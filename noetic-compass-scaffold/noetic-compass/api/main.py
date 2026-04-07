@@ -20,7 +20,7 @@ from api.errors import (
 from api.middleware.auth import JWTAuthMiddleware
 from api.middleware.rate_limit import RateLimitMiddleware
 from api.middleware.audit import AuditLogMiddleware
-from api.routes import assess, batch, config, health, wrap
+from api.routes import assess, batch, cohort, config, health, wrap
 
 
 @asynccontextmanager
@@ -63,4 +63,5 @@ app.include_router(health.router)
 app.include_router(assess.router)
 app.include_router(wrap.router)
 app.include_router(batch.router)
+app.include_router(cohort.router)
 app.include_router(config.router)

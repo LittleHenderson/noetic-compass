@@ -7,6 +7,7 @@ import { ConfigPage } from './pages/ConfigPage';
 import { DetailsPage } from './pages/DetailsPage';
 import { HowItWorksPage } from './pages/HowItWorksPage';
 import { FaqPage } from './pages/FaqPage';
+import { CohortPage } from './pages/CohortPage';
 import { LoginPage } from './pages/LoginPage';
 import type { ReactNode } from 'react';
 
@@ -31,6 +32,7 @@ export default function App() {
                 <Route path="/history" element={<HistoryPage />} />
                 <Route path="/config" element={<ConfigPage />} />
                 <Route path="/details/:id" element={<DetailsPage />} />
+                <Route path="/cohort" element={<CohortPage />} />
                 <Route path="/how-it-works" element={<HowItWorksPage />} />
                 <Route path="/faq" element={<FaqPage />} />
               </Routes>

@@ -143,6 +143,56 @@ class HealthResponse(BaseModel):
     engine: str = "cas-engine"
 
 
+class CohortProfile(BaseModel):
+    """A single candidate profile for cohort comparison."""
+
+    label: str = Field(min_length=1, max_length=200)
+    operator_scores: list[float] = Field(min_length=10, max_length=10)
+    domain_averages: list[float] = Field(min_length=4, max_length=4)
+
+    @field_validator("domain_averages")
+    @classmethod
+    def validate_cohort_simplex(cls, v: list[float]) -> list[float]:
+        if any(x <= 0 for x in v):
+            raise ValueError("domain_averages must all be strictly positive")
+        total = sum(v)
+        if abs(total - 1.0) > 0.01:
+            raise ValueError(f"domain_averages must sum to 1.0 (got {total:.4f})")
+        return v
+
+
+class CohortCompareRequest(BaseModel):
+    """Request for cohort distance comparison."""
+
+    profiles: list[CohortProfile] = Field(min_length=2, max_length=100)
+
+
+class CohortDistance(BaseModel):
+    """Pairwise distance between two profiles."""
+
+    from_label: str
+    to_label: str
+    geodesic_distance: float
+    alignment_pct: float
+    bhattacharyya_coefficient: float
+    similarity_pct: float
+
+
+class CohortCluster(BaseModel):
+    """Cluster assignment for a profile."""
+
+    label: str
+    cluster: int
+
+
+class CohortCompareResponse(BaseModel):
+    """Response with pairwise distances and cluster assignments."""
+
+    distances: list[CohortDistance]
+    labels: list[str]
+    clusters: list[CohortCluster]
+
+
 class ErrorResponse(BaseModel):
     """Standard error response."""
 

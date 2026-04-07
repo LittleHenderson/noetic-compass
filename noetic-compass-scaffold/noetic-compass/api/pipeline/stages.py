@@ -59,11 +59,23 @@ class DomainCoherenceResult:
 
 
 @dataclass
+class InversionEvidence:
+    """Per-axis evidence explaining why an inversion was flagged."""
+    axis: str
+    axis_index: int
+    score: float
+    flagged: bool
+    severity: str  # 'none' | 'low' | 'moderate' | 'stealth' | 'high'
+    trigger: str   # human-readable trigger reason
+    transcript_snippet: str  # relevant text excerpt
+
+@dataclass
 class InversionResult:
     axis_scores: list[float]
     stealth_resistance: float
     compound_severity: float
     resistance_score: float
+    evidence: list[InversionEvidence] = field(default_factory=list)
 
 
 @dataclass
@@ -305,19 +317,156 @@ async def domain_coherence(
 # Stage 7: Inversion Scan
 # ---------------------------------------------------------------------------
 
+_AXIS_LABELS = ["N: Operator", "W: Domain", "F: Drive", "E: State", "S: Sub-Drive", "A: Pathway", "P: Compound"]
+
+_AXIS_TRIGGER_TEMPLATES: dict[int, str] = {
+    0: "Operator involution imbalance detected — CO-{a} and CO-{b} diverge by {gap:.0%}, suggesting the paired cognitive operations are not mutually reinforcing.",
+    1: "Domain precedence anomaly — {weak} domain ({weak_val:.0%}) is significantly weaker than {strong} domain ({strong_val:.0%}), indicating uneven processing hierarchy.",
+    2: "Drive inversion risk — {drive} drive scored {val:.0%}, below stability threshold. Paired drive tension may cause motivational distortion.",
+    3: "Cognitive state entropy elevated — state distribution shows irregular clustering, indicating potential instability under cognitive load.",
+    4: "Sub-drive granular failure — domain-level drive component shows inconsistency with the core drive score, suggesting fragmented motivation at the operational level.",
+    5: "Pathway prerequisite disruption — RPM chain for {drive} has a broken link at the {stage} stage ({val:.0%}), blocking capability flow.",
+    6: "Compound inversion risk — multiple low-severity inversions are combining. Individual axis scores are marginal but their intersection amplifies risk.",
+}
+
+
+def _classify_severity(score: float) -> str:
+    if score >= 0.8:
+        return "none"
+    if score >= 0.6:
+        return "low"
+    if score >= 0.4:
+        return "moderate"
+    if score >= 0.3:
+        return "stealth"
+    return "high"
+
+
+def _extract_snippet(text: str, keyword: str, window: int = 80) -> str:
+    """Extract a short snippet around the first occurrence of keyword."""
+    lower = text.lower()
+    idx = lower.find(keyword.lower())
+    if idx == -1:
+        # Fall back to a chunk from the middle of the text
+        mid = len(text) // 2
+        start = max(0, mid - window)
+        end = min(len(text), mid + window)
+        return text[start:end].strip()
+    start = max(0, idx - window)
+    end = min(len(text), idx + len(keyword) + window)
+    snippet = text[start:end].strip()
+    if start > 0:
+        snippet = "..." + snippet
+    if end < len(text):
+        snippet = snippet + "..."
+    return snippet
+
+
+def _build_evidence(
+    axis_scores: list[float],
+    op_result: OperatorScoreResult,
+    drive_scores: list[float],
+    domain_averages: list[float],
+    rpm_drive_scores: list[list[float]] | None,
+    llm_text: str,
+) -> list[InversionEvidence]:
+    """Build per-axis evidence with triggers and transcript snippets."""
+    evidence: list[InversionEvidence] = []
+    inv_pairs = [(2, 3), (5, 6), (8, 9)]
+    op_names = ["Identity", "Reflection", "Abstraction", "Concretization", "Integration",
+                "Differentiation", "Unification", "Transformation", "Expansion", "Contraction"]
+    domain_names = ["Principled", "Cognitive", "Evaluative", "Operational"]
+    drive_names = ["Unity", "Wisdom", "Vitality", "Connection", "Agency", "Structure", "Purpose"]
+    rpm_stages = ["Direction", "Will", "Power"]
+
+    for i, score in enumerate(axis_scores):
+        severity = _classify_severity(score)
+        flagged = score < 0.6
+
+        # Build axis-specific trigger explanation
+        if i == 0:  # N: Operator
+            worst_pair = max(inv_pairs, key=lambda p: abs(op_result.scores[p[0]] - op_result.scores[p[1]]))
+            gap = abs(op_result.scores[worst_pair[0]] - op_result.scores[worst_pair[1]])
+            trigger = _AXIS_TRIGGER_TEMPLATES[0].format(
+                a=f"CO-{worst_pair[0]} ({op_names[worst_pair[0]]})",
+                b=f"CO-{worst_pair[1]} ({op_names[worst_pair[1]]})",
+                gap=gap,
+            )
+            snippet = _extract_snippet(llm_text, op_names[worst_pair[0]])
+        elif i == 1:  # W: Domain
+            weak_idx = domain_averages.index(min(domain_averages))
+            strong_idx = domain_averages.index(max(domain_averages))
+            trigger = _AXIS_TRIGGER_TEMPLATES[1].format(
+                weak=domain_names[weak_idx], weak_val=domain_averages[weak_idx],
+                strong=domain_names[strong_idx], strong_val=domain_averages[strong_idx],
+            )
+            snippet = _extract_snippet(llm_text, domain_names[weak_idx])
+        elif i == 2:  # F: Drive
+            worst_drive_idx = drive_scores.index(min(drive_scores))
+            trigger = _AXIS_TRIGGER_TEMPLATES[2].format(
+                drive=drive_names[worst_drive_idx], val=drive_scores[worst_drive_idx],
+            )
+            snippet = _extract_snippet(llm_text, drive_names[worst_drive_idx])
+        elif i == 3:  # E: State
+            trigger = _AXIS_TRIGGER_TEMPLATES[3]
+            snippet = _extract_snippet(llm_text, "cognitive")
+        elif i == 4:  # S: Sub-Drive
+            trigger = _AXIS_TRIGGER_TEMPLATES[4]
+            snippet = _extract_snippet(llm_text, "domain")
+        elif i == 5:  # A: Pathway
+            if rpm_drive_scores:
+                # Find the worst chain
+                worst_chain_idx = 0
+                worst_val = 1.0
+                worst_stage = 0
+                for ci, chain in enumerate(rpm_drive_scores):
+                    for si, sv in enumerate(chain):
+                        if sv < worst_val:
+                            worst_val = sv
+                            worst_chain_idx = ci
+                            worst_stage = si
+                trigger = _AXIS_TRIGGER_TEMPLATES[5].format(
+                    drive=drive_names[worst_chain_idx],
+                    stage=rpm_stages[worst_stage] if worst_stage < len(rpm_stages) else "unknown",
+                    val=worst_val,
+                )
+            else:
+                trigger = "Pathway analysis based on available RPM data."
+            snippet = _extract_snippet(llm_text, "prerequisite" if "prerequisite" in llm_text.lower() else "chain")
+        else:  # P: Compound
+            trigger = _AXIS_TRIGGER_TEMPLATES[6]
+            snippet = _extract_snippet(llm_text, "alignment")
+
+        evidence.append(InversionEvidence(
+            axis=_AXIS_LABELS[i],
+            axis_index=i,
+            score=score,
+            flagged=flagged,
+            severity=severity,
+            trigger=trigger,
+            transcript_snippet=snippet,
+        ))
+
+    return evidence
+
+
 async def inversion_scan(
     op_result: OperatorScoreResult,
     drive_scores: list[float] | None = None,
     domain_averages: list[float] | None = None,
+    llm_text: str = "",
+    rpm_drive_scores: list[list[float]] | None = None,
 ) -> InversionResult:
-    """Run 7-axis inversion scanner via Rust engine."""
+    """Run 7-axis inversion scanner via Rust engine.
+
+    When llm_text is provided, generates per-axis evidence with
+    transcript snippets for audit trail / explainability.
+    """
     if drive_scores is None:
-        # Derive from operator scores average as rough proxy
         avg = sum(op_result.scores) / len(op_result.scores)
         drive_scores = [round(avg * (0.8 + 0.2 * (i % 3) / 2), 4) for i in range(7)]
 
     if domain_averages is None:
-        # Derive from operator scores
         raw = []
         for op_indices in _DOMAIN_OPERATOR_MAP:
             raw.append(sum(op_result.scores[i] for i in op_indices) / len(op_indices))
@@ -332,11 +481,22 @@ async def inversion_scan(
         domain_averages=domain_averages,
     )
 
+    axis_scores = result["axis_scores"]
+
+    # Build evidence if we have LLM text to reference
+    evidence: list[InversionEvidence] = []
+    if llm_text:
+        evidence = _build_evidence(
+            axis_scores, op_result, drive_scores, domain_averages,
+            rpm_drive_scores, llm_text,
+        )
+
     return InversionResult(
-        axis_scores=result["axis_scores"],
+        axis_scores=axis_scores,
         stealth_resistance=result["stealth_resistance"],
         compound_severity=result["compound_severity"],
         resistance_score=result["resistance_score"],
+        evidence=evidence,
     )
 
 

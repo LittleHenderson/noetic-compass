@@ -102,11 +102,13 @@ class WrapPipelineRunner:
             data={"dci": dc_result.dci, "domain_averages": dc_result.domain_averages},
         ))
 
-        # Stage 7: Inversion Scan — pass real drive scores and domain averages
+        # Stage 7: Inversion Scan — pass real drive scores, domain averages, and LLM text for evidence
         inv_result = await inversion_scan(
             op_result,
             drive_scores=flat_drives,
             domain_averages=dc_result.domain_averages,
+            llm_text=llm_resp.text if llm_resp else "",
+            rpm_drive_scores=rpm_result.drive_scores,
         )
         stages.append(StageResult(
             stage="inversion_scan",
@@ -115,6 +117,18 @@ class WrapPipelineRunner:
                 "resistance_score": inv_result.resistance_score,
                 "stealth_resistance": inv_result.stealth_resistance,
                 "axis_scores": inv_result.axis_scores,
+                "evidence": [
+                    {
+                        "axis": e.axis,
+                        "axis_index": e.axis_index,
+                        "score": e.score,
+                        "flagged": e.flagged,
+                        "severity": e.severity,
+                        "trigger": e.trigger,
+                        "transcript_snippet": e.transcript_snippet,
+                    }
+                    for e in inv_result.evidence
+                ],
             },
         ))
 

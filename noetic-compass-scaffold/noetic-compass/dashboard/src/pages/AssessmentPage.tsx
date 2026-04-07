@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import { useWrap } from '../hooks/useWrap';
+import { useTranslation } from '../hooks/useTranslation';
 import { Card } from '../components/shared/Card';
 import { LoadingSpinner } from '../components/shared/LoadingSpinner';
 import { ErrorBanner } from '../components/shared/ErrorBanner';
 import { CertBadge } from '../components/shared/CertBadge';
 import { ExportButton } from '../components/shared/ExportButton';
 import { ExplainPanel } from '../components/shared/ExplainPanel';
+import { ExecutiveSummary } from '../components/shared/ExecutiveSummary';
 import { NccsGauge } from '../components/charts/NccsGauge';
 import { SubScoreBreakdown } from '../components/charts/SubScoreBreakdown';
 import { OperatorRadarChart } from '../components/charts/OperatorRadarChart';
+import { DomainCoherenceRadar } from '../components/charts/DomainCoherenceRadar';
 import { StateHeatmap } from '../components/charts/StateHeatmap';
 import { CoreDriveTree } from '../components/charts/CoreDriveTree';
 import { RpmGraph } from '../components/charts/RpmGraph';
 import { InversionMap } from '../components/charts/InversionMap';
+import { InversionAlert } from '../components/shared/InversionAlert';
 import { PIPELINE_STAGES } from '../lib/constants';
 import { interpretStage } from '../lib/interpretations';
 import type { WrapResult } from '../api/types';
@@ -85,6 +89,7 @@ export function AssessmentPage() {
   }
 
   const result = wrap.data;
+  const translated = useTranslation(result);
 
   const operatorScores = result?.stages.find(s => s.stage === 'operator_scoring')?.data?.scores as number[] | undefined;
   const domainAverages = result?.stages.find(s => s.stage === 'domain_coherence')?.data?.domain_averages as number[] | undefined;
@@ -148,15 +153,34 @@ export function AssessmentPage() {
             </Card>
           </div>
 
+          {/* Executive Summary (translated) */}
+          {translated && (
+            <Card title="Executive Summary">
+              <ExecutiveSummary data={translated} />
+            </Card>
+          )}
+
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             {operatorScores && (
-              <Card title="Operator Radar">
+              <Card title="Thinking Patterns">
                 <OperatorRadarChart scores={operatorScores} />
               </Card>
             )}
+            <Card title="Processing Balance">
+              <DomainCoherenceRadar result={result} />
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             {operatorScores && domainAverages && (
               <Card title="40-State Heatmap">
                 <StateHeatmap operatorScores={operatorScores} domainAverages={domainAverages} />
+              </Card>
+            )}
+            {/* Inversion Alert (Task 2) */}
+            {axisScores && stealthResistance !== undefined && (
+              <Card title="Stability Alerts">
+                <InversionAlert result={result} />
               </Card>
             )}
           </div>

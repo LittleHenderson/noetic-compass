@@ -6,6 +6,8 @@ import type {
   NccsResult,
   BatchRequest,
   BatchResult,
+  CohortCompareRequest,
+  CohortCompareResult,
   DialConfig,
   HealthStatus,
 } from './types';
@@ -39,6 +41,13 @@ export function putConfig(config: DialConfig): Promise<DialConfig> {
   return apiFetch<DialConfig>('/config', {
     method: 'PUT',
     body: JSON.stringify(config),
+  });
+}
+
+export function postCohortCompare(req: CohortCompareRequest): Promise<CohortCompareResult> {
+  return apiFetch<CohortCompareResult>('/batch/compare', {
+    method: 'POST',
+    body: JSON.stringify(req),
   });
 }
 

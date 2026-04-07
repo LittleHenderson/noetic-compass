@@ -86,6 +86,41 @@ export interface ErrorResponse {
   error_type: string;
 }
 
+/** Inversion evidence for audit trail (from inversion_scan stage) */
+export interface InversionEvidence {
+  axis: string;
+  axis_index: number;
+  score: number;
+  flagged: boolean;
+  severity: 'none' | 'low' | 'moderate' | 'stealth' | 'high';
+  trigger: string;
+  transcript_snippet: string;
+}
+
+/** Cohort comparison result */
+export interface CohortCompareRequest {
+  profiles: {
+    label: string;
+    operator_scores: number[];
+    domain_averages: number[];
+  }[];
+}
+
+export interface CohortDistance {
+  from_label: string;
+  to_label: string;
+  geodesic_distance: number;
+  alignment_pct: number;
+  bhattacharyya_coefficient: number;
+  similarity_pct: number;
+}
+
+export interface CohortCompareResult {
+  distances: CohortDistance[];
+  labels: string[];
+  clusters: { label: string; cluster: number }[];
+}
+
 /** Local-only type for assessment history */
 export interface AssessmentRecord {
   id: string;

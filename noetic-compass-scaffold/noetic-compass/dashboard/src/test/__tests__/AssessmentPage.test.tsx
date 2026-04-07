@@ -44,6 +44,6 @@ describe('AssessmentPage', () => {
       expect(screen.getByText('68.0')).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/Silver/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Silver/).length).toBeGreaterThan(0);
   });
 });

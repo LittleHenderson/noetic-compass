@@ -1,5 +1,41 @@
 # Noetic Compass — Progress Log
 
+## Session 12: Four-Task Implementation (April 7, 2026)
+
+### Task 4: Makefile (DevEx)
+- **`Makefile`** — Root-level build orchestration with `make install`, `make dev`, `make test`, `make clean`, `make build`, `make lint`, `make help`. Auto-detects Unix vs Windows venv layout. Handles Rust (maturin), Python (venv/pytest), and Node (npm) toolchains.
+
+### Task 1: Translation Layer (UX)
+- **`dashboard/src/lib/translations.ts`** — 40+ term mappings from mathematical CAS language to business-friendly labels (e.g., "geodesic_distance" → "Alignment Match", "dci" → "Processing Balance", "inversion_resistance" → "Stability Under Pressure"). Score severity classifier (excellent/good/moderate/concern/critical). Conversion helpers: `geodesicToAlignment()`, `bhattacharyyaToSimilarity()`, `translateNccs()`, `translateDomainCoherence()`.
+- **`dashboard/src/hooks/useTranslation.ts`** — React hook transforming WrapResult into fully translated `TranslatedResult` with business-named operators, drives, inversions, executive summary, top strength/risk.
+- **`dashboard/src/components/shared/TranslatedMetric.tsx`** — Reusable metric display with severity dot, hover tooltip, and color-coded value.
+- **`dashboard/src/components/shared/ExecutiveSummary.tsx`** — Stakeholder-facing overview card with one-liner, top strength, priority improvement, and translated sub-score breakdown.
+- **`dashboard/src/components/charts/DomainCoherenceRadar.tsx`** — New Recharts radar chart for 4 processing domains with DCI indicator and drill-down explanation panel.
+- **`dashboard/src/pages/AssessmentPage.tsx`** — Wired in Executive Summary, DomainCoherenceRadar, InversionAlert, and translated chart titles.
+
+### Task 2: Inversion Explainability & Audit Trail
+- **`api/pipeline/stages.py`** — New `InversionEvidence` dataclass with axis, severity, trigger reason, and transcript snippet. `_build_evidence()` generates per-axis explanations referencing operator pairs, domain hierarchy, drive scores, and RPM chains. `inversion_scan()` now accepts `llm_text` and `rpm_drive_scores` parameters for evidence generation.
+- **`api/pipeline/runner.py`** — Passes LLM response text and RPM drive scores to inversion scan stage. Serializes evidence into stage result data.
+- **`dashboard/src/api/types.ts`** — Added `InversionEvidence` and cohort types.
+- **`dashboard/src/components/shared/InversionAlert.tsx`** — Interactive evidence cards grouped by flagged/stable. Each card expands to show "Why this was flagged" trigger explanation and related transcript snippet. Color-coded by severity (none/low/moderate/stealth/high).
+
+### Task 3: Dynamic Benchmarking & Cohort Clustering
+- **`api/models.py`** — New models: `CohortProfile`, `CohortCompareRequest`, `CohortDistance`, `CohortCluster`, `CohortCompareResponse`.
+- **`api/routes/cohort.py`** — `POST /batch/compare` endpoint. Builds 40-dim CognitiveStateVectors from profiles, computes pairwise geodesic distance and Bhattacharyya coefficient via Rust engine, converts to alignment/similarity percentages, runs single-linkage clustering.
+- **`api/main.py`** — Registered cohort router.
+- **`dashboard/src/api/endpoints.ts`** — Added `postCohortCompare()` typed wrapper.
+- **`dashboard/src/hooks/useCohort.ts`** — TanStack Query mutation hook.
+- **`dashboard/src/pages/CohortPage.tsx`** — Full cohort analysis page with profile input form, cluster summary with color-coded badges, alignment heatmap, and pairwise comparison table.
+- **`dashboard/src/components/charts/CohortHeatmap.tsx`** — NxN alignment heatmap with gradient cell coloring.
+- **`dashboard/src/components/layout/Sidebar.tsx`** — Added "Cohort Analysis" nav item.
+- **`dashboard/src/App.tsx`** — Added `/cohort` route.
+- **`tests/test_cohort.py`** — 5 tests: two profiles, identical profiles (100% alignment), three profiles (3 pairwise distances), requires ≥2, bad simplex rejection.
+
+### Test Results
+- Python: **55/55 passed** (50 existing + 5 new cohort tests)
+- Vitest: **23/23 passed**
+- TypeScript build: **0 errors**
+
 ## Session 11: Re-Audit Fixes (April 7, 2026)
 
 ### Re-Audit Item 1: Python Version Cap
