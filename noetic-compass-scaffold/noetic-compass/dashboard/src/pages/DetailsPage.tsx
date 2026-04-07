@@ -63,7 +63,7 @@ export function DetailsPage() {
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <Card title="NCCS Score">
           <div className="flex flex-col items-center gap-4">
-            <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} />
+            <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
             <CertBadge certification={result.nccs.certification} composite={result.nccs.composite} />
           </div>
         </Card>

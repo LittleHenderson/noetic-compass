@@ -1,5 +1,31 @@
 # Noetic Compass — Progress Log
 
+## Session 7: Interactive Assessment Readouts (April 6, 2026)
+
+### Interactive Explanation Panels
+- Created `src/components/shared/ExplainPanel.tsx` — reusable slide-down panel with close button, dark glassmorphism style
+- Created `src/lib/interpretations.ts` — VP-friendly text generators for all 7 chart types + pipeline stages
+- Added CSS `animate-slide-down` keyframe animation and `chart-interactive` / `chart-hint` utilities to `index.css`
+
+### Chart Component Updates (all 7 + StageTimeline)
+- **NccsGauge**: click → shows summary, top strength, biggest gap, recommendation. Accepts optional `nccs` prop.
+- **SubScoreBreakdown**: click bar → shows sub-score description, weight contribution, verdict
+- **OperatorRadarChart**: click → expands full operator list with descriptions + involution pair balance status
+- **StateHeatmap**: click cell → shows domain×operator state interpretation with intensity rating
+- **CoreDriveTree**: click bar → shows drive description, score, and inversion pair tension note
+- **RpmGraph**: click drive row → shows prerequisite chain status with flowing/blocked indicators per node
+- **InversionMap**: click → expands all 7 axes with descriptions + stealth resistance assessment
+- **StageTimeline**: click stage → shows what happened, description, and pass/fail status
+
+### Page Updates
+- Updated `AssessmentPage.tsx` — passes `nccs` to NccsGauge, StageTimeline is now clickable
+- Updated `DetailsPage.tsx` — passes `nccs` to NccsGauge
+
+### Verification
+- TypeScript: 0 errors
+- Tests: 23/23 passing
+- Build: successful
+
 ## Session 6: Phase 3 — Frontend Dashboard (April 6, 2026)
 
 ### Backend Enhancement (Pre-requisite)

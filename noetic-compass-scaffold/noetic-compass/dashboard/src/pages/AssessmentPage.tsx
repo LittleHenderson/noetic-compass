@@ -4,6 +4,7 @@ import { Card } from '../components/shared/Card';
 import { LoadingSpinner } from '../components/shared/LoadingSpinner';
 import { ErrorBanner } from '../components/shared/ErrorBanner';
 import { CertBadge } from '../components/shared/CertBadge';
+import { ExplainPanel } from '../components/shared/ExplainPanel';
 import { NccsGauge } from '../components/charts/NccsGauge';
 import { SubScoreBreakdown } from '../components/charts/SubScoreBreakdown';
 import { OperatorRadarChart } from '../components/charts/OperatorRadarChart';
@@ -12,20 +13,25 @@ import { CoreDriveTree } from '../components/charts/CoreDriveTree';
 import { RpmGraph } from '../components/charts/RpmGraph';
 import { InversionMap } from '../components/charts/InversionMap';
 import { PIPELINE_STAGES } from '../lib/constants';
+import { interpretStage } from '../lib/interpretations';
 import type { WrapResult } from '../api/types';
 
 const PROVIDERS = ['mock', 'openai', 'anthropic', 'google', 'meta'];
 
 function StageTimeline({ stages }: { stages: WrapResult['stages'] }) {
+  const [selected, setSelected] = useState<number | null>(null);
+
+  const insight = selected !== null ? interpretStage(stages[selected], selected) : null;
+
   return (
     <div className="space-y-2">
       {stages.map((s, i) => (
         <div
           key={i}
-          className="flex items-center gap-3 animate-chart-in"
+          className="flex items-center gap-3 animate-chart-in cursor-pointer rounded px-1 py-0.5 hover:bg-white/[0.02] transition-colors"
           style={{ animationDelay: `${i * 60}ms` }}
+          onClick={() => setSelected(selected === i ? null : i)}
         >
-          {/* Animated status indicator */}
           <div className="relative flex items-center justify-center w-5 h-5">
             {s.success ? (
               <>
@@ -43,8 +49,9 @@ function StageTimeline({ stages }: { stages: WrapResult['stages'] }) {
               </>
             )}
           </div>
-          <span className="text-xs font-medium text-slate-300 w-32">{PIPELINE_STAGES[i]}</span>
-          {/* Progress bar */}
+          <span className={`text-xs font-medium w-32 ${selected === i ? 'text-slate-100' : 'text-slate-300'}`}>
+            {PIPELINE_STAGES[i]}
+          </span>
           <div className="flex-1 h-1 rounded-full bg-white/[0.04] overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${s.success ? 'bg-emerald-400/40' : 'bg-red-400/40'}`}
@@ -54,6 +61,14 @@ function StageTimeline({ stages }: { stages: WrapResult['stages'] }) {
           {s.error && <span className="text-[10px] text-red-400">{s.error}</span>}
         </div>
       ))}
+
+      {insight && (
+        <ExplainPanel visible={true} onClose={() => setSelected(null)}>
+          <p className="font-medium text-slate-200">{insight.name}</p>
+          <p>{insight.description}</p>
+          <p className={insight.success ? 'text-emerald-400' : 'text-red-400'}>{insight.status}</p>
+        </ExplainPanel>
+      )}
     </div>
   );
 }
@@ -120,7 +135,7 @@ export function AssessmentPage() {
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <Card title="NCCS Score">
               <div className="flex flex-col items-center gap-4">
-                <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} />
+                <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
                 <CertBadge certification={result.nccs.certification} composite={result.nccs.composite} />
               </div>
             </Card>

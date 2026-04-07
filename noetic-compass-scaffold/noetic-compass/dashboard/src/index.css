@@ -61,6 +61,20 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
+/* Slide-down animation for explain panels */
+@keyframes slide-down {
+  from { opacity: 0; max-height: 0; margin-top: 0; }
+  to   { opacity: 1; max-height: 600px; margin-top: 12px; }
+}
+.animate-slide-down {
+  animation: slide-down 0.35s ease-out forwards;
+  overflow: hidden;
+}
+
+/* Interactive chart cursor */
+.chart-interactive { cursor: pointer; }
+.chart-interactive:hover .chart-hint { opacity: 1; }
+
 /* Range slider dark theme */
 input[type="range"] {
   accent-color: #2dd4bf;
