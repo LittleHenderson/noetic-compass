@@ -20,7 +20,7 @@ from api.errors import (
 from api.middleware.auth import JWTAuthMiddleware
 from api.middleware.rate_limit import RateLimitMiddleware
 from api.middleware.audit import AuditLogMiddleware
-from api.routes import assess, batch, cohort, config, health, wrap
+from api.routes import assess, auth, batch, cohort, config, health, wrap
 
 
 @asynccontextmanager
@@ -60,6 +60,7 @@ app.add_exception_handler(PipelineStageError, pipeline_stage_error_handler)  # t
 
 # Routes
 app.include_router(health.router)
+app.include_router(auth.router)
 app.include_router(assess.router)
 app.include_router(wrap.router)
 app.include_router(batch.router)

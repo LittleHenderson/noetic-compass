@@ -12,7 +12,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from api.config import settings
 
 # Paths that don't require authentication
-PUBLIC_PATHS = {"/health", "/docs", "/openapi.json", "/redoc"}
+PUBLIC_PATHS = {"/health", "/auth/token", "/docs", "/openapi.json", "/redoc"}
 
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
