@@ -90,13 +90,13 @@ const OPERATOR_DESC: string[] = [
   'Identity — preserves core meaning without distortion. Foundation for all other operators.',
   'Reflection — examines and self-assesses cognitive patterns. Essential for learning.',
   'Abstraction — generalizes from specifics to principles. Paired with Concretization.',
-  'Concretization — turns abstract ideas into actionable specifics. Paired with Abstraction.',
+  'Concretization — turns abstract ideas into actionable specifics. Paired with Abstraction. Parallels Anthropic\'s functional frustration/curiosity states: the drive to resolve abstract uncertainty into concrete form.',
   'Integration — synthesizes diverse concepts into a coherent whole.',
-  'Differentiation — distinguishes nuances, avoids oversimplification. Paired with Unification.',
+  'Differentiation — distinguishes nuances, avoids oversimplification. Paired with Unification. Parallels Anthropic\'s evaluative internal states: the capacity to assess and distinguish quality across options.',
   'Unification — brings disparate elements into alignment. Paired with Differentiation.',
   'Transformation — enables adaptive change and evolving perspectives.',
-  'Expansion — explores new territory and broadens scope. Paired with Contraction.',
-  'Contraction — focuses, prioritizes, and cuts through noise. Paired with Expansion.',
+  'Expansion — explores new territory and broadens scope. Paired with Contraction. Parallels Anthropic\'s exploration drive: the functional impulse to seek novel information and broaden the solution space.',
+  'Contraction — focuses, prioritizes, and cuts through noise. Paired with Expansion. Parallels Anthropic\'s exploitation/focus states: the functional drive to converge on the best-known option and commit resources.',
 ];
 
 export interface OperatorInsight {

@@ -19,6 +19,30 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    question: 'How does CAS relate to Anthropic\'s research on AI emotions?',
+    answer: (
+      <div className="space-y-2">
+        <p>
+          Anthropic's 2025 research on functional emotions in AI systems found that large language
+          models develop internal states that function analogously to emotions — not as subjective
+          experiences, but as computational processes that influence behavior. CAS's cognitive operator
+          model independently arrived at a compatible framework: operators like CO-3 (Concretization),
+          CO-5 (Differentiation), and CO-8/CO-9 (Expansion/Contraction) map directly to the
+          frustration/curiosity, evaluative, and exploration/exploitation states Anthropic identified.
+        </p>
+        <p>
+          This independent convergence strengthens both frameworks. CAS provides the formal mathematical
+          scaffolding (category theory, Fisher-Rao metric) that Anthropic's empirical findings can be
+          mapped onto. Learn more in the{' '}
+          <Link to="/how-it-works#science" className="text-accent-teal hover:underline">
+            Science Behind It
+          </Link>{' '}
+          section.
+        </p>
+      </div>
+    ),
+  },
+  {
     question: 'What does NCCS stand for?',
     answer: (
       <p>

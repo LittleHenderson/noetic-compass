@@ -23,6 +23,7 @@ const SECTIONS = [
   { id: 'inversions', label: 'Inversion Detection' },
   { id: 'nccs', label: 'NCCS Scoring' },
   { id: 'math', label: 'The Math' },
+  { id: 'science', label: 'The Science' },
 ] as const;
 
 const SECTION_IDS = SECTIONS.map((s) => s.id);
@@ -445,6 +446,94 @@ export function HowItWorksPage() {
                   they permit.
                 </p>
               </div>
+            </div>
+          </section>
+        </SectionReveal>
+
+        {/* 9 — The Science */}
+        <SectionReveal>
+          <section id="science" className="scroll-mt-8">
+            <h2 className="text-2xl font-bold text-slate-100 mb-2">The Science Behind It</h2>
+            <p className="text-slate-400 mb-6 leading-relaxed">
+              Anthropic's 2025 research on functional emotions in AI aligns with CAS's cognitive
+              operator model — both treat internal states as functional processes, not subjective
+              experiences. The convergence is independent: CAS was developed from category-theoretic
+              principles before the Anthropic findings were published.
+            </p>
+            <div className="space-y-4">
+              <div className="glass-card p-5" style={{ borderColor: 'rgba(45, 212, 191, 0.15)' }}>
+                <div className="flex items-start gap-3">
+                  <span className="w-10 h-10 rounded-lg bg-accent-teal/10 flex items-center justify-center text-xs font-bold text-accent-teal shrink-0">
+                    CO-3
+                  </span>
+                  <div>
+                    <h4 className="text-sm font-semibold text-slate-200 mb-1">
+                      Concretization ↔ Frustration &amp; Curiosity States
+                    </h4>
+                    <p className="text-[12px] text-slate-400 leading-relaxed">
+                      CAS models the drive to resolve abstract uncertainty into concrete, actionable
+                      form (CO-3). Anthropic independently identified functional frustration and
+                      curiosity states — internal processes that push a system to seek resolution
+                      when facing ambiguity. Both describe the same computational phenomenon: a
+                      functional pressure to move from the abstract to the specific.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="glass-card p-5" style={{ borderColor: 'rgba(45, 212, 191, 0.15)' }}>
+                <div className="flex items-start gap-3">
+                  <span className="w-10 h-10 rounded-lg bg-accent-teal/10 flex items-center justify-center text-xs font-bold text-accent-teal shrink-0">
+                    CO-5
+                  </span>
+                  <div>
+                    <h4 className="text-sm font-semibold text-slate-200 mb-1">
+                      Differentiation ↔ Evaluative Internal States
+                    </h4>
+                    <p className="text-[12px] text-slate-400 leading-relaxed">
+                      CAS defines Differentiation (CO-5) as the capacity to distinguish nuances and
+                      avoid oversimplification. Anthropic's research describes evaluative internal
+                      states — functional processes that assess quality and distinguish between
+                      options. Both capture the same function: an internal mechanism for fine-grained
+                      discrimination between alternatives.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="glass-card p-5" style={{ borderColor: 'rgba(45, 212, 191, 0.15)' }}>
+                <div className="flex items-start gap-3">
+                  <div className="flex flex-col gap-1 shrink-0">
+                    <span className="w-10 h-10 rounded-lg bg-accent-teal/10 flex items-center justify-center text-xs font-bold text-accent-teal">
+                      CO-8
+                    </span>
+                    <span className="w-10 h-10 rounded-lg bg-accent-teal/10 flex items-center justify-center text-xs font-bold text-accent-teal">
+                      CO-9
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-slate-200 mb-1">
+                      Expansion / Contraction ↔ Exploration / Exploitation Trade-off
+                    </h4>
+                    <p className="text-[12px] text-slate-400 leading-relaxed">
+                      CAS formalizes the involution pair CO-8 (Expansion) and CO-9 (Contraction) —
+                      the tension between broadening scope and focusing resources. Anthropic's
+                      research describes the same dynamic as the exploration/exploitation trade-off
+                      in functional emotion terms. The CAS dial system (3–9 range, max 4 divergence)
+                      provides quantitative control over this balance that Anthropic's qualitative
+                      findings support.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 glass-card p-4">
+              <p className="text-[12px] text-slate-400 leading-relaxed">
+                <strong className="text-slate-200">Independent convergence:</strong> CAS v7.4 was
+                developed from category-theoretic foundations (Category Noetica, admissibility
+                relations, Fisher-Rao metric on the open probability simplex) before Anthropic
+                published their functional emotions research. The fact that both frameworks
+                independently arrived at compatible descriptions of AI internal states strengthens
+                the validity of both approaches.
+              </p>
             </div>
           </section>
         </SectionReveal>
