@@ -1,0 +1,20 @@
+{
+  "taskListId": "noetic-compass-build",
+  "permissions": {
+    "allow": [
+      "Bash(cargo *)",
+      "Bash(pytest *)",
+      "Bash(npm *)",
+      "Bash(git *)",
+      "Bash(rustfmt *)",
+      "Bash(clippy *)",
+      "Read(*)",
+      "Write(cas-engine/**)",
+      "Write(api/**)",
+      "Write(dashboard/**)",
+      "Write(cas-native/**)",
+      "Write(scenarios/**)",
+      "Write(CHANGELOG.md)"
+    ]
+  }
+}
