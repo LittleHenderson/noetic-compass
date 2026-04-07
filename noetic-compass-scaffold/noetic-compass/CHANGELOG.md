@@ -1,5 +1,19 @@
 # Noetic Compass — Progress Log
 
+## Session 19: Assessment Export — API Endpoint + Dashboard Button (April 7, 2026)
+
+### Assessment Export Feature
+- **`api/store.py`** (NEW) — Thread-safe in-memory assessment store keyed by API key, max 1000 records per key, resets on restart
+- **`api/routes/export.py`** (NEW) — `GET /assessments/export?format=csv|json` endpoint with flattened scores (26 columns: NCCS sub-scores, per-operator CO-0..CO-9, domain averages, provenance)
+- **`api/routes/wrap.py`** — Modified to save each successful pipeline result to the in-memory store
+- **`api/main.py`** — Registered export router
+- **`dashboard/src/pages/HistoryPage.tsx`** — Added "Export All Data" dropdown button (CSV / JSON) using client-side export from Zustand store via `file-saver`
+- **`tests/test_export.py`** (NEW) — 5 tests: empty JSON, JSON after wrap, CSV after wrap, CSV column schema, auth required
+
+**Test results**: 65 Python tests passed, 23 frontend tests passed, 0 TypeScript errors
+
+---
+
 ## Session 18: Production Readiness — LLM Integration, Validation Tooling, Deployment (April 7, 2026)
 
 ### Section 1: Real LLM Integration
