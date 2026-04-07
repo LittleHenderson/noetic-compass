@@ -39,59 +39,58 @@ export function DialPanel({
 
   const isValid = errors.length === 0;
 
-  // Group: self-dual operators, then involution pairs
   const selfDualIndices = [0, 1, 4, 7];
   const pairIndices = INVOLUTION_PAIRS;
 
   return (
     <div className="space-y-6">
-      {/* Self-dual operators */}
       <div>
-        <h4 className="mb-2 text-xs font-semibold text-gray-400 uppercase">Self-Dual Operators</h4>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Self-Dual Operators</h4>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {selfDualIndices.map((i) => (
             <DialSlider key={i} index={i} value={values[i]} onChange={handleChange} />
           ))}
         </div>
       </div>
 
-      {/* Involution pairs */}
       <div>
-        <h4 className="mb-2 text-xs font-semibold text-gray-400 uppercase">Involution Pairs</h4>
+        <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">Involution Pairs</h4>
         <div className="space-y-4">
-          {pairIndices.map(([a, b]) => (
-            <div key={`${a}-${b}`} className="rounded-md border border-gray-100 bg-gray-50 p-3">
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <DialSlider index={a} value={values[a]} onChange={handleChange} />
-                <DialSlider index={b} value={values[b]} onChange={handleChange} />
+          {pairIndices.map(([a, b]) => {
+            const divergence = Math.abs(values[a] - values[b]);
+            const isWarning = divergence >= 3;
+            return (
+              <div key={`${a}-${b}`} className={`rounded-lg border p-4 ${isWarning ? 'border-amber-500/30 bg-amber-500/5' : 'border-white/[0.06] bg-white/[0.02]'}`}>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <DialSlider index={a} value={values[a]} onChange={handleChange} />
+                  <DialSlider index={b} value={values[b]} onChange={handleChange} />
+                </div>
+                <div className={`mt-2 text-[10px] text-center font-medium ${isWarning ? 'text-amber-400' : 'text-slate-600'}`}>
+                  Divergence: {divergence} / 4 max
+                </div>
               </div>
-              <div className="mt-1 text-[10px] text-gray-400 text-center">
-                Divergence: {Math.abs(values[a] - values[b])} / 4 max
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
-      {/* Errors */}
       {errors.length > 0 && (
-        <div className="rounded-md border border-red-200 bg-red-50 p-2 text-xs text-red-600">
+        <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-400">
           {errors.map((e, i) => <div key={i}>{e}</div>)}
         </div>
       )}
 
-      {/* Actions */}
       <div className="flex gap-3">
         <button
           onClick={() => onSave(values)}
           disabled={!isValid || saving}
-          className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-5 py-2 text-sm font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
         >
           {saving ? 'Saving...' : 'Save Configuration'}
         </button>
         <button
           onClick={handleReset}
-          className="rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-200"
+          className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
         >
           Reset to Default
         </button>

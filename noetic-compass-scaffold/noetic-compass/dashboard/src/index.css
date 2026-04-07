@@ -1,11 +1,72 @@
 @import "tailwindcss";
 
+@theme {
+  --color-dark-900: #0a0f1a;
+  --color-dark-800: #0f1629;
+  --color-dark-700: #151d33;
+  --color-dark-600: #1b2540;
+  --color-dark-500: #243052;
+  --color-dark-400: #2d3b63;
+  --color-dark-border: rgba(255, 255, 255, 0.06);
+  --color-dark-border-hover: rgba(255, 255, 255, 0.12);
+  --color-glass: rgba(15, 22, 41, 0.6);
+  --color-glass-hover: rgba(15, 22, 41, 0.8);
+  --color-accent-teal: #2dd4bf;
+  --color-accent-cyan: #22d3ee;
+  --color-accent-gold: #fbbf24;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  background-color: #0a0f1a;
+  color: #e2e8f0;
 }
 
 #root {
   min-height: 100vh;
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(15, 22, 41, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.04);
+}
+
+/* Chart fade-in animation */
+@keyframes chart-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-chart-in {
+  animation: chart-fade-in 0.5s ease-out both;
+}
+
+/* Glow effects */
+.glow-teal { filter: drop-shadow(0 0 6px rgba(45, 212, 191, 0.4)); }
+.glow-cyan { filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.4)); }
+
+/* Custom scrollbar for dark mode */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* Range slider dark theme */
+input[type="range"] {
+  accent-color: #2dd4bf;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  height: 4px;
 }

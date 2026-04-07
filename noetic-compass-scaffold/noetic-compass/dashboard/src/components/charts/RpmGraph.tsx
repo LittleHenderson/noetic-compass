@@ -1,9 +1,15 @@
 const NODE_LABELS = ['A0', 'D', 'W', 'P'];
 
 function scoreColor(score: number): string {
-  if (score >= 0.7) return '#22c55e';
-  if (score >= 0.4) return '#f59e0b';
-  return '#ef4444';
+  if (score >= 0.7) return '#34d399';
+  if (score >= 0.4) return '#fbbf24';
+  return '#f87171';
+}
+
+function scoreGlow(score: number): string {
+  if (score >= 0.7) return 'rgba(52, 211, 153, 0.4)';
+  if (score >= 0.4) return 'rgba(251, 191, 36, 0.3)';
+  return 'rgba(248, 113, 113, 0.3)';
 }
 
 export function RpmGraph({
@@ -12,28 +18,28 @@ export function RpmGraph({
   rpmCompleteness,
 }: {
   a0Score: number;
-  driveScores: number[][]; // 7 drives × 3 stages [Dn, Wn, Pn]
+  driveScores: number[][];
   rpmCompleteness: number;
 }) {
-  const rowH = 32;
+  const rowH = 34;
   const colW = 70;
-  const nodeR = 10;
+  const nodeR = 11;
   const startX = 40;
-  const startY = 24;
+  const startY = 26;
   const svgW = startX + colW * 4 + 40;
   const svgH = startY + rowH * 7 + 20;
 
   return (
-    <div>
+    <div className="animate-chart-in">
       <svg width={svgW} height={svgH} className="text-xs">
-        {/* Column headers */}
         {NODE_LABELS.map((label, ci) => (
           <text
             key={label}
             x={startX + ci * colW}
             y={12}
             textAnchor="middle"
-            className="fill-gray-400 text-[10px]"
+            fill="#64748b"
+            fontSize="10"
           >
             {label}
           </text>
@@ -45,10 +51,8 @@ export function RpmGraph({
 
           return (
             <g key={row}>
-              {/* Drive label */}
-              <text x={4} y={y + 4} className="fill-gray-500 text-[10px]">F{row + 1}</text>
+              <text x={4} y={y + 4} fill="#64748b" fontSize="10" fontWeight="500">F{row + 1}</text>
 
-              {/* Arrows */}
               {scores.slice(0, -1).map((_, ci) => {
                 const x1 = startX + ci * colW + nodeR + 2;
                 const x2 = startX + (ci + 1) * colW - nodeR - 2;
@@ -57,14 +61,14 @@ export function RpmGraph({
                   <line
                     key={ci}
                     x1={x1} y1={y} x2={x2} y2={y}
-                    stroke={met ? '#22c55e' : '#ef4444'}
+                    stroke={met ? '#34d399' : '#f87171'}
                     strokeWidth={1.5}
-                    markerEnd="url(#arrowhead)"
+                    strokeOpacity={0.6}
+                    markerEnd="url(#arrowhead-dark)"
                   />
                 );
               })}
 
-              {/* Nodes */}
               {scores.map((score, ci) => (
                 <g key={ci}>
                   <circle
@@ -72,13 +76,26 @@ export function RpmGraph({
                     cy={y}
                     r={nodeR}
                     fill={scoreColor(score)}
-                    opacity={0.8}
+                    fillOpacity={0.2}
+                    stroke={scoreColor(score)}
+                    strokeWidth={1.5}
+                  />
+                  <circle
+                    cx={startX + ci * colW}
+                    cy={y}
+                    r={nodeR + 3}
+                    fill="none"
+                    stroke={scoreColor(score)}
+                    strokeWidth={0}
+                    style={{ filter: `drop-shadow(0 0 4px ${scoreGlow(score)})` }}
                   />
                   <text
                     x={startX + ci * colW}
-                    y={y + 3}
+                    y={y + 3.5}
                     textAnchor="middle"
-                    className="fill-white text-[8px] font-medium"
+                    fill={scoreColor(score)}
+                    fontSize="8"
+                    fontWeight="600"
                   >
                     {(score * 100).toFixed(0)}
                   </text>
@@ -89,13 +106,13 @@ export function RpmGraph({
         })}
 
         <defs>
-          <marker id="arrowhead" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
-            <polygon points="0 0, 6 2, 0 4" fill="#9ca3af" />
+          <marker id="arrowhead-dark" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+            <polygon points="0 0, 6 2, 0 4" fill="#475569" />
           </marker>
         </defs>
       </svg>
-      <div className="mt-1 text-xs text-gray-500 text-center">
-        RPM Completeness: {(rpmCompleteness * 100).toFixed(1)}%
+      <div className="mt-1 text-[11px] text-slate-500 text-center font-medium">
+        RPM Completeness: <span className="text-accent-teal">{(rpmCompleteness * 100).toFixed(1)}%</span>
       </div>
     </div>
   );

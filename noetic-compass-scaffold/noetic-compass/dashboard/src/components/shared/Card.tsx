@@ -10,8 +10,12 @@ export function Card({
   className?: string;
 }) {
   return (
-    <div className={`rounded-lg border border-gray-200 bg-white p-4 shadow-sm ${className}`}>
-      {title && <h3 className="mb-3 text-sm font-semibold text-gray-500 uppercase tracking-wide">{title}</h3>}
+    <div className={`glass-card p-5 animate-chart-in ${className}`}>
+      {title && (
+        <h3 className="mb-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
+          {title}
+        </h3>
+      )}
       {children}
     </div>
   );

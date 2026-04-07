@@ -1,4 +1,3 @@
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 import { DRIVE_LABELS } from '../../lib/constants';
 import { DRIVE_COLORS } from '../../lib/colors';
 
@@ -9,22 +8,28 @@ export function CoreDriveTree({ driveScores }: { driveScores: number[] }) {
     color: DRIVE_COLORS[i],
   }));
 
+  const maxScore = Math.max(...data.map(d => d.score), 1);
+
   return (
-    <BarChart
-      width={400}
-      height={220}
-      data={data}
-      layout="vertical"
-      margin={{ left: 110, right: 20, top: 5, bottom: 5 }}
-    >
-      <XAxis type="number" domain={[0, 100]} />
-      <YAxis type="category" dataKey="name" width={110} tick={{ fontSize: 11 }} />
-      <Tooltip />
-      <Bar dataKey="score" barSize={16}>
-        {data.map((d, i) => (
-          <Cell key={i} fill={d.color} />
-        ))}
-      </Bar>
-    </BarChart>
+    <div className="animate-chart-in space-y-2.5 px-1">
+      {data.map((d, i) => (
+        <div key={i} className="space-y-1">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-medium text-slate-400 truncate pr-2">{d.name}</span>
+            <span className="text-[11px] font-bold text-slate-300 tabular-nums">{d.score.toFixed(1)}</span>
+          </div>
+          <div className="h-2 w-full rounded-full bg-white/[0.04] overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-700 ease-out"
+              style={{
+                width: `${(d.score / maxScore) * 100}%`,
+                backgroundColor: d.color,
+                boxShadow: `0 0 8px ${d.color}50`,
+              }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

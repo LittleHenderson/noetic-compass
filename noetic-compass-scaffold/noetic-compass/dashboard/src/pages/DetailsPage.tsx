@@ -20,8 +20,8 @@ export function DetailsPage() {
 
   if (!record) {
     return (
-      <div className="p-8 text-center text-gray-500">
-        Assessment not found. <button onClick={() => navigate('/history')} className="text-indigo-600 underline">Back to history</button>
+      <div className="p-8 text-center text-slate-500">
+        Assessment not found. <button onClick={() => navigate('/history')} className="text-accent-teal underline">Back to history</button>
       </div>
     );
   }
@@ -36,35 +36,33 @@ export function DetailsPage() {
   const stealthResistance = result.stages.find(s => s.stage === 'inversion_scan')?.data?.stealth_resistance as number | undefined;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-800">Assessment Details</h2>
+        <h2 className="text-xl font-bold text-slate-100">Assessment Details</h2>
         <div className="flex gap-2">
           <button
             onClick={() => navigate('/', { state: { prefill: record.text } })}
-            className="rounded-md bg-indigo-50 px-3 py-1.5 text-xs font-medium text-indigo-600 hover:bg-indigo-100"
+            className="rounded-lg border border-accent-teal/30 bg-accent-teal/10 px-3 py-1.5 text-xs font-medium text-accent-teal hover:bg-accent-teal/20 transition-colors"
           >
             Re-run
           </button>
           <button
             onClick={() => navigate('/history')}
-            className="rounded-md bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-200"
+            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
           >
             Back
           </button>
         </div>
       </div>
 
-      {/* Full text */}
       <Card title="Input Text">
-        <p className="text-sm text-gray-700 whitespace-pre-wrap">{record.text}</p>
-        <p className="mt-2 text-xs text-gray-400">{new Date(record.timestamp).toLocaleString()}</p>
+        <p className="text-sm text-slate-300 whitespace-pre-wrap">{record.text}</p>
+        <p className="mt-2 text-xs text-slate-600">{new Date(record.timestamp).toLocaleString()}</p>
       </Card>
 
-      {/* Score overview */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <Card title="NCCS Score">
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col items-center gap-4">
             <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} />
             <CertBadge certification={result.nccs.certification} composite={result.nccs.composite} />
           </div>
@@ -74,8 +72,7 @@ export function DetailsPage() {
         </Card>
       </div>
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {operatorScores && (
           <Card title="Operator Radar">
             <OperatorRadarChart scores={operatorScores} />
@@ -88,7 +85,7 @@ export function DetailsPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         {driveScores && driveScores.length > 0 && (
           <Card title="Core Drives">
             <CoreDriveTree driveScores={driveScores.map(d => d[0])} />
@@ -106,29 +103,43 @@ export function DetailsPage() {
         )}
       </div>
 
-      {/* Pipeline */}
       <Card title="Pipeline Stages">
-        <div className="space-y-1">
+        <div className="space-y-2">
           {result.stages.map((s, i) => (
-            <div key={i} className="flex items-center gap-2 text-xs">
-              <span className={`h-2 w-2 rounded-full ${s.success ? 'bg-green-500' : 'bg-red-500'}`} />
-              <span className="w-28 font-medium text-gray-600">{PIPELINE_STAGES[i]}</span>
-              {s.error && <span className="text-red-500">{s.error}</span>}
+            <div key={i} className="flex items-center gap-3">
+              <div className="relative flex items-center justify-center w-5 h-5">
+                {s.success ? (
+                  <>
+                    <div className="absolute inset-0 rounded-full bg-emerald-400/20" />
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M2.5 6L5 8.5L9.5 3.5" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </>
+                ) : (
+                  <>
+                    <div className="absolute inset-0 rounded-full bg-red-400/20" />
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                      <path d="M2.5 2.5L7.5 7.5M7.5 2.5L2.5 7.5" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </>
+                )}
+              </div>
+              <span className="text-xs font-medium text-slate-300 w-32">{PIPELINE_STAGES[i]}</span>
+              {s.error && <span className="text-[10px] text-red-400">{s.error}</span>}
             </div>
           ))}
         </div>
       </Card>
 
-      {/* Raw JSON toggle */}
       <Card>
         <button
           onClick={() => setShowRaw(!showRaw)}
-          className="text-xs font-medium text-indigo-600 hover:underline"
+          className="text-xs font-medium text-accent-teal hover:text-accent-cyan transition-colors"
         >
           {showRaw ? 'Hide' : 'Show'} Raw JSON
         </button>
         {showRaw && (
-          <pre className="mt-2 max-h-96 overflow-auto rounded bg-gray-100 p-3 text-xs">
+          <pre className="mt-3 max-h-96 overflow-auto rounded-lg bg-dark-800 border border-white/[0.06] p-4 text-xs text-slate-400">
             {JSON.stringify(result, null, 2)}
           </pre>
         )}

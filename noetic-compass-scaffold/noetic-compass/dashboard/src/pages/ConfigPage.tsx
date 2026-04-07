@@ -13,14 +13,14 @@ export function ConfigPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-bold text-gray-800">Dial Configuration</h2>
+    <div className="space-y-6 max-w-4xl mx-auto">
+      <h2 className="text-xl font-bold text-slate-100">Dial Configuration</h2>
 
       {config.isLoading && <LoadingSpinner />}
       <ErrorBanner error={(config.error ?? mutation.error) as Error | null} />
 
       {mutation.isSuccess && (
-        <div className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-700">
+        <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-400">
           Configuration saved successfully.
         </div>
       )}

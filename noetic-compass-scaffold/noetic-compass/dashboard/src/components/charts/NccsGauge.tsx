@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell } from 'recharts';
-import { certColor } from '../../lib/colors';
+import { certColor, GAUGE_GRADIENT } from '../../lib/colors';
 
 export function NccsGauge({
   composite,
@@ -9,32 +9,47 @@ export function NccsGauge({
   certification: string;
 }) {
   const color = certColor(certification);
+  const gradientId = 'nccs-gauge-gradient';
   const data = [
     { value: composite },
     { value: 100 - composite },
   ];
 
   return (
-    <div className="flex flex-col items-center">
-      <PieChart width={200} height={120}>
+    <div className="flex flex-col items-center animate-chart-in">
+      <PieChart width={220} height={130}>
+        <defs>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="0">
+            {GAUGE_GRADIENT.map((stop) => (
+              <stop key={stop.offset} offset={stop.offset} stopColor={stop.color} />
+            ))}
+          </linearGradient>
+        </defs>
         <Pie
           data={data}
-          cx={100}
-          cy={100}
+          cx={110}
+          cy={110}
           startAngle={180}
           endAngle={0}
-          innerRadius={60}
-          outerRadius={90}
+          innerRadius={65}
+          outerRadius={95}
           dataKey="value"
           stroke="none"
         >
-          <Cell fill={color} />
-          <Cell fill="#e5e7eb" />
+          <Cell fill={`url(#${gradientId})`} />
+          <Cell fill="rgba(255,255,255,0.04)" />
         </Pie>
       </PieChart>
-      <div className="-mt-4 text-center">
-        <div className="text-3xl font-bold" style={{ color }}>{composite.toFixed(1)}</div>
-        <div className="text-xs text-gray-500">NCCS Composite</div>
+      <div className="-mt-6 text-center">
+        <div
+          className="text-4xl font-extrabold tracking-tight"
+          style={{ color, textShadow: `0 0 20px ${color}40` }}
+        >
+          {composite.toFixed(1)}
+        </div>
+        <div className="mt-1 text-[11px] font-medium uppercase tracking-widest text-slate-500">
+          NCCS Composite
+        </div>
       </div>
     </div>
   );
