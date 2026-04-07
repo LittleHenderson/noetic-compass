@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { DOMAIN_SHORT, OPERATOR_SHORT } from '../../lib/constants';
 import { DOMAIN_COLORS } from '../../lib/colors';
 import { ExplainPanel } from '../shared/ExplainPanel';
@@ -18,7 +18,7 @@ export function StateHeatmap({
     : null;
 
   return (
-    <div>
+    <div className="chart-interactive">
       <div className="overflow-x-auto animate-chart-in">
         <div className="inline-grid gap-1" style={{ gridTemplateColumns: `auto repeat(10, 1fr)` }}>
           <div />
@@ -29,8 +29,8 @@ export function StateHeatmap({
           ))}
 
           {DOMAIN_SHORT.map((domain, di) => (
-            <>
-              <div key={`label-${domain}`} className="px-2 py-1 text-xs font-medium text-slate-400 flex items-center">
+            <Fragment key={domain}>
+              <div className="px-2 py-1 text-xs font-medium text-slate-400 flex items-center">
                 {domain}
               </div>
               {operatorScores.map((opScore, oi) => {
@@ -53,7 +53,7 @@ export function StateHeatmap({
                   />
                 );
               })}
-            </>
+            </Fragment>
           ))}
         </div>
         <div className="chart-hint mt-1 text-center text-[10px] text-slate-600 opacity-0 transition-opacity">

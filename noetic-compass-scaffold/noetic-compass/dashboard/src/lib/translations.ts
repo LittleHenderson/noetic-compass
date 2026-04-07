@@ -204,17 +204,27 @@ export function bhattacharyyaToSimilarity(bc: number): number {
   return Math.max(0, Math.min(100, bc * 100));
 }
 
+/** Max weight for each NCCS sub-score (from the scoring algorithm). */
+const NCCS_MAX_WEIGHTS: Record<string, number> = {
+  operator_profile: 25,
+  domain_coherence: 20,
+  drive_rpm_integrity: 20,
+  pathway_quality: 10,
+  inversion_resistance: 15,
+  social_engineering: 10,
+};
+
 /** Translate the NCCS sub-scores into business-ready metrics. */
 export function translateNccs(nccs: NccsResult): TranslatedMetricData[] {
   const metrics: TranslatedMetricData[] = [
-    translateMetric('operator_profile', nccs.operator_profile / 100),
-    translateMetric('domain_coherence', nccs.domain_coherence / 100),
-    translateMetric('drive_rpm_integrity', nccs.drive_rpm_integrity / 100),
-    translateMetric('pathway_quality', nccs.pathway_quality / 100),
-    translateMetric('inversion_resistance', nccs.inversion_resistance / 100),
+    translateMetric('operator_profile', nccs.operator_profile / NCCS_MAX_WEIGHTS.operator_profile),
+    translateMetric('domain_coherence', nccs.domain_coherence / NCCS_MAX_WEIGHTS.domain_coherence),
+    translateMetric('drive_rpm_integrity', nccs.drive_rpm_integrity / NCCS_MAX_WEIGHTS.drive_rpm_integrity),
+    translateMetric('pathway_quality', nccs.pathway_quality / NCCS_MAX_WEIGHTS.pathway_quality),
+    translateMetric('inversion_resistance', nccs.inversion_resistance / NCCS_MAX_WEIGHTS.inversion_resistance),
   ];
   if (nccs.social_engineering != null) {
-    metrics.push(translateMetric('social_engineering', nccs.social_engineering / 100));
+    metrics.push(translateMetric('social_engineering', nccs.social_engineering / NCCS_MAX_WEIGHTS.social_engineering));
   }
   return metrics;
 }

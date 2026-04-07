@@ -1,5 +1,21 @@
 # Noetic Compass — Progress Log
 
+## Session 13: Bug Fixes — Severity Labels & Heatmap Interactivity (April 7, 2026)
+
+### Fix 1: NCCS Sub-Score Severity Normalization
+- **`dashboard/src/lib/translations.ts`** — `translateNccs()` was dividing all sub-scores by 100, but each has a different max weight (operator=25, domain=20, drive=20, pathway=10, inversion=15, social=10). Added `NCCS_MAX_WEIGHTS` constant and normalized each sub-score by its correct maximum. Without fix: all severities showed "Critical" (e.g., 18.5/100=18.5%). With fix: correct severities (e.g., 18.5/25=74% → "Good").
+
+### Fix 2: StateHeatmap React Fragment Key & Interactivity
+- **`dashboard/src/components/charts/StateHeatmap.tsx`** — Fixed two issues:
+  1. Replaced keyless `<>` fragment in `.map()` with `<Fragment key={domain}>` — eliminated React "unique key" console error that could cause rendering/click handler issues.
+  2. Added `chart-interactive` class to root div — enables the CSS hover rule that shows "Click a cell for details" hint text on hover.
+
+### Verification
+- 0 TypeScript errors, 23/23 Vitest tests pass, 0 console errors
+- Browser-tested: severity labels now show correct values (Good/Excellent), heatmap cells clickable with ExplainPanel drill-down working
+
+---
+
 ## Session 12: Four-Task Implementation (April 7, 2026)
 
 ### Task 4: Makefile (DevEx)
