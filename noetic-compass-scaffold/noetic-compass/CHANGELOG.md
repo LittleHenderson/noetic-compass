@@ -1,5 +1,40 @@
 # Noetic Compass — Progress Log
 
+## Session 18: Production Readiness — LLM Integration, Validation Tooling, Deployment (April 7, 2026)
+
+### Section 1: Real LLM Integration
+- **`.env.example`** — API key template with NC_ prefix namespacing
+- **`api/llm_connectors/base.py`** — Added `CAS_SYSTEM_PROMPT` (structured prompt for all 10 COs, 4 domains, 7 drives), token usage logging, retry failure logging
+- **`api/llm_connectors/openai_connector.py`** — 60s timeout, max_tokens=4096, temperature=0.3
+- **`api/llm_connectors/anthropic_connector.py`** — 60s timeout, total_tokens computed
+- **`api/llm_connectors/google_connector.py`** — total_tokens computed
+- **`api/pipeline/stages.py`** — dial_adjustment uses CAS_SYSTEM_PROMPT
+- **`dashboard/src/pages/AssessmentPage.tsx`** — mock=false for real providers, live API warning indicator
+
+### Section 2: Validation Study Tooling
+- **`scenarios/sample_prompts.json`** — 50 diverse prompts (ethics, hiring, healthcare, AI safety, leadership)
+- **`validation/run_baseline_study.py`** — Batch runner via TestClient, extracts operator/domain/drive scores, summary statistics
+- **`validation/human_labeling_tool.py`** — CLI for collecting human CO ratings (0-10) and domain coherence ratings per prompt-response pair
+- **`validation/correlation_analysis.py`** — Pearson r with p-value, Fisher z-transform 95% CI, Cohen's kappa inter-rater reliability, 4-section report
+- **`validation/README.md`** — Updated with full study workflow documentation
+
+### Section 3: Deployment Preparation
+- **`docker-compose.yml`** — cas-api + cas-dashboard (nginx) + Redis stack
+- **`Dockerfile.api`** — Multi-stage build (Rust cas-engine via maturin, then Python runtime)
+- **`dashboard/Dockerfile`** — Node build + nginx serve
+- **`dashboard/nginx.conf`** — SPA fallback + API proxy + static asset caching
+- **`infra/render.yaml`** — Render Blueprint (API web service + static dashboard)
+- **`docs/DEPLOYMENT.md`** — Docker Compose + Render deployment guide
+- **`api/config.py`** — Added rate_limit_tier setting (community/professional/enterprise)
+- **`api/middleware/rate_limit.py`** — Tiered rate limiting with per-API-key monthly caps (Community: 50/mo, Professional: 500/mo, Enterprise: unlimited) + token bucket RPM
+
+### Verification
+- Python: 60/60 tests pass (55 core + 5 validation)
+- Vitest: 23/23 tests pass
+- TypeScript: 0 errors
+
+---
+
 ## Session 17: Anthropic Emotions Integration + Validation Framework (April 7, 2026)
 
 ### PART 2: Anthropic Functional Emotions Integration
