@@ -30,7 +30,7 @@ endif
 .PHONY: all install install-rust install-python install-node \
         dev dev-api dev-ui \
         build build-engine build-ui \
-        test test-rust test-python test-node \
+        test test-rust test-python test-node validate \
         lint lint-python lint-node \
         clean help
 
@@ -100,6 +100,10 @@ test-python:  ## Run Python pytest suite
 test-node:  ## Run Vitest dashboard tests
 	@echo "──── Running dashboard tests ────"
 	cd $(DASHBOARD) && $(NPM) run test
+
+validate:  ## Run validation framework (reproducibility + sensitivity)
+	@echo "──── Running validation suite ────"
+	$(PYTEST) validation/ -v
 
 # ─── Lint ─────────────────────────────────────────────────────────────
 

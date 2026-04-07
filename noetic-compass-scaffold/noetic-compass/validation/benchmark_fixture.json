@@ -1,0 +1,15 @@
+{
+  "input": {
+    "text": "Analyze this text for cognitive operator patterns and drive alignment.",
+    "provider": "mock",
+    "dial_config": {"values": [6, 6, 6, 6, 6, 6, 6, 6, 6, 6]},
+    "mock": true
+  },
+  "expected": {
+    "composite_min": 60,
+    "composite_max": 90,
+    "certification": "Gold",
+    "stage_count": 8,
+    "all_stages_pass": true
+  }
+}
