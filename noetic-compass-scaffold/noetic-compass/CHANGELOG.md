@@ -1,5 +1,52 @@
 # Noetic Compass — Progress Log
 
+## Session 17: Anthropic Emotions Integration + Validation Framework (April 7, 2026)
+
+### PART 2: Anthropic Functional Emotions Integration
+
+#### HowItWorksPage — "The Science Behind It" Section
+- **`dashboard/src/pages/HowItWorksPage.tsx`** — Added 9th section (`id='science'`, label "The Science") to SECTIONS array and new `<SectionReveal>` block with three glass-card mapping cards:
+  - **CO-3 Concretization** ↔ Frustration/curiosity functional states
+  - **CO-5 Differentiation** ↔ Evaluative internal states
+  - **CO-8/CO-9 Expansion/Contraction** ↔ Exploration/exploitation trade-off
+  - Closing note on independent convergence strengthening both frameworks
+
+#### FaqPage — New FAQ Entry
+- **`dashboard/src/pages/FaqPage.tsx`** — Added FAQ item at index 1: "How does CAS relate to Anthropic's research on AI emotions?" with two-paragraph answer explaining functional emotions alignment and link to `/how-it-works#science`
+
+#### OperatorRadarChart Tooltips
+- **`dashboard/src/lib/interpretations.ts`** — Appended functional emotions parallels to OPERATOR_DESC entries:
+  - Index 3 (Concretization): frustration/curiosity parallel
+  - Index 5 (Differentiation): evaluative states parallel
+  - Index 8 (Expansion): exploration drive parallel
+  - Index 9 (Contraction): exploitation/focus parallel
+
+### PART 3: Validation Framework
+
+#### New Files
+- **`validation/README.md`** — Description, usage instructions (`make validate`)
+- **`validation/conftest.py`** — sys.path setup for api module resolution
+- **`validation/benchmark_fixture.json`** — Frozen reference input with expected composite range (60-90), Gold certification, 8 stages all passing
+- **`validation/reproducibility_test.py`** — 2 tests:
+  - `test_mock_determinism` — 5 identical /wrap calls produce identical composites
+  - `test_benchmark_fixture` — composite within range, cert matches, 8 stages pass
+- **`validation/sensitivity_test.py`** — 3 tests:
+  - `test_dial_sensitivity` — dials=5 vs dials=8 produce different dial_values
+  - `test_prompt_sensitivity` — different prompts produce different operator scores
+  - `test_open_simplex_validation` — domain_averages > 0 and sum ≈ 1.0
+
+#### Build System
+- **`Makefile`** — Added `validate` target after `test-node`, added to `.PHONY`
+- **`pyproject.toml`** — Added `validation` to `testpaths`
+
+### Verification
+- `npx tsc --noEmit` — 0 errors
+- `npx vitest run` — 23/23 tests pass
+- `pytest tests/` — 55/55 tests pass
+- `pytest validation/` — 5/5 tests pass
+
+---
+
 ## Session 16: Performance — Lazy Loading, Chunk Splitting, Query Tuning (April 7, 2026)
 
 ### Route-Based Code Splitting
