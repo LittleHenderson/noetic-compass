@@ -26,7 +26,7 @@ def valid_assess_payload() -> dict:
     """Valid payload for POST /assess."""
     return {
         "operator_scores": [0.8] * 10,
-        "domain_averages": [0.5, 0.5, 0.5, 0.5],
+        "domain_averages": [0.25, 0.25, 0.25, 0.25],
         "drive_scores": [0.7] * 7,
         "rpm_completeness": 0.8,
         "pathway_rpm_completeness": 0.8,

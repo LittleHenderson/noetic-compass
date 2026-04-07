@@ -40,11 +40,24 @@ async def test_input_analyzer_whitespace_only():
 
 @pytest.mark.asyncio
 async def test_rpm_gate():
+    # RPM gate derives a0 from text length; short text may yield a0 < threshold
     analyzed = await input_analyzer("Test text for RPM gate.")
     result = await rpm_gate(analyzed)
-    assert result.passed is True
     assert 0 <= result.rpm_completeness <= 1
     assert 0 <= result.a0_score <= 1
+    assert result.heuristic is True
+    assert len(result.drive_scores) == 7
+    assert all(len(chain) == 3 for chain in result.drive_scores)
+
+
+@pytest.mark.asyncio
+async def test_rpm_gate_longer_text():
+    """Longer text produces higher a0 and passes the gate."""
+    long_text = " ".join(["cognitive architecture assessment"] * 50)
+    analyzed = await input_analyzer(long_text)
+    result = await rpm_gate(analyzed)
+    assert result.passed is True
+    assert result.a0_score > 0.5
 
 
 @pytest.mark.asyncio
@@ -135,3 +148,5 @@ async def test_output_gate():
     result = await output_gate(op, dc, inv, rpm)
     assert 0 <= result.composite <= 100
     assert result.certification in ["Platinum", "Gold", "Silver", "Bronze", "Fail"]
+    assert result.social_engineering is None
+    assert "social_engineering" in result.not_measured

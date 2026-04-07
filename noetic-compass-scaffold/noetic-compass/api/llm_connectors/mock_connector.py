@@ -31,12 +31,10 @@ class MockLLMConnector(BaseLLMConnector):
 
         # Generate synthetic operator scores and assessment text
         scores = [round(rng.uniform(0.4, 0.95), 3) for _ in range(10)]
-        drives = [round(rng.uniform(0.3, 0.9), 3) for _ in range(7)]
 
         text = (
             f"CAS Assessment Result:\n"
             f"Operator Scores: {scores}\n"
-            f"Drive Scores: {drives}\n"
             f"Analysis: The subject demonstrates moderate cognitive alignment "
             f"with balanced operator involution pairs. Domain coherence is "
             f"within acceptable parameters.\n"

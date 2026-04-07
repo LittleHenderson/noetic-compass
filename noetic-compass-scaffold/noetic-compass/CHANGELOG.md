@@ -1,5 +1,24 @@
 # Noetic Compass — Progress Log
 
+## Session 11: Re-Audit Fixes (April 7, 2026)
+
+### Re-Audit Item 1: Python Version Cap
+- **`cas-engine/pyproject.toml`** — `requires-python` updated from `<=3.13` to `<=3.14`
+
+### Re-Audit Item 2: Remove Unused Drive Scores Emission
+- **`api/llm_connectors/mock_connector.py`** — Removed `Drive Scores: {drives}` line from mock response text (no pipeline stage parses it)
+
+### Re-Audit Item 3: Research Heuristic Labelling
+- **`dashboard/src/lib/reportData.ts`** — `certLevel` now includes `(Research Heuristic)` suffix. Verdict includes footnote: "Certification levels are based on heuristic scoring under active empirical validation."
+
+### Re-Audit Item 4: Fix 8 Failing Tests
+- **`tests/conftest.py`** — `domain_averages` fixed from `[0.5]*4` (sum=2) to `[0.25]*4` (sum=1) for simplex compliance
+- **`tests/test_assess.py`** — All payloads use simplex domain_averages. Relaxed `social_engineering` assertion to allow None. Added `test_assess_rejects_bad_simplex`
+- **`tests/test_connectors.py`** — Removed obsolete `test_registry_mock_mode_overrides`. Added `test_mock_connector_deterministic` and `test_registry_explicit_provider_respected`
+- **`tests/test_pipeline.py`** — Fixed `test_rpm_gate` for short text (a0 may be < threshold). Added `test_rpm_gate_longer_text`. Added `social_engineering=None` and `not_measured` assertions to `test_output_gate`
+
+### Result: 50/50 tests pass
+
 ## Session 10: 6-Item Audit Fix (April 7, 2026)
 
 ### Audit Item 1 (CRITICAL): Replace Pipeline Placeholder Values

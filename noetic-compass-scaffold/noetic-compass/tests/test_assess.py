@@ -14,7 +14,7 @@ def test_assess_valid(client, auth_headers, valid_assess_payload):
 def test_assess_perfect_scores(client, auth_headers):
     payload = {
         "operator_scores": [1.0] * 10,
-        "domain_averages": [1.0] * 4,
+        "domain_averages": [0.25, 0.25, 0.25, 0.25],
         "drive_scores": [1.0] * 7,
         "rpm_completeness": 1.0,
         "pathway_rpm_completeness": 1.0,
@@ -35,7 +35,7 @@ def test_assess_perfect_scores(client, auth_headers):
 def test_assess_zero_scores(client, auth_headers):
     payload = {
         "operator_scores": [0.0] * 10,
-        "domain_averages": [0.0] * 4,
+        "domain_averages": [0.25, 0.25, 0.25, 0.25],
         "drive_scores": [0.0] * 7,
         "rpm_completeness": 0.0,
         "pathway_rpm_completeness": 0.0,
@@ -56,7 +56,7 @@ def test_assess_zero_scores(client, auth_headers):
 def test_assess_wrong_length_operator_scores(client, auth_headers):
     payload = {
         "operator_scores": [0.8] * 5,  # wrong length
-        "domain_averages": [0.5] * 4,
+        "domain_averages": [0.25, 0.25, 0.25, 0.25],
         "drive_scores": [0.7] * 7,
         "rpm_completeness": 0.8,
     }
@@ -79,7 +79,20 @@ def test_assess_all_sub_scores_present(client, auth_headers, valid_assess_payloa
         "drive_rpm_integrity",
         "pathway_quality",
         "inversion_resistance",
-        "social_engineering",
     ]:
         assert key in data
         assert isinstance(data[key], float)
+    # social_engineering may be null (not measured) or float
+    assert "social_engineering" in data
+
+
+def test_assess_rejects_bad_simplex(client, auth_headers):
+    """Domain averages that don't sum to 1 should be rejected."""
+    payload = {
+        "operator_scores": [0.8] * 10,
+        "domain_averages": [1.0, 1.0, 1.0, 1.0],  # sum=4, not simplex
+        "drive_scores": [0.7] * 7,
+        "rpm_completeness": 0.8,
+    }
+    resp = client.post("/assess", json=payload, headers=auth_headers)
+    assert resp.status_code == 422

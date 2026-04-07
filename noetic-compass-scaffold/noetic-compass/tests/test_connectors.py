@@ -22,7 +22,15 @@ async def test_mock_connector_includes_operator_scores():
     connector = MockLLMConnector()
     resp = await connector.generate("Test prompt")
     assert "Operator Scores:" in resp.text
-    assert "Drive Scores:" in resp.text
+
+
+@pytest.mark.asyncio
+async def test_mock_connector_deterministic():
+    """Same input should produce same output (reproducibility)."""
+    connector = MockLLMConnector()
+    resp1 = await connector.generate("Determinism test")
+    resp2 = await connector.generate("Determinism test")
+    assert resp1.text == resp2.text
 
 
 def test_registry_returns_mock():
@@ -31,30 +39,21 @@ def test_registry_returns_mock():
 
 
 def test_registry_unknown_provider():
-    """When mock_llm=False, unknown provider should raise LLMError."""
-    import api.config
-    original = api.config.settings.mock_llm
-    api.config.settings.mock_llm = False
-    try:
-        with pytest.raises(LLMError, match="Unknown provider"):
-            get_connector("unknown_provider")
-    finally:
-        api.config.settings.mock_llm = original
+    with pytest.raises(LLMError, match="Unknown provider"):
+        get_connector("unknown_provider")
 
 
 def test_registry_openai_no_key():
-    """Should fail if key not configured and not in mock mode."""
-    import api.config
-    original = api.config.settings.mock_llm
-    api.config.settings.mock_llm = False
-    try:
-        with pytest.raises(LLMError, match="API key not configured"):
-            get_connector("openai")
-    finally:
-        api.config.settings.mock_llm = original
+    """Should fail if key not configured."""
+    with pytest.raises(LLMError, match="API key not configured"):
+        get_connector("openai")
 
 
-def test_registry_mock_mode_overrides():
-    """When mock_llm=True, any provider returns mock."""
-    connector = get_connector("openai")
-    assert isinstance(connector, MockLLMConnector)
+def test_registry_explicit_provider_respected():
+    """Explicit provider='mock' returns mock; explicit 'openai' does NOT
+    fall back to mock — it raises because no API key is set."""
+    mock = get_connector("mock")
+    assert isinstance(mock, MockLLMConnector)
+
+    with pytest.raises(LLMError, match="API key not configured"):
+        get_connector("openai")

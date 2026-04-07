@@ -182,7 +182,7 @@ export function extractReportData(
     assessmentId: crypto.randomUUID?.() ?? Date.now().toString(36),
     inputExcerpt: text.length > 300 ? text.slice(0, 297) + '...' : text,
     nccs: result.nccs,
-    certLevel: cert,
+    certLevel: `${cert} (Research Heuristic)`,
     operators,
     involutionPairs,
     domains,
@@ -216,12 +216,13 @@ function buildVerdict(
     Fail: 'insufficient',
   };
   const level = certDesc[cert] ?? 'unknown';
-  let verdict = `This assessment achieved a ${cert} certification with a composite NCCS score of ${composite}/100, indicating ${level} cognitive architecture integrity.`;
+  let verdict = `This assessment achieved a ${cert} (Research Heuristic) certification with a composite NCCS score of ${composite}/100, indicating ${level} cognitive architecture integrity.`;
   verdict += ` The strongest dimension is ${topStrength}, while the primary area for improvement is ${topVuln}.`;
   if (brokenCount > 0) {
     verdict += ` ${brokenCount} of 7 RPM capability chains have broken prerequisites, which may limit operational effectiveness.`;
   } else {
     verdict += ` All 7 RPM capability chains are intact, indicating healthy prerequisite flow.`;
   }
+  verdict += ` Note: Certification levels are based on heuristic scoring under active empirical validation. They do not constitute validated psychological or safety assessments.`;
   return verdict;
 }
