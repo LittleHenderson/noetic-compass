@@ -84,3 +84,44 @@ input[type="range"]::-webkit-slider-runnable-track {
   border-radius: 4px;
   height: 4px;
 }
+
+/* Section reveal animation (IntersectionObserver driven) */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.section-reveal.section-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* FAQ accordion expand/collapse */
+.accordion-body {
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+.accordion-open {
+  max-height: 600px;
+  opacity: 1;
+}
+.accordion-close {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* Scroll-spy active indicator */
+.scroll-spy-active {
+  position: relative;
+}
+.scroll-spy-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 16px;
+  background: #2dd4bf;
+  border-radius: 1px;
+}

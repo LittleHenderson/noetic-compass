@@ -1,5 +1,32 @@
 # Noetic Compass — Progress Log
 
+## Session 8: How It Works + FAQ Pages (April 6, 2026)
+
+### Added
+- `src/hooks/useScrollSpy.ts` — IntersectionObserver-based scroll-spy hook for sticky nav highlighting
+- `src/components/shared/SectionReveal.tsx` — viewport-triggered fade-in + slide-up wrapper
+- `src/pages/HowItWorksPage.tsx` — 8-section premium documentation page:
+  - The Big Picture (8-stage pipeline diagram)
+  - 10 Cognitive Operators (grid with involution pairs & self-duals)
+  - 4 Processing Domains (vertical descent + feedback loop)
+  - 7 Core Drives (cards with inversion pair indicators)
+  - RPM Prerequisite Model (section-retraction chain, one-directional)
+  - Inversion Detection (7 axes explained)
+  - NCCS Scoring (stacked bar weights + certification tiers)
+  - The Math (Fisher-Rao, open simplex, geodesic distance, admissibility)
+- `src/pages/FaqPage.tsx` — 10-question accordion with animated expand/collapse and chevron rotation
+- Sidebar nav entries for How It Works (book icon) and FAQ (question-mark icon)
+- Routes `/how-it-works` and `/faq` in App.tsx
+- CSS: `section-reveal`/`section-revealed` animation, `accordion-open`/`accordion-close` transitions, `scroll-spy-active` indicator
+
+### Reuses
+- All constants: OPERATOR_LABELS, DOMAIN_LABELS, DRIVE_LABELS, INVERSION_AXIS_LABELS, NCCS_WEIGHTS, PIPELINE_STAGES, CERTIFICATION_THRESHOLDS
+- Colors: CERT_COLORS, DOMAIN_COLORS, DRIVE_COLORS
+
+### Verified
+- `npm run build` — 0 TypeScript errors
+- `npx vitest run` — 23/23 tests pass (no regressions)
+
 ## Session 7: Interactive Assessment Readouts (April 6, 2026)
 
 ### Interactive Explanation Panels

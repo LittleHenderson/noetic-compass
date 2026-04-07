@@ -5,6 +5,8 @@ import { AssessmentPage } from './pages/AssessmentPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { ConfigPage } from './pages/ConfigPage';
 import { DetailsPage } from './pages/DetailsPage';
+import { HowItWorksPage } from './pages/HowItWorksPage';
+import { FaqPage } from './pages/FaqPage';
 import { LoginPage } from './pages/LoginPage';
 import type { ReactNode } from 'react';
 
@@ -29,6 +31,8 @@ export default function App() {
                 <Route path="/history" element={<HistoryPage />} />
                 <Route path="/config" element={<ConfigPage />} />
                 <Route path="/details/:id" element={<DetailsPage />} />
+                <Route path="/how-it-works" element={<HowItWorksPage />} />
+                <Route path="/faq" element={<FaqPage />} />
               </Routes>
             </AppShell>
           </AuthGuard>
