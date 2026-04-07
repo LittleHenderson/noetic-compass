@@ -1,5 +1,78 @@
 # Noetic Compass — Progress Log
 
+## Session 6: Phase 3 — Frontend Dashboard (April 6, 2026)
+
+### Backend Enhancement (Pre-requisite)
+- Added `drive_scores`, `involution_balances`, `axis_scores` to pipeline stage data in `api/pipeline/runner.py`
+- Enables chart components to render full CAS visualization data
+
+### T3.0: Vite + React + TypeScript Scaffold
+- Created React 18 + TypeScript project via `create vite@latest --template react-ts`
+- Installed: react-router-dom, @tanstack/react-query, recharts, tailwindcss v4, @tailwindcss/vite, zustand
+- Dev deps: vitest, jsdom, @testing-library/{react,jest-dom,user-event}, msw
+- Configured vite proxy (`/api` → `localhost:8000`), Tailwind v4 CSS import
+
+### T3.1: TypeScript Types + Constants
+- `src/api/types.ts` — 12 types mirroring api/models.py (NccsResult, WrapResult, etc.)
+- `src/lib/constants.ts` — OPERATOR_LABELS[10], DOMAIN_LABELS[4], DRIVE_LABELS[7], INVERSION_AXIS_LABELS[7], NCCS_WEIGHTS, PIPELINE_STAGES[8]
+- `src/lib/colors.ts` — Certification colors, domain/drive/involution pair palettes
+
+### T3.2: API Client Layer
+- `src/api/client.ts` — fetch wrapper with JWT from localStorage, typed ApiError
+- `src/api/auth.ts` — getToken/setToken/clearToken/isAuthenticated
+- `src/api/endpoints.ts` — typed wrappers: postWrap, postAssess, postBatch, getConfig, putConfig, getHealth
+
+### T3.3: TanStack Query Hooks + Zustand Store
+- `src/hooks/` — useWrap (saves to history), useAssess, useBatch, useConfig (query+mutation), useHealth (30s refetch)
+- `src/stores/historyStore.ts` — Zustand + persist middleware, localStorage-backed, max 100 records
+
+### T3.4: Shared Components
+- Card, LoadingSpinner, ErrorBanner (with status code labels), CertBadge
+
+### T3.5: Chart Components (7 visualizations)
+- NccsGauge — semicircular Recharts PieChart, certification-colored
+- SubScoreBreakdown — horizontal BarChart, 6 NCCS sub-components with weight labels
+- OperatorRadarChart — 10-spoke RadarChart (CO-0 to CO-9)
+- StateHeatmap — CSS grid 4×10 (domains × operators), intensity-colored cells
+- CoreDriveTree — 7 horizontal bars, drive-colored
+- RpmGraph — custom SVG, 7 rows × 4 nodes (A0→Dn→Wn→Pn), colored by satisfaction
+- InversionMap — 7-axis RadarChart with stealth resistance display
+
+### T3.6: Layout Components
+- AppShell — flex layout with 240px sidebar, mobile hamburger
+- Sidebar — nav links + health indicator dot
+- Header — title, auth status, logout
+
+### T3.7: AssessmentPage
+- Text input + provider select + submit
+- Full chart rendering on success: gauge, sub-scores, radar, heatmap, drives, RPM, inversions
+- Stage timeline with status indicators
+
+### T3.8: Dial Components
+- `src/lib/validation.ts` — validateDials: range [3,9] + involution divergence ≤4
+- DialSlider — range input (3-9) with operator label
+- DialPanel — 10 sliders grouped by self-dual/involution pairs, inline validation, save/reset
+
+### T3.9: ConfigPage
+- Loads config via useConfig, renders DialPanel, save/reset with success feedback
+
+### T3.10: HistoryPage + DetailsPage
+- History table with timestamp, text excerpt, composite, certification, link to details
+- Details view with all charts, full text, stage timeline, raw JSON toggle, re-run button
+
+### T3.11: Router + LoginPage
+- BrowserRouter: / (Assessment), /history, /config, /details/:id, /login
+- JWT token input + connect flow, auth guard redirects to /login
+
+### T3.12: Tests (23 passing)
+- validation.test.ts (8): dial range, involution divergence, edge cases
+- NccsGauge.test.tsx (3): renders composite for Gold/Fail/Platinum
+- DialPanel.test.tsx (5): slider count, save/reset, disabled while saving
+- AssessmentPage.test.tsx (2): form render, submit flow with MSW
+- api.test.ts (5): auth store, JWT header attachment, 401/422 error handling
+
+**Total: 42 Rust + 47 Python + 23 Frontend = 112 tests passing. PHASE 3 COMPLETE.**
+
 ## Session 5: Phase 2 — API Gateway + LLM Connectors (April 6, 2026)
 
 ### Task 2.1: PyO3 Bindings (maturin)
@@ -133,12 +206,11 @@
 ### Current Status
 - [x] Phase 1: CAS Scoring Engine — COMPLETE (42 Rust tests)
 - [x] Phase 2: API Gateway + LLM Connectors — COMPLETE (47 Python tests)
-- [ ] Phase 3: Frontend Dashboard — NOT STARTED
+- [x] Phase 3: Frontend Dashboard — COMPLETE (23 Frontend tests)
 - [ ] Phase 4: CAS-Native AI — NOT STARTED
 
 ### Next Steps
-1. Phase 3: Frontend Dashboard (React 18 + TypeScript)
-2. Phase 4: CAS-Native AI (PyTorch)
+1. Phase 4: CAS-Native AI (PyTorch)
 
 ### Failed Approaches
 (none yet)

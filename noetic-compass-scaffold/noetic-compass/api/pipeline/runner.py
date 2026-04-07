@@ -50,6 +50,7 @@ class WrapPipelineRunner:
             data={
                 "a0_score": rpm_result.a0_score,
                 "rpm_completeness": rpm_result.rpm_completeness,
+                "drive_scores": rpm_result.drive_scores,
             },
         ))
 
@@ -77,6 +78,7 @@ class WrapPipelineRunner:
             data={
                 "profile_score": op_result.profile_score,
                 "scores": op_result.scores,
+                "involution_balances": op_result.involution_balances,
             },
         ))
 
@@ -96,6 +98,7 @@ class WrapPipelineRunner:
             data={
                 "resistance_score": inv_result.resistance_score,
                 "stealth_resistance": inv_result.stealth_resistance,
+                "axis_scores": inv_result.axis_scores,
             },
         ))
 
