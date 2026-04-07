@@ -11,9 +11,10 @@ const FAQ_ITEMS: FaqItem[] = [
     question: 'What is the Noetic Compass?',
     answer: (
       <p>
-        The Noetic Compass is an AI Psychology &amp; Ethics Assessment Platform built on the
-        Cognitive Architecture System (CAS) v7.4. It evaluates AI model responses for psychological
-        alignment, ethical integrity, and cognitive coherence across 40 cognitive states.
+        The Noetic Compass is an AI Cognitive Architecture Assessment Platform (Research Prototype)
+        built on the Cognitive Architecture System (CAS) v7.4. It evaluates AI model responses for
+        cognitive architecture integrity and coherence across 40 cognitive states. All scores are
+        heuristic-derived and empirical validation is pending.
       </p>
     ),
   },

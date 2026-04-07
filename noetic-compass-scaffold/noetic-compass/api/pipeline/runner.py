@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import hashlib
+import time
+
 from api.llm_connectors.base import BaseLLMConnector, LLMResponse
 from api.models import (
     DialConfigSchema,
@@ -33,17 +36,25 @@ class WrapPipelineRunner:
         """Execute the full 8-stage pipeline."""
         stages: list[StageResult] = []
         llm_resp: LLMResponse | None = None
+        t0 = time.monotonic()
 
         # Stage 1: Input Analyzer
         analyzed = await input_analyzer(text)
         stages.append(StageResult(
             stage="input_analyzer",
             success=True,
-            data={"token_count": analyzed.token_count, "word_count": analyzed.word_count},
+            data={
+                "token_count": analyzed.token_count,
+                "word_count": analyzed.word_count,
+                "sentence_count": analyzed.sentence_count,
+                "vocab_richness": analyzed.vocab_richness,
+            },
         ))
 
         # Stage 2: RPM Gate
         rpm_result = await rpm_gate(analyzed)
+        # Flatten drive_scores [[D,W,P], ...] → [D1, D2, ...D7] (top-level only)
+        flat_drives = [chain[0] for chain in rpm_result.drive_scores]
         stages.append(StageResult(
             stage="rpm_gate",
             success=rpm_result.passed,
@@ -51,6 +62,7 @@ class WrapPipelineRunner:
                 "a0_score": rpm_result.a0_score,
                 "rpm_completeness": rpm_result.rpm_completeness,
                 "drive_scores": rpm_result.drive_scores,
+                "heuristic": rpm_result.heuristic,
             },
         ))
 
@@ -90,8 +102,12 @@ class WrapPipelineRunner:
             data={"dci": dc_result.dci, "domain_averages": dc_result.domain_averages},
         ))
 
-        # Stage 7: Inversion Scan
-        inv_result = await inversion_scan(op_result)
+        # Stage 7: Inversion Scan — pass real drive scores and domain averages
+        inv_result = await inversion_scan(
+            op_result,
+            drive_scores=flat_drives,
+            domain_averages=dc_result.domain_averages,
+        )
         stages.append(StageResult(
             stage="inversion_scan",
             success=True,
@@ -102,13 +118,18 @@ class WrapPipelineRunner:
             },
         ))
 
-        # Stage 8: Output Gate (NCCS)
-        nccs = await output_gate(op_result, dc_result, inv_result, rpm_result)
+        # Stage 8: Output Gate (NCCS) — pass real drive scores
+        nccs = await output_gate(
+            op_result, dc_result, inv_result, rpm_result,
+            drive_scores=flat_drives,
+        )
         stages.append(StageResult(
             stage="output_gate",
             success=True,
             data={"composite": nccs.composite, "certification": nccs.certification},
         ))
+
+        elapsed_ms = round((time.monotonic() - t0) * 1000, 1)
 
         nccs_response = NccsResponse(
             operator_profile=nccs.operator_profile,
@@ -119,6 +140,7 @@ class WrapPipelineRunner:
             social_engineering=nccs.social_engineering,
             composite=nccs.composite,
             certification=nccs.certification,
+            not_measured=nccs.not_measured,
         )
 
         llm_response_schema = None
@@ -130,8 +152,19 @@ class WrapPipelineRunner:
                 latency_ms=llm_resp.latency_ms,
             )
 
+        # Provenance metadata for reproducibility
+        provenance = {
+            "pipeline_version": "0.2.0",
+            "engine": "cas-engine",
+            "input_hash": hashlib.sha256(text.encode()).hexdigest()[:16],
+            "connector": self.connector.provider_name,
+            "elapsed_ms": elapsed_ms,
+            "rpm_heuristic": rpm_result.heuristic,
+        }
+
         return WrapResponse(
             nccs=nccs_response,
             stages=stages,
             llm_response=llm_response_schema,
+            provenance=provenance,
         )

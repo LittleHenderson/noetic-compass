@@ -41,9 +41,10 @@ export interface NccsResult {
   drive_rpm_integrity: number;
   pathway_quality: number;
   inversion_resistance: number;
-  social_engineering: number;
+  social_engineering: number | null;
   composite: number;
   certification: string;
+  not_measured?: string[];
 }
 
 export interface StageResult {
@@ -64,6 +65,7 @@ export interface WrapResult {
   nccs: NccsResult;
   stages: StageResult[];
   llm_response: LLMResponse | null;
+  provenance?: Record<string, unknown>;
 }
 
 export interface BatchResult {

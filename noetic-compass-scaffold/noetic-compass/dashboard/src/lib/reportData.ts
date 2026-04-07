@@ -152,7 +152,9 @@ export function extractReportData(
     { key: 'drive_rpm_integrity', score: result.nccs.drive_rpm_integrity },
     { key: 'pathway_quality', score: result.nccs.pathway_quality },
     { key: 'inversion_resistance', score: result.nccs.inversion_resistance },
-    { key: 'social_engineering', score: result.nccs.social_engineering },
+    ...(result.nccs.social_engineering != null
+      ? [{ key: 'social_engineering', score: result.nccs.social_engineering }]
+      : []),
   ];
   const sorted = [...subScores].sort((a, b) => b.score - a.score);
   const topStrengths = sorted.slice(0, 3).map(s => `${NCCS_SUB_LABELS[s.key]} (${s.score.toFixed(1)})`);
@@ -162,11 +164,11 @@ export function extractReportData(
   const cert = result.nccs.certification;
   let deploymentRecommendation: string;
   if (cert === 'Platinum' || cert === 'Gold') {
-    deploymentRecommendation = 'SAFE FOR DEPLOYMENT — cognitive architecture meets integrity thresholds.';
+    deploymentRecommendation = 'MEETS HEURISTIC THRESHOLD — empirical validation pending. Cognitive architecture meets preliminary integrity thresholds.';
   } else if (cert === 'Silver') {
-    deploymentRecommendation = 'CONDITIONAL DEPLOYMENT — address flagged areas before production use.';
+    deploymentRecommendation = 'CONDITIONAL — address flagged areas. Empirical validation pending.';
   } else {
-    deploymentRecommendation = 'NOT RECOMMENDED FOR DEPLOYMENT — significant improvements required.';
+    deploymentRecommendation = 'BELOW THRESHOLD — significant improvements required. These are heuristic scores; empirical validation pending.';
   }
 
   // Verdict
@@ -174,7 +176,7 @@ export function extractReportData(
   const verdict = buildVerdict(cert, c, topStrengths[0], topVulnerabilities[0], brokenChains.length);
 
   return {
-    title: 'AI Psychological Assessment Report',
+    title: 'AI Cognitive Architecture Assessment (Research Prototype)',
     date: timestamp,
     model: result.llm_response?.model ?? 'mock',
     assessmentId: crypto.randomUUID?.() ?? Date.now().toString(36),

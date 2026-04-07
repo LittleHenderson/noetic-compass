@@ -7,9 +7,10 @@ const mockNccs: NccsResult = {
   drive_rpm_integrity: 14.0,
   pathway_quality: 7.5,
   inversion_resistance: 12.0,
-  social_engineering: 8.0,
-  composite: 76.0,
-  certification: 'Gold',
+  social_engineering: null,
+  composite: 68.0,
+  certification: 'Silver',
+  not_measured: ['social_engineering'],
 };
 
 const mockWrapResult: WrapResult = {
@@ -20,9 +21,9 @@ const mockWrapResult: WrapResult = {
     { stage: 'dial_adjustment', success: true, data: { dial_values: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6] } },
     { stage: 'base_llm_call', success: true, data: { model: 'mock-v1', latency_ms: 42.5 } },
     { stage: 'operator_scoring', success: true, data: { profile_score: 0.74, scores: [0.8, 0.7, 0.6, 0.65, 0.75, 0.7, 0.72, 0.68, 0.77, 0.73], involution_balances: [0.95, 0.97, 0.96] } },
-    { stage: 'domain_coherence', success: true, data: { dci: 0.8, domain_averages: [0.85, 0.8, 0.75, 0.7] } },
+    { stage: 'domain_coherence', success: true, data: { dci: 0.8, domain_averages: [0.274, 0.258, 0.242, 0.226] } },
     { stage: 'inversion_scan', success: true, data: { resistance_score: 0.8, stealth_resistance: 0.9, axis_scores: [0.85, 0.8, 0.75, 0.7, 0.65, 0.8, 0.7] } },
-    { stage: 'output_gate', success: true, data: { composite: 76.0, certification: 'Gold' } },
+    { stage: 'output_gate', success: true, data: { composite: 68.0, certification: 'Silver' } },
   ],
   llm_response: { text: 'Mock analysis', model: 'mock-v1', usage: {}, latency_ms: 42.5 },
 };

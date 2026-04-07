@@ -125,7 +125,7 @@ export async function exportDocx(data: ReportData, images: ChartImages): Promise
   // Title
   children.push(new Paragraph({
     spacing: { after: 40 },
-    children: [new TextRun({ text: 'NOETIC COMPASS', color: TEAL, bold: true, size: 18 })],
+    children: [new TextRun({ text: 'NOETIC COMPASS — RESEARCH PROTOTYPE', color: TEAL, bold: true, size: 18 })],
   }));
   children.push(heading(data.title, HeadingLevel.TITLE));
   children.push(textPara(
@@ -243,7 +243,7 @@ export async function exportDocx(data: ReportData, images: ChartImages): Promise
           children: [new Paragraph({
             alignment: AlignmentType.CENTER,
             children: [
-              new TextRun({ text: 'Noetic Compass | CAS v7.4 | Confidential  —  Page ', color: GRAY, size: 14 }),
+              new TextRun({ text: 'Noetic Compass (Research Prototype) | CAS v7.4 | Heuristic scores — empirical validation pending  —  Page ', color: GRAY, size: 14 }),
               new TextRun({ children: [PageNumber.CURRENT], color: GRAY, size: 14 }),
               new TextRun({ text: ' of ', color: GRAY, size: 14 }),
               new TextRun({ children: [PageNumber.TOTAL_PAGES], color: GRAY, size: 14 }),

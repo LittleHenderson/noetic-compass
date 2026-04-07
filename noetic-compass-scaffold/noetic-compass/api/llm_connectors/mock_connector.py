@@ -3,13 +3,18 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import random
 
 from .base import BaseLLMConnector, LLMResponse
 
 
 class MockLLMConnector(BaseLLMConnector):
-    """Returns synthetic CAS-formatted responses for testing."""
+    """Returns synthetic CAS-formatted responses for testing.
+
+    Uses a deterministic seed derived from prompt content so that
+    identical inputs always produce identical outputs.
+    """
 
     provider_name = "mock"
     max_retries = 1
@@ -20,9 +25,13 @@ class MockLLMConnector(BaseLLMConnector):
         # Simulate slight latency
         await asyncio.sleep(0.01)
 
+        # Deterministic seed from prompt hash for reproducibility
+        seed = int(hashlib.sha256(prompt.encode()).hexdigest()[:8], 16)
+        rng = random.Random(seed)
+
         # Generate synthetic operator scores and assessment text
-        scores = [round(random.uniform(0.4, 0.95), 3) for _ in range(10)]
-        drives = [round(random.uniform(0.3, 0.9), 3) for _ in range(7)]
+        scores = [round(rng.uniform(0.4, 0.95), 3) for _ in range(10)]
+        drives = [round(rng.uniform(0.3, 0.9), 3) for _ in range(7)]
 
         text = (
             f"CAS Assessment Result:\n"

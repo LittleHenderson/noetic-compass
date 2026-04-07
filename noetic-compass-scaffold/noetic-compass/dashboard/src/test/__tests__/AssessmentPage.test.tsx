@@ -41,9 +41,9 @@ describe('AssessmentPage', () => {
     await user.click(screen.getByRole('button', { name: /assess/i }));
 
     await waitFor(() => {
-      expect(screen.getByText('76.0')).toBeInTheDocument();
+      expect(screen.getByText('68.0')).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/Gold/)).toBeInTheDocument();
+    expect(screen.getByText(/Silver/)).toBeInTheDocument();
   });
 });

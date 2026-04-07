@@ -1,5 +1,50 @@
 # Noetic Compass — Progress Log
 
+## Session 10: 6-Item Audit Fix (April 7, 2026)
+
+### Audit Item 1 (CRITICAL): Replace Pipeline Placeholder Values
+- **`api/pipeline/stages.py`** — Full rewrite:
+  - `rpm_gate()`: Derives A0/drive scores from text analysis (word count, vocab richness, SHA-256 seeded RNG) instead of hardcoded 0.7/0.6/0.5
+  - `domain_coherence()`: Derives domain averages from operator scores via `_DOMAIN_OPERATOR_MAP` P=[0,1,4], C=[2,3,7], E=[5,6], O=[8,9]. Normalizes to open simplex (sum=1, all>0)
+  - `inversion_scan()`: Accepts real drive_scores/domain_averages from earlier stages instead of using [0.7]*7
+  - `output_gate()`: Sets `social_engineering=None` (not measured), uses 0.5 neutral placeholders, tracks `not_measured` list
+  - Added `_text_seed()` helper for deterministic SHA-256 hashing
+  - Added `_normalize_to_simplex()` helper for open probability simplex normalization
+  - Added `RpmGateResult.heuristic` flag, `NccsResult.not_measured` list
+
+### Audit Item 2 (HIGH): Fix Simplex Math Validation
+- **`api/models.py`** — Added `@field_validator("domain_averages")` that enforces sum≈1 (±0.01) and all values >0 (open simplex). Changed `manipulation_resistance`/`overton_drift_resistance` defaults from 1.0 to 0.5
+- **`dashboard/src/test/mocks/handlers.ts`** — Fixed mock `domain_averages` from `[0.85, 0.8, 0.75, 0.7]` (sum=3.1) to `[0.274, 0.258, 0.242, 0.226]` (sum=1.0). Set `social_engineering: null`, `not_measured: ['social_engineering']`, composite 68.0/Silver
+- **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated assertions from 76.0/Gold to 68.0/Silver
+
+### Audit Item 3 (HIGH): Fix Provider Routing
+- **`api/llm_connectors/registry.py`** — Removed `settings.mock_llm` global override. Now only `provider == "mock"` triggers MockLLMConnector. Explicit provider choice (openai, anthropic, google, meta) is always respected
+
+### Audit Item 4 (MEDIUM): Fix Reproducibility + Provenance
+- **`api/llm_connectors/mock_connector.py`** — Uses deterministic `hashlib.sha256(prompt)` seed instead of `random.uniform` for reproducible mock responses
+- **`api/pipeline/runner.py`** — Added provenance dict (pipeline_version, engine, input_hash, connector, elapsed_ms, rpm_heuristic). Passes flat_drives and domain_averages between stages properly. Propagates not_measured to NccsResponse
+- **`api/models.py`** — Added `NccsResponse.not_measured: list[str]`, `NccsResponse.social_engineering: float | None`, `WrapResponse.provenance: dict`
+
+### Audit Item 5 (MEDIUM): Fix PyO3 Compatibility
+- **`cas-engine/Cargo.toml`** — Upgraded PyO3 from 0.24 to 0.25
+- **`cas-engine/pyproject.toml`** — Capped `requires-python = ">=3.10,<=3.13"`
+
+### Audit Item 6 (MEDIUM): Reframe All UI Text
+- **`dashboard/src/lib/reportData.ts`** — Title → "AI Cognitive Architecture Assessment (Research Prototype)". Deployment text → "MEETS HEURISTIC THRESHOLD — empirical validation pending"
+- **`dashboard/src/lib/exportMarkdown.ts`** — Added research disclaimer section. Footer → "Research Prototype"
+- **`dashboard/src/lib/exportPdf.ts`** — Header → "NOETIC COMPASS — RESEARCH PROTOTYPE". Footer → "Heuristic scores — empirical validation pending"
+- **`dashboard/src/lib/exportDocx.ts`** — Header/footer reframed with research prototype language
+- **`dashboard/src/api/types.ts`** — `NccsResult.social_engineering` → `number | null`, added `not_measured?`, `WrapResult.provenance?`
+- **`dashboard/src/lib/interpretations.ts`** — Handles null `social_engineering` (filters from scoring arrays)
+- **`dashboard/src/components/charts/SubScoreBreakdown.tsx`** — Filters unmeasured sub-scores from chart
+- **`dashboard/src/pages/FaqPage.tsx`** — Replaced "AI Psychology" with "AI Cognitive Architecture Assessment Platform (Research Prototype)"
+- **`dashboard/src/pages/HowItWorksPage.tsx`** — Replaced "psychological alignment" with "cognitive architecture integrity and coherence"
+
+### Verification
+- `npx tsc --noEmit` — 0 errors
+- `npx vitest run` — 23/23 tests pass
+- `npm run build` — Success
+
 ## Session 9: Assessment Report Export Feature (April 7, 2026)
 
 ### Added

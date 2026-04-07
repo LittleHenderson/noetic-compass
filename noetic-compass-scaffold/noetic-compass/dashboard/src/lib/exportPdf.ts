@@ -23,7 +23,7 @@ const RED: [number, number, number] = [248, 113, 113];
 function addFooter(doc: jsPDF, page: number, totalPages: number) {
   doc.setFontSize(7);
   doc.setTextColor(...GRAY);
-  doc.text('Noetic Compass | CAS v7.4 | Confidential', MARGIN, PAGE_H - 8);
+  doc.text('Noetic Compass (Research Prototype) | CAS v7.4 | Confidential | Heuristic scores — empirical validation pending', MARGIN, PAGE_H - 8);
   doc.text(`Page ${page} of ${totalPages}`, PAGE_W - MARGIN, PAGE_H - 8, { align: 'right' });
 }
 
@@ -99,7 +99,7 @@ export function exportPdf(data: ReportData, images: ChartImages): void {
   // Title block
   doc.setFontSize(9);
   doc.setTextColor(...TEAL);
-  doc.text('NOETIC COMPASS', MARGIN, y);
+  doc.text('NOETIC COMPASS — RESEARCH PROTOTYPE', MARGIN, y);
   y += 7;
   doc.setFontSize(18);
   doc.setTextColor(...WHITE);

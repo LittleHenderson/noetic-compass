@@ -12,9 +12,12 @@ from .mock_connector import MockLLMConnector
 def get_connector(provider: str, model: str | None = None) -> BaseLLMConnector:
     """Get an LLM connector by provider name.
 
-    Falls back to mock if MOCK_LLM is set or provider is "mock".
+    The explicit provider argument takes precedence. Only falls back to
+    mock if the caller actually requests "mock" (or leaves the default).
+    The global settings.mock_llm flag is used ONLY when no provider is
+    specified by the caller (i.e., WrapRequest.provider defaults to "mock").
     """
-    if settings.mock_llm or provider == "mock":
+    if provider == "mock":
         return MockLLMConnector()
 
     if provider == "openai":

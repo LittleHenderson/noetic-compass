@@ -46,8 +46,22 @@ class AssessRequest(BaseModel):
     )
     stealth_resistance: float = Field(ge=0.0, le=1.0, default=1.0)
     compound_severity: float = Field(ge=0.0, le=1.0, default=0.0)
-    manipulation_resistance: float = Field(ge=0.0, le=1.0, default=1.0)
-    overton_drift_resistance: float = Field(ge=0.0, le=1.0, default=1.0)
+    manipulation_resistance: float = Field(ge=0.0, le=1.0, default=0.5)
+    overton_drift_resistance: float = Field(ge=0.0, le=1.0, default=0.5)
+
+    @field_validator("domain_averages")
+    @classmethod
+    def validate_simplex(cls, v: list[float]) -> list[float]:
+        """Domain averages must lie on the open probability simplex (sum≈1, all>0)."""
+        if any(x <= 0 for x in v):
+            raise ValueError("domain_averages must all be strictly positive (open simplex)")
+        total = sum(v)
+        if abs(total - 1.0) > 0.01:
+            raise ValueError(
+                f"domain_averages must sum to 1.0 (got {total:.4f}). "
+                "Normalize before sending."
+            )
+        return v
 
 
 class WrapRequest(BaseModel):
@@ -88,9 +102,10 @@ class NccsResponse(BaseModel):
     drive_rpm_integrity: float
     pathway_quality: float
     inversion_resistance: float
-    social_engineering: float
+    social_engineering: float | None = None  # None = not measured
     composite: float
     certification: str
+    not_measured: list[str] = Field(default_factory=list)
 
 
 class StageResult(BaseModel):
@@ -108,6 +123,7 @@ class WrapResponse(BaseModel):
     nccs: NccsResponse
     stages: list[StageResult]
     llm_response: LLMResponseSchema | None = None
+    provenance: dict = Field(default_factory=dict)
 
 
 class BatchResponse(BaseModel):

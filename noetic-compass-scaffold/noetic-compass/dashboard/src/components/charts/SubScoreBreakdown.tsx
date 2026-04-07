@@ -17,14 +17,17 @@ const BARS = [
 export function SubScoreBreakdown({ nccs }: { nccs: NccsResult }) {
   const [selected, setSelected] = useState<number | null>(null);
 
-  const data = BARS.map((b) => ({
+  // Filter out unmeasured sub-scores (null values)
+  const activeBars = BARS.filter((b) => nccs[b.key] != null);
+
+  const data = activeBars.map((b) => ({
     name: `${b.label} (${(NCCS_WEIGHTS[b.key] * 100).toFixed(0)}%)`,
-    score: nccs[b.key],
+    score: nccs[b.key] ?? 0,
     color: b.color,
   }));
 
-  const insight = selected !== null
-    ? interpretSubScore(BARS[selected].key, BARS[selected].label, nccs[BARS[selected].key], NCCS_WEIGHTS[BARS[selected].key] * 100)
+  const insight = selected !== null && activeBars[selected]
+    ? interpretSubScore(activeBars[selected].key, activeBars[selected].label, (nccs[activeBars[selected].key] ?? 0) as number, NCCS_WEIGHTS[activeBars[selected].key] * 100)
     : null;
 
   return (

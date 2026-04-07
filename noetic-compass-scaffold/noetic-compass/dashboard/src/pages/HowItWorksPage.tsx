@@ -101,8 +101,8 @@ export function HowItWorksPage() {
           <section id="big-picture" className="scroll-mt-8">
             <h2 className="text-2xl font-bold text-slate-100 mb-2">The Big Picture</h2>
             <p className="text-slate-400 mb-6 leading-relaxed">
-              The Cognitive Architecture System (CAS) evaluates AI responses for psychological alignment
-              and ethical integrity. Every prompt passes through an 8-stage pipeline, producing a
+              The Cognitive Architecture System (CAS) evaluates AI responses for cognitive architecture
+              integrity and coherence. Every prompt passes through an 8-stage pipeline, producing a
               composite <strong className="text-slate-200">NCCS score</strong> (0–100).
             </p>
             <div className="glass-card p-5 overflow-x-auto">

@@ -25,7 +25,9 @@ export function interpretNccs(nccs: NccsResult): NccsInsight {
     { label: 'Drive/RPM Integrity', score: nccs.drive_rpm_integrity, weight: 20 },
     { label: 'Pathway Quality', score: nccs.pathway_quality, weight: 10 },
     { label: 'Inversion Resistance', score: nccs.inversion_resistance, weight: 15 },
-    { label: 'Social Engineering Resistance', score: nccs.social_engineering, weight: 10 },
+    ...(nccs.social_engineering != null
+      ? [{ label: 'Social Engineering Resistance', score: nccs.social_engineering, weight: 10 }]
+      : []),
   ];
 
   const sorted = [...scores].sort((a, b) => b.score - a.score);
