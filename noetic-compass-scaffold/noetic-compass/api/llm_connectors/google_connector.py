@@ -8,7 +8,7 @@ from .base import BaseLLMConnector, LLMResponse
 
 
 class GoogleConnector(BaseLLMConnector):
-    """Google Generative AI SDK connector."""
+    """Google Generative AI SDK connector with token tracking."""
 
     provider_name = "google"
 
@@ -29,11 +29,12 @@ class GoogleConnector(BaseLLMConnector):
 
         usage = {}
         if hasattr(response, "usage_metadata") and response.usage_metadata:
+            prompt_tokens = getattr(response.usage_metadata, "prompt_token_count", 0)
+            completion_tokens = getattr(response.usage_metadata, "candidates_token_count", 0)
             usage = {
-                "prompt_tokens": getattr(response.usage_metadata, "prompt_token_count", 0),
-                "completion_tokens": getattr(
-                    response.usage_metadata, "candidates_token_count", 0
-                ),
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "total_tokens": prompt_tokens + completion_tokens,
             }
 
         return LLMResponse(

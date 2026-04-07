@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 import cas_engine
 
 from api.errors import DialViolationError, PipelineStageError
-from api.llm_connectors.base import BaseLLMConnector, LLMResponse
+from api.llm_connectors.base import BaseLLMConnector, CAS_SYSTEM_PROMPT, LLMResponse
 from api.models import DialConfigSchema
 
 
@@ -202,13 +202,7 @@ async def dial_adjustment(
         raise DialViolationError(str(e))
 
     dial_values = dial_config.as_list()
-    system_prompt = (
-        "You are a CAS cognitive architecture assessment engine. "
-        "Analyze the following text for cognitive operator patterns. "
-        f"Dial configuration: {dial_values}. "
-        "Respond with structured operator scores (0-1) for each CO-0 through CO-9, "
-        "drive scores for F1-F7, and any inversion observations."
-    )
+    system_prompt = CAS_SYSTEM_PROMPT + f"\n\nDial configuration: {dial_values}."
 
     return AdjustedInput(
         text=analyzed.text,

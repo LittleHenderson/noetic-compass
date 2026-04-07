@@ -8,12 +8,12 @@ from .base import BaseLLMConnector, LLMResponse
 
 
 class AnthropicConnector(BaseLLMConnector):
-    """Anthropic SDK connector."""
+    """Anthropic SDK connector with timeout and token tracking."""
 
     provider_name = "anthropic"
 
     def __init__(self, api_key: str, model: str = "claude-sonnet-4-6"):
-        self.client = AsyncAnthropic(api_key=api_key)
+        self.client = AsyncAnthropic(api_key=api_key, timeout=60.0)
         self.model = model
 
     async def _generate(
@@ -38,6 +38,7 @@ class AnthropicConnector(BaseLLMConnector):
         usage = {
             "input_tokens": response.usage.input_tokens,
             "output_tokens": response.usage.output_tokens,
+            "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
         }
 
         return LLMResponse(

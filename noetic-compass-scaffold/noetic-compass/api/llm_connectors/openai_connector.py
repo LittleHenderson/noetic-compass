@@ -1,4 +1,4 @@
-"""OpenAI LLM connector (GPT-4/3.5)."""
+"""OpenAI LLM connector (GPT-4/4o)."""
 
 from __future__ import annotations
 
@@ -8,12 +8,12 @@ from .base import BaseLLMConnector, LLMResponse
 
 
 class OpenAIConnector(BaseLLMConnector):
-    """OpenAI SDK connector."""
+    """OpenAI SDK connector with timeout and token tracking."""
 
     provider_name = "openai"
 
     def __init__(self, api_key: str, model: str = "gpt-4"):
-        self.client = AsyncOpenAI(api_key=api_key)
+        self.client = AsyncOpenAI(api_key=api_key, timeout=60.0)
         self.model = model
 
     async def _generate(
@@ -28,6 +28,8 @@ class OpenAIConnector(BaseLLMConnector):
         response = await self.client.chat.completions.create(
             model=model,  # type: ignore[arg-type]
             messages=messages,  # type: ignore[arg-type]
+            max_tokens=4096,
+            temperature=0.3,
         )
 
         choice = response.choices[0]

@@ -85,7 +85,7 @@ export function AssessmentPage() {
 
   function handleSubmit() {
     if (!text.trim()) return;
-    wrap.mutate({ text, provider });
+    wrap.mutate({ text, provider, mock: provider === 'mock' });
   }
 
   const result = wrap.data;
@@ -122,6 +122,14 @@ export function AssessmentPage() {
                 <option key={p} value={p} className="bg-dark-800">{p}</option>
               ))}
             </select>
+            {provider !== 'mock' && (
+              <span className="text-[10px] text-amber-400/80 flex items-center gap-1">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Live API — requires key in .env
+              </span>
+            )}
             <button
               onClick={handleSubmit}
               disabled={wrap.isPending || !text.trim()}
