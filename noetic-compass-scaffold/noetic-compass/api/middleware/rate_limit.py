@@ -1,4 +1,4 @@
-"""In-memory token bucket rate limiter (per API key)."""
+"""In-memory tiered token bucket rate limiter (per API key)."""
 
 from __future__ import annotations
 
@@ -10,6 +10,14 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from api.config import settings
 from api.middleware.auth import PUBLIC_PATHS
+
+# Tier definitions: (requests_per_minute, monthly_limit)
+# monthly_limit=0 means unlimited
+TIER_LIMITS: dict[str, tuple[int, int]] = {
+    "community": (10, 50),
+    "professional": (30, 500),
+    "enterprise": (120, 0),
+}
 
 
 class TokenBucket:
@@ -33,13 +41,35 @@ class TokenBucket:
         return False
 
 
+class MonthlyCounter:
+    """Tracks monthly usage per API key."""
+
+    def __init__(self) -> None:
+        self.counts: dict[str, int] = {}
+        self.month: int = time.gmtime().tm_mon
+
+    def increment(self, key: str) -> int:
+        current_month = time.gmtime().tm_mon
+        if current_month != self.month:
+            self.counts.clear()
+            self.month = current_month
+        self.counts[key] = self.counts.get(key, 0) + 1
+        return self.counts[key]
+
+    def get_count(self, key: str) -> int:
+        return self.counts.get(key, 0)
+
+
 class RateLimitMiddleware(BaseHTTPMiddleware):
-    """Per-API-key rate limiting using token bucket algorithm."""
+    """Per-API-key tiered rate limiting using token bucket + monthly cap."""
 
     def __init__(self, app, rpm: int | None = None):  # type: ignore[no-untyped-def]
         super().__init__(app)
+        tier = settings.rate_limit_tier.lower()
+        tier_rpm, self.monthly_limit = TIER_LIMITS.get(tier, TIER_LIMITS["community"])
         self.rpm = rpm or settings.rate_limit_rpm
         self.buckets: dict[str, TokenBucket] = {}
+        self.monthly = MonthlyCounter()
 
     def _get_bucket(self, key: str) -> TokenBucket:
         if key not in self.buckets:
@@ -54,12 +84,25 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         api_key = getattr(request.state, "api_key", "default")
-        bucket = self._get_bucket(api_key)
 
+        # Per-minute rate limit
+        bucket = self._get_bucket(api_key)
         if not bucket.consume():
             return JSONResponse(
                 status_code=429,
-                content={"detail": "Rate limit exceeded"},
+                content={"detail": "Rate limit exceeded (per-minute)"},
             )
+
+        # Monthly cap (0 = unlimited)
+        if self.monthly_limit > 0:
+            count = self.monthly.increment(api_key)
+            if count > self.monthly_limit:
+                return JSONResponse(
+                    status_code=429,
+                    content={
+                        "detail": f"Monthly limit exceeded ({self.monthly_limit} assessments). "
+                        f"Upgrade tier or wait until next month.",
+                    },
+                )
 
         return await call_next(request)

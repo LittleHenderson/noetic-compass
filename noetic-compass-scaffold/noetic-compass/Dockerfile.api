@@ -1,0 +1,36 @@
+# Noetic Compass API — multi-stage build
+# Stage 1: build cas-engine Rust crate via maturin
+# Stage 2: lightweight Python runtime
+
+FROM python:3.12-slim AS builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl build-essential && \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY cas-engine/ cas-engine/
+RUN cd cas-engine && maturin build --release --features python && \
+    pip install --no-cache-dir target/wheels/*.whl
+
+# --- Runtime stage ---
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+COPY api/ api/
+COPY scenarios/ scenarios/
+COPY validation/ validation/
+
+EXPOSE 8000
+
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

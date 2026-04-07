@@ -1,0 +1,39 @@
+# Render Blueprint — Noetic Compass
+# Deploy: connect repo on Render dashboard or `render blueprint apply`
+
+services:
+  # FastAPI backend
+  - type: web
+    name: noetic-compass-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile.api
+    dockerContext: .
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: NC_JWT_SECRET
+        generateValue: true
+      - key: NC_RATE_LIMIT_TIER
+        value: community
+      - key: NC_DEFAULT_LLM_PROVIDER
+        value: mock
+      - key: NC_OPENAI_API_KEY
+        sync: false
+      - key: NC_ANTHROPIC_API_KEY
+        sync: false
+      - key: NC_GOOGLE_API_KEY
+        sync: false
+
+  # React dashboard (static site)
+  - type: web
+    name: noetic-compass-dashboard
+    runtime: static
+    buildCommand: cd dashboard && npm ci && npm run build
+    staticPublishPath: dashboard/dist
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://noetic-compass-api.onrender.com/*
+      - type: rewrite
+        source: /*
+        destination: /index.html

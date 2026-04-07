@@ -13,8 +13,9 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expiry_minutes: int = 60
 
-    # Rate limiting (requests per minute per API key)
+    # Rate limiting
     rate_limit_rpm: int = 60
+    rate_limit_tier: str = "community"  # community | professional | enterprise
 
     # LLM provider keys (optional — mock mode if unset)
     openai_api_key: str = ""
