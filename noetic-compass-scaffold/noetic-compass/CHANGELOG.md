@@ -1,5 +1,40 @@
 # Noetic Compass — Progress Log
 
+## Session 9: Assessment Report Export Feature (April 7, 2026)
+
+### Added
+- `src/lib/reportData.ts` — Pure data extraction: `extractReportData()` pulls operator scores, domain averages, drives, RPM, inversions, pipeline stages from WrapResult. Computes top 3 strengths/vulnerabilities, deployment recommendation, one-paragraph verdict.
+- `src/lib/exportMarkdown.ts` — Markdown export with ASCII tables, GitHub/Notion compatible. Uses `file-saver` for download.
+- `src/lib/chartCapture.ts` — `captureChartImages()` uses `html2canvas` to capture chart sections as base64 PNGs from hidden DOM container.
+- `src/lib/exportPdf.ts` — jsPDF-based A4 PDF generation with dark theme, teal section headers, embedded chart images, alternating-row tables, NCCS score highlight, certification badge, page footers.
+- `src/lib/exportDocx.ts` — `docx` package Word document generation with proper heading styles, bordered tables, embedded chart ImageRuns, page numbering footer.
+- `src/components/shared/HiddenReportCharts.tsx` — Off-screen chart renderer (all 7 charts at fixed 600px width) for html2canvas capture. Mounted only during export.
+- `src/components/shared/ExportButton.tsx` — Dropdown button (PDF / DOCX / Markdown) with loading spinner, outside-click dismiss, dark glass-card styling.
+
+### Modified
+- `src/pages/AssessmentPage.tsx` — Added ExportButton after results render
+- `src/pages/DetailsPage.tsx` — Added ExportButton next to Re-run button in header
+
+### Dependencies Added
+- `jspdf` + `html2canvas` — PDF generation (render DOM → canvas → PDF pages)
+- `docx` — Programmatic DOCX generation
+- `file-saver` + `@types/file-saver` — Cross-browser saveAs() download
+
+### Report Sections (all formats)
+1. Header (branding, date, model, assessment ID, CAS v7.4)
+2. Executive Summary (NCCS score, cert level, verdict, strengths, vulnerabilities, deployment recommendation)
+3. Cognitive Operator Profile (10 operators + involution pair balance)
+4. Domain Coherence (4 domains + DCI + weakest domain)
+5. Core Drive Integrity (7 drives, flagged if < 50%)
+6. RPM Analysis (completeness + broken chains)
+7. Inversion Analysis (7 axes + stealth resistance)
+8. Pipeline Trace (8 stages pass/flag/block)
+9. Footer (branding, CAS v7.4, Confidential, page numbers)
+
+### Verified
+- `npm run build` — 0 TypeScript errors
+- `npx vitest run` — 23/23 tests pass (no regressions)
+
 ## Session 8: How It Works + FAQ Pages (April 6, 2026)
 
 ### Added

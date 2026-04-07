@@ -81,7 +81,7 @@ const FAQ_ITEMS: FaqItem[] = [
     answer: (
       <div className="space-y-2">
         <p>
-          The <strong>Realization-Prerequisite Model</strong> governs capability pathways. Each drive
+          The <strong>Recursive Prerequisite Model</strong> governs capability pathways. Each drive
           follows the chain: A0 (Pure Desire) → Dn (Desire) → Wn (Will) → Pn (Power) → Outcome.
         </p>
         <p>

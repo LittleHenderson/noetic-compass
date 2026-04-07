@@ -4,6 +4,7 @@ import { Card } from '../components/shared/Card';
 import { LoadingSpinner } from '../components/shared/LoadingSpinner';
 import { ErrorBanner } from '../components/shared/ErrorBanner';
 import { CertBadge } from '../components/shared/CertBadge';
+import { ExportButton } from '../components/shared/ExportButton';
 import { ExplainPanel } from '../components/shared/ExplainPanel';
 import { NccsGauge } from '../components/charts/NccsGauge';
 import { SubScoreBreakdown } from '../components/charts/SubScoreBreakdown';
@@ -132,6 +133,9 @@ export function AssessmentPage() {
 
       {result && (
         <div className="space-y-6">
+          <div className="flex justify-end">
+            <ExportButton result={result} text={text} timestamp={new Date().toLocaleString()} />
+          </div>
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <Card title="NCCS Score">
               <div className="flex flex-col items-center gap-4">

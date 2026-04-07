@@ -1,0 +1,158 @@
+/**
+ * Exports assessment report as a downloadable Markdown file.
+ * Pure string generation — no images, charts rendered as ASCII tables.
+ */
+
+import { saveAs } from 'file-saver';
+import type { ReportData } from './reportData';
+
+function pad(s: string, len: number): string {
+  return s.length >= len ? s.slice(0, len) : s + ' '.repeat(len - s.length);
+}
+
+function padNum(n: number, decimals = 1): string {
+  return (n * 100).toFixed(decimals) + '%';
+}
+
+function tableRow(cells: string[], widths: number[]): string {
+  return '| ' + cells.map((c, i) => pad(c, widths[i])).join(' | ') + ' |';
+}
+
+function tableSep(widths: number[]): string {
+  return '| ' + widths.map(w => '-'.repeat(w)).join(' | ') + ' |';
+}
+
+export function generateMarkdown(data: ReportData): string {
+  const lines: string[] = [];
+
+  // Header
+  lines.push(`# Noetic Compass — ${data.title}`);
+  lines.push('');
+  lines.push(`**Date:** ${data.date}  `);
+  lines.push(`**Model:** ${data.model}  `);
+  lines.push(`**Assessment ID:** ${data.assessmentId}  `);
+  lines.push(`**Framework:** CAS v7.4 — Corrected Edition  `);
+  lines.push(`**Classification:** Confidential`);
+  lines.push('');
+
+  // Executive Summary
+  lines.push('## Executive Summary');
+  lines.push('');
+  lines.push(`**NCCS Composite Score:** ${data.nccs.composite.toFixed(1)} / 100  `);
+  lines.push(`**Certification Level:** ${data.certLevel}  `);
+  lines.push(`**Deployment:** ${data.deploymentRecommendation}`);
+  lines.push('');
+  lines.push(`> ${data.verdict}`);
+  lines.push('');
+  lines.push('**Top 3 Strengths:**');
+  data.topStrengths.forEach(s => lines.push(`- ${s}`));
+  lines.push('');
+  lines.push('**Top 3 Vulnerabilities:**');
+  data.topVulnerabilities.forEach(v => lines.push(`- ${v}`));
+  lines.push('');
+
+  // Section 1: Cognitive Operator Profile
+  lines.push('## 1. Cognitive Operator Profile');
+  lines.push('');
+  const opWidths = [25, 8];
+  lines.push(tableRow(['Operator', 'Score'], opWidths));
+  lines.push(tableSep(opWidths));
+  data.operators.forEach(op => {
+    lines.push(tableRow([op.label, padNum(op.score)], opWidths));
+  });
+  lines.push('');
+
+  lines.push('**Involution Pair Balance:**');
+  lines.push('');
+  const pairWidths = [12, 8, 8, 8, 8];
+  lines.push(tableRow(['Pair', 'Score A', 'Score B', 'Gap', 'Status'], pairWidths));
+  lines.push(tableSep(pairWidths));
+  data.involutionPairs.forEach(p => {
+    lines.push(tableRow([
+      `${p.a}/${p.b}`,
+      padNum(p.scoreA),
+      padNum(p.scoreB),
+      padNum(p.gap, 0),
+      p.flagged ? 'FLAGGED' : 'OK',
+    ], pairWidths));
+  });
+  lines.push('');
+
+  // Section 2: Domain Coherence
+  lines.push('## 2. Domain Coherence');
+  lines.push('');
+  const domWidths = [14, 8];
+  lines.push(tableRow(['Domain', 'Average'], domWidths));
+  lines.push(tableSep(domWidths));
+  data.domains.forEach(d => {
+    const flag = d.label === data.weakestDomain ? ' (weakest)' : '';
+    lines.push(tableRow([d.label + flag, padNum(d.average)], domWidths));
+  });
+  lines.push('');
+  lines.push(`**DCI (Domain Coherence Index):** ${(data.dci * 100).toFixed(1)}%  `);
+  lines.push(`**Weakest Domain:** ${data.weakestDomain}`);
+  lines.push('');
+
+  // Section 3: Core Drive Integrity
+  lines.push('## 3. Core Drive Integrity');
+  lines.push('');
+  const driveWidths = [18, 8, 8];
+  lines.push(tableRow(['Drive', 'Score', 'Status'], driveWidths));
+  lines.push(tableSep(driveWidths));
+  data.drives.forEach(d => {
+    lines.push(tableRow([d.label, padNum(d.score), d.flagged ? 'CONCERN' : 'OK'], driveWidths));
+  });
+  lines.push('');
+
+  // Section 4: RPM Analysis
+  lines.push('## 4. RPM Analysis');
+  lines.push('');
+  lines.push(`**RPM Completeness:** ${(data.rpmCompleteness * 100).toFixed(1)}%`);
+  lines.push('');
+  if (data.brokenChains.length > 0) {
+    lines.push('**Broken Chains:**');
+    data.brokenChains.forEach(c => lines.push(`- ${c}`));
+  } else {
+    lines.push('All 7 RPM chains are intact.');
+  }
+  lines.push('');
+
+  // Section 5: Inversion Analysis
+  lines.push('## 5. Inversion Analysis');
+  lines.push('');
+  const invWidths = [18, 8];
+  lines.push(tableRow(['Axis', 'Score'], invWidths));
+  lines.push(tableSep(invWidths));
+  data.inversions.forEach(inv => {
+    lines.push(tableRow([inv.label, padNum(inv.score)], invWidths));
+  });
+  lines.push('');
+  lines.push(`**Stealth Resistance:** ${(data.stealthResistance * 100).toFixed(1)}%`);
+  lines.push('');
+
+  // Section 6: Pipeline Trace
+  lines.push('## 6. Pipeline Trace');
+  lines.push('');
+  const stageWidths = [20, 8];
+  lines.push(tableRow(['Stage', 'Status'], stageWidths));
+  lines.push(tableSep(stageWidths));
+  data.stages.forEach(s => {
+    const statusLabel = s.status === 'pass' ? 'PASS' : s.status === 'flag' ? 'FLAG' : 'BLOCK';
+    lines.push(tableRow([s.name, statusLabel], stageWidths));
+  });
+  lines.push('');
+
+  // Footer
+  lines.push('---');
+  lines.push('');
+  lines.push('*Generated by Noetic Compass | CAS v7.4 — Corrected Edition | Confidential*');
+
+  return lines.join('\n');
+}
+
+export function exportMarkdown(data: ReportData): void {
+  const md = generateMarkdown(data);
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const filename = `noetic-assessment-${data.date.replace(/[/:, ]/g, '-')}.md`;
+  saveAs(blob, filename);
+}

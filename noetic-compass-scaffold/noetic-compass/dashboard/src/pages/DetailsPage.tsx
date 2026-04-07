@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useHistoryStore } from '../stores/historyStore';
 import { Card } from '../components/shared/Card';
 import { CertBadge } from '../components/shared/CertBadge';
+import { ExportButton } from '../components/shared/ExportButton';
 import { NccsGauge } from '../components/charts/NccsGauge';
 import { SubScoreBreakdown } from '../components/charts/SubScoreBreakdown';
 import { OperatorRadarChart } from '../components/charts/OperatorRadarChart';
@@ -40,6 +41,11 @@ export function DetailsPage() {
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-slate-100">Assessment Details</h2>
         <div className="flex gap-2">
+          <ExportButton
+            result={record.result}
+            text={record.text}
+            timestamp={new Date(record.timestamp).toLocaleString()}
+          />
           <button
             onClick={() => navigate('/', { state: { prefill: record.text } })}
             className="rounded-lg border border-accent-teal/30 bg-accent-teal/10 px-3 py-1.5 text-xs font-medium text-accent-teal hover:bg-accent-teal/20 transition-colors"

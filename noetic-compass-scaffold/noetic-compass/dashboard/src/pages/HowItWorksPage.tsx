@@ -66,29 +66,36 @@ export function HowItWorksPage() {
   );
 
   return (
-    <div className="flex gap-8">
-      {/* Sticky scroll-spy nav — desktop only */}
-      <nav className="hidden lg:block sticky top-6 self-start w-44 shrink-0">
-        <ul className="flex flex-col gap-0.5">
+    <div className="max-w-3xl mx-auto">
+      {/* Page header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-slate-100 mb-2">How It Works</h1>
+        <p className="text-slate-400 text-sm">
+          A guided tour of the Cognitive Architecture System — from pipeline to math.
+        </p>
+      </div>
+
+      {/* Horizontal section nav */}
+      <nav className="sticky top-0 z-10 -mx-1 mb-10 py-2 bg-dark-900/90 backdrop-blur-md">
+        <div className="flex flex-wrap gap-1.5 px-1">
           {SECTIONS.map((s) => (
-            <li key={s.id}>
-              <a
-                href={`#${s.id}`}
-                className={`block rounded-md px-3 py-1.5 text-xs font-medium transition-all duration-150 ${
-                  activeId === s.id
-                    ? 'bg-accent-teal/10 text-accent-teal scroll-spy-active'
-                    : 'text-slate-500 hover:text-slate-300'
-                }`}
-              >
-                {s.label}
-              </a>
-            </li>
+            <a
+              key={s.id}
+              href={`#${s.id}`}
+              className={`rounded-full px-3 py-1 text-[11px] font-medium transition-all duration-150 ${
+                activeId === s.id
+                  ? 'bg-accent-teal/15 text-accent-teal'
+                  : 'text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]'
+              }`}
+            >
+              {s.label}
+            </a>
           ))}
-        </ul>
+        </div>
       </nav>
 
       {/* Content */}
-      <div className="flex-1 max-w-3xl space-y-16 pb-24">
+      <div className="space-y-16 pb-24">
         {/* 1 — Big Picture */}
         <SectionReveal>
           <section id="big-picture" className="scroll-mt-8">
@@ -250,7 +257,7 @@ export function HowItWorksPage() {
           <section id="rpm" className="scroll-mt-8">
             <h2 className="text-2xl font-bold text-slate-100 mb-2">RPM Prerequisite Model</h2>
             <p className="text-slate-400 mb-6 leading-relaxed">
-              The Realization-Prerequisite Model uses a <strong className="text-slate-200">section-retraction</strong>,
+              The Recursive Prerequisite Model uses a <strong className="text-slate-200">section-retraction</strong>,
               not an adjunction. Prerequisite satisfaction is one-directional: realization after
               embedding equals identity, but re-embedding after realization may lose information.
             </p>
