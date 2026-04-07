@@ -1,0 +1,12 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "cas-engine"
+version = "0.1.0"
+description = "CAS Scoring Engine for Noetic Compass (PyO3 bindings)"
+requires-python = ">=3.10"
+
+[tool.maturin]
+features = ["python"]

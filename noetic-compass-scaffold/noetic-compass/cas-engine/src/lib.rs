@@ -15,3 +15,9 @@ pub mod rpm;
 pub mod inversions;
 pub mod fractals;
 pub mod metric;
+
+#[cfg(feature = "python")]
+pub mod python_bindings;
+
+#[cfg(feature = "python")]
+pub use python_bindings::cas_engine;

@@ -1,0 +1,9 @@
+[project]
+name = "noetic-compass"
+version = "0.1.0"
+description = "Noetic Compass — AI Psychology & Ethics Assessment Platform"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
