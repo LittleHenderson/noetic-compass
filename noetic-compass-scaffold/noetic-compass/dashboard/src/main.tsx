@@ -10,6 +10,8 @@ const queryClient = new QueryClient({
     queries: {
       retry: 1,
       refetchOnWindowFocus: false,
+      staleTime: 60_000,    // 1 min before refetch
+      gcTime: 5 * 60_000,   // 5 min garbage collection
     },
   },
 });

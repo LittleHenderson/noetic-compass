@@ -5,12 +5,12 @@
  * they cluster relative to each other using Fisher-Rao geometry.
  */
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useCohort } from '../hooks/useCohort';
 import { Card } from '../components/shared/Card';
 import { LoadingSpinner } from '../components/shared/LoadingSpinner';
 import { ErrorBanner } from '../components/shared/ErrorBanner';
-import { CohortHeatmap } from '../components/charts/CohortHeatmap';
+import { CohortHeatmap, cohortColor } from '../components/charts/CohortHeatmap';
 import type { CohortCompareRequest } from '../api/types';
 
 interface ProfileInput {
@@ -28,6 +28,18 @@ function parseScores(s: string): number[] {
   return s.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
 }
 
+/** Validate a single profile's score string. Returns null if valid, error message if not. */
+function validateScores(s: string): string | null {
+  const parts = s.split(',').map(v => v.trim()).filter(v => v.length > 0);
+  if (parts.length !== 10) return `Need exactly 10 scores, got ${parts.length}`;
+  for (let i = 0; i < parts.length; i++) {
+    const n = parseFloat(parts[i]);
+    if (isNaN(n)) return `Score ${i + 1} ("${parts[i]}") is not a number`;
+    if (n < 0 || n > 1) return `Score ${i + 1} (${n}) must be between 0 and 1`;
+  }
+  return null;
+}
+
 function scoresToDomainAverages(scores: number[]): number[] {
   // P=[0,1,4], C=[2,3,7], E=[5,6], O=[8,9]
   const map = [[0, 1, 4], [2, 3, 7], [5, 6], [8, 9]];
@@ -42,6 +54,13 @@ function scoresToDomainAverages(scores: number[]): number[] {
 export function CohortPage() {
   const [profiles, setProfiles] = useState<ProfileInput[]>(DEFAULT_PROFILES);
   const cohort = useCohort();
+
+  /** Per-profile validation errors (null = valid) */
+  const validationErrors = useMemo(
+    () => profiles.map(p => validateScores(p.scores)),
+    [profiles],
+  );
+  const hasErrors = validationErrors.some(e => e !== null);
 
   function addProfile() {
     setProfiles([...profiles, { label: `Candidate ${String.fromCharCode(65 + profiles.length)}`, scores: '0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7' }]);
@@ -58,6 +77,7 @@ export function CohortPage() {
   }
 
   function handleCompare() {
+    if (hasErrors) return;
     const req: CohortCompareRequest = {
       profiles: profiles.map(p => {
         const scores = parseScores(p.scores);
@@ -85,26 +105,35 @@ export function CohortPage() {
       <Card title="Candidate Profiles">
         <div className="space-y-3">
           {profiles.map((p, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <input
-                value={p.label}
-                onChange={(e) => updateProfile(i, 'label', e.target.value)}
-                className="w-36 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-200 focus:border-accent-teal/50 focus:outline-none"
-                placeholder="Label"
-              />
-              <input
-                value={p.scores}
-                onChange={(e) => updateProfile(i, 'scores', e.target.value)}
-                className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 font-mono focus:border-accent-teal/50 focus:outline-none"
-                placeholder="10 comma-separated scores (0-1)"
-              />
-              {profiles.length > 2 && (
-                <button
-                  onClick={() => removeProfile(i)}
-                  className="text-slate-600 hover:text-red-400 transition-colors text-sm px-2"
-                >
-                  Remove
-                </button>
+            <div key={i} className="space-y-1">
+              <div className="flex items-center gap-3">
+                <input
+                  value={p.label}
+                  onChange={(e) => updateProfile(i, 'label', e.target.value)}
+                  className="w-36 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-200 focus:border-accent-teal/50 focus:outline-none"
+                  placeholder="Label"
+                />
+                <input
+                  value={p.scores}
+                  onChange={(e) => updateProfile(i, 'scores', e.target.value)}
+                  className={`flex-1 rounded-lg border bg-white/[0.03] px-3 py-2 text-sm text-slate-300 font-mono focus:outline-none ${
+                    validationErrors[i]
+                      ? 'border-red-500/50 focus:border-red-400/70'
+                      : 'border-white/[0.08] focus:border-accent-teal/50'
+                  }`}
+                  placeholder="10 comma-separated scores (0-1)"
+                />
+                {profiles.length > 2 && (
+                  <button
+                    onClick={() => removeProfile(i)}
+                    className="text-slate-600 hover:text-red-400 transition-colors text-sm px-2"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              {validationErrors[i] && (
+                <p className="text-[11px] text-red-400 ml-[9.5rem]">{validationErrors[i]}</p>
               )}
             </div>
           ))}
@@ -118,7 +147,7 @@ export function CohortPage() {
             </button>
             <button
               onClick={handleCompare}
-              disabled={cohort.isPending || profiles.length < 2}
+              disabled={cohort.isPending || profiles.length < 2 || hasErrors}
               className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-6 py-2 text-sm font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
             >
               {cohort.isPending ? 'Comparing...' : 'Compare Profiles'}
@@ -173,6 +202,10 @@ export function CohortPage() {
                     <th className="px-3 py-2">To</th>
                     <th className="px-3 py-2">Alignment</th>
                     <th className="px-3 py-2">Similarity</th>
+                    <th className="px-3 py-2">
+                      Bhattacharyya
+                      <span className="ml-1 text-[10px] text-slate-600" title="Statistical overlap coefficient between two probability distributions. Range 0-1 where 1 = identical distributions.">(?)</span>
+                    </th>
                     <th className="px-3 py-2">Cognitive Distance</th>
                   </tr>
                 </thead>
@@ -182,13 +215,18 @@ export function CohortPage() {
                       <td className="px-3 py-2 text-slate-200 font-medium">{d.from_label}</td>
                       <td className="px-3 py-2 text-slate-200 font-medium">{d.to_label}</td>
                       <td className="px-3 py-2">
-                        <span className="font-mono font-bold" style={{ color: alignmentColor(d.alignment_pct) }}>
+                        <span className="font-mono font-bold" style={{ color: cohortColor(d.alignment_pct, 'text') }}>
                           {d.alignment_pct.toFixed(1)}%
                         </span>
                       </td>
                       <td className="px-3 py-2">
-                        <span className="font-mono font-bold" style={{ color: alignmentColor(d.similarity_pct) }}>
+                        <span className="font-mono font-bold" style={{ color: cohortColor(d.similarity_pct, 'text') }}>
                           {d.similarity_pct.toFixed(1)}%
+                        </span>
+                      </td>
+                      <td className="px-3 py-2">
+                        <span className="font-mono font-bold" style={{ color: cohortColor(d.bhattacharyya_coefficient * 100, 'text') }}>
+                          {d.bhattacharyya_coefficient.toFixed(4)}
                         </span>
                       </td>
                       <td className="px-3 py-2 font-mono text-slate-400">
@@ -207,10 +245,3 @@ export function CohortPage() {
 }
 
 const CLUSTER_COLORS = ['#22d3ee', '#a78bfa', '#34d399', '#fbbf24', '#f87171', '#f472b6'];
-
-function alignmentColor(pct: number): string {
-  if (pct >= 80) return '#22d3ee';
-  if (pct >= 60) return '#34d399';
-  if (pct >= 40) return '#fbbf24';
-  return '#ef4444';
-}

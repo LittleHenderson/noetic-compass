@@ -110,6 +110,22 @@ input[type="range"]::-webkit-slider-runnable-track {
   opacity: 0;
 }
 
+/* Thermal heatmap pulse animations */
+@keyframes heat-pulse {
+  0%, 100% { box-shadow: var(--heat-glow); }
+  50% { box-shadow: var(--heat-glow-bright); }
+}
+@keyframes frost-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(96,165,250,0.2); }
+  50% { box-shadow: 0 0 8px rgba(96,165,250,0.4), inset 0 0 4px rgba(96,165,250,0.15); }
+}
+.animate-heat-pulse {
+  animation: heat-pulse 2s ease-in-out infinite;
+}
+.animate-frost-pulse {
+  animation: frost-pulse 2.5s ease-in-out infinite;
+}
+
 /* Scroll-spy active indicator */
 .scroll-spy-active {
   position: relative;

@@ -1,5 +1,79 @@
 # Noetic Compass — Progress Log
 
+## Session 16: Performance — Lazy Loading, Chunk Splitting, Query Tuning (April 7, 2026)
+
+### Route-Based Code Splitting
+- **`App.tsx`** — All 8 page imports converted to `React.lazy()` with `Suspense` fallbacks. Each page is now its own chunk, loaded only when visited. Outer Suspense shows full-screen spinner, inner Suspense (within AppShell) shows inline spinner during page transitions.
+
+### Dynamic Export Library Imports
+- **`ExportButton.tsx`** — Removed static imports of `exportPdf`, `exportDocx`, `exportMarkdown`, and `captureChartImages`. All four are now `await import()`'d inside `handleExport()`, so jspdf (177 KB gz), html2canvas, docx (105 KB gz), and file-saver are never loaded until user clicks Export.
+
+### Vite Chunk Splitting
+- **`vite.config.ts`** — Added `build.rollupOptions.output.manualChunks()` function splitting:
+  - `vendor` (react/react-dom/react-router): 70 KB gz — cached across all pages
+  - `recharts` + d3: 111 KB gz — only on chart pages
+  - `query` (@tanstack/react-query): 13 KB gz
+  - `export-pdf` (jspdf + html2canvas): 177 KB gz — on-demand only
+  - `export-docx` (docx + file-saver): 105 KB gz — on-demand only
+- Initial page load (login/assessment) now ~90 KB gz vs previous ~500 KB monolithic bundle.
+
+### TanStack Query Tuning
+- **`main.tsx`** — Added `staleTime: 60_000` (1 min) and `gcTime: 5 * 60_000` (5 min) to QueryClient defaults. Prevents unnecessary refetches when navigating between pages.
+- **`useHealth.ts`** — Health poll interval increased from 30s to 60s, added `staleTime: 30_000` to prevent redundant health checks.
+
+### Also Fixed
+- **`CohortHeatmap.tsx`** — Fixed keyless `<>` fragment in `.map()` → `<Fragment key>` (prevents React console warning).
+
+### Verification
+- `npx tsc --noEmit` — 0 errors
+- `npx vitest run` — 23/23 tests pass
+- `npx vite build` — Success, 30 chunks generated with correct splitting
+
+---
+
+## Session 15: Cohort Analysis — 3 Bug Fixes (April 7, 2026)
+
+### Fix 1: Color Inconsistency
+- **`CohortHeatmap.tsx`** — Replaced private `cellColor()` with exported `cohortColor(pct, mode)` supporting both `'bg'` (semi-transparent for heatmap cells) and `'text'` (solid for table text) modes. Fixed keyless Fragment → `<Fragment key>`.
+- **`CohortPage.tsx`** — Removed local `alignmentColor()`, now imports shared `cohortColor` from CohortHeatmap. Same breakpoints everywhere: 80%+ cyan, 60%+ emerald, 40%+ amber, below red.
+
+### Fix 2: Bhattacharyya Coefficient Display
+- **`CohortPage.tsx`** — Added "Bhattacharyya" column to pairwise comparison table with `(?)` tooltip explaining it. Value shown as 4-decimal coefficient, color-coded using `cohortColor(bc * 100, 'text')` so 0-1 range maps to the same visual scale as percentages.
+
+### Fix 3: Operator Score Input Validation
+- **`CohortPage.tsx`** — Added `validateScores()` function checking: exactly 10 values, all numeric, all in [0, 1] range. Errors shown inline below each profile input in red. Score input border turns red on error. Compare button disabled when any profile has validation errors.
+
+### Verification
+- `npx tsc --noEmit` — 0 errors
+- `npx vitest run` — 23/23 tests pass
+
+---
+
+## Session 14: 40-State Heatmap Thermal Redesign (April 7, 2026)
+
+### StateHeatmap.tsx — Full Rewrite
+- **Thermal color mapping**: Replaced flat domain-colored cells with NASA/thermal-camera gradient (cold navy → deep teal → cyan → amber → hot white-gold). Smooth interpolation between 8 color stops using RGB lerp.
+- **Ranked cell animations**: Top 5 highest-intensity cells pulse with warm `heat-pulse` glow; bottom 5 lowest pulse with cold `frost-pulse` blue glow.
+- **Expanded grid**: 12-column layout (label + 10×40px cells + row summary). Cell size increased from 28px to 40px for visual impact.
+- **Row summaries**: Mini horizontal progress bars on right side with percentage. Strongest row labeled gold, weakest red.
+- **Column summaries**: Mini vertical progress bars below grid with operator averages. Strongest column gold, weakest red.
+- **Hover tooltip**: Custom CSS tooltip positioned above hovered cell showing `{Domain}{CO-n} = {score}/10` with amber highlight.
+- **Legend bar**: Full-width horizontal gradient bar (Cold → Moderate → Hot) with labeled endpoints.
+- **Score overlay**: High-intensity cells (≥0.7) show their score directly on the cell face.
+- **Performance**: All 40 intensities + rankings computed in single `useMemo` pass.
+
+### index.css — New Animations
+- `@keyframes heat-pulse` — warm box-shadow pulsing via CSS custom properties
+- `@keyframes frost-pulse` — cold blue box-shadow pulsing
+- `.animate-heat-pulse` / `.animate-frost-pulse` Tailwind utility classes
+
+### Verification
+- `npx tsc --noEmit` — 0 errors
+- `npx vitest run` — 23/23 tests pass
+- No regressions, existing ExplainPanel click behavior preserved
+
+---
+
 ## Session 13: Bug Fixes — Severity Labels & Heatmap Interactivity (April 7, 2026)
 
 ### Fix 1: NCCS Sub-Score Severity Normalization

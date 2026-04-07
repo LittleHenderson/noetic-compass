@@ -14,4 +14,18 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/') || id.includes('node_modules/react-router')) return 'vendor'
+          if (id.includes('node_modules/@tanstack')) return 'query'
+          if (id.includes('node_modules/recharts') || id.includes('node_modules/d3-')) return 'recharts'
+          if (id.includes('node_modules/jspdf') || id.includes('node_modules/html2canvas')) return 'export-pdf'
+          if (id.includes('node_modules/docx') || id.includes('node_modules/file-saver')) return 'export-docx'
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
+  },
 })

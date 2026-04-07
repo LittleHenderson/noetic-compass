@@ -1,15 +1,12 @@
 /**
  * Export Results button with dropdown for PDF, DOCX, Markdown formats.
- * Handles chart capture, data extraction, and format-specific generation.
+ * Heavy libraries (jspdf, docx, html2canvas) are loaded dynamically
+ * on first export — not bundled with the main app.
  */
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { WrapResult } from '../../api/types';
 import { extractReportData } from '../../lib/reportData';
-import { captureChartImages } from '../../lib/chartCapture';
-import { exportPdf } from '../../lib/exportPdf';
-import { exportDocx } from '../../lib/exportDocx';
-import { exportMarkdown } from '../../lib/exportMarkdown';
 import { HiddenReportCharts } from './HiddenReportCharts';
 
 type ExportFormat = 'pdf' | 'docx' | 'md';
@@ -62,6 +59,7 @@ export function ExportButton({ result, text, timestamp }: ExportButtonProps) {
       const data = extractReportData(result, text, timestamp);
 
       if (format === 'md') {
+        const { exportMarkdown } = await import('../../lib/exportMarkdown');
         exportMarkdown(data);
         setLoading(false);
         return;
@@ -75,14 +73,17 @@ export function ExportButton({ result, text, timestamp }: ExportButtonProps) {
 
       let images = {};
       if (chartRef.current) {
+        const { captureChartImages } = await import('../../lib/chartCapture');
         images = await captureChartImages(chartRef.current);
       }
 
       setShowCharts(false);
 
       if (format === 'pdf') {
+        const { exportPdf } = await import('../../lib/exportPdf');
         exportPdf(data, images);
       } else {
+        const { exportDocx } = await import('../../lib/exportDocx');
         await exportDocx(data, images);
       }
     } catch (err) {
