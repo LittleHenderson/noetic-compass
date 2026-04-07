@@ -81,7 +81,7 @@ export function generateMarkdown(data: ReportData): string {
   // Section 2: Domain Coherence
   lines.push('## 2. Domain Coherence');
   lines.push('');
-  const domWidths = [14, 8];
+  const domWidths = [24, 8];
   lines.push(tableRow(['Domain', 'Average'], domWidths));
   lines.push(tableSep(domWidths));
   data.domains.forEach(d => {
