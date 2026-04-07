@@ -374,41 +374,69 @@ export function HowItWorksPage() {
               CAS operates on the <strong className="text-slate-200">open probability simplex</strong> —
               a 39-dimensional manifold equipped with the Fisher-Rao metric.
             </p>
-            <div className="space-y-4">
-              <div className="glass-card p-4">
+            <div className="space-y-6">
+              <div className="glass-card p-5">
                 <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
                   State Space
                 </h4>
-                <code className="block text-sm text-accent-teal font-mono leading-relaxed">
+                <code className="block text-sm text-accent-teal font-mono leading-relaxed mb-3">
                   {'S°_I = Δ°₃₉ = { p ∈ ℝ⁴⁰ : pₖ > 0 ∀k, Σpₖ = 1 }'}
                 </code>
+                <p className="text-[12px] text-slate-400 leading-relaxed">
+                  For a 39-dimensional manifold, you need 40 components because the constraint
+                  <code className="text-slate-300 mx-1">Σpₖ = 1</code> removes one degree of freedom. The
+                  <strong className="text-slate-200"> open</strong> simplex (<code className="text-slate-300">pₖ {'>'} 0</code>)
+                  ensures every cognitive state always has a nonzero probability — no state is ever
+                  completely absent from the model.
+                </p>
               </div>
-              <div className="glass-card p-4">
+              <div className="glass-card p-5">
                 <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
                   Fisher-Rao Metric
                 </h4>
-                <code className="block text-sm text-accent-teal font-mono leading-relaxed">
+                <code className="block text-sm text-accent-teal font-mono leading-relaxed mb-3">
                   {'g^FR_p(u, v) = Σₖ (uₖ · vₖ) / pₖ'}
                 </code>
+                <p className="text-[12px] text-slate-400 leading-relaxed">
+                  This is the standard Fisher Information Metric in coordinates. Think of it as the
+                  <strong className="text-slate-200"> sensitivity</strong> of the system — it scales the inner product
+                  by the inverse of the probability, making changes in small probabilities far more
+                  significant than changes in large ones. A tiny shift in a rare cognitive state
+                  matters more than the same shift in a dominant one.
+                </p>
               </div>
-              <div className="glass-card p-4">
+              <div className="glass-card p-5">
                 <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
                   Geodesic Distance
                 </h4>
-                <code className="block text-sm text-accent-teal font-mono leading-relaxed">
+                <code className="block text-sm text-accent-teal font-mono leading-relaxed mb-3">
                   {'d(p, q) = 2 · arccos( Σₖ √(pₖ · qₖ) )'}
                 </code>
+                <p className="text-[12px] text-slate-400 leading-relaxed">
+                  This is the Bhattacharyya distance scaled for the sphere. The square-root transform
+                  maps the probability simplex onto a portion of a unit hypersphere, so the
+                  <strong className="text-slate-200"> shortest path</strong> (geodesic) between two cognitive
+                  state distributions is simply the angle between them on that sphere.
+                </p>
               </div>
-              <div className="glass-card p-4">
+              <div className="glass-card p-5">
                 <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
                   Admissibility Relation
                 </h4>
                 <code className="block text-sm text-accent-teal font-mono leading-relaxed">
                   {'Dₖ ⊆ I × I — valid (source, target) pairs for operator CO-k'}
                 </code>
-                <code className="block text-sm text-slate-500 font-mono mt-1">
+                <code className="block text-sm text-slate-500 font-mono mt-1 mb-3">
                   {'D₀ = { (I, I) : I ∈ I } — identity on diagonal only'}
                 </code>
+                <p className="text-[12px] text-slate-400 leading-relaxed">
+                  This defines the valid transitions for each Cognitive Operator.
+                  <code className="text-slate-300 mx-1">D₀</code> correctly acts as the
+                  <strong className="text-slate-200"> identity monoid</strong>, where the source and target must
+                  be identical — meaning the identity operator can only map a state to itself.
+                  Other operators have broader admissibility sets defining which state transitions
+                  they permit.
+                </p>
               </div>
             </div>
           </section>
