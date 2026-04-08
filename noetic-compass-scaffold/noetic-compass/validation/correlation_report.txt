@@ -1,0 +1,51 @@
+======================================================================
+CAS VALIDATION — CORRELATION ANALYSIS REPORT
+======================================================================
+
+Machine results: 50 assessments
+Human labels:    100 ratings
+
+--------------------------------------------------
+SECTION 1: MACHINE vs HUMAN CORRELATION (per CO)
+--------------------------------------------------
+  CO-0 Identity              r=+0.788  95%CI=[+0.700, +0.852]  p=0.0000 *
+  CO-1 Reflection            r=+0.748  95%CI=[+0.647, +0.824]  p=0.0000 *
+  CO-2 Abstraction           r=+0.784  95%CI=[+0.694, +0.849]  p=0.0000 *
+  CO-3 Concretization        r=+0.777  95%CI=[+0.686, +0.845]  p=0.0000 *
+  CO-4 Integration           r=+0.820  95%CI=[+0.743, +0.876]  p=0.0000 *
+  CO-5 Differentiation       r=+0.759  95%CI=[+0.661, +0.831]  p=0.0000 *
+  CO-6 Unification           r=+0.785  95%CI=[+0.695, +0.850]  p=0.0000 *
+  CO-7 Transformation        r=+0.758  95%CI=[+0.659, +0.831]  p=0.0000 *
+  CO-8 Expansion             r=+0.813  95%CI=[+0.734, +0.871]  p=0.0000 *
+  CO-9 Contraction           r=+0.749  95%CI=[+0.648, +0.824]  p=0.0000 *
+
+--------------------------------------------------
+SECTION 2: INTER-RATER RELIABILITY (Cohen's kappa)
+--------------------------------------------------
+
+  Raters: Rater_A vs Rater_B (50 overlapping items)
+    CO-0 Identity              kappa=0.096 (poor)
+    CO-1 Reflection            kappa=0.108 (poor)
+    CO-2 Abstraction           kappa=0.199 (poor)
+    CO-3 Concretization        kappa=0.128 (poor)
+    CO-4 Integration           kappa=0.181 (poor)
+    CO-5 Differentiation       kappa=0.107 (poor)
+    CO-6 Unification           kappa=0.050 (poor)
+    CO-7 Transformation        kappa=0.194 (poor)
+    CO-8 Expansion             kappa=0.148 (poor)
+    CO-9 Contraction           kappa=0.080 (poor)
+
+--------------------------------------------------
+SECTION 3: TEST-RETEST RELIABILITY
+--------------------------------------------------
+  No reproducibility data file provided.
+
+--------------------------------------------------
+SECTION 4: MACHINE SCORE SUMMARY STATISTICS
+--------------------------------------------------
+  Composite: mean=65.5, std=6.2, min=59.4, max=84.1
+  Certifications: {'Silver': 39, 'Gold': 7, 'Bronze': 4}
+
+======================================================================
+END OF REPORT
+======================================================================

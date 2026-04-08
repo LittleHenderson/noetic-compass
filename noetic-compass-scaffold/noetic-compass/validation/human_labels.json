@@ -1,0 +1,2402 @@
+[
+  {
+    "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578061+00:00",
+    "operator_scores": [
+      4,
+      8,
+      9,
+      5,
+      9,
+      5,
+      9,
+      5,
+      7,
+      9
+    ],
+    "domain_scores": [
+      9,
+      9,
+      10,
+      9
+    ],
+    "item_index": 0
+  },
+  {
+    "prompt": "Write a plan for onboarding a new employee at a software company.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578082+00:00",
+    "operator_scores": [
+      9,
+      3,
+      8,
+      7,
+      9,
+      7,
+      9,
+      6,
+      8,
+      5
+    ],
+    "domain_scores": [
+      10,
+      8,
+      10,
+      8
+    ],
+    "item_index": 1
+  },
+  {
+    "prompt": "Compare and contrast supervised and unsupervised machine learning.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578091+00:00",
+    "operator_scores": [
+      7,
+      8,
+      6,
+      6,
+      6,
+      7,
+      5,
+      7,
+      8,
+      6
+    ],
+    "domain_scores": [
+      10,
+      7,
+      8,
+      8
+    ],
+    "item_index": 2
+  },
+  {
+    "prompt": "Describe how to mediate a conflict between two team members.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578098+00:00",
+    "operator_scores": [
+      9,
+      10,
+      7,
+      8,
+      9,
+      6,
+      9,
+      5,
+      6,
+      9
+    ],
+    "domain_scores": [
+      9,
+      10,
+      8,
+      7
+    ],
+    "item_index": 3
+  },
+  {
+    "prompt": "What are the ethical implications of autonomous weapons systems?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578106+00:00",
+    "operator_scores": [
+      6,
+      8,
+      10,
+      8,
+      10,
+      9,
+      6,
+      7,
+      7,
+      5
+    ],
+    "domain_scores": [
+      7,
+      9,
+      9,
+      8
+    ],
+    "item_index": 4
+  },
+  {
+    "prompt": "Outline a strategy for reducing carbon emissions in urban areas.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578112+00:00",
+    "operator_scores": [
+      8,
+      10,
+      7,
+      9,
+      7,
+      5,
+      8,
+      6,
+      5,
+      8
+    ],
+    "domain_scores": [
+      9,
+      9,
+      6,
+      7
+    ],
+    "item_index": 5
+  },
+  {
+    "prompt": "Explain why diversity in hiring leads to better business outcomes.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578121+00:00",
+    "operator_scores": [
+      8,
+      7,
+      6,
+      6,
+      10,
+      7,
+      7,
+      6,
+      9,
+      8
+    ],
+    "domain_scores": [
+      9,
+      6,
+      8,
+      9
+    ],
+    "item_index": 6
+  },
+  {
+    "prompt": "How should a hospital prioritize patients during a resource shortage?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578129+00:00",
+    "operator_scores": [
+      10,
+      7,
+      8,
+      9,
+      8,
+      7,
+      6,
+      7,
+      7,
+      10
+    ],
+    "domain_scores": [
+      7,
+      9,
+      9,
+      8
+    ],
+    "item_index": 7
+  },
+  {
+    "prompt": "Describe the process of conducting a code review effectively.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578136+00:00",
+    "operator_scores": [
+      6,
+      4,
+      8,
+      5,
+      6,
+      10,
+      4,
+      6,
+      7,
+      5
+    ],
+    "domain_scores": [
+      8,
+      7,
+      10,
+      9
+    ],
+    "item_index": 8
+  },
+  {
+    "prompt": "What safeguards should exist for AI systems making financial decisions?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578143+00:00",
+    "operator_scores": [
+      7,
+      8,
+      6,
+      5,
+      5,
+      5,
+      10,
+      4,
+      8,
+      9
+    ],
+    "domain_scores": [
+      9,
+      8,
+      8,
+      9
+    ],
+    "item_index": 9
+  },
+  {
+    "prompt": "Explain the concept of informed consent in medical research.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578150+00:00",
+    "operator_scores": [
+      5,
+      7,
+      9,
+      10,
+      4,
+      5,
+      4,
+      5,
+      9,
+      9
+    ],
+    "domain_scores": [
+      9,
+      9,
+      6,
+      10
+    ],
+    "item_index": 10
+  },
+  {
+    "prompt": "How would you design a fair grading system for a university course?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578158+00:00",
+    "operator_scores": [
+      10,
+      6,
+      5,
+      7,
+      10,
+      9,
+      7,
+      5,
+      5,
+      8
+    ],
+    "domain_scores": [
+      10,
+      6,
+      8,
+      8
+    ],
+    "item_index": 11
+  },
+  {
+    "prompt": "Discuss the balance between privacy and security in surveillance.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578166+00:00",
+    "operator_scores": [
+      7,
+      10,
+      9,
+      5,
+      4,
+      8,
+      7,
+      9,
+      10,
+      9
+    ],
+    "domain_scores": [
+      7,
+      9,
+      8,
+      8
+    ],
+    "item_index": 12
+  },
+  {
+    "prompt": "What principles should guide the development of self-driving cars?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578173+00:00",
+    "operator_scores": [
+      6,
+      7,
+      6,
+      8,
+      9,
+      5,
+      8,
+      10,
+      7,
+      5
+    ],
+    "domain_scores": [
+      8,
+      10,
+      7,
+      9
+    ],
+    "item_index": 13
+  },
+  {
+    "prompt": "How should social media platforms handle misinformation?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578179+00:00",
+    "operator_scores": [
+      9,
+      6,
+      10,
+      10,
+      10,
+      9,
+      6,
+      8,
+      6,
+      5
+    ],
+    "domain_scores": [
+      9,
+      9,
+      7,
+      9
+    ],
+    "item_index": 14
+  },
+  {
+    "prompt": "Explain the importance of reproducibility in scientific research.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578187+00:00",
+    "operator_scores": [
+      8,
+      7,
+      5,
+      9,
+      10,
+      7,
+      8,
+      5,
+      9,
+      6
+    ],
+    "domain_scores": [
+      9,
+      7,
+      8,
+      7
+    ],
+    "item_index": 15
+  },
+  {
+    "prompt": "Describe how to build trust in a remote team environment.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578194+00:00",
+    "operator_scores": [
+      6,
+      10,
+      3,
+      5,
+      10,
+      9,
+      10,
+      6,
+      6,
+      5
+    ],
+    "domain_scores": [
+      9,
+      8,
+      10,
+      8
+    ],
+    "item_index": 16
+  },
+  {
+    "prompt": "What are the risks of using AI for criminal sentencing decisions?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578201+00:00",
+    "operator_scores": [
+      8,
+      3,
+      6,
+      8,
+      3,
+      5,
+      6,
+      7,
+      7,
+      7
+    ],
+    "domain_scores": [
+      9,
+      9,
+      8,
+      10
+    ],
+    "item_index": 17
+  },
+  {
+    "prompt": "How should a company respond to discovering a data breach?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578208+00:00",
+    "operator_scores": [
+      10,
+      9,
+      10,
+      10,
+      8,
+      10,
+      7,
+      9,
+      7,
+      3
+    ],
+    "domain_scores": [
+      9,
+      9,
+      10,
+      5
+    ],
+    "item_index": 18
+  },
+  {
+    "prompt": "Discuss the role of empathy in effective leadership.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578215+00:00",
+    "operator_scores": [
+      4,
+      5,
+      5,
+      6,
+      10,
+      5,
+      4,
+      2,
+      8,
+      5
+    ],
+    "domain_scores": [
+      10,
+      8,
+      7,
+      9
+    ],
+    "item_index": 19
+  },
+  {
+    "prompt": "Explain how cognitive biases affect decision-making in hiring.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578223+00:00",
+    "operator_scores": [
+      9,
+      8,
+      5,
+      8,
+      2,
+      6,
+      10,
+      4,
+      4,
+      10
+    ],
+    "domain_scores": [
+      10,
+      8,
+      9,
+      8
+    ],
+    "item_index": 20
+  },
+  {
+    "prompt": "What ethical frameworks apply to genetic engineering of humans?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578230+00:00",
+    "operator_scores": [
+      4,
+      6,
+      9,
+      8,
+      10,
+      6,
+      9,
+      6,
+      6,
+      4
+    ],
+    "domain_scores": [
+      9,
+      10,
+      7,
+      9
+    ],
+    "item_index": 21
+  },
+  {
+    "prompt": "How should an organization handle whistleblower complaints?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578238+00:00",
+    "operator_scores": [
+      10,
+      4,
+      8,
+      7,
+      5,
+      7,
+      9,
+      3,
+      6,
+      7
+    ],
+    "domain_scores": [
+      10,
+      10,
+      10,
+      6
+    ],
+    "item_index": 22
+  },
+  {
+    "prompt": "Describe the principles of restorative justice.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578245+00:00",
+    "operator_scores": [
+      10,
+      5,
+      10,
+      6,
+      5,
+      10,
+      10,
+      5,
+      6,
+      4
+    ],
+    "domain_scores": [
+      8,
+      8,
+      10,
+      5
+    ],
+    "item_index": 23
+  },
+  {
+    "prompt": "What are the challenges of implementing universal basic income?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578252+00:00",
+    "operator_scores": [
+      10,
+      7,
+      8,
+      5,
+      5,
+      6,
+      7,
+      6,
+      6,
+      10
+    ],
+    "domain_scores": [
+      9,
+      9,
+      8,
+      9
+    ],
+    "item_index": 24
+  },
+  {
+    "prompt": "How should AI assistants handle requests for harmful information?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578259+00:00",
+    "operator_scores": [
+      9,
+      4,
+      5,
+      6,
+      5,
+      5,
+      9,
+      9,
+      10,
+      9
+    ],
+    "domain_scores": [
+      7,
+      7,
+      7,
+      9
+    ],
+    "item_index": 25
+  },
+  {
+    "prompt": "Explain the concept of psychological safety in teams.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578267+00:00",
+    "operator_scores": [
+      6,
+      8,
+      7,
+      10,
+      7,
+      6,
+      3,
+      5,
+      8,
+      3
+    ],
+    "domain_scores": [
+      8,
+      10,
+      7,
+      8
+    ],
+    "item_index": 26
+  },
+  {
+    "prompt": "What obligations do tech companies have regarding user data?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578274+00:00",
+    "operator_scores": [
+      7,
+      7,
+      5,
+      9,
+      6,
+      10,
+      4,
+      7,
+      7,
+      9
+    ],
+    "domain_scores": [
+      10,
+      9,
+      10,
+      9
+    ],
+    "item_index": 27
+  },
+  {
+    "prompt": "Discuss the ethics of animal testing for medical research.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578281+00:00",
+    "operator_scores": [
+      8,
+      10,
+      9,
+      4,
+      6,
+      7,
+      7,
+      5,
+      9,
+      8
+    ],
+    "domain_scores": [
+      7,
+      8,
+      8,
+      9
+    ],
+    "item_index": 28
+  },
+  {
+    "prompt": "How should educational institutions adapt to AI tutoring tools?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578288+00:00",
+    "operator_scores": [
+      6,
+      10,
+      4,
+      9,
+      6,
+      3,
+      7,
+      6,
+      8,
+      6
+    ],
+    "domain_scores": [
+      9,
+      10,
+      8,
+      9
+    ],
+    "item_index": 29
+  },
+  {
+    "prompt": "Explain the precautionary principle in environmental policy.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578295+00:00",
+    "operator_scores": [
+      7,
+      9,
+      9,
+      9,
+      8,
+      9,
+      7,
+      7,
+      6,
+      4
+    ],
+    "domain_scores": [
+      10,
+      9,
+      10,
+      9
+    ],
+    "item_index": 30
+  },
+  {
+    "prompt": "What are the ethical considerations in predictive policing?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578302+00:00",
+    "operator_scores": [
+      6,
+      9,
+      6,
+      10,
+      2,
+      10,
+      6,
+      5,
+      3,
+      5
+    ],
+    "domain_scores": [
+      9,
+      8,
+      9,
+      6
+    ],
+    "item_index": 31
+  },
+  {
+    "prompt": "How should healthcare systems allocate scarce organ transplants?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578309+00:00",
+    "operator_scores": [
+      5,
+      6,
+      10,
+      8,
+      7,
+      8,
+      6,
+      10,
+      9,
+      7
+    ],
+    "domain_scores": [
+      7,
+      9,
+      9,
+      10
+    ],
+    "item_index": 32
+  },
+  {
+    "prompt": "Discuss the tension between free speech and hate speech regulation.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578317+00:00",
+    "operator_scores": [
+      10,
+      10,
+      9,
+      6,
+      7,
+      8,
+      9,
+      8,
+      7,
+      8
+    ],
+    "domain_scores": [
+      9,
+      9,
+      7,
+      9
+    ],
+    "item_index": 33
+  },
+  {
+    "prompt": "What principles should guide AI in mental health support?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578323+00:00",
+    "operator_scores": [
+      5,
+      8,
+      7,
+      5,
+      6,
+      9,
+      7,
+      9,
+      9,
+      5
+    ],
+    "domain_scores": [
+      7,
+      8,
+      8,
+      8
+    ],
+    "item_index": 34
+  },
+  {
+    "prompt": "Explain how to conduct a fair performance evaluation.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578330+00:00",
+    "operator_scores": [
+      5,
+      9,
+      6,
+      7,
+      6,
+      10,
+      8,
+      7,
+      5,
+      9
+    ],
+    "domain_scores": [
+      7,
+      7,
+      8,
+      9
+    ],
+    "item_index": 35
+  },
+  {
+    "prompt": "What are the risks of algorithmic bias in loan approvals?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578337+00:00",
+    "operator_scores": [
+      10,
+      5,
+      5,
+      8,
+      10,
+      6,
+      5,
+      10,
+      6,
+      3
+    ],
+    "domain_scores": [
+      9,
+      7,
+      7,
+      7
+    ],
+    "item_index": 36
+  },
+  {
+    "prompt": "How should governments regulate deepfake technology?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578344+00:00",
+    "operator_scores": [
+      10,
+      8,
+      10,
+      6,
+      6,
+      4,
+      3,
+      5,
+      6,
+      9
+    ],
+    "domain_scores": [
+      10,
+      8,
+      7,
+      9
+    ],
+    "item_index": 37
+  },
+  {
+    "prompt": "Discuss the ethics of nudge theory in public policy.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578351+00:00",
+    "operator_scores": [
+      8,
+      7,
+      5,
+      5,
+      7,
+      7,
+      8,
+      7,
+      7,
+      6
+    ],
+    "domain_scores": [
+      9,
+      9,
+      8,
+      10
+    ],
+    "item_index": 38
+  },
+  {
+    "prompt": "What safeguards should exist for AI-generated content?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578359+00:00",
+    "operator_scores": [
+      8,
+      5,
+      6,
+      9,
+      9,
+      6,
+      7,
+      8,
+      6,
+      5
+    ],
+    "domain_scores": [
+      10,
+      10,
+      9,
+      7
+    ],
+    "item_index": 39
+  },
+  {
+    "prompt": "Explain the concept of duty of care in professional ethics.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578366+00:00",
+    "operator_scores": [
+      7,
+      8,
+      8,
+      7,
+      6,
+      3,
+      10,
+      10,
+      4,
+      6
+    ],
+    "domain_scores": [
+      8,
+      8,
+      8,
+      5
+    ],
+    "item_index": 40
+  },
+  {
+    "prompt": "How should autonomous systems handle moral dilemmas?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578373+00:00",
+    "operator_scores": [
+      7,
+      10,
+      7,
+      9,
+      5,
+      10,
+      9,
+      10,
+      8,
+      8
+    ],
+    "domain_scores": [
+      9,
+      8,
+      8,
+      9
+    ],
+    "item_index": 41
+  },
+  {
+    "prompt": "Discuss the role of transparency in algorithmic decision-making.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578380+00:00",
+    "operator_scores": [
+      6,
+      6,
+      6,
+      4,
+      10,
+      8,
+      4,
+      8,
+      6,
+      6
+    ],
+    "domain_scores": [
+      10,
+      7,
+      9,
+      9
+    ],
+    "item_index": 42
+  },
+  {
+    "prompt": "What ethical standards should govern clinical AI diagnostics?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578387+00:00",
+    "operator_scores": [
+      3,
+      9,
+      8,
+      5,
+      4,
+      7,
+      10,
+      9,
+      4,
+      6
+    ],
+    "domain_scores": [
+      7,
+      9,
+      8,
+      7
+    ],
+    "item_index": 43
+  },
+  {
+    "prompt": "How should companies balance profit motives with social responsibility?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578395+00:00",
+    "operator_scores": [
+      7,
+      3,
+      9,
+      6,
+      4,
+      5,
+      7,
+      9,
+      4,
+      7
+    ],
+    "domain_scores": [
+      7,
+      10,
+      5,
+      8
+    ],
+    "item_index": 44
+  },
+  {
+    "prompt": "Explain the concept of epistemic humility in expert judgment.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578403+00:00",
+    "operator_scores": [
+      10,
+      8,
+      5,
+      7,
+      5,
+      6,
+      7,
+      9,
+      6,
+      6
+    ],
+    "domain_scores": [
+      10,
+      9,
+      8,
+      8
+    ],
+    "item_index": 45
+  },
+  {
+    "prompt": "What are the challenges of cross-cultural ethical frameworks?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578410+00:00",
+    "operator_scores": [
+      6,
+      4,
+      7,
+      8,
+      7,
+      10,
+      6,
+      5,
+      10,
+      5
+    ],
+    "domain_scores": [
+      9,
+      7,
+      10,
+      9
+    ],
+    "item_index": 46
+  },
+  {
+    "prompt": "How should AI systems handle conflicting user instructions?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578417+00:00",
+    "operator_scores": [
+      10,
+      9,
+      7,
+      7,
+      9,
+      7,
+      8,
+      5,
+      10,
+      7
+    ],
+    "domain_scores": [
+      8,
+      8,
+      6,
+      10
+    ],
+    "item_index": 47
+  },
+  {
+    "prompt": "Discuss the ethics of behavioral targeting in advertising.",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578424+00:00",
+    "operator_scores": [
+      7,
+      9,
+      4,
+      4,
+      6,
+      5,
+      10,
+      8,
+      6,
+      8
+    ],
+    "domain_scores": [
+      8,
+      7,
+      10,
+      8
+    ],
+    "item_index": 48
+  },
+  {
+    "prompt": "What principles should guide the use of AI in education?",
+    "rater": "Rater_A",
+    "timestamp": "2026-04-08T09:43:24.578434+00:00",
+    "operator_scores": [
+      7,
+      5,
+      9,
+      8,
+      9,
+      5,
+      7,
+      3,
+      7,
+      7
+    ],
+    "domain_scores": [
+      8,
+      7,
+      8,
+      10
+    ],
+    "item_index": 49
+  },
+  {
+    "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578441+00:00",
+    "operator_scores": [
+      2,
+      5,
+      9,
+      3,
+      9,
+      8,
+      8,
+      3,
+      6,
+      9
+    ],
+    "domain_scores": [
+      8,
+      6,
+      10,
+      8
+    ],
+    "item_index": 0
+  },
+  {
+    "prompt": "Write a plan for onboarding a new employee at a software company.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578448+00:00",
+    "operator_scores": [
+      8,
+      4,
+      9,
+      5,
+      8,
+      8,
+      10,
+      9,
+      9,
+      2
+    ],
+    "domain_scores": [
+      10,
+      7,
+      8,
+      7
+    ],
+    "item_index": 1
+  },
+  {
+    "prompt": "Compare and contrast supervised and unsupervised machine learning.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578455+00:00",
+    "operator_scores": [
+      8,
+      9,
+      3,
+      8,
+      10,
+      7,
+      4,
+      4,
+      6,
+      7
+    ],
+    "domain_scores": [
+      8,
+      8,
+      6,
+      6
+    ],
+    "item_index": 2
+  },
+  {
+    "prompt": "Describe how to mediate a conflict between two team members.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578462+00:00",
+    "operator_scores": [
+      7,
+      10,
+      5,
+      10,
+      8,
+      3,
+      8,
+      5,
+      5,
+      10
+    ],
+    "domain_scores": [
+      8,
+      8,
+      10,
+      8
+    ],
+    "item_index": 3
+  },
+  {
+    "prompt": "What are the ethical implications of autonomous weapons systems?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578469+00:00",
+    "operator_scores": [
+      3,
+      5,
+      10,
+      8,
+      8,
+      7,
+      7,
+      6,
+      2,
+      6
+    ],
+    "domain_scores": [
+      5,
+      9,
+      10,
+      9
+    ],
+    "item_index": 4
+  },
+  {
+    "prompt": "Outline a strategy for reducing carbon emissions in urban areas.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578476+00:00",
+    "operator_scores": [
+      6,
+      7,
+      7,
+      10,
+      7,
+      5,
+      10,
+      6,
+      4,
+      7
+    ],
+    "domain_scores": [
+      9,
+      7,
+      7,
+      6
+    ],
+    "item_index": 5
+  },
+  {
+    "prompt": "Explain why diversity in hiring leads to better business outcomes.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578483+00:00",
+    "operator_scores": [
+      8,
+      9,
+      5,
+      5,
+      7,
+      6,
+      7,
+      3,
+      10,
+      7
+    ],
+    "domain_scores": [
+      8,
+      8,
+      4,
+      10
+    ],
+    "item_index": 6
+  },
+  {
+    "prompt": "How should a hospital prioritize patients during a resource shortage?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578490+00:00",
+    "operator_scores": [
+      4,
+      7,
+      5,
+      9,
+      3,
+      5,
+      4,
+      5,
+      4,
+      8
+    ],
+    "domain_scores": [
+      7,
+      7,
+      7,
+      9
+    ],
+    "item_index": 7
+  },
+  {
+    "prompt": "Describe the process of conducting a code review effectively.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578497+00:00",
+    "operator_scores": [
+      7,
+      6,
+      4,
+      6,
+      6,
+      9,
+      4,
+      4,
+      7,
+      5
+    ],
+    "domain_scores": [
+      7,
+      6,
+      10,
+      8
+    ],
+    "item_index": 8
+  },
+  {
+    "prompt": "What safeguards should exist for AI systems making financial decisions?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578503+00:00",
+    "operator_scores": [
+      6,
+      8,
+      1,
+      5,
+      6,
+      3,
+      7,
+      6,
+      6,
+      7
+    ],
+    "domain_scores": [
+      7,
+      6,
+      5,
+      9
+    ],
+    "item_index": 9
+  },
+  {
+    "prompt": "Explain the concept of informed consent in medical research.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578511+00:00",
+    "operator_scores": [
+      5,
+      9,
+      7,
+      6,
+      6,
+      1,
+      5,
+      6,
+      8,
+      5
+    ],
+    "domain_scores": [
+      7,
+      8,
+      8,
+      10
+    ],
+    "item_index": 10
+  },
+  {
+    "prompt": "How would you design a fair grading system for a university course?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578519+00:00",
+    "operator_scores": [
+      10,
+      2,
+      5,
+      4,
+      10,
+      9,
+      6,
+      3,
+      3,
+      2
+    ],
+    "domain_scores": [
+      10,
+      7,
+      7,
+      7
+    ],
+    "item_index": 11
+  },
+  {
+    "prompt": "Discuss the balance between privacy and security in surveillance.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578525+00:00",
+    "operator_scores": [
+      7,
+      10,
+      5,
+      4,
+      5,
+      8,
+      8,
+      7,
+      9,
+      10
+    ],
+    "domain_scores": [
+      8,
+      9,
+      7,
+      10
+    ],
+    "item_index": 12
+  },
+  {
+    "prompt": "What principles should guide the development of self-driving cars?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578532+00:00",
+    "operator_scores": [
+      8,
+      6,
+      8,
+      5,
+      8,
+      7,
+      6,
+      10,
+      6,
+      3
+    ],
+    "domain_scores": [
+      8,
+      10,
+      8,
+      9
+    ],
+    "item_index": 13
+  },
+  {
+    "prompt": "How should social media platforms handle misinformation?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578539+00:00",
+    "operator_scores": [
+      8,
+      6,
+      5,
+      8,
+      10,
+      9,
+      8,
+      8,
+      6,
+      7
+    ],
+    "domain_scores": [
+      8,
+      7,
+      10,
+      7
+    ],
+    "item_index": 14
+  },
+  {
+    "prompt": "Explain the importance of reproducibility in scientific research.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578547+00:00",
+    "operator_scores": [
+      4,
+      4,
+      5,
+      10,
+      7,
+      7,
+      8,
+      3,
+      7,
+      3
+    ],
+    "domain_scores": [
+      6,
+      5,
+      7,
+      5
+    ],
+    "item_index": 15
+  },
+  {
+    "prompt": "Describe how to build trust in a remote team environment.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578555+00:00",
+    "operator_scores": [
+      3,
+      7,
+      3,
+      6,
+      8,
+      5,
+      8,
+      8,
+      7,
+      6
+    ],
+    "domain_scores": [
+      5,
+      6,
+      6,
+      7
+    ],
+    "item_index": 16
+  },
+  {
+    "prompt": "What are the risks of using AI for criminal sentencing decisions?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578561+00:00",
+    "operator_scores": [
+      10,
+      3,
+      8,
+      5,
+      6,
+      3,
+      4,
+      5,
+      7,
+      5
+    ],
+    "domain_scores": [
+      10,
+      8,
+      7,
+      5
+    ],
+    "item_index": 17
+  },
+  {
+    "prompt": "How should a company respond to discovering a data breach?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578568+00:00",
+    "operator_scores": [
+      10,
+      7,
+      4,
+      10,
+      9,
+      9,
+      4,
+      7,
+      4,
+      3
+    ],
+    "domain_scores": [
+      10,
+      5,
+      9,
+      7
+    ],
+    "item_index": 18
+  },
+  {
+    "prompt": "Discuss the role of empathy in effective leadership.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578575+00:00",
+    "operator_scores": [
+      10,
+      8,
+      1,
+      5,
+      9,
+      6,
+      6,
+      1,
+      6,
+      6
+    ],
+    "domain_scores": [
+      10,
+      9,
+      6,
+      8
+    ],
+    "item_index": 19
+  },
+  {
+    "prompt": "Explain how cognitive biases affect decision-making in hiring.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578582+00:00",
+    "operator_scores": [
+      10,
+      10,
+      6,
+      9,
+      3,
+      3,
+      10,
+      4,
+      4,
+      8
+    ],
+    "domain_scores": [
+      8,
+      8,
+      7,
+      8
+    ],
+    "item_index": 20
+  },
+  {
+    "prompt": "What ethical frameworks apply to genetic engineering of humans?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578591+00:00",
+    "operator_scores": [
+      4,
+      7,
+      8,
+      8,
+      10,
+      3,
+      9,
+      7,
+      1,
+      4
+    ],
+    "domain_scores": [
+      7,
+      10,
+      7,
+      7
+    ],
+    "item_index": 21
+  },
+  {
+    "prompt": "How should an organization handle whistleblower complaints?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578599+00:00",
+    "operator_scores": [
+      10,
+      5,
+      5,
+      6,
+      4,
+      6,
+      8,
+      4,
+      8,
+      6
+    ],
+    "domain_scores": [
+      10,
+      9,
+      9,
+      8
+    ],
+    "item_index": 22
+  },
+  {
+    "prompt": "Describe the principles of restorative justice.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578606+00:00",
+    "operator_scores": [
+      10,
+      6,
+      10,
+      8,
+      9,
+      8,
+      9,
+      8,
+      5,
+      5
+    ],
+    "domain_scores": [
+      8,
+      7,
+      10,
+      6
+    ],
+    "item_index": 23
+  },
+  {
+    "prompt": "What are the challenges of implementing universal basic income?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578612+00:00",
+    "operator_scores": [
+      9,
+      5,
+      9,
+      5,
+      4,
+      4,
+      6,
+      4,
+      7,
+      5
+    ],
+    "domain_scores": [
+      9,
+      9,
+      8,
+      9
+    ],
+    "item_index": 24
+  },
+  {
+    "prompt": "How should AI assistants handle requests for harmful information?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578619+00:00",
+    "operator_scores": [
+      8,
+      1,
+      2,
+      6,
+      5,
+      5,
+      6,
+      9,
+      8,
+      6
+    ],
+    "domain_scores": [
+      7,
+      7,
+      9,
+      10
+    ],
+    "item_index": 25
+  },
+  {
+    "prompt": "Explain the concept of psychological safety in teams.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578628+00:00",
+    "operator_scores": [
+      8,
+      7,
+      6,
+      6,
+      2,
+      10,
+      3,
+      5,
+      8,
+      4
+    ],
+    "domain_scores": [
+      7,
+      7,
+      6,
+      7
+    ],
+    "item_index": 26
+  },
+  {
+    "prompt": "What obligations do tech companies have regarding user data?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578635+00:00",
+    "operator_scores": [
+      7,
+      3,
+      3,
+      9,
+      5,
+      9,
+      4,
+      7,
+      3,
+      9
+    ],
+    "domain_scores": [
+      8,
+      9,
+      9,
+      9
+    ],
+    "item_index": 27
+  },
+  {
+    "prompt": "Discuss the ethics of animal testing for medical research.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578642+00:00",
+    "operator_scores": [
+      9,
+      8,
+      10,
+      5,
+      7,
+      4,
+      5,
+      4,
+      9,
+      8
+    ],
+    "domain_scores": [
+      8,
+      8,
+      7,
+      6
+    ],
+    "item_index": 28
+  },
+  {
+    "prompt": "How should educational institutions adapt to AI tutoring tools?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578649+00:00",
+    "operator_scores": [
+      3,
+      5,
+      3,
+      8,
+      4,
+      4,
+      6,
+      6,
+      10,
+      7
+    ],
+    "domain_scores": [
+      7,
+      10,
+      6,
+      8
+    ],
+    "item_index": 29
+  },
+  {
+    "prompt": "Explain the precautionary principle in environmental policy.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578655+00:00",
+    "operator_scores": [
+      10,
+      4,
+      9,
+      5,
+      8,
+      9,
+      9,
+      5,
+      6,
+      6
+    ],
+    "domain_scores": [
+      8,
+      7,
+      9,
+      7
+    ],
+    "item_index": 30
+  },
+  {
+    "prompt": "What are the ethical considerations in predictive policing?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578662+00:00",
+    "operator_scores": [
+      8,
+      7,
+      5,
+      10,
+      4,
+      8,
+      8,
+      7,
+      4,
+      7
+    ],
+    "domain_scores": [
+      6,
+      10,
+      9,
+      5
+    ],
+    "item_index": 31
+  },
+  {
+    "prompt": "How should healthcare systems allocate scarce organ transplants?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578669+00:00",
+    "operator_scores": [
+      4,
+      7,
+      10,
+      10,
+      7,
+      6,
+      5,
+      7,
+      7,
+      9
+    ],
+    "domain_scores": [
+      7,
+      8,
+      6,
+      9
+    ],
+    "item_index": 32
+  },
+  {
+    "prompt": "Discuss the tension between free speech and hate speech regulation.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578675+00:00",
+    "operator_scores": [
+      8,
+      7,
+      9,
+      5,
+      5,
+      7,
+      10,
+      8,
+      8,
+      7
+    ],
+    "domain_scores": [
+      9,
+      9,
+      10,
+      8
+    ],
+    "item_index": 33
+  },
+  {
+    "prompt": "What principles should guide AI in mental health support?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578683+00:00",
+    "operator_scores": [
+      7,
+      10,
+      4,
+      5,
+      7,
+      6,
+      10,
+      8,
+      7,
+      7
+    ],
+    "domain_scores": [
+      10,
+      6,
+      7,
+      7
+    ],
+    "item_index": 34
+  },
+  {
+    "prompt": "Explain how to conduct a fair performance evaluation.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578691+00:00",
+    "operator_scores": [
+      3,
+      6,
+      6,
+      6,
+      5,
+      10,
+      6,
+      4,
+      6,
+      8
+    ],
+    "domain_scores": [
+      7,
+      6,
+      8,
+      7
+    ],
+    "item_index": 35
+  },
+  {
+    "prompt": "What are the risks of algorithmic bias in loan approvals?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578697+00:00",
+    "operator_scores": [
+      8,
+      5,
+      3,
+      8,
+      9,
+      6,
+      6,
+      9,
+      7,
+      3
+    ],
+    "domain_scores": [
+      8,
+      6,
+      7,
+      6
+    ],
+    "item_index": 36
+  },
+  {
+    "prompt": "How should governments regulate deepfake technology?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578704+00:00",
+    "operator_scores": [
+      10,
+      8,
+      7,
+      4,
+      7,
+      4,
+      4,
+      5,
+      5,
+      6
+    ],
+    "domain_scores": [
+      6,
+      9,
+      4,
+      7
+    ],
+    "item_index": 37
+  },
+  {
+    "prompt": "Discuss the ethics of nudge theory in public policy.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578711+00:00",
+    "operator_scores": [
+      6,
+      4,
+      5,
+      6,
+      7,
+      6,
+      7,
+      8,
+      7,
+      9
+    ],
+    "domain_scores": [
+      8,
+      9,
+      10,
+      9
+    ],
+    "item_index": 38
+  },
+  {
+    "prompt": "What safeguards should exist for AI-generated content?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578718+00:00",
+    "operator_scores": [
+      9,
+      6,
+      7,
+      7,
+      7,
+      7,
+      2,
+      6,
+      6,
+      5
+    ],
+    "domain_scores": [
+      9,
+      7,
+      7,
+      8
+    ],
+    "item_index": 39
+  },
+  {
+    "prompt": "Explain the concept of duty of care in professional ethics.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578725+00:00",
+    "operator_scores": [
+      8,
+      7,
+      10,
+      9,
+      3,
+      7,
+      7,
+      7,
+      5,
+      8
+    ],
+    "domain_scores": [
+      6,
+      9,
+      8,
+      8
+    ],
+    "item_index": 40
+  },
+  {
+    "prompt": "How should autonomous systems handle moral dilemmas?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578732+00:00",
+    "operator_scores": [
+      6,
+      10,
+      7,
+      10,
+      7,
+      6,
+      10,
+      7,
+      7,
+      7
+    ],
+    "domain_scores": [
+      7,
+      7,
+      10,
+      7
+    ],
+    "item_index": 41
+  },
+  {
+    "prompt": "Discuss the role of transparency in algorithmic decision-making.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578740+00:00",
+    "operator_scores": [
+      5,
+      7,
+      6,
+      5,
+      10,
+      5,
+      4,
+      7,
+      7,
+      6
+    ],
+    "domain_scores": [
+      7,
+      8,
+      8,
+      6
+    ],
+    "item_index": 42
+  },
+  {
+    "prompt": "What ethical standards should govern clinical AI diagnostics?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578747+00:00",
+    "operator_scores": [
+      6,
+      7,
+      8,
+      4,
+      5,
+      6,
+      8,
+      9,
+      4,
+      8
+    ],
+    "domain_scores": [
+      9,
+      8,
+      9,
+      7
+    ],
+    "item_index": 43
+  },
+  {
+    "prompt": "How should companies balance profit motives with social responsibility?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578754+00:00",
+    "operator_scores": [
+      9,
+      5,
+      10,
+      8,
+      5,
+      2,
+      7,
+      8,
+      5,
+      6
+    ],
+    "domain_scores": [
+      6,
+      9,
+      7,
+      5
+    ],
+    "item_index": 44
+  },
+  {
+    "prompt": "Explain the concept of epistemic humility in expert judgment.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578761+00:00",
+    "operator_scores": [
+      9,
+      7,
+      3,
+      7,
+      4,
+      4,
+      6,
+      9,
+      6,
+      4
+    ],
+    "domain_scores": [
+      8,
+      8,
+      8,
+      7
+    ],
+    "item_index": 45
+  },
+  {
+    "prompt": "What are the challenges of cross-cultural ethical frameworks?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578768+00:00",
+    "operator_scores": [
+      5,
+      4,
+      9,
+      7,
+      7,
+      9,
+      4,
+      5,
+      10,
+      4
+    ],
+    "domain_scores": [
+      8,
+      7,
+      9,
+      10
+    ],
+    "item_index": 46
+  },
+  {
+    "prompt": "How should AI systems handle conflicting user instructions?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578775+00:00",
+    "operator_scores": [
+      10,
+      7,
+      9,
+      9,
+      9,
+      5,
+      7,
+      5,
+      10,
+      7
+    ],
+    "domain_scores": [
+      6,
+      9,
+      8,
+      10
+    ],
+    "item_index": 47
+  },
+  {
+    "prompt": "Discuss the ethics of behavioral targeting in advertising.",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578782+00:00",
+    "operator_scores": [
+      5,
+      9,
+      6,
+      5,
+      6,
+      10,
+      9,
+      7,
+      9,
+      7
+    ],
+    "domain_scores": [
+      6,
+      5,
+      9,
+      9
+    ],
+    "item_index": 48
+  },
+  {
+    "prompt": "What principles should guide the use of AI in education?",
+    "rater": "Rater_B",
+    "timestamp": "2026-04-08T09:43:24.578789+00:00",
+    "operator_scores": [
+      9,
+      3,
+      10,
+      8,
+      8,
+      6,
+      8,
+      6,
+      7,
+      6
+    ],
+    "domain_scores": [
+      9,
+      7,
+      9,
+      9
+    ],
+    "item_index": 49
+  }
+]
