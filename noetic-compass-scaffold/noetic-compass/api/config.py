@@ -39,6 +39,10 @@ class Settings(BaseSettings):
     # Default LLM provider
     default_llm_provider: str = "mock"
 
+    # Optional secondary scorer LLM. Empty = no separate scorer for mock/base demo flows.
+    scoring_provider: str = ""
+    scoring_model: str = ""
+
     # Docker Compose DB credentials (used only by docker-compose.yml)
     db_user: str = "noetic"
     db_password: str = "noetic_dev"

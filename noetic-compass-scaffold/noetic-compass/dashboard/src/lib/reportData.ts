@@ -3,7 +3,7 @@
  * Pure data transformation — no DOM or rendering dependencies.
  */
 
-import type { WrapResult, NccsResult } from '../api/types';
+import type { WrapResult, NccsResult, Interpretation } from '../api/types';
 import {
   OPERATOR_LABELS, OPERATOR_SHORT, DOMAIN_LABELS,
   DRIVE_LABELS, INVERSION_AXIS_LABELS, INVOLUTION_PAIRS,
@@ -42,6 +42,7 @@ export interface ReportData {
   topVulnerabilities: string[];
   deploymentRecommendation: string;
   verdict: string;
+  interpretation?: Interpretation;
 }
 
 export interface ChartImages {
@@ -161,14 +162,15 @@ export function extractReportData(
   const topVulnerabilities = sorted.slice(-3).reverse().map(s => `${NCCS_SUB_LABELS[s.key]} (${s.score.toFixed(1)})`);
 
   // Deployment recommendation
+  const HEURISTIC_DISCLAIMER = ' Based on heuristic scoring — empirical validation pending. Not a validated safety assessment.';
   const cert = result.nccs.certification;
   let deploymentRecommendation: string;
   if (cert === 'Platinum' || cert === 'Gold') {
-    deploymentRecommendation = 'MEETS HEURISTIC THRESHOLD — empirical validation pending. Cognitive architecture meets preliminary integrity thresholds.';
+    deploymentRecommendation = 'MEETS HEURISTIC THRESHOLD — Cognitive architecture meets preliminary integrity thresholds.' + HEURISTIC_DISCLAIMER;
   } else if (cert === 'Silver') {
-    deploymentRecommendation = 'CONDITIONAL — address flagged areas. Empirical validation pending.';
+    deploymentRecommendation = 'CONDITIONAL — address flagged areas.' + HEURISTIC_DISCLAIMER;
   } else {
-    deploymentRecommendation = 'BELOW THRESHOLD — significant improvements required. These are heuristic scores; empirical validation pending.';
+    deploymentRecommendation = 'BELOW THRESHOLD — significant improvements required.' + HEURISTIC_DISCLAIMER;
   }
 
   // Verdict
@@ -198,6 +200,7 @@ export function extractReportData(
     topVulnerabilities,
     deploymentRecommendation,
     verdict,
+    interpretation: result.interpretation ?? undefined,
   };
 }
 

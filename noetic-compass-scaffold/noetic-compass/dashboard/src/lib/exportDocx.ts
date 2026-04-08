@@ -134,6 +134,17 @@ export async function exportDocx(data: ReportData, images: ChartImages): Promise
   ));
   children.push(textPara('Framework: CAS v7.4 — Corrected Edition  |  Confidential', { color: GRAY, size: 18 }));
 
+  // AI Executive Briefing
+  if (data.interpretation) {
+    children.push(heading('AI Executive Briefing', HeadingLevel.HEADING_1));
+    children.push(textPara('THE BOTTOM LINE', { bold: true, color: TEAL }));
+    children.push(textPara(data.interpretation.bottom_line));
+    children.push(textPara('WHAT WE FOUND', { bold: true, color: TEAL }));
+    data.interpretation.findings.forEach(f => children.push(textPara(f, { color: GRAY })));
+    children.push(textPara('WHAT WE RECOMMEND', { bold: true, color: TEAL }));
+    data.interpretation.recommendations.forEach(r => children.push(bulletPara(r)));
+  }
+
   // Executive Summary
   children.push(heading('Executive Summary', HeadingLevel.HEADING_1));
   children.push(textPara(

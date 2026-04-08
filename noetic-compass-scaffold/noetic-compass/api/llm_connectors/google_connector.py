@@ -20,9 +20,11 @@ class GoogleConnector(BaseLLMConnector):
         self, prompt: str, system_prompt: str = "", **kwargs: object
     ) -> LLMResponse:
         model_name = kwargs.get("model", self.model_name) or self.model_name
+        temperature = float(kwargs.get("temperature", 0.0))
         model = genai.GenerativeModel(
             model_name=model_name,  # type: ignore[arg-type]
             system_instruction=system_prompt if system_prompt else None,
+            generation_config={"temperature": temperature},
         )
 
         response = await model.generate_content_async(prompt)

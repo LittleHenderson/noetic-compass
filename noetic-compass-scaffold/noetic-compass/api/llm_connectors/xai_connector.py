@@ -28,9 +28,11 @@ class XAIConnector(BaseLLMConnector):
         messages.append({"role": "user", "content": prompt})
 
         model = kwargs.get("model", self.model) or self.model
+        temperature = float(kwargs.get("temperature", 0.0))
         response = await self.client.chat.completions.create(
             model=model,  # type: ignore[arg-type]
             messages=messages,  # type: ignore[arg-type]
+            temperature=temperature,
         )
 
         choice = response.choices[0]

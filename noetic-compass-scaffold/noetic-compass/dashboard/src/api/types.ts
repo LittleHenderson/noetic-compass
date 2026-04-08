@@ -42,6 +42,7 @@ export interface NccsResult {
   pathway_quality: number;
   inversion_resistance: number;
   social_engineering: number | null;
+  bias_flags: number | null;
   composite: number;
   certification: string;
   not_measured?: string[];
@@ -61,11 +62,19 @@ export interface LLMResponse {
   latency_ms: number;
 }
 
+export interface Interpretation {
+  bottom_line: string;
+  findings: string[];
+  recommendations: string[];
+}
+
 export interface WrapResult {
   nccs: NccsResult;
   stages: StageResult[];
   llm_response: LLMResponse | null;
+  scoring_method?: 'llm' | 'heuristic';
   provenance?: Record<string, unknown>;
+  interpretation?: Interpretation | null;
 }
 
 export interface BatchResult {

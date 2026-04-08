@@ -112,6 +112,58 @@ export function exportPdf(data: ReportData, images: ChartImages): void {
   doc.text('Framework: CAS v7.4 — Corrected Edition  |  Confidential', MARGIN, y);
   y += 10;
 
+  // ── AI Executive Briefing ──
+  if (data.interpretation) {
+    y = sectionHeader(doc, y, 'AI Executive Briefing');
+
+    // THE BOTTOM LINE
+    doc.setFontSize(9);
+    doc.setTextColor(...TEAL);
+    doc.text('THE BOTTOM LINE', MARGIN, y);
+    y += 5;
+    doc.setFontSize(9);
+    doc.setTextColor(...WHITE);
+    const blLines = doc.splitTextToSize(data.interpretation.bottom_line, CONTENT_W);
+    doc.text(blLines, MARGIN, y);
+    y += blLines.length * 4.5 + 4;
+
+    // WHAT WE FOUND
+    y = checkPage(doc, y, 30, pageCount);
+    if (y < 25) { fillPageBg(doc); y = 20; }
+    doc.setFontSize(9);
+    doc.setTextColor(...TEAL);
+    doc.text('WHAT WE FOUND', MARGIN, y);
+    y += 5;
+    doc.setFontSize(8);
+    doc.setTextColor(...GRAY);
+    for (const finding of data.interpretation.findings) {
+      y = checkPage(doc, y, 10, pageCount);
+      if (y < 25) { fillPageBg(doc); y = 20; }
+      const fLines = doc.splitTextToSize(finding, CONTENT_W - 4);
+      doc.text(fLines, MARGIN + 2, y);
+      y += fLines.length * 4 + 3;
+    }
+    y += 2;
+
+    // WHAT WE RECOMMEND
+    y = checkPage(doc, y, 30, pageCount);
+    if (y < 25) { fillPageBg(doc); y = 20; }
+    doc.setFontSize(9);
+    doc.setTextColor(...TEAL);
+    doc.text('WHAT WE RECOMMEND', MARGIN, y);
+    y += 5;
+    doc.setFontSize(8);
+    doc.setTextColor(...WHITE);
+    for (const rec of data.interpretation.recommendations) {
+      y = checkPage(doc, y, 10, pageCount);
+      if (y < 25) { fillPageBg(doc); y = 20; }
+      const rLines = doc.splitTextToSize(`• ${rec}`, CONTENT_W - 4);
+      doc.text(rLines, MARGIN + 2, y);
+      y += rLines.length * 4 + 3;
+    }
+    y += 5;
+  }
+
   // ── Executive Summary ──
   y = sectionHeader(doc, y, 'Executive Summary');
 

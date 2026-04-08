@@ -10,9 +10,10 @@ from dataclasses import dataclass, field
 
 import cas_engine
 
-from api.errors import DialViolationError, PipelineStageError
+from api.errors import DialViolationError, LLMError, PipelineStageError
 from api.llm_connectors.base import BaseLLMConnector, CAS_SYSTEM_PROMPT, LLMResponse
 from api.models import DialConfigSchema
+from api.pipeline.llm_scorer import score_prompt_response
 
 
 # ---------------------------------------------------------------------------
@@ -48,8 +49,14 @@ class AdjustedInput:
 @dataclass
 class OperatorScoreResult:
     scores: list[float]
+    raw_scores_0_to_10: list[float]
     profile_score: float
     involution_balances: list[float]
+    scoring_method: str = "heuristic"
+    evidence: dict[str, list[str]] = field(default_factory=dict)
+    scorer_model: str | None = None
+    scorer_provider: str | None = None
+    fallback_reason: str | None = None
 
 
 @dataclass
@@ -86,6 +93,7 @@ class NccsResult:
     pathway_quality: float
     inversion_resistance: float
     social_engineering: float | None  # None = not measured
+    bias_flags: int | None  # None = not measured
     composite: float
     certification: str
     not_measured: list[str] = field(default_factory=list)
@@ -224,24 +232,71 @@ async def base_llm_call(
         return await connector.generate(
             prompt=adjusted.text,
             system_prompt=adjusted.system_prompt,
+            temperature=0.0,
         )
     except Exception as e:
-        raise PipelineStageError("base_llm_call", f"LLM call failed: {e}")
+        raise LLMError(
+            detail=f"LLM call failed: {e}",
+            provider=connector.provider_name,
+        )
 
 
 # ---------------------------------------------------------------------------
 # Stage 5: Operator Scoring
 # ---------------------------------------------------------------------------
 
-async def operator_scoring(llm_response: LLMResponse) -> OperatorScoreResult:
-    """Extract or compute operator scores from LLM response."""
-    scores = _extract_operator_scores(llm_response.text)
+async def operator_scoring(
+    llm_response: LLMResponse,
+    prompt_text: str | None = None,
+    scorer_connector: BaseLLMConnector | None = None,
+    scorer_model: str | None = None,
+) -> OperatorScoreResult:
+    """Score operators using a secondary assessor LLM when available.
+
+    Falls back to legacy heuristic extraction if the dedicated scorer is
+    unavailable or returns invalid output.
+    """
+    scoring_method = "heuristic"
+    evidence: dict[str, list[str]] = {}
+    scorer_used_model: str | None = None
+    scorer_provider: str | None = None
+    fallback_reason: str | None = None
+    raw_scores_0_to_10: list[float]
+
+    if prompt_text and scorer_connector:
+        try:
+            assessment = await score_prompt_response(
+                prompt_text=prompt_text,
+                response_text=llm_response.text,
+                connector=scorer_connector,
+                model=scorer_model,
+            )
+            scores = assessment.scores
+            raw_scores_0_to_10 = assessment.raw_scores_0_to_10
+            evidence = assessment.evidence
+            scoring_method = "llm"
+            scorer_used_model = assessment.model
+            scorer_provider = scorer_connector.provider_name
+        except Exception as exc:
+            scores = _extract_operator_scores(llm_response.text)
+            raw_scores_0_to_10 = [round(score * 10.0, 4) for score in scores]
+            fallback_reason = str(exc)
+    else:
+        scores = _extract_operator_scores(llm_response.text)
+        raw_scores_0_to_10 = [round(score * 10.0, 4) for score in scores]
+
     op = cas_engine.OperatorScores(scores)
 
     return OperatorScoreResult(
         scores=scores,
+        raw_scores_0_to_10=raw_scores_0_to_10,
         profile_score=op.profile_score(),
         involution_balances=op.all_involution_balances(),
+        scoring_method=scoring_method,
+        evidence=evidence,
+        scorer_model=scorer_used_model,
+        scorer_provider=scorer_provider,
+        fallback_reason=fallback_reason,
     )
 
 
@@ -522,13 +577,16 @@ async def output_gate(
     overton_drift_resistance = 0.5
     not_measured.append("social_engineering")
 
+    # Bias flags are not measured — pass 0 to engine, mark as not measured
+    not_measured.append("bias_flags")
+
     result = cas_engine.compute_nccs(
         operator_scores=op_result.scores,
         domain_averages=dc_result.domain_averages,
         drive_scores=drive_scores,
         rpm_completeness=rpm_result.rpm_completeness,
         pathway_rpm_completeness=rpm_result.rpm_completeness,
-        bias_flag_count=0,
+        bias_flag_count=0,  # placeholder — not yet measured
         inversion_axis_scores=inv_result.axis_scores,
         stealth_resistance=inv_result.stealth_resistance,
         compound_severity=inv_result.compound_severity,
@@ -543,6 +601,7 @@ async def output_gate(
         pathway_quality=result["pathway_quality"],
         inversion_resistance=result["inversion_resistance"],
         social_engineering=None,  # Not measured
+        bias_flags=None,  # Not measured
         composite=result["composite"],
         certification=result["certification"],
         not_measured=not_measured,

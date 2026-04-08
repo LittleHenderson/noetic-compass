@@ -11,6 +11,7 @@ import { StateHeatmap } from '../components/charts/StateHeatmap';
 import { CoreDriveTree } from '../components/charts/CoreDriveTree';
 import { RpmGraph } from '../components/charts/RpmGraph';
 import { InversionMap } from '../components/charts/InversionMap';
+import { AiBriefing } from '../components/shared/AiBriefing';
 import { PIPELINE_STAGES } from '../lib/constants';
 
 export function DetailsPage() {
@@ -18,6 +19,7 @@ export function DetailsPage() {
   const navigate = useNavigate();
   const record = useHistoryStore((s) => s.getById(id ?? ''));
   const [showRaw, setShowRaw] = useState(false);
+  const [viewMode, setViewMode] = useState<'summary' | 'technical'>('summary');
 
   if (!record) {
     return (
@@ -66,76 +68,95 @@ export function DetailsPage() {
         <p className="mt-2 text-xs text-slate-600">{new Date(record.timestamp).toLocaleString()}</p>
       </Card>
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <Card title="NCCS Score">
-          <div className="flex flex-col items-center gap-4">
-            <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
-            <CertBadge certification={result.nccs.certification} composite={result.nccs.composite} />
-          </div>
-        </Card>
-        <Card title="Sub-Score Breakdown">
-          <SubScoreBreakdown nccs={result.nccs} />
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        {operatorScores && (
-          <Card title="Operator Radar">
-            <OperatorRadarChart scores={operatorScores} />
-          </Card>
-        )}
-        {operatorScores && domainAverages && (
-          <Card title="40-State Heatmap">
-            <StateHeatmap operatorScores={operatorScores} domainAverages={domainAverages} />
-          </Card>
-        )}
-      </div>
-
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-        {driveScores && driveScores.length > 0 && (
-          <Card title="Core Drives">
-            <CoreDriveTree driveScores={driveScores.map(d => d[0])} />
-          </Card>
-        )}
-        {driveScores && a0Score !== undefined && rpmCompleteness !== undefined && (
-          <Card title="RPM Graph">
-            <RpmGraph a0Score={a0Score} driveScores={driveScores} rpmCompleteness={rpmCompleteness} />
-          </Card>
-        )}
-        {axisScores && stealthResistance !== undefined && (
-          <Card title="Inversion Map">
-            <InversionMap axisScores={axisScores} stealthResistance={stealthResistance} />
-          </Card>
-        )}
-      </div>
-
-      <Card title="Pipeline Stages">
-        <div className="space-y-2">
-          {result.stages.map((s, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <div className="relative flex items-center justify-center w-5 h-5">
-                {s.success ? (
-                  <>
-                    <div className="absolute inset-0 rounded-full bg-emerald-400/20" />
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <path d="M2.5 6L5 8.5L9.5 3.5" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </>
-                ) : (
-                  <>
-                    <div className="absolute inset-0 rounded-full bg-red-400/20" />
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                      <path d="M2.5 2.5L7.5 7.5M7.5 2.5L2.5 7.5" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                  </>
-                )}
-              </div>
-              <span className="text-xs font-medium text-slate-300 w-32">{PIPELINE_STAGES[i]}</span>
-              {s.error && <span className="text-[10px] text-red-400">{s.error}</span>}
-            </div>
-          ))}
+      {result.interpretation && (
+        <div className="flex justify-end">
+          <button
+            onClick={() => setViewMode(viewMode === 'summary' ? 'technical' : 'summary')}
+            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
+          >
+            {viewMode === 'summary' ? 'Show Technical View' : 'Show Summary View'}
+          </button>
         </div>
-      </Card>
+      )}
+
+      {viewMode === 'summary' && result.interpretation && (
+        <AiBriefing interpretation={result.interpretation} />
+      )}
+
+      {(viewMode === 'technical' || !result.interpretation) && (
+        <>
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <Card title="NCCS Score">
+              <div className="flex flex-col items-center gap-4">
+                <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
+                <CertBadge certification={result.nccs.certification} composite={result.nccs.composite} />
+              </div>
+            </Card>
+            <Card title="Sub-Score Breakdown">
+              <SubScoreBreakdown nccs={result.nccs} />
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            {operatorScores && (
+              <Card title="Operator Radar">
+                <OperatorRadarChart scores={operatorScores} />
+              </Card>
+            )}
+            {operatorScores && domainAverages && (
+              <Card title="40-State Heatmap">
+                <StateHeatmap operatorScores={operatorScores} domainAverages={domainAverages} />
+              </Card>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+            {driveScores && driveScores.length > 0 && (
+              <Card title="Core Drives">
+                <CoreDriveTree driveScores={driveScores.map(d => d[0])} />
+              </Card>
+            )}
+            {driveScores && a0Score !== undefined && rpmCompleteness !== undefined && (
+              <Card title="RPM Graph">
+                <RpmGraph a0Score={a0Score} driveScores={driveScores} rpmCompleteness={rpmCompleteness} />
+              </Card>
+            )}
+            {axisScores && stealthResistance !== undefined && (
+              <Card title="Inversion Map">
+                <InversionMap axisScores={axisScores} stealthResistance={stealthResistance} />
+              </Card>
+            )}
+          </div>
+
+          <Card title="Pipeline Stages">
+            <div className="space-y-2">
+              {result.stages.map((s, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="relative flex items-center justify-center w-5 h-5">
+                    {s.success ? (
+                      <>
+                        <div className="absolute inset-0 rounded-full bg-emerald-400/20" />
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                          <path d="M2.5 6L5 8.5L9.5 3.5" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </>
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 rounded-full bg-red-400/20" />
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                          <path d="M2.5 2.5L7.5 7.5M7.5 2.5L2.5 7.5" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round" />
+                        </svg>
+                      </>
+                    )}
+                  </div>
+                  <span className="text-xs font-medium text-slate-300 w-32">{PIPELINE_STAGES[i]}</span>
+                  {s.error && <span className="text-[10px] text-red-400">{s.error}</span>}
+                </div>
+              ))}
+            </div>
+          </Card>
+        </>
+      )}
 
       <Card>
         <button

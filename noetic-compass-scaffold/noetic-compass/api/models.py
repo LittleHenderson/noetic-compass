@@ -103,6 +103,7 @@ class NccsResponse(BaseModel):
     pathway_quality: float
     inversion_resistance: float
     social_engineering: float | None = None  # None = not measured
+    bias_flags: int | None = None  # None = not measured
     composite: float
     certification: str
     not_measured: list[str] = Field(default_factory=list)
@@ -117,13 +118,23 @@ class StageResult(BaseModel):
     error: str | None = None
 
 
+class InterpretationSchema(BaseModel):
+    """AI-generated executive briefing for non-technical stakeholders."""
+
+    bottom_line: str
+    findings: list[str]
+    recommendations: list[str]
+
+
 class WrapResponse(BaseModel):
     """Full wrap pipeline response."""
 
     nccs: NccsResponse
     stages: list[StageResult]
     llm_response: LLMResponseSchema | None = None
+    scoring_method: str = "heuristic"
     provenance: dict = Field(default_factory=dict)
+    interpretation: InterpretationSchema | None = None
 
 
 class BatchResponse(BaseModel):

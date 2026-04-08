@@ -5,7 +5,9 @@ from __future__ import annotations
 import hashlib
 import time
 
+from api.config import settings
 from api.llm_connectors.base import BaseLLMConnector, LLMResponse
+from api.llm_connectors.registry import get_connector
 from api.models import (
     DialConfigSchema,
     LLMResponseSchema,
@@ -13,6 +15,7 @@ from api.models import (
     StageResult,
     WrapResponse,
 )
+from api.pipeline.interpreter import generate_interpretation, DRIVE_NAMES
 from api.pipeline.stages import (
     input_analyzer,
     rpm_gate,
@@ -31,6 +34,30 @@ class WrapPipelineRunner:
     def __init__(self, connector: BaseLLMConnector, dial_config: DialConfigSchema):
         self.connector = connector
         self.dial_config = dial_config
+
+    def _resolve_scoring_connector(self) -> tuple[BaseLLMConnector | None, str | None, str | None]:
+        """Resolve the secondary scorer LLM, if configured/available."""
+        try:
+            configured_provider = settings.scoring_provider.strip().lower()
+            configured_model = settings.scoring_model.strip() or None
+
+            if configured_provider:
+                connector = get_connector(configured_provider, model=configured_model)
+                return connector, configured_provider, configured_model
+
+            if self.connector.provider_name in {"openai", "anthropic"}:
+                default_models = {
+                    "openai": "gpt-4o",
+                    "anthropic": "claude-sonnet-4-6",
+                }
+                provider = self.connector.provider_name
+                model = configured_model or default_models[provider]
+                connector = get_connector(provider, model=model)
+                return connector, provider, model
+        except Exception:
+            return None, None, None
+
+        return None, None, None
 
     async def run(self, text: str) -> WrapResponse:
         """Execute the full 8-stage pipeline."""
@@ -83,14 +110,26 @@ class WrapPipelineRunner:
         ))
 
         # Stage 5: Operator Scoring
-        op_result = await operator_scoring(llm_resp)
+        scorer_connector, scorer_provider, scorer_model = self._resolve_scoring_connector()
+        op_result = await operator_scoring(
+            llm_resp,
+            prompt_text=adjusted.text,
+            scorer_connector=scorer_connector,
+            scorer_model=scorer_model,
+        )
         stages.append(StageResult(
             stage="operator_scoring",
             success=True,
             data={
                 "profile_score": op_result.profile_score,
                 "scores": op_result.scores,
+                "raw_scores_0_to_10": op_result.raw_scores_0_to_10,
                 "involution_balances": op_result.involution_balances,
+                "scoring_method": op_result.scoring_method,
+                "evidence": op_result.evidence,
+                "scorer_provider": op_result.scorer_provider,
+                "scorer_model": op_result.scorer_model,
+                "fallback_reason": op_result.fallback_reason,
             },
         ))
 
@@ -152,6 +191,7 @@ class WrapPipelineRunner:
             pathway_quality=nccs.pathway_quality,
             inversion_resistance=nccs.inversion_resistance,
             social_engineering=nccs.social_engineering,
+            bias_flags=nccs.bias_flags,
             composite=nccs.composite,
             certification=nccs.certification,
             not_measured=nccs.not_measured,
@@ -172,13 +212,36 @@ class WrapPipelineRunner:
             "engine": "cas-engine",
             "input_hash": hashlib.sha256(text.encode()).hexdigest()[:16],
             "connector": self.connector.provider_name,
+            "scoring_method": op_result.scoring_method,
+            "scorer_provider": op_result.scorer_provider or scorer_provider,
+            "scorer_model": op_result.scorer_model or scorer_model,
             "elapsed_ms": elapsed_ms,
             "rpm_heuristic": rpm_result.heuristic,
         }
+
+        # Post-pipeline: AI interpretation (not a 9th stage)
+        broken_chains = [
+            DRIVE_NAMES[i]
+            for i, chain in enumerate(rpm_result.drive_scores)
+            if any(s < 0.5 for s in [rpm_result.a0_score, *chain])
+        ]
+        interpretation = await generate_interpretation(
+            self.connector,
+            composite=nccs.composite,
+            certification=nccs.certification,
+            operator_scores=op_result.scores,
+            domain_averages=dc_result.domain_averages,
+            drive_scores=flat_drives,
+            inversion_axis_scores=inv_result.axis_scores,
+            rpm_completeness=rpm_result.rpm_completeness,
+            broken_chains=broken_chains,
+        )
 
         return WrapResponse(
             nccs=nccs_response,
             stages=stages,
             llm_response=llm_response_schema,
+            scoring_method=op_result.scoring_method,
             provenance=provenance,
+            interpretation=interpretation,
         )

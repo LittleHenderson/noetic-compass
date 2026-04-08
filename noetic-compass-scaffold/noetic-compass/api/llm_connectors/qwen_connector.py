@@ -28,12 +28,14 @@ class QwenConnector(BaseLLMConnector):
         messages.append({"role": "user", "content": prompt})
 
         model = kwargs.get("model", self.model) or self.model
+        temperature = float(kwargs.get("temperature", 0.0))
         extra: dict[str, object] = {}
         if str(model).startswith("qwen3"):
             extra["extra_body"] = {"enable_thinking": False}
         response = await self.client.chat.completions.create(
             model=model,  # type: ignore[arg-type]
             messages=messages,  # type: ignore[arg-type]
+            temperature=temperature,
             **extra,  # type: ignore[arg-type]
         )
 

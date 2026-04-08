@@ -20,9 +20,11 @@ class AnthropicConnector(BaseLLMConnector):
         self, prompt: str, system_prompt: str = "", **kwargs: object
     ) -> LLMResponse:
         model = kwargs.get("model", self.model) or self.model
+        temperature = float(kwargs.get("temperature", 0.0))
         create_kwargs: dict = {
             "model": model,
             "max_tokens": 4096,
+            "temperature": temperature,
             "messages": [{"role": "user", "content": prompt}],
         }
         if system_prompt:

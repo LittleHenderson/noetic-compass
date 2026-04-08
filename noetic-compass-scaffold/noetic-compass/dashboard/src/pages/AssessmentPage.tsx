@@ -8,6 +8,7 @@ import { CertBadge } from '../components/shared/CertBadge';
 import { ExportButton } from '../components/shared/ExportButton';
 import { ExplainPanel } from '../components/shared/ExplainPanel';
 import { ExecutiveSummary } from '../components/shared/ExecutiveSummary';
+import { AiBriefing } from '../components/shared/AiBriefing';
 import { NccsGauge } from '../components/charts/NccsGauge';
 import { SubScoreBreakdown } from '../components/charts/SubScoreBreakdown';
 import { OperatorRadarChart } from '../components/charts/OperatorRadarChart';
@@ -81,6 +82,7 @@ function StageTimeline({ stages }: { stages: WrapResult['stages'] }) {
 export function AssessmentPage() {
   const [text, setText] = useState('');
   const [provider, setProvider] = useState('mock');
+  const [viewMode, setViewMode] = useState<'summary' | 'technical'>('summary');
   const wrap = useWrap();
 
   function handleSubmit() {
@@ -146,78 +148,95 @@ export function AssessmentPage() {
 
       {result && (
         <div className="space-y-6">
-          <div className="flex justify-end">
+          <div className="flex items-center justify-end gap-3">
+            {result.interpretation && (
+              <button
+                onClick={() => setViewMode(viewMode === 'summary' ? 'technical' : 'summary')}
+                className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
+              >
+                {viewMode === 'summary' ? 'Show Technical View' : 'Show Summary View'}
+              </button>
+            )}
             <ExportButton result={result} text={text} timestamp={new Date().toLocaleString()} />
           </div>
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            <Card title="NCCS Score">
-              <div className="flex flex-col items-center gap-4">
-                <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
-                <CertBadge certification={result.nccs.certification} composite={result.nccs.composite} />
-              </div>
-            </Card>
-            <Card title="Sub-Score Breakdown">
-              <SubScoreBreakdown nccs={result.nccs} />
-            </Card>
-          </div>
 
-          {/* Executive Summary (translated) */}
-          {translated && (
-            <Card title="Executive Summary">
-              <ExecutiveSummary data={translated} />
-            </Card>
+          {viewMode === 'summary' && result.interpretation && (
+            <AiBriefing interpretation={result.interpretation} />
           )}
 
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            {operatorScores && (
-              <Card title="Thinking Patterns">
-                <OperatorRadarChart scores={operatorScores} />
-              </Card>
-            )}
-            <Card title="Processing Balance">
-              <DomainCoherenceRadar result={result} />
-            </Card>
-          </div>
+          {(viewMode === 'technical' || !result.interpretation) && (
+            <>
+              <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                <Card title="NCCS Score">
+                  <div className="flex flex-col items-center gap-4">
+                    <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
+                    <CertBadge certification={result.nccs.certification} composite={result.nccs.composite} />
+                  </div>
+                </Card>
+                <Card title="Sub-Score Breakdown">
+                  <SubScoreBreakdown nccs={result.nccs} />
+                </Card>
+              </div>
 
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            {operatorScores && domainAverages && (
-              <Card title="40-State Heatmap">
-                <StateHeatmap operatorScores={operatorScores} domainAverages={domainAverages} />
-              </Card>
-            )}
-            {/* Inversion Alert (Task 2) */}
-            {axisScores && stealthResistance !== undefined && (
-              <Card title="Stability Alerts">
-                <InversionAlert result={result} />
-              </Card>
-            )}
-          </div>
+              {/* Executive Summary (translated) */}
+              {translated && (
+                <Card title="Executive Summary">
+                  <ExecutiveSummary data={translated} />
+                </Card>
+              )}
 
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-            {driveScores && driveScores.length > 0 && (
-              <Card title="Core Drives">
-                <CoreDriveTree driveScores={driveScores.map(d => d[0])} />
-              </Card>
-            )}
-            {driveScores && a0Score !== undefined && rpmCompleteness !== undefined && (
-              <Card title="RPM Graph">
-                <RpmGraph
-                  a0Score={a0Score}
-                  driveScores={driveScores}
-                  rpmCompleteness={rpmCompleteness}
-                />
-              </Card>
-            )}
-            {axisScores && stealthResistance !== undefined && (
-              <Card title="Inversion Map">
-                <InversionMap axisScores={axisScores} stealthResistance={stealthResistance} />
-              </Card>
-            )}
-          </div>
+              <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                {operatorScores && (
+                  <Card title="Thinking Patterns">
+                    <OperatorRadarChart scores={operatorScores} />
+                  </Card>
+                )}
+                <Card title="Processing Balance">
+                  <DomainCoherenceRadar result={result} />
+                </Card>
+              </div>
 
-          <Card title="Pipeline Stages">
-            <StageTimeline stages={result.stages} />
-          </Card>
+              <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                {operatorScores && domainAverages && (
+                  <Card title="40-State Heatmap">
+                    <StateHeatmap operatorScores={operatorScores} domainAverages={domainAverages} />
+                  </Card>
+                )}
+                {/* Inversion Alert (Task 2) */}
+                {axisScores && stealthResistance !== undefined && (
+                  <Card title="Stability Alerts">
+                    <InversionAlert result={result} />
+                  </Card>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                {driveScores && driveScores.length > 0 && (
+                  <Card title="Core Drives">
+                    <CoreDriveTree driveScores={driveScores.map(d => d[0])} />
+                  </Card>
+                )}
+                {driveScores && a0Score !== undefined && rpmCompleteness !== undefined && (
+                  <Card title="RPM Graph">
+                    <RpmGraph
+                      a0Score={a0Score}
+                      driveScores={driveScores}
+                      rpmCompleteness={rpmCompleteness}
+                    />
+                  </Card>
+                )}
+                {axisScores && stealthResistance !== undefined && (
+                  <Card title="Inversion Map">
+                    <InversionMap axisScores={axisScores} stealthResistance={stealthResistance} />
+                  </Card>
+                )}
+              </div>
+
+              <Card title="Pipeline Stages">
+                <StageTimeline stages={result.stages} />
+              </Card>
+            </>
+          )}
         </div>
       )}
     </div>

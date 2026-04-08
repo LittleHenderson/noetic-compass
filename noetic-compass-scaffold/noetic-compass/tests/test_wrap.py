@@ -32,6 +32,19 @@ def test_wrap_mock(client, auth_headers, valid_wrap_payload):
     # Check LLM response present
     assert data["llm_response"] is not None
     assert data["llm_response"]["model"] == "mock-cas-v1"
+    assert data["scoring_method"] in ["llm", "heuristic"]
+    assert data["provenance"]["scoring_method"] == data["scoring_method"]
+
+    # Check AI interpretation is present
+    assert "interpretation" in data
+    interp = data["interpretation"]
+    assert interp is not None
+    assert isinstance(interp["bottom_line"], str)
+    assert len(interp["bottom_line"]) > 0
+    assert isinstance(interp["findings"], list)
+    assert len(interp["findings"]) >= 1
+    assert isinstance(interp["recommendations"], list)
+    assert len(interp["recommendations"]) >= 1
 
 
 def test_wrap_with_custom_dials(client, auth_headers):

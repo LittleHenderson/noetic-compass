@@ -40,10 +40,19 @@ describe('AssessmentPage', () => {
     await user.type(screen.getByPlaceholderText(/enter text/i), 'Test input text for assessment');
     await user.click(screen.getByRole('button', { name: /assess/i }));
 
+    // Default view is summary with AI briefing
+    await waitFor(() => {
+      expect(screen.getByText(/AI Interpretation/)).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/The Bottom Line/)).toBeInTheDocument();
+
+    // Switch to technical view to see NCCS score
+    await user.click(screen.getByRole('button', { name: /Show Technical View/i }));
+
     await waitFor(() => {
       expect(screen.getByText('68.0')).toBeInTheDocument();
     });
-
     expect(screen.getAllByText(/Silver/).length).toBeGreaterThan(0);
   });
 });

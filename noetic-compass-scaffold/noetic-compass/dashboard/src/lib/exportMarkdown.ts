@@ -35,6 +35,24 @@ export function generateMarkdown(data: ReportData): string {
   lines.push(`**Classification:** Confidential`);
   lines.push('');
 
+  // AI Executive Briefing
+  if (data.interpretation) {
+    lines.push('## AI Executive Briefing');
+    lines.push('');
+    lines.push('### The Bottom Line');
+    lines.push('');
+    lines.push(data.interpretation.bottom_line);
+    lines.push('');
+    lines.push('### What We Found');
+    lines.push('');
+    data.interpretation.findings.forEach(f => lines.push(`- ${f}`));
+    lines.push('');
+    lines.push('### What We Recommend');
+    lines.push('');
+    data.interpretation.recommendations.forEach(r => lines.push(`- ${r}`));
+    lines.push('');
+  }
+
   // Executive Summary
   lines.push('## Executive Summary');
   lines.push('');

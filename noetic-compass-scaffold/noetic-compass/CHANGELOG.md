@@ -1,5 +1,59 @@
 # Noetic Compass — Progress Log
 
+## Session 22: Codex Audit — 3 Cleanup Fixes (April 8, 2026)
+
+### Fix 1: Research Heuristic Disclaimer on Deployment Recommendations
+- **`dashboard/src/lib/reportData.ts`** — Every deployment recommendation now ends with "Based on heuristic scoring — empirical validation pending. Not a validated safety assessment." Certification levels already wrapped with `(Research Heuristic)` in prior sessions.
+
+### Fix 2: `bias_flags` Surfaced as Not Measured
+- **`api/models.py`** — Added `bias_flags: int | None = None` to `NccsResponse`
+- **`api/pipeline/stages.py`** — `NccsResult` dataclass gains `bias_flags: int | None`. `output_gate()` sets `bias_flags=None` and adds `"bias_flags"` to `not_measured` list. Engine still receives `bias_flag_count=0` placeholder internally.
+- **`api/pipeline/runner.py`** — Propagates `bias_flags` to `NccsResponse`
+- **`dashboard/src/api/types.ts`** — Added `bias_flags: number | null` to `NccsResult`
+- **`dashboard/src/test/mocks/handlers.ts`** — Mock includes `bias_flags: null` and updated `not_measured`
+
+### Fix 3: Provider-Specific LLM Error Semantics
+- **`api/pipeline/stages.py`** — `base_llm_call()` now raises `LLMError(detail=..., provider=connector.provider_name)` instead of `PipelineStageError`. Returns 502 `{"detail": "...", "error_type": "llm_error", "provider": "..."}` via existing `llm_error_handler` in `api/errors.py`.
+- **`tests/test_pipeline.py`** — Added `test_base_llm_call_failure_raises_llm_error`: verifies `LLMError` with correct provider name and detail message. Also added `bias_flags` assertions to `test_output_gate`.
+
+### Verification
+- Python: 85/85 tests passed (84 + 1 new LLM error test, 1 skipped)
+- TypeScript: 0 errors
+- Frontend: 23/23 tests passed
+
+---
+
+## Session 21: AI-Powered Natural Language Interpretation (April 8, 2026)
+
+### Backend
+- **`api/models.py`** — Added `InterpretationSchema` (bottom_line, findings, recommendations) and `interpretation` field on `WrapResponse`
+- **`api/pipeline/interpreter.py`** (NEW) — 3 functions: `build_interpretation_prompt()` serializes all score data, `parse_interpretation()` regex-extracts 3 sections with fallback defaults, `generate_interpretation()` async orchestrator returning None on failure
+- **`api/llm_connectors/mock_connector.py`** — Detects interpreter requests via system_prompt sentinel, returns deterministic 3-section briefing using seeded RNG
+- **`api/pipeline/runner.py`** — Post-pipeline interpretation call after Stage 8 (not a 9th stage). Computes broken_chains from RPM drive scores, passes all score data to interpreter
+
+### Frontend
+- **`dashboard/src/api/types.ts`** — Added `Interpretation` interface and `interpretation?` field on `WrapResult`
+- **`dashboard/src/components/shared/AiBriefing.tsx`** (NEW) — 3-section card: teal pill badge, amber "The Bottom Line", left-bordered findings, emerald bullet recommendations
+- **`dashboard/src/pages/AssessmentPage.tsx`** — Added `viewMode` toggle (summary/technical), AiBriefing shown in summary mode, technical cards wrapped in conditional
+- **`dashboard/src/pages/DetailsPage.tsx`** — Same toggle pattern with AiBriefing after "Input Text" card
+- **`dashboard/src/lib/reportData.ts`** — Added `interpretation?` to `ReportData` interface and extraction
+- **`dashboard/src/lib/exportPdf.ts`** — AI Executive Briefing section before Executive Summary (3 sub-sections, teal headers)
+- **`dashboard/src/lib/exportDocx.ts`** — AI Executive Briefing heading with sub-sections before Executive Summary
+- **`dashboard/src/lib/exportMarkdown.ts`** — `## AI Executive Briefing` with 3 markdown sub-sections
+- **`dashboard/src/test/mocks/handlers.ts`** — Added interpretation to mock WrapResult
+- **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated to verify AiBriefing in summary view, then switch to technical view for NCCS score
+
+### Tests
+- **`tests/test_interpreter.py`** (NEW) — 6 tests: prompt includes all data, well-formed parse, malformed fallback, mock end-to-end, failure returns None, deterministic output
+- **`tests/test_wrap.py`** — Added interpretation assertions to `test_wrap_mock` (bottom_line, findings, recommendations)
+
+### Verification
+- Python: 84/84 tests passed (75 existing + 6 interpreter + 3 new assertions, 1 skipped)
+- TypeScript: 0 errors
+- Frontend: 23/23 tests passed
+
+---
+
 ## Session 20: Benchmark Mode — Multi-Provider Statistical Comparison (April 8, 2026)
 
 ### Backend

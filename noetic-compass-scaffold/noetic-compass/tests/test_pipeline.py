@@ -15,7 +15,7 @@ from api.pipeline.stages import (
 from api.llm_connectors.mock_connector import MockLLMConnector
 from api.llm_connectors.base import LLMResponse
 from api.models import DialConfigSchema
-from api.errors import PipelineStageError, DialViolationError
+from api.errors import LLMError, PipelineStageError, DialViolationError
 
 
 @pytest.mark.asyncio
@@ -98,6 +98,30 @@ async def test_base_llm_call_mock():
 
 
 @pytest.mark.asyncio
+async def test_base_llm_call_failure_raises_llm_error():
+    """LLM failure raises LLMError (502) with provider name, not PipelineStageError (500)."""
+    from api.pipeline.stages import AdjustedInput
+    import cas_engine
+
+    class FailingConnector(MockLLMConnector):
+        provider_name = "test-provider"
+
+        async def _generate(self, prompt, system_prompt="", **kwargs):
+            raise ConnectionError("upstream timeout")
+
+    adjusted = AdjustedInput(
+        text="Test",
+        dial_config=cas_engine.DialConfig.default_config(),
+        system_prompt="Test system prompt",
+    )
+    with pytest.raises(LLMError) as exc_info:
+        await base_llm_call(adjusted, FailingConnector())
+
+    assert exc_info.value.provider == "test-provider"
+    assert "upstream timeout" in exc_info.value.detail
+
+
+@pytest.mark.asyncio
 async def test_operator_scoring_from_mock():
     connector = MockLLMConnector()
     resp = await connector.generate("Test")
@@ -120,7 +144,12 @@ async def test_operator_scoring_fallback():
 @pytest.mark.asyncio
 async def test_domain_coherence_uniform():
     from api.pipeline.stages import OperatorScoreResult
-    op = OperatorScoreResult(scores=[0.8] * 10, profile_score=0.86, involution_balances=[0.0] * 3)
+    op = OperatorScoreResult(
+        scores=[0.8] * 10,
+        raw_scores_0_to_10=[8.0] * 10,
+        profile_score=0.86,
+        involution_balances=[0.0] * 3,
+    )
     result = await domain_coherence(op)
     assert abs(result.dci - 1.0) < 1e-6  # uniform => DCI = 1
 
@@ -128,7 +157,12 @@ async def test_domain_coherence_uniform():
 @pytest.mark.asyncio
 async def test_inversion_scan():
     from api.pipeline.stages import OperatorScoreResult
-    op = OperatorScoreResult(scores=[0.8] * 10, profile_score=0.86, involution_balances=[0.0] * 3)
+    op = OperatorScoreResult(
+        scores=[0.8] * 10,
+        raw_scores_0_to_10=[8.0] * 10,
+        profile_score=0.86,
+        involution_balances=[0.0] * 3,
+    )
     result = await inversion_scan(op)
     assert len(result.axis_scores) == 7
     assert 0 <= result.resistance_score <= 1
@@ -140,7 +174,12 @@ async def test_output_gate():
         OperatorScoreResult, DomainCoherenceResult,
         InversionResult, RpmGateResult,
     )
-    op = OperatorScoreResult(scores=[0.8] * 10, profile_score=0.86, involution_balances=[0.0] * 3)
+    op = OperatorScoreResult(
+        scores=[0.8] * 10,
+        raw_scores_0_to_10=[8.0] * 10,
+        profile_score=0.86,
+        involution_balances=[0.0] * 3,
+    )
     dc = DomainCoherenceResult(domain_averages=[0.5, 0.5, 0.5, 0.5], dci=1.0)
     inv = InversionResult(axis_scores=[0.9] * 7, stealth_resistance=0.9, compound_severity=0.1, resistance_score=0.85)
     rpm = RpmGateResult(passed=True, a0_score=0.7, rpm_completeness=0.75, drive_scores=[[0.6, 0.5, 0.4]] * 7)
@@ -149,4 +188,6 @@ async def test_output_gate():
     assert 0 <= result.composite <= 100
     assert result.certification in ["Platinum", "Gold", "Silver", "Bronze", "Fail"]
     assert result.social_engineering is None
+    assert result.bias_flags is None
     assert "social_engineering" in result.not_measured
+    assert "bias_flags" in result.not_measured
