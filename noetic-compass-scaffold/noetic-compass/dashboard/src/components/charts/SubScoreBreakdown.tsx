@@ -20,14 +20,19 @@ export function SubScoreBreakdown({ nccs }: { nccs: NccsResult }) {
   // Filter out unmeasured sub-scores (null values)
   const activeBars = BARS.filter((b) => nccs[b.key] != null);
 
-  const data = activeBars.map((b) => ({
-    name: `${b.label} (${(NCCS_WEIGHTS[b.key] * 100).toFixed(0)}%)`,
-    score: nccs[b.key] ?? 0,
-    color: b.color,
-  }));
+  const data = activeBars.map((b) => {
+    const raw = nccs[b.key] ?? 0;
+    // Engine returns sub-scores in 0-1; scale to 0-100 for display
+    const score = typeof raw === 'number' && raw <= 1.0 ? raw * 100 : (raw as number);
+    return {
+      name: `${b.label} (${(NCCS_WEIGHTS[b.key] * 100).toFixed(0)}%)`,
+      score,
+      color: b.color,
+    };
+  });
 
   const insight = selected !== null && activeBars[selected]
-    ? interpretSubScore(activeBars[selected].key, activeBars[selected].label, (nccs[activeBars[selected].key] ?? 0) as number, NCCS_WEIGHTS[activeBars[selected].key] * 100)
+    ? interpretSubScore(activeBars[selected].key, activeBars[selected].label, data[selected]?.score ?? 0, NCCS_WEIGHTS[activeBars[selected].key] * 100)
     : null;
 
   return (

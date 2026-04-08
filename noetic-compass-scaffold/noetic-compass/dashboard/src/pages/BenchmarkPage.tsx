@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useBenchmark } from '../hooks/useBenchmark';
 import { Card } from '../components/shared/Card';
 import { LoadingSpinner } from '../components/shared/LoadingSpinner';
@@ -13,6 +13,7 @@ export function BenchmarkPage() {
   const [selectedProviders, setSelectedProviders] = useState<string[]>(['mock']);
   const [runsPerProvider, setRunsPerProvider] = useState(5);
   const benchmark = useBenchmark();
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   function toggleProvider(p: string) {
     setSelectedProviders((prev) =>
@@ -26,6 +27,13 @@ export function BenchmarkPage() {
   }
 
   const result: BenchmarkResponse | undefined = benchmark.data;
+
+  // Auto-scroll to results when benchmark completes
+  useEffect(() => {
+    if (result && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [result]);
 
   return (
     <div className="space-y-6">
@@ -99,7 +107,11 @@ export function BenchmarkPage() {
 
       <ErrorBanner error={benchmark.error as Error | null} />
 
-      {result && <BenchmarkResults data={result} />}
+      {result && (
+        <div ref={resultsRef} className="scroll-mt-4">
+          <BenchmarkResults data={result} />
+        </div>
+      )}
     </div>
   );
 }
