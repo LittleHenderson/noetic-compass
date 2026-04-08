@@ -47,7 +47,7 @@ def get_connector(provider: str, model: str | None = None) -> BaseLLMConnector:
 
         return GoogleConnector(
             api_key=settings.google_api_key,
-            model=model or "gemini-1.5-pro",
+            model=model or "gemini-2.5-flash",
         )
 
     if provider == "meta":

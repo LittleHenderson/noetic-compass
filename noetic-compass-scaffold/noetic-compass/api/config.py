@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     # Default LLM provider
     default_llm_provider: str = "mock"
 
+    # Docker Compose DB credentials (used only by docker-compose.yml)
+    db_user: str = "noetic"
+    db_password: str = "noetic_dev"
+
     model_config = {"env_prefix": "NC_", "env_file": ".env"}
 
 

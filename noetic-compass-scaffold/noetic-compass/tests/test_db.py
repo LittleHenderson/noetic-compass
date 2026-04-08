@@ -24,7 +24,7 @@ async def test_inmemory_fallback():
     """When DATABASE_URL is None, the in-memory store works transparently."""
     from api.config import settings
 
-    assert settings.database_url is None, "Tests should run without DATABASE_URL"
+    assert not settings.database_url, "Tests should run without DATABASE_URL"
 
     record_id = await save_assessment(
         api_key="test-key",
