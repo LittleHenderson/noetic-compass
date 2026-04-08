@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## Session 25: Vercel Deployment Setup (April 8, 2026)
+
+### Vercel Configuration
+- **`dashboard/vercel.json`** (NEW) — Vite framework, `dist` output, SPA rewrites (non-asset routes → `index.html`), service worker no-cache header, manifest content-type header
+
+### Configurable API URL
+- **`dashboard/src/api/config.ts`** (NEW) — Exports `API_BASE` from `VITE_API_URL` env var, defaults to `/api` for dev proxy
+- **`dashboard/src/api/client.ts`** — `apiFetch()` now uses `API_BASE` instead of hardcoded `/api`
+- **`dashboard/src/pages/LoginPage.tsx`** — Token fetch uses `API_BASE` instead of hardcoded `/api`
+- **`dashboard/.env.example`** (NEW) — Documents `VITE_API_URL` with commented-out example
+
+### Deployment Docs
+- **`docs/DEPLOYMENT.md`** — Added Vercel section: CLI install, `vercel` deploy, `VITE_API_URL` env setup (CLI + dashboard), `.env.local` for local overrides, CORS note, custom domain instructions
+
+### Verification
+- TypeScript: 0 errors
+- Frontend: 23/23 tests passed
+- Production build: successful
+
+---
+
 ## Session 24: Progressive Web App (PWA) Conversion (April 8, 2026)
 
 ### PWA Manifest & Icons

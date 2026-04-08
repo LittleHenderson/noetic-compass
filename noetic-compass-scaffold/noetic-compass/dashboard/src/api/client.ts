@@ -1,4 +1,5 @@
 import { getToken } from './auth';
+import { API_BASE } from './config';
 
 export class ApiError extends Error {
   status: number;
@@ -27,7 +28,7 @@ export async function apiFetch<T>(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`/api${path}`, { ...options, headers });
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
 
   if (!res.ok) {
     let detail = res.statusText;

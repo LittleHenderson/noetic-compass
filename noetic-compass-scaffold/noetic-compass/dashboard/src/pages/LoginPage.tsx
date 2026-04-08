@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setToken } from '../api/auth';
+import { API_BASE } from '../api/config';
 
 export function LoginPage() {
   const [username, setUsername] = useState('dashboard-user');
@@ -15,7 +16,7 @@ export function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/token', {
+      const res = await fetch(`${API_BASE}/auth/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: name }),

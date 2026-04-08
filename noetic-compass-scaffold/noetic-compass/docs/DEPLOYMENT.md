@@ -114,6 +114,85 @@ docker compose up --build -d
 | noetic-compass-api | Web Service (Docker) | `*.onrender.com` |
 | noetic-compass-dashboard | Static Site | `*.onrender.com` |
 
+## Vercel Deployment (Dashboard)
+
+Deploy the dashboard as a static site on Vercel with zero-config HTTPS and global CDN.
+
+### Prerequisites
+
+```bash
+npm i -g vercel
+```
+
+### Deploy
+
+```bash
+cd dashboard
+vercel
+```
+
+On first run, Vercel CLI walks you through project linking. It auto-detects `vercel.json` and uses these settings:
+
+| Setting | Value |
+|---------|-------|
+| Framework | Vite |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+| SPA rewrites | All non-asset routes → `index.html` |
+
+### Set the API URL
+
+By default the dashboard proxies `/api` to `localhost:8000` (dev mode). In production, set the environment variable so the built JS points to your real API:
+
+```bash
+# Option A: Vercel CLI
+vercel env add VITE_API_URL production
+# Enter value: https://your-api-host.com
+
+# Option B: Vercel dashboard
+# Project Settings → Environment Variables → Add:
+#   Name:  VITE_API_URL
+#   Value: https://your-api-host.com
+#   Environments: Production (and Preview if desired)
+```
+
+Then redeploy for the variable to take effect:
+
+```bash
+vercel --prod
+```
+
+### Local `.env` override
+
+For local development with a remote API (no Vite proxy):
+
+```bash
+cp .env.example .env.local
+# Edit .env.local:
+# VITE_API_URL=https://your-api-host.com
+```
+
+`.env.local` is gitignored by default (`*.local` in `.gitignore`).
+
+### CORS
+
+When the dashboard is on a different origin than the API, make sure the API allows the dashboard's origin:
+
+```bash
+# On the API server, set:
+NC_CORS_ORIGINS=https://your-dashboard.vercel.app
+```
+
+### Custom Domain
+
+```bash
+vercel domains add app.noetic-compass.com
+```
+
+Vercel provisions a TLS certificate automatically. The PWA install flow, service worker, and offline mode all require HTTPS — Vercel handles this out of the box.
+
+---
+
 ## Environment Variables Reference
 
 All variables use the `NC_` prefix and are loaded via pydantic-settings.
