@@ -6,6 +6,8 @@ import type {
   NccsResult,
   BatchRequest,
   BatchResult,
+  BenchmarkRequest,
+  BenchmarkResponse,
   CohortCompareRequest,
   CohortCompareResult,
   DialConfig,
@@ -46,6 +48,13 @@ export function putConfig(config: DialConfig): Promise<DialConfig> {
 
 export function postCohortCompare(req: CohortCompareRequest): Promise<CohortCompareResult> {
   return apiFetch<CohortCompareResult>('/batch/compare', {
+    method: 'POST',
+    body: JSON.stringify(req),
+  });
+}
+
+export function postBenchmark(req: BenchmarkRequest): Promise<BenchmarkResponse> {
+  return apiFetch<BenchmarkResponse>('/benchmark', {
     method: 'POST',
     body: JSON.stringify(req),
   });

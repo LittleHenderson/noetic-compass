@@ -1,5 +1,30 @@
 # Noetic Compass — Progress Log
 
+## Session 20: Benchmark Mode — Multi-Provider Statistical Comparison (April 8, 2026)
+
+### Backend
+- **`api/models.py`** — Added 3 new Pydantic schemas: `BenchmarkRequest` (text, providers, runs_per_provider 2-20, max_concurrency), `ProviderBenchmarkResult` (scores, mean, std_dev, min, max, certification_counts, high_variance flag, failed_runs, avg_latency_ms), `BenchmarkResponse` (results list, prompt_preview, total_runs, variance_threshold=5.0)
+- **`api/routes/benchmark.py`** (NEW) — `POST /benchmark` endpoint. For each provider: creates connector via `get_connector()`, runs `WrapPipelineRunner` N times with `asyncio.Semaphore` concurrency control. Computes mean/stdev via `statistics` module. Providers with missing API keys report as failed_runs. Collects elapsed_ms from provenance for latency tracking.
+- **`api/main.py`** — Registered `benchmark.router`
+
+### Frontend
+- **`dashboard/src/api/types.ts`** — Added `BenchmarkRequest`, `ProviderBenchmarkResult`, `BenchmarkResponse` interfaces
+- **`dashboard/src/api/endpoints.ts`** — Added `postBenchmark()` typed wrapper
+- **`dashboard/src/hooks/useBenchmark.ts`** (NEW) — TanStack Query mutation hook
+- **`dashboard/src/pages/BenchmarkPage.tsx`** (NEW) — Full benchmark UI: textarea input, provider multi-select checkboxes, runs-per-provider input, results table sorted by mean descending. High-variance rows highlighted amber. Columns: Provider, Mean, Std Dev, Min, Max, Certifications, Latency, Failed, Flag.
+- **`dashboard/src/App.tsx`** — Added lazy-loaded `/benchmark` route
+- **`dashboard/src/components/layout/Sidebar.tsx`** — Added "Benchmark" nav item with bar-chart icon
+
+### Tests
+- **`tests/test_benchmark.py`** (NEW) — 5 tests: single mock (5 runs), multi mock (2 providers), low variance (deterministic mock), auth required (401), invalid provider (failed_runs = runs_per_provider)
+
+### Verification
+- Python: 75/75 tests passed (71 existing + 4 benchmark, 1 skipped)
+- TypeScript: 0 errors
+- Frontend: 23/23 tests passed
+
+---
+
 ## Session 19: Four-Stream Parallel Integration (April 7, 2026)
 
 ### Stream A: Assessment Export (completed first, then upgraded by Stream C)

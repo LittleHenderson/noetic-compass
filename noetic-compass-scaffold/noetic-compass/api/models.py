@@ -193,6 +193,41 @@ class CohortCompareResponse(BaseModel):
     clusters: list[CohortCluster]
 
 
+class BenchmarkRequest(BaseModel):
+    """Multi-provider benchmark request — runs each provider N times."""
+
+    text: str = Field(min_length=1, max_length=50000)
+    providers: list[str] = Field(min_length=1)
+    runs_per_provider: int = Field(default=5, ge=2, le=20)
+    dial_config: DialConfigSchema = Field(default_factory=DialConfigSchema)
+    max_concurrency: int = Field(default=3, ge=1, le=20)
+
+
+class ProviderBenchmarkResult(BaseModel):
+    """Statistical results for a single provider across multiple runs."""
+
+    provider: str
+    scores: list[float]
+    mean: float
+    std_dev: float
+    min: float
+    max: float
+    certification_counts: dict[str, int]
+    high_variance: bool
+    failed_runs: int
+    avg_latency_ms: float
+
+
+class BenchmarkResponse(BaseModel):
+    """Aggregated benchmark results across providers."""
+
+    results: list[ProviderBenchmarkResult]
+    prompt_preview: str
+    runs_per_provider: int
+    total_runs: int
+    variance_threshold: float = 5.0
+
+
 class ErrorResponse(BaseModel):
     """Standard error response."""
 

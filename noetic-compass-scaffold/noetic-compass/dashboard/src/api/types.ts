@@ -121,6 +121,36 @@ export interface CohortCompareResult {
   clusters: { label: string; cluster: number }[];
 }
 
+/** Benchmark mode types */
+export interface BenchmarkRequest {
+  text: string;
+  providers: string[];
+  runs_per_provider?: number;
+  dial_config?: DialConfig;
+  max_concurrency?: number;
+}
+
+export interface ProviderBenchmarkResult {
+  provider: string;
+  scores: number[];
+  mean: number;
+  std_dev: number;
+  min: number;
+  max: number;
+  certification_counts: Record<string, number>;
+  high_variance: boolean;
+  failed_runs: number;
+  avg_latency_ms: number;
+}
+
+export interface BenchmarkResponse {
+  results: ProviderBenchmarkResult[];
+  prompt_preview: string;
+  runs_per_provider: number;
+  total_runs: number;
+  variance_threshold: number;
+}
+
 /** Local-only type for assessment history */
 export interface AssessmentRecord {
   id: string;
