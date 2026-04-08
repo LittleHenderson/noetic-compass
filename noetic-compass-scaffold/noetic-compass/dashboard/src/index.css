@@ -137,6 +137,31 @@ input[type="range"]::-webkit-slider-runnable-track {
   animation: frost-pulse 2.5s ease-in-out infinite;
 }
 
+/* NC logo heartbeat glow */
+@keyframes nc-heartbeat {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(45, 212, 191, 0.2), 0 0 24px rgba(45, 212, 191, 0.1);
+    transform: scale(1);
+  }
+  25% {
+    box-shadow: 0 0 20px rgba(45, 212, 191, 0.5), 0 0 40px rgba(34, 211, 238, 0.25);
+    transform: scale(1.04);
+  }
+  35% {
+    box-shadow: 0 0 14px rgba(45, 212, 191, 0.3), 0 0 28px rgba(45, 212, 191, 0.15);
+    transform: scale(1.01);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(34, 211, 238, 0.45), 0 0 36px rgba(45, 212, 191, 0.2);
+    transform: scale(1.03);
+  }
+}
+.nc-heartbeat {
+  animation: nc-heartbeat 2.4s ease-in-out infinite;
+  border-radius: 16px;
+  display: inline-flex;
+}
+
 /* Scroll-spy active indicator */
 .scroll-spy-active {
   position: relative;

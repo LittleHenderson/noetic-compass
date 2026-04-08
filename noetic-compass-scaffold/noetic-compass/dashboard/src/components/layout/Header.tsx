@@ -36,12 +36,7 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
             )}
           </button>
         )}
-        <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-accent-teal to-accent-cyan flex items-center justify-center">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a0f1a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20M2 12h20" />
-          </svg>
-        </div>
+        <img src="/icon-192.svg" alt="" className="h-7 w-7 rounded-lg" />
         <h1 className="text-base font-bold tracking-tight">
           <span className="bg-gradient-to-r from-accent-teal to-accent-cyan bg-clip-text text-transparent">
             Noetic Compass

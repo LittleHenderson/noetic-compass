@@ -45,11 +45,8 @@ export function LoginPage() {
       <div className="relative glass-card w-full max-w-md p-8">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-accent-teal to-accent-cyan flex items-center justify-center mb-4">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0a0f1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20M2 12h20" />
-            </svg>
+          <div className="nc-heartbeat mb-4">
+            <img src="/icon-192.svg" alt="Noetic Compass" className="h-20 w-20 rounded-2xl" />
           </div>
           <h1 className="text-2xl font-bold">
             <span className="bg-gradient-to-r from-accent-teal to-accent-cyan bg-clip-text text-transparent">
