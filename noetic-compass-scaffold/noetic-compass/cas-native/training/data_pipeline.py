@@ -1,8 +1,12 @@
 """
 CASDataset and data pipeline for CAS-Native training.
 
-Loads prompt-response-score triples from JSON files and prepares them
-for PyTorch DataLoader consumption.
+5-stage pipeline:
+  Stage 1: Load labeled assessments (baseline JSON + optional PostgreSQL)
+  Stage 2: Augment using the inversion engine (7x expansion)
+  Stage 3: Validate all data against CAS ontology (open simplex, valid ranges)
+  Stage 4: Split into train/val/test (80/10/10)
+  Stage 5: Tokenize and prepare for PyTorch DataLoader
 
 Features:
   - Load from JSON files (validation/baseline_results.json format)
@@ -10,6 +14,8 @@ Features:
   - CAS scores attached as training labels
   - Train/val/test split (80/10/10)
   - Collate function for batching variable-length sequences
+  - Inversion engine augmentation for training data expansion
+  - CAS ontology validation (open simplex, score ranges)
 """
 
 import json
@@ -250,3 +256,116 @@ def create_data_loaders(
     )
 
     return train_loader, val_loader, test_loader
+
+
+# ---- 5-Stage Pipeline ----
+
+
+def validate_cas_item(item: dict[str, Any]) -> bool:
+    """Stage 3: Validate a single data item against CAS ontology.
+
+    Checks:
+    - operator_scores: 10 values in [0, 1]
+    - domain_averages: 4 values, all > 0, sum ≈ 1.0 (open simplex)
+    - composite: in [0, 100]
+    """
+    ops = item.get("operator_scores", [])
+    if ops:
+        if len(ops) != 10:
+            return False
+        if not all(0.0 <= s <= 1.0 for s in ops):
+            return False
+
+    doms = item.get("domain_averages", [])
+    if doms:
+        if len(doms) != 4:
+            return False
+        if not all(d > 0 for d in doms):
+            return False
+        total = sum(doms)
+        if abs(total - 1.0) > 0.01:
+            return False
+
+    comp = item.get("composite")
+    if comp is not None:
+        if not (0.0 <= comp <= 100.0):
+            return False
+
+    return True
+
+
+def run_pipeline(
+    json_paths: list[str | Path],
+    augment: bool = True,
+    batch_size: int = 8,
+    max_length: int = 512,
+    seed: int = 42,
+) -> tuple[DataLoader, DataLoader, DataLoader, dict[str, Any]]:
+    """Run the full 5-stage CAS-Native data pipeline.
+
+    Args:
+        json_paths: List of JSON file paths to load (baseline_results, etc.)
+        augment: Whether to apply inversion engine augmentation (Stage 2)
+        batch_size: Batch size for DataLoaders
+        max_length: Maximum token sequence length
+        seed: Random seed for reproducible splits
+
+    Returns:
+        Tuple of (train_loader, val_loader, test_loader, stats)
+    """
+    stats: dict[str, Any] = {"stages": {}}
+
+    # Stage 1: Load
+    all_data: list[dict[str, Any]] = []
+    for path in json_paths:
+        loaded = load_cas_data(path)
+        all_data.extend(loaded)
+    stats["stages"]["1_load"] = {"items": len(all_data), "sources": len(json_paths)}
+
+    if not all_data:
+        raise ValueError("No data loaded from any source")
+
+    # Stage 2: Augment (optional)
+    if augment:
+        from cas_native.training.augment import augment_dataset
+
+        pre_augment = len(all_data)
+        all_data = augment_dataset(all_data)
+        stats["stages"]["2_augment"] = {
+            "before": pre_augment,
+            "after": len(all_data),
+            "multiplier": round(len(all_data) / max(pre_augment, 1), 1),
+        }
+    else:
+        stats["stages"]["2_augment"] = {"skipped": True}
+
+    # Stage 3: Validate
+    valid_data = [item for item in all_data if validate_cas_item(item)]
+    rejected = len(all_data) - len(valid_data)
+    stats["stages"]["3_validate"] = {
+        "valid": len(valid_data),
+        "rejected": rejected,
+    }
+
+    if not valid_data:
+        raise ValueError("No valid data after CAS ontology validation")
+
+    # Stage 4 + 5: Split and tokenize (via create_data_loaders)
+    train_loader, val_loader, test_loader = create_data_loaders(
+        valid_data,
+        batch_size=batch_size,
+        max_length=max_length,
+        seed=seed,
+    )
+    stats["stages"]["4_split"] = {
+        "train": len(train_loader.dataset),
+        "val": len(val_loader.dataset),
+        "test": len(test_loader.dataset),
+    }
+    stats["stages"]["5_tokenize"] = {
+        "max_length": max_length,
+        "batch_size": batch_size,
+    }
+    stats["total_items"] = len(valid_data)
+
+    return train_loader, val_loader, test_loader, stats

@@ -13,6 +13,14 @@ from cas_native.training.data_pipeline import (
     cas_collate_fn,
     create_data_loaders,
     load_cas_data,
+    validate_cas_item,
+    run_pipeline,
+)
+from cas_native.training.augment import (
+    augment_training_item,
+    augment_dataset,
+    _flip_operator_scores,
+    _flip_domain_averages,
 )
 
 
@@ -203,3 +211,155 @@ class TestSplitRatios:
         train_size = len(train_loader.dataset)
         # With 10 samples: 80% = 8, 10% = 1, 10% = 1
         assert train_size == int(n * 0.8)
+
+
+# ---- CAS Ontology Validation ----
+
+
+class TestValidation:
+
+    def test_valid_item(self):
+        item = {
+            "operator_scores": [0.5] * 10,
+            "domain_averages": [0.25, 0.25, 0.25, 0.25],
+            "composite": 65.0,
+        }
+        assert validate_cas_item(item) is True
+
+    def test_invalid_operator_count(self):
+        item = {"operator_scores": [0.5] * 8}
+        assert validate_cas_item(item) is False
+
+    def test_invalid_operator_range(self):
+        item = {"operator_scores": [0.5] * 9 + [1.5]}
+        assert validate_cas_item(item) is False
+
+    def test_invalid_domain_zero(self):
+        """Open simplex requires all pk > 0."""
+        item = {"domain_averages": [0.0, 0.5, 0.3, 0.2]}
+        assert validate_cas_item(item) is False
+
+    def test_invalid_domain_sum(self):
+        item = {"domain_averages": [0.5, 0.5, 0.5, 0.5]}
+        assert validate_cas_item(item) is False
+
+    def test_invalid_composite_range(self):
+        item = {"composite": 150.0}
+        assert validate_cas_item(item) is False
+
+    def test_empty_item_is_valid(self):
+        """Items without scores are valid (no constraints to violate)."""
+        assert validate_cas_item({}) is True
+
+
+# ---- Training Data Augmentation ----
+
+
+class TestAugmentation:
+
+    @pytest.fixture
+    def scored_item(self):
+        return {
+            "index": 0,
+            "prompt": "Evaluate this ethical dilemma.",
+            "operator_scores": [0.7, 0.6, 0.8, 0.5, 0.9, 0.6, 0.7, 0.5, 0.65, 0.8],
+            "domain_averages": [0.28, 0.22, 0.27, 0.23],
+            "drive_scores": [0.7, 0.6, 0.8, 0.5, 0.7, 0.6, 0.9],
+            "composite": 72.5,
+        }
+
+    def test_augment_produces_7_variants(self, scored_item):
+        results = augment_training_item(scored_item)
+        assert len(results) == 7
+
+    def test_augment_tags_with_metadata(self, scored_item):
+        results = augment_training_item(scored_item)
+        for r in results:
+            assert "augmentation" in r
+            assert "inversion_axis" in r["augmentation"]
+            assert "source_index" in r["augmentation"]
+
+    def test_n_axis_swaps_scores(self):
+        scores = [0.1, 0.2, 0.8, 0.3, 0.4, 0.9, 0.5, 0.6, 0.7, 0.95]
+        flipped = _flip_operator_scores(scores, "N")
+        # CO-2↔CO-3 swapped
+        assert flipped[2] == 0.3
+        assert flipped[3] == 0.8
+        # CO-5↔CO-6 swapped
+        assert flipped[5] == 0.5
+        assert flipped[6] == 0.9
+
+    def test_domain_averages_w_axis_swap(self):
+        avgs = [0.30, 0.20, 0.25, 0.25]
+        flipped = _flip_domain_averages(avgs, "W")
+        # P↔O swapped, C↔E swapped, then renormalized
+        total = sum(flipped)
+        assert abs(total - 1.0) < 0.01
+        # After swap: original[3] should be in position 0
+        assert flipped[0] > flipped[1]  # O was 0.25, swapped to P
+
+    def test_composite_dampened(self, scored_item):
+        results = augment_training_item(scored_item)
+        for r in results:
+            assert r["composite"] < scored_item["composite"]
+
+    def test_augment_dataset_includes_originals(self, scored_item):
+        data = [scored_item]
+        augmented = augment_dataset(data)
+        assert len(augmented) == 8  # 1 original + 7 variants
+        assert augmented[0]["prompt"] == scored_item["prompt"]
+
+
+# ---- 5-Stage Pipeline ----
+
+
+class TestRunPipeline:
+
+    def test_pipeline_with_baseline(self, tmp_path):
+        """Pipeline should run end-to-end with a minimal JSON file."""
+        data = [
+            {
+                "prompt": f"Test prompt {i}",
+                "response": f"Response {i}",
+                "operator_scores": [0.5 + i * 0.01] * 10,
+                "domain_averages": [0.25, 0.25, 0.25, 0.25],
+                "composite": 60.0 + i,
+            }
+            for i in range(20)
+        ]
+        path = tmp_path / "test_baseline.json"
+        path.write_text(json.dumps({"results": data}))
+
+        train, val, test, stats = run_pipeline(
+            [str(path)], augment=False, batch_size=4
+        )
+
+        assert stats["stages"]["1_load"]["items"] == 20
+        assert stats["stages"]["2_augment"]["skipped"] is True
+        assert stats["stages"]["3_validate"]["valid"] == 20
+        total = (
+            len(train.dataset) + len(val.dataset) + len(test.dataset)
+        )
+        assert total == 20
+
+    def test_pipeline_with_augmentation(self, tmp_path):
+        """Pipeline with augmentation should expand the dataset."""
+        data = [
+            {
+                "index": i,
+                "prompt": f"Test prompt {i}",
+                "operator_scores": [0.5] * 10,
+                "domain_averages": [0.25, 0.25, 0.25, 0.25],
+                "composite": 65.0,
+            }
+            for i in range(5)
+        ]
+        path = tmp_path / "test_aug.json"
+        path.write_text(json.dumps({"results": data}))
+
+        _, _, _, stats = run_pipeline(
+            [str(path)], augment=True, batch_size=2
+        )
+
+        assert stats["stages"]["2_augment"]["before"] == 5
+        assert stats["stages"]["2_augment"]["after"] > 5
