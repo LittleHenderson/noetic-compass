@@ -1,5 +1,28 @@
 # Noetic Compass — Progress Log
 
+## Session 23: Validation Study (April 8, 2026)
+
+### Automated Validation Tests — 5/5 passed
+- `validation/reproducibility_test.py` — Mock determinism + benchmark fixture
+- `validation/sensitivity_test.py` — Dial sensitivity, prompt sensitivity, open simplex validation
+
+### Baseline Study — 50/50 succeeded
+- 50 mock prompts processed in 1.8s
+- Composite: mean=65.5, std=6.2, range [59.4, 84.1]
+- Certifications: Silver=39, Gold=7, Bronze=4
+- Results saved to `validation/baseline_results.json`
+
+### Correlation Analysis
+- Machine score summary statistics confirmed (matches baseline)
+- Sections 1-2 (machine vs. human correlation, inter-rater reliability) require human labels — run `validation/human_labeling_tool.py` to generate
+- Section 3 (test-retest reliability) requires reproducibility data file
+
+### Next Steps
+- Collect human labels via `human_labeling_tool.py` for full correlation report
+- Re-run `correlation_analysis.py` with human labels for Pearson r and Cohen's kappa
+
+---
+
 ## Session 22: Codex Audit — 3 Cleanup Fixes (April 8, 2026)
 
 ### Fix 1: Research Heuristic Disclaimer on Deployment Recommendations
