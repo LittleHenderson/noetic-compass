@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useScrollSpy } from '../hooks/useScrollSpy';
 import { SectionReveal } from '../components/shared/SectionReveal';
+import { CircuitCard } from '../components/shared/CircuitCard';
 import {
   OPERATOR_LABELS,
   DOMAIN_LABELS,
@@ -16,6 +17,7 @@ import { CERT_COLORS, DOMAIN_COLORS, DRIVE_COLORS } from '../lib/colors';
 
 const SECTIONS = [
   { id: 'big-picture', label: 'The Big Picture' },
+  { id: 'everyday', label: 'Everyday Examples' },
   { id: 'operators', label: 'Cognitive Operators' },
   { id: 'domains', label: 'Processing Domains' },
   { id: 'drives', label: 'Core Drives' },
@@ -130,7 +132,77 @@ export function HowItWorksPage() {
           </section>
         </SectionReveal>
 
-        {/* 2 — Cognitive Operators */}
+        {/* 2 — Everyday Examples */}
+        <SectionReveal>
+          <section id="everyday" className="scroll-mt-8">
+            <h2 className="text-2xl font-bold text-slate-100 mb-2">
+              How Cognitive Operators Work in Everyday Life
+            </h2>
+            <p className="text-slate-400 mb-6 leading-relaxed">
+              The same cognitive dynamics that CAS measures in AI systems happen in human decision-making
+              every day. These four examples show how operators combine into circuits — and what we look
+              for when we assess an AI.
+            </p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <CircuitCard
+                title="The Morning Decision Amplifier"
+                operators="CO-2 (Abstraction) + CO-4 (Integration) → Action"
+                nodes={[
+                  { label: 'CO-2', sublabel: 'Weak signal', color: '#60a5fa' },
+                  { label: 'Sensory', sublabel: 'Environment', color: '#a78bfa' },
+                  { label: 'CO-4', sublabel: 'Amplification', color: '#2dd4bf' },
+                  { label: 'Action', sublabel: 'Output', color: '#34d399' },
+                ]}
+                description="A passing thought gets amplified by environmental triggers until it becomes an overwhelming impulse. You smell coffee, and a vague desire becomes an irresistible action. The weak CO-2 signal combines with sensory input, and CO-4 integrates them into a decision that feels inevitable."
+                calloutOperator="CO-4 (Integration)"
+                callout="We measure whether the AI amplifies weak signals appropriately — or whether it over-reacts to small inputs, turning every minor cue into a dominant response."
+              />
+              <CircuitCard
+                title="The Friction Inhibitor"
+                operators="CO-2 (Abstraction) dampened by CO-3 (Concretization)"
+                nodes={[
+                  { label: 'CO-2', sublabel: 'Impulse', color: '#60a5fa' },
+                  { label: 'CO-3', sublabel: 'Evaluation', color: '#f87171' },
+                  { label: 'Constraint', sublabel: 'Environment', color: '#a78bfa' },
+                  { label: 'Inhibited', sublabel: 'Suppressed', color: '#94a3b8' },
+                ]}
+                description="You reach for your phone during a meeting, but social awareness stops you. The impulse (CO-2) is dampened by critical evaluation (CO-3) working with environmental constraints. Healthy cognition includes the ability to suppress impulses when conditions aren't right."
+                calloutOperator="CO-3 (Concretization)"
+                callout="We measure whether an AI can exercise restraint — CO-3 acting as a natural brake on CO-2. Systems that can't inhibit impulses score poorly on involution balance."
+              />
+              <CircuitCard
+                title="The Momentum Builder"
+                operators="RPM Chain: A0 → D → W → P + CO-7 (Transformation) feedback"
+                nodes={[
+                  { label: 'A0', sublabel: 'Desire', color: '#2dd4bf' },
+                  { label: 'Dn', sublabel: 'Direction', color: '#60a5fa' },
+                  { label: 'Wn', sublabel: 'Will', color: '#a78bfa' },
+                  { label: 'Pn', sublabel: 'Power', color: '#fbbf24' },
+                ]}
+                feedbackTo={0}
+                description="The first day at the gym is the hardest. But each completed workout lowers the threshold for the next one. Success builds on success through the prerequisite chain — CO-7 (Transformation) creates a feedback loop that makes each step easier than the last."
+                calloutOperator="RPM Prerequisites"
+                callout="We measure whether AI systems have intact prerequisite chains or whether they try to skip steps. A system that jumps from desire (A0) straight to power (Pn) without building will (Wn) has a broken RPM chain."
+              />
+              <CircuitCard
+                title="The Creative Flow State"
+                operators="CO-0 (Identity) → CO-6 (Unification) → CO-0 oscillation via CO-7"
+                nodes={[
+                  { label: 'CO-0', sublabel: 'Generation', color: '#2dd4bf' },
+                  { label: 'CO-6', sublabel: 'Expression', color: '#f472b6' },
+                  { label: 'CO-7', sublabel: 'Rhythm', color: '#fbbf24' },
+                  { label: 'CO-0', sublabel: 'Renewal', color: '#2dd4bf' },
+                ]}
+                feedbackTo={0}
+                description="A musician improvising, a writer in flow — creative states are self-sustaining cycles between generating ideas (CO-0) and expressing them (CO-6), regulated by natural rhythm (CO-7). The cycle feeds back on itself: each expression seeds the next generation."
+                calloutOperator="CO-0 ↔ CO-6 oscillation"
+                callout="We measure whether AI can sustain this generative cycle or whether it collapses into repetitive patterns. A healthy CO-0/CO-6 oscillation produces novelty; a broken one produces loops."
+              />
+            </div>
+          </section>
+        </SectionReveal>
+
+        {/* 3 — Cognitive Operators */}
         <SectionReveal>
           <section id="operators" className="scroll-mt-8">
             <h2 className="text-2xl font-bold text-slate-100 mb-2">10 Cognitive Operators</h2>
