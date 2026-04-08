@@ -37,8 +37,17 @@ def _parse_cors_origins(raw: str) -> list[str]:
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
-    # Startup: verify cas_engine is importable
-    import cas_engine  # noqa: F401
+    import logging
+
+    logger = logging.getLogger("noetic.startup")
+
+    # Startup: verify cas_engine is importable (non-fatal if missing)
+    try:
+        import cas_engine  # noqa: F401
+
+        logger.info("cas_engine loaded successfully")
+    except ImportError:
+        logger.warning("cas_engine not available — running without Rust scoring engine")
 
     # Initialise database (no-op when DATABASE_URL is unset)
     from api.db import init_db, close_db
