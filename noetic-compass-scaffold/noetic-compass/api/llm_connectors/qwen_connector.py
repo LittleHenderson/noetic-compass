@@ -12,7 +12,7 @@ class QwenConnector(BaseLLMConnector):
 
     provider_name = "qwen"
 
-    def __init__(self, api_key: str, model: str = "qwen-max"):
+    def __init__(self, api_key: str, model: str = "qwen3.6-plus"):
         self.client = AsyncOpenAI(
             api_key=api_key,
             base_url="https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
@@ -28,9 +28,13 @@ class QwenConnector(BaseLLMConnector):
         messages.append({"role": "user", "content": prompt})
 
         model = kwargs.get("model", self.model) or self.model
+        extra: dict[str, object] = {}
+        if str(model).startswith("qwen3"):
+            extra["extra_body"] = {"enable_thinking": False}
         response = await self.client.chat.completions.create(
             model=model,  # type: ignore[arg-type]
             messages=messages,  # type: ignore[arg-type]
+            **extra,  # type: ignore[arg-type]
         )
 
         choice = response.choices[0]

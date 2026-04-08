@@ -88,7 +88,7 @@ def get_connector(provider: str, model: str | None = None) -> BaseLLMConnector:
 
         return QwenConnector(
             api_key=settings.qwen_api_key,
-            model=model or "qwen-max",
+            model=model or "qwen3.6-plus",
         )
 
     raise LLMError(f"Unknown provider: {provider}", provider=provider)
