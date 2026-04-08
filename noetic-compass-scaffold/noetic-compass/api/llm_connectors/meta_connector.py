@@ -12,7 +12,7 @@ class MetaConnector(BaseLLMConnector):
 
     provider_name = "meta"
 
-    def __init__(self, api_base: str, api_key: str = "", model: str = "llama-3-70b"):
+    def __init__(self, api_base: str, api_key: str = "", model: str = "llama-3.3-70b-versatile"):
         self.client = AsyncOpenAI(
             api_key=api_key or "no-key",
             base_url=api_base,

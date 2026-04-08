@@ -58,7 +58,7 @@ def get_connector(provider: str, model: str | None = None) -> BaseLLMConnector:
         return MetaConnector(
             api_base=settings.meta_api_base_url,
             api_key=settings.meta_api_key,
-            model=model or "llama-3-70b",
+            model=model or "llama-3.3-70b-versatile",
         )
 
     raise LLMError(f"Unknown provider: {provider}", provider=provider)
