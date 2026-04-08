@@ -21,7 +21,7 @@ import { PIPELINE_STAGES } from '../lib/constants';
 import { interpretStage } from '../lib/interpretations';
 import type { WrapResult } from '../api/types';
 
-const PROVIDERS = ['mock', 'openai', 'anthropic', 'google', 'meta'];
+const PROVIDERS = ['mock', 'openai', 'anthropic', 'google', 'meta', 'xai', 'deepseek', 'qwen'];
 
 function StageTimeline({ stages }: { stages: WrapResult['stages'] }) {
   const [selected, setSelected] = useState<number | null>(null);

@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     google_api_key: str = ""
     meta_api_base_url: str = ""
     meta_api_key: str = ""
+    xai_api_key: str = ""
+    deepseek_api_key: str = ""
+    qwen_api_key: str = ""
 
     # CORS — comma-separated origins, "*" for dev (default)
     cors_origins: str = "*"

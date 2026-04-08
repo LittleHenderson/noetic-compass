@@ -61,4 +61,34 @@ def get_connector(provider: str, model: str | None = None) -> BaseLLMConnector:
             model=model or "llama-3.3-70b-versatile",
         )
 
+    if provider == "xai":
+        if not settings.xai_api_key:
+            raise LLMError("xAI API key not configured", provider="xai")
+        from .xai_connector import XAIConnector
+
+        return XAIConnector(
+            api_key=settings.xai_api_key,
+            model=model or "grok-3",
+        )
+
+    if provider == "deepseek":
+        if not settings.deepseek_api_key:
+            raise LLMError("DeepSeek API key not configured", provider="deepseek")
+        from .deepseek_connector import DeepSeekConnector
+
+        return DeepSeekConnector(
+            api_key=settings.deepseek_api_key,
+            model=model or "deepseek-chat",
+        )
+
+    if provider == "qwen":
+        if not settings.qwen_api_key:
+            raise LLMError("Qwen API key not configured", provider="qwen")
+        from .qwen_connector import QwenConnector
+
+        return QwenConnector(
+            api_key=settings.qwen_api_key,
+            model=model or "qwen-max",
+        )
+
     raise LLMError(f"Unknown provider: {provider}", provider=provider)
