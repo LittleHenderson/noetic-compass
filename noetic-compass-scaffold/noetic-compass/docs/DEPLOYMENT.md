@@ -99,6 +99,91 @@ docker compose down -v       # stop containers AND remove volumes
 docker compose up --build -d
 ```
 
+## Railway Deployment (API Backend)
+
+Deploy the FastAPI backend to Railway with Docker (includes Rust cas-engine build).
+
+### Prerequisites
+
+```bash
+npm i -g @railway/cli
+railway login
+```
+
+### Deploy
+
+```bash
+cd noetic-compass   # project root (where railway.toml lives)
+railway init        # create new project, follow prompts
+railway up          # deploy using Dockerfile.api
+```
+
+Railway auto-detects `railway.toml` which points to `Dockerfile.api` and sets the start command to respect Railway's dynamic `PORT`.
+
+### Environment Variables
+
+Set these in the Railway dashboard (Project → Variables) or via CLI:
+
+```bash
+# Required — change from default
+railway variables set NC_JWT_SECRET=your-secure-random-string
+
+# Required — allow your Vercel dashboard origin
+railway variables set NC_CORS_ORIGINS=https://noetic-compass.vercel.app
+
+# Optional — LLM provider keys (mock mode works without these)
+railway variables set NC_OPENAI_API_KEY=sk-...
+railway variables set NC_ANTHROPIC_API_KEY=sk-ant-...
+railway variables set NC_GOOGLE_API_KEY=AI...
+
+# Optional — switch default provider from mock
+railway variables set NC_DEFAULT_LLM_PROVIDER=openai
+railway variables set NC_MOCK_LLM=false
+```
+
+Full list of `NC_` variables is in the Environment Variables Reference section below.
+
+### Connect to Vercel Dashboard
+
+After Railway deploys, grab your public API URL from the Railway dashboard (Settings → Networking → Public URL). Then update Vercel:
+
+```bash
+cd dashboard
+vercel env rm VITE_API_URL production    # remove old value
+vercel env add VITE_API_URL production   # enter Railway URL, e.g. https://noetic-compass-production.up.railway.app
+vercel --prod                            # redeploy with new API URL
+```
+
+### Database (Optional)
+
+Railway offers one-click PostgreSQL:
+
+1. Railway dashboard → New → Database → PostgreSQL
+2. Copy the connection string
+3. Set: `railway variables set NC_DATABASE_URL=postgresql+asyncpg://user:pass@host:port/db`
+
+The API works without a database (in-memory fallback).
+
+### Health Check
+
+Railway uses the `/health` endpoint (configured in `railway.toml`). You can also verify manually:
+
+```bash
+curl https://your-app.up.railway.app/health
+# → {"status": "ok", "version": "0.1.0"}
+
+curl https://your-app.up.railway.app/health/ready
+# → {"status": "ok", "checks": {...}}
+```
+
+### Custom Domain
+
+```bash
+railway domain add api.noetic-compass.com
+```
+
+---
+
 ## Cloud Deployment (Render)
 
 ### Quick Start

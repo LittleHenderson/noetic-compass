@@ -1,5 +1,19 @@
 # Noetic Compass — Progress Log
 
+## Session 26: Railway API Backend Deployment (April 8, 2026)
+
+### Railway Configuration
+- **`railway.toml`** (NEW) — Points to `Dockerfile.api`, start command with dynamic `PORT`, health check on `/health`, restart-on-failure policy
+- **`Dockerfile.api`** — CMD now uses shell form with `${PORT:-8000}` to respect Railway's dynamic port assignment
+
+### Deployment Docs
+- **`docs/DEPLOYMENT.md`** — Added full Railway section: CLI install, `railway init/up`, env vars setup (`NC_JWT_SECRET`, `NC_CORS_ORIGINS`, LLM keys), connecting Railway URL to Vercel dashboard, optional PostgreSQL, health check verification, custom domain
+
+### Verification
+- Python: 80 passed, 1 skipped
+
+---
+
 ## Session 25: Vercel Deployment Setup (April 8, 2026)
 
 ### Vercel Configuration
