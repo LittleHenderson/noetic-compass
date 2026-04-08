@@ -100,7 +100,7 @@ export function ExportButton({ result, text, timestamp }: ExportButtonProps) {
         <button
           onClick={() => setOpen(!open)}
           disabled={loading}
-          className="flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-slate-100 hover:bg-white/[0.08] hover:border-accent-teal/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          className="flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-xs font-medium text-slate-300 hover:text-slate-100 hover:bg-white/[0.08] hover:border-accent-teal/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all min-h-[44px]"
         >
           {loading ? (
             <>
@@ -131,7 +131,7 @@ export function ExportButton({ result, text, timestamp }: ExportButtonProps) {
               <button
                 key={opt.key}
                 onClick={() => handleExport(opt.key)}
-                className="flex items-center gap-3 w-full px-3 py-2.5 text-left text-xs text-slate-300 hover:text-slate-100 hover:bg-white/[0.06] transition-colors"
+                className="flex items-center gap-3 w-full px-3 py-3 text-left text-xs text-slate-300 hover:text-slate-100 hover:bg-white/[0.06] transition-colors min-h-[44px]"
               >
                 <span className="inline-flex items-center justify-center w-7 h-5 rounded bg-white/[0.06] text-[9px] font-bold tracking-wider text-accent-teal">
                   {opt.icon}

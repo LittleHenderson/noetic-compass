@@ -22,10 +22,21 @@ body {
   -webkit-font-smoothing: antialiased;
   background-color: #0a0f1a;
   color: #e2e8f0;
+  /* Prevent pull-to-refresh in standalone PWA mode */
+  overscroll-behavior-y: contain;
 }
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh; /* dynamic viewport height for mobile */
+}
+
+/* Safe area insets for notch/home-indicator devices */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 /* Glassmorphism card */

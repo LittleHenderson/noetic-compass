@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0f1a" />
+  <title>Noetic Compass — Offline</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #0a0f1a;
+      color: #e2e8f0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding: 24px;
+      text-align: center;
+    }
+    .logo {
+      width: 96px;
+      height: 96px;
+      margin-bottom: 32px;
+      opacity: 0.8;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #2dd4bf, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+    p {
+      color: #94a3b8;
+      font-size: 16px;
+      max-width: 360px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    button {
+      background: linear-gradient(135deg, #2dd4bf, #22d3ee);
+      color: #0a0f1a;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+    }
+    button:active { opacity: 0.85; }
+    .pulse {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #f87171;
+      display: inline-block;
+      margin-right: 8px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      color: #f87171;
+      margin-bottom: 24px;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+  <img src="/icon-192.svg" alt="Noetic Compass" class="logo" />
+  <div class="status">
+    <span class="pulse"></span>
+    Disconnected
+  </div>
+  <h1>Noetic Compass</h1>
+  <p>Connect to assess AI systems. Check your connection and try again.</p>
+  <button onclick="location.reload()">Retry Connection</button>
+</body>
+</html>

@@ -1,5 +1,48 @@
 # Noetic Compass — Progress Log
 
+## Session 24: Progressive Web App (PWA) Conversion (April 8, 2026)
+
+### PWA Manifest & Icons
+- **`dashboard/public/manifest.json`** (NEW) — Full PWA manifest: `standalone` display, `portrait` orientation, theme/bg `#0a0f1a`, 192+512 SVG icons with maskable variant
+- **`dashboard/public/icon-192.svg`** (NEW) — Stylized compass with neural network motif (10 nodes, cross-connections, teal-cyan gradient, "NC" center)
+- **`dashboard/public/icon-512.svg`** (NEW) — High-res version with 10 operator nodes, 4 domain indicators, ordinal ticks
+
+### Service Worker
+- **`dashboard/public/sw.js`** (NEW) — Cache-first for static assets (JS/CSS/fonts/images), network-first for `/api` calls, offline fallback for navigation
+- **`dashboard/public/offline.html`** (NEW) — Dark-themed offline page with NC logo, "Connect to assess AI systems" message, retry button
+
+### Install Prompt
+- **`dashboard/src/hooks/usePwaInstall.ts`** (NEW) — Captures `beforeinstallprompt`, tracks dismissals in localStorage (max 3), handles `appinstalled`
+- **`dashboard/src/components/shared/InstallBanner.tsx`** (NEW) — Bottom banner with icon, "Install Noetic Compass" CTA, dismiss button. Safe-area aware.
+- **`dashboard/src/App.tsx`** — Added `<InstallBanner />` at root
+
+### PWA Meta Tags
+- **`dashboard/index.html`** — Title "Noetic Compass", manifest link, `theme-color`, `viewport-fit=cover`, full iOS support (`apple-mobile-web-app-capable`, `apple-mobile-web-app-status-bar-style`, `apple-touch-icon`), description meta
+
+### Service Worker Registration
+- **`dashboard/src/main.tsx`** — Registers `/sw.js` on window load with silent failure fallback
+
+### Mobile Responsiveness
+- **`dashboard/src/index.css`** — `100dvh` root, `overscroll-behavior-y: contain` (prevents pull-to-refresh in standalone), `.safe-bottom`/`.safe-top` utility classes for notch devices
+- **`dashboard/src/components/layout/Header.tsx`** — Hamburger menu button (inline, not floating FAB), X icon when open, 44px touch target, responsive padding
+- **`dashboard/src/components/layout/AppShell.tsx`** — Menu toggle in header, responsive main padding (`p-3 sm:p-4 md:p-6`), `100dvh` height
+- **`dashboard/src/components/layout/Sidebar.tsx`** — Opens below header (`top-14`), 44px nav link touch targets, `100dvh` height calc
+- **`dashboard/src/pages/AssessmentPage.tsx`** — `text-base` textarea on mobile (prevents iOS zoom), stacked controls `flex-col sm:flex-row`, 44px buttons
+- **`dashboard/src/pages/DetailsPage.tsx`** — Stacked header buttons on mobile, touch-friendly targets
+- **`dashboard/src/pages/BenchmarkPage.tsx`** — Stacked inputs, `min-w-[640px]` table with horizontal scroll, 44px provider toggles. Fixed pre-existing `CertBadge` missing `composite` prop.
+- **`dashboard/src/pages/HistoryPage.tsx`** — Stacked header, `min-w-[480px]` table, 44px buttons/dropdowns
+- **`dashboard/src/pages/LoginPage.tsx`** — `100dvh`, `px-4` mobile padding
+- **`dashboard/src/components/config/DialPanel.tsx`** — Stacked save/reset buttons on mobile, 44px targets
+- **`dashboard/src/components/shared/ExportButton.tsx`** — 44px trigger and dropdown items
+
+### Verification
+- TypeScript: 0 errors
+- Frontend: 23/23 tests passed
+- Python: 80 passed, 1 skipped
+- Production build: successful (381ms)
+
+---
+
 ## Session 23: Validation Study (April 8, 2026)
 
 ### Automated Validation Tests — 5/5 passed

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0f1a"/>
+      <stop offset="100%" stop-color="#0f1629"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2dd4bf"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- Outer glow ring -->
+  <circle cx="256" cy="256" r="192" fill="none" stroke="url(#glow)" stroke-width="12"/>
+  <!-- Compass ring -->
+  <circle cx="256" cy="256" r="166" fill="none" stroke="url(#teal)" stroke-width="3" opacity="0.6"/>
+  <!-- Cardinal ticks -->
+  <line x1="256" y1="70" x2="256" y2="100" stroke="#2dd4bf" stroke-width="4" stroke-linecap="round"/>
+  <line x1="256" y1="412" x2="256" y2="442" stroke="#2dd4bf" stroke-width="4" stroke-linecap="round"/>
+  <line x1="70" y1="256" x2="100" y2="256" stroke="#2dd4bf" stroke-width="4" stroke-linecap="round"/>
+  <line x1="412" y1="256" x2="442" y2="256" stroke="#2dd4bf" stroke-width="4" stroke-linecap="round"/>
+  <!-- Ordinal ticks (smaller) -->
+  <line x1="369" y1="113" x2="356" y2="126" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <line x1="369" y1="399" x2="356" y2="386" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <line x1="143" y1="113" x2="156" y2="126" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <line x1="143" y1="399" x2="156" y2="386" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <!-- Neural network nodes (10 nodes = 10 cognitive operators) -->
+  <circle cx="256" cy="120" r="10" fill="#2dd4bf"/>
+  <circle cx="338" cy="144" r="8" fill="#22d3ee"/>
+  <circle cx="388" cy="210" r="10" fill="#2dd4bf"/>
+  <circle cx="388" cy="302" r="8" fill="#22d3ee"/>
+  <circle cx="338" cy="368" r="10" fill="#2dd4bf"/>
+  <circle cx="256" cy="392" r="8" fill="#22d3ee"/>
+  <circle cx="174" cy="368" r="10" fill="#2dd4bf"/>
+  <circle cx="124" cy="302" r="8" fill="#22d3ee"/>
+  <circle cx="124" cy="210" r="10" fill="#2dd4bf"/>
+  <circle cx="174" cy="144" r="8" fill="#22d3ee"/>
+  <!-- Neural connections (ring) -->
+  <g stroke="#2dd4bf" stroke-width="1.5" opacity="0.3">
+    <line x1="256" y1="120" x2="338" y2="144"/>
+    <line x1="338" y1="144" x2="388" y2="210"/>
+    <line x1="388" y1="210" x2="388" y2="302"/>
+    <line x1="388" y1="302" x2="338" y2="368"/>
+    <line x1="338" y1="368" x2="256" y2="392"/>
+    <line x1="256" y1="392" x2="174" y2="368"/>
+    <line x1="174" y1="368" x2="124" y2="302"/>
+    <line x1="124" y1="302" x2="124" y2="210"/>
+    <line x1="124" y1="210" x2="174" y2="144"/>
+    <line x1="174" y1="144" x2="256" y2="120"/>
+    <!-- Cross connections (involution pairs + integration) -->
+    <line x1="256" y1="120" x2="388" y2="210"/>
+    <line x1="256" y1="120" x2="124" y2="210"/>
+    <line x1="256" y1="120" x2="256" y2="392"/>
+    <line x1="388" y1="210" x2="174" y2="368"/>
+    <line x1="124" y1="210" x2="338" y2="368"/>
+    <line x1="338" y1="144" x2="174" y2="368"/>
+    <line x1="174" y1="144" x2="338" y2="368"/>
+    <line x1="388" y1="302" x2="124" y2="210"/>
+    <line x1="124" y1="302" x2="388" y2="210"/>
+    <line x1="388" y1="302" x2="124" y2="302"/>
+  </g>
+  <!-- Inner domain ring (4 domains) -->
+  <circle cx="256" cy="256" r="50" fill="none" stroke="url(#teal)" stroke-width="1.5" opacity="0.25"/>
+  <circle cx="256" cy="210" r="5" fill="#2dd4bf" opacity="0.7"/>
+  <circle cx="302" cy="256" r="5" fill="#22d3ee" opacity="0.7"/>
+  <circle cx="256" cy="302" r="5" fill="#2dd4bf" opacity="0.7"/>
+  <circle cx="210" cy="256" r="5" fill="#22d3ee" opacity="0.7"/>
+  <!-- Center hub -->
+  <circle cx="256" cy="256" r="22" fill="url(#teal)"/>
+  <circle cx="256" cy="256" r="12" fill="#0a0f1a"/>
+  <!-- Compass needle (N pointer) -->
+  <polygon points="256,108 248,172 256,158 264,172" fill="#2dd4bf" opacity="0.9"/>
+  <polygon points="256,404 248,340 256,354 264,340" fill="#22d3ee" opacity="0.45"/>
+  <!-- NC letters in center -->
+  <text x="256" y="260" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="#0a0f1a" letter-spacing="2">NC</text>
+</svg>

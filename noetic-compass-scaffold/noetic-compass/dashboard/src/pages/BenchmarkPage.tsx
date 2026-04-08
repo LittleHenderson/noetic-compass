@@ -53,7 +53,7 @@ export function BenchmarkPage() {
                 <button
                   key={p}
                   onClick={() => toggleProvider(p)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all min-h-[44px] ${
                     selectedProviders.includes(p)
                       ? 'bg-accent-teal/20 text-accent-teal border border-accent-teal/40'
                       : 'bg-white/[0.04] text-slate-400 border border-white/10 hover:bg-white/[0.08]'
@@ -65,7 +65,7 @@ export function BenchmarkPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
             <div>
               <label className="block text-xs font-medium text-slate-400 mb-1">Runs per Provider</label>
               <input
@@ -74,13 +74,13 @@ export function BenchmarkPage() {
                 max={20}
                 value={runsPerProvider}
                 onChange={(e) => setRunsPerProvider(Math.min(20, Math.max(2, Number(e.target.value))))}
-                className="w-20 rounded-lg border border-white/10 bg-dark-700 px-3 py-2 text-sm text-slate-200 focus:border-accent-teal focus:outline-none focus:ring-1 focus:ring-accent-teal"
+                className="w-full sm:w-20 rounded-lg border border-white/10 bg-dark-700 px-3 py-2 text-sm text-slate-200 focus:border-accent-teal focus:outline-none focus:ring-1 focus:ring-accent-teal min-h-[44px]"
               />
             </div>
             <button
               onClick={handleSubmit}
               disabled={!text.trim() || selectedProviders.length === 0 || benchmark.isPending}
-              className="mt-5 px-6 py-2 rounded-lg bg-accent-teal/90 text-dark-900 text-sm font-semibold hover:bg-accent-teal transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="px-6 py-3 sm:py-2 rounded-lg bg-accent-teal/90 text-dark-900 text-sm font-semibold hover:bg-accent-teal transition-colors disabled:opacity-40 disabled:cursor-not-allowed min-h-[44px]"
             >
               {benchmark.isPending ? 'Running...' : 'Run Benchmark'}
             </button>
@@ -115,8 +115,8 @@ function BenchmarkResults({ data }: { data: BenchmarkResponse }) {
         <span>Variance threshold: {data.variance_threshold}</span>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0">
+        <table className="w-full text-sm min-w-[640px]">
           <thead>
             <tr className="border-b border-white/10 text-left text-xs font-medium text-slate-500">
               <th className="pb-2 pr-4">Provider</th>
@@ -175,7 +175,7 @@ function BenchmarkRow({ result }: { result: ProviderBenchmarkResult }) {
       <td className="py-2.5 pr-4">
         {topCert ? (
           <span className="flex items-center gap-1.5">
-            <CertBadge certification={topCert[0]} />
+            <CertBadge certification={topCert[0]} composite={result.mean} />
             {Object.keys(result.certification_counts).length > 1 && (
               <span className="text-xs text-slate-500">
                 +{Object.keys(result.certification_counts).length - 1}

@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { isAuthenticated } from './api/auth';
 import { AppShell } from './components/layout/AppShell';
 import { LoadingSpinner } from './components/shared/LoadingSpinner';
+import { InstallBanner } from './components/shared/InstallBanner';
 import type { ReactNode } from 'react';
 
 /* Lazy-loaded pages — each becomes its own chunk */
@@ -26,6 +27,7 @@ function AuthGuard({ children }: { children: ReactNode }) {
 export default function App() {
   return (
     <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><LoadingSpinner /></div>}>
+      <InstallBanner />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route

@@ -80,17 +80,17 @@ export function DialPanel({
         </div>
       )}
 
-      <div className="flex gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <button
           onClick={() => onSave(values)}
           disabled={!isValid || saving}
-          className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-5 py-2 text-sm font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
+          className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-5 py-3 sm:py-2 text-sm font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity min-h-[44px]"
         >
           {saving ? 'Saving...' : 'Save Configuration'}
         </button>
         <button
           onClick={handleReset}
-          className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
+          className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-4 py-3 sm:py-2 text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors min-h-[44px]"
         >
           Reset to Default
         </button>

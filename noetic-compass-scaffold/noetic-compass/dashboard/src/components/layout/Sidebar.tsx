@@ -23,12 +23,12 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
 
       <aside
         className={`
-          fixed z-40 top-0 left-0 h-full w-56 bg-dark-800/95 backdrop-blur-xl border-r border-white/[0.06] p-4 pt-5
-          transform transition-transform duration-200 md:relative md:translate-x-0
+          fixed z-40 top-14 left-0 h-[calc(100%-3.5rem)] h-[calc(100dvh-3.5rem)] w-60 bg-dark-800/95 backdrop-blur-xl border-r border-white/[0.06] p-4 pt-5
+          transform transition-transform duration-200 md:relative md:top-0 md:h-full md:translate-x-0
           ${open ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
-        <div className="mb-8 flex items-center gap-2.5 px-2">
+        <div className="mb-6 flex items-center gap-2.5 px-2">
           <div className="relative">
             <div
               className={`h-2 w-2 rounded-full ${isHealthy ? 'bg-emerald-400' : 'bg-red-400'}`}
@@ -42,21 +42,21 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
           </span>
         </div>
 
-        <nav className="flex flex-col gap-1">
+        <nav className="flex flex-col gap-0.5">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150 ${
+                `flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-all duration-150 min-h-[44px] ${
                   isActive
                     ? 'bg-accent-teal/10 text-accent-teal'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
                 }`
               }
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d={item.icon} />
               </svg>
               {item.label}

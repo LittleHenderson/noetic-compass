@@ -97,14 +97,14 @@ export function HistoryPage() {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-bold text-slate-100">History</h2>
         {records.length > 0 && (
           <div className="flex items-center gap-2">
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen((v) => !v)}
-                className="rounded-lg border border-accent-teal/30 bg-accent-teal/10 px-3 py-1.5 text-xs font-medium text-accent-teal hover:bg-accent-teal/20 transition-colors"
+                className="rounded-lg border border-accent-teal/30 bg-accent-teal/10 px-3 py-2 text-xs font-medium text-accent-teal hover:bg-accent-teal/20 transition-colors min-h-[44px]"
               >
                 Export All Data
               </button>
@@ -115,7 +115,7 @@ export function HistoryPage() {
                       exportCSV(records);
                       setDropdownOpen(false);
                     }}
-                    className="block w-full px-4 py-2 text-left text-xs text-slate-300 hover:bg-white/[0.05] rounded-t-lg transition-colors"
+                    className="block w-full px-4 py-3 text-left text-xs text-slate-300 hover:bg-white/[0.05] rounded-t-lg transition-colors min-h-[44px]"
                   >
                     Download CSV
                   </button>
@@ -124,7 +124,7 @@ export function HistoryPage() {
                       exportJSON(records);
                       setDropdownOpen(false);
                     }}
-                    className="block w-full px-4 py-2 text-left text-xs text-slate-300 hover:bg-white/[0.05] rounded-b-lg transition-colors"
+                    className="block w-full px-4 py-3 text-left text-xs text-slate-300 hover:bg-white/[0.05] rounded-b-lg transition-colors min-h-[44px]"
                   >
                     Download JSON
                   </button>
@@ -135,7 +135,7 @@ export function HistoryPage() {
               onClick={() => {
                 if (confirm('Clear all history?')) clearHistory();
               }}
-              className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-500/20 transition-colors"
+              className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-500/20 transition-colors min-h-[44px]"
             >
               Clear All
             </button>
@@ -149,8 +149,8 @@ export function HistoryPage() {
         </Card>
       ) : (
         <div className="glass-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto -mx-0">
+            <table className="w-full text-sm min-w-[480px]">
               <thead>
                 <tr className="border-b border-white/[0.06] text-left text-[11px] text-slate-500 uppercase tracking-wider">
                   <th className="px-4 py-3">Time</th>

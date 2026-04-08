@@ -111,14 +111,14 @@ export function AssessmentPage() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Enter text to assess..."
-            rows={5}
-            className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:border-accent-teal/50 focus:outline-none focus:ring-1 focus:ring-accent-teal/30 resize-none"
+            rows={4}
+            className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-base sm:text-sm text-slate-200 placeholder-slate-600 focus:border-accent-teal/50 focus:outline-none focus:ring-1 focus:ring-accent-teal/30 resize-none"
           />
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <select
               value={provider}
               onChange={(e) => setProvider(e.target.value)}
-              className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none"
+              className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]"
             >
               {PROVIDERS.map((p) => (
                 <option key={p} value={p} className="bg-dark-800">{p}</option>
@@ -135,7 +135,7 @@ export function AssessmentPage() {
             <button
               onClick={handleSubmit}
               disabled={wrap.isPending || !text.trim()}
-              className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-6 py-2 text-sm font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
+              className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-6 py-3 sm:py-2 text-sm font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity min-h-[44px]"
             >
               {wrap.isPending ? 'Assessing...' : 'Assess'}
             </button>
@@ -148,11 +148,11 @@ export function AssessmentPage() {
 
       {result && (
         <div className="space-y-6">
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
             {result.interpretation && (
               <button
                 onClick={() => setViewMode(viewMode === 'summary' ? 'technical' : 'summary')}
-                className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
+                className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors min-h-[44px]"
               >
                 {viewMode === 'summary' ? 'Show Technical View' : 'Show Summary View'}
               </button>

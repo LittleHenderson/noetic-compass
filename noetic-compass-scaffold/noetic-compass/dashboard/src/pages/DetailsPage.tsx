@@ -40,9 +40,9 @@ export function DetailsPage() {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-bold text-slate-100">Assessment Details</h2>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <ExportButton
             result={record.result}
             text={record.text}
@@ -50,13 +50,13 @@ export function DetailsPage() {
           />
           <button
             onClick={() => navigate('/', { state: { prefill: record.text } })}
-            className="rounded-lg border border-accent-teal/30 bg-accent-teal/10 px-3 py-1.5 text-xs font-medium text-accent-teal hover:bg-accent-teal/20 transition-colors"
+            className="rounded-lg border border-accent-teal/30 bg-accent-teal/10 px-3 py-2 text-xs font-medium text-accent-teal hover:bg-accent-teal/20 transition-colors min-h-[44px]"
           >
             Re-run
           </button>
           <button
             onClick={() => navigate('/history')}
-            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
+            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors min-h-[44px]"
           >
             Back
           </button>
@@ -72,7 +72,7 @@ export function DetailsPage() {
         <div className="flex justify-end">
           <button
             onClick={() => setViewMode(viewMode === 'summary' ? 'technical' : 'summary')}
-            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
+            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors min-h-[44px]"
           >
             {viewMode === 'summary' ? 'Show Technical View' : 'Show Summary View'}
           </button>
