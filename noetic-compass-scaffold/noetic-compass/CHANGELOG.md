@@ -1,5 +1,39 @@
 # Noetic Compass — Progress Log
 
+## Session 27: TKS Integration — 4 Tasks (April 8, 2026)
+
+### Task 1: Cognitive Circuit Examples → HowItWorksPage
+- **`dashboard/src/components/shared/CircuitCard.tsx`** (NEW) — Reusable circuit card with SVG node/arrow diagram, feedback loops, description, assessment callout
+- **`dashboard/src/pages/HowItWorksPage.tsx`** — New "How Cognitive Operators Work in Everyday Life" section with 4 circuit examples:
+  - Morning Decision Amplifier (CO-2 → CO-4 integration)
+  - Friction Inhibitor (CO-2 dampened by CO-3)
+  - Momentum Builder (RPM chain A0→D→W→P + CO-7 feedback)
+  - Creative Flow State (CO-0 ↔ CO-6 oscillation via CO-7)
+
+### Task 2: Scenario Inversion Engine + Augmentation + Teacher
+- **`scenarios/generator/__init__.py`** (NEW) — Package init
+- **`scenarios/generator/inversion_engine.py`** (NEW) — 7-axis CAS inversions: N (operator swap), W (domain flip), F (drive swap), E (polarity), S (sub-drive shift), A (RPM scramble), P (compound). Includes prompt rewriting and target transformation.
+- **`scenarios/generator/augmentation.py`** (NEW) — Loads 50 base scenarios, assigns targets via keyword heuristics, runs 7-axis expansion → 400 scenarios
+- **`scenarios/generator/teacher.py`** (NEW) — LLM-based scenario generation with CAS ontology validation
+- **`scenarios/generator/__main__.py`** (NEW) — CLI: `python -m scenarios.generator --augment --count 500`
+- **`scenarios/augmented_library.json`** (NEW) — 400 augmented scenarios (50 base × 8)
+- **`tests/test_scenario_generator.py`** (NEW) — 24 tests covering all axes, augmentation, teacher parsing
+- Verified: 104 passed, 1 skipped
+
+### Task 3: CAS-Native 5-Stage Data Pipeline
+- **`cas-native/training/data_pipeline.py`** — Added `validate_cas_item()` (open simplex, score ranges) and `run_pipeline()` implementing 5 stages: load → augment → validate → split → tokenize
+- **`cas-native/training/augment.py`** (NEW) — Generates 7 inverted variants per training item with adjusted scores: N-axis swaps involution pair scores, W-axis swaps domain averages, F-axis swaps drives, composite dampened per axis severity
+- **`cas-native/tests/test_data.py`** — Added TestValidation, TestAugmentation, TestRunPipeline classes (requires PyTorch)
+
+### Task 4: tootra-tks Rust Type Extraction — Assessment
+Reviewed `github.com/LittleHenderson/tootra-tks` tks-rs workspace:
+- **`tkscore/src/ast.rs`**: `World` enum (A/B/C/D) → maps to CAS Domains (P/C/E/O)
+- **`tksir/src/ir.rs`**: `Noetic(u8)` → CO-0 through CO-9; `Element(World, u8)` → cognitive states; `RpmReturn/RpmBind/RPMAcquire/RPMCheck/RPMFail` → RPM monad ops
+- **`inversion/engine.py`**: `NOETIC_OPPOSITE` (involution pairs), `FOUNDATION_OPP` (drive inversions), `WORLD_OPP` (domain swaps) — all compatible with CAS v7.4, already ported to CAS notation in our inversion_engine.py
+- **Decision**: tks-rs is a compiler for a DSL (lexer/parser/IR/bytecode), not standalone ontology types. The algebraic structures (involution tables, domain swaps, drive inversions) have been ported to CAS terminology. No Rust code imported — cas-engine ontology should be written fresh with admissibility relations, Fisher-Rao metric, and section-retraction RPM per v7.4 corrections.
+
+---
+
 ## Session 26: Railway API Backend Deployment (April 8, 2026)
 
 ### Railway Configuration
