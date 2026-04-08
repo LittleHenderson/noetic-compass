@@ -12,7 +12,7 @@ class XAIConnector(BaseLLMConnector):
 
     provider_name = "xai"
 
-    def __init__(self, api_key: str, model: str = "grok-3"):
+    def __init__(self, api_key: str, model: str = "grok-4.20"):
         self.client = AsyncOpenAI(
             api_key=api_key,
             base_url="https://api.x.ai/v1",

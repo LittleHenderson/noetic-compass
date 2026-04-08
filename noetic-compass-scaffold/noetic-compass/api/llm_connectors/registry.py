@@ -68,7 +68,7 @@ def get_connector(provider: str, model: str | None = None) -> BaseLLMConnector:
 
         return XAIConnector(
             api_key=settings.xai_api_key,
-            model=model or "grok-3",
+            model=model or "grok-4.20",
         )
 
     if provider == "deepseek":
