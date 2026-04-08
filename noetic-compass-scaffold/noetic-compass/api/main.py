@@ -20,7 +20,19 @@ from api.errors import (
 from api.middleware.auth import JWTAuthMiddleware
 from api.middleware.rate_limit import RateLimitMiddleware
 from api.middleware.audit import AuditLogMiddleware
+from api.middleware.request_id import RequestIdMiddleware
 from api.routes import assess, auth, batch, cohort, config, export, health, wrap
+
+
+def _parse_cors_origins(raw: str) -> list[str]:
+    """Parse comma-separated CORS origins from settings.
+
+    Returns ["*"] for wildcard, otherwise a trimmed list of origins.
+    """
+    stripped = raw.strip()
+    if stripped == "*":
+        return ["*"]
+    return [origin.strip() for origin in stripped.split(",") if origin.strip()]
 
 
 @asynccontextmanager
@@ -28,8 +40,15 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     # Startup: verify cas_engine is importable
     import cas_engine  # noqa: F401
 
+    # Initialise database (no-op when DATABASE_URL is unset)
+    from api.db import init_db, close_db
+
+    await init_db()
+
     yield
-    # Shutdown: nothing to clean up
+
+    # Shutdown: close database connection pool
+    await close_db()
 
 
 app = FastAPI(
@@ -38,19 +57,22 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS
+# CORS — configured via NC_CORS_ORIGINS env var (default "*")
+cors_origins = _parse_cors_origins(settings.cors_origins)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Middleware (order matters: outermost first)
+# RequestIdMiddleware runs first (outermost) so request_id is available to all others
 app.add_middleware(AuditLogMiddleware)
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(JWTAuthMiddleware)
+app.add_middleware(RequestIdMiddleware)
 
 # Exception handlers
 app.add_exception_handler(DialViolationError, dial_violation_handler)  # type: ignore[arg-type]

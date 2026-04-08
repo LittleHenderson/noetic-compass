@@ -23,15 +23,21 @@ class AuditLogMiddleware(BaseHTTPMiddleware):
 
         user = getattr(request.state, "user", "anonymous")
         api_key = getattr(request.state, "api_key", "default")
+        request_id = getattr(request.state, "request_id", None)
 
-        entry = {
+        # Content-Length from request headers (may be absent for GET)
+        content_length = request.headers.get("Content-Length")
+
+        entry: dict = {
             "timestamp": datetime.now(tz=timezone.utc).isoformat(),
+            "request_id": request_id,
             "user": user,
             "api_key": api_key,
             "method": request.method,
             "path": request.url.path,
             "status": response.status_code,
             "latency_ms": round(elapsed_ms, 2),
+            "content_length": int(content_length) if content_length else None,
         }
 
         logger.info(json.dumps(entry))

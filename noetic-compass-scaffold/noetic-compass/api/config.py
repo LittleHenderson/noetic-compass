@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     app_name: str = "Noetic Compass API"
     debug: bool = False
 
+    # Database (None = in-memory fallback)
+    database_url: str | None = None
+
     # JWT Auth
     jwt_secret: str = "change-me-in-production"
     jwt_algorithm: str = "HS256"
@@ -23,6 +26,9 @@ class Settings(BaseSettings):
     google_api_key: str = ""
     meta_api_base_url: str = ""
     meta_api_key: str = ""
+
+    # CORS — comma-separated origins, "*" for dev (default)
+    cors_origins: str = "*"
 
     # Mock mode
     mock_llm: bool = True
