@@ -9,6 +9,7 @@ import {
   DRIVE_LABELS, INVERSION_AXIS_LABELS, INVOLUTION_PAIRS,
   PIPELINE_STAGES,
 } from './constants';
+import { computeBlindSpots, type BlindSpot } from './blindSpots';
 
 // ── Types ──
 
@@ -37,6 +38,8 @@ export interface ReportData {
   stealthResistance: number;
 
   stages: { name: string; status: 'pass' | 'flag' | 'block'; error?: string }[];
+
+  blindSpots: BlindSpot[];
 
   topStrengths: string[];
   topVulnerabilities: string[];
@@ -196,6 +199,11 @@ export function extractReportData(
     inversions,
     stealthResistance,
     stages,
+    blindSpots: computeBlindSpots(
+      operators.map(o => o.score),
+      domains.map(d => d.average),
+      drives.map(d => d.score),
+    ),
     topStrengths,
     topVulnerabilities,
     deploymentRecommendation,

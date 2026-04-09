@@ -18,7 +18,9 @@ import { CoreDriveTree } from '../components/charts/CoreDriveTree';
 import { RpmGraph } from '../components/charts/RpmGraph';
 import { InversionMap } from '../components/charts/InversionMap';
 import { InversionAlert } from '../components/shared/InversionAlert';
+import { BlindSpotCard } from '../components/shared/BlindSpotCard';
 import { PIPELINE_STAGES } from '../lib/constants';
+import { computeBlindSpots } from '../lib/blindSpots';
 import { interpretStage } from '../lib/interpretations';
 import type { WrapResult } from '../api/types';
 
@@ -100,6 +102,11 @@ export function AssessmentPage() {
   const rpmCompleteness = result?.stages.find(s => s.stage === 'rpm_gate')?.data?.rpm_completeness as number | undefined;
   const axisScores = result?.stages.find(s => s.stage === 'inversion_scan')?.data?.axis_scores as number[] | undefined;
   const stealthResistance = result?.stages.find(s => s.stage === 'inversion_scan')?.data?.stealth_resistance as number | undefined;
+
+  const flatDrives = driveScores?.map(d => d[0]);
+  const blindSpots = operatorScores && domainAverages
+    ? computeBlindSpots(operatorScores, domainAverages, flatDrives)
+    : [];
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -209,6 +216,12 @@ export function AssessmentPage() {
                   </Card>
                 )}
               </div>
+
+              {blindSpots.length > 0 && (
+                <Card title="Cognitive Blind Spots">
+                  <BlindSpotCard spots={blindSpots} />
+                </Card>
+              )}
 
               <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
                 {driveScores && driveScores.length > 0 && (

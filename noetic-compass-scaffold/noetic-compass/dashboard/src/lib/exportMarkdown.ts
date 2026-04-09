@@ -69,6 +69,14 @@ export function generateMarkdown(data: ReportData): string {
   data.topVulnerabilities.forEach(v => lines.push(`- ${v}`));
   lines.push('');
 
+  if (data.blindSpots.length > 0) {
+    lines.push('**Cognitive Blind Spots:**');
+    data.blindSpots.forEach(s => {
+      lines.push(`- **${s.label}** (${s.severity}) — ${s.risk}`);
+    });
+    lines.push('');
+  }
+
   // Section 1: Cognitive Operator Profile
   lines.push('## 1. Cognitive Operator Profile');
   lines.push('');
