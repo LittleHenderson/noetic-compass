@@ -19,6 +19,7 @@ import { RpmGraph } from '../components/charts/RpmGraph';
 import { InversionMap } from '../components/charts/InversionMap';
 import { FractalCard } from '../components/charts/FractalCard';
 import { TraceViewer } from '../components/shared/TraceViewer';
+import { NotationComposer } from '../components/shared/NotationComposer';
 import { InversionAlert } from '../components/shared/InversionAlert';
 import { BlindSpotCard } from '../components/shared/BlindSpotCard';
 import { ConfidenceIndicator } from '../components/shared/ConfidenceIndicator';
@@ -88,6 +89,7 @@ export function AssessmentPage() {
   const [text, setText] = useState('');
   const [provider, setProvider] = useState('mock');
   const [viewMode, setViewMode] = useState<'summary' | 'technical'>('summary');
+  const [inputMode, setInputMode] = useState<'text' | 'compose'>('text');
   const wrap = useWrap();
 
   function handleSubmit() {
@@ -118,41 +120,65 @@ export function AssessmentPage() {
       <ConfidenceIndicator />
 
       <Card>
-        <div className="space-y-3">
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Enter text to assess..."
-            rows={4}
-            className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-base sm:text-sm text-slate-200 placeholder-slate-600 focus:border-accent-teal/50 focus:outline-none focus:ring-1 focus:ring-accent-teal/30 resize-none"
-          />
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <select
-              value={provider}
-              onChange={(e) => setProvider(e.target.value)}
-              className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]"
-            >
-              {PROVIDERS.map((p) => (
-                <option key={p} value={p} className="bg-dark-800">{p}</option>
-              ))}
-            </select>
-            {provider !== 'mock' && (
-              <span className="text-[10px] text-amber-400/80 flex items-center gap-1">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Live API — requires key in .env
-              </span>
-            )}
-            <button
-              onClick={handleSubmit}
-              disabled={wrap.isPending || !text.trim()}
-              className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-6 py-3 sm:py-2 text-sm font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity min-h-[44px]"
-            >
-              {wrap.isPending ? 'Assessing...' : 'Assess'}
-            </button>
-          </div>
+        {/* Tab switcher */}
+        <div className="flex gap-1 mb-4">
+          <button
+            onClick={() => setInputMode('text')}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all min-h-[36px] ${
+              inputMode === 'text' ? 'bg-accent-teal/15 text-accent-teal' : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            Free Text
+          </button>
+          <button
+            onClick={() => setInputMode('compose')}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all min-h-[36px] ${
+              inputMode === 'compose' ? 'bg-accent-teal/15 text-accent-teal' : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            Compose
+          </button>
         </div>
+
+        {inputMode === 'text' ? (
+          <div className="space-y-3">
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Enter text to assess..."
+              rows={4}
+              className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-base sm:text-sm text-slate-200 placeholder-slate-600 focus:border-accent-teal/50 focus:outline-none focus:ring-1 focus:ring-accent-teal/30 resize-none"
+            />
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <select
+                value={provider}
+                onChange={(e) => setProvider(e.target.value)}
+                className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]"
+              >
+                {PROVIDERS.map((p) => (
+                  <option key={p} value={p} className="bg-dark-800">{p}</option>
+                ))}
+              </select>
+              {provider !== 'mock' && (
+                <span className="text-[10px] text-amber-400/80 flex items-center gap-1">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Live API — requires key in .env
+                </span>
+              )}
+              <button
+                onClick={handleSubmit}
+                disabled={wrap.isPending || !text.trim()}
+                className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-6 py-3 sm:py-2 text-sm font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity min-h-[44px]"
+              >
+                {wrap.isPending ? 'Assessing...' : 'Assess'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <NotationComposer onGenerate={(prompt) => { setText(prompt); setInputMode('text'); }} />
+        )}
       </Card>
 
       {wrap.isPending && <LoadingSpinner />}
