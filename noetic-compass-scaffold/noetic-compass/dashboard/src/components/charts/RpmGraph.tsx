@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ExplainPanel } from '../shared/ExplainPanel';
 import { interpretRpmChain, interpretRpmSummary } from '../../lib/interpretations';
+import { classifyRpmStage, RPM_NODE_TYPES } from '../../lib/rpmStages';
 
 const NODE_LABELS = ['A0', 'D', 'W', 'P'];
 
@@ -87,38 +88,53 @@ export function RpmGraph({
                   );
                 })}
 
-                {scores.map((score, ci) => (
-                  <g key={ci}>
-                    <circle
-                      cx={startX + ci * colW}
-                      cy={y}
-                      r={nodeR}
-                      fill={scoreColor(score)}
-                      fillOpacity={0.2}
-                      stroke={scoreColor(score)}
-                      strokeWidth={isSelected ? 2.5 : 1.5}
-                    />
-                    <circle
-                      cx={startX + ci * colW}
-                      cy={y}
-                      r={nodeR + 3}
-                      fill="none"
-                      stroke={scoreColor(score)}
-                      strokeWidth={0}
-                      style={{ filter: `drop-shadow(0 0 4px ${scoreGlow(score)})` }}
-                    />
-                    <text
-                      x={startX + ci * colW}
-                      y={y + 3.5}
-                      textAnchor="middle"
-                      fill={scoreColor(score)}
-                      fontSize="8"
-                      fontWeight="600"
-                    >
-                      {(score * 100).toFixed(0)}
-                    </text>
-                  </g>
-                ))}
+                {scores.map((score, ci) => {
+                  const stage = classifyRpmStage(RPM_NODE_TYPES[ci], score);
+                  return (
+                    <g key={ci}>
+                      <circle
+                        cx={startX + ci * colW}
+                        cy={y}
+                        r={nodeR}
+                        fill={stage.color}
+                        fillOpacity={0.2}
+                        stroke={stage.color}
+                        strokeWidth={isSelected ? 2.5 : 1.5}
+                      />
+                      <circle
+                        cx={startX + ci * colW}
+                        cy={y}
+                        r={nodeR + 3}
+                        fill="none"
+                        stroke={stage.color}
+                        strokeWidth={0}
+                        style={{ filter: `drop-shadow(0 0 4px ${scoreGlow(score)})` }}
+                      />
+                      <text
+                        x={startX + ci * colW}
+                        y={y + 3}
+                        textAnchor="middle"
+                        fill={stage.color}
+                        fontSize="8"
+                        fontWeight="600"
+                      >
+                        {(score * 100).toFixed(0)}
+                      </text>
+                      {isSelected && (
+                        <text
+                          x={startX + ci * colW}
+                          y={y + nodeR + 12}
+                          textAnchor="middle"
+                          fill={stage.color}
+                          fontSize="7"
+                          fontWeight="500"
+                        >
+                          {stage.label}
+                        </text>
+                      )}
+                    </g>
+                  );
+                })}
               </g>
             );
           })}

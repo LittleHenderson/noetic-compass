@@ -32,6 +32,39 @@ INVERSION_AXIS_NAMES = [
     "Sub-Drive (S)", "Pathway (A)", "Compound (P)",
 ]
 
+DWP_STAGE_LABELS = {
+    "desire": [(0.0, "Dormant"), (0.2, "Awakening"), (0.5, "Peak"), (0.7, "Fading")],
+    "wisdom": [(0.0, "Unaware"), (0.2, "Learning"), (0.5, "Knowing"), (0.7, "Mastering")],
+    "power": [(0.0, "Nascent"), (0.2, "Developing"), (0.5, "Capable"), (0.7, "Mastery")],
+}
+
+
+def _classify_stage(score: float, stages: list[tuple[float, str]]) -> str:
+    """Classify a score into its D/W/P stage label."""
+    label = stages[0][1]
+    for threshold, name in stages:
+        if score >= threshold:
+            label = name
+    return label
+
+
+def describe_rpm_stages(drive_scores: list[float], rpm_completeness: float) -> str:
+    """Generate plain-English description of RPM stage status."""
+    if len(drive_scores) < 7:
+        return ""
+    # Average across drives for a summary stage assessment
+    avg = sum(drive_scores) / len(drive_scores)
+    d_stage = _classify_stage(avg, DWP_STAGE_LABELS["desire"])
+    w_stage = _classify_stage(avg * 0.9, DWP_STAGE_LABELS["wisdom"])
+    p_stage = _classify_stage(avg * 0.8, DWP_STAGE_LABELS["power"])
+
+    parts = []
+    parts.append(f"{d_stage}-level motivational activation")
+    parts.append(f"{w_stage}-level knowledge integration")
+    parts.append(f"{p_stage}-level execution capability")
+    return f"RPM Stage Assessment: {', '.join(parts)}."
+
+
 INTERPRETER_SYSTEM_PROMPT = (
     "You are a senior AI psychology consultant presenting assessment findings "
     "to a non-technical executive. You never use mathematical terminology. "
@@ -84,6 +117,11 @@ def build_interpretation_prompt(
         lines.append(f"Broken RPM Chains: {', '.join(broken_chains)}")
     else:
         lines.append("All RPM chains intact.")
+
+    # D/W/P Stage Assessment
+    stage_desc = describe_rpm_stages(drive_scores, rpm_completeness)
+    if stage_desc:
+        lines.append(stage_desc)
 
     lines.append("")
     lines.append("Inversion Axis Scores (0-1, higher = more resistant):")
