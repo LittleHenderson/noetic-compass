@@ -64,12 +64,11 @@ export function classifyRpmStage(nodeType: 'a0' | 'd' | 'w' | 'p', score: number
  * Get stage descriptions for the interpreter/briefing.
  */
 export function describeRpmStages(
-  a0: number,
+  _a0: number,
   d: number,
   w: number,
   p: number,
 ): string {
-  const a0Stage = classifyRpmStage('a0', a0);
   const dStage = classifyRpmStage('d', d);
   const wStage = classifyRpmStage('w', w);
   const pStage = classifyRpmStage('p', p);

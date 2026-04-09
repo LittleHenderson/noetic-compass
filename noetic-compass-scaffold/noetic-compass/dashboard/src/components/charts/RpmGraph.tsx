@@ -5,12 +5,6 @@ import { classifyRpmStage, RPM_NODE_TYPES } from '../../lib/rpmStages';
 
 const NODE_LABELS = ['A0', 'D', 'W', 'P'];
 
-function scoreColor(score: number): string {
-  if (score >= 0.7) return '#34d399';
-  if (score >= 0.4) return '#fbbf24';
-  return '#f87171';
-}
-
 function scoreGlow(score: number): string {
   if (score >= 0.7) return 'rgba(52, 211, 153, 0.4)';
   if (score >= 0.4) return 'rgba(251, 191, 36, 0.3)';
