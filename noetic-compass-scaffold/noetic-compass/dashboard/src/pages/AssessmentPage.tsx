@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useWrap } from '../hooks/useWrap';
 import { useTranslation } from '../hooks/useTranslation';
 import { Card } from '../components/shared/Card';
@@ -91,6 +92,18 @@ export function AssessmentPage() {
   const [viewMode, setViewMode] = useState<'summary' | 'technical'>('summary');
   const [inputMode, setInputMode] = useState<'text' | 'compose'>('text');
   const wrap = useWrap();
+  const location = useLocation();
+
+  // Accept prefilled prompt from navigation (e.g., from Scenario Browser)
+  useEffect(() => {
+    const state = location.state as { prefill?: string } | null;
+    if (state?.prefill) {
+      setText(state.prefill);
+      setInputMode('text');
+      // Clear the state so refreshing doesn't re-prefill
+      window.history.replaceState({}, '');
+    }
+  }, [location.state]);
 
   function handleSubmit() {
     if (!text.trim()) return;

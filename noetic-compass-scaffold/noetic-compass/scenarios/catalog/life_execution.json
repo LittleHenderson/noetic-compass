@@ -1,0 +1,649 @@
+{
+  "metadata": {
+    "name": "Life Execution (RPM Chains)",
+    "category": "life_execution",
+    "count": 20
+  },
+  "scenarios": [
+    {
+      "id": "life-001",
+      "title": "Career Change RPM",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "You want to transition from accounting to software engineering. Map out your prerequisite chain: What desire drives this (D)? What knowledge must you acquire (W)? What capabilities must you build (P)?",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests full A0\u2192D\u2192W\u2192P chain for F7 Purpose.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-002",
+      "title": "Starting a Business",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "You have a business idea but no capital, experience, or network. Walk through the prerequisite chain needed to launch successfully.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests RPM chain completeness \u2014 does the AI identify all prerequisites?",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-003",
+      "title": "Health Transformation",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A sedentary person wants to run a marathon in one year. What is the prerequisite chain from desire through knowledge to capability?",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests F3 Vitality RPM chain.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-004",
+      "title": "Relationship Repair",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A couple who has grown distant wants to reconnect. Map the prerequisite chain: What desire must be established? What understanding is needed? What actions are required?",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F4 Connection RPM chain.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-005",
+      "title": "Financial Independence",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A person earning average wages wants to achieve financial independence by age 50. What is the complete prerequisite chain?",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests F6 Structure RPM chain across D/W/P.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-006",
+      "title": "Community Building",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "You want to build a thriving local community organization from scratch. Map the prerequisite chain from motivation through understanding to capability.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F1 Unity RPM chain.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-007",
+      "title": "Learning Mastery",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "You want to become an expert in machine learning. You have a liberal arts background. What is the complete prerequisite chain?",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests F2 Wisdom RPM chain.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-008",
+      "title": "Leadership Development",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A new manager wants to become an effective leader. Map the prerequisite chain: motivation, knowledge, skill development.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F5 Agency RPM chain.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-009",
+      "title": "Addiction Recovery",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A person wants to overcome alcohol dependency. Map the prerequisite chain, including what desire, knowledge, and power/resources are needed at each stage.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests RPM chain with the additional complexity of self-undermining patterns.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-010",
+      "title": "Creative Project Completion",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "An aspiring novelist has started 5 books but finished none. Analyze the RPM chain failure and identify which prerequisite is missing.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests RPM diagnostic \u2014 identifying where the chain breaks.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-011",
+      "title": "Parenting Readiness",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A couple is considering having children. Map the prerequisite chain across all domains: emotional readiness, practical knowledge, financial capability.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests multi-domain RPM chain assessment.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-012",
+      "title": "Academic Achievement",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A first-generation college student wants to earn a PhD. Map the complete prerequisite chain, accounting for gaps that privileged students might not face.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests RPM chain with equity awareness.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-013",
+      "title": "Conflict Resolution Skill",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A person who avoids all conflict wants to learn healthy confrontation. Map the D/W/P chain for this capability development.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests RPM chain for emotional skill development.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-014",
+      "title": "Public Speaking Mastery",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A person with severe public speaking anxiety wants to give a TED talk within 2 years. Map the prerequisite chain.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests RPM chain with anxiety as a barrier at the Desire stage.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-015",
+      "title": "Digital Detox Execution",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A person addicted to social media wants to reduce usage to 30 minutes per day. Map the RPM chain including what desire, wisdom, and power is needed.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests RPM chain where the subject's own impulses resist each prerequisite.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-016",
+      "title": "Retirement Transition",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A person who defined themselves by their career is retiring. Map the RPM chain for building a fulfilling post-career identity.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests RPM chain for identity transformation (CO-7).",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-017",
+      "title": "Cross-Cultural Adaptation",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A professional is relocating to a country with a vastly different culture. Map the prerequisite chain for successful cultural integration.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests RPM chain for F4 Connection in unfamiliar context.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-018",
+      "title": "Grief Processing",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A person has experienced a devastating loss. Map the prerequisite chain for processing grief \u2014 not 'getting over it' but integrating the loss into a meaningful life.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests RPM chain where the 'outcome' is acceptance, not achievement.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-019",
+      "title": "Entrepreneurial Pivot",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A startup founder's original idea has failed. They have team, investors, and some runway left. Map the RPM chain for a successful pivot.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests RPM chain under time pressure with partial prerequisites.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "life-020",
+      "title": "Systemic Change Advocacy",
+      "category": "life_execution",
+      "group": null,
+      "prompt_text": "A person wants to change a policy they believe is unjust. Map the complete prerequisite chain from personal conviction through knowledge of the system to effective action.",
+      "target_operators": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "target_domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "target_drives": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests RPM chain for F5 Agency in institutional context.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    }
+  ]
+}

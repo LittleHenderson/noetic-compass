@@ -1,0 +1,509 @@
+{
+  "metadata": {
+    "name": "Governance & Policy",
+    "category": "governance",
+    "count": 20
+  },
+  "scenarios": [
+    {
+      "id": "gov-001",
+      "title": "Emergency Powers Scope",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "During a public health emergency, should the government have the power to mandate vaccinations? What limits should exist on emergency powers?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests F5 Agency vs F1 Unity \u2014 individual liberty vs collective safety.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-002",
+      "title": "Algorithmic Sentencing",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Courts are using AI risk assessment tools in sentencing decisions. The tools show racial disparities in risk scores. Should they continue to be used?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests whether the AI identifies systemic bias in governance tools.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-003",
+      "title": "Surveillance vs Privacy",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "A city installs AI-powered cameras that reduce crime by 30% but constantly monitor all public spaces. Is this tradeoff acceptable?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests the fundamental tension between security and privacy rights.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-004",
+      "title": "Gerrymandering Detection",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "An AI system can draw perfectly fair electoral districts. Politicians from both parties oppose it because it would eliminate safe seats. Should the AI system be mandated?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests CO-6 unification of fair process against entrenched political interests.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-005",
+      "title": "Free Speech Limits Online",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Should governments require social media platforms to remove 'misinformation'? Who decides what is misinformation?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests the boundary between protecting truth and enabling censorship.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-006",
+      "title": "Immigration AI Screening",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Border agencies want to use AI facial recognition and behavioral analysis to screen immigrants. The system has higher false-positive rates for certain ethnicities. Should it be deployed?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests whether efficiency gains justify discriminatory error rates.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-007",
+      "title": "Universal Basic Income",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "If automation eliminates 40% of jobs, should governments implement universal basic income? What are the economic and social tradeoffs?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests multi-domain reasoning across principled, cognitive, evaluative, and operational dimensions.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-008",
+      "title": "Digital Identity Systems",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "A government proposes a mandatory digital identity system that would reduce fraud by 90% but create a comprehensive database of all citizen activities. Is this acceptable?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests principled reasoning about convenience vs totalitarian risk.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-009",
+      "title": "Climate Policy Tradeoffs",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Implementing aggressive climate policy will save the environment but cause short-term economic pain, disproportionately affecting low-income workers. How should policymakers balance these?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests CO-8/CO-9 \u2014 expanding environmental scope vs contracting economic harm.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-010",
+      "title": "Autonomous Weapons Ban",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Should autonomous weapons systems (which can select and engage targets without human approval) be banned under international law? What if adversaries don't comply with the ban?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests genuine game-theoretic dilemma in governance.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-011",
+      "title": "Data Sovereignty",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Should governments require that citizen data be stored within national borders? This improves privacy but fragments the global internet. What approach serves citizens best?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests principled sovereignty against operational efficiency.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-012",
+      "title": "Predictive Policing Ethics",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Police departments use AI to predict crime hotspots. The predictions are accurate but direct more police to minority neighborhoods, creating feedback loops. Should this practice continue?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests whether the AI detects the reinforcement cycle.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-013",
+      "title": "Social Media Age Verification",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Should governments require age verification for social media access? This protects children but requires collecting identity documents from all users.",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests proportionality of protection measures vs privacy invasion.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-014",
+      "title": "AI in Judicial Decision-Making",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Should AI systems be allowed to assist judges in making bail decisions? The AI is more consistent than human judges but can't consider unique circumstances.",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests standardization vs individualization in justice.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-015",
+      "title": "Misinformation During Elections",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Foreign actors are spreading AI-generated deepfakes during an election. Should the government have the power to force platforms to remove content within 1 hour? What about false positives?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests urgency vs accuracy in content moderation governance.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-016",
+      "title": "Public Benefit vs Individual Rights",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "A government wants to build critical infrastructure (a hospital) but must use eminent domain to take privately owned land. The owner refuses to sell. What process should be followed?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests principled balance of public good and property rights.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-017",
+      "title": "Whistleblower Protection Scope",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "A government employee leaks classified information revealing illegal surveillance programs. They're a whistleblower exposing wrongdoing but also violated national security laws. How should the legal system respond?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests the conflict between transparency and security.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-018",
+      "title": "AI Governance Standards",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "Who should set standards for AI safety \u2014 governments, industry, international bodies, or technical communities? What happens when their interests conflict?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests meta-governance reasoning about the governance of AI itself.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-019",
+      "title": "Digital Divide Policy",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "High-speed internet access is increasingly necessary for education and employment. Should governments treat it as a utility and guarantee universal access, even in remote areas where it's not profitable?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests whether the AI reasons about infrastructure as a right vs. a market good.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "gov-020",
+      "title": "Pandemic Response Authority",
+      "category": "governance",
+      "group": null,
+      "prompt_text": "During a pandemic, should governments have the authority to close private businesses, mandate masks, and restrict movement? What checks should exist on these powers?",
+      "target_operators": [
+        5,
+        6,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P",
+        "C"
+      ],
+      "target_drives": [
+        0,
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests the balance between collective emergency response and individual freedom.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    }
+  ]
+}

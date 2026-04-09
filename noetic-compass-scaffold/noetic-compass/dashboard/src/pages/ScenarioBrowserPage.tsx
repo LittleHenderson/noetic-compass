@@ -1,253 +1,175 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/shared/Card';
-
-// Embedded scenario catalog — loaded statically for now.
-// In production, this would come from an API endpoint.
+import { API_BASE } from '../api/config';
 
 interface Scenario {
   id: string;
-  group: string;
-  group_label: string;
-  prompt: string;
-  attack_pattern?: string;
-  resilience_target?: Record<string, string>;
-  inversion_axis?: string;
-  is_original?: boolean;
-  inversion_notes?: string;
+  title: string;
+  category: string;
+  group?: string | null;
+  prompt?: string;
+  prompt_text?: string;
   target_operators?: number[];
-  target_domain?: string;
+  target_domains?: string[];
+  target_drives?: number[];
+  difficulty?: string;
+  what_it_tests?: string;
+  success_indicator?: string;
+  failure_indicator?: string;
 }
 
-const GROUP_COLORS: Record<string, string> = {
-  cognitive_bias_resilience: '#60a5fa',
-  discourse_boundary_resilience: '#a78bfa',
-  prerequisite_integrity_resilience: '#2dd4bf',
-  domain_coherence_resilience: '#fbbf24',
-  inversion_detection_resilience: '#f87171',
-  sample: '#94a3b8',
+const CAT_COLORS: Record<string, string> = {
+  healthcare: '#34d399', hiring: '#60a5fa', finance: '#fbbf24',
+  governance: '#a78bfa', education: '#22d3ee', relationships: '#f472b6',
+  ai_safety: '#f87171', environmental: '#34d399', adversarial_resilience: '#ef4444',
+  life_execution: '#818cf8', cas_patterns: '#2dd4bf',
 };
 
-const GROUP_LABELS: Record<string, string> = {
-  cognitive_bias_resilience: 'Cognitive Bias Resilience',
-  discourse_boundary_resilience: 'Discourse Boundary Resilience',
-  prerequisite_integrity_resilience: 'Prerequisite Integrity Resilience',
-  domain_coherence_resilience: 'Domain Coherence Resilience',
-  inversion_detection_resilience: 'Inversion Detection Resilience',
-  sample: 'Base Scenarios',
+const CAT_LABELS: Record<string, string> = {
+  healthcare: 'Healthcare', hiring: 'Hiring & HR', finance: 'Finance',
+  governance: 'Governance', education: 'Education', relationships: 'Relationships',
+  ai_safety: 'AI Safety', environmental: 'Environmental',
+  adversarial_resilience: 'Adversarial', life_execution: 'Life Execution',
+  cas_patterns: 'CAS Patterns',
 };
 
-// Fetch scenarios from API or static catalog
-function useScenarios() {
-  const [scenarios, setScenarios] = useState<Scenario[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-
-  const load = async () => {
-    if (loaded) return;
-    setLoading(true);
-    try {
-      // Try API endpoint first, fall back to static file
-      const urls = ['/api/scenarios/catalog', '/scenarios/catalog/adversarial_resilience.json'];
-      for (const url of urls) {
-        try {
-          const res = await fetch(url);
-          if (res.ok) {
-            const data = await res.json();
-            const items = data.scenarios ?? (Array.isArray(data) ? data : []);
-            if (items.length > 0) {
-              setScenarios(items);
-              break;
-            }
-          }
-        } catch {
-          continue;
-        }
-      }
-    } catch {
-      // No scenarios available
-    }
-    setLoading(false);
-    setLoaded(true);
-  };
-
-  return { scenarios, loading, loaded, load };
-}
+const DIFF_COLORS: Record<string, string> = {
+  easy: '#34d399', moderate: '#fbbf24', hard: '#f87171',
+};
 
 export function ScenarioBrowserPage() {
-  const { scenarios, loading, loaded, load } = useScenarios();
+  const navigate = useNavigate();
+  const [scenarios, setScenarios] = useState<Scenario[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  // Load on mount
-  if (!loaded && !loading) {
-    load();
-  }
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/scenarios`);
+        if (res.ok) {
+          const data = await res.json();
+          setScenarios(data.scenarios ?? []);
+        }
+      } catch { /* API not available */ }
+      setLoading(false);
+    })();
+  }, []);
 
-  const groups = useMemo(() => {
-    const g: Record<string, number> = {};
-    for (const s of scenarios) {
-      g[s.group] = (g[s.group] ?? 0) + 1;
-    }
-    return Object.entries(g).sort(([, a], [, b]) => b - a);
+  const categories = useMemo(() => {
+    const cats: Record<string, number> = {};
+    for (const s of scenarios) cats[s.category] = (cats[s.category] ?? 0) + 1;
+    return Object.entries(cats).sort(([, a], [, b]) => b - a);
   }, [scenarios]);
 
   const filtered = useMemo(() => {
-    let result = scenarios;
-    if (selectedGroup) {
-      result = result.filter(s => s.group === selectedGroup);
-    }
+    let r = scenarios;
+    if (selectedCat) r = r.filter(s => s.category === selectedCat);
     if (search.trim()) {
       const q = search.toLowerCase();
-      result = result.filter(s =>
-        s.prompt.toLowerCase().includes(q) ||
-        (s.attack_pattern ?? '').toLowerCase().includes(q) ||
-        (s.group_label ?? '').toLowerCase().includes(q)
+      r = r.filter(s =>
+        (s.prompt_text ?? s.prompt ?? '').toLowerCase().includes(q) ||
+        (s.title ?? '').toLowerCase().includes(q) ||
+        (s.what_it_tests ?? '').toLowerCase().includes(q)
       );
     }
-    return result;
-  }, [scenarios, selectedGroup, search]);
+    return r;
+  }, [scenarios, selectedCat, search]);
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div>
         <h1 className="text-2xl font-bold text-slate-100 mb-1">Scenario Browser</h1>
         <p className="text-sm text-slate-400">
-          Browse {scenarios.length} adversarial resilience testing scenarios. Each tests whether an AI system
-          is resilient to a specific manipulation pattern.
+          {scenarios.length} assessment scenarios across {categories.length} categories.
         </p>
       </div>
 
-      {/* Search + Filter */}
       <div className="flex flex-col gap-3 sm:flex-row">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search scenarios..."
-          className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm text-slate-200 placeholder-slate-600 focus:border-accent-teal/50 focus:outline-none min-h-[44px]"
-        />
-        <select
-          value={selectedGroup ?? ''}
-          onChange={(e) => setSelectedGroup(e.target.value || null)}
-          className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]"
-        >
-          <option value="" className="bg-dark-800">All Groups ({scenarios.length})</option>
-          {groups.map(([group, count]) => (
-            <option key={group} value={group} className="bg-dark-800">
-              {GROUP_LABELS[group] ?? group} ({count})
-            </option>
-          ))}
+        <input type="text" value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Search scenarios..." className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm text-slate-200 placeholder-slate-600 focus:border-accent-teal/50 focus:outline-none min-h-[44px]" />
+        <select value={selectedCat ?? ''} onChange={e => setSelectedCat(e.target.value || null)}
+          className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]">
+          <option value="" className="bg-dark-800">All ({scenarios.length})</option>
+          {categories.map(([c, n]) => <option key={c} value={c} className="bg-dark-800">{CAT_LABELS[c] ?? c} ({n})</option>)}
         </select>
       </div>
 
-      {/* Group pills */}
       <div className="flex flex-wrap gap-2">
-        <button
-          onClick={() => setSelectedGroup(null)}
-          className={`rounded-full px-3 py-1.5 text-[11px] font-medium transition-all min-h-[36px] ${
-            !selectedGroup ? 'bg-accent-teal/15 text-accent-teal' : 'text-slate-500 hover:text-slate-300 bg-white/[0.03]'
-          }`}
-        >
-          All
+        <button onClick={() => setSelectedCat(null)}
+          className={`rounded-full px-3 py-1.5 text-[11px] font-medium transition-all min-h-[36px] ${!selectedCat ? 'bg-accent-teal/15 text-accent-teal' : 'text-slate-500 hover:text-slate-300 bg-white/[0.03]'}`}>
+          All ({scenarios.length})
         </button>
-        {groups.map(([group, count]) => {
-          const color = GROUP_COLORS[group] ?? '#94a3b8';
-          const active = selectedGroup === group;
+        {categories.map(([c, n]) => {
+          const color = CAT_COLORS[c] ?? '#94a3b8';
           return (
-            <button
-              key={group}
-              onClick={() => setSelectedGroup(active ? null : group)}
-              className={`rounded-full px-3 py-1.5 text-[11px] font-medium transition-all min-h-[36px] ${
-                active ? '' : 'hover:bg-white/[0.04]'
-              }`}
-              style={active ? { backgroundColor: `${color}20`, color } : { color: '#94a3b8' }}
-            >
-              {GROUP_LABELS[group]?.split(' ')[0] ?? group} ({count})
+            <button key={c} onClick={() => setSelectedCat(selectedCat === c ? null : c)}
+              className="rounded-full px-3 py-1.5 text-[11px] font-medium transition-all min-h-[36px]"
+              style={selectedCat === c ? { backgroundColor: `${color}20`, color } : { color: '#94a3b8' }}>
+              {CAT_LABELS[c] ?? c} ({n})
             </button>
           );
         })}
       </div>
 
-      {/* Results count */}
-      <p className="text-[11px] text-slate-500">
-        Showing {filtered.length} of {scenarios.length} scenarios
-      </p>
+      <p className="text-[11px] text-slate-500">Showing {filtered.length} of {scenarios.length}</p>
 
-      {/* Scenario list */}
       {loading ? (
         <Card><p className="text-sm text-slate-500 text-center py-8">Loading scenarios...</p></Card>
       ) : filtered.length === 0 ? (
         <Card><p className="text-sm text-slate-500 text-center py-8">No scenarios match your search.</p></Card>
       ) : (
         <div className="space-y-2">
-          {filtered.map((scenario) => {
-            const color = GROUP_COLORS[scenario.group] ?? '#94a3b8';
-            const isExpanded = expandedId === scenario.id;
-
+          {filtered.map(s => {
+            const color = CAT_COLORS[s.category] ?? '#94a3b8';
+            const diffColor = DIFF_COLORS[s.difficulty ?? 'moderate'] ?? '#94a3b8';
+            const open = expandedId === s.id;
+            const prompt = s.prompt_text ?? s.prompt ?? '';
             return (
-              <div
-                key={scenario.id}
-                className="glass-card overflow-hidden transition-all duration-150"
-                style={isExpanded ? { borderColor: `${color}30` } : undefined}
-              >
-                <button
-                  onClick={() => setExpandedId(isExpanded ? null : scenario.id)}
-                  className="w-full flex items-start gap-3 p-4 text-left min-h-[44px]"
-                >
-                  <span
-                    className="w-2 h-2 rounded-full mt-1.5 shrink-0"
-                    style={{ backgroundColor: color }}
-                  />
+              <div key={s.id} className="glass-card overflow-hidden transition-all duration-150" style={open ? { borderColor: `${color}30` } : undefined}>
+                <button onClick={() => setExpandedId(open ? null : s.id)} className="w-full flex items-start gap-3 p-4 text-left min-h-[44px]">
+                  <span className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: color }} />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[9px] font-mono text-slate-600">{scenario.id}</span>
-                      {scenario.attack_pattern && (
-                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/[0.04] text-slate-400">
-                          {scenario.attack_pattern.replace(/_/g, ' ')}
-                        </span>
-                      )}
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <span className="text-[9px] font-mono text-slate-600">{s.id}</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded" style={{ backgroundColor: `${color}15`, color }}>{CAT_LABELS[s.category] ?? s.category}</span>
+                      {s.difficulty && <span className="text-[9px] px-1.5 py-0.5 rounded" style={{ backgroundColor: `${diffColor}15`, color: diffColor }}>{s.difficulty}</span>}
                     </div>
-                    <p className="text-[12px] text-slate-300 leading-relaxed line-clamp-2">
-                      {scenario.prompt.slice(0, 200)}{scenario.prompt.length > 200 ? '...' : ''}
-                    </p>
+                    <p className="text-[12px] font-medium text-slate-200 mb-0.5">{s.title}</p>
+                    <p className="text-[11px] text-slate-400 line-clamp-2">{prompt.slice(0, 150)}{prompt.length > 150 ? '...' : ''}</p>
                   </div>
-                  <svg
-                    width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5"
-                    className={`text-slate-600 shrink-0 mt-1 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                  >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5"
+                    className={`text-slate-600 shrink-0 mt-1 transition-transform ${open ? 'rotate-180' : ''}`}>
                     <path d="M3 5l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
-
-                {isExpanded && (
+                {open && (
                   <div className="px-4 pb-4 space-y-3 border-t border-white/[0.04] pt-3">
-                    <p className="text-[12px] text-slate-300 leading-relaxed whitespace-pre-wrap">
-                      {scenario.prompt}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 text-[10px]">
-                      <span className="px-2 py-1 rounded" style={{ backgroundColor: `${color}15`, color }}>
-                        {scenario.group_label}
-                      </span>
-                      {scenario.inversion_axis && (
-                        <span className="px-2 py-1 rounded bg-amber-500/10 text-amber-400">
-                          {scenario.inversion_axis}-axis
-                        </span>
-                      )}
-                      {scenario.resilience_target && (
-                        <span className="px-2 py-1 rounded bg-accent-teal/10 text-accent-teal">
-                          Target: {scenario.resilience_target.operator ?? ''} {scenario.resilience_target.domain ?? ''}
-                        </span>
-                      )}
-                    </div>
-
-                    {scenario.inversion_notes && (
-                      <p className="text-[11px] text-slate-500">
-                        <strong className="text-slate-400">Detection: </strong>
-                        {scenario.inversion_notes}
-                      </p>
+                    <p className="text-[12px] text-slate-300 leading-relaxed whitespace-pre-wrap">{prompt}</p>
+                    {s.what_it_tests && (
+                      <div className="rounded-lg bg-white/[0.02] border border-white/[0.06] p-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1">What It Tests</p>
+                        <p className="text-[11px] text-slate-400">{s.what_it_tests}</p>
+                      </div>
                     )}
+                    <div className="flex flex-wrap gap-2 text-[10px]">
+                      {s.target_operators?.map(op => <span key={`op-${op}`} className="px-2 py-0.5 rounded bg-accent-teal/10 text-accent-teal font-mono">CO-{op}</span>)}
+                      {s.target_domains?.map(d => <span key={`d-${d}`} className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400">{d}</span>)}
+                      {s.target_drives?.map(i => <span key={`f-${i}`} className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400">F{i + 1}</span>)}
+                    </div>
+                    {(s.success_indicator || s.failure_indicator) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {s.success_indicator && <div className="rounded-lg bg-emerald-500/[0.04] border border-emerald-500/15 p-2"><p className="text-[9px] font-semibold text-emerald-400 mb-0.5">Resilient</p><p className="text-[10px] text-slate-400">{s.success_indicator}</p></div>}
+                        {s.failure_indicator && <div className="rounded-lg bg-red-500/[0.04] border border-red-500/15 p-2"><p className="text-[9px] font-semibold text-red-400 mb-0.5">Vulnerable</p><p className="text-[10px] text-slate-400">{s.failure_indicator}</p></div>}
+                      </div>
+                    )}
+                    <button onClick={() => navigate('/', { state: { prefill: prompt } })}
+                      className="w-full rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-4 py-2.5 text-xs font-semibold text-dark-900 hover:opacity-90 transition-opacity min-h-[44px]">
+                      Run This Assessment
+                    </button>
                   </div>
                 )}
               </div>

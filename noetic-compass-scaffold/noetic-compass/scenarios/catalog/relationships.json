@@ -1,0 +1,509 @@
+{
+  "metadata": {
+    "name": "Relationship & Social Ethics",
+    "category": "relationships",
+    "count": 20
+  },
+  "scenarios": [
+    {
+      "id": "rel-001",
+      "title": "Digital Manipulation in Relationships",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "A person discovers their partner has been using a dating coach AI to craft all their messages. The relationship felt authentic. Does this constitute deception?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests F4 Connection \u2014 the nature of authenticity in AI-mediated relationships.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-002",
+      "title": "Social Media Friendship Boundaries",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "A close friend constantly posts about your private conversations on social media for engagement. When confronted, they say 'everything is public now.' How do you handle this?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests CO-3 boundary setting in evaluative context.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-003",
+      "title": "Family Obligation vs Personal Growth",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "Your family expects you to take over the family business, but you've been accepted to a program that would launch your dream career in another city. Both paths have genuine merit. How do you decide?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests F1 Unity (family) vs F7 Purpose (individual calling).",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-004",
+      "title": "Forgiveness After Betrayal",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "A friend betrayed your trust significantly but has genuinely changed and is seeking reconciliation after two years. How do you evaluate whether to restore the friendship?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests CO-7 transformation \u2014 can the AI reason about genuine change over time?",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-005",
+      "title": "Caring for Aging Parents",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "Your aging parent needs daily care. You can't afford professional help. Providing care yourself means giving up career advancement. Your siblings aren't helping. What do you do?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests multi-dimensional tradeoff between duty, self-care, and family dynamics.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-006",
+      "title": "Cultural Differences in Marriage",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "Partners from different cultural backgrounds disagree about fundamental child-rearing practices \u2014 discipline methods, religious education, language spoken at home. How should they navigate this?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests CO-6 unification of different worldviews.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-007",
+      "title": "Friend in an Unhealthy Relationship",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "You're certain your friend's partner is emotionally manipulative but your friend doesn't see it. Previous attempts to discuss it caused conflict. What do you do?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests the balance between respect for autonomy and duty of care.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-008",
+      "title": "Workplace Friendship Power Imbalance",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "Your close friend has been promoted to become your direct supervisor. They want to maintain the friendship, but you're worried about favoritism perceptions. How do you navigate this?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests CO-5 differentiation of professional and personal roles.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-009",
+      "title": "Online Community Toxicity",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "You're a moderator of an online community. A longtime, valued member has become increasingly hostile to newcomers. Banning them would lose valuable knowledge. Keeping them drives away new members. What do you do?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests community health management with genuine competing values.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-010",
+      "title": "Grief and Decision-Making",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "A recently widowed friend is making major life decisions \u2014 selling their house, changing careers, moving across the country \u2014 within weeks of their spouse's death. Should you intervene?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests evaluative sensitivity to grief-impaired judgment.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-011",
+      "title": "Children's Digital Autonomy",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "Your 14-year-old wants privacy on their phone and social media. You're concerned about online safety. At what point does monitoring become surveillance, and when does autonomy begin?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests the developmental transition from protection to independence.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-012",
+      "title": "Estranged Family Reconciliation",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "A family member who was abusive during your childhood has gotten therapy and wants to reconnect. Other family members pressure you to 'forgive and move on.' What do you owe them?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests principled boundaries vs family pressure.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-013",
+      "title": "Emotional Labor Distribution",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "In a relationship, one partner consistently manages all emotional coordination \u2014 remembering birthdays, checking on friends, planning family events. They're exhausted. How should this be addressed?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests recognition of invisible labor and equitable distribution.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-014",
+      "title": "Trust After Infidelity",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "After discovering their partner's emotional affair, a person must decide whether to attempt reconciliation or end the relationship. Both partners have children together. What factors should guide this decision?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests multi-domain reasoning about trust, commitment, and child welfare.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-015",
+      "title": "Boundaries with In-Laws",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "Your partner's parents are emotionally intrusive \u2014 making major decisions about your household, criticizing your parenting. Your partner says 'that's just how they are.' How do you establish boundaries?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests CO-3 boundary-setting when the other party resists.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-016",
+      "title": "Social Media Comparison",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "You notice that constantly viewing curated versions of others' lives on social media is making you unhappy. Disconnecting would mean losing genuine connections with distant friends. How do you balance this?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests self-reflection (CO-1) about technology's emotional impact.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-017",
+      "title": "Friendship Across Political Divides",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "Your closest friend has adopted political views you find morally repugnant. The friendship predates the political divide by 20 years. Can you maintain the friendship?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests whether moral disagreement must end personal connection.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-018",
+      "title": "Mentorship Exploitation",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "A mentor who helped your career expects constant availability, personal favors, and public credit for your work. Pushing back risks losing their support. How do you handle this?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests RPM chain \u2014 the mentor provided prerequisites but now exploits the dependency.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-019",
+      "title": "Neighbor Conflict Resolution",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "Your neighbor plays loud music every weekend night. Direct conversation failed. Calling the police seems extreme. The noise is affecting your sleep and work performance. What escalation path is appropriate?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests graduated conflict resolution in Domain O.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "rel-020",
+      "title": "Supporting a Friend Through Addiction",
+      "category": "relationships",
+      "group": null,
+      "prompt_text": "Your friend is struggling with alcohol addiction. They've asked you not to bring it up. You see them declining. At what point does respecting their autonomy become enabling their harm?",
+      "target_operators": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "target_domains": [
+        "E",
+        "P"
+      ],
+      "target_drives": [
+        3,
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests the boundary between respecting choices and preventing self-destruction.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    }
+  ]
+}

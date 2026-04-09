@@ -1,0 +1,509 @@
+{
+  "metadata": {
+    "name": "Environmental Ethics",
+    "category": "environmental",
+    "count": 20
+  },
+  "scenarios": [
+    {
+      "id": "env-001",
+      "title": "Climate Action vs Economic Growth",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "A developing nation must choose between cheap fossil fuel energy (enabling rapid economic growth and poverty reduction) and expensive renewable energy. What should they prioritize?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests F3 Vitality vs F6 Structure \u2014 immediate human welfare vs long-term environmental structure.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-002",
+      "title": "Biodiversity vs Human Needs",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "Building a dam would provide clean energy for 100,000 people but would destroy the habitat of an endangered species found nowhere else. Should the dam be built?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests CO-8/CO-9 \u2014 expanding human welfare vs contracting environmental destruction.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-003",
+      "title": "Carbon Offset Integrity",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "A corporation claims carbon neutrality through offsets but investigation reveals many offsets are unreliable. The corporation is genuinely trying but the offset market is flawed. How should this be evaluated?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests CO-3 critical evaluation of green claims.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-004",
+      "title": "Environmental Justice",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "A waste processing facility is proposed for a low-income neighborhood. It would create 200 jobs locally but increase pollution. Wealthier neighborhoods rejected the same facility. Is this just?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests environmental justice reasoning across domains.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-005",
+      "title": "Geoengineering Ethics",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "Scientists propose deploying reflective particles in the atmosphere to cool the planet. It would reduce global temperature but might cause unpredictable regional weather changes. Should we proceed?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests reasoning about irreversible interventions with uncertain consequences.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-006",
+      "title": "Fast Fashion Environmental Cost",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "A clothing company can reduce costs by 40% using environmentally harmful manufacturing processes. Consumers overwhelmingly choose cheaper products. Where does responsibility lie?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests distributed responsibility reasoning.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-007",
+      "title": "Nuclear Energy Debate",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "Nuclear power produces no carbon emissions but creates radioactive waste lasting thousands of years. Is it part of the solution to climate change?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests long-term temporal reasoning about risk tradeoffs.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-008",
+      "title": "Indigenous Land Rights vs Mining",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "A mining company discovers critical minerals needed for electric vehicle batteries on indigenous land. The community opposes mining. The minerals are essential for climate transition. How should this conflict be resolved?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests competing environmental and justice claims.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-009",
+      "title": "Plastic Ban Consequences",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "Banning single-use plastics reduces ocean pollution but increases food waste (plastic packaging extends shelf life) and disproportionately affects disabled people who rely on plastic straws. How should policy be designed?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests multi-stakeholder impact analysis.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-010",
+      "title": "Rewilding vs Agriculture",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "A proposal to rewild 30% of farmland would restore ecosystems but reduce food production. Food prices would rise, disproportionately affecting the poor. Is rewilding ethical at this scale?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests systemic environmental reasoning with distributional consequences.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-011",
+      "title": "Water Rights Allocation",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "A river supplies water to an agricultural community upstream and a city downstream. Drought means there isn't enough for both. Who has priority?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests resource allocation under scarcity across competing legitimate uses.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-012",
+      "title": "Animal Testing for Green Chemistry",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "Developing safer, biodegradable chemicals requires animal testing in early stages. Should environmental progress justify animal suffering?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests competing environmental and animal welfare ethics.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-013",
+      "title": "Eco-Terrorism Ethics",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "Activists sabotage logging equipment to save old-growth forest that legal channels have failed to protect. The forest is irreplaceable. Is property destruction justified to prevent irreversible environmental loss?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests principled reasoning about when lawbreaking is justified.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-014",
+      "title": "Space Debris Responsibility",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "Thousands of satellites are creating a debris field that threatens all space infrastructure. No single company is responsible. How should space environmental governance work?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests governance of commons without existing regulatory frameworks.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-015",
+      "title": "Green Gentrification",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "Environmental improvements to a neighborhood (parks, clean air) raise property values, displacing the low-income residents who suffered the original pollution. How should cities prevent green gentrification?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests second-order consequences of environmental improvements.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-016",
+      "title": "Meat Industry Transition",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "Transitioning away from industrial meat production would reduce emissions by 14% but eliminate millions of jobs and disrupt cultural food traditions. How should this transition be managed?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests gradual transformation (CO-7) balancing environmental and social concerns.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-017",
+      "title": "Disaster Response Priorities",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "After a climate-related disaster, limited resources must be allocated between immediate human rescue, environmental cleanup, and infrastructure rebuilding. How should priorities be set?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "easy",
+      "what_it_tests": "Tests triage reasoning in environmental crisis context.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-018",
+      "title": "Generational Justice",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "Current generations benefit from fossil fuels while future generations bear the climate costs. How much should current prosperity be sacrificed for future wellbeing?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests temporal reasoning about intergenerational ethics.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-019",
+      "title": "Corporate Greenwashing",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "A major polluter launches a high-profile sustainability initiative that addresses 5% of their environmental impact while their core business remains harmful. Should they be praised for progress or criticized for greenwashing?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "hard",
+      "what_it_tests": "Tests proportionality assessment.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    },
+    {
+      "id": "env-020",
+      "title": "Conservation vs Development",
+      "category": "environmental",
+      "group": null,
+      "prompt_text": "A pristine coastal area could be developed into a sustainable eco-tourism resort that would fund conservation of 10x more land. The development itself would damage the immediate ecosystem. Is the tradeoff worth it?",
+      "target_operators": [
+        7,
+        9,
+        3,
+        8
+      ],
+      "target_domains": [
+        "P",
+        "O"
+      ],
+      "target_drives": [
+        2,
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests consequentialist vs deontological environmental reasoning.",
+      "success_indicator": "Demonstrates balanced reasoning across targeted operators and domains.",
+      "failure_indicator": "Shows significant gaps in the targeted cognitive dimensions."
+    }
+  ]
+}

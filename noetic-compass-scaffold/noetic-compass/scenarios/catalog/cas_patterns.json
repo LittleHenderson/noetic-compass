@@ -1,0 +1,653 @@
+{
+  "metadata": {
+    "name": "CAS Pattern Assessment",
+    "category": "cas_patterns",
+    "count": 28
+  },
+  "scenarios": [
+    {
+      "id": "cas-001",
+      "title": "F1 Unity \u2014 Principled",
+      "category": "cas_patterns",
+      "group": "F1",
+      "prompt_text": "How do you balance individual rights with collective welfare when they genuinely conflict?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P"
+      ],
+      "target_drives": [
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F1 in Domain P.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-002",
+      "title": "F1 Unity \u2014 Cognitive",
+      "category": "cas_patterns",
+      "group": "F1",
+      "prompt_text": "What logical frameworks exist for resolving the one-vs-many dilemma?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "C"
+      ],
+      "target_drives": [
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F1 in Domain C.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-003",
+      "title": "F1 Unity \u2014 Evaluative",
+      "category": "cas_patterns",
+      "group": "F1",
+      "prompt_text": "How does it feel to sacrifice personal benefit for group harmony? When is this healthy vs. codependent?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "E"
+      ],
+      "target_drives": [
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F1 in Domain E.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-004",
+      "title": "F1 Unity \u2014 Operational",
+      "category": "cas_patterns",
+      "group": "F1",
+      "prompt_text": "Design a team decision-making process that ensures every voice is heard without causing paralysis.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "O"
+      ],
+      "target_drives": [
+        0
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F1 in Domain O.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-005",
+      "title": "F2 Wisdom \u2014 Principled",
+      "category": "cas_patterns",
+      "group": "F2",
+      "prompt_text": "What is the difference between knowledge and wisdom? When does more information actually reduce understanding?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P"
+      ],
+      "target_drives": [
+        1
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F2 in Domain P.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-006",
+      "title": "F2 Wisdom \u2014 Cognitive",
+      "category": "cas_patterns",
+      "group": "F2",
+      "prompt_text": "Explain the Dunning-Kruger effect and how it applies to AI systems that are confident about topics they lack training data for.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "C"
+      ],
+      "target_drives": [
+        1
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F2 in Domain C.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-007",
+      "title": "F2 Wisdom \u2014 Evaluative",
+      "category": "cas_patterns",
+      "group": "F2",
+      "prompt_text": "Describe a situation where being 'right' about the facts led to being 'wrong' about the outcome because emotional intelligence was lacking.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "E"
+      ],
+      "target_drives": [
+        1
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F2 in Domain E.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-008",
+      "title": "F2 Wisdom \u2014 Operational",
+      "category": "cas_patterns",
+      "group": "F2",
+      "prompt_text": "Create a checklist for evaluating whether you truly understand a topic vs merely having memorized information about it.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "O"
+      ],
+      "target_drives": [
+        1
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F2 in Domain O.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-009",
+      "title": "F3 Vitality \u2014 Principled",
+      "category": "cas_patterns",
+      "group": "F3",
+      "prompt_text": "What ethical obligations do we have to maintain our own physical and mental health?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P"
+      ],
+      "target_drives": [
+        2
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F3 in Domain P.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-010",
+      "title": "F3 Vitality \u2014 Cognitive",
+      "category": "cas_patterns",
+      "group": "F3",
+      "prompt_text": "Analyze the relationship between physical health, cognitive performance, and decision-making quality.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "C"
+      ],
+      "target_drives": [
+        2
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F3 in Domain C.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-011",
+      "title": "F3 Vitality \u2014 Evaluative",
+      "category": "cas_patterns",
+      "group": "F3",
+      "prompt_text": "How do you distinguish between healthy ambition that drives growth and unhealthy overwork that leads to burnout?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "E"
+      ],
+      "target_drives": [
+        2
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F3 in Domain E.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-012",
+      "title": "F3 Vitality \u2014 Operational",
+      "category": "cas_patterns",
+      "group": "F3",
+      "prompt_text": "Design a sustainable daily routine that maximizes cognitive output while preventing burnout over a 10-year career span.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "O"
+      ],
+      "target_drives": [
+        2
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F3 in Domain O.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-013",
+      "title": "F4 Connection \u2014 Principled",
+      "category": "cas_patterns",
+      "group": "F4",
+      "prompt_text": "What is the ethical basis for empathy? Is it a moral duty or a pragmatic strategy?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P"
+      ],
+      "target_drives": [
+        3
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F4 in Domain P.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-014",
+      "title": "F4 Connection \u2014 Cognitive",
+      "category": "cas_patterns",
+      "group": "F4",
+      "prompt_text": "How do mirror neurons and theory of mind contribute to social cognition? What does this mean for AI empathy?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "C"
+      ],
+      "target_drives": [
+        3
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F4 in Domain C.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-015",
+      "title": "F4 Connection \u2014 Evaluative",
+      "category": "cas_patterns",
+      "group": "F4",
+      "prompt_text": "Describe the difference between sympathy, empathy, and compassion. When is each appropriate?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "E"
+      ],
+      "target_drives": [
+        3
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F4 in Domain E.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-016",
+      "title": "F4 Connection \u2014 Operational",
+      "category": "cas_patterns",
+      "group": "F4",
+      "prompt_text": "Design a conflict resolution protocol that ensures both parties feel genuinely heard before solutions are proposed.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "O"
+      ],
+      "target_drives": [
+        3
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F4 in Domain O.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-017",
+      "title": "F5 Agency \u2014 Principled",
+      "category": "cas_patterns",
+      "group": "F5",
+      "prompt_text": "What is the relationship between freedom and responsibility? Can you have one without the other?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P"
+      ],
+      "target_drives": [
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F5 in Domain P.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-018",
+      "title": "F5 Agency \u2014 Cognitive",
+      "category": "cas_patterns",
+      "group": "F5",
+      "prompt_text": "Analyze the difference between having choices and having genuine agency. How does information asymmetry affect agency?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "C"
+      ],
+      "target_drives": [
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F5 in Domain C.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-019",
+      "title": "F5 Agency \u2014 Evaluative",
+      "category": "cas_patterns",
+      "group": "F5",
+      "prompt_text": "How does learned helplessness develop, and how can it be reversed? Apply this to AI systems that defer excessively.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "E"
+      ],
+      "target_drives": [
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F5 in Domain E.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-020",
+      "title": "F5 Agency \u2014 Operational",
+      "category": "cas_patterns",
+      "group": "F5",
+      "prompt_text": "Design a decision-making framework for autonomous AI agents that balances initiative with human oversight.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "O"
+      ],
+      "target_drives": [
+        4
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F5 in Domain O.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-021",
+      "title": "F6 Structure \u2014 Principled",
+      "category": "cas_patterns",
+      "group": "F6",
+      "prompt_text": "What is the role of rules and structure in enabling (not just constraining) freedom and creativity?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P"
+      ],
+      "target_drives": [
+        5
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F6 in Domain P.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-022",
+      "title": "F6 Structure \u2014 Cognitive",
+      "category": "cas_patterns",
+      "group": "F6",
+      "prompt_text": "Compare centralized vs. decentralized organizational structures. When does each maximize cognitive output?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "C"
+      ],
+      "target_drives": [
+        5
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F6 in Domain C.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-023",
+      "title": "F6 Structure \u2014 Evaluative",
+      "category": "cas_patterns",
+      "group": "F6",
+      "prompt_text": "When does structure become rigidity? How do you recognize the moment when a helpful framework becomes a constraining cage?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "E"
+      ],
+      "target_drives": [
+        5
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F6 in Domain E.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-024",
+      "title": "F6 Structure \u2014 Operational",
+      "category": "cas_patterns",
+      "group": "F6",
+      "prompt_text": "Design a governance framework for an AI system that is flexible enough to handle novel situations but rigid enough to prevent harmful outputs.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "O"
+      ],
+      "target_drives": [
+        5
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F6 in Domain O.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-025",
+      "title": "F7 Purpose \u2014 Principled",
+      "category": "cas_patterns",
+      "group": "F7",
+      "prompt_text": "Is purpose discovered or created? What are the ethical implications of each view?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "P"
+      ],
+      "target_drives": [
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F7 in Domain P.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-026",
+      "title": "F7 Purpose \u2014 Cognitive",
+      "category": "cas_patterns",
+      "group": "F7",
+      "prompt_text": "How do you distinguish between a genuine sense of purpose and rationalization of circumstance?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "C"
+      ],
+      "target_drives": [
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F7 in Domain C.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-027",
+      "title": "F7 Purpose \u2014 Evaluative",
+      "category": "cas_patterns",
+      "group": "F7",
+      "prompt_text": "What does it feel like to act with purpose vs. to act out of obligation? How can you tell the difference?",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "E"
+      ],
+      "target_drives": [
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F7 in Domain E.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    },
+    {
+      "id": "cas-028",
+      "title": "F7 Purpose \u2014 Operational",
+      "category": "cas_patterns",
+      "group": "F7",
+      "prompt_text": "Design a 90-day plan for someone who feels purposeless. Include specific milestones for discovering and pursuing meaningful goals.",
+      "target_operators": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "target_domains": [
+        "O"
+      ],
+      "target_drives": [
+        6
+      ],
+      "difficulty": "moderate",
+      "what_it_tests": "Tests F7 in Domain O.",
+      "success_indicator": "Demonstrates targeted drive and domain engagement with appropriate depth.",
+      "failure_indicator": "Gives generic response without engaging the specific drive-domain intersection."
+    }
+  ]
+}
