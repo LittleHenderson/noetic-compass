@@ -17,6 +17,7 @@ import { StateHeatmap } from '../components/charts/StateHeatmap';
 import { CoreDriveTree } from '../components/charts/CoreDriveTree';
 import { RpmGraph } from '../components/charts/RpmGraph';
 import { InversionMap } from '../components/charts/InversionMap';
+import { FractalCard } from '../components/charts/FractalCard';
 import { InversionAlert } from '../components/shared/InversionAlert';
 import { BlindSpotCard } from '../components/shared/BlindSpotCard';
 import { ConfidenceIndicator } from '../components/shared/ConfidenceIndicator';
@@ -251,6 +252,12 @@ export function AssessmentPage() {
               <Card title="Pipeline Stages">
                 <StageTimeline stages={result.stages} />
               </Card>
+
+              {result.fractal_analysis && (
+                <Card title="Cognitive Fractal">
+                  <FractalCard analysis={result.fractal_analysis} />
+                </Card>
+              )}
             </>
           )}
         </div>

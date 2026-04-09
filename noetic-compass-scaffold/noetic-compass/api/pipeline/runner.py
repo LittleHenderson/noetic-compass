@@ -16,6 +16,7 @@ from api.models import (
     WrapResponse,
 )
 from api.pipeline.interpreter import generate_interpretation, DRIVE_NAMES
+from api.pipeline.fractal_analysis import analyze_fractal
 from api.pipeline.stages import (
     input_analyzer,
     rpm_gate,
@@ -237,6 +238,18 @@ class WrapPipelineRunner:
             broken_chains=broken_chains,
         )
 
+        # Fractal analysis on operator sequence
+        from api.models import FractalAnalysisSchema
+        fractal = analyze_fractal(op_result.scores)
+        fractal_schema = FractalAnalysisSchema(
+            dominant_sequence=fractal.dominant_sequence,
+            canonical_form=fractal.canonical_form,
+            cancellations_detected=fractal.cancellations_detected,
+            classification=fractal.classification,
+            orbit_length=fractal.orbit_length,
+            has_fixed_point=fractal.has_fixed_point,
+        )
+
         return WrapResponse(
             nccs=nccs_response,
             stages=stages,
@@ -244,4 +257,5 @@ class WrapPipelineRunner:
             scoring_method=op_result.scoring_method,
             provenance=provenance,
             interpretation=interpretation,
+            fractal_analysis=fractal_schema,
         )

@@ -126,6 +126,17 @@ class InterpretationSchema(BaseModel):
     recommendations: list[str]
 
 
+class FractalAnalysisSchema(BaseModel):
+    """Cognitive Fractal analysis of the operator sequence."""
+
+    dominant_sequence: list[int] = Field(default_factory=list)
+    canonical_form: list[int] = Field(default_factory=list)
+    cancellations_detected: int = 0
+    classification: str = "neutral"
+    orbit_length: int = 1
+    has_fixed_point: bool = True
+
+
 class WrapResponse(BaseModel):
     """Full wrap pipeline response."""
 
@@ -135,6 +146,7 @@ class WrapResponse(BaseModel):
     scoring_method: str = "heuristic"
     provenance: dict = Field(default_factory=dict)
     interpretation: InterpretationSchema | None = None
+    fractal_analysis: FractalAnalysisSchema | None = None
 
 
 class BatchResponse(BaseModel):

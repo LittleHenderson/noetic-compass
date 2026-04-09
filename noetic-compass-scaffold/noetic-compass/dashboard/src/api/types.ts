@@ -68,6 +68,15 @@ export interface Interpretation {
   recommendations: string[];
 }
 
+export interface FractalAnalysis {
+  dominant_sequence: number[];
+  canonical_form: number[];
+  cancellations_detected: number;
+  classification: 'stabilizing' | 'amplifying' | 'oscillatory' | 'neutral';
+  orbit_length: number;
+  has_fixed_point: boolean;
+}
+
 export interface WrapResult {
   nccs: NccsResult;
   stages: StageResult[];
@@ -75,6 +84,7 @@ export interface WrapResult {
   scoring_method?: 'llm' | 'heuristic';
   provenance?: Record<string, unknown>;
   interpretation?: Interpretation | null;
+  fractal_analysis?: FractalAnalysis | null;
 }
 
 export interface BatchResult {
