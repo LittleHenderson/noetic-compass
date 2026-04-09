@@ -15,6 +15,7 @@ const HowItWorksPage = lazy(() => import('./pages/HowItWorksPage').then(m => ({ 
 const FaqPage        = lazy(() => import('./pages/FaqPage').then(m => ({ default: m.FaqPage })));
 const CohortPage     = lazy(() => import('./pages/CohortPage').then(m => ({ default: m.CohortPage })));
 const BenchmarkPage  = lazy(() => import('./pages/BenchmarkPage').then(m => ({ default: m.BenchmarkPage })));
+const AiChallengesPage = lazy(() => import('./pages/AiChallengesPage').then(m => ({ default: m.AiChallengesPage })));
 const LoginPage      = lazy(() => import('./pages/LoginPage').then(m => ({ default: m.LoginPage })));
 
 function AuthGuard({ children }: { children: ReactNode }) {
@@ -43,6 +44,7 @@ export default function App() {
                     <Route path="/details/:id" element={<DetailsPage />} />
                     <Route path="/cohort" element={<CohortPage />} />
                     <Route path="/benchmark" element={<BenchmarkPage />} />
+                    <Route path="/ai-challenges" element={<AiChallengesPage />} />
                     <Route path="/how-it-works" element={<HowItWorksPage />} />
                     <Route path="/faq" element={<FaqPage />} />
                   </Routes>
