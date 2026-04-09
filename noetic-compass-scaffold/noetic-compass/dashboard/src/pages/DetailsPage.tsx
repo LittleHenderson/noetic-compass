@@ -12,6 +12,7 @@ import { CoreDriveTree } from '../components/charts/CoreDriveTree';
 import { RpmGraph } from '../components/charts/RpmGraph';
 import { InversionMap } from '../components/charts/InversionMap';
 import { AiBriefing } from '../components/shared/AiBriefing';
+import { TraceViewer } from '../components/shared/TraceViewer';
 import { PIPELINE_STAGES } from '../lib/constants';
 
 export function DetailsPage() {
@@ -157,6 +158,10 @@ export function DetailsPage() {
           </Card>
         </>
       )}
+
+      <Card title="Evaluation Trace">
+        <TraceViewer stages={result.stages} />
+      </Card>
 
       <Card>
         <button
