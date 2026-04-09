@@ -19,6 +19,7 @@ import { RpmGraph } from '../components/charts/RpmGraph';
 import { InversionMap } from '../components/charts/InversionMap';
 import { InversionAlert } from '../components/shared/InversionAlert';
 import { BlindSpotCard } from '../components/shared/BlindSpotCard';
+import { ConfidenceIndicator } from '../components/shared/ConfidenceIndicator';
 import { PIPELINE_STAGES } from '../lib/constants';
 import { computeBlindSpots } from '../lib/blindSpots';
 import { interpretStage } from '../lib/interpretations';
@@ -111,6 +112,8 @@ export function AssessmentPage() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       <h2 className="text-xl font-bold text-slate-100">Assessment</h2>
+
+      <ConfidenceIndicator />
 
       <Card>
         <div className="space-y-3">

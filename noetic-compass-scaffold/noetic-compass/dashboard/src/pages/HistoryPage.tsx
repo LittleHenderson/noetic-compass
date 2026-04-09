@@ -98,7 +98,19 @@ export function HistoryPage() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-xl font-bold text-slate-100">History</h2>
+        <div>
+          <h2 className="text-xl font-bold text-slate-100">History</h2>
+          {records.length > 0 && (
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              {records.length} prompt{records.length !== 1 ? 's' : ''} assessed
+              {records.length < 40 ? (
+                <span className="text-amber-400"> — {40 - records.length} more needed for stabilized profile</span>
+              ) : (
+                <span className="text-emerald-400"> — profile stabilized</span>
+              )}
+            </p>
+          )}
+        </div>
         {records.length > 0 && (
           <div className="flex items-center gap-2">
             <div className="relative" ref={dropdownRef}>
