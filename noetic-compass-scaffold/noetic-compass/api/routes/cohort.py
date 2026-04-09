@@ -6,7 +6,10 @@ import math
 
 from fastapi import APIRouter
 
-import cas_engine
+try:
+    import cas_engine
+except ImportError:
+    cas_engine = None  # type: ignore[assignment]
 
 from api.models import (
     CohortCompareRequest,

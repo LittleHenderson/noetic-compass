@@ -8,7 +8,10 @@ import re
 import random
 from dataclasses import dataclass, field
 
-import cas_engine
+try:
+    import cas_engine
+except ImportError:
+    cas_engine = None  # type: ignore[assignment]
 
 from api.errors import DialViolationError, LLMError, PipelineStageError
 from api.llm_connectors.base import BaseLLMConnector, CAS_SYSTEM_PROMPT, LLMResponse
