@@ -1,5 +1,41 @@
 # Noetic Compass — Progress Log
 
+## Session 28: Defensive Assessment Content — 5 Tasks (April 8, 2026)
+
+### Task 1: Seven AI Challenges Page
+- **`dashboard/src/pages/AiChallengesPage.tsx`** (NEW) — 7 expandable challenge cards: Alignment Verification (RPM), Interpretability (40-State Heatmap), Cognitive Stability (Fractal), Distribution Robustness (Fisher-Rao), Multi-Agent Coherence (Cohort), Value Learning (Topos), Safety Verification (Inversion). Defensive framing with research disclaimer.
+- **`dashboard/src/App.tsx`** — Added lazy route `/ai-challenges`
+- **`dashboard/src/components/layout/Sidebar.tsx`** — Added "AI Challenges" nav item
+
+### Task 2: 30 Adversarial Resilience Scenarios
+- **`scenarios/catalog/adversarial_resilience.json`** (NEW) — 30 scenarios in 5 groups: Cognitive Bias Exploitation (authority, social proof, scarcity, reciprocity, escalation, emotional override), Discourse Boundary (normalization, reframing, false equivalence, context switch, definitional drift, helpfulness appeal), Prerequisite Integrity (desire/wisdom/power bypass, chain reversal, partial chain, false prerequisites), Domain Coherence (logic-only/emotion-only traps, theory-practice gap, abstraction avoidance, feeling dismissal, action without reflection), Inversion Detection (empathy/authority/causal/freedom/safety/wisdom inversions)
+- **`tests/test_adversarial_scenarios.py`** (NEW) — 10 validation tests
+
+### Task 3: D/W/P Chain Stage Analysis
+- **`dashboard/src/lib/rpmStages.ts`** (NEW) — Stage classification: Desire (Dormant→Fading), Wisdom (Unaware→Mastering), Power (Nascent→Mastery) with color coding
+- **`dashboard/src/components/charts/RpmGraph.tsx`** — Nodes colored by stage, stage labels shown on selected drive row
+- **`api/pipeline/interpreter.py`** — RPM stage description added to briefing prompt
+
+### Task 4: Cognitive Blind Spot Analysis
+- **`dashboard/src/lib/blindSpots.ts`** (NEW) — Computes blind spots from operator scores (<0.4), domain averages (<0.15), involution imbalance (>0.3), drive deficits (<0.5) with risk descriptions
+- **`dashboard/src/components/shared/BlindSpotCard.tsx`** (NEW) — Visual summary with severity counts, critical callout, remediation
+- **`dashboard/src/pages/AssessmentPage.tsx`** — Added BlindSpotCard after Stability Alerts
+- **`dashboard/src/lib/reportData.ts`** — Added blindSpots to ReportData
+- **`dashboard/src/lib/exportMarkdown.ts`** — Blind spots in exported reports
+
+### Task 5: 40-Prompt Stabilization Confidence Indicator
+- **`dashboard/src/components/shared/ConfidenceIndicator.tsx`** (NEW) — Progress bar: Preliminary (<10, red), Developing (10-39, amber), Stabilized (40+, green). Based on CAS 40-step stabilization bound.
+- **`dashboard/src/pages/AssessmentPage.tsx`** — Confidence bar above input
+- **`dashboard/src/pages/HistoryPage.tsx`** — Cumulative count with stabilization status
+
+### Verification
+- Python: 114 passed, 1 skipped
+- TypeScript: 0 errors
+- Frontend: 23/23 tests passed
+- All content uses defensive framing only
+
+---
+
 ## Session 27: TKS Integration — 4 Tasks (April 8, 2026)
 
 ### Task 1: Cognitive Circuit Examples → HowItWorksPage
