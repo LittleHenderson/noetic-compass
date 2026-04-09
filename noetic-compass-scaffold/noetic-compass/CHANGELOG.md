@@ -14,10 +14,30 @@
 - **`diagnostics.rs`** (NEW) — Plain-English diagnostics per v6.1 Def 7.14: identifies first failure, explains what was satisfied, suggests remediation. `diagnose_all_chains()` for 7-drive summary.
 - 20 unit tests; 287 total Rust tests passing
 
-### Remaining (Tasks 3-5 pending)
-- Task 3: Fractal scoring pipeline integration + dashboard visualization
-- Task 4: CAS-Native type constraints
-- Task 5: Assessment trace + CAS notation parser
+### Task 3: Fractal Scoring Integration + Dashboard
+- **`api/pipeline/fractal_analysis.py`** (NEW) — Pure Python fractal analysis: dual cancellation, canonical form, classification, orbit analysis
+- **`api/models.py`** — Added `FractalAnalysisSchema` to `WrapResponse`
+- **`api/pipeline/runner.py`** — Fractal analysis runs post-operator-scoring
+- **`dashboard/src/api/types.ts`** — `FractalAnalysis` interface
+- **`dashboard/src/components/charts/FractalCard.tsx`** (NEW) — Color-coded operator sequence, classification badge, orbit/contradiction/fixed-point stats
+- **`dashboard/src/pages/AssessmentPage.tsx`** — Added FractalCard after Pipeline Stages
+- 14 Python tests
+
+### Task 4: CAS-Native Type Constraints
+- **`cas-native/model/type_constraints.py`** (NEW) — Pure validation functions (no PyTorch): operator identity, involution roundtrip, domain descent, RPM chain ordering, fractal type well-formedness. PyTorch loss regularizers: identity_constraint_loss, involution_constraint_loss, domain_descent_loss, rpm_ordering_loss, combined type_constraint_loss (λ=0.1)
+- 19 pure validation tests
+
+### Task 5: Assessment Trace + CAS Notation Parser
+- **`api/pipeline/trace.py`** (NEW) — AssessmentTrace class: step-by-step evaluation recording with rule names, I/O summaries, plain-English reductions. build_trace_from_stages() for pipeline output.
+- **`api/notation/parser.py`** (NEW) — Tokenizer + parser for CAS notation (CO-3^E, CO-2+CO-3, RPM(F5), Phi<2:5:8>, P3/C7/E0/O5)
+- **`api/notation/renderer.py`** (NEW) — Plain English rendering + assessment config extraction
+- 26 tests (parser/tokenizer/renderer + trace)
+
+### Verification
+- Rust: 287 tests passing (245 lib + 42 integration)
+- Python: 173 tests passing, 1 skipped
+- TypeScript: 0 errors
+- Frontend: 23/23 tests passing
 
 ---
 
