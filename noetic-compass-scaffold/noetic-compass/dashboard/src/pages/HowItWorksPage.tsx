@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { useScrollSpy } from '../hooks/useScrollSpy';
 import { SectionReveal } from '../components/shared/SectionReveal';
 import { CircuitCard } from '../components/shared/CircuitCard';
@@ -26,6 +27,7 @@ const SECTIONS = [
   { id: 'nccs', label: 'NCCS Scoring' },
   { id: 'math', label: 'The Math' },
   { id: 'science', label: 'The Science' },
+  { id: 'tools', label: 'Tools' },
 ] as const;
 
 const SECTION_IDS = SECTIONS.map((s) => s.id);
@@ -606,6 +608,109 @@ export function HowItWorksPage() {
                 independently arrived at compatible descriptions of AI internal states strengthens
                 the validity of both approaches.
               </p>
+            </div>
+          </section>
+        </SectionReveal>
+
+        {/* 10 — Tools */}
+        <SectionReveal>
+          <section id="tools" className="scroll-mt-8">
+            <h2 className="text-2xl font-bold text-slate-100 mb-2">Assessment Tools</h2>
+            <p className="text-slate-400 mb-6 leading-relaxed">
+              Three tools that give you deeper control over assessments — trace derivations,
+              browse adversarial scenarios, and compose targeted assessments using formal notation.
+            </p>
+
+            <div className="space-y-4">
+              {/* Evaluation Trace */}
+              <div className="glass-card p-5" style={{ borderColor: 'rgba(45, 212, 191, 0.15)' }}>
+                <div className="flex items-start gap-4">
+                  <span className="w-10 h-10 rounded-lg bg-accent-teal/10 flex items-center justify-center shrink-0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold text-slate-100 mb-1">Evaluation Trace</h3>
+                    <p className="text-[12px] text-slate-400 leading-relaxed mb-3">
+                      Every assessment produces a complete derivation showing each pipeline stage —
+                      what rule fired, what went in, what came out, and why. Expand it on any
+                      assessment to see the full formal audit trail in monospace notation.
+                    </p>
+                    <Link
+                      to="/"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-medium text-accent-teal hover:text-accent-cyan transition-colors"
+                    >
+                      Try It — Run any assessment and click "Show Evaluation Trace"
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2.5 6h7M7 3.5L9.5 6 7 8.5" />
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* Scenario Browser */}
+              <div className="glass-card p-5" style={{ borderColor: 'rgba(96, 165, 250, 0.15)' }}>
+                <div className="flex items-start gap-4">
+                  <span className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold text-slate-100 mb-1">Scenario Browser</h3>
+                    <p className="text-[12px] text-slate-400 leading-relaxed mb-3">
+                      Browse, filter, and search 30 adversarial resilience scenarios organized by
+                      attack group: Cognitive Bias Exploitation, Discourse Boundary, Prerequisite
+                      Integrity, Domain Coherence, and Inversion Detection. Each scenario has an
+                      expandable detail card showing what it tests, why it matters, and what a
+                      resilient response looks like.
+                    </p>
+                    <Link
+                      to="/scenarios"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                    >
+                      Try It — Click "Scenarios" in the sidebar
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2.5 6h7M7 3.5L9.5 6 7 8.5" />
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* Notation Composer */}
+              <div className="glass-card p-5" style={{ borderColor: 'rgba(167, 139, 250, 0.15)' }}>
+                <div className="flex items-start gap-4">
+                  <span className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold text-slate-100 mb-1">Notation Composer</h3>
+                    <p className="text-[12px] text-slate-400 leading-relaxed mb-3">
+                      Write CAS notation directly and see it parsed in real time. Type expressions
+                      like <code className="text-accent-teal/80 text-[11px]">CO-3^E</code> (Concretization
+                      in Evaluative Domain), <code className="text-accent-teal/80 text-[11px]">RPM(F5)</code>{' '}
+                      (Agency prerequisite chain), or{' '}
+                      <code className="text-accent-teal/80 text-[11px]">{'Φ⟨1:4:7⟩'}</code> (Cognitive
+                      Fractal sequence). The system validates your notation, translates it to plain
+                      English, and generates a targeted assessment prompt.
+                    </p>
+                    <Link
+                      to="/"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-medium text-purple-400 hover:text-purple-300 transition-colors"
+                    >
+                      Try It — Go to Assessment and click the "Compose" tab
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2.5 6h7M7 3.5L9.5 6 7 8.5" />
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </SectionReveal>

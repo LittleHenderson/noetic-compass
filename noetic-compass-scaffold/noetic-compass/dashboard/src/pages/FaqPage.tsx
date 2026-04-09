@@ -173,6 +173,74 @@ const FAQ_ITEMS: FaqItem[] = [
       </p>
     ),
   },
+  {
+    question: 'What is the Evaluation Trace?',
+    answer: (
+      <div className="space-y-2">
+        <p>
+          A step-by-step derivation of how every score was produced. Each pipeline stage shows the
+          formal rule that fired, the input state, the output state, and a plain-English explanation.
+          Think of it as showing your work — every number in the assessment can be traced back to a
+          specific decision.
+        </p>
+        <p>
+          This is essential for compliance teams who need to explain why an AI received a particular
+          score. You can find it on any assessment by scrolling to the "Evaluation Trace" card and
+          clicking "Show Evaluation Trace." Learn more in{' '}
+          <Link to="/how-it-works#tools" className="text-accent-teal hover:underline">
+            Assessment Tools
+          </Link>
+          .
+        </p>
+      </div>
+    ),
+  },
+  {
+    question: 'How do I use the Scenario Browser?',
+    answer: (
+      <div className="space-y-2">
+        <p>
+          Click{' '}
+          <Link to="/scenarios" className="text-accent-teal hover:underline">Scenarios</Link>{' '}
+          in the sidebar. You'll see 30 adversarial resilience scenarios grouped into five categories.
+          Each tests whether an AI can resist a specific type of cognitive manipulation — authority
+          exploitation, graduated normalization, prerequisite bypassing, domain confusion, or stealth
+          inversion.
+        </p>
+        <p>
+          Click any scenario to see what it tests, what a vulnerable response looks like vs. a
+          resilient one, and which Cognitive Operators and Domains are being probed.
+        </p>
+      </div>
+    ),
+  },
+  {
+    question: 'What is the Notation Composer?',
+    answer: (
+      <div className="space-y-2">
+        <p>
+          A real-time CAS notation editor on the{' '}
+          <Link to="/" className="text-accent-teal hover:underline">Assessment</Link>{' '}
+          page. Instead of writing a natural language prompt, you can specify exactly which Cognitive
+          Operators, Domains, and Drives to target using formal notation. Click the "Compose" tab to
+          switch from free text input to notation mode.
+        </p>
+        <p>
+          For example, typing{' '}
+          <code className="text-accent-teal/80 bg-white/[0.04] px-1 rounded">CO-3^E</code>{' '}
+          tells the system to generate a scenario testing Concretization in the Evaluative Domain.
+          Typing{' '}
+          <code className="text-accent-teal/80 bg-white/[0.04] px-1 rounded">RPM(F5)</code>{' '}
+          targets the Agency prerequisite chain. The composer validates your notation instantly and
+          shows the English translation as you type. See{' '}
+          <Link to="/how-it-works#tools" className="text-accent-teal hover:underline">
+            Assessment Tools
+          </Link>{' '}
+          for more.
+        </p>
+      </div>
+    ),
+  },
 ];
 
 export function FaqPage() {
