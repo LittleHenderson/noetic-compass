@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## Session 29: v6.1 Fractal Calculus + D/W/P Chain in Rust (April 8, 2026)
+
+### Task 1: Cognitive Fractal Calculus (cas-engine/src/fractals/)
+- **`fractal.rs`** (NEW) — `CognitiveFractal` type: non-empty Vec<u8> (each 0-9), right-to-left application via operator composition, identity ⟨0⟩, Display trait
+- **`composition.rs`** (NEW) — Concatenation-based composition forming monoid (Frac, ∘, Φ_id), `iterate()` for Φⁿ, associativity + identity law tests
+- **`simplification.rs`** (NEW) — Dual cancellation for all 3 involution pairs (CO-2/3, CO-5/6, CO-8/9 → identity), identity elimination, `canonicalize()` with confluence guarantee per Newman's lemma, polarity fractal test (Theorem 8.22)
+- **`convergence.rs`** (NEW) — `orbit()`, `find_fixed_point()`, periodic cycle detection, `FractalClass` enum (Stabilizing/Amplifying/Oscillatory/Neutral per Def 8.20), `find_eigenvalue()`, MVR stability test (Theorem 8.21)
+- 32 unit tests
+
+### Task 2: D/W/P Chain Evaluation (cas-engine/src/rpm/)
+- **`chain.rs`** (NEW) — `DwpStage` enum (Dormant→Fading, Unaware→Mastering, Nascent→Mastery), `evaluate_chain()` implementing v6.1 Def 7.10 with v7.4 section-retraction semantics (forward-only, no backward reconstruction), `RpmChainResult` with stage classification and completeness score
+- **`diagnostics.rs`** (NEW) — Plain-English diagnostics per v6.1 Def 7.14: identifies first failure, explains what was satisfied, suggests remediation. `diagnose_all_chains()` for 7-drive summary.
+- 20 unit tests; 287 total Rust tests passing
+
+### Remaining (Tasks 3-5 pending)
+- Task 3: Fractal scoring pipeline integration + dashboard visualization
+- Task 4: CAS-Native type constraints
+- Task 5: Assessment trace + CAS notation parser
+
+---
+
 ## Session 28: Defensive Assessment Content — 5 Tasks (April 8, 2026)
 
 ### Task 1: Seven AI Challenges Page
