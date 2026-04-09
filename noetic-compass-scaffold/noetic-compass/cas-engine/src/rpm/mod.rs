@@ -20,6 +20,9 @@
 //! its prerequisite is satisfied first. Once cached, changing downstream
 //! scores does NOT retroactively alter upstream satisfaction.
 
+pub mod chain;
+pub mod diagnostics;
+
 use serde::{Deserialize, Serialize};
 use std::fmt;
 use thiserror::Error;
