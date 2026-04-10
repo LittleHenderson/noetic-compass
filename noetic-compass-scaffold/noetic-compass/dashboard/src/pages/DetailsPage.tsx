@@ -13,7 +13,9 @@ import { RpmGraph } from '../components/charts/RpmGraph';
 import { InversionMap } from '../components/charts/InversionMap';
 import { AiBriefing } from '../components/shared/AiBriefing';
 import { TraceViewer } from '../components/shared/TraceViewer';
+import { InterpretButton } from '../components/shared/InterpretButton';
 import { PIPELINE_STAGES } from '../lib/constants';
+import { interpretNccs, interpretSubScores, interpretOperators, interpretHeatmap, interpretDrives, interpretRpm, interpretInversions, interpretPipeline, interpretTrace } from '../lib/cardInterpretations';
 
 export function DetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -87,25 +89,25 @@ export function DetailsPage() {
       {(viewMode === 'technical' || !result.interpretation) && (
         <>
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            <Card title="NCCS Score">
+            <Card title="NCCS Score" action={<InterpretButton interpretation={interpretNccs(result.nccs)} />}>
               <div className="flex flex-col items-center gap-4">
                 <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
                 <CertBadge certification={result.nccs.certification} composite={result.nccs.composite} />
               </div>
             </Card>
-            <Card title="Sub-Score Breakdown">
+            <Card title="Sub-Score Breakdown" action={<InterpretButton interpretation={interpretSubScores(result.nccs)} />}>
               <SubScoreBreakdown nccs={result.nccs} />
             </Card>
           </div>
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             {operatorScores && (
-              <Card title="Operator Radar">
+              <Card title="Operator Radar" action={<InterpretButton interpretation={interpretOperators(operatorScores)} />}>
                 <OperatorRadarChart scores={operatorScores} />
               </Card>
             )}
             {operatorScores && domainAverages && (
-              <Card title="40-State Heatmap">
+              <Card title="40-State Heatmap" action={<InterpretButton interpretation={interpretHeatmap(operatorScores, domainAverages)} />}>
                 <StateHeatmap operatorScores={operatorScores} domainAverages={domainAverages} />
               </Card>
             )}
@@ -113,23 +115,23 @@ export function DetailsPage() {
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
             {driveScores && driveScores.length > 0 && (
-              <Card title="Core Drives">
+              <Card title="Core Drives" action={<InterpretButton interpretation={interpretDrives(driveScores.map(d => d[0]))} />}>
                 <CoreDriveTree driveScores={driveScores.map(d => d[0])} />
               </Card>
             )}
             {driveScores && a0Score !== undefined && rpmCompleteness !== undefined && (
-              <Card title="RPM Graph">
+              <Card title="RPM Graph" action={<InterpretButton interpretation={interpretRpm(driveScores, a0Score, rpmCompleteness)} />}>
                 <RpmGraph a0Score={a0Score} driveScores={driveScores} rpmCompleteness={rpmCompleteness} />
               </Card>
             )}
             {axisScores && stealthResistance !== undefined && (
-              <Card title="Inversion Map">
+              <Card title="Inversion Map" action={<InterpretButton interpretation={interpretInversions(axisScores, stealthResistance)} />}>
                 <InversionMap axisScores={axisScores} stealthResistance={stealthResistance} />
               </Card>
             )}
           </div>
 
-          <Card title="Pipeline Stages">
+          <Card title="Pipeline Stages" action={<InterpretButton interpretation={interpretPipeline(result.stages)} />}>
             <div className="space-y-2">
               {result.stages.map((s, i) => (
                 <div key={i} className="flex items-center gap-3">
@@ -159,7 +161,7 @@ export function DetailsPage() {
         </>
       )}
 
-      <Card title="Evaluation Trace">
+      <Card title="Evaluation Trace" action={<InterpretButton interpretation={interpretTrace(result.stages)} />}>
         <TraceViewer stages={result.stages} />
       </Card>
 
