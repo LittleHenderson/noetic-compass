@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
-const CACHE_NAME = 'noetic-compass-v1';
-const STATIC_CACHE = 'noetic-static-v1';
+const CACHE_NAME = 'noetic-compass-v2';
+const STATIC_CACHE = 'noetic-static-v2';
 
 const STATIC_EXTENSIONS = ['.js', '.css', '.woff', '.woff2', '.ttf', '.svg', '.png', '.jpg', '.ico'];
 
@@ -42,10 +42,15 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests
+  // Skip non-GET requests — let the browser handle them directly
   if (request.method !== 'GET') return;
 
-  // API calls: network-first with no cache fallback
+  // Cross-origin requests (API calls to Railway, etc.) — pass through untouched.
+  // The service worker should NOT intercept or cache these. Let the browser
+  // handle them natively so errors propagate correctly.
+  if (url.origin !== self.location.origin) return;
+
+  // Same-origin API calls: network-first with no cache fallback
   if (url.pathname.startsWith('/api')) {
     event.respondWith(networkFirst(request));
     return;
@@ -87,14 +92,11 @@ async function cacheFirst(request) {
 
 async function networkFirst(request) {
   try {
-    const response = await fetch(request);
-    return response;
-  } catch {
+    return await fetch(request);
+  } catch (err) {
     const cached = await caches.match(request);
     if (cached) return cached;
-    return new Response(JSON.stringify({ error: 'offline' }), {
-      status: 503,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    // Re-throw so the real network error surfaces to the caller
+    throw err;
   }
 }
