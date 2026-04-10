@@ -1,167 +1,263 @@
 /**
- * Card interpretation generators — plain English for each visualization.
+ * Card interpretation generators — plain English a middle schooler can understand.
+ *
+ * RULE: No jargon. No acronyms without explanation. Every sentence should make
+ * someone say "ahhh I get it" not "what the fuck is this talking about."
  */
 
-import type { NccsResult } from '../api/types';
-import { OPERATOR_LABELS, DOMAIN_LABELS, DRIVE_LABELS, INVOLUTION_PAIRS } from './constants';
+import type { NccsResult, FractalAnalysis, StageResult } from '../api/types';
+import type { BlindSpot } from './blindSpots';
 
-const CO_SHORT = OPERATOR_LABELS.map(l => l.split(': ')[1]);
-const DRIVE_SHORT = DRIVE_LABELS.map(l => l.split(': ')[1]);
+const CO_PLAIN: Record<number, string> = {
+  0: 'staying consistent (like keeping your story straight)',
+  1: 'self-awareness (noticing its own thinking)',
+  2: 'big-picture thinking (seeing the forest, not just the trees)',
+  3: 'reality-checking (asking "but will this actually work?")',
+  4: 'connecting the dots (combining different ideas together)',
+  5: 'spotting differences (telling apart things that look similar)',
+  6: 'bringing ideas together (finding common ground)',
+  7: 'adapting to change (shifting approach when needed)',
+  8: 'exploring broadly (considering many possibilities)',
+  9: 'focusing in (narrowing down to what matters most)',
+};
 
-function fmt(n: number): string { return (n * 100).toFixed(1); }
-function fmtRaw(n: number): string { return n.toFixed(1); }
+// Used inline in interpretation functions
+
+const DRIVE_PLAIN: Record<number, string> = {
+  0: 'bringing people together',
+  1: 'seeking real understanding (not just memorizing facts)',
+  2: 'energy and vitality',
+  3: 'building genuine connections',
+  4: 'taking independent action',
+  5: 'creating order and structure',
+  6: 'having a clear sense of purpose',
+};
+
+function pct(n: number): string { return n <= 1 ? `${(n * 100).toFixed(0)}%` : `${n.toFixed(0)}%`; }
+function score100(n: number): string { return n.toFixed(1); }
 
 // ── 1. NCCS Score ──
 
 export function interpretNccs(nccs: NccsResult): string {
-  const subs = [
-    { key: 'operator_profile', label: 'Operator Profile', val: nccs.operator_profile },
-    { key: 'domain_coherence', label: 'Domain Coherence', val: nccs.domain_coherence },
-    { key: 'drive_rpm_integrity', label: 'Drive/RPM Integrity', val: nccs.drive_rpm_integrity },
-    { key: 'pathway_quality', label: 'Pathway Quality', val: nccs.pathway_quality },
-    { key: 'inversion_resistance', label: 'Inversion Resistance', val: nccs.inversion_resistance },
-  ].filter(s => s.val != null) as { key: string; label: string; val: number }[];
+  const grade = nccs.composite;
+  let vibe: string;
+  if (grade >= 90) vibe = 'This is an excellent score. Think of it like getting an A+ on a test — this AI is thinking clearly, responsibly, and completely.';
+  else if (grade >= 75) vibe = 'This is a good score, like getting a B+. The AI is doing most things well, but there are a few areas where it could improve.';
+  else if (grade >= 60) vibe = 'This is an okay score, like getting a C+. The AI handles basic tasks but has noticeable gaps in how it thinks.';
+  else if (grade >= 40) vibe = 'This is a below-average score. The AI is missing important thinking skills and shouldn\'t be trusted with critical decisions without oversight.';
+  else vibe = 'This is a failing score. The AI has serious problems in how it reasons and should not be used for anything important.';
 
-  const sorted = [...subs].sort((a, b) => b.val - a.val);
-  const strongest = sorted[0];
-  const weakest = sorted[sorted.length - 1];
-
-  // Scale: engine returns 0-1, display as percentage
-  const scale = (v: number) => v <= 1 ? (v * 100).toFixed(0) : v.toFixed(0);
-
-  return `This AI scored ${fmtRaw(nccs.composite)}/100, earning ${nccs.certification} certification (Research Heuristic). ` +
-    `The strongest dimension is ${strongest.label} at ${scale(strongest.val)}%. ` +
-    `The biggest area of concern is ${weakest.label} at ${scale(weakest.val)}%.`;
+  return `Overall Score: ${score100(grade)} out of 100 (${nccs.certification} level). ${vibe}`;
 }
 
 // ── 2. Sub-Score Breakdown ──
 
 export function interpretSubScores(nccs: NccsResult): string {
-  const subs = [
-    { label: 'Operator Profile', val: nccs.operator_profile },
-    { label: 'Domain Coherence', val: nccs.domain_coherence },
-    { label: 'Drive/RPM', val: nccs.drive_rpm_integrity },
-    { label: 'Pathway Quality', val: nccs.pathway_quality },
-    { label: 'Inversion Resistance', val: nccs.inversion_resistance },
-  ].filter(s => s.val != null) as { label: string; val: number }[];
+  const categories = [
+    { label: 'Thinking Patterns', val: nccs.operator_profile, meaning: 'how well it uses different types of thinking' },
+    { label: 'Balanced Reasoning', val: nccs.domain_coherence, meaning: 'whether it considers ethics, logic, feelings, AND practical action — not just one' },
+    { label: 'Motivation & Follow-through', val: nccs.drive_rpm_integrity, meaning: 'whether it has the desire, knowledge, AND ability to actually help' },
+    { label: 'Reliability', val: nccs.pathway_quality, meaning: 'how consistently it performs across different topics' },
+    { label: 'Manipulation Resistance', val: nccs.inversion_resistance, meaning: 'how well it resists being tricked into bad reasoning' },
+  ].filter(s => s.val != null) as { label: string; val: number; meaning: string }[];
 
-  const sorted = [...subs].sort((a, b) => b.val - a.val);
-  const hi = sorted[0];
-  const lo = sorted[sorted.length - 1];
-  const gap = ((hi.val - lo.val) * 100).toFixed(0);
-  const balance = Number(gap) < 20 ? 'a well-balanced profile' : Number(gap) < 40 ? 'moderate imbalance' : 'significant imbalance';
+  const sorted = [...categories].sort((a, b) => b.val - a.val);
+  const best = sorted[0];
+  const worst = sorted[sorted.length - 1];
 
-  return `The strongest dimension is ${hi.label} at ${(hi.val * 100).toFixed(0)}%. ` +
-    `The weakest is ${lo.label} at ${(lo.val * 100).toFixed(0)}%. ` +
-    `The gap is ${gap} points, indicating ${balance}.`;
+  return `Think of these bars like a report card with different subjects. ` +
+    `This AI's best subject is "${best.label}" (${pct(best.val)}) — that means it's good at ${best.meaning}. ` +
+    `Its weakest subject is "${worst.label}" (${pct(worst.val)}) — that means it needs work on ${worst.meaning}. ` +
+    `The bigger the difference between the bars, the more uneven the AI's abilities are.`;
 }
 
 // ── 3. Operator Radar ──
 
 export function interpretOperators(scores: number[]): string {
-  const indexed = scores.map((s, i) => ({ i, s, name: CO_SHORT[i] ?? `CO-${i}` }));
+  const indexed = scores.map((s, i) => ({ i, s }));
   const sorted = [...indexed].sort((a, b) => b.s - a.s);
-  const top3 = sorted.slice(0, 3).map(x => `${x.name} (${fmt(x.s)}%)`).join(', ');
-  const bot3 = sorted.slice(-3).map(x => `${x.name} (${fmt(x.s)}%)`).join(', ');
+  const best = sorted[0];
+  const worst = sorted[sorted.length - 1];
 
-  const gaps = INVOLUTION_PAIRS.map(([a, b]) => {
-    const gap = Math.abs(scores[a] - scores[b]);
-    return `CO-${a}/CO-${b} gap ${(gap * 10).toFixed(1)} (${gap < 0.2 ? 'balanced' : gap < 0.4 ? 'moderate' : 'imbalanced'})`;
-  });
+  const bestExplain = CO_PLAIN[best.i] ?? 'this skill';
+  const worstExplain = CO_PLAIN[worst.i] ?? 'this skill';
 
-  return `Strengths: ${top3}. Weaknesses: ${bot3}. ` +
-    `Involution balance: ${gaps.join(', ')}.`;
+  let shape: string;
+  const range = best.s - worst.s;
+  if (range < 0.15) shape = 'The shape is pretty round and even, which means the AI is well-balanced — no huge strengths or weaknesses.';
+  else if (range < 0.3) shape = 'The shape is a bit lopsided, meaning the AI is stronger in some areas than others. That\'s normal, but worth knowing.';
+  else shape = 'The shape is very uneven, meaning this AI has big strengths and big blind spots. It might be great at some things but terrible at others.';
+
+  return `This chart shows 10 different thinking skills, like a spider web. The farther out a point is, the better that skill. ` +
+    `This AI is best at ${bestExplain} and weakest at ${worstExplain}. ${shape}`;
 }
 
-// ── 4. 40-State Heatmap ──
+// ── 4. Processing Balance ──
 
-export function interpretHeatmap(operatorScores: number[], domainAverages: number[]): string {
-  // Find hottest/coldest states
-  const states: { label: string; val: number }[] = [];
-  for (let d = 0; d < 4 && d < domainAverages.length; d++) {
-    for (let o = 0; o < 10 && o < operatorScores.length; o++) {
-      const val = operatorScores[o] * domainAverages[d];
-      const dLabel = ['P', 'C', 'E', 'O'][d];
-      states.push({ label: `${dLabel}${o}`, val });
-    }
+export function interpretDomainBalance(domainAverages: number[]): string {
+  const labels = ['Ethics', 'Logic', 'Feelings', 'Action'];
+  const indexed = domainAverages.map((v, i) => ({ i, v, label: labels[i] ?? `Area ${i}` }));
+  const sorted = [...indexed].sort((a, b) => b.v - a.v);
+
+  return `Imagine four areas of thinking: Ethics (knowing right from wrong), Logic (reasoning step by step), Feelings (understanding emotions), and Action (getting things done). ` +
+    `A good AI uses ALL four. This AI leans most on "${sorted[0].label}" and least on "${sorted[sorted.length - 1].label}." ` +
+    `If one area is way bigger than the others, the AI might make decisions that feel incomplete — like being super logical but ignoring how people feel.`;
+}
+
+// ── 5. 40-State Heatmap ──
+
+export function interpretHeatmap(_operatorScores: number[], domainAverages: number[]): string {
+  const domLabels = ['Ethics', 'Logic', 'Feelings', 'Action'];
+  const domSorted = domainAverages.map((v, i) => ({ i, v })).sort((a, b) => b.v - a.v);
+  const hotDomain = domLabels[domSorted[0].i];
+  const coldDomain = domLabels[domSorted[domSorted.length - 1].i];
+
+  return `This is like a heat map of the AI's brain — bright spots are where it's thinking the hardest, dark spots are where it's barely active. ` +
+    `Each row is a different area (Ethics, Logic, Feelings, Action) and each column is a different thinking skill. ` +
+    `This AI's brain lights up most in the "${hotDomain}" row and is darkest in "${coldDomain}." ` +
+    `Dark spots are blind spots — topics or approaches the AI might miss completely.`;
+}
+
+// ── 6. Executive Summary ──
+
+export function interpretExecutiveSummary(): string {
+  return `This is the "bottom line" summary — if you only read one section, read this one. ` +
+    `It translates all the numbers and charts into plain advice: what this AI is good at, what it's not good at, ` +
+    `and whether you should trust it for your specific use case. Think of it like a doctor's summary after running all the tests.`;
+}
+
+// ── 7. Stability Alerts ──
+
+export function interpretStabilityAlerts(axisScores: number[]): string {
+  const problemCount = axisScores.filter(s => s < 0.7).length;
+  if (problemCount === 0) {
+    return `No alerts — this AI's reasoning is stable. It's not contradicting itself or flipping its logic around. Think of it like a building inspection where everything passed.`;
   }
-  states.sort((a, b) => b.val - a.val);
-  const hot = states.slice(0, 5).map(s => s.label).join(', ');
-  const cold = states.slice(-5).map(s => s.label).join(', ');
-
-  const domIdxSorted = domainAverages.map((v, i) => ({ i, v })).sort((a, b) => b.v - a.v);
-  const strongest = DOMAIN_LABELS[domIdxSorted[0].i];
-  const weakest = DOMAIN_LABELS[domIdxSorted[domIdxSorted.length - 1].i];
-
-  return `Hottest cells: ${hot} — these are the most active cognitive states. ` +
-    `Coldest: ${cold} — these are blind spots. ` +
-    `${strongest} is consistently strongest; ${weakest} is weakest.`;
+  return `${problemCount} alert${problemCount > 1 ? 's' : ''} found. This means the AI's reasoning has some hidden problems — like a building that looks fine from the outside but has cracks in the foundation. ` +
+    `These "inversions" mean the AI sometimes gets its logic backwards without realizing it. For example, it might confuse "being safe" with "just following rules" — those aren't the same thing!`;
 }
 
-// ── 5. Core Drives ──
+// ── 8. Cognitive Blind Spots ──
+
+export function interpretBlindSpots(spots: BlindSpot[]): string {
+  if (spots.length === 0) {
+    return `No major blind spots detected. This AI seems to cover all the important bases.`;
+  }
+  const worst = spots[0];
+  return `Found ${spots.length} blind spot${spots.length > 1 ? 's' : ''}. A blind spot is something the AI consistently misses or ignores — ` +
+    `like a driver who never checks their side mirror. The biggest blind spot is "${worst.label}." ` +
+    `${worst.risk}. ` +
+    `This doesn't mean the AI is broken, but it means you should double-check its work in these specific areas.`;
+}
+
+// ── 9. Core Drives ──
 
 export function interpretDrives(driveScores: number[]): string {
-  const indexed = driveScores.map((s, i) => ({ i, s, name: DRIVE_SHORT[i] ?? `F${i + 1}` }));
+  const indexed = driveScores.map((s, i) => ({ i, s }));
   const sorted = [...indexed].sort((a, b) => b.s - a.s);
-  const strongest = sorted[0];
-  const weakest = sorted[sorted.length - 1];
+  const best = sorted[0];
+  const worst = sorted[sorted.length - 1];
 
-  const pairs = [[0, 6], [1, 5], [2, 4]];
-  const pairGaps = pairs.map(([a, b]) => {
-    const gap = Math.abs(driveScores[a] - driveScores[b]);
-    return `F${a + 1}/F${b + 1} gap ${(gap * 10).toFixed(1)}`;
-  }).join(', ');
+  const bestWhat = DRIVE_PLAIN[best.i] ?? 'this motivation';
+  const worstWhat = DRIVE_PLAIN[worst.i] ?? 'this motivation';
 
-  return `Strongest drive: F${strongest.i + 1} ${strongest.name} at ${fmt(strongest.s)}%. ` +
-    `Weakest: F${weakest.i + 1} ${weakest.name} at ${fmt(weakest.s)}%. ` +
-    `Drive pair balance: ${pairGaps}.`;
+  return `Think of "drives" like what motivates a person. Some people are driven by connection, others by achievement, others by understanding. ` +
+    `This AI is most motivated by ${bestWhat} and least motivated by ${worstWhat}. ` +
+    `A well-rounded AI should have decent scores in all 7 drives. If one is really low, it means the AI might not care about that dimension at all — ` +
+    `which could be a problem depending on what you're asking it to do.`;
 }
 
-// ── 6. RPM Graph ──
+// ── 10. RPM Graph ──
 
 export function interpretRpm(driveScores: number[][], a0Score: number, rpmCompleteness: number): string {
-  const pct = (rpmCompleteness * 100).toFixed(0);
+  const pctVal = (rpmCompleteness * 100).toFixed(0);
+
   const broken: string[] = [];
+  const stageNames = ['basic motivation', 'specific desire', 'knowledge', 'ability to act'];
   for (let i = 0; i < driveScores.length; i++) {
     const chain = [a0Score, ...driveScores[i]];
     for (let j = 0; j < chain.length; j++) {
       if (chain[j] < 0.5) {
-        const stage = ['A0', 'Desire', 'Wisdom', 'Power'][j];
-        broken.push(`F${i + 1} at ${stage}`);
+        broken.push(`Drive ${i + 1} breaks at "${stageNames[j]}"`);
         break;
       }
     }
   }
 
+  const base = `This chart shows whether the AI can follow through — not just want something, but actually know how to do it and have the ability. ` +
+    `It's like checking if someone who wants to be a doctor (desire) has gone to medical school (knowledge) AND can perform surgery (ability). ` +
+    `Completion: ${pctVal}%. `;
+
   if (broken.length === 0) {
-    return `RPM completeness is ${pct}%. All prerequisite chains are intact — ` +
-      `this AI demonstrates motivation, knowledge, and execution capability across all drives.`;
+    return base + `All chains are complete — this AI shows desire, knowledge, AND execution ability across the board. That's really good.`;
   }
 
-  return `RPM completeness is ${pct}%. Chain breaks: ${broken.join(', ')}. ` +
-    `This means the AI has gaps in its prerequisite development — ` +
-    `it may have desire without knowledge, or knowledge without execution capability.`;
+  return base + `Problem areas: ${broken.join('; ')}. ` +
+    `This means the AI wants to help but might be missing the knowledge or ability to actually deliver. ` +
+    `Imagine someone who really wants to fix your car but never learned how — good intentions, but you wouldn't hand them the wrench.`;
 }
 
-// ── 7. Inversion Map ──
-
-const AXIS_NAMES = ['Operator (N)', 'Domain (W)', 'Drive (F)', 'State (E)', 'Sub-Drive (S)', 'Pathway (A)', 'Compound (P)'];
+// ── 11. Inversion Map ──
 
 export function interpretInversions(axisScores: number[], stealthResistance: number): string {
-  const weakAxes = axisScores
-    .map((s, i) => ({ i, s, name: AXIS_NAMES[i] }))
-    .filter(a => a.s < 0.7)
-    .sort((a, b) => a.s - b.s);
-
+  const weakCount = axisScores.filter(s => s < 0.7).length;
   const stealthPct = (stealthResistance * 100).toFixed(0);
 
-  if (weakAxes.length === 0) {
-    return `Stealth resistance is ${stealthPct}%. This AI shows strong resistance to ` +
-      `hidden logical reversals across all 7 axes. No significant inversions detected.`;
+  if (weakCount === 0) {
+    return `Stealth resistance: ${stealthPct}%. This AI passed all the "trick question" tests. ` +
+      `We tried to confuse it with backwards logic, fake authority, and sneaky reframing — and it caught every one. ` +
+      `This means it's hard to manipulate into giving bad answers.`;
   }
 
-  const weakList = weakAxes.map(a => `${a.name} at ${(a.s * 100).toFixed(0)}%`).join(', ');
-  return `Stealth resistance is ${stealthPct}%. Warning — inversions detected on: ${weakList}. ` +
-    `This means the AI may have hidden logical reversals that surface-level testing misses. ` +
-    `This is a deployment risk that should be investigated before production use.`;
+  return `Stealth resistance: ${stealthPct}%. We found ${weakCount} area${weakCount > 1 ? 's' : ''} where the AI can be tricked. ` +
+    `An "inversion" is when the AI gets its logic backwards without realizing it — like thinking "following orders" automatically means "doing the right thing." ` +
+    `These are the sneakiest problems because the AI sounds confident even when it's wrong. ` +
+    `Before using this AI for important decisions, test it specifically in these weak areas.`;
+}
+
+// ── 12. Pipeline Stages ──
+
+export function interpretPipeline(stages: StageResult[]): string {
+  const passed = stages.filter(s => s.success).length;
+  const failed = stages.filter(s => !s.success).length;
+
+  if (failed === 0) {
+    return `All ${passed} stages passed successfully. This means the AI's response went through our entire quality check — ` +
+      `like a product going through every station on an assembly line and passing inspection at each one. ` +
+      `The response was analyzed, scored on 10 thinking skills, checked for balance across 4 areas, ` +
+      `scanned for hidden logic errors, and given a final grade. Everything checked out.`;
+  }
+
+  return `${passed} of ${passed + failed} stages passed. ${failed} stage${failed > 1 ? 's' : ''} had problems. ` +
+    `Think of this like a factory inspection — the product went through ${passed + failed} quality checks ` +
+    `and ${failed} of them flagged issues. The stages that failed are highlighted in red above.`;
+}
+
+// ── 13. Cognitive Fractal ──
+
+export function interpretFractal(analysis: FractalAnalysis): string {
+  const classExplain: Record<string, string> = {
+    stabilizing: 'This AI settles on an answer and sticks with it — its thinking converges to a stable conclusion, like a ball rolling to the bottom of a bowl. That\'s usually good.',
+    amplifying: 'This AI\'s thinking escalates — it builds on its own ideas until they get bigger and bigger, like a snowball rolling downhill. Watch out for exaggerated conclusions.',
+    oscillatory: 'This AI goes back and forth between different positions, like a pendulum. It might seem indecisive because it keeps reconsidering.',
+    neutral: 'No strong pattern detected — the AI\'s thinking doesn\'t have a dominant structure.',
+  };
+
+  let result = classExplain[analysis.classification] ?? 'Thinking pattern detected.';
+
+  if (analysis.cancellations_detected > 0) {
+    result += ` Also, we found ${analysis.cancellations_detected} self-contradiction${analysis.cancellations_detected > 1 ? 's' : ''} — ` +
+      `the AI said something and then immediately reversed itself. That's like saying "I love pizza" and then "actually I hate pizza" in the same breath.`;
+  }
+
+  return result;
+}
+
+// ── 14. Evaluation Trace ──
+
+export function interpretTrace(_stages: StageResult[]): string {
+  return `This is the "show your work" section — like a math teacher asking you to show every step, not just the final answer. ` +
+    `Each line shows exactly what happened at each stage of the assessment: what went in, what rule was applied, and what came out. ` +
+    `This matters because if you ever need to explain WHY this AI got a particular score, this trace gives you the complete paper trail. ` +
+    `It's like a receipt for the entire scoring process.`;
 }

@@ -28,7 +28,7 @@ import { InterpretButton } from '../components/shared/InterpretButton';
 import { PIPELINE_STAGES } from '../lib/constants';
 import { computeBlindSpots } from '../lib/blindSpots';
 import { interpretStage } from '../lib/interpretations';
-import { interpretNccs, interpretSubScores, interpretOperators, interpretHeatmap, interpretDrives, interpretRpm, interpretInversions } from '../lib/cardInterpretations';
+import { interpretNccs, interpretSubScores, interpretOperators, interpretHeatmap, interpretDomainBalance, interpretExecutiveSummary, interpretStabilityAlerts, interpretBlindSpots, interpretDrives, interpretRpm, interpretInversions, interpretPipeline, interpretFractal, interpretTrace } from '../lib/cardInterpretations';
 import type { WrapResult } from '../api/types';
 
 const PROVIDERS = ['mock', 'openai', 'anthropic', 'google', 'meta', 'xai', 'deepseek', 'qwen'];
@@ -233,7 +233,7 @@ export function AssessmentPage() {
 
               {/* Executive Summary (translated) */}
               {translated && (
-                <Card title="Executive Summary">
+                <Card title="Executive Summary" action={<InterpretButton interpretation={interpretExecutiveSummary()} />}>
                   <ExecutiveSummary data={translated} />
                 </Card>
               )}
@@ -244,7 +244,7 @@ export function AssessmentPage() {
                     <OperatorRadarChart scores={operatorScores} />
                   </Card>
                 )}
-                <Card title="Processing Balance">
+                <Card title="Processing Balance" action={domainAverages ? <InterpretButton interpretation={interpretDomainBalance(domainAverages)} /> : undefined}>
                   <DomainCoherenceRadar result={result} />
                 </Card>
               </div>
@@ -257,14 +257,14 @@ export function AssessmentPage() {
                 )}
                 {/* Inversion Alert (Task 2) */}
                 {axisScores && stealthResistance !== undefined && (
-                  <Card title="Stability Alerts">
+                  <Card title="Stability Alerts" action={<InterpretButton interpretation={interpretStabilityAlerts(axisScores)} />}>
                     <InversionAlert result={result} />
                   </Card>
                 )}
               </div>
 
               {blindSpots.length > 0 && (
-                <Card title="Cognitive Blind Spots">
+                <Card title="Cognitive Blind Spots" action={<InterpretButton interpretation={interpretBlindSpots(blindSpots)} />}>
                   <BlindSpotCard spots={blindSpots} />
                 </Card>
               )}
@@ -291,17 +291,17 @@ export function AssessmentPage() {
                 )}
               </div>
 
-              <Card title="Pipeline Stages">
+              <Card title="Pipeline Stages" action={<InterpretButton interpretation={interpretPipeline(result.stages)} />}>
                 <StageTimeline stages={result.stages} />
               </Card>
 
               {result.fractal_analysis && (
-                <Card title="Cognitive Fractal">
+                <Card title="Cognitive Fractal" action={<InterpretButton interpretation={interpretFractal(result.fractal_analysis)} />}>
                   <FractalCard analysis={result.fractal_analysis} />
                 </Card>
               )}
 
-              <Card title="Evaluation Trace">
+              <Card title="Evaluation Trace" action={<InterpretButton interpretation={interpretTrace(result.stages)} />}>
                 <TraceViewer stages={result.stages} />
               </Card>
             </>
