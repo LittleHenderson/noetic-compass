@@ -57,13 +57,22 @@ def get_score(name: str) -> int:
             print("    Please enter a number 0-10.")
 
 
-def label_one(prompt: str, response: str, rater: str, item_index: int) -> dict:
-    """Collect human ratings for a single prompt-response pair."""
+def label_one(prompt: str, response, rater: str, item_index: int) -> dict:
+    """Collect human ratings for a single prompt-response pair.
+
+    ``response`` may be a plain string or a dict (e.g. LLMResponse with a
+    ``text`` field). Normalize to string before slicing.
+    """
+    if isinstance(response, dict):
+        response_text = str(response.get("text", response.get("response", str(response))))
+    else:
+        response_text = str(response)
+
     print(f"\n{'='*70}")
     print(f"Item {item_index + 1}")
     print(f"{'='*70}")
     print(f"\nPROMPT:\n{prompt[:500]}{'...' if len(prompt) > 500 else ''}")
-    print(f"\nRESPONSE (first 800 chars):\n{response[:800]}{'...' if len(response) > 800 else ''}")
+    print(f"\nRESPONSE (first 800 chars):\n{response_text[:800]}{'...' if len(response_text) > 800 else ''}")
     print(f"\n{'-'*40}")
     print("Rate each Cognitive Operator (0=absent, 5=moderate, 10=excellent):")
 
@@ -123,7 +132,12 @@ def main() -> None:
         for i in range(args.start, end):
             item = items[i]
             prompt = item.get("prompt", "")
-            response = item.get("llm_response", "")
+            raw_response = item.get("llm_response", "")
+            # llm_response may be a dict {text, model, ...} or a plain string
+            if isinstance(raw_response, dict):
+                response = raw_response.get("text", raw_response.get("response", ""))
+            else:
+                response = raw_response
             if not response:
                 response = "(no LLM response recorded)"
 
