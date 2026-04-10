@@ -1,5 +1,58 @@
 # Noetic Compass — Progress Log
 
+## Session 31: Human Validation Study System (April 10, 2026)
+
+### Backend
+- **`api/validation/correlation.py`** (NEW) — Pearson r, approximate p-values via t→normal, Fisher z-transform 95% CI, Cohen's kappa, strength classification (strong ≥0.7, moderate ≥0.4, weak <0.4), per-operator correlation computation (scales machine 0-1 to 0-10), inter-rater reliability, headline stats, auto-generated calibration recommendations, JSON label persistence.
+- **`api/routes/validation.py`** (NEW) — 6 endpoints: `GET /validation/items`, `GET /validation/next?rater=`, `POST /validation/label`, `GET /validation/stats`, `GET /validation/leaderboard`, `GET /validation/export?format=json|csv`. Pydantic validation enforces 10 operator scores + 4 domain scores, all in [0,10].
+- **`api/main.py`** — Registered validation router.
+
+### Frontend
+- **`dashboard/src/pages/ValidationPage.tsx`** (NEW) — Labeling interface with rater name gate (persisted to localStorage), progress bar, full prompt + scrollable response cards, 10 operator sliders + 4 domain sliders (color-coded red/amber/green), Submit/Skip/Quit buttons, post-submit reveal showing side-by-side "You vs Machine" delta table.
+- **`dashboard/src/pages/ValidationLeaderboardPage.tsx`** (NEW) — Real-time dashboard with 10-second React Query refetch: 5 headline stat cards (labels, raters, multi-rated, overall r, κ), sortable per-operator correlation table, interactive scatter plots via Recharts (click row → plot), inter-rater reliability table, calibration recommendations with severity colors, JSON/CSV export links.
+- **`dashboard/src/api/types.ts`** — Added 8 validation types.
+- **`dashboard/src/api/endpoints.ts`** — Added 4 validation client functions.
+- **`dashboard/src/components/layout/Sidebar.tsx`** — Added "Validation" and "Leaderboard" nav items.
+- **`dashboard/src/App.tsx`** — Added `/validate` and `/validation/leaderboard` routes (lazy).
+
+### Tests
+- **`tests/test_correlation.py`** (NEW) — 24 tests: Pearson edge cases, CI, kappa, strength classification, operator correlation computation with scatter points, inter-rater pairs, stats aggregation, recommendations.
+- **`tests/test_validation_api.py`** (NEW) — 11 tests: list/next/submit/stats/leaderboard/export endpoints with mocked storage, auth rejection, validation errors.
+- **Verification**: 241 passed, 1 pre-existing failure (notation compiler showcase, unrelated).
+
+---
+
+## Session 30: Executable CAS Notation Compiler (April 10, 2026)
+
+### Task 1: Real CAS DSL Compiler/Interpreter
+- **`api/notation/compiler.py`** (NEW) — Executable CAS notation pipeline: lexer, AST parser, static type checker, admissibility-aware validation, lowering to stack bytecode, and Python VM execution
+- Supported executable forms: state literals (`CO-2^C_{F2}`), relations (`->`, `<-`, `<->` plus unicode aliases), additive and multiplicative operators (`+`, `-`, `*`, `/`), `RPM(...)`, and `Phi<...>` / `Φ⟨...⟩`
+- Uses Rust `cas_engine` bindings when available for operator composition and admissibility, with Python fallback logic when unavailable
+- Semantics are explicit and bounded in code; this is an executable DSL surface, not a claim that every manuscript law is already compiled
+- Expanded language surface: shorthand state refs (`P3`, `C7`), fractal composition via `∘`, multi-statement programs split by semicolons/newlines, comment skipping, and program-result aggregation
+
+### Task 2: API and CLI Exposure
+- **`api/routes/notation.py`** (NEW) — `POST /notation/compile` returns tokens, AST, type information, bytecode, warnings, and execution result for a CAS expression
+- **`api/routes/notation.py`** — Added `GET /notation/grammar` exposing the current BNF and semantic notes
+- **`api/main.py`** — Mounted notation router
+- **`api/notation/cli.py`** (NEW) — Compiler CLI with `--mode lex|parse|check|run`, `--file`, `--grammar`, and `--repl`
+- **`api/notation/__init__.py`** — Exported `compile_expression()`
+- **`docs/CAS_LANGUAGE_SPEC.md`** (NEW) — Written language-spec overview
+- **`docs/CAS_LANGUAGE_GRAMMAR.bnf`** (NEW) — Current grammar artifact
+- **`docs/CAS_LANGUAGE_EXAMPLES.cas`** (NEW) — Example CAS programs
+
+### Task 3: Verification
+- **`tests/test_notation_compiler.py`** (NEW) — Transition compilation, invalid descent rejection, operator range validation, RPM execution, fractal execution, and CO-0 admissibility behavior
+- **`tests/test_notation_route.py`** (NEW) — Successful compile route response, invalid-expression rejection, and grammar endpoint coverage
+- Existing parser/renderer tests still pass unchanged
+
+### Verification
+- Python: `197 passed` across `tests/`
+- Notation-focused suite: `32 passed`
+- CLI run verified on `(CO-2^C_{F2} * CO-4^C_{F2}) -> CO-5^E_{F4}` and `P0 -> C0; RPM(F5); CO-8^C ∘ CO-3^C`
+
+---
+
 ## Session 29: v6.1 Fractal Calculus + D/W/P Chain in Rust (April 8, 2026)
 
 ### Task 1: Cognitive Fractal Calculus (cas-engine/src/fractals/)

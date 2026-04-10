@@ -87,6 +87,80 @@ export interface WrapResult {
   fractal_analysis?: FractalAnalysis | null;
 }
 
+// ── Validation types ──
+
+export interface ValidationNextItem {
+  item_index: number | null;
+  prompt: string;
+  response: string;
+  model: string;
+  total_items: number;
+  rater_progress: number;
+  complete?: boolean;
+}
+
+export interface ValidationLabelSubmit {
+  item_index: number;
+  rater: string;
+  operator_scores: number[];
+  domain_scores: number[];
+  notes?: string;
+}
+
+export interface ValidationLabelResponse {
+  status: string;
+  label_count: number;
+  machine_scores: number[] | null;
+  machine_domain_averages: number[] | null;
+}
+
+export interface OperatorCorrelation {
+  operator_index: number;
+  operator_name: string;
+  n_pairs: number;
+  human_mean: number;
+  machine_mean: number;
+  pearson_r: number;
+  p_value: number;
+  ci_lower: number;
+  ci_upper: number;
+  strength: 'strong' | 'moderate' | 'weak';
+  scatter_points: { machine: number; human: number }[];
+}
+
+export interface InterRaterPair {
+  rater_a: string;
+  rater_b: string;
+  shared_items: number;
+  cohens_kappa: number;
+  agreement_pct: number;
+}
+
+export interface CalibrationRecommendation {
+  operator: string;
+  severity: 'ok' | 'warn' | 'alert' | 'info';
+  message: string;
+}
+
+export interface ValidationStats {
+  total_labels: number;
+  num_raters: number;
+  items_multi_rated: number;
+  total_machine_items: number;
+  overall_pearson_r: number;
+  overall_pearson_p: number;
+  overall_cohens_kappa: number;
+}
+
+export interface ValidationLeaderboard {
+  stats: ValidationStats;
+  operator_correlations: OperatorCorrelation[];
+  inter_rater: InterRaterPair[];
+  recommendations: CalibrationRecommendation[];
+  operator_names: string[];
+  domain_names: string[];
+}
+
 export interface BatchResult {
   results: WrapResult[];
   total: number;

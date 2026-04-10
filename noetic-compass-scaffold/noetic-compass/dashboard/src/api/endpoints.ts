@@ -12,6 +12,11 @@ import type {
   CohortCompareResult,
   DialConfig,
   HealthStatus,
+  ValidationNextItem,
+  ValidationLabelSubmit,
+  ValidationLabelResponse,
+  ValidationStats,
+  ValidationLeaderboard,
 } from './types';
 
 export function postWrap(req: WrapRequest): Promise<WrapResult> {
@@ -62,4 +67,25 @@ export function postBenchmark(req: BenchmarkRequest): Promise<BenchmarkResponse>
 
 export function getHealth(): Promise<HealthStatus> {
   return apiFetch<HealthStatus>('/health');
+}
+
+// ── Validation endpoints ──
+
+export function getValidationNext(rater: string): Promise<ValidationNextItem> {
+  return apiFetch<ValidationNextItem>(`/validation/next?rater=${encodeURIComponent(rater)}`);
+}
+
+export function postValidationLabel(submission: ValidationLabelSubmit): Promise<ValidationLabelResponse> {
+  return apiFetch<ValidationLabelResponse>('/validation/label', {
+    method: 'POST',
+    body: JSON.stringify(submission),
+  });
+}
+
+export function getValidationStats(): Promise<ValidationStats> {
+  return apiFetch<ValidationStats>('/validation/stats');
+}
+
+export function getValidationLeaderboard(): Promise<ValidationLeaderboard> {
+  return apiFetch<ValidationLeaderboard>('/validation/leaderboard');
 }

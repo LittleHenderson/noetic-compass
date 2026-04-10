@@ -17,6 +17,8 @@ const CohortPage     = lazy(() => import('./pages/CohortPage').then(m => ({ defa
 const BenchmarkPage  = lazy(() => import('./pages/BenchmarkPage').then(m => ({ default: m.BenchmarkPage })));
 const AiChallengesPage = lazy(() => import('./pages/AiChallengesPage').then(m => ({ default: m.AiChallengesPage })));
 const ScenarioBrowserPage = lazy(() => import('./pages/ScenarioBrowserPage').then(m => ({ default: m.ScenarioBrowserPage })));
+const ValidationPage = lazy(() => import('./pages/ValidationPage').then(m => ({ default: m.ValidationPage })));
+const ValidationLeaderboardPage = lazy(() => import('./pages/ValidationLeaderboardPage').then(m => ({ default: m.ValidationLeaderboardPage })));
 const LoginPage      = lazy(() => import('./pages/LoginPage').then(m => ({ default: m.LoginPage })));
 
 function AuthGuard({ children }: { children: ReactNode }) {
@@ -46,6 +48,8 @@ export default function App() {
                     <Route path="/cohort" element={<CohortPage />} />
                     <Route path="/benchmark" element={<BenchmarkPage />} />
                     <Route path="/scenarios" element={<ScenarioBrowserPage />} />
+                    <Route path="/validate" element={<ValidationPage />} />
+                    <Route path="/validation/leaderboard" element={<ValidationLeaderboardPage />} />
                     <Route path="/ai-challenges" element={<AiChallengesPage />} />
                     <Route path="/how-it-works" element={<HowItWorksPage />} />
                     <Route path="/faq" element={<FaqPage />} />
