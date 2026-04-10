@@ -162,6 +162,15 @@ input[type="range"]::-webkit-slider-runnable-track {
   display: inline-flex;
 }
 
+/* Interpret button glow */
+@keyframes interpret-glow {
+  0%, 100% { box-shadow: 0 0 4px rgba(45, 212, 191, 0.15); }
+  50% { box-shadow: 0 0 8px rgba(45, 212, 191, 0.3); }
+}
+.interpret-glow {
+  animation: interpret-glow 3s ease-in-out infinite;
+}
+
 /* Scroll-spy active indicator */
 .scroll-spy-active {
   position: relative;
