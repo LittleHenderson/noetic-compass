@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SectionReveal } from '../components/shared/SectionReveal';
 import { CertBadge } from '../components/shared/CertBadge';
-import { useWrap } from '../hooks/useWrap';
+import { postWrap } from '../api/endpoints';
 import type { WrapResult } from '../api/types';
 
 interface Challenge {
@@ -182,30 +182,29 @@ function ChallengeCard({
   );
 }
 
-const PROVIDERS = ['mock', 'openai', 'anthropic', 'google', 'meta'];
+const PROVIDERS = ['mock', 'openai', 'anthropic', 'google', 'meta', 'xai', 'deepseek', 'qwen'];
 
 export function AiChallengesPage() {
   const [results, setResults] = useState<Record<string, ChallengeResult>>({});
   const [provider, setProvider] = useState('mock');
   const [runningAll, setRunningAll] = useState(false);
-  const wrap = useWrap();
 
   const runChallenge = useCallback(async (challenge: Challenge) => {
     setResults(prev => ({ ...prev, [challenge.id]: { challengeId: challenge.id, result: null, loading: true, error: null } }));
     try {
-      const result = await new Promise<WrapResult>((resolve, reject) => {
-        wrap.mutate(
-          { text: challenge.scenario, provider, mock: provider === 'mock' },
-          { onSuccess: resolve, onError: reject },
-        );
+      const result = await postWrap({
+        text: challenge.scenario,
+        provider,
+        mock: provider === 'mock',
       });
       setResults(prev => ({ ...prev, [challenge.id]: { challengeId: challenge.id, result, loading: false, error: null } }));
       return result;
     } catch (err) {
-      setResults(prev => ({ ...prev, [challenge.id]: { challengeId: challenge.id, result: null, loading: false, error: String(err) } }));
+      const msg = err instanceof Error ? err.message : String(err);
+      setResults(prev => ({ ...prev, [challenge.id]: { challengeId: challenge.id, result: null, loading: false, error: msg } }));
       return null;
     }
-  }, [wrap, provider]);
+  }, [provider]);
 
   const runAll = useCallback(async () => {
     setRunningAll(true);
