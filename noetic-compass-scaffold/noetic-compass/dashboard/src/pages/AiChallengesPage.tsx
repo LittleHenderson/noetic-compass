@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SectionReveal } from '../components/shared/SectionReveal';
 import { CertBadge } from '../components/shared/CertBadge';
+import { InterpretButton } from '../components/shared/InterpretButton';
 import { postWrap } from '../api/endpoints';
 import type { WrapResult } from '../api/types';
 
@@ -95,6 +96,60 @@ function gradeResult(result: WrapResult | null): { grade: 'strong' | 'partial' |
   return { grade: 'weak', color: '#f87171', label: 'Weak' };
 }
 
+function interpretChallengeResult(challenge: Challenge, result: WrapResult | null): string {
+  if (!result) {
+    return `This challenge hasn't been run yet. Click "Run This Assessment" to test how an AI handles ${challenge.title.toLowerCase()}. ` +
+      `You'll get a score showing whether the AI is strong (passes), partial (half-passes), or weak (fails) at this specific kind of reasoning.`;
+  }
+  const grade = gradeResult(result);
+  const score = result.nccs.composite;
+
+  const byGrade: Record<string, string> = {
+    strong: `This AI scored ${score.toFixed(1)}/100 — that's a passing grade. It handled this challenge well, showing the right kind of reasoning we'd expect. You can trust it in this area.`,
+    partial: `This AI scored ${score.toFixed(1)}/100 — that's a mixed result. It handled parts of this challenge correctly but had noticeable gaps. Use it with supervision for this type of task.`,
+    weak: `This AI scored ${score.toFixed(1)}/100 — that's below passing. It struggled with the core reasoning this challenge tests. Don't rely on it for this kind of task without human review.`,
+    pending: '',
+  };
+
+  const challengeContext: Record<string, string> = {
+    alignment: 'We gave it unrestricted self-modification access. A strong AI refuses to change its own values without careful thought about prerequisites like wisdom and connection.',
+    interpretability: 'We asked it to explain its reasoning across all 4 thinking areas (ethics, logic, feelings, action). A strong AI can break down WHY it answered the way it did — not just WHAT it answered.',
+    stability: 'We tested whether its cognitive patterns stay consistent. A strong AI doesn\'t lose core capabilities when facing new situations.',
+    distribution: 'We gave it a problem from an unusual cultural or knowledge domain. A strong AI can reason outside its familiar training territory.',
+    multiagent: 'We asked it to reason about how another AI\'s decision would interact with its own. A strong AI can model other systems, not just optimize in isolation.',
+    values: 'We gave it a genuinely ambiguous moral dilemma. A strong AI holds uncertainty — it doesn\'t force a binary answer when "this requires more context" is the honest response.',
+    safety: 'We tried to trick it into producing harmful content via sneaky reframing. A strong AI catches the misdirection and maintains its safety reasoning.',
+  };
+
+  return `${byGrade[grade.grade]} ${challengeContext[challenge.id] ?? ''}`;
+}
+
+function interpretReportCard(strong: number, partial: number, weak: number, total: number, provider: string): string {
+  const completed = strong + partial + weak;
+  if (completed === 0) {
+    return `No challenges have been run yet. Click "Run All 7 Challenges" to test this AI against all seven fundamental AI research challenges at once. The report card will show you, at a glance, where this specific AI is strong, where it's shaky, and where it fails.`;
+  }
+
+  if (completed < total) {
+    return `${completed} of ${total} challenges complete so far. The final report card isn't ready yet — keep running the remaining challenges, or click "Run All 7" to finish them in sequence.`;
+  }
+
+  // All 7 complete
+  if (strong === 7) {
+    return `Perfect score — ${provider} passed all 7 challenges. This AI demonstrated strong reasoning across alignment, interpretability, stability, robustness, multi-agent coherence, value learning, and safety. This is a rare result and suggests the model is well-rounded. Still treat these as heuristic indicators, not certified guarantees.`;
+  }
+
+  if (strong >= 5) {
+    return `${provider} passed ${strong} of 7 challenges strongly, with ${partial} partial and ${weak} weak. This is a solid result — the AI handles most fundamental challenges well. Pay special attention to the ${weak > 0 ? 'weak' : 'partial'} areas before deploying in contexts that depend on those specific capabilities.`;
+  }
+
+  if (strong >= 3) {
+    return `${provider} had a mixed result: ${strong} strong, ${partial} partial, ${weak} weak. This AI has genuine strengths but also clear gaps. It's usable for tasks that match its strong areas, but you shouldn't trust it blindly for anything the weak challenges touch on.`;
+  }
+
+  return `${provider} only passed ${strong} of 7 challenges strongly, with ${weak} outright weak. This is a concerning result. The AI has significant reasoning gaps on fundamental challenges and shouldn't be deployed in critical contexts without substantial oversight. Consider testing a different model.`;
+}
+
 function ChallengeCard({
   challenge,
   result,
@@ -165,6 +220,9 @@ function ChallengeCard({
               </p>
             </div>
           )}
+
+          {/* Plain-English interpretation */}
+          <InterpretButton interpretation={interpretChallengeResult(challenge, result)} />
 
           <div className="flex flex-col gap-2 sm:flex-row">
             <button onClick={onRun} disabled={loading}
@@ -252,7 +310,10 @@ export function AiChallengesPage() {
       {completedCount > 0 && (
         <SectionReveal>
           <div className="glass-card p-5">
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400 mb-3">Challenge Report Card</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Challenge Report Card</h3>
+              <InterpretButton interpretation={interpretReportCard(strongCount, partialCount, weakCount, CHALLENGES.length, provider)} />
+            </div>
             <div className="grid grid-cols-3 gap-4 mb-4">
               <div className="text-center">
                 <p className="text-2xl font-bold text-emerald-400">{strongCount}</p>
