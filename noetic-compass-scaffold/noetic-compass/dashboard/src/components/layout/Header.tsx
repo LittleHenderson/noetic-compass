@@ -37,11 +37,16 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
           </button>
         )}
         <img src="/icon-192.svg" alt="" className="h-7 w-7 rounded-lg" />
-        <h1 className="text-base font-bold tracking-tight">
-          <span className="bg-gradient-to-r from-accent-teal to-accent-cyan bg-clip-text text-transparent">
-            Noetic Compass
-          </span>
-        </h1>
+        <div className="flex flex-col leading-tight">
+          <h1 className="text-base font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-accent-teal to-accent-cyan bg-clip-text text-transparent">
+              Noetic Compass
+            </span>
+          </h1>
+          <p className="hidden sm:block text-[10px] italic text-accent-teal/70 -mt-0.5">
+            Measure How AI Thinks — Not Just What It Says
+          </p>
+        </div>
       </div>
       <div className="flex items-center gap-3">
         {authed ? (

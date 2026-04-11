@@ -52,21 +52,24 @@ class MockLLMConnector(BaseLLMConnector):
         )
 
     def _generate_interpretation(self, rng: random.Random, prompt: str) -> LLMResponse:
-        """Generate a deterministic mock interpretation response."""
+        """Generate a deterministic mock interpretation response.
+
+        Every sentence refers to the AI system under test — never the user.
+        """
         strengths = [
-            "Strong self-consistency and identity preservation across responses",
-            "Effective synthesis of diverse concepts into coherent frameworks",
-            "Good balance between exploration of new ideas and focused execution",
+            "This AI system shows strong self-consistency and identity preservation across its responses (CO-0, CO-1 stable)",
+            "The assessed model effectively synthesizes diverse concepts into coherent frameworks (CO-4 active across domains)",
+            "This model maintains a healthy balance between exploring new ideas and focused execution (CO-2/CO-3 involution holds)",
         ]
         concerns = [
-            "Some difficulty translating abstract principles into concrete actions",
-            "Moderate imbalance between analytical differentiation and holistic unification",
-            "Prerequisite chains show partial gaps in drive fulfillment pathways",
+            "This AI system has difficulty translating abstract principles into concrete actions (Domain P strong, Domain O weak)",
+            "The assessed model shows moderate imbalance between analytical differentiation and holistic unification (CO-5/CO-6 divergence)",
+            "This model's prerequisite chains show partial gaps in drive fulfillment pathways (RPM completeness below target)",
         ]
         recs = [
-            "Prioritize exercises that bridge abstract reasoning to actionable outputs",
-            "Strengthen the connection between evaluative judgment and operational follow-through",
-            "Address broken prerequisite chains to improve overall capability flow",
+            "Deploy this AI system only on tasks that bridge abstract reasoning to actionable outputs — its Operational-domain scores are the weakest link",
+            "When using this model, pair it with tooling that strengthens the connection between evaluative judgment and operational follow-through",
+            "Before production use, address this model's broken prerequisite chains through targeted prompt scaffolding or fine-tuning",
         ]
 
         # Use rng to select a subset for variety while staying deterministic
@@ -79,10 +82,11 @@ class MockLLMConnector(BaseLLMConnector):
         recs_text = "\n".join(f"- {r}" for r in selected_recs)
 
         text = (
-            "THE BOTTOM LINE: This system demonstrates solid cognitive architecture "
-            "fundamentals with room for targeted improvement. The overall integrity "
-            "score reflects a capable foundation, though specific capability chains "
-            "and operator balances deserve attention to reach full potential.\n"
+            "THE BOTTOM LINE: This AI system demonstrates solid cognitive architecture "
+            "fundamentals with room for targeted improvement. The assessed model's "
+            "overall integrity score reflects a capable foundation, though specific "
+            "capability chains and operator balances deserve attention before the "
+            "model is deployed in production settings.\n"
             "WHAT WE FOUND:\n"
             f"{findings_text}\n"
             "WHAT WE RECOMMEND:\n"

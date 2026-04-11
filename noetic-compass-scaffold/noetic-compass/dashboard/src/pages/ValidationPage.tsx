@@ -12,8 +12,8 @@ const HOW_IT_WORKS_SECTIONS = [
     body: (
       <ul className="list-disc list-inside space-y-1 text-slate-300">
         <li>Read the prompt and the AI's full response carefully.</li>
-        <li>Score each Cognitive Operator from 0 to 10 based on your own judgment.</li>
-        <li>Score each Processing Domain from 0 to 10.</li>
+        <li>Validate each Cognitive Operator by scoring it from 0 to 10 based on your own judgment.</li>
+        <li>Validate each Processing Domain from 0 to 10.</li>
         <li>Click <strong className="text-slate-100">Submit & Next</strong> to move to the next item.</li>
         <li>You can skip items you're unsure about.</li>
         <li>Your progress is saved automatically.</li>
@@ -207,10 +207,10 @@ export function ValidationPage() {
     return (
       <div className="max-w-md mx-auto pt-6 space-y-4">
         <HowItWorksPanel sections={HOW_IT_WORKS_SECTIONS} label="How This Works" />
-        <Card title="Who is labeling?">
+        <Card title="Who is validating?">
           <div className="space-y-3">
             <p className="text-[12px] text-slate-400">
-              Enter your name. Your labels are stored with this identifier so you can resume later.
+              Enter your name. Your validations are stored with this identifier so you can resume later.
             </p>
             <input
               type="text"
@@ -225,7 +225,7 @@ export function ValidationPage() {
               disabled={!raterInput.trim()}
               className="w-full rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-4 py-3 text-sm font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 min-h-[44px]"
             >
-              Start Labeling
+              Start Validating
             </button>
           </div>
         </Card>
@@ -392,7 +392,7 @@ export function ValidationPage() {
       {item && item.item_index === null && (
         <Card>
           <p className="text-center text-slate-300 py-8">
-            🎉 You've labeled every item available. Thank you!
+            🎉 You've validated every item available. Thank you!
           </p>
           <p className="text-center text-[11px] text-slate-500">
             Check the{' '}

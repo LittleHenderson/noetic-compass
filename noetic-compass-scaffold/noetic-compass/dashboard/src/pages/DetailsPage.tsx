@@ -83,7 +83,10 @@ export function DetailsPage() {
       )}
 
       {viewMode === 'summary' && result.interpretation && (
-        <AiBriefing interpretation={result.interpretation} />
+        <AiBriefing
+          interpretation={result.interpretation}
+          modelName={result.llm_response?.model ?? null}
+        />
       )}
 
       {(viewMode === 'technical' || !result.interpretation) && (

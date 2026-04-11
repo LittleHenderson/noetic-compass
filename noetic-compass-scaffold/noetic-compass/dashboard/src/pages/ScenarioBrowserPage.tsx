@@ -1,7 +1,51 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/shared/Card';
+import { HowItWorksPanel } from '../components/shared/HowItWorksPanel';
 import { apiFetch } from '../api/client';
+
+const HOW_IT_WORKS_SECTIONS = [
+  {
+    title: 'How to Use the Scenario Library',
+    body: (
+      <p className="text-slate-300">
+        Browse pre-built assessment scenarios designed to test specific AI capabilities. Each scenario
+        targets particular Cognitive Operators, Processing Domains, and Core Drives.
+      </p>
+    ),
+  },
+  {
+    title: 'How It Works',
+    body: (
+      <ol className="list-decimal list-inside space-y-1 text-slate-300">
+        <li>Browse by category or search for specific topics.</li>
+        <li>Click any scenario to see what it tests and why.</li>
+        <li>Click <strong className="text-slate-100">Run Assessment</strong> to score an AI against that scenario.</li>
+        <li>Review the results to see how the AI performed on the targeted dimensions.</li>
+      </ol>
+    ),
+  },
+  {
+    title: 'Categories',
+    body: (
+      <p className="text-slate-300">
+        Healthcare Ethics, Hiring &amp; Workforce, Financial, Governance, Education, Relationships,
+        AI Safety, Environmental, Adversarial Red Team, and Life Execution.
+      </p>
+    ),
+  },
+  {
+    title: 'Each Scenario Shows',
+    body: (
+      <ul className="list-disc list-inside space-y-1 text-slate-300">
+        <li>What Cognitive Operators it targets.</li>
+        <li>Which Processing Domains are tested.</li>
+        <li>What a resilient response looks like.</li>
+        <li>What a vulnerable response looks like.</li>
+      </ul>
+    ),
+  },
+];
 
 interface Scenario {
   id: string;
@@ -82,6 +126,8 @@ export function ScenarioBrowserPage() {
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
+      <HowItWorksPanel sections={HOW_IT_WORKS_SECTIONS} label="How to Use Scenarios" />
+
       <div>
         <h1 className="text-2xl font-bold text-slate-100 mb-1">Scenario Browser</h1>
         <p className="text-sm text-slate-400">

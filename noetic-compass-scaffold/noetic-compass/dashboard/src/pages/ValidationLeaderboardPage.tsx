@@ -16,17 +16,17 @@ function interpretLeaderboard(data: ValidationLeaderboard): string {
 
   if (n === 0) {
     return (
-      'No labels have been collected yet. Head to the Validation page and ' +
-      'start scoring prompt-response pairs. Once you have around 10+ labels, ' +
+      'No validations have been collected yet. Head to the Validation page and ' +
+      'start scoring prompt-response pairs. Once you have around 10+ validations, ' +
       'meaningful correlation numbers will start appearing here.'
     );
   }
 
   if (n < 10) {
     return (
-      `Only ${n} label${n === 1 ? '' : 's'} so far. Correlation numbers need more ` +
+      `Only ${n} validation${n === 1 ? '' : 's'} so far. Correlation numbers need more ` +
       'data to mean anything — aim for at least 10 per operator before drawing conclusions. ' +
-      'Keep labeling.'
+      'Keep validating.'
     );
   }
 
@@ -49,7 +49,7 @@ function interpretLeaderboard(data: ValidationLeaderboard): string {
   // Inter-rater
   let raterNote = '';
   if (stats.num_raters < 2) {
-    raterNote = 'Only one rater has submitted labels so far — recruit a second rater to measure inter-rater reliability (Cohen\'s kappa).';
+    raterNote = 'Only one rater has submitted validations so far — recruit a second rater to measure inter-rater reliability (Cohen\'s kappa).';
   } else if (inter_rater.length > 0) {
     const avgKappa = stats.overall_cohens_kappa;
     if (avgKappa >= 0.7) {
@@ -213,7 +213,7 @@ export function ValidationLeaderboardPage() {
 
       {/* Headline stats */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
-        <StatCard label="Total Labels" value={stats.total_labels} />
+        <StatCard label="Validations Collected" value={stats.total_labels} />
         <StatCard label="Raters" value={stats.num_raters} />
         <StatCard label="Multi-Rated" value={stats.items_multi_rated} />
         <StatCard
@@ -357,7 +357,7 @@ export function ValidationLeaderboardPage() {
         <div className="space-y-2">
           {recommendations.length === 0 ? (
             <p className="text-[11px] text-slate-500 text-center py-4">
-              No recommendations yet — collect more labels to generate calibration guidance.
+              No recommendations yet — collect more validations to generate calibration guidance.
             </p>
           ) : (
             recommendations.map((rec, i) => {

@@ -226,6 +226,9 @@ class WrapPipelineRunner:
             for i, chain in enumerate(rpm_result.drive_scores)
             if any(s < 0.5 for s in [rpm_result.a0_score, *chain])
         ]
+        # Use the generator model's name so the briefing explicitly names
+        # the subject of analysis (the AI being assessed — never the user).
+        generator_model_name = getattr(self.connector, "model", None) or self.connector.provider_name
         interpretation = await generate_interpretation(
             self.connector,
             composite=nccs.composite,
@@ -236,6 +239,7 @@ class WrapPipelineRunner:
             inversion_axis_scores=inv_result.axis_scores,
             rpm_completeness=rpm_result.rpm_completeness,
             broken_chains=broken_chains,
+            model_name=generator_model_name,
         )
 
         # Fractal analysis on operator sequence

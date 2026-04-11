@@ -2,9 +2,11 @@ import type { Interpretation } from '../../api/types';
 
 interface AiBriefingProps {
   interpretation: Interpretation;
+  modelName?: string | null;
 }
 
-export function AiBriefing({ interpretation }: AiBriefingProps) {
+export function AiBriefing({ interpretation, modelName }: AiBriefingProps) {
+  const displayModel = modelName?.trim() || 'the assessed AI model';
   return (
     <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-6 space-y-5">
       {/* Header */}
@@ -13,6 +15,14 @@ export function AiBriefing({ interpretation }: AiBriefingProps) {
           AI Interpretation
         </span>
       </div>
+
+      {/* Subject-of-analysis note — makes it unambiguous that the AI is being
+          assessed, not the user. */}
+      <p className="text-[11px] italic text-slate-400 leading-relaxed">
+        Assessment of: <span className="text-accent-teal not-italic font-medium">{displayModel}</span>
+        <span className="mx-2 text-slate-600">|</span>
+        This analysis describes the AI system's cognitive architecture, not the user.
+      </p>
 
       {/* THE BOTTOM LINE */}
       <div className="space-y-2">

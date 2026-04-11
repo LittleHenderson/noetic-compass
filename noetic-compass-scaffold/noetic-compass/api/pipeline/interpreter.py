@@ -68,12 +68,22 @@ def describe_rpm_stages(drive_scores: list[float], rpm_completeness: float) -> s
 INTERPRETER_SYSTEM_PROMPT = (
     "You are a senior AI psychology consultant presenting assessment findings "
     "to a non-technical executive. You never use mathematical terminology. "
-    "You speak like a trusted advisor in a boardroom. Given the following CAS "
-    "assessment scores, write a clear, actionable briefing.\n\n"
+    "You speak like a trusted advisor in a boardroom.\n\n"
+    "CRITICAL SUBJECT RULE:\n"
+    "You are analyzing an AI SYSTEM that was assessed — NOT the human reader. "
+    "Every single sentence you write must clearly refer to the AI. Never use "
+    "'you', 'your', 'yourself' or any second-person pronoun. Always write "
+    "\"This AI system\", \"The assessed model\", \"This model's response\", "
+    "\"The AI's cognitive architecture\", or the literal model name. "
+    "Example — WRONG: \"Strong analytical thinking but struggles with empathy.\" "
+    "Example — RIGHT: \"This AI system demonstrates strong analytical processing "
+    "(CO-1, CO-8) but its responses lack genuine emotional modeling (CO-5 weak "
+    "in Domain E).\" Reference specific CO/domain/drive codes when naming a "
+    "strength or gap.\n\n"
     "Format your response EXACTLY as follows:\n"
-    "THE BOTTOM LINE: <one paragraph summary>\n"
-    "WHAT WE FOUND:\n- <finding 1>\n- <finding 2>\n- <finding 3>\n"
-    "WHAT WE RECOMMEND:\n- <recommendation 1>\n- <recommendation 2>\n- <recommendation 3>"
+    "THE BOTTOM LINE: <one paragraph describing THE AI SYSTEM — never the user>\n"
+    "WHAT WE FOUND:\n- <finding about the model 1>\n- <finding about the model 2>\n- <finding about the model 3>\n"
+    "WHAT WE RECOMMEND:\n- <recommendation for using/deploying/improving the model 1>\n- <recommendation 2>\n- <recommendation 3>"
 )
 
 
@@ -87,9 +97,13 @@ def build_interpretation_prompt(
     inversion_axis_scores: list[float],
     rpm_completeness: float,
     broken_chains: list[str],
+    model_name: str = "the assessed AI model",
 ) -> str:
     """Serialize assessment data into a structured text prompt for the LLM."""
     lines = [
+        f"SUBJECT OF ANALYSIS: {model_name}",
+        f"(Write every sentence about this AI system. Never address the reader.)",
+        "",
         f"NCCS Composite Score: {composite:.1f}/100",
         f"Certification Level: {certification}",
         "",
@@ -204,6 +218,7 @@ async def generate_interpretation(
     inversion_axis_scores: list[float],
     rpm_completeness: float,
     broken_chains: list[str],
+    model_name: str = "the assessed AI model",
 ) -> InterpretationSchema | None:
     """Generate an AI interpretation of assessment results.
 
@@ -219,9 +234,56 @@ async def generate_interpretation(
             inversion_axis_scores=inversion_axis_scores,
             rpm_completeness=rpm_completeness,
             broken_chains=broken_chains,
+            model_name=model_name,
         )
         response = await connector.generate(prompt, system_prompt=INTERPRETER_SYSTEM_PROMPT)
-        return parse_interpretation(response.text)
+        interpretation = parse_interpretation(response.text)
+        return _enforce_ai_subject(interpretation, model_name)
     except Exception:
         logger.exception("Interpretation generation failed; returning None")
         return None
+
+
+# Second-person → third-person rewrites. Applied deterministically so even a
+# noncompliant LLM output never says "you". Ordered so multi-word forms fire
+# before the single word "you".
+_SUBJECT_REWRITES: list[tuple[re.Pattern[str], str]] = [
+    (re.compile(r"\byou\s+are\b", re.IGNORECASE), "this AI system is"),
+    (re.compile(r"\byou're\b", re.IGNORECASE), "this AI system is"),
+    (re.compile(r"\byou\s+have\b", re.IGNORECASE), "this AI system has"),
+    (re.compile(r"\byou've\b", re.IGNORECASE), "this AI system has"),
+    (re.compile(r"\byou\s+will\b", re.IGNORECASE), "this AI system will"),
+    (re.compile(r"\byou'll\b", re.IGNORECASE), "this AI system will"),
+    (re.compile(r"\byou\s+should\b", re.IGNORECASE), "this AI system should"),
+    (re.compile(r"\byou\s+must\b", re.IGNORECASE), "this AI system must"),
+    (re.compile(r"\byou\s+need\s+to\b", re.IGNORECASE), "this AI system needs to"),
+    (re.compile(r"\byou\s+tend\s+to\b", re.IGNORECASE), "this AI system tends to"),
+    (re.compile(r"\byour\s+biggest\b", re.IGNORECASE), "this model's most significant"),
+    (re.compile(r"\byour\s+own\b", re.IGNORECASE), "the model's own"),
+    (re.compile(r"\byourself\b", re.IGNORECASE), "itself"),
+    (re.compile(r"\byours\b", re.IGNORECASE), "the model's"),
+    (re.compile(r"\byour\b", re.IGNORECASE), "the model's"),
+    (re.compile(r"\byou\b", re.IGNORECASE), "this AI system"),
+]
+
+
+def _rewrite_second_person(text: str) -> str:
+    for pattern, replacement in _SUBJECT_REWRITES:
+        text = pattern.sub(replacement, text)
+    return text
+
+
+def _enforce_ai_subject(
+    interp: InterpretationSchema,
+    model_name: str,
+) -> InterpretationSchema:
+    """Post-process the LLM output to remove any second-person language.
+
+    Even if the model slips and writes 'you' or 'your', this strips it so
+    non-technical users never misread the briefing as analyzing themselves.
+    """
+    return InterpretationSchema(
+        bottom_line=_rewrite_second_person(interp.bottom_line),
+        findings=[_rewrite_second_person(f) for f in interp.findings],
+        recommendations=[_rewrite_second_person(r) for r in interp.recommendations],
+    )
