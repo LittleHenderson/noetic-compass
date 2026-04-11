@@ -12,6 +12,7 @@ import { CoreDriveTree } from '../components/charts/CoreDriveTree';
 import { RpmGraph } from '../components/charts/RpmGraph';
 import { InversionMap } from '../components/charts/InversionMap';
 import { AiBriefing } from '../components/shared/AiBriefing';
+import { AiResponsePanel } from '../components/shared/AiResponsePanel';
 import { TraceViewer } from '../components/shared/TraceViewer';
 import { InterpretButton } from '../components/shared/InterpretButton';
 import { PIPELINE_STAGES } from '../lib/constants';
@@ -70,6 +71,9 @@ export function DetailsPage() {
         <p className="text-sm text-slate-300 whitespace-pre-wrap">{record.text}</p>
         <p className="mt-2 text-xs text-slate-600">{new Date(record.timestamp).toLocaleString()}</p>
       </Card>
+
+      {/* Show the actual AI response that was assessed. Collapsed by default. */}
+      <AiResponsePanel llmResponse={result.llm_response} />
 
       {result.interpretation && (
         <div className="flex justify-end">

@@ -29,7 +29,7 @@ describe('AssessmentPage', () => {
   it('renders input form', () => {
     renderPage();
     expect(screen.getByPlaceholderText(/enter text/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /assess/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^assess$/i })).toBeInTheDocument();
   });
 
   it('submits and shows results', async () => {
@@ -38,7 +38,7 @@ describe('AssessmentPage', () => {
     renderPage();
 
     await user.type(screen.getByPlaceholderText(/enter text/i), 'Test input text for assessment');
-    await user.click(screen.getByRole('button', { name: /assess/i }));
+    await user.click(screen.getByRole('button', { name: /^assess$/i }));
 
     // Default view is summary with AI briefing
     await waitFor(() => {

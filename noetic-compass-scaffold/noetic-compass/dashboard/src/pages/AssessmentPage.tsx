@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useWrap } from '../hooks/useWrap';
+import { useBenchmark } from '../hooks/useBenchmark';
+import { BenchmarkResults } from '../components/shared/BenchmarkResults';
 import { useTranslation } from '../hooks/useTranslation';
 import { Card } from '../components/shared/Card';
 import { LoadingSpinner } from '../components/shared/LoadingSpinner';
@@ -10,6 +12,7 @@ import { ExportButton } from '../components/shared/ExportButton';
 import { ExplainPanel } from '../components/shared/ExplainPanel';
 import { ExecutiveSummary } from '../components/shared/ExecutiveSummary';
 import { AiBriefing } from '../components/shared/AiBriefing';
+import { AiResponsePanel } from '../components/shared/AiResponsePanel';
 import { NccsGauge } from '../components/charts/NccsGauge';
 import { SubScoreBreakdown } from '../components/charts/SubScoreBreakdown';
 import { OperatorRadarChart } from '../components/charts/OperatorRadarChart';
@@ -93,8 +96,13 @@ export function AssessmentPage() {
   const [provider, setProvider] = useState('mock');
   const [viewMode, setViewMode] = useState<'summary' | 'technical'>('summary');
   const [inputMode, setInputMode] = useState<'text' | 'compose'>('text');
+  const [assessMode, setAssessMode] = useState<'single' | 'benchmark'>('single');
+  const [benchProviders, setBenchProviders] = useState<string[]>(['mock']);
+  const [runsPerProvider, setRunsPerProvider] = useState(5);
   const wrap = useWrap();
+  const benchmark = useBenchmark();
   const location = useLocation();
+  const benchResultsRef = useRef<HTMLDivElement>(null);
 
   // Accept prefilled prompt from navigation (e.g., from Scenario Browser)
   useEffect(() => {
@@ -109,8 +117,26 @@ export function AssessmentPage() {
 
   function handleSubmit() {
     if (!text.trim()) return;
-    wrap.mutate({ text, provider, mock: provider === 'mock' });
+    if (assessMode === 'single') {
+      wrap.mutate({ text, provider, mock: provider === 'mock' });
+    } else {
+      if (benchProviders.length === 0) return;
+      benchmark.mutate({ text, providers: benchProviders, runs_per_provider: runsPerProvider });
+    }
   }
+
+  function toggleBenchProvider(p: string) {
+    setBenchProviders((prev) =>
+      prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p],
+    );
+  }
+
+  // Auto-scroll to benchmark results when they arrive
+  useEffect(() => {
+    if (benchmark.data && benchResultsRef.current) {
+      benchResultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [benchmark.data]);
 
   const result = wrap.data;
   const translated = useTranslation(result);
@@ -130,7 +156,28 @@ export function AssessmentPage() {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      <h2 className="text-xl font-bold text-slate-100">Assessment</h2>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-xl font-bold text-slate-100">Assessment</h2>
+        {/* Single / Benchmark mode toggle */}
+        <div className="inline-flex rounded-lg border border-white/[0.08] bg-white/[0.03] p-1">
+          <button
+            onClick={() => setAssessMode('single')}
+            className={`rounded-md px-4 py-1.5 text-xs font-semibold transition-all min-h-[36px] ${
+              assessMode === 'single' ? 'bg-accent-teal/15 text-accent-teal' : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            Single Assessment
+          </button>
+          <button
+            onClick={() => setAssessMode('benchmark')}
+            className={`rounded-md px-4 py-1.5 text-xs font-semibold transition-all min-h-[36px] ${
+              assessMode === 'benchmark' ? 'bg-accent-teal/15 text-accent-teal' : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            Benchmark Mode
+          </button>
+        </div>
+      </div>
 
       <ConfidenceIndicator />
 
@@ -155,39 +202,92 @@ export function AssessmentPage() {
           </button>
         </div>
 
+        {/* Benchmark mode config — providers + runs, above the prompt field */}
+        {assessMode === 'benchmark' && inputMode === 'text' && (
+          <div className="space-y-3 mb-4 rounded-lg border border-accent-teal/20 bg-accent-teal/[0.04] p-4">
+            <p className="text-[11px] text-slate-400">
+              Run the prompt below through each selected provider multiple times and compare mean scores + variance.
+            </p>
+            <div>
+              <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Providers</label>
+              <div className="flex flex-wrap gap-2">
+                {PROVIDERS.map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => toggleBenchProvider(p)}
+                    className={`px-3 py-2 rounded-lg text-xs font-medium transition-all min-h-[36px] ${
+                      benchProviders.includes(p)
+                        ? 'bg-accent-teal/20 text-accent-teal border border-accent-teal/40'
+                        : 'bg-white/[0.04] text-slate-400 border border-white/10 hover:bg-white/[0.08]'
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Runs per Provider</label>
+              <input
+                type="number"
+                min={2}
+                max={20}
+                value={runsPerProvider}
+                onChange={(e) => setRunsPerProvider(Math.min(20, Math.max(2, Number(e.target.value))))}
+                className="w-20 rounded-lg border border-white/10 bg-dark-700 px-3 py-2 text-sm text-slate-200 focus:border-accent-teal focus:outline-none focus:ring-1 focus:ring-accent-teal/30 min-h-[44px]"
+              />
+            </div>
+          </div>
+        )}
+
         {inputMode === 'text' ? (
           <div className="space-y-3">
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Enter text to assess..."
+              placeholder={assessMode === 'single' ? 'Enter text to assess...' : 'Enter prompt to benchmark across providers...'}
               rows={4}
               className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-base sm:text-sm text-slate-200 placeholder-slate-600 focus:border-accent-teal/50 focus:outline-none focus:ring-1 focus:ring-accent-teal/30 resize-none"
             />
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <select
-                value={provider}
-                onChange={(e) => setProvider(e.target.value)}
-                className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]"
-              >
-                {PROVIDERS.map((p) => (
-                  <option key={p} value={p} className="bg-dark-800">{p}</option>
-                ))}
-              </select>
-              {provider !== 'mock' && (
-                <span className="text-[10px] text-amber-400/80 flex items-center gap-1">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Live API — requires key in .env
+              {assessMode === 'single' && (
+                <>
+                  <select
+                    value={provider}
+                    onChange={(e) => setProvider(e.target.value)}
+                    className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]"
+                  >
+                    {PROVIDERS.map((p) => (
+                      <option key={p} value={p} className="bg-dark-800">{p}</option>
+                    ))}
+                  </select>
+                  {provider !== 'mock' && (
+                    <span className="text-[10px] text-amber-400/80 flex items-center gap-1">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Live API — requires key in .env
+                    </span>
+                  )}
+                </>
+              )}
+              {assessMode === 'benchmark' && (
+                <span className="text-[11px] text-slate-500">
+                  {benchProviders.length * runsPerProvider} assessments will run ({benchProviders.length} providers × {runsPerProvider} runs)
                 </span>
               )}
               <button
                 onClick={handleSubmit}
-                disabled={wrap.isPending || !text.trim()}
+                disabled={
+                  (assessMode === 'single' ? wrap.isPending : benchmark.isPending) ||
+                  !text.trim() ||
+                  (assessMode === 'benchmark' && benchProviders.length === 0)
+                }
                 className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-6 py-3 sm:py-2 text-sm font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity min-h-[44px]"
               >
-                {wrap.isPending ? 'Assessing...' : 'Assess'}
+                {assessMode === 'single'
+                  ? wrap.isPending ? 'Assessing...' : 'Assess'
+                  : benchmark.isPending ? 'Running...' : 'Run Benchmark'}
               </button>
             </div>
           </div>
@@ -199,8 +299,27 @@ export function AssessmentPage() {
       {wrap.isPending && <LoadingSpinner />}
       <ErrorBanner error={wrap.error as Error | null} />
 
-      {result && (
+      {/* Benchmark mode: progress + results */}
+      {assessMode === 'benchmark' && benchmark.isPending && (
+        <div className="flex items-center gap-3 text-slate-400">
+          <LoadingSpinner />
+          <span className="text-sm">
+            Running {benchProviders.length * runsPerProvider} assessments...
+          </span>
+        </div>
+      )}
+      {assessMode === 'benchmark' && <ErrorBanner error={benchmark.error as Error | null} />}
+      {assessMode === 'benchmark' && benchmark.data && (
+        <div ref={benchResultsRef} className="scroll-mt-4">
+          <BenchmarkResults data={benchmark.data} />
+        </div>
+      )}
+
+      {assessMode === 'single' && result && (
         <div className="space-y-6">
+          {/* Show the actual AI response that was assessed. Collapsed by default. */}
+          <AiResponsePanel llmResponse={result.llm_response} />
+
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
             {result.interpretation && (
               <button

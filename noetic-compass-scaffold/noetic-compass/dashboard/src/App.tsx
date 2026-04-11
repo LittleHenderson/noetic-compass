@@ -14,7 +14,6 @@ const DetailsPage    = lazy(() => import('./pages/DetailsPage').then(m => ({ def
 const HowItWorksPage = lazy(() => import('./pages/HowItWorksPage').then(m => ({ default: m.HowItWorksPage })));
 const FaqPage        = lazy(() => import('./pages/FaqPage').then(m => ({ default: m.FaqPage })));
 const CohortPage     = lazy(() => import('./pages/CohortPage').then(m => ({ default: m.CohortPage })));
-const BenchmarkPage  = lazy(() => import('./pages/BenchmarkPage').then(m => ({ default: m.BenchmarkPage })));
 const AiChallengesPage = lazy(() => import('./pages/AiChallengesPage').then(m => ({ default: m.AiChallengesPage })));
 const ScenarioBrowserPage = lazy(() => import('./pages/ScenarioBrowserPage').then(m => ({ default: m.ScenarioBrowserPage })));
 const ValidationPage = lazy(() => import('./pages/ValidationPage').then(m => ({ default: m.ValidationPage })));
@@ -46,7 +45,8 @@ export default function App() {
                     <Route path="/config" element={<ConfigPage />} />
                     <Route path="/details/:id" element={<DetailsPage />} />
                     <Route path="/cohort" element={<CohortPage />} />
-                    <Route path="/benchmark" element={<BenchmarkPage />} />
+                    {/* /benchmark merged into /assessment (mode toggle) — keep a redirect for old bookmarks */}
+                    <Route path="/benchmark" element={<Navigate to="/" replace />} />
                     <Route path="/scenarios" element={<ScenarioBrowserPage />} />
                     <Route path="/validate" element={<ValidationPage />} />
                     <Route path="/validation/leaderboard" element={<ValidationLeaderboardPage />} />
