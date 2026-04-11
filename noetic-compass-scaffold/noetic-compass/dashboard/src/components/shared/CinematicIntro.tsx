@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
 
-/** localStorage flag — set once the intro has played so it never shows again. */
-const INTRO_SEEN_KEY = 'nc_intro_seen_v1';
+/** localStorage flag — set once the user has pressed Skip. Bumped to v2 so
+ *  returning users see the new floating/mega-pulse intro at least once. */
+const INTRO_SEEN_KEY = 'nc_intro_seen_v2';
 
 /**
  * Cinematic intro:
  *  0.0s  — black screen
  *  0.0s  — tagline starts far away, small + blurred
- *  ~1.6s — tagline reaches full size
- *  1.6s  — pulses softly for ~3s
- *  4.6s  — swiftly slides up + fades out
- *  ~5s   — children (the app) takes over
+ *  ~1.6s — tagline reaches full size at center
+ *  ~1.6s — drifts like an astronaut in space (floats forever) with strong
+ *          pulsing glow. Stays on screen indefinitely until the user
+ *          presses Skip.
  *
- * Shows a "Skip" button so returning users aren't trapped.
- * Persists a localStorage flag so it only plays on the first visit.
+ * Shows a "Skip" button so users can dismiss the intro whenever they want.
+ * Persists a localStorage flag on skip so it doesn't replay on next visit.
  */
 export function CinematicIntro({ children }: { children: React.ReactNode }) {
-  const [phase, setPhase] = useState<'hidden' | 'flying' | 'pulsing' | 'leaving' | 'done'>(
+  const [phase, setPhase] = useState<'hidden' | 'flying' | 'floating' | 'leaving' | 'done'>(
     () => (localStorage.getItem(INTRO_SEEN_KEY) === '1' ? 'done' : 'hidden'),
   );
 
@@ -24,26 +25,20 @@ export function CinematicIntro({ children }: { children: React.ReactNode }) {
     if (phase !== 'hidden') return;
     // Start flying on next frame
     const t1 = setTimeout(() => setPhase('flying'), 60);
-    // After the fly-in animation (~1.6s), start pulsing
-    const t2 = setTimeout(() => setPhase('pulsing'), 1700);
-    // After ~3s of pulsing, start leaving
-    const t3 = setTimeout(() => setPhase('leaving'), 4700);
-    // After slide-up animation finishes, mark done
-    const t4 = setTimeout(() => {
-      setPhase('done');
-      localStorage.setItem(INTRO_SEEN_KEY, '1');
-    }, 5400);
+    // After the fly-in animation (~1.6s), switch to endless floating. No
+    // auto-advance past this — only the Skip button can dismiss the intro.
+    const t2 = setTimeout(() => setPhase('floating'), 1700);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
     };
   }, [phase]);
 
   function handleSkip() {
     localStorage.setItem(INTRO_SEEN_KEY, '1');
-    setPhase('done');
+    setPhase('leaving');
+    // After slide-up animation, fully unmount
+    setTimeout(() => setPhase('done'), 700);
   }
 
   if (phase === 'done') {
@@ -63,17 +58,17 @@ export function CinematicIntro({ children }: { children: React.ReactNode }) {
           className={`intro-tagline px-4 text-center font-bold italic ${
             phase === 'hidden' ? 'intro-phase-hidden' : ''
           } ${phase === 'flying' ? 'intro-phase-flying' : ''} ${
-            phase === 'pulsing' ? 'intro-phase-pulsing' : ''
+            phase === 'floating' ? 'intro-phase-floating' : ''
           } ${phase === 'leaving' ? 'intro-phase-leaving' : ''}`}
         >
           <span className="bg-gradient-to-r from-accent-teal to-accent-cyan bg-clip-text text-transparent">
-            Measure How AI Thinks — Not Just What It Says
+            Measure How AI Thinks
           </span>
         </h1>
 
         <button
           onClick={handleSkip}
-          className="absolute bottom-6 right-6 rounded-lg border border-white/[0.08] bg-white/[0.04] px-4 py-2 text-xs text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
+          className="absolute bottom-6 right-6 rounded-lg border border-accent-teal/40 bg-accent-teal/10 px-5 py-3 text-sm font-semibold text-accent-teal hover:bg-accent-teal/20 hover:border-accent-teal/60 transition-colors shadow-lg shadow-accent-teal/20"
         >
           Skip →
         </button>

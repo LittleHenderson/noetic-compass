@@ -54,7 +54,7 @@ export function LoginPage() {
             </span>
           </h1>
           <p className="mt-1 text-xs italic text-accent-teal/80 text-center">
-            Measure How AI Thinks — Not Just What It Says
+            Measure How AI Thinks
           </p>
           <p className="mt-3 text-sm text-slate-500">
             Enter a username to connect to the API.

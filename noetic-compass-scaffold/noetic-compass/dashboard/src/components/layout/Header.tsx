@@ -44,7 +44,7 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
             </span>
           </h1>
           <p className="hidden sm:block text-[10px] italic text-accent-teal/70 -mt-0.5">
-            Measure How AI Thinks — Not Just What It Says
+            Measure How AI Thinks
           </p>
         </div>
       </div>
