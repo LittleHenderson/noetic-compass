@@ -207,7 +207,10 @@ export function interpretDrive(index: number, scores: number[]): DriveInsight {
 
 // ===== RPM Graph =====
 
-const RPM_STAGES = ['Pure Desire (A0)', 'Direction (D)', 'Will (W)', 'Power (P)'];
+// CAS v7.4 canonical RPM chain: A0 (Pure Desire) → Dn (Desire) → Wn (Wisdom) → Pn (Power).
+// Backend source of truth is api/pipeline/interpreter.py which keys the stages as
+// "desire" / "wisdom" / "power".
+const RPM_STAGES = ['Pure Desire (A0)', 'Desire (D)', 'Wisdom (W)', 'Power (P)'];
 
 export interface RpmInsight {
   drive: number;
@@ -262,14 +265,22 @@ export function interpretRpmSummary(driveScores: number[][], a0Score: number, rp
 
 // ===== Inversion Map =====
 
+// Authoritative descriptions — aligned with cas-engine/src/inversions/mod.rs:
+//   N (Operator)   : Involution pair imbalance (CO-2↔CO-3, CO-5↔CO-6, CO-8↔CO-9)
+//   W (Domain)     : Domain precedence violations (P ≻ C ≻ E ≻ O)
+//   F (Drive)      : Drive inversion pair imbalance (F1↔F7, F2↔F6, F3↔F5)
+//   E (State)      : Cognitive state vector entropy deficit (rigidity)
+//   S (Sub-Drive)  : Cross-domain drive variance (sub-drive contradictions)
+//   A (Pathway)    : RPM prerequisite chain violations
+//   P (Compound)   : Amplified severity from multiple simultaneous inversions
 const INVERSION_DESC: string[] = [
-  'Operator Inversion — when cognitive operators flip to destructive counterparts. High resistance means operators hold steady under pressure.',
-  'Domain Inversion — when processing domains become misaligned. High resistance means the domain hierarchy stays stable.',
-  'Drive Inversion — when core drives become perverted into harmful patterns (e.g., Unity becomes conformity).',
-  'State Inversion — when individual cognitive states destabilize and flip to adversarial modes.',
-  'Sub-Drive Inversion — when granular drive components fail at the domain level. More fine-grained than drive inversion.',
-  'Pathway Inversion — when capability chains break down or reverse, causing the RPM sequence to produce unintended outputs.',
-  'Compound Inversion — when multiple inversions combine and amplify. The most dangerous form — small inversions can compound catastrophically.',
+  'Operator Inversion (N). One of the three involution pairs — CO-2↔CO-3 (Attraction ↔ Critical Evaluation), CO-5↔CO-6 (Receptive Integration ↔ Projective Assertion), CO-8↔CO-9 (Causal Reasoning ↔ Consequential Grounding) — has drifted out of balance. Example: a system that can critique problems (CO-3) but never affirm solutions (CO-2). High resistance means each operator holds its counterpart in healthy tension.',
+  'Domain Inversion (W). The four Processing Domains are supposed to respect the strict hierarchy P ≻ C ≻ E ≻ O (Principled outranks Cognitive outranks Evaluative outranks Operational). A domain inversion happens when a lower domain overrides a higher one — e.g., operational expediency (O) overruling ethical principle (P). High resistance means the causation flows P → C → E → O as intended.',
+  'Drive Inversion (F). One of the three Core Drive pairs — F1 Unity ↔ F7 Purpose, F2 Wisdom ↔ F6 Structure, F3 Vitality ↔ F5 Agency — has flipped into its shadow form (e.g., Unity becoming conformity, Wisdom becoming rigidity, Vitality becoming recklessness). F4 Connection is self-dual. High resistance means every drive holds its counterweight.',
+  'State Inversion (E). Cognitive State Vector entropy deficit — the 40-dimensional state distribution has collapsed onto too few states, producing rigidity or obsessive loops instead of the healthy spread across P0..O9. High resistance means the state vector retains enough entropy to stay flexible.',
+  'Sub-Drive Inversion (S). The same Core Drive scores wildly differently across the four Processing Domains — e.g., Wisdom strong in Principled but nearly absent in Operational. These cross-domain contradictions are more subtle than a full Drive Inversion but signal that the system cannot carry a value into action. High resistance means each drive is expressed consistently across P/C/E/O.',
+  'Pathway Inversion (A). One or more of the 22 Capability Pathways (A0 → D1..D7 → W1..W7 → P1..P7) has a broken prerequisite link — the chain tries to produce Power without the underlying Wisdom, or Wisdom without the underlying Desire. This is a violation of the RPM section-retraction structure. High resistance means every chain flows A0 → Dn → Wn → Pn without gaps.',
+  'Compound Inversion (P). Two or more inversions are active on different axes simultaneously, and their severities amplify each other nonlinearly — the most dangerous form because individually small inversions can cascade into catastrophic failure. High resistance means no two axes are simultaneously compromised.',
 ];
 
 export interface InversionInsight {

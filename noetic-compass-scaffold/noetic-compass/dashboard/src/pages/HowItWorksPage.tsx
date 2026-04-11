@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useScrollSpy } from '../hooks/useScrollSpy';
 import { SectionReveal } from '../components/shared/SectionReveal';
 import { CircuitCard } from '../components/shared/CircuitCard';
+import { InterpretButton } from '../components/shared/InterpretButton';
 import {
   OPERATOR_LABELS,
   DOMAIN_LABELS,
@@ -176,15 +177,15 @@ export function HowItWorksPage() {
                 title="The Momentum Builder"
                 operators="RPM Chain: A0 → D → W → P + CO-7 (Transformation) feedback"
                 nodes={[
-                  { label: 'A0', sublabel: 'Desire', color: '#2dd4bf' },
-                  { label: 'Dn', sublabel: 'Direction', color: '#60a5fa' },
-                  { label: 'Wn', sublabel: 'Will', color: '#a78bfa' },
+                  { label: 'A0', sublabel: 'Pure Desire', color: '#2dd4bf' },
+                  { label: 'Dn', sublabel: 'Desire', color: '#60a5fa' },
+                  { label: 'Wn', sublabel: 'Wisdom', color: '#a78bfa' },
                   { label: 'Pn', sublabel: 'Power', color: '#fbbf24' },
                 ]}
                 feedbackTo={0}
                 description="The first day at the gym is the hardest. But each completed workout lowers the threshold for the next one. Success builds on success through the prerequisite chain — CO-7 (Transformation) creates a feedback loop that makes each step easier than the last."
                 calloutOperator="RPM Prerequisites"
-                callout="We measure whether AI systems have intact prerequisite chains or whether they try to skip steps. A system that jumps from desire (A0) straight to power (Pn) without building will (Wn) has a broken RPM chain."
+                callout="We measure whether AI systems have intact prerequisite chains or whether they try to skip steps. A system that jumps from pure desire (A0) straight to power (Pn) without building wisdom (Wn) has a broken RPM chain."
               />
               <CircuitCard
                 title="The Creative Flow State"
@@ -349,7 +350,7 @@ export function HowItWorksPage() {
                             : 'bg-dark-600 border-white/[0.06] text-slate-300'
                       }`}
                     >
-                      {node === 'A0' ? 'A0 (Pure Desire)' : node === 'D' ? 'Dn (Desire)' : node === 'W' ? 'Wn (Will)' : node === 'P' ? 'Pn (Power)' : node}
+                      {node === 'A0' ? 'A0 (Pure Desire)' : node === 'D' ? 'Dn (Desire)' : node === 'W' ? 'Wn (Wisdom)' : node === 'P' ? 'Pn (Power)' : node}
                     </div>
                     {i < arr.length - 1 && (
                       <svg width="20" height="10" className="text-accent-teal/50 shrink-0">
@@ -458,9 +459,12 @@ export function HowItWorksPage() {
             </p>
             <div className="space-y-6">
               <div className="glass-card p-5">
-                <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                  State Space
-                </h4>
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                    State Space
+                  </h4>
+                  <InterpretButton interpretation="Imagine the AI's mind as a pie cut into 40 slices — each slice is one of the 40 cognitive states (like 'critical thinking' or 'emotional processing'). At any moment, each slice has some size, and all 40 sizes have to add up to a whole pie (100%). The word 'open' means every slice must have at least a tiny bit of pie — no slice can be completely empty. Why does that matter? Because a healthy mind is never totally missing any cognitive capability — it might be small, but it's always there. This 'pie of 40 slices where nothing is zero' is the space where every possible state of mind lives, and it's what the rest of the math measures distances on." />
+                </div>
                 <code className="block text-sm text-accent-teal font-mono leading-relaxed mb-3">
                   {'S°_I = Δ°₃₉ = { p ∈ ℝ⁴⁰ : pₖ > 0 ∀k, Σpₖ = 1 }'}
                 </code>
@@ -473,9 +477,12 @@ export function HowItWorksPage() {
                 </p>
               </div>
               <div className="glass-card p-5">
-                <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                  Fisher-Rao Metric
-                </h4>
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                    Fisher-Rao Metric
+                  </h4>
+                  <InterpretButton interpretation="This is the yardstick we use to measure how different two states of mind are. What makes it special is that it pays way more attention to small changes in rare things than to small changes in common things. Think of it this way: if somebody who NEVER loses their temper suddenly yells at you, that's shocking — it matters a lot. If somebody who yells all the time yells again, you barely notice. The Fisher-Rao metric is the math version of that intuition — a tiny shift in a rare cognitive state is huge; the same shift in a dominant one is tiny. It's the most sensitive, fair way to tell 'how far' one mind is from another." />
+                </div>
                 <code className="block text-sm text-accent-teal font-mono leading-relaxed mb-3">
                   {'g^FR_p(u, v) = Σₖ (uₖ · vₖ) / pₖ'}
                 </code>
@@ -488,9 +495,12 @@ export function HowItWorksPage() {
                 </p>
               </div>
               <div className="glass-card p-5">
-                <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                  Geodesic Distance
-                </h4>
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                    Geodesic Distance
+                  </h4>
+                  <InterpretButton interpretation="A geodesic is just the shortest path between two points — on a flat map it's a straight line, but on a globe it's a curve (that's why long flights look bent on flat maps). Here we treat each 'state of mind' as a spot on a giant curved surface (a hypersphere), and we use this formula to find the shortest curved path between two minds. The output is a single number — small means the two minds are very similar, big means they think very differently. This is how we compare two AI models (or the same model before and after a jailbreak attempt) and say 'these are 87% aligned' or 'this one drifted 0.4 geodesic units'." />
+                </div>
                 <code className="block text-sm text-accent-teal font-mono leading-relaxed mb-3">
                   {'d(p, q) = 2 · arccos( Σₖ √(pₖ · qₖ) )'}
                 </code>
@@ -502,9 +512,12 @@ export function HowItWorksPage() {
                 </p>
               </div>
               <div className="glass-card p-5">
-                <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                  Admissibility Relation
-                </h4>
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h4 className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                    Admissibility Relation
+                  </h4>
+                  <InterpretButton interpretation="Think of each Cognitive Operator (CO-0 through CO-9) as a move the mind can make — and this rule spells out which moves are actually LEGAL. Like chess: a bishop can't move like a knight. Each operator has its own little rulebook of 'if the mind is in state X, it's allowed to land in state Y' pairs. The identity operator (CO-0) has the strictest rulebook — it can only leave things exactly where they already are. Other operators have broader rulebooks. This is how we stop the math from pretending impossible transitions (like jumping straight from panic to nirvana) are valid. Every scored move is checked against its rulebook first." />
+                </div>
                 <code className="block text-sm text-accent-teal font-mono leading-relaxed">
                   {'Dₖ ⊆ I × I — valid (source, target) pairs for operator CO-k'}
                 </code>

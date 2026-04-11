@@ -429,7 +429,7 @@ def _build_evidence(
                 "Differentiation", "Unification", "Transformation", "Expansion", "Contraction"]
     domain_names = ["Principled", "Cognitive", "Evaluative", "Operational"]
     drive_names = ["Unity", "Wisdom", "Vitality", "Connection", "Agency", "Structure", "Purpose"]
-    rpm_stages = ["Direction", "Will", "Power"]
+    rpm_stages = ["Desire", "Wisdom", "Power"]
 
     for i, score in enumerate(axis_scores):
         severity = _classify_severity(score)

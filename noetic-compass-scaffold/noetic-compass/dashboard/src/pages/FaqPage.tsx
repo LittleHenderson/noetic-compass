@@ -107,7 +107,7 @@ const FAQ_ITEMS: FaqItem[] = [
       <div className="space-y-2">
         <p>
           The <strong>Recursive Prerequisite Model</strong> governs capability pathways. Each drive
-          follows the chain: A0 (Pure Desire) → Dn (Desire) → Wn (Will) → Pn (Power) → Outcome.
+          follows the chain: A0 (Pure Desire) → Dn (Desire) → Wn (Wisdom) → Pn (Power) → Outcome.
         </p>
         <p>
           Critically, RPM uses a <strong>section-retraction</strong>, not an adjunction. Prerequisite
