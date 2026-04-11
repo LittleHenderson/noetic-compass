@@ -6,8 +6,78 @@ import {
 import { Card } from '../components/shared/Card';
 import { LoadingSpinner } from '../components/shared/LoadingSpinner';
 import { ErrorBanner } from '../components/shared/ErrorBanner';
+import { InterpretButton } from '../components/shared/InterpretButton';
 import { getValidationLeaderboard } from '../api/endpoints';
-import type { OperatorCorrelation } from '../api/types';
+import type { OperatorCorrelation, ValidationLeaderboard } from '../api/types';
+
+function interpretLeaderboard(data: ValidationLeaderboard): string {
+  const { stats, operator_correlations, inter_rater, recommendations } = data;
+  const n = stats.total_labels;
+
+  if (n === 0) {
+    return (
+      'No labels have been collected yet. Head to the Validation page and ' +
+      'start scoring prompt-response pairs. Once you have around 10+ labels, ' +
+      'meaningful correlation numbers will start appearing here.'
+    );
+  }
+
+  if (n < 10) {
+    return (
+      `Only ${n} label${n === 1 ? '' : 's'} so far. Correlation numbers need more ` +
+      'data to mean anything — aim for at least 10 per operator before drawing conclusions. ' +
+      'Keep labeling.'
+    );
+  }
+
+  const strong = operator_correlations.filter(o => o.strength === 'strong').length;
+  const moderate = operator_correlations.filter(o => o.strength === 'moderate').length;
+  const weak = operator_correlations.filter(o => o.strength === 'weak').length;
+
+  const overall = stats.overall_pearson_r;
+  let headline: string;
+  if (overall >= 0.7) {
+    headline = `Overall correlation is ${overall.toFixed(2)} — that's strong agreement between human raters and the machine. The framework is tracking human judgment well.`;
+  } else if (overall >= 0.4) {
+    headline = `Overall correlation is ${overall.toFixed(2)} — that's moderate agreement. The machine and humans are in the same ballpark, but there's room for calibration.`;
+  } else {
+    headline = `Overall correlation is ${overall.toFixed(2)} — that's weak agreement. The machine and humans often disagree, which means the scoring rubric needs recalibration.`;
+  }
+
+  const breakdown = `${strong} operator${strong === 1 ? '' : 's'} show strong correlation, ${moderate} show moderate, and ${weak} show weak.`;
+
+  // Inter-rater
+  let raterNote = '';
+  if (stats.num_raters < 2) {
+    raterNote = 'Only one rater has submitted labels so far — recruit a second rater to measure inter-rater reliability (Cohen\'s kappa).';
+  } else if (inter_rater.length > 0) {
+    const avgKappa = stats.overall_cohens_kappa;
+    if (avgKappa >= 0.7) {
+      raterNote = `Inter-rater reliability is strong (κ = ${avgKappa.toFixed(2)}). Your raters largely agree with each other.`;
+    } else if (avgKappa >= 0.4) {
+      raterNote = `Inter-rater reliability is moderate (κ = ${avgKappa.toFixed(2)}). Raters agree on general direction but diverge on specific scores.`;
+    } else {
+      raterNote = `Inter-rater reliability is weak (κ = ${avgKappa.toFixed(2)}). Raters are interpreting the scoring criteria differently — consider a calibration session.`;
+    }
+  }
+
+  // Worst operator to flag
+  const sortedByR = [...operator_correlations].sort((a, b) => a.pearson_r - b.pearson_r);
+  const worst = sortedByR[0];
+  let worstNote = '';
+  if (worst && worst.strength === 'weak' && worst.n_pairs >= 10) {
+    worstNote = `The weakest alignment is on ${worst.operator_name} (r = ${worst.pearson_r.toFixed(2)}). Check the Calibration Recommendations below for specific guidance.`;
+  }
+
+  // Count active recommendations
+  const alerts = recommendations.filter(r => r.severity === 'alert').length;
+  const ready = alerts === 0 && strong >= 7;
+  const readinessNote = ready
+    ? 'The framework is in good shape — no critical calibration needed right now.'
+    : `There ${alerts === 1 ? 'is' : 'are'} ${alerts} operator${alerts === 1 ? '' : 's'} flagged for recalibration. Scroll down to the recommendations section for specifics.`;
+
+  return [headline, breakdown, raterNote, worstNote, readinessNote].filter(Boolean).join(' ');
+}
 
 const STRENGTH_COLOR: Record<string, string> = {
   strong: '#34d399',
@@ -131,11 +201,14 @@ export function ValidationLeaderboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-100 mb-1">Validation Leaderboard</h1>
-        <p className="text-[11px] text-slate-500">
-          Real-time correlation between human raters and machine scores. Updates every 10 seconds.
-        </p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-100 mb-1">Validation Leaderboard</h1>
+          <p className="text-[11px] text-slate-500">
+            Real-time correlation between human raters and machine scores. Updates every 10 seconds.
+          </p>
+        </div>
+        <InterpretButton interpretation={interpretLeaderboard(data)} />
       </div>
 
       {/* Headline stats */}

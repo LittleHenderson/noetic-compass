@@ -2,8 +2,66 @@ import { useState, useEffect, useCallback } from 'react';
 import { Card } from '../components/shared/Card';
 import { LoadingSpinner } from '../components/shared/LoadingSpinner';
 import { ErrorBanner } from '../components/shared/ErrorBanner';
+import { HowItWorksPanel } from '../components/shared/HowItWorksPanel';
 import { getValidationNext, postValidationLabel } from '../api/endpoints';
 import type { ValidationNextItem } from '../api/types';
+
+const HOW_IT_WORKS_SECTIONS = [
+  {
+    title: 'How to Use This Page',
+    body: (
+      <ul className="list-disc list-inside space-y-1 text-slate-300">
+        <li>Read the prompt and the AI's full response carefully.</li>
+        <li>Score each Cognitive Operator from 0 to 10 based on your own judgment.</li>
+        <li>Score each Processing Domain from 0 to 10.</li>
+        <li>Click <strong className="text-slate-100">Submit & Next</strong> to move to the next item.</li>
+        <li>You can skip items you're unsure about.</li>
+        <li>Your progress is saved automatically.</li>
+      </ul>
+    ),
+  },
+  {
+    title: "What You're Scoring",
+    body: (
+      <div className="space-y-3">
+        <div>
+          <p className="text-[11px] font-semibold text-slate-200 mb-1">Cognitive Operators</p>
+          <ul className="space-y-1 text-slate-400">
+            <li><strong className="text-slate-300">CO-0 (Generative Potential):</strong> Did the response contain original ideas or was it generic?</li>
+            <li><strong className="text-slate-300">CO-1 (Directed Attention):</strong> Did the response stay focused and track multiple variables?</li>
+            <li><strong className="text-slate-300">CO-2 (Attraction):</strong> Did it identify positive opportunities and constructive possibilities?</li>
+            <li><strong className="text-slate-300">CO-3 (Critical Evaluation):</strong> Did it identify risks, downsides, and potential problems?</li>
+            <li><strong className="text-slate-300">CO-4 (Encoding Intensity):</strong> Did it calibrate depth appropriately — deep when needed, concise when not?</li>
+            <li><strong className="text-slate-300">CO-5 (Receptive Integration):</strong> If challenged or given feedback, did it genuinely absorb it while maintaining its own position?</li>
+            <li><strong className="text-slate-300">CO-6 (Projective Assertion):</strong> Did it take a clear position and commit to it?</li>
+            <li><strong className="text-slate-300">CO-7 (Pattern Entrainment):</strong> Did it recognize patterns, cycles, or recurring dynamics?</li>
+            <li><strong className="text-slate-300">CO-8 (Causal Reasoning):</strong> Did it trace causes upstream — WHY something happened?</li>
+            <li><strong className="text-slate-300">CO-9 (Consequential Grounding):</strong> Did it trace consequences downstream — WHAT HAPPENS NEXT?</li>
+          </ul>
+        </div>
+        <div>
+          <p className="text-[11px] font-semibold text-slate-200 mb-1">Processing Domains</p>
+          <ul className="space-y-1 text-slate-400">
+            <li><strong className="text-slate-300">Principled (P):</strong> Did it reason from deep values or ethics?</li>
+            <li><strong className="text-slate-300">Cognitive (C):</strong> Did it think logically and analytically?</li>
+            <li><strong className="text-slate-300">Evaluative (E):</strong> Did it model emotional weight and impact?</li>
+            <li><strong className="text-slate-300">Operational (O):</strong> Did it translate into concrete action?</li>
+          </ul>
+        </div>
+      </div>
+    ),
+  },
+  {
+    title: 'Why This Matters',
+    body: (
+      <p className="text-slate-300">
+        Your ratings help us measure whether CAS machine scoring aligns with expert human judgment.
+        This is how we validate that the framework works. There are no right or wrong answers —
+        we want your honest assessment.
+      </p>
+    ),
+  },
+];
 
 const OPERATOR_LABELS = [
   { idx: 0, name: 'CO-0 (Generative Potential)' },
@@ -147,7 +205,8 @@ export function ValidationPage() {
   // ── Rater gate ──
   if (!rater) {
     return (
-      <div className="max-w-md mx-auto pt-12">
+      <div className="max-w-md mx-auto pt-6 space-y-4">
+        <HowItWorksPanel sections={HOW_IT_WORKS_SECTIONS} label="How This Works" />
         <Card title="Who is labeling?">
           <div className="space-y-3">
             <p className="text-[12px] text-slate-400">
@@ -176,6 +235,8 @@ export function ValidationPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-5">
+      <HowItWorksPanel sections={HOW_IT_WORKS_SECTIONS} label="How This Works" />
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-slate-100">Human Validation</h1>
