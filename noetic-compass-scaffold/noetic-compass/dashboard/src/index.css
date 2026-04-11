@@ -75,11 +75,40 @@ body {
 /* Slide-down animation for explain panels */
 @keyframes slide-down {
   from { opacity: 0; max-height: 0; margin-top: 0; }
-  to   { opacity: 1; max-height: 600px; margin-top: 12px; }
+  to   { opacity: 1; max-height: 90vh; margin-top: 12px; }
 }
 .animate-slide-down {
   animation: slide-down 0.35s ease-out forwards;
   overflow: hidden;
+}
+
+/* Glowing teal scrollbar for expandable info panels */
+.scroll-glow {
+  scrollbar-width: thin;
+  scrollbar-color: #2dd4bf rgba(45, 212, 191, 0.08);
+}
+.scroll-glow::-webkit-scrollbar {
+  width: 10px;
+}
+.scroll-glow::-webkit-scrollbar-track {
+  background: rgba(45, 212, 191, 0.06);
+  border-radius: 5px;
+  margin: 4px 0;
+}
+.scroll-glow::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #2dd4bf 0%, #22d3ee 100%);
+  border-radius: 5px;
+  border: 1px solid rgba(45, 212, 191, 0.4);
+  box-shadow: 0 0 6px rgba(45, 212, 191, 0.6), inset 0 0 3px rgba(255, 255, 255, 0.3);
+  animation: scroll-thumb-pulse 2.2s ease-in-out infinite;
+}
+.scroll-glow::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #5eead4 0%, #67e8f9 100%);
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.9);
+}
+@keyframes scroll-thumb-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(45, 212, 191, 0.5), inset 0 0 3px rgba(255, 255, 255, 0.3); }
+  50%      { box-shadow: 0 0 12px rgba(45, 212, 191, 0.95), inset 0 0 3px rgba(255, 255, 255, 0.4); }
 }
 
 /* Interactive chart cursor */

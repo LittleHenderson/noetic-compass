@@ -67,10 +67,13 @@ app = FastAPI(
 )
 
 # CORS — configured via NC_CORS_ORIGINS env var (default "*")
+# Regex matches every Vercel deployment alias (preview, team-scoped, canonical)
+# so stakeholder demos never hit "Failed to fetch" when Vercel rotates the URL.
 cors_origins = _parse_cors_origins(settings.cors_origins)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
+    allow_origin_regex=settings.cors_origin_regex or None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

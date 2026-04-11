@@ -32,6 +32,8 @@ class Settings(BaseSettings):
 
     # CORS — comma-separated origins, "*" for dev (default)
     cors_origins: str = "*"
+    # CORS regex — matches any Vercel deployment alias + localhost by default
+    cors_origin_regex: str = r"https://([a-z0-9-]+\.)*vercel\.app|http://localhost(:\d+)?"
 
     # Mock mode
     mock_llm: bool = True

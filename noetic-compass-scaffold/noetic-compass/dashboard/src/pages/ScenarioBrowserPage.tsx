@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/shared/Card';
-import { API_BASE } from '../api/config';
+import { apiFetch } from '../api/client';
 
 interface Scenario {
   id: string;
@@ -42,6 +42,7 @@ export function ScenarioBrowserPage() {
   const navigate = useNavigate();
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -49,12 +50,12 @@ export function ScenarioBrowserPage() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${API_BASE}/scenarios`);
-        if (res.ok) {
-          const data = await res.json();
-          setScenarios(data.scenarios ?? []);
-        }
-      } catch { /* API not available */ }
+        const data = await apiFetch<{ scenarios: Scenario[] }>('/scenarios');
+        setScenarios(data.scenarios ?? []);
+        setLoadError(null);
+      } catch (err) {
+        setLoadError(err instanceof Error ? err.message : 'Failed to load scenarios');
+      }
       setLoading(false);
     })();
   }, []);
@@ -119,6 +120,13 @@ export function ScenarioBrowserPage() {
 
       {loading ? (
         <Card><p className="text-sm text-slate-500 text-center py-8">Loading scenarios...</p></Card>
+      ) : loadError ? (
+        <Card>
+          <div className="text-center py-8 space-y-2">
+            <p className="text-sm text-red-400 font-medium">Could not load scenarios</p>
+            <p className="text-xs text-slate-500">{loadError}</p>
+          </div>
+        </Card>
       ) : filtered.length === 0 ? (
         <Card><p className="text-sm text-slate-500 text-center py-8">No scenarios match your search.</p></Card>
       ) : (

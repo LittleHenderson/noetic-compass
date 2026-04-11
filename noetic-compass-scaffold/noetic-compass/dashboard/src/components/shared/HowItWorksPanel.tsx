@@ -37,17 +37,19 @@ export function HowItWorksPanel({ sections, label = 'How This Works', defaultOpe
       </button>
 
       {open && (
-        <div className="px-5 pb-5 pt-1 space-y-4 border-t border-white/[0.04] animate-slide-down">
-          {sections.map((section, i) => (
-            <div key={i}>
-              <h4 className="text-[10px] font-semibold uppercase tracking-wider text-accent-teal mb-2">
-                {section.title}
-              </h4>
-              <div className="text-[12px] text-slate-300 leading-relaxed">
-                {section.body}
+        <div className="border-t border-white/[0.04] animate-slide-down">
+          <div className="px-5 pb-5 pt-4 pr-3 space-y-4 max-h-[65vh] overflow-y-auto scroll-glow">
+            {sections.map((section, i) => (
+              <div key={i}>
+                <h4 className="text-[10px] font-semibold uppercase tracking-wider text-accent-teal mb-2">
+                  {section.title}
+                </h4>
+                <div className="text-[12px] text-slate-300 leading-relaxed">
+                  {section.body}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
     </div>
