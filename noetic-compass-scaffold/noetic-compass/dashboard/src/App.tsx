@@ -18,6 +18,7 @@ const AiChallengesPage = lazy(() => import('./pages/AiChallengesPage').then(m =>
 const ScenarioBrowserPage = lazy(() => import('./pages/ScenarioBrowserPage').then(m => ({ default: m.ScenarioBrowserPage })));
 const ValidationPage = lazy(() => import('./pages/ValidationPage').then(m => ({ default: m.ValidationPage })));
 const ValidationLeaderboardPage = lazy(() => import('./pages/ValidationLeaderboardPage').then(m => ({ default: m.ValidationLeaderboardPage })));
+const ReproducibilityPage = lazy(() => import('./pages/ReproducibilityPage').then(m => ({ default: m.ReproducibilityPage })));
 const LoginPage      = lazy(() => import('./pages/LoginPage').then(m => ({ default: m.LoginPage })));
 
 function AuthGuard({ children }: { children: ReactNode }) {
@@ -40,16 +41,18 @@ export default function App() {
               <AppShell>
                 <Suspense fallback={<LoadingSpinner />}>
                   <Routes>
-                    <Route path="/" element={<AssessmentPage />} />
+                    <Route path="/" element={<Navigate to="/scenarios" replace />} />
+                    <Route path="/assessment" element={<AssessmentPage />} />
                     <Route path="/history" element={<HistoryPage />} />
                     <Route path="/config" element={<ConfigPage />} />
                     <Route path="/details/:id" element={<DetailsPage />} />
                     <Route path="/cohort" element={<CohortPage />} />
                     {/* /benchmark merged into /assessment (mode toggle) — keep a redirect for old bookmarks */}
-                    <Route path="/benchmark" element={<Navigate to="/" replace />} />
+                    <Route path="/benchmark" element={<Navigate to="/assessment" replace />} />
                     <Route path="/scenarios" element={<ScenarioBrowserPage />} />
                     <Route path="/validate" element={<ValidationPage />} />
                     <Route path="/validation/leaderboard" element={<ValidationLeaderboardPage />} />
+                    <Route path="/reproducibility" element={<ReproducibilityPage />} />
                     <Route path="/ai-challenges" element={<AiChallengesPage />} />
                     <Route path="/how-it-works" element={<HowItWorksPage />} />
                     <Route path="/faq" element={<FaqPage />} />

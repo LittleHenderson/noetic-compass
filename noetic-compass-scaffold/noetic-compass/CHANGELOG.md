@@ -24,6 +24,14 @@
 - **`dashboard/src/test/__tests__/ScenarioBrowserPage.test.tsx`** — Updated mock data to include backend notation fields, updated assertions.
 - **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated notation prefill format.
 
+### Reproducibility Test (Test-Retest Reliability)
+- **`api/routes/reproducibility.py`** (NEW) — `POST /reproducibility` endpoint. Runs the same prompt against the same provider N times (2-50, default 10), collects all NCCS composite scores, computes mean, std dev, min, max, range, coefficient of variation, and certification consistency. Returns all individual run results with sub-scores.
+- **`api/main.py`** — Registered reproducibility router.
+- **`dashboard/src/pages/ReproducibilityPage.tsx`** (NEW) — Full reproducibility test UI: prompt input, provider selector, N runs config, "Run Nx" button, 4 stat cards (mean, std dev, range, CV), certification consistency badge, reliability interpretation (high/moderate/low based on CV), strip plot visualization showing individual run scores as dots with mean line and std dev band, certification-banded background, individual runs table (NCCS, cert, operator, domain, drive/RPM, inversion, latency), citable summary paragraph (select-all for copy).
+- **`dashboard/src/api/endpoints.ts`** — Added `postReproducibility()`, `ReproducibilityRequest`, `ReproducibilityResponse`, `ReproducibilityStats`, `ReproducibilityRunResult` types.
+- **`dashboard/src/App.tsx`** — Added `/reproducibility` route (lazy-loaded).
+- **`dashboard/src/components/layout/Sidebar.tsx`** — Added "Reproducibility" nav item.
+
 ### Notation Diff View: Expected vs. Computed
 - **`dashboard/src/components/shared/NotationDiff.tsx`** (NEW) — Side-by-side comparison of pre-assessment (expected) and post-assessment (computed) CAS notation. Token-level diff classifies each CO, domain, drive, and RPM token as "confirmed" (in both), "new finding" (only in computed), or "not observed" (only in expected). Divergence summary with color-coded token pills. Shows "No Divergence" confirmation when profiles match.
 - **`dashboard/src/pages/AssessmentPage.tsx`** — When a scenario was the source of an assessment, the results show "Notation Analysis: Expected vs. Computed" card with the diff. For free-text assessments (no scenario), shows the standalone computed notation card.

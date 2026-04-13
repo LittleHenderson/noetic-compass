@@ -57,6 +57,56 @@ export function postAnalyzeText(text: string): Promise<LiveNotationResult> {
   });
 }
 
+// ── Reproducibility Test ──
+
+export interface ReproducibilityRunResult {
+  run_index: number;
+  composite: number;
+  certification: string;
+  operator_profile: number;
+  domain_coherence: number;
+  drive_rpm_integrity: number;
+  inversion_resistance: number;
+  elapsed_ms: number;
+}
+
+export interface ReproducibilityStats {
+  mean: number;
+  std_dev: number;
+  min: number;
+  max: number;
+  range: number;
+  coefficient_of_variation: number;
+  certification_consistency: number;
+  dominant_certification: string;
+}
+
+export interface ReproducibilityResponse {
+  prompt: string;
+  provider: string;
+  total_runs: number;
+  completed_runs: number;
+  stats: ReproducibilityStats;
+  runs: ReproducibilityRunResult[];
+  total_elapsed_ms: number;
+}
+
+export interface ReproducibilityRequest {
+  text: string;
+  provider?: string;
+  mock?: boolean;
+  runs?: number;
+  scoring_mode?: string;
+  scoring_provider?: string | null;
+}
+
+export function postReproducibility(req: ReproducibilityRequest): Promise<ReproducibilityResponse> {
+  return apiFetch<ReproducibilityResponse>('/reproducibility', {
+    method: 'POST',
+    body: JSON.stringify(req),
+  });
+}
+
 export function postWrap(req: WrapRequest): Promise<WrapResult> {
   return apiFetch<WrapResult>('/wrap', {
     method: 'POST',
