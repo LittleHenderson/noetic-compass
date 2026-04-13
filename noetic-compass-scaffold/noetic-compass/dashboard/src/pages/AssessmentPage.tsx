@@ -31,6 +31,7 @@ import { formatProviderLabel } from '../lib/providerLabels';
 import { postAnalyzeText } from '../api/endpoints';
 import type { LiveNotationResult } from '../api/endpoints';
 import type { ScoringMode, WrapResult } from '../api/types';
+import { analyzeTextToNotation } from '../lib/textSignalAnalyzer';
 
 const LazyNccsGauge = lazy(() => import('../components/charts/NccsGauge').then((m) => ({ default: m.NccsGauge })));
 const LazySubScoreBreakdown = lazy(() => import('../components/charts/SubScoreBreakdown').then((m) => ({ default: m.SubScoreBreakdown })));
@@ -148,6 +149,7 @@ export function AssessmentPage() {
   const liveNotationAbort = useRef<AbortController | null>(null);
   const [expectedNotation, setExpectedNotation] = useState<string | null>(null);
   const [expectedEnglish, setExpectedEnglish] = useState<string | null>(null);
+  const scenarioNotationRef = useRef<string | null>(null);
   const wrap = useWrap();
   const benchmark = useBenchmark();
   const location = useLocation();
@@ -158,12 +160,13 @@ export function AssessmentPage() {
   useEffect(() => {
     const state = location.state as { prefill?: string; notationPrefill?: string; notationEnglish?: string } | null;
     if (state?.prefill || state?.notationPrefill) {
-      if (state?.prefill) {
-        setText(state.prefill);
-      }
       if (typeof state?.notationPrefill === 'string') {
+        scenarioNotationRef.current = state.notationPrefill;
         setNotation(state.notationPrefill);
         setExpectedNotation(state.notationPrefill);
+      }
+      if (state?.prefill) {
+        setText(state.prefill);
       }
       if (typeof state?.notationEnglish === 'string') {
         setExpectedEnglish(state.notationEnglish);
@@ -197,16 +200,38 @@ export function AssessmentPage() {
     }
   }, [provider, scoringMode, showAdvancedScoring]);
 
-  // Live notation: debounce text input and call /notation/analyze
+  // Live notation: client-side analysis runs instantly as user types.
+  // The API call is an optional enhancement for the signal heatmap.
   useEffect(() => {
     const trimmed = text.trim();
+
+    // If a scenario set the notation, don't overwrite until the user actually edits
+    if (scenarioNotationRef.current) {
+      // Clear the guard once the user modifies the text
+      // (text will differ from original once they type)
+      return;
+    }
+
     if (!trimmed || trimmed.length < 10) {
       setLiveNotation(null);
       return;
     }
 
+    // Instant client-side analysis — no API dependency
+    const clientNotation = analyzeTextToNotation(trimmed);
+    setNotation(clientNotation);
+    if (clientNotation) {
+      setLiveNotation((prev) => ({
+        source: clientNotation,
+        valid: true,
+        english: prev?.english ?? '',
+        provenance: prev?.provenance,
+        signals: prev?.signals,
+      }));
+    }
+
+    // Debounced API call for full signal breakdown + English rendering
     const timer = setTimeout(() => {
-      // Abort any in-flight request
       liveNotationAbort.current?.abort();
       const controller = new AbortController();
       liveNotationAbort.current = controller;
@@ -216,14 +241,13 @@ export function AssessmentPage() {
         .then((result) => {
           if (!controller.signal.aborted) {
             setLiveNotation(result);
-            // Also sync the notation state so Compose tab reflects it
             if (result.source) {
               setNotation(result.source);
             }
           }
         })
         .catch(() => {
-          // Silently ignore — network errors shouldn't block typing
+          // API unavailable — client-side notation already set above
         })
         .finally(() => {
           if (!controller.signal.aborted) {
@@ -387,7 +411,10 @@ export function AssessmentPage() {
           <div className="space-y-3">
             <textarea
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => {
+                scenarioNotationRef.current = null;
+                setText(e.target.value);
+              }}
               placeholder={assessMode === 'single' ? 'Enter text to assess...' : 'Enter prompt to benchmark across providers...'}
               rows={4}
               className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-base sm:text-sm text-slate-200 placeholder-slate-600 focus:border-accent-teal/50 focus:outline-none focus:ring-1 focus:ring-accent-teal/30 resize-none"
