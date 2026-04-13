@@ -22,7 +22,7 @@ function extractTokens(notation: string): Set<string> {
   return tokens;
 }
 
-function classifyToken(token: string, inExpected: boolean, inComputed: boolean): 'match' | 'added' | 'removed' {
+function classifyToken(_token: string, inExpected: boolean, inComputed: boolean): 'match' | 'added' | 'removed' {
   if (inExpected && inComputed) return 'match';
   if (!inExpected && inComputed) return 'added';
   return 'removed';
