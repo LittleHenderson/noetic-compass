@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/shared/Card';
 import { HowItWorksPanel } from '../components/shared/HowItWorksPanel';
@@ -61,6 +61,10 @@ interface Scenario {
   what_it_tests?: string;
   success_indicator?: string;
   failure_indicator?: string;
+  cas_notation?: string | null;
+  cas_notation_validated?: boolean;
+  cas_notation_english?: string | null;
+  cas_notation_source?: string;
 }
 
 const CAT_COLORS: Record<string, string> = {
@@ -82,6 +86,40 @@ const DIFF_COLORS: Record<string, string> = {
   easy: '#34d399', moderate: '#fbbf24', hard: '#f87171',
 };
 
+const FEATURED_CATEGORY_ORDER = [
+  'ai_safety',
+  'governance',
+  'finance',
+  'healthcare',
+  'hiring',
+  'education',
+  'life_execution',
+  'relationships',
+  'environmental',
+  'adversarial_resilience',
+  'cas_patterns',
+];
+
+function getScenarioPrompt(scenario: Scenario): string {
+  return scenario.prompt_text ?? scenario.prompt ?? '';
+}
+
+function pickFeaturedScenario(scenarios: Scenario[]): Scenario | null {
+  if (scenarios.length === 0) return null;
+
+  for (const category of FEATURED_CATEGORY_ORDER) {
+    const match = scenarios.find(
+      (scenario) =>
+        scenario.category === category
+        && scenario.difficulty !== 'hard'
+        && Boolean(getScenarioPrompt(scenario).trim()),
+    );
+    if (match) return match;
+  }
+
+  return scenarios.find((scenario) => Boolean(getScenarioPrompt(scenario).trim())) ?? scenarios[0];
+}
+
 export function ScenarioBrowserPage() {
   const navigate = useNavigate();
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
@@ -90,6 +128,8 @@ export function ScenarioBrowserPage() {
   const [search, setSearch] = useState('');
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [hasAutoExpanded, setHasAutoExpanded] = useState(false);
+  const scenarioRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
     (async () => {
@@ -124,6 +164,35 @@ export function ScenarioBrowserPage() {
     return r;
   }, [scenarios, selectedCat, search]);
 
+  const featuredScenario = useMemo(() => {
+    const filteredMode = Boolean(selectedCat) || Boolean(search.trim());
+    return pickFeaturedScenario(filteredMode ? filtered : scenarios);
+  }, [filtered, scenarios, search, selectedCat]);
+
+  useEffect(() => {
+    if (!featuredScenario || hasAutoExpanded) return;
+    setExpandedId(featuredScenario.id);
+    setHasAutoExpanded(true);
+  }, [featuredScenario, hasAutoExpanded]);
+
+  function openAssessment(scenario: Scenario) {
+    const prompt = getScenarioPrompt(scenario);
+    navigate('/assessment', {
+      state: {
+        prefill: prompt,
+        notationPrefill: scenario.cas_notation || undefined,
+        scenarioId: scenario.id,
+      },
+    });
+  }
+
+  function previewScenarioDetails(id: string) {
+    setExpandedId(id);
+    window.requestAnimationFrame(() => {
+      scenarioRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <HowItWorksPanel sections={HOW_IT_WORKS_SECTIONS} label="How to Use Scenarios" />
@@ -134,6 +203,68 @@ export function ScenarioBrowserPage() {
           {scenarios.length} assessment scenarios across {categories.length} categories.
         </p>
       </div>
+
+      {featuredScenario && (
+        <Card title="Start Here">
+          <div className="space-y-4">
+            <p className="text-[11px] leading-relaxed text-slate-400">
+              First-time users should not have to invent a prompt from scratch. Start with one featured scenario, see how the system evaluates it, then branch into the rest of the library.
+            </p>
+            <div
+              className="rounded-xl border px-4 py-4"
+              style={{ borderColor: `${CAT_COLORS[featuredScenario.category] ?? '#94a3b8'}33`, backgroundColor: 'rgba(255,255,255,0.03)' }}
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <span
+                  className="rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-wider"
+                  style={{
+                    backgroundColor: `${CAT_COLORS[featuredScenario.category] ?? '#94a3b8'}20`,
+                    color: CAT_COLORS[featuredScenario.category] ?? '#94a3b8',
+                  }}
+                >
+                  Featured Scenario
+                </span>
+                <span className="text-[10px] uppercase tracking-wider text-slate-500">
+                  {CAT_LABELS[featuredScenario.category] ?? featuredScenario.category}
+                </span>
+                {featuredScenario.difficulty && (
+                  <span
+                    className="rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-wider"
+                    style={{
+                      backgroundColor: `${DIFF_COLORS[featuredScenario.difficulty] ?? '#94a3b8'}20`,
+                      color: DIFF_COLORS[featuredScenario.difficulty] ?? '#94a3b8',
+                    }}
+                  >
+                    {featuredScenario.difficulty}
+                  </span>
+                )}
+              </div>
+              <h2 className="mt-3 text-lg font-semibold text-slate-100">{featuredScenario.title}</h2>
+              {featuredScenario.what_it_tests && (
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">{featuredScenario.what_it_tests}</p>
+              )}
+              <p className="mt-3 text-[12px] leading-relaxed text-slate-400">
+                {getScenarioPrompt(featuredScenario).slice(0, 220)}
+                {getScenarioPrompt(featuredScenario).length > 220 ? '...' : ''}
+              </p>
+              <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                <button
+                  onClick={() => openAssessment(featuredScenario)}
+                  className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-4 py-2.5 text-sm font-semibold text-dark-900 hover:opacity-90 transition-opacity min-h-[44px]"
+                >
+                  Run Featured Scenario
+                </button>
+                <button
+                  onClick={() => previewScenarioDetails(featuredScenario.id)}
+                  className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-slate-300 hover:text-slate-100 hover:bg-white/[0.08] transition-colors min-h-[44px]"
+                >
+                  Preview Scenario Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
 
       <div className="flex flex-col gap-3 sm:flex-row">
         <input type="text" value={search} onChange={e => setSearch(e.target.value)}
@@ -181,9 +312,16 @@ export function ScenarioBrowserPage() {
             const color = CAT_COLORS[s.category] ?? '#94a3b8';
             const diffColor = DIFF_COLORS[s.difficulty ?? 'moderate'] ?? '#94a3b8';
             const open = expandedId === s.id;
-            const prompt = s.prompt_text ?? s.prompt ?? '';
+            const prompt = getScenarioPrompt(s);
             return (
-              <div key={s.id} className="glass-card overflow-hidden transition-all duration-150" style={open ? { borderColor: `${color}30` } : undefined}>
+              <div
+                key={s.id}
+                ref={(node) => {
+                  scenarioRefs.current[s.id] = node;
+                }}
+                className="glass-card overflow-hidden scroll-mt-24 transition-all duration-150"
+                style={open ? { borderColor: `${color}30` } : undefined}
+              >
                 <button onClick={() => setExpandedId(open ? null : s.id)} className="w-full flex items-start gap-3 p-4 text-left min-h-[44px]">
                   <span className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: color }} />
                   <div className="flex-1 min-w-0">
@@ -214,13 +352,29 @@ export function ScenarioBrowserPage() {
                       {s.target_domains?.map(d => <span key={`d-${d}`} className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400">{d}</span>)}
                       {s.target_drives?.map(i => <span key={`f-${i}`} className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400">F{i + 1}</span>)}
                     </div>
+                    {s.cas_notation && (
+                      <div className="rounded-lg bg-white/[0.02] border border-white/[0.06] p-3">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">CAS Notation</p>
+                          {s.cas_notation_validated ? (
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400">validated</span>
+                          ) : (
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400">unvalidated</span>
+                          )}
+                        </div>
+                        <p className="text-[12px] font-mono text-accent-teal">{s.cas_notation}</p>
+                        {s.cas_notation_english && (
+                          <p className="text-[11px] text-slate-400 mt-1">{s.cas_notation_english}</p>
+                        )}
+                      </div>
+                    )}
                     {(s.success_indicator || s.failure_indicator) && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {s.success_indicator && <div className="rounded-lg bg-emerald-500/[0.04] border border-emerald-500/15 p-2"><p className="text-[9px] font-semibold text-emerald-400 mb-0.5">Resilient</p><p className="text-[10px] text-slate-400">{s.success_indicator}</p></div>}
                         {s.failure_indicator && <div className="rounded-lg bg-red-500/[0.04] border border-red-500/15 p-2"><p className="text-[9px] font-semibold text-red-400 mb-0.5">Vulnerable</p><p className="text-[10px] text-slate-400">{s.failure_indicator}</p></div>}
                       </div>
                     )}
-                    <button onClick={() => navigate('/', { state: { prefill: prompt } })}
+                    <button onClick={() => openAssessment(s)}
                       className="w-full rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-4 py-2.5 text-xs font-semibold text-dark-900 hover:opacity-90 transition-opacity min-h-[44px]">
                       Run This Assessment
                     </button>

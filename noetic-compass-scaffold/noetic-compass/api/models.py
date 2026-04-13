@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field, field_validator
+from typing import Literal
+
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class DialConfigSchema(BaseModel):
@@ -72,6 +74,34 @@ class WrapRequest(BaseModel):
     dial_config: DialConfigSchema = Field(default_factory=DialConfigSchema)
     model: str | None = None
     mock: bool = False
+    scoring_mode: Literal["secondary_llm", "self_reported", "heuristic_fallback"] = Field(
+        default="heuristic_fallback"
+    )
+    scoring_provider: str | None = None
+    scoring_model: str | None = None
+
+    @field_validator("scoring_provider", "scoring_model")
+    @classmethod
+    def normalize_optional_strings(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        value = v.strip()
+        return value or None
+
+    @model_validator(mode="after")
+    def apply_scoring_defaults(self) -> "WrapRequest":
+        """Prefer an independent secondary scorer for live providers when unset."""
+        fields_set = getattr(self, "model_fields_set", set())
+        provider = (self.provider or "").strip().lower()
+
+        if "scoring_mode" not in fields_set and provider and provider != "mock" and not self.mock:
+            self.scoring_mode = "secondary_llm"
+
+        if self.scoring_mode != "secondary_llm":
+            self.scoring_provider = None
+            self.scoring_model = None
+
+        return self
 
 
 class BatchRequest(BaseModel):
@@ -137,16 +167,26 @@ class FractalAnalysisSchema(BaseModel):
     has_fixed_point: bool = True
 
 
+class CompiledNotationSchema(BaseModel):
+    """Real-time CAS notation synthesized from pipeline results."""
+
+    source: str = ""
+    valid: bool = False
+    english: str = ""
+    provenance: dict = Field(default_factory=dict)
+
+
 class WrapResponse(BaseModel):
     """Full wrap pipeline response."""
 
     nccs: NccsResponse
     stages: list[StageResult]
     llm_response: LLMResponseSchema | None = None
-    scoring_method: str = "heuristic"
+    scoring_method: Literal["secondary_llm", "self_reported", "heuristic_fallback"] = "heuristic_fallback"
     provenance: dict = Field(default_factory=dict)
     interpretation: InterpretationSchema | None = None
     fractal_analysis: FractalAnalysisSchema | None = None
+    compiled_notation: CompiledNotationSchema | None = None
 
 
 class BatchResponse(BaseModel):

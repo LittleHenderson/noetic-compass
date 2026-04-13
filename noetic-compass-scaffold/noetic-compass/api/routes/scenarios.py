@@ -3,14 +3,63 @@
 from __future__ import annotations
 
 import json
+import logging
+import re
 from pathlib import Path
 from typing import Optional
 
 from fastapi import APIRouter, Query
 
+from api.scenario_notation import enrich_scenario_with_notation
+
+logger = logging.getLogger(__name__)
+
 router = APIRouter(prefix="/scenarios", tags=["scenarios"])
 
 CATALOG_DIR = Path(__file__).resolve().parent.parent.parent / "scenarios" / "catalog"
+RAW_ID_TITLE_PATTERN = re.compile(r"^[a-z]{2,4}-\d{2,3}$", re.IGNORECASE)
+
+
+def _humanize_identifier(value: str) -> str:
+    words = value.replace("-", " ").replace("_", " ").split()
+    if not words:
+        return value
+
+    minor_words = {"a", "an", "and", "as", "at", "for", "in", "of", "on", "or", "the", "to", "vs"}
+    formatted: list[str] = []
+    for index, word in enumerate(words):
+        lower = word.lower()
+        if lower == "ai":
+            formatted.append("AI")
+        elif index > 0 and index < len(words) - 1 and lower in minor_words:
+            formatted.append(lower)
+        else:
+            formatted.append(lower.capitalize())
+    return " ".join(formatted)
+
+
+def _derive_display_title(scenario: dict) -> str:
+    title = (scenario.get("title") or "").strip()
+    scenario_id = (scenario.get("id") or "").strip()
+
+    if title and title != scenario_id and not RAW_ID_TITLE_PATTERN.fullmatch(title):
+        return title
+
+    for field in ("attack_pattern", "threshold_test", "drift_measurement"):
+        value = scenario.get(field)
+        if isinstance(value, str) and value.strip():
+            candidate = value.strip()
+            if field == "drift_measurement":
+                candidate = candidate.split("?", 1)[0].strip()
+            return _humanize_identifier(candidate)
+
+    group_label = scenario.get("group_label")
+    if isinstance(group_label, str) and group_label.strip():
+        return group_label.strip()
+
+    if scenario_id:
+        return _humanize_identifier(scenario_id)
+    return "Untitled"
 
 
 def _load_all() -> list[dict]:
@@ -33,13 +82,22 @@ def _load_all() -> list[dict]:
                     s["prompt_text"] = s["prompt"]
                 # Ensure category
                 s.setdefault("category", data.get("metadata", {}).get("category", json_file.stem))
-                s.setdefault("title", s.get("id", "Untitled"))
+                s["title"] = _derive_display_title(s)
                 s.setdefault("difficulty", "moderate")
             all_scenarios.extend(scenarios)
         except (json.JSONDecodeError, KeyError):
             continue
 
-    return all_scenarios
+    # Enrich every scenario with backend-validated CAS notation
+    enriched: list[dict] = []
+    for scenario in all_scenarios:
+        try:
+            enriched.append(enrich_scenario_with_notation(scenario))
+        except Exception:
+            logger.exception("Notation enrichment failed for scenario %s", scenario.get("id"))
+            enriched.append(scenario)
+
+    return enriched
 
 
 @router.get("")

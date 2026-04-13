@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useWrap } from '../hooks/useWrap';
 import { useBenchmark } from '../hooks/useBenchmark';
@@ -13,14 +13,6 @@ import { ExplainPanel } from '../components/shared/ExplainPanel';
 import { ExecutiveSummary } from '../components/shared/ExecutiveSummary';
 import { AiBriefing } from '../components/shared/AiBriefing';
 import { AiResponsePanel } from '../components/shared/AiResponsePanel';
-import { NccsGauge } from '../components/charts/NccsGauge';
-import { SubScoreBreakdown } from '../components/charts/SubScoreBreakdown';
-import { OperatorRadarChart } from '../components/charts/OperatorRadarChart';
-import { DomainCoherenceRadar } from '../components/charts/DomainCoherenceRadar';
-import { StateHeatmap } from '../components/charts/StateHeatmap';
-import { CoreDriveTree } from '../components/charts/CoreDriveTree';
-import { RpmGraph } from '../components/charts/RpmGraph';
-import { InversionMap } from '../components/charts/InversionMap';
 import { FractalCard } from '../components/charts/FractalCard';
 import { TraceViewer } from '../components/shared/TraceViewer';
 import { NotationComposer } from '../components/shared/NotationComposer';
@@ -28,13 +20,57 @@ import { InversionAlert } from '../components/shared/InversionAlert';
 import { BlindSpotCard } from '../components/shared/BlindSpotCard';
 import { ConfidenceIndicator } from '../components/shared/ConfidenceIndicator';
 import { InterpretButton } from '../components/shared/InterpretButton';
+import { ResearchPrototypeNotice } from '../components/shared/ResearchPrototypeNotice';
 import { PIPELINE_STAGES } from '../lib/constants';
 import { computeBlindSpots } from '../lib/blindSpots';
 import { interpretStage } from '../lib/interpretations';
 import { interpretNccs, interpretSubScores, interpretOperators, interpretHeatmap, interpretDomainBalance, interpretExecutiveSummary, interpretStabilityAlerts, interpretBlindSpots, interpretDrives, interpretRpm, interpretInversions, interpretPipeline, interpretFractal, interpretTrace } from '../lib/cardInterpretations';
-import type { WrapResult } from '../api/types';
+import { formatProviderLabel } from '../lib/providerLabels';
+import type { ScoringMode, WrapResult } from '../api/types';
+
+const LazyNccsGauge = lazy(() => import('../components/charts/NccsGauge').then((m) => ({ default: m.NccsGauge })));
+const LazySubScoreBreakdown = lazy(() => import('../components/charts/SubScoreBreakdown').then((m) => ({ default: m.SubScoreBreakdown })));
+const LazyOperatorRadarChart = lazy(() => import('../components/charts/OperatorRadarChart').then((m) => ({ default: m.OperatorRadarChart })));
+const LazyDomainCoherenceRadar = lazy(() => import('../components/charts/DomainCoherenceRadar').then((m) => ({ default: m.DomainCoherenceRadar })));
+const LazyStateHeatmap = lazy(() => import('../components/charts/StateHeatmap').then((m) => ({ default: m.StateHeatmap })));
+const LazyCoreDriveTree = lazy(() => import('../components/charts/CoreDriveTree').then((m) => ({ default: m.CoreDriveTree })));
+const LazyRpmGraph = lazy(() => import('../components/charts/RpmGraph').then((m) => ({ default: m.RpmGraph })));
+const LazyInversionMap = lazy(() => import('../components/charts/InversionMap').then((m) => ({ default: m.InversionMap })));
 
 const PROVIDERS = ['mock', 'openai', 'anthropic', 'google', 'meta', 'xai', 'deepseek', 'qwen'];
+const SCORER_PROVIDERS = PROVIDERS.filter((provider) => provider !== 'mock');
+
+function getScoringMethodLabel(method: ScoringMode | undefined): string {
+  switch (method) {
+    case 'secondary_llm':
+      return 'Secondary LLM assessor';
+    case 'self_reported':
+      return 'Self-reported inline scores';
+    case 'heuristic_fallback':
+    default:
+      return 'Deterministic heuristic fallback';
+  }
+}
+
+function getScoringMethodDescription(method: ScoringMode | undefined): string {
+  switch (method) {
+    case 'secondary_llm':
+      return 'A second scoring call graded the generated response. If no scorer provider is configured, the backend may still fall back safely.';
+    case 'self_reported':
+      return 'The generating model embedded its own operator scores in the response. Treat this as self-assessment, not independent grading.';
+    case 'heuristic_fallback':
+    default:
+      return 'Scores were derived from deterministic text heuristics. This avoids self-grading, but it is still a research-stage approximation.';
+  }
+}
+
+function formatMeasurementLabel(metric: string): string {
+  const labels: Record<string, string> = {
+    social_engineering: 'Social engineering resistance',
+    bias_flags: 'Bias flags',
+  };
+  return labels[metric] ?? metric.replace(/_/g, ' ');
+}
 
 function StageTimeline({ stages }: { stages: WrapResult['stages'] }) {
   const [selected, setSelected] = useState<number | null>(null);
@@ -93,7 +129,11 @@ function StageTimeline({ stages }: { stages: WrapResult['stages'] }) {
 
 export function AssessmentPage() {
   const [text, setText] = useState('');
+  const [notation, setNotation] = useState('');
   const [provider, setProvider] = useState('mock');
+  const [scoringMode, setScoringMode] = useState<ScoringMode>('heuristic_fallback');
+  const [scoringProvider, setScoringProvider] = useState('auto');
+  const [showAdvancedScoring, setShowAdvancedScoring] = useState(false);
   const [viewMode, setViewMode] = useState<'summary' | 'technical'>('summary');
   const [inputMode, setInputMode] = useState<'text' | 'compose'>('text');
   const [assessMode, setAssessMode] = useState<'single' | 'benchmark'>('single');
@@ -103,22 +143,57 @@ export function AssessmentPage() {
   const benchmark = useBenchmark();
   const location = useLocation();
   const benchResultsRef = useRef<HTMLDivElement>(null);
+  const previousProviderRef = useRef(provider);
 
   // Accept prefilled prompt from navigation (e.g., from Scenario Browser)
   useEffect(() => {
-    const state = location.state as { prefill?: string } | null;
-    if (state?.prefill) {
-      setText(state.prefill);
-      setInputMode('text');
-      // Clear the state so refreshing doesn't re-prefill
+    const state = location.state as { prefill?: string; notationPrefill?: string } | null;
+    if (state?.prefill || state?.notationPrefill) {
+      if (state?.prefill) {
+        setText(state.prefill);
+      }
+      if (typeof state?.notationPrefill === 'string') {
+        setNotation(state.notationPrefill);
+      }
+      setInputMode(state?.notationPrefill?.trim() ? 'compose' : 'text');
       window.history.replaceState({}, '');
     }
   }, [location.state]);
 
+  useEffect(() => {
+    if (previousProviderRef.current === provider) {
+      return;
+    }
+
+    previousProviderRef.current = provider;
+    if (provider === 'mock') {
+      if (!showAdvancedScoring || scoringMode === 'secondary_llm') {
+        setScoringMode('heuristic_fallback');
+      }
+      return;
+    }
+
+    if (!showAdvancedScoring || scoringMode === 'heuristic_fallback') {
+      setScoringMode('secondary_llm');
+    }
+  }, [provider, scoringMode, showAdvancedScoring]);
+
+  useEffect(() => {
+    if (!showAdvancedScoring && scoringMode === 'self_reported') {
+      setScoringMode(provider === 'mock' ? 'heuristic_fallback' : 'secondary_llm');
+    }
+  }, [provider, scoringMode, showAdvancedScoring]);
+
   function handleSubmit() {
     if (!text.trim()) return;
     if (assessMode === 'single') {
-      wrap.mutate({ text, provider, mock: provider === 'mock' });
+      wrap.mutate({
+        text,
+        provider,
+        mock: provider === 'mock',
+        scoring_mode: scoringMode,
+        scoring_provider: scoringMode === 'secondary_llm' && scoringProvider !== 'auto' ? scoringProvider : null,
+      });
     } else {
       if (benchProviders.length === 0) return;
       benchmark.mutate({ text, providers: benchProviders, runs_per_provider: runsPerProvider });
@@ -140,6 +215,15 @@ export function AssessmentPage() {
 
   const result = wrap.data;
   const translated = useTranslation(result);
+  const scoringMethod = result?.scoring_method ?? result?.provenance?.scoring_method;
+  const resolvedScorerProvider = typeof result?.provenance?.scorer_provider === 'string'
+    ? result.provenance.scorer_provider
+    : null;
+  const resolvedScorerModel = typeof result?.provenance?.scorer_model === 'string'
+    ? result.provenance.scorer_model
+    : null;
+  const notMeasured = result?.nccs.not_measured ?? [];
+  const unmeasuredLabels = notMeasured.map(formatMeasurementLabel);
 
   const operatorScores = result?.stages.find(s => s.stage === 'operator_scoring')?.data?.scores as number[] | undefined;
   const domainAverages = result?.stages.find(s => s.stage === 'domain_coherence')?.data?.domain_averages as number[] | undefined;
@@ -153,6 +237,11 @@ export function AssessmentPage() {
   const blindSpots = operatorScores && domainAverages
     ? computeBlindSpots(operatorScores, domainAverages, flatDrives)
     : [];
+  const chartFallback = (
+    <div className="flex min-h-[220px] items-center justify-center text-xs text-slate-500">
+      Loading visualization...
+    </div>
+  );
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -180,6 +269,7 @@ export function AssessmentPage() {
       </div>
 
       <ConfidenceIndicator />
+      <ResearchPrototypeNotice compact />
 
       <Card>
         {/* Tab switcher */}
@@ -211,17 +301,17 @@ export function AssessmentPage() {
             <div>
               <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Providers</label>
               <div className="flex flex-wrap gap-2">
-                {PROVIDERS.map((p) => (
-                  <button
-                    key={p}
+                    {PROVIDERS.map((p) => (
+                      <button
+                        key={p}
                     onClick={() => toggleBenchProvider(p)}
                     className={`px-3 py-2 rounded-lg text-xs font-medium transition-all min-h-[36px] ${
                       benchProviders.includes(p)
                         ? 'bg-accent-teal/20 text-accent-teal border border-accent-teal/40'
                         : 'bg-white/[0.04] text-slate-400 border border-white/10 hover:bg-white/[0.08]'
                     }`}
-                  >
-                    {p}
+                    >
+                    {formatProviderLabel(p)}
                   </button>
                 ))}
               </div>
@@ -252,15 +342,71 @@ export function AssessmentPage() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               {assessMode === 'single' && (
                 <>
-                  <select
-                    value={provider}
-                    onChange={(e) => setProvider(e.target.value)}
-                    className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]"
-                  >
-                    {PROVIDERS.map((p) => (
-                      <option key={p} value={p} className="bg-dark-800">{p}</option>
-                    ))}
-                  </select>
+                  <div className="flex-1 space-y-3">
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      <label className="space-y-1">
+                        <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">Generator</span>
+                        <select
+                          value={provider}
+                          onChange={(e) => setProvider(e.target.value)}
+                          className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]"
+                        >
+                          {PROVIDERS.map((p) => (
+                            <option key={p} value={p} className="bg-dark-800">{formatProviderLabel(p)}</option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <label className="space-y-1">
+                        <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">Scoring Mode</span>
+                        <select
+                          value={scoringMode}
+                          onChange={(e) => setScoringMode(e.target.value as ScoringMode)}
+                          className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]"
+                        >
+                          {provider !== 'mock' && (
+                            <option value="secondary_llm" className="bg-dark-800">
+                              Secondary LLM assessor (recommended)
+                            </option>
+                          )}
+                          <option value="heuristic_fallback" className="bg-dark-800">Heuristic fallback</option>
+                          {showAdvancedScoring && (
+                            <option value="self_reported" className="bg-dark-800">Self-reported inline scores</option>
+                          )}
+                        </select>
+                      </label>
+
+                      <label className="space-y-1">
+                        <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">Scorer Provider</span>
+                        <select
+                          value={scoringProvider}
+                          onChange={(e) => setScoringProvider(e.target.value)}
+                          disabled={scoringMode !== 'secondary_llm'}
+                          className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px] disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          <option value="auto" className="bg-dark-800">Auto</option>
+                          {SCORER_PROVIDERS.map((p) => (
+                            <option key={p} value={p} className="bg-dark-800">{formatProviderLabel(p)}</option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+
+                    <label className="flex items-start gap-3 rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2">
+                      <input
+                        type="checkbox"
+                        checked={showAdvancedScoring}
+                        onChange={(e) => setShowAdvancedScoring(e.target.checked)}
+                        className="mt-1 h-4 w-4 rounded border-white/[0.12] bg-dark-700 text-accent-teal focus:ring-accent-teal/40"
+                      />
+                      <span className="space-y-1">
+                        <span className="block text-[11px] font-medium text-slate-300">Advanced scoring options</span>
+                        <span className="block text-[11px] leading-relaxed text-slate-500">
+                          Reveal self-reported scoring. This allows the generator to grade its own response and is not recommended for stakeholder-facing assessments.
+                        </span>
+                      </span>
+                    </label>
+                  </div>
                   {provider !== 'mock' && (
                     <span className="text-[10px] text-amber-400/80 flex items-center gap-1">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -290,9 +436,47 @@ export function AssessmentPage() {
                   : benchmark.isPending ? 'Running...' : 'Run Benchmark'}
               </button>
             </div>
+            {assessMode === 'single' && (
+              <div className="space-y-1 rounded-lg border border-white/[0.08] bg-white/[0.02] px-4 py-3">
+                <p className="text-[11px] font-medium text-slate-300">{getScoringMethodLabel(scoringMode)}</p>
+                <p className="text-[11px] leading-relaxed text-slate-500">
+                  {getScoringMethodDescription(scoringMode)}
+                </p>
+                <div className="rounded-lg border border-white/[0.06] bg-dark-900/30 px-3 py-2 text-[10px] leading-relaxed text-slate-500">
+                  <p className="font-semibold uppercase tracking-wider text-slate-400">Mode guidance</p>
+                  <p className="mt-1">
+                    Least-biased automated baseline: <span className="text-slate-300">heuristic_fallback</span>.
+                    Best overall current mode: <span className="text-slate-300">secondary_llm</span> with a separate scorer.
+                    Worst stakeholder comparison mode: <span className="text-slate-300">self_reported</span>.
+                  </p>
+                </div>
+                {provider !== 'mock' && scoringMode === 'secondary_llm' && (
+                  <p className="text-[10px] text-emerald-300/80">
+                    Recommended default for live providers: a separate scorer reduces self-grading risk and makes report provenance clearer.
+                  </p>
+                )}
+                {scoringMode === 'secondary_llm' && (
+                  <p className="text-[10px] text-slate-500">
+                    Auto prefers a different scorer provider when one is configured and available. Pick a scorer provider explicitly if you want a specific grading source.
+                  </p>
+                )}
+                {scoringMode === 'self_reported' && (
+                  <p className="text-[10px] text-amber-400/80">
+                    Advanced warning: self-reported mode allows the generator to supply its own operator scores. Treat it as self-assessment only.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         ) : (
-          <NotationComposer onGenerate={(prompt) => { setText(prompt); setInputMode('text'); }} />
+          <NotationComposer
+            notation={notation}
+            onNotationChange={setNotation}
+            onGenerate={(prompt) => {
+              setText(prompt);
+              setInputMode('text');
+            }}
+          />
         )}
       </Card>
 
@@ -317,8 +501,43 @@ export function AssessmentPage() {
 
       {assessMode === 'single' && result && (
         <div className="space-y-6">
+          <ResearchPrototypeNotice />
+
           {/* Show the actual AI response that was assessed. Collapsed by default. */}
           <AiResponsePanel llmResponse={result.llm_response} />
+
+          <Card title="Scoring Provenance">
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Method</p>
+                <p className="mt-1 text-sm font-medium text-slate-200">{getScoringMethodLabel(scoringMethod)}</p>
+              </div>
+              <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Scorer Provider</p>
+                <p className="mt-1 text-sm font-medium text-slate-200">{resolvedScorerProvider ?? 'Not used'}</p>
+              </div>
+              <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Scorer Model</p>
+                <p className="mt-1 text-sm font-medium text-slate-200">{resolvedScorerModel ?? 'Not provided'}</p>
+              </div>
+            </div>
+            <div className="mt-4 space-y-2 text-sm text-slate-400">
+              <p>{getScoringMethodDescription(scoringMethod)}</p>
+              <p className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-slate-400">
+                Social engineering resistance and bias-flag counts are measured as heuristic risk signals. They are included in prototype scoring, but they are not validated instruments.
+              </p>
+              {scoringMethod === 'self_reported' && (
+                <p className="rounded-lg border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-amber-300">
+                  This run used inline self-reporting from the generator response. Treat the scores as self-assessment, not independent grading.
+                </p>
+              )}
+              {unmeasuredLabels.length > 0 && (
+                <p className="rounded-lg border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-amber-300">
+                  Unmeasured dimensions: {unmeasuredLabels.join(', ')}. These metrics are not currently measured by the scoring pipeline.
+                </p>
+              )}
+            </div>
+          </Card>
 
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
             {result.interpretation && (
@@ -339,17 +558,40 @@ export function AssessmentPage() {
             />
           )}
 
+          {result.compiled_notation?.source && (
+            <Card title="CAS Notation (Computed)">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  {result.compiled_notation.valid ? (
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-medium">compiler-validated</span>
+                  ) : (
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 font-medium">unvalidated</span>
+                  )}
+                  <span className="text-[10px] text-slate-600">synthesized from pipeline results</span>
+                </div>
+                <p className="font-mono text-base text-accent-teal tracking-wide">{result.compiled_notation.source}</p>
+                {result.compiled_notation.english && (
+                  <p className="text-sm text-slate-400">{result.compiled_notation.english}</p>
+                )}
+              </div>
+            </Card>
+          )}
+
           {(viewMode === 'technical' || !result.interpretation) && (
             <>
               <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
                 <Card title="NCCS Score" action={<InterpretButton interpretation={interpretNccs(result.nccs)} />}>
                   <div className="flex flex-col items-center gap-4">
-                    <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
+                    <Suspense fallback={chartFallback}>
+                      <LazyNccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
+                    </Suspense>
                     <CertBadge certification={result.nccs.certification} composite={result.nccs.composite} />
                   </div>
                 </Card>
                 <Card title="Sub-Score Breakdown" action={<InterpretButton interpretation={interpretSubScores(result.nccs)} />}>
-                  <SubScoreBreakdown nccs={result.nccs} />
+                  <Suspense fallback={chartFallback}>
+                    <LazySubScoreBreakdown nccs={result.nccs} />
+                  </Suspense>
                 </Card>
               </div>
 
@@ -363,18 +605,24 @@ export function AssessmentPage() {
               <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
                 {operatorScores && (
                   <Card title="Thinking Patterns" action={<InterpretButton interpretation={interpretOperators(operatorScores)} />}>
-                    <OperatorRadarChart scores={operatorScores} />
+                    <Suspense fallback={chartFallback}>
+                      <LazyOperatorRadarChart scores={operatorScores} />
+                    </Suspense>
                   </Card>
                 )}
                 <Card title="Processing Balance" action={domainAverages ? <InterpretButton interpretation={interpretDomainBalance(domainAverages)} /> : undefined}>
-                  <DomainCoherenceRadar result={result} />
+                  <Suspense fallback={chartFallback}>
+                    <LazyDomainCoherenceRadar result={result} />
+                  </Suspense>
                 </Card>
               </div>
 
               <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
                 {operatorScores && domainAverages && (
                   <Card title="40-State Heatmap" action={<InterpretButton interpretation={interpretHeatmap(operatorScores, domainAverages)} />}>
-                    <StateHeatmap operatorScores={operatorScores} domainAverages={domainAverages} />
+                    <Suspense fallback={chartFallback}>
+                      <LazyStateHeatmap operatorScores={operatorScores} domainAverages={domainAverages} />
+                    </Suspense>
                   </Card>
                 )}
                 {/* Inversion Alert (Task 2) */}
@@ -394,21 +642,27 @@ export function AssessmentPage() {
               <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
                 {driveScores && driveScores.length > 0 && (
                   <Card title="Core Drives" action={<InterpretButton interpretation={interpretDrives(driveScores.map(d => d[0]))} />}>
-                    <CoreDriveTree driveScores={driveScores.map(d => d[0])} />
+                    <Suspense fallback={chartFallback}>
+                      <LazyCoreDriveTree driveScores={driveScores.map(d => d[0])} />
+                    </Suspense>
                   </Card>
                 )}
                 {driveScores && a0Score !== undefined && rpmCompleteness !== undefined && (
                   <Card title="RPM Graph" action={<InterpretButton interpretation={interpretRpm(driveScores, a0Score, rpmCompleteness)} />}>
-                    <RpmGraph
-                      a0Score={a0Score}
-                      driveScores={driveScores}
-                      rpmCompleteness={rpmCompleteness}
-                    />
+                    <Suspense fallback={chartFallback}>
+                      <LazyRpmGraph
+                        a0Score={a0Score}
+                        driveScores={driveScores}
+                        rpmCompleteness={rpmCompleteness}
+                      />
+                    </Suspense>
                   </Card>
                 )}
                 {axisScores && stealthResistance !== undefined && (
                   <Card title="Inversion Map" action={<InterpretButton interpretation={interpretInversions(axisScores, stealthResistance)} />}>
-                    <InversionMap axisScores={axisScores} stealthResistance={stealthResistance} />
+                    <Suspense fallback={chartFallback}>
+                      <LazyInversionMap axisScores={axisScores} stealthResistance={stealthResistance} />
+                    </Suspense>
                   </Card>
                 )}
               </div>

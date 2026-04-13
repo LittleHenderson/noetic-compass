@@ -9,6 +9,7 @@ from api.config import settings
 from api.llm_connectors.base import BaseLLMConnector, LLMResponse
 from api.llm_connectors.registry import get_connector
 from api.models import (
+    CompiledNotationSchema,
     DialConfigSchema,
     LLMResponseSchema,
     NccsResponse,
@@ -17,6 +18,7 @@ from api.models import (
 )
 from api.pipeline.interpreter import generate_interpretation, DRIVE_NAMES
 from api.pipeline.fractal_analysis import analyze_fractal
+from api.pipeline.notation_synthesizer import synthesize_notation
 from api.pipeline.stages import (
     input_analyzer,
     rpm_gate,
@@ -32,35 +34,87 @@ from api.pipeline.stages import (
 class WrapPipelineRunner:
     """Orchestrates the 8-stage wrap pipeline."""
 
+    _SCORER_DEFAULT_MODELS: dict[str, str] = {
+        "openai": "gpt-4o",
+        "anthropic": "claude-sonnet-4-6",
+        "google": "gemini-2.5-flash",
+        "xai": "grok-4.20",
+        "deepseek": "deepseek-chat",
+        "qwen": "qwen3.6-plus",
+        "meta": "llama-3.3-70b-versatile",
+    }
+
+    _SCORER_PREFERENCE_ORDER: tuple[str, ...] = (
+        "anthropic",
+        "openai",
+        "google",
+        "xai",
+        "deepseek",
+        "qwen",
+        "meta",
+    )
+
     def __init__(self, connector: BaseLLMConnector, dial_config: DialConfigSchema):
         self.connector = connector
         self.dial_config = dial_config
 
-    def _resolve_scoring_connector(self) -> tuple[BaseLLMConnector | None, str | None, str | None]:
+    @staticmethod
+    def _provider_is_available(provider: str) -> bool:
+        return {
+            "openai": bool(settings.openai_api_key),
+            "anthropic": bool(settings.anthropic_api_key),
+            "google": bool(settings.google_api_key),
+            "meta": bool(settings.meta_api_base_url),
+            "xai": bool(settings.xai_api_key),
+            "deepseek": bool(settings.deepseek_api_key),
+            "qwen": bool(settings.qwen_api_key),
+        }.get(provider, False)
+
+    def _resolve_scoring_connector(
+        self,
+        *,
+        scoring_mode: str,
+        scoring_provider_override: str | None = None,
+        scoring_model_override: str | None = None,
+    ) -> tuple[BaseLLMConnector | None, str | None, str | None]:
         """Resolve the secondary scorer LLM, if configured/available."""
+        if scoring_mode != "secondary_llm":
+            return None, None, None
+
         try:
-            configured_provider = settings.scoring_provider.strip().lower()
-            configured_model = settings.scoring_model.strip() or None
+            configured_provider = (scoring_provider_override or settings.scoring_provider).strip().lower()
+            configured_model = (scoring_model_override or settings.scoring_model).strip() or None
 
             if configured_provider:
                 connector = get_connector(configured_provider, model=configured_model)
-                return connector, configured_provider, configured_model
+                return connector, configured_provider, configured_model or self._SCORER_DEFAULT_MODELS.get(configured_provider)
 
-            if self.connector.provider_name in {"openai", "anthropic"}:
-                default_models = {
-                    "openai": "gpt-4o",
-                    "anthropic": "claude-sonnet-4-6",
-                }
-                provider = self.connector.provider_name
-                model = configured_model or default_models[provider]
+            generator_provider = self.connector.provider_name
+
+            for provider in self._SCORER_PREFERENCE_ORDER:
+                if provider == generator_provider or not self._provider_is_available(provider):
+                    continue
+                model = configured_model or self._SCORER_DEFAULT_MODELS.get(provider)
                 connector = get_connector(provider, model=model)
                 return connector, provider, model
+
+            if self._provider_is_available(generator_provider):
+                model = configured_model or self._SCORER_DEFAULT_MODELS.get(generator_provider)
+                connector = get_connector(generator_provider, model=model)
+                return connector, generator_provider, model
         except Exception:
             return None, None, None
 
         return None, None, None
 
-    async def run(self, text: str) -> WrapResponse:
+    async def run(
+        self,
+        text: str,
+        *,
+        scoring_mode: str = "heuristic_fallback",
+        scoring_provider: str | None = None,
+        scoring_model: str | None = None,
+    ) -> WrapResponse:
         """Execute the full 8-stage pipeline."""
         stages: list[StageResult] = []
         llm_resp: LLMResponse | None = None
@@ -95,7 +149,11 @@ class WrapPipelineRunner:
         ))
 
         # Stage 3: Dial Adjustment
-        adjusted = await dial_adjustment(analyzed, self.dial_config)
+        adjusted = await dial_adjustment(
+            analyzed,
+            self.dial_config,
+            include_inline_scores=scoring_mode == "self_reported",
+        )
         stages.append(StageResult(
             stage="dial_adjustment",
             success=True,
@@ -111,12 +169,17 @@ class WrapPipelineRunner:
         ))
 
         # Stage 5: Operator Scoring
-        scorer_connector, scorer_provider, scorer_model = self._resolve_scoring_connector()
+        scorer_connector, scorer_provider_resolved, scorer_model_resolved = self._resolve_scoring_connector(
+            scoring_mode=scoring_mode,
+            scoring_provider_override=scoring_provider,
+            scoring_model_override=scoring_model,
+        )
         op_result = await operator_scoring(
             llm_resp,
+            scoring_mode=scoring_mode,
             prompt_text=adjusted.text,
             scorer_connector=scorer_connector,
-            scorer_model=scorer_model,
+            scorer_model=scorer_model_resolved,
         )
         stages.append(StageResult(
             stage="operator_scoring",
@@ -176,11 +239,20 @@ class WrapPipelineRunner:
         nccs = await output_gate(
             op_result, dc_result, inv_result, rpm_result,
             drive_scores=flat_drives,
+            prompt_text=adjusted.text,
+            response_text=llm_resp.text if llm_resp else "",
         )
         stages.append(StageResult(
             stage="output_gate",
             success=True,
-            data={"composite": nccs.composite, "certification": nccs.certification},
+            data={
+                "composite": nccs.composite,
+                "certification": nccs.certification,
+                "social_engineering": nccs.social_engineering,
+                "bias_flags": nccs.bias_flags,
+                "manipulation_resistance": nccs.manipulation_resistance,
+                "overton_drift_resistance": nccs.overton_drift_resistance,
+            },
         ))
 
         elapsed_ms = round((time.monotonic() - t0) * 1000, 1)
@@ -213,9 +285,10 @@ class WrapPipelineRunner:
             "engine": "cas-engine",
             "input_hash": hashlib.sha256(text.encode()).hexdigest()[:16],
             "connector": self.connector.provider_name,
+            "requested_scoring_mode": scoring_mode,
             "scoring_method": op_result.scoring_method,
-            "scorer_provider": op_result.scorer_provider or scorer_provider,
-            "scorer_model": op_result.scorer_model or scorer_model,
+            "scorer_provider": op_result.scorer_provider or scorer_provider_resolved,
+            "scorer_model": op_result.scorer_model or scorer_model_resolved,
             "elapsed_ms": elapsed_ms,
             "rpm_heuristic": rpm_result.heuristic,
         }
@@ -254,6 +327,25 @@ class WrapPipelineRunner:
             has_fixed_point=fractal.has_fixed_point,
         )
 
+        # Real-time notation synthesis from actual computed results
+        synthesized = synthesize_notation(
+            operator_scores=op_result.scores,
+            raw_scores_0_to_10=op_result.raw_scores_0_to_10,
+            domain_averages=dc_result.domain_averages,
+            drive_chains=rpm_result.drive_scores,
+            a0_score=rpm_result.a0_score,
+            rpm_completeness=rpm_result.rpm_completeness,
+            inversion_axis_scores=inv_result.axis_scores,
+            fractal_sequence=fractal.dominant_sequence,
+            fractal_classification=fractal.classification,
+        )
+        compiled_notation = CompiledNotationSchema(
+            source=synthesized.source,
+            valid=synthesized.valid,
+            english=synthesized.english,
+            provenance=synthesized.provenance,
+        )
+
         return WrapResponse(
             nccs=nccs_response,
             stages=stages,
@@ -262,4 +354,5 @@ class WrapPipelineRunner:
             provenance=provenance,
             interpretation=interpretation,
             fractal_analysis=fractal_schema,
+            compiled_notation=compiled_notation,
         )

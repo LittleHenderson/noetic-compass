@@ -1,5 +1,7 @@
 /** TypeScript types mirroring api/models.py */
 
+export type ScoringMode = 'secondary_llm' | 'self_reported' | 'heuristic_fallback';
+
 export interface DialConfig {
   values: number[]; // 10 ints, each [3,9]
 }
@@ -24,6 +26,9 @@ export interface WrapRequest {
   dial_config?: DialConfig;
   model?: string | null;
   mock?: boolean;
+  scoring_mode?: ScoringMode;
+  scoring_provider?: string | null;
+  scoring_model?: string | null;
 }
 
 export interface BatchRequest {
@@ -77,14 +82,36 @@ export interface FractalAnalysis {
   has_fixed_point: boolean;
 }
 
+export interface WrapProvenance {
+  pipeline_version?: string;
+  engine?: string;
+  input_hash?: string;
+  connector?: string;
+  requested_scoring_mode?: ScoringMode;
+  scoring_method?: ScoringMode;
+  scorer_provider?: string | null;
+  scorer_model?: string | null;
+  elapsed_ms?: number;
+  rpm_heuristic?: string;
+  [key: string]: unknown;
+}
+
+export interface CompiledNotation {
+  source: string;
+  valid: boolean;
+  english: string;
+  provenance?: Record<string, unknown>;
+}
+
 export interface WrapResult {
   nccs: NccsResult;
   stages: StageResult[];
   llm_response: LLMResponse | null;
-  scoring_method?: 'llm' | 'heuristic';
-  provenance?: Record<string, unknown>;
+  scoring_method?: ScoringMode;
+  provenance?: WrapProvenance;
   interpretation?: Interpretation | null;
   fractal_analysis?: FractalAnalysis | null;
+  compiled_notation?: CompiledNotation | null;
 }
 
 // ── Validation types ──
@@ -112,6 +139,157 @@ export interface ValidationLabelResponse {
   label_count: number;
   machine_scores: number[] | null;
   machine_domain_averages: number[] | null;
+}
+
+export interface ScorerAgreementSubmit {
+  generator_provider: string;
+  generator_model?: string | null;
+  scorer_provider: string;
+  scorer_model?: string | null;
+  prompt_excerpt: string;
+  machine_score: number;
+  scorer_score: number;
+  notes?: string;
+  item_index?: number | null;
+}
+
+export interface BenchmarkSuiteSubmit {
+  suite_name: string;
+  provider: string;
+  model?: string | null;
+  scoring_mode?: ScoringMode;
+  scoring_provider?: string | null;
+  scoring_model?: string | null;
+  cases_run: number;
+  mean_score: number;
+  variance: number;
+  notes?: string;
+}
+
+export interface ErrorCaseSubmit {
+  kind: 'false_positive' | 'false_negative';
+  provider?: string | null;
+  model?: string | null;
+  prompt_excerpt: string;
+  expected_tier: string;
+  observed_tier: string;
+  notes?: string;
+  item_index?: number | null;
+}
+
+export interface ValidationEvidenceMutationResponse {
+  status: string;
+  count: number;
+  summary: Record<string, unknown>;
+}
+
+export interface ValidationEvidenceFacetOption {
+  value: string;
+  label: string;
+}
+
+export interface ValidationEvidenceEntry {
+  kind: 'scorer_agreement' | 'benchmark_suites' | 'error_cases';
+  kind_label: string;
+  case_kind?: string;
+  provider?: string | null;
+  model?: string | null;
+  scoring_mode?: ScoringMode | null;
+  scoring_provider?: string | null;
+  scoring_model?: string | null;
+  summary: string;
+  timestamp: string;
+  notes?: string;
+  prompt_excerpt?: string;
+  suite_name?: string;
+  status?: string;
+  successes?: number;
+  failures?: number;
+  expected_tier?: string;
+  observed_tier?: string;
+  machine_score?: number;
+  scorer_score?: number;
+  mean_score?: number | null;
+  item_index?: number | null;
+}
+
+export interface ValidationEvidenceReview {
+  total: number;
+  returned: number;
+  filters: {
+    kind?: string | null;
+    provider?: string | null;
+    model?: string | null;
+    q?: string | null;
+    limit: number;
+    offset: number;
+  };
+  facets: {
+    kinds: ValidationEvidenceFacetOption[];
+    providers: string[];
+    models: string[];
+  };
+  entries: ValidationEvidenceEntry[];
+}
+
+export interface ValidationEvidenceSummaryGroup {
+  count: number;
+  recent: Record<string, unknown>[];
+  mean_absolute_gap?: number;
+  cases_run?: number;
+  failed_runs?: number;
+  false_positives?: number;
+  false_negatives?: number;
+}
+
+export interface ValidationEvidenceSeedResponse {
+  status: string;
+  summary: {
+    scorer_agreement: ValidationEvidenceSummaryGroup;
+    benchmark_suites: ValidationEvidenceSummaryGroup;
+    error_cases: ValidationEvidenceSummaryGroup;
+  };
+  counts: {
+    scorer_agreement: number;
+    benchmark_suites: number;
+    error_cases: number;
+  };
+}
+
+export interface ValidationEvidenceTrendRow {
+  provider?: string;
+  model?: string;
+  total_entries: number;
+  scorer_agreement: number;
+  benchmark_suites: number;
+  error_cases: number;
+  mean_absolute_gap: number;
+  benchmark_cases: number;
+  failed_runs: number;
+  false_positives: number;
+  false_negatives: number;
+  latest_timestamp: string;
+}
+
+export interface ValidationEvidenceTimelinePoint {
+  date: string;
+  total: number;
+  scorer_agreement: number;
+  benchmark_suites: number;
+  error_cases: number;
+}
+
+export interface ValidationEvidenceTierDrift {
+  expected_tier: string;
+  observed_tier: string;
+  count: number;
+}
+
+export interface ValidationEvidenceTrends {
+  timeline: ValidationEvidenceTimelinePoint[];
+  by_provider: ValidationEvidenceTrendRow[];
+  by_model: ValidationEvidenceTrendRow[];
+  tier_drift: ValidationEvidenceTierDrift[];
 }
 
 export interface OperatorCorrelation {
@@ -156,9 +334,211 @@ export interface ValidationLeaderboard {
   stats: ValidationStats;
   operator_correlations: OperatorCorrelation[];
   inter_rater: InterRaterPair[];
+  calibration?: ValidationCalibration;
   recommendations: CalibrationRecommendation[];
   operator_names: string[];
   domain_names: string[];
+  evidence_summary?: {
+    scorer_agreement: ValidationEvidenceSummaryGroup;
+    benchmark_suites: ValidationEvidenceSummaryGroup;
+    error_cases: ValidationEvidenceSummaryGroup;
+  };
+}
+
+export interface ValidationCalibrationRaterRow {
+  rater: string;
+  label_count: number;
+  item_count: number;
+  mean_panel_gap: number;
+  mean_abs_panel_gap: number;
+  mean_abs_machine_gap: number;
+  top_operator_drift?: {
+    operator_index: number;
+    operator_name: string;
+    signed_gap: number;
+  } | null;
+}
+
+export interface ValidationCalibrationOperatorRow {
+  operator_index: number;
+  operator_name: string;
+  shared_items: number;
+  mean_spread: number;
+  max_spread: number;
+}
+
+export interface ValidationCalibrationItemRow {
+  item_index: number;
+  prompt_excerpt: string;
+  raters: string[];
+  label_count: number;
+  largest_operator_gap: {
+    operator_index: number;
+    operator_name: string;
+    spread: number;
+    panel_mean: number;
+  };
+  mean_spread: number;
+  machine_mean: number | null;
+  panel_mean: number;
+}
+
+export interface ValidationCalibration {
+  raters: ValidationCalibrationRaterRow[];
+  operators: ValidationCalibrationOperatorRow[];
+  items: ValidationCalibrationItemRow[];
+}
+
+export type ValidationCalibrationDisposition =
+  | 'resolved_panel'
+  | 'resolved_machine'
+  | 'rubric_clarification'
+  | 'false_positive'
+  | 'false_negative'
+  | 'needs_more_review';
+
+export interface ValidationCalibrationQueueLabel {
+  rater: string;
+  timestamp: string;
+  notes: string;
+  operator_scores: number[];
+  domain_scores: number[];
+}
+
+export interface ValidationCalibrationSessionEntry {
+  item_index: number;
+  reconciler: string;
+  disposition: ValidationCalibrationDisposition;
+  notes: string;
+  timestamp: string;
+  resolved_operator_scores?: number[] | null;
+  resolved_domain_scores?: number[] | null;
+}
+
+export interface ValidationCalibrationQueueItem {
+  item_index: number;
+  prompt: string;
+  prompt_excerpt: string;
+  response: string;
+  model: string;
+  raters: string[];
+  labels: ValidationCalibrationQueueLabel[];
+  panel_operator_scores: number[];
+  panel_domain_scores: number[];
+  machine_operator_scores: number[];
+  machine_domain_scores: number[];
+  largest_operator_gap?: {
+    operator_index: number;
+    operator_name: string;
+    spread: number;
+    panel_mean: number;
+  } | null;
+  mean_spread: number;
+  machine_panel_gap: number;
+  session_count: number;
+  last_session?: ValidationCalibrationSessionEntry | null;
+}
+
+export interface ValidationCalibrationSessionData {
+  queue: ValidationCalibrationQueueItem[];
+  recent_sessions: ValidationCalibrationSessionEntry[];
+}
+
+export interface ValidationCalibrationSessionSubmit {
+  item_index: number;
+  reconciler: string;
+  disposition: ValidationCalibrationDisposition;
+  notes?: string;
+  resolved_operator_scores?: number[] | null;
+  resolved_domain_scores?: number[] | null;
+}
+
+export interface ValidationCalibrationSessionResponse {
+  status: string;
+  count: number;
+  entry: ValidationCalibrationSessionEntry;
+}
+
+export interface ValidationCatalogCollection {
+  id: string;
+  label: string;
+  path: string;
+  kind: string;
+}
+
+export interface ValidationStudyArtifact {
+  filename: string;
+  path: string;
+  provider?: string | null;
+  model?: string | null;
+  scoring_mode?: ScoringMode | null;
+  scoring_provider?: string | null;
+  scoring_model?: string | null;
+  study_label?: string | null;
+  prompt_source?: string | null;
+  prompt_count?: number | null;
+  successes?: number | null;
+  failures?: number | null;
+  status?: string | null;
+  composite_mean?: number | null;
+  composite_std?: number | null;
+  study_date?: string | null;
+}
+
+export interface ValidationAdminBaselineRequest {
+  provider: string;
+  prompt_collection: string;
+  count: number;
+  label?: string | null;
+  model?: string | null;
+  scoring_mode?: ScoringMode;
+  scoring_provider?: string | null;
+  scoring_model?: string | null;
+  reseed?: boolean;
+}
+
+export interface ValidationAdminBaselineResponse {
+  status: string;
+  summary: Record<string, unknown>;
+  archive_path: string;
+  output_path?: string | null;
+  evidence_summary?: ValidationLeaderboard['evidence_summary'];
+}
+
+export interface ValidationAdminSuiteMatrixRequest {
+  provider: string;
+  suite_ids?: string[];
+  count_per_suite: number;
+  model?: string | null;
+  scoring_mode?: ScoringMode;
+  scoring_provider?: string | null;
+  scoring_model?: string | null;
+  reseed?: boolean;
+}
+
+export interface ValidationAdminSuiteMatrixRun {
+  suite_id: string;
+  label?: string;
+  status: string;
+  provider?: string;
+  model?: string | null;
+  successes?: number;
+  failures?: number;
+  prompt_count?: number;
+  composite_mean?: number;
+  archive_path?: string;
+  error?: string;
+}
+
+export interface ValidationAdminSuiteMatrixResponse {
+  status: string;
+  provider: string;
+  suite_count: number;
+  success_count: number;
+  partial_count: number;
+  failed_count: number;
+  runs: ValidationAdminSuiteMatrixRun[];
+  evidence_summary?: ValidationLeaderboard['evidence_summary'];
 }
 
 export interface BatchResult {

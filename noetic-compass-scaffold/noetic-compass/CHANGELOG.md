@@ -1,5 +1,40 @@
 # Noetic Compass — Progress Log
 
+## Session 32: Real-Time CAS Notation Synthesis (April 13, 2026)
+
+### Backend — Notation Synthesizer (NEW)
+- **`api/pipeline/notation_synthesizer.py`** (NEW) — Real-time CAS notation synthesizer that derives a compiler-validated expression from actual pipeline computation results (operator scores, domain averages, drive chains, RPM completeness, inversion axis scores, fractal analysis). The notation is a formal description of what the system *found*, not a prediction of what it expected to find.
+- Extracts significant operators (raw score > 5.0), domains (average > 0.45), drives (chain stage > 0.5), RPM-wraps drives with complete prerequisite chains, includes non-neutral fractal sequences.
+- Feeds the assembled expression through `compiler.py` (lexer → AST → type checker → bytecode → VM) for validation. Falls back to simplified expression if the full one fails compilation.
+- Generates English description directly from extracted components: operator names, domain names, drive chain status, fractal classification.
+- **`api/models.py`** — Added `CompiledNotationSchema` (source, valid, english, provenance).
+- **`api/pipeline/runner.py`** — Synthesizer runs after fractal analysis; `WrapResponse` now includes `compiled_notation` field.
+- **`tests/test_notation_synthesizer.py`** (NEW) — 22 tests: component extraction (operators, domains, drives, inversions), expression building, full synthesis integration, determinism, below-threshold handling, provenance tracking.
+
+### Backend — Scenario Notation Enrichment
+- **`api/scenario_notation.py`** (already existed from previous session) — `enrich_scenario_with_notation()` generates pre-assessment CAS notation from scenario metadata and validates through compiler.
+- **`api/routes/scenarios.py`** — Every scenario returned by the API is now enriched with `cas_notation`, `cas_notation_validated`, `cas_notation_english`, `cas_notation_source`, `cas_assessment_config`. This is the pre-assessment "what will this test?" notation.
+
+### Frontend — Notation Display
+- **`dashboard/src/pages/ScenarioBrowserPage.tsx`** — Removed client-side `buildScenarioNotation()` import. Now consumes `cas_notation` from the API response. Expanded scenario detail shows validated CAS notation with compiler badge and English translation.
+- **`dashboard/src/pages/AssessmentPage.tsx`** — After assessment runs, displays "CAS Notation (Computed)" card showing the real-time synthesized notation with compiler-validated badge and English translation.
+- **`dashboard/src/api/types.ts`** — Added `CompiledNotation` interface, added `compiled_notation` to `WrapResult`, added notation fields to `Scenario` interface.
+- **`dashboard/src/lib/scenarioNotation.ts`** — DELETED (client-side notation generation removed entirely).
+- **`dashboard/src/test/__tests__/scenarioNotation.test.ts`** — DELETED.
+- **`dashboard/src/test/__tests__/ScenarioBrowserPage.test.tsx`** — Updated mock data to include backend notation fields, updated assertions.
+- **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated notation prefill format.
+
+### Two Notation Paths
+1. **Pre-assessment** (scenario browser): derived from scenario metadata, compiler-validated. Teaches users CAS language before they run anything.
+2. **Post-assessment** (results): derived from actual pipeline computation, compiler-validated. Proves what the system computed in real-time.
+
+### Verification
+- Python: 286 passed, 1 skipped (22 new synthesizer tests)
+- Frontend: 31 passed (8 test files)
+- Synthesizer produces `rust+python` compiler-validated expressions with full provenance
+
+---
+
 ## Session 31: Human Validation Study System (April 10, 2026)
 
 ### Backend
