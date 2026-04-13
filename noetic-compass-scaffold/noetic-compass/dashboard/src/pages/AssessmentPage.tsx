@@ -16,6 +16,8 @@ import { AiResponsePanel } from '../components/shared/AiResponsePanel';
 import { FractalCard } from '../components/charts/FractalCard';
 import { TraceViewer } from '../components/shared/TraceViewer';
 import { NotationComposer } from '../components/shared/NotationComposer';
+import { NotationDiff } from '../components/shared/NotationDiff';
+import { SignalHeatmap } from '../components/shared/SignalHeatmap';
 import { InversionAlert } from '../components/shared/InversionAlert';
 import { BlindSpotCard } from '../components/shared/BlindSpotCard';
 import { ConfidenceIndicator } from '../components/shared/ConfidenceIndicator';
@@ -144,6 +146,8 @@ export function AssessmentPage() {
   const [liveNotation, setLiveNotation] = useState<LiveNotationResult | null>(null);
   const [liveNotationLoading, setLiveNotationLoading] = useState(false);
   const liveNotationAbort = useRef<AbortController | null>(null);
+  const [expectedNotation, setExpectedNotation] = useState<string | null>(null);
+  const [expectedEnglish, setExpectedEnglish] = useState<string | null>(null);
   const wrap = useWrap();
   const benchmark = useBenchmark();
   const location = useLocation();
@@ -152,13 +156,17 @@ export function AssessmentPage() {
 
   // Accept prefilled prompt from navigation (e.g., from Scenario Browser)
   useEffect(() => {
-    const state = location.state as { prefill?: string; notationPrefill?: string } | null;
+    const state = location.state as { prefill?: string; notationPrefill?: string; notationEnglish?: string } | null;
     if (state?.prefill || state?.notationPrefill) {
       if (state?.prefill) {
         setText(state.prefill);
       }
       if (typeof state?.notationPrefill === 'string') {
         setNotation(state.notationPrefill);
+        setExpectedNotation(state.notationPrefill);
+      }
+      if (typeof state?.notationEnglish === 'string') {
+        setExpectedEnglish(state.notationEnglish);
       }
       setInputMode(state?.notationPrefill?.trim() ? 'compose' : 'text');
       window.history.replaceState({}, '');
@@ -403,6 +411,16 @@ export function AssessmentPage() {
                     {liveNotation.english && (
                       <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed">{liveNotation.english}</p>
                     )}
+                    {liveNotation.signals && (
+                      <div className="mt-3 pt-3 border-t border-white/[0.04]">
+                        <SignalHeatmap
+                          operatorScores={liveNotation.signals.operator_scores}
+                          domainScores={liveNotation.signals.domain_scores}
+                          driveScores={liveNotation.signals.drive_scores}
+                          rpmSignal={liveNotation.signals.rpm_signal}
+                        />
+                      </div>
+                    )}
                   </>
                 ) : liveNotation && !liveNotationLoading ? (
                   <p className="text-[11px] text-slate-500">Keep typing — the system needs more text to detect CAS patterns...</p>
@@ -628,7 +646,17 @@ export function AssessmentPage() {
             />
           )}
 
-          {result.compiled_notation?.source && (
+          {result.compiled_notation?.source && expectedNotation ? (
+            <Card title="Notation Analysis: Expected vs. Computed">
+              <NotationDiff
+                expected={expectedNotation}
+                expectedEnglish={expectedEnglish}
+                computed={result.compiled_notation.source}
+                computedEnglish={result.compiled_notation.english}
+                computedValid={result.compiled_notation.valid}
+              />
+            </Card>
+          ) : result.compiled_notation?.source ? (
             <Card title="CAS Notation (Computed)">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
@@ -645,7 +673,7 @@ export function AssessmentPage() {
                 )}
               </div>
             </Card>
-          )}
+          ) : null}
 
           {(viewMode === 'technical' || !result.interpretation) && (
             <>

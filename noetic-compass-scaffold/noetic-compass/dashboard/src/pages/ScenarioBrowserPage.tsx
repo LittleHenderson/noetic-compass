@@ -181,6 +181,7 @@ export function ScenarioBrowserPage() {
       state: {
         prefill: prompt,
         notationPrefill: scenario.cas_notation || undefined,
+        notationEnglish: scenario.cas_notation_english || undefined,
         scenarioId: scenario.id,
       },
     });

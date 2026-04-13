@@ -24,6 +24,15 @@
 - **`dashboard/src/test/__tests__/ScenarioBrowserPage.test.tsx`** — Updated mock data to include backend notation fields, updated assertions.
 - **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated notation prefill format.
 
+### Notation Diff View: Expected vs. Computed
+- **`dashboard/src/components/shared/NotationDiff.tsx`** (NEW) — Side-by-side comparison of pre-assessment (expected) and post-assessment (computed) CAS notation. Token-level diff classifies each CO, domain, drive, and RPM token as "confirmed" (in both), "new finding" (only in computed), or "not observed" (only in expected). Divergence summary with color-coded token pills. Shows "No Divergence" confirmation when profiles match.
+- **`dashboard/src/pages/AssessmentPage.tsx`** — When a scenario was the source of an assessment, the results show "Notation Analysis: Expected vs. Computed" card with the diff. For free-text assessments (no scenario), shows the standalone computed notation card.
+- **`dashboard/src/pages/ScenarioBrowserPage.tsx`** — Now passes `notationEnglish` to the assessment page alongside the notation itself.
+
+### Live Signal Heatmap
+- **`dashboard/src/components/shared/SignalHeatmap.tsx`** (NEW) — Mini heatmap showing per-operator (10 cells), per-domain (4 cells), per-drive (7 cells) signal scores as the user types. Color intensity scales with signal strength. RPM signal shown as a progress bar. Makes the live analysis feel like a real-time diagnostic instrument.
+- **`dashboard/src/pages/AssessmentPage.tsx`** — Signal heatmap appears below the live CAS notation in the Free Text tab, inside the analysis panel.
+
 ### Live CAS Analysis (Real-Time Text → Notation)
 - **`api/pipeline/text_signal_analyzer.py`** (NEW) — Fast text-to-CAS signal analyzer. Scans raw input for linguistic patterns mapped to CAS ontology: 10 operator signal lists (stem-matched), 4 domain signal lists, 7 drive signal lists, RPM chain language. Runs in <50ms — no LLM needed.
 - **`api/routes/notation.py`** — Added `POST /notation/analyze` endpoint. Takes raw text, extracts signals, feeds through synthesizer + compiler, returns compiler-validated CAS notation with signal breakdown. This is the live endpoint the UI calls as the user types.
