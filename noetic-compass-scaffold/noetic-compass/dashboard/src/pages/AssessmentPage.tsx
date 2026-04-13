@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useWrap } from '../hooks/useWrap';
 import { useBenchmark } from '../hooks/useBenchmark';
@@ -26,6 +26,8 @@ import { computeBlindSpots } from '../lib/blindSpots';
 import { interpretStage } from '../lib/interpretations';
 import { interpretNccs, interpretSubScores, interpretOperators, interpretHeatmap, interpretDomainBalance, interpretExecutiveSummary, interpretStabilityAlerts, interpretBlindSpots, interpretDrives, interpretRpm, interpretInversions, interpretPipeline, interpretFractal, interpretTrace } from '../lib/cardInterpretations';
 import { formatProviderLabel } from '../lib/providerLabels';
+import { postAnalyzeText } from '../api/endpoints';
+import type { LiveNotationResult } from '../api/endpoints';
 import type { ScoringMode, WrapResult } from '../api/types';
 
 const LazyNccsGauge = lazy(() => import('../components/charts/NccsGauge').then((m) => ({ default: m.NccsGauge })));
@@ -139,6 +141,9 @@ export function AssessmentPage() {
   const [assessMode, setAssessMode] = useState<'single' | 'benchmark'>('single');
   const [benchProviders, setBenchProviders] = useState<string[]>(['mock']);
   const [runsPerProvider, setRunsPerProvider] = useState(5);
+  const [liveNotation, setLiveNotation] = useState<LiveNotationResult | null>(null);
+  const [liveNotationLoading, setLiveNotationLoading] = useState(false);
+  const liveNotationAbort = useRef<AbortController | null>(null);
   const wrap = useWrap();
   const benchmark = useBenchmark();
   const location = useLocation();
@@ -183,6 +188,46 @@ export function AssessmentPage() {
       setScoringMode(provider === 'mock' ? 'heuristic_fallback' : 'secondary_llm');
     }
   }, [provider, scoringMode, showAdvancedScoring]);
+
+  // Live notation: debounce text input and call /notation/analyze
+  useEffect(() => {
+    const trimmed = text.trim();
+    if (!trimmed || trimmed.length < 10) {
+      setLiveNotation(null);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      // Abort any in-flight request
+      liveNotationAbort.current?.abort();
+      const controller = new AbortController();
+      liveNotationAbort.current = controller;
+
+      setLiveNotationLoading(true);
+      postAnalyzeText(trimmed)
+        .then((result) => {
+          if (!controller.signal.aborted) {
+            setLiveNotation(result);
+            // Also sync the notation state so Compose tab reflects it
+            if (result.source) {
+              setNotation(result.source);
+            }
+          }
+        })
+        .catch(() => {
+          // Silently ignore — network errors shouldn't block typing
+        })
+        .finally(() => {
+          if (!controller.signal.aborted) {
+            setLiveNotationLoading(false);
+          }
+        });
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [text]);
 
   function handleSubmit() {
     if (!text.trim()) return;
@@ -339,6 +384,31 @@ export function AssessmentPage() {
               rows={4}
               className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-base sm:text-sm text-slate-200 placeholder-slate-600 focus:border-accent-teal/50 focus:outline-none focus:ring-1 focus:ring-accent-teal/30 resize-none"
             />
+
+            {/* Live CAS notation — updates as user types */}
+            {(liveNotation || liveNotationLoading) && (
+              <div className={`rounded-lg border p-3 transition-all ${liveNotation?.valid ? 'border-accent-teal/20 bg-accent-teal/[0.03]' : 'border-white/[0.06] bg-white/[0.02]'}`}>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Live CAS Analysis</p>
+                  {liveNotationLoading && (
+                    <span className="text-[9px] text-slate-600 animate-pulse">analyzing...</span>
+                  )}
+                  {liveNotation?.valid && !liveNotationLoading && (
+                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400">compiler-validated</span>
+                  )}
+                </div>
+                {liveNotation?.source ? (
+                  <>
+                    <p className="font-mono text-sm text-accent-teal tracking-wide">{liveNotation.source}</p>
+                    {liveNotation.english && (
+                      <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed">{liveNotation.english}</p>
+                    )}
+                  </>
+                ) : liveNotation && !liveNotationLoading ? (
+                  <p className="text-[11px] text-slate-500">Keep typing — the system needs more text to detect CAS patterns...</p>
+                ) : null}
+              </div>
+            )}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               {assessMode === 'single' && (
                 <>

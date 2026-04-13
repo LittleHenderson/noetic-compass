@@ -24,6 +24,14 @@
 - **`dashboard/src/test/__tests__/ScenarioBrowserPage.test.tsx`** — Updated mock data to include backend notation fields, updated assertions.
 - **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated notation prefill format.
 
+### Live CAS Analysis (Real-Time Text → Notation)
+- **`api/pipeline/text_signal_analyzer.py`** (NEW) — Fast text-to-CAS signal analyzer. Scans raw input for linguistic patterns mapped to CAS ontology: 10 operator signal lists (stem-matched), 4 domain signal lists, 7 drive signal lists, RPM chain language. Runs in <50ms — no LLM needed.
+- **`api/routes/notation.py`** — Added `POST /notation/analyze` endpoint. Takes raw text, extracts signals, feeds through synthesizer + compiler, returns compiler-validated CAS notation with signal breakdown. This is the live endpoint the UI calls as the user types.
+- **`dashboard/src/pages/AssessmentPage.tsx`** — Free Text tab now shows "Live CAS Analysis" panel below the textarea. Debounced (300ms), calls `/notation/analyze` as user types, displays compiler-validated notation + English translation in real time. Also syncs to the Compose tab.
+- **`dashboard/src/api/endpoints.ts`** — Added `postAnalyzeText()` client function and `LiveNotationResult` type.
+- **`dashboard/src/test/mocks/handlers.ts`** — Added mock handler for `/notation/analyze`.
+- **`tests/test_text_signal_analyzer.py`** (NEW) — 12 tests: signal extraction (ethical→CO-3+Principled, analytical→CO-1+Cognitive, action→CO-8+Operational), drive detection, RPM detection, bounds checking, determinism, API endpoint tests with auth.
+
 ### Two Notation Paths
 1. **Pre-assessment** (scenario browser): derived from scenario metadata, compiler-validated. Teaches users CAS language before they run anything.
 2. **Post-assessment** (results): derived from actual pipeline computation, compiler-validated. Proves what the system computed in real-time.
