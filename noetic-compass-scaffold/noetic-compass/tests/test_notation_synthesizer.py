@@ -153,8 +153,7 @@ class TestBuildExpression:
             fractal_sequence=[5, 3, 1],
             fractal_classification="stabilizing",
         )
-        # Short fractals (<=3) use ∘ composition; longer ones use Phi<>
-        assert "\u2218" in expr  # ∘ composition operator
+        assert "Phi<" in expr
 
     def test_fractal_excluded_when_neutral(self):
         expr = _build_expression(
@@ -203,11 +202,13 @@ class TestSynthesizeNotation:
         ))
         assert "Phi<" in result.source
 
-    def test_excludes_fractal_for_neutral(self):
+    def test_auto_generates_fractal_from_operator_order(self):
+        """Even with neutral classification, 3+ operators auto-generate Phi<>."""
         result = synthesize_notation(**_default_kwargs(
             fractal_classification="neutral",
         ))
-        assert "Phi<" not in result.source
+        # 4 operators above threshold → auto-generated fractal sequence
+        assert "Phi<" in result.source
 
     def test_handles_all_below_threshold(self):
         result = synthesize_notation(**_default_kwargs(
