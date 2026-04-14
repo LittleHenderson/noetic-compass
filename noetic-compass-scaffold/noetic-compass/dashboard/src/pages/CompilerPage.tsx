@@ -1,56 +1,20 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { apiFetch } from '../api/client';
 
-// ── TKS 10-Dot Formation ──
-
-const TKS_NODES = [
-  { id: 1, cx: 400, cy: 55,   fill: '#FFC107', stroke: '#FFA000' },
-  { id: 3, cx: 110, cy: 190,  fill: '#E53935', stroke: '#C62828' },
-  { id: 2, cx: 690, cy: 190,  fill: '#7B1FA2', stroke: '#6A1B9A' },
-  { id: 4, cx: 400, cy: 400,  fill: '#FFC107', stroke: '#FFA000' },
-  { id: 6, cx: 110, cy: 545,  fill: '#E53935', stroke: '#C62828' },
-  { id: 5, cx: 690, cy: 545,  fill: '#7B1FA2', stroke: '#6A1B9A' },
-  { id: 7, cx: 400, cy: 690,  fill: '#FFC107', stroke: '#FFA000' },
-  { id: 9, cx: 110, cy: 870,  fill: '#E53935', stroke: '#C62828' },
-  { id: 8, cx: 690, cy: 870,  fill: '#7B1FA2', stroke: '#6A1B9A' },
-  { id: 0, cx: 400, cy: 1020, fill: '#FFC107', stroke: '#FFA000' },
-];
-
-function TksDotFormation({ flash }: { flash: boolean }) {
-  return (
-    <svg viewBox="0 0 800 1100" className="h-full w-auto" style={{ maxHeight: '180px' }}>
-      {TKS_NODES.map((n, i) => (
-        <circle
-          key={n.id}
-          cx={n.cx}
-          cy={n.cy}
-          r={80}
-          fill={n.fill}
-          stroke={n.stroke}
-          strokeWidth={12}
-          opacity={flash ? 1 : undefined}
-          style={{
-            animation: flash
-              ? `tks-flash 0.4s ease-out`
-              : `tks-breathe 2.5s ease-in-out ${i * 0.25}s infinite alternate`,
-          }}
-        />
-      ))}
-    </svg>
-  );
-}
-
 // ── Constants ──
 
-const ASCII_LOGO = ` ██████╗ █████╗ ███████╗
-██╔════╝██╔══██╗██╔════╝
-██║     ███████║███████╗
-██║     ██╔══██║╚════██║
-╚██████╗██║  ██║███████║
- ╚═════╝╚═╝  ╚═╝╚══════╝
-Cognitive Architecture
-Compiler v1.0
-Patent Pending`;
+// ASCII lines split so the dot formation can be inlined after the S
+const ASCII_LINES = [
+  ' ██████╗ █████╗ ███████╗',
+  '██╔════╝██╔══██╗██╔════╝',
+  '██║     ███████║███████╗',
+  '██║     ██╔══██║╚════██║',
+  '╚██████╗██║  ██║███████║',
+  ' ╚═════╝╚═╝  ╚═╝╚══════╝',
+  'Cognitive Architecture',
+  'Compiler v1.0',
+  'Patent Pending',
+];
 
 const HELP_TEXT = `Commands:
   :help      Show this message
@@ -466,14 +430,24 @@ export function CompilerPage() {
           style={{ backgroundColor: '#0d1117' }}
           onClick={() => inputRef.current?.focus()}
         >
-          {/* Logo: ASCII letters + TKS dot formation side by side */}
+          {/* Logo: ASCII CAS with 10-dot formation fused to the end of the S */}
           {history.length === 0 && (
             <div className="space-y-3">
-              <div className="flex items-center gap-4">
-                <pre className="text-accent-teal text-[10px] leading-tight select-none shrink-0">{ASCII_LOGO}</pre>
-                <div className="shrink-0">
-                  <TksDotFormation flash={false} />
-                </div>
+              <div className="select-none flex items-start gap-4">
+                <pre className="text-accent-teal text-[10px] leading-tight whitespace-pre m-0 shrink-0">{ASCII_LINES.join('\n')}</pre>
+                {/* TKS 10-dot formation — exact original proportions from SVG viewBox 0 0 800 1100, 3x dot size */}
+                <svg viewBox="0 0 800 1100" className="shrink-0" style={{ height: '140px', width: '100px' }}>
+                  <circle cx="400" cy="55"   r="90" fill="#FFC107" stroke="#FFA000" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 0s infinite alternate' }} />
+                  <circle cx="110" cy="190"  r="90" fill="#E53935" stroke="#C62828" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.25s infinite alternate' }} />
+                  <circle cx="690" cy="190"  r="90" fill="#7B1FA2" stroke="#6A1B9A" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.5s infinite alternate' }} />
+                  <circle cx="400" cy="400"  r="90" fill="#FFC107" stroke="#FFA000" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.75s infinite alternate' }} />
+                  <circle cx="110" cy="545"  r="90" fill="#E53935" stroke="#C62828" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.0s infinite alternate' }} />
+                  <circle cx="690" cy="545"  r="90" fill="#7B1FA2" stroke="#6A1B9A" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.25s infinite alternate' }} />
+                  <circle cx="400" cy="690"  r="90" fill="#FFC107" stroke="#FFA000" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.5s infinite alternate' }} />
+                  <circle cx="110" cy="870"  r="90" fill="#E53935" stroke="#C62828" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.75s infinite alternate' }} />
+                  <circle cx="690" cy="870"  r="90" fill="#7B1FA2" stroke="#6A1B9A" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 2.0s infinite alternate' }} />
+                  <circle cx="400" cy="1020" r="90" fill="#FFC107" stroke="#FFA000" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 2.25s infinite alternate' }} />
+                </svg>
               </div>
               <p className="text-slate-500 text-xs">
                 Type <span className="text-slate-300">:help</span> for commands,{' '}
