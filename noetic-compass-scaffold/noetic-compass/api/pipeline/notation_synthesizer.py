@@ -92,13 +92,26 @@ def _pick_significant_operators(
     return [idx for idx, _ in scored[:MAX_OPERATORS]]
 
 
-def _pick_significant_domains(domain_averages: list[float]) -> list[str]:
-    """Return domain codes for domains above the significance threshold."""
-    return [
+def _pick_significant_domains(
+    domain_averages: list[float],
+    *,
+    need_fallback: bool = False,
+) -> list[str]:
+    """Return domain codes for domains above the significance threshold.
+
+    When need_fallback is True and no domain passes threshold, returns the
+    strongest domain so notation always has proper CO-N^D form.
+    """
+    result = [
         DOMAIN_CODES[idx]
         for idx, avg in enumerate(domain_averages)
         if avg >= DOMAIN_SIGNIFICANCE_THRESHOLD and idx < len(DOMAIN_CODES)
     ]
+    if not result and need_fallback:
+        best_idx = max(range(len(domain_averages)), key=lambda i: domain_averages[i])
+        if domain_averages[best_idx] > 0:
+            result = [DOMAIN_CODES[best_idx]]
+    return result
 
 
 def _pick_significant_drives(
@@ -227,7 +240,10 @@ def synthesize_notation(
     """
     # Extract significant components from the scores
     operators = _pick_significant_operators(raw_scores_0_to_10)
-    domains = _pick_significant_domains(domain_averages)
+    domains = _pick_significant_domains(
+        domain_averages,
+        need_fallback=len(operators) > 0,
+    )
     rpm_drives, plain_drives = _pick_significant_drives(drive_chains, a0_score)
     flagged_inversions = _pick_flagged_inversions(inversion_axis_scores)
 

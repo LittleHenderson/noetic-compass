@@ -83,22 +83,37 @@ export function analyzeTextToNotation(text: string): string {
     .slice(0, MAX_OPERATORS)
     .map((o) => o.idx);
 
-  // Pick significant domains
-  const significantDomains = DOMAIN_ORDER.filter(
+  // Pick significant domains — if none pass threshold, use the strongest one
+  // so notation always has proper CO-N^D form (never bare CO-N)
+  let significantDomains = DOMAIN_ORDER.filter(
     (_, i) => domScores[i] >= DOMAIN_THRESHOLD,
   );
+  if (significantDomains.length === 0 && significantOps.length > 0) {
+    // Fall back to the strongest domain even if below threshold
+    let bestIdx = 0;
+    let bestScore = domScores[0];
+    for (let i = 1; i < domScores.length; i++) {
+      if (domScores[i] > bestScore) {
+        bestScore = domScores[i];
+        bestIdx = i;
+      }
+    }
+    if (bestScore > 0) {
+      significantDomains = [DOMAIN_ORDER[bestIdx]];
+    }
+  }
 
-  if (significantOps.length === 0 && significantDomains.length === 0) return '';
+  if (significantOps.length === 0) return '';
 
   // Build notation: operator^domain pairs
   const parts: string[] = [];
-  if (significantOps.length > 0 && significantDomains.length > 0) {
+  if (significantDomains.length > 0) {
     for (const op of significantOps) {
       for (const dom of significantDomains) {
         parts.push(`CO-${op}^${dom}`);
       }
     }
-  } else if (significantOps.length > 0) {
+  } else {
     for (const op of significantOps) {
       parts.push(`CO-${op}`);
     }

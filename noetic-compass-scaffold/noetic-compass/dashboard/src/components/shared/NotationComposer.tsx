@@ -223,29 +223,32 @@ export function NotationComposer({ notation, onNotationChange, onGenerate }: Not
         </div>
       )}
 
-      {/* Quick reference — dual-layer operations */}
-      <div className="text-[9px] leading-relaxed space-y-1">
-        <div className="text-slate-600">
-          <span className="font-mono text-slate-500">CO-3^E</span> state
-          {' · '}
-          <span className="font-mono text-slate-500">RPM(F5)</span> chain
-          {' · '}
-          <span className="font-mono text-slate-500">Phi&lt;1:4:7&gt;</span> fractal
-          {' · '}
-          <span className="font-mono text-slate-500">P3</span> shorthand
-        </div>
-        <div className="flex gap-3">
-          <span className="text-slate-500">
-            <span className="text-[8px] uppercase tracking-wider">Syntactic</span>{' '}
-            <span className="font-mono text-slate-400">+</span> combine{' '}
-            <span className="font-mono text-slate-400">-</span> remove
-          </span>
-          <span className="text-orange-400/70">
-            <span className="text-[8px] uppercase tracking-wider">Algebraic</span>{' '}
-            <span className="font-mono text-orange-400">×</span> compose{' '}
-            <span className="font-mono text-orange-400">÷</span> ratio{' '}
-            <span className="font-mono text-orange-400">∘</span> fractal
-          </span>
+      {/* Syntax reference — visually separated from output */}
+      <div className="border-t border-white/[0.04] pt-2 mt-1">
+        <p className="text-[8px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Syntax Reference</p>
+        <div className="text-[9px] leading-relaxed space-y-1">
+          <div className="text-slate-600">
+            <span className="font-mono text-slate-500">CO-3^E</span> state
+            {' · '}
+            <span className="font-mono text-slate-500">RPM(F5)</span> chain
+            {' · '}
+            <span className="font-mono text-slate-500">Phi&lt;1:4:7&gt;</span> fractal
+            {' · '}
+            <span className="font-mono text-slate-500">P3</span> shorthand
+          </div>
+          <div className="flex gap-3">
+            <span className="text-slate-500">
+              <span className="text-[8px] uppercase tracking-wider">Syntactic</span>{' '}
+              <span className="font-mono text-slate-400">+</span> combine{' '}
+              <span className="font-mono text-slate-400">-</span> remove
+            </span>
+            <span className="text-orange-400/70">
+              <span className="text-[8px] uppercase tracking-wider">Algebraic</span>{' '}
+              <span className="font-mono text-orange-400">×</span> compose{' '}
+              <span className="font-mono text-orange-400">÷</span> ratio{' '}
+              <span className="font-mono text-orange-400">∘</span> fractal
+            </span>
+          </div>
         </div>
       </div>
 
