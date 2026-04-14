@@ -66,6 +66,104 @@ body {
 .glow-teal { filter: drop-shadow(0 0 6px rgba(45, 212, 191, 0.4)); }
 .glow-cyan { filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.4)); }
 
+@keyframes brand-tagline-pulse {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 10px rgba(45, 212, 191, 0.45))
+      drop-shadow(0 0 24px rgba(34, 211, 238, 0.2));
+    transform: scale(1);
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 16px rgba(45, 212, 191, 0.9))
+      drop-shadow(0 0 40px rgba(34, 211, 238, 0.5))
+      drop-shadow(0 0 72px rgba(45, 212, 191, 0.3));
+    transform: scale(1.02);
+  }
+}
+
+@keyframes brand-compass-pulse {
+  0%, 100% {
+    opacity: 0.82;
+    filter: drop-shadow(0 0 6px rgba(45, 212, 191, 0.2));
+  }
+  50% {
+    opacity: 1;
+    filter:
+      drop-shadow(0 0 10px rgba(45, 212, 191, 0.55))
+      drop-shadow(0 0 24px rgba(34, 211, 238, 0.3));
+  }
+}
+
+.brand-tagline {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0;
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  color: #d7fbf5;
+  animation: brand-tagline-pulse 2.2s ease-in-out infinite;
+}
+
+.brand-tagline-header {
+  font-size: 0.68rem;
+}
+
+.brand-tagline-hero {
+  font-size: 0.95rem;
+}
+
+.brand-tagline-intro {
+  font-size: clamp(1.7rem, 6vw, 4.2rem);
+}
+
+.brand-tagline-ai {
+  margin: 0 0.03em;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  color: #f3fffd;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.45),
+    0 0 24px rgba(45, 212, 191, 0.55),
+    0 0 46px rgba(34, 211, 238, 0.35);
+}
+
+.brand-compass {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.3rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(167, 243, 208, 0.92);
+  animation: brand-compass-pulse 2.8s ease-in-out infinite;
+}
+
+.brand-compass-header {
+  margin-top: 0.15rem;
+  font-size: 0.5rem;
+}
+
+.brand-compass-hero {
+  font-size: 0.64rem;
+}
+
+.brand-compass-intro {
+  font-size: clamp(0.7rem, 1.6vw, 0.95rem);
+}
+
+.brand-compass-icon {
+  height: 1.1em;
+  width: 1.1em;
+  border-radius: 9999px;
+  box-shadow:
+    0 0 10px rgba(45, 212, 191, 0.35),
+    0 0 22px rgba(34, 211, 238, 0.18);
+}
+
 /* Custom scrollbar for dark mode */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -123,7 +221,6 @@ body {
 
 /* ── Cinematic intro tagline ── */
 .intro-tagline {
-  font-size: clamp(1.6rem, 6vw, 4rem);
   transform-style: preserve-3d;
   will-change: transform, opacity, filter;
   letter-spacing: 0.01em;
@@ -187,6 +284,22 @@ body {
       drop-shadow(0 0 120px rgba(45, 212, 191, 0.7))
       drop-shadow(0 0 180px rgba(34, 211, 238, 0.4));
   }
+}
+
+/* Category pill — always colored, rapid glow pulse on hover */
+.cat-pill {
+  transition: all 0.15s ease;
+}
+.cat-pill:hover {
+  animation: cat-glow-pulse 0.4s ease-in-out infinite alternate;
+  filter: brightness(1.3);
+  box-shadow:
+    0 0 8px var(--cat-glow, #94a3b8),
+    0 0 20px color-mix(in srgb, var(--cat-glow, #94a3b8) 40%, transparent);
+}
+@keyframes cat-glow-pulse {
+  0%   { filter: brightness(1.2); transform: scale(1); }
+  100% { filter: brightness(1.6); transform: scale(1.06); }
 }
 
 /* Interactive chart cursor */

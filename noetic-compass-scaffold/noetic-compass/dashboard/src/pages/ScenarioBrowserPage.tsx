@@ -284,10 +284,20 @@ export function ScenarioBrowserPage() {
         </button>
         {categories.map(([c, n]) => {
           const color = CAT_COLORS[c] ?? '#94a3b8';
+          const isActive = selectedCat === c;
           return (
-            <button key={c} onClick={() => setSelectedCat(selectedCat === c ? null : c)}
-              className="rounded-full px-3 py-1.5 text-[11px] font-medium transition-all min-h-[36px]"
-              style={selectedCat === c ? { backgroundColor: `${color}20`, color } : { color: '#94a3b8' }}>
+            <button
+              key={c}
+              onClick={() => setSelectedCat(isActive ? null : c)}
+              className="cat-pill group relative rounded-full px-3 py-1.5 text-[11px] font-semibold transition-all min-h-[36px]"
+              style={{
+                color,
+                backgroundColor: `${color}${isActive ? '25' : '12'}`,
+                borderWidth: '1px',
+                borderColor: `${color}${isActive ? '50' : '20'}`,
+                '--cat-glow': color,
+              } as React.CSSProperties}
+            >
               {CAT_LABELS[c] ?? c} ({n})
             </button>
           );
