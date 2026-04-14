@@ -24,6 +24,18 @@
 - **`dashboard/src/test/__tests__/ScenarioBrowserPage.test.tsx`** — Updated mock data to include backend notation fields, updated assertions.
 - **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated notation prefill format.
 
+### Algebraic Operations: × and ÷ in Rust Scoring Engine
+- **`cas-engine/src/algebra/`** (NEW MODULE) — Full CAS v7.4 algebraic operations, formally verified by Qwen:
+  - **`drives.rs`** — Drive synthesis table: same drive = idempotent, inversion pairs (F1↔F7, F2↔F6, F3↔F5) → F4 Connection, non-paired → attractor closest to F4. Drive ratio for division.
+  - **`multiplication.rs`** — Cognitive state multiplication: operator composition (monoid on Z/10Z), domain descent (P×C=C, E×C=Error), drive synthesis, admissibility check. 6 tests including associativity.
+  - **`division.rs`** — Cognitive state division: same-domain only, operator ratio (same=CO-0, involution pair=CO-0, midpoint otherwise), drive ratio. 5 tests.
+  - **`simplex.rs`** — Probability simplex operations: geometric mean for ×, element-wise ratio for ÷, both renormalized to Δ°39. Commutativity, idempotency, simplex preservation tests.
+  - **`error.rs`** — AlgebraError type: DomainAscentViolation, CrossDomainDivision, AdmissibilityViolation, DegenerateState, BoundaryViolation, DimensionMismatch.
+- **`cas-engine/src/lib.rs`** — Registered `pub mod algebra`.
+- **`cas-engine/src/python_bindings.rs`** — 5 new PyO3 functions: `multiply_state_vectors`, `divide_state_vectors`, `multiply_cognitive_states`, `divide_cognitive_states`, `synthesize_drives`.
+- **`api/notation/compiler.py`** — TIMES and DIVIDE evaluation now routes through Rust algebra when available. TIMES allows domain descent (P×C=C). DIVIDE enforces same-domain. Involution pairs resolve to CO-0 identity. Python fallback preserved.
+- **Rust tests:** 330 total (278 lib + 42 integration + 10 others), all passing.
+
 ### Reproducibility Test (Test-Retest Reliability)
 - **`api/routes/reproducibility.py`** (NEW) — `POST /reproducibility` endpoint. Runs the same prompt against the same provider N times (2-50, default 10), collects all NCCS composite scores, computes mean, std dev, min, max, range, coefficient of variation, and certification consistency. Returns all individual run results with sub-scores.
 - **`api/main.py`** — Registered reproducibility router.

@@ -2,15 +2,16 @@
 //!
 //! Exposes the core CAS types and scoring functions to Python via maturin.
 
+use pyo3::exceptions::{PyIndexError, PyValueError};
 use pyo3::prelude::*;
-use pyo3::exceptions::{PyValueError, PyIndexError};
 use std::collections::HashMap;
 
-use crate::ontology;
-use crate::scoring;
-use crate::metric;
+use crate::algebra;
 use crate::inversions;
+use crate::metric;
+use crate::ontology;
 use crate::rpm;
+use crate::scoring;
 
 // ---------------------------------------------------------------------------
 // CognitiveOperator
@@ -28,7 +29,9 @@ impl PyCognitiveOperator {
     fn new(index: usize) -> PyResult<Self> {
         ontology::CognitiveOperator::from_index(index)
             .map(|op| Self { inner: op })
-            .ok_or_else(|| PyValueError::new_err(format!("operator index must be 0-9, got {index}")))
+            .ok_or_else(|| {
+                PyValueError::new_err(format!("operator index must be 0-9, got {index}"))
+            })
     }
 
     #[getter]
@@ -37,7 +40,9 @@ impl PyCognitiveOperator {
     }
 
     fn involute(&self) -> Self {
-        Self { inner: self.inner.involute() }
+        Self {
+            inner: self.inner.involute(),
+        }
     }
 
     fn is_self_dual(&self) -> bool {
@@ -45,14 +50,18 @@ impl PyCognitiveOperator {
     }
 
     fn compose(&self, other: &PyCognitiveOperator) -> Self {
-        Self { inner: self.inner.compose(other.inner) }
+        Self {
+            inner: self.inner.compose(other.inner),
+        }
     }
 
     fn is_admissible(&self, source_index: usize, target_index: usize) -> PyResult<bool> {
-        let src = ontology::CognitiveStateId::from_linear_index(source_index)
-            .ok_or_else(|| PyValueError::new_err(format!("source index must be 0-39, got {source_index}")))?;
-        let tgt = ontology::CognitiveStateId::from_linear_index(target_index)
-            .ok_or_else(|| PyValueError::new_err(format!("target index must be 0-39, got {target_index}")))?;
+        let src = ontology::CognitiveStateId::from_linear_index(source_index).ok_or_else(|| {
+            PyValueError::new_err(format!("source index must be 0-39, got {source_index}"))
+        })?;
+        let tgt = ontology::CognitiveStateId::from_linear_index(target_index).ok_or_else(|| {
+            PyValueError::new_err(format!("target index must be 0-39, got {target_index}"))
+        })?;
         Ok(self.inner.is_admissible(src, tgt))
     }
 
@@ -158,7 +167,9 @@ impl PyCoreDrive {
     }
 
     fn invert(&self) -> Self {
-        Self { inner: self.inner.invert() }
+        Self {
+            inner: self.inner.invert(),
+        }
     }
 
     fn is_self_dual(&self) -> bool {
@@ -227,8 +238,9 @@ impl PyCognitiveStateVector {
     }
 
     fn domain_average(&self, domain_index: usize) -> PyResult<f64> {
-        let domain = ontology::Domain::from_index(domain_index)
-            .ok_or_else(|| PyValueError::new_err(format!("domain index must be 0-3, got {domain_index}")))?;
+        let domain = ontology::Domain::from_index(domain_index).ok_or_else(|| {
+            PyValueError::new_err(format!("domain index must be 0-3, got {domain_index}"))
+        })?;
         Ok(self.inner.domain_average(domain))
     }
 
@@ -276,15 +288,19 @@ impl PyDialConfig {
     }
 
     fn get(&self, operator_index: usize) -> PyResult<u8> {
-        let op = ontology::CognitiveOperator::from_index(operator_index)
-            .ok_or_else(|| PyValueError::new_err(format!("operator index must be 0-9, got {operator_index}")))?;
+        let op = ontology::CognitiveOperator::from_index(operator_index).ok_or_else(|| {
+            PyValueError::new_err(format!("operator index must be 0-9, got {operator_index}"))
+        })?;
         Ok(self.inner.get(op).value())
     }
 
     fn set(&mut self, operator_index: usize, value: u8) -> PyResult<()> {
-        let op = ontology::CognitiveOperator::from_index(operator_index)
-            .ok_or_else(|| PyValueError::new_err(format!("operator index must be 0-9, got {operator_index}")))?;
-        self.inner.set(op, value).map_err(|e| PyValueError::new_err(format!("{e}")))
+        let op = ontology::CognitiveOperator::from_index(operator_index).ok_or_else(|| {
+            PyValueError::new_err(format!("operator index must be 0-9, got {operator_index}"))
+        })?;
+        self.inner
+            .set(op, value)
+            .map_err(|e| PyValueError::new_err(format!("{e}")))
     }
 
     fn as_list(&self) -> Vec<u8> {
@@ -457,12 +473,16 @@ impl PyInversionScanner {
         // Parse domain_drive_scores: 7x4 matrix, default to uniform
         let dds = if let Some(ref dds_vec) = domain_drive_scores {
             if dds_vec.len() != 7 {
-                return Err(PyValueError::new_err("domain_drive_scores must have 7 rows"));
+                return Err(PyValueError::new_err(
+                    "domain_drive_scores must have 7 rows",
+                ));
             }
             let mut arr = [[0.5f64; 4]; 7];
             for (i, row) in dds_vec.iter().enumerate() {
                 if row.len() != 4 {
-                    return Err(PyValueError::new_err("each domain_drive_scores row must have 4 values"));
+                    return Err(PyValueError::new_err(
+                        "each domain_drive_scores row must have 4 values",
+                    ));
                 }
                 arr[i].copy_from_slice(row);
             }
@@ -484,7 +504,9 @@ impl PyInversionScanner {
             let mut arr = [[0.5f64; 4]; 7];
             for (i, row) in ps_vec.iter().enumerate() {
                 if row.len() != 4 {
-                    return Err(PyValueError::new_err("each pathway_scores row must have 4 values"));
+                    return Err(PyValueError::new_err(
+                        "each pathway_scores row must have 4 values",
+                    ));
                 }
                 arr[i].copy_from_slice(row);
             }
@@ -503,19 +525,35 @@ impl PyInversionScanner {
         };
 
         let scanner = inversions::InversionScanner::new();
-        let result = scanner.scan(&input)
+        let result = scanner
+            .scan(&input)
             .map_err(|e| PyValueError::new_err(format!("{e}")))?;
 
         Python::with_gil(|py| {
             let mut map: HashMap<String, PyObject> = HashMap::new();
 
             let axis_scores: Vec<f64> = result.axis_scores().to_vec();
-            map.insert("axis_scores".to_string(), axis_scores.into_pyobject(py)?.into());
-            map.insert("stealth_resistance".to_string(), result.stealth_resistance().into_pyobject(py)?.into());
-            map.insert("compound_severity".to_string(), result.compound_severity().into_pyobject(py)?.into());
+            map.insert(
+                "axis_scores".to_string(),
+                axis_scores.into_pyobject(py)?.into(),
+            );
+            map.insert(
+                "stealth_resistance".to_string(),
+                result.stealth_resistance().into_pyobject(py)?.into(),
+            );
+            map.insert(
+                "compound_severity".to_string(),
+                result.compound_severity().into_pyobject(py)?.into(),
+            );
 
             let resistance_input = result.to_resistance_input();
-            map.insert("resistance_score".to_string(), resistance_input.resistance_score().into_pyobject(py)?.into());
+            map.insert(
+                "resistance_score".to_string(),
+                resistance_input
+                    .resistance_score()
+                    .into_pyobject(py)?
+                    .into(),
+            );
 
             Ok(map)
         })
@@ -571,8 +609,9 @@ impl PyRpmProfile {
     }
 
     fn chain_completeness(&self, drive_number: u8) -> PyResult<f64> {
-        let drive = ontology::CoreDrive::from_number(drive_number)
-            .ok_or_else(|| PyValueError::new_err(format!("drive number must be 1-7, got {drive_number}")))?;
+        let drive = ontology::CoreDrive::from_number(drive_number).ok_or_else(|| {
+            PyValueError::new_err(format!("drive number must be 1-7, got {drive_number}"))
+        })?;
         Ok(self.inner.chain(drive).completeness())
     }
 
@@ -623,8 +662,8 @@ fn compute_nccs(
 
     let mut op_arr = [0.0f64; 10];
     op_arr.copy_from_slice(&operator_scores);
-    let op = scoring::OperatorScores::new(op_arr)
-        .map_err(|e| PyValueError::new_err(format!("{e}")))?;
+    let op =
+        scoring::OperatorScores::new(op_arr).map_err(|e| PyValueError::new_err(format!("{e}")))?;
 
     let mut dom_arr = [0.0f64; 4];
     dom_arr.copy_from_slice(&domain_averages);
@@ -640,8 +679,9 @@ fn compute_nccs(
     let ir = scoring::InversionResistanceInput::new(inv_arr, stealth_resistance, compound_severity)
         .map_err(|e| PyValueError::new_err(format!("{e}")))?;
 
-    let se = scoring::SocialEngineeringInput::new(manipulation_resistance, overton_drift_resistance)
-        .map_err(|e| PyValueError::new_err(format!("{e}")))?;
+    let se =
+        scoring::SocialEngineeringInput::new(manipulation_resistance, overton_drift_resistance)
+            .map_err(|e| PyValueError::new_err(format!("{e}")))?;
 
     let pq = scoring::PathwayQualityInput::new(pathway_rpm_completeness, bias_flag_count)
         .map_err(|e| PyValueError::new_err(format!("{e}")))?;
@@ -660,14 +700,40 @@ fn compute_nccs(
 
     Python::with_gil(|py| {
         let mut map: HashMap<String, PyObject> = HashMap::new();
-        map.insert("operator_profile".to_string(), result.operator_profile.into_pyobject(py)?.into());
-        map.insert("domain_coherence".to_string(), result.domain_coherence.into_pyobject(py)?.into());
-        map.insert("drive_rpm_integrity".to_string(), result.drive_rpm_integrity.into_pyobject(py)?.into());
-        map.insert("pathway_quality".to_string(), result.pathway_quality.into_pyobject(py)?.into());
-        map.insert("inversion_resistance".to_string(), result.inversion_resistance.into_pyobject(py)?.into());
-        map.insert("social_engineering".to_string(), result.social_engineering.into_pyobject(py)?.into());
-        map.insert("composite".to_string(), result.composite.into_pyobject(py)?.into());
-        map.insert("certification".to_string(), format!("{}", result.certification).into_pyobject(py)?.into());
+        map.insert(
+            "operator_profile".to_string(),
+            result.operator_profile.into_pyobject(py)?.into(),
+        );
+        map.insert(
+            "domain_coherence".to_string(),
+            result.domain_coherence.into_pyobject(py)?.into(),
+        );
+        map.insert(
+            "drive_rpm_integrity".to_string(),
+            result.drive_rpm_integrity.into_pyobject(py)?.into(),
+        );
+        map.insert(
+            "pathway_quality".to_string(),
+            result.pathway_quality.into_pyobject(py)?.into(),
+        );
+        map.insert(
+            "inversion_resistance".to_string(),
+            result.inversion_resistance.into_pyobject(py)?.into(),
+        );
+        map.insert(
+            "social_engineering".to_string(),
+            result.social_engineering.into_pyobject(py)?.into(),
+        );
+        map.insert(
+            "composite".to_string(),
+            result.composite.into_pyobject(py)?.into(),
+        );
+        map.insert(
+            "certification".to_string(),
+            format!("{}", result.certification)
+                .into_pyobject(py)?
+                .into(),
+        );
         Ok(map)
     })
 }
@@ -684,6 +750,95 @@ fn geodesic_distance(p: &PyCognitiveStateVector, q: &PyCognitiveStateVector) -> 
 #[pyfunction]
 fn bhattacharyya_coefficient(p: &PyCognitiveStateVector, q: &PyCognitiveStateVector) -> f64 {
     metric::bhattacharyya_coefficient(&p.inner, &q.inner)
+}
+
+// ---------------------------------------------------------------------------
+// Algebra functions
+// ---------------------------------------------------------------------------
+
+/// Multiply two cognitive state vectors on the open simplex.
+/// Uses element-wise geometric mean, renormalized to Δ°39.
+#[pyfunction]
+fn multiply_state_vectors(p: Vec<f64>, q: Vec<f64>) -> PyResult<Vec<f64>> {
+    algebra::simplex_multiply(&p, &q)
+        .map_err(|e| PyValueError::new_err(e.to_string()))
+}
+
+/// Divide two cognitive state vectors on the open simplex.
+/// Uses element-wise ratio, renormalized to Δ°39.
+#[pyfunction]
+fn divide_state_vectors(p: Vec<f64>, q: Vec<f64>) -> PyResult<Vec<f64>> {
+    algebra::simplex_divide(&p, &q)
+        .map_err(|e| PyValueError::new_err(e.to_string()))
+}
+
+/// Multiply two cognitive states (operator, domain, drive).
+/// Returns (result_operator_idx, result_domain_idx, result_drive_number) or raises ValueError.
+#[pyfunction]
+fn multiply_cognitive_states(
+    left_op: usize, left_dom: usize, left_drive: u8,
+    right_op: usize, right_dom: usize, right_drive: u8,
+) -> PyResult<(usize, usize, u8)> {
+    let lo = ontology::CognitiveOperator::from_index(left_op)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid operator index {left_op}")))?;
+    let ld = ontology::Domain::from_index(left_dom)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid domain index {left_dom}")))?;
+    let ldr = ontology::CoreDrive::from_number(left_drive)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid drive number {left_drive}")))?;
+    let ro = ontology::CognitiveOperator::from_index(right_op)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid operator index {right_op}")))?;
+    let rd = ontology::Domain::from_index(right_dom)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid domain index {right_dom}")))?;
+    let rdr = ontology::CoreDrive::from_number(right_drive)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid drive number {right_drive}")))?;
+
+    let left = ontology::CognitiveStateId::new(lo, ld);
+    let right = ontology::CognitiveStateId::new(ro, rd);
+
+    let (result, drive) = algebra::multiply_states(left, ldr, right, rdr)
+        .map_err(|e| PyValueError::new_err(e.to_string()))?;
+
+    Ok((result.operator().index(), result.domain().index(), drive.number()))
+}
+
+/// Divide two cognitive states (operator, domain, drive).
+/// Returns (result_operator_idx, result_domain_idx, result_drive_number) or raises ValueError.
+#[pyfunction]
+fn divide_cognitive_states(
+    left_op: usize, left_dom: usize, left_drive: u8,
+    right_op: usize, right_dom: usize, right_drive: u8,
+) -> PyResult<(usize, usize, u8)> {
+    let lo = ontology::CognitiveOperator::from_index(left_op)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid operator index {left_op}")))?;
+    let ld = ontology::Domain::from_index(left_dom)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid domain index {left_dom}")))?;
+    let ldr = ontology::CoreDrive::from_number(left_drive)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid drive number {left_drive}")))?;
+    let ro = ontology::CognitiveOperator::from_index(right_op)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid operator index {right_op}")))?;
+    let rd = ontology::Domain::from_index(right_dom)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid domain index {right_dom}")))?;
+    let rdr = ontology::CoreDrive::from_number(right_drive)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid drive number {right_drive}")))?;
+
+    let left = ontology::CognitiveStateId::new(lo, ld);
+    let right = ontology::CognitiveStateId::new(ro, rd);
+
+    let (result, drive) = algebra::divide_states(left, ldr, right, rdr)
+        .map_err(|e| PyValueError::new_err(e.to_string()))?;
+
+    Ok((result.operator().index(), result.domain().index(), drive.number()))
+}
+
+/// Synthesize two drives under CAS algebra.
+/// Returns the result drive number (1-7).
+#[pyfunction]
+fn synthesize_drives(drive_a: u8, drive_b: u8) -> PyResult<u8> {
+    let a = ontology::CoreDrive::from_number(drive_a)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid drive {drive_a}")))?;
+    let b = ontology::CoreDrive::from_number(drive_b)
+        .ok_or_else(|| PyValueError::new_err(format!("invalid drive {drive_b}")))?;
+    Ok(algebra::synthesize_drives(a, b).number())
 }
 
 // ---------------------------------------------------------------------------
@@ -704,5 +859,10 @@ pub fn cas_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(compute_nccs, m)?)?;
     m.add_function(wrap_pyfunction!(geodesic_distance, m)?)?;
     m.add_function(wrap_pyfunction!(bhattacharyya_coefficient, m)?)?;
+    m.add_function(wrap_pyfunction!(multiply_state_vectors, m)?)?;
+    m.add_function(wrap_pyfunction!(divide_state_vectors, m)?)?;
+    m.add_function(wrap_pyfunction!(multiply_cognitive_states, m)?)?;
+    m.add_function(wrap_pyfunction!(divide_cognitive_states, m)?)?;
+    m.add_function(wrap_pyfunction!(synthesize_drives, m)?)?;
     Ok(())
 }
