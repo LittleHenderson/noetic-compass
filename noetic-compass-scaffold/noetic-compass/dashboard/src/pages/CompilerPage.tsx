@@ -435,18 +435,29 @@ export function CompilerPage() {
             <div className="space-y-3">
               <div className="select-none flex items-start gap-4">
                 <pre className="text-accent-teal text-[10px] leading-tight whitespace-pre m-0 shrink-0">{ASCII_LINES.join('\n')}</pre>
-                {/* TKS 10-dot formation — exact original proportions, accent-teal to match CAS letters */}
+                {/* TKS 10-dot formation — 3D spheres with shadow matching ASCII depth */}
                 <svg viewBox="0 0 800 1100" className="shrink-0" style={{ height: '100px', width: '58px' }}>
-                  <circle cx="400" cy="55"   r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 0s infinite alternate' }} />
-                  <circle cx="110" cy="190"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.25s infinite alternate' }} />
-                  <circle cx="690" cy="190"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.5s infinite alternate' }} />
-                  <circle cx="400" cy="400"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.75s infinite alternate' }} />
-                  <circle cx="110" cy="545"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.0s infinite alternate' }} />
-                  <circle cx="690" cy="545"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.25s infinite alternate' }} />
-                  <circle cx="400" cy="690"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.5s infinite alternate' }} />
-                  <circle cx="110" cy="870"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.75s infinite alternate' }} />
-                  <circle cx="690" cy="870"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 2.0s infinite alternate' }} />
-                  <circle cx="400" cy="1020" r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 2.25s infinite alternate' }} />
+                  <defs>
+                    <radialGradient id="dotGrad" cx="35%" cy="35%" r="65%">
+                      <stop offset="0%" stopColor="#5ce0d6" />
+                      <stop offset="70%" stopColor="#38b2ac" />
+                      <stop offset="100%" stopColor="#2a9d8f" />
+                    </radialGradient>
+                    <filter id="dotShadow" x="-20%" y="-20%" width="150%" height="150%">
+                      <feDropShadow dx="8" dy="8" stdDeviation="0" floodColor="rgba(56,178,172,0.3)" />
+                      <feDropShadow dx="0" dy="0" stdDeviation="12" floodColor="rgba(56,178,172,0.2)" />
+                    </filter>
+                  </defs>
+                  <circle cx="400" cy="55"   r="90" fill="url(#dotGrad)" filter="url(#dotShadow)" style={{ animation: 'tks-breathe 2.5s ease-in-out 0s infinite alternate' }} />
+                  <circle cx="110" cy="190"  r="90" fill="url(#dotGrad)" filter="url(#dotShadow)" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.25s infinite alternate' }} />
+                  <circle cx="690" cy="190"  r="90" fill="url(#dotGrad)" filter="url(#dotShadow)" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.5s infinite alternate' }} />
+                  <circle cx="400" cy="400"  r="90" fill="url(#dotGrad)" filter="url(#dotShadow)" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.75s infinite alternate' }} />
+                  <circle cx="110" cy="545"  r="90" fill="url(#dotGrad)" filter="url(#dotShadow)" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.0s infinite alternate' }} />
+                  <circle cx="690" cy="545"  r="90" fill="url(#dotGrad)" filter="url(#dotShadow)" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.25s infinite alternate' }} />
+                  <circle cx="400" cy="690"  r="90" fill="url(#dotGrad)" filter="url(#dotShadow)" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.5s infinite alternate' }} />
+                  <circle cx="110" cy="870"  r="90" fill="url(#dotGrad)" filter="url(#dotShadow)" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.75s infinite alternate' }} />
+                  <circle cx="690" cy="870"  r="90" fill="url(#dotGrad)" filter="url(#dotShadow)" style={{ animation: 'tks-breathe 2.5s ease-in-out 2.0s infinite alternate' }} />
+                  <circle cx="400" cy="1020" r="90" fill="url(#dotGrad)" filter="url(#dotShadow)" style={{ animation: 'tks-breathe 2.5s ease-in-out 2.25s infinite alternate' }} />
                 </svg>
               </div>
               <p className="text-slate-500 text-xs">
