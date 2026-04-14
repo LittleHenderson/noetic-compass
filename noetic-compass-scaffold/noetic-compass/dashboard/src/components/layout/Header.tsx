@@ -10,12 +10,12 @@ interface HeaderProps {
 
 export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { pathname } = useLocation();
   const authed = isAuthenticated();
 
-  // Back button shows on every page except Scenarios (the home page).
-  // The moment a user leaves /scenarios for any reason, the back button is live.
-  const showBack = location.pathname !== '/scenarios' && location.pathname !== '/';
+  // Back button shows on every page except the home pages.
+  const isHome = pathname === '/scenarios' || pathname === '/' || pathname === '/login';
+  const showBack = !isHome;
 
   function handleLogout() {
     clearToken();
@@ -43,21 +43,21 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
             )}
           </button>
         )}
-        {/* Glowing back button — visible on every page except Scenarios (home) */}
-        {showBack && (
+        {/* Glowing back button — visible on every page except home */}
+        {showBack ? (
           <button
             onClick={() => navigate(-1)}
-            className="group relative flex items-center justify-center w-9 h-9 min-h-[44px] min-w-[44px] rounded-xl bg-accent-teal/10 border border-accent-teal/20 text-accent-teal hover:bg-accent-teal/20 hover:border-accent-teal/40 active:scale-95 transition-all"
+            className="group relative flex items-center justify-center w-10 h-10 min-h-[44px] min-w-[44px] rounded-xl bg-accent-teal/15 border border-accent-teal/30 text-accent-teal hover:bg-accent-teal/25 hover:border-accent-teal/50 active:scale-90 transition-all shadow-[0_0_12px_rgba(45,212,191,0.15)]"
             aria-label="Go back"
             title="Go back"
           >
-            {/* Glow effect */}
-            <span className="absolute inset-0 rounded-xl bg-accent-teal/5 blur-md group-hover:bg-accent-teal/10 transition-colors" />
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10">
+            {/* Persistent glow pulse */}
+            <span className="absolute inset-0 rounded-xl bg-accent-teal/10 blur-lg animate-pulse" />
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="relative z-10">
               <path d="M10 12L6 8l4-4" />
             </svg>
           </button>
-        )}
+        ) : null}
         <img src="/icon-192.svg" alt="" className="h-7 w-7 rounded-lg" />
         <div className="flex flex-col leading-tight">
           <h1 className="text-base font-bold tracking-tight">
