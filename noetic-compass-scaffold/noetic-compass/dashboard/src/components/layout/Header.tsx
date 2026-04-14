@@ -43,16 +43,21 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
             )}
           </button>
         )}
-        {/* Glowing back button — visible on every page except home */}
+        {/* Glowing back button — burgundy, visible on every page except home */}
         {showBack ? (
           <button
             onClick={() => navigate(-1)}
-            className="group relative flex items-center justify-center w-10 h-10 min-h-[44px] min-w-[44px] rounded-xl bg-accent-teal/15 border border-accent-teal/30 text-accent-teal hover:bg-accent-teal/25 hover:border-accent-teal/50 active:scale-90 transition-all shadow-[0_0_12px_rgba(45,212,191,0.15)]"
+            className="group relative flex items-center justify-center w-10 h-10 min-h-[44px] min-w-[44px] rounded-xl border transition-all active:scale-90"
+            style={{
+              backgroundColor: 'rgba(155, 44, 44, 0.2)',
+              borderColor: 'rgba(185, 55, 55, 0.4)',
+              color: '#e88a8a',
+              boxShadow: '0 0 14px rgba(155, 44, 44, 0.3)',
+            }}
             aria-label="Go back"
             title="Go back"
           >
-            {/* Persistent glow pulse */}
-            <span className="absolute inset-0 rounded-xl bg-accent-teal/10 blur-lg animate-pulse" />
+            <span className="absolute inset-0 rounded-xl animate-pulse" style={{ backgroundColor: 'rgba(155, 44, 44, 0.12)', filter: 'blur(10px)' }} />
             <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="relative z-10">
               <path d="M10 12L6 8l4-4" />
             </svg>
