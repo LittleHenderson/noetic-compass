@@ -1107,10 +1107,19 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
         right = _infer(node.right, warnings, env)
 
         if node.op in {"PLUS", "MINUS"}:
-            require_stateish(left, node.op)
-            require_stateish(right, node.op)
-            domains = tuple(sorted(set(left.domains) | set(right.domains)))
-            return TypeInfo(kind=TypeKind.STATE, domains=domains, singular=False)
+            # + and - are syntactic assemblers: they work on states, drives, and RPM
+            allowed = {TypeKind.STATE, TypeKind.DRIVE, TypeKind.RPM, TypeKind.ANY}
+            if left.kind not in allowed or right.kind not in allowed:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.op} is only defined for state, drive, or RPM expressions",
+                )
+            # If both are states, produce a state; otherwise produce a program
+            if left.kind in {TypeKind.STATE, TypeKind.ANY} and right.kind in {TypeKind.STATE, TypeKind.ANY}:
+                domains = tuple(sorted(set(left.domains) | set(right.domains)))
+                return TypeInfo(kind=TypeKind.STATE, domains=domains, singular=False)
+            # Mixed types: produce a program-like result
+            return TypeInfo(kind=TypeKind.STATE, domains=(), singular=False)
 
         if node.op in {"TIMES", "DIVIDE"}:
             require_stateish(left, node.op)
@@ -1638,23 +1647,35 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
     left = stack.pop()
 
     if opcode == "PLUS":
-        if not isinstance(left, StateValue) or not isinstance(right, StateValue):
-            raise CompilerError(CompilerStage.EXECUTION, "PLUS expects state operands")
-        merged = dict(left.states)
-        for key, value in right.states.items():
-            merged[key] = merged.get(key, 0.0) + value
-        stack.append(
-            StateValue(
-                states=merged,
-                drive_weights=_merge_drives(left.drive_weights, right.drive_weights),
-                explicit_drive=left.explicit_drive or right.explicit_drive,
-            ).normalized()
-        )
+        # State + State: merge probability distributions
+        if isinstance(left, StateValue) and isinstance(right, StateValue):
+            merged = dict(left.states)
+            for key, value in right.states.items():
+                merged[key] = merged.get(key, 0.0) + value
+            stack.append(
+                StateValue(
+                    states=merged,
+                    drive_weights=_merge_drives(left.drive_weights, right.drive_weights),
+                    explicit_drive=left.explicit_drive or right.explicit_drive,
+                ).normalized()
+            )
+            return
+        # Mixed types (RPM + State, Drive + RPM, etc.): co-presence as program
+        # The left value is the primary; right is aggregated alongside it
+        results = []
+        for val in (left, right):
+            if isinstance(val, ProgramValue):
+                results.extend(val.results)
+            else:
+                results.append(val)
+        stack.append(ProgramValue(results=results))
         return
 
     if opcode == "MINUS":
         if not isinstance(left, StateValue) or not isinstance(right, StateValue):
-            raise CompilerError(CompilerStage.EXECUTION, "MINUS expects state operands")
+            # Non-state MINUS: wrap as program with left only (subtraction removes right)
+            stack.append(left if not isinstance(left, ProgramValue) else left)
+            return
         remaining = dict(left.states)
         for key, value in right.states.items():
             if key in remaining:

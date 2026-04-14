@@ -278,18 +278,18 @@ def _build_expression(
             inv_partner = {2: 3, 3: 2, 5: 6, 6: 5, 8: 9, 9: 8}.get(normal_idx, (normal_idx + 5) % 10)
             statements.append(f"CO-{normal_idx}^{dom} - CO-{inv_partner}^{dom}")
 
-    # Statement 5+: RPM drives and plain drives
-    drive_parts: list[str] = []
+    # + (PLUS): co-present drives and extra domain expressions
+    # Drives combine with + (syntactic co-presence)
+    coexist_parts: list[str] = []
     for d in rpm_drives:
-        drive_parts.append(f"RPM(F{d + 1})")
+        coexist_parts.append(f"RPM(F{d + 1})")
     for d in plain_drives:
-        drive_parts.append(f"F{d + 1}")
-    if drive_parts:
-        statements.append(" ".join(drive_parts))
-
-    # Extra domain expressions (3rd, 4th domain)
+        coexist_parts.append(f"F{d + 1}")
+    # Extra domains (3rd, 4th) also co-present via +
     for expr in domain_exprs[2:]:
-        statements.append(expr)
+        coexist_parts.append(expr)
+    if coexist_parts:
+        statements.append(" + ".join(coexist_parts))
 
     # ∘ (CIRC): fractal operator sequence composition
     if (
