@@ -63,7 +63,23 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
             </svg>
           </button>
         ) : null}
-        <img src="/icon-192.svg" alt="" className="h-7 w-7 rounded-lg" />
+        {/* TKS 10-dot brand mark */}
+        <svg viewBox="0 0 800 1100" className="h-7 w-5 shrink-0">
+          {[
+            { cx: 400, cy: 55,   fill: '#FFC107' },
+            { cx: 110, cy: 190,  fill: '#E53935' },
+            { cx: 690, cy: 190,  fill: '#7B1FA2' },
+            { cx: 400, cy: 400,  fill: '#FFC107' },
+            { cx: 110, cy: 545,  fill: '#E53935' },
+            { cx: 690, cy: 545,  fill: '#7B1FA2' },
+            { cx: 400, cy: 690,  fill: '#FFC107' },
+            { cx: 110, cy: 870,  fill: '#E53935' },
+            { cx: 690, cy: 870,  fill: '#7B1FA2' },
+            { cx: 400, cy: 1020, fill: '#FFC107' },
+          ].map((n, i) => (
+            <circle key={i} cx={n.cx} cy={n.cy} r={70} fill={n.fill} opacity={0.9} />
+          ))}
+        </svg>
         <div className="flex flex-col leading-tight">
           <h1 className="text-base font-bold tracking-tight">
             <span className="bg-gradient-to-r from-accent-teal to-accent-cyan bg-clip-text text-transparent">

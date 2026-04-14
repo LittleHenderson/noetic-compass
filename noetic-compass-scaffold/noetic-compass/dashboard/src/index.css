@@ -179,6 +179,17 @@ body {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* TKS dot formation — breathing glow */
+@keyframes tks-breathe {
+  0%   { opacity: 0.65; filter: drop-shadow(0 0 2px currentColor); }
+  100% { opacity: 1;    filter: drop-shadow(0 0 6px currentColor); }
+}
+/* TKS dot formation — compilation flash */
+@keyframes tks-flash {
+  0%   { opacity: 1; filter: brightness(2) drop-shadow(0 0 12px currentColor); }
+  100% { opacity: 1; filter: brightness(1) drop-shadow(0 0 2px currentColor); }
+}
 .animate-slide-down {
   animation: slide-down 0.35s ease-out forwards;
   overflow: hidden;

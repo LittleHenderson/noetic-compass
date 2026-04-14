@@ -1,18 +1,56 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { apiFetch } from '../api/client';
 
+// ── TKS 10-Dot Formation ──
+
+const TKS_NODES = [
+  { id: 1, cx: 400, cy: 55,   fill: '#FFC107', stroke: '#FFA000' },
+  { id: 3, cx: 110, cy: 190,  fill: '#E53935', stroke: '#C62828' },
+  { id: 2, cx: 690, cy: 190,  fill: '#7B1FA2', stroke: '#6A1B9A' },
+  { id: 4, cx: 400, cy: 400,  fill: '#FFC107', stroke: '#FFA000' },
+  { id: 6, cx: 110, cy: 545,  fill: '#E53935', stroke: '#C62828' },
+  { id: 5, cx: 690, cy: 545,  fill: '#7B1FA2', stroke: '#6A1B9A' },
+  { id: 7, cx: 400, cy: 690,  fill: '#FFC107', stroke: '#FFA000' },
+  { id: 9, cx: 110, cy: 870,  fill: '#E53935', stroke: '#C62828' },
+  { id: 8, cx: 690, cy: 870,  fill: '#7B1FA2', stroke: '#6A1B9A' },
+  { id: 0, cx: 400, cy: 1020, fill: '#FFC107', stroke: '#FFA000' },
+];
+
+function TksDotFormation({ flash }: { flash: boolean }) {
+  return (
+    <svg viewBox="0 0 800 1100" className="h-full w-auto" style={{ maxHeight: '180px' }}>
+      {TKS_NODES.map((n, i) => (
+        <circle
+          key={n.id}
+          cx={n.cx}
+          cy={n.cy}
+          r={80}
+          fill={n.fill}
+          stroke={n.stroke}
+          strokeWidth={12}
+          opacity={flash ? 1 : undefined}
+          style={{
+            animation: flash
+              ? `tks-flash 0.4s ease-out`
+              : `tks-breathe 2.5s ease-in-out ${i * 0.25}s infinite alternate`,
+          }}
+        />
+      ))}
+    </svg>
+  );
+}
+
 // ── Constants ──
 
-const ASCII_LOGO = `╔═══════════════════════════════════════╗
-║   ██████╗ █████╗ ███████╗            ║
-║  ██╔════╝██╔══██╗██╔════╝            ║
-║  ██║     ███████║███████╗            ║
-║  ██║     ██╔══██║╚════██║            ║
-║  ╚██████╗██║  ██║███████║            ║
-║   ╚═════╝╚═╝  ╚═╝╚══════╝            ║
-║  Cognitive Architecture Compiler v1.0 ║
-║  Patent Pending · noeticcompass.com   ║
-╚═══════════════════════════════════════╝`;
+const ASCII_LOGO = ` ██████╗ █████╗ ███████╗
+██╔════╝██╔══██╗██╔════╝
+██║     ███████║███████╗
+██║     ██╔══██║╚════██║
+╚██████╗██║  ██║███████║
+ ╚═════╝╚═╝  ╚═╝╚══════╝
+Cognitive Architecture
+Compiler v1.0
+Patent Pending`;
 
 const HELP_TEXT = `Commands:
   :help      Show this message
@@ -428,10 +466,15 @@ export function CompilerPage() {
           style={{ backgroundColor: '#0d1117' }}
           onClick={() => inputRef.current?.focus()}
         >
-          {/* ASCII Logo */}
+          {/* Logo: ASCII letters + TKS dot formation side by side */}
           {history.length === 0 && (
             <div className="space-y-3">
-              <pre className="text-accent-teal text-[10px] leading-tight select-none">{ASCII_LOGO}</pre>
+              <div className="flex items-center gap-4">
+                <pre className="text-accent-teal text-[10px] leading-tight select-none shrink-0">{ASCII_LOGO}</pre>
+                <div className="shrink-0">
+                  <TksDotFormation flash={false} />
+                </div>
+              </div>
               <p className="text-slate-500 text-xs">
                 Type <span className="text-slate-300">:help</span> for commands,{' '}
                 <span className="text-slate-300">:grammar</span> for the BNF,{' '}
