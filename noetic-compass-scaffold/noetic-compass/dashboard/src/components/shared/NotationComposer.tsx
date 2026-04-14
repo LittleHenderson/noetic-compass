@@ -97,20 +97,31 @@ function parseNotation(input: string): ParseResult {
     result.error = 'No recognized CAS notation found';
   }
 
-  // Build English
+  // Build English — deduplicate and group by domain
+  const uniqueOps = [...new Set(result.operators)];
+  const uniqueDomains = [...new Set(result.domains)];
+  const uniqueDrives = [...new Set(result.drives)];
+
   const parts: string[] = [];
-  if (result.operators.length > 0) {
-    const opNames = result.operators.map(i => `CO-${i} (${OPERATOR_NAMES[i] ?? '?'})`);
-    parts.push(opNames.join(' and '));
+  if (uniqueOps.length > 0) {
+    const opNames = uniqueOps.map(i => `${OPERATOR_NAMES[i] ?? `CO-${i}`}`);
+    parts.push(opNames.join(', '));
   }
-  if (result.domains.length > 0) {
-    parts.push('in the ' + result.domains.map(d => `${DOMAIN_NAMES[d] ?? d} Domain`).join(' and '));
+  if (uniqueDomains.length > 0) {
+    if (uniqueDomains.length === 1) {
+      parts.push(`in the ${DOMAIN_NAMES[uniqueDomains[0]] ?? uniqueDomains[0]} Domain`);
+    } else {
+      const domNames = uniqueDomains.map(d => DOMAIN_NAMES[d] ?? d);
+      const last = domNames.pop();
+      parts.push(`across ${domNames.join(', ')} and ${last} Domains`);
+    }
   }
-  if (result.drives.length > 0) {
-    parts.push('grounded in ' + result.drives.map(i => `F${i + 1} (${DRIVE_NAMES[i] ?? '?'})`).join(' and '));
+  if (uniqueDrives.length > 0) {
+    const driveNames = uniqueDrives.map(i => `${DRIVE_NAMES[i] ?? `F${i + 1}`}`);
+    parts.push(`driven by ${driveNames.join(' and ')}`);
   }
-  if (result.isRpm) parts.push('(RPM prerequisite chain)');
-  if (result.fractal) parts.push(`Cognitive Fractal [${result.fractal.join(':')}]`);
+  if (result.isRpm) parts.push('with RPM prerequisite chain');
+  if (result.fractal) parts.push(`fractal signature \u27E8${result.fractal.join(':')}\u27E9`);
 
   result.english = parts.join(' ') || 'Empty notation';
 
@@ -182,17 +193,17 @@ export function NotationComposer({ notation, onNotationChange, onGenerate }: Not
             <>
               <p className="text-[11px] text-slate-300 leading-relaxed">{parsed.english}</p>
               <div className="flex flex-wrap gap-1.5 mt-2">
-                {parsed.operators.map(op => (
+                {[...new Set(parsed.operators)].map(op => (
                   <span key={`op-${op}`} className="text-[9px] px-2 py-0.5 rounded-full bg-accent-teal/10 text-accent-teal font-mono">
                     CO-{op}
                   </span>
                 ))}
-                {parsed.domains.map(d => (
+                {[...new Set(parsed.domains)].map(d => (
                   <span key={`d-${d}`} className="text-[9px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400">
                     {DOMAIN_NAMES[d]}
                   </span>
                 ))}
-                {parsed.drives.map(i => (
+                {[...new Set(parsed.drives)].map(i => (
                   <span key={`f-${i}`} className="text-[9px] px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400">
                     F{i + 1}
                   </span>
