@@ -435,18 +435,18 @@ export function CompilerPage() {
             <div className="space-y-3">
               <div className="select-none flex items-start gap-4">
                 <pre className="text-accent-teal text-[10px] leading-tight whitespace-pre m-0 shrink-0">{ASCII_LINES.join('\n')}</pre>
-                {/* TKS 10-dot formation — exact original proportions from SVG viewBox 0 0 800 1100, 3x dot size */}
-                <svg viewBox="0 0 800 1100" className="shrink-0" style={{ height: '140px', width: '100px' }}>
-                  <circle cx="400" cy="55"   r="90" fill="#FFC107" stroke="#FFA000" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 0s infinite alternate' }} />
-                  <circle cx="110" cy="190"  r="90" fill="#E53935" stroke="#C62828" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.25s infinite alternate' }} />
-                  <circle cx="690" cy="190"  r="90" fill="#7B1FA2" stroke="#6A1B9A" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.5s infinite alternate' }} />
-                  <circle cx="400" cy="400"  r="90" fill="#FFC107" stroke="#FFA000" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.75s infinite alternate' }} />
-                  <circle cx="110" cy="545"  r="90" fill="#E53935" stroke="#C62828" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.0s infinite alternate' }} />
-                  <circle cx="690" cy="545"  r="90" fill="#7B1FA2" stroke="#6A1B9A" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.25s infinite alternate' }} />
-                  <circle cx="400" cy="690"  r="90" fill="#FFC107" stroke="#FFA000" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.5s infinite alternate' }} />
-                  <circle cx="110" cy="870"  r="90" fill="#E53935" stroke="#C62828" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.75s infinite alternate' }} />
-                  <circle cx="690" cy="870"  r="90" fill="#7B1FA2" stroke="#6A1B9A" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 2.0s infinite alternate' }} />
-                  <circle cx="400" cy="1020" r="90" fill="#FFC107" stroke="#FFA000" strokeWidth="10" style={{ animation: 'tks-breathe 2.5s ease-in-out 2.25s infinite alternate' }} />
+                {/* TKS 10-dot formation — exact original proportions, accent-teal to match CAS letters */}
+                <svg viewBox="0 0 800 1100" className="shrink-0" style={{ height: '100px', width: '58px' }}>
+                  <circle cx="400" cy="55"   r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 0s infinite alternate' }} />
+                  <circle cx="110" cy="190"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.25s infinite alternate' }} />
+                  <circle cx="690" cy="190"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.5s infinite alternate' }} />
+                  <circle cx="400" cy="400"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 0.75s infinite alternate' }} />
+                  <circle cx="110" cy="545"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.0s infinite alternate' }} />
+                  <circle cx="690" cy="545"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.25s infinite alternate' }} />
+                  <circle cx="400" cy="690"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.5s infinite alternate' }} />
+                  <circle cx="110" cy="870"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 1.75s infinite alternate' }} />
+                  <circle cx="690" cy="870"  r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 2.0s infinite alternate' }} />
+                  <circle cx="400" cy="1020" r="90" fill="#2dd4bf" style={{ animation: 'tks-breathe 2.5s ease-in-out 2.25s infinite alternate' }} />
                 </svg>
               </div>
               <p className="text-slate-500 text-xs">
