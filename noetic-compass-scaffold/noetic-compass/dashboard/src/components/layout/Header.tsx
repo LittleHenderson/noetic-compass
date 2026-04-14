@@ -1,6 +1,5 @@
 import { isAuthenticated, clearToken } from '../../api/auth';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useRef, useEffect } from 'react';
 import { BrandTagline } from '../shared/BrandTagline';
 import { PatentPendingBadge } from '../shared/PatentPendingBadge';
 
@@ -13,12 +12,10 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const authed = isAuthenticated();
-  const historyDepth = useRef(0);
 
-  // Track navigation depth so we know when there's history to go back to
-  useEffect(() => {
-    historyDepth.current += 1;
-  }, [location.pathname]);
+  // Back button shows on every page except Scenarios (the home page).
+  // The moment a user leaves /scenarios for any reason, the back button is live.
+  const showBack = location.pathname !== '/scenarios' && location.pathname !== '/';
 
   function handleLogout() {
     clearToken();
@@ -46,8 +43,8 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
             )}
           </button>
         )}
-        {/* Glowing back button — visible when there's navigation history */}
-        {historyDepth.current > 1 && (
+        {/* Glowing back button — visible on every page except Scenarios (home) */}
+        {showBack && (
           <button
             onClick={() => navigate(-1)}
             className="group relative flex items-center justify-center w-9 h-9 min-h-[44px] min-w-[44px] rounded-xl bg-accent-teal/10 border border-accent-teal/20 text-accent-teal hover:bg-accent-teal/20 hover:border-accent-teal/40 active:scale-95 transition-all"
