@@ -159,6 +159,9 @@ def _pick_flagged_inversions(axis_scores: list[float]) -> list[str]:
     return flagged
 
 
+_INVOLUTION_PAIRS = {(2, 3), (3, 2), (5, 6), (6, 5), (8, 9), (9, 8)}
+
+
 def _build_expression(
     operators: list[int],
     domains: list[str],
@@ -166,18 +169,18 @@ def _build_expression(
     plain_drives: list[int],
     fractal_sequence: list[int] | None,
     fractal_classification: str | None,
+    flagged_inversions: list[str] | None = None,
 ) -> str:
-    """Assemble a compiler-valid CAS expression using the full CAS algebra.
+    """Assemble a compiler-valid CAS expression using all 5 generative operations.
 
-    Uses algebraic operations to express structure, not just enumerate components:
-    - × (multiplication) for operators in the same domain
-    - → (relation) for domain descent chains
-    - RPM() for complete prerequisite chains with drive subscripts
-    - Phi<> for non-trivial fractal sequences
-    - _{Fn} drive subscripts on state expressions
+    The five CAS compositional operations:
+    - × (TIMES)   : algebraic — operators composing in the same domain
+    - ÷ (DIVIDE)  : algebraic — involution pairs showing opposition/resolution
+    - ∘ (CIRC)    : algebraic — fractal operator sequence composition
+    - + (PLUS)    : syntactic — co-present states across domains
+    - - (MINUS)   : syntactic — inversions subtracting from expected state
     """
     if not operators:
-        # No operators: just drives
         parts: list[str] = []
         for d in rpm_drives:
             parts.append(f"RPM(F{d + 1})")
@@ -185,76 +188,123 @@ def _build_expression(
             parts.append(f"F{d + 1}")
         return " ".join(parts)
 
-    # Assign the primary drive to the first operator (most significant)
+    flagged = flagged_inversions or []
+
+    # Assign primary drive subscript to the lead state
     primary_drive = rpm_drives[0] if rpm_drives else (plain_drives[0] if plain_drives else None)
 
-    # Group operators by domain for algebraic structure
-    # Sort domains by precedence (P > C > E > O) for descent chain
+    # Separate involution pairs from non-paired operators for ÷ expressions
+    involution_exprs: list[str] = []
+    remaining_ops = list(operators)
+    used_in_division: set[int] = set()
+
+    for a_idx, a_op in enumerate(operators):
+        if a_op in used_in_division:
+            continue
+        for b_op in operators[a_idx + 1:]:
+            if b_op in used_in_division:
+                continue
+            if (a_op, b_op) in _INVOLUTION_PAIRS:
+                # Division: involution pair shows opposition → resolves to CO-0
+                dom = domains[0] if domains else "P"
+                involution_exprs.append(f"CO-{a_op}^{dom} / CO-{b_op}^{dom}")
+                used_in_division.add(a_op)
+                used_in_division.add(b_op)
+                break
+
+    remaining_ops = [op for op in remaining_ops if op not in used_in_division]
+
+    # Group remaining operators by domain for × (multiplication)
     domain_groups: dict[str, list[str]] = {}
     for dom in domains:
         group_ops = []
-        for op in operators:
+        for op in remaining_ops:
             state = f"CO-{op}^{dom}"
-            # Add drive subscript to the first state expression
-            if primary_drive is not None and not group_ops:
+            if primary_drive is not None and not group_ops and not involution_exprs:
                 state = f"CO-{op}^{dom}_{{F{primary_drive + 1}}}"
-                primary_drive = None  # only attach to first state
+                primary_drive = None
             group_ops.append(state)
         if group_ops:
-            # Same-domain operators compose via multiplication (×)
             domain_groups[dom] = group_ops
 
-    # Build domain expressions: use × within domain, → between domains
-    # Limit to top 2 domains for compiler compatibility (-> chains don't nest)
+    # Build per-domain expressions: × within domain
     domain_exprs: list[str] = []
     for dom in ("P", "C", "E", "O"):
-        if dom in domain_groups and len(domain_exprs) < 2:
+        if dom in domain_groups:
             ops = domain_groups[dom]
             if len(ops) == 1:
                 domain_exprs.append(ops[0])
             else:
-                # Multiple operators in same domain = multiplication
                 domain_exprs.append(" * ".join(ops))
 
-    # Connect domain expressions with → for domain descent
-    if len(domain_exprs) == 2:
-        state_part = f"{domain_exprs[0]} -> {domain_exprs[1]}"
-    elif domain_exprs:
-        state_part = domain_exprs[0]
-    else:
-        state_part = ""
+    # Build a multi-statement CAS program where each statement uses
+    # the appropriate algebraic operation. Joined by ; (semicolons).
+    statements: list[str] = []
 
-    # Wrap in parentheses if complex and there are more parts
-    has_more = bool(rpm_drives) or bool(plain_drives) or bool(fractal_sequence)
-    if " -> " in state_part and has_more:
-        state_part = f"({state_part})"
+    # Statement 1: × (TIMES) — operators multiplied within primary domain
+    if domain_exprs:
+        statements.append(domain_exprs[0])
 
-    # Collect all parts
-    parts = [state_part] if state_part else []
+    # Statement 2: → (ARROW) — domain descent to secondary domain
+    if len(domain_exprs) >= 2:
+        # Pick one operator from each domain for the descent relation
+        primary_dom = list(domain_groups.keys())[0]
+        secondary_dom = list(domain_groups.keys())[1]
+        first_op = operators[0]
+        statements.append(f"CO-{first_op}^{primary_dom} -> CO-{first_op}^{secondary_dom}")
 
-    # RPM-wrapped drives (complete prerequisite chains)
+    # Statement 3: ÷ (DIVIDE) — involution pairs showing opposition
+    for expr in involution_exprs:
+        statements.append(expr)
+
+    # Statement 4: - (MINUS) — inversion distortions
+    # Construct same-domain subtraction pairs for each flagged axis
+    inversion_map = {
+        "N": ("CO-0", "P"),  # Operator axis
+        "W": ("CO-1", "C"),  # Domain axis
+        "F": ("CO-4", "E"),  # Drive axis
+        "E": ("CO-7", "E"),  # State axis
+        "S": ("CO-2", "O"),  # Sub-drive axis
+        "A": ("CO-8", "O"),  # Pathway axis
+        "P": ("CO-5", "P"),  # Compound axis
+    }
+    for axis in flagged:
+        inv = inversion_map.get(axis)
+        if inv:
+            op_str, dom = inv
+            # Subtract inverted operator from normal state in same domain
+            inv_op = inv[0].replace("CO-", "")
+            normal_idx = int(inv_op)
+            inv_partner = {2: 3, 3: 2, 5: 6, 6: 5, 8: 9, 9: 8}.get(normal_idx, (normal_idx + 5) % 10)
+            statements.append(f"CO-{normal_idx}^{dom} - CO-{inv_partner}^{dom}")
+
+    # Statement 5+: RPM drives and plain drives
+    drive_parts: list[str] = []
     for d in rpm_drives:
-        parts.append(f"RPM(F{d + 1})")
-
-    # Plain drives (active but incomplete chain)
+        drive_parts.append(f"RPM(F{d + 1})")
     for d in plain_drives:
-        parts.append(f"F{d + 1}")
+        drive_parts.append(f"F{d + 1}")
+    if drive_parts:
+        statements.append(" ".join(drive_parts))
 
-    # Fractal sequence
-    fractal_part = None
+    # Extra domain expressions (3rd, 4th domain)
+    for expr in domain_exprs[2:]:
+        statements.append(expr)
+
+    # ∘ (CIRC): fractal operator sequence composition
     if (
         fractal_sequence
         and len(fractal_sequence) >= 2
         and fractal_classification not in (None, "neutral")
     ):
-        seq_str = ":".join(str(op) for op in fractal_sequence)
-        fractal_part = f"Phi<{seq_str}>"
+        if len(fractal_sequence) <= 3:
+            circ_parts = [f"CO-{op}" for op in fractal_sequence]
+            statements.append(" \u2218 ".join(circ_parts))
+        else:
+            seq_str = ":".join(str(op) for op in fractal_sequence)
+            statements.append(f"Phi<{seq_str}>")
 
-    # Join: main expression on one line, fractal as separate statement
-    main = " ".join(parts)
-    if fractal_part:
-        return f"{main}; {fractal_part}" if main else fractal_part
-    return main
+    return "; ".join(statements)
 
 
 def synthesize_notation(
@@ -283,7 +333,7 @@ def synthesize_notation(
     rpm_drives, plain_drives = _pick_significant_drives(drive_chains, a0_score)
     flagged_inversions = _pick_flagged_inversions(inversion_axis_scores)
 
-    # Build the expression
+    # Build the expression using all 5 generative operations
     source = _build_expression(
         operators=operators,
         domains=domains,
@@ -291,6 +341,7 @@ def synthesize_notation(
         plain_drives=plain_drives,
         fractal_sequence=fractal_sequence,
         fractal_classification=fractal_classification,
+        flagged_inversions=flagged_inversions,
     )
 
     if not source.strip():

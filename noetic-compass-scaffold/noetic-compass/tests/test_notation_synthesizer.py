@@ -117,7 +117,9 @@ class TestBuildExpression:
             fractal_classification=None,
         )
         assert "CO-3^P" in expr
-        assert "CO-5^C" in expr
+        assert "CO-5^P" in expr  # both ops appear in primary domain
+        # Domain descent appears as separate statement
+        assert "->" in expr
 
     def test_rpm_drives(self):
         expr = _build_expression(
@@ -151,7 +153,8 @@ class TestBuildExpression:
             fractal_sequence=[5, 3, 1],
             fractal_classification="stabilizing",
         )
-        assert "Phi<5:3:1>" in expr
+        # Short fractals (<=3) use ∘ composition; longer ones use Phi<>
+        assert "\u2218" in expr  # ∘ composition operator
 
     def test_fractal_excluded_when_neutral(self):
         expr = _build_expression(
