@@ -105,19 +105,29 @@ export function analyzeTextToNotation(text: string): string {
 
   if (significantOps.length === 0) return '';
 
-  // Build notation: operator^domain pairs
-  const parts: string[] = [];
-  if (significantDomains.length > 0) {
-    for (const op of significantOps) {
-      for (const dom of significantDomains) {
-        parts.push(`CO-${op}^${dom}`);
-      }
-    }
-  } else {
-    for (const op of significantOps) {
-      parts.push(`CO-${op}`);
+  // Build notation using CAS algebraic structure:
+  // × within same domain, → between domains (descent chain)
+
+  // Group operators per domain, ordered by precedence (P > C > E > O)
+  const domainExprs: string[] = [];
+  for (const dom of significantDomains) {
+    const states = significantOps.map((op) => `CO-${op}^${dom}`);
+    if (states.length === 1) {
+      domainExprs.push(states[0]);
+    } else {
+      // Multiple operators in same domain = multiplication
+      domainExprs.push(states.join(' * '));
     }
   }
 
-  return parts.join(' ');
+  // No domains at all — bare operators
+  if (domainExprs.length === 0) {
+    return significantOps.map((op) => `CO-${op}`).join(' * ');
+  }
+
+  // Connect domains with → for domain descent
+  if (domainExprs.length === 1) {
+    return domainExprs[0];
+  }
+  return domainExprs.join(' -> ');
 }

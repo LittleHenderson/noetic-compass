@@ -167,58 +167,94 @@ def _build_expression(
     fractal_sequence: list[int] | None,
     fractal_classification: str | None,
 ) -> str:
-    """Assemble a compiler-valid CAS expression from extracted components."""
-    statements: list[str] = []
+    """Assemble a compiler-valid CAS expression using the full CAS algebra.
 
-    # 1. Operator-domain state expressions (the core finding)
-    if operators and domains:
-        # Pair each significant operator with the strongest domain
-        # to get precise state expressions like CO-3^P
-        state_exprs = []
+    Uses algebraic operations to express structure, not just enumerate components:
+    - × (multiplication) for operators in the same domain
+    - → (relation) for domain descent chains
+    - RPM() for complete prerequisite chains with drive subscripts
+    - Phi<> for non-trivial fractal sequences
+    - _{Fn} drive subscripts on state expressions
+    """
+    if not operators:
+        # No operators: just drives
+        parts: list[str] = []
+        for d in rpm_drives:
+            parts.append(f"RPM(F{d + 1})")
+        for d in plain_drives:
+            parts.append(f"F{d + 1}")
+        return " ".join(parts)
+
+    # Assign the primary drive to the first operator (most significant)
+    primary_drive = rpm_drives[0] if rpm_drives else (plain_drives[0] if plain_drives else None)
+
+    # Group operators by domain for algebraic structure
+    # Sort domains by precedence (P > C > E > O) for descent chain
+    domain_groups: dict[str, list[str]] = {}
+    for dom in domains:
+        group_ops = []
         for op in operators:
-            for dom in domains:
-                state_exprs.append(f"CO-{op}^{dom}")
-        statements.append(" * ".join(state_exprs) if len(state_exprs) <= 2 else " ".join(state_exprs))
-    elif operators:
-        statements.append(" ".join(f"CO-{op}" for op in operators))
+            state = f"CO-{op}^{dom}"
+            # Add drive subscript to the first state expression
+            if primary_drive is not None and not group_ops:
+                state = f"CO-{op}^{dom}_{{F{primary_drive + 1}}}"
+                primary_drive = None  # only attach to first state
+            group_ops.append(state)
+        if group_ops:
+            # Same-domain operators compose via multiplication (×)
+            domain_groups[dom] = group_ops
 
-    # 2. RPM-wrapped drives (complete prerequisite chains)
-    for drive_idx in rpm_drives:
-        statements.append(f"RPM(F{drive_idx + 1})")
+    # Build domain expressions: use × within domain, → between domains
+    # Limit to top 2 domains for compiler compatibility (-> chains don't nest)
+    domain_exprs: list[str] = []
+    for dom in ("P", "C", "E", "O"):
+        if dom in domain_groups and len(domain_exprs) < 2:
+            ops = domain_groups[dom]
+            if len(ops) == 1:
+                domain_exprs.append(ops[0])
+            else:
+                # Multiple operators in same domain = multiplication
+                domain_exprs.append(" * ".join(ops))
 
-    # 3. Plain drives (active but incomplete chain)
-    for drive_idx in plain_drives:
-        statements.append(f"F{drive_idx + 1}")
+    # Connect domain expressions with → for domain descent
+    if len(domain_exprs) == 2:
+        state_part = f"{domain_exprs[0]} -> {domain_exprs[1]}"
+    elif domain_exprs:
+        state_part = domain_exprs[0]
+    else:
+        state_part = ""
 
-    # 4. Fractal sequence if non-trivial
+    # Wrap in parentheses if complex and there are more parts
+    has_more = bool(rpm_drives) or bool(plain_drives) or bool(fractal_sequence)
+    if " -> " in state_part and has_more:
+        state_part = f"({state_part})"
+
+    # Collect all parts
+    parts = [state_part] if state_part else []
+
+    # RPM-wrapped drives (complete prerequisite chains)
+    for d in rpm_drives:
+        parts.append(f"RPM(F{d + 1})")
+
+    # Plain drives (active but incomplete chain)
+    for d in plain_drives:
+        parts.append(f"F{d + 1}")
+
+    # Fractal sequence
+    fractal_part = None
     if (
         fractal_sequence
         and len(fractal_sequence) >= 2
         and fractal_classification not in (None, "neutral")
     ):
         seq_str = ":".join(str(op) for op in fractal_sequence)
-        statements.append(f"Phi<{seq_str}>")
+        fractal_part = f"Phi<{seq_str}>"
 
-    # Join with semicolons for multi-statement programs
-    if len(statements) <= 1:
-        return statements[0] if statements else ""
-
-    # If we have states + drives, keep them on one line with spaces
-    # Only use semicolons for truly separate concepts (e.g., fractal is separate)
-    main_parts = []
-    fractal_part = None
-
-    for stmt in statements:
-        if stmt.startswith("Phi<"):
-            fractal_part = stmt
-        else:
-            main_parts.append(stmt)
-
-    result = " ".join(main_parts)
+    # Join: main expression on one line, fractal as separate statement
+    main = " ".join(parts)
     if fractal_part:
-        result = f"{result}; {fractal_part}"
-
-    return result
+        return f"{main}; {fractal_part}" if main else fractal_part
+    return main
 
 
 def synthesize_notation(
@@ -273,12 +309,28 @@ def synthesize_notation(
     # Compile through the real compiler
     artifact: CompilationArtifact = compile_expression(source)
 
-    # If compiler rejects it, try a simplified fallback (operators only)
+    # If compiler rejects it, try progressively simpler fallbacks
     if not artifact.valid and operators:
-        fallback = " ".join(f"CO-{op}" for op in operators)
-        artifact = compile_expression(fallback)
-        if artifact.valid:
-            source = fallback
+        # Fallback 1: operators with best domain, joined by multiplication
+        if domains:
+            best_dom = domains[0]
+            fallback = " * ".join(f"CO-{op}^{best_dom}" for op in operators)
+            artifact = compile_expression(fallback)
+            if artifact.valid:
+                source = fallback
+        # Fallback 2: operators with best domain, space-separated
+        if not artifact.valid and domains:
+            best_dom = domains[0]
+            fallback = " ".join(f"CO-{op}^{best_dom}" for op in operators)
+            artifact = compile_expression(fallback)
+            if artifact.valid:
+                source = fallback
+        # Fallback 3: bare operators (last resort)
+        if not artifact.valid:
+            fallback = " ".join(f"CO-{op}" for op in operators)
+            artifact = compile_expression(fallback)
+            if artifact.valid:
+                source = fallback
 
     # Build English directly from the extracted components (the parser
     # chokes on semicolons that the compiler handles fine, so we render
