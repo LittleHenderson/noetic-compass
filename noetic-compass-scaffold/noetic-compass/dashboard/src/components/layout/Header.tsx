@@ -1,5 +1,8 @@
 import { isAuthenticated, clearToken } from '../../api/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useRef, useEffect } from 'react';
+import { BrandTagline } from '../shared/BrandTagline';
+import { PatentPendingBadge } from '../shared/PatentPendingBadge';
 
 interface HeaderProps {
   onMenuToggle?: () => void;
@@ -8,7 +11,14 @@ interface HeaderProps {
 
 export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const authed = isAuthenticated();
+  const historyDepth = useRef(0);
+
+  // Track navigation depth so we know when there's history to go back to
+  useEffect(() => {
+    historyDepth.current += 1;
+  }, [location.pathname]);
 
   function handleLogout() {
     clearToken();
@@ -16,7 +26,7 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
   }
 
   return (
-    <header className="flex h-14 items-center justify-between border-b border-white/[0.06] bg-dark-800/80 backdrop-blur-md px-3 sm:px-5 safe-top">
+    <header className="flex min-h-[4.5rem] items-center justify-between border-b border-white/[0.06] bg-dark-800/80 px-3 py-2 backdrop-blur-md sm:px-5 safe-top">
       <div className="flex items-center gap-2.5">
         {/* Hamburger menu — mobile only */}
         {onMenuToggle && (
@@ -36,6 +46,21 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
             )}
           </button>
         )}
+        {/* Glowing back button — visible when there's navigation history */}
+        {historyDepth.current > 1 && (
+          <button
+            onClick={() => navigate(-1)}
+            className="group relative flex items-center justify-center w-9 h-9 min-h-[44px] min-w-[44px] rounded-xl bg-accent-teal/10 border border-accent-teal/20 text-accent-teal hover:bg-accent-teal/20 hover:border-accent-teal/40 active:scale-95 transition-all"
+            aria-label="Go back"
+            title="Go back"
+          >
+            {/* Glow effect */}
+            <span className="absolute inset-0 rounded-xl bg-accent-teal/5 blur-md group-hover:bg-accent-teal/10 transition-colors" />
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10">
+              <path d="M10 12L6 8l4-4" />
+            </svg>
+          </button>
+        )}
         <img src="/icon-192.svg" alt="" className="h-7 w-7 rounded-lg" />
         <div className="flex flex-col leading-tight">
           <h1 className="text-base font-bold tracking-tight">
@@ -43,12 +68,13 @@ export function Header({ onMenuToggle, sidebarOpen }: HeaderProps) {
               Noetic Compass
             </span>
           </h1>
-          <p className="hidden sm:block text-[10px] italic text-accent-teal/70 -mt-0.5">
-            Measure How AI Thinks
-          </p>
+          <div className="hidden sm:block -mt-0.5">
+            <BrandTagline variant="header" />
+          </div>
         </div>
       </div>
       <div className="flex items-center gap-3">
+        <PatentPendingBadge compact className="shrink-0" />
         {authed ? (
           <button
             onClick={handleLogout}
