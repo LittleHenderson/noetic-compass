@@ -315,7 +315,7 @@ export function AssessmentPage() {
     ? computeBlindSpots(operatorScores, domainAverages, flatDrives)
     : [];
   const chartFallback = (
-    <div className="flex min-h-[220px] items-center justify-center text-xs text-slate-500">
+    <div className="flex min-h-[280px] items-center justify-center text-xs text-slate-500">
       Loading visualization...
     </div>
   );

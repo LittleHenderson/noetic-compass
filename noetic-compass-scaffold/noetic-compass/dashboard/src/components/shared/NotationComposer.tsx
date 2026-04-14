@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 
 const OPERATOR_NAMES = [
   'Identity', 'Reflection', 'Abstraction', 'Concretization',
@@ -17,12 +17,16 @@ interface ParseResult {
   valid: boolean;
   error: string;
   english: string;
+  /** Detected composition operations: syntactic (+, -) and algebraic (×, ÷, ∘) */
+  syntacticOps: string[];
+  algebraicOps: string[];
 }
 
 function parseNotation(input: string): ParseResult {
   const result: ParseResult = {
     operators: [], domains: [], drives: [], fractal: null,
     isRpm: false, valid: true, error: '', english: '',
+    syntacticOps: [], algebraicOps: [],
   };
 
   if (!input.trim()) {
@@ -80,6 +84,13 @@ function parseNotation(input: string): ParseResult {
     }
   }
 
+  // Detect composition operations
+  if (/[+]/.test(text)) result.syntacticOps.push('+');
+  if (/[-]/.test(text) && !/->|<-/.test(text)) result.syntacticOps.push('-');
+  if (/[*×]/.test(text)) result.algebraicOps.push('×');
+  if (/[/÷]/.test(text) && !/\/\//.test(text)) result.algebraicOps.push('÷');
+  if (/∘/.test(text)) result.algebraicOps.push('∘');
+
   // Check for unknown content
   if (result.operators.length === 0 && result.drives.length === 0 && !result.fractal && !result.isRpm) {
     result.valid = false;
@@ -135,11 +146,12 @@ function generatePrompt(parsed: ParseResult): string {
 }
 
 interface NotationComposerProps {
+  notation: string;
+  onNotationChange: (notation: string) => void;
   onGenerate: (prompt: string) => void;
 }
 
-export function NotationComposer({ onGenerate }: NotationComposerProps) {
-  const [notation, setNotation] = useState('');
+export function NotationComposer({ notation, onNotationChange, onGenerate }: NotationComposerProps) {
   const parsed = useMemo(() => parseNotation(notation), [notation]);
 
   const handleGenerate = () => {
@@ -157,7 +169,7 @@ export function NotationComposer({ onGenerate }: NotationComposerProps) {
         <input
           type="text"
           value={notation}
-          onChange={(e) => setNotation(e.target.value)}
+          onChange={(e) => onNotationChange(e.target.value)}
           placeholder="CO-3^E + CO-5^C   or   RPM(F5)   or   Phi<1:4:7>"
           className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-base sm:text-sm font-mono text-accent-teal placeholder-slate-600 focus:border-accent-teal/50 focus:outline-none focus:ring-1 focus:ring-accent-teal/30"
         />
@@ -193,6 +205,16 @@ export function NotationComposer({ onGenerate }: NotationComposerProps) {
                     Φ⟨{parsed.fractal.join(':')}⟩
                   </span>
                 )}
+                {parsed.syntacticOps.map(op => (
+                  <span key={`syn-${op}`} className="text-[9px] px-2 py-0.5 rounded-full bg-slate-500/10 text-slate-400 font-mono" title="Syntactic assembler">
+                    {op}
+                  </span>
+                ))}
+                {parsed.algebraicOps.map(op => (
+                  <span key={`alg-${op}`} className="text-[9px] px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 font-mono" title="Algebraic transformer">
+                    {op}
+                  </span>
+                ))}
               </div>
             </>
           ) : (
@@ -201,17 +223,30 @@ export function NotationComposer({ onGenerate }: NotationComposerProps) {
         </div>
       )}
 
-      {/* Quick reference */}
-      <div className="text-[9px] text-slate-600 leading-relaxed">
-        <span className="font-mono text-slate-500">CO-3^E</span> operator+domain
-        {' · '}
-        <span className="font-mono text-slate-500">CO-2 + CO-3</span> combination
-        {' · '}
-        <span className="font-mono text-slate-500">RPM(F5)</span> prerequisite chain
-        {' · '}
-        <span className="font-mono text-slate-500">Phi&lt;1:4:7&gt;</span> fractal
-        {' · '}
-        <span className="font-mono text-slate-500">P3</span> state
+      {/* Quick reference — dual-layer operations */}
+      <div className="text-[9px] leading-relaxed space-y-1">
+        <div className="text-slate-600">
+          <span className="font-mono text-slate-500">CO-3^E</span> state
+          {' · '}
+          <span className="font-mono text-slate-500">RPM(F5)</span> chain
+          {' · '}
+          <span className="font-mono text-slate-500">Phi&lt;1:4:7&gt;</span> fractal
+          {' · '}
+          <span className="font-mono text-slate-500">P3</span> shorthand
+        </div>
+        <div className="flex gap-3">
+          <span className="text-slate-500">
+            <span className="text-[8px] uppercase tracking-wider">Syntactic</span>{' '}
+            <span className="font-mono text-slate-400">+</span> combine{' '}
+            <span className="font-mono text-slate-400">-</span> remove
+          </span>
+          <span className="text-orange-400/70">
+            <span className="text-[8px] uppercase tracking-wider">Algebraic</span>{' '}
+            <span className="font-mono text-orange-400">×</span> compose{' '}
+            <span className="font-mono text-orange-400">÷</span> ratio{' '}
+            <span className="font-mono text-orange-400">∘</span> fractal
+          </span>
+        </div>
       </div>
 
       {/* Generate button */}

@@ -24,6 +24,12 @@
 - **`dashboard/src/test/__tests__/ScenarioBrowserPage.test.tsx`** — Updated mock data to include backend notation fields, updated assertions.
 - **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated notation prefill format.
 
+### Architecture & UX Improvements (Gemini Recommendations)
+- **IndexedDB History Storage** — `dashboard/src/stores/historyStore.ts` now uses IndexedDB (via `idb-keyval`) instead of localStorage. Prevents silent data loss when 100 assessment records exceed the 5MB localStorage quota. Falls back to localStorage in test environments.
+- **Chart Layout Stability** — `chartFallback` min-height bumped from 220px to 280px to prevent layout shifts during lazy chart loading.
+- **Graceful CAS Math Violations** — `dashboard/src/components/shared/ErrorBanner.tsx` now detects 6 CAS-specific error patterns (domain descent violations, cross-domain division, admissibility violations, degenerate states, simplex boundary violations, dial safety constraints) and renders them with domain terminology and amber warning styling instead of generic red HTTP errors.
+- **Pentad Visualization (Dual-Layer Modularity)** — `dashboard/src/components/shared/NotationComposer.tsx` now detects and color-codes syntactic assemblers (`+`, `-` in slate/grey) separately from algebraic transformers (`×`, `÷`, `∘` in orange). Quick reference updated to teach the dual-layer distinction inline. Users learn the math visually.
+
 ### Algebraic Operations: × and ÷ in Rust Scoring Engine
 - **`cas-engine/src/algebra/`** (NEW MODULE) — Full CAS v7.4 algebraic operations, formally verified by Qwen:
   - **`drives.rs`** — Drive synthesis table: same drive = idempotent, inversion pairs (F1↔F7, F2↔F6, F3↔F5) → F4 Connection, non-paired → attractor closest to F4. Drive ratio for division.
