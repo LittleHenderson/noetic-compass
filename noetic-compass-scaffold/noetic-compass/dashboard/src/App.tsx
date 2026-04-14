@@ -19,6 +19,7 @@ const ScenarioBrowserPage = lazy(() => import('./pages/ScenarioBrowserPage').the
 const ValidationPage = lazy(() => import('./pages/ValidationPage').then(m => ({ default: m.ValidationPage })));
 const ValidationLeaderboardPage = lazy(() => import('./pages/ValidationLeaderboardPage').then(m => ({ default: m.ValidationLeaderboardPage })));
 const ReproducibilityPage = lazy(() => import('./pages/ReproducibilityPage').then(m => ({ default: m.ReproducibilityPage })));
+const CompilerPage = lazy(() => import('./pages/CompilerPage').then(m => ({ default: m.CompilerPage })));
 const LoginPage      = lazy(() => import('./pages/LoginPage').then(m => ({ default: m.LoginPage })));
 
 function AuthGuard({ children }: { children: ReactNode }) {
@@ -53,6 +54,7 @@ export default function App() {
                     <Route path="/validate" element={<ValidationPage />} />
                     <Route path="/validation/leaderboard" element={<ValidationLeaderboardPage />} />
                     <Route path="/reproducibility" element={<ReproducibilityPage />} />
+                    <Route path="/compiler" element={<CompilerPage />} />
                     <Route path="/ai-challenges" element={<AiChallengesPage />} />
                     <Route path="/how-it-works" element={<HowItWorksPage />} />
                     <Route path="/faq" element={<FaqPage />} />

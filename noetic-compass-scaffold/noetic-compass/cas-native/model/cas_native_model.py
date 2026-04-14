@@ -28,6 +28,7 @@ from .domain_descent import DomainDescentAttention
 from .rpm_gate import PrerequisiteGateLayer
 from .fractal_attention import FractalAttentionHead
 from .topos_reasoner import CognitiveToposReasoner
+from .composition import GenerativeHead
 
 
 @dataclass
@@ -119,29 +120,48 @@ class CASTransformerLayer(nn.Module):
         self.norm4 = nn.LayerNorm(config.d_model)
 
     def forward(
-        self, x: torch.Tensor
+        self,
+        x: torch.Tensor,
+        cognitive_state: torch.Tensor,
+        attention_mask: torch.Tensor | None = None,
     ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
         """
         Args:
             x: Input tensor (batch, seq, d_model)
+            cognitive_state: Token-to-slot weights (batch, seq, 40)
+            attention_mask: Optional padding mask (batch, seq)
 
         Returns:
             Tuple of (output, rpm_satisfaction_dict)
         """
+        mask = None
+        if attention_mask is not None:
+            mask = attention_mask.unsqueeze(-1).to(x.dtype)
+
         # Domain descent attention + fractal attention (blended)
-        domain_out = self.domain_attn(self.norm1(x))
-        fractal_out = self.fractal_attn(self.norm2(x))
+        domain_out = self.domain_attn(
+            self.norm1(x),
+            cognitive_state,
+            attention_mask=attention_mask,
+        )
+        fractal_out = self.fractal_attn(self.norm2(x), attention_mask=attention_mask)
 
         gate = torch.sigmoid(self.fractal_gate)
         attn_out = gate * domain_out + (1.0 - gate) * fractal_out
         x = x + attn_out
+        if mask is not None:
+            x = x * mask
 
         # RPM prerequisite gate
         gated, rpm_satisfaction = self.rpm_gate(self.norm3(x))
         x = x + gated
+        if mask is not None:
+            x = x * mask
 
         # Feed-forward
         x = x + self.ffn(self.norm4(x))
+        if mask is not None:
+            x = x * mask
 
         return x, rpm_satisfaction
 
@@ -218,6 +238,7 @@ class CASNativeModel(nn.Module):
             config.num_ethical_propositions,
         )
         self.inversion_detector = InversionDetector(config.d_model)
+        self.generative_head = GenerativeHead(config.d_model)
 
         # Initialize weights
         self._init_weights()
@@ -234,6 +255,15 @@ class CASNativeModel(nn.Module):
             elif isinstance(module, nn.LayerNorm):
                 nn.init.ones_(module.weight)
                 nn.init.zeros_(module.bias)
+
+    @staticmethod
+    def _masked_mean(x: torch.Tensor, attention_mask: torch.Tensor | None) -> torch.Tensor:
+        """Average across sequence positions while ignoring padding."""
+        if attention_mask is None:
+            return x.mean(dim=1)
+
+        weights = attention_mask.to(x.dtype).unsqueeze(-1)
+        return (x * weights).sum(dim=1) / weights.sum(dim=1).clamp_min(1.0)
 
     def forward(
         self,
@@ -261,17 +291,21 @@ class CASNativeModel(nn.Module):
         if attention_mask is not None:
             x = x * attention_mask.unsqueeze(-1).float()
 
-        # Cognitive state embedding branch (parallel)
-        cognitive_state = self.cognitive_embedding(x)
-
         # CAS transformer layers
         all_rpm_satisfaction: list[dict[str, torch.Tensor]] = []
         for layer in self.layers:
-            x, rpm_sat = layer(x)
+            layer_cognitive_state = self.cognitive_embedding(x)
+            x, rpm_sat = layer(
+                x,
+                layer_cognitive_state,
+                attention_mask=attention_mask,
+            )
             all_rpm_satisfaction.append(rpm_sat)
 
         # Final normalization
         x = self.final_norm(x)
+        if attention_mask is not None:
+            x = x * attention_mask.unsqueeze(-1).float()
 
         # LM head
         logits = self.lm_head(x)
@@ -280,7 +314,7 @@ class CASNativeModel(nn.Module):
         cognitive_state = self.cognitive_embedding(x)
 
         # Pooled representation for global heads
-        pooled = x.mean(dim=1)  # (batch, d_model)
+        pooled = self._masked_mean(x, attention_mask)  # (batch, d_model)
 
         # Topos reasoning (intuitionistic 3-valued logic)
         topos_truth_values = self.topos_reasoner(pooled)

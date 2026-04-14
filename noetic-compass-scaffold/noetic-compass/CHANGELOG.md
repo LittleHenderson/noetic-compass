@@ -24,6 +24,18 @@
 - **`dashboard/src/test/__tests__/ScenarioBrowserPage.test.tsx`** — Updated mock data to include backend notation fields, updated assertions.
 - **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated notation prefill format.
 
+### CAS Interactive Compiler (/compiler)
+- **`dashboard/src/pages/CompilerPage.tsx`** (NEW) — Full interactive REPL page with terminal aesthetic (#0d1117 dark background, monospace font, teal cursor prompt). Features: ASCII CAS logo on load, syntax highlighting as you type (operators=cyan, domains=green, drives=amber, operations=white, RPM=purple, fractals=magenta), styled compilation result cards with AST/type/result display, error cards with token analysis, command history (up/down arrow), special commands (:help, :grammar, :examples, :clear, :history), collapsible side panel with operator/domain/drive/operation reference and clickable example expressions that auto-fill the input. Cards slide in with fadeSlideIn animation.
+- **`dashboard/src/App.tsx`** — Added `/compiler` route (lazy-loaded).
+- **`dashboard/src/components/layout/Sidebar.tsx`** — Added "CAS Compiler" nav item between Scenarios and AI Challenges.
+- **`dashboard/src/index.css`** — Added `@keyframes fadeSlideIn` animation.
+
+### CAS-Native Generative Operations
+- **`cas-native/model/composition.py`** (NEW) — COMPOSE_TABLE (10×10 monoid multiplication table), CompositionHead (learns to compose two slot activations via the CAS monoid with learnable-weighted lookup initialized to ground truth), GenerativeHead (takes two cognitive state embeddings, merges them, applies composition, outputs emergent state on 40-simplex + operator distribution), composition_loss (cross-entropy against monoid ground truth).
+- **`cas-native/model/cas_native_model.py`** — Added GenerativeHead as output head.
+- **`cas-native/model/loss.py`** — Added lambda_composition parameter and compute_composition_loss method using the monoid ground truth. Imported composition_loss from new module.
+- **`cas-native/tests/test_composition.py`** (NEW) — 13 tests: COMPOSE_TABLE identity/closure/commutativity/specific values, CompositionHead output shape/distribution, GenerativeHead output keys/shapes/simplex constraint, composition_loss perfect/wrong/scalar. (Requires PyTorch to run.)
+
 ### Architecture & UX Improvements (Gemini Recommendations)
 - **IndexedDB History Storage** — `dashboard/src/stores/historyStore.ts` now uses IndexedDB (via `idb-keyval`) instead of localStorage. Prevents silent data loss when 100 assessment records exceed the 5MB localStorage quota. Falls back to localStorage in test environments.
 - **Chart Layout Stability** — `chartFallback` min-height bumped from 220px to 280px to prevent layout shifts during lazy chart loading.

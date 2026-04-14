@@ -21,6 +21,8 @@ Components:
 import torch
 import torch.nn as nn
 
+from .composition import composition_loss as _composition_loss
+
 
 # Involution pairs: CO-2/CO-3, CO-5/CO-6, CO-8/CO-9
 INVOLUTION_PAIRS = [(2, 3), (5, 6), (8, 9)]
@@ -46,17 +48,24 @@ def fisher_rao_distance(p: torch.Tensor, q: torch.Tensor) -> torch.Tensor:
     Returns:
         Distance tensor of shape (...), one distance per vector pair
     """
-    # Ensure positivity for sqrt
-    p_safe = torch.clamp(p, min=1e-12)
-    q_safe = torch.clamp(q, min=1e-12)
+    original_dtype = p.dtype
+
+    # Compute in float64 to keep d(p, p) numerically pinned at zero.
+    p_safe = torch.clamp(p.double(), min=1e-12)
+    q_safe = torch.clamp(q.double(), min=1e-12)
 
     # Bhattacharyya coefficient: sum(sqrt(pk * qk))
     bc = (torch.sqrt(p_safe * q_safe)).sum(dim=-1)
 
     # Clamp for numerical stability before arccos
-    bc = torch.clamp(bc, -1.0, 1.0)
+    bc = torch.clamp(bc, 0.0, 1.0)
+    bc = torch.where(
+        torch.abs(1.0 - bc) < 1e-7,
+        torch.ones_like(bc),
+        bc,
+    )
 
-    return 2.0 * torch.arccos(bc)
+    return (2.0 * torch.arccos(bc)).to(original_dtype)
 
 
 class CognitiveMetricLoss(nn.Module):
@@ -73,6 +82,7 @@ class CognitiveMetricLoss(nn.Module):
         lambda_rpm_satisfaction: float = 1.0,
         lambda_inversion_penalty: float = 1.0,
         lambda_cognitive_drift: float = 1.0,
+        lambda_composition: float = 0.5,
         involution_gap_threshold: float = 4.0,
         dci_threshold: float = 0.7,
     ):
@@ -82,6 +92,7 @@ class CognitiveMetricLoss(nn.Module):
         self.lambda_rpm_satisfaction = lambda_rpm_satisfaction
         self.lambda_inversion_penalty = lambda_inversion_penalty
         self.lambda_cognitive_drift = lambda_cognitive_drift
+        self.lambda_composition = lambda_composition
         self.involution_gap_threshold = involution_gap_threshold
         self.dci_threshold = dci_threshold
 
@@ -173,6 +184,16 @@ class CognitiveMetricLoss(nn.Module):
         Uses the geodesic distance on the open probability simplex.
         """
         return fisher_rao_distance(cognitive_state, target_state).mean()
+
+    @staticmethod
+    def compute_composition_loss(
+        predicted_op: torch.Tensor,
+        op_idx_a: torch.Tensor,
+        op_idx_b: torch.Tensor,
+    ) -> torch.Tensor:
+        """Monoid composition loss: penalizes when model's composed operator
+        doesn't match (a + b) mod 10."""
+        return _composition_loss(predicted_op, op_idx_a, op_idx_b)
 
     def forward(
         self,
