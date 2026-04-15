@@ -59,9 +59,34 @@ interface CompileResult {
   result?: Record<string, unknown> | null;
 }
 
+interface NlPipelineResult {
+  text: string;
+  signals: {
+    operator_scores: number[];
+    domain_scores: number[];
+    drive_scores: number[];
+    rpm_signal: number;
+    word_count: number;
+  };
+  synthesized_notation: string;
+  notation_english: string;
+  compilation: {
+    valid: boolean;
+    error?: string | null;
+    engine?: string;
+    tokens: number;
+    bytecode: number;
+    warnings: string[];
+    ast?: Record<string, unknown> | null;
+    result?: Record<string, unknown> | null;
+  } | null;
+  interpretation: string;
+}
+
 interface HistoryEntry {
   input: string;
   result: CompileResult | null;
+  nlResult?: NlPipelineResult | null;
   isCommand: boolean;
   commandOutput?: string;
   timestamp: number;
@@ -200,6 +225,71 @@ function ResultCard({ entry }: { entry: HistoryEntry }) {
     );
   }
 
+  // Natural language pipeline result
+  if (entry.nlResult) {
+    const nl = entry.nlResult;
+    const valid = nl.compilation?.valid ?? false;
+    return (
+      <div className={`animate-[fadeSlideIn_0.3s_ease-out] rounded-lg border p-4 font-mono text-xs ${valid ? 'border-emerald-500/20 bg-emerald-500/[0.03]' : 'border-white/[0.08] bg-white/[0.02]'}`}>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-purple-400">nl&gt;</span>
+          <span className="text-sm text-slate-300 font-sans">{entry.input}</span>
+        </div>
+
+        {/* Signal extraction */}
+        <div className="mb-3 rounded border border-white/[0.06] bg-white/[0.02] p-3">
+          <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Signal Extraction</p>
+          <div className="space-y-1">
+            {nl.signals.operator_scores.map((score, i) => score > 0 ? (
+              <div key={i} className="flex items-center gap-2 text-[10px]">
+                <span className="text-cyan-400 w-32 shrink-0">CO-{i} {OPERATOR_NAMES[i]}</span>
+                <div className="flex-1 h-2 rounded-full bg-white/[0.04] overflow-hidden">
+                  <div className="h-full rounded-full bg-cyan-500/60" style={{ width: `${score * 10}%` }} />
+                </div>
+                <span className="text-slate-500 w-8 text-right">{score.toFixed(1)}</span>
+              </div>
+            ) : null)}
+          </div>
+          <div className="flex gap-4 mt-2 text-[10px]">
+            {(['P', 'C', 'E', 'O'] as const).map((d, i) => (
+              <span key={d} className="text-emerald-400">
+                {d}={nl.signals.domain_scores[i]?.toFixed(2)}
+              </span>
+            ))}
+            <span className="text-amber-400">RPM={nl.signals.rpm_signal.toFixed(2)}</span>
+          </div>
+        </div>
+
+        {/* Synthesized notation */}
+        {nl.synthesized_notation && (
+          <div className="mb-3 rounded border border-accent-teal/20 bg-accent-teal/[0.03] p-3">
+            <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Synthesized Notation</p>
+            <p className="text-accent-teal text-[12px]">{highlightSyntax(nl.synthesized_notation)}</p>
+            {nl.notation_english && (
+              <p className="text-[10px] text-slate-400 mt-1 font-sans">{nl.notation_english}</p>
+            )}
+          </div>
+        )}
+
+        {/* Compilation */}
+        {nl.compilation && (
+          <div className="mb-3 flex items-center gap-2 text-[10px]">
+            {nl.compilation.valid ? <span className="text-emerald-400">Compiled</span> : <span className="text-red-400">Compilation failed</span>}
+            {nl.compilation.engine && <span className="text-slate-600">engine: {nl.compilation.engine}</span>}
+            <span className="text-slate-600">tokens: {nl.compilation.tokens}</span>
+            <span className="text-slate-600">bytecode: {nl.compilation.bytecode}</span>
+          </div>
+        )}
+
+        {/* Interpretation */}
+        <div className="rounded border border-purple-500/20 bg-purple-500/[0.03] p-3">
+          <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Interpretation</p>
+          <p className="text-[11px] text-slate-300 font-sans leading-relaxed">{nl.interpretation}</p>
+        </div>
+      </div>
+    );
+  }
+
   const r = entry.result;
   if (!r) return null;
 
@@ -288,6 +378,7 @@ function ResultCard({ entry }: { entry: HistoryEntry }) {
 // ── Main Page ──
 
 export function CompilerPage() {
+  const [mode, setMode] = useState<'cas' | 'nl'>('cas');
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
@@ -348,8 +439,25 @@ export function CompilerPage() {
       return;
     }
 
-    // Compile expression
+    // Route based on mode
     setLoading(true);
+    if (mode === 'nl') {
+      try {
+        const nlResult = await apiFetch<NlPipelineResult>('/notation/natural-language', {
+          method: 'POST',
+          body: JSON.stringify({ text: trimmed, compile: true }),
+        });
+        addEntry({ input: trimmed, result: null, nlResult, isCommand: false, timestamp: ts });
+      } catch (err) {
+        const detail = err instanceof Error ? err.message : String(err);
+        addEntry({ input: trimmed, result: { source: trimmed, valid: false, error: detail }, isCommand: false, timestamp: ts });
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    // CAS notation mode — compile expression
     try {
       const result = await apiFetch<CompileResult>('/notation/compile', {
         method: 'POST',
@@ -481,17 +589,34 @@ export function CompilerPage() {
           )}
         </div>
 
-        {/* Input area */}
-        <div className="border-t border-white/[0.06] p-3 flex items-center gap-2" style={{ backgroundColor: '#0d1117' }}>
-          <span className="text-accent-teal font-mono text-sm font-bold shrink-0">cas&gt;</span>
+        {/* Mode toggle + Input area */}
+        <div className="border-t border-white/[0.06]" style={{ backgroundColor: '#0d1117' }}>
+          <div className="flex gap-1 px-3 pt-2">
+            <button
+              onClick={() => setMode('cas')}
+              className={`rounded px-2 py-1 text-[10px] font-mono transition-colors ${mode === 'cas' ? 'bg-accent-teal/15 text-accent-teal' : 'text-slate-600 hover:text-slate-400'}`}
+            >
+              CAS Notation
+            </button>
+            <button
+              onClick={() => setMode('nl')}
+              className={`rounded px-2 py-1 text-[10px] font-mono transition-colors ${mode === 'nl' ? 'bg-purple-500/15 text-purple-400' : 'text-slate-600 hover:text-slate-400'}`}
+            >
+              Natural Language
+            </button>
+          </div>
+          <div className="p-3 pt-1 flex items-center gap-2">
+          <span className={`font-mono text-sm font-bold shrink-0 ${mode === 'nl' ? 'text-purple-400' : 'text-accent-teal'}`}>
+            {mode === 'nl' ? 'nl>' : 'cas>'}
+          </span>
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="CO-3^P_{F2} * CO-8^P_{F6}"
-            className="flex-1 bg-transparent border-none outline-none text-sm font-mono text-slate-200 placeholder-slate-700 caret-accent-teal min-h-[44px]"
+            placeholder={mode === 'nl' ? 'Type any sentence or paragraph...' : 'CO-3^P_{F2} * CO-8^P_{F6}'}
+            className={`flex-1 bg-transparent border-none outline-none text-sm text-slate-200 placeholder-slate-700 min-h-[44px] ${mode === 'nl' ? 'font-sans caret-purple-400' : 'font-mono caret-accent-teal'}`}
             autoComplete="off"
             spellCheck={false}
           />
@@ -501,6 +626,7 @@ export function CompilerPage() {
           >
             {showRef ? 'Hide Ref' : 'Ref'}
           </button>
+          </div>
         </div>
       </div>
 
