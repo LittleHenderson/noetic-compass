@@ -24,6 +24,14 @@
 - **`dashboard/src/test/__tests__/ScenarioBrowserPage.test.tsx`** — Updated mock data to include backend notation fields, updated assertions.
 - **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated notation prefill format.
 
+### CAS Synthetic Training Data Generator
+- **`cas-native/data/expression_generator.py`** (NEW) — Random CAS expression generator with 3 complexity levels (simple: 1-2 states; medium: 2-4 states with RPM/fractal; complex: parenthesized sub-expressions with domain descent, RPM, fractals, co-present drives). Respects domain descent for ->, same-domain for /, admissibility constraints. Every expression validated through compiler before acceptance.
+- **`cas-native/data/english_generator.py`** (NEW) — Template-based reverse synthesizer. 120+ operator-domain templates (all 40 combos x 3 each), 21 drive context templates, 20+ operation transition templates, 50+ scenario contexts (doctor, teacher, manager, judge, engineer, etc.). Converts any compiled CAS expression into natural English.
+- **`cas-native/data/score_extractor.py`** (NEW) — Extracts ground truth labels from expressions: 10 operator scores, 4 domain scores, 7 drive scores, RPM completeness, fractal classification, lacunarity, structural flags (descent, division).
+- **`cas-native/data/validate_data.py`** (NEW) — Dataset quality validation: compilation validity rate, score consistency, operator/domain/drive distribution balance, complexity distribution, duplicate detection, average English length, underrepresentation warnings.
+- **`cas-native/data/verifier.py`** (NEW) — Round-trip verification for LLM-generated English: feeds text back through signal analyzer, compares re-extracted operators/domains/drives/structure against original. Accepts if 3 of 4 criteria match. Catches hallucinations.
+- **`cas-native/data/generate_training_data.py`** (NEW) — Batch pipeline: generates N triples as JSONL, runs quality validation, reports statistics. Tested: 100 triples, 0 failures, 100% valid, 100% consistent, 1% duplicates, 38 avg words.
+
 ### CAS-Native Lacunarity — Training + Inference + Output
 - **`cas-native/model/lacunarity_gate.py`** (NEW) — LacunarityGate: inference-time self-correction. Computes lacunarity (Var/Mean^2) on slot activations. When above threshold (2.0), applies learned rebalancing correction that boosts neglected slots and dampens over-concentrated ones. Re-normalizes to open simplex via softmax + clamp. The model catches itself when thinking gets too narrow.
 - **`cas-native/model/lacunarity_head.py`** (NEW) — LacunarityHead: metacognitive output head. Produces 5 lacunarity dimension scores, 40-element gap map (per-slot blind spot probability), and 4 domain confidence scores. The model reports its own cognitive gaps alongside its answer.
