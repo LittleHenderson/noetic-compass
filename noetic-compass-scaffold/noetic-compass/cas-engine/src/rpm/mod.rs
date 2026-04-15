@@ -22,6 +22,7 @@
 
 pub mod chain;
 pub mod diagnostics;
+pub mod recursive;
 
 use serde::{Deserialize, Serialize};
 use std::fmt;
@@ -543,7 +544,9 @@ impl RpmProfile {
     /// Whether A0 (Pure Desire) is satisfied for this profile.
     pub fn a0_satisfied(&self) -> bool {
         // All chains share the same A0; check the first one
-        self.chains[0].state_at(PathwayStage::Aspiration).is_satisfied()
+        self.chains[0]
+            .state_at(PathwayStage::Aspiration)
+            .is_satisfied()
     }
 
     /// Overall completeness: average of all 7 chain completeness values.
@@ -670,7 +673,11 @@ mod tests {
         // Test section law across 1001 evenly-spaced points
         for i in 0..=1000 {
             let s = i as f64 / 1000.0;
-            assert!(verify_section_law(s).is_ok(), "Section law failed for s={}", s);
+            assert!(
+                verify_section_law(s).is_ok(),
+                "Section law failed for s={}",
+                s
+            );
         }
     }
 
@@ -782,7 +789,7 @@ mod tests {
         let chain = RpmChain::new(
             CoreDrive::F1Unity,
             [0.3, 0.9, 0.9, 0.9], // A0=0.3 below threshold
-            0.5,                    // threshold
+            0.5,                  // threshold
         )
         .unwrap();
 
@@ -816,12 +823,7 @@ mod tests {
 
     #[test]
     fn test_prerequisite_gating_full_chain() {
-        let chain = RpmChain::new(
-            CoreDrive::F3Vitality,
-            [0.8, 0.7, 0.6, 0.5],
-            0.5,
-        )
-        .unwrap();
+        let chain = RpmChain::new(CoreDrive::F3Vitality, [0.8, 0.7, 0.6, 0.5], 0.5).unwrap();
 
         assert!(chain.state_at(PathwayStage::Aspiration).is_satisfied());
         assert!(chain.state_at(PathwayStage::Drive).is_satisfied());
@@ -841,19 +843,9 @@ mod tests {
         // We test this by verifying that a chain where only A0 is satisfied
         // has the correct cached states, and that the A0 state is fully
         // independent of the downstream scores.
-        let chain_a = RpmChain::new(
-            CoreDrive::F2Wisdom,
-            [0.8, 0.3, 0.9, 0.9],
-            0.5,
-        )
-        .unwrap();
+        let chain_a = RpmChain::new(CoreDrive::F2Wisdom, [0.8, 0.3, 0.9, 0.9], 0.5).unwrap();
 
-        let chain_b = RpmChain::new(
-            CoreDrive::F2Wisdom,
-            [0.8, 0.3, 0.1, 0.1],
-            0.5,
-        )
-        .unwrap();
+        let chain_b = RpmChain::new(CoreDrive::F2Wisdom, [0.8, 0.3, 0.1, 0.1], 0.5).unwrap();
 
         // A0 satisfaction is identical regardless of downstream scores
         assert_eq!(
@@ -914,8 +906,8 @@ mod tests {
 
         let states = RpmGate::evaluate_chain(&nodes_and_scores, 0.5).unwrap();
 
-        assert!(states[0].is_satisfied());  // A0: 0.8 >= 0.5
-        assert!(states[1].is_satisfied());  // D4: 0.7 >= 0.5, prereq OK
+        assert!(states[0].is_satisfied()); // A0: 0.8 >= 0.5
+        assert!(states[1].is_satisfied()); // D4: 0.7 >= 0.5, prereq OK
         assert!(!states[2].is_satisfied()); // W4: 0.4 < 0.5
         assert!(!states[3].is_satisfied()); // P4: prereq W4 failed
     }
@@ -926,23 +918,13 @@ mod tests {
 
     #[test]
     fn test_chain_completeness_all_satisfied() {
-        let chain = RpmChain::new(
-            CoreDrive::F7Purpose,
-            [0.9, 0.8, 0.7, 0.6],
-            0.5,
-        )
-        .unwrap();
+        let chain = RpmChain::new(CoreDrive::F7Purpose, [0.9, 0.8, 0.7, 0.6], 0.5).unwrap();
         assert!((chain.completeness() - 1.0).abs() < 1e-12);
     }
 
     #[test]
     fn test_chain_completeness_none_satisfied() {
-        let chain = RpmChain::new(
-            CoreDrive::F7Purpose,
-            [0.1, 0.8, 0.7, 0.6],
-            0.5,
-        )
-        .unwrap();
+        let chain = RpmChain::new(CoreDrive::F7Purpose, [0.1, 0.8, 0.7, 0.6], 0.5).unwrap();
         assert!((chain.completeness() - 0.0).abs() < 1e-12);
     }
 
@@ -960,12 +942,7 @@ mod tests {
 
     #[test]
     fn test_chain_raw_scores() {
-        let chain = RpmChain::new(
-            CoreDrive::F6Structure,
-            [0.1, 0.2, 0.3, 0.4],
-            0.5,
-        )
-        .unwrap();
+        let chain = RpmChain::new(CoreDrive::F6Structure, [0.1, 0.2, 0.3, 0.4], 0.5).unwrap();
         assert_eq!(chain.raw_scores(), [0.1, 0.2, 0.3, 0.4]);
     }
 
@@ -1010,13 +987,13 @@ mod tests {
         assert!(profile.a0_satisfied());
 
         let completeness_values = profile.per_drive_completeness();
-        assert!((completeness_values[0] - 1.0).abs() < 1e-12);    // F1
-        assert!((completeness_values[1] - 0.75).abs() < 1e-12);   // F2
-        assert!((completeness_values[2] - 0.5).abs() < 1e-12);    // F3
-        assert!((completeness_values[3] - 0.25).abs() < 1e-12);   // F4
-        assert!((completeness_values[4] - 1.0).abs() < 1e-12);    // F5
-        assert!((completeness_values[5] - 1.0).abs() < 1e-12);    // F6
-        assert!((completeness_values[6] - 1.0).abs() < 1e-12);    // F7
+        assert!((completeness_values[0] - 1.0).abs() < 1e-12); // F1
+        assert!((completeness_values[1] - 0.75).abs() < 1e-12); // F2
+        assert!((completeness_values[2] - 0.5).abs() < 1e-12); // F3
+        assert!((completeness_values[3] - 0.25).abs() < 1e-12); // F4
+        assert!((completeness_values[4] - 1.0).abs() < 1e-12); // F5
+        assert!((completeness_values[5] - 1.0).abs() < 1e-12); // F6
+        assert!((completeness_values[6] - 1.0).abs() < 1e-12); // F7
 
         // Expected overall: (1.0 + 0.75 + 0.5 + 0.25 + 1.0 + 1.0 + 1.0) / 7
         let expected_overall = (1.0 + 0.75 + 0.5 + 0.25 + 1.0 + 1.0 + 1.0) / 7.0;
@@ -1106,13 +1083,7 @@ mod tests {
         assert!(state.is_satisfied());
 
         // Score meets threshold, prerequisite NOT satisfied => NOT satisfied
-        let state = RpmState::new(
-            PathwayNode::D(CoreDrive::F1Unity),
-            0.6,
-            0.5,
-            false,
-        )
-        .unwrap();
+        let state = RpmState::new(PathwayNode::D(CoreDrive::F1Unity), 0.6, 0.5, false).unwrap();
         assert!(!state.is_satisfied());
 
         // Score below threshold, prerequisite satisfied => NOT satisfied
@@ -1145,12 +1116,7 @@ mod tests {
 
     #[test]
     fn test_chain_display() {
-        let chain = RpmChain::new(
-            CoreDrive::F1Unity,
-            [0.8, 0.7, 0.6, 0.5],
-            0.5,
-        )
-        .unwrap();
+        let chain = RpmChain::new(CoreDrive::F1Unity, [0.8, 0.7, 0.6, 0.5], 0.5).unwrap();
         let display = format!("{}", chain);
         assert!(display.contains("F1 Unity"));
         assert!(display.contains("completeness=100%"));
@@ -1173,12 +1139,7 @@ mod tests {
     #[test]
     fn test_boundary_threshold_equals_score() {
         // Score == threshold => satisfied (>=, not >)
-        let chain = RpmChain::new(
-            CoreDrive::F4Connection,
-            [0.5, 0.5, 0.5, 0.5],
-            0.5,
-        )
-        .unwrap();
+        let chain = RpmChain::new(CoreDrive::F4Connection, [0.5, 0.5, 0.5, 0.5], 0.5).unwrap();
         assert!(chain.is_complete());
         assert!((chain.completeness() - 1.0).abs() < 1e-12);
     }
@@ -1186,32 +1147,17 @@ mod tests {
     #[test]
     fn test_zero_threshold() {
         // threshold=0.0 => all scores >= 0.0 are satisfied
-        let chain = RpmChain::new(
-            CoreDrive::F1Unity,
-            [0.0, 0.0, 0.0, 0.0],
-            0.0,
-        )
-        .unwrap();
+        let chain = RpmChain::new(CoreDrive::F1Unity, [0.0, 0.0, 0.0, 0.0], 0.0).unwrap();
         assert!(chain.is_complete());
     }
 
     #[test]
     fn test_max_threshold() {
         // threshold=1.0 => only score=1.0 satisfies
-        let chain = RpmChain::new(
-            CoreDrive::F1Unity,
-            [1.0, 1.0, 1.0, 1.0],
-            1.0,
-        )
-        .unwrap();
+        let chain = RpmChain::new(CoreDrive::F1Unity, [1.0, 1.0, 1.0, 1.0], 1.0).unwrap();
         assert!(chain.is_complete());
 
-        let chain2 = RpmChain::new(
-            CoreDrive::F1Unity,
-            [0.999, 1.0, 1.0, 1.0],
-            1.0,
-        )
-        .unwrap();
+        let chain2 = RpmChain::new(CoreDrive::F1Unity, [0.999, 1.0, 1.0, 1.0], 1.0).unwrap();
         assert!(!chain2.state_at(PathwayStage::Aspiration).is_satisfied());
         assert_eq!(chain2.depth(), 0);
     }

@@ -1,19 +1,17 @@
 """
-PrerequisiteGateLayer: Differentiable gate implementing the RPM
-(Realization-Prerequisite Monad) chain A0 -> D -> W -> P.
+PrerequisiteGateLayer: neural RPM-style gating for A0 -> D -> W -> P.
 
-CORRECTION 2: RPM is Section-Retraction, NOT Adjunction.
-  epsilon_I . eta_I = id_I  (realization after embedding = identity)
-  BUT: eta_I . epsilon_I != id_R(I)  (re-embedding after realization may lose info)
+What is explicit here:
+  - There are four ordered gates matching the RPM chain stages.
+  - The model uses separate eta/epsilon parameter paths rather than a single
+    symmetric transform.
+  - Satisfaction is cached from the forward pass only.
 
-This means:
-  - Forward (eta): embeds input into prerequisite space
-  - Backward (epsilon): separate retraction path, NOT the inverse of eta
-  - Satisfaction is ONE-DIRECTIONAL: we cache forward results
-  - The gate attenuates (soft-blocks) signals that fail prerequisites
-
-The 4 sequential gates correspond to the RPM chain:
-  A0 (Pure Desire) -> D (Drive) -> W (Wisdom) -> P (Proficiency)
+What is *not* enforced here:
+  - The section law epsilon ∘ eta = id is not hard-constrained.
+  - This module should therefore be read as an RPM-inspired neural
+    approximation, not as a literal implementation of the formal monadic
+    construction.
 """
 
 import torch
@@ -49,15 +47,10 @@ class SoftGate(nn.Module):
 
 
 class PrerequisiteGateLayer(nn.Module):
-    """Differentiable RPM prerequisite gate with section-retraction semantics.
+    """Differentiable RPM-style prerequisite gate.
 
-    Implements the chain A0 -> Drive -> Wisdom -> Proficiency where each
-    stage gates the next. Uses separate forward (eta) and retraction (epsilon)
-    paths to enforce one-directional prerequisite satisfaction.
-
-    The forward path (eta) embeds and computes satisfaction.
-    The retraction path (epsilon) is a separate linear mapping that does NOT
-    invert eta, implementing CORRECTION 2.
+    The chain order is explicit, but the categorical section-retraction law
+    is only approximated architecturally via separate eta/epsilon maps.
     """
 
     def __init__(self, d_model: int, threshold: float = 0.5):
@@ -139,3 +132,209 @@ class PrerequisiteGateLayer(nn.Module):
 
         all_sats = torch.stack([s.mean() for s in self._cached_satisfaction.values()])
         return all_sats.mean()
+
+
+# ---------------------------------------------------------------------------
+# Recursive RPM Resolution Modules
+# ---------------------------------------------------------------------------
+
+
+class ExposureLoop(nn.Module):
+    """CO-1/CO-4/CO-7 iterative loop for desire cultivation.
+
+    NOT recursive — iterative. Desire cannot be acquired through rational
+    sub-chains. It must be CULTIVATED through repeated exposure:
+    CO-1 (observe) → CO-4 (intensify) → CO-7 (repeat) → loop.
+    """
+
+    def __init__(self, d_model: int, max_cycles: int = 10):
+        super().__init__()
+        self.observe = nn.Linear(d_model, d_model)      # CO-1
+        self.intensify = nn.Linear(d_model, d_model)     # CO-4
+        self.entrain = nn.Linear(d_model, d_model)       # CO-7
+        self.threshold_check = nn.Linear(d_model, 1)
+        self.max_cycles = max_cycles
+
+    def forward(self, state: torch.Tensor) -> tuple[torch.Tensor, int]:
+        """Run the exposure loop until desire threshold is met.
+
+        Returns (modified_state, cycles_used).
+        """
+        cycles = 0
+        for _ in range(self.max_cycles):
+            state = torch.relu(self.observe(state))
+            state = torch.relu(self.intensify(state))
+            state = torch.relu(self.entrain(state))
+            cycles += 1
+            if torch.sigmoid(self.threshold_check(state)).mean() > 0.5:
+                break
+        return state, cycles
+
+
+class CausalResolver(nn.Module):
+    """CO-8/CO-9 resolution for blocked Power nodes.
+
+    CO-8 scans for conditions that could CAUSE the resource to appear.
+    CO-9 identifies the specific solution that RESULTS from the causal scan.
+    """
+
+    def __init__(self, d_model: int):
+        super().__init__()
+        self.causal_scan = nn.Linear(d_model, d_model)     # CO-8
+        self.effect_identify = nn.Linear(d_model, d_model)  # CO-9
+        self.norm = nn.LayerNorm(d_model)
+
+    def forward(self, state: torch.Tensor) -> torch.Tensor:
+        cause = torch.relu(self.causal_scan(state))
+        effect = torch.relu(self.effect_identify(cause))
+        return self.norm(effect + state)  # residual
+
+
+class KnowledgeReceptor(nn.Module):
+    """CO-5 resolution for blocked Wisdom — find embodied knowledge source.
+
+    "Find someone who EMBODIES the knowledge — a person whose experience
+    includes it, a text that encodes it, a situation that demonstrates it."
+    """
+
+    def __init__(self, d_model: int):
+        super().__init__()
+        self.search = nn.Linear(d_model, d_model)  # CO-5
+        self.absorb = nn.Linear(d_model, d_model)
+        self.norm = nn.LayerNorm(d_model)
+
+    def forward(self, state: torch.Tensor) -> torch.Tensor:
+        source = torch.relu(self.search(state))
+        absorbed = torch.relu(self.absorb(source))
+        return self.norm(absorbed + state)
+
+
+class KnowledgeDecomposer(nn.Module):
+    """CO-6 resolution for blocked Wisdom — decompose into components.
+
+    "Break the complex knowledge gap into smaller independently acquirable
+    components. Each component spawns its own child chain."
+    """
+
+    def __init__(self, d_model: int, max_components: int = 4):
+        super().__init__()
+        self.max_components = max_components
+        self.decompose = nn.Linear(d_model, d_model * max_components)
+        self.component_gate = nn.Linear(d_model, 1)
+        self.assemble = nn.Linear(d_model * max_components, d_model)
+        self.norm = nn.LayerNorm(d_model)
+
+    def forward(self, state: torch.Tensor) -> tuple[list[torch.Tensor], torch.Tensor]:
+        """Decompose state into components and reassemble.
+
+        Returns (components, assembled_state).
+        """
+        raw = self.decompose(state)
+        components = raw.chunk(self.max_components, dim=-1)
+        # Filter to active components
+        active = [c for c in components if torch.sigmoid(self.component_gate(c)).mean() > 0.3]
+        if not active:
+            active = list(components[:1])
+        # Reassemble
+        padded = torch.cat(active + [torch.zeros_like(active[0])] * (self.max_components - len(active)), dim=-1)
+        assembled = self.norm(self.assemble(padded) + state)
+        return active, assembled
+
+
+class RecursiveRPMGate(nn.Module):
+    """Recursive RPM gate with resolution mechanisms for each blocked node.
+
+    When D/W/P nodes are blocked, specific CO pairs activate:
+    - Desire blocked → CO-1/CO-4/CO-7 exposure loop (iterative)
+    - Wisdom blocked → CO-5 reception or CO-6 decomposition (recursive)
+    - Power blocked → CO-8/CO-9 causal search (recursive)
+
+    Preserves the existing PrerequisiteGateLayer interface while adding
+    recursive resolution capability.
+    """
+
+    def __init__(self, d_model: int, max_depth: int = 5, threshold: float = 0.5):
+        super().__init__()
+        self.max_depth = max_depth
+        self.threshold = threshold
+
+        # Base gates (same as PrerequisiteGateLayer)
+        self.gate_desire = SoftGate(d_model, threshold)
+        self.gate_wisdom = SoftGate(d_model, threshold)
+        self.gate_power = SoftGate(d_model, threshold)
+
+        # Resolution modules
+        self.exposure_loop = ExposureLoop(d_model)
+        self.causal_resolver = CausalResolver(d_model)
+        self.knowledge_receptor = KnowledgeReceptor(d_model)
+        self.knowledge_decomposer = KnowledgeDecomposer(d_model)
+
+        # Operator activation extractors
+        self.co1_ext = nn.Linear(d_model, 1)
+        self.co4_ext = nn.Linear(d_model, 1)
+        self.co5_ext = nn.Linear(d_model, 1)
+        self.co6_ext = nn.Linear(d_model, 1)
+        self.co7_ext = nn.Linear(d_model, 1)
+        self.co8_ext = nn.Linear(d_model, 1)
+        self.co9_ext = nn.Linear(d_model, 1)
+
+        # Section-retraction paths
+        self.eta = nn.Linear(d_model, d_model)
+        self.epsilon = nn.Linear(d_model, d_model)
+
+    def forward(
+        self,
+        x: torch.Tensor,
+        depth: int = 0,
+    ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+        embedded = self.eta(x)
+        satisfaction: dict[str, torch.Tensor] = {}
+
+        # --- Desire gate ---
+        out_d, sat_d = self.gate_desire(embedded)
+        satisfaction["desire"] = sat_d
+        if sat_d.mean() < self.threshold and depth < self.max_depth:
+            co1 = torch.sigmoid(self.co1_ext(embedded)).mean()
+            co4 = torch.sigmoid(self.co4_ext(embedded)).mean()
+            co7 = torch.sigmoid(self.co7_ext(embedded)).mean()
+            if (co1 + co4 + co7) / 3.0 > 0.3:
+                out_d, _cycles = self.exposure_loop(out_d)
+                _, sat_d = self.gate_desire(out_d)
+                satisfaction["desire"] = sat_d
+                satisfaction["desire_exposure_activated"] = torch.tensor(1.0)
+
+        # --- Wisdom gate ---
+        out_w, sat_w = self.gate_wisdom(out_d)
+        satisfaction["wisdom"] = sat_w
+        if sat_w.mean() < self.threshold and depth < self.max_depth:
+            co5 = torch.sigmoid(self.co5_ext(out_d)).mean()
+            co6 = torch.sigmoid(self.co6_ext(out_d)).mean()
+            if co5 > co6 and co5 > 0.3:
+                out_w = self.knowledge_receptor(out_w)
+                _, sat_w = self.gate_wisdom(out_w)
+                satisfaction["wisdom"] = sat_w
+                satisfaction["wisdom_reception_activated"] = torch.tensor(1.0)
+            elif co6 > 0.3:
+                _components, assembled = self.knowledge_decomposer(out_w)
+                out_w = assembled
+                _, sat_w = self.gate_wisdom(out_w)
+                satisfaction["wisdom"] = sat_w
+                satisfaction["wisdom_decomposition_activated"] = torch.tensor(1.0)
+
+        # --- Power gate ---
+        out_p, sat_p = self.gate_power(out_w)
+        satisfaction["power"] = sat_p
+        if sat_p.mean() < self.threshold and depth < self.max_depth:
+            co8 = torch.sigmoid(self.co8_ext(out_w)).mean()
+            co9 = torch.sigmoid(self.co9_ext(out_w)).mean()
+            if co8 > 0.3 and co9 > 0.3:
+                resolved = self.causal_resolver(out_p)
+                # Recursive call on the resolved state
+                sub_out, sub_sat = self.forward(resolved, depth + 1)
+                out_p = sub_out
+                _, sat_p = self.gate_power(out_p)
+                satisfaction["power"] = sat_p
+                satisfaction["power_causal_activated"] = torch.tensor(1.0)
+
+        output = self.epsilon(out_p)
+        return output, satisfaction

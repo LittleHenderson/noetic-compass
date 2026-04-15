@@ -24,6 +24,28 @@
 - **`dashboard/src/test/__tests__/ScenarioBrowserPage.test.tsx`** — Updated mock data to include backend notation fields, updated assertions.
 - **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated notation prefill format.
 
+### Recursive RPM — Complete Implementation Across All Layers
+- **`cas-engine/src/rpm/recursive.rs`** (NEW) — Full recursive RPM evaluation in Rust. When D/W/P nodes are blocked, specific CO pairs activate to resolve:
+  - **Power blocked → CO-8/CO-9 (Causal Search)**: spawns child D/W/P chain to acquire resource. RECURSIVE.
+  - **Wisdom blocked → CO-5 (Knowledge Reception)**: find external source that carries knowledge. RECURSIVE.
+  - **Wisdom blocked → CO-6 (Knowledge Decomposition)**: break into components, each gets own chain. PARALLEL RECURSIVE.
+  - **Desire blocked → CO-1/CO-4/CO-7 (Exposure Loop)**: observe → intensify → repeat. ITERATIVE, not recursive.
+  - Max recursion depth: 5. Section-retraction holds at every level. Desire loops don't count toward depth.
+  - Types: `RecursiveRpmResult`, `NodeResult`, `ResolutionMechanism` (CausalSearch, KnowledgeReception, KnowledgeDecomposition, ExposureLoop).
+  - 11 tests: flat chain, Power/Wisdom/Desire resolution, operator-inactive stays blocked, max depth, A0 fail, section-retraction, exposure loop depth independence.
+- **`cas-engine/src/rpm/mod.rs`** — Registered `pub mod recursive`.
+- **`api/pipeline/stages.py`** — RPM gate now evaluates recursive resolution mechanisms. `RpmGateResult` extended with `recursive_resolutions`, `exposure_loops_detected`, `resolution_details` (per-drive resolution mechanism, operators, strength).
+- **`api/pipeline/runner.py`** — Pipeline includes recursive resolution data in RPM stage output.
+- **`dashboard/src/components/charts/RpmGraph.tsx`** — Shows recursive resolution count, per-drive resolution details when selected (mechanism name, operator pair, component count for CO-6 decomposition).
+- **`dashboard/src/pages/AssessmentPage.tsx`** — Passes `resolutionDetails` from pipeline to RpmGraph.
+- **`cas-native/model/rpm_gate.py`** — Added 5 new modules:
+  - `ExposureLoop` — CO-1→CO-4→CO-7 iterative cycle (max 10 cycles, threshold exit)
+  - `CausalResolver` — CO-8→CO-9 with residual connection
+  - `KnowledgeReceptor` — CO-5 search + absorb with residual
+  - `KnowledgeDecomposer` — CO-6 decompose into max 4 components, gate filter, reassemble
+  - `RecursiveRPMGate` — Full recursive gate with operator extractors, resolution dispatch, depth-limited recursion. Preserves `PrerequisiteGateLayer` for backward compatibility.
+- **341 Rust tests + 297 Python tests + 31 frontend tests = all passing.**
+
 ### CAS Interactive Compiler (/compiler)
 - **`dashboard/src/pages/CompilerPage.tsx`** (NEW) — Full interactive REPL page with terminal aesthetic (#0d1117 dark background, monospace font, teal cursor prompt). Features: ASCII CAS logo on load, syntax highlighting as you type (operators=cyan, domains=green, drives=amber, operations=white, RPM=purple, fractals=magenta), styled compilation result cards with AST/type/result display, error cards with token analysis, command history (up/down arrow), special commands (:help, :grammar, :examples, :clear, :history), collapsible side panel with operator/domain/drive/operation reference and clickable example expressions that auto-fill the input. Cards slide in with fadeSlideIn animation.
 - **`dashboard/src/App.tsx`** — Added `/compiler` route (lazy-loaded).

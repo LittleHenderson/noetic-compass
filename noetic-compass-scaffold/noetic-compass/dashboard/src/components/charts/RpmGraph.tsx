@@ -11,14 +11,21 @@ function scoreGlow(score: number): string {
   return 'rgba(248, 113, 113, 0.3)';
 }
 
+interface ResolutionDetail {
+  drive: number;
+  resolutions: { node: string; mechanism: string; operators: string[]; strength: number; components?: number }[];
+}
+
 export function RpmGraph({
   a0Score,
   driveScores,
   rpmCompleteness,
+  resolutionDetails = [],
 }: {
   a0Score: number;
   driveScores: number[][];
   rpmCompleteness: number;
+  resolutionDetails?: ResolutionDetail[];
 }) {
   const [selectedDrive, setSelectedDrive] = useState<number | null>(null);
 
@@ -141,7 +148,36 @@ export function RpmGraph({
         </svg>
         <div className="mt-1 text-[11px] text-slate-500 text-center font-medium">
           RPM Completeness: <span className="text-accent-teal">{(rpmCompleteness * 100).toFixed(1)}%</span>
+          {resolutionDetails.length > 0 && (
+            <span className="ml-2 text-emerald-400">
+              ({resolutionDetails.reduce((n, d) => n + d.resolutions.length, 0)} recursive resolutions)
+            </span>
+          )}
         </div>
+        {/* Resolution details when a drive is selected */}
+        {selectedDrive !== null && resolutionDetails.find(d => d.drive === selectedDrive)?.resolutions.length ? (
+          <div className="mt-2 space-y-1.5 px-2">
+            {resolutionDetails
+              .filter(d => d.drive === selectedDrive)
+              .flatMap(d => d.resolutions)
+              .map((res, i) => (
+                <div key={i} className="flex items-start gap-2 rounded bg-emerald-500/[0.06] border border-emerald-500/20 px-2 py-1.5">
+                  <span className="text-emerald-400 text-[10px] mt-0.5">✓</span>
+                  <div className="text-[10px]">
+                    <span className="text-emerald-300 font-semibold capitalize">{res.node}</span>
+                    <span className="text-slate-400"> resolved via </span>
+                    <span className="text-accent-teal font-mono">
+                      {res.mechanism === 'exposure_loop' ? 'Exposure Loop (CO-1→CO-4→CO-7)' :
+                       res.mechanism === 'knowledge_reception' ? 'Knowledge Reception (CO-5)' :
+                       res.mechanism === 'knowledge_decomposition' ? `Knowledge Decomposition (CO-6, ${res.components ?? '?'} components)` :
+                       res.mechanism === 'causal_search' ? 'Causal Search (CO-8→CO-9)' :
+                       res.mechanism}
+                    </span>
+                  </div>
+                </div>
+              ))}
+          </div>
+        ) : null}
         <div className="chart-hint text-center text-[10px] text-slate-600 opacity-0 transition-opacity">
           Click a drive row for details
         </div>

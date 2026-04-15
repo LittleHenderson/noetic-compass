@@ -145,6 +145,9 @@ class WrapPipelineRunner:
                 "rpm_completeness": rpm_result.rpm_completeness,
                 "drive_scores": rpm_result.drive_scores,
                 "heuristic": rpm_result.heuristic,
+                "recursive_resolutions": rpm_result.recursive_resolutions,
+                "exposure_loops_detected": rpm_result.exposure_loops_detected,
+                "resolution_details": rpm_result.resolution_details,
             },
         ))
 

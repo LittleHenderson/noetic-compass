@@ -779,6 +779,7 @@ export function AssessmentPage() {
                         a0Score={a0Score}
                         driveScores={driveScores}
                         rpmCompleteness={rpmCompleteness}
+                        resolutionDetails={result?.stages.find(s => s.stage === 'rpm_gate')?.data?.resolution_details as { drive: number; resolutions: { node: string; mechanism: string; operators: string[]; strength: number; components?: number }[] }[] | undefined}
                       />
                     </Suspense>
                   </Card>
