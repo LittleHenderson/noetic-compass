@@ -450,7 +450,11 @@ export function CompilerPage() {
         addEntry({ input: trimmed, result: null, nlResult, isCommand: false, timestamp: ts });
       } catch (err) {
         const detail = err instanceof Error ? err.message : String(err);
-        addEntry({ input: trimmed, result: { source: trimmed, valid: false, error: detail }, isCommand: false, timestamp: ts });
+        const isNotFound = detail.includes('Not Found') || detail.includes('404');
+        const errorMsg = isNotFound
+          ? 'Natural Language endpoint not available. The backend needs to be redeployed with the latest code. Try deploying the API to Railway.'
+          : detail;
+        addEntry({ input: trimmed, result: { source: '', valid: false, error: errorMsg }, isCommand: false, timestamp: ts });
       } finally {
         setLoading(false);
       }
