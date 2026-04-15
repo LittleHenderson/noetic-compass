@@ -256,3 +256,39 @@ class CognitiveMetricLoss(nn.Module):
         }
 
         return total, components
+
+
+class LacunarityRegularizationLoss(nn.Module):
+    """Penalizes extreme concentration in the 40-slot activation vector.
+
+    Encourages balanced cognitive architecture development during training.
+    Too high lacunarity = blind spots. Too low = no specialization.
+    The target represents the ideal balance point.
+
+    Args:
+        alpha: Weight of the lacunarity penalty in the total loss.
+        target_lacunarity: The ideal lacunarity level to train toward.
+    """
+
+    def __init__(self, alpha: float = 0.1, target_lacunarity: float = 0.5):
+        super().__init__()
+        self.alpha = alpha
+        self.target = target_lacunarity
+
+    def forward(self, slot_activations: torch.Tensor) -> torch.Tensor:
+        """Compute lacunarity regularization loss.
+
+        Args:
+            slot_activations: (batch, ..., 40) on the probability simplex
+
+        Returns:
+            Scalar loss penalizing deviation from target lacunarity.
+        """
+        # Flatten to (batch, 40) if needed
+        flat = slot_activations.reshape(-1, slot_activations.shape[-1])
+        mean = flat.mean(dim=-1, keepdim=True)
+        var = ((flat - mean) ** 2).mean(dim=-1)
+        lacunarity = var / (mean.squeeze(-1) ** 2 + 1e-8)
+
+        loss = self.alpha * ((lacunarity - self.target) ** 2).mean()
+        return loss

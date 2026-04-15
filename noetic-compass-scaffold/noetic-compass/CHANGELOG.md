@@ -24,6 +24,13 @@
 - **`dashboard/src/test/__tests__/ScenarioBrowserPage.test.tsx`** — Updated mock data to include backend notation fields, updated assertions.
 - **`dashboard/src/test/__tests__/AssessmentPage.test.tsx`** — Updated notation prefill format.
 
+### CAS-Native Lacunarity — Training + Inference + Output
+- **`cas-native/model/lacunarity_gate.py`** (NEW) — LacunarityGate: inference-time self-correction. Computes lacunarity (Var/Mean^2) on slot activations. When above threshold (2.0), applies learned rebalancing correction that boosts neglected slots and dampens over-concentrated ones. Re-normalizes to open simplex via softmax + clamp. The model catches itself when thinking gets too narrow.
+- **`cas-native/model/lacunarity_head.py`** (NEW) — LacunarityHead: metacognitive output head. Produces 5 lacunarity dimension scores, 40-element gap map (per-slot blind spot probability), and 4 domain confidence scores. The model reports its own cognitive gaps alongside its answer.
+- **`cas-native/model/loss.py`** — LacunarityRegularizationLoss: training-time prevention. Penalizes deviation from target lacunarity (default 0.5). Too high = blind spots. Too low = no specialization. Added to total training loss.
+- **`cas-native/model/cas_native_model.py`** — CASNativeModel now includes LacunarityGate (between cognitive embedding and output heads) and LacunarityHead (auxiliary metacognitive output). Forward pass returns `lacunarity_scores`, `lacunarity_meta` (with gap_map and domain_confidence), and both raw and corrected cognitive states.
+- **`cas-native/tests/test_lacunarity.py`** (NEW) — 13 tests: gate output shape/simplex preservation/low-lacunarity minimal change/high-lacunarity correction/sequence handling, head output keys/shapes/ranges/sequence handling, loss scalar/target behavior/extreme concentration penalty.
+
 ### Cognitive Lacunarity Profile
 - **`cas-engine/src/scoring/lacunarity.rs`** (NEW) — 5 lacunarity metrics measuring cognitive gap distribution: state lacunarity (Var/Mean^2 on operator scores), fractal lacunarity (1 - unique operators/10), domain lacunarity (1 - active domains/4), drive lacunarity (1 - active drives/7), RPM resolution lacunarity (1 - mechanisms used/4). Composite weighted 30/20/20/15/15. Classifications: Uniform (<0.5), Moderate (0.5-1.5), Concentrated (1.5-3.0), Extreme (>3.0). Gap map identifies absent operators, domains, drives, strongest cluster, and largest void with human-readable description. 14 tests.
 - **`api/pipeline/lacunarity.py`** (NEW) — Python implementation mirroring the Rust module. Computes full lacunarity profile from pipeline scores.

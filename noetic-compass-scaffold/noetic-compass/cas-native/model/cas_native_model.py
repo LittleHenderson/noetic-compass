@@ -29,6 +29,8 @@ from .rpm_gate import PrerequisiteGateLayer
 from .fractal_attention import FractalAttentionHead
 from .topos_reasoner import CognitiveToposReasoner
 from .composition import GenerativeHead
+from .lacunarity_gate import LacunarityGate
+from .lacunarity_head import LacunarityHead
 
 
 @dataclass
@@ -239,6 +241,8 @@ class CASNativeModel(nn.Module):
         )
         self.inversion_detector = InversionDetector(config.d_model)
         self.generative_head = GenerativeHead(config.d_model)
+        self.lacunarity_gate = LacunarityGate(num_slots=40)
+        self.lacunarity_head = LacunarityHead(config.d_model)
 
         # Initialize weights
         self._init_weights()
@@ -313,6 +317,9 @@ class CASNativeModel(nn.Module):
         # Recompute cognitive state from final hidden states
         cognitive_state = self.cognitive_embedding(x)
 
+        # Lacunarity self-correction: if activation is too concentrated, rebalance
+        corrected_state, lacunarity_scores = self.lacunarity_gate(cognitive_state)
+
         # Pooled representation for global heads
         pooled = self._masked_mean(x, attention_mask)  # (batch, d_model)
 
@@ -321,6 +328,9 @@ class CASNativeModel(nn.Module):
 
         # Inversion detection
         inversion_flags = self.inversion_detector(pooled)
+
+        # Metacognitive lacunarity reporting
+        lacunarity_meta = self.lacunarity_head(x)
 
         # Aggregate RPM satisfaction across layers
         mean_rpm = torch.tensor(0.0, device=input_ids.device)
@@ -334,8 +344,11 @@ class CASNativeModel(nn.Module):
 
         return {
             "logits": logits,
-            "cognitive_state": cognitive_state,
+            "cognitive_state": corrected_state,
+            "raw_cognitive_state": cognitive_state,
             "rpm_satisfaction": mean_rpm,
             "inversion_flags": inversion_flags,
             "topos_truth_values": topos_truth_values,
+            "lacunarity_scores": lacunarity_scores,
+            "lacunarity_meta": lacunarity_meta,
         }
