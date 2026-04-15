@@ -187,6 +187,7 @@ class WrapResponse(BaseModel):
     interpretation: InterpretationSchema | None = None
     fractal_analysis: FractalAnalysisSchema | None = None
     compiled_notation: CompiledNotationSchema | None = None
+    lacunarity: dict | None = None
 
 
 class BatchResponse(BaseModel):

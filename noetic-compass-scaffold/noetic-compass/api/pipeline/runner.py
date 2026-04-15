@@ -19,6 +19,7 @@ from api.models import (
 from api.pipeline.interpreter import generate_interpretation, DRIVE_NAMES
 from api.pipeline.fractal_analysis import analyze_fractal
 from api.pipeline.notation_synthesizer import synthesize_notation
+from api.pipeline.lacunarity import compute_lacunarity_profile
 from api.pipeline.stages import (
     input_analyzer,
     rpm_gate,
@@ -349,6 +350,15 @@ class WrapPipelineRunner:
             provenance=synthesized.provenance,
         )
 
+        # Cognitive Lacunarity Profile
+        lacunarity_profile = compute_lacunarity_profile(
+            operator_scores=op_result.raw_scores_0_to_10,
+            domain_scores=dc_result.domain_averages,
+            drive_scores=flat_drives,
+            fractal_sequence=fractal.dominant_sequence,
+            resolution_details=rpm_result.resolution_details,
+        )
+
         return WrapResponse(
             nccs=nccs_response,
             stages=stages,
@@ -358,4 +368,5 @@ class WrapPipelineRunner:
             interpretation=interpretation,
             fractal_analysis=fractal_schema,
             compiled_notation=compiled_notation,
+            lacunarity=lacunarity_profile,
         )

@@ -14,6 +14,7 @@ import { ExecutiveSummary } from '../components/shared/ExecutiveSummary';
 import { AiBriefing } from '../components/shared/AiBriefing';
 import { AiResponsePanel } from '../components/shared/AiResponsePanel';
 import { FractalCard } from '../components/charts/FractalCard';
+import { LacunarityCard } from '../components/charts/LacunarityCard';
 import { TraceViewer } from '../components/shared/TraceViewer';
 import { NotationComposer } from '../components/shared/NotationComposer';
 import { NotationDiff } from '../components/shared/NotationDiff';
@@ -800,6 +801,12 @@ export function AssessmentPage() {
               {result.fractal_analysis && (
                 <Card title="Cognitive Fractal" action={<InterpretButton interpretation={interpretFractal(result.fractal_analysis)} />}>
                   <FractalCard analysis={result.fractal_analysis} />
+                </Card>
+              )}
+
+              {result.lacunarity && (
+                <Card title="Cognitive Lacunarity Profile">
+                  <LacunarityCard profile={result.lacunarity} />
                 </Card>
               )}
 

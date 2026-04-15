@@ -112,6 +112,22 @@ export interface WrapResult {
   interpretation?: Interpretation | null;
   fractal_analysis?: FractalAnalysis | null;
   compiled_notation?: CompiledNotation | null;
+  lacunarity?: {
+    state: number;
+    fractal: number;
+    domain: number;
+    drive: number;
+    rpm_resolution: number;
+    composite: number;
+    classification: string;
+    gap_map: {
+      absent_operators: number[];
+      absent_domains: string[];
+      absent_drives: number[];
+      strongest_cluster: number[];
+      largest_void: string;
+    };
+  } | null;
 }
 
 // ── Validation types ──

@@ -11,6 +11,8 @@
 //! Certification Levels:
 //!   90-100 = Platinum | 75-89 = Gold | 60-74 = Silver | 40-59 = Bronze | 0-39 = Fail
 
+pub mod lacunarity;
+
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
