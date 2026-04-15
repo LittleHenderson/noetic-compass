@@ -22,5 +22,7 @@ async def generate_token(body: TokenRequest) -> TokenResponse:
     """Issue a JWT signed with the server's secret. For dev/demo use."""
     from api.config import settings
 
-    token = create_token(sub=body.username, exp_minutes=settings.jwt_expiry_minutes)
+    normalized = body.username.strip() or "dashboard-user"
+    api_key = f"dashboard:{normalized.lower()}"
+    token = create_token(sub=normalized, api_key=api_key, exp_minutes=settings.jwt_expiry_minutes)
     return TokenResponse(token=token, expires_in_minutes=settings.jwt_expiry_minutes)

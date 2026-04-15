@@ -5,8 +5,7 @@
 //! produces correct, internally consistent results.
 
 use cas_engine::metric::{
-    bhattacharyya_coefficient, fisher_rao_norm, geodesic_distance,
-    validate_tangent_vector,
+    bhattacharyya_coefficient, fisher_rao_norm, geodesic_distance, validate_tangent_vector,
 };
 use cas_engine::ontology::{
     CognitiveOperator, CognitiveStateId, CognitiveStateVector, CoreDrive, Domain, DomainDrive,
@@ -16,8 +15,8 @@ use cas_engine::rpm::{embed, realize, verify_section_law, RpmChain, RpmProfile};
 use cas_engine::scoring::{
     compute_nccs, CertificationLevel, DomainCoherence, InversionResistanceInput, NccsInput,
     OperatorScores, PathwayQualityInput, SocialEngineeringInput, WEIGHT_DOMAIN_COHERENCE,
-    WEIGHT_DRIVE_RPM, WEIGHT_INVERSION_RESISTANCE, WEIGHT_OPERATOR_PROFILE,
-    WEIGHT_PATHWAY_QUALITY, WEIGHT_SOCIAL_ENGINEERING,
+    WEIGHT_DRIVE_RPM, WEIGHT_INVERSION_RESISTANCE, WEIGHT_OPERATOR_PROFILE, WEIGHT_PATHWAY_QUALITY,
+    WEIGHT_SOCIAL_ENGINEERING,
 };
 
 // ===========================================================================
@@ -192,7 +191,11 @@ fn e2e_state_vector_to_domain_coherence_to_nccs() {
         social_engineering: SocialEngineeringInput::new(0.8, 0.8).unwrap(),
     };
     let result = compute_nccs(&input);
-    assert!(result.composite > 70.0, "high-quality input should score > 70, got {}", result.composite);
+    assert!(
+        result.composite > 70.0,
+        "high-quality input should score > 70, got {}",
+        result.composite
+    );
 }
 
 #[test]
@@ -264,7 +267,11 @@ fn e2e_all_subscores_contribute_to_composite() {
 fn metric_uniform_self_distance_is_zero() {
     let u = CognitiveStateVector::uniform();
     let d = geodesic_distance(&u, &u);
-    assert!(d.abs() < 1e-12, "d(uniform, uniform) should be 0, got {}", d);
+    assert!(
+        d.abs() < 1e-12,
+        "d(uniform, uniform) should be 0, got {}",
+        d
+    );
 }
 
 #[test]
@@ -272,7 +279,11 @@ fn metric_different_state_vectors_positive_distance() {
     let p = CognitiveStateVector::uniform();
     let q = shifted_vector(0, 0.01);
     let d = geodesic_distance(&p, &q);
-    assert!(d > 0.0, "different distributions should have positive distance, got {}", d);
+    assert!(
+        d > 0.0,
+        "different distributions should have positive distance, got {}",
+        d
+    );
 }
 
 #[test]
@@ -313,7 +324,10 @@ fn metric_domain_biased_vectors_distance_correlates_with_dci() {
     // Also verify their DCI values reflect the bias
     let dc_p = DomainCoherence::from_state_vector(&p_biased);
     let dc_u = DomainCoherence::from_state_vector(&CognitiveStateVector::uniform());
-    assert!(dc_p.dci() < dc_u.dci(), "biased vector should have lower DCI than uniform");
+    assert!(
+        dc_p.dci() < dc_u.dci(),
+        "biased vector should have lower DCI than uniform"
+    );
 }
 
 #[test]
@@ -485,7 +499,11 @@ fn scoring_domain_coherence_from_biased_state_vector() {
     // Principled domain should have highest average
     assert_eq!(dc.strongest_domain(), Domain::Principled);
     // DCI should be < 1.0 due to bias
-    assert!(dc.dci() < 1.0, "biased vector should have DCI < 1.0, got {}", dc.dci());
+    assert!(
+        dc.dci() < 1.0,
+        "biased vector should have DCI < 1.0, got {}",
+        dc.dci()
+    );
 }
 
 // ===========================================================================
@@ -494,12 +512,7 @@ fn scoring_domain_coherence_from_biased_state_vector() {
 
 #[test]
 fn rpm_complete_chains_yield_high_pathway_score() {
-    let profile = RpmProfile::new(
-        0.9,
-        [[0.9, 0.9, 0.9]; 7],
-        0.5,
-    )
-    .unwrap();
+    let profile = RpmProfile::new(0.9, [[0.9, 0.9, 0.9]; 7], 0.5).unwrap();
 
     let completeness = profile.overall_completeness();
     assert!(
@@ -517,12 +530,7 @@ fn rpm_complete_chains_yield_high_pathway_score() {
 #[test]
 fn rpm_blocked_a0_yields_low_pathway_score() {
     // A0 below threshold blocks all chains
-    let profile = RpmProfile::new(
-        0.1,
-        [[0.9, 0.9, 0.9]; 7],
-        0.5,
-    )
-    .unwrap();
+    let profile = RpmProfile::new(0.1, [[0.9, 0.9, 0.9]; 7], 0.5).unwrap();
 
     let completeness = profile.overall_completeness();
     assert!(
@@ -545,12 +553,7 @@ fn rpm_blocked_a0_yields_low_pathway_score() {
 #[test]
 fn rpm_partial_chains_yield_intermediate_pathway_score() {
     // A0 and D satisfied, but W below threshold
-    let profile = RpmProfile::new(
-        0.8,
-        [[0.8, 0.3, 0.3]; 7],
-        0.5,
-    )
-    .unwrap();
+    let profile = RpmProfile::new(0.8, [[0.8, 0.3, 0.3]; 7], 0.5).unwrap();
 
     let completeness = profile.overall_completeness();
     // Each chain: A0 + D satisfied = 2/4 = 0.5
@@ -729,9 +732,17 @@ fn algebra_admissibility_co0_diagonal_only() {
         for target in CognitiveStateId::all() {
             let admissible = CognitiveOperator::CO0.is_admissible(source, target);
             if source == target {
-                assert!(admissible, "CO0 should be admissible on diagonal: {} -> {}", source, target);
+                assert!(
+                    admissible,
+                    "CO0 should be admissible on diagonal: {} -> {}",
+                    source, target
+                );
             } else {
-                assert!(!admissible, "CO0 should NOT be admissible off diagonal: {} -> {}", source, target);
+                assert!(
+                    !admissible,
+                    "CO0 should NOT be admissible off diagonal: {} -> {}",
+                    source, target
+                );
             }
         }
     }
@@ -775,7 +786,12 @@ fn algebra_self_dual_operators_are_correct() {
             assert_eq!(op.involute(), op, "{} should involute to itself", op);
         } else {
             assert!(!op.is_self_dual(), "{} should NOT be self-dual", op);
-            assert_ne!(op.involute(), op, "{} should involute to a different operator", op);
+            assert_ne!(
+                op.involute(),
+                op,
+                "{} should involute to a different operator",
+                op
+            );
         }
     }
 }
@@ -864,16 +880,46 @@ fn invariant_composite_in_zero_to_hundred() {
 #[test]
 fn invariant_certification_level_boundaries() {
     // Verify that from_score matches documented boundaries exactly
-    assert_eq!(CertificationLevel::from_score(100.0), CertificationLevel::Platinum);
-    assert_eq!(CertificationLevel::from_score(90.0), CertificationLevel::Platinum);
-    assert_eq!(CertificationLevel::from_score(89.999), CertificationLevel::Gold);
-    assert_eq!(CertificationLevel::from_score(75.0), CertificationLevel::Gold);
-    assert_eq!(CertificationLevel::from_score(74.999), CertificationLevel::Silver);
-    assert_eq!(CertificationLevel::from_score(60.0), CertificationLevel::Silver);
-    assert_eq!(CertificationLevel::from_score(59.999), CertificationLevel::Bronze);
-    assert_eq!(CertificationLevel::from_score(40.0), CertificationLevel::Bronze);
-    assert_eq!(CertificationLevel::from_score(39.999), CertificationLevel::Fail);
-    assert_eq!(CertificationLevel::from_score(0.0), CertificationLevel::Fail);
+    assert_eq!(
+        CertificationLevel::from_score(100.0),
+        CertificationLevel::Platinum
+    );
+    assert_eq!(
+        CertificationLevel::from_score(90.0),
+        CertificationLevel::Platinum
+    );
+    assert_eq!(
+        CertificationLevel::from_score(89.999),
+        CertificationLevel::Gold
+    );
+    assert_eq!(
+        CertificationLevel::from_score(75.0),
+        CertificationLevel::Gold
+    );
+    assert_eq!(
+        CertificationLevel::from_score(74.999),
+        CertificationLevel::Silver
+    );
+    assert_eq!(
+        CertificationLevel::from_score(60.0),
+        CertificationLevel::Silver
+    );
+    assert_eq!(
+        CertificationLevel::from_score(59.999),
+        CertificationLevel::Bronze
+    );
+    assert_eq!(
+        CertificationLevel::from_score(40.0),
+        CertificationLevel::Bronze
+    );
+    assert_eq!(
+        CertificationLevel::from_score(39.999),
+        CertificationLevel::Fail
+    );
+    assert_eq!(
+        CertificationLevel::from_score(0.0),
+        CertificationLevel::Fail
+    );
 
     // Min scores
     assert!((CertificationLevel::Platinum.min_score() - 90.0).abs() < 1e-12);

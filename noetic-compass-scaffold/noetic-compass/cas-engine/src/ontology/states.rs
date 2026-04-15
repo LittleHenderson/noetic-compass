@@ -115,10 +115,7 @@ impl CognitiveStateVector {
                 return Err(StateVectorError::NaN { index: i });
             }
             if p <= 0.0 {
-                return Err(StateVectorError::NonPositiveProbability {
-                    index: i,
-                    value: p,
-                });
+                return Err(StateVectorError::NonPositiveProbability { index: i, value: p });
             }
             sum += p;
         }

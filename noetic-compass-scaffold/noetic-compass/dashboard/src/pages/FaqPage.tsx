@@ -13,8 +13,9 @@ const FAQ_ITEMS: FaqItem[] = [
       <p>
         The Noetic Compass is an AI Cognitive Architecture Assessment Platform (Research Prototype)
         built on the Cognitive Architecture System (CAS) v7.4. It evaluates AI model responses for
-        cognitive architecture integrity and coherence across 40 cognitive states. All scores are
-        heuristic-derived and empirical validation is pending.
+        cognitive architecture integrity and coherence across 40 cognitive states. Scores are
+        produced by research-stage scoring methods selected at runtime, and empirical validation is
+        pending.
       </p>
     ),
   },
@@ -66,7 +67,7 @@ const FAQ_ITEMS: FaqItem[] = [
           all six components, normalized to 0–100.
         </p>
         <p>
-          Certification tiers: <strong>Platinum</strong> (90–100), <strong>Gold</strong> (75–89),{' '}
+          Research tiers: <strong>Platinum</strong> (90–100), <strong>Gold</strong> (75–89),{' '}
           <strong>Silver</strong> (60–74), <strong>Bronze</strong> (40–59), <strong>Fail</strong>{' '}
           (0–39).
         </p>

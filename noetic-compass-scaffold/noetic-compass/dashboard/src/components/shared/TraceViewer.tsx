@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { StageResult } from '../../api/types';
 import { PIPELINE_STAGES } from '../../lib/constants';
+import { researchTierLabel } from '../../lib/researchTier';
 
 const STAGE_RULES: Record<string, string> = {
   input_analyzer: 'parse(text) → TokenStream',
@@ -50,7 +51,8 @@ function summarizeStage(stage: StageResult, index: number): { rule: string; outp
     case 'output_gate': {
       const comp = (data.composite as number) ?? 0;
       const cert = (data.certification as string) ?? '?';
-      return { rule, output: `NCCS=${comp.toFixed(1)}, ${cert}`, reduction: `Final: ${comp.toFixed(1)} (${cert})` };
+      const tier = researchTierLabel(cert);
+      return { rule, output: `NCCS=${comp.toFixed(1)}, ${tier}`, reduction: `Final: ${comp.toFixed(1)} (${tier})` };
     }
     default:
       return { rule, output: 'ok', reduction: `${PIPELINE_STAGES[index] ?? name} completed` };

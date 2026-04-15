@@ -1,0 +1,9 @@
+[package]
+name = "casc-types"
+version = "0.1.0"
+edition = "2021"
+description = "Constraint-based type machinery for the CAS compiler"
+
+[lib]
+name = "casc_types"
+path = "src/lib.rs"

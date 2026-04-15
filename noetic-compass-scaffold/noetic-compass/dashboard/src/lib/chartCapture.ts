@@ -1,9 +1,8 @@
 /**
  * Captures chart elements from a hidden DOM container as base64 images.
- * Uses html2canvas to render each chart section.
+ * Uses html2canvas to render each chart section, loaded only when export runs.
  */
 
-import html2canvas from 'html2canvas';
 import type { ChartImages } from './reportData';
 
 const CHART_KEYS: (keyof ChartImages)[] = [
@@ -13,6 +12,7 @@ const CHART_KEYS: (keyof ChartImages)[] = [
 export async function captureChartImages(
   containerRef: HTMLDivElement,
 ): Promise<ChartImages> {
+  const { default: html2canvas } = await import('html2canvas');
   const images: ChartImages = {};
 
   for (const key of CHART_KEYS) {

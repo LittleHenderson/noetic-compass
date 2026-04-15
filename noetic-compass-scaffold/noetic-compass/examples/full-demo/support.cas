@@ -1,0 +1,4 @@
+export let principle: state[C] = CO-2^C_{F2};
+export let judgment: state[E] = CO-5^E_{F4};
+export fn link(source: state[C], target: state[E]): relation = source -> target;
+export fn chain(a: state[C], b: state[C]): fractal = a circ b;

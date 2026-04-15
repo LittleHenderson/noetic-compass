@@ -1,0 +1,6 @@
+[package]
+name = "demo_pkg"
+version = "0.1.0"
+entry = "src/main.cas"
+
+[dependencies]

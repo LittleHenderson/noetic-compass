@@ -1,8 +1,10 @@
 import { certColor, certGlow } from '../../lib/colors';
+import { researchTierLabel } from '../../lib/researchTier';
 
 export function CertBadge({ certification, composite }: { certification: string; composite: number }) {
   const color = certColor(certification);
   const glow = certGlow(certification);
+  const label = researchTierLabel(certification);
 
   return (
     <span
@@ -18,7 +20,7 @@ export function CertBadge({ certification, composite }: { certification: string;
         className="h-2 w-2 rounded-full"
         style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}` }}
       />
-      {certification} — {composite.toFixed(1)}
+      {label} - {composite.toFixed(1)}
     </span>
   );
 }

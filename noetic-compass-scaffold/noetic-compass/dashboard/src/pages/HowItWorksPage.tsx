@@ -430,9 +430,9 @@ export function HowItWorksPage() {
               </div>
             </div>
 
-            {/* Certification tiers */}
+            {/* Research tiers */}
             <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
-              Certification Tiers
+              Research Tiers
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
               {certEntries.map(({ tier, min, color }) => (

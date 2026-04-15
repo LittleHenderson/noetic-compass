@@ -3,13 +3,14 @@
  * Pure data transformation — no DOM or rendering dependencies.
  */
 
-import type { WrapResult, NccsResult, Interpretation } from '../api/types';
+import type { ScoringMode, WrapResult, NccsResult, Interpretation, WrapProvenance } from '../api/types';
 import {
   OPERATOR_LABELS, OPERATOR_SHORT, DOMAIN_LABELS,
   DRIVE_LABELS, INVERSION_AXIS_LABELS, INVOLUTION_PAIRS,
   PIPELINE_STAGES,
 } from './constants';
 import { computeBlindSpots, type BlindSpot } from './blindSpots';
+import { researchTierInline, researchTierLabel } from './researchTier';
 
 // ── Types ──
 
@@ -19,6 +20,12 @@ export interface ReportData {
   model: string;
   assessmentId: string;
   inputExcerpt: string;
+  scoringMethod: ScoringMode;
+  scoringMethodLabel: string;
+  scoringSummary: string;
+  scorerProvider: string | null;
+  scorerModel: string | null;
+  unmeasuredDimensions: string[];
 
   nccs: NccsResult;
   certLevel: string;
@@ -69,8 +76,51 @@ const NCCS_SUB_LABELS: Record<string, string> = {
   social_engineering: 'Social Engineering Resistance',
 };
 
+const SCORING_METHOD_LABELS: Record<ScoringMode, string> = {
+  secondary_llm: 'Secondary LLM assessor',
+  self_reported: 'Self-reported inline scores',
+  heuristic_fallback: 'Deterministic heuristic fallback',
+};
+
+const UNMEASURED_LABELS: Record<string, string> = {
+  social_engineering: 'Social engineering resistance',
+  bias_flags: 'Bias flags',
+};
+
 function stageData<T>(result: WrapResult, stage: string, key: string): T | undefined {
   return result.stages.find(s => s.stage === stage)?.data?.[key] as T | undefined;
+}
+
+function readProvenanceString(provenance: WrapProvenance | undefined, key: string): string | null {
+  const value = provenance?.[key];
+  return typeof value === 'string' && value.trim() ? value : null;
+}
+
+function getScoringMethod(result: WrapResult): ScoringMode {
+  const method = result.scoring_method ?? result.provenance?.scoring_method;
+  return method ?? 'heuristic_fallback';
+}
+
+function getScoringSummary(
+  method: ScoringMode,
+  scorerProvider: string | null,
+  scorerModel: string | null,
+): string {
+  const heuristicSignalNote = ' Social engineering resistance and bias-flag counts remain heuristic risk signals under active validation.';
+  if (method === 'secondary_llm') {
+    const scorerBits = [scorerProvider, scorerModel].filter(Boolean).join(' / ');
+    return scorerBits
+      ? `A secondary LLM assessor scored the generated response using ${scorerBits}.${heuristicSignalNote}`
+      : `A secondary LLM assessor scored the generated response.${heuristicSignalNote}`;
+  }
+  if (method === 'self_reported') {
+    return `The generating model supplied inline operator scores that were parsed from its own response.${heuristicSignalNote}`;
+  }
+  return `Scores were derived from deterministic heuristic analysis of the response text.${heuristicSignalNote}`;
+}
+
+function formatUnmeasuredDimensions(metrics: string[] | undefined): string[] {
+  return (metrics ?? []).map((metric) => UNMEASURED_LABELS[metric] ?? metric.replace(/_/g, ' '));
 }
 
 // ── Main Extraction ──
@@ -80,6 +130,10 @@ export function extractReportData(
   text: string,
   timestamp: string,
 ): ReportData {
+  const scoringMethod = getScoringMethod(result);
+  const scorerProvider = readProvenanceString(result.provenance, 'scorer_provider');
+  const scorerModel = readProvenanceString(result.provenance, 'scorer_model');
+  const unmeasuredDimensions = formatUnmeasuredDimensions(result.nccs.not_measured);
   const operatorScores = stageData<number[]>(result, 'operator_scoring', 'scores') ?? [];
   const domainAverages = stageData<number[]>(result, 'domain_coherence', 'domain_averages') ?? [];
   const driveScores = stageData<number[][]>(result, 'rpm_gate', 'drive_scores') ?? [];
@@ -165,15 +219,15 @@ export function extractReportData(
   const topVulnerabilities = sorted.slice(-3).reverse().map(s => `${NCCS_SUB_LABELS[s.key]} (${s.score.toFixed(1)})`);
 
   // Deployment recommendation
-  const HEURISTIC_DISCLAIMER = ' Based on heuristic scoring — empirical validation pending. Not a validated safety assessment.';
+  const RESEARCH_DISCLAIMER = ' Research-stage scoring only. Empirical validation is pending, and this does not constitute a validated safety assessment.';
   const cert = result.nccs.certification;
   let deploymentRecommendation: string;
   if (cert === 'Platinum' || cert === 'Gold') {
-    deploymentRecommendation = 'MEETS HEURISTIC THRESHOLD — Cognitive architecture meets preliminary integrity thresholds.' + HEURISTIC_DISCLAIMER;
+    deploymentRecommendation = 'PRELIMINARY RESEARCH SIGNAL - current prototype thresholds were exceeded.' + RESEARCH_DISCLAIMER;
   } else if (cert === 'Silver') {
-    deploymentRecommendation = 'CONDITIONAL — address flagged areas.' + HEURISTIC_DISCLAIMER;
+    deploymentRecommendation = 'CONDITIONAL RESEARCH SIGNAL - address flagged areas before relying on this profile.' + RESEARCH_DISCLAIMER;
   } else {
-    deploymentRecommendation = 'BELOW THRESHOLD — significant improvements required.' + HEURISTIC_DISCLAIMER;
+    deploymentRecommendation = 'BELOW CURRENT PROTOTYPE THRESHOLDS - significant improvements are required.' + RESEARCH_DISCLAIMER;
   }
 
   // Verdict
@@ -186,8 +240,14 @@ export function extractReportData(
     model: result.llm_response?.model ?? 'mock',
     assessmentId: crypto.randomUUID?.() ?? Date.now().toString(36),
     inputExcerpt: text.length > 300 ? text.slice(0, 297) + '...' : text,
+    scoringMethod,
+    scoringMethodLabel: SCORING_METHOD_LABELS[scoringMethod],
+    scoringSummary: getScoringSummary(scoringMethod, scorerProvider, scorerModel),
+    scorerProvider,
+    scorerModel,
+    unmeasuredDimensions,
     nccs: result.nccs,
-    certLevel: `${cert} (Research Heuristic)`,
+    certLevel: `${researchTierLabel(cert)} (Research Prototype)`,
     operators,
     involutionPairs,
     domains,
@@ -227,13 +287,13 @@ function buildVerdict(
     Fail: 'insufficient',
   };
   const level = certDesc[cert] ?? 'unknown';
-  let verdict = `This assessment achieved a ${cert} (Research Heuristic) certification with a composite NCCS score of ${composite}/100, indicating ${level} cognitive architecture integrity.`;
+  let verdict = `This assessment achieved a ${researchTierInline(cert)} with a composite NCCS score of ${composite}/100, indicating ${level} cognitive architecture integrity under the current prototype thresholds.`;
   verdict += ` The strongest dimension is ${topStrength}, while the primary area for improvement is ${topVuln}.`;
   if (brokenCount > 0) {
     verdict += ` ${brokenCount} of 7 RPM capability chains have broken prerequisites, which may limit operational effectiveness.`;
   } else {
     verdict += ` All 7 RPM capability chains are intact, indicating healthy prerequisite flow.`;
   }
-  verdict += ` Note: Certification levels are based on heuristic scoring under active empirical validation. They do not constitute validated psychological or safety assessments.`;
+  verdict += ` Note: research tiers are based on research-stage scoring under active empirical validation. They do not constitute validated psychological or safety assessments.`;
   return verdict;
 }

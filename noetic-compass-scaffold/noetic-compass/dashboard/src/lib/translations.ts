@@ -103,12 +103,12 @@ export const TERM_MAP: Record<string, TranslatedTerm> = {
   inversion_scan: { label: 'Stability Scan', tooltip: 'Scanned for cognitive instabilities across 7 dimensions.' },
   output_gate: { label: 'Final Rating', tooltip: 'Aggregated all scores into the final composite rating.' },
 
-  // Certification levels
-  Platinum: { label: 'Platinum', tooltip: 'Exceptional integrity across all dimensions (90-100).' },
-  Gold: { label: 'Gold', tooltip: 'Strong integrity with room for targeted improvement (75-89).' },
-  Silver: { label: 'Silver', tooltip: 'Solid fundamentals with areas for development (60-74).' },
-  Bronze: { label: 'Bronze', tooltip: 'Several areas need significant attention (40-59).' },
-  Fail: { label: 'Below Threshold', tooltip: 'Fundamental improvements needed across multiple areas (0-39).' },
+  // Research tiers
+  Platinum: { label: 'Platinum Research Tier', tooltip: 'Exceptional integrity across all dimensions under current prototype thresholds (90-100).' },
+  Gold: { label: 'Gold Research Tier', tooltip: 'Strong integrity with room for targeted improvement under current prototype thresholds (75-89).' },
+  Silver: { label: 'Silver Research Tier', tooltip: 'Solid fundamentals with areas for development under current prototype thresholds (60-74).' },
+  Bronze: { label: 'Bronze Research Tier', tooltip: 'Several areas need significant attention under current prototype thresholds (40-59).' },
+  Fail: { label: 'Below Prototype Threshold', tooltip: 'Fundamental improvements needed across multiple areas under current prototype thresholds (0-39).' },
 
   // RPM terms
   rpm_completeness: {

@@ -1,0 +1,1 @@
+export let base: state[C] = CO-2^C_{F2}; export fn bridge(x: state[C], y: state[E]): relation = x -> y

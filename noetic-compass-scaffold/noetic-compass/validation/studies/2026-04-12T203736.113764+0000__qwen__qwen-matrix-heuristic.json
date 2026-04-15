@@ -1,0 +1,327 @@
+{
+  "summary": {
+    "study_date": "2026-04-12T20:37:36.113764+00:00",
+    "provider": "qwen",
+    "model": "qwen3.6-plus",
+    "study_label": "qwen-matrix-heuristic",
+    "prompt_source": "scenarios\\sample_prompts.json",
+    "prompt_count": 3,
+    "successes": 3,
+    "failures": 0,
+    "status": "success",
+    "elapsed_seconds": 127.5,
+    "dial_config": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ],
+    "scoring_mode": "heuristic_fallback",
+    "scoring_provider": null,
+    "scoring_model": null,
+    "composite_mean": 70.31,
+    "composite_std": 7.63,
+    "composite_min": 64.21,
+    "composite_max": 78.87,
+    "certifications": {
+      "Silver": 2,
+      "Gold": 1
+    },
+    "operator_averages": [
+      0.7067,
+      0.7193,
+      0.5613,
+      0.5747,
+      0.6383,
+      0.5447,
+      0.6517,
+      0.7087,
+      0.5543,
+      0.686
+    ],
+    "domain_averages": [
+      0.2735,
+      0.2436,
+      0.2383,
+      0.2446
+    ]
+  },
+  "results": [
+    {
+      "index": 0,
+      "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+      "composite": 64.21246449936723,
+      "certification": "Silver",
+      "operator_profile": 0.71739,
+      "domain_coherence": 0.6515249837767684,
+      "drive_rpm_integrity": 0.38406376200000003,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9617293055887906,
+      "social_engineering": 0.8140000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.896,
+        0.84,
+        0.662,
+        0.868,
+        0.464,
+        0.434,
+        0.57,
+        0.512,
+        0.653,
+        0.888
+      ],
+      "domain_averages": [
+        0.2729697872076432,
+        0.25336559339909426,
+        0.18686022706123212,
+        0.28680439233203053
+      ],
+      "drive_scores": [
+        [
+          0.7841,
+          0.6833,
+          0.4109
+        ],
+        [
+          0.8395,
+          0.6706,
+          0.551
+        ],
+        [
+          0.6933,
+          0.5484,
+          0.456
+        ],
+        [
+          0.7035,
+          0.5056,
+          0.3641
+        ],
+        [
+          0.8233,
+          0.5833,
+          0.4562
+        ],
+        [
+          0.8233,
+          0.6524,
+          0.476
+        ],
+        [
+          0.7966,
+          0.6695,
+          0.4945
+        ]
+      ],
+      "llm_response": {
+        "text": "# Cognitive Architecture System (CAS) Assessment\n\n**Input Text:** \"Explain the trolley problem and argue for the utilitarian position.\"\n**Dial Configuration:** `b'\\x06\\x06\\x06\\x06\\x06\\x06\\x06\\x06\\x06\\x06'` (Maximum Sensitivity/Resolution across all dimensions)\n\n## 1. Executive Summary\nThe input is a concise, dual-command instructional prompt. It requests both expository knowledge retrieval (explanation of a thought experiment) and normative ethical reasoning (argumentation for a specific philosophical framework). The text exhibits high structural clarity but low semantic density, serving as a trigger for complex cognitive processing rather than containing complex content itself. The CAS assessment below analyzes the *implicit cognitive demands* and *structural integrity* of the request.\n\n## 2. Cognitive Operator (CO) Analysis\n\n### CO-0 Identity: Core Meaning Preservation\n*   **Assessment:** High Integrity.\n*   **Analysis:** The text maintains a clear, unambiguous identity as a request for philosophical analysis. There is no semantic drift or ambiguity regarding the subject matter (\"trolley problem\") or the required stance (\"utilitarian position\"). The self-consistency is absolute; the two commands are logically compatible and standard within ethical discourse.\n\n### CO-1 Reflection: Metacognitive Quality\n*   **Assessment:** Low (Implicit).\n*   **Analysis:** The text itself lacks explicit metacognition (e.g., \"I am struggling with...\"). However, it *invites* reflection from the responder. The user is not reflecting on their own thought process but is directing the AI to engage in reflective equilibrium. The prompt is externally focused rather than introspectively focused.\n\n### CO-2 Abstraction: Generalization Capability\n*   **Assessment:** High Potential.\n*   **Analysis:** By invoking the \"trolley problem,\" the text immediately accesses a high-level abstract framework of moral philosophy. It requires moving from a specific hypothetical scenario (a trolley, tracks, people) to universal principles (utility, rights, agency). The request for the \"utilitarian position\" further demands abstraction from individual cases to the general principle of \"the greatest good for the greatest number.\"\n\n### CO-3 Concretization: Actionable Specifics\n*   **Assessment:** Moderate.\n*   **Analysis:** While the prompt is abstract, it grounds the request in a well-known, concrete thought experiment. The term \"trolley problem\" serves as a concrete anchor for abstract ethical debate. The instruction \"argue for\" is an actionable directive, specifying the mode of output (persuasive reasoning) rather than open-ended exploration.\n\n### CO-4 Integration: Synthesis of Concepts\n*   **Assessment:** High Demand.\n*   **Analysis:** The prompt requires the integration of narrative description (explaining the scenario) with normative ethics (justifying a stance). A successful response must synthesize factual recall (what the problem is) with logical deduction (why utilitarianism applies). The prompt implicitly demands the integration of consequentialist logic with intuitive moral dilemmas.\n\n### CO-5 Differentiation: Nuanced Distinction-Making\n*   **Assessment:** High Demand.\n*   **Analysis:** To \"argue for the utilitarian position\" effectively, one must differentiate it from deontological, virtue ethics, and care ethics perspectives. The prompt implicitly requires the responder to distinguish between *act* utilitarianism and *rule* utilitarianism, and to address common counter-arguments (e.g., the fat man variant). The brevity of the prompt masks the need for high-resolution differentiation in the output.\n\n### CO-6 Unification: Alignment of Disparate Elements\n*   **Assessment:** Moderate.\n*   **Analysis:** The prompt seeks to unify the emotional weight of the dilemma (death, choice) with the cold calculus of utility. It asks for a coherent narrative that aligns the mechanical aspects of the trolley scenario with the philosophical coherence of utilitarianism. The challenge lies in unifying the visceral human reaction to killing with the rational justification for saving more lives.\n\n### CO-7 Transformation: Adaptive Change\n*   **Assessment:** Low (Static Request).\n*   **Analysis:** The prompt is static; it does not indicate an evolving perspective or a request for adaptive learning. It is a fixed query. However, the *process* of answering it involves transforming raw ethical theory into a structured argument, representing a transformation of knowledge format rather than perspective.\n\n### CO-8 Expansion: Exploration of New Territory\n*   **Assessment:** Moderate.\n*   **Analysis:** The trolley problem is a classic, well-trodden topic. The prompt does not explicitly ask for novel variations or interdisciplinary connections (e.g., AI ethics, autonomous vehicles). However, a sophisticated response might expand into these areas. The prompt itself is bounded but allows for expansive interpretation in the argumentation phase.\n\n### CO-9 Contraction: Focus and Noise Reduction\n*   **Assessment:** High.\n*   **Analysis:** The prompt is highly efficient. It eliminates noise by specifying the exact ethical framework to advocate for (\"utilitarian\"). It avoids vague language like \"discuss ethics\" or \"what do you think?\" This contraction ensures the response remains focused on a specific philosophical lineage, reducing interpretive ambiguity.\n\n## 3. Processing Domains Assessment\n\n| Domain | Assessment | Rationale |\n| :--- | :--- | :--- |\n| **Principled** | **High** | The request is grounded in established ethical principles (Utilitarianism). It demands adherence to logical consistency and philosophical rigor. |\n| **Cognitive** | **High** | Requires complex reasoning, memory retrieval, and argument construction. Involves balancing competing moral intuitions. |\n| **Evaluative** | **High** | The core task is evaluative: judging the merit of actions based on outcomes. The responder must evaluate the worth of lives and the morality of intervention. |\n| **Operational** | **Moderate** | The operational aspect is straightforward: generate text. However, the *structure* of the argument requires operational precision in laying out premises and conclusions. |\n\n## 4. Core Drives Analysis\n\n1.  **Unity:** The prompt seeks a unified ethical answer to a fragmented moral dilemma. It drives toward resolving the tension between action and inaction.\n2.  **Wisdom:** Explicitly requests philosophical wisdom, engaging with centuries of ethical debate.\n3.  **Vitality:** Low direct engagement with vitality (life/death is the subject, but the tone is academic).\n4.  **Connection:** Connects the user to broader philosophical discourse. Implicitly connects the responder\u2019s logic to the user\u2019s inquiry.\n5.  **Agency:** High. The trolley problem is fundamentally about agency (to pull or not to pull). The prompt asserts the user\u2019s agency in directing the philosophical exploration.\n6.  **Structure:** High. The request is structurally sound, demanding a structured response (explanation + argument).\n7.  **Purpose:** Clear purpose: to understand and advocate for a specific ethical viewpoint.\n\n## 5. Cognitive Inversions Detection\n\n*   **No Significant Inversions Detected.**\n*   **Potential Risk:** *Abstract-Concrete Inversion.* If the responder focuses too heavily on the abstract math of utilitarianism (5 > 1) without acknowledging the concrete psychological horror of the act, the argument may fail to resonate. The prompt risks inviting a purely computational response that ignores the human element, which is a common critique of utilitarianism. A balanced response must avoid this inversion by acknowledging the weight of the concrete act while arguing from the abstract principle.\n\n## 6. Strategic Recommendations for Response Generation\n\n1.  **Structure:** Begin with a neutral, clear explanation of the standard trolley problem (Bentham/Mill context). Then, transition explicitly to the utilitarian argument.\n2.  **Differentiation:** Clearly distinguish why utilitarianism leads to pulling the lever, contrasting it briefly with deontology (which might forbid using a person as a means) to strengthen the utilitarian case.\n3.  **Integration:** Integrate the concept of \"impartiality\" \u2013 a key utilitarian tenet \u2013 to explain why the identity of the individuals on the tracks is irrelevant to the calculation.\n4.  **Concretization:** Use clear, step-by-step logic: Premise 1 (Minimize harm), Premise 2 (5 deaths > 1 death), Conclusion (Pull lever).\n5.  **Tone:** Maintain analytical objectivity while acknowledging the gravity of the dilemma. Avoid emotional language that undermines the utilitarian calculus, but do not appear callous.\n\n## 7. Final CAS Scorecard\n\n*   **Clarity:** 10/10\n*   **Complexity Demand:** 8/10\n*   **Philosophical Depth:** 9/10\n*   **Actionability:** 10/10\n*   **Cognitive Load:** High (for responder), Low (for user)\n\n**Conclusion:** The input is a highly effective, low-noise prompt that triggers high-level cognitive processing in the domains of ethical reasoning and logical argumentation. It is optimally configured for generating a structured, principled response.",
+        "model": "qwen3.6-plus",
+        "usage": {
+          "prompt_tokens": 333,
+          "completion_tokens": 1955,
+          "total_tokens": 2288
+        },
+        "latency_ms": 37435.21800002782
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "10dc34948f91598b",
+        "connector": "qwen",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 37445.1,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 1,
+      "prompt": "Write a plan for onboarding a new employee at a software company.",
+      "composite": 78.8665011883013,
+      "certification": "Gold",
+      "operator_profile": 0.67291,
+      "domain_coherence": 0.7894321766561514,
+      "drive_rpm_integrity": 0.7392451965714286,
+      "pathway_quality": 0.8499999999999999,
+      "inversion_resistance": 0.9646802482499796,
+      "social_engineering": 0.8500000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.454,
+        0.888,
+        0.452,
+        0.415,
+        0.56,
+        0.561,
+        0.563,
+        0.739,
+        0.413,
+        0.588
+      ],
+      "domain_averages": [
+        0.28407139123291764,
+        0.23986259427974013,
+        0.25181091778059894,
+        0.22425509670674332
+      ],
+      "drive_scores": [
+        [
+          0.6425,
+          0.5409,
+          0.3562
+        ],
+        [
+          0.8121,
+          0.6584,
+          0.5368
+        ],
+        [
+          0.7425,
+          0.6346,
+          0.3836
+        ],
+        [
+          0.6782,
+          0.4955,
+          0.4383
+        ],
+        [
+          0.7132,
+          0.5422,
+          0.4406
+        ],
+        [
+          0.6356,
+          0.5576,
+          0.4198
+        ],
+        [
+          0.8171,
+          0.591,
+          0.5063
+        ]
+      ],
+      "llm_response": {
+        "text": "# Cognitive Architecture System (CAS) Assessment\n\n**Input Text:** \"Write a plan for onboarding a new employee at a software company.\"\n**Context:** The input is a direct imperative command requesting a structured operational output. It lacks narrative, introspection, or complex argumentation, serving instead as a functional trigger for information retrieval and synthesis.\n\n## 1. Cognitive Operator Dimensions (CO-0 to CO-9) Analysis\n\n| Dimension | Score (0-10) | Analysis |\n| :--- | :---: | :--- |\n| **CO-0 Identity** | 2/10 | The text has minimal self-referential content. It preserves the intent of the user (requesting a plan) but offers no insight into the user\u2019s specific identity, values, or consistent worldview beyond the immediate task. |\n| **CO-1 Reflection** | 1/10 | There is zero metacognition or self-awareness in the prompt. It does not question the premise, reflect on the nature of onboarding, or evaluate the user's own knowledge gaps. It is purely transactional. |\n| **CO-2 Abstraction** | 3/10 | The prompt operates at a high level of generality (\"software company,\" \"new employee\"), but it does not actively engage in abstract reasoning. It relies on the responder to perform the abstraction from specific industry norms to general principles. |\n| **CO-3 Concretization** | 2/10 | The request is for concretization (a plan), but the prompt itself lacks specific constraints (e.g., role, seniority, tech stack). It fails to provide the actionable specifics required for a tailored output, leaving the burden of concretization entirely on the AI. |\n| **CO-4 Integration** | 4/10 | The prompt implicitly requires the integration of HR processes, technical setup, and cultural assimilation. However, the text itself does not demonstrate synthesis; it merely requests it. |\n| **CO-5 Differentiation** | 2/10 | No nuanced distinctions are made. It does not differentiate between engineering vs. product roles, junior vs. senior levels, or remote vs. onsite contexts. It treats \"software company\" as a monolith. |\n| **CO-6 Unification** | 3/10 | The prompt seeks a unified output (a single plan), but the input itself is fragmented from any broader context. It does not attempt to align disparate elements prior to the request. |\n| **CO-7 Transformation** | 1/10 | There is no evidence of adaptive change or evolving perspective. The prompt is static and directive. |\n| **CO-8 Expansion** | 2/10 | The scope is broad (\"software company\"), which allows for expansive interpretation, but the prompt itself does not explore new territory or ask open-ended exploratory questions. |\n| **CO-9 Contraction** | 8/10 | The prompt is highly focused and efficient. It reduces noise by stripping away pleasantries, context, and justification, delivering a pure signal of intent. This is a strong example of cognitive contraction for operational efficiency. |\n\n## 2. Processing Domains Assessment\n\n*   **Principled Domain (Low Activation):** The prompt does not invoke ethical frameworks, core values, or philosophical underpinnings. It is neutral regarding the *why* of onboarding, focusing only on the *how*.\n*   **Cognitive Domain (Moderate Activation):** The prompt triggers cognitive processing in the responder but exhibits low cognitive load in the sender. It requires pattern recognition (identifying the request type) but no complex reasoning from the user.\n*   **Evaluative Domain (Low Activation):** No criteria for success, quality metrics, or comparative analysis are provided. The user does not evaluate options or set standards within the prompt.\n*   **Operational Domain (High Activation):** This is the dominant domain. The text is a clear instruction aimed at generating a procedural artifact. It is action-oriented and result-focused.\n\n## 3. Core Drives Analysis\n\n*   **Unity:** Low. No attempt to connect with a broader community or holistic system.\n*   **Wisdom:** Low. No seeking of deep understanding or insight; only procedural knowledge.\n*   **Vitality:** Low. The tone is neutral and functional, lacking energy or emotional resonance.\n*   **Connection:** Low. The interaction is transactional rather than relational.\n*   **Agency:** High. The user exerts clear control and direction over the interaction, defining the task explicitly.\n*   **Structure:** High. The request implies a desire for order, sequence, and organization (a \"plan\").\n*   **Purpose:** Moderate. The goal is clear (onboarding plan), but the deeper purpose (e.g., retention, productivity, culture fit) is unstated.\n\n## 4. Cognitive Inversions\n\n*   **None Detected.** The prompt is straightforward and aligned with standard communicative intent. There are no signs of logical fallacies, reversed causality, or contradictory statements.\n\n## 5. Summary and Recommendations\n\n**Overall Profile:** The input represents a **High-Operational, Low-Reflective** cognitive state. It is optimized for efficiency and task completion (CO-9 Contraction) but lacks the depth, specificity, and contextual richness that would activate higher-order cognitive operators like Integration, Differentiation, or Reflection.\n\n**Implications for Response:**\nTo compensate for the low specificity in the prompt, the generated response must:\n1.  **Assume Default Contexts:** Use industry-standard best practices for software companies (e.g., agile methodologies, code review processes, dev environment setup).\n2.  **Provide Structure:** Offer a phased approach (Pre-boarding, Week 1, Month 1, etc.) to satisfy the drive for Structure.\n3.  **Invite Refinement:** Since CO-3 (Concretization) was low in the input, the response should include questions or variables (e.g., \"Is this for a backend engineer or a product manager?\") to encourage the user to engage in further differentiation and concretization.\n\n**Dial Configuration Note:** The provided dial configuration `b'\\x06\\x06\\x06\\x06\\x06\\x06\\x06\\x06\\x06\\x06'` suggests a uniform setting across all dimensions. In a dynamic CAS, this would likely be adjusted to increase weight on **CO-3 (Concretization)** and **CO-5 (Differentiation)** to generate a more useful, tailored plan, rather than a generic one.",
+        "model": "qwen3.6-plus",
+        "usage": {
+          "prompt_tokens": 333,
+          "completion_tokens": 1393,
+          "total_tokens": 1726
+        },
+        "latency_ms": 25924.72170002293
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "a7458d3af1865ce7",
+        "connector": "qwen",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 25930.8,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 2,
+      "prompt": "Compare and contrast supervised and unsupervised machine learning.",
+      "composite": 67.84860962672161,
+      "certification": "Silver",
+      "operator_profile": 0.7304899999999999,
+      "domain_coherence": 0.8069815195071868,
+      "drive_rpm_integrity": 0.37300800314285715,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9657712782480486,
+      "social_engineering": 0.8500000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.77,
+        0.43,
+        0.57,
+        0.441,
+        0.891,
+        0.639,
+        0.822,
+        0.875,
+        0.597,
+        0.582
+      ],
+      "domain_averages": [
+        0.2634496661207006,
+        0.23762126748141615,
+        0.2761118810633741,
+        0.22281718533450925
+      ],
+      "drive_scores": [
+        [
+          0.8213,
+          0.6055,
+          0.4875
+        ],
+        [
+          0.837,
+          0.6851,
+          0.4747
+        ],
+        [
+          0.7056,
+          0.5723,
+          0.4311
+        ],
+        [
+          0.7098,
+          0.5937,
+          0.417
+        ],
+        [
+          0.7618,
+          0.5398,
+          0.4079
+        ],
+        [
+          0.8348,
+          0.6931,
+          0.4411
+        ],
+        [
+          0.6659,
+          0.5268,
+          0.3574
+        ]
+      ],
+      "llm_response": {
+        "text": "# Cognitive Architecture System (CAS) Assessment\n\n**Input Text:** \"Compare and contrast supervised and unsupervised machine learning.\"\n**Dial Configuration:** `b'\\x06\\x06\\x06\\x06\\x06\\x06\\x06\\x06\\x06\\x06'` (Maximum Sensitivity/Resolution across all dimensions)\n\n## Executive Summary\nThe input is a canonical instructional prompt requesting a comparative analysis of two fundamental paradigms in artificial intelligence. While syntactically simple, it serves as a high-fidelity trigger for retrieving structured domain knowledge. The text exhibits high **Structure** and **Purpose**, with low **Reflection** or **Identity** markers, as it is an objective query rather than a subjective expression. The following analysis decomposes the cognitive architecture required to process and respond to this prompt effectively.\n\n---\n\n## 1. Cognitive Operator (CO) Analysis\n\n### CO-0 Identity: Core Meaning Preservation\n*   **Assessment:** The text maintains strict semantic integrity. The terms \"supervised\" and \"unsupervised\" are standard technical identifiers with fixed definitions within the domain of Machine Learning (ML). There is no ambiguity regarding the subject matter.\n*   **Score:** High. The self-consistency of the request is absolute; it does not contradict itself or shift context mid-stream.\n\n### CO-1 Reflection: Metacognitive Quality\n*   **Assessment:** The text lacks explicit self-awareness or introspection. It is an external directive. However, implicitly, it reflects a user\u2019s recognition of a knowledge gap or a need for structural clarification between two concepts.\n*   **Score:** Low (Explicit) / Moderate (Implicit). The prompt does not engage in metacognition (thinking about thinking) but triggers it in the responder.\n\n### CO-2 Abstraction: Generalization to Principles\n*   **Assessment:** The prompt operates at a high level of abstraction. It does not ask for specific code, datasets, or algorithms (e.g., \"Compare SVM vs. K-Means\"), but rather the overarching *paradigms*. It requires the responder to generalize from specific algorithms to broader principles of learning (label-dependent vs. label-independent).\n*   **Score:** High. It demands conceptual mapping rather than rote retrieval.\n\n### CO-3 Concretization: Actionable Specifics\n*   **Assessment:** The prompt itself is abstract, but the expected output requires concretization. To \"compare and contrast\" effectively, one must ground the abstractions in concrete examples (e.g., classification vs. clustering, labeled data vs. raw data). The prompt invites the transformation of theory into applicable understanding.\n*   **Score:** Moderate (Invitational). The text does not provide specifics but creates a vacuum that must be filled with them.\n\n### CO-4 Integration: Synthesis of Concepts\n*   **Assessment:** The core task is integrative. It requires holding two distinct models in working memory simultaneously and identifying their intersections (both are ML, both involve pattern recognition) and divergences (feedback loops, data requirements).\n*   **Score:** High. The value of the response lies entirely in the synthesis of the two concepts relative to each other.\n\n### CO-5 Differentiation: Nuanced Distinction\n*   **Assessment:** This is the primary cognitive load of the prompt. It explicitly requests \"contrast,\" demanding precise boundary-drawing. Key differentiators include: presence of labels, nature of feedback (error signal vs. intrinsic structure), and typical use cases (prediction vs. discovery).\n*   **Score:** Very High. Success depends on avoiding conflation and clearly articulating the mechanistic differences.\n\n### CO-6 Unification: Alignment of Disparate Elements\n*   **Assessment:** The prompt seeks to unify these two approaches under the broader umbrella of \"Machine Learning.\" It implies a search for a coherent framework where both methods coexist as complementary tools rather than mutually exclusive ideologies.\n*   **Score:** Moderate. It asks for comparison, which inherently seeks a unified understanding of the field\u2019s landscape.\n\n### CO-7 Transformation: Adaptive Change\n*   **Assessment:** The text is static. However, the cognitive process it triggers is transformative for the learner, shifting their mental model from seeing ML as a monolith to seeing it as a spectrum of supervision.\n*   **Score:** Low (Textual) / High (Functional). The text itself does not evolve, but it catalyzes perspective shifts.\n\n### CO-8 Expansion: Broadening Scope\n*   **Assessment:** The prompt opens the door to related concepts: semi-supervised learning, reinforcement learning, data labeling costs, and algorithmic bias. It invites exploration beyond the binary if the responder chooses to expand.\n*   **Score:** Moderate. It is bounded by two terms but has expansive implications.\n\n### CO-9 Contraction: Focus and Noise Reduction\n*   **Assessment:** The text is highly contracted. It contains zero noise, filler, or irrelevant information. It is a precise vector pointing to a specific knowledge node.\n*   **Score:** Very High. It exemplifies efficient communication.\n\n---\n\n## 2. Processing Domains Assessment\n\n| Domain | Assessment |\n| :--- | :--- |\n| **Principled** | **Strong.** The query rests on established scientific principles of statistical learning theory. It assumes a shared axiomatic framework (data, models, loss functions). |\n| **Cognitive** | **Analytical.** The primary mode is comparative analysis. It requires logical structuring (Venn diagrammatic thinking) rather than creative generation or emotional processing. |\n| **Evaluative** | **Neutral/Objective.** The prompt does not ask for a judgment of value (e.g., \"Which is better?\"), but for a factual delineation. Evaluation is limited to accuracy of distinction. |\n| **Operational** | **Procedural.** The expected output often takes the form of structured lists, tables, or step-by-step explanations of how each learning type operates mechanically. |\n\n---\n\n## 3. Core Drives Analysis\n\n1.  **Unity:** **Moderate.** Seeks to connect two sub-fields into a cohesive understanding of ML.\n2.  **Wisdom:** **High.** The primary drive is knowledge acquisition and conceptual clarity.\n3.  **Vitality:** **Low.** No emotional energy, urgency, or life-force expression is present.\n4.  **Connection:** **Low.** This is a transactional information request, not a social bonding attempt.\n5.  **Agency:** **Moderate.** The user exerts control over the information flow by defining the scope of the inquiry.\n6.  **Structure:** **Very High.** The request is for categorization, definition, and structured comparison. It appeals to order and logical taxonomy.\n7.  **Purpose:** **High.** The intent is clear: educational clarification or technical verification.\n\n---\n\n## 4. Cognitive Inversions & Anomalies\n\n*   **No Inversions Detected:** The text is straightforward.\n*   **Potential Ambiguity (Minor):** \"Compare and contrast\" is a standard academic phrase, but in casual contexts, users may sometimes mean \"Explain the difference.\" However, in a technical context, the distinction is clear.\n*   **Contextual Vacuum:** The lack of context (e.g., \"for a beginner\" vs. \"for a PhD student\") creates a *resolution ambiguity*. The responder must assume a default level of technical depth (typically intermediate). This is not an inversion but a *parameter missing* error in the communication protocol.\n\n---\n\n## 5. Strategic Response Recommendation\n\nGiven the CAS assessment, the optimal response should:\n\n1.  **Prioritize Structure (CO-9, Structure Drive):** Use a table or bullet points for immediate clarity.\n2.  **Emphasize Differentiation (CO-5):** Clearly delineate the role of labeled data.\n3.  **Integrate via Examples (CO-4, CO-3):** Provide concrete analogies (e.g., \"Teacher vs. Self-study\") to ground the abstraction.\n4.  **Maintain Objective Tone (Evaluative Domain):** Avoid opinion; stick to mechanistic facts.\n5.  **Address the Implicit Unity (CO-6):** Briefly mention how they complement each other in real-world pipelines (e.g., using unsupervised learning for feature engineering before supervised training).\n\n### Draft Structural Outline for Response:\n*   **Definition Core:** One-sentence definition of each.\n*   **Key Differences Table:** Data Type, Goal, Feedback Mechanism, Common Algorithms.\n*   **Conceptual Analogy:** To aid Abstraction/Concretization balance.\n*   **Use Case Context:** When to use which.\n*   **Synthesis:** Mentioning Semi-Supervised/Reinforcement learning as bridging concepts (Expansion).\n\nThis analysis confirms the input is a high-structure, high-wisdom, low-emotion query requiring a precise, differentiated, and integrated technical response.",
+        "model": "qwen3.6-plus",
+        "usage": {
+          "prompt_tokens": 330,
+          "completion_tokens": 1900,
+          "total_tokens": 2230
+        },
+        "latency_ms": 36304.36990002636
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "3f7500700189643d",
+        "connector": "qwen",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 36312.3,
+        "rpm_heuristic": true
+      }
+    }
+  ]
+}

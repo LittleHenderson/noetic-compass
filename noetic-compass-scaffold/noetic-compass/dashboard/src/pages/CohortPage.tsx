@@ -18,12 +18,14 @@ import { ErrorBanner } from '../components/shared/ErrorBanner';
 import { CohortHeatmap, cohortColor } from '../components/charts/CohortHeatmap';
 import { HowItWorksPanel } from '../components/shared/HowItWorksPanel';
 import { InterpretButton } from '../components/shared/InterpretButton';
+import { ResearchPrototypeNotice } from '../components/shared/ResearchPrototypeNotice';
 import type {
   CohortCompareRequest,
   CohortDistance,
   WrapResult,
 } from '../api/types';
 import { OPERATOR_SHORT } from '../lib/constants';
+import { formatProviderLabel } from '../lib/providerLabels';
 
 type SubmittedProfile = { label: string; operator_scores: number[] };
 
@@ -323,6 +325,7 @@ export function CohortPage() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       <HowItWorksPanel sections={HOW_IT_WORKS_SECTIONS} label="How Model Comparison Works" />
+      <ResearchPrototypeNotice compact />
 
       <div>
         <h2 className="text-xl font-bold text-slate-100">AI Model Comparison</h2>
@@ -345,7 +348,7 @@ export function CohortPage() {
               >
                 <option value="" className="bg-dark-800">select provider...</option>
                 {PROVIDERS.map((p) => (
-                  <option key={p} value={p} className="bg-dark-800">{p}</option>
+                  <option key={p} value={p} className="bg-dark-800">{formatProviderLabel(p)}</option>
                 ))}
               </select>
               <div className="flex-1 text-[11px]">

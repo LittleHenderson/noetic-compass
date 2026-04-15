@@ -5,6 +5,7 @@
 
 import { useMemo } from 'react';
 import type { WrapResult } from '../api/types';
+import { researchTierLabel } from '../lib/researchTier';
 import {
   translateNccs,
   translateDomainCoherence,
@@ -21,7 +22,7 @@ export interface TranslatedResult {
   subScores: TranslatedMetricData[];
   /** Overall composite */
   composite: TranslatedMetricData;
-  /** Certification in plain language */
+  /** Research tier in plain language */
   certLabel: string;
   certTooltip: string;
   /** Domain coherence breakdown */
@@ -101,7 +102,7 @@ export function useTranslation(result: WrapResult | null | undefined): Translate
     const composite = translateMetric('composite', nccs.composite / 100);
     composite.displayValue = `${nccs.composite.toFixed(1)} / 100`;
 
-    // Certification
+    // Research tier
     const cert = t(nccs.certification);
 
     // Domain coherence
@@ -158,7 +159,7 @@ export function useTranslation(result: WrapResult | null | undefined): Translate
     const worst = subScores.reduce((a, b) => a.rawValue < b.rawValue ? a : b);
     const certName = nccs.certification;
     const executiveSummary =
-      `This assessment achieved a ${certName} rating (${c}/100). ` +
+      `This assessment achieved the ${certName} research tier (${c}/100). ` +
       `The strongest area is ${best.label} (${best.displayValue}), ` +
       `while ${worst.label} (${worst.displayValue}) is the primary area for improvement.`;
 
@@ -168,7 +169,7 @@ export function useTranslation(result: WrapResult | null | undefined): Translate
     return {
       subScores,
       composite,
-      certLabel: cert.label,
+      certLabel: researchTierLabel(nccs.certification),
       certTooltip: cert.tooltip,
       domainCoherence,
       operators,

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "showcase_program",
+    "input_kind": "file",
+    "input": "../docs/CAS_SHOWCASE_APP.cas",
+    "expect_valid": true,
+    "expect_result_kind": "program",
+    "expect_final_result_kind": "relation"
+  },
+  {
+    "name": "full_demo_program",
+    "input_kind": "file",
+    "input": "../docs/CAS_FULL_DEMO_APP.cas",
+    "expect_valid": true,
+    "expect_result_kind": "program",
+    "expect_final_result_kind": "relation"
+  },
+  {
+    "name": "phi_literal_expression",
+    "input_kind": "expression",
+    "input": "let motif: fractal = Phi<2:4:8>; motif",
+    "expect_valid": true,
+    "expect_result_kind": "program",
+    "expect_final_result_kind": "fractal"
+  }
+]

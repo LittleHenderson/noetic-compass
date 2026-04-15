@@ -1,0 +1,10 @@
+# Showcase program exercising the CAS language surface
+use "CAS_SHOWCASE_MODULE.cas";
+
+let encoded: state[C] = compose(foundation, CO-4^C_{F2});
+let readiness: rpm = rpm_of(response);
+let motif: fractal = weave(encoded, CO-8^C);
+let operator_name: string = dominant_operator(encoded);
+fn assess(source: state[C], target: state[E]): relation = bridge(source, target);
+
+assess(encoded, response)

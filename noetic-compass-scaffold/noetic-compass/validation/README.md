@@ -13,6 +13,8 @@ make validate   # or: pytest validation/ -v
 
 ## Validation Study Tooling
 
+See [VALIDATION_PROTOCOL.md](./VALIDATION_PROTOCOL.md) for the documented evidence-collection and review process used by the validation UI/API.
+
 ### 1. Run Baseline Study
 
 Generate machine scores for prompts from the scenario library:
@@ -25,7 +27,18 @@ python validation/run_baseline_study.py --provider mock --count 50
 python validation/run_baseline_study.py --provider openai --count 100
 ```
 
-Outputs `validation/baseline_results.json` with per-prompt scores and summary statistics.
+Each run is archived to `validation/studies/`. By default the latest canonical run also updates `validation/baseline_results.json`.
+
+### 1b. Run a Benchmark Matrix
+
+Generate multiple archived benchmark studies across scenario collections:
+
+```bash
+python validation/run_suite_matrix.py --provider mock --count-per-suite 3
+python validation/run_suite_matrix.py --provider openai --count-per-suite 5 --suites sample_prompts,ai_safety,finance
+```
+
+This is the fastest way to populate benchmark evidence/trend views without manually logging each suite.
 
 ### 2. Human Labeling
 
@@ -54,3 +67,22 @@ Produces:
 ## Benchmark Fixture
 
 `benchmark_fixture.json` contains a frozen reference input and expected output ranges for regression testing.
+
+## Evidence Log Seeding
+
+Seed the validation evidence log from the current baseline study and human labels:
+
+```bash
+python validation/seed_evidence_log.py
+```
+
+This produces `validation/evidence_log.json` with scorer-agreement cases, benchmark runs from `validation/studies/`, and tier-disagreement error cases derived from the current artifacts.
+
+## Admin / UI Workflow
+
+The validation leaderboard now supports:
+- running a baseline study + reseed directly from the UI/API
+- running a suite matrix + reseed directly from the UI/API
+- reviewing archived study history
+- reviewing rater calibration / reconciliation hotspots
+- filtering/exporting evidence by kind/provider/model

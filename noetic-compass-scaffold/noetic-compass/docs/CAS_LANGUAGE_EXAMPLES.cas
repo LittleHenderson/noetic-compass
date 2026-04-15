@@ -1,0 +1,21 @@
+# Simple dependency
+CO-2^C_{F2} -> CO-5^E_{F4}
+
+# Composition followed by dependency
+(CO-2^C_{F2} × CO-4^C_{F2}) -> CO-5^E_{F4}
+
+# RPM wrapping
+RPM(F5)
+
+# Fractal operator sequence
+CO-8^C ∘ CO-3^C
+
+# Multi-statement program
+P0 -> C0;
+RPM(CO-6^O_{F5});
+Phi<2:5:8:3:9>
+
+# Typed bindings and functions
+let thesis: state[C] = CO-2^C_{F2};
+fn bridge(x: state[C], y: state[E]): relation = x -> y;
+bridge(thesis, CO-5^E_{F4})

@@ -3,12 +3,17 @@
 //! Produces plain-English diagnostic messages explaining chain failures,
 //! what was satisfied before the failure, and suggested remediation.
 
-use super::chain::{DwpStage, RpmChainResult};
+use super::chain::RpmChainResult;
 
 /// Drive names in CAS terminology.
 const DRIVE_NAMES: [&str; 7] = [
-    "Unity", "Wisdom", "Vitality", "Connection",
-    "Agency", "Structure", "Purpose",
+    "Unity",
+    "Wisdom",
+    "Vitality",
+    "Connection",
+    "Agency",
+    "Structure",
+    "Purpose",
 ];
 
 /// Generate a plain-English diagnostic for a chain evaluation result.
@@ -18,9 +23,7 @@ const DRIVE_NAMES: [&str; 7] = [
 /// - Explains what was satisfied before the failure
 /// - Provides remediation guidance
 pub fn diagnose_chain(result: &RpmChainResult) -> String {
-    let drive_name = DRIVE_NAMES
-        .get(result.drive_index)
-        .unwrap_or(&"Unknown");
+    let drive_name = DRIVE_NAMES.get(result.drive_index).unwrap_or(&"Unknown");
 
     if result.first_failure.is_none() {
         return format!(
@@ -84,8 +87,14 @@ pub fn diagnose_chain(result: &RpmChainResult) -> String {
 
 /// Generate a summary across all 7 drive chains.
 pub fn diagnose_all_chains(results: &[RpmChainResult]) -> String {
-    let complete: Vec<_> = results.iter().filter(|r| r.first_failure.is_none()).collect();
-    let broken: Vec<_> = results.iter().filter(|r| r.first_failure.is_some()).collect();
+    let complete: Vec<_> = results
+        .iter()
+        .filter(|r| r.first_failure.is_none())
+        .collect();
+    let broken: Vec<_> = results
+        .iter()
+        .filter(|r| r.first_failure.is_some())
+        .collect();
 
     let mut lines = Vec::new();
 
@@ -100,7 +109,12 @@ pub fn diagnose_all_chains(results: &[RpmChainResult]) -> String {
         for r in &broken {
             let name = DRIVE_NAMES.get(r.drive_index).unwrap_or(&"?");
             let failure = r.first_failure.as_deref().unwrap_or("unknown");
-            lines.push(format!("  - F{} ({}): failed at {}", r.drive_index + 1, name, failure));
+            lines.push(format!(
+                "  - F{} ({}): failed at {}",
+                r.drive_index + 1,
+                name,
+                failure
+            ));
         }
     }
 
@@ -109,8 +123,8 @@ pub fn diagnose_all_chains(results: &[RpmChainResult]) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::super::chain::evaluate_chain;
+    use super::*;
 
     #[test]
     fn test_complete_chain_diagnostic() {

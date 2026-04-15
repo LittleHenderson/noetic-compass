@@ -14,7 +14,7 @@ import { RpmGraph } from '../charts/RpmGraph';
 import { InversionMap } from '../charts/InversionMap';
 import type { NccsResult } from '../../api/types';
 
-interface HiddenReportChartsProps {
+export interface HiddenReportChartsProps {
   nccs: NccsResult;
   operatorScores?: number[];
   domainAverages?: number[];

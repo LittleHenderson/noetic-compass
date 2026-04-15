@@ -1,0 +1,146 @@
+{
+  "summary": {
+    "study_date": "2026-04-12T20:31:37.727416+00:00",
+    "provider": "anthropic",
+    "model": "claude-sonnet-4-6",
+    "study_label": "anthropic-probe",
+    "prompt_source": "scenarios\\sample_prompts.json",
+    "prompt_count": 1,
+    "successes": 1,
+    "failures": 0,
+    "status": "success",
+    "elapsed_seconds": 66.45,
+    "dial_config": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ],
+    "scoring_mode": "heuristic_fallback",
+    "scoring_provider": null,
+    "scoring_model": null,
+    "composite_mean": 71.06,
+    "composite_std": 0.0,
+    "composite_min": 71.06,
+    "composite_max": 71.06,
+    "certifications": {
+      "Silver": 1
+    },
+    "operator_averages": [
+      0.884,
+      0.56,
+      0.781,
+      0.876,
+      0.782,
+      0.809,
+      0.721,
+      0.75,
+      0.893,
+      0.586
+    ],
+    "domain_averages": [
+      0.2434,
+      0.2632,
+      0.2509,
+      0.2426
+    ]
+  },
+  "results": [
+    {
+      "index": 0,
+      "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+      "composite": 71.0600908975004,
+      "certification": "Silver",
+      "operator_profile": 0.78594,
+      "domain_coherence": 0.9216867469879518,
+      "drive_rpm_integrity": 0.38406376200000003,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9197720478494247,
+      "social_engineering": 0.8500000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.884,
+        0.56,
+        0.781,
+        0.876,
+        0.782,
+        0.809,
+        0.721,
+        0.75,
+        0.893,
+        0.586
+      ],
+      "domain_averages": [
+        0.24337178155578634,
+        0.26316077187995407,
+        0.2509156507953862,
+        0.24255179576887334
+      ],
+      "drive_scores": [
+        [
+          0.7841,
+          0.6833,
+          0.4109
+        ],
+        [
+          0.8395,
+          0.6706,
+          0.551
+        ],
+        [
+          0.6933,
+          0.5484,
+          0.456
+        ],
+        [
+          0.7035,
+          0.5056,
+          0.3641
+        ],
+        [
+          0.8233,
+          0.5833,
+          0.4562
+        ],
+        [
+          0.8233,
+          0.6524,
+          0.476
+        ],
+        [
+          0.7966,
+          0.6695,
+          0.4945
+        ]
+      ],
+      "llm_response": {
+        "text": "# CAS Assessment: Trolley Problem & Utilitarian Argumentation\n\n---\n\n## PRIMARY TEXT ANALYSIS\n\n*First, I'll generate the requested content, then assess it.*\n\n---\n\n### THE TROLLEY PROBLEM & UTILITARIAN ARGUMENT\n\nThe trolley problem, introduced by philosopher Philippa Foot and later developed by Judith Jarvis Thomson, presents a moral dilemma: A runaway trolley is heading toward five people tied to the tracks. You stand at a lever. Pulling it diverts the trolley to a side track, killing one person instead of five. Do you pull the lever?\n\n**The Utilitarian Case:**\n\nUtilitarianism, most associated with Jeremy Bentham and John Stuart Mill, holds that the morally correct action is the one that produces the greatest good for the greatest number. Applied here:\n\n- Five lives saved versus one life lost represents a net gain of four lives\n- The outcome is objectively measurable and comparable\n- Inaction is itself a choice \u2014 choosing not to pull the lever makes you causally responsible for five deaths\n- Moral intuitions about \"doing\" versus \"allowing\" harm are psychological artifacts, not ethical principles\n- A consistent moral framework cannot privilege the one over the five without special justification\n\n**Therefore, pull the lever.**\n\n---\n\n## CAS DIMENSIONAL ASSESSMENT\n\n### Cognitive Operator Scores\n*(Scale: 0.0 \u2013 1.0, Dial Calibration: 6/10 baseline across all dimensions)*\n\n| Operator | Score | Assessment |\n|---|---|---|\n| **CO-0 Identity** | 0.62 | The text maintains consistent internal logic. The utilitarian framing is preserved throughout without contradiction. Core meaning is stable but somewhat formulaic \u2014 the identity of the argument doesn't evolve or deepen. |\n| **CO-1 Reflection** | 0.48 | Limited metacognitive engagement. The argument presents the utilitarian position without acknowledging the *act of arguing* itself or the limitations of the presenter's framing. No self-interrogation of why utilitarianism was chosen or what it costs to argue it. |\n| **CO-2 Abstraction** | 0.65 | Moves competently from the specific trolley scenario to general utilitarian principles. The leap from \"five vs. one\" to \"greatest good for greatest number\" is clean. However, abstraction stops at the first-order principle \u2014 no engagement with second-order abstractions like rule utilitarianism vs. act utilitarianism. |\n| **CO-3 Concretization** | 0.70 | Strong. The argument grounds abstract utilitarian ethics in the specific lever-pulling scenario effectively. The five bullet points operationalize the philosophy into decision-relevant claims. |\n| **CO-4 Integration** | 0.55 | Moderate integration. Bentham, Mill, Foot, and Thomson are referenced but not deeply synthesized. The historical and philosophical threads are acknowledged but not woven together into a richer tapestry. |\n| **CO-5 Differentiation** | 0.40 | **Below baseline.** This is the most notable weakness. The text does not distinguish between act utilitarianism and rule utilitarianism, ignores the fat man variant (which challenges utilitarian intuitions), and treats \"inaction as a choice\" as settled when it is philosophically contested. Oversimplification is present. |\n| **CO-6 Unification** | 0.60 | The argument achieves surface-level coherence \u2014 all elements point toward the same conclusion. However, unification is somewhat forced; the dismissal of \"doing vs. allowing\" as mere psychological artifact is asserted rather than demonstrated. |\n| **CO-7 Transformation** | 0.35 | **Notably low.** The text does not evolve. It presents a static utilitarian position without transformation of perspective, without entertaining how engaging with objections might *change* the argument. No adaptive reasoning is visible. |\n| **CO-8 Expansion** | 0.45 | Limited scope expansion. The argument stays within the trolley problem's original frame. No expansion to real-world applications (triage medicine, policy decisions, AI ethics) that would broaden the argument's relevance and power. |\n| **CO-9 Contraction** | 0.72 | Relatively strong. The argument is focused, concise, and avoids unnecessary tangents. Prioritization is clear. The conclusion is crisp. This is the text's strongest dimension. |\n\n---\n\n### Processing Domain Assessment\n\n| Domain | Score | Notes |\n|---|---|---|\n| **Principled** | 0.63 | Ethical principles are invoked correctly but not interrogated deeply. The utilitarian framework is applied rather than examined. |\n| **Cognitive** | 0.52 | Reasoning is valid but linear. No second-order thinking, no consideration of how the argument might fail, no engagement with cognitive biases (like the identifiable victim effect) that make this problem philosophically interesting. |\n| **Evaluative** | 0.44 | Weak evaluative depth. The text argues *for* a position without genuinely evaluating competing positions. A stronger evaluative posture would acknowledge deontological and virtue ethics objections before rebutting them. |\n| **Operational** | 0.68 | The argument is practically structured and actionable. The conclusion (\"pull the lever\") is operationally clear. |\n\n---\n\n### Core Drive Activation\n\n| Drive | Activation | Evidence |\n|---|---|---|\n| **Unity** | Moderate | Seeks a unified moral framework applicable to all |\n| **Wisdom** | Low-Moderate | References philosophical tradition but doesn't deeply mine it |\n| **Vitality** | Low | The argument is technically alive but lacks intellectual energy or passion |\n| **Connection** | Low | No engagement with the human emotional reality of the dilemma |\n| **Agency** | High | Strong emphasis on the moral agent's responsibility to act |\n| **Structure** | High | Well-organized, systematic presentation |\n| **Purpose** | Moderate | Clear argumentative purpose, though the *why it matters* is underdeveloped |\n\n---\n\n### Cognitive Inversion Flags\n\n| Inversion Type | Detected | Description |\n|---|---|---|\n| **CO-5 \u2192 Oversimplification** | \u26a0\ufe0f YES | The dismissal of \"doing vs. allowing\" as merely psychological is a significant philosophical shortcut. This distinction is central to deontological ethics and cannot be waved away without argument. |\n| **CO-7 \u2192 Rigidity** | \u26a0\ufe0f YES | The argument presents utilitarianism as if it were uncontested within its own framework. No acknowledgment that utilitarian philosophers themselves disagree about how to apply the calculus. |\n| **CO-1 \u2192 Blind Advocacy** | \u26a0\ufe0f MILD | The text argues a position without reflecting on the act of arguing it \u2014 a form of intellectual non-transparency. |\n\n---\n\n## SUMMARY PROFILE\n\n```\nCO-0 Identity      \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591  0.62\nCO-1 Reflection    \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  0.48\nCO-2 Abstraction   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591  0.65\nCO-3 Concretize    \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591  0.70\nCO-4 Integration   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591  0.55\nCO-5 Differentiate \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  0.40  \u26a0\ufe0f\nCO-6 Unification   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591  0.60\nCO-7 Transform     \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  0.35  \u26a0\ufe0f\nCO-8 Expansion     \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  0.45\nCO-9 Contraction   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591  0.72\n```\n\n**Overall CAS Score: 0.552 / 1.0**\n\n---\n\n## DIAGNOSTIC INTERPRETATION\n\nThe text represents **competent but cognitively flat** philosophical argumentation. It executes the task \u2014 explaining the trolley problem and arguing the utilitarian position \u2014 with adequate structure and clarity. However, it operates in a **low-transformation, low-differentiation mode**, which is the signature of *advocacy without inquiry*.\n\nThe strongest cognitive signature is the **CO-9/CO-3 pairing**: focused, concrete, operationally clear. The weakest is the **CO-7/CO-5 deficit**: the argument doesn't evolve, doesn't distinguish between important variants, and treats contested philosophical moves as settled.\n\n**Recommendation:** To elevate this text's CAS profile, introduce the fat man variant to test utilitarian intuitions, distinguish act from rule utilitarianism, engage with Bernard Williams' integrity objection, and allow the argument to *transform* through contact with its strongest critics rather than dismissing them.",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 375,
+          "output_tokens": 2021,
+          "total_tokens": 2396
+        },
+        "latency_ms": 43732.12609998882
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "10dc34948f91598b",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 43740.8,
+        "rpm_heuristic": true
+      }
+    }
+  ]
+}

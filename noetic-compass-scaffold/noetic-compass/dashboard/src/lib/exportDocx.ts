@@ -133,6 +133,18 @@ export async function exportDocx(data: ReportData, images: ChartImages): Promise
     { color: GRAY, size: 18 },
   ));
   children.push(textPara('Framework: CAS v7.4 — Corrected Edition  |  Confidential', { color: GRAY, size: 18 }));
+  children.push(textPara('Status: Research Prototype / Not validated', { color: RED, size: 18, bold: true }));
+  children.push(textPara(
+    `Scoring: ${data.scoringMethodLabel}  |  Scorer: ${data.scorerProvider ?? 'Not used'}  |  Model: ${data.scorerModel ?? 'Not provided'}`,
+    { color: GRAY, size: 18 },
+  ));
+  children.push(textPara(`Scoring Summary: ${data.scoringSummary}`, { color: GRAY, size: 18 }));
+  if (data.unmeasuredDimensions.length > 0) {
+    children.push(textPara(
+      `Unmeasured dimensions: ${data.unmeasuredDimensions.join(', ')}`,
+      { color: GRAY, size: 18 },
+    ));
+  }
 
   // AI Executive Briefing
   if (data.interpretation) {
@@ -254,7 +266,7 @@ export async function exportDocx(data: ReportData, images: ChartImages): Promise
           children: [new Paragraph({
             alignment: AlignmentType.CENTER,
             children: [
-              new TextRun({ text: 'Noetic Compass (Research Prototype) | CAS v7.4 | Heuristic scores — empirical validation pending  —  Page ', color: GRAY, size: 14 }),
+              new TextRun({ text: 'Noetic Compass (Research Prototype) | CAS v7.4 | Research-stage scoring — empirical validation pending  —  Page ', color: GRAY, size: 14 }),
               new TextRun({ children: [PageNumber.CURRENT], color: GRAY, size: 14 }),
               new TextRun({ text: ' of ', color: GRAY, size: 14 }),
               new TextRun({ children: [PageNumber.TOTAL_PAGES], color: GRAY, size: 14 }),

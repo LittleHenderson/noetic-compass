@@ -4,6 +4,7 @@ import { saveAs } from 'file-saver';
 import { useHistoryStore } from '../stores/historyStore';
 import { CertBadge } from '../components/shared/CertBadge';
 import { Card } from '../components/shared/Card';
+import { ResearchPrototypeNotice } from '../components/shared/ResearchPrototypeNotice';
 import type { AssessmentRecord, StageResult } from '../api/types';
 
 /** Flatten a record into the same column schema used by the API export. */
@@ -104,9 +105,9 @@ export function HistoryPage() {
             <p className="text-[11px] text-slate-500 mt-0.5">
               {records.length} prompt{records.length !== 1 ? 's' : ''} assessed
               {records.length < 40 ? (
-                <span className="text-amber-400"> — {40 - records.length} more needed for stabilized profile</span>
+                <span className="text-amber-400"> — {40 - records.length} more for broader prompt coverage</span>
               ) : (
-                <span className="text-emerald-400"> — profile stabilized</span>
+                <span className="text-emerald-400"> — broader coverage reached</span>
               )}
             </p>
           )}
@@ -155,6 +156,8 @@ export function HistoryPage() {
         )}
       </div>
 
+      <ResearchPrototypeNotice compact />
+
       {records.length === 0 ? (
         <Card>
           <p className="text-sm text-slate-500 text-center py-8">No assessments yet.</p>
@@ -168,7 +171,7 @@ export function HistoryPage() {
                   <th className="px-4 py-3">Time</th>
                   <th className="px-4 py-3">Text</th>
                   <th className="px-4 py-3">Score</th>
-                  <th className="px-4 py-3">Level</th>
+                  <th className="px-4 py-3">Research Tier</th>
                 </tr>
               </thead>
               <tbody>

@@ -10,10 +10,10 @@
 //! - Simplification: dual cancellation + identity elimination → canonical form
 //! - Convergence: orbit computation, fixed points, classification
 
-pub mod fractal;
 pub mod composition;
-pub mod simplification;
 pub mod convergence;
+pub mod fractal;
+pub mod simplification;
 
-pub use fractal::CognitiveFractal;
 pub use convergence::FractalClass;
+pub use fractal::CognitiveFractal;

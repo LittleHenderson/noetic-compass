@@ -1,0 +1,343 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  urlcolor=blue!50!black,
+  citecolor=blue!50!black
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+
+% Core notation retained from the source document
+\newcommand{\Worlds}{\mathcal{W}}
+\newcommand{\Ideas}{\mathcal{I}}
+\newcommand{\Noetics}{\mathcal{N}}
+\newcommand{\Foundations}{\mathcal{F}}
+\newcommand{\Acquisitions}{\mathcal{A}}
+\newcommand{\noe}[1]{\nu_{#1}}
+\newcommand{\Frac}{\Phi}
+\newcommand{\RPM}{\mathfrak{R}}
+\newcommand{\Lacunarity}{\Lambda}
+\newcommand{\PsychAttractor}{\mathcal{A}_{\psi}}
+\newcommand{\ProfileFrac}{\Phi_{\mathrm{profile}}}
+\newcommand{\VulnScore}{\mathcal{V}}
+\newcommand{\LevelI}{\mathcal{L}_1}
+\newcommand{\LevelII}{\mathcal{L}_2}
+\newcommand{\LevelIII}{\mathcal{L}_3}
+\newcommand{\LevelIV}{\mathcal{L}_4}
+\newcommand{\AIGoal}{\mathcal{G}_{\mathrm{AI}}}
+\newcommand{\HumanValue}{\mathcal{V}_{\mathrm{H}}}
+\newcommand{\Noetica}{\mathbf{Noetica}}
+\newcommand{\Sh}{\mathbf{Sh}}
+
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}
+
+\newtcolorbox{claimbox}[2]{
+  breakable,
+  colback=gray!5!white,
+  colframe=gray!55!black,
+  title=\textbf{#1}: #2
+}
+
+\title{\textbf{TKS Cognitive Framework}\\[0.5em]
+\large Referee-Safe Reduction and Claim Classification}
+\author{Prepared from the December 2025 source text}
+\date{April 8, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document is a referee-safe reduction of the source file
+\texttt{TKS\_FULL\_Cognitive\_Framework.tex}. Its purpose is editorial rather
+than promotional: it preserves only those statements that can be honestly
+presented as definitions, adopted axioms, imported standard mathematics,
+explicit threat models, heuristics, or short proved consequences of stated
+definitions. Claims of empirical validity, predictive power, psychological
+diagnosis, population-level control, or resolved AI safety are removed or
+reclassified as unsupported application hypotheses. The result is not a proof
+of the source document's psychological, social, or AI claims. It is a narrower
+artifact designed to separate formal structure from interpretation and to mark
+clearly where validation is still missing.
+\end{abstract}
+
+\section{Scope and Labeling Rule}
+
+\begin{claimbox}{Definition}{Editorial rule}
+Every substantive retained claim in this reduction is labeled as exactly one of:
+\textbf{Definition}, \textbf{Axiom}, \textbf{Imported Standard Result},
+\textbf{Threat Model}, \textbf{Heuristic}, \textbf{Application Hypothesis}, or
+\textbf{Proved Statement}.
+\end{claimbox}
+
+\begin{claimbox}{Definition}{Referee-safe meaning}
+``Referee-safe'' here means only that the claim surface is honest and bounded.
+It does \emph{not} mean that the underlying framework has been empirically
+validated.
+\end{claimbox}
+
+\begin{claimbox}{Threat Model}{Intended use}
+Material retained below for psychology, social influence, and predictive
+analysis is presented only as a defensive or analytic threat-model language.
+Nothing in this document should be read as an endorsed deployment recipe.
+\end{claimbox}
+
+\section{Formal Core Retained From the Source}
+
+\begin{claimbox}{Definition}{Noetic alphabet}
+Adopt a finite alphabet of ten labeled operators
+\[
+\Noetics = \{\noe{0},\noe{1},\ldots,\noe{9}\}.
+\]
+In this reduction, the operators are treated as named symbols inside a formal
+model. No empirical semantics are assumed beyond the labels chosen by the
+framework.
+\end{claimbox}
+
+\begin{claimbox}{Axiom}{D/W/P acquisition order}
+For each foundation index $m$, the acquisition predicates satisfy
+\[
+\sigma(P_m)\Rightarrow \sigma(W_m)\Rightarrow \sigma(D_m).
+\]
+This is retained as a proposed structural axiom of the framework, not as an
+empirical law of human cognition.
+\end{claimbox}
+
+\begin{claimbox}{Definition}{Chain level}
+For each foundation $m$, define a chain level by
+\[
+\mathrm{Level}_m =
+\begin{cases}
+0 & \text{if } \neg \sigma(D_m),\\
+1 & \text{if } \sigma(D_m)\land \neg \sigma(W_m),\\
+2 & \text{if } \sigma(W_m)\land \neg \sigma(P_m),\\
+3 & \text{if } \sigma(P_m).
+\end{cases}
+\]
+\end{claimbox}
+
+\begin{claimbox}{Definition}{Profile sequence}
+A profile sequence is a finite or countable word
+\[
+\ProfileFrac = \langle k_1:k_2:\cdots:k_n\rangle,\qquad k_i\in\{0,\ldots,9\}.
+\]
+This is a formal encoding device only. No automatic extraction validity is
+claimed here.
+\end{claimbox}
+
+\begin{claimbox}{Definition}{Grouped domain scores}
+If a positive 40-state vector $x=(x_1,\ldots,x_{40})$ satisfies
+$\sum_{i=1}^{40}x_i=1$, define four grouped domain scores
+\[
+d_j(x)=\sum_{i=10(j-1)+1}^{10j}x_i,\qquad j=1,2,3,4.
+\]
+\end{claimbox}
+
+\begin{proposition}[Grouped simplex property]
+If $x_i>0$ for all $i$ and $\sum_i x_i=1$, then each $d_j(x)>0$ and
+$\sum_{j=1}^{4} d_j(x)=1$.
+\end{proposition}
+
+\begin{proof}
+Each $d_j(x)$ is a sum of positive terms, so $d_j(x)>0$. Summing the four block
+sums simply partitions the total sum of the forty coordinates, hence
+\[
+\sum_{j=1}^{4}d_j(x)=\sum_{i=1}^{40}x_i=1.
+\]
+\end{proof}
+
+\begin{proposition}[Immediate consequence of the D/W/P axiom]
+Under the retained acquisition axiom, $\mathrm{Level}_m=3$ implies
+$\mathrm{Level}_m\ge 2$, and $\mathrm{Level}_m\ge 2$ implies
+$\mathrm{Level}_m\ge 1$.
+\end{proposition}
+
+\begin{proof}
+If $\mathrm{Level}_m=3$, then $\sigma(P_m)$ holds, hence by the axiom
+$\sigma(W_m)$ and $\sigma(D_m)$ also hold. Therefore the chain has at least the
+properties required for the lower levels. The second implication is identical.
+\end{proof}
+
+\section{Imported Mathematical Templates}
+
+\begin{claimbox}{Imported Standard Result}{Contractive fixed-point principle}
+If a self-map on a complete metric space is contractive, then it has a unique
+fixed point and iterates converge to it. This is standard mathematics. It does
+\emph{not} by itself validate any psychological or social interpretation.
+\end{claimbox}
+
+\begin{claimbox}{Definition}{Lacunarity template}
+For a suitable box-mass function $M_\varepsilon$, one may define
+\[
+\Lacunarity(\Frac,\varepsilon)
+= \frac{\mathrm{Var}[M_\varepsilon]}{\mathbb{E}[M_\varepsilon]^2}+1.
+\]
+This is a mathematically standard kind of gap statistic in fractal analysis.
+\end{claimbox}
+
+\begin{claimbox}{Imported Standard Result}{Sheaf language}
+If a site $(\mathcal{C},J)$ is given, then the category $\Sh(\mathcal{C},J)$ of
+sheaves is a Grothendieck topos. This is standard category theory. Any use of
+sheaf language for values or cognition requires additional modeling choices.
+\end{claimbox}
+
+\begin{claimbox}{Imported Standard Result}{Graph-based threshold dynamics}
+Threshold and cascade models on graphs are a standard mathematical template for
+studying diffusion processes. Their use in any concrete social or cognitive
+application depends on justified state variables, parameters, and data.
+\end{claimbox}
+
+\section{Retained Threat Models and Heuristics}
+
+\begin{claimbox}{Heuristic}{NLP-to-noetic mapping}
+One may attempt to map text or behavior into profile sequences
+$\ProfileFrac$ by a classifier over the ten-symbol alphabet. In this reduction,
+that mapping is treated as a heuristic feature-extraction step. No claim is made
+that such a mapping is unique, validated, or psychologically complete.
+\end{claimbox}
+
+\begin{claimbox}{Threat Model}{Psychological profiling}
+Given a chosen extraction pipeline, one can define a workflow
+\[
+\text{text/behavior} \longrightarrow \ProfileFrac \longrightarrow
+\text{derived features}
+\]
+for defensive analysis of possible profiling systems. This is retained only as a
+threat model describing how an adversary might operationalize a symbolic
+framework.
+\end{claimbox}
+
+\begin{claimbox}{Heuristic}{Attractor language for profiles}
+If a profile update map is \emph{assumed} to be contractive on a chosen state
+space, then fixed-point language may be used to speak about an attractor-like
+summary state. In the absence of a validated state space and validated dynamics,
+this remains heuristic rather than diagnostic science.
+\end{claimbox}
+
+\begin{claimbox}{Heuristic}{Vulnerability score}
+The source document's vulnerability score based on lacunarity is retained only
+as a heuristic ranking function. Thresholds such as ``critical if
+$\VulnScore>1.5$'' are not preserved as validated scientific cutoffs.
+\end{claimbox}
+
+\begin{claimbox}{Threat Model}{Influence and cascade modeling}
+Graph diffusion, seed-node choice, campaign propagation, and attractor
+perturbation can be written down as formal threat models for how a hostile actor
+might reason about influence operations. They are not presented here as proven
+laws of populations.
+\end{claimbox}
+
+\begin{claimbox}{Threat Model}{Predictive pipeline}
+The six-stage pipeline from digital traces to inferred goals, trajectories, and
+intervention points is retained only as an adversarial capability model. It is
+not retained as an established predictive system.
+\end{claimbox}
+
+\section{Application Hypotheses for AI}
+
+\begin{claimbox}{Application Hypothesis}{Alignment decomposition}
+The source proposes that alignment analysis may be \emph{modeled} by decomposing
+goals into desire, wisdom, and power components and expressing constraints
+through an RPM-like wrapper. This is a design hypothesis, not a solved
+alignment theorem.
+\end{claimbox}
+
+\begin{claimbox}{Application Hypothesis}{Interpretability vocabulary}
+The ten-symbol noetic alphabet may be explored as a human-readable vocabulary
+for annotating model behavior. This is a proposed interpretive schema, not an
+established decomposition of neural computation.
+\end{claimbox}
+
+\begin{claimbox}{Application Hypothesis}{Value-sheaf viewpoint}
+It may be mathematically convenient to describe context-dependent value
+assignments using sheaf-like language over a chosen site. This is a modeling
+proposal only; no result here shows that real value learning in AI is solved by
+such a construction.
+\end{claimbox}
+
+\begin{claimbox}{Application Hypothesis}{Safety architecture}
+Temporal typing, coalgebraic dynamics, or categorical organization may be useful
+for specifying AI safety architectures. The source document does not provide the
+formal verification machinery or empirical evidence needed to claim deployment
+readiness.
+\end{claimbox}
+
+\section{Claims Explicitly Removed From the Referee-Safe Version}
+
+\begin{claimbox}{Definition}{Removed claim class}
+The following kinds of claims from the source document are intentionally omitted
+from the referee-safe version because they were unsupported, overstated, or too
+operational for a scholarly artifact.
+\end{claimbox}
+
+\begin{itemize}[leftmargin=1.5em]
+\item theorem-style claims without proofs, including the ``40-Step
+Stabilization'' claim and application-level cascade or predictive theorems;
+\item assertions that TKS provides ``rigorous solutions'' to core AI crises;
+\item statements that collective attractors, value resolution, or uncertainty
+tracking make AI systems robust or safe ``by construction'';
+\item operational scenario language that reads like a deployment recipe for
+psychological manipulation, population steering, or mass surveillance;
+\item threshold claims presented as if empirically calibrated when no evidence
+is supplied.
+\end{itemize}
+
+\section{What Would Be Required for Validation}
+
+\begin{claimbox}{Definition}{Validation requirements}
+To move any retained heuristic or application hypothesis toward scientific
+credibility, the framework would need at minimum:
+\begin{enumerate}[label=(\arabic*)]
+  \item an explicit state space and observation model;
+  \item reproducible extraction procedures from data to symbolic states;
+  \item benchmark datasets and inter-rater agreement where human annotation is
+  involved;
+  \item predictive evaluation against held-out outcomes;
+  \item ablations against simpler baselines;
+  \item false-positive and false-negative analysis for any risk or vulnerability
+  scoring.
+\end{enumerate}
+\end{claimbox}
+
+\section{Conclusion}
+
+\begin{claimbox}{Definition}{Honest status}
+This referee-safe reduction does \emph{not} certify the original cognitive
+framework as scientifically valid. It preserves a narrower core: formal
+definitions, a few trivial proved consequences, standard imported mathematics,
+and clearly labeled heuristics or threat models. Everything stronger remains
+future work or unsupported interpretation.
+\end{claimbox}
+
+\begin{thebibliography}{9}
+\bibitem{barnsley}
+M. F. Barnsley, \emph{Fractals Everywhere}, Academic Press, 1988.
+
+\bibitem{banach}
+S. Banach, ``Sur les opérations dans les ensembles abstraits et leur application
+aux équations intégrales,'' \emph{Fundamenta Mathematicae} 3 (1922), 133--181.
+
+\bibitem{maclane}
+S. Mac Lane and I. Moerdijk, \emph{Sheaves in Geometry and Logic}, Springer,
+1992.
+
+\bibitem{threshold}
+D. Centola and M. Macy, ``Complex contagions and the weakness of long ties,''
+\emph{American Journal of Sociology} 113(3) (2007), 702--734.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,3529 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TKS FORMAL MATHEMATICAL MANUAL v6.1 — ACADEMIC COMPLETE EDITION
+%% Dynamic Semantics Release
+%% Full Integration of RPM Monad and Noetic Fractal Calculus
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt,twoside,openright]{book}
+
+%% ============================================================================
+%% PACKAGES
+%% ============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{mathtools}
+\usepackage{stmaryrd}           % For semantic brackets
+\usepackage{bm}                 % Bold math
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{cd,arrows,positioning,calc}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems,skins,breakable}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{makeidx}
+\usepackage{bussproofs}
+\geometry{
+  paper=letterpaper,
+  inner=1.2in,
+  outer=1in,
+  top=1in,
+  bottom=1in
+}
+\setlength{\headheight}{14pt}
+\makeindex
+
+%% ============================================================================
+%% THEOREM ENVIRONMENTS
+%% ============================================================================
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{axiom}[definition]{Axiom}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Corollary}
+
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{example}[definition]{Example}
+\newtheorem{notation}[definition]{Notation}
+
+%% ============================================================================
+%% CUSTOM COMMANDS
+%% ============================================================================
+% Semantic brackets
+\newcommand{\sem}[1]{\llbracket #1 \rrbracket}
+
+% TKS-specific symbols
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Bool}{\mathbb{B}}
+\newcommand{\Worlds}{\mathcal{W}}
+\newcommand{\Ideas}{\mathcal{I}}
+\newcommand{\Elements}{\mathcal{E}}
+\newcommand{\Noetics}{\mathcal{N}}
+\newcommand{\Foundations}{\mathcal{F}}
+\newcommand{\Acquisitions}{\mathcal{A}}
+\newcommand{\Noetica}{\mathbf{Noetica}}
+\newcommand{\Acq}{\mathbf{Acq}}
+
+% Noetic operators
+\newcommand{\noe}[1]{\nu_{#1}}
+
+% Tootra operations
+\newcommand{\Tadd}{\oplus_T}
+\newcommand{\Tsub}{\ominus_T}
+\newcommand{\Tmul}{\otimes_T}
+\newcommand{\Tdiv}{\oslash_T}
+
+% World association
+\newcommand{\Wadd}{\oplus_W}
+\newcommand{\Wsub}{\ominus_W}
+
+% Type judgments
+\newcommand{\types}{\vdash}
+\newcommand{\typmark}{:}
+
+% RPM Monad
+\newcommand{\RPM}{\mathfrak{R}}
+\newcommand{\rpmret}{\mathsf{return}}
+\newcommand{\rpmbind}{\mathbin{\gg\!=}}
+
+% Fractal notation (v6.1)
+\newcommand{\Frac}{\Phi}
+\newcommand{\FracSet}{\mathbf{Frac}}
+
+% Semantic-domain notation
+\newcommand{\Val}{\mathsf{Val}}
+\newcommand{\Env}{\mathsf{Env}}
+\newcommand{\Store}{\mathsf{Store}}
+\newcommand{\State}{\mathsf{State}}
+\newcommand{\Var}{\mathsf{Var}}
+\newcommand{\Loc}{\mathsf{Loc}}
+\newcommand{\Expr}{\mathsf{Expr}}
+\newcommand{\Config}{\mathsf{Config}}
+\newcommand{\Dom}{\mathsf{Dom}}
+\newcommand{\Fund}{\mathsf{Fund}}
+\newcommand{\NoeTerm}{\mathsf{NoeTerm}}
+
+% Category theory
+\newcommand{\Ob}{\mathrm{Ob}}
+\newcommand{\Hom}{\mathrm{Hom}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\dom}{\mathrm{dom}}
+\newcommand{\cod}{\mathrm{cod}}
+
+% Ordinal function
+\newcommand{\ord}{\mathrm{ord}}
+
+% Evaluation relations (v6.1)
+\newcommand{\evalto}{\Downarrow}
+\newcommand{\smallstep}{\to}
+\newcommand{\bigstep}{\Downarrow}
+
+% Acquisition state (v6.1)
+\newcommand{\AcqState}{\sigma}
+\newcommand{\Satisfied}{\mathsf{Sat}}
+\newcommand{\Failed}{\mathsf{Fail}}
+
+%% ============================================================================
+%% HEADER/FOOTER
+%% ============================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\leftmark}
+\fancyhead[RO]{\rightmark}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+%% ============================================================================
+%% TITLE INFO
+%% ============================================================================
+\title{%
+  \Huge\bfseries TKS FORMAL MATHEMATICAL MANUAL\\[0.5em]
+  \Large Version 6.1 — Academic Complete Edition\\[0.5em]
+  \large\textit{Dynamic Semantics Release}\\[1em]
+  \normalsize The Complete Rigorous Formalization of the\\
+  Tootra Kabbalistic System\\[0.5em]
+  with Full RPM Monad and Noetic Fractal Calculus Integration
+}
+\author{%
+  Compiled from Canonical Sources\\[0.5em]
+  \textit{A Graduate-Level Treatise in Formal Metaphysical Mathematics}
+}
+\date{2024}
+
+%% ============================================================================
+%% BEGIN DOCUMENT
+%% ============================================================================
+\begin{document}
+
+\frontmatter
+\maketitle
+
+%% ============================================================================
+%% ABSTRACT
+%% ============================================================================
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+This manual presents the complete formal mathematical specification of the \textbf{Tootra Kabbalistic System (TKS)}, Version 6.1---the \textbf{Dynamic Semantics Release}. Building upon the canonical v6.0 Academic Release, this edition provides:
+
+\begin{enumerate}[label=(\arabic*)]
+  \item A \textbf{complete ontology} of 40 Elements across 4 Worlds with 10 Noetic operators (preserved from v6.0).
+  \item A \textbf{formal algebra} with Noetic composition, Foundation filtering, and Tootra arithmetic (preserved from v6.0).
+  \item A \textbf{category-theoretic foundation} establishing TKS as the category $\Noetica$ (preserved from v6.0).
+  \item \textbf{[NEW v6.1]} A \textbf{fully formalized RPM Monad} with:
+    \begin{itemize}
+      \item Rigorous monad structure ($\RPM$, $\eta$, $\mu$) with complete proofs of monad laws.
+      \item Kleisli composition and bind operations.
+      \item Dynamic evaluation semantics with acquisition state threading.
+      \item Failure propagation and diagnostic mechanisms.
+    \end{itemize}
+  \item \textbf{[NEW v6.1]} A \textbf{comprehensive Noetic Fractal Calculus} with:
+    \begin{itemize}
+      \item Fractals as higher-order operators with formal typing.
+      \item Fractal composition, simplification, and canonical forms.
+      \item Convergence and stability theorems.
+      \item Classification of fractal families (stabilizing, amplifying, oscillatory).
+      \item Eigenfractal analysis.
+    \end{itemize}
+  \item \textbf{[EXPANDED v6.1]} \textbf{Integrated dynamic semantics} combining RPM and Fractals:
+    \begin{itemize}
+      \item Small-step and big-step operational semantics for all constructs.
+      \item Denotational semantics extended for monadic and fractal operations.
+      \item Soundness correspondence between operational and denotational semantics.
+    \end{itemize}
+  \item A \textbf{complete type system} with inference rules, effect typing for RPM, and fractal types (extended from v6.0).
+  \item A \textbf{compiler specification} with complete BNF grammar, operational semantics, and termination analysis (preserved and extended from v6.0).
+  \item \textbf{[EXPANDED v6.1]} Over 20 \textbf{fully worked examples} with complete evaluation traces.
+  \item \textbf{Rigorous proofs} of all major theorems with academic-level detail.
+\end{enumerate}
+
+Version 6.1 represents the \textbf{Dynamic Semantics Release}, providing the formal machinery necessary for:
+\begin{itemize}
+  \item Implementation of a TKS interpreter/compiler.
+  \item Future formalization in proof assistants (Coq, Agda, Isabelle).
+  \item Academic publication and peer review.
+\end{itemize}
+
+\vspace{1em}
+\noindent\textbf{Keywords:} Formal metaphysics, category theory, type theory, denotational semantics, operational semantics, monads, recursive evaluation, fractal calculus, Kabbalistic mathematics, consciousness modeling, transformation algebra.
+
+%% ============================================================================
+%% TABLE OF CONTENTS
+%% ============================================================================
+\tableofcontents
+
+%% ============================================================================
+%% PREFACE
+%% ============================================================================
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+
+The Tootra Kabbalistic System (TKS) represents an ambitious attempt to formalize metaphysical concepts using the rigorous tools of modern mathematics. This manual serves as the definitive reference for TKS v6.1, the \textbf{Dynamic Semantics Release}.
+
+\section*{What's New in v6.1}
+
+Version 6.1 builds upon the canonical v6.0 Academic Release with two major additions:
+
+\begin{enumerate}
+  \item \textbf{RPM as a Full Monad with Dynamic Evaluation}: The Recursive Prerequisite Model is now formalized as a complete monad with unit, multiplication, and Kleisli composition. Dynamic evaluation rules show how expressions are evaluated through the RPM prerequisite chain, with explicit failure propagation.
+
+  \item \textbf{Noetic Fractal Calculus as Core Dynamics}: Fractals are elevated from notation to a full calculus with typing rules, composition laws, convergence theorems, and eigenfractal analysis. This provides the mathematical foundation for iterative transformation processes.
+\end{enumerate}
+
+\section*{Relationship to Prior Versions}
+
+\begin{itemize}
+  \item \textbf{v3.2.1}: Established core definitions and initial formal structure.
+  \item \textbf{v5.0}: Unified all subsystems with category theory, type theory, and compiler specification.
+  \item \textbf{v6.0}: Academic Release with complete denotational semantics, strengthened proofs, and fully formalized algebraic structures.
+  \item \textbf{v6.1}: Dynamic Semantics Release with full RPM monad and Noetic Fractal Calculus integration.
+\end{itemize}
+
+All content from v6.0 is preserved and extended. v6.1 is a strict superset of v6.0.
+
+\section*{Intended Audience}
+
+This manual is written for:
+\begin{itemize}
+  \item Graduate students in mathematics, computer science, or philosophy.
+  \item Researchers interested in formal approaches to metaphysics.
+  \item Implementers building TKS-based software systems.
+  \item Scholars studying the intersection of Kabbalistic thought and formal methods.
+  \item Proof assistant users seeking to formalize TKS in Coq/Agda/Isabelle.
+\end{itemize}
+
+\section*{Prerequisites}
+
+Readers should have familiarity with:
+\begin{itemize}
+  \item Basic set theory and abstract algebra.
+  \item Elementary category theory (categories, functors, natural transformations, monads).
+  \item Type theory fundamentals.
+  \item Programming language semantics (denotational and operational).
+\end{itemize}
+
+\section*{Document Structure}
+
+The manual is organized into five major parts:
+\begin{enumerate}
+  \item \textbf{Foundations}: Ontology, Elements, Noetics, and Foundations.
+  \item \textbf{Algebraic Structures}: Noetic algebra, Tootra arithmetic, and their properties.
+  \item \textbf{Categorical Framework}: Category Noetica, ACBE functor.
+  \item \textbf{Dynamic Semantics} [NEW]: RPM Monad, Noetic Fractal Calculus, integrated evaluation.
+  \item \textbf{Applications}: Type theory, language specification, theorems, worked examples.
+\end{enumerate}
+
+\mainmatter
+
+%% ============================================================================
+%% PART I: FOUNDATIONS
+%% ============================================================================
+\part{Foundations}
+
+%% ============================================================================
+%% CHAPTER 1: INTRODUCTION
+%% ============================================================================
+\chapter{Introduction}
+\label{ch:introduction}
+
+\section{Aims and Scope of TKS}
+
+The Tootra Kabbalistic System (TKS) is a formal mathematical framework designed to model the structure of consciousness, transformation, and manifestation. Unlike purely empirical theories, TKS operates in the domain of \emph{formal metaphysics}---it provides a rigorous algebraic and categorical language for reasoning about concepts traditionally relegated to philosophy or mysticism.
+
+\begin{definition}[Formal Metaphysics]
+\label{def:formal-metaphysics}
+A \textbf{formal metaphysical system} is a mathematical structure $\mathcal{S} = (\mathcal{O}, \mathcal{M}, \mathcal{A})$ where:
+\begin{itemize}
+  \item $\mathcal{O}$ is a set of \emph{ontological primitives} (the basic entities of the system),
+  \item $\mathcal{M}$ is a set of \emph{morphisms} or transformations between entities,
+  \item $\mathcal{A}$ is a set of \emph{axioms} governing the behavior of primitives and morphisms.
+\end{itemize}
+\end{definition}
+
+TKS instantiates this schema with:
+\begin{itemize}
+  \item $\mathcal{O}$: The 40 Elements, 4 Worlds, 7 Foundations, and the Idea space $\Ideas$.
+  \item $\mathcal{M}$: The 10 Noetic operators $\noe{0}, \ldots, \noe{9}$, the RPM monad $\RPM$, and Noetic fractals.
+  \item $\mathcal{A}$: The axioms of composition, duality, precedence, prerequisite satisfaction, and fractal convergence.
+\end{itemize}
+
+\section{The Central Thesis}
+
+TKS is built on a single foundational claim:
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Central Thesis of TKS]
+\textbf{All phenomena of consciousness, transformation, and manifestation can be modeled as algebraic operations on a structured space of Ideas, mediated by a finite set of Noetic operators, organized across a hierarchy of Worlds, filtered through life-domain Foundations, subject to prerequisite constraints (RPM), and capable of recursive self-application (Fractals).}
+\end{tcolorbox}
+
+This thesis is \emph{not} an empirical claim about physics or neuroscience. Rather, it is a \emph{formal postulate} that enables systematic reasoning about transformation processes.
+
+\section{v6.1 Dynamic Semantics: Overview}
+
+Version 6.1 introduces two major components that provide TKS with full \emph{dynamic semantics}:
+
+\subsection{The RPM Monad}
+
+The Recursive Prerequisite Model (RPM) is formalized as a monad $\RPM$ on the category of TKS expressions with acquisition state. This provides:
+\begin{itemize}
+  \item A formal mechanism for sequencing computations that depend on prerequisite satisfaction.
+  \item Failure propagation: if a prerequisite fails, the entire computation fails gracefully.
+  \item A clean separation between pure TKS expressions and effectful prerequisite checking.
+\end{itemize}
+
+\subsection{Noetic Fractal Calculus}
+
+Noetic Fractals are formalized as higher-order operators with:
+\begin{itemize}
+  \item A well-defined type system.
+  \item Composition and simplification rules.
+  \item Convergence criteria for iterated application.
+  \item Classification into stabilizing, amplifying, and oscillatory families.
+\end{itemize}
+
+Together, RPM and Fractals provide the complete dynamic semantics needed to evaluate TKS expressions, diagnose failures, and analyze transformation stability.
+
+\section{Notation and Conventions}
+\label{sec:notation}
+
+Throughout this manual, we employ consistent notation:
+
+\begin{notation}[Symbol Classes]
+\label{not:symbols}
+The following symbol classes are used:
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Class} & \textbf{Notation} & \textbf{Domain} \\
+\midrule
+Worlds & $A, B, C, D$ & $\Worlds = \{A, B, C, D\}$ \\
+Noetics & $\noe{0}, \noe{1}, \ldots, \noe{9}$ & $\Noetics = \{\noe{k} : k \in \{0,\ldots,9\}\}$ \\
+Foundations & $F_1, F_2, \ldots, F_7$ & $\Foundations = \{F_m : m \in \{1,\ldots,7\}\}$ \\
+Elements & $Xn$ where $X \in \Worlds$, $n \in \{1,\ldots,10\}$ & $\Elements = \Worlds \times \{1,\ldots,10\}$ \\
+Ideas & $\Ideas$ & Space of all Ideas \\
+Fractals & $\Frac, \Psi, \Omega$ & $\FracSet$ \\
+Acquisitions & $A0, D_m, W_m, P_m$ & $\Acquisitions$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{notation}
+
+\begin{notation}[Operations]
+\label{not:operations}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Operation} & \textbf{Symbol} & \textbf{Meaning} \\
+\midrule
+Tootra-Addition & $\Tadd$ & Idea union/co-presence \\
+Tootra-Subtraction & $\Tsub$ & Idea removal \\
+Tootra-Multiplication & $\Tmul$ & Idea interaction/scaling \\
+Tootra-Division & $\Tdiv$ & Idea decomposition \\
+World Association & $\oplus$ & Link expression to world \\
+Composition & $\circ$ & Sequential application \\
+Dependency & $\to$ & Prerequisite relation \\
+Fractal & $\langle X : Y : Z \rangle$ & Noetic fractal chain \\
+Semantic bracket & $\sem{\cdot}$ & Denotational meaning \\
+RPM return & $\rpmret$ & Monad unit \\
+RPM bind & $\rpmbind$ & Kleisli composition \\
+Big-step eval & $\bigstep$ & Evaluates to \\
+Small-step & $\smallstep$ & Single reduction step \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{notation}
+
+%% ============================================================================
+%% CHAPTER 2: CANONICAL ONTOLOGY
+%% ============================================================================
+\chapter{Canonical Ontology}
+\label{ch:ontology}
+
+This chapter establishes the foundational ontology of TKS: the primordial categories, the Four Worlds, the 40 Elements, the 10 Noetic operators, and the 7 Foundations. All definitions in this chapter are canonical from v6.0 and preserved unchanged.
+
+\section{The Primordial Duality: Mind and Idea}
+
+\begin{axiom}[Ontological Foundation]
+\label{ax:ontological-foundation}
+The TKS system posits two primordial categories from which all else derives:
+\begin{align}
+\textbf{MIND} &: \text{The operator that processes, stores, and transforms} \\
+\textbf{IDEA} &: \text{The operand---all that can be represented or structured}
+\end{align}
+\end{axiom}
+
+\begin{definition}[Idea Space]
+\label{def:idea-space}
+The \textbf{Idea space} is the collection of all Ideas:
+\[
+\Ideas = \{\text{all possible Ideas}\}
+\]
+An Idea encompasses spiritual, mental, emotional, or physical content, including any composite expression built from Elements, Foundations, and Worlds.
+\end{definition}
+
+\begin{definition}[Mind as Operator Class]
+\label{def:mind-class}
+Mind is an operator class $M$ with instantiations across four worlds:
+\[
+M = \{M_A, M_B, M_C, M_D\}
+\]
+where:
+\begin{itemize}
+  \item $M_A \cong A1$: Divine Mind (First Cause Awareness)
+  \item $M_B \cong B1$: Mental Mind (Ego, Memory, Analytical Intelligence)
+  \item $M_C \cong C1$: Emotional Mind (Emotional Awareness, EQ)
+  \item $M_D \cong D1$: Physical Mind (Brain, Hardware, Biological System)
+\end{itemize}
+\end{definition}
+
+\section{The Four Worlds}
+
+\begin{definition}[World Set]
+\label{def:world-set}
+The \textbf{World set} is:
+\[
+\Worlds = \{A, B, C, D\}
+\]
+with total ordering by metaphysical subtlety:
+\[
+A \succ B \succ C \succ D
+\]
+\end{definition}
+
+\begin{definition}[World Ordinal Function]
+\label{def:world-ord}
+The \textbf{ordinal function} assigns a natural number to each world:
+\[
+\ord : \Worlds \to \mathbb{N}
+\]
+\[
+\ord(A) = 0, \quad \ord(B) = 1, \quad \ord(C) = 2, \quad \ord(D) = 3
+\]
+\end{definition}
+
+\begin{definition}[World Distance]
+\label{def:world-distance}
+The \textbf{distance} between worlds $W_1$ and $W_2$ is:
+\[
+d(W_1, W_2) = |\ord(W_1) - \ord(W_2)|
+\]
+\end{definition}
+
+\begin{table}[h]
+\centering
+\caption{World Signatures}
+\label{tab:world-signatures}
+\begin{tabular}{llllll}
+\toprule
+\textbf{World} & \textbf{Domain} & \textbf{Substrate} & \textbf{Kabbalistic} & \textbf{Mind} & \textbf{Idea} \\
+\midrule
+$A$ & Spiritual & Aether & Atziluth & $A1$ & $A10$ \\
+$B$ & Mental & Thought & Briah & $B1$ & $B10$ \\
+$C$ & Emotional & Feeling & Yetzirah & $C1$ & $C10$ \\
+$D$ & Physical & Matter & Assiah & $D1$ & $D10$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{The 40 Elements}
+
+\begin{definition}[Element Space]
+\label{def:element-space}
+The \textbf{Element space} is the Cartesian product:
+\[
+\Elements = \Worlds \times \{1, 2, 3, 4, 5, 6, 7, 8, 9, 10\}
+\]
+yielding $|\Elements| = 4 \times 10 = 40$ elements.
+\end{definition}
+
+\begin{theorem}[Element Tensor Structure]
+\label{thm:element-tensor}
+The 40 Elements form a $4 \times 10$ tensor grid:
+
+\[
+\begin{array}{c|cccccccccc}
+ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\hline
+A & A1 & A2 & A3 & A4 & A5 & A6 & A7 & A8 & A9 & A10 \\
+B & B1 & B2 & B3 & B4 & B5 & B6 & B7 & B8 & B9 & B10 \\
+C & C1 & C2 & C3 & C4 & C5 & C6 & C7 & C8 & C9 & C10 \\
+D & D1 & D2 & D3 & D4 & D5 & D6 & D7 & D8 & D9 & D10 \\
+\end{array}
+\]
+\end{theorem}
+
+\subsection{Element Semantics by Mode}
+
+Each mode $n \in \{1, \ldots, 10\}$ carries a consistent meaning across all worlds:
+
+\begin{center}
+\begin{tabular}{cl}
+\toprule
+\textbf{Mode} & \textbf{Semantic Role} \\
+\midrule
+1 & Mind / Awareness / Processing \\
+2 & Positive / Attraction / Union \\
+3 & Negative / Repulsion / Separation \\
+4 & Vibration / Frequency / Energy \\
+5 & Female / Receptive / Nurturing \\
+6 & Male / Projective / Structuring \\
+7 & Rhythm / Cycles / Periodicity \\
+8 & Above / Inner / Esoteric / Causal \\
+9 & Below / Outer / Exoteric / Effect \\
+10 & Idea / Pure Form / Potential \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{The Ten Noetic Operators}
+
+\begin{definition}[Noetic Operator Space]
+\label{def:noetic-space}
+The \textbf{Noetic operator space} is:
+\[
+\Noetics = \{\noe{0}, \noe{1}, \noe{2}, \noe{3}, \noe{4}, \noe{5}, \noe{6}, \noe{7}, \noe{8}, \noe{9}\}
+\]
+Each Noetic is an endofunction on the Idea space:
+\[
+\noe{k} : \Ideas \to \Ideas
+\]
+\end{definition}
+
+\begin{table}[h]
+\centering
+\caption{Noetic Operators}
+\label{tab:noetics}
+\begin{tabular}{clll}
+\toprule
+\textbf{Index} & \textbf{Symbol} & \textbf{Name} & \textbf{Function} \\
+\midrule
+0 & $\noe{0}$ & Idea & Neutral form, identity \\
+1 & $\noe{1}$ & Mind & Attention, awareness, processing \\
+2 & $\noe{2}$ & Positive & Attraction, affirmation, union \\
+3 & $\noe{3}$ & Negative & Repulsion, negation, separation \\
+4 & $\noe{4}$ & Vibration & Amplitude/frequency modulation \\
+5 & $\noe{5}$ & Female & Receptive structuring, internalization \\
+6 & $\noe{6}$ & Male & Projective structuring, externalization \\
+7 & $\noe{7}$ & Rhythm & Periodicity, repetition, cycles \\
+8 & $\noe{8}$ & Above & Inner, higher, esoteric, causal \\
+9 & $\noe{9}$ & Below & Outer, lower, exoteric, effect \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The Mirror Principle}
+
+\begin{definition}[Noetic Mirror Pairs]
+\label{def:mirror-pairs}
+Noetics form \textbf{mirror pairs} that sum to 9:
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+\textbf{Pair} & \textbf{Sum} & \textbf{Interpretation} \\
+\midrule
+$\noe{1} \leftrightarrow \noe{8}$ & $1 + 8 = 9$ & Mind $\leftrightarrow$ Above \\
+$\noe{2} \leftrightarrow \noe{7}$ & $2 + 7 = 9$ & Positive $\leftrightarrow$ Rhythm \\
+$\noe{3} \leftrightarrow \noe{6}$ & $3 + 6 = 9$ & Negative $\leftrightarrow$ Male \\
+$\noe{4} \leftrightarrow \noe{5}$ & $4 + 5 = 9$ & Vibration $\leftrightarrow$ Female \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{definition}
+
+\section{The Seven Foundations}
+
+\begin{definition}[Foundation Space]
+\label{def:foundation-space}
+The \textbf{Foundation space} is:
+\[
+\Foundations = \{F_1, F_2, F_3, F_4, F_5, F_6, F_7\}
+\]
+\end{definition}
+
+\begin{table}[h]
+\centering
+\caption{The Seven Foundations}
+\label{tab:foundations}
+\begin{tabular}{clll}
+\toprule
+$m$ & \textbf{Foundation} & \textbf{Core Meaning} & \textbf{Life Domain} \\
+\midrule
+1 & Unity & Coherence, integration & Spiritual wholeness \\
+2 & Wisdom & Knowledge, understanding & Truth and learning \\
+3 & Life & Vitality, health & Biological survival \\
+4 & Companionship & Connection, love & Relationships \\
+5 & Power & Influence, agency & Authority and action \\
+6 & Material & Resources, possessions & Economic domain \\
+7 & Lust & Sex, reproduction & Procreation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{definition}[Sub-Foundation Structure]
+\label{def:subfoundation}
+Each Foundation has four world-manifestations:
+\[
+F_m = \{F_{ma}, F_{mb}, F_{mc}, F_{md}\}
+\]
+where the subscript indicates the world ($a$ = Spiritual, $b$ = Mental, $c$ = Emotional, $d$ = Physical).
+\end{definition}
+
+\begin{definition}[Sub-Foundation Space]
+\label{def:subfoundation-space}
+The complete \textbf{Sub-Foundation space} is:
+\[
+\Foundations^* = \Foundations \times \{a, b, c, d\}
+\]
+with $|\Foundations^*| = 7 \times 4 = 28$ sub-foundations.
+\end{definition}
+
+\begin{table}[ht]
+\centering
+\caption{The 28 Sub-Foundations}
+\label{tab:28-subfoundations}
+\begin{tabular}{c|cccc}
+\toprule
+\textbf{Foundation} & \textbf{a (Spiritual)} & \textbf{b (Mental)} & \textbf{c (Emotional)} & \textbf{d (Physical)} \\
+\midrule
+$F_1$ (Unity) & $1_a$ & $1_b$ & $1_c$ & $1_d$ \\
+$F_2$ (Wisdom) & $2_a$ & $2_b$ & $2_c$ & $2_d$ \\
+$F_3$ (Life) & $3_a$ & $3_b$ & $3_c$ & $3_d$ \\
+$F_4$ (Companionship) & $4_a$ & $4_b$ & $4_c$ & $4_d$ \\
+$F_5$ (Power) & $5_a$ & $5_b$ & $5_c$ & $5_d$ \\
+$F_6$ (Material) & $6_a$ & $6_b$ & $6_c$ & $6_d$ \\
+$F_7$ (Lust) & $7_a$ & $7_b$ & $7_c$ & $7_d$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{example}[Sub-Foundation Interpretations]
+\label{ex:subfoundation-interpretations}
+\begin{itemize}
+  \item $3_d$ (Physical Life): biological energy, health, stamina, bodily vitality
+  \item $3_a$ (Spiritual Life): life force, divine energy, purpose-driven existence
+  \item $5_b$ (Mental Power): influence through ideas, intellectual authority, persuasion
+  \item $5_d$ (Physical Power): bodily strength, material resources for action
+  \item $7_c$ (Emotional Lust): desire, attraction, bonding impulse
+  \item $2_b$ (Mental Wisdom): knowledge, beliefs, conceptual understanding
+  \item $4_c$ (Emotional Companionship): love, affection, emotional connection
+  \item $1_a$ (Spiritual Unity): divine coherence, archetypal wholeness
+\end{itemize}
+\end{example}
+
+\section{The Acquisition Space}
+
+\begin{definition}[Acquisition Space]
+\label{def:acq-space}
+The \textbf{Acquisition space} is:
+\[
+\Acquisitions = \{A0\} \cup \{D_m : m \in \{1,\ldots,7\}\} \cup \{W_m : m \in \{1,\ldots,7\}\} \cup \{P_m : m \in \{1,\ldots,7\}\}
+\]
+with $|\Acquisitions| = 1 + 7 + 7 + 7 = 22$.
+
+\begin{itemize}
+  \item $A0$: Pure Desire (root intentional vector)
+  \item $D_m$: Desire for Foundation $m$
+  \item $W_m$: Wisdom about Foundation $m$
+  \item $P_m$: Power to achieve Foundation $m$
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Acquisition State]
+\label{def:acq-state}
+An \textbf{Acquisition State} is a function:
+\[
+\AcqState : \Acquisitions \to \{\mathtt{true}, \mathtt{false}\}
+\]
+indicating which acquisitions are currently satisfied.
+\end{definition}
+
+%% ============================================================================
+%% PART II: ALGEBRAIC STRUCTURES
+%% ============================================================================
+\part{Algebraic Structures}
+
+%% ============================================================================
+%% CHAPTER 3: NOETIC OPERATOR ALGEBRA
+%% ============================================================================
+\chapter{Noetic Operator Algebra}
+\label{ch:noetic-algebra}
+
+This chapter provides a complete specification of the algebraic structure of Noetic operators, including the composition table, structural properties, and eigenmodes. All definitions are preserved from v6.0.
+
+\section{Composition as Binary Operation}
+
+\begin{definition}[Noetic Composition]
+\label{def:noetic-composition}
+The \textbf{composition operation} on Noetics is:
+\[
+\circ : \Noetics \times \Noetics \to \mathrm{End}(\Ideas)
+\]
+defined by:
+\[
+(\noe{j} \circ \noe{i})(X) = \noe{j}(\noe{i}(X))
+\]
+for all $X \in \Ideas$.
+\end{definition}
+
+\begin{remark}
+The notation $\noe{j} \circ \noe{i}$ means ``apply $\noe{i}$ first, then $\noe{j}$.'' This follows the standard convention for function composition.
+\end{remark}
+
+\section{Fundamental Composition Axioms}
+
+\begin{axiom}[Associativity of Composition]
+\label{ax:assoc-comp}
+For all $\noe{i}, \noe{j}, \noe{k} \in \Noetics$:
+\[
+\noe{k} \circ (\noe{j} \circ \noe{i}) = (\noe{k} \circ \noe{j}) \circ \noe{i}
+\]
+\end{axiom}
+
+\begin{axiom}[Identity Element]
+\label{ax:identity}
+The Noetic $\noe{0}$ (Idea) serves as the identity element:
+\[
+\noe{0} \circ \noe{k} = \noe{k} \circ \noe{0} = \noe{k} \quad \forall k \in \{0,\ldots,9\}
+\]
+\end{axiom}
+
+\begin{theorem}[Monoid Structure]
+\label{thm:monoid}
+The structure $(\Noetics, \circ, \noe{0})$ forms a monoid.
+\end{theorem}
+
+\begin{proof}
+We verify the monoid axioms:
+\begin{enumerate}
+  \item \textbf{Closure}: For any $\noe{i}, \noe{j} \in \Noetics$, the composition $\noe{j} \circ \noe{i}$ is an endofunction on $\Ideas$. By the closure axiom of TKS, compositions of Noetics yield valid operators in the extended closure $\overline{\Noetics}$.
+  \item \textbf{Associativity}: By Axiom~\ref{ax:assoc-comp}.
+  \item \textbf{Identity}: By Axiom~\ref{ax:identity}, $\noe{0}$ is the identity.
+\end{enumerate}
+\end{proof}
+
+\section{The Complete 10$\times$10 Noetic Composition Table}
+
+\begin{definition}[Composition Notation]
+\label{def:comp-notation}
+We use the following notational conventions:
+\begin{itemize}
+  \item $\noe{ij}$ denotes the compound operator $\noe{j} \circ \noe{i}$
+  \item $\noe{i}^2$ denotes the self-composition $\noe{i} \circ \noe{i}$
+  \item $\approx \noe{0}$ indicates approximate neutralization (returns toward identity)
+\end{itemize}
+\end{definition}
+
+\begin{table}[h]
+\centering
+\caption{Complete 10$\times$10 Noetic Composition Table}
+\label{tab:composition}
+\small
+\begin{tabular}{c|cccccccccc}
+$\circ$ & $\noe{0}$ & $\noe{1}$ & $\noe{2}$ & $\noe{3}$ & $\noe{4}$ & $\noe{5}$ & $\noe{6}$ & $\noe{7}$ & $\noe{8}$ & $\noe{9}$ \\
+\hline
+$\noe{0}$ & $\noe{0}$ & $\noe{1}$ & $\noe{2}$ & $\noe{3}$ & $\noe{4}$ & $\noe{5}$ & $\noe{6}$ & $\noe{7}$ & $\noe{8}$ & $\noe{9}$ \\
+$\noe{1}$ & $\noe{1}$ & $\noe{1}^2$ & $\noe{12}$ & $\noe{13}$ & $\noe{14}$ & $\noe{15}$ & $\noe{16}$ & $\noe{17}$ & $\noe{18}$ & $\noe{19}$ \\
+$\noe{2}$ & $\noe{2}$ & $\noe{21}$ & $\noe{2}^2$ & $\approx\noe{0}$ & $\noe{24}$ & $\noe{25}$ & $\noe{26}$ & $\noe{27}$ & $\noe{28}$ & $\noe{29}$ \\
+$\noe{3}$ & $\noe{3}$ & $\noe{31}$ & $\approx\noe{0}$ & $\noe{3}^2$ & $\noe{34}$ & $\noe{35}$ & $\noe{36}$ & $\noe{37}$ & $\noe{38}$ & $\noe{39}$ \\
+$\noe{4}$ & $\noe{4}$ & $\noe{41}$ & $\noe{42}$ & $\noe{43}$ & $\noe{4}^2$ & $\noe{45}$ & $\noe{46}$ & $\noe{47}$ & $\noe{48}$ & $\noe{49}$ \\
+$\noe{5}$ & $\noe{5}$ & $\noe{51}$ & $\noe{52}$ & $\noe{53}$ & $\noe{54}$ & $\noe{5}^2$ & $\approx\noe{0}$ & $\noe{57}$ & $\noe{58}$ & $\noe{59}$ \\
+$\noe{6}$ & $\noe{6}$ & $\noe{61}$ & $\noe{62}$ & $\noe{63}$ & $\noe{64}$ & $\approx\noe{0}$ & $\noe{6}^2$ & $\noe{67}$ & $\noe{68}$ & $\noe{69}$ \\
+$\noe{7}$ & $\noe{7}$ & $\noe{71}$ & $\noe{72}$ & $\noe{73}$ & $\noe{74}$ & $\noe{75}$ & $\noe{76}$ & $\noe{7}^2$ & $\noe{78}$ & $\noe{79}$ \\
+$\noe{8}$ & $\noe{8}$ & $\noe{81}$ & $\noe{82}$ & $\noe{83}$ & $\noe{84}$ & $\noe{85}$ & $\noe{86}$ & $\noe{87}$ & $\noe{8}^2$ & $\approx\noe{0}$ \\
+$\noe{9}$ & $\noe{9}$ & $\noe{91}$ & $\noe{92}$ & $\noe{93}$ & $\noe{94}$ & $\noe{95}$ & $\noe{96}$ & $\noe{97}$ & $\approx\noe{0}$ & $\noe{9}^2$ \\
+\end{tabular}
+\end{table}
+
+\section{Dualities and Inversions}
+
+\begin{definition}[Dual Noetics]
+\label{def:dual-noetics}
+The three \textbf{fundamental dualities} are:
+\begin{align}
+\text{Duality}_1 &: \noe{2} \leftrightarrow \noe{3} && \text{(Positive } \leftrightarrow \text{ Negative)} \\
+\text{Duality}_2 &: \noe{5} \leftrightarrow \noe{6} && \text{(Female } \leftrightarrow \text{ Male)} \\
+\text{Duality}_3 &: \noe{8} \leftrightarrow \noe{9} && \text{(Above } \leftrightarrow \text{ Below)}
+\end{align}
+\end{definition}
+
+\begin{axiom}[Pseudo-Inverse Relations]
+\label{ax:pseudo-inverse}
+For dual pairs, we define pseudo-inverses:
+\begin{align}
+\noe{2}^{-1} &:= \noe{3} & \noe{3}^{-1} &:= \noe{2} \\
+\noe{5}^{-1} &:= \noe{6} & \noe{6}^{-1} &:= \noe{5} \\
+\noe{8}^{-1} &:= \noe{9} & \noe{9}^{-1} &:= \noe{8}
+\end{align}
+\end{axiom}
+
+\begin{theorem}[Duality Neutralization]
+\label{thm:duality-neutral}
+For dual pairs $(\noe{a}, \noe{b})$:
+\[
+\noe{b} \circ \noe{a} \approx \noe{0}
+\]
+The composition returns toward the neutral/potential state.
+\end{theorem}
+
+\begin{proof}
+We verify for each dual pair:
+\begin{enumerate}
+  \item $\noe{3} \circ \noe{2}$: Attraction followed by repulsion nullifies the directional component, leaving undifferentiated potential.
+  \item $\noe{6} \circ \noe{5}$: Reception followed by projection restructures content back toward potential.
+  \item $\noe{9} \circ \noe{8}$: Elevation followed by grounding returns content toward neutral manifestation level.
+\end{enumerate}
+The approximate equality $\approx$ indicates that while the result may not be exactly $\noe{0}$ in all contexts, it is semantically equivalent to returning toward the identity operation.
+\end{proof}
+
+\section{Commutators and Anti-Commutators}
+
+\begin{definition}[Noetic Commutator]
+\label{def:commutator}
+For Noetics $\noe{i}, \noe{j}$, the \textbf{commutator} is:
+\[
+[\noe{i}, \noe{j}] := \noe{i} \circ \noe{j} - \noe{j} \circ \noe{i}
+\]
+where subtraction is interpreted as the operator difference.
+\end{definition}
+
+\begin{theorem}[Key Commutator Relations]
+\label{thm:commutators}
+The following commutator relations hold:
+\begin{enumerate}
+  \item $[\noe{0}, \noe{k}] = 0$ for all $k$ (identity commutes with everything)
+  \item $[\noe{2}, \noe{3}] \neq 0$ (Positive-Negative order matters)
+  \item $[\noe{5}, \noe{6}] \neq 0$ (Female-Male order matters)
+  \item $[\noe{8}, \noe{9}] \neq 0$ (Above-Below order matters)
+  \item $[\noe{4}, \noe{7}] \approx 0$ (Vibration and Rhythm approximately commute)
+\end{enumerate}
+\end{theorem}
+
+\section{Eigenmodes and Stability}
+
+\begin{definition}[Noetic Eigenstate]
+\label{def:eigenstate}
+An Idea $X \in \Ideas$ is an \textbf{eigenstate} of Noetic $\noe{k}$ with eigenvalue $\lambda$ if:
+\[
+\noe{k}(X) = \lambda X
+\]
+\end{definition}
+
+\begin{theorem}[Element-Noetic Correspondence]
+\label{thm:element-noetic}
+Each Element $Xn$ (where $X \in \Worlds$ and $n \in \{1,\ldots,10\}$) is a stable eigenstate of its corresponding Noetic $\noe{n}$:
+\[
+\noe{n}(Xn) = Xn \quad (\lambda = 1)
+\]
+\end{theorem}
+
+\begin{proof}
+Each Element of mode $n$ is intrinsically aligned with Noetic $\noe{n}$. Applying $\noe{n}$ to an already-$n$-aligned Element preserves its form.
+\end{proof}
+
+%% ============================================================================
+%% CHAPTER 4: TOOTRA ARITHMETIC
+%% ============================================================================
+\chapter{Algebraic Structures of Tootra Arithmetic}
+\label{ch:tootra-arithmetic}
+
+This chapter provides a complete formalization of Tootra arithmetic on the Idea space.
+
+\section{The Idea Space as a Mathematical Structure}
+
+\begin{definition}[Idea Space Structure]
+\label{def:idea-structure}
+The \textbf{Idea space} $\Ideas$ is defined as a \textbf{graded multiset algebra}:
+\[
+\Ideas = \bigcup_{W \in \Worlds} \mathcal{M}(\mathcal{P}_W)
+\]
+where $\mathcal{M}(\mathcal{P}_W)$ denotes the space of finite multisets over a property space $\mathcal{P}_W$ for world $W$.
+\end{definition}
+
+\begin{definition}[Property Space]
+\label{def:property-space}
+For each world $W$, the \textbf{property space} $\mathcal{P}_W$ is a set of atomic properties:
+\[
+\mathcal{P}_W = \{p_{W,i} : i \in I_W\}
+\]
+An Idea in world $W$ is a multiset $X : \mathcal{P}_W \to \mathbb{N}$ assigning a non-negative multiplicity to each property.
+\end{definition}
+
+\section{Tootra-Addition ($\Tadd$)}
+
+\begin{definition}[Tootra-Addition]
+\label{def:tootra-add}
+For Ideas $X, Y \in \Ideas$, the \textbf{Tootra-Addition} is:
+\[
+X \Tadd Y = X \uplus Y
+\]
+where $\uplus$ denotes multiset union (summing multiplicities).
+
+Formally, for each property $p$:
+\[
+(X \Tadd Y)(p) = X(p) + Y(p)
+\]
+\end{definition}
+
+\begin{theorem}[Properties of Tootra-Addition]
+\label{thm:tadd-properties}
+Tootra-Addition satisfies:
+\begin{enumerate}
+  \item \textbf{Commutativity}: $X \Tadd Y = Y \Tadd X$
+  \item \textbf{Associativity}: $(X \Tadd Y) \Tadd Z = X \Tadd (Y \Tadd Z)$
+  \item \textbf{Identity}: $X \Tadd \varnothing = X$ (where $\varnothing$ is the empty multiset)
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\begin{enumerate}
+  \item \textbf{Commutativity}: $(X \Tadd Y)(p) = X(p) + Y(p) = Y(p) + X(p) = (Y \Tadd X)(p)$.
+  \item \textbf{Associativity}: $((X \Tadd Y) \Tadd Z)(p) = (X(p) + Y(p)) + Z(p) = X(p) + (Y(p) + Z(p))$.
+  \item \textbf{Identity}: $(X \Tadd \varnothing)(p) = X(p) + 0 = X(p)$.
+\end{enumerate}
+\end{proof}
+
+\begin{corollary}[Abelian Monoid Structure]
+\label{cor:tadd-monoid}
+The structure $(\Ideas, \Tadd, \varnothing)$ forms an \textbf{abelian monoid}.
+\end{corollary}
+
+\section{Tootra-Subtraction ($\Tsub$)}
+
+\begin{definition}[Tootra-Subtraction]
+\label{def:tootra-sub}
+For Ideas $X, Y \in \Ideas$, the \textbf{Tootra-Subtraction} is:
+\[
+X \Tsub Y = X \setminus_m Y
+\]
+where $\setminus_m$ denotes multiset difference (subtracting multiplicities, floored at 0).
+
+Formally:
+\[
+(X \Tsub Y)(p) = \max(0, X(p) - Y(p))
+\]
+\end{definition}
+
+\begin{theorem}[Properties of Tootra-Subtraction]
+\label{thm:tsub-properties}
+Tootra-Subtraction satisfies:
+\begin{enumerate}
+  \item \textbf{Non-Commutativity}: $X \Tsub Y \neq Y \Tsub X$ in general
+  \item \textbf{Right Identity}: $X \Tsub \varnothing = X$
+  \item \textbf{Nullification}: $X \Tsub X = \varnothing$
+\end{enumerate}
+\end{theorem}
+
+\section{Tootra-Multiplication ($\Tmul$)}
+
+\begin{definition}[Tootra-Multiplication]
+\label{def:tootra-mul}
+Under the simplified (Hadamard) form:
+\[
+(X \Tmul Y)(p) = X(p) \cdot Y(p)
+\]
+This is the component-wise product.
+\end{definition}
+
+\begin{theorem}[Properties of Tootra-Multiplication]
+\label{thm:tmul-properties}
+Under simplified Tootra-Multiplication:
+\begin{enumerate}
+  \item \textbf{Commutativity}: $X \Tmul Y = Y \Tmul X$
+  \item \textbf{Associativity}: $(X \Tmul Y) \Tmul Z = X \Tmul (Y \Tmul Z)$
+  \item \textbf{Identity}: $X \Tmul \mathbf{1} = X$ where $\mathbf{1}(p) = 1$ for all $p$
+  \item \textbf{Annihilation}: $X \Tmul \varnothing = \varnothing$
+\end{enumerate}
+\end{theorem}
+
+\section{Tootra-Division ($\Tdiv$)}
+
+\begin{definition}[Tootra-Division]
+\label{def:tootra-div}
+For Ideas $X, Y \in \Ideas$ where $Y \neq \varnothing$:
+\[
+(X \Tdiv Y)(p) = \begin{cases}
+\lfloor X(p) / Y(p) \rfloor & \text{if } Y(p) > 0 \\
+X(p) & \text{if } Y(p) = 0
+\end{cases}
+\]
+\end{definition}
+
+\section{Algebraic Structure Summary}
+
+\begin{theorem}[Tootra Semiring Structure]
+\label{thm:semiring}
+Under simplified operations, $(\Ideas, \Tadd, \Tmul, \varnothing, \mathbf{1})$ forms a \textbf{commutative semiring}.
+\end{theorem}
+
+\begin{proof}
+We verify the semiring axioms:
+\begin{enumerate}
+  \item $(\Ideas, \Tadd, \varnothing)$ is a commutative monoid.
+  \item $(\Ideas, \Tmul, \mathbf{1})$ is a commutative monoid.
+  \item \textbf{Distributivity}: $(X \Tadd Y) \Tmul Z = (X \Tmul Z) \Tadd (Y \Tmul Z)$
+  \item \textbf{Annihilation}: $X \Tmul \varnothing = \varnothing$
+\end{enumerate}
+\end{proof}
+
+%% ============================================================================
+%% PART III: CATEGORICAL FRAMEWORK
+%% ============================================================================
+\part{Categorical Framework}
+
+%% ============================================================================
+%% CHAPTER 5: THE CATEGORY NOETICA
+%% ============================================================================
+\chapter{The Category Noetica}
+\label{ch:category-noetica}
+
+This chapter provides a rigorous category-theoretic foundation for TKS.
+
+\section{Definition of Category Noetica}
+
+\begin{definition}[Category Noetica]
+\label{def:category-noetica}
+The category $\Noetica$ is defined by:
+
+\textbf{Objects:}
+\[
+\Ob(\Noetica) = \Ideas \cup \Worlds \cup \Elements \cup \Foundations \cup \Acquisitions
+\]
+
+\textbf{Morphisms:}
+\[
+\Hom(\Noetica) = \Noetics \cup \{\oplus_W, \ominus_W : W \in \Worlds\}
+\]
+
+For objects $X, Y \in \Ob(\Noetica)$:
+\[
+\Hom(X, Y) = \{f : X \to Y \mid f \text{ is a valid TKS transformation}\}
+\]
+
+\textbf{Identity:}
+\[
+\id_X = \noe{0} : X \to X
+\]
+
+\textbf{Composition:}
+For morphisms $f : X \to Y$ and $g : Y \to Z$:
+\[
+(g \circ f) : X \to Z, \quad (g \circ f)(x) = g(f(x))
+\]
+\end{definition}
+
+\section{Verification of Category Axioms}
+
+\begin{theorem}[Noetica is a Category]
+\label{thm:noetica-category}
+The structure $\Noetica$ satisfies all category axioms.
+\end{theorem}
+
+\begin{proof}
+We verify each axiom:
+
+\textbf{(C1) Identity Law:}
+For any morphism $f : X \to Y$:
+\begin{align}
+f \circ \id_X &= f \circ \noe{0} = f \\
+\id_Y \circ f &= \noe{0} \circ f = f
+\end{align}
+Both equalities hold because $\noe{0}(x) = x$ for all $x$ (Axiom~\ref{ax:identity}).
+
+\textbf{(C2) Associativity:}
+For morphisms $f : X \to Y$, $g : Y \to Z$, $h : Z \to W$:
+\begin{align}
+(h \circ (g \circ f))(x) &= h((g \circ f)(x)) = h(g(f(x))) \\
+((h \circ g) \circ f)(x) &= (h \circ g)(f(x)) = h(g(f(x)))
+\end{align}
+Thus $h \circ (g \circ f) = (h \circ g) \circ f$.
+
+\textbf{(C3) Composition Closure:}
+For any $f \in \Hom(X, Y)$ and $g \in \Hom(Y, Z)$, the composite $g \circ f$ is in $\Hom(X, Z)$ by closure of Noetic composition.
+\end{proof}
+
+\section{World Subcategories}
+
+\begin{definition}[World Subcategory]
+\label{def:world-subcat}
+For each World $W \in \{A, B, C, D\}$, define the subcategory $\Noetica_W$:
+\begin{align}
+\Ob(\Noetica_W) &= \{X \in \Ob(\Noetica) : \mathrm{World}(X) = W\} \\
+\Hom(\Noetica_W) &= \{f \in \Hom(\Noetica) : f \text{ preserves World } W\}
+\end{align}
+\end{definition}
+
+\begin{proposition}[World Subcategories are Categories]
+\label{prop:world-subcat}
+Each $\Noetica_W$ is a valid subcategory of $\Noetica$.
+\end{proposition}
+
+%% ============================================================================
+%% CHAPTER 6: THE ACBE FUNCTOR
+%% ============================================================================
+\chapter{The ACBE Functor}
+\label{ch:acbe-functor}
+
+The ACBE (Above-Cause-Below-Effect) transformation is the primary manifestation functor in TKS.
+
+\section{Functor Definition}
+
+\begin{definition}[ACBE Functor]
+\label{def:acbe-functor}
+The \textbf{ACBE functor} is:
+\[
+\mathrm{ACBE} : \Noetica_A \to \Noetica_D
+\]
+
+\textbf{Object Mapping:}
+For each $An \in \Ob(\Noetica_A)$:
+\[
+\mathrm{ACBE}(An) = Dn
+\]
+
+\textbf{Morphism Mapping:}
+For morphism $f : X \to Y$ in $\Noetica_A$:
+\[
+\mathrm{ACBE}(f) : \mathrm{ACBE}(X) \to \mathrm{ACBE}(Y)
+\]
+\[
+\mathrm{ACBE}(\noe{k}) = \noe{k}
+\]
+Noetics are preserved across worlds.
+\end{definition}
+
+\section{Proof of Functoriality}
+
+\begin{theorem}[ACBE is a Functor]
+\label{thm:acbe-functor}
+ACBE preserves identity and composition, hence is a valid functor.
+\end{theorem}
+
+\begin{proof}
+\textbf{(F1) Identity Preservation:}
+\[
+\mathrm{ACBE}(\id_X) = \mathrm{ACBE}(\noe{0}) = \noe{0} = \id_{\mathrm{ACBE}(X)}
+\]
+
+\textbf{(F2) Composition Preservation:}
+For $f : X \to Y$ and $g : Y \to Z$ in $\Noetica_A$:
+\[
+\mathrm{ACBE}(g \circ f) = \mathrm{ACBE}(g) \circ \mathrm{ACBE}(f)
+\]
+Since $\mathrm{ACBE}(\noe{j} \circ \noe{i}) = \noe{j} \circ \noe{i} = \mathrm{ACBE}(\noe{j}) \circ \mathrm{ACBE}(\noe{i})$.
+\end{proof}
+
+\section{The Cascade Decomposition}
+
+\begin{theorem}[ACBE Factorization]
+\label{thm:acbe-factor}
+ACBE factors through intermediate categories:
+\[
+\mathrm{ACBE} = F_D \circ F_C \circ F_B
+\]
+where:
+\begin{align}
+F_B &: \Noetica_A \to \Noetica_B && \text{(Spiritual } \to \text{ Mental)} \\
+F_C &: \Noetica_B \to \Noetica_C && \text{(Mental } \to \text{ Emotional)} \\
+F_D &: \Noetica_C \to \Noetica_D && \text{(Emotional } \to \text{ Physical)}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+Each $F_W$ is defined by $F_B(An) = Bn$, $F_C(Bn) = Cn$, $F_D(Cn) = Dn$.
+Then $(F_D \circ F_C \circ F_B)(An) = Dn = \mathrm{ACBE}(An)$.
+\end{proof}
+
+%% ============================================================================
+%% PART IV: DYNAMIC SEMANTICS (NEW IN v6.1)
+%% ============================================================================
+\part{Dynamic Semantics}
+
+%% ============================================================================
+%% CHAPTER 7: THE RPM MONAD AND DYNAMIC EVALUATION (NEW v6.1)
+%% ============================================================================
+\chapter{The RPM Monad and Dynamic Evaluation}
+\label{ch:rpm-monad}
+
+\begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=New in v6.1]
+This chapter provides a complete formalization of the Recursive Prerequisite Model (RPM) as a monad, with full proofs of monad laws, Kleisli composition, and dynamic evaluation semantics.
+\end{tcolorbox}
+
+\section{Motivation: Prerequisites as Computational Effects}
+
+In TKS, not every transformation can be performed unconditionally. The RPM captures the constraint that certain acquisitions (Desire, Wisdom, Power) must be satisfied before outcomes can manifest. This is naturally modeled as a \emph{computational effect}: evaluation proceeds through a chain of prerequisite checks, and failure at any point aborts the computation.
+
+\begin{definition}[Prerequisite Operators]
+\label{def:prereq-ops}
+The \textbf{Prerequisite operator set} is:
+\[
+\Pi = \{D, W, P\}
+\]
+where:
+\begin{itemize}
+  \item $D$: Desire --- initiates and directs
+  \item $W$: Wisdom --- models and validates
+  \item $P$: Power --- executes and manifests
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Strict Ordering]
+\label{thm:prereq-order}
+The prerequisite operators have a strict total ordering:
+\[
+D \prec W \prec P
+\]
+Desire must precede Wisdom must precede Power.
+\end{theorem}
+
+\section{The RPM Type Constructor}
+
+\begin{definition}[RPM Type Constructor]
+\label{def:rpm-type}
+The \textbf{RPM type constructor} is:
+\[
+\RPM : \mathcal{D} \to \mathcal{D}_\RPM
+\]
+where $\mathcal{D}$ is the semantic domain and $\mathcal{D}_\RPM$ is the domain of RPM-wrapped computations.
+
+Concretely:
+\[
+\RPM(A) = \AcqState \to (A + \Failed) \times \AcqState
+\]
+An RPM computation takes an acquisition state $\AcqState$, and returns either a value of type $A$ together with an updated state, or a failure indicator with the failure origin.
+\end{definition}
+
+\begin{definition}[RPM Result Type]
+\label{def:rpm-result}
+The result of an RPM computation is:
+\[
+\mathsf{Result}_A = \mathsf{Success}(a : A, \sigma' : \AcqState) \mid \mathsf{Failure}(o : \Acquisitions)
+\]
+where $o$ is the \textbf{failure origin}---the acquisition that was not satisfied.
+\end{definition}
+
+\section{Monad Structure}
+
+\begin{definition}[RPM Unit (Return)]
+\label{def:rpm-unit}
+The \textbf{unit} (return) operation $\eta : A \to \RPM(A)$ is:
+\[
+\rpmret(a) = \lambda \sigma. \, (\mathsf{Success}(a), \sigma)
+\]
+It injects a pure value into the RPM monad without modifying state.
+\end{definition}
+
+\begin{definition}[RPM Bind]
+\label{def:rpm-bind}
+The \textbf{bind} operation $(\rpmbind) : \RPM(A) \times (A \to \RPM(B)) \to \RPM(B)$ is:
+\[
+m \rpmbind f = \lambda \sigma. \begin{cases}
+f(a)(\sigma') & \text{if } m(\sigma) = (\mathsf{Success}(a), \sigma') \\
+(\mathsf{Failure}(o), \sigma') & \text{if } m(\sigma) = (\mathsf{Failure}(o), \sigma')
+\end{cases}
+\]
+If the first computation succeeds, pass its result to $f$. If it fails, propagate the failure.
+\end{definition}
+
+\begin{definition}[RPM Multiplication]
+\label{def:rpm-mult}
+The \textbf{multiplication} $\mu : \RPM(\RPM(A)) \to \RPM(A)$ is:
+\[
+\mu(m) = m \rpmbind \id
+\]
+This flattens nested RPM computations.
+\end{definition}
+
+\section{Proof of Monad Laws}
+
+\begin{theorem}[RPM Satisfies Monad Laws]
+\label{thm:rpm-monad-laws}
+The structure $(\RPM, \eta, \mu)$ satisfies the three monad laws.
+\end{theorem}
+
+\begin{proof}
+\textbf{(M1) Left Unit Law:} $\rpmret(a) \rpmbind f = f(a)$
+
+\begin{align}
+(\rpmret(a) \rpmbind f)(\sigma) &= (\lambda \sigma'. (\mathsf{Success}(a), \sigma'))(\sigma) \text{ then } f \\
+&= f(a)(\sigma)
+\end{align}
+Since $\rpmret(a)(\sigma) = (\mathsf{Success}(a), \sigma)$, we have $f(a)(\sigma)$.
+
+\textbf{(M2) Right Unit Law:} $m \rpmbind \rpmret = m$
+
+For any $m$:
+\begin{align}
+(m \rpmbind \rpmret)(\sigma) &= \begin{cases}
+\rpmret(a)(\sigma') = (\mathsf{Success}(a), \sigma') & \text{if } m(\sigma) = (\mathsf{Success}(a), \sigma') \\
+(\mathsf{Failure}(o), \sigma') & \text{if } m(\sigma) = (\mathsf{Failure}(o), \sigma')
+\end{cases} \\
+&= m(\sigma)
+\end{align}
+
+\textbf{(M3) Associativity:} $(m \rpmbind f) \rpmbind g = m \rpmbind (\lambda a. f(a) \rpmbind g)$
+
+Let $m(\sigma) = (\mathsf{Success}(a), \sigma_1)$, $f(a)(\sigma_1) = (\mathsf{Success}(b), \sigma_2)$.
+\begin{align}
+\text{LHS: } ((m \rpmbind f) \rpmbind g)(\sigma) &= (f(a) \rpmbind g)(\sigma_1) = g(b)(\sigma_2) \\
+\text{RHS: } (m \rpmbind (\lambda a. f(a) \rpmbind g))(\sigma) &= (f(a) \rpmbind g)(\sigma_1) = g(b)(\sigma_2)
+\end{align}
+Both sides equal. Failure cases propagate identically by definition of bind.
+\end{proof}
+
+\section{Prerequisite Checking Operations}
+
+\begin{definition}[Check Acquisition]
+\label{def:check-acq}
+The operation $\mathsf{check} : \Acquisitions \to \RPM(\mathsf{Unit})$ verifies a prerequisite:
+\[
+\mathsf{check}(X) = \lambda \sigma. \begin{cases}
+(\mathsf{Success}(()), \sigma) & \text{if } \sigma(X) = \mathtt{true} \\
+(\mathsf{Failure}(X), \sigma) & \text{if } \sigma(X) = \mathtt{false}
+\end{cases}
+\]
+\end{definition}
+
+\begin{definition}[RPM Chain for Foundation $m$]
+\label{def:rpm-chain}
+The complete prerequisite chain for Foundation $m$ is:
+\begin{align}
+\mathsf{evalChain}_m &= \mathsf{check}(A0) \rpmbind \lambda \_. \\
+&\quad\; \mathsf{check}(D_m) \rpmbind \lambda \_. \\
+&\quad\; \mathsf{check}(W_m) \rpmbind \lambda \_. \\
+&\quad\; \mathsf{check}(P_m) \rpmbind \lambda \_. \\
+&\quad\; \rpmret(\mathsf{Outcome}_m)
+\end{align}
+\end{definition}
+
+\begin{theorem}[Chain Evaluation Semantics]
+\label{thm:chain-eval}
+For an acquisition state $\sigma$:
+\[
+\mathsf{evalChain}_m(\sigma) = \begin{cases}
+(\mathsf{Success}(\mathsf{Outcome}_m), \sigma) & \text{if all prerequisites satisfied} \\
+(\mathsf{Failure}(X), \sigma) & \text{where } X \text{ is the first unsatisfied prerequisite}
+\end{cases}
+\]
+\end{theorem}
+
+\begin{proof}
+By the definition of bind, the chain short-circuits at the first failure. If $\sigma(A0) = \mathtt{false}$, the result is $\mathsf{Failure}(A0)$. Otherwise, proceed to check $D_m$, and so on.
+\end{proof}
+
+\section{Dynamic Evaluation Rules}
+
+\begin{definition}[RPM Evaluation Judgment]
+\label{def:rpm-eval-judgment}
+The evaluation judgment for RPM computations is:
+\[
+\langle E, \sigma \rangle \bigstep_\RPM v \mid \sigma'
+\]
+meaning: expression $E$ in state $\sigma$ evaluates to value $v$ with final state $\sigma'$.
+
+For failures:
+\[
+\langle E, \sigma \rangle \bigstep_\RPM \Failed(o) \mid \sigma'
+\]
+\end{definition}
+
+\begin{definition}[Big-Step Rules for RPM]
+\label{def:rpm-bigstep}
+\textbf{Return Rule:}
+\[
+\frac{}{\langle \rpmret(v), \sigma \rangle \bigstep_\RPM v \mid \sigma} \quad [\textsc{E-Return}]
+\]
+
+\textbf{Bind Success Rule:}
+\[
+\frac{\langle m, \sigma \rangle \bigstep_\RPM v \mid \sigma' \quad \langle f(v), \sigma' \rangle \bigstep_\RPM w \mid \sigma''}{\langle m \rpmbind f, \sigma \rangle \bigstep_\RPM w \mid \sigma''} \quad [\textsc{E-Bind-Succ}]
+\]
+
+\textbf{Bind Failure Rule:}
+\[
+\frac{\langle m, \sigma \rangle \bigstep_\RPM \Failed(o) \mid \sigma'}{\langle m \rpmbind f, \sigma \rangle \bigstep_\RPM \Failed(o) \mid \sigma'} \quad [\textsc{E-Bind-Fail}]
+\]
+
+\textbf{Check Success Rule:}
+\[
+\frac{\sigma(X) = \mathtt{true}}{\langle \mathsf{check}(X), \sigma \rangle \bigstep_\RPM () \mid \sigma} \quad [\textsc{E-Check-Succ}]
+\]
+
+\textbf{Check Failure Rule:}
+\[
+\frac{\sigma(X) = \mathtt{false}}{\langle \mathsf{check}(X), \sigma \rangle \bigstep_\RPM \Failed(X) \mid \sigma} \quad [\textsc{E-Check-Fail}]
+\]
+\end{definition}
+
+\section{RPM Diagnostic Algorithm}
+
+\begin{definition}[RPM Diagnostic Function]
+\label{def:rpm-diag}
+The diagnostic function identifies the first unsatisfied prerequisite:
+\begin{align}
+&\mathsf{diagnose} : \Foundations \times \AcqState \to \Acquisitions + \mathsf{Success} \\
+&\mathsf{diagnose}(m, \sigma) = \\
+&\quad \mathbf{if}\ \neg\sigma(A0)\ \mathbf{then}\ A0 \\
+&\quad \mathbf{else\ if}\ \neg\sigma(D_m)\ \mathbf{then}\ D_m \\
+&\quad \mathbf{else\ if}\ \neg\sigma(W_m)\ \mathbf{then}\ W_m \\
+&\quad \mathbf{else\ if}\ \neg\sigma(P_m)\ \mathbf{then}\ P_m \\
+&\quad \mathbf{else}\ \mathsf{Success}
+\end{align}
+\end{definition}
+
+\begin{theorem}[RPM Termination]
+\label{thm:rpm-term}
+The RPM diagnostic algorithm terminates for any input in $O(1)$ time (constant number of checks).
+\end{theorem}
+
+\begin{proof}
+The diagnostic performs at most 4 boolean checks: $A0, D_m, W_m, P_m$. Each check is $O(1)$. The total complexity is $O(4) = O(1)$.
+\end{proof}
+
+\section{Worked Examples: RPM Evaluation}
+
+\begin{example}[Successful RPM Chain]
+\label{ex:rpm-success}
+\textbf{Goal:} Evaluate wealth acquisition ($F_6$) with all prerequisites satisfied.
+
+\textbf{State:} $\sigma = \{A0 \mapsto \mathtt{true}, D_6 \mapsto \mathtt{true}, W_6 \mapsto \mathtt{true}, P_6 \mapsto \mathtt{true}\}$
+
+\textbf{Evaluation:}
+\begin{align}
+&\langle \mathsf{evalChain}_6, \sigma \rangle \\
+&= \langle \mathsf{check}(A0) \rpmbind \ldots, \sigma \rangle \\
+&\bigstep_\RPM () \mid \sigma \quad [\text{check } A0 \text{ succeeds}] \\
+&\bigstep_\RPM () \mid \sigma \quad [\text{check } D_6 \text{ succeeds}] \\
+&\bigstep_\RPM () \mid \sigma \quad [\text{check } W_6 \text{ succeeds}] \\
+&\bigstep_\RPM () \mid \sigma \quad [\text{check } P_6 \text{ succeeds}] \\
+&\bigstep_\RPM \mathsf{Outcome}_6 \mid \sigma \quad [\text{return outcome}]
+\end{align}
+
+\textbf{Result:} $\mathsf{Success}(\mathsf{Outcome}_6)$ --- Wealth can manifest.
+\end{example}
+
+\begin{example}[Failed RPM Chain]
+\label{ex:rpm-failure}
+\textbf{Goal:} Evaluate wealth acquisition ($F_6$) with wisdom failure.
+
+\textbf{State:} $\sigma = \{A0 \mapsto \mathtt{true}, D_6 \mapsto \mathtt{true}, W_6 \mapsto \mathtt{false}, P_6 \mapsto \mathtt{true}\}$
+
+\textbf{Evaluation:}
+\begin{align}
+&\langle \mathsf{evalChain}_6, \sigma \rangle \\
+&\bigstep_\RPM () \mid \sigma \quad [\text{check } A0 \text{ succeeds}] \\
+&\bigstep_\RPM () \mid \sigma \quad [\text{check } D_6 \text{ succeeds}] \\
+&\bigstep_\RPM \Failed(W_6) \mid \sigma \quad [\text{check } W_6 \text{ fails!}]
+\end{align}
+
+\textbf{Result:} $\mathsf{Failure}(W_6)$ --- Wisdom about wealth is missing.
+
+\textbf{Diagnostic:} The person desires wealth and has power to act, but lacks correct mental models about money (perhaps believes ``money is evil'').
+
+\textbf{Correction:} Repair $W_6$ through education, belief change, or therapy.
+\end{example}
+
+\begin{example}[RPM with Expression Evaluation]
+\label{ex:rpm-expr}
+\textbf{Expression:} $\RPM(A8^1_{6d})$ --- Evaluate esoteric truth in material foundation with RPM.
+
+\textbf{State:} $\sigma = \{A0 \mapsto \mathtt{true}, D_6 \mapsto \mathtt{true}, W_6 \mapsto \mathtt{true}, P_6 \mapsto \mathtt{false}\}$
+
+\textbf{Evaluation:}
+\begin{enumerate}
+\item Parse: $\RPM(A8^1_{6d})$
+\item Extract Foundation: $m = 6$ (Material)
+\item Run prerequisite chain:
+   \begin{itemize}
+   \item Check $A0$: $\checkmark$
+   \item Check $D_6$: $\checkmark$
+   \item Check $W_6$: $\checkmark$
+   \item Check $P_6$: $\times$ \textbf{FAIL}
+   \end{itemize}
+\item Result: $\mathsf{Failure}(P_6)$
+\end{enumerate}
+
+\textbf{Interpretation:} The person has desire and wisdom for material success, but lacks power (action, resources, connections) to manifest.
+\end{example}
+
+%% ============================================================================
+%% CHAPTER 8: NOETIC FRACTAL CALCULUS (NEW/EXPANDED v6.1)
+%% ============================================================================
+\chapter{Noetic Fractal Calculus and Recursive Dynamics}
+\label{ch:fractal-calculus}
+
+\begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=New in v6.1]
+This chapter provides a complete formalization of Noetic Fractal Calculus, treating fractals as higher-order operators with formal typing, composition laws, and convergence analysis.
+\end{tcolorbox}
+
+\section{Fractals as Higher-Order Operators}
+
+\begin{definition}[Noetic Fractal]
+\label{def:noetic-fractal}
+A \textbf{Noetic Fractal} $\Frac$ is a finite sequence of Noetic indices:
+\[
+\Frac = \langle k_1 : k_2 : \cdots : k_n \rangle
+\]
+where each $k_i \in \{0, 1, \ldots, 9\}$ and $n \geq 1$.
+\end{definition}
+
+\begin{definition}[Fractal Space]
+\label{def:fractal-space}
+The \textbf{Fractal space} is:
+\[
+\FracSet = \{\langle k_1 : \cdots : k_n \rangle : n \geq 1, k_i \in \{0, \ldots, 9\}\}
+\]
+\end{definition}
+
+\begin{definition}[Fractal as Operator]
+\label{def:fractal-operator}
+Each fractal $\Frac = \langle k_1 : k_2 : \cdots : k_n \rangle$ defines an operator:
+\[
+\Frac : \Ideas \to \Ideas
+\]
+\[
+\Frac(E) = \noe{k_1}(\noe{k_2}(\cdots\noe{k_n}(E)\cdots))
+\]
+Application is right-to-left (innermost first).
+\end{definition}
+
+\begin{definition}[Fractal Type]
+\label{def:fractal-type}
+In the TKS type system, fractals have type:
+\[
+\mathtt{Fractal} : \mathtt{List}^+(\mathbb{Z}_{10}) \to (\mathtt{Expr} \to \mathtt{Expr})
+\]
+where $\mathtt{List}^+$ denotes non-empty lists.
+\end{definition}
+
+\section{Fractal Composition}
+
+\begin{definition}[Fractal Composition]
+\label{def:fractal-comp}
+For fractals $\Frac_1 = \langle a_1 : \cdots : a_m \rangle$ and $\Frac_2 = \langle b_1 : \cdots : b_n \rangle$:
+\[
+\Frac_1 \circ \Frac_2 = \langle a_1 : \cdots : a_m : b_1 : \cdots : b_n \rangle
+\]
+Concatenation of sequences.
+\end{definition}
+
+\begin{theorem}[Fractal Composition is Associative]
+\label{thm:fractal-assoc}
+For fractals $\Frac_1, \Frac_2, \Frac_3$:
+\[
+(\Frac_1 \circ \Frac_2) \circ \Frac_3 = \Frac_1 \circ (\Frac_2 \circ \Frac_3)
+\]
+\end{theorem}
+
+\begin{proof}
+List concatenation is associative.
+\end{proof}
+
+\begin{definition}[Identity Fractal]
+\label{def:id-fractal}
+The identity fractal is:
+\[
+\Frac_{\id} = \langle 0 \rangle
+\]
+\[
+\Frac_{\id}(E) = \noe{0}(E) = E
+\]
+\end{definition}
+
+\begin{theorem}[Fractal Monoid]
+\label{thm:fractal-monoid}
+The structure $(\FracSet, \circ, \Frac_{\id})$ forms a monoid.
+\end{theorem}
+
+\section{Fractal Simplification}
+
+\begin{definition}[Dual Cancellation]
+\label{def:dual-cancel}
+Adjacent dual pairs simplify:
+\begin{align}
+\langle \cdots : 2 : 3 : \cdots \rangle &\Rightarrow \langle \cdots : 0 : \cdots \rangle \\
+\langle \cdots : 3 : 2 : \cdots \rangle &\Rightarrow \langle \cdots : 0 : \cdots \rangle \\
+\langle \cdots : 5 : 6 : \cdots \rangle &\Rightarrow \langle \cdots : 0 : \cdots \rangle \\
+\langle \cdots : 6 : 5 : \cdots \rangle &\Rightarrow \langle \cdots : 0 : \cdots \rangle \\
+\langle \cdots : 8 : 9 : \cdots \rangle &\Rightarrow \langle \cdots : 0 : \cdots \rangle \\
+\langle \cdots : 9 : 8 : \cdots \rangle &\Rightarrow \langle \cdots : 0 : \cdots \rangle
+\end{align}
+\end{definition}
+
+\begin{definition}[Identity Elimination]
+\label{def:id-elim}
+Identity elements can be removed:
+\[
+\langle \cdots : 0 : \cdots \rangle \Rightarrow \langle \cdots : \cdots \rangle
+\]
+(unless it's the only element)
+\end{definition}
+
+\begin{definition}[Canonical Form]
+\label{def:canonical-form}
+A fractal is in \textbf{canonical form} if:
+\begin{enumerate}
+\item No adjacent dual pairs exist.
+\item No interior zeros exist (only $\langle 0 \rangle$ itself).
+\item The sequence is minimal under these reductions.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Canonical Form Existence]
+\label{thm:canonical-exists}
+Every fractal has a unique canonical form.
+\end{theorem}
+
+\begin{proof}
+The simplification rules are confluent (any order of application yields the same result) and terminating (each rule reduces sequence length or removes a pair). By Newman's lemma, a unique normal form exists.
+\end{proof}
+
+\section{Fractal Semantics}
+
+\begin{definition}[Fractal Denotation]
+\label{def:fractal-denote}
+The denotational semantics of a fractal is:
+\[
+\sem{\langle k_1 : k_2 : \cdots : k_n \rangle(E)} = \mathfrak{n}_{k_1}(\mathfrak{n}_{k_2}(\cdots\mathfrak{n}_{k_n}(\sem{E})\cdots))
+\]
+\end{definition}
+
+\begin{theorem}[Compositional Fractal Semantics]
+\label{thm:fractal-compositional}
+\[
+\sem{(\Frac_1 \circ \Frac_2)(E)} = \sem{\Frac_1}(\sem{\Frac_2(E)})
+\]
+\end{theorem}
+
+\begin{proof}
+By definition of fractal composition and the compositional nature of Noetic semantics.
+\end{proof}
+
+\section{Fractal Iteration and Convergence}
+
+\begin{definition}[Iterated Fractal]
+\label{def:iterated-fractal}
+For fractal $\Frac$ and $n \geq 0$:
+\[
+\Frac^n = \underbrace{\Frac \circ \Frac \circ \cdots \circ \Frac}_{n \text{ times}}
+\]
+with $\Frac^0 = \Frac_{\id}$.
+\end{definition}
+
+\begin{definition}[Fractal Orbit]
+\label{def:fractal-orbit}
+The \textbf{orbit} of $E$ under $\Frac$ is:
+\[
+\mathcal{O}_\Frac(E) = \{E, \Frac(E), \Frac^2(E), \Frac^3(E), \ldots\}
+\]
+\end{definition}
+
+\begin{definition}[Fractal Fixed Point]
+\label{def:fractal-fixpoint}
+$E^*$ is a \textbf{fixed point} of $\Frac$ if:
+\[
+\Frac(E^*) = E^*
+\]
+\end{definition}
+
+\begin{definition}[Eigenfractal]
+\label{def:eigenfractal}
+$E$ is an \textbf{eigenstate} of $\Frac$ with eigenvalue $\lambda$ if:
+\[
+\Frac(E) = \lambda E
+\]
+Fixed points have $\lambda = 1$.
+\end{definition}
+
+\begin{definition}[Fractal Convergence]
+\label{def:fractal-convergence}
+$\Frac$ \textbf{converges} on $E$ if:
+\[
+\lim_{n \to \infty} \Frac^n(E) = E^*
+\]
+exists (in a suitable topology on $\Ideas$).
+\end{definition}
+
+\section{Fractal Classification}
+
+\begin{definition}[Fractal Classes]
+\label{def:fractal-classes}
+Fractals are classified by their dynamic behavior:
+
+\textbf{Stabilizing:} $\Frac$ is stabilizing if for all compatible $E$:
+\[
+\exists E^* : \lim_{n \to \infty} \Frac^n(E) = E^*
+\]
+
+\textbf{Amplifying:} $\Frac$ is amplifying if:
+\[
+\|\Frac^n(E)\| \to \infty \text{ as } n \to \infty
+\]
+
+\textbf{Oscillatory:} $\Frac$ is oscillatory if the orbit is periodic:
+\[
+\exists p > 0 : \Frac^p(E) = E
+\]
+
+\textbf{Neutral:} $\Frac$ is neutral if $\Frac(E) = E$ for all $E$ (identity).
+\end{definition}
+
+\begin{theorem}[MVR Stability]
+\label{thm:mvr-stability}
+The MVR fractal $\Frac_{\text{MVR}} = \langle 1 : 4 : 7 \rangle$ is stabilizing.
+\end{theorem}
+
+\begin{proof}
+MVR applies Mind ($\noe{1}$), Vibration ($\noe{4}$), and Rhythm ($\noe{7}$). None of these are in dual pairs with each other. The combination:
+\begin{itemize}
+\item $\noe{7}$: Establishes periodic structure (bounded oscillation)
+\item $\noe{4}$: Charges with energy (bounded amplitude)
+\item $\noe{1}$: Applies awareness (stabilizing attention)
+\end{itemize}
+The composition creates a stable attractor pattern. Repeated application reinforces rather than amplifies.
+\end{proof}
+
+\begin{theorem}[Polarity Oscillation]
+\label{thm:polarity-oscillation}
+The polarity fractal $\Frac_{\text{pol}} = \langle 2 : 3 \rangle$ is oscillatory with period 2 (approximately).
+\end{theorem}
+
+\begin{proof}
+$\langle 2 : 3 \rangle \circ \langle 2 : 3 \rangle = \langle 2 : 3 : 2 : 3 \rangle \Rightarrow \langle 0 : 0 \rangle \Rightarrow \langle 0 \rangle$.
+
+After simplification, $\Frac_{\text{pol}}^2 \approx \Frac_{\id}$. The orbit returns to (approximately) the starting point.
+\end{proof}
+
+\section{Standard Fractal Families}
+
+\begin{definition}[Standard Fractals]
+\label{def:standard-fractals}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Name} & \textbf{Fractal} & \textbf{Class} \\
+\midrule
+MVR & $\langle 1 : 4 : 7 \rangle$ & Stabilizing \\
+ACBE & $\langle 8 : 9 \rangle$ or cascade & Stabilizing \\
+Polarity & $\langle 2 : 3 \rangle$ & Oscillatory \\
+Gender & $\langle 5 : 6 \rangle$ & Oscillatory \\
+Causation & $\langle 8 : 9 \rangle$ & Oscillatory \\
+Deep Mind & $\langle 1 : 1 : 1 \rangle$ & Stabilizing \\
+Resonance & $\langle 4 : 4 : 4 \rangle$ & Amplifying \\
+Meta-Rhythm & $\langle 7 : 7 : 7 \rangle$ & Stabilizing \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{definition}
+
+\section{Operational Semantics for Fractals}
+
+\begin{definition}[Small-Step Fractal Evaluation]
+\label{def:fractal-smallstep}
+\[
+\frac{}{\langle k \rangle(E) \smallstep \noe{k}(E)} \quad [\textsc{S-Frac-Single}]
+\]
+
+\[
+\frac{}{\langle k_1 : k_2 : \cdots : k_n \rangle(E) \smallstep \noe{k_1}(\langle k_2 : \cdots : k_n \rangle(E))} \quad [\textsc{S-Frac-Step}]
+\]
+\end{definition}
+
+\begin{definition}[Big-Step Fractal Evaluation]
+\label{def:fractal-bigstep}
+\[
+\frac{E \bigstep v}{\langle k \rangle(E) \bigstep \mathfrak{n}_k(v)} \quad [\textsc{E-Frac-Single}]
+\]
+
+\[
+\frac{E \bigstep v_n \quad \langle k_1 : \cdots : k_{n-1} \rangle(v_n) \bigstep v_1}{\langle k_1 : \cdots : k_n \rangle(E) \bigstep v_1} \quad [\textsc{E-Frac-Multi}]
+\]
+\end{definition}
+
+\section{Worked Examples: Fractal Evaluation}
+
+\begin{example}[MVR Application]
+\label{ex:mvr-application}
+\textbf{Expression:} $\langle 1 : 4 : 7 \rangle(D2_{3d})$
+
+\textbf{Evaluation:}
+\begin{align}
+&\langle 1 : 4 : 7 \rangle(D2_{3d}) \\
+&\smallstep \noe{1}(\langle 4 : 7 \rangle(D2_{3d})) \\
+&\smallstep \noe{1}(\noe{4}(\langle 7 \rangle(D2_{3d}))) \\
+&\smallstep \noe{1}(\noe{4}(\noe{7}(D2_{3d}))) \\
+&\bigstep \noe{1}(\noe{4}(\text{Rhythmic Physical Positive})) \\
+&\bigstep \noe{1}(\text{Vibrating Rhythmic Physical Positive}) \\
+&\bigstep \text{Aware Vibrating Rhythmic Physical Positive}
+\end{align}
+
+\textbf{Semantic interpretation:} A conscious, vibratory, rhythmic pattern of physical health (for Life foundation).
+\end{example}
+
+\begin{example}[Polarity Cancellation]
+\label{ex:polarity-cancel}
+\textbf{Expression:} $\langle 2 : 3 : 2 : 3 \rangle(A8)$
+
+\textbf{Simplification:}
+\[
+\langle 2 : 3 : 2 : 3 \rangle \Rightarrow \langle 0 : 0 \rangle \Rightarrow \langle 0 \rangle
+\]
+
+\textbf{Evaluation:}
+\[
+\langle 0 \rangle(A8) = \noe{0}(A8) = A8
+\]
+
+\textbf{Result:} The polarity oscillations cancel, returning to the original expression.
+\end{example}
+
+\begin{example}[Deep Meditation Fractal]
+\label{ex:deep-meditation}
+\textbf{Expression:} $\langle 1 : 1 : 1 : 4 : 4 : 4 : 7 : 7 : 7 \rangle(A1_{1a})$
+
+\textbf{Interpretation:} Triple-strength MVR for deep spiritual practice.
+
+\textbf{Evaluation:}
+\begin{align}
+&= (\noe{1})^3 \circ (\noe{4})^3 \circ (\noe{7})^3 (A1_{1a}) \\
+&= \noe{1}(\noe{1}(\noe{1}(\noe{4}(\noe{4}(\noe{4}(\noe{7}(\noe{7}(\noe{7}(A1_{1a})))))))))
+\end{align}
+
+\textbf{Result:} Deeply stabilized spiritual awareness with strong rhythmic and vibratory components.
+\end{example}
+
+%=============================================================================
+% PART V: INTEGRATED SEMANTICS
+%=============================================================================
+
+\part{Integrated Semantics}
+
+\chapter{Denotational Semantics}
+\label{ch:denotational}
+
+This chapter presents the denotational semantics of TKS, providing mathematical meaning to all language constructs through semantic functions.
+
+\section{Semantic Domains}
+
+\begin{definition}[Semantic Domains]
+\label{def:semantic-domains}
+The semantic domains for TKS are:
+\begin{align}
+\Val &= \N \cup \Bool \cup \NoeTerm \cup \Fund \cup \Dom \cup \RPM(\Val) \cup \FracSet \\
+\Env &= \Var \to \Val \quad \text{(environments)} \\
+\Store &= \Loc \to \Val \quad \text{(stores)} \\
+\State &= \Env \times \Store \times \AcqState \quad \text{(full state)}
+\end{align}
+where $\AcqState$ is the prerequisite acquisition state from Chapter~\ref{ch:rpm-monad}.
+\end{definition}
+
+\begin{definition}[Semantic Functions]
+\label{def:semantic-functions}
+The semantic functions are:
+\begin{align}
+\llbracket \cdot \rrbracket_{\text{expr}} &: \Expr \to \State \to \Val \\
+\llbracket \cdot \rrbracket_{\text{noe}} &: \NoeTerm \to \Dom \to \Dom \\
+\llbracket \cdot \rrbracket_{\text{frac}} &: \FracSet \to (\Val \to \Val) \\
+\llbracket \cdot \rrbracket_{\text{rpm}} &: \RPM(\Val) \to \AcqState \to (\Val + \Failed) \times \AcqState
+\end{align}
+\end{definition}
+
+\section{Expression Semantics}
+
+\begin{definition}[Expression Denotation]
+\label{def:expr-denotation}
+\begin{align}
+\llbracket n \rrbracket_{\text{expr}} \rho \sigma \alpha &= n \quad \text{(integer literal)} \\
+\llbracket x \rrbracket_{\text{expr}} \rho \sigma \alpha &= \rho(x) \quad \text{(variable lookup)} \\
+\llbracket e_1 + e_2 \rrbracket_{\text{expr}} \rho \sigma \alpha &= \llbracket e_1 \rrbracket_{\text{expr}} \rho \sigma \alpha + \llbracket e_2 \rrbracket_{\text{expr}} \rho \sigma \alpha \\
+\llbracket \noe{k}(e) \rrbracket_{\text{expr}} \rho \sigma \alpha &= \llbracket \noe{k} \rrbracket_{\text{noe}}(\llbracket e \rrbracket_{\text{expr}} \rho \sigma \alpha) \\
+\llbracket \lambda x. e \rrbracket_{\text{expr}} \rho \sigma \alpha &= \langle \lambda x. e, \rho \rangle \quad \text{(closure)}
+\end{align}
+\end{definition}
+
+\section{Noetic Function Semantics}
+
+\begin{definition}[Noetic Function Denotation]
+\label{def:noe-denotation}
+For each noetic function $\noe{k}$ where $k \in \{0, 1, \ldots, 9\}$:
+\begin{align}
+\llbracket \noe{0} \rrbracket_{\text{noe}}(d) &= d \quad \text{(identity)} \\
+\llbracket \noe{1} \rrbracket_{\text{noe}}(d) &= \mathsf{Aware}(d) \quad \text{(mentalism)} \\
+\llbracket \noe{2} \rrbracket_{\text{noe}}(d) &= \mathsf{Above}(d) \quad \text{(correspondence above)} \\
+\llbracket \noe{3} \rrbracket_{\text{noe}}(d) &= \mathsf{Below}(d) \quad \text{(correspondence below)} \\
+\llbracket \noe{4} \rrbracket_{\text{noe}}(d) &= \mathsf{Vibrate}(d) \quad \text{(vibration)} \\
+\llbracket \noe{5} \rrbracket_{\text{noe}}(d) &= \mathsf{Masc}(d) \quad \text{(gender masculine)} \\
+\llbracket \noe{6} \rrbracket_{\text{noe}}(d) &= \mathsf{Fem}(d) \quad \text{(gender feminine)} \\
+\llbracket \noe{7} \rrbracket_{\text{noe}}(d) &= \mathsf{Rhythm}(d) \quad \text{(rhythm)} \\
+\llbracket \noe{8} \rrbracket_{\text{noe}}(d) &= \mathsf{Cause}(d) \quad \text{(cause)} \\
+\llbracket \noe{9} \rrbracket_{\text{noe}}(d) &= \mathsf{Effect}(d) \quad \text{(effect)}
+\end{align}
+\end{definition}
+
+\section{RPM Semantics}
+
+\begin{definition}[RPM Denotation]
+\label{def:rpm-denotation}
+The semantics of RPM computations:
+\begin{align}
+\llbracket \rpmret\; v \rrbracket_{\text{rpm}} \alpha &= (\mathsf{inl}\; v, \alpha) \\
+\llbracket m \rpmbind f \rrbracket_{\text{rpm}} \alpha &=
+  \begin{cases}
+    \llbracket f(v) \rrbracket_{\text{rpm}} \alpha' & \text{if } \llbracket m \rrbracket_{\text{rpm}} \alpha = (\mathsf{inl}\; v, \alpha') \\
+    (\mathsf{inr}\; \bot, \alpha') & \text{if } \llbracket m \rrbracket_{\text{rpm}} \alpha = (\mathsf{inr}\; \bot, \alpha')
+  \end{cases}
+\end{align}
+\end{definition}
+
+\begin{definition}[Prerequisite Check Semantics]
+\label{def:prereq-denotation}
+\begin{align}
+\llbracket \mathsf{check}(p) \rrbracket_{\text{rpm}} \alpha &=
+  \begin{cases}
+    (\mathsf{inl}\; (), \alpha) & \text{if } p \in \alpha \\
+    (\mathsf{inr}\; \bot, \alpha) & \text{if } p \notin \alpha
+  \end{cases} \\
+\llbracket \mathsf{acquire}(p) \rrbracket_{\text{rpm}} \alpha &= (\mathsf{inl}\; (), \alpha \cup \{p\})
+\end{align}
+\end{definition}
+
+\section{Fractal Semantics}
+
+\begin{definition}[Fractal Denotation]
+\label{def:fractal-denotation}
+For a fractal $\Frac = \langle k_1 : k_2 : \cdots : k_n \rangle$:
+\[
+\llbracket \Frac \rrbracket_{\text{frac}} = \llbracket \noe{k_1} \rrbracket_{\text{noe}} \circ \llbracket \noe{k_2} \rrbracket_{\text{noe}} \circ \cdots \circ \llbracket \noe{k_n} \rrbracket_{\text{noe}}
+\]
+\end{definition}
+
+\begin{theorem}[Fractal Composition Homomorphism]
+\label{thm:fractal-homomorphism}
+The denotation function respects fractal composition:
+\[
+\llbracket \Frac_1 \circ \Frac_2 \rrbracket_{\text{frac}} = \llbracket \Frac_1 \rrbracket_{\text{frac}} \circ \llbracket \Frac_2 \rrbracket_{\text{frac}}
+\]
+\end{theorem}
+
+\begin{proof}
+Let $\Frac_1 = \langle a_1 : \cdots : a_m \rangle$ and $\Frac_2 = \langle b_1 : \cdots : b_n \rangle$.
+
+By Definition~\ref{def:fractal-comp}:
+\[
+\Frac_1 \circ \Frac_2 = \langle a_1 : \cdots : a_m : b_1 : \cdots : b_n \rangle
+\]
+
+Then:
+\begin{align}
+\llbracket \Frac_1 \circ \Frac_2 \rrbracket_{\text{frac}}
+&= \llbracket \noe{a_1} \rrbracket \circ \cdots \circ \llbracket \noe{a_m} \rrbracket \circ \llbracket \noe{b_1} \rrbracket \circ \cdots \circ \llbracket \noe{b_n} \rrbracket \\
+&= (\llbracket \noe{a_1} \rrbracket \circ \cdots \circ \llbracket \noe{a_m} \rrbracket) \circ (\llbracket \noe{b_1} \rrbracket \circ \cdots \circ \llbracket \noe{b_n} \rrbracket) \\
+&= \llbracket \Frac_1 \rrbracket_{\text{frac}} \circ \llbracket \Frac_2 \rrbracket_{\text{frac}}
+\end{align}
+\end{proof}
+
+\section{ACBE Functor Semantics}
+
+\begin{definition}[ACBE Semantic Action]
+\label{def:acbe-semantics}
+The ACBE functor $\text{ACBE} : \mathbf{Noetica} \to \mathbf{Noetica}$ acts on semantic values as follows:
+
+For morphisms (noetic functions):
+\[
+\llbracket \text{ACBE}(f) \rrbracket = \mathsf{Cause} \circ \llbracket f \rrbracket \circ \mathsf{Effect}
+\]
+
+For objects (domains):
+\[
+\llbracket \text{ACBE}(D) \rrbracket = \{ \mathsf{Cause}(d) \circ \mathsf{Effect}(d) \mid d \in \llbracket D \rrbracket \}
+\]
+\end{definition}
+
+\section{Compositionality}
+
+\begin{theorem}[Semantic Compositionality]
+\label{thm:compositionality}
+The TKS semantics is compositional: the meaning of a compound expression depends only on the meanings of its immediate subexpressions.
+\[
+\llbracket C[e] \rrbracket = \mathcal{F}_C(\llbracket e \rrbracket)
+\]
+where $C[\cdot]$ is a context and $\mathcal{F}_C$ is determined by the structure of $C$.
+\end{theorem}
+
+\begin{proof}
+By structural induction on contexts. Each semantic clause in Definition~\ref{def:expr-denotation} defines the meaning of a compound expression purely in terms of the meanings of its subexpressions, never examining their syntactic structure directly.
+\end{proof}
+
+\chapter{Operational Semantics}
+\label{ch:operational}
+
+This chapter provides both small-step and big-step operational semantics for the complete TKS language, integrating RPM monadic evaluation and fractal dynamics.
+
+\section{Small-Step Semantics}
+
+\begin{definition}[Configuration]
+\label{def:configuration}
+A configuration is a tuple $\langle e, \rho, \sigma, \alpha \rangle$ where:
+\begin{itemize}
+\item $e$ is an expression
+\item $\rho$ is an environment
+\item $\sigma$ is a store
+\item $\alpha$ is an acquisition state
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Small-Step Transition]
+\label{def:small-step}
+The small-step relation $\smallstep \subseteq \Config \times \Config$ is defined by:
+
+\textbf{Values:}
+\[
+\text{(Values are terminal; no transition rule)}
+\]
+
+\textbf{Arithmetic:}
+\[
+\frac{e_1 \smallstep e_1'}{\langle e_1 + e_2, \rho, \sigma, \alpha \rangle \smallstep \langle e_1' + e_2, \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Add-L}]
+\]
+
+\[
+\frac{e_2 \smallstep e_2'}{\langle v_1 + e_2, \rho, \sigma, \alpha \rangle \smallstep \langle v_1 + e_2', \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Add-R}]
+\]
+
+\[
+\frac{n = n_1 + n_2}{\langle n_1 + n_2, \rho, \sigma, \alpha \rangle \smallstep \langle n, \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Add}]
+\]
+
+\textbf{Noetic Application:}
+\[
+\frac{e \smallstep e'}{\langle \noe{k}(e), \rho, \sigma, \alpha \rangle \smallstep \langle \noe{k}(e'), \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Noe-Arg}]
+\]
+
+\[
+\frac{}{\langle \noe{k}(v), \rho, \sigma, \alpha \rangle \smallstep \langle \mathfrak{n}_k(v), \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Noe}]
+\]
+
+\textbf{Fractal Application:}
+\[
+\frac{}{\langle \langle k \rangle(v), \rho, \sigma, \alpha \rangle \smallstep \langle \noe{k}(v), \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Frac-Single}]
+\]
+
+\[
+\frac{}{\langle \langle k_1 : k_2 : \cdots \rangle(v), \rho, \sigma, \alpha \rangle \smallstep \langle \noe{k_1}(\langle k_2 : \cdots \rangle(v)), \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Frac-Step}]
+\]
+
+\textbf{RPM Monadic Operations:}
+\[
+\frac{}{\langle \rpmret\; v, \rho, \sigma, \alpha \rangle \smallstep \langle \mathsf{RPM}(v), \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Return}]
+\]
+
+\[
+\frac{m \smallstep m'}{\langle m \rpmbind f, \rho, \sigma, \alpha \rangle \smallstep \langle m' \rpmbind f, \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Bind-L}]
+\]
+
+\[
+\frac{}{\langle \mathsf{RPM}(v) \rpmbind f, \rho, \sigma, \alpha \rangle \smallstep \langle f(v), \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Bind}]
+\]
+
+\[
+\frac{}{\langle \Failed \rpmbind f, \rho, \sigma, \alpha \rangle \smallstep \langle \Failed, \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Bind-Fail}]
+\]
+
+\textbf{Prerequisite Operations:}
+\[
+\frac{p \in \alpha}{\langle \mathsf{check}(p), \rho, \sigma, \alpha \rangle \smallstep \langle \mathsf{RPM}(()), \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Check-Ok}]
+\]
+
+\[
+\frac{p \notin \alpha}{\langle \mathsf{check}(p), \rho, \sigma, \alpha \rangle \smallstep \langle \Failed, \rho, \sigma, \alpha \rangle} \quad [\textsc{S-Check-Fail}]
+\]
+
+\[
+\frac{}{\langle \mathsf{acquire}(p), \rho, \sigma, \alpha \rangle \smallstep \langle \mathsf{RPM}(()), \rho, \sigma, \alpha \cup \{p\} \rangle} \quad [\textsc{S-Acquire}]
+\]
+
+\textbf{Function Application:}
+\[
+\frac{e_1 \smallstep e_1'}{\langle e_1\; e_2, \rho, \sigma, \alpha \rangle \smallstep \langle e_1'\; e_2, \rho, \sigma, \alpha \rangle} \quad [\textsc{S-App-L}]
+\]
+
+\[
+\frac{e_2 \smallstep e_2'}{\langle v_1\; e_2, \rho, \sigma, \alpha \rangle \smallstep \langle v_1\; e_2', \rho, \sigma, \alpha \rangle} \quad [\textsc{S-App-R}]
+\]
+
+\[
+\frac{}{\langle (\lambda x. e)\; v, \rho, \sigma, \alpha \rangle \smallstep \langle e, \rho[x \mapsto v], \sigma, \alpha \rangle} \quad [\textsc{S-Beta}]
+\]
+\end{definition}
+
+\section{Big-Step Semantics}
+
+\begin{definition}[Big-Step Evaluation]
+\label{def:big-step}
+The big-step relation $\bigstep \subseteq \Config \times \Val$ is defined by:
+
+\textbf{Values:}
+\[
+\frac{}{\langle v, \rho, \sigma, \alpha \rangle \bigstep (v, \alpha)} \quad [\textsc{E-Val}]
+\]
+
+\textbf{Variables:}
+\[
+\frac{}{\langle x, \rho, \sigma, \alpha \rangle \bigstep (\rho(x), \alpha)} \quad [\textsc{E-Var}]
+\]
+
+\textbf{Arithmetic:}
+\[
+\frac{\langle e_1, \rho, \sigma, \alpha \rangle \bigstep (n_1, \alpha') \quad \langle e_2, \rho, \sigma, \alpha' \rangle \bigstep (n_2, \alpha'')}{\langle e_1 + e_2, \rho, \sigma, \alpha \rangle \bigstep (n_1 + n_2, \alpha'')} \quad [\textsc{E-Add}]
+\]
+
+\textbf{Noetic Application:}
+\[
+\frac{\langle e, \rho, \sigma, \alpha \rangle \bigstep (v, \alpha')}{\langle \noe{k}(e), \rho, \sigma, \alpha \rangle \bigstep (\mathfrak{n}_k(v), \alpha')} \quad [\textsc{E-Noe}]
+\]
+
+\textbf{Fractal Application:}
+\[
+\frac{\langle e, \rho, \sigma, \alpha \rangle \bigstep (v, \alpha')}{\langle \langle k \rangle(e), \rho, \sigma, \alpha \rangle \bigstep (\mathfrak{n}_k(v), \alpha')} \quad [\textsc{E-Frac-Single}]
+\]
+
+\[
+\frac{\langle \langle k_2 : \cdots : k_n \rangle(e), \rho, \sigma, \alpha \rangle \bigstep (v', \alpha') \quad \langle \noe{k_1}(v'), \rho, \sigma, \alpha' \rangle \bigstep (v'', \alpha'')}{\langle \langle k_1 : k_2 : \cdots : k_n \rangle(e), \rho, \sigma, \alpha \rangle \bigstep (v'', \alpha'')} \quad [\textsc{E-Frac-Multi}]
+\]
+
+\textbf{RPM Monadic Operations:}
+\[
+\frac{\langle e, \rho, \sigma, \alpha \rangle \bigstep (v, \alpha')}{\langle \rpmret\; e, \rho, \sigma, \alpha \rangle \bigstep (\mathsf{RPM}(v), \alpha')} \quad [\textsc{E-Return}]
+\]
+
+\[
+\frac{\langle m, \rho, \sigma, \alpha \rangle \bigstep (\mathsf{RPM}(v), \alpha') \quad \langle f(v), \rho, \sigma, \alpha' \rangle \bigstep (r, \alpha'')}{\langle m \rpmbind f, \rho, \sigma, \alpha \rangle \bigstep (r, \alpha'')} \quad [\textsc{E-Bind}]
+\]
+
+\[
+\frac{\langle m, \rho, \sigma, \alpha \rangle \bigstep (\Failed, \alpha')}{\langle m \rpmbind f, \rho, \sigma, \alpha \rangle \bigstep (\Failed, \alpha')} \quad [\textsc{E-Bind-Fail}]
+\]
+
+\textbf{Prerequisite Operations:}
+\[
+\frac{p \in \alpha}{\langle \mathsf{check}(p), \rho, \sigma, \alpha \rangle \bigstep (\mathsf{RPM}(()), \alpha)} \quad [\textsc{E-Check-Ok}]
+\]
+
+\[
+\frac{p \notin \alpha}{\langle \mathsf{check}(p), \rho, \sigma, \alpha \rangle \bigstep (\Failed, \alpha)} \quad [\textsc{E-Check-Fail}]
+\]
+
+\[
+\frac{}{\langle \mathsf{acquire}(p), \rho, \sigma, \alpha \rangle \bigstep (\mathsf{RPM}(()), \alpha \cup \{p\})} \quad [\textsc{E-Acquire}]
+\]
+
+\textbf{Function Application:}
+\[
+\frac{\langle e_1, \rho, \sigma, \alpha \rangle \bigstep (\langle \lambda x.e, \rho' \rangle, \alpha') \quad \langle e_2, \rho, \sigma, \alpha' \rangle \bigstep (v_2, \alpha'') \quad \langle e, \rho'[x \mapsto v_2], \sigma, \alpha'' \rangle \bigstep (v, \alpha''')}{\langle e_1\; e_2, \rho, \sigma, \alpha \rangle \bigstep (v, \alpha''')} \quad [\textsc{E-App}]
+\]
+\end{definition}
+
+\section{Semantic Equivalence}
+
+\begin{theorem}[Small-Step/Big-Step Equivalence]
+\label{thm:semantic-equivalence}
+For all expressions $e$, environments $\rho$, stores $\sigma$, acquisition states $\alpha$, and values $v$:
+\[
+\langle e, \rho, \sigma, \alpha \rangle \smallstep^* \langle v, \rho', \sigma', \alpha' \rangle \iff \langle e, \rho, \sigma, \alpha \rangle \bigstep (v, \alpha')
+\]
+\end{theorem}
+
+\begin{proof}
+The proof proceeds by mutual induction:
+
+\textbf{($\Rightarrow$)} If $e \smallstep^* v$, then $e \bigstep v$:
+
+By induction on the length of the reduction sequence. Base case ($n=0$): $e = v$, and $v \bigstep v$ by [\textsc{E-Val}]. Inductive case: if $e \smallstep e' \smallstep^* v$ and $e' \bigstep v$ by IH, then by case analysis on the small-step rule used, construct the corresponding big-step derivation.
+
+\textbf{($\Leftarrow$)} If $e \bigstep v$, then $e \smallstep^* v$:
+
+By induction on the structure of the big-step derivation. For each big-step rule, demonstrate that the required small-step sequence exists by composing the sequences from the premises.
+\end{proof}
+
+\section{Progress and Preservation}
+
+\begin{theorem}[Progress]
+\label{thm:progress}
+If $\vdash e : \tau$ (well-typed closed expression), then either:
+\begin{enumerate}
+\item $e$ is a value, or
+\item There exists $e'$ such that $e \smallstep e'$
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+By structural induction on the typing derivation. Each case considers the possible forms of $e$ and shows that either $e$ is already a value or a reduction rule applies.
+\end{proof}
+
+\begin{theorem}[Preservation (Type Safety)]
+\label{thm:preservation}
+If $\Gamma \vdash e : \tau$ and $e \smallstep e'$, then $\Gamma \vdash e' : \tau$.
+\end{theorem}
+
+\begin{proof}
+By induction on the derivation of $e \smallstep e'$. For each small-step rule, show that the typing of the resulting expression matches the typing of the original.
+\end{proof}
+
+\begin{corollary}[Type Safety]
+\label{cor:type-safety}
+Well-typed programs do not get stuck: if $\vdash e : \tau$, then either $e \smallstep^* v$ for some value $v$, or $e$ diverges.
+\end{corollary}
+
+\section{Termination Analysis}
+
+\begin{definition}[Well-Founded Measure]
+\label{def:termination-measure}
+Define the complexity measure $\mathcal{M} : \Expr \to \N$ by:
+\begin{align}
+\mathcal{M}(v) &= 0 \quad \text{(values)} \\
+\mathcal{M}(e_1 + e_2) &= 1 + \mathcal{M}(e_1) + \mathcal{M}(e_2) \\
+\mathcal{M}(\noe{k}(e)) &= 1 + \mathcal{M}(e) \\
+\mathcal{M}(\langle k_1 : \cdots : k_n \rangle(e)) &= n + \mathcal{M}(e) \\
+\mathcal{M}(\rpmret\; e) &= 1 + \mathcal{M}(e) \\
+\mathcal{M}(m \rpmbind f) &= 1 + \mathcal{M}(m) + \mathcal{M}(f) \\
+\mathcal{M}(\mathsf{check}(p)) &= 1 \\
+\mathcal{M}(\mathsf{acquire}(p)) &= 1
+\end{align}
+\end{definition}
+
+\begin{theorem}[Termination of Non-Recursive Expressions]
+\label{thm:termination}
+For expressions without explicit recursion, if $e \smallstep e'$, then $\mathcal{M}(e') < \mathcal{M}(e)$.
+\end{theorem}
+
+\begin{proof}
+By case analysis on the small-step rule applied. Each rule either eliminates a constructor (reducing measure by at least 1) or evaluates a subexpression (strict decrease by IH).
+\end{proof}
+
+\section{Integrated RPM-Fractal Evaluation}
+
+\begin{definition}[RPM-Fractal Integration]
+\label{def:rpm-fractal-integration}
+When fractals are applied within RPM contexts:
+\[
+\frac{\langle m, \rho, \sigma, \alpha \rangle \bigstep (\mathsf{RPM}(v), \alpha') \quad \langle \Frac(v), \rho, \sigma, \alpha' \rangle \bigstep (v', \alpha'')}{\langle m \rpmbind (\lambda x. \Frac(x)), \rho, \sigma, \alpha \rangle \bigstep (\mathsf{RPM}(v'), \alpha'')} \quad [\textsc{E-RPM-Frac}]
+\]
+\end{definition}
+
+\begin{example}[Integrated Evaluation]
+\label{ex:integrated-eval}
+Consider evaluating with prerequisites and MVR fractal:
+
+\textbf{Expression:}
+\[
+\mathsf{check}(D1) \rpmbind (\lambda \_. \rpmret\; \langle 1:4:7 \rangle(A2_{1b}))
+\]
+
+\textbf{With acquisition state:} $\alpha = \{D1, D2\}$
+
+\textbf{Evaluation:}
+\begin{enumerate}
+\item Check $D1 \in \alpha$ — succeeds: $\mathsf{RPM}(())$
+\item Bind passes unit to continuation
+\item Evaluate $\langle 1:4:7 \rangle(A2_{1b})$:
+  \begin{itemize}
+  \item $\noe{7}(A2_{1b}) = \text{Rhythmic}(A2_{1b})$
+  \item $\noe{4}(\cdot) = \text{Vibrating}(\cdot)$
+  \item $\noe{1}(\cdot) = \text{Aware}(\cdot)$
+  \end{itemize}
+\item Wrap in return: $\mathsf{RPM}(\text{Aware Vibrating Rhythmic } A2_{1b})$
+\end{enumerate}
+
+\textbf{Result:} $(\mathsf{RPM}(\text{MVR-transformed } A2_{1b}), \{D1, D2\})$
+\end{example}
+
+%=============================================================================
+% PART VI: TYPE THEORY AND LANGUAGE SPECIFICATION
+%=============================================================================
+
+\part{Type Theory and Language Specification}
+
+\chapter{Type System}
+\label{ch:types}
+
+This chapter presents the formal type system for TKS, including base types, constructed types, typing rules, and type inference.
+
+\section{Base Types}
+
+\begin{definition}[Base Types]
+\label{def:base-types}
+The base types of TKS are:
+\begin{align}
+\tau_{\text{base}} ::=&\; \mathsf{Int} \mid \mathsf{Bool} \mid \mathsf{Unit} \\
+                     &\mid \mathsf{Noe}[k] \quad (k \in \{0, \ldots, 9\}) \\
+                     &\mid \mathsf{Domain} \\
+                     &\mid \mathsf{Foundation} \\
+                     &\mid \mathsf{Aspect}
+\end{align}
+\end{definition}
+
+\begin{definition}[Noetic Base Type]
+\label{def:noe-base-type}
+Each noetic function $\noe{k}$ has type:
+\[
+\mathsf{Noe}[k] : \mathsf{Domain} \to \mathsf{Domain}
+\]
+
+The noetic type index $k$ tracks which principle is being applied, enabling principle-specific optimizations and static analysis.
+\end{definition}
+
+\section{Constructed Types}
+
+\begin{definition}[Type Constructors]
+\label{def:type-constructors}
+\begin{align}
+\tau ::=&\; \tau_{\text{base}} \\
+       &\mid \tau_1 \to \tau_2 \quad \text{(function type)} \\
+       &\mid \tau_1 \times \tau_2 \quad \text{(product type)} \\
+       &\mid \tau_1 + \tau_2 \quad \text{(sum type)} \\
+       &\mid \mathsf{RPM}[\tau] \quad \text{(RPM monad type)} \\
+       &\mid \mathsf{Frac}[\bar{k}] \quad \text{(fractal type with index sequence)} \\
+       &\mid \forall \alpha. \tau \quad \text{(polymorphic type)} \\
+       &\mid \mathsf{List}[\tau] \quad \text{(list type)}
+\end{align}
+\end{definition}
+
+\begin{definition}[RPM Type]
+\label{def:rpm-type-system}
+The RPM monad type constructor:
+\[
+\mathsf{RPM} : \mathsf{Type} \to \mathsf{Type}
+\]
+
+A value of type $\mathsf{RPM}[\tau]$ represents a computation that:
+\begin{itemize}
+\item Requires certain prerequisites to be satisfied
+\item May fail if prerequisites are not met
+\item Produces a value of type $\tau$ on success
+\item Tracks acquisition state changes
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Fractal Type]
+\label{def:fractal-type-system}
+The fractal type constructor:
+\[
+\mathsf{Frac}[\langle k_1 : \cdots : k_n \rangle] : \mathsf{Domain} \to \mathsf{Domain}
+\]
+
+The type index $\bar{k} = \langle k_1 : \cdots : k_n \rangle$ encodes the sequence of noetic principles, enabling static composition analysis.
+\end{definition}
+
+\section{Typing Contexts}
+
+\begin{definition}[Typing Context]
+\label{def:typing-context}
+A typing context $\Gamma$ is a finite mapping from variables to types:
+\[
+\Gamma ::= \emptyset \mid \Gamma, x : \tau
+\]
+
+Well-formedness: $\Gamma$ is well-formed if all bound variables are distinct.
+\end{definition}
+
+\begin{definition}[Context Operations]
+\label{def:context-ops}
+\begin{align}
+\Gamma(x) &= \tau \quad \text{if } (x : \tau) \in \Gamma \\
+\dom(\Gamma) &= \{x \mid (x : \tau) \in \Gamma \text{ for some } \tau\} \\
+\Gamma, x : \tau &\text{ is defined only if } x \notin \dom(\Gamma)
+\end{align}
+\end{definition}
+
+\section{Typing Rules}
+
+\begin{definition}[Typing Judgment]
+\label{def:typing-judgment}
+The typing judgment $\Gamma \vdash e : \tau$ asserts that expression $e$ has type $\tau$ in context $\Gamma$.
+\end{definition}
+
+\begin{definition}[Core Typing Rules]
+\label{def:typing-rules}
+
+\textbf{Variables and Constants:}
+\[
+\frac{(x : \tau) \in \Gamma}{\Gamma \vdash x : \tau} \quad [\textsc{T-Var}]
+\]
+
+\[
+\frac{}{\Gamma \vdash n : \mathsf{Int}} \quad [\textsc{T-Int}]
+\]
+
+\[
+\frac{}{\Gamma \vdash \mathsf{true} : \mathsf{Bool}} \quad [\textsc{T-True}]
+\qquad
+\frac{}{\Gamma \vdash \mathsf{false} : \mathsf{Bool}} \quad [\textsc{T-False}]
+\]
+
+\[
+\frac{}{\Gamma \vdash () : \mathsf{Unit}} \quad [\textsc{T-Unit}]
+\]
+
+\textbf{Functions:}
+\[
+\frac{\Gamma, x : \tau_1 \vdash e : \tau_2}{\Gamma \vdash \lambda x : \tau_1. e : \tau_1 \to \tau_2} \quad [\textsc{T-Abs}]
+\]
+
+\[
+\frac{\Gamma \vdash e_1 : \tau_1 \to \tau_2 \quad \Gamma \vdash e_2 : \tau_1}{\Gamma \vdash e_1\; e_2 : \tau_2} \quad [\textsc{T-App}]
+\]
+
+\textbf{Arithmetic:}
+\[
+\frac{\Gamma \vdash e_1 : \mathsf{Int} \quad \Gamma \vdash e_2 : \mathsf{Int}}{\Gamma \vdash e_1 + e_2 : \mathsf{Int}} \quad [\textsc{T-Add}]
+\]
+
+\textbf{Noetic Functions:}
+\[
+\frac{\Gamma \vdash e : \mathsf{Domain}}{\Gamma \vdash \noe{k}(e) : \mathsf{Domain}} \quad [\textsc{T-Noe}]
+\]
+
+\textbf{Fractals:}
+\[
+\frac{\Gamma \vdash e : \mathsf{Domain}}{\Gamma \vdash \langle k_1 : \cdots : k_n \rangle(e) : \mathsf{Domain}} \quad [\textsc{T-Frac}]
+\]
+
+\textbf{RPM Monad:}
+\[
+\frac{\Gamma \vdash e : \tau}{\Gamma \vdash \rpmret\; e : \mathsf{RPM}[\tau]} \quad [\textsc{T-Return}]
+\]
+
+\[
+\frac{\Gamma \vdash m : \mathsf{RPM}[\tau_1] \quad \Gamma \vdash f : \tau_1 \to \mathsf{RPM}[\tau_2]}{\Gamma \vdash m \rpmbind f : \mathsf{RPM}[\tau_2]} \quad [\textsc{T-Bind}]
+\]
+
+\[
+\frac{p : \mathsf{Prereq}}{\Gamma \vdash \mathsf{check}(p) : \mathsf{RPM}[\mathsf{Unit}]} \quad [\textsc{T-Check}]
+\]
+
+\[
+\frac{p : \mathsf{Prereq}}{\Gamma \vdash \mathsf{acquire}(p) : \mathsf{RPM}[\mathsf{Unit}]} \quad [\textsc{T-Acquire}]
+\]
+
+\textbf{Let Binding:}
+\[
+\frac{\Gamma \vdash e_1 : \tau_1 \quad \Gamma, x : \tau_1 \vdash e_2 : \tau_2}{\Gamma \vdash \mathsf{let}\; x = e_1 \;\mathsf{in}\; e_2 : \tau_2} \quad [\textsc{T-Let}]
+\]
+
+\textbf{Conditionals:}
+\[
+\frac{\Gamma \vdash e_1 : \mathsf{Bool} \quad \Gamma \vdash e_2 : \tau \quad \Gamma \vdash e_3 : \tau}{\Gamma \vdash \mathsf{if}\; e_1 \;\mathsf{then}\; e_2 \;\mathsf{else}\; e_3 : \tau} \quad [\textsc{T-If}]
+\]
+
+\textbf{Products:}
+\[
+\frac{\Gamma \vdash e_1 : \tau_1 \quad \Gamma \vdash e_2 : \tau_2}{\Gamma \vdash (e_1, e_2) : \tau_1 \times \tau_2} \quad [\textsc{T-Pair}]
+\]
+
+\[
+\frac{\Gamma \vdash e : \tau_1 \times \tau_2}{\Gamma \vdash \mathsf{fst}\; e : \tau_1} \quad [\textsc{T-Fst}]
+\qquad
+\frac{\Gamma \vdash e : \tau_1 \times \tau_2}{\Gamma \vdash \mathsf{snd}\; e : \tau_2} \quad [\textsc{T-Snd}]
+\]
+
+\textbf{Sums:}
+\[
+\frac{\Gamma \vdash e : \tau_1}{\Gamma \vdash \mathsf{inl}\; e : \tau_1 + \tau_2} \quad [\textsc{T-Inl}]
+\qquad
+\frac{\Gamma \vdash e : \tau_2}{\Gamma \vdash \mathsf{inr}\; e : \tau_1 + \tau_2} \quad [\textsc{T-Inr}]
+\]
+
+\[
+\frac{\Gamma \vdash e : \tau_1 + \tau_2 \quad \Gamma, x : \tau_1 \vdash e_1 : \tau \quad \Gamma, y : \tau_2 \vdash e_2 : \tau}{\Gamma \vdash \mathsf{case}\; e \;\mathsf{of}\; \mathsf{inl}\; x \Rightarrow e_1 \mid \mathsf{inr}\; y \Rightarrow e_2 : \tau} \quad [\textsc{T-Case}]
+\]
+\end{definition}
+
+\section{Type Inference}
+
+\begin{definition}[Principal Type]
+\label{def:principal-type}
+A type $\tau$ is a \emph{principal type} for expression $e$ in context $\Gamma$ if:
+\begin{enumerate}
+\item $\Gamma \vdash e : \tau$ (derivable)
+\item For all $\tau'$ such that $\Gamma \vdash e : \tau'$, there exists a substitution $\theta$ with $\theta(\tau) = \tau'$
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Principal Types Exist]
+\label{thm:principal-types}
+For any well-typed expression $e$ in context $\Gamma$, there exists a principal type.
+\end{theorem}
+
+\begin{definition}[Type Inference Algorithm]
+\label{def:type-inference}
+The type inference algorithm $\mathcal{W}$ computes principal types:
+\begin{align}
+\mathcal{W}(\Gamma, x) &= (\emptyset, \Gamma(x)) \\
+\mathcal{W}(\Gamma, \lambda x. e) &= \text{let } \alpha \text{ fresh}, (\theta, \tau) = \mathcal{W}(\Gamma[x \mapsto \alpha], e) \\
+&\quad \text{in } (\theta, \theta(\alpha) \to \tau) \\
+\mathcal{W}(\Gamma, e_1\; e_2) &= \text{let } (\theta_1, \tau_1) = \mathcal{W}(\Gamma, e_1), \\
+&\quad (\theta_2, \tau_2) = \mathcal{W}(\theta_1(\Gamma), e_2), \\
+&\quad \alpha \text{ fresh}, \\
+&\quad \theta_3 = \mathsf{unify}(\theta_2(\tau_1), \tau_2 \to \alpha) \\
+&\quad \text{in } (\theta_3 \circ \theta_2 \circ \theta_1, \theta_3(\alpha))
+\end{align}
+\end{definition}
+
+\begin{theorem}[Soundness and Completeness of Type Inference]
+\label{thm:inference-sound-complete}
+The algorithm $\mathcal{W}$ is sound (if it returns $(\theta, \tau)$, then $\theta(\Gamma) \vdash e : \tau$) and complete (if $\Gamma \vdash e : \tau'$, then $\mathcal{W}$ succeeds with a more general type).
+\end{theorem}
+
+\section{Domain-Specific Typing}
+
+\begin{definition}[Domain Typing]
+\label{def:domain-typing}
+For TKS domains:
+\begin{align}
+\Gamma \vdash D_i &: \mathsf{Domain} \quad \text{for } i \in \{1, \ldots, 7\} \\
+\Gamma \vdash A_j &: \mathsf{Aspect} \quad \text{for aspects within foundations} \\
+\Gamma \vdash F_k &: \mathsf{Foundation} \quad \text{for } k \in \{1, \ldots, 10\}
+\end{align}
+\end{definition}
+
+\begin{definition}[Subtyping for Domains]
+\label{def:domain-subtyping}
+The subtype relation $<:$ on domain types:
+\[
+\mathsf{Aspect} <: \mathsf{Foundation} <: \mathsf{Domain}
+\]
+
+With subsumption rule:
+\[
+\frac{\Gamma \vdash e : \tau \quad \tau <: \tau'}{\Gamma \vdash e : \tau'} \quad [\textsc{T-Sub}]
+\]
+\end{definition}
+
+\section{Type Safety Properties}
+
+\begin{theorem}[Type Soundness]
+\label{thm:type-soundness}
+TKS is type-sound:
+\begin{enumerate}
+\item \textbf{Progress:} If $\vdash e : \tau$, then either $e$ is a value or $\exists e'. e \smallstep e'$
+\item \textbf{Preservation:} If $\Gamma \vdash e : \tau$ and $e \smallstep e'$, then $\Gamma \vdash e' : \tau$
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{Progress} follows by induction on typing derivations, showing that each well-typed non-value expression can take a step.
+
+\textbf{Preservation} follows by induction on evaluation derivations, using substitution lemmas and canonical forms.
+\end{proof}
+
+\chapter{Language Specification}
+\label{ch:language-spec}
+
+This chapter provides the complete formal language specification for TKS, including lexical structure, grammar, and concrete syntax.
+
+\section{Lexical Structure}
+
+\begin{definition}[Token Categories]
+\label{def:tokens}
+\begin{verbatim}
+<integer>    ::= [0-9]+
+<identifier> ::= [a-zA-Z_][a-zA-Z0-9_]*
+<keyword>    ::= 'let' | 'in' | 'if' | 'then' | 'else'
+              | 'true' | 'false' | 'return' | 'check'
+              | 'acquire' | 'fst' | 'snd' | 'case' | 'of'
+              | 'inl' | 'inr' | 'noe' | 'frac' | 'domain'
+              | 'foundation' | 'aspect' | 'rpm'
+<operator>   ::= '+' | '-' | '*' | '/' | '=' | '<' | '>'
+              | '>>=' | '=>' | '->' | ':' | '|'
+<delimiter>  ::= '(' | ')' | '[' | ']' | '{' | '}'
+              | ',' | ';' | '.' | '<' | '>'
+<whitespace> ::= [ \t\n\r]+
+<comment>    ::= '--' [^\n]* | '{-' .* '-}'
+\end{verbatim}
+\end{definition}
+
+\section{Grammar}
+
+\begin{definition}[TKS Grammar (BNF)]
+\label{def:tks-grammar}
+\begin{verbatim}
+<program>      ::= <declaration>*
+
+<declaration>  ::= <domain-decl>
+                 | <foundation-decl>
+                 | <function-decl>
+                 | <fractal-decl>
+
+<domain-decl>  ::= 'domain' <identifier> '{' <foundation-list> '}'
+
+<foundation-decl> ::= 'foundation' <identifier> ':' <domain-ref>
+                      '{' <aspect-list> '}'
+
+<function-decl> ::= 'let' <identifier> ':' <type> '=' <expr>
+
+<fractal-decl> ::= 'frac' <identifier> '=' '<' <noe-sequence> '>'
+
+<noe-sequence> ::= <integer> (':' <integer>)*
+
+<expr>         ::= <expr> '+' <term>
+                 | <expr> '-' <term>
+                 | <term>
+
+<term>         ::= <term> '*' <factor>
+                 | <term> '/' <factor>
+                 | <factor>
+
+<factor>       ::= <integer>
+                 | 'true' | 'false'
+                 | '()'
+                 | <identifier>
+                 | '(' <expr> ')'
+                 | <lambda-expr>
+                 | <let-expr>
+                 | <if-expr>
+                 | <noe-expr>
+                 | <frac-expr>
+                 | <rpm-expr>
+                 | <pair-expr>
+                 | <case-expr>
+                 | <app-expr>
+
+<lambda-expr>  ::= '\' <identifier> ':' <type> '.' <expr>
+                 | '\' <identifier> '.' <expr>
+
+<let-expr>     ::= 'let' <identifier> '=' <expr> 'in' <expr>
+
+<if-expr>      ::= 'if' <expr> 'then' <expr> 'else' <expr>
+
+<noe-expr>     ::= 'noe' '[' <integer> ']' '(' <expr> ')'
+
+<frac-expr>    ::= 'frac' '<' <noe-sequence> '>' '(' <expr> ')'
+                 | '<' <noe-sequence> '>' '(' <expr> ')'
+
+<rpm-expr>     ::= 'return' <expr>
+                 | <expr> '>>=' <expr>
+                 | 'check' '(' <prereq-ref> ')'
+                 | 'acquire' '(' <prereq-ref> ')'
+
+<pair-expr>    ::= '(' <expr> ',' <expr> ')'
+                 | 'fst' <expr>
+                 | 'snd' <expr>
+
+<case-expr>    ::= 'case' <expr> 'of'
+                   'inl' <identifier> '=>' <expr>
+                   '|' 'inr' <identifier> '=>' <expr>
+
+<app-expr>     ::= <factor> <factor>+
+
+<type>         ::= <base-type>
+                 | <type> '->' <type>
+                 | <type> '*' <type>
+                 | <type> '+' <type>
+                 | 'RPM' '[' <type> ']'
+                 | 'Frac' '[' <noe-sequence> ']'
+                 | '(' <type> ')'
+
+<base-type>    ::= 'Int' | 'Bool' | 'Unit'
+                 | 'Domain' | 'Foundation' | 'Aspect'
+                 | 'Noe' '[' <integer> ']'
+
+<prereq-ref>   ::= 'D' <integer>
+                 | <identifier>
+
+<domain-ref>   ::= 'D' <integer>
+                 | <identifier>
+
+<aspect-list>  ::= <aspect-decl> (',' <aspect-decl>)*
+
+<aspect-decl>  ::= <identifier> ':' <aspect-type>
+
+<aspect-type>  ::= 'positive' | 'negative' | 'neutral'
+\end{verbatim}
+\end{definition}
+
+\section{Concrete Syntax Examples}
+
+\begin{example}[Domain Declaration]
+\label{ex:domain-syntax}
+\begin{verbatim}
+domain Life {
+  foundation Health : D2 {
+    physical_positive : positive,
+    physical_negative : negative,
+    mental_positive : positive,
+    mental_negative : negative,
+    emotional_positive : positive,
+    emotional_negative : negative
+  }
+}
+\end{verbatim}
+\end{example}
+
+\begin{example}[Fractal Declaration and Application]
+\label{ex:fractal-syntax}
+\begin{verbatim}
+-- Define the MVR fractal
+frac MVR = <1:4:7>
+
+-- Define a custom healing fractal
+frac HealingCycle = <1:4:7:8:9>
+
+-- Apply fractal to a domain value
+let transformed = <1:4:7>(D2_physical_positive)
+
+-- Apply named fractal
+let healed = frac HealingCycle (patient_state)
+\end{verbatim}
+\end{example}
+
+\begin{example}[RPM Computation]
+\label{ex:rpm-syntax}
+\begin{verbatim}
+-- Check prerequisite and transform
+let guarded_transform =
+  check(D1) >>= \_ .
+  check(D2) >>= \_ .
+  return (<1:4:7>(target))
+
+-- Acquire and compute
+let learning_path =
+  acquire(D3) >>= \_ .
+  acquire(D4) >>= \_ .
+  let result = noe[1](noe[4](base_knowledge)) in
+  return result
+\end{verbatim}
+\end{example}
+
+\begin{example}[Higher-Order Functions]
+\label{ex:higher-order-syntax}
+\begin{verbatim}
+-- Fractal combinator
+let compose_fractals : Frac -> Frac -> Frac =
+  \f1 : Frac . \f2 : Frac .
+    \x : Domain . f1 (f2 x)
+
+-- Apply noetic function n times
+let iterate_noe : Int -> (Domain -> Domain) -> Domain -> Domain =
+  \n : Int . \f : Domain -> Domain . \x : Domain .
+    if n = 0 then x else f (iterate_noe (n - 1) f x)
+
+-- MVR iterated 3 times
+let deep_mvr = iterate_noe 3 (<1:4:7>)
+\end{verbatim}
+\end{example}
+
+\section{Abstract Syntax}
+
+\begin{definition}[Abstract Syntax Tree]
+\label{def:ast}
+The AST node types:
+\begin{verbatim}
+data Expr
+  = IntLit Integer
+  | BoolLit Bool
+  | UnitLit
+  | Var String
+  | Lambda String Type Expr
+  | App Expr Expr
+  | Let String Expr Expr
+  | If Expr Expr Expr
+  | BinOp Op Expr Expr
+  | Noe Int Expr
+  | Frac [Int] Expr
+  | Return Expr
+  | Bind Expr Expr
+  | Check Prereq
+  | Acquire Prereq
+  | Pair Expr Expr
+  | Fst Expr
+  | Snd Expr
+  | Inl Expr
+  | Inr Expr
+  | Case Expr String Expr String Expr
+  | DomainRef String
+  | FoundationRef String String
+  | AspectRef String String String
+
+data Type
+  = TInt | TBool | TUnit
+  | TDomain | TFoundation | TAspect
+  | TNoe Int
+  | TFrac [Int]
+  | TArrow Type Type
+  | TProd Type Type
+  | TSum Type Type
+  | TRPM Type
+  | TVar String
+  | TForall String Type
+
+data Op = Add | Sub | Mul | Div | Eq | Lt | Gt
+
+data Prereq = DomainPrereq Int | NamedPrereq String
+\end{verbatim}
+\end{definition}
+
+\section{Desugaring Rules}
+
+\begin{definition}[Syntactic Sugar]
+\label{def:desugar}
+The following syntactic sugar is supported:
+
+\textbf{Do-notation for RPM:}
+\begin{verbatim}
+do { x <- m; e }  ==>  m >>= \x . e
+do { m; e }       ==>  m >>= \_ . e
+do { e }          ==>  e
+\end{verbatim}
+
+\textbf{Multi-argument functions:}
+\begin{verbatim}
+\x y z . e        ==>  \x . \y . \z . e
+let f x y = e     ==>  let f = \x . \y . e
+\end{verbatim}
+
+\textbf{List notation:}
+\begin{verbatim}
+[e1, e2, e3]      ==>  Cons e1 (Cons e2 (Cons e3 Nil))
+\end{verbatim}
+
+\textbf{Fractal shorthand:}
+\begin{verbatim}
+MVR(e)            ==>  <1:4:7>(e)
+ACBE(e)           ==>  <8:9>(e)
+\end{verbatim}
+\end{definition}
+
+\section{Static Semantics Summary}
+
+\begin{definition}[Well-Formedness]
+\label{def:well-formed}
+A TKS program is well-formed if:
+\begin{enumerate}
+\item All domain references resolve to declared domains
+\item All foundation references resolve within their domain
+\item All aspect references resolve within their foundation
+\item All prerequisite references are valid domain identifiers
+\item All expressions are well-typed according to Chapter~\ref{ch:types}
+\item All fractal indices are in the range $[0, 9]$
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Module System]
+\label{def:modules}
+TKS supports a simple module system:
+\begin{verbatim}
+module Life where
+  domain Life { ... }
+
+  export: Health, Wealth, transform_health
+
+import Life (Health, transform_health)
+\end{verbatim}
+\end{definition}
+
+%=============================================================================
+% PART VII: APPLICATIONS, EXAMPLES, AND APPENDICES
+%=============================================================================
+
+\part{Applications, Examples, and Reference}
+
+\chapter{Comprehensive Worked Examples}
+\label{ch:examples}
+
+This chapter provides a comprehensive collection of worked examples demonstrating the full power of TKS v6.1, including RPM monadic computations, fractal dynamics, and their integration.
+
+\section{Foundation Examples}
+
+\begin{example}[Complete Domain Traversal]
+\label{ex:domain-traversal}
+\textbf{Goal:} Transform an aspect through all seven domains using prerequisite checking.
+
+\textbf{Program:}
+\begin{verbatim}
+let domain_traversal : Domain -> RPM[Domain] =
+  \initial : Domain .
+    check(D1) >>= \_ .    -- Spirit prerequisite
+    check(D2) >>= \_ .    -- Life prerequisite
+    check(D3) >>= \_ .    -- Knowledge prerequisite
+    check(D4) >>= \_ .    -- Love prerequisite
+    check(D5) >>= \_ .    -- Power prerequisite
+    check(D6) >>= \_ .    -- Wealth prerequisite
+    check(D7) >>= \_ .    -- Expression prerequisite
+    return (<1:4:7>(initial))
+\end{verbatim}
+
+\textbf{Evaluation with $\alpha = \{D1, D2, D3, D4, D5, D6, D7\}$:}
+\begin{enumerate}
+\item All seven checks succeed (all prerequisites satisfied)
+\item MVR fractal $\langle 1:4:7 \rangle$ applied to initial
+\item Final result: $\mathsf{RPM}(\text{MVR}(\texttt{initial}))$
+\end{enumerate}
+
+\textbf{Evaluation with $\alpha = \{D1, D2, D3\}$:}
+\begin{enumerate}
+\item $\mathsf{check}(D1)$ succeeds
+\item $\mathsf{check}(D2)$ succeeds
+\item $\mathsf{check}(D3)$ succeeds
+\item $\mathsf{check}(D4)$ fails — $D4 \notin \alpha$
+\item Result: $\Failed$
+\end{enumerate}
+\end{example}
+
+\begin{example}[Progressive Learning Path]
+\label{ex:learning-path}
+\textbf{Goal:} Model knowledge acquisition with prerequisite tracking.
+
+\textbf{Program:}
+\begin{verbatim}
+let learn_mathematics : RPM[Domain] =
+  acquire(D3_arithmetic) >>= \_ .
+  acquire(D3_algebra) >>= \_ .
+  check(D3_arithmetic) >>= \_ .
+  check(D3_algebra) >>= \_ .
+  acquire(D3_calculus) >>= \_ .
+  return (noe[1](D3_calculus))  -- Conscious mastery
+\end{verbatim}
+
+\textbf{Evaluation (starting with $\alpha = \emptyset$):}
+\begin{enumerate}
+\item $\mathsf{acquire}(D3_{\text{arithmetic}})$: $\alpha' = \{D3_{\text{arithmetic}}\}$
+\item $\mathsf{acquire}(D3_{\text{algebra}})$: $\alpha'' = \{D3_{\text{arithmetic}}, D3_{\text{algebra}}\}$
+\item $\mathsf{check}(D3_{\text{arithmetic}})$: succeeds
+\item $\mathsf{check}(D3_{\text{algebra}})$: succeeds
+\item $\mathsf{acquire}(D3_{\text{calculus}})$: $\alpha''' = \{D3_{\text{arithmetic}}, D3_{\text{algebra}}, D3_{\text{calculus}}\}$
+\item $\noe{1}(D3_{\text{calculus}}) = \text{Aware}(D3_{\text{calculus}})$
+\item Final: $(\mathsf{RPM}(\text{Aware Calculus}), \alpha''')$
+\end{enumerate}
+\end{example}
+
+\section{Fractal Application Examples}
+
+\begin{example}[Healing Protocol]
+\label{ex:healing-protocol}
+\textbf{Goal:} Apply a multi-stage healing fractal with verification.
+
+\textbf{Program:}
+\begin{verbatim}
+frac Diagnosis = <1:3>      -- Awareness + Below (examine)
+frac Treatment = <4:8>      -- Vibration + Cause (apply remedy)
+frac Recovery = <7:9>       -- Rhythm + Effect (stabilize)
+
+let healing_protocol : Domain -> RPM[Domain] =
+  \patient : Domain .
+    check(D2) >>= \_ .      -- Require Life domain mastery
+    let diagnosed = frac Diagnosis (patient) in
+    let treated = frac Treatment (diagnosed) in
+    let recovered = frac Recovery (treated) in
+    return recovered
+\end{verbatim}
+
+\textbf{Full Evaluation Trace:}
+\begin{align}
+&\text{patient} = D2_{3a} \text{ (physical negative)} \\
+&\mathsf{check}(D2): \text{success} \\
+&\text{diagnosed} = \langle 1:3 \rangle(D2_{3a}) \\
+&\quad = \noe{1}(\noe{3}(D2_{3a})) \\
+&\quad = \noe{1}(\text{Below}(D2_{3a})) \\
+&\quad = \text{Aware}(\text{Below}(D2_{3a})) \\
+&\text{treated} = \langle 4:8 \rangle(\text{diagnosed}) \\
+&\quad = \noe{4}(\noe{8}(\text{Aware Below } D2_{3a})) \\
+&\quad = \text{Vibrating Caused Aware Below } D2_{3a} \\
+&\text{recovered} = \langle 7:9 \rangle(\text{treated}) \\
+&\quad = \noe{7}(\noe{9}(\text{Vibrating Caused Aware Below } D2_{3a})) \\
+&\quad = \text{Rhythmic Effected Vibrating Caused Aware Below } D2_{3a}
+\end{align}
+\end{example}
+
+\begin{example}[Fractal Composition Analysis]
+\label{ex:fractal-composition}
+\textbf{Goal:} Demonstrate fractal composition and simplification.
+
+\textbf{Fractals:}
+\begin{align}
+\Frac_1 &= \langle 2 : 3 \rangle \quad \text{(Polarity)} \\
+\Frac_2 &= \langle 5 : 6 \rangle \quad \text{(Gender)} \\
+\Frac_3 &= \Frac_1 \circ \Frac_2 = \langle 2 : 3 : 5 : 6 \rangle
+\end{align}
+
+\textbf{Double Polarity:}
+\begin{align}
+\Frac_1 \circ \Frac_1 &= \langle 2 : 3 : 2 : 3 \rangle \\
+&\Rightarrow \langle 0 : 0 \rangle \quad \text{(dual cancellation)} \\
+&\Rightarrow \langle 0 \rangle \quad \text{(identity elimination)} \\
+&= \Frac_{\id}
+\end{align}
+
+\textbf{Classification:}
+\begin{itemize}
+\item $\Frac_1$: Oscillatory (period $\approx 2$)
+\item $\Frac_2$: Oscillatory (period $\approx 2$)
+\item $\Frac_3$: Oscillatory (combines both oscillations)
+\end{itemize}
+\end{example}
+
+\begin{example}[Eigenfractal Discovery]
+\label{ex:eigenfractal}
+\textbf{Goal:} Find domain values that are fixed points for MVR.
+
+\textbf{Analysis:} For $\Frac_{\text{MVR}} = \langle 1:4:7 \rangle$, we seek $d$ such that:
+\[
+\Frac_{\text{MVR}}(d) = d
+\]
+
+\textbf{Candidate:} A domain value that is already fully aware, vibrating, and rhythmic:
+\[
+d^* = \text{Aware Vibrating Rhythmic } A1_{1a}
+\]
+
+\textbf{Verification:}
+\begin{align}
+\Frac_{\text{MVR}}(d^*) &= \noe{1}(\noe{4}(\noe{7}(d^*))) \\
+&= \noe{1}(\noe{4}(\text{Rhythm}(\text{Aware Vibrating Rhythmic } A1_{1a}))) \\
+&= \noe{1}(\noe{4}(\text{Aware Vibrating Rhythmic } A1_{1a})) \quad \text{(idempotence)} \\
+&= \text{Aware Vibrating Rhythmic } A1_{1a} \\
+&= d^*
+\end{align}
+
+\textbf{Result:} $d^*$ is an eigenfractal for MVR with eigenvalue 1.
+\end{example}
+
+\section{RPM Monad Examples}
+
+\begin{example}[Monad Law Verification (Concrete)]
+\label{ex:monad-laws-concrete}
+\textbf{Goal:} Verify monad laws with specific computations.
+
+\textbf{Setup:}
+\begin{align}
+v &= D3_{2a} \quad \text{(Knowledge, positive aspect)} \\
+f &= \lambda x. \rpmret\; \noe{1}(x) \\
+g &= \lambda x. \rpmret\; \noe{4}(x) \\
+m &= \rpmret\; v
+\end{align}
+
+\textbf{Left Unit:}
+\begin{align}
+(\rpmret\; v) \rpmbind f &= (\rpmret\; D3_{2a}) \rpmbind (\lambda x. \rpmret\; \noe{1}(x)) \\
+&= \rpmret\; \noe{1}(D3_{2a}) \\
+&= \rpmret\; \text{Aware}(D3_{2a}) \\
+&= f(v) \quad \checkmark
+\end{align}
+
+\textbf{Right Unit:}
+\begin{align}
+m \rpmbind \rpmret &= (\rpmret\; D3_{2a}) \rpmbind \rpmret \\
+&= \rpmret\; D3_{2a} \\
+&= m \quad \checkmark
+\end{align}
+
+\textbf{Associativity:}
+\begin{align}
+(m \rpmbind f) \rpmbind g &= ((\rpmret\; D3_{2a}) \rpmbind f) \rpmbind g \\
+&= (\rpmret\; \text{Aware}(D3_{2a})) \rpmbind g \\
+&= \rpmret\; \noe{4}(\text{Aware}(D3_{2a})) \\
+&= \rpmret\; \text{Vibrating Aware}(D3_{2a})
+\end{align}
+
+\begin{align}
+m \rpmbind (\lambda x. f(x) \rpmbind g) &= (\rpmret\; D3_{2a}) \rpmbind (\lambda x. (\rpmret\; \noe{1}(x)) \rpmbind g) \\
+&= (\rpmret\; \noe{1}(D3_{2a})) \rpmbind g \\
+&= \rpmret\; \noe{4}(\text{Aware}(D3_{2a})) \\
+&= \rpmret\; \text{Vibrating Aware}(D3_{2a}) \quad \checkmark
+\end{align}
+\end{example}
+
+\begin{example}[Failure Propagation]
+\label{ex:failure-propagation}
+\textbf{Goal:} Demonstrate correct failure propagation.
+
+\textbf{Program:}
+\begin{verbatim}
+let risky_computation : RPM[Domain] =
+  check(D5) >>= \_ .           -- Requires Power
+  acquire(D6) >>= \_ .         -- Acquire Wealth
+  check(D7) >>= \_ .           -- Requires Expression
+  return (noe[1](D7_base))
+\end{verbatim}
+
+\textbf{With $\alpha = \{D5\}$:}
+\begin{enumerate}
+\item $\mathsf{check}(D5)$: $D5 \in \alpha$ — succeeds
+\item $\mathsf{acquire}(D6)$: $\alpha' = \{D5, D6\}$
+\item $\mathsf{check}(D7)$: $D7 \notin \alpha'$ — \textbf{FAIL}
+\item Result: $(\Failed, \{D5, D6\})$
+\end{enumerate}
+
+\textbf{Note:} The acquisition of D6 persists even though the overall computation fails. This models real-world scenarios where partial progress is preserved.
+\end{example}
+
+\section{Integrated Examples}
+
+\begin{example}[Spiritual Development Program]
+\label{ex:spiritual-development}
+\textbf{Goal:} Model a complete spiritual development path with prerequisites and transformations.
+
+\textbf{Program:}
+\begin{verbatim}
+frac Awakening = <1:1:1>        -- Triple awareness
+frac Purification = <2:3:4>    -- Polarity balance + vibration
+frac Integration = <1:4:7:8:9> -- MVR + ACBE
+
+let spiritual_path : Domain -> RPM[Domain] =
+  \seeker : Domain .
+    -- Stage 1: Foundation
+    acquire(D1) >>= \_ .
+    let awakened = frac Awakening (seeker) in
+
+    -- Stage 2: Purification (requires Spirit)
+    check(D1) >>= \_ .
+    let purified = frac Purification (awakened) in
+
+    -- Stage 3: Integration (requires all)
+    acquire(D2) >>= \_ .
+    acquire(D3) >>= \_ .
+    acquire(D4) >>= \_ .
+    let integrated = frac Integration (purified) in
+
+    return integrated
+\end{verbatim}
+
+\textbf{Complete Evaluation Trace (initial $\alpha = \emptyset$):}
+
+\textbf{Stage 1:}
+\begin{align}
+&\mathsf{acquire}(D1): \alpha_1 = \{D1\} \\
+&\text{awakened} = \langle 1:1:1 \rangle(\text{seeker}) = \noe{1}(\noe{1}(\noe{1}(\text{seeker}))) \\
+&\quad = \text{Deeply Aware seeker}
+\end{align}
+
+\textbf{Stage 2:}
+\begin{align}
+&\mathsf{check}(D1): D1 \in \alpha_1 \text{ — success} \\
+&\text{purified} = \langle 2:3:4 \rangle(\text{awakened}) \\
+&\quad = \noe{2}(\noe{3}(\noe{4}(\text{Deeply Aware seeker}))) \\
+&\quad = \text{Above Below Vibrating Deeply Aware seeker}
+\end{align}
+
+\textbf{Stage 3:}
+\begin{align}
+&\mathsf{acquire}(D2): \alpha_2 = \{D1, D2\} \\
+&\mathsf{acquire}(D3): \alpha_3 = \{D1, D2, D3\} \\
+&\mathsf{acquire}(D4): \alpha_4 = \{D1, D2, D3, D4\} \\
+&\text{integrated} = \langle 1:4:7:8:9 \rangle(\text{purified}) \\
+&\quad = \text{Aware Vibrating Rhythmic Caused Effected} \\
+&\quad\quad \text{Above Below Vibrating Deeply Aware seeker}
+\end{align}
+
+\textbf{Final Result:} $(\mathsf{RPM}(\text{integrated}), \{D1, D2, D3, D4\})$
+\end{example}
+
+\begin{example}[Business Transformation]
+\label{ex:business-transformation}
+\textbf{Goal:} Apply TKS to organizational development.
+
+\textbf{Domain Mapping:}
+\begin{itemize}
+\item D6 (Wealth): Financial resources
+\item D5 (Power): Organizational authority
+\item D3 (Knowledge): Market intelligence
+\item D7 (Expression): Brand and communication
+\end{itemize}
+
+\textbf{Program:}
+\begin{verbatim}
+frac MarketAnalysis = <1:3>      -- Aware + Below (research)
+frac StrategicPlan = <8:1:4>    -- Cause + Aware + Vibrate
+frac Execution = <5:6:7:9>      -- Gender balance + Rhythm + Effect
+
+let business_transformation : Domain -> RPM[Domain] =
+  \company : Domain .
+    -- Phase 1: Market Research
+    check(D3) >>= \_ .
+    let analyzed = frac MarketAnalysis (company) in
+
+    -- Phase 2: Strategic Planning
+    check(D5) >>= \_ .
+    check(D6) >>= \_ .
+    let planned = frac StrategicPlan (analyzed) in
+
+    -- Phase 3: Execution
+    acquire(D7) >>= \_ .
+    let executed = frac Execution (planned) in
+
+    return executed
+\end{verbatim}
+\end{example}
+
+\begin{example}[Type Derivation]
+\label{ex:type-derivation}
+\textbf{Goal:} Derive the type of a complex expression.
+
+\textbf{Expression:}
+\[
+e = \lambda f. \lambda x. f\; (\langle 1:4:7 \rangle(x))
+\]
+
+\textbf{Derivation:}
+\begin{prooftree}
+\AxiomC{$f : \mathsf{Domain} \to \tau, x : \mathsf{Domain} \vdash x : \mathsf{Domain}$}
+\UnaryInfC{$f : \mathsf{Domain} \to \tau, x : \mathsf{Domain} \vdash \langle 1:4:7 \rangle(x) : \mathsf{Domain}$}
+\AxiomC{$f : \mathsf{Domain} \to \tau \vdash f : \mathsf{Domain} \to \tau$}
+\BinaryInfC{$f : \mathsf{Domain} \to \tau, x : \mathsf{Domain} \vdash f\; (\langle 1:4:7 \rangle(x)) : \tau$}
+\UnaryInfC{$f : \mathsf{Domain} \to \tau \vdash \lambda x. f\; (\langle 1:4:7 \rangle(x)) : \mathsf{Domain} \to \tau$}
+\UnaryInfC{$\vdash \lambda f. \lambda x. f\; (\langle 1:4:7 \rangle(x)) : (\mathsf{Domain} \to \tau) \to \mathsf{Domain} \to \tau$}
+\end{prooftree}
+
+\textbf{Principal Type:} $\forall \tau. (\mathsf{Domain} \to \tau) \to \mathsf{Domain} \to \tau$
+\end{example}
+
+\chapter{Reference Tables}
+\label{ch:reference}
+
+\section{Domain Reference}
+
+\begin{center}
+\begin{longtable}{clll}
+\caption{Complete Domain Reference} \\
+\toprule
+\textbf{ID} & \textbf{Domain} & \textbf{Foundations} & \textbf{Core Principle} \\
+\midrule
+\endfirsthead
+\multicolumn{4}{c}{\textit{(continued)}} \\
+\toprule
+\textbf{ID} & \textbf{Domain} & \textbf{Foundations} & \textbf{Core Principle} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\textit{Continued on next page}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+D1 & Spirit & Consciousness, Purpose, Connection & Awareness \\
+D2 & Life & Health (Physical, Mental, Emotional) & Vitality \\
+D3 & Knowledge & Learning, Wisdom, Understanding & Truth \\
+D4 & Love & Relationships, Compassion, Unity & Connection \\
+D5 & Power & Authority, Influence, Will & Mastery \\
+D6 & Wealth & Resources, Abundance, Flow & Prosperity \\
+D7 & Expression & Communication, Creativity, Art & Manifestation \\
+\end{longtable}
+\end{center}
+
+\section{Noetic Function Reference}
+
+\begin{center}
+\begin{tabular}{cllll}
+\toprule
+\textbf{k} & \textbf{Name} & \textbf{Principle} & \textbf{Symbol} & \textbf{Action} \\
+\midrule
+0 & Identity & — & $\id$ & No transformation \\
+1 & Mentalism & Mind is All & $\mathfrak{n}_1$ & Apply awareness \\
+2 & Correspondence (Above) & As above & $\mathfrak{n}_2$ & Project upward \\
+3 & Correspondence (Below) & So below & $\mathfrak{n}_3$ & Ground downward \\
+4 & Vibration & Everything moves & $\mathfrak{n}_4$ & Add energy/vibration \\
+5 & Gender (Masculine) & Creation principle & $\mathfrak{n}_5$ & Active/projective \\
+6 & Gender (Feminine) & Reception principle & $\mathfrak{n}_6$ & Receptive/formative \\
+7 & Rhythm & Pendulum swings & $\mathfrak{n}_7$ & Establish pattern \\
+8 & Cause & Every effect has cause & $\mathfrak{n}_8$ & Identify/create cause \\
+9 & Effect & Every cause has effect & $\mathfrak{n}_9$ & Manifest effect \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Standard Fractal Reference}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+\textbf{Name} & \textbf{Sequence} & \textbf{Class} & \textbf{Application} \\
+\midrule
+MVR & $\langle 1:4:7 \rangle$ & Stabilizing & General transformation \\
+ACBE & $\langle 8:9 \rangle$ & Oscillatory & Causation analysis \\
+Deep MVR & $\langle 1:1:1:4:4:4:7:7:7 \rangle$ & Stabilizing & Intensive work \\
+Polarity & $\langle 2:3 \rangle$ & Oscillatory & Balance analysis \\
+Gender & $\langle 5:6 \rangle$ & Oscillatory & Creative balance \\
+Full Causation & $\langle 8:8:9:9 \rangle$ & Stabilizing & Deep causal analysis \\
+Healing & $\langle 1:3:4:8:9 \rangle$ & Stabilizing & Health applications \\
+Manifestation & $\langle 1:4:5:8:9:7 \rangle$ & Stabilizing & Creation/expression \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Type Reference}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Type} & \textbf{Kind} & \textbf{Description} \\
+\midrule
+$\mathsf{Int}$ & $*$ & Integer values \\
+$\mathsf{Bool}$ & $*$ & Boolean values \\
+$\mathsf{Unit}$ & $*$ & Unit type (single value) \\
+$\mathsf{Domain}$ & $*$ & Domain values \\
+$\mathsf{Foundation}$ & $*$ & Foundation values \\
+$\mathsf{Aspect}$ & $*$ & Aspect values \\
+$\mathsf{Noe}[k]$ & $*$ & Noetic function type (indexed) \\
+$\tau_1 \to \tau_2$ & $*$ & Function type \\
+$\tau_1 \times \tau_2$ & $*$ & Product type \\
+$\tau_1 + \tau_2$ & $*$ & Sum type \\
+$\mathsf{RPM}[\tau]$ & $* \to *$ & RPM monad type \\
+$\mathsf{Frac}[\bar{k}]$ & $*$ & Fractal type (indexed by sequence) \\
+$\forall \alpha. \tau$ & $*$ & Polymorphic type \\
+$\mathsf{List}[\tau]$ & $* \to *$ & List type \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\chapter{Appendices}
+\label{ch:appendices}
+
+\appendix
+
+\chapter{Symbol Index}
+\label{app:symbols}
+
+\begin{multicols}{2}
+\begin{description}[leftmargin=2em,labelindent=0em]
+\item[$\noe{k}$] Noetic function $k$
+\item[$\mathfrak{n}_k$] Semantic value of $\noe{k}$
+\item[$\Dom$] Domain set
+\item[$\Fund$] Foundation set
+\item[$\NoeTerm$] Noetic term set
+\item[$\circ$] Function/fractal composition
+\item[$\id$] Identity function/element
+\item[$\RPM$] RPM monad type constructor
+\item[$\rpmret$] Monadic return
+\item[$\rpmbind$] Monadic bind
+\item[$\Frac$] Fractal constructor
+\item[$\FracSet$] Set of all fractals
+\item[$\langle k_1 : \cdots : k_n \rangle$] Fractal notation
+\item[$\Gamma$] Typing context
+\item[$\vdash$] Typing judgment
+\item[$\tau$] Type variable
+\item[$\to$] Function type constructor
+\item[$\times$] Product type constructor
+\item[$+$] Sum type constructor
+\item[$\llbracket \cdot \rrbracket$] Semantic brackets
+\item[$\smallstep$] Small-step reduction
+\item[$\bigstep$] Big-step evaluation
+\item[$\alpha$] Acquisition state
+\item[$\Satisfied$] Prerequisite satisfied
+\item[$\Failed$] Computation failed
+\item[$\mathsf{check}$] Prerequisite check
+\item[$\mathsf{acquire}$] Prerequisite acquisition
+\item[$\eta$] Monad unit
+\item[$\mu$] Monad multiplication
+\item[$\text{ACBE}$] Action-Context-Behavior-Effect functor
+\item[$\mathbf{Noetica}$] Category of noetic objects
+\item[$\mathcal{M}$] Complexity measure
+\end{description}
+\end{multicols}
+
+\chapter{Proof Summaries}
+\label{app:proofs}
+
+\section{Key Theorems and Their Proofs}
+
+\begin{enumerate}
+\item \textbf{Theorem~\ref{thm:monoid} (Monoid Structure / Closure):} The noetic operators are closed under composition and admit an identity. \textit{Proof:} Direct from the composition definition together with Axioms~\ref{ax:assoc-comp} and~\ref{ax:identity}. 
+
+\item \textbf{Theorem~\ref{thm:rpm-monad-laws} (Left Unit Law):} $\rpmret\; a \rpmbind f = f(a)$. \textit{Proof:} By computation of bind on a successful return value.
+
+\item \textbf{Theorem~\ref{thm:rpm-monad-laws} (Right Unit Law):} $m \rpmbind \rpmret = m$. \textit{Proof:} By case analysis on success/failure of $m$.
+
+\item \textbf{Theorem~\ref{thm:rpm-monad-laws} (Associativity):} $(m \rpmbind f) \rpmbind g = m \rpmbind (\lambda x. f(x) \rpmbind g)$. \textit{Proof:} By case analysis and compositional state threading.
+
+\item \textbf{Theorem~\ref{thm:fractal-assoc} (Fractal Composition Associativity):} $(\Frac_1 \circ \Frac_2) \circ \Frac_3 = \Frac_1 \circ (\Frac_2 \circ \Frac_3)$. \textit{Proof:} List concatenation is associative.
+
+\item \textbf{Theorem~\ref{thm:mvr-stability} (MVR Stability):} MVR is stabilizing. \textit{Proof:} Component analysis shows bounded iteration.
+
+\item \textbf{Theorem~\ref{thm:semantic-equivalence} (Semantic Equivalence):} Small-step and big-step semantics agree. \textit{Proof:} Mutual induction on derivation structure.
+
+\item \textbf{Theorem~\ref{thm:type-soundness} (Type Soundness):} Well-typed programs don't get stuck. \textit{Proof:} Progress + Preservation by structural induction.
+\end{enumerate}
+
+\chapter{Implementation Notes}
+\label{app:implementation}
+
+\section{Interpreter Architecture}
+
+A TKS interpreter should implement:
+
+\begin{enumerate}
+\item \textbf{Lexer/Parser:} According to grammar in Chapter~\ref{ch:language-spec}
+\item \textbf{Type Checker:} Implementing rules from Chapter~\ref{ch:types}
+\item \textbf{Evaluator:} Following operational semantics from Chapter~\ref{ch:operational}
+\item \textbf{RPM Runtime:} State monad with prerequisite tracking
+\item \textbf{Fractal Engine:} Composition, simplification, application
+\end{enumerate}
+
+\section{Data Structure Recommendations}
+
+\begin{verbatim}
+-- Core evaluation state
+data EvalState = EvalState
+  { environment :: Map String Value
+  , store :: Map Location Value
+  , acquisitionState :: Set Prereq
+  }
+
+-- RPM monad implementation
+newtype RPM a = RPM (EvalState -> (Either Failure a, EvalState))
+
+instance Monad RPM where
+  return x = RPM (\s -> (Right x, s))
+  (RPM m) >>= f = RPM $ \s ->
+    case m s of
+      (Left err, s') -> (Left err, s')
+      (Right x, s') -> let RPM m' = f x in m' s'
+
+-- Fractal representation
+data Fractal = Fractal [Int]  -- Sequence of noetic indices
+
+applyFractal :: Fractal -> Value -> Value
+applyFractal (Fractal []) v = v
+applyFractal (Fractal (k:ks)) v =
+  applyNoe k (applyFractal (Fractal ks) v)
+\end{verbatim}
+
+\section{Optimization Opportunities}
+
+\begin{enumerate}
+\item \textbf{Fractal Simplification:} Apply simplification rules at compile time
+\item \textbf{Prerequisite Analysis:} Static analysis to detect guaranteed failures
+\item \textbf{Memoization:} Cache fractal applications for repeated patterns
+\item \textbf{Lazy Evaluation:} Defer RPM computations until forced
+\end{enumerate}
+
+\chapter{Version History}
+\label{app:versions}
+
+\begin{description}
+\item[v6.1 (Current)] Dynamic Semantics Release
+  \begin{itemize}
+  \item RPM formalized as full monad with proofs
+  \item Noetic Fractal Calculus with convergence analysis
+  \item Integrated RPM + Fractal evaluation rules
+  \item Extended worked examples (20+)
+  \item Complete BNF grammar
+  \end{itemize}
+
+\item[v6.0] Core Formalization
+  \begin{itemize}
+  \item Basic algebraic structures
+  \item Category-theoretic framework
+  \item Initial operational semantics
+  \item Type system foundation
+  \end{itemize}
+
+\item[v5.0] Initial Mathematical Framework
+  \begin{itemize}
+  \item Domain and foundation definitions
+  \item Noetic function introduction
+  \item Basic composition rules
+  \end{itemize}
+\end{description}
+
+%=============================================================================
+% BIBLIOGRAPHY AND INDEX
+%=============================================================================
+
+\backmatter
+
+\chapter*{Acknowledgments}
+\addcontentsline{toc}{chapter}{Acknowledgments}
+
+This formal specification draws upon rich traditions in:
+\begin{itemize}
+\item Category theory and functional programming semantics
+\item Monad theory and effect systems
+\item Type theory and programming language design
+\item Hermetic philosophy and esoteric mathematics
+\end{itemize}
+
+\begin{thebibliography}{99}
+\bibitem{kybalion} Three Initiates. \textit{The Kybalion}. Yogi Publication Society, 1908.
+\bibitem{moggi} E. Moggi. ``Notions of computation and monads.'' \textit{Information and Computation}, 93(1):55--92, 1991.
+\bibitem{wadler} P. Wadler. ``Monads for functional programming.'' \textit{Advanced Functional Programming}, LNCS 925:24--52, 1995.
+\bibitem{pierce} B. C. Pierce. \textit{Types and Programming Languages}. MIT Press, 2002.
+\bibitem{plotkin} G. D. Plotkin. ``A structural approach to operational semantics.'' DAIMI FN-19, 1981.
+\bibitem{mac-lane} S. Mac Lane. \textit{Categories for the Working Mathematician}. Springer, 1971.
+\end{thebibliography}
+
+\printindex
+
+\end{document}

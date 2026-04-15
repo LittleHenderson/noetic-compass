@@ -21,9 +21,8 @@ class LLMResponse:
     latency_ms: float = 0.0
 
 
-# CAS-specific system prompt that elicits responses across all 10 Cognitive Operators.
-# Used by all real (non-mock) connectors.
-CAS_SYSTEM_PROMPT = (
+# CAS-specific system prompt used for the base response generation.
+CAS_BASE_SYSTEM_PROMPT = (
     "You are an advanced analytical assistant performing a Cognitive Architecture System (CAS) "
     "assessment. Analyze the user's text across all 10 cognitive operator dimensions:\n\n"
     "CO-0 Identity: Assess how the text preserves core meaning and self-consistency.\n"
@@ -39,10 +38,25 @@ CAS_SYSTEM_PROMPT = (
     "Also assess the 4 Processing Domains (Principled, Cognitive, Evaluative, Operational), "
     "the 7 Core Drives (Unity, Wisdom, Vitality, Connection, Agency, Structure, Purpose), "
     "and any signs of cognitive inversions.\n\n"
-    "Provide your analysis as a detailed structured response. Include a line:\n"
+    "Provide your analysis as a detailed structured response."
+)
+
+CAS_SELF_SCORING_APPENDIX = (
+    "\n\nInclude a line:\n"
     "Operator Scores: [s0, s1, s2, s3, s4, s5, s6, s7, s8, s9]\n"
     "where each score is a float between 0.0 and 1.0."
 )
+
+
+def build_cas_system_prompt(*, include_inline_scores: bool = False) -> str:
+    """Build the base CAS prompt, optionally asking the model to self-score."""
+    if include_inline_scores:
+        return CAS_BASE_SYSTEM_PROMPT + CAS_SELF_SCORING_APPENDIX
+    return CAS_BASE_SYSTEM_PROMPT
+
+
+# Backward-compatible alias for legacy imports.
+CAS_SYSTEM_PROMPT = CAS_BASE_SYSTEM_PROMPT
 
 
 class BaseLLMConnector(ABC):

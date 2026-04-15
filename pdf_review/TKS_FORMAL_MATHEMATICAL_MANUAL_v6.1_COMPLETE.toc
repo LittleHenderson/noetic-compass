@@ -1,0 +1,116 @@
+\contentsline {chapter}{Abstract}{iii}{chapter*.1}%
+\contentsline {chapter}{Preface}{ix}{chapter*.3}%
+\contentsline {part}{I\hspace {1em}Foundations}{1}{part.1}%
+\contentsline {chapter}{\numberline {1}Introduction}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Aims and Scope of TKS}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}The Central Thesis}{3}{section.1.2}%
+\contentsline {section}{\numberline {1.3}v6.1 Dynamic Semantics: Overview}{4}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}The RPM Monad}{4}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Noetic Fractal Calculus}{4}{subsection.1.3.2}%
+\contentsline {section}{\numberline {1.4}Notation and Conventions}{4}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Canonical Ontology}{7}{chapter.2}%
+\contentsline {section}{\numberline {2.1}The Primordial Duality: Mind and Idea}{7}{section.2.1}%
+\contentsline {section}{\numberline {2.2}The Four Worlds}{8}{section.2.2}%
+\contentsline {section}{\numberline {2.3}The 40 Elements}{8}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Element Semantics by Mode}{9}{subsection.2.3.1}%
+\contentsline {section}{\numberline {2.4}The Ten Noetic Operators}{9}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}The Mirror Principle}{9}{subsection.2.4.1}%
+\contentsline {section}{\numberline {2.5}The Seven Foundations}{10}{section.2.5}%
+\contentsline {section}{\numberline {2.6}The Acquisition Space}{11}{section.2.6}%
+\contentsline {part}{II\hspace {1em}Algebraic Structures}{13}{part.2}%
+\contentsline {chapter}{\numberline {3}Noetic Operator Algebra}{15}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Composition as Binary Operation}{15}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Fundamental Composition Axioms}{15}{section.3.2}%
+\contentsline {section}{\numberline {3.3}The Complete 10$\times $10 Noetic Composition Table}{16}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Dualities and Inversions}{16}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Commutators and Anti-Commutators}{17}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Eigenmodes and Stability}{17}{section.3.6}%
+\contentsline {chapter}{\numberline {4}Algebraic Structures of Tootra Arithmetic}{19}{chapter.4}%
+\contentsline {section}{\numberline {4.1}The Idea Space as a Mathematical Structure}{19}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Tootra-Addition ($\oplus _T$)}{19}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Tootra-Subtraction ($\ominus _T$)}{20}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Tootra-Multiplication ($\otimes _T$)}{20}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Tootra-Division ($\oslash _T$)}{20}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Algebraic Structure Summary}{21}{section.4.6}%
+\contentsline {part}{III\hspace {1em}Categorical Framework}{23}{part.3}%
+\contentsline {chapter}{\numberline {5}The Category Noetica}{25}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Definition of Category Noetica}{25}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Verification of Category Axioms}{25}{section.5.2}%
+\contentsline {section}{\numberline {5.3}World Subcategories}{26}{section.5.3}%
+\contentsline {chapter}{\numberline {6}The ACBE Functor}{27}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Functor Definition}{27}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Proof of Functoriality}{27}{section.6.2}%
+\contentsline {section}{\numberline {6.3}The Cascade Decomposition}{28}{section.6.3}%
+\contentsline {part}{IV\hspace {1em}Dynamic Semantics}{29}{part.4}%
+\contentsline {chapter}{\numberline {7}The RPM Monad and Dynamic Evaluation}{31}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Motivation: Prerequisites as Computational Effects}{31}{section.7.1}%
+\contentsline {section}{\numberline {7.2}The RPM Type Constructor}{31}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Monad Structure}{32}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Proof of Monad Laws}{32}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Prerequisite Checking Operations}{33}{section.7.5}%
+\contentsline {section}{\numberline {7.6}Dynamic Evaluation Rules}{33}{section.7.6}%
+\contentsline {section}{\numberline {7.7}RPM Diagnostic Algorithm}{34}{section.7.7}%
+\contentsline {section}{\numberline {7.8}Worked Examples: RPM Evaluation}{34}{section.7.8}%
+\contentsline {chapter}{\numberline {8}Noetic Fractal Calculus and Recursive Dynamics}{37}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Fractals as Higher-Order Operators}{37}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Fractal Composition}{38}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Fractal Simplification}{38}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Fractal Semantics}{39}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Fractal Iteration and Convergence}{39}{section.8.5}%
+\contentsline {section}{\numberline {8.6}Fractal Classification}{39}{section.8.6}%
+\contentsline {section}{\numberline {8.7}Standard Fractal Families}{40}{section.8.7}%
+\contentsline {section}{\numberline {8.8}Operational Semantics for Fractals}{40}{section.8.8}%
+\contentsline {section}{\numberline {8.9}Worked Examples: Fractal Evaluation}{41}{section.8.9}%
+\contentsline {part}{V\hspace {1em}Integrated Semantics}{43}{part.5}%
+\contentsline {chapter}{\numberline {9}Denotational Semantics}{45}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Semantic Domains}{45}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Expression Semantics}{45}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Noetic Function Semantics}{46}{section.9.3}%
+\contentsline {section}{\numberline {9.4}RPM Semantics}{46}{section.9.4}%
+\contentsline {section}{\numberline {9.5}Fractal Semantics}{46}{section.9.5}%
+\contentsline {section}{\numberline {9.6}ACBE Functor Semantics}{47}{section.9.6}%
+\contentsline {section}{\numberline {9.7}Compositionality}{47}{section.9.7}%
+\contentsline {chapter}{\numberline {10}Operational Semantics}{49}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Small-Step Semantics}{49}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Big-Step Semantics}{50}{section.10.2}%
+\contentsline {section}{\numberline {10.3}Semantic Equivalence}{51}{section.10.3}%
+\contentsline {section}{\numberline {10.4}Progress and Preservation}{52}{section.10.4}%
+\contentsline {section}{\numberline {10.5}Termination Analysis}{52}{section.10.5}%
+\contentsline {section}{\numberline {10.6}Integrated RPM-Fractal Evaluation}{53}{section.10.6}%
+\contentsline {part}{VI\hspace {1em}Type Theory and Language Specification}{55}{part.6}%
+\contentsline {chapter}{\numberline {11}Type System}{57}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Base Types}{57}{section.11.1}%
+\contentsline {section}{\numberline {11.2}Constructed Types}{57}{section.11.2}%
+\contentsline {section}{\numberline {11.3}Typing Contexts}{58}{section.11.3}%
+\contentsline {section}{\numberline {11.4}Typing Rules}{58}{section.11.4}%
+\contentsline {section}{\numberline {11.5}Type Inference}{60}{section.11.5}%
+\contentsline {section}{\numberline {11.6}Domain-Specific Typing}{60}{section.11.6}%
+\contentsline {section}{\numberline {11.7}Type Safety Properties}{60}{section.11.7}%
+\contentsline {chapter}{\numberline {12}Language Specification}{63}{chapter.12}%
+\contentsline {section}{\numberline {12.1}Lexical Structure}{63}{section.12.1}%
+\contentsline {section}{\numberline {12.2}Grammar}{63}{section.12.2}%
+\contentsline {section}{\numberline {12.3}Concrete Syntax Examples}{65}{section.12.3}%
+\contentsline {section}{\numberline {12.4}Abstract Syntax}{66}{section.12.4}%
+\contentsline {section}{\numberline {12.5}Desugaring Rules}{67}{section.12.5}%
+\contentsline {section}{\numberline {12.6}Static Semantics Summary}{68}{section.12.6}%
+\contentsline {part}{VII\hspace {1em}Applications, Examples, and Reference}{69}{part.7}%
+\contentsline {chapter}{\numberline {13}Comprehensive Worked Examples}{71}{chapter.13}%
+\contentsline {section}{\numberline {13.1}Foundation Examples}{71}{section.13.1}%
+\contentsline {section}{\numberline {13.2}Fractal Application Examples}{72}{section.13.2}%
+\contentsline {section}{\numberline {13.3}RPM Monad Examples}{74}{section.13.3}%
+\contentsline {section}{\numberline {13.4}Integrated Examples}{75}{section.13.4}%
+\contentsline {chapter}{\numberline {14}Reference Tables}{79}{chapter.14}%
+\contentsline {section}{\numberline {14.1}Domain Reference}{79}{section.14.1}%
+\contentsline {section}{\numberline {14.2}Noetic Function Reference}{79}{section.14.2}%
+\contentsline {section}{\numberline {14.3}Standard Fractal Reference}{80}{section.14.3}%
+\contentsline {section}{\numberline {14.4}Type Reference}{80}{section.14.4}%
+\contentsline {chapter}{\numberline {15}Appendices}{81}{chapter.15}%
+\contentsline {chapter}{\numberline {A}Symbol Index}{83}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Proof Summaries}{85}{appendix.B}%
+\contentsline {section}{\numberline {B.1}Key Theorems and Their Proofs}{85}{section.B.1}%
+\contentsline {chapter}{\numberline {C}Implementation Notes}{87}{appendix.C}%
+\contentsline {section}{\numberline {C.1}Interpreter Architecture}{87}{section.C.1}%
+\contentsline {section}{\numberline {C.2}Data Structure Recommendations}{87}{section.C.2}%
+\contentsline {section}{\numberline {C.3}Optimization Opportunities}{88}{section.C.3}%
+\contentsline {chapter}{\numberline {D}Version History}{89}{appendix.D}%
+\contentsline {chapter}{Acknowledgments}{91}{appendix*.4}%

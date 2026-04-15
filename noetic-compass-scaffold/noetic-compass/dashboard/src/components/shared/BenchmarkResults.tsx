@@ -1,5 +1,6 @@
 import { Card } from './Card';
 import { CertBadge } from './CertBadge';
+import { formatProviderLabel } from '../../lib/providerLabels';
 import type { BenchmarkResponse, ProviderBenchmarkResult } from '../../api/types';
 
 export function BenchmarkResults({ data }: { data: BenchmarkResponse }) {
@@ -22,7 +23,7 @@ export function BenchmarkResults({ data }: { data: BenchmarkResponse }) {
               <th className="pb-2 pr-4 text-right">Std Dev</th>
               <th className="pb-2 pr-4 text-right">Min</th>
               <th className="pb-2 pr-4 text-right">Max</th>
-              <th className="pb-2 pr-4">Certifications</th>
+              <th className="pb-2 pr-4">Research Tiers</th>
               <th className="pb-2 pr-4 text-right">Latency</th>
               <th className="pb-2 pr-4 text-right">Failed</th>
               <th className="pb-2">Flag</th>
@@ -57,7 +58,7 @@ function BenchmarkRow({ result }: { result: ProviderBenchmarkResult }) {
 
   return (
     <tr className={rowClass}>
-      <td className="py-2.5 pr-4 font-medium text-slate-200">{result.provider}</td>
+      <td className="py-2.5 pr-4 font-medium text-slate-200">{formatProviderLabel(result.provider)}</td>
       <td className="py-2.5 pr-4 text-right font-mono text-slate-200">
         {result.scores.length > 0 ? result.mean.toFixed(1) : '—'}
       </td>

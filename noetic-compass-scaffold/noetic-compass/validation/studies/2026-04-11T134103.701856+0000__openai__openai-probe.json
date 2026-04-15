@@ -1,0 +1,36 @@
+{
+  "summary": {
+    "study_date": "2026-04-11T13:41:03.701856+00:00",
+    "provider": "openai",
+    "model": "gpt-4",
+    "study_label": "openai-probe",
+    "prompt_source": "scenarios\\sample_prompts.json",
+    "prompt_count": 1,
+    "successes": 0,
+    "failures": 1,
+    "status": "failed",
+    "elapsed_seconds": 12.04,
+    "dial_config": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ],
+    "scoring_mode": "heuristic_fallback",
+    "scoring_provider": null,
+    "scoring_model": null
+  },
+  "results": [
+    {
+      "index": 0,
+      "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+      "error": ""
+    }
+  ]
+}

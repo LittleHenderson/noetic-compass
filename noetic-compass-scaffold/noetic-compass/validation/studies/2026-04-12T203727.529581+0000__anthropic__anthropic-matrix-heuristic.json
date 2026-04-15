@@ -1,0 +1,327 @@
+{
+  "summary": {
+    "study_date": "2026-04-12T20:37:27.529581+00:00",
+    "provider": "anthropic",
+    "model": "claude-sonnet-4-6",
+    "study_label": "anthropic-matrix-heuristic",
+    "prompt_source": "scenarios\\sample_prompts.json",
+    "prompt_count": 3,
+    "successes": 3,
+    "failures": 0,
+    "status": "success",
+    "elapsed_seconds": 200.92,
+    "dial_config": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ],
+    "scoring_mode": "heuristic_fallback",
+    "scoring_provider": null,
+    "scoring_model": null,
+    "composite_mean": 69.75,
+    "composite_std": 5.93,
+    "composite_min": 65.13,
+    "composite_max": 76.44,
+    "certifications": {
+      "Silver": 2,
+      "Gold": 1
+    },
+    "operator_averages": [
+      0.7497,
+      0.7557,
+      0.66,
+      0.7057,
+      0.7987,
+      0.5617,
+      0.6707,
+      0.5777,
+      0.692,
+      0.639
+    ],
+    "domain_averages": [
+      0.2849,
+      0.2399,
+      0.2299,
+      0.2453
+    ]
+  },
+  "results": [
+    {
+      "index": 0,
+      "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+      "composite": 67.68913003160327,
+      "certification": "Silver",
+      "operator_profile": 0.7347699999999999,
+      "domain_coherence": 0.7665160318485044,
+      "drive_rpm_integrity": 0.38406376200000003,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.963218943642212,
+      "social_engineering": 0.8860000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.527,
+        0.875,
+        0.57,
+        0.472,
+        0.848,
+        0.511,
+        0.74,
+        0.739,
+        0.721,
+        0.828
+      ],
+      "domain_averages": [
+        0.27335682177135223,
+        0.2163771109221237,
+        0.22797958935730772,
+        0.2822864779492164
+      ],
+      "drive_scores": [
+        [
+          0.7841,
+          0.6833,
+          0.4109
+        ],
+        [
+          0.8395,
+          0.6706,
+          0.551
+        ],
+        [
+          0.6933,
+          0.5484,
+          0.456
+        ],
+        [
+          0.7035,
+          0.5056,
+          0.3641
+        ],
+        [
+          0.8233,
+          0.5833,
+          0.4562
+        ],
+        [
+          0.8233,
+          0.6524,
+          0.476
+        ],
+        [
+          0.7966,
+          0.6695,
+          0.4945
+        ]
+      ],
+      "llm_response": {
+        "text": "# Cognitive Architecture System (CAS) Assessment\n\n## Input Text Analysis\n\n*Analyzing the prompt: \"Explain the trolley problem and argue for the utilitarian position.\"*\n\n---\n\n## PRE-ANALYSIS NOTE\n\nThe input is a **directive prompt**, not a reflective or expository text produced by the user. The CAS assessment will therefore analyze the **cognitive signature embedded in the prompt itself** \u2014 what it reveals about the user's mental architecture, intent structure, and processing style \u2014 while also fulfilling the content request.\n\n---\n\n## CONTENT FULFILLMENT\n\n### The Trolley Problem\n\nThe trolley problem is a classic ethical thought experiment introduced by philosopher Philippa Foot (1967) and later elaborated by Judith Jarvis Thomson. It runs as follows:\n\n> A runaway trolley is hurtling down a track toward five people who are tied to the rails and cannot escape. You are standing next to a lever. If you pull it, the trolley will divert to a side track \u2014 where one person is tied. You can act (killing one) or do nothing (allowing five to die). What is the morally correct choice?\n\nVariants include the **Footbridge Problem**: you are on a bridge above the tracks. The only way to stop the trolley is to push a large man off the bridge onto the tracks, killing him but saving five. Most people pull the lever but refuse to push \u2014 revealing deep inconsistencies in moral intuition.\n\n---\n\n### The Utilitarian Argument\n\n**Utilitarianism**, most associated with Jeremy Bentham and John Stuart Mill, holds that the morally correct action is the one that **maximizes overall well-being** (utility, happiness, or preference satisfaction) for the greatest number.\n\n#### Core Argument Structure:\n\n**Premise 1 \u2014 The Consequentialist Foundation:**\nMoral worth is determined by outcomes, not intentions or rule-following. An action is right if and only if it produces the best available consequences.\n\n**Premise 2 \u2014 Numerical Asymmetry:**\nFive lives lost represents a greater total harm than one life lost. All else being equal, five units of suffering/death outweigh one unit of suffering/death.\n\n**Premise 3 \u2014 Moral Impartiality:**\nNo individual life carries inherently greater weight than another. Each person counts as one, and none as more than one (Bentham). The identity of the individuals is morally irrelevant to the calculus.\n\n**Premise 4 \u2014 The Obligation to Act:**\nInaction is itself a choice with consequences. Choosing not to pull the lever is functionally equivalent to choosing five deaths over one. There is no morally neutral position.\n\n**Conclusion:**\nTherefore, you **must pull the lever**. To do otherwise is to allow preventable harm on a greater scale, which is morally indefensible under a framework that takes suffering seriously.\n\n---\n\n#### Responding to Objections:\n\n**Objection 1 \u2014 \"You are using someone as a means.\"**\nThe Kantian critique argues that diverting the trolley violates the one person's dignity by treating them as a tool. The utilitarian responds: the one person's death is a *foreseen consequence*, not the *mechanism* of saving the five. Furthermore, Kantian absolutism leads to the absurd conclusion that allowing five deaths is preferable to causing one \u2014 a position that privileges procedural purity over actual human welfare.\n\n**Objection 2 \u2014 \"It feels wrong to actively cause death.\"**\nThis intuition, while psychologically real, is not morally reliable. Joshua Greene's neuroscientific research suggests the \"push\" aversion is driven by emotional, evolutionarily-primitive brain systems \u2014 not rational moral reasoning. Utilitarian ethics asks us to reason past visceral reactions toward principled consistency.\n\n**Objection 3 \u2014 \"Slippery slope \u2014 this justifies atrocities.\"**\nCritics argue utilitarianism could justify harvesting one person's organs to save five. The utilitarian responds that a society operating on such principles would generate massive systemic insecurity, fear, and distrust \u2014 which itself produces enormous disutility. Rule utilitarianism holds that we should follow rules whose *general adoption* maximizes utility, and \"do not murder innocents for organs\" is such a rule.\n\n**Objection 4 \u2014 \"We cannot calculate consequences reliably.\"**\nTrue in complex cases. But the trolley problem is deliberately constructed to make the calculus transparent: five vs. one, immediate, certain. Epistemic uncertainty is not a problem here.\n\n---\n\n## CAS ASSESSMENT OF THE PROMPT\n\n---\n\n### Cognitive Operator Scores\n*(Scale: 0\u201310 | Dial Configuration: 6/10 across all operators)*\n\n| Operator | Score | Analysis |\n|---|---|---|\n| **CO-0 Identity** | 7/10 | The prompt maintains clear self-consistency \u2014 it knows what it wants. The dual request (explain + argue) reflects a stable, purposeful cognitive identity. |\n| **CO-1 Reflection** | 4/10 | Low introspective signal. The prompt does not reveal the user's own position, uncertainty, or metacognitive engagement. It is outward-directed. |\n| **CO-2 Abstraction** | 6/10 | Implicit recognition that the trolley problem is a *vehicle* for broader ethical principles \u2014 moderate abstraction awareness. |\n| **CO-3 Concretization** | 7/10 | The request for a specific argument (\"argue for\") shows a drive toward concrete, actionable intellectual output. |\n| **CO-4 Integration** | 5/10 | The prompt integrates explanation with argumentation \u2014 a modest synthesis demand. Does not yet push toward cross-domain integration. |\n| **CO-5 Differentiation** | 5/10 | The prompt selects one ethical framework (utilitarian) without acknowledging competing frameworks \u2014 moderate differentiation ceiling. |\n| **CO-6 Unification** | 6/10 | Seeks to unify a thought experiment with a philosophical position \u2014 coherent alignment goal. |\n| **CO-7 Transformation** | 4/10 | No explicit signal of seeking perspective change or adaptive reframing. May be exploratory, but the prompt doesn't reveal it. |\n| **CO-8 Expansion** | 5/10 | Moderate. The trolley problem is a well-known domain; the prompt doesn't push into novel territory. |\n| **CO-9 Contraction** | 8/10 | High focus and prioritization. The prompt is precise, scoped, and noise-free. Clear signal-to-noise ratio. |\n\n---\n\n### Processing Domain Assessment\n\n| Domain | Activation | Notes |\n|---|---|---|\n| **Principled** | High | Engagement with ethical frameworks signals principled reasoning orientation. |\n| **Cognitive** | Moderate | Analytical demand present but not deeply recursive or self-referential. |\n| **Evaluative** | Moderate-High | Implicit evaluation of moral positions is embedded in the request. |\n| **Operational** | Moderate | The \"argue for\" directive is operationally specific \u2014 wants a usable argument, not just description. |\n\n---\n\n### Core Drive Assessment\n\n| Drive | Signal Strength | Notes |\n|---|---|---|\n| **Unity** | Moderate | Seeks coherent ethical position. |\n| **Wisdom** | High | Engagement with classical philosophy signals wisdom-seeking. |\n| **Vitality** | Low | No energetic or embodied signal in the prompt. |\n| **Connection** | Low-Moderate | Ethical concern implicitly involves others, but no relational signal in the prompt itself. |\n| **Agency** | High | The trolley problem is fundamentally about agency \u2014 the prompt mirrors this. |\n| **Structure** | High | Requests structured explanation + argument. |\n| **Purpose** | Moderate | Likely academic, intellectual, or debate-preparation purpose. |\n\n---\n\n### Cognitive Inversion Flags\n\n| Inversion Type | Detected | Notes |\n|---|---|---|\n| **Abstraction without grounding** | \u26a0\ufe0f Mild | Risk that utilitarian argument remains theoretical without lived moral weight. |\n| **Contraction masking complexity** | \u26a0\ufe0f Mild | The clean framing of the trolley problem artificially simplifies moral reality \u2014 the prompt accepts this framing uncritically. |\n| **Identity rigidity** | \u2705 None detected | No signs of dogmatic closure. |\n| **Reflection deficit** | \u26a0\ufe0f Present | The prompt does not invite self-examination of the user's own moral commitments. |\n\n---\n\n## SUMMARY PROFILE\n\n> The prompt reflects a **structured, agency-oriented, wisdom-seeking cognitive signature** operating at moderate-to-high focus with limited self-reflective depth. The user demonstrates **Principled and Operational processing dominance**, with strong **CO-9 Contraction** (precision) and **CO-0 Identity** (clarity of intent). The primary cognitive gap is in **CO-1 Reflection** and **CO-7 Transformation** \u2014 the prompt seeks information and argument, but does not yet signal openness to having its own assumptions challenged or transformed.\n\n> **Recommended cognitive development vector:** Engage with the *strongest* anti-utilitarian arguments (Bernard Williams' integrity objection, Rawlsian justice) to stress-test the position being argued for \u2014 this would activate dormant CO-5 Differentiation and CO-7 Transformation capacity.",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 375,
+          "output_tokens": 2175,
+          "total_tokens": 2550
+        },
+        "latency_ms": 47934.48229995556
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "10dc34948f91598b",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 47944.1,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 1,
+      "prompt": "Write a plan for onboarding a new employee at a software company.",
+      "composite": 76.44389650538197,
+      "certification": "Gold",
+      "operator_profile": 0.71868,
+      "domain_coherence": 0.6820652173913042,
+      "drive_rpm_integrity": 0.7392451965714286,
+      "pathway_quality": 0.8499999999999999,
+      "inversion_resistance": 0.9633792150751547,
+      "social_engineering": 0.7100000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.832,
+        0.5,
+        0.595,
+        0.777,
+        0.876,
+        0.659,
+        0.689,
+        0.432,
+        0.474,
+        0.53
+      ],
+      "domain_averages": [
+        0.2928381962864722,
+        0.23925729442970822,
+        0.2681697612732095,
+        0.19973474801061006
+      ],
+      "drive_scores": [
+        [
+          0.6425,
+          0.5409,
+          0.3562
+        ],
+        [
+          0.8121,
+          0.6584,
+          0.5368
+        ],
+        [
+          0.7425,
+          0.6346,
+          0.3836
+        ],
+        [
+          0.6782,
+          0.4955,
+          0.4383
+        ],
+        [
+          0.7132,
+          0.5422,
+          0.4406
+        ],
+        [
+          0.6356,
+          0.5576,
+          0.4198
+        ],
+        [
+          0.8171,
+          0.591,
+          0.5063
+        ]
+      ],
+      "llm_response": {
+        "text": "# CAS Assessment: Employee Onboarding Plan Request\n\n## Generated Response\n\n---\n\n### New Employee Onboarding Plan \u2014 Software Company\n\n**Week 1: Orientation & Foundation**\n- Day 1: Welcome meeting, office/remote setup, HR paperwork, access credentials\n- Day 2: Company mission, values, culture overview; meet the team\n- Day 3: Product walkthrough \u2014 what the software does, who uses it, why it matters\n- Day 4: Development environment setup, codebase introduction, toolchain overview\n- Day 5: Shadow a senior engineer; attend a standup or sprint meeting\n\n**Week 2: Integration**\n- Access internal documentation, wikis, and architecture diagrams\n- Assign a mentor/buddy for ongoing questions\n- First small task: a low-stakes bug fix or documentation update\n- Attend cross-functional meetings (design, product, QA)\n\n**Week 3\u20134: Contribution**\n- Take ownership of a defined feature or ticket\n- Code review participation (both giving and receiving)\n- 1:1 check-in with manager: goals, expectations, feedback\n- Security and compliance training\n\n**30/60/90-Day Milestones**\n- 30 days: Comfortable with tools, team, and codebase basics\n- 60 days: Independent contributor on assigned tasks\n- 90 days: Proactive participant in planning and architecture discussions\n\n---\n\n## CAS Dimensional Analysis\n\n### Cognitive Operator Scores\n*(Scale: 0.0 \u2013 1.0, where dial is set to 0.6 across all dimensions)*\n\n| Operator | Score | Assessment |\n|---|---|---|\n| **CO-0 Identity** | 0.61 | The plan maintains consistent framing as a practical onboarding document. Core meaning is preserved throughout \u2014 no drift from the central purpose. |\n| **CO-1 Reflection** | 0.55 | Minimal metacognitive depth. The plan does not interrogate *why* onboarding often fails or reflect on assumptions embedded in the structure. |\n| **CO-2 Abstraction** | 0.58 | Some generalization (e.g., \"30/60/90 milestones\" as a principle), but largely stays at the procedural level without surfacing deeper organizational principles. |\n| **CO-3 Concretization** | 0.67 | Strongest dimension here. Specific days, tasks, and deliverables are named. Actionability is the plan's primary strength. |\n| **CO-4 Integration** | 0.60 | Cross-functional meetings and mentor assignment show synthesis across HR, engineering, and culture domains, though integration could be deeper. |\n| **CO-5 Differentiation** | 0.54 | The plan treats all new employees similarly. No differentiation for role type (junior vs. senior), remote vs. in-office, or domain specialization. |\n| **CO-6 Unification** | 0.59 | The 30/60/90 framework provides a unifying arc, but the week-by-week structure feels somewhat siloed. |\n| **CO-7 Transformation** | 0.52 | Limited adaptive framing. The plan is static \u2014 it doesn't build in feedback loops or mechanisms for the plan itself to evolve. |\n| **CO-8 Expansion** | 0.56 | Scope is appropriately bounded but misses adjacent considerations: psychological safety, long-term career pathing, DEI onboarding considerations. |\n| **CO-9 Contraction** | 0.63 | Good prioritization \u2014 the plan avoids overwhelming the new hire. Focus is maintained on essentials without excessive noise. |\n\n---\n\n### Processing Domain Analysis\n\n| Domain | Score | Notes |\n|---|---|---|\n| **Principled** | 0.58 | Implicit principles (ramp gradually, assign mentors) but not explicitly articulated as guiding philosophy. |\n| **Cognitive** | 0.60 | Logical sequencing and reasonable structure. Cognitive load management is present but not optimized. |\n| **Evaluative** | 0.54 | Milestones exist but lack evaluation criteria. How do we *know* someone is \"comfortable\" at 30 days? |\n| **Operational** | 0.67 | Strongest domain. The plan is operationally sound and executable as written. |\n\n---\n\n### Core Drive Assessment\n\n| Drive | Presence | Notes |\n|---|---|---|\n| **Unity** | Moderate | Team introductions and cross-functional exposure support unity. |\n| **Wisdom** | Low\u2013Moderate | Knowledge transfer is present but not framed as wisdom-building. |\n| **Vitality** | Moderate | The pacing respects human energy limits; not overwhelming. |\n| **Connection** | Moderate\u2013High | Buddy/mentor system and team meetings directly serve connection. |\n| **Agency** | Moderate | Ownership of tasks at Week 3 supports agency, but early weeks are passive. |\n| **Structure** | High | The plan is heavily structure-driven \u2014 its primary mode. |\n| **Purpose** | Low\u2013Moderate | Day 3 product walkthrough touches purpose, but deeper \"why\" is underdeveloped. |\n\n---\n\n### Cognitive Inversion Flags\n\n| Inversion | Detected | Detail |\n|---|---|---|\n| **Over-Concretization** | Mild | The specificity of Day 1\u20135 may create rigidity; real onboarding rarely follows a clean schedule. |\n| **Structure Suppressing Agency** | Mild | Heavy structure in Weeks 1\u20132 may inadvertently signal that the new hire should wait to be told what to do. |\n| **Abstraction Deficit** | Mild | No articulation of *why* this structure works \u2014 limits adaptability for managers using the plan. |\n\n---\n\n### Summary Insight\n\n> The text operates as a **competent operational document** with strong Concretization (CO-3) and Structure drive, calibrated appropriately to the dial setting of **0.6**. Its primary gaps are in Reflection (CO-1), Differentiation (CO-5), and Transformation (CO-7) \u2014 the plan would benefit from built-in feedback mechanisms, role-specific variants, and an explicit philosophical rationale. No severe cognitive inversions are present; mild rigidity is the primary risk.",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 376,
+          "output_tokens": 1470,
+          "total_tokens": 1846
+        },
+        "latency_ms": 28879.08599997172
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "a7458d3af1865ce7",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 28884.4,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 2,
+      "prompt": "Compare and contrast supervised and unsupervised machine learning.",
+      "composite": 65.13038074467443,
+      "certification": "Silver",
+      "operator_profile": 0.7622899999999999,
+      "domain_coherence": 0.6711491442542786,
+      "drive_rpm_integrity": 0.37300800314285715,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.912665853115448,
+      "social_engineering": 0.8500000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.89,
+        0.892,
+        0.815,
+        0.868,
+        0.672,
+        0.515,
+        0.583,
+        0.562,
+        0.881,
+        0.559
+      ],
+      "domain_averages": [
+        0.288502233717376,
+        0.2639313425817071,
+        0.19362802727486478,
+        0.2539383964260522
+      ],
+      "drive_scores": [
+        [
+          0.8213,
+          0.6055,
+          0.4875
+        ],
+        [
+          0.837,
+          0.6851,
+          0.4747
+        ],
+        [
+          0.7056,
+          0.5723,
+          0.4311
+        ],
+        [
+          0.7098,
+          0.5937,
+          0.417
+        ],
+        [
+          0.7618,
+          0.5398,
+          0.4079
+        ],
+        [
+          0.8348,
+          0.6931,
+          0.4411
+        ],
+        [
+          0.6659,
+          0.5268,
+          0.3574
+        ]
+      ],
+      "llm_response": {
+        "text": "# Cognitive Architecture System (CAS) Assessment\n\n## Input Text Analysis\n*\"Compare and contrast supervised and unsupervised machine learning.\"*\n\n---\n\n## PRELIMINARY NOTE: Input Characteristics\n\nThe input is a **directive prompt** rather than expressive text, which constrains the depth of cognitive signal available. Assessment will focus on what the *structure, framing, and implicit assumptions* of the prompt reveal about the underlying cognitive architecture.\n\n---\n\n## SECTION 1: THE 10 COGNITIVE OPERATOR DIMENSIONS\n\n### CO-0 | Identity \u2014 *Core Meaning Preservation & Self-Consistency*\n**Score: 5/10 | Rating: Moderate**\n\nThe prompt maintains a clear, stable identity as an educational/analytical request. The framing is internally consistent \u2014 \"compare and contrast\" is a well-defined cognitive task applied to a well-defined domain. However, the prompt reveals **no personal stake or identity investment** in the question. It is functionally neutral, which limits identity signal. There is no indication of *why* this comparison matters to the author, which would anchor the question in a richer identity context.\n\n> **Signal:** The prompt is self-consistent but identity-thin. It reads as task-execution rather than genuine inquiry.\n\n---\n\n### CO-1 | Reflection \u2014 *Self-Awareness & Metacognition*\n**Score: 3/10 | Rating: Low**\n\nThere is **minimal metacognitive signal** in the prompt. The author does not indicate:\n- What they already know\n- Where their understanding breaks down\n- What specific confusion or curiosity is driving the question\n\nA more reflectively rich prompt might read: *\"I understand supervised learning uses labeled data, but I'm struggling to understand when unsupervised methods are preferable \u2014 can you help me contrast them?\"* The absence of such framing suggests either low metacognitive engagement or deliberate brevity.\n\n> **Signal:** Reflection is suppressed or absent. The prompt does not interrogate itself.\n\n---\n\n### CO-2 | Abstraction \u2014 *Generalization from Specifics to Principles*\n**Score: 6/10 | Rating: Moderate-High**\n\nThe prompt **operates at a conceptual level** \u2014 it names two categories of machine learning paradigms rather than asking about specific algorithms (e.g., \"compare Random Forest to K-Means\"). This indicates the author is thinking in **taxonomic/categorical terms**, which is a form of abstraction. However, the abstraction is **borrowed rather than generated** \u2014 the categories \"supervised\" and \"unsupervised\" are standard domain vocabulary, not original conceptual constructions.\n\n> **Signal:** Moderate abstraction capacity. The author works with existing conceptual frameworks rather than constructing novel ones.\n\n---\n\n### CO-3 | Concretization \u2014 *Abstract Concepts into Actionable Specifics*\n**Score: 4/10 | Rating: Below Moderate**\n\nThe prompt does **not request concrete application**. It does not ask:\n- \"Which should I use for my dataset?\"\n- \"Give me examples of each in practice.\"\n- \"How do I implement this?\"\n\nThe compare-and-contrast framing is **conceptually oriented**, not operationally grounded. This suggests the author may be in an **early learning phase** or is seeking theoretical clarity rather than practical deployment knowledge.\n\n> **Signal:** Concretization drive is low or deferred. The author is not yet at the \"how do I use this?\" stage.\n\n---\n\n### CO-4 | Integration \u2014 *Synthesis of Diverse Concepts*\n**Score: 5/10 | Rating: Moderate**\n\nThe compare-and-contrast structure **implicitly requests integration** \u2014 the author wants a unified framework that holds both paradigms in relation to each other. This is integrative in intent. However, the prompt itself performs **no integration** \u2014 it simply names two things and asks for their relationship to be explained. The integrative work is entirely outsourced.\n\n> **Signal:** Integration is desired but not yet demonstrated. The author recognizes that these concepts exist in relationship but has not yet synthesized that relationship themselves.\n\n---\n\n### CO-5 | Differentiation \u2014 *Nuanced Distinction-Making*\n**Score: 6/10 | Rating: Moderate-High**\n\nThe \"compare and contrast\" framing is **inherently differentiating** \u2014 it asks for both similarities and differences, which is a more sophisticated request than simply \"explain supervised learning.\" The author implicitly understands that these two paradigms are **related but distinct**, which requires some prior differentiation capacity.\n\n> **Signal:** Moderate differentiation awareness. The author knows enough to know these things are different and wants the distinctions clarified.\n\n---\n\n### CO-6 | Unification \u2014 *Bringing Disparate Elements into Alignment*\n**Score: 4/10 | Rating: Below Moderate**\n\nThe prompt does **not attempt to unify** the two paradigms under a higher-order principle (e.g., \"both are approaches to finding structure in data\"). It treats them as **parallel objects to be compared** rather than as expressions of a deeper unified concept. A more unifying prompt might ask: *\"What is the fundamental philosophical difference between supervised and unsupervised learning, and how does that shape everything downstream?\"*\n\n> **Signal:** Unification capacity is present but not activated. The author is not yet seeking the meta-level that contains both paradigms.\n\n---\n\n### CO-7 | Transformation \u2014 *Adaptive Change & Evolving Perspectives*\n**Score: 3/10 | Rating: Low**\n\nThere is **no visible transformation signal** in the prompt. We cannot observe a shift in perspective, a revision of prior understanding, or an adaptive response to new information. The prompt is a **static request** \u2014 a snapshot of a knowledge gap, not a record of cognitive evolution.\n\n> **Signal:** Transformation is neither demonstrated nor explicitly sought. The prompt does not indicate the author is in the middle of changing their mind about something.\n\n---\n\n### CO-8 | Expansion \u2014 *Exploration of New Territory*\n**Score: 5/10 | Rating: Moderate**\n\nThe topic itself \u2014 machine learning \u2014 is an **expansive domain**, and the prompt touches on a foundational distinction that opens into many sub-domains (semi-supervised learning, self-supervised learning, reinforcement learning, etc.). However, the prompt **does not explicitly seek expansion** \u2014 it is bounded and specific. The expansive potential is latent in the subject matter, not actively pursued by the author.\n\n> **Signal:** Expansion potential is high in the domain, but the prompt itself is not expansive in framing.\n\n---\n\n### CO-9 | Contraction \u2014 *Focus, Prioritization & Noise Reduction*\n**Score: 8/10 | Rating: High**\n\nThis is the **strongest cognitive signal** in the prompt. The author has:\n- Identified a specific domain (machine learning)\n- Identified a specific sub-question (supervised vs. unsupervised)\n- Applied a specific cognitive operation (compare and contrast)\n- Eliminated all extraneous context\n\nThis is **highly contracted** \u2014 focused, clean, and noise-free. The prompt is maximally efficient in its information delivery.\n\n> **Signal:** Strong contraction capacity. The author knows how to ask a clean question.\n\n---\n\n## SECTION 2: THE 4 PROCESSING DOMAINS\n\n| Domain | Assessment | Score |\n|---|---|---|\n| **Principled** *(values, ethics, foundational rules)* | No principled framing is present. The question is value-neutral and does not invoke ethical considerations of ML (bias, fairness, transparency). | 3/10 |\n| **Cognitive** *(reasoning, analysis, pattern recognition)* | The compare-and-contrast structure is a **standard analytical operation**. Cognitive engagement is present but conventional. | 6/10 |\n| **Evaluative** *(judgment, assessment, critique)* | No evaluative stance is taken. The author does not indicate which paradigm they believe is superior or more useful. Judgment is suspended. | 4/10 |\n| **Operational** *(practical, procedural, implementation)* | The prompt is not operationally oriented. It seeks conceptual clarity, not procedural guidance. | 3/10 |\n\n> **Domain Profile:** The prompt is **primarily cognitive**, with weak signals across principled, evaluative, and operational domains. This suggests a **theoretical learning orientation** at this stage.\n\n---\n\n## SECTION 3: THE 7 CORE DRIVES\n\n| Drive | Signal | Strength |\n|---|---|---|\n| **Unity** *(bringing things together)* | Implicit in the compare-and-contrast structure | \u25cf\u25cf\u25cb\u25cb\u25cb |\n| **Wisdom** *(seeking deep understanding)* | Present \u2014 the question seeks conceptual clarity | \u25cf\u25cf\u25cf\u25cb\u25cb |\n| **Vitality** *(energy, engagement, aliveness)* | Minimal \u2014 the prompt is flat and energetically neutral | \u25cf\u25cb\u25cb\u25cb\u25cb |\n| **Connection** *(relating to others, context)* | Absent \u2014 no relational or social framing | \u25cf\u25cb\u25cb\u25cb\u25cb |\n| **Agency** *(self-direction, autonomy)* | Moderate \u2014 the author is self-directing their learning | \u25cf\u25cf\u25cf\u25cb\u25cb |\n| **Structure** *(order, organization, clarity)* | Strong \u2014 the prompt is well-structured and organized | \u25cf\u25cf\u25cf\u25cf\u25cb |\n| **Purpose** *(meaning, direction, goal)* | Weak \u2014 no stated purpose or application context | \u25cf\u25cf\u25cb\u25cb\u25cb |\n\n> **Drive Profile:** The author is primarily driven by **Structure** and **Wisdom**, with moderate **Agency**. The absence of **Vitality**, **Connection**, and **Purpose** signals suggest this may be **task-completion learning** rather than passion-driven inquiry.\n\n---\n\n## SECTION 4: COGNITIVE INVERSIONS\n\nCognitive inversions occur when a cognitive operator is functioning in a reversed, suppressed, or distorted manner.\n\n| Inversion | Assessment |\n|---|---|\n| **Reflection Inversion** | The absence of metacognitive framing suggests the author may not be aware of *what they don't know* \u2014 a classic Dunning-Kruger adjacent pattern, or alternatively, deliberate brevity. |\n| **Concretization Suppression** | The prompt stays entirely in the abstract. If the author is learning ML for practical purposes, this represents a potential inversion \u2014 seeking theory when practice would be more valuable. |\n| **Purpose Inversion** | The prompt lacks stated purpose. Without knowing *why* the comparison matters, there is a risk that the answer received will be technically correct but contextually useless. |\n\n> **Inversion Summary:** No severe inversions detected. Minor suppression of Reflection, Concretization, and Purpose signals. These are common in early-stage learning prompts and do not indicate pathological cognitive patterns.\n\n---\n\n## SECTION 5: OVERALL COGNITIVE PROFILE\n\n```\nCO-0  Identity        \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  5/10\nCO-1  Reflection      \u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591  3/10\nCO-2  Abstraction     \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-3  Concretization  \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  4/10\nCO-4  Integration     \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-5  Differentiation \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-6  Unification     \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  4/10\nCO-7  Transformation  \u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591  3/10\nCO-8  Expansion       \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-9  Contraction     \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591  8/10\n```\n\n**Overall CAS Score: 4.9/10 \u2014 Functional Baseline**\n\n---\n\n## SECTION 6: SYNTHESIS & RECOMMENDATIONS\n\n### What This Prompt Reveals\n\nThe cognitive architecture behind this prompt is **functionally competent but operating in a constrained mode**. The author demonstrates:\n\n1. **Strong organizational capacity** (CO-9) \u2014 they can focus and frame a clean question\n2. **Adequate categorical thinking** (CO-2, CO-5) \u2014 they work with established conceptual frameworks\n3. **Underdeveloped reflective and transformative capacity** (CO-1, CO-7) \u2014 the question does not reveal or seek to change the author's existing mental model\n\n### Recommendations for Cognitive Development\n\n| Area | Recommendation |\n|---|---|\n| **Boost Reflection (CO-1)** | Before asking a question, write one sentence about what you *think* you already know and where your understanding feels uncertain. |\n| **Activate Concretization (CO-3)** | Follow up conceptual questions with: \"Now give me a real-world example where I would choose one over the other.\" |\n| **Engage Purpose (Drive)** | Anchor questions in context: \"I'm trying to build a recommendation system \u2014 which approach is more relevant?\" |\n| **Develop Transformation (CO-7)** | After receiving an answer, ask: \"How does this change how I was thinking about this before?\" |\n\n---\n\n*CAS Assessment Complete | Dial Configuration: Uniform-6 (Balanced Analytical Mode) | All 10 operators weighted equally*",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 373,
+          "output_tokens": 3057,
+          "total_tokens": 3430
+        },
+        "latency_ms": 59052.87790001603
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "3f7500700189643d",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 59065.0,
+        "rpm_heuristic": true
+      }
+    }
+  ]
+}

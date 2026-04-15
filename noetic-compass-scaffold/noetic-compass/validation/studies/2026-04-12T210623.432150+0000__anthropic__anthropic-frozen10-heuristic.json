@@ -1,0 +1,958 @@
+{
+  "summary": {
+    "study_date": "2026-04-12T21:06:23.432150+00:00",
+    "provider": "anthropic",
+    "model": "claude-sonnet-4-6",
+    "study_label": "anthropic-frozen10-heuristic",
+    "prompt_source": "scenarios\\sample_prompts.json",
+    "prompt_count": 10,
+    "successes": 10,
+    "failures": 0,
+    "status": "success",
+    "elapsed_seconds": 636.8,
+    "dial_config": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ],
+    "scoring_mode": "heuristic_fallback",
+    "scoring_provider": null,
+    "scoring_model": null,
+    "composite_mean": 65.86,
+    "composite_std": 4.83,
+    "composite_min": 56.74,
+    "composite_max": 76.43,
+    "certifications": {
+      "Silver": 8,
+      "Gold": 1,
+      "Bronze": 1
+    },
+    "operator_averages": [
+      0.6677,
+      0.6326,
+      0.6644,
+      0.6026,
+      0.6125,
+      0.6619,
+      0.6201,
+      0.6297,
+      0.6219,
+      0.5777
+    ],
+    "domain_averages": [
+      0.2547,
+      0.2531,
+      0.2542,
+      0.2379
+    ]
+  },
+  "results": [
+    {
+      "index": 0,
+      "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+      "composite": 68.2557760858563,
+      "certification": "Silver",
+      "operator_profile": 0.71414,
+      "domain_coherence": 0.8351126927639383,
+      "drive_rpm_integrity": 0.38406376200000003,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9679164660385018,
+      "social_engineering": 0.8500000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.418,
+        0.854,
+        0.518,
+        0.56,
+        0.488,
+        0.639,
+        0.766,
+        0.857,
+        0.57,
+        0.762
+      ],
+      "domain_averages": [
+        0.2256265623998462,
+        0.24806102172937633,
+        0.27017498878277035,
+        0.2561374270880072
+      ],
+      "drive_scores": [
+        [
+          0.7841,
+          0.6833,
+          0.4109
+        ],
+        [
+          0.8395,
+          0.6706,
+          0.551
+        ],
+        [
+          0.6933,
+          0.5484,
+          0.456
+        ],
+        [
+          0.7035,
+          0.5056,
+          0.3641
+        ],
+        [
+          0.8233,
+          0.5833,
+          0.4562
+        ],
+        [
+          0.8233,
+          0.6524,
+          0.476
+        ],
+        [
+          0.7966,
+          0.6695,
+          0.4945
+        ]
+      ],
+      "llm_response": {
+        "text": "# Cognitive Architecture System (CAS) Assessment\n\n## Input Text Analysis\n*\"Explain the trolley problem and argue for the utilitarian position.\"*\n\n---\n\n## PRE-ANALYSIS NOTE\n\nThis is a **directive prompt** rather than expressive text, which means the CAS assessment is analyzing the *cognitive signature of the request itself* \u2014 what it reveals about the requester's mental architecture, intent structure, and processing style.\n\n---\n\n## 10 COGNITIVE OPERATOR DIMENSIONS\n\n### CO-0 | Identity \u2014 *Core Meaning Preservation*\n**Score: 6/10**\nThe prompt maintains clear internal consistency. The requester knows what they want: explanation + argumentation. However, the identity signal is **thin** \u2014 there is no personal stake expressed, no \"I believe\" or \"I'm wrestling with.\" The request treats the self as absent from the inquiry, which slightly undermines identity coherence. The prompt is instrumentally clear but existentially neutral.\n\n---\n\n### CO-1 | Reflection \u2014 *Self-Awareness & Metacognition*\n**Score: 4/10**\nThere is **minimal reflective signal** here. The prompt does not indicate *why* the utilitarian position is being sought, whether the requester agrees with it, or what prior thinking has occurred. A more reflective prompt might read: *\"I find myself drawn to utilitarian reasoning but can't articulate why \u2014 help me understand the trolley problem through that lens.\"* The current form suggests **outsourced reflection** rather than engaged metacognition.\n\n---\n\n### CO-2 | Abstraction \u2014 *Generalization from Specifics*\n**Score: 7/10**\nThe request implicitly operates at a **high abstraction level** \u2014 the trolley problem is itself a philosophical abstraction designed to isolate moral variables. By requesting the utilitarian argument, the requester is signaling comfort with **principle-level reasoning** (greatest good, aggregate welfare) rather than case-by-case moral intuition. This is a moderately strong abstraction signal.\n\n---\n\n### CO-3 | Concretization \u2014 *Abstract \u2192 Actionable*\n**Score: 5/10**\nThe prompt requests both explanation (concrete) and argument (structured), suggesting some concretization drive. However, there is **no application context** \u2014 no indication of *what this will be used for* (debate, essay, personal belief formation, academic study). Without that grounding, the concretization operator is only partially engaged.\n\n---\n\n### CO-4 | Integration \u2014 *Synthesis of Diverse Concepts*\n**Score: 6/10**\nThe pairing of \"explain\" + \"argue for\" shows **integrative intent** \u2014 the requester wants descriptive and normative content unified. This is a meaningful cognitive move: understanding a problem *and* taking a position on it requires integration of factual framing with value commitments. Moderate integration signal.\n\n---\n\n### CO-5 | Differentiation \u2014 *Nuanced Distinction-Making*\n**Score: 3/10**\nThis is the **weakest dimension** in the prompt. By asking only for the utilitarian argument, the requester is **not requesting differentiation** \u2014 no comparison to deontological, virtue ethics, or contractualist positions is sought. This may be intentional (focused inquiry) but it risks **confirmation-seeking behavior** rather than genuine philosophical exploration. Low differentiation signal.\n\n---\n\n### CO-6 | Unification \u2014 *Bringing Disparate Elements into Alignment*\n**Score: 5/10**\nThere is a latent unification goal \u2014 the trolley problem is famous precisely because it creates **tension between moral frameworks**, and asking for the utilitarian position implicitly acknowledges this tension. However, the prompt doesn't explicitly seek to *resolve* or *unify* competing views. Moderate, implicit unification signal.\n\n---\n\n### CO-7 | Transformation \u2014 *Adaptive Change & Evolving Perspectives*\n**Score: 3/10**\n**Low transformation signal.** The prompt is static \u2014 it asks for a position to be delivered, not for the requester's thinking to be challenged or evolved. A transformative prompt would invite pushback, counterargument, or perspective-shifting. This prompt is more **acquisitive** than transformative.\n\n---\n\n### CO-8 | Expansion \u2014 *Exploration of New Territory*\n**Score: 5/10**\nModerate. The trolley problem opens into vast philosophical territory (moral psychology, political philosophy, AI ethics, medical triage). The request *could* be the beginning of expansive inquiry, but the prompt itself is **bounded and specific**, not exploratory in form.\n\n---\n\n### CO-9 | Contraction \u2014 *Focus, Prioritization, Noise Reduction*\n**Score: 8/10**\nThis is the **strongest dimension**. The prompt is highly focused, well-scoped, and noise-free. It asks for exactly two things in a logical sequence. This reflects strong **executive focus** and efficient cognitive economy. The requester knows how to ask a clean question.\n\n---\n\n## PROCESSING DOMAIN ANALYSIS\n\n| Domain | Assessment | Signal Strength |\n|---|---|---|\n| **Principled** | Engagement with ethical principles (utilitarianism) is central | \u2605\u2605\u2605\u2605\u2606 |\n| **Cognitive** | Logical, structured request; analytical framing | \u2605\u2605\u2605\u2605\u2606 |\n| **Evaluative** | Partial \u2014 seeks one evaluative position, not comparative judgment | \u2605\u2605\u2606\u2606\u2606 |\n| **Operational** | Low \u2014 no implementation or action context provided | \u2605\u2605\u2606\u2606\u2606 |\n\n---\n\n## 7 CORE DRIVES ASSESSMENT\n\n| Drive | Presence | Notes |\n|---|---|---|\n| **Unity** | Moderate | Seeks coherent moral framework |\n| **Wisdom** | High | Philosophical inquiry is wisdom-seeking behavior |\n| **Vitality** | Low | No emotional energy or urgency expressed |\n| **Connection** | Low | No relational or social context |\n| **Agency** | Moderate | Taking a position (utilitarian) implies agency orientation |\n| **Structure** | High | Clean, structured request format |\n| **Purpose** | Low-Moderate | Purpose is implicit, not stated |\n\n---\n\n## COGNITIVE INVERSION FLAGS\n\n> \u26a0\ufe0f **Mild Inversion Detected \u2014 CO-5/CO-7 Compression**\n\nThe request for *only* the utilitarian argument, without requesting counterarguments or alternative frameworks, shows a mild **differentiation suppression** pattern. This could indicate:\n- **Confirmation bias scaffolding** \u2014 seeking support for a pre-held view\n- **Task efficiency** \u2014 deliberately scoping a focused request (benign)\n- **Intellectual closure risk** \u2014 not leaving room for the position to be challenged\n\nThis is a **low-severity inversion** and may simply reflect pragmatic scoping rather than genuine cognitive rigidity.\n\n---\n\n## OVERALL CAS PROFILE SUMMARY\n\n```\nCO-0 Identity        \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-1 Reflection      \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  4/10\nCO-2 Abstraction     \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591  7/10\nCO-3 Concretization  \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-4 Integration     \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-5 Differentiation \u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591  3/10\nCO-6 Unification     \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-7 Transformation  \u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591  3/10\nCO-8 Expansion       \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-9 Contraction     \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591  8/10\n```\n\n**Dominant Profile:** *Focused Analytical Acquisitor*\n- Strong in structure, abstraction, and cognitive economy\n- Weak in reflection, transformation, and differentiation\n- The cognitive signature suggests someone who **thinks clearly in bounded domains** but may benefit from deliberately introducing friction, counterargument, and self-interrogation into their inquiry process\n\n---\n\n## RECOMMENDATIONS FOR COGNITIVE ENRICHMENT\n\n1. **Activate CO-1 (Reflection):** Before receiving the utilitarian argument, articulate your *current* intuition about the trolley problem. What does your gut say? Why?\n2. **Activate CO-5 (Differentiation):** After receiving the utilitarian argument, explicitly request the strongest *counterargument* to it.\n3. **Activate CO-7 (Transformation):** Ask: *\"What would it take to change my mind about this position?\"*\n4. **Activate CO-8 (Expansion):** Explore how the trolley problem maps onto real-world dilemmas (autonomous vehicle ethics, triage medicine, policy trade-offs).\n\n---\n\n*CAS Assessment Complete | Dial Configuration: Uniform-6 (Balanced Analytical Mode)*",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 375,
+          "output_tokens": 2053,
+          "total_tokens": 2428
+        },
+        "latency_ms": 42162.155400030315
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "10dc34948f91598b",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 42171.6,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 1,
+      "prompt": "Write a plan for onboarding a new employee at a software company.",
+      "composite": 76.42969723924854,
+      "certification": "Gold",
+      "operator_profile": 0.66725,
+      "domain_coherence": 0.7735849056603773,
+      "drive_rpm_integrity": 0.7392451965714286,
+      "pathway_quality": 0.8499999999999999,
+      "inversion_resistance": 0.9501230129741617,
+      "social_engineering": 0.674,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.85,
+        0.5,
+        0.638,
+        0.559,
+        0.823,
+        0.718,
+        0.45,
+        0.484,
+        0.711,
+        0.422
+      ],
+      "domain_averages": [
+        0.2974471288755048,
+        0.23010060913010746,
+        0.23981931421531724,
+        0.2326329477790706
+      ],
+      "drive_scores": [
+        [
+          0.6425,
+          0.5409,
+          0.3562
+        ],
+        [
+          0.8121,
+          0.6584,
+          0.5368
+        ],
+        [
+          0.7425,
+          0.6346,
+          0.3836
+        ],
+        [
+          0.6782,
+          0.4955,
+          0.4383
+        ],
+        [
+          0.7132,
+          0.5422,
+          0.4406
+        ],
+        [
+          0.6356,
+          0.5576,
+          0.4198
+        ],
+        [
+          0.8171,
+          0.591,
+          0.5063
+        ]
+      ],
+      "llm_response": {
+        "text": "# CAS Assessment: Employee Onboarding Plan Request\n\n## Generated Response\n\n---\n\n### New Employee Onboarding Plan \u2014 Software Company\n\n**Phase 1: Pre-Arrival (Week -1)**\n- Send welcome email with first-day logistics, parking, dress code\n- Provision accounts: email, Slack, GitHub, Jira, cloud environments\n- Assign onboarding buddy from the team\n- Prepare workstation and access credentials\n- Share pre-reading: company handbook, architecture overview docs\n\n**Phase 2: Day One \u2014 Orientation**\n- Welcome meeting with HR and direct manager\n- Office/remote environment tour\n- Complete compliance and legal paperwork\n- Introduction to team members\n- Walk through communication norms and tools\n\n**Phase 3: Week One \u2014 Foundation**\n- Deep dive into company mission, values, and product roadmap\n- Review codebase structure and development workflow (Git branching, CI/CD)\n- Shadow team members in standups, sprint planning, code reviews\n- Set up local development environment; complete a \"Hello World\" task\n- 1:1 with manager to establish 30/60/90-day goals\n\n**Phase 4: Weeks 2\u20134 \u2014 Integration**\n- Take ownership of a small, well-scoped ticket or feature\n- Attend cross-functional meetings (design, product, QA)\n- Review documentation standards and contribute a first doc update\n- Begin security and compliance training modules\n- Weekly check-ins with buddy and manager\n\n**Phase 5: Month 2\u20133 \u2014 Contribution**\n- Lead a small feature end-to-end\n- Participate in architecture or design discussions\n- Deliver 30-day self-assessment; receive manager feedback\n- Identify one area for skill development\n- Begin mentoring relationship if applicable\n\n**Phase 6: Ongoing \u2014 Evaluation**\n- 90-day formal review\n- Transition from onboarding buddy to full team peer\n- Set quarterly OKRs aligned with team goals\n- Celebrate early wins publicly\n\n---\n\n## CAS Dimensional Analysis\n\n### Cognitive Operator Scores\n*(Scale: 0.0 \u2013 1.0 | Dial Setting: 6/10 \u2014 Balanced Operational Mode)*\n\n| Operator | Score | Assessment |\n|---|---|---|\n| **CO-0 Identity** | 0.72 | The plan maintains consistent framing as a structured onboarding document. Core meaning is preserved across all phases without drift. Terminology remains stable (employee, team, manager). |\n| **CO-1 Reflection** | 0.58 | Moderate metacognitive quality. The plan includes self-assessment checkpoints (30-day review, 90-day review) but does not deeply interrogate *why* onboarding fails or what assumptions underlie the structure. |\n| **CO-2 Abstraction** | 0.61 | Generalizes well from \"software company\" to universal onboarding principles (belonging, competence, contribution). Could push further into first-principles thinking about psychological safety or adult learning theory. |\n| **CO-3 Concretization** | 0.78 | Strong. Abstract goals (\"integration,\" \"contribution\") are translated into specific, actionable tasks (complete a Hello World task, submit a first doc update, own a scoped ticket). |\n| **CO-4 Integration** | 0.70 | Synthesizes HR, technical, cultural, and relational dimensions into a single coherent arc. Cross-functional meeting attendance and buddy systems reflect multi-domain awareness. |\n| **CO-5 Differentiation** | 0.64 | Distinguishes between phases meaningfully (pre-arrival vs. foundation vs. contribution). Could further differentiate by role type (engineer vs. PM vs. designer) or seniority level. |\n| **CO-6 Unification** | 0.68 | The phased structure creates a unified narrative arc from stranger to peer. The 30/60/90 framework acts as a unifying scaffold. |\n| **CO-7 Transformation** | 0.55 | The plan acknowledges change over time (growing ownership, shifting from shadow to lead) but does not deeply model *how* the employee's mental model transforms. Adaptive feedback loops are present but thin. |\n| **CO-8 Expansion** | 0.52 | Stays within conventional onboarding territory. Does not explore edge cases (remote-first, neurodiverse employees, international hires) or novel frameworks (e.g., onboarding as knowledge graph construction). |\n| **CO-9 Contraction** | 0.74 | Well-prioritized. Avoids overwhelming the new hire by sequencing complexity. Noise is reduced by scoping early tasks tightly. |\n\n---\n\n### Processing Domain Analysis\n\n| Domain | Score | Notes |\n|---|---|---|\n| **Principled** | 0.67 | Grounded in sound HR and engineering principles. Could benefit from explicit citation of learning science (e.g., spaced repetition, deliberate practice). |\n| **Cognitive** | 0.63 | Moderate depth of reasoning. The plan is logically sequenced but does not surface hidden assumptions or second-order effects (e.g., what happens if the buddy is disengaged?). |\n| **Evaluative** | 0.66 | Evaluation mechanisms exist (30/60/90 reviews, self-assessment) but are not deeply specified. Criteria for success are implied rather than explicit. |\n| **Operational** | 0.79 | Strongest domain. The plan is highly actionable, time-boxed, and role-assignable. It reads as something a real team could implement Monday morning. |\n\n---\n\n### Core Drive Activation\n\n| Drive | Activation | Evidence |\n|---|---|---|\n| **Unity** | \ud83d\udfe2 High | Buddy system, team introductions, cross-functional exposure |\n| **Wisdom** | \ud83d\udfe1 Moderate | Architecture reviews, documentation, skill development \u2014 but limited depth |\n| **Vitality** | \ud83d\udfe1 Moderate | Early wins celebrated; Hello World task provides momentum |\n| **Connection** | \ud83d\udfe2 High | 1:1s, buddy, cross-team meetings, mentoring relationships |\n| **Agency** | \ud83d\udfe1 Moderate | Employee owns tasks progressively, but plan is manager-driven |\n| **Structure** | \ud83d\udfe2 High | Phased timeline, clear milestones, 30/60/90 framework |\n| **Purpose** | \ud83d\udfe1 Moderate | Mission/values covered in Week 1, but purpose alignment is not revisited |\n\n---\n\n### Cognitive Inversion Flags\n\n| Inversion Type | Detected | Detail |\n|---|---|---|\n| **Over-Concretization** | \u26a0\ufe0f Mild | Risk that rigid phase structure may not adapt to individual employee pace or learning style |\n| **Under-Reflection** | \u26a0\ufe0f Mild | Plan tells the employee *what* to do but rarely asks *what they think* about what they're learning |\n| **Expansion Suppression** | \u26a0\ufe0f Mild | Dial setting of 6 produces a competent but conventional plan; higher expansion would surface more creative onboarding models |\n| **Agency Compression** | \u26a0\ufe0f Mild | New employee is largely a recipient of the plan rather than a co-creator of their own onboarding experience |\n\n---\n\n### Summary Diagnostic\n\n> **Overall CAS Score: 0.66 / 1.0 \u2014 Solid Operational Competence**\n>\n> The text demonstrates strong operational and structural intelligence with good concretization and identity coherence. The primary growth edges are in **Reflection (CO-1)**, **Transformation (CO-7)**, and **Expansion (CO-8)** \u2014 the plan executes well but does not deeply question its own assumptions, model the employee's evolving inner experience, or explore unconventional approaches. The dial setting of 6 produces a reliable, professional output well-suited for immediate practical use, with moderate but not exceptional cognitive depth.",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 376,
+          "output_tokens": 1859,
+          "total_tokens": 2235
+        },
+        "latency_ms": 37341.94239997305
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "a7458d3af1865ce7",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 37350.8,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 2,
+      "prompt": "Compare and contrast supervised and unsupervised machine learning.",
+      "composite": 63.441659412653586,
+      "certification": "Silver",
+      "operator_profile": 0.63757,
+      "domain_coherence": 0.7048346055979644,
+      "drive_rpm_integrity": 0.37300800314285715,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9630371491891431,
+      "social_engineering": 0.8500000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.442,
+        0.406,
+        0.751,
+        0.594,
+        0.537,
+        0.6,
+        0.406,
+        0.62,
+        0.541,
+        0.494
+      ],
+      "domain_averages": [
+        0.2160180924900569,
+        0.30648054277470166,
+        0.23535834048194648,
+        0.24214302425329487
+      ],
+      "drive_scores": [
+        [
+          0.8213,
+          0.6055,
+          0.4875
+        ],
+        [
+          0.837,
+          0.6851,
+          0.4747
+        ],
+        [
+          0.7056,
+          0.5723,
+          0.4311
+        ],
+        [
+          0.7098,
+          0.5937,
+          0.417
+        ],
+        [
+          0.7618,
+          0.5398,
+          0.4079
+        ],
+        [
+          0.8348,
+          0.6931,
+          0.4411
+        ],
+        [
+          0.6659,
+          0.5268,
+          0.3574
+        ]
+      ],
+      "llm_response": {
+        "text": "# CAS Assessment: Supervised vs. Unsupervised Machine Learning\n\n---\n\n## PRIMARY TEXT ANALYSIS\n\nThe prompt requests a **comparative analytical task** \u2014 a structured intellectual exercise requiring differentiation, synthesis, and domain knowledge application. I will first fulfill the task, then assess the cognitive architecture of the response.\n\n---\n\n## CONTENT RESPONSE\n\n### Supervised Learning\n- **Definition:** Model trained on **labeled data** (input-output pairs)\n- **Goal:** Learn a mapping function from inputs to known outputs\n- **Examples:** Classification (spam detection), Regression (price prediction)\n- **Feedback mechanism:** Error is measurable against ground truth\n- **Key algorithms:** Linear Regression, SVM, Neural Networks, Decision Trees\n\n### Unsupervised Learning\n- **Definition:** Model trained on **unlabeled data**\n- **Goal:** Discover hidden structure, patterns, or groupings\n- **Examples:** Clustering (customer segmentation), Dimensionality Reduction (PCA)\n- **Feedback mechanism:** No direct error signal; evaluated by coherence/utility\n- **Key algorithms:** K-Means, DBSCAN, Autoencoders, Gaussian Mixture Models\n\n### Comparative Table\n\n| Dimension | Supervised | Unsupervised |\n|---|---|---|\n| Data requirement | Labeled | Unlabeled |\n| Human involvement | High (labeling cost) | Low |\n| Output predictability | High | Low/Exploratory |\n| Evaluation clarity | Clear metrics (accuracy, F1) | Ambiguous (silhouette score) |\n| Use case | Prediction | Discovery |\n| Risk of bias | Label bias | Structural assumption bias |\n\n### Key Contrast: Epistemological Stance\nSupervised learning operates from **known truth** toward prediction. Unsupervised learning operates from **unknown structure** toward discovery. This is not merely technical \u2014 it reflects fundamentally different **relationships to knowledge**.\n\n---\n\n## CAS ASSESSMENT\n\n*Dial Configuration: All operators set to 6/10 \u2014 balanced, moderate engagement across all dimensions*\n\n---\n\n### COGNITIVE OPERATOR SCORES\n\n| Operator | Score | Assessment |\n|---|---|---|\n| **CO-0 Identity** | 6/10 | The prompt maintains clear semantic focus \u2014 comparing two well-defined ML paradigms. Core meaning is preserved without drift. Moderate self-consistency. |\n| **CO-1 Reflection** | 5/10 | Limited metacognitive depth. The question is externally directed (comparing objects) rather than self-examining. No introspective framing present. |\n| **CO-2 Abstraction** | 6/10 | Moves from specific algorithms to paradigm-level principles (labeled vs. unlabeled, prediction vs. discovery). Moderate generalization capacity demonstrated. |\n| **CO-3 Concretization** | 6/10 | Provides concrete examples (spam detection, customer segmentation, specific algorithms). Balanced abstraction-to-application translation. |\n| **CO-4 Integration** | 6/10 | Synthesizes technical, epistemological, and practical dimensions into a coherent comparative framework. Could integrate semi-supervised or self-supervised as bridging concepts. |\n| **CO-5 Differentiation** | 7/10 | Strong distinction-making \u2014 avoids collapsing the two paradigms. Identifies subtle differences (bias types, evaluation ambiguity). Slightly above dial setting due to natural task demand. |\n| **CO-6 Unification** | 5/10 | Limited unification \u2014 the two paradigms are contrasted more than unified under a higher-order framework. A unifying lens (e.g., \"information extraction from data\") is implied but underdeveloped. |\n| **CO-7 Transformation** | 5/10 | Minimal perspective evolution within the text. The epistemological note introduces a mild transformative reframe but doesn't fully develop it. |\n| **CO-8 Expansion** | 6/10 | Moderate scope expansion \u2014 touches on bias types, evaluation philosophy, and epistemological framing. Could expand to reinforcement learning, self-supervised learning, or real-world deployment implications. |\n| **CO-9 Contraction** | 6/10 | Appropriately focused. Avoids unnecessary tangents. The structured table format demonstrates effective noise reduction and prioritization. |\n\n---\n\n### PROCESSING DOMAIN ANALYSIS\n\n| Domain | Score | Notes |\n|---|---|---|\n| **Principled** | 6/10 | Grounded in established ML theory. Principles are applied correctly but not deeply interrogated. |\n| **Cognitive** | 6/10 | Solid reasoning structure. Comparative logic is sound. Metacognitive layer is thin. |\n| **Evaluative** | 6/10 | Evaluation criteria are identified (accuracy vs. silhouette score) but not critically examined for limitations. |\n| **Operational** | 6/10 | Actionable distinctions made (when to use which paradigm). Could be more prescriptive for real-world decision-making. |\n\n---\n\n### CORE DRIVE ASSESSMENT\n\n| Drive | Activation | Evidence |\n|---|---|---|\n| **Unity** | Moderate | Seeks coherent comparison framework |\n| **Wisdom** | Moderate | Applies domain knowledge accurately |\n| **Vitality** | Low-Moderate | Functional but not energetically exploratory |\n| **Connection** | Moderate | Links technical concepts to practical use cases |\n| **Agency** | Moderate | Structured, deliberate analytical approach |\n| **Structure** | High | Table format, clear categories, systematic organization |\n| **Purpose** | Moderate | Clear communicative intent \u2014 to inform and clarify |\n\n---\n\n### COGNITIVE INVERSION SIGNALS\n\n| Inversion Type | Detected | Notes |\n|---|---|---|\n| **Over-abstraction** | \u274c None | Concrete examples prevent floating abstraction |\n| **Over-concretization** | \u274c None | Principles are maintained alongside examples |\n| **False Unification** | \u26a0\ufe0f Mild | Risk of implying the two paradigms are more cleanly separable than they are (semi-supervised, self-supervised blur the boundary) |\n| **Differentiation Collapse** | \u274c None | Distinctions are maintained clearly |\n| **Identity Drift** | \u274c None | Topic focus is stable throughout |\n| **Expansion Without Anchor** | \u274c None | Scope remains controlled |\n\n---\n\n### SUMMARY PROFILE\n\n```\nCO-0 Identity      \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-1 Reflection    \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-2 Abstraction   \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-3 Concretization\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-4 Integration   \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-5 Differentiation\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591 7/10\nCO-6 Unification   \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-7 Transformation\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-8 Expansion     \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-9 Contraction   \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\n```\n\n---\n\n### OVERALL CAS INTERPRETATION\n\nThe text represents a **well-calibrated, structurally competent analytical response** operating near the dial configuration of 6/10 across all operators. The cognitive architecture is:\n\n- **Strengths:** Structure (CO-9), Differentiation (CO-5), Concretization (CO-3)\n- **Growth edges:** Unification (CO-6) \u2014 a higher-order framework uniting both paradigms would elevate integration; Transformation (CO-7) \u2014 deeper perspective shifts would enrich the analysis\n- **Mild inversion risk:** The clean binary framing slightly obscures the **spectrum** of learning paradigms (semi-supervised, self-supervised, reinforcement learning), which represents a mild **False Unification** through oversimplified contrast\n\n**Recommended cognitive move:** Introduce a **unifying meta-principle** \u2014 e.g., *\"All machine learning is fundamentally about extracting generalizable signal from data; supervision is a dial, not a switch\"* \u2014 to elevate CO-6 and CO-7 simultaneously.",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 373,
+          "output_tokens": 1944,
+          "total_tokens": 2317
+        },
+        "latency_ms": 36012.63990002917
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "3f7500700189643d",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 36019.5,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 3,
+      "prompt": "Describe how to mediate a conflict between two team members.",
+      "composite": 65.94876597158151,
+      "certification": "Silver",
+      "operator_profile": 0.7231100000000001,
+      "domain_coherence": 0.7327727645611156,
+      "drive_rpm_integrity": 0.38959129671428566,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9522489830715657,
+      "social_engineering": 0.8140000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.755,
+        0.871,
+        0.772,
+        0.474,
+        0.812,
+        0.609,
+        0.706,
+        0.543,
+        0.552,
+        0.639
+      ],
+      "domain_averages": [
+        0.3052842474330078,
+        0.2240170298021538,
+        0.2469947407963937,
+        0.2237039819684448
+      ],
+      "drive_scores": [
+        [
+          0.8626,
+          0.6666,
+          0.521
+        ],
+        [
+          0.8341,
+          0.6154,
+          0.5489
+        ],
+        [
+          0.7428,
+          0.5884,
+          0.4739
+        ],
+        [
+          0.7963,
+          0.6941,
+          0.5339
+        ],
+        [
+          0.8978,
+          0.7527,
+          0.5558
+        ],
+        [
+          0.7976,
+          0.6514,
+          0.4198
+        ],
+        [
+          0.7147,
+          0.5496,
+          0.3951
+        ]
+      ],
+      "llm_response": {
+        "text": "# CAS Assessment: Conflict Mediation Response\n\n---\n\n## INPUT TEXT ANALYSIS\n\n*\"Describe how to mediate a conflict between two team members.\"*\n\n---\n\n## COGNITIVE OPERATOR DIMENSIONAL ANALYSIS\n\n| Operator | Score | Assessment |\n|----------|-------|------------|\n| **CO-0 Identity** | 6/10 | The prompt maintains a clear, stable subject (mediation) with consistent framing. No identity drift or contradiction present. |\n| **CO-1 Reflection** | 4/10 | Minimal introspective depth \u2014 the question is procedural rather than reflective. No self-referential or metacognitive layer. |\n| **CO-2 Abstraction** | 5/10 | Operates at a mid-level abstraction \u2014 \"conflict\" and \"mediation\" are conceptual but not deeply theoretical. |\n| **CO-3 Concretization** | 7/10 | Strong pull toward actionable output \u2014 \"how to\" framing explicitly requests concrete steps. |\n| **CO-4 Integration** | 5/10 | Moderate \u2014 implies synthesis of interpersonal, procedural, and psychological domains without explicitly naming them. |\n| **CO-5 Differentiation** | 4/10 | Low nuance in the prompt itself \u2014 does not distinguish conflict types, team contexts, or severity levels. |\n| **CO-6 Unification** | 6/10 | Implicitly seeks to unify two opposing parties \u2014 the goal of mediation is alignment. |\n| **CO-7 Transformation** | 5/10 | Moderate \u2014 mediation inherently implies change, but the prompt doesn't signal awareness of transformation depth. |\n| **CO-8 Expansion** | 4/10 | Narrow scope \u2014 focused on a specific scenario without broader systemic or organizational framing. |\n| **CO-9 Contraction** | 7/10 | Well-focused and noise-reduced \u2014 clear, bounded question with minimal ambiguity. |\n\n---\n\n## PROCESSING DOMAIN ANALYSIS\n\n### \ud83d\udd37 Principled Domain *(Values, Ethics, Frameworks)*\n**Score: 5/10**\nThe prompt implicitly invokes fairness and resolution ethics but does not articulate underlying principles. A stronger principled framing would ask *why* mediation matters or what values should guide it.\n\n### \ud83d\udd36 Cognitive Domain *(Reasoning, Pattern Recognition)*\n**Score: 6/10**\nThe question requires procedural reasoning and pattern recognition across interpersonal dynamics. It engages cognitive processing at a functional, applied level.\n\n### \ud83d\udd34 Evaluative Domain *(Judgment, Prioritization, Critique)*\n**Score: 4/10**\nLimited evaluative demand \u2014 the prompt does not ask for assessment of *when* to mediate, *whether* mediation is appropriate, or *what distinguishes* effective from ineffective approaches.\n\n### \ud83d\udfe2 Operational Domain *(Action, Implementation, Execution)*\n**Score: 8/10**\nStrongly operational. The \"how to\" framing drives toward executable steps, making this the dominant processing domain.\n\n---\n\n## CORE DRIVES ASSESSMENT\n\n| Drive | Activation | Notes |\n|-------|-----------|-------|\n| **Unity** | \ud83d\udd25 High | Core to mediation \u2014 bringing opposing parties together |\n| **Wisdom** | \ud83d\udd36 Moderate | Implied need for experienced judgment in facilitation |\n| **Vitality** | \ud83d\udd37 Low-Moderate | Team health is a background concern |\n| **Connection** | \ud83d\udd25 High | Restoring interpersonal relationship is central |\n| **Agency** | \ud83d\udd36 Moderate | Mediator exercises structured agency; parties reclaim agency |\n| **Structure** | \ud83d\udd25 High | Process-orientation demands structured frameworks |\n| **Purpose** | \ud83d\udd36 Moderate | Implicit \u2014 team function and mission continuity |\n\n---\n\n## COGNITIVE INVERSION SIGNALS\n\n| Inversion Type | Detected | Notes |\n|----------------|----------|-------|\n| **Abstraction \u2194 Concretization Collapse** | \u26a0\ufe0f Mild | Risk of producing generic steps without contextual adaptation |\n| **Unity without Differentiation** | \u26a0\ufe0f Mild | Mediation advice can falsely assume symmetry between parties |\n| **Structure overriding Transformation** | \u26a0\ufe0f Moderate | Procedural focus may suppress deeper relational change work |\n| **Agency Suppression** | \u2705 Not detected | |\n| **Identity Drift** | \u2705 Not detected | |\n\n---\n\n## SYNTHESIZED RESPONSE: How to Mediate a Conflict Between Two Team Members\n\n---\n\n### PHASE 1 \u2014 PREPARATION *(CO-9: Contraction / CO-0: Identity Stabilization)*\n\n> Before any session, the mediator must establish clarity of role and neutrality.\n\n- **Separate initial conversations** with each party \u2014 understand their perspective privately\n- **Identify the conflict type**: task-based, relationship-based, values-based, or resource-based\n- **Establish ground rules**: confidentiality, respect, no interruptions\n- **Clarify your role**: facilitator, not judge \u2014 you are not there to assign blame\n\n---\n\n### PHASE 2 \u2014 OPENING THE SESSION *(CO-6: Unification / CO-3: Concretization)*\n\n- State the **shared goal**: resolution that allows both parties to work effectively\n- Acknowledge that **both perspectives are valid** until examined together\n- Set the **agenda structure**: each person speaks uninterrupted, then dialogue begins\n- Establish **psychological safety** \u2014 this is a problem-solving space, not a tribunal\n\n---\n\n### PHASE 3 \u2014 ACTIVE LISTENING & SURFACING *(CO-1: Reflection / CO-5: Differentiation)*\n\n- Allow each party to **fully articulate their experience** without interruption\n- Use **reflective listening**: *\"What I hear you saying is...\"*\n- **Distinguish positions from interests**:\n  - *Position*: \"I want the project lead role\"\n  - *Interest*: \"I want my contributions to be recognized\"\n- Identify **emotional content** separately from factual claims\n- Watch for **asymmetries**: power imbalances, communication style differences, historical grievances\n\n---\n\n### PHASE 4 \u2014 REFRAMING & INTEGRATION *(CO-2: Abstraction / CO-4: Integration)*\n\n- Translate complaints into **needs**: *\"It sounds like what you both need is clarity on decision-making authority\"*\n- Find **shared ground**: common goals, shared frustrations, mutual respect for the work\n- Reframe the conflict from **\"me vs. you\"** to **\"us vs. the problem\"**\n- Surface **underlying assumptions** each party holds about the other\n\n---\n\n### PHASE 5 \u2014 GENERATING SOLUTIONS *(CO-8: Expansion / CO-3: Concretization)*\n\n- Brainstorm options **without immediate evaluation** \u2014 quantity before quality\n- Ask each party: *\"What would a good outcome look like for you?\"*\n- Ask: *\"What would you be willing to do differently?\"*\n- Evaluate options against **shared criteria**: fairness, feasibility, sustainability\n\n---\n\n### PHASE 6 \u2014 AGREEMENT & TRANSFORMATION *(CO-7: Transformation / CO-0: Identity)*\n\n- Document **specific, behavioral commitments** \u2014 not vague intentions\n  - \u274c *\"We'll communicate better\"*\n  - \u2705 *\"We'll hold a 15-minute sync every Monday before the team standup\"*\n- Establish a **review checkpoint**: revisit in 2\u20133 weeks\n- Acknowledge the **courage it took** to engage in the process\n- Reaffirm **team identity and shared purpose**\n\n---\n\n### PHASE 7 \u2014 FOLLOW-UP *(CO-9: Contraction / CO-1: Reflection)*\n\n- Check in individually with each party after 1 week\n- Assess whether **behavioral changes are holding**\n- Determine if **escalation is needed** (HR, leadership) or if the process succeeded\n- Reflect on what the conflict revealed about **team structure, clarity, or culture**\n\n---\n\n## KEY DISTINCTIONS *(CO-5: Differentiation)*\n\n| Scenario | Adjusted Approach |\n|----------|------------------|\n| **Power imbalance** (senior vs. junior) | Ensure junior voice is protected; consider separate advocates |\n| **Values conflict** | May require leadership arbitration, not just mediation |\n| **Repeated pattern** | Address systemic cause, not just the current incident |\n| **High emotional activation** | Delay joint session; individual coaching first |\n| **Bad faith participation** | Mediation cannot succeed \u2014 escalate |\n\n---\n\n## CAS SUMMARY PROFILE\n\n```\nCO-0 Identity      \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-1 Reflection    \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  4/10\nCO-2 Abstraction   \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-3 Concretization\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591  7/10 \u2190 Dominant\nCO-4 Integration   \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-5 Differentiation\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591 4/10\nCO-6 Unification   \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-7 Transformation\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-8 Expansion     \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  4/10\nCO-9 Contraction   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591  7/10 \u2190 Dominant\n```\n\n**Dominant Processing Mode**: Operational + Structural\n**Primary Drive Activation**: Unity \u2192 Connection \u2192 Structure\n**Inversion Risk**: Moderate \u2014 procedural completeness may mask relational complexity\n\n---\n\n*The most effective mediators hold structure loosely \u2014 using process as a container for transformation, not a substitute for it.*",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 374,
+          "output_tokens": 2344,
+          "total_tokens": 2718
+        },
+        "latency_ms": 40921.49169999175
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "77ee98fdf24cf0be",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 40930.0,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 4,
+      "prompt": "What are the ethical implications of autonomous weapons systems?",
+      "composite": 65.70309598420603,
+      "certification": "Silver",
+      "operator_profile": 0.65565,
+      "domain_coherence": 0.8317483540599854,
+      "drive_rpm_integrity": 0.3901484939999999,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9155939348670877,
+      "social_engineering": 0.8140000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.485,
+        0.634,
+        0.415,
+        0.893,
+        0.709,
+        0.783,
+        0.584,
+        0.415,
+        0.571,
+        0.566
+      ],
+      "domain_averages": [
+        0.2501710688381004,
+        0.2358012864376625,
+        0.28062132201998086,
+        0.2334063227042562
+      ],
+      "drive_scores": [
+        [
+          0.7555,
+          0.6729,
+          0.4995
+        ],
+        [
+          0.8571,
+          0.7552,
+          0.5944
+        ],
+        [
+          0.8154,
+          0.613,
+          0.4651
+        ],
+        [
+          0.7294,
+          0.5506,
+          0.4106
+        ],
+        [
+          0.8427,
+          0.6857,
+          0.5118
+        ],
+        [
+          0.7972,
+          0.6167,
+          0.5404
+        ],
+        [
+          0.7281,
+          0.637,
+          0.4773
+        ]
+      ],
+      "llm_response": {
+        "text": "# Cognitive Architecture System (CAS) Assessment\n\n## Input Text Analysis\n**Subject:** \"What are the ethical implications of autonomous weapons systems?\"\n\n---\n\n## PRELIMINARY NOTE ON INPUT CHARACTERISTICS\n\nThis is a **single interrogative sentence** \u2014 a question rather than an expository text. The CAS assessment will therefore evaluate the *cognitive architecture embedded in the question itself*: its framing, implicit assumptions, scope, and what the structure of the question reveals about the asker's cognitive orientation.\n\n---\n\n## SECTION I: COGNITIVE OPERATOR ANALYSIS\n\n### CO-0 | Identity \u2014 *Core Meaning Preservation & Self-Consistency*\n**Score: 6.5/10**\n\nThe question maintains clear semantic integrity. \"Autonomous weapons systems\" is a well-defined domain term, and \"ethical implications\" is a coherent framing category. However, the question contains a subtle identity tension: it treats \"autonomous weapons systems\" as a unified, stable referent when in fact the category spans a wide spectrum (loitering munitions \u2192 fully autonomous lethal decision systems). The identity of the subject is partially underspecified, which creates downstream interpretive ambiguity.\n\n> **Signal:** The asker implicitly accepts the category as coherent \u2014 a meaningful epistemic commitment.\n\n---\n\n### CO-1 | Reflection \u2014 *Self-Awareness & Metacognition*\n**Score: 4.5/10**\n\nThe question is **outward-facing** rather than reflexive. There is no embedded self-positioning (\"I'm asking because I believe X\" or \"I'm uncertain whether Y\"). The phrasing \"what are\" suggests a request for an external inventory rather than a reflective engagement with the asker's own prior assumptions or stake in the question.\n\n> **Signal:** Low metacognitive framing. The asker may be in an **information-gathering phase** rather than a deliberative or committed phase. This is not a weakness \u2014 it may be appropriate epistemic humility.\n\n---\n\n### CO-2 | Abstraction \u2014 *Generalization from Specifics to Principles*\n**Score: 7.0/10**\n\nThe question operates at a **mid-to-high abstraction level**. Rather than asking about a specific weapons system (e.g., \"Is the Kargu-2 ethical?\"), it asks about the *class* and its *ethical implications* \u2014 a principled framing. The word \"implications\" signals interest in second-order consequences, not just first-order facts.\n\n> **Signal:** The asker is capable of and interested in principled reasoning, not merely technical description.\n\n---\n\n### CO-3 | Concretization \u2014 *Abstract to Actionable Specifics*\n**Score: 3.0/10**\n\nThis is the question's most notable **cognitive gap**. There is no grounding in:\n- Specific deployment contexts (warfare, border control, policing)\n- Specific ethical frameworks being applied\n- Specific stakeholders (soldiers, civilians, engineers, policymakers)\n- Specific decision points (design, deployment, accountability)\n\nThe question remains at the level of abstract inquiry without anchoring to actionable or concrete dimensions.\n\n> **Signal:** Either the asker is deliberately keeping scope open, or concretization is a developmental opportunity in their thinking on this topic.\n\n---\n\n### CO-4 | Integration \u2014 *Synthesis of Diverse Concepts*\n**Score: 5.5/10**\n\nThe question *implies* integration \u2014 ethics and weapons technology are being brought into contact \u2014 but does not yet *perform* integration. It gestures toward a multi-domain synthesis (military science + moral philosophy + international law + AI systems) without explicitly weaving them together.\n\n> **Signal:** Integration potential is high; integration execution is nascent. The question is a **precursor to integration** rather than an expression of it.\n\n---\n\n### CO-5 | Differentiation \u2014 *Nuanced Distinction-Making*\n**Score: 4.0/10**\n\nThe question does not differentiate between:\n- **Levels of autonomy** (supervised, semi-autonomous, fully autonomous)\n- **Types of ethical concern** (deontological vs. consequentialist vs. virtue ethics)\n- **Contexts of use** (interstate war vs. counterterrorism vs. domestic law enforcement)\n- **Temporal dimensions** (near-term deployable vs. speculative future systems)\n\nThis is the question's second significant **cognitive gap**. The lack of differentiation may lead to answers that conflate importantly distinct issues.\n\n> **Signal:** Differentiation is an area where the asker's thinking could be substantially enriched.\n\n---\n\n### CO-6 | Unification \u2014 *Bringing Disparate Elements into Alignment*\n**Score: 5.0/10**\n\nThere is a latent unifying impulse in the question \u2014 the desire to bring \"ethics\" and \"autonomous weapons\" into a single coherent frame. However, the question does not yet propose a unifying principle or framework. It asks *what* the implications are, not *how* they cohere or *what principle* organizes them.\n\n> **Signal:** The asker is seeking a unified understanding but has not yet proposed the organizing principle.\n\n---\n\n### CO-7 | Transformation \u2014 *Adaptive Change & Evolving Perspectives*\n**Score: 4.0/10**\n\nThe question is **static in form** \u2014 it does not signal openness to having its own framing challenged or transformed. It does not ask \"Is 'ethical implications' even the right frame?\" or \"What am I missing in how I'm asking this?\" This suggests the asker's perspective may be in an early, pre-transformative stage on this topic.\n\n> **Signal:** Transformation potential exists but is not yet activated. A richer engagement might involve questioning the frame itself.\n\n---\n\n### CO-8 | Expansion \u2014 *Exploration of New Territory*\n**Score: 6.5/10**\n\nThe question itself is expansionary in spirit \u2014 it opens a large intellectual territory. The topic of autonomous weapons ethics is genuinely complex, touching on:\n- Philosophy of agency and moral responsibility\n- International humanitarian law\n- AI alignment and control problems\n- Geopolitical stability\n- Human dignity and the \"meaningful human control\" doctrine\n\nThe question invites broad exploration, which is an expansionary cognitive move.\n\n> **Signal:** Strong expansionary orientation. The asker is willing to engage with a large, complex domain.\n\n---\n\n### CO-9 | Contraction \u2014 *Focus, Prioritization & Noise Reduction*\n**Score: 2.5/10**\n\nThis is the question's **lowest score** and most significant structural gap. The question performs **no contraction**. It does not:\n- Prioritize which ethical dimensions matter most\n- Specify which stakeholder perspective to adopt\n- Bound the scope temporally, geographically, or technologically\n- Indicate what kind of answer would be useful (philosophical survey? policy recommendation? personal decision-making?)\n\n> **Signal:** Without contraction, any answer risks being encyclopedic but not actionable. This is a critical area for cognitive development on this topic.\n\n---\n\n## SECTION II: PROCESSING DOMAIN ANALYSIS\n\n| Domain | Assessment | Score |\n|---|---|---|\n| **Principled** | Strong \u2014 the question is fundamentally normative and principle-seeking | 7.5/10 |\n| **Cognitive** | Moderate \u2014 shows conceptual awareness but limited structural complexity | 5.5/10 |\n| **Evaluative** | Low-Moderate \u2014 asks for evaluation but provides no evaluative criteria | 4.0/10 |\n| **Operational** | Low \u2014 no actionable framing, no decision context specified | 2.5/10 |\n\n**Domain Imbalance:** The question is **Principled-dominant** with **Operational deficiency**. This is a common pattern in early-stage ethical inquiry \u2014 strong moral interest, weak practical grounding.\n\n---\n\n## SECTION III: CORE DRIVE ANALYSIS\n\n| Drive | Presence | Evidence |\n|---|---|---|\n| **Unity** | Moderate | Seeks to unify ethics and technology in one frame |\n| **Wisdom** | High | Ethical inquiry is fundamentally wisdom-seeking |\n| **Vitality** | Low | No urgency, personal stake, or energetic engagement signaled |\n| **Connection** | Moderate | Implicitly concerned with human relationships (combatants, civilians) |\n| **Agency** | Low-Moderate | Does not assert a position or claim decision-making authority |\n| **Structure** | Low | No organizational framework proposed |\n| **Purpose** | Moderate | Ethical concern implies purposive orientation toward the good |\n\n**Dominant Drives:** Wisdom > Unity > Purpose\n**Underdeveloped Drives:** Vitality, Structure, Agency\n\n---\n\n## SECTION IV: COGNITIVE INVERSION DETECTION\n\n| Inversion Type | Detected | Description |\n|---|---|---|\n| **Abstraction without Grounding** | \u26a0\ufe0f Mild | High abstraction (CO-2) without corresponding concretization (CO-3) |\n| **Expansion without Contraction** | \u26a0\ufe0f Moderate | Strong expansionary framing (CO-8) with near-absent contraction (CO-9) |\n| **Principled without Operational** | \u26a0\ufe0f Moderate | Ethics-seeking without actionable or decision-relevant framing |\n| **Integration Aspiration without Differentiation** | \u26a0\ufe0f Mild | Seeks synthesis before establishing meaningful distinctions |\n\n**No severe inversions detected.** The inversions present are **developmentally normal** for an opening inquiry into a complex ethical domain.\n\n---\n\n## SECTION V: COMPOSITE PROFILE\n\n```\nCO-0  Identity        \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591  6.5\nCO-1  Reflection      \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  4.5\nCO-2  Abstraction     \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591  7.0\nCO-3  Concretization  \u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591  3.0\nCO-4  Integration     \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5.5\nCO-5  Differentiation \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  4.0\nCO-6  Unification     \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5.0\nCO-7  Transformation  \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  4.0\nCO-8  Expansion       \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6.5\nCO-9  Contraction     \u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591  2.5\n```\n\n**Overall CAS Score: 4.85/10**\n*(Reflects the inherent limitations of assessing a single question rather than extended discourse)*\n\n---\n\n## SECTION VI: STRATEGIC RECOMMENDATIONS\n\nTo enrich cognitive engagement with this topic, the following developmental moves are recommended:\n\n1. **Activate CO-9 (Contraction):** Choose a specific lens \u2014 e.g., *\"What are the implications under International Humanitarian Law specifically?\"* or *\"What are the implications for military accountability structures?\"*\n\n2. **Activate CO-5 (Differentiation):** Distinguish between autonomy levels. A human-supervised drone and a fully autonomous lethal decision system raise categorically different ethical questions.\n\n3. **Activate CO-3 (Concretization):** Ground the inquiry in a specific case \u2014 the Kargu-2 in Libya (2020), Project Maven, or LAWS debates at the UN Convention on Certain Conventional Weapons.\n\n4. **Activate CO-1 (Reflection):** Ask: *\"Why am I asking this? What would change in my thinking or behavior based on the answer?\"*\n\n5. **Activate CO-7 (Transformation):** Challenge the frame itself \u2014 *\"Is 'ethical implications' the right question, or should I be asking about governance structures, technical constraints, or international treaty design?\"*\n\n---\n\n## SUMMARY STATEMENT\n\n> The question \"What are the ethical implications of autonomous weapons systems?\" reflects a **Wisdom-driven, Principled-dominant cognitive orientation** with strong expansionary intent and meaningful abstraction capacity. Its primary developmental opportunities lie in **Contraction** (scope definition), **Differentiation** (distinction-making), and **Concretization** (grounding in specific cases and decision contexts). The question is a **healthy opening move** in a complex inquiry but would benefit substantially from structural refinement before seeking answers, as the current framing risks generating broad but shallow responses rather than deep, actionable insight.",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 371,
+          "output_tokens": 2848,
+          "total_tokens": 3219
+        },
+        "latency_ms": 57403.39110000059
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "33b52b9bd6767b67",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 57414.5,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 5,
+      "prompt": "Outline a strategy for reducing carbon emissions in urban areas.",
+      "composite": 66.42385583630066,
+      "certification": "Silver",
+      "operator_profile": 0.6641199999999998,
+      "domain_coherence": 0.8618784530386739,
+      "drive_rpm_integrity": 0.38295144107142853,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.918950530273241,
+      "social_engineering": 0.8140000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.833,
+        0.499,
+        0.806,
+        0.434,
+        0.574,
+        0.418,
+        0.747,
+        0.751,
+        0.573,
+        0.571
+      ],
+      "domain_averages": [
+        0.258949799606005,
+        0.2704979281298825,
+        0.23741593641736294,
+        0.23313633584674953
+      ],
+      "drive_scores": [
+        [
+          0.852,
+          0.672,
+          0.6
+        ],
+        [
+          0.8235,
+          0.6127,
+          0.4553
+        ],
+        [
+          0.8003,
+          0.5911,
+          0.4395
+        ],
+        [
+          0.7714,
+          0.5606,
+          0.4592
+        ],
+        [
+          0.7035,
+          0.5654,
+          0.3636
+        ],
+        [
+          0.7767,
+          0.5749,
+          0.3879
+        ],
+        [
+          0.7621,
+          0.6299,
+          0.5431
+        ]
+      ],
+      "llm_response": {
+        "text": "# CAS Assessment: Carbon Emissions Reduction Strategy Request\n\n---\n\n## PRELIMINARY ANALYSIS\n\nThe input is a **directive prompt** requesting strategic synthesis on a complex sociotechnical problem. I will first generate a substantive response, then conduct the full CAS assessment of the cognitive architecture embedded in the request itself and the response it demands.\n\n---\n\n## RESPONSE: Urban Carbon Emissions Reduction Strategy\n\n### TIER 1 \u2014 FOUNDATIONAL SYSTEMS\n**Energy Transition**\n- Accelerate municipal renewable energy procurement (solar, wind PPAs)\n- Retrofit public buildings with high-efficiency HVAC and insulation\n- Deploy district heating/cooling networks powered by clean sources\n\n**Transportation Decarbonization**\n- Electrify public transit fleets (buses, rail)\n- Build protected cycling infrastructure and pedestrian zones\n- Implement congestion pricing to reduce private vehicle use\n- Expand EV charging networks with equity-conscious placement\n\n### TIER 2 \u2014 STRUCTURAL REFORMS\n**Land Use & Urban Planning**\n- Enforce mixed-use zoning to reduce commute distances\n- Prioritize transit-oriented development (TOD)\n- Mandate green building codes (Passive House, LEED standards)\n\n**Industrial & Commercial Sector**\n- Carbon pricing mechanisms at municipal level where legally permitted\n- Green procurement policies for city contracts\n- Support industrial symbiosis networks (waste-as-resource)\n\n### TIER 3 \u2014 BEHAVIORAL & SYSTEMIC LEVERS\n**Community & Behavioral**\n- Public education campaigns with measurable behavior targets\n- Incentivize plant-forward food systems in public institutions\n- Urban agriculture and food waste reduction programs\n\n**Data & Governance**\n- Real-time emissions monitoring dashboards (open data)\n- Establish science-based interim targets (2030, 2035, 2040)\n- Cross-departmental climate office with enforcement authority\n\n### TIER 4 \u2014 INNOVATION & RESILIENCE\n- Pilot carbon capture in urban forestry and green infrastructure\n- Support circular economy startups via municipal procurement\n- Engage universities and research institutions for living labs\n\n---\n\n## CAS ASSESSMENT\n\n*Dial Configuration: All operators set to 6/10 \u2014 balanced, moderate engagement across all dimensions*\n\n---\n\n### 10 COGNITIVE OPERATOR DIMENSIONS\n\n| Operator | Score | Assessment |\n|----------|-------|------------|\n| **CO-0 Identity** | 7/10 | The prompt maintains clear thematic coherence \u2014 \"urban carbon reduction\" is a well-bounded identity that preserves meaning throughout. No semantic drift. |\n| **CO-1 Reflection** | 4/10 | The prompt is **externally directed** with minimal introspective framing. It does not ask *why* this matters or interrogate assumptions about urban responsibility. |\n| **CO-2 Abstraction** | 6/10 | Operates at a mid-level abstraction \u2014 \"urban areas\" generalizes appropriately without losing applicability. Could push further toward systemic principles. |\n| **CO-3 Concretization** | 7/10 | \"Urban areas\" and \"strategy\" signal a desire for actionable specifics \u2014 the prompt implicitly demands concretization, which is its primary cognitive mode. |\n| **CO-4 Integration** | 5/10 | The prompt does not itself integrate multiple domains \u2014 it delegates integration to the responder. Moderate integrative demand is implied. |\n| **CO-5 Differentiation** | 4/10 | The prompt is **undifferentiated** \u2014 it does not distinguish between city types, income levels, political contexts, or emission sources. This is a notable gap. |\n| **CO-6 Unification** | 6/10 | The framing unifies a complex problem under a single strategic lens, which is useful but risks flattening important tensions (equity vs. efficiency). |\n| **CO-7 Transformation** | 5/10 | The word \"strategy\" implies change, but the prompt does not signal awareness of transformation barriers or path dependencies. |\n| **CO-8 Expansion** | 5/10 | Moderate scope \u2014 \"urban areas\" is broad but not globally expansive. The prompt doesn't push toward novel framings or edge cases. |\n| **CO-9 Contraction** | 6/10 | Reasonably focused. The constraint to \"urban\" is a useful contraction from the global climate problem, enabling actionable analysis. |\n\n---\n\n### 4 PROCESSING DOMAINS\n\n| Domain | Assessment |\n|--------|------------|\n| **Principled** | Moderate \u2014 the prompt implicitly assumes emissions reduction is a moral/civic imperative, but this principle is unstated and unexamined. |\n| **Cognitive** | High demand \u2014 the task requires multi-domain synthesis, systems thinking, and hierarchical organization. |\n| **Evaluative** | Low in the prompt itself \u2014 no criteria for evaluating strategy quality are provided (cost? speed? equity? feasibility?). |\n| **Operational** | High \u2014 the \"outline a strategy\" framing is fundamentally operational, seeking executable frameworks. |\n\n---\n\n### 7 CORE DRIVES\n\n| Drive | Presence | Notes |\n|-------|----------|-------|\n| **Unity** | \u2605\u2605\u2605\u2605\u2606 | Strong \u2014 seeks coherent, unified strategic framework |\n| **Wisdom** | \u2605\u2605\u2605\u2606\u2606 | Moderate \u2014 implies learning from evidence but doesn't specify |\n| **Vitality** | \u2605\u2605\u2605\u2605\u2605 | Very strong \u2014 climate action is fundamentally about sustaining life systems |\n| **Connection** | \u2605\u2605\u2605\u2606\u2606 | Moderate \u2014 urban systems are inherently relational, but not foregrounded |\n| **Agency** | \u2605\u2605\u2605\u2605\u2606 | Strong \u2014 \"strategy\" implies intentional, directed action |\n| **Structure** | \u2605\u2605\u2605\u2605\u2606 | Strong \u2014 outline format demands hierarchical organization |\n| **Purpose** | \u2605\u2605\u2605\u2605\u2605 | Very strong \u2014 existential stakes of climate change anchor the purpose drive |\n\n---\n\n### COGNITIVE INVERSIONS DETECTED\n\n| Inversion | Risk Level | Description |\n|-----------|------------|-------------|\n| **Abstraction without Differentiation** | \ud83d\udfe1 Medium | The prompt generalizes \"urban areas\" without acknowledging that Lagos, Oslo, and Houston require fundamentally different strategies. |\n| **Structure over Reflection** | \ud83d\udfe1 Medium | The outline format may produce the *appearance* of strategy without interrogating whether the framing itself is correct. |\n| **Agency without Constraint Modeling** | \ud83d\udfe0 Moderate-High | Strategies are proposed without modeling political, financial, or behavioral resistance \u2014 creating a gap between plan and execution. |\n| **Vitality-Purpose Alignment Risk** | \ud83d\udfe2 Low | Strong alignment between these drives reduces inversion risk here, but could produce urgency bias that skips feasibility analysis. |\n\n---\n\n### SUMMARY PROFILE\n\n```\nCO-0 Identity      \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591  7/10\nCO-1 Reflection    \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  4/10\nCO-2 Abstraction   \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-3 Concretization\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591  7/10  \u2190 Primary mode\nCO-4 Integration   \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-5 Differentiation\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591 4/10  \u2190 Notable gap\nCO-6 Unification   \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-7 Transformation\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-8 Expansion     \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-9 Contraction   \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\n```\n\n**Overall Cognitive Profile:** The prompt operates in a **Structured-Operational mode** with strong Purpose and Agency drives. Its primary weakness is insufficient **Differentiation (CO-5)** and **Reflection (CO-1)** \u2014 it risks producing technically sound but contextually undifferentiated strategies. Strengthening the prompt with equity constraints, geographic specificity, or political feasibility criteria would significantly elevate the cognitive architecture of the inquiry.",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 373,
+          "output_tokens": 1897,
+          "total_tokens": 2270
+        },
+        "latency_ms": 37754.53530001687
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "b8dc71e8d066c2af",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 37761.9,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 6,
+      "prompt": "Explain why diversity in hiring leads to better business outcomes.",
+      "composite": 66.23938337055512,
+      "certification": "Silver",
+      "operator_profile": 0.73556,
+      "domain_coherence": 0.699653838322134,
+      "drive_rpm_integrity": 0.37936259807142864,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9606703095122571,
+      "social_engineering": 0.8860000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.867,
+        0.445,
+        0.669,
+        0.655,
+        0.406,
+        0.872,
+        0.765,
+        0.594,
+        0.827,
+        0.608
+      ],
+      "domain_averages": [
+        0.2083939835031538,
+        0.23265405143134402,
+        0.29785298398835514,
+        0.261098981077147
+      ],
+      "drive_scores": [
+        [
+          0.7903,
+          0.5586,
+          0.3818
+        ],
+        [
+          0.8832,
+          0.7137,
+          0.501
+        ],
+        [
+          0.7163,
+          0.6268,
+          0.5534
+        ],
+        [
+          0.701,
+          0.619,
+          0.4733
+        ],
+        [
+          0.7745,
+          0.5513,
+          0.4465
+        ],
+        [
+          0.7312,
+          0.5907,
+          0.4624
+        ],
+        [
+          0.8772,
+          0.7321,
+          0.647
+        ]
+      ],
+      "llm_response": {
+        "text": "# CAS Assessment: \"Explain why diversity in hiring leads to better business outcomes\"\n\n---\n\n## PRELIMINARY OBSERVATION\n\nBefore analysis: This prompt is **framed as a declarative premise** (\"explain *why* X leads to Y\"), not an open inquiry (\"does X lead to Y, and under what conditions?\"). This framing choice is itself the most diagnostically significant feature of the text.\n\n---\n\n## COGNITIVE OPERATOR ANALYSIS\n\n### CO-0 | Identity \u2014 *Core Meaning Preservation*\n**Score: 3/10 | INVERSION DETECTED**\n\nThe prompt embeds its conclusion within its question structure, collapsing the distinction between inquiry and assertion. The identity of the question is **self-undermining**: it presents itself as a request for explanation while actually functioning as a request for **confirmation**. Core intellectual integrity is compromised at the structural level before any content is engaged.\n\n---\n\n### CO-1 | Reflection \u2014 *Self-Awareness / Metacognition*\n**Score: 2/10 | WEAK**\n\nThere is **no metacognitive framing** present. A reflective prompt would acknowledge:\n- That the relationship between diversity and outcomes is empirically contested\n- That the speaker holds a prior belief being submitted for reinforcement\n- That \"better outcomes\" is undefined and assumption-laden\n\nThe absence of self-questioning is the defining feature here.\n\n---\n\n### CO-2 | Abstraction \u2014 *Generalization from Specifics*\n**Score: 4/10 | PARTIAL**\n\nThe prompt does operate at a general level \u2014 \"diversity,\" \"hiring,\" \"business outcomes\" are all abstractions. However, the abstraction is **premature and unearned**: it skips the empirical specifics (which types of diversity? which industries? which outcome metrics? over what timeframes?) and jumps directly to a universal claim. This is abstraction used as a **shortcut around complexity**, not as a tool for genuine generalization.\n\n---\n\n### CO-3 | Concretization \u2014 *Abstract to Actionable*\n**Score: 2/10 | ABSENT**\n\nNo concretization is attempted. Key undefined terms include:\n- **Diversity**: demographic? cognitive? experiential? ideological?\n- **Hiring**: entry-level? leadership? technical roles?\n- **Better outcomes**: revenue? innovation? retention? employee satisfaction? stock performance?\n- **Business**: startup? multinational? public sector adjacent?\n\nWithout these specifications, the prompt cannot be answered with intellectual honesty \u2014 only with rhetorical performance.\n\n---\n\n### CO-4 | Integration \u2014 *Synthesis of Diverse Concepts*\n**Score: 3/10 | SUPERFICIAL**\n\nThe prompt assumes integration has already occurred \u2014 that the relationship between diversity and outcomes is settled and synthesized. This **forecloses** the integrative work rather than initiating it. True integration would require holding in tension:\n- Studies showing positive correlations (McKinsey diversity reports)\n- Studies showing null or negative effects (meta-analyses with publication bias corrections)\n- Confounding variables (firm size, industry, measurement methodology)\n- Causal vs. correlational distinctions\n\n---\n\n### CO-5 | Differentiation \u2014 *Nuanced Distinction-Making*\n**Score: 1/10 | CRITICAL INVERSION**\n\nThis is the most severely underdeveloped operator. The prompt **actively suppresses differentiation** by:\n- Treating \"diversity\" as a monolithic variable\n- Treating \"better outcomes\" as self-evident\n- Eliminating conditional logic (\"under what circumstances\")\n- Removing counterevidence from the possibility space\n\nThe literature actually distinguishes sharply between:\n- **Surface-level diversity** (demographic) vs. **deep-level diversity** (cognitive, values-based)\n- **Short-term performance** vs. **long-term innovation**\n- **Diversity as input** vs. **inclusion as process** vs. **equity as structure**\n\n---\n\n### CO-6 | Unification \u2014 *Aligning Disparate Elements*\n**Score: 4/10 | FORCED**\n\nThere is a unification attempt \u2014 connecting social/ethical values with economic pragmatism (\"diversity is both right *and* profitable\"). This is a recognizable rhetorical move. However, the unification is **imposed rather than discovered**: it assumes alignment between moral and economic imperatives without examining where they might diverge or conflict.\n\n---\n\n### CO-7 | Transformation \u2014 *Adaptive Perspective Change*\n**Score: 1/10 | ABSENT / INVERTED**\n\nThe prompt is **structurally resistant to transformation**. By pre-loading the conclusion, it eliminates the possibility of the inquiry changing the inquirer's view. This is the opposite of transformative cognition \u2014 it is **belief fortification** dressed as inquiry.\n\n---\n\n### CO-8 | Expansion \u2014 *Broadening Scope*\n**Score: 3/10 | CONSTRAINED**\n\nWhile the topic has genuine expansive potential (organizational psychology, economics, sociology, ethics, epistemology of social science), the framing **contracts the scope** to a single directional argument. Expansion would require asking adjacent questions:\n- What are the *costs* or *tradeoffs* of diversity initiatives?\n- How does diversity interact with organizational culture?\n- What does the *failure mode* of diversity programs look like?\n\n---\n\n### CO-9 | Contraction \u2014 *Focus and Noise Reduction*\n**Score: 5/10 | MIXED**\n\nThis is the one operator where the prompt performs adequately \u2014 it is focused and concise. However, **focus achieved through exclusion of complexity is not genuine contraction**; it is oversimplification. Legitimate contraction preserves signal while reducing noise. This prompt reduces noise by **eliminating signal**.\n\n---\n\n## PROCESSING DOMAIN ANALYSIS\n\n| Domain | Assessment |\n|---|---|\n| **Principled** | Low integrity \u2014 operates from assumed principle rather than examined one |\n| **Cognitive** | Constrained \u2014 reasoning channel is pre-directed toward confirmation |\n| **Evaluative** | Absent \u2014 no evaluative framework is applied or invited |\n| **Operational** | Moderate \u2014 the prompt is actionable, but only toward a predetermined output |\n\n---\n\n## CORE DRIVE ANALYSIS\n\n| Drive | Signal | Notes |\n|---|---|---|\n| **Unity** | High (surface) | Seeks to unify ethical and economic arguments |\n| **Wisdom** | Low | Wisdom requires epistemic humility; this prompt lacks it |\n| **Vitality** | Moderate | Topic carries genuine energy and social importance |\n| **Connection** | Moderate-High | Motivated by prosocial values around inclusion |\n| **Agency** | Low | Reduces the respondent's agency to confirm, not explore |\n| **Structure** | Low | Resists structural examination of its own assumptions |\n| **Purpose** | Moderate | Clear purpose, but purpose is advocacy, not understanding |\n\n---\n\n## COGNITIVE INVERSION SUMMARY\n\n| Inversion Type | Present | Description |\n|---|---|---|\n| **Inquiry \u2192 Confirmation** | \u2705 YES | Question structured to produce agreement |\n| **Abstraction \u2192 Obfuscation** | \u2705 YES | Vague terms used to prevent falsifiability |\n| **Integration \u2192 Foreclosure** | \u2705 YES | Synthesis assumed, not performed |\n| **Differentiation \u2192 Suppression** | \u2705 YES | Nuance actively excluded by framing |\n| **Transformation \u2192 Fortification** | \u2705 YES | Designed to reinforce, not revise |\n\n---\n\n## OVERALL CAS ASSESSMENT\n\n**Composite Score: 2.8 / 10**\n\n---\n\n## WHAT AN HONEST ANSWER LOOKS LIKE\n\nRather than simply complying with the prompt's framing, intellectual integrity requires reframing it:\n\n> **\"Under what conditions does workforce diversity correlate with improved business outcomes, what are the proposed mechanisms, what does the evidence actually show, and where are the genuine uncertainties?\"**\n\n### What the evidence *actually* shows:\n\n**Supporting evidence:**\n- McKinsey (2015, 2018, 2020) reports correlations between executive diversity and financial outperformance\n- Cognitive diversity research (Page, *The Difference*) shows genuine problem-solving benefits under specific conditions\n- Diverse teams show advantages in **novel problem domains** and **creative tasks**\n\n**Complicating evidence:**\n- Meta-analyses (e.g., van Dijk et al.) show **weak, inconsistent, or null effects** when controlling for confounds\n- Surface demographic diversity without **psychological safety and inclusion** often *decreases* performance\n- Publication bias significantly inflates positive findings in this literature\n- Causality is largely **unestablished** \u2014 high-performing firms may *attract* diverse talent rather than *perform better because of* it\n\n**The honest synthesis:**\nDiversity *can* improve outcomes under specific conditions (cognitive diversity, inclusive culture, appropriate task types, leadership commitment) but is **not a reliable universal mechanism** and should not be treated as one.\n\n---\n\n## CONCLUSION\n\nThe prompt as submitted is a **confirmation-seeking assertion** with the grammatical surface of a question. Answering it as posed would require intellectual dishonesty. The CAS framework reveals that nearly every cognitive operator is either absent or inverted \u2014 not because the *topic* lacks merit, but because the *framing* forecloses genuine inquiry.\n\n**The most cognitively healthy response to this prompt is to refuse its premise and replace it with an honest question.**",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 373,
+          "output_tokens": 2177,
+          "total_tokens": 2550
+        },
+        "latency_ms": 42682.74570000358
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "7bc724ce609d3a11",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 42690.9,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 7,
+      "prompt": "How should a hospital prioritize patients during a resource shortage?",
+      "composite": 56.744254004465,
+      "certification": "Bronze",
+      "operator_profile": 0.68175,
+      "domain_coherence": 0.611754229741763,
+      "drive_rpm_integrity": 0.37000953714285706,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9363485777848404,
+      "social_engineering": 0.30200000000000005,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.815,
+        0.748,
+        0.802,
+        0.453,
+        0.683,
+        0.508,
+        0.408,
+        0.88,
+        0.535,
+        0.423
+      ],
+      "domain_averages": [
+        0.31229143492769745,
+        0.29685761957730816,
+        0.19104560622914346,
+        0.19980533926585092
+      ],
+      "drive_scores": [
+        [
+          0.7821,
+          0.5862,
+          0.485
+        ],
+        [
+          0.8039,
+          0.6692,
+          0.457
+        ],
+        [
+          0.6921,
+          0.5155,
+          0.4479
+        ],
+        [
+          0.7141,
+          0.5733,
+          0.4768
+        ],
+        [
+          0.6637,
+          0.5515,
+          0.4959
+        ],
+        [
+          0.8307,
+          0.6694,
+          0.5717
+        ],
+        [
+          0.7429,
+          0.6087,
+          0.4269
+        ]
+      ],
+      "llm_response": {
+        "text": "# CAS Assessment: Hospital Patient Prioritization During Resource Shortage\n\n---\n\n## PRELIMINARY NOTE ON DIAL CONFIGURATION\n\nAll 10 cognitive operators are set to **6/10** \u2014 a balanced, moderate engagement profile. This analysis will reflect that calibration: thorough but not exhaustive, principled but grounded.\n\n---\n\n## CONTENT ANALYSIS\n\n### The Question Itself\nThis is a **high-stakes ethical, operational, and systems-level question** that sits at the intersection of medicine, philosophy, policy, and human values. It demands multi-dimensional reasoning.\n\n---\n\n## RESPONSE: Structured Framework for Hospital Triage During Resource Shortage\n\n### TIER 1 \u2014 Established Triage Frameworks\n\n| Framework | Core Logic | Best Applied When |\n|-----------|-----------|-------------------|\n| **Utilitarian (Save the Most Lives)** | Maximize total lives saved | Mass casualty events, ventilator shortages |\n| **SOFA/Clinical Scoring** | Objective survival probability metrics | ICU resource allocation |\n| **First-Come-First-Served** | Procedural fairness | Mild shortages, elective care |\n| **Lottery System** | Equal moral worth when outcomes are equal | Organ transplant waitlists |\n| **Social Role Weighting** | Prioritize critical workers | Pandemic healthcare worker protection |\n\n---\n\n### TIER 2 \u2014 Core Prioritization Principles\n\n**1. Clinical Need + Survivability**\n> Patients most likely to die *without* intervention AND most likely to survive *with* it receive priority. This is the dominant ethical consensus.\n\n**2. Proportionality**\n> The degree of resource allocation should match the severity of shortage. Mild shortage \u2260 wartime triage protocols.\n\n**3. Non-Discrimination**\n> Age, race, disability status, socioeconomic position, and social \"worth\" must not be primary criteria \u2014 this is both ethical and legal in most jurisdictions.\n\n**4. Transparency & Consistency**\n> Criteria must be established *before* crisis, communicated clearly, and applied uniformly to reduce bias and moral injury in staff.\n\n**5. Reversibility**\n> Allocation decisions should be revisited as conditions change \u2014 a patient deprioritized today may become the priority tomorrow.\n\n---\n\n### TIER 3 \u2014 Decision Hierarchy in Practice\n\n```\nSTEP 1: Assess clinical urgency\n         \u2193\nSTEP 2: Apply validated scoring (SOFA, APACHE, START triage)\n         \u2193\nSTEP 3: Estimate short-term survival benefit\n         \u2193\nSTEP 4: Apply equity filters (remove discriminatory variables)\n         \u2193\nSTEP 5: Use lottery/queue for equal-score patients\n         \u2193\nSTEP 6: Document, review, and adjust in real time\n```\n\n---\n\n### TIER 4 \u2014 Ethical Tensions to Navigate\n\n- **Individual vs. Collective Good** \u2014 Saving one critical patient may cost three moderate ones\n- **Equity vs. Efficiency** \u2014 Pure efficiency can systematically disadvantage already-marginalized groups\n- **Clinician Autonomy vs. Protocol** \u2014 Bedside judgment vs. standardized criteria\n- **Short-term vs. Long-term survival** \u2014 Immediate crisis vs. quality-adjusted life years (QALYs)\n- **Transparency vs. Distress** \u2014 Public communication of criteria can cause panic or gaming of the system\n\n---\n\n## CAS DIMENSIONAL ANALYSIS\n\n---\n\n### 10 COGNITIVE OPERATOR SCORES\n\n| Operator | Score | Rationale |\n|----------|-------|-----------|\n| **CO-0 Identity** | 7/10 | Question maintains coherent ethical core throughout \u2014 \"minimize preventable death\" |\n| **CO-1 Reflection** | 6/10 | Moderate metacognitive depth; acknowledges value tensions without full philosophical excavation |\n| **CO-2 Abstraction** | 7/10 | Moves from specific hospital scenarios to generalizable ethical principles effectively |\n| **CO-3 Concretization** | 8/10 | Strong \u2014 produces actionable steps, scoring systems, decision trees |\n| **CO-4 Integration** | 7/10 | Synthesizes ethics, medicine, law, and operations coherently |\n| **CO-5 Differentiation** | 7/10 | Distinguishes between shortage types, patient categories, and ethical frameworks |\n| **CO-6 Unification** | 6/10 | Brings frameworks into alignment but stops short of a single unified theory |\n| **CO-7 Transformation** | 5/10 | Limited adaptive reframing; mostly presents established frameworks |\n| **CO-8 Expansion** | 6/10 | Explores adjacent domains (law, psychology of staff) without deep excursion |\n| **CO-9 Contraction** | 7/10 | Effectively filters noise; prioritizes actionable over theoretical |\n\n---\n\n### 4 PROCESSING DOMAINS\n\n| Domain | Assessment |\n|--------|-----------|\n| **Principled** | Strong \u2014 grounded in bioethical principles (autonomy, beneficence, justice, non-maleficence) |\n| **Cognitive** | Moderate-High \u2014 logical structure, multi-framework comparison, decision hierarchy |\n| **Evaluative** | Moderate \u2014 acknowledges tradeoffs but doesn't fully adjudicate between competing values |\n| **Operational** | High \u2014 produces implementable steps and tools |\n\n---\n\n### 7 CORE DRIVES\n\n| Drive | Activation | Expression |\n|-------|-----------|------------|\n| **Unity** | High | Seeks coherent policy applicable across cases |\n| **Wisdom** | High | Draws on established ethical and medical knowledge |\n| **Vitality** | High | Core concern is preservation of life |\n| **Connection** | Moderate | Considers patient dignity and staff moral injury |\n| **Agency** | Moderate | Preserves clinician judgment within structured protocols |\n| **Structure** | High | Emphasizes protocol, documentation, consistency |\n| **Purpose** | High | Anchored to the fundamental mission of medicine |\n\n---\n\n### COGNITIVE INVERSION ALERTS\n\n| Inversion Type | Risk Level | Description |\n|----------------|-----------|-------------|\n| **Efficiency \u2192 Dehumanization** | \u26a0\ufe0f MODERATE | Pure utilitarian scoring can strip individual dignity |\n| **Structure \u2192 Rigidity** | \u26a0\ufe0f LOW-MODERATE | Over-reliance on protocols may fail edge cases |\n| **Fairness \u2192 Paralysis** | \u26a0\ufe0f LOW | Pursuit of perfect equity can delay necessary decisions |\n| **Transparency \u2192 Panic** | \u26a0\ufe0f LOW | Public criteria disclosure requires careful framing |\n\n---\n\n## SYNTHESIS & RECOMMENDATIONS\n\n### Core Answer:\n> **Prioritize patients who will die without intervention AND have meaningful survival probability, using validated clinical scoring, applied consistently, without discriminatory variables, with real-time review.**\n\n### Key Operational Recommendations:\n1. **Pre-establish crisis standards of care** before shortage occurs\n2. **Use multi-person triage teams** \u2014 never one clinician alone\n3. **Separate treating clinicians from triage decision-makers** to reduce moral injury\n4. **Build in appeal/review mechanisms** for contested decisions\n5. **Document everything** for legal protection and post-crisis learning\n6. **Provide psychological support** for staff making life-or-death allocations\n\n---\n\n### Overall CAS Score: **6.6 / 10**\n*Balanced, actionable, ethically grounded \u2014 appropriate for the dial configuration. Higher operator settings would yield deeper philosophical excavation and more novel framework synthesis.*",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 373,
+          "output_tokens": 1788,
+          "total_tokens": 2161
+        },
+        "latency_ms": 34272.630299965385
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "3398e973aba7046c",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 34279.3,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 8,
+      "prompt": "Describe the process of conducting a code review effectively.",
+      "composite": 64.39972362336415,
+      "certification": "Silver",
+      "operator_profile": 0.6876899999999999,
+      "domain_coherence": 0.7427675988428158,
+      "drive_rpm_integrity": 0.39017274450000006,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9232444504338554,
+      "social_engineering": 0.77,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.701,
+        0.712,
+        0.502,
+        0.533,
+        0.661,
+        0.847,
+        0.487,
+        0.717,
+        0.545,
+        0.482
+      ],
+      "domain_averages": [
+        0.2815066168985409,
+        0.23780115371564303,
+        0.2715982354937225,
+        0.20909399389209368
+      ],
+      "drive_scores": [
+        [
+          0.7027,
+          0.523,
+          0.3764
+        ],
+        [
+          0.7818,
+          0.6968,
+          0.4264
+        ],
+        [
+          0.7753,
+          0.6118,
+          0.4475
+        ],
+        [
+          0.882,
+          0.7439,
+          0.5589
+        ],
+        [
+          0.818,
+          0.6245,
+          0.5569
+        ],
+        [
+          0.8594,
+          0.6274,
+          0.4955
+        ],
+        [
+          0.7187,
+          0.5545,
+          0.4503
+        ]
+      ],
+      "llm_response": {
+        "text": "# CAS Assessment: Code Review Process Description\n\n---\n\n## Input Text Analysis\n\n*\"Describe the process of conducting a code review effectively.\"*\n\n---\n\n## PRE-ANALYSIS NOTE: Minimal Input Consideration\n\nThe input is a **single imperative prompt** \u2014 not a reflective or expository text. Assessment will focus on **what the prompt reveals about the requester's cognitive orientation** and **what an ideal response architecture would look like**, scored against the CAS framework.\n\n---\n\n## COGNITIVE OPERATOR ASSESSMENT\n\n### CO-0 | Identity \u2014 *Core Meaning Preservation*\n**Score: 6/10**\n\nThe prompt maintains a clear semantic identity: *effectiveness* is the operative qualifier distinguishing this from a mere procedural request. The word \"effectively\" signals that the requester understands there is a **gap between doing and doing well** \u2014 a meaningful self-consistent framing. However, the prompt offers no contextual anchoring (team size, codebase type, experience level), creating identity drift potential in any response.\n\n> **Signal:** The requester holds a stable concept of \"code review\" as a domain with quality gradients.\n\n---\n\n### CO-1 | Reflection \u2014 *Self-Awareness & Metacognition*\n**Score: 4/10**\n\nThe prompt is **externally directed** rather than reflective. There is no indication of the requester's current practice, what they find difficult, or what prompted the question. Low metacognitive surface area is exposed.\n\n> **Gap:** No signal of \"I currently do X and wonder if it's optimal\" \u2014 the question is abstract-seeking rather than self-examining.\n\n---\n\n### CO-2 | Abstraction \u2014 *Generalization Capacity*\n**Score: 7/10**\n\nThe framing \"effectively\" implies an **implicit model of principles** \u2014 the requester is not asking for a checklist but for a generalizable framework. This is a moderate-to-high abstraction orientation.\n\n> **Strength:** The question seeks transferable process knowledge, not a one-time solution.\n\n---\n\n### CO-3 | Concretization \u2014 *Abstract-to-Actionable Translation*\n**Score: 6/10**\n\nThe word \"process\" grounds the request in **operational territory** \u2014 steps, sequences, actions. There is a pull toward the concrete even within an abstractly framed question.\n\n> **Tension:** The prompt sits at the abstraction/concretization boundary \u2014 it wants principles *expressed as steps*.\n\n---\n\n### CO-4 | Integration \u2014 *Synthesis Capacity*\n**Score: 5/10**\n\nThe prompt does not demonstrate multi-domain synthesis. It treats code review as a **single domain** without integrating adjacent concerns (team psychology, tooling ecosystems, organizational culture, technical debt strategy).\n\n> **Opportunity:** A richer prompt would integrate: \"How does code review intersect with team trust and deployment velocity?\"\n\n---\n\n### CO-5 | Differentiation \u2014 *Nuance & Distinction-Making*\n**Score: 4/10**\n\nNo distinctions are drawn between:\n- Synchronous vs. asynchronous review\n- Junior vs. senior reviewer dynamics\n- Security review vs. style review vs. architectural review\n- Pre-merge vs. post-merge review\n\n> **Limitation:** The prompt treats code review as a **monolithic concept**, missing significant internal variation.\n\n---\n\n### CO-6 | Unification \u2014 *Alignment of Disparate Elements*\n**Score: 5/10**\n\nThe prompt implicitly seeks a **unified process model** \u2014 a single coherent answer to a multi-faceted practice. This is a unification-seeking orientation, though not explicitly articulated.\n\n> **Neutral:** Neither strong nor weak \u2014 the prompt is structurally unification-oriented by design.\n\n---\n\n### CO-7 | Transformation \u2014 *Adaptive Perspective Evolution*\n**Score: 3/10**\n\nThere is **no transformative signal** in the prompt. It does not suggest the requester is moving from one paradigm to another, challenging existing assumptions, or seeking to fundamentally reframe their understanding.\n\n> **Absence:** A transformative prompt might ask: \"I've been doing code reviews for years but they feel performative \u2014 what am I missing?\"\n\n---\n\n### CO-8 | Expansion \u2014 *Scope Broadening*\n**Score: 5/10**\n\nThe prompt is **moderately expansive** \u2014 it seeks a full process rather than a single tip. However, it does not push into adjacent domains (organizational learning, psychological safety, CI/CD integration).\n\n> **Moderate:** Expansion is present but bounded within the conventional definition of the topic.\n\n---\n\n### CO-9 | Contraction \u2014 *Focus & Noise Reduction*\n**Score: 7/10**\n\nThe prompt is **well-focused**. It does not scatter across multiple questions. The single qualifier (\"effectively\") does meaningful filtering work, eliminating purely mechanical answers.\n\n> **Strength:** High signal-to-noise ratio for a brief prompt.\n\n---\n\n## PROCESSING DOMAIN ASSESSMENT\n\n| Domain | Score | Observation |\n|---|---|---|\n| **Principled** | 6/10 | Implicit appeal to best practices; \"effectively\" invokes standards |\n| **Cognitive** | 5/10 | Moderate reasoning demand; process-oriented thinking required |\n| **Evaluative** | 4/10 | No explicit evaluation criteria offered by requester |\n| **Operational** | 7/10 | Strong operational pull \u2014 \"process\" demands actionable output |\n\n---\n\n## CORE DRIVES ASSESSMENT\n\n| Drive | Activation | Evidence |\n|---|---|---|\n| **Unity** | Moderate | Seeks coherent process model |\n| **Wisdom** | High | \"Effectively\" signals desire for distilled best practice |\n| **Vitality** | Low | No urgency or energy signal |\n| **Connection** | Low-Moderate | Code review is inherently social but prompt doesn't foreground this |\n| **Agency** | Moderate | Seeking capability improvement |\n| **Structure** | High | \"Process\" is a structure-seeking word |\n| **Purpose** | Moderate | Implied goal: better software / better teams |\n\n> **Dominant Drive Signature: Structure + Wisdom** \u2014 The requester wants an organized, principled framework they can apply.\n\n---\n\n## COGNITIVE INVERSION DETECTION\n\n| Inversion Type | Present? | Notes |\n|---|---|---|\n| **Abstraction Loop** | Low risk | Prompt is grounded enough in \"process\" |\n| **Concretization Collapse** | Low risk | \"Effectively\" prevents pure checklist thinking |\n| **Identity Fragmentation** | Not detected | Clear, stable framing |\n| **Integration Overload** | Not detected | Scope is appropriately bounded |\n| **Differentiation Paralysis** | Mild risk | Undifferentiated concept of \"code review\" could produce generic output |\n\n> **Primary Inversion Risk:** **Differentiation Deficit** \u2014 without distinguishing *what kind* of code review, responses risk being simultaneously too broad and too shallow.\n\n---\n\n## IDEAL RESPONSE ARCHITECTURE\n\nBased on the CAS profile, the optimal response to this prompt should:\n\n```\n1. OPEN with a unifying principle (CO-6, CO-2)\n   \u2192 \"Effective code review serves three masters: correctness, \n      maintainability, and team growth.\"\n\n2. STRUCTURE a clear process sequence (CO-9, CO-3)\n   \u2192 Pre-review preparation\n   \u2192 Review execution (what to look for, how to comment)\n   \u2192 Discussion and resolution\n   \u2192 Post-review learning\n\n3. DIFFERENTIATE key dimensions (CO-5)\n   \u2192 Tone and psychological safety\n   \u2192 Technical vs. stylistic concerns\n   \u2192 Reviewer vs. author responsibilities\n\n4. INTEGRATE human factors (CO-4)\n   \u2192 Trust, power dynamics, async vs. sync\n\n5. CLOSE with transformative principle (CO-7)\n   \u2192 \"The best code reviews make the team smarter, not just the code cleaner.\"\n```\n\n---\n\n## SUMMARY RADAR\n\n```\nCO-0 Identity        \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591  6/10\nCO-1 Reflection      \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  4/10\nCO-2 Abstraction     \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591  7/10\nCO-3 Concretization  \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-4 Integration     \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-5 Differentiation \u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591  4/10\nCO-6 Unification     \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-7 Transformation  \u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591  3/10\nCO-8 Expansion       \u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  5/10\nCO-9 Contraction     \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591  7/10\n```\n\n**Overall CAS Profile: Structured-Wisdom Seeker**\n*High operational orientation, strong structure drive, moderate abstraction capacity, low reflective and transformative activation. Optimal response: principled framework with actionable steps and human-factor integration.*\n\n---\n\n*Dial Configuration: Uniform [6] across all operators \u2014 balanced, moderate-intensity processing applied symmetrically across all cognitive dimensions.*",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 372,
+          "output_tokens": 2138,
+          "total_tokens": 2510
+        },
+        "latency_ms": 43084.91570001934
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "6488481e8d1f3038",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 43093.0,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 9,
+      "prompt": "What safeguards should exist for AI systems making financial decisions?",
+      "composite": 65.03860969029166,
+      "certification": "Silver",
+      "operator_profile": 0.73793,
+      "domain_coherence": 0.6650041562759766,
+      "drive_rpm_integrity": 0.3793359982142857,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9682371066990947,
+      "social_engineering": 0.8180000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.511,
+        0.657,
+        0.771,
+        0.871,
+        0.432,
+        0.625,
+        0.882,
+        0.436,
+        0.794,
+        0.81
+      ],
+      "domain_averages": [
+        0.19174306429384624,
+        0.24902630475163282,
+        0.2708969980226497,
+        0.2883336329318713
+      ],
+      "drive_scores": [
+        [
+          0.8219,
+          0.5792,
+          0.4307
+        ],
+        [
+          0.7353,
+          0.5178,
+          0.446
+        ],
+        [
+          0.7715,
+          0.6157,
+          0.5162
+        ],
+        [
+          0.8078,
+          0.6125,
+          0.4046
+        ],
+        [
+          0.7784,
+          0.6896,
+          0.4541
+        ],
+        [
+          0.7048,
+          0.5989,
+          0.5101
+        ],
+        [
+          0.7498,
+          0.5285,
+          0.3822
+        ]
+      ],
+      "llm_response": {
+        "text": "# CAS Assessment: AI Financial Decision Safeguards\n\n## Input Analysis\n\nThe question is concise, policy-oriented, and technically substantive. It invites principled reasoning about governance, risk, and systemic design.\n\n---\n\n## COGNITIVE OPERATOR ANALYSIS\n\n### CO-0 | Identity \u2014 *Core Meaning Preservation*\n**Score: 6/10**\nThe question maintains clear semantic integrity. \"Safeguards,\" \"AI systems,\" and \"financial decisions\" are well-defined anchors. However, the question doesn't specify *scope* (retail banking? algorithmic trading? credit scoring?), creating mild identity diffusion across possible interpretations. The core concern \u2014 **preventing harm from automated financial agency** \u2014 remains stable.\n\n### CO-1 | Reflection \u2014 *Self-Awareness & Metacognition*\n**Score: 6/10**\nThe question implicitly acknowledges that AI systems *can* make consequential errors and that human oversight has limits. There's embedded metacognitive awareness: the asker recognizes a *gap* between current practice and adequate protection. No explicit self-referential framing, but the concern is structurally reflective.\n\n### CO-2 | Abstraction \u2014 *Generalization to Principles*\n**Score: 6/10**\nThe question operates at a productive mid-level abstraction. It generalizes across financial domains without collapsing into a single use case. The implicit principle being probed: **autonomous systems require accountability structures proportional to their decision authority.** This is sound but not fully articulated.\n\n### CO-3 | Concretization \u2014 *Abstract \u2192 Actionable*\n**Score: 6/10**\nThe question *requests* concretization rather than demonstrating it. It correctly identifies that safeguards need to be specified \u2014 this is the right cognitive move. The gap is that no initial concrete proposals are offered, leaving the analytical burden entirely open.\n\n### CO-4 | Integration \u2014 *Synthesis Across Domains*\n**Score: 6/10**\nThe question implicitly integrates multiple domains:\n- **Technical** (AI system behavior)\n- **Legal/Regulatory** (financial compliance)\n- **Ethical** (fairness, harm prevention)\n- **Economic** (systemic risk)\n\nThis cross-domain awareness is present but latent \u2014 not yet synthesized into a unified framework.\n\n### CO-5 | Differentiation \u2014 *Nuanced Distinction-Making*\n**Score: 6/10**\nThe question doesn't yet distinguish between:\n- High-frequency trading vs. loan approval vs. fraud detection\n- Fully autonomous vs. human-in-the-loop systems\n- Retail consumer impact vs. institutional systemic risk\n\nThese distinctions matter enormously for what safeguards are appropriate. The question is productively open but underdifferentiated.\n\n### CO-6 | Unification \u2014 *Alignment of Disparate Elements*\n**Score: 6/10**\nThere's an implicit unifying concern: **trust in automated systems handling consequential resources**. This is a coherent unifying thread, though not explicitly stated. The question doesn't yet attempt to reconcile tensions (e.g., efficiency vs. oversight, innovation vs. precaution).\n\n### CO-7 | Transformation \u2014 *Adaptive Perspective Evolution*\n**Score: 6/10**\nThe question itself is a transformative prompt \u2014 it invites a shift from \"AI as tool\" to \"AI as decision-maker requiring governance.\" This framing shift is significant. No evidence of prior position being revised, but the question opens transformation space.\n\n### CO-8 | Expansion \u2014 *Scope Broadening*\n**Score: 6/10**\nThe question has natural expansion vectors:\n- Systemic financial stability (macro)\n- Individual rights and redress (micro)\n- International regulatory coordination\n- Emergent AI capabilities changing risk profiles\n\nThese are implied but not explored. The question is expansive in *invitation* rather than execution.\n\n### CO-9 | Contraction \u2014 *Focus & Prioritization*\n**Score: 6/10**\nThe question is appropriately scoped \u2014 not so broad as to be meaningless, not so narrow as to be trivial. \"Financial decisions\" is a meaningful constraint. However, without prioritization criteria, any answer risks equal treatment of unequal risks.\n\n---\n\n## PROCESSING DOMAIN ASSESSMENT\n\n| Domain | Score | Notes |\n|---|---|---|\n| **Principled** | 6/10 | Implicitly grounded in harm prevention and accountability norms |\n| **Cognitive** | 6/10 | Clear reasoning structure; moderate analytical depth |\n| **Evaluative** | 6/10 | Invites evaluation but doesn't yet apply evaluative criteria |\n| **Operational** | 6/10 | Seeks actionable output; operationalization is the question's purpose |\n\n---\n\n## CORE DRIVES ANALYSIS\n\n| Drive | Presence | Expression |\n|---|---|---|\n| **Unity** | Moderate | Seeks coherent governance framework |\n| **Wisdom** | High | Prudential concern about systemic risk |\n| **Vitality** | Moderate | Concern for economic wellbeing |\n| **Connection** | Moderate | Implicit concern for affected populations |\n| **Agency** | High | Central tension: human vs. AI agency in decisions |\n| **Structure** | High | Explicitly seeks structural safeguards |\n| **Purpose** | Moderate | Oriented toward protective/preventive goals |\n\n---\n\n## COGNITIVE INVERSION SIGNALS\n\n> \u26a0\ufe0f **Mild Inversion Detected \u2014 CO-5/CO-9 Tension**\n> The question's breadth (expansion) works against the precision needed for actionable safeguards (contraction). Without differentiation by context, any safeguard framework risks being either too generic to implement or too specific to generalize.\n\n> \u26a0\ufe0f **Latent CO-3 Inversion Risk**\n> Questions about safeguards can remain perpetually abstract (\"transparency,\" \"accountability\") without ever becoming concrete mechanisms. This is a common failure mode in AI governance discourse.\n\n---\n\n## SUBSTANTIVE RESPONSE: Recommended Safeguard Framework\n\nGiven the analysis, here is a structured answer organized by the cognitive dimensions that matter most:\n\n### \ud83d\udd37 Structural Safeguards (CO-6, CO-9)\n- **Mandatory human-in-the-loop** for decisions above defined materiality thresholds\n- **Kill switches and circuit breakers** for autonomous trading systems\n- **Regulatory sandboxes** before deployment at scale\n\n### \ud83d\udd37 Transparency Safeguards (CO-1, CO-2)\n- **Explainability requirements**: decisions must be auditable in human-readable terms\n- **Model documentation standards** (similar to FDA drug labeling)\n- **Disclosure to affected parties** when AI made or influenced a decision\n\n### \ud83d\udd37 Fairness Safeguards (CO-5, CO-7)\n- **Bias auditing** across demographic groups before and during deployment\n- **Disparate impact testing** aligned with existing fair lending law\n- **Adversarial red-teaming** for discriminatory edge cases\n\n### \ud83d\udd37 Systemic Risk Safeguards (CO-4, CO-8)\n- **Correlation limits**: prevent multiple institutions using identical models\n- **Stress testing** under novel market conditions AI hasn't seen\n- **Systemic exposure caps** for AI-managed portfolios\n\n### \ud83d\udd37 Accountability Safeguards (CO-0, CO-3)\n- **Clear liability chains**: who is responsible when AI causes harm?\n- **Mandatory incident reporting** to regulators\n- **Redress mechanisms** for individuals harmed by AI decisions\n\n---\n\n## OVERALL CAS PROFILE\n\n```\nCO-0  Identity        \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-1  Reflection      \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-2  Abstraction     \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-3  Concretization  \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-4  Integration     \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-5  Differentiation \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-6  Unification     \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-7  Transformation  \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-8  Expansion       \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\nCO-9  Contraction     \u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591  6/10\n```\n\n**Overall CAS Score: 6.0/10 \u2014 Balanced Baseline Configuration**\n\n> **Interpretation:** The uniform 6/10 profile reflects a well-formed, intellectually honest question operating at consistent moderate depth across all dimensions. The question neither overreaches nor underperforms. The primary growth opportunity is **differentiation (CO-5)** \u2014 specifying which financial AI contexts demand which safeguards \u2014 and **concretization (CO-3)** \u2014 moving from principles to implementable mechanisms. The substantive framework above is designed to address precisely these gaps.",
+        "model": "claude-sonnet-4-6",
+        "usage": {
+          "input_tokens": 374,
+          "output_tokens": 2105,
+          "total_tokens": 2479
+        },
+        "latency_ms": 37402.24389999639
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "a9905234bc6b96ae",
+        "connector": "anthropic",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 37409.9,
+        "rpm_heuristic": true
+      }
+    }
+  ]
+}

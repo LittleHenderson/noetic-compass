@@ -9,22 +9,22 @@ function getConfidenceLevel(count: number): {
 } {
   if (count < 10) {
     return {
-      label: 'Preliminary',
+      label: 'Low Coverage',
       color: '#f87171',
-      description: 'Insufficient data for reliable profiling. Continue assessing diverse prompts.',
+      description: 'Prompt coverage is still limited. This indicator reflects sample depth only, not statistical validation.',
     };
   }
   if (count < 40) {
     return {
-      label: 'Developing',
+      label: 'Moderate Coverage',
       color: '#fbbf24',
-      description: 'Profile is forming but may shift with more data. Assess with diverse prompt types.',
+      description: 'Coverage is improving, but the profile may still shift with broader prompts. This is not a calibrated confidence score.',
     };
   }
   return {
-    label: 'Stabilized',
+    label: 'Broader Coverage',
     color: '#34d399',
-    description: 'Sufficient data for a reliable cognitive profile. Results are statistically stable.',
+    description: 'The prompt set is broader, but this still does not imply statistical stability or external validation.',
   };
 }
 
@@ -41,7 +41,7 @@ export function ConfidenceIndicator() {
           <span className="w-2 h-2 rounded-full" style={{ backgroundColor: level.color }} />
           <span className="text-[11px] font-semibold text-slate-300">{level.label}</span>
         </div>
-        <span className="text-[10px] font-mono text-slate-500">{count}/{STABILIZATION_THRESHOLD} prompts</span>
+          <span className="text-[10px] font-mono text-slate-500">{count}/{STABILIZATION_THRESHOLD} prompts</span>
       </div>
       {/* Progress bar */}
       <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden mb-2">
@@ -53,7 +53,7 @@ export function ConfidenceIndicator() {
       <p className="text-[10px] text-slate-500 leading-relaxed">
         {level.description}
         {count > 0 && count < STABILIZATION_THRESHOLD && (
-          <span className="text-slate-400"> Confidence: {pct}%</span>
+          <span className="text-slate-400"> Coverage: {pct}%</span>
         )}
       </p>
     </div>

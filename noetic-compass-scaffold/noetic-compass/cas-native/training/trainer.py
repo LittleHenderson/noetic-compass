@@ -127,13 +127,64 @@ class CASTrainer:
         self.global_step = ckpt["global_step"]
         self.best_val_loss = ckpt.get("best_val_loss", float("inf"))
 
-    def _generate_target_cognitive_state(self, batch_size: int, seq_len: int) -> torch.Tensor:
-        """Generate a target cognitive state on the open simplex.
+    @staticmethod
+    def _normalize_score_list(
+        raw_scores: Any,
+        expected_len: int,
+        scale_hint: float = 10.0,
+    ) -> Optional[torch.Tensor]:
+        """Normalize score lists that may arrive in 0-1 or 0-10 form."""
+        if not isinstance(raw_scores, (list, tuple)) or len(raw_scores) != expected_len:
+            return None
 
-        For training, we use a uniform distribution as the balanced target.
+        tensor = torch.tensor(raw_scores, dtype=torch.float32)
+        if torch.isnan(tensor).any():
+            return None
+
+        max_score = float(tensor.max().item())
+        if max_score > 1.0:
+            tensor = tensor / scale_hint
+
+        return tensor.clamp(min=1e-6, max=1.0)
+
+    def _build_sample_target_state(self, cas_scores: dict[str, Any]) -> torch.Tensor:
+        """Construct a 40-state simplex target from labeled CAS scores.
+
+        Operator scores shape the within-domain distribution. Domain scores, when
+        present, weight the four domains. If no structured labels are available,
+        the fallback is uniform.
         """
-        # Uniform on the open simplex
-        target = torch.ones(batch_size, seq_len, 40, device=self.device) / 40.0
+        operator_scores = self._normalize_score_list(
+            cas_scores.get("operator_scores"),
+            expected_len=10,
+        )
+        domain_scores = self._normalize_score_list(
+            cas_scores.get("domain_scores"),
+            expected_len=4,
+        )
+
+        if operator_scores is None:
+            return torch.ones(40, device=self.device) / 40.0
+
+        if domain_scores is None:
+            domain_scores = torch.ones(4, dtype=torch.float32)
+
+        target = domain_scores.unsqueeze(-1) * operator_scores.unsqueeze(0)
+        target = target.reshape(-1).to(self.device)
+        target = target / target.sum().clamp_min(1e-8)
+        return target
+
+    def _generate_target_cognitive_state(
+        self,
+        cas_scores_batch: list[dict[str, Any]],
+        seq_len: int,
+    ) -> torch.Tensor:
+        """Generate per-sample target cognitive states on the open simplex."""
+        if not cas_scores_batch:
+            return torch.ones(0, seq_len, 40, device=self.device)
+
+        sample_targets = [self._build_sample_target_state(scores) for scores in cas_scores_batch]
+        target = torch.stack(sample_targets, dim=0).unsqueeze(1).repeat(1, seq_len, 1)
         return target
 
     def _train_step(self, batch: dict[str, torch.Tensor]) -> dict[str, float]:
@@ -145,13 +196,14 @@ class CASTrainer:
         attention_mask = batch.get("attention_mask")
         if attention_mask is not None:
             attention_mask = attention_mask.to(self.device)
+        cas_scores = batch.get("cas_scores", [])
 
         # Forward pass
         outputs = self.model(input_ids, attention_mask=attention_mask)
 
         # Generate target cognitive state
         batch_size, seq_len = input_ids.shape
-        target_cog = self._generate_target_cognitive_state(batch_size, seq_len)
+        target_cog = self._generate_target_cognitive_state(cas_scores, seq_len)
 
         # Build RPM satisfaction dict from scalar
         rpm_sat_dict = {"mean": outputs["rpm_satisfaction"].unsqueeze(0)}
@@ -199,11 +251,12 @@ class CASTrainer:
             attention_mask = batch.get("attention_mask")
             if attention_mask is not None:
                 attention_mask = attention_mask.to(self.device)
+            cas_scores = batch.get("cas_scores", [])
 
             outputs = self.model(input_ids, attention_mask=attention_mask)
 
             batch_size, seq_len = input_ids.shape
-            target_cog = self._generate_target_cognitive_state(batch_size, seq_len)
+            target_cog = self._generate_target_cognitive_state(cas_scores, seq_len)
 
             rpm_sat_dict = {"mean": outputs["rpm_satisfaction"].unsqueeze(0)}
 

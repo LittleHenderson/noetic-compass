@@ -1,0 +1,4 @@
+# demo_pkg entry
+let foundation: state[C] = CO-2^C_{F2};
+let outcome: state[E] = CO-5^E_{F4};
+foundation -> outcome

@@ -13,6 +13,7 @@ import math
 from collections import defaultdict
 from pathlib import Path
 import json
+from statistics import mean
 
 OPERATOR_NAMES = [
     "CO-0 Identity", "CO-1 Reflection", "CO-2 Abstraction",
@@ -25,6 +26,11 @@ DOMAIN_NAMES = ["Principled", "Cognitive", "Evaluative", "Operational"]
 # Weak correlation threshold — operators below this are flagged for recalibration
 WEAK_THRESHOLD = 0.4
 STRONG_THRESHOLD = 0.7
+
+
+def _clip_prompt(text: str, limit: int = 180) -> str:
+    compact = " ".join(text.split())
+    return compact if len(compact) <= limit else f"{compact[:limit - 3]}..."
 
 
 def _norm_cdf(x: float) -> float:
@@ -304,6 +310,166 @@ def compute_stats(labels: list[dict], machine_results: list[dict]) -> dict:
         "overall_pearson_r": round(overall_r, 3),
         "overall_pearson_p": round(overall_p, 4),
         "overall_cohens_kappa": round(overall_kappa, 3),
+    }
+
+
+def compute_calibration_review(labels: list[dict], machine_results: list[dict]) -> dict:
+    """Summarize rater bias and disagreement hot spots for calibration sessions."""
+    if not labels:
+        return {"raters": [], "operators": [], "items": []}
+
+    machine_by_idx: dict[int, list[float]] = {}
+    prompt_by_idx: dict[int, str] = {}
+    for item in machine_results:
+        idx = item.get("index")
+        if idx is None:
+            continue
+        machine_by_idx[int(idx)] = [float(score) * 10.0 for score in item.get("operator_scores", [])[:10]]
+        prompt_by_idx[int(idx)] = str(item.get("prompt", ""))
+
+    labels_by_item: dict[int, list[dict]] = defaultdict(list)
+    labels_by_rater: dict[str, list[dict]] = defaultdict(list)
+    for label in labels:
+        idx = label.get("item_index")
+        if idx is None:
+            continue
+        labels_by_item[int(idx)].append(label)
+        labels_by_rater[str(label.get("rater", "unknown"))].append(label)
+
+    panel_means_by_item: dict[int, list[float]] = {}
+    for idx, item_labels in labels_by_item.items():
+        if not item_labels:
+            continue
+        panel_means_by_item[idx] = [
+            mean(float(label.get("operator_scores", [0] * 10)[op_idx]) for label in item_labels)
+            for op_idx in range(10)
+        ]
+
+    rater_rows: list[dict] = []
+    for rater, rater_labels in sorted(labels_by_rater.items()):
+        signed_panel_gaps: list[float] = []
+        abs_panel_gaps: list[float] = []
+        abs_machine_gaps: list[float] = []
+        per_operator_signed: dict[int, list[float]] = defaultdict(list)
+
+        for label in rater_labels:
+            idx = int(label.get("item_index", -1))
+            scores = [float(score) for score in label.get("operator_scores", [])[:10]]
+            panel = panel_means_by_item.get(idx, [])
+            machine = machine_by_idx.get(idx, [])
+            for op_idx, score in enumerate(scores):
+                if len(panel) > op_idx:
+                    diff = score - panel[op_idx]
+                    signed_panel_gaps.append(diff)
+                    abs_panel_gaps.append(abs(diff))
+                    per_operator_signed[op_idx].append(diff)
+                if len(machine) > op_idx:
+                    abs_machine_gaps.append(abs(score - machine[op_idx]))
+
+        top_operator = None
+        if per_operator_signed:
+            op_idx, diffs = max(per_operator_signed.items(), key=lambda item: abs(mean(item[1])))
+            top_operator = {
+                "operator_index": op_idx,
+                "operator_name": OPERATOR_NAMES[op_idx],
+                "signed_gap": round(mean(diffs), 3),
+            }
+
+        rater_rows.append(
+            {
+                "rater": rater,
+                "label_count": len(rater_labels),
+                "item_count": len({int(label.get("item_index", -1)) for label in rater_labels}),
+                "mean_panel_gap": round(mean(signed_panel_gaps), 3) if signed_panel_gaps else 0.0,
+                "mean_abs_panel_gap": round(mean(abs_panel_gaps), 3) if abs_panel_gaps else 0.0,
+                "mean_abs_machine_gap": round(mean(abs_machine_gaps), 3) if abs_machine_gaps else 0.0,
+                "top_operator_drift": top_operator,
+            }
+        )
+
+    operator_rows: list[dict] = []
+    for op_idx in range(10):
+        spreads: list[float] = []
+        for idx, item_labels in labels_by_item.items():
+            if len(item_labels) < 2:
+                continue
+            scores = [
+                float(label.get("operator_scores", [0] * 10)[op_idx])
+                for label in item_labels
+                if len(label.get("operator_scores", [])) > op_idx
+            ]
+            if len(scores) < 2:
+                continue
+            spreads.append(max(scores) - min(scores))
+        operator_rows.append(
+            {
+                "operator_index": op_idx,
+                "operator_name": OPERATOR_NAMES[op_idx],
+                "shared_items": len(spreads),
+                "mean_spread": round(mean(spreads), 3) if spreads else 0.0,
+                "max_spread": round(max(spreads), 3) if spreads else 0.0,
+            }
+        )
+
+    operator_rows.sort(key=lambda row: (-row["mean_spread"], row["operator_index"]))
+
+    item_rows: list[dict] = []
+    for idx, item_labels in labels_by_item.items():
+        if len(item_labels) < 2:
+            continue
+        operator_spreads: list[dict] = []
+        for op_idx in range(10):
+            scores = [
+                float(label.get("operator_scores", [0] * 10)[op_idx])
+                for label in item_labels
+                if len(label.get("operator_scores", [])) > op_idx
+            ]
+            if len(scores) < 2:
+                continue
+            operator_spreads.append(
+                {
+                    "operator_index": op_idx,
+                    "operator_name": OPERATOR_NAMES[op_idx],
+                    "spread": round(max(scores) - min(scores), 3),
+                    "panel_mean": round(mean(scores), 3),
+                }
+            )
+        if not operator_spreads:
+            continue
+        operator_spreads.sort(key=lambda item: (-item["spread"], item["operator_index"]))
+        machine_scores = machine_by_idx.get(idx, [])
+        machine_mean = round(mean(machine_scores), 3) if machine_scores else None
+        item_rows.append(
+            {
+                "item_index": idx,
+                "prompt_excerpt": _clip_prompt(prompt_by_idx.get(idx, "")),
+                "raters": sorted({str(label.get("rater", "unknown")) for label in item_labels}),
+                "label_count": len(item_labels),
+                "largest_operator_gap": operator_spreads[0],
+                "mean_spread": round(mean(item["spread"] for item in operator_spreads), 3),
+                "machine_mean": machine_mean,
+                "panel_mean": round(
+                    mean(
+                        score
+                        for label in item_labels
+                        for score in [float(value) for value in label.get("operator_scores", [])[:10]]
+                    ),
+                    3,
+                ),
+            }
+        )
+    item_rows.sort(
+        key=lambda row: (
+            -(row["largest_operator_gap"]["spread"]),
+            -(row["mean_spread"]),
+            row["item_index"],
+        )
+    )
+
+    return {
+        "raters": rater_rows,
+        "operators": operator_rows,
+        "items": item_rows[:25],
     }
 
 

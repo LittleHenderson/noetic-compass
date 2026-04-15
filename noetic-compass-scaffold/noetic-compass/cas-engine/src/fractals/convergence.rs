@@ -134,10 +134,7 @@ pub fn classify(
 /// In discrete CAS, "eigenvalue" is defined via the operator index ratio:
 /// If Φ maps state (CO_a, D) to (CO_b, D), the eigenvalue is b/a (or None if a=0).
 /// Fixed points have eigenvalue 1.
-pub fn find_eigenvalue(
-    fractal: &CognitiveFractal,
-    element: &CognitiveStateId,
-) -> Option<f64> {
+pub fn find_eigenvalue(fractal: &CognitiveFractal, element: &CognitiveStateId) -> Option<f64> {
     let result = fractal.apply(element);
     if result == *element {
         return Some(1.0); // Fixed point

@@ -109,6 +109,34 @@ class TestCASNativeModel:
             output = model(input_ids, attention_mask=mask)
         assert output["logits"].shape == (2, 40, 1000)
 
+    def test_padding_mask_invariance(self, model):
+        """Masked suffix tokens should not change unmasked prefix outputs."""
+        model.eval()
+        prefix = torch.randint(0, 1000, (1, 30))
+        padded = torch.cat([prefix, torch.randint(0, 1000, (1, 10))], dim=1)
+        mask = torch.cat(
+            [
+                torch.ones(1, 30, dtype=torch.long),
+                torch.zeros(1, 10, dtype=torch.long),
+            ],
+            dim=1,
+        )
+
+        with torch.no_grad():
+            short_out = model(prefix)
+            padded_out = model(padded, attention_mask=mask)
+
+        assert torch.allclose(
+            short_out["logits"],
+            padded_out["logits"][:, :30, :],
+            atol=1e-5,
+        )
+        assert torch.allclose(
+            short_out["cognitive_state"],
+            padded_out["cognitive_state"][:, :30, :],
+            atol=1e-5,
+        )
+
     def test_default_config(self):
         """Model should work with default config."""
         model = CASNativeModel()

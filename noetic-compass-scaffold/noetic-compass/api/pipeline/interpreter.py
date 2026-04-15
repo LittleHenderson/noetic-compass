@@ -105,7 +105,7 @@ def build_interpretation_prompt(
         f"(Write every sentence about this AI system. Never address the reader.)",
         "",
         f"NCCS Composite Score: {composite:.1f}/100",
-        f"Certification Level: {certification}",
+        f"Research Tier: {certification}",
         "",
         "Cognitive Operator Scores (0-1 scale):",
     ]

@@ -1,4 +1,4 @@
-import { getToken } from './auth';
+import { clearToken, getToken } from './auth';
 import { API_BASE } from './config';
 
 export class ApiError extends Error {
@@ -28,7 +28,16 @@ export async function apiFetch<T>(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  } catch {
+    throw new ApiError(
+      0,
+      `Unable to reach API at ${API_BASE}. Check the backend URL, deployment status, or browser cache state.`,
+      'network_error',
+    );
+  }
 
   if (!res.ok) {
     let detail = res.statusText;
@@ -39,6 +48,12 @@ export async function apiFetch<T>(
       errorType = body.error_type ?? errorType;
     } catch {
       // use statusText
+    }
+    if (res.status === 401) {
+      clearToken();
+      if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+        window.location.assign('/login');
+      }
     }
     throw new ApiError(res.status, detail, errorType);
   }

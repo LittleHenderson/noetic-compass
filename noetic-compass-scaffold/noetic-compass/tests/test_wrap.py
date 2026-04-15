@@ -32,8 +32,9 @@ def test_wrap_mock(client, auth_headers, valid_wrap_payload):
     # Check LLM response present
     assert data["llm_response"] is not None
     assert data["llm_response"]["model"] == "mock-cas-v1"
-    assert data["scoring_method"] in ["llm", "heuristic"]
+    assert data["scoring_method"] in ["secondary_llm", "self_reported", "heuristic_fallback"]
     assert data["provenance"]["scoring_method"] == data["scoring_method"]
+    assert data["provenance"]["requested_scoring_mode"] == "heuristic_fallback"
 
     # Check AI interpretation is present
     assert "interpretation" in data

@@ -1,0 +1,29 @@
+{
+  "summary": {
+    "study_date": "2026-04-11T13:24:23.747134+00:00",
+    "provider": "openai",
+    "prompt_count": 1,
+    "successes": 0,
+    "failures": 1,
+    "elapsed_seconds": 12.33,
+    "dial_config": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ]
+  },
+  "results": [
+    {
+      "index": 0,
+      "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+      "error": "{\"detail\":\"LLM call failed: Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code'"
+    }
+  ]
+}

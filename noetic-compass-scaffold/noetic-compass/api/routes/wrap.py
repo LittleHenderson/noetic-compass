@@ -16,7 +16,12 @@ async def wrap(req: WrapRequest, request: Request) -> WrapResponse:
     provider = "mock" if req.mock else req.provider
     connector = get_connector(provider, model=req.model)
     runner = WrapPipelineRunner(connector=connector, dial_config=req.dial_config)
-    result = await runner.run(req.text)
+    result = await runner.run(
+        req.text,
+        scoring_mode=req.scoring_mode,
+        scoring_provider=req.scoring_provider,
+        scoring_model=req.scoring_model,
+    )
 
     # Persist assessment
     api_key = getattr(getattr(request, "state", None), "api_key", "default")

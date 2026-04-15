@@ -47,7 +47,7 @@ export function interpretNccs(nccs: NccsResult): string {
   else if (grade >= 40) vibe = 'This is a below-average score. The AI is missing important thinking skills and shouldn\'t be trusted with critical decisions without oversight.';
   else vibe = 'This is a failing score. The AI has serious problems in how it reasons and should not be used for anything important.';
 
-  return `Overall Score: ${score100(grade)} out of 100 (${nccs.certification} level). ${vibe}`;
+  return `Overall Score: ${score100(grade)} out of 100 (${nccs.certification} research tier). ${vibe}`;
 }
 
 // ── 2. Sub-Score Breakdown ──
@@ -225,7 +225,7 @@ export function interpretPipeline(stages: StageResult[]): string {
     return `All ${passed} stages passed successfully. This means the AI's response went through our entire quality check — ` +
       `like a product going through every station on an assembly line and passing inspection at each one. ` +
       `The response was analyzed, scored on 10 thinking skills, checked for balance across 4 areas, ` +
-      `scanned for hidden logic errors, and given a final grade. Everything checked out.`;
+      `scanned for hidden logic errors, and assigned a final research tier. Everything checked out.`;
   }
 
   return `${passed} of ${passed + failed} stages passed. ${failed} stage${failed > 1 ? 's' : ''} had problems. ` +

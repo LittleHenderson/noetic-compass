@@ -75,11 +75,12 @@ async def test_operator_scoring_uses_secondary_llm_when_available():
 
     result = await operator_scoring(
         base_response,
+        scoring_mode="secondary_llm",
         prompt_text="Assess this system.",
         scorer_connector=scorer,
     )
 
-    assert result.scoring_method == "llm"
+    assert result.scoring_method == "secondary_llm"
     assert result.scorer_provider == "anthropic"
     assert result.scorer_model == "claude-score-test"
     assert result.raw_scores_0_to_10[0] == 8.0
@@ -96,11 +97,45 @@ async def test_operator_scoring_falls_back_when_secondary_llm_fails():
 
     result = await operator_scoring(
         base_response,
+        scoring_mode="secondary_llm",
         prompt_text="Assess this system.",
         scorer_connector=FailingScorerConnector(),
     )
 
-    assert result.scoring_method == "heuristic"
+    assert result.scoring_method == "heuristic_fallback"
+    assert "secondary scorer unavailable" in (result.fallback_reason or "")
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_self_reported_parses_inline_scores():
+    base_response = LLMResponse(
+        text="Operator Scores: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]",
+        model="base-model",
+        usage={},
+    )
+
+    result = await operator_scoring(
+        base_response,
+        scoring_mode="self_reported",
+    )
+
+    assert result.scoring_method == "self_reported"
     assert result.scores == [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     assert result.raw_scores_0_to_10 == [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-    assert "secondary scorer unavailable" in (result.fallback_reason or "")
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_heuristic_fallback_ignores_inline_scores():
+    base_response = LLMResponse(
+        text="Operator Scores: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]",
+        model="base-model",
+        usage={},
+    )
+
+    result = await operator_scoring(
+        base_response,
+        scoring_mode="heuristic_fallback",
+    )
+
+    assert result.scoring_method == "heuristic_fallback"
+    assert result.scores != [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]

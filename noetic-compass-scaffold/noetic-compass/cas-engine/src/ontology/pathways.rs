@@ -28,12 +28,8 @@ pub enum PathwayStage {
 }
 
 impl PathwayStage {
-    pub const ALL: [PathwayStage; 4] = [
-        Self::Aspiration,
-        Self::Drive,
-        Self::Will,
-        Self::Proficiency,
-    ];
+    pub const ALL: [PathwayStage; 4] =
+        [Self::Aspiration, Self::Drive, Self::Will, Self::Proficiency];
 
     /// The next stage in the RPM chain. Aspiration -> Drive -> Will -> Proficiency -> None.
     pub fn next(self) -> Option<Self> {
@@ -302,18 +298,9 @@ mod tests {
     #[test]
     fn test_pathway_display() {
         assert_eq!(format!("{}", PathwayNode::A0), "A0");
-        assert_eq!(
-            format!("{}", PathwayNode::D(CoreDrive::F3Vitality)),
-            "D3"
-        );
-        assert_eq!(
-            format!("{}", PathwayNode::W(CoreDrive::F7Purpose)),
-            "W7"
-        );
-        assert_eq!(
-            format!("{}", PathwayNode::P(CoreDrive::F1Unity)),
-            "P1"
-        );
+        assert_eq!(format!("{}", PathwayNode::D(CoreDrive::F3Vitality)), "D3");
+        assert_eq!(format!("{}", PathwayNode::W(CoreDrive::F7Purpose)), "W7");
+        assert_eq!(format!("{}", PathwayNode::P(CoreDrive::F1Unity)), "P1");
     }
 
     #[test]

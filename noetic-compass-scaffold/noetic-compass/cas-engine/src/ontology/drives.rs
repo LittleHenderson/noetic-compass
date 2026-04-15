@@ -151,12 +151,7 @@ impl DomainDrive {
 
 impl fmt::Display for DomainDrive {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "F{}-{}",
-            self.drive.number(),
-            self.domain.abbreviation()
-        )
+        write!(f, "F{}-{}", self.drive.number(), self.domain.abbreviation())
     }
 }
 
@@ -275,8 +270,14 @@ mod tests {
     fn test_drive_profile_inversion_balance() {
         let profile = DriveProfile::new([0.8, 0.6, 0.7, 0.5, 0.3, 0.4, 0.2]).unwrap();
         // F1(0.8) <-> F7(0.2) => balance = 0.6
-        assert!((profile.inversion_balance(CoreDrive::F1Unity, CoreDrive::F7Purpose) - 0.6).abs() < 1e-12);
+        assert!(
+            (profile.inversion_balance(CoreDrive::F1Unity, CoreDrive::F7Purpose) - 0.6).abs()
+                < 1e-12
+        );
         // F2(0.6) <-> F6(0.4) => balance = 0.2
-        assert!((profile.inversion_balance(CoreDrive::F2Wisdom, CoreDrive::F6Structure) - 0.2).abs() < 1e-12);
+        assert!(
+            (profile.inversion_balance(CoreDrive::F2Wisdom, CoreDrive::F6Structure) - 0.2).abs()
+                < 1e-12
+        );
     }
 }

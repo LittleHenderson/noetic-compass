@@ -310,8 +310,14 @@ mod tests {
 
     #[test]
     fn test_admissibility_co0_diagonal_only() {
-        let s = CognitiveStateId::new(CognitiveOperator::CO1, super::super::domains::Domain::Principled);
-        let t = CognitiveStateId::new(CognitiveOperator::CO2, super::super::domains::Domain::Principled);
+        let s = CognitiveStateId::new(
+            CognitiveOperator::CO1,
+            super::super::domains::Domain::Principled,
+        );
+        let t = CognitiveStateId::new(
+            CognitiveOperator::CO2,
+            super::super::domains::Domain::Principled,
+        );
         assert!(CognitiveOperator::CO0.is_admissible(s, s));
         assert!(!CognitiveOperator::CO0.is_admissible(s, t));
     }

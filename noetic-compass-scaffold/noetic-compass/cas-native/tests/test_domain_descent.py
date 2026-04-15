@@ -10,6 +10,11 @@ from cas_native.model.domain_descent import (
 )
 
 
+def _make_slot_weights(batch: int, seq: int) -> torch.Tensor:
+    """Create valid token-to-slot weights."""
+    return torch.softmax(torch.randn(batch, seq, NUM_COGNITIVE_STATES), dim=-1)
+
+
 @pytest.fixture
 def mask():
     return build_domain_descent_mask()
@@ -65,25 +70,38 @@ class TestDomainDescentAttention:
     def test_forward_shape(self, attention):
         """Output shape should match input shape."""
         x = torch.randn(2, NUM_COGNITIVE_STATES, 64)
-        output = attention(x)
+        output = attention(x, _make_slot_weights(2, NUM_COGNITIVE_STATES))
         assert output.shape == x.shape
 
     def test_forward_short_sequence(self, attention):
         """Should handle sequences shorter than 40."""
         x = torch.randn(2, 10, 64)
-        output = attention(x)
+        output = attention(x, _make_slot_weights(2, 10))
         assert output.shape == (2, 10, 64)
 
     def test_forward_long_sequence(self, attention):
         """Should handle sequences longer than 40."""
         x = torch.randn(1, 80, 64)
-        output = attention(x)
+        output = attention(x, _make_slot_weights(1, 80))
         assert output.shape == (1, 80, 64)
 
     def test_gradient_flow(self, attention):
         """Ensure gradients flow through attention."""
         x = torch.randn(2, NUM_COGNITIVE_STATES, 64, requires_grad=True)
-        output = attention(x)
+        output = attention(x, _make_slot_weights(2, NUM_COGNITIVE_STATES))
         loss = output.sum()
         loss.backward()
         assert x.grad is not None
+
+    def test_slot_attention_respects_domain_ordering(self, attention):
+        """Forbidden domain pairs should receive zero slot attention weight."""
+        slot_states = torch.randn(1, NUM_COGNITIVE_STATES, 64)
+        slot_mask = torch.ones(1, NUM_COGNITIVE_STATES, dtype=torch.bool)
+        weights = attention.slot_attention_weights(slot_states, slot_mask)
+
+        # P slots cannot attend outside P.
+        assert torch.allclose(weights[:, :, 0:10, 10:], torch.zeros_like(weights[:, :, 0:10, 10:]))
+        # C slots cannot attend to E or O.
+        assert torch.allclose(weights[:, :, 10:20, 20:], torch.zeros_like(weights[:, :, 10:20, 20:]))
+        # E slots cannot attend to O.
+        assert torch.allclose(weights[:, :, 20:30, 30:40], torch.zeros_like(weights[:, :, 20:30, 30:40]))

@@ -1,0 +1,5 @@
+# Exported CAS module surface
+export let foundation: state[C] = CO-2^C_{F2};
+export let response: state[E] = CO-5^E_{F4};
+export fn bridge(x: state[C], y: state[E]): relation = x -> y;
+export fn weave(x: state[C], y: state[C]): fractal = fractal(x, y);

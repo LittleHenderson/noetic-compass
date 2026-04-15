@@ -1,50 +1,30 @@
-# Full CAS Language Demo
-# Exercises every compiler capability in one program
+# Full CAS language demo
+# Exercises modules, typed bindings, operators, fractals, RPM, builtins, and typed functions.
 
-# 1. Import a module — only exported symbols are visible
 use "CAS_FULL_DEMO_LIB.cas";
 
-# 2. Typed let bindings with explicit state notation
 let abstraction: state[C] = CO-2^C_{F2};
 let concretization: state[C] = CO-3^C_{F2};
 let integration: state[C] = CO-4^C_{F4};
 
-# 3. Binary state operators — composition (*, ×) and modular difference (/, ÷)
 let composed: state[C] = abstraction * integration;
 let difference: state[C] = integration / abstraction;
 
-# 4. Fractal composition via ∘ operator
-let motif: fractal = abstraction ∘ concretization ∘ integration;
-
-# 5. Phi literal — direct fractal sequence notation
+let motif: fractal = abstraction circ concretization circ integration;
 let phi_seq: fractal = Phi<2:4:6:8>;
 
-# 6. RPM wrapping — prerequisite chain evaluation on a drive-tagged state
 let readiness: rpm = RPM(CO-6^O_{F5});
-
-# 7. Builtins — dominant_operator, dominant_domain, dominant_state
 let top_op: string = dominant_operator(composed);
 let top_domain: string = dominant_domain(composed);
 let top_state: string = dominant_state(composed);
 
-# 8. compose builtin — alternative to * operator
 let bridged: state[C] = compose(principle, integration);
-
-# 9. rpm_of builtin — build RPM from state
 let principle_rpm: rpm = rpm_of(principle);
-
-# 10. fractal builtin — construct fractal from multiple states
 let woven: fractal = fractal(abstraction, integration, concretization);
 
-# 11. Typed function with parameters and declared return
 fn finalize(seed: state[C], outcome: state[E]): relation = link(seed, outcome);
 
-# 12. Call imported function from library
 let library_chain: fractal = chain(principle, integration);
-
-# 13. Use imported typed function
 let imported_link: relation = link(principle, judgment);
 
-# 14. Final expression — typed relation between composed cognitive state
-# and the library's judgment state. This is the program's return value.
 finalize(bridged, judgment)

@@ -11,8 +11,8 @@ const queryClient = new QueryClient({
     queries: {
       retry: 1,
       refetchOnWindowFocus: false,
-      staleTime: 60_000,    // 1 min before refetch
-      gcTime: 5 * 60_000,   // 5 min garbage collection
+      staleTime: 60_000,
+      gcTime: 5 * 60_000,
     },
   },
 });
@@ -29,11 +29,15 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 );
 
-// Register service worker for PWA support
+// Reliability takes priority over offline caching for stakeholder demos.
+// Unregister any prior service workers so stale bundles do not survive redeploys.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {
-      // SW registration failed — app still works without it
-    });
+    navigator.serviceWorker
+      .getRegistrations()
+      .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+      .catch(() => {
+        // Ignore cleanup failures.
+      });
   });
 }

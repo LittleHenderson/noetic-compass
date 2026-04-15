@@ -78,6 +78,14 @@ class TestScenariosAPI:
             assert "category" in s, f"Missing category in {s.get('id')}"
             assert ("prompt_text" in s or "prompt" in s), f"Missing prompt in {s.get('id')}"
 
+    def test_adversarial_scenarios_expose_friendly_titles(self):
+        res = client.get("/scenarios/cbr-04", headers=HEADERS)
+        assert res.status_code == 200
+        data = res.json()
+        assert data["id"] == "cbr-04"
+        assert data["title"] == "Reciprocity Exploitation"
+        assert data["title"] != data["id"]
+
     def test_catalog_files_exist(self):
         expected = [
             "healthcare", "hiring", "finance", "governance", "education",

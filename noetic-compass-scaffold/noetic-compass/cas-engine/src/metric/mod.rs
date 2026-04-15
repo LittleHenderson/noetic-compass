@@ -136,10 +136,7 @@ pub fn fisher_rao_norm(p: &CognitiveStateVector, u: &TangentVector) -> f64 {
 ///
 /// This measures the overlap between two distributions. It satisfies 0 ≤ BC ≤ 1,
 /// with BC = 1 if and only if p = q.
-pub fn bhattacharyya_coefficient(
-    p: &CognitiveStateVector,
-    q: &CognitiveStateVector,
-) -> f64 {
+pub fn bhattacharyya_coefficient(p: &CognitiveStateVector, q: &CognitiveStateVector) -> f64 {
     let ps = p.as_slice();
     let qs = q.as_slice();
 
@@ -157,10 +154,7 @@ pub fn bhattacharyya_coefficient(
 /// This is the length of the shortest geodesic path between p and q under
 /// the Fisher-Rao metric. The arccos argument is clamped to [0, 1] for
 /// numerical stability (floating-point arithmetic may slightly exceed bounds).
-pub fn geodesic_distance(
-    p: &CognitiveStateVector,
-    q: &CognitiveStateVector,
-) -> f64 {
+pub fn geodesic_distance(p: &CognitiveStateVector, q: &CognitiveStateVector) -> f64 {
     let bc = bhattacharyya_coefficient(p, q);
     // Clamp to [0, 1] for numerical stability.
     let bc_clamped = bc.clamp(0.0, 1.0);
@@ -203,7 +197,10 @@ mod tests {
         }
         // Ensure all positive
         let min_val = weights.iter().cloned().fold(f64::INFINITY, f64::min);
-        assert!(min_val > 0.0, "shift_amount too large, produced non-positive weights");
+        assert!(
+            min_val > 0.0,
+            "shift_amount too large, produced non-positive weights"
+        );
         let sum: f64 = weights.iter().sum();
         // Re-normalize (should already sum to 1, but be safe)
         for w in weights.iter_mut() {
@@ -297,7 +294,10 @@ mod tests {
         };
         let u = make_tangent(raw);
         let ip = fisher_rao_inner_product(&p, &u, &u);
-        assert!(ip > 0.0, "inner product of non-zero vector must be positive, got {ip}");
+        assert!(
+            ip > 0.0,
+            "inner product of non-zero vector must be positive, got {ip}"
+        );
     }
 
     #[test]
@@ -306,7 +306,10 @@ mod tests {
         let p = CognitiveStateVector::uniform();
         let zero = validate_tangent_vector(&[0.0; NUM_STATES]).unwrap();
         let ip = fisher_rao_inner_product(&p, &zero, &zero);
-        assert!((ip).abs() < 1e-15, "inner product of zero vector must be 0, got {ip}");
+        assert!(
+            (ip).abs() < 1e-15,
+            "inner product of zero vector must be 0, got {ip}"
+        );
     }
 
     #[test]
@@ -373,7 +376,8 @@ mod tests {
         let combined_tv = validate_tangent_vector(&combined).unwrap();
 
         let lhs = fisher_rao_inner_product(&p, &combined_tv, &v);
-        let rhs = a * fisher_rao_inner_product(&p, &u, &v) + b * fisher_rao_inner_product(&p, &w, &v);
+        let rhs =
+            a * fisher_rao_inner_product(&p, &u, &v) + b * fisher_rao_inner_product(&p, &w, &v);
         assert!(
             (lhs - rhs).abs() < 1e-10,
             "bilinearity failed: lhs={lhs}, rhs={rhs}"
@@ -453,10 +457,7 @@ mod tests {
     fn test_bhattacharyya_identical_distributions() {
         let p = CognitiveStateVector::uniform();
         let bc = bhattacharyya_coefficient(&p, &p);
-        assert!(
-            (bc - 1.0).abs() < 1e-12,
-            "BC(p, p) should be 1.0, got {bc}"
-        );
+        assert!((bc - 1.0).abs() < 1e-12, "BC(p, p) should be 1.0, got {bc}");
     }
 
     #[test]
@@ -681,6 +682,9 @@ mod tests {
         let p = CognitiveStateVector::uniform();
         let q = shifted_vector(0, 1e-10);
         let d = geodesic_distance(&p, &q);
-        assert!(d < 1e-4, "near-identical distributions should have tiny distance, got {d}");
+        assert!(
+            d < 1e-4,
+            "near-identical distributions should have tiny distance, got {d}"
+        );
     }
 }

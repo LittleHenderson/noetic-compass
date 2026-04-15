@@ -11,14 +11,16 @@
 //! - 22 Capability Pathways with RPM chain structure
 //! - 7 Inversion Axes
 
-pub mod operators;
 pub mod domains;
-pub mod states;
 pub mod drives;
+pub mod operators;
 pub mod pathways;
+pub mod states;
 
-pub use operators::{CognitiveOperator, DialConfig, DialError, DialSetting};
 pub use domains::Domain;
-pub use states::{CognitiveStateId, CognitiveStateVector, StateVectorError, NUM_STATES, MIN_PROBABILITY};
 pub use drives::{CoreDrive, DomainDrive, DriveProfile, DriveScore};
+pub use operators::{CognitiveOperator, DialConfig, DialError, DialSetting};
 pub use pathways::{InversionAxis, PathwayNode, PathwaySatisfaction, PathwayStage};
+pub use states::{
+    CognitiveStateId, CognitiveStateVector, StateVectorError, MIN_PROBABILITY, NUM_STATES,
+};

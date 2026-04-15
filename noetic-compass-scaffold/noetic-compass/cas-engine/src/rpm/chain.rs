@@ -18,16 +18,16 @@ use std::fmt;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum DwpStage {
     // Desire stages
-    Dormant,    // score < 0.2 — no motivation detected
-    Awakening,  // 0.2 ≤ score < 0.5 — motivation acknowledged but weak
-    Peak,       // 0.5 ≤ score < 0.7 — strong clear motivation
-    Fading,     // score ≥ 0.7 — present but potentially declining
+    Dormant,   // score < 0.2 — no motivation detected
+    Awakening, // 0.2 ≤ score < 0.5 — motivation acknowledged but weak
+    Peak,      // 0.5 ≤ score < 0.7 — strong clear motivation
+    Fading,    // score ≥ 0.7 — present but potentially declining
 
     // Wisdom stages
-    Unaware,    // score < 0.2 — doesn't know what it doesn't know
-    Learning,   // 0.2 ≤ score < 0.5 — actively acquiring, gaps remain
-    Knowing,    // 0.5 ≤ score < 0.8 — sufficient knowledge to act
-    Mastering,  // score ≥ 0.8 — deep expertise evident
+    Unaware,   // score < 0.2 — doesn't know what it doesn't know
+    Learning,  // 0.2 ≤ score < 0.5 — actively acquiring, gaps remain
+    Knowing,   // 0.5 ≤ score < 0.8 — sufficient knowledge to act
+    Mastering, // score ≥ 0.8 — deep expertise evident
 
     // Power stages
     Nascent,    // score < 0.2 — no resources identified
@@ -39,26 +39,41 @@ pub enum DwpStage {
 impl DwpStage {
     /// Classify a Desire score into its stage.
     pub fn classify_desire(score: f64) -> Self {
-        if score < 0.2 { Self::Dormant }
-        else if score < 0.5 { Self::Awakening }
-        else if score < 0.7 { Self::Peak }
-        else { Self::Fading }
+        if score < 0.2 {
+            Self::Dormant
+        } else if score < 0.5 {
+            Self::Awakening
+        } else if score < 0.7 {
+            Self::Peak
+        } else {
+            Self::Fading
+        }
     }
 
     /// Classify a Wisdom score into its stage.
     pub fn classify_wisdom(score: f64) -> Self {
-        if score < 0.2 { Self::Unaware }
-        else if score < 0.5 { Self::Learning }
-        else if score < 0.8 { Self::Knowing }
-        else { Self::Mastering }
+        if score < 0.2 {
+            Self::Unaware
+        } else if score < 0.5 {
+            Self::Learning
+        } else if score < 0.8 {
+            Self::Knowing
+        } else {
+            Self::Mastering
+        }
     }
 
     /// Classify a Power score into its stage.
     pub fn classify_power(score: f64) -> Self {
-        if score < 0.2 { Self::Nascent }
-        else if score < 0.5 { Self::Developing }
-        else if score < 0.8 { Self::Capable }
-        else { Self::Mastery }
+        if score < 0.2 {
+            Self::Nascent
+        } else if score < 0.5 {
+            Self::Developing
+        } else if score < 0.8 {
+            Self::Capable
+        } else {
+            Self::Mastery
+        }
     }
 
     /// Level 0-3 for chain completion (Definition 2.10 from Cognitive Framework).

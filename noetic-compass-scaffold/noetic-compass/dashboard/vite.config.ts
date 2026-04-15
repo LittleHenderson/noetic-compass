@@ -21,7 +21,9 @@ export default defineConfig({
           if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/') || id.includes('node_modules/react-router')) return 'vendor'
           if (id.includes('node_modules/@tanstack')) return 'query'
           if (id.includes('node_modules/recharts') || id.includes('node_modules/d3-')) return 'recharts'
-          if (id.includes('node_modules/jspdf') || id.includes('node_modules/html2canvas')) return 'export-pdf'
+          if (id.includes('node_modules/html2canvas')) return 'export-capture'
+          if (id.includes('node_modules/canvg') || id.includes('node_modules/rgbcolor') || id.includes('node_modules/fflate')) return 'export-pdf-deps'
+          if (id.includes('node_modules/jspdf')) return 'export-pdf'
           if (id.includes('node_modules/docx') || id.includes('node_modules/file-saver')) return 'export-docx'
         },
       },

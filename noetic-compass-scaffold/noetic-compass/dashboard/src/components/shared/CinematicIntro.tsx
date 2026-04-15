@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { BrandTagline } from './BrandTagline';
+import { PatentPendingBadge } from './PatentPendingBadge';
 
 /** localStorage flag — set once the user has pressed Skip. Bumped to v2 so
  *  returning users see the new floating/mega-pulse intro at least once. */
@@ -54,17 +56,18 @@ export function CinematicIntro({ children }: { children: React.ReactNode }) {
         }`}
         style={{ perspective: '1200px' }}
       >
-        <h1
-          className={`intro-tagline px-4 text-center font-bold italic ${
+        <div
+          className={`intro-tagline px-4 ${
             phase === 'hidden' ? 'intro-phase-hidden' : ''
           } ${phase === 'flying' ? 'intro-phase-flying' : ''} ${
             phase === 'floating' ? 'intro-phase-floating' : ''
           } ${phase === 'leaving' ? 'intro-phase-leaving' : ''}`}
         >
-          <span className="bg-gradient-to-r from-accent-teal to-accent-cyan bg-clip-text text-transparent">
-            Measure How AI Thinks
-          </span>
-        </h1>
+          <div className="flex flex-col items-center gap-5 text-center">
+            <PatentPendingBadge />
+            <BrandTagline variant="intro" align="center" />
+          </div>
+        </div>
 
         <button
           onClick={handleSkip}

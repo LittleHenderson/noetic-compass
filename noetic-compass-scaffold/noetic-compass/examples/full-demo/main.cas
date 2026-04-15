@@ -1,0 +1,12 @@
+use "support.cas";
+
+let abstraction: state[C] = CO-2^C_{F2};
+let integration: state[C] = CO-4^C_{F4};
+let composed: state[C] = abstraction * integration;
+let motif: fractal = Phi<2:4:6> circ chain(abstraction, integration);
+let readiness: rpm = rpm_of(principle);
+
+fn finalize(seed: state[C], target: state[E]): relation = link(seed, target);
+
+finalize(compose(principle, integration), judgment)
+

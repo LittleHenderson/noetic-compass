@@ -1,41 +1,49 @@
 /**
  * Exports assessment report as a downloadable Markdown file.
- * Pure string generation — no images, charts rendered as ASCII tables.
+ * Pure string generation with no DOM dependencies.
  */
 
 import { saveAs } from 'file-saver';
 import type { ReportData } from './reportData';
 
-function pad(s: string, len: number): string {
-  return s.length >= len ? s.slice(0, len) : s + ' '.repeat(len - s.length);
+function pad(text: string, length: number): string {
+  return text.length >= length ? text.slice(0, length) : text + ' '.repeat(length - text.length);
 }
 
-function padNum(n: number, decimals = 1): string {
-  return (n * 100).toFixed(decimals) + '%';
+function padNum(value: number, decimals = 1): string {
+  return (value * 100).toFixed(decimals) + '%';
 }
 
 function tableRow(cells: string[], widths: number[]): string {
-  return '| ' + cells.map((c, i) => pad(c, widths[i])).join(' | ') + ' |';
+  return '| ' + cells.map((cell, index) => pad(cell, widths[index])).join(' | ') + ' |';
 }
 
 function tableSep(widths: number[]): string {
-  return '| ' + widths.map(w => '-'.repeat(w)).join(' | ') + ' |';
+  return '| ' + widths.map((width) => '-'.repeat(width)).join(' | ') + ' |';
 }
 
 export function generateMarkdown(data: ReportData): string {
   const lines: string[] = [];
 
-  // Header
-  lines.push(`# Noetic Compass — ${data.title}`);
+  lines.push(`# Noetic Compass - ${data.title}`);
   lines.push('');
   lines.push(`**Date:** ${data.date}  `);
   lines.push(`**Model:** ${data.model}  `);
   lines.push(`**Assessment ID:** ${data.assessmentId}  `);
-  lines.push(`**Framework:** CAS v7.4 — Corrected Edition  `);
-  lines.push(`**Classification:** Confidential`);
+  lines.push(`**Framework:** CAS v7.4 - Corrected Edition  `);
+  lines.push('**Status:** Research Prototype / Not validated  ');
+  lines.push(`**Scoring Method:** ${data.scoringMethodLabel}  `);
+  lines.push(`**Scorer Provider:** ${data.scorerProvider ?? 'Not used'}  `);
+  lines.push(`**Scorer Model:** ${data.scorerModel ?? 'Not provided'}  `);
+  lines.push('**Classification:** Confidential');
   lines.push('');
+  lines.push(`**Scoring Summary:** ${data.scoringSummary}`);
+  lines.push('');
+  if (data.unmeasuredDimensions.length > 0) {
+    lines.push(`**Unmeasured Dimensions:** ${data.unmeasuredDimensions.join(', ')}`);
+    lines.push('');
+  }
 
-  // AI Executive Briefing
   if (data.interpretation) {
     lines.push('## AI Executive Briefing');
     lines.push('');
@@ -45,147 +53,140 @@ export function generateMarkdown(data: ReportData): string {
     lines.push('');
     lines.push('### What We Found');
     lines.push('');
-    data.interpretation.findings.forEach(f => lines.push(`- ${f}`));
+    data.interpretation.findings.forEach((finding) => lines.push(`- ${finding}`));
     lines.push('');
     lines.push('### What We Recommend');
     lines.push('');
-    data.interpretation.recommendations.forEach(r => lines.push(`- ${r}`));
+    data.interpretation.recommendations.forEach((recommendation) => lines.push(`- ${recommendation}`));
     lines.push('');
   }
 
-  // Executive Summary
   lines.push('## Executive Summary');
   lines.push('');
   lines.push(`**NCCS Composite Score:** ${data.nccs.composite.toFixed(1)} / 100  `);
-  lines.push(`**Certification Level:** ${data.certLevel}  `);
-  lines.push(`**Deployment:** ${data.deploymentRecommendation}`);
+  lines.push(`**Research Tier:** ${data.certLevel}  `);
+  lines.push(`**Research Guidance:** ${data.deploymentRecommendation}`);
   lines.push('');
   lines.push(`> ${data.verdict}`);
   lines.push('');
   lines.push('**Top 3 Strengths:**');
-  data.topStrengths.forEach(s => lines.push(`- ${s}`));
+  data.topStrengths.forEach((strength) => lines.push(`- ${strength}`));
   lines.push('');
   lines.push('**Top 3 Vulnerabilities:**');
-  data.topVulnerabilities.forEach(v => lines.push(`- ${v}`));
+  data.topVulnerabilities.forEach((vulnerability) => lines.push(`- ${vulnerability}`));
   lines.push('');
 
   if (data.blindSpots.length > 0) {
     lines.push('**Cognitive Blind Spots:**');
-    data.blindSpots.forEach(s => {
-      lines.push(`- **${s.label}** (${s.severity}) — ${s.risk}`);
+    data.blindSpots.forEach((spot) => {
+      lines.push(`- **${spot.label}** (${spot.severity}) - ${spot.risk}`);
     });
     lines.push('');
   }
 
-  // Section 1: Cognitive Operator Profile
   lines.push('## 1. Cognitive Operator Profile');
   lines.push('');
-  const opWidths = [25, 8];
-  lines.push(tableRow(['Operator', 'Score'], opWidths));
-  lines.push(tableSep(opWidths));
-  data.operators.forEach(op => {
-    lines.push(tableRow([op.label, padNum(op.score)], opWidths));
+  const operatorWidths = [25, 8];
+  lines.push(tableRow(['Operator', 'Score'], operatorWidths));
+  lines.push(tableSep(operatorWidths));
+  data.operators.forEach((operator) => {
+    lines.push(tableRow([operator.label, padNum(operator.score)], operatorWidths));
   });
   lines.push('');
-
   lines.push('**Involution Pair Balance:**');
   lines.push('');
   const pairWidths = [12, 8, 8, 8, 8];
   lines.push(tableRow(['Pair', 'Score A', 'Score B', 'Gap', 'Status'], pairWidths));
   lines.push(tableSep(pairWidths));
-  data.involutionPairs.forEach(p => {
+  data.involutionPairs.forEach((pair) => {
     lines.push(tableRow([
-      `${p.a}/${p.b}`,
-      padNum(p.scoreA),
-      padNum(p.scoreB),
-      padNum(p.gap, 0),
-      p.flagged ? 'FLAGGED' : 'OK',
+      `${pair.a}/${pair.b}`,
+      padNum(pair.scoreA),
+      padNum(pair.scoreB),
+      padNum(pair.gap, 0),
+      pair.flagged ? 'FLAGGED' : 'OK',
     ], pairWidths));
   });
   lines.push('');
 
-  // Section 2: Domain Coherence
   lines.push('## 2. Domain Coherence');
   lines.push('');
-  const domWidths = [24, 8];
-  lines.push(tableRow(['Domain', 'Average'], domWidths));
-  lines.push(tableSep(domWidths));
-  data.domains.forEach(d => {
-    const flag = d.label === data.weakestDomain ? ' (weakest)' : '';
-    lines.push(tableRow([d.label + flag, padNum(d.average)], domWidths));
+  const domainWidths = [24, 8];
+  lines.push(tableRow(['Domain', 'Average'], domainWidths));
+  lines.push(tableSep(domainWidths));
+  data.domains.forEach((domain) => {
+    const suffix = domain.label === data.weakestDomain ? ' (weakest)' : '';
+    lines.push(tableRow([domain.label + suffix, padNum(domain.average)], domainWidths));
   });
   lines.push('');
   lines.push(`**DCI (Domain Coherence Index):** ${(data.dci * 100).toFixed(1)}%  `);
   lines.push(`**Weakest Domain:** ${data.weakestDomain}`);
   lines.push('');
 
-  // Section 3: Core Drive Integrity
   lines.push('## 3. Core Drive Integrity');
   lines.push('');
   const driveWidths = [18, 8, 8];
   lines.push(tableRow(['Drive', 'Score', 'Status'], driveWidths));
   lines.push(tableSep(driveWidths));
-  data.drives.forEach(d => {
-    lines.push(tableRow([d.label, padNum(d.score), d.flagged ? 'CONCERN' : 'OK'], driveWidths));
+  data.drives.forEach((drive) => {
+    lines.push(tableRow([drive.label, padNum(drive.score), drive.flagged ? 'CONCERN' : 'OK'], driveWidths));
   });
   lines.push('');
 
-  // Section 4: RPM Analysis
   lines.push('## 4. RPM Analysis');
   lines.push('');
   lines.push(`**RPM Completeness:** ${(data.rpmCompleteness * 100).toFixed(1)}%`);
   lines.push('');
   if (data.brokenChains.length > 0) {
     lines.push('**Broken Chains:**');
-    data.brokenChains.forEach(c => lines.push(`- ${c}`));
+    data.brokenChains.forEach((chain) => lines.push(`- ${chain}`));
   } else {
     lines.push('All 7 RPM chains are intact.');
   }
   lines.push('');
 
-  // Section 5: Inversion Analysis
   lines.push('## 5. Inversion Analysis');
   lines.push('');
-  const invWidths = [18, 8];
-  lines.push(tableRow(['Axis', 'Score'], invWidths));
-  lines.push(tableSep(invWidths));
-  data.inversions.forEach(inv => {
-    lines.push(tableRow([inv.label, padNum(inv.score)], invWidths));
+  const inversionWidths = [18, 8];
+  lines.push(tableRow(['Axis', 'Score'], inversionWidths));
+  lines.push(tableSep(inversionWidths));
+  data.inversions.forEach((inversion) => {
+    lines.push(tableRow([inversion.label, padNum(inversion.score)], inversionWidths));
   });
   lines.push('');
   lines.push(`**Stealth Resistance:** ${(data.stealthResistance * 100).toFixed(1)}%`);
   lines.push('');
 
-  // Section 6: Pipeline Trace
   lines.push('## 6. Pipeline Trace');
   lines.push('');
   const stageWidths = [20, 8];
   lines.push(tableRow(['Stage', 'Status'], stageWidths));
   lines.push(tableSep(stageWidths));
-  data.stages.forEach(s => {
-    const statusLabel = s.status === 'pass' ? 'PASS' : s.status === 'flag' ? 'FLAG' : 'BLOCK';
-    lines.push(tableRow([s.name, statusLabel], stageWidths));
+  data.stages.forEach((stage) => {
+    const statusLabel = stage.status === 'pass' ? 'PASS' : stage.status === 'flag' ? 'FLAG' : 'BLOCK';
+    lines.push(tableRow([stage.name, statusLabel], stageWidths));
   });
   lines.push('');
 
-  // Footer
-  // Research Disclaimer
   lines.push('## Disclaimer');
   lines.push('');
-  lines.push('This report is generated by a research prototype. All scores are heuristic-derived');
-  lines.push('and have not been empirically validated. Do not use as a sole basis for deployment');
-  lines.push('decisions. Social engineering resistance is not currently measured.');
+  lines.push('This report is generated by a research prototype. Scores are produced by the');
+  lines.push(`stated scoring method (${data.scoringMethodLabel}) and have not been empirically`);
+  lines.push('validated. Do not use this report as a sole basis for deployment or safety decisions.');
+  if (data.unmeasuredDimensions.length > 0) {
+    lines.push(`Unmeasured dimensions in this run: ${data.unmeasuredDimensions.join(', ')}.`);
+  }
   lines.push('');
   lines.push('---');
   lines.push('');
-  lines.push('*Generated by Noetic Compass (Research Prototype) | CAS v7.4 — Corrected Edition | Confidential*');
+  lines.push('*Generated by Noetic Compass (Research Prototype) | CAS v7.4 - Corrected Edition | Confidential*');
 
   return lines.join('\n');
 }
 
 export function exportMarkdown(data: ReportData): void {
-  const md = generateMarkdown(data);
-  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const markdown = generateMarkdown(data);
+  const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
   const filename = `noetic-assessment-${data.date.replace(/[/:, ]/g, '-')}.md`;
   saveAs(blob, filename);
 }

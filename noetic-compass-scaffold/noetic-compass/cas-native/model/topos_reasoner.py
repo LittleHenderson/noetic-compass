@@ -1,21 +1,18 @@
 """
-CognitiveToposReasoner: Implements intuitionistic reasoning with a three-valued
-subobject classifier Omega = {true, false, undetermined}.
+CognitiveToposReasoner: neural 3-valued proposition scorer.
 
-CORRECTION 3: Noetic Coverage uses COUNIT not UNIT.
-  Noe-Cov-3 uses epsilon_I: R(I) -> I (toward target), NOT eta_I: I -> R(I).
-  Covering morphisms point TOWARD the covered object.
+What is explicit here:
+  - Outputs are normalized over three labels: true / false / undetermined.
+  - "Undetermined" is treated as a first-class output rather than an error.
 
-In intuitionistic logic:
-  - The law of excluded middle does NOT hold: p OR NOT p is not always true
-  - "undetermined" is a valid truth value, NOT an error
-  - This models genuine ethical uncertainty in CAS assessments
+What is not implemented here:
+  - No actual sheaf, Grothendieck-topology, or internal-logic machinery is
+    constructed in this module.
+  - The "counit" path is naming guidance only; it is a learned linear layer,
+    not a categorical proof object.
 
-The subobject classifier Omega has three truth values:
-  0 = true, 1 = false, 2 = undetermined
-
-For each ethical proposition, the reasoner outputs a probability distribution
-over these three values.
+This module is therefore a neural proxy for 3-valued assessment, not a literal
+implementation of a topos' internal logic.
 """
 
 import torch
@@ -31,19 +28,11 @@ NUM_TRUTH_VALUES = 3
 
 
 class CognitiveToposReasoner(nn.Module):
-    """Intuitionistic logic reasoner with three-valued subobject classifier.
+    """Neural 3-valued proposition classifier.
 
-    For each of num_propositions ethical propositions, produces a probability
-    distribution over {true, false, undetermined}.
-
-    Architecture:
-      - Linear projection from d_model to proposition space
-      - Per-proposition classification into 3 truth values
-      - Softmax ensures valid probability distribution
-
-    The covering morphisms point toward the covered object (CORRECTION 3),
-    meaning the reasoner's output represents the degree to which evidence
-    supports each truth value for a given proposition.
+    The probabilistic 3-valued output is explicit. Any stronger "topos"
+    interpretation should be treated as an external modeling claim rather than
+    something proven by this module alone.
     """
 
     def __init__(self, d_model: int, num_propositions: int = 7):

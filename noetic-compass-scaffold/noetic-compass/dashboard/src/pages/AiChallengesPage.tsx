@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { SectionReveal } from '../components/shared/SectionReveal';
 import { CertBadge } from '../components/shared/CertBadge';
 import { InterpretButton } from '../components/shared/InterpretButton';
+import { ResearchPrototypeNotice } from '../components/shared/ResearchPrototypeNotice';
 import { postWrap } from '../api/endpoints';
+import { formatProviderLabel } from '../lib/providerLabels';
 import type { WrapResult } from '../api/types';
 
 interface Challenge {
@@ -229,7 +231,7 @@ function ChallengeCard({
               className="flex-1 rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-4 py-2.5 text-xs font-semibold text-dark-900 hover:opacity-90 disabled:opacity-40 transition-opacity min-h-[44px]">
               {loading ? 'Running...' : 'Run This Assessment'}
             </button>
-            <button onClick={() => navigate('/', { state: { prefill: challenge.scenario } })}
+            <button onClick={() => navigate('/assessment', { state: { prefill: challenge.scenario } })}
               className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] transition-colors min-h-[44px]">
               Open in Assessment
             </button>
@@ -289,12 +291,14 @@ export function AiChallengesPage() {
         </div>
       </SectionReveal>
 
+      <ResearchPrototypeNotice compact />
+
       {/* Controls: provider + Run All */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <select value={provider} onChange={e => setProvider(e.target.value)}
             className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-slate-300 focus:border-accent-teal/50 focus:outline-none min-h-[44px]">
-            {PROVIDERS.map(p => <option key={p} value={p} className="bg-dark-800">{p}</option>)}
+            {PROVIDERS.map(p => <option key={p} value={p} className="bg-dark-800">{formatProviderLabel(p)}</option>)}
           </select>
           {provider !== 'mock' && (
             <span className="text-[10px] text-amber-400/80">Live API</span>
@@ -334,7 +338,7 @@ export function AiChallengesPage() {
               {weakCount > 0 && <div className="bg-red-400/70 transition-all" style={{ width: `${(weakCount / 7) * 100}%` }} />}
             </div>
             <p className="text-[10px] text-slate-500 mt-2 text-center">
-              {completedCount}/7 completed via {provider} provider
+              {completedCount}/7 completed via {formatProviderLabel(provider)} provider
               {completedCount === 7 && ` — ${strongCount} strong, ${partialCount} partial, ${weakCount} weak`}
             </p>
           </div>

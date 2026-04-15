@@ -1,0 +1,51 @@
+\documentclass[11pt,oneside]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\geometry{margin=1in}
+\setcounter{tocdepth}{1}
+\setcounter{secnumdepth}{3}
+
+\title{The TKS Formal Mathematical Manual\\Typeset Reconstruction Scaffold}
+\author{Internal Editorial Reconstruction}
+\date{\today}
+
+% Uncomment for selective chapter work.
+% \includeonly{
+%   parts/part_05_meta_system_2_categories_and_topoi/ch27_the_noetic_topos,
+%   parts/part_09_differential_noetic_geometry/ch53_the_noetic_metric
+% }
+
+\begin{document}
+
+\frontmatter
+\hypersetup{pageanchor=false}
+\maketitle
+\tableofcontents
+\input{frontmatter/continuity_bridge}
+\input{frontmatter/guide_to_this_manual}
+
+\cleardoublepage
+\hypersetup{pageanchor=true}
+\mainmatter
+\input{parts/part_01_canonical_foundation/part}
+\input{parts/part_02_transfinite_noetic_fractals/part}
+\input{parts/part_03_extended_tks_language_and_vm/part}
+\input{parts/part_04_quantum_noetics/part}
+\input{parts/part_05_meta_system_2_categories_and_topoi/part}
+\input{parts/part_06_extended_transfinite_fractals/part}
+\input{parts/part_07_domain_theoretic_semantics/part}
+\input{parts/part_08_higher_categories_and_infinity_topoi/part}
+\input{parts/part_09_differential_noetic_geometry/part}
+\input{parts/part_10_unified_theory_and_cross_domain_integration/part}
+\input{parts/part_11_appendices/part}
+
+\backmatter
+
+\end{document}

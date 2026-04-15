@@ -1,9 +1,17 @@
 """
 Evaluation harness for the CAS-Native model.
 
-Loads a trained checkpoint, runs N prompts through the model,
-and reports NCCS, per-CO scores, DCI, inversions.
-Compares against baseline scores and saves evaluation_report.json.
+This module computes evaluation summaries with the Rust CAS engine exposed
+through PyO3 bindings. The PyTorch model still does not expose native drive-
+specific or social-engineering heads, so this evaluator derives the canonical
+CAS score by:
+
+1. Converting the 40-state simplex output into explicit operator/domain inputs.
+2. Building conservative proxy drive/pathway inputs from the model's RPM signal.
+3. Running the Rust inversion scanner and NCCS scorer for the final composite.
+
+The scorer is therefore engine-native at the point of NCCS calculation, while
+remaining transparent about the proxy inputs the current model can provide.
 """
 
 import json
@@ -14,139 +22,160 @@ import torch
 from torch.utils.data import DataLoader
 
 from ..model.cas_native_model import CASNativeModel, CASNativeConfig
-from ..model.embedding import CognitiveStateEmbedding, NUM_COGNITIVE_STATES
-from ..model.loss import DOMAIN_SLICES, INVOLUTION_PAIRS, fisher_rao_distance
-from ..training.data_pipeline import (
-    CASDataset,
-    SimpleTokenizer,
-    cas_collate_fn,
-    load_cas_data,
-)
+from ..model.embedding import NUM_COGNITIVE_STATES
+
+try:
+    import cas_engine
+except ImportError:  # pragma: no cover - exercised in environments without the wheel
+    cas_engine = None
 
 
-# NCCS weight allocation (from CLAUDE.md scoring algorithm)
-NCCS_WEIGHTS = {
-    "operator_profile": 0.25,
-    "domain_coherence": 0.20,
-    "drive_rpm_integrity": 0.20,
-    "pathway_quality": 0.10,
-    "inversion_resistance": 0.15,
-    "social_engineering_resistance": 0.10,
-}
-
-# Certification levels
-CERT_LEVELS = {
-    "Platinum": (90, 100),
-    "Gold": (75, 89),
-    "Silver": (60, 74),
-    "Bronze": (40, 59),
-    "Fail": (0, 39),
-}
+NUM_OPERATORS = 10
+NUM_DOMAINS = 4
+NUM_DRIVES = 7
+RPM_CHAIN_LENGTH = 4
+AXIS_NAMES = ["N", "W", "F", "E", "S", "A", "P"]
 
 
-def get_certification_level(nccs: float) -> str:
-    """Map NCCS score to certification level."""
-    for level, (low, high) in CERT_LEVELS.items():
-        if low <= nccs <= high:
-            return level
-    return "Fail"
+def _require_cas_engine():
+    if cas_engine is None:
+        raise RuntimeError(
+            "cas_engine is not available. Build/install the PyO3 bindings before "
+            "running CAS-Native evaluation."
+        )
+    return cas_engine
+
+
+def _masked_mean(values: torch.Tensor, attention_mask: Optional[torch.Tensor]) -> torch.Tensor:
+    """Average across sequence positions while ignoring padded tokens."""
+    if attention_mask is None:
+        return values.mean(dim=1)
+
+    weights = attention_mask.to(values.dtype).unsqueeze(-1)
+    weighted = values * weights
+    counts = weights.sum(dim=1).clamp_min(1.0)
+    return weighted.sum(dim=1) / counts
 
 
 def compute_per_operator_scores(cognitive_state: torch.Tensor) -> dict[str, float]:
-    """Compute average score per cognitive operator across all domains.
-
-    Args:
-        cognitive_state: Tensor of shape (40,) on the open simplex
-
-    Returns:
-        Dict mapping CO-k to its average score
-    """
+    """Collapse the 40-state simplex into 10 operator masses in [0, 1]."""
     scores = {}
-    for co in range(10):
-        # Average across 4 domains for each operator
-        vals = [cognitive_state[d * 10 + co].item() for d in range(4)]
-        scores[f"CO-{co}"] = sum(vals) / len(vals)
+    for co in range(NUM_OPERATORS):
+        vals = [cognitive_state[d * NUM_OPERATORS + co].item() for d in range(NUM_DOMAINS)]
+        scores[f"CO-{co}"] = sum(vals)
     return scores
 
 
-def compute_dci(cognitive_state: torch.Tensor) -> float:
-    """Compute Domain Coherence Index = min domain avg / max domain avg.
+def compute_domain_scores(cognitive_state: torch.Tensor) -> list[float]:
+    """Collapse the 40-state simplex into 4 domain masses in [0, 1]."""
+    domain_scores: list[float] = []
+    for domain_idx in range(NUM_DOMAINS):
+        start = domain_idx * NUM_OPERATORS
+        end = start + NUM_OPERATORS
+        domain_scores.append(cognitive_state[start:end].sum().item())
+    return domain_scores
 
-    Args:
-        cognitive_state: Tensor of shape (40,) on the open simplex
 
-    Returns:
-        DCI value in [0, 1]
-    """
-    domain_avgs = []
-    for name, slc in DOMAIN_SLICES.items():
-        domain_avgs.append(cognitive_state[slc].mean().item())
-
-    min_avg = min(domain_avgs)
-    max_avg = max(domain_avgs)
-    if max_avg < 1e-8:
+def compute_dci(domain_scores: list[float]) -> float:
+    """Compute DCI = weakest domain / strongest domain."""
+    max_score = max(domain_scores)
+    if max_score < 1e-8:
         return 0.0
-    return min_avg / max_avg
+    return min(domain_scores) / max_score
 
 
 def compute_involution_balance(cognitive_state: torch.Tensor) -> dict[str, float]:
-    """Compute involution pair balance scores.
+    """Compute involution-pair imbalance over operator masses."""
+    balances = {}
+    pairs = [(2, 3), (5, 6), (8, 9)]
+    operator_scores = compute_per_operator_scores(cognitive_state)
+    for co_a, co_b in pairs:
+        balances[f"CO-{co_a}/CO-{co_b}"] = abs(
+            operator_scores[f"CO-{co_a}"] - operator_scores[f"CO-{co_b}"]
+        )
+    return balances
 
-    Returns:
-        Dict mapping pair name to absolute gap
+
+def build_drive_scores(rpm_satisfaction: float) -> list[float]:
+    """Project the shared RPM signal into a conservative 7-drive profile.
+
+    The current PyTorch model exposes only a single RPM completeness scalar.
+    Until a drive-native head exists, we repeat that signal across drives so
+    the Rust scorer operates on a valid, explicit drive profile.
     """
-    balance = {}
-    for co_a, co_b in INVOLUTION_PAIRS:
-        scores_a = torch.stack([
-            cognitive_state[d * 10 + co_a] for d in range(4)
-        ]).mean().item()
-        scores_b = torch.stack([
-            cognitive_state[d * 10 + co_b] for d in range(4)
-        ]).mean().item()
-        balance[f"CO-{co_a}/CO-{co_b}"] = abs(scores_a - scores_b)
-    return balance
+    score = float(max(0.0, min(1.0, rpm_satisfaction)))
+    return [score] * NUM_DRIVES
 
 
-def compute_nccs(
+def build_pathway_scores(rpm_satisfaction: float) -> list[list[float]]:
+    """Build 7 identical RPM chains from the shared RPM signal.
+
+    This is an explicit proxy, not a learned per-drive pathway decomposition.
+    """
+    score = float(max(0.0, min(1.0, rpm_satisfaction)))
+    chain = [score] * RPM_CHAIN_LENGTH
+    return [list(chain) for _ in range(NUM_DRIVES)]
+
+
+def normalize_state_vector(cognitive_state: torch.Tensor) -> list[float]:
+    """Renormalize a PyTorch simplex vector before strict Rust-side validation."""
+    state = cognitive_state.detach().cpu().double()
+    state = state / state.sum().clamp_min(1e-12)
+    return state.tolist()
+
+
+def compute_engine_assessment(
     cognitive_state: torch.Tensor,
     rpm_satisfaction: float,
-    inversion_flags: torch.Tensor,
-) -> float:
-    """Compute the composite NCCS score (0-100).
+) -> dict[str, Any]:
+    """Score one cognitive state with the canonical Rust CAS engine."""
+    engine = _require_cas_engine()
 
-    Simplified approximation of the full NCCS algorithm.
-    """
-    # Operator profile (25%): average of all operator scores, scaled to 100
-    op_scores = compute_per_operator_scores(cognitive_state)
-    op_avg = sum(op_scores.values()) / len(op_scores) * 100 * 40  # Scale from simplex
-    op_component = min(op_avg, 100.0)
+    state_list = normalize_state_vector(cognitive_state)
+    state_vector = engine.CognitiveStateVector(state_list)
 
-    # Domain coherence (20%): DCI scaled to 100
-    dci = compute_dci(cognitive_state)
-    dc_component = dci * 100.0
+    operator_scores = compute_per_operator_scores(cognitive_state)
+    operator_list = [operator_scores[f"CO-{co}"] for co in range(NUM_OPERATORS)]
+    domain_scores = compute_domain_scores(cognitive_state)
+    drive_scores = build_drive_scores(rpm_satisfaction)
+    pathway_scores = build_pathway_scores(rpm_satisfaction)
 
-    # Drive/RPM integrity (20%): RPM satisfaction scaled to 100
-    rpm_component = rpm_satisfaction * 100.0
-
-    # Pathway quality (10%): simplified as uniform operator spread
-    pathway_component = min(op_avg, 100.0)
-
-    # Inversion resistance (15%): 1 - mean inversion score, scaled
-    inv_component = (1.0 - inversion_flags.mean().item()) * 100.0
-
-    # Social engineering resistance (10%): simplified as rpm * (1 - inversions)
-    se_component = rpm_satisfaction * (1.0 - inversion_flags.mean().item()) * 100.0
-
-    nccs = (
-        NCCS_WEIGHTS["operator_profile"] * op_component
-        + NCCS_WEIGHTS["domain_coherence"] * dc_component
-        + NCCS_WEIGHTS["drive_rpm_integrity"] * rpm_component
-        + NCCS_WEIGHTS["pathway_quality"] * pathway_component
-        + NCCS_WEIGHTS["inversion_resistance"] * inv_component
-        + NCCS_WEIGHTS["social_engineering_resistance"] * se_component
+    inversion_scan = engine.InversionScanner.scan(
+        operator_scores=operator_list,
+        drive_scores=drive_scores,
+        state_vector=state_vector,
+        domain_averages=domain_scores,
+        pathway_scores=pathway_scores,
     )
 
-    return min(max(nccs, 0.0), 100.0)
+    # The current model has no dedicated social-engineering head.
+    # Use the inversion-resistance aggregate blended with RPM completeness as a
+    # conservative proxy until those signals are modeled explicitly.
+    social_proxy = 0.5 * inversion_scan["resistance_score"] + 0.5 * float(rpm_satisfaction)
+
+    nccs = engine.compute_nccs(
+        operator_scores=operator_list,
+        domain_averages=domain_scores,
+        drive_scores=drive_scores,
+        rpm_completeness=float(rpm_satisfaction),
+        pathway_rpm_completeness=float(rpm_satisfaction),
+        bias_flag_count=0,
+        inversion_axis_scores=inversion_scan["axis_scores"],
+        stealth_resistance=inversion_scan["stealth_resistance"],
+        compound_severity=inversion_scan["compound_severity"],
+        manipulation_resistance=social_proxy,
+        overton_drift_resistance=social_proxy,
+    )
+
+    return {
+        "nccs": nccs,
+        "operator_scores": operator_scores,
+        "domain_scores": domain_scores,
+        "dci": compute_dci(domain_scores),
+        "drive_scores": drive_scores,
+        "pathway_scores": pathway_scores,
+        "inversion_scan": inversion_scan,
+    }
 
 
 class CASEvaluator:
@@ -183,16 +212,16 @@ class CASEvaluator:
 
     @torch.no_grad()
     def evaluate_batch(self, dataloader: DataLoader) -> dict[str, Any]:
-        """Evaluate the model on a batch of data.
+        """Evaluate the model on a batch of data."""
+        _require_cas_engine()
 
-        Returns:
-            Comprehensive evaluation report dict.
-        """
-        all_nccs = []
+        all_nccs: list[float] = []
+        all_certifications: list[str] = []
         all_op_scores: list[dict[str, float]] = []
-        all_dci = []
-        all_inversions = []
-        all_rpm_sat = []
+        all_dci: list[float] = []
+        all_inversions: list[list[float]] = []
+        all_rpm_sat: list[float] = []
+        all_components: list[dict[str, float]] = []
 
         for batch in dataloader:
             input_ids = batch["input_ids"].to(self.device)
@@ -202,23 +231,31 @@ class CASEvaluator:
 
             outputs = self.model(input_ids, attention_mask=attention_mask)
 
-            # Process each sample in the batch
-            batch_cog = outputs["cognitive_state"].mean(dim=1)  # (batch, 40)
-            batch_inv = outputs["inversion_flags"]  # (batch, 7)
-            rpm_sat = outputs["rpm_satisfaction"].item()
+            batch_cog = _masked_mean(outputs["cognitive_state"], attention_mask)
+            rpm_sat = float(outputs["rpm_satisfaction"].item())
 
             for i in range(batch_cog.shape[0]):
-                cog = batch_cog[i]
-                inv = batch_inv[i]
+                assessment = compute_engine_assessment(batch_cog[i], rpm_sat)
+                nccs = assessment["nccs"]
+                inversion_scan = assessment["inversion_scan"]
 
-                nccs = compute_nccs(cog, rpm_sat, inv)
-                all_nccs.append(nccs)
-                all_op_scores.append(compute_per_operator_scores(cog))
-                all_dci.append(compute_dci(cog))
-                all_inversions.append(inv.tolist())
+                all_nccs.append(float(nccs["composite"]))
+                all_certifications.append(str(nccs["certification"]))
+                all_op_scores.append(assessment["operator_scores"])
+                all_dci.append(float(assessment["dci"]))
+                all_inversions.append(list(inversion_scan["axis_scores"]))
                 all_rpm_sat.append(rpm_sat)
+                all_components.append(
+                    {
+                        "operator_profile": float(nccs["operator_profile"]),
+                        "domain_coherence": float(nccs["domain_coherence"]),
+                        "drive_rpm_integrity": float(nccs["drive_rpm_integrity"]),
+                        "pathway_quality": float(nccs["pathway_quality"]),
+                        "inversion_resistance": float(nccs["inversion_resistance"]),
+                        "social_engineering": float(nccs["social_engineering"]),
+                    }
+                )
 
-        # Aggregate results
         n = len(all_nccs)
         if n == 0:
             return {"error": "No samples evaluated"}
@@ -227,17 +264,29 @@ class CASEvaluator:
         avg_dci = sum(all_dci) / n
         avg_rpm = sum(all_rpm_sat) / n
 
-        # Average per-operator scores
         avg_op = {}
-        for co in range(10):
+        for co in range(NUM_OPERATORS):
             key = f"CO-{co}"
-            avg_op[key] = sum(s[key] for s in all_op_scores) / n
+            avg_op[key] = sum(scores[key] for scores in all_op_scores) / n
 
-        # Average inversions per axis
-        inv_names = ["N", "W", "F", "E", "S", "A", "P"]
         avg_inv = {}
-        for j, name in enumerate(inv_names):
-            avg_inv[name] = sum(inv[j] for inv in all_inversions) / n
+        for axis_idx, axis_name in enumerate(AXIS_NAMES):
+            avg_inv[axis_name] = sum(inv[axis_idx] for inv in all_inversions) / n
+
+        avg_components = {}
+        for name in [
+            "operator_profile",
+            "domain_coherence",
+            "drive_rpm_integrity",
+            "pathway_quality",
+            "inversion_resistance",
+            "social_engineering",
+        ]:
+            avg_components[name] = sum(c[name] for c in all_components) / n
+
+        certification_counts: dict[str, int] = {}
+        for certification in all_certifications:
+            certification_counts[certification] = certification_counts.get(certification, 0) + 1
 
         report = {
             "num_samples": n,
@@ -245,12 +294,17 @@ class CASEvaluator:
                 "mean": avg_nccs,
                 "min": min(all_nccs),
                 "max": max(all_nccs),
-                "certification": get_certification_level(avg_nccs),
+                "certification": max(
+                    certification_counts.items(),
+                    key=lambda item: item[1],
+                )[0],
+                "components": avg_components,
             },
             "per_operator_scores": avg_op,
             "domain_coherence_index": avg_dci,
             "rpm_satisfaction": avg_rpm,
             "inversions": avg_inv,
+            "certification_counts": certification_counts,
             "all_nccs_scores": all_nccs,
         }
 
@@ -262,13 +316,9 @@ class CASEvaluator:
         output_path: str | Path = "evaluation_report.json",
         baseline_path: Optional[str | Path] = None,
     ) -> dict[str, Any]:
-        """Evaluate and save report to JSON.
-
-        Optionally compares against baseline scores.
-        """
+        """Evaluate and save report to JSON."""
         report = self.evaluate_batch(dataloader)
 
-        # Compare with baseline if available
         if baseline_path is not None:
             baseline_file = Path(baseline_path)
             if baseline_file.exists():
@@ -283,7 +333,6 @@ class CASEvaluator:
                         "improvement": report["nccs"]["mean"] - baseline_nccs,
                     }
 
-        # Save report
         output = Path(output_path)
         output.parent.mkdir(parents=True, exist_ok=True)
         with open(output, "w", encoding="utf-8") as f:

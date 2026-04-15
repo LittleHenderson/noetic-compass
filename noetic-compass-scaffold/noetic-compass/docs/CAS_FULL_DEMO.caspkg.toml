@@ -1,0 +1,4 @@
+[package]
+name = "cas-full-demo"
+version = "0.1.0"
+entry = "CAS_FULL_DEMO_APP.cas"

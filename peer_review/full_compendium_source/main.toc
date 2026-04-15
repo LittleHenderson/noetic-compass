@@ -1,0 +1,74 @@
+\contentsline {chapter}{v7.3 to v7.4 Continuity Bridge}{v}{chapter*.2}%
+\contentsline {chapter}{Guide to This Manual}{vi}{chapter*.3}%
+\contentsline {part}{I\hspace {1em}Canonical Foundation (v6.1 Reference)}{1}{part.1}%
+\contentsline {chapter}{\numberline {1}Ontological Foundations Reference}{2}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Core Calculus Overview}{3}{chapter.2}%
+\contentsline {part}{II\hspace {1em}Transfinite Noetic Fractals (v7.3)}{4}{part.2}%
+\contentsline {chapter}{\numberline {3}Ordinal Fractal Structures}{5}{chapter.3}%
+\contentsline {chapter}{\numberline {4}Fractal Dimension Theory}{6}{chapter.4}%
+\contentsline {chapter}{\numberline {5}Iterated Function Systems on Ideas}{7}{chapter.5}%
+\contentsline {chapter}{\numberline {6}Fractal Self-Similarity}{8}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Convergence and Stability of Transfinite Fractals}{9}{chapter.7}%
+\contentsline {chapter}{\numberline {8}Extended Fractal Calculus}{10}{chapter.8}%
+\contentsline {chapter}{\numberline {9}Transfinite Fractals and RPM Dynamics}{11}{chapter.9}%
+\contentsline {part}{III\hspace {1em}Extended TKS Language and Virtual Machine (v7.3)}{12}{part.3}%
+\contentsline {chapter}{\numberline {10}Extended TKS Language Specification}{13}{chapter.10}%
+\contentsline {chapter}{\numberline {11}Extended Type System}{14}{chapter.11}%
+\contentsline {chapter}{\numberline {12}Algebraic Effect Handlers}{15}{chapter.12}%
+\contentsline {chapter}{\numberline {13}Extended Compiler Architecture}{16}{chapter.13}%
+\contentsline {chapter}{\numberline {14}TKS Virtual Machine}{17}{chapter.14}%
+\contentsline {chapter}{\numberline {15}Module System}{18}{chapter.15}%
+\contentsline {chapter}{\numberline {16}Foreign Function Interface}{19}{chapter.16}%
+\contentsline {part}{IV\hspace {1em}Quantum Noetics (v7.3)}{20}{part.4}%
+\contentsline {chapter}{\numberline {17}Hilbert Space Semantics for Ideas}{21}{chapter.17}%
+\contentsline {chapter}{\numberline {18}Quantum Noetic Operators}{22}{chapter.18}%
+\contentsline {chapter}{\numberline {19}Spectral Theory of Noetics}{23}{chapter.19}%
+\contentsline {chapter}{\numberline {20}Density Matrix Formalism}{24}{chapter.20}%
+\contentsline {chapter}{\numberline {21}Quantum Channels and Noetic Dynamics}{25}{chapter.21}%
+\contentsline {chapter}{\numberline {22}Noetic Entanglement}{26}{chapter.22}%
+\contentsline {chapter}{\numberline {23}Quantum Measurement in TKS}{27}{chapter.23}%
+\contentsline {chapter}{\numberline {24}Quantum Noetic Fractals}{28}{chapter.24}%
+\contentsline {part}{V\hspace {1em}Noetic Meta-System: 2-Categories and Topoi (v7.3)}{29}{part.5}%
+\contentsline {chapter}{\numberline {25}2-Categorical Structure of TKS}{30}{chapter.25}%
+\contentsline {chapter}{\numberline {26}Lax and Pseudo-Functors in TKS}{31}{chapter.26}%
+\contentsline {chapter}{\numberline {27}The Noetic Topos}{32}{chapter.27}%
+\contentsline {chapter}{\numberline {28}Internal Language of the Noetic Topos}{33}{chapter.28}%
+\contentsline {chapter}{\numberline {29}Extended Coalgebraic Dynamics}{34}{chapter.29}%
+\contentsline {chapter}{\numberline {30}Indexed and Fibered Structures}{35}{chapter.30}%
+\contentsline {chapter}{\numberline {31}Higher Structures and Future Directions}{36}{chapter.31}%
+\contentsline {part}{VI\hspace {1em}Extended Transfinite Fractals}{37}{part.6}%
+\contentsline {chapter}{\numberline {32}Large Ordinal Classes for Noetic Fractals}{38}{chapter.32}%
+\contentsline {chapter}{\numberline {33}Multi-Indexed Fractal Systems}{39}{chapter.33}%
+\contentsline {chapter}{\numberline {34}Fractal Spectrum Theory}{40}{chapter.34}%
+\contentsline {chapter}{\numberline {35}Functorial Fractal Constructions}{41}{chapter.35}%
+\contentsline {chapter}{\numberline {36}Integration with v7.3 Fractal Theory}{42}{chapter.36}%
+\contentsline {chapter}{\numberline {37}RPM Dependency Structures and World Transformations}{43}{chapter.37}%
+\contentsline {chapter}{\numberline {38}Noetic Operator Algebra and Fractal Classification}{44}{chapter.38}%
+\contentsline {chapter}{\numberline {39}Advanced Classification and Formal System Tables}{45}{chapter.39}%
+\contentsline {part}{VII\hspace {1em}Domain-Theoretic Semantics}{46}{part.7}%
+\contentsline {chapter}{\numberline {40}Scott Domains for Noetic Spaces}{47}{chapter.40}%
+\contentsline {chapter}{\numberline {41}Continuous Lattices and Way-Below}{48}{chapter.41}%
+\contentsline {chapter}{\numberline {42}Fixed-Point Semantics}{49}{chapter.42}%
+\contentsline {chapter}{\numberline {43}Domain Equations for Noetic Structures}{50}{chapter.43}%
+\contentsline {chapter}{\numberline {44}Denotational Semantics of TKS}{51}{chapter.44}%
+\contentsline {part}{VIII\hspace {1em}Higher Categories and (Infinity,1)-Topoi}{52}{part.8}%
+\contentsline {chapter}{\numberline {45}Quasi-Categories and Noetic Spaces}{53}{chapter.45}%
+\contentsline {chapter}{\numberline {46}Segal Spaces for Noetics}{54}{chapter.46}%
+\contentsline {chapter}{\numberline {47}(Infinity,1)-Categories of Ideas}{55}{chapter.47}%
+\contentsline {chapter}{\numberline {48}(Infinity,1)-Topoi and Noetic Sheaves}{56}{chapter.48}%
+\contentsline {chapter}{\numberline {49}Noetic Homotopy Groups}{57}{chapter.49}%
+\contentsline {chapter}{\numberline {50}Higher Stacks and Moduli}{58}{chapter.50}%
+\contentsline {chapter}{\numberline {51}Synthesis and Connections}{59}{chapter.51}%
+\contentsline {part}{IX\hspace {1em}Differential Noetic Geometry}{60}{part.9}%
+\contentsline {chapter}{\numberline {52}Noetic Manifolds}{61}{chapter.52}%
+\contentsline {chapter}{\numberline {53}The Noetic Metric}{62}{chapter.53}%
+\contentsline {chapter}{\numberline {54}Noetic Connections}{63}{chapter.54}%
+\contentsline {chapter}{\numberline {55}Noetic Curvature}{64}{chapter.55}%
+\contentsline {chapter}{\numberline {56}Noetic Geodesics}{65}{chapter.56}%
+\contentsline {chapter}{\numberline {57}Parallel Transport and Holonomy}{66}{chapter.57}%
+\contentsline {chapter}{\numberline {58}Applications to TKS}{67}{chapter.58}%
+\contentsline {part}{X\hspace {1em}Unified Theory and Cross-Domain Integration}{68}{part.10}%
+\contentsline {chapter}{\numberline {59}Cross-Domain Integration}{69}{chapter.59}%
+\contentsline {part}{XI\hspace {1em}Appendices}{70}{part.11}%
+\contentsline {chapter}{\numberline {60}Complete Symbol Reference}{71}{chapter.60}%
+\contentsline {chapter}{\numberline {61}Version History}{72}{chapter.61}%

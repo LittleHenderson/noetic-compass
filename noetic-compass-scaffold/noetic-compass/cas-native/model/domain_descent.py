@@ -1,22 +1,19 @@
 """
-DomainDescentAttention: Custom attention with causal mask enforcing the
-Domain Descent hierarchy P -> C -> E -> O.
+DomainDescentAttention over explicit 40 cognitive-state slots.
 
-The 40 cognitive states are grouped by domain:
-  P (Principled):  indices 0-9   (CO-0 through CO-9)
-  C (Cognitive):   indices 10-19
-  E (Evaluative):  indices 20-29
-  O (Operational): indices 30-39
+This layer applies the P -> C -> E -> O descent mask to a fixed bank of
+40 slot representations, not to token positions. Token hidden states are first
+aggregated into slot states using externally supplied slot weights, then the
+domain mask is enforced over slot-to-slot attention, and finally the updated
+slot states are projected back to token positions.
 
-Information flow rules:
-  - P attends only to P         (positions 0-9)
-  - C attends to P + C          (positions 0-19)
-  - E attends to P + C + E      (positions 0-29)
-  - O attends to all            (positions 0-39)
-  - O -> P feedback via learned skip connection (nn.Linear)
+The domain-order mask is an explicit CAS structural constraint. The token-to-
+slot assignment remains a learned neural approximation supplied by the model's
+cognitive-state head.
 """
 
 import math
+from typing import Optional
 
 import torch
 import torch.nn as nn
@@ -28,36 +25,19 @@ DOMAIN_SIZE = 10  # 10 operators per domain
 
 
 def build_domain_descent_mask(num_states: int = NUM_COGNITIVE_STATES) -> torch.Tensor:
-    """Build the domain descent causal mask.
-
-    Returns:
-        Boolean mask of shape (num_states, num_states) where True means
-        "allowed to attend". mask[i, j] = True if state i can attend to state j.
-    """
+    """Build the slot-level domain descent mask."""
     mask = torch.zeros(num_states, num_states, dtype=torch.bool)
 
-    # P (0-9) attends only to P (0-9)
     mask[0:10, 0:10] = True
-
-    # C (10-19) attends to P + C (0-19)
     mask[10:20, 0:20] = True
-
-    # E (20-29) attends to P + C + E (0-29)
     mask[20:30, 0:30] = True
-
-    # O (30-39) attends to all (0-39)
     mask[30:40, 0:40] = True
 
     return mask
 
 
 class DomainDescentAttention(nn.Module):
-    """Multi-head attention with domain descent causal masking.
-
-    Implements scaled dot-product attention where the attention pattern
-    is constrained by the P -> C -> E -> O information flow hierarchy.
-    Includes O -> P feedback via a learned skip connection.
-    """
+    """Multi-head attention constrained by the CAS domain order on 40 slots."""
 
     def __init__(self, d_model: int, n_heads: int, num_states: int = NUM_COGNITIVE_STATES):
         super().__init__()
@@ -69,79 +49,127 @@ class DomainDescentAttention(nn.Module):
         self.num_states = num_states
         self.scale = math.sqrt(self.head_dim)
 
-        # Standard QKV projections
         self.q_proj = nn.Linear(d_model, d_model)
         self.k_proj = nn.Linear(d_model, d_model)
         self.v_proj = nn.Linear(d_model, d_model)
         self.out_proj = nn.Linear(d_model, d_model)
-
-        # O -> P feedback: learned skip connection from Operational back to Principled
         self.feedback_proj = nn.Linear(d_model, d_model)
 
-        # Register the domain descent mask as a buffer (non-learnable)
         self.register_buffer("domain_mask", build_domain_descent_mask(num_states))
 
-    def _apply_domain_mask(self, attn_weights: torch.Tensor, seq_len: int) -> torch.Tensor:
-        """Apply the domain descent mask to attention weights.
+    @staticmethod
+    def _normalize_attention_mask(
+        attention_mask: Optional[torch.Tensor],
+        batch: int,
+        seq_len: int,
+        device: torch.device,
+    ) -> torch.Tensor:
+        if attention_mask is None:
+            return torch.ones(batch, seq_len, device=device, dtype=torch.bool)
+        return attention_mask.to(device=device, dtype=torch.bool)
 
-        For sequences shorter or longer than 40, we tile/truncate the mask
-        to cover the full sequence length.
-        """
-        # Build a mask for the actual sequence length
-        if seq_len <= self.num_states:
-            mask = self.domain_mask[:seq_len, :seq_len]
-        else:
-            # Tile the 40x40 mask to cover longer sequences
-            repeats_r = (seq_len + self.num_states - 1) // self.num_states
-            repeats_c = repeats_r
-            mask = self.domain_mask.repeat(repeats_r, repeats_c)[:seq_len, :seq_len]
+    def _aggregate_slots(
+        self,
+        x: torch.Tensor,
+        slot_weights: torch.Tensor,
+        attention_mask: Optional[torch.Tensor],
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Aggregate token states into explicit cognitive-state slots."""
+        batch, seq_len, _ = x.shape
+        token_mask = self._normalize_attention_mask(attention_mask, batch, seq_len, x.device)
+        masked_slot_weights = slot_weights * token_mask.unsqueeze(-1).to(slot_weights.dtype)
 
-        # Where mask is False, fill with -inf to zero out after softmax
-        attn_weights = attn_weights.masked_fill(
-            ~mask.unsqueeze(0).unsqueeze(0),  # (1, 1, seq, seq)
-            float("-inf"),
-        )
+        slot_mass = masked_slot_weights.sum(dim=1)  # (batch, 40)
+        slot_states = torch.einsum("bsd,bsk->bkd", x, masked_slot_weights)
+        slot_states = slot_states / slot_mass.unsqueeze(-1).clamp_min(1e-8)
+        slot_mask = slot_mass > 1e-8
+
+        return slot_states, slot_mask, masked_slot_weights
+
+    def slot_attention_weights(
+        self,
+        slot_states: torch.Tensor,
+        slot_mask: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
+        """Return slot-level attention weights after the descent mask is applied."""
+        batch, num_slots, _ = slot_states.shape
+        if num_slots != self.num_states:
+            raise ValueError(f"expected {self.num_states} slots, got {num_slots}")
+
+        q = self.q_proj(slot_states).view(batch, num_slots, self.n_heads, self.head_dim).transpose(1, 2)
+        k = self.k_proj(slot_states).view(batch, num_slots, self.n_heads, self.head_dim).transpose(1, 2)
+        attn_logits = torch.matmul(q, k.transpose(-2, -1)) / self.scale
+
+        allowed = self.domain_mask.unsqueeze(0).unsqueeze(0)
+        if slot_mask is not None:
+            key_mask = slot_mask.unsqueeze(1).unsqueeze(1)
+            allowed = allowed & key_mask
+
+        attn_logits = attn_logits.masked_fill(~allowed, -1e9)
+        attn_weights = F.softmax(attn_logits, dim=-1)
+
+        if slot_mask is not None:
+            query_mask = slot_mask.unsqueeze(1).unsqueeze(-1).to(attn_weights.dtype)
+            attn_weights = attn_weights * query_mask
+            attn_weights = attn_weights / attn_weights.sum(dim=-1, keepdim=True).clamp_min(1e-8)
+
         return attn_weights
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self,
+        x: torch.Tensor,
+        slot_weights: torch.Tensor,
+        attention_mask: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
         """
         Args:
             x: Input tensor of shape (batch, seq, d_model)
+            slot_weights: Token-to-slot weights of shape (batch, seq, 40)
+            attention_mask: Optional padding mask of shape (batch, seq)
 
         Returns:
             Output tensor of shape (batch, seq, d_model)
         """
         batch, seq_len, _ = x.shape
+        if slot_weights.shape != (batch, seq_len, self.num_states):
+            raise ValueError(
+                f"slot_weights must have shape {(batch, seq_len, self.num_states)}, "
+                f"got {tuple(slot_weights.shape)}"
+            )
 
-        # QKV projections
-        q = self.q_proj(x).view(batch, seq_len, self.n_heads, self.head_dim).transpose(1, 2)
-        k = self.k_proj(x).view(batch, seq_len, self.n_heads, self.head_dim).transpose(1, 2)
-        v = self.v_proj(x).view(batch, seq_len, self.n_heads, self.head_dim).transpose(1, 2)
+        token_mask = self._normalize_attention_mask(attention_mask, batch, seq_len, x.device)
+        slot_states, slot_mask, masked_slot_weights = self._aggregate_slots(
+            x, slot_weights, token_mask
+        )
 
-        # Scaled dot-product attention
-        attn_weights = torch.matmul(q, k.transpose(-2, -1)) / self.scale
+        q = self.q_proj(slot_states).view(batch, self.num_states, self.n_heads, self.head_dim).transpose(1, 2)
+        k = self.k_proj(slot_states).view(batch, self.num_states, self.n_heads, self.head_dim).transpose(1, 2)
+        v = self.v_proj(slot_states).view(batch, self.num_states, self.n_heads, self.head_dim).transpose(1, 2)
 
-        # Apply domain descent mask
-        attn_weights = self._apply_domain_mask(attn_weights, seq_len)
+        attn_logits = torch.matmul(q, k.transpose(-2, -1)) / self.scale
+        allowed = self.domain_mask.unsqueeze(0).unsqueeze(0) & slot_mask.unsqueeze(1).unsqueeze(1)
+        attn_logits = attn_logits.masked_fill(~allowed, -1e9)
 
-        # Softmax (masked positions become 0 attention)
-        attn_weights = F.softmax(attn_weights, dim=-1)
+        attn_weights = F.softmax(attn_logits, dim=-1)
+        query_mask = slot_mask.unsqueeze(1).unsqueeze(-1).to(attn_weights.dtype)
+        attn_weights = attn_weights * query_mask
+        attn_weights = attn_weights / attn_weights.sum(dim=-1, keepdim=True).clamp_min(1e-8)
 
-        # Attend to values
-        attn_output = torch.matmul(attn_weights, v)
+        slot_output = torch.matmul(attn_weights, v)
+        slot_output = slot_output.transpose(1, 2).contiguous().view(batch, self.num_states, self.d_model)
+        slot_output = self.out_proj(slot_output)
+        slot_output = slot_output * slot_mask.unsqueeze(-1).to(slot_output.dtype)
 
-        # Reshape back
-        attn_output = attn_output.transpose(1, 2).contiguous().view(batch, seq_len, self.d_model)
-        output = self.out_proj(attn_output)
+        # Learned O -> P feedback on the explicit slot bank.
+        o_mask = slot_mask[:, 30:40]
+        if o_mask.any():
+            o_states = slot_output[:, 30:40, :]
+            feedback_denom = o_mask.sum(dim=1, keepdim=True).clamp_min(1).to(o_states.dtype)
+            feedback = (o_states * o_mask.unsqueeze(-1).to(o_states.dtype)).sum(dim=1, keepdim=True)
+            feedback = self.feedback_proj(feedback / feedback_denom.unsqueeze(-1))
+            slot_output = slot_output.clone()
+            slot_output[:, 0:10, :] = slot_output[:, 0:10, :] + feedback
 
-        # O -> P feedback: extract O domain states and project back to P positions
-        if seq_len >= self.num_states:
-            # Extract Operational domain output (positions 30-39)
-            o_states = output[:, 30:40, :]
-            # Project and aggregate feedback
-            feedback = self.feedback_proj(o_states.mean(dim=1, keepdim=True))
-            # Add feedback to Principled domain positions (0-9)
-            output = output.clone()
-            output[:, 0:10, :] = output[:, 0:10, :] + feedback
-
-        return output
+        token_output = torch.einsum("bkd,bsk->bsd", slot_output, masked_slot_weights)
+        token_output = token_output * token_mask.unsqueeze(-1).to(token_output.dtype)
+        return token_output

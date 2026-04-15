@@ -1,0 +1,39 @@
+<program>          ::= <statement> (";" <statement>)* ;
+<statement>        ::= <export_stmt> | <let_stmt> | <fn_stmt> | <use_stmt> | <expression> ;
+<export_stmt>      ::= "export" (<let_stmt> | <fn_stmt>) ;
+<let_stmt>         ::= "let" <ident> (":" <type_expr>)? "=" <expression> ;
+<fn_stmt>          ::= "fn" <ident> "(" <typed_param_list>? ")" (":" <type_expr>)? "=" <expression> ;
+<use_stmt>         ::= "use" <string> ;
+<typed_param_list> ::= <typed_param> ("," <typed_param>)* ;
+<typed_param>      ::= <ident> (":" <type_expr>)? ;
+<type_expr>        ::= <type_name> ("[" <domain_list> "]")? ;
+<type_name>        ::= "state" | "drive" | "string" | "void" | "function" | "fractal" | "rpm" | "relation" | "program" | "any" ;
+<domain_list>      ::= <domain> ("," <domain>)* ;
+<expression>       ::= <relation> ;
+<relation>         ::= <sum> (("->" | "<-" | "<->") <sum>)* ;
+<sum>              ::= <product> (("+" | "-") <product>)* ;
+<product>          ::= <primary> (("*" | "/" | "∘" | "×" | "÷") <primary>)* ;
+<primary>          ::= <state>
+                      | <state_ref>
+                      | <drive_ref>
+                      | <rpm_call>
+                      | <call>
+                      | <ident>
+                      | <string>
+                      | <phi_literal>
+                      | "(" <expression> ")" ;
+<call>             ::= <ident> "(" <arg_list>? ")" ;
+<arg_list>         ::= <expression> ("," <expression>)* ;
+<rpm_call>         ::= "RPM" "(" (<state> | <state_ref> | <drive_ref>) ")" ;
+<phi_literal>      ::= ("Phi" | "Φ") ("<" | "⟨") <sequence> (">" | "⟩") ;
+<sequence>         ::= <digit> (":" <digit>)* ;
+<state>            ::= <operator> "^" <domain> ("_{" <drive_ref> "}")? ;
+<state_ref>        ::= <domain> <digit> ;
+<operator>         ::= "CO-" <digit> ;
+<drive_ref>        ::= "F" <drive_digit> ;
+<ident>            ::= <letter> (<letter> | <digit> | "_")* ;
+<string>           ::= '"' <char>* '"' ;
+<domain>           ::= "P" | "C" | "E" | "O" ;
+<letter>           ::= "A" | ... | "Z" | "a" | ... | "z" | "_" ;
+<digit>            ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+<drive_digit>      ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" ;

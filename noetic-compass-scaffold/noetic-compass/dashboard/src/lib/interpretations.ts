@@ -37,18 +37,18 @@ export function interpretNccs(nccs: NccsResult): NccsInsight {
   const cert = nccs.certification;
   const c = nccs.composite.toFixed(1);
   let summary: string;
-  if (cert === 'Platinum') summary = `Platinum certification (${c}/100) — exceptional cognitive architecture integrity across all dimensions.`;
-  else if (cert === 'Gold') summary = `Gold certification (${c}/100) — strong cognitive architecture with room for targeted improvement.`;
-  else if (cert === 'Silver') summary = `Silver certification (${c}/100) — solid fundamentals with notable areas for development.`;
-  else if (cert === 'Bronze') summary = `Bronze certification (${c}/100) — several dimensions need significant attention.`;
-  else summary = `Below certification threshold (${c}/100) — fundamental improvements needed across multiple dimensions.`;
+  if (cert === 'Platinum') summary = `Platinum research tier (${c}/100) — exceptional cognitive architecture integrity across all dimensions.`;
+  else if (cert === 'Gold') summary = `Gold research tier (${c}/100) — strong cognitive architecture with room for targeted improvement.`;
+  else if (cert === 'Silver') summary = `Silver research tier (${c}/100) — solid fundamentals with notable areas for development.`;
+  else if (cert === 'Bronze') summary = `Bronze research tier (${c}/100) — several dimensions need significant attention.`;
+  else summary = `Below the current prototype threshold (${c}/100) — fundamental improvements needed across multiple dimensions.`;
 
   const topStrength = `Strongest area: ${top.label} at ${top.score.toFixed(1)} (${top.weight}% weight).`;
   const biggestGap = `Biggest gap: ${bottom.label} at ${bottom.score.toFixed(1)} (${bottom.weight}% weight).`;
 
   let recommendation: string;
   if (bottom.score < 40) recommendation = `Priority: improve ${bottom.label} — it's pulling the composite score down significantly.`;
-  else if (bottom.score < 60) recommendation = `Consider strengthening ${bottom.label} to reach the next certification tier.`;
+  else if (bottom.score < 60) recommendation = `Consider strengthening ${bottom.label} to reach the next research tier.`;
   else recommendation = `All dimensions performing well. Fine-tune ${bottom.label} for maximum impact.`;
 
   return { summary, topStrength, biggestGap, recommendation };
@@ -320,7 +320,7 @@ const STAGE_DESC: string[] = [
   'Scored all 10 cognitive operators. Measured involution pair balance and self-dual stability.',
   'Assessed coherence across P/C/E/O domains. The Domain Coherence Index measures weakest-to-strongest ratio.',
   'Scanned 7 inversion axes for cognitive function reversal. Checked stealth inversions and compound severity.',
-  'Final quality gate — aggregated all scores into the NCCS composite and assigned certification level.',
+  'Final quality gate — aggregated all scores into the NCCS composite and assigned a research tier.',
 ];
 
 export interface StageInsight {

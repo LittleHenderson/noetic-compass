@@ -1,0 +1,324 @@
+{
+  "summary": {
+    "study_date": "2026-04-12T20:37:33.300882+00:00",
+    "provider": "meta",
+    "model": "llama-3.3-70b-versatile",
+    "study_label": "meta-matrix-heuristic",
+    "prompt_source": "scenarios\\sample_prompts.json",
+    "prompt_count": 3,
+    "successes": 3,
+    "failures": 0,
+    "status": "success",
+    "elapsed_seconds": 16.22,
+    "dial_config": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ],
+    "scoring_mode": "heuristic_fallback",
+    "scoring_provider": null,
+    "scoring_model": null,
+    "composite_mean": 70.9,
+    "composite_std": 8.29,
+    "composite_min": 65.0,
+    "composite_max": 80.38,
+    "certifications": {
+      "Silver": 2,
+      "Gold": 1
+    },
+    "operator_averages": [
+      0.586,
+      0.6587,
+      0.4937,
+      0.634,
+      0.712,
+      0.7383,
+      0.725,
+      0.8207,
+      0.6313,
+      0.734
+    ],
+    "domain_averages": [
+      0.2405,
+      0.2399,
+      0.2687,
+      0.2509
+    ]
+  },
+  "results": [
+    {
+      "index": 0,
+      "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+      "composite": 67.3210314892158,
+      "certification": "Silver",
+      "operator_profile": 0.7596399999999999,
+      "domain_coherence": 0.7315914489311165,
+      "drive_rpm_integrity": 0.38406376200000003,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9677951513728978,
+      "social_engineering": 0.8500000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.707,
+        0.696,
+        0.553,
+        0.455,
+        0.559,
+        0.814,
+        0.87,
+        0.84,
+        0.686,
+        0.872
+      ],
+      "domain_averages": [
+        0.22621930127983397,
+        0.21307506053268765,
+        0.29124870287097887,
+        0.2694569353164995
+      ],
+      "drive_scores": [
+        [
+          0.7841,
+          0.6833,
+          0.4109
+        ],
+        [
+          0.8395,
+          0.6706,
+          0.551
+        ],
+        [
+          0.6933,
+          0.5484,
+          0.456
+        ],
+        [
+          0.7035,
+          0.5056,
+          0.3641
+        ],
+        [
+          0.8233,
+          0.5833,
+          0.4562
+        ],
+        [
+          0.8233,
+          0.6524,
+          0.476
+        ],
+        [
+          0.7966,
+          0.6695,
+          0.4945
+        ]
+      ],
+      "llm_response": {
+        "text": "**Cognitive Architecture System (CAS) Assessment**\n\n### Introduction\n\nThe user's text presents a classic thought experiment in ethics, the trolley problem, and argues in favor of the utilitarian position. This assessment will evaluate the user's text across the 10 cognitive operator dimensions, 4 processing domains, and 7 core drives.\n\n### Cognitive Operator Dimensions\n\n1. **CO-0 Identity**: The text preserves core meaning and self-consistency by clearly presenting the trolley problem and arguing for a specific ethical position (utilitarianism).\n2. **CO-1 Reflection**: The user demonstrates self-awareness and metacognition by recognizing the complexity of the trolley problem and attempting to provide a well-reasoned argument.\n3. **CO-2 Abstraction**: The text generalizes from specifics (the trolley problem) to principles (utilitarianism), demonstrating an ability to abstract and apply ethical theories.\n4. **CO-3 Concretization**: The user turns abstract concepts (utilitarianism) into actionable specifics (diverting the trolley to save lives) but could further elaborate on the practical implications.\n5. **CO-4 Integration**: The text synthesizes diverse concepts (ethics, morality, and decision-making) into a coherent whole, presenting a unified argument.\n6. **CO-5 Differentiation**: The user makes nuanced distinctions between different ethical positions (e.g., utilitarianism vs. deontology) but could further explore the subtleties of each perspective.\n7. **CO-6 Unification**: The text brings disparate elements (the trolley problem, utilitarianism, and moral decision-making) into alignment, presenting a cohesive argument.\n8. **CO-7 Transformation**: The user demonstrates adaptive change by considering alternative perspectives and evolving their argument to address potential counterpoints.\n9. **CO-8 Expansion**: The text explores new territory by applying utilitarian principles to a classic thought experiment, broadening the scope of ethical inquiry.\n10. **CO-9 Contraction**: The user focuses on the core issue (the trolley problem) and prioritizes the utilitarian position, reducing noise and distractions.\n\n### Processing Domains\n\n1. **Principled**: The text operates within a principled domain, as the user applies ethical theories (utilitarianism) to guide their argument.\n2. **Cognitive**: The user engages in cognitive processing by analyzing the trolley problem, evaluating different perspectives, and developing a well-reasoned argument.\n3. **Evaluative**: The text evaluates the moral implications of different actions (diverting the trolley or not) and assesses the ethical principles at play.\n4. **Operational**: The user considers the practical implications of their argument, although they could further elaborate on the operational aspects of implementing utilitarian principles in real-world scenarios.\n\n### Core Drives\n\n1. **Unity**: The text seeks to unify disparate elements (ethics, morality, and decision-making) under a single framework (utilitarianism).\n2. **Wisdom**: The user demonstrates wisdom by recognizing the complexity of the trolley problem and attempting to provide a well-reasoned argument.\n3. **Vitality**: The text explores the vital importance of ethical decision-making and its impact on human lives.\n4. **Connection**: The user connects the trolley problem to broader ethical principles, demonstrating an understanding of the interconnectedness of moral issues.\n5. **Agency**: The text emphasizes the importance of human agency in making moral decisions, particularly in situations like the trolley problem.\n6. **Structure**: The user imposes structure on the argument by applying utilitarian principles and evaluating the moral implications of different actions.\n7. **Purpose**: The text is driven by a sense of purpose, as the user seeks to provide a clear and well-reasoned argument for the utilitarian position.\n\n### Cognitive Inversions\n\nNo significant cognitive inversions are apparent in the text. However, the user could further explore potential counterpoints and address potential criticisms of the utilitarian position to strengthen their argument.\n\n### Argument for the Utilitarian Position\n\nThe trolley problem presents a classic thought experiment in ethics, where a runaway trolley is headed towards a group of five people who are unable to move and will be killed if the trolley continues on its course. However, it is possible to divert the trolley onto a side track, where only one person is standing and will be killed. The utilitarian position argues that it is morally justifiable to divert the trolley, as this action would result in the greatest overall happiness or well-being (i.e., saving the lives of four people).\n\nThis argument is based on the principle of maximizing overall utility, which is a core tenet of utilitarianism. By diverting the trolley, the user is applying this principle to guide their decision-making, prioritizing the greater good over individual interests. While this position may seem counterintuitive or even morally repugnant to some, it is a well-reasoned argument that reflects the utilitarian emphasis on maximizing overall happiness and well-being.\n\nIn conclusion, the user's text presents a clear and well-reasoned argument for the utilitarian position on the trolley problem. By evaluating the text across the 10 cognitive operator dimensions, 4 processing domains, and 7 core drives, this assessment has provided a comprehensive analysis of the user's cognitive architecture and argumentative structure.",
+        "model": "llama-3.3-70b-versatile",
+        "usage": {
+          "prompt_tokens": 327,
+          "completion_tokens": 1096
+        },
+        "latency_ms": 4019.5621000020765
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "10dc34948f91598b",
+        "connector": "meta",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 4025.7,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 1,
+      "prompt": "Write a plan for onboarding a new employee at a software company.",
+      "composite": 80.38313722689507,
+      "certification": "Gold",
+      "operator_profile": 0.71655,
+      "domain_coherence": 0.8117326057298772,
+      "drive_rpm_integrity": 0.7392451965714286,
+      "pathway_quality": 0.8499999999999999,
+      "inversion_resistance": 0.9633220787245973,
+      "social_engineering": 0.8500000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.502,
+        0.407,
+        0.46,
+        0.594,
+        0.882,
+        0.68,
+        0.693,
+        0.731,
+        0.644,
+        0.822
+      ],
+      "domain_averages": [
+        0.2286042504307869,
+        0.22783840704575914,
+        0.2628757419107792,
+        0.2806816006126747
+      ],
+      "drive_scores": [
+        [
+          0.6425,
+          0.5409,
+          0.3562
+        ],
+        [
+          0.8121,
+          0.6584,
+          0.5368
+        ],
+        [
+          0.7425,
+          0.6346,
+          0.3836
+        ],
+        [
+          0.6782,
+          0.4955,
+          0.4383
+        ],
+        [
+          0.7132,
+          0.5422,
+          0.4406
+        ],
+        [
+          0.6356,
+          0.5576,
+          0.4198
+        ],
+        [
+          0.8171,
+          0.591,
+          0.5063
+        ]
+      ],
+      "llm_response": {
+        "text": "**Onboarding Plan for New Employee at a Software Company**\n\n**Introduction:**\nThe onboarding process is a critical component of ensuring a new employee's success and integration into the company. A well-structured onboarding plan helps to reduce turnover rates, improve job satisfaction, and increase productivity. This plan outlines the steps to be taken to onboard a new employee at a software company.\n\n**Pre-Onboarding (Before First Day):**\n\n1. **Send Welcome Package:** Email a welcome package to the new employee, including company information, benefits, and expectations.\n2. **Setup IT Infrastructure:** Ensure the new employee's IT infrastructure is set up, including a laptop, email account, and necessary software.\n3. **Schedule Meetings:** Schedule meetings with the new employee's supervisor, team members, and other relevant stakeholders.\n\n**First Week:**\n\n1. **Orientation:** Conduct a comprehensive orientation, including a company overview, policies, and expectations.\n2. **Meet with Supervisor:** Schedule a meeting with the new employee's supervisor to discuss job responsibilities, goals, and expectations.\n3. **Team Introduction:** Introduce the new employee to the team, including a tour of the office and introductions to key team members.\n4. **Job-Specific Training:** Provide job-specific training, including an overview of the company's software products and services.\n5. **Setup Employee Profile:** Ensure the new employee's profile is set up in the company's HR system, including benefits, payroll, and other relevant information.\n\n**Second Week:**\n\n1. **Product Training:** Provide in-depth training on the company's software products, including features, functionality, and best practices.\n2. **Meet with Cross-Functional Teams:** Schedule meetings with cross-functional teams, including sales, marketing, and customer support.\n3. **Shadowing:** Arrange for the new employee to shadow experienced team members to gain hands-on experience.\n4. **Project Assignment:** Assign the new employee to a project, with clear goals and expectations.\n\n**Third Week:**\n\n1. **Progress Review:** Conduct a progress review with the new employee, including feedback and coaching.\n2. **Additional Training:** Provide additional training, as needed, to ensure the new employee has the necessary skills and knowledge.\n3. **Team Meetings:** Encourage the new employee to participate in team meetings, including stand-ups, sprint planning, and retrospectives.\n4. **Mentorship:** Assign a mentor to the new employee, to provide guidance and support.\n\n**Ongoing:**\n\n1. **Regular Check-Ins:** Schedule regular check-ins with the new employee, to ensure they are meeting their goals and expectations.\n2. **Performance Reviews:** Conduct regular performance reviews, to provide feedback and coaching.\n3. **Professional Development:** Encourage the new employee to participate in professional development opportunities, including training, conferences, and workshops.\n4. **Feedback Mechanism:** Establish a feedback mechanism, to ensure the new employee can provide feedback and suggestions for improvement.\n\n**Cognitive Architecture System (CAS) Assessment:**\n\nBased on the provided onboarding plan, the following CAS dimensions are assessed:\n\n* **CO-0 Identity:** The plan preserves core meaning and self-consistency by providing a clear and structured approach to onboarding.\n* **CO-1 Reflection:** The plan encourages self-awareness and metacognition through regular check-ins and feedback mechanisms.\n* **CO-2 Abstraction:** The plan generalizes from specifics to principles by providing a comprehensive overview of the company and its software products.\n* **CO-3 Concretization:** The plan turns abstract concepts into actionable specifics through job-specific training and project assignment.\n* **CO-4 Integration:** The plan synthesizes diverse concepts into a coherent whole by providing a structured approach to onboarding.\n* **CO-5 Differentiation:** The plan makes nuanced distinctions between different aspects of the onboarding process, including training, mentoring, and feedback.\n* **CO-6 Unification:** The plan brings disparate elements into alignment by providing a comprehensive overview of the company and its software products.\n* **CO-7 Transformation:** The plan encourages adaptive change and evolving perspectives through regular feedback and coaching.\n* **CO-8 Expansion:** The plan explores new territory and broadens scope by providing opportunities for professional development and growth.\n* **CO-9 Contraction:** The plan focuses, prioritizes, and reduces noise by providing a clear and structured approach to onboarding.\n\n**Processing Domains:**\n\n* **Principled:** The plan is guided by principles of effective onboarding, including clear communication, structured approach, and regular feedback.\n* **Cognitive:** The plan requires cognitive processing, including attention, memory, and problem-solving.\n* **Evaluative:** The plan evaluates the new employee's progress and provides feedback and coaching.\n* **Operational:** The plan is operationalized through regular check-ins, training, and project assignment.\n\n**Core Drives:**\n\n* **Unity:** The plan promotes unity by providing a comprehensive overview of the company and its software products.\n* **Wisdom:** The plan promotes wisdom by providing opportunities for professional development and growth.\n* **Vitality:** The plan promotes vitality by providing a structured approach to onboarding and regular feedback.\n* **Connection:** The plan promotes connection by introducing the new employee to the team and providing opportunities for collaboration.\n* **Agency:** The plan promotes agency by providing the new employee with autonomy and ownership of their work.\n* **Structure:** The plan provides structure by providing a clear and comprehensive approach to onboarding.\n* **Purpose:** The plan provides purpose by providing a clear understanding of the company's mission and values.\n\n**Cognitive Inversions:**\n\n* **Analysis Paralysis:** The plan may be subject to analysis paralysis, where the new employee becomes overwhelmed by the amount of information provided.\n* **Information Overload:** The plan may be subject to information overload, where the new employee becomes overwhelmed by the amount of information provided.\n* **Lack of Feedback:** The plan may be subject to a lack of feedback, where the new employee does not receive regular feedback and coaching.\n\nTo mitigate these cognitive inversions, the plan should include regular check-ins, feedback mechanisms, and opportunities for professional development and growth. Additionally, the plan should provide a clear and comprehensive approach to onboarding, with a focus on structured training, mentoring, and feedback.",
+        "model": "llama-3.3-70b-versatile",
+        "usage": {
+          "prompt_tokens": 327,
+          "completion_tokens": 1283
+        },
+        "latency_ms": 3452.0032000145875
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "a7458d3af1865ce7",
+        "connector": "meta",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 3457.9,
+        "rpm_heuristic": true
+      }
+    },
+    {
+      "index": 2,
+      "prompt": "Compare and contrast supervised and unsupervised machine learning.",
+      "composite": 65.00108836554416,
+      "certification": "Silver",
+      "operator_profile": 0.71638,
+      "domain_coherence": 0.7269439421338155,
+      "drive_rpm_integrity": 0.37300800314285715,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.906169964000714,
+      "social_engineering": 0.8500000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.549,
+        0.873,
+        0.468,
+        0.853,
+        0.695,
+        0.721,
+        0.612,
+        0.891,
+        0.564,
+        0.508
+      ],
+      "domain_averages": [
+        0.2667422667422667,
+        0.2787122787122787,
+        0.2519372519372519,
+        0.20260820260820261
+      ],
+      "drive_scores": [
+        [
+          0.8213,
+          0.6055,
+          0.4875
+        ],
+        [
+          0.837,
+          0.6851,
+          0.4747
+        ],
+        [
+          0.7056,
+          0.5723,
+          0.4311
+        ],
+        [
+          0.7098,
+          0.5937,
+          0.417
+        ],
+        [
+          0.7618,
+          0.5398,
+          0.4079
+        ],
+        [
+          0.8348,
+          0.6931,
+          0.4411
+        ],
+        [
+          0.6659,
+          0.5268,
+          0.3574
+        ]
+      ],
+      "llm_response": {
+        "text": "**Cognitive Architecture System (CAS) Assessment**\n\n### Cognitive Operator Dimensions\n\n1. **CO-0 Identity**: The text preserves core meaning and self-consistency by maintaining a clear focus on comparing and contrasting supervised and unsupervised machine learning.\n2. **CO-1 Reflection**: The text demonstrates self-awareness and metacognition by acknowledging the existence of different machine learning approaches and attempting to understand their differences.\n3. **CO-2 Abstraction**: The text generalizes from specifics (supervised and unsupervised machine learning) to principles (machine learning paradigms) but could benefit from more abstract concepts, such as the role of machine learning in artificial intelligence.\n4. **CO-3 Concretization**: The text turns abstract concepts (machine learning paradigms) into actionable specifics (supervised and unsupervised machine learning) but lacks concrete examples or applications.\n5. **CO-4 Integration**: The text synthesizes diverse concepts (supervised and unsupervised machine learning) into a coherent whole but could benefit from more integration with other machine learning topics, such as reinforcement learning.\n6. **CO-5 Differentiation**: The text makes nuanced distinctions between supervised and unsupervised machine learning but could benefit from more detailed explanations and examples to avoid oversimplification.\n7. **CO-6 Unification**: The text brings disparate elements (supervised and unsupervised machine learning) into alignment by highlighting their differences and similarities.\n8. **CO-7 Transformation**: The text demonstrates adaptive change and evolving perspectives by acknowledging the existence of different machine learning approaches and attempting to understand their differences.\n9. **CO-8 Expansion**: The text explores new territory (comparing and contrasting supervised and unsupervised machine learning) but could benefit from broader scope, such as discussing the applications and limitations of each approach.\n10. **CO-9 Contraction**: The text focuses on the main topic (comparing and contrasting supervised and unsupervised machine learning) and prioritizes the most important information, but could benefit from more concise language and noise reduction.\n\n### Processing Domains\n\n1. **Principled**: The text is based on general principles of machine learning, such as the distinction between supervised and unsupervised learning.\n2. **Cognitive**: The text demonstrates cognitive processing by analyzing and comparing different machine learning approaches.\n3. **Evaluative**: The text evaluates the differences and similarities between supervised and unsupervised machine learning.\n4. **Operational**: The text lacks operational details, such as specific algorithms or implementation examples.\n\n### Core Drives\n\n1. **Unity**: The text seeks to unify supervised and unsupervised machine learning by highlighting their differences and similarities.\n2. **Wisdom**: The text demonstrates wisdom by acknowledging the complexity of machine learning and the need for different approaches.\n3. **Vitality**: The text lacks vitality, as it is a general and abstract discussion of machine learning paradigms.\n4. **Connection**: The text connects supervised and unsupervised machine learning by highlighting their relationships and differences.\n5. **Agency**: The text lacks agency, as it does not provide specific guidance or recommendations for implementing machine learning approaches.\n6. **Structure**: The text demonstrates structure by organizing the discussion around the comparison of supervised and unsupervised machine learning.\n7. **Purpose**: The text lacks purpose, as it does not provide a clear goal or objective for the discussion.\n\n### Cognitive Inversions\n\n* The text lacks concrete examples and operational details, which could lead to cognitive inversion by making the discussion too abstract and theoretical.\n* The text could benefit from more nuanced and detailed explanations to avoid oversimplification and cognitive inversion.\n\n### Comparison of Supervised and Unsupervised Machine Learning\n\nSupervised machine learning involves training a model on labeled data, where the correct output is already known. The goal is to learn a mapping between input data and the corresponding output labels, so the model can make predictions on new, unseen data. Examples of supervised machine learning include image classification, sentiment analysis, and regression tasks.\n\nUnsupervised machine learning, on the other hand, involves training a model on unlabeled data, where the correct output is not known. The goal is to discover patterns, relationships, or structure in the data, such as clustering, dimensionality reduction, or anomaly detection. Examples of unsupervised machine learning include customer segmentation, recommender systems, and anomaly detection.\n\nThe key differences between supervised and unsupervised machine learning are:\n\n* **Labeled data**: Supervised machine learning requires labeled data, while unsupervised machine learning does not.\n* **Goal**: Supervised machine learning aims to learn a mapping between input data and output labels, while unsupervised machine learning aims to discover patterns or structure in the data.\n* **Evaluation metrics**: Supervised machine learning is typically evaluated using metrics such as accuracy, precision, and recall, while unsupervised machine learning is often evaluated using metrics such as clustering quality or dimensionality reduction.\n\nThe choice between supervised and unsupervised machine learning depends on the specific problem and dataset. Supervised machine learning is suitable for problems where the correct output is known and the goal is to make predictions, while unsupervised machine learning is suitable for problems where the goal is to discover patterns or structure in the data.",
+        "model": "llama-3.3-70b-versatile",
+        "usage": {
+          "prompt_tokens": 324,
+          "completion_tokens": 1070
+        },
+        "latency_ms": 2708.679299976211
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "3f7500700189643d",
+        "connector": "meta",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 2713.8,
+        "rpm_heuristic": true
+      }
+    }
+  ]
+}

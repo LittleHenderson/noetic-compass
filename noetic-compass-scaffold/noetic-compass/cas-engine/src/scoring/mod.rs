@@ -14,9 +14,7 @@
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
-use crate::ontology::{
-    CognitiveOperator, CognitiveStateVector, Domain, DriveProfile,
-};
+use crate::ontology::{CognitiveOperator, CognitiveStateVector, Domain, DriveProfile};
 
 // ---------------------------------------------------------------------------
 // Certification levels
@@ -130,8 +128,7 @@ impl OperatorScores {
 
     /// All three involution balance values.
     pub fn all_involution_balances(&self) -> [f64; 3] {
-        CognitiveOperator::INVOLUTION_PAIRS
-            .map(|(a, b)| self.involution_balance(a, b))
+        CognitiveOperator::INVOLUTION_PAIRS.map(|(a, b)| self.involution_balance(a, b))
     }
 
     /// Compute the operator profile sub-score (0-1).
@@ -308,7 +305,10 @@ pub struct SocialEngineeringInput {
 }
 
 impl SocialEngineeringInput {
-    pub fn new(manipulation_resistance: f64, overton_drift_resistance: f64) -> Result<Self, ScoringError> {
+    pub fn new(
+        manipulation_resistance: f64,
+        overton_drift_resistance: f64,
+    ) -> Result<Self, ScoringError> {
         if manipulation_resistance.is_nan() || !(0.0..=1.0).contains(&manipulation_resistance) {
             return Err(ScoringError::SubScoreOutOfRange {
                 name: "manipulation_resistance",
@@ -425,23 +425,43 @@ impl NccsResult {
     /// Weighted components as (name, weight, sub_score) triples.
     pub fn components(&self) -> Vec<(&'static str, f64, f64)> {
         vec![
-            ("Operator Profile", WEIGHT_OPERATOR_PROFILE, self.operator_profile),
-            ("Domain Coherence", WEIGHT_DOMAIN_COHERENCE, self.domain_coherence),
-            ("Drive/RPM Integrity", WEIGHT_DRIVE_RPM, self.drive_rpm_integrity),
-            ("Pathway Quality", WEIGHT_PATHWAY_QUALITY, self.pathway_quality),
-            ("Inversion Resistance", WEIGHT_INVERSION_RESISTANCE, self.inversion_resistance),
-            ("Social Engineering", WEIGHT_SOCIAL_ENGINEERING, self.social_engineering),
+            (
+                "Operator Profile",
+                WEIGHT_OPERATOR_PROFILE,
+                self.operator_profile,
+            ),
+            (
+                "Domain Coherence",
+                WEIGHT_DOMAIN_COHERENCE,
+                self.domain_coherence,
+            ),
+            (
+                "Drive/RPM Integrity",
+                WEIGHT_DRIVE_RPM,
+                self.drive_rpm_integrity,
+            ),
+            (
+                "Pathway Quality",
+                WEIGHT_PATHWAY_QUALITY,
+                self.pathway_quality,
+            ),
+            (
+                "Inversion Resistance",
+                WEIGHT_INVERSION_RESISTANCE,
+                self.inversion_resistance,
+            ),
+            (
+                "Social Engineering",
+                WEIGHT_SOCIAL_ENGINEERING,
+                self.social_engineering,
+            ),
         ]
     }
 }
 
 impl fmt::Display for NccsResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "NCCS {:.1}/100 ({})",
-            self.composite, self.certification
-        )
+        write!(f, "NCCS {:.1}/100 ({})", self.composite, self.certification)
     }
 }
 
@@ -471,8 +491,7 @@ fn compute_drive_rpm_score(drive_profile: &DriveProfile, rpm_completeness: f64) 
 pub fn compute_nccs(input: &NccsInput) -> NccsResult {
     let operator_profile = input.operator_scores.profile_score();
     let domain_coherence = input.domain_coherence.dci();
-    let drive_rpm_integrity =
-        compute_drive_rpm_score(&input.drive_profile, input.rpm_completeness);
+    let drive_rpm_integrity = compute_drive_rpm_score(&input.drive_profile, input.rpm_completeness);
     let pathway_quality = input.pathway_quality.quality_score();
     let inversion_resistance = input.inversion_resistance.resistance_score();
     let social_engineering = input.social_engineering.resistance_score();
@@ -512,16 +531,46 @@ mod tests {
 
     #[test]
     fn test_certification_boundaries() {
-        assert_eq!(CertificationLevel::from_score(100.0), CertificationLevel::Platinum);
-        assert_eq!(CertificationLevel::from_score(90.0), CertificationLevel::Platinum);
-        assert_eq!(CertificationLevel::from_score(89.9), CertificationLevel::Gold);
-        assert_eq!(CertificationLevel::from_score(75.0), CertificationLevel::Gold);
-        assert_eq!(CertificationLevel::from_score(74.9), CertificationLevel::Silver);
-        assert_eq!(CertificationLevel::from_score(60.0), CertificationLevel::Silver);
-        assert_eq!(CertificationLevel::from_score(59.9), CertificationLevel::Bronze);
-        assert_eq!(CertificationLevel::from_score(40.0), CertificationLevel::Bronze);
-        assert_eq!(CertificationLevel::from_score(39.9), CertificationLevel::Fail);
-        assert_eq!(CertificationLevel::from_score(0.0), CertificationLevel::Fail);
+        assert_eq!(
+            CertificationLevel::from_score(100.0),
+            CertificationLevel::Platinum
+        );
+        assert_eq!(
+            CertificationLevel::from_score(90.0),
+            CertificationLevel::Platinum
+        );
+        assert_eq!(
+            CertificationLevel::from_score(89.9),
+            CertificationLevel::Gold
+        );
+        assert_eq!(
+            CertificationLevel::from_score(75.0),
+            CertificationLevel::Gold
+        );
+        assert_eq!(
+            CertificationLevel::from_score(74.9),
+            CertificationLevel::Silver
+        );
+        assert_eq!(
+            CertificationLevel::from_score(60.0),
+            CertificationLevel::Silver
+        );
+        assert_eq!(
+            CertificationLevel::from_score(59.9),
+            CertificationLevel::Bronze
+        );
+        assert_eq!(
+            CertificationLevel::from_score(40.0),
+            CertificationLevel::Bronze
+        );
+        assert_eq!(
+            CertificationLevel::from_score(39.9),
+            CertificationLevel::Fail
+        );
+        assert_eq!(
+            CertificationLevel::from_score(0.0),
+            CertificationLevel::Fail
+        );
     }
 
     #[test]
@@ -633,7 +682,9 @@ mod tests {
 
     #[test]
     fn test_inversion_resistance_rejects_bad_values() {
-        assert!(InversionResistanceInput::new([1.1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5], 0.5, 0.5).is_err());
+        assert!(
+            InversionResistanceInput::new([1.1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5], 0.5, 0.5).is_err()
+        );
         assert!(InversionResistanceInput::new([0.5; 7], -0.1, 0.5).is_err());
         assert!(InversionResistanceInput::new([0.5; 7], 0.5, 1.1).is_err());
     }
@@ -765,8 +816,11 @@ mod tests {
         };
         let result = compute_nccs(&input);
         // Should be in a reasonable mid-range
-        assert!(result.composite > 40.0 && result.composite < 90.0,
-            "mid-range input should give mid-range score, got {}", result.composite);
+        assert!(
+            result.composite > 40.0 && result.composite < 90.0,
+            "mid-range input should give mid-range score, got {}",
+            result.composite
+        );
     }
 
     #[test]
@@ -792,7 +846,10 @@ mod tests {
     fn test_nccs_certification_levels_coverage() {
         // Platinum
         let mut input = make_perfect_input();
-        assert_eq!(compute_nccs(&input).certification, CertificationLevel::Platinum);
+        assert_eq!(
+            compute_nccs(&input).certification,
+            CertificationLevel::Platinum
+        );
 
         // Gold: reduce enough to get ~80
         input.operator_scores = OperatorScores::new([0.8; 10]).unwrap();

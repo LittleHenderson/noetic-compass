@@ -3,7 +3,7 @@
  * Uses jsPDF for layout — no DOM rendering at export time.
  */
 
-import { jsPDF } from 'jspdf';
+import type { jsPDF } from 'jspdf';
 import type { ReportData, ChartImages } from './reportData';
 
 // ── Constants ──
@@ -23,7 +23,7 @@ const RED: [number, number, number] = [248, 113, 113];
 function addFooter(doc: jsPDF, page: number, totalPages: number) {
   doc.setFontSize(7);
   doc.setTextColor(...GRAY);
-  doc.text('Noetic Compass (Research Prototype) | CAS v7.4 | Confidential | Heuristic scores — empirical validation pending', MARGIN, PAGE_H - 8);
+  doc.text('Noetic Compass (Research Prototype) | CAS v7.4 | Confidential | Research-stage scoring - empirical validation pending', MARGIN, PAGE_H - 8);
   doc.text(`Page ${page} of ${totalPages}`, PAGE_W - MARGIN, PAGE_H - 8, { align: 'right' });
 }
 
@@ -87,7 +87,8 @@ function tableRow(
 
 // ── Main Export ──
 
-export function exportPdf(data: ReportData, images: ChartImages): void {
+export async function exportPdf(data: ReportData, images: ChartImages): Promise<void> {
+  const { jsPDF } = await import('jspdf');
   const doc = new jsPDF('p', 'mm', 'a4');
   const pageCount = { n: 1 };
   let y = 20;
@@ -110,7 +111,19 @@ export function exportPdf(data: ReportData, images: ChartImages): void {
   doc.text(`Date: ${data.date}  |  Model: ${data.model}  |  ID: ${data.assessmentId}`, MARGIN, y);
   y += 4;
   doc.text('Framework: CAS v7.4 — Corrected Edition  |  Confidential', MARGIN, y);
-  y += 10;
+  y += 4;
+  doc.setTextColor(...RED);
+  doc.text('Status: Research Prototype / Not validated', MARGIN, y);
+  y += 4;
+  doc.setTextColor(...GRAY);
+  doc.text(`Scoring: ${data.scoringMethodLabel}  |  Scorer: ${data.scorerProvider ?? 'Not used'}  |  Model: ${data.scorerModel ?? 'Not provided'}`, MARGIN, y);
+  y += 4;
+  if (data.unmeasuredDimensions.length > 0) {
+    doc.text(`Unmeasured: ${data.unmeasuredDimensions.join(', ')}`, MARGIN, y);
+    y += 6;
+  } else {
+    y += 6;
+  }
 
   // ── AI Executive Briefing ──
   if (data.interpretation) {
@@ -192,6 +205,12 @@ export function exportPdf(data: ReportData, images: ChartImages): void {
   doc.setTextColor(...TEAL);
   doc.text(data.deploymentRecommendation, MARGIN, y);
   y += 8;
+
+  doc.setFontSize(8);
+  doc.setTextColor(...GRAY);
+  const scoringLines = doc.splitTextToSize(`Scoring summary: ${data.scoringSummary}`, CONTENT_W);
+  doc.text(scoringLines, MARGIN, y);
+  y += scoringLines.length * 4 + 4;
 
   // Strengths / Vulnerabilities side by side
   doc.setFontSize(9);

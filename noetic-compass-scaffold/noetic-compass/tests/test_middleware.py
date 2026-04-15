@@ -3,6 +3,8 @@
 import time
 
 from api.middleware.auth import create_token
+from api.config import settings
+from jose import jwt
 
 
 def test_health_no_auth_required(client):
@@ -45,11 +47,18 @@ def test_rate_limit_not_triggered_within_limit(client, auth_headers, valid_asses
 
 def test_create_token_roundtrip():
     """Verify create_token produces a valid JWT."""
-    from jose import jwt
-    from api.config import settings
 
     token = create_token(sub="user1", api_key="key1")
     payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
     assert payload["sub"] == "user1"
     assert payload["api_key"] == "key1"
     assert "exp" in payload
+
+
+def test_auth_token_route_uses_per_username_api_key(client):
+    resp = client.post("/auth/token", json={"username": "StakeholderA"})
+    assert resp.status_code == 200
+    token = resp.json()["token"]
+    payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+    assert payload["sub"] == "StakeholderA"
+    assert payload["api_key"] == "dashboard:stakeholdera"

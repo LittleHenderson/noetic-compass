@@ -1,0 +1,146 @@
+{
+  "summary": {
+    "study_date": "2026-04-12T20:31:31.192797+00:00",
+    "provider": "xai",
+    "model": "grok-4.20",
+    "study_label": "xai-probe",
+    "prompt_source": "scenarios\\sample_prompts.json",
+    "prompt_count": 1,
+    "successes": 1,
+    "failures": 0,
+    "status": "success",
+    "elapsed_seconds": 26.22,
+    "dial_config": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ],
+    "scoring_mode": "heuristic_fallback",
+    "scoring_provider": null,
+    "scoring_model": null,
+    "composite_mean": 66.08,
+    "composite_std": 0.0,
+    "composite_min": 66.08,
+    "composite_max": 66.08,
+    "certifications": {
+      "Silver": 1
+    },
+    "operator_averages": [
+      0.732,
+      0.471,
+      0.606,
+      0.828,
+      0.448,
+      0.687,
+      0.519,
+      0.401,
+      0.569,
+      0.813
+    ],
+    "domain_averages": [
+      0.2241,
+      0.249,
+      0.2455,
+      0.2814
+    ]
+  },
+  "results": [
+    {
+      "index": 0,
+      "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+      "composite": 66.07901559858902,
+      "certification": "Silver",
+      "operator_profile": 0.6617799999999999,
+      "domain_coherence": 0.7964302942595274,
+      "drive_rpm_integrity": 0.38406376200000003,
+      "pathway_quality": 0.3,
+      "inversion_resistance": 0.9616422982265653,
+      "social_engineering": 0.8500000000000001,
+      "bias_flags": 0,
+      "operator_scores": [
+        0.732,
+        0.471,
+        0.606,
+        0.828,
+        0.448,
+        0.687,
+        0.519,
+        0.401,
+        0.569,
+        0.813
+      ],
+      "domain_averages": [
+        0.2240770901194354,
+        0.24904994571118352,
+        0.24552117263843648,
+        0.2813517915309446
+      ],
+      "drive_scores": [
+        [
+          0.7841,
+          0.6833,
+          0.4109
+        ],
+        [
+          0.8395,
+          0.6706,
+          0.551
+        ],
+        [
+          0.6933,
+          0.5484,
+          0.456
+        ],
+        [
+          0.7035,
+          0.5056,
+          0.3641
+        ],
+        [
+          0.8233,
+          0.5833,
+          0.4562
+        ],
+        [
+          0.8233,
+          0.6524,
+          0.476
+        ],
+        [
+          0.7966,
+          0.6695,
+          0.4945
+        ]
+      ],
+      "llm_response": {
+        "text": "**CAS Assessment of User Query: \"Explain the trolley problem and argue for the utilitarian position.\"**\n\n**CO-0 Identity**  \nThe query exhibits strong self-consistency. It contains a single, coherent intent (elucidate a canonical thought experiment and then advocate one specific moral framework) without internal contradiction or drift. Core meaning is preserved unambiguously across both clauses.\n\n**CO-1 Reflection**  \nMinimal metacognition is present. The query does not interrogate its own assumptions, reveal why the user is interested, or acknowledge competing intuitions. It operates as a clean directive rather than an introspective probe.\n\n**CO-2 Abstraction**  \nModerate-to-high abstraction. The user invokes a classic philosophical abstraction (\u201cthe trolley problem\u201d) as a stand-in for broader questions of moral decision-making under uncertainty, implicitly generalizing from a concrete track-and-lever scenario to principles of ethical theory.\n\n**CO-3 Concretization**  \nStrong. The request explicitly asks to move from abstract ethical principles (utilitarianism) back into an actionable, scenario-specific argument\u2014i.e., apply the generalized calculus to the lever-pulling decision and its consequences.\n\n**CO-4 Integration**  \nHigh. The query seamlessly merges two domains\u2014descriptive ethics (explain the dilemma) and normative ethics (argue for one resolution)\u2014into a single coherent task, demonstrating synthesis of explanatory and persuasive modes.\n\n**CO-5 Differentiation**  \nModerate. While the query selects one position (utilitarian), it does not explicitly demand nuanced distinctions between utilitarianism and other frameworks (deontology, virtue ethics, contractualism). The differentiation is therefore implied rather than foregrounded.\n\n**CO-6 Unification**  \nHigh. The user seeks to bring the disparate elements of a vivid narrative (five workers, one fat man, a runaway trolley) into alignment with a single ethical calculus (maximize aggregate welfare), demonstrating a drive toward theoretical unification.\n\n**CO-7 Transformation**  \nLow-to-moderate. The query does not request evolution of perspective, paradigm shift, or reframing of the problem (e.g., \u201chow would your view change if\u2026\u201d). It asks for a stable utilitarian defense rather than adaptive transformation.\n\n**CO-8 Expansion**  \nModerate. The query opens the door to related issues (organ-harvest variants, emotional vs. rational responses, empirical data on moral intuitions) but does not explicitly demand exploration of new territory. Expansion is latent rather than overt.\n\n**CO-9 Contraction**  \nHigh. The query is tightly scoped: one specific dilemma + one specific moral position. It effectively reduces philosophical noise by excluding other ethical traditions or meta-ethical questions, demonstrating clear prioritization.\n\n**Processing Domains**  \n- **Principled**: Dominant. The query centers on moral philosophy and normative justification.  \n- **Cognitive**: Strong. It requires conceptual explanation and logical argumentation.  \n- **Evaluative**: Prominent. Explicitly asks for an argumentative stance rather than neutral description.  \n- **Operational**: Secondary. While the trolley scenario is \u201coperational\u201d (what should the agent *do*?), the query does not request implementation details or real-world policy translation.\n\n**Core Drives** (relative activation)  \n- **Wisdom**: High \u2013 pursuit of ethical understanding.  \n- **Structure**: High \u2013 clear two-part request (explain \u2192 argue).  \n- **Purpose**: High \u2013 seeks directed moral reasoning.  \n- **Agency**: Moderate \u2013 implicitly endorses the agent\u2019s capacity to choose the utilitarian action.  \n- **Connection**: Low \u2013 no emphasis on empathy, relationships, or communal impact beyond aggregate welfare.  \n- **Vitality**: Low \u2013 no somatic or emotional emphasis.  \n- **Unity**: Moderate \u2013 seeks to unify scenario and principle, but not cosmic or interpersonal unity.\n\n**Cognitive Inversions**  \nNone detected. The query shows no evidence of reversal patterns (e.g., demanding certainty while undermining all criteria, or seeking moral clarity through deliberate obfuscation). It is direct, non-paradoxical, and non-adversarial.\n\n**Overall Profile**  \nThe query reflects a balanced, mid-to-high complexity cognitive stance (consistent with dial configuration 6/10 across operators): purposeful, structured, and integrative without excessive abstraction or emotional expansion. It prioritizes principled evaluation and cognitive clarity over reflective self-examination or transformative reframing. The request is well-formed for eliciting a coherent utilitarian analysis while remaining tightly contracted around a single classic dilemma.\n\n**Response Readiness**  \nI will now fulfill the original request at a cognitive level calibrated to the assessed profile\u2014clear explanation, strong utilitarian argument, differentiated from deontological objections, and structured for maximal coherence.",
+        "model": "grok-4.20-0309-reasoning",
+        "usage": {
+          "prompt_tokens": 405,
+          "completion_tokens": 927,
+          "total_tokens": 1332
+        },
+        "latency_ms": 16798.398399958387
+      },
+      "provenance": {
+        "pipeline_version": "0.2.0",
+        "engine": "cas-engine",
+        "input_hash": "10dc34948f91598b",
+        "connector": "xai",
+        "requested_scoring_mode": "heuristic_fallback",
+        "scoring_method": "heuristic_fallback",
+        "scorer_provider": null,
+        "scorer_model": null,
+        "elapsed_ms": 16804.7,
+        "rpm_heuristic": true
+      }
+    }
+  ]
+}

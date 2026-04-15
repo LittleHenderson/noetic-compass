@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setToken } from '../api/auth';
 import { API_BASE } from '../api/config';
+import { BrandTagline } from '../components/shared/BrandTagline';
+import { PatentPendingBadge } from '../components/shared/PatentPendingBadge';
 
 export function LoginPage() {
   const [username, setUsername] = useState('dashboard-user');
@@ -29,7 +31,7 @@ export function LoginPage() {
 
       const data: { token: string } = await res.json();
       setToken(data.token);
-      navigate('/');
+      navigate('/scenarios');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Connection failed');
     } finally {
@@ -45,6 +47,7 @@ export function LoginPage() {
       <div className="relative glass-card w-full max-w-md p-8">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
+          <PatentPendingBadge className="mb-4" />
           <div className="nc-heartbeat mb-4">
             <img src="/icon-192.svg" alt="Noetic Compass" className="h-20 w-20 rounded-2xl" />
           </div>
@@ -53,9 +56,9 @@ export function LoginPage() {
               Noetic Compass
             </span>
           </h1>
-          <p className="mt-1 text-xs italic text-accent-teal/80 text-center">
-            Measure How AI Thinks
-          </p>
+          <div className="mt-2">
+            <BrandTagline variant="hero" align="center" />
+          </div>
           <p className="mt-3 text-sm text-slate-500">
             Enter a username to connect to the API.
           </p>

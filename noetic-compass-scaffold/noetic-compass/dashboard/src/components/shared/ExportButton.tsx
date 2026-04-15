@@ -4,10 +4,10 @@
  * on first export — not bundled with the main app.
  */
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, type ForwardRefExoticComponent, type RefAttributes } from 'react';
 import type { WrapResult } from '../../api/types';
 import { extractReportData } from '../../lib/reportData';
-import { HiddenReportCharts } from './HiddenReportCharts';
+import type { HiddenReportChartsProps } from './HiddenReportCharts';
 
 type ExportFormat = 'pdf' | 'docx' | 'md';
 
@@ -27,6 +27,8 @@ export function ExportButton({ result, text, timestamp }: ExportButtonProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showCharts, setShowCharts] = useState(false);
+  const [HiddenReportChartsComponent, setHiddenReportChartsComponent] =
+    useState<ForwardRefExoticComponent<HiddenReportChartsProps & RefAttributes<HTMLDivElement>> | null>(null);
   const chartRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -66,6 +68,11 @@ export function ExportButton({ result, text, timestamp }: ExportButtonProps) {
       }
 
       // For PDF/DOCX, mount hidden charts, capture images, then generate
+      if (!HiddenReportChartsComponent) {
+        const chartsModule = await import('./HiddenReportCharts');
+        setHiddenReportChartsComponent(() => chartsModule.HiddenReportCharts);
+      }
+
       setShowCharts(true);
 
       // Wait for charts to render
@@ -81,7 +88,7 @@ export function ExportButton({ result, text, timestamp }: ExportButtonProps) {
 
       if (format === 'pdf') {
         const { exportPdf } = await import('../../lib/exportPdf');
-        exportPdf(data, images);
+        await exportPdf(data, images);
       } else {
         const { exportDocx } = await import('../../lib/exportDocx');
         await exportDocx(data, images);
@@ -92,7 +99,9 @@ export function ExportButton({ result, text, timestamp }: ExportButtonProps) {
       setLoading(false);
       setShowCharts(false);
     }
-  }, [result, text, timestamp]);
+  }, [HiddenReportChartsComponent, result, text, timestamp]);
+
+  const HiddenCharts = HiddenReportChartsComponent;
 
   return (
     <>
@@ -143,8 +152,8 @@ export function ExportButton({ result, text, timestamp }: ExportButtonProps) {
         )}
       </div>
 
-      {showCharts && (
-        <HiddenReportCharts
+      {showCharts && HiddenCharts && (
+        <HiddenCharts
           ref={chartRef}
           nccs={result.nccs}
           operatorScores={operatorScores}

@@ -21,7 +21,9 @@ const INVOLUTION_PAIRS: [(u8, u8); 3] = [(2, 3), (5, 6), (8, 9)];
 
 /// Check if two adjacent operators form a dual (involution) pair.
 fn is_dual_pair(a: u8, b: u8) -> bool {
-    INVOLUTION_PAIRS.iter().any(|&(x, y)| (a == x && b == y) || (a == y && b == x))
+    INVOLUTION_PAIRS
+        .iter()
+        .any(|&(x, y)| (a == x && b == y) || (a == y && b == x))
 }
 
 /// Apply one pass of dual cancellation.

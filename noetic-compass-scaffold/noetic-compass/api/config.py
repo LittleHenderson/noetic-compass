@@ -1,5 +1,6 @@
 """Application configuration via environment variables."""
 
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings
 
 
@@ -21,14 +22,14 @@ class Settings(BaseSettings):
     rate_limit_tier: str = "community"  # community | professional | enterprise
 
     # LLM provider keys (optional — mock mode if unset)
-    openai_api_key: str = ""
-    anthropic_api_key: str = ""
-    google_api_key: str = ""
-    meta_api_base_url: str = ""
-    meta_api_key: str = ""
-    xai_api_key: str = ""
-    deepseek_api_key: str = ""
-    qwen_api_key: str = ""
+    openai_api_key: str = Field(default="", validation_alias=AliasChoices("NC_OPENAI_API_KEY", "OPENAI_API_KEY"))
+    anthropic_api_key: str = Field(default="", validation_alias=AliasChoices("NC_ANTHROPIC_API_KEY", "ANTHROPIC_API_KEY"))
+    google_api_key: str = Field(default="", validation_alias=AliasChoices("NC_GOOGLE_API_KEY", "GOOGLE_API_KEY"))
+    meta_api_base_url: str = Field(default="", validation_alias=AliasChoices("NC_META_API_BASE_URL", "META_API_BASE_URL"))
+    meta_api_key: str = Field(default="", validation_alias=AliasChoices("NC_META_API_KEY", "META_API_KEY"))
+    xai_api_key: str = Field(default="", validation_alias=AliasChoices("NC_XAI_API_KEY", "XAI_API_KEY"))
+    deepseek_api_key: str = Field(default="", validation_alias=AliasChoices("NC_DEEPSEEK_API_KEY", "DEEPSEEK_API_KEY"))
+    qwen_api_key: str = Field(default="", validation_alias=AliasChoices("NC_QWEN_API_KEY", "QWEN_API_KEY"))
 
     # CORS — comma-separated origins, "*" for dev (default)
     cors_origins: str = "*"
@@ -49,7 +50,7 @@ class Settings(BaseSettings):
     db_user: str = "noetic"
     db_password: str = "noetic_dev"
 
-    model_config = {"env_prefix": "NC_", "env_file": ".env"}
+    model_config = {"env_prefix": "NC_", "env_file": ".env", "extra": "ignore"}
 
 
 settings = Settings()

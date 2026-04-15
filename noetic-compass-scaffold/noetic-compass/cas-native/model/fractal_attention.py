@@ -1,15 +1,10 @@
 """
-FractalAttentionHead: Multi-head attention where each head's initial weights
-follow fractal structure derived from IFS (Iterated Function System)
-contraction maps.
+FractalAttentionHead with learnable self-similar query transforms.
 
-Hutchinson operator: H(A) = union of wi(A) where wi are affine contractions.
-Contraction ratios are learnable parameters initialized from CAS operator
-composition patterns.
-
-Supports 3 configurable levels of fractal depth, creating multi-scale
-attention patterns that mirror the self-similar structure of cognitive
-operator interactions.
+This module is a neural approximation inspired by fractal/IFS language.
+It does not implement a proved CAS fractal law. The mathematically explicit
+constraint here is only that each contraction ratio is kept in (0, 1); the
+choice of depth levels and initial ratios is heuristic model design.
 """
 
 import math
@@ -136,15 +131,32 @@ class FractalAttentionHead(nn.Module):
         # Depth-level mixing weights (learnable)
         self.depth_weights = nn.Parameter(torch.ones(fractal_depth) / fractal_depth)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def _normalize_attention_mask(
+        self,
+        attention_mask: Optional[torch.Tensor],
+        batch: int,
+        seq_len: int,
+        device: torch.device,
+    ) -> torch.Tensor:
+        if attention_mask is None:
+            return torch.ones(batch, seq_len, device=device, dtype=torch.bool)
+        return attention_mask.to(device=device, dtype=torch.bool)
+
+    def forward(
+        self,
+        x: torch.Tensor,
+        attention_mask: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
         """
         Args:
             x: Input tensor of shape (batch, seq, d_model)
+            attention_mask: Optional padding mask of shape (batch, seq)
 
         Returns:
             Output tensor of shape (batch, seq, d_model)
         """
         batch, seq_len, _ = x.shape
+        token_mask = self._normalize_attention_mask(attention_mask, batch, seq_len, x.device)
 
         # QKV
         q = self.q_proj(x).view(batch, seq_len, self.n_heads, self.head_dim).transpose(1, 2)
@@ -165,7 +177,14 @@ class FractalAttentionHead(nn.Module):
 
             # Standard scaled dot-product attention with fractal queries
             attn_weights = torch.matmul(q_fractal, k.transpose(-2, -1)) / self.scale
+            attn_weights = attn_weights.masked_fill(
+                ~token_mask.unsqueeze(1).unsqueeze(1),
+                -1e9,
+            )
             attn_weights = F.softmax(attn_weights, dim=-1)
+            query_mask = token_mask.unsqueeze(1).unsqueeze(-1).to(attn_weights.dtype)
+            attn_weights = attn_weights * query_mask
+            attn_weights = attn_weights / attn_weights.sum(dim=-1, keepdim=True).clamp_min(1e-8)
             attn_output = torch.matmul(attn_weights, v)
 
             accumulated_output = accumulated_output + depth_weights[depth] * attn_output
@@ -176,5 +195,6 @@ class FractalAttentionHead(nn.Module):
         # Reshape and project
         output = accumulated_output.transpose(1, 2).contiguous().view(batch, seq_len, self.d_model)
         output = self.out_proj(output)
+        output = output * token_mask.unsqueeze(-1).to(output.dtype)
 
         return output

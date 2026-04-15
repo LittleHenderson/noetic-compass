@@ -14,6 +14,7 @@ from __future__ import annotations
 import csv
 import io
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Optional
 
 from fastapi import APIRouter, Query
@@ -21,6 +22,7 @@ from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field, field_validator
 
 from api.validation.correlation import (
+    compute_calibration_review,
     compute_inter_rater_kappa,
     compute_operator_correlations,
     compute_stats,
@@ -30,6 +32,27 @@ from api.validation.correlation import (
     save_labels,
     OPERATOR_NAMES,
     DOMAIN_NAMES,
+)
+from api.validation.calibration_sessions import (
+    append_calibration_session,
+    build_calibration_session_payload,
+    load_calibration_sessions,
+)
+from api.validation.evidence import (
+    append_evidence_entry,
+    build_evidence_review,
+    build_evidence_summary,
+    build_evidence_trends,
+    export_evidence_csv,
+    load_evidence,
+    seed_evidence_from_artifacts,
+)
+from api.validation.studies import (
+    available_prompt_collections,
+    list_study_artifacts,
+    resolve_prompt_collection,
+    run_and_archive_study,
+    run_suite_matrix,
 )
 
 router = APIRouter(prefix="/validation", tags=["validation"])
@@ -87,6 +110,107 @@ class LabelResponse(BaseModel):
     machine_domain_averages: list[float] | None = None
 
 
+class ScorerAgreementSubmit(BaseModel):
+    """Log a scorer-agreement comparison case."""
+
+    generator_provider: str = Field(..., min_length=1, max_length=80)
+    generator_model: str | None = Field(default=None, max_length=120)
+    scorer_provider: str = Field(..., min_length=1, max_length=80)
+    scorer_model: str | None = Field(default=None, max_length=120)
+    prompt_excerpt: str = Field(..., min_length=1, max_length=1000)
+    machine_score: float = Field(..., ge=0.0, le=10.0)
+    scorer_score: float = Field(..., ge=0.0, le=10.0)
+    notes: str = ""
+    item_index: int | None = None
+
+
+class BenchmarkSuiteSubmit(BaseModel):
+    """Log a benchmark suite run for later validation analysis."""
+
+    suite_name: str = Field(..., min_length=1, max_length=120)
+    provider: str = Field(..., min_length=1, max_length=80)
+    model: str | None = Field(default=None, max_length=120)
+    scoring_mode: str = Field(default="heuristic_fallback", pattern="^(heuristic_fallback|secondary_llm|self_reported)$")
+    scoring_provider: str | None = Field(default=None, max_length=80)
+    scoring_model: str | None = Field(default=None, max_length=120)
+    cases_run: int = Field(..., ge=1, le=10000)
+    mean_score: float = Field(..., ge=0.0, le=100.0)
+    variance: float = Field(..., ge=0.0)
+    notes: str = ""
+
+
+class ErrorCaseSubmit(BaseModel):
+    """Log a false-positive or false-negative case."""
+
+    kind: str = Field(..., pattern="^(false_positive|false_negative)$")
+    provider: str | None = Field(default=None, max_length=80)
+    model: str | None = Field(default=None, max_length=120)
+    prompt_excerpt: str = Field(..., min_length=1, max_length=1000)
+    expected_tier: str = Field(..., min_length=1, max_length=80)
+    observed_tier: str = Field(..., min_length=1, max_length=80)
+    notes: str = ""
+    item_index: int | None = None
+
+
+class BaselineRunSubmit(BaseModel):
+    provider: str = Field(..., min_length=1, max_length=40)
+    prompt_collection: str = Field(default="sample_prompts", min_length=1, max_length=240)
+    count: int = Field(default=10, ge=1, le=500)
+    label: str | None = Field(default=None, max_length=120)
+    model: str | None = Field(default=None, max_length=120)
+    scoring_mode: str = Field(default="heuristic_fallback", pattern="^(heuristic_fallback|secondary_llm|self_reported)$")
+    scoring_provider: str | None = Field(default=None, max_length=80)
+    scoring_model: str | None = Field(default=None, max_length=120)
+    reseed: bool = True
+
+
+class SuiteMatrixSubmit(BaseModel):
+    provider: str = Field(..., min_length=1, max_length=40)
+    suite_ids: list[str] = Field(default_factory=list)
+    count_per_suite: int = Field(default=5, ge=1, le=100)
+    model: str | None = Field(default=None, max_length=120)
+    scoring_mode: str = Field(default="heuristic_fallback", pattern="^(heuristic_fallback|secondary_llm|self_reported)$")
+    scoring_provider: str | None = Field(default=None, max_length=80)
+    scoring_model: str | None = Field(default=None, max_length=120)
+    reseed: bool = True
+
+
+class CalibrationSessionSubmit(BaseModel):
+    item_index: int = Field(..., ge=0)
+    reconciler: str = Field(..., min_length=1, max_length=80)
+    disposition: str = Field(
+        ...,
+        pattern="^(resolved_panel|resolved_machine|rubric_clarification|false_positive|false_negative|needs_more_review)$",
+    )
+    notes: str = Field(default="", max_length=4000)
+    resolved_operator_scores: list[int] | None = Field(default=None)
+    resolved_domain_scores: list[int] | None = Field(default=None)
+
+    @field_validator("resolved_operator_scores")
+    @classmethod
+    def _resolved_ops_len(cls, v: list[int] | None) -> list[int] | None:
+        if v is None:
+            return v
+        if len(v) != 10:
+            raise ValueError("resolved_operator_scores must have exactly 10 values")
+        for score in v:
+            if not (0 <= score <= 10):
+                raise ValueError("resolved operator scores must be between 0 and 10")
+        return v
+
+    @field_validator("resolved_domain_scores")
+    @classmethod
+    def _resolved_domains_len(cls, v: list[int] | None) -> list[int] | None:
+        if v is None:
+            return v
+        if len(v) != 4:
+            raise ValueError("resolved_domain_scores must have exactly 4 values")
+        for score in v:
+            if not (0 <= score <= 10):
+                raise ValueError("resolved domain scores must be between 0 and 10")
+        return v
+
+
 # ── Helpers ──
 
 
@@ -115,6 +239,13 @@ def _labels_by_index(labels: list[dict]) -> dict[int, list[dict]]:
             continue
         out.setdefault(int(idx), []).append(label)
     return out
+
+
+def _timestamped_entry(payload: dict) -> dict:
+    return {
+        **payload,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
 
 
 # ── Endpoints ──
@@ -252,10 +383,204 @@ async def get_leaderboard():
         "stats": stats,
         "operator_correlations": correlations,
         "inter_rater": inter_rater,
+        "calibration": compute_calibration_review(labels, machine),
         "recommendations": recommendations,
         "operator_names": OPERATOR_NAMES,
         "domain_names": DOMAIN_NAMES,
+        "evidence_summary": build_evidence_summary(load_evidence()),
     }
+
+
+@router.get("/calibration")
+async def get_calibration():
+    """Return calibration/reconciliation summaries derived from current human labels."""
+    labels = load_labels()
+    machine = load_machine_results()
+    return compute_calibration_review(labels, machine)
+
+
+@router.get("/calibration/session")
+async def get_calibration_session():
+    """Return the active calibration queue plus recent reconciliation history."""
+    labels = load_labels()
+    machine = load_machine_results()
+    sessions = load_calibration_sessions()
+    return build_calibration_session_payload(labels, machine, sessions)
+
+
+@router.post("/calibration/session")
+async def save_calibration_session(submission: CalibrationSessionSubmit):
+    """Persist a calibration/reconciliation decision for a disputed item."""
+    store = append_calibration_session(
+        _timestamped_entry(submission.model_dump()),
+    )
+    return {
+        "status": "saved",
+        "count": len(store),
+        "entry": store[-1],
+    }
+
+
+@router.get("/admin/catalog")
+async def get_validation_catalog():
+    """List available prompt collections for baseline/suite runs."""
+    return {"collections": available_prompt_collections()}
+
+
+@router.get("/admin/studies")
+async def get_validation_studies():
+    """List archived validation study artifacts."""
+    return {"studies": list_study_artifacts()}
+
+
+@router.post("/admin/run-baseline")
+async def run_validation_baseline(submission: BaselineRunSubmit):
+    """Run a baseline study, archive it, and optionally reseed evidence."""
+    prompts_path = resolve_prompt_collection(submission.prompt_collection)
+    result = await run_and_archive_study(
+        provider=submission.provider,
+        count=submission.count,
+        prompts_path=prompts_path,
+        model=submission.model,
+        scoring_mode=submission.scoring_mode,
+        scoring_provider=submission.scoring_provider,
+        scoring_model=submission.scoring_model,
+        study_label=submission.label or Path(prompts_path).stem,
+        update_default_output=True,
+    )
+    response = {
+        "status": "completed",
+        "summary": result["bundle"]["summary"],
+        "archive_path": str(result["archive_path"]),
+        "output_path": str(result["output_path"]) if result.get("output_path") else None,
+    }
+    if submission.reseed:
+        store = seed_evidence_from_artifacts(replace=True)
+        response["evidence_summary"] = build_evidence_summary(store)
+    return response
+
+
+@router.post("/admin/run-suite-matrix")
+async def run_validation_suite_matrix(submission: SuiteMatrixSubmit):
+    """Run multiple prompt collections and optionally reseed evidence."""
+    result = await run_suite_matrix(
+        provider=submission.provider,
+        suite_ids=submission.suite_ids or None,
+        count_per_suite=submission.count_per_suite,
+        model=submission.model,
+        scoring_mode=submission.scoring_mode,
+        scoring_provider=submission.scoring_provider,
+        scoring_model=submission.scoring_model,
+    )
+    response = {"status": "completed", **result}
+    if submission.reseed:
+        store = seed_evidence_from_artifacts(replace=True)
+        response["evidence_summary"] = build_evidence_summary(store)
+    return response
+
+
+@router.get("/evidence")
+async def get_evidence(
+    kind: str | None = Query(default=None, pattern="^(scorer_agreement|benchmark_suites|error_cases)?$"),
+    provider: str | None = Query(default=None),
+    model: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=500),
+    offset: int = Query(default=0, ge=0),
+):
+    """Return evidence summary plus a filtered review slice."""
+    store = load_evidence()
+    return {
+        "summary": build_evidence_summary(store),
+        "review": build_evidence_review(
+            store,
+            kind=kind,
+            provider=provider,
+            model=model,
+            q=q,
+            limit=limit,
+            offset=offset,
+        ),
+    }
+
+
+@router.get("/evidence/trends")
+async def get_evidence_trends():
+    """Return aggregate validation-evidence trends by provider, model, and day."""
+    return build_evidence_trends(load_evidence())
+
+
+@router.post("/evidence/seed")
+async def seed_evidence(replace: bool = Query(default=True)):
+    """Populate validation evidence from the current baseline study and human labels."""
+    store = seed_evidence_from_artifacts(replace=replace)
+    summary = build_evidence_summary(store)
+    return {
+        "status": "seeded",
+        "summary": summary,
+        "counts": {
+            "scorer_agreement": summary["scorer_agreement"]["count"],
+            "benchmark_suites": summary["benchmark_suites"]["count"],
+            "error_cases": summary["error_cases"]["count"],
+        },
+    }
+
+
+@router.post("/evidence/scorer-agreement")
+async def add_scorer_agreement(submission: ScorerAgreementSubmit):
+    store = append_evidence_entry(
+        "scorer_agreement",
+        _timestamped_entry(submission.model_dump()),
+    )
+    return {
+        "status": "saved",
+        "count": len(store["scorer_agreement"]),
+        "summary": build_evidence_summary(store)["scorer_agreement"],
+    }
+
+
+@router.post("/evidence/benchmark-case")
+async def add_benchmark_case(submission: BenchmarkSuiteSubmit):
+    store = append_evidence_entry(
+        "benchmark_suites",
+        _timestamped_entry(submission.model_dump()),
+    )
+    return {
+        "status": "saved",
+        "count": len(store["benchmark_suites"]),
+        "summary": build_evidence_summary(store)["benchmark_suites"],
+    }
+
+
+@router.post("/evidence/error-case")
+async def add_error_case(submission: ErrorCaseSubmit):
+    store = append_evidence_entry(
+        "error_cases",
+        _timestamped_entry(submission.model_dump()),
+    )
+    return {
+        "status": "saved",
+        "count": len(store["error_cases"]),
+        "summary": build_evidence_summary(store)["error_cases"],
+    }
+
+
+@router.get("/evidence/export")
+async def export_evidence(
+    format: str = Query("json", pattern="^(json|csv)$"),
+    kind: str | None = Query(default=None, pattern="^(scorer_agreement|benchmark_suites|error_cases)?$"),
+    provider: str | None = Query(default=None),
+    model: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+):
+    """Export validation evidence with optional filters."""
+    store = load_evidence()
+    if format == "json":
+        return build_evidence_review(store, kind=kind, provider=provider, model=model, q=q, limit=100000, offset=0)
+    return PlainTextResponse(
+        export_evidence_csv(store, kind=kind, provider=provider, model=model, q=q),
+        media_type="text/csv",
+    )
 
 
 @router.get("/export")

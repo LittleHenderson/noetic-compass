@@ -46,9 +46,7 @@ impl CognitiveFractal {
     /// The identity fractal ⟨0⟩ (Definition 8.7).
     /// Φ_id(E) = ν₀(E) = E
     pub fn identity() -> Self {
-        Self {
-            operators: vec![0],
-        }
+        Self { operators: vec![0] }
     }
 
     /// Length of the fractal sequence.
@@ -78,7 +76,10 @@ impl CognitiveFractal {
     ///
     /// Since CognitiveStateId tracks (operator, domain), applying operator
     /// ν_k to a state (op, dom) produces state (compose(CO_k, op), dom).
-    pub fn apply(&self, element: &crate::ontology::states::CognitiveStateId) -> crate::ontology::states::CognitiveStateId {
+    pub fn apply(
+        &self,
+        element: &crate::ontology::states::CognitiveStateId,
+    ) -> crate::ontology::states::CognitiveStateId {
         use crate::ontology::operators::CognitiveOperator;
 
         let mut current = *element;
@@ -86,7 +87,8 @@ impl CognitiveFractal {
         for &op_idx in self.operators.iter().rev() {
             if let Some(op) = CognitiveOperator::from_index(op_idx as usize) {
                 let composed = op.compose(current.operator());
-                current = crate::ontology::states::CognitiveStateId::new(composed, current.domain());
+                current =
+                    crate::ontology::states::CognitiveStateId::new(composed, current.domain());
             }
         }
         current

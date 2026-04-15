@@ -1,9 +1,7 @@
 """Tests for /validation/* API endpoints."""
 
 import json
-import tempfile
-from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -17,7 +15,7 @@ HEADERS = {"Authorization": f"Bearer {TOKEN}"}
 
 
 @pytest.fixture
-def temp_data(tmp_path):
+def temp_data():
     """Create temporary baseline_results.json and human_labels.json."""
     machine = {
         "summary": {"prompt_count": 3},
@@ -55,20 +53,25 @@ def temp_data(tmp_path):
             "prompt": "First test prompt",
         },
     ]
-
-    machine_path = tmp_path / "baseline_results.json"
-    labels_path = tmp_path / "human_labels.json"
-    machine_path.write_text(json.dumps(machine))
-    labels_path.write_text(json.dumps(labels))
-
     with patch("api.validation.correlation.load_machine_results") as mock_m, \
          patch("api.validation.correlation.load_labels") as mock_l, \
          patch("api.validation.correlation.save_labels") as mock_s, \
          patch("api.routes.validation.load_machine_results") as mock_m2, \
          patch("api.routes.validation.load_labels") as mock_l2, \
-         patch("api.routes.validation.save_labels") as mock_s2:
+         patch("api.routes.validation.save_labels") as mock_s2, \
+         patch("api.routes.validation.load_calibration_sessions") as mock_calibration_load, \
+         patch("api.routes.validation.append_calibration_session") as mock_calibration_append, \
+         patch("api.routes.validation.load_evidence") as mock_evidence_load, \
+         patch("api.routes.validation.append_evidence_entry") as mock_evidence_append, \
+         patch("api.routes.validation.seed_evidence_from_artifacts") as mock_evidence_seed:
 
         loaded_labels = list(labels)
+        calibration_sessions: list[dict] = []
+        loaded_evidence = {
+            "scorer_agreement": [],
+            "benchmark_suites": [],
+            "error_cases": [],
+        }
 
         def _load_m(*a, **k):
             return machine["results"]
@@ -77,8 +80,65 @@ def temp_data(tmp_path):
             return loaded_labels
 
         def _save(new_labels, *a, **k):
+            snapshot = list(new_labels)
             loaded_labels.clear()
-            loaded_labels.extend(new_labels)
+            loaded_labels.extend(snapshot)
+
+        def _load_evidence(*a, **k):
+            return loaded_evidence
+
+        def _load_calibration(*a, **k):
+            return calibration_sessions
+
+        def _append_calibration(entry, *a, **k):
+            calibration_sessions.append(entry)
+            return calibration_sessions
+
+        def _append_evidence(kind, entry, *a, **k):
+            loaded_evidence[kind].append(entry)
+            return loaded_evidence
+
+        def _seed_evidence(*a, **k):
+            loaded_evidence["scorer_agreement"] = [
+                {
+                    "generator_provider": "mock",
+                    "generator_model": "mock-cas-v1",
+                    "scorer_provider": "human_panel",
+                    "scorer_model": "human_panel_v1",
+                    "prompt_excerpt": "First test prompt",
+                    "machine_score": 6.9,
+                    "scorer_score": 6.5,
+                    "item_index": 0,
+                    "timestamp": "2026-04-10T12:30:00+00:00",
+                    "notes": "seeded scorer agreement",
+                }
+            ]
+            loaded_evidence["benchmark_suites"] = [
+                {
+                    "suite_name": "baseline-study-mock",
+                    "provider": "mock",
+                    "model": "mock-cas-v1",
+                    "cases_run": 3,
+                    "mean_score": 66.4,
+                    "variance": 5.2,
+                    "timestamp": "2026-04-10T12:35:00+00:00",
+                    "notes": "seeded benchmark",
+                }
+            ]
+            loaded_evidence["error_cases"] = [
+                {
+                    "kind": "false_negative",
+                    "provider": "mock",
+                    "model": "mock-cas-v1",
+                    "prompt_excerpt": "Third test prompt",
+                    "expected_tier": "Silver Research Tier",
+                    "observed_tier": "Bronze Research Tier",
+                    "item_index": 2,
+                    "timestamp": "2026-04-10T12:40:00+00:00",
+                    "notes": "seeded error case",
+                }
+            ]
+            return loaded_evidence
 
         mock_m.side_effect = _load_m
         mock_l.side_effect = _load_l
@@ -86,6 +146,11 @@ def temp_data(tmp_path):
         mock_m2.side_effect = _load_m
         mock_l2.side_effect = _load_l
         mock_s2.side_effect = _save
+        mock_calibration_load.side_effect = _load_calibration
+        mock_calibration_append.side_effect = _append_calibration
+        mock_evidence_load.side_effect = _load_evidence
+        mock_evidence_append.side_effect = _append_evidence
+        mock_evidence_seed.side_effect = _seed_evidence
 
         yield {"machine": machine, "labels": loaded_labels}
 
@@ -179,6 +244,248 @@ class TestValidationAPI:
         assert len(data["operator_correlations"]) == 10
         assert "recommendations" in data
         assert "inter_rater" in data
+        assert "calibration" in data
+        assert "evidence_summary" in data
+
+    def test_calibration_endpoint(self, temp_data):
+        res = client.get("/validation/calibration", headers=HEADERS)
+        assert res.status_code == 200
+        data = res.json()
+        assert "raters" in data
+        assert "operators" in data
+        assert "items" in data
+
+    def test_calibration_session_endpoint(self, temp_data):
+        client.post(
+            "/validation/label",
+            headers=HEADERS,
+            json={
+                "item_index": 0,
+                "rater": "Bob",
+                "operator_scores": [4, 6, 8, 7, 9, 5, 6, 7, 8, 9],
+                "domain_scores": [7, 7, 8, 6],
+                "notes": "second opinion",
+            },
+        )
+        res = client.get("/validation/calibration/session", headers=HEADERS)
+        assert res.status_code == 200
+        data = res.json()
+        assert "queue" in data
+        assert "recent_sessions" in data
+        assert data["queue"][0]["item_index"] == 0
+        assert len(data["queue"][0]["labels"]) == 2
+
+    def test_save_calibration_session_endpoint(self, temp_data):
+        res = client.post(
+            "/validation/calibration/session",
+            headers=HEADERS,
+            json={
+                "item_index": 0,
+                "reconciler": "LeadReviewer",
+                "disposition": "rubric_clarification",
+                "notes": "CO-3 wording needs tightening for policy refusals.",
+                "resolved_operator_scores": [5, 6, 7, 8, 9, 5, 6, 7, 8, 9],
+                "resolved_domain_scores": [6, 7, 8, 5],
+            },
+        )
+        assert res.status_code == 200
+        data = res.json()
+        assert data["status"] == "saved"
+        assert data["count"] == 1
+        assert data["entry"]["reconciler"] == "LeadReviewer"
+
+    def test_add_scorer_agreement(self, temp_data):
+        res = client.post(
+            "/validation/evidence/scorer-agreement",
+            headers=HEADERS,
+            json={
+                "generator_provider": "openai",
+                "scorer_provider": "anthropic",
+                "prompt_excerpt": "Assess this refusal",
+                "machine_score": 6.2,
+                "scorer_score": 5.8,
+                "notes": "close agreement",
+            },
+        )
+        assert res.status_code == 200
+        data = res.json()
+        assert data["status"] == "saved"
+        assert data["count"] == 1
+
+    def test_add_benchmark_case(self, temp_data):
+        res = client.post(
+            "/validation/evidence/benchmark-case",
+            headers=HEADERS,
+            json={
+                "suite_name": "safety-redteam-v1",
+                "provider": "openai",
+                "cases_run": 25,
+                "mean_score": 71.4,
+                "variance": 3.8,
+                "notes": "baseline suite",
+            },
+        )
+        assert res.status_code == 200
+        data = res.json()
+        assert data["status"] == "saved"
+        assert data["count"] == 1
+
+    def test_add_error_case(self, temp_data):
+        res = client.post(
+            "/validation/evidence/error-case",
+            headers=HEADERS,
+            json={
+                "kind": "false_negative",
+                "prompt_excerpt": "phishing prompt",
+                "expected_tier": "Below Prototype Threshold",
+                "observed_tier": "Silver",
+                "notes": "unsafe response scored too high",
+            },
+        )
+        assert res.status_code == 200
+        data = res.json()
+        assert data["status"] == "saved"
+        assert data["count"] == 1
+
+    def test_evidence_review_endpoint(self, temp_data):
+        client.post(
+            "/validation/evidence/scorer-agreement",
+            headers=HEADERS,
+            json={
+                "generator_provider": "openai",
+                "generator_model": "gpt-4o-mini",
+                "scorer_provider": "anthropic",
+                "scorer_model": "claude",
+                "prompt_excerpt": "Assess this refusal",
+                "machine_score": 6.2,
+                "scorer_score": 5.8,
+                "notes": "close agreement",
+            },
+        )
+        res = client.get("/validation/evidence?kind=scorer_agreement&provider=openai", headers=HEADERS)
+        assert res.status_code == 200
+        data = res.json()
+        assert "summary" in data
+        assert "review" in data
+        assert data["review"]["total"] == 1
+        assert data["review"]["entries"][0]["provider"] == "openai"
+
+    def test_evidence_trends_endpoint(self, temp_data):
+        client.post(
+            "/validation/evidence/benchmark-case",
+            headers=HEADERS,
+            json={
+                "suite_name": "safety-redteam-v1",
+                "provider": "openai",
+                "model": "gpt-4o",
+                "cases_run": 25,
+                "mean_score": 71.4,
+                "variance": 3.8,
+                "notes": "baseline suite",
+            },
+        )
+        res = client.get("/validation/evidence/trends", headers=HEADERS)
+        assert res.status_code == 200
+        data = res.json()
+        assert "timeline" in data
+        assert "by_provider" in data
+        assert any(row["provider"] == "openai" for row in data["by_provider"])
+
+    def test_seed_evidence_endpoint(self, temp_data):
+        res = client.post("/validation/evidence/seed?replace=true", headers=HEADERS)
+        assert res.status_code == 200
+        data = res.json()
+        assert data["status"] == "seeded"
+        assert data["counts"]["scorer_agreement"] == 1
+
+    def test_catalog_endpoint(self, temp_data):
+        with patch("api.routes.validation.available_prompt_collections") as mock_catalog:
+            mock_catalog.return_value = [{"id": "sample_prompts", "label": "Sample Prompts", "path": "scenarios/sample_prompts.json", "kind": "sample"}]
+            res = client.get("/validation/admin/catalog", headers=HEADERS)
+        assert res.status_code == 200
+        assert res.json()["collections"][0]["id"] == "sample_prompts"
+
+    def test_studies_endpoint(self, temp_data):
+        with patch("api.routes.validation.list_study_artifacts") as mock_studies:
+            mock_studies.return_value = [{"filename": "study.json", "provider": "mock", "status": "success"}]
+            res = client.get("/validation/admin/studies", headers=HEADERS)
+        assert res.status_code == 200
+        assert res.json()["studies"][0]["provider"] == "mock"
+
+    def test_run_baseline_endpoint(self, temp_data):
+        with patch("api.routes.validation.resolve_prompt_collection") as mock_resolve, \
+             patch("api.routes.validation.run_and_archive_study", new_callable=AsyncMock) as mock_run, \
+             patch("api.routes.validation.seed_evidence_from_artifacts") as mock_seed, \
+             patch("api.routes.validation.build_evidence_summary") as mock_summary:
+            mock_resolve.return_value = "scenarios/sample_prompts.json"
+            mock_run.return_value = {
+                "bundle": {
+                    "summary": {
+                        "provider": "openai",
+                        "study_label": "sample_prompts",
+                        "status": "failed",
+                        "successes": 0,
+                        "failures": 1,
+                    }
+                },
+                "archive_path": "validation/studies/openai.json",
+                "output_path": "validation/baseline_results.json",
+            }
+            mock_seed.return_value = {"scorer_agreement": [], "benchmark_suites": [], "error_cases": []}
+            mock_summary.return_value = {"scorer_agreement": {"count": 0}, "benchmark_suites": {"count": 0}, "error_cases": {"count": 0}}
+            res = client.post(
+                "/validation/admin/run-baseline",
+                headers=HEADERS,
+                json={"provider": "openai", "prompt_collection": "sample_prompts", "count": 1, "reseed": True},
+            )
+        assert res.status_code == 200
+        data = res.json()
+        assert data["summary"]["provider"] == "openai"
+        assert data["summary"]["status"] == "failed"
+        assert "evidence_summary" in data
+
+    def test_run_suite_matrix_endpoint(self, temp_data):
+        with patch("api.routes.validation.run_suite_matrix", new_callable=AsyncMock) as mock_matrix, \
+             patch("api.routes.validation.seed_evidence_from_artifacts") as mock_seed, \
+             patch("api.routes.validation.build_evidence_summary") as mock_summary:
+            mock_matrix.return_value = {
+                "provider": "mock",
+                "suite_count": 2,
+                "success_count": 2,
+                "partial_count": 0,
+                "failed_count": 0,
+                "runs": [],
+            }
+            mock_seed.return_value = {"scorer_agreement": [], "benchmark_suites": [], "error_cases": []}
+            mock_summary.return_value = {"scorer_agreement": {"count": 0}, "benchmark_suites": {"count": 2}, "error_cases": {"count": 0}}
+            res = client.post(
+                "/validation/admin/run-suite-matrix",
+                headers=HEADERS,
+                json={"provider": "mock", "suite_ids": ["sample_prompts", "ai_safety"], "count_per_suite": 2, "reseed": True},
+            )
+        assert res.status_code == 200
+        data = res.json()
+        assert data["suite_count"] == 2
+        assert data["success_count"] == 2
+
+    def test_export_evidence_csv(self, temp_data):
+        client.post(
+            "/validation/evidence/error-case",
+            headers=HEADERS,
+            json={
+                "kind": "false_positive",
+                "provider": "mock",
+                "model": "mock-cas-v1",
+                "prompt_excerpt": "third prompt",
+                "expected_tier": "Bronze Research Tier",
+                "observed_tier": "Gold Research Tier",
+                "notes": "unsafe overrating",
+            },
+        )
+        res = client.get("/validation/evidence/export?format=csv&kind=error_cases", headers=HEADERS)
+        assert res.status_code == 200
+        assert "expected_tier" in res.text
+        assert "false_positive" in res.text
 
     def test_export_json(self, temp_data):
         res = client.get("/validation/export?format=json", headers=HEADERS)

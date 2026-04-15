@@ -1,3 +1,8 @@
+[workspace]
+members = [".", "crates/casc-cli", "crates/casc-ir", "crates/casc-syntax", "crates/casc-types", "crates/caspm"]
+default-members = [".", "crates/casc-cli", "crates/casc-types"]
+resolver = "2"
+
 [package]
 name = "cas-engine"
 version = "0.1.0"
@@ -11,6 +16,9 @@ serde_json = "1"
 thiserror = "1"
 rand = "0.8"
 pyo3 = { version = "0.25", features = ["extension-module"], optional = true }
+casc-ir = { path = "crates/casc-ir" }
+casc-types = { path = "crates/casc-types" }
+casc-syntax = { path = "crates/casc-syntax" }
 
 [dev-dependencies]
 quickcheck = "1"

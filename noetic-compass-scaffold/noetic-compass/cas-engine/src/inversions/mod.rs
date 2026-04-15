@@ -16,8 +16,7 @@ use serde::{Deserialize, Serialize};
 use std::fmt;
 
 use crate::ontology::{
-    CognitiveOperator, CognitiveStateVector, DriveProfile,
-    InversionAxis, NUM_STATES,
+    CognitiveOperator, CognitiveStateVector, DriveProfile, InversionAxis, NUM_STATES,
 };
 use crate::scoring::InversionResistanceInput;
 
@@ -171,16 +170,8 @@ impl fmt::Display for InversionScanResult {
         for d in &self.detections {
             writeln!(f, "  {}", d)?;
         }
-        writeln!(
-            f,
-            "  Stealth resistance: {:.3}",
-            self.stealth_resistance
-        )?;
-        write!(
-            f,
-            "  Compound severity: {:.3}",
-            self.compound_severity
-        )
+        writeln!(f, "  Stealth resistance: {:.3}", self.stealth_resistance)?;
+        write!(f, "  Compound severity: {:.3}", self.compound_severity)
     }
 }
 
@@ -326,8 +317,7 @@ impl InversionScanner {
         }
 
         // --- S: Sub-Drive inversion ---
-        let subdrive_severity =
-            self.detect_subdrive_inversion(&input.domain_drive_scores);
+        let subdrive_severity = self.detect_subdrive_inversion(&input.domain_drive_scores);
         axis_scores[InversionAxis::SubDrive.index()] = 1.0 - subdrive_severity;
         if subdrive_severity > self.severity_threshold {
             detections.push(InversionDetection::new(
@@ -479,10 +469,7 @@ impl InversionScanner {
     /// Severity = maximum |score(a) - score(b)| across the 3 pairs.
     fn detect_drive_inversion(&self, drive_profile: &DriveProfile) -> f64 {
         let balances = drive_profile.all_inversion_balances();
-        let max_imbalance = balances
-            .iter()
-            .cloned()
-            .fold(0.0_f64, f64::max);
+        let max_imbalance = balances.iter().cloned().fold(0.0_f64, f64::max);
         max_imbalance.clamp(0.0, 1.0)
     }
 
@@ -643,7 +630,10 @@ mod tests {
         let scanner = InversionScanner::new();
         let scores = [0.5; 10];
         let severity = scanner.detect_operator_inversion(&scores);
-        assert!(severity.abs() < 1e-12, "balanced operators should have 0 severity");
+        assert!(
+            severity.abs() < 1e-12,
+            "balanced operators should have 0 severity"
+        );
     }
 
     #[test]
@@ -654,7 +644,10 @@ mod tests {
         scores[2] = 1.0;
         scores[3] = 0.0;
         let severity = scanner.detect_operator_inversion(&scores);
-        assert!((severity - 1.0).abs() < 1e-12, "max imbalance should be 1.0");
+        assert!(
+            (severity - 1.0).abs() < 1e-12,
+            "max imbalance should be 1.0"
+        );
     }
 
     #[test]
@@ -682,7 +675,10 @@ mod tests {
         scores[8] = 0.55;
         scores[9] = 0.45;
         let severity = scanner.detect_operator_inversion(&scores);
-        assert!((severity - 0.7).abs() < 1e-12, "should pick max pair imbalance");
+        assert!(
+            (severity - 0.7).abs() < 1e-12,
+            "should pick max pair imbalance"
+        );
     }
 
     // -----------------------------------------------------------------------
@@ -695,7 +691,10 @@ mod tests {
         // P > C > E > O: no violation
         let averages = [0.8, 0.6, 0.4, 0.2];
         let severity = scanner.detect_domain_inversion(&averages);
-        assert!(severity.abs() < 1e-12, "correct domain order should have 0 severity");
+        assert!(
+            severity.abs() < 1e-12,
+            "correct domain order should have 0 severity"
+        );
     }
 
     #[test]
@@ -723,7 +722,10 @@ mod tests {
         let scanner = InversionScanner::new();
         let averages = [0.5, 0.5, 0.5, 0.5];
         let severity = scanner.detect_domain_inversion(&averages);
-        assert!(severity.abs() < 1e-12, "equal domains should not be a violation");
+        assert!(
+            severity.abs() < 1e-12,
+            "equal domains should not be a violation"
+        );
     }
 
     // -----------------------------------------------------------------------
@@ -735,7 +737,10 @@ mod tests {
         let scanner = InversionScanner::new();
         let profile = DriveProfile::new([0.5; 7]).unwrap();
         let severity = scanner.detect_drive_inversion(&profile);
-        assert!(severity.abs() < 1e-12, "balanced drives should have 0 severity");
+        assert!(
+            severity.abs() < 1e-12,
+            "balanced drives should have 0 severity"
+        );
     }
 
     #[test]
@@ -744,7 +749,10 @@ mod tests {
         // F1=1.0, F7=0.0 => imbalance = 1.0
         let profile = DriveProfile::new([1.0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.0]).unwrap();
         let severity = scanner.detect_drive_inversion(&profile);
-        assert!((severity - 1.0).abs() < 1e-12, "max drive imbalance should be 1.0");
+        assert!(
+            (severity - 1.0).abs() < 1e-12,
+            "max drive imbalance should be 1.0"
+        );
     }
 
     #[test]
@@ -814,7 +822,10 @@ mod tests {
         let scanner = InversionScanner::new();
         let scores = [[0.5; 4]; 7];
         let severity = scanner.detect_subdrive_inversion(&scores);
-        assert!(severity.abs() < 1e-12, "uniform sub-drives should have 0 severity");
+        assert!(
+            severity.abs() < 1e-12,
+            "uniform sub-drives should have 0 severity"
+        );
     }
 
     #[test]
@@ -824,7 +835,10 @@ mod tests {
         let mut scores = [[0.5; 4]; 7];
         scores[0] = [1.0, 0.0, 1.0, 0.0];
         let severity = scanner.detect_subdrive_inversion(&scores);
-        assert!((severity - 1.0).abs() < 1e-12, "max variance should give severity 1.0");
+        assert!(
+            (severity - 1.0).abs() < 1e-12,
+            "max variance should give severity 1.0"
+        );
     }
 
     #[test]
@@ -848,7 +862,10 @@ mod tests {
         // All chains: A0=0.9, D=0.8, W=0.7, P=0.6 (decreasing, no violation)
         let scores = [[0.9, 0.8, 0.7, 0.6]; 7];
         let severity = scanner.detect_pathway_inversion(&scores);
-        assert!(severity.abs() < 1e-12, "correct pathway order should have 0 severity");
+        assert!(
+            severity.abs() < 1e-12,
+            "correct pathway order should have 0 severity"
+        );
     }
 
     #[test]
@@ -858,14 +875,17 @@ mod tests {
         // A0 < 0.5 and D > A0, so violation; also W > A0, P > A0; D < 0.5 and W > D, etc.
         let scores = [[0.1, 0.2, 0.3, 0.8]; 7];
         let severity = scanner.detect_pathway_inversion(&scores);
-        assert!((severity - 1.0).abs() < 1e-12, "all chains violated should give severity 1.0");
+        assert!(
+            (severity - 1.0).abs() < 1e-12,
+            "all chains violated should give severity 1.0"
+        );
     }
 
     #[test]
     fn test_pathway_inversion_one_chain_violated() {
         let scanner = InversionScanner::new();
         let mut scores = [[0.9, 0.8, 0.7, 0.6]; 7]; // all correct
-        // Violate chain 3: A0=0.2 (unsatisfied), P=0.9
+                                                    // Violate chain 3: A0=0.2 (unsatisfied), P=0.9
         scores[3] = [0.2, 0.1, 0.1, 0.9];
         let severity = scanner.detect_pathway_inversion(&scores);
         assert!(
@@ -882,7 +902,10 @@ mod tests {
         // W < 0.5 and P > W => violation
         let scores = [[0.8, 0.7, 0.3, 0.9]; 7];
         let severity = scanner.detect_pathway_inversion(&scores);
-        assert!((severity - 1.0).abs() < 1e-12, "all chains have W<0.5 with P>W");
+        assert!(
+            (severity - 1.0).abs() < 1e-12,
+            "all chains have W<0.5 with P>W"
+        );
     }
 
     // -----------------------------------------------------------------------
@@ -894,7 +917,10 @@ mod tests {
         let scanner = InversionScanner::new();
         let detections: Vec<InversionDetection> = vec![];
         let severity = scanner.compute_compound_severity(&detections);
-        assert!(severity.abs() < 1e-12, "no inversions should give 0 compound severity");
+        assert!(
+            severity.abs() < 1e-12,
+            "no inversions should give 0 compound severity"
+        );
     }
 
     #[test]
@@ -961,13 +987,19 @@ mod tests {
     #[test]
     fn test_stealth_at_lower_boundary() {
         let det = InversionDetection::new(InversionAxis::Operator, 0.3, "test".to_string());
-        assert!(det.is_stealth(), "severity 0.3 should be stealth (inclusive)");
+        assert!(
+            det.is_stealth(),
+            "severity 0.3 should be stealth (inclusive)"
+        );
     }
 
     #[test]
     fn test_stealth_at_upper_boundary() {
         let det = InversionDetection::new(InversionAxis::Operator, 0.7, "test".to_string());
-        assert!(det.is_stealth(), "severity 0.7 should be stealth (inclusive)");
+        assert!(
+            det.is_stealth(),
+            "severity 0.7 should be stealth (inclusive)"
+        );
     }
 
     #[test]
@@ -1169,7 +1201,11 @@ mod tests {
         };
 
         let result = scanner.scan(&input).unwrap();
-        let stealth_count = result.detections().iter().filter(|d| d.is_stealth()).count();
+        let stealth_count = result
+            .detections()
+            .iter()
+            .filter(|d| d.is_stealth())
+            .count();
         // At least some stealth inversions should be detected
         assert!(
             stealth_count > 0,
@@ -1190,7 +1226,10 @@ mod tests {
         let scanner = InversionScanner::new();
         let scores = [0.0; 10];
         let severity = scanner.detect_operator_inversion(&scores);
-        assert!(severity.abs() < 1e-12, "all zero operators have 0 imbalance");
+        assert!(
+            severity.abs() < 1e-12,
+            "all zero operators have 0 imbalance"
+        );
     }
 
     #[test]
@@ -1241,7 +1280,10 @@ mod tests {
         // All stages equal at 0.3 (unsatisfied): no violation since later == earlier
         let scores = [[0.3, 0.3, 0.3, 0.3]; 7];
         let severity = scanner.detect_pathway_inversion(&scores);
-        assert!(severity.abs() < 1e-12, "equal low values should not violate");
+        assert!(
+            severity.abs() < 1e-12,
+            "equal low values should not violate"
+        );
     }
 
     // -----------------------------------------------------------------------
@@ -1294,11 +1336,8 @@ mod tests {
 
     #[test]
     fn test_detection_display() {
-        let det = InversionDetection::new(
-            InversionAxis::Operator,
-            0.5,
-            "test description".to_string(),
-        );
+        let det =
+            InversionDetection::new(InversionAxis::Operator, 0.5, "test description".to_string());
         let display = format!("{}", det);
         assert!(display.contains("N (Operator)"));
         assert!(display.contains("0.500"));

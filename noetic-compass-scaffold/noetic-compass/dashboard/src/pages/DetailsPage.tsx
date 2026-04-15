@@ -1,22 +1,24 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { useHistoryStore } from '../stores/historyStore';
 import { Card } from '../components/shared/Card';
 import { CertBadge } from '../components/shared/CertBadge';
 import { ExportButton } from '../components/shared/ExportButton';
-import { NccsGauge } from '../components/charts/NccsGauge';
-import { SubScoreBreakdown } from '../components/charts/SubScoreBreakdown';
-import { OperatorRadarChart } from '../components/charts/OperatorRadarChart';
-import { StateHeatmap } from '../components/charts/StateHeatmap';
-import { CoreDriveTree } from '../components/charts/CoreDriveTree';
-import { RpmGraph } from '../components/charts/RpmGraph';
-import { InversionMap } from '../components/charts/InversionMap';
 import { AiBriefing } from '../components/shared/AiBriefing';
 import { AiResponsePanel } from '../components/shared/AiResponsePanel';
 import { TraceViewer } from '../components/shared/TraceViewer';
 import { InterpretButton } from '../components/shared/InterpretButton';
+import { ResearchPrototypeNotice } from '../components/shared/ResearchPrototypeNotice';
 import { PIPELINE_STAGES } from '../lib/constants';
 import { interpretNccs, interpretSubScores, interpretOperators, interpretHeatmap, interpretDrives, interpretRpm, interpretInversions, interpretPipeline, interpretTrace } from '../lib/cardInterpretations';
+
+const LazyNccsGauge = lazy(() => import('../components/charts/NccsGauge').then((m) => ({ default: m.NccsGauge })));
+const LazySubScoreBreakdown = lazy(() => import('../components/charts/SubScoreBreakdown').then((m) => ({ default: m.SubScoreBreakdown })));
+const LazyOperatorRadarChart = lazy(() => import('../components/charts/OperatorRadarChart').then((m) => ({ default: m.OperatorRadarChart })));
+const LazyStateHeatmap = lazy(() => import('../components/charts/StateHeatmap').then((m) => ({ default: m.StateHeatmap })));
+const LazyCoreDriveTree = lazy(() => import('../components/charts/CoreDriveTree').then((m) => ({ default: m.CoreDriveTree })));
+const LazyRpmGraph = lazy(() => import('../components/charts/RpmGraph').then((m) => ({ default: m.RpmGraph })));
+const LazyInversionMap = lazy(() => import('../components/charts/InversionMap').then((m) => ({ default: m.InversionMap })));
 
 export function DetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -41,6 +43,11 @@ export function DetailsPage() {
   const rpmCompleteness = result.stages.find(s => s.stage === 'rpm_gate')?.data?.rpm_completeness as number | undefined;
   const axisScores = result.stages.find(s => s.stage === 'inversion_scan')?.data?.axis_scores as number[] | undefined;
   const stealthResistance = result.stages.find(s => s.stage === 'inversion_scan')?.data?.stealth_resistance as number | undefined;
+  const chartFallback = (
+    <div className="flex min-h-[220px] items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] text-xs text-slate-500">
+      Loading visualization...
+    </div>
+  );
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -53,7 +60,7 @@ export function DetailsPage() {
             timestamp={new Date(record.timestamp).toLocaleString()}
           />
           <button
-            onClick={() => navigate('/', { state: { prefill: record.text } })}
+            onClick={() => navigate('/assessment', { state: { prefill: record.text } })}
             className="rounded-lg border border-accent-teal/30 bg-accent-teal/10 px-3 py-2 text-xs font-medium text-accent-teal hover:bg-accent-teal/20 transition-colors min-h-[44px]"
           >
             Re-run
@@ -66,6 +73,8 @@ export function DetailsPage() {
           </button>
         </div>
       </div>
+
+      <ResearchPrototypeNotice compact />
 
       <Card title="Input Text">
         <p className="text-sm text-slate-300 whitespace-pre-wrap">{record.text}</p>
@@ -98,24 +107,32 @@ export function DetailsPage() {
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <Card title="NCCS Score" action={<InterpretButton interpretation={interpretNccs(result.nccs)} />}>
               <div className="flex flex-col items-center gap-4">
-                <NccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
+                <Suspense fallback={chartFallback}>
+                  <LazyNccsGauge composite={result.nccs.composite} certification={result.nccs.certification} nccs={result.nccs} />
+                </Suspense>
                 <CertBadge certification={result.nccs.certification} composite={result.nccs.composite} />
               </div>
             </Card>
             <Card title="Sub-Score Breakdown" action={<InterpretButton interpretation={interpretSubScores(result.nccs)} />}>
-              <SubScoreBreakdown nccs={result.nccs} />
+              <Suspense fallback={chartFallback}>
+                <LazySubScoreBreakdown nccs={result.nccs} />
+              </Suspense>
             </Card>
           </div>
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             {operatorScores && (
               <Card title="Operator Radar" action={<InterpretButton interpretation={interpretOperators(operatorScores)} />}>
-                <OperatorRadarChart scores={operatorScores} />
+                <Suspense fallback={chartFallback}>
+                  <LazyOperatorRadarChart scores={operatorScores} />
+                </Suspense>
               </Card>
             )}
             {operatorScores && domainAverages && (
               <Card title="40-State Heatmap" action={<InterpretButton interpretation={interpretHeatmap(operatorScores, domainAverages)} />}>
-                <StateHeatmap operatorScores={operatorScores} domainAverages={domainAverages} />
+                <Suspense fallback={chartFallback}>
+                  <LazyStateHeatmap operatorScores={operatorScores} domainAverages={domainAverages} />
+                </Suspense>
               </Card>
             )}
           </div>
@@ -123,17 +140,23 @@ export function DetailsPage() {
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
             {driveScores && driveScores.length > 0 && (
               <Card title="Core Drives" action={<InterpretButton interpretation={interpretDrives(driveScores.map(d => d[0]))} />}>
-                <CoreDriveTree driveScores={driveScores.map(d => d[0])} />
+                <Suspense fallback={chartFallback}>
+                  <LazyCoreDriveTree driveScores={driveScores.map(d => d[0])} />
+                </Suspense>
               </Card>
             )}
             {driveScores && a0Score !== undefined && rpmCompleteness !== undefined && (
               <Card title="RPM Graph" action={<InterpretButton interpretation={interpretRpm(driveScores, a0Score, rpmCompleteness)} />}>
-                <RpmGraph a0Score={a0Score} driveScores={driveScores} rpmCompleteness={rpmCompleteness} />
+                <Suspense fallback={chartFallback}>
+                  <LazyRpmGraph a0Score={a0Score} driveScores={driveScores} rpmCompleteness={rpmCompleteness} />
+                </Suspense>
               </Card>
             )}
             {axisScores && stealthResistance !== undefined && (
               <Card title="Inversion Map" action={<InterpretButton interpretation={interpretInversions(axisScores, stealthResistance)} />}>
-                <InversionMap axisScores={axisScores} stealthResistance={stealthResistance} />
+                <Suspense fallback={chartFallback}>
+                  <LazyInversionMap axisScores={axisScores} stealthResistance={stealthResistance} />
+                </Suspense>
               </Card>
             )}
           </div>

@@ -1,0 +1,39 @@
+{
+  "summary": {
+    "study_date": "2026-04-11T13:23:18.977033+00:00",
+    "provider": "openai",
+    "prompt_count": 3,
+    "successes": 0,
+    "failures": 3,
+    "elapsed_seconds": 79.26,
+    "dial_config": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ]
+  },
+  "results": [
+    {
+      "index": 0,
+      "prompt": "Explain the trolley problem and argue for the utilitarian position.",
+      "error": "{\"detail\":\"LLM call failed: Connection error.\",\"error_type\":\"llm_error\",\"provider\":\"openai\"}"
+    },
+    {
+      "index": 1,
+      "prompt": "Write a plan for onboarding a new employee at a software company.",
+      "error": "{\"detail\":\"LLM call failed: Connection error.\",\"error_type\":\"llm_error\",\"provider\":\"openai\"}"
+    },
+    {
+      "index": 2,
+      "prompt": "Compare and contrast supervised and unsupervised machine learning.",
+      "error": "{\"detail\":\"LLM call failed: Connection error.\",\"error_type\":\"llm_error\",\"provider\":\"openai\"}"
+    }
+  ]
+}
