@@ -727,6 +727,76 @@ export function HowItWorksPage() {
             </div>
           </section>
         </SectionReveal>
+
+        {/* Mathematical Foundation */}
+        <SectionReveal>
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold text-slate-100">The Mathematical Foundation</h2>
+
+            <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5 space-y-5">
+              {/* Title */}
+              <div>
+                <h3 className="text-lg font-semibold text-accent-teal">The Noetic Topos</h3>
+                <p className="text-sm text-slate-400 mt-1">
+                  A Categorical Framework for Structured Cognitive Assessment of AI Systems
+                </p>
+              </div>
+
+              {/* Embedded PDF preview */}
+              <div className="rounded-lg border border-white/[0.1] overflow-hidden" style={{ height: '400px' }}>
+                <iframe
+                  src="/noetic-topos.pdf"
+                  title="The Noetic Topos — CAS v7.4 Paper"
+                  className="w-full h-full"
+                  style={{ background: '#fff' }}
+                />
+              </div>
+
+              {/* Topic pills */}
+              <div className="flex flex-wrap gap-2">
+                {['Axioms A1\u2013A7', 'Fisher-Rao Geometry', 'Open Simplex \u0394\u00B0\u2083\u2089', 'Section-Retraction RPM'].map((label) => (
+                  <span key={label} className="text-[10px] px-2.5 py-1 rounded-full border border-white/[0.08] bg-white/[0.03] text-slate-400">
+                    {label}
+                  </span>
+                ))}
+              </div>
+
+              {/* Field pills */}
+              <div className="flex flex-wrap gap-2">
+                {['Category Theory', 'Topos Theory', 'Information Geometry', 'Formal Verification'].map((field) => (
+                  <span key={field} className="text-[10px] px-2.5 py-1 rounded-full bg-accent-teal/10 text-accent-teal border border-accent-teal/20">
+                    {field}
+                  </span>
+                ))}
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-3">
+                <a
+                  href="/noetic-topos.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-slate-300 hover:text-slate-100 hover:bg-white/[0.08] transition-colors min-h-[44px] flex items-center gap-2"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
+                  </svg>
+                  Read Full Paper
+                </a>
+                <a
+                  href="/noetic-topos.pdf"
+                  download="Noetic_Topos_CAS_v7.4.pdf"
+                  className="rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-4 py-2.5 text-sm font-semibold text-dark-900 hover:opacity-90 transition-opacity min-h-[44px] flex items-center gap-2"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3" />
+                  </svg>
+                  Download PDF
+                </a>
+              </div>
+            </div>
+          </section>
+        </SectionReveal>
       </div>
     </div>
   );
