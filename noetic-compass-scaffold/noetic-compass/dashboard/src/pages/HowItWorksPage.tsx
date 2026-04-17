@@ -752,20 +752,36 @@ export function HowItWorksPage() {
                 />
               </div>
 
-              {/* Topic pills */}
+              {/* Topic pills with hover definitions */}
               <div className="flex flex-wrap gap-2">
-                {['Axioms A1\u2013A7', 'Fisher-Rao Geometry', 'Open Simplex \u0394\u00B0\u2083\u2089', 'Section-Retraction RPM'].map((label) => (
-                  <span key={label} className="text-[10px] px-2.5 py-1 rounded-full border border-white/[0.08] bg-white/[0.03] text-slate-400">
+                {([
+                  ['Axioms A1\u2013A7', 'Seven foundational laws that define the entire CAS framework. A1 establishes the operator monoid. A2 defines the domain ordering. A3 constrains admissibility relations. A4 specifies the open probability simplex as the state space. A5 formalizes drive inversion pairs. A6 establishes RPM section-retraction semantics. A7 defines the noetic coverage condition. Every theorem and every line of code in the system traces back to one of these seven axioms.'],
+                  ['Fisher-Rao Geometry', 'The Fisher-Rao metric is the unique Riemannian metric on probability distributions that is invariant under sufficient statistics. In CAS, it defines how we measure the "distance" between two cognitive states on the 40-dimensional probability simplex. The geodesic distance formula d(p,q) = 2\u00B7arccos(\u03A3\u221A(p\u2096\u00B7q\u2096)) gives the shortest path between two states through the curved geometry of the simplex \u2014 not Euclidean distance, but the natural distance that respects the probabilistic structure of cognition.'],
+                  ['Open Simplex \u0394\u00B0\u2083\u2089', 'The state space of CAS is not a discrete set of 40 elements \u2014 it is the open interior of a 39-dimensional probability simplex. Every cognitive state is a probability distribution over 40 dimensions (10 operators \u00D7 4 domains) where every component is strictly positive and all components sum to 1. The "open" constraint (all p\u2096 > 0) means no cognitive dimension is ever completely absent \u2014 there are no hard zeros, only vanishingly small activations. This is Correction 4 from the v7.4 review and it changes everything: distances become geodesics, averages become Fr\u00E9chet means, and the geometry becomes hyperbolic near the boundary.'],
+                  ['Section-Retraction RPM', 'The Recursive Prerequisite Model uses section-retraction semantics, not monadic adjunction. The section law \u03B5\u2218\u03B7 = id means that realizing a state after embedding it recovers the original \u2014 the forward direction works perfectly. But \u03B7\u2218\u03B5 \u2260 id means re-embedding after realization loses information \u2014 you cannot reconstruct the enriched representation from the realized output. This is Correction 2 from v7.4. It means prerequisite satisfaction is one-directional: once a chain node is satisfied, downstream changes cannot retroactively unsatisfy it. Forward only. No backtracking.'],
+                ] as const).map(([label, tip]) => (
+                  <span key={label} className="group relative text-[10px] px-2.5 py-1 rounded-full border border-white/[0.08] bg-white/[0.03] text-slate-400 cursor-help">
                     {label}
+                    <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 rounded-lg border border-white/[0.1] bg-dark-800 px-3 py-2.5 text-[11px] leading-relaxed text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-xl z-50">
+                      {tip}
+                    </span>
                   </span>
                 ))}
               </div>
 
-              {/* Field pills */}
+              {/* Field pills with hover definitions */}
               <div className="flex flex-wrap gap-2">
-                {['Category Theory', 'Topos Theory', 'Information Geometry', 'Formal Verification'].map((field) => (
-                  <span key={field} className="text-[10px] px-2.5 py-1 rounded-full bg-accent-teal/10 text-accent-teal border border-accent-teal/20">
+                {([
+                  ['Category Theory', 'The mathematics of structured composition. Category theory studies how objects relate to each other through morphisms (arrows) and how those relationships compose. In CAS, the 10 cognitive operators form a category called Noetica where the objects are cognitive states and the morphisms are operator applications. The monoid composition rule (a+b mod 10) is the composition law of this category. Category theory is the reason CAS can prove that its operations are mathematically consistent \u2014 closure, associativity, and identity are not hoped for, they are proven from the categorical structure.'],
+                  ['Topos Theory', 'A topos is a category that behaves like a universe of mathematical sets but with its own internal logic. The Noetic Topos is the sheaf topos over Category Noetica \u2014 it provides an intuitionistic logic where propositions can be "true," "false," or "undetermined." This three-valued logic is why CAS can handle genuine uncertainty rather than forcing binary classifications. When the system encounters a cognitive state that is neither clearly ethical nor clearly unethical, the topos logic assigns it a truth value in the subobject classifier \u03A9 that captures exactly how much evidence supports each interpretation. This is not fuzzy logic \u2014 it is the internal logic of the universe in which cognitive states live.'],
+                  ['Information Geometry', 'Information geometry treats probability distributions as points on a curved manifold and uses differential geometry to study the structure of statistical models. In CAS, the 40-dimensional cognitive state vector lives on a Riemannian manifold equipped with the Fisher information metric. This means "distance between two cognitive states" is not arbitrary \u2014 it is the unique distance that respects the information content of the distributions. The Bhattacharyya coefficient measures overlap between states. The geodesic distance measures the shortest path through the curved space. The Fisher-Rao inner product defines how tangent vectors (small perturbations to a cognitive state) interact. This geometric framework is what makes CAS scoring mathematically rigorous rather than ad hoc.'],
+                  ['Formal Verification', 'Every algebraic operation in CAS (\u00D7, \u00F7, \u2218, +, \u2212) has been proven to preserve the mathematical constraints of the system: admissibility relations remain valid, domain descent ordering is never violated, probability vectors stay on the open simplex, and RPM section-retraction semantics hold at every recursion depth. These are not unit tests \u2014 they are structural proofs that the operations cannot produce invalid states regardless of input. The Rust scoring engine enforces these constraints at the type level: the compiler rejects any expression that would violate the axioms before it ever executes. This is the difference between "we tested it and it worked" and "it is mathematically impossible for it to fail."'],
+                ] as const).map(([field, tip]) => (
+                  <span key={field} className="group relative text-[10px] px-2.5 py-1 rounded-full bg-accent-teal/10 text-accent-teal border border-accent-teal/20 cursor-help">
                     {field}
+                    <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-80 rounded-lg border border-accent-teal/20 bg-dark-800 px-3 py-2.5 text-[11px] leading-relaxed text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-xl z-50">
+                      {tip}
+                    </span>
                   </span>
                 ))}
               </div>
