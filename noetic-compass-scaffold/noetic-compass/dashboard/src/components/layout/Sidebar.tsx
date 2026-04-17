@@ -67,6 +67,18 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
               {item.label}
             </NavLink>
           ))}
+
+          {/* Download: Noetic Topos paper */}
+          <a
+            href="/noetic-topos.pdf"
+            download="Noetic_Topos_CAS_v7.4.pdf"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-400 hover:text-accent-teal hover:bg-white/[0.04] transition-colors min-h-[44px] mt-2 border-t border-white/[0.04] pt-3"
+          >
+            <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3" />
+            </svg>
+            Noetic Topos (PDF)
+          </a>
         </nav>
       </aside>
     </>
