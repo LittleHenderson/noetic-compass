@@ -160,7 +160,13 @@ export function HistoryPage() {
 
       {records.length === 0 ? (
         <Card>
-          <p className="text-sm text-slate-500 text-center py-8">No assessments yet.</p>
+          <div className="text-center py-12 space-y-3">
+            <p className="text-sm text-slate-400">No assessments yet</p>
+            <p className="text-xs text-slate-500">Run your first assessment to see results here</p>
+            <a href="/assessment" className="inline-block rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-4 py-2 text-sm font-semibold text-dark-900 hover:opacity-90 transition-opacity">
+              Go to Assessment
+            </a>
+          </div>
         </Card>
       ) : (
         <div className="glass-card overflow-hidden">
