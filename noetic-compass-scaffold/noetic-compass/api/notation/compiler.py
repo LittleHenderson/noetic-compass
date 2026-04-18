@@ -1172,27 +1172,35 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
             )
 
         if node.op in {"ARROW", "LARROW", "BIARROW"}:
-            require_stateish(left, node.op)
-            require_stateish(right, node.op)
-            if left.kind != TypeKind.ANY and not left.singular:
-                raise CompilerError(CompilerStage.TYPECHECK, f"{node.op} requires singular state operands")
-            if right.kind != TypeKind.ANY and not right.singular:
-                raise CompilerError(CompilerStage.TYPECHECK, f"{node.op} requires singular state operands")
+            # Arrow accepts any state-typed operand: singular states,
+            # × compositions (resolve to singular), and + compositions
+            # (co-present states, valid if they share a domain).
+            allowed_kinds = {TypeKind.STATE, TypeKind.ANY}
+            if left.kind not in allowed_kinds:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.op} requires state-typed operands (got {left.kind.value})",
+                )
+            if right.kind not in allowed_kinds:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.op} requires state-typed operands (got {right.kind.value})",
+                )
+            # Domain descent check: use the dominant (first) domain from each side
             if (
                 left.kind != TypeKind.ANY
                 and right.kind != TypeKind.ANY
-                and (len(left.domains) != 1 or len(right.domains) != 1)
+                and left.domains
+                and right.domains
             ):
-                raise CompilerError(CompilerStage.TYPECHECK, f"{node.op} requires fully resolved domains")
-            if left.kind != TypeKind.ANY and right.kind != TypeKind.ANY:
                 left_domain = left.domains[0]
                 right_domain = right.domains[0]
-                if node.op == "ARROW" and DOMAIN_ORDER[left_domain] > DOMAIN_ORDER[right_domain]:
+                if node.op == "ARROW" and DOMAIN_ORDER.get(left_domain, 0) > DOMAIN_ORDER.get(right_domain, 0):
                     raise CompilerError(
                         CompilerStage.TYPECHECK,
                         f"domain descent violated: {left_domain} cannot descend to {right_domain}",
                     )
-                if node.op == "LARROW" and DOMAIN_ORDER[right_domain] > DOMAIN_ORDER[left_domain]:
+                if node.op == "LARROW" and DOMAIN_ORDER.get(right_domain, 0) > DOMAIN_ORDER.get(left_domain, 0):
                     raise CompilerError(
                         CompilerStage.TYPECHECK,
                         f"reverse dependency violated: {right_domain} cannot descend to {left_domain}",
