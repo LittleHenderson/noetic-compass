@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "generated": "2026-04-19",
+  "last_updated": "2026-04-19",
+  "total_incidents": 0,
+  "by_category": {},
+  "by_year": {},
+  "by_sector": {},
+  "by_severity": {},
+  "by_entity": {},
+  "sourcing_statistics": {
+    "average_sources_per_incident": null,
+    "incidents_by_source_tier_primary": {},
+    "sessions_conducted": 0,
+    "urls_fetched_total": 0,
+    "candidates_rejected_for_insufficient_sourcing": 0
+  },
+  "prevention_vs_detection": {
+    "prevention_defensible_count": 0,
+    "detection_only_count": 0
+  },
+  "notes": "This file is regenerated whenever incidents.json is updated. It contains only aggregate statistics — no narrative claims. Empty fields mean the threshold for that statistic has not yet been reached."
+}

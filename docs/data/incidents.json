@@ -1,0 +1,29 @@
+{
+  "$schema": "internal/incidents-v1",
+  "schema_version": "1.0.0",
+  "schema_description": "Machine-readable records for the AI Misalignment Incident Database. Every entry must correspond to a session-verified markdown entry in docs/AI_MISALIGNMENT_INCIDENTS_DATABASE.md.",
+  "generated": "2026-04-19",
+  "last_updated": "2026-04-19",
+  "total_verified_incidents": 0,
+  "field_definitions": {
+    "id": "Sequential integer, assigned in verification order, not incident date.",
+    "name": "Canonical short name for the incident.",
+    "date_of_incident": "ISO 8601 date or partial (YYYY / YYYY-MM / YYYY-MM-DD), as precisely as primary sources support.",
+    "date_of_disclosure": "Date the incident became publicly known via primary-source documentation.",
+    "entity": "Operating organization or owner of the system.",
+    "system": "Specific AI model, product, or system name.",
+    "primary_category": "One of the 12 CAS failure classes (see docs/INCIDENT_CATEGORIES.md).",
+    "secondary_categories": "Additional CAS failure-class features present but not dominant.",
+    "severity": "One of: Critical / High / Moderate / Documented.",
+    "what_happened": "Verified narrative, facts only, every claim traceable to sources.",
+    "documented_harm": "List of harm outcomes traceable to fetched sources.",
+    "sources": "Array of fetched-and-verified citations with URLs and accessed-date.",
+    "cas_analysis": "Structured analytical layer — operator signature, domain analysis, drive architecture, inversion axes, RPM status, lacunarity profile.",
+    "detection_mechanism": "How CAS would have detected this — which specific module/gate would fire.",
+    "prevention_defensible": "Boolean — true only if this incident is promoted to CAS_PREVENTION_CLAIMS.md.",
+    "verified_session": "Session ID in which this entry was added or last materially updated.",
+    "verified_date": "Date of the verification session.",
+    "verifier_notes": "Honest disclosures — conflicts between sources, limitations of the verification, open questions."
+  },
+  "incidents": []
+}
