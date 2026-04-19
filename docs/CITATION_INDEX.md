@@ -2,7 +2,7 @@
 
 Master bibliography for the AI Misalignment Incident Database. Every source cited in an incident entry must appear here, grouped by source type. Entries are added only after the source has been fetched and read in a verified-source research session.
 
-**Current session-verified entries:** 1 (from 1 incident across 1 session)
+**Current session-verified entries:** 2 (from 2 incidents across 2 sessions)
 
 ---
 
@@ -46,7 +46,12 @@ Accepted outlets (non-exhaustive): Reuters, Associated Press, The New York Times
 
 Known aggregators: AI Incident Database (AIID, incidentdatabase.ai), MIT AI Risk Repository, OECD AI Policy Observatory, AlgorithmWatch.
 
-*(Empty — scaffold.)*
+**[E-001]** Koning, Merel (25 October 2021). "Dutch childcare benefit scandal an urgent wake-up call to ban racist algorithms." Amnesty International.
+- URL: `https://www.amnesty.org/en/latest/news/2021/10/xenophobic-machines-dutch-child-benefit-scandal/`
+- Retrieved via WebFetch 2026-04-19.
+- Tier: 2 (NGO primary-in-English; Amnesty International).
+- Used in: Incident 2.
+- Linked full-report URL (pending parse, noted for Session 3+): `https://www.amnesty.org/en/documents/eur35/4686/2021/en/` (*Xenophobic Machines*, EUR 35/4686/2021).
 
 ---
 
@@ -74,4 +79,24 @@ YYYY-MM-DD [session-id] | URL | status | used-for-incident-N-or-rejected
 2026-04-19 | https://www.reuters.com/article/us-autos-selfdriving-uber/...idUSKBN1GV296 | tool-blocked                      | not used; Tier 3 domain block
 2026-04-19 | https://www.theguardian.com/technology/2018/mar/19/uber-self-driving-car-kills-woman-arizona-tempe | tool-blocked | not used; Tier 3 domain block
 2026-04-19 | https://web.archive.org/web/2018/https://www.theguardian.com/... | tool-blocked                      | not used; Tier 3 (Wayback)
+```
+
+**Session 2026-04-19 (Session 2):**
+```
+2026-04-19 | https://decisions.civilresolutionbc.ca/                                                        | success                  | routing-only (no citation resolver); Air Canada deferred
+2026-04-19 | https://canlii.org/en/bc/bccrt/doc/2024/2024bccrt149/2024bccrt149.html                         | HTTP 403                 | Tier 2 reclass; Air Canada deferred
+2026-04-19 | https://decisions.civilresolutionbc.ca/crt/sd/en/nav.do                                        | HTTP 404                 | not used; Air Canada deferred
+2026-04-19 | https://courtlistener.com/docket/?q=1%3A22-cv-01461-PKC&type=r                                 | HTTP 403                 | Tier 2 reclass; Mata deferred
+2026-04-19 | https://nysd.uscourts.gov/opinions-significant-cases                                           | HTTP 404                 | not used; Mata nav
+2026-04-19 | https://nysd.uscourts.gov/                                                                     | success                  | routing-only; Mata nav
+2026-04-19 | https://nysd.uscourts.gov/cases/rulings-of-special-interest?combine=Mata                       | success (filter no-op)   | routing-only; Mata nav
+2026-04-19 | https://nysd.uscourts.gov/cases/rulings-of-special-interest?page=9                             | success                  | routing-only; Mata nav (May–Feb 2023, no Mata)
+2026-04-19 | https://nysd.uscourts.gov/cases/rulings-of-special-interest?page=8                             | success                  | routing-only; Mata nav (Oct–May 2023, Mata excluded)
+2026-04-19 | https://nysd.uscourts.gov/search?keys=Mata+Avianca                                             | HTTP 404                 | not used; Mata deferred
+2026-04-19 | https://www.nhtsa.gov/recalls?nhtsaId=23V838                                                   | HTTP 403                 | Amendment 6 data point; NHTSA deferred
+2026-04-19 | https://api.nhtsa.gov/recalls/recallsByCampaign?campaignNumber=23V838                          | HTTP 403                 | Amendment 6 data point; NHTSA deferred
+2026-04-19 | https://robodebt.royalcommission.gov.au/                                                       | timeout (>60s, x2)       | Amendment 6 new failure mode; Robodebt deferred
+2026-04-19 | https://www.tweedekamer.nl/                                                                    | success                  | routing-only; Amendment 7 confirmed
+2026-04-19 | https://www.houseofrepresentatives.nl/                                                         | success                  | routing-only; Amendment 7 second data point
+2026-04-19 | https://www.amnesty.org/en/latest/news/2021/10/xenophobic-machines-dutch-child-benefit-scandal/ | success                  | **source-consuming — used for Incident 2**
 ```

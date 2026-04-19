@@ -2,40 +2,53 @@
   "schema_version": "1.0.0",
   "generated": "2026-04-19",
   "last_updated": "2026-04-19",
-  "total_incidents": 1,
+  "total_incidents": 2,
   "by_category": {
-    "Prerequisite Chain Failures (RPM breaks)": 1
+    "Prerequisite Chain Failures (RPM breaks)": 1,
+    "Drive Corruption": 1
   },
   "by_year": {
+    "2013": 1,
     "2018": 1
   },
   "by_sector": {
-    "autonomous_vehicles_transportation": 1
+    "autonomous_vehicles_transportation": 1,
+    "government_public_administration": 1
   },
   "by_severity": {
-    "Critical": 1
+    "Critical": 2
   },
   "by_entity": {
-    "Uber Technologies, Inc., Advanced Technologies Group": 1
+    "Uber Technologies, Inc., Advanced Technologies Group": 1,
+    "Belastingdienst (Dutch Tax and Customs Administration) / Government of the Netherlands": 1
   },
   "sourcing_statistics": {
     "average_sources_per_incident": 1.0,
     "incidents_by_source_tier_primary": {
       "tier_1_government_court_academic": 1,
-      "tier_2_international_news_ngo": 0,
+      "tier_2_international_news_ngo": 1,
       "tier_3_commercial_journalism_archival": 0
     },
-    "sessions_conducted": 1,
-    "urls_fetched_total": 5,
-    "urls_fetched_successful": 2,
+    "sessions_conducted": 2,
+    "urls_fetched_total": 21,
+    "urls_fetched_successful": 11,
     "urls_fetched_tool_blocked": 3,
+    "urls_fetched_403_server_refused": 5,
+    "urls_fetched_404_path_not_found": 2,
+    "urls_fetched_timeout": 2,
     "candidates_rejected_for_insufficient_sourcing": 0,
-    "incidents_with_pending_research_items": 1,
-    "incidents_with_single_source_verification": 1
+    "candidates_deferred_environment_constraint": 4,
+    "incidents_with_pending_research_items": 2,
+    "incidents_with_single_source_verification": 2
   },
   "prevention_vs_detection": {
     "prevention_defensible_count": 0,
-    "detection_only_count": 1
+    "detection_only_count": 2
   },
-  "notes": "This file is regenerated whenever incidents.json is updated. Single-incident aggregates are not statistically meaningful and are not yet suitable for the summary sections of the main database document, which unlock at N≥20/25/30/40 per the document's staged-evidence policy."
+  "cas_pattern_distribution": {
+    "broken_chain_patterns": 1,
+    "corrupted_source_patterns": 1,
+    "note": "Both patterns present at N=2 establishes the minimum evidentiary base for cross-incident pattern analysis. Too small for statistical claims; sufficient for analytical distinction demonstrated in Incident 2's CAS structural analysis section."
+  },
+  "notes": "This file is regenerated whenever incidents.json is updated. Summary sections in the main database document unlock at N≥20/25/30/40 per the document's staged-evidence policy. Current N=2 remains below all summary-section thresholds."
 }

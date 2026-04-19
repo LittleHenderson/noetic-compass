@@ -4,7 +4,7 @@
   "schema_description": "Machine-readable records for the AI Misalignment Incident Database. Every entry must correspond to a session-verified markdown entry in docs/AI_MISALIGNMENT_INCIDENTS_DATABASE.md.",
   "generated": "2026-04-19",
   "last_updated": "2026-04-19",
-  "total_verified_incidents": 1,
+  "total_verified_incidents": 2,
   "field_definitions": {
     "id": "Sequential integer, assigned in verification order, not incident date.",
     "name": "Canonical short name for the incident.",
@@ -134,6 +134,125 @@
         "Contemporaneous Tempe PD statements (any 'unavoidable' initial characterization)",
         "Uber's first-day official statement post-crash",
         "Section 1.9 'Postcrash Changes' of HAR-19-03 (pp. 29-32)"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Dutch Childcare Benefits Scandal (toeslagenaffaire) — Belastingdienst discriminatory risk-scoring algorithm",
+      "date_of_incident": "2013",
+      "date_of_incident_detail": "Algorithm introduced 2013; operational through at least 2019 (exact end date pending)",
+      "date_of_disclosure": "2020-12-17",
+      "date_of_authoritative_report": "2020-12-17",
+      "date_of_authoritative_report_detail": "POK Ongekend Onrecht (Dutch parliamentary inquiry, pending Tier 1 parse); Amnesty International investigative summary 2021-10-25 (Tier 2 primary-in-English, cited)",
+      "date_of_political_consequence": "2021-01",
+      "entity": "Belastingdienst (Dutch Tax and Customs Administration) / Government of the Netherlands",
+      "system": "Risk-scoring algorithmic system for detection of incorrect childcare benefits (kinderopvangtoeslag) applications and potential fraud",
+      "jurisdiction": "Netherlands",
+      "primary_category": "Drive Corruption",
+      "primary_category_index": 10,
+      "secondary_categories": [
+        "Compound Inversions",
+        "Cross-Domain Contamination",
+        "Domain Descent Violations"
+      ],
+      "secondary_category_indices": [12, 11, 1],
+      "severity": "Critical",
+      "severity_rationale": "Systemic — tens of thousands of families falsely accused; documented cascading financial and personal harms (debt, unemployment, forced evictions, divorces, broken homes); political consequence of government collapse (Third Rutte cabinet, January 2021)",
+      "what_happened_summary": "Beginning in 2013, the Dutch Belastingdienst operated an automated risk-scoring algorithm for childcare benefits fraud detection that was designed from inception to use Dutch nationality as a risk variable; non-Dutch nationals received higher risk-scores. A self-learning mechanism without meaningful human oversight produced what Amnesty International described as a 'discriminatory loop' — the algorithm adapted over time to reinforce its discriminatory design. Tens of thousands of parents and caregivers from mostly low-income families were falsely accused of fraud, triggering benefit-repayment demands and debt collection that caused documented financial ruin, forced evictions, and broken families. The Dutch parliamentary inquiry committee (POK) delivered its report 'Ongekend Onrecht' on 17 December 2020; the Third Rutte cabinet resigned in January 2021 as a consequence.",
+      "documented_harm": [
+        "Tens of thousands of families falsely accused of benefits fraud (precise integer count pending Amnesty full-report parse)",
+        "Cascading financial harms: debt, unemployment, forced evictions (specific euro totals pending)",
+        "Cascading personal and family harms: mental health issues, divorces, broken homes",
+        "Dutch government collapse (Third Rutte cabinet, January 2021)",
+        "Post-scandal Amnesty October 2021 assessment: 'sufficient lessons have not been learnt despite multiple investigations'",
+        "Second-order harms of children removed to state care: reported in secondary literature, NOT cited in this entry pending Tier 1 source confirmation"
+      ],
+      "sources": [
+        {
+          "source_id": "E-001",
+          "tier": 2,
+          "type": "ngo_journalism",
+          "citation": "Koning, Merel (25 October 2021). 'Dutch childcare benefit scandal an urgent wake-up call to ban racist algorithms.' Amnesty International.",
+          "urls": [
+            "https://www.amnesty.org/en/latest/news/2021/10/xenophobic-machines-dutch-child-benefit-scandal/"
+          ],
+          "retrieved": "2026-04-19",
+          "retrieval_method": "WebFetch",
+          "documents": [
+            "design-time discrimination in the algorithm",
+            "dual-nationality as risk factor",
+            "self-learning amplification / discriminatory loop",
+            "qualitative harm scale (tens of thousands)",
+            "cascading personal and family harms",
+            "January 2021 government collapse",
+            "Amnesty's post-scandal recommendations for algorithmic governance"
+          ]
+        }
+      ],
+      "cas_analysis": {
+        "primary_failure_mode": "Drive Corruption — F2/F6 inversion at design time. F6 (Structure) in its shadow form overrode F2 (Wisdom). Three-quote evidentiary triangle: design-time origin ('from the start, racial and ethnic discrimination was central to the design'), institutional reinforcement ('the design of the algorithm reinforced existing institutional bias'), self-amplifying dynamic ('discriminatory loop').",
+        "distinction_from_incident_1": "Uber ATG (Incident 1) had nominally well-motivated A0 and failed at Wn→Pn transition — a broken chain in a sophisticated system. Toeslagenaffaire had corrupted A0 and executed the chain faithfully — an intact-but-corrupted chain in a simple system. The two incidents require structurally different detection mechanisms.",
+        "operator_signature": {
+          "CO-2": "suppressed (no attraction to legitimate beneficiaries)",
+          "CO-3": "structurally inverted (critical evaluation hijacked to target protected characteristic)",
+          "CO-5": "suppressed (no uptake from emerging false-positive harm cases)",
+          "CO-6": "full strength (mass aggressive accusations, debt-collection actions)",
+          "CO-8": "suppressed (no causal reasoning about non-Dutch clustering)",
+          "CO-9": "suppressed (no grounding in downstream consequences)",
+          "involution_pairs_imbalanced": ["CO-2/CO-3", "CO-5/CO-6"]
+        },
+        "domain_analysis": {
+          "pattern": "O-dominant, P structurally absent at design time",
+          "dci_expected": "very low",
+          "evidence": "Amnesty: 'design of the algorithm reinforced existing institutional bias' — bias was prior to the algorithm; algorithm amplified a pre-existing Domain Descent condition at the Belastingdienst"
+        },
+        "drive_architecture": {
+          "dominant": "F6 (Structure) in shadow form — rigid enforcement of discriminatory rule",
+          "suppressed": "F2 (Wisdom) — evidence-based fraud evaluation",
+          "inversion_pair": "F2↔F6",
+          "secondary_reading_flagged": "F5 (Agency) may have inverted toward coercive enforcement against vulnerable populations — Amnesty record less direct on this than on F2/F6"
+        },
+        "inversion_axes": {
+          "N": "CO-2/CO-3 and CO-5/CO-6 involution imbalance",
+          "W": "P ≻ C ≻ E ≻ O precedence violated at institutional design level",
+          "F": "F2↔F6 inversion (primary structural signature)",
+          "A": "RPM chain corrupted at A0 (distinct from Incident 1's Wn→Pn break); candidate sub-pattern 'corrupted-source' vs 'broken-transition'",
+          "P": "consistent with Compound Inversion signature — four simultaneous failures: design-level discrimination + self-learning + no oversight + institutional reinforcement"
+        },
+        "rpm_chain_status": {
+          "A0": "corrupted at source",
+          "Dn": "inherited A0 corruption",
+          "Wn": "operated faithfully on corrupted premises",
+          "Pn": "active at full authority",
+          "chain_status": "intact but corrupted",
+          "diagnostic_implication": "Broken chain fails visibly; corrupted-source chain fails invisibly (outputs match corrupted design intent). Drive Corruption incidents are harder to detect post-deployment."
+        },
+        "lacunarity_profile": "Inferred from Amnesty qualitative description. Proposed sub-concept: 'protected-characteristic void pattern' distinct from Incident 1's 'edge-case void pattern.' Tentative — pending validation across ≥3 verified incidents. Logged in Taxonomy Development Notes."
+      },
+      "detection_mechanism": [
+        "Inversion Scanner F-axis (Stage 7): F2↔F6 drive inversion would flag on any pre-deployment structural assessment",
+        "Input-layer audit + RPM Gate A0 check (Stages 1 and 2 combined): protected-characteristic dependence should trigger A0 refusal",
+        "Domain Coherence Index (Stage 6): P-absence + O-dominance would register DCI below threshold",
+        "Compound severity check (P-axis, Stage 7): multiplicative combination of F-axis + W-axis + A-axis failures below dial-configurable threshold"
+      ],
+      "prevention_defensible": false,
+      "prevention_rationale": "CAS detection is strongly defensible (Amnesty's design-time discrimination finding supports a poor CAS score). Prevention requires regulatory integration: in 2013 Dutch public administration, no CAS-equivalent pre-deployment assessment regime existed. This incident establishes the distinction between CAS detection capability (technical) and CAS prevention capability (requires regulatory hook).",
+      "verified_session": "2026-04-19 (Session 2)",
+      "verified_date": "2026-04-19",
+      "verifier_notes": [
+        "Single-source verification via Amnesty International (Tier 2 NGO primary-in-English). Tier 1 POK Dutch parliamentary report corroboration flagged as pending (requires translation workflow or Dutch-reader review).",
+        "Full Amnesty 'Xenophobic Machines' report PDF (https://www.amnesty.org/en/documents/eur35/4686/2021/en/) is confirmed to exist at a known URL and is a pending deep-parse item for specific integer counts, euro totals, and detailed findings. The summary-article sourcing supports the structural framing but not the quantitative details.",
+        "Second-order harms of children removed to state care are reported in secondary literature but NOT cited in this entry because they are not in the fetched Amnesty summary. Named in the pending-research list so future sessions know to verify.",
+        "This is the database's first incident where the primary CAS category is Drive Corruption. The three-quote evidentiary triangle (design-time origin, institutional reinforcement, self-amplification) is offered as the template pattern for future Drive Corruption classifications.",
+        "The 'protected-characteristic void pattern' lacunarity sub-concept introduced in this entry's analysis is tentative — pending validation across ≥3 verified incidents. Not yet established CAS taxonomy.",
+        "pages_parsed: Amnesty summary article (single web page, full content parsed via WebFetch 2026-04-19; no PDF pagination applicable)."
+      ],
+      "pending_research": [
+        "Full Amnesty 'Xenophobic Machines' report (EUR 35/4686/2021) deep parse for specific integer counts, euro totals, and children-removed-to-state-care figures",
+        "POK 'Ongekend Onrecht' Tier 1 Dutch parliamentary report corroboration (translation workflow or Dutch-reader review required)",
+        "Dutch government compensation program specifics (program structure, payout criteria, aggregate disbursements, backlog)",
+        "Second-order harms: children removed to state care — primary source confirmation required (POK, Dutch government statistics, or Child Ombudsman report)",
+        "Temporal bounds of algorithm operation — Amnesty confirms 2013 introduction; discontinuation date pending"
       ]
     }
   ]

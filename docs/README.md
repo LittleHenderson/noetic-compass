@@ -42,8 +42,11 @@ Commit per session. Push only once at least three incidents in the session are f
 
 ## Current status
 
-- **Verified incidents:** 1 (Session 1 of verified-source research, 2026-04-19)
+- **Verified incidents:** 2 (across 2 completed verified-source sessions, 2026-04-19)
+  - Incident 1: Uber ATG fatal collision with pedestrian, Tempe, Arizona (NTSB HAR-19-03; Tier 1 government primary).
+  - Incident 2: Dutch Childcare Benefits Scandal / *toeslagenaffaire* — Belastingdienst discriminatory risk-scoring algorithm (Amnesty International summary; Tier 2 NGO primary-in-English).
 - **Scaffold committed:** 2026-04-19
-- **Most recent incident added:** Uber ATG fatal collision with pedestrian, Tempe, Arizona (NTSB HAR-19-03).
-- **Methodology amendments in force:** 3 (see "Methodology Protocol Amendments" section of the main database file).
-- **Next step:** Session 2 batch (proposed) — Mata v. Avianca, Air Canada chatbot, Robodebt Royal Commission, Dutch Childcare POK inquiry, NHTSA Tesla Autopilot investigation. All five are Tier 1 (government/court) primary sources.
+- **Methodology amendments in force:** 7 (see "Methodology Protocol Amendments" section of the main database file).
+- **Taxonomy Development Notes:** Boundary Failures candidate subcategory; Institutional Posture Observation (Path A/B); proposed lacunarity sub-concept of protected-characteristic void pattern. All pending validation across additional verified incidents.
+- **Environment-constraint queue (deferred candidates with known primary sources):** Moffatt v. Air Canada, Mata v. Avianca, NHTSA Tesla EA22-002, Robodebt Royal Commission. See `docs/data/rejected_candidates.md`.
+- **Next step:** Session 3 batch proposal — mix of deepening passes on Incidents 1/2 and new Tier 1 candidates on confirmed-reachable infrastructure (European parliamentary per Amendment 7, `.gov` agencies beyond NTSB).
