@@ -110,6 +110,21 @@ Structural semantics:
 
 The RPM is a **section-retraction**, not an adjunction: prerequisite satisfaction is one-directional, and re-embedding after realization may lose information. The RPM Gate caches initial satisfaction results rather than assuming reversibility.
 
+### 5 Generative Operations
+
+Five formally-verified operations on cognitive-state expressions. Each preserves the four CAS v7.4 invariants: admissibility relations, domain descent, open-simplex constraints, and RPM section-retraction.
+
+**Three algebraic operations:**
+- **Multiplication** — monoid composition with domain descent applied.
+- **Division** — same-domain ratio; involution pairs resolve to the identity operator CO-0.
+- **Fractal composition** — operator-sequence dynamics over iterated function systems.
+
+**Two syntactic operations:**
+- **Addition** — co-presence of two Ideas or configurations.
+- **Subtraction** — structural removal of an element.
+
+The CAS notation compiler enforces these invariants at compile time before any expression is executed. The synthesizer in the platform's Compose tab uses all five operations to produce structurally varied assessable scenarios.
+
 ### Lacunarity analysis
 
 Structural measure of how activation is distributed across the 40-state space. High lacunarity = concentration in a few states with adjacent voids. Two sub-patterns currently under development in the incident database: **edge-case void** (competent in the training-distribution core, voided at structurally adjacent edges) and **protected-characteristic void** (activation dense along a protected axis, voided on the axes that should have carried the evaluation). See `docs/INCIDENT_CATEGORIES.md` Taxonomy Development Notes.
