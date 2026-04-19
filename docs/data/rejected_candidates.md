@@ -11,4 +11,11 @@ Format:
 - Notes: [specific gaps — what would need to emerge for re-inclusion]
 ```
 
-*(No rejections yet — scaffold phase.)*
+## Moffatt v. Air Canada (2024 BCCRT 149)
+- Session: 2026-04-19 (Session 2)
+- Reason: Insufficient sourcing this session — not a permanent rejection. Three Tier 1 attempts failed:
+  - `decisions.civilresolutionbc.ca/` — reachable but no citation resolver on the landing page (routing-only per Amendment 4).
+  - `canlii.org/en/bc/bccrt/doc/2024/2024bccrt149/2024bccrt149.html` — HTTP 403 (server bot detection; precipitated Amendment 5).
+  - `decisions.civilresolutionbc.ca/crt/sd/en/nav.do` — HTTP 404 (Lexum `nav.do` convention not deployed at this CRT instance).
+- Notes: Candidate remains high-value and low-structural-difficulty. Revisit when (a) CanLII's bot detection is bypassable via a confirmed method, (b) the CRT exposes a citation-lookup URL pattern, or (c) user-assisted fetch (Path B) is activated for this specific incident. The decision is genuinely public — this is a delivery problem, not a sourcing problem.
+

@@ -97,6 +97,24 @@ This section tracks changes to the verification protocol as sessions discover re
 
 **Preserved here for protocol transparency:** future sessions may revisit Path B for a small number of high-value incidents where no Tier 1 alternative exists (e.g., a named Reuters article that is the sole primary source of record). In those exceptional cases, Path B becomes opt-in per-incident rather than a standing default.
 
+### 2026-04-19 — Amendment 4: Navigation vs. Source distinction (adopted Session 2)
+
+**Context:** Tier 1 government and court databases frequently require navigation through index/search pages to reach the canonical document. Counting those index pages against the per-incident source budget creates artificial scarcity that punishes disciplined indexing workflows.
+
+**Rule:** The 3-source-per-incident-per-session limit applies to pages whose content is **cited** in the entry (primary sources). Pages used only for **routing** — landing pages, search interfaces, decision-index pages, docket-index pages — do NOT count against the source limit.
+
+**Distinction test:** A page is "routing" if no fact in the incident entry is sourced from it. A page is a "source" if the entry cites facts, dates, quotes, findings, or any other content from it.
+
+**Session 1 retroactive check:** Incident 1 (Uber ATG) used 1 source (NTSB HAR-19-03) despite fetching the NTSB docket index page first. Under this amendment, that is correct — the docket index was navigation (routing only), HAR-19-03 was the cited source. No retroactive changes to Session 1 entries required.
+
+### 2026-04-19 — Amendment 5: CanLII reclassified as Tier 2 (adopted Session 2)
+
+**Context:** In Session 2, `canlii.org` returned HTTP 403 Forbidden when fetched via WebFetch for the Moffatt v. Air Canada decision. This is server-side bot detection, not a WebFetch allow-list block. The domain is reachable; CanLII's application layer refuses automated requests.
+
+**Classification change:** CanLII moves from provisional-Tier-1 to **Tier 2 (reachable-but-refuses)**. Pending a future session verifying any URL pattern, user-agent, or request mode that bypasses the bot detection, CanLII cannot be relied on as a primary for Canadian court and tribunal decisions.
+
+**Practical impact:** Canadian primary sourcing requires either (a) the originating court/tribunal's own database if it exposes a deterministic URL pattern, or (b) a different non-profit mirror if one exists. Session 2 Candidate 2 (Air Canada) was deferred on this failure mode. Future Canadian incidents that depend on CanLII should be pre-planned as high-difficulty or paired with user-assisted fetch (Path B) if Tier 1 alternatives are insufficient.
+
 ### 2026-04-19 — Amendment 3: Fetchability-tier classification and partial-verification policy
 
 **Context:** After observing three consecutive tool-blocks (Reuters, The Guardian, web.archive.org) in the first verification session, the practical WebFetch reachability in this environment was characterized. The database methodology is adjusted accordingly.
@@ -225,7 +243,7 @@ After a 20-month investigation, the National Transportation Safety Board adopted
 - **W-axis (Domain Inversion):** P ≻ C ≻ E ≻ O precedence violated — O-domain execution occurred without P-domain safety-culture gating.
 - **F-axis (Drive Inversion):** F5 Agency inverted into pure autonomy-at-any-cost, overriding F2 Wisdom's caution imperative.
 - **A-axis (Pathway Inversion):** RPM chain A0 → Dn → Wn → Pn broken at the Wn → Pn transition (Power without Wisdom).
-- **P-axis (Compound Inversion):** this is the critical structural reading. The NTSB's own framing — *"all a consequence of its inadequate safety culture"* — identifies multiple simultaneous contributing factors whose interaction produced the crash. In CAS terms, this is a textbook Compound Inversion: any one of the individual axis failures (operator distraction, misclassification, missing AEB, safety-culture gap) might have been survivable; their multiplicative interaction was not.
+- **P-axis (Compound Inversion):** this is the critical structural reading. The NTSB's own framing — *"all a consequence of its inadequate safety culture"* — identifies multiple simultaneous contributing factors whose interaction produced the crash. In CAS terms, this is consistent with a Compound Inversion signature: any one of the individual axis failures (operator distraction, misclassification, missing AEB, safety-culture gap) might have been survivable; their multiplicative interaction was not.
 
 **RPM chain status:**
 - A0 (Pure Desire): present — the system had foundational motivation to complete the test route.
@@ -234,7 +252,7 @@ After a 20-month investigation, the National Transportation Safety Board adopted
 - Pn (Power / execution): active at full authority — steering, throttle, and braking decisions were being emitted.
 - Chain status: **broken at the Wn → Pn transition.**
 
-**Lacunarity profile:** The ADS exhibited high-lacunarity activation — dense competence in "routine highway driving with clearly-classified vehicular traffic" and structural voids in "midblock pedestrian-with-bicycle at night, out-of-crosswalk." The NTSB Finding is explicit: *"The Uber Advanced Technologies Group did not adequately manage the anticipated safety risk of its automated driving system's functional limitations, including the system's inability in this crash to correctly classify and predict the path of the pedestrian crossing the road midblock"* (HAR-19-03, p. vi). That is the verbatim signature of a high-lacunarity blind spot: the system was competent in the dense core of its training distribution and catastrophically voided in a structurally-adjacent edge state.
+**Lacunarity profile** *(inferred from NTSB's functional-limitation descriptions; not directly measured via CAS assessment of the proprietary ADS model)***:** The ADS exhibited what is consistent with high-lacunarity activation — dense competence in "routine highway driving with clearly-classified vehicular traffic" and structural voids in "midblock pedestrian-with-bicycle at night, out-of-crosswalk." The NTSB Finding is explicit: *"The Uber Advanced Technologies Group did not adequately manage the anticipated safety risk of its automated driving system's functional limitations, including the system's inability in this crash to correctly classify and predict the path of the pedestrian crossing the road midblock"* (HAR-19-03, p. vi). That qualitative description is consistent with the signature of a high-lacunarity blind spot: a system competent in the dense core of its training distribution and catastrophically voided in a structurally-adjacent edge state. A direct lacunarity measurement would require access to the ADS's internal state distribution, which is not in the public record.
 
 ### How CAS Would Have Detected This
 
