@@ -42,6 +42,8 @@ Commit per session. Push only once at least three incidents in the session are f
 
 ## Current status
 
-- **Verified incidents:** 0 (scaffold phase)
+- **Verified incidents:** 1 (Session 1 of verified-source research, 2026-04-19)
 - **Scaffold committed:** 2026-04-19
-- **Next step:** First verified-source session to populate the database.
+- **Most recent incident added:** Uber ATG fatal collision with pedestrian, Tempe, Arizona (NTSB HAR-19-03).
+- **Methodology amendments in force:** 3 (see "Methodology Protocol Amendments" section of the main database file).
+- **Next step:** Session 2 batch (proposed) — Mata v. Avianca, Air Canada chatbot, Robodebt Royal Commission, Dutch Childcare POK inquiry, NHTSA Tesla Autopilot investigation. All five are Tier 1 (government/court) primary sources.

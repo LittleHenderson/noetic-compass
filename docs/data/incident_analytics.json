@@ -2,22 +2,40 @@
   "schema_version": "1.0.0",
   "generated": "2026-04-19",
   "last_updated": "2026-04-19",
-  "total_incidents": 0,
-  "by_category": {},
-  "by_year": {},
-  "by_sector": {},
-  "by_severity": {},
-  "by_entity": {},
+  "total_incidents": 1,
+  "by_category": {
+    "Prerequisite Chain Failures (RPM breaks)": 1
+  },
+  "by_year": {
+    "2018": 1
+  },
+  "by_sector": {
+    "autonomous_vehicles_transportation": 1
+  },
+  "by_severity": {
+    "Critical": 1
+  },
+  "by_entity": {
+    "Uber Technologies, Inc., Advanced Technologies Group": 1
+  },
   "sourcing_statistics": {
-    "average_sources_per_incident": null,
-    "incidents_by_source_tier_primary": {},
-    "sessions_conducted": 0,
-    "urls_fetched_total": 0,
-    "candidates_rejected_for_insufficient_sourcing": 0
+    "average_sources_per_incident": 1.0,
+    "incidents_by_source_tier_primary": {
+      "tier_1_government_court_academic": 1,
+      "tier_2_international_news_ngo": 0,
+      "tier_3_commercial_journalism_archival": 0
+    },
+    "sessions_conducted": 1,
+    "urls_fetched_total": 5,
+    "urls_fetched_successful": 2,
+    "urls_fetched_tool_blocked": 3,
+    "candidates_rejected_for_insufficient_sourcing": 0,
+    "incidents_with_pending_research_items": 1,
+    "incidents_with_single_source_verification": 1
   },
   "prevention_vs_detection": {
     "prevention_defensible_count": 0,
-    "detection_only_count": 0
+    "detection_only_count": 1
   },
-  "notes": "This file is regenerated whenever incidents.json is updated. It contains only aggregate statistics — no narrative claims. Empty fields mean the threshold for that statistic has not yet been reached."
+  "notes": "This file is regenerated whenever incidents.json is updated. Single-incident aggregates are not statistically meaningful and are not yet suitable for the summary sections of the main database document, which unlock at N≥20/25/30/40 per the document's staged-evidence policy."
 }

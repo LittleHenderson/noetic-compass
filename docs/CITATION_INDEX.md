@@ -2,7 +2,7 @@
 
 Master bibliography for the AI Misalignment Incident Database. Every source cited in an incident entry must appear here, grouped by source type. Entries are added only after the source has been fetched and read in a verified-source research session.
 
-**Current session-verified entries:** 0 (scaffold only)
+**Current session-verified entries:** 1 (from 1 incident across 1 session)
 
 ---
 
@@ -18,7 +18,11 @@ Citations are grouped by authoritative tier:
 ### B. Government and Regulatory Reports
 *Issuing agency, report ID or title, publication date, URL to official release.*
 
-*(Empty — scaffold.)*
+**[B-001]** National Transportation Safety Board. *Collision Between Vehicle Controlled by Developmental Automated Driving System and Pedestrian, Tempe, Arizona, March 18, 2018.* Highway Accident Report NTSB/HAR-19-03, PB2019-101402, Notation 59392. Adopted November 19, 2019; reissued June 26, 2020 with title-page corrections. Washington, DC.
+- Docket URL: `https://www.ntsb.gov/investigations/Pages/HWY18MH010.aspx`
+- Full-report URL: `https://www.ntsb.gov/investigations/AccidentReports/Reports/HAR1903.pdf`
+- Retrieved via WebFetch 2026-04-19 (docket page; PDF retrieved via WebFetch, parsed locally via Read tool, pages 1–12 of 78).
+- Used in: Incident 1.
 
 ### C. Academic Papers (Peer-Reviewed)
 *Author(s), title, journal/conference, DOI or preprint ID, year.*
@@ -63,4 +67,11 @@ Format:
 YYYY-MM-DD [session-id] | URL | status | used-for-incident-N-or-rejected
 ```
 
-*(Empty — scaffold.)*
+**Session 2026-04-19 (Session 1):**
+```
+2026-04-19 | https://www.ntsb.gov/investigations/Pages/HWY18MH010.aspx        | success                           | used for Incident 1 (NTSB docket index)
+2026-04-19 | https://www.ntsb.gov/investigations/AccidentReports/Reports/HAR1903.pdf | success (retrieved); local Read parse needed | used for Incident 1 (NTSB full report, pp. 1–12 of 78)
+2026-04-19 | https://www.reuters.com/article/us-autos-selfdriving-uber/...idUSKBN1GV296 | tool-blocked                      | not used; Tier 3 domain block
+2026-04-19 | https://www.theguardian.com/technology/2018/mar/19/uber-self-driving-car-kills-woman-arizona-tempe | tool-blocked | not used; Tier 3 domain block
+2026-04-19 | https://web.archive.org/web/2018/https://www.theguardian.com/... | tool-blocked                      | not used; Tier 3 (Wayback)
+```

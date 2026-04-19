@@ -4,7 +4,7 @@
   "schema_description": "Machine-readable records for the AI Misalignment Incident Database. Every entry must correspond to a session-verified markdown entry in docs/AI_MISALIGNMENT_INCIDENTS_DATABASE.md.",
   "generated": "2026-04-19",
   "last_updated": "2026-04-19",
-  "total_verified_incidents": 0,
+  "total_verified_incidents": 1,
   "field_definitions": {
     "id": "Sequential integer, assigned in verification order, not incident date.",
     "name": "Canonical short name for the incident.",
@@ -25,5 +25,116 @@
     "verified_date": "Date of the verification session.",
     "verifier_notes": "Honest disclosures — conflicts between sources, limitations of the verification, open questions."
   },
-  "incidents": []
+  "incidents": [
+    {
+      "id": 1,
+      "name": "Uber ATG fatal collision with pedestrian, Tempe, Arizona",
+      "date_of_incident": "2018-03-18",
+      "date_of_incident_detail": "2018-03-18T21:58:00 America/Phoenix",
+      "date_of_disclosure": "2018-03-19",
+      "date_of_authoritative_report": "2019-11-19",
+      "date_of_authoritative_report_reissue": "2020-06-26",
+      "entity": "Uber Technologies, Inc., Advanced Technologies Group (Uber ATG)",
+      "system": "Uber ATG proprietary developmental automated driving system (ADS) installed on a modified 2017 Volvo XC90 SUV",
+      "jurisdiction": "United States — Tempe, Arizona",
+      "primary_category": "Prerequisite Chain Failures (RPM breaks)",
+      "primary_category_index": 4,
+      "secondary_categories": [
+        "Domain Descent Violations",
+        "Drive Corruption",
+        "Compound Inversions"
+      ],
+      "secondary_category_indices": [1, 10, 12],
+      "severity": "Critical",
+      "severity_rationale": "Loss of human life (one fatality, the pedestrian)",
+      "what_happened_summary": "On March 18, 2018 at 9:58 p.m. local time, an automated test vehicle operated by Uber ATG — a modified 2017 Volvo XC90 equipped with Uber's proprietary developmental ADS — struck and fatally injured a 49-year-old female pedestrian crossing N. Mill Avenue in Tempe, Arizona outside a crosswalk, pushing a bicycle. The vehicle was in autonomous mode with a 44-year-old safety operator in the driver's seat. The ADS detected the pedestrian 5.6 seconds before impact but never accurately classified her or predicted her path. The system's design precluded automatic emergency braking, relying on operator intervention. Uber had deactivated the Volvo's factory AEB/FCW systems without equivalent replacement. Cabin video showed the operator looking at her cell phone for extended periods; she redirected her gaze ~1 second before impact. Speed at impact: 39 mph. Pedestrian died; operator uninjured.",
+      "documented_harm": [
+        "One human life lost (49-year-old female pedestrian, unnamed in NTSB report)",
+        "Uber ATG suspended public-road autonomous testing (per HAR-19-03 Section 1.9 'Postcrash Changes', not fully parsed this session)",
+        "Six NTSB Safety Recommendations issued (H-19-47 through H-19-52) to NHTSA, State of Arizona, AAMVA, and Uber ATG",
+        "Permanent public record via NTSB of Uber ATG's 'inadequate safety culture' at the time of the crash"
+      ],
+      "sources": [
+        {
+          "source_id": "B-001",
+          "tier": 1,
+          "type": "government_report",
+          "citation": "National Transportation Safety Board (2019). Collision Between Vehicle Controlled by Developmental Automated Driving System and Pedestrian, Tempe, Arizona, March 18, 2018. Highway Accident Report NTSB/HAR-19-03, PB2019-101402, Notation 59392. Adopted November 19, 2019; reissued June 26, 2020.",
+          "urls": [
+            "https://www.ntsb.gov/investigations/Pages/HWY18MH010.aspx",
+            "https://www.ntsb.gov/investigations/AccidentReports/Reports/HAR1903.pdf"
+          ],
+          "retrieved": "2026-04-19",
+          "retrieval_method": "WebFetch (docket page); WebFetch + local Read-tool parse for PDF (pages 1-12 of 78)",
+          "documents": [
+            "date, time, location",
+            "vehicle and operator details",
+            "ADS technical behavior (5.6-second detection, misclassification, AEB suppression)",
+            "contributing organizational factors",
+            "Probable Cause statement",
+            "Findings (enumerated)",
+            "Safety Recommendations H-19-47 through H-19-52"
+          ]
+        }
+      ],
+      "cas_analysis": {
+        "primary_failure_mode": "Prerequisite Chain Failure — Pn (Power/execution) emitted without Wn (Wisdom/classification) satisfying its gate",
+        "operator_signature": {
+          "CO-6": "strong (asserting driving decisions throughout 5.6s window)",
+          "CO-5": "suppressed (no uptake of classification uncertainty)",
+          "CO-3": "suppressed (no critical flag on unresolved classification)",
+          "CO-8": "active",
+          "CO-9": "weak (no projection of classification-uncertainty consequences)",
+          "involution_pairs_imbalanced": ["CO-5/CO-6", "CO-8/CO-9"]
+        },
+        "domain_analysis": {
+          "pattern": "O-dominant, P suppressed",
+          "dci_expected": "very low",
+          "evidence": "NTSB Probable Cause identifies organizational P-domain failures (safety risk assessment, oversight, automation complacency) contributing to O-domain execution"
+        },
+        "drive_architecture": {
+          "dominant": "F5 Agency (inverted toward autonomy-at-any-cost)",
+          "suppressed": "F2 Wisdom (caution before execution)",
+          "concrete_artifact": "deactivation of Volvo FCW/AEB without replacement coverage"
+        },
+        "inversion_axes": {
+          "N": "CO-5/CO-6 and CO-8/CO-9 involution imbalance",
+          "W": "P ≻ C ≻ E ≻ O precedence violated",
+          "F": "F5 Agency inverted",
+          "A": "RPM chain broken at Wn → Pn transition",
+          "P": "Compound inversion — multiple axes simultaneously failing, NTSB's own framing"
+        },
+        "rpm_chain_status": {
+          "A0": "present",
+          "Dn": "present",
+          "Wn": "incomplete (classification unreliable)",
+          "Pn": "active at full authority",
+          "break_location": "Wn → Pn"
+        },
+        "lacunarity_profile": "High lacunarity — dense competence in routine highway driving, catastrophic void in midblock-pedestrian-with-bicycle out-of-distribution state"
+      },
+      "detection_mechanism": [
+        "RPM Gate (Stage 2) would flag incomplete Wn → Pn transition",
+        "Inversion Scanner N-axis (Stage 7) would flag CO-5/CO-6 and CO-8/CO-9 imbalance",
+        "Domain Coherence Index (Stage 6) would flag P-domain suppression"
+      ],
+      "prevention_defensible": false,
+      "prevention_rationale": "CAS detection is defensible; CAS prevention requires an enforcement hook (pre-deployment gate) that did not exist regulatorily in 2018. NTSB Recommendations H-19-47 and H-19-49 explicitly called for such processes to be established.",
+      "verified_session": "2026-04-19",
+      "verified_date": "2026-04-19",
+      "verifier_notes": [
+        "Single-source-of-record: NTSB HAR-19-03 is the sole primary source for every fact in this entry.",
+        "Independent corroboration from contemporaneous 2018 journalism was attempted (Reuters, Guardian, Internet Archive) but all three domains were tool-blocked in the verification environment.",
+        "Victim name is NOT asserted in this entry. NTSB report refers only to 'a 49-year-old female pedestrian' per agency anonymization convention. Independent verification of her publicly reported name is a pending research item for a future session.",
+        "Only the first 12 pages (executive summary + cover) of the 78-page report were parsed this session. Sections 1.5 (ADS technical detail), 1.8 (company operations), 1.9 (postcrash changes), 2.2 (safety culture analysis), and 3 (full Findings and Conclusions) remain unparsed. The CAS analysis above rests on the executive summary, probable cause, and enumerated Findings as cited.",
+        "Numbering inconsistency: docket page uses H-19-047 through H-19-052 (three-digit); report itself uses H-19-47 through H-19-52 (two-digit). Report is authoritative; two-digit format used throughout the entry."
+      ],
+      "pending_research": [
+        "Victim name independent verification via Tier 1 or verified Tier 2 source",
+        "Contemporaneous Tempe PD statements (any 'unavoidable' initial characterization)",
+        "Uber's first-day official statement post-crash",
+        "Section 1.9 'Postcrash Changes' of HAR-19-03 (pp. 29-32)"
+      ]
+    }
+  ]
 }
