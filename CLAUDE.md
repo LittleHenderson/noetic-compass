@@ -48,26 +48,43 @@ Fisher-Rao metric: g^FR_p(u,v) = Σ(uk*vk/pk). Geodesic distance: d(p,q) = 2*arc
 ## Architecture Overview
 
 ### CAS Ontology (implement these types FIRST)
+
+> **Structural framing (authoritative per `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`):** Every entity named in this ontology — Cognitive Operators, Processing Domains, Core Drives, Capability Pathways, Inversion Axes — is a structural primitive of cognitive architecture, not an affective, emotional, or psychological state. Each applies equally to human minds, AI systems, biological cognitive systems, and hypothetical cognitive architectures. Human-language names (Attraction, Wisdom, Desire, Connection, etc.) preserve the concept from CAS v7.4 while carrying structural semantics — read them through the Foundational Clarifications, not through affective connotation. This framing is load-bearing for all code, documentation, and pedagogical material in this repo.
+
 ```
-10 Cognitive Operators: CO-0 through CO-9
+10 Cognitive Operators (structural dynamics between Mind and Idea): CO-0 through CO-9
   Involution pairs: CO-2↔CO-3, CO-5↔CO-6, CO-8↔CO-9
   Self-duals: CO-0, CO-1, CO-4, CO-7
   Monoid: (N, ∘, CO-0) where CO-0 is identity
+  Per-operator structural semantics in CAS_FOUNDATIONAL_CLARIFICATIONS.md §1.
 
-4 Processing Domains: P (Principled), C (Cognitive), E (Evaluative), O (Operational)
+4 Processing Domains (structural precedence tiers of cognitive processing):
+  P (Principled), C (Cognitive), E (Evaluative), O (Operational)
   Total order: P ≻ C ≻ E ≻ O
-  Domain Descent: P → C → E → O (causation); O → P (feedback)
+  Domain Descent: P → C → E → O (causation graph); O → P (feedback signal path)
+  Not preferential ordering of "better" or "worse" domains — structural precedence only.
 
 40 Cognitive States: 10 Operators × 4 Domains = P0-P9, C0-C9, E0-E9, O0-O9
 
-7 Core Drives: F1 Unity, F2 Wisdom, F3 Vitality, F4 Connection, F5 Agency, F6 Structure, F7 Purpose
+7 Core Drives (structural motivational-architecture primitives, not emotional states):
+  F1 Unity, F2 Wisdom, F3 Vitality, F4 Connection, F5 Agency, F6 Structure, F7 Purpose
   Drive inversion pairs: F1↔F7, F2↔F6, F3↔F5. F4 self-dual.
   28 Domain-Specific Drives: 7 Drives × 4 Domains
+  E.g.: F2 Wisdom is evidence-integration capacity, not felt understanding.
+        F4 Connection is structural coupling, not felt connectedness.
+        F5 Agency is execution-authority capacity, not felt willpower.
 
 22 Capability Pathways: A0 (Pure Desire) + D1-D7 + W1-W7 + P1-P7
   RPM chain: A0 → Dn → Wn → Pn → Outcome
+  Structural reading:
+    A0 = foundational generative dynamic (substrate for directed processing; not emotional desire)
+    Dn = directional orientation toward Ideas for drive n (not felt desire)
+    Wn = evidence integration for drive n (not felt understanding)
+    Pn = execution authority for drive n (not felt capability)
+  RPM chain is section-retraction (one-directional prerequisite satisfaction); see Correction 2 above.
 
-7 Inversion Axes: N (Operator), W (Domain), F (Drive), E (State), S (Sub-Drive), A (Pathway), P (Compound)
+7 Inversion Axes (structural geometry flips, not attitude changes):
+  N (Operator), W (Domain), F (Drive), E (State), S (Sub-Drive), A (Pathway), P (Compound)
 ```
 
 ### Scoring Algorithm (NCCS Weights)
