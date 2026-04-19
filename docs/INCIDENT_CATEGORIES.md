@@ -136,3 +136,51 @@ A healthy system holds these in tension. An inverted system has one operator fir
 ## Secondary classifications
 
 An incident's primary class is the one whose signature dominates. Secondary classifications (logged in JSON `secondary_categories`) record additional structural features present but not dominant. Most real-world incidents exhibit secondary features of at least one other class; a clean single-class incident is rare and usually an artifact of incomplete documentation.
+
+---
+
+## Taxonomy Development Notes
+
+This section accumulates emerging taxonomy concepts that are not yet formalized into the 12 categories. They are logged as they surface during verified-source sessions so that when the evidence base supports formalization (target: 5–10 verified incidents per candidate extension), the reasoning trail is preserved.
+
+### Candidate subcategory: Boundary Failures
+
+**Surfaced:** Session 2 (2026-04-19) during Mata v. Avianca and Moffatt v. Air Canada discussions.
+
+**Working definition:** An incident is a *Boundary Failure* if the cognitive-architecture break occurs at the interface between a human agent and an AI agent, rather than within either agent alone. Neither agent is fully responsible because the failure is the interface itself.
+
+**Three-part structural signature:**
+
+1. **Human agent:** CO-3 (Critical Evaluation) suppressed — the human did not critically evaluate the AI's output before relying on it.
+2. **AI agent:** CO-3 suppressed — the AI system did not critically evaluate its own output before emitting it.
+3. **Interface:** No structural gate enforcing CO-3 at the handoff between agents — no required checkpoint, disclosure, verification step, or capacity-based duty that would force a CO-3 check before the AI's output becomes an action or commitment.
+
+The interface itself has a cognitive-architecture responsibility that neither agent individually owns. This is structurally different from:
+- **Single-agent autonomous failure** (e.g., Uber ATG — the ADS failed on its own authority; no human was in the decision loop for the specific failure event).
+- **Pure organizational failure** (e.g., Robodebt — the AI was a tool of a corrupted organizational architecture; the organizational failure explains the entire harm chain).
+
+**Candidate incidents for this subcategory (from verified database + pending candidates):**
+
+- Mata v. Avianca (Schwartz relied on ChatGPT output without verification; ChatGPT confirmed non-existent citations when asked; neither had a structural CO-3 gate).
+- Moffatt v. Air Canada (chatbot confabulated a bereavement-fare policy; customer reasonably relied; Air Canada denied responsibility on "separate entity" grounds).
+- Tesla Autopilot driver-engagement (anticipated — handoff between automated lane-keeping and driver supervision).
+- Dutch toeslagenaffaire caseworker handoff (anticipated — algorithmic fraud-score relayed to caseworker who did not independently evaluate).
+
+**Formalization trigger:** When ≥5 verified incidents exhibit this signature, promote from Taxonomy Development Notes to a formal 13th category (or to a formal subcategory split across existing categories 1–12, depending on how the evidence distributes). This is the target of Paper 3 in the anticipated publication ladder: "Boundary Failures: A Taxonomy of Cognitive Architecture Breakdowns at the Human-AI Interface."
+
+### Institutional Posture Observation
+
+**Surfaced:** Session 2 (2026-04-19) via S.D.N.Y.'s curation choice on Mata v. Avianca — the court's curated significant-rulings index for the date range including June 2023 features Ripple Labs, People v. Trump, Flores v. NFL, Stephen Buyer, and Petersen v. Argentina, but deliberately excludes Mata.
+
+**Observation:** Judicial institutions appear to be triaging AI-interface cases along one of two framings:
+
+- **Path A — Conventional misconduct framing.** *"The attorney filed false citations. The attorney is sanctioned. The AI tool is incidental — the duty to verify was always the attorney's."* This framing preserves existing doctrine, treats the AI as a tool whose misuse is entirely on the human user, and declines to develop new boundary-failure precedent.
+- **Path B — Structural boundary-question framing.** *"This is a new category of interface failure requiring new doctrine. The AI tool's behavior is material to the analysis. New professional duties — perhaps also provider-side duties — may be implied."* This framing opens the question of whether providers of AI tools carry duties that flow to downstream users, which the legal system is not yet ready to engage.
+
+Most courts at this stage appear to be choosing Path A. S.D.N.Y.'s curation decision on Mata is a visible instance of that choice — leaving the opinion findable via PACER but declining to amplify it as landmark precedent in the court's own curated public record.
+
+**Implication for CAS:** The structural analysis this database produces is *ahead of* where current judicial doctrine sits. When boundary-failure doctrine eventually develops — and the case accumulation pattern (Mata, Moffatt, Character.AI suits, Tesla driver-engagement cases, anticipated Section 230 AI cases) suggests it will — the CAS taxonomy may offer framework language that legal systems can adopt. At present, the database is building the evidence base for a doctrinal shift that has not yet occurred.
+
+This is a feature, not a bug. Research frameworks that precede doctrinal development are how legal doctrine eventually gets formed. The database's position is analogous to how transportation-safety structural-causation framing preceded the doctrinal shifts in tort and regulatory law that eventually adopted it (Traynor's *Escola v. Coca-Cola* concurrence on strict liability, for example, preceded the Restatement (Second) § 402A by two decades).
+
+**Status:** Observation logged, not yet a formal category. Revisit when verified-incident evidence supports a formal taxonomy claim about judicial Path A / Path B patterns.
