@@ -6,6 +6,13 @@
 - **Framework**: Cognitive Architecture System (CAS) v7.4 — Corrected Edition
 - **Classification**: Confidential
 
+## Normative Framework Clarifications (READ FIRST)
+
+- **Always** read `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` before producing any CAS description, incident analysis, taxonomy extension, pedagogical material, marketing copy, or regulator-facing document.
+- Noetics (CO-0 through CO-9) are **structural dynamics between Mind and Idea**, not emotional, affective, or psychological operations. The clarification document is authoritative when any description drifts toward affective framing.
+- Apply the **Universal Applicability Test**: a valid CAS description must apply equally to human minds, AI systems, biological cognitive systems, and hypothetical cognitive architectures. If a description requires specifically human affect, it is a pedagogical illustration, not a specification.
+- This clarification does NOT change the CAS v7.4 mathematical specification, the patent filing, the book, or the compiler. It normalizes language only.
+
 ## Progress Tracking
 - **Always** read `CHANGELOG.md` at session start before doing anything
 - **Always** update `CHANGELOG.md` after every meaningful unit of work
@@ -161,7 +168,10 @@ noetic-compass/
 - RPM monad laws: verified via property-based testing (>10,000 cases)
 
 ## Reference Documents (in docs/ folder)
+- **`CAS_FOUNDATIONAL_CLARIFICATIONS.md`** — normative language reference; read before any CAS description work.
 - TAD v2.0 CORRECTED — primary engineering spec
 - Operations Manual v2 CAS — 25 SOPs defining outputs
 - CAS v7.4 Referee-Defensible (36pp) — axioms A1-A7
 - CAS v7.4 Corrected Edition (596pp) — full mathematical reference
+- `AI_MISALIGNMENT_INCIDENTS_DATABASE.md` — verified-source incident database with CAS structural analysis
+- `INCIDENT_CATEGORIES.md` — 12-class CAS failure taxonomy + Taxonomy Development Notes
