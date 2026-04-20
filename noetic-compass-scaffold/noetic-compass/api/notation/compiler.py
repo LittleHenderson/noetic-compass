@@ -30,16 +30,16 @@ except ImportError:  # pragma: no cover - exercised via fallback tests
 
 
 OPERATOR_NAMES = [
-    "Generative Potential",
-    "Directed Attention",
-    "Attraction / Affinity",
-    "Aversion / Critical Evaluation",
-    "Encoding Intensity",
-    "Receptive Integration",
-    "Projective Assertion",
-    "Pattern Entrainment",
-    "Causal Initiation",
-    "Consequential Grounding",
+    "Idea",
+    "Mind",
+    "Positive",
+    "Negative",
+    "Vibration",
+    "Female",
+    "Male",
+    "Rhythm",
+    "Above/Cause",
+    "Below/Effect",
 ]
 
 DOMAIN_NAMES = {
