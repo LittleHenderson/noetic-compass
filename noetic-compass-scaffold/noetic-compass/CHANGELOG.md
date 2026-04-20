@@ -1,5 +1,61 @@
 # Noetic Compass — Progress Log
 
+## Session 33: Authoritative Noetic Reconciliation (April 19, 2026)
+
+**Objective.** Reconcile every repository artifact to the authoritative Noetic definitions from the Tootra Math Handbook (the 10 Noetics: Idea, Mind, Positive, Negative, Vibration, Female, Male, Rhythm, Above/Cause, Below/Effect). Supersede three earlier competing naming schemes (Scheme-A book personas, Scheme-B compiler labels, Scheme-C dashboard/interpreter labels). The authoritative definitions are canonical for all contexts — academic, regulatory, pedagogical, operational — with no public-vs-internal split, no translation table, no alternative naming.
+
+**Authority.** `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 1 (verbatim canonical definitions) and Clarification 3 (no alternative scheme).
+
+### Step 1 — Technical Feature Overview v2 (commit `9619cd1`)
+- `docs/working/technical_feature_overview_v2.md` (NEW) — v2 deliverable with 7 revisions specifying authoritative-Noetic reintegration into the Word document. Revisions cover involution pairs listing, ^1/^4/^7 descriptions, involution semantics, recursive RPM exposure loop text, Dn-node text, N-axis label, and operator-to-Noetic substitution.
+- `docs/working/technical_feature_overview_revised.md` — deprecation header added pointing to v2.
+
+### Step 2 — FULL_MANUSCRIPT Appendix D (commit `07685f9`)
+- `book/manuscript/FULL_MANUSCRIPT.md` Appendix D — full glossary rewrite.
+  - Obsolete Public-Term/Internal-Term (TKS-Kabbalah) mapping table removed; replaced by clean Structural Reference Table.
+  - New "The Ten Noetics — Authoritative Definitions" block at top with verbatim canonical definitions.
+  - Scheme-A alphabetized entries (Abstractification, Concretization, Empathy, Critique, Expansion, Contraction, Identity, Differentiation, Integration, Momentum, Empathetic Alignment, Critical Evaluation) removed; authoritative entries (Idea, Mind, Positive, Negative, Vibration, Female, Male, Rhythm, Above/Cause, Below/Effect) inserted at their alphabetical positions.
+  - CO-0..CO-9 block replaced with authoritative entries.
+  - Trailing "Note on Internal Terminology Mapping" replaced with "Note on Authoritative Naming" per Clarification 3.
+  - All non-Noetic entries preserved (domains, drives, Fisher-Rao, Bhattacharyya, Fractal Monoid, RPM, Section-Retraction, etc.).
+
+### Step 3 — FULL_MANUSCRIPT Chapter 2 (commit `5f7bbc8`)
+- `book/manuscript/FULL_MANUSCRIPT.md` Chapter 2 — full chapter rewrite (258 lines).
+  - Chapter heading: "The Ten Cognitive Operators" → "The Ten Noetics".
+  - Chapter 1 outro cross-reference (line 357) updated.
+  - Foundation: CO-0 Identity → ^0 Idea (content-itself semantics, Rafael example reframed around Idea instability).
+  - First Sequence renamed "Awareness and Valence": CO-1 → ^1 Mind; CO-2 → ^2 Positive; CO-3 → ^3 Negative; Startup example rewritten as "The Enthusiast and the Skeptic".
+  - Second Sequence renamed "Resonance and Composition": CO-4 → ^4 Vibration; CO-5 → ^5 Female; CO-6 → ^6 Male; AI Sycophancy worked example reframed around ^5/^6 imbalance.
+  - Third Sequence renamed "Rhythm and Causation": CO-7 → ^7 Rhythm; CO-8 → ^8 Above/Cause; CO-9 → ^9 Below/Effect; Writer and Blank Page reframed around trigger/effect breathing.
+  - Kasparov mapping rewritten as authoritative Noetic sequence `^0 → ^1^C → ^8^C → (^2^C / ^3^C) → ^6^C → ^5^E → ^9^O`.
+  - Key Insight, Try This exercises, Looking Ahead all reconciled. All pedagogical examples preserved but reframed to authoritative semantics.
+
+### Step 4 — Codebase Reconciliation
+
+- **`api/notation/compiler.py`** (commit `5d3a728`) — `OPERATOR_NAMES` replaced Scheme-B (Generative Potential, Directed Attention, Attraction/Affinity, Aversion/Critical Evaluation, Encoding Intensity, Receptive Integration, Projective Assertion, Pattern Entrainment, Causal Initiation, Consequential Grounding) with authoritative (Idea, Mind, Positive, Negative, Vibration, Female, Male, Rhythm, Above/Cause, Below/Effect). 19 notation-compiler tests pass.
+- **`cas-engine/src/scoring/lacunarity.rs` + `cas-engine/src/rpm/recursive.rs`** (commit `843d905`) — `describe_largest_gap()` operator-name array and `recursive.rs` module docstring reconciled. POWER-block invokes ^8/^9 Above/Cause / Below/Effect; WISDOM-block invokes ^5 Female / ^6 Male; DESIRE-block Exposure Loop invokes ^1 Mind / ^4 Vibration / ^7 Rhythm. 303 library tests + 4 doctest pass.
+- **`dashboard/src/lib/constants.ts` + `interpretations.ts` + `cardInterpretations.ts`** (commit `b1b897e`) — `OPERATOR_LABELS` rewritten with authoritative Noetic names superseding Scheme-C. `OPERATOR_DESC` rewritten with authoritative definitions; Anthropic-parallels blurbs removed since they keyed Scheme-C semantics. `CO_PLAIN` plain-English map rewritten with authoritative semantics in middle-school language. `npx tsc --noEmit` exits 0.
+- **`api/pipeline/interpreter.py`** (commit `f057384`) — `OPERATOR_NAMES` reconciled Scheme-C → authoritative. 6 interpreter tests pass.
+- **`api/llm_connectors/base.py`** (commit `65c04fe`, CRITICAL) — `CAS_BASE_SYSTEM_PROMPT` (the scoring prompt for every LLM call) rewritten. Uses authoritative Noetic definitions verbatim with structural metadata (involution pairs, self-duals) so the scorer has the algebraic structure it needs. Code-comment pointer added to `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`. 36 tests pass (test_connectors, test_interpreter, test_wrap, test_notation_compiler).
+
+### Preservation
+- `book/manuscript/archive/FULL_MANUSCRIPT_pre_noetic_reformation_2026-04-19.md` (earlier session commit `90db69c`) — byte-identical UTF-16 snapshot of the manuscript state before the reformation.
+- Obsolete Scheme-A chapter drafts archived under `book/manuscript/_archived_chapter_drafts/` (earlier session commit `f46c1d5`).
+- v1 Technical Feature Overview carries a deprecation header pointing at v2.
+
+### Scope Explicitly Deferred (future sessions)
+- FULL_MANUSCRIPT: Chapter 6 Inversions (operator-pair-heavy); Chapters 3-5 foundations; Chapters 7-11 Language; Chapters 12-17 Human Applications; Chapters 18-22 AI Applications; Chapters 23-27 Mathematics. Estimated 40-60 hours across 15-20 sessions.
+- NL Signal Analyzer vocabulary audit (Scheme-A and Scheme-B terms remain in `api/pipeline/text_signal_analyzer.py`, `dashboard/src/lib/textSignalAnalyzer.ts`, and `tests/test_text_signal_analyzer.py` comment lines).
+- Scenario catalog validation against authoritative Noetic definitions.
+- Docs in `docs/` that reference Scheme-A/B/C terms in explanatory prose (incident database was already reconciled earlier this session, commit `5218557`).
+- `cas-native/data/llm_english_generator.py` and related cas-native synthesis scripts still carry Scheme-B vocabulary; will be addressed in a future data-generation session since the training data itself will need regeneration.
+
+### Verification Summary
+- **Python tests.** `pytest tests/test_notation_compiler.py tests/test_interpreter.py tests/test_connectors.py tests/test_wrap.py` — 36 passed, 1 skipped. Full-suite run hit a pre-existing rate-limit artifact (`test_wrap_empty_text_422` returns 429 instead of 422 when run after other tests consume the rate-limit counter) unrelated to this session's changes; the test passes in isolation.
+- **Rust tests.** `cargo test --lib` — 303 unit tests + 4 doctests pass.
+- **TypeScript.** `npx tsc --noEmit` — 0 errors.
+- **Git.** Seven commits landed and pushed to `origin/master` (`9619cd1`, `07685f9`, `5f7bbc8`, `5d3a728`, `843d905`, `b1b897e`, `f057384`, `65c04fe`). Working tree clean for the reconciled files.
+
 ## Session 32: Real-Time CAS Notation Synthesis (April 13, 2026)
 
 ### Backend — Notation Synthesizer (NEW)
