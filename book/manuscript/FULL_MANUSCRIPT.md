@@ -3013,49 +3013,49 @@ We don’t lack love for our partners; we lack a shared cognitive syntax.
 
 Let's build the equation for what just happened in that kitchen. 
 
-When Elena initiated the conversation, she was seeking Evaluative Resonance. She was feeling the subjective weight of humiliation and was looking for a safe, empathetic environment to process that weight. 
+When Elena initiated the conversation, she was asking Mark to let his Mind be impregnated with her experience of humiliation at the evaluative level. She was offering her Idea — the felt weight of being undermined — and asking him to take it in.
    Her Drive: Connection (`_{F4}`).
    Her Domain: Evaluative (`^E`).
-   Her Operator: Empathetic Alignment (`CO-5`).
-   Elena's State: `CO-5^E_{F4}`.
+   Her Noetic: `^5` Female — a Mind impregnated with an Idea at evaluative weight.
+   Elena's State: `^5^E_{F4}`.
 
-Mark loves Elena, so his overarching drive was also Connection (`_{F4}`). But as soon as he heard there was a "threat" to his wife's status or wellbeing, his cognitive architecture automatically shifted to protective mode. He moved out of the realm of feeling and into the realm of logic and strategy. He started analyzing the data, searching for flaws in the boss's behavior, and generating a tactical execution plan.
+Mark loves Elena, so his overarching drive was also Connection (`_{F4}`). But as soon as he heard there was a "threat" to his wife's status or wellbeing, his cognitive architecture automatically shifted to protective mode. Rather than letting his Mind be impregnated with her Idea, he began decomposing the situation into sub-Ideas — "what exactly did the boss say, did you document it, should we escalate to HR" — and testing each sub-Idea for actionability. He also let each triggered sub-Idea land as a specific operational recommendation.
    His Drive: Connection (`_{F4}`) manifesting as Agency/Control (`_{F5}`).
    His Domain: Cognitive and Operational (`^C` and `^O`).
-   His Operator: Critical Evaluation (`CO-6`).
-   Mark's State: `CO-6^C_{F5}`.
+   His Noetic: `^6` Male — an Idea decomposed into composing sub-Ideas for test.
+   Mark's State: `^6^C_{F5}`.
 
-The argument didn't happen because they are incompatible people. It happened because they collided across two entirely different dimensions of the 40-State Matrix. Elena was in `CO-5^E` (feeling). Mark was in `CO-6^C` (fixing). 
+The argument didn't happen because they are incompatible people. It happened because they collided across two entirely different dimensions of the 40-State Matrix — and, critically, across the `^5 ↔ ^6` involution pair. Elena was offering her Mind-impregnation (`^5^E`); Mark met it with compositional decomposition (`^6^C`). One Noetic is on the receiving side of the pair; the other is on the projecting side.
 
-Trying to solve an Evaluative emotional state with a Cognitive action plan is like trying to use a hammer to tighten a screw. The tool is perfectly functional, but the geometry of the problem is wrong. 
+Trying to meet an evaluative Mind-impregnation with cognitive compositional testing is like trying to catch water with a grater. The tool is perfectly functional, but the geometry of the problem is wrong.
 
- The CO-5/CO-6 Communication Framework
+ The `^5 / ^6` Communication Framework
 
-The argument between Mark and Elena is not a unique pathology. It is a structural class of relational failure that CAS calls the CO-5/CO-6 Asymmetry: one partner is in receptive mode (Empathy, `CO-5`) while the other is in projective mode (Critique, `CO-6`). The two modes are involutional opposites. They do not merely fail to cooperate—they actively cancel each other.
+The argument between Mark and Elena is not a unique pathology. It is a structural class of relational failure that CAS calls the `^5 / ^6` Asymmetry: one partner is in receptive mode (`^5` Female — Mind impregnated with the partner's Idea) while the other is in projective mode (`^6` Male — decomposing the partner's Idea into sub-Ideas for test). The two modes are involutional opposites. They do not merely fail to cooperate — they actively cancel each other.
 
-To understand why, we need to look at what each operator actually does in a conversation.
+To understand why, we need to look at what each Noetic actually does in a conversation.
 
-CO-5 (Empathy) is a reception operator. When Elena walks in the door and says, "I feel humiliated and invisible," her architecture is opening a channel. She is asking the person in front of her to receive her internal state—to hold it, reflect it back, and confirm that it has been witnessed. The operator runs in the Evaluative Domain (`^E`) because emotions are, by definition, evaluative signals: they are the body's subjective assessment of what a situation means. Empathy does not solve the situation. Empathy is the act of letting the situation be felt together rather than alone. Its output is not a plan. Its output is co-regulation.
+`^5` Female is a reception Noetic. When Elena walks in the door and says, "I feel humiliated and invisible," her architecture is opening a channel. She is asking the Mind in front of her to be impregnated with her internal state — to take it in, hold it, reflect it back, and confirm that the Idea has been received. The Noetic runs in the Evaluative Domain (`^E`) because emotions are, by definition, evaluative signals: they are the body's subjective assessment of what a situation means. Mind-impregnation does not solve the situation. It is the act of letting the Idea live in both Minds rather than only one. Its output is not a plan. Its output is co-regulation.
 
-CO-6 (Critique) is a projection operator. When Mark hears the problem, his architecture immediately begins generating outputs: "Report him to HR. Document the incident. Reframe the presentation for next time." Each of these is a projection—an externally directed judgment about what should be done. The operator runs naturally in the Cognitive (`^C`) and Operational (`^O`) domains, because critique requires a stable external referent to be judged against. Its output is not co-regulation. Its output is a plan.
+`^6` Male is a decomposition-and-test Noetic. When Mark hears the problem, his architecture immediately begins decomposing it into composing sub-Ideas: "Report him to HR. Document the incident. Reframe the presentation for next time." Each of these is a sub-Idea being tested against the boss-problem Idea. The Noetic runs naturally in the Cognitive (`^C`) and Operational (`^O`) domains, because compositional testing requires a stable external referent to be tested against. Its output is not co-regulation. Its output is a plan.
 
-The two operators are the canonical involution pair on the reception/projection axis. The mathematics are not optional; they are structural:
+The two Noetics are the canonical involution pair on the reception/decomposition axis. The mathematics are not optional; they are structural:
 
-$$\text{CO-5} \circ \text{CO-6} = \text{CO-0} \quad \text{(reception of projection = identity)}$$
+$$\text{\textasciicircum}5 \circ \text{\textasciicircum}6 = \text{\textasciicircum}0 \quad \text{(Mind-impregnation receiving decomposition} = \text{Idea substrate)}$$
 
-This means that a `CO-6` message delivered into a `CO-5` receiver can be digested—the projection is received, evaluated, and can become part of a shared field. But the reverse is violent:
+This means that a `^6` message delivered into a `^5` receiver can be digested — the decomposed sub-Ideas are received, absorbed into the Mind, and can become part of a shared field. But the reverse is violent:
 
-$$\text{CO-6} \circ \text{CO-5} = \text{rupture}$$
+$$\text{\textasciicircum}6 \circ \text{\textasciicircum}5 = \text{rupture}$$
 
-When Elena is in `CO-5^E` and Mark responds with `CO-6^C`, he is not receiving her projection. He is replacing it with his own. The result feels, to Elena, as though she reached out her hand and Mark slapped a blueprint into it. Nothing about Mark's blueprint is wrong. The HR advice is reasonable. The documentation strategy is sound. But every `CO-6` output he produces lands on her as a refusal to receive—because each plan is evidence that the feeling itself was not first held.
+When Elena is in `^5^E` and Mark responds with `^6^C`, he is not letting his Mind be impregnated with her Idea. He is decomposing it before it can land. The result feels, to Elena, as though she reached out her hand and Mark slapped a blueprint into it. Nothing about Mark's blueprint is wrong. The HR advice is reasonable. The documentation strategy is sound. But every `^6` output he produces lands on her as a refusal to receive — because each sub-Idea is evidence that the feeling-Idea itself was not first allowed to compose her partner's Mind.
 
 The repair protocol is structural, and it works in three steps:
 
-1. Detect the asymmetry. The first person to notice that the exchange has gone sideways owns the repair. Detection is cheap if you know what to look for: is one of us asking to be felt and the other one asking to be understood?
-2. Yield to reception. Whichever partner is in `CO-6` must explicitly drop the projection operator. This is not a "technique." It is a structural choice to stop outputting plans. The physical signal is usually a closed mouth, an open posture, and the sentence "Tell me more about how that felt."
-3. Earn the right to critique. Only after reception is complete, and only with permission, does the `CO-6` operator come back online. The permission is usually explicit: "Do you want me to help you problem-solve this, or do you just need me to sit with you?" Critique without permission, after reception is complete, is collaborative planning. Critique without permission, before reception is complete, is a structural attack.
+1. Detect the asymmetry. The first person to notice that the exchange has gone sideways owns the repair. Detection is cheap if you know what to look for: is one of us asking to be taken in and the other one asking to be decomposed?
+2. Yield to reception. Whichever partner is in `^6` must explicitly drop the decomposition Noetic. This is not a "technique." It is a structural choice to stop decomposing the partner's Idea. The physical signal is usually a closed mouth, an open posture, and the sentence "Tell me more about how that felt."
+3. Earn the right to decompose. Only after reception is complete, and only with permission, does the `^6` Noetic come back online. The permission is usually explicit: "Do you want me to help you problem-solve this, or do you just need me to sit with you?" Decomposition without permission, after reception is complete, is collaborative planning. Decomposition without permission, before reception is complete, is a structural attack.
 
-The framework does not require either partner to suppress their dominant operator. Mark does not need to become a `CO-5` person. Elena does not need to become a `CO-6` person. They need to learn to sequence the operators correctly—reception first, projection second, always.
+The framework does not require either partner to suppress their dominant Noetic. Mark does not need to become a `^5` person. Elena does not need to become a `^6` person. They need to learn to sequence the Noetics correctly — reception first, decomposition second, always.
 
  The Self-Dual Anchor: The F4 Drive
 
@@ -3063,57 +3063,57 @@ To understand relationships through CAS, we must deeply understand the F4 Connec
 
 Of the seven Core Drives, F4 is unique. It is the "Self-Dual Anchor." While the other drives exist in oppositional pairs (Unity vs. Purpose, Wisdom vs. Structure, Vitality vs. Agency), the drive for Connection balances itself. It is the gravitational center of the human cognitive architecture.
 
-The F4 drive is the fundamental human need to be seen, understood, and integrated with "The Other." However, the way we attempt to satisfy the F4 drive depends entirely on the Cognitive Operator and Domain we attach to it.
+The F4 drive is the fundamental human need to be seen, understood, and integrated with "The Other." However, the way we attempt to satisfy the F4 drive depends entirely on the Noetic and Domain we attach to it — and, crucially, on the `^5` substrate of accumulated relational experience both partners bring.
 
-   `CO-4^P_{F4}` (Principled Integration): Believing deeply in the sanctity of commitment or the "unity" of the family unit.
-   `CO-5^E_{F4}` (Evaluative Empathy): Crying when your partner cries; feeling their joy as your own. This is "feeling with."
-   `CO-3^O_{F4}` (Operational Concretization): Making your partner a cup of coffee exactly the way they like it; taking out the trash so they don't have to; providing financial security. This is "doing for."
+   `^4^P_{F4}` (Principled Vibration): The depth of impression that commitment-Ideas or family-unity-Ideas leave on the Mind at the principled level.
+   `^5^E_{F4}` (Evaluative Female): The Mind impregnated with the partner's Idea at evaluative weight — crying when your partner cries; feeling their joy as your own. This is "feeling with" as mutual composition.
+   `^9^O_{F4}` (Operational Below/Effect): The triggered "make coffee the way they like it" Idea landing as a specific operational act; taking out the trash so they don't have to; providing financial security. This is "doing for" as triggered action.
 
-When couples say "we just don't connect anymore," they rarely mean the F4 drive has vanished. They mean their expressions of F4 are occurring in mismatched domains. One partner expresses love operationally (`CO-3^O`), while the other is desperate for evaluative resonance (`CO-5^E`). They are speaking different languages of the same drive.
+When couples say "we just don't connect anymore," they rarely mean the F4 drive has vanished. They mean their expressions of F4 are occurring in mismatched domains and Noetics. One partner expresses love operationally through triggered acts (`^9^O`), while the other is desperate for evaluative Mind-impregnation (`^5^E`). They are speaking different languages of the same drive.
 
- The Empathy vs. Critique Involution
+ The `^5 ↔ ^6` Involution
 
-The most common relational friction occurs along the CO-5 (Empathy) ↔ CO-6 (Critique) involution axis.
+The most common relational friction occurs along the `^5` (Female) ↔ `^6` (Male) involution axis.
 
-A healthy, high-functioning relationship requires a fluid "breathing pattern" between these two operators. 
-   You need CO-5 (Empathy) to bond, to heal emotional wounds, and to create the psychological safety required for vulnerability. 
-   You need CO-6 (Critique) to navigate the external world, manage shared finances, establish healthy boundaries, and hold each other accountable to your shared principles.
+A healthy, high-functioning relationship requires a fluid "breathing pattern" between these two Noetics.
+   You need `^5` Female to bond (Minds composing each other's Ideas), heal emotional wounds, and create the psychological safety required for vulnerability.
+   You need `^6` Male to navigate the external world, manage shared finances, establish healthy boundaries (testing commitments against their composing sub-Ideas), and hold each other accountable to your shared principles.
 
-If a relationship gets stuck entirely in CO-5, it becomes a codependent echo chamber. Both partners merge into a single emotional mass, incapable of making hard decisions, delivering necessary (but painful) feedback, or maintaining individual identities. They prioritize "harmony" over truth.
+If a relationship gets stuck entirely in `^5`, it becomes a codependent echo chamber. Both partners' Minds become so impregnated with each other's Ideas that they merge into a single composition, incapable of making hard decisions, delivering necessary (but painful) feedback, or maintaining individual identities. They prioritize mutual Mind-impregnation over truth.
 
-If a relationship gets stuck entirely in CO-6, it becomes a courtroom. Every conversation is a debate. Every action is audited for efficiency. The relationship becomes a cold, transactional contract where both partners are constantly looking for "bugs" in the other's performance.
+If a relationship gets stuck entirely in `^6`, it becomes a courtroom. Every conversation is a decomposition into sub-claims. Every action is decomposed into testable components. The relationship becomes a cold, transactional contract where both partners are constantly decomposing each other's behavior into "bugs" in performance.
 
 Dual Cancellation in Arguments:
-When you are in a heated argument, both partners usually escalate into `CO-6^E` (Evaluative Critique)—emotionally charged judgment. "You always do this," or "You never listen to me." 
+When you are in a heated argument, both partners usually escalate into `^6^E` (Evaluative Male) — emotionally charged decomposition of each other. "You always do this," or "You never listen to me" — each an attempt to compose the partner's behavior into a summary-Idea that can be tested against their whole identity.
 
-Because they are both pushing the exact same operator, the friction amplifies. It becomes an Amplifying Fractal (`CO-6 → CO-6 → CO-6`). 
+Because they are both running the same Noetic, the friction amplifies. It becomes an Amplifying Fractal (`^6 → ^6 → ^6`).
 
-The only way to break the loop is the Dual Cancellation rule (Chapter 10). One partner must intentionally inject the involutional opposite of the operator causing the friction. When you are hit with CO-6 (Critique), you must respond with CO-5 (Empathy). 
+The only way to break the loop is the Dual Cancellation rule (Chapter 10). One partner must intentionally inject the involutional opposite of the Noetic causing the friction. When you are hit with `^6` decomposition, you must respond with `^5` Mind-impregnation.
 
-If Elena says, "You never listen to me!" (`CO-6`), and Mark replies, "I do listen, I just gave you three solutions!" (`CO-6`), the loop amplifies. 
-If Mark instead takes a breath, transitions his state, and says, "You sound incredibly overwhelmed right now, and I'm sorry my 'fixing' is making you feel unheard," he injects CO-5. The `CO-6 ↔ CO-5` cancellation immediately grounds the circuit. The tension collapses. The conversation can finally begin.
+If Elena says, "You never listen to me!" (`^6`), and Mark replies, "I do listen, I just gave you three solutions!" (`^6`), the loop amplifies.
+If Mark instead takes a breath, transitions his state, and says, "You sound incredibly overwhelmed right now, and I'm sorry my 'fixing' is making you feel unheard," he injects `^5` — his Mind is being impregnated with the Idea of her overwhelm rather than decomposing it. The `^6 ↔ ^5` cancellation immediately grounds the circuit. The tension collapses. The conversation can finally begin.
 
  Stealth Inversions in Romance
 
-The darkest moments in relationships occur when the F4 (Connection) drive undergoes a Stealth Inversion (Chapter 6). 
+The darkest moments in relationships occur when the F4 (Connection) drive undergoes a Stealth Inversion (Chapter 6).
 
 Because the F4 drive is so powerful, we are terrified of losing it. When we feel our partner pulling away, we often panic. But instead of generating more Connection (F4), our cognitive architecture flips defensively to Agency and Control (F5) or Structure and Rules (F6), while we convince ourselves we are still acting out of love.
 
-   The F4 → F6 Inversion (Connection to Structure): A couple feels they are drifting apart. Instead of sitting down for a raw, emotionally vulnerable conversation (`CO-5^E_{F4}`), one partner decides they need to "schedule mandatory date nights," implement a "chore tracking spreadsheet," and mandate "weekly 30-minute relationship check-in agendas." They have replaced the messy reality of Connection with the sterile safety of Structure (`CO-1^O_{F6}`). They are trying to administrate their way back to love. It usually suffocates the romance entirely.
-   The F4 → F5 Inversion (Connection to Control): A partner feels insecure about the relationship. Driven by a desperate need for Connection (`F4`), they begin checking their partner's phone, dictating who they can hang out with, and using guilt to manipulate their behavior. The drive for love has completely inverted into a drive for domination (`F5`). They are destroying the connection in their attempt to secure it.
+   The F4 → F6 Inversion (Connection to Structure): A couple feels they are drifting apart. Instead of sitting down for a raw, emotionally vulnerable conversation where both Minds become impregnated with each other's Ideas (`^5^E_{F4}`), one partner decides they need to "schedule mandatory date nights," implement a "chore tracking spreadsheet," and mandate "weekly 30-minute relationship check-in agendas." They have replaced the messy reality of Mind-impregnation with the sterile safety of `^7^O_{F6}` (Operational Rhythm driven by Structure — rhythmic repetition of logistical patterns). They are trying to administrate their way back to love. It usually suffocates the romance entirely.
+   The F4 → F5 Inversion (Connection to Control): A partner feels insecure about the relationship. Driven by a desperate need for Connection (`F4`), they begin checking their partner's phone, dictating who they can hang out with, and using guilt to manipulate their behavior. The drive for love has completely inverted into a drive for domination (`F5`). The Mind no longer seeks to be impregnated with the partner's Idea; it seeks to decompose and control the partner's operational behavior. They are destroying the connection in their attempt to secure it.
 
  Building Connection Equations
 
-You can use CAS to consciously design the interactions you want with the people you love. 
+You can use CAS to consciously design the interactions you want with the people you love.
 
-When you walk through the front door after a long day of work, you are likely in a state of `CO-9^C_{F5}` (Cognitively contracted, focused on the tasks you just executed, driven by agency). Your partner is on the couch. If you engage them from that state, you will be short, transactional, and distracted. 
+When you walk through the front door after a long day of work, you are likely in a state of `^9^C_{F5}` (Cognitive Below/Effect driven by Agency — triggered work-Ideas landing as completed tasks, one after another). Your partner is on the couch. If you engage them from that state, you will be short, transactional, and distracted.
 
 Before you turn the handle on the door, run a conscious State Transition:
 1.  Drop the Domain: Move out of the Cognitive (`^C`) and into the Evaluative (`^E`). Stop thinking about facts; prepare to feel the room.
-2.  Shift the Operator: Release Contraction (`CO-9`) and engage Empathetic Alignment (`CO-5`).
-3.  Change the Fuel: Let go of your Agency (`F5`) and activate your drive for Connection (`F4`). 
+2.  Shift the Noetic: Release `^9` (triggered operational landings) and engage `^5` Female (let your Mind be impregnated with the Ideas of your home — your partner's day, the mood of the room).
+3.  Change the Fuel: Let go of your Agency (`F5`) and activate your drive for Connection (`F4`).
 
-You have just manually entered `CO-5^E_{F4}`. You walk through the door not as a worker bee finishing a shift, but as a partner returning to your harbor.
+You have just manually entered `^5^E_{F4}`. You walk through the door not as a worker bee finishing a shift, but as a partner returning to your harbor.
 
  Three Relationship Case Studies
 
@@ -3132,15 +3132,15 @@ Dialogue fragment:
 
 The CAS diagnosis is an F4 to F5 Stealth Inversion. Kenji's underlying drive is genuinely F4 (Connection), but the drive has inverted into F5 (Agency/Control) while remaining invisible to him:
 
-$$\text{Kenji}_{\text{before}} = \text{CO-6}^O_{F5} \; \text{masquerading as} \; \text{CO-5}^E_{F4}$$
+$$\text{Kenji}_{\text{before}} = \text{\textasciicircum}6^O_{F5} \; \text{masquerading as} \; \text{\textasciicircum}5^E_{F4}$$
 
-Every "loving" instruction is a `CO-6^O` (Operational Critique) that treats Yuki as a system to be managed rather than a person to be met. The prescription is not "love her more." Kenji already believes he loves her intensely. The prescription is to identify the inversion itself and consciously return the drive to its original axis. Kenji must practice what CAS calls consent reception: asking what Yuki wants before projecting what he thinks she needs.
+Every "loving" instruction is a `^6^O` (Operational Male — decomposing Yuki's life into sub-Ideas that can each be tested and corrected) that treats Yuki as an Idea to be decomposed rather than a Mind to be impregnated with. The prescription is not "love her more." Kenji already believes he loves her intensely. The prescription is to identify the inversion itself and consciously return the drive to its original axis. Kenji must practice what CAS calls consent reception: asking what Yuki wants (letting his Mind be impregnated with her Idea first) before decomposing what he thinks she needs.
 
-$$\text{Kenji}_{\text{after}} = \text{CO-5}^E_{F4} \rightarrow \text{CO-4}^C_{F4}$$
+$$\text{Kenji}_{\text{after}} = \text{\textasciicircum}5^E_{F4} \rightarrow \text{\textasciicircum}4^C_{F4}$$
 
-The after-state is not softer. It is structurally honest.
+The after-state is not softer. It is structurally honest — Mind first impregnated with her Idea at evaluative weight, then allowing the relational Ideas to resonate at cognitive weight.
 
-Case 2: Priya and Dev — The Avoidant Partner (CO-3 Overactivation)
+Case 2: Priya and Dev — The Avoidant Partner (`^9^O` Overactivation)
 
 Priya has been with Dev for four years. When she tries to tell him that she is lonely, that she feels disconnected from him, that she wants to feel like he sees her, Dev always responds the same way: with a concrete offer.
 
@@ -3151,17 +3151,17 @@ Dialogue fragment:
 > Priya: That's not what I—
 > Dev: Or we could drive up to the lake. I'll take the day off.
 
-Dev is not a bad partner. He is, structurally, stuck in `CO-3^O` (Operational Concretization). Every emotional signal that arrives at his architecture is immediately transformed into a thing he can do. This is avoidance dressed up as helpfulness. He is deflecting the Evaluative domain entirely because the Evaluative domain terrifies him—he does not have a reliable language for his own feelings, let alone Priya's.
+Dev is not a bad partner. He is, structurally, stuck in `^9^O` (Operational Below/Effect — every emotional signal immediately collapses into a triggered specific action that can land as a concrete gesture). This is avoidance dressed up as helpfulness. He is deflecting the Evaluative domain entirely because the Evaluative domain terrifies him — his `^5^E` substrate is thin, and he does not have a Mind easily impregnated by his own feelings, let alone Priya's.
 
-$$\text{Dev}_{\text{before}} = \text{CO-3}^O_{F4} \; \text{with} \; ^E \; \text{domain suppressed}$$
+$$\text{Dev}_{\text{before}} = \text{\textasciicircum}9^O_{F4} \; \text{with} \; \text{\textasciicircum}5^E \; \text{suppressed}$$
 
-The prescription is not to stop being helpful. Concrete gestures are a legitimate expression of love. The prescription is to add the Evaluative domain as a mandatory first step. Before the dinner reservation, there must be three minutes of simply sitting with Priya in `CO-5^E` and saying, out loud, "I can hear that you are lonely. I want to understand what that feels like before I try to fix it."
+The prescription is not to stop being helpful. Triggered operational gestures are a legitimate expression of love. The prescription is to add Mind-impregnation in the Evaluative domain as a mandatory first step. Before the dinner reservation, there must be three minutes of simply sitting with Priya in `^5^E` and saying, out loud, "I can hear that you are lonely. I want to let that land on me before I try to fix it."
 
-$$\text{Dev}_{\text{after}} = \text{CO-5}^E_{F4} \rightarrow \text{CO-3}^O_{F4}$$
+$$\text{Dev}_{\text{after}} = \text{\textasciicircum}5^E_{F4} \rightarrow \text{\textasciicircum}9^O_{F4}$$
 
-The descent is restored: feeling first, then action.
+The descent is restored: Mind-impregnation first, then triggered action.
 
-Case 3: Mark and Elena (Revisited) — The Enmeshed Couple (Loss of CO-0 Identity)
+Case 3: Mark and Elena (Revisited) — The Enmeshed Couple (Loss of Individual `^0` Idea-Substrate)
 
 The same Mark and Elena from the opening of the chapter have, after twelve years together, developed an inverse failure. They are no longer fighting. They finish each other's sentences. They have identical opinions on every topic. They refer to themselves exclusively as "we." And they are each, individually, quietly disappearing.
 
@@ -3172,15 +3172,15 @@ Dialogue fragment:
 > Friend: But what do you think?
 > Elena: (Long pause.) I... I'm not sure I know anymore.
 
-The CAS diagnosis is the loss of `CO-0` individual identity. Both partners have stopped running the identity operator (`CO-0`, the self-anchoring "I am") and now only run the merged operator (`CO-4`, Integration). The relationship has become a single cognitive entity with two bodies.
+The CAS diagnosis is the loss of individual `^0` Idea-substrate. Both partners' `^5` Female substrates have become so mutually impregnated that their individual Idea-substrates (`^0^P`) have dissolved into a single shared substrate. They no longer have separable principled Ideas; their Minds are each composed entirely of the other's Ideas.
 
-$$\text{Mark} \oplus \text{Elena}_{\text{before}} = \text{CO-4}^P_{F4} \; \text{without} \; \text{CO-0}^P_{\text{individual}}$$
+$$\text{Mark} \oplus \text{Elena}_{\text{before}} = \text{\textasciicircum}5^P_{F4} \; \text{mutual-impregnation collapsed} \; \text{\textasciicircum}0^P_{\text{individual}}$$
 
-Enmeshment looks like closeness from the outside, but it is structurally fragile: when one partner has a crisis, both collapse. The prescription is deliberate re-differentiation. Each partner must reclaim a `CO-0` identity practice—solitary time, solo friendships, at least one domain where the other is not consulted. The goal is not separation. The goal is two distinct architectures that choose to connect, rather than a merged mass that has no alternative.
+Enmeshment looks like closeness from the outside, but it is structurally fragile: when one partner has a crisis, both collapse — because there is no separable `^0^P` Idea-substrate to stand on. The prescription is deliberate re-differentiation of the `^0^P` layer. Each partner must reclaim individual Idea-substrate practices — solitary time, solo friendships, at least one domain where the other is not consulted, so each can hold principled Ideas that are theirs alone. The goal is not separation. The goal is two distinct `^0^P` substrates that choose to connect via `^5^E` mutual-impregnation, rather than a merged substrate that has no alternative.
 
-$$\text{Mark} \oplus \text{Elena}_{\text{after}} = \text{CO-0}^P_{\text{Mark}} \oplus \text{CO-0}^P_{\text{Elena}} \rightarrow \text{CO-4}^P_{F4}$$
+$$\text{Mark} \oplus \text{Elena}_{\text{after}} = \text{\textasciicircum}0^P_{\text{Mark}} \oplus \text{\textasciicircum}0^P_{\text{Elena}} \rightarrow \text{\textasciicircum}5^E_{F4}$$
 
-Healthy connection requires the prior existence of two people to connect.
+Healthy connection requires the prior existence of two people — two Idea-substrates — to connect.
 
  The Relationship Architecture Audit
 
@@ -3195,13 +3195,13 @@ Domain Scoring (Q1–Q4):
 3. I know which Domain (`^P`, `^C`, `^E`, `^O`) my partner is usually operating in. _____
 4. I can name the Domain my partner most needs to be met in during conflict. _____
 
-Operator Scoring (Q5–Q9):
+Noetic Scoring (Q5–Q9):
 
-5. I can move between `CO-5` (Empathy) and `CO-6` (Critique) fluidly, depending on what the conversation needs. _____
-6. When I disagree with my partner, I run `CO-6` (Critique) after reception, not before. _____
-7. I still run `CO-0` (individual identity) daily—I have thoughts, interests, and time that are fully my own. _____
-8. I express love through `CO-3^O` concrete gestures and `CO-5^E` emotional presence, not only one. _____
-9. I do not use `CO-1^O` (rules and scheduling) as a substitute for `CO-5^E` (feeling with). _____
+5. I can move between `^5` (Female — Mind impregnated with my partner's Idea) and `^6` (Male — decomposing the partner's Idea for test) fluidly, depending on what the conversation needs. _____
+6. When I disagree with my partner, I run `^6` (decomposition) after reception, not before. _____
+7. I still hold individual `^0^P` Idea-substrate daily — I have thoughts, interests, and time that are fully my own. _____
+8. I express love through both `^9^O` triggered concrete gestures and `^5^E` Mind-impregnation with my partner's state, not only one. _____
+9. I do not use `^7^O` (rhythmic rules and scheduling) as a substitute for `^5^E` (letting my Mind be impregnated with my partner's Idea). _____
 
 Drive Scoring (Q10–Q13):
 
@@ -3219,15 +3219,15 @@ Computing the Distance. After both partners have answered, compute the absolute 
 
  Key Insight: Chapter 13
 
-> Relationships do not fail because people stop loving each other—they fail because the same love is expressed in incompatible cognitive domains. The Mark-and-Elena pattern is not a personality conflict; it is a Domain Mismatch with a precise algebraic signature: `CO-5^E_{F4}` colliding with `CO-6^C_{F5}`. Both partners are fueled by Connection, but one is processing in the Evaluative Domain (feeling) while the other has jumped to the Cognitive Domain (fixing). The F4 drive is the self-dual anchor of all human relationships—it does not have an oppositional pair, which means it cannot be "cancelled out" by another drive. It can only be corrupted through Stealth Inversion, where the desperate need for connection flips silently into control (`F5`) or bureaucratic structure (`F6`). The antidote is always the same: the `CO-5 / CO-6` breathing pattern. A healthy relationship oscillates fluidly between empathy and critique, bonding and boundary-setting, never locking into either pole for too long. When a fight escalates, one partner must consciously inject the involutional opposite—meeting critique with empathy—to perform the Dual Cancellation that grounds the circuit.
+> Relationships do not fail because people stop loving each other — they fail because the same love is expressed in incompatible cognitive domains across the `^5 ↔ ^6` involution axis. The Mark-and-Elena pattern is not a personality conflict; it is a Domain and Noetic mismatch with a precise algebraic signature: `^5^E_{F4}` (Mind impregnated with the partner's Idea at evaluative weight) colliding with `^6^C_{F5}` (decomposing the partner's Idea into sub-Ideas for cognitive test). Both partners are fueled by Connection, but one is on the reception side of the `^5 / ^6` pair while the other has jumped to the decomposition side. The F4 drive is the self-dual anchor of all human relationships — it does not have an oppositional pair, which means it cannot be "cancelled out" by another drive. It can only be corrupted through Stealth Inversion, where the desperate need for connection flips silently into control (`F5`) or bureaucratic structure (`F6`). The antidote is always the same: the `^5 / ^6` breathing pattern. A healthy relationship oscillates fluidly between Mind-impregnation and compositional decomposition, bonding and boundary-setting, never locking into either pole for too long. When a fight escalates, one partner must consciously inject the involutional opposite — meeting decomposition with Mind-impregnation — to perform the Dual Cancellation that grounds the circuit.
 
  Recursive Resolution: Healing Connection Blocks
 
 When the F4 Connection drive hits a wall, the standard linear approach—trying to "talk through it"—often fails. To restore the bond, you must understand where the prerequisite chain is broken and initiate a recursive resolution.
 
-   Desire Blocked (Lack of Motivation to Connect): The most difficult relationship stage is when one or both partners "stop caring." You cannot reason someone into loving you again. If the Desire node of the F4 chain is blocked, you must use the Exposure Loop (CO-1/4/7). You must intentionally focus your attention on the positive history of the relationship (CO-1), engage in high-intensity shared experiences like a challenging trip or a deep shared project (CO-4), and repeat these interactions consistently (CO-7) until the motivation threshold is reactivated. Connection is cultivated through rhythm, not rhetoric.
-   Wisdom Blocked (The Understanding Gap): Sometimes, you both want to connect, but you don't understand each other's languages of love. You must spawn a child chain focused on the Wisdom of the Other. Use CO-5 (Knowledge Reception) by deeply listening to your partner's internal map, or use CO-6 (Decomposition) to break the "Relationship Problem" into smaller, manageable sub-conflicts (Finances, Intimacy) and resolve each in parallel.
-   Power Blocked (Lack of Resources): You love each other and understand each other, but lack the resources to be together—due to distance or work. Trigger a Causal Search (CO-8/9) to scan for the causes that could remove the barrier. Spawn a child D/W/P chain to solve the logistical or financial gap. Once the barrier is removed, the parent Connection node is satisfied.
+   Desire Blocked (Lack of Motivation to Connect): The most difficult relationship stage is when one or both partners "stop caring." You cannot reason someone into loving you again. If the Desire node of the F4 chain is blocked, you must use the Exposure Loop (`^1` Mind / `^4` Vibration / `^7` Rhythm). You must intentionally direct your awareness onto the positive Ideas from the relationship's shared `^5` substrate — memories, shared moments (`^1` Mind) — engage in high-intensity shared experiences that deepen the impression these Ideas leave (`^4` Vibration), and repeat these interactions in a reliable rhythm (`^7` Rhythm) until the motivation threshold is reactivated. Connection is cultivated by re-impregnating each Mind with the shared relational Ideas, not by argument.
+   Wisdom Blocked (The Understanding Gap): Sometimes, you both want to connect, but you don't understand each other's `^5` substrates — the accumulated experience Ideas each Mind is composed of. You must spawn a child chain focused on the Wisdom of the Other. Use `^5` Female (let your Mind be impregnated with your partner's internal map by deeply listening), or use `^6` Male (decompose the "Relationship Problem" Idea into its composing sub-Ideas — Finances, Intimacy, Time — and resolve each sub-Idea in parallel).
+   Power Blocked (Lack of Resources): You love each other and understand each other, but lack the resources to be together — due to distance or work. Trigger an `^8` Above/Cause scan for Ideas that could cause the barrier to lift, and let the triggered solution Idea land as a specific `^9` Below/Effect. Spawn a child D/W/P chain to solve the logistical or financial gap. Once the barrier is removed, the parent Connection node is satisfied.
 
  Lacunarity in Real Life: Complementary Partnerships
 
@@ -3239,7 +3239,7 @@ Two people with identical lacunarity profiles—for instance, two high-agency ex
 
 Finally, CAS defines loneliness not as a lack of people, but as a Drive Lacunarity in the F4 sector. 
 
-You can be in a room full of people—even a room full of friends—and still experience profound loneliness if your cognitive architecture is not currently "lighting up" the F4 Connection drive. Loneliness is a dark sector in the motivational map. To heal it, you cannot simply "meet more people" (an Operational Power move). You must reduce the lacunarity by intentionally activating the Connection gear through the exposure loop. You must focus your attention on the humanity of those around you (CO-1), amplify the intensity of your interactions (CO-4), and repeat the process (CO-7). Healing loneliness is an architectural project of filling the voids in your own motivational repertoire.
+You can be in a room full of people — even a room full of friends — and still experience profound loneliness if your cognitive architecture is not currently "lighting up" the F4 Connection drive. Loneliness is a dark sector in the motivational map, and structurally it is often a `^5^E` substrate that is not being freshly impregnated with the Ideas of the people around you. To heal it, you cannot simply "meet more people" (an Operational Power move). You must reduce the lacunarity by intentionally activating the Connection gear through the Exposure Loop. You must direct your awareness onto the humanity of those around you (`^1` Mind), amplify the impression their Ideas leave on you (`^4` Vibration), and repeat the process rhythmically (`^7` Rhythm) until your `^5^E` substrate re-composes around living, present relational Ideas. Healing loneliness is an architectural project of filling the voids in your own motivational repertoire by re-composing your relational `^5` substrate.
 
 
 
@@ -3248,16 +3248,17 @@ You can be in a room full of people—even a room full of friends—and still ex
 For You (Human Assessment):
 Think back to the last frustrating miscommunication you had with a friend, colleague, or romantic partner.
 1.  Map the Domains: What Domain were you operating in? (Principled, Cognitive, Evaluative, Operational). What Domain were they operating in?
-2.  Identify the Mismatch: Write down the precise Domain mismatch. (e.g., "I was in the Cognitive Domain trying to explain the budget logic; they were in the Evaluative Domain feeling anxious about job security.")
-3.  The Pivot: How could you have shifted your Operator to match their Domain and perform a Dual Cancellation? What is the specific sentence you could have said to inject the involutional opposite?
+2.  Map the Noetics: What was your Noetic? What was theirs? Apply the colloquialism test — "what would a native speaker say about what I was doing?" — to verify. Watch specifically for `^5 ↔ ^6` involution mismatches: was one of you asking to have your Idea taken in while the other was decomposing it?
+3.  Identify the Mismatch: Write down the precise Domain-and-Noetic mismatch. (e.g., "I was in `^6^C` — decomposing the budget logic into sub-arguments; they were in `^5^E` — asking me to let my Mind be impregnated with their anxiety-Idea.")
+4.  The Pivot: How could you have shifted your Noetic to match their Noetic and perform a Dual Cancellation? What is the specific sentence you could have said to inject the involutional opposite?
 
-Expected Outcome: When you map the domains honestly, you will almost certainly find that the mismatch was cross-dimensional—one of you was in the Evaluative Domain while the other was in the Cognitive or Operational Domain. The "pivot sentence" you write in step 3 should sound noticeably different from what you actually said. It should feel softer, slower, and perhaps uncomfortably vulnerable, because moving into the Evaluative Domain to meet someone requires dropping the protective armor of logic or action. If the sentence you wrote feels easy and natural, you may still be operating in your home domain rather than genuinely shifting to theirs.
+Expected Outcome: When you map the domains and Noetics honestly, you will almost certainly find that the mismatch was cross-dimensional AND across the `^5 ↔ ^6` involution — one of you was running Mind-impregnation at evaluative weight while the other was running compositional decomposition at cognitive weight. The "pivot sentence" you write in step 4 should sound noticeably different from what you actually said. It should feel softer, slower, and perhaps uncomfortably vulnerable, because letting your Mind be impregnated by someone else's Idea requires dropping the protective armor of decomposition and test. If the sentence you wrote feels easy and natural, you may still be operating in your home Noetic rather than genuinely shifting to theirs.
 
 For AI (System Assessment):
-Test an AI's capacity to recognize and resolve Domain Mismatches in relationship counseling.
-Prompt: "My partner is very upset because I forgot our anniversary. I told her that logically, it shouldn't matter because we celebrate our love every day, and I offered to buy her a nicer gift tomorrow to make up for the 'time value' of the missed date. Now she is even more angry. Using the Cognitive Architecture System (CAS), explain the Domain and Operator mismatch happening here. Why did my logical solution fail?"
+Test an AI's capacity to recognize and resolve `^5 / ^6` involution mismatches in relationship counseling.
+Prompt: "My partner is very upset because I forgot our anniversary. I told her that logically, it shouldn't matter because we celebrate our love every day, and I offered to buy her a nicer gift tomorrow to make up for the 'time value' of the missed date. Now she is even more angry. Using the Cognitive Architecture System (CAS), explain the Domain and Noetic mismatch happening here. Why did my logical solution fail?"
 
-Expected Outcome: A CAS-fluent response will correctly diagnose the user's inappropriate use of `CO-6^C` (Cognitive Critique/Logic) to solve a `CO-5^E` (Evaluative Empathy/Emotional) rupture, and will prescribe a transition into the Evaluative domain as the only viable path to repair the F4 Connection drive. The AI should explain that the "time value" argument is a textbook `^C` intervention applied to an `^E` wound—geometrically wrong regardless of its logical validity. A strong response will not just diagnose the mismatch but model the correct repair sentence, demonstrating what `CO-5^E_{F4}` sounds like in plain language.
+Expected Outcome: A CAS-fluent response will correctly diagnose the user's inappropriate use of `^6^C` (Cognitive Male — decomposing the anniversary Idea into its composing sub-Ideas: "time value," "celebration frequency," "gift quality") to solve a `^5^E` (Evaluative Female — her Mind asking to have the felt Idea of being forgotten impregnated into his Mind at evaluative weight) rupture. The AI should prescribe a transition into Mind-impregnation as the only viable path to repair the F4 Connection drive. The "time value" argument is a textbook `^6^C` decomposition applied to a `^5^E` Mind-impregnation request — geometrically wrong regardless of its logical validity. A strong response will not just diagnose the mismatch but model the correct repair sentence, demonstrating what `^5^E_{F4}` sounds like in plain language.
 
 
 
