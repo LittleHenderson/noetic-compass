@@ -15,9 +15,9 @@ from api.models import InterpretationSchema
 logger = logging.getLogger("noetic.interpreter")
 
 OPERATOR_NAMES = [
-    "Identity", "Reflection", "Abstraction", "Concretization",
-    "Integration", "Differentiation", "Unification", "Transformation",
-    "Expansion", "Contraction",
+    "Idea", "Mind", "Positive", "Negative",
+    "Vibration", "Female", "Male", "Rhythm",
+    "Above/Cause", "Below/Effect",
 ]
 
 DOMAIN_NAMES = ["Principled", "Cognitive", "Evaluative", "Operational"]
