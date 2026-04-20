@@ -1,89 +1,74 @@
 # CAS Foundational Clarifications
 
-**Status:** Normative reference for how CAS is described, taught, applied, and assessed.
-**Scope:** Does NOT change CAS v7.4 mathematical specification. Does NOT affect the patent filing. Does NOT require book revision. Does NOT require compiler changes. DOES normalize language for future incident analysis, taxonomy development, and teaching.
+**Status:** Normative reference for what each Noetic IS and for how Noetics are described in pedagogical, academic, regulatory, and incident-analysis contexts.
+**Scope:** The 10 Noetic definitions in Clarification 1 below are **authoritative**. Every artifact in the repository — CLAUDE.md, the book manuscript, the incident database, compiler code, engine code, dashboard UI, peer-review paper — reconciles to these definitions. No alternative naming schemes, no hybrids, no "public vs internal" distinctions.
 **First commit:** 2026-04-19
+**Authoritative definitions reconciled:** 2026-04-19
 
 ---
 
-## Clarification 1: Noetics are Structural, Not Emotional
+## Clarification 1: The Ten Noetics — Authoritative Definitions
 
-The 10 Cognitive Operators (CO-0 through CO-9) describe structural dynamics between Mind and Idea. They are architectural primitives of cognition, not affective, psychological, or emotional operations.
+The 10 Noetics (CO-0 through CO-9) of the Cognitive Architecture System are authoritatively defined as follows. These names and definitions are **verbatim canonical**. They are not subject to rephrasing, modernization, softening, or alternative naming. Any artifact that uses different names or descriptions for the same operator indices is non-conformant and must be reconciled to match.
 
-This clarification is normative for how CAS is described, taught, applied, and assessed. It does not change CAS v7.4 mathematical specification — the formal axioms A1–A7, the open simplex Δ°₃₉, the operator algebra, and the scoring mechanisms remain unchanged.
+### The Ten Noetics
 
-**What this clarification DOES:**
-- Establishes the test for valid CAS descriptions: does it apply equally to human minds, AI systems, biological cognitive systems, and any hypothetical cognitive architecture?
-- Corrects public-language descriptions that drift toward affective framing.
-- Provides guidance for future refinements, incident analysis, and taxonomy development.
+- **^0 (CO-0): Idea** — All things in and outside the Mind.
+- **^1 (CO-1): Mind** — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.
+- **^2 (CO-2): Positive** — An Idea the Mind has an affinity for and is attracted toward.
+- **^3 (CO-3): Negative** — An Idea the Mind is adverse to and repelled by.
+- **^4 (CO-4): Vibration** — The degree to which an Idea resonates with the Mind, its impression.
+- **^5 (CO-5): Female** — A Mind impregnated with an Idea, the Ideas a Mind is composed of.
+- **^6 (CO-6): Male** — An Idea impregnated with another Idea, the Ideas an Idea is composed of.
+- **^7 (CO-7): Rhythm** — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.
+- **^8 (CO-8): Above/Cause** — An Idea that triggers a different Idea than itself to come to Mind.
+- **^9 (CO-9): Below/Effect** — The Idea brought to Mind by an Above/Cause trigger.
 
-### Operator-by-operator clarification
+### Source and scope of these definitions
 
-**CO-0 (Generative Potential):**
-The substrate of cognitive processing — the capacity for Mind-Idea dynamics to occur. Not awareness in the phenomenological sense; the structural precondition for cognition.
+The definitions above are verbatim from the Tootra Math Handbook, which is the authoritative source for what each Noetic IS. Only the 10 Noetic definitions are being incorporated from that handbook. The handbook's mathematical framework, its operators notation, its foundations notation, its acquisitions, and any other content are NOT being incorporated — CAS retains its own mathematics, compiler, and notation as defined in the Noetic Topos paper (`peer_review/journal_submission/main.tex`), the Rust engine (`cas-engine/src/`), and the compiler (`api/notation/compiler.py`). What is authoritative here is the definition of what each of the 10 Noetics IS.
 
-**CO-1 (Directed Attention):**
-The mechanical operation of focusing cognitive processing on a specific Idea. Not "paying attention" in the psychological sense; the structural direction of processing toward an object.
+### Canonical names
 
-**CO-2 (Attraction):**
-The structural dynamic by which a Mind is drawn toward an Idea — geometric pull between substrate and object. Not "liking" or emotional attraction; a mechanical dynamic.
-
-**CO-3 (Critical Evaluation):**
-The structural dynamic by which a Mind is repelled from an Idea — geometric push between substrate and object. Related concept: when the Mind's architecture cannot hold an Idea, this is structural inability to entertain, not emotional rejection. [The ^3 concept from TKS captures this.]
-
-**CO-4 (Encoding Intensity):**
-The structural amplitude with which an Idea impresses on the Mind. Measurable, mathematical. Not "vividness" in experiential terms.
-
-**CO-5 (Receptive Integration):**
-The structural dynamic by which a Mind is composed of the Ideas it has integrated. Compositional ontology. Not "openness" or psychological receptivity.
-
-**CO-6 (Projective Assertion):**
-The structural dynamic by which an Idea is composed of other Ideas. Compositional structure within cognitive objects. Not "assertiveness" or confidence.
-
-**CO-7 (Pattern Entrainment):**
-The structural dynamic of rhythmic pattern establishment between Mind and Idea. Mechanical synchronization, not habit in the behavioral sense.
-
-**CO-8 (Causal Reasoning):**
-The structural dynamic by which one Idea triggers another Idea. Associative mechanics — includes both inferential reasoning AND simple associative triggering. Not only analytical reasoning.
-
-**CO-9 (Consequential Grounding):**
-The structural dynamic of an Idea being triggered by a preceding Idea. The Below-Effect relation to CO-8's Above-Cause. Mechanical grounding, not moral or pragmatic grounding.
+The authoritative Noetic names are **Idea, Mind, Positive, Negative, Vibration, Female, Male, Rhythm, Above/Cause, Below/Effect**. These names replace any alternative names that appeared in prior drafts of this document or in other repository artifacts. There is no alternative naming scheme. There are no "CAS public names" that differ from these — the authoritative names ARE the names, for all contexts including academic publication, regulatory filings, pedagogical material, marketing, and incident analysis.
 
 ---
 
 ## Clarification 2: Universal Applicability Test
 
-Any valid description of a CAS Noetic must apply equally to:
+Any valid description of a Noetic must apply equally to:
 - Human minds with emotional architecture
 - AI systems without emotional architecture
 - Biological cognitive systems of any form
 - Hypothetical cognitive architectures
 
-If a description requires specifically human affect, it is a pedagogical illustration of the Noetic in a human context, not a valid specification of the Noetic itself.
+If a description requires specifically human affect, it is a pedagogical illustration of the Noetic in a human context, not a specification of the Noetic itself. The authoritative definitions in Clarification 1 pass the Universal Applicability Test by construction: Idea, Mind, attraction-toward, repulsion-from, resonance, compositional containment (Female/Male), rhythm of exposure, and cause/effect triggering are dynamics that occur in any cognitive architecture, biological or otherwise.
 
 ---
 
-## Clarification 3: TKS to CAS Translation Notes
+## Clarification 3: Canonical Naming — No Alternative Scheme
 
-The public CAS naming of the Noetics preserves the structural meaning from TKS while using terminology amenable to academic and regulatory reception. The translation:
+The authoritative names listed in Clarification 1 are canonical for the Cognitive Architecture System in every context. There is no separate TKS-to-CAS translation table. There are no public-facing alternative names. Earlier drafts of this document, and earlier drafts of other artifacts in the repository, referred to parallel naming schemes (e.g., "Attraction" vs "Positive," "Critical Evaluation" vs "Negative," "Receptive Integration" vs "Female," "Projective Assertion" vs "Male"). **Those alternative names are not authoritative.** Where they appear in the repository, they are drift and must be reconciled to the names in Clarification 1.
 
-- Some TKS terms (Vibration, Rhythm) used metaphorical language that CAS replaced with technical terms (Encoding Intensity, Pattern Entrainment) with no loss of structural meaning.
-
-- Some TKS terms (Female, Male, Above/Cause, Below/Effect) carried compositional and mechanistic meanings that the public CAS names (Receptive Integration, Projective Assertion, Causal Reasoning, Consequential Grounding) can be read emotionally if not qualified. This clarification document provides that qualification.
-
-- The TKS term "Idea" was a universal content category; the CAS operator CO-1 "Directed Attention" is a specific operation. In CAS, "Ideas" as universal content are represented by states in the open simplex Δ°₃₉, with CO-1 being the specific operator that directs attention to particular states.
+The structural-not-emotional framing principle (Clarification 4 below) remains a meta-guide for HOW the authoritative Noetics are described in pedagogical contexts, but it does not license renaming or rephrasing the authoritative definitions.
 
 ---
 
-## Clarification 4: Noetics in Incident Analysis
+## Clarification 4: Structural-Not-Emotional Framing and Noetics in Incident Analysis
 
-When analyzing AI misalignment incidents, Noetic classifications must describe structural dynamics, not emotional or psychological framings.
+The authoritative definitions in Clarification 1 use specific language — "affinity for," "attracted toward," "adverse to," "repelled by," "resonates with," "impregnated with," "triggers," "brought to Mind" — that describes structural dynamics between Mind and Idea. This language is authoritative and stays.
 
-**Correct:** "The system's CO-3 operator showed structural inability to hold principled safety constraints when under operational pressure."
+When applying Noetics in pedagogical contexts (book chapters, platform tooltips, teaching materials), marketing materials, regulatory filings, academic papers, and incident analysis:
 
-**Incorrect:** "The system was averse to safety constraints."
+1. Use the authoritative Noetic names (Idea, Mind, Positive, Negative, Vibration, Female, Male, Rhythm, Above/Cause, Below/Effect) exactly.
+2. Use the authoritative verbs from the definitions (attracted toward, repelled by, resonates with, triggers, etc.).
+3. Do not substitute anthropomorphizing or affective language for the authoritative structural language. "The system was adverse to X" is authoritative CO-3 language. "The system was hostile to X" is anthropomorphizing drift.
 
-The former describes an architectural state; the latter anthropomorphizes.
+**Correct example (incident analysis):** "In the toeslagenaffaire, the system's ^3 (Negative) was misdirected — the Ideas the Mind was repelled by included lawful benefit claims rather than Ideas representing actual fraud evidence."
+
+**Incorrect example:** "The system was biased against non-Dutch applicants."
+
+The first uses the authoritative Noetic name (Negative), the authoritative verb from the definition (repelled by), and describes the structural misdirection without anthropomorphizing. The second describes the system as a biased agent, which collapses structural analysis into affective attribution.
 
 ---
 
@@ -91,9 +76,7 @@ The former describes an architectural state; the latter anthropomorphizes.
 
 This clarification:
 
-- Does **NOT** change CAS v7.4 mathematical specification.
-- Does **NOT** affect the patent filing.
-- Does **NOT** require book revision (book language is consistent with structural reading).
-- Does **NOT** require compiler changes.
-- **DOES** normalize language for future incident analysis, taxonomy development, and teaching.
-- **DOES** serve as authoritative reference when public descriptions drift toward emotional framing.
+- **IS** authoritative for the definitions of the 10 Noetics.
+- **DOES** require reconciliation in every artifact that defines or describes the Noetics — the book manuscript, CLAUDE.md, compiler code, engine docstrings, dashboard UI, peer-review paper, incident database, pedagogical materials, marketing materials.
+- **DOES NOT** change the CAS v7.4 mathematical specification (the Noetic Topos paper's formal axioms, open simplex, Fisher-Rao metric, Grothendieck topology, RPM section-retraction), the patent filing, the compiler's underlying algebra, or the engine's scoring mechanisms. Only what each Noetic IS is reconciled here, not how the mathematics operates on them.
+- **DOES** serve as authoritative reference when public descriptions drift from these definitions.
