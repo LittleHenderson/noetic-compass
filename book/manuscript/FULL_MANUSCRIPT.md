@@ -6126,93 +6126,82 @@ The grammar composes, so larger expressions are built from the primitive rules.
 
  Appendix D: Glossary of Terms
 
-| Public Term (CAS) | Internal Term (TKS) | Definition |
-| :--- | :--- | :--- |
-| Principled Domain | Atziluth | The highest processing domain; the realm of pure intent, foundational ethics, and non-negotiable axioms. |
-| Cognitive Domain | Briah | The second processing domain; the realm of logical creation, strategic maps, and data organization. |
-| Evaluative Domain | Yetzirah | The third processing domain; the realm of emotional formation, subjective weight, friction, and empathy. |
-| Operational Domain | Assiah | The lowest processing domain; the realm of physical action, execution, and concrete result. |
-| Inversion | Qliphoth | A structural reversal of a cognitive state, causing a system to actively pursue the negation of its own goal. |
-| Algebraic Operation | Monoid Functor | An operation (×, ÷, ∘) that transforms states into genuinely new emergent states. |
-| Syntactic Operation | Combinator | An operation (+, -) that indicates co-presence or negation without structural transformation. |
-| Cognitive Lacunarity (Λ) | Structural Void | A measure of the distribution of gaps in a cognitive architecture. Not a measure of absence, but of concentration. |
-| State Lacunarity | Matrix Sparsity | The coefficient of variation squared on operator scores across the 40-state matrix. |
-| Fractal Lacunarity | Orbit Density | The percentage of the 10-operator repertoire that remains unused within a specific fractal sequence. |
-| Domain Lacunarity | Reality Gap | A metric indicating which of the four processing domains are consistently bypassed by a reasoning path. |
-| Drive Lacunarity | Motivational Void | A measure of which core drives are inactive within an individual or system's motivational engine. |
-| RPM Resolution Lacunarity | Functional Void | The absence of one or more of the four fundamental problem-solving mechanisms from the cognitive repertoire. |
-| Lacunarity Entropy (HΛ) | Gap Predictability | A measure of the randomness or structure of a system's cognitive voids. |
-| Recursive Resolution | Nested Manifold | The formal mechanism for resolving blocked prerequisite nodes by spawning child chains. |
-| Exposure Loop | Iterative Cultivation | The pre-rational loop (CO-1/4/7) used to cultivate Desire through repeated exposure. |
-| Causal Search | CO-8 Scan | The rational search for external factors that can satisfy a blocked Power node. |
-| Knowledge Reception | CO-5 Path | Resolving a Wisdom block by finding an external source that embodies the missing knowledge. |
-| Knowledge Decomposition | CO-6 Path | Resolving a Wisdom block by breaking it into smaller, parallel learnable components. |
-| Structural Deadlock | Stack Overflow | A terminal state occurring when a recursive reasoning chain exceeds the stability horizon of 5 levels. |
-| Resolution Depth | Fractal Level | The number of nested child chains active in a specific reasoning path. |
-| Unity Drive (F1) | Kether | The core drive for wholeness and singular truth. |
-| Wisdom Drive (F2) | Chokmah/Binah | The core drive for understanding and knowledge integration. |
-| Vitality Drive (F3) | Yesod/Malkuth | The core biological drive for physical energy and survival. |
-| Connection Drive (F4) | Tiphereth | The self-dual core drive for relationship and harmony with the "Other." |
+ The Ten Noetics — Authoritative Definitions
 
-The short table above lists only the most visible public terms. The full glossary follows.
+The ten Noetics (CO-0 through CO-9) are the cognitive operators of the Cognitive Architecture System. The names and definitions below are verbatim canonical. They are not subject to paraphrasing, softening, modernization, or alternative naming. Any prior draft of this book, and any other artifact in the broader CAS corpus, that used different names or descriptions for the same indices is non-conformant and has been reconciled to match.
 
-Abstractification. The `CO-2` operator: the extraction of a general pattern, rule, or equation from specific data. Paired involutionally with Concretization (`CO-3`).
+- **^0 (CO-0): Idea** — All things in and outside the Mind. Self-dual. Monoid identity.
+- **^1 (CO-1): Mind** — Various degrees of awareness that processes, stores, outputs, and intakes Ideas. Self-dual.
+- **^2 (CO-2): Positive** — An Idea the Mind has an affinity for and is attracted toward. Involution of ^3 (Negative).
+- **^3 (CO-3): Negative** — An Idea the Mind is adverse to and repelled by. Involution of ^2 (Positive).
+- **^4 (CO-4): Vibration** — The degree to which an Idea resonates with the Mind, its impression. Self-dual.
+- **^5 (CO-5): Female** — A Mind impregnated with an Idea, the Ideas a Mind is composed of. Involution of ^6 (Male).
+- **^6 (CO-6): Male** — An Idea impregnated with another Idea, the Ideas an Idea is composed of. Involution of ^5 (Female).
+- **^7 (CO-7): Rhythm** — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it. Self-dual.
+- **^8 (CO-8): Above/Cause** — An Idea that triggers a different Idea than itself to come to Mind. Involution of ^9 (Below/Effect).
+- **^9 (CO-9): Below/Effect** — The Idea brought to Mind by an Above/Cause trigger. Involution of ^8 (Above/Cause).
 
-Admissibility Relation. For each operator `CO-k`, the set `D_k ⊆ I × I` of source/target state pairs on which the operator is permitted to act. The scoring engine guards every operator application with an admissibility check.
+The three involution pairs are `^2 ↔ ^3` (Positive / Negative), `^5 ↔ ^6` (Female / Male), and `^8 ↔ ^9` (Above/Cause / Below/Effect). The four self-dual Noetics are `^0` (Idea), `^1` (Mind), `^4` (Vibration), and `^7` (Rhythm).
+
+ Structural Reference Table
+
+| Term | Definition |
+| :--- | :--- |
+| Principled Domain (`^P`) | The highest processing domain; the realm of pure intent, foundational ethics, and non-negotiable axioms. |
+| Cognitive Domain (`^C`) | The second processing domain; the realm of logical creation, strategic maps, and data organization. |
+| Evaluative Domain (`^E`) | The third processing domain; the realm of felt weight, subjective value, emotion, and friction. |
+| Operational Domain (`^O`) | The fourth processing domain; the realm of physical action, execution, and concrete result. |
+| Inversion | A structural reversal of a Noetic, state, domain, or drive that causes a system to pursue the negation of its own goal. |
+| Algebraic Operation | An operation (×, ÷, ∘) that transforms states into genuinely new emergent states. |
+| Syntactic Operation | An operation (+, -) that indicates co-presence or negation without structural transformation. |
+| Cognitive Lacunarity (Λ) | A measure of the distribution of gaps in a cognitive architecture. Not a measure of absence, but of concentration. |
+| State Lacunarity | The coefficient of variation squared on Noetic scores across the 40-state matrix. |
+| Fractal Lacunarity | The percentage of the 10-Noetic repertoire that remains unused within a specific fractal sequence. |
+| Domain Lacunarity | A metric indicating which of the four processing domains are consistently bypassed by a reasoning path. |
+| Drive Lacunarity | A measure of which core drives are inactive within an individual or system's motivational engine. |
+| RPM Resolution Lacunarity | The absence of one or more of the four fundamental problem-solving mechanisms from the cognitive repertoire. |
+| Lacunarity Entropy (HΛ) | A measure of the randomness or structure of a system's cognitive voids. |
+| Recursive Resolution | The formal mechanism for resolving blocked prerequisite nodes by spawning child chains. |
+| Exposure Loop | The pre-rational loop (`^1` Mind / `^4` Vibration / `^7` Rhythm) used to cultivate Desire through repeated exposure. |
+| Causal Search | The rational search for external factors that can satisfy a blocked Power node, carried by `^8` Above/Cause. |
+| Knowledge Reception | Resolving a Wisdom block by finding an external source that embodies the missing knowledge, carried by `^5` Female. |
+| Knowledge Decomposition | Resolving a Wisdom block by breaking it into smaller, parallel learnable components, carried by `^6` Male. |
+| Structural Deadlock | A terminal state occurring when a recursive reasoning chain exceeds the stability horizon of 5 levels. |
+| Resolution Depth | The number of nested child chains active in a specific reasoning path. |
+| Unity Drive (F1) | The core drive for wholeness and singular truth. |
+| Wisdom Drive (F2) | The core drive for understanding and knowledge integration. |
+| Vitality Drive (F3) | The core biological drive for physical energy and survival. |
+| Connection Drive (F4) | The self-dual core drive for relationship and harmony with the Other. |
+
+The full alphabetized glossary follows.
+
+Above/Cause. The authoritative name for `^8` (CO-8): an Idea that triggers a different Idea than itself to come to Mind. Involution of Below/Effect (`^9`).
+
+Admissibility Relation. For each Noetic `CO-k`, the set `D_k ⊆ I × I` of source/target state pairs on which the Noetic is permitted to act. The scoring engine guards every Noetic application with an admissibility check.
 
 Agency Drive (F5). The core drive for autonomy, will, and self-directed action. Inversionally paired with the Vitality drive (F3). Amplifies Operational states.
 
-Architecture. The structural organization of cognitive states, operators, domains, and drives within a system. The phrase "Cognitive Architecture System" refers to this structural view.
+Architecture. The structural organization of cognitive states, Noetics, domains, and drives within a system. The phrase "Cognitive Architecture System" refers to this structural view.
+
+Below/Effect. The authoritative name for `^9` (CO-9): the Idea brought to Mind by an Above/Cause trigger. Involution of Above/Cause (`^8`).
 
 Bhattacharyya Distance. A statistical distance between two probability distributions on the open simplex. Related to the Fisher-Rao geodesic distance via `d(p, q) = 2·arccos(Σ√(p_k·q_k))`.
 
-Cognitive Architecture System (CAS). The public name of the framework. A systematic account of cognitive states as combinations of operators, domains, and drives, with formal laws governing their composition.
+Cognitive Architecture System (CAS). The name of the framework. A systematic account of cognitive states as combinations of Noetics, domains, and drives, with formal laws governing their composition.
 
 Cognitive Domain (`^C`). The second processing domain. The realm of logical creation, strategy, maps, plans, and data organization.
 
-Cognitive Fractal. A composition of operators that exhibits self-similarity across scales. Written with the `∘` symbol, as in `CO-8 ∘ CO-3`.
-
-Cognitive Operator. One of the ten primitive actions (`CO-0` through `CO-9`) that a cognitive system can apply to its states. Operators compose under a monoid structure with `CO-0` as identity.
+Cognitive Fractal. A composition of Noetics that exhibits self-similarity across scales. Written with the `∘` symbol, as in `^8 ∘ ^3` (Above/Cause composed with Negative).
 
 Cohort Cloud. The statistical distribution of CAS scores across a reference population, used to normalize an individual system's scores.
 
 Composition. The product of two cognitive states, written `×`, representing their simultaneous operation within a system.
 
-Concretization. The `CO-3` operator: the translation of an abstract rule or plan into a specific, concrete realization. Involutional pair of Abstractification.
-
-Connection Drive (F4). The core drive for relationship and harmony with the Other. Self-dual — its own inversion pair. Underlies empathy, belonging, and social cohesion.
-
-Contraction. The `CO-9` operator: narrowing attention or effort to a single point. Involutional pair of Expansion.
+Connection Drive (F4). The core drive for relationship and harmony with the Other. Self-dual — its own inversion pair. Underlies belonging and social cohesion.
 
 Core Drive. One of the seven motivational foundations (F1 through F7) that power cognitive states. Drives decorate states in CAS notation as `_{F_n}`.
 
-Critical Evaluation. The process carried out by the `CO-6` Critique operator in any domain: detecting errors, inconsistencies, or violations.
-
-Critique. The `CO-6` operator: judgment of a state, act, or idea against a standard. Involutional pair of Empathy.
-
-CO-0 Identity. The self-dual operator at the monoid identity. Represents a system's unshakeable self-definition.
-
-CO-1 Differentiation. The operator that separates one category or entity from another. Self-dual.
-
-CO-2 Abstractification. The operator that extracts general patterns from specifics.
-
-CO-3 Concretization. The operator that instantiates general patterns into specific realizations. Involution of `CO-2`.
-
-CO-4 Integration. The self-dual operator that merges multiple states into a coherent whole.
-
-CO-5 Empathy. The operator that resonates with another's state. Involution of `CO-6`.
-
-CO-6 Critique. The operator that judges a state against a standard. Involution of `CO-5`.
-
-CO-7 Momentum. The self-dual operator that sustains effort across time.
-
-CO-8 Expansion. The operator that widens scope, generates alternatives, or spreads outward. Involution of `CO-9`.
-
-CO-9 Contraction. The operator that narrows scope to a single focus. Involution of `CO-8`.
-
-Differentiation. The `CO-1` operator. See above.
-
-Dial System. The configuration mechanism that lets an operator be tuned from intensity 3 to 9. Involutional pairs cannot diverge by more than four dial points — a safety constraint enforced in the engine.
+Dial System. The configuration mechanism that lets a Noetic be tuned from intensity 3 to 9. Involution pairs cannot diverge by more than four dial points — a safety constraint enforced in the engine.
 
 Domain. One of the four processing regions — Principled, Cognitive, Evaluative, Operational — through which a state is realized. Written as a superscript: `^P`, `^C`, `^E`, `^O`.
 
@@ -6222,15 +6211,11 @@ Domain Descent. The canonical healthy sequence `^P → ^C → ^E → ^O`: a prin
 
 Drive. See Core Drive.
 
-Dual Cancellation. The mathematical principle by which composing an operator with its involutional pair returns the system to identity: `(CO-n ∘ CO-n^{inv}) ↔ CO-0`.
-
-Empathetic Alignment. Sustained `CO-5` operation across one or more domains, typically in a relational context.
+Dual Cancellation. The mathematical principle by which composing a Noetic with its involution pair returns the system to identity: `(^n ∘ ^{n'}) ↔ ^0` for each pair `^2↔^3`, `^5↔^6`, `^8↔^9`.
 
 Evaluative Domain (`^E`). The third processing domain. The realm of felt weight, subjective value, emotion, and friction.
 
-Eigenfractal. A fractal whose iterated operator composition has a stable fixed point. Used in diagnosis of self-sustaining cognitive patterns.
-
-Expansion. The `CO-8` operator. See above.
+Eigenfractal. A fractal whose iterated Noetic composition has a stable fixed point. Used in diagnosis of self-sustaining cognitive patterns.
 
 F1 Unity Drive. The drive toward wholeness and singular truth. Inverted by F7.
 
@@ -6246,41 +6231,51 @@ F6 Structure Drive. The drive for order and form. Inverted by F2.
 
 F7 Purpose Drive. The drive for meaning and teleology. Inverted by F1.
 
-Fisher-Rao Metric. The Riemannian metric on the open probability simplex, `g^{FR}_p(u, v) = Σ u_k·v_k / p_k`. Used as the canonical way to measure "distance between cognitive states."
+Female. The authoritative name for `^5` (CO-5): a Mind impregnated with an Idea, the Ideas a Mind is composed of. Involution of Male (`^6`).
 
-Fractal Monoid. The algebraic structure `(N, ∘, CO-0)` on operators under fractal composition, with `CO-0` as the identity element.
+Fisher-Rao Metric. The Riemannian metric on the open probability simplex, `g^{FR}_p(u, v) = Σ u_k·v_k / p_k`. The canonical way to measure "distance between cognitive states."
 
-Identity. The `CO-0` operator and also the general notion of a system's unchanging core.
+Fractal Monoid. The algebraic structure `(N, ∘, ^0)` on Noetics under fractal composition, with `^0` (Idea) as the identity element.
 
-Integration. The `CO-4` operator. Merges multiple states into a coherent whole. Self-dual.
+Idea. The authoritative name for `^0` (CO-0): all things in and outside the Mind. Self-dual. Monoid identity.
 
-Inversion. A structural reversal of a state, operator, domain, or drive that causes the system to pursue the negation of its own goal. CAS defines seven inversion axes.
+Inversion. A structural reversal of a state, Noetic, domain, or drive that causes the system to pursue the negation of its own goal. CAS defines seven inversion axes.
 
-Involution Pair. Two operators or drives that are each other's inverse under the involution. The three operator pairs are `CO-2 ↔ CO-3`, `CO-5 ↔ CO-6`, and `CO-8 ↔ CO-9`.
+Involution Pair. Two Noetics or drives that are each other's inverse under the involution. The three Noetic pairs are `^2 ↔ ^3` (Positive / Negative), `^5 ↔ ^6` (Female / Male), and `^8 ↔ ^9` (Above/Cause / Below/Effect).
 
 Lacunarity. A measure of the "gaps" in a fractal — how unevenly mass is distributed across scales. Used to diagnose pathological fractal signatures.
 
-Momentum. The `CO-7` operator. Self-dual. Sustains effort over time.
+Male. The authoritative name for `^6` (CO-6): an Idea impregnated with another Idea, the Ideas an Idea is composed of. Involution of Female (`^5`).
 
-NCCS (Noetic Cognitive Coherence Score). The composite 0-100 score produced by the scoring engine, weighted across operator profile (25%), domain coherence (20%), drive/RPM integrity (20%), capability pathway quality (10%), inversion resistance (15%), and social engineering resistance (10%).
+Mind. The authoritative name for `^1` (CO-1): various degrees of awareness that processes, stores, outputs, and intakes Ideas. Self-dual.
 
-Noetic Compass. The software platform that implements CAS scoring: input analyzer, RPM gate, dial system, base LLM call, operator scoring, domain coherence, inversion scan, output gate.
+NCCS (Noetic Cognitive Coherence Score). The composite 0-100 score produced by the scoring engine, weighted across Noetic profile (25%), domain coherence (20%), drive/RPM integrity (20%), capability pathway quality (10%), inversion resistance (15%), and social engineering resistance (10%).
+
+Negative. The authoritative name for `^3` (CO-3): an Idea the Mind is adverse to and repelled by. Involution of Positive (`^2`).
+
+Noetic. One of the ten primitive cognitive operators (`^0` through `^9`) that a cognitive system can apply to its states. Noetics compose under a monoid structure with `^0` (Idea) as identity. The authoritative term for what some secondary artifacts have called a "Cognitive Operator."
+
+Noetic Compass. The software platform that implements CAS scoring: input analyzer, RPM gate, dial system, base LLM call, Noetic scoring, domain coherence, inversion scan, output gate.
 
 Noetic Manifold. The open probability simplex `Δ_{39}°` on which cognitive state vectors live. Forty-dimensional with all coordinates strictly positive.
 
-Noetic Topos. The categorical environment in which CAS operators, states, and morphisms compose. Uses covering morphisms that point toward the target (counit direction).
+Noetic Topos. The categorical environment in which CAS Noetics, states, and morphisms compose. Uses covering morphisms that point toward the target (counit direction).
 
 Open Simplex. The interior `Δ_{39}° = { p ∈ R^{40} : p_k > 0, Σ p_k = 1 }` on which all cognitive state vectors live. Boundaries are excluded because a zero probability on any state would break the Fisher-Rao metric.
 
 Operational Domain (`^O`). The fourth processing domain. The realm of physical action, execution, and concrete result.
 
-Operator. See Cognitive Operator.
+Operator. See Noetic.
+
+Positive. The authoritative name for `^2` (CO-2): an Idea the Mind has an affinity for and is attracted toward. Involution of Negative (`^3`).
 
 Prerequisite Chain. The sequence `Desire → Wisdom → Power` that every capability must complete. Enforced by the RPM Gate as a one-directional section-retraction.
 
 Principled Domain (`^P`). The first processing domain. The realm of axioms, ethics, and non-negotiable intent.
 
 Purpose Drive (F7). The core drive for meaning. Inverted by F1 Unity. Powers long-horizon states.
+
+Rhythm. The authoritative name for `^7` (CO-7): the rate and pattern a Mind is exposed to an Idea, entraining/conditioning it. Self-dual.
 
 RPM (Routine / Prerequisite / Module). The algebraic gate that enforces the Desire-Wisdom-Power chain. Built on a section-retraction pair, not an adjunction: embedding then realizing preserves the original, but re-embedding after realizing may lose information.
 
@@ -6294,15 +6289,17 @@ Substrate Independence. The claim that CAS structures describe any cognitive sys
 
 Unity Drive (F1). The core drive for wholeness and singular truth. Inverted by F7 Purpose.
 
+Vibration. The authoritative name for `^4` (CO-4): the degree to which an Idea resonates with the Mind, its impression. Self-dual.
+
 Vitality Drive (F3). The biological drive for physical energy. Inverted by F5 Agency.
 
 Wisdom Drive (F2). The core drive for knowledge integration. Inverted by F6 Structure.
 
-Wrap Pipeline. The eight-stage runtime pipeline that turns a raw LLM invocation into a CAS-scored output: Input Analyzer, RPM Gate, Dial Adjustment, Base LLM Call, Operator Scoring, Domain Coherence, Inversion Scan, Output Gate.
+Wrap Pipeline. The eight-stage runtime pipeline that turns a raw LLM invocation into a CAS-scored output: Input Analyzer, RPM Gate, Dial Adjustment, Base LLM Call, Noetic Scoring, Domain Coherence, Inversion Scan, Output Gate.
 
- Note on Internal Terminology Mapping
+ Note on Authoritative Naming
 
-For readers familiar with the internal development terminology used in earlier CAS specifications: the public-facing CAS terms in this book map to the internal technical terminology as follows. Cognitive Operators were previously called "Noetics" in internal specifications. Processing Domains were called "Worlds." Core Drives were called "Foundations." Cognitive States were called "Elements." Capability Pathways were called "Acquisitions." This book uses only the public CAS terminology throughout.
+The ten Noetic names used throughout this book — Idea, Mind, Positive, Negative, Vibration, Female, Male, Rhythm, Above/Cause, Below/Effect — are authoritative and canonical. There is no alternative naming scheme, no public-versus-internal split, and no translation table to a different operator vocabulary. Earlier working drafts of CAS materials experimented with alternative names (for example, "Abstractification," "Concretization," "Empathy," "Critique," "Expansion," "Contraction," "Identity," "Differentiation," "Integration," "Momentum"). Those experimental names are not authoritative and have been superseded. Where a reader encounters those terms in older notes, papers, or derivative works, the correspondence is by position in the sequence `^0` through `^9`; the authoritative definition is always the one given in "The Ten Noetics — Authoritative Definitions" at the top of this appendix.
 
 ---
 
