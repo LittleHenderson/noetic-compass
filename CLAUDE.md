@@ -77,6 +77,24 @@ Analytical implications:
 - AI analog: ^5 composition = training data + fine-tuning corpus. Fine-tuning is ^5-level intervention; in-context prompting is ^1 Mind (awareness) operating against a stable ^5.
 - Cross-session consistency reflects ^5 stability. Drift = either genuine ^5 drift (new accumulated experience) or activation-pattern drift against a stable ^5.
 
+#### Colloquialism Test — diagnostic for Noetic verification
+
+When unsure whether a proposed Noetic classification aligns with authoritative semantics, apply the Colloquialism Test (`docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 6): write down the most natural colloquialism a native speaker would use for the phenomenon, then match it against the canonical colloquialism map below. A clean match supports the classification; no match signals drift; multiple matches suggest a compound expression.
+
+Canonical colloquialism map:
+- ^0 Idea: "It's all in your head."
+- ^1 Mind: "Paying attention." / "Making up your mind." / "Using your head."
+- ^2 Positive: "Drawn to it like a moth to a flame." / "Speaks to me." / "Can't resist."
+- ^3 Negative: "Can't stomach it." / "Rubs me the wrong way." / "Wouldn't touch it with a ten-foot pole."
+- ^4 Vibration: "Hit me hard." / "Struck a chord." / "Resonated." / "Made an impression."
+- ^5 Female: "We are the sum of our experiences." / "It's who I am." / "Part of what makes me me."
+- ^6 Male: "Unpacking an idea." / "Breaking it down." / "Looking at what's underneath." / "Pulling apart the argument."
+- ^7 Rhythm: "Practice makes perfect." / "You are what you repeatedly do." / "Getting into a groove." / "Muscle memory."
+- ^8 Above/Cause: "That reminds me..." / "One thing leads to another." / "Triggered a memory." / "Made me think of..."
+- ^9 Below/Effect: "It just popped into my head." / "Out of nowhere I thought of..." / "The thought came to me." / "It just clicked."
+
+Guardrail: where a colloquialism and a canonical definition appear to disagree, the canonical definition in Clarification 1 governs. Apply the test during reconciliation work, incident-database CAS analysis, pedagogical example construction, and marketing copy review.
+
 #### Structural invariants (conventions layered on top of the authoritative definitions)
 
 ```

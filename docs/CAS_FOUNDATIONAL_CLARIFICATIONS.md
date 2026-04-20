@@ -119,6 +119,77 @@ All of these are ^5 Female content. There is no category of lasting cognitive fo
 
 ---
 
+## Clarification 6: The Colloquialism Test — Diagnostic Principle for Verifying Noetic Readings
+
+### The principle
+
+> **If ever unsure of a Noetic's true definition, try to match its definition with a colloquialism and it will make it clear.**
+
+Every authoritative Noetic corresponds to folk-wisdom colloquialisms that natively capture the Mind-Idea dynamic. If a reading of a Noetic can be expressed as a colloquialism that feels natural and true, the reading is aligned with authoritative semantics. If no colloquialism fits, the reading is drifting from what the Noetic actually describes.
+
+### Why this works
+
+Colloquialisms are distilled observations about cognitive architecture refined across generations. They encode structural truths about Mind-Idea dynamics in folk form. The Noetics axiomatize what colloquialisms already know.
+
+When a colloquialism fits a Noetic reading cleanly, both are pointing at the same structural phenomenon — the colloquialism at the phenomenological surface, the Noetic at the architectural foundation. The match is not approximate; it is two descriptions of the same underlying mechanism at different resolutions.
+
+### Canonical colloquialism map
+
+| Noetic | Authoritative definition | Folk-form colloquialisms |
+| :--- | :--- | :--- |
+| ^0 Idea | All things in and outside the Mind. | "It's all in your head." |
+| ^1 Mind | Various degrees of awareness that processes, stores, outputs, and intakes Ideas. | "Paying attention." / "Making up your mind." / "Using your head." |
+| ^2 Positive | An Idea the Mind has an affinity for and is attracted toward. | "Drawn to it like a moth to a flame." / "Speaks to me." / "Can't resist." |
+| ^3 Negative | An Idea the Mind is adverse to and repelled by. | "Can't stomach it." / "Rubs me the wrong way." / "Wouldn't touch it with a ten-foot pole." |
+| ^4 Vibration | The degree to which an Idea resonates with the Mind, its impression. | "Hit me hard." / "Struck a chord." / "Resonated." / "Made an impression." |
+| ^5 Female | A Mind impregnated with an Idea, the Ideas a Mind is composed of. | "We are the sum of our experiences." / "It's who I am." / "Part of what makes me me." |
+| ^6 Male | An Idea impregnated with another Idea, the Ideas an Idea is composed of. | "Unpacking an idea." / "Breaking it down." / "Looking at what's underneath." / "Pulling apart the argument." |
+| ^7 Rhythm | The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it. | "Practice makes perfect." / "You are what you repeatedly do." / "Getting into a groove." / "Muscle memory." |
+| ^8 Above/Cause | An Idea that triggers a different Idea than itself to come to Mind. | "That reminds me..." / "One thing leads to another." / "Triggered a memory." / "Made me think of..." |
+| ^9 Below/Effect | The Idea brought to Mind by an Above/Cause trigger. | "It just popped into my head." / "Out of nowhere I thought of..." / "The thought came to me." / "It just clicked." |
+
+These colloquialisms are representative, not exhaustive. Native speakers of any language carry many more folk-form descriptions that align with each Noetic; the patterns above are English-language exemplars. When working in other linguistic or cultural contexts, find the equivalent folk-form markers that encode the same Mind-Idea dynamic.
+
+### Diagnostic application
+
+When analyzing an example and classifying it in Noetic notation, pose two questions:
+
+1. **What colloquialism would a native speaker use to describe this cognitive phenomenon?**
+2. **Which Noetic's authoritative definition does that colloquialism align with?**
+
+If the answer produces a clean match to a single Noetic, single-operator classification is supported. If the colloquialism invokes several Noetics simultaneously, the example probably needs a compound expression (often with ^5 Female as substrate per Clarification 5). If no colloquialism fits at all, the Noetic reading is drifting from authoritative semantics and must be reconciled.
+
+### Worked examples of the test
+
+**Example A.** An analyst examining data feels pulled toward a particular pattern. The native-speaker colloquialism: "That pattern is speaking to me." Colloquialism match: ^2 Positive ("speaks to me"). Clean single-operator classification: `^2^C` (Cognitive Positive). ✓
+
+**Example B.** A therapist absorbs a patient's grief. The colloquialism: "Her grief became part of who I was that day." Colloquialism match: ^5 Female ("part of who I was"). Clean single-operator classification against the evaluative substrate: `^5^E`. ✓
+
+**Example C.** A code reviewer tests each sub-claim of a PR. The colloquialism: "I'm breaking it down to look at what's underneath." Colloquialism match: ^6 Male ("breaking it down" / "looking at what's underneath"). Clean single-operator classification: `^6^C`. ✓
+
+**Example D.** A founder whose attraction to the vision depends on her accumulated entrepreneurial experience. Native colloquialisms: "This opportunity speaks to me" (^2 Positive) **and** "It fits who I've become" (^5 Female). Two colloquialisms, two Noetics — compound expression warranted: `^2^C × ^5^C` (Cognitive Positive operating against accumulated cognitive ^5 substrate). ✓ This pattern is the typical case for seasoned-practitioner examples where expertise (^5) shapes attraction (^2).
+
+**Example E (drift caught).** A proposed reading of ^3 Negative as "analytical critique finding flaws." Applying the test: no native colloquialism for ^3 uses analytical-critique vocabulary. "Can't stomach it," "rubs me the wrong way," and "wouldn't touch it with a ten-foot pole" are all visceral-aversion colloquialisms, not analytical ones. The proposed reading is drifting from authoritative semantics (which specifies aversion/repulsion, not analytical critique). Reconcile: either the example is actually ^3 (visceral aversion, drop the analytical framing) or it is actually ^6 Male (compositional analysis, drop the ^3 label).
+
+### Application to reconciliation work and incident analysis
+
+When reconciling chapters, scenarios, incident analyses, or any other CAS artifact:
+
+1. For each example's proposed Noetic classification, write down the most natural colloquialism a native speaker would use.
+2. Compare the colloquialism to the authoritative-definition/colloquialism map above.
+3. If the match is clean: classification is supported.
+4. If the colloquialism evokes multiple Noetics: compound expression.
+5. If no colloquialism fits the proposed classification: the classification is drifting from authoritative semantics and must be reconciled.
+
+This diagnostic prevents drift between example framings and authoritative Noetic definitions. It complements the Universal Applicability Test (Clarification 2) and the expanded ^5 scope guidance (Clarification 5) as a third layer of verification.
+
+### What this clarification does NOT change
+
+- The authoritative Noetic definitions in Clarification 1 are unchanged. Colloquialisms are diagnostic aids; they do not override, replace, or augment the canonical definitions.
+- Where a colloquialism and a canonical definition appear to disagree, the canonical definition governs; the colloquialism is either imprecise in that specific usage or the proposed example is misclassified.
+
+---
+
 ## Scope of This Document
 
 This clarification:
