@@ -95,6 +95,14 @@ Canonical colloquialism map:
 
 Guardrail: where a colloquialism and a canonical definition appear to disagree, the canonical definition in Clarification 1 governs. Apply the test during reconciliation work, incident-database CAS analysis, pedagogical example construction, and marketing copy review.
 
+Anti-drift annotations — load-bearing warnings that catch the specific drift patterns recurring across prior Scheme-A/B/C artifacts (full worked verification in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 6):
+
+- **`^3` Negative is VISCERAL, not analytical.** The colloquialisms "can't stomach it," "rubs me the wrong way," "wouldn't touch it with a ten-foot pole" describe aversion/repulsion, not analytical critique. If an example reaches for audit/scrutinize/find-flaws vocabulary, the correct classification is `^6` Male (compositional decomposition-and-test), not `^3`. This catches Scheme-A CO-3 Concretization drift and Scheme-B "Aversion / Critical Evaluation" drift.
+- **`^8` Above/Cause is associative TRIGGERING, not analytical reasoning.** The colloquialisms "that reminds me," "one thing leads to another," "triggered a memory" describe associative surfacing of Ideas, not deductive inference. Deductive causal analysis is a compound of `^6` Male (decomposition) and `^9` Below/Effect (landing), not `^8`. This catches Scheme-B "Causal Reasoning" drift that appeared in compiler code, cas-engine docstrings, and multiple chapter examples.
+- **`^4` Vibration has an etymological cognate.** "Struck a chord" is not a metaphor for resonance — it is a literal vibration metaphor pointing at the same structural dynamic the authoritative definition names. When the colloquialism and the definition etymologically converge, the verification is strongest.
+
+When classifying a new example during reconciliation or analysis: if the proposed Noetic is `^3` or `^8`, explicitly check the anti-drift annotation before committing the classification. The visceral-vs-analytical and triggering-vs-reasoning distinctions are where Scheme-A/B/C schemes most commonly re-emerge.
+
 #### Structural invariants (conventions layered on top of the authoritative definitions)
 
 ```
