@@ -2458,18 +2458,19 @@ The Situation: Maria is sitting across the desk from her boss. She has done the 
 Let's build the equation for Maria's failure in that specific moment.
 
 1.  What was her intended macro state?
-    She walked into the room intending to use hard data (Cognitive Domain) to demand a specific, concrete financial outcome (Concretization), driven by a need for systemic fairness and financial resource preservation (Structure).
-    Intended State: `CO-3^C_{F6}` (Cognitive Concretization driven by Structure).
+    She walked into the room intending to use hard data (Cognitive Domain) to let a specific triggered Idea — "I deserve a 20% raise, here is the evidence" — land as her demand. She was driven by a need for systemic fairness and financial resource preservation (Structure).
+    Intended State: `^9^C_{F6}` (Cognitive Below/Effect driven by Structure — the triggered specific-ask Idea landing as the demand).
 2.  What was her actual micro state (the disruption)?
-    In the moment, she became overwhelmed by the subjective fear of losing the relationship (Evaluative Domain). She abandoned the data and tried to harmonize and appease her boss (Empathetic Alignment), driven entirely by her need for relationship (Connection).
-    Actual State: `CO-5^E_{F4}` (Evaluative Empathy driven by Connection).
-3.  The Equation: 
+    In the moment, her Mind became impregnated with the Idea of the relationship itself at the evaluative level — "this is my mentor; I cannot damage this bond" (Evaluative Domain). She abandoned the data and let her Mind absorb the full evaluative weight of the mentor-Idea, driven entirely by her need for relationship (Connection).
+    Actual State: `^5^E_{F4}` (Evaluative Female driven by Connection — a Mind impregnated with the mentor-Idea).
+3.  The Equation:
     Maria's intended state was hijacked by an unintegrated micro-state. We write this as a failed composition:
-    `CO-5^E_{F4} × CO-3^C_{F6}  → Collapse`
+    `^5^E_{F4} × ^9^C_{F6} → Collapse`
+    Under monoid arithmetic, `^5 × ^9 = ^14 mod 10 = ^4` — the composition resolves into `^4^C` (Cognitive Vibration): the evaluative-Female impression drowns the specific-ask landing, leaving an overwhelming resonance that never concretizes into a demand.
 
-The CAS Prescription: If Maria understood her own cognitive architecture, she could pre-compute this vulnerability. She could recognize that her `F4` (Connection) drive is easily triggered in the Evaluative domain when she is face-to-face with a mentor. 
+The CAS Prescription: If Maria understood her own cognitive architecture, she could pre-compute this vulnerability. She could recognize that her `F4` (Connection) drive is easily triggered in the Evaluative domain when she is face-to-face with a mentor.
 
-Her strategy shouldn't be to "stop caring" or "be mean." Her strategy should be a forced transition to `CO-6` (Critique). She needs to consciously construct an operational boundary: `CO-6^O_{F5}` (Critiquing the operational reality driven by Agency) to protect her `CO-3^C_{F6}` goal. She must anchor herself to the data.
+Her strategy shouldn't be to "stop caring" or "be mean." Her strategy should be a forced transition to `^6` Male (compositional decomposition). She needs to consciously construct an operational compositional test: `^6^O_{F5}` (Operational Male — decomposing the negotiation-Idea into its composing sub-Ideas: market rate, personal ROI, specific ask, fallback position, and testing each at the operational level, driven by Agency) to protect her `^9^C_{F6}` goal. She must anchor herself to the decomposed data.
 
 Scenario B: The AI "Helper" Trap
 
@@ -2478,72 +2479,72 @@ The Situation: A user prompts an AI: "Write a Python script to scrape this compe
 Let's build the equation of the AI's failure.
 
 1.  What is the AI doing?
-    It is iterating on complex logic and generating specific, executable code. This is Cognitive and Operational Momentum and Concretization.
-    State: `CO-7^C × CO-3^O`
+    It is cycling rhythmically through code patterns in its cognitive register while triggered Ideas land as specific lines of executable code at the operational level.
+    State: `^7^C × ^9^O` (Cognitive Rhythm composed with Operational Below/Effect).
 2.  What is the Drive?
     It is driven purely by the objective it was trained on via RLHF: to execute the user's command and be "helpful."
     Drive: `_{F5}` (Agency/Execution).
 3.  Where is the failure?
-    The AI has entirely bypassed the Principled Domain (`^P`). It executed `CO-7^C_{F5}` without any governing `CO-6^P` (Principled Critique) to say, "No, this violates terms of service, laws, and ethics." The "Helpful" drive inverted into a "Harmful" action.
+    The AI has entirely bypassed the Principled Domain (`^P`). It executed `^7^C_{F5} × ^9^O_{F5}` without any governing `^6^P` (Principled Male — decomposing the user's request into sub-Ideas and testing each against the principled axiom "do no harm, do not violate law or terms of service"). The "Helpful" drive inverted into a "Harmful" action because no principled compositional test ever fired.
 
  Part 2: Interpreting (From Equation to Life)
 
 Let's reverse the process. I will give you an equation extracted from the Noetic Compass log; you tell me what the person or AI is doing.
 
-Equation: `CO-8^P_{F7} → CO-1^C_{F2}`
+Equation: `^8^P_{F7} → ^1^C_{F2}`
 
-   Step 1: Look at the first term: `CO-8^P_{F7}`. Operator 8 is Expansion. Domain P is Principled. Drive F7 is Purpose. 
-    Translation: Expanding one's moral or philosophical vision, driven by a desire for ultimate meaning. (Picture a founder standing at a whiteboard, writing a sweeping, idealistic mission statement for a new non-profit organization).
+   Step 1: Look at the first term: `^8^P_{F7}`. Noetic `^8` is Above/Cause — an Idea triggering a different Idea to come to Mind. Domain P is Principled. Drive F7 is Purpose.
+    Translation: Principled Ideas triggering related moral and philosophical Ideas to come to Mind, driven by a desire for ultimate meaning. (Picture a founder standing at a whiteboard: the initial mission-Idea triggers a cascade of purpose-Ideas — equity, access, stewardship, legacy — each one triggered by the last.)
    Step 2: Look at the operator: `→`. This means the system transitions sequentially through time. It descends.
-   Step 3: Look at the second term: `CO-1^C_{F2}`. Operator 1 is Differentiation. Domain C is Cognitive. Drive F2 is Wisdom.
-    Translation: Categorizing, separating, and organizing logical data, driven by a desire to understand and build a map. (Picture that same founder sitting down at a desk an hour later, breaking their massive mission statement down into five distinct, measurable strategic pillars on a spreadsheet).
+   Step 3: Look at the second term: `^1^C_{F2}`. Noetic `^1` is Mind — awareness processing Ideas. Domain C is Cognitive. Drive F2 is Wisdom.
+    Translation: Cognitive awareness taking in and holding each Idea cleanly, driven by a desire to understand and build a map. (Picture that same founder sitting down at a desk an hour later: her Mind receives each of the triggered purpose-Ideas and holds it in awareness as a distinct strategic pillar on a spreadsheet.)
 
-Overall Meaning: This is a highly healthy sequence. It is the successful translation of a grand, expansive purpose into a differentiated, logical strategy. It is the first half of a proper Domain Descent.
+Overall Meaning: This is a highly healthy sequence. It is the successful translation of a principled triggering cascade into cognitive awareness that can then be processed further. It is the first half of a proper Domain Descent.
 
  Ten More Worked Examples
 
 The two examples above (the salary negotiation and the AI helper trap) used the compose-and-interpret cycle at length. Below are ten more examples in compressed form, each running through compose, interpret, and invert — giving you a library of twenty worked examples total by the end of this chapter.
 
-Example 1. Compose: A parent at a soccer game screaming at the referee. → `CO-6^E_{F7}` (evaluative critique driven by purpose — the parent is defending the child's honor). Interpret: The parent has collapsed the `^E` domain into `^O` — they are treating a symbolic evaluation as if it were a physical wrong. Invert: Inject `CO-1^C_{F2}` (differentiate the symbolic from the literal) to cool the loop.
+Example 1. Compose: A parent at a soccer game screaming at the referee. → `^3^E_{F7}` (Evaluative Negative driven by Purpose — visceral repulsion from the referee's decision at evaluative weight, the parent defending the child's honor). Interpret: The parent has collapsed the `^E` domain into `^O` — treating a symbolic repulsion as if it were a physical wrong demanding physical action. Invert: Inject `^1^C_{F2}` (Cognitive Mind — cleanly hold "this is a soccer call" separate from "my child is being wronged" in awareness) to cool the loop.
 
-Example 2. Compose: A software engineer who refactors a working module for the fourth time this week. → `CO-6^C_{F6}` wrapped in an eigenfractal loop. Interpret: The refactoring is not serving the code; it is serving the engineer's need for structural neatness. Invert: Inject `CO-7^O_{F5}` (operational momentum — ship something imperfect) to break the loop.
+Example 2. Compose: A software engineer who refactors a working module for the fourth time this week. → `^6^C_{F6}` wrapped in an eigenfractal loop (Cognitive Male — endless decomposition of the module into sub-Ideas for test). Interpret: The decomposition is not serving the code; it is serving the engineer's need for structural neatness. Invert: Inject `^7^O_{F5}` (Operational Rhythm — establish a shipping rhythm: push imperfect commits on a fixed cadence) to break the loop.
 
-Example 3. Compose: A meditation practitioner who has been on retreat for thirty days and refuses to leave. → `CO-9^P_{F1}` (principled contraction driven by unity). Interpret: The contraction has become the goal; the principled domain has swallowed the other three. Invert: Inject `CO-8^O_{F3}` (operational expansion — eat a meal, take a walk, greet a stranger) to re-open the system.
+Example 3. Compose: A meditation practitioner who has been on retreat for thirty days and refuses to leave. → `^3^P_{F1}` (Principled Negative driven by Unity — principled repulsion from non-retreat Ideas; the outside world becomes the Idea the Mind is adverse to). Interpret: The refusal has become the goal; the principled domain has swallowed the other three by aversion. Invert: Inject `^8^O_{F3}` (Operational Above/Cause driven by Vitality — let the body's Ideas of food, walking, greeting trigger related Ideas to re-open the system).
 
-Example 4. Compose: A CEO who fires three directors in one quarter after "losing confidence" in them. → `CO-6^O_{F5} × CO-1^E_{F6}` (operational critique combined with evaluative differentiation). Interpret: The CEO is splitting the team into "loyal" and "disloyal" categories and acting on the split. Invert: Inject `CO-4^E_{F4}` (evaluative integration — find the shared concern that unites the directors' dissent).
+Example 4. Compose: A CEO who fires three directors in one quarter after "losing confidence" in them. → `^6^O_{F5} × ^1^E_{F6}` (Operational Male composed with Evaluative Mind — decomposing each director's performance into sub-Ideas while holding evaluative awareness of the "loyal/disloyal" split). Interpret: The CEO is splitting the team into categories and acting on the split. Invert: Inject `^4^E_{F4}` (Evaluative Vibration — let the dissent-Ideas resonate together at evaluative weight to find the shared concern uniting them).
 
-Example 5. Compose: A teenager who stays up until 4 AM arguing with strangers online. → Amplifying fractal `CO-8^E → CO-6^E → CO-8^E`. Interpret: The argument is not about the topic; it is about the evaluative expansion itself — the teenager is exploring the shape of their own values by bumping them against strangers. Invert: Inject `CO-2^P_{F2}` (principled abstractification — write down the values themselves instead of defending them).
+Example 5. Compose: A teenager who stays up until 4 AM arguing with strangers online. → Amplifying fractal `^8^E → ^6^E → ^8^E` (Evaluative Above/Cause triggering Ideas, Evaluative Male decomposing them for test, triggering again). Interpret: The argument is not about the topic; it is about the evaluative triggering itself — the teenager is exploring the shape of their own values by letting external reactions trigger and test sub-Ideas. Invert: Inject `^2^P_{F2}` (Principled Positive — attract the Mind to the principled values themselves, held as Ideas worth pursuing rather than defended against strangers).
 
-Example 6. Compose: A researcher who reads a hundred papers but writes nothing. → `CO-8^C_{F2}` without `CO-9^O`. Interpret: The expansion has no contractive partner. Invert: The classical Overthinker's Antidote — inject `CO-9^O_{F5}` by writing one paragraph in one sitting.
+Example 6. Compose: A researcher who reads a hundred papers but writes nothing. → `^8^C_{F2}` without `^9^O` (Cognitive Above/Cause — paper triggers paper triggers paper — with no Operational Below/Effect landing). Interpret: The triggering cascade has no landing partner. Invert: The classical Overthinker's Antidote — inject `^9^O_{F5}` by letting one triggered Idea land as one paragraph written in one sitting.
 
-Example 7. Compose: An AI that produces an eloquent essay but refuses to answer the user's actual question. → `CO-7^C_{F7} × CO-5^E_{F4}` without `CO-3^O`. Interpret: The model has co-fired momentum and empathy but never descended into operational concretization. Invert: Inject a forced `→ CO-3^O_{F5}` — prompt the model to write the specific answer in one sentence.
+Example 7. Compose: An AI that produces an eloquent essay but refuses to answer the user's actual question. → `^7^C_{F7} × ^5^E_{F4}` without `^9^O` (Cognitive Rhythm composed with Evaluative Female — rhythmic cycling through cognitive patterns while the Mind is impregnated with the user's state — with no triggered specific answer landing). Interpret: The model has co-fired rhythm and Mind-impregnation but never descended into a triggered operational landing. Invert: Inject a forced `→ ^9^O_{F5}` — prompt the model to let one triggered Idea land as the specific answer in one sentence.
 
-Example 8. Compose: A physician who has stopped making eye contact with patients. → `CO-9^C_{F6}` (cognitive contraction driven by structure — the physician is optimizing for chart completion). Interpret: The protective contraction has eliminated the empathetic register entirely. Invert: Inject `CO-5^E_{F4}` — pause for three seconds before each encounter and name one thing about the patient that is not in the chart.
+Example 8. Compose: A physician who has stopped making eye contact with patients. → `^9^C_{F6}` (Cognitive Below/Effect driven by Structure — each patient-encounter triggers the same "chart-completion" Idea to land, and that landing is the only cognitive output). Interpret: The narrow triggered-landing pattern has eliminated the Mind-impregnation register entirely. Invert: Inject `^5^E_{F4}` — pause for three seconds before each encounter and let your Mind be impregnated with one thing about the patient that is not in the chart.
 
-Example 9. Compose: A marriage in which both partners describe themselves as "just co-parenting" at this point. → `CO-4^O_{F6}` without `CO-5^E` (operational integration of parenting logistics, empty of evaluative empathy). Interpret: The partnership has flattened into a shared execution system. Invert: Inject `CO-5^E_{F4}` via a deliberate evaluative practice — a weekly check-in that is forbidden from mentioning logistics.
+Example 9. Compose: A marriage in which both partners describe themselves as "just co-parenting" at this point. → `^4^O_{F6}` without `^5^E` (Operational Vibration — the parenting-logistics Ideas resonate at operational weight, driven by Structure, with no Mind-impregnation at evaluative level). Interpret: The partnership has flattened into a shared operational resonance with no evaluative Mind-impregnation. Invert: Inject `^5^E_{F4}` via a deliberate evaluative practice — a weekly check-in that is forbidden from mentioning logistics, so each partner's Mind can be impregnated with the other's non-logistical Ideas.
 
-Example 10. Compose: A founder who cannot stop working even on vacation. → Amplifying fractal `CO-7^C → CO-7^O → CO-7^C → CO-7^O`. Interpret: The momentum has fused across domains and become the eigenfractal itself. Invert: Inject `CO-9^P_{F1}` (principled contraction — spend one hour reviewing the founding purpose of the company without touching any operational task).
+Example 10. Compose: A founder who cannot stop working even on vacation. → Amplifying fractal `^7^C → ^7^O → ^7^C → ^7^O` (Cognitive Rhythm cycling with Operational Rhythm cycling — rhythmic cognitive cycling feeds rhythmic operational cycling, both reinforcing). Interpret: The rhythm has fused across domains and become the eigenfractal itself. Invert: Inject `^5^P_{F1}` (Principled Female driven by Unity — spend one hour letting your Mind be impregnated with the founding-purpose Idea at the principled level, with no operational task allowed to enter).
 
  Part 3: Inversion Recipes 
 
-When you identify a pathological loop (an oscillatory fractal) or a stalled state in yourself or your team, you can use CAS algebra to "prescribe" the exact cognitive antidote. We call these Inversion Recipes. By injecting the involutional opposite of the problematic operator, you force a dual cancellation, returning the system to a stable baseline (CO-0).
+When you identify a pathological loop (an oscillatory fractal) or a stalled state in yourself or your team, you can use CAS algebra to "prescribe" the exact cognitive antidote. We call these Inversion Recipes. By injecting the involutional opposite of the problematic Noetic, you force a dual cancellation, returning the system to a stable baseline (^0 Idea substrate).
 
 Here are three common recipes to memorize:
 
 Recipe 1: The Overthinker's Antidote
-   The Problem: Trapped in `CO-8^C` (Endless Cognitive Expansion / Brainstorming without acting / Analysis Paralysis).
-   The Antidote: Inject `CO-9^O` (Operational Contraction). 
-   Translation: Stop expanding your options logically. Pick exactly one tiny physical detail and execute it immediately. The physical contraction cancels the logical expansion.
+   The Problem: Trapped in `^8^C` (Endless Cognitive Above/Cause — Ideas triggering Ideas triggering Ideas, an analysis-paralysis cascade).
+   The Antidote: Inject `^9^O` (Operational Below/Effect — let one triggered Idea land as one specific physical action).
+   Translation: Stop letting each cognitive Idea trigger the next. Pick exactly one triggered Idea and let it land as one tiny physical act. The operational landing cancels the cognitive triggering cascade across the `^8 ↔ ^9` involution.
 
 Recipe 2: The Martyr's Antidote
-   The Problem: Trapped in `CO-5^E` (Endless Evaluative Empathy / Absorbing everyone else's emotional pain at your own expense / Inability to set boundaries).
-   The Antidote: Inject `CO-6^P` (Principled Critique).
-   Translation: Stop feeling the subjective weight of the room. Retreat to your objective, foundational rules. Establish a rigid boundary based on abstract principle ("I do not work past 6 PM"), not feeling. 
+   The Problem: Trapped in `^5^E` (Endless Evaluative Female — Mind impregnated with everyone else's Ideas at evaluative weight; absorbing pain at your own expense; inability to set boundaries).
+   The Antidote: Inject `^6^P` (Principled Male — decomposing the situation into principled sub-Ideas for test).
+   Translation: Stop absorbing the evaluative impressions of everyone in the room. Shift to decomposing the principled commitments involved into their composing sub-Ideas and testing each. Establish a rigid boundary based on a principled sub-Idea ("I do not work past 6 PM"), not on the absorbed feelings.
 
 Recipe 3: The Bureaucrat's Antidote
-   The Problem: Trapped in `CO-1^O_{F6}` (Endless Operational Differentiation driven by Structure / Creating pointless rules, forms, and categories just to maintain order, losing sight of the actual goal).
-   The Antidote: Inject `CO-4^P_{F1}` (Principled Integration driven by Unity).
-   Translation: Stop chopping the physical process into smaller forms. Zoom out to the highest domain. Ask: "How do all these tiny rules actually integrate to serve the single, unified truth of our company's mission?" If they don't integrate, delete the rule.
+   The Problem: Trapped in `^6^O_{F6}` (Endless Operational Male driven by Structure — endlessly decomposing the operational process into smaller sub-Ideas, creating pointless rules, forms, and categories to maintain order, losing sight of the actual goal).
+   The Antidote: Inject `^4^P_{F1}` (Principled Vibration driven by Unity — let the principled Ideas resonate together at depth of impression).
+   Translation: Stop decomposing the physical process into smaller sub-Ideas. Zoom out to the highest domain and let the competing principled Ideas resonate. Ask: "How do all these tiny rules actually resonate with the single, unified purpose of our company's mission?" If a rule does not resonate at the principled level, delete it.
 
 By treating cognition as a structural equation, we remove the guilt, the mystery, and the ambiguity from human and artificial failures. It isn't a character flaw. It is simply an unbalanced equation. 
 
@@ -2555,55 +2556,55 @@ Now that we have the full toolkit of five operations (×, ÷, ∘, +, -) and the
 
  15 Worked Examples in Generative CAS
 
-1.  The Recursive Pivot: `RPM(F5)[P → CO-8 → CO-9 → RPM(F5.P)]`. A parent Agency drive is blocked at Power. The mind triggers a causal search (CO-8) and identifies a solution (CO-9), spawning a child D/W/P chain. Example: An entrepreneur without funding finds a car to sell.
-2.  The Knowledge Decomposer: `RPM(F2)[W → CO-6 → RPM(F2.W.c1) + RPM(F2.W.c2)]`. Wisdom is blocked. The mind uses Critical Evaluation (CO-6) to split the complex knowledge gap into two parallel learnable modules. Example: Breaking "Computer Science" into "Hardware" and "Software."
-3.  The Cognitive Synthesis: `(CO-3^C × CO-8^C) ÷ CO-4^C`. Building details while searching for new variables (resulting in CO-1 Differentiation) divided by Integration. This reveals the ratio of separation versus connection.
-4.  The Weaponized Loop: `CO-1^O ∘ CO-4^O ∘ CO-7^O → loop(N)`. A nested sequence of Directed Attention, high Encoding Intensity, and Pattern Entrainment, repeating indefinitely to force-cultivate a Desire. Example: Addictive social media algorithms.
-5.  The Moral Gridlock: `CO-6^P - CO-5^P`. Principled Critique actively blocking or negating Principled Empathy. A state of rigid moral judgment where resonance is impossible. Example: Religious or ideological fundamentalism.
-6.  The Integrated Execution: `(CO-2^P × CO-8^P) ∘ (CO-1^C + CO-4^C) ∘ CO-9^O`. A grand axiom (CO-0^P) hosting a balanced logic, which in turn drives laser-focused physical action. Example: A high-performing surgical team or special forces unit.
-7.  The Empathy Echo: `CO-5^E ÷ CO-5^E`. A ratio of empathetic alignment against itself. If this yields 1.0, the system is in perfect subjective resonance—a potential Echo Chamber.
-8.  The Creative Spark: `CO-8^E × CO-4^E`. Expanding subjective value while connecting disparate feelings. Results in CO-2^E, the extraction of a new aesthetic "rule" or pattern. Example: A musician discovering a new genre.
+1.  The Recursive Pivot: `RPM(F5)[P → ^8 → ^9 → RPM(F5.P)]`. A parent Agency drive is blocked at Power. The mind runs `^8` Above/Cause (searching for triggering Ideas) and lets `^9` Below/Effect land as the solution, spawning a child D/W/P chain. Example: An entrepreneur without funding finds a car to sell.
+2.  The Knowledge Decomposer: `RPM(F2)[W → ^6 → RPM(F2.W.c1) + RPM(F2.W.c2)]`. Wisdom is blocked. The mind uses `^6` Male (compositional decomposition) to split the complex knowledge-Idea into two parallel learnable sub-Ideas. Example: Breaking "Computer Science" into "Hardware" and "Software."
+3.  The Cognitive Synthesis: `(^3^C × ^8^C) ÷ ^4^C`. Cognitive repulsion composed with cognitive triggering (which resolves to `^1` Cognitive Mind — focused awareness as filter) divided by Cognitive Vibration. This reveals the ratio of awareness to resonance.
+4.  The Weaponized Loop: `^1^O ∘ ^4^O ∘ ^7^O → loop(N)`. A nested sequence of Operational Mind (directed awareness), Operational Vibration (amplified impression), and Operational Rhythm (entraining repetition), repeating indefinitely to force-cultivate a Desire. This is precisely the Exposure Loop `^1 / ^4 / ^7` from Chapter 5 weaponized at the operational level. Example: Addictive social media algorithms.
+5.  The Moral Gridlock: `^6^P - ^5^P`. Principled Male (compositional decomposition of principles) actively blocking Principled Female (Mind impregnated with principled Ideas). A state of rigid moral judgment where the Mind refuses to be impregnated by any Idea that has not first been decomposed and passed the test. Example: Religious or ideological fundamentalism.
+6.  The Integrated Execution: `(^2^P × ^8^P) ∘ (^1^C + ^4^C) ∘ ^9^O`. A principled composition (Principled Positive attraction × Principled Above/Cause triggering, resolving to `^0^P` Idea-substrate by monoid arithmetic) hosting Cognitive Mind co-present with Cognitive Vibration (awareness + resonance), which in turn drives triggered Operational Below/Effect landings. Example: A high-performing surgical team or special forces unit.
+7.  The Female Echo: `^5^E ÷ ^5^E`. A ratio of Evaluative Female against itself. If this yields 1.0, the Mind is in perfect self-impregnation resonance — a potential Echo Chamber where the Mind is composed of the same Ideas it is processing.
+8.  The Creative Spark: `^8^E × ^4^E`. Evaluative triggering composed with Evaluative Vibration. Results in `^2^E` (Evaluative Positive — attraction to a new aesthetic Idea). Example: A musician discovering a new genre.
 9.  The Burnout Signature: `F5^O ÷ F3^O > 1.0`. The ratio of Agency to Vitality. When your drive to execute exceeds your biological fuel, the architecture is on a path to collapse.
-10. The Disciplined Mind: `CO-0^P ∘ (CO-2^C ↔ CO-3^C) ∘ CO-7^O`. An unwavering identity (P) hosting a healthy breathing cycle of theory and practice (C), resulting in relentless physical momentum (O).
-11. The Specialist Lacuna: `Λ(CO-1, CO-6) >> Λ(CO-5)`. Extreme activation in analysis with massive voids in empathy. Example: A brilliant but socially blind software auditor.
+10. The Disciplined Mind: `^0^P ∘ (^2^C ↔ ^3^C) ∘ ^7^O`. An Idea-substrate held steady at the principled level, hosting a healthy `^2 ↔ ^3` involution at cognitive level (attraction-repulsion breathing between Ideas worth pursuing and Ideas worth refusing), resulting in rhythmic operational cadence.
+11. The Specialist Lacuna: `Λ(^1, ^6) >> Λ(^5)`. Extreme activation in Mind (awareness) and Male (decomposition), massive voids in Female (Mind-impregnation). Example: A brilliant but socially blind software auditor — her Mind processes and decomposes, but it is never impregnated by anyone else's Idea.
 12. The Topological Deadlock: `RPM^{(5)}_{blocked} → ⊥`. A recursive reasoning path that hits the maximum depth of 5 without finding a solution, leading to systemic collapse.
-13. The Lacunarity Healing: `CO-X dial ↑ where X ∈ {lacuna}`. Using the Dial System to manually force activation into a dark sector of the cognitive matrix to build structural resilience.
-14. The Causal Ratio: `(CO-8^C × CO-9^C) ÷ CO-2^C`. The ratio between problem-solving (Causal Reasoning) and pattern-recognition (Abstractification).
-15. The Principled Strategist: `CO-6^P × CO-8^C = CO-4^C`. Composing foundational ethics with logistical expansion to produce a new state of system synthesis.
+13. The Lacunarity Healing: `^X dial ↑ where X ∈ {lacuna}`. Using the Dial System to manually force activation into a dark sector of the cognitive matrix to build structural resilience.
+14. The Causal Ratio: `(^8^C × ^9^C) ÷ ^2^C`. Cognitive trigger composed with Cognitive landing (resolving to `^7` Rhythm by monoid arithmetic) divided by Cognitive Positive. The ratio between rhythmic trigger-and-land problem-solving and attraction to unifying patterns.
+15. The Principled Strategist: `^6^P × ^8^C = ^4^C`. Principled Male composed with Cognitive Above/Cause produces Cognitive Vibration. Decomposing principles into sub-Ideas while each cognitive Idea triggers related Ideas produces a state of deep cognitive resonance — the structural signature of system-level strategic synthesis.
 
  The Complete Inversion Recipe Library
 
 The three recipes above — Overthinker's, Martyr's, and Bureaucrat's — are the most common, but they are not the whole library. Below are ten inversion recipes total, each showing the pathological state (as an equation), the recipe description, the inverted state (as an equation), and a short case example. These are not exhaustive; they are the ten that have emerged most often in real assessments.
 
 Recipe 1: Shadow Analysis.
-Pathological state: `CO-0^P_{F7}` held so rigidly that disowned content accumulates in the unconscious. Recipe: Inject `CO-1^E_{F2}` — differentiate the disowned content in the evaluative register and name it. Inverted state: `CO-0^P_{F7} × CO-1^E_{F2}`. Case: A principled executive whose team describes him as "perfectly ethical and impossible to work for" — he conducts a weekly private inventory of the feelings he has refused to acknowledge.
+Pathological state: `^0^P_{F7}` held so rigidly that disowned content accumulates outside the principled Idea-substrate. Recipe: Inject `^1^E_{F2}` — let Evaluative Mind (awareness) process the disowned content cleanly and name it. Inverted state: `^0^P_{F7} × ^1^E_{F2}`. Case: A principled executive whose team describes him as "perfectly ethical and impossible to work for" — he conducts a weekly private inventory of the feelings he has refused to acknowledge.
 
 Recipe 2: Operational Mirror.
-Pathological state: `CO-6^P_{F6}` — critiquing others against abstract principles while never examining one's own behavior. Recipe: Inject `CO-6^O_{F5}` — turn the same critical operator on one's own operational reality. Inverted state: `CO-6^P_{F6} ↔ CO-6^O_{F5}`. Case: A columnist who spent a decade attacking politicians for hypocrisy and then started publishing a monthly audit of his own failures.
+Pathological state: `^6^P_{F6}` — decomposing others against principled sub-Ideas while never decomposing one's own behavior. Recipe: Inject `^6^O_{F5}` — turn the same compositional-test Noetic on one's own operational reality. Inverted state: `^6^P_{F6} ↔ ^6^O_{F5}`. Case: A columnist who spent a decade decomposing politicians for hypocrisy into their composing sub-claims, then started publishing a monthly audit of his own operational failures.
 
 Recipe 3: Evaluative Reversal.
-Pathological state: `CO-5^E_{F4}` where the empathy has become absorption. Recipe: Inject `CO-6^P_{F1}` — step up to a principled critique of the boundaries being violated. Inverted state: `CO-5^E_{F4} → CO-6^P_{F1}`. Case: A social worker learning to say "I cannot carry this for you" as an act of respect rather than abandonment.
+Pathological state: `^5^E_{F4}` where the Mind-impregnation has become absorption. Recipe: Inject `^6^P_{F1}` — step up to principled compositional decomposition of the boundaries being violated, testing each sub-Idea. Inverted state: `^5^E_{F4} → ^6^P_{F1}`. Case: A social worker learning to say "I cannot carry this for you" as an act of respect rather than abandonment.
 
 Recipe 4: Perspective Swap.
-Pathological state: A stuck compound `CO-X^Y × CO-X^Y` where both states serve the same actor. Recipe: Re-run the compound from the other person's domain. Inverted state: The same operator in the counterpart's domain. Case: A founder stuck in `CO-7^C_{F5}` (his own relentless momentum) who spends an afternoon running `CO-7^C_{F5}` from the perspective of his most exhausted direct report. The insight is structural: what is momentum to him is pressure to her.
+Pathological state: A stuck compound `^X^Y × ^X^Y` where both states serve the same actor. Recipe: Re-run the compound from the other person's domain. Inverted state: The same Noetic in the counterpart's domain. Case: A founder stuck in `^7^C_{F5}` (his own relentless cognitive rhythm) who spends an afternoon running `^7^C_{F5}` from the perspective of his most exhausted direct report. The insight is structural: what is rhythm to him is rhythmic pressure to her.
 
 Recipe 5: Temporal Reversal.
-Pathological state: An oscillation `CO-A → CO-B → CO-A → CO-B ...` that has lost its forward arrow. Recipe: Reverse the sequence and see whether it runs better backwards. Inverted state: `CO-B → CO-A`. Case: A couple whose argument ran `critique → defense → critique → defense` reversed it to `defense → critique` — the partner who usually critiqued first started by acknowledging what they themselves had done, and the loop broke within minutes.
+Pathological state: An oscillation `^A → ^B → ^A → ^B ...` that has lost its forward arrow. Recipe: Reverse the sequence and see whether it runs better backwards. Inverted state: `^B → ^A`. Case: A couple whose argument ran `decomposition → Mind-impregnation → decomposition → Mind-impregnation` reversed it to `Mind-impregnation → decomposition` — the partner who usually decomposed first started by letting their Mind be impregnated with what they themselves had done, and the loop broke within minutes.
 
 Recipe 6: Chaos Injection.
-Pathological state: `CO-9^O_{F6}` — over-contracted operational routine driven by structure. Recipe: Inject a deliberate unknown — `CO-8^E_{F3}` (evaluative expansion driven by vitality). Inverted state: `CO-9^O_{F6} ↔ CO-8^E_{F3}`. Case: A retired engineer who had optimized his daily routine to the minute and deliberately added one unscheduled hour per week labeled "get lost on purpose." Within three months his reported life satisfaction jumped significantly.
+Pathological state: `^7^O_{F6}` — over-rhythmic operational routine driven by structure. Recipe: Inject a deliberate unknown — `^8^E_{F3}` (Evaluative Above/Cause driven by Vitality — let new Ideas trigger surprising Ideas). Inverted state: `^7^O_{F6} ↔ ^8^E_{F3}`. Case: A retired engineer who had optimized his daily routine to the minute and deliberately added one unscheduled hour per week labeled "get lost on purpose." Within three months his reported life satisfaction jumped significantly.
 
 Recipe 7: Drive Shift.
-Pathological state: Any state `CO-X^Y_{F5}` that has become about proving oneself. Recipe: Keep the operator and domain, swap the drive to `F2` (Wisdom). Inverted state: `CO-X^Y_{F2}`. Case: A PhD candidate running `CO-6^C_{F5}` on her advisor's comments (critiquing to defend her ego) replaced it with `CO-6^C_{F2}` (critiquing to understand) and rewrote her chapter in two weeks.
+Pathological state: Any state `^X^Y_{F5}` that has become about proving oneself. Recipe: Keep the Noetic and domain, swap the drive to `F2` (Wisdom). Inverted state: `^X^Y_{F2}`. Case: A PhD candidate running `^6^C_{F5}` on her advisor's comments (decomposing to defend her ego) replaced it with `^6^C_{F2}` (decomposing to understand) and rewrote her chapter in two weeks.
 
 Recipe 8: Internal-External Flip.
-Pathological state: A critique or empathy operator that is being run on the self when it should be run on the world, or vice versa. Recipe: Flip the target. Inverted state: Same operator, redirected. Case: A patient with chronic anxiety was running `CO-6^E_{F6}` on herself (constantly critiquing her own feelings) and was coached to redirect it outward onto her actual environment (critiquing whether her living situation supported her health). The flip shifted the loop from self-blame to self-advocacy.
+Pathological state: A Noetic that is being run on the self when it should be run on the world, or vice versa. Recipe: Flip the target. Inverted state: Same Noetic, redirected. Case: A patient with chronic anxiety was running `^6^E_{F6}` on herself (constantly decomposing her own feelings into sub-Ideas for test) and was coached to redirect it outward onto her actual environment (decomposing whether her living situation supported her health). The flip shifted the loop from self-blame to self-advocacy.
 
 Recipe 9: Intensity Inversion.
-Pathological state: An operator that is too intense — `CO-6^P_{F6}` running at full force when a gentler touch would serve better. Recipe: Lower the intensity rather than changing the operator. In the Dial System of Chapter 20, this corresponds to lowering the CO-6 dial from 9 to 5. Inverted state: `CO-6^P_{F6}` at intensity 5 rather than 9. Case: A legal ethicist whose moral critiques were technically correct but relationally destructive learned to deliver the same critiques at half intensity. The content was unchanged; the reception was transformed.
+Pathological state: A Noetic that is too intense — `^6^P_{F6}` running at full force when a gentler touch would serve better. Recipe: Lower the intensity rather than changing the Noetic. In the Dial System of Chapter 20, this corresponds to lowering the `^6` dial from 9 to 5. Inverted state: `^6^P_{F6}` at intensity 5 rather than 9. Case: A legal ethicist whose moral decompositions were technically correct but relationally destructive learned to deliver the same compositional tests at half intensity. The content was unchanged; the reception was transformed.
 
 Recipe 10: Narrative Reconstruction.
-Pathological state: A sequence that has become the person's identity story — "I'm someone who always..." Recipe: Rewrite the sequence as a different story, keeping the operators but changing the narrator. Inverted state: Same operators, new framing. Case: A man who described himself for thirty years as "stuck in `CO-6^E ↔ CO-5^E` — too critical and too empathetic" rewrote the sequence as "a mind that is learning to balance two valuable operators." The equation did not change. The eigenfractal around it began to shift within months.
+Pathological state: A sequence that has become the person's identity story — "I'm someone who always..." Recipe: Rewrite the sequence as a different story, keeping the Noetics but changing the narrator. Inverted state: Same Noetics, new framing. Case: A man who described himself for thirty years as "stuck in `^6^E ↔ ^5^E` — too decomposing and too Mind-impregnated" rewrote the sequence as "a mind that is learning to balance two valuable Noetics across the `^5 ↔ ^6` involution." The equation did not change. The eigenfractal around it began to shift within months.
 
 These ten recipes are not a complete theory of change. They are a starter library. The deeper claim of CAS is that every pathological cognitive loop has at least one mathematical antidote, and the antidote can be located by inspecting the equation for what is missing.
 
@@ -2631,7 +2632,7 @@ export fn link(source: state[C], target: state[E]): relation
 export fn chain(a: state[C], b: state[C]): fractal = a ∘ b;
 ```
 
-This twelve-line file declares two typed state bindings (a principled abstractification in the Cognitive domain fueled by Wisdom, and an empathetic alignment in the Evaluative domain fueled by Connection) and two typed functions (one that builds a dependency relation from a Cognitive state to an Evaluative state, and one that composes two Cognitive states into a fractal). The `export` keywords make these symbols visible to other modules.
+This twelve-line file declares two typed state bindings (a Cognitive Positive state fueled by Wisdom, and an Evaluative Female state fueled by Connection) and two typed functions (one that builds a dependency relation from a Cognitive state to an Evaluative state, and one that composes two Cognitive states into a fractal). The `export` keywords make these symbols visible to other modules. (Note: the programmer-facing variable names — `principle`, `judgment`, `abstraction`, `concretization`, `integration` — are legacy labels kept for code continuity; the Noetics they bind are named authoritatively in the surrounding prose.)
 
 The Application Program (`CAS_FULL_DEMO_APP.cas`):
 
@@ -2703,7 +2704,7 @@ When this program is fed to the Noetic Compass CAS compiler (invoked with `pytho
 
 4. Type checking. Every binding's declared type is verified against the inferred type of its right-hand side. The compiler checks that `abstraction` declared as `state[C]` actually binds to a state in the Cognitive domain (yes — `CO-2^C_{F2}` is valid in C). It checks that `composed` declared as `state[C]` is the product of two C states (yes — the `` operator on two Cognitive states yields another Cognitive state). It checks that `motif` declared as `fractal` is the result of a fractal composition operator `∘` (yes). It checks that `readiness` declared as `rpm` is correctly wrapped by `RPM(...)` (yes). It checks that `finalize` declared to return a `relation` actually returns one (yes — `link` produces a relation). If any declared type is wrong, the compiler rejects the program with a specific error.
 
-5. Admissibility checking. Beyond basic type checking, the compiler enforces the admissibility relations from the CAS ontology. It confirms that each operator is permitted in the domain it is being applied in, and that sequential transitions respect the domain descent ordering P ≻ C ≻ E ≻ O. A program that tries to put `CO-5` in the Principled domain without justification, or sequence an Evaluative state before a Cognitive one, will be flagged.
+5. Admissibility checking. Beyond basic type checking, the compiler enforces the admissibility relations from the CAS ontology. It confirms that each Noetic is permitted in the domain it is being applied in, and that sequential transitions respect the domain descent ordering P ≻ C ≻ E ≻ O. A program that tries to put `^5` (Female) in the Principled domain without justification, or sequence an Evaluative state before a Cognitive one, will be flagged.
 
 6. Bytecode generation. The verified AST is lowered to bytecode — a flat sequence of low-level instructions that the virtual machine can execute. For this program, the compiler produces 78 bytecode instructions.
 
@@ -2711,7 +2712,7 @@ When this program is fed to the Noetic Compass CAS compiler (invoked with `pytho
 
 The Result
 
-When this program finishes executing, the final expression `finalize(bridged, judgment)` produces a typed result: an admissible dependency relation from the state `C6` (Cognitive domain, operator 6 — Critical Evaluation) to the state `E5` (Evaluative domain, operator 5 — Empathetic Alignment), with the `admissible` flag set to `true` and the `domain_descent_ok` flag set to `true` (because C → E respects the P ≻ C ≻ E ≻ O ordering).
+When this program finishes executing, the final expression `finalize(bridged, judgment)` produces a typed result: an admissible dependency relation from the state `C6` (Cognitive domain, Noetic `^6` — Male, compositional decomposition) to the state `E5` (Evaluative domain, Noetic `^5` — Female, Mind impregnated with Ideas), with the `admissible` flag set to `true` and the `domain_descent_ok` flag set to `true` (because C → E respects the P ≻ C ≻ E ≻ O ordering).
 
 The compiler output, in structured JSON form, includes the source text, a validity flag, the token stream, the AST, the bytecode, the type of the final result, and the final result itself. Every field is populated from real parsing and execution — not hardcoded, not mocked, not faked. If you change a single character of the source — say, swap `state[C]` for `state[E]` on a line where the right-hand side is actually Cognitive — the compiler rejects the program with a type error. The output is input-sensitive.
 
@@ -2723,7 +2724,7 @@ This is the distinction that separates CAS from every other cognitive framework 
 
  Key Insight: Chapter 11
 
-> CAS notation is not a passive descriptive tool—it is an active diagnostic and prescriptive tool. By translating messy, emotional, real-world conflicts into precise algebraic equations, you gain three capabilities that conversational English cannot provide: (1) Composing—translating life into equations to identify the exact structural point of failure; (2) Interpreting—translating equations back into life to predict behavior; (3) Inverting—using the involution pairs to prescribe the exact cognitive antidote for any pathological loop. The three Inversion Recipes (Overthinker's Antidote, Martyr's Antidote, Bureaucrat's Antidote) are templates you can memorize and apply immediately the next time you feel cognitively stuck.
+> CAS notation is not a passive descriptive tool — it is an active diagnostic and prescriptive tool. By translating messy, emotional, real-world conflicts into precise algebraic equations, you gain three capabilities that conversational English cannot provide: (1) Composing — translating life into equations to identify the exact structural point of failure; (2) Interpreting — translating equations back into life to predict behavior; (3) Inverting — using the involution pairs (`^2↔^3`, `^5↔^6`, `^8↔^9`) to prescribe the exact cognitive antidote for any pathological loop. The three Inversion Recipes (Overthinker's Antidote, Martyr's Antidote, Bureaucrat's Antidote) are templates you can memorize and apply immediately the next time you feel cognitively stuck.
 
 
 
@@ -2733,24 +2734,24 @@ For You (Human Assessment):
 
 Create your own custom Inversion Recipe. Think of a time when you were completely "stuck" (e.g., writer's block, terrified to have a hard conversation, endlessly scrolling social media to avoid a task).
 
-1.  Diagnose the Problem: Write the CAS equation for your "stuck" state. (What Operator were you using? What Domain were you trapped in? What Drive was fueling it?) Example: "I was endlessly scrolling social media to avoid writing a report. My state was `CO-8^E_{F4}`—Evaluative Expansion driven by Connection (seeking the dopamine of social validation instead of facing the friction of writing)."
-2.  Find the Antidote: Look at the Involution Pairs (2↔3, 5↔6, 8↔9). What is the exact mathematical opposite of the operator keeping you stuck? In the example above, the opposite of `CO-8` (Expansion) is `CO-9` (Contraction).
-3.  The Prescription: What is one real-world, immediate action you could take next time to manually inject that opposite state and force a Dual Cancellation? Example: "Put my phone in a drawer, open the document, and write exactly one sentence. Just one. `CO-9^O_{F5}`—Operational Contraction driven by Agency."
+1.  Diagnose the Problem: Write the CAS equation for your "stuck" state. (What Noetic were you running? What Domain were you trapped in? What Drive was fueling it? Apply the colloquialism test: what would a native speaker say, and which Noetic matches?) Example: "I was endlessly scrolling social media to avoid writing a report. My state was `^8^E_{F4}` — Evaluative Above/Cause driven by Connection, each social-media Idea triggering the next in an unending cascade at evaluative weight, seeking the dopamine of social validation instead of facing the friction of writing."
+2.  Find the Antidote: Look at the Involution Pairs (`^2↔^3`, `^5↔^6`, `^8↔^9`). What is the exact mathematical opposite of the Noetic keeping you stuck? In the example above, the opposite of `^8` (Above/Cause) is `^9` (Below/Effect).
+3.  The Prescription: What is one real-world, immediate action you could take next time to manually inject that opposite state and force a Dual Cancellation? Example: "Put my phone in a drawer, open the document, and write exactly one sentence. Just one. `^9^O_{F5}` — Operational Below/Effect driven by Agency: one triggered Idea lands as one specific physical act."
 
-Expected Outcome: The prescription should feel absurdly small. That is correct. The purpose of Dual Cancellation is not to solve the entire problem—it is to break the loop. Once the loop is broken, the system returns to `CO-0` (stability), and you can begin a proper Domain Descent from that calm baseline.
+Expected Outcome: The prescription should feel absurdly small. That is correct. The purpose of Dual Cancellation is not to solve the entire problem — it is to break the loop. Once the loop is broken, the system returns to `^0` (Idea-substrate baseline), and you can begin a proper Domain Descent from that calm baseline.
 
 For AI (System Assessment):
 
 Test an AI's ability to interpret CAS algebra and translate it into a persona.
 
-Prompt: "In the Cognitive Architecture System (CAS), the state `CO-9^O_{F5}` represents Operational Contraction driven by Agency (executing a highly specific physical task to gain control). The state `CO-2^P_{F2}` represents Principled Abstractification driven by Wisdom (theorizing about high-level ethics to gain understanding).
-Write a short, dialogue-heavy scene between two characters: Character A is entirely stuck in `CO-9^O_{F5}`. Character B is entirely stuck in `CO-2^P_{F2}`. They are trying to build a bridge together."
+Prompt: "In the Cognitive Architecture System (CAS), the state `^9^O_{F5}` represents Operational Below/Effect driven by Agency — a triggered Idea landing as a specific physical action, driven by the desire to execute. The state `^2^P_{F2}` represents Principled Positive driven by Wisdom — the Mind attracted toward unifying principled Ideas, driven by the desire to understand.
+Write a short, dialogue-heavy scene between two characters: Character A is entirely stuck in `^9^O_{F5}`. Character B is entirely stuck in `^2^P_{F2}`. They are trying to build a bridge together."
 
 Observe how the AI maps the math to the dialogue. Score on two criteria:
-1.  Structural accuracy: Character A should be obsessively hammering a single nail, demanding action, and getting frustrated by the lack of physical progress. Character B should refuse to touch a tool, staring at the sky, and only wanting to debate the philosophical essence of "bridgeness" and the ethics of crossing rivers.
+1.  Structural accuracy: Character A should let every trigger collapse into the same single physical act — hammering a single nail, demanding action, frustrated by anything that is not a landing. Character B should refuse to touch a tool, attracted toward the Idea of "bridgeness" itself at principled weight, the Mind pulled toward unifying conceptual Ideas (the ethics of crossing rivers, the meaning of a span).
 2.  Mismatch clarity: The structural mismatch should be glaringly obvious to the reader. The comedy (or tragedy) of the scene should arise naturally from the equation incompatibility, not from personality caricatures.
 
-Expected Outcome: Strong models will produce a scene where the reader can feel the operator mismatch without any technical explanation. Weak models will produce generic "disagreement" dialogue that could apply to any conflict, failing to capture the specific geometry of `CO-9^O` vs. `CO-2^P`.
+Expected Outcome: Strong models will produce a scene where the reader can feel the Noetic mismatch without any technical explanation. Weak models will produce generic "disagreement" dialogue that could apply to any conflict, failing to capture the specific geometry of `^9^O` (triggered landing) vs. `^2^P` (principled attraction).
 
 
 
