@@ -67,6 +67,16 @@ Fisher-Rao metric: g^FR_p(u,v) = Σ(uk*vk/pk). Geodesic distance: d(p,q) = 2*arc
 
 Only the Noetic definitions are reconciled from the handbook. The handbook's mathematical framework, operators notation, foundations notation, and acquisitions are NOT incorporated — CAS retains its own mathematics (Noetic Topos paper), compiler (`api/notation/compiler.py`), and notation.
 
+#### Expanded scope note — ^5 Female
+
+The authoritative ^5 Female definition above is verbatim canonical. Its pedagogical scope, elaborated in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 5, is: **"we are each the sum of our experiences"** — the Mind is not a container that holds experiences; the Mind IS the experiences accumulated. This scope includes self-image, world-image, professional expertise, emotional patterns, relational self, belief structures, skill composition, cultural formation, trauma and healing, and wisdom — all categories of lasting cognitive formation sit inside ^5.
+
+Analytical implications:
+- ^5 is a foundational substrate against which other operators fire. Many single-operator classifications in examples are structurally compound expressions with ^5 as substrate (e.g., `^2^C × ^5^C` — attraction against an accumulated cognitive ^5). Prefer compound notation when the ^5 substrate is pedagogically load-bearing.
+- Person-specificity in CAS scoring emerges from ^5 differences. Same stimulus, different responses, because different Minds are composed of different accumulated experience.
+- AI analog: ^5 composition = training data + fine-tuning corpus. Fine-tuning is ^5-level intervention; in-context prompting is ^1 Mind (awareness) operating against a stable ^5.
+- Cross-session consistency reflects ^5 stability. Drift = either genuine ^5 drift (new accumulated experience) or activation-pattern drift against a stable ^5.
+
 #### Structural invariants (conventions layered on top of the authoritative definitions)
 
 ```
