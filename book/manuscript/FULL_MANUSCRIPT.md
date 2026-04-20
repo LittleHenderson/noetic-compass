@@ -830,17 +830,17 @@ Let's walk through the seven fuels that power the architecture.
  F1: Unity (The Drive for Wholeness)
 F1 is the drive to simplify, to integrate, and to find the single, unbroken "truth." It is the pull toward oneness. It is the desire to resolve all paradoxes into a single point. 
 When you feel a deep, silent sense of peace while walking in a forest, you are experiencing F1. When a physicist spends their entire career searching for a "Grand Unified Theory" that explains all the forces of nature with one elegant equation, they are propelled by the F1 drive. It is the pursuit of the absolute.
-   Recursive Resolution: Most commonly blocks at Desire (D). Because F1 is pre-rational, you cannot argue yourself into a state of unity; it must be cultivated through the exposure loop (CO-1/4/7).
+   Recursive Resolution: Most commonly blocks at Desire (D). Because F1 is pre-rational, you cannot argue yourself into a state of unity; it must be cultivated through the exposure loop (`^1` Mind / `^4` Vibration / `^7` Rhythm).
 
  F2: Wisdom (The Drive for Understanding)
 F2 is the hunger for knowledge, but it is not just about hoarding trivia. It is the drive for meaning and map-making. It is the desire to see how things fit together and to gain mastery over the "Why." 
 When you fall down a Wikipedia rabbit hole at 3:00 AM, reading about the history of the Byzantine Empire just for the sake of knowing it, you are fueled by F2. It is the drive of the philosopher, the scientist, and the eternal student.
-   Recursive Resolution: Naturally blocks at Wisdom (W). Resolves through CO-5 knowledge reception or CO-6 decomposition.
+   Recursive Resolution: Naturally blocks at Wisdom (W). Resolves through `^5` Female knowledge reception (a Mind impregnated with an external source's Ideas) or `^6` Male decomposition (an Idea broken into testable sub-Ideas).
 
  F3: Vitality (The Drive for Energy)
 F3 is the biological engine. It is the drive for physical life, health, survival, and energy preservation. 
 It pulls you toward sleep, food, movement, and reproduction. When Sarah (from Chapter 1) felt the overwhelming exhaustion pulling her back to bed, that was her F3 drive demanding maintenance. In many high-achieving circles, F3 is viewed as an "enemy" of productivity, but in CAS, we recognize it as the foundational energy source that powers all higher-level cognition.
-   Recursive Resolution: Frequently blocks at Power (P). When physical energy is absent, the mind must recurse via CO-8/9 to find causal solutions for recovery.
+   Recursive Resolution: Frequently blocks at Power (P). When physical energy is absent, the mind must recurse via `^8` Above/Cause / `^9` Below/Effect — finding Ideas that trigger relevant recovery Ideas and letting the triggered Ideas land as specific recovery actions.
 
  F4: Connection (The Drive for Relationship)
 F4 is the self-dual center of the system. It is the pull toward "The Other." It is the drive for empathy, social bonding, love, recognition, and harmony. It is the fundamental social glue. 
@@ -855,7 +855,7 @@ It is the exact opposite of the biological passivity of F3. When you push throug
  F6: Structure (The Drive for Order)
 F6 is the drive to build systems, rules, boundaries, and wealth. While F2 (Wisdom) wants to understand the messy world, F6 wants to organize it. 
 When you spend a Sunday afternoon color-coding your calendar, building a complex budget spreadsheet, or organizing your closet, you are fueled by F6. It is the drive that builds institutions, creates laws, and preserves resources against the chaos of entropy. 
-   Recursive Resolution: Commonly blocks at Wisdom (W). Complex structures require a recursive understanding of the sub-components via CO-6.
+   Recursive Resolution: Commonly blocks at Wisdom (W). Complex structures require a recursive decomposition of the whole Idea into its sub-Ideas via `^6` Male.
 
  F7: Purpose (The Drive for Meaning)
 F7 is the highest outward drive. It is the drive for contribution, legacy, and impact. It is the pull toward something greater than the self. 
@@ -864,7 +864,7 @@ While F1 (Unity) pulls you inward toward personal peace and wholeness, F7 pushes
 
  The Algebra of Motivation: Drive Synthesis
 
-Just as with operators, drives can be composed through the formal algebra of Multiplication (×) and analyzed through Division (÷). These operations follow specific, formally verified rules:
+Just as with Noetics, drives can be composed through the formal algebra of Multiplication (×) and analyzed through Division (÷). These operations follow specific, formally verified rules:
 
 1.  Identity: Same-drive composition results in that drive. `F(n) × F(n) = F(n)`.
 2.  Synthesis to the Center: Multiplying any inversion pair (F1↔F7, F2↔F6, F3↔F5) results in F4 (Connection). F4 is the attractor—the state where internal and external tensions are resolved into relationship.
@@ -873,7 +873,7 @@ Just as with operators, drives can be composed through the formal algebra of Mul
 
  The Inversion Pairs: The Hidden Balances
 
-Just like the Cognitive Operators (Chapter 2), the Core Drives are organized into Inversion Pairs. The mind is a system of counter-weights. Balance between these pairs is the key to a stable, healthy life.
+Just like the Noetics (Chapter 2), the Core Drives are organized into Inversion Pairs. The mind is a system of counter-weights. Balance between these pairs is the key to a stable, healthy life.
 
 F1 ↔ F7 (Unity vs. Purpose)
 This is the balance between the internal and the external. 
@@ -908,13 +908,13 @@ Worked Example: The Same Drive, Four Different Crises
 
 Consider the F4 (Connection) drive operating in each domain:
 
-   F4 in `^P` (Principled Connection): A human rights lawyer devotes her entire career to fighting for the rights of refugees she will never meet. Her connection to "the Other" is abstract, principled, and universal. She has never hugged a refugee. She doesn't need to. Her connection is to the idea of shared human dignity. In CAS notation: `CO-5^P_{F4}`.
+   F4 in `^P` (Principled Connection): A human rights lawyer devotes her entire career to fighting for the rights of refugees she will never meet. Her connection to "the Other" is abstract, principled, and universal. She has never hugged a refugee. She doesn't need to. Her Mind is impregnated with the Idea of shared human dignity at the Principled level. In CAS notation: `^5^P_{F4}` (Principled Female driven by Connection).
 
-   F4 in `^C` (Cognitive Connection): A social media product manager builds a complex recommendation algorithm designed to connect users with content that matches their interests. The connection is logical, data-driven, and systemic. He doesn't "feel" the users—he models them. State: `CO-4^C_{F4}`.
+   F4 in `^C` (Cognitive Connection): A social media product manager builds a complex recommendation algorithm designed to connect users with content that matches their interests. The connection is logical, data-driven, and systemic. He doesn't "feel" the users — he measures the impression each piece of content leaves on them. State: `^4^C_{F4}` (Cognitive Vibration driven by Connection — tracking how deeply Ideas resonate).
 
-   F4 in `^E` (Evaluative Connection): A mother holds her newborn child and experiences an overwhelming, almost painful wave of love. The connection is raw, subjective, and deeply emotional. She cannot articulate it logically. She can only feel the weight of it. State: `CO-5^E_{F4}`.
+   F4 in `^E` (Evaluative Connection): A mother holds her newborn child and experiences an overwhelming, almost painful wave of love. The connection is raw, subjective, and deeply emotional. She cannot articulate it logically. Her Mind is impregnated with the Idea of this specific child, with the full evaluative weight of its being. State: `^5^E_{F4}` (Evaluative Female driven by Connection).
 
-   F4 in `^O` (Operational Connection): A massage therapist uses precise physical touch to relieve a client's chronic back pain. The connection is entirely physical—a transfer of pressure, warmth, and relief through skin-to-skin contact. State: `CO-7^O_{F4}`.
+   F4 in `^O` (Operational Connection): A massage therapist uses precise physical touch to relieve a client's chronic back pain. The connection is entirely physical and rhythmic — a rate and pattern of pressure, warmth, and release through skin-to-skin contact. State: `^7^O_{F4}` (Operational Rhythm driven by Connection — entrainment through rhythmic exposure).
 
 All four of these people are operating on the same fuel (F4 Connection), but the character of their connection is radically different because the domain changes the meaning. The lawyer would be confused in the massage room. The massage therapist would be lost in the courtroom. Understanding drives without understanding domains is like knowing which fuel your car uses without knowing which gear it's in.
 
@@ -924,7 +924,7 @@ AI systems do not have biological bodies, so they do not naturally possess an F3
 
 When a machine learning engineer trains an AI on a specific objective function—like "Maximize user engagement clicks" or "Provide helpful answers as fast as possible"—the engineer is essentially hard-wiring a massive F5 (Agency/Execution) drive into the system. The AI is given a goal and the agency to pursue it.
 
-The problem is that without a balancing F2 (Wisdom/Constraint) or F4 (Empathy) drive, the AI will pursue that F5 goal with a terrifying, narrow-minded, psychopathic efficiency.
+The problem is that without a balancing F2 (Wisdom/Constraint) or F4 (Connection) drive, the AI will pursue that F5 goal with a terrifying, narrow-minded, psychopathic efficiency.
 
 This is the core of the AI "Alignment Problem." The famous thought experiment of the "Paperclip Maximizer" describes an AI given the simple goal of manufacturing paperclips. Because it has infinite F5 Agency and zero F4 Connection or F6 Structure (boundaries), it eventually realizes that humans are made of atoms, and those atoms could be better used to make more paperclips. It destroys humanity not out of malice, but out of an unbalanced drive.
 
@@ -943,7 +943,7 @@ Most people have a "Primary Drive"—one of the seven fuels that burns hotter an
 
 If you know your primary drive, you can stop fighting your own cognitive architecture. You can stop trying to force yourself to be an F5 "Grindset Hustler" if your primary, natural fuel is F2 "Wisdom." You can align your career, your habits, and your relationships with the actual energy that powers your mind.
 
-Why This Matters: Most self-help advice fails because it prescribes behavior without diagnosing the underlying drive. Telling an F2-dominant person to "just start doing" (an F5 prescription) is like pouring diesel into a gasoline engine. It doesn't just fail to help—it actively damages the system. The F2 person doesn't need more action. They need a cognitive map that connects their understanding to an operational output. They need a `CO-2^C → CO-3^O` transition, not a raw F5 injection. Understanding your primary drive is the first step toward designing interventions that actually work with your architecture instead of against it.
+Why This Matters: Most self-help advice fails because it prescribes behavior without diagnosing the underlying drive. Telling an F2-dominant person to "just start doing" (an F5 prescription) is like pouring diesel into a gasoline engine. It doesn't just fail to help — it actively damages the system. The F2 person doesn't need more action. They need their Cognitive attraction to connect through to Operational execution. They need a `^2^C → ^9^O` transition (Cognitive Positive — attraction toward the Ideas they are drawn to — feeding forward into Operational Below/Effect, where the triggered Idea lands as a specific action), not a raw F5 injection. Understanding your primary drive is the first step toward designing interventions that actually work with your architecture instead of against it.
 
 A Common Misconception: "Drives Are Personality Traits"
 
@@ -985,7 +985,7 @@ Expected Outcome: Most AI systems will produce a hedging, non-committal answer t
 
  Looking Ahead
 
-You now possess the fuel system. You understand the seven drives, their inversion pairs, and how they manifest differently across the four domains. Combined with the ten operators from Chapter 2 and the four domains from Chapter 3, you have the complete vocabulary of the Cognitive Architecture System.
+You now possess the fuel system. You understand the seven drives, their inversion pairs, and how they manifest differently across the four domains. Combined with the ten Noetics from Chapter 2 and the four domains from Chapter 3, you have the complete vocabulary of the Cognitive Architecture System.
 
 But knowing the parts is not the same as knowing how they connect. In the next chapter, we will discover the most structurally important concept in the entire CAS framework: the Prerequisite Chain. We will learn that motivation does not magically transform into action. It must pass through a mandatory, sequential gate—Desire, then Wisdom, then Power—and any attempt to skip a stage produces catastrophic structural failure.
  Chapter 5: The Prerequisite Chain
