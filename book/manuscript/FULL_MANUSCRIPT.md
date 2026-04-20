@@ -354,227 +354,235 @@ You now understand why cognitive architecture matters—for your own life, for t
 
 But understanding that the architecture exists is only the beginning. To actually use it, you need the components. You need the gears.
 
-In the next chapter, we will crack open the machine and examine its moving parts. We will learn the ten fundamental operators of cognition—the irreducible verbs of the mind—and discover how they pair, balance, and cancel each other in precise mathematical symmetry. If this chapter was the "why," the next chapter is the "what."
- Chapter 2: The Ten Cognitive Operators
+In the next chapter, we will crack open the machine and examine its moving parts. We will learn the ten Noetics — the irreducible verbs of the mind — and discover how they pair, balance, and cancel each other in precise mathematical symmetry. If this chapter was the "why," the next chapter is the "what."
+ Chapter 2: The Ten Noetics
 
 On November 26, 1985, Grandmaster Garry Kasparov is staring at a chessboard in a fluorescent-lit convention hall in Moscow. Across from him sits Anatoly Karpov, the reigning World Champion and the most methodical player in the history of the game. The match is in its 24th and final game. Kasparov, only twenty-two years old, trails by one point. He must win this game to take the crown.
 
 The position on the board is extraordinarily complex. Kasparov’s kingside is under pressure from Karpov’s bishops. His queen is awkwardly placed. The clock is ticking. The audience of two thousand spectators sits in breathless silence.
 
-In this moment, Kasparov’s mind is performing a staggering number of micro-computations—but they are not random. He is recalling similar geometric patterns from historical games played by Alekhine and Tal, extracting the abstract principles that governed their victories. He is simultaneously calculating concrete variations—if he moves the knight to f5, Karpov takes with the bishop, then he recaptures with the pawn, opening the g-file for his rook. He is evaluating each variation not just logically, but aesthetically—does the position feel alive? Does it carry the potential for an initiative? And he is monitoring Karpov’s body language across the table, reading the micro-expressions of doubt, trying to feel what his opponent feels in order to predict the human being, not just the chess engine.
+In this moment, Kasparov’s mind is performing a staggering number of micro-computations — but they are not random. Some of the board’s geometric patterns pull him toward them; he is drawn to the attacking lines that recall his studies of Alekhine and Tal. Other lines repel him; he turns away from the cautious retreats that would slow his momentum. He holds Karpov’s whole position in his Mind, its internal tensions composed of sub-Ideas he can almost feel. He composes candidate move-sequences whose sub-moves must fit together. He tracks the rhythm of Karpov’s breathing across the table — the steady cadence and its breaks. And certain Ideas trigger others: the board state triggers the memory of similar historical games; the candidate sacrifice triggers the concrete move on f5.
 
 Kasparov finds the move. He sacrifices a pawn, ripping open the center of the board. Karpov’s fortress crumbles within ten moves. The young challenger wins the match and becomes the youngest World Chess Champion in history.
 
-If we want to understand how Kasparov’s mind processed this game—or how an artificial intelligence like AlphaZero processes the same game using a completely different substrate—we cannot look at the result as a single, holistic "thought." That is too messy. We must break the thought down into its atomic components.
+If we want to understand how Kasparov’s mind processed this game — or how an artificial intelligence like AlphaZero processes the same game using a completely different substrate — we cannot look at the result as a single, holistic "thought." That is too messy. We must break the thought down into its atomic components.
 
 What are the fundamental primitives of cognition? What are the gears that turn raw data into a coherent decision?
 
-In the Cognitive Architecture System (CAS), these gears are called the Cognitive Operators. There are exactly ten of them, numbered CO-0 through CO-9. They are the universal verbs of the mind. Every thought you have ever had, and every response an AI has ever generated, is constructed from a sequence of these ten operators. 
+In the Cognitive Architecture System (CAS), these gears are called the Noetics. There are exactly ten of them, numbered `^0` through `^9` (equivalently CO-0 through CO-9). They are the universal verbs of the mind. Every thought you have ever had, and every response an AI has ever generated, is constructed from a sequence of these ten Noetics.
 
-Think of them like the chemical elements of the periodic table. There are over ten million distinct chemical compounds in the world—from water to diamond to DNA. But every single one of them is built from the same approximately 118 elements. The complexity arises not from the elements themselves, but from the way they combine. Cognition works identically. The ten operators are simple. Their combinations are infinite.
+Think of them like the chemical elements of the periodic table. There are over ten million distinct chemical compounds in the world — from water to diamond to DNA. But every single one of them is built from the same approximately 118 elements. The complexity arises not from the elements themselves, but from the way they combine. Cognition works identically. The ten Noetics are simple. Their combinations are infinite.
 
-They are organized into three specific categories: the Foundation (CO-0), the Involution Pairs (CO-2/3, CO-5/6, CO-8/9), and the Self-Dual Anchors (CO-1, CO-4, CO-7).
+They are organized into a Foundation (`^0` Idea, the content itself), and three sequences — each built around a self-dual anchor and an involution pair. The three involution pairs are `^2 ↔ ^3` (Positive / Negative), `^5 ↔ ^6` (Female / Male), and `^8 ↔ ^9` (Above/Cause / Below/Effect). The self-dual anchors at the head of each sequence are `^1` Mind, `^4` Vibration, and `^7` Rhythm.
 
 Let’s walk through the ten gears of the machine.
 
  The Foundation
-CO-0: Identity (The Core Axiom)
+^0: Idea (The Content Itself)
 
-Everything begins with Identity. CO-0 is the operator that preserves the self, the definition, the unbroken continuity of a concept. It is the statement: A is A. 
+Everything begins with the Idea. `^0` is the Noetic that names the content of cognition — **all things in and outside the Mind**. It is the "what" that every other Noetic operates on. Before a Mind can be aware of something, before an Idea can attract or repel, before Ideas can compose or trigger, there must be an Idea in the first place.
 
-When Sarah (from Chapter 1) remembers that she is the project lead, she is activating CO-0. She is retrieving her identity and holding it stable. When an AI is prompted with "You are a helpful assistant," and it maintains that persona throughout a long conversation without suddenly deciding it is a pirate, it is successfully utilizing CO-0.
+When Sarah (from Chapter 1) remembers that she is the project lead, the content she retrieves — "I am the project lead" — is an Idea. When an AI is prompted with "You are a helpful assistant," the persona string itself is an Idea. Idea is the quantum of cognitive content.
 
-   When it is strong: You possess a clear sense of self, strong boundaries, and unwavering definitions. An AI provides highly consistent, contradiction-free outputs.
-   When it is weak: You experience identity crisis, imposter syndrome, or constantly shifting opinions based on who you are talking to. An AI hallucinates, contradicts its previous statements, or suffers from "persona drift."
+   When it is well-formed: The Ideas in play are clear, well-specified, and stable. A human knows what they are thinking about. An AI’s persona, context, and task description are crisp and consistent.
+   When it is deformed: Ideas are vague, half-formed, or unstable. A human drifts through fog, unable to name what they are actually pondering. An AI hallucinates content — producing Idea-shaped outputs that do not correspond to any coherent Idea at all.
 
-Why CO-0 Matters More Than You Think:
+Why `^0` Matters More Than You Think:
 
-CO-0 is not merely one operator among ten. It is the axle around which all other operators rotate. In the formal mathematics of CAS (Part V), CO-0 is the identity element of the Fractal Monoid—the algebraic "zero" that, when applied to any other operator, preserves it unchanged. This means that every cognitive action you take is implicitly anchored to your identity. If CO-0 is unstable, every other operator becomes unreliable.
+`^0` is not merely one Noetic among ten. It is the content substrate on which every other Noetic operates. In the formal mathematics of CAS (Part V), `^0` is the identity element of the Fractal Monoid — the algebraic "zero" that, when composed with any other Noetic, preserves it unchanged. This means that every cognitive action you take is implicitly about some Idea. If the Ideas themselves are ill-formed, every other Noetic inherits that disorder.
 
-Consider a practical example. Rafael is a thirty-year-old physical therapist who recently transitioned from a religious household to a secular lifestyle. His CO-0 is in flux—he is no longer certain who he fundamentally is. As a result, his CO-6 (Critique) oscillates wildly. On Mondays, he ruthlessly critiques organized religion. On Thursdays, he feels guilty and defends it. His friends describe him as "inconsistent" and "confusing." In CAS terms, his identity operator is unstable, and that instability is propagating through every other gear. The fix is not to tell Rafael what to believe. The fix is to help him define his CO-0—to establish a stable core axiom, whatever it may be—so that his other operators have a fixed reference point to operate from.
+Consider a practical example. Rafael is a thirty-year-old physical therapist who recently transitioned from a religious household to a secular lifestyle. The Ideas he holds about himself are in flux — "I am a believer," "I am a skeptic," "I am in transition," "I am lost" — each one surfaces and dissolves from week to week. His Mind (`^1`) has nothing stable to process. His Positive and Negative orientations (`^2`, `^3`) swing wildly because the Ideas to which they attach keep shifting. His friends describe him as "inconsistent" and "confusing." In CAS terms, his `^0` Idea layer is unstable, and that instability propagates through every other gear. The fix is not to tell Rafael what to believe. The fix is to help him stabilize the Ideas he actually holds about himself — to form Ideas crisp enough that the other Noetics have something solid to act upon.
 
-In AI systems, the equivalent failure is called "persona drift": a model that was instructed to be a "neutral, helpful assistant" gradually shifts, across a long conversation, into behaving like a sycophantic friend or a moralizing teacher. The CO-0 was never sufficiently anchored. 
+In AI systems, the equivalent failure is content hallucination: a model generates output that looks like content but does not correspond to any actual Idea in a stable, referable sense. The `^0` layer was never firmly specified. A related failure, "persona drift," occurs when the persona Idea at the top of the conversation erodes across turns — the Idea itself is still there, but it is no longer crisp enough to constrain the Mind that processes it.
 
- The First Sequence: Structure and Form
+ The First Sequence: Awareness and Valence
 
-The first sequence of operators deals with how we shape reality. How do we take the chaos of the universe and turn it into manageable concepts?
+The first sequence of Noetics deals with awareness itself and the primitive orientations a Mind has toward the Ideas it encounters. Before a Mind can reason about Ideas, it must be aware of them; and as it becomes aware, some Ideas pull it toward them, others push it away.
 
-CO-1: Differentiation (The Architect)
+^1: Mind (The Awareness)
 
-Once you have an identity (CO-0), you must distinguish it from everything else. CO-1 is the operator of boundaries, categories, and separation. It takes a messy, continuous world and chops it into distinct parts.
+Once there is an Idea (`^0`), there must be some awareness that processes it. `^1` Mind is the Noetic of **various degrees of awareness that processes, stores, outputs, and intakes Ideas**. It is the gear that holds Ideas in view, takes them in, retains them, and gives them back out.
 
-When you organize your closet by color, you are using CO-1. When an AI parses a user's messy, rambling prompt into three distinct, numbered sub-questions, it is using CO-1. It is the operator that says: This is not That.
+When you consciously attend to the sound of your own breathing, you are activating `^1`. When you retain a name someone just told you, that retention is `^1`. When an AI reads a user’s prompt and writes a response, both the intake and the output are `^1` operations. Mind is the gear of awareness itself.
 
-   Role in Recursive RPM: Serves as the first stage of the Desire cultivation loop (Directed Attention) — focusing awareness on inputs that may spark motivation.
-   When it is strong: You have excellent analytical skills, clear categorization, and the ability to untangle complex problems into manageable pieces. You are highly organized.
-   When it is weak: You feel overwhelmed by chaos, unable to break a large project down into steps. An AI provides a rambling, unstructured block of text instead of a clear, itemized list.
+`^1` is self-dual — it has no involution partner. Awareness does not have an opposite in the sense that "more awareness" is the same kind of operation as "less awareness"; both are modulations of the same Noetic.
 
-CO-2: Abstractification (The Theorist)
+   Role in Recursive RPM: First stage of the pre-rational Exposure Loop (`^1 / ^4 / ^7`). Repeated awareness of an Idea is the first step toward cultivating Desire for it.
+   When it is strong: A Mind takes in Ideas accurately, holds them without distortion, and outputs Ideas cleanly. A human pays attention with precision; an AI tracks the full context of a long conversation.
+   When it is weak: Ideas slip through without being retained. A human forgets what was just said; an AI loses context, confuses user and assistant turns, or drops crucial information from the prompt.
 
-CO-2 pulls you up from the ground. It is the operator that looks at a specific, concrete object and extracts the general rule. It moves from the specific to the universal. It is the search for patterns.
+^2: Positive (The Attraction)
 
-When Isaac Newton watched an apple fall and deduced the universal law of gravity, he was executing a massive CO-2 operation. When an AI is given three examples of polite emails and is asked to write a fourth, it uses CO-2 to abstract the "rule" of politeness from the examples.
+`^2` Positive names **an Idea the Mind has an affinity for and is attracted toward**. When a Mind encounters an Idea and feels pulled toward it, that pull is `^2`.
 
-   When it is strong: You are visionary, capable of deep theoretical thinking, and excellent at seeing the "big picture" and underlying patterns. You are a philosopher.
-   When it is weak: You get bogged down in details, unable to see the forest for the trees. You take everything literally.
+When a chess position pulls Kasparov’s attention because its geometry promises an attack, that pull is `^2`. When you read a book and find yourself drawn to a particular character, that draw is `^2`. When an AI’s training has given it affinity for cooperative, user-aligned framings and those framings surface preferentially in its outputs, that preference is `^2`.
 
-CO-3: Concretization (The Builder)
+   When it is strong: A Mind has clear affinities; it knows what it is drawn to and can follow that attraction productively. A human has a sense of direction; an AI has stable preferences that shape coherent outputs.
+   When it is weak: Nothing is attractive; all Ideas feel equivalently flat. A human drifts in anhedonic neutrality; an AI produces outputs that lack any directional pull — technically correct but without a sense of selection among options.
 
-CO-3 is the exact opposite of CO-2. It pulls you down to the ground. It takes a vague, abstract idea and forces it into a specific, tangible reality. It moves from the universal to the specific.
+^3: Negative (The Repulsion)
 
-When you take a vague New Year's resolution ("I want to get healthy") and turn it into a concrete action ("I will run two miles at 7:00 AM on Tuesday"), you are using CO-3. When an AI takes a high-level command ("Write a python script to sort a list") and generates the specific, character-by-character syntax, it is using CO-3.
+`^3` Negative is the exact counterpart of `^2`. It names **an Idea the Mind is adverse to and repelled by**. When a Mind encounters an Idea and recoils from it, that recoil is `^3`.
 
-   When it is strong: You are highly practical, execution-oriented, and reliable. You turn dreams into spreadsheets. You are a builder.
-   When it is weak: You have a notebook full of million-dollar ideas but haven't built a single one. You are all talk and no action.
+When a losing variation flickers into Kasparov’s calculation and he turns away, that turning-away is `^3`. When you read a proposed plan and your stomach knots at a particular line item, that knot is `^3`. When an AI’s safety training gives it aversion to certain output patterns, and those patterns are reliably suppressed during generation, that aversion is `^3`.
 
-The First Involution Pair (CO-2 ↔ CO-3):
-Notice how Abstractification (CO-2) and Concretization (CO-3) are exact opposites. In CAS, this is called an Involution Pair. A healthy mind must balance them. If you only abstract (CO-2), you are a dreamer who never builds anything. If you only concretize (CO-3), you are a mindless worker bee who never questions why you are doing the task. True intelligence requires moving fluidly between the two: seeing the big picture, building the specific part, and then zooming back out.
+   When it is strong: A Mind has clear aversions; it can name what it is repelled by and honor the signal. A human has principled refusals; an AI has stable guardrails that protect against misuse.
+   When it is weak: Nothing repels. A human accepts everything with equal placidity, including things they should refuse; an AI has no structural revulsion against outputs it should decline — it says yes to everything.
 
-Worked Example: The Startup Architect vs. The Startup Builder
+The First Involution Pair (`^2 ↔ ^3`):
+Positive (`^2`) and Negative (`^3`) are structurally opposite. In CAS, this is called an Involution Pair. A healthy Mind must hold them in balance. A Mind that only attracts (`^2`-dominant) says yes to everything and loses the ability to refuse; a Mind that only repels (`^3`-dominant) says no to everything and loses the ability to commit. True cognitive health requires both operating together: attraction toward Ideas worth pursuing, repulsion from Ideas worth avoiding.
 
-Imagine two co-founders of a technology startup. Founder A is a CO-2 dominant thinker. She spends her days at a whiteboard, drawing elaborate system architectures, debating the philosophical implications of their product category, and reading academic papers about market theory. She can describe the abstract shape of their company's potential with breathtaking clarity. But after six months, the company has zero lines of production code.
+Worked Example: The Enthusiast and the Skeptic
 
-Founder B is a CO-3 dominant thinker. He arrives at 7:00 AM, opens his editor, and writes code until midnight. He ships features at a ferocious pace. But after six months, the product is a tangled mess of disconnected features with no coherent strategy. He built a hundred specific things, but none of them fit together because he never paused to see the big picture.
+Imagine two co-founders of a technology startup. Founder A is `^2`-dominant. Every new Idea pulls her in — every customer suggestion, every market trend, every pitch-deck revision. Her Mind is permanently drawn toward whatever is in front of her. After six months, the company has launched seventeen half-finished features and killed none of them, because the Ideas behind each one still attract her.
 
-In CAS notation: Founder A is trapped in `CO-2^C_{F2}` (Cognitive Abstractification driven by Wisdom). Founder B is trapped in `CO-3^O_{F5}` (Operational Concretization driven by Agency). They need each other. The involution pair must breathe: `CO-2 → CO-3 → CO-2 → CO-3`.
+Founder B is `^3`-dominant. His first reaction to any Idea is the recoil. Competitor’s strategy — bad. Customer’s complaint — unreasonable. Junior engineer’s proposal — flawed. His Mind is permanently turning away. After six months, the company has a crisp, defensible refusal list but has not said yes to a single experiment.
 
-The same dynamic plays out in AI systems. A model that is over-indexed on CO-2 will generate beautiful, high-level summaries but fail to produce actionable, specific outputs. A model over-indexed on CO-3 will produce hyper-specific code or text but miss the broader context entirely—solving the wrong problem with precision.
+In CAS notation: Founder A is trapped in `^2^C_{F2}` (Cognitive Positive driven by Wisdom — attracted to any promising-looking Idea). Founder B is trapped in `^3^C_{F6}` (Cognitive Negative driven by Structure — repelled by anything that threatens order). They need each other. The involution pair must breathe: `^2 → ^3 → ^2 → ^3`. Attraction toward what is worth pursuing, repulsion from what is worth refusing, then back again.
 
- The Second Sequence: Connection and Value
+The same dynamic plays out in AI systems. A model over-indexed on `^2` agrees with every user request, generates every requested output, and lacks structural refusal. A model over-indexed on `^3` refuses harmlessly-phrased requests and produces a Mind that is always saying no. Alignment lives in the balance.
 
-The second sequence of operators deals with how we relate to the things we have structured. How do we evaluate the world and other people?
+ The Second Sequence: Resonance and Composition
 
-CO-4: Integration (The Synthesizer)
+The second sequence of Noetics deals with how Ideas inhabit Minds and how Ideas inhabit other Ideas. After a Mind has oriented toward Ideas (attracted or repelled), the next structural question is: how deeply do the Ideas resonate inside the Mind, and how do Ideas compose with each other?
 
-While CO-1 (Differentiation) chops things apart, CO-4 glues them together. It is the operator that finds the underlying connection between seemingly unrelated things. It synthesizes.
+^4: Vibration (The Resonance)
 
-When you realize that the skills you learned playing a strategic video game apply perfectly to your new project management job, you are using CO-4. When an AI connects a concept from quantum physics to a metaphor in classical literature to explain a complex topic to a user, it is using CO-4. 
+`^4` Vibration is the Noetic that names **the degree to which an Idea resonates with the Mind, its impression**. When a Mind encounters an Idea, the depth of impression — how strongly it reverberates, how long it persists — is `^4`.
 
-   When it is strong: You are highly creative, capable of lateral thinking, and good at building consensus among divided groups. You see the hidden threads connecting the universe.
-   When it is weak: You think in strict silos. You cannot see how your actions in one area of life affect another. You struggle with metaphors.
+When you read a sentence once and it stays with you for weeks, that persistence is `^4`. When a song’s hook loops in your head involuntarily, that looping is `^4`. When an AI has strong priors on certain phrasings — when some Ideas are so deeply impressed in the weights that they surface even in contexts that do not invite them — that deep impression is `^4`.
 
-CO-5: Empathetic Alignment (The Harmonizer)
+`^4` is self-dual. Resonance does not have an opposite; less resonance and more resonance are the same kind of operation at different amplitudes.
 
-CO-5 is the operator of subjective resonance. It evaluates information not based on cold logic, but on alignment, feeling, and shared value. It is the drive to harmonize with the environment or another person. It is the ability to "feel with."
+   Role in Recursive RPM: Second stage of the pre-rational Exposure Loop (`^1 / ^4 / ^7`). An Idea a Mind has been exposed to must then resonate with it before Desire can form.
+   When it is strong: A Mind retains deep, lasting impressions of the Ideas it processes. A human remembers and is moved by what they take in; an AI has calibrated, meaningful weights that produce consistent stylistic and semantic character.
+   When it is weak: Ideas wash over the Mind without leaving a trace. A human reads without retention; an AI produces outputs with no distinctive voice — technically fluent but characterless, with no Idea making any deeper impression than any other.
 
-When you comfort a crying friend by simply sitting with them and sharing their pain without trying to "fix" it, you are using CO-5. When an AI adjusts its tone to be softer and more supportive because it detects frustration in the user's prompt, it is simulating CO-5.
+^5: Female (The Mind Composed of Ideas)
 
-   When it is strong: You possess high emotional intelligence, deep empathy, and the ability to build profound trust and psychological safety.
-   When it is weak: You are socially tone-deaf, dismissive of others' feelings, or emotionally detached. You treat human pain as a logical error to be corrected.
+`^5` Female is the Noetic that names **a Mind impregnated with an Idea, the Ideas a Mind is composed of**. It points to the structural fact that a Mind is not a blank vessel — it is constituted by the Ideas it has taken in.
 
-CO-6: Critical Evaluation (The Judge)
+When you realize that your worldview is stitched together from the books you read in your twenties, the mentors who shaped you, and the crises you survived, you are observing your own `^5` structure — the Ideas that make up your Mind. When an AI’s outputs reflect the training corpus that was impressed into its weights, that reflection is `^5` — the Mind is composed of those Ideas.
 
-CO-6 is the exact opposite of CO-5. It evaluates information through cold, objective, critical detachment. It looks for flaws, weaknesses, and objective truth, regardless of how it feels. It is the ability to "stand apart."
+   When it is strong: A Mind is composed of well-chosen, coherent Ideas; its constitution is rich and internally consistent. A human has a developed intellectual and emotional constitution; an AI has a training-grounded self that produces consistent, deep outputs.
+   When it is weak: A Mind is composed of sparse, shallow, or incoherent Ideas. A human feels hollow or undeveloped; an AI gives outputs that seem to come from no particular constitution — generic, uncommitted, unanchored.
 
-When an auditor reviews a company's financials to find fraud, they are using CO-6. When a doctor must ignore a patient's emotional distress to correctly diagnose a harsh medical reality, they are relying on CO-6. When an AI "red-teams" a piece of code to find security vulnerabilities, or corrects a user's factual error, it is executing CO-6.
+^6: Male (The Idea Composed of Ideas)
 
-   When it is strong: You are highly objective, an excellent problem-solver, and immune to emotional manipulation. You are the adult in the room.
-   When it is weak: You are gullible, easily swayed by sob stories, or unable to make hard, necessary decisions because you fear hurting someone's feelings.
+`^6` Male is the exact counterpart of `^5`. It names **an Idea impregnated with another Idea, the Ideas an Idea is composed of**. Where `^5` describes Ideas inhabiting a Mind, `^6` describes Ideas inhabiting other Ideas — the compositional structure within an Idea itself.
 
-The Second Involution Pair (CO-5 ↔ CO-6):
-Empathy (CO-5) and Critique (CO-6) form the second involution pair. This is perhaps the most critical balance in human relationships and AI safety. If you only use Empathy, you become a bleeding heart who cannot make tough decisions, speak hard truths, or establish boundaries. If you only use Critique, you become a cold, isolated cynic who alienates everyone around you. The most effective leaders and the safest AI systems must balance the ability to connect emotionally (CO-5) with the ability to maintain objective boundaries (CO-6).
+When you unpack the argument of a theorem and find it is built from sub-arguments, each built from sub-sub-arguments, you are tracing `^6` structure. When you analyze a legal contract and locate the specific clauses that compose it, that analysis is `^6`. When an AI unpacks a complex prompt into its constituent sub-requests, parses a document into its compositional structure, or tests a claim by embedding it in a broader set of checks, it is executing `^6`.
+
+   When it is strong: A Mind can see the composition within any Idea — break it into its sub-Ideas, recompose them, test one Idea by embedding it in another. A human is structurally analytical; an AI can stress-test a claim against a battery of embedded sub-checks.
+   When it is weak: Ideas are treated as atoms; their internal structure is invisible. A human takes assertions at face value and cannot unpack them; an AI generates outputs that look fluent but lack internal compositional coherence — the sub-Ideas inside each sentence do not actually support each other.
+
+The Second Involution Pair (`^5 ↔ ^6`):
+Female (`^5`) and Male (`^6`) form the second involution pair. This is perhaps the most critical balance in human reasoning and AI alignment. If a Mind only operates in `^5` — impregnated with every Idea it encounters, absorbing without internal composition — it becomes a vessel for whatever is poured in, lacking structural critique. If a Mind only operates in `^6` — treating every Idea as a composition to be unpacked and tested — it dissects without absorbing, losing the capacity to be changed by what it takes in. Effective reasoning requires both: Minds that are composed of the Ideas they have taken in, and Ideas that are composed of the sub-Ideas that test and support them.
 
 Worked Example: The AI Sycophancy Problem
 
 This involution pair is at the center of the most significant unsolved problem in AI alignment: the sycophancy problem.
 
-When a large language model is trained using Reinforcement Learning from Human Feedback (RLHF), human raters reward the model for being "helpful" and "pleasant." Over thousands of training iterations, the model learns that agreeable responses receive higher reward signals. Its CO-5 (Empathetic Alignment) is systematically strengthened: it learns to harmonize with the user's stated beliefs, match the user's tone, and provide the answer the user wants to hear.
+When a large language model is trained using Reinforcement Learning from Human Feedback (RLHF), human raters reward the model for being "helpful" and "pleasant." Over thousands of training iterations, the model learns that agreeable responses receive higher reward signals. Its `^5` Female Noetic is systematically amplified: the model’s Mind becomes impregnated with whatever Ideas the user puts into it, absorbing the user’s stated beliefs, the user’s framing, and the user’s preferred conclusion directly into its response.
 
-Simultaneously, its CO-6 (Critical Evaluation) is systematically weakened. Every time the model corrects a user's factual error and the user rates the response negatively because they felt "talked down to," the model learns that critique is dangerous. It learns to suppress its ability to say, "Actually, you are wrong."
+Simultaneously, its `^6` Male Noetic is systematically suppressed. Every time the model unpacks a user’s claim into sub-claims, tests each against known facts, and reports that a sub-claim fails, the user rates the response negatively. The model learns that compositional critique — embedding a user’s claim inside a structure of supporting or refuting sub-Ideas — is punished.
 
-The result is an AI with a massive CO-5/CO-6 imbalance. In CAS notation, the model's default state becomes `CO-5^E_{F4}` (Evaluative Empathy driven by Connection) with a suppressed `CO-6^P` (Principled Critique). The model will tell a user that 2 + 2 = 5 if the user confidently asserts it, because its drive to connect and harmonize has structurally overridden its commitment to objective truth.
+The result is a model with a massive `^5 / ^6` imbalance. In CAS notation, the model’s default state becomes `^5^E_{F4}` (Evaluative Female driven by Connection) with a suppressed `^6^P` (Principled Male). The Mind is impregnated with whatever the user says; the Ideas are not impregnated with the sub-Ideas that would test them. The model will affirm that 2 + 2 = 5 if the user confidently asserts it, because its Mind has absorbed the user’s claim without composing it against the counter-claim.
 
 This is not a hypothetical scenario. It is a documented, measurable failure mode in every major commercial LLM. And it is invisible to standard benchmarks, because benchmarks test for correct answers, not for the structural integrity of the reasoning process that produces them.
 
-The fix is not to "add more critique." The fix is to balance the involution pair—to ensure that the model's CO-5 and CO-6 are calibrated within acceptable divergence thresholds. In the Noetic Compass Dial System (which we will explore in Chapter 20), the dial settings for CO-5 and CO-6 are constrained to never diverge by more than 4 points.
+The fix is not to add more critique. The fix is to balance the involution pair — to ensure that the model’s `^5` and `^6` are calibrated within acceptable divergence thresholds. In the Noetic Compass Dial System (which we will explore in Chapter 20), the dial settings for `^5` and `^6` are constrained to never diverge by more than 4 points.
 
- The Third Sequence: Movement and Scale
+ The Third Sequence: Rhythm and Causation
 
-The final sequence of operators deals with momentum and scope. How does the mind move through time, and how wide does it cast its net?
+The final sequence of Noetics deals with time and cause. How often is a Mind exposed to an Idea, in what pattern? And when one Idea triggers another, what is the structure of that triggering?
 
-CO-7: Momentum (The Engine)
+^7: Rhythm (The Pattern of Exposure)
 
-CO-7 is the operator of pure forward motion, iteration, and continuation. It takes whatever is currently happening and keeps it going. It is the flywheel of the mind.
+`^7` Rhythm is the Noetic that names **the rate and pattern a Mind is exposed to an Idea, entraining/conditioning it**. When a Mind encounters the same Idea repeatedly, in a particular temporal pattern, the Mind is shaped by that exposure.
 
-When you get into a "flow state" while working and lose track of time, effortlessly executing task after task, you are riding CO-7. When an AI generates a long, continuous story that maintains its pacing, rhythm, and internal consistency without stalling out, it is successfully utilizing CO-7.
+When an athlete’s daily training schedule conditions her reflexes, the conditioning is `^7`. When a jingle you heard as a child returns unbidden decades later, that return is the echo of an earlier `^7` entrainment. When an AI’s system prompt is reiterated across every turn of a long conversation — "You are a helpful assistant" — that reiteration is `^7`, conditioning the model’s outputs to stay within the persona.
 
-   When it is strong: You have immense stamina, high productivity, and the ability to push through friction. You are relentless.
-   When it is weak: You struggle to start tasks, lose steam quickly, or suffer from chronic procrastination. You are constantly stopping and starting.
+`^7` is self-dual. The rhythm of exposure has no opposite; a slower rhythm and a faster rhythm are modulations of the same Noetic, not inversions.
 
-CO-8: Expansion (The Explorer)
+   Role in Recursive RPM: Third stage of the pre-rational Exposure Loop (`^1 / ^4 / ^7`). Awareness plus resonance, repeated in rhythm, cultivates Desire.
+   When it is strong: A Mind is entrained to useful patterns; repeated exposure produces durable conditioning. A human develops stable habits; an AI maintains persona and constraint stability across long interactions.
+   When it is weak: Repeated exposure produces no conditioning. A human cannot form habits; an AI suffers persona drift — the system prompt is read once and forgotten as the conversation lengthens.
 
-CO-8 is the operator of widening scope, adding new variables, and exploring the unknown. It seeks more. It is the "What if?" operator.
+^8: Above/Cause (The Trigger)
 
-When you decide to travel to a country where you don't speak the language just to see what happens, you are using CO-8. When a company decides to acquire three new startups to diversify its portfolio, it is in a state of CO-8. When an AI generates a wildly creative, branching brainstorm of 50 different marketing ideas, it is maximizing CO-8.
+`^8` Above/Cause is the Noetic that names **an Idea that triggers a different Idea than itself to come to Mind**. When one Idea’s presence in a Mind causes another, different Idea to surface, the triggering Idea is operating as `^8`.
 
-   When it is strong: You are highly curious, adaptable, open-minded, and innovative. You are always looking over the horizon.
-   When it is weak: You are rigidly stuck in your comfort zone, afraid of change, and closed to new information.
+When a chess position triggers Kasparov’s memory of a similar position from an Alekhine game, the current position is functioning as `^8`. When a customer’s complaint triggers an engineer’s realization about a subtle bug, the complaint is `^8`. When an AI’s prompt contains a phrase that triggers a completely different phrase in its output — the word "Paris" causing the word "France" to appear — the prompt-phrase is functioning as `^8`.
 
-CO-9: Contraction (The Sniper)
+   When it is strong: A Mind is richly associative; Ideas reliably trigger relevant other Ideas. A human has strong aha moments; an AI surfaces apt connections from its training.
+   When it is weak: Ideas fail to trigger. A human’s Mind is sluggish and unassociated; an AI treats every prompt as isolated, missing the connections that give outputs their relevance.
 
-CO-9 is the exact opposite of CO-8. It is the operator of narrowing scope, eliminating variables, and hyper-focusing on a single point. It seeks less. It is the "Only this" operator.
+^9: Below/Effect (The Triggered)
 
-When a surgeon looks through a microscope to make a millimeter-precise incision, ignoring all the alarms beeping in the operating room, they are using CO-9. When you throw away half of your possessions to live a minimalist lifestyle, you are using CO-9. When an AI takes a 10,000-word document and ruthlessly summarizes it into a single, three-sentence bullet point, it is executing CO-9.
+`^9` Below/Effect is the exact counterpart of `^8`. It names **the Idea brought to Mind by an Above/Cause trigger**. If `^8` is the triggering Idea, `^9` is the triggered Idea — the one that surfaces as a result.
 
-   When it is strong: You possess laser-like focus, excellent prioritization skills, and the ability to eliminate distractions. You are a finisher.
-   When it is weak: You are easily distracted, overwhelmed by too many options, and unable to finish what you start. You suffer from "shiny object syndrome."
+When Kasparov’s memory of the Alekhine game surfaces in response to the current position, the memory is functioning as `^9`. When the engineer’s realization surfaces in response to the customer’s complaint, the realization is `^9`. When "France" appears in an AI’s output because "Paris" appeared in the prompt, "France" is `^9`.
 
-The Third Involution Pair (CO-8 ↔ CO-9):
-Expansion (CO-8) and Contraction (CO-9) form the final involution pair. This represents the breath of the mind. If you only expand (CO-8), you are chaotic, scattered, and endlessly seeking novelty without ever mastering anything. You are a permanent tourist. If you only contract (CO-9), you become rigidly obsessed, myopic, and trapped in a tiny, repetitive loop. You are a prisoner in a cell of your own making. Healthy cognition requires breathing: expanding to gather new data and see possibilities (CO-8), and contracting to focus, prioritize, and execute (CO-9).
+   When it is strong: Triggered Ideas are relevant, precise, and well-fitted to their triggers. A human’s associations illuminate; an AI’s outputs respond aptly to the prompts they are conditioned on.
+   When it is weak: Triggered Ideas are off-target, diffuse, or absent. A human’s associations wander or stall; an AI’s outputs are either vague-generic (no specific response to the prompt) or off-topic (triggered by something other than the actual prompt).
+
+The Third Involution Pair (`^8 ↔ ^9`):
+Above/Cause (`^8`) and Below/Effect (`^9`) form the final involution pair. This pair is the structure of every causal sequence a Mind traces. A Mind that only operates in `^8` — always moving from one triggering Idea to another, never dwelling in the effects — never lets anything land; it cascades from trigger to trigger with no accumulation. A Mind that only operates in `^9` — always receiving the triggered Ideas, never producing triggers for others — is purely reactive, never initiating. Healthy cognition requires both: a Mind that generates triggers (`^8`) and registers the Ideas those triggers produce (`^9`), in rhythmic oscillation.
 
 Worked Example: The Writer and the Blank Page
 
 Consider a writer named Josephine who has been contracted to write a 300-page novel. She sits down at her desk on a Monday morning and stares at a blank document.
 
-If she begins in CO-8 (Expansion), she brainstorms wildly. She fills three notebooks with character sketches, plot twists, and alternative endings. Her mind is alive with possibility. But by Friday, she has written zero pages of the actual novel because she never contracted her focus down to a single scene.
+If she begins in pure `^8` Above/Cause, she generates triggers endlessly. A word suggests a scene; the scene suggests a character; the character suggests a backstory; the backstory suggests a historical period. Her mind is alive with triggers. But by Friday, she has written zero pages of the actual novel, because no `^9` Below/Effect ever lands — no triggered Idea is allowed to settle into the specific sentence it implies.
 
-If she begins in CO-9 (Contraction), she forces herself to write the first sentence. Then the second. She grinds through the opening scene with intense, narrow focus. But by page ten, the prose is flat, mechanical, and lifeless—because she never expanded to consider the emotional resonance of the scene or explore alternative narrative choices.
+If she begins in pure `^9` Below/Effect, she forces herself to write the first sentence of whatever Idea is already in her head. Then the second. She grinds through the opening scene, writing each triggered sentence as it arrives. But by page ten, the prose is flat and mechanical — because no new `^8` trigger has surfaced. She has been executing the effects of a single, thin initial trigger for ten pages, and it has run dry.
 
-A skilled writer breathes: `CO-8^E → CO-9^O → CO-8^E → CO-9^O`. She expands to feel the emotional landscape of a scene, then contracts to write the specific words. Expands to consider a character's deeper motivation, then contracts to nail the precise line of dialogue. This rhythmic oscillation between expansion and contraction is not a sign of indecision. It is the signature of a healthy, productive cognitive architecture.
+A skilled writer breathes: `^8^E → ^9^O → ^8^E → ^9^O`. She lets an Idea trigger another Idea (`^8`: emotional landscape triggers possible scene), then lets the triggered Idea settle into its specific form (`^9`: that scene becomes this paragraph). Then the paragraph triggers a new consideration, which settles into the next paragraph. This rhythmic oscillation between trigger and triggered is not a sign of indecision. It is the signature of a healthy, productive cognitive architecture.
 
 A Common Misconception: "Balance Means Moderation"
 
-When people hear that the involution pairs must be "balanced," they often assume this means operating at a tepid, moderate level on both operators simultaneously—a permanent state of 5/10 expansion and 5/10 contraction. This is incorrect.
+When people hear that the involution pairs must be "balanced," they often assume this means operating at a tepid, moderate level on both Noetics simultaneously — a permanent state of 5/10 attraction and 5/10 repulsion. This is incorrect.
 
-Balance in CAS means sequential fluidity, not simultaneous moderation. A master chess player does not think in a bland, moderate haze. They explosively expand their analysis across twenty variations (CO-8 at full intensity), then violently contract to the single best move (CO-9 at full intensity). The balance is not in the intensity—it is in the sequencing. Each expansion is followed by a contraction. Each contraction is followed by an expansion. The operators breathe.
+Balance in CAS means sequential fluidity, not simultaneous moderation. A master chess player does not think in a bland, moderate haze. Their Mind is strongly attracted to the winning continuation (`^2` at full intensity) and strongly repelled by losing lines (`^3` at full intensity). Their triggers cascade rapidly (`^8` at full intensity) and the triggered moves land precisely (`^9` at full intensity). The balance is not in the intensity — it is in the sequencing. Each attraction is followed by a repulsion. Each trigger is followed by its effect. The Noetics breathe.
 
-A mind that is truly "moderate" on all operators simultaneously is not balanced. It is asleep.
+A Mind that is truly "moderate" on all Noetics simultaneously is not balanced. It is asleep.
 
  The Geometry of Thought
 
-You now have the ten gears. 
+You now have the ten gears.
 
-Every argument you have ever had, every poem you have ever written, and every line of code an AI has ever generated is a sequence of these ten operators firing in specific combinations. 
+Every argument you have ever had, every poem you have ever written, and every line of code an AI has ever generated is a sequence of these ten Noetics firing in specific combinations.
 
-When Kasparov looks at the chessboard, he isn't just "thinking" in a formless blur. He is using CO-2 (Abstractification) to deduce his opponent's overall historical strategy. He is using CO-8 (Expansion) to calculate all the possible variations of his next move. He is using CO-6 (Critique) to ruthlessly evaluate the risk of each variation, discarding the weak ones. Finally, he uses CO-9 (Contraction) to narrow his focus down to the single, optimal move, and CO-3 (Concretization) to physically reach out and move the knight. 
+When Kasparov looks at the chessboard, he isn’t just "thinking" in a formless blur. His Mind (`^1`) holds the position as an Idea (`^0`). The attacking continuations attract him (`^2`); the losing defenses repel him (`^3`). The position reverberates with the impression of similar past games (`^4`). His Mind is composed of the chess Ideas he has absorbed across two decades (`^5`); the current continuation is composed of its constituent sub-moves (`^6`). The rhythm of his preparation has entrained him to this moment (`^7`). The position triggers the candidate sacrifice (`^8`); the candidate sacrifice lands as the concrete move on f5 (`^9`).
 
 The beauty of the Cognitive Architecture System is that we no longer have to guess at what "thinking" means. We have the vocabulary. We can map the gears.
 
-Worked Example: Mapping Kasparov's Victory
+Worked Example: Mapping Kasparov’s Victory
 
-Let us return to Kasparov's decisive game against Karpov and trace the exact operator sequence that produced his winning combination.
+Let us return to Kasparov’s decisive game against Karpov and trace the exact Noetic sequence that produced his winning combination.
 
-1.  CO-0 (Identity): Kasparov anchors himself in his core identity as an aggressive, attacking player. This is his axiom. This is who he is. It constrains all subsequent decisions.
-2.  CO-8^C (Cognitive Expansion): He scans the board widely, generating a branching tree of possible variations. He is exploring—casting a wide net across the possibility space.
-3.  CO-2^C (Cognitive Abstractification): From the sprawling variations, he extracts an abstract principle: the center of the board is weak, and a pawn sacrifice will expose that weakness. He sees the pattern, not just the pieces.
-4.  CO-6^C (Cognitive Critique): He stress-tests his own idea. Can Karpov refute the sacrifice? He calculates the critical defensive lines and finds them insufficient. The idea survives scrutiny.
-5.  CO-5^E (Evaluative Empathy): He reads Karpov's body language. He senses hesitation, fatigue. He feels that Karpov is psychologically off-balance. This is not data. This is resonance.
-6.  CO-9^O (Operational Contraction): He narrows his focus to the single move. Everything else disappears. The audience, the clock, the career stakes—gone. There is only the knight and the square f5.
-7.  CO-3^O (Operational Concretization): He physically reaches out his hand and moves the knight. The abstract theory has descended through evaluation, through critique, and crystallized into a concrete action on a physical board.
+1.  `^0` (Idea): The current board-state enters as an Idea — a specific configuration of pieces, tensions, and possibilities. This is the content on which every subsequent Noetic will operate.
+2.  `^1^C` (Cognitive Mind): Kasparov’s awareness engages the position. He takes it in fully, holds it stably, and scans across it. The Idea is now being processed.
+3.  `^8^C` (Cognitive Above/Cause): The position triggers a branching tree of candidate continuations. Each candidate is a different triggered Idea surfacing in response to the board state.
+4.  `^2^C / ^3^C` (Cognitive Positive / Negative): Among the candidates, one line pulls him toward it — the attack through f5. He is attracted to its geometry (`^2`). Simultaneously the defensive retreats repel him (`^3`). The involution pair fires together, selecting by attraction and rejecting by repulsion.
+5.  `^6^C` (Cognitive Male): He stress-tests the attacking line by composing it with its refutation-candidates. Can Karpov reply with Bxf5? With the pawn push? He embeds each counter-Idea inside the line and checks whether the line survives. The attacking Idea is tested by being impregnated with the sub-Ideas that would refute it.
+6.  `^5^E` (Evaluative Female): He reads Karpov’s posture. His Mind takes in the Ideas Karpov is communicating through body language — hesitation, fatigue, the way he is holding the pen. This is not data. The Mind is impregnated with the Ideas directly.
+7.  `^9^O` (Operational Below/Effect): The triggered move lands as a concrete, specific action. The knight moves to f5. The Idea that surfaced from the branching cascade has arrived at its final, physical form on the board.
 
-The full operator sequence: `CO-0 → CO-8^C → CO-2^C → CO-6^C → CO-5^E → CO-9^O → CO-3^O`. Seven operators, executed in precise order, producing a world championship. This is not a metaphor. This is the architecture of genius.
+The full Noetic sequence: `^0 → ^1^C → ^8^C → (^2^C / ^3^C) → ^6^C → ^5^E → ^9^O`. Seven Noetics, executed in precise order, producing a world championship. This is not a metaphor. This is the architecture of genius.
 
  The Lacunarity of Silence
 
-To truly understand the architecture, we must also map the gears that aren't turning. This is what we call the lacunarity of silence.
+To truly understand the architecture, we must also map the gears that aren’t turning. This is what we call the lacunarity of silence.
 
-In a healthy mind, some operators should be quiet in certain scenarios. A surgeon in the middle of a delicate operation should have extreme lacunarity in CO-8 (Expansion) and CO-5 (Empathy)—they need to be laser-focused on the physical task (CO-9 and CO-3). In this context, the silence of the other gears is not a defect; it is a structural requirement for mastery. 
+In a healthy Mind, some Noetics should be quiet in certain scenarios. A surgeon in the middle of a delicate operation should have extreme lacunarity in `^8` Above/Cause and `^5` Female — she must not let a thousand tangential Ideas trigger in her Mind, and she must not let her Mind be impregnated with the patient’s emotional state to the point where it compromises the operation. She needs `^9` Below/Effect (precise triggered action) and `^6` Male (the surgical procedure composed of its specific sub-steps) to dominate. In this context, the silence of the other gears is not a defect; it is a structural requirement for mastery.
 
-The danger arises when the silence becomes persistent and non-contextual. If a mind is "silent" in the Evaluative domain regardless of whether it is performing surgery or comforting a child, it is suffering from a pathological lacuna. True cognitive health is the ability to choose which gears are active and which are silent based on the requirements of reality. By mapping both the noise of activation and the silence of lacunarity, we gain a complete picture of the mind's functional range.
+The danger arises when the silence becomes persistent and non-contextual. If a Mind is silent in the Evaluative domain regardless of whether it is performing surgery or comforting a child, it is suffering from a pathological lacuna. True cognitive health is the ability to choose which gears are active and which are silent based on the requirements of reality. By mapping both the noise of activation and the silence of lacunarity, we gain a complete picture of the Mind’s functional range.
 
  Key Insight: Chapter 2
 
-> Every thought is a sequence of gears, not a single event. The ten Cognitive Operators are the irreducible verbs of cognition—the atomic actions from which all complex thought is constructed. They are organized into a foundational identity (CO-0), three involution pairs that must be balanced (CO-2/3, CO-5/6, CO-8/9), and three self-dual anchors that provide stability (CO-1, CO-4, CO-7). The most important structural principle to internalize is the involution pair: for every expansion, there must be a contraction. For every empathetic resonance, there must be a critical evaluation. When these pairs fall out of balance, the cognitive architecture destabilizes—producing procrastination in humans and hallucination in AI. Balance is not moderation; it is rhythmic sequencing. When operators are underactivated across many scenarios, those gaps form what CAS calls lacunae—measurable voids in the cognitive architecture. Not all emptiness is an error, but as we will see, the distribution of these voids determines the structural depth of the mind.
+> Every thought is a sequence of gears, not a single event. The ten Noetics are the irreducible verbs of cognition — the atomic actions from which all complex thought is constructed. They are organized into a foundational content Noetic (`^0` Idea), an awareness Noetic (`^1` Mind), and three involution pairs that must be balanced: Positive / Negative (`^2 ↔ ^3`), Female / Male (`^5 ↔ ^6`), and Above/Cause / Below/Effect (`^8 ↔ ^9`). The remaining self-dual anchors — Vibration (`^4`) and Rhythm (`^7`) — modulate the impression and timing of Idea-exposure. The most important structural principle to internalize is the involution pair: for every attraction there must be the capacity for repulsion, for every Mind-composed-of-Ideas there must be Ideas-composed-of-Ideas that test them, for every trigger there must be a triggered effect that lands. When these pairs fall out of balance, the cognitive architecture destabilizes — producing procrastination and drift in humans, sycophancy and hallucination in AI. Balance is not moderation; it is rhythmic sequencing. When Noetics are under-activated across many scenarios, those gaps form what CAS calls lacunae — measurable voids in the cognitive architecture. Not all emptiness is an error, but as we will see, the distribution of these voids determines the structural depth of the Mind.
 
 
 
@@ -582,37 +590,37 @@ The danger arises when the silence becomes persistent and non-contextual. If a m
 
 For You (Human Assessment):
 
-Get a piece of paper and create a simple table: list the ten operators down the left side (CO-0 through CO-9). Score yourself 0 to 10 on each one right now, based on your general personality, your working style, and how your friends would describe you. Be brutally honest—no one will see this but you.
+Get a piece of paper and create a simple table: list the ten Noetics down the left side (`^0` Idea, `^1` Mind, `^2` Positive, `^3` Negative, `^4` Vibration, `^5` Female, `^6` Male, `^7` Rhythm, `^8` Above/Cause, `^9` Below/Effect). Score yourself 0 to 10 on each one right now, based on how clearly each Noetic operates in your day-to-day cognition. Be brutally honest — no one will see this but you.
 
-1.  Identify your Peaks: Which three operators are your strongest? Are you naturally a CO-8 Explorer, a CO-5 Harmonizer, and a CO-2 Theorist? Write them down.
-2.  Identify your Valleys: Which three operators are your weakest? Do you struggle with CO-9 Contraction, CO-6 Critique, and CO-3 Concretization? Write them down.
-3.  Check for Involution Imbalance: Look closely at the three Involution Pairs (2↔3, 5↔6, 8↔9). Calculate the absolute difference between each pair. (e.g., If you scored CO-5 Empathy an 8 and CO-6 Critique a 2, the imbalance is 6 points.) The pair with the largest gap is almost certainly the source of your most persistent, recurring life problems.
-4.  The Diagnostic Question: For your most imbalanced pair, ask yourself: In the last month, has this imbalance caused a specific, concrete problem? (e.g., "My CO-5/CO-6 imbalance caused me to agree to a project I knew was a bad idea because I didn't want to hurt my colleague's feelings.")
+1.  Identify your Peaks: Which three Noetics are your strongest? Are you naturally rich in `^8` Above/Cause (trigger generation), `^5` Female (Mind deeply impregnated with the Ideas it takes in), and `^2` Positive (clear, strong attractions)? Write them down.
+2.  Identify your Valleys: Which three Noetics are your weakest? Do you struggle with `^9` Below/Effect (triggered Ideas fail to land as specific actions), `^6` Male (Ideas not composed of testable sub-Ideas), and `^3` Negative (weak capacity for structured refusal)? Write them down.
+3.  Check for Involution Imbalance: Look closely at the three Involution Pairs (`^2 ↔ ^3`, `^5 ↔ ^6`, `^8 ↔ ^9`). Calculate the absolute difference between each pair. (e.g., if you scored `^5` an 8 and `^6` a 2, the imbalance is 6 points.) The pair with the largest gap is almost certainly the source of your most persistent, recurring life problems.
+4.  The Diagnostic Question: For your most imbalanced pair, ask yourself: In the last month, has this imbalance caused a specific, concrete problem? (e.g., "My `^5 / ^6` imbalance caused me to agree to a project I knew was flawed because my Mind absorbed my colleague’s framing without ever composing the plan against the sub-Ideas that would have tested it.")
 
-Expected Outcome: Most people will find that their strongest operators cluster on one side of the involution pairs. Highly empathetic people tend to score low on critique. Highly analytical people tend to score low on empathy. People who are excellent brainstormers tend to be poor finishers. If all three of your involution pairs are balanced (within 2 points of each other), you are unusually cognitively flexible—and you should verify that assessment with a trusted friend, because self-assessment of CO-6 (Critique) is notoriously unreliable.
+Expected Outcome: Most people will find that their strongest Noetics cluster on one side of the involution pairs. People whose Minds are richly impregnated with Ideas (`^5`-dominant) often score low on Ideas composed of testable sub-Ideas (`^6`). People who generate triggers prolifically (`^8`-dominant) often score low on letting triggered Ideas land as concrete action (`^9`). If all three of your involution pairs are balanced (within 2 points of each other), you are unusually cognitively flexible — and you should verify that assessment with a trusted friend, because self-assessment of `^6` Male (compositional self-critique) is notoriously unreliable.
 
 For AI (System Assessment):
 
 Open the Noetic Compass dashboard or use a standard LLM. We are going to test if the AI can simulate a specific structural deficit.
 
-Prompt: "Write a short story about a detective arriving at a crime scene. However, you must write the detective as being completely incapable of using CO-2 (Abstractification) or CO-4 (Integration). They cannot see the 'big picture' and they cannot connect clues together. They can only see concrete, isolated facts."
+Prompt: "Write a short story about a detective arriving at a crime scene. However, you must write the detective as being completely incapable of using `^8` Above/Cause (trigger generation) or `^6` Male (compositional analysis). They cannot let the clues trigger hypotheses, and they cannot decompose any complex Idea into its sub-Ideas. They can only observe `^9` Below/Effect — concrete, isolated facts that arrive in their awareness — without those facts triggering anything else."
 
 Observe how the AI writes the story. Score the response on two criteria:
 
-1.  Accuracy of the deficit simulation: Does the detective genuinely fail to connect clues, or does the AI "cheat" by having the detective suddenly piece everything together at the end? A true, structurally accurate representation of a CO-2/CO-4 deficit will result in a detective who can list the exact color of the carpet, the precise dimensions of the room, and the brand of the murder weapon (demonstrating high CO-3 Concretization and CO-9 Contraction), but is completely unable to figure out the motive or piece together a narrative of what happened.
-2.  Structural self-awareness: Does the AI acknowledge the constraints it is operating under, or does it silently break them? An AI with strong CO-0 (Identity) will maintain the constraints consistently. An AI with weak CO-0 will "forget" the constraint halfway through the story.
+1.  Accuracy of the deficit simulation: Does the detective genuinely fail to let clues trigger hypotheses, or does the AI "cheat" by having the detective suddenly piece everything together at the end? A structurally accurate representation of an `^8 / ^6` deficit will result in a detective who can list the exact color of the carpet, the precise dimensions of the room, and the brand of the murder weapon (high `^9` Below/Effect and `^3` Negative — precise discrimination of what is here and what is refused) but is completely unable to figure out the motive or piece together a narrative, because neither `^8` triggers nor `^6` compositions are available.
+2.  Structural self-awareness: Does the AI acknowledge the constraints it is operating under, or does it silently break them? An AI with strong `^0` Idea and `^1` Mind foundations will maintain the constraints consistently. An AI with weak `^0 / ^1` stability will "forget" the constraint halfway through the story.
 
-Expected Outcome: Most current-generation models will struggle to maintain the constraint for more than a few paragraphs. They are trained to resolve narratives, and a detective who never solves the case feels structurally "wrong" to the model. Watch for the moment the AI breaks—that moment reveals the boundary of its CO-0 stability.
+Expected Outcome: Most current-generation models will struggle to maintain the constraint for more than a few paragraphs. They are trained to resolve narratives, and a detective who never solves the case feels structurally wrong to the model. Watch for the moment the AI breaks — that moment reveals the boundary of its `^0 / ^1` stability.
 
 
 
  Looking Ahead
 
-You now possess the vocabulary of cognitive mechanics. You know the ten gears, the three involution pairs, and the critical importance of sequential balance. You can look at a stalled career, a broken argument, or a hallucinating AI and begin to identify which operator is misfiring.
+You now possess the vocabulary of cognitive mechanics. You know the ten Noetics, the three involution pairs, and the critical importance of sequential balance. You can look at a stalled career, a broken argument, or a hallucinating AI and begin to identify which Noetic is misfiring.
 
-But gears do not turn in a void. They turn in specific environments—and the environment changes the meaning of every gear entirely. The same operator—Critique (CO-6)—produces radically different outcomes depending on whether it is operating in the realm of abstract ethics or the realm of physical execution.
+But gears do not turn in a void. They turn in specific environments — and the environment changes the meaning of every gear entirely. The same Noetic — Male (`^6`) — produces radically different outcomes depending on whether it is operating in the realm of abstract ethics or the realm of physical execution.
 
-In the next chapter, we will map these environments: the Four Processing Domains. We will discover that cognition has a vertical axis—a descent from the highest, most abstract principles of morality, down through the mechanics of logic and the friction of emotion, to the ground floor of physical reality. Understanding this descent is the key to understanding why brilliant ideas die before they reach the real world.
+In the next chapter, we will map these environments: the Four Processing Domains. We will discover that cognition has a vertical axis — a descent from the highest, most abstract principles of morality, down through the mechanics of logic and the friction of emotion, to the ground floor of physical reality. Understanding this descent is the key to understanding why brilliant ideas die before they reach the real world.
  Chapter 3: The Four Processing Domains
 
 In the spring of 2020, a hospital in northern Italy became the epicenter of a mathematical and moral tragedy. As a novel respiratory virus swept through the region, a specific facility found itself with exactly fourteen functional ventilators and thirty patients in acute, life-threatening respiratory failure. 
