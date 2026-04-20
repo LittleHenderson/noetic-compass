@@ -1,4 +1,8 @@
-# Technical Feature Overview — Structural Language Review Deliverable
+> ⚠️ **DEPRECATED — DO NOT USE FOR WORD REINTEGRATION.** This v1 deliverable was built against Scheme-B operator naming (Attraction / Critical Evaluation / Receptive Integration / Projective Assertion / Causal Reasoning / Consequential Grounding). Scheme-B is not authoritative. The authoritative Noetic names, per `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`, are Idea, Mind, Positive, Negative, Vibration, Female, Male, Rhythm, Above/Cause, Below/Effect. Use the v2 deliverable at `docs/working/technical_feature_overview_v2.md` instead. Deprecation applied 2026-04-19.
+
+---
+
+# Technical Feature Overview — Structural Language Review Deliverable (v1 — DEPRECATED)
 
 **Review date:** 2026-04-19
 **Source document:** `Noetic_Compass_Technical_Feature_Overview.docx` (repo root)
