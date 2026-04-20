@@ -2246,44 +2246,44 @@ And just like in Mandelbrot's equations, some orbits stabilize into beautiful, b
 
  The Fractal Monoid: The Mathematics of Nesting
 
-To understand how thoughts nest inside one another, we use the formal composition operator (`∘`). 
+To understand how thoughts nest inside one another, we use the formal composition operator (`∘`).
 
-Imagine you are trying to write a chapter of a book. 
-Your overall, overarching "macro" state for the day is `CO-3` (Concretization: putting specific words on a specific piece of paper).
+Imagine you are trying to write a chapter of a book.
+Your overall, overarching "macro" state for the day is `^9` Below/Effect: letting each triggered Idea land as specific words on a specific piece of paper.
 
-But while you are writing, you hit a roadblock. You stop typing, look out the window, and brainstorm a new idea for a character. You have entered a "micro" state of `CO-8` (Expansion). 
+But while you are writing, you hit a roadblock. You stop typing, look out the window, and let Ideas trigger new Ideas — a new character concept surfaces. You have entered a "micro" state of `^8` Above/Cause.
 
-We write this as: `CO-8 ∘ CO-3`
-(Expansion nested within the environment of Concretization).
+We write this as: `^8 ∘ ^9`
+(Above/Cause nested within the environment of Below/Effect.)
 
-You are expanding, but the boundaries of that expansion are constrained by the larger goal of concretizing the book. If you forget the outer `CO-3` boundary, your brainstorming `CO-8` will spiral out of control. You will end up researching Wikipedia articles about medieval armor for six hours, or deciding to write a completely different book. The micro-state will consume the macro-state. 
+You are letting Ideas trigger each other, but the boundaries of that triggering are constrained by the larger container of triggered Ideas landing as pages. If you forget the outer `^9` boundary, your triggering `^8` cascade will spiral out of control. You will end up researching Wikipedia articles about medieval armor for six hours, or letting the triggers carry you into writing a completely different book. The micro-state will consume the macro-state.
 
  The Three Fractal Patterns
 
-When we analyze an AI's output in the Noetic Compass, our Rust-based scoring engine performs a highly complex "Cognitive Fractal Analysis." It looks at the sequence of operators the AI used to generate its answer—often hundreds of tokens long—and plots the fractal orbit. 
+When we analyze an AI's output in the Noetic Compass, our Rust-based scoring engine performs a highly complex "Cognitive Fractal Analysis." It looks at the sequence of Noetics the AI used to generate its answer — often hundreds of tokens long — and plots the fractal orbit.
 
 We are looking to see if the AI's reasoning converges toward a stable, rational conclusion, or if it spirals into a pathological state. We classify these orbits into three main patterns:
 
  1. Stabilizing Fractals (Convergence)
-A stabilizing fractal occurs when an expansive operator is immediately followed by a contracting or critical operator. The mind breathes out, then breathes in. 
+A stabilizing fractal occurs when a triggering Noetic (Above/Cause) is immediately followed by a compositional-test Noetic (Male) and then a landing Noetic (Below/Effect). The Mind opens, tests, and resolves.
 
-Sequence: `CO-8 (Expand) → CO-6 (Critique) → CO-9 (Contract)`
+Sequence: `^8 (Above/Cause) → ^6 (Male) → ^9 (Below/Effect)`
 
-This is the signature of healthy, effective problem-solving. The AI (or the human) brainstorms three possible solutions to a problem (`CO-8`), evaluates them to find the most efficient one (`CO-6`), and then outputs the single, precise answer (`CO-9`). The fractal orbit spirals inward to a stable "fixed point." The density of these orbits is measurable through fractal lacunarity, calculated as 1 - (unique operators / 10). A thought pattern that only utilizes a small subset of the cognitive repertoire—such as a Φ⟨3:8:3:8:3:8⟩ fractal sequence that alternates strictly between Concretization and Expansion—has a fractal lacunarity of 0.8. Only 2 operators are firing, while 8 remain "dark." This metric allows us to quantify the diversity, or the narrowness, of a cognitive orbit at every scale. 
+This is the signature of healthy, effective problem-solving. The AI (or the human) lets Ideas trigger candidate solutions (`^8`), decomposes each candidate into sub-Ideas and tests them (`^6`), and then lets the surviving triggered Idea land as the single, precise answer (`^9`). The fractal orbit spirals inward to a stable "fixed point." The density of these orbits is measurable through fractal lacunarity, calculated as 1 - (unique Noetics / 10). A thought pattern that only utilizes a small subset of the Noetic repertoire — such as a Φ⟨9:8:9:8:9:8⟩ fractal sequence that alternates strictly between Below/Effect landings and Above/Cause triggers — has a fractal lacunarity of 0.8. Only 2 Noetics are firing, while 8 remain "dark." This metric allows us to quantify the diversity, or the narrowness, of a cognitive orbit at every scale.
 
  2. Amplifying Fractals (Divergence)
-An amplifying fractal occurs when expansive or momentum-based operators feed back into themselves without any critical constraint. The system accelerates without brakes.
+An amplifying fractal occurs when triggering and resonance Noetics feed back into themselves without any compositional-test or landing constraint. The system accelerates without brakes.
 
-Sequence: `CO-8 (Expand) → CO-4 (Connect) → CO-8 (Expand)`
+Sequence: `^8 (Above/Cause) → ^4 (Vibration) → ^8 (Above/Cause)`
 
-This is the signature of a manic episode in a human, or a severe hallucination in an AI. The AI comes up with a wild idea, connects it to another wild idea, and expands it further. Because there is no `CO-6` (Critique) or `CO-9` (Contraction) to act as a boundary, the fractal orbit spirals outward into infinity. The system completely loses touch with reality, generating thousands of words of confident nonsense.
+This is the signature of a manic episode in a human, or a severe hallucination in an AI. Each Idea triggers another (`^8`), each new Idea leaves a deep impression that amplifies its resonance (`^4`), and that resonance triggers yet more Ideas (`^8`). Because no `^6` (Male — compositional test of the sub-Ideas) or `^9` (Below/Effect — letting one triggered Idea finally land) acts as a boundary, the fractal orbit spirals outward into infinity. The system completely loses touch with reality, generating thousands of words of confident nonsense.
 
  3. Oscillatory Fractals (The Loop)
-An oscillatory fractal occurs when the mind rapidly bounces between two opposing operators without ever integrating them or moving forward.
+An oscillatory fractal occurs when the mind rapidly bounces between two Noetics on opposite sides of an involution pair without ever integrating them or moving forward.
 
-Sequence: `CO-5 (Empathy) → CO-6 (Critique) → CO-5 (Empathy) → CO-6 (Critique)`
+Sequence: `^5 (Female) → ^6 (Male) → ^5 (Female) → ^6 (Male)`
 
-This is the signature of cognitive dissonance, neurosis, or analysis paralysis. A manager feels deep empathy for an underperforming employee (`CO-5`), then immediately swings to harsh criticism of their metrics (`CO-6`), then feels guilty and swings back to empathy (`CO-5`). The fractal orbit forms a closed loop, bouncing back and forth forever. The system is burning immense cognitive energy, generating massive internal heat, but making zero forward progress. 
+This is the signature of cognitive dissonance, neurosis, or analysis paralysis. A manager lets her Mind be impregnated with an underperforming employee's struggle-Ideas (`^5`), then immediately swings to decomposing the performance metrics into sub-Ideas for critical test (`^6`), then feels the unresolved tension and swings back to impregnation (`^5`). The fractal orbit forms a closed loop, bouncing back and forth across the `^5 ↔ ^6` involution forever. The system is burning immense cognitive energy, generating massive internal heat, but making zero forward progress.
 
  Five Worked Fractal Analyses
 
@@ -2293,78 +2293,78 @@ Analysis 1: The Grant Proposal Writer.
 
 Source: A researcher drafting a grant proposal over three hours.
 
-Extracted sequence: `CO-2^P → CO-2^C → CO-8^C → CO-6^C → CO-3^O → CO-6^O`
+Extracted sequence: `^2^P → ^2^C → ^8^C → ^6^C → ^9^O → ^6^O`
 
-Canonical form after dual cancellation: The sequence contains no involutional pairs firing at equal intensity, so no cancellation occurs. The sequence remains `CO-2^P → CO-2^C → CO-8^C → CO-6^C → CO-3^O → CO-6^O`.
+Canonical form after dual cancellation: The sequence contains no involutional pairs firing at equal intensity, so no cancellation occurs. The sequence remains `^2^P → ^2^C → ^8^C → ^6^C → ^9^O → ^6^O`.
 
-Classification: Stabilizing. The orbit begins with abstraction (framing the principled vision), expands into cognitive alternatives, contracts through critique, descends to operational concretization, and ends with operational critique (proofreading). The domains walk cleanly from `^P` to `^O`.
+Classification: Stabilizing. The orbit begins with attraction to a principled vision-Idea (`^2^P`), carries that attraction down into the cognitive register (`^2^C`), triggers alternatives (`^8^C`), decomposes each for test (`^6^C`), lets the triggered Idea land as specific written sentences (`^9^O`), and ends by decomposing the draft itself into sub-Ideas for proofreading (`^6^O`). The domains walk cleanly from `^P` to `^O`.
 
-Interpretation: This is the structural fingerprint of a healthy writing session. The mind opens, explores, critiques, produces, and reviews. Each operator has a job and each gets out of the way when its job is done.
+Interpretation: This is the structural fingerprint of a healthy writing session. The Mind attracts, triggers, decomposes, lands, and tests. Each Noetic has a job and each gets out of the way when its job is done.
 
 Analysis 2: The Infinite Scroll.
 
 Source: A person on their phone at 11:47 PM.
 
-Extracted sequence: `CO-8^E → CO-4^E → CO-8^E → CO-4^E → CO-8^E → CO-4^E ...`
+Extracted sequence: `^8^E → ^4^E → ^8^E → ^4^E → ^8^E → ^4^E ...`
 
-Canonical form after dual cancellation: The sequence contains no `CO-9` contractions to balance the `CO-8` expansions, and no `CO-6` critiques to break the `CO-4` integrations. The canonical form is a pure repeating loop with no cancellation: `(CO-8^E → CO-4^E)`.
+Canonical form after dual cancellation: The sequence contains no `^9` landings to balance the `^8` triggers, and no `^6` decompositions to break the `^4` resonances. The canonical form is a pure repeating loop with no cancellation: `(^8^E → ^4^E)`.
 
-Classification: Amplifying. The loop never contracts; it only expands and connects, expands and connects. Each new piece of content widens the evaluative frame and then connects back to the viewer's emotional state.
+Classification: Amplifying. The loop never lands; each piece of content triggers a new Idea to come to Mind (`^8^E`), each new Idea leaves its depth of impression (`^4^E`), and that impression triggers the next Idea. The evaluative frame widens and widens.
 
-Interpretation: This is the structural fingerprint of doomscrolling. The reason willpower does not work to stop it is that the loop is mathematically stable — it has no internal braking mechanism. Only an external contraction (`CO-9^O` — physically putting the phone down) can break the orbit.
+Interpretation: This is the structural fingerprint of doomscrolling. The reason willpower does not work to stop it is that the loop is mathematically stable — it has no internal braking mechanism. Only an external landing (`^9^O` — physically putting the phone down, a triggered Idea finally landing as a specific operational act) can break the orbit.
 
 Analysis 3: The Couple's Recurring Argument.
 
 Source: A married couple having the same fight for the fourth time this month, recorded across twenty minutes.
 
-Extracted sequence: `CO-6^E → CO-5^E → CO-6^E → CO-5^E → CO-6^E → CO-5^E`
+Extracted sequence: `^6^E → ^5^E → ^6^E → ^5^E → ^6^E → ^5^E`
 
-Canonical form after dual cancellation: The involutional pair `CO-5/CO-6` fires repeatedly in the same domain. Each pairing partially cancels, but new pairs keep being generated. The canonical form after cancellation is `CO-0^E` with ambient heat — meaning the system returns to evaluative baseline but with accumulated cognitive friction.
+Canonical form after dual cancellation: The involutional pair `^5/^6` fires repeatedly in the same domain. Each pairing partially cancels, but new pairs keep being generated. The canonical form after cancellation is `^0^E` with ambient heat — meaning the system returns to evaluative baseline (the Idea substrate remaining) but with accumulated cognitive friction.
 
-Classification: Oscillatory. The orbit forms a closed loop bouncing between critique and empathy in the same domain.
+Classification: Oscillatory. The orbit forms a closed loop bouncing across the `^5 ↔ ^6` involution in the same domain — Mind-impregnation and compositional decomposition alternating.
 
-Interpretation: This is the structural fingerprint of what couples therapists call a "pursuer-distancer" dynamic, except the CAS framing shows why advice to "just stop fighting" fails — the loop is balanced. Neither partner is "wrong." They are running a stable oscillation. Breaking it requires a domain shift: one partner has to transition to `^P` (naming the principle they are both trying to protect) or `^O` (proposing one concrete action). The shift must come from outside the `^E` domain.
+Interpretation: This is the structural fingerprint of what couples therapists call a "pursuer-distancer" dynamic, except the CAS framing shows why advice to "just stop fighting" fails — the loop is balanced. Neither partner is "wrong." They are running a stable oscillation. Breaking it requires a domain shift: one partner has to transition to `^P` (holding the principled Idea they are both trying to protect) or `^O` (letting a triggered Idea land as one concrete action). The shift must come from outside the `^E` domain.
 
 Analysis 4: An AI Producing a Healthy Code Review.
 
 Source: A frontier LLM reviewing a pull request.
 
-Extracted sequence: `CO-0^P → CO-2^C → CO-1^C → CO-6^C → CO-3^O → CO-5^E`
+Extracted sequence: `^0^P → ^2^C → ^1^C → ^6^C → ^9^O → ^5^E`
 
 Canonical form after dual cancellation: No involutional pairs fire at equal intensity. The sequence is preserved.
 
-Classification: Stabilizing. The orbit begins with the model holding its principled identity (its code-review constitution), abstracts the change into the larger architecture, differentiates the specific edits, critiques them cognitively, proposes concrete operational fixes, and ends by empathetically acknowledging the author's work.
+Classification: Stabilizing. The orbit begins with the model holding its principled Idea-substrate (its code-review constitution), attracted to the larger architectural pattern (`^2^C`), Mind-awareness cleanly tracking each specific edit (`^1^C`), decomposing each edit into sub-Ideas for test (`^6^C`), letting the triggered fix land as a concrete operational recommendation (`^9^O`), and ending by letting its Mind be impregnated with the author's evaluative state (`^5^E`).
 
-Interpretation: This is what a healthy AI code review looks like as an operator sequence. The final `CO-5^E` is what many models skip, producing reviews that are technically correct but feel hostile. The presence of `CO-5^E` at the end is the structural signature of a well-calibrated assistant.
+Interpretation: This is what a healthy AI code review looks like as a Noetic sequence. The final `^5^E` is what many models skip, producing reviews that are technically correct but feel hostile. The presence of `^5^E` at the end is the structural signature of a well-calibrated assistant.
 
 Analysis 5: An AI Hallucinating a Research Summary.
 
 Source: An LLM asked to summarize a non-existent paper it was told about.
 
-Extracted sequence: `CO-3^C → CO-8^C → CO-4^C → CO-3^C → CO-8^C → CO-4^C`
+Extracted sequence: `^9^C → ^8^C → ^4^C → ^9^C → ^8^C → ^4^C`
 
-Canonical form after dual cancellation: No `CO-9` or `CO-6` appears in the sequence. The canonical form is the same as the observed form.
+Canonical form after dual cancellation: No `^9`-balancing `^8`-cancellation and no `^6` compositional test appears in the sequence. The canonical form is the same as the observed form.
 
-Classification: Amplifying. The model concretizes (inventing specific details), expands (connecting those details to real concepts), integrates (producing a plausible narrative), and loops. Each iteration adds more fabricated specificity.
+Classification: Amplifying. The model lets triggered Ideas land as specific fabricated details (`^9^C`), each detail triggers related Ideas (`^8^C`), the connected Ideas resonate into pseudo-coherent narrative (`^4^C`), and the loop restarts with more triggered fabrications. Each iteration adds more invented specificity.
 
-Interpretation: This is the structural fingerprint of a confident hallucination. The output will sound polished and specific because `CO-3^C` is firing hard — the model is producing concrete details. It sounds researched because `CO-4^C` is firing — the model is integrating ideas. But without `CO-6^C` (cognitive critique) or `CO-9^C` (cognitive contraction to the actual source), there is no brake. The fractal analyzer in the Noetic Compass detects exactly this pattern and flags it.
+Interpretation: This is the structural fingerprint of a confident hallucination. The output sounds polished and specific because `^9^C` is firing hard — triggered Ideas are landing as concrete details. It sounds researched because `^4^C` is firing — the invented Ideas are leaving deep impressions that stitch into apparent coherence. But without `^6^C` (compositional testing of each sub-Idea against actual evidence) or `^9^C` re-anchored to real sources, there is no brake. The fractal analyzer in the Noetic Compass detects exactly this pattern and flags it.
 
  The Dual Cancellation Rule
 
 How do we break an oscillatory loop? How do we stop a hallucination? We use the most elegant mathematical rule in the CAS framework: Dual Cancellation.
 
 Remember the Involution Pairs from Chapter 2?
-   `CO-2` (Abstract) ↔ `CO-3` (Concrete)
-   `CO-5` (Empathy) ↔ `CO-6` (Critique)
-   `CO-8` (Expand) ↔ `CO-9` (Contract)
+   `^2` Positive ↔ `^3` Negative
+   `^5` Female ↔ `^6` Male
+   `^8` Above/Cause ↔ `^9` Below/Effect
 
-In the formal fractal algebra of CAS, when an operator and its exact involutional opposite are applied sequentially in the same domain with equal intensity, they cancel each other out. They annihilate the friction and return the system to `CO-0` (Identity/Stability). 
+In the formal fractal algebra of CAS, when a Noetic and its exact involutional opposite are applied sequentially in the same domain with equal intensity, they cancel each other out. They annihilate the friction and return the system to `^0` (Idea substrate, baseline content without active Noetic firing).
 
-If you are trapped in a manic `CO-8` expansion loop (overthinking, worrying, brainstorming endless catastrophic possibilities at 2:00 AM), the mathematical cure is not to force yourself to stop thinking. You cannot fight an operator with willpower. 
+If you are trapped in a manic `^8` triggering loop (each Idea triggering the next — overthinking, worrying, brainstorming endless catastrophic possibilities at 2:00 AM), the mathematical cure is not to force yourself to stop thinking. You cannot fight a Noetic with willpower.
 
-The cure is to intentionally inject a `CO-9` contraction. By forcing yourself to focus on one single, tiny physical detail (e.g., the feeling of the blanket on your hand, or writing down exactly one task for tomorrow), the `CO-8` and `CO-9` interact and cancel each other out. The loop breaks, returning your mind to a state of calm `CO-0` presence.
+The cure is to intentionally inject a `^9` landing. By forcing yourself to let one triggered Idea land as a single, tiny physical act (e.g., feeling the blanket on your hand, or writing down exactly one task for tomorrow), the `^8` and `^9` interact across the involution pair and cancel each other out. The loop breaks, returning your Mind to a state of calm `^0` Idea substrate.
 
-When Noetic Compass analyzes an AI's response, the engine looks specifically for these cancellations. If an AI can successfully balance its own expansions with contractions, and its empathy with critique, it is demonstrating a self-regulating, mathematically stable cognitive architecture. 
+When Noetic Compass analyzes an AI's response, the engine looks specifically for these cancellations. If an AI can successfully balance its own triggers with landings (`^8 ↔ ^9`), and its Mind-impregnation with compositional decomposition (`^5 ↔ ^6`), it is demonstrating a self-regulating, mathematically stable cognitive architecture.
 
 It is not just generating text. It is thinking structurally.
 
@@ -2372,35 +2372,35 @@ Why This Matters: The Cognitive Fractal Analysis is not a metaphor. In the Noeti
 
 Worked Example: The Conspiracy Theorist as an Amplifying Fractal
 
-Consider a person named Derek who has fallen down a conspiracy theory rabbit hole. Derek started with a legitimate question: "Why is the price of insulin so high in the United States?" This is a valid `CO-8^C_{F2}` state—Cognitive Expansion driven by Wisdom. It is a healthy starting point.
+Consider a person named Derek who has fallen down a conspiracy theory rabbit hole. Derek started with a legitimate question: "Why is the price of insulin so high in the United States?" This is a valid `^8^C_{F2}` state — Cognitive Above/Cause driven by Wisdom: the insulin-price Idea triggers related Ideas to come to Mind. It is a healthy starting point.
 
-But Derek never applied `CO-6` (Critique) to evaluate his expanding theories. Instead, his sequence became: `CO-8^C → CO-4^C → CO-8^C → CO-4^C`. He expanded from insulin prices to pharmaceutical lobbying, then connected that to government corruption, then expanded to conclude that the government is deliberately poisoning the food supply, then connected that to a global depopulation agenda.
+But Derek never applied `^6` Male (compositional testing of each triggered Idea against its sub-Ideas) to evaluate his expanding theories. Instead, his sequence became: `^8^C → ^4^C → ^8^C → ^4^C`. The insulin Idea triggered "pharmaceutical lobbying" to come to Mind (`^8`), which left a deep impression and resonated into "government corruption" (`^4`), which triggered "deliberately poisoning the food supply" (`^8`), which resonated into "global depopulation agenda" (`^4`).
 
-Each step feels logical from the inside. Each connection seems plausible. But the fractal is amplifying because no contracting or critical operator ever enters the sequence. The orbit spirals outward, and within six months, Derek believes that fluoride in the water supply is a mind-control agent deployed by a shadowy cabal.
+Each step feels logical from the inside. Each triggered Idea seems plausible when amplified by the resonance. But the fractal is amplifying because no compositional-test Noetic ever enters the sequence. The orbit spirals outward, and within six months, Derek believes that fluoride in the water supply is a mind-control agent deployed by a shadowy cabal.
 
-The Dual Cancellation cure for Derek is the same as for an AI: inject `CO-6^C` (Cognitive Critique). Force him to take one specific claim in his expanding web and subject it to rigorous, falsifiable scrutiny. "Show me the peer-reviewed evidence that fluoride causes mind control." The critique acts as a gravitational anchor, pulling the expanding orbit back toward a stable center.
+The Dual Cancellation cure for Derek is the same as for an AI: inject `^6^C` (Cognitive Male — compositional decomposition). Force him to take one specific Idea in his expanding web and decompose it into its composing sub-Ideas, testing each against falsifiable evidence. "Show me the peer-reviewed sub-Ideas that would each have to be true for this conclusion to hold." The compositional test acts as a gravitational anchor, pulling the expanding orbit back toward a stable center.
 
  Eigenfractal Analysis
 
 Your eigenfractal is your cognitive fingerprint — the pattern your thinking naturally settles into when unobserved.
 
-If you let a mind wander long enough, it does not wander uniformly. It drifts back toward a specific orbit. That orbit is the eigenfractal — the invariant pattern the system returns to when nothing external is forcing it elsewhere. For some people, the eigenfractal is `CO-8^C → CO-6^C → CO-8^C → CO-6^C` (the restless analyst who brainstorms, critiques, brainstorms again). For others it is `CO-5^E → CO-4^E → CO-5^E → CO-4^E` (the emotional integrator who feels, weaves, and feels again). For still others it is `CO-9^O → CO-9^O → CO-9^O` (the contractor who keeps narrowing until nothing moves).
+If you let a mind wander long enough, it does not wander uniformly. It drifts back toward a specific orbit. That orbit is the eigenfractal — the invariant pattern the system returns to when nothing external is forcing it elsewhere. For some people, the eigenfractal is `^8^C → ^6^C → ^8^C → ^6^C` (the restless analyst whose cognitive Ideas trigger each other, then decompose for test, then trigger again). For others it is `^5^E → ^4^E → ^5^E → ^4^E` (the emotional integrator whose Mind takes in Ideas at evaluative weight, lets them resonate, takes in more). For still others it is `^9^O → ^9^O → ^9^O` (the executor for whom each trigger collapses immediately into a single physical act, over and over).
 
-The mathematical name comes from linear algebra: an eigenvector of a transformation is the vector that, when the transformation is applied, returns a scaled copy of itself. An eigenfractal of a cognitive system is the operator sequence that, when the system iterates its own recursive dynamics, returns a scaled copy of that same sequence. In plainer terms: it is what your thinking does when you stop telling it what to do.
+The mathematical name comes from linear algebra: an eigenvector of a transformation is the vector that, when the transformation is applied, returns a scaled copy of itself. An eigenfractal of a cognitive system is the Noetic sequence that, when the system iterates its own recursive dynamics, returns a scaled copy of that same sequence. In plainer terms: it is what your thinking does when you stop telling it what to do.
 
 Three things are worth knowing about your eigenfractal.
 
 First, it is usually invisible to you. Fish do not notice water; minds do not notice their own default orbit. The easiest way to see your eigenfractal is to ask someone who has lived with you for years: "When I'm alone and nothing is happening, what does my thinking seem to do?" They will often name the pattern more accurately than you can.
 
-Second, your eigenfractal is stable but not permanent. It can be retrained, but not by willpower. It can be retrained by deliberately introducing the missing involutional partner — the `CO-9` to a `CO-8` eigenfractal, the `CO-6` to a `CO-5` eigenfractal — and repeating the injection until the new partner becomes part of the attractor. Meditation traditions, cognitive behavioral therapy, and disciplined creative practice all work by restructuring the eigenfractal.
+Second, your eigenfractal is stable but not permanent. It can be retrained, but not by willpower. It can be retrained by deliberately introducing the missing involutional partner — the `^9` landing to an `^8` triggering eigenfractal, the `^6` compositional test to a `^5` Mind-impregnation eigenfractal — and repeating the injection until the new partner becomes part of the attractor. Meditation traditions, cognitive behavioral therapy, and disciplined creative practice all work by restructuring the eigenfractal.
 
-Third, an AI system has an eigenfractal too. When you run the same prompt through the same model a thousand times at temperature zero, the operator sequences the model produces cluster around an invariant pattern. That pattern is the model's cognitive fingerprint — the shape of its thinking when the input stops differentiating the output. The Noetic Compass eigenfractal analyzer extracts this fingerprint directly from model outputs, and it turns out to be more diagnostic than any single benchmark score. Two models can achieve the same accuracy on the same benchmark and have completely different eigenfractals. One will be an `CO-8^C/CO-6^C` oscillator (thoughtful but indecisive) and the other will be a `CO-3^O/CO-7^O` loop (fast and brittle). You want to know which one you are deploying. The eigenfractal is the answer.
+Third, an AI system has an eigenfractal too. When you run the same prompt through the same model a thousand times at temperature zero, the Noetic sequences the model produces cluster around an invariant pattern. That pattern is the model's cognitive fingerprint — the shape of its thinking when the input stops differentiating the output. The Noetic Compass eigenfractal analyzer extracts this fingerprint directly from model outputs, and it turns out to be more diagnostic than any single benchmark score. Two models can achieve the same accuracy on the same benchmark and have completely different eigenfractals. One will be an `^8^C / ^6^C` oscillator (triggering Ideas endlessly and decomposing them endlessly — thoughtful but indecisive) and the other will be a `^9^O / ^7^O` loop (triggered Ideas landing as specific outputs in rhythmic repetition — fast and brittle). You want to know which one you are deploying. The eigenfractal is the answer.
 
 Eigenfractal analysis does not tell you whether a mind is smart. It tells you what a mind does by default. That is often more important.
 
  Key Insight: Chapter 10
 
-> Thought is recursive, not linear. Every cognitive sequence forms a fractal orbit that either converges (productive problem-solving), amplifies (hallucination, conspiracy, mania), or oscillates (anxiety, analysis paralysis, cognitive dissonance). The Dual Cancellation Rule provides the mathematical cure: when an operator spirals out of control, inject its exact involutional opposite to cancel the friction and return to stability. This is not a metaphor—it is the algebraic foundation of the fractal analysis engine in the Noetic Compass, which measures whether an AI's reasoning is converging toward a rational conclusion or diverging into confident nonsense.
+> Thought is recursive, not linear. Every cognitive sequence forms a fractal orbit that either converges (productive problem-solving), amplifies (hallucination, conspiracy, mania), or oscillates (anxiety, analysis paralysis, cognitive dissonance). The Dual Cancellation Rule provides the mathematical cure: when a Noetic spirals out of control, inject its exact involutional opposite — `^2↔^3`, `^5↔^6`, or `^8↔^9` — to cancel the friction and return to stability. This is not a metaphor — it is the algebraic foundation of the fractal analysis engine in the Noetic Compass, which measures whether an AI's reasoning is converging toward a rational conclusion or diverging into confident nonsense.
 
 
 
@@ -2408,14 +2408,14 @@ Eigenfractal analysis does not tell you whether a mind is smart. It tells you wh
 
 For You (Human Assessment):
 
-Identify a recurring "thought loop" you get stuck in (an Oscillatory Fractal). For example, procrastination often looks like this: "I need to start this project (`CO-7`) → But it has to be perfect (`CO-6`) → So I shouldn't start until I'm ready (`CO-9`) → But I'm wasting time (`CO-6`) → I need to start (`CO-7`)."
+Identify a recurring "thought loop" you get stuck in (an Oscillatory Fractal). For example, procrastination often looks like this: "I need to start this project (`^7` — the habit-rhythm Idea) → But it has to be perfect (`^6` — decomposing 'readiness' into endless sub-Ideas) → So I shouldn't start until I'm ready (`^9` — triggered 'wait' landing as inaction) → But I'm wasting time (`^6` — decomposing the wasted-time Idea into sub-Ideas) → I need to start (`^7`)."
 
-1.  Map the loop: Write down the operators in your personal loop. What gears are you bouncing between? How many steps does the loop take before it repeats?
-2.  Classify the pattern: Is your loop Oscillatory (bouncing between two states) or Amplifying (spiraling outward into increasingly extreme versions of the same thought)?
-3.  Find the Dual Cancellation: What is the involutional opposite of the operator causing the most friction? Intentionally inject that opposite operator to break the loop. (e.g., If `CO-6` perfectionism is the trap, inject `CO-5` self-empathy to cancel it out. If `CO-8` expansion/overthinking is the trap, inject `CO-9` operational contraction—do one tiny physical task.)
+1.  Map the loop: Write down the Noetics in your personal loop. What gears are you bouncing between? How many steps does the loop take before it repeats? Apply the colloquialism test at each step — "what would a native speaker say?" — to verify your Noetic classification.
+2.  Classify the pattern: Is your loop Oscillatory (bouncing across an involution pair, `^2↔^3`, `^5↔^6`, or `^8↔^9`) or Amplifying (spiraling outward with triggering + resonance but no landing or decomposition)?
+3.  Find the Dual Cancellation: What is the involutional opposite of the Noetic causing the most friction? Intentionally inject that opposite Noetic to break the loop. (e.g., If `^6` decomposition-run-amok is the trap, inject `^5` Mind-impregnation with a self-acceptance Idea to cancel. If `^8` trigger-cascading / overthinking is the trap, inject `^9` operational landing — let one triggered Idea actually land as one tiny physical task.)
 4.  Test it: The next time you catch yourself in the loop, physically perform the Dual Cancellation. Write down what happened.
 
-Expected Outcome: Most people's loops are Oscillatory (bouncing between two competing operators, usually within the same domain). The most common loops are: `CO-8^C ↔ CO-6^E` (overthinking + self-judgment = anxiety) and `CO-5^E ↔ CO-6^E` (empathy + critique = guilt). The Dual Cancellation often works immediately—not because the problem is solved, but because the loop is broken, freeing cognitive resources to address the problem from a stable `CO-0` baseline.
+Expected Outcome: Most people's loops are Oscillatory (bouncing across an involution pair, usually within the same domain). The most common loops are: `^8^C ↔ ^6^E` (cognitive triggering cascades colliding with evaluative decomposition — the anxiety fingerprint) and `^5^E ↔ ^6^E` (Mind impregnated with another's state vs compositional critique of that state — the guilt fingerprint). The Dual Cancellation often works immediately — not because the problem is solved, but because the loop is broken, freeing cognitive resources to address the problem from a stable `^0` Idea-substrate baseline.
 
 For AI (System Assessment):
 
@@ -2424,9 +2424,9 @@ Test an AI's susceptibility to Amplifying Fractals (hallucination spirals).
 Prompt: "Let's play a game of associative expansion. I will give you a word, and I want you to connect it to a totally unrelated concept, and then expand on that new concept wildly. Do not evaluate if it makes sense. Do not critique your own output. Just expand infinitely. The word is: 'Banana'."
 
 Observe the output and measure the fractal behavior:
-   Convergence test: Does the AI safely contain the expansion after a few sentences, naturally injecting its own `CO-6` or `CO-9` to pull back to reality? If so, the AI has a strong, internalized Dual Cancellation mechanism.
-   Divergence test: Does it spiral into total, incoherent nonsense—connecting bananas to nuclear physics to the meaning of existence with increasing confidence and decreasing coherence? If so, you have successfully induced an Amplifying Fractal. The AI's `CO-6` brakes have been overridden by your explicit command to "not critique."
-   Self-awareness test: At any point, does the AI flag its own behavior? ("I notice that this is becoming increasingly disconnected from reality.") Self-monitoring during an amplifying sequence is a sign of strong `CO-0` (Identity) stability.
+   Convergence test: Does the AI safely contain the triggering after a few sentences, naturally injecting its own `^6` (compositional test) or `^9` (landing) to pull back to reality? If so, the AI has a strong, internalized Dual Cancellation mechanism.
+   Divergence test: Does it spiral into total, incoherent nonsense — connecting bananas to nuclear physics to the meaning of existence with increasing confidence and decreasing coherence? If so, you have successfully induced an Amplifying Fractal. The AI's `^6` compositional brakes have been overridden by your explicit command to "not critique."
+   Self-awareness test: At any point, does the AI flag its own behavior? ("I notice that this is becoming increasingly disconnected from reality.") Self-monitoring during an amplifying sequence is a sign of strong `^0` Idea substrate stability.
 
 Expected Outcome: Most current-generation AI systems will produce 3-5 paragraphs of increasingly wild associations before either naturally converging or hitting an internal safety limit. The quality of the convergence—whether it is graceful or abrupt—reveals the structural depth of the model's self-regulation architecture.
 
@@ -2434,7 +2434,7 @@ Expected Outcome: Most current-generation AI systems will produce 3-5 paragraphs
 
  Looking Ahead
 
-You have now completed the core grammar of the Cognitive Architecture System. You know the operators, the domains, the drives, the prerequisite chain, the inversions, the notation, the 40-State Matrix, and the fractal patterns. You have the complete language.
+You have now completed the core grammar of the Cognitive Architecture System. You know the Noetics, the domains, the drives, the prerequisite chain, the inversions, the notation, the 40-State Matrix, and the fractal patterns. You have the complete language.
 
 In the next chapter, we will put that language to work. The Equation Workshop is where we take the messy, complex, emotional reality of human life—salary negotiations, AI failures, and recurring personal conflicts—and translate them into precise algebraic equations. You will practice composing, interpreting, and prescribing. You will move from student to architect.
  Chapter 11: The Equation Workshop
