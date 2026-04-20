@@ -163,9 +163,9 @@ pub fn generate_gap_map(
 
 fn describe_largest_gap(absent_ops: &[u8], absent_doms: &[String], absent_drvs: &[u8]) -> String {
     let op_names = [
-        "Generative Potential", "Directed Attention", "Attraction", "Critical Evaluation",
-        "Encoding Intensity", "Receptive Integration", "Projective Assertion",
-        "Pattern Entrainment", "Causal Reasoning", "Consequential Grounding",
+        "Idea", "Mind", "Positive", "Negative",
+        "Vibration", "Female", "Male",
+        "Rhythm", "Above/Cause", "Below/Effect",
     ];
     let drive_names = ["Unity", "Wisdom", "Vitality", "Connection", "Agency", "Structure", "Purpose"];
 

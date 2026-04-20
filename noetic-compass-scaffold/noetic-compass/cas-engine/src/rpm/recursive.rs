@@ -1,17 +1,20 @@
 //! Recursive RPM Evaluation
 //!
-//! When a node in the D→W→P chain is blocked, specific Cognitive Operator
-//! pairs activate to resolve the blockage:
+//! When a node in the D→W→P chain is blocked, specific Noetics activate
+//! to resolve the blockage:
 //!
-//! - POWER blocked → CO-8/CO-9 (Causal Reasoning / Consequential Grounding)
+//! - POWER blocked → CO-8/CO-9 (Above/Cause / Below/Effect)
 //!   Spawns a CHILD D/W/P chain to acquire the missing resource. RECURSIVE.
 //!
-//! - WISDOM blocked → CO-5 (Receptive Integration) or CO-6 (Projective Assertion)
-//!   CO-5: find an external source that carries the knowledge. RECURSIVE (child chain).
-//!   CO-6: decompose into smaller components, each with its own chain. RECURSIVE (parallel).
+//! - WISDOM blocked → CO-5 (Female) or CO-6 (Male)
+//!   CO-5 Female: find an external source the Mind is impregnated with
+//!   (carries the missing knowledge). RECURSIVE (child chain).
+//!   CO-6 Male: decompose the Idea into sub-Ideas, each with its own chain.
+//!   RECURSIVE (parallel).
 //!
-//! - DESIRE blocked → CO-1/CO-4/CO-7 (Attention / Intensity / Entrainment)
-//!   Exposure loop: observe → intensify → repeat. ITERATIVE, not recursive.
+//! - DESIRE blocked → CO-1/CO-4/CO-7 (Mind / Vibration / Rhythm)
+//!   Exposure loop: awareness → resonance → rhythmic repetition.
+//!   ITERATIVE, not recursive.
 //!
 //! Max recursion depth: 5. Section-retraction holds at every level.
 //! Desire loops do NOT count toward recursion depth.
