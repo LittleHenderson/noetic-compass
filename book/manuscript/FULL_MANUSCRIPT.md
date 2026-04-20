@@ -3302,11 +3302,11 @@ When the F3 Vitality drive is depleted, the cognitive architecture simply loses 
 
 The architecture begins to collapse downward, like a skyscraper losing power floor by floor. 
 
-First, the Principled Domain shuts down. (James compromises his ethics on the marketing campaign because fighting for the truth requires energy he doesn't have). 
-Then, the Cognitive Domain shuts down. (James experiences "brain fog" and cannot solve the complex spreadsheet). 
-Finally, the Evaluative Domain narrows and corrupts. (James loses his capacity for `CO-5` Empathy and becomes highly reactive, snapping at the designer). 
+First, the Principled Domain shuts down. (James compromises his ethics on the marketing campaign because fighting for the truth requires energy he doesn't have.)
+Then, the Cognitive Domain shuts down. (James experiences "brain fog" and cannot solve the complex spreadsheet.)
+Finally, the Evaluative Domain narrows and corrupts. (James loses his capacity for `^5^E` — his Mind can no longer be impregnated with the designer's Idea at evaluative weight, so he reacts to a typo with the force of a personal attack.)
 
-James is left operating entirely in the Operational Domain, surviving on base instinct and momentum (`CO-7^O`), incapable of deep thought, creative synthesis, or principled leadership. James didn't sign off on the misleading marketing campaign because he is a bad person who lacks moral character. He signed off on it because his F3 drive was so depleted that his Principled domain literally lacked the battery power to boot up.
+James is left operating entirely in the Operational Domain, surviving on base instinct and rhythmic repetition (`^7^O` — Operational Rhythm, the same action-pattern cycling on pure biological momentum), incapable of deep thought, creative synthesis, or principled leadership. James didn't sign off on the misleading marketing campaign because he is a bad person who lacks moral character. He signed off on it because his F3 drive was so depleted that his Principled domain literally lacked the battery power to boot up — his `^0^P` Idea-substrate of "I am an ethical person" could not remain active under the wattage constraint.
 
 Willpower is not a mystical character trait. It is a highly expensive cognitive state fueled by physical vitality.
 
@@ -3318,38 +3318,38 @@ Most people fail at building health habits—like diet, exercise, and sleep hygi
 
 But in CAS, we know that behavior is not monolithic. It is a sequence of operators. A habit is a Cognitive Fractal (Chapter 10). 
 
-When you successfully build a lifelong health habit, you are actually creating a Stabilizing Fractal. 
-1.  You expand your vision to the long-term goal (`CO-8`).
-2.  You critically evaluate the plan to find the optimal, realistic path (`CO-6`).
-3.  You contract your focus down to the single, tiny, daily execution (`CO-9`).
-The loop closes, stabilizes, and seamlessly repeats the next day. The friction drops to near-zero.
+When you successfully build a lifelong health habit, you are actually creating a Stabilizing Fractal.
+1.  Ideas trigger related vision-Ideas to come to Mind (`^8` Above/Cause — "what could my life look like?").
+2.  The vision-Idea is decomposed into its composing sub-Ideas for test (`^6` Male — "what specific daily pattern gets me there?").
+3.  A triggered daily-action Idea lands as specific execution (`^9` Below/Effect — "this is what I do at 7 AM").
+The loop closes, stabilizes, and seamlessly repeats the next day. The friction drops to near-zero. Crucially, each successful iteration further composes your `^5` substrate with the health-Idea — you are becoming a healthier person through accumulated experience, not just doing health things.
 
-When you fail at a health goal—for example, yo-yo dieting—you are trapped in an Oscillatory Fractal.
-1.  You feel intense subjective disgust with your health (`CO-6^E` - Evaluative Critique).
-2.  Driven by this negative emotion, you impulsively adopt a massive, highly restrictive diet (`CO-9^O` - Operational Contraction).
-3.  The severe physical restriction triggers a biological panic. Your F3 drive screams that you are starving.
-4.  You break the diet and binge-eat to satisfy the biological panic (`CO-8^O` - Operational Expansion).
-5.  You wake up the next morning and feel intense subjective disgust with yourself (`CO-6^E`). 
+When you fail at a health goal — for example, yo-yo dieting — you are trapped in an Oscillatory Fractal.
+1.  You feel intense visceral self-repulsion (`^3^E` — Evaluative Negative, the mirror-Idea your Mind is adverse to and repelled by).
+2.  Driven by this repulsion, you impulsively adopt a massive, highly restrictive diet (`^3^O` — Operational Negative, a physical repulsion from food-Ideas at the operational level).
+3.  The severe physical restriction triggers a biological panic. Your F3 drive screams that you are starving, forcing food-Ideas to cascade.
+4.  You break the diet and binge-eat (`^9^O` — Operational Below/Effect, the suppressed food-Ideas finally triggered and landing as specific overwhelming intake).
+5.  You wake up the next morning and feel intense self-repulsion again (`^3^E`).
 
-The loop oscillates endlessly: Critique → Restrict → Panic → Binge → Critique. You are burning immense cognitive energy, generating massive internal shame, but your health is actively deteriorating. 
+The loop oscillates endlessly: repulsion → restrict → panic → triggered-landing → repulsion. You are burning immense cognitive energy, generating massive internal shame, but your health is actively deteriorating.
 
-To break the yo-yo diet loop, you must use Dual Cancellation. You must stop oscillating between severe restriction (`CO-9`) and chaotic bingeing (`CO-8`). Instead, you must intentionally inject `CO-4` (Integration). You must integrate a sustainable, moderate way of eating into your actual, normal, daily life, rather than treating your diet as an extreme, isolated, temporary state.
+To break the yo-yo diet loop, you must use Dual Cancellation. You must stop oscillating between severe repulsion (`^3`) and triggered bingeing (`^9`). Instead, you must intentionally inject `^4` Vibration — let the depth of impression of food-Ideas resonate at evaluative weight so neither repulsion nor triggered-landing dominates. You must integrate a sustainable, moderate relationship with food into your actual, normal, daily life — letting food-Ideas leave balanced impressions rather than extreme ones.
 
  The Habit Formation Fractal in Detail
 
-The Habit Fractal is easy to state and notoriously hard to execute. Most habit-formation failures are not failures of willpower; they are failures of sequencing. The fractal must run in a specific order: `CO-3` (Concretization) first, then `CO-7` (Momentum), then `CO-0` (Identity). Skipping stages—or running them in the wrong order—produces the ghost habits that people adopt in January and abandon by February.
+The Habit Fractal is easy to state and notoriously hard to execute. Most habit-formation failures are not failures of willpower; they are failures of sequencing. The fractal must run in a specific order: `^9` (Below/Effect — specific triggered action) first, then `^7` (Rhythm — rhythmic repetition), then `^5` (Female — Mind composed of the habit-Idea). Skipping stages — or running them in the wrong order — produces the ghost habits that people adopt in January and abandon by February.
 
-Stage 1: CO-3 (Concrete Action). A habit begins as a single, embarrassingly small, physically real action. Not a plan. Not a resolution. An action. "I will put my running shoes next to the front door before I go to bed." This is `CO-3^O`—operational concretization. It is not a metaphor; it is a physical object in a physical location. The smaller the action, the higher the probability it will actually run. The mistake people make at this stage is confusing the plan (which lives in `^C`) with the action (which must live in `^O`). A plan is not a habit. Only an action that has been performed is a habit-in-formation.
+Stage 1: `^9` (Triggered Landing). A habit begins as a single, embarrassingly small, physically real triggered action. Not a plan. Not a resolution. A triggered Idea that lands. "I will put my running shoes next to the front door before I go to bed." This is `^9^O` — Operational Below/Effect, the triggered Idea "move these shoes" arriving as a specific physical act. It is not a metaphor; it is a physical object in a physical location. The smaller the triggered landing, the higher the probability it will actually run. The mistake people make at this stage is confusing the plan (which lives in `^C` as triggered cognitive Ideas) with the action (which must land in `^O`). A plan is not a habit. Only a triggered Idea that has landed physically is a habit-in-formation.
 
-Stage 2: CO-7 (Momentum). Once the action has been performed seven to fourteen times, it begins to generate its own kinetic signal. The body remembers. The environment has been cued. Running `CO-7^O` means allowing the momentum of prior repetitions to carry the next repetition—you stop deciding each time, and the action starts happening because it already happened yesterday. This is the stage where most habit trackers and streak counters become useful, because the visible chain of prior executions becomes part of the environmental cue that pulls the next execution forward. The failure mode at this stage is interruption: a single missed day, if not promptly recovered, can collapse the momentum back to Stage 1.
+Stage 2: `^7` (Rhythm). Once the triggered action has landed seven to fourteen times, the rhythm itself begins to entrain the Mind. The body remembers the rate and pattern. The environment has been cued as part of the rhythmic exposure. Running `^7^O` means allowing the rate and pattern of prior exposures to carry the next exposure — you stop deciding each time, and the action happens because the rhythm itself pulls it through. This is the stage where most habit trackers and streak counters become useful, because the visible rhythmic chain becomes part of the environmental cue. The failure mode at this stage is rhythm interruption: a single missed day, if not promptly recovered, can collapse the rhythm back to Stage 1.
 
-Stage 3: CO-0 (Identity Integration). After the action has run consistently for a long enough period—typically ninety days or more for moderate-complexity habits—it ceases to be a thing you do and becomes part of what you are. This is `CO-0^P`—principled identity. The question shifts from "Should I run today?" to "What kind of person am I?" and the answer is "I am someone who runs." At this stage, missing a day generates a mild identity dissonance rather than a willpower battle. The action has descended from the Operational domain, through the Evaluative domain (you now feel something when you skip it), into the Principled domain (you now are the kind of person who does it).
+Stage 3: `^5` Female (Mind Composed of the Habit-Idea). After the action has run consistently for a long enough period — typically ninety days or more for moderate-complexity habits — it ceases to be a thing you do and becomes one of the Ideas your Mind is composed of. This is `^5^P` — your Mind is now impregnated with "I am a runner" as a principled Idea that constitutes who you are. The question shifts from "Should I run today?" to "What kind of person am I?" and the answer surfaces because your Mind is literally composed of the running-Idea now. At this stage, missing a day generates a mild identity dissonance rather than a willpower battle. The habit has ascended from a triggered operational act, through rhythmic exposure, into the accumulated `^5` substrate that now includes the habit-Idea as part of the self.
 
 The full fractal looks like this:
 
-$$\text{Habit} = \text{CO-3}^O \rightarrow \text{CO-7}^O \rightarrow \text{CO-0}^P$$
+$$\text{Habit} = \text{\textasciicircum}9^O \rightarrow \text{\textasciicircum}7^O \rightarrow \text{\textasciicircum}5^P$$
 
-This is a domain ascent. The action starts in the Operational domain as a physical event, gathers momentum in the Operational domain through repetition, and then ascends into the Principled domain as a stabilized identity claim. The ascent is slow and largely invisible until the identity claim crystallizes. Most habit-formation frameworks get the first two stages right but never name the third, which is why so many "habits" remain operational drudgery rather than effortless identity.
+This is a domain ascent driven by `^5` substrate composition. The action starts in the Operational domain as a triggered physical event, gathers rhythm in the Operational domain through repeated exposure, and then ascends into the Principled domain as a new Idea composing the Mind's substrate. The ascent is slow and largely invisible until the substrate recomposition crystallizes. Most habit-formation frameworks get the first two stages right but never name the third — the `^5` substrate rebuild — which is why so many "habits" remain operational drudgery rather than effortless identity.
 
  Why Diets Fail: The Broken RPM
 
@@ -3408,11 +3408,11 @@ Marcus is forty-seven years old and, over eighteen months, transformed his healt
 - Stage 11 (Capable Power): Five months in, Marcus could execute the full health protocol without thinking about it.
 - Stage 12 (Mastery Power): At eighteen months, Marcus was no longer "doing" the protocol; he was the protocol. The identity had crystallized.
 
-$$\text{Marcus}_{\text{final}} = \text{CO-0}^P_{F3} \rightarrow \text{CO-4}^C_{F2} \rightarrow \text{CO-3}^O_{F5}$$
+$$\text{Marcus}_{\text{final}} = \text{\textasciicircum}0^P_{F3} \times \text{\textasciicircum}5^P_{F3} \rightarrow \text{\textasciicircum}4^C_{F2} \rightarrow \text{\textasciicircum}9^O_{F5}$$
 
-The full descent is intact. Notice that the transformation took eighteen months, not six weeks. Structural change runs on the timeline of biology, not on the timeline of enthusiasm.
+The full descent is intact, with the crucial addition of the `^5^P_{F3}` substrate — his Mind is now composed of the health-Ideas accumulated over eighteen months, at the principled level driven by Vitality. Notice that the transformation took eighteen months, not six weeks. Structural change runs on the timeline of biology and `^5` substrate composition, not on the timeline of enthusiasm.
 
- The Momentum Builder Circuit (D/W/P)
+ The Rhythm Builder Circuit (D/W/P)
 
 How do we actually build the F3 drive so that it can power the rest of our lives? We must respect the Prerequisite Chain (Chapter 5): Desire → Wisdom → Power.
 
@@ -3432,7 +3432,7 @@ Only once the Principle is set and the Knowledge is acquired can you execute the
 
 The ultimate goal of health and vitality in the CAS framework is a seamless, frictionless Domain Descent. 
 
-We want to take the highest, most abstract Principle (`CO-0^P` - "I identify as a healthy, vital person") and allow it to descend without friction, without willpower, and without angst, into the Operational Domain (`CO-3^O` - "I am lacing up my running shoes right now"). 
+We want to take the highest, most foundational Idea (`^0^P` — "healthy, vital person" held as the principled Idea-substrate, with the Mind impregnated with this Idea as part of its `^5^P` composition) and allow it to descend without friction, without willpower, and without angst, into the Operational Domain (`^9^O` — "lace up running shoes" triggered as a specific operational landing). 
 
 When your F3 Vitality drive is full and properly structured, it acts as a massive baseline amplifier for every other thing you wish to achieve in life. When you are rested, fed, and physically strong, the Cognitive Domain is sharp. The Evaluative Domain is resilient against the stress of relationships. The Principled Domain is unshakeable in the boardroom. 
 You do not take care of your body merely to look good in a mirror. You take care of your body so that the architecture of your mind does not collapse under the immense weight of your ambitions.
@@ -3441,14 +3441,14 @@ You do not take care of your body merely to look good in a mirror. You take care
 
 When you fail to maintain your vitality, it is often because you are attempting a "Desire-to-Power" jump—trying to use sheer willpower to force a physical change without an intact prerequisite chain. To fix this, you must recurse.
 
-   Desire Blocked (The Resistance Loop): If you know you "should" work out but find yourself physically unable to get off the couch, you are experiencing a Desire block. You cannot reason yourself into energy. Use the Exposure Loop (CO-1/4/7). Do not worry about "working out" yet. Simply focus your attention on the feeling of vitality in others (CO-1), put yourself in a high-energy environment for just ten minutes without the pressure to perform (CO-4), and repeat this exposure (CO-7) until the F3 drive threshold activates. You are priming the pump.
-   Wisdom Blocked (The Knowledge Gap): If you have the drive but your health is still failing, you likely have a map error. You must choose a path. Knowledge Reception (CO-5) means finding a mentor who embodies the health you want and following their mental models. Knowledge Decomposition (CO-6) means breaking your health down into Nutrition, Sleep, and Movement—mastering the "Wisdom" of each sub-component in parallel.
-   Power Blocked (Lack of Resources): If you have the drive and the knowledge but lack the resources—time, a kitchen, a safe place to run—you must trigger a Causal Search (CO-8/9). Scan for the specific causes that could provide the missing resource. This might mean spawning a child chain to wake up 30 minutes earlier (securing Time) or meal-prepping on Sundays (securing Food). Once the resource is secured, it satisfies the Power node of your health chain.
+   Desire Blocked (The Resistance Loop): If you know you "should" work out but find yourself physically unable to get off the couch, you are experiencing a Desire block. You cannot reason yourself into energy. Use the Exposure Loop (`^1` Mind / `^4` Vibration / `^7` Rhythm). Do not worry about "working out" yet. Simply direct your awareness onto the feeling of vitality in others (`^1` Mind), put yourself in a high-energy environment for just ten minutes without the pressure to perform so the vitality-Ideas leave a deep impression on your Mind (`^4` Vibration), and repeat this exposure in a reliable rhythm (`^7` Rhythm) until the F3 drive threshold activates and your `^5` substrate begins to re-compose around vitality-Ideas. You are priming the pump.
+   Wisdom Blocked (The Knowledge Gap): If you have the drive but your health is still failing, you likely have a map error. You must choose a path. `^5` Female (Knowledge Reception) means finding a mentor who embodies the health you want and letting your Mind be impregnated with their mental models and lived patterns. `^6` Male (Knowledge Decomposition) means decomposing "health" into composing sub-Ideas — Nutrition, Sleep, Movement — and mastering each sub-Idea in parallel.
+   Power Blocked (Lack of Resources): If you have the drive and the knowledge but lack the resources — time, a kitchen, a safe place to run — you must trigger an `^8` Above/Cause scan for Ideas that could provide the missing resource, then let the triggered solution Idea land (`^9` Below/Effect). This might mean spawning a child chain to wake up 30 minutes earlier (securing Time) or meal-prepping on Sundays (securing Food). Once the resource is secured, it satisfies the Power node of your health chain.
 
 
 
  Try This: Chapter 14 Exercises
-> F3 Vitality is not one drive among seven—it is the power supply that determines whether the other six can even boot up. When you deplete your biological reserves, the cognitive architecture does not degrade uniformly. It collapses in a strict top-down sequence: the Principled Domain goes dark first (ethics and long-term commitments vanish), then the Cognitive Domain dims (strategic thinking and complex analysis fail), then the Evaluative Domain narrows and corrupts (empathy disappears, reactivity spikes). You are left stranded in the Operational Domain, running on pure momentum and instinct—a state that looks like "toughness" from the outside but is actually structural failure. This is why James signed off on the misleading campaign: his `^P` domain had no battery power. The habit fractal framework reveals that sustainable health is never built through willpower alone. Willpower is an `F3`-dependent resource that depletes by mid-afternoon. Instead, you must build Stabilizing Fractals—small, self-reinforcing loops of `CO-8` (vision), `CO-6` (planning), and `CO-9` (execution) that run on near-zero friction. The body is not a vehicle for the brain. It is the foundation the brain is built upon.
+> F3 Vitality is not one drive among seven — it is the power supply that determines whether the other six can even boot up. When you deplete your biological reserves, the cognitive architecture does not degrade uniformly. It collapses in a strict top-down sequence: the Principled Domain goes dark first (ethics and long-term commitments vanish, the `^0^P` Idea-substrate cannot hold), then the Cognitive Domain dims (strategic thinking and complex analysis fail), then the Evaluative Domain narrows and corrupts (Mind-impregnation with others' Ideas disappears, reactive repulsion spikes). You are left stranded in the Operational Domain, running on rhythmic repetition and instinct (`^7^O`) — a state that looks like "toughness" from the outside but is actually structural failure. This is why James signed off on the misleading campaign: his `^P` domain had no battery power. The habit fractal framework reveals that sustainable health is never built through willpower alone. Willpower is an `F3`-dependent resource that depletes by mid-afternoon. Instead, you must build Stabilizing Fractals — small, self-reinforcing loops of `^8` (vision-triggering), `^6` (planning decomposition), and `^9` (triggered execution landing) that run on near-zero friction, progressively composing your `^5` substrate with the habit-Ideas. The body is not a vehicle for the brain. It is the foundation the brain is built upon.
 
  Lacunarity in Real Life: Health Resistance
 
@@ -3456,7 +3456,7 @@ Most failed health goals demonstrate a profound F3 Vitality lacunarity. The driv
 
  The Vitality Ratio: F5/F3
 
-A critical structural diagnostic for high-performance health is the Vitality Ratio, defined as F5 (Agency) divided by F3 (Vitality) in the Operational domain. When `F5^O / F3^O > 1.0`, the system is cannibalizing its foundation to power its execution. This is the structural signature of burnout. In this state, the mind attempts to maintain high-intensity agency (CO-3, CO-9) while the biological battery (F3) is depleted. The result is an inevitable collapse of the entire architecture. Correcting this requires a recursive intervention: halting the F5 chain and spawning a child chain specifically focused on F3 replenishment. You cannot "power through" a structural deficit in vitality.
+A critical structural diagnostic for high-performance health is the Vitality Ratio, defined as F5 (Agency) divided by F3 (Vitality) in the Operational domain. When `F5^O / F3^O > 1.0`, the system is cannibalizing its foundation to power its execution. This is the structural signature of burnout. In this state, the mind attempts to maintain high-intensity agency (`^9^O` triggered landings + `^3^O` repulsion from rest) while the biological battery (F3) is depleted. The result is an inevitable collapse of the entire architecture. Correcting this requires a recursive intervention: halting the F5 chain and spawning a child chain specifically focused on F3 replenishment. You cannot "power through" a structural deficit in vitality.
 
  The Lacunarity of Disease
 
