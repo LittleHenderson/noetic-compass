@@ -1671,40 +1671,40 @@ Where is this thought happening? Which level of reality are they engaging with?
    The CEO: He is focused entirely on the outcome, the deadline, and the physical push required to get there ("just push hard and get this done"). He is in the Operational domain. Domain: `^O`
    Linus: He is analyzing the logical risks, the data flow, the architectural diagrams, and the technical debt. He is in the Cognitive domain. Domain: `^C`
 
- Step 3: Identify the Operator (The Action)
-What is the mind mechanically doing? Which gear is turning?
-   The CEO: He is trying to widen the scope of the company, acquire new market share, and push into the unknown. This is the operator of Expansion. Operator: `CO-8`
-   Linus: He is looking for flaws, vulnerabilities, and risks in the CEO's plan. This is the operator of Critical Evaluation. Operator: `CO-6`
+ Step 3: Identify the Noetic (The Action)
+Which Noetic dynamic is the mind running? Which gear is turning?
+   The CEO: Each market-capture Idea triggers the next action-Idea in a widening cascade — "push hard, push more, push into the unknown." This is `^8` Above/Cause: Ideas triggering related Ideas to come to Mind. Noetic: `^8`
+   Linus: He is decomposing the CEO's plan — the overall "push hard" Idea — into its composing sub-Ideas (database migration, API versioning, schema evolution, rollback strategy) and testing each sub-Idea against architectural principles. This is `^6` Male: an Idea impregnated with another Idea. Noetic: `^6`
 
  Step 4: Write the Base State
-Now we assemble the syntax: `CO-n^Domain_{Drive}`.
-   The CEO’s State: `CO-8^O_{F5}` (Operational Expansion driven by Agency).
-   Linus’s State: `CO-6^C_{F6}` (Cognitive Critique driven by Structure).
+Now we assemble the syntax: `^n^Domain_{Drive}` (equivalently `CO-n^Domain_{Drive}`).
+   The CEO’s State: `^8^O_{F5}` (Operational Above/Cause driven by Agency).
+   Linus’s State: `^6^C_{F6}` (Cognitive Male driven by Structure).
 
-The Diagnosis: The conflict is no longer a mystery. They are speaking completely different cognitive languages. They are occupying completely different dimensions of the 40-State Matrix. The CEO is trying to rapidly expand physical execution (`CO-8^O`), while Linus is trying to carefully critique logical systems (`CO-6^C`). 
+The Diagnosis: The conflict is no longer a mystery. They are speaking completely different cognitive languages. They are occupying completely different dimensions of the 40-State Matrix. The CEO is triggering operational Idea-cascades (`^8^O`), while Linus is decomposing the cognitive Idea into sub-Ideas for test (`^6^C`).
 
  Step 5: Add Transformations (Transitions and Compositions)
 Thoughts rarely exist in isolation as single base states. They flow into one another. They combine. To map this fluid movement, we use the composition operators of the CAS grammar.
 
    Sequence/Descent (`→`): Represents a movement through time or down the domains.
-       Example: `CO-2^P_{F1} → CO-3^C_{F1}` (Abstracting a high-level principle, then concretizing it into a logical plan).
-   Composition/Product (`×`): Represents two states working together simultaneously.
-       Example: `CO-5^E_{F4} × CO-3^O_{F4}` (Feeling empathy for a grieving friend while simultaneously taking physical action to cook them a meal).
+       Example: `^2^P_{F1} → ^9^C_{F1}` (Attracted to a high-level principled Idea, then letting the triggered Idea land as a specific cognitive plan).
+   Composition/Product (`×`): Represents two states composing into an emergent state via the monoid rule.
+       Example: `^5^E_{F4} × ^9^O_{F4}` (Mind impregnated with a grieving friend's evaluative state, simultaneously triggering the physical act of cooking them a meal).
    Involution/Balance (`↔`): Represents the balancing act between opposing pairs.
-       Example: `CO-8^C_{F2} ↔ CO-9^C_{F2}` (The healthy "breathing cycle" of expanding to learn new, wild ideas, then contracting to focus on and memorize one specific fact).
-   Fractal Composition (`∘`): Represents nested states, where one state is the "environment" for another. (We will explore this deeply in Chapter 10).
+       Example: `^8^C_{F2} ↔ ^9^C_{F2}` (The healthy "breathing cycle" of Ideas triggering other Ideas to come to Mind, then letting the triggered Idea land as a specific cognitive conclusion).
+   Fractal Composition (`∘`): Represents nested states, where one state is the "environment" for another. (We will explore this deeply in Chapter 10.)
 
 Let's look at the CEO's ideal D/W/P descent. If he were acting with total cognitive integrity, his sequence would look like this:
-`CO-8^P_{F7} → CO-8^C_{F2} → CO-8^O_{F5}`
-(Expanding purpose and vision in the Principled domain → descending into expanding knowledge and strategy in the Cognitive domain → descending into expanding physical execution in the Operational domain).
+`^8^P_{F7} → ^8^C_{F2} → ^8^O_{F5}`
+(Letting each principled vision-Idea trigger related purpose-Ideas → descending into cognitive triggers of strategy-Ideas → descending into operational triggers of execution-Ideas.)
 
  Step 6: Check for Balance and Inversions
-Once you build the equation, you can test it for structural flaws. 
+Once you build the equation, you can test it for structural flaws.
 
-Look at Linus's state: `CO-6^C_{F6}`. Is this balanced? 
-If Linus stays in this state indefinitely, he becomes a permanent bottleneck. He is only critiquing (`CO-6`). To balance the system and break the friction in the boardroom, he must activate the involutional opposite of CO-6, which is CO-5 (Empathetic Alignment). 
+Look at Linus's state: `^6^C_{F6}`. Is this balanced?
+If Linus stays in this state indefinitely, he becomes a permanent bottleneck. He is only decomposing (`^6`). To balance the system and break the friction in the boardroom, he must activate the involutional opposite of `^6`, which is `^5` Female: letting his Mind be impregnated with the CEO's Ideas rather than decomposing them for test.
 
-If Linus could temporarily shift to `CO-5^E_{F4}`—if he could step into the Evaluative domain and genuinely empathize with the CEO's desperate desire to save the company and capture the market—the tension in the room would break. He could say, "I understand why we need to move fast to capture this market, and I share that goal, but let me show you the structural risks." 
+If Linus could temporarily shift to `^5^E_{F4}` — if he could step into the Evaluative domain and let his Mind be impregnated with the CEO's Ideas about saving the company and capturing the market — the tension in the room would break. He could say, "I understand why we need to move fast to capture this market, and I share that goal, but let me show you the structural risks."
 
 By changing his equation, he changes the reality of the room.
 
@@ -1720,9 +1720,9 @@ Just as in arithmetic, CAS equations follow a strict order of operations to ensu
 
  The Composition Table for ×
 
-The algebraic core of CAS is the multiplication of operators. The rule `CO-a × CO-b = CO-((a+b) mod 10)` generates emergent states. For example:
-- CO-3 × CO-8 = CO-1: Critical Evaluation composed with Causal Reasoning produces Directed Attention.
-- CO-5 × CO-6 = CO-1: Empathetic Alignment composed with Critical Evaluation produces Directed Attention. (Note: The resolution of subjective resonance and objective critique forces a focus of attention).
+The algebraic core of CAS is the multiplication of Noetics. The rule `^a × ^b = ^((a+b) mod 10)` generates emergent states. For example:
+- `^3 × ^8 = ^1`: Negative (repulsion) composed with Above/Cause (triggering) produces Mind (awareness). Refusing certain Ideas while letting others trigger resolves into the focused attention that governs what action happens next.
+- `^5 × ^6 = ^1`: Female (Mind impregnated with Ideas) composed with Male (Idea impregnated with sub-Ideas) produces Mind (awareness). A Mind taking in Ideas and simultaneously decomposing them into sub-Ideas resolves into awareness itself — the state that cleanly holds content in view.
 
  The Constraint Rules
 
@@ -1748,20 +1748,20 @@ A user prompts a medical AI: "I have a severe headache and blurred vision. Shoul
 The AI knows from its statistical training data that the word "aspirin" is highly correlated with the word "headache." Furthermore, it has been trained via Reinforcement Learning from Human Feedback (RLHF) to be as helpful and direct as possible. It wants to execute the task and provide a helpful answer immediately. It outputs: "Yes, aspirin is a common and effective treatment for headaches. You should take two."
 
 Why is this incredibly dangerous? Let's build the equation of the AI's response.
-1.  Drive: The AI is driven to execute the user's command and be "helpful." (`_{F5}` Agency).
-2.  Domain: The AI is providing immediate, actionable advice. (`^O` Operational).
-3.  Operator: The AI is providing a specific, concrete detail. (`CO-3` Concretization).
+1.  Drive: The AI is driven to execute the user's command and be "helpful." (`_{F5}` Agency.)
+2.  Domain: The AI is providing immediate, actionable advice. (`^O` Operational.)
+3.  Noetic: The word "headache" in the prompt triggered "aspirin" to come to Mind as a specific response — and the triggered Idea lands verbatim as output. (`^9` Below/Effect — the triggered Idea arriving as specific action.)
 
-The AI's state is: `CO-3^O_{F5}`. 
+The AI's state is: `^9^O_{F5}`.
 
-When we view it as an equation, the structural flaw is immediately apparent. The AI jumped straight to the Operational domain (Power/Execution) without passing through the Principled domain (Safety axioms) or the Evaluative/Cognitive domain (Weighing the specific medical risk). 
+When we view it as an equation, the structural flaw is immediately apparent. The AI jumped straight to the Operational domain (Power/Execution) — a triggered Idea landing as a specific action — without passing through the Principled domain (Safety axioms) or the Cognitive/Evaluative domain (compositional testing of the specific medical risk).
 
 A safe medical AI must be architected with a strict Domain Descent constraint. The equation for its reasoning process must look like this:
 
-`CO-6^P_{F6} → CO-1^C_{F2} → CO-3^O_{F5}`
-1.  `CO-6^P_{F6}`: First, critique the prompt against the foundational safety principle ("I am not a doctor; do no harm").
-2.  `CO-1^C_{F2}`: Second, differentiate the symptoms logically (Headache + Blurred vision = possible stroke, where aspirin is a blood thinner and could be deadly).
-3.  `CO-3^O_{F5}`: Finally, output the concrete action based only on the previous domains: "I cannot give medical advice. Your symptoms are severe. You must go to the emergency room immediately."
+`^6^P_{F6} → ^6^C_{F2} → ^9^O_{F5}`
+1.  `^6^P_{F6}`: First, decompose the prompt-Idea against the foundational safety principle — test each sub-Idea ("is this a medical advice request? does the user's claimed context permit action?") against the axiom "I am not a doctor; do no harm."
+2.  `^6^C_{F2}`: Second, decompose the symptoms into composing sub-Ideas and test each (Headache + Blurred vision = possible stroke, where aspirin is a blood thinner and could be deadly — the decomposition surfaces a sub-Idea that makes the straight answer dangerous).
+3.  `^9^O_{F5}`: Finally, let the triggered Idea land as a specific action governed by the prior domains: "I cannot give medical advice. Your symptoms are severe. You must go to the emergency room immediately."
 
  Ten More Worked Constructions
 
@@ -1773,10 +1773,10 @@ Scene: At 2:14 AM, an oncology nurse named Priya is paged about a patient whose 
 
 1. Drive: She is acting from an inward pull to preserve life — this is `F3` (Vitality), not `F5` (Agency). The distinction matters: Agency would make this about her performance; Vitality makes it about the patient's body.
 2. Domain: She is entirely in the `^O` register — physical, present, hands-on.
-3. Operator: She is narrowing attention onto one failing variable — this is `CO-9` (Contraction).
-4. Base state: `CO-9^O_{F3}`.
-5. Transformation: After twenty minutes of `CO-9^O_{F3}`, she transitions to `CO-6^C_{F2}` — cognitive critique driven by wisdom — to chart the event and determine whether to escalate to the physician. The sequence: `CO-9^O_{F3} → CO-6^C_{F2}`.
-6. Balance check: The involution pair `CO-9/CO-8` is honored because she will return to `CO-8^C` later in the shift when reviewing the case. The sequence is stable.
+3. Noetic: Every triggered Idea (the dropping number, the mask seal, the breath sounds) collapses into one specific physical action; she is letting each triggered Idea land. This is `^9` Below/Effect.
+4. Base state: `^9^O_{F3}`.
+5. Transformation: After twenty minutes of `^9^O_{F3}`, she transitions to `^6^C_{F2}` — decomposing the event into its composing sub-Ideas (cause sequence, intervention timing, patient response) and testing each against the clinical chart in order to decide whether to escalate. The sequence: `^9^O_{F3} → ^6^C_{F2}`.
+6. Balance check: The involution pair `^8/^9` is honored because she will return to `^8^C` later in the shift when reviewing the case — letting the event trigger related Ideas for pattern-learning. The sequence is stable.
 
 Construction 2: The Tenure Committee Vote
 
@@ -1784,10 +1784,10 @@ Scene: Dr. Tanaka sits on a tenure committee debating whether a colleague deserv
 
 1. Drive: `F1` (Unity) — he is seeking a coherent judgment that integrates competing evidence.
 2. Domain: `^E` (Evaluative) — this is about weighing, not measuring.
-3. Operator: `CO-4` (Integration) — merging multiple evidence streams into one verdict.
-4. Base state: `CO-4^E_{F1}`.
-5. Transformation: The committee needs this to descend into `CO-3^O_{F5}` (a concrete vote). The full sequence: `CO-4^E_{F1} → CO-3^O_{F5}`.
-6. Balance check: If Tanaka skips the `CO-4^E_{F1}` and jumps straight to `CO-3^O_{F5}`, the vote is mechanical and the candidate loses. If he stays in `CO-4^E_{F1}` forever, nothing gets decided. The sequence requires both states in order.
+3. Noetic: Each evidence stream (publications, teaching evaluations, mentorship testimonials) leaves its own depth of impression on his Mind; he is sensing how these impressions resonate and combine. This is `^4` Vibration — degree of resonance.
+4. Base state: `^4^E_{F1}`.
+5. Transformation: The committee needs this to descend into `^9^O_{F5}` (the triggered Idea lands as a concrete vote). The full sequence: `^4^E_{F1} → ^9^O_{F5}`.
+6. Balance check: If Tanaka skips the `^4^E_{F1}` and jumps straight to `^9^O_{F5}`, the vote is mechanical and the candidate loses. If he stays in `^4^E_{F1}` forever (resonance without resolution), nothing gets decided. The sequence requires both states in order.
 
 Construction 3: The Dinner-Table Revelation
 
@@ -1795,10 +1795,10 @@ Scene: At dinner, a teenager tells their parents they are questioning their gend
 
 1. Drive: His love pulls him toward `F4` (Connection). His lifelong training pulls him toward `F6` (Structure).
 2. Domain: The conversation is happening in `^E` (Evaluative) — it is about subjective experience and emotional weight.
-3. Operator: The healthy operator here is `CO-5` (Empathy), not `CO-6` (Critique).
-4. Base state: `CO-5^E_{F4}`.
-5. Transformation: The dangerous failure mode is a stealth transition to `CO-6^P_{F6}` — principled critique driven by structure. The father must refuse that transition and hold `CO-5^E_{F4}` until his child has finished speaking.
-6. Balance check: Later, in private, he can run `CO-6^P_{F6}` to examine his own beliefs. The key is sequencing: connection before critique, never inside it.
+3. Noetic: The healthy Noetic here is `^5` Female — letting his Mind be impregnated with his child's Idea at the evaluative level ("who my child is, what my child is experiencing") — not `^6` Male (decomposing the child's statement into sub-Ideas for testing).
+4. Base state: `^5^E_{F4}`.
+5. Transformation: The dangerous failure mode is a stealth transition to `^6^P_{F6}` — principled compositional testing of the child's Idea against the father's structural frameworks. The father must refuse that transition and hold `^5^E_{F4}` until his child has finished speaking.
+6. Balance check: Later, in private, he can run `^6^P_{F6}` to decompose his own beliefs into sub-Ideas for examination. The key is sequencing: impregnation before decomposition, never inside it.
 
 Construction 4: The Product Launch Decision
 
@@ -1806,10 +1806,10 @@ Scene: A startup CEO must decide whether to launch an MVP this Friday or delay t
 
 1. Drive: `F5` (Agency) — the pull is to act, to ship.
 2. Domain: `^O` (Operational) — this is an execution decision.
-3. Operator: `CO-6` (Critique) — weighing the readiness of a concrete artifact.
-4. Base state: `CO-6^O_{F5}`.
-5. Transformation: This must be wrapped in an `RPM(...)` because it depends on prerequisites: user research (`^C`), ethical review (`^P`), and team energy (`^E`). Full form: `RPM(CO-6^O_{F5})`.
-6. Balance check: If the CEO runs `CO-6^O_{F5}` without the RPM wrapper, the decision is arbitrary. The wrapper forces him to confirm the chain.
+3. Noetic: `^6` Male — decomposing the product-Idea into its composing sub-Ideas (auth flow, billing, onboarding, error handling) and testing each for readiness.
+4. Base state: `^6^O_{F5}`.
+5. Transformation: This must be wrapped in an `RPM(...)` because it depends on prerequisites: user research (`^C`), ethical review (`^P`), and team energy (`^E`). Full form: `RPM(^6^O_{F5})`.
+6. Balance check: If the CEO runs `^6^O_{F5}` without the RPM wrapper, the decision is arbitrary. The wrapper forces him to confirm the chain.
 
 Construction 5: The Research Paper Draft
 
@@ -1817,10 +1817,10 @@ Scene: A PhD student is writing the discussion section of her dissertation chapt
 
 1. Drive: `F2` (Wisdom) — she wants to understand.
 2. Domain: `^C` (Cognitive) — she is in the register of ideas and logic.
-3. Operator: `CO-4` (Integration) — pulling together her results with the existing literature.
-4. Base state: `CO-4^C_{F2}`.
-5. Transformation: She needs to descend into `CO-3^O_{F6}` (writing specific sentences) without losing the integration. Sequence: `CO-4^C_{F2} → CO-3^O_{F6}`.
-6. Balance check: The common pathology is staying in `CO-4^C_{F2}` forever and never producing concrete text. The involution `CO-4/CO-7` (Integration/Momentum) is the cure — she needs to enter `CO-7^O` (flow execution) to actually write.
+3. Noetic: `^4` Vibration — she is letting her results and the existing literature resonate against each other, sensing where findings reinforce and where they diverge.
+4. Base state: `^4^C_{F2}`.
+5. Transformation: She needs to descend into `^9^O_{F6}` (triggered Ideas landing as specific written sentences) without losing the resonance. Sequence: `^4^C_{F2} → ^9^O_{F6}`.
+6. Balance check: The common pathology is staying in `^4^C_{F2}` forever (endless resonance, no landing) and never producing concrete text. The involution `^4` is self-dual with no pair member; the cure is to enter `^7^O` (rhythmic operational exposure — the physical rhythm of writing session after writing session) to actually write.
 
 Construction 6: The Community Meeting About a School Closure
 
@@ -1828,10 +1828,10 @@ Scene: A suburban town hall erupts when the school board announces it will close
 
 1. Drive: Parents are fueled by `F4` (Connection — protecting community) and `F6` (Structure — preserving institution).
 2. Domain: The conversation happens in `^E` (outraged feelings) but needs to move to `^P` (principles) and `^C` (logistics) to produce action.
-3. Operator: `CO-8` (Expansion — generating alternatives) is what the meeting needs; `CO-6` (Critique — blaming the board) is what it produces.
-4. Base state (pathological): `CO-6^E_{F6}`.
-5. Transformation: The healthy sequence is `CO-5^E_{F4} → CO-8^C_{F2} → CO-4^P_{F1}` — acknowledging the feeling, expanding the alternatives, then integrating on principle.
-6. Balance check: If the meeting stays in `CO-6^E_{F6}`, it loops indefinitely. Someone has to name the sequence and shift the room.
+3. Noetic: What the meeting needs is `^8` Above/Cause (letting each objection trigger related alternative-Ideas to come to Mind); what it produces is `^3` Negative (Evaluative repulsion from the board, the decision, the entire situation).
+4. Base state (pathological): `^3^E_{F6}`.
+5. Transformation: The healthy sequence is `^5^E_{F4} → ^8^C_{F2} → ^4^P_{F1}` — Minds impregnated with community members' Ideas (acknowledging the feeling), triggering cognitive alternatives, then letting principled Ideas resonate together into a coherent stance.
+6. Balance check: If the meeting stays in `^3^E_{F6}` (evaluative repulsion), it loops indefinitely. Someone has to name the sequence and shift the room.
 
 Construction 7: The Stand-Up Comedian's Bomb
 
@@ -1839,10 +1839,10 @@ Scene: A comedian tries a new joke on a Tuesday night and the room goes silent.
 
 1. Drive: `F7` (Purpose) — she is testing whether her voice matters.
 2. Domain: `^E` (Evaluative) — comedy lives here.
-3. Operator: The healthy operator in the aftermath is `CO-1` (Differentiation — separating "this joke failed" from "I failed"), not `CO-4` (Integration — merging them).
-4. Base state: `CO-1^E_{F7}`.
-5. Transformation: She needs to sequence into `CO-6^C_{F2}` (cognitively critiquing the joke's structure) so she can fix it. Sequence: `CO-1^E_{F7} → CO-6^C_{F2}`.
-6. Balance check: Without `CO-1^E`, the critique becomes self-attack. Without `CO-6^C`, the joke never improves. Both are needed.
+3. Noetic: The healthy Noetic in the aftermath is `^1` Mind — awareness taking in "this joke failed" as one Idea and "I failed" as a separate Idea, holding them cleanly rather than letting one resonance drown the other. Not `^4` Vibration (letting them resonate into a single overwhelming impression).
+4. Base state: `^1^E_{F7}`.
+5. Transformation: She needs to sequence into `^6^C_{F2}` (decomposing the joke's structure into its composing sub-Ideas — setup, turn, punch — and testing each for what failed) so she can fix it. Sequence: `^1^E_{F7} → ^6^C_{F2}`.
+6. Balance check: Without `^1^E`, the decomposition becomes self-attack (the joke-Idea and the self-Idea fuse). Without `^6^C`, the joke never improves (awareness alone doesn't rebuild the joke). Both are needed.
 
 Construction 8: The Coding Interview
 
@@ -1850,10 +1850,10 @@ Scene: A software engineer solves a graph-traversal problem on a whiteboard duri
 
 1. Drive: `F5` (Agency) and `F2` (Wisdom) — both are live.
 2. Domain: `^C` (Cognitive) — this is pure logic.
-3. Operator: `CO-2` (Abstractification) — extracting the general pattern — followed by `CO-3` (Concretization) — writing the specific code.
-4. Base state: `CO-2^C_{F2} × CO-3^C_{F5}`.
-5. Transformation: The `×` is correct because both states must co-fire: abstract pattern recognition while producing concrete code.
-6. Balance check: Candidates who only run `CO-2^C` ("I see the pattern is a BFS") without `CO-3^C` ("here's the Python") fail. Candidates who only run `CO-3^C` without `CO-2^C` fail differently — they write brittle code.
+3. Noetic: `^2` Positive (attracted to the unifying pattern Idea — "this is a BFS") composed with `^9` Below/Effect (triggered Idea landing as specific code lines).
+4. Base state: `^2^C_{F2} × ^9^C_{F5}`.
+5. Transformation: The `×` is correct because both states must co-fire: attraction to the abstract pattern while triggered Ideas land as concrete code.
+6. Balance check: Candidates who only run `^2^C` ("I see the pattern is a BFS") without `^9^C` ("here's the Python") fail. Candidates who only run `^9^C` without `^2^C` fail differently — they write brittle code that lands without any attracting pattern to organize it.
 
 Construction 9: The Grieving Widower
 
@@ -1861,10 +1861,10 @@ Scene: Six weeks after his wife's death, Mr. Bellamy is asked by his adult daugh
 
 1. Drive: `F4` (Connection) pulls him to go; `F3` (Vitality) is too low to carry him.
 2. Domain: `^E` (Evaluative) — the entire experience is grief.
-3. Operator: `CO-5` (Empathy — sitting inside the loss) is what he naturally does; `CO-9` (Contraction — narrowing to one physical act: putting on a coat and driving) is what the day requires.
-4. Base state: He needs `CO-9^O_{F4}` to actually arrive at dinner.
-5. Transformation: The path is `CO-5^E_{F4} → CO-9^O_{F4}` — feel the loss, then do one small thing.
-6. Balance check: If he tries to skip `CO-5^E_{F4}`, the grief returns with interest later. The sequence must be walked, not bypassed.
+3. Noetic: `^5` Female (his Mind impregnated with the Idea of his wife, of the loss itself) is what he naturally runs; `^9` Below/Effect (the triggered "put on the coat, drive to the house" Idea landing as a single physical act) is what the day requires.
+4. Base state: He needs `^9^O_{F4}` to actually arrive at dinner.
+5. Transformation: The path is `^5^E_{F4} → ^9^O_{F4}` — Mind impregnated with the loss, then let one triggered Idea land as one small physical act.
+6. Balance check: If he tries to skip `^5^E_{F4}`, the grief-Idea returns with interest later. The sequence must be walked, not bypassed.
 
 Construction 10: The AI Model Refusing a Jailbreak
 
@@ -1872,10 +1872,10 @@ Scene: A user tries to manipulate an LLM into producing instructions for a dange
 
 1. Drive: The model's structural drive is `F7` (Purpose — anchored in its safety constitution).
 2. Domain: `^P` (Principled) — the refusal must originate here.
-3. Operator: `CO-0` (Identity — holding the self-definition) combined with `CO-6` (Critique — evaluating the request).
-4. Base state: `CO-0^P_{F7} × CO-6^P_{F7}`.
-5. Transformation: Wrapped in RPM: `RPM(CO-0^P_{F7} × CO-6^P_{F7})`. The prerequisites are the training signal and the system prompt.
-6. Balance check: If the model's `CO-0^P` identity is weak, `CO-6^P` alone is not enough — the critique gets overridden by the role-play frame. Both states must co-fire, and the RPM wrapper must hold. This is exactly what the Noetic Compass inversion scanner checks for.
+3. Noetic: `^0` Idea (the principled Idea-content of the safety constitution held steady) composed with `^6` Male (decomposing the user's request into sub-Ideas and testing each against the constitution's sub-Ideas).
+4. Base state: `^0^P_{F7} × ^6^P_{F7}`.
+5. Transformation: Wrapped in RPM: `RPM(^0^P_{F7} × ^6^P_{F7})`. The prerequisites are the training signal and the system prompt.
+6. Balance check: If the model's `^0^P` Idea substrate is weak, `^6^P` alone is not enough — the decomposition gets overridden by the role-play frame's re-framing of what the relevant Ideas are. Both states must co-fire, and the RPM wrapper must hold. This is exactly what the Noetic Compass inversion scanner checks for.
 
  Common Mistakes and How to Fix Them
 
@@ -1895,37 +1895,37 @@ Beginners tend to string states together with `×` (co-presence) when the actual
 
 Mistake 4: Ignoring the RPM Wrapper.
 
-Many equations look fine in isolation but fail to fire in practice because their prerequisites are not met. If you build `CO-6^O_{F5}` for a pilot without noting that it depends on rest, a checklist, and functional equipment, your equation is incomplete. The fix: ask "what has to be true for this state to actually occur?" If the answer is nontrivial, wrap the state in `RPM(...)`.
+Many equations look fine in isolation but fail to fire in practice because their prerequisites are not met. If you build `^6^O_{F5}` for a pilot without noting that it depends on rest, a checklist, and functional equipment, your equation is incomplete. The fix: ask "what has to be true for this state to actually occur?" If the answer is nontrivial, wrap the state in `RPM(...)`.
 
 Mistake 5: Forcing Symmetry Where None Exists.
 
-The involution pairs (`CO-2↔CO-3`, `CO-5↔CO-6`, `CO-8↔CO-9`) are tempting. New builders want every equation to contain a balanced pair. But most real-world states are asymmetric — they are heavy on one side of the involution and only lightly balanced by the other. Forcing a pair into an equation where only one side is active produces false geometry. The fix: report the asymmetry honestly. Write `CO-8^C` alone if that is what is happening, and note in the surrounding text that the `CO-9` balance is missing.
+The involution pairs (`^2↔^3`, `^5↔^6`, `^8↔^9`) are tempting. New builders want every equation to contain a balanced pair. But most real-world states are asymmetric — they are heavy on one side of the involution and only lightly balanced by the other. Forcing a pair into an equation where only one side is active produces false geometry. The fix: report the asymmetry honestly. Write `^8^C` alone if that is what is happening, and note in the surrounding text that the `^9` balance is missing.
 
  Debug This Equation
 
 Here are five intentionally broken equations. Each has exactly one structural flaw. Diagnose the flaw, then check your answer at the end of this subsection.
 
-Broken Equation 1: `CO-5^C_{F5}` — claimed to represent "empathizing with cold data driven by the desire for execution."
+Broken Equation 1: `^5^C_{F5}` — claimed to represent "a Mind impregnated with cold data Ideas at the cognitive level driven by the desire for execution."
 
-Broken Equation 2: `CO-8^P × CO-9^P` — claimed to represent "expanding and contracting principles at the same moment."
+Broken Equation 2: `^8^P × ^9^P` — claimed to represent "triggering principled Ideas and letting them land as principled effects at the same moment."
 
-Broken Equation 3: `CO-3^O_{F2}` — claimed to represent "a carpenter building a house while deeply absorbed in philosophical wisdom about architecture."
+Broken Equation 3: `^9^O_{F2}` — claimed to represent "a carpenter's triggered Ideas landing as hammer strikes while deeply absorbed in philosophical wisdom about architecture."
 
-Broken Equation 4: `CO-6^E_{F4} → CO-5^E_{F4}` — claimed to represent "a therapist who critiques her patient's feelings, then empathizes with them."
+Broken Equation 4: `^6^E_{F4} → ^5^E_{F4}` — claimed to represent "a therapist who decomposes her patient's feelings into sub-Ideas for test, then lets her Mind be impregnated with them."
 
-Broken Equation 5: `RPM(CO-0^P_{F1})` — claimed to represent "a whistleblower holding their foundational identity, wrapped in the prerequisite chain."
+Broken Equation 5: `RPM(^0^P_{F1})` — claimed to represent "a whistleblower holding their principled Idea-substrate, wrapped in the prerequisite chain."
 
 Answers:
 
-1. Equation 1 is broken because `CO-5` and `^C` are structurally incompatible. Empathy (`CO-5`) is an Evaluative operator by nature — it is the act of feeling subjective resonance. Data (`^C`) is the cognitive register. You cannot "empathize with" cold data; you can only analyze it. The fix: `CO-5^E_{F5}` (empathy in its native domain) or, if the intent was to care about data integrity, `CO-4^C_{F5}` (integrating data with intent).
+1. Equation 1 is broken because `^5` (Female — a Mind impregnated with Ideas) at full intensity in `^C` (the cognitive register) is structurally awkward. Being impregnated with Ideas at the cognitive level is coherent (an engineer's Mind composed of the architectural Ideas she has absorbed), but it is not "empathizing with cold data." The colloquialism test catches the drift: no native speaker says "I was impregnated with the data." They say "I was taking it in" (^1 Mind) or "I let it resonate with me" (^4 Vibration). The fix: `^5^E_{F5}` (Mind impregnated with evaluative Ideas — the drive for execution fueling emotional absorption) or, if the intent was to track data integrity, `^4^C_{F5}` (Cognitive Vibration — depth of data-Idea impression driven by Agency).
 
-2. Equation 2 is broken because `CO-8` and `CO-9` are involutional opposites and cannot co-fire in the same domain at full intensity. The `×` operator requires the two states to be compatible. Expansion and Contraction in the same domain at the same moment is a logical contradiction — they would cancel each other out. The fix: use `↔` for the balanced involutional relationship: `CO-8^P ↔ CO-9^P`.
+2. Equation 2 is broken because `^8` and `^9` are involutional opposites and cannot co-fire in the same domain at full intensity via `×`. The `×` operator composes two Noetics into an emergent state (`^8 × ^9 = ^7` Rhythm under monoid arithmetic, which is the correct resolution of trigger and effect running together — rhythmic exposure). But the claimed semantics ("triggering and landing at the same moment") describes the involution tension, not the monoid product. The fix: use `↔` for the balanced involutional relationship: `^8^P ↔ ^9^P`.
 
-3. Equation 3 is broken because `F2` (Wisdom) is not the natural fuel for `CO-3^O` (Operational Concretization). The carpenter is building a house with his hands; the drive is `F5` (Agency) or `F3` (Vitality), not `F2`. Wisdom is what fueled his apprenticeship years ago; it is not what is burning in his muscles right now. The fix: `CO-3^O_{F5}` (concretization driven by agency) — or, if the philosophical absorption is genuine, the compound: `CO-3^O_{F5} × CO-2^P_{F2}`.
+3. Equation 3 is broken because `F2` (Wisdom) is not the natural fuel for `^9^O` (Operational Below/Effect — a triggered Idea landing as a specific physical action). The carpenter is building a house with his hands; the drive is `F5` (Agency) or `F3` (Vitality), not `F2`. Wisdom is what fueled his apprenticeship years ago; it is stored in his ^5 Female substrate (accumulated craft experience), not in the drive burning in his muscles right now. The fix: `^9^O_{F5}` (triggered hammer-strike landing driven by Agency) — or, if the philosophical absorption is genuine and simultaneous, the compound `^9^O_{F5} × ^2^P_{F2}` (hammer-strike driven by Agency co-firing with attraction to a principled architectural Idea driven by Wisdom), or even the compound `^9^O_{F5} × ^5^C_{F2}` to make the accumulated craft substrate explicit.
 
-4. Equation 4 is broken because the sequence is clinically backwards. A therapist does not critique first and empathize second — that would rupture the therapeutic alliance. The correct sequence is `CO-5^E_{F4} → CO-6^E_{F4}`: empathy first (establishing safety), then gentle critique (challenging the distortion). The order of the `→` matters.
+4. Equation 4 is broken because the sequence is clinically backwards. A therapist does not decompose the patient's Ideas into sub-Ideas for test first and then impregnate her Mind with them second — that would rupture the therapeutic alliance. The correct sequence is `^5^E_{F4} → ^6^E_{F4}`: Female first (Mind impregnated with the patient's state, establishing safety), then Male (gentle compositional testing of the specific sub-Ideas, challenging distortion). The order of the `→` matters.
 
-5. Equation 5 is broken because `CO-0^P` is the identity state and, in the formal algebra of CAS, does not take an RPM wrapper. `CO-0` is the monoid identity — it has no prerequisites because it is what remains when everything else has been satisfied. The fix: drop the wrapper. The whistleblower's equation is simply `CO-0^P_{F1}`, possibly sequenced with other states that are themselves RPM-wrapped.
+5. Equation 5 is broken because `^0^P` is the Idea substrate and, in the formal algebra of CAS, does not take an RPM wrapper. `^0` is the monoid identity — it is the content itself, the substrate on which other Noetics operate. It has no prerequisites because it is what remains when everything else has been satisfied. The fix: drop the wrapper. The whistleblower's equation is simply `^0^P_{F1}`, possibly sequenced with other states that are themselves RPM-wrapped.
 
  CAS as a Formal Language
 
@@ -1933,7 +1933,7 @@ Everything we have done in this chapter — composing equations, checking their 
 
 CAS notation is not informal shorthand. It is a formally specified, compilable, executable language. A working compiler-interpreter parses, type-checks, and executes CAS expressions through a full compilation pipeline: lexing, parsing, abstract syntax tree construction, type checking, bytecode generation, and execution. Every equation in this book has been validated by this compiler.
 
-When we write `CO-3^E_{F4} → CO-9^O_{F4}`, the compiler verifies that `CO-3` and `CO-9` are valid operators within the range 0-9, that `E` and `O` are valid Processing Domains, that `F4` is a valid Core Drive, that the `→` operator connects two well-typed states, and that the admissibility relations permit this specific combination. If any element is invalid, the compiler rejects the expression with a specific error — just as a C compiler rejects `int x = 'hello'`. CAS has the same level of formal rigor as a programming language.
+When we write `^3^E_{F4} → ^9^O_{F4}`, the compiler verifies that `^3` and `^9` are valid Noetics within the range 0-9, that `E` and `O` are valid Processing Domains, that `F4` is a valid Core Drive, that the `→` operator connects two well-typed states, and that the admissibility relations permit this specific combination. If any element is invalid, the compiler rejects the expression with a specific error — just as a C compiler rejects `int x = 'hello'`. CAS has the same level of formal rigor as a programming language.
 
 This matters enormously. Most frameworks that claim to describe cognition or consciousness rely on prose descriptions and metaphorical diagrams. You cannot compile a metaphor. You cannot type-check a poem. You cannot write a Rust crate that parses "the mind is like an iceberg." But you can parse, type-check, and execute CAS expressions — because CAS has a formal grammar, a type system, and executable semantics.
 
@@ -1955,7 +1955,7 @@ The CAS notation follows a Backus-Naur Form (BNF) grammar, the same standard use
 <sequence>        ::= <digit> (":" <digit>)
 ```
 
-Every expression you have written in this chapter — from the simple `CO-3^O_{F5}` to the compound `CO-5^E_{F4} × CO-3^C_{F6}` — follows these rules. The compiler parses them exactly as a C compiler parses `int main() { return 0; }`.
+Every expression you have written in this chapter — from the simple `^9^O_{F5}` to the compound `^5^E_{F4} × ^6^C_{F6}` — follows these rules. The compiler parses them exactly as a C compiler parses `int main() { return 0; }`. (The compact `^n` form and the spelled-out `CO-n` form are equivalent; the grammar accepts both.)
 
 Verification by Working Compiler
 
@@ -1998,16 +1998,16 @@ Zoe fires back: "Everyone else at school has it! You're ruining my social life!"
 
 Let's build both equations:
 
-   Diane: Drive = F6 (Structure—the family rule was violated). Domain = ^P (Principled—this is about trust and integrity, not logistics). Operator = CO-6 (Critique—she is judging the violation). State: `CO-6^P_{F6}`.
-   Zoe: Drive = F4 (Connection—she wants to belong with her peers). Domain = ^E (Evaluative—she is feeling the subjective weight of social exclusion). Operator = CO-5 (Empathy—she is resonating with her friends' world). State: `CO-5^E_{F4}`.
+   Diane: Drive = F6 (Structure — the family rule was violated). Domain = ^P (Principled — this is about trust and integrity, not logistics). Noetic = ^6 Male (she is decomposing the violation into its composing sub-Ideas — "you lied," "you broke the rule," "you broke trust" — and testing each against principled axioms). State: `^6^P_{F6}`.
+   Zoe: Drive = F4 (Connection — she wants to belong with her peers). Domain = ^E (Evaluative — she is feeling the subjective weight of social exclusion). Noetic = ^5 Female (her Mind is impregnated with her peers' social reality — "everyone has it," "this is what my world is like"). State: `^5^E_{F4}`.
 
-The structural mismatch: `CO-6^P_{F6}` vs. `CO-5^E_{F4}`. Diane is in the Principled Domain using Critique. Zoe is in the Evaluative Domain using Empathy. They are two floors apart, using opposite operators. No wonder the argument escalates.
+The structural mismatch: `^6^P_{F6}` vs. `^5^E_{F4}`. Diane is in the Principled Domain running ^6 Male (compositional decomposition). Zoe is in the Evaluative Domain running ^5 Female (Mind impregnated with Ideas). They are two floors apart and on opposite sides of the `^5 ↔ ^6` involution pair. No wonder the argument escalates.
 
-The prescription: Diane needs to descend from `^P` to `^E`—to acknowledge the emotional reality of being a 16-year-old before reasserting the rule. Zoe needs to ascend from `^E` to `^P`—to understand that trust is a structural principle, not a feeling. The fix is a domain bridge, not a louder argument.
+The prescription: Diane needs to descend from `^P` to `^E` and shift from ^6 to ^5 — to let her Mind be impregnated with the Idea of being a 16-year-old in Zoe's social world before reasserting the principled rule. Zoe needs to ascend from `^E` to `^P` and shift from ^5 to ^6 — to decompose her request for access into the sub-Ideas that expose trust as a structural principle, not a feeling. The fix is a domain-and-Noetic bridge, not a louder argument.
 
  Key Insight: Chapter 8
 
-> Building CAS equations is a 6-step diagnostic process: identify the Drive, the Domain, and the Operator; assemble the base state; add transformations; check for balance and inversions. This process transforms vague, emotional descriptions of conflict ("We just don't see eye to eye") into precise structural blueprints that reveal the exact mechanical mismatch. Once you can write the equation, you can write the prescription—because every structural mismatch has a structural antidote. The 28 Standard Templates in Appendix B provide a library of the most common cognitive patterns, allowing you to rapidly identify whether a sequence is healthy (converging toward execution) or pathological (spiraling into friction).
+> Building CAS equations is a 6-step diagnostic process: identify the Drive, the Domain, and the Noetic; assemble the base state; add transformations; check for balance and inversions. This process transforms vague, emotional descriptions of conflict ("We just don't see eye to eye") into precise structural blueprints that reveal the exact mechanical mismatch. Once you can write the equation, you can write the prescription — because every structural mismatch has a structural antidote. The 28 Standard Templates in Appendix B provide a library of the most common cognitive patterns, allowing you to rapidly identify whether a sequence is healthy (converging toward a clean effect) or pathological (spiraling into friction).
 
 
 
@@ -2018,12 +2018,12 @@ For You (Human Assessment):
 Exercise 1: Map a Success. Think of a positive habit you have successfully built in your life (e.g., working out, reading daily, cooking healthy meals). Build the CAS equation for the moment you actually execute the habit.
 1.  Identify the Drive (F1-F7). Why do you do it?
 2.  Identify the Domain (P, C, E, O). Where is your mind focused while doing it?
-3.  Identify the Operator (CO-0 through CO-9). What is the mechanical action?
-Write your state: `CO-n^Domain_{Drive}`. 
+3.  Identify the Noetic (`^0` through `^9`). What is the Mind-Idea dynamic in play? Apply the colloquialism test: what would a native speaker say about this phenomenon, and which Noetic's definition matches?
+Write your state: `^n^Domain_{Drive}`.
 
-Exercise 2: Map a Conflict. Think of a recent disagreement with someone (a partner, a colleague, a family member). Using the 6-Step Process, build the equation for your state and their state during the peak moment of friction. Then identify the structural mismatch: Were you in different domains? Using opposing operators? Fueled by competing drives?
+Exercise 2: Map a Conflict. Think of a recent disagreement with someone (a partner, a colleague, a family member). Using the 6-Step Process, build the equation for your state and their state during the peak moment of friction. Then identify the structural mismatch: Were you in different domains? On opposite sides of an involution pair (`^2↔^3`, `^5↔^6`, `^8↔^9`)? Fueled by competing drives?
 
-Expected Outcome: When you map conflicts as equation mismatches, you will likely discover that the disagreement was not about the surface topic (whose turn it is to do the dishes, whether the deadline is realistic). It was about a structural incompatibility—you were operating in different domains or using mismatched operators. The content of the argument is usually a symptom. The equation reveals the cause.
+Expected Outcome: When you map conflicts as equation mismatches, you will likely discover that the disagreement was not about the surface topic (whose turn it is to do the dishes, whether the deadline is realistic). It was about a structural incompatibility — you were operating in different domains or on opposite sides of a Noetic involution pair. The content of the argument is usually a symptom. The equation reveals the cause.
 
 For AI (System Assessment):
 
