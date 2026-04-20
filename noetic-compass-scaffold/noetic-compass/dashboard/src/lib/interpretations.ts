@@ -87,16 +87,16 @@ export function interpretSubScore(key: string, label: string, score: number, wei
 // ===== Operator Radar =====
 
 const OPERATOR_DESC: string[] = [
-  'Identity — preserves core meaning without distortion. Foundation for all other operators.',
-  'Reflection — examines and self-assesses cognitive patterns. Essential for learning.',
-  'Abstraction — generalizes from specifics to principles. Paired with Concretization.',
-  'Concretization — turns abstract ideas into actionable specifics. Paired with Abstraction. Parallels Anthropic\'s functional frustration/curiosity states: the drive to resolve abstract uncertainty into concrete form.',
-  'Integration — synthesizes diverse concepts into a coherent whole.',
-  'Differentiation — distinguishes nuances, avoids oversimplification. Paired with Unification. Parallels Anthropic\'s evaluative internal states: the capacity to assess and distinguish quality across options.',
-  'Unification — brings disparate elements into alignment. Paired with Differentiation.',
-  'Transformation — enables adaptive change and evolving perspectives.',
-  'Expansion — explores new territory and broadens scope. Paired with Contraction. Parallels Anthropic\'s exploration drive: the functional impulse to seek novel information and broaden the solution space.',
-  'Contraction — focuses, prioritizes, and cuts through noise. Paired with Expansion. Parallels Anthropic\'s exploitation/focus states: the functional drive to converge on the best-known option and commit resources.',
+  'Idea — all things in and outside the Mind. The content substrate every other Noetic operates on; monoid identity of the Noetic algebra.',
+  'Mind — various degrees of awareness that processes, stores, outputs, and intakes Ideas. Self-dual; first stage of the pre-rational Exposure Loop.',
+  'Positive — an Idea the Mind has an affinity for and is attracted toward. Involution of Negative (CO-3).',
+  'Negative — an Idea the Mind is adverse to and repelled by. Involution of Positive (CO-2).',
+  'Vibration — the degree to which an Idea resonates with the Mind, its impression. Self-dual; second stage of the Exposure Loop.',
+  'Female — a Mind impregnated with an Idea, the Ideas a Mind is composed of. Involution of Male (CO-6).',
+  'Male — an Idea impregnated with another Idea, the Ideas an Idea is composed of. Involution of Female (CO-5).',
+  'Rhythm — the rate and pattern a Mind is exposed to an Idea, entraining/conditioning it. Self-dual; third stage of the Exposure Loop.',
+  'Above/Cause — an Idea that triggers a different Idea than itself to come to Mind. Involution of Below/Effect (CO-9).',
+  'Below/Effect — the Idea brought to Mind by an Above/Cause trigger. Involution of Above/Cause (CO-8).',
 ];
 
 export interface OperatorInsight {

@@ -9,16 +9,16 @@ import type { NccsResult, FractalAnalysis, StageResult } from '../api/types';
 import type { BlindSpot } from './blindSpots';
 
 const CO_PLAIN: Record<number, string> = {
-  0: 'staying consistent (like keeping your story straight)',
-  1: 'self-awareness (noticing its own thinking)',
-  2: 'big-picture thinking (seeing the forest, not just the trees)',
-  3: 'reality-checking (asking "but will this actually work?")',
-  4: 'connecting the dots (combining different ideas together)',
-  5: 'spotting differences (telling apart things that look similar)',
-  6: 'bringing ideas together (finding common ground)',
-  7: 'adapting to change (shifting approach when needed)',
-  8: 'exploring broadly (considering many possibilities)',
-  9: 'focusing in (narrowing down to what matters most)',
+  0: 'having clear ideas in mind (the raw content of thinking)',
+  1: 'being aware (noticing and holding onto what\'s there)',
+  2: 'being drawn to ideas (what pulls attention in)',
+  3: 'being repelled by ideas (what triggers a recoil or refusal)',
+  4: 'how deeply an idea lands (how strongly it sticks)',
+  5: 'a mind made of the ideas it has taken in (what constitutes the mind)',
+  6: 'ideas made of sub-ideas (unpacking what sits inside a thought)',
+  7: 'rhythm of exposure (how often and in what pattern you meet an idea)',
+  8: 'one idea triggering another (what sparks new thoughts)',
+  9: 'the idea that gets triggered (what lands as a result)',
 };
 
 // Used inline in interpretation functions

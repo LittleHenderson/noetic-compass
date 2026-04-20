@@ -1,16 +1,16 @@
 /** CAS ontology constants */
 
 export const OPERATOR_LABELS: readonly string[] = [
-  'CO-0: Identity',
-  'CO-1: Reflection',
-  'CO-2: Abstraction',
-  'CO-3: Concretization',
-  'CO-4: Integration',
-  'CO-5: Differentiation',
-  'CO-6: Unification',
-  'CO-7: Transformation',
-  'CO-8: Expansion',
-  'CO-9: Contraction',
+  'CO-0: Idea',
+  'CO-1: Mind',
+  'CO-2: Positive',
+  'CO-3: Negative',
+  'CO-4: Vibration',
+  'CO-5: Female',
+  'CO-6: Male',
+  'CO-7: Rhythm',
+  'CO-8: Above/Cause',
+  'CO-9: Below/Effect',
 ] as const;
 
 export const OPERATOR_SHORT: readonly string[] = [
