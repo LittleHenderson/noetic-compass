@@ -439,44 +439,43 @@ def test_v7_7_no_same_noetic_multi_register_cross_product():
     )
 
 
-def test_v7_7_tks_validation_heuristic_same_noetic_register_only_via_plus():
-    """Same-Noetic register co-presence in prompt uses `+`, not `×`.
+def test_v7_7_tks_validation_heuristic_documented_in_prompt():
+    """Clarification 10 Section 7 TKS validation heuristic is present in prompt.
 
     Clarification 10 Section 7's TKS validation heuristic states:
     - `+` substitutes as "associates with"
     - `×` substitutes as "intensifies through"
 
-    For same-Noetic register enumeration, `+` is the correct operator.
-    The v7.6 prompt does not yet carry Clarification 10 content, but we
-    assert it does not pre-emptively violate the rule either. All `×`
-    occurrences in the prompt should be either (a) different-axis
-    products (e.g., `10 Noetics × 4 Domains`) or (b) English prose
-    ("Register × anti-drift interaction"), not CAS-notation
-    same-Noetic-register products.
+    When v7.7 content is present in the prompt (per rollout track (f), commit
+    adding Register Operator Discipline section), this substitution-test
+    guidance must be documented so LLMs applying the discipline have the
+    heuristic available. This test verifies the heuristic text is present.
+
+    Rule 4 enforcement (that no bare same-Noetic multi-register `×` lacks
+    an emergent-result spec) is delegated entirely to
+    `test_v7_7_no_same_noetic_multi_register_cross_product` above, which
+    correctly handles disciplined `×` patterns: (a) different-state
+    integration with `=` assignment, (b) same-state with named emergent
+    result (`Ω`, `TF`, etc.) within 80 chars, and (c) negative examples
+    clearly marked with rewrite hints (`|⟨…⟩` or `+`) within 80 chars.
+
+    Predecessor note: this test previously implemented a whitelist that
+    pre-emptively forbade `×` occurrences beyond axis-cardinality products
+    and English section headings, under the pre-v7.7 assumption that the
+    prompt carried no Clarification 10 content. Once v7.7 content lands,
+    that whitelist becomes obsolete — disciplined `×` patterns and
+    correctly-marked negative examples must be permitted. Rule 4
+    enforcement moved entirely to the sibling discipline scanner.
     """
     prompt = CAS_BASE_SYSTEM_PROMPT
-    # Enumerate every × occurrence and categorise.
-    disallowed = []
-    for match in re.finditer(r"×", prompt):
-        window = prompt[max(0, match.start() - 30) : min(len(prompt), match.end() + 30)]
-        # Acceptable cases:
-        #  (a) axis cardinality products: "Noetics × 4 Domains", "× 4 Domains"
-        #  (b) section-heading English: "Register × anti-drift"
-        #  (c) different-state CAS integration (none in current prompt, but allowed)
-        axis_product = bool(re.search(r"\bNoetics?\b\s*×\s*\d", window)) or bool(
-            re.search(r"×\s*\d+\s*Domains?", window)
-        )
-        section_heading = "Register × anti-drift" in window
-        if axis_product or section_heading:
-            continue
-        # If neither — flag for manual inspection.
-        disallowed.append(window.strip())
-
-    assert not disallowed, (
-        "CAS_BASE_SYSTEM_PROMPT contains `×` occurrence(s) outside the "
-        "whitelisted patterns (axis-cardinality product, English section "
-        "heading). Review for v7.7 Clarification 10 discipline: "
-        f"{disallowed}"
+    # Heuristic substitution phrases per Clarification 10 Section 7.
+    assert "associates with" in prompt, (
+        "CAS_BASE_SYSTEM_PROMPT must document the `+` → 'associates with' "
+        "substitution per Clarification 10 Section 7 TKS validation heuristic."
+    )
+    assert "intensifies through" in prompt, (
+        "CAS_BASE_SYSTEM_PROMPT must document the `×` → 'intensifies through' "
+        "substitution per Clarification 10 Section 7 TKS validation heuristic."
     )
 
 
