@@ -8,6 +8,10 @@
 
 ---
 
+> **Note (2026-04-20, second admission same day).** CAS is now at v7.6 per Clarification 9 (Stoichiometric Production Semantics) in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`. This v7.5 rollout plan continues on its existing schedule — v7.6 implementation rolls out on a SEPARATE track per `docs/working/cas_v7_6_rollout_plan.md`. v7.6 content is NOT added to v7.5 rollout tracks in this plan. The separation is deliberate: admit v7.6 now to lock framework formalization, while sequencing implementation to preserve v7.5 stability.
+
+---
+
 ## Principle: Backward Compatibility
 
 CAS v7.4 expressions remain valid in v7.5 (register-unspecified = register-neutral). No existing artifact is "broken" by the v7.5 admission. The propagation work **adds** register-specification capacity to artifacts that currently operate in v7.4 semantics; it does not **require** retroactive updates to every prior expression.
