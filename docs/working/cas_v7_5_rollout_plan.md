@@ -9,6 +9,8 @@
 ---
 
 > **Note (2026-04-20, second admission same day).** CAS is now at v7.6 per Clarification 9 (Stoichiometric Production Semantics) in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`. This v7.5 rollout plan continues on its existing schedule — v7.6 implementation rolls out on a SEPARATE track per `docs/working/cas_v7_6_rollout_plan.md`. v7.6 content is NOT added to v7.5 rollout tracks in this plan. The separation is deliberate: admit v7.6 now to lock framework formalization, while sequencing implementation to preserve v7.5 stability.
+>
+> **Note (2026-04-21, third admission).** CAS is now at v7.7 per Clarification 10 (Register Multiplicity, Co-Presence, and Cross-Register Integration) in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`. This v7.5 rollout plan continues on its existing schedule — v7.7 implementation rolls out on a THIRD SEPARATE track per `docs/working/cas_v7_7_rollout_plan.md`. v7.7 content is NOT added to v7.5 rollout tracks in this plan. Clarification 10 resolves the `×` overloading introduced when same-Noetic multi-register notation was used in Wave 1 Chapter 21 enrichment; v7.7 operator discipline (three-way distinction between `|⟨…⟩` specification, `+` co-presence, `×` integration) governs all new register-enriched content in this plan's tracks from 2026-04-21 onward.
 
 ---
 

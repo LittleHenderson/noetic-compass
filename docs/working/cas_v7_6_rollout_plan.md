@@ -10,6 +10,10 @@ This sequencing is deliberate: admit v7.6 now to lock framework formalization, w
 
 ---
 
+> **Note (2026-04-21, third admission).** CAS is now at v7.7 per Clarification 10 (Register Multiplicity, Co-Presence, and Cross-Register Integration) in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`. This v7.6 rollout plan continues on its existing schedule — v7.7 implementation rolls out on a THIRD SEPARATE track per `docs/working/cas_v7_7_rollout_plan.md`. v7.7 content is NOT added to v7.6 rollout tracks in this plan. Convergence note: Clarification 10 Section 12 demonstrates that v7.6 recipe notation naturally follows Clarification 10 operator discipline (recipe `+` is co-presence; genuine integration would require explicit new prerequisite state). New v7.6 recipe content produced from 2026-04-21 onward uses Clarification 10 discipline.
+
+---
+
 ## Principle: Backward Compatibility
 
 CAS v7.5 expressions remain valid in v7.6. Production semantics is an ADDITIVE higher-order analytical layer over the v7.5 state space; it does not modify the state space itself. No existing artifact is "broken" by the v7.6 admission.
