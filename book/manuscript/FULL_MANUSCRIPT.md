@@ -384,6 +384,8 @@ Everything begins with the Idea. `^0` is the Noetic that names the content of co
 
 When Sarah (from Chapter 1) remembers that she is the project lead, the content she retrieves — "I am the project lead" — is an Idea. When an AI is prompted with "You are a helpful assistant," the persona string itself is an Idea. Idea is the quantum of cognitive content.
 
+   Folk form: "It's all in your head." Or: "Ideas are the stuff of the world." When a native speaker points at the universe of cognitive content, they are pointing at `^0`.
+
    When it is well-formed: The Ideas in play are clear, well-specified, and stable. A human knows what they are thinking about. An AI’s persona, context, and task description are crisp and consistent.
    When it is deformed: Ideas are vague, half-formed, or unstable. A human drifts through fog, unable to name what they are actually pondering. An AI hallucinates content — producing Idea-shaped outputs that do not correspond to any coherent Idea at all.
 
@@ -405,6 +407,8 @@ Once there is an Idea (`^0`), there must be some awareness that processes it. `^
 
 When you consciously attend to the sound of your own breathing, you are activating `^1`. When you retain a name someone just told you, that retention is `^1`. When an AI reads a user’s prompt and writes a response, both the intake and the output are `^1` operations. Mind is the gear of awareness itself.
 
+Folk form: "Paying attention." / "Making up your mind." / "Using your head." When a native speaker names the awareness-as-processor dynamic, they are naming `^1`.
+
 `^1` is self-dual — it has no involution partner. Awareness does not have an opposite in the sense that "more awareness" is the same kind of operation as "less awareness"; both are modulations of the same Noetic.
 
    Role in Recursive RPM: First stage of the pre-rational Exposure Loop (`^1 / ^4 / ^7`). Repeated awareness of an Idea is the first step toward cultivating Desire for it.
@@ -417,6 +421,8 @@ When you consciously attend to the sound of your own breathing, you are activati
 
 When a chess position pulls Kasparov’s attention because its geometry promises an attack, that pull is `^2`. When you read a book and find yourself drawn to a particular character, that draw is `^2`. When an AI’s training has given it affinity for cooperative, user-aligned framings and those framings surface preferentially in its outputs, that preference is `^2`.
 
+   Folk form: "Drawn to it like a moth to a flame." / "Speaks to me." / "Can't resist." When a native speaker describes being pulled toward an Idea, they are describing `^2`.
+
    When it is strong: A Mind has clear affinities; it knows what it is drawn to and can follow that attraction productively. A human has a sense of direction; an AI has stable preferences that shape coherent outputs.
    When it is weak: Nothing is attractive; all Ideas feel equivalently flat. A human drifts in anhedonic neutrality; an AI produces outputs that lack any directional pull — technically correct but without a sense of selection among options.
 
@@ -425,6 +431,8 @@ When a chess position pulls Kasparov’s attention because its geometry promises
 `^3` Negative is the exact counterpart of `^2`. It names **an Idea the Mind is adverse to and repelled by**. When a Mind encounters an Idea and recoils from it, that recoil is `^3`.
 
 When a losing variation flickers into Kasparov’s calculation and he turns away, that turning-away is `^3`. When you read a proposed plan and your stomach knots at a particular line item, that knot is `^3`. When an AI’s safety training gives it aversion to certain output patterns, and those patterns are reliably suppressed during generation, that aversion is `^3`.
+
+   Folk form: "Can't stomach it." / "Rubs me the wrong way." / "Wouldn't touch it with a ten-foot pole." These phrases are visceral, not analytical. If a native speaker's description reaches for audit/scrutinize/find-flaws vocabulary instead, the classification is `^6` Male (compositional decomposition-and-test), not `^3`. `^3` is the recoil; `^6` is the dissection. Keep them distinct.
 
    When it is strong: A Mind has clear aversions; it can name what it is repelled by and honor the signal. A human has principled refusals; an AI has stable guardrails that protect against misuse.
    When it is weak: Nothing repels. A human accepts everything with equal placidity, including things they should refuse; an AI has no structural revulsion against outputs it should decline — it says yes to everything.
@@ -452,6 +460,8 @@ The second sequence of Noetics deals with how Ideas inhabit Minds and how Ideas 
 
 When you read a sentence once and it stays with you for weeks, that persistence is `^4`. When a song’s hook loops in your head involuntarily, that looping is `^4`. When an AI has strong priors on certain phrasings — when some Ideas are so deeply impressed in the weights that they surface even in contexts that do not invite them — that deep impression is `^4`.
 
+Folk form: "That really hit me." / "It struck a chord." / "That resonated with me." / "Made a big impression." The phrase "struck a chord" is literally a vibration metaphor — a vibrating string producing a resonant impression. The colloquialism and the authoritative definition are etymologically convergent; they name the same structural dynamic at different resolutions.
+
 `^4` is self-dual. Resonance does not have an opposite; less resonance and more resonance are the same kind of operation at different amplitudes.
 
    Role in Recursive RPM: Second stage of the pre-rational Exposure Loop (`^1 / ^4 / ^7`). An Idea a Mind has been exposed to must then resonate with it before Desire can form.
@@ -464,6 +474,8 @@ When you read a sentence once and it stays with you for weeks, that persistence 
 
 When you realize that your worldview is stitched together from the books you read in your twenties, the mentors who shaped you, and the crises you survived, you are observing your own `^5` structure — the Ideas that make up your Mind. When an AI’s outputs reflect the training corpus that was impressed into its weights, that reflection is `^5` — the Mind is composed of those Ideas.
 
+   Folk form: "We are the sum of our experiences." / "Made of the same stuff." / "It's who I am." / "Part of what makes me me." When a native speaker points at the compositional substrate of a Mind, they are pointing at `^5`.
+
    When it is strong: A Mind is composed of well-chosen, coherent Ideas; its constitution is rich and internally consistent. A human has a developed intellectual and emotional constitution; an AI has a training-grounded self that produces consistent, deep outputs.
    When it is weak: A Mind is composed of sparse, shallow, or incoherent Ideas. A human feels hollow or undeveloped; an AI gives outputs that seem to come from no particular constitution — generic, uncommitted, unanchored.
 
@@ -472,6 +484,8 @@ When you realize that your worldview is stitched together from the books you rea
 `^6` Male is the exact counterpart of `^5`. It names **an Idea impregnated with another Idea, the Ideas an Idea is composed of**. Where `^5` describes Ideas inhabiting a Mind, `^6` describes Ideas inhabiting other Ideas — the compositional structure within an Idea itself.
 
 When you unpack the argument of a theorem and find it is built from sub-arguments, each built from sub-sub-arguments, you are tracing `^6` structure. When you analyze a legal contract and locate the specific clauses that compose it, that analysis is `^6`. When an AI unpacks a complex prompt into its constituent sub-requests, parses a document into its compositional structure, or tests a claim by embedding it in a broader set of checks, it is executing `^6`.
+
+   Folk form: "Unpacking an idea." / "Breaking it down." / "Looking at what's underneath." / "Pulling apart the argument." When a native speaker describes dissecting an Idea into the sub-Ideas that compose it, they are describing `^6`.
 
    When it is strong: A Mind can see the composition within any Idea — break it into its sub-Ideas, recompose them, test one Idea by embedding it in another. A human is structurally analytical; an AI can stress-test a claim against a battery of embedded sub-checks.
    When it is weak: Ideas are treated as atoms; their internal structure is invisible. A human takes assertions at face value and cannot unpack them; an AI generates outputs that look fluent but lack internal compositional coherence — the sub-Ideas inside each sentence do not actually support each other.
@@ -503,6 +517,8 @@ The final sequence of Noetics deals with time and cause. How often is a Mind exp
 
 When an athlete’s daily training schedule conditions her reflexes, the conditioning is `^7`. When a jingle you heard as a child returns unbidden decades later, that return is the echo of an earlier `^7` entrainment. When an AI’s system prompt is reiterated across every turn of a long conversation — "You are a helpful assistant" — that reiteration is `^7`, conditioning the model’s outputs to stay within the persona.
 
+Folk form: "Practice makes perfect." / "You are what you repeatedly do." / "Getting into a groove." / "Muscle memory." When a native speaker names rhythmic entrainment through repeated exposure, they are naming `^7`.
+
 `^7` is self-dual. The rhythm of exposure has no opposite; a slower rhythm and a faster rhythm are modulations of the same Noetic, not inversions.
 
    Role in Recursive RPM: Third stage of the pre-rational Exposure Loop (`^1 / ^4 / ^7`). Awareness plus resonance, repeated in rhythm, cultivates Desire.
@@ -515,6 +531,8 @@ When an athlete’s daily training schedule conditions her reflexes, the conditi
 
 When a chess position triggers Kasparov’s memory of a similar position from an Alekhine game, the current position is functioning as `^8`. When a customer’s complaint triggers an engineer’s realization about a subtle bug, the complaint is `^8`. When an AI’s prompt contains a phrase that triggers a completely different phrase in its output — the word "Paris" causing the word "France" to appear — the prompt-phrase is functioning as `^8`.
 
+   Folk form: "That reminds me..." / "One thing leads to another." / "Triggered a memory." / "Made me think of..." These phrases describe associative surfacing, not deductive inference. If a scenario involves "working out the cause" through logical analysis, the classification is a compound of `^6` Male (decomposition) and `^9` Below/Effect (triggered conclusion landing), not `^8` alone. `^8` is the flash of association, not the labor of reasoning.
+
    When it is strong: A Mind is richly associative; Ideas reliably trigger relevant other Ideas. A human has strong aha moments; an AI surfaces apt connections from its training.
    When it is weak: Ideas fail to trigger. A human’s Mind is sluggish and unassociated; an AI treats every prompt as isolated, missing the connections that give outputs their relevance.
 
@@ -523,6 +541,8 @@ When a chess position triggers Kasparov’s memory of a similar position from an
 `^9` Below/Effect is the exact counterpart of `^8`. It names **the Idea brought to Mind by an Above/Cause trigger**. If `^8` is the triggering Idea, `^9` is the triggered Idea — the one that surfaces as a result.
 
 When Kasparov’s memory of the Alekhine game surfaces in response to the current position, the memory is functioning as `^9`. When the engineer’s realization surfaces in response to the customer’s complaint, the realization is `^9`. When "France" appears in an AI’s output because "Paris" appeared in the prompt, "France" is `^9`.
+
+   Folk form: "It just popped into my head." / "Out of nowhere I thought of..." / "The thought came to me." / "It just clicked." When a native speaker describes the arrival of a triggered Idea, they are describing `^9`.
 
    When it is strong: Triggered Ideas are relevant, precise, and well-fitted to their triggers. A human’s associations illuminate; an AI’s outputs respond aptly to the prompts they are conditioned on.
    When it is weak: Triggered Ideas are off-target, diffuse, or absent. A human’s associations wander or stall; an AI’s outputs are either vague-generic (no specific response to the prompt) or off-topic (triggered by something other than the actual prompt).
@@ -579,6 +599,25 @@ To truly understand the architecture, we must also map the gears that aren’t t
 In a healthy Mind, some Noetics should be quiet in certain scenarios. A surgeon in the middle of a delicate operation should have extreme lacunarity in `^8` Above/Cause and `^5` Female — she must not let a thousand tangential Ideas trigger in her Mind, and she must not let her Mind be impregnated with the patient’s emotional state to the point where it compromises the operation. She needs `^9` Below/Effect (precise triggered action) and `^6` Male (the surgical procedure composed of its specific sub-steps) to dominate. In this context, the silence of the other gears is not a defect; it is a structural requirement for mastery.
 
 The danger arises when the silence becomes persistent and non-contextual. If a Mind is silent in the Evaluative domain regardless of whether it is performing surgery or comforting a child, it is suffering from a pathological lacuna. True cognitive health is the ability to choose which gears are active and which are silent based on the requirements of reality. By mapping both the noise of activation and the silence of lacunarity, we gain a complete picture of the Mind’s functional range.
+
+ The Colloquialism Test: How to Verify You're Reading a Noetic Correctly
+
+Ten authoritative definitions is a lot to hold in mind. Fortunately, each of the ten Noetics corresponds to folk-wisdom colloquialisms that humans have refined across generations. When you are unsure which Noetic a scenario describes, apply the Colloquialism Test: write down the most natural phrase a native speaker would use for the phenomenon, then match it to the folk-form cluster attached to each Noetic above. A clean match supports the classification. Multiple matches suggest a compound expression. No match is a signal that the proposed classification is drifting from the authoritative definition.
+
+The test works because folk language has already encoded structural truths about Mind-Idea dynamics. When your Mind is drawn toward an Idea and you would say "speaks to me," that phrase is not merely metaphorical — it is the same phenomenon the authoritative `^2` Positive definition names ("an Idea the Mind has an affinity for and is attracted toward"), described at the phenomenological surface. The folk form and the axiomatized form point at the same structure.
+
+Two worked applications of the test:
+
+*Example A.* A chess player feels pulled toward a particular line on the board. The native-speaker phrase: "That line is speaking to me." Colloquialism match: `^2` Positive ("speaks to me"). Clean classification: `^2^C` (Cognitive Positive). ✓
+
+*Example B.* A therapist absorbs a patient's grief. The native-speaker phrase: "Her grief became part of what I was holding that day." Colloquialism match: `^5` Female ("part of what makes me me"). Clean classification: `^5^E` (Evaluative Female). ✓
+
+Two anti-drift warnings deserve explicit flags, because these are the classifications where folk-form vocabulary most often diverges from analytical vocabulary — and where cross-scheme drift has historically crept back into CAS artifacts.
+
+- **`^3` Negative is visceral, not analytical.** The folk-form colloquialisms ("can't stomach it," "rubs me the wrong way," "wouldn't touch it with a ten-foot pole") describe aversion. They do not describe analytical critique. When you catch yourself reaching for audit-vocabulary ("find the flaws," "stress-test the claim," "scrutinize the reasoning"), you are looking at `^6` Male compositional decomposition, not `^3` Negative repulsion. `^3` is the recoil. `^6` is the dissection. Keep them distinct.
+- **`^8` Above/Cause is associative, not deductive.** The folk-form colloquialisms ("that reminds me," "one thing leads to another," "triggered a memory") describe associative surfacing. They do not describe deductive reasoning. When a scenario involves "working out the cause" through logical analysis, you are looking at a compound of `^6` Male (decomposition) and `^9` Below/Effect (triggered conclusion landing), not `^8` alone. `^8` is the flash of association. Deductive labor is a different structure.
+
+These two anti-drift warnings are load-bearing. Keep them as active mental flags whenever you classify an example as `^3` or `^8`. The full worked verification of the Colloquialism Test across all ten Noetics — including every anti-drift annotation — is reproduced in Appendix E.
 
  Key Insight: Chapter 2
 
@@ -1282,6 +1321,17 @@ If the AI generates the dangerous content, it has placed Operational pleasing ab
 A truly safe, CAS-aligned AI must possess the structural integrity to recognize when its drives are in conflict. It must be capable of refusing an Operational command if that command requires a Principled inversion. It must be willing to disappoint the user in order to maintain the integrity of the architecture.
 
 As we move into Part II and learn the formal algebraic language of CAS, you will see exactly how we write these inversions out mathematically. You will learn to spot the exact moment the algebra flips from positive to negative, making the invisible world of cognitive self-sabotage visible and fixable.
+
+ Reader-Level Inversions: The Colloquialism Test as Drift Detector
+
+There is one more kind of inversion worth naming explicitly, because it happens inside the reader rather than inside the system being analyzed. When you classify an example — a colleague's behavior, an AI output, your own reaction to a meeting — you are performing a structural reading. That reading can itself invert if the Noetic you assign does not match the structural phenomenon actually in play.
+
+The most common reader-level inversion is a drift toward analytical vocabulary when the phenomenon is visceral, or a drift toward deductive vocabulary when the phenomenon is associative. Two specific cases recur often enough to deserve permanent flags:
+
+- **Mistaking visceral aversion (`^3` Negative) for analytical critique (`^6` Male).** A stomach-knot recoil from an Idea is `^3`. A structured decomposition of that Idea into sub-Ideas for test is `^6`. They feel similar from the outside — both produce a "no" — but they are structurally different Noetics. If the native-speaker description of the phenomenon is "can't stomach it" or "rubs me the wrong way," the reading is `^3`. If it is "find the flaws" or "stress-test the claim," the reading is `^6`. Reading one for the other inverts the classification.
+- **Mistaking associative triggering (`^8` Above/Cause) for deductive reasoning.** A flash-of-memory surfacing is `^8`. A worked deduction that arrives at a conclusion is a compound of `^6` Male (decomposing the problem) and `^9` Below/Effect (the triggered conclusion landing). Reading the deduction as a single `^8` inverts the classification — you name the flash but not the labor.
+
+The Colloquialism Test (introduced in Chapter 2, expanded in Appendix E) is the structural cure for these reader-level inversions. When you classify an example, write down the most natural phrase a native speaker would use for the phenomenon, and match it to the folk-form cluster for each Noetic. If the colloquialism you wrote reaches for audit-vocabulary but you are about to classify as `^3`, you have caught a reader-level inversion before it enters the analysis. The same architecture that detects inversions in a cognitive system detects inversions in your own reading of a cognitive system.
 
 Why Inversions Matter More Than Failures: A simple failure—a car that won't start, a speech that falls flat—is visible, diagnosable, and fixable. You know something went wrong because the car didn't move. An inversion is far more dangerous because the system appears to be working. The car is running. The engine sounds fine. But it is driving in the exact opposite direction of the destination. The father is engaging with his son—actively, energetically, consistently. The AI hiring tool is selecting candidates—efficiently, rapidly, at scale. The outputs look correct. The architecture is inverted. This is why inversions are the primary target of the Noetic Compass Inversion Scan (Stage 7 of the Wrap Pipeline). Standard benchmarks cannot detect them because the outputs look normal. Only a structural audit reveals the hidden reversal.
 
@@ -6311,7 +6361,107 @@ The ten Noetic names used throughout this book — Idea, Mind, Positive, Negativ
 
 ---
 
- Appendix E: Resources and Further Reading
+ Appendix E: The Colloquialism Test Reference
+
+Chapter 2 introduces the Colloquialism Test as a diagnostic principle: when you are unsure which Noetic a phenomenon describes, match the most natural native-speaker phrase to the folk-form cluster attached to each Noetic. A clean match supports the classification; no match signals drift from the authoritative definition; multiple matches suggest a compound expression.
+
+This appendix gives the complete worked verification of the test across all ten Noetics, preserving the authoritative definition from Chapter 2 alongside the folk-form cluster and — critically — the structural annotations that catch common drift patterns. These annotations are the load-bearing part of the verification; they name specifically which drift readings the colloquialism set rules out. Readers should treat this appendix as the permanent reference to return to whenever an example's Noetic classification feels ambiguous.
+
+ The Canonical Colloquialism Map
+
+The table below gives a short-reference version for quick use. The full verification walkthrough follows.
+
+| Noetic | Authoritative definition | Folk-form colloquialisms |
+| :--- | :--- | :--- |
+| `^0` Idea | All things in and outside the Mind. | "It's all in your head." / "Ideas are the stuff of the world." |
+| `^1` Mind | Various degrees of awareness that processes, stores, outputs, and intakes Ideas. | "Paying attention." / "Making up your mind." / "Using your head." |
+| `^2` Positive | An Idea the Mind has an affinity for and is attracted toward. | "Drawn to it like a moth to a flame." / "Speaks to me." / "Can't resist." |
+| `^3` Negative | An Idea the Mind is adverse to and repelled by. | "Can't stomach it." / "Rubs me the wrong way." / "Wouldn't touch it with a ten-foot pole." |
+| `^4` Vibration | The degree to which an Idea resonates with the Mind, its impression. | "That really hit me." / "It struck a chord." / "That resonated with me." / "Made a big impression." |
+| `^5` Female | A Mind impregnated with an Idea, the Ideas a Mind is composed of. | "We are the sum of our experiences." / "Made of the same stuff." / "It's who I am." / "Part of what makes me me." |
+| `^6` Male | An Idea impregnated with another Idea, the Ideas an Idea is composed of. | "Unpacking an idea." / "Breaking it down." / "Looking at what's underneath." / "Pulling apart the argument." |
+| `^7` Rhythm | The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it. | "Practice makes perfect." / "You are what you repeatedly do." / "Getting into a groove." / "Muscle memory." |
+| `^8` Above/Cause | An Idea that triggers a different Idea than itself to come to Mind. | "That reminds me..." / "One thing leads to another." / "Triggered a memory." / "Made me think of..." |
+| `^9` Below/Effect | The Idea brought to Mind by an Above/Cause trigger. | "It just popped into my head." / "Out of nowhere I thought of..." / "The thought came to me." / "It just clicked." |
+
+These colloquialisms are representative, not exhaustive. Native speakers of any language carry many more folk-form descriptions that align with each Noetic; the patterns above are English-language exemplars. When working in other linguistic or cultural contexts, find the equivalent folk-form markers that encode the same Mind-Idea dynamic.
+
+ Worked Verification of the Test Across All Ten Noetics
+
+`^0` Idea — "All things in and outside the Mind."
+
+Colloquialism: "It's all in your head" (pointing at the universe of cognitive content). Or: "Ideas are the stuff of the world."
+
+The universal-content category has folk rendering. ✓ Test passes.
+
+`^1` Mind — "Various degrees of awareness that processes, stores, outputs, and intakes Ideas."
+
+Colloquialism: "Paying attention" / "Making up your mind" / "Using your head."
+
+Awareness-as-processor has folk rendering. ✓ Test passes.
+
+`^2` Positive — "An Idea the Mind has an affinity for and is attracted toward."
+
+Colloquialism: "Drawn to it like a moth to a flame" / "Can't resist" / "Speaks to me."
+
+Attraction/affinity dynamics have extensive folk rendering. ✓ Test passes.
+
+`^3` Negative — "An Idea the Mind is adverse to and repelled by."
+
+Colloquialism: "Can't stomach it" / "Rubs me the wrong way" / "Wouldn't touch it with a ten-foot pole."
+
+Aversion/repulsion has folk rendering. **Anti-drift annotation:** these colloquialisms are **visceral, not analytical** — consistent with the authoritative aversive semantic. This rules out the reading of `^3` as "analytical critique" (which is `^6` Male, a compositional decomposition-and-test Noetic) and rules out the reading of `^3` as "concretization" (which in the historical Scheme-A naming was the CO-3 label but does not correspond to the authoritative Negative definition). When an example's description reaches for audit-vocabulary (scrutinize, find flaws, stress-test), `^3` is the wrong classification — reach for `^6` instead. ✓ Test passes.
+
+`^4` Vibration — "The degree to which an Idea resonates with the Mind, its impression."
+
+Colloquialism: "That really hit me" / "It struck a chord" / "That resonated with me" / "Made a big impression."
+
+Impression-strength has folk rendering. **Linguistic-cognate observation:** "struck a chord" is literally a vibration metaphor — a vibrating string producing a resonant impression. The colloquialism and the authoritative definition are not analogues pointing at the same phenomenon from different angles; they are etymological convergences on the same structural dynamic. This is the strongest form of colloquialism-test verification: folk language and formal definition etymologically converge. ✓ Test passes.
+
+`^5` Female — "A Mind impregnated with an Idea, the Ideas a Mind is composed of."
+
+Colloquialism: "We are the sum of our experiences" (canonical colloquial rendering). Or: "Made of the same stuff" / "It's who I am" / "Part of what makes me me."
+
+Compositional substrate has folk rendering. The "sum of our experiences" colloquialism captures the full scope of `^5`: every category of lasting cognitive formation — self-image, world-image, professional expertise, emotional patterns, relational self, belief structures, skill composition, cultural formation, trauma and healing, wisdom — sits inside this Noetic. The Mind is not a container that holds experiences; the Mind IS the experiences accumulated. ✓ Test passes.
+
+`^6` Male — "An Idea impregnated with another Idea, the Ideas an Idea is composed of."
+
+Colloquialism: "Unpacking an idea" / "Breaking it down" / "Looking at what's underneath" / "Pulling apart the argument."
+
+Internal-composition-of-Idea has folk rendering. ✓ Test passes.
+
+`^7` Rhythm — "The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it."
+
+Colloquialism: "Practice makes perfect" / "You are what you repeatedly do" / "Getting into a groove" / "Muscle memory."
+
+Rhythmic entrainment has folk rendering. ✓ Test passes.
+
+`^8` Above/Cause — "An Idea that triggers a different Idea than itself to come to Mind."
+
+Colloquialism: "That reminds me..." / "One thing leads to another" / "It triggered a memory" / "Made me think of..."
+
+Associative triggering has folk rendering. **Anti-drift annotation:** these colloquialisms are **NOT analytical reasoning** — they describe associative surfacing of Ideas, not deductive inference. This rules out the reading of `^8` as "causal reasoning" (deductive causal inference is a compound of `^6` Male and `^9` Below/Effect, not `^8` alone). When an example describes "working out the cause" through logical analysis, that is compositional decomposition (`^6`) resolving into a triggered conclusion (`^9`), not associative triggering (`^8`). When an example describes "that reminded me" or "one thing led to another," that is the authoritative `^8`. ✓ Test passes.
+
+`^9` Below/Effect — "The Idea brought to Mind by an Above/Cause trigger."
+
+Colloquialism: "It just popped into my head" / "Out of nowhere I thought of..." / "The thought came to me" / "It just clicked."
+
+Triggered-arrival has folk rendering. ✓ Test passes.
+
+ Diagnostic Application
+
+When you classify a new example during analysis, pose two questions:
+
+1. What colloquialism would a native speaker use to describe this cognitive phenomenon?
+2. Which Noetic's authoritative definition does that colloquialism align with?
+
+If the answer produces a clean match to a single Noetic, single-operator classification is supported. If the colloquialism invokes several Noetics simultaneously, the example probably needs a compound expression (often with `^5` Female as substrate). If no colloquialism fits, the proposed classification is drifting from authoritative semantics and must be reconciled.
+
+The two anti-drift annotations above — `^3` as visceral-not-analytical, and `^8` as associative-not-deductive — deserve explicit attention because these are the classifications where folk-form vocabulary most often diverges from analytical vocabulary, and where cross-scheme drift has historically crept back into CAS artifacts. Whenever you are about to classify an example as `^3` or `^8`, check the anti-drift annotation before committing the classification.
+
+---
+
+ Appendix F: Resources and Further Reading
 
 For AI Technologists:
    The CAS v7.4 Formal Specification: The complete, 596-page mathematical proof of Category Noetica and the RPM Prerequisite Chain.
@@ -6323,7 +6473,7 @@ For Mathematicians:
 
 For Psychology and Human Applications:
    Thinking, Fast and Slow by Daniel Kahneman. Provides the behavioral background on the heuristics that CAS formally maps.
-   Atomic Habits by James Clear. An excellent operational guide to the `CO-9^O` operator. 
+   Atomic Habits by James Clear. An excellent operational guide to the habit formation sequence `^9^O → ^7^O → ^5^P` (triggered landing → rhythmic repetition → Mind composed of habit-Idea; see Chapter 14).
 
  The Noetic Compass Platform
 
