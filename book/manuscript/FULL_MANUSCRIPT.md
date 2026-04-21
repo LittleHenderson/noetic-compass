@@ -3910,7 +3910,7 @@ A human life with high lacunarity is a life full of structural holes.
    You might have a brilliant, high-paying career (low financial lacunarity) but a completely hollow physical structure (poor health, high physical lacunarity). 
    You might have a perfect physical structure (you are a fitness model) but a hollow social structure (you are entirely isolated and have no friends).
 
-True wealth building is the conscious process of reducing lacunarity across all eight categories. It is the process of identifying your structural "blind spots" and intentionally building Cognitive Scaffolding (`CO-1^O_{F6}`) to fill those holes.
+True wealth building is the conscious process of reducing lacunarity across all eight categories. It is the process of identifying your structural "blind spots" and intentionally building Operational Scaffolding (`^1^O_{F6}` — Operational Mind, F6 Structure) to fill those holes. In authoritative terms: your Mind's awareness must descend from the Cognitive Domain (where the map lives) into the Operational Domain (where the scaffolding is physically built), under the F6 Structure drive.
 
  Building Wealth as a Complete RPM Chain
 
@@ -3923,14 +3923,18 @@ You must first cultivate a stable, principled desire for Structure (`F6`). If yo
 You must transition to Stage 4 (Principled Commitment): "I am building financial structure not to limit my freedom, but to provide the unshakeable platform that guarantees my future freedom."
 
 2. Wisdom (The Cognitive Map):
-You must acquire the specific Wisdom of systems. You cannot just "try to spend less." You need a map. You need to understand compound interest, tax-advantaged accounts, time-blocking, and systems thinking. This is the realm of `CO-1^C` (Cognitive Differentiation). You must sit down, look at the messy reality of your life, and chop it into the 8 resource categories to measure them accurately. You cannot manage what you do not measure.
+You must acquire the specific Wisdom of systems. You cannot just "try to spend less." You need a map. You need to understand compound interest, tax-advantaged accounts, time-blocking, and systems thinking. This is the realm of `^6^C` Male (Cognitive Male) — you must sit down, look at the messy reality of your life, and decompose it into the sub-Ideas (the 8 resource categories) it is composed of, so that each can be measured accurately. You cannot manage what you do not measure. (Colloquialism Test: "breaking it down" / "unpacking the books" / "looking at what's underneath the numbers" — native-speaker phrases here are clean matches for `^6` Male decomposition.)
+<!-- AUTHOR REVIEW: In pre-v7.4 drafts this step was labelled `CO-1^C` ("Cognitive Differentiation"), a Scheme-A/B gloss. The authoritative `^1` is Mind (awareness), not "differentiation." The underlying content — chopping messy reality into its composing sub-Ideas, the 8 resource categories — is structurally `^6^C` Male (compositional decomposition at cognitive weight), which is what has been retained here. The Mind (`^1^C`) is of course engaged throughout as the substrate of awareness, but the load-bearing operation named in this step is decomposition, not attention. Flagged for author confirmation during final editing pass. -->
+
 
 3. Power (The Operational Scaffolding):
 Finally, you must build the Power. This does not mean relying on willpower to resist buying a coffee every morning. Willpower is an `F3` biological resource, and it depletes by 3:00 PM. 
 
 Building Power means setting up Operational Scaffolding. This means configuring automatic bank transfers that move 15% of your income into an investment account the moment you are paid, before you ever see it. It means creating a rigid calendar invite for deep work that your phone automatically blocks notifications during. 
 
-You are building physical rules (`CO-3^O_{F6}`) that protect your resources even when your conscious will is weak. Wealth is what happens when your structure does the heavy lifting for you.
+You are building physical rules (`^3^O_{F6}` — Operational Negative, F6 Structure) that protect your resources even when your conscious will is weak. Wealth is what happens when your structure does the heavy lifting for you.
+<!-- AUTHOR REVIEW: This `^3^O_{F6}` classification inherits the pre-v7.4 labelling. Authoritative `^3` Negative is defined as visceral aversion — an Idea the Mind is "adverse to and repelled by" (colloquialisms: "can't stomach it," "wouldn't touch it with a ten-foot pole"). Automated bank transfers and calendar blocks are structural constraints, not felt aversion. A defensible reading is that the scaffold embodies the Mind's `^3` (by preemptively refusing the wrong operation), but a structurally cleaner reading may be `^6^O` Male (the automated-transfer-Idea decomposed into its sub-Ideas: trigger-date, percentage, destination) or a compound `^6^O × ^3^O` (decomposed structure whose effect is preemptive refusal). Leaving the existing classification in place for author review; the obsolete `CO-3` notation has been updated to authoritative `^3`. -->
+
 
  Lacunarity in Real Life: Structural Scaffolding
 
@@ -3947,22 +3951,22 @@ When your financial or structural D/W/P chain hits a resource block, the mind of
  The Barbershop Resolution (Power Blocked)
 Consider Marcus, who has the Desire to open a barbershop (F6 Structure/F5 Agency). He has the Wisdom—he is a master barber with a business plan—but he is blocked at the Power stage: he lacks the $50,000 for the lease and equipment.
 
-His mind initiates a recursive resolution: `RPM(F6)[P → CO-8 → CO-9 → RPM(F6.P)]`
+His mind initiates a recursive resolution: `RPM(F6)[P → ^8 → ^9 → RPM(F6.P)]`
 
-1.  CO-8 (Causal Scan): Instead of staring at the empty bank account, Marcus uses Operator 8 (Expansion) to scan for what could cause $50,000 to appear. He looks at his assets and relationships.
-2.  CO-9 (Solution Selection): He identifies a causal link: he owns a vintage car worth $30,000, and has $20,000 in a retirement account.
+1.  `^8` Above/Cause (Associative Trigger Scan): Instead of staring at the empty bank account, Marcus runs `^8` Above/Cause — he lets the cash-shortfall Idea trigger other Ideas to come to Mind. One Idea triggers the next: the liquid-assets Idea surfaces, which triggers the vintage-car Idea, which triggers the retirement-account Idea. He is scanning his accumulated substrate (his `^5` Female — the Mind composed of everything he owns, every relationship he has) for whatever associatively surfaces in response to the need. This is associative triggering, not deductive analysis; the Ideas arrive rather than being argued toward. (Colloquialism Test: "that reminds me..." / "one thing leads to another" — clean `^8` matches.)
+2.  `^9` Below/Effect (The Triggered Idea Landing): One of the triggered Ideas lands as the solution: the vintage car, worth $30,000, plus $20,000 from the retirement account. The `^9` move is where the triggered-Idea is brought to Mind as the specific operational target. What `^8` surfaces, `^9` lands.
 3.  The Child Chain: The "Car Sale" becomes a nested child D/W/P chain. He must activate the Desire to sell it, gain the Wisdom of how to list it, and execute the Power of the sale.
 
 When the car is sold, the child chain outputs $50,000, satisfying the parent Power node. Marcus's mind used a rational, recursive search to bridge the gap. 
 
  Structural Deadlock in Wealth
-Wealth stagnation often occurs when a person refuses to recurse. They keep trying to solve a Power block by using more Power (willpower), which is a linear error. The recursive solution is to stop the current chain and spawn a child chain focused on Causal Search (increasing income) or Wisdom (learning a new high-value skill).
+Wealth stagnation often occurs when a person refuses to recurse. They keep trying to solve a Power block by using more Power (willpower), which is a linear error. The recursive solution is to stop the current chain and spawn a child chain focused on `^8` Above/Cause associative scanning (letting new income-generating Ideas be triggered and surface to Mind) or `F2` Wisdom acquisition (learning a new high-value skill).
 
 
 
  Key Insight: Chapter 16
 
-> Wealth is not the size of your income stream—it is the structural integrity of the container that holds it. The F6 Structure drive is the involutional partner of F2 Wisdom: where Wisdom seeks to understand the world, Structure seeks to organize it. Sarah earns a high six-figure salary but lives in financial terror because she has zero F6 scaffolding—no budgets, no automated savings, no systematic resource tracking. Her sieve has no bottom. The 8 Resource Categories (Financial, Temporal, Physical, Cognitive, Social, Structural, Emotional, Principled) reveal that money is only one of eight reservoirs that must be maintained. Lacunarity—the "gapiness" of your life's fractal structure—is the diagnostic metric: a life with low financial lacunarity but high temporal or emotional lacunarity is a building with solid walls and a missing roof. Building wealth means reducing lacunarity across all eight categories simultaneously, and the most effective tool is not willpower but Operational Scaffolding (`CO-3^O_{F6}`)—automated rules and physical systems that protect your resources even when your conscious will is depleted.
+> Wealth is not the size of your income stream—it is the structural integrity of the container that holds it. The F6 Structure drive is the involutional partner of F2 Wisdom: where Wisdom seeks to understand the world, Structure seeks to organize it. Sarah earns a high six-figure salary but lives in financial terror because she has zero F6 scaffolding—no budgets, no automated savings, no systematic resource tracking. Her sieve has no bottom. The 8 Resource Categories (Financial, Temporal, Physical, Cognitive, Social, Structural, Emotional, Principled) reveal that money is only one of eight reservoirs that must be maintained. Lacunarity—the "gapiness" of your life's fractal structure—is the diagnostic metric: a life with low financial lacunarity but high temporal or emotional lacunarity is a building with solid walls and a missing roof. Building wealth means reducing lacunarity across all eight categories simultaneously, and the most effective tool is not willpower but Operational Scaffolding (`^3^O_{F6}`)—automated rules and physical systems that protect your resources even when your conscious will is depleted.
 
 
 
