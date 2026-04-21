@@ -12,6 +12,11 @@
 //!   90-100 = Platinum | 75-89 = Gold | 60-74 = Silver | 40-59 = Bronze | 0-39 = Fail
 
 pub mod lacunarity;
+pub mod yield_calc;
+
+pub use yield_calc::{
+    efficiency, excess_capacity, limiting_reagent, theoretical_yield, LimitingReagent, Yield,
+};
 
 use serde::{Deserialize, Serialize};
 use std::fmt;

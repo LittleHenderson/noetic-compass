@@ -14,6 +14,15 @@
 //! CAS v7.5 adds an optional [`ontology::Register`] axis orthogonal to the
 //! 40 Cognitive States and 7 Core Drives. v7.4 expressions (register-neutral)
 //! remain fully valid; register-aware scoring is future work.
+//!
+//! CAS v7.6 adds Stoichiometric Production Semantics per
+//! `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 9. Production
+//! semantics types live in [`ontology::recipe`] (Recipe, ProductionTarget,
+//! StateVector, Leakage, Conditions, Catalyst, Inhibitor, PrimitiveId) and
+//! yield-calculation algorithms live in [`scoring::yield_calc`]
+//! (theoretical_yield, limiting_reagent, excess_capacity, efficiency). The
+//! v7.6 layer is additive: no v7.4/v7.5 type, axiom, or signature is
+//! modified.
 
 pub mod algebra;
 pub mod fractals;
@@ -25,6 +34,14 @@ pub mod rpm;
 pub mod scoring;
 
 pub use ontology::Register;
+
+// CAS v7.6 Stoichiometric Production Semantics re-exports (Clarification 9).
+pub use ontology::{
+    Catalyst, Conditions, Inhibitor, Leakage, PrimitiveId, ProductionTarget, Recipe, StateVector,
+};
+pub use scoring::{
+    efficiency, excess_capacity, limiting_reagent, theoretical_yield, LimitingReagent, Yield,
+};
 
 pub use casc_ir as compiler_ir;
 pub use casc_syntax as compiler_syntax;

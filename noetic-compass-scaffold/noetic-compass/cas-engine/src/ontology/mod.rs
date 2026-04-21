@@ -20,6 +20,7 @@ pub mod domains;
 pub mod drives;
 pub mod operators;
 pub mod pathways;
+pub mod recipe;
 pub mod register;
 pub mod states;
 
@@ -27,6 +28,9 @@ pub use domains::Domain;
 pub use drives::{CoreDrive, DomainDrive, DriveProfile, DriveScore};
 pub use operators::{CognitiveOperator, DialConfig, DialError, DialSetting};
 pub use pathways::{InversionAxis, PathwayNode, PathwaySatisfaction, PathwayStage};
+pub use recipe::{
+    Catalyst, Conditions, Inhibitor, Leakage, PrimitiveId, ProductionTarget, Recipe, StateVector,
+};
 pub use register::Register;
 pub use states::{
     CognitiveStateId, CognitiveStateVector, StateVectorError, MIN_PROBABILITY, NUM_STATES,

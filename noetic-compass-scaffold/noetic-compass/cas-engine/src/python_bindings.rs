@@ -951,6 +951,574 @@ fn synthesize_drives(drive_a: u8, drive_b: u8) -> PyResult<u8> {
 }
 
 // ---------------------------------------------------------------------------
+// CAS v7.6 Production Semantics bindings (Clarification 9)
+// ---------------------------------------------------------------------------
+//
+// The Production Semantics types live in `ontology::recipe` and the
+// yield-calculation algorithms live in `scoring::yield_calc`. These are
+// additive over v7.4/v7.5 and do not modify existing types. Follow the
+// PyRegister pattern established in v7.5.
+
+use crate::ontology::recipe as recipe_mod;
+use crate::scoring::yield_calc as yield_mod;
+
+/// PyO3 wrapper for [`crate::ontology::recipe::PrimitiveId`]. Construct via
+/// the class methods (`noetic`, `domain`, `drive`, `register`, `compound`);
+/// register-annotated variants accept a symbol string ("T"/"A"/"f"/"E") per
+/// Clarification 8 Section 3 (lowercase `f` is authoritative).
+#[pyclass(name = "PrimitiveId", eq, hash, frozen)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+pub struct PyPrimitiveId {
+    inner: recipe_mod::PrimitiveId,
+}
+
+impl PyPrimitiveId {
+    fn parse_register(symbol: Option<&str>) -> PyResult<Option<ontology::Register>> {
+        match symbol {
+            None => Ok(None),
+            Some(s) => ontology::Register::from_symbol(s)
+                .map(Some)
+                .ok_or_else(|| {
+                    PyValueError::new_err(format!(
+                        "register symbol must be one of 'T', 'A', 'f', 'E'; got {s:?}"
+                    ))
+                }),
+        }
+    }
+}
+
+#[pymethods]
+impl PyPrimitiveId {
+    /// Construct a pure Noetic primitive `^n` (or `^n|R` if `register` is
+    /// given). `operator_index` is the CO-k index in [0, 9].
+    #[staticmethod]
+    #[pyo3(signature = (operator_index, register=None))]
+    fn noetic(operator_index: usize, register: Option<&str>) -> PyResult<Self> {
+        let op = ontology::CognitiveOperator::from_index(operator_index).ok_or_else(|| {
+            PyValueError::new_err(format!("operator index must be 0-9, got {operator_index}"))
+        })?;
+        let reg = Self::parse_register(register)?;
+        let inner = match reg {
+            None => recipe_mod::PrimitiveId::noetic(op),
+            Some(r) => recipe_mod::PrimitiveId::noetic_with_register(op, r),
+        };
+        Ok(Self { inner })
+    }
+
+    /// Construct a pure Domain primitive `^D` (or `^D|R` if `register` is
+    /// given). `domain_index` in [0, 3] (P=0, C=1, E=2, O=3).
+    #[staticmethod]
+    #[pyo3(signature = (domain_index, register=None))]
+    fn domain(domain_index: usize, register: Option<&str>) -> PyResult<Self> {
+        let d = ontology::Domain::from_index(domain_index).ok_or_else(|| {
+            PyValueError::new_err(format!("domain index must be 0-3, got {domain_index}"))
+        })?;
+        let reg = Self::parse_register(register)?;
+        let inner = match reg {
+            None => recipe_mod::PrimitiveId::domain(d),
+            Some(r) => recipe_mod::PrimitiveId::domain_with_register(d, r),
+        };
+        Ok(Self { inner })
+    }
+
+    /// Construct a pure Drive primitive `F_k` (or `F_k|R` if `register` is
+    /// given). `drive_number` in [1, 7].
+    #[staticmethod]
+    #[pyo3(signature = (drive_number, register=None))]
+    fn drive(drive_number: u8, register: Option<&str>) -> PyResult<Self> {
+        let d = ontology::CoreDrive::from_number(drive_number).ok_or_else(|| {
+            PyValueError::new_err(format!("drive number must be 1-7, got {drive_number}"))
+        })?;
+        let reg = Self::parse_register(register)?;
+        let inner = match reg {
+            None => recipe_mod::PrimitiveId::drive(d),
+            Some(r) => recipe_mod::PrimitiveId::drive_with_register(d, r),
+        };
+        Ok(Self { inner })
+    }
+
+    /// Construct a Register-only primitive `|R`. `register` is a symbol.
+    #[staticmethod]
+    fn register(register: &str) -> PyResult<Self> {
+        let r = ontology::Register::from_symbol(register).ok_or_else(|| {
+            PyValueError::new_err(format!(
+                "register symbol must be one of 'T', 'A', 'f', 'E'; got {register:?}"
+            ))
+        })?;
+        Ok(Self {
+            inner: recipe_mod::PrimitiveId::register(r),
+        })
+    }
+
+    /// Construct a compound primitive `^n^D_{F_k}` (or `...|R` if `register`
+    /// is given).
+    #[staticmethod]
+    #[pyo3(signature = (operator_index, domain_index, drive_number, register=None))]
+    fn compound(
+        operator_index: usize,
+        domain_index: usize,
+        drive_number: u8,
+        register: Option<&str>,
+    ) -> PyResult<Self> {
+        let op = ontology::CognitiveOperator::from_index(operator_index).ok_or_else(|| {
+            PyValueError::new_err(format!("operator index must be 0-9, got {operator_index}"))
+        })?;
+        let d = ontology::Domain::from_index(domain_index).ok_or_else(|| {
+            PyValueError::new_err(format!("domain index must be 0-3, got {domain_index}"))
+        })?;
+        let drv = ontology::CoreDrive::from_number(drive_number).ok_or_else(|| {
+            PyValueError::new_err(format!("drive number must be 1-7, got {drive_number}"))
+        })?;
+        let reg = Self::parse_register(register)?;
+        let inner = match reg {
+            None => recipe_mod::PrimitiveId::compound(op, d, drv),
+            Some(r) => recipe_mod::PrimitiveId::compound_with_register(op, d, drv, r),
+        };
+        Ok(Self { inner })
+    }
+
+    #[getter]
+    fn canonical_notation(&self) -> String {
+        self.inner.canonical_notation()
+    }
+
+    #[getter]
+    fn register_symbol(&self) -> Option<&'static str> {
+        self.inner.register_annotation().map(|r| r.symbol())
+    }
+
+    fn __repr__(&self) -> String {
+        format!("PrimitiveId({})", self.inner.canonical_notation())
+    }
+
+    fn __str__(&self) -> String {
+        self.inner.canonical_notation()
+    }
+}
+
+/// PyO3 wrapper for [`crate::ontology::recipe::ProductionTarget`].
+#[pyclass(name = "ProductionTarget")]
+#[derive(Clone)]
+pub struct PyProductionTarget {
+    inner: recipe_mod::ProductionTarget,
+}
+
+#[pymethods]
+impl PyProductionTarget {
+    #[new]
+    fn new(name: String) -> Self {
+        Self {
+            inner: recipe_mod::ProductionTarget::new(name),
+        }
+    }
+
+    #[getter]
+    fn name(&self) -> String {
+        self.inner.name.clone()
+    }
+
+    fn __repr__(&self) -> String {
+        format!("ProductionTarget(Ω_{{{}}})", self.inner.name)
+    }
+}
+
+/// PyO3 wrapper for [`crate::ontology::recipe::Leakage`].
+#[pyclass(name = "Leakage")]
+#[derive(Clone)]
+pub struct PyLeakage {
+    inner: recipe_mod::Leakage,
+}
+
+#[pymethods]
+impl PyLeakage {
+    #[new]
+    fn new(prerequisite: &PyPrimitiveId, side_product: String, magnitude: f64) -> Self {
+        Self {
+            inner: recipe_mod::Leakage::new(prerequisite.inner, side_product, magnitude),
+        }
+    }
+
+    #[getter]
+    fn side_product(&self) -> String {
+        self.inner.side_product.clone()
+    }
+
+    #[getter]
+    fn magnitude(&self) -> f64 {
+        self.inner.magnitude
+    }
+
+    #[getter]
+    fn prerequisite(&self) -> PyPrimitiveId {
+        PyPrimitiveId {
+            inner: self.inner.prerequisite,
+        }
+    }
+}
+
+/// PyO3 wrapper for [`crate::ontology::recipe::Catalyst`].
+#[pyclass(name = "Catalyst")]
+#[derive(Clone)]
+pub struct PyCatalyst {
+    inner: recipe_mod::Catalyst,
+}
+
+#[pymethods]
+impl PyCatalyst {
+    #[new]
+    fn new(name: String) -> Self {
+        Self {
+            inner: recipe_mod::Catalyst::new(name),
+        }
+    }
+
+    #[getter]
+    fn name(&self) -> String {
+        self.inner.name.clone()
+    }
+}
+
+/// PyO3 wrapper for [`crate::ontology::recipe::Inhibitor`].
+#[pyclass(name = "Inhibitor")]
+#[derive(Clone)]
+pub struct PyInhibitor {
+    inner: recipe_mod::Inhibitor,
+}
+
+#[pymethods]
+impl PyInhibitor {
+    #[new]
+    fn new(name: String) -> Self {
+        Self {
+            inner: recipe_mod::Inhibitor::new(name),
+        }
+    }
+
+    #[getter]
+    fn name(&self) -> String {
+        self.inner.name.clone()
+    }
+}
+
+/// PyO3 wrapper for [`crate::ontology::recipe::Conditions`].
+#[pyclass(name = "Conditions")]
+#[derive(Clone)]
+pub struct PyConditions {
+    inner: recipe_mod::Conditions,
+}
+
+#[pymethods]
+impl PyConditions {
+    #[new]
+    #[pyo3(signature = (catalysts=None, inhibitors=None))]
+    fn new(catalysts: Option<Vec<PyCatalyst>>, inhibitors: Option<Vec<PyInhibitor>>) -> Self {
+        let cats = catalysts
+            .unwrap_or_default()
+            .into_iter()
+            .map(|c| c.inner)
+            .collect();
+        let inhs = inhibitors
+            .unwrap_or_default()
+            .into_iter()
+            .map(|i| i.inner)
+            .collect();
+        Self {
+            inner: recipe_mod::Conditions::new(cats, inhs),
+        }
+    }
+
+    #[staticmethod]
+    fn empty() -> Self {
+        Self {
+            inner: recipe_mod::Conditions::empty(),
+        }
+    }
+
+    #[getter]
+    fn catalyst_names(&self) -> Vec<String> {
+        self.inner
+            .catalysts
+            .iter()
+            .map(|c| c.name.clone())
+            .collect()
+    }
+
+    #[getter]
+    fn inhibitor_names(&self) -> Vec<String> {
+        self.inner
+            .inhibitors
+            .iter()
+            .map(|i| i.name.clone())
+            .collect()
+    }
+}
+
+/// PyO3 wrapper for [`crate::ontology::recipe::Recipe`].
+#[pyclass(name = "Recipe")]
+#[derive(Clone)]
+pub struct PyRecipe {
+    inner: recipe_mod::Recipe,
+}
+
+#[pymethods]
+impl PyRecipe {
+    /// Construct a Recipe.
+    ///
+    /// `prerequisites` is a list of `(PrimitiveId, coefficient)` tuples.
+    /// `leakages` and `conditions` are optional.
+    #[new]
+    #[pyo3(signature = (target, prerequisites, leakages=None, conditions=None))]
+    fn new(
+        target: &PyProductionTarget,
+        prerequisites: Vec<(PyPrimitiveId, f64)>,
+        leakages: Option<Vec<PyLeakage>>,
+        conditions: Option<PyConditions>,
+    ) -> Self {
+        let prereq: Vec<(recipe_mod::PrimitiveId, f64)> = prerequisites
+            .into_iter()
+            .map(|(p, c)| (p.inner, c))
+            .collect();
+        let leaks: Vec<recipe_mod::Leakage> = leakages
+            .unwrap_or_default()
+            .into_iter()
+            .map(|l| l.inner)
+            .collect();
+        let conds = conditions
+            .map(|c| c.inner)
+            .unwrap_or_else(recipe_mod::Conditions::empty);
+        Self {
+            inner: recipe_mod::Recipe::with_leakages_and_conditions(
+                target.inner.clone(),
+                prereq,
+                leaks,
+                conds,
+            ),
+        }
+    }
+
+    #[getter]
+    fn target(&self) -> PyProductionTarget {
+        PyProductionTarget {
+            inner: self.inner.target.clone(),
+        }
+    }
+
+    #[getter]
+    fn arity(&self) -> usize {
+        self.inner.arity()
+    }
+
+    fn is_empty(&self) -> bool {
+        self.inner.is_empty()
+    }
+
+    /// Return the list of `(PrimitiveId, coefficient)` prerequisite pairs.
+    fn prerequisites(&self) -> Vec<(PyPrimitiveId, f64)> {
+        self.inner
+            .prerequisites
+            .iter()
+            .map(|(p, c)| (PyPrimitiveId { inner: *p }, *c))
+            .collect()
+    }
+
+    /// Return the list of Leakage entries.
+    fn leakages(&self) -> Vec<PyLeakage> {
+        self.inner
+            .leakages
+            .iter()
+            .cloned()
+            .map(|l| PyLeakage { inner: l })
+            .collect()
+    }
+
+    /// Return the Conditions (catalysts + inhibitors).
+    fn conditions(&self) -> PyConditions {
+        PyConditions {
+            inner: self.inner.conditions.clone(),
+        }
+    }
+
+    /// Serialize this Recipe to a JSON string.
+    fn to_json(&self) -> PyResult<String> {
+        serde_json::to_string(&self.inner)
+            .map_err(|e| PyValueError::new_err(format!("serde error: {e}")))
+    }
+
+    /// Deserialize a Recipe from a JSON string.
+    #[staticmethod]
+    fn from_json(json: &str) -> PyResult<Self> {
+        serde_json::from_str(json)
+            .map(|inner| Self { inner })
+            .map_err(|e| PyValueError::new_err(format!("serde error: {e}")))
+    }
+}
+
+/// PyO3 wrapper for [`crate::ontology::recipe::StateVector`] (v7.6).
+///
+/// NOTE: This is a DIFFERENT class from [`PyCognitiveStateVector`], which
+/// exposes the v7.4/v7.5 open-simplex state vector. The v7.6 state vector
+/// records available quantities of CAS primitives for yield analysis — no
+/// normalization constraint.
+#[pyclass(name = "ProductionStateVector")]
+#[derive(Clone)]
+pub struct PyProductionStateVector {
+    inner: recipe_mod::StateVector,
+}
+
+#[pymethods]
+impl PyProductionStateVector {
+    /// Construct an empty state vector. Add activations with `set`.
+    #[new]
+    fn new() -> Self {
+        Self {
+            inner: recipe_mod::StateVector::empty(),
+        }
+    }
+
+    /// Record an available quantity for a primitive.
+    fn set(&mut self, primitive: &PyPrimitiveId, quantity: f64) {
+        self.inner.set(primitive.inner, quantity);
+    }
+
+    /// Look up the quantity for a primitive; missing entries return 0.
+    fn quantity(&self, primitive: &PyPrimitiveId) -> f64 {
+        self.inner.quantity(&primitive.inner)
+    }
+
+    fn __len__(&self) -> usize {
+        self.inner.len()
+    }
+
+    fn is_empty(&self) -> bool {
+        self.inner.is_empty()
+    }
+}
+
+/// PyO3 wrapper for [`crate::scoring::yield_calc::Yield`].
+#[pyclass(name = "Yield")]
+#[derive(Clone)]
+pub struct PyYield {
+    inner: yield_mod::Yield,
+}
+
+#[pymethods]
+impl PyYield {
+    #[getter]
+    fn theoretical(&self) -> f64 {
+        self.inner.theoretical
+    }
+
+    #[getter]
+    fn actual(&self) -> Option<f64> {
+        self.inner.actual
+    }
+
+    #[getter]
+    fn efficiency(&self) -> Option<f64> {
+        self.inner.efficiency
+    }
+
+    /// Construct a full Yield with an actual measurement; efficiency is
+    /// computed via [`crate::scoring::yield_calc::efficiency`].
+    #[staticmethod]
+    fn with_actual(theoretical: f64, actual: f64) -> Self {
+        Self {
+            inner: yield_mod::Yield::with_actual(theoretical, actual),
+        }
+    }
+}
+
+/// PyO3 wrapper for [`crate::scoring::yield_calc::LimitingReagent`].
+///
+/// The variant name is exposed via the `kind` getter
+/// (`"primitive"` / `"multiple"` / `"none"`); callers inspect `primitive`,
+/// `primitives`, `ratio`, or `ratios` depending on kind.
+#[pyclass(name = "LimitingReagent")]
+#[derive(Clone)]
+pub struct PyLimitingReagent {
+    inner: yield_mod::LimitingReagent,
+}
+
+#[pymethods]
+impl PyLimitingReagent {
+    #[getter]
+    fn kind(&self) -> &'static str {
+        match &self.inner {
+            yield_mod::LimitingReagent::Primitive(_, _) => "primitive",
+            yield_mod::LimitingReagent::Multiple(_) => "multiple",
+            yield_mod::LimitingReagent::None => "none",
+        }
+    }
+
+    /// For `kind = "primitive"`, the sole limiting primitive. Else `None`.
+    fn primitive(&self) -> Option<PyPrimitiveId> {
+        match &self.inner {
+            yield_mod::LimitingReagent::Primitive(p, _) => Some(PyPrimitiveId { inner: *p }),
+            _ => None,
+        }
+    }
+
+    /// For `kind = "primitive"`, the ratio `xᵢ / aᵢ`. Else `None`.
+    fn ratio(&self) -> Option<f64> {
+        match &self.inner {
+            yield_mod::LimitingReagent::Primitive(_, r) => Some(*r),
+            _ => None,
+        }
+    }
+
+    /// For `kind = "multiple"`, the list of `(PrimitiveId, ratio)` tied at
+    /// the minimum. For other kinds, an empty list.
+    fn tied(&self) -> Vec<(PyPrimitiveId, f64)> {
+        match &self.inner {
+            yield_mod::LimitingReagent::Multiple(v) => v
+                .iter()
+                .map(|(p, r)| (PyPrimitiveId { inner: *p }, *r))
+                .collect(),
+            _ => Vec::new(),
+        }
+    }
+}
+
+/// Compute `Y_T = min_i(xᵢ / aᵢ)` per Clarification 9 Section 2.
+#[pyfunction]
+fn theoretical_yield(recipe: &PyRecipe, state: &PyProductionStateVector) -> PyYield {
+    PyYield {
+        inner: yield_mod::theoretical_yield(&recipe.inner, &state.inner),
+    }
+}
+
+/// Identify the limiting reagent (or tied limiting reagents) per
+/// Clarification 9 Section 2.
+#[pyfunction]
+fn limiting_reagent(recipe: &PyRecipe, state: &PyProductionStateVector) -> PyLimitingReagent {
+    PyLimitingReagent {
+        inner: yield_mod::limiting_reagent(&recipe.inner, &state.inner),
+    }
+}
+
+/// Compute `εᵢ = xᵢ - (Y_T · aᵢ)` for each prerequisite with `aᵢ > 0`.
+/// Returns a dict keyed by canonical notation of each primitive.
+#[pyfunction]
+fn excess_capacity(
+    recipe: &PyRecipe,
+    state: &PyProductionStateVector,
+) -> HashMap<String, f64> {
+    let map = yield_mod::excess_capacity(&recipe.inner, &state.inner);
+    let mut out: HashMap<String, f64> = HashMap::new();
+    for (primitive, epsilon) in map {
+        out.insert(primitive.canonical_notation(), epsilon);
+    }
+    out
+}
+
+/// Compute efficiency `η = actual / theoretical`. Returns NaN when
+/// `theoretical <= 0.0` per module-level convention.
+#[pyfunction]
+fn efficiency(theoretical: f64, actual: f64) -> f64 {
+    yield_mod::efficiency(theoretical, actual)
+}
+
+// ---------------------------------------------------------------------------
 // Module registration
 // ---------------------------------------------------------------------------
 
@@ -966,6 +1534,17 @@ pub fn cas_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<PyDomainCoherence>()?;
     m.add_class::<PyInversionScanner>()?;
     m.add_class::<PyRpmProfile>()?;
+    // CAS v7.6 production semantics
+    m.add_class::<PyPrimitiveId>()?;
+    m.add_class::<PyProductionTarget>()?;
+    m.add_class::<PyLeakage>()?;
+    m.add_class::<PyCatalyst>()?;
+    m.add_class::<PyInhibitor>()?;
+    m.add_class::<PyConditions>()?;
+    m.add_class::<PyRecipe>()?;
+    m.add_class::<PyProductionStateVector>()?;
+    m.add_class::<PyYield>()?;
+    m.add_class::<PyLimitingReagent>()?;
     m.add_function(wrap_pyfunction!(compute_nccs, m)?)?;
     m.add_function(wrap_pyfunction!(geodesic_distance, m)?)?;
     m.add_function(wrap_pyfunction!(bhattacharyya_coefficient, m)?)?;
@@ -974,5 +1553,10 @@ pub fn cas_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(multiply_cognitive_states, m)?)?;
     m.add_function(wrap_pyfunction!(divide_cognitive_states, m)?)?;
     m.add_function(wrap_pyfunction!(synthesize_drives, m)?)?;
+    // CAS v7.6 production-semantics algorithms
+    m.add_function(wrap_pyfunction!(theoretical_yield, m)?)?;
+    m.add_function(wrap_pyfunction!(limiting_reagent, m)?)?;
+    m.add_function(wrap_pyfunction!(excess_capacity, m)?)?;
+    m.add_function(wrap_pyfunction!(efficiency, m)?)?;
     Ok(())
 }
