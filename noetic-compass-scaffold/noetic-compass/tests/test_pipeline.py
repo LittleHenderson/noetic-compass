@@ -11,6 +11,7 @@ from api.pipeline.stages import (
     inversion_scan,
     output_gate,
     base_llm_call,
+    _parse_self_reported_scores,
 )
 from api.llm_connectors.mock_connector import MockLLMConnector
 from api.llm_connectors.base import BaseLLMConnector, LLMResponse
@@ -283,3 +284,179 @@ def test_secondary_llm_falls_back_to_generator_provider_when_needed(monkeypatch)
     assert connector is not None
     assert provider == "openai"
     assert model == "gpt-4o"
+
+
+# ---------------------------------------------------------------------------
+# Score parser — CAS v7.5 Phenomenological Register coverage
+# (Clarification 8; compiler's VALID_REGISTERS is the source of truth.)
+# ---------------------------------------------------------------------------
+
+
+def _ten_scores_line(values):
+    """Helper: render `Operator Scores: [v0, v1, ..., v9]`."""
+    return "Operator Scores: [" + ", ".join(values) + "]"
+
+
+def test_parse_scores_v74_plain_numeric_list_unchanged():
+    """Backward-compat: plain CAS v7.4 numeric list still parses identically."""
+    text = "Some prose. Operator Scores: [0.72, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66]"
+    assert _parse_self_reported_scores(text) == [
+        0.72, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66
+    ]
+
+
+def test_parse_scores_v74_missing_scores_returns_none():
+    """Text without an operator-scores line returns None (caller uses heuristic fallback)."""
+    assert _parse_self_reported_scores("No scores here.") is None
+
+
+def test_parse_scores_v74_short_list_returns_none():
+    """Lists with fewer than 10 scores remain invalid, as in v7.4."""
+    assert _parse_self_reported_scores("Operator Scores: [0.5, 0.5]") is None
+
+
+def test_parse_scores_v74_out_of_range_returns_none():
+    """Scores outside [0, 1] remain invalid, as in v7.4."""
+    text = "Operator Scores: [1.2, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66]"
+    assert _parse_self_reported_scores(text) is None
+
+
+def test_parse_scores_all_four_registers_in_value_list():
+    """CAS v7.5: each Register (T, A, f, E) is accepted on a numeric score."""
+    text = _ten_scores_line(
+        ["0.72|T", "0.81|A", "0.64|f", "0.55|E", "0.70", "0.68", "0.77", "0.60", "0.58", "0.66"]
+    )
+    assert _parse_self_reported_scores(text) == [
+        0.72, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66
+    ]
+
+
+def test_parse_scores_register_at_start_middle_end_of_list():
+    """Register annotations are positionally independent within the list."""
+    # Register on first (start)
+    t_start = _ten_scores_line(["0.70|A"] + ["0.50"] * 9)
+    # Register on middle
+    t_mid = _ten_scores_line(["0.50"] * 5 + ["0.70|f"] + ["0.50"] * 4)
+    # Register on last (end)
+    t_end = _ten_scores_line(["0.50"] * 9 + ["0.70|E"])
+    for text in (t_start, t_mid, t_end):
+        out = _parse_self_reported_scores(text)
+        assert out is not None
+        assert len(out) == 10
+        assert all(0.0 <= v <= 1.0 for v in out)
+
+
+def test_parse_scores_mixed_registers_and_plain_tokens():
+    """Mixed list: some scores with register, some without (v7.5 prompt example shape)."""
+    text = _ten_scores_line(
+        ["0.72|A", "0.81", "0.64|f", "0.55|f", "0.70", "0.68", "0.77|A", "0.60", "0.58", "0.66"]
+    )
+    assert _parse_self_reported_scores(text) == [
+        0.72, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66
+    ]
+
+
+def test_parse_scores_lowercase_f_accepted():
+    """CAS v7.5: lowercase `f` for Affective is authoritative and accepted."""
+    text = _ten_scores_line(["0.5|f"] * 10)
+    out = _parse_self_reported_scores(text)
+    assert out == [0.5] * 10
+
+
+def test_parse_scores_uppercase_F_rejected():
+    """CAS v7.5: uppercase `F` is NOT the Affective register; it must be rejected."""
+    text = _ten_scores_line(["0.5|F"] + ["0.5"] * 9)
+    with pytest.raises(ValueError, match="invalid register 'F'"):
+        _parse_self_reported_scores(text)
+
+
+def test_parse_scores_invalid_register_letter_rejected():
+    """Any register letter outside {T, A, f, E} is rejected with a clear error."""
+    text = _ten_scores_line(["0.5|Q"] + ["0.5"] * 9)
+    with pytest.raises(ValueError, match="invalid register 'Q'"):
+        _parse_self_reported_scores(text)
+
+
+def test_parse_scores_malformed_register_double_letter_returns_none():
+    """Malformed `|TT` (two letters after `|`) is structurally invalid → None."""
+    text = _ten_scores_line(["0.5|TT"] + ["0.5"] * 9)
+    assert _parse_self_reported_scores(text) is None
+
+
+def test_parse_scores_malformed_register_mixed_letters_returns_none():
+    """Malformed `|fE`, `|TA` (two valid letters concatenated) → None."""
+    for suffix in ("|fE", "|TA", "|Af"):
+        text = _ten_scores_line([f"0.5{suffix}"] + ["0.5"] * 9)
+        assert _parse_self_reported_scores(text) is None, suffix
+
+
+def test_parse_scores_empty_register_annotation_rejected():
+    """Bare `|` with no register letter is structurally invalid → None."""
+    text = _ten_scores_line(["0.5|"] + ["0.5"] * 9)
+    assert _parse_self_reported_scores(text) is None
+
+
+def test_parse_scores_keyed_state_expression_v74_register_neutral():
+    """Backward-compat: v7.4 register-neutral keyed state lines parse to 10 floats."""
+    lines = [f"^{i}^C_{{F2}}: 0.5" for i in range(10)]
+    text = "Some analysis prose.\n" + "\n".join(lines)
+    assert _parse_self_reported_scores(text) == [0.5] * 10
+
+
+def test_parse_scores_keyed_state_noetic_register():
+    """CAS v7.5: Noetic-level register `^n|R` on keyed state lines is accepted."""
+    lines = [f"^{i}|T^C_{{F2}}: 0.6" for i in range(10)]
+    text = "\n".join(lines)
+    assert _parse_self_reported_scores(text) == [0.6] * 10
+
+
+def test_parse_scores_keyed_state_drive_register():
+    """CAS v7.5: Drive-level register `_{F_k|R}` on keyed state lines is accepted."""
+    lines = [f"^{i}^C_{{F2|A}}: 0.7" for i in range(10)]
+    text = "\n".join(lines)
+    assert _parse_self_reported_scores(text) == [0.7] * 10
+
+
+def test_parse_scores_keyed_state_compound_register():
+    """CAS v7.5: compound-level register `^n^D_{F_k}|R` on keyed state lines is accepted."""
+    lines = [f"^{i}^E_{{F3}}|f: 0.4" for i in range(10)]
+    text = "\n".join(lines)
+    assert _parse_self_reported_scores(text) == [0.4] * 10
+
+
+def test_parse_scores_keyed_state_independent_registers():
+    """CAS v7.5: independent Noetic and Drive registers `^n|R_n^D_{F_k|R_d}`."""
+    lines = [f"^{i}|T^C_{{F2|A}}: 0.55" for i in range(10)]
+    text = "\n".join(lines)
+    assert _parse_self_reported_scores(text) == [0.55] * 10
+
+
+def test_parse_scores_keyed_state_uppercase_F_rejected():
+    """Keyed state format must also reject uppercase `F` on any register slot."""
+    lines = [f"^{i}^C_{{F2}}|F: 0.5" for i in range(10)]
+    text = "\n".join(lines)
+    with pytest.raises(ValueError, match="invalid register 'F'"):
+        _parse_self_reported_scores(text)
+
+
+def test_parse_scores_keyed_state_requires_all_ten_operators():
+    """Keyed format needs one line per CO-0..CO-9 to yield a valid 10-vector."""
+    # Only 5 operators covered → fallback (None).
+    lines = [f"^{i}^C_{{F2}}: 0.5" for i in range(5)]
+    text = "\n".join(lines)
+    assert _parse_self_reported_scores(text) is None
+
+
+def test_parse_scores_keyed_state_value_register_accepted():
+    """Register may appear on the numeric value even in keyed format: `: 0.73|A`."""
+    lines = [f"^{i}^C_{{F2}}: 0.73|A" for i in range(10)]
+    text = "\n".join(lines)
+    assert _parse_self_reported_scores(text) == [0.73] * 10
+
+
+def test_parse_scores_invalid_register_on_keyed_noetic_rejected():
+    """Invalid register letter `Q` at the Noetic position is rejected cleanly."""
+    lines = [f"^{i}|Q^C_{{F2}}: 0.5" for i in range(10)]
+    text = "\n".join(lines)
+    with pytest.raises(ValueError, match="invalid register 'Q'"):
+        _parse_self_reported_scores(text)

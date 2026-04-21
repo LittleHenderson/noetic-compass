@@ -16,6 +16,7 @@ except ImportError:
 from api.errors import DialViolationError, LLMError, PipelineStageError
 from api.llm_connectors.base import BaseLLMConnector, build_cas_system_prompt, LLMResponse
 from api.models import DialConfigSchema
+from api.notation.compiler import VALID_REGISTERS
 from api.pipeline.llm_scorer import score_prompt_response
 
 
@@ -399,16 +400,135 @@ async def operator_scoring(
     )
 
 
+# CAS v7.5 Phenomenological Register (Clarification 8) accepted on inline
+# self-reported operator scores. Each numeric score may carry an optional
+# `|R` suffix where R ∈ {T, A, f, E} (lowercase `f` for Affective is
+# authoritative; uppercase `F` is rejected). A plain numeric list without
+# register annotations remains the v7.4-compatible default and must continue
+# to parse unchanged.
+#
+# Register metadata is parsed and validated here but not yet propagated
+# downstream (OperatorScoreResult stores `list[float]`). The score list is
+# returned in its current shape; register-on-score plumbing to the scoring
+# result is flagged as follow-up work, not part of this fix.
+_SCORE_LIST_RE = re.compile(r"Operator Scores:\s*\[([^\]]+)\]")
+# Single `value` or `value|R` token. Anchored so trailing junk (e.g. the
+# second `T` in `0.73|TT`, or a trailing bare `|`) causes a non-match and the
+# whole list parse falls back — consistent with the pre-existing "return None
+# on malformed input" convention.
+_SCORE_TOKEN_RE = re.compile(
+    r"^\s*(?P<value>\d+(?:\.\d+)?)(?:\|(?P<register>[A-Za-z]))?\s*$"
+)
+# Keyed state-expression format that the compiler already accepts. Each
+# component register is optional. The compiler is the source of truth for
+# register grammar; we mirror its `\|[A-Za-z]` form and reuse its
+# VALID_REGISTERS for validation.
+_STATE_SCORE_LINE_RE = re.compile(
+    r"\^(?P<op>\d)"
+    r"(?:\|(?P<noetic_register>[A-Za-z]))?"
+    r"\^(?P<domain>[PCEO])"
+    r"_\{F(?P<drive>\d)(?:\|(?P<drive_register>[A-Za-z]))?\}"
+    r"(?:\|(?P<compound_register>[A-Za-z]))?"
+    r"\s*:\s*"
+    r"(?P<value>\d+(?:\.\d+)?)"
+    r"(?:\|(?P<value_register>[A-Za-z]))?"
+)
+
+
+def _validate_register_char(register: str | None) -> None:
+    """Validate an optional register character against CAS v7.5 values.
+
+    Mirrors the compiler's `_validate_register_token` error-message
+    convention. None is valid (register-neutral / v7.4-compatible).
+    """
+    if register is None:
+        return
+    if register not in VALID_REGISTERS:
+        raise ValueError(
+            f"invalid register {register!r}: CAS v7.5 Phenomenological Register "
+            f"must be one of {{T, A, f, E}} (lowercase f is authoritative "
+            f"for Affective)"
+        )
+
+
 def _parse_self_reported_scores(text: str) -> list[float] | None:
-    """Parse inline self-reported operator scores from the base model response."""
-    match = re.search(r"Operator Scores:\s*\[([\d.,\s]+)\]", text)
-    if match:
-        try:
-            values = [float(x.strip()) for x in match.group(1).split(",")]
-            if len(values) == 10 and all(0.0 <= v <= 1.0 for v in values):
+    """Parse inline self-reported operator scores from the base model response.
+
+    Accepts two formats:
+
+    1. Numeric list (existing v7.4 format, extended for CAS v7.5 register
+       annotations):
+           Operator Scores: [0.72, 0.81, 0.64, ...]                   # v7.4
+           Operator Scores: [0.72|A, 0.81, 0.64|f, ...]                # v7.5
+       Each score is a float in [0.0, 1.0]; register annotations are
+       optional and ignored by downstream scoring for now.
+
+    2. Keyed state expressions (CAS v7.5 Clarification 8 compatible with the
+       compiler's notation). When ten lines of the form
+           ^n^D_{Fk}[|R]: value[|R]
+       are present (one per CO-0 through CO-9, any domain/drive), they are
+       collected into an ordered list. This matches the compiler's
+       register-suffix grammar; VALID_REGISTERS from
+       `api.notation.compiler` is the single source of truth.
+
+    Returns a list of ten floats in [0.0, 1.0], or None if the text does not
+    contain a parseable score set. Register characters that fully match the
+    `|R` grammar but carry an invalid letter (uppercase `F`, `Q`, etc.) are
+    rejected with ValueError carrying a clear, compiler-consistent message.
+    """
+    # Format 1: `Operator Scores: [ ... ]` numeric list, optionally with
+    # per-score `|R` annotations.
+    list_match = _SCORE_LIST_RE.search(text)
+    if list_match:
+        tokens = [tok for tok in list_match.group(1).split(",")]
+        if len(tokens) == 10:
+            values: list[float] = []
+            for token in tokens:
+                tok_match = _SCORE_TOKEN_RE.match(token)
+                if not tok_match:
+                    # Malformed token (e.g. `0.73|TT`, trailing `|`, mid-token
+                    # junk): the pre-existing convention is to return None
+                    # and let the caller fall back to heuristics.
+                    return None
+                # Validate register letter even though we do not currently
+                # propagate it downstream — this catches uppercase `F`,
+                # `Q`, etc. with a clear message per CAS v7.5.
+                _validate_register_char(tok_match.group("register"))
+                try:
+                    values.append(float(tok_match.group("value")))
+                except ValueError:
+                    return None
+            if all(0.0 <= v <= 1.0 for v in values):
                 return values
+        return None
+
+    # Format 2: Keyed state-expression lines, one per operator CO-0..CO-9.
+    # Register annotations are validated at every position they can appear:
+    # Noetic-level (`^2|T`), Drive-level (`_{F2|A}`), compound-level
+    # (`^2^C_{F2}|A`), and on the numeric value (`: 0.73|A`). Invalid
+    # register letters are rejected with the same error as Format 1.
+    keyed_scores: dict[int, float] = {}
+    for state_match in _STATE_SCORE_LINE_RE.finditer(text):
+        for group_name in (
+            "noetic_register",
+            "drive_register",
+            "compound_register",
+            "value_register",
+        ):
+            _validate_register_char(state_match.group(group_name))
+        op_index = int(state_match.group("op"))
+        try:
+            value = float(state_match.group("value"))
         except ValueError:
             return None
+        if not 0.0 <= value <= 1.0:
+            return None
+        # First occurrence wins so repeated mentions in narrative text do
+        # not clobber an earlier explicit assignment.
+        keyed_scores.setdefault(op_index, value)
+    if len(keyed_scores) == 10 and set(keyed_scores.keys()) == set(range(10)):
+        return [keyed_scores[i] for i in range(10)]
+
     return None
 
 
