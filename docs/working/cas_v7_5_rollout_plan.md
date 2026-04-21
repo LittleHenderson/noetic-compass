@@ -122,17 +122,59 @@ This consultation is **blocking** for any public disclosure of v7.5 that might a
 
 **Location.** `dashboard/src/`.
 
-**Priority.** Low (user-facing polish; not blocking).
+**Priority.** Medium-high (Phase A of multi-modal visualization is a v7.5 rollout dependency; Phases B-E are progressive enhancement).
 
-**Required updates:**
+**Scope expanded on 2026-04-20:** Decision 5 from the Open Decisions section has been resolved as a full multi-modal visualization system. Specification lives at `docs/design/cas_v7_5_multimodal_display_specification.md`. Dashboard work now includes both visual (Radial Architecture Display) and auditory (Temporal Cognitive Score) modalities, formally corresponded via CAS algebra.
+
+**Required updates — base (apply to all phases):**
 
 1. Update state-display components to optionally show Register when assessment returns register-specified states.
 2. Add Register explanation to UI (tooltip, help panel, or dedicated explanation page).
 3. Update `dashboard/src/lib/interpretations.ts` to optionally interpret Register variations of the same Noetic × Domain × Drive combination.
 4. Update tooltips to reference the four Registers when hovering over a state display.
-5. Consider a "Register heatmap" visualization as a v7.5 feature (4-axis visualization is a design problem; decision deferred).
 
-**Dependencies.** Requires compiler and Rust engine register support first.
+**Required updates — Phase A (v7.5 rollout dependency):**
+
+1. Static Radial Architecture Display rendering (concentric rings: Domains at compass points, 10 Noetic petals per Domain, Register quadrants per petal, Drive indicators at perimeter).
+2. Basic interactive hover and click behaviors (cell-detail overlay on hover).
+3. Domain / Noetic / Register / Drive display at all four rings.
+4. Lacunarity void indication (empty quadrants with dashed outline).
+5. Color palette with colorblind-accessibility considerations and value-encoding for grayscale.
+6. Alternative text-based view for accessibility.
+7. Keyboard navigation.
+
+**Required updates — Phase B (enhanced mandala):**
+
+1. Full interactive mandala (toggle register layers, toggle involution highlight, composition trace animation, comparison mode).
+2. Involution visualization with connecting lines.
+3. Composition tracing with animated flow between input cells and compound cell.
+4. Side-by-side comparison mode for two Minds or two time points.
+5. Zoomed Noetic sub-mandala (16 Domain × Register combinations for a single Noetic).
+
+**Required updates — Phase C (auditory modality):**
+
+1. Sonification engine implementation (Tone.js web audio).
+2. Formal pitch / dynamic / tempo / rhythm / key-signature mappings per Part 2 of the multi-modal spec.
+3. Playback controls (play, pause, scrub, loop).
+4. Audio export (WAV, MP3).
+5. Score notation rendering (four domain staves).
+
+**Required updates — Phase D (multi-modal integration):**
+
+1. Synchronized playback (cursor traverses score; mandala pulses in sync).
+2. Cross-modal interactivity (click mandala plays score passage; playback highlights mandala).
+3. Combined export formats (video with synchronized animation and playback).
+
+**Required updates — Phase E (advanced research features):**
+
+1. MIDI export for musicians wanting to edit/remix.
+2. Score notation export (PDF, MusicXML).
+3. Scientific audio analysis tools (spectrum, rhythm extraction).
+4. Research-grade data export (JSON, CSV) with full axis values.
+
+**Dependencies.** Phase A requires compiler and Rust engine Register support first. Phases B-E build progressively on Phase A. Phase C (sonification) is largely independent of the compiler/engine work and can proceed in parallel once mandala base is stable.
+
+**Cross-reference:** full design specification at `docs/design/cas_v7_5_multimodal_display_specification.md`.
 
 ---
 
@@ -213,28 +255,44 @@ This consultation is **blocking** for any public disclosure of v7.5 that might a
 Suggested order for propagation work:
 
 1. **Peer-review paper update** (blocking arXiv submission; gated on IP attorney consultation).
-2. **Compiler Register support** (unblocks downstream LLM prompt and scenario work).
+2. **Compiler Register support** (unblocks downstream LLM prompt, Rust engine, dashboard, and scenario work).
 3. **LLM scoring prompt update** (benefits from compiler support but can proceed in parallel since it's a string update).
-4. **Rust engine Register field** (downstream dependency for dashboard).
-5. **Dashboard Register display** (user-facing polish after engine support exists).
-6. **Book manuscript Register chapter** (independent of technical stack; can proceed in parallel).
-7. **Human-application chapter enrichment (12-17)** (after Register chapter establishes the axis).
-8. **AI-application chapter enrichment (18-22)** (after Register chapter).
-9. **Mathematics chapter formalization (23-27)** (after peer-review paper establishes formal treatment).
-10. **Appendix updates** (final polish after main chapters stabilize).
-11. **Incident database re-examination** (opportunistic during normal incident-analysis work).
-12. **Scenario catalog register coverage** (after compiler support exists).
-13. **NL signal analyzer register detection** (after compiler support exists).
-14. **TKS 28 Foundations translation key full population** (requires Wakil source access and review; can proceed in parallel with other work).
+4. **Rust engine Register field** (downstream dependency for dashboard Phase A).
+5. **Dashboard Phase A — minimum viable visualization** (Radial Architecture Display static rendering, basic interactivity, lacunarity void indication, accessibility baseline). **v7.5 rollout dependency.**
+6. **Dashboard Phase B — enhanced mandala** (full interactivity, involution visualization, composition tracing, comparison mode). Progressive enhancement.
+7. **Dashboard Phase C — auditory modality** (sonification engine, pitch/dynamic/tempo mappings, playback controls, audio export). Progressive enhancement. Largely independent of earlier work once Phase A is stable; can proceed in parallel with book work.
+8. **Dashboard Phase D — multi-modal integration** (synchronized playback, cross-modal interactivity, combined exports). Builds on Phases B and C.
+9. **Book manuscript Register chapter** (independent of technical stack; can proceed in parallel with dashboard work).
+10. **Human-application chapter enrichment (12-17)** (after Register chapter establishes the axis).
+11. **AI-application chapter enrichment (18-22)** (after Register chapter).
+12. **Mathematics chapter formalization (23-27)** (after peer-review paper establishes formal treatment).
+13. **Appendix updates** (final polish after main chapters stabilize).
+14. **Incident database re-examination** (opportunistic during normal incident-analysis work).
+15. **Scenario catalog register coverage** (after compiler support exists).
+16. **NL signal analyzer register detection** (after compiler support exists).
+17. **Dashboard Phase E — advanced research features** (MIDI export, MusicXML, scientific analysis tools). Research extension. Non-blocking.
+18. **TKS 28 Foundations translation key full population** (requires Wakil source access and review; can proceed in parallel with other work).
 
 This sequencing respects the backward-compatibility mandate: at every stage, existing v7.4 expressions continue to work. Register is added as optional capacity; nothing breaks.
+
+**v7.5 rollout dependencies (items that must complete before v7.5 is considered rolled out):**
+
+- (1) Peer-review paper update (or deferred per IP attorney guidance).
+- (2) Compiler Register support.
+- (3) LLM scoring prompt update.
+- (4) Rust engine Register field.
+- (5) Dashboard Phase A (minimum viable multi-modal visualization, visual modality only).
+
+Items 6-18 are progressive enhancement, not rollout blockers.
 
 ---
 
 ## Open Decisions
 
-1. **Register heatmap visualization format** (dashboard). 4-axis visualization is a design problem with no obvious best form. Decision deferred.
+1. ~~**Register heatmap visualization format** (dashboard). 4-axis visualization is a design problem with no obvious best form. Decision deferred.~~ **RESOLVED 2026-04-20:** Multi-modal system combining Radial Architecture Display (visual) and Temporal Cognitive Score (auditory), formally corresponded via CAS algebra. Full specification at `docs/design/cas_v7_5_multimodal_display_specification.md`. Phased implementation (Phase A as v7.5 dependency, Phases B-E as progressive enhancement) added to section (e) Dashboard above.
 2. **Register-axis lacunarity metric** (Rust engine). Does lacunarity extend to Register? If so, with what formula? Research decision deferred until empirical Register-distribution data exists.
 3. **New chapter vs. Chapter 9 extension** for book Register introduction. Pedagogical-flow decision for Wakil.
 4. **Supplementary Appendix G** (160 Noetic × Domain × Register positions). Decision on full enumeration vs selective pedagogical highlighting for Wakil.
-5. **Continuation-in-part filing** (legal). IP attorney consultation outcome governs.
+5. ~~**Continuation-in-part filing** (legal). IP attorney consultation outcome governs.~~ *(numbering preserved for historical reference; see legal-framing section earlier in this document for current IP-attorney action item.)*
+
+**Note on numbering.** Decision 1 (formerly the dashboard-visualization decision) is resolved as of 2026-04-20. Remaining open decisions keep their original numbers for historical consistency.
