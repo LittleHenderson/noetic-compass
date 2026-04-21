@@ -618,6 +618,300 @@ def _parse_self_reported_scores(text: str) -> list[float] | None:
     return scores
 
 
+# ---------------------------------------------------------------------------
+# CAS v7.7 — Register-set notation and named emergent result support
+# (Clarification 10 Sections 2, 3). Introduced as a separate function to
+# avoid cascading the widened entry type through OperatorScoreResult,
+# WrapResponse, and the dashboard schema in a single diff. The v7.5
+# `_parse_self_reported_scores_with_registers` remains the wired-in parser
+# for the scoring stage; the v7.7 function below extends the grammar
+# without disrupting the existing data flow. Rewiring the scoring stage to
+# the v7.7 parser and widening downstream types is flagged as follow-up.
+# ---------------------------------------------------------------------------
+
+# Unicode angle brackets per Clarification 10 Section 3 — U+27E8 MATHEMATICAL
+# LEFT ANGLE BRACKET / U+27E9 MATHEMATICAL RIGHT ANGLE BRACKET. These are
+# deliberately distinct from ASCII `<>` to avoid collision with comparison
+# operators and from U+2329/U+232A which are deprecated in Unicode.
+_REGISTER_SET_OPEN = "⟨"   # ⟨
+_REGISTER_SET_CLOSE = "⟩"  # ⟩
+
+# v7.7 token recognizer for the numeric list position. One of:
+#   - plain numeric (v7.4):              `0.72`
+#   - numeric with single register:       `0.72|A`          (v7.5)
+#   - numeric with register-set:          `0.72|⟨A,f,T⟩`    (v7.7)
+#   - numeric with named emergent result: `0.72|Ω`, `0.72|TF`, etc. (v7.7)
+#
+# The trailing alternation is greedy-at-most-one: register-set angle-bracket
+# form, OR a multi-character identifier (letters / digits / non-ASCII Ω etc.).
+# The single-letter VALID_REGISTERS form is a subset of the identifier form,
+# handled by the validator downstream rather than by a third regex branch.
+_SCORE_TOKEN_V7_7_RE = re.compile(
+    r"^\s*(?P<value>\d+(?:\.\d+)?)"
+    + r"(?:"
+    + r"\|" + _REGISTER_SET_OPEN + r"(?P<register_set>[^" + _REGISTER_SET_CLOSE + r"]*)" + _REGISTER_SET_CLOSE
+    + r"|"
+    + r"\|(?P<register_name>[^\s,\]\|" + _REGISTER_SET_OPEN + _REGISTER_SET_CLOSE + r"]+)"
+    + r")?\s*$"
+)
+
+# v7.7 keyed state-expression line. Mirrors `_STATE_SCORE_LINE_RE` but:
+# (a) makes the `_{Fk}` drive subscript OPTIONAL — Clarification 10's
+#     emergent-result notation `^n^D|name: v` commonly appears without a
+#     drive subscript (the LHS `×`-chain carries the architectural content
+#     and the emergent-state name subsumes drive granularity).
+# (b) lifts the COMPOUND (state-level) suffix to accept single-register,
+#     register-set, or named emergent result. Per Clarification 10 Section
+#     2A/2C, `|⟨…⟩` and `|<name>` attach to the state label itself
+#     (`^3^P|Ω: v`), not to the numeric value. The compound slot's
+#     alternation (set | multi-char identifier) captures register-set and
+#     named-emergent forms; single-letter v7.5 forms are captured by the
+#     same identifier slot and disambiguated via VALID_REGISTERS
+#     membership downstream.
+# (c) non-compound positions (noetic/drive) retain the v7.5 single-letter
+#     form — only the compound/value slots extend. Per Clarification 10
+#     Section 3, register-set and named-emergent notation are authored at
+#     state-level, not at sub-component level.
+_STATE_SCORE_LINE_V7_7_RE = re.compile(
+    r"\^(?P<op>\d)"
+    + r"(?:\|(?P<noetic_register>[A-Za-z]))?"
+    + r"\^(?P<domain>[PCEO])"
+    + r"(?:_\{F(?P<drive>\d)(?:\|(?P<drive_register>[A-Za-z]))?\})?"
+    + r"(?:"
+    + r"\|" + _REGISTER_SET_OPEN + r"(?P<compound_register_set>[^" + _REGISTER_SET_CLOSE + r"]*)" + _REGISTER_SET_CLOSE
+    + r"|"
+    + r"\|(?P<compound_register_name>[^\s,\]\|\(\):" + _REGISTER_SET_OPEN + _REGISTER_SET_CLOSE + r"]+)"
+    + r")?"
+    + r"\s*:\s*"
+    + r"(?P<value>\d+(?:\.\d+)?)"
+    + r"(?:"
+    + r"\|" + _REGISTER_SET_OPEN + r"(?P<value_register_set>[^" + _REGISTER_SET_CLOSE + r"]*)" + _REGISTER_SET_CLOSE
+    + r"|"
+    + r"\|(?P<value_register_name>[^\s,\]\|\(\)" + _REGISTER_SET_OPEN + _REGISTER_SET_CLOSE + r"]+)"
+    + r")?"
+)
+
+
+def _split_score_list_v7_7(inner: str) -> list[str] | None:
+    """Comma-split the `[...]` interior, but respect `⟨…⟩` grouping.
+
+    Naive `inner.split(",")` splits inside register-sets like
+    `0.72|⟨A,f,T⟩`, fragmenting the token across multiple list slots.
+    This walker preserves angle-bracket groupings so a register-set
+    stays intact inside its parent token. Mismatched brackets yield
+    None, which bubbles up as a parser failure (None return).
+    """
+    tokens: list[str] = []
+    current: list[str] = []
+    depth = 0
+    for ch in inner:
+        if ch == _REGISTER_SET_OPEN:
+            depth += 1
+            current.append(ch)
+        elif ch == _REGISTER_SET_CLOSE:
+            if depth == 0:
+                return None
+            depth -= 1
+            current.append(ch)
+        elif ch == "," and depth == 0:
+            tokens.append("".join(current))
+            current = []
+        else:
+            current.append(ch)
+    if depth != 0:
+        return None
+    tokens.append("".join(current))
+    return tokens
+
+
+def _parse_register_set_literal(raw: str) -> list[str]:
+    """Parse the interior of `|⟨…⟩` into an ordered validated list.
+
+    - Empty set `|⟨⟩` is rejected per Clarification 10 Section 3 (set must
+      specify at least one register).
+    - Each entry must be a single letter in `VALID_REGISTERS` (imported
+      single-source from `api.notation.compiler`). Named emergent results
+      are NOT admitted inside `|⟨…⟩` — they live on the `= X|name` form.
+    - Duplicates are rejected: Clarification 10 describes register
+      occupancy as a set, so `|⟨A,A,T⟩` is an ill-formed specification
+      not a legitimate specification of double-analytical presence.
+    - Insertion order is preserved (first-pass convention; canonical sort
+      can be layered later without breaking callers).
+    """
+    stripped = raw.strip()
+    if stripped == "":
+        raise ValueError(
+            "invalid register-set: '|⟨⟩' is empty — CAS v7.7 Clarification 10 "
+            "requires a register-set to specify at least one register "
+            "(one of {T, A, f, E}); use '|R' for a single register or "
+            "omit the suffix for register-neutral"
+        )
+    entries: list[str] = []
+    for raw_entry in stripped.split(","):
+        entry = raw_entry.strip()
+        if entry not in VALID_REGISTERS:
+            raise ValueError(
+                f"invalid register {entry!r} inside register-set: CAS v7.7 "
+                f"Clarification 10 register-set entries must each be one of "
+                f"{{T, A, f, E}} (lowercase f is authoritative for Affective); "
+                f"named emergent results like 'Ω' or 'TF' belong on the "
+                f"'= X|name' form, not inside '|⟨…⟩'"
+            )
+        if entry in entries:
+            raise ValueError(
+                f"duplicate register {entry!r} in register-set: CAS v7.7 "
+                f"Clarification 10 treats register-sets as specifications of "
+                f"occupancy, so duplicates are ill-formed"
+            )
+        entries.append(entry)
+    return entries
+
+
+def _resolve_value_register_v7_7(
+    register_set_raw: str | None,
+    register_name_raw: str | None,
+) -> str | list[str] | None:
+    """Resolve a single register slot into a v7.7-typed entry.
+
+    Exactly one of the two regex alternation branches will be populated
+    at any call site (the regex enforces mutual exclusion). A non-None
+    `register_set_raw` is parsed via `_parse_register_set_literal`. A
+    non-None `register_name_raw` is either a single VALID_REGISTERS
+    letter (v7.5 compatible) or a named emergent result outside
+    VALID_REGISTERS (v7.7, returned as-is).
+
+    None return means register-neutral (both branches unmatched).
+    """
+    if register_set_raw is not None:
+        return _parse_register_set_literal(register_set_raw)
+    if register_name_raw is None:
+        return None
+    if register_name_raw in VALID_REGISTERS:
+        return register_name_raw
+    # Named emergent result per Clarification 10 Section 2C. The parser
+    # does NOT validate that the LHS `×`-chain defines `name` correctly —
+    # that is the compiler's (Agent 12) Rule 4 enforcement. The regex
+    # character class already prevents empty / whitespace / bracket /
+    # pipe content, so any string reaching this branch is a plausible
+    # identifier.
+    return register_name_raw
+
+
+def _parse_self_reported_scores_v7_7(
+    text: str,
+) -> tuple[list[float], list[str | list[str] | None]] | None:
+    """CAS v7.7 score parser with register-set and named-emergent support.
+
+    Extends `_parse_self_reported_scores_with_registers` with two grammar
+    additions from Clarification 10:
+
+    1. Register-set notation `|⟨R1,R2,…⟩` on a numeric score (Section 2A /
+       Section 3). Each entry must be a single letter in VALID_REGISTERS;
+       empty sets and duplicates are rejected.
+
+    2. Named emergent result `|<name>` where `<name>` is any identifier
+       outside VALID_REGISTERS (Section 2C). The emergent register is
+       returned verbatim as a string; the parser does not validate the
+       `×`-chain RHS-LHS relationship — that is the compiler's Rule 4.
+
+    Return type widens the per-score register entry from `str | None`
+    (v7.5) to `str | list[str] | None` (v7.7):
+        - `None`     — register-neutral (v7.4 shape)
+        - `str`      — single-register (v7.5) OR named emergent (v7.7)
+        - `list[str]`— register-set (v7.7)
+
+    Named-emergent strings are distinguishable from v7.5 single-register
+    strings by membership test against `VALID_REGISTERS`: any string NOT
+    in `VALID_REGISTERS` is a named emergent result.
+
+    Backward compatibility: v7.4 plain numeric lists and v7.5
+    single-register annotations both parse through the unchanged v7.5
+    path and yield identical score lists, with registers as `None` or
+    single-character strings respectively. No existing caller of the
+    v7.5 function is affected — this is an additive API.
+    """
+    # Format 1: `Operator Scores: [ ... ]` numeric list. Use the
+    # bracket-aware splitter so that register-sets like `0.72|⟨A,f,T⟩`
+    # are not fragmented by the intra-set commas.
+    list_match = _SCORE_LIST_RE.search(text)
+    if list_match:
+        tokens = _split_score_list_v7_7(list_match.group(1))
+        if tokens is None:
+            return None
+        if len(tokens) == 10:
+            values: list[float] = []
+            registers: list[str | list[str] | None] = []
+            for token in tokens:
+                tok_match = _SCORE_TOKEN_V7_7_RE.match(token)
+                if not tok_match:
+                    return None
+                register = _resolve_value_register_v7_7(
+                    register_set_raw=tok_match.group("register_set"),
+                    register_name_raw=tok_match.group("register_name"),
+                )
+                try:
+                    values.append(float(tok_match.group("value")))
+                except ValueError:
+                    return None
+                registers.append(register)
+            if all(0.0 <= v <= 1.0 for v in values):
+                return values, registers
+        return None
+
+    # Format 2: Keyed state-expression lines, one per CO-0..CO-9. The
+    # compound-level register slot (attached to the state label, e.g.
+    # `^3^P|Ω`) accepts single-letter, register-set, or named-emergent
+    # forms; the value-level slot does the same. Precedence:
+    # value > compound > drive > noetic (most specific wins), consistent
+    # with the v7.5 convention.
+    keyed_scores: dict[int, float] = {}
+    keyed_registers: dict[int, str | list[str] | None] = {}
+    for state_match in _STATE_SCORE_LINE_V7_7_RE.finditer(text):
+        noetic_register = state_match.group("noetic_register")
+        drive_register = state_match.group("drive_register")
+        # Noetic and drive slots remain single-letter v7.5 — validate
+        # against VALID_REGISTERS via the existing helper.
+        for register in (noetic_register, drive_register):
+            _validate_register_char(register)
+        op_index = int(state_match.group("op"))
+        try:
+            value = float(state_match.group("value"))
+        except ValueError:
+            return None
+        if not 0.0 <= value <= 1.0:
+            return None
+
+        compound_register_entry = _resolve_value_register_v7_7(
+            register_set_raw=state_match.group("compound_register_set"),
+            register_name_raw=state_match.group("compound_register_name"),
+        )
+        value_register_entry = _resolve_value_register_v7_7(
+            register_set_raw=state_match.group("value_register_set"),
+            register_name_raw=state_match.group("value_register_name"),
+        )
+
+        # Precedence: value (most specific) > compound > drive > noetic.
+        # Register-set and named-emergent entries can appear at compound
+        # and value slots; drive and noetic remain single-letter (v7.5).
+        if value_register_entry is not None:
+            resolved_register: str | list[str] | None = value_register_entry
+        elif compound_register_entry is not None:
+            resolved_register = compound_register_entry
+        else:
+            resolved_register = drive_register or noetic_register
+
+        if op_index not in keyed_scores:
+            keyed_scores[op_index] = value
+            keyed_registers[op_index] = resolved_register
+    if len(keyed_scores) == 10 and set(keyed_scores.keys()) == set(range(10)):
+        return (
+            [keyed_scores[i] for i in range(10)],
+            [keyed_registers[i] for i in range(10)],
+        )
+
+    return None
+
+
 def _heuristic_operator_scores(text: str) -> list[float]:
     """Deterministic heuristic operator scores based on text content only."""
     rng = random.Random(_text_seed(text))

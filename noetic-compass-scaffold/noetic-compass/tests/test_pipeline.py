@@ -13,6 +13,7 @@ from api.pipeline.stages import (
     base_llm_call,
     _parse_self_reported_scores,
     _parse_self_reported_scores_with_registers,
+    _parse_self_reported_scores_v7_7,
 )
 from api.llm_connectors.mock_connector import MockLLMConnector
 from api.llm_connectors.base import BaseLLMConnector, LLMResponse
@@ -616,3 +617,172 @@ def test_operator_score_result_rejects_wrong_length_register_list():
             involution_balances=[0.0, 0.0, 0.0],
             score_registers=["T", "A", "f"],
         )
+
+
+# ---------------------------------------------------------------------------
+# CAS v7.7 — Register-set notation `|⟨…⟩` and named emergent result support
+# (Clarification 10 Sections 2, 3). Additive API — v7.5 functions remain
+# unchanged, so v7.4/v7.5 parser tests above continue to cover backward
+# compatibility on their own pathway.
+# ---------------------------------------------------------------------------
+
+
+def test_parse_v7_7_register_set_basic_accepted():
+    """CAS v7.7 Clarification 10 Section 2A: basic `|⟨A,f,T⟩` register-set."""
+    text = _ten_scores_line(
+        ["0.73|⟨A,f,T⟩"] + ["0.5"] * 9
+    )
+    parsed = _parse_self_reported_scores_v7_7(text)
+    assert parsed is not None
+    scores, registers = parsed
+    assert scores[0] == 0.73
+    assert registers[0] == ["A", "f", "T"]
+    # Remaining slots are register-neutral.
+    assert registers[1:] == [None] * 9
+
+
+def test_parse_v7_7_register_set_preserves_lowercase_f():
+    """Lowercase `f` is authoritative (Clarification 8); preserved inside the set."""
+    text = _ten_scores_line(
+        ["0.5|⟨A,f,T,E⟩"] + ["0.5"] * 9
+    )
+    parsed = _parse_self_reported_scores_v7_7(text)
+    assert parsed is not None
+    _scores, registers = parsed
+    # All four canonical registers present, `f` preserved in lowercase,
+    # insertion order preserved.
+    assert registers[0] == ["A", "f", "T", "E"]
+
+
+def test_parse_v7_7_register_set_rejects_invalid_register():
+    """Clarification 10 Section 3: register-set entries must be in VALID_REGISTERS."""
+    text = _ten_scores_line(
+        ["0.5|⟨A,Q,T⟩"] + ["0.5"] * 9
+    )
+    with pytest.raises(ValueError, match="invalid register 'Q' inside register-set"):
+        _parse_self_reported_scores_v7_7(text)
+
+
+def test_parse_v7_7_register_set_rejects_duplicate_register():
+    """Clarification 10: register-sets are occupancy specifications; duplicates ill-formed."""
+    text = _ten_scores_line(
+        ["0.5|⟨A,A,T⟩"] + ["0.5"] * 9
+    )
+    with pytest.raises(ValueError, match="duplicate register 'A' in register-set"):
+        _parse_self_reported_scores_v7_7(text)
+
+
+def test_parse_v7_7_register_set_rejects_empty_set():
+    """Clarification 10 Section 3: `|⟨⟩` must specify at least one register."""
+    text = _ten_scores_line(
+        ["0.5|⟨⟩"] + ["0.5"] * 9
+    )
+    with pytest.raises(ValueError, match="is empty"):
+        _parse_self_reported_scores_v7_7(text)
+
+
+def test_parse_v7_7_register_set_score_line_roundtrip():
+    """Task-spec acceptance: `^3^P|⟨A,f,T⟩: 0.73` parses to score=0.73 reg=[A,f,T]."""
+    # Author the full 10-operator keyed state set with the register-set form
+    # at every position; this is the multi-line context the parser operates on.
+    lines = [f"^{i}^P|⟨A,f,T⟩: 0.73" for i in range(10)]
+    text = "\n".join(lines)
+    parsed = _parse_self_reported_scores_v7_7(text)
+    assert parsed is not None
+    scores, registers = parsed
+    assert scores == [0.73] * 10
+    assert registers == [["A", "f", "T"]] * 10
+
+
+def test_parse_v7_7_named_emergent_omega_preserved():
+    """Task-spec acceptance: `(×-chain) = ^3^P|Ω: 0.85` preserves `Ω`."""
+    # The parser accepts the full Clarification 10 Section 2C form on a line.
+    # LHS `×`-chain definition is the compiler's concern (Agent 12 Rule 4),
+    # not the parser's — the parser just carries the emergent name forward.
+    lines = [
+        f"(^{i}^P|A × ^{i}^P|f × ^{i}^P|T) = ^{i}^P|Ω: 0.85"
+        for i in range(10)
+    ]
+    text = "\n".join(lines)
+    parsed = _parse_self_reported_scores_v7_7(text)
+    assert parsed is not None
+    scores, registers = parsed
+    assert scores == [0.85] * 10
+    # Named emergent register preserved verbatim; outside VALID_REGISTERS
+    # so downstream rendering distinguishes it from single-register v7.5.
+    assert registers == ["Ω"] * 10
+
+
+def test_parse_v7_7_named_emergent_multi_character_preserved():
+    """Clarification 10 Section 8: `|TF` (multi-char identifier) preserved."""
+    # Example from Clarification 10 Section 8: `(^2^P|T × ^2^P|f) = ^2^P|TF`.
+    lines = [f"^{i}^P|TF: 0.62" for i in range(10)]
+    text = "\n".join(lines)
+    parsed = _parse_self_reported_scores_v7_7(text)
+    assert parsed is not None
+    scores, registers = parsed
+    assert scores == [0.62] * 10
+    assert registers == ["TF"] * 10
+
+
+def test_parse_v7_7_backward_compat_v75_single_register():
+    """Backward compatibility: CAS v7.5 single-register `|A` still parses."""
+    text = _ten_scores_line(
+        ["0.5|A"] + ["0.5"] * 9
+    )
+    parsed = _parse_self_reported_scores_v7_7(text)
+    assert parsed is not None
+    scores, registers = parsed
+    assert scores == [0.5] * 10
+    # Single-letter VALID_REGISTERS entry returned as `str` — matches the
+    # v7.5 shape. Downstream can distinguish v7.5 (str in VALID_REGISTERS)
+    # from v7.7 named-emergent (str outside VALID_REGISTERS) by membership
+    # test.
+    assert registers[0] == "A"
+    assert registers[1:] == [None] * 9
+
+
+def test_parse_v7_7_backward_compat_v74_register_neutral():
+    """Backward compatibility: CAS v7.4 register-neutral plain list still parses."""
+    text = _ten_scores_line(
+        ["0.72", "0.81", "0.64", "0.55", "0.70", "0.68", "0.77", "0.60", "0.58", "0.66"]
+    )
+    parsed = _parse_self_reported_scores_v7_7(text)
+    assert parsed is not None
+    scores, registers = parsed
+    assert scores == [0.72, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66]
+    assert registers == [None] * 10
+
+
+# --- Additional coverage: v7.7 extensions on compound notation ---
+
+
+def test_parse_v7_7_register_set_with_drive_subscript():
+    """Register-set combines with drive subscript: `^3^P_{F2}|⟨A,T⟩: 0.4`."""
+    lines = [f"^{i}^P_{{F2}}|⟨A,T⟩: 0.4" for i in range(10)]
+    text = "\n".join(lines)
+    parsed = _parse_self_reported_scores_v7_7(text)
+    assert parsed is not None
+    scores, registers = parsed
+    assert scores == [0.4] * 10
+    assert registers == [["A", "T"]] * 10
+
+
+def test_parse_v7_7_distinguishes_v75_single_from_v77_emergent():
+    """Membership in VALID_REGISTERS distinguishes v7.5 single from v7.7 emergent."""
+    from api.notation.compiler import VALID_REGISTERS
+    # Line 0 uses single-register `|A` (v7.5, in VALID_REGISTERS).
+    # Line 1 uses named emergent `|Ω` (v7.7, outside VALID_REGISTERS).
+    # Mixed emission is a legal author pattern during v7.5→v7.7 migration.
+    lines = (
+        ["^0^P|A: 0.5", "^1^P|Ω: 0.5"]
+        + [f"^{i}^P_{{F2}}: 0.5" for i in range(2, 10)]
+    )
+    text = "\n".join(lines)
+    parsed = _parse_self_reported_scores_v7_7(text)
+    assert parsed is not None
+    _scores, registers = parsed
+    assert registers[0] == "A"
+    assert registers[0] in VALID_REGISTERS
+    assert registers[1] == "Ω"
+    assert registers[1] not in VALID_REGISTERS
