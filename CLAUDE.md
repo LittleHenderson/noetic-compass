@@ -135,6 +135,8 @@ Resolution of CAS v7.4 ambiguity: the Evaluative-domain conflation (analytical a
 
 Status of artifacts: Chapters 2-17 of FULL_MANUSCRIPT.md were reconciled under CAS v7.4 semantics (pre-Register). Register integration into the book is follow-on work, not yet completed. See `docs/working/cas_v7_5_rollout_plan.md` for the scheduled rollout across peer-review paper, book manuscript, compiler, Rust engine, dashboard, LLM scoring prompt, incident database, scenario catalog, and NL signal analyzer.
 
+Dashboard visualization for v7.5 is specified as a multi-modal system in `docs/design/cas_v7_5_multimodal_display_specification.md`: a Radial Architecture Display (visual mandala across all four CAS axes) and a Temporal Cognitive Score (auditory sonification with formal pitch/dynamic/tempo/rhythm mappings from CAS algebra). Implementation is phased — Phase A (minimum viable visual rendering) is a v7.5 rollout dependency; Phases B-E are progressive enhancement. Public-facing names are strictly technical ("Radial Architecture Display," "Temporal Cognitive Score," "Multi-Modal Cognitive Signature"); aesthetic heritage informs design but never appears in product marketing. Every visual and auditory mapping is traceable to a formal CAS primitive.
+
 Legal framing: Register is specification of operational character of existing primitives, not introduction of new primitives. The 40 Cognitive States and 7 Drives remain unchanged. This preserves integrity of the provisional patent filing USPTO #64/037,173. IP attorney consultation is flagged in the rollout plan.
 
 #### Structural invariants (conventions layered on top of the authoritative definitions)
