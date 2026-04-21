@@ -88,6 +88,22 @@ UNICODE_PHI = "\u03a6"
 UNICODE_LANGLE = "\u27e8"
 UNICODE_RANGLE = "\u27e9"
 
+# CAS v7.6 Stoichiometric Production Semantics (Clarification 9) Unicode
+# symbols. Recipe notation introduces Greek letters plus the middle-dot
+# coefficient separator as first-class tokens. Each Unicode symbol has an
+# ASCII keyword alias (Theta, Omega, Lambda, kappa, iota, eta) so sources
+# authored on keyboards without Greek input still compose recipes. The
+# middle dot (U+00B7) is additionally accepted wherever `*` would be
+# inside recipe prerequisites.
+UNICODE_THETA = "Θ"   # Theta  - recipe function
+UNICODE_OMEGA = "Ω"   # Omega  - production target
+UNICODE_LAMBDA = "Λ"  # Lambda - leakage coefficient marker
+UNICODE_KAPPA = "κ"   # kappa  - catalyst marker
+UNICODE_IOTA = "ι"    # iota   - inhibitor marker
+UNICODE_ETA = "η"     # eta    - efficiency function
+UNICODE_CDOT = "·"    # middle dot - coefficient separator
+
+
 _LEGACY_CAS_GRAMMAR_BNF = """<program>       ::= <statement> (";" <statement>)* ;
 <statement>     ::= <let_stmt> | <fn_stmt> | <use_stmt> | <expression> ;
 <let_stmt>      ::= "let" <ident> "=" <expression> ;
@@ -220,6 +236,21 @@ class TokenKind(Enum):
     LBRACKET = "LBRACKET"
     RBRACKET = "RBRACKET"
     SEMI = "SEMI"
+    # CAS v7.6 Stoichiometric Production Semantics (Clarification 9):
+    # recipe/production primitives. These are additive tokens; none of them
+    # clash with v7.5 tokens, so every v7.4/v7.5 source continues to lex
+    # unchanged.
+    THETA = "THETA"            # Theta or Θ  - recipe function
+    OMEGA = "OMEGA"            # Omega or Ω  - production target
+    LAMBDA_TOK = "LAMBDA"      # Lambda or Λ - leakage coefficient marker
+    KAPPA_TOK = "KAPPA"        # kappa or κ  - catalyst marker
+    IOTA_TOK = "IOTA"          # iota or ι   - inhibitor marker
+    ETA_TOK = "ETA"            # eta or η    - efficiency function
+    CDOT = "CDOT"              # middle dot  - coefficient separator
+    STATE_VECTOR = "STATE_VECTOR"  # bare S keyword - v7.6 state-vector literal
+    YIELD_T = "YIELD_T"        # Y_T - theoretical yield function
+    YIELD_A = "YIELD_A"        # Y_A - actual yield function
+    PIPE = "PIPE"              # bare `|` condition separator (v7.6 recipes)
     EOF = "EOF"
 
 
@@ -300,6 +331,13 @@ class DriveLiteral:
     drive: int
     # CAS v7.5 Phenomenological Register. Optional; None means register-neutral.
     register: str | None = None
+    # CAS v7.6 (Clarification 9) Section 4 allows the shorthand
+    # `F_k^D` / `F_k^D|R` for a drive specified in a particular domain
+    # (e.g., `F2^C|A` = Wisdom-driven analytical cognitive work). The
+    # optional `domain` field carries the domain when this shorthand is
+    # used; it is None for register-neutral or domain-less v7.4/v7.5
+    # drive references so legacy parsing paths are unaffected.
+    domain: str | None = None
 
 
 @dataclass
@@ -364,6 +402,116 @@ class ExportStatement:
 @dataclass
 class Program:
     statements: list[Any]
+
+
+# ---------------------------------------------------------------------------
+# CAS v7.6 Stoichiometric Production Semantics (Clarification 9) AST nodes.
+#
+# These are parse-only literals: the compiler validates recipe SYNTAX and
+# captures the parsed structure as AST. Yield calculation, limiting reagent
+# analysis, efficiency computation, and recipe-algebra execution are
+# delegated to the Rust cas-engine (parallel v7.6 backend). The bytecode
+# path here pushes recipe/production literals as opaque values so they
+# survive round-tripping but are not "executed" by the Python VM.
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class ProductionTargetLiteral:
+    """A v7.6 production target `Ω_{name}` or `Ω_name` (Clarification 9 §2).
+
+    `name` is the free-form identifier following the `Ω_` prefix. Targets
+    are opaque labels from the compiler's perspective; they acquire meaning
+    only via a Recipe definition and yield queries.
+    """
+
+    name: str
+
+
+@dataclass
+class RecipePrerequisite:
+    """A single `a_i · X_i` pair on the left-hand side of a v7.6 recipe.
+
+    The coefficient is stored as a `float` (integer literals are widened),
+    and `primitive` is any v7.5 primitive AST node — StateLiteral,
+    DriveLiteral, or a BinaryExpr for compound states — already covered by
+    the existing parser.
+    """
+
+    coefficient: float
+    primitive: Any
+
+
+@dataclass
+class LeakageAnnotation:
+    """A `Λ_i · Ω_side` entry appearing after the `→` of a recipe RHS
+    (Clarification 9 §3 leakage notation). Represents a side-reaction
+    diversion of prerequisite into an unintended production target.
+    """
+
+    coefficient: float
+    target: ProductionTargetLiteral
+
+
+@dataclass
+class ConditionAnnotation:
+    """A `κ_name` catalyst or `ι_name` inhibitor appearing on the arrow of a
+    recipe (Clarification 9 §3 catalyst/inhibitor notation). `kind` is
+    literal "catalyst" or "inhibitor"; `name` is the free-form identifier
+    following the marker (may be empty for a bare `κ` / `ι`).
+    """
+
+    kind: str
+    name: str
+
+
+@dataclass
+class RecipeLiteral:
+    """A full v7.6 recipe:
+
+        Θ(Ω_name) [| κ_n, ι_n ...] = a_1·X_1 + ... + a_n·X_n → Ω_name [+ Λ·Ω_side ...]
+
+    Parse-only: the compiler does NOT compute yield, limiting reagent, or
+    efficiency from a RecipeLiteral. Those are Rust cas-engine
+    responsibilities. The AST captures the parsed structure faithfully so
+    downstream tooling (engine bindings, renderers) can consume it.
+    """
+
+    target: ProductionTargetLiteral
+    prerequisites: list[RecipePrerequisite] = field(default_factory=list)
+    leakages: list[LeakageAnnotation] = field(default_factory=list)
+    catalysts: list[ConditionAnnotation] = field(default_factory=list)
+    inhibitors: list[ConditionAnnotation] = field(default_factory=list)
+
+
+@dataclass
+class StateVectorLiteral:
+    """A v7.6 state-vector literal `S = {X_1: x_1, ..., X_n: x_n}`
+    (Clarification 9 §3). Each entry binds a v7.5 primitive to a numeric
+    activation quantity. The compiler parses the mapping and captures it
+    as an ordered list of `(primitive_ast, number)` pairs; the Rust engine
+    consumes the vector for yield computations.
+    """
+
+    entries: list[tuple[Any, float]] = field(default_factory=list)
+
+
+@dataclass
+class YieldExpression:
+    """A v7.6 yield query:
+
+      Y_T(Ω | S, Θ)     - theoretical yield, kind="theoretical"
+      Y_A(Ω)            - actual yield,       kind="actual"
+      η(Ω)              - efficiency,         kind="efficiency"
+
+    The compiler parses the shape but does NOT evaluate yields. Execution
+    of these queries is a Rust cas-engine responsibility.
+    """
+
+    kind: str
+    target: ProductionTargetLiteral
+    state: Any | None = None
+    recipe: Any | None = None
 
 
 @dataclass
@@ -529,6 +677,84 @@ class ModuleValue:
         return {"kind": "module", "path": self.path, "exports": self.exports}
 
 
+# ---------------------------------------------------------------------------
+# CAS v7.6 runtime values. Each parse-only v7.6 literal lowers to a single
+# PUSH_* instruction whose argument is the AST node itself; the VM wraps
+# the AST node in a thin *Value dataclass so the result survives program
+# serialization unchanged. Execution does NOT compute yields, limiting
+# reagents, or efficiency -- those are Rust cas-engine responsibilities.
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class ProductionTargetValue:
+    """Runtime value for a `Ω_{name}` production target literal."""
+
+    name: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"kind": "production_target", "name": self.name}
+
+
+@dataclass
+class RecipeValue:
+    """Runtime value for a `Θ(Ω) = ... → Ω [+ Λ·Ω_side]` recipe literal.
+
+    Prerequisites, leakages, catalysts, and inhibitors are preserved as
+    serializable dicts so the Rust cas-engine can round-trip the recipe
+    without re-parsing.
+    """
+
+    target: str
+    prerequisites: list[dict[str, Any]] = field(default_factory=list)
+    leakages: list[dict[str, Any]] = field(default_factory=list)
+    catalysts: list[str] = field(default_factory=list)
+    inhibitors: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "kind": "recipe",
+            "target": self.target,
+            "prerequisites": self.prerequisites,
+            "leakages": self.leakages,
+            "catalysts": self.catalysts,
+            "inhibitors": self.inhibitors,
+        }
+
+
+@dataclass
+class StateVectorValue:
+    """Runtime value for a `S = { X: x, ... }` state-vector literal."""
+
+    entries: list[dict[str, Any]] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"kind": "state_vector", "entries": self.entries}
+
+
+@dataclass
+class YieldExpressionValue:
+    """Runtime value for a `Y_T(...)`, `Y_A(...)`, or `η(...)` query.
+
+    The compiler emits this as an un-evaluated query; the Rust cas-engine
+    is responsible for computing yields when it consumes the AST.
+    """
+
+    kind: str  # "theoretical" | "actual" | "efficiency"
+    target: str
+    state: Any | None = None
+    recipe: Any | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "kind": "yield_expression",
+            "yield_kind": self.kind,
+            "target": self.target,
+            "state": serialize_value(self.state) if self.state is not None else None,
+            "recipe": serialize_value(self.recipe) if self.recipe is not None else None,
+        }
+
+
 @dataclass
 class UserFunction:
     name: str
@@ -628,12 +854,44 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     (r"<-|" + re.escape(UNICODE_LARROW), TokenKind.LARROW),
     (r"RPM\b", TokenKind.RPM),
     (r"Phi\b|" + re.escape(UNICODE_PHI), TokenKind.PHI),
+    # CAS v7.6 yield-query keywords `Y_T` and `Y_A`. Listed BEFORE the
+    # generic identifier/drive patterns so `Y_T(...)` and `Y_A(...)` of
+    # Clarification 9 Section 3 tokenize as single tokens rather than
+    # `Y` + `_T`. Anchored with `\b` so a longer identifier starting with
+    # `Y_T`/`Y_A` is not silently swallowed.
+    (r"Y_T\b", TokenKind.YIELD_T),
+    (r"Y_A\b", TokenKind.YIELD_A),
+    # CAS v7.6 ASCII aliases for the Greek production-semantics tokens.
+    # Listed BEFORE domain/state-ref/ident so `Omega` does not tokenize
+    # as DOMAIN `O` + IDENT `mega` and `S` (state-vector keyword) does
+    # not get swallowed. No `\b` anchor -- production-target / condition
+    # names follow the keyword via `_` (e.g. `Ω_book`, `κ_deadline`),
+    # and `_` is a word character, so `\b` would fail after the keyword
+    # in every realistic shape. These six keywords are reserved in v7.6
+    # and cannot be used as user identifiers.
+    (r"Theta|" + re.escape(UNICODE_THETA), TokenKind.THETA),
+    (r"Omega|" + re.escape(UNICODE_OMEGA), TokenKind.OMEGA),
+    (r"Lambda|" + re.escape(UNICODE_LAMBDA), TokenKind.LAMBDA_TOK),
+    (r"kappa|" + re.escape(UNICODE_KAPPA), TokenKind.KAPPA_TOK),
+    (r"iota|" + re.escape(UNICODE_IOTA), TokenKind.IOTA_TOK),
+    (r"eta|" + re.escape(UNICODE_ETA), TokenKind.ETA_TOK),
+    # CAS v7.6 state-vector keyword `S`. Matched with word-boundary so it
+    # only consumes a bare `S`, never the leading `S` of some longer
+    # identifier.
+    (r"S\b", TokenKind.STATE_VECTOR),
     (r'"(?:[^"\\]|\\.)*"', TokenKind.STRING),
     (r"CO-\d+", TokenKind.CO),
     # CAS v7.5: `|R` register suffix. Matched permissively as `|<letter>` so
     # invalid values like `|Q` are lexed and rejected at parse time with a
     # helpful CAS v7.5 error rather than a generic lexing failure.
     (r"\|[A-Za-z]", TokenKind.REGISTER),
+    # CAS v7.6: bare `|` condition-separator token used by recipe catalyst /
+    # inhibitor annotations: `Θ(Ω) | κ_n, ι_n → Ω`. Matches only when NOT
+    # followed by an ASCII letter, so it cannot collide with the v7.5
+    # REGISTER pattern above (which requires `|` immediately followed by a
+    # letter). The greedy REGISTER match therefore wins whenever a register
+    # suffix is intended.
+    (r"\|(?![A-Za-z])", TokenKind.PIPE),
     # CAS v7.5 shorthand Noetic primitive: `^n` is equivalent to `CO-n`.
     # Must come before CARET so `^2` tokenizes as a whole rather than as
     # CARET + NUMBER.
@@ -644,10 +902,18 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     (r"F_\d+", TokenKind.DRIVE),
     (r"F\d+", TokenKind.DRIVE),
     (r"[PCEO]", TokenKind.DOMAIN),
-    (r"\d+", TokenKind.NUMBER),
+    # Numeric literal: integer or decimal. CAS v7.6 recipe coefficients may
+    # be floats (e.g. `0.3·Ω_procrastination`); v7.4/v7.5 integer-only
+    # callers still lex NUMBER on integers unchanged because the decimal
+    # branch is optional.
+    (r"\d+\.\d+|\d+", TokenKind.NUMBER),
     (r"\+|\u2295", TokenKind.PLUS),
     (r"-", TokenKind.MINUS),
-    (r"\*|" + re.escape(UNICODE_TIMES), TokenKind.TIMES),
+    # CAS v7.6: the middle dot `·` (U+00B7) is additionally accepted
+    # wherever `*` or `×` would be. Inside recipe prerequisites `a·X`
+    # reads as "a times X" without the visual noise of `*`. The CDOT is
+    # folded into TIMES so existing TIMES handling applies unchanged.
+    (r"\*|" + re.escape(UNICODE_TIMES) + r"|" + re.escape(UNICODE_CDOT), TokenKind.TIMES),
     (r"/|" + re.escape(UNICODE_DIVIDE), TokenKind.DIVIDE),
     (r"\u2218", TokenKind.CIRC),
     (r"\^", TokenKind.CARET),
@@ -923,6 +1189,12 @@ class Parser:
             self.advance()
             path_token = self.expect(TokenKind.STRING)
             return UseStatement(path=_decode_path_literal(path_token.value))
+        # CAS v7.6 state-vector statement: `S = { X1: x1, ... }` (Clarification
+        # 9 Section 3). Captured at the statement level so it can coexist
+        # with existing state/relation expressions in a multi-statement
+        # program.
+        if token.kind == TokenKind.STATE_VECTOR:
+            return self.parse_state_vector()
         return self.parse_relation()
 
     def parse_type(self) -> TypeInfo:
@@ -985,6 +1257,21 @@ class Parser:
             return RpmCall(expr=expr)
         if token.kind == TokenKind.PHI:
             return self.parse_fractal()
+        # CAS v7.6 (Clarification 9): production-semantics primaries.
+        # A `Θ(...)` expression is either a recipe definition
+        # `Θ(Ω) [| conditions] = a_1·X_1 + ... → Ω [leakages]` or (inside
+        # a higher-level arithmetic form like `Θ(Ω1) + Θ(Ω2)`) a bare
+        # recipe reference — `parse_recipe` handles both by checking for
+        # the `=` that distinguishes a full recipe from a reference.
+        if token.kind == TokenKind.THETA:
+            return self.parse_recipe()
+        # `Ω_{name}` / `Ω_name` as a standalone production target literal.
+        if token.kind == TokenKind.OMEGA:
+            return self.parse_production_target()
+        # Yield queries: `Y_T(Ω | S, Θ)`, `Y_A(Ω)`, `η(Ω)`. Parse-only —
+        # execution is delegated to the Rust cas-engine.
+        if token.kind in (TokenKind.YIELD_T, TokenKind.YIELD_A, TokenKind.ETA_TOK):
+            return self.parse_yield_expression()
         if token.kind == TokenKind.CO:
             return self.parse_state()
         if token.kind == TokenKind.NOETIC:
@@ -1012,8 +1299,27 @@ class Parser:
         if token.kind == TokenKind.DRIVE:
             drive_token = self.advance()
             drive = self._drive_token_index(drive_token)
-            register = self._consume_optional_register()
-            return DriveLiteral(drive=drive, register=register)
+            # CAS v7.5: optional `|R` register suffix may attach directly to
+            # the drive primitive (`F_2|A`).
+            pre_domain_register = self._consume_optional_register()
+            domain: str | None = None
+            tail_register: str | None = None
+            # CAS v7.6 (Clarification 9) Section 4 shorthand: a drive may be
+            # specified in a particular domain via `F_k^D` / `F_k^D|R`
+            # (e.g. `F2^C|A` = "Wisdom-driven analytical cognitive work").
+            # This extends, rather than replaces, the v7.4/v7.5 bare-drive
+            # form; legacy expressions without `^D` continue to produce a
+            # domain-less DriveLiteral.
+            if self.current().kind == TokenKind.CARET:
+                self.advance()
+                domain = self.expect(TokenKind.DOMAIN).value
+                tail_register = self._consume_optional_register()
+            # When both a pre-domain register and a tail register appear,
+            # prefer the tail (compound) register since it attaches to the
+            # drive-in-domain compound. This mirrors the v7.5 state parser's
+            # handling of noetic_register / tail_register.
+            register = tail_register or pre_domain_register
+            return DriveLiteral(drive=drive, register=register, domain=domain)
         raise CompilerError(
             CompilerStage.PARSING,
             f"unexpected token {token.value!r}",
@@ -1139,6 +1445,530 @@ class Parser:
             drive_register=drive_register,
         )
 
+    # ----------------------------------------------------------------------
+    # CAS v7.6 Stoichiometric Production Semantics (Clarification 9) parsers.
+    #
+    # These methods handle the additive grammar extension for recipe
+    # notation. They do NOT compute yields, limiting reagents, or efficiency
+    # values -- those are Rust cas-engine responsibilities. The compiler's
+    # responsibility here is parse-only: accept syntactically well-formed
+    # recipes / yield queries / state vectors and emit the corresponding
+    # AST node, or reject clearly-invalid input with a v7.6-specific error.
+    #
+    # Backward compatibility note: every token added for v7.6 (THETA,
+    # OMEGA, LAMBDA_TOK, KAPPA_TOK, IOTA_TOK, ETA_TOK, CDOT, STATE_VECTOR,
+    # YIELD_T, YIELD_A, PIPE) is additive. None of them clash with any
+    # v7.4/v7.5 production, so every pre-v7.6 expression continues to
+    # parse unchanged.
+    # ----------------------------------------------------------------------
+
+    def _parse_production_name(self) -> str:
+        """Parse the identifier portion of a production-target literal.
+
+        Accepts both notational forms from Clarification 9 Section 3:
+          - `Ω_{name}` -- canonical brace form
+          - `Ω_name`   -- bare underscore form used throughout the spec
+                          examples (Ω_book, Ω_paper, Ω_refusal)
+
+        The caller has already consumed the leading OMEGA token. Name
+        characters are captured as a free-form identifier: ASCII letters,
+        digits, and underscores after the initial `_`.
+        """
+        # Underscore is mandatory between the production marker and its name.
+        if self.current().kind != TokenKind.UNDERSCORE:
+            token = self.current()
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.6 production-target literal: expected `_` after `Ω` "
+                    f"(form `Ω_name` or `Ω_{{name}}`), got {token.kind.value}"
+                ),
+                position=token.position,
+            )
+        self.advance()
+        # Brace form `Ω_{name}`.
+        if self.current().kind == TokenKind.LBRACE:
+            self.advance()
+            name_parts: list[str] = []
+            # Accept any sequence of identifier-shaped tokens inside braces.
+            while self.current().kind not in (TokenKind.RBRACE, TokenKind.EOF):
+                name_parts.append(self._consume_name_fragment())
+            self.expect(TokenKind.RBRACE)
+            name = "".join(name_parts)
+        else:
+            # Bare form `Ω_name` -- read a single name fragment.
+            name = self._consume_name_fragment()
+        if not name:
+            token = self.current()
+            raise CompilerError(
+                CompilerStage.PARSING,
+                "CAS v7.6 production-target literal: empty name",
+                position=token.position,
+            )
+        return name
+
+    def _consume_name_fragment(self) -> str:
+        """Consume the next token as a fragment of a production / condition
+        identifier. Fragments that are naturally part of identifier bodies
+        (IDENT, NUMBER, DOMAIN, STATE_REF, DRIVE, underscore) are accepted;
+        anything else stops the scan.
+        """
+        tok = self.current()
+        fragment_kinds = (
+            TokenKind.IDENT,
+            TokenKind.NUMBER,
+            TokenKind.DOMAIN,
+            TokenKind.STATE_REF,
+            TokenKind.DRIVE,
+        )
+        if tok.kind in fragment_kinds:
+            self.advance()
+            return tok.value
+        if tok.kind == TokenKind.UNDERSCORE:
+            self.advance()
+            return "_"
+        raise CompilerError(
+            CompilerStage.PARSING,
+            f"CAS v7.6: expected identifier fragment, got {tok.kind.value}",
+            position=tok.position,
+        )
+
+    def parse_production_target(self) -> ProductionTargetLiteral:
+        """Parse a standalone production-target literal `Ω_{name}` / `Ω_name`."""
+        self.expect(TokenKind.OMEGA)
+        name = self._parse_production_name()
+        return ProductionTargetLiteral(name=name)
+
+    def _parse_condition_annotation(self, kind: str) -> ConditionAnnotation:
+        """Parse a single catalyst (`κ_name`) or inhibitor (`ι_name`).
+
+        The caller has already consumed the KAPPA_TOK / IOTA_TOK. A bare
+        `κ` / `ι` with no following `_name` is accepted and produces a
+        ConditionAnnotation with an empty name, so the recipe author can
+        record "some catalyst" placeholders during authoring.
+        """
+        name = ""
+        if self.current().kind == TokenKind.UNDERSCORE:
+            self.advance()
+            if self.current().kind == TokenKind.LBRACE:
+                self.advance()
+                parts: list[str] = []
+                while self.current().kind not in (TokenKind.RBRACE, TokenKind.EOF):
+                    parts.append(self._consume_name_fragment())
+                self.expect(TokenKind.RBRACE)
+                name = "".join(parts)
+            else:
+                name = self._consume_name_fragment()
+        return ConditionAnnotation(kind=kind, name=name)
+
+    def _parse_conditions(
+        self,
+    ) -> tuple[list[ConditionAnnotation], list[ConditionAnnotation]]:
+        """Parse a comma-separated list of catalyst/inhibitor annotations
+        following a `|` separator inside a recipe header.
+
+        Entries may appear in any order; each is classified as catalyst or
+        inhibitor by its leading marker (κ or ι). Returns the two lists
+        split by kind.
+        """
+        catalysts: list[ConditionAnnotation] = []
+        inhibitors: list[ConditionAnnotation] = []
+
+        def consume_one() -> None:
+            tok = self.current()
+            if tok.kind == TokenKind.KAPPA_TOK:
+                self.advance()
+                catalysts.append(self._parse_condition_annotation("catalyst"))
+            elif tok.kind == TokenKind.IOTA_TOK:
+                self.advance()
+                inhibitors.append(self._parse_condition_annotation("inhibitor"))
+            else:
+                raise CompilerError(
+                    CompilerStage.PARSING,
+                    (
+                        f"CAS v7.6 recipe conditions: expected a catalyst (κ) "
+                        f"or inhibitor (ι) marker, got {tok.kind.value}"
+                    ),
+                    position=tok.position,
+                )
+
+        consume_one()
+        while self.current().kind == TokenKind.COMMA:
+            self.advance()
+            consume_one()
+        return catalysts, inhibitors
+
+    def _parse_coefficient_primitive(self) -> RecipePrerequisite:
+        """Parse a single `a · X` term from a recipe left-hand side.
+
+        `a` is a numeric literal (integer or decimal). The separator is
+        TIMES (which lex-wise accepts `*`, `×`, or `·`). `X` is any
+        v7.5-legal primary expression, so compound primitives like
+        `^3^P_{F2}|A` or `CO-2^C` continue to be accepted unchanged.
+        """
+        tok = self.current()
+        if tok.kind != TokenKind.NUMBER:
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.6 recipe prerequisite: expected numeric "
+                    f"coefficient, got {tok.kind.value}"
+                ),
+                position=tok.position,
+            )
+        self.advance()
+        try:
+            coeff = float(tok.value)
+        except ValueError as exc:  # pragma: no cover - lexer guards shape
+            raise CompilerError(
+                CompilerStage.PARSING,
+                f"CAS v7.6 recipe: malformed coefficient {tok.value!r}",
+                position=tok.position,
+            ) from exc
+        if coeff <= 0:
+            # Section 2: recipe weights are proportional requirements;
+            # zero or negative coefficients are structurally invalid.
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.6 recipe: coefficient must be positive, got "
+                    f"{coeff}"
+                ),
+                position=tok.position,
+            )
+        # Require the coefficient separator (`*`, `×`, or `·`). This
+        # catches shapes like `2 F_2` where the author forgot the dot.
+        sep = self.current()
+        if sep.kind != TokenKind.TIMES:
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.6 recipe prerequisite: expected `·` (or `*`) "
+                    f"between coefficient and primitive, got {sep.kind.value}"
+                ),
+                position=sep.position,
+            )
+        self.advance()
+        primitive = self.parse_primary()
+        return RecipePrerequisite(coefficient=coeff, primitive=primitive)
+
+    def _parse_leakage_annotation(self) -> LeakageAnnotation:
+        """Parse one leakage entry `Λ [·] Ω_side` or `Λ_i · Ω_side`.
+
+        Leakage annotations appear on the RHS of a recipe arrow, separated
+        by `+` signs. The coefficient is carried either by a numeric
+        subscript on Λ (`Λ_0.3`) or by a preceding number-TIMES pair that
+        has already been consumed by the caller. In the minimal shape used
+        by Section 3 examples, `Λ·Ω_side` is treated as coefficient 1.0.
+        """
+        self.expect(TokenKind.LAMBDA_TOK)
+        coefficient = 1.0
+        # Optional `_{...}` numeric subscript on Λ to encode a named or
+        # numeric tag. The authoritative spec shape is `Λ_i` where `i` is
+        # an index; we accept an optional numeric subscript and fold it
+        # into the coefficient when parseable.
+        if self.current().kind == TokenKind.UNDERSCORE:
+            self.advance()
+            sub = self.current()
+            if sub.kind == TokenKind.NUMBER:
+                self.advance()
+                # An integer subscript on Λ is an index tag (Λ_1, Λ_2),
+                # not a coefficient -- keep coefficient at 1.0.
+                try:
+                    float(sub.value)
+                except ValueError:  # pragma: no cover - lexer guards shape
+                    pass
+            elif sub.kind == TokenKind.IDENT:
+                self.advance()
+            elif sub.kind == TokenKind.LBRACE:
+                self.advance()
+                while self.current().kind not in (TokenKind.RBRACE, TokenKind.EOF):
+                    self.advance()
+                self.expect(TokenKind.RBRACE)
+            else:
+                raise CompilerError(
+                    CompilerStage.PARSING,
+                    (
+                        f"CAS v7.6 leakage annotation: expected identifier "
+                        f"or number after `Λ_`, got {sub.kind.value}"
+                    ),
+                    position=sub.position,
+                )
+        # Optional `·` between Λ[_i] and the side target.
+        if self.current().kind == TokenKind.TIMES:
+            self.advance()
+        if self.current().kind != TokenKind.OMEGA:
+            tok = self.current()
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.6 leakage annotation: expected `Ω_side` after "
+                    f"`Λ`, got {tok.kind.value}"
+                ),
+                position=tok.position,
+            )
+        target = self.parse_production_target()
+        return LeakageAnnotation(coefficient=coefficient, target=target)
+
+    def parse_recipe(self) -> RecipeLiteral:
+        """Parse a v7.6 recipe literal (Clarification 9 Section 3).
+
+        Recipe shape (conditions are optional, leakages are optional):
+
+            Θ(Ω_name) [| κ_n [, ι_m ...]] = a_1·X_1 + ... + a_n·X_n
+                → Ω_name [+ Λ·Ω_side_1 [+ Λ·Ω_side_2 ...]]
+
+        For a bare `Θ(Ω_name)` with no `=`, the method still returns a
+        RecipeLiteral so that recipe-algebra forms from Clarification 9
+        Section 6 (`Θ(Ω_1) + Θ(Ω_2)`, `Θ(Ω_full) − Θ(Ω_achieved)`, etc.)
+        parse at the additive / multiplicative layer. Such bare forms
+        carry an empty prerequisites list and are understood by the
+        caller (Rust engine) as a reference to a separately-defined
+        recipe.
+        """
+        self.expect(TokenKind.THETA)
+        self.expect(TokenKind.LPAREN)
+        if self.current().kind != TokenKind.OMEGA:
+            tok = self.current()
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.6 recipe: expected `Ω_...` production target "
+                    f"inside Θ(...), got {tok.kind.value}"
+                ),
+                position=tok.position,
+            )
+        target = self.parse_production_target()
+        catalysts: list[ConditionAnnotation] = []
+        inhibitors: list[ConditionAnnotation] = []
+        # Optional conditions clause `| κ_n, ι_m, ...` before closing `)`.
+        if self.current().kind == TokenKind.PIPE:
+            self.advance()
+            catalysts, inhibitors = self._parse_conditions()
+        self.expect(TokenKind.RPAREN)
+        # Also accept the outer-position conditions form
+        # `Θ(Ω) | κ_n, ι_m → Ω` where conditions appear AFTER the closing
+        # parenthesis but BEFORE the `=`. This matches Section 3's
+        # catalyst/inhibitor notation which specifies conditions as
+        # modifiers on the arrow.
+        if self.current().kind == TokenKind.PIPE:
+            self.advance()
+            extra_cats, extra_inhs = self._parse_conditions()
+            catalysts.extend(extra_cats)
+            inhibitors.extend(extra_inhs)
+        # A bare `Θ(Ω)` with no `=` is a recipe reference. Return an
+        # empty-body RecipeLiteral so higher-level arithmetic can
+        # combine it via `+` / `−` / `×` / `÷` / `∘` (Clarification 9
+        # Section 6 recipe operations).
+        if self.current().kind != TokenKind.EQUALS:
+            return RecipeLiteral(
+                target=target,
+                prerequisites=[],
+                leakages=[],
+                catalysts=catalysts,
+                inhibitors=inhibitors,
+            )
+        self.expect(TokenKind.EQUALS)
+        prerequisites: list[RecipePrerequisite] = [self._parse_coefficient_primitive()]
+        while self.current().kind == TokenKind.PLUS:
+            self.advance()
+            prerequisites.append(self._parse_coefficient_primitive())
+        # CAS v7.6 Clarification 9 Section 3 says catalyst/inhibitor
+        # conditions are specified "as modifiers on the arrow". Accept a
+        # third legal position for the condition clause: between the last
+        # prerequisite and the `→`. Any conditions found here extend the
+        # lists already collected from the earlier two positions.
+        if self.current().kind == TokenKind.PIPE:
+            self.advance()
+            arrow_cats, arrow_inhs = self._parse_conditions()
+            catalysts.extend(arrow_cats)
+            inhibitors.extend(arrow_inhs)
+        # The `→` is mandatory on a recipe with a body; if it's missing,
+        # surface a v7.6-specific error so the failure mode is obvious.
+        if self.current().kind != TokenKind.ARROW:
+            tok = self.current()
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.6 recipe: expected `→` after prerequisites, "
+                    f"got {tok.kind.value}"
+                ),
+                position=tok.position,
+            )
+        self.advance()  # consume ARROW
+        # Right-hand side: the target itself (possibly an alias of the
+        # header target -- we accept either spelling) followed by
+        # optional `+ Λ·Ω_side` leakage terms.
+        if self.current().kind != TokenKind.OMEGA:
+            tok = self.current()
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.6 recipe: expected `Ω_name` on right-hand side "
+                    f"of `→`, got {tok.kind.value}"
+                ),
+                position=tok.position,
+            )
+        self.parse_production_target()  # consumed but implied to equal the header target
+        leakages: list[LeakageAnnotation] = []
+        while self.current().kind == TokenKind.PLUS:
+            self.advance()
+            # A leakage entry may be shaped as `Λ·Ω_side` or as
+            # `coeff·Λ·Ω_side` / `coeff·Ω_side`. Accept the three shapes
+            # uniformly: if a NUMBER-TIMES prefix appears, consume it
+            # and use it as the leakage coefficient; otherwise default
+            # to 1.0.
+            coeff: float = 1.0
+            if self.current().kind == TokenKind.NUMBER:
+                num_tok = self.advance()
+                try:
+                    coeff = float(num_tok.value)
+                except ValueError as exc:  # pragma: no cover
+                    raise CompilerError(
+                        CompilerStage.PARSING,
+                        f"CAS v7.6 leakage: malformed coefficient {num_tok.value!r}",
+                        position=num_tok.position,
+                    ) from exc
+                if coeff <= 0:
+                    raise CompilerError(
+                        CompilerStage.PARSING,
+                        (
+                            f"CAS v7.6 leakage: coefficient must be "
+                            f"positive, got {coeff}"
+                        ),
+                        position=num_tok.position,
+                    )
+                if self.current().kind != TokenKind.TIMES:
+                    tok = self.current()
+                    raise CompilerError(
+                        CompilerStage.PARSING,
+                        (
+                            f"CAS v7.6 leakage: expected `·` after "
+                            f"coefficient, got {tok.kind.value}"
+                        ),
+                        position=tok.position,
+                    )
+                self.advance()
+            if self.current().kind == TokenKind.LAMBDA_TOK:
+                entry = self._parse_leakage_annotation()
+                entry.coefficient = coeff
+                leakages.append(entry)
+            elif self.current().kind == TokenKind.OMEGA:
+                # Short form: `coeff · Ω_side` with no explicit Λ marker.
+                side = self.parse_production_target()
+                leakages.append(LeakageAnnotation(coefficient=coeff, target=side))
+            else:
+                tok = self.current()
+                raise CompilerError(
+                    CompilerStage.PARSING,
+                    (
+                        f"CAS v7.6 recipe RHS: expected `Λ·Ω_side` or "
+                        f"`Ω_side` leakage term, got {tok.kind.value}"
+                    ),
+                    position=tok.position,
+                )
+        return RecipeLiteral(
+            target=target,
+            prerequisites=prerequisites,
+            leakages=leakages,
+            catalysts=catalysts,
+            inhibitors=inhibitors,
+        )
+
+    def parse_yield_expression(self) -> YieldExpression:
+        """Parse a v7.6 yield query:
+
+          Y_T(Ω | S, Θ)   -> kind="theoretical"
+          Y_A(Ω)          -> kind="actual"
+          η(Ω)            -> kind="efficiency"
+
+        The compiler accepts the full shape from Clarification 9 Section 3
+        but does NOT evaluate the query. The Rust cas-engine computes yield,
+        efficiency, and limiting-reagent analysis against the parsed AST.
+        """
+        head = self.advance()
+        if head.kind == TokenKind.YIELD_T:
+            kind = "theoretical"
+        elif head.kind == TokenKind.YIELD_A:
+            kind = "actual"
+        elif head.kind == TokenKind.ETA_TOK:
+            kind = "efficiency"
+        else:  # pragma: no cover - parse_primary gates the entry
+            raise CompilerError(
+                CompilerStage.PARSING,
+                f"CAS v7.6: unexpected yield-query head {head.kind.value}",
+                position=head.position,
+            )
+        self.expect(TokenKind.LPAREN)
+        if self.current().kind != TokenKind.OMEGA:
+            tok = self.current()
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.6 yield query: expected `Ω_...` as first "
+                    f"argument, got {tok.kind.value}"
+                ),
+                position=tok.position,
+            )
+        target = self.parse_production_target()
+        state: Any | None = None
+        recipe: Any | None = None
+        if self.current().kind == TokenKind.PIPE:
+            # `Y_T(Ω | S, Θ)` form: pipe separator introduces the state
+            # vector and recipe reference(s). Only Y_T uses this form in
+            # Section 3, but we accept the syntax for any yield query so
+            # the parser stays uniform.
+            self.advance()
+            state = self.parse_primary()
+            if self.current().kind == TokenKind.COMMA:
+                self.advance()
+                recipe = self.parse_primary()
+        self.expect(TokenKind.RPAREN)
+        return YieldExpression(kind=kind, target=target, state=state, recipe=recipe)
+
+    def parse_state_vector(self) -> StateVectorLiteral:
+        """Parse a v7.6 state-vector literal `S = {X_1: x_1, ..., X_n: x_n}`.
+
+        Each entry is a v7.5 primitive followed by `:` and a numeric
+        activation quantity. The compiler captures the mapping faithfully;
+        no validation beyond syntax is performed here.
+        """
+        self.expect(TokenKind.STATE_VECTOR)
+        self.expect(TokenKind.EQUALS)
+        self.expect(TokenKind.LBRACE)
+        entries: list[tuple[Any, float]] = []
+        if self.current().kind != TokenKind.RBRACE:
+            entries.append(self._parse_state_vector_entry())
+            while self.current().kind == TokenKind.COMMA:
+                self.advance()
+                entries.append(self._parse_state_vector_entry())
+        self.expect(TokenKind.RBRACE)
+        return StateVectorLiteral(entries=entries)
+
+    def _parse_state_vector_entry(self) -> tuple[Any, float]:
+        primitive = self.parse_primary()
+        self.expect(TokenKind.COLON)
+        num = self.current()
+        if num.kind != TokenKind.NUMBER:
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.6 state-vector entry: expected numeric "
+                    f"activation, got {num.kind.value}"
+                ),
+                position=num.position,
+            )
+        self.advance()
+        try:
+            value = float(num.value)
+        except ValueError as exc:  # pragma: no cover
+            raise CompilerError(
+                CompilerStage.PARSING,
+                f"CAS v7.6 state-vector entry: malformed number {num.value!r}",
+                position=num.position,
+            ) from exc
+        return primitive, value
+
 
 def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeInfo:
     env = env or TypeEnv()
@@ -1181,6 +2011,30 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
 
     if isinstance(node, StringLiteral):
         return TypeInfo(kind=TypeKind.STRING, singular=True)
+
+    # CAS v7.6 (Clarification 9): production-semantics AST nodes are
+    # parse-only from the Python compiler's perspective. We type them as
+    # ANY so they compose freely with recipe-algebra forms at the
+    # additive / multiplicative layer (`Θ(Ω1) + Θ(Ω2)`,
+    # `Θ(Ω_full) − Θ(Ω_achieved)`, `Θ(Ω_int) ∘ Θ(Ω_final)`). The Rust
+    # cas-engine enforces whatever stronger typing it needs when it
+    # consumes the AST.
+    if isinstance(node, (ProductionTargetLiteral, RecipeLiteral, StateVectorLiteral, YieldExpression)):
+        if isinstance(node, RecipeLiteral) and node.prerequisites:
+            # Light sanity check: recipe prerequisites should all have
+            # positive coefficients. The parser already enforces this on
+            # literal recipes; we re-check here to guard against AST
+            # construction from non-parser paths (e.g. future builders).
+            for prereq in node.prerequisites:
+                if prereq.coefficient <= 0:
+                    raise CompilerError(
+                        CompilerStage.TYPECHECK,
+                        (
+                            f"CAS v7.6 recipe: coefficient must be "
+                            f"positive, got {prereq.coefficient}"
+                        ),
+                    )
+        return TypeInfo(kind=TypeKind.ANY)
 
     if isinstance(node, Identifier):
         if node.name in env.vars:
@@ -1485,12 +2339,83 @@ def lower(node: Any) -> list[Instruction]:
             bytecode.append(
                 Instruction(
                     "PUSH_DRIVE",
-                    {"drive": expr.drive, "register": expr.register},
+                    {
+                        "drive": expr.drive,
+                        "register": expr.register,
+                        # CAS v7.6 Section 4 drive-in-domain shorthand:
+                        # surface the domain when present so the runtime
+                        # DriveLiteral reconstructed downstream carries the
+                        # same v7.6 metadata.
+                        "domain": expr.domain,
+                    },
                 )
             )
             return
         if isinstance(expr, StringLiteral):
             bytecode.append(Instruction("PUSH_STRING", expr.value))
+            return
+        # CAS v7.6 (Clarification 9): production-semantics literals lower to
+        # opaque PUSH_* instructions. The runtime just wraps the AST in a
+        # *Value dataclass so the parsed recipe/state-vector/yield query
+        # survives into the final serialized artifact. The Rust cas-engine
+        # performs yield / limiting-reagent / efficiency computation.
+        if isinstance(expr, ProductionTargetLiteral):
+            bytecode.append(Instruction("PUSH_PRODUCTION_TARGET", {"name": expr.name}))
+            return
+        if isinstance(expr, RecipeLiteral):
+            bytecode.append(
+                Instruction(
+                    "PUSH_RECIPE",
+                    {
+                        "target": expr.target.name,
+                        "prerequisites": [
+                            {
+                                "coefficient": prereq.coefficient,
+                                "primitive": serialize_ast(prereq.primitive),
+                            }
+                            for prereq in expr.prerequisites
+                        ],
+                        "leakages": [
+                            {
+                                "coefficient": leak.coefficient,
+                                "target": leak.target.name,
+                            }
+                            for leak in expr.leakages
+                        ],
+                        "catalysts": [cat.name for cat in expr.catalysts],
+                        "inhibitors": [inh.name for inh in expr.inhibitors],
+                    },
+                )
+            )
+            return
+        if isinstance(expr, StateVectorLiteral):
+            bytecode.append(
+                Instruction(
+                    "PUSH_STATE_VECTOR",
+                    {
+                        "entries": [
+                            {
+                                "primitive": serialize_ast(prim),
+                                "activation": value,
+                            }
+                            for prim, value in expr.entries
+                        ]
+                    },
+                )
+            )
+            return
+        if isinstance(expr, YieldExpression):
+            bytecode.append(
+                Instruction(
+                    "PUSH_YIELD",
+                    {
+                        "yield_kind": expr.kind,
+                        "target": expr.target.name,
+                        "state": serialize_ast(expr.state) if expr.state is not None else None,
+                        "recipe": serialize_ast(expr.recipe) if expr.recipe is not None else None,
+                    },
+                )
+            )
             return
         if isinstance(expr, Identifier):
             bytecode.append(Instruction("LOAD_VAR", expr.name))
@@ -1640,15 +2565,20 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
 
     if opcode == "PUSH_DRIVE":
         # Accept both the legacy integer-arg form (v7.4) and the v7.5
-        # dict form that carries an optional register.
+        # dict form that carries an optional register. CAS v7.6 adds an
+        # optional `domain` field for drive-in-domain shorthand `F_k^D`;
+        # when absent the DriveLiteral remains domain-less and behaves
+        # identically to v7.4.
         payload = instruction.arg
         if isinstance(payload, dict):
             drive_index = int(payload["drive"])
             register = payload.get("register")
+            domain = payload.get("domain")
         else:
             drive_index = int(payload)
             register = None
-        stack.append(DriveLiteral(drive=drive_index, register=register))
+            domain = None
+        stack.append(DriveLiteral(drive=drive_index, register=register, domain=domain))
         return
 
     if opcode == "LOAD_VAR":
@@ -1751,6 +2681,45 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
         for op in sequence:
             composed = _compose_operators(composed, op)
         stack.append(FractalValue(sequence=sequence, composed_operator=composed, orbit_length=max(1, len(sequence))))
+        return
+
+    # CAS v7.6 production-semantics opcodes. Each one simply rehydrates the
+    # lowered dict payload into a *Value dataclass and pushes it on the
+    # stack. The Python VM does NOT compute yields or recipe algebra;
+    # those are Rust cas-engine responsibilities (Clarification 9 §6, §10).
+    if opcode == "PUSH_PRODUCTION_TARGET":
+        payload = instruction.arg
+        stack.append(ProductionTargetValue(name=str(payload["name"])))
+        return
+
+    if opcode == "PUSH_RECIPE":
+        payload = instruction.arg
+        stack.append(
+            RecipeValue(
+                target=str(payload["target"]),
+                prerequisites=list(payload.get("prerequisites", [])),
+                leakages=list(payload.get("leakages", [])),
+                catalysts=list(payload.get("catalysts", [])),
+                inhibitors=list(payload.get("inhibitors", [])),
+            )
+        )
+        return
+
+    if opcode == "PUSH_STATE_VECTOR":
+        payload = instruction.arg
+        stack.append(StateVectorValue(entries=list(payload.get("entries", []))))
+        return
+
+    if opcode == "PUSH_YIELD":
+        payload = instruction.arg
+        stack.append(
+            YieldExpressionValue(
+                kind=str(payload["yield_kind"]),
+                target=str(payload["target"]),
+                state=payload.get("state"),
+                recipe=payload.get("recipe"),
+            )
+        )
         return
 
     if opcode == "RPM":
@@ -2107,6 +3076,11 @@ def serialize_ast(node: Any) -> Any:
         payload = {"node": "DriveLiteral", "drive": f"F{node.drive}"}
         if node.register is not None:
             payload["register"] = node.register
+        # CAS v7.6 Section 4 drive-in-domain shorthand `F_k^D|R` surfaces
+        # the domain when present. Register-neutral v7.4 drive references
+        # produce no new fields.
+        if node.domain is not None:
+            payload["domain"] = node.domain
         return payload
     if isinstance(node, StringLiteral):
         return {"node": "StringLiteral", "value": node.value}
@@ -2154,6 +3128,65 @@ def serialize_ast(node: Any) -> Any:
             "node": "Program",
             "statements": [serialize_ast(statement) for statement in node.statements],
         }
+    # CAS v7.6 (Clarification 9) AST nodes. Serialize to stable dict shapes
+    # so callers (JSON API, renderer, Rust engine bindings) can round-trip
+    # parse-only recipes and yield queries without re-implementing the
+    # grammar.
+    if isinstance(node, ProductionTargetLiteral):
+        return {"node": "ProductionTargetLiteral", "name": node.name}
+    if isinstance(node, RecipeLiteral):
+        return {
+            "node": "RecipeLiteral",
+            "target": serialize_ast(node.target),
+            "prerequisites": [
+                {
+                    "coefficient": prereq.coefficient,
+                    "primitive": serialize_ast(prereq.primitive),
+                }
+                for prereq in node.prerequisites
+            ],
+            "leakages": [
+                {
+                    "coefficient": leak.coefficient,
+                    "target": serialize_ast(leak.target),
+                }
+                for leak in node.leakages
+            ],
+            "catalysts": [
+                {"kind": cat.kind, "name": cat.name} for cat in node.catalysts
+            ],
+            "inhibitors": [
+                {"kind": inh.kind, "name": inh.name} for inh in node.inhibitors
+            ],
+        }
+    if isinstance(node, StateVectorLiteral):
+        return {
+            "node": "StateVectorLiteral",
+            "entries": [
+                {"primitive": serialize_ast(prim), "activation": value}
+                for prim, value in node.entries
+            ],
+        }
+    if isinstance(node, YieldExpression):
+        return {
+            "node": "YieldExpression",
+            "yield_kind": node.kind,
+            "target": serialize_ast(node.target),
+            "state": serialize_ast(node.state) if node.state is not None else None,
+            "recipe": serialize_ast(node.recipe) if node.recipe is not None else None,
+        }
+    if isinstance(node, LeakageAnnotation):
+        return {
+            "node": "LeakageAnnotation",
+            "coefficient": node.coefficient,
+            "target": serialize_ast(node.target),
+        }
+    if isinstance(node, ConditionAnnotation):
+        return {
+            "node": "ConditionAnnotation",
+            "kind": node.kind,
+            "name": node.name,
+        }
     return repr(node)
 
 
@@ -2196,7 +3229,22 @@ def serialize_value(value: Any) -> Any:
         if value.register is not None:
             payload["register"] = value.register
             payload["register_name"] = REGISTER_NAMES[value.register]
+        # CAS v7.6 Section 4 drive-in-domain shorthand: surface the
+        # domain when present so downstream consumers can distinguish
+        # `F2` from `F2^C`.
+        if value.domain is not None:
+            payload["domain"] = value.domain
+            payload["domain_name"] = DOMAIN_NAMES.get(value.domain)
         return payload
+    # CAS v7.6 (Clarification 9) runtime values.
+    if isinstance(value, ProductionTargetValue):
+        return value.to_dict()
+    if isinstance(value, RecipeValue):
+        return value.to_dict()
+    if isinstance(value, StateVectorValue):
+        return value.to_dict()
+    if isinstance(value, YieldExpressionValue):
+        return value.to_dict()
     return repr(value)
 
 
