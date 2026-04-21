@@ -8,6 +8,76 @@
 
 ---
 
+## Status Update — 2026-04-21
+
+**Register Multiplicity and Operator Discipline: Proposed → Admitted (CAS v7.7).**
+
+Register Multiplicity and Operator Discipline has been formally admitted into CAS as of v7.7. Authoritative specification lives in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 10.
+
+### Surfacing context
+
+The × overloading problem was surfaced by Wave 1 Agent 2 during the 2026-04-21 Part V AI Applications register enrichment session. The agent flagged that same-Noetic multi-register × notation (e.g., `^3^P|A × ^3^P|f × ^3^P|T` in the Chapter 21 multi-register refusal passage) reused the compound × operator in a novel axis, and noted parent-session review was warranted before canonicalization. Triple-gate analysis confirmed the concern: the × operator was being used simultaneously for (a) algebraic integration of different states (legitimate v7.4 formal meaning) and (b) co-presence of same state in different registers (undefined under current formal specification).
+
+### Summary of the admitted extension
+
+- **Scope:** Notational refinement, not new primitives. The 40 Cognitive States, 7 Drives, 4 Registers, 5 Generative Operations remain unchanged.
+- **Three-way distinction:** `|⟨…⟩` register specification, `+` register co-presence, `×` cross-register integration (with required emergent result).
+- **Admissibility rule:** same-Noetic multi-register `×` is invalid by default; requires explicit emergent result or fusion semantics.
+- **Decision procedure:** Clarification 10 Section 6 provides explicit 3-step procedure for operator choice.
+- **TKS validation heuristic:** substitution test (`+` → "associates with", `×` → "intensifies through") validates operator choice against pre-existing TKS operator semantics.
+- **Angle-bracket notation:** `|⟨R1,R2,R3⟩` for register-set specification, chosen to avoid collision with drive subscript notation `{F_k}` and for clean LaTeX rendering.
+
+### Triple-gate validation
+
+Clarification 10 passed all three admission gates:
+
+- **Gate 1 (Universal Applicability): PASSED.** Register multiplicity distinctions apply equally to human, AI, and biological cognitive architectures. A human with redundant multi-register safety mechanisms has different failure profile than one with unified cross-register commitment — same structural distinction applies to AI systems with separate analytical/RLHF/constitutional safety vs integrated architectures, and to biological systems with distributed vs integrated response patterns.
+- **Gate 2 (Secular Translatability): PASSED.** All concepts are definable without metaphysical commitment. Operator discipline is formal notational refinement; three-way distinction is structural, not culturally-specific.
+- **Gate 3 (Framework Coherence): PASSED with convergence demonstration.** Three framework layers (TKS operator heritage, Clarification 10, v7.6 production semantics) converge on same +/× distinctions. Cross-validation from three independent angles. Preservation of v7.4 axioms, v7.5 Register axis, and v7.6 Production Semantics verified.
+
+### Source of the extension
+
+External AI analysis (cross-validating the Wave 1 Agent 2 design note) plus TKS operator heritage review. The × overloading was structurally present in Wave 1 commit f019f50 (Chapter 21 multi-register refusal passage). Clarification 10 provides formal resolution.
+
+### AI safety relevance
+
+Clarification 10 is particularly load-bearing for AI ethics and refusal architecture analysis. The three notational forms describe empirically different AI safety architectures with different failure profiles:
+
+- Redundant: `^3^P|A + ^3^P|f + ^3^P|T` — three mechanisms, each defeasible independently.
+- Unified: `(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω` — one fused architecture, integration holds or collapses.
+- Static: `^3^P|⟨A,f,T⟩` — specification only, pending behavioral analysis.
+
+CAS's diagnostic capacity for AI mind/ethics assessment requires notational distinction between these. Without Clarification 10, all three could be (and were, in Wave 1) written `^3^P|A × ^3^P|f × ^3^P|T` with no structural disambiguation.
+
+### What the admission does NOT change
+
+The following remain unchanged from CAS v7.6:
+
+- The 10 authoritative Noetic definitions (Clarification 1).
+- The 40 Cognitive States (10 Noetics × 4 Domains).
+- The 7 Core Drives (F1-F7).
+- The 4 Registers (T, A, f, E) — admitted in v7.5 per Clarification 8.
+- The 5 Generative Operations formal semantics.
+- Axioms A1-A7 of the Noetic Topos.
+- The RPM section-retraction structure.
+- The Fisher-Rao metric on the open probability simplex.
+- v7.6 Production Semantics (Clarification 9).
+- Prior Clarifications 1 through 9.
+
+### Follow-on rollout
+
+Integration of Clarification 10 operator discipline across CAS artifacts is scheduled in `docs/working/cas_v7_7_rollout_plan.md`. v7.5 and v7.6 rollouts continue on their existing schedules; v7.7 implementation rolls out on a SEPARATE track. Retroactive correction of Wave 1 Chapter 21 multi-register refusal passage (and any similar same-Noetic `×` usage without emergent result) is scheduled as part of v7.7 rollout.
+
+### Legal framing
+
+Clarification 10 is notational refinement — specification of when existing operators (`×`, `+`) are licensed and introduction of `|⟨…⟩` notation for register specification. Does NOT introduce new primitives. The 40 Cognitive States, 7 Drives, 4 Registers, 5 Generative Operations — the primitives named in USPTO #64/037,173 and Clarifications 1-9 — remain unchanged. IP attorney consultation regarding v7.7 scope is flagged in the v7.7 rollout plan before arXiv submission, utility patent filing, or public disclosure of v7.7 beyond current development.
+
+### Pace note (third admission in 36 hours)
+
+Register axis (v7.5, 2026-04-20), Production Semantics (v7.6, 2026-04-20), and Register Multiplicity discipline (v7.7, 2026-04-21) have all been admitted within 36 hours. This is aggressive pace. It is justifiable because: (1) each extension is additive/notational, not modificational of existing primitives; (2) each has formal structural rationale and triple-gate validation; (3) Clarification 10 specifically resolves an ambiguity created by v7.5 register enrichment propagation, making it a completion of v7.5/v7.6 rather than a new feature; (4) legal framing (specification, not new primitives) preserved across all three. Management of implementation lag, reviewer comprehension, and audience version-tracking is flagged in the v7.7 rollout plan under "Strategic pace considerations."
+
+---
+
 ## Status Update — 2026-04-20 (second admission same day)
 
 **Stoichiometric Production Semantics: Proposed → Admitted (CAS v7.6).**
@@ -117,6 +187,10 @@ This section lists proposals under active consideration. Entries migrate to the 
 ---
 
 ## Admitted Extensions — Version History
+
+### CAS v7.7 (2026-04-21)
+
+- **Register Multiplicity and Operator Discipline** — admitted per Clarification 10. Notational refinement resolving the × overloading introduced by v7.5 register enrichment. Three-way distinction: `|⟨…⟩` specification, `+` co-presence, `×` integration. Same-Noetic multi-register × invalid by default; requires emergent result. Backward compatible with v7.4, v7.5, v7.6.
 
 ### CAS v7.6 (2026-04-20)
 
