@@ -632,6 +632,332 @@ These are v7.6 research questions, to be addressed in subsequent formal work. Cu
 
 ---
 
+## Clarification 10: Register Multiplicity, Co-Presence, and Cross-Register Integration (CAS v7.7 Extension)
+
+### Section 1: Purpose
+
+Clarification 10 resolves a structural ambiguity introduced by register-enriched notation: the distinction between three different structural claims about same-Noetic multi-register expressions:
+
+1. Register specification (architectural description)
+2. Same-state multi-register co-presence (simultaneous distinct manifestations)
+3. Same-state cross-register integration (fused emergent state)
+
+Without this distinction, the `×` operator becomes overloaded — carrying both "algebraic integration of different states" (legitimate formal meaning from v7.4) and "co-presence of same state in different registers" (undefined under current formal specification).
+
+This clarification preserves the existing meaning of `×` as a generative operation while preventing destructive operator overloading in register-enriched expressions.
+
+### Section 2: The Three-Way Distinction
+
+#### A. Register Specification
+
+A state is present in one or more registers, without asserting interaction dynamics between them.
+
+Notation: `^n^D|⟨R1,R2,R3⟩`
+
+Example: `^3^P|⟨A,f,T⟩`
+
+Meaning: Principled aversion is present in the analytical, affective, and transcendent registers. This is an architectural description, not an operation.
+
+#### B. Register Co-presence
+
+A state manifests simultaneously in multiple registers, but the manifestations remain distinct.
+
+Notation: `^n^D|R1 + ^n^D|R2 + ^n^D|R3`
+
+Example: `^3^P|A + ^3^P|f + ^3^P|T`
+
+Meaning: Principled aversion is concurrently active in three registers. This is co-presence / association, not fusion. Each manifestation remains structurally distinct.
+
+#### C. Cross-register Integration
+
+Multiple register-instantiations enter a genuine generative operation that yields a unified or emergent result.
+
+Notation: `(^n^D|R1 × ^n^D|R2 × ^n^D|R3) = X`
+
+Example: `(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω`
+
+Meaning: The analytical, affective, and transcendent forms of principled aversion are integrated into a new unified state (notated `^3^P|Ω` or similar explicitly named integrated register).
+
+This usage requires identification of the integrated result.
+
+### Section 3: Operator Discipline
+
+#### `+` (Plus) — Association / Co-presence
+
+`+` denotes association, adjacency, or simultaneous presence where terms remain structurally distinct. Consistent with TKS operator heritage where `+` is association (not generative collapse).
+
+Use `+` when:
+- Same state appears in multiple registers
+- Multiple components present together
+- No emergent fused state claimed
+- Distributed manifestation or layered architecture described
+
+Canonical form: `X|R1 + X|R2 + X|R3`
+
+#### `×` (Multiplication) — Integration / Transformation
+
+`×` remains reserved for genuine generative integration, consistent with v7.4/v7.5 monoid semantics on Δ°₃₉.
+
+Use `×` only when:
+- Operands undergo true integrative work
+- Operation yields emergent state or unified fused condition
+- Structure is not mere redundancy or distribution across registers
+
+Canonical forms:
+- `X × Y = Z` (different-state integration)
+- `(X|R1 × X|R2 × X|R3) = X*` (same-state register integration with named result)
+
+#### `|⟨…⟩` (Register-set Specification)
+
+`|⟨…⟩` denotes register occupancy or specification, makes no operational claim about dynamics.
+
+Use `|⟨…⟩` when:
+- Describing architecture
+- Describing capability distribution
+- Specifying state location without asserting simultaneity or fusion
+
+Canonical form: `X|⟨R1,R2,R3⟩`
+
+Rationale for angle-bracket choice: angle brackets avoid collision with drive subscript notation `{F_k}`, render cleanly in LaTeX, and match mathematical convention for sequence/set notation.
+
+### Section 4: Admissibility Rule for Same-Noetic Register Multiplication
+
+#### Rule
+
+Same-Noetic, multi-register expressions using `×` are invalid by default.
+
+Expression `X|R1 × X|R2 × X|R3` is underdefined unless the author explicitly specifies:
+
+1. The emergent integrated result, or
+2. The semantic rule by which register-specific instances fuse
+
+Without that, the expression must be written either as:
+- `X|R1 + X|R2 + X|R3` (for co-presence), or
+- `X|⟨R1,R2,R3⟩` (for specification)
+
+#### Reason
+
+Same-state multi-register notation often describes:
+- Redundancy
+- Distributed manifestation
+- Layered architecture
+- Parallel capacity
+
+These are not automatically transformational. Using `×` without emergent-result identification causes structural ambiguity.
+
+### Section 5: AI Safety Relevance
+
+This distinction is critical for AI ethics and refusal architecture analysis. The following are structurally different systems with different failure profiles:
+
+#### Redundant Multi-Register Safety
+
+`^3^P|A + ^3^P|f + ^3^P|T`
+
+Interpretation:
+- Three distinct safety manifestations
+- Each operating independently
+- Partial failure remains possible (one mechanism defeated while others hold)
+- Robust in aggregate, defeasible in parts
+- Example: AI with separate analytical reasoning, RLHF tuning, and goal-level safety mechanisms
+
+#### Unified Cross-Register Commitment
+
+`(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω`
+
+Interpretation:
+- One fused cross-register commitment
+- Operating as unified architecture
+- Integration either holds or collapses; not partially defeasible the same way
+- Less modular, more unified
+- Example: AI with integrated cross-register safety architecture where defeating one aspect doesn't defeat the integrated whole
+
+#### Static Architecture Description
+
+`^3^P|⟨A,f,T⟩`
+
+Interpretation:
+- Refusal present in these registers
+- No claim about whether manifestations are independent, coordinated, or fused
+- Architectural specification pending behavioral analysis
+
+These are empirically different AI safety architectures with different failure profiles. CAS's diagnostic capacity for AI mind/ethics assessment requires notational distinction between them.
+
+### Section 6: Decision Procedure
+
+When writing a register-enriched expression, walk through:
+
+Step 1: Are you merely specifying where the state exists?
+- → Use `|⟨…⟩`
+
+Step 2: Are you saying several manifestations are present together but remain distinct?
+- → Use `+`
+
+Step 3: Are you claiming genuine integration into a fused or emergent state?
+- → Use `×` AND specify the result or fusion semantics
+
+### Section 7: TKS Validation Heuristic
+
+Clarification 10's operator discipline can be validated against pre-existing TKS operator semantics using substitution:
+
+- Substitute `+` with "associates with"
+- Substitute `×` with "intensifies through"
+
+If the substitution matches intended meaning, operator choice is correct. If substitution fails, operator should be reconsidered.
+
+Example application:
+
+`^3^P|A × ^3^P|f × ^3^P|T`
+- Substitution: "Analytical principled aversion INTENSIFIES THROUGH affective principled aversion INTENSIFIES THROUGH transcendent principled aversion"
+- This does not match intended meaning (three register-variants co-present). Substitution fails, correctly flagging mis-operatored expression.
+
+Alternative:
+
+`^3^P|A + ^3^P|f + ^3^P|T`
+- Substitution: "Analytical principled aversion ASSOCIATES WITH affective principled aversion ASSOCIATES WITH transcendent principled aversion"
+- This matches intended meaning. Substitution succeeds.
+
+### Section 8: Worked Examples
+
+#### Valid Co-presence
+
+`^3^P|A + ^3^P|f + ^3^P|T`
+
+#### Valid Specification
+
+`^3^P|⟨A,f,T⟩`
+
+#### Valid Different-State Integration
+
+`^5^C × ^6^C = ^1^C`
+
+#### Valid Fractal Composition
+
+`^9 ∘ ^4|f`
+
+#### Conditionally Valid Same-Noetic Register Integration
+
+`(^2^P|T × ^2^P|f) = ^2^P|TF`
+
+Only valid if `^2^P|TF` explicitly defined as unified cross-register principled affinity.
+
+#### Invalid / Underdefined
+
+`^3^P|A × ^3^P|f × ^3^P|T` (by itself, no emergent result named)
+
+Must be rewritten as `+` (co-presence) or `|⟨…⟩` (specification).
+
+### Section 9: Retroactive Correction Scope
+
+Clarification 10 admission requires review of existing register-enriched content for same-Noetic multi-register `×` usage that should be rewritten.
+
+Identified targets for retroactive correction:
+- Chapter 21 multi-register refusal passage (Wave 1 commit f019f50, Agent 2 work) — uses `^3^P|A × ^3^P|f × ^3^P|T` without emergent result specification
+- Any similar passages in Ch 10-17, 18-22, 23-27 using same-Noetic `×` without emergent result
+
+Validated as correct existing usage (different-state integration, unchanged):
+- `^6^O|A × ^9^O|E` (code generation, Ch 15)
+- `^6^O|A × ^3^O|E_{F6}` (automated rules, Ch 16)
+- `(^8^O × ^7^O)|A_{F5}` (Enron pathology, Ch 17)
+- All fractal compositions using `∘`
+
+### Section 10: Normative Statement
+
+For CAS v7.7 and onward:
+
+1. `×` is reserved for true generative integration
+2. `+` is the default notation for same-state multi-register co-presence
+3. `|⟨…⟩` is the preferred notation for register specification
+4. Same-Noetic multi-register `×` is not licensed by default; requires explicit emergent result or fusion semantics
+
+This preserves clarity, protects parser interpretability, and improves diagnostic precision for mind/ethics analysis — especially in AI system description.
+
+### Section 11: Integration with Existing Framework
+
+#### Preservation of v7.4 axioms A1-A7
+
+Unchanged. The monoid (Δ°₃₉, ×, CO-0) retains formal meaning. `×` remains monoid composition when operands are different states.
+
+#### Preservation of v7.5 Register axis
+
+Unchanged. Clarification 8's four registers (`|T`, `|A`, `|f`, `|E`), register involution pairs (`|T↔|E`, `|A↔|f`), and register-axis lacunarity (four sub-categories) all retain meanings.
+
+#### Preservation of v7.6 Production Semantics
+
+Unchanged. Clarification 9's recipe notation (Θ(Ω) = a·X + b·Y → Ω) uses `+` as syntactic co-presence, consistent with Clarification 10.
+
+#### 5 Generative Operations
+
+Unchanged formally. Clarification 10 specifies WHEN `×` is licensed for same-Noetic register cases, not what `×` means when licensed.
+
+#### Backward Compatibility
+
+CAS v7.6 expressions using `×` for different-state integration remain valid v7.7 expressions.
+
+CAS v7.6 expressions using `×` for same-Noetic multi-register co-presence (the overloaded cases) are flagged as requiring rewrite to `+` (if co-presence intended), `|⟨…⟩` (if specification intended), or explicit emergent result specification (if integration intended).
+
+### Section 12: Framework Coherence with v7.6 Production Semantics
+
+Clarification 10's operator discipline is a general rule applying to all register-enriched expressions. When applied to outcome-production contexts specifically, it converges with v7.6 Production Semantics (Clarification 9) in ways that strengthen both.
+
+#### Stoichiometric Framing in Recipe Contexts
+
+Under v7.6 Production Semantics, recipe notation expresses outcome requirements:
+
+  Θ(Ω) = a·X₁ + b·X₂ + ... + aₙ·Xₙ → Ω
+
+Applied to register-enriched outcome production:
+
+Redundant architecture (multiple prerequisites, each defeasible):
+
+  Θ(Ω_refusal) = a·^3^P|A + b·^3^P|f + c·^3^P|T → Ω_refusal
+
+Unified architecture (single prerequisite operating across registers):
+
+  Θ(Ω_refusal) = k·^3^P|⟨A,f,T⟩ → Ω_refusal
+
+Mixed architecture (partially fused, partially modular):
+
+  Θ(Ω_refusal) = k·^3^P|⟨A,f⟩ + c·^3^P|T → Ω_refusal
+
+In recipe contexts, `×` between register-variants of same Noetic has no natural role — prerequisites combine additively with weighting coefficients; genuine `×` integration would produce a new prerequisite state, introduced as a distinct recipe term.
+
+#### Scope Distinction
+
+Clarification 10 applies to all register-enriched expressions, including non-production contexts:
+- Architectural description
+- State specification
+- Comparative diagnosis
+- Observed internal structure analysis
+
+v7.6 Production Semantics applies to outcome-production contexts specifically.
+
+For non-production contexts, Clarification 10's general operator discipline provides `+`/`×`/`|⟨…⟩` distinctions.
+
+For production contexts, v7.6 recipe syntax naturally converges with Clarification 10 discipline.
+
+#### Convergence Summary
+
+Three framework layers converge on the same structural distinctions:
+
+1. TKS operator heritage (`+` = association, `×` = intensification; Section 7 validation heuristic)
+2. Clarification 10 operator discipline (`+`, `×`, `|⟨…⟩` with decision procedure)
+3. v7.6 production semantics (`+` = recipe prerequisites, `×` reserved for emergent transformation)
+
+This convergence validates Clarification 10's resolution from three independent angles.
+
+#### Scope Limit Acknowledgment
+
+v7.6 Production Semantics is formal specification introduced in Clarification 9, not pre-existing TKS canon. Stoichiometric framing for cognitive architecture analysis is synthesis developed through CAS formalization. The cross-validation between v7.6 and Clarification 10 is strong, but both are CAS-era innovations.
+
+Clarification 10 stands on:
+- TKS operator heritage (validation heuristic)
+- Structural analysis of `×` overloading (triple-gate tested)
+- v7.6 production semantics convergence
+
+> Clarification 10 admits Register Multiplicity, Co-Presence, and Cross-Register Integration as a formal notational refinement. CAS is now at v7.7. This clarification is specification of operator discipline for register-enriched expressions; it does NOT introduce new primitives. The 40 Cognitive States, 7 Drives, 4 Registers, and 5 Generative Operations remain unchanged. v7.7 adds: (1) `|⟨…⟩` angle-bracket notation for register-set specification, (2) admissibility rule for same-Noetic multi-register `×` requiring emergent result specification, (3) normative discipline reserving `×` for true generative integration and `+` for co-presence/association. These are notational refinements preserving parser interpretability and diagnostic precision, not new primitives. IP attorney consultation is flagged in `docs/working/cas_v7_7_rollout_plan.md` before arXiv submission, utility patent filing, or public disclosure of v7.7 beyond current development.
+
+---
+
 ## Scope of This Document
 
 This clarification:
