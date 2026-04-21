@@ -3,7 +3,7 @@
 ## Project Identity
 - **Product**: Noetic Compass — AI Psychology & Ethics Assessment Platform
 - **Founder**: Little Henderson (a.k.a. Wakil, a.k.a. Prof. Hermes M. Thoth)
-- **Framework**: Cognitive Architecture System (CAS) v7.4 — Corrected Edition
+- **Framework**: Cognitive Architecture System (CAS) v7.5 — Phenomenological Register Extension (prior: v7.4 Corrected Edition)
 - **Classification**: Confidential
 
 ## Authoritative Noetic Definitions (READ FIRST)
@@ -102,6 +102,40 @@ Anti-drift annotations — load-bearing warnings that catch the specific drift p
 - **`^4` Vibration has an etymological cognate.** "Struck a chord" is not a metaphor for resonance — it is a literal vibration metaphor pointing at the same structural dynamic the authoritative definition names. When the colloquialism and the definition etymologically converge, the verification is strongest.
 
 When classifying a new example during reconciliation or analysis: if the proposed Noetic is `^3` or `^8`, explicitly check the anti-drift annotation before committing the classification. The visceral-vs-analytical and triggering-vs-reasoning distinctions are where Scheme-A/B/C schemes most commonly re-emerge.
+
+#### Phenomenological Register axis — CAS v7.5 extension
+
+CAS v7.5 introduces a second orthogonal axis: the **Phenomenological Register**. Register specifies the operational character of a cognitive operation without changing what the operation IS. The 40 Cognitive States (10 Noetics × 4 Domains) and 7 Drives (F1-F7) remain unchanged; Register is a specification layer on top of them. Full authoritative treatment is in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 8.
+
+Four Register values (R ∈ {T, A, f, E}):
+- **`|T` Transcendent** — high-abstraction, purpose-orienting, integrative-across-particulars. Human: felt sense of meaning, vision, calling. AI: high-level goal representation, strategic abstraction. Biological: holistic orienting responses.
+- **`|A` Analytical** — explicit, sequential, logical, reason-based. Human: conscious reasoning, deliberation. AI: chain-of-thought, symbolic reasoning. Biological: problem-solving behavior, step-by-step procedure execution.
+- **`|f` Affective** — value-laden, feeling-toned. Human: emotional response, visceral reaction. AI: RLHF-tuned value expression, preference-weighted output. Biological: valence-carrying response, approach-avoidance dynamics.
+- **`|E` Embodied** — sensorimotor, concrete, direct engagement with material/physical substrate. Human: bodily knowing, gut response, kinesthetic awareness. AI: direct sensor/actuator engagement, real-time control loops, embodied robotic action. Biological: reflexive/sensorimotor behavior.
+
+Notation:
+- `^n|R` — Register specified for a Noetic primitive alone.
+- `F_k|R` — Register specified for a Drive primitive alone.
+- `^n^D_{F_k}|R` — Register specified for the compound state as a whole.
+- `^n|R_n^D_{F_k|R_d}` — Independent register specification for Noetic and Drive when they differ.
+
+Register is **optional**. CAS v7.4 expressions (no register specified) remain valid in v7.5 and indicate register-neutral or unspecified register. When register matters analytically, specification is recommended. When it does not, omission is acceptable.
+
+Register applies orthogonally to the four cognitive axes:
+- Noetic (which structural dynamic: `^0` through `^9`)
+- Domain (which ontological level: P / C / E / O)
+- Drive (which motivational architecture: F1 through F7)
+- Register (which operational character: T / A / f / E)
+
+All four axes orthogonal. Any combination expressible.
+
+Cross-validation: the Register axis is independently confirmed by two TKS cross-products — 10 Noetics × 4 Worlds = 40 Elements (Noetic-level) and 7 Foundations × 4 Worlds = 28 Foundations (Drive-level). The same 4-Worlds axis appears at both cross-products. Reframed in secular universal terms as 4 Registers, it applies consistently across all CAS primitives. CAS v7.4 lost this axis in translation from TKS; v7.5 restores it on secular basis. Only the axis structure is reconciled from TKS; metaphysical/cultural content is not incorporated (see `docs/reference/tks_28_foundations_translation_key.md`).
+
+Resolution of CAS v7.4 ambiguity: the Evaluative-domain conflation (analytical assessment vs affective response) is resolved by `|A` vs `|f` Register specification. Both `^3^E|A` (analytical assessment that something is bad) and `^3^E|f` (felt aversion) are legitimate; the Register disambiguates which.
+
+Status of artifacts: Chapters 2-17 of FULL_MANUSCRIPT.md were reconciled under CAS v7.4 semantics (pre-Register). Register integration into the book is follow-on work, not yet completed. See `docs/working/cas_v7_5_rollout_plan.md` for the scheduled rollout across peer-review paper, book manuscript, compiler, Rust engine, dashboard, LLM scoring prompt, incident database, scenario catalog, and NL signal analyzer.
+
+Legal framing: Register is specification of operational character of existing primitives, not introduction of new primitives. The 40 Cognitive States and 7 Drives remain unchanged. This preserves integrity of the provisional patent filing USPTO #64/037,173. IP attorney consultation is flagged in the rollout plan.
 
 #### Structural invariants (conventions layered on top of the authoritative definitions)
 
