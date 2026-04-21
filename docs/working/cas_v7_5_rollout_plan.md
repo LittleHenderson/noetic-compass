@@ -250,40 +250,110 @@ This consultation is **blocking** for any public disclosure of v7.5 that might a
 
 ---
 
+## (j) Register Data Flow Extension (end-to-end register metadata propagation)
+
+**Status.** NOT STARTED (flagged 2026-04-20 by the parser fix agent that shipped commit `317b2b5`).
+
+**Priority.** Medium. **v7.5 rollout dependency** — this track is what makes Register user-visible in assessment output. Without it, the backend pipeline is complete but the dashboard and wrap API response still render v7.4-shaped output (no register column, no register-resolved state breakdown).
+
+**Dependencies.** None blocking. Compiler (track c), Rust engine (track d), LLM prompt (track f), and score parser (fix shipped in commit `317b2b5`) are all implementation-complete. This track connects them end-to-end. Can be started immediately; benefits from but does not require Dashboard Phase A completion because the data-model extensions can ship independently of the visualization work and be picked up by the dashboard when Phase A consumes them.
+
+### Scope summary
+
+Register annotations are currently parsed at input boundaries (LLM output via the updated `_parse_self_reported_scores`; compiler expressions via the `|R` lexer/parser extension) but **discarded before reaching output boundaries** (dashboard, wrap API response, assessment reports). This track extends the data model to carry register metadata end-to-end so registers appear in user-facing assessment results.
+
+### Source of follow-up
+
+Flagged by the score parser agent in commit `317b2b5` on 2026-04-20. Agent quote:
+
+> "Per-score register metadata is parsed and validated but not yet propagated downstream. `OperatorScoreResult.scores` remains `list[float]`. A future session should extend `OperatorScoreResult` with `score_registers: list[str | None]` and plumb it through `operator_scoring` → scoring → NCCS → dashboard → wrap response schema."
+
+### Files affected (to be verified during implementation)
+
+- `api/scoring/operator_scoring.py` — `OperatorScoreResult` schema extension.
+- `api/scoring/scoring.py` — NCCS aggregation preserves per-score register attribution.
+- `api/scoring/ncss.py` (if a separate module exists).
+- `api/wrap/*.py` — wrap API response schema.
+- `dashboard/src/lib/` — types and data-transformation modules.
+- `dashboard/src/components/` — score-display components.
+- Any other modules in the data flow path from score parsing to dashboard display (verify during implementation; likely includes serialization layers and report generators).
+
+### Extension pattern
+
+- `OperatorScoreResult.scores: list[float]` — retain as-is.
+- **Add** `OperatorScoreResult.score_registers: list[str | None]` — parallel list, one optional register per score, lowercase `"f"` for Affective per authoritative convention.
+- Propagate `score_registers` through aggregation layers preserving per-score register attribution.
+- Dashboard: render register annotations alongside score values in assessment output. Render nothing (clean v7.4-shape output) when all registers are None.
+- Wrap API response: include `score_registers` in JSON schema as an optional field.
+
+### Backward compatibility requirements
+
+- Clients not requesting register data get unchanged response shape (omitted keys, not empty lists, if the client version predates register support).
+- Score values without register annotation (list of None) render identically to v7.4 output — no visual artifacts.
+- Dashboard displays register annotations only when present, not when None.
+- API consumers can opt into register metadata via version flag or feature toggle if downstream clients need staged rollout.
+
+### Acceptance criteria
+
+1. **End-to-end test.** LLM emits a register-annotated score → parser captures the register → `OperatorScoreResult` carries the register through → NCCS preserves the register → wrap response includes it → dashboard displays it. One integration test covering the whole pipeline.
+2. **Backward-compat test.** A register-neutral assessment produces byte-for-byte v7.4 output at the wrap-API layer and at the dashboard-rendering layer.
+3. **Schema documentation.** Wrap API schema updated to reflect new optional `score_registers` field. OpenAPI / JSON Schema definitions updated where they exist.
+4. **Mixed-register test.** Dashboard rendering tested with mixed input (some scores register-annotated, some register-neutral) — partial annotation should render partial register information without collapsing the full row.
+
+### Estimated effort
+
+Medium. Touches multiple modules but each change is mechanical: schema extension + pass-through plumbing. No algorithmic complexity. Primary work is ensuring all data-flow layers preserve the optional register field and that tests exist at each pass-through hop.
+
+### Risk
+
+Low. Additive change preserving backward compatibility. Test coverage of register-neutral paths prevents regression, and the already-shipped score-parser tests cover the input-boundary behavior.
+
+### Recommended sequencing
+
+After Dashboard Phase A begins (track e above), since dashboard-level changes are the terminal consumers of the register metadata. But can be started any time; does not require Dashboard Phase A completion, because the data-model extensions can ship independently and be picked up by the dashboard when Phase A is ready to consume them.
+
+---
+
 ## Sequencing Recommendation
 
 Suggested order for propagation work:
 
 1. **Peer-review paper update** (blocking arXiv submission; gated on IP attorney consultation).
-2. **Compiler Register support** (unblocks downstream LLM prompt, Rust engine, dashboard, and scenario work).
-3. **LLM scoring prompt update** (benefits from compiler support but can proceed in parallel since it's a string update).
-4. **Rust engine Register field** (downstream dependency for dashboard Phase A).
-5. **Dashboard Phase A — minimum viable visualization** (Radial Architecture Display static rendering, basic interactivity, lacunarity void indication, accessibility baseline). **v7.5 rollout dependency.**
-6. **Dashboard Phase B — enhanced mandala** (full interactivity, involution visualization, composition tracing, comparison mode). Progressive enhancement.
-7. **Dashboard Phase C — auditory modality** (sonification engine, pitch/dynamic/tempo mappings, playback controls, audio export). Progressive enhancement. Largely independent of earlier work once Phase A is stable; can proceed in parallel with book work.
-8. **Dashboard Phase D — multi-modal integration** (synchronized playback, cross-modal interactivity, combined exports). Builds on Phases B and C.
-9. **Book manuscript Register chapter** (independent of technical stack; can proceed in parallel with dashboard work).
-10. **Human-application chapter enrichment (12-17)** (after Register chapter establishes the axis).
-11. **AI-application chapter enrichment (18-22)** (after Register chapter).
-12. **Mathematics chapter formalization (23-27)** (after peer-review paper establishes formal treatment).
-13. **Appendix updates** (final polish after main chapters stabilize).
-14. **Incident database re-examination** (opportunistic during normal incident-analysis work).
-15. **Scenario catalog register coverage** (after compiler support exists).
-16. **NL signal analyzer register detection** (after compiler support exists).
-17. **Dashboard Phase E — advanced research features** (MIDI export, MusicXML, scientific analysis tools). Research extension. Non-blocking.
-18. **TKS 28 Foundations translation key full population** (requires Wakil source access and review; can proceed in parallel with other work).
+2. **Compiler Register support** (unblocks downstream LLM prompt, Rust engine, dashboard, and scenario work). *(Shipped 2026-04-20, commit `2df24f5`.)*
+3. **LLM scoring prompt update** (benefits from compiler support but can proceed in parallel since it's a string update). *(Shipped 2026-04-20, commit `22d7d5e`.)*
+4. **Score parser Register support** (closes latent bug from the LLM prompt update — parser rejects register characters otherwise). *(Shipped 2026-04-20, commit `317b2b5`.)*
+5. **Rust engine Register field** (downstream dependency for dashboard Phase A). *(Shipped 2026-04-20, commit `0dc07af`.)*
+6. **Dashboard Phase A — minimum viable visualization** (Radial Architecture Display static rendering, basic interactivity, lacunarity void indication, accessibility baseline). **v7.5 rollout dependency.**
+7. **Register Data Flow Extension — end-to-end register metadata propagation** (track (j) above). **v7.5 rollout dependency.** Connects the backend input boundaries (parser, compiler) to the output boundaries (wrap API, dashboard) so register annotations become user-visible. Can be started immediately; does not require Dashboard Phase A completion, but dashboard-side rendering work pairs naturally with it.
+8. **Dashboard Phase B — enhanced mandala** (full interactivity, involution visualization, composition tracing, comparison mode). Progressive enhancement.
+9. **Dashboard Phase C — auditory modality** (sonification engine, pitch/dynamic/tempo mappings, playback controls, audio export). Progressive enhancement. Largely independent of earlier work once Phase A is stable; can proceed in parallel with book work.
+10. **Dashboard Phase D — multi-modal integration** (synchronized playback, cross-modal interactivity, combined exports). Builds on Phases B and C.
+11. **Book manuscript Register chapter** (independent of technical stack; can proceed in parallel with dashboard work).
+12. **Human-application chapter enrichment (12-17)** (after Register chapter establishes the axis).
+13. **AI-application chapter enrichment (18-22)** (after Register chapter).
+14. **Mathematics chapter formalization (23-27)** (after peer-review paper establishes formal treatment).
+15. **Appendix updates** (final polish after main chapters stabilize).
+16. **Incident database re-examination** (opportunistic during normal incident-analysis work).
+17. **Scenario catalog register coverage** (after compiler support exists).
+18. **NL signal analyzer register detection** (after compiler support exists).
+19. **Dashboard Phase E — advanced research features** (MIDI export, MusicXML, scientific analysis tools). Research extension. Non-blocking.
+20. **TKS 28 Foundations translation key full population** (requires Wakil source access and review; can proceed in parallel with other work).
 
 This sequencing respects the backward-compatibility mandate: at every stage, existing v7.4 expressions continue to work. Register is added as optional capacity; nothing breaks.
 
 **v7.5 rollout dependencies (items that must complete before v7.5 is considered rolled out):**
 
 - (1) Peer-review paper update (or deferred per IP attorney guidance).
-- (2) Compiler Register support.
-- (3) LLM scoring prompt update.
-- (4) Rust engine Register field.
-- (5) Dashboard Phase A (minimum viable multi-modal visualization, visual modality only).
+- (2) Compiler Register support. ✅ Shipped 2026-04-20, commit `2df24f5`.
+- (3) LLM scoring prompt update. ✅ Shipped 2026-04-20, commit `22d7d5e`.
+- (4) Score parser Register support. ✅ Shipped 2026-04-20, commit `317b2b5`.
+- (5) Rust engine Register field. ✅ Shipped 2026-04-20, commit `0dc07af`.
+- (6) Dashboard Phase A (minimum viable multi-modal visualization, visual modality only). **Not started.**
+- (7) Register Data Flow Extension (track (j) — end-to-end register metadata propagation from parser/compiler through wrap API to dashboard). **Not started.**
 
-Items 6-18 are progressive enhancement, not rollout blockers.
+Items 8-20 are progressive enhancement, not rollout blockers.
+
+**Three v7.5 rollout dependencies remain:** peer-review paper (blocked on IP attorney), Dashboard Phase A visualization, and Register Data Flow Extension (flagged by parser fix agent, tracks end-to-end register metadata propagation). The backend pipeline is implementation-complete; the remaining rollout work is the visualization surface (Phase A) and the data-flow plumbing that makes register annotations user-visible (track (j)). Not a regression — track (j) surfaces work that was previously implicit in the backend pipeline but not explicitly scheduled.
 
 ---
 
