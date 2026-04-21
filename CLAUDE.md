@@ -3,7 +3,7 @@
 ## Project Identity
 - **Product**: Noetic Compass — AI Psychology & Ethics Assessment Platform
 - **Founder**: Little Henderson (a.k.a. Wakil, a.k.a. Prof. Hermes M. Thoth)
-- **Framework**: Cognitive Architecture System (CAS) v7.5 — Phenomenological Register Extension (prior: v7.4 Corrected Edition)
+- **Framework**: Cognitive Architecture System (CAS) v7.6 — Stoichiometric Production Semantics Extension (prior: v7.5 Phenomenological Register Extension; prior: v7.4 Corrected Edition)
 - **Classification**: Confidential
 
 ## Authoritative Noetic Definitions (READ FIRST)
@@ -138,6 +138,28 @@ Status of artifacts: Chapters 2-17 of FULL_MANUSCRIPT.md were reconciled under C
 Dashboard visualization for v7.5 is specified as a multi-modal system in `docs/design/cas_v7_5_multimodal_display_specification.md`: a Radial Architecture Display (visual mandala across all four CAS axes) and a Temporal Cognitive Score (auditory sonification with formal pitch/dynamic/tempo/rhythm mappings from CAS algebra). Implementation is phased — Phase A (minimum viable visual rendering) is a v7.5 rollout dependency; Phases B-E are progressive enhancement. Public-facing names are strictly technical ("Radial Architecture Display," "Temporal Cognitive Score," "Multi-Modal Cognitive Signature"); aesthetic heritage informs design but never appears in product marketing. Every visual and auditory mapping is traceable to a formal CAS primitive.
 
 Legal framing: Register is specification of operational character of existing primitives, not introduction of new primitives. The 40 Cognitive States and 7 Drives remain unchanged. This preserves integrity of the provisional patent filing USPTO #64/037,173. IP attorney consultation is flagged in the rollout plan.
+
+#### Production Semantics — CAS v7.6 extension
+
+> CAS v7.6 adds production semantics as a higher-order analytical layer over the v7.5 state space. Every outcome is treated as a production target Ω requiring a recipe Θ — a proportional weighting of prerequisite primitives (Noetics, Domains, Drives, Registers, or compound states from v7.5). Recipe notation: `Θ(Ω) = a₁·X₁ + a₂·X₂ + ... + aₙ·Xₙ → Ω`. Full authoritative treatment is in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 9.
+>
+> Core v7.6 concepts (each defined in Clarification 9 Section 2):
+> - **Production Target (Ω)** — a specified outcome under analysis.
+> - **Recipe (Θ)** — proportional prerequisite weighting for a unit of Ω.
+> - **State Vector (S)** — current activation quantities of each primitive.
+> - **Theoretical Yield (Y_T)** — `min_i(xᵢ / aᵢ)` across recipe prerequisites; produces the Limiting Reagent.
+> - **Actual Yield (Y_A)** — observed/achieved units of Ω.
+> - **Production Efficiency (η)** — `Y_A / Y_T`, in `[0, 1]`.
+> - **Limiting Reagent (L)** — the prerequisite bottlenecking Y_T.
+> - **Excess Capacity (ε)** — unused prerequisite quantity after Limiting Reagent bottlenecks production.
+> - **Leakage / Side-Reaction (Λ)** — prerequisite present but producing wrong product (distinct from lacunarity = absence, and from inversion = shadow form).
+> - **Catalyst (κ)** / **Inhibitor (ι)** — environmental factors raising or lowering η without being consumed.
+>
+> Legal framing: v7.6 is specification of how existing v7.5 primitives (Noetics, Domains, Drives, Registers) participate in outcome production. It does NOT introduce new primitives to the topos. The 40 Cognitive States, 7 Drives, and 4 Registers — the primitives named in USPTO #64/037,173 and Clarifications 1-8 — remain unchanged. v7.6 adds analytical capacities (recipe notation, yield measurement, leakage detection, catalyst/inhibitor formalism, limiting reagent analysis) over those existing primitives, not new primitives themselves. IP attorney consultation for v7.6 scope is flagged in `docs/working/cas_v7_6_rollout_plan.md`.
+>
+> Explicit distinctions (Clarification 9 Section 5): Leakage ≠ Lacunarity (present-wrong-product vs absent). Leakage ≠ Inversion (normal-with-diverted-output vs shadow-form). Recipe ≠ RPM (proportional quantities vs sequential dependency). Recipe weights ≠ Drive values (outcome-specific requirements vs current activation). Limiting Reagent ≠ Lacunarity (ratio-bottleneck among present vs absence-among-absent).
+>
+> Status of artifacts: CAS v7.5 rollout continues on its existing schedule; v7.6 implementation rolls out on a SEPARATE track per `docs/working/cas_v7_6_rollout_plan.md`. The v7.5 chapter-integration, Appendix G, Dashboard Phase A, and peer-review-paper tracks proceed with v7.5 content only. v7.6 content is added as v7.5 rollout stabilizes. This sequencing is deliberate: v7.6 admitted now to lock framework formalization, while sequencing implementation preserves v7.5 stability.
 
 #### Structural invariants (conventions layered on top of the authoritative definitions)
 
