@@ -3,7 +3,7 @@
 ## Project Identity
 - **Product**: Noetic Compass — AI Psychology & Ethics Assessment Platform
 - **Founder**: Little Henderson (a.k.a. Wakil, a.k.a. Prof. Hermes M. Thoth)
-- **Framework**: Cognitive Architecture System (CAS) v7.6 — Stoichiometric Production Semantics Extension (prior: v7.5 Phenomenological Register Extension; prior: v7.4 Corrected Edition)
+- **Framework**: Cognitive Architecture System (CAS) v7.7 — Register Multiplicity and Operator Discipline Extension (prior: v7.6 Stoichiometric Production Semantics Extension; prior: v7.5 Phenomenological Register Extension; prior: v7.4 Corrected Edition)
 - **Classification**: Confidential
 
 ## Authoritative Noetic Definitions (READ FIRST)
@@ -160,6 +160,36 @@ Legal framing: Register is specification of operational character of existing pr
 > Explicit distinctions (Clarification 9 Section 5): Leakage ≠ Lacunarity (present-wrong-product vs absent). Leakage ≠ Inversion (normal-with-diverted-output vs shadow-form). Recipe ≠ RPM (proportional quantities vs sequential dependency). Recipe weights ≠ Drive values (outcome-specific requirements vs current activation). Limiting Reagent ≠ Lacunarity (ratio-bottleneck among present vs absence-among-absent).
 >
 > Status of artifacts: CAS v7.5 rollout continues on its existing schedule; v7.6 implementation rolls out on a SEPARATE track per `docs/working/cas_v7_6_rollout_plan.md`. The v7.5 chapter-integration, Appendix G, Dashboard Phase A, and peer-review-paper tracks proceed with v7.5 content only. v7.6 content is added as v7.5 rollout stabilizes. This sequencing is deliberate: v7.6 admitted now to lock framework formalization, while sequencing implementation preserves v7.5 stability.
+
+#### Register Multiplicity and Operator Discipline — CAS v7.7 extension
+
+> CAS v7.7 admits Clarification 10: Register Multiplicity, Co-Presence, and Cross-Register Integration. Formal operator discipline for register-enriched expressions, resolving the three-way ambiguity between architectural specification, same-state co-presence, and cross-register integration. Full authoritative treatment is in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 10.
+>
+> Three-way notational distinction:
+> - **`|⟨R1,R2,R3⟩` — Register-set specification.** State is present in one or more registers; no claim about interaction dynamics. Architectural description only. Example: `^3^P|⟨A,f,T⟩` — principled aversion present in analytical, affective, transcendent registers.
+> - **`+` — Register co-presence / association.** Same state manifests simultaneously in multiple registers; manifestations remain distinct. Example: `^3^P|A + ^3^P|f + ^3^P|T` — three distinct co-present manifestations of principled aversion.
+> - **`×` — Cross-register integration.** Multiple register-instantiations enter a genuine generative operation yielding a unified or emergent result. Requires explicit named emergent result. Example: `(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω` where `^3^P|Ω` is defined.
+>
+> Admissibility rule (Clarification 10 Section 4): same-Noetic multi-register expressions using `×` are invalid by default; require explicit emergent result or fusion semantics. Absent those, must be rewritten as `+` (co-presence) or `|⟨…⟩` (specification).
+>
+> Operator discipline (Section 3):
+> - `+` — association/co-presence; terms remain structurally distinct.
+> - `×` — genuine generative integration yielding emergent state; reserved for true integrative work.
+> - `|⟨…⟩` — register-set occupancy; no operational claim.
+>
+> Decision procedure (Section 6): (1) specifying where state exists → `|⟨…⟩`; (2) manifestations present together but distinct → `+`; (3) genuine integration into fused state → `×` with specified result.
+>
+> TKS validation heuristic (Section 7): substitute `+` with "associates with" and `×` with "intensifies through"; if substitution matches intended meaning, operator choice is correct.
+>
+> AI safety relevance (Section 5): redundant multi-register safety (`^3^P|A + ^3^P|f + ^3^P|T` — three mechanisms, each defeasible) vs unified cross-register commitment (`(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω` — one fused architecture) vs static architecture description (`^3^P|⟨A,f,T⟩` — specification pending behavioral analysis) are empirically different AI safety architectures with different failure profiles. Notational distinction required for diagnostic precision.
+>
+> Convergence with v7.6 (Section 12): three framework layers — TKS operator heritage, Clarification 10, v7.6 production semantics — converge on same `+`/`×` distinctions. Recipe notation under v7.6 (`Θ(Ω) = a·X₁ + b·X₂ → Ω`) uses `+` for prerequisite co-presence, consistent with Clarification 10. Register-enriched recipes naturally follow Clarification 10 discipline.
+>
+> Legal framing: Clarification 10 is notational refinement — specification of when existing operators (`×`, `+`) are licensed and introduction of `|⟨…⟩` notation for register specification. Does NOT introduce new primitives. The 40 Cognitive States, 7 Drives, 4 Registers, 5 Generative Operations — the primitives named in USPTO #64/037,173 and Clarifications 1-9 — remain unchanged. v7.7 adds notational discipline preserving parser interpretability and diagnostic precision, not new primitives. IP attorney consultation is flagged in `docs/working/cas_v7_7_rollout_plan.md` before arXiv submission, utility patent filing, or public disclosure of v7.7 beyond current development.
+>
+> Backward compatibility: v7.6 expressions using `×` for different-state integration remain valid v7.7. v7.6 expressions using `×` for same-Noetic multi-register co-presence (overloaded cases) are flagged for rewrite to `+`, `|⟨…⟩`, or explicit emergent-result specification.
+>
+> Status of artifacts: CAS v7.5 and v7.6 rollouts continue on their existing schedules; v7.7 implementation rolls out on a SEPARATE track per `docs/working/cas_v7_7_rollout_plan.md`. Retroactive correction of Wave 1 Chapter 21 multi-register refusal passage (and any similar same-Noetic `×` usage without emergent result) is scheduled as part of v7.7 rollout.
 
 #### Structural invariants (conventions layered on top of the authoritative definitions)
 
