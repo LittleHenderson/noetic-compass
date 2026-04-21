@@ -322,15 +322,31 @@ class StateLiteral:
     # `register` carries the Noetic-level or compound-state register.
     # `drive_register` carries an independent Drive-level register when the
     # notation specifies both (e.g. `^2|T^C_{F2|A}`).
-    register: str | None = None
-    drive_register: str | None = None
+    #
+    # CAS v7.7 (Clarification 10 §2): `register` may ALSO be a
+    # `tuple[str, ...]` when the source uses the `|⟨R1,R2,...⟩` register-set
+    # notation (e.g. `^3^P|⟨A,f,T⟩`). Representation choice: we extend the
+    # existing field rather than introducing a new `RegisterSet` AST node so
+    # that downstream consumers that only care whether a register is present
+    # (JSON serializers, register-aware scoring, etc.) continue to work via
+    # `state.register is not None`; consumers that need to distinguish single
+    # register vs register-set call `isinstance(state.register, tuple)`. The
+    # serializer (`serialize_ast`) and runtime (`StateValue`) emit a stable
+    # `register_set: [...]` key when the field is a tuple so JSON round-trip
+    # preserves set form without collapsing it to a single register.
+    # `drive_register` follows the same extension.
+    register: str | tuple[str, ...] | None = None
+    drive_register: str | tuple[str, ...] | None = None
 
 
 @dataclass
 class DriveLiteral:
     drive: int
     # CAS v7.5 Phenomenological Register. Optional; None means register-neutral.
-    register: str | None = None
+    # CAS v7.7 (Clarification 10 §2): may also be a `tuple[str, ...]` when the
+    # source uses `F_k|⟨R1,R2⟩` register-set notation. See StateLiteral for
+    # the representation rationale.
+    register: str | tuple[str, ...] | None = None
     # CAS v7.6 (Clarification 9) Section 4 allows the shorthand
     # `F_k^D` / `F_k^D|R` for a drive specified in a particular domain
     # (e.g., `F2^C|A` = Wisdom-driven analytical cognitive work). The
@@ -371,6 +387,29 @@ class BinaryExpr:
     op: str
     left: Any
     right: Any
+
+
+@dataclass
+class EmergentResult:
+    """CAS v7.7 (Clarification 10 §4) named emergent result wrapper.
+
+    A parenthesized `×` chain explicitly assigned a named emergent register
+    is modeled as `EmergentResult(inner, assigned_name)`. Example:
+
+        (^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω
+
+    parses to an EmergentResult whose `inner` is the ×-chain BinaryExpr and
+    whose `assigned_name` is the fully-rendered emergent register identifier
+    (e.g. `"^3^P|Ω"`). Representation choice: a dedicated AST node rather
+    than extending BinaryExpr with an optional field — this keeps bare
+    `×` chains (pre-v7.7) free of new fields and isolates the admissibility
+    carve-out of Rule 4 (Section 4) to a single node type, so the Rule 4
+    typecheck only needs to know "if this ×-chain is wrapped in
+    EmergentResult, the named result is specified and the chain is licensed".
+    """
+
+    inner: Any
+    assigned_name: str
 
 
 @dataclass
@@ -523,8 +562,18 @@ class StateValue:
     # means the state is register-neutral (v7.4-compatible). `register`
     # carries the Noetic/compound-level register; `drive_register` carries
     # an independent Drive-level register when the notation specifies both.
-    register: str | None = None
-    drive_register: str | None = None
+    # CAS v7.7 (Clarification 10 §2): these fields may be `tuple[str, ...]`
+    # when the source uses the `|⟨…⟩` register-set notation; `to_dict()`
+    # surfaces the set under a `register_set` key to preserve the
+    # specification shape without collapsing to a single register.
+    register: str | tuple[str, ...] | None = None
+    drive_register: str | tuple[str, ...] | None = None
+    # CAS v7.7 (Clarification 10 §4): named emergent register assigned via
+    # `(... × ...) = X|Ω` syntax. Only set when the ×-chain was wrapped in
+    # an EmergentResult node; None otherwise so legacy ×-chain output is
+    # unchanged. The value is the raw author-supplied label (e.g. `^3^P|Ω`
+    # or `^2^P|TF`) preserved verbatim for downstream consumption.
+    emergent_register: str | None = None
 
     def dominant_state(self) -> int:
         return max(self.states, key=self.states.get)
@@ -549,6 +598,10 @@ class StateValue:
             explicit_drive=self.explicit_drive,
             register=self.register,
             drive_register=self.drive_register,
+            # CAS v7.7 Clarification 10 §4: preserve named emergent register
+            # through normalization so the authored label survives the
+            # `×`-chain execution path end-to-end.
+            emergent_register=self.emergent_register,
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -570,12 +623,31 @@ class StateValue:
         # the keys when actually set so register-neutral states look identical
         # to v7.4 output and downstream consumers aren't surprised by new
         # fields on legacy expressions.
-        if self.register is not None:
+        # CAS v7.7 (Clarification 10 §2): a tuple-valued register represents
+        # the `|⟨…⟩` register-set form. Surface it under `register_set` with
+        # the full ordered list so consumers can distinguish "one register"
+        # from "a set of registers" without collapsing the set form.
+        if isinstance(self.register, tuple):
+            payload["register_set"] = list(self.register)
+            payload["register_set_names"] = [
+                REGISTER_NAMES[r] for r in self.register
+            ]
+        elif self.register is not None:
             payload["register"] = self.register
             payload["register_name"] = REGISTER_NAMES[self.register]
-        if self.drive_register is not None:
+        if isinstance(self.drive_register, tuple):
+            payload["drive_register_set"] = list(self.drive_register)
+            payload["drive_register_set_names"] = [
+                REGISTER_NAMES[r] for r in self.drive_register
+            ]
+        elif self.drive_register is not None:
             payload["drive_register"] = self.drive_register
             payload["drive_register_name"] = REGISTER_NAMES[self.drive_register]
+        # CAS v7.7 (Clarification 10 §4): named emergent register from a
+        # `(... × ...) = X|Ω` assignment. Surface the raw label for
+        # downstream engine / renderer / report consumers.
+        if self.emergent_register is not None:
+            payload["emergent_register"] = self.emergent_register
         return payload
 
 
@@ -902,6 +974,20 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     (r"F_\d+", TokenKind.DRIVE),
     (r"F\d+", TokenKind.DRIVE),
     (r"[PCEO]", TokenKind.DOMAIN),
+    # CAS v7.7 (Clarification 10 §2): single uppercase letters lex as
+    # IDENT. This enables the register-set form `|⟨T,A,f⟩` where each
+    # element tokenizes individually, and enables diagnostic-quality
+    # errors for invalid register letters (e.g. `|⟨A,Q,T⟩` surfaces a
+    # v7.7 "invalid register" error at parse time rather than an opaque
+    # lexing failure). Domain letters P/C/E/O are claimed earlier by the
+    # DOMAIN pattern so this fallback does not collide; S is claimed by
+    # STATE_VECTOR, and F-prefixed drive tokens (`F_n`, `Fn`) are claimed
+    # by the DRIVE patterns. A bare `F` had no prior semantic use.
+    # Single-letter uppercase identifiers were not previously lexable
+    # (bare `T` raised a lexing error), so adding this pattern expands
+    # the lexable surface without conflicting with any pre-v7.7 valid
+    # token.
+    (r"[A-Z]\b", TokenKind.IDENT),
     # Numeric literal: integer or decimal. CAS v7.6 recipe coefficients may
     # be floats (e.g. `0.3·Ω_procrastination`); v7.4/v7.5 integer-only
     # callers still lex NUMBER on integers unchanged because the decimal
@@ -956,6 +1042,27 @@ def _validate_register_token(token: "LexToken") -> str:
                 f"for Affective)"
             ),
             position=token.position,
+        )
+    return value
+
+
+def _validate_register_identifier(value: str, position: int | None) -> str:
+    """Validate a bare register identifier value (no leading `|`).
+
+    Used by the CAS v7.7 (Clarification 10 §2) register-set parser when
+    collecting comma-separated identifiers inside `|⟨R1,R2,...⟩`. Enforces
+    exactly the same `VALID_REGISTERS` constraint as the single-register
+    path so there is one source of truth for the 4-value Register axis.
+    """
+    if value not in VALID_REGISTERS:
+        raise CompilerError(
+            CompilerStage.PARSING,
+            (
+                f"invalid register {value!r}: CAS v7.5/v7.7 Phenomenological "
+                f"Register must be one of {{T, A, f, E}} (lowercase f is "
+                f"authoritative for Affective)"
+            ),
+            position=position,
         )
     return value
 
@@ -1195,7 +1302,104 @@ class Parser:
         # program.
         if token.kind == TokenKind.STATE_VECTOR:
             return self.parse_state_vector()
-        return self.parse_relation()
+        expr = self.parse_relation()
+        # CAS v7.7 Clarification 10 §4: named emergent result assignment.
+        # If the expression is followed by `=` and a register-named identifier,
+        # wrap it in an EmergentResult node. Example:
+        #   `(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω`
+        # This syntax is the only way to license a same-Noetic multi-register
+        # `×` chain (Rule 4). `let`/`fn` statements have already consumed
+        # their `=` by this point, so seeing `=` here at statement level
+        # unambiguously indicates an emergent-result assignment.
+        if self.current().kind == TokenKind.EQUALS:
+            self.advance()
+            assigned_name = self._parse_emergent_register_name()
+            return EmergentResult(inner=expr, assigned_name=assigned_name)
+        return expr
+
+    def _parse_emergent_register_name(self) -> str:
+        """Parse the right-hand side of a CAS v7.7 named-emergent-result
+        assignment: `(... × ... × ...) = <name>`.
+
+        The name is an identifier-like label per Clarification 10 §4. We
+        accept two shapes that appear in the spec examples:
+
+          - Bare identifier-like label (e.g. `TF`, `Ω`, `fused_commitment`).
+            Must start with a letter or the uppercase Greek Omega Ω.
+          - State-literal-shaped label (e.g. `^3^P|Ω`, `^2^P|TF`) — a
+            compound-state notation whose register field names the
+            emergent unified register. Parsed by the existing state parser
+            path, with the register-letter constraint loosened by storing
+            the raw tokens as the assigned name.
+
+        The method captures the raw token stream from the current position
+        forward, up to (but not including) the next statement terminator
+        (SEMI, EOF). The captured substring is returned as the `assigned_name`
+        payload, preserved verbatim so downstream tooling (engine bindings,
+        renderers, documentation extractors) can re-interpret the assigned
+        emergent register without the compiler overloading its own register
+        validation onto author-chosen emergent labels.
+        """
+        start_tok = self.current()
+        if start_tok.kind in (TokenKind.SEMI, TokenKind.EOF):
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    "CAS v7.7 named emergent result: expected an identifier "
+                    "after `=` (Clarification 10 §4)"
+                ),
+                position=start_tok.position,
+            )
+        # Light shape check: the first token must be a letter-started or
+        # Ω-started token. The lexer already constrains what appears here;
+        # we re-verify the "starts with letter / Ω / ^" contract so clearly
+        # malformed names (e.g. `= 123`, `= +`) surface a specific error.
+        leader_ok = start_tok.kind in (
+            TokenKind.IDENT,
+            TokenKind.DOMAIN,
+            TokenKind.STATE_REF,
+            TokenKind.NOETIC,
+            TokenKind.CO,
+            TokenKind.OMEGA,
+            TokenKind.THETA,
+        )
+        if not leader_ok:
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"CAS v7.7 named emergent result: expected identifier-like "
+                    f"label after `=`, got {start_tok.kind.value} "
+                    f"(Clarification 10 §4 allows letters, digits, "
+                    f"underscores, and `Ω` as the starting token)"
+                ),
+                position=start_tok.position,
+            )
+        # Collect tokens up to the next statement boundary. We stop at SEMI,
+        # EOF, RPAREN, RBRACE, RBRACKET, or RANGLE (the close-brackets so a
+        # nested assignment `f((...) = X)` surfaces cleanly — though that
+        # shape is not in the normative examples, it's a safe boundary).
+        terminators = (
+            TokenKind.SEMI,
+            TokenKind.EOF,
+            TokenKind.RPAREN,
+            TokenKind.RBRACE,
+            TokenKind.RBRACKET,
+        )
+        parts: list[str] = []
+        while self.current().kind not in terminators:
+            tok = self.advance()
+            parts.append(tok.value)
+        name = "".join(parts).strip()
+        if not name:
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    "CAS v7.7 named emergent result: empty name after `=` "
+                    "(Clarification 10 §4)"
+                ),
+                position=start_tok.position,
+            )
+        return name
 
     def parse_type(self) -> TypeInfo:
         token = self.expect(TokenKind.IDENT)
@@ -1346,16 +1550,140 @@ class Parser:
         body = value[2:] if value.startswith("F_") else value[1:]
         return int(body)
 
-    def _consume_optional_register(self) -> str | None:
+    def _consume_optional_register(self) -> str | tuple[str, ...] | None:
         """Consume and validate an optional `|R` register suffix if present.
 
-        Returns the validated register character (one of {T, A, f, E}) or None
-        if no register suffix is present. Rejects invalid values with a CAS
-        v7.5 error.
+        CAS v7.5 (Clarification 8): returns a single validated register char
+        (one of {T, A, f, E}) for bare `|R` forms.
+
+        CAS v7.7 (Clarification 10 §2): additionally accepts the register-set
+        form `|⟨R1,R2,...⟩` and returns a `tuple[str, ...]` preserving source
+        order. Duplicates and empty sets are rejected at this layer so the
+        caller can treat the return value as a canonical specification.
+
+        Returns None if no register suffix is present. Rejects invalid values
+        with an explicit CAS v7.5/v7.7 error.
         """
         if self.current().kind == TokenKind.REGISTER:
             return _validate_register_token(self.advance())
+        # CAS v7.7 Clarification 10 §2: `|⟨R1,R2,...⟩` register-set form.
+        # The lexer splits this into PIPE + LANGLE + identifier tokens + RANGLE.
+        # The PIPE pattern `\|(?![A-Za-z])` matches bare `|` when not followed
+        # by an ASCII letter; the register-set opening `⟨` (U+27E8) or ASCII
+        # `<` that follows is not a letter, so PIPE wins over the REGISTER
+        # greedy match. Both Unicode (canonical) and ASCII `<`/`>` are
+        # accepted via the existing LANGLE/RANGLE token fold.
+        if (
+            self.current().kind == TokenKind.PIPE
+            and self.index + 1 < len(self.tokens)
+            and self.tokens[self.index + 1].kind == TokenKind.LANGLE
+        ):
+            return self._consume_register_set()
         return None
+
+    def _consume_register_set(self) -> tuple[str, ...]:
+        """Parse a `|⟨R1,R2,...⟩` register-set suffix (CAS v7.7 §2).
+
+        Grammar: PIPE LANGLE IDENT_OR_DOMAIN (COMMA IDENT_OR_DOMAIN)* RANGLE.
+        Each element must be one of the four authoritative register values
+        ({T, A, f, E}); duplicates and empty sets are rejected as structurally
+        invalid (Clarification 10 §2). The returned tuple preserves source
+        order so round-trip AST → serialization → re-parse survives.
+
+        The lexer classifies:
+          - `A`, `T`, `E` (single capital letter) as DOMAIN tokens, because
+            the domain pattern `[PCEO]` matches a subset of register letters.
+            Only `A` is both a valid register AND a DOMAIN (it is ambiguous
+            with no domain letter; P/C/E/O are domain-only). The `T` and `f`
+            identifiers tokenize as IDENT because `T` doesn't match any
+            single-letter token pattern; lowercase `f` tokenizes as IDENT.
+          - Lowercase `f` tokenizes as IDENT.
+        We therefore accept IDENT, DOMAIN, and (defensively) STATE_REF-style
+        tokens here, extract the literal value, and validate it against
+        VALID_REGISTERS — giving a single source of truth for what counts
+        as a register.
+        """
+        self.expect(TokenKind.PIPE)
+        open_tok = self.expect(TokenKind.LANGLE)
+        registers: list[str] = []
+        seen: set[str] = set()
+        if self.current().kind == TokenKind.RANGLE:
+            # Empty `|⟨⟩` — explicitly rejected per Clarification 10 §2 (a
+            # register set must specify at least one register; use the bare
+            # no-register form to leave register unspecified).
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    "CAS v7.7 register set `|⟨…⟩` must contain at least one "
+                    "register (Clarification 10 §2); use a bare primitive "
+                    "without `|R` to leave register unspecified"
+                ),
+                position=open_tok.position,
+            )
+        value, pos = self._consume_register_set_element()
+        _validate_register_identifier(value, pos)
+        registers.append(value)
+        seen.add(value)
+        while self.current().kind == TokenKind.COMMA:
+            self.advance()
+            value, pos = self._consume_register_set_element()
+            _validate_register_identifier(value, pos)
+            if value in seen:
+                raise CompilerError(
+                    CompilerStage.PARSING,
+                    (
+                        f"CAS v7.7 register set: duplicate register "
+                        f"{value!r} in `|⟨…⟩` (Clarification 10 §2 requires "
+                        f"distinct register identifiers)"
+                    ),
+                    position=pos,
+                )
+            seen.add(value)
+            registers.append(value)
+        self.expect(TokenKind.RANGLE)
+        return tuple(registers)
+
+    def _consume_register_set_element(self) -> tuple[str, int]:
+        """Consume the next token as a register identifier and return
+        `(raw_value, position)`. Accepts the token kinds that naturally
+        tokenize from the four register letters under the existing lexer:
+
+          - `A` → DOMAIN (because `A` is not in `[PCEO]`... actually `A` is
+            NOT a domain letter and thus tokenizes as IDENT since the IDENT
+            pattern `[a-z]` doesn't match uppercase. The pre-existing
+            behavior: `A` matches no single-letter token pattern, so it
+            falls through to the generic IDENT pattern — but IDENT is
+            lowercase-only. Let's trace more carefully: `A` has no matching
+            rule among DOMAIN ([PCEO]), IDENT ([a-z]...), or STATE_REF
+            ([PCEO]\\d+). It would fail to lex. We therefore need the lexer
+            to accept single uppercase letters as register identifiers in
+            this context.)
+
+        In practice, the lexer handles these cases via existing token
+        families (IDENT for lowercase `f`, and we add a STATE_REF-like
+        fallback for single uppercase letters T/A/E). Rather than add
+        new lexer patterns, we accept any of the tokens the lexer is known
+        to produce for register letters here, plus a fallback that parses
+        the raw source character at the token's position.
+        """
+        tok = self.current()
+        if tok.kind in (
+            TokenKind.IDENT,
+            TokenKind.DOMAIN,
+            TokenKind.STATE_REF,
+        ):
+            self.advance()
+            return tok.value, tok.position
+        # Fallback: anything else is a lex-level problem. Report with
+        # a v7.7 register-set error so the author gets a specific hint.
+        raise CompilerError(
+            CompilerStage.PARSING,
+            (
+                f"CAS v7.7 register set: expected a register identifier "
+                f"(T, A, f, or E), got {tok.kind.value} {tok.value!r}"
+            ),
+            position=tok.position,
+        )
 
     def parse_state_ref(self) -> StateLiteral:
         """Parse a shorthand state reference like `P3` with optional `|R`."""
@@ -1970,6 +2298,108 @@ class Parser:
         return primitive, value
 
 
+def _collect_times_chain(node: Any) -> list[Any] | None:
+    """If `node` is a left-associative `×` BinaryExpr chain composed only of
+    StateLiteral operands, return the list of operands in source order.
+    Otherwise return None — the chain is not a candidate for Rule 4 analysis.
+
+    The parser builds `×` chains left-associatively, so `A × B × C` becomes
+    `BinaryExpr(×, BinaryExpr(×, A, B), C)`. We walk the left spine to
+    recover the flat operand list.
+    """
+    operands: list[Any] = []
+
+    def walk(n: Any) -> bool:
+        if isinstance(n, BinaryExpr) and n.op == "TIMES":
+            if not walk(n.left):
+                return False
+            if not walk(n.right):
+                return False
+            return True
+        if isinstance(n, StateLiteral):
+            operands.append(n)
+            return True
+        # Any non-Times non-State node breaks the candidate chain — the
+        # expression is not a pure state-literal `×` chain, so Rule 4
+        # (which applies specifically to same-Noetic multi-register state
+        # chains) does not apply.
+        return False
+
+    return operands if walk(node) else None
+
+
+def _rule4_check_times_chain(node: Any) -> None:
+    """CAS v7.7 Clarification 10 §4 admissibility enforcement.
+
+    For a `×` chain of StateLiteral operands, reject when ALL operands share
+    the same Noetic × Domain × Drive core but differ in register. The Rule
+    requires either:
+      (a) explicit emergent-result assignment via `= X|Ω` (parse layer
+          wraps such a chain in EmergentResult, so this function is never
+          called on licensed chains), OR
+      (b) rewrite to `+` (co-presence) or `|⟨…⟩` (specification).
+
+    Chains with different Noetics, different Domains, different Drives, or
+    where at least one operand carries a register-set (tuple register) are
+    valid cross-register integration and are NOT flagged.
+    """
+    operands = _collect_times_chain(node)
+    if operands is None or len(operands) < 2:
+        return
+    # All operands must be StateLiterals — guaranteed by _collect_times_chain.
+    # Extract the (operator, domain, drive) core and the set of registers.
+    cores = {(op.operator, op.domain, op.drive) for op in operands}
+    if len(cores) != 1:
+        # Different Noetic / Domain / Drive somewhere in the chain — valid
+        # cross-state integration under v7.4 monoid semantics.
+        return
+    # Same core across the chain. Rule 4 applies only when the operands
+    # differ solely in register AND at least one carries a register
+    # specification. Collect registers; any operand carrying a tuple
+    # register (register-set) is already an explicit specification, so we
+    # exempt the chain (author has chosen the `|⟨…⟩` form deliberately).
+    registers: list[Any] = []
+    for op in operands:
+        if isinstance(op.register, tuple):
+            return
+        registers.append(op.register)
+    # Require at least two distinct single-register specifications to flag.
+    distinct = {r for r in registers if r is not None}
+    if len(distinct) < 2:
+        # Either all register-neutral (not a multi-register case) or only
+        # one register value appears — neither triggers Rule 4.
+        return
+    # Construct a diagnostic rendering of the offending chain for the
+    # error message. We use the canonical compact form the author likely
+    # typed: `^n^D|R1 × ^n^D|R2 × ...`.
+    parts: list[str] = []
+    for op in operands:
+        core = f"^{op.operator}^{op.domain}"
+        if op.drive is not None:
+            core = f"{core}_{{F{op.drive}}}"
+        if op.register is not None:
+            core = f"{core}|{op.register}"
+        parts.append(core)
+    rendered = " × ".join(parts)
+    raise CompilerError(
+        CompilerStage.TYPECHECK,
+        (
+            f"CAS v7.7 Clarification 10 Section 4 admissibility rule: "
+            f"same-Noetic multi-register `×` expression is invalid by "
+            f"default. Offending expression: `{rendered}`. The `×` "
+            f"operator is reserved for genuine generative integration; "
+            f"same-state multi-register co-presence must use `+` "
+            f"(co-presence, e.g. `{parts[0]} + {parts[1]}`) or "
+            f"`|⟨…⟩` (specification, e.g. "
+            f"`^{operands[0].operator}^{operands[0].domain}|⟨"
+            f"{','.join(str(r) for r in registers if r is not None)}⟩`). "
+            f"If true integration into a fused state is intended, "
+            f"assign a named emergent result: `({rendered}) = "
+            f"^{operands[0].operator}^{operands[0].domain}|Ω`."
+        ),
+    )
+
+
 def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeInfo:
     env = env or TypeEnv()
 
@@ -2137,7 +2567,28 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
             warnings.append(f"function {node.callee}(...) contains inferred any-typed contracts; prefer explicit annotations")
         return signature.return_type
 
+    if isinstance(node, EmergentResult):
+        # CAS v7.7 Clarification 10 §4: named-emergent-result wrapper.
+        # The inner expression is a licensed ×-chain (Rule 4 bypassed).
+        # Mark the inner tree as Rule 4-exempt by carrying a marker through
+        # the env's vars dictionary under a reserved key so recursive
+        # _infer calls for the inner chain skip the Rule 4 check. The
+        # marker is cleared after inference so subsequent top-level
+        # statements in the same program are unaffected.
+        env.vars["__cas_v77_rule4_exempt__"] = TypeInfo(kind=TypeKind.ANY)
+        try:
+            return _infer(node.inner, warnings, env)
+        finally:
+            env.vars.pop("__cas_v77_rule4_exempt__", None)
+
     if isinstance(node, BinaryExpr):
+        # CAS v7.7 Clarification 10 §4: Rule 4 admissibility for same-Noetic
+        # multi-register `×`. Evaluated before operand inference so the
+        # diagnostic fires with a framework-aware message rather than a
+        # generic typecheck error on an intermediate product. Skipped when
+        # the enclosing scope is already a licensed EmergentResult wrapper.
+        if node.op == "TIMES" and "__cas_v77_rule4_exempt__" not in env.vars:
+            _rule4_check_times_chain(node)
         left = _infer(node.left, warnings, env)
         right = _infer(node.right, warnings, env)
 
@@ -2432,6 +2883,20 @@ def lower(node: Any) -> list[Instruction]:
                 emit(arg)
             bytecode.append(Instruction("CALL", {"name": expr.callee, "argc": len(expr.args)}))
             return
+        if isinstance(expr, EmergentResult):
+            # CAS v7.7 Clarification 10 §4: the inner ×-chain lowers
+            # identically to a plain TIMES chain; the assigned_name is
+            # attached by a follow-up ATTACH_EMERGENT_RESULT instruction
+            # so the runtime value carries the emergent label into
+            # serialization unchanged.
+            emit(expr.inner)
+            bytecode.append(
+                Instruction(
+                    "ATTACH_EMERGENT_RESULT",
+                    {"assigned_name": expr.assigned_name},
+                )
+            )
+            return
         if isinstance(expr, BinaryExpr):
             emit(expr.left)
             emit(expr.right)
@@ -2544,8 +3009,16 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
         # CAS v7.5 register metadata (Clarification 8). Defaults to None for
         # backward compatibility with v7.4 bytecode streams that don't carry
         # register fields.
+        # CAS v7.7 (Clarification 10 §2): tuple-valued register fields carry
+        # the `|⟨…⟩` register-set form; lists coming from serialized bytecode
+        # JSON round-trips are rehydrated to tuples so tests comparing
+        # register shape get a stable container type.
         register = instruction.arg.get("register")
         drive_register = instruction.arg.get("drive_register")
+        if isinstance(register, list):
+            register = tuple(register)
+        if isinstance(drive_register, list):
+            drive_register = tuple(drive_register)
         state_index = _state_index(operator, domain)
         drives = {drive: 1.0} if drive is not None else {}
         stack.append(
@@ -2745,6 +3218,29 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
             stack.append(RpmValue(drive=drive, completeness=completeness, chain=chain))
             return
         raise CompilerError(CompilerStage.EXECUTION, "RPM expected a drive or state")
+
+    if opcode == "ATTACH_EMERGENT_RESULT":
+        # CAS v7.7 Clarification 10 §4: annotate the top-of-stack result
+        # (the ×-chain product) with the author-supplied emergent register
+        # name so downstream serialization surfaces the named unified state.
+        # If the top is a StateValue, stamp the emergent_register field on
+        # it; otherwise surface an execution error (we expect a state at
+        # this point because the parser only admits EmergentResult wrapping
+        # a ×-chain whose terminal type is a state).
+        payload = instruction.arg
+        assigned = str(payload["assigned_name"])
+        value = stack.pop()
+        if isinstance(value, StateValue):
+            value.emergent_register = assigned
+            stack.append(value)
+            return
+        raise CompilerError(
+            CompilerStage.EXECUTION,
+            (
+                "CAS v7.7 emergent-result assignment expects a state "
+                "value at the ×-chain terminal position"
+            ),
+        )
 
     if opcode == "CALL":
         payload = instruction.arg
@@ -3067,14 +3563,26 @@ def serialize_ast(node: Any) -> Any:
         }
         # CAS v7.5: surface register metadata when present. Omitted for
         # register-neutral nodes so v7.4-style AST output is unchanged.
-        if node.register is not None:
+        # CAS v7.7 (Clarification 10 §2): tuple-valued register is the
+        # `|⟨…⟩` register-set form; serialize as a list under a distinct
+        # `register_set` key so round-trip serialization preserves the
+        # set shape without collapsing it to a single register.
+        if isinstance(node.register, tuple):
+            payload["register_set"] = list(node.register)
+        elif node.register is not None:
             payload["register"] = node.register
-        if node.drive_register is not None:
+        if isinstance(node.drive_register, tuple):
+            payload["drive_register_set"] = list(node.drive_register)
+        elif node.drive_register is not None:
             payload["drive_register"] = node.drive_register
         return payload
     if isinstance(node, DriveLiteral):
         payload = {"node": "DriveLiteral", "drive": f"F{node.drive}"}
-        if node.register is not None:
+        # CAS v7.7 (Clarification 10 §2): tuple-valued register is the
+        # `|⟨…⟩` register-set form on a drive primitive.
+        if isinstance(node.register, tuple):
+            payload["register_set"] = list(node.register)
+        elif node.register is not None:
             payload["register"] = node.register
         # CAS v7.6 Section 4 drive-in-domain shorthand `F_k^D|R` surfaces
         # the domain when present. Register-neutral v7.4 drive references
@@ -3082,6 +3590,13 @@ def serialize_ast(node: Any) -> Any:
         if node.domain is not None:
             payload["domain"] = node.domain
         return payload
+    if isinstance(node, EmergentResult):
+        # CAS v7.7 Clarification 10 §4: named emergent result wrapper.
+        return {
+            "node": "EmergentResult",
+            "inner": serialize_ast(node.inner),
+            "assigned_name": node.assigned_name,
+        }
     if isinstance(node, StringLiteral):
         return {"node": "StringLiteral", "value": node.value}
     if isinstance(node, Identifier):
@@ -3226,7 +3741,14 @@ def serialize_value(value: Any) -> Any:
     if isinstance(value, DriveLiteral):
         payload: dict[str, Any] = {"kind": "drive", "drive": f"F{value.drive}"}
         # CAS v7.5: surface register metadata when present.
-        if value.register is not None:
+        # CAS v7.7 (Clarification 10 §2): tuple-valued register is the
+        # `|⟨…⟩` register-set form on a drive.
+        if isinstance(value.register, tuple):
+            payload["register_set"] = list(value.register)
+            payload["register_set_names"] = [
+                REGISTER_NAMES[r] for r in value.register
+            ]
+        elif value.register is not None:
             payload["register"] = value.register
             payload["register_name"] = REGISTER_NAMES[value.register]
         # CAS v7.6 Section 4 drive-in-domain shorthand: surface the

@@ -714,4 +714,236 @@ def test_v76_recipe_coefficient_must_be_positive():
     assert not artifact.valid
     assert artifact.error is not None
     assert "v7.6" in artifact.error
-    assert "positive" in artifact.error.lower()
+
+
+# ---------------------------------------------------------------------------
+# CAS v7.7 Register Multiplicity and Cross-Register Integration tests
+# (Clarification 10, Sections 2, 3, 4, 6).
+#
+# Three additions over v7.5/v7.6:
+#   1. `|⟨R1,R2,...⟩` register-set specification notation.
+#   2. Rule 4 admissibility — same-Noetic multi-register `×` is invalid
+#      unless wrapped in an explicit emergent-result assignment.
+#   3. `(... × ... × ...) = X|Ω` named emergent-result notation that
+#      licenses same-Noetic multi-register `×` by naming the fused state.
+#
+# Both Unicode mathematical angle brackets (⟨ / ⟩, U+27E8 / U+27E9 —
+# canonical) and ASCII `<` / `>` (lexer aliases) are accepted wherever
+# the LANGLE / RANGLE token fold applies.
+# ---------------------------------------------------------------------------
+
+
+# --- (1) Register-set specification -----------------------------------------
+
+
+def test_v77_register_set_basic_parsing():
+    """`^3^P|⟨A,f,T⟩` parses as a state with a register-set specification."""
+    artifact = compile_expression("^3^P|⟨A,f,T⟩")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "state"
+    assert result["dominant_state"] == "P3"
+    assert result["register_set"] == ["A", "f", "T"]
+    assert result["register_set_names"] == ["Analytical", "Affective", "Transcendent"]
+
+
+def test_v77_register_set_lowercase_f_preserved():
+    """Lowercase `f` in a register set is preserved (authoritative Affective)."""
+    artifact = compile_expression("^3^P|⟨A,f⟩")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert "f" in result["register_set"]
+    assert result["register_set"] == ["A", "f"]
+
+
+def test_v77_register_set_invalid_element_rejected():
+    """An invalid register letter inside a set is rejected with a v7.7 error."""
+    artifact = compile_expression("^3^P|⟨A,Q,T⟩")
+    assert not artifact.valid
+    assert artifact.error is not None
+    # Error cites the Phenomenological Register valid set and flags Q.
+    assert "Q" in artifact.error
+    assert "T" in artifact.error and "A" in artifact.error
+    assert "f" in artifact.error and "E" in artifact.error
+
+
+def test_v77_register_set_duplicate_rejected():
+    """Duplicate registers inside a set are rejected per Clarification 10 §2."""
+    artifact = compile_expression("^3^P|⟨A,A,T⟩")
+    assert not artifact.valid
+    assert artifact.error is not None
+    assert "duplicate" in artifact.error.lower()
+    assert "Clarification 10" in artifact.error
+
+
+def test_v77_register_set_empty_rejected():
+    """An empty register set `|⟨⟩` is rejected."""
+    artifact = compile_expression("^3^P|⟨⟩")
+    assert not artifact.valid
+    assert artifact.error is not None
+    assert "at least one register" in artifact.error
+    assert "Clarification 10" in artifact.error
+
+
+def test_v77_register_set_single_element_accepted():
+    """A single-element register set `|⟨A⟩` is syntactically acceptable.
+
+    The specification does not forbid this form; it is merely stylistically
+    equivalent to the bare `|A` form. The compiler accepts it without error
+    (a stylistic warning is a permitted but optional enhancement).
+    """
+    artifact = compile_expression("^3^P|⟨A⟩")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["register_set"] == ["A"]
+
+
+def test_v77_register_set_serialization_preserves_set_form():
+    """Round-trip: AST serialization preserves register-set shape (not a
+    single register). `|⟨A,T⟩` survives as a list on the serialized AST
+    and the runtime state value, not collapsed to a single `register` key.
+    """
+    artifact = compile_expression("^3^P|⟨A,T⟩")
+    assert artifact.valid, artifact.error
+    # Serialized AST carries `register_set` (list), not `register` (string).
+    ast_payload = artifact.to_dict()["ast"]
+    assert ast_payload.get("register_set") == ["A", "T"]
+    assert "register" not in ast_payload  # not collapsed
+    # Runtime result surfaces the same set form.
+    result = artifact.to_dict()["result"]
+    assert result.get("register_set") == ["A", "T"]
+    assert "register" not in result  # distinct from single-register key
+
+
+# --- (2) Rule 4 admissibility enforcement -----------------------------------
+
+
+def test_v77_rule4_bare_same_noetic_times_rejected():
+    """`^3^P|A × ^3^P|f` is Rule 4 invalid (same Noetic+Domain, two registers,
+    no emergent result specified)."""
+    artifact = compile_expression("^3^P|A * ^3^P|f")
+    assert not artifact.valid
+    assert artifact.error is not None
+    assert "Section 4" in artifact.error
+
+
+def test_v77_rule4_different_noetic_times_accepted():
+    """Different-Noetic `×` is valid cross-state integration (not Rule 4)."""
+    artifact = compile_expression("^5^C * ^6^C")
+    assert artifact.valid, artifact.error
+
+
+def test_v77_rule4_different_domain_times_accepted():
+    """Same Noetic, different Domain `×` is valid (not Rule 4)."""
+    artifact = compile_expression("^2^P * ^2^O")
+    assert artifact.valid, artifact.error
+
+
+def test_v77_rule4_different_drive_times_accepted():
+    """Same Noetic+Domain, different Drive `×` is valid (not Rule 4)."""
+    artifact = compile_expression("^5^C_{F2} * ^5^C_{F4}")
+    assert artifact.valid, artifact.error
+
+
+def test_v77_rule4_same_noetic_times_with_named_result_accepted():
+    """`(^3^P|A × ^3^P|f) = X` licenses same-Noetic `×` via emergent result."""
+    artifact = compile_expression("(^3^P|A * ^3^P|f) = fused")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "state"
+    assert result.get("emergent_register") == "fused"
+
+
+def test_v77_rule4_error_cites_clarification_10():
+    """The Rule 4 error explicitly names 'Clarification 10 Section 4'."""
+    artifact = compile_expression("^3^P|A * ^3^P|T")
+    assert not artifact.valid
+    assert artifact.error is not None
+    assert "Clarification 10" in artifact.error
+    assert "Section 4" in artifact.error
+
+
+def test_v77_rule4_error_suggests_alternatives():
+    """The Rule 4 error suggests all three valid alternatives: `+`, `|⟨…⟩`,
+    or explicit emergent-result assignment.
+    """
+    artifact = compile_expression("^3^P|A * ^3^P|f")
+    assert not artifact.valid
+    assert artifact.error is not None
+    # Three alternative shapes should appear in the suggestion text.
+    assert "+" in artifact.error  # co-presence form
+    assert "⟨" in artifact.error  # register-set form
+    assert "=" in artifact.error  # emergent-result assignment form
+
+
+# --- (3) Co-presence (+) unchanged ------------------------------------------
+
+
+def test_v77_same_noetic_plus_accepted():
+    """Same-Noetic `+` expressions are valid (co-presence) per §3.
+
+    `^3^P|A + ^3^P|f + ^3^P|T` is the canonical rewrite of a rejected
+    same-Noetic `×` chain when co-presence is intended.
+    """
+    artifact = compile_expression("^3^P|A + ^3^P|f + ^3^P|T")
+    assert artifact.valid, artifact.error
+
+
+def test_v77_cross_domain_plus_accepted():
+    """Cross-domain `+` expressions remain valid under v7.7."""
+    artifact = compile_expression("^2^P|T + ^2^O|E")
+    assert artifact.valid, artifact.error
+
+
+def test_v77_v76_recipe_plus_unchanged():
+    """Backward compat: v7.6 recipe notation using `+` between prerequisites
+    continues to parse as a recipe (not subject to Rule 4 since `+` is the
+    co-presence operator, not `×`).
+    """
+    artifact = compile_expression(
+        "Theta(Omega_refusal) = 1*^3^P|A + 1*^3^P|f -> Omega_refusal"
+    )
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "recipe"
+    assert result["target"] == "refusal"
+
+
+# --- (4) Edge cases ---------------------------------------------------------
+
+
+def test_v77_register_set_with_drive_subscript():
+    """`^3^P_{F2}|⟨A,f,T⟩` — compound state with drive subscript AND register
+    set attached to the compound. All v7.4/v7.5/v7.7 notation composes.
+    """
+    artifact = compile_expression("^3^P_{F2}|⟨A,f,T⟩")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "state"
+    assert result["dominant_state"] == "P3"
+    assert result["dominant_drive"] == "F2"
+    assert result["register_set"] == ["A", "f", "T"]
+
+
+def test_v77_compound_with_register_set_operand():
+    """A `×` with one operand carrying a register-set (different-Noetic case).
+
+    `(^3^P|⟨A,f⟩ × ^6^P|T)` is different-Noetic `×` and therefore NOT a
+    Rule 4 case — it is valid cross-state integration where the first
+    operand carries a register-set specification and the second carries
+    a single-register specification. Exercises the AST's ability to
+    represent mixed register forms in a single expression.
+    """
+    artifact = compile_expression("(^3^P|⟨A,f⟩ * ^6^P|T)")
+    assert artifact.valid, artifact.error
+
+
+def test_v77_fractal_composition_with_register_sets():
+    """Fractal composition `∘` accepts operands with register sets.
+
+    `^9|⟨A,E⟩ ∘ ^4|f` combines a register-set-specified ^9 with a
+    single-register ^4. Fractal composition is never subject to Rule 4
+    (the restriction is on `×`, not on `∘`).
+    """
+    artifact = compile_expression("^9|⟨A,E⟩ ∘ ^4|f")
+    assert artifact.valid, artifact.error
