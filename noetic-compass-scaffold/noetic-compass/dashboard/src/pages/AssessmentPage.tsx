@@ -304,6 +304,16 @@ export function AssessmentPage() {
   const unmeasuredLabels = notMeasured.map(formatMeasurementLabel);
 
   const operatorScores = result?.stages.find(s => s.stage === 'operator_scoring')?.data?.scores as number[] | undefined;
+  // CAS v7.5 Register data flow (Clarification 8). Prefer the top-level
+  // `score_registers` field (canonical serialization) and fall back to the
+  // operator_scoring stage `data.score_registers` if the top-level field
+  // is absent (defensive; keeps legacy stage-data consumers working).
+  const scoreRegisters =
+    result?.score_registers ??
+    (result?.stages.find(s => s.stage === 'operator_scoring')?.data?.score_registers as
+      | (import('../api/types').PhenomenologicalRegister | null)[]
+      | undefined) ??
+    null;
   const domainAverages = result?.stages.find(s => s.stage === 'domain_coherence')?.data?.domain_averages as number[] | undefined;
   const driveScores = result?.stages.find(s => s.stage === 'rpm_gate')?.data?.drive_scores as number[][] | undefined;
   const a0Score = result?.stages.find(s => s.stage === 'rpm_gate')?.data?.a0_score as number | undefined;
@@ -732,7 +742,7 @@ export function AssessmentPage() {
                 {operatorScores && (
                   <Card title="Thinking Patterns" action={<InterpretButton interpretation={interpretOperators(operatorScores)} />}>
                     <Suspense fallback={chartFallback}>
-                      <LazyOperatorRadarChart scores={operatorScores} />
+                      <LazyOperatorRadarChart scores={operatorScores} registers={scoreRegisters} />
                     </Suspense>
                   </Card>
                 )}

@@ -185,20 +185,27 @@ class WrapPipelineRunner:
             scorer_connector=scorer_connector,
             scorer_model=scorer_model_resolved,
         )
+        # CAS v7.5 Register data flow: emit `score_registers` into the
+        # operator_scoring stage data only when at least one score carried
+        # a register. This preserves byte-for-byte v7.4 response shape for
+        # register-neutral assessments.
+        operator_scoring_data: dict = {
+            "profile_score": op_result.profile_score,
+            "scores": op_result.scores,
+            "raw_scores_0_to_10": op_result.raw_scores_0_to_10,
+            "involution_balances": op_result.involution_balances,
+            "scoring_method": op_result.scoring_method,
+            "evidence": op_result.evidence,
+            "scorer_provider": op_result.scorer_provider,
+            "scorer_model": op_result.scorer_model,
+            "fallback_reason": op_result.fallback_reason,
+        }
+        if op_result.score_registers is not None:
+            operator_scoring_data["score_registers"] = op_result.score_registers
         stages.append(StageResult(
             stage="operator_scoring",
             success=True,
-            data={
-                "profile_score": op_result.profile_score,
-                "scores": op_result.scores,
-                "raw_scores_0_to_10": op_result.raw_scores_0_to_10,
-                "involution_balances": op_result.involution_balances,
-                "scoring_method": op_result.scoring_method,
-                "evidence": op_result.evidence,
-                "scorer_provider": op_result.scorer_provider,
-                "scorer_model": op_result.scorer_model,
-                "fallback_reason": op_result.fallback_reason,
-            },
+            data=operator_scoring_data,
         ))
 
         # Stage 6: Domain Coherence
@@ -369,4 +376,8 @@ class WrapPipelineRunner:
             fractal_analysis=fractal_schema,
             compiled_notation=compiled_notation,
             lacunarity=lacunarity_profile,
+            # CAS v7.5 Register data flow — None when the assessment is
+            # register-neutral (no `|R` annotations on any score), so the
+            # serialized JSON omits the field and remains v7.4-compatible.
+            score_registers=op_result.score_registers,
         )

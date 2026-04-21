@@ -6,6 +6,11 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
+# Single-source import for CAS v7.5 Phenomenological Register validation.
+# Importing from the compiler prevents the constant from being duplicated
+# and keeps the register grammar governed by `api.notation.compiler`.
+from api.notation.compiler import VALID_REGISTERS
+
 
 class DialConfigSchema(BaseModel):
     """Dial configuration for 10 cognitive operators. Each value in [3, 9]."""
@@ -177,7 +182,15 @@ class CompiledNotationSchema(BaseModel):
 
 
 class WrapResponse(BaseModel):
-    """Full wrap pipeline response."""
+    """Full wrap pipeline response.
+
+    CAS v7.5 Phenomenological Register (Clarification 8) propagates through
+    the `score_registers` top-level field. When present, it is a parallel
+    list to the per-operator scores (one optional register character per
+    operator, or None for unannotated scores). When absent (or every entry
+    None), the assessment is register-neutral and the response is
+    byte-for-byte v7.4-compatible.
+    """
 
     nccs: NccsResponse
     stages: list[StageResult]
@@ -188,6 +201,41 @@ class WrapResponse(BaseModel):
     fractal_analysis: FractalAnalysisSchema | None = None
     compiled_notation: CompiledNotationSchema | None = None
     lacunarity: dict | None = None
+    # CAS v7.5 Register data flow. One optional register character per
+    # operator score, or None for register-neutral assessments. Absent from
+    # serialized JSON when None — preserving v7.4 response shape exactly.
+    score_registers: list[str | None] | None = Field(
+        default=None,
+        description=(
+            "CAS v7.5 Phenomenological Register per operator score (Clarification 8). "
+            "Parallel to the 10 operator scores; each entry is one of "
+            "{T, A, f, E} or None when the score is register-neutral. "
+            "Null/absent at the top level when the assessment is "
+            "register-neutral (backward-compatible with CAS v7.4)."
+        ),
+    )
+
+    @field_validator("score_registers")
+    @classmethod
+    def validate_score_registers(
+        cls, v: list[str | None] | None
+    ) -> list[str | None] | None:
+        """Validate each non-None entry is in CAS v7.5 `VALID_REGISTERS`."""
+        if v is None:
+            return None
+        if len(v) != 10:
+            raise ValueError(
+                f"score_registers must have length 10 (got {len(v)})"
+            )
+        for i, register in enumerate(v):
+            if register is None:
+                continue
+            if register not in VALID_REGISTERS:
+                raise ValueError(
+                    f"score_registers[{i}]={register!r} invalid — must be one of "
+                    f"{set(VALID_REGISTERS)} (CAS v7.5 Phenomenological Register)"
+                )
+        return v
 
 
 class BatchResponse(BaseModel):

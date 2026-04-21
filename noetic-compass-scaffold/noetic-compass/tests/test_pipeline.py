@@ -12,6 +12,7 @@ from api.pipeline.stages import (
     output_gate,
     base_llm_call,
     _parse_self_reported_scores,
+    _parse_self_reported_scores_with_registers,
 )
 from api.llm_connectors.mock_connector import MockLLMConnector
 from api.llm_connectors.base import BaseLLMConnector, LLMResponse
@@ -460,3 +461,158 @@ def test_parse_scores_invalid_register_on_keyed_noetic_rejected():
     text = "\n".join(lines)
     with pytest.raises(ValueError, match="invalid register 'Q'"):
         _parse_self_reported_scores(text)
+
+
+# ---------------------------------------------------------------------------
+# CAS v7.5 Register data flow (Clarification 8, rollout track (j))
+# — per-score register metadata propagation from parser through scoring.
+# ---------------------------------------------------------------------------
+
+
+def test_parse_scores_with_registers_v74_plain_list_returns_all_none():
+    """v7.4 register-neutral numeric list: scores populated, all registers None."""
+    text = _ten_scores_line(
+        ["0.72", "0.81", "0.64", "0.55", "0.70", "0.68", "0.77", "0.60", "0.58", "0.66"]
+    )
+    parsed = _parse_self_reported_scores_with_registers(text)
+    assert parsed is not None
+    scores, registers = parsed
+    assert scores == [0.72, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66]
+    assert registers == [None] * 10
+
+
+def test_parse_scores_with_registers_v75_all_four_registers():
+    """v7.5 list with the four canonical registers: parallel list returned."""
+    text = _ten_scores_line(
+        ["0.72|T", "0.81|A", "0.64|f", "0.55|E", "0.70", "0.68", "0.77", "0.60", "0.58", "0.66"]
+    )
+    parsed = _parse_self_reported_scores_with_registers(text)
+    assert parsed is not None
+    scores, registers = parsed
+    assert scores == [0.72, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66]
+    assert registers == ["T", "A", "f", "E", None, None, None, None, None, None]
+
+
+def test_parse_scores_with_registers_mixed_registers_and_plain():
+    """Mixed list: only the annotated positions carry registers; rest None."""
+    text = _ten_scores_line(
+        ["0.5|A", "0.5", "0.5|f", "0.5", "0.5|E", "0.5", "0.5|T", "0.5", "0.5", "0.5"]
+    )
+    parsed = _parse_self_reported_scores_with_registers(text)
+    assert parsed is not None
+    _scores, registers = parsed
+    assert registers == ["A", None, "f", None, "E", None, "T", None, None, None]
+
+
+def test_parse_scores_with_registers_keyed_state_noetic_register():
+    """Keyed state format: Noetic-level register `^n|R` flows to the parallel list."""
+    lines = [f"^{i}|A^C_{{F2}}: 0.6" for i in range(10)]
+    text = "\n".join(lines)
+    parsed = _parse_self_reported_scores_with_registers(text)
+    assert parsed is not None
+    _scores, registers = parsed
+    assert registers == ["A"] * 10
+
+
+def test_parse_scores_with_registers_keyed_state_value_register_wins():
+    """Keyed state precedence: value-level register beats Noetic-level register."""
+    lines = [f"^{i}|T^C_{{F2}}: 0.6|A" for i in range(10)]
+    text = "\n".join(lines)
+    parsed = _parse_self_reported_scores_with_registers(text)
+    assert parsed is not None
+    _scores, registers = parsed
+    # Value register is the most specific; wins over Noetic register.
+    assert registers == ["A"] * 10
+
+
+def test_parse_scores_with_registers_malformed_still_returns_none():
+    """Parser-failure convention preserved: malformed token → None."""
+    text = _ten_scores_line(["0.5|TT"] + ["0.5"] * 9)
+    assert _parse_self_reported_scores_with_registers(text) is None
+
+
+def test_parse_scores_with_registers_invalid_letter_raises():
+    """Invalid register letter rejected with the same error as legacy parser."""
+    text = _ten_scores_line(["0.5|Q"] + ["0.5"] * 9)
+    with pytest.raises(ValueError, match="invalid register 'Q'"):
+        _parse_self_reported_scores_with_registers(text)
+
+
+# ---------------------------------------------------------------------------
+# operator_scoring stage — register propagation via OperatorScoreResult
+# ---------------------------------------------------------------------------
+
+
+class _StubConnector(BaseLLMConnector):
+    """Minimal connector for driving `operator_scoring` deterministically."""
+
+    provider_name = "stub"
+    max_retries = 1
+
+    async def _generate(
+        self, prompt: str, system_prompt: str = "", **kwargs: object
+    ) -> LLMResponse:  # pragma: no cover - unused in this test
+        raise NotImplementedError
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_self_reported_register_neutral_preserves_v74_shape():
+    """Register-neutral self-reported scores produce v7.4-shape result (score_registers=None)."""
+    llm_resp = LLMResponse(
+        text="Operator Scores: [0.72, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66]",
+        model="test",
+        usage={},
+    )
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    assert result.scoring_method == "self_reported"
+    assert result.score_registers is None
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_self_reported_carries_registers_through():
+    """Register-annotated self-reported scores surface on OperatorScoreResult."""
+    llm_resp = LLMResponse(
+        text="Operator Scores: [0.72|T, 0.81|A, 0.64|f, 0.55|E, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66]",
+        model="test",
+        usage={},
+    )
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    assert result.scoring_method == "self_reported"
+    assert result.score_registers == [
+        "T", "A", "f", "E", None, None, None, None, None, None,
+    ]
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_heuristic_fallback_no_registers():
+    """Heuristic fallback pathway never emits register metadata."""
+    llm_resp = LLMResponse(text="Totally unrelated prose.", model="test", usage={})
+    result = await operator_scoring(llm_resp, scoring_mode="heuristic_fallback")
+    assert result.scoring_method == "heuristic_fallback"
+    assert result.score_registers is None
+
+
+def test_operator_score_result_rejects_invalid_register_letter():
+    """Defense-in-depth: OperatorScoreResult validates register letters."""
+    from api.pipeline.stages import OperatorScoreResult
+    with pytest.raises(ValueError, match="not a valid CAS v7.5"):
+        OperatorScoreResult(
+            scores=[0.5] * 10,
+            raw_scores_0_to_10=[5.0] * 10,
+            profile_score=0.5,
+            involution_balances=[0.0, 0.0, 0.0],
+            score_registers=["T", "A", "f", "E", None, None, None, "Q", None, None],
+        )
+
+
+def test_operator_score_result_rejects_wrong_length_register_list():
+    """Length mismatch between scores and score_registers is caught early."""
+    from api.pipeline.stages import OperatorScoreResult
+    with pytest.raises(ValueError, match="length must match"):
+        OperatorScoreResult(
+            scores=[0.5] * 10,
+            raw_scores_0_to_10=[5.0] * 10,
+            profile_score=0.5,
+            involution_balances=[0.0, 0.0, 0.0],
+            score_registers=["T", "A", "f"],
+        )

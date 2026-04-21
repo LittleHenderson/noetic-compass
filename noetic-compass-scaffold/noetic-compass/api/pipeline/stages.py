@@ -65,6 +65,35 @@ class OperatorScoreResult:
     scorer_model: str | None = None
     scorer_provider: str | None = None
     fallback_reason: str | None = None
+    # CAS v7.5 Phenomenological Register axis (Clarification 8). Parallel
+    # to `scores`: one optional register character per operator score. None
+    # at a position means the LLM did not annotate that score with a register
+    # (register-neutral / v7.4-compatible). When every entry is None (or the
+    # field is None), the full operator-score set is register-neutral and the
+    # response serializes identically to CAS v7.4 shape.
+    #
+    # Validation: each non-None entry MUST be in `VALID_REGISTERS` (imported
+    # single-source from `api.notation.compiler`). The parser applies this
+    # validation at input-boundary parse time; this dataclass trusts its
+    # source but `__post_init__` re-verifies defensively.
+    score_registers: list[str | None] | None = None
+
+    def __post_init__(self) -> None:
+        if self.score_registers is None:
+            return
+        if len(self.score_registers) != len(self.scores):
+            raise ValueError(
+                "score_registers length must match scores length "
+                f"(got {len(self.score_registers)} vs {len(self.scores)})"
+            )
+        for i, register in enumerate(self.score_registers):
+            if register is None:
+                continue
+            if register not in VALID_REGISTERS:
+                raise ValueError(
+                    f"score_registers[{i}]={register!r} is not a valid CAS v7.5 "
+                    f"Phenomenological Register (expected one of {set(VALID_REGISTERS)})"
+                )
 
 
 @dataclass
@@ -347,6 +376,12 @@ async def operator_scoring(
     scorer_provider: str | None = None
     fallback_reason: str | None = None
     raw_scores_0_to_10: list[float]
+    # CAS v7.5 Register data flow (Clarification 8): per-score Register
+    # characters propagated from the parser. None means the path did not
+    # produce register metadata (heuristic fallback, secondary LLM scorer
+    # without register emission), in which case the result carries the
+    # register-neutral v7.4-shape for byte-for-byte backward compatibility.
+    score_registers: list[str | None] | None = None
 
     if scoring_mode == "secondary_llm":
         if prompt_text and scorer_connector:
@@ -363,6 +398,10 @@ async def operator_scoring(
                 scoring_method = "secondary_llm"
                 scorer_used_model = assessment.model
                 scorer_provider = scorer_connector.provider_name
+                # The secondary scorer currently does not emit Register
+                # metadata. If a future LLMOperatorAssessment adds
+                # `score_registers`, this will pick it up automatically.
+                score_registers = getattr(assessment, "score_registers", None)
             except Exception as exc:
                 scores = _heuristic_operator_scores(llm_response.text)
                 raw_scores_0_to_10 = [round(score * 10.0, 4) for score in scores]
@@ -372,11 +411,16 @@ async def operator_scoring(
             raw_scores_0_to_10 = [round(score * 10.0, 4) for score in scores]
             fallback_reason = "secondary scorer unavailable"
     elif scoring_mode == "self_reported":
-        parsed_scores = _parse_self_reported_scores(llm_response.text)
-        if parsed_scores is not None:
-            scores = parsed_scores
+        parsed = _parse_self_reported_scores_with_registers(llm_response.text)
+        if parsed is not None:
+            scores, parsed_registers = parsed
             raw_scores_0_to_10 = [round(score * 10.0, 4) for score in scores]
             scoring_method = "self_reported"
+            # Only carry forward register metadata when at least one score
+            # was annotated. All-None register list collapses to None to
+            # preserve v7.4 response shape exactly.
+            if any(r is not None for r in parsed_registers):
+                score_registers = parsed_registers
         else:
             scores = _heuristic_operator_scores(llm_response.text)
             raw_scores_0_to_10 = [round(score * 10.0, 4) for score in scores]
@@ -397,6 +441,7 @@ async def operator_scoring(
         scorer_model=scorer_used_model,
         scorer_provider=scorer_provider,
         fallback_reason=fallback_reason,
+        score_registers=score_registers,
     )
 
 
@@ -451,30 +496,29 @@ def _validate_register_char(register: str | None) -> None:
         )
 
 
-def _parse_self_reported_scores(text: str) -> list[float] | None:
-    """Parse inline self-reported operator scores from the base model response.
+def _parse_self_reported_scores_with_registers(
+    text: str,
+) -> tuple[list[float], list[str | None]] | None:
+    """Parse inline self-reported operator scores AND their optional registers.
 
-    Accepts two formats:
+    Mirrors the grammar of `_parse_self_reported_scores` but returns both the
+    numeric score list and a parallel list of optional register characters.
+    This is the CAS v7.5 data-flow entry point: it carries Register metadata
+    forward so downstream stages (scoring result, wrap response, dashboard)
+    can render register annotations without re-parsing.
 
-    1. Numeric list (existing v7.4 format, extended for CAS v7.5 register
-       annotations):
-           Operator Scores: [0.72, 0.81, 0.64, ...]                   # v7.4
-           Operator Scores: [0.72|A, 0.81, 0.64|f, ...]                # v7.5
-       Each score is a float in [0.0, 1.0]; register annotations are
-       optional and ignored by downstream scoring for now.
+    Returns (scores, registers) on success or None when the text does not
+    contain a parseable score set. `registers` is a list of length 10; each
+    entry is either a single character in `VALID_REGISTERS` (imported from
+    `api.notation.compiler` — single source of truth) or None for an
+    unannotated / register-neutral score.
 
-    2. Keyed state expressions (CAS v7.5 Clarification 8 compatible with the
-       compiler's notation). When ten lines of the form
-           ^n^D_{Fk}[|R]: value[|R]
-       are present (one per CO-0 through CO-9, any domain/drive), they are
-       collected into an ordered list. This matches the compiler's
-       register-suffix grammar; VALID_REGISTERS from
-       `api.notation.compiler` is the single source of truth.
-
-    Returns a list of ten floats in [0.0, 1.0], or None if the text does not
-    contain a parseable score set. Register characters that fully match the
-    `|R` grammar but carry an invalid letter (uppercase `F`, `Q`, etc.) are
-    rejected with ValueError carrying a clear, compiler-consistent message.
+    Register precedence when multiple positions carry a register on the same
+    keyed-state line (`^n|R_n^D_{F_k|R_d}|R_compound: v|R_value`): value,
+    compound, drive, noetic. This mirrors the "most specific wins" convention
+    consistent with the compiler. If none of the four positions carries a
+    register, the entry is None. Invalid register letters are rejected
+    with ValueError at the parse site via `_validate_register_char`.
     """
     # Format 1: `Operator Scores: [ ... ]` numeric list, optionally with
     # per-score `|R` annotations.
@@ -483,6 +527,7 @@ def _parse_self_reported_scores(text: str) -> list[float] | None:
         tokens = [tok for tok in list_match.group(1).split(",")]
         if len(tokens) == 10:
             values: list[float] = []
+            registers: list[str | None] = []
             for token in tokens:
                 tok_match = _SCORE_TOKEN_RE.match(token)
                 if not tok_match:
@@ -490,16 +535,17 @@ def _parse_self_reported_scores(text: str) -> list[float] | None:
                     # junk): the pre-existing convention is to return None
                     # and let the caller fall back to heuristics.
                     return None
-                # Validate register letter even though we do not currently
-                # propagate it downstream — this catches uppercase `F`,
+                register = tok_match.group("register")
+                # Validate register letter — this catches uppercase `F`,
                 # `Q`, etc. with a clear message per CAS v7.5.
-                _validate_register_char(tok_match.group("register"))
+                _validate_register_char(register)
                 try:
                     values.append(float(tok_match.group("value")))
                 except ValueError:
                     return None
+                registers.append(register)
             if all(0.0 <= v <= 1.0 for v in values):
-                return values
+                return values, registers
         return None
 
     # Format 2: Keyed state-expression lines, one per operator CO-0..CO-9.
@@ -508,14 +554,14 @@ def _parse_self_reported_scores(text: str) -> list[float] | None:
     # (`^2^C_{F2}|A`), and on the numeric value (`: 0.73|A`). Invalid
     # register letters are rejected with the same error as Format 1.
     keyed_scores: dict[int, float] = {}
+    keyed_registers: dict[int, str | None] = {}
     for state_match in _STATE_SCORE_LINE_RE.finditer(text):
-        for group_name in (
-            "noetic_register",
-            "drive_register",
-            "compound_register",
-            "value_register",
-        ):
-            _validate_register_char(state_match.group(group_name))
+        noetic_register = state_match.group("noetic_register")
+        drive_register = state_match.group("drive_register")
+        compound_register = state_match.group("compound_register")
+        value_register = state_match.group("value_register")
+        for register in (noetic_register, drive_register, compound_register, value_register):
+            _validate_register_char(register)
         op_index = int(state_match.group("op"))
         try:
             value = float(state_match.group("value"))
@@ -523,13 +569,53 @@ def _parse_self_reported_scores(text: str) -> list[float] | None:
             return None
         if not 0.0 <= value <= 1.0:
             return None
+        # Precedence: value > compound > drive > noetic (most specific wins).
+        resolved_register = (
+            value_register or compound_register or drive_register or noetic_register
+        )
         # First occurrence wins so repeated mentions in narrative text do
         # not clobber an earlier explicit assignment.
-        keyed_scores.setdefault(op_index, value)
+        if op_index not in keyed_scores:
+            keyed_scores[op_index] = value
+            keyed_registers[op_index] = resolved_register
     if len(keyed_scores) == 10 and set(keyed_scores.keys()) == set(range(10)):
-        return [keyed_scores[i] for i in range(10)]
+        return (
+            [keyed_scores[i] for i in range(10)],
+            [keyed_registers[i] for i in range(10)],
+        )
 
     return None
+
+
+def _parse_self_reported_scores(text: str) -> list[float] | None:
+    """Parse inline self-reported operator scores from the base model response.
+
+    Backward-compatible thin wrapper that returns only the numeric score list.
+    For CAS v7.5 Register-aware parsing, use
+    `_parse_self_reported_scores_with_registers` which returns both the
+    scores and their parallel per-score register list.
+
+    Accepts two formats:
+
+    1. Numeric list (existing v7.4 format, extended for CAS v7.5 register
+       annotations):
+           Operator Scores: [0.72, 0.81, 0.64, ...]                   # v7.4
+           Operator Scores: [0.72|A, 0.81, 0.64|f, ...]                # v7.5
+
+    2. Keyed state expressions (CAS v7.5 Clarification 8 compatible with the
+       compiler's notation). When ten lines of the form
+           ^n^D_{Fk}[|R]: value[|R]
+       are present (one per CO-0 through CO-9, any domain/drive), they are
+       collected into an ordered list.
+
+    Returns a list of ten floats in [0.0, 1.0], or None if the text does not
+    contain a parseable score set.
+    """
+    parsed = _parse_self_reported_scores_with_registers(text)
+    if parsed is None:
+        return None
+    scores, _registers = parsed
+    return scores
 
 
 def _heuristic_operator_scores(text: str) -> list[float]:

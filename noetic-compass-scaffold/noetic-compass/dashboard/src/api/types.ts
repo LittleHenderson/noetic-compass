@@ -103,6 +103,17 @@ export interface CompiledNotation {
   provenance?: Record<string, unknown>;
 }
 
+/**
+ * CAS v7.5 Phenomenological Register axis (Clarification 8).
+ * Register specifies the operational character of a cognitive operation
+ * without changing what the operation IS.
+ *   T = Transcendent | A = Analytical | f = Affective (lowercase authoritative) | E = Embodied
+ * Registers appear in assessments only when the scoring pathway emits them
+ * (currently: self-reported scoring with register-annotated scores).
+ * Null entries indicate register-neutral scores.
+ */
+export type PhenomenologicalRegister = 'T' | 'A' | 'f' | 'E';
+
 export interface WrapResult {
   nccs: NccsResult;
   stages: StageResult[];
@@ -128,6 +139,13 @@ export interface WrapResult {
       largest_void: string;
     };
   } | null;
+  /**
+   * CAS v7.5 Register data flow (Clarification 8). Parallel to the 10
+   * operator scores; each entry is a `PhenomenologicalRegister` character
+   * or `null` when the score is register-neutral. Null/absent at the top
+   * level when the assessment is fully register-neutral (v7.4-compatible).
+   */
+  score_registers?: (PhenomenologicalRegister | null)[] | null;
 }
 
 // ── Validation types ──

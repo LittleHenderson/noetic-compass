@@ -37,6 +37,16 @@ export function DetailsPage() {
 
   const { result } = record;
   const operatorScores = result.stages.find(s => s.stage === 'operator_scoring')?.data?.scores as number[] | undefined;
+  // CAS v7.5 Register data flow (Clarification 8). Top-level
+  // `score_registers` is canonical; fall back to the operator_scoring
+  // stage data for defense-in-depth. Null/undefined = register-neutral
+  // (v7.4-compatible rendering).
+  const scoreRegisters =
+    result.score_registers ??
+    (result.stages.find(s => s.stage === 'operator_scoring')?.data?.score_registers as
+      | (import('../api/types').PhenomenologicalRegister | null)[]
+      | undefined) ??
+    null;
   const domainAverages = result.stages.find(s => s.stage === 'domain_coherence')?.data?.domain_averages as number[] | undefined;
   const driveScores = result.stages.find(s => s.stage === 'rpm_gate')?.data?.drive_scores as number[][] | undefined;
   const a0Score = result.stages.find(s => s.stage === 'rpm_gate')?.data?.a0_score as number | undefined;
@@ -124,7 +134,7 @@ export function DetailsPage() {
             {operatorScores && (
               <Card title="Operator Radar" action={<InterpretButton interpretation={interpretOperators(operatorScores)} />}>
                 <Suspense fallback={chartFallback}>
-                  <LazyOperatorRadarChart scores={operatorScores} />
+                  <LazyOperatorRadarChart scores={operatorScores} registers={scoreRegisters} />
                 </Suspense>
               </Card>
             )}
