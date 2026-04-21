@@ -61,6 +61,24 @@ DRIVE_NAMES = {
 
 DOMAIN_ORDER = {"P": 0, "C": 1, "E": 2, "O": 3}
 
+# CAS v7.5 Phenomenological Register axis (Clarification 8).
+# Register attaches optionally to Noetic primitives, Drive primitives, or
+# compound states via the `|R` suffix. Values:
+#   T = Transcendent, A = Analytical, f = Affective (lowercase authoritative),
+#   E = Embodied.
+# Register is a specification of operational character layered on top of the
+# existing primitives; it does not modify the 40 Cognitive States, the 7 Core
+# Drives, or axioms A1-A7. Expressions without `|R` are register-neutral and
+# remain valid as in CAS v7.4.
+VALID_REGISTERS = ("T", "A", "f", "E")
+
+REGISTER_NAMES = {
+    "T": "Transcendent",
+    "A": "Analytical",
+    "f": "Affective",
+    "E": "Embodied",
+}
+
 UNICODE_ARROW = "\u2192"
 UNICODE_LARROW = "\u2190"
 UNICODE_BIARROW = "\u2194"
@@ -170,9 +188,11 @@ class TokenKind(Enum):
     FN = "FN"
     USE = "USE"
     CO = "CO"
+    NOETIC = "NOETIC"
     STATE_REF = "STATE_REF"
     DOMAIN = "DOMAIN"
     DRIVE = "DRIVE"
+    REGISTER = "REGISTER"
     RPM = "RPM"
     PHI = "PHI"
     IDENT = "IDENT"
@@ -266,11 +286,20 @@ class StateLiteral:
     operator: int
     domain: str
     drive: int | None = None
+    # CAS v7.5 Phenomenological Register (Clarification 8). Optional — when
+    # None, the state is register-neutral (CAS v7.4-compatible).
+    # `register` carries the Noetic-level or compound-state register.
+    # `drive_register` carries an independent Drive-level register when the
+    # notation specifies both (e.g. `^2|T^C_{F2|A}`).
+    register: str | None = None
+    drive_register: str | None = None
 
 
 @dataclass
 class DriveLiteral:
     drive: int
+    # CAS v7.5 Phenomenological Register. Optional; None means register-neutral.
+    register: str | None = None
 
 
 @dataclass
@@ -342,6 +371,12 @@ class StateValue:
     states: dict[int, float]
     drive_weights: dict[int, float] = field(default_factory=dict)
     explicit_drive: bool = False
+    # CAS v7.5 Phenomenological Register (Clarification 8). Optional; None
+    # means the state is register-neutral (v7.4-compatible). `register`
+    # carries the Noetic/compound-level register; `drive_register` carries
+    # an independent Drive-level register when the notation specifies both.
+    register: str | None = None
+    drive_register: str | None = None
 
     def dominant_state(self) -> int:
         return max(self.states, key=self.states.get)
@@ -364,6 +399,8 @@ class StateValue:
                 else {}
             ),
             explicit_drive=self.explicit_drive,
+            register=self.register,
+            drive_register=self.drive_register,
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -373,7 +410,7 @@ class StateValue:
         drive = None
         if self.drive_weights:
             drive = max(self.drive_weights, key=self.drive_weights.get)
-        return {
+        payload: dict[str, Any] = {
             "kind": "state",
             "states": {str(k): round(v, 6) for k, v in sorted(self.states.items())},
             "dominant_state": f"{dom}{op}",
@@ -381,6 +418,17 @@ class StateValue:
             "dominant_domain": dom,
             "dominant_drive": f"F{drive}" if drive is not None else None,
         }
+        # CAS v7.5: expose register metadata on the state output. Only include
+        # the keys when actually set so register-neutral states look identical
+        # to v7.4 output and downstream consumers aren't surprised by new
+        # fields on legacy expressions.
+        if self.register is not None:
+            payload["register"] = self.register
+            payload["register_name"] = REGISTER_NAMES[self.register]
+        if self.drive_register is not None:
+            payload["drive_register"] = self.drive_register
+            payload["drive_register_name"] = REGISTER_NAMES[self.drive_register]
+        return payload
 
 
 @dataclass
@@ -582,7 +630,18 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     (r"Phi\b|" + re.escape(UNICODE_PHI), TokenKind.PHI),
     (r'"(?:[^"\\]|\\.)*"', TokenKind.STRING),
     (r"CO-\d+", TokenKind.CO),
+    # CAS v7.5: `|R` register suffix. Matched permissively as `|<letter>` so
+    # invalid values like `|Q` are lexed and rejected at parse time with a
+    # helpful CAS v7.5 error rather than a generic lexing failure.
+    (r"\|[A-Za-z]", TokenKind.REGISTER),
+    # CAS v7.5 shorthand Noetic primitive: `^n` is equivalent to `CO-n`.
+    # Must come before CARET so `^2` tokenizes as a whole rather than as
+    # CARET + NUMBER.
+    (r"\^\d+", TokenKind.NOETIC),
     (r"[PCEO]\d+", TokenKind.STATE_REF),
+    # Accept both `F_n` (CAS v7.5 Clarification 8 notation, with underscore)
+    # and `Fn` (CAS v7.4 compatibility) for drive primitives.
+    (r"F_\d+", TokenKind.DRIVE),
     (r"F\d+", TokenKind.DRIVE),
     (r"[PCEO]", TokenKind.DOMAIN),
     (r"\d+", TokenKind.NUMBER),
@@ -611,6 +670,28 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
 
 def _state_index(operator: int, domain: str) -> int:
     return DOMAIN_ORDER[domain] * 10 + operator
+
+
+def _validate_register_token(token: "LexToken") -> str:
+    """Extract and validate a `|R` register suffix from a REGISTER token.
+
+    CAS v7.5 Clarification 8 defines the Phenomenological Register axis with
+    four authoritative values: T (Transcendent), A (Analytical), f (Affective,
+    lowercase is authoritative), E (Embodied). Any other value is rejected
+    with a clear error referencing CAS v7.5 and the valid set.
+    """
+    value = token.value[1:]  # strip leading `|`
+    if value not in VALID_REGISTERS:
+        raise CompilerError(
+            CompilerStage.PARSING,
+            (
+                f"invalid register {value!r}: CAS v7.5 Phenomenological Register "
+                f"must be one of {{T, A, f, E}} (lowercase f is authoritative "
+                f"for Affective)"
+            ),
+            position=token.position,
+        )
+    return value
 
 
 def _decode_string_literal(raw: str) -> str:
@@ -906,9 +987,13 @@ class Parser:
             return self.parse_fractal()
         if token.kind == TokenKind.CO:
             return self.parse_state()
+        if token.kind == TokenKind.NOETIC:
+            # CAS v7.5 shorthand: `^n` is equivalent to `CO-n`. Reuse the same
+            # parsing path so register suffixes and compound notation work the
+            # same way as with `CO-n`.
+            return self.parse_state()
         if token.kind == TokenKind.STATE_REF:
-            token = self.advance()
-            return StateLiteral(operator=int(token.value[1:]), domain=token.value[0], drive=None)
+            return self.parse_state_ref()
         if token.kind == TokenKind.STRING:
             return StringLiteral(value=_decode_string_literal(self.advance().value))
         if token.kind == TokenKind.IDENT:
@@ -925,8 +1010,10 @@ class Parser:
                 return CallExpr(callee=name, args=args)
             return Identifier(name=name)
         if token.kind == TokenKind.DRIVE:
-            drive = int(self.advance().value[1:])
-            return DriveLiteral(drive=drive)
+            drive_token = self.advance()
+            drive = self._drive_token_index(drive_token)
+            register = self._consume_optional_register()
+            return DriveLiteral(drive=drive, register=register)
         raise CompilerError(
             CompilerStage.PARSING,
             f"unexpected token {token.value!r}",
@@ -943,11 +1030,72 @@ class Parser:
         self.expect(TokenKind.RANGLE)
         return FractalLiteral(sequence=sequence)
 
+    def _drive_token_index(self, token: LexToken) -> int:
+        """Extract the numeric drive index from a DRIVE token.
+
+        Accepts both the CAS v7.5 `F_n` form (with underscore, per Clarification
+        8 Section 3) and the CAS v7.4 `Fn` form (without underscore).
+        """
+        value = token.value
+        body = value[2:] if value.startswith("F_") else value[1:]
+        return int(body)
+
+    def _consume_optional_register(self) -> str | None:
+        """Consume and validate an optional `|R` register suffix if present.
+
+        Returns the validated register character (one of {T, A, f, E}) or None
+        if no register suffix is present. Rejects invalid values with a CAS
+        v7.5 error.
+        """
+        if self.current().kind == TokenKind.REGISTER:
+            return _validate_register_token(self.advance())
+        return None
+
+    def parse_state_ref(self) -> StateLiteral:
+        """Parse a shorthand state reference like `P3` with optional `|R`."""
+        token = self.expect(TokenKind.STATE_REF)
+        register = self._consume_optional_register()
+        return StateLiteral(
+            operator=int(token.value[1:]),
+            domain=token.value[0],
+            drive=None,
+            register=register,
+        )
+
     def parse_state(self) -> StateLiteral:
-        token = self.expect(TokenKind.CO)
-        operator = int(token.value.split("-")[1])
+        """Parse a CAS state literal, optionally carrying Phenomenological
+        Register suffixes per CAS v7.5 Clarification 8.
+
+        Accepts both the canonical `CO-n` form and the v7.5 shorthand `^n`
+        form as the leading Noetic primitive. Register suffixes may attach at:
+          - Noetic level:    `^2|T`  or  `CO-2|T`
+          - Drive level:     `_{F_2|A}`
+          - Compound level:  `^2^C_{F2}|A`  or  `CO-2^C_{F2}|A`
+
+        Independent Noetic and Drive registers (per Section 3 of Clarification
+        8) are preserved when both are specified.
+        """
+        token = self.current()
+        if token.kind == TokenKind.CO:
+            self.advance()
+            operator = int(token.value.split("-")[1])
+        elif token.kind == TokenKind.NOETIC:
+            self.advance()
+            # NOETIC value looks like `^2`; strip the leading caret.
+            operator = int(token.value[1:])
+        else:
+            raise CompilerError(
+                CompilerStage.PARSING,
+                f"expected a Noetic primitive (CO-n or ^n), got {token.kind.value}",
+                position=token.position,
+            )
+
         domain = "P"
-        drive = None
+        drive: int | None = None
+        drive_register: str | None = None
+
+        # Optional Noetic-level register: `^2|T` or `CO-2|T` before the domain.
+        noetic_register = self._consume_optional_register()
 
         if self.current().kind == TokenKind.CARET:
             self.advance()
@@ -956,9 +1104,40 @@ class Parser:
             self.advance()
             self.expect(TokenKind.LBRACE)
             drive_token = self.expect(TokenKind.DRIVE)
-            drive = int(drive_token.value[1:])
+            drive = self._drive_token_index(drive_token)
+            # Optional Drive-level register inside the braces: `_{F_2|A}`.
+            drive_register = self._consume_optional_register()
             self.expect(TokenKind.RBRACE)
-        return StateLiteral(operator=operator, domain=domain, drive=drive)
+
+        # Optional compound-level register at the tail: `^2^C_{F2}|A`. If a
+        # Noetic-level register was already consumed before the domain, we
+        # treat a trailing register here as an independent compound register
+        # (retaining the Noetic-level register distinctly is fine for the
+        # shape `^2|T^C_{F2|A}`; the trailing form is simply the compound
+        # register when no earlier Noetic register was set).
+        tail_register = self._consume_optional_register()
+
+        if noetic_register is not None and tail_register is not None:
+            # Both specified: keep the Noetic-level one on `register` and
+            # treat the trailing register as the compound register overriding
+            # it for the compound. Per Section 3 Example 4, the canonical
+            # independent-register shape is `^n|R_n^D_{F_k|R_d}`, so a
+            # trailing register is rare when a Noetic-level one is present.
+            # We prefer the tail register as the compound register and keep
+            # the Noetic register preserved via the compound's semantic.
+            register = tail_register
+        elif tail_register is not None:
+            register = tail_register
+        else:
+            register = noetic_register
+
+        return StateLiteral(
+            operator=operator,
+            domain=domain,
+            drive=drive,
+            register=register,
+            drive_register=drive_register,
+        )
 
 
 def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeInfo:
@@ -988,6 +1167,8 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
                 CompilerStage.TYPECHECK,
                 f"drive number must be 1-7, got F{node.drive}",
             )
+        # CAS v7.5 register values are validated during parsing (_validate_register_token);
+        # by the time we get here, any non-None value is already in VALID_REGISTERS.
         return TypeInfo(kind=TypeKind.STATE, domains=(node.domain,), singular=True)
 
     if isinstance(node, DriveLiteral):
@@ -1288,12 +1469,25 @@ def lower(node: Any) -> list[Instruction]:
             bytecode.append(
                 Instruction(
                     "PUSH_STATE",
-                    {"operator": expr.operator, "domain": expr.domain, "drive": expr.drive},
+                    {
+                        "operator": expr.operator,
+                        "domain": expr.domain,
+                        "drive": expr.drive,
+                        # CAS v7.5 register metadata (Clarification 8). None
+                        # means register-neutral (v7.4-compatible).
+                        "register": expr.register,
+                        "drive_register": expr.drive_register,
+                    },
                 )
             )
             return
         if isinstance(expr, DriveLiteral):
-            bytecode.append(Instruction("PUSH_DRIVE", expr.drive))
+            bytecode.append(
+                Instruction(
+                    "PUSH_DRIVE",
+                    {"drive": expr.drive, "register": expr.register},
+                )
+            )
             return
         if isinstance(expr, StringLiteral):
             bytecode.append(Instruction("PUSH_STRING", expr.value))
@@ -1422,9 +1616,22 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
         operator = instruction.arg["operator"]
         domain = instruction.arg["domain"]
         drive = instruction.arg["drive"]
+        # CAS v7.5 register metadata (Clarification 8). Defaults to None for
+        # backward compatibility with v7.4 bytecode streams that don't carry
+        # register fields.
+        register = instruction.arg.get("register")
+        drive_register = instruction.arg.get("drive_register")
         state_index = _state_index(operator, domain)
         drives = {drive: 1.0} if drive is not None else {}
-        stack.append(StateValue(states={state_index: 1.0}, drive_weights=drives, explicit_drive=drive is not None))
+        stack.append(
+            StateValue(
+                states={state_index: 1.0},
+                drive_weights=drives,
+                explicit_drive=drive is not None,
+                register=register,
+                drive_register=drive_register,
+            )
+        )
         return
 
     if opcode == "PUSH_STRING":
@@ -1432,7 +1639,16 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
         return
 
     if opcode == "PUSH_DRIVE":
-        stack.append(DriveLiteral(int(instruction.arg)))
+        # Accept both the legacy integer-arg form (v7.4) and the v7.5
+        # dict form that carries an optional register.
+        payload = instruction.arg
+        if isinstance(payload, dict):
+            drive_index = int(payload["drive"])
+            register = payload.get("register")
+        else:
+            drive_index = int(payload)
+            register = None
+        stack.append(DriveLiteral(drive=drive_index, register=register))
         return
 
     if opcode == "LOAD_VAR":
@@ -1874,14 +2090,24 @@ def execute(bytecode: list[Instruction], env: RuntimeEnv | None = None) -> Any:
 
 def serialize_ast(node: Any) -> Any:
     if isinstance(node, StateLiteral):
-        return {
+        payload = {
             "node": "StateLiteral",
             "operator": f"CO-{node.operator}",
             "domain": node.domain,
             "drive": f"F{node.drive}" if node.drive is not None else None,
         }
+        # CAS v7.5: surface register metadata when present. Omitted for
+        # register-neutral nodes so v7.4-style AST output is unchanged.
+        if node.register is not None:
+            payload["register"] = node.register
+        if node.drive_register is not None:
+            payload["drive_register"] = node.drive_register
+        return payload
     if isinstance(node, DriveLiteral):
-        return {"node": "DriveLiteral", "drive": f"F{node.drive}"}
+        payload = {"node": "DriveLiteral", "drive": f"F{node.drive}"}
+        if node.register is not None:
+            payload["register"] = node.register
+        return payload
     if isinstance(node, StringLiteral):
         return {"node": "StringLiteral", "value": node.value}
     if isinstance(node, Identifier):
@@ -1965,7 +2191,12 @@ def serialize_value(value: Any) -> Any:
     if isinstance(value, ModuleValue):
         return value.to_dict()
     if isinstance(value, DriveLiteral):
-        return {"kind": "drive", "drive": f"F{value.drive}"}
+        payload: dict[str, Any] = {"kind": "drive", "drive": f"F{value.drive}"}
+        # CAS v7.5: surface register metadata when present.
+        if value.register is not None:
+            payload["register"] = value.register
+            payload["register_name"] = REGISTER_NAMES[value.register]
+        return payload
     return repr(value)
 
 

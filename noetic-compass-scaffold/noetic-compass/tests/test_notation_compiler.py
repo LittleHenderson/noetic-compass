@@ -230,3 +230,155 @@ def test_showcase_program_executes():
     assert result["results"][4]["kind"] == "binding"
     assert result["results"][5]["kind"] == "function"
     assert result["final_result"]["kind"] == "relation"
+
+
+# ---------------------------------------------------------------------------
+# CAS v7.5 Phenomenological Register tests (Clarification 8).
+#
+# These cover the optional `|R` register suffix on Noetic primitives, Drive
+# primitives, and compound-state expressions. Register is OPTIONAL: expressions
+# without `|R` remain valid and register-neutral (v7.4-compatible).
+# ---------------------------------------------------------------------------
+
+
+def test_v75_register_at_noetic_level():
+    """(a) `^2|T` attaches the Transcendent register to a Noetic primitive."""
+    artifact = compile_expression("^2|T")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "state"
+    assert result["dominant_operator"] == "CO-2"
+    assert result["register"] == "T"
+    assert result["register_name"] == "Transcendent"
+
+
+def test_v75_register_at_drive_level():
+    """(b) `F_2|A` attaches the Analytical register to a Drive primitive.
+
+    The underscore form `F_n` is the CAS v7.5 Section 3 notation; the parser
+    also accepts the legacy `Fn` form for backward compatibility.
+    """
+    artifact = compile_expression("F_2|A")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "drive"
+    assert result["drive"] == "F2"
+    assert result["register"] == "A"
+    assert result["register_name"] == "Analytical"
+
+
+def test_v75_register_at_compound_level():
+    """(c) `^6^C_{F2}|A` attaches register to the whole compound state."""
+    artifact = compile_expression("^6^C_{F2}|A")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "state"
+    assert result["dominant_state"] == "C6"
+    assert result["dominant_drive"] == "F2"
+    assert result["register"] == "A"
+
+
+def test_v75_independent_registers_on_noetic_and_drive():
+    """(d) `^2|T^C_{F2|A}` specifies independent Noetic and Drive registers."""
+    artifact = compile_expression("^2|T^C_{F2|A}")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "state"
+    assert result["dominant_state"] == "C2"
+    assert result["dominant_drive"] == "F2"
+    # Noetic-level register preserved on `register`; Drive-level register
+    # preserved independently on `drive_register`.
+    assert result["register"] == "T"
+    assert result["drive_register"] == "A"
+
+
+def test_v75_invalid_register_rejected():
+    """(e) `^2|Q` fails with a CAS v7.5 error listing the valid register set."""
+    artifact = compile_expression("^2|Q")
+    assert not artifact.valid
+    assert artifact.error is not None
+    assert "CAS v7.5" in artifact.error
+    assert "T" in artifact.error and "A" in artifact.error
+    assert "f" in artifact.error and "E" in artifact.error
+    assert "'Q'" in artifact.error or "Q" in artifact.error
+
+
+def test_v75_register_neutral_backward_compatible():
+    """(f) `^2^C_{F2}` parses as a v7.4-compatible register-neutral state.
+
+    The resulting state dict must NOT carry register keys, so downstream
+    consumers written against CAS v7.4 are unaffected.
+    """
+    artifact = compile_expression("^2^C_{F2}")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "state"
+    assert result["dominant_state"] == "C2"
+    assert result["dominant_drive"] == "F2"
+    assert "register" not in result
+    assert "drive_register" not in result
+
+
+def test_v75_lowercase_f_affective_register_accepted():
+    """(g) `^3|f` accepts lowercase `f` as the authoritative Affective register.
+
+    Per Clarification 8, lowercase f is the authoritative token for the
+    Affective register (capital F would collide with the Drive primitive
+    notation F_k).
+    """
+    artifact = compile_expression("^3|f")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "state"
+    assert result["dominant_operator"] == "CO-3"
+    assert result["register"] == "f"
+    assert result["register_name"] == "Affective"
+
+
+def test_v75_uppercase_F_affective_rejected():
+    """Uppercase `F` is NOT accepted as the Affective register.
+
+    `|F` would be ambiguous with the Drive primitive letter F, and the
+    authoritative specification per Clarification 8 uses lowercase `f`.
+    """
+    artifact = compile_expression("^3|F")
+    assert not artifact.valid
+    assert artifact.error is not None
+    assert "CAS v7.5" in artifact.error
+
+
+def test_v75_register_on_co_notation_also_supported():
+    """Register attaches to canonical `CO-n` notation as well as `^n` shorthand.
+
+    This keeps existing `CO-n`-style call sites forward-compatible with
+    v7.5 without forcing a rewrite to `^n`.
+    """
+    artifact = compile_expression("CO-2^P_{F2}|T")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "state"
+    assert result["dominant_state"] == "P2"
+    assert result["register"] == "T"
+
+
+def test_v75_register_neutral_co_notation_unchanged():
+    """Existing `CO-n^D_{Fk}` expressions without register behave exactly as
+    they did under CAS v7.4 (no new fields appear on the state dict)."""
+    artifact = compile_expression("CO-5^E_{F4}")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "state"
+    assert result["dominant_state"] == "E5"
+    assert "register" not in result
+    assert "drive_register" not in result
+
+
+def test_v75_all_four_registers_accepted():
+    """All four register values {T, A, f, E} are accepted on a Noetic."""
+    expected = {"T": "Transcendent", "A": "Analytical", "f": "Affective", "E": "Embodied"}
+    for token, name in expected.items():
+        artifact = compile_expression(f"^4|{token}")
+        assert artifact.valid, f"register |{token} should be valid: {artifact.error}"
+        result = artifact.to_dict()["result"]
+        assert result["register"] == token
+        assert result["register_name"] == name
