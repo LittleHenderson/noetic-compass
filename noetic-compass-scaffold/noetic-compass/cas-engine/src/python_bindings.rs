@@ -12,6 +12,7 @@ use crate::metric;
 use crate::ontology;
 use crate::rpm;
 use crate::scoring;
+use crate::validation;
 
 // ---------------------------------------------------------------------------
 // CognitiveOperator
@@ -1519,6 +1520,271 @@ fn efficiency(theoretical: f64, actual: f64) -> f64 {
 }
 
 // ---------------------------------------------------------------------------
+// CAS v7.7 Register Multiplicity bindings (Clarification 10)
+// ---------------------------------------------------------------------------
+//
+// Exposes RegisterSet (|⟨…⟩ notation), NamedEmergentRegister (emergent fused
+// cross-register result), and Rule 4 admissibility validator. All are
+// additive over v7.5/v7.6 — no existing type is modified.
+
+/// PyO3 wrapper for [`crate::ontology::RegisterSet`].
+///
+/// A non-empty ordered set of Phenomenological Registers, canonical CAS
+/// notation `|⟨R1,R2,…⟩`. Per Clarification 10 Section 2A, this notation
+/// denotes architectural specification — state presence in these registers
+/// without any claim about interaction dynamics.
+#[pyclass(name = "RegisterSet", eq, hash, frozen)]
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub struct PyRegisterSet {
+    inner: ontology::RegisterSet,
+}
+
+#[pymethods]
+impl PyRegisterSet {
+    /// Construct a `RegisterSet` from a list of register symbol strings.
+    /// Duplicates are silently deduplicated; an empty list is rejected.
+    /// Accepts the canonical short forms "T", "A", "f" (lowercase
+    /// authoritative per Clarification 8 Section 3), and "E".
+    #[new]
+    fn new(symbols: Vec<String>) -> PyResult<Self> {
+        let mut registers: Vec<ontology::Register> = Vec::with_capacity(symbols.len());
+        for s in &symbols {
+            let r = ontology::Register::from_symbol(s).ok_or_else(|| {
+                PyValueError::new_err(format!(
+                    "register symbol must be one of 'T', 'A', 'f', 'E'; got {s:?}"
+                ))
+            })?;
+            registers.push(r);
+        }
+        ontology::RegisterSet::from_registers(&registers)
+            .map(|inner| Self { inner })
+            .map_err(|e| PyValueError::new_err(format!("{e}")))
+    }
+
+    /// Membership test: is the given register symbol present?
+    fn contains(&self, symbol: &str) -> PyResult<bool> {
+        let r = ontology::Register::from_symbol(symbol).ok_or_else(|| {
+            PyValueError::new_err(format!(
+                "register symbol must be one of 'T', 'A', 'f', 'E'; got {symbol:?}"
+            ))
+        })?;
+        Ok(self.inner.contains(&r))
+    }
+
+    /// Subset test: `self ⊆ other`.
+    fn is_subset_of(&self, other: &PyRegisterSet) -> bool {
+        self.inner.is_subset_of(&other.inner)
+    }
+
+    /// Superset test: `self ⊇ other`.
+    fn is_superset_of(&self, other: &PyRegisterSet) -> bool {
+        self.inner.is_superset_of(&other.inner)
+    }
+
+    /// Whether the set contains both members of a register involution pair
+    /// ({|T, |E} or {|A, |f}) per Clarification 8 Section 3.
+    fn involution_pair_present(&self) -> bool {
+        self.inner.involution_pair_present()
+    }
+
+    /// Canonical CAS notation WITHOUT the `|` prefix, e.g. `"⟨T,A,f⟩"`.
+    #[getter]
+    fn canonical_notation(&self) -> String {
+        self.inner.canonical_notation()
+    }
+
+    /// Cardinality of the set.
+    fn __len__(&self) -> usize {
+        self.inner.len()
+    }
+
+    fn is_empty(&self) -> bool {
+        self.inner.is_empty()
+    }
+
+    /// List the contained registers as short-form symbols in canonical
+    /// order ("T", "A", "f", "E").
+    fn symbols(&self) -> Vec<&'static str> {
+        self.inner.iter().map(|r| r.symbol()).collect()
+    }
+
+    fn __repr__(&self) -> String {
+        format!("RegisterSet({})", self.inner.canonical_notation())
+    }
+
+    fn __str__(&self) -> String {
+        self.inner.canonical_notation()
+    }
+
+    /// Serialize to a JSON string — the v7.5-compatible array-of-symbols
+    /// form, e.g. `["T","A","f"]`.
+    fn to_json(&self) -> PyResult<String> {
+        serde_json::to_string(&self.inner)
+            .map_err(|e| PyValueError::new_err(format!("serde error: {e}")))
+    }
+
+    /// Deserialize from a JSON string.
+    #[staticmethod]
+    fn from_json(json: &str) -> PyResult<Self> {
+        serde_json::from_str(json)
+            .map(|inner| Self { inner })
+            .map_err(|e| PyValueError::new_err(format!("serde error: {e}")))
+    }
+}
+
+/// PyO3 wrapper for [`crate::ontology::NamedEmergentRegister`].
+///
+/// A named identifier (e.g., "Ω", "TF") for the unified emergent result of
+/// a same-Noetic cross-register `×` integration per Clarification 10
+/// Section 2C.
+#[pyclass(name = "NamedEmergentRegister", eq, hash, frozen)]
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub struct PyNamedEmergentRegister {
+    inner: ontology::NamedEmergentRegister,
+}
+
+#[pymethods]
+impl PyNamedEmergentRegister {
+    /// Construct from a name string. Validates: non-empty, starts with ASCII
+    /// letter or Greek uppercase, subsequent chars ASCII letter/digit/
+    /// underscore.
+    #[new]
+    fn new(name: &str) -> PyResult<Self> {
+        ontology::NamedEmergentRegister::from_str(name)
+            .map(|inner| Self { inner })
+            .map_err(|e| PyValueError::new_err(format!("{e}")))
+    }
+
+    #[getter]
+    fn name(&self) -> String {
+        self.inner.name.clone()
+    }
+
+    fn __repr__(&self) -> String {
+        format!("NamedEmergentRegister({})", self.inner.name)
+    }
+
+    fn __str__(&self) -> String {
+        self.inner.name.clone()
+    }
+}
+
+/// PyO3 wrapper for the Rule 4 validator result enum.
+///
+/// The variant is exposed via `.kind` (`"valid"` or
+/// `"violation_requires_emergent_result"`). For the violation variant,
+/// `.violation_registers()` returns the distinct register symbols and
+/// `.violation_core()` returns a `(operator_index, domain_index_or_-1,
+/// drive_number_or_0)` triple describing the shared core.
+#[pyclass(name = "RuleFourResult")]
+#[derive(Clone)]
+pub struct PyRuleFourResult {
+    inner: validation::RuleFourResult,
+}
+
+#[pymethods]
+impl PyRuleFourResult {
+    #[getter]
+    fn kind(&self) -> &'static str {
+        match &self.inner {
+            validation::RuleFourResult::Valid => "valid",
+            validation::RuleFourResult::ViolationRequiresEmergentResult { .. } => {
+                "violation_requires_emergent_result"
+            }
+        }
+    }
+
+    /// For the violation variant, return the distinct register symbols
+    /// that triggered the violation. Empty list for the valid variant.
+    fn violation_registers(&self) -> Vec<&'static str> {
+        match &self.inner {
+            validation::RuleFourResult::ViolationRequiresEmergentResult { registers, .. } => {
+                registers.iter().map(|r| r.symbol()).collect()
+            }
+            _ => Vec::new(),
+        }
+    }
+
+    /// For the violation variant, return the shared
+    /// `(operator_index, domain_index_or_-1, drive_number_or_0)` core.
+    /// Returns `None` for the valid variant. `domain_index` is `-1` when
+    /// the core had no domain; `drive_number` is `0` when the core had no
+    /// drive.
+    fn violation_core(&self) -> Option<(usize, i32, u8)> {
+        match &self.inner {
+            validation::RuleFourResult::ViolationRequiresEmergentResult { core, .. } => {
+                let op_idx = core.noetic.index();
+                let dom_idx = core.domain.map(|d| d.index() as i32).unwrap_or(-1);
+                let drv_num = core.drive.map(|d| d.number()).unwrap_or(0);
+                Some((op_idx, dom_idx, drv_num))
+            }
+            _ => None,
+        }
+    }
+
+    fn __repr__(&self) -> String {
+        match &self.inner {
+            validation::RuleFourResult::Valid => "RuleFourResult(valid)".to_string(),
+            validation::RuleFourResult::ViolationRequiresEmergentResult {
+                registers, ..
+            } => {
+                let regs: Vec<&'static str> = registers.iter().map(|r| r.symbol()).collect();
+                format!(
+                    "RuleFourResult(violation_requires_emergent_result, registers={regs:?})"
+                )
+            }
+        }
+    }
+}
+
+/// Validate a list of `×`-cross-product operands against Clarification 10
+/// Section 4 (Rule 4). Each operand is encoded as a tuple
+/// `(operator_index, domain_index_or_None, drive_number_or_None,
+/// register_symbol_or_None)`. `named_emergent_result` is an optional
+/// [`PyNamedEmergentRegister`] or name string identifying a named fused
+/// emergent result.
+#[pyfunction]
+#[pyo3(signature = (operands, named_emergent_result=None))]
+fn validate_same_noetic_cross_product(
+    operands: Vec<(usize, Option<usize>, Option<u8>, Option<String>)>,
+    named_emergent_result: Option<PyNamedEmergentRegister>,
+) -> PyResult<PyRuleFourResult> {
+    let mut parsed: Vec<validation::CognitiveStateWithRegister> =
+        Vec::with_capacity(operands.len());
+    for (op_idx, dom_idx, drv_num, reg_sym) in operands {
+        let noetic = ontology::CognitiveOperator::from_index(op_idx).ok_or_else(|| {
+            PyValueError::new_err(format!("operator index must be 0-9, got {op_idx}"))
+        })?;
+        let domain = match dom_idx {
+            None => None,
+            Some(idx) => Some(ontology::Domain::from_index(idx).ok_or_else(|| {
+                PyValueError::new_err(format!("domain index must be 0-3, got {idx}"))
+            })?),
+        };
+        let drive = match drv_num {
+            None => None,
+            Some(n) => Some(ontology::CoreDrive::from_number(n).ok_or_else(|| {
+                PyValueError::new_err(format!("drive number must be 1-7, got {n}"))
+            })?),
+        };
+        let register = match reg_sym.as_deref() {
+            None => None,
+            Some(s) => Some(ontology::Register::from_symbol(s).ok_or_else(|| {
+                PyValueError::new_err(format!(
+                    "register symbol must be one of 'T', 'A', 'f', 'E'; got {s:?}"
+                ))
+            })?),
+        };
+        parsed.push(validation::CognitiveStateWithRegister::new(
+            noetic, domain, drive, register,
+        ));
+    }
+    let named = named_emergent_result.as_ref().map(|n| &n.inner);
+    let result = validation::validate_same_noetic_cross_product(&parsed, named);
+    Ok(PyRuleFourResult { inner: result })
+}
+
+// ---------------------------------------------------------------------------
 // Module registration
 // ---------------------------------------------------------------------------
 
@@ -1545,6 +1811,10 @@ pub fn cas_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<PyProductionStateVector>()?;
     m.add_class::<PyYield>()?;
     m.add_class::<PyLimitingReagent>()?;
+    // CAS v7.7 Register Multiplicity (Clarification 10)
+    m.add_class::<PyRegisterSet>()?;
+    m.add_class::<PyNamedEmergentRegister>()?;
+    m.add_class::<PyRuleFourResult>()?;
     m.add_function(wrap_pyfunction!(compute_nccs, m)?)?;
     m.add_function(wrap_pyfunction!(geodesic_distance, m)?)?;
     m.add_function(wrap_pyfunction!(bhattacharyya_coefficient, m)?)?;
@@ -1558,5 +1828,7 @@ pub fn cas_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(limiting_reagent, m)?)?;
     m.add_function(wrap_pyfunction!(excess_capacity, m)?)?;
     m.add_function(wrap_pyfunction!(efficiency, m)?)?;
+    // CAS v7.7 Rule 4 admissibility validator (Clarification 10)
+    m.add_function(wrap_pyfunction!(validate_same_noetic_cross_product, m)?)?;
     Ok(())
 }

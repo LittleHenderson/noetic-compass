@@ -32,12 +32,22 @@ pub mod metric;
 pub mod ontology;
 pub mod rpm;
 pub mod scoring;
+pub mod validation;
 
 pub use ontology::Register;
 
 // CAS v7.6 Stoichiometric Production Semantics re-exports (Clarification 9).
 pub use ontology::{
     Catalyst, Conditions, Inhibitor, Leakage, PrimitiveId, ProductionTarget, Recipe, StateVector,
+};
+
+// CAS v7.7 Register Multiplicity re-exports (Clarification 10).
+pub use ontology::{
+    NamedEmergentRegister, NamedEmergentRegisterError, RegisterSet, RegisterSetError,
+};
+pub use validation::{
+    validate_same_noetic_cross_product, CognitiveStateCore, CognitiveStateWithRegister,
+    RuleFourResult,
 };
 pub use scoring::{
     efficiency, excess_capacity, limiting_reagent, theoretical_yield, LimitingReagent, Yield,

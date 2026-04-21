@@ -15,6 +15,7 @@
 //! - 22 Capability Pathways with RPM chain structure
 //! - 7 Inversion Axes
 //! - 4 Phenomenological Registers (T, A, f, E) — CAS v7.5, optional per state
+//! - Register Set `|⟨…⟩` + NamedEmergentRegister — CAS v7.7, Clarification 10
 
 pub mod domains;
 pub mod drives;
@@ -22,6 +23,7 @@ pub mod operators;
 pub mod pathways;
 pub mod recipe;
 pub mod register;
+pub mod register_set;
 pub mod states;
 
 pub use domains::Domain;
@@ -32,6 +34,9 @@ pub use recipe::{
     Catalyst, Conditions, Inhibitor, Leakage, PrimitiveId, ProductionTarget, Recipe, StateVector,
 };
 pub use register::Register;
+pub use register_set::{
+    NamedEmergentRegister, NamedEmergentRegisterError, RegisterSet, RegisterSetError,
+};
 pub use states::{
     CognitiveStateId, CognitiveStateVector, StateVectorError, MIN_PROBABILITY, NUM_STATES,
 };
