@@ -194,6 +194,92 @@ impl PyCoreDrive {
 }
 
 // ---------------------------------------------------------------------------
+// Register (CAS v7.5 Phenomenological Register, Clarification 8)
+// ---------------------------------------------------------------------------
+
+/// Phenomenological Register (CAS v7.5). Canonical short forms: "T", "A",
+/// "f" (lowercase — authoritative per Clarification 8 Section 3), "E".
+#[pyclass(name = "Register", eq, hash, frozen)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+pub struct PyRegister {
+    inner: ontology::Register,
+}
+
+#[pymethods]
+impl PyRegister {
+    /// Construct a Register from its canonical short-form symbol
+    /// ("T", "A", "f", "E"). The affective symbol is LOWERCASE.
+    #[new]
+    fn new(symbol: &str) -> PyResult<Self> {
+        ontology::Register::from_symbol(symbol)
+            .map(|inner| Self { inner })
+            .ok_or_else(|| {
+                PyValueError::new_err(format!(
+                    "register symbol must be one of 'T', 'A', 'f', 'E'; got {symbol:?}"
+                ))
+            })
+    }
+
+    #[getter]
+    fn symbol(&self) -> &'static str {
+        self.inner.symbol()
+    }
+
+    #[getter]
+    fn name(&self) -> &'static str {
+        self.inner.name()
+    }
+
+    #[classattr]
+    #[allow(non_snake_case)]
+    fn Transcendent() -> Self {
+        Self {
+            inner: ontology::Register::Transcendent,
+        }
+    }
+
+    #[classattr]
+    #[allow(non_snake_case)]
+    fn Analytical() -> Self {
+        Self {
+            inner: ontology::Register::Analytical,
+        }
+    }
+
+    #[classattr]
+    #[allow(non_snake_case)]
+    fn Affective() -> Self {
+        Self {
+            inner: ontology::Register::Affective,
+        }
+    }
+
+    #[classattr]
+    #[allow(non_snake_case)]
+    fn Embodied() -> Self {
+        Self {
+            inner: ontology::Register::Embodied,
+        }
+    }
+
+    fn __repr__(&self) -> String {
+        format!("Register({})", self.inner.symbol())
+    }
+
+    fn __str__(&self) -> String {
+        self.inner.symbol().to_string()
+    }
+
+    #[staticmethod]
+    fn all() -> Vec<PyRegister> {
+        ontology::Register::ALL
+            .iter()
+            .map(|&r| PyRegister { inner: r })
+            .collect()
+    }
+}
+
+// ---------------------------------------------------------------------------
 // CognitiveStateVector
 // ---------------------------------------------------------------------------
 
@@ -246,6 +332,29 @@ impl PyCognitiveStateVector {
 
     fn as_list(&self) -> Vec<f64> {
         self.inner.as_slice().to_vec()
+    }
+
+    /// CAS v7.5: Return a copy of this state vector annotated with the given
+    /// Phenomenological Register.
+    fn with_register(&self, register: &PyRegister) -> Self {
+        Self {
+            inner: self.inner.clone().with_register(register.inner),
+        }
+    }
+
+    /// CAS v7.5: Return a copy of this state vector with no Register
+    /// annotation (register-neutral / v7.4-compatible).
+    fn without_register(&self) -> Self {
+        Self {
+            inner: self.inner.clone().without_register(),
+        }
+    }
+
+    /// CAS v7.5: The Phenomenological Register annotation, if any.
+    /// Returns `None` for register-neutral (v7.4-compatible) vectors.
+    #[getter]
+    fn register(&self) -> Option<PyRegister> {
+        self.inner.register().map(|r| PyRegister { inner: r })
     }
 
     fn __repr__(&self) -> String {
@@ -850,6 +959,7 @@ pub fn cas_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<PyCognitiveOperator>()?;
     m.add_class::<PyDomain>()?;
     m.add_class::<PyCoreDrive>()?;
+    m.add_class::<PyRegister>()?;
     m.add_class::<PyCognitiveStateVector>()?;
     m.add_class::<PyDialConfig>()?;
     m.add_class::<PyOperatorScores>()?;

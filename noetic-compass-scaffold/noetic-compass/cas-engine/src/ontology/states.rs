@@ -5,12 +5,20 @@
 //! CORRECTION 4: The state space is the open probability simplex
 //! S_I = Delta_39_open = { p in R^40 : pk > 0 for all k, sum(pk) = 1 }
 //! NOT the discrete 40-element set.
+//!
+//! CAS v7.5 extension: A [`CognitiveStateVector`] may optionally carry a
+//! [`Register`] annotation per `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`
+//! Clarification 8. The annotation specifies operational character
+//! (Transcendent / Analytical / Affective / Embodied) without modifying the
+//! probability geometry. Register-unspecified vectors remain valid
+//! (backward-compatible register-neutral v7.4 semantics).
 
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
 use super::domains::Domain;
 use super::operators::CognitiveOperator;
+use super::register::Register;
 
 /// Total number of cognitive states (10 operators x 4 domains).
 pub const NUM_STATES: usize = 40;
@@ -90,9 +98,17 @@ pub enum StateVectorError {
 ///
 /// CORRECTION 4: All components pk must be strictly positive (pk > 0)
 /// and must sum to 1.
+///
+/// CAS v7.5 (Clarification 8): the optional `register` field records the
+/// Phenomenological Register (Transcendent / Analytical / Affective / Embodied)
+/// under which this state vector is interpreted. The default (`None`) is
+/// register-neutral, preserving full backward compatibility with v7.4
+/// state-vector semantics and serialization (omitted when `None`).
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CognitiveStateVector {
     probabilities: Vec<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    register: Option<Register>,
 }
 
 impl CognitiveStateVector {
@@ -124,6 +140,7 @@ impl CognitiveStateVector {
         }
         Ok(Self {
             probabilities: probabilities.to_vec(),
+            register: None,
         })
     }
 
@@ -131,7 +148,34 @@ impl CognitiveStateVector {
     pub fn uniform() -> Self {
         Self {
             probabilities: vec![1.0 / NUM_STATES as f64; NUM_STATES],
+            register: None,
         }
+    }
+
+    /// Return a copy of this state vector annotated with the given
+    /// Phenomenological Register (CAS v7.5, Clarification 8).
+    ///
+    /// This is a builder-style helper: it does not modify the underlying
+    /// probability distribution. Register is a characterization layer, not a
+    /// scoring input, consistent with Clarification 8's "specification of
+    /// operational character" framing.
+    pub fn with_register(mut self, register: Register) -> Self {
+        self.register = Some(register);
+        self
+    }
+
+    /// Clear any Register annotation, returning the vector to register-neutral
+    /// (backward-compatible v7.4) form.
+    pub fn without_register(mut self) -> Self {
+        self.register = None;
+        self
+    }
+
+    /// The Phenomenological Register annotation, if any.
+    ///
+    /// `None` indicates register-neutral / unspecified (the v7.4 default).
+    pub fn register(&self) -> Option<Register> {
+        self.register
     }
 
     /// Get the probability for a specific state.
