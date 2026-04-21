@@ -409,6 +409,229 @@ IP attorney consultation is flagged in the CAS v7.5 rollout plan to confirm that
 
 ---
 
+## Clarification 9: Stoichiometric Production Semantics (CAS v7.6 Extension)
+
+### Section 1: Principle Statement
+
+CAS v7.6 introduces production semantics as a structural layer describing how cognitive primitives (Noetics × Domains × Drives × Registers from v7.5) produce outcomes through constrained transformation. Every outcome is treated as a production target requiring a recipe of prerequisite activations in specific proportional weightings. Production efficiency is measurable through yield analysis. Deviations between theoretical and actual yield are diagnosable through leakage, catalyst/inhibitor, and limiting reagent analysis.
+
+This extends CAS from a framework that describes cognitive architecture to a framework that describes both cognitive architecture AND cognitive production under constraint.
+
+### Section 2: Definitions
+
+**Production Target (Ω)**
+A specified outcome whose generation is under analysis. May be any discrete achievement: completing a project, producing a reliable refusal, reaching an insight, forming a relationship, building a capability. Notation: Ω_{name}.
+
+**Recipe (Θ)**
+The proportional weighting of prerequisite primitives required for a unit of production target. Notation:
+  Θ(Ω) = a₁·X₁ + a₂·X₂ + ... + aₙ·Xₙ
+where Xᵢ are CAS primitives (Noetics, Domains, Drives, Registers, or compound states) and aᵢ are the required proportional coefficients.
+
+Recipe specification is ALWAYS relative to a specific target Ω. Different outcomes require different recipes. A single primitive (e.g., F2 Wisdom) participates in many recipes with different coefficients.
+
+**State Vector (S)**
+The current activation profile of a Mind, specified as the available quantities of each primitive. Notation:
+  S = ⟨x₁, x₂, ..., xₙ⟩
+where xᵢ is the available quantity of primitive Xᵢ.
+
+**Theoretical Yield (Y_T)**
+Maximum producible units of Ω given state vector S and recipe Θ, under ideal conversion.
+
+Calculation: Y_T = min_i(xᵢ / aᵢ) for all i where aᵢ > 0.
+
+The minimum ratio across all recipe prerequisites determines theoretical yield. The primitive producing this minimum is the Limiting Reagent.
+
+**Actual Yield (Y_A)**
+Observed/achieved units of Ω in practice. Empirically determined, not calculated.
+
+**Production Efficiency (η)**
+Ratio of actual to theoretical yield.
+  η = Y_A / Y_T
+
+Values: η ∈ [0, 1]. Values near 1 indicate efficient conversion of prerequisites into intended outcome. Values near 0 indicate poor conversion despite adequate prerequisites.
+
+**Limiting Reagent (L)**
+The prerequisite Xᵢ producing the minimum xᵢ/aᵢ ratio in the yield calculation. The bottleneck constraining outcome production.
+
+**Excess Capacity (ε)**
+For each prerequisite Xᵢ not serving as limiting reagent:
+  εᵢ = xᵢ - (Y_T · aᵢ)
+
+The unused quantity of prerequisite Xᵢ after the limiting reagent bottlenecks production.
+
+**Leakage / Side-Reaction (Λ)**
+Input prerequisite consumed by unintended products rather than the target Ω. Distinct from lacunarity (absence) and inversion (shadow form) — leakage is present prerequisites producing wrong products.
+
+Notation: Λᵢ(Ω_side) represents leakage of prerequisite Xᵢ into unintended product Ω_side.
+
+**Catalyst (κ)**
+A contextual or environmental factor that enhances conversion efficiency without being consumed as a prerequisite. Raises η without appearing in the recipe.
+
+**Inhibitor (ι)**
+A contextual or environmental factor that reduces conversion efficiency without removing prerequisites. Lowers η.
+
+### Section 3: Notation
+
+Recipe notation:
+  Θ(Ω) = a₁·X₁ + a₂·X₂ + ... + aₙ·Xₙ → Ω
+
+State vector notation:
+  S = {X₁: x₁, X₂: x₂, ..., Xₙ: xₙ}
+
+Yield notation:
+  Y_T(Ω | S, Θ) = theoretical yield
+  Y_A(Ω) = actual yield
+  η(Ω) = Y_A / Y_T = efficiency
+
+Leakage notation:
+  Θ(Ω) = ... → Ω + Λ₁·Ω_side₁ + Λ₂·Ω_side₂
+
+Catalyst/inhibitor notation:
+  Θ(Ω) | κ₁, κ₂, ..., ι₁, ι₂, ... → Ω
+  (conditions specified as modifiers on the arrow)
+
+### Section 4: Integration with CAS v7.5
+
+Production semantics operates ON v7.5 primitives. The recipe prerequisites Xᵢ are always drawn from the CAS v7.5 state space:
+- Noetics (^0 through ^9)
+- Domains (P, C, E, O)
+- Drives (F1 through F7)
+- Registers (|T, |A, |f, |E)
+- Compound states (^n^D_{Fk}|R)
+
+Example recipe for "complete AI safety research paper":
+  Θ(Ω_paper) =
+      3·F2^C|A        (Wisdom-driven analytical cognitive work)
+    + 2·F2^C|T        (Wisdom-driven transcendent integration)
+    + 4·^7^O_{F6}|E   (Rhythmic operational execution, embodied register)
+    + 2·^5^C_{F2}|A   (Integrative composition of sources)
+    + 1·^8^P_{F1}|T   (Transcendent principled triggering of foundational insight)
+    → Ω_paper
+
+This is a v7.6 expression operating on v7.5 primitives.
+
+### Section 5: Distinctions from Existing CAS Concepts
+
+Production semantics must NOT be conflated with existing CAS machinery. Explicit distinctions:
+
+**Leakage vs Lacunarity**
+- Lacunarity: prerequisite ABSENT (void in activation profile)
+- Leakage: prerequisite PRESENT but producing wrong product
+
+Both can coexist. A Mind can have ^3^P (principled aversion) absent — lacunarity. A Mind can have ^3^P present but directed at trivial slights rather than genuine principle violations — leakage.
+
+**Leakage vs Inversion**
+- Inversion: state operating in shadow/destructive form
+- Leakage: state operating normally but output diverted to side product
+
+F5 Power in inverted form (operating as domination) is different from F5 Power leaked to dominance displays rather than productive power exercise. Different phenomena, different interventions.
+
+**Recipe vs RPM**
+- RPM (Recursive Prerequisite Model): sequential/logical dependency chain (A0 → Dn → Wn → Pn)
+- Recipe: quantitative proportional requirement for specific outcomes
+
+RPM asks "are prerequisites present in correct sequence?" Recipe asks "are prerequisites present in correct proportion for this outcome?" Both can operate simultaneously on the same situation.
+
+**Recipe weights vs Drive values**
+- Drive value: motivational architecture activation (what's firing)
+- Recipe weight: outcome-specific requirement (how much is needed)
+
+F2 Wisdom drive value = 7 (current activation). F2 Wisdom recipe weight for target Ω_book = 3 (units needed per unit of book). Different quantities serving different analytical functions.
+
+**Limiting Reagent vs Lacunarity**
+- Lacunarity: identifies state space voids (absence detection)
+- Limiting Reagent: identifies proportional bottlenecks among present prerequisites (ratio analysis)
+
+Lacunarity detects what's missing. Limiting Reagent detects what's insufficient relative to required ratio. Both diagnostic, different phenomena.
+
+### Section 6: The 5 Generative Operations Under v7.6
+
+The 5 Generative Operations from v7.5 (Multiplication ×, Division ÷, Fractal Composition ∘, Addition +, Subtraction −) operate on CAS primitives and produce composite states. Under v7.6, these remain unchanged in their state-algebra behavior.
+
+However, each Generative Operation may also serve as a RECIPE OPERATION when applied to a production target:
+
+- Recipe multiplication: Θ(Ω₁) × Θ(Ω₂) produces a compound recipe for compound outcomes
+- Recipe division: Θ(Ω_total) ÷ Θ(Ω_part) identifies the marginal recipe for the remaining portion
+- Recipe composition: Θ(Ω_intermediate) ∘ Θ(Ω_final) specifies sequential production where outcome of one recipe serves as prerequisite for another
+- Recipe addition: Θ(Ω₁) + Θ(Ω₂) specifies parallel production requirements
+- Recipe subtraction: Θ(Ω_full) − Θ(Ω_achieved) specifies remaining production requirement
+
+v7.5 formal verification (monoid on Δ°₃₉) remains valid. v7.6 adds recipe-level operations as a higher-order structure over v7.5 state operations.
+
+### Section 7: Universal Applicability
+
+Production semantics applies to any Mind architecture:
+
+Human production: outcomes requiring prerequisite activations (book completion, relationship formation, skill acquisition, etc.)
+
+AI production: outcomes requiring prerequisite capabilities (reliable refusal, helpful response, reasoning chain completion, calibrated uncertainty expression)
+
+AI recipe example: Reliable refusal of harmful requests:
+  Θ(Ω_refusal) =
+      1·^3^P|T       (principled aversion, transcendent goal commitment)
+    + 2·^3^P|A       (principled aversion, analytical checking)
+    + 1·^3^P|f       (principled aversion, value-tuned response)
+    + 1·^8^P|T       (principled triggering of foundational commitment)
+    → Ω_refusal
+
+AI limiting reagent analysis: If an AI system has strong |f register refusal but weak |T and |A registers, the refusal is brittle (jailbreak-vulnerable). Limiting reagent analysis identifies this structural weakness.
+
+Biological production: outcomes requiring integrated sensory/motor/coordination prerequisites.
+
+### Section 8: Diagnostic Applications
+
+Production semantics enables diagnostic distinctions CAS v7.5 could not make:
+
+**Prerequisite shortage vs conversion inefficiency**
+Low Y_A with low Y_T = prerequisite shortage (intervention: build missing prerequisites)
+Low Y_A with high Y_T = conversion inefficiency (intervention: address leakage, inhibitors, or develop catalysts)
+
+**Active bottleneck identification**
+Limiting reagent analysis identifies which specific prerequisite bottlenecks a given outcome, enabling targeted intervention rather than general recommendation.
+
+**Leakage detection**
+Side-reaction analysis identifies where prerequisites are being consumed productively but producing unintended outcomes. Addresses "why do I have the capacity but not the result?" cases.
+
+**Environmental factor formalization**
+Catalyst/inhibitor analysis makes environmental/contextual factors explicit participants in production analysis rather than implicit assumptions.
+
+### Section 9: Source and Triple-Gate Validation
+
+Source: External analytical collaboration (ChatGPT analysis of TKS-to-production-grammar mapping), refined through triple-gate analysis in CAS session.
+
+Triple-gate analysis results:
+
+**Gate 1 (Universal Applicability): PASSED**
+Production concepts (recipe, yield, leakage, catalyst, inhibitor, limiting reagent) apply to human, AI, and biological cognitive architectures with architecture-specific manifestations.
+
+**Gate 2 (Secular Translatability): PASSED**
+All production semantics concepts definable without metaphysical commitment. Recipes are proportional weightings; yields are measurable ratios; leakage is diversion to unintended products; catalysts/inhibitors are conversion modifiers.
+
+**Gate 3 (Framework Coherence): PASSED with required distinctions**
+Production semantics adds real analytical capacity (5 diagnostic gaps filled) without blurring existing CAS structure. Explicit distinctions from Lacunarity, Inversion, RPM, Drive values, and Limiting Reagent vocabulary preserved.
+
+### Section 10: Formal Verification Status
+
+v7.5 formal verification remains valid. v7.6 production semantics operates as higher-order structure over v7.5 state space.
+
+Specific verification notes:
+- The monoid (Δ°₃₉, ×, CO-0) is unchanged
+- The Fisher-Rao metric is unchanged
+- Axioms A1-A7 remain as in v7.4/v7.5
+- Clarifications 1-8 remain as specified
+- RPM section-retraction is unchanged
+
+v7.6 adds proof obligations for:
+- Recipe arithmetic (do recipe operations form a well-defined algebraic structure?)
+- Yield calculation (does min ratio computation have the expected properties under recipe composition?)
+- Leakage conservation (does sum of yields plus leakages equal total prerequisite consumption?)
+
+These are v7.6 research questions, to be addressed in subsequent formal work. Current admission is structural (concepts admitted with definitional rigor); formal verification of recipe-level algebra is follow-on research.
+
+> Clarification 9 admits Stoichiometric Production Semantics as a formal framework extension. CAS is now at v7.6. Production semantics is specification of how existing CAS primitives (Noetics, Domains, Drives, Registers) participate in outcome production; it does NOT introduce new primitives to the topos. The 40 Cognitive States, 7 Drives, and 4 Registers — the primitives named in USPTO #64/037,173 and Clarifications 1-8 — remain unchanged. v7.6 adds: recipe notation (proportional weightings), yield measurement (theoretical vs actual), leakage detection (side-reaction products), catalyst/inhibitor formalism (conversion modifiers), limiting reagent analysis (bottleneck identification). These are analytical capacities over existing primitives, not new primitives. IP attorney consultation is flagged in `docs/working/cas_v7_6_rollout_plan.md`.
+
+---
+
 ## Scope of This Document
 
 This clarification:
