@@ -15,6 +15,7 @@
 pub mod rule_four;
 
 pub use rule_four::{
-    validate_same_noetic_cross_product, validate_same_noetic_cross_product_batch,
-    CognitiveStateCore, CognitiveStateWithRegister, RuleFourBatchInput, RuleFourResult,
+    rule_four_distance, rule_four_distance_batch, validate_same_noetic_cross_product,
+    validate_same_noetic_cross_product_batch, CognitiveStateCore, CognitiveStateWithRegister,
+    RuleFourBatchInput, RuleFourResult,
 };

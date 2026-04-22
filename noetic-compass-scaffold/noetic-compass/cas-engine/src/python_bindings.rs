@@ -1861,6 +1861,57 @@ fn py_validate_same_noetic_cross_product_batch(
         .collect())
 }
 
+/// Continuous distance-to-valid Rule 4 signal (ADR-06).
+///
+/// Returns `0.0` for an admissible expression, or a positive severity-weighted
+/// scalar for a violation. Complements
+/// [`validate_same_noetic_cross_product`]; returns `0.0` exactly iff the
+/// binary validator returns `Valid`.
+///
+/// Input shape matches the per-sample validator: a list of operand tuples
+/// `(operator_index, domain_index_or_None, drive_number_or_None,
+/// register_symbol_or_None)` plus an optional
+/// [`PyNamedEmergentRegister`].
+#[pyfunction(name = "rule_four_distance")]
+#[pyo3(signature = (operands, named_emergent_result=None))]
+fn py_rule_four_distance(
+    operands: Vec<(usize, Option<usize>, Option<u8>, Option<String>)>,
+    named_emergent_result: Option<PyNamedEmergentRegister>,
+) -> PyResult<f64> {
+    let mut parsed: Vec<validation::CognitiveStateWithRegister> =
+        Vec::with_capacity(operands.len());
+    for (op_idx, dom_idx, drv_num, reg_sym) in operands {
+        parsed.push(parse_operand_tuple(op_idx, dom_idx, drv_num, reg_sym)?);
+    }
+    let named = named_emergent_result.as_ref().map(|n| &n.inner);
+    Ok(validation::rule_four_distance(&parsed, named))
+}
+
+/// ADR-06 batch variant of [`py_rule_four_distance`].
+///
+/// Each element of `inputs` is a tuple `(operands, named_emergent_result)`
+/// with the same per-sample shape. Returns a list of distance-to-valid
+/// floats preserving input order.
+#[pyfunction(name = "rule_four_distance_batch")]
+fn py_rule_four_distance_batch(
+    inputs: Vec<(
+        Vec<(usize, Option<usize>, Option<u8>, Option<String>)>,
+        Option<PyNamedEmergentRegister>,
+    )>,
+) -> PyResult<Vec<f64>> {
+    let mut parsed: Vec<validation::RuleFourBatchInput> = Vec::with_capacity(inputs.len());
+    for (operand_tuples, named_py) in inputs {
+        let mut operands: Vec<validation::CognitiveStateWithRegister> =
+            Vec::with_capacity(operand_tuples.len());
+        for (op_idx, dom_idx, drv_num, reg_sym) in operand_tuples {
+            operands.push(parse_operand_tuple(op_idx, dom_idx, drv_num, reg_sym)?);
+        }
+        let named = named_py.map(|n| n.inner);
+        parsed.push((operands, named));
+    }
+    Ok(validation::rule_four_distance_batch(&parsed))
+}
+
 /// PyO3 wrapper for [`ontology::ValidationResult`]. Fields surface the
 /// discriminant (`kind`), optional `reason` tag, and optional `detail`
 /// message so Python callers can dispatch on the tag without textual parsing.
@@ -2057,5 +2108,8 @@ pub fn cas_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(py_validate_same_noetic_cross_product_batch, m)?)?;
     m.add_function(wrap_pyfunction!(py_verify_named_emergent_register_batch, m)?)?;
     m.add_function(wrap_pyfunction!(py_compute_yield_batch, m)?)?;
+    // CAS-Native v2 ADR-06 continuous Rule 4 signal (distance-to-valid)
+    m.add_function(wrap_pyfunction!(py_rule_four_distance, m)?)?;
+    m.add_function(wrap_pyfunction!(py_rule_four_distance_batch, m)?)?;
     Ok(())
 }

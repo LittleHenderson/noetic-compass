@@ -264,6 +264,114 @@ pub fn validate_same_noetic_cross_product_batch(
         .collect()
 }
 
+// ---------------------------------------------------------------------------
+// rule_four_distance — CAS-Native v2 ADR-06 continuous validation signal
+// ---------------------------------------------------------------------------
+
+/// Continuous distance-to-valid signal for Rule 4 admissibility (ADR-06).
+///
+/// Returns `0.0` if the expression passes Rule 4; a strictly positive value
+/// proportional to violation severity otherwise. Complements the binary
+/// [`validate_same_noetic_cross_product`] API and is guaranteed by
+/// construction to return exactly `0.0` iff that validator returns
+/// [`RuleFourResult::Valid`].
+///
+/// # Use case
+///
+/// Gradient-bearing Rule 4 loss for CAS-Native v2 training. The binary
+/// validator's 0.0/1.0 categorical loss provides no gradient signal beyond
+/// the pass/fail boundary. This continuous variant encodes violation
+/// severity, allowing optimizers to converge toward admissible expressions
+/// via a smoother landscape. See
+/// `docs/architecture/cas_native_v2_adrs.md` ADR-06 ("Continuous validation
+/// signal where possible: distance-to-valid metric for gradient flow").
+///
+/// # Severity metric (option (b) severity-weighted)
+///
+/// The metric is register-count-based. Same-Noetic multi-register `×`
+/// violations carry progressively more ambiguity as more distinct registers
+/// are involved. Concretely:
+///
+/// | Result                                              | Distance |
+/// |-----------------------------------------------------|----------|
+/// | `Valid`                                             | `0.0`    |
+/// | Violation, 2 distinct registers (minimum)           | `1.0`    |
+/// | Violation, 3 distinct registers                     | `1.5`    |
+/// | Violation, 4 distinct registers (max, T/A/f/E)      | `2.0`    |
+///
+/// Formula for the violation case: `1.0 + (num_registers - 2) * 0.5`.
+/// Bounded above at `2.0` since the CAS register alphabet has cardinality 4
+/// (`T`, `A`, `f`, `E`). Strictly monotone in the distinct-register count:
+/// more registers => larger distance.
+///
+/// Rationale for option (b) over option (a) count-based (plain
+/// `num_registers - 1`): option (b)'s base offset (`1.0`) guarantees a
+/// hard step from `Valid` (0.0) to any violation (≥1.0), making the
+/// pass/fail boundary unambiguous for loss-clamping while still admitting
+/// fine-grained severity ordering within the violation regime. Option (c)
+/// minimum-perturbation (distance in operand-edit space) was rejected as
+/// unstable under the current AST-only validator — it would require a
+/// separate edit-distance oracle not present in the engine.
+///
+/// # Invariants
+///
+/// - `rule_four_distance(ops, named) == 0.0`
+///   **iff** `validate_same_noetic_cross_product(ops, named) == Valid`.
+/// - Distance is strictly non-negative.
+/// - Distance is monotone non-decreasing in the distinct-register count
+///   for violation cases (2 → 3 → 4 registers ⇒ 1.0 → 1.5 → 2.0).
+///
+/// # Non-breaking
+///
+/// Purely additive. Does NOT modify [`validate_same_noetic_cross_product`],
+/// [`validate_same_noetic_cross_product_batch`], [`RuleFourResult`], or any
+/// existing public type.
+pub fn rule_four_distance(
+    operands: &[CognitiveStateWithRegister],
+    named_emergent_result: Option<&NamedEmergentRegister>,
+) -> f64 {
+    match validate_same_noetic_cross_product(operands, named_emergent_result) {
+        RuleFourResult::Valid => 0.0,
+        RuleFourResult::ViolationRequiresEmergentResult { registers, .. } => {
+            // Violation severity: base 1.0 (minimum 2-register violation) +
+            // 0.5 per additional distinct register beyond the minimum.
+            // With at most 4 registers in the CAS alphabet, distance is
+            // bounded above by 2.0.
+            let n = registers.len() as f64;
+            // Defensive: the per-sample validator only emits this variant
+            // when at least 2 distinct register flavors are observed. If
+            // for any reason `registers.len() < 2` (should not occur),
+            // clamp to the minimum 2-register severity (1.0).
+            let severity_registers = if n < 2.0 { 2.0 } else { n };
+            1.0 + (severity_registers - 2.0) * 0.5
+        }
+    }
+}
+
+/// Batch variant of [`rule_four_distance`] (ADR-06).
+///
+/// Applies [`rule_four_distance`] to each `(operands, named_emergent)` pair
+/// and collects results into a `Vec<f64>` preserving input order:
+/// `result[i]` is the distance metric for `inputs[i]`. Matches the
+/// iterate-and-collect pattern of
+/// [`validate_same_noetic_cross_product_batch`], introduced for the same
+/// PyO3-crossing-amortization reason (CAS-Native v2 training loop).
+///
+/// # Determinism
+///
+/// No parallelism, no non-determinism. Straight wrapper over the per-sample
+/// function.
+///
+/// # Empty batch
+///
+/// Returns an empty `Vec` for empty input.
+pub fn rule_four_distance_batch(inputs: &[RuleFourBatchInput]) -> Vec<f64> {
+    inputs
+        .iter()
+        .map(|(operands, named)| rule_four_distance(operands.as_slice(), named.as_ref()))
+        .collect()
+}
+
 /// Collect the distinct explicit registers across operands in
 /// first-appearance order, and separately report whether any operand was
 /// register-neutral (`None`). The `None` sentinel is excluded from the
