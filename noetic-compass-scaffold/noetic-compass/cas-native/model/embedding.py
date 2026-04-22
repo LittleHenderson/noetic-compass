@@ -9,9 +9,13 @@ The 40 dimensions correspond to the 10 Cognitive Operators x 4 Processing Domain
   P0-P9 (Principled), C0-C9 (Cognitive), E0-E9 (Evaluative), O0-O9 (Operational)
 """
 
+from typing import Optional
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+from .register_film import RegisterFiLM, DEFAULT_REGISTER_DIM, NUM_REGISTERS
 
 
 # Number of cognitive states: 10 operators x 4 domains
@@ -103,3 +107,93 @@ class CognitiveStateEmbedding(nn.Module):
             return False
 
         return True
+
+
+class CognitiveStateEmbeddingWithRegister(nn.Module):
+    """CognitiveStateEmbedding composed with a RegisterFiLM modulation.
+
+    This class adds Phenomenological Register (CAS v7.5) integration on top of
+    the base CognitiveStateEmbedding. The FiLM modulation is applied to the
+    pre-simplex logits produced by the base projection: it modulates the
+    register's operational character without altering that the output lies on
+    the 40-dim open probability simplex.
+
+    Register-neutral mode (register_idx=None) is byte-for-byte identical to the
+    base CognitiveStateEmbedding forward, preserving CAS v7.4 backward
+    compatibility (ADR-01).
+
+    Args:
+        d_model: Dim of input token embeddings.
+        num_states: Size of the cognitive state simplex (default 40).
+        eps: Epsilon floor for strict positivity on the open simplex.
+        register_dim: FiLM modulation dim; must equal num_states (the FiLM
+            modulates the 40-dim logits, not the intermediate d_model/2 layer).
+            Defaults to num_states for that reason.
+        num_registers: Number of Phenomenological Registers (default 4: T/A/f/E).
+    """
+
+    def __init__(
+        self,
+        d_model: int,
+        num_states: int = NUM_COGNITIVE_STATES,
+        eps: float = SIMPLEX_EPS,
+        register_dim: Optional[int] = None,
+        num_registers: int = NUM_REGISTERS,
+    ) -> None:
+        super().__init__()
+
+        # Base embedding — preserved verbatim (no behavioral change in
+        # register-neutral mode).
+        self.base = CognitiveStateEmbedding(
+            d_model=d_model, num_states=num_states, eps=eps
+        )
+
+        # FiLM operates on the 40-dim pre-simplex logit vector so the
+        # per-register modulation affects the cognitive-state distribution
+        # directly. register_dim defaults to num_states for that reason.
+        self.register_dim = register_dim if register_dim is not None else num_states
+        self.register_film = RegisterFiLM(
+            d_model=self.register_dim,
+            num_registers=num_registers,
+        )
+
+    @property
+    def d_model(self) -> int:
+        return self.base.d_model
+
+    @property
+    def num_states(self) -> int:
+        return self.base.num_states
+
+    @property
+    def eps(self) -> float:
+        return self.base.eps
+
+    def forward(
+        self,
+        x: torch.Tensor,
+        register_idx: Optional[int] = None,
+    ) -> torch.Tensor:
+        """
+        Args:
+            x: Token embeddings of shape (batch, seq, d_model).
+            register_idx: Optional register index in [0, num_registers):
+                0=T, 1=A, 2=f, 3=E. None = register-neutral (v7.4 behavior).
+
+        Returns:
+            Cognitive state vectors of shape (batch, seq, num_states) on the
+            open probability simplex.
+        """
+        # Project to 40-dim logits via the base projection.
+        logits = self.base.projection(x)
+
+        # FiLM modulate (no-op when register_idx is None).
+        logits = self.register_film.apply_register(logits, register_idx)
+
+        # Re-project to the open simplex (shared implementation with base).
+        return self.base._project_to_open_simplex(logits)
+
+    @staticmethod
+    def validate(tensor: torch.Tensor, tol: float = 1e-5) -> bool:
+        """Delegate to CognitiveStateEmbedding.validate (identical contract)."""
+        return CognitiveStateEmbedding.validate(tensor, tol=tol)

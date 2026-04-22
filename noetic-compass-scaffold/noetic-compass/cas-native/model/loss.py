@@ -18,10 +18,17 @@ Components:
   L_cognitive_metric_drift: Fisher-Rao distance from target alignment
 """
 
+from typing import Optional, Union
+
 import torch
 import torch.nn as nn
 
 from .composition import composition_loss as _composition_loss
+from .register_film import (
+    INVOLUTION_REGISTER_PAIRS,
+    REGISTER_INDEX,
+    RegisterFiLM,
+)
 
 
 # Involution pairs: CO-2/CO-3, CO-5/CO-6, CO-8/CO-9
@@ -256,6 +263,91 @@ class CognitiveMetricLoss(nn.Module):
         }
 
         return total, components
+
+
+class InvolutionConstraintLoss(nn.Module):
+    """Soft involution constraint on RegisterFiLM parameters (ADR-01).
+
+    Encodes the CAS v7.5 involution relation on Phenomenological Registers —
+    T <-> E and A <-> f — as a SOFT regularizer, not hard architectural
+    enforcement. The constraint says involution partners are multiplicative
+    inverses in gamma and additive inverses in beta, so applying one register
+    then its partner returns to the unmodulated state:
+
+        L_involution = lambda * (
+            || gamma_T * gamma_E - 1 ||^2 + || beta_T + beta_E ||^2 +
+            || gamma_A * gamma_f - 1 ||^2 + || beta_A + beta_f ||^2
+        )
+
+    At initialization (gamma = 1, beta = 0) every term is exactly zero:
+    gamma_T * gamma_E = 1 * 1 = 1 so (gamma_T * gamma_E - 1) = 0; beta_T + beta_E
+    = 0 + 0 = 0. The constraint keeps register partners near their involution
+    during training, modulated by lambda (default 0.1 per ADR-01).
+
+    Args:
+        lambda_involution: Scalar weight on the constraint. Default 0.1 per
+            ADR-01; tunable based on training dynamics.
+        involution_pairs: Optional override for the (idx_a, idx_b) pair list.
+            Defaults to the authoritative pairs T<->E, A<->f from register_film.
+    """
+
+    def __init__(
+        self,
+        lambda_involution: float = 0.1,
+        involution_pairs: Optional[list[tuple[int, int]]] = None,
+    ) -> None:
+        super().__init__()
+        self.lambda_involution = lambda_involution
+        self.involution_pairs = (
+            list(involution_pairs)
+            if involution_pairs is not None
+            else list(INVOLUTION_REGISTER_PAIRS)
+        )
+
+    @staticmethod
+    def _extract_gamma_beta(
+        source: Union[RegisterFiLM, tuple[torch.Tensor, torch.Tensor]],
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        if isinstance(source, RegisterFiLM):
+            return source.gamma, source.beta
+        if isinstance(source, tuple) and len(source) == 2:
+            return source[0], source[1]
+        raise TypeError(
+            "InvolutionConstraintLoss expects a RegisterFiLM instance or a "
+            "(gamma, beta) tensor tuple; got {type!r}".format(type=type(source))
+        )
+
+    def involution_loss(
+        self,
+        source: Union[RegisterFiLM, tuple[torch.Tensor, torch.Tensor]],
+    ) -> torch.Tensor:
+        """Compute the soft involution constraint loss.
+
+        Args:
+            source: Either a RegisterFiLM module or a (gamma, beta) tensor
+                tuple with shapes (num_registers, d_model).
+
+        Returns:
+            Scalar loss tensor: lambda * sum over pairs of
+            ||gamma_a * gamma_b - 1||^2 + ||beta_a + beta_b||^2.
+        """
+        gamma, beta = self._extract_gamma_beta(source)
+
+        total = torch.zeros((), device=gamma.device, dtype=gamma.dtype)
+        ones = torch.ones_like(gamma[0])
+
+        for idx_a, idx_b in self.involution_pairs:
+            gamma_term = gamma[idx_a] * gamma[idx_b] - ones
+            beta_term = beta[idx_a] + beta[idx_b]
+            total = total + (gamma_term**2).sum() + (beta_term**2).sum()
+
+        return self.lambda_involution * total
+
+    def forward(
+        self,
+        source: Union[RegisterFiLM, tuple[torch.Tensor, torch.Tensor]],
+    ) -> torch.Tensor:
+        return self.involution_loss(source)
 
 
 class LacunarityRegularizationLoss(nn.Module):
