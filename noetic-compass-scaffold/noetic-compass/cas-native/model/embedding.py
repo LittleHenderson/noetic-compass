@@ -110,25 +110,35 @@ class CognitiveStateEmbedding(nn.Module):
 
 
 class CognitiveStateEmbeddingWithRegister(nn.Module):
-    """CognitiveStateEmbedding composed with a RegisterFiLM modulation.
+    """CognitiveStateEmbedding composed with RegisterFiLM modulation.
 
     This class adds Phenomenological Register (CAS v7.5) integration on top of
-    the base CognitiveStateEmbedding. The FiLM modulation is applied to the
-    pre-simplex logits produced by the base projection: it modulates the
-    register's operational character without altering that the output lies on
-    the 40-dim open probability simplex.
+    the base CognitiveStateEmbedding. Two FiLM modules are maintained:
 
-    Register-neutral mode (register_idx=None) is byte-for-byte identical to the
-    base CognitiveStateEmbedding forward, preserving CAS v7.4 backward
+    - ``register_film`` — operates at ``register_dim`` (default = ``num_states``,
+      40) on the PRE-SIMPLEX LOGITS produced by the base projection. This is
+      the v7.5 path: per-register modulation of the cognitive-state
+      distribution directly. The FiLM is applied to the 40-dim logit vector,
+      not the intermediate d_model/2 layer.
+
+    - ``register_film_dmodel`` — operates at the BASE ``d_model`` width and is
+      the consumer surface for downstream v7.7 components (ADR-02
+      EmergentRegisterBindingHead) that need register-modulated hidden states
+      at the transformer's native representation width. Without this second
+      FiLM the binding head could only consume 40-dim states, breaking the
+      ADR-01/ADR-02 contract that `d_model` is a free parameter.
+
+    Register-neutral mode (``register_idx=None``) is byte-for-byte identical
+    to the base CognitiveStateEmbedding forward, preserving CAS v7.4 backward
     compatibility (ADR-01).
 
     Args:
-        d_model: Dim of input token embeddings.
+        d_model: Dim of input token embeddings. Also the width of the
+            ``register_film_dmodel`` FiLM used by downstream binding heads.
         num_states: Size of the cognitive state simplex (default 40).
         eps: Epsilon floor for strict positivity on the open simplex.
-        register_dim: FiLM modulation dim; must equal num_states (the FiLM
-            modulates the 40-dim logits, not the intermediate d_model/2 layer).
-            Defaults to num_states for that reason.
+        register_dim: FiLM modulation dim for the pre-simplex logits; defaults
+            to ``num_states`` because the FiLM modulates the 40-dim logits.
         num_registers: Number of Phenomenological Registers (default 4: T/A/f/E).
     """
 
@@ -148,12 +158,22 @@ class CognitiveStateEmbeddingWithRegister(nn.Module):
             d_model=d_model, num_states=num_states, eps=eps
         )
 
-        # FiLM operates on the 40-dim pre-simplex logit vector so the
+        # FiLM operating on the 40-dim pre-simplex logit vector so the
         # per-register modulation affects the cognitive-state distribution
         # directly. register_dim defaults to num_states for that reason.
         self.register_dim = register_dim if register_dim is not None else num_states
         self.register_film = RegisterFiLM(
             d_model=self.register_dim,
+            num_registers=num_registers,
+        )
+        # Additional FiLM operating at the BASE d_model width. This is what
+        # downstream binding heads (ADR-02 EmergentRegisterBindingHead) consume
+        # when they need register-modulated hidden states at the transformer's
+        # native dimension. Keeping this separate from `register_film` above
+        # preserves the v7.5 simplex-modulation semantics while making d_model
+        # a free parameter end-to-end.
+        self.register_film_dmodel = RegisterFiLM(
+            d_model=d_model,
             num_registers=num_registers,
         )
 

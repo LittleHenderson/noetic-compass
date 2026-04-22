@@ -132,6 +132,7 @@ class CASTrainer:
         # so they participate in parameters() / state_dict() automatically.
         # ------------------------------------------------------------------
         self._register_film_module: Optional[nn.Module] = None
+        self._register_film_dmodel_module: Optional[nn.Module] = None
         self._involution_loss: Optional[InvolutionConstraintLoss] = None
         self._emergent_pipeline: Optional[EmergentRegisterPipeline] = None
         self._production_head: Optional[ProductionSemanticsHead] = None
@@ -214,6 +215,10 @@ class CASTrainer:
             # register_idx=None short-circuit — not on weight copy).
             self.model.v2_components["register_embedding"] = reg_emb
             self._register_film_module = reg_emb.register_film
+            # Base-d_model FiLM is the surface binding heads consume — keeping
+            # it separate from the 40-dim simplex FiLM ensures emergent-binding
+            # aligns with `CASNativeConfig.d_model` at any width (not just 128).
+            self._register_film_dmodel_module = reg_emb.register_film_dmodel
             self._involution_loss = InvolutionConstraintLoss(
                 lambda_involution=hp.lambda_involution,
             )
@@ -424,14 +429,26 @@ class CASTrainer:
 
         # Synthesize register-modulated states from the pooled hidden state by
         # applying each register's FiLM, producing a (batch, num_registers,
-        # d_model) tensor. Only meaningful when register_film is active.
-        if self._register_film_module is None:
+        # d_model) tensor. Use `register_film_dmodel` here — this FiLM is sized
+        # at CASNativeConfig.d_model (not 40) and feeds the binding head, which
+        # is also sized at d_model. Using register_film (40-dim) would fail any
+        # d_model != 40. See ADR-01/ADR-02 + embedding.py docstring.
+        film = self._register_film_dmodel_module
+        if film is None:
             return None
+        if pooled.shape[-1] != film.d_model:
+            # Dim alignment invariant: trainer instantiates register_film_dmodel
+            # at config.d_model and feeds pooled from the same d_model hidden
+            # path, so this is a programming error if it ever fires.
+            raise RuntimeError(
+                "Emergent-binding dim mismatch: pooled last-dim "
+                f"{pooled.shape[-1]} != register_film_dmodel.d_model "
+                f"{film.d_model}; this indicates broken dim propagation "
+                "from CASNativeConfig.d_model."
+            )
         states_per_register = []
-        for r_idx in range(self._register_film_module.num_registers):
-            # Project pooled to registry d_model if dims match; ADR defaults
-            # align at d_model=128.
-            state = self._register_film_module.apply_register(pooled, r_idx)
+        for r_idx in range(film.num_registers):
+            state = film.apply_register(pooled, r_idx)
             states_per_register.append(state)
         reg_states = torch.stack(states_per_register, dim=-2)  # (B, R, d)
 

@@ -355,8 +355,13 @@ class CASEvaluator:
             )
 
             outputs = self.model(input_ids, attention_mask=attention_mask)
+            # pooled is in simplex space (40-dim) because cognitive_state is
+            # post-projection. register_film modulates at register_dim (= 40
+            # by default), so this path is dim-aligned by construction — no
+            # dim-mismatch None return here.
             pooled = _masked_mean(outputs["cognitive_state"], attention_mask)
 
+            film = reg_embedding.register_film
             for i, reg_list in enumerate(register_labels_batch):
                 if not reg_list:
                     continue
@@ -368,17 +373,9 @@ class CASEvaluator:
                     # Score each register: apply FiLM and take the register
                     # producing the highest L2-norm (proxy for activation).
                     scores: list[float] = []
-                    for r_idx in range(reg_embedding.register_film.num_registers):
-                        if pooled.shape[-1] != reg_embedding.register_film.d_model:
-                            # Dim mismatch — skip this example cleanly.
-                            scores = []
-                            break
-                        modulated = reg_embedding.register_film.apply_register(
-                            pooled[i], r_idx
-                        )
+                    for r_idx in range(film.num_registers):
+                        modulated = film.apply_register(pooled[i], r_idx)
                         scores.append(float(torch.linalg.norm(modulated).item()))
-                    if not scores:
-                        continue
                     predicted = int(torch.tensor(scores).argmax().item())
                     total += 1
                     if predicted == truth_idx:
@@ -481,15 +478,27 @@ class CASEvaluator:
                 tok = tok * attention_mask.unsqueeze(-1).float()
             pooled = tok.mean(dim=1)  # (B, d_model)
 
-            if pooled.shape[-1] != reg_embedding.register_film.d_model:
-                continue
+            # Use register_film_dmodel (sized at config.d_model) not
+            # register_film (40-dim). Both FiLM modules are instantiated on
+            # the same CognitiveStateEmbeddingWithRegister — see embedding.py.
+            film = reg_embedding.register_film_dmodel
+            if pooled.shape[-1] != film.d_model:
+                # Dim propagation invariant: register_film_dmodel is sized at
+                # config.d_model and pooled is drawn from the d_model token-
+                # embedding pathway, so this should be impossible absent a
+                # programming error. Raise loudly rather than silently returning
+                # None — per Wave 7A follow-up #5 (d_model alignment).
+                raise RuntimeError(
+                    "Omega-activation dim mismatch: pooled last-dim "
+                    f"{pooled.shape[-1]} != register_film_dmodel.d_model "
+                    f"{film.d_model}; indicates broken dim propagation from "
+                    "CASNativeConfig.d_model."
+                )
 
             # Build register-modulated states + bind.
             register_states = []
-            for r_idx in range(reg_embedding.register_film.num_registers):
-                register_states.append(
-                    reg_embedding.register_film.apply_register(pooled, r_idx)
-                )
+            for r_idx in range(film.num_registers):
+                register_states.append(film.apply_register(pooled, r_idx))
             reg_states = torch.stack(register_states, dim=-2)
             bound = pipeline.binding_head(
                 reg_states,

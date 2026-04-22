@@ -266,10 +266,19 @@ class TestCognitiveStateEmbeddingWithRegister:
         assert not torch.allclose(out_A, out_f, atol=1e-4)
 
     def test_wrapped_parameter_count_includes_film(self):
-        """Total parameter count = base + 1,024 (FiLM at register_dim=40)."""
-        wrapped = CognitiveStateEmbeddingWithRegister(d_model=64)
-        base = CognitiveStateEmbedding(d_model=64)
-        expected_film_params = NUM_REGISTERS * 2 * NUM_COGNITIVE_STATES  # 4*2*40 = 320
+        """Total parameter count = base + simplex-FiLM + d_model-FiLM.
+
+        Wave 7A follow-up #5: `CognitiveStateEmbeddingWithRegister` now owns
+        TWO FiLM modules — one at register_dim=num_states (40, the v7.5 simplex
+        path) and one at the base d_model (consumed by v7.7 binding heads per
+        ADR-02). Expected extra params = 4*2*40 + 4*2*d_model.
+        """
+        d_model = 64
+        wrapped = CognitiveStateEmbeddingWithRegister(d_model=d_model)
+        base = CognitiveStateEmbedding(d_model=d_model)
+        simplex_film_params = NUM_REGISTERS * 2 * NUM_COGNITIVE_STATES  # 4*2*40 = 320
+        dmodel_film_params = NUM_REGISTERS * 2 * d_model                 # 4*2*64 = 512
+        expected_film_params = simplex_film_params + dmodel_film_params
         base_count = sum(p.numel() for p in base.parameters())
         wrapped_count = sum(p.numel() for p in wrapped.parameters())
         assert wrapped_count == base_count + expected_film_params

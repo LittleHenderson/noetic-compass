@@ -59,8 +59,15 @@ DEFAULT_SIMILARITY_THRESHOLD = 0.7  # EMPIRICALLY UNTUNED PLACEHOLDER — see AD
 # Registry capacity per ADR-02 / ADR-03 lock (20 slots, k=2 admitted at v1).
 DEFAULT_REGISTRY_CAPACITY = 20
 
-# Default model dimension (matches CognitiveStateEmbedding) per cross-cutting locked
-# decision in ADR design ledger.
+# Default model dimension per cross-cutting locked decision in the ADR design
+# ledger (ADR-01, ADR-02 both specify d=128 as the default). This is a
+# PRAGMATIC DEFAULT — callers should ALWAYS pass d_model explicitly when
+# composing with a CASNativeModel, threading it from ``CASNativeConfig.d_model``
+# so the binding layer matches the base model's hidden dim at any width
+# (64, 128, 256, 512, ...). Keeping 128 as the module-level default preserves
+# v2-scaffold tests that instantiate OmegaRegistry/EmergentRegisterBindingHead
+# without a dim argument; production wiring in trainer.py / evaluate.py is
+# explicit.
 DEFAULT_D_MODEL = 128
 
 
