@@ -184,12 +184,16 @@ class CompiledNotationSchema(BaseModel):
 class WrapResponse(BaseModel):
     """Full wrap pipeline response.
 
-    CAS v7.5 Phenomenological Register (Clarification 8) propagates through
-    the `score_registers` top-level field. When present, it is a parallel
-    list to the per-operator scores (one optional register character per
-    operator, or None for unannotated scores). When absent (or every entry
-    None), the assessment is register-neutral and the response is
-    byte-for-byte v7.4-compatible.
+    CAS v7.5/v7.7 Phenomenological Register (Clarifications 8 & 10) propagates
+    through the `score_registers` top-level field. When present, it is a
+    parallel list to the per-operator scores; each entry is either:
+      - None                — register-neutral / v7.4-compatible
+      - str in VALID_REGISTERS — v7.5 single-register (T/A/f/E)
+      - list[str]           — v7.7 register-set `|⟨…⟩` (Clarification 10 Sec 2A)
+      - str not in VALID_REGISTERS — v7.7 named emergent result (Sec 2C)
+
+    When absent (or every entry None), the assessment is register-neutral
+    and the response is byte-for-byte v7.4-compatible.
     """
 
     nccs: NccsResponse
@@ -201,26 +205,36 @@ class WrapResponse(BaseModel):
     fractal_analysis: FractalAnalysisSchema | None = None
     compiled_notation: CompiledNotationSchema | None = None
     lacunarity: dict | None = None
-    # CAS v7.5 Register data flow. One optional register character per
-    # operator score, or None for register-neutral assessments. Absent from
-    # serialized JSON when None — preserving v7.4 response shape exactly.
-    score_registers: list[str | None] | None = Field(
+    # CAS v7.5/v7.7 Register data flow. One entry per operator score. Absent
+    # from serialized JSON when None — preserving v7.4 response shape exactly.
+    score_registers: list[str | list[str] | None] | None = Field(
         default=None,
         description=(
-            "CAS v7.5 Phenomenological Register per operator score (Clarification 8). "
-            "Parallel to the 10 operator scores; each entry is one of "
-            "{T, A, f, E} or None when the score is register-neutral. "
-            "Null/absent at the top level when the assessment is "
-            "register-neutral (backward-compatible with CAS v7.4)."
+            "CAS v7.5/v7.7 Phenomenological Register per operator score "
+            "(Clarifications 8 & 10). Parallel to the 10 operator scores; "
+            "each entry is one of: None (register-neutral), a single "
+            "character in {T, A, f, E} (v7.5 single-register), a list of "
+            "such characters (v7.7 register-set `|⟨…⟩`), or a "
+            "multi-character identifier outside {T, A, f, E} (v7.7 named "
+            "emergent result, e.g. `Ω` or `TF`). Null/absent at the top "
+            "level when the assessment is register-neutral "
+            "(backward-compatible with CAS v7.4)."
         ),
     )
 
     @field_validator("score_registers")
     @classmethod
     def validate_score_registers(
-        cls, v: list[str | None] | None
-    ) -> list[str | None] | None:
-        """Validate each non-None entry is in CAS v7.5 `VALID_REGISTERS`."""
+        cls, v: list[str | list[str] | None] | None
+    ) -> list[str | list[str] | None] | None:
+        """Validate CAS v7.5 single-register, v7.7 register-set, and v7.7
+        named-emergent entries. Single-character entries must be in
+        VALID_REGISTERS; list entries must each be in VALID_REGISTERS
+        (named emergent names live on str entries, not inside lists —
+        Clarification 10 Section 3). Multi-character str entries are
+        accepted verbatim as named emergent results; the compiler Rule 4
+        validator enforces `×`-chain definition elsewhere.
+        """
         if v is None:
             return None
         if len(v) != 10:
@@ -230,11 +244,50 @@ class WrapResponse(BaseModel):
         for i, register in enumerate(v):
             if register is None:
                 continue
-            if register not in VALID_REGISTERS:
-                raise ValueError(
-                    f"score_registers[{i}]={register!r} invalid — must be one of "
-                    f"{set(VALID_REGISTERS)} (CAS v7.5 Phenomenological Register)"
-                )
+            if isinstance(register, list):
+                if len(register) == 0:
+                    raise ValueError(
+                        f"score_registers[{i}] is an empty register-set; "
+                        "CAS v7.7 Clarification 10 requires a register-set "
+                        "to specify at least one register"
+                    )
+                for j, entry in enumerate(register):
+                    if entry not in VALID_REGISTERS:
+                        raise ValueError(
+                            f"score_registers[{i}][{j}]={entry!r} invalid "
+                            f"— register-set entries must each be one of "
+                            f"{set(VALID_REGISTERS)} (CAS v7.7 "
+                            "Clarification 10 Section 3); named emergent "
+                            "results live on str entries, not inside "
+                            "register-set lists"
+                        )
+                continue
+            if isinstance(register, str):
+                # Single ASCII-letter strings are constrained to
+                # VALID_REGISTERS (v7.5). Any other str — non-ASCII single
+                # char like `Ω`, multi-char like `TF` — is a v7.7 named
+                # emergent result (Clarification 10 Section 2C) and passes
+                # verbatim.
+                if (
+                    len(register) == 1
+                    and register.isascii()
+                    and register.isalpha()
+                    and register not in VALID_REGISTERS
+                ):
+                    raise ValueError(
+                        f"score_registers[{i}]={register!r} invalid — "
+                        f"single-character register must be one of "
+                        f"{set(VALID_REGISTERS)} (CAS v7.5 "
+                        "Phenomenological Register); multi-character or "
+                        "non-ASCII identifiers are admitted as v7.7 "
+                        "named emergent results per Clarification 10 "
+                        "Section 2C"
+                    )
+                continue
+            raise ValueError(
+                f"score_registers[{i}] has unsupported type "
+                f"{type(register).__name__}; expected str, list[str], or null"
+            )
         return v
 
 

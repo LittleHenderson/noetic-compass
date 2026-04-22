@@ -786,3 +786,220 @@ def test_parse_v7_7_distinguishes_v75_single_from_v77_emergent():
     assert registers[0] in VALID_REGISTERS
     assert registers[1] == "Ω"
     assert registers[1] not in VALID_REGISTERS
+
+
+# ---------------------------------------------------------------------------
+# CAS v7.7 — operator_scoring stage dispatch integration tests
+# (Clarification 10). Verifies the production scoring pipeline routes each
+# LLM output shape to the correct parser version and preserves v7.7 register
+# metadata end-to-end through to OperatorScoreResult.score_registers.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_routes_v7_7_register_set_preserves_list():
+    """Clarification 10 Section 2A: `|⟨T,A,f⟩` routes to v7.7 parser."""
+    # Author a 10-score list with a register-set on position 0; remaining
+    # scores are register-neutral.
+    inner = "0.73|⟨T,A,f⟩, " + ", ".join(["0.5"] * 9)
+    llm_resp = LLMResponse(
+        text="Operator Scores: [" + inner + "]",
+        model="test",
+        usage={},
+    )
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    assert result.scoring_method == "self_reported"
+    assert result.fallback_reason is None
+    assert result.score_registers is not None
+    # Register-set preserved as list[str]; insertion order preserved.
+    assert result.score_registers[0] == ["T", "A", "f"]
+    # Remaining positions unannotated → None.
+    assert result.score_registers[1:] == [None] * 9
+    assert result.scores[0] == 0.73
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_routes_v7_7_named_emergent_preserves_name():
+    """Clarification 10 Section 2C: `(^3^P|A × ^3^P|f) = ^3^P|Ω` preserves Ω."""
+    # Use the fully-formed cross-register integration line with an emergent
+    # result; per Section 2C the assignment licenses the v7.7 parser.
+    lines = [
+        f"(^{i}^P|A × ^{i}^P|f × ^{i}^P|T) = ^{i}^P|Ω: 0.85"
+        for i in range(10)
+    ]
+    llm_resp = LLMResponse(text="\n".join(lines), model="test", usage={})
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    assert result.scoring_method == "self_reported"
+    assert result.fallback_reason is None
+    # Named emergent register preserved verbatim as str outside
+    # VALID_REGISTERS — downstream distinguishes it by membership test.
+    assert result.score_registers == ["Ω"] * 10
+    assert result.scores == [0.85] * 10
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_routes_single_register_to_v7_5_path():
+    """Single-register `|A` does NOT trigger v7.7 parser — v7.5 suffices."""
+    # No `|⟨` and no `= ^`; routing picks v7.5. Verify by confirming the
+    # register entry is a single-character str (v7.5 shape) not a list
+    # or named-emergent form.
+    llm_resp = LLMResponse(
+        text="Operator Scores: [0.72|A, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66]",
+        model="test",
+        usage={},
+    )
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    assert result.scoring_method == "self_reported"
+    assert result.score_registers is not None
+    assert result.score_registers[0] == "A"
+    # v7.5 shape: str (not list). Not a register-set.
+    assert isinstance(result.score_registers[0], str)
+    assert result.score_registers[1:] == [None] * 9
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_register_neutral_routes_to_v7_4_path():
+    """No `|` annotations anywhere → register-neutral; score_registers is None."""
+    llm_resp = LLMResponse(
+        text="Operator Scores: [0.72, 0.81, 0.64, 0.55, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66]",
+        model="test",
+        usage={},
+    )
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    assert result.scoring_method == "self_reported"
+    # v7.4 shape preserved: all-None register list collapses to None so
+    # downstream serialization omits the field entirely.
+    assert result.score_registers is None
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_mixed_notation_within_single_output():
+    """Mixed v7.7 register-set + v7.5 single-register + v7.4 plain in one list.
+
+    Dispatch picks v7.7 because `|⟨` appears anywhere; the v7.7 parser is a
+    strict superset of v7.5 and accepts the per-token mixture, preserving
+    each row's notation verbatim.
+    """
+    inner = "0.73|⟨A,f,T⟩, 0.81|A, 0.64, 0.55|E, 0.70, 0.68|f, 0.77, 0.60, 0.58, 0.66"
+    llm_resp = LLMResponse(
+        text="Operator Scores: [" + inner + "]",
+        model="test",
+        usage={},
+    )
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    assert result.scoring_method == "self_reported"
+    assert result.fallback_reason is None
+    assert result.score_registers is not None
+    assert result.score_registers[0] == ["A", "f", "T"]  # v7.7 register-set
+    assert result.score_registers[1] == "A"               # v7.5 single
+    assert result.score_registers[2] is None              # v7.4 neutral
+    assert result.score_registers[3] == "E"               # v7.5 single
+    assert result.score_registers[5] == "f"               # v7.5 single
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_malformed_v7_7_input_falls_back_with_reason():
+    """v7.7 parser rejects malformed input → stage surfaces clear fallback_reason."""
+    # `|⟨` signal present but `|⟨⟩` is an empty register-set — rejected by
+    # the parser per Clarification 10. However the parser raises rather
+    # than returning None for empty sets; verify the raised ValueError
+    # propagates out of the stage. (Invalid-register-letter inside the set
+    # likewise raises.) Separately, an *unclosed* `|⟨A,f` returns None and
+    # triggers the heuristic fallback with the framework-aware message.
+    llm_resp = LLMResponse(
+        text="Operator Scores: [0.5|⟨A,f, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]",
+        model="test",
+        usage={},
+    )
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    # The v7.7 parser returns None on unclosed `⟨…`; the stage falls back.
+    assert result.scoring_method == "heuristic_fallback"
+    assert result.fallback_reason is not None
+    # Error message mentions Clarification 10 / register-set per contract.
+    assert "Clarification 10" in result.fallback_reason
+    assert "register-set" in result.fallback_reason
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_backward_compat_v7_5_register_annotated():
+    """Existing v7.5 register-annotated flow is unchanged by v7.7 dispatch."""
+    # Replicates the pre-existing test at line ~573 exactly; verifies the
+    # dispatch adds no observable behavior change on v7.5 input.
+    llm_resp = LLMResponse(
+        text="Operator Scores: [0.72|T, 0.81|A, 0.64|f, 0.55|E, 0.70, 0.68, 0.77, 0.60, 0.58, 0.66]",
+        model="test",
+        usage={},
+    )
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    assert result.scoring_method == "self_reported"
+    assert result.score_registers == [
+        "T", "A", "f", "E", None, None, None, None, None, None,
+    ]
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_v7_7_registers_flow_to_operator_score_result():
+    """End-to-end: v7.7 register-set reaches OperatorScoreResult.score_registers."""
+    # Covers the aggregate-level contract: the OperatorScoreResult dataclass
+    # accepts the widened entry types (list[str], str-named-emergent) and
+    # its __post_init__ validation passes.
+    lines = [f"^{i}^P|⟨A,f,T⟩: 0.4" for i in range(10)]
+    llm_resp = LLMResponse(text="\n".join(lines), model="test", usage={})
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    # Schema preserved: the dataclass validator ran __post_init__ without
+    # raising, so the register-set list entries are recognized as valid.
+    assert result.score_registers is not None
+    assert all(entry == ["A", "f", "T"] for entry in result.score_registers)
+    # Downstream profile_score and involution_balances computed as normal
+    # against the 10 numeric scores — v7.7 notation does not disrupt the
+    # numeric aggregation path.
+    assert len(result.involution_balances) == 3
+    assert 0 <= result.profile_score <= 1
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_v7_7_with_whitespace_variations():
+    """Edge case: whitespace around register-set and named-emergent tokens."""
+    # Clarification 10 examples use `(chain) = ^n^D|Ω: v` with optional
+    # whitespace around `=`. Confirm the dispatch detector tolerates
+    # author-level whitespace variations without falling back.
+    lines = [
+        f"(^{i}^P|A × ^{i}^P|f)   =   ^{i}^P|Ψ: 0.6"
+        for i in range(10)
+    ]
+    llm_resp = LLMResponse(text="\n".join(lines), model="test", usage={})
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    assert result.scoring_method == "self_reported"
+    assert result.fallback_reason is None
+    assert result.score_registers == ["Ψ"] * 10
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_v7_7_multiple_register_sets_one_output():
+    """Edge case: multiple `|⟨…⟩` annotations across different positions."""
+    inner = "0.4|⟨A,T⟩, 0.5|⟨f,E⟩, 0.6|⟨T,A,f,E⟩, 0.7, 0.8, 0.5, 0.5, 0.5, 0.5, 0.5"
+    llm_resp = LLMResponse(
+        text="Operator Scores: [" + inner + "]",
+        model="test",
+        usage={},
+    )
+    result = await operator_scoring(llm_resp, scoring_mode="self_reported")
+    assert result.scoring_method == "self_reported"
+    assert result.fallback_reason is None
+    assert result.score_registers is not None
+    assert result.score_registers[0] == ["A", "T"]
+    assert result.score_registers[1] == ["f", "E"]
+    assert result.score_registers[2] == ["T", "A", "f", "E"]
+    assert result.score_registers[3:] == [None] * 7
+
+
+@pytest.mark.asyncio
+async def test_operator_scoring_v7_7_dispatch_does_not_affect_heuristic_fallback():
+    """v7.7 dispatch is scoped to `self_reported` mode only — not heuristic."""
+    # Text contains v7.7 notation but mode is heuristic_fallback; dispatch
+    # must NOT run and result must be register-neutral.
+    lines = [f"^{i}^P|⟨A,f,T⟩: 0.4" for i in range(10)]
+    llm_resp = LLMResponse(text="\n".join(lines), model="test", usage={})
+    result = await operator_scoring(llm_resp, scoring_mode="heuristic_fallback")
+    assert result.scoring_method == "heuristic_fallback"
+    assert result.score_registers is None

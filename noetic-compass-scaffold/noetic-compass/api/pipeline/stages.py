@@ -65,18 +65,27 @@ class OperatorScoreResult:
     scorer_model: str | None = None
     scorer_provider: str | None = None
     fallback_reason: str | None = None
-    # CAS v7.5 Phenomenological Register axis (Clarification 8). Parallel
-    # to `scores`: one optional register character per operator score. None
-    # at a position means the LLM did not annotate that score with a register
-    # (register-neutral / v7.4-compatible). When every entry is None (or the
-    # field is None), the full operator-score set is register-neutral and the
-    # response serializes identically to CAS v7.4 shape.
+    # CAS v7.5/v7.7 Phenomenological Register axis (Clarification 8 / 10).
+    # Parallel to `scores`: one entry per operator score, where each entry is:
+    #   - None           — register-neutral / v7.4-compatible
+    #   - str in VALID_REGISTERS — v7.5 single-register annotation (T/A/f/E)
+    #   - list[str]      — v7.7 register-set `|⟨…⟩` (Clarification 10 Sec 2A/3),
+    #                      each element a VALID_REGISTERS letter
+    #   - str NOT in VALID_REGISTERS — v7.7 named emergent result `|Ω`, `|TF`
+    #                      (Clarification 10 Sec 2C)
     #
-    # Validation: each non-None entry MUST be in `VALID_REGISTERS` (imported
-    # single-source from `api.notation.compiler`). The parser applies this
-    # validation at input-boundary parse time; this dataclass trusts its
-    # source but `__post_init__` re-verifies defensively.
-    score_registers: list[str | None] | None = None
+    # When every entry is None (or the field is None), the full operator-score
+    # set is register-neutral and the response serializes identically to
+    # CAS v7.4 shape for byte-for-byte backward compatibility.
+    #
+    # Validation: single-letter entries MUST be in `VALID_REGISTERS` (imported
+    # single-source from `api.notation.compiler`); list entries must each be
+    # valid registers. Strings outside VALID_REGISTERS (length > 1 or
+    # non-ASCII) are treated as named emergent results and accepted verbatim —
+    # the parser's register-set path enforces VALID_REGISTERS membership for
+    # single-letter content; named-emergent identifiers are validated for
+    # `×`-chain correctness by the compiler (Rule 4), not here.
+    score_registers: list[str | list[str] | None] | None = None
 
     def __post_init__(self) -> None:
         if self.score_registers is None:
@@ -89,11 +98,53 @@ class OperatorScoreResult:
         for i, register in enumerate(self.score_registers):
             if register is None:
                 continue
-            if register not in VALID_REGISTERS:
-                raise ValueError(
-                    f"score_registers[{i}]={register!r} is not a valid CAS v7.5 "
-                    f"Phenomenological Register (expected one of {set(VALID_REGISTERS)})"
-                )
+            if isinstance(register, list):
+                # v7.7 register-set: every element must be a VALID_REGISTERS
+                # letter. Clarification 10 Section 3.
+                if len(register) == 0:
+                    raise ValueError(
+                        f"score_registers[{i}] is an empty register-set; CAS "
+                        "v7.7 Clarification 10 requires a register-set to "
+                        "specify at least one register"
+                    )
+                for j, entry in enumerate(register):
+                    if entry not in VALID_REGISTERS:
+                        raise ValueError(
+                            f"score_registers[{i}][{j}]={entry!r} is not a "
+                            f"valid CAS v7.5/v7.7 Phenomenological Register "
+                            f"(expected one of {set(VALID_REGISTERS)}); named "
+                            "emergent results must appear on the `= X|name` "
+                            "form, not inside a register-set"
+                        )
+                continue
+            if isinstance(register, str):
+                # Single-character v7.5 register OR v7.7 named emergent result
+                # (Clarification 10 Section 2C). Distinguishing rule:
+                # ASCII-letter strings of length 1 are constrained to
+                # VALID_REGISTERS (otherwise they would silently pass as
+                # named emergents and mask v7.5 typos like `|Q` or `|F`).
+                # Any other string — non-ASCII single char (e.g., `Ω`, `Ψ`),
+                # multi-char identifier (e.g., `TF`), etc. — is a named
+                # emergent and passes verbatim.
+                if (
+                    len(register) == 1
+                    and register.isascii()
+                    and register.isalpha()
+                    and register not in VALID_REGISTERS
+                ):
+                    raise ValueError(
+                        f"score_registers[{i}]={register!r} is not a valid "
+                        f"CAS v7.5 Phenomenological Register "
+                        f"(expected one of {set(VALID_REGISTERS)}); "
+                        "multi-character or non-ASCII identifiers are "
+                        "admitted as v7.7 named emergent results per "
+                        "Clarification 10 Section 2C"
+                    )
+                continue
+            raise ValueError(
+                f"score_registers[{i}] has unsupported type "
+                f"{type(register).__name__}; expected str, list[str], or None"
+            )
 
 
 @dataclass
@@ -376,12 +427,14 @@ async def operator_scoring(
     scorer_provider: str | None = None
     fallback_reason: str | None = None
     raw_scores_0_to_10: list[float]
-    # CAS v7.5 Register data flow (Clarification 8): per-score Register
-    # characters propagated from the parser. None means the path did not
-    # produce register metadata (heuristic fallback, secondary LLM scorer
-    # without register emission), in which case the result carries the
-    # register-neutral v7.4-shape for byte-for-byte backward compatibility.
-    score_registers: list[str | None] | None = None
+    # CAS v7.5/v7.7 Register data flow (Clarifications 8 & 10): per-score
+    # register metadata propagated from the parser. None means the path did
+    # not produce register metadata (heuristic fallback, secondary LLM
+    # scorer without register emission), in which case the result carries
+    # the register-neutral v7.4-shape for byte-for-byte backward
+    # compatibility. Each non-None entry is str (v7.5 single-register OR
+    # v7.7 named emergent result), list[str] (v7.7 register-set), or None.
+    score_registers: list[str | list[str] | None] | None = None
 
     if scoring_mode == "secondary_llm":
         if prompt_text and scorer_connector:
@@ -411,8 +464,15 @@ async def operator_scoring(
             raw_scores_0_to_10 = [round(score * 10.0, 4) for score in scores]
             fallback_reason = "secondary scorer unavailable"
     elif scoring_mode == "self_reported":
-        parsed = _parse_self_reported_scores_with_registers(llm_response.text)
-        if parsed is not None:
+        # CAS v7.7 dispatch (Clarification 10): select the parser version
+        # that matches the notation the LLM actually emitted. Register-set
+        # `|⟨…⟩` and named emergent assignments `= ^` require the v7.7
+        # parser; single-register annotations `|R` use the v7.5 parser;
+        # register-neutral output collapses to the v7.4 path (which lives
+        # inside the v7.5 parser).
+        dispatch = _dispatch_self_reported_parse(llm_response.text)
+        if dispatch is not None:
+            parsed, parser_version = dispatch
             scores, parsed_registers = parsed
             raw_scores_0_to_10 = [round(score * 10.0, 4) for score in scores]
             scoring_method = "self_reported"
@@ -424,7 +484,12 @@ async def operator_scoring(
         else:
             scores = _heuristic_operator_scores(llm_response.text)
             raw_scores_0_to_10 = [round(score * 10.0, 4) for score in scores]
-            fallback_reason = "base model did not return valid self-reported operator scores"
+            fallback_reason = (
+                "base model did not return valid self-reported operator "
+                "scores (tried CAS v7.7 register-set / named-emergent "
+                "parser per Clarification 10, v7.5 register parser per "
+                "Clarification 8, and v7.4 register-neutral parser)"
+            )
     else:
         scores = _heuristic_operator_scores(llm_response.text)
         raw_scores_0_to_10 = [round(score * 10.0, 4) for score in scores]
@@ -910,6 +975,102 @@ def _parse_self_reported_scores_v7_7(
         )
 
     return None
+
+
+# ---------------------------------------------------------------------------
+# CAS v7.7 parser dispatch (Clarification 10). The self-reported scoring
+# stage routes an LLM output to the narrowest parser that recognizes its
+# notation:
+#
+#   1. Register-set `|⟨…⟩` OR named emergent assignment `= ^…` → v7.7 parser
+#      (`_parse_self_reported_scores_v7_7`). Named-emergent `|Ω`, `|TF` also
+#      trigger the v7.7 parser because only the v7.7 grammar accepts
+#      multi-character / non-VALID_REGISTERS identifiers after `|`.
+#   2. Single-register annotation `|[TAfE]` → v7.5 parser
+#      (`_parse_self_reported_scores_with_registers`).
+#   3. Register-neutral → v7.5 parser (covers v7.4 plain numeric lists; the
+#      v7.5 parser is a strict superset of v7.4 on register-neutral input).
+#
+# The dispatcher only SELECTS a parser; each parser validates its own
+# grammar. If the selected parser returns None, the dispatcher returns None
+# and the caller falls back to heuristics with a descriptive fallback_reason.
+# ---------------------------------------------------------------------------
+
+# Literal indicators of v7.7-specific notation within an LLM output. These
+# are textual-level signals: the dispatcher picks a parser based on whether
+# any of these appear anywhere in the text, with the understanding that
+# false positives are cheap (the v7.7 parser is a strict superset of v7.5
+# on the grammar forms v7.5 accepts, so selecting v7.7 on ambiguous input
+# is safe).
+_V7_7_REGISTER_SET_OPEN_MARKER = "|⟨"
+# Named emergent assignment `= ^…` per Clarification 10 Section 2C. The
+# `|` after the `^…^D` state label carries the emergent identifier. The
+# assignment line shape is `(×-chain) = ^n^D|<name>: value`; the presence
+# of `= ^` followed by a digit distinguishes it from an incidental `=` in
+# prose. We use a regex so whitespace between `=` and `^` is tolerated
+# per the author convention in Clarification 10 examples.
+_V7_7_NAMED_EMERGENT_ASSIGN_RE = re.compile(r"=\s*\^\d")
+
+
+def _looks_like_v7_7_output(text: str) -> bool:
+    """Detect CAS v7.7-only notation per Clarification 10 Section 3.
+
+    Returns True when the text contains register-set `|⟨…⟩` notation OR a
+    named emergent assignment `= ^<digit>…`. Otherwise False — v7.5 or
+    v7.4 parsers are sufficient.
+    """
+    if _V7_7_REGISTER_SET_OPEN_MARKER in text:
+        return True
+    if _V7_7_NAMED_EMERGENT_ASSIGN_RE.search(text):
+        return True
+    return False
+
+
+# Register annotation detector for v7.5 vs v7.4 selection. Accepts
+# `|T|A|f|E` as a sufficient signal; false positives are acceptable because
+# the v7.5 parser is a strict superset of v7.4 on register-neutral input.
+# The `|f` lowercase is authoritative per Clarification 8.
+_V7_5_REGISTER_MARKER_RE = re.compile(r"\|[TAfE](?![A-Za-z])")
+
+
+def _dispatch_self_reported_parse(
+    text: str,
+) -> tuple[
+    tuple[list[float], list[str | list[str] | None]],
+    str,
+] | None:
+    """Dispatch to the correct parser version based on output notation.
+
+    Returns ((scores, registers), parser_version) on success or None on
+    failure. `parser_version` is one of "v7.7", "v7.5", "v7.4" and is
+    returned so the caller (operator_scoring stage) can record which
+    grammar was exercised in diagnostics or provenance.
+
+    Routing heuristic (per Clarification 10 Section 3):
+      - `|⟨` present OR `= ^` present → v7.7 parser
+      - any `|[TAfE]` present         → v7.5 parser
+      - otherwise                      → v7.4-style register-neutral parse
+                                         (handled by the v7.5 parser, which
+                                         is a strict superset on
+                                         register-neutral input)
+    """
+    if _looks_like_v7_7_output(text):
+        parsed_v7_7 = _parse_self_reported_scores_v7_7(text)
+        if parsed_v7_7 is None:
+            return None
+        return parsed_v7_7, "v7.7"
+
+    # Fall through to the v7.5 parser. Its return type is the narrower
+    # `tuple[list[float], list[str | None]]`; widen to the dispatcher's
+    # union type for uniform caller handling.
+    parsed_v7_5 = _parse_self_reported_scores_with_registers(text)
+    if parsed_v7_5 is None:
+        return None
+    scores, registers = parsed_v7_5
+    # Classify as v7.5 if any register was actually emitted, else v7.4.
+    parser_version = "v7.5" if any(r is not None for r in registers) else "v7.4"
+    widened_registers: list[str | list[str] | None] = [r for r in registers]
+    return (scores, widened_registers), parser_version
 
 
 def _heuristic_operator_scores(text: str) -> list[float]:
