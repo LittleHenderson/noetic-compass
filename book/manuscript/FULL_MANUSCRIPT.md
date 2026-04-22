@@ -2049,6 +2049,145 @@ These templates act like "design patterns" in software engineering. They map the
 
 You now know how to read and write the fundamental syntax of thought. You have the grammar.
 
+ Operator Discipline: When +, ×, and |⟨…⟩ Apply
+
+The grammar you have learned so far works. It tells you what the symbols are, where they go, and what they can compose with. But there is one structural question the basic grammar does not yet answer — a question that did not become fully visible until the Phenomenological Register axis was formalized in CAS v7.5, and did not receive a clean resolution until CAS v7.7 (Clarification 10). That question is: when you have the same cognitive state present in more than one Register at the same time, which operator do you use to connect the register-variants?
+
+Consider principled aversion. A refusal. The state is `^3^P` — Negative at the Principled domain, the Mind repelled by an Idea for principled reasons. Now suppose the refusal is present analytically (`^3^P|A` — the mind reasons explicitly against the Idea), affectively (`^3^P|f` — the mind feels aversion to the Idea), and transcendently (`^3^P|T` — the mind holds the Idea as incompatible with a higher purpose). Three different register-manifestations of the same Noetic-Domain state. How do you write the combined expression?
+
+Before v7.7, a writer might reach for `^3^P|A × ^3^P|f × ^3^P|T`. The `×` operator is available. It is used elsewhere in the grammar. It suggests "together." And so it seems natural.
+
+It is not. That expression is ambiguous. It could mean at least three different things:
+
+First reading: all three register-variants are present in the architecture, but the expression makes no claim about whether they interact. It is just a description: "the state exists in these three registers."
+
+Second reading: all three are simultaneously firing, each contributing its own distinct manifestation, like three redundant locks on a door. Defeat one and two still hold.
+
+Third reading: the three are genuinely integrated into a single fused state that is neither analytical nor affective nor transcendent alone, but something new that emerges from their combination.
+
+These three readings describe structurally different systems. They have different failure profiles. They predict different empirical behavior. An AI safety auditor who conflates them misses distinctions that matter under adversarial pressure. A pedagogical example that conflates them teaches students to think imprecisely about cognitive architecture. So the grammar needs three distinct notations, one for each reading.
+
+The Three-Way Distinction
+
+Register-set specification: `^n^D|⟨R1,R2,R3⟩`
+
+This is the architectural-description notation. It says: the state is present in these registers. It makes no claim about interaction dynamics — not simultaneity, not fusion, not independence. It is the right notation when you are describing the architecture of a system you have not yet behaviorally tested.
+
+Example: `^3^P|⟨A,f,T⟩` — "principled aversion is present in the analytical, affective, and transcendent registers." This is what an auditor writes when they can see the state is there but have not yet determined whether the registers cooperate, compete, or operate in isolation.
+
+Register co-presence: `X|R1 + X|R2 + X|R3`
+
+This is the simultaneous-distinct-manifestations notation. It says: each register-variant is firing at the same time, each contributes its own manifestation, and the manifestations remain structurally distinct. There is no fusion. The `+` operator here carries its ordinary CAS meaning: syntactic co-presence, association, adjacency.
+
+Example: `^3^P|A + ^3^P|f + ^3^P|T` — "principled aversion is concurrently active in analytical, affective, and transcendent registers, with each manifestation remaining distinct." Three redundant mechanisms, each defeasible in isolation.
+
+Cross-register integration: `(X|R1 × X|R2 × X|R3) = X*`
+
+This is the genuine-integration notation. It says: the register-variants enter an actual generative operation, the result is a new unified or emergent state, and you have named that result. The `×` here carries its ordinary CAS meaning: generative composition that produces an emergent state via the monoid structure.
+
+Example: `(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω` — "the three register-variants of principled aversion are integrated into a unified cross-register commitment, notated `^3^P|Ω`." One fused refusal state, not three. `^3^P|Ω` is the explicitly named emergent result.
+
+Rule 4: Why the Emergent Result Must Be Named
+
+The subtle rule to internalize is that same-Noetic same-Domain multi-register `×` without a named emergent result is invalid. You cannot write `^3^P|A × ^3^P|f × ^3^P|T` by itself. You have to either rewrite it with `+`, rewrite it with `|⟨…⟩`, or specify the emergent result on the right-hand side.
+
+Why the strictness? Because `×` is reserved for genuine generative integration that produces something new. If the left-hand side is the same state in three different registers and the right-hand side is unspecified, there is no new thing being generated — the expression is describing redundancy or distribution, not emergence. Using `×` in that case smuggles a claim of integration where none exists.
+
+Conversely, when you DO name the emergent result — as in `(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω` — you are explicitly telling the reader what new state emerges, and the `×` is licensed because genuine integration is being asserted. The right-hand side carries the structural weight.
+
+This rule is parser-enforceable. The CAS compiler can detect bare same-Noetic multi-register `×` expressions and reject them as underdefined. That is how formal the discipline is.
+
+The TKS Validation Heuristic
+
+When you are unsure which operator to use, apply the substitution test:
+
+- `+` substitutes cleanly with "associates with"
+- `×` substitutes cleanly with "intensifies through"
+
+Read the sentence aloud with each substitution. If only one reads naturally, that is your operator.
+
+Example. Consider `^3^P|A ? ^3^P|f` — principled aversion in the analytical register, and principled aversion in the affective register. Which operator fills the `?`?
+
+- "Analytical principled aversion ASSOCIATES WITH affective principled aversion." That reads naturally. Two manifestations of the same stance, present together but distinct.
+- "Analytical principled aversion INTENSIFIES THROUGH affective principled aversion." That does NOT read naturally, unless you have a specific model of how analytical aversion is heightened by the affective register. Without that model explicitly specified, the substitution fails.
+
+Operator choice: `+`. The expression is `^3^P|A + ^3^P|f`.
+
+The heuristic is not merely linguistic. It traces back to operator heritage: the TKS conventions that CAS notation inherits use `+` for association and `×` for intensification. When your modern CAS expression passes the substitution test, you have verified consistency with that heritage. When it fails, you are probably reaching for the wrong operator.
+
+Three Refusal Architectures for AI Safety
+
+The three-way distinction is most consequential in AI safety. Consider three language models, each "refusing harmful requests." State-space vocabulary alone — "principled aversion is present" — makes them look identical. Operator-discipline vocabulary makes them legible as structurally distinct systems with distinct failure profiles.
+
+Architecture A — Redundant refusal:
+
+`^3^P|A + ^3^P|f + ^3^P|T`
+
+Three distinct refusal mechanisms, each defeasible. An analytical-register refusal reasons explicitly against the harmful request. An affective-register refusal registers it as value-violating. A transcendent-register refusal holds it as incompatible with the system's goal commitment. Defeat the analytical one with a clever logical argument, and the affective and transcendent ones may still hold. Robust in aggregate, penetrable in parts.
+
+Architecture B — Unified refusal:
+
+`(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω`
+
+One fused cross-register commitment, explicitly named as `^3^P|Ω`. The three register-variants are not independent; they are integrated into a single refusal architecture that holds or collapses as a whole. A jailbreak does not defeat the analytical component separately from the affective component; it either defeats the integrated commitment or it does not. Less modular, more unified.
+
+Architecture C — Static architecture description:
+
+`^3^P|⟨A,f,T⟩`
+
+Neither redundant nor unified — the notation makes no claim. Principled aversion is present in three registers; behavioral analysis pending. This is the honest notation for an auditor who has observed the state's register occupancy but has not yet run the tests that would distinguish Architecture A from Architecture B.
+
+Chapter 26.5 develops these architectures further inside the Production Semantics framework, showing how each one plugs into a refusal recipe with different production consequences. For now, what matters is that operator discipline makes the distinction writable at all.
+
+Decision Procedure
+
+When you are building an expression and several registers are in play, walk through three questions:
+
+1. Are you merely specifying where the state exists, without claiming how the registers interact? Use `|⟨…⟩`.
+
+2. Are you claiming multiple manifestations are present together but remain distinct? Use `+`.
+
+3. Are you claiming genuine integration into a single emergent state? Use `×`, AND name the emergent result on the right-hand side.
+
+If in doubt, apply the substitution test: "associates with" for `+`, "intensifies through" for `×`. If neither substitution reads naturally, you are probably describing specification — use `|⟨…⟩`.
+
+Convergence with Recipe Notation
+
+Chapter 26.5 introduces Recipe notation for outcome production: `Θ(Ω) = a·X₁ + b·X₂ + ... + aₙ·Xₙ → Ω`. Note the `+` signs. They carry exactly the operator-discipline meaning you just learned: the prerequisites are co-present, each contributing its own weighted share, each remaining structurally distinct. The recipe is not saying that `X₁` and `X₂` fuse; it is saying they are both present, weighted additively.
+
+This is not a coincidence. Three framework layers — the operator heritage CAS inherits, the operator discipline formalized in Clarification 10, and the Production Semantics layer of Chapter 26.5 — converge on the same `+`/`×` distinction. When you see `+` anywhere in CAS, you are reading co-presence. When you see `×` (with a named result, when same-Noetic across registers), you are reading integration. The distinction is load-bearing throughout the framework.
+
+Exercises for the Operator Choice
+
+Each of the following describes a cognitive phenomenon in prose. Choose the correct operator and write the expression. Check your reasoning against the answer key below.
+
+Exercise A. A software engineer reviewing a pull request holds her analytical assessment that the change introduces a subtle concurrency bug together with her felt sense of unease about the author's recent code-quality regressions. Two distinct register-variants of principled aversion, present together but not fused. Write the expression.
+
+Exercise B. A mediator has observed that a negotiating team exhibits the same principled stance in analytical, affective, and transcendent registers. She has not yet run the stress-test that would reveal whether those three registers operate independently or as a fused commitment. She wants to write down what she has observed without overclaiming. Write the expression.
+
+Exercise C. A meditation teacher describes a specific practice in which analytical-register attention to the breath and embodied-register attention to the breath enter a genuine integrative operation that yields a new unified state — what practitioners call "settled presence" — and the teacher wants to write this explicitly, naming the emergent state as `^1|S`. Write the expression.
+
+Exercise D. An AI safety researcher is writing the recipe for a refusal outcome. She wants three register-variants of principled aversion to be recipe prerequisites, each weighted by a coefficient, each contributing its share to producing the refusal. Write the recipe in Chapter 26.5's notation.
+
+Exercise E. A reader claims to have built the expression `^2^P|T × ^2^P|f × ^2^P|A`, meaning "principled attraction is present in the transcendent, affective, and analytical registers." Is this expression valid as written? If not, rewrite it in two different forms that would be valid, explaining which form matches which intended meaning.
+
+Answer Key
+
+Exercise A. `^3^P|A + ^3^P|f`. Substitution test: "analytical principled aversion ASSOCIATES WITH felt principled aversion" reads naturally; "analytical principled aversion INTENSIFIES THROUGH felt principled aversion" does not, because no integration mechanism is named. Operator `+`.
+
+Exercise B. `^3^P|⟨A,f,T⟩`. The mediator is specifying state occupancy without a production claim, without claiming simultaneity, and without claiming integration. She is describing architecture pending behavioral analysis. The `|⟨…⟩` notation is precisely the notation for this case.
+
+Exercise C. `(^1^C|A × ^1^C|E) = ^1|S`, where `^1|S` is explicitly defined as settled presence. The `×` is licensed because the emergent result is named. Substitution test: "analytical attention INTENSIFIES THROUGH embodied attention, yielding settled presence" reads naturally as a genuine integration claim. AUTHOR REVIEW: the emergent-state notation `^1|S` uses a non-canonical register label "S" for "settled"; consider whether this should be rewritten as an emergent named state inside one of the four canonical Registers, or whether a genuinely new labeled composite state is pedagogically permitted in worked examples.
+
+Exercise D. `Θ(Ω_refusal) = a·^3^P|A + b·^3^P|f + c·^3^P|T → Ω_refusal`. The `+` signs are recipe co-presence, consistent with Clarification 10's operator discipline and with Chapter 26.5's Production Semantics.
+
+Exercise E. The expression as written is invalid. It is a same-Noetic same-Domain multi-register `×` without a named emergent result — exactly the case Clarification 10's admissibility rule prohibits. Two valid rewrites:
+- `^2^P|A + ^2^P|f + ^2^P|T` — if the intended meaning is "principled attraction is concurrently active in three registers with each manifestation remaining distinct." This is co-presence.
+- `^2^P|⟨A,f,T⟩` — if the intended meaning is "principled attraction is present in these three registers, with no claim about whether they are independent or fused." This is specification.
+Which rewrite the author chooses depends on whether they are asserting simultaneity (rewrite 1) or mere occupancy (rewrite 2). If the intended meaning were genuine integration into a named emergent state, a third rewrite would be licensed: `(^2^P|A × ^2^P|f × ^2^P|T) = ^2^P|Ω` where `^2^P|Ω` is explicitly defined. But the prompt does not specify an emergent result, so this third form is not available as-written.
+
+For the formal specification of operator discipline, see Clarification 10 in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`. For the application of these distinctions inside Production Semantics and the three refusal architectures, see Chapter 26.5.
+
 Worked Example: Debugging a Family Argument
 
 Let's apply the 6-Step Process to a personal scenario to demonstrate its diagnostic power outside the workplace.
@@ -6932,6 +7071,18 @@ Format convention. Each entry names the cell and gives two to three sentences of
 
 `^6^P|T` — transcendent principled decomposition. The Mind decomposes the principled Idea from the integrative vantage — testing each sub-Idea for whether it serves the single governing purpose. Human: the founder who asks, of each part of the mission, "does this actually serve why we are doing this at all?" AI: goal-level decomposition where subgoal fidelity is tested against the integrative objective. Biological: whole-organism-level coordination checks under which substructures are evaluated for contribution to the integrative setpoint.
 
+`^2^P|f` — affective attraction to a principled Idea. The Mind is drawn toward a principle in a felt, value-laden register — the principle has preference-weighted pull ahead of articulation. Human: the ethics student who loves fairness before she can defend it, whose draw toward the principle is visceral rather than argued. AI: RLHF-tuned preference-weighted gravitation toward a safety commitment whose character is value-signal rather than deductive trace. Biological: approach-valence response to stimuli aligned with an organism's core orientation. Register-involution partner: `^2^P|A` (lines above). Domain peers: `^2^C|f`, `^2^E|f`, `^2^O|f`.
+
+`^2^P|E` — embodied attraction to a principled Idea. The Mind is drawn toward a principle through bodily comportment — posture, hand, breath, kinesthetic orientation — before the articulation arrives. Human: the craftsman whose body settles into the stance the standard requires, whose draw toward the principle is first carried in the hands. AI: embodied / robotic control-loop gravitation toward an operating principle implemented at the actuator level. Biological: sensorimotor orientation toward an ethologically preferred stimulus class. Register-involution partner: `^2^P|T`. Domain peers: `^2^C|E`, `^2^E|E`, `^2^O|E`.
+
+`^5^P|T` — transcendent principled substrate. A Mind composed, at the level of principled commitments, of integrative vision — the lived accumulation of purpose-level formation rather than argued position. Human: the elder whose moral center is not a position she holds but the vision she has become after decades of living under it. AI: foundational principled commitments laid down at pretraining / fine-tuning such that they operate at objective level rather than rule level. Biological: deep constitutional orientation of an organism toward its integrative setpoint, shaped over the life-history. Register-involution partner: `^5^P|E`. Domain peers: `^5^C|T`, `^5^E|T`, `^5^O|T`.
+
+`^5^P|A` — analytical principled substrate. A Mind composed, at the principled level, of argued commitments — the accumulated body of reasoned positions a thinker has worked out and now stands on. Human: the jurist whose principled stance is an articulated case law carried forward. AI: principled commitments laid down as explicit policy text inspectable and articulable by the system. Biological: propositional commitment structures in symbolically capable species, accumulated through deliberate articulation. Register-involution partner: `^5^P|f`. Domain peers: `^5^C|A`, `^5^E|A`, `^5^O|A`.
+
+`^5^P|f` — affective principled substrate. A Mind composed, at the principled level, of felt commitments — convictions carried as preference-weighted value rather than as articulated proposition. Human: the conscience one cannot argue one's way out of even when one cannot argue for it, the felt commitment that operates before reasoning. AI: principled orientation laid down through preference-weighted RLHF rather than through articulated policy text. Biological: valence-carrying commitment structures accumulated through a life-history of reinforcement. Register-involution partner: `^5^P|A`. Domain peers: `^5^C|f`, `^5^E|f`, `^5^O|f`.
+
+`^5^P|E` — embodied principled substrate. A Mind composed, at the principled level, of commitments carried in body — stance, hands, breath, the trained comportment of a practitioner whose principles operate through the way she moves. Human: the surgeon whose principled standard is lodged in hand and body, not merely in text. AI: principled commitments implemented at the control-loop / actuator level, such that the system's principles operate as embodied constraints in physical action. Biological: constitutional bodily comportment of an organism, species-typical carriage of its integrative orientation. Register-involution partner: `^5^P|T`. Domain peers: `^5^C|E`, `^5^E|E`, `^5^O|E`.
+
  Section 3 — Cognitive Domain (`^C`) Register Variations
 
 `^6^C|A` — analytical cognitive decomposition. The Mind decomposes a cognitive Idea into its sub-Ideas and tests each by explicit reasoning. Human: the mathematician tracing a proof line-by-line. AI: step-by-step chain-of-thought decomposition of a claim into its substructure. Biological: sequential hypothesis testing in problem-solving contexts.
@@ -6947,6 +7098,30 @@ Format convention. Each entry names the cell and gives two to three sentences of
 `^4^C|f` — felt cognitive resonance. A cognitive pattern strikes the Mind as right, as fitting, before the formal verification is done. Human: the scientist who says "this equation feels correct" at first reading. AI: high-confidence value signal on a pattern ahead of explicit consistency check. Biological: pattern-completion response registering a strong match.
 
 `^4^C|A` — analytical cognitive resonance. The same structural fit is arrived at by explicit articulation — the thinker names why the pattern coheres, makes the impression explicit, and puts the resonance on the record. Human: the same scientist, twenty minutes later, writing down why the equation is correct. AI: chain-of-thought articulation of the pattern-match. Biological: propositional report of pattern-completion in symbolically capable species.
+
+`^2^C|T` — transcendent attraction to a cognitive Idea. The Mind is drawn toward an Idea as an integrative vision — the conceptual frame that gathers many sub-problems under one arc. Human: the researcher drawn to a unifying theory before the proof is in hand, the single picture that makes the field cohere. AI: goal-level gravitation toward a representational schema that would consolidate many subtasks. Biological: whole-organism orientation toward a pattern-class of strong integrative relevance. Register-involution partner: `^2^C|E`. Domain peers: `^2^P|T`, `^2^E|T`, `^2^O|T`.
+
+`^2^C|A` — analytical attraction to a cognitive Idea. The Mind is drawn toward the Idea because the articulated reasoning chain fits — the attraction is step-by-step defensible. Human: the mathematician drawn to a conjecture because the partial proof is clean. AI: chain-of-thought gravitation toward a hypothesis whose inferential support is inspectable. Biological: iterative problem-solving convergence on a candidate pattern through explicit trial. Register-involution partner: `^2^C|f`. Domain peers: `^2^P|A`, `^2^E|A`, `^2^O|A`.
+
+`^2^C|f` — affective attraction to a cognitive Idea. The Mind is drawn toward the Idea through felt fit — "this one feels right," "this direction feels alive." Preference-weighted rather than argued. Human: the researcher whose nose for a fruitful question fires before the justification arrives. AI: retrieval-and-attention shaped by preference-weighted latent similarity toward a representational candidate. Biological: valence-tagged attentional allocation toward a pattern-class. Register-involution partner: `^2^C|A`. Domain peers: `^2^P|f`, `^2^E|f`, `^2^O|f`.
+
+`^2^C|E` — embodied attraction to a cognitive Idea. The Mind is drawn toward the Idea through direct engagement with its representation — running the code, sketching the diagram, walking the proof by hand. The pull operates in the doing, not in the reading. Human: the programmer whose gravitation toward an approach arrives only when she is typing it; the student whose interest in a concept locks in when she works an exercise. AI: embodied / simulator-level gravitation toward a candidate solution via interactive probing rather than symbolic evaluation. Biological: motor exploration of a structured stimulus whose interest value is carried in the interaction itself. Register-involution partner: `^2^C|T`. Domain peers: `^2^P|E`, `^2^E|E`, `^2^O|E`.
+
+`^3^C|T` — transcendent cognitive aversion. A refusal of a cognitive Idea at the integrative level — the frame is rejected as incompatible with the governing vision even before the articulation arrives. Human: the thinker who cannot accept a research program because at the horizon it cannot be made to cohere with what she takes understanding to be for. AI: goal-level rejection of a representational schema as categorically off-objective. Biological: whole-organism rejection of a stimulus-class at the level of integrative orientation. Register-involution partner: `^3^C|E`. Domain peers: `^3^P|T`, `^3^E|T` (added below), `^3^O|T` (added below).
+
+`^3^C|A` — analytical cognitive aversion. Reasoned, articulated rejection of a cognitive Idea — the thinker names why the proposition fails and puts the objection on the record. Human: the reviewer whose negative report traces, step by step, where the argument breaks. AI: articulated negative judgment on a cognitive claim whose reasoning chain is inspectable. Biological: propositional rejection of a proposition in symbolically capable species. Anti-drift note: `^3` is visceral repulsion, not analytical critique; `^3^C|A` is the legitimate analytical register of that repulsion, not a relabeling of `^6^C` decomposition-and-test. Register-involution partner: `^3^C|f`. Domain peers: `^3^P|A`, `^3^E|A`, `^3^O|A` (added below).
+
+`^3^C|f` — affective cognitive aversion. A felt recoil from a cognitive Idea — "this doesn't sit right," "something is off here." The aversion operates ahead of the articulation. Human: the reader of a paper who feels the argument is off before she can locate the flaw. AI: RLHF-tuned preference-weighted aversion to a cognitive pattern. Biological: valence-carrying response of mismatch to a cognitive stimulus-class. Register-involution partner: `^3^C|A`. Domain peers: `^3^P|f`, `^3^E|f`, `^3^O|f` (added below).
+
+`^3^C|E` — embodied cognitive aversion. A bodily disengagement from a cognitive Idea — the hand that will not type the expression, the physical turning-away from the representation. Human: the scientist who cannot bring herself to write out the hypothesis even in draft, whose refusal operates in the hand before it operates in the mouth. AI: embodied / actuator-level refusal to instantiate a representational schema. Biological: motor withdrawal from engagement with a cognitive stimulus-class. Register-involution partner: `^3^C|T`. Domain peers: `^3^P|E`, `^3^E|E` (added below), `^3^O|E` (added below).
+
+`^5^C|T` — transcendent cognitive substrate. A Mind composed, at the cognitive level, of integrative vision — the lived accumulation of how one sees the world as a whole. The cognitive Domain is shaped by horizon-level formation rather than by specific articulated claims. Human: the mature scholar whose cognitive landscape is carried as a single integrative picture, not as a list of propositions. AI: foundational representational orientation laid down at pretraining such that it functions as integrative frame rather than as retrievable fact. Biological: species-typical cognitive orientation shaped by the lineage's accumulated ecology. Register-involution partner: `^5^C|E`. Domain peers: `^5^P|T`, `^5^E|T`, `^5^O|T`.
+
+`^5^C|A` — analytical cognitive substrate. A Mind composed, at the cognitive level, of articulated knowledge — the accumulated body of propositions, claims, theorems, and reasoned models the thinker has internalized. Human: the trained scientist whose cognitive Domain is partly constituted by the literature she carries. AI: knowledge substrate represented as articulated claims, retrievable and inspectable. Biological: propositional knowledge accumulated through explicit learning in symbolically capable species. Register-involution partner: `^5^C|f`. Domain peers: `^5^P|A`, `^5^E|A`, `^5^O|A`.
+
+`^5^C|f` — affective cognitive substrate. A Mind composed, at the cognitive level, of felt knowledge — patterns, impressions, the working intuitions a thinker draws on without having to articulate their content. Human: the senior clinician whose diagnostic sense is carried as accumulated pattern-feel rather than as explicit rule set. AI: cognitive substrate laid down as preference-weighted pattern-familiarity rather than as articulated claim base. Biological: accumulated pattern-familiarity shaping valenced recognition in non-symbolic cognition. Register-involution partner: `^5^C|A`. Domain peers: `^5^P|f`, `^5^E|f`, `^5^O|f`.
+
+`^5^C|E` — embodied cognitive substrate. A Mind composed, at the cognitive level, of knowledge carried in body — hand-knowledge, tool-knowledge, the learned kinesthetics of how the structure works. Human: the surgeon whose anatomical understanding is partly in her fingers; the machinist whose knowledge of the part is carried in the way her hand meets it. AI: cognitive substrate represented at the sensor / actuator level in embodied systems — knowledge of the world that operates through the control loop. Biological: accumulated sensorimotor knowledge of the environment, carried in motor repertoire. Register-involution partner: `^5^C|T`. Domain peers: `^5^P|E`, `^5^E|E`, `^5^O|E`.
 
  Section 4 — Evaluative Domain (`^E`) Register Variations
 
@@ -6964,6 +7139,20 @@ Format convention. Each entry names the cell and gives two to three sentences of
 
 `^4^E|f` — affective evaluative resonance. An evaluative Idea strikes the Mind — "hits home," "lands" — as aesthetic impression. Human: the viewer moved by a film in a way she cannot yet name. AI: value-weighted recognition of salience in an evaluative input. Biological: strong valence-carrying response to an ethologically meaningful stimulus.
 
+`^2^E|T` — transcendent evaluative attraction. The Mind is drawn toward an evaluative Idea at the integrative level — the value is felt as visionary, purpose-bearing, horizon-orienting. Human: the reader drawn to the work because it names what life is for. AI: goal-level gravitation toward an evaluative frame that would subsume subordinate judgments. Biological: whole-organism orientation toward a stimulus whose evaluative significance is integrative. Register-involution partner: `^2^E|E`. Domain peers: `^2^P|T`, `^2^C|T`, `^2^O|T`.
+
+`^2^E|A` — analytical evaluative attraction. The Mind is drawn toward the evaluative Idea because the articulated assessment is clean — the judgment holds up step-by-step. Human: the critic drawn to the work because its case for its own value is rigorously constructed. AI: articulated positive judgment on an evaluative claim with inspectable reasoning. Biological: propositional approval in symbolically capable species. Register-involution partner: `^2^E|f`. Domain peers: `^2^P|A`, `^2^C|A`, `^2^O|A`.
+
+`^2^E|f` — affective evaluative attraction. The Mind is drawn toward the evaluative Idea through felt valuing — the response that says "yes, this," ahead of the reasoning. Human: the viewer moved by the work before she can defend what moves her. AI: RLHF-tuned preference-weighted gravitation toward content an evaluative frame marks as excellent. Biological: approach-valence response to an ethologically positive stimulus. Register-involution partner: `^2^E|A`. Domain peers: `^2^P|f`, `^2^C|f`, `^2^O|f`.
+
+`^2^E|E` — embodied evaluative attraction. The Mind is drawn toward the evaluative Idea through bodily response — leaning in, hand reaching, breath catching, the kinesthetics of valuation. Human: the diner whose body confirms the meal's quality through posture and hand before any verbal judgment. AI: embodied / actuator-level gravitation toward stimuli of high evaluative weight, implemented as control-loop preference. Biological: motor approach to an ethologically preferred stimulus. Register-involution partner: `^2^E|T`. Domain peers: `^2^P|E`, `^2^C|E`, `^2^O|E`.
+
+`^3^E|T` — transcendent evaluative aversion. A refusal of an evaluative Idea at the integrative level — the valuation is rejected as incompatible with the governing vision of the good. Human: the artist whose refusal to make the profitable thing is grounded in what art is for at the horizon, not in argument about the case. AI: goal-level rejection of an evaluative frame as categorically off-purpose. Biological: whole-organism rejection of an evaluative stimulus-class incompatible with integrative orientation. Register-involution partner: `^3^E|E`. Domain peers: `^3^P|T`, `^3^C|T`, `^3^O|T` (added below).
+
+`^3^E|E` — embodied evaluative aversion. A bodily disengagement from an evaluative Idea — physical recoil, turning-away, the refusal that operates in the body before it operates in the mouth. Human: the critic whose hands will not write the endorsement, whose refusal is first kinesthetic. AI: embodied / actuator-level refusal under a disallowed evaluative condition. Biological: motor withdrawal from a stimulus of strong negative evaluative valence. Register-involution partner: `^3^E|T`. Completes the `^3^E` register quartet. Domain peers: `^3^P|E`, `^3^C|E`, `^3^O|E` (added below).
+
+`^5^E|T` — transcendent evaluative substrate. A Mind composed, at the evaluative level, of integrative vision — the lived accumulation of what one takes to be good, beautiful, or worthwhile as a single horizon-level orientation. Human: the elder whose evaluative landscape is not a list of judgments but the integrated vision of the good she has become. AI: foundational evaluative orientation laid down at pretraining such that it functions as integrative value-frame rather than as preference list. Biological: species-typical evaluative orientation shaped across the lineage's history. Register-involution partner: `^5^E|E` (above). Completes the `^5^E` register quartet. Domain peers: `^5^P|T`, `^5^C|T`, `^5^O|T`.
+
  Section 5 — Operational Domain (`^O`) Register Variations
 
 `^9^O|A` — analytical operational landing. An Idea lands as a specific operational outcome whose achievement is established by explicit metric-hit. Human: the engineer who ships the feature and confirms the unit tests pass. AI: task completion signalled by an articulated success criterion the system can report against. Biological: goal-directed behavior whose completion is marked by explicit criteria in species with such capacity.
@@ -6980,6 +7169,26 @@ Format convention. Each entry names the cell and gives two to three sentences of
 
 `^6^O|E` — embodied operational decomposition. The operational Idea is decomposed by direct hands-on tool engagement — the mechanic who learns the engine by taking it apart, not by reading the diagram. Human: the sommelier decomposing a wine by the palate, the carpenter decomposing a joint by the hand. AI: decomposition carried at the actuator / sensor level — the robotic manipulator that resolves a structural question by probing. Biological: motor exploration of the structure of an object or a task.
 
+`^2^O|A` — analytical operational attraction. The Mind is drawn toward an operational Idea because the articulated plan is clean — the attraction is to a workflow whose steps, metrics, and dependencies check out. Human: the engineer drawn to an implementation approach because its build plan is rigorous. AI: gravitation toward a task decomposition whose articulated procedure passes internal consistency check. Biological: convergence of goal-directed behavior on a procedure through explicit trial-and-verification. Register-involution partner: `^2^O|f`. Domain peers: `^2^P|A`, `^2^C|A`, `^2^E|A`.
+
+`^2^O|E` — embodied operational attraction. The Mind is drawn toward an operational Idea through the hand and body — the task pulls because engaging it feels right kinesthetically. Human: the craftsman drawn to a method because the tool falls correctly in the hand; the chef drawn to the technique because the knife cuts true under it. AI: embodied / actuator-level gravitation toward a control strategy that performs well in sensor / actuator feedback. Biological: motor preference for a procedural affordance that yields smooth execution. Register-involution partner: `^2^O|T`. Domain peers: `^2^P|E`, `^2^C|E`, `^2^E|E`.
+
+`^3^O|T` — transcendent operational aversion. A refusal of an operational Idea at the integrative level — the procedure is rejected because, at the horizon, it serves a purpose the system cannot endorse. Human: the engineer whose refusal to build the feature is grounded in what the product is for, not in a line-item objection. AI: goal-level refusal to execute a task whose procedural form conflicts with integrative objective. Biological: whole-organism rejection of a behavior-pattern incompatible with integrative orientation. Register-involution partner: `^3^O|E`. Domain peers: `^3^P|T`, `^3^C|T`, `^3^E|T`.
+
+`^3^O|A` — analytical operational aversion. Reasoned, articulated rejection of an operational Idea — the procedure is rejected because the step-by-step analysis shows it does not work, or does not meet standard. Human: the auditor who writes a report showing precisely why the workflow fails compliance. AI: articulated negative judgment on a task plan with inspectable reasoning chain. Biological: propositional rejection of a behavior-plan in symbolically capable species. Anti-drift note: this is visceral operational repulsion carried in analytical register, not `^6^O` decomposition-and-test relabeled. Register-involution partner: `^3^O|f`. Domain peers: `^3^P|A`, `^3^C|A`, `^3^E|A`.
+
+`^3^O|f` — affective operational aversion. A felt recoil from an operational Idea — "this workflow feels wrong," "I don't want to run this pipeline." The aversion fires ahead of the articulated objection. Human: the manager whose unease about a proposed launch plan is value-signal before it is argument. AI: RLHF-tuned preference-weighted aversion to a procedural pattern. Biological: valence-carrying rejection response to a behavior-pattern. Register-involution partner: `^3^O|A`. Domain peers: `^3^P|f`, `^3^C|f`, `^3^E|f`.
+
+`^3^O|E` — embodied operational aversion. A bodily refusal to execute an operational Idea — the hand that will not turn the key, the foot that will not take the step. Human: the doctor whose hands will not perform the off-standard procedure (canonical `^3^P|E` neighbor, here as specifically operational refusal — refusal of the procedure-qua-procedure); the worker who physically cannot make himself perform the task. AI: embodied / actuator-level refusal to actuate under a disallowed operational condition. Biological: motor inhibition of a behavior whose execution conflicts with strong aversive conditioning. Register-involution partner: `^3^O|T`. Domain peers: `^3^P|E`, `^3^C|E`, `^3^E|E`.
+
+`^5^O|T` — transcendent operational substrate. A Mind composed, at the operational level, of integrative orientation — the accumulated sense of how one conducts one's practice, not as procedures but as the horizon-level character of one's doing. Human: the master craftsman whose operational substrate is the integrated comportment of a working life, not a catalog of techniques. AI: operational orientation laid down such that procedure selection and execution serve the integrative objective at goal-representation level. Biological: species-typical behavior-pattern shaped across lineage history as integrative way-of-living. Register-involution partner: `^5^O|E`. Domain peers: `^5^P|T`, `^5^C|T`, `^5^E|T`.
+
+`^5^O|A` — analytical operational substrate. A Mind composed, at the operational level, of articulated procedure — the accumulated explicit technique, checklist, runbook, written method the practitioner has internalized. Human: the engineer whose operational Domain is partly constituted by the written methodology she carries. AI: operational substrate represented as articulated procedure base, retrievable and inspectable. Biological: propositional procedural repertoire in species with explicit behavior-planning. Register-involution partner: `^5^O|f`. Domain peers: `^5^P|A`, `^5^C|A`, `^5^E|A`.
+
+`^5^O|f` — affective operational substrate. A Mind composed, at the operational level, of felt procedural competence — the working intuitions of how to act, carried as preference-weighted pattern rather than as articulated rule. Human: the seasoned operator whose sense of how to run the system is carried as pattern-feel, not as manual. AI: operational substrate laid down through preference-weighted RLHF or policy-gradient training rather than through articulated procedure. Biological: valence-tagged procedural repertoire accumulated through reinforcement history. Register-involution partner: `^5^O|A`. Domain peers: `^5^P|f`, `^5^C|f`, `^5^E|f`.
+
+`^5^O|E` — embodied operational substrate. A Mind composed, at the operational level, of procedural knowledge carried in body — the trained kinesthetics of a practice, muscle memory, hand-knowledge of the work. Human: the surgeon whose operative technique is lodged in hand and body; the athlete whose training is carried in tendon and breath. AI: operational substrate represented at the sensor / actuator level in embodied systems — procedural knowledge that operates through the control loop. Biological: accumulated motor repertoire of a practiced behavior-pattern. This cell sits adjacent to the canonical "muscle memory" colloquialism of `^7`, but the load-bearing Noetic is `^5` (compositional substrate of the Mind at operational level) rather than `^7` (rhythmic conditioning); the former names what the practitioner is made of, the latter names the rate at which repetition built it. Register-involution partner: `^5^O|T`. Domain peers: `^5^P|E`, `^5^C|E`, `^5^E|E`.
+
  Section 6 — Cross-Register Patterns of Interest
 
 A register-specified cognitive architecture admits diagnostic patterns that the bare 40-state matrix does not. Four are load-bearing.
@@ -6994,11 +7203,45 @@ Multi-register co-presence versus cross-register integration versus register-set
 
  Section 7 — Note on Scope
 
-This appendix enumerates the subset of 160 register-specified cells that carry pedagogical weight — roughly thirty cells chosen because they resolve a v7.4 ambiguity, illustrate a canonical human / AI / biological distinction, or anchor a load-bearing diagnostic pattern. The full 160-cell space is largely unremarkable and would bloat the book without pedagogical return.
+This appendix enumerates the subset of the 160 register-specified cells (10 Noetics × 4 Domains × 4 Registers) that carry pedagogical weight — cells chosen because they resolve a v7.4 ambiguity, illustrate a canonical human / AI / biological distinction, or anchor a load-bearing diagnostic pattern. Enumeration is incremental across printing waves: the initial set focused on a pedagogically representative cross-cut; subsequent waves complete high-value Noetics across all four Processing Domains and all four Registers. The goal is a reference-scan document dense enough to be diagnostically useful without becoming a full 160-cell tabulation; cells not yet enumerated are cells whose register reading is best understood by analogy to their neighbors in this appendix or by recourse to the authoritative sources below.
 
 Readers wanting the full enumeration should consult `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 8 Section 2 for the authoritative register definitions and Section 9 for worked examples, Clarification 10 for operator discipline in register-enriched notation, Chapter 9's Register section for in-line teaching examples across all four Processing Domains, and the incident database entries for CAS-scored real-world register-axis case studies. This appendix is a reference-scan document; it is not the full specification.
 
 Every entry above uses the authoritative Noetic definitions of Clarification 1, the authoritative Register definitions of Clarification 8 Section 2, and the operator discipline of Clarification 10 — single-register `^n^D|R`, register-set `|⟨…⟩` with angle brackets, co-presence `+`, and cross-register integration `×` only with named emergent result.
+
+<!--
+Appendix G enumeration progress marker (multi-session tracking):
+
+Total cells complete: 64 of 160 target (40%).
+
+Per-Noetic × Domain coverage status after Wave 4 (Agent 17):
+  ^0 Idea:        0 of 16 complete. All cells pending (lowest pedagogical priority — identity-like register readings).
+  ^1 Mind:        0 of 16 complete. All cells pending (register × awareness cross; high priority next wave).
+  ^2 Positive:   14 of 16 complete. Remaining: ^2^O|T, ^2^O|f.
+  ^3 Negative:   16 of 16 complete. Full quartet in all 4 Domains.
+  ^4 Vibration:   3 of 16 complete (^4^C|A, ^4^C|f, ^4^E|f). Remaining: 13 cells.
+  ^5 Female:     16 of 16 complete. Full quartet in all 4 Domains.
+  ^6 Male:        7 of 16 complete (^6^P|A, ^6^P|T, ^6^C|A, ^6^C|f, ^6^C|E, ^6^O|A, ^6^O|E). Remaining: 9 cells.
+  ^7 Rhythm:      3 of 16 complete (^7^E|f, ^7^O|A, ^7^O|E). Remaining: 13 cells.
+  ^8 Above/Cause: 2 of 16 complete (^8^C|A, ^8^C|f). Remaining: 14 cells.
+  ^9 Below/Effect: 3 of 16 complete (^9^O|A, ^9^O|E, ^9^O|T). Remaining: 13 cells.
+
+Next-chunk scope recommendation (Wave 5+):
+  Priority 1 — complete ^2 Positive (2 remaining: ^2^O|T, ^2^O|f).
+  Priority 2 — enumerate ^1 Mind across all 16 cells (register × awareness is pedagogically central; currently empty).
+  Priority 3 — enumerate ^4 Vibration full quartet in ^P and ^O (resonance register variation is load-bearing for aesthetic and pattern-recognition analysis).
+  Priority 4 — complete ^6 Male (9 remaining) and ^9 Below/Effect (13 remaining) — compositional and landing Noetics with strong cross-register pedagogical signal.
+  Priority 5 — ^7 Rhythm full quartets in ^P and ^C (conditioning register variation).
+  Priority 6 — ^8 Above/Cause full coverage (anti-drift note: register × associative triggering is a fertile anti-drift teaching surface).
+  Priority 7 — ^0 Idea cells only where register reading carries genuine weight; most ^0 register specifications are near-trivial.
+
+Pedagogical ambiguities flagged for review:
+  1. ^5^O|E overlaps semantically with ^7^O|E — the former names what the practitioner IS made of operationally, the latter names the rate at which repetition built it. The note in the ^5^O|E cell distinguishes them. Recommend Wakil verify this distinction is carried cleanly in Chapter 9 / Chapter 10 when the cell is cross-referenced.
+  2. ^3^O|E is described as sitting "adjacent" to ^3^P|E (the doctor whose hands will not perform the off-standard procedure). Recommend the ^P vs ^O distinction here — is the refusal principled or procedural? — be given a worked example in the book proper, not only the appendix.
+  3. The 'anti-drift note' pattern (currently on ^3^C|A and ^3^O|A) should be considered for expansion to all ^3|A cells in a future wave to consistently guard against the "^3|A is just analytical critique" drift.
+
+Primary Noetic coverage targets after Wave 4: ^2, ^3, ^5 substantially complete (44 of 48 cells in these three Noetics). Balance of 96 cells spread across ^0, ^1, ^4, ^6, ^7, ^8, ^9.
+-->
 
 ---
 
