@@ -125,11 +125,20 @@ class CASDataset(Dataset):
         if "nccs" in item:
             cas_scores["nccs"] = item["nccs"]
 
+        # v2 label streams (ADR-01 / ADR-02 / ADR-04). All optional; absent
+        # fields default to empty list / None so per-example masking applies.
+        register_labels = item.get("register_labels", [])
+        omega_labels = item.get("omega_labels", [])
+        production_target = item.get("production_target", None)
+
         return {
             "input_ids": input_ids,
             "targets": targets,
             "attention_mask": attention_mask,
             "cas_scores": cas_scores,
+            "register_labels": register_labels,
+            "omega_labels": omega_labels,
+            "production_target": production_target,
         }
 
 
@@ -146,6 +155,9 @@ def cas_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
     padded_targets = []
     padded_masks = []
     cas_scores_list = []
+    register_labels_list = []
+    omega_labels_list = []
+    production_targets_list = []
 
     pad_id = 0  # [PAD] token ID
 
@@ -169,12 +181,18 @@ def cas_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
         )
 
         cas_scores_list.append(item["cas_scores"])
+        register_labels_list.append(item.get("register_labels", []))
+        omega_labels_list.append(item.get("omega_labels", []))
+        production_targets_list.append(item.get("production_target", None))
 
     return {
         "input_ids": torch.stack(padded_input_ids),
         "targets": torch.stack(padded_targets),
         "attention_mask": torch.stack(padded_masks),
         "cas_scores": cas_scores_list,
+        "register_labels": register_labels_list,
+        "omega_labels": omega_labels_list,
+        "production_target": production_targets_list,
     }
 
 

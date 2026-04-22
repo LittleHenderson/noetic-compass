@@ -19,10 +19,12 @@ from pathlib import Path
 from typing import Any, Optional
 
 import torch
+import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
 from ..model.cas_native_model import CASNativeModel, CASNativeConfig
 from ..model.embedding import NUM_COGNITIVE_STATES
+from ..model.register_film import REGISTER_INDEX
 
 try:
     import cas_engine
@@ -309,6 +311,323 @@ class CASEvaluator:
         }
 
         return report
+
+    # ------------------------------------------------------------------
+    # CAS v2 evaluation extensions (ADR-01 / ADR-02 / ADR-04 / ADR-06).
+    # These metrics are available only when the corresponding v2 components
+    # are attached to the model (via CASTrainer with v2 flags enabled). When
+    # disabled, the methods return ``None`` so the caller can omit the key
+    # from reports.
+    # ------------------------------------------------------------------
+
+    def _v2_components(self) -> dict[str, Any]:
+        """Return the v2 ModuleDict attached to the model, empty if absent."""
+        container = getattr(self.model, "v2_components", None)
+        if container is None:
+            return {}
+        # nn.ModuleDict -> regular dict for read-only access.
+        return {k: container[k] for k in container.keys()}
+
+    @torch.no_grad()
+    def register_prediction_accuracy(
+        self, dataloader: DataLoader
+    ) -> Optional[float]:
+        """Accuracy of register inference against ``register_labels``.
+
+        Uses the RegisterFiLM module's per-register similarity to the pooled
+        hidden state as a prediction signal. Returns ``None`` when either the
+        v2 register embedding is missing or no labeled examples are present.
+        """
+        components = self._v2_components()
+        reg_embedding = components.get("register_embedding")
+        if reg_embedding is None:
+            return None
+
+        correct = 0
+        total = 0
+        for batch in dataloader:
+            input_ids = batch["input_ids"].to(self.device)
+            attention_mask = batch.get("attention_mask")
+            if attention_mask is not None:
+                attention_mask = attention_mask.to(self.device)
+            register_labels_batch = batch.get(
+                "register_labels", [[] for _ in range(input_ids.size(0))]
+            )
+
+            outputs = self.model(input_ids, attention_mask=attention_mask)
+            pooled = _masked_mean(outputs["cognitive_state"], attention_mask)
+
+            for i, reg_list in enumerate(register_labels_batch):
+                if not reg_list:
+                    continue
+                for entry in reg_list:
+                    label = entry.get("register")
+                    if label not in REGISTER_INDEX:
+                        continue
+                    truth_idx = REGISTER_INDEX[label]
+                    # Score each register: apply FiLM and take the register
+                    # producing the highest L2-norm (proxy for activation).
+                    scores: list[float] = []
+                    for r_idx in range(reg_embedding.register_film.num_registers):
+                        if pooled.shape[-1] != reg_embedding.register_film.d_model:
+                            # Dim mismatch — skip this example cleanly.
+                            scores = []
+                            break
+                        modulated = reg_embedding.register_film.apply_register(
+                            pooled[i], r_idx
+                        )
+                        scores.append(float(torch.linalg.norm(modulated).item()))
+                    if not scores:
+                        continue
+                    predicted = int(torch.tensor(scores).argmax().item())
+                    total += 1
+                    if predicted == truth_idx:
+                        correct += 1
+
+        if total == 0:
+            return None
+        return correct / total
+
+    @torch.no_grad()
+    def rule_four_compliance_rate(
+        self,
+        dataloader: DataLoader,
+        rust_bridge: Optional[Any] = None,
+    ) -> Optional[float]:
+        """Fraction of emergent-register outputs that pass Rust Rule 4.
+
+        Requires a :class:`RustValidationBridge` (injected or pulled from the
+        trainer). Returns ``None`` when no bridge is available.
+        """
+        if rust_bridge is None:
+            return None
+        try:
+            from ..validation.structural_hash import StructuralPattern
+        except Exception:  # pragma: no cover - defensive
+            return None
+
+        patterns: list[StructuralPattern] = []
+        call_args: list[Any] = []
+        for batch in dataloader:
+            register_labels_batch = batch.get("register_labels", [])
+            for reg_list in register_labels_batch:
+                regs = [
+                    entry.get("register")
+                    for entry in reg_list
+                    if "register" in entry
+                ]
+                regs = [r for r in regs if r in REGISTER_INDEX]
+                if len(regs) < 2:
+                    continue
+                operands = [(3, 0, None, r) for r in regs]
+                pattern = StructuralPattern(
+                    noetics=(3,),
+                    domains=("P",),
+                    drives=tuple(),
+                    registers=tuple(sorted(set(regs))),
+                    register_sets=(tuple(sorted(regs)),),
+                    emergent_register_name=None,
+                    recipe_shape=None,
+                    validation_kind="rule_four",
+                )
+                patterns.append(pattern)
+                call_args.append((operands, None))
+
+        if not patterns:
+            return None
+
+        results = rust_bridge.validate_rule_four_batch(patterns, call_args=call_args)
+        valid = sum(1 for r in results if getattr(r, "kind", None) == "valid")
+        return valid / len(results)
+
+    @torch.no_grad()
+    def omega_activation_accuracy(
+        self, dataloader: DataLoader
+    ) -> Optional[float]:
+        """Accuracy of Ω_* identification against ``omega_labels``.
+
+        Compares the top-1 registered Ω_* (by cosine similarity to the
+        binding-head output) against the labeled ground truth. Returns
+        ``None`` when the emergent register pipeline is not attached or no
+        Ω_*-labeled examples are present.
+        """
+        components = self._v2_components()
+        pipeline = components.get("emergent_register")
+        reg_embedding = components.get("register_embedding")
+        if pipeline is None or reg_embedding is None:
+            return None
+        if pipeline.registry.active_size == 0:
+            return None
+
+        name_to_slot = {
+            n: i for i, n in enumerate(pipeline.registry.get_active_names())
+        }
+
+        correct = 0
+        total = 0
+        for batch in dataloader:
+            input_ids = batch["input_ids"].to(self.device)
+            attention_mask = batch.get("attention_mask")
+            if attention_mask is not None:
+                attention_mask = attention_mask.to(self.device)
+            omega_labels_batch = batch.get(
+                "omega_labels", [[] for _ in range(input_ids.size(0))]
+            )
+
+            # Synthesize d_model-hidden pooled state.
+            tok = self.model.token_embedding(input_ids)
+            tok = self.model.pos_encoding(tok)
+            if attention_mask is not None:
+                tok = tok * attention_mask.unsqueeze(-1).float()
+            pooled = tok.mean(dim=1)  # (B, d_model)
+
+            if pooled.shape[-1] != reg_embedding.register_film.d_model:
+                continue
+
+            # Build register-modulated states + bind.
+            register_states = []
+            for r_idx in range(reg_embedding.register_film.num_registers):
+                register_states.append(
+                    reg_embedding.register_film.apply_register(pooled, r_idx)
+                )
+            reg_states = torch.stack(register_states, dim=-2)
+            bound = pipeline.binding_head(
+                reg_states,
+                prereq_mask=torch.ones(
+                    reg_states.shape[:-2],
+                    device=reg_states.device,
+                    dtype=torch.bool,
+                ),
+            )
+            active_emb = pipeline.registry.get_active_embeddings()
+            bind_norm = F.normalize(bound, p=2, dim=-1, eps=1e-12)
+            reg_norm = F.normalize(active_emb, p=2, dim=-1, eps=1e-12)
+            logits = bind_norm @ reg_norm.transpose(0, 1)  # (B, k)
+            predictions = logits.argmax(dim=-1)
+
+            for i, omega_list in enumerate(omega_labels_batch):
+                if not omega_list:
+                    continue
+                entry = omega_list[0]
+                name = entry.get("omega_name")
+                if name not in name_to_slot:
+                    continue
+                total += 1
+                if int(predictions[i].item()) == name_to_slot[name]:
+                    correct += 1
+
+        if total == 0:
+            return None
+        return correct / total
+
+    @torch.no_grad()
+    def production_semantics_accuracy(
+        self, dataloader: DataLoader
+    ) -> Optional[dict[str, float]]:
+        """Per-recipe prerequisite / yield-prediction accuracy.
+
+        Returns ``{"prereq_accuracy": ..., "yield_mae": ...}`` or ``None``
+        when the production head is missing / no labeled examples.
+        """
+        components = self._v2_components()
+        prod_head = components.get("production_semantics")
+        if prod_head is None:
+            return None
+
+        correct_prereq = 0
+        total_prereq = 0
+        total_abs_err = 0.0
+        total_yield = 0
+        for batch in dataloader:
+            input_ids = batch["input_ids"].to(self.device)
+            attention_mask = batch.get("attention_mask")
+            if attention_mask is not None:
+                attention_mask = attention_mask.to(self.device)
+            production_targets_batch = batch.get(
+                "production_target",
+                [None for _ in range(input_ids.size(0))],
+            )
+
+            labelled = [
+                (i, t)
+                for i, t in enumerate(production_targets_batch)
+                if t is not None
+            ]
+            if not labelled:
+                continue
+
+            tok = self.model.token_embedding(input_ids)
+            tok = self.model.pos_encoding(tok)
+            if attention_mask is not None:
+                tok = tok * attention_mask.unsqueeze(-1).float()
+            pooled = tok.mean(dim=1)
+
+            for i, target in labelled:
+                out = prod_head(
+                    pooled[i].unsqueeze(0),
+                    mode="inference",
+                )
+                # Prereq correctness: first labeled prereq state_id must
+                # appear in predictions.
+                prereqs = target.get("prereqs", [])
+                if prereqs:
+                    predicted_ids = (
+                        out["prereq_identifications"][0].cpu().tolist()
+                    )
+                    gold_ids = {int(p[0]) for p in prereqs}
+                    total_prereq += 1
+                    if gold_ids & set(predicted_ids):
+                        correct_prereq += 1
+
+                observed = target.get("observed_yield")
+                if observed is not None:
+                    predicted_yield = float(
+                        out["theoretical_yield"].cpu().item()
+                    )
+                    total_abs_err += abs(predicted_yield - float(observed))
+                    total_yield += 1
+
+        if total_prereq == 0 and total_yield == 0:
+            return None
+        result: dict[str, float] = {}
+        if total_prereq > 0:
+            result["prereq_accuracy"] = correct_prereq / total_prereq
+        if total_yield > 0:
+            result["yield_mae"] = total_abs_err / total_yield
+        return result
+
+    def evaluate_v2_metrics(
+        self,
+        dataloader: DataLoader,
+        rust_bridge: Optional[Any] = None,
+    ) -> dict[str, Any]:
+        """Run every v2 metric against a dataloader and return a dict.
+
+        Keys whose corresponding v2 component is absent are omitted from the
+        returned dict (i.e. not set to ``None``). When all v2 components are
+        absent, an empty dict is returned.
+        """
+        results: dict[str, Any] = {}
+
+        reg_acc = self.register_prediction_accuracy(dataloader)
+        if reg_acc is not None:
+            results["register_prediction_accuracy"] = reg_acc
+
+        rule_four = self.rule_four_compliance_rate(
+            dataloader, rust_bridge=rust_bridge
+        )
+        if rule_four is not None:
+            results["rule_four_compliance_rate"] = rule_four
+
+        omega_acc = self.omega_activation_accuracy(dataloader)
+        if omega_acc is not None:
+            results["omega_activation_accuracy"] = omega_acc
+
+        prod_acc = self.production_semantics_accuracy(dataloader)
+        if prod_acc is not None:
+            results["production_semantics_accuracy"] = prod_acc
+
+        return results
 
     def evaluate_and_save(
         self,

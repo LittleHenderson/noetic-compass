@@ -1,0 +1,77 @@
+# Canonical CAS-Native v2 training configuration template.
+#
+# Every field here corresponds to a `TrainingConfig` dataclass field in
+# `cas-native/training/config.py`. Inline citations point at the governing
+# ADR in `docs/architecture/cas_native_v2_adrs.md`. To disable v2 components
+# entirely (v7.4 parity mode), set every flag under `component_flags` to
+# false; the trainer then falls back to the legacy v7.4 path byte-for-byte.
+
+# ---------------------------------------------------------------------------
+# v2 component flags — each gates a v2 extension (ADR-01 / ADR-02 / ADR-04 /
+# ADR-06). With all four False, trainer behaves as the legacy v7.4 trainer.
+# ---------------------------------------------------------------------------
+component_flags:
+  use_register_film: true            # ADR-01: Phenomenological Register FiLM
+  use_emergent_register: true        # ADR-02/03: Ω_* metric-learning binding
+  use_production_semantics: true     # ADR-04: hybrid production semantics head
+  use_rust_validation: true          # ADR-06: RustValidationBridge integration
+
+# ---------------------------------------------------------------------------
+# v2 hyperparameters — defaults match the "Cross-Cutting Locked Decisions"
+# table in `docs/architecture/cas_native_v2_adrs.md` §Hyperparameter defaults.
+# ---------------------------------------------------------------------------
+v2_hyperparameters:
+  # ADR-01 — InvolutionConstraintLoss weight on RegisterFiLM (γ, β).
+  lambda_involution: 0.1
+
+  # Loss aggregation weights — default 1.0 each, tunable via training runs.
+  lambda_emergent_binding: 1.0       # Ω_* registry CE binding loss (ADR-02/03)
+  lambda_production: 1.0             # production-semantics yield loss (ADR-04)
+  lambda_rule_four: 1.0              # Rule 4 compliance loss (ADR-06)
+
+  # ADR-04 — Gumbel-softmax / soft-min temperature annealing schedule.
+  gumbel_tau_initial: 10.0
+  gumbel_tau_final: 0.1
+  gumbel_tau_anneal_steps: 50000
+
+  # ADR-03 — Ω_* similarity threshold. EMPIRICALLY UNTUNED placeholder —
+  # tune against first-training-run validation data.
+  similarity_threshold: 0.7
+
+  # ADR-02/03 — Ω_* registry capacity (k=2 admitted at v1, 18 slots reserved).
+  registry_capacity: 20
+
+  # ADR-06 — LRU cache capacity for the RustValidationBridge structural cache.
+  rust_cache_capacity: 10000
+
+  # ADR cross-cutting Design Ledger §Training data distribution —
+  # initial 60/40 split (revisit after first evaluation pass).
+  data_mix_cross_register: 0.60
+  data_mix_production: 0.40
+
+# ---------------------------------------------------------------------------
+# v7.4 hyperparameters — preserved verbatim from the legacy CASTrainer config.
+# These are routed unchanged to the trainer regardless of v2 flag state.
+# ---------------------------------------------------------------------------
+v7_4_hyperparameters:
+  lr: 0.0001
+  warmup_steps: 1000
+  max_steps: 100000
+  grad_clip: 1.0
+  checkpoint_every: 1000
+  eval_every: 500
+  checkpoint_dir: "checkpoints"
+  target_nccs: 75.0
+
+  # CognitiveMetricLoss component weights (v7.4 scalar knobs).
+  lambda_operator_balance: 1.0
+  lambda_domain_coherence: 1.0
+  lambda_rpm_satisfaction: 1.0
+  lambda_inversion_penalty: 1.0
+  lambda_cognitive_drift: 1.0
+
+# ---------------------------------------------------------------------------
+# Optional: path to Ω_* registry config (ADR-03). When `use_emergent_register`
+# is true, the trainer calls `OmegaRegistry.load_from_config(path)`.
+# ---------------------------------------------------------------------------
+omega_registry_config: "cas-native/config/omega_registry.yaml"
