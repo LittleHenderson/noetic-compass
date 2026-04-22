@@ -2007,6 +2007,9 @@ fn py_compute_yield_batch(
 
 #[pymodule]
 pub fn cas_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    // Expose crate version as Python module attribute for cache-invalidation
+    // (consumed by cas-native/validation/rust_bridge.py::_detect_engine_version).
+    m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add_class::<PyCognitiveOperator>()?;
     m.add_class::<PyDomain>()?;
     m.add_class::<PyCoreDrive>()?;
