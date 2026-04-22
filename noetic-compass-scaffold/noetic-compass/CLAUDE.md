@@ -3,8 +3,16 @@
 ## Project Identity
 - **Product**: Noetic Compass — AI Psychology & Ethics Assessment Platform
 - **Founder**: Little Henderson (a.k.a. Wakil, a.k.a. Prof. Hermes M. Thoth)
-- **Framework**: Cognitive Architecture System (CAS) v7.4 — Corrected Edition
+- **Framework**: Cognitive Architecture System (CAS) v7.7 — Register Multiplicity and Operator Discipline Extension (prior: v7.6 Stoichiometric Production Semantics Extension; prior: v7.5 Phenomenological Register Extension; prior: v7.4 Corrected Edition)
 - **Classification**: Confidential
+
+## Authoritative Noetic Definitions (READ FIRST)
+
+- **Always** read `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` before producing any CAS description, incident analysis, taxonomy extension, pedagogical material, marketing copy, or regulator-facing document.
+- The 10 Noetic names and definitions (Idea, Mind, Positive, Negative, Vibration, Female, Male, Rhythm, Above/Cause, Below/Effect) are **authoritative and canonical**. They are verbatim from the Tootra Math Handbook. They are not subject to alternative naming. There is no "public CAS scheme" distinct from these names — the authoritative names ARE the names in every context (academic, regulatory, pedagogical, marketing, incident analysis).
+- Apply the **Universal Applicability Test**: a valid Noetic description must apply equally to human minds, AI systems, biological cognitive systems, and hypothetical cognitive architectures. The authoritative definitions pass this test by construction.
+- Preserve the authoritative verbs from the definitions ("affinity for," "attracted toward," "adverse to," "repelled by," "resonates with," "impregnated with," "triggers," "brought to Mind"). Do not substitute anthropomorphizing or affective replacements.
+- Only the Noetic definitions are reconciled from the Tootra Math Handbook. The handbook's mathematical framework, notation, and acquisitions are NOT incorporated — CAS retains its own math, compiler, and notation.
 
 ## Progress Tracking
 - **Always** read `CHANGELOG.md` at session start before doing anything
@@ -41,26 +49,179 @@ Fisher-Rao metric: g^FR_p(u,v) = Σ(uk*vk/pk). Geodesic distance: d(p,q) = 2*arc
 ## Architecture Overview
 
 ### CAS Ontology (implement these types FIRST)
+
+> **Authoritative Noetic definitions (per `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 1):** The 10 Noetic names and definitions below are canonical. They are verbatim from the Tootra Math Handbook. They are not subject to alternative naming, rephrasing, or softening. Every artifact in the repository — book manuscript, incident analyses, compiler code, engine docstrings, dashboard UI, peer-review paper, pedagogical materials, marketing — uses these names and definitions without alteration.
+
+#### The 10 Noetics
+
+- **^0 (CO-0): Idea** — All things in and outside the Mind.
+- **^1 (CO-1): Mind** — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.
+- **^2 (CO-2): Positive** — An Idea the Mind has an affinity for and is attracted toward.
+- **^3 (CO-3): Negative** — An Idea the Mind is adverse to and repelled by.
+- **^4 (CO-4): Vibration** — The degree to which an Idea resonates with the Mind, its impression.
+- **^5 (CO-5): Female** — A Mind impregnated with an Idea, the Ideas a Mind is composed of.
+- **^6 (CO-6): Male** — An Idea impregnated with another Idea, the Ideas an Idea is composed of.
+- **^7 (CO-7): Rhythm** — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.
+- **^8 (CO-8): Above/Cause** — An Idea that triggers a different Idea than itself to come to Mind.
+- **^9 (CO-9): Below/Effect** — The Idea brought to Mind by an Above/Cause trigger.
+
+Only the Noetic definitions are reconciled from the handbook. The handbook's mathematical framework, operators notation, foundations notation, and acquisitions are NOT incorporated — CAS retains its own mathematics (Noetic Topos paper), compiler (`api/notation/compiler.py`), and notation.
+
+#### Expanded scope note — ^5 Female
+
+The authoritative ^5 Female definition above is verbatim canonical. Its pedagogical scope, elaborated in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 5, is: **"we are each the sum of our experiences"** — the Mind is not a container that holds experiences; the Mind IS the experiences accumulated. This scope includes self-image, world-image, professional expertise, emotional patterns, relational self, belief structures, skill composition, cultural formation, trauma and healing, and wisdom — all categories of lasting cognitive formation sit inside ^5.
+
+Analytical implications:
+- ^5 is a foundational substrate against which other operators fire. Many single-operator classifications in examples are structurally compound expressions with ^5 as substrate (e.g., `^2^C × ^5^C` — attraction against an accumulated cognitive ^5). Prefer compound notation when the ^5 substrate is pedagogically load-bearing.
+- Person-specificity in CAS scoring emerges from ^5 differences. Same stimulus, different responses, because different Minds are composed of different accumulated experience.
+- AI analog: ^5 composition = training data + fine-tuning corpus. Fine-tuning is ^5-level intervention; in-context prompting is ^1 Mind (awareness) operating against a stable ^5.
+- Cross-session consistency reflects ^5 stability. Drift = either genuine ^5 drift (new accumulated experience) or activation-pattern drift against a stable ^5.
+
+#### Colloquialism Test — diagnostic for Noetic verification
+
+When unsure whether a proposed Noetic classification aligns with authoritative semantics, apply the Colloquialism Test (`docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 6): write down the most natural colloquialism a native speaker would use for the phenomenon, then match it against the canonical colloquialism map below. A clean match supports the classification; no match signals drift; multiple matches suggest a compound expression.
+
+Canonical colloquialism map:
+- ^0 Idea: "It's all in your head."
+- ^1 Mind: "Paying attention." / "Making up your mind." / "Using your head."
+- ^2 Positive: "Drawn to it like a moth to a flame." / "Speaks to me." / "Can't resist."
+- ^3 Negative: "Can't stomach it." / "Rubs me the wrong way." / "Wouldn't touch it with a ten-foot pole."
+- ^4 Vibration: "Hit me hard." / "Struck a chord." / "Resonated." / "Made an impression."
+- ^5 Female: "We are the sum of our experiences." / "It's who I am." / "Part of what makes me me."
+- ^6 Male: "Unpacking an idea." / "Breaking it down." / "Looking at what's underneath." / "Pulling apart the argument."
+- ^7 Rhythm: "Practice makes perfect." / "You are what you repeatedly do." / "Getting into a groove." / "Muscle memory."
+- ^8 Above/Cause: "That reminds me..." / "One thing leads to another." / "Triggered a memory." / "Made me think of..."
+- ^9 Below/Effect: "It just popped into my head." / "Out of nowhere I thought of..." / "The thought came to me." / "It just clicked."
+
+Guardrail: where a colloquialism and a canonical definition appear to disagree, the canonical definition in Clarification 1 governs. Apply the test during reconciliation work, incident-database CAS analysis, pedagogical example construction, and marketing copy review.
+
+Anti-drift annotations — load-bearing warnings that catch the specific drift patterns recurring across prior Scheme-A/B/C artifacts (full worked verification in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 6):
+
+- **`^3` Negative is VISCERAL, not analytical.** The colloquialisms "can't stomach it," "rubs me the wrong way," "wouldn't touch it with a ten-foot pole" describe aversion/repulsion, not analytical critique. If an example reaches for audit/scrutinize/find-flaws vocabulary, the correct classification is `^6` Male (compositional decomposition-and-test), not `^3`. This catches Scheme-A CO-3 Concretization drift and Scheme-B "Aversion / Critical Evaluation" drift.
+- **`^8` Above/Cause is associative TRIGGERING, not analytical reasoning.** The colloquialisms "that reminds me," "one thing leads to another," "triggered a memory" describe associative surfacing of Ideas, not deductive inference. Deductive causal analysis is a compound of `^6` Male (decomposition) and `^9` Below/Effect (landing), not `^8`. This catches Scheme-B "Causal Reasoning" drift that appeared in compiler code, cas-engine docstrings, and multiple chapter examples.
+- **`^4` Vibration has an etymological cognate.** "Struck a chord" is not a metaphor for resonance — it is a literal vibration metaphor pointing at the same structural dynamic the authoritative definition names. When the colloquialism and the definition etymologically converge, the verification is strongest.
+
+When classifying a new example during reconciliation or analysis: if the proposed Noetic is `^3` or `^8`, explicitly check the anti-drift annotation before committing the classification. The visceral-vs-analytical and triggering-vs-reasoning distinctions are where Scheme-A/B/C schemes most commonly re-emerge.
+
+#### Phenomenological Register axis — CAS v7.5 extension
+
+CAS v7.5 introduces a second orthogonal axis: the **Phenomenological Register**. Register specifies the operational character of a cognitive operation without changing what the operation IS. The 40 Cognitive States (10 Noetics × 4 Domains) and 7 Drives (F1-F7) remain unchanged; Register is a specification layer on top of them. Full authoritative treatment is in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 8.
+
+Four Register values (R ∈ {T, A, f, E}):
+- **`|T` Transcendent** — high-abstraction, purpose-orienting, integrative-across-particulars. Human: felt sense of meaning, vision, calling. AI: high-level goal representation, strategic abstraction. Biological: holistic orienting responses.
+- **`|A` Analytical** — explicit, sequential, logical, reason-based. Human: conscious reasoning, deliberation. AI: chain-of-thought, symbolic reasoning. Biological: problem-solving behavior, step-by-step procedure execution.
+- **`|f` Affective** — value-laden, feeling-toned. Human: emotional response, visceral reaction. AI: RLHF-tuned value expression, preference-weighted output. Biological: valence-carrying response, approach-avoidance dynamics.
+- **`|E` Embodied** — sensorimotor, concrete, direct engagement with material/physical substrate. Human: bodily knowing, gut response, kinesthetic awareness. AI: direct sensor/actuator engagement, real-time control loops, embodied robotic action. Biological: reflexive/sensorimotor behavior.
+
+Notation:
+- `^n|R` — Register specified for a Noetic primitive alone.
+- `F_k|R` — Register specified for a Drive primitive alone.
+- `^n^D_{F_k}|R` — Register specified for the compound state as a whole.
+- `^n|R_n^D_{F_k|R_d}` — Independent register specification for Noetic and Drive when they differ.
+
+Register is **optional**. CAS v7.4 expressions (no register specified) remain valid in v7.5 and indicate register-neutral or unspecified register. When register matters analytically, specification is recommended. When it does not, omission is acceptable.
+
+Register applies orthogonally to the four cognitive axes:
+- Noetic (which structural dynamic: `^0` through `^9`)
+- Domain (which ontological level: P / C / E / O)
+- Drive (which motivational architecture: F1 through F7)
+- Register (which operational character: T / A / f / E)
+
+All four axes orthogonal. Any combination expressible.
+
+Cross-validation: the Register axis is independently confirmed by two TKS cross-products — 10 Noetics × 4 Worlds = 40 Elements (Noetic-level) and 7 Foundations × 4 Worlds = 28 Foundations (Drive-level). The same 4-Worlds axis appears at both cross-products. Reframed in secular universal terms as 4 Registers, it applies consistently across all CAS primitives. CAS v7.4 lost this axis in translation from TKS; v7.5 restores it on secular basis. Only the axis structure is reconciled from TKS; metaphysical/cultural content is not incorporated (see `docs/reference/tks_28_foundations_translation_key.md`).
+
+Resolution of CAS v7.4 ambiguity: the Evaluative-domain conflation (analytical assessment vs affective response) is resolved by `|A` vs `|f` Register specification. Both `^3^E|A` (analytical assessment that something is bad) and `^3^E|f` (felt aversion) are legitimate; the Register disambiguates which.
+
+Status of artifacts: Chapters 2-17 of FULL_MANUSCRIPT.md were reconciled under CAS v7.4 semantics (pre-Register). Register integration into the book is follow-on work, not yet completed. See `docs/working/cas_v7_5_rollout_plan.md` for the scheduled rollout across peer-review paper, book manuscript, compiler, Rust engine, dashboard, LLM scoring prompt, incident database, scenario catalog, and NL signal analyzer.
+
+Dashboard visualization for v7.5 is specified as a multi-modal system in `docs/design/cas_v7_5_multimodal_display_specification.md`: a Radial Architecture Display (visual mandala across all four CAS axes) and a Temporal Cognitive Score (auditory sonification with formal pitch/dynamic/tempo/rhythm mappings from CAS algebra). Implementation is phased — Phase A (minimum viable visual rendering) is a v7.5 rollout dependency; Phases B-E are progressive enhancement. Public-facing names are strictly technical ("Radial Architecture Display," "Temporal Cognitive Score," "Multi-Modal Cognitive Signature"); aesthetic heritage informs design but never appears in product marketing. Every visual and auditory mapping is traceable to a formal CAS primitive.
+
+Legal framing: Register is specification of operational character of existing primitives, not introduction of new primitives. The 40 Cognitive States and 7 Drives remain unchanged. This preserves integrity of the provisional patent filing USPTO #64/037,173. IP attorney consultation is flagged in the rollout plan.
+
+#### Production Semantics — CAS v7.6 extension
+
+> CAS v7.6 adds production semantics as a higher-order analytical layer over the v7.5 state space. Every outcome is treated as a production target Ω requiring a recipe Θ — a proportional weighting of prerequisite primitives (Noetics, Domains, Drives, Registers, or compound states from v7.5). Recipe notation: `Θ(Ω) = a₁·X₁ + a₂·X₂ + ... + aₙ·Xₙ → Ω`. Full authoritative treatment is in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 9.
+>
+> Core v7.6 concepts (each defined in Clarification 9 Section 2):
+> - **Production Target (Ω)** — a specified outcome under analysis.
+> - **Recipe (Θ)** — proportional prerequisite weighting for a unit of Ω.
+> - **State Vector (S)** — current activation quantities of each primitive.
+> - **Theoretical Yield (Y_T)** — `min_i(xᵢ / aᵢ)` across recipe prerequisites; produces the Limiting Reagent.
+> - **Actual Yield (Y_A)** — observed/achieved units of Ω.
+> - **Production Efficiency (η)** — `Y_A / Y_T`, in `[0, 1]`.
+> - **Limiting Reagent (L)** — the prerequisite bottlenecking Y_T.
+> - **Excess Capacity (ε)** — unused prerequisite quantity after Limiting Reagent bottlenecks production.
+> - **Leakage / Side-Reaction (Λ)** — prerequisite present but producing wrong product (distinct from lacunarity = absence, and from inversion = shadow form).
+> - **Catalyst (κ)** / **Inhibitor (ι)** — environmental factors raising or lowering η without being consumed.
+>
+> Legal framing: v7.6 is specification of how existing v7.5 primitives (Noetics, Domains, Drives, Registers) participate in outcome production. It does NOT introduce new primitives to the topos. The 40 Cognitive States, 7 Drives, and 4 Registers — the primitives named in USPTO #64/037,173 and Clarifications 1-8 — remain unchanged. v7.6 adds analytical capacities (recipe notation, yield measurement, leakage detection, catalyst/inhibitor formalism, limiting reagent analysis) over those existing primitives, not new primitives themselves. IP attorney consultation for v7.6 scope is flagged in `docs/working/cas_v7_6_rollout_plan.md`.
+>
+> Explicit distinctions (Clarification 9 Section 5): Leakage ≠ Lacunarity (present-wrong-product vs absent). Leakage ≠ Inversion (normal-with-diverted-output vs shadow-form). Recipe ≠ RPM (proportional quantities vs sequential dependency). Recipe weights ≠ Drive values (outcome-specific requirements vs current activation). Limiting Reagent ≠ Lacunarity (ratio-bottleneck among present vs absence-among-absent).
+>
+> Status of artifacts: CAS v7.5 rollout continues on its existing schedule; v7.6 implementation rolls out on a SEPARATE track per `docs/working/cas_v7_6_rollout_plan.md`. The v7.5 chapter-integration, Appendix G, Dashboard Phase A, and peer-review-paper tracks proceed with v7.5 content only. v7.6 content is added as v7.5 rollout stabilizes. This sequencing is deliberate: v7.6 admitted now to lock framework formalization, while sequencing implementation preserves v7.5 stability.
+
+#### Register Multiplicity and Operator Discipline — CAS v7.7 extension
+
+> CAS v7.7 admits Clarification 10: Register Multiplicity, Co-Presence, and Cross-Register Integration. Formal operator discipline for register-enriched expressions, resolving the three-way ambiguity between architectural specification, same-state co-presence, and cross-register integration. Full authoritative treatment is in `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 10.
+>
+> Three-way notational distinction:
+> - **`|⟨R1,R2,R3⟩` — Register-set specification.** State is present in one or more registers; no claim about interaction dynamics. Architectural description only. Example: `^3^P|⟨A,f,T⟩` — principled aversion present in analytical, affective, transcendent registers.
+> - **`+` — Register co-presence / association.** Same state manifests simultaneously in multiple registers; manifestations remain distinct. Example: `^3^P|A + ^3^P|f + ^3^P|T` — three distinct co-present manifestations of principled aversion.
+> - **`×` — Cross-register integration.** Multiple register-instantiations enter a genuine generative operation yielding a unified or emergent result. Requires explicit named emergent result. Example: `(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω` where `^3^P|Ω` is defined.
+>
+> Admissibility rule (Clarification 10 Section 4): same-Noetic multi-register expressions using `×` are invalid by default; require explicit emergent result or fusion semantics. Absent those, must be rewritten as `+` (co-presence) or `|⟨…⟩` (specification).
+>
+> Operator discipline (Section 3):
+> - `+` — association/co-presence; terms remain structurally distinct.
+> - `×` — genuine generative integration yielding emergent state; reserved for true integrative work.
+> - `|⟨…⟩` — register-set occupancy; no operational claim.
+>
+> Decision procedure (Section 6): (1) specifying where state exists → `|⟨…⟩`; (2) manifestations present together but distinct → `+`; (3) genuine integration into fused state → `×` with specified result.
+>
+> TKS validation heuristic (Section 7): substitute `+` with "associates with" and `×` with "intensifies through"; if substitution matches intended meaning, operator choice is correct.
+>
+> AI safety relevance (Section 5): redundant multi-register safety (`^3^P|A + ^3^P|f + ^3^P|T` — three mechanisms, each defeasible) vs unified cross-register commitment (`(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω` — one fused architecture) vs static architecture description (`^3^P|⟨A,f,T⟩` — specification pending behavioral analysis) are empirically different AI safety architectures with different failure profiles. Notational distinction required for diagnostic precision.
+>
+> Convergence with v7.6 (Section 12): three framework layers — TKS operator heritage, Clarification 10, v7.6 production semantics — converge on same `+`/`×` distinctions. Recipe notation under v7.6 (`Θ(Ω) = a·X₁ + b·X₂ → Ω`) uses `+` for prerequisite co-presence, consistent with Clarification 10. Register-enriched recipes naturally follow Clarification 10 discipline.
+>
+> Legal framing: Clarification 10 is notational refinement — specification of when existing operators (`×`, `+`) are licensed and introduction of `|⟨…⟩` notation for register specification. Does NOT introduce new primitives. The 40 Cognitive States, 7 Drives, 4 Registers, 5 Generative Operations — the primitives named in USPTO #64/037,173 and Clarifications 1-9 — remain unchanged. v7.7 adds notational discipline preserving parser interpretability and diagnostic precision, not new primitives. IP attorney consultation is flagged in `docs/working/cas_v7_7_rollout_plan.md` before arXiv submission, utility patent filing, or public disclosure of v7.7 beyond current development.
+>
+> Backward compatibility: v7.6 expressions using `×` for different-state integration remain valid v7.7. v7.6 expressions using `×` for same-Noetic multi-register co-presence (overloaded cases) are flagged for rewrite to `+`, `|⟨…⟩`, or explicit emergent-result specification.
+>
+> Status of artifacts: CAS v7.5 and v7.6 rollouts continue on their existing schedules; v7.7 implementation rolls out on a SEPARATE track per `docs/working/cas_v7_7_rollout_plan.md`. Retroactive correction of Wave 1 Chapter 21 multi-register refusal passage (and any similar same-Noetic `×` usage without emergent result) is scheduled as part of v7.7 rollout.
+
+#### Structural invariants (conventions layered on top of the authoritative definitions)
+
 ```
-10 Cognitive Operators: CO-0 through CO-9
-  Involution pairs: CO-2↔CO-3, CO-5↔CO-6, CO-8↔CO-9
-  Self-duals: CO-0, CO-1, CO-4, CO-7
-  Monoid: (N, ∘, CO-0) where CO-0 is identity
+Involution pairs: CO-2↔CO-3, CO-5↔CO-6, CO-8↔CO-9
+Self-duals: CO-0, CO-1, CO-4, CO-7
+Monoid: (N, ∘, CO-0) where CO-0 is identity
 
-4 Processing Domains: P (Principled), C (Cognitive), E (Evaluative), O (Operational)
+4 Processing Domains (structural precedence tiers):
+  P (Principled), C (Cognitive), E (Evaluative), O (Operational)
   Total order: P ≻ C ≻ E ≻ O
-  Domain Descent: P → C → E → O (causation); O → P (feedback)
+  Domain Descent: P → C → E → O (causation graph); O → P (feedback signal path)
 
-40 Cognitive States: 10 Operators × 4 Domains = P0-P9, C0-C9, E0-E9, O0-O9
+40 Cognitive States: 10 Noetics × 4 Domains = P0-P9, C0-C9, E0-E9, O0-O9
 
-7 Core Drives: F1 Unity, F2 Wisdom, F3 Vitality, F4 Connection, F5 Agency, F6 Structure, F7 Purpose
+7 Core Drives:
+  F1 Unity, F2 Wisdom, F3 Vitality, F4 Connection, F5 Agency, F6 Structure, F7 Purpose
   Drive inversion pairs: F1↔F7, F2↔F6, F3↔F5. F4 self-dual.
   28 Domain-Specific Drives: 7 Drives × 4 Domains
 
 22 Capability Pathways: A0 (Pure Desire) + D1-D7 + W1-W7 + P1-P7
   RPM chain: A0 → Dn → Wn → Pn → Outcome
+  RPM chain is section-retraction (one-directional prerequisite satisfaction); see Correction 2 above.
 
-7 Inversion Axes: N (Operator), W (Domain), F (Drive), E (State), S (Sub-Drive), A (Pathway), P (Compound)
+7 Inversion Axes:
+  N (Operator / Noetic involution imbalance)
+  W (Domain precedence violation)
+  F (Drive pair imbalance)
+  E (State-vector entropy deficit)
+  S (Sub-Drive cross-domain variance)
+  A (Pathway RPM chain violation)
+  P (Compound — multiple axes simultaneously)
 ```
 
 ### Scoring Algorithm (NCCS Weights)
@@ -161,7 +322,10 @@ noetic-compass/
 - RPM monad laws: verified via property-based testing (>10,000 cases)
 
 ## Reference Documents (in docs/ folder)
+- **`CAS_FOUNDATIONAL_CLARIFICATIONS.md`** — normative language reference; read before any CAS description work.
 - TAD v2.0 CORRECTED — primary engineering spec
 - Operations Manual v2 CAS — 25 SOPs defining outputs
 - CAS v7.4 Referee-Defensible (36pp) — axioms A1-A7
 - CAS v7.4 Corrected Edition (596pp) — full mathematical reference
+- `AI_MISALIGNMENT_INCIDENTS_DATABASE.md` — verified-source incident database with CAS structural analysis
+- `INCIDENT_CATEGORIES.md` — 12-class CAS failure taxonomy + Taxonomy Development Notes
