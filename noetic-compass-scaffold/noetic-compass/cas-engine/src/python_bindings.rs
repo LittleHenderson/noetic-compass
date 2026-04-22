@@ -1785,6 +1785,223 @@ fn validate_same_noetic_cross_product(
 }
 
 // ---------------------------------------------------------------------------
+// CAS-Native v2 ADR-06 batch APIs
+// ---------------------------------------------------------------------------
+//
+// Batch wrappers exposed for the CAS-Native v2 Rust bridge (ADR-06). Each
+// batch PyO3 entry point parses a list of per-sample inputs, delegates to
+// the existing per-sample Rust function via the public batch wrapper, and
+// returns a list of result objects. Ordering is preserved.
+
+/// Parse a single Rule 4 operand encoded as
+/// `(operator_index, domain_index_or_None, drive_number_or_None,
+/// register_symbol_or_None)` into a [`validation::CognitiveStateWithRegister`].
+fn parse_operand_tuple(
+    op_idx: usize,
+    dom_idx: Option<usize>,
+    drv_num: Option<u8>,
+    reg_sym: Option<String>,
+) -> PyResult<validation::CognitiveStateWithRegister> {
+    let noetic = ontology::CognitiveOperator::from_index(op_idx).ok_or_else(|| {
+        PyValueError::new_err(format!("operator index must be 0-9, got {op_idx}"))
+    })?;
+    let domain = match dom_idx {
+        None => None,
+        Some(idx) => Some(ontology::Domain::from_index(idx).ok_or_else(|| {
+            PyValueError::new_err(format!("domain index must be 0-3, got {idx}"))
+        })?),
+    };
+    let drive = match drv_num {
+        None => None,
+        Some(n) => Some(ontology::CoreDrive::from_number(n).ok_or_else(|| {
+            PyValueError::new_err(format!("drive number must be 1-7, got {n}"))
+        })?),
+    };
+    let register = match reg_sym.as_deref() {
+        None => None,
+        Some(s) => Some(ontology::Register::from_symbol(s).ok_or_else(|| {
+            PyValueError::new_err(format!(
+                "register symbol must be one of 'T', 'A', 'f', 'E'; got {s:?}"
+            ))
+        })?),
+    };
+    Ok(validation::CognitiveStateWithRegister::new(
+        noetic, domain, drive, register,
+    ))
+}
+
+/// ADR-06 batch validator for Rule 4.
+///
+/// Each batch element is a tuple `(operands, named_emergent_result)` where
+/// `operands` is a list of operand tuples (see
+/// [`validate_same_noetic_cross_product`] above for the tuple layout) and
+/// `named_emergent_result` is an optional [`PyNamedEmergentRegister`]. Returns
+/// a list of [`PyRuleFourResult`] in the same order as the input.
+#[pyfunction(name = "validate_same_noetic_cross_product_batch")]
+fn py_validate_same_noetic_cross_product_batch(
+    expressions: Vec<(
+        Vec<(usize, Option<usize>, Option<u8>, Option<String>)>,
+        Option<PyNamedEmergentRegister>,
+    )>,
+) -> PyResult<Vec<PyRuleFourResult>> {
+    let mut parsed: Vec<validation::RuleFourBatchInput> = Vec::with_capacity(expressions.len());
+    for (operand_tuples, named_py) in expressions {
+        let mut operands: Vec<validation::CognitiveStateWithRegister> =
+            Vec::with_capacity(operand_tuples.len());
+        for (op_idx, dom_idx, drv_num, reg_sym) in operand_tuples {
+            operands.push(parse_operand_tuple(op_idx, dom_idx, drv_num, reg_sym)?);
+        }
+        let named = named_py.map(|n| n.inner);
+        parsed.push((operands, named));
+    }
+    let results = validation::validate_same_noetic_cross_product_batch(&parsed);
+    Ok(results
+        .into_iter()
+        .map(|inner| PyRuleFourResult { inner })
+        .collect())
+}
+
+/// PyO3 wrapper for [`ontology::ValidationResult`]. Fields surface the
+/// discriminant (`kind`), optional `reason` tag, and optional `detail`
+/// message so Python callers can dispatch on the tag without textual parsing.
+#[pyclass(name = "ValidationResult")]
+#[derive(Clone)]
+pub struct PyValidationResult {
+    inner: ontology::ValidationResult,
+}
+
+#[pymethods]
+impl PyValidationResult {
+    #[getter]
+    fn kind(&self) -> &'static str {
+        match &self.inner {
+            ontology::ValidationResult::Valid => "valid",
+            ontology::ValidationResult::Invalid { .. } => "invalid",
+        }
+    }
+
+    /// Machine-readable reason tag (e.g., `"empty_register_set"`). `None`
+    /// for the valid variant.
+    #[getter]
+    fn reason(&self) -> Option<String> {
+        match &self.inner {
+            ontology::ValidationResult::Invalid { reason, .. } => Some(reason.clone()),
+            _ => None,
+        }
+    }
+
+    /// Human-readable detail string. `None` for the valid variant.
+    #[getter]
+    fn detail(&self) -> Option<String> {
+        match &self.inner {
+            ontology::ValidationResult::Invalid { detail, .. } => Some(detail.clone()),
+            _ => None,
+        }
+    }
+
+    fn is_valid(&self) -> bool {
+        self.inner.is_valid()
+    }
+
+    fn __repr__(&self) -> String {
+        match &self.inner {
+            ontology::ValidationResult::Valid => "ValidationResult(valid)".to_string(),
+            ontology::ValidationResult::Invalid { reason, .. } => {
+                format!("ValidationResult(invalid, reason={reason:?})")
+            }
+        }
+    }
+}
+
+/// ADR-06 batch verification for `(RegisterSet, NamedEmergentRegister)` pairs.
+///
+/// Each element of `inputs` is a `(register_set, named_emergent_register)`
+/// pair. Returns a list of [`PyValidationResult`] preserving order.
+#[pyfunction(name = "verify_named_emergent_register_batch")]
+fn py_verify_named_emergent_register_batch(
+    inputs: Vec<(PyRegisterSet, PyNamedEmergentRegister)>,
+) -> Vec<PyValidationResult> {
+    let parsed: Vec<ontology::NamedEmergentBatchInput> = inputs
+        .into_iter()
+        .map(|(rs, ner)| (rs.inner, ner.inner))
+        .collect();
+    ontology::verify_named_emergent_register_batch(&parsed)
+        .into_iter()
+        .map(|inner| PyValidationResult { inner })
+        .collect()
+}
+
+/// PyO3 wrapper for [`yield_mod::YieldResult`]. Exposes the theoretical
+/// yield, a [`PyLimitingReagent`], optional actual yield, optional
+/// efficiency, and the excess-capacity map keyed by primitive canonical
+/// notation.
+#[pyclass(name = "YieldResult")]
+#[derive(Clone)]
+pub struct PyYieldResult {
+    inner: yield_mod::YieldResult,
+}
+
+#[pymethods]
+impl PyYieldResult {
+    #[getter]
+    fn theoretical_yield(&self) -> f64 {
+        self.inner.theoretical_yield
+    }
+
+    #[getter]
+    fn limiting_reagent(&self) -> PyLimitingReagent {
+        PyLimitingReagent {
+            inner: self.inner.limiting_reagent.clone(),
+        }
+    }
+
+    #[getter]
+    fn actual_yield(&self) -> Option<f64> {
+        self.inner.actual_yield
+    }
+
+    #[getter]
+    fn efficiency(&self) -> Option<f64> {
+        self.inner.efficiency
+    }
+
+    /// Excess capacity per prerequisite, keyed by canonical notation string.
+    #[getter]
+    fn excess_capacity(&self) -> HashMap<String, f64> {
+        self.inner
+            .excess_capacity
+            .iter()
+            .map(|(p, e)| (p.canonical_notation(), *e))
+            .collect()
+    }
+
+    fn __repr__(&self) -> String {
+        format!(
+            "YieldResult(Y_T={:.6}, actual={:?}, η={:?})",
+            self.inner.theoretical_yield, self.inner.actual_yield, self.inner.efficiency
+        )
+    }
+}
+
+/// ADR-06 batch yield computation.
+///
+/// Each element of `inputs` is a `(recipe, state, observed_yield_or_None)`
+/// triple. Returns a list of [`PyYieldResult`] preserving order.
+#[pyfunction(name = "compute_yield_batch")]
+fn py_compute_yield_batch(
+    inputs: Vec<(PyRecipe, PyProductionStateVector, Option<f64>)>,
+) -> Vec<PyYieldResult> {
+    let parsed: Vec<yield_mod::YieldBatchInput> = inputs
+        .into_iter()
+        .map(|(r, s, o)| (r.inner, s.inner, o))
+        .collect();
+    yield_mod::compute_yield_batch(&parsed)
+        .into_iter()
+        .map(|inner| PyYieldResult { inner })
+        .collect()
+}
+
+// ---------------------------------------------------------------------------
 // Module registration
 // ---------------------------------------------------------------------------
 
@@ -1815,6 +2032,9 @@ pub fn cas_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<PyRegisterSet>()?;
     m.add_class::<PyNamedEmergentRegister>()?;
     m.add_class::<PyRuleFourResult>()?;
+    // CAS-Native v2 ADR-06 batch API result types
+    m.add_class::<PyValidationResult>()?;
+    m.add_class::<PyYieldResult>()?;
     m.add_function(wrap_pyfunction!(compute_nccs, m)?)?;
     m.add_function(wrap_pyfunction!(geodesic_distance, m)?)?;
     m.add_function(wrap_pyfunction!(bhattacharyya_coefficient, m)?)?;
@@ -1830,5 +2050,9 @@ pub fn cas_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(efficiency, m)?)?;
     // CAS v7.7 Rule 4 admissibility validator (Clarification 10)
     m.add_function(wrap_pyfunction!(validate_same_noetic_cross_product, m)?)?;
+    // CAS-Native v2 ADR-06 batch APIs (Rust engine alignment)
+    m.add_function(wrap_pyfunction!(py_validate_same_noetic_cross_product_batch, m)?)?;
+    m.add_function(wrap_pyfunction!(py_verify_named_emergent_register_batch, m)?)?;
+    m.add_function(wrap_pyfunction!(py_compute_yield_batch, m)?)?;
     Ok(())
 }

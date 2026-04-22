@@ -15,7 +15,8 @@ pub mod lacunarity;
 pub mod yield_calc;
 
 pub use yield_calc::{
-    efficiency, excess_capacity, limiting_reagent, theoretical_yield, LimitingReagent, Yield,
+    compute_yield_batch, efficiency, excess_capacity, limiting_reagent, theoretical_yield,
+    LimitingReagent, Yield, YieldBatchInput, YieldResult,
 };
 
 use serde::{Deserialize, Serialize};

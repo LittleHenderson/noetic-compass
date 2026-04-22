@@ -35,7 +35,9 @@ pub use recipe::{
 };
 pub use register::Register;
 pub use register_set::{
-    NamedEmergentRegister, NamedEmergentRegisterError, RegisterSet, RegisterSetError,
+    verify_named_emergent_register, verify_named_emergent_register_batch,
+    NamedEmergentBatchInput, NamedEmergentRegister, NamedEmergentRegisterError, RegisterSet,
+    RegisterSetError, ValidationResult,
 };
 pub use states::{
     CognitiveStateId, CognitiveStateVector, StateVectorError, MIN_PROBABILITY, NUM_STATES,

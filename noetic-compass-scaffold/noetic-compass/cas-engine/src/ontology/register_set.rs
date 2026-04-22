@@ -373,6 +373,116 @@ impl fmt::Display for NamedEmergentRegister {
     }
 }
 
+// ---------------------------------------------------------------------------
+// ValidationResult — batch verification outcome (ADR-06)
+// ---------------------------------------------------------------------------
+
+/// Outcome of a single batched verification check.
+///
+/// Used by [`verify_named_emergent_register_batch`] to report per-sample
+/// results without aborting the whole batch on a single failure. The variants
+/// carry a structured reason for the failure so downstream Python code can
+/// surface diagnostics without re-parsing textual error messages.
+///
+/// See `docs/architecture/cas_native_v2_adrs.md` ADR-06 for motivation.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ValidationResult {
+    /// The sample passed all checks.
+    Valid,
+    /// The sample failed validation. `reason` is a short machine-readable
+    /// tag (e.g., `"empty_register_set"`, `"invalid_name_start"`) suitable
+    /// for dispatching, plus a human-readable `detail` string.
+    Invalid { reason: String, detail: String },
+}
+
+impl ValidationResult {
+    /// Whether this result is valid.
+    pub fn is_valid(&self) -> bool {
+        matches!(self, Self::Valid)
+    }
+
+    /// Construct an Invalid result with a short tag and a long-form message.
+    pub fn invalid(reason: impl Into<String>, detail: impl Into<String>) -> Self {
+        Self::Invalid {
+            reason: reason.into(),
+            detail: detail.into(),
+        }
+    }
+}
+
+/// Per-sample input for [`verify_named_emergent_register_batch`]: a
+/// `RegisterSet` (architectural specification) paired with a
+/// `NamedEmergentRegister` (the emergent fused result claimed for that
+/// specification).
+pub type NamedEmergentBatchInput = (RegisterSet, NamedEmergentRegister);
+
+/// Verify a single `(RegisterSet, NamedEmergentRegister)` pair.
+///
+/// Checks performed:
+///
+/// 1. `RegisterSet` is non-empty (enforced at construction; defensive check
+///    here covers any future relaxation).
+/// 2. `NamedEmergentRegister.name` is well-formed per
+///    [`NamedEmergentRegister::from_str`] rules (re-validated defensively so
+///    stale/unchecked values via `new_unchecked` are still caught).
+/// 3. The `RegisterSet` has at least 2 registers — a same-Noetic emergent
+///    fusion requires at least two register-instantiations per Clarification
+///    10 Section 2C. A singleton register set does not instantiate the
+///    ambiguity pattern Rule 4 guards against and therefore does not require
+///    a `NamedEmergentRegister`. When a named result is nevertheless supplied
+///    for a singleton set, we report this as invalid to surface the likely
+///    modeling error.
+///
+/// Returns [`ValidationResult::Valid`] when all checks pass, else
+/// [`ValidationResult::Invalid`] with a structured reason tag.
+pub fn verify_named_emergent_register(
+    register_set: &RegisterSet,
+    named: &NamedEmergentRegister,
+) -> ValidationResult {
+    if register_set.is_empty() {
+        return ValidationResult::invalid(
+            "empty_register_set",
+            "RegisterSet must contain at least one Register per Clarification 10 Section 2A",
+        );
+    }
+    if register_set.len() < 2 {
+        return ValidationResult::invalid(
+            "singleton_register_set",
+            "NamedEmergentRegister is only meaningful when the RegisterSet \
+             contains ≥2 distinct registers (fusion requires ≥2 source \
+             instantiations per Clarification 10 Section 2C)",
+        );
+    }
+    // Re-validate the name defensively; callers may have constructed via
+    // `new_unchecked`.
+    if let Err(err) = NamedEmergentRegister::from_str(&named.name) {
+        let reason = match &err {
+            NamedEmergentRegisterError::Empty => "empty_name",
+            NamedEmergentRegisterError::InvalidStart(_) => "invalid_name_start",
+            NamedEmergentRegisterError::InvalidChar(_) => "invalid_name_char",
+        };
+        return ValidationResult::invalid(reason, format!("{err}"));
+    }
+    ValidationResult::Valid
+}
+
+/// Batch version of [`verify_named_emergent_register`] (ADR-06).
+///
+/// Applies the single-sample verifier to each `(RegisterSet,
+/// NamedEmergentRegister)` pair in `inputs` and returns a `Vec<ValidationResult>`
+/// preserving input order: `result[i]` corresponds to `inputs[i]`.
+///
+/// Determinism / parallelism / empty-batch semantics match
+/// [`crate::validation::rule_four::validate_same_noetic_cross_product_batch`].
+pub fn verify_named_emergent_register_batch(
+    inputs: &[NamedEmergentBatchInput],
+) -> Vec<ValidationResult> {
+    inputs
+        .iter()
+        .map(|(rset, named)| verify_named_emergent_register(rset, named))
+        .collect()
+}
+
 /// ASCII letter or Greek uppercase letter.
 fn is_valid_start(c: char) -> bool {
     c.is_ascii_alphabetic() || is_greek_uppercase(c)

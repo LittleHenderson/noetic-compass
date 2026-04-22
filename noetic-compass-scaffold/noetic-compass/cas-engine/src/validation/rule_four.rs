@@ -222,6 +222,48 @@ pub fn validate_same_noetic_cross_product(
     }
 }
 
+// ---------------------------------------------------------------------------
+// validate_same_noetic_cross_product_batch — ADR-06 Rust engine batch API
+// ---------------------------------------------------------------------------
+
+/// A single Rule 4 expression in batch form: a list of cross-product operands
+/// plus an optional [`NamedEmergentRegister`] declaring the emergent fused
+/// result (when applicable).
+///
+/// Used by [`validate_same_noetic_cross_product_batch`] so one PyO3 crossing
+/// can validate many expressions at once. Each batch element is independent;
+/// ordering is preserved in the returned `Vec<RuleFourResult>`.
+pub type RuleFourBatchInput = (Vec<CognitiveStateWithRegister>, Option<NamedEmergentRegister>);
+
+/// Batch version of [`validate_same_noetic_cross_product`] (ADR-06).
+///
+/// Applies the existing per-sample validator to each `(operands, named_emergent)`
+/// pair and collects results into a `Vec<RuleFourResult>` preserving input
+/// order: `result[i]` is the validation outcome for `expressions[i]`.
+///
+/// # Determinism
+///
+/// This function performs NO parallelism and introduces no non-determinism.
+/// It is a straight iterate-and-collect wrapper over the per-sample function,
+/// specified by ADR-06 primarily to amortize PyO3 crossing cost for the
+/// CAS-Native v2 training pipeline (see
+/// `docs/architecture/cas_native_v2_adrs.md` ADR-06).
+///
+/// # Empty batch
+///
+/// Returns an empty `Vec` for an empty input slice. No allocations beyond the
+/// result `Vec`'s zero-capacity initialization.
+pub fn validate_same_noetic_cross_product_batch(
+    expressions: &[RuleFourBatchInput],
+) -> Vec<RuleFourResult> {
+    expressions
+        .iter()
+        .map(|(operands, named)| {
+            validate_same_noetic_cross_product(operands.as_slice(), named.as_ref())
+        })
+        .collect()
+}
+
 /// Collect the distinct explicit registers across operands in
 /// first-appearance order, and separately report whether any operand was
 /// register-neutral (`None`). The `None` sentinel is excluded from the

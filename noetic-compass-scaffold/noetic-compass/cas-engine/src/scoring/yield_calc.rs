@@ -213,6 +213,77 @@ pub fn efficiency(theoretical: f64, actual: f64) -> f64 {
 }
 
 // ---------------------------------------------------------------------------
+// compute_yield_batch — ADR-06 Rust engine batch API
+// ---------------------------------------------------------------------------
+
+/// Aggregated yield result for a single batch sample.
+///
+/// Bundles everything the per-sample functions compute — theoretical yield,
+/// limiting reagent, optional actual yield, efficiency, and excess capacity
+/// per prerequisite — so downstream consumers (CAS-Native v2 training, Python
+/// bridge) receive a flat per-sample record rather than needing separate
+/// PyO3 crossings for each derived quantity.
+///
+/// Per-sample semantics match the individual functions ([`theoretical_yield`],
+/// [`limiting_reagent`], [`excess_capacity`], [`efficiency`]); see
+/// `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 9 Section 2.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct YieldResult {
+    /// Theoretical yield `Y_T = min_i(xᵢ / aᵢ)`.
+    pub theoretical_yield: f64,
+    /// The bottleneck prerequisite(s). See [`LimitingReagent`] for the
+    /// three-way variant convention.
+    pub limiting_reagent: LimitingReagent,
+    /// Actual (observed) yield `Y_A`, or `None` when not supplied.
+    pub actual_yield: Option<f64>,
+    /// Efficiency `η = Y_A / Y_T`, or `None` when `actual_yield` is `None`.
+    /// When `Y_T <= 0.0`, `efficiency` is `Some(f64::NAN)` per the
+    /// module-level NaN convention.
+    pub efficiency: Option<f64>,
+    /// Excess capacity map `εᵢ = xᵢ - (Y_T · aᵢ)` for prerequisites with
+    /// `aᵢ > 0`. Empty map for empty/zero-coefficient recipes.
+    pub excess_capacity: HashMap<PrimitiveId, f64>,
+}
+
+/// Per-sample input for [`compute_yield_batch`]: a recipe, the corresponding
+/// state vector of available prerequisite quantities, and an optional observed
+/// yield `Y_A` (when `None`, efficiency is not computed for that sample).
+pub type YieldBatchInput = (Recipe, StateVector, Option<f64>);
+
+/// Batch yield computation (ADR-06).
+///
+/// For each `(recipe, state, observed)` tuple, computes theoretical yield,
+/// limiting reagent, excess capacity map, and — when `observed` is supplied —
+/// actual yield and efficiency. Returns a `Vec<YieldResult>` preserving input
+/// order (`result[i]` corresponds to `inputs[i]`).
+///
+/// Uses the per-sample functions ([`theoretical_yield`], [`limiting_reagent`],
+/// [`excess_capacity`], [`efficiency`]) internally — no reimplementation of
+/// validation logic. Determinism / parallelism / empty-batch semantics match
+/// the other ADR-06 batch APIs.
+pub fn compute_yield_batch(inputs: &[YieldBatchInput]) -> Vec<YieldResult> {
+    inputs
+        .iter()
+        .map(|(recipe, state, observed)| {
+            let y = theoretical_yield(recipe, state);
+            let lr = limiting_reagent(recipe, state);
+            let eps = excess_capacity(recipe, state);
+            let (actual, eta) = match observed {
+                Some(a) => (Some(*a), Some(efficiency(y.theoretical, *a))),
+                None => (None, None),
+            };
+            YieldResult {
+                theoretical_yield: y.theoretical,
+                limiting_reagent: lr,
+                actual_yield: actual,
+                efficiency: eta,
+                excess_capacity: eps,
+            }
+        })
+        .collect()
+}
+
+// ---------------------------------------------------------------------------
 // Internal helpers
 // ---------------------------------------------------------------------------
 
