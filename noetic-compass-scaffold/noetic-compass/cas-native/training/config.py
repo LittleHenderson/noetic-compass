@@ -78,7 +78,14 @@ class V2Hyperparameters:
     lambda_emergent_binding: float = 1.0
 
     # ADR-04 — production semantics yield / limiting-reagent loss weight.
+    # ``lambda_production`` is the outer weight on the aggregated production
+    # loss; the three sub-component weights below select how the aggregate
+    # is formed from the limiting-reagent CE, theoretical-yield MSE, and
+    # efficiency MSE sub-terms (Wave 7B Task 4, ADR-04).
     lambda_production: float = 1.0
+    lambda_production_limiting_reagent: float = 1.0  # w_LR — CE over LR distribution
+    lambda_production_yield: float = 1.0              # w_Y  — MSE on Y_T prediction
+    lambda_production_efficiency: float = 0.5         # w_eff — derived, lower weight
 
     # ADR-06 — Rule 4 compliance loss weight (distance-to-valid penalty).
     lambda_rule_four: float = 1.0

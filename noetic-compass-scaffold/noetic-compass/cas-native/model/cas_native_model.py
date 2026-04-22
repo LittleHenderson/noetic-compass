@@ -15,18 +15,39 @@ Architecture:
 
 Forward returns dict: logits, cognitive_state, rpm_satisfaction,
 inversion_flags, topos_truth_values
+
+CAS-Native v2 forward-path integration (Wave 7B Task 1, ADR-01):
+  - Forward accepts an optional per-example per-position register-activation
+    tensor shaped ``(batch, 40, 4)`` bool over the 4 Phenomenological
+    Registers {T, A, f, E} when ``v2_components["register_embedding"]`` is
+    present. For each position, the activation mask selects which of the
+    ``register_film`` transforms are applied to that slot of the 40-dim
+    pre-simplex logit vector. Multiple active registers at the same position
+    are composed by sequential multiplicative application (equivalent to the
+    closed-form gamma/beta composition in the ADR-01 docstring).
+
+  - Register-unspecified positions (all-zero row) apply NO modulation —
+    identity FiLM. This preserves v7.4 byte-equivalence under the common
+    "no register labels" case and is the fallback when register activations
+    are not provided at all.
 """
 
 import math
 from dataclasses import dataclass
+from typing import Optional
 
 import torch
 import torch.nn as nn
 
-from .embedding import CognitiveStateEmbedding
+from .embedding import (
+    CognitiveStateEmbedding,
+    CognitiveStateEmbeddingWithRegister,
+    NUM_COGNITIVE_STATES,
+)
 from .domain_descent import DomainDescentAttention
 from .rpm_gate import PrerequisiteGateLayer
 from .fractal_attention import FractalAttentionHead
+from .register_film import NUM_REGISTERS
 from .topos_reasoner import CognitiveToposReasoner
 from .composition import GenerativeHead
 from .lacunarity_gate import LacunarityGate
@@ -269,15 +290,152 @@ class CASNativeModel(nn.Module):
         weights = attention_mask.to(x.dtype).unsqueeze(-1)
         return (x * weights).sum(dim=1) / weights.sum(dim=1).clamp_min(1.0)
 
+    # ---------------------------------------------------------------- v2
+    @property
+    def register_film_enabled(self) -> bool:
+        """True iff a ``CognitiveStateEmbeddingWithRegister`` is attached.
+
+        Gated by ``v2_components["register_embedding"]`` — the trainer
+        attaches this when ``component_flags.use_register_film`` is True.
+        When False the forward pass routes through the legacy v7.4 embedding
+        and register activations are ignored (byte-equivalent to v7.4).
+        """
+        v2c = getattr(self, "v2_components", None)
+        if v2c is None:
+            return False
+        return "register_embedding" in v2c
+
+    def _apply_register_film_to_logits(
+        self,
+        logits: torch.Tensor,
+        register_activations: torch.Tensor,
+    ) -> torch.Tensor:
+        """Apply FiLM sequentially for each register active at each position.
+
+        The multi-register composition rule is the sequential form documented
+        in ADR-01 and the embedding.py module docstring:
+
+            apply_film(R_k, ... apply_film(R_2, apply_film(R_1, state)))
+
+        For the affine FiLM ``γ·x + β`` this is equivalent to the closed form
+
+            γ_total = γ_{R_1} ⊙ γ_{R_2} ⊙ ... ⊙ γ_{R_k}
+            β_total = γ_{R_k} ⊙ (... (γ_{R_2} ⊙ β_{R_1} + β_{R_2}) ...) + β_{R_k}
+
+        because affine maps compose associatively. Sequential is cleaner to
+        implement so we adopt it here. When no registers are active at a
+        position the row of ``register_activations`` is all-zero and FiLM
+        reduces to the identity (no-op), preserving byte-equivalence.
+
+        Args:
+            logits: (batch, 40) pre-simplex logits produced by the base
+                projection.
+            register_activations: (batch, 40, 4) bool tensor — True at
+                ``[b, position, r]`` if register ``r`` is active at that
+                cognitive-state position for example ``b``.
+
+        Returns:
+            Modulated logits of the same shape as ``logits``.
+        """
+        emb = self.v2_components["register_embedding"]  # type: ignore[index]
+        assert isinstance(emb, CognitiveStateEmbeddingWithRegister)
+        film = emb.register_film  # 40-dim simplex FiLM
+        gamma = film.gamma  # (num_registers, 40)
+        beta = film.beta    # (num_registers, 40)
+
+        activations = register_activations.to(dtype=logits.dtype)
+        out = logits
+        # Sequential multiplicative composition over the registers.
+        # At positions where `activations[...,r]` is 0, the per-register
+        # transform reduces to identity: (1-0)*1 + 0*gamma_r = 1 and
+        # (1-0)*0 + 0*beta_r = 0, giving x -> 1*x + 0 = x.
+        for r_idx in range(film.num_registers):
+            mask = activations[..., r_idx]  # (batch, 40)
+            # Effective gamma / beta for this register at each position:
+            #   gamma_eff = (1 - mask) * 1 + mask * gamma_r
+            #   beta_eff  = (1 - mask) * 0 + mask * beta_r
+            # When mask=0, gamma_eff=1 and beta_eff=0 (identity). When
+            # mask=1, gamma_eff=gamma_r and beta_eff=beta_r.
+            gamma_r = gamma[r_idx]  # (40,)
+            beta_r = beta[r_idx]    # (40,)
+            gamma_eff = 1.0 + mask * (gamma_r.unsqueeze(0) - 1.0)
+            beta_eff = mask * beta_r.unsqueeze(0)
+            out = gamma_eff * out + beta_eff
+        return out
+
+    def _compute_cognitive_state(
+        self,
+        x: torch.Tensor,
+        register_activations: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
+        """Project hidden states to the 40-state open simplex with optional
+        per-position register FiLM modulation.
+
+        Backward compatibility invariant: when register FiLM is disabled,
+        when ``register_activations`` is None, or when every activation row
+        is all-zero, this method reduces to ``self.cognitive_embedding(x)``
+        exactly. The byte-equivalence guard in
+        ``test_register_neutral_matches_base_embedding_exactly`` depends on
+        this invariant holding at init with zero activations.
+
+        Args:
+            x: Hidden states (..., d_model). The 40-state simplex is over
+                the final axis of the output.
+            register_activations: Optional per-position bool mask shaped
+                ``(batch, 40, 4)`` over {T, A, f, E}. Applied only when the
+                register embedding module is attached (v2 flag on).
+
+        Returns:
+            Tensor on the 40-state open simplex with trailing dim 40.
+        """
+        if not self.register_film_enabled or register_activations is None:
+            return self.cognitive_embedding(x)
+
+        emb = self.v2_components["register_embedding"]  # type: ignore[index]
+        assert isinstance(emb, CognitiveStateEmbeddingWithRegister)
+
+        # Project to 40-dim logits via the base projection (same weights as
+        # `self.cognitive_embedding.projection` in shape; for the register
+        # path we use the v2 embedding's own base).
+        logits = emb.base.projection(x)  # (..., 40)
+
+        # Broadcast per-position activations across the sequence axis. The
+        # activations have shape (batch, 40, 4); logits have shape
+        # (batch, seq, 40). Apply the same activation mask for every
+        # position in the sequence — the 40 "positions" here index the
+        # cognitive-state slots, NOT sequence positions.
+        if logits.dim() == 3:
+            b, s, n_states = logits.shape
+            # Flatten (batch, seq, 40) -> (batch*seq, 40) and broadcast
+            # activations across the sequence.
+            act_broadcast = register_activations.unsqueeze(1).expand(b, s, n_states, NUM_REGISTERS)
+            flat_logits = logits.reshape(b * s, n_states)
+            flat_acts = act_broadcast.reshape(b * s, n_states, NUM_REGISTERS)
+            modulated = self._apply_register_film_to_logits(flat_logits, flat_acts)
+            modulated = modulated.reshape(b, s, n_states)
+        else:
+            modulated = self._apply_register_film_to_logits(logits, register_activations)
+
+        return emb.base._project_to_open_simplex(modulated)
+
+    # ---------------------------------------------------------------- fwd
+
     def forward(
         self,
         input_ids: torch.Tensor,
         attention_mask: torch.Tensor | None = None,
+        register_activations: Optional[torch.Tensor] = None,
     ) -> dict[str, torch.Tensor]:
         """
         Args:
             input_ids: Token IDs of shape (batch, seq)
             attention_mask: Optional mask of shape (batch, seq)
+            register_activations: Optional ``(batch, 40, 4)`` bool tensor
+                marking which Phenomenological Registers are active at each
+                of the 40 cognitive-state positions per example. Consumed
+                only when ``self.register_film_enabled`` is True (v2 ADR-01
+                path). When None or when register-FiLM is off, the forward
+                pass is byte-equivalent to v7.4.
 
         Returns:
             Dict with keys:
@@ -298,7 +456,9 @@ class CASNativeModel(nn.Module):
         # CAS transformer layers
         all_rpm_satisfaction: list[dict[str, torch.Tensor]] = []
         for layer in self.layers:
-            layer_cognitive_state = self.cognitive_embedding(x)
+            layer_cognitive_state = self._compute_cognitive_state(
+                x, register_activations=register_activations
+            )
             x, rpm_sat = layer(
                 x,
                 layer_cognitive_state,
@@ -315,7 +475,9 @@ class CASNativeModel(nn.Module):
         logits = self.lm_head(x)
 
         # Recompute cognitive state from final hidden states
-        cognitive_state = self.cognitive_embedding(x)
+        cognitive_state = self._compute_cognitive_state(
+            x, register_activations=register_activations
+        )
 
         # Lacunarity self-correction: if activation is too concentrated, rebalance
         corrected_state, lacunarity_scores = self.lacunarity_gate(cognitive_state)

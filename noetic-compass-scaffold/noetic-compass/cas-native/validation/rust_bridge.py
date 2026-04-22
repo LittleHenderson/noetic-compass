@@ -234,11 +234,13 @@ class RustValidationBridge:
     # ``docs/working/cas_v7_7_rollout_plan.md`` Rust engine queue.
     _BATCH_FN_NAMES = {
         "rule_four": "validate_same_noetic_cross_product_batch",
+        "rule_four_distance": "rule_four_distance_batch",
         "named_emergent": "verify_named_emergent_register_batch",
         "yield": "compute_yield_batch",
     }
     _PER_SAMPLE_FN_NAMES = {
         "rule_four": "validate_same_noetic_cross_product",
+        "rule_four_distance": "rule_four_distance",
         "named_emergent": "verify_named_emergent_register",
         "yield": "compute_yield",
     }
@@ -464,6 +466,64 @@ class RustValidationBridge:
             "rule_four",
             expressions,
             call_args_for=lambda i, _p: args[i],
+        )
+
+    def rule_four_distance_batch(
+        self,
+        expressions: Sequence[Any],
+        *,
+        call_args: Sequence[Any] | None = None,
+    ) -> list[float]:
+        """Continuous distance-to-valid Rule 4 signal (ADR-06 §Continuous
+        validation signal).
+
+        Wraps ``cas_engine.rule_four_distance_batch`` (PyO3, wheel 0.1.1+)
+        with structural-hash caching. Returns a float per expression:
+        ``0.0`` for admissible, and a positive severity-weighted scalar for
+        a violation (1.0 / 1.5 / 2.0 across 2- / 3- / 4-register violations
+        in the current Rust emitter).
+
+        Cache namespace is ``"rule_four_distance"`` — separate from the
+        binary ``"rule_four"`` cache so cross-contamination between the two
+        result types is structurally impossible.
+
+        When ``rule_four_distance_batch`` is absent from the loaded
+        ``cas_engine`` module (pre-0.1.1 wheels) the bridge falls back via
+        :meth:`_run_batch`'s per-sample path to ``rule_four_distance`` if
+        present. When neither is present the caller should fall back to
+        :meth:`validate_rule_four_batch` (binary 0.0/1.0 signal).
+
+        :param expressions: structural descriptors (one per sample) suitable
+            for :func:`structural_hash`.
+        :param call_args: optional parallel sequence of Rust-call arguments
+            in the `(operands, named_emergent_result)` tuple shape; if
+            omitted each expression is passed through verbatim.
+        """
+        args = list(call_args) if call_args is not None else list(expressions)
+        if len(args) != len(expressions):
+            raise ValueError("call_args length must match expressions length")
+        # Cast results to float — Rust returns Vec<f64>, we normalize to
+        # Python float for downstream tensor construction.
+        results = self._dispatch(
+            "rule_four_distance",
+            expressions,
+            call_args_for=lambda i, _p: args[i],
+        )
+        return [float(r) for r in results]
+
+    def has_rule_four_distance(self) -> bool:
+        """True iff the loaded Rust engine exposes the continuous Rule 4
+        distance API (``rule_four_distance_batch`` or per-sample
+        ``rule_four_distance``).
+
+        Used by the trainer to decide between the continuous gradient-bearing
+        signal and the binary 0.0/1.0 fallback when older wheels are loaded.
+        """
+        if self._engine is None:
+            return False
+        return (
+            self._resolve_fn("rule_four_distance", batch=True) is not None
+            or self._resolve_fn("rule_four_distance", batch=False) is not None
         )
 
     def verify_named_emergent_batch(

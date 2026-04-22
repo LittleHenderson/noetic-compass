@@ -46,8 +46,9 @@ from ..model.loss import (
 from ..model.embedding import (
     CognitiveStateEmbedding,
     CognitiveStateEmbeddingWithRegister,
+    NUM_COGNITIVE_STATES,
 )
-from ..model.register_film import REGISTER_INDEX
+from ..model.register_film import NUM_REGISTERS, REGISTER_INDEX
 from ..model.emergent_register import EmergentRegisterPipeline
 from ..model.production_semantics import ProductionSemanticsHead
 from .config import TrainingConfig, V2ComponentFlags
@@ -407,50 +408,192 @@ class CASTrainer:
             return None
         return self._involution_loss.involution_loss(self._register_film_module)
 
+    # -------------------------------------------------- register activations
+
+    def _build_register_activations(
+        self,
+        register_labels_batch: list[list[dict[str, Any]]],
+    ) -> Optional[torch.Tensor]:
+        """Build a ``(batch, 40, 4)`` bool activation tensor from label lists.
+
+        Training data (`data_format.md`) stores per-example register_labels
+        as ``[{"position": int, "register": str}, ...]``. Position indexes
+        into the 40 cognitive-state slots (not sequence positions). This
+        helper buckets those labels into a dense per-position per-register
+        mask suitable for the model's forward-path FiLM routing (Task 1).
+
+        Labels with out-of-range positions or unrecognized registers are
+        silently skipped — the trainer's scaffold data pipeline validates
+        upstream, and defensive tolerance here keeps a malformed batch from
+        crashing the training loop.
+
+        Returns None when the batch carries zero register labels — that
+        signal lets the forward pass short-circuit to the byte-equivalent
+        v7.4 path.
+        """
+        batch_size = len(register_labels_batch)
+        if batch_size == 0:
+            return None
+
+        any_labels = any(bool(lst) for lst in register_labels_batch)
+        if not any_labels:
+            return None
+
+        acts = torch.zeros(
+            batch_size,
+            NUM_COGNITIVE_STATES,
+            NUM_REGISTERS,
+            dtype=torch.bool,
+            device=self.device,
+        )
+        for i, labels in enumerate(register_labels_batch):
+            for entry in labels or []:
+                pos = entry.get("position")
+                reg = entry.get("register")
+                if pos is None or reg is None:
+                    continue
+                if not (0 <= int(pos) < NUM_COGNITIVE_STATES):
+                    continue
+                r_idx = REGISTER_INDEX.get(reg)
+                if r_idx is None:
+                    continue
+                acts[i, int(pos), r_idx] = True
+        return acts
+
     def _compute_emergent_binding_loss(
         self,
         hidden_states: torch.Tensor,
         omega_labels_batch: list[list[dict[str, Any]]],
+        register_labels_batch: Optional[list[list[dict[str, Any]]]] = None,
     ) -> Optional[torch.Tensor]:
-        """Cross-entropy over Ω_* registry targets for labeled positions.
+        """Per-position Ω_* binding loss (Wave 7B Task 3, ADR-02).
 
-        Uses the EmergentRegisterBindingHead output at the pooled hidden-state
-        representation. When no examples in the batch carry Ω_* labels, the
-        loss is zero (mask-driven).
+        Upgrade path from Wave 6B's pooled-hidden-state approximation to a
+        per-position signal:
+
+        1. For each example `b` with both ``omega_labels`` and
+           ``register_labels`` entries, identify the Rule 4 integration
+           positions: positions `p` where **at least two** distinct
+           registers are marked active AND a named Ω_* emergent is present.
+        2. For each such `(b, p)`, apply the d_model-width
+           ``register_film_dmodel`` per register to the pooled hidden state,
+           producing the per-register modulated states that the binding
+           head consumes. (An earlier alternative — apply FiLM to the
+           per-position 40-dim slot — is architecturally mismatched against
+           Agent 27's binding head, which lives in d_model-space per ADR-02.)
+        3. Run the binding head on the stack of register-modulated states
+           with the prerequisite mask True, and compute the cosine-distance
+           loss ``1 - cos(binding_output, target_Ω)`` where the target is
+           the registry embedding for the named Ω_*.
+        4. Mean over matched positions; batch-mean is a weighted-mean by
+           the count of positions per example (simple averaging across the
+           flattened (example, position) pairs).
+
+        Backward compatibility: when no examples have Rule 4 integration
+        positions (no co-active ≥2 registers AND no Ω_* label at those
+        positions), the loss is None and contributes zero to the trainer
+        aggregate (same zero-contribution pattern as other v2 losses).
         """
         if self._emergent_pipeline is None:
             return None
-        # Skip when no active Ω_* entries are registered.
         if self._emergent_pipeline.registry.active_size == 0:
             return None
 
-        # Pool over sequence — ER-space bindings are per-example.
+        # Pool over sequence — ER-space bindings are per-example at each of
+        # the 40 cognitive-state positions. The register-modulated states
+        # ride on the pooled hidden state (d_model-width) rather than the
+        # simplex slot because the binding head / Ω_* registry live in
+        # d_model-space.
         pooled = hidden_states.mean(dim=1)  # (batch, d_model)
 
-        # Synthesize register-modulated states from the pooled hidden state by
-        # applying each register's FiLM, producing a (batch, num_registers,
-        # d_model) tensor. Use `register_film_dmodel` here — this FiLM is sized
-        # at CASNativeConfig.d_model (not 40) and feeds the binding head, which
-        # is also sized at d_model. Using register_film (40-dim) would fail any
-        # d_model != 40. See ADR-01/ADR-02 + embedding.py docstring.
         film = self._register_film_dmodel_module
         if film is None:
             return None
         if pooled.shape[-1] != film.d_model:
-            # Dim alignment invariant: trainer instantiates register_film_dmodel
-            # at config.d_model and feeds pooled from the same d_model hidden
-            # path, so this is a programming error if it ever fires.
             raise RuntimeError(
                 "Emergent-binding dim mismatch: pooled last-dim "
                 f"{pooled.shape[-1]} != register_film_dmodel.d_model "
                 f"{film.d_model}; this indicates broken dim propagation "
                 "from CASNativeConfig.d_model."
             )
+
+        # Index-accelerated lookup: per example, what registers are active
+        # at what positions? Build position-keyed register sets.
+        batch_size = pooled.shape[0]
+        register_labels_batch = register_labels_batch or [[] for _ in range(batch_size)]
+        active_registers_by_example: list[dict[int, set[int]]] = []
+        for reg_list in register_labels_batch:
+            per_pos: dict[int, set[int]] = {}
+            for entry in reg_list or []:
+                pos = entry.get("position")
+                reg = entry.get("register")
+                if pos is None or reg is None:
+                    continue
+                try:
+                    pos_int = int(pos)
+                except (TypeError, ValueError):
+                    continue
+                if not (0 <= pos_int < NUM_COGNITIVE_STATES):
+                    continue
+                r_idx = REGISTER_INDEX.get(reg)
+                if r_idx is None:
+                    continue
+                per_pos.setdefault(pos_int, set()).add(r_idx)
+            active_registers_by_example.append(per_pos)
+
+        # Identify Rule 4 integration positions: Ω_* label present AND >=2
+        # registers active at the SAME position.
+        active_names = self._emergent_pipeline.registry.get_active_names()
+        name_to_slot = {n: i for i, n in enumerate(active_names)}
+        registry_emb = self._emergent_pipeline.registry.get_active_embeddings()
+        if registry_emb.numel() == 0:
+            return None
+
+        # Collect (example_idx, position, target_slot) per integration point.
+        integration_points: list[tuple[int, int, int]] = []
+        for i, omega_list in enumerate(omega_labels_batch):
+            if not omega_list:
+                continue
+            active_at = active_registers_by_example[i] if i < len(active_registers_by_example) else {}
+            for entry in omega_list:
+                name = entry.get("omega_name")
+                pos = entry.get("position")
+                if name is None or pos is None:
+                    continue
+                try:
+                    pos_int = int(pos)
+                except (TypeError, ValueError):
+                    continue
+                slot = name_to_slot.get(name)
+                if slot is None:
+                    continue
+                regs_here = active_at.get(pos_int, set())
+                # Rule 4: same-Noetic multi-register integration requires
+                # >= 2 registers co-active at the same position, else the
+                # named emergent is not licensed.
+                if len(regs_here) < 2:
+                    continue
+                integration_points.append((i, pos_int, slot))
+
+        if not integration_points:
+            return None
+
+        # For each integration point, build the per-register modulated
+        # state stack (num_registers, d_model) by running every register's
+        # FiLM on the pooled hidden state for example `b`. This produces
+        # the input shape the binding head expects.
         states_per_register = []
         for r_idx in range(film.num_registers):
-            state = film.apply_register(pooled, r_idx)
-            states_per_register.append(state)
-        reg_states = torch.stack(states_per_register, dim=-2)  # (B, R, d)
+            states_per_register.append(film.apply_register(pooled, r_idx))
+        reg_states_full = torch.stack(states_per_register, dim=-2)  # (B, R, d)
+
+        # Gather per-integration-point register stacks — shape (P, R, d).
+        example_indices = torch.tensor(
+            [p[0] for p in integration_points],
+            dtype=torch.long,
+            device=pooled.device,
+        )
+        reg_states = reg_states_full.index_select(0, example_indices)  # (P, R, d)
 
         bound = self._emergent_pipeline.binding_head(
             reg_states,
@@ -459,51 +602,62 @@ class CASTrainer:
                 device=reg_states.device,
                 dtype=torch.bool,
             ),
-        )  # (B, d)
+        )  # (P, d)
 
-        active_emb = self._emergent_pipeline.registry.get_active_embeddings()
-        if active_emb.numel() == 0:
-            return None
-
-        bind_norm = F.normalize(bound, p=2, dim=-1, eps=1e-12)
-        reg_norm = F.normalize(active_emb, p=2, dim=-1, eps=1e-12)
-        logits = bind_norm @ reg_norm.transpose(0, 1)  # (B, k)
-
-        active_names = self._emergent_pipeline.registry.get_active_names()
-        name_to_slot = {n: i for i, n in enumerate(active_names)}
-
-        # Aggregate labels across batch — use the first Ω_* annotation per
-        # example when multiple are present (simplification for v2 scaffold).
-        label_targets: list[int] = []
-        label_indices: list[int] = []
-        for i, omega_list in enumerate(omega_labels_batch):
-            if not omega_list:
-                continue
-            for entry in omega_list:
-                name = entry.get("omega_name")
-                if name in name_to_slot:
-                    label_targets.append(name_to_slot[name])
-                    label_indices.append(i)
-                    break
-
-        if not label_targets:
-            return None
-
-        target_tensor = torch.tensor(
-            label_targets, dtype=torch.long, device=logits.device
+        target_slots = torch.tensor(
+            [p[2] for p in integration_points],
+            dtype=torch.long,
+            device=pooled.device,
         )
-        selected_logits = logits[label_indices]
-        return F.cross_entropy(selected_logits, target_tensor)
+        targets = registry_emb.index_select(0, target_slots)  # (P, d)
+
+        # Cosine-distance loss: 1 - cos(binding_out, target). Monotone in
+        # the arc-length; differentiable and bounded. Chose cosine over MSE
+        # so the loss is insensitive to Ω_* embedding magnitude (cosine
+        # similarity is the same metric the ADR-02 SimilarityActivation
+        # uses at inference, keeping training + inference on the same
+        # geometric signal).
+        cos = F.cosine_similarity(bound, targets, dim=-1, eps=1e-12)  # (P,)
+        return (1.0 - cos).mean()
 
     def _compute_production_loss(
         self,
         hidden_states: torch.Tensor,
         production_targets_batch: list[Optional[dict[str, Any]]],
     ) -> Optional[torch.Tensor]:
-        """Soft yield / efficiency loss from ProductionSemanticsHead.
+        """Multi-component production loss (Wave 7B Task 4, ADR-04).
 
-        Per-example masking: examples without ``production_target`` metadata do
-        not contribute.
+        Three sub-losses:
+
+        - ``L_limiting_reagent``: cross-entropy over the soft-argmin LR
+          distribution against ``target_limiting_reagent_index``. Produces
+          the primary gradient signal for the recipe head's identification
+          of which prerequisite bottlenecks yield.
+        - ``L_yield``: MSE on soft-min theoretical yield against
+          ``target_theoretical_yield``.
+        - ``L_efficiency``: MSE on `Y_A / Y_T` efficiency against
+          ``target_efficiency``.
+
+        Aggregate::
+
+            L_production = w_LR * L_LR + w_Y * L_Y + w_eff * L_eff
+
+        with weights from ``V2Hyperparameters.lambda_production_*``.
+
+        Per-example per-component masking: if a specific target field is
+        absent from an example's ``production_target`` dict, that component
+        is zero-weighted for that example; the other components still
+        compute.
+
+        Backward compatibility with the Wave 6B provisional MSE loss:
+        examples whose ``production_target`` dict only carries the legacy
+        fields (``prereqs``, ``leakages``, ``observed_yield``) produce
+        zero loss from the new LR/yield/efficiency paths. Callers retain
+        the old MSE path by reading ``out["theoretical_yield"]`` directly;
+        the new loss is an additive upgrade that does not break old
+        configurations — but the provisional MSE form is no longer the
+        default, since it trained against ``observed_yield`` (= Y_A), not
+        ``target_theoretical_yield`` (= ground-truth Y_T).
         """
         if self._production_head is None:
             return None
@@ -530,24 +684,123 @@ class CASTrainer:
             tau=max(self.current_tau, 1e-3),
             actual_yield=observed_yields,
         )
-        # Loss: MSE between soft theoretical yield and observed actual yield.
-        # This is a PROVISIONAL form — the exact loss shape (MSE vs efficiency
-        # regression vs limiting-reagent CE) is a tuning follow-up.
-        theoretical = out["theoretical_yield"]
-        return F.mse_loss(theoretical, observed_yields)
+
+        theoretical = out["theoretical_yield"]              # (N,)
+        lr_weights = out["limiting_reagent_weights"]        # (N, max_prereq)
+        efficiency_pred = out.get("efficiency")             # (N,) or None
+
+        w_lr = float(self.v2_hp.lambda_production_limiting_reagent)
+        w_y = float(self.v2_hp.lambda_production_yield)
+        w_eff = float(self.v2_hp.lambda_production_efficiency)
+
+        device = pooled_sub.device
+        dtype = pooled_sub.dtype
+        aggregate = torch.zeros((), device=device, dtype=dtype)
+        any_component = False
+
+        # Limiting-reagent CE — per-example masked.
+        lr_indices: list[int] = []
+        lr_targets: list[int] = []
+        max_prereq = lr_weights.shape[-1]
+        for i, t in enumerate(targets_sub):
+            idx = t.get("target_limiting_reagent_index")
+            if idx is None:
+                continue
+            try:
+                idx_int = int(idx)
+            except (TypeError, ValueError):
+                continue
+            if not (0 <= idx_int < max_prereq):
+                continue
+            lr_indices.append(i)
+            lr_targets.append(idx_int)
+        if lr_indices:
+            sel = torch.tensor(lr_indices, dtype=torch.long, device=device)
+            lr_soft = lr_weights.index_select(0, sel)           # (m, max_prereq)
+            lr_true = torch.tensor(lr_targets, dtype=torch.long, device=device)
+            # soft_argmin output already sums to 1 across last dim; take log
+            # and compute NLL. F.cross_entropy expects logits, so feed
+            # log-probabilities via F.nll_loss on safe-logged probs.
+            log_probs = torch.log(lr_soft.clamp_min(1e-12))
+            lr_loss = F.nll_loss(log_probs, lr_true)
+            aggregate = aggregate + w_lr * lr_loss
+            any_component = True
+
+        # Theoretical-yield MSE — per-example masked.
+        y_indices: list[int] = []
+        y_targets: list[float] = []
+        for i, t in enumerate(targets_sub):
+            val = t.get("target_theoretical_yield")
+            if val is None:
+                continue
+            try:
+                y_targets.append(float(val))
+                y_indices.append(i)
+            except (TypeError, ValueError):
+                continue
+        if y_indices:
+            sel = torch.tensor(y_indices, dtype=torch.long, device=device)
+            y_pred = theoretical.index_select(0, sel)
+            y_true = torch.tensor(y_targets, dtype=dtype, device=device)
+            y_loss = F.mse_loss(y_pred, y_true)
+            aggregate = aggregate + w_y * y_loss
+            any_component = True
+
+        # Efficiency MSE — per-example masked. Efficiency is only defined
+        # when the head computed it (i.e. actual_yield was fed), which we
+        # do unconditionally above so efficiency_pred is available.
+        if efficiency_pred is not None:
+            eff_indices: list[int] = []
+            eff_targets: list[float] = []
+            for i, t in enumerate(targets_sub):
+                val = t.get("target_efficiency")
+                if val is None:
+                    continue
+                try:
+                    eff_targets.append(float(val))
+                    eff_indices.append(i)
+                except (TypeError, ValueError):
+                    continue
+            if eff_indices:
+                sel = torch.tensor(eff_indices, dtype=torch.long, device=device)
+                eff_pred_sub = efficiency_pred.index_select(0, sel)
+                eff_true = torch.tensor(eff_targets, dtype=dtype, device=device)
+                eff_loss = F.mse_loss(eff_pred_sub, eff_true)
+                aggregate = aggregate + w_eff * eff_loss
+                any_component = True
+
+        if not any_component:
+            # None of LR / Y_T / efficiency targets were supplied for any
+            # labelled example — legacy-only payload (prereqs/observed_yield).
+            # Fall back to the provisional MSE signal (backward-compat).
+            return F.mse_loss(theoretical, observed_yields)
+
+        return aggregate
 
     def _compute_rule_four_loss(
         self,
         hidden_states: torch.Tensor,
         register_labels_batch: list[list[dict[str, Any]]],
     ) -> Optional[torch.Tensor]:
-        """Rule 4 compliance loss via RustValidationBridge.
+        """Rule 4 compliance loss via RustValidationBridge (ADR-06).
 
-        Emits a distance-to-valid scalar per batch element using the Rust
-        engine's Rule 4 validator. Zero for expressions marked ``valid``,
-        constant 1.0 per violation otherwise (provisional — the Rust engine
-        does not yet emit a continuous distance-to-valid metric; wiring the
-        graded signal is flagged as follow-up work against the Rust queue).
+        Wave 7B Task 2 upgrade: prefer the continuous distance-to-valid
+        signal (``rule_four_distance_batch``) over the binary 0.0/1.0
+        categorical. Wheel 0.1.1 emits a severity-weighted scalar (0.0 for
+        Valid, 1.0 for 2-register violation, 1.5 for 3-register, 2.0 for
+        4-register) which is the loss magnitude directly. For older wheels
+        without the continuous API the trainer falls back to the binary
+        signal (backward-compat; visible as a RuntimeWarning).
+
+        Gradient-flow note: the loss scalar itself is gradient-bearing only
+        through whatever activations upstream fed into the expression-building
+        machinery. The Rust validator is not differentiable; the distance
+        metric is used as a fixed target-magnitude for the loss. In the
+        current scaffold, expression-building is derived from labels, so
+        ``rule_four_loss`` contributes to the model's total-loss scalar but
+        does not pass gradient through the validator. Full end-to-end
+        gradient wiring awaits a learned "expression proposer" head which
+        is scheduled beyond Wave 7B.
         """
         if self._rust_bridge is None:
             return None
@@ -588,38 +841,53 @@ class CASTrainer:
         if not patterns:
             return None
 
-        try:
-            results = self._rust_bridge.validate_rule_four_batch(
-                patterns, call_args=call_args
-            )
-        except Exception as exc:
-            warnings.warn(
-                f"RustValidationBridge.validate_rule_four_batch raised {exc!r}; "
-                "skipping Rule 4 loss for this batch.",
-                RuntimeWarning,
-                stacklevel=2,
-            )
+        bridge = self._rust_bridge
+        distances: Optional[list[float]] = None
+
+        # Prefer the continuous signal when the wheel exposes it.
+        if bridge.has_rule_four_distance():
+            try:
+                distances = bridge.rule_four_distance_batch(
+                    patterns, call_args=call_args
+                )
+            except Exception as exc:
+                warnings.warn(
+                    f"RustValidationBridge.rule_four_distance_batch raised "
+                    f"{exc!r}; falling back to binary validator.",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                distances = None
+
+        if distances is None:
+            # Fallback: binary signal from the categorical validator.
+            try:
+                results = bridge.validate_rule_four_batch(
+                    patterns, call_args=call_args
+                )
+            except Exception as exc:
+                warnings.warn(
+                    f"RustValidationBridge.validate_rule_four_batch raised "
+                    f"{exc!r}; skipping Rule 4 loss for this batch.",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                return None
+
+            distances = []
+            for r in results:
+                kind = getattr(r, "kind", None)
+                if kind is None:
+                    continue
+                distances.append(0.0 if kind == "valid" else 1.0)
+
+        if not distances:
             return None
 
-        # PROVISIONAL: distance-to-valid treated as 0.0 for "valid", else 1.0.
-        # The Rust engine currently returns a categorical kind; the continuous
-        # signal is a flagged Rust-queue follow-up (ADR-06 §Continuous
-        # validation signal).
-        penalties = []
-        for r in results:
-            kind = getattr(r, "kind", None)
-            if kind is None:
-                continue
-            penalty = 0.0 if kind == "valid" else 1.0
-            penalties.append(penalty)
-
-        if not penalties:
-            return None
-
-        penalty_tensor = torch.tensor(
-            penalties, dtype=hidden_states.dtype, device=hidden_states.device
+        tensor = torch.tensor(
+            distances, dtype=hidden_states.dtype, device=hidden_states.device
         )
-        return penalty_tensor.mean()
+        return tensor.mean()
 
     # ------------------------------------------------------------------ step
 
@@ -659,8 +927,22 @@ class CASTrainer:
             "production_target", [None for _ in range(input_ids.size(0))]
         )
 
+        # Build the per-position register-activation tensor used by the
+        # forward-path FiLM routing (Wave 7B Task 1). Returns None when no
+        # example in the batch has any register labels — that signal lets
+        # the forward pass short-circuit to the byte-equivalent v7.4 path.
+        register_activations = None
+        if self.v2_flags.use_register_film:
+            register_activations = self._build_register_activations(
+                register_labels_batch
+            )
+
         # Forward pass.
-        outputs = self.model(input_ids, attention_mask=attention_mask)
+        outputs = self.model(
+            input_ids,
+            attention_mask=attention_mask,
+            register_activations=register_activations,
+        )
 
         # Generate target cognitive state.
         batch_size, seq_len = input_ids.shape
@@ -709,7 +991,9 @@ class CASTrainer:
 
         if self.v2_flags.use_emergent_register:
             binding_loss = self._compute_emergent_binding_loss(
-                d_model_hidden, omega_labels_batch
+                d_model_hidden,
+                omega_labels_batch,
+                register_labels_batch=register_labels_batch,
             )
             if binding_loss is not None:
                 weighted = self.v2_hp.lambda_emergent_binding * binding_loss

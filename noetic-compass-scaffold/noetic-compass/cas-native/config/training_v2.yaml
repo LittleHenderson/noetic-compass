@@ -26,8 +26,16 @@ v2_hyperparameters:
 
   # Loss aggregation weights — default 1.0 each, tunable via training runs.
   lambda_emergent_binding: 1.0       # Ω_* registry CE binding loss (ADR-02/03)
-  lambda_production: 1.0             # production-semantics yield loss (ADR-04)
+  lambda_production: 1.0             # outer weight on production semantics (ADR-04)
   lambda_rule_four: 1.0              # Rule 4 compliance loss (ADR-06)
+
+  # Production sub-component weights (Wave 7B Task 4, ADR-04). The overall
+  # production loss is `lambda_production * (w_LR * L_LR + w_Y * L_Y + w_eff * L_eff)`
+  # where the inner sub-weights let callers tune the relative contribution of
+  # limiting-reagent CE, theoretical-yield MSE, and efficiency MSE.
+  lambda_production_limiting_reagent: 1.0   # w_LR — CE on LR distribution
+  lambda_production_yield: 1.0              # w_Y  — MSE on theoretical yield
+  lambda_production_efficiency: 0.5         # w_eff — MSE on efficiency (derived)
 
   # ADR-04 — Gumbel-softmax / soft-min temperature annealing schedule.
   gumbel_tau_initial: 10.0
