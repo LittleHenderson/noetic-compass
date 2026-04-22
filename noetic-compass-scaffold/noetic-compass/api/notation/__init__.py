@@ -4,6 +4,22 @@
 `compiler.py` provides the executable typed DSL pipeline.
 """
 
-from .compiler import CAS_GRAMMAR_BNF, CAS_LANGUAGE_NOTES, compile_expression, compile_file
+from .compiler import (
+    CAS_GRAMMAR_BNF,
+    CAS_LANGUAGE_NOTES,
+    RegisterActivation,
+    VALID_REGISTERS,
+    compile_expression,
+    compile_file,
+    extract_register_activations,
+)
 
-__all__ = ["CAS_GRAMMAR_BNF", "CAS_LANGUAGE_NOTES", "compile_expression", "compile_file"]
+__all__ = [
+    "CAS_GRAMMAR_BNF",
+    "CAS_LANGUAGE_NOTES",
+    "RegisterActivation",
+    "VALID_REGISTERS",
+    "compile_expression",
+    "compile_file",
+    "extract_register_activations",
+]

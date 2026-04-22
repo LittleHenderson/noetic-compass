@@ -444,6 +444,74 @@ class Program:
 
 
 # ---------------------------------------------------------------------------
+# CAS v7.5 Phenomenological Register — per-position register activation
+# extraction for trainer consumption (ADR-02 in cas-native v2).
+#
+# `RegisterActivation` is an additive, opt-in data view over already-parsed
+# ASTs. It surfaces per-cognitive-state-position register metadata in a
+# shape that is trivial for a PyTorch trainer to turn into tensors
+# (cf. `cas-native/training/data_format.md` `register_labels` schema) while
+# leaving the existing compiler output (`CompilationArtifact`, `serialize_ast`,
+# `serialize_value`, bytecode) untouched. Consumers that only care about the
+# AST or the scalar compile result see no change; trainers call
+# `extract_register_activations(artifact.ast)` (or `artifact.activations()`)
+# to obtain a `list[RegisterActivation]`.
+#
+# Representation choice (Format A in the dispatch): one frozen dataclass per
+# cognitive-state position encountered, emitted in source order. This keeps
+# the walker output trivially hashable and equality-comparable (register-set
+# ordering is normalized via `frozenset`), lets the trainer iterate and
+# scatter into tensor slots without re-walking the AST, and is a stable JSON
+# shape if the activation view is later exported over the API boundary. The
+# alternative parallel-list shape (Format B) is a trivial derivation at
+# batch time and does not need to be the authoritative surface here.
+#
+# Semantics per field, tied to the grammar:
+#   - `position`: the canonical 40-state-bank index computed by
+#     `_state_index(operator, domain)` — same formula used everywhere else
+#     in the compiler so trainer tensor slots align with the engine's
+#     Cognitive State index.
+#   - `registers_active`: the concrete register letters that this AST node
+#     claims are active. Empty set means *register-neutral*: the CAS v7.4
+#     expression did not specify a register. The trainer treats an empty
+#     set as "skip register supervision for this example" (per the
+#     `register_labels` masking rule in `data_format.md`); it is NOT
+#     equivalent to "zero registers" or a negative supervision signal.
+#   - `is_register_set`: True when the source used the CAS v7.7
+#     `|⟨R1,R2,...⟩` register-set specification (Clarification 10 §2).
+#     False for the single-register form `|R` and for register-neutral
+#     nodes. Trainers that care about Rule 4 compliance or architectural
+#     specification vs co-presence distinguish these two cases; empty-set
+#     plus False ⇒ neutral, one-element set plus False ⇒ single register,
+#     any cardinality plus True ⇒ explicit set specification.
+#   - `emergent_name`: the name on the RHS of a CAS v7.7 named
+#     emergent-result assignment (e.g. `Ω_refusal`). Set on a trailing
+#     activation record appended for the emergent result itself, and on
+#     each operand activation whose position participates in the same
+#     emergent result (so the trainer can associate inputs with their
+#     fused output). `None` for ordinary positions. The emergent record's
+#     `registers_active` carries the *union* of the operand registers —
+#     see the walker docstring below for rationale.
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class RegisterActivation:
+    """Per-position Phenomenological Register activation for trainer consumption.
+
+    Emitted by :func:`extract_register_activations` (or the
+    :meth:`CompilationArtifact.activations` convenience method) one per
+    cognitive-state position walked in source order. See the module header
+    comment for semantics of each field.
+    """
+
+    position: int
+    registers_active: frozenset[str]
+    is_register_set: bool
+    emergent_name: str | None = None
+
+
+# ---------------------------------------------------------------------------
 # CAS v7.6 Stoichiometric Production Semantics (Clarification 9) AST nodes.
 #
 # These are parse-only literals: the compiler validates recipe SYNTAX and
@@ -910,6 +978,19 @@ class CompilationArtifact:
             ],
             "result": serialize_value(self.result),
         }
+
+    def activations(self) -> list["RegisterActivation"]:
+        """Per-position register activation view for trainer consumption.
+
+        Additive convenience wrapper around :func:`extract_register_activations`
+        that walks :attr:`ast`. Returns an empty list for a failed compile
+        (``valid=False``) or for an expression with no cognitive-state nodes
+        (e.g. a pure RPM drive query). See the :class:`RegisterActivation`
+        docstring and the module header comment for semantics.
+        """
+        if self.ast is None:
+            return []
+        return extract_register_activations(self.ast)
 
 
 TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
@@ -3768,6 +3849,220 @@ def serialize_value(value: Any) -> Any:
     if isinstance(value, YieldExpressionValue):
         return value.to_dict()
     return repr(value)
+
+
+# ---------------------------------------------------------------------------
+# Per-position register activation extraction (ADR-02 trainer integration).
+#
+# `extract_register_activations` walks a parsed AST and emits one
+# `RegisterActivation` record per cognitive-state position encountered, in
+# source order. Design choices:
+#
+#   1. The walker is PURE — it does not mutate the AST, does not depend on
+#      typecheck or execution, and does not depend on the Rust `cas_engine`
+#      fallback. A trainer can call it against any parsed `ast` (including
+#      one that would fail downstream Rule 4 admissibility); validation and
+#      activation extraction are independent concerns. This matches the
+#      dispatch requirement that Rule 4 validation is a separate concern.
+#
+#   2. `StateLiteral` is the only cognitive-state position the walker emits.
+#      `DriveLiteral` is NOT emitted as a state-bank position: drives are the
+#      Core Drive F1-F7 primitives and live on a separate axis from the 40
+#      Cognitive States (10 Noetics × 4 Domains). The `data_format.md`
+#      `register_labels` schema uses positions in `[0, 40)`, i.e. the state
+#      bank. Drive-level register information (`DriveLiteral.register`) is
+#      therefore not projected into this trainer-facing view; when a
+#      compound state has an independent drive register (`^2|T^C_{F2|A}`),
+#      only the Noetic-level register on the compound is surfaced. This is
+#      a deliberate alignment with the trainer-side ADR-02 embedding
+#      (register-modulated *state* representation); drive-level register
+#      supervision is a separate follow-on if ever needed.
+#
+#   3. VALID_REGISTERS is the single source of truth. When the walker
+#      builds `registers_active`, every element is cross-checked against
+#      VALID_REGISTERS defensively — the parser already enforces this, but
+#      the defensive check means a hand-constructed AST (e.g. in a test)
+#      cannot smuggle an invalid register letter past the activation view.
+#      A raised ValueError here is a programming error, not a user-facing
+#      diagnostic.
+#
+#   4. EmergentResult emission: the walker descends into the inner `×` chain
+#      and emits one `RegisterActivation` per operand (with
+#      `emergent_name` set to the assigned name so the trainer can
+#      associate the operand with its fused output), then appends ONE
+#      additional record for the emergent result itself whose
+#      `registers_active` is the set-union of the operand register sets.
+#      Rationale for union: when a recipe author writes
+#      `(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω`, the emergent Ω is defined by
+#      integrating the listed registers; the natural supervision target
+#      for the emergent position is therefore the set of input registers.
+#      The emergent record's `is_register_set` is False — the emergent is
+#      not itself a `|⟨…⟩` specification — so consumers that need to
+#      distinguish "architectural specification" from "union-of-emergent-
+#      inputs" can do so via the flag. `emergent_name` carries the
+#      author-chosen name verbatim (`Ω_refusal`, `fused`, `^3^P|Ω`, etc.)
+#      so the trainer can look it up in `omega_registry.yaml`.
+# ---------------------------------------------------------------------------
+
+
+def _state_literal_activation(
+    node: "StateLiteral",
+    *,
+    emergent_name: str | None = None,
+) -> "RegisterActivation":
+    """Project a StateLiteral onto a RegisterActivation record."""
+    position = _state_index(node.operator, node.domain)
+    if isinstance(node.register, tuple):
+        # CAS v7.7 |⟨R1,R2,...⟩ register-set specification.
+        regs = node.register
+        is_set = True
+    elif node.register is not None:
+        # CAS v7.5 single-register |R specification.
+        regs = (node.register,)
+        is_set = False
+    else:
+        # Register-neutral (CAS v7.4-compatible) position.
+        regs = ()
+        is_set = False
+    for reg in regs:
+        if reg not in VALID_REGISTERS:
+            # Defensive guard — parser already rejects invalid letters.
+            raise ValueError(
+                f"RegisterActivation encountered non-canonical register "
+                f"{reg!r}; valid registers are {VALID_REGISTERS}"
+            )
+    return RegisterActivation(
+        position=position,
+        registers_active=frozenset(regs),
+        is_register_set=is_set,
+        emergent_name=emergent_name,
+    )
+
+
+def extract_register_activations(expr: Any) -> list[RegisterActivation]:
+    """Walk a parsed CAS expression and emit per-position register activations.
+
+    Returns a list of :class:`RegisterActivation` records, one per
+    cognitive-state position encountered, in source order. Register-neutral
+    positions produce records with an empty ``registers_active`` set — the
+    trainer interprets empty as "no register supervision for this position"
+    per the masking rule in ``cas-native/training/data_format.md``.
+
+    The walker descends into composite AST nodes (BinaryExpr, RpmCall,
+    CallExpr, EmergentResult, LetStatement, FunctionDef, ExportStatement,
+    Program, and the v7.6 recipe/state-vector/yield literals) but only
+    emits records for :class:`StateLiteral` leaves. :class:`DriveLiteral`
+    carries its own register axis but does not map to the 40-state bank;
+    drive-level registers are intentionally not surfaced through this
+    trainer-facing view (see module comment for rationale).
+
+    For a :class:`EmergentResult` wrapper (CAS v7.7 Clarification 10 §4),
+    the walker emits each operand's activation with ``emergent_name`` set
+    to the assigned name, then appends ONE additional record for the
+    emergent position whose ``registers_active`` is the union of the
+    operand register sets. This matches the data_format.md
+    ``omega_labels`` schema, which expects the emergent-result position to
+    carry the emergent name and the input registers that compose it.
+
+    Returns an empty list when the AST contains no cognitive-state nodes
+    (e.g. pure drive queries, fractal literals, RPM calls on drives).
+    """
+    out: list[RegisterActivation] = []
+    _walk(expr, out, emergent_name=None)
+    return out
+
+
+def _walk(
+    node: Any,
+    out: list[RegisterActivation],
+    *,
+    emergent_name: str | None,
+) -> None:
+    """Recursive AST walker for register activation extraction."""
+    if node is None:
+        return
+    if isinstance(node, StateLiteral):
+        out.append(_state_literal_activation(node, emergent_name=emergent_name))
+        return
+    if isinstance(node, DriveLiteral):
+        # Drive-level register is intentionally not projected onto the
+        # state bank; see module comment (3).
+        return
+    if isinstance(node, EmergentResult):
+        # CAS v7.7 Clarification 10 §4: named emergent-result assignment.
+        # Emit one activation per operand (with emergent_name attached),
+        # then one trailing activation for the emergent position whose
+        # registers_active is the union of operand register sets. The
+        # emergent position is derived from the first StateLiteral in the
+        # inner chain (all operands share the same Noetic × Domain core
+        # by Rule 4 construction); if the inner expression has no state
+        # literals (defensive — should not occur for well-formed
+        # emergent-result wrappers), no trailing record is emitted.
+        start = len(out)
+        _walk(node.inner, out, emergent_name=node.assigned_name)
+        operand_records = out[start:]
+        if operand_records:
+            union_regs: set[str] = set()
+            for rec in operand_records:
+                union_regs.update(rec.registers_active)
+            # Position of the emergent result mirrors the position of the
+            # operands — Rule 4 guarantees all operands share the same
+            # (operator, domain) core when the chain is licensed via
+            # EmergentResult, so any operand's position is representative.
+            emergent_position = operand_records[0].position
+            out.append(
+                RegisterActivation(
+                    position=emergent_position,
+                    registers_active=frozenset(union_regs),
+                    is_register_set=False,
+                    emergent_name=node.assigned_name,
+                )
+            )
+        return
+    if isinstance(node, BinaryExpr):
+        _walk(node.left, out, emergent_name=emergent_name)
+        _walk(node.right, out, emergent_name=emergent_name)
+        return
+    if isinstance(node, RpmCall):
+        _walk(node.expr, out, emergent_name=emergent_name)
+        return
+    if isinstance(node, CallExpr):
+        for arg in node.args:
+            _walk(arg, out, emergent_name=emergent_name)
+        return
+    if isinstance(node, LetStatement):
+        _walk(node.expr, out, emergent_name=emergent_name)
+        return
+    if isinstance(node, FunctionDef):
+        _walk(node.body, out, emergent_name=emergent_name)
+        return
+    if isinstance(node, ExportStatement):
+        _walk(node.statement, out, emergent_name=emergent_name)
+        return
+    if isinstance(node, Program):
+        for stmt in node.statements:
+            _walk(stmt, out, emergent_name=emergent_name)
+        return
+    if isinstance(node, RecipeLiteral):
+        for prereq in node.prerequisites:
+            _walk(prereq.primitive, out, emergent_name=emergent_name)
+        for leak in node.leakages:
+            _walk(leak.target, out, emergent_name=emergent_name)
+        return
+    if isinstance(node, StateVectorLiteral):
+        for primitive, _ in node.entries:
+            _walk(primitive, out, emergent_name=emergent_name)
+        return
+    if isinstance(node, YieldExpression):
+        _walk(node.state, out, emergent_name=emergent_name)
+        _walk(node.recipe, out, emergent_name=emergent_name)
+        return
+    # Terminal nodes with no cognitive-state children (Identifier, StringLiteral,
+    # FractalLiteral, ProductionTargetLiteral, LeakageAnnotation,
+    # ConditionAnnotation, RecipePrerequisite, UseStatement) contribute no
+    # activations. RecipePrerequisite is only ever reached via RecipeLiteral
+    # traversal above, so it is handled there.
+    return
 
 
 def _compile_source(source: str, *, module_dir: str | None = None) -> CompilationArtifact:
