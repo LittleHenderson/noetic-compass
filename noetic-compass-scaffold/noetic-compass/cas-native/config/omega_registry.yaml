@@ -1,0 +1,29 @@
+# Authoritative Omega_* registry — synchronized with FULL_MANUSCRIPT.md Appendix I.
+#
+# This file is the authoritative mapping from OmegaRegistry slot index to
+# admitted Omega_* name. Entries here MUST match FULL_MANUSCRIPT.md Appendix I
+# Section 3 (Admitted Registry). Do not invent Omega_* names in this file;
+# admission is a formal process (Clarification 10 Section 5, six-stage workflow)
+# and this file reflects admitted state, not candidates.
+#
+# Schema: version (int), capacity (int), reserved_slots_for_growth (int),
+# admitted (list of {slot, name, appendix_i_ref, derivation, admission_date}).
+# Entries may optionally include an `embedding` field (list of d_model floats)
+# to seed the registry slot; when omitted the slot retains its random init.
+#
+# ADR-02 / ADR-03 lock: capacity 20, current admitted k = 2.
+
+version: 1
+capacity: 20
+reserved_slots_for_growth: 18
+admitted:
+  - slot: 0
+    name: "Omega_presence"
+    appendix_i_ref: "Entry 1"
+    derivation: "(^1|A x ^1|E) = ^1|Omega_presence"
+    admission_date: "2026-04-21"
+  - slot: 1
+    name: "Omega_refusal"
+    appendix_i_ref: "Entry 2"
+    derivation: "(^3^P|A x ^3^P|f x ^3^P|T) = ^3^P|Omega_refusal"
+    admission_date: "2026-04-21"
