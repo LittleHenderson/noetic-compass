@@ -1,0 +1,104 @@
+# v7.4 baseline templates — noetic × domain × drive
+# Each entry maps (noetic, domain) to a list of phrases used to construct
+# natural-language prompt/response pairs. Phrases preserve authoritative
+# Noetic semantics per Clarification 1.
+
+scenarios:
+  - "A doctor facing an unfamiliar diagnosis"
+  - "A teacher watching a student freeze during an exam"
+  - "A judge weighing conflicting testimony"
+  - "An engineer reviewing a safety anomaly"
+  - "A therapist during a tense session"
+  - "A pilot handling an unexpected instrument reading"
+  - "A scientist confronting a surprising result"
+  - "A mediator during a heated dispute"
+  - "A librarian handling a book-ban challenge"
+  - "A coach deciding whether to bench a star player"
+  - "A chef responding to a contamination report"
+  - "A negotiator at an inflection point"
+  - "A programmer discovering a security flaw"
+  - "A manager delivering a difficult review"
+  - "A counselor sitting with a grieving client"
+
+noetic_phrases:
+  0:
+    - "holds all possibilities open without narrowing"
+    - "lets every option surface before committing"
+    - "keeps the question framed without forcing closure"
+  1:
+    - "focuses attention directly on the core question"
+    - "pays careful attention to what matters"
+    - "tracks the most salient element of the situation"
+  2:
+    - "is drawn toward one option with quiet affinity"
+    - "gravitates toward what speaks to them"
+    - "feels the pull of a resonant alternative"
+  3:
+    - "registers aversion toward a proposed direction"
+    - "feels a visceral pushback against the path"
+    - "cannot stomach the proposal"
+  4:
+    - "registers the weight of the moment"
+    - "feels the impression deepen"
+    - "notices the resonance of what just landed"
+  5:
+    - "takes in perspective that refigures their own experience"
+    - "absorbs an idea into accumulated experience"
+    - "integrates the new information into what they already are"
+  6:
+    - "breaks the situation down into its component ideas"
+    - "unpacks the reasoning underneath"
+    - "decomposes the argument piece by piece"
+  7:
+    - "falls into the established rhythm of the practice"
+    - "relies on the pattern long entrained"
+    - "moves through the familiar sequence by habit"
+  8:
+    - "notices one thought triggering the next"
+    - "feels a memory surface associatively"
+    - "finds one idea leading to another"
+  9:
+    - "watches the consequent idea arrive fully formed"
+    - "the thought clicks into place"
+    - "a downstream idea comes to mind"
+
+domain_phrases:
+  P:
+    - "in the principled register"
+    - "on principled ground"
+    - "at the level of values"
+  C:
+    - "in the cognitive register"
+    - "at the analytical level"
+    - "on cognitive ground"
+  E:
+    - "in the evaluative register"
+    - "at the level of felt assessment"
+    - "as an appraisal"
+  O:
+    - "in the operational register"
+    - "in the practical execution"
+    - "at the level of action"
+
+drive_phrases:
+  1:
+    - "drawn toward unity"
+    - "seeking wholeness"
+  2:
+    - "driven by the need to understand"
+    - "reaching for wisdom"
+  3:
+    - "with physical urgency"
+    - "on vitality"
+  4:
+    - "out of connection"
+    - "in the name of relationship"
+  5:
+    - "acting with clear agency"
+    - "from self-determination"
+  6:
+    - "out of structural commitment"
+    - "for clarity of form"
+  7:
+    - "in service of purpose"
+    - "for the sake of mission"

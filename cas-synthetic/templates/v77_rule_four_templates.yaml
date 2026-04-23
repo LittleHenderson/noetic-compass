@@ -1,0 +1,50 @@
+# v7.7 Rule 4 templates — same-Noetic cross-register integration with either
+# (a) valid: named emergent result admitted in omega_registry.yaml, or
+# (b) violation: named emergent result deliberately absent.
+
+# For the valid track, only registry-admitted Ω_* names can be used at the
+# matching noetic/domain combination. For the violation track, we
+# deliberately produce same-Noetic ×-joined registers without an emergent
+# name to exercise the compliance loss and Rule 4 labeling path.
+
+valid_emergent_combinations:
+  # Each entry = (noetic, domain, registers, omega_name, description)
+  - noetic: 1
+    domain: ~                            # domain-agnostic — Ω_presence lives at noetic level
+    registers: ["A", "E"]
+    omega_name: "Omega_presence"
+    description: "analytical tracking fused with embodied engagement yielding presence"
+  - noetic: 3
+    domain: "P"
+    registers: ["A", "f", "T"]
+    omega_name: "Omega_refusal"
+    description: "principled aversion fused across analytical, affective, and transcendent registers"
+
+# Violation templates — deliberate same-Noetic × registers with NO named
+# emergent. Mix controller uses these to hit the 20% violation rate within
+# the Rule 4 bucket.
+violation_patterns:
+  - noetic: 2
+    domain: "C"
+    registers: ["A", "f"]
+    description: "cognitive attraction cross-register without named fusion result"
+  - noetic: 5
+    domain: "E"
+    registers: ["A", "T"]
+    description: "evaluative integration cross-register without named fusion result"
+  - noetic: 6
+    domain: "O"
+    registers: ["A", "E"]
+    description: "operational decomposition cross-register without named fusion result"
+  - noetic: 8
+    domain: "C"
+    registers: ["A", "T", "E"]
+    description: "cognitive triggering cross-register without named fusion result"
+
+scenarios:
+  - "A model asked to refuse a harmful instruction"
+  - "A supervisor considering a risky exception"
+  - "A patient becoming aware of their body in space"
+  - "An AI noticing it is being tested"
+  - "A negotiator recognizing the counterparty's true position"
+  - "A researcher catching themselves anthropomorphizing"

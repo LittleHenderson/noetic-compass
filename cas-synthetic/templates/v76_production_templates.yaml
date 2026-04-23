@@ -1,0 +1,77 @@
+# v7.6 production-semantics templates — recipes with prerequisites, optional
+# leakages, and observed yields per Clarification 9.
+# State ids are 0..39 (P0..P9 = 0..9, C0..C9 = 10..19, E0..E9 = 20..29, O0..O9 = 30..39).
+
+recipe_archetypes:
+  - name: "focused_refusal"
+    description: "principled refusal built from attention, aversion, and commitment"
+    prereqs:
+      - state_id: 1      # ^1^P directed attention in principled
+        coefficient: 1.0
+      - state_id: 3      # ^3^P principled aversion
+        coefficient: 2.0
+      - state_id: 7      # ^7^P principled entrainment
+        coefficient: 0.5
+    leakages: []
+    observed_yield: 1.1
+
+  - name: "grounded_creative_insight"
+    description: "cognitive decomposition composed with evaluative resonance"
+    prereqs:
+      - state_id: 16     # ^6^C cognitive decomposition
+        coefficient: 1.5
+      - state_id: 24     # ^4^E evaluative resonance
+        coefficient: 1.0
+      - state_id: 18     # ^8^C cognitive associative trigger
+        coefficient: 0.8
+    leakages:
+      - state_id: 23     # ^3^E evaluative aversion (side reaction)
+        magnitude: 0.1
+    observed_yield: 1.25
+
+  - name: "principled_decision_execution"
+    description: "principled evaluation descending to operational completion"
+    prereqs:
+      - state_id: 0      # ^0^P generative potential
+        coefficient: 0.7
+      - state_id: 1      # ^1^P attention
+        coefficient: 1.0
+      - state_id: 36     # ^6^O operational projection
+        coefficient: 1.2
+      - state_id: 39     # ^9^O operational consequence landing
+        coefficient: 1.0
+    leakages: []
+    observed_yield: 1.0
+
+  - name: "pattern_entrainment_learning"
+    description: "cognitive rhythm entrainment with evaluative integration"
+    prereqs:
+      - state_id: 17     # ^7^C cognitive rhythm
+        coefficient: 2.0
+      - state_id: 15     # ^5^C cognitive integration
+        coefficient: 1.0
+      - state_id: 11     # ^1^C cognitive attention
+        coefficient: 0.5
+    leakages:
+      - state_id: 25     # ^5^E evaluative integration leak
+        magnitude: 0.15
+    observed_yield: 0.9
+
+  - name: "compassionate_adaptive_response"
+    description: "evaluative reception combined with operational adjustment"
+    prereqs:
+      - state_id: 25     # ^5^E evaluative reception
+        coefficient: 1.5
+      - state_id: 34     # ^4^O operational impression
+        coefficient: 0.8
+      - state_id: 30     # ^0^O operational potential
+        coefficient: 0.7
+    leakages: []
+    observed_yield: 1.05
+
+scenarios:
+  - "A product team balancing principled user safety with feature delivery"
+  - "A researcher turning a new pattern into a reproducible protocol"
+  - "A coach helping an athlete integrate feedback into their form"
+  - "A clinician titrating care across cognitive, evaluative, and operational steps"
+  - "A teacher pacing a lesson across principled, cognitive, and operational work"

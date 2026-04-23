@@ -1,0 +1,35 @@
+# v7.5 register-annotated templates.
+# Each entry pairs a single Noetic × Domain × Register annotation with a
+# phrase that operationally expresses that register. Per Clarification 8:
+# T=Transcendent, A=Analytical, f=Affective (lowercase), E=Embodied.
+
+register_phrases:
+  T:
+    - "at a purpose-orienting level, holding the whole frame in view"
+    - "as a high-abstraction stance integrating across particulars"
+    - "with a felt sense of meaning and direction"
+  A:
+    - "through explicit sequential reasoning"
+    - "via a chain-of-thought walking each step"
+    - "in deliberative logical form"
+  f:
+    - "as a felt, value-laden response"
+    - "with visceral preference-tone"
+    - "as an emotionally charged reaction"
+  E:
+    - "through direct sensorimotor engagement"
+    - "as bodily knowing in the moment"
+    - "via concrete physical contact with the situation"
+
+# Scenario contexts for v7.5 — same pool as v7.4 plus register-specific framings.
+scenarios:
+  - "A surgeon who must decide whether to operate"
+  - "An AI safety reviewer inspecting a model's output"
+  - "A pilot handling an in-flight emergency"
+  - "A manager noticing a team member's silent distress"
+  - "A physical therapist guiding a patient through a movement"
+  - "A lawyer weighing an unusual argument"
+  - "A meditator noticing a subtle sensation"
+  - "A data scientist seeing a suspicious pattern in the logs"
+  - "A chef tasting a dish before service"
+  - "A negotiator reading the room"

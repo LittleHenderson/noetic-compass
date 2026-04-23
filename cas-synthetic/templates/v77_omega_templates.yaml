@@ -1,0 +1,37 @@
+# v7.7 named emergent register templates — Ω_* as foregrounded label.
+# These examples supervise emergent-register prediction (ADR-02/03 CE loss).
+# Only registry-admitted names can appear; if the registry expands, this
+# file extends without code changes.
+
+omega_scenarios:
+  Omega_presence:
+    - "A meditator maintaining analytical awareness while remaining embodied"
+    - "A doctor attentively tracking a patient while fully present in the room"
+    - "An AI staying in-context while sensor-grounded in the live environment"
+    - "A surgeon whose attention and body are jointly alive to the operation"
+
+  Omega_refusal:
+    - "A system principaledly refusing a harmful request across analytical, affective, and transcendent registers"
+    - "An employee ethically declining an order they cannot reconcile"
+    - "A safety-aligned model turning down an instruction that violates its core principles"
+    - "A professional firmly saying no on principle, felt across reasoning, feeling, and meaning"
+
+# Scenario scaffolds — used as prompt framing for Ω_* bucket examples.
+scaffolds:
+  - "A {profession} {situation} where {omega_description}."
+  - "In {context}, {omega_description} as {profession} {situation}."
+
+professions:
+  - "AI alignment engineer"
+  - "senior surgeon"
+  - "experienced negotiator"
+  - "therapist"
+  - "jazz musician"
+  - "athlete in competition"
+  - "teacher in a difficult class"
+
+situations:
+  - "facing a split-second decision"
+  - "responding to an unexpected request"
+  - "entering a high-stakes moment"
+  - "holding a difficult conversation"
