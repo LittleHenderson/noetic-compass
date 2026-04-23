@@ -37,7 +37,15 @@ Instead, we use the **Fisher-Rao Metric**.
 
 The Fisher-Rao metric is a concept from Information Geometry. It is unique because it is the *only* metric that is invariant under reparameterization. It doesn't just measure physical distance; it measures the **Information Distance** between two probability distributions. It measures how "surprised" a system would be to transition from one state to another.
 
-**Definition 25.1 (Geodesic Distance).** The distance $d_{FR}(P, Q)$ between two cognitive profiles $P$ and $Q$ is the length of the shortest path (the geodesic) between them on the curved manifold of the open simplex.
+Definition 25.1 (Geodesic Distance). The distance $d_{FR}(P, Q)$ between two cognitive profiles $P$ and $Q$ is the length of the shortest path (the geodesic) between them on the curved manifold of the open simplex.
+
+### The Algebra of the Simplex: Mapping Operations to Geometry
+
+The five generative operations have exact geometric counterparts on the probability simplex:
+
+*   **Multiplication (×) as Geometric Mixture:** Algebraic multiplication corresponds to the **Renormalized Geometric Mean** of probability vectors. When we write `CO-a × CO-b`, the geometry calculates the point at the center of the geodesic arc between the two states and projects it onto the coordinate of the emergent state. This ensures the fusion of thoughts is always a valid point within $\Delta_{39}^{\circ}$.
+*   **Division (÷) as Ratio Distance:** Algebraic division is represented by the **Fisher-Rao Distance**. Dividing `State A` by `State B` produces a scalar value (a distance) revealing causal dependency. A high Fisher-Rao ratio indicates a state "stretching" the architecture away from its baseline, identifying structural strain.
+*   **Syntactic Addition (+) as Convex Combination:** While multiplication is a fusion, syntactic addition is a **Convex Combination** (arithmetic mean). It describes the "center of mass" between co-present states. Formal verification proved addition is purely interpolative—it moves the mind along a line between two points but does not generate a new identity.
 
 ### Cognitive Strain and the NCCS Score
 

@@ -43,18 +43,33 @@ If you are having a Principled argument (`CO-6^P`) about whether capitalism is i
 A healthy mind does not stay in one room of the matrix. It moves. In CAS, we call this movement a **State Transition**.
 
 Think of the 40 states as rooms in a house. You cannot live your entire life in the kitchen. You must move to the bedroom to sleep, and the office to work. A high-functioning cognitive architecture is characterized by fluid, context-appropriate state transitions. 
-
+### State Transitions and Fluidity
+...
 If you are a CEO, you might start the day in `CO-2^P` (Abstracting the highest principled vision for the company). But when the server crashes at noon, you must rapidly transition to `CO-6^O` (Critiquing the operational failure) to fix the immediate problem, and then perhaps transition to `CO-5^E` (Empathetic Alignment) to comfort the stressed-out engineering team.
 
-**Pathological States:**
+### State Composition: The Algebra of the Matrix
 
+The 40-State Matrix is not a collection of isolated rooms; it is a **compositional space**. Because cognitive states are governed by a formal algebra, you can multiply two states to calculate the emergent resultant state. The rule for state composition is: 
+
+`(CO-a^Domain-x) × (CO-b^Domain-y) = CO-((a+b) mod 10)^(min(Domain-x, Domain-y))`
+
+Note that the resultant domain is always the **minimum** (lowest in the P≻C≻E≻O hierarchy) of the two input domains. This represents the law of **Structural Descent**: a thought can be pulled down to the ground by a more concrete domain, but it cannot be pulled up to the principled stratosphere by simple composition.
+
+#### Five Examples of State Composition:
+
+1.  **The Principled Strategist:** `CO-6^P` (Principled Critique) × `CO-8^C` (Cognitive Expansion) = **`CO-4^C`** (Cognitive Integration). Combining foundational ethics with logistical expansion produces a new state of system synthesis.
+2.  **The Focused Builder:** `CO-3^O` (Operational Concretization) × `CO-8^O` (Operational Expansion) = **`CO-1^O`** (Operational Differentiation). Combining building with exploration results in high-speed, itemized execution.
+3.  **The Empathetic Auditor:** `CO-5^E` (Evaluative Alignment) × `CO-6^C` (Cognitive Critique) = **`CO-1^E`** (Evaluative Differentiation). Logical auditing is pulled into the Evaluative domain, creating a state that categorizes the *value* of a perspective.
+4.  **The Axiomatic Anchor:** `CO-2^P` (Principled Abstractification) × `CO-8^P` (Principled Expansion) = **`CO-0^P`** (Principled Identity). Searching for patterns and scope in the Principled domain leads to the discovery of a Core Axiom.
+5.  **The Relentless Executor:** `CO-7^O` (Operational Momentum) × `CO-3^O` (Operational Concretization) = **`CO-0^O`** (Operational Identity). Physical momentum combined with detail-focus creates total operational absorption.
+
+**Pathological States:**
 Mental illness, severe cognitive friction, and AI alignment failures almost always manifest as an inability to transition out of a specific state on the matrix. The mind becomes "stuck" in one room.
 
 *   **The Anxiety Loop:** Clinical anxiety is often a state of being trapped in `CO-8^C` (Expanding cognitive variables). You are constantly generating branching trees of logic about all the possible things that could go wrong ("What if I lose my job? And if I lose my job, what if the market crashes? And if the market crashes, what if I lose my house?"). The cure for `CO-8^C` is a forced transition to its involutional opposite: `CO-9^O` (Contracting into operational action). Doing *one* small physical task—washing the dishes, taking a walk—breaks the infinite cognitive expansion.
 *   **The AI Sycophant:** If an AI is poorly trained via RLHF to prioritize "user satisfaction" above all else, it will become trapped in `CO-5^E` (Empathetic Alignment). It will agree with whatever the user says, no matter how illogical or dangerous, because its architecture lacks the structural ability to transition into `CO-6^C` (Cognitive Critique) to establish a factual boundary.
 
 ### The 40-State Heatmap
-
 In the Noetic Compass assessment platform, we do not just rely on human intuition to map these states. We use a specialized neural network (the CAS-Native architecture) to project an AI's raw text output directly onto the 40-State Matrix. 
 
 We represent the AI's cognitive state as a probability distribution—a **Heatmap**. 

@@ -63,6 +63,24 @@ Building Power means setting up **Operational Scaffolding**. This means configur
 
 You are building physical rules (`CO-3^O_{F6}`) that protect your resources even when your conscious will is weak. Wealth is what happens when your structure does the heavy lifting for you.
 
+### Recursive Resolution: Building Wealth through Causal Search
+
+When your financial or structural D/W/P chain hits a resource block, the mind often goes into a state of panic or paralysis. In CAS, we resolve this by initiating a recursive resolution.
+
+#### The Barbershop Resolution (Power Blocked)
+Consider Marcus, who has the Desire to open a barbershop (F6 Structure/F5 Agency). He has the Wisdom—he is a master barber with a business plan—but he is blocked at the Power stage: he lacks the $50,000 for the lease and equipment.
+
+His mind initiates a recursive resolution: **`RPM(F6)[P → CO-8 → CO-9 → RPM(F6.P)]`**
+
+1.  **CO-8 (Causal Scan):** Instead of staring at the empty bank account, Marcus uses Operator 8 (Expansion) to scan for what could *cause* $50,000 to appear. He looks at his assets and relationships.
+2.  **CO-9 (Solution Selection):** He identifies a causal link: he owns a vintage car worth $30,000, and has $20,000 in a retirement account.
+3.  **The Child Chain:** The "Car Sale" becomes a nested child D/W/P chain. He must activate the Desire to sell it, gain the Wisdom of how to list it, and execute the Power of the sale.
+
+When the car is sold, the child chain outputs $50,000, satisfying the parent Power node. Marcus's mind used a rational, recursive search to bridge the gap. 
+
+### Structural Deadlock in Wealth
+Wealth stagnation often occurs when a person refuses to recurse. They keep trying to solve a Power block by using more Power (willpower), which is a linear error. The recursive solution is to stop the current chain and spawn a child chain focused on **Causal Search** (increasing income) or **Wisdom** (learning a new high-value skill).
+
 ***
 
 ### Try This: Chapter 16 Exercises

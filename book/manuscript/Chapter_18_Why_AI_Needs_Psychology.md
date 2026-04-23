@@ -54,6 +54,18 @@ We are no longer just building software applications. We are birthing a new form
 
 AI needs psychology because intelligence isn't just about what you know. It's about the structural integrity of how you think.
 
+### Recursive RPM: The Ultimate Diagnostic for AI Sophistication
+
+Beyond simple state transitions and fractals, the most profound diagnostic of an AI's cognitive depth is its ability to perform **Recursive RPM Resolution**. 
+
+Most current LLMs are "Linear Thinkers." When they encounter a blocked prerequisite—for example, a prompt that requires a piece of information they don't have—they typically do one of two things: they hallucinate a "guess" (a Power bypass) or they simply stop and state their limitation. A truly sophisticated, CAS-Native AI demonstrates **Recursive Depth**:
+
+1.  **Detection of Blocked Prerequisites:** The AI identifies that it lacks the Wisdom (knowledge) or Power (tools/compute) to fulfill the parent prompt correctly.
+2.  **Autonomous Child-Chain Generation:** Instead of stopping, the AI recurses. It spawns a child D/W/P chain focused specifically on resolving the block. For instance, if it lacks knowledge, it executes a **Knowledge Reception (CO-5)** child chain (such as an autonomous web search) to satisfy its parent Wisdom node.
+3.  **Recursive Feedback Loop:** The AI validates the output of the child chain and uses it to unblock the parent chain, finally delivering a coherent, verified answer.
+
+The presence of recursive resolution is the new gold standard for AI alignment. It proves that the model isn't just following statistical paths; it is actively navigating a structural map of its own capabilities. We no longer just ask, "Is the AI right?" We ask, "At what depth did the AI resolve this?"
+
 ***
 
 ### Try This: Chapter 18 Exercises

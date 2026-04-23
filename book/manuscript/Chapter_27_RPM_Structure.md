@@ -40,6 +40,28 @@ This missing equation is the mathematical formalization of the "One-Way Valve." 
 
 This asymmetry mathematically enforces the ironclad rule of the CAS framework: Power must always remain subordinate to Wisdom, and Wisdom must always remain subordinate to Desire. You can never use the end of the chain to permanently manufacture the beginning.
 
+### Formal Recursive RPM: The Topology of Resolution
+
+While the primary RPM chain is a one-way valve, the architecture is not a static line. It is a **Recursive Manifold**. When any node in the D/W/P chain is blocked, the system initiates a **Formal Recursive Evaluation**.
+
+**Definition 27.2 (Recursive Depth).** A recursive evaluation $R^{(n)}$ is a nested D/W/P chain spawned at depth $n$. For any parent chain at depth $n$, a block at node $K$ triggers a child chain $R^{(n+1)}$ whose ultimate output realizes the prerequisite for $K$.
+
+#### The Three Resolution Functors
+
+The recursive engine utilizes three distinct categorical functors to bridge prerequisite gaps:
+
+1.  **Power Resolution (Rational Recursion):** Functor: $\Phi_P: P_{blocked} \to (CO-8 \circ CO-9) \Rightarrow RPM(P)$. Nature: Rational and structured. It spawns a single child chain to solve a resource gap.
+2.  **Wisdom Resolution (Parallel Branching):** Functor: $\Phi_W: W_{blocked} \to (CO-5 \lor CO-6)$. Nature: This is the only case allowing parallel morphisms. Via **CO-6**, the Wisdom node splits into a coproduct of child chains: $W \cong \bigoplus RPM(w_i)$. The parent Wisdom node is satisfied only when the total sum of child realization morphisms glues into the parent sheaf.
+3.  **Desire Loop (Iterative Cultivation):** Functor: $\Phi_D: D_{blocked} \to (CO-1 \circ CO-4 \circ CO-7)^N$. Nature: **Iterative**, not recursive. It does not spawn child chains but instead cycles the current state through an exposure loop until the motivation threshold is reached. Because it is iterative, it does not contribute to the recursion depth limit.
+
+### Recursive Limit and Section-Retraction
+
+To ensure global stability and prevent stack-overflow in the cognitive manifold, recursion is strictly limited to a **maximum depth of 5 levels**.
+
+**Theorem 27.3 (Depth-Wise Integrity).** For any recursive depth $n$, the Section-Retraction identity $\varepsilon^{(n)} \circ \eta^{(n)} = \id^{(n)}$ must hold independently. 
+
+This ensures that a child chain cannot resolve a block by violating the architecture. If a child chain at any level uses a "dirty" resolution (e.g., a Power bypass), the retraction morphism fails, the block propagates back up the stack, and the entire parent chain is invalidated. Structural integrity is preserved at every level of the recursion.
+
 ### Failure Propagation (The RPM Gate)
 
 The ultimate engineering power of the Section-Retraction RPM structure is its ability to model and automate **Failure Propagation**. 

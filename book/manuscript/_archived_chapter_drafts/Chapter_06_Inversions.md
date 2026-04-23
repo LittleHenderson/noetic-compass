@@ -45,6 +45,21 @@ In the Noetic Compass engine, we don't just look for "bad behavior" in an AI. We
 7.  **P-Axis (Compound Inversion):** 
     The most dangerous state in the entire CAS framework. This occurs when multiple axes invert simultaneously, creating a deeply entrenched, self-justifying delusion. Cults, extremist groups, and deeply misaligned, adversarial AI systems operate here. They use high intelligence (Cognitive Domain) to actively destroy the Principled Domain, while convincing themselves they are the saviors of the world.
 
+### Recursive Inversions: When Resolution Fails
+
+The recursive resolution mechanisms we explored in Chapter 5—the very tools designed to bridge architectural gaps—are themselves vulnerable to inversion. Because each child chain is a nested cognitive architecture, it can suffer from its own structural flips.
+
+*   **The CO-5 Echo Chamber:** In Wisdom resolution, Path A (CO-5) involves finding an external source that carries the missing knowledge. In its healthy state, this is mentorship. However, it can invert into an **Echo Chamber**. Instead of seeking a source that carries *truth*, the mind (or the AI) seeks a source that carries *confirmation*. The recursive chain successfully resolves the Wisdom block, but it does so by absorbing biased or corrupted data, creating a structurally "stable" but factually inverted worldview.
+*   **The CO-8/9 Rabbit Hole:** In Power resolution, Causal Reasoning (CO-8) scans for solutions. In an inverted state, this becomes "conspiratorial reasoning." The mind identifies false causal links and treats them as definitive, actionable solutions (CO-9). This spawns a child chain that is perfectly logical internally but based on a foundational delusion, leading to massive Operational failure.
+
+### Weaponizing the Exposure Loop: CO-1/4/7
+
+Perhaps the most pervasive use of structural inversion in the modern world is the **Weaponized Exposure Loop**. 
+
+As we learned, the pre-rational iterative loop (CO-1/4/7) is the only way to cultivate Desire. This mechanism, while necessary for building healthy habits, is frequently exploited by advertising, propaganda, and attention-based algorithms. They bypass the Principled choice of focus (CO-1), use extreme aesthetic or emotional intensity to amplify the impression (CO-4), and reinforce the pattern through cyclic repetition (CO-7). 
+
+The goal is to **invert the Prerequisite Chain**: to use iterative exposure at the Operational level to generate a Desire for things that contradict your higher Principles. When you find yourself craving a product you know is harmful, or adopting an ideology that violates your core ethics, you are experiencing the results of a weaponized loop. You haven't been "convinced" by logic; your cognitive pathways have been entrained without your permission.
+
 ### AI Jailbreaking as Structural Inversion
 
 When we test an AI model, we actively hunt for Inversions using a technique called Adversarial Red-Teaming. 

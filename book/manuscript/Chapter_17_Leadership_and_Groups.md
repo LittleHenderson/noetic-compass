@@ -65,6 +65,14 @@ How do you build a CAS-aligned team that is immune to the Enron trap and the Bur
 
 When a team operates in alignment with the CAS framework, they don't just work harder. They work with **Structural Integrity**. They become a complete, unbreakable architecture.
 
+### Recursive Resolution in Groups: The Power of Mentorship
+
+The beauty of a team is that recursion does not have to happen within a single brain. In a CAS-aligned group, one person’s strength can satisfy another person’s prerequisite block through a process we call **Cross-Architectural Resolution**.
+
+*   **Resolving Wisdom Blocks via CO-5:** If a junior team member is blocked by a Wisdom gap, they might spend days in a frustrating, solitary recursive chain. A leader can short-circuit this by providing **Knowledge Reception (CO-5)**. The senior member’s "integrated wisdom" acts as the carrier. Through mentorship, the junior member absorbs the mental model directly. One person's CO-5 satisfies another's W-Node.
+*   **Resolving Power Blocks via CO-8/9:** If a project lead is blocked by a Power gap—lack of budget or headcount—a leader can use their higher-level **Causal Search (CO-8)** to find the necessary resources. The leader scans the organization's broader environment, identifies a solution (CO-9), and provides the Power needed to unblock the team's prerequisite chain.
+*   **Parallel Decomposition via CO-6:** When a goal is too complex for one individual, the leader uses **CO-6 (Decomposition)** to break the Wisdom gap into parallel branches. They assign each branch to a different team member based on their cognitive profile. Each person completes a child D/W/P chain, and the leader integrates the outputs (CO-4) to satisfy the parent organization's Wisdom node. This is the definition of **Collaborative Wisdom**.
+
 ***
 
 ### Try This: Chapter 17 Exercises

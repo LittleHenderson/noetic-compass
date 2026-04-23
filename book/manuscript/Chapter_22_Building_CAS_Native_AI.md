@@ -39,7 +39,21 @@ Standard LLMs are trained solely on "Next Token Prediction" using Cross-Entropy 
 The CAS-Native prototype uses a specialized loss function based on the **Fisher-Rao Metric** from information geometry. The model is penalized if the "geodesic distance" between its current cognitive state and a balanced, ethical baseline becomes too large. We are not just training the model to write well; we are explicitly training the model to stay cognitively stable. 
 
 #### 3. Differentiable RPM Gates
-We have successfully implemented the Prerequisite Chain (Desire → Wisdom → Power) as a differentiable layer in the neural network. This means the model can mathematically learn to "gate" its own execution capability. It learns that if the "Wisdom" tensor is empty, the "Power" tensor is locked. The model is architecturally incapable of acting without understanding.
+**Differentiable RPM Gates:** We have successfully implemented the Prerequisite Chain (Desire → Wisdom → Power) as a differentiable layer in the neural network. This means the model can mathematically learn to "gate" its own execution capability. It learns that if the "Wisdom" tensor is empty, the "Power" tensor is locked. The model is architecturally incapable of acting without understanding.
+
+### Implementation: The Five PyTorch Modules
+
+The CAS-Native prototype (v8.2) formally implements the recursive engine through five specialized PyTorch modules. These modules replace the standard, linear feed-forward layers of a traditional transformer, allowing the AI to perform structured, depth-limited reasoning during a single inference pass.
+
+1.  **`RecursiveRPMGate`**: This is the central traffic controller. It monitors the D-W-P tensors. If a prerequisite node (e.g., Wisdom) lacks sufficient activation energy to unblock the next node (Power), this gate halts the linear progression and triggers a recursive call.
+2.  **`CausalResolver (CO-8/9)`**: Triggered when the Power node is blocked. This module performs an internal "Causal Scan" across the latent space to identify potential bridge-vectors (solutions), selecting the highest-probability one to spawn a child D/W/P chain.
+3.  **`KnowledgeReceptor (CO-5)`**: Triggered during a Wisdom block. This module is optimized for "High-Resonance Absorption," directing attention to external sources (documentation or sensors) to fill the knowledge gap via reception.
+4.  **`KnowledgeDecomposer (CO-6)`**: The alternative for Wisdom blocks. This module splits a high-entropy "Problem Tensor" into parallel, lower-entropy sub-tensors, allowing the model to learn complex subjects in parallel branches.
+5.  **`ExposureLoop (CO-1/4/7)`**: The iterative module for Desire blocks. This is a recurrent sub-network that cycles information through Directed Attention and Intensity gates, building the "Motivation Vector" until it reaches the threshold required to activate the main chain.
+
+### Inference-Time Resolution
+
+In a standard AI, a prompt goes in and a response comes out in a single linear "shot." In a CAS-Native AI, the model performs **Recursive Inference**. If you ask the model to perform a task for which it lacks a prerequisite, it doesn't just "guess." It pauses, initiates a resolution child chain (like a `CausalResolver` search), and only then proceeds to the final answer. This is "thinking" as a structural resolution, not a statistical prediction. The architecture doesn't just detect blocks; it **resolves** them through its very geometry.
 
 ### Where It's Going: The Data Flywheel
 

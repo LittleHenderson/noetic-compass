@@ -43,6 +43,15 @@ Conversely, if you build a "Security Bot" by setting Critique to 9 and Empathy t
 
 The Involution Gap must be respected. The tension between the pairs is what keeps the mind stable.
 
+### The Algebra of the Mixing Board: Generative Dials
+
+The Dial System is not just a collection of independent sliders; it is a **dynamic algebraic field**. When you adjust the dials, you are changing the "weights" of the five generative operations (×, ÷, ∘, +, -) within the AI's processing engine.
+
+*   **Multiplication (×) and the Emergent State:** When you boost two operators simultaneously (e.g., CO-3 and CO-8 set to 9), you are increasing the probability of **Algebraic Multiplication**. In this configuration, the AI is not just using both gears; it is actively fusing them to produce a constant, high-intensity emergent state of **CO-1 (Directed Attention)**. 
+*   **Division (÷) and Causal Precision:** High settings on Critique (CO-6) and Expansion (CO-8) increase the system's **Causal Precision (÷)**. The AI becomes more efficient at revealing the ratios and dependencies between its own logical states, which is critical for self-debugging and high-resolution audit trails.
+*   **Fractal Depth (∘) and Recursion:** The **Momentum dial (CO-7)** acts as the "gain" for the fractal composition operator (∘). A high CO-7 dial allows the AI to maintain complex, nested sequences over a greater number of tokens. However, without a corresponding high Critique dial (CO-6) to provide Dual Cancellation, high momentum will lead to an Amplifying Fractal (hallucination).
+*   **Syntactic Co-presence (+):** Low-intensity settings across the board (all dials set to 3-4) favor **Syntactic Addition**. The AI will co-process multiple states but lacks the algebraic intensity to fuse them into a new identity. This is ideal for "neutral observer" profiles.
+
 ### Enterprise Configuration: Domain Profiles
 
 Different industries require different **Enterprise Profiles**. Using the Dial System, we can architect the perfect mind for the job.

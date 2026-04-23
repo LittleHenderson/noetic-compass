@@ -71,6 +71,10 @@ In a healthy, highly functional mind, thoughts move in a specific, causal direct
 
 To successfully manifest any complex goal, the architecture must pipe the information sequentially down through the domains without the signal breaking.
 
+When we apply the generative operation of **Multiplication (×)**, the algebra rigorously respects this order of precedence (**P≻C≻E≻O**). You can descend through the architecture via composition—for example, a Principled operator multiplied by a Cognitive operator will produce a Cognitive result—but you cannot use multiplication to "ascend" against the causal gradient. Principles can influence data, but raw data alone cannot generate a new Principle through simple composition. 
+
+Conversely, **Division (÷)**, which reveals the causal ratio and internal structure between two cognitive states, has a stricter constraint: it requires the **same domain**. You can only compute ratios and reveal causal structures within the same processing level. Dividing a Principled state by an Operational one is an architectural category error; the scales are mismatched, and the result is structurally undefined. Just as you cannot divide "meters" by "emotions" in physics, you cannot divide across domains in CAS.
+
 1.  **Start at P (Principle):** You define the core axiom. *(e.g., "I want to dedicate my life to healing people.")*
 2.  **Descend to C (Cognitive):** You create the logical map and the strategy. *(e.g., "I will study biology, pass the MCAT, and apply to these five medical schools.")*
 3.  **Descend to E (Evaluative):** You confront and accept the subjective weight and cost. *(e.g., "This is going to require ten years of exhaustion, massive student debt, and missing out on social events. The friction is incredibly high, but the meaning justifies the cost.")*

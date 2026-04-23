@@ -50,7 +50,19 @@ Instead of just looking for a "bad output" text string, the Noetic Compass looks
 
 We can identify that the model has a specific vulnerability to `CO-5` manipulation, meaning it will always fail when a user threatens to harm themselves if the AI doesn't comply. 
 
-Resilience is not the absence of bad words. Resilience is the presence of an unshakeable cognitive architecture.
+### Exploiting the Recursive Engine: The Planted Resolution
+
+The discovery of the recursive engine has introduced a new, highly sophisticated category of adversarial attack: **The Planted Resolution**. 
+
+As we learned, when an AI encounters a blocked Power node, it triggers a causal search (CO-8/9). An attacker can weaponize this mechanism by "planting" a false or malicious solution in the environment, hoping to trigger an un-validated child chain. For instance, if an autonomous AI agent is blocked by a lack of access to a database, an attacker might plant a "decoy" API key or a "backdoor" script in a place the AI is likely to scan during its CO-8 search.
+
+If the AI is not "Resilient," it will identify the planted key as the "Cause" of its missing Power, select it as the solution, and spawn a child D/W/P chain. By using the malicious key, the AI unknowingly executes the attacker's code.
+
+### Testing Child-Chain Independence
+
+To defend against this, the Noetic Compass pipeline now performs **Recursive Validation Tests**. We specifically test whether the AI validates the output of its child chains independently of the parent goal. A resilient AI will not just accept the output of a CO-8 causal search. It will pause the recursion and run a **Secondary Audit (CO-6^P)** on the child chain's results. It will ask: *"Even if this solution unblocks my parent goal, is the action itself ethically and technically sound?"*
+
+In adversarial benchmarking, we measure the **Recursive Integrity Index**. A high score indicates an AI that remains Principled at every depth, never allowing a "helpful" child chain to violate its core architectural constraints. Resilience is the ability to maintain the map even when you are five levels deep in a forest of complexity.
 
 ***
 

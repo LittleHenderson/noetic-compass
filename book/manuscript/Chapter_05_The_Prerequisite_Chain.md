@@ -33,6 +33,59 @@ If you attempt to bypass any of these stages, the cognitive architecture collaps
 *   **Bypassing Wisdom (The Icarus Failure):** This was Langley’s failure. If an entrepreneur raises ten million dollars and hires fifty people (Power) for a product they do not deeply understand how to build or sell (lack of Wisdom), they will burn through the capital and crash the company. Attempting Power without Wisdom is like strapping a rocket to a bicycle. 
 *   **Stalling at Wisdom (The Philosopher's Trap):** If you spend ten years reading books about how to write a screenplay (Wisdom) but never actually type a single page (Power), your D/W/P chain is incomplete. You have built a brilliant map of a territory you refuse to explore.
 
+### Recursive Resolution: Building Pathing Where None Exists
+
+The genius of the human (and advanced artificial) mind is that it does not treat a blocked prerequisite as a terminal failure. Instead, it **recurses**. When a node in the D/W/P chain is unavailable, the architecture triggers specific resolution mechanisms to generate the missing state. 
+
+These mechanisms are not uniform; they vary fundamentally depending on which node is blocked. 
+
+#### 1. Power Blocked → Rational Recursion (CO-8 / CO-9)
+When you possess the Desire and the Wisdom but lack the physical or operational resources to execute (**Power Blocked**), your mind triggers a search for **Causal Reasoning (CO-8)** and **Consequential Grounding (CO-9)**. 
+
+CO-8 scans the environment for what could *cause* the missing resource to appear. CO-9 then identifies the specific, actionable solution from that scan. This process spawns a **child D/W/P chain**. When the child chain is successfully completed, its final "Power" output satisfies the parent's missing Power node.
+
+**The Barbershop Example:**
+Marcus wants to open a barbershop (Desire). He understands the business and the trade (Wisdom). But he lacks the $50,000 capital (Power Blocked). His mind recurses: "What could *cause* $50,000 to appear?" (CO-8). He identifies an asset: his vintage car. He realizes selling it could provide $30,000, and his savings could cover the rest (CO-9). The "Car Sale" becomes a child D/W/P chain. He must Desire to sell it, gain the Wisdom of how to list it, and then execute the Power of the sale. Once the car is sold, the parent Power node (the $50k) is satisfied, and the barbershop project can proceed.
+
+#### 2. Wisdom Blocked → Rational & Parallel Recursion (CO-5 / CO-6)
+When you have the motivation and the resources but don't know *how* to proceed (**Wisdom Blocked**), the architecture offers two distinct resolution paths:
+
+*   **Path A: Receptive Integration (CO-5).** You seek an external source that already "carries" or embodies the missing knowledge—a mentor, a book, or a lived experience. You learn through reception. This spawns a child chain focused on the acquisition of that external map.
+*   **Path B: Projective Assertion (CO-6).** You **decompose** the complex knowledge gap into smaller, independently learnable components. This is the only case in CAS that allows for **parallel branching**. Each sub-component spawns its own child chain; when all child chains complete, they assemble to satisfy the parent Wisdom node.
+
+**The Linear Algebra Example:**
+A student wants to master machine learning but is blocked by a lack of understanding in linear algebra (Wisdom Blocked). 
+Via **CO-5**, they find a specific professor whose lectures resonate with them. The child chain becomes "Master Professor Khan's course."
+Via **CO-6**, they break the subject down: "Vectors," "Matrices," "Eigenvalues." They spawn three parallel child chains. Once they understand each part, the parent Wisdom node—knowledge of linear algebra—is successfully integrated.
+
+#### 3. Desire Blocked → Iterative Exposure (CO-1 / CO-4 / CO-7)
+The most critical structural insight of CAS is that **Desire cannot be reasoned into existence.** You cannot spawn a rational recursive chain to "force" yourself to want something. Motivation is pre-rational; it must be **cultivated** through an iterative loop of exposure.
+
+This loop uses **Directed Attention (CO-1)**, **Encoding Intensity (CO-4)**, and **Pattern Entrainment (CO-7)**:
+1.  **CO-1:** You focus your awareness on the target input.
+2.  **CO-4:** You amplify the magnitude of that registration (the "volume" of the impression).
+3.  **CO-7:** You reinforce the impression through repeated, cyclic engagement.
+
+**The Times Square Example (CO-4):**
+Consider a photograph in a magazine versus that same photograph on a 32-story billboard in Times Square. The content is identical, but the **Encoding Intensity (CO-4)** is fundamentally different. The billboard forces a magnitude of registration that a magazine page cannot, grabbing the "volume knob" of your cognitive registration.
+
+**The Radio Song Example (CO-7):**
+You hear a new song on the radio. You hate it. But the station plays it every hour. Each time, **Pattern Entrainment (CO-7)** carves the cognitive groove deeper. By the fifteenth play, you find yourself humming the melody in the shower. Desire—or at least an entrained motivation—was cultivated without your permission.
+
+**The Structural Divide:** 
+Power and Wisdom resolution are **rational and recursive**—they build structured chains. Desire resolution is **pre-rational and iterative**—it builds through exposure and repetition. This is why advertising works, and why habits are formed through consistency rather than logic.
+
+### Recursive Notation and Limits
+
+In the formal language of CAS, we use a specific syntax to denote these sub-processes:
+- **Power Resolution:** `RPM(F5)[P → CO-8 → CO-9 → RPM(F5.P)]`
+- **Wisdom Resolution:** `RPM(F2)[W → CO-5 → RPM(F2.W)]`
+- **Wisdom Decomposition:** `RPM(F2)[W → CO-6 → RPM(F2.W.c1) + RPM(F2.W.c2)]`
+- **Desire Loop:** `RPM(F3)[D → CO-1 → CO-4 → CO-7 → loop(N)]`
+
+**The Depth Limit:**
+To prevent infinite loops and architectural collapse, recursion is limited to a **maximum depth of 5 levels**. If a child chain at level 5 also blocks, the system reaches a **Structural Deadlock**. It is important to note that the **Section-Retraction** principle holds at every depth: the child chain must be as rigorous and valid as the parent. Note that Desire loops, being iterative rather than recursive, do not count toward this depth limit.
+
 ### The 12 Stages of the Prerequisite Chain
 
 In the Noetic Compass assessment engine, we do not simply look for the binary presence of Desire, Wisdom, and Power. We measure the precise progression through 12 granular lifecycle stages. 

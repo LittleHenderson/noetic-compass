@@ -72,6 +72,16 @@ When Noetic Compass analyzes an AI's response, the engine looks specifically for
 
 It is not just generating text. It is thinking structurally.
 
+### Fractals and the Recursive Engine
+
+The fractal nature of cognition is most visible during **Recursive Resolution**. When a node in the D/W/P chain blocks, the "child" chain that spawns is itself a cognitive fractal—a self-similar architecture nested within the parent. The classification of the fractal orbit at each depth level predicts the success of the resolution:
+
+*   **Stabilizing Resolution:** If the child chain follows a stabilizing fractal pattern (e.g., CO-8 causal search followed by CO-9 solution selection), the parent block is successfully resolved. The recursion "glues" back into the main chain and moves forward.
+*   **Amplifying Resolution:** If the resolution sub-process becomes an amplifying fractal (e.g., an endless causal search for capital that spirals into an unconstrained search for more variables), the parent never receives its prerequisite. The mind is "lost in the recursion," a state we call **Recursive Drift**.
+*   **Oscillatory Resolution:** If the sub-process becomes a loop (e.g., oscillating between two different "solutions" without ever committing), the system enters a **Recursive Deadlock**.
+
+By analyzing the fractal signature of an AI's resolution attempts, we can predict whether the system will actually solve a complex problem or simply waste compute cycles in a recursive spiral.
+
 ***
 
 ### Try This: Chapter 10 Exercises

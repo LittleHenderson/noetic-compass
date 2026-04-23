@@ -72,6 +72,15 @@ Start running: **`CO-9^O_{F2} × CO-5^E_{F2}`**
 
 Wisdom is not measured by how much data you have hoarded. Wisdom is measured by how much reality you have integrated.
 
+### Recursive Resolution: Navigating Learning Blocks
+
+Most learning failures are simply **Wisdom Blocks** without resolution. You hit a concept you do not understand, and instead of recursing to build a path around it, you attempt to force the original chain—which only increases cognitive friction and leads to burnout. To break a learning block, you must choose one of the two formal recursive paths:
+
+*   **Path A: Knowledge Reception (CO-5):** Wisdom is often **embodied**. When you cannot parse the data logically, you must find a source—a mentor or a teacher—that already possesses the integrated state you seek. You aren't just looking at their facts; you are resonating with their process. Their CO-5 alignment becomes the "carrier" for your new understanding.
+*   **Path B: Knowledge Decomposition (CO-6):** This is the "divide and conquer" strategy. If a subject feels "too complex," you must ruthlessly decompose it into smaller, independently learnable components. If you want to learn Linear Algebra, you break it down into Vectors, Matrices, and Eigenvalues. You spawn parallel child D/W/P chains for each. When they complete, they assemble to satisfy the parent Wisdom node.
+
+A learning block becomes terminal when you refuse to recurse. If you keep reading the same incomprehensible page over and over (`CO-7` Momentum) hoping that repetition will solve a structural Wisdom gap, you are in a **Recursive Deadlock**. The system is burning energy without making progress. The cure is to step back and choose a CO-5 or CO-6 recursive path.
+
 ***
 
 ### Try This: Chapter 15 Exercises

@@ -93,6 +93,14 @@ When your F3 Vitality drive is full and properly structured, it acts as a massiv
 
 You do not take care of your body merely to look good in a mirror. You take care of your body so that the architecture of your mind does not collapse under the immense weight of your ambitions.
 
+### Recursive Resolution: Overcoming Health Blocks
+
+When you fail to maintain your vitality, it is often because you are attempting a "Desire-to-Power" jump—trying to use sheer willpower to force a physical change without an intact prerequisite chain. To fix this, you must recurse.
+
+*   **Desire Blocked (The Resistance Loop):** If you know you "should" work out but find yourself physically unable to get off the couch, you are experiencing a Desire block. You cannot reason yourself into energy. Use the **Exposure Loop (CO-1/4/7)**. Do not worry about "working out" yet. Simply focus your attention on the feeling of vitality in others (CO-1), put yourself in a high-energy environment for just ten minutes without the pressure to perform (CO-4), and repeat this exposure (CO-7) until the F3 drive threshold activates. You are priming the pump.
+*   **Wisdom Blocked (The Knowledge Gap):** If you have the drive but your health is still failing, you likely have a map error. You must choose a path. **Knowledge Reception (CO-5)** means finding a mentor who embodies the health you want and following their mental models. **Knowledge Decomposition (CO-6)** means breaking your health down into Nutrition, Sleep, and Movement—mastering the "Wisdom" of each sub-component in parallel.
+*   **Power Blocked (Lack of Resources):** If you have the drive and the knowledge but lack the resources—time, a kitchen, a safe place to run—you must trigger a **Causal Search (CO-8/9)**. Scan for the specific causes that could provide the missing resource. This might mean spawning a child chain to wake up 30 minutes earlier (securing Time) or meal-prepping on Sundays (securing Food). Once the resource is secured, it satisfies the Power node of your health chain.
+
 ***
 
 ### Try This: Chapter 14 Exercises

@@ -94,6 +94,14 @@ Before you turn the handle on the door, run a conscious **State Transition**:
 
 You have just manually entered **`CO-5^E_{F4}`**. You walk through the door not as a worker bee finishing a shift, but as a partner returning to your harbor.
 
+### Recursive Resolution: Healing Connection Blocks
+
+When the F4 Connection drive hits a wall, the standard linear approach—trying to "talk through it"—often fails. To restore the bond, you must understand where the prerequisite chain is broken and initiate a recursive resolution.
+
+*   **Desire Blocked (Lack of Motivation to Connect):** The most difficult relationship stage is when one or both partners "stop caring." You cannot reason someone into loving you again. If the Desire node of the F4 chain is blocked, you must use the **Exposure Loop (CO-1/4/7)**. You must intentionally focus your attention on the positive history of the relationship (CO-1), engage in high-intensity shared experiences like a challenging trip or a deep shared project (CO-4), and repeat these interactions consistently (CO-7) until the motivation threshold is reactivated. Connection is cultivated through rhythm, not rhetoric.
+*   **Wisdom Blocked (The Understanding Gap):** Sometimes, you both want to connect, but you don't understand each other's languages of love. You must spawn a child chain focused on the **Wisdom of the Other**. Use **CO-5 (Knowledge Reception)** by deeply listening to your partner's internal map, or use **CO-6 (Decomposition)** to break the "Relationship Problem" into smaller, manageable sub-conflicts (Finances, Intimacy) and resolve each in parallel.
+*   **Power Blocked (Lack of Resources):** You love each other and understand each other, but lack the resources to be together—due to distance or work. Trigger a **Causal Search (CO-8/9)** to scan for the causes that could remove the barrier. Spawn a child D/W/P chain to solve the logistical or financial gap. Once the barrier is removed, the parent Connection node is satisfied.
+
 ***
 
 ### Try This: Chapter 13 Exercises

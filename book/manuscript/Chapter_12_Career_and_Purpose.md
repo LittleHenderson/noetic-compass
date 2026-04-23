@@ -76,6 +76,14 @@ Or are you hoarding wisdom while refusing to take the operational risks required
 
 Align your drives. Respect the prerequisites. Balance the power with the wisdom. Only then does a job become a calling.
 
+### Recursive Resolution: Navigating Career Blocks
+
+When your career D/W/P chain hits a wall, you do not have to accept the stagnation. You can initiate a recursive resolution to build a path around the block.
+
+*   **Power Blocked (Lack of Resources):** If you have the motivation and the expertise but lack the capital, the team, or the authority to execute, your mind must trigger a **Causal Search (CO-8/9)**. If you want to launch a new product line but have no budget, you recurse to find alternative "causes" of funding—perhaps an underutilized marketing budget for "innovation trials." You spawn a child D/W/P chain to secure those specific funds. Once secured, they satisfy the Power node of your parent project.
+*   **Wisdom Blocked (The Knowledge Gap):** If you don't understand the industry dynamics, you must choose a learning path. You can use **Knowledge Reception (CO-5)** to find a mentor who carries the "embodied wisdom" you lack, or **Knowledge Decomposition (CO-6)** to break the gap into parts—Finance, Supply Chain, Sales—and master each in parallel.
+*   **Desire Blocked (The Burnout Loop):** If you find yourself going through the motions with zero motivation, you cannot "reason" your way into caring. You must use the **Exposure Loop (CO-1/4/7)** to re-cultivate desire. You must intentionally focus your attention on the impact of your work (CO-1), put yourself in high-intensity environments where that impact is amplified (CO-4), and repeat this exposure (CO-7) until the motivation threshold is reactivated. This is not a logical chain; it is a rhythmic cultivation of fuel.
+
 ***
 
 ### Try This: Chapter 12 Exercises

@@ -49,9 +49,17 @@ Once we have proven that Noetica is a valid site, we can define **Sheaves**.
 
 A sheaf on Noetica is a functor that assigns specific "data" (e.g., probability mass, semantic meaning, ethical weight) to each cognitive state in a way that respects the topology we just built. 
 
-Specifically, a sheaf ensures that "local" observations of an AI's behavior (a single sentence in a long essay) can be uniquely and mathematically glued into a "global" cognitive profile without creating a contradiction.
+Specifically, a sheaf ensures that "local" observations of an AI's behavior can be uniquely and mathematically glued into a "global" cognitive profile without creating a contradiction. The collection of all these valid, consistent sheaves forms a massive mathematical structure known as the **Noetic Topos**. 
 
-The collection of all these valid, consistent sheaves forms a massive mathematical structure known as the **Noetic Topos**. 
+### Recursive Sheaf Evaluation: The Gluing of Depth
+
+The most complex operation within the Noetic Topos is **Recursive Sheaf Evaluation**. When the RPM mechanism triggers a recursion, the topos does not just spawn a new "process"; it nests a **Local Sheaf Section** inside the parent sheaf.
+
+*   **Local Sectioning:** When a prerequisite node (e.g., Power) blocks, the system creates a "Local Section" focused exclusively on the resolution child chain. This section has its own internal consistency requirements and local topology.
+*   **Sheaf Gluing:** For the parent goal to succeed, the output of the child chain's section must **glue** perfectly into the parent sheaf at the boundary of the blocked node. If the child chain's resolution morphism does not satisfy the transition axiom at the glue point, the global sheaf fails to extend, and the system enters a **Topological Deadlock**.
+*   **Depth Consistency:** Because section-retraction holds at every level, the topos enforces that a child chain cannot resolve a block by violating the higher-level coverage of the parent. You cannot resolve a Wisdom block by using a method that shatters the global Principled sheaf. 
+
+This recursive gluing is why deeply recursive thinkers are so resilient. They aren't just "solving problems"; they are building a continuous, globally consistent mathematical manifold of thought.
 
 ### Implications: Intuitionistic Logic vs. Boolean Logic
 

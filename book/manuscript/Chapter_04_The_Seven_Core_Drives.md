@@ -25,30 +25,46 @@ Let's walk through the seven fuels that power the architecture.
 #### F1: Unity (The Drive for Wholeness)
 F1 is the drive to simplify, to integrate, and to find the single, unbroken "truth." It is the pull toward oneness. It is the desire to resolve all paradoxes into a single point. 
 When you feel a deep, silent sense of peace while walking in a forest, you are experiencing F1. When a physicist spends their entire career searching for a "Grand Unified Theory" that explains all the forces of nature with one elegant equation, they are propelled by the F1 drive. It is the pursuit of the absolute.
+*   **Recursive Resolution:** Most commonly blocks at **Desire (D)**. Because F1 is pre-rational, you cannot argue yourself into a state of unity; it must be cultivated through the exposure loop (CO-1/4/7).
 
 #### F2: Wisdom (The Drive for Understanding)
 F2 is the hunger for knowledge, but it is not just about hoarding trivia. It is the drive for *meaning* and *map-making*. It is the desire to see how things fit together and to gain mastery over the "Why." 
 When you fall down a Wikipedia rabbit hole at 3:00 AM, reading about the history of the Byzantine Empire just for the sake of knowing it, you are fueled by F2. It is the drive of the philosopher, the scientist, and the eternal student.
+*   **Recursive Resolution:** Naturally blocks at **Wisdom (W)**. Resolves through CO-5 knowledge reception or CO-6 decomposition.
 
 #### F3: Vitality (The Drive for Energy)
 F3 is the biological engine. It is the drive for physical life, health, survival, and energy preservation. 
 It pulls you toward sleep, food, movement, and reproduction. When Sarah (from Chapter 1) felt the overwhelming exhaustion pulling her back to bed, that was her F3 drive demanding maintenance. In many high-achieving circles, F3 is viewed as an "enemy" of productivity, but in CAS, we recognize it as the foundational energy source that powers all higher-level cognition.
+*   **Recursive Resolution:** Frequently blocks at **Power (P)**. When physical energy is absent, the mind must recurse via CO-8/9 to find causal solutions for recovery.
 
 #### F4: Connection (The Drive for Relationship)
 F4 is the self-dual center of the system. It is the pull toward "The Other." It is the drive for empathy, social bonding, love, recognition, and harmony. It is the fundamental social glue. 
 When you feel lonely, your F4 drive is "empty," sending an alarm that you need social fuel. When you compromise your own preferences just to make a friend happy, you are allowing your F4 drive to override your other desires.
+*   **Recursive Resolution:** Often blocks at **Desire (D)**. Connection cannot be forced; it requires the iterative exposure loop to spark genuine motivation.
 
 #### F5: Agency (The Drive for Power)
 F5 is the drive to exert your will upon the world. It is the hunger for autonomy, control, competence, and execution. It is the drive to *do*. 
 It is the exact opposite of the biological passivity of F3. When you push through the pain of a difficult workout, when you negotiate aggressively for a raise, or when you lead a team to victory, you are riding the F5 drive. It is the fuel of the entrepreneur and the athlete.
+*   **Recursive Resolution:** Primarily blocks at **Power (P)**. Resolves through rational causal search for the tools and resources needed to execute.
 
 #### F6: Structure (The Drive for Order)
 F6 is the drive to build systems, rules, boundaries, and wealth. While F2 (Wisdom) wants to *understand* the messy world, F6 wants to *organize* it. 
 When you spend a Sunday afternoon color-coding your calendar, building a complex budget spreadsheet, or organizing your closet, you are fueled by F6. It is the drive that builds institutions, creates laws, and preserves resources against the chaos of entropy. 
+*   **Recursive Resolution:** Commonly blocks at **Wisdom (W)**. Complex structures require a recursive understanding of the sub-components via CO-6.
 
 #### F7: Purpose (The Drive for Meaning)
 F7 is the highest outward drive. It is the drive for contribution, legacy, and impact. It is the pull toward something greater than the self. 
 While F1 (Unity) pulls you *inward* toward personal peace and wholeness, F7 pushes you *outward* to leave a mark on the universe. When a person dedicates their life to a charitable cause, or writes a symphony, or builds a cathedral, they are operating on the F7 fuel tank.
+*   **Recursive Resolution:** Can block at **Desire (D)** or **Wisdom (W)**. Identifying one’s "calling" often requires a child-chain search for self-knowledge.
+
+### The Algebra of Motivation: Drive Synthesis
+
+Just as with operators, drives can be composed through the formal algebra of **Multiplication (×)** and analyzed through **Division (÷)**. These operations follow specific, formally verified rules:
+
+1.  **Identity:** Same-drive composition results in that drive. `F(n) × F(n) = F(n)`.
+2.  **Synthesis to the Center:** Multiplying any inversion pair (F1↔F7, F2↔F6, F3↔F5) results in **F4 (Connection)**. F4 is the attractor—the state where internal and external tensions are resolved into relationship.
+3.  **Self-Duality:** F4 is self-dual (`F4 × F4 = F4`). Connection is its own resolution.
+4.  **Structural Ratio (÷):** Division between drives reveals the hidden dependency. If `F5 ÷ F3` yields a high ratio, it indicates a mind that is cannibalizing its own vitality (F3) to power its agency (F5)—a signature of imminent burnout.
 
 ### The Inversion Pairs: The Hidden Balances
 

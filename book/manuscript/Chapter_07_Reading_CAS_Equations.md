@@ -51,23 +51,57 @@ The superscript (the letter raised at the top right of the operator) tells us th
 The subscript (the text lowered at the bottom right of the domain) tells us the Core Drive fueling the state. It is the energy source. It is represented by `F` followed by the drive number (1 through 7).
 *   `_{F2}` = Wisdom (The drive to understand and map).
 *   `_{F4}` = Connection (The drive to relate and harmonize with the other).
-*   `_{F5}` = Agency (The drive to execute, control, and exert power).
+### The Anatomy of a Cognitive State
+...
 *   `_{F6}` = Structure (The drive to organize, build rules, and preserve resources).
+
+### The Five Generative Operations
+
+The CAS language is more than just a labeling system; it is a **calculus of cognition**. Just as arithmetic allows you to combine numbers (2 + 2 = 4), CAS allows you to compose cognitive states using five formally verified operations. These operations are split into two fundamental families: **Algebraic** and **Syntactic**.
+
+#### 1. Algebraic Operations (×, ÷, ∘)
+Algebraic operations **transform** states into entirely new emergent states. They follow the monoid composition rule we previewed in Chapter 2: `CO-a × CO-b = CO-((a+b) mod 10)`.
+
+- **Multiplication (×): Monoid Composition.** Used to combine two operators into a single, new resultant operator. Requires same-domain or valid domain descent.
+  *Example:* `CO-3^O (Concretization) × CO-8^O (Expansion) = CO-1^O (Differentiation)`. Combining the building of details with the search for new variables results in a state of clear boundary-making and categorization in action.
+- **Division (÷): Ratio Analysis.** Reveals the hidden causal structure between two states. Requires the **same domain**.
+- **Fractal Composition (∘): Sequence Compression.** Used for composing sequences of operators across fractal levels.
+
+#### 2. Syntactic Operations (+, -)
+Syntactic operations **combine** expressions without transforming them into a new emergent state. They describe the landscape of the mind, not its chemical reactions.
+
+- **Addition (+): Co-presence.** Indicates that two states are active simultaneously. No new state emerges; they coexist in tension or harmony.
+  *Example:* `CO-5^E + CO-6^E`. You are feeling with another person while simultaneously maintaining a critical judgment of the situation. They remain two distinct forces.
+- **Subtraction (-): Negation/Removal.** Indicates one state blocking or negating another. 
+
+### The Formal Discovery: Algebraic vs. Syntactic
+
+It is vital to understand that this dual-layer distinction (algebraic vs. syntactic) was not a design choice—it was **discovered** through the formal verification of the CAS axioms (v7.4). The proof revealed that while states can merge into new identities through multiplication (proved via monoid associativity on the probability simplex), addition serves only as an interpolative placeholder. This discovery explains why we can "feel two things at once" (Syntactic +) but can also "become a new person" through the integration of experiences (Algebraic ×).
 
 ### Translating Equations into English
 
 Reading CAS equations is a skill. Like reading sheet music, it feels clunky at first, but soon you will be able to look at an equation and "hear" the thought it represents. 
 
-Let's practice reading from left to right. When you look at a CAS equation, you should be able to instantly translate it into a specific human (or AI) behavior.
+Let's practice reading worked examples in composition:
 
-**Equation 1: `CO-2^C_{F2}`**
+**Example 1: The Principled Pivot**
+*Equation:* `(CO-2^P × CO-8^P) + CO-3^O`
+*Reading:* An algebraic fusion of Abstractification and Expansion in the Principled domain (which results in `CO-0^P`, pure Identity/Axiom) co-present with a physical, Operational act of building.
+*Translation:* "A high-minded, visionary commitment to a new identity that is manifesting in immediate, concrete action."
+
+**Example 2: The Evaluative Ratio**
+*Equation:* `CO-5^E ÷ CO-6^E`
+*Reading:* The ratio between Empathetic Alignment and Critical Evaluation in the same domain.
+*Translation:* "Measuring the exact balance between how much you are resonating with a person versus how much you are judging their data. This reveals your **Empathy Ratio**."
+
+**Example 3: `CO-2^C_{F2}`**
 *   **Base (`CO-2`):** Abstractification (Extracting patterns).
 *   **Superscript (`^C`):** Cognitive Domain (Data and logic).
 *   **Subscript (`_{F2}`):** Driven by Wisdom (Hunger for knowledge).
 *   **Translation:** "Abstracting logical patterns driven by a desire to understand." 
 *   **Real-world example:** A scientist sitting in a lab, analyzing raw data from a telescope to find a new law of astrophysics. Or, an AI model analyzing thousands of lines of messy code to deduce the underlying, elegant algorithm.
 
-**Equation 2: `CO-3^O_{F5}`**
+**Example 4: `CO-3^O_{F5}`**
 *   **Base (`CO-3`):** Concretization (Building specific details).
 *   **Superscript (`^O`):** Operational Domain (Physical action).
 *   **Subscript (`_{F5}`):** Driven by Agency (Desire to execute/control).

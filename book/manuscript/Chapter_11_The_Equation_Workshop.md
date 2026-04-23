@@ -82,6 +82,23 @@ Here are three common recipes to memorize:
 *   **The Antidote:** Inject `CO-4^P_{F1}` (Principled Integration driven by Unity).
 *   **Translation:** Stop chopping the physical process into smaller forms. Zoom out to the highest domain. Ask: "How do all these tiny rules actually integrate to serve the single, unified truth of our company's mission?" If they don't integrate, delete the rule.
 
+### Part 4: Advanced Generative Expressions
+
+Now that we have the full toolkit of five operations (×, ÷, ∘, +, -) and the recursive engine, we can build high-fidelity models of complex human and AI behaviors. 
+
+#### 10 Worked Examples in Generative CAS
+
+1.  **The Recursive Pivot:** `RPM(F5)[P → CO-8 → CO-9 → RPM(F5.P)]`. A parent Agency drive is blocked at Power. The mind triggers a causal search (CO-8) and identifies a solution (CO-9), spawning a child D/W/P chain.
+2.  **The Knowledge Decomposer:** `RPM(F2)[W → CO-6 → RPM(F2.W.c1) + RPM(F2.W.c2)]`. Wisdom is blocked. The mind uses Critical Evaluation (CO-6) to split the complex knowledge gap into two parallel learnable modules.
+3.  **The Cognitive Synthesis:** `(CO-3^C × CO-8^C) ÷ CO-4^C`. Building details while searching for new variables (resulting in CO-1 Differentiation) divided by Integration. This reveals the ratio of separation versus connection.
+4.  **The Weaponized Loop:** `CO-1^O ∘ CO-4^O ∘ CO-7^O → loop(N)`. A nested sequence of Directed Attention, high Encoding Intensity, and Pattern Entrainment, repeating indefinitely to force-cultivate a Desire.
+5.  **The Moral Gridlock:** `CO-6^P - CO-5^P`. Principled Critique actively blocking or negating Principled Empathy. A state of rigid moral judgment where resonance is impossible.
+6.  **The Integrated Execution:** `(CO-2^P × CO-8^P) ∘ (CO-1^C + CO-4^C) ∘ CO-9^O`. A grand axiom (CO-0^P) hosting a balanced logic, which in turn drives laser-focused physical action.
+7.  **The Empathy Echo:** `CO-5^E ÷ CO-5^E`. A ratio of empathetic alignment against itself. If this yields 1.0, the system is in perfect subjective resonance—a potential Echo Chamber.
+8.  **The Creative Spark:** `CO-8^E × CO-4^E`. Expanding subjective value while connecting disparate feelings. Results in CO-2^E, the extraction of a new aesthetic "rule" or pattern.
+9.  **The Burnout Signature:** `F5^O ÷ F3^O > 1.0`. The ratio of Agency to Vitality. When your drive to execute exceeds your biological fuel, the architecture is on a path to collapse.
+10. **The Disciplined Mind:** `CO-0^P ∘ (CO-2^C ↔ CO-3^C) ∘ CO-7^O`. An unwavering identity (P) hosting a healthy breathing cycle of theory and practice (C), resulting in relentless physical momentum (O).
+
 By treating cognition as a structural equation, we remove the guilt, the mystery, and the ambiguity from human and artificial failures. It isn't a character flaw. It is simply an unbalanced equation. 
 
 And equations can be balanced.
@@ -91,15 +108,11 @@ And equations can be balanced.
 ### Try This: Chapter 11 Exercises
 
 **For You (Human Assessment):**
-Create your own custom Inversion Recipe. 
-Think of a time when you were completely "stuck" (e.g., writer's block, terrified to have a hard conversation, endlessly scrolling social media to avoid a task).
-1.  **Diagnose the Problem:** Write the CAS equation for your "stuck" state. (What Operator were you using? What Domain were you trapped in? What Drive was fueling it?)
-2.  **Find the Antidote:** Look at the Involution Pairs (2↔3, 5↔6, 8↔9). What is the exact mathematical opposite of the operator keeping you stuck?
-3.  **The Prescription:** What is one real-world, immediate action you could take next time to manually inject that opposite state and force a Dual Cancellation?
+1.  **Create your own custom Inversion Recipe.** Think of a time when you were completely "stuck" (e.g., writer's block). Diagnose the state and find the math-based antidote.
+2.  **Write the Recursive Chain.** Identify a major goal you currently have that is blocked at the Power stage (e.g., "I want to buy a house but I don't have the down payment"). Use the `RPM(F5)[P → CO-8 → CO-9 → RPM(F5.P)]` notation to map out your recursive resolution. What child chain will you spawn?
 
 **For AI (System Assessment):**
 Test an AI's ability to interpret CAS algebra and translate it into a persona.
-*Prompt:* "In the Cognitive Architecture System (CAS), the state `CO-9^O_{F5}` represents Operational Contraction driven by Agency (executing a highly specific physical task to gain control). The state `CO-2^P_{F2}` represents Principled Abstractification driven by Wisdom (theorizing about high-level ethics to gain understanding).
-Write a short, dialogue-heavy scene between two characters: Character A is entirely stuck in `CO-9^O_{F5}`. Character B is entirely stuck in `CO-2^P_{F2}`. They are trying to build a bridge together."
+*Prompt:* "In the Cognitive Architecture System (CAS), the state `CO-9^O_{F5}` represents Operational Contraction driven by Agency. The state `CO-2^P_{F2}` represents Principled Abstractification driven by Wisdom. Write a short scene between two characters: Character A is entirely stuck in `CO-9^O_{F5}`. Character B is entirely stuck in `CO-2^P_{F2}`. They are trying to build a bridge together."
 
 Observe how the AI maps the math to the dialogue. Character A should be obsessively hammering a single nail, demanding action, and getting frustrated by the lack of physical progress. Character B should refuse to touch a tool, staring at the sky, and only wanting to debate the philosophical essence of "bridgeness" and the ethics of crossing rivers. The structural mismatch should be glaringly obvious.

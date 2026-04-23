@@ -56,6 +56,21 @@ In category theory, a **Pullback** (also known as a fiber product) is a mathemat
 
 This mathematical closure ensures that the system is "structurally safe"—an AI reasoning within the bounds of CAS can never accidentally think a thought that takes it "outside" the bounds of the 40-state architecture into undefinable, unpredictable chaos. The universe is contained.
 
+### The Calculus of Noetica: Formally Defining Operations
+
+Within $\Noetica$, the five generative operations are formal algebraic functors and morphisms that govern the movement of information across the category.
+
+1.  **Algebraic Multiplication (×): The Monoid Functor.** Multiplication is defined as a binary operation on the set of objects: `×: Obj(\Noetica) \times Obj(\Noetica) \to Obj(\Noetica)`. It follows the monoid structure where `CO-a × CO-b = CO-((a+b) mod 10)`. Multiplication is only defined where the target domain satisfies the descent constraint `min(Domain-x, Domain-y)`. This preserves the topological ordering of the processing domains.
+2.  **Algebraic Division (÷): The Fiber Ratio.** Division is defined as the **Fiber Ratio** between two objects in the same domain. It represents the degree of dependency or morphism-density between states. ÷ requires that the two objects belong to the same fiber in the domain-bundle.
+3.  **Fractal Composition (∘): The Monoidal Composition.** The ∘ operator represents the standard composition of morphisms within the category, extended across fractal levels. It allows for the nesting of "micro-categories" (child chains) within the "macro-category" (parent chain).
+4.  **Syntactic Addition (+) and Subtraction (-):** These are **Non-Generative Combinators**. Categorically, addition is a **Co-product (X + Y)**—it places two objects in the same environment without fusing their internal structures. Subtraction is the **Negation Morphism**, representing the active suppression of one state by another within the same domain.
+
+### Proof of Closure
+
+**Theorem 23.3 (Closure under Generative Algebra).** For any objects $X, Y \in \Obj(\Noetica)$, the result of the operations $X \times Y$, $X \div Y$, $X + Y$, and $X - Y$ is either another object in $\Obj(\Noetica)$ or a valid morphism within $\Noetica$. 
+
+*Proof Sketch:* Since the set of objects is finite and the operation results are defined by modular arithmetic and strict domain-descent rules, the output of any algebraic operation is guaranteed to map back onto the existing 40-state matrix. The syntactic operations (+ and -) do not create new states but instead define the configuration of the existing state-space. Therefore, $\Noetica$ is algebraically closed.
+
 ### Why Category Theory Matters
 
 By constructing Noetica as a formal category, we have proven that the 40-state matrix is not just a convenient list of psychological metaphors. It is a **closed logical universe**. 

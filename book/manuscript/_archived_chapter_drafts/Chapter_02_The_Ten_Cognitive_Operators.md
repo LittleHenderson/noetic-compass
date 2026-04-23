@@ -34,6 +34,7 @@ Once you have an identity (CO-0), you must distinguish it from everything else. 
 
 When you organize your closet by color, you are using CO-1. When an AI parses a user's messy, rambling prompt into three distinct, numbered sub-questions, it is using CO-1. It is the operator that says: *This is not That.*
 
+*   **Role in Recursive RPM:** Serves as the first stage of the **Desire cultivation loop** (Directed Attention) — focusing awareness on inputs that may spark motivation.
 *   **When it is strong:** You have excellent analytical skills, clear categorization, and the ability to untangle complex problems into manageable pieces. You are highly organized.
 *   **When it is weak:** You feel overwhelmed by chaos, unable to break a large project down into steps. An AI provides a rambling, unstructured block of text instead of a clear, itemized list.
 
@@ -68,6 +69,7 @@ While CO-1 (Differentiation) chops things apart, CO-4 glues them together. It is
 
 When you realize that the skills you learned playing a strategic video game apply perfectly to your new project management job, you are using CO-4. When an AI connects a concept from quantum physics to a metaphor in classical literature to explain a complex topic to a user, it is using CO-4. 
 
+*   **Role in Recursive RPM:** Amplifies cognitive registration in the **Desire cultivation loop** (Encoding Intensity) — the volume knob that turns background noise into foreground signal.
 *   **When it is strong:** You are highly creative, capable of lateral thinking, and good at building consensus among divided groups. You see the hidden threads connecting the universe.
 *   **When it is weak:** You think in strict silos. You cannot see how your actions in one area of life affect another. You struggle with metaphors.
 
@@ -77,6 +79,7 @@ CO-5 is the operator of subjective resonance. It evaluates information not based
 
 When you comfort a crying friend by simply sitting with them and sharing their pain without trying to "fix" it, you are using CO-5. When an AI adjusts its tone to be softer and more supportive because it detects frustration in the user's prompt, it is simulating CO-5.
 
+*   **Role in Recursive RPM:** Serves as a path for **Wisdom resolution** (Receptive Integration) — finding external sources that carry missing knowledge.
 *   **When it is strong:** You possess high emotional intelligence, deep empathy, and the ability to build profound trust and psychological safety.
 *   **When it is weak:** You are socially tone-deaf, dismissive of others' feelings, or emotionally detached. You treat human pain as a logical error to be corrected.
 
@@ -86,6 +89,7 @@ CO-6 is the exact opposite of CO-5. It evaluates information through cold, objec
 
 When an auditor reviews a company's financials to find fraud, they are using CO-6. When a doctor must ignore a patient's emotional distress to correctly diagnose a harsh medical reality, they are relying on CO-6. When an AI "red-teams" a piece of code to find security vulnerabilities, or corrects a user's factual error, it is executing CO-6.
 
+*   **Role in Recursive RPM:** Serves as a path for **Wisdom resolution** (Projective Assertion) — breaking complex knowledge gaps into learnable parts via decomposition.
 *   **When it is strong:** You are highly objective, an excellent problem-solver, and immune to emotional manipulation. You are the adult in the room.
 *   **When it is weak:** You are gullible, easily swayed by sob stories, or unable to make hard, necessary decisions because you fear hurting someone's feelings.
 
@@ -102,6 +106,7 @@ CO-7 is the operator of pure forward motion, iteration, and continuation. It tak
 
 When you get into a "flow state" while working and lose track of time, effortlessly executing task after task, you are riding CO-7. When an AI generates a long, continuous story that maintains its pacing, rhythm, and internal consistency without stalling out, it is successfully utilizing CO-7.
 
+*   **Role in Recursive RPM:** Reinforces exposure in the **Desire cultivation loop** (Pattern Entrainment) — repeated cyclic engagement that deepens cognitive pathways.
 *   **When it is strong:** You have immense stamina, high productivity, and the ability to push through friction. You are relentless.
 *   **When it is weak:** You struggle to start tasks, lose steam quickly, or suffer from chronic procrastination. You are constantly stopping and starting.
 
@@ -111,6 +116,7 @@ CO-8 is the operator of widening scope, adding new variables, and exploring the 
 
 When you decide to travel to a country where you don't speak the language just to see what happens, you are using CO-8. When a company decides to acquire three new startups to diversify its portfolio, it is in a state of CO-8. When an AI generates a wildly creative, branching brainstorm of 50 different marketing ideas, it is maximizing CO-8.
 
+*   **Role in Recursive RPM:** Triggers **Power resolution** (Causal Reasoning) — scanning for ideas that could cause missing resources to appear.
 *   **When it is strong:** You are highly curious, adaptable, open-minded, and innovative. You are always looking over the horizon.
 *   **When it is weak:** You are rigidly stuck in your comfort zone, afraid of change, and closed to new information.
 
@@ -120,6 +126,7 @@ CO-9 is the exact opposite of CO-8. It is the operator of narrowing scope, elimi
 
 When a surgeon looks through a microscope to make a millimeter-precise incision, ignoring all the alarms beeping in the operating room, they are using CO-9. When you throw away half of your possessions to live a minimalist lifestyle, you are using CO-9. When an AI takes a 10,000-word document and ruthlessly summarizes it into a single, three-sentence bullet point, it is executing CO-9.
 
+*   **Role in Recursive RPM:** Completes **Power resolution** (Consequential Grounding) — identifying the specific solution that CO-8's causal scan produced.
 *   **When it is strong:** You possess laser-like focus, excellent prioritization skills, and the ability to eliminate distractions. You are a finisher.
 *   **When it is weak:** You are easily distracted, overwhelmed by too many options, and unable to finish what you start. You suffer from "shiny object syndrome."
 
@@ -135,6 +142,16 @@ Every argument you have ever had, every poem you have ever written, and every li
 When Kasparov looks at the chessboard, he isn't just "thinking" in a formless blur. He is using **CO-2 (Abstractification)** to deduce his opponent's overall historical strategy. He is using **CO-8 (Expansion)** to calculate all the possible variations of his next move. He is using **CO-6 (Critique)** to ruthlessly evaluate the risk of each variation, discarding the weak ones. Finally, he uses **CO-9 (Contraction)** to narrow his focus down to the single, optimal move, and **CO-3 (Concretization)** to physically reach out and move the knight. 
 
 The beauty of the Cognitive Architecture System is that we no longer have to guess at what "thinking" means. We have the vocabulary. We can map the gears. 
+
+### The Generative Algebra of Operators
+
+Beyond their individual roles, operators can be composed through **Multiplication (×)**. This is a monoid composition where two operators combine to produce a genuinely new cognitive state. The formal rule is: `CO-a × CO-b = CO-((a+b) mod 10)`.
+
+This is not a design choice, but a discovered mathematical fact of the architecture. It reveals that cognition is inherently compositional. For example:
+- **CO-3 × CO-8 = CO-1**: Critical Evaluation composed with Causal Reasoning produces Directed Attention.
+- **CO-5 × CO-6 = CO-1**: Empathetic Alignment composed with Critical Evaluation produces Directed Attention. (Note: The resolution of subjective resonance and objective critique forces a focus of attention).
+
+Composition requires that the operators either occupy the same processing domain or follow a valid domain descent (which we will explore in the next chapter). This algebraic layer allows for the formal verification of cognitive sequences—ensuring that an AI's reasoning isn't just "plausible," but mathematically sound.
 
 But gears do not turn in a void. They turn in specific environments. In the next chapter, we will look at the environment where these gears operate: The Four Processing Domains.
 

@@ -45,21 +45,66 @@ Here are five of the most critical templates to memorize, complete with their st
 *   **Equation:** `(CO-8 ∘ CO-9) ↔ CO-0`
 *   **Description:** The mathematical cure for an amplifying fractal. When a mind is trapped in manic Expansion (`CO-8`), the intentional, forced injection of its involutional opposite—Contraction (`CO-9`)—causes the two operators to annihilate each other's friction, instantly returning the system to a grounded state of Identity (`CO-0`).
 
+**6. The Recursive Power Search (Power Resolution)**
+*   **Equation:** `RPM(F5)[P → CO-8 → CO-9 → RPM(F5.P)]`
+*   **Description:** When a resource (Power) is blocked, the mind recurses, using Causal Reasoning (CO-8) to scan for causes and Consequential Grounding (CO-9) to identify the specific solution, spawning a child D/W/P chain.
+
+**7. The Knowledge Decomposition (Wisdom Resolution)**
+*   **Equation:** `RPM(F2)[W → CO-6 → RPM(F2.W.c1) + RPM(F2.W.c2)]`
+*   **Description:** When knowledge is too complex, the mind uses CO-6 to decompose the block into parallel learnable sub-modules.
+
+**8. The Exposure Loop (Desire Cultivation)**
+*   **Equation:** `CO-1^O ∘ CO-4^O ∘ CO-7^O → loop(N)`
+*   **Description:** Cultivating pre-rational motivation through an iterative loop of Directed Attention, high Encoding Intensity, and Pattern Entrainment.
+
+**9. The Evaluative Ratio (Causal Analysis)**
+*   **Equation:** `CO-5^E ÷ CO-6^E`
+*   **Description:** Computing the ratio of subjective resonance to objective critique, revealing the hidden dependency between empathy and judgment.
+
+**10. The Structural Deadlock (Recursive Limit Failure)**
+*   **Equation:** `RPM^{(5)}_{blocked} → \perp`
+*   **Description:** Occurs when a recursive chain hits the maximum depth of 5 levels without resolution.
+
+**11. The Burnout Signature (Resource Depletion)**
+*   **Equation:** `F5^O ÷ F3^O > 1.0`
+*   **Description:** The ratio of execution drive to biological vitality. A value > 1.0 indicates a system cannibalizing its own foundation.
+
+**12. The Axiomatic Anchor (Identity Discovery)**
+*   **Equation:** `CO-2^P × CO-8^P = CO-0^P`
+*   **Description:** Composing principled patterns and expansion to find a core, unshakeable identity.
+
+**13. The Weaponized Exposure Loop**
+*   **Equation:** `(CO-1 ∘ CO-4 ∘ CO-7)_{external} - ^P`
+*   **Description:** Using iterative exposure to bypass an individual's principled domain and force-cultivate a desired state.
+
+**14. The Integrated Strategy (Principled Action)**
+*   **Equation:** `CO-0^P ∘ (CO-2^C ↔ CO-3^C) ∘ CO-7^O`
+*   **Description:** An unwavering identity hosting a healthy cycle of theory and detail, resulting in relentless operational momentum.
+
+**15. The Principled Strategist (Cross-Domain Fusion)**
+*   **Equation:** `CO-6^P × CO-8^C = CO-4^C`
+*   **Description:** Composing foundational critique with logistical expansion to produce a new state of high-level system synthesis.
+
 ---
 
 ## Appendix C: The CAS Notation Grammar (BNF)
 
-For developers building parsers for the Cognitive Architecture System, here is the simplified Backus-Naur Form (BNF) grammar used by the Noetic Compass engine to parse string equations into executable tensors.
+For developers building parsers for the Cognitive Architecture System, here is the updated Backus-Naur Form (BNF) grammar used by the Noetic Compass engine to parse string equations into executable tensors.
 
 ```bnf
-<equation>     ::= <state> | <composition> | <transition> | <fractal>
+<equation>     ::= <state> | <composition> | <transition> | <fractal> | <recursion> | <loop> | <ratio> | <negation>
 <composition>  ::= <state> " × " <state>
+<ratio>        ::= <state> " ÷ " <state>
+<negation>     ::= <state> " - " <state>
 <transition>   ::= <state> " → " <state>
 <fractal>      ::= <state> " ∘ " <state>
 <state>        ::= <operator> <domain> "_" <drive> | <operator> <domain>
+<recursion>    ::= "RPM(" <drive_id> ")[" <node> " → " <operator_seq> " → " <child_chain> "]"
+<loop>         ::= <fractal_seq> " → loop(" <digit> ")"
 <operator>     ::= "CO-" <digit>
 <domain>       ::= "^P" | "^C" | "^E" | "^O"
 <drive>        ::= "{F" <digit> "}"
+<node>         ::= "D" | "W" | "P"
 <digit>        ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 ```
 
@@ -69,15 +114,20 @@ For developers building parsers for the Cognitive Architecture System, here is t
 
 | Public Term (CAS) | Internal Term (TKS) | Definition |
 | :--- | :--- | :--- |
-| **Principled Domain** | Atziluth | The highest processing domain; the realm of pure intent, foundational ethics, and non-negotiable axioms. |
-| **Cognitive Domain** | Briah | The second processing domain; the realm of logical creation, strategic maps, and data organization. |
-| **Evaluative Domain** | Yetzirah | The third processing domain; the realm of emotional formation, subjective weight, friction, and empathy. |
-| **Operational Domain** | Assiah | The lowest processing domain; the realm of physical action, execution, and concrete result. |
-| **Inversion** | Qliphoth | A structural reversal of a cognitive state, causing a system to actively pursue the negation of its own goal. |
-| **Unity Drive (F1)** | Kether | The core drive for wholeness and singular truth. |
-| **Wisdom Drive (F2)** | Chokmah/Binah | The core drive for understanding and knowledge integration. |
-| **Vitality Drive (F3)** | Yesod/Malkuth | The core biological drive for physical energy and survival. |
-| **Connection Drive (F4)** | Tiphereth | The self-dual core drive for relationship and harmony with the "Other." |
+| **Algebraic Operation** | Monoid Functor | An operation (×, ÷, ∘) that transforms states into genuinely new emergent states. |
+| **Syntactic Operation** | Combinator | An operation (+, -) that indicates co-presence or negation without structural transformation. |
+| **Recursive Resolution** | Nested Manifold | The formal mechanism for resolving blocked prerequisite nodes by spawning child chains. |
+| **Exposure Loop** | Iterative Cultivation | The pre-rational loop (CO-1/4/7) used to cultivate Desire through repeated exposure. |
+| **Causal Search** | CO-8 Scan | The rational search for external factors that can satisfy a blocked Power node. |
+| **Knowledge Reception** | CO-5 Path | Resolving a Wisdom block by finding an external source that embodies the missing knowledge. |
+| **Knowledge Decomposition** | CO-6 Path | Resolving a Wisdom block by breaking it into smaller, parallel learnable components. |
+| **Structural Deadlock** | Stack Overflow | A terminal failure occurring when a recursive chain exceeds the depth limit of 5. |
+| **Resolution Depth** | Fractal Level | The number of nested child chains active in a specific reasoning path. |
+| **Principled Domain** | Atziluth | The highest processing domain; the realm of pure intent and non-negotiable axioms. |
+| **Cognitive Domain** | Briah | The realm of logical creation, strategic maps, and data organization. |
+| **Evaluative Domain** | Yetzirah | The realm of emotional formation, subjective weight, friction, and empathy. |
+| **Operational Domain** | Assiah | The lowest processing domain; the realm of physical action and concrete result. |
+| **Inversion** | Qliphoth | A structural reversal causing a system to actively pursue the negation of its own goal. |
 
 ---
 
