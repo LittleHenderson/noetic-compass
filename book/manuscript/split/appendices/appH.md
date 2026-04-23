@@ -161,5 +161,323 @@ A production-semantics recipe library for a specific applied domain — clinical
 
 Readers building their own recipes should treat these examples as structural templates: identify the Production Target, enumerate the v7.5 primitives that plausibly participate, choose coefficients that reflect relative proportion, and write the recipe in the canonical form `Θ(Ω) = a₁·X₁ + a₂·X₂ + ... + aₙ·Xₙ → Ω`. The Clarification 10 decision procedure (Section 6 of that clarification: are you specifying, associating, or integrating?) resolves the operator choice in every case.
 
+ Section 8: Extended Recipe Library
+
+The recipes below extend the library across seven applied domains: psychological transformation, learning and education, creative process, decision-making, emotional regulation, professional practice, and collective/organizational dynamics. Three recipes per domain, chosen to exhibit different structural profiles — different limiting reagents, different catalyst/inhibitor pairs, different leakage patterns, different register flavors — rather than minor variations on a single structural template. Coefficients remain illustrative rather than empirically calibrated; cross-references to earlier chapters are provided where the recipe connects to book-length treatment of the underlying phenomenon.
+
+ Section 8.1: Psychological Transformation Recipes
+
+**Grief Resolution.** Rhythmic rhythmic-evaluative re-contact with the loss, accumulated felt evaluative substrate, analytical cognitive decomposition of the changed reality, and Connection drive as sustaining architecture.
+
+  `Θ(Ω_grief_resolution) = 3·^7^E|f + 3·^5^E|f + 2·^6^C|A + 1·F4 → Ω_grief_resolution`
+
+Grief is rate-and-pattern dominant at the evaluative-affective register (`^7^E|f` = 3) — the resolution is produced by sustained re-contact with the felt loss over time, not by a single cathartic moment. Felt evaluative substrate (`^5^E|f` = 3) is the accumulated relational history that gives the loss its specific weight; cognitive decomposition (`^6^C|A`) is the unpacking of what has changed and what remains. F4 Connection sustains the recipe, often through relational scaffolding around the griever.
+
+- Catalyst (κ): supportive relational context that holds the rhythm without forcing resolution.
+- Inhibitor (ι): avoidance behaviors that interrupt `^7^E|f` re-contact before integration completes.
+- Limiting reagent: typically `^7^E|f` — rhythmic felt re-contact. Grief that "won't resolve" is usually not grief lacking depth (`^5^E|f`) but grief lacking the sustained rhythm of revisiting.
+- Leakage (Λ): rhythmic re-contact that produces rumination rather than integration — the rhythm fires but its output lands as repetitive intrusive cycling (`Ω_rumination`) rather than graduated integration.
+- Register flavor: primarily `|f` affective, with `|A` analytical scaffolding and, in somatic-grief frameworks, substantive `|E` embodied re-contact.
+
+Cross-reference: Chapter 13 Relationships and Connection (attachment architecture as `^5^E|f` substrate); Chapter 14 Health and Vitality (somatic grief variants).
+
+**Sudden Insight.** Principled transcendent attraction, cognitive analytical decomposition, principled associative triggering, and analytical landing, with incubation as catalyst.
+
+  `Θ(Ω_aha) = 2·^2^P|T + 2·^6^C|A + 2·^8^P|T + 1·^9^C|A → Ω_aha`
+
+The aha moment is the signature production whose recipe makes the Colloquialism-Test anti-drift annotation operationally load-bearing: `^8^P|T` is principled associative triggering (what the colloquialism "that reminds me" names), not analytical deduction. `^6^C|A` supplies the prior decomposition on which the trigger lands; `^9^C|A` is the analytical landing that converts the triggered Idea into usable structure. `^2^P|T` fixes the orientation that makes the landing feel meaningful rather than merely surprising.
+
+- Catalyst (κ): incubation — periods of reduced analytical load during which `^8^P|T` triggering surfaces associations the directed-attention state suppressed.
+- Inhibitor (ι): sustained high-effort analytical grinding that suppresses the associative-triggering architecture.
+- Limiting reagent: counter-intuitively, `^8^P|T` — the associative-triggering capacity itself, not the analytical depth. Minds with enormous `^6^C|A` who never report aha moments are typically not insight-limited by decomposition but by inhibited associative architecture.
+- Leakage (Λ): associative triggering that produces tangential distraction (`Ω_tangent`) rather than target-relevant insight, particularly under low `^2^P|T` orientation.
+- Register flavor: the recipe is `|T`/`|A` dominant; `|f` appears as downstream phenomenology of the landing, not as recipe prerequisite.
+
+Cross-reference: Chapter 8 Building CAS Equations (the `^8` vs `^6`+`^9` distinction); Chapter 15 Learning and Wisdom (insight as learning-mode).
+
+**Psychological Healing (Trauma Integration).** Long-horizon rhythmic affective re-contact, cognitive decomposition, felt evaluative substrate reconstitution, and the cross-register embodied-affective integration that names the produced wholeness.
+
+  `Θ(Ω_healing) = 4·^7^E|f + 3·^5^E|f + 2·^6^C|A + 2·^9^E|⟨f,E⟩ + 1·F4 → Ω_healing`
+
+Healing is long-horizon rhythm-dominant (`^7^E|f` = 4) because trauma integration is measured in months and years, not sessions. `^5^E|f` reconstitution is the accumulated revision of the felt substrate that encoded the original injury; `^6^C|A` provides the cognitive scaffolding through which re-contact becomes workable rather than retraumatizing; `^9^E|⟨f,E⟩` is register-specified evaluative landing in both affective and embodied registers — the healed state is one in which the felt and the bodily both land as safe again.
+
+- Catalyst (κ): trustworthy therapeutic or relational container that holds the rhythm safely.
+- Inhibitor (ι): retraumatization — `^7^E|f` re-contact at intensity exceeding the container's holding capacity, which inverts the recipe into further injury rather than integration.
+- Limiting reagent: the container (catalyst) rather than any single reactant — healing recipes fail most often not because prerequisites are absent but because the catalyst is insufficient to permit the rhythm without retraumatization.
+- Leakage (Λ): affective re-contact that lands as chronic activation rather than integration (`Ω_chronic_activation`), or that produces dissociation (`Ω_dissociation`) when the container fails.
+- Register flavor: substantive `|E` embodied register is typically required for full integration; purely cognitive-analytical processing can produce `Ω_insight_about_trauma` without producing `Ω_healing`. Related to Appendix I Entry 1 `Ω_presence` as a capacity that supports but does not constitute healing.
+
+Cross-reference: Chapter 13 Relationships and Connection; Chapter 14 Health and Vitality.
+
+ Section 8.2: Learning and Education Recipes
+
+**Skill Acquisition (Novice to Proficient).** Rhythmic embodied or analytical practice, analytical decomposition scaffolding, felt evaluative substrate for corrective signal, and Wisdom drive.
+
+  `Θ(Ω_skill_acquired) = 3·^7|R_practice + 2·^6^C|A + 2·^5^E|f + 1·F2 → Ω_skill_acquired`
+
+The `^7|R_practice` term uses register-specification to mark that the practice register varies by skill domain: embodied skills (piano, surgery, welding) require `^7|E`; analytical skills (proof-writing, theorem application) require `^7|A`; affective skills (therapeutic attunement, negotiation) require `^7|f`. The recipe structure is identical across registers; only the register of the rhythm changes. `^6^C|A` is the structural decomposition that turns practice into self-correcting repetition; `^5^E|f` is the felt discrimination between correct and incorrect execution.
+
+- Catalyst (κ): feedback — external correction that lets `^5^E|f` calibrate faster than unsupervised practice would permit.
+- Inhibitor (ι): rehearsal without correction — rhythm that entrains incorrect execution.
+- Limiting reagent: `^5^E|f` in novice phase, `^6^C|A` in intermediate phase. The bottleneck shifts: beginners are corrective-signal limited; intermediates are decomposition limited (they need to understand WHY the motion works, not just that it does).
+- Leakage (Λ): practice that entrains surface imitation (`Ω_mimicry`) without developing the decomposition — the learner can do the motion but cannot teach it, vary it, or repair it under novel conditions.
+- Register flavor: the register of the practice rhythm determines the register of the acquired skill. Skills acquired in `|A` do not transfer cleanly into `|E` performance and vice versa.
+
+Cross-reference: Chapter 15 Learning and Wisdom; Chapter 12 Career and Purpose (skill as professional substrate).
+
+**Conceptual Comprehension ("It Clicks").** Analytical decomposition, cognitive substrate, transcendent attraction, and the analytical landing that registers the click.
+
+  `Θ(Ω_click) = 3·^6^C|A + 2·^5^C|A + 2·^2^C|T + 2·^9^C|A → Ω_click`
+
+The moment a concept clicks is the production of an analytical landing (`^9^C|A`) against a prepared cognitive substrate (`^5^C|A`) under active decomposition (`^6^C|A`). Transcendent attraction (`^2^C|T`) supplies the pull that keeps the learner in decomposition until the landing happens rather than abandoning the problem. The click is phenomenologically distinct from rote acquisition: the learner reports "I see it now" in a way that subjectively marks the integration into substrate.
+
+- Catalyst (κ): well-constructed pedagogical sequence — the `^6^C|A` decomposition done by the teacher in advance, transmitted in a form that lets the learner's own `^6^C|A` do the final step.
+- Inhibitor (ι): premature closure — declaring a concept understood before the landing has actually integrated it into substrate. Produces surface fluency without click.
+- Limiting reagent: `^5^C|A` substrate in early exposure (nothing to land into); `^6^C|A` decomposition in later exposure (substrate present but not being worked).
+- Leakage (Λ): decomposition that produces memorization (`Ω_memorized`) rather than comprehension — a common pattern in high-stakes educational contexts where `^7` rhythmic drill substitutes for `^6` decomposition.
+- Register flavor: `|A` analytical dominant; `|T` transcendent as orientation. `|f` can accompany the click as felt satisfaction but is not recipe prerequisite.
+
+Cross-reference: Chapter 15 Learning and Wisdom; Chapter 11 The Equation Workshop (where the click of CAS notation is the pedagogical target).
+
+**Mastery Emergence (Proficient to Expert).** The distinction between mastery (Section 2) and mastery *emergence* is that emergence requires the transition from conscious decomposition to integrated execution.
+
+  `Θ(Ω_mastery_emergence) = 4·^7|E + 3·^5^C|⟨A,f⟩ + 2·^6^C|A + 2·^9^E|⟨f,E⟩ + 1·F2 → Ω_mastery_emergence`
+
+Emergence is rhythm-dominant beyond proficient mastery because the transition from proficient to expert requires enough practice at the proficient level for the decomposition to become pre-conscious. `^5^C|⟨A,f⟩` is register-specified substrate — the expert holds the subject both analytically and affectively, without the recipe claiming fusion. `^9^E|⟨f,E⟩` register-specified landing indicates that expert performance lands in both the felt and the embodied — the expert "feels wrong" before consciously detecting the error and "feels right" before consciously verifying correctness.
+
+- Catalyst (κ): deliberate practice at the edge of current capacity, in the sense Ericsson's literature operationalizes.
+- Inhibitor (ι): comfortable repetition at established capacity — produces stable proficiency without emergence.
+- Limiting reagent: `^7|E` rhythm volume. Mastery emergence is bottlenecked by the sheer hours of deliberate practice more reliably than by any cognitive prerequisite.
+- Leakage (Λ): rhythm that produces plateau (`Ω_plateau`) rather than emergence when catalyst conditions fail. Plateau is the expert-adjacent stable state in which proficiency is maintained but emergence has stalled.
+- Register flavor: expert performance is cross-register — the `|⟨f,E⟩` landing is characteristic. A practitioner whose performance registers only in `|A` is typically not yet at mastery-emergence regardless of years of practice.
+
+Cross-reference: Chapter 15 Learning and Wisdom; Chapter 12 Career and Purpose; the `Ω_mastery` recipe in Section 2 above.
+
+ Section 8.3: Creative Process Recipes
+
+**Ideation.** Principled associative triggering, cognitive substrate as source material, transcendent attraction to the adjacent-possible, and Purpose drive.
+
+  `Θ(Ω_ideation) = 3·^8^P|T + 2·^5^C|⟨A,f⟩ + 2·^2^P|T + 1·F7 → Ω_ideation`
+
+Ideation is triggering-dominant (`^8^P|T` = 3). The production is generation of novel candidate Ideas, which is the `^8` "that reminds me" architecture operating at scale, not the `^6` decomposition architecture. Register-specified substrate `^5^C|⟨A,f⟩` carries the analytical and affective material the triggering re-combines; without dual-register substrate, ideation produces combinations that are clever-but-sterile or evocative-but-structurally-unsound.
+
+- Catalyst (κ): divergent-thinking contexts — low-stakes generation with explicit permission to produce quantity over quality.
+- Inhibitor (ι): premature evaluation — any `^3^E|A` critical assessment active during ideation collapses `^8^P|T` into cautious association. This is the operational meaning of "separate generation from evaluation."
+- Limiting reagent: `^8^P|T` in most practitioners. Substrate is usually abundant; the triggering architecture is what is suppressed, typically by chronic high-`^3^E|A` evaluative vigilance.
+- Leakage (Λ): triggering that produces recombination of existing Ideas without novelty (`Ω_derivative`), or triggering into unrelated domains (`Ω_tangent`).
+- Register flavor: `|T` transcendent dominant during production; `|A` analytical sorting happens downstream in synthesis, not during ideation itself.
+
+Cross-reference: Chapter 8 Building CAS Equations (the anti-drift annotation on `^8`); Chapter 15 Learning and Wisdom.
+
+**Synthesis.** Analytical decomposition, cognitive substrate, principled transcendent attraction, and — crucially — the genuine generative integration `×` across disparate inputs.
+
+  `Θ(Ω_synthesis) = 3·^6^C|A + 3·^5^C|⟨A,f⟩ + 2·^2^P|T + 2·(^6^C|A × ^2^P|T) → Ω_synthesis`
+
+Synthesis is the recipe where a `×` integration appears inside the recipe structure rather than as the recipe's own emergent register. The `(^6^C|A × ^2^P|T)` term denotes the integrative operation by which decomposition and transcendent attraction cross-integrate to produce pattern-recognition-across-domains. This is genuine `×` usage per Clarification 10 Section 3: two different states generatively integrating to produce capacity absent in either alone. It is distinct from the inadmissible same-Noetic `×` pattern.
+
+- Catalyst (κ): time — synthesis is slow-kernel; the `×` integration does not occur under time pressure.
+- Inhibitor (ι): narrow-substrate conditions — synthesis across domains requires `^5^C|⟨A,f⟩` substrate spanning the domains being synthesized. Monoculture substrate produces narrow recombination, not synthesis.
+- Limiting reagent: `^5^C|⟨A,f⟩` substrate breadth. The practitioner who "cannot synthesize" typically has substrate in only one domain.
+- Leakage (Λ): apparent-synthesis that is actually analogy-without-integration (`Ω_surface_analogy`) — the decomposition is mapped across domains but the integration has not occurred.
+- Register flavor: `|A` analytical and `|T` transcendent dominant; `|f` appears as felt-rightness of the produced synthesis, downstream of the recipe.
+
+Cross-reference: Chapter 10 Cognitive Fractals (self-similarity as synthesis signature); Chapter 23 Category Noetica.
+
+**Iteration (Creative Refinement).** Rhythmic analytical practice, evaluative rhythm for discrimination, analytical decomposition of the work-in-progress, and felt evaluative substrate.
+
+  `Θ(Ω_iteration) = 3·^7^O|A + 3·^7^E|A + 2·^6^C|A + 2·^5^E|f → Ω_iteration`
+
+Iteration is dual-rhythm: rhythmic operational execution (`^7^O|A` — the revision pass itself) against rhythmic evaluative discrimination (`^7^E|A` — entrained comparison of current draft against target). Cognitive decomposition (`^6^C|A`) is the per-pass analysis of what is not yet working; felt evaluative substrate (`^5^E|f`) is the accumulated sense of the work that guides decomposition.
+
+- Catalyst (κ): separation in time between production and evaluation — returning to work after distance permits `^7^E|A` to re-calibrate.
+- Inhibitor (ι): attachment to the prior draft — `^5^E|f` that encodes the existing work as "correct" rather than as "the current approximation," which inverts the recipe into defense rather than refinement.
+- Limiting reagent: `^7^E|A` entrained evaluative rhythm. Practitioners can iterate rhythmically (produce revision passes) without refining (improving the work) when evaluative discrimination is under-entrained. This is the structural signature of "a lot of work, no progress."
+- Leakage (Λ): revision rhythm that produces change without improvement (`Ω_churn`), or that degrades earlier-correct elements under continued revision (`Ω_over-iterated`).
+- Register flavor: `|A` analytical dominant in the revision rhythm; `|f` affective substrate-dominant in the taste that guides revision.
+
+Cross-reference: Chapter 11 The Equation Workshop (iteration as craft); Chapter 15 Learning and Wisdom.
+
+ Section 8.4: Decision-Making Recipes
+
+**Decision Point.** Multi-register principled attraction across options, analytical cognitive decomposition of option structure, felt evaluative substrate, and the analytical landing that registers the choice.
+
+  `Θ(Ω_decision) = 3·^2^P|⟨T,A,f⟩ + 2·^6^C|A + 2·^5^E|f + 2·^9^C|A + 1·F7 → Ω_decision`
+
+A decision point produces a selection among options. `^2^P|⟨T,A,f⟩` is register-specified principled attraction — the chooser's principled orientations must be present in the transcendent (what matters), analytical (what is justified), and affective (what is felt) registers without the recipe asserting they fuse. `^6^C|A` decomposes the option space; `^5^E|f` contributes accumulated relational and contextual taste; `^9^C|A` is the landing that makes the choice feel chosen rather than defaulted-into.
+
+- Catalyst (κ): sufficient information — decision points produced with inadequate substrate leak into premature commitment.
+- Inhibitor (ι): analysis-paralysis — unbounded `^6^C|A` that never permits `^9^C|A` landing.
+- Limiting reagent: `^9^C|A` landing capacity, more often than decomposition depth. The decision-averse are typically not substrate-limited but landing-limited.
+- Leakage (Λ): decomposition that produces further deliberation (`Ω_deliberation`) rather than decision, or visceral refusal (`Ω_avoidance`) that produces default-by-timeout rather than chosen commitment.
+- Register flavor: `|⟨T,A,f⟩` cross-register attraction is characteristic of well-grounded decision; decisions made in only one register (purely `|A` or purely `|f`) tend to require revision when the suppressed registers surface.
+
+Cross-reference: Chapter 16 Wealth and Structure; Chapter 17 Leadership and Groups.
+
+**Commitment.** The stabilization of a decision — production of a state in which the chosen option carries sustained activation across register and drive architecture.
+
+  `Θ(Ω_commitment) = 3·^2^P|T + 3·^7^O|A + 2·^5^E|f + 2·^3^P|⟨A,f⟩ + 1·F6 → Ω_commitment`
+
+Commitment is NOT the same production as the decision itself. It is the downstream production of a state in which the decision is sustained against counter-pressure. Transcendent principled attraction (`^2^P|T`) fixes what the commitment is for; rhythmic operational execution (`^7^O|A`) is the daily enactment that keeps it real; `^3^P|⟨A,f⟩` register-specified principled refusal closes off the option to reopen the decision casually. F6 Structure provides the motivational architecture that sustains against fatigue.
+
+- Catalyst (κ): public or structural stakes — commitments made against architecture that makes reversal costly are more stable than commitments held privately.
+- Inhibitor (ι): permanent reopen-ability — commitments under conditions of cheap reversal often fail to stabilize, producing perpetual decision states rather than commitment.
+- Limiting reagent: `^3^P|⟨A,f⟩` refusal to reopen. Most commitment failure is not orientation-failure (`^2^P|T` is intact) but a missing refusal to reconsider, letting the decision re-enter the decision recipe each time it is questioned.
+- Leakage (Λ): operational rhythm that produces activity without commitment (`Ω_going-through-motions`) when `^2^P|T` is insufficient.
+- Register flavor: commitment is recipe-distinct from decision — different prerequisites, different limiting reagent, different failure mode. Treating them as a single production misdiagnoses both.
+
+Cross-reference: Chapter 12 Career and Purpose; Chapter 16 Wealth and Structure.
+
+**Decision Reversal.** The production of a re-opened decision — structurally distinct from either commitment or indecision.
+
+  `Θ(Ω_reversal) = 3·^6^C|A + 2·^9^E|f + 2·^3^P|A + 2·^5^C|A_new + 1·F2 → Ω_reversal`
+
+Reversal requires analytical decomposition of the prior decision (`^6^C|A`), a felt evaluative landing that the prior decision was wrong (`^9^E|f`), register-specified analytical refusal of the prior commitment (`^3^P|A`), and — crucially — new cognitive substrate (`^5^C|A_new`, which denotes substrate that was NOT available when the original decision was made; notation is informal within the recipe to flag the novelty condition). Reversal without new substrate is typically indecision, not reversal.
+
+- Catalyst (κ): genuinely new information, or substantively changed circumstances, or a shift in the reverser's own substrate through experience since the original decision.
+- Inhibitor (ι): sunk-cost psychology — high-coefficient `^5^E|f` that encodes the prior commitment as identity rather than as one past choice.
+- Limiting reagent: `^5^C|A_new` — new substrate. Reversal attempted on the same substrate that produced the original decision is typically a recipe failure dressed as a fresh recipe.
+- Leakage (Λ): reversal that produces oscillation (`Ω_oscillation`) — reopening the decision without landing a new choice, cycling repeatedly through `Ω_decision` and `Ω_reversal` without stabilizing into `Ω_commitment` again.
+- Register flavor: `|A` analytical dominant in the refusal of prior commitment; `|f` affective only in the evaluative landing. Emotional reversals without `^6^C|A` decomposition tend to reverse back.
+
+Cross-reference: Chapter 17 Leadership and Groups (organizational reversal dynamics); Chapter 5 The Prerequisite Chain.
+
+ Section 8.5: Emotional Regulation Recipes
+
+**Calming.** Rhythmic embodied attention, evaluative felt substrate, analytical cognitive decomposition of the activation, and Vitality drive.
+
+  `Θ(Ω_calming) = 3·^7^E|E + 2·^5^E|f + 2·^6^C|A + 1·F3 → Ω_calming`
+
+Calming is the descent from an activated emotional state. The recipe is rhythm-dominant at the embodied register (`^7^E|E` = 3) — breath, posture, bodily pacing. Felt evaluative substrate (`^5^E|f`) carries the accumulated capacity to re-contact activation without escalating it; `^6^C|A` supplies the cognitive frame ("this is activation; it will pass") that turns re-contact into regulation. F3 Vitality provides the embodied energetic substrate.
+
+- Catalyst (κ): safe environment — external conditions consistent with de-escalation.
+- Inhibitor (ι): continued triggering input — `^8` triggering architecture firing into activation faster than the recipe can dissipate.
+- Limiting reagent: `^7^E|E` embodied rhythm in most dysregulation — individuals who "can't calm down" are typically not missing the cognitive frame (they know they should calm) but are missing the embodied rhythmic capacity to implement it.
+- Leakage (Λ): cognitive analysis (`^6^C|A`) without embodied rhythm that produces intellectualization (`Ω_intellectualized`) rather than calming — the person can explain why they are activated but cannot de-escalate.
+- Register flavor: `|E` embodied dominant; this is the recipe in which `|A` analytical alone is conspicuously insufficient. Most failed calming interventions are failures to engage the embodied register.
+
+Cross-reference: Chapter 14 Health and Vitality; Chapter 13 Relationships and Connection.
+
+**Reframing.** Analytical decomposition of the current interpretive frame, cognitive substrate containing alternative frames, transcendent principled attraction to the new frame, and analytical landing.
+
+  `Θ(Ω_reframe) = 3·^6^C|A + 3·^5^C|A + 2·^2^P|T + 2·^9^C|A → Ω_reframe`
+
+Reframing is a cognitive production: the decomposition of the current frame (`^6^C|A`), access to alternative frames via substrate (`^5^C|A`), transcendent attraction to the new frame (`^2^P|T` — reframing requires that the new frame matter, not merely that it be available), and analytical landing of the new frame (`^9^C|A`).
+
+- Catalyst (κ): external frame-offer — another mind proposing the alternative frame often supplies what the reframing mind cannot generate from its own substrate.
+- Inhibitor (ι): high `^5^E|f` affective attachment to the current frame — the reframer must release the current frame emotionally, which pure `|A` analysis does not accomplish.
+- Limiting reagent: `^5^C|A` substrate of alternative frames. Reframers with narrow substrate (few frames available) reframe into the same new frame repeatedly regardless of context.
+- Leakage (Λ): reframing that produces only rhetorical change (`Ω_relabeled`) — the language shifts but the underlying interpretation is unchanged.
+- Register flavor: `|A` analytical dominant; contrast with emotional integration below, which has substantively different register profile.
+
+Cross-reference: Chapter 14 Health and Vitality; Chapter 15 Learning and Wisdom; Chapter 21 Adversarial Resilience (reframing as defense vector and as attack vector).
+
+**Emotional Integration.** The cross-register production of felt experience integrated with cognitive understanding — related to but not equivalent to Appendix I Entry 1 `Ω_presence`.
+
+  `Θ(Ω_emotional_integration) = 3·^9^E|f + 3·^6^C|A + 2·^5^E|f + 2·^1|⟨A,E⟩ + 1·F4 → Ω_emotional_integration`
+
+Emotional integration produces the state in which a felt experience is fully landed (`^9^E|f` = 3) AND cognitively decomposed (`^6^C|A` = 3) without either operation suppressing the other. Register-specified attention `^1|⟨A,E⟩` indicates that analytical and embodied attention must both be present — the practitioner attends analytically to what is being felt bodily. When this attention cross-integrates, the resulting state moves into `Ω_presence` territory (Appendix I Entry 1); emotional integration is recipe-adjacent to `Ω_presence` but is distinct in that it centers on a specific emotional content rather than on pure attentional integration.
+
+- Catalyst (κ): reflective capacity — `^1|⟨A,E⟩` attention supported by trained self-reflection rather than raw attentional capacity.
+- Inhibitor (ι): suppression of either register — practitioners who over-analyze suppress `|E` and produce intellectualization; practitioners who over-identify with feeling suppress `|A` and produce flooding.
+- Limiting reagent: `^1|⟨A,E⟩` register-specified attention. Most integration failure is attentional-architecture failure, not substrate or decomposition failure.
+- Leakage (Λ): attention that resolves into one register (`Ω_intellectualized` or `Ω_flooded`) rather than sustaining the dual-register attentional state.
+- Register flavor: this is the recipe in which dual-register attention is load-bearing. The connection to `Ω_presence` is structural: `Ω_presence` is the attentional state; emotional integration is that attentional state applied to specific felt content.
+
+Cross-reference: Appendix I Entry 1 `Ω_presence`; Chapter 13 Relationships and Connection; Chapter 14 Health and Vitality.
+
+ Section 8.6: Professional Practice Recipes
+
+**Expertise Development (Journeyman to Senior).** Distinct from the `Ω_mastery_emergence` recipe above in that expertise is the specifically professional form: sustained delivery under accountability, pattern library across cases, and peer recognition.
+
+  `Θ(Ω_expertise) = 4·^7|R_practice + 3·^5^C|⟨A,f⟩ + 2·^6^C|A + 2·^5^E|f_cases + 1·F2 → Ω_expertise`
+
+The `^5^E|f_cases` notation flags the distinctive feature: the senior practitioner's accumulated felt substrate is CASE-specific — an accumulated library of prior situations whose felt patterns inform present judgment. This is substrate with internal structure, not generic accumulated taste. Rhythmic practice (`^7|R_practice`) remains the largest coefficient because expertise is hours-accumulated; `^6^C|A` decomposes the case library into usable patterns; F2 Wisdom activates the judgment architecture.
+
+- Catalyst (κ): mentorship — senior practitioners' decomposed case libraries transmitted to journeymen accelerate the development that unsupervised practice would generate more slowly.
+- Inhibitor (ι): narrow case exposure — a journeyman encountering only typical cases builds a case library without edge-case patterns.
+- Limiting reagent: `^5^E|f_cases` breadth. Journeyman-to-senior transition is most often case-library-limited rather than hours-limited.
+- Leakage (Λ): hours accumulated without case-library growth (`Ω_seniority_without_expertise`) — the practitioner who has "30 years of experience" that is functionally "one year of experience 30 times."
+- Register flavor: register of practice is domain-specific (see `Ω_skill_acquired`); senior expertise typically cross-integrates `|A` and `|f` registers of the accumulated case substrate.
+
+Cross-reference: Chapter 12 Career and Purpose; Chapter 15 Learning and Wisdom; the `Ω_mastery` and `Ω_mastery_emergence` recipes.
+
+**Problem-Solving (Working a Specific Problem).** Analytical decomposition, cognitive substrate, evaluative rhythm for hypothesis testing, and analytical landing on the solution.
+
+  `Θ(Ω_solved) = 3·^6^C|A + 2·^5^C|A + 2·^7^E|A + 2·^9^C|A + 1·F2 → Ω_solved`
+
+Problem-solving is the working-through of a specific problem instance. `^6^C|A` decomposes the problem structure; `^5^C|A` provides the methods substrate; `^7^E|A` is the entrained rhythm of hypothesis-and-test that separates effective problem-solving from staring-at-the-problem; `^9^C|A` is the solution landing.
+
+- Catalyst (κ): useful analogs — access to other solved problems whose structures partially apply.
+- Inhibitor (ι): solution-fixation — premature `^9^C|A` landing on a candidate solution suppresses continued `^7^E|A` testing and produces wrong answers held confidently.
+- Limiting reagent: `^7^E|A` evaluative rhythm. Substrate and decomposition are commonly abundant among educated problem-solvers; the entrained rhythm of generating and testing candidate solutions is what distinguishes those who solve from those who stall.
+- Leakage (Λ): decomposition that produces understanding of the problem without solution (`Ω_analyzed`) — a common pattern in academic training that produces diagnosticians rather than solvers.
+- Register flavor: `|A` analytical dominant; `|T` transcendent rarely appears in specific problem-solving and when it does typically indicates the problem has crossed into research territory.
+
+Cross-reference: Chapter 11 The Equation Workshop; Chapter 15 Learning and Wisdom.
+
+**Execution Under Pressure.** Register-specified rhythmic operational capacity, felt evaluative substrate for real-time discrimination, transcendent principled attraction to the standard of quality, and Structure drive.
+
+  `Θ(Ω_execution) = 4·^7^O|⟨A,E⟩ + 3·^5^E|f + 2·^2^P|T + 2·^9^O|⟨A,E⟩ + 1·F6 → Ω_execution`
+
+High-quality delivery under pressure is register-specified at two points: operational rhythm `^7^O|⟨A,E⟩` and operational landing `^9^O|⟨A,E⟩`, both co-present in analytical and embodied registers. This specification reflects that professional execution under pressure is neither purely cognitive (the surgeon's hands must also know) nor purely embodied (the analyst's rhythm of reasoning must also be entrained). `^5^E|f` provides real-time felt discrimination of whether execution is on-target; `^2^P|T` supplies the standard to which execution is being held.
+
+- Catalyst (κ): rehearsal — prior execution under similar pressure that has entrained the `^7^O|⟨A,E⟩` rhythm.
+- Inhibitor (ι): high `^3^E|f` activation — felt aversion to the situation that suppresses `^7^O|⟨A,E⟩` rhythm into freeze.
+- Limiting reagent: `^9^O|⟨A,E⟩` register-specified landing. Practitioners can sustain rhythm under pressure while losing the landing — producing continued activity that decreases in quality without the practitioner registering the decrease.
+- Leakage (Λ): execution rhythm that produces volume without quality (`Ω_volume`) when `^5^E|f` discrimination drops under pressure-induced cognitive load.
+- Register flavor: cross-register `|⟨A,E⟩` is characteristic of high-stakes professional execution; practitioners whose execution rhythm is present in only one register have characteristic failure modes under pressure.
+
+Cross-reference: Chapter 12 Career and Purpose; Chapter 14 Health and Vitality; Chapter 17 Leadership and Groups.
+
+ Section 8.7: Collective and Organizational Dynamics Recipes
+
+**Team Formation.** The production of a coherent team from a set of individuals — distinct from team resilience (Section 4) in that formation is the initial assembly rather than the sustained capacity under stress.
+
+  `Θ(Ω_team_formation) = 3·^5^E|f_shared + 3·^2^P|T_shared + 2·^7^E|A + 2·^9^O|⟨A,E⟩ + 1·F4 + 1·F1 → Ω_team_formation`
+
+The `_shared` annotation flags the distinctive feature: team formation requires accumulated felt substrate and transcendent attraction that are HELD-IN-COMMON across members, not merely present in each. A collection of individuals each with high `^5^E|f` but no shared felt history is not yet a team. `^7^E|A` is entrained evaluative rhythm — team members learning to read each other's judgments. `^9^O|⟨A,E⟩` register-specified operational landing is the shared execution capacity.
+
+- Catalyst (κ): shared work under moderate pressure — stakes that require coordination but permit learning.
+- Inhibitor (ι): imposed structure without shared substrate — assembling a team by organizational fiat without the shared history produces `Ω_org_chart` rather than `Ω_team_formation`.
+- Limiting reagent: `^5^E|f_shared` accumulated shared felt substrate. Most "teams" that do not perform as teams are `^5^E|f_shared`-limited — the members are competent individually but have not yet accumulated the shared substrate.
+- Leakage (Λ): coordination rhythm (`^7^E|A`) that produces procedure without team (`Ω_procedural`) when shared felt substrate is underbuilt.
+- Register flavor: `|f` affective shared substrate is characteristically undervalued in technical organizational cultures, which produce procedural coordination without team formation and then cannot diagnose why team performance lags.
+
+Cross-reference: Chapter 17 Leadership and Groups; Chapter 13 Relationships and Connection; the `Ω_team_resilience` recipe in Section 4.
+
+**Conflict Resolution.** Register-specified principled refusal of the adversarial frame, analytical decomposition of the conflict structure, felt evaluative substrate from both parties, and Connection drive.
+
+  `Θ(Ω_conflict_resolution) = 3·^3^P|⟨A,T⟩ + 3·^6^C|A + 2·^5^E|f_both + 2·^9^E|f + 1·F4 → Ω_conflict_resolution`
+
+The recipe centers on register-specified principled refusal of the adversarial frame itself — `^3^P|⟨A,T⟩` specifies that both parties must refuse the adversarial structure at the analytical register (the argument that escalation is required) and the transcendent register (the orientation that the other party is the problem). This is refusal of a FRAME, not refusal of the other party. `^5^E|f_both` denotes felt evaluative substrate from both sides held by each — each party capable of feeling the other's felt substrate. `^9^E|f` is the felt landing of resolution — both parties register the conflict as actually resolved rather than merely suspended.
+
+- Catalyst (κ): skilled third-party facilitation — external mind that holds `^6^C|A` decomposition while the parties hold `^5^E|f_both`.
+- Inhibitor (ι): high `^3^E|f` aversion between parties that prevents `^5^E|f_both` from being sustained.
+- Limiting reagent: `^3^P|⟨A,T⟩` frame-refusal. Parties frequently have capacity for mutual feeling (`^5^E|f_both`) but remain committed to the adversarial frame, which blocks the recipe from producing resolution.
+- Leakage (Λ): decomposition that produces mutual understanding without resolution (`Ω_understood_not_resolved`) — both parties see the conflict clearly but remain in it.
+- Register flavor: this is a recipe where refusal (`^3^P`) is productive — refusal of the adversarial frame enables resolution. Contrast with `^3^P|⟨A,f,T⟩` AI safety refusal, which refuses a target.
+
+Cross-reference: Chapter 17 Leadership and Groups; Chapter 13 Relationships and Connection.
+
+**Organizational Alignment.** Multi-register principled attraction across members, analytical cognitive decomposition of mission and strategy, shared felt substrate, and operational rhythm at scale.
+
+  `Θ(Ω_alignment) = 3·^2^P|⟨T,A⟩_shared + 3·^6^C|A + 2·^5^E|f_shared + 2·^7^O|A + 1·F1 + 1·F7 → Ω_alignment`
+
+Organizational alignment is the scaled-up variant of team formation. `^2^P|⟨T,A⟩_shared` specifies that principled attraction must be present in BOTH transcendent (mission) and analytical (strategy) registers, shared across the organization, without the recipe claiming fusion. `^6^C|A` is the ongoing organizational decomposition work — strategy documents, operating plans, role clarity — that translates transcendent mission into analytical action. `^7^O|A` is operational rhythm at scale — the cadence of execution that makes alignment observable rather than merely declared.
+
+- Catalyst (κ): leadership cadence — regular organizational rhythm of communication and decision-making that sustains `^2^P|⟨T,A⟩_shared` against drift.
+- Inhibitor (ι): strategy-mission divergence — organizations in which `^2^P|T_shared` (stated mission) and `^2^P|A_shared` (actual strategic decisions) diverge produce misalignment-by-construction regardless of member intent.
+- Limiting reagent: varies by organizational stage — early-stage organizations are typically `^2^P|A_shared`-limited (strategy unclear despite clear mission); mature organizations are typically `^2^P|T_shared`-limited (strategy entrenched but mission drifted).
+- Leakage (Λ): operational rhythm that produces activity-without-alignment (`Ω_organizational_churn`) when the `^2^P|⟨T,A⟩_shared` foundation is degraded.
+- Register flavor: note that `F1` Unity and `F7` Purpose both appear as recipe prerequisites — alignment recipes distinctively activate the Unity/Purpose drive pair, reflecting that organizational alignment sits at the intersection of collective coherence (F1) and directional drive (F7).
+
+Cross-reference: Chapter 17 Leadership and Groups; Chapter 12 Career and Purpose; Chapter 16 Wealth and Structure.
+
+ Section 9: Library Status
+
+The extended library contains 35 recipes across 10 thematic domains: Wisdom (5), Wealth (4), Leadership (5), AI Refusal (2 Θ-form recipes — Architectures A and B — plus the static-specification architecture C treated in prose rather than recipe form, and a compositional-note section), Psychological Transformation (3), Learning and Education (3), Creative Process (3), Decision-Making (3), Emotional Regulation (3), Professional Practice (3), and Collective/Organizational Dynamics (3) — totaling 14 recipes in Sections 2-5 and 21 recipes in Sections 8.1-8.7. Coefficients across the library remain illustrative rather than empirically calibrated; domain-specific calibration and empirical yield measurement are the standing research obligation flagged in Section 7 above. Recipes that reference `Ω_*` emergent registers cross-reference Appendix I where registry entries exist; candidate `Ω_*` labels introduced informally within recipe leakage terms (e.g., `Ω_rumination`, `Ω_churn`, `Ω_plateau`) are pedagogical and not registry-admitted.
+
+<!-- BOOK-3 closure: 35 total recipes across 10 thematic domains (original 14 + 21 new across 7 applied domains). -->
+
 ---
 
