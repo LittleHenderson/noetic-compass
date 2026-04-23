@@ -248,12 +248,23 @@ class TestCognitiveStateEmbeddingWithRegister:
     def test_register_changes_output_after_perturbation(
         self, embedding_with_register, sample_input
     ):
-        """After training-like perturbation, different registers give different outputs."""
+        """After training-like perturbation, different registers give different outputs.
+
+        ADR-08 Option E adaptation: register identity lives on the shared
+        ``register_latent`` module — perturbing the old ``register_film.gamma``
+        / ``.beta`` view is a no-op. We perturb the W output heads directly
+        so the latent -> FiLM-surface projection produces non-identity
+        modulation at every register.
+        """
         torch.manual_seed(11)
-        film = embedding_with_register.register_film
+        latent = embedding_with_register.register_latent
         with torch.no_grad():
-            film.gamma.add_(torch.randn_like(film.gamma) * 0.3)
-            film.beta.add_(torch.randn_like(film.beta) * 0.3)
+            latent.W_gamma_40.weight.add_(
+                torch.randn_like(latent.W_gamma_40.weight) * 0.3
+            )
+            latent.W_beta_40.weight.add_(
+                torch.randn_like(latent.W_beta_40.weight) * 0.3
+            )
 
         out_T = embedding_with_register(sample_input, register_idx=REGISTER_INDEX["T"])
         out_A = embedding_with_register(sample_input, register_idx=REGISTER_INDEX["A"])
@@ -266,22 +277,40 @@ class TestCognitiveStateEmbeddingWithRegister:
         assert not torch.allclose(out_A, out_f, atol=1e-4)
 
     def test_wrapped_parameter_count_includes_film(self):
-        """Total parameter count = base + simplex-FiLM + d_model-FiLM.
+        """Total parameter count = base + RegisterLatent (ADR-08 Option E).
 
-        Wave 7A follow-up #5: `CognitiveStateEmbeddingWithRegister` now owns
-        TWO FiLM modules — one at register_dim=num_states (40, the v7.5 simplex
-        path) and one at the base d_model (consumed by v7.7 binding heads per
-        ADR-02). Expected extra params = 4*2*40 + 4*2*d_model.
+        Wave 7A had two independent FiLM modules with 4*2*40 + 4*2*d_model
+        parameters. Under ADR-08 Option E those two modules collapse into a
+        single ``RegisterLatent`` with shared per-register latent vectors
+        feeding four output-head linear maps:
+
+            z_R           : 4 * latent_dim_r                    (64 at r=16)
+            W_gamma_40    : latent_dim_r * num_states           (640)
+            W_beta_40     : latent_dim_r * num_states           (640)
+            W_gamma_d     : latent_dim_r * d_model              (16*64 = 1024)
+            W_beta_d      : latent_dim_r * d_model              (16*64 = 1024)
+            scale_40      : 1
+            scale_d       : 1
         """
         d_model = 64
-        wrapped = CognitiveStateEmbeddingWithRegister(d_model=d_model)
+        latent_dim_r = 16
+        wrapped = CognitiveStateEmbeddingWithRegister(
+            d_model=d_model, latent_dim_r=latent_dim_r
+        )
         base = CognitiveStateEmbedding(d_model=d_model)
-        simplex_film_params = NUM_REGISTERS * 2 * NUM_COGNITIVE_STATES  # 4*2*40 = 320
-        dmodel_film_params = NUM_REGISTERS * 2 * d_model                 # 4*2*64 = 512
-        expected_film_params = simplex_film_params + dmodel_film_params
+
+        num_states = NUM_COGNITIVE_STATES
+        expected_latent_params = (
+            NUM_REGISTERS * latent_dim_r             # z_R
+            + latent_dim_r * num_states              # W_gamma_40
+            + latent_dim_r * num_states              # W_beta_40
+            + latent_dim_r * d_model                 # W_gamma_d
+            + latent_dim_r * d_model                 # W_beta_d
+            + 2                                       # scale_40, scale_d
+        )
         base_count = sum(p.numel() for p in base.parameters())
         wrapped_count = sum(p.numel() for p in wrapped.parameters())
-        assert wrapped_count == base_count + expected_film_params
+        assert wrapped_count == base_count + expected_latent_params
 
 
 # ---------------------------------------------------------------------------

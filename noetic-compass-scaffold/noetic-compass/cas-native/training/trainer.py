@@ -42,6 +42,7 @@ from ..model.cas_native_model import CASNativeModel, CASNativeConfig
 from ..model.loss import (
     CognitiveMetricLoss,
     InvolutionConstraintLoss,
+    LatentInvolutionLoss,
     NullSpaceRegularizationLoss,
     ProposerRuleFourLoss,
 )
@@ -142,6 +143,10 @@ class CASTrainer:
         self._register_film_module: Optional[nn.Module] = None
         self._register_film_dmodel_module: Optional[nn.Module] = None
         self._involution_loss: Optional[InvolutionConstraintLoss] = None
+        # ADR-08 Option E — latent-level involution loss (layered on top of
+        # the legacy surface-level loss; both contribute to total when
+        # register-film is enabled). Initialized in ``_init_v2_components``.
+        self._latent_involution_loss: Optional[LatentInvolutionLoss] = None
         self._emergent_pipeline: Optional[EmergentRegisterPipeline] = None
         self._production_head: Optional[ProductionSemanticsHead] = None
         self._rust_bridge: Any = None
@@ -223,23 +228,37 @@ class CASTrainer:
         hp = self.v2_hp
 
         # ADR-01 — RegisterFiLM + involution constraint loss.
+        # ADR-08 Option E — now routed through a shared RegisterLatent module
+        # owned by ``CognitiveStateEmbeddingWithRegister``. ``register_film``
+        # and ``register_film_dmodel`` are exposed as legacy-compatible views
+        # over the shared latent; existing call sites that read
+        # ``.gamma`` / ``.beta`` continue to work through those views.
         if flags.use_register_film:
-            # Wrap the existing cognitive embedding with a register-aware variant
-            # (backward-compatible: register_idx=None yields identical outputs
-            # to the base embedding).
             d_model = self.model.config.d_model
-            reg_emb = CognitiveStateEmbeddingWithRegister(d_model=d_model)
-            # Copy base projection weights so neutral-register forward matches
-            # the pre-existing embedding at init (byte-compat check relies on
-            # register_idx=None short-circuit — not on weight copy).
+            reg_emb = CognitiveStateEmbeddingWithRegister(
+                d_model=d_model,
+                latent_dim_r=hp.latent_dim_r,
+                scale_40=hp.scale_40,
+                scale_d=hp.scale_d,
+                scale_warmup_steps=hp.scale_warmup_steps,
+            )
             self.model.v2_components["register_embedding"] = reg_emb
             self._register_film_module = reg_emb.register_film
-            # Base-d_model FiLM is the surface binding heads consume — keeping
-            # it separate from the 40-dim simplex FiLM ensures emergent-binding
-            # aligns with `CASNativeConfig.d_model` at any width (not just 128).
             self._register_film_dmodel_module = reg_emb.register_film_dmodel
+            # Legacy output-surface involution loss (gamma/beta based) is
+            # preserved as an adjunct diagnostic. Primary Option E involution
+            # enforcement is the latent-level ``LatentInvolutionLoss`` below.
             self._involution_loss = InvolutionConstraintLoss(
                 lambda_involution=hp.lambda_involution,
+            )
+            # ADR-08 — latent-involution loss combines the output-surface and
+            # latent-level terms; caller-tunable via ``lambda_out`` /
+            # ``lambda_latent``. At step 0 with zero-init W heads:
+            #   l_inv_output == 0 (gamma=1, beta=0 exactly)
+            #   l_inv_latent  > 0 (z_R ~ N(0,1) so z_T+z_E nonzero)
+            self._latent_involution_loss = LatentInvolutionLoss(
+                lambda_out=hp.lambda_out,
+                lambda_latent=hp.lambda_latent,
             )
 
         # ADR-02/03 — EmergentRegisterPipeline.
@@ -452,10 +471,137 @@ class CASTrainer:
     # ------------------------------------------------------------------ v2 losses
 
     def _compute_involution_loss(self) -> Optional[torch.Tensor]:
-        """Soft involution regularizer on RegisterFiLM parameters (ADR-01)."""
-        if self._involution_loss is None or self._register_film_module is None:
+        """Soft involution regularizer on RegisterLatent parameters.
+
+        Under ADR-08 Option E the primary involution enforcement is the
+        latent-level loss (``L_inv_latent = sum over pairs mean((z_a +
+        z_b)^2)``) plus a dimension-normalized output-surface term applied
+        to both FiLM surfaces. At init (zero-init W heads), the output-surface
+        term is exactly zero while the latent-level term is nonzero (z_R
+        is random), giving a non-trivial regularization signal from step 0.
+
+        Returns the aggregate ``lambda_out * L_inv_output + lambda_latent *
+        L_inv_latent`` as a single scalar. Sub-term values are surfaced
+        through the diagnostic metrics path (``_latent_film_metrics``).
+        """
+        if self._latent_involution_loss is None:
             return None
-        return self._involution_loss.involution_loss(self._register_film_module)
+        emb = (
+            self.model.v2_components["register_embedding"]
+            if "register_embedding" in self.model.v2_components
+            else None
+        )
+        if emb is None or not isinstance(
+            emb, CognitiveStateEmbeddingWithRegister
+        ):
+            return None
+        return self._latent_involution_loss(emb.register_latent)
+
+    # ---------------------------------------------- ADR-08 scale-warmup freeze
+
+    def _maybe_unfreeze_scales(self, current_step: int) -> None:
+        """Transition RegisterLatent scales from frozen to trainable.
+
+        Called once per training step. While
+        ``current_step < scale_warmup_steps``, ``scale_40`` / ``scale_d``
+        remain ``requires_grad=False`` — the W heads adapt under fixed
+        scalar magnitudes. At the warmup boundary the scales unfreeze, are
+        added to the optimizer, and begin receiving gradient.
+
+        Idempotent: once unfrozen, subsequent calls are no-ops.
+        """
+        emb = None
+        if self._register_film_module is not None:
+            emb = (
+            self.model.v2_components["register_embedding"]
+            if "register_embedding" in self.model.v2_components
+            else None
+        )
+        if emb is None or not isinstance(
+            emb, CognitiveStateEmbeddingWithRegister
+        ):
+            return
+
+        latent = emb.register_latent
+        warmup = int(getattr(self.v2_hp, "scale_warmup_steps", 1000))
+        if current_step < warmup:
+            return
+        if not latent.scales_frozen:
+            return
+
+        # Unfreeze the scales. The optimizer already owns them (``Adam(self.
+        # model.parameters())`` captured every nn.Parameter at construction),
+        # so simply flipping ``requires_grad`` is sufficient to let gradient
+        # flow through and have the optimizer update them on the next step.
+        # Adam's internal state (exp_avg / exp_avg_sq) is lazily initialized
+        # when the first non-zero gradient arrives.
+        latent.set_scales_frozen(False)
+
+    # -------------------------------------------- ADR-08 diagnostic metrics
+
+    def _latent_film_metrics(self) -> dict[str, torch.Tensor]:
+        """Return per-register latent + FiLM-surface diagnostics.
+
+        Keys follow the ADR-08 spec:
+          ``register_latent/z_norm_per_register``
+          ``register_latent/gamma40_norm_per_register``
+          ``register_latent/beta40_norm_per_register``
+          ``register_latent/gammad_norm_per_register``
+          ``register_latent/betad_norm_per_register``
+          ``register_latent/l_inv_output``
+          ``register_latent/l_inv_latent``
+          ``register_latent/scale_40_value``
+          ``register_latent/scale_d_value``
+          ``register_latent/scales_frozen``
+        """
+        out: dict[str, torch.Tensor] = {}
+        if self._register_film_module is None:
+            return out
+        emb = (
+            self.model.v2_components["register_embedding"]
+            if "register_embedding" in self.model.v2_components
+            else None
+        )
+        if emb is None or not isinstance(
+            emb, CognitiveStateEmbeddingWithRegister
+        ):
+            return out
+
+        raw = emb.register_latent.diagnostic_metrics()
+        # Per-register vectors stored under explicit keys so downstream
+        # W&B logging surfaces each register as an individual scalar.
+        for reg_idx, reg_sym in enumerate(("T", "A", "f", "E")):
+            out[f"register_latent/z_norm/{reg_sym}"] = raw["z_norm"][reg_idx]
+            out[f"register_latent/gamma40_norm/{reg_sym}"] = raw[
+                "gamma40_norm"
+            ][reg_idx]
+            out[f"register_latent/beta40_norm/{reg_sym}"] = raw[
+                "beta40_norm"
+            ][reg_idx]
+            out[f"register_latent/gammad_norm/{reg_sym}"] = raw[
+                "gammad_norm"
+            ][reg_idx]
+            out[f"register_latent/betad_norm/{reg_sym}"] = raw[
+                "betad_norm"
+            ][reg_idx]
+        out["register_latent/scale_40_value"] = raw["scale_40_value"]
+        out["register_latent/scale_d_value"] = raw["scale_d_value"]
+        out["register_latent/scales_frozen"] = raw["scales_frozen"]
+
+        # L_inv_output and L_inv_latent are most naturally read out of the
+        # loss module itself — one-shot compute here.
+        if self._latent_involution_loss is not None:
+            with torch.no_grad():
+                l_out = self._latent_involution_loss.output_surface_term(
+                    emb.register_latent
+                )
+                l_latent = self._latent_involution_loss.latent_term(
+                    emb.register_latent
+                )
+                out["register_latent/l_inv_output"] = l_out.detach()
+                out["register_latent/l_inv_latent"] = l_latent.detach()
+
+        return out
 
     # -------------------------------------------------- register activations
 
@@ -1402,10 +1548,26 @@ class CASTrainer:
         # Anneal Gumbel-softmax temperature.
         self.current_tau = self._anneal_tau_for_step(self.global_step)
 
+        # ADR-08 Option E — transition scale_40/scale_d from frozen to
+        # trainable once the warmup window elapses. Called after
+        # optimizer.step so the step that crosses the boundary applies
+        # gradients under the new param group from the NEXT step onward.
+        if self.v2_flags.use_register_film:
+            self._maybe_unfreeze_scales(self.global_step + 1)
+
         # Return metrics.
         metrics = {k: v.item() for k, v in components.items() if isinstance(v, torch.Tensor)}
         metrics["lr"] = self.scheduler.get_last_lr()[0]
         metrics["current_tau"] = self.current_tau
+
+        # ADR-08 — surface the latent/FiLM diagnostic metrics on every step.
+        if self.v2_flags.use_register_film:
+            for k, v in self._latent_film_metrics().items():
+                try:
+                    metrics[k] = float(v.item()) if v.ndim == 0 else float(v.detach().cpu().mean().item())
+                except Exception:
+                    pass
+
         return metrics
 
     @torch.no_grad()

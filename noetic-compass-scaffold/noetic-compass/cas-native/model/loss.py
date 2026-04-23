@@ -28,6 +28,7 @@ from .register_film import (
     INVOLUTION_REGISTER_PAIRS,
     REGISTER_INDEX,
     RegisterFiLM,
+    RegisterLatent,
 )
 
 
@@ -306,25 +307,38 @@ class InvolutionConstraintLoss(nn.Module):
 
     @staticmethod
     def _extract_gamma_beta(
-        source: Union[RegisterFiLM, tuple[torch.Tensor, torch.Tensor]],
+        source: Union[RegisterFiLM, RegisterLatent, tuple[torch.Tensor, torch.Tensor]],
     ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Normalize the loss input to a (gamma, beta) tensor pair.
+
+        Accepts the legacy ``RegisterFiLM`` (direct parameter access), the
+        ADR-08 ``RegisterLatent`` (reads the 40-dim simplex FiLM surface via
+        ``compute_gamma_beta_40``), or an explicit tensor tuple.
+        """
         if isinstance(source, RegisterFiLM):
             return source.gamma, source.beta
+        if isinstance(source, RegisterLatent):
+            # Default surface is the 40-dim simplex FiLM; callers wanting
+            # the d_model surface should pass the tuple directly via
+            # ``source.compute_gamma_beta_d()``.
+            return source.compute_gamma_beta_40()
         if isinstance(source, tuple) and len(source) == 2:
             return source[0], source[1]
         raise TypeError(
-            "InvolutionConstraintLoss expects a RegisterFiLM instance or a "
-            "(gamma, beta) tensor tuple; got {type!r}".format(type=type(source))
+            "InvolutionConstraintLoss expects a RegisterFiLM / RegisterLatent "
+            "instance or a (gamma, beta) tensor tuple; got "
+            "{type!r}".format(type=type(source))
         )
 
     def involution_loss(
         self,
-        source: Union[RegisterFiLM, tuple[torch.Tensor, torch.Tensor]],
+        source: Union[RegisterFiLM, RegisterLatent, tuple[torch.Tensor, torch.Tensor]],
     ) -> torch.Tensor:
         """Compute the soft involution constraint loss.
 
         Args:
-            source: Either a RegisterFiLM module or a (gamma, beta) tensor
+            source: A RegisterFiLM module, a RegisterLatent module (reads
+                the 40-dim simplex FiLM surface), or a (gamma, beta) tensor
                 tuple with shapes (num_registers, d_model).
 
         Returns:
@@ -345,7 +359,7 @@ class InvolutionConstraintLoss(nn.Module):
 
     def forward(
         self,
-        source: Union[RegisterFiLM, tuple[torch.Tensor, torch.Tensor]],
+        source: Union[RegisterFiLM, RegisterLatent, tuple[torch.Tensor, torch.Tensor]],
     ) -> torch.Tensor:
         return self.involution_loss(source)
 
@@ -661,3 +675,144 @@ class NullSpaceRegularizationLoss(nn.Module):
 
         sq_err = (unused_embeddings - target).pow(2).sum(dim=-1)  # (unused_count,)
         return self.lambda_null * sq_err.mean()
+
+
+# ---------------------------------------------------------------------------
+# ADR-08 Option E — Latent-Level Involution Loss
+# ---------------------------------------------------------------------------
+
+
+class LatentInvolutionLoss(nn.Module):
+    """Option E involution loss over a shared :class:`RegisterLatent` module.
+
+    Under ADR-08, register identity is a single per-register latent vector
+    ``z_R``; the two FiLM surfaces (gamma_40/beta_40 and gamma_d/beta_d) are
+    projections of that latent via learned linear heads. This loss enforces
+    the T <-> E and A <-> f involution relation at two levels:
+
+    * **Latent-level** (``L_inv_latent``) — asserts involution partners are
+      additive inverses in latent space::
+
+          L_inv_latent = mean((z_T + z_E)^2) + mean((z_A + z_f)^2)
+
+      When z_T = -z_E exactly and the W heads are linear (which they are
+      by construction), the gamma/beta outputs are automatically involution
+      partners at both FiLM surfaces — the output-surface terms become
+      redundant. Latent-level enforcement is cleaner and lower-dim than
+      enforcing at both output surfaces.
+
+    * **Output-surface** (``L_inv_output``) — enforces the involution at
+      the surfaces themselves, dimension-normalized so the 40-surface and
+      d_model-surface terms stay scale-comparable even when d_model changes::
+
+          L_inv_output =
+                mean((gamma_40,T * gamma_40,E - 1)^2)
+              + mean((beta_40,T + beta_40,E)^2)
+              + mean((gamma_40,A * gamma_40,f - 1)^2)
+              + mean((beta_40,A + beta_40,f)^2)
+              + mean((gamma_d,T  * gamma_d,E  - 1)^2)
+              + mean((beta_d,T  + beta_d,E )^2)
+              + mean((gamma_d,A  * gamma_d,f  - 1)^2)
+              + mean((beta_d,A  + beta_d,f )^2)
+
+    The aggregate is::
+
+        L_involution_total = lambda_out * L_inv_output
+                           + lambda_latent * L_inv_latent
+
+    Defaults per ADR-08: ``lambda_out = 0.1`` (matches the legacy
+    ``InvolutionConstraintLoss`` default), ``lambda_latent = 0.01``.
+
+    At initialization: z_R ~ N(0,1) so ``z_T + z_E`` is nonzero on average,
+    but the W_* matrices are zero-initialized — gamma = 1, beta = 0 exactly
+    at all surfaces. So ``L_inv_output`` is zero at init while
+    ``L_inv_latent`` is nonzero (a small but nonzero regularization signal
+    at step 0). This is intentional: the latent-level term carries the
+    primary involution pressure during training, while the output-surface
+    term is a belt-and-braces redundancy that goes to zero automatically
+    once the latent-level constraint is satisfied.
+
+    Args:
+        lambda_out: Scalar weight on the output-surface term. Default 0.1.
+        lambda_latent: Scalar weight on the latent-level term. Default 0.01.
+        involution_pairs: Optional override for the (idx_a, idx_b) pair list.
+            Defaults to the authoritative pairs T<->E, A<->f from
+            ``register_film.INVOLUTION_REGISTER_PAIRS``.
+    """
+
+    def __init__(
+        self,
+        lambda_out: float = 0.1,
+        lambda_latent: float = 0.01,
+        involution_pairs: Optional[list[tuple[int, int]]] = None,
+    ) -> None:
+        super().__init__()
+        self.lambda_out = float(lambda_out)
+        self.lambda_latent = float(lambda_latent)
+        self.involution_pairs = (
+            list(involution_pairs)
+            if involution_pairs is not None
+            else list(INVOLUTION_REGISTER_PAIRS)
+        )
+
+    # ---------------------------------------------------------------- latent
+
+    def latent_term(self, latent: RegisterLatent) -> torch.Tensor:
+        """Compute ``L_inv_latent = sum over pairs mean((z_a + z_b)^2)``."""
+        z = latent.register_latent  # (R, latent_dim_r)
+        total = torch.zeros((), device=z.device, dtype=z.dtype)
+        for idx_a, idx_b in self.involution_pairs:
+            total = total + ((z[idx_a] + z[idx_b]) ** 2).mean()
+        return total
+
+    # --------------------------------------------------------------- surface
+
+    def output_surface_term(self, latent: RegisterLatent) -> torch.Tensor:
+        """Compute ``L_inv_output`` across both 40-dim and d_model FiLMs.
+
+        Uses ``.mean()`` per dimension so the 40-wide and d_model-wide
+        surfaces stay scale-comparable under differing ``d_model`` values.
+        """
+        gamma40, beta40 = latent.compute_gamma_beta_40()
+        gammad, betad = latent.compute_gamma_beta_d()
+
+        total = torch.zeros((), device=gamma40.device, dtype=gamma40.dtype)
+        for idx_a, idx_b in self.involution_pairs:
+            # 40-dim simplex surface.
+            g40_prod = gamma40[idx_a] * gamma40[idx_b] - 1.0
+            b40_sum = beta40[idx_a] + beta40[idx_b]
+            total = total + (g40_prod ** 2).mean() + (b40_sum ** 2).mean()
+            # d_model surface.
+            gd_prod = gammad[idx_a] * gammad[idx_b] - 1.0
+            bd_sum = betad[idx_a] + betad[idx_b]
+            total = total + (gd_prod ** 2).mean() + (bd_sum ** 2).mean()
+        return total
+
+    # ------------------------------------------------------------- aggregate
+
+    def forward(
+        self,
+        latent: RegisterLatent,
+        return_components: bool = False,
+    ) -> Union[torch.Tensor, tuple[torch.Tensor, dict[str, torch.Tensor]]]:
+        """Compute the aggregate latent-involution loss.
+
+        Args:
+            latent: The shared :class:`RegisterLatent` module.
+            return_components: If True, also return a dict with the two
+                unweighted sub-terms under keys ``"l_inv_output"`` and
+                ``"l_inv_latent"`` (useful for diagnostic logging).
+
+        Returns:
+            Scalar loss ``lambda_out * L_inv_output + lambda_latent * L_inv_latent``,
+            optionally paired with the components dict.
+        """
+        l_out = self.output_surface_term(latent)
+        l_latent = self.latent_term(latent)
+        total = self.lambda_out * l_out + self.lambda_latent * l_latent
+        if return_components:
+            return total, {
+                "l_inv_output": l_out.detach(),
+                "l_inv_latent": l_latent.detach(),
+            }
+        return total

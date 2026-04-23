@@ -397,7 +397,13 @@ class TestEmergentBindingPerPosition:
         assert loss.ndim == 0
 
     def test_binding_loss_gradient_flow(self, trainer):
-        """Loss gradient reaches binding projection and register_film_dmodel."""
+        """Loss gradient reaches binding projection and RegisterLatent.
+
+        ADR-08 Option E adaptation: ``_register_film_dmodel_module`` is a
+        read-only view over the shared RegisterLatent under Option E; the
+        real parameters live on ``register_latent``. We zero-grad the shared
+        latent directly.
+        """
         self._admit_omega(trainer)
         hidden = torch.randn(
             1, 8, trainer.model.config.d_model, requires_grad=True
@@ -410,7 +416,8 @@ class TestEmergentBindingPerPosition:
             ]
         ]
         trainer.emergent_pipeline.binding_head.zero_grad()
-        trainer._register_film_dmodel_module.zero_grad()
+        emb = trainer.model.v2_components["register_embedding"]
+        emb.register_latent.zero_grad()
 
         loss = trainer._compute_emergent_binding_loss(
             hidden, omega_labels, register_labels_batch=register_labels

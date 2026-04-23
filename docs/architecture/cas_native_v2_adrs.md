@@ -999,3 +999,256 @@ Six ADRs lock the CAS-Native v2 architectural decisions:
 **Total v2 additions: ~30,000 parameters.** For a 50M demonstration model, additions are <0.1% of total. Device-friendly, load-time-friendly, runtime-friendly, quantization-tractable.
 
 Ready for implementation in subsequent work sessions. First implementation phase: background agents per the directive sequencing.
+
+---
+
+# ADR-07: Learned Expression Proposer Head
+
+## Status
+Accepted — 2026-04-22 (CAS-Native v2 Wave 8A)
+
+## Context
+
+Codex 5.4 verified in the Wave 7B panel review (and Claude Code confirmed) that the current `_compute_rule_four_loss` in `cas-native/training/trainer.py` is not gradient-bearing with respect to model weights. Two issues make the existing implementation a **metric**, not a **training signal**:
+
+1. Expression operands are built from **ground-truth labels** (`register_labels_batch`), not from model outputs. The structural patterns fed to the Rust validator carry no graph linkage to any model parameters.
+2. The Rust-returned per-sample distances are Python floats. The trainer wraps them in `torch.tensor(distances, ...)`, which has `requires_grad=False`. The resulting scalar enters `total_loss` but its backward pass touches no parameters.
+
+Agent 34's own docstring at `trainer.py:795-803` acknowledges this: *"Full end-to-end gradient wiring awaits a learned 'expression proposer' head which is scheduled beyond Wave 7B."* ADR-07 closes that gap.
+
+The Rust validator itself is non-differentiable. Any design must route gradients through a **differentiable proxy** for expression correctness; the Rust engine can remain as an inference-time / evaluation-time authority, but not as a training-time gradient source.
+
+## Decision
+
+Introduce `ExpressionProposerHead` (`cas-native/model/expression_proposer.py`): a learned head that consumes d_model-width hidden states from `CASNativeModel` and emits five parallel logit heads describing a CAS v7.7 structural expression. Train the proposer with a **score-based loss** (Option A — see Alternatives Considered) computed against label-derived targets; because the proposer logits are produced by a linear projection of hidden states, the loss is gradient-bearing through the entire upstream model.
+
+### Head architecture
+
+* Shared low-rank backbone: `d_model → bottleneck_dim (default 32) → GELU`.
+* Five parallel heads:
+  - `noetic_logits` — `(B, 10)` over the 10 Noetics (CO-0 … CO-9)
+  - `domain_logits` — `(B, 4)` over P / C / E / O
+  - `register_logits_per_operand` — `(B, max_operands=4, 4)` over T / A / f / E
+  - `operand_count_logits` — `(B, 5)` over operand counts `{0, 1, 2, 3, 4}`
+  - `named_emergent_logits` — `(B, 2)` binary "is an emergent result named"
+* Training mode attaches a straight-through Gumbel-softmax sample on the per-operand register logits (`register_gumbel`) for forward-compat with a future Option-B upgrade; v1 loss does not consume it.
+* Inference mode: argmax on every head → `ExpressionProposal` dataclass aligned with the Rust bridge's `StructuralPattern` shape.
+
+### Parameter budget
+
+At `d_model=128, bottleneck=32, max_operands=4`:
+
+```
+backbone:    128 * 32 + 32                  =  4,128
+noetic:       32 * 10 + 10                  =    330
+domain:       32 *  4 +  4                  =    132
+register:     32 * (4 * 4) + (4 * 4)        =    528
+op_count:     32 *  5 +  5                  =    165
+named_emg:    32 *  2 +  2                  =     66
+─────────────────────────────────────────────────────
+TOTAL                                        ≈  5,349
+```
+
+At `d_model=512`: ≈ 17,637. At the upper `d_model=512, bottleneck=64, max_operands=5` sweep the figure approaches ≈ 50K — the upper bound quoted in the ADR-07 directive. The actual count is exposed by `ExpressionProposerHead.parameter_count`.
+
+### Training loss (Option A, score-based)
+
+`cas-native/model/loss.py` gains `ProposerRuleFourLoss` with five component terms:
+
+* `L_noetic` — cross-entropy on `noetic_logits`
+* `L_domain` — cross-entropy on `domain_logits`
+* `L_register` — cross-entropy on `register_logits` masked by per-operand-slot presence
+* `L_count` — smooth-L1 on the soft-argmax of `operand_count_logits` (smooth-L1 respects the ordinal axis; count-3 is closer to count-4 than to count-0)
+* `L_named_emergent` — cross-entropy on `named_emergent_logits`
+
+Aggregate: `L = w_n·L_noetic + w_d·L_domain + w_r·L_register + w_c·L_count + w_e·L_named_emergent`. Outer weight `lambda_proposer_rule_four` (default `0.5`) multiplies the aggregate in the trainer's loss sum.
+
+### Trainer integration
+
+* `_compute_proposer_rule_four_loss(hidden_states, register_labels_batch, omega_labels_batch)` builds per-example targets from the batch label streams, runs the proposer, and returns the weighted score loss.
+* Aggregation sits in `_train_step` immediately after `rule_four_loss` addition, marked `# ADR-07 expression proposer loss aggregation`.
+* Gumbel-softmax tau is reused from ADR-04's annealing schedule — the same `self.current_tau` the `DifferentiableStoichiometry` head consumes.
+
+### Backward compatibility
+
+A new flag `V2ComponentFlags.use_expression_proposer: bool` (default `False`) gates the head. When `False`:
+* No proposer is instantiated; `state_dict` contains no proposer entries.
+* Forward pass returns the identical dict (no `proposer_outputs` key).
+* Loss aggregation adds nothing.
+* Parameter count unchanged; byte-equivalent to the pre-ADR-07 Wave 7B state.
+
+Default `False` at introduction is deliberate: the proposer is a significant architectural addition; opt-in preserves first-training-run stability while the other v2 components continue to stabilize.
+
+## Alternatives Considered
+
+### Option A — Score-based (chosen)
+
+Proposer outputs are scored directly against label-derived target distributions using CE + smooth-L1. Gradient path: `hidden_states → proposer logits → loss → backward`.
+
+Pros: simple, low variance, no Rust at training time, closes the wiring gap with minimum architectural surface, Rust remains authoritative at eval.
+
+Cons: loses the Rust distance's structural severity weighting (2-register vs 3-register vs 4-register); relies on label-derived targets that the synthetic data generator must emit correctly.
+
+### Option B — REINFORCE-lite with Gumbel-ST
+
+Proposer outputs are discretized (straight-through Gumbel-softmax), fed to Rust via `rule_four_distance_batch`, and the resulting distance is used as a negative reward. The pathwise gradient is computed by multiplying the reward against proposer log-probabilities.
+
+Pros: directly optimizes Rust-validated distance; structural severity weighting preserved.
+
+Cons: higher variance; requires Rust at every training step (latency hit at ~10 ms/batch); variance reduction (baselines, control variates) adds complexity; marginally better only when label-derived CE targets and Rust distances disagree — and at v1 they largely agree.
+
+Deferred to a future v2 of ADR-07 if empirical signal justifies it. The proposer head emits `register_gumbel` in training mode to preserve this upgrade path with no additional head surgery.
+
+### Option C — Do nothing, accept Rule 4 as metric-only
+
+Leave `_compute_rule_four_loss` as a non-gradient-bearing metric; rely on the other v2 losses (emergent binding, production, involution) to shape the architecture and evaluate Rule 4 compliance at validation time.
+
+Rejected because: (1) Codex 5.4's panel finding explicitly flagged this as a gap requiring closure before first training run, (2) Agent 34's own docstring cites the learned proposer as the planned resolution, (3) leaving the loss inert while it appears in the aggregate creates misleading per-step metrics in W&B / checkpoint state.
+
+## Consequences
+
+* **Parameter budget** adds ~5K-18K parameters depending on `d_model` (<0.04% of a 50M-parameter demonstration model). Well within the ADR cross-cutting "v2 additions < 1%" constraint.
+* **Gradient flow closes** — the first training run can see genuine Rule 4 signal backpropagating through the model. Empirical question: does the proposer's label-CE signal improve Rule 4 compliance at eval? Answer measured at first validation pass.
+* **Forward contract extended** — when enabled, `CASNativeModel.forward` adds a `proposer_outputs` key. All existing consumers ignore unknown keys.
+* **Config schema extended** — `V2ComponentFlags.use_expression_proposer` + eight `V2Hyperparameters.lambda_proposer_* / proposer_*` fields. YAML schema updated in `training_v2.yaml`.
+* **Test surface** — ~25 new tests in `tests/test_expression_proposer.py` covering shape, gradient flow, Gumbel mode, backward compatibility, config integration, and the critical end-to-end "does proposer loss deliver gradient to model params" assertion.
+* **Follow-ups flagged** — Synthetic data generator should begin emitting explicit `target_noetic` / `target_domain` fields on `omega_labels` entries; the v1 proposer loss falls back to the Rule-4 template (`^3^P|…`) when only register labels are present.
+
+## Framework Fidelity Notes
+
+No framework change. ADR-07 is implementation work closing a wiring gap in CAS-Native v2. The 40 Cognitive States, 7 Drives, 4 Registers, 5 Generative Operations — the primitives named in USPTO #64/037,173 and Clarifications 1-10 — remain unchanged. The proposer head consumes the v7.7 expression space (Noetic × Domain × Register × operand-count × named-emergent) and emits proposals within that space. IP attorney review flagged with `cas_v7_7_rollout_plan.md` as part of v7.7 rollout; ADR-07 adds no new primitives and does not alter v7.7's provisional patent posture.
+
+Because this is a Wave 8A scaffold, the ADR carries a **partial framework fidelity** note: the proposer's training signal derives from labels, not from a CAS-algebraic reward. Once empirical signal justifies it, the Option-B upgrade path wires the Rust validator's distance directly into the gradient — at which point framework fidelity graduates to full. The v1 Option-A design closes the gradient-flow gap identified by the panel without claiming framework-level optimality.
+
+## Implementation Notes
+
+* New module: `cas-native/model/expression_proposer.py` with `ExpressionProposerHead`, `ExpressionProposal` dataclass, and public constants.
+* New loss class: `ProposerRuleFourLoss` in `cas-native/model/loss.py`, alongside `InvolutionConstraintLoss` and `LacunarityRegularizationLoss`.
+* Trainer integration: `_compute_proposer_rule_four_loss` method + aggregation term in `_train_step` with marker comment `# ADR-07 expression proposer loss aggregation`.
+* Model integration: `CASNativeModel.forward` runs the proposer on the pre-final-norm hidden states `x` (same tensor feeding `lm_head` and `topos_reasoner`), so proposer gradients reach every transformer layer.
+* Config: `V2ComponentFlags.use_expression_proposer` defaults `False`. `V2Hyperparameters` gains eight fields (five loss weights + two architecture knobs + the outer `lambda_proposer_rule_four`). YAML template `training_v2.yaml` updated.
+* Test file: `cas-native/tests/test_expression_proposer.py`.
+
+Integration points — summary table:
+
+| Surface | Change |
+|---|---|
+| `model/expression_proposer.py` | NEW — `ExpressionProposerHead`, `ExpressionProposal` |
+| `model/loss.py` | ADD `ProposerRuleFourLoss` |
+| `model/cas_native_model.py` | ADD `expression_proposer_enabled` property + forward branch emitting `proposer_outputs` when enabled |
+| `training/trainer.py` | ADD proposer init, `_compute_proposer_rule_four_loss`, aggregation term marked `# ADR-07 expression proposer loss aggregation` |
+| `training/config.py` | ADD `use_expression_proposer` flag + 8 proposer hyperparameters + validate() hooks |
+| `config/training_v2.yaml` | ADD proposer section |
+| `tests/test_expression_proposer.py` | NEW — ~25 tests including the critical gradient-flow assertion |
+
+Total v2 additions after ADR-07: ~30K (pre-existing) + ~5-18K (proposer) ≈ **35-48K parameters**. Still <0.1% of a 50M demonstration model. Device-friendly, load-time-friendly, runtime-friendly, quantization-tractable.
+
+---
+
+# ADR-08: Option E — Shared Register Latent with Dual Output Heads
+
+## Status
+Accepted — 2026-04-22 (CARP Round 3 panel consensus, 4-of-5)
+
+## Context
+Wave 7A landed two independently-learned FiLM modules on `CognitiveStateEmbeddingWithRegister`:
+- `register_film`, 40-dim over the cognitive-state simplex surface (v7.5 path)
+- `register_film_dmodel`, d_model-wide for downstream binding heads (v7.7 path, ADR-02)
+
+Each module carried `(num_registers, width)` gamma and beta parameter tensors, learned independently. Nothing architecturally forced the two modules to represent the same register concept — the A-register's 40-dim gamma and the A-register's d_model gamma are independent parameter tensors with no structural coupling. Semantic drift was possible: the 40-dim module could learn to encode "A = analytical cognitive state" while the d_model module independently drifted to encode "A = something-else-under-d_model-width." The drift would be silent — emerging only as cross-surface inconsistency at inference.
+
+The 5-model panel (Codex 5.4, Claude Code 4.7, Qwen 3.5, Gemini 3, DeepSeek-R1) debated four alternatives across three CARP rounds. Panel converged 4-of-5 on Option E (shared latent with dual heads) with all accepting-panelist modifications incorporated.
+
+## Decision
+Introduce `RegisterLatent` as the authoritative register parameterization. Single learnable per-register embedding `z_R` (latent dimension `r=16`). Four output heads project `z_R` into `(gamma_40, beta_40, gamma_d, beta_d)` via zero-initialized linear layers with tanh-saturated scaled readouts:
+
+```
+gamma_40 = 1 + s_40 * tanh(W_gamma_40 @ z_R)      (R, num_states)
+beta_40  =       s_40 * tanh(W_beta_40  @ z_R)    (R, num_states)
+gamma_d  = 1 + s_d  * tanh(W_gamma_d  @ z_R)      (R, d_model)
+beta_d   =       s_d  * tanh(W_beta_d   @ z_R)    (R, d_model)
+```
+
+Scales `s_40 = 0.05`, `s_d = 0.02`, frozen for the first `scale_warmup_steps = 1000` training steps so the W heads adapt under fixed scalar magnitudes before the scalars themselves begin moving.
+
+Involution enforcement is latent-level primarily (`z_T + z_E ≈ 0`, `z_A + z_f ≈ 0`) with a dimension-normalized output-surface regularizer layered on top as a belt-and-braces redundancy. Defaults: `lambda_latent = 0.01`, `lambda_out = 0.1`. When `z_T = -z_E` exactly and the W heads are linear, the output-surface involution follows by construction (tanh is odd, W is linear), so the output-surface term vanishes automatically as the latent-level term is satisfied — they are not orthogonal constraints.
+
+`RegisterFiLM` is preserved in `register_film.py` as a legacy shim for tests and external call sites that construct it directly; the model/embedding/trainer forward path consumes `RegisterLatent` exclusively. `CognitiveStateEmbeddingWithRegister.register_film` and `register_film_dmodel` are now `_LatentFiLMView` proxies — read-through accessors that compute gamma/beta from the shared latent on each access. Legacy code reading `.gamma` and `.beta` continues to work; perturbation via `.gamma.add_` does NOT (the views are computed, not stored).
+
+## Alternatives Considered
+
+**Option A — Shared Projection.** Learn Module 1 (40-dim) directly; derive Module 2 (d_model) via a fixed projection (e.g. random linear or Fourier lift). Rejected because the projection choice is a design-by-guess problem with no principled answer at the framework level — the "correct" projection depends on the downstream d_model surface's role, which varies across binding heads, production semantics, and LM-head consumers.
+
+**Option B — Consistency Loss.** Learn both modules independently, add a penalty for divergence between their per-register representations. Rejected under the panel's "brains first" priority: soft enforcement permits drift under strong task-gradient pressure; the panel favored structural enforcement — if the two modules are semantically coupled, the architecture should make drift impossible, not merely penalize it.
+
+**Option C — Hypernetwork.** Deep generator maps register_id to all FiLM parameters. At general `k` (number of registers), C is the most expressive option; at `k = 4` (Clarification 8 register axis is closed at T/A/f/E), C's scalability advantage is moot and the parameter overhead is unjustified (deep hypernetwork >> simple linear heads over a 16-dim latent).
+
+**Option D — Single d_model Module.** Eliminate the 40-dim module entirely; let all register modulation happen at d_model and propagate to the simplex via the projection. Rejected because it inverts framework alignment — the 40-dim cognitive-state simplex is the canonical target space (Clarification 8, ADR-01, CORRECTION 4), not an implementation derivative of d_model. Option D would subordinate the canonical space to the architectural convenience of the transformer's hidden-state width.
+
+Option E preferred over Codex's full-hypernetwork variant of C because k=4 means the shared-latent-with-linear-heads form is sufficient and cheaper. Preferred over Claude Code's Option A variant because learned readout heads avoid the "which projection?" design problem — the heads learn whatever projection the task gradient requires, constrained only by the shared latent.
+
+## Consequences
+
+**Parameter budget (d=128, r=16):**
+```
+Register embeddings  : 4 * 16  =     64
+W_gamma_40, W_beta_40: 2 * 16 * 40 = 1,280
+W_gamma_d,  W_beta_d : 2 * 16 * 128 = 4,096
+Scales (s_40, s_d)   :              2
+                              Total = 5,442  (~ 5,440 target)
+```
+
+**At d=512:** `5,442 - 4,096 + (2 * 16 * 512) = 17,730`. Comparable to the Wave 7A two-module design (which had `4*2*40 + 4*2*512 = 4,416`) — slightly larger absolute count due to the shared latent + 4 W heads, but **semantically more tightly coupled** (one source of register identity instead of eight independent gamma/beta vectors).
+
+**Structural alignment guarantee.** Register identity is a single `z_R`; both substrate expressions are projections of one semantic source. Semantic drift prevented by construction: a gradient that pushes the A-register's 40-dim gamma in one direction flows through `z_A` and symmetrically affects `gamma_d`, `beta_d` (and the other 40-dim head). The two FiLM surfaces cannot individually specialize to inconsistent interpretations of "A."
+
+**v7.4 byte-equivalence preserved.** Zero-initialized W heads + `tanh(0) = 0` gives `gamma = 1`, `beta = 0` at every surface at step 0. The step-0 FiLM is the exact identity. When `V2ComponentFlags.use_register_film = False`, `CognitiveStateEmbeddingWithRegister` is never instantiated, and the model path is byte-for-byte identical to the v7.4 `CognitiveStateEmbedding` forward. Guarded by `test_v74_byte_equivalent_when_flags_off` (`test_option_e_alignment.py`) and `test_register_neutral_matches_base_embedding_exactly` (`test_register_integration.py`).
+
+**Wave 8A agent compatibility preserved.** Agent 35's `ExpressionProposerHead` (operates on hidden states, not register params) unchanged. Agent 37's unified None/zero forward path (Decision G) preserved and guarded by bitwise-equality tests under Option E. Agent 38's null-space regularization (`OmegaRegistry` unused-slot pull) unchanged — operates on a separate emergent-register surface entirely.
+
+**Legacy-test adaptation required.** Tests that mutated `emb.register_film.gamma.add_(...)` no longer produce mutation (the view is read-only); adapted to perturb `emb.register_latent.W_*.weight` instead. Scope: 4 assertions across `test_register_integration.py` and `test_forward_path.py`. `test_wrapped_parameter_count_includes_film` rewritten to count RegisterLatent's 5,442 instead of the legacy two-module 832.
+
+## Framework Fidelity
+
+Clarification 8 §1 line 263: "The Register axis does not introduce new primitives. The 40 Cognitive States remain unchanged. Register is a specification of operational character layered on top of the existing primitives."
+
+**ADR-08 verdict.** `z_R` is a compact INTERNAL REPRESENTATION of the specification layer. It is not a CAS primitive; it does not modify the 40-state bank or add to the 10-Noetic / 4-Domain / 7-Drive / 4-Register framework vocabulary. It is the architecture-internal encoding of "which register is being specified" at parameter-storage level, analogous to a token embedding table in any NLP model (tokens are not primitives independent of the vocabulary just because they have learned embeddings).
+
+The register axis remains T/A/f/E — four values, orthogonal to Noetic/Domain/Drive, closed set. The `z_R` table has four rows because the register axis has four values. No primitive introduced; no framework drift.
+
+Framework fidelity satisfied. USPTO #64/037,173 provisional patent posture unchanged.
+
+## Implementation Notes
+
+**Scale-freeze mechanism.** Scales are `nn.Parameter` with `requires_grad=False` at construction. `RegisterLatent.set_scales_frozen(False)` flips the requires_grad and subsequently permits gradient accumulation. The optimizer (`Adam(model.parameters())`) already owns the scale parameters at construction time — Adam's internal momentum buffers lazily initialize when the first non-zero gradient arrives, so no `add_param_group` call is needed at the unfreeze boundary. This is simpler than the "add param group at unfreeze" alternative considered in the panel discussion; implementation-wise it is also more robust (no risk of the same parameter appearing in two param groups).
+
+**Trainer scale-warmup wiring.** `CASTrainer._maybe_unfreeze_scales(current_step)` is called at the END of each `_train_step` with `current_step + 1` (so the step crossing the boundary applies the unfreeze effect on the FOLLOWING step's forward). Idempotent: once unfrozen, subsequent calls are no-ops via the `latent.scales_frozen` guard.
+
+**Diagnostic metrics.** `CASTrainer._latent_film_metrics()` returns a `register_latent/*`-prefixed dict covering per-register `z_norm`, `gamma40_norm`, `beta40_norm`, `gammad_norm`, `betad_norm`, plus scalar `l_inv_output`, `l_inv_latent`, `scale_40_value`, `scale_d_value`, `scales_frozen`. Routed into the `_train_step` metrics dict for W&B / stdout surfacing.
+
+**Test coverage.** 30 tests in `test_register_latent.py` (instantiation, zero-init, apply-register, scale freeze, involution symmetry, gradient flow, diagnostics). 15 tests in `test_option_e_alignment.py` (LatentInvolutionLoss correctness, byte-equivalence, Wave 8A agent integration, scale warmup, trainer diagnostics). 4 legacy tests adapted (`test_register_integration.py`, `test_forward_path.py`, `test_trainer_v2.py`, `test_loss_refinement.py`). Full suite: 388 passing (343 baseline + 45 new - 0 regressions), 3 pre-existing unchanged failures.
+
+**Planned follow-up — ablation harness.** ADR-08 is admitted on CARP consensus plus step-0 byte-equivalence + unit-test coverage. A small-scale empirical ablation comparing Option E against the two-independent-FiLM Wave 7A baseline is scheduled as follow-up (not in scope for the landing commit):
+- Training 10k steps on a ~100M-token synthetic register-labeled corpus, Option E vs Wave 7A, matched hyperparameters.
+- Primary metrics: register prediction accuracy on held-out registers, cross-surface consistency (do the 40-dim and d_model FiLMs agree on register identity at similar-context inputs?), Rule 4 violation rate.
+- Expected finding: Option E delivers equal or lower register-prediction error AND substantially higher cross-surface consistency than Wave 7A. If Option E underperforms on prediction accuracy at equal compute, that's a signal to relax the scale_warmup schedule or increase `latent_dim_r`. The ablation is instrumentation-only; landing commit does not gate on it.
+
+## Integration Points — Summary Table
+
+| Surface | Change |
+|---|---|
+| `model/register_film.py` | ADD `RegisterLatent`; preserve `RegisterFiLM` as legacy shim |
+| `model/embedding.py` | REPLACE two-FiLM design with shared `register_latent`; expose `register_film` / `register_film_dmodel` as `_LatentFiLMView` proxies |
+| `model/cas_native_model.py` | `_apply_register_film_to_logits` reads gamma/beta once from shared latent (was: twice through view properties in loop) |
+| `model/loss.py` | ADD `LatentInvolutionLoss`; extend `InvolutionConstraintLoss._extract_gamma_beta` to accept `RegisterLatent` |
+| `training/config.py` | ADD 6 Option E hyperparameters: `latent_dim_r`, `scale_40`, `scale_d`, `scale_warmup_steps`, `lambda_out`, `lambda_latent` |
+| `training/trainer.py` | ADD `_latent_involution_loss`, `_maybe_unfreeze_scales`, `_latent_film_metrics`; rewire `_compute_involution_loss` |
+| `config/training_v2.yaml` | DOCUMENT new hyperparameters with ADR-08 citation |
+| `tests/test_register_latent.py` | NEW — 30 tests |
+| `tests/test_option_e_alignment.py` | NEW — 15 tests |
+| `tests/test_register_integration.py` | ADAPT 2 tests (perturb latent W heads, rewrite parameter-count assertion) |
+| `tests/test_forward_path.py` | ADAPT 4 tests (perturbations via shared latent; non-trivial loss function) |
+| `tests/test_trainer_v2.py` | ADAPT 1 test (init involution loss is small-positive, not zero) |
+| `tests/test_loss_refinement.py` | ADAPT 1 test (zero-grad on latent, not view) |
+
+Total Option E delta: ~600 LoC added, ~150 LoC modified, 45 new tests, 8 adapted tests. ADR-08 preserves the CAS framework vocabulary unchanged and improves architectural coupling between the two FiLM surfaces.

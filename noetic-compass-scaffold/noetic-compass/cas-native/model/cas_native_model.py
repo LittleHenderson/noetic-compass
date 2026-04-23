@@ -341,6 +341,12 @@ class CASNativeModel(nn.Module):
         position the row of ``register_activations`` is all-zero and FiLM
         reduces to the identity (no-op), preserving byte-equivalence.
 
+        Under ADR-08 Option E (shared RegisterLatent), ``gamma`` and
+        ``beta`` are computed ONCE from the shared latent here and reused
+        across the per-register iteration — avoiding the 4x recompute that
+        would follow from reading through the ``_LatentFiLMView.gamma`` /
+        ``.beta`` properties inside the loop.
+
         Args:
             logits: (batch, 40) pre-simplex logits produced by the base
                 projection.
@@ -353,9 +359,10 @@ class CASNativeModel(nn.Module):
         """
         emb = self.v2_components["register_embedding"]  # type: ignore[index]
         assert isinstance(emb, CognitiveStateEmbeddingWithRegister)
-        film = emb.register_film  # 40-dim simplex FiLM
-        gamma = film.gamma  # (num_registers, 40)
-        beta = film.beta    # (num_registers, 40)
+        latent = emb.register_latent
+        # Compute gamma/beta once from the shared Option E latent.
+        gamma, beta = latent.compute_gamma_beta_40()  # (R, 40)
+        num_registers = latent.num_registers
 
         activations = register_activations.to(dtype=logits.dtype)
         out = logits
@@ -363,13 +370,11 @@ class CASNativeModel(nn.Module):
         # At positions where `activations[...,r]` is 0, the per-register
         # transform reduces to identity: (1-0)*1 + 0*gamma_r = 1 and
         # (1-0)*0 + 0*beta_r = 0, giving x -> 1*x + 0 = x.
-        for r_idx in range(film.num_registers):
+        for r_idx in range(num_registers):
             mask = activations[..., r_idx]  # (batch, 40)
             # Effective gamma / beta for this register at each position:
             #   gamma_eff = (1 - mask) * 1 + mask * gamma_r
             #   beta_eff  = (1 - mask) * 0 + mask * beta_r
-            # When mask=0, gamma_eff=1 and beta_eff=0 (identity). When
-            # mask=1, gamma_eff=gamma_r and beta_eff=beta_r.
             gamma_r = gamma[r_idx]  # (40,)
             beta_r = beta[r_idx]    # (40,)
             gamma_eff = 1.0 + mask * (gamma_r.unsqueeze(0) - 1.0)

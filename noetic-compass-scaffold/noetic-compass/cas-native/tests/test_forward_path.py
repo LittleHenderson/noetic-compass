@@ -326,17 +326,25 @@ class TestForwardAcceptsActivations:
         )
 
     def test_forward_with_perturbed_film_diverges(self, model_with_register_film):
-        """After perturbing FiLM parameters, activations change cognitive state."""
+        """After perturbing FiLM parameters, activations change cognitive state.
+
+        ADR-08 Option E adaptation: perturb the shared RegisterLatent W
+        output heads (register_film is now a read-only view).
+        """
         model_with_register_film.eval()
         torch.manual_seed(7)
         input_ids = torch.randint(0, 64, (2, 8), dtype=torch.long)
         attention_mask = torch.ones(2, 8, dtype=torch.long)
 
         emb = model_with_register_film.v2_components["register_embedding"]
-        film = emb.register_film
+        latent = emb.register_latent
         with torch.no_grad():
-            film.gamma.add_(torch.randn_like(film.gamma) * 0.3)
-            film.beta.add_(torch.randn_like(film.beta) * 0.3)
+            latent.W_gamma_40.weight.add_(
+                torch.randn_like(latent.W_gamma_40.weight) * 0.3
+            )
+            latent.W_beta_40.weight.add_(
+                torch.randn_like(latent.W_beta_40.weight) * 0.3
+            )
 
         acts = torch.zeros(2, NUM_COGNITIVE_STATES, NUM_REGISTERS, dtype=torch.bool)
         # Turn on A register at every position for example 0.
@@ -377,17 +385,20 @@ class TestMultiRegisterComposition:
     def test_co_presence_composes_sequentially(self, model_with_register_film):
         """Two-register composition equals applying each register in sequence.
 
-        The sequential form is documented in the embedding/model module
-        docstrings as the canonical composition for multi-register positions
-        (ADR-01 extension). We verify the output matches applying the
-        per-register FiLMs sequentially by hand via `_apply_register_film_to_logits`.
+        ADR-08 Option E adaptation: perturb the shared RegisterLatent W heads
+        and read the authoritative gamma/beta via ``compute_gamma_beta_40``.
+        The ``register_film`` view yields the same tensors (read-through).
         """
         torch.manual_seed(0)
         emb = model_with_register_film.v2_components["register_embedding"]
-        film = emb.register_film
+        latent = emb.register_latent
         with torch.no_grad():
-            film.gamma.add_(torch.randn_like(film.gamma) * 0.25)
-            film.beta.add_(torch.randn_like(film.beta) * 0.25)
+            latent.W_gamma_40.weight.add_(
+                torch.randn_like(latent.W_gamma_40.weight) * 0.25
+            )
+            latent.W_beta_40.weight.add_(
+                torch.randn_like(latent.W_beta_40.weight) * 0.25
+            )
 
         # Fabricate a known input.
         torch.manual_seed(1)
@@ -401,14 +412,14 @@ class TestMultiRegisterComposition:
             logits, activations
         )
 
-        # Manual sequential reference: for each register, where activation is
-        # True, apply FiLM(R) to that position; else identity.
+        # Manual sequential reference. Compute once outside the loop so the
+        # reference matches the model's internal one-shot gamma/beta read.
+        gamma, beta = latent.compute_gamma_beta_40()
         expected = logits.clone()
-        # Register order T=0, A=1, f=2, E=3 — same iteration as the model.
         for r_idx in range(NUM_REGISTERS):
             mask = activations[..., r_idx].to(dtype=logits.dtype)
-            gamma_eff = 1.0 + mask * (film.gamma[r_idx].unsqueeze(0) - 1.0)
-            beta_eff = mask * film.beta[r_idx].unsqueeze(0)
+            gamma_eff = 1.0 + mask * (gamma[r_idx].unsqueeze(0) - 1.0)
+            beta_eff = mask * beta[r_idx].unsqueeze(0)
             expected = gamma_eff * expected + beta_eff
 
         assert torch.allclose(composed, expected, atol=1e-6)
@@ -416,14 +427,21 @@ class TestMultiRegisterComposition:
     def test_single_register_path_matches_film_apply(
         self, model_with_register_film
     ):
-        """Single-register activation at one position matches film.apply_register
-        on that single slot."""
+        """Single-register activation at one position matches latent FiLM apply.
+
+        ADR-08 Option E adaptation: verify against the shared-latent
+        compute_gamma_beta_40 output.
+        """
         torch.manual_seed(0)
         emb = model_with_register_film.v2_components["register_embedding"]
-        film = emb.register_film
+        latent = emb.register_latent
         with torch.no_grad():
-            film.gamma.add_(torch.randn_like(film.gamma) * 0.2)
-            film.beta.add_(torch.randn_like(film.beta) * 0.2)
+            latent.W_gamma_40.weight.add_(
+                torch.randn_like(latent.W_gamma_40.weight) * 0.2
+            )
+            latent.W_beta_40.weight.add_(
+                torch.randn_like(latent.W_beta_40.weight) * 0.2
+            )
 
         logits = torch.randn(1, NUM_COGNITIVE_STATES)
         activations = torch.zeros(
@@ -437,8 +455,12 @@ class TestMultiRegisterComposition:
 
         # Expected: only slot 2 is modulated by gamma_T / beta_T;
         # all other slots unchanged.
+        gamma, beta = latent.compute_gamma_beta_40()
         expected = logits.clone()
-        expected[0, 2] = film.gamma[REGISTER_INDEX["T"]][2] * logits[0, 2] + film.beta[REGISTER_INDEX["T"]][2]
+        expected[0, 2] = (
+            gamma[REGISTER_INDEX["T"]][2] * logits[0, 2]
+            + beta[REGISTER_INDEX["T"]][2]
+        )
         assert torch.allclose(composed, expected, atol=1e-6)
 
 
@@ -486,15 +508,25 @@ class TestBackwardCompat:
 class TestGradientFlow:
 
     def test_gradient_reaches_register_film(self, model_with_register_film):
-        """Loss through cognitive_state populates gamma/beta gradients."""
+        """Loss through cognitive_state populates RegisterLatent gradients.
+
+        ADR-08 Option E adaptation: under the shared-latent architecture,
+        gradient flows to the latent (``register_latent``) and the W output
+        heads, not to the synthesized gamma/beta view tensors. The test
+        verifies the Option E gradient path directly.
+        """
         emb = model_with_register_film.v2_components["register_embedding"]
-        film = emb.register_film
-        # Perturb so gradients are non-trivial.
+        latent = emb.register_latent
+        # Perturb so gradients are non-trivial through tanh.
         torch.manual_seed(2)
         with torch.no_grad():
-            film.gamma.add_(torch.randn_like(film.gamma) * 0.1)
-            film.beta.add_(torch.randn_like(film.beta) * 0.1)
-        film.zero_grad()
+            latent.W_gamma_40.weight.add_(
+                torch.randn_like(latent.W_gamma_40.weight) * 0.1
+            )
+            latent.W_beta_40.weight.add_(
+                torch.randn_like(latent.W_beta_40.weight) * 0.1
+            )
+        latent.zero_grad()
 
         input_ids = torch.zeros(1, 4, dtype=torch.long)
         attention_mask = torch.ones(1, 4, dtype=torch.long)
@@ -508,14 +540,21 @@ class TestGradientFlow:
             attention_mask=attention_mask,
             register_activations=acts,
         )
-        loss = out["cognitive_state"].sum()
+        # Use a non-trivial loss function (sum of squared entries) because
+        # ``cognitive_state.sum() == 1`` per position on the simplex — plain
+        # sum has zero gradient regardless of architecture.
+        loss = (out["cognitive_state"] ** 2).sum()
         loss.backward()
 
-        assert film.gamma.grad is not None
-        assert film.beta.grad is not None
-        # Register A (idx 1) should have nonzero gradient.
-        assert not torch.all(film.gamma.grad[REGISTER_INDEX["A"]] == 0)
-        assert not torch.all(film.beta.grad[REGISTER_INDEX["A"]] == 0)
+        # Gradient reaches the shared per-register latent embedding.
+        assert latent.register_latent.grad is not None
+        # Register A (idx 1) should receive nonzero gradient.
+        assert not torch.all(
+            latent.register_latent.grad[REGISTER_INDEX["A"]] == 0
+        )
+        # W_gamma_40 / W_beta_40 also receive gradient (forward through 40-FiLM).
+        assert latent.W_gamma_40.weight.grad is not None
+        assert latent.W_beta_40.weight.grad is not None
 
 
 # ---------------------------------------------------------------------------

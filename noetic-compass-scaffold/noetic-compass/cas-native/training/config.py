@@ -143,6 +143,31 @@ class V2Hyperparameters:
         "origin", "learned_anchor", "mean_inactive"
     ] = "origin"
 
+    # ADR-08 — Option E Shared Register Latent hyperparameters. See ADR-08
+    # for rationale (CARP Round 3 panel 4-of-5 consensus). Register identity
+    # is a single per-register latent vector ``z_R`` that drives both the
+    # 40-dim simplex and d_model FiLM surfaces via zero-init linear heads
+    # with tanh-saturated scaled readouts:
+    #     gamma = 1 + s * tanh(W @ z_R)
+    #     beta  =     s * tanh(W @ z_R)
+    # The scales s_40 and s_d start small and remain frozen for the first
+    # ``scale_warmup_steps`` training steps so the W heads find useful
+    # directions before the scalar magnitudes adapt.
+    #
+    # Defaults match ADR-08:
+    #   latent_dim_r       = 16      (compact latent width per register)
+    #   scale_40           = 0.05    (initial 40-dim surface magnitude)
+    #   scale_d            = 0.02    (initial d_model surface magnitude)
+    #   scale_warmup_steps = 1000    (freeze scales for first N steps)
+    #   lambda_out         = 0.1     (output-surface involution weight)
+    #   lambda_latent      = 0.01    (latent-level involution weight)
+    latent_dim_r: int = 16
+    scale_40: float = 0.05
+    scale_d: float = 0.02
+    scale_warmup_steps: int = 1000
+    lambda_out: float = 0.1
+    lambda_latent: float = 0.01
+
     def validate(self) -> None:
         """Raise ``ValueError`` on structurally invalid hyperparameters."""
         if self.gumbel_tau_initial <= 0 or self.gumbel_tau_final <= 0:
@@ -198,6 +223,26 @@ class V2Hyperparameters:
                 "null_space_reg_strategy must be one of "
                 "{'origin', 'learned_anchor', 'mean_inactive'}, got "
                 f"{self.null_space_reg_strategy!r}"
+            )
+        # ADR-08 Option E validation.
+        if self.latent_dim_r <= 0:
+            raise ValueError(
+                f"latent_dim_r must be > 0, got {self.latent_dim_r}"
+            )
+        if self.scale_40 < 0 or self.scale_d < 0:
+            raise ValueError(
+                f"scale_40 / scale_d must be >= 0, got "
+                f"{self.scale_40}, {self.scale_d}"
+            )
+        if self.scale_warmup_steps < 0:
+            raise ValueError(
+                f"scale_warmup_steps must be >= 0, got "
+                f"{self.scale_warmup_steps}"
+            )
+        if self.lambda_out < 0 or self.lambda_latent < 0:
+            raise ValueError(
+                f"lambda_out / lambda_latent must be >= 0, got "
+                f"{self.lambda_out}, {self.lambda_latent}"
             )
 
 

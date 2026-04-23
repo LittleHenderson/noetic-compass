@@ -27,7 +27,25 @@ component_flags:
 # ---------------------------------------------------------------------------
 v2_hyperparameters:
   # ADR-01 — InvolutionConstraintLoss weight on RegisterFiLM (γ, β).
+  # Preserved as an adjunct diagnostic weight; under ADR-08 Option E the
+  # primary involution enforcement is the latent-level LatentInvolutionLoss
+  # parameterized by ``lambda_out`` / ``lambda_latent`` (see below).
   lambda_involution: 0.1
+
+  # ADR-08 — Option E Shared Register Latent hyperparameters.
+  # Register identity is a single per-register latent vector z_R; the two
+  # FiLM surfaces (40-dim simplex + d_model hidden state) are zero-initialized
+  # linear projections of z_R with tanh-saturated scaled readouts:
+  #     gamma = 1 + s * tanh(W @ z_R)
+  #     beta  =     s * tanh(W @ z_R)
+  # Scales start small and remain frozen for the first ``scale_warmup_steps``
+  # training steps so the W heads adapt under fixed scalar magnitudes.
+  latent_dim_r: 16              # compact latent width per register
+  scale_40: 0.05                # initial 40-dim surface magnitude
+  scale_d: 0.02                 # initial d_model surface magnitude
+  scale_warmup_steps: 1000      # freeze s_40 / s_d for first N steps
+  lambda_out: 0.1               # output-surface involution weight
+  lambda_latent: 0.01           # latent-level involution weight
 
   # Loss aggregation weights — default 1.0 each, tunable via training runs.
   lambda_emergent_binding: 1.0       # Ω_* registry CE binding loss (ADR-02/03)

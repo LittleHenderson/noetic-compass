@@ -185,11 +185,24 @@ class TestForwardAndLoss:
             assert key in outputs
 
     def test_involution_loss_independent(self, trainer_all_on):
-        """ADR-01 involution loss can be computed in isolation."""
+        """ADR-08 involution loss (latent + surface) can be computed in isolation.
+
+        Under Option E, ``_compute_involution_loss`` returns the
+        ``lambda_out * L_inv_output + lambda_latent * L_inv_latent``
+        aggregate. At init the output-surface term is zero (gamma=1,
+        beta=0 from zero-init W heads) but the latent-level term is
+        non-zero (z_R ~ N(0,1) so z_T+z_E != 0). The loss is therefore
+        small-but-positive at init rather than exactly zero as it was
+        under the legacy ADR-01 surface-only loss.
+        """
         loss = trainer_all_on._compute_involution_loss()
         assert loss is not None
-        # At init gamma=1 beta=0 so the loss is zero.
-        assert float(loss.item()) == pytest.approx(0.0, abs=1e-6)
+        # Loss magnitude is bounded: latent dim=16, R=4, default
+        # lambda_latent=0.01 — O(0.01 * variance) at init. Loosely verify
+        # positivity and a sane upper bound.
+        val = float(loss.item())
+        assert val >= 0.0
+        assert val < 1.0
 
     def test_production_loss_masks_when_no_label(self, trainer_all_on):
         """Production loss returns None when no example has a target."""
