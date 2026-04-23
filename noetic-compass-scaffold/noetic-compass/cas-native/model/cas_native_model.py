@@ -292,6 +292,20 @@ class CASNativeModel(nn.Module):
 
     # ---------------------------------------------------------------- v2
     @property
+    def expression_proposer_enabled(self) -> bool:
+        """True iff an ``ExpressionProposerHead`` is attached (ADR-07).
+
+        Gated by ``V2ComponentFlags.use_expression_proposer`` — the trainer
+        attaches this when the flag is True. When False the forward pass
+        routes around it (byte-equivalent to the pre-ADR-07 model) and the
+        ``proposer_outputs`` key is absent from the forward return dict.
+        """
+        v2c = getattr(self, "v2_components", None)
+        if v2c is None:
+            return False
+        return "expression_proposer" in v2c
+
+    @property
     def register_film_enabled(self) -> bool:
         """True iff a ``CognitiveStateEmbeddingWithRegister`` is attached.
 
@@ -363,6 +377,53 @@ class CASNativeModel(nn.Module):
             out = gamma_eff * out + beta_eff
         return out
 
+    def _normalize_register_activations(
+        self,
+        x: torch.Tensor,
+        register_activations: Optional[torch.Tensor],
+    ) -> torch.Tensor:
+        """Normalize ``None`` register activations to a zero-activation tensor.
+
+        Decision G (Wave 7B integration review): when
+        ``register_film_enabled=True``, the forward pass must take a SINGLE
+        code path regardless of whether the caller passed
+        ``register_activations=None`` or an explicit zero tensor. Previously
+        the ``None`` case routed through ``self.cognitive_embedding``
+        (wrapper) and the zero-tensor case routed through ``emb.base``
+        (inner base) — two functionally-equivalent branches at init but
+        structurally divergent (independently-initialized projection
+        weights), a latent bug attractor under mixed-annotation training.
+
+        This helper collapses the divergence: when activations are None we
+        synthesize a zero-valued bool tensor of the canonical shape
+        ``(batch, 40, 4)`` on the same device as ``x``. All downstream code
+        then runs through the unified zero-activation path using
+        ``emb.base``, which is the authoritative base projection owned by
+        the v2 embedding module.
+
+        Args:
+            x: Hidden states (..., d_model). Shape is used only to derive
+                the batch dimension when activations must be synthesized.
+            register_activations: Optional per-position bool mask shaped
+                ``(batch, 40, 4)``. If None, a zero tensor of that shape is
+                returned on ``x.device``.
+
+        Returns:
+            Bool tensor shaped ``(batch, 40, 4)`` on the same device as
+            ``x``. All-False when synthesized from None.
+        """
+        if register_activations is not None:
+            return register_activations
+
+        batch_size = x.shape[0] if x.dim() >= 1 else 1
+        return torch.zeros(
+            batch_size,
+            NUM_COGNITIVE_STATES,
+            NUM_REGISTERS,
+            dtype=torch.bool,
+            device=x.device,
+        )
+
     def _compute_cognitive_state(
         self,
         x: torch.Tensor,
@@ -371,32 +432,61 @@ class CASNativeModel(nn.Module):
         """Project hidden states to the 40-state open simplex with optional
         per-position register FiLM modulation.
 
-        Backward compatibility invariant: when register FiLM is disabled,
-        when ``register_activations`` is None, or when every activation row
-        is all-zero, this method reduces to ``self.cognitive_embedding(x)``
-        exactly. The byte-equivalence guard in
-        ``test_register_neutral_matches_base_embedding_exactly`` depends on
-        this invariant holding at init with zero activations.
+        Backward compatibility invariant: when register FiLM is disabled
+        entirely (``register_film_enabled=False``), this method reduces to
+        ``self.cognitive_embedding(x)`` exactly — the v7.4 byte-equivalent
+        path with zero register machinery engaged. This preserves the
+        legacy-model guarantee tested by
+        ``test_v74_byte_equivalent_when_flags_off`` and the
+        register-disabled branch of
+        ``test_register_neutral_matches_base_embedding_exactly``.
+
+        When register FiLM IS enabled, a SINGLE unified code path runs
+        regardless of whether ``register_activations`` is None or an
+        explicit zero tensor (Decision G, Wave 7B integration review). None
+        is normalized to a zero-activation tensor at the function boundary
+        via ``_normalize_register_activations``, and both cases route
+        through the v2 embedding's own base projection (``emb.base``) with
+        FiLM applied. At init (gamma=1, beta=0) FiLM is the identity, so
+        the zero-activation path is byte-equivalent to the v2 embedding's
+        register-neutral forward — this is the ADR-01 byte-equivalence
+        invariant guarded by
+        ``test_register_neutral_matches_base_embedding_exactly``. The
+        unification eliminates the former latent-bug attractor where None
+        routed through ``self.cognitive_embedding`` (wrapper) and
+        zero-tensor routed through ``emb.base`` (inner base) with
+        independently-initialized weights.
 
         Args:
             x: Hidden states (..., d_model). The 40-state simplex is over
                 the final axis of the output.
             register_activations: Optional per-position bool mask shaped
                 ``(batch, 40, 4)`` over {T, A, f, E}. Applied only when the
-                register embedding module is attached (v2 flag on).
+                register embedding module is attached (v2 flag on). When
+                None and FiLM is enabled, a zero-activation tensor is
+                synthesized (identity FiLM path).
 
         Returns:
             Tensor on the 40-state open simplex with trailing dim 40.
         """
-        if not self.register_film_enabled or register_activations is None:
+        # Flag-OFF path: complete bypass of register machinery (v7.4 path).
+        if not self.register_film_enabled:
             return self.cognitive_embedding(x)
+
+        # Flag-ON path: unify None and zero-activation cases via
+        # normalization at the function boundary. From here on, a single
+        # code path handles both.
+        register_activations = self._normalize_register_activations(
+            x, register_activations
+        )
 
         emb = self.v2_components["register_embedding"]  # type: ignore[index]
         assert isinstance(emb, CognitiveStateEmbeddingWithRegister)
 
-        # Project to 40-dim logits via the base projection (same weights as
-        # `self.cognitive_embedding.projection` in shape; for the register
-        # path we use the v2 embedding's own base).
+        # Project to 40-dim logits via the v2 embedding's own base. This is
+        # the authoritative projection under the flag-ON path — NOT
+        # `self.cognitive_embedding.projection`, which is a different
+        # module with independently-initialized weights.
         logits = emb.base.projection(x)  # (..., 40)
 
         # Broadcast per-position activations across the sequence axis. The
@@ -504,7 +594,7 @@ class CASNativeModel(nn.Module):
         if count > 0:
             mean_rpm = mean_rpm / count
 
-        return {
+        output = {
             "logits": logits,
             "cognitive_state": corrected_state,
             "raw_cognitive_state": cognitive_state,
@@ -514,3 +604,17 @@ class CASNativeModel(nn.Module):
             "lacunarity_scores": lacunarity_scores,
             "lacunarity_meta": lacunarity_meta,
         }
+
+        # ADR-07 — learned ExpressionProposerHead. Only runs when the
+        # proposer is attached (i.e. ``V2ComponentFlags.use_expression_proposer``
+        # is True). The proposer consumes the pre-final-norm d_model
+        # hidden states ``x`` (same tensor feeding ``lm_head`` and
+        # ``topos_reasoner``), so its gradients flow through every
+        # upstream transformer layer. When disabled, the key is absent
+        # from the dict — preserving byte-equivalence with the pre-ADR-07
+        # forward-path contract.
+        if self.expression_proposer_enabled:
+            proposer = self.v2_components["expression_proposer"]  # type: ignore[index]
+            output["proposer_outputs"] = proposer(x, mode="training")
+
+        return output

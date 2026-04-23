@@ -132,7 +132,12 @@ class TestForwardAcceptsActivations:
         assert out["cognitive_state"].shape == (2, 8, NUM_COGNITIVE_STATES)
 
     def test_forward_with_none_activations(self, model_with_register_film):
-        """Explicit None activations is identical to omitted kwarg."""
+        """Explicit None activations is identical to omitted kwarg.
+
+        Post Wave 8A Decision G: both cases normalize to the same
+        zero-activation tensor at the forward-pass boundary, so the
+        outputs are bitwise-identical (atol=0.0).
+        """
         model_with_register_film.eval()  # disable dropout for byte-compare
         input_ids = torch.zeros(2, 8, dtype=torch.long)
         attention_mask = torch.ones(2, 8, dtype=torch.long)
@@ -143,7 +148,9 @@ class TestForwardAcceptsActivations:
             input_ids, attention_mask=attention_mask, register_activations=None
         )
         assert torch.allclose(
-            out_no_kwarg["cognitive_state"], out_none["cognitive_state"]
+            out_no_kwarg["cognitive_state"],
+            out_none["cognitive_state"],
+            atol=0.0,
         )
 
     def test_forward_with_all_zero_activations_matches_base(
@@ -151,15 +158,13 @@ class TestForwardAcceptsActivations:
     ):
         """All-zero activations yield no FiLM modulation.
 
-        Verified by checking the simplex-projection via the v2 embedding's
-        own base is reached in both the "None" and "zero-activations" paths
-        *within* the same code branch. (Cross-branch comparison — None branch
-        uses `self.cognitive_embedding` while zero-acts branch uses
-        `emb.base` — fails because those are independently-initialized
-        projections. That's a separate concern.)
-
-        The equivalence tested here is: two successive forwards with zero
-        activations produce bitwise-identical simplex output.
+        Post Wave 8A Decision G unification: the ``None`` case is
+        normalized at the forward-pass boundary into a zero-activation
+        tensor via ``_normalize_register_activations``, so both paths now
+        route through the SAME simplex projection (``emb.base``). Two
+        successive zero-activation forwards therefore produce
+        bitwise-identical simplex output — this test guards the
+        determinism/stability of the unified path.
         """
         model_with_register_film.eval()
         torch.manual_seed(0)
@@ -181,6 +186,113 @@ class TestForwardAcceptsActivations:
         assert torch.allclose(
             out_a["cognitive_state"], out_b["cognitive_state"], atol=1e-7
         )
+
+    def test_unified_none_path_matches_zero_path(
+        self, model_with_register_film
+    ):
+        """Wave 8A Decision G: None and zero-activation paths are unified.
+
+        Before the Decision G fix, ``register_activations=None`` routed
+        through ``self.cognitive_embedding`` (wrapper) while an explicit
+        zero tensor routed through ``emb.base`` (inner base). The two
+        projections are independently initialized, so their outputs
+        diverged even at init. After unification, both cases normalize to
+        the zero-activation path at the function boundary — outputs must
+        be bitwise-identical.
+        """
+        model_with_register_film.eval()
+        torch.manual_seed(0)
+        input_ids = torch.randint(0, 64, (2, 8), dtype=torch.long)
+        attention_mask = torch.ones(2, 8, dtype=torch.long)
+        zeros = torch.zeros(
+            2, NUM_COGNITIVE_STATES, NUM_REGISTERS, dtype=torch.bool
+        )
+        out_none = model_with_register_film(
+            input_ids,
+            attention_mask=attention_mask,
+            register_activations=None,
+        )
+        out_zeros = model_with_register_film(
+            input_ids,
+            attention_mask=attention_mask,
+            register_activations=zeros,
+        )
+        assert torch.allclose(
+            out_none["cognitive_state"],
+            out_zeros["cognitive_state"],
+            atol=0.0,
+        ), "None and zero-activation paths must be bitwise-identical after unification"
+
+    def test_unified_path_byte_equivalent_at_init(
+        self, model_with_register_film
+    ):
+        """Wave 8A Decision G: at init (gamma=1, beta=0), the unified
+        zero-activation path is byte-equivalent to the v2 embedding's
+        register-neutral forward (``emb(x)`` with ``register_idx=None``).
+
+        This is the ADR-01 byte-equivalence invariant under unification.
+        The assertion exercises the same ``emb.base.projection`` path that
+        the v2 embedding's register-neutral forward uses, at identity FiLM,
+        producing structurally identical outputs.
+        """
+        model_with_register_film.eval()
+        torch.manual_seed(0)
+        input_ids = torch.randint(0, 64, (2, 8), dtype=torch.long)
+        attention_mask = torch.ones(2, 8, dtype=torch.long)
+
+        # Build the reference: hidden state from the model's token + pos
+        # embedding, projected through the v2 embedding's register-neutral
+        # forward. This is what the unified zero-activation path must match
+        # at init.
+        x = model_with_register_film.token_embedding(input_ids)
+        x = model_with_register_film.pos_encoding(x)
+        x = x * attention_mask.unsqueeze(-1).float()
+        emb = model_with_register_film.v2_components["register_embedding"]
+        reference = emb(x, register_idx=None)  # register-neutral
+
+        # Unified zero-activation path — None normalizes to zero.
+        actual = model_with_register_film._compute_cognitive_state(
+            x, register_activations=None
+        )
+        assert torch.allclose(actual, reference, atol=1e-6), (
+            "Unified None-path at init must match emb.register-neutral forward"
+        )
+
+        # Explicit-zero activation path — must produce the same output.
+        zeros = torch.zeros(
+            2, NUM_COGNITIVE_STATES, NUM_REGISTERS, dtype=torch.bool
+        )
+        actual_zeros = model_with_register_film._compute_cognitive_state(
+            x, register_activations=zeros
+        )
+        assert torch.allclose(actual_zeros, reference, atol=1e-6)
+
+    def test_normalize_register_activations_none_synthesizes_zeros(
+        self, model_with_register_film
+    ):
+        """Wave 8A Decision G: _normalize_register_activations(None) returns
+        a zero bool tensor of the canonical shape on the correct device."""
+        x = torch.randn(3, 8, 64)
+        synthesized = (
+            model_with_register_film._normalize_register_activations(x, None)
+        )
+        assert synthesized.shape == (3, NUM_COGNITIVE_STATES, NUM_REGISTERS)
+        assert synthesized.dtype == torch.bool
+        assert synthesized.device == x.device
+        assert not synthesized.any(), "synthesized tensor must be all-False"
+
+    def test_normalize_register_activations_passthrough(
+        self, model_with_register_film
+    ):
+        """Wave 8A Decision G: _normalize_register_activations passes
+        through a non-None tensor unchanged (no reallocation)."""
+        x = torch.randn(2, 8, 64)
+        acts = torch.zeros(
+            2, NUM_COGNITIVE_STATES, NUM_REGISTERS, dtype=torch.bool
+        )
+        acts[0, 3, 1] = True
+        out = model_with_register_film._normalize_register_activations(x, acts)
+        assert out is acts, "non-None input must be passed through by identity"
 
     def test_forward_with_activations_at_init_matches_base(
         self, model_with_register_film

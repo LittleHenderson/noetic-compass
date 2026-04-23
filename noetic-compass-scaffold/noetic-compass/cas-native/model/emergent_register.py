@@ -287,6 +287,44 @@ class OmegaRegistry(nn.Module):
         assert all(n is not None for n in names), "active_size out of sync"
         return [str(n) for n in names]
 
+    # ------------------------------------------------------------------
+    # Null-space (unused slot) accessors — ADR-03 follow-up support.
+    # ------------------------------------------------------------------
+
+    def unused_slot_indices(self) -> torch.LongTensor:
+        """Return indices of registry slots that are not in ``self.active_size``.
+
+        Registry rows at these indices receive minimal gradient during training
+        (no label ever lands on them) yet still participate in similarity
+        comparisons at inference. Exposing them lets the null-space regularizer
+        pull them toward a "null" point so they don't drift into patterns that
+        accidentally match real Omega_* (ADR-03 follow-up).
+
+        Returns an empty tensor on the registry device when the registry is
+        fully saturated (``active_size == capacity``).
+        """
+        if self.active_size >= self.capacity:
+            return torch.empty(0, dtype=torch.long, device=self.registry.device)
+        return torch.arange(
+            self.active_size, self.capacity, device=self.registry.device
+        )
+
+    def unused_slot_embeddings(self) -> torch.Tensor:
+        """Return the embedding vectors at unused slot indices.
+
+        Shape: ``(unused_count, d_model)``. When ``active_size == capacity``
+        returns an empty ``(0, d_model)`` tensor.
+
+        Note: this is an **indexing** view via ``torch.arange`` gather — the
+        returned tensor is differentiable w.r.t. the underlying ``self.registry``
+        parameter (unlike a plain slice, this path keeps Autograd happy for
+        subsequent loss computations in ``NullSpaceRegularizationLoss``).
+        """
+        idx = self.unused_slot_indices()
+        if idx.numel() == 0:
+            return self.registry.new_empty((0, self.d_model))
+        return self.registry[idx]
+
 
 # ---------------------------------------------------------------------------
 # SimilarityActivation

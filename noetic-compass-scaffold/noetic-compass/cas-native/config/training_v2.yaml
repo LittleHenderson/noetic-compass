@@ -15,6 +15,11 @@ component_flags:
   use_emergent_register: true        # ADR-02/03: Ω_* metric-learning binding
   use_production_semantics: true     # ADR-04: hybrid production semantics head
   use_rust_validation: true          # ADR-06: RustValidationBridge integration
+  # ADR-07: learned ExpressionProposerHead closes the Rule 4 gradient-flow
+  # gap. Default False at introduction (Wave 8A) — opt-in for first-training
+  # stability. Flip to true to instantiate the proposer + route its
+  # gradient-bearing score-based loss into the trainer aggregate.
+  use_expression_proposer: false
 
 # ---------------------------------------------------------------------------
 # v2 hyperparameters — defaults match the "Cross-Cutting Locked Decisions"
@@ -56,6 +61,56 @@ v2_hyperparameters:
   # initial 60/40 split (revisit after first evaluation pass).
   data_mix_cross_register: 0.60
   data_mix_production: 0.40
+
+  # ADR-03 follow-up — null-space regularization for unused Omega_* registry
+  # slots. Pulls unused embeddings (v1 has 2 admitted + 18 unused in the
+  # capacity-20 table) toward a "null" point so they don't drift toward
+  # patterns that accidentally match real Omega_* at inference. Low default
+  # weight (0.01) — regularization only, not a primary signal.
+  #   strategy: "origin" | "learned_anchor" | "mean_inactive"
+  #     "origin"         — pull toward the zero vector (v1 default; zero
+  #                         extra parameters; simplest; clear "pull toward
+  #                         null" semantics).
+  #     "learned_anchor" — pull toward a learned anchor parameter
+  #                         (d_model extra parameters).
+  #     "mean_inactive"  — pull toward the mean of unused embeddings
+  #                         (collective centering; zero extra parameters;
+  #                         weaker separation from admitted slots).
+  null_space_reg_strategy: "origin"
+  lambda_null_space_reg: 0.01
+
+  # ADR-07 — learned ExpressionProposerHead. Outer loss weight
+  # (``lambda_proposer_rule_four``) applies in the trainer's aggregation;
+  # the five inner component weights route to ``ProposerRuleFourLoss``
+  # and weight the Noetic CE, Domain CE, per-operand Register CE,
+  # operand-count smooth-L1, and named-emergent CE heads respectively.
+  # Architecture knobs (``proposer_bottleneck_dim``, ``proposer_max_operands``)
+  # size the shared backbone and per-operand register head; defaults yield
+  # ~5K params at d_model=128, ~17K at d_model=512 (see
+  # model/expression_proposer.py docstring).
+  lambda_proposer_rule_four: 0.5
+  lambda_proposer_noetic: 1.0
+  lambda_proposer_domain: 1.0
+  lambda_proposer_register: 1.0
+  lambda_proposer_count: 0.5
+  lambda_proposer_named_emergent: 1.0
+  proposer_bottleneck_dim: 32
+  proposer_max_operands: 4
+
+# ---------------------------------------------------------------------------
+# Checkpoint selection — governs which saved checkpoint is tagged "best".
+# Wave 8A v2-aware evaluation extension.
+#   metric: "composite_v2" | "nccs"
+#     "composite_v2" — 25/25/25/25 weighted composite of the four v2 metrics
+#                       (register accuracy, Rule 4 compliance, Omega_*
+#                       activation, production accuracy). Selected by default
+#                       while v2 component flags are active.
+#     "nccs"         — classic NCCS composite (v7.4 baseline). Selected
+#                       automatically when every v2 flag under
+#                       ``component_flags`` above is False (v7.4 parity mode).
+# ---------------------------------------------------------------------------
+checkpoint_selection:
+  metric: "composite_v2"
 
 # ---------------------------------------------------------------------------
 # v7.4 hyperparameters — preserved verbatim from the legacy CASTrainer config.

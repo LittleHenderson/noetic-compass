@@ -45,7 +45,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 
 
 @dataclass
@@ -56,6 +56,12 @@ class V2ComponentFlags:
     use_emergent_register: bool = True        # ADR-02/03 — Ω_* binding pipeline
     use_production_semantics: bool = True     # ADR-04 — ProductionSemanticsHead
     use_rust_validation: bool = True          # ADR-06 — RustValidationBridge
+    # ADR-07 — learned ExpressionProposerHead closes the Rule 4 gradient gap.
+    # Default False at introduction (Wave 8A): opt-in for first-training-run
+    # stability. Flipping this True instantiates the proposer and routes a
+    # gradient-bearing score-based loss into the aggregate — byte-equivalent
+    # to the pre-ADR-07 trainer when False.
+    use_expression_proposer: bool = False
 
     def all_off(self) -> bool:
         """True when every v2 component is disabled (v7.4-equivalent path)."""
@@ -64,6 +70,7 @@ class V2ComponentFlags:
             or self.use_emergent_register
             or self.use_production_semantics
             or self.use_rust_validation
+            or self.use_expression_proposer
         )
 
 
@@ -108,6 +115,34 @@ class V2Hyperparameters:
     data_mix_cross_register: float = 0.60
     data_mix_production: float = 0.40
 
+    # ADR-07 — ExpressionProposerHead hyperparameters. The outer weight
+    # (``lambda_proposer_rule_four``) is applied in the trainer's loss
+    # aggregation; the inner component weights (``lambda_proposer_noetic``
+    # etc.) are routed to ``ProposerRuleFourLoss`` and weight the five
+    # head components (Noetic CE, Domain CE, per-operand Register CE,
+    # operand-count smooth-L1, named-emergent CE).
+    lambda_proposer_rule_four: float = 0.5
+    lambda_proposer_noetic: float = 1.0
+    lambda_proposer_domain: float = 1.0
+    lambda_proposer_register: float = 1.0
+    lambda_proposer_count: float = 0.5
+    lambda_proposer_named_emergent: float = 1.0
+    # Proposer architecture knobs (see model/expression_proposer.py).
+    proposer_bottleneck_dim: int = 32
+    proposer_max_operands: int = 4
+
+    # ADR-03 follow-up — null-space regularization for unused Omega_* slots.
+    # Low default weight: this is regularization only, not primary signal.
+    # v1 strategy is "origin" (pull toward zero vector) per ADR-03 follow-up
+    # analysis — simplest, zero extra parameters, clear "pull toward null"
+    # semantics. Other strategies available for future tuning:
+    #   "learned_anchor"  — adds d_model parameters (one learned anchor)
+    #   "mean_inactive"   — collective centering on mean of unused slots
+    lambda_null_space_reg: float = 0.01
+    null_space_reg_strategy: Literal[
+        "origin", "learned_anchor", "mean_inactive"
+    ] = "origin"
+
     def validate(self) -> None:
         """Raise ``ValueError`` on structurally invalid hyperparameters."""
         if self.gumbel_tau_initial <= 0 or self.gumbel_tau_final <= 0:
@@ -133,11 +168,36 @@ class V2Hyperparameters:
             raise ValueError(
                 f"rust_cache_capacity must be > 0, got {self.rust_cache_capacity}"
             )
+        if self.proposer_bottleneck_dim <= 0:
+            raise ValueError(
+                f"proposer_bottleneck_dim must be > 0, got "
+                f"{self.proposer_bottleneck_dim}"
+            )
+        if self.proposer_max_operands <= 0:
+            raise ValueError(
+                f"proposer_max_operands must be > 0, got "
+                f"{self.proposer_max_operands}"
+            )
         mix_sum = self.data_mix_cross_register + self.data_mix_production
         if abs(mix_sum - 1.0) > 1e-3:
             raise ValueError(
                 "data_mix_cross_register + data_mix_production should sum to "
                 f"1.0, got {mix_sum}"
+            )
+        if self.lambda_null_space_reg < 0:
+            raise ValueError(
+                f"lambda_null_space_reg must be >= 0, got "
+                f"{self.lambda_null_space_reg}"
+            )
+        if self.null_space_reg_strategy not in (
+            "origin",
+            "learned_anchor",
+            "mean_inactive",
+        ):
+            raise ValueError(
+                "null_space_reg_strategy must be one of "
+                "{'origin', 'learned_anchor', 'mean_inactive'}, got "
+                f"{self.null_space_reg_strategy!r}"
             )
 
 
@@ -177,6 +237,20 @@ class TrainingConfig:
     # Optional path to Ω_* registry YAML (ADR-03).
     omega_registry_config: Optional[str] = None
 
+    # Checkpoint selection metric (Wave 8A v2-aware evaluation extension).
+    #   "composite_v2" — 25/25/25/25 weighted composite of the four v2 metrics
+    #       (register accuracy, Rule 4 compliance, Omega_* activation,
+    #        production accuracy). Used when any v2 component flag is ON.
+    #   "nccs"         — classic NCCS composite (v7.4 baseline). Used when
+    #       every v2 component flag is OFF, or when callers explicitly want
+    #       v7.4-style selection.
+    #
+    # Default is "composite_v2" because v2 components are on by default; a
+    # v7.4-parity caller (all flags OFF) should explicitly set this to "nccs"
+    # OR rely on the ``effective_checkpoint_selection_metric`` helper which
+    # transparently falls back to "nccs" when all v2 flags are OFF.
+    checkpoint_selection_metric: Literal["nccs", "composite_v2"] = "composite_v2"
+
     # ------------------------------------------------------------------ yaml
 
     @classmethod
@@ -198,11 +272,27 @@ class TrainingConfig:
         v74 = V74Hyperparameters(**(raw.get("v7_4_hyperparameters") or {}))
         v2.validate()
         omega_cfg = raw.get("omega_registry_config", None)
+
+        # Checkpoint selection metric — default "composite_v2"; accept either
+        # top-level key or nested ``checkpoint_selection.metric`` (YAML shape).
+        selection_raw: Any = raw.get("checkpoint_selection_metric")
+        if selection_raw is None:
+            nested = raw.get("checkpoint_selection") or {}
+            if isinstance(nested, dict):
+                selection_raw = nested.get("metric")
+        selection: str = str(selection_raw) if selection_raw is not None else "composite_v2"
+        if selection not in ("nccs", "composite_v2"):
+            raise ValueError(
+                "checkpoint_selection_metric must be 'nccs' or 'composite_v2', "
+                f"got {selection!r}"
+            )
+
         return cls(
             component_flags=flags,
             v2_hyperparameters=v2,
             v7_4_hyperparameters=v74,
             omega_registry_config=omega_cfg,
+            checkpoint_selection_metric=selection,  # type: ignore[arg-type]
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -212,7 +302,20 @@ class TrainingConfig:
             "v2_hyperparameters": asdict(self.v2_hyperparameters),
             "v7_4_hyperparameters": asdict(self.v7_4_hyperparameters),
             "omega_registry_config": self.omega_registry_config,
+            "checkpoint_selection_metric": self.checkpoint_selection_metric,
         }
+
+    def effective_checkpoint_selection_metric(self) -> str:
+        """Return the metric name to actually use for best-checkpoint logic.
+
+        Transparent backward-compatibility wrapper: when every v2 component
+        flag is OFF, no v2 metric is computable (all four metrics would
+        return ``None``), so selection must fall back to ``"nccs"`` even if
+        the user set ``checkpoint_selection_metric="composite_v2"``.
+        """
+        if self.component_flags.all_off():
+            return "nccs"
+        return self.checkpoint_selection_metric
 
     # ----------------------------------------------------------- legacy view
 

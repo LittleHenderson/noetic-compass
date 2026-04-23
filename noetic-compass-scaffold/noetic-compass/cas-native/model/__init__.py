@@ -4,7 +4,16 @@ from .embedding import CognitiveStateEmbedding, CognitiveStateEmbeddingWithRegis
 from .domain_descent import DomainDescentAttention
 from .rpm_gate import PrerequisiteGateLayer
 from .fractal_attention import FractalAttentionHead
-from .loss import CognitiveMetricLoss, InvolutionConstraintLoss
+from .loss import CognitiveMetricLoss, InvolutionConstraintLoss, ProposerRuleFourLoss
+from .expression_proposer import (
+    ExpressionProposerHead,
+    ExpressionProposal,
+    NUM_NOETICS,
+    NUM_DOMAINS,
+    DEFAULT_MAX_OPERANDS,
+    DEFAULT_BOTTLENECK_DIM,
+    OPERAND_COUNT_BUCKETS,
+)
 from .register_film import (
     RegisterFiLM,
     NUM_REGISTERS,
@@ -23,6 +32,14 @@ __all__ = [
     "FractalAttentionHead",
     "CognitiveMetricLoss",
     "InvolutionConstraintLoss",
+    "ProposerRuleFourLoss",
+    "ExpressionProposerHead",
+    "ExpressionProposal",
+    "NUM_NOETICS",
+    "NUM_DOMAINS",
+    "DEFAULT_MAX_OPERANDS",
+    "DEFAULT_BOTTLENECK_DIM",
+    "OPERAND_COUNT_BUCKETS",
     "RegisterFiLM",
     "NUM_REGISTERS",
     "REGISTER_INDEX",

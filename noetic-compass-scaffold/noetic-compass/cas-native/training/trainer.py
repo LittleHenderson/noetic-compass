@@ -42,6 +42,12 @@ from ..model.cas_native_model import CASNativeModel, CASNativeConfig
 from ..model.loss import (
     CognitiveMetricLoss,
     InvolutionConstraintLoss,
+    NullSpaceRegularizationLoss,
+    ProposerRuleFourLoss,
+)
+from ..model.expression_proposer import (
+    ExpressionProposerHead,
+    OPERAND_COUNT_BUCKETS,
 )
 from ..model.embedding import (
     CognitiveStateEmbedding,
@@ -106,6 +112,7 @@ class CASTrainer:
                 use_emergent_register=False,
                 use_production_semantics=False,
                 use_rust_validation=False,
+                use_expression_proposer=False,  # ADR-07 off in legacy path
             )
             self.v2_hp = TrainingConfig().v2_hyperparameters  # defaults only
 
@@ -138,6 +145,12 @@ class CASTrainer:
         self._emergent_pipeline: Optional[EmergentRegisterPipeline] = None
         self._production_head: Optional[ProductionSemanticsHead] = None
         self._rust_bridge: Any = None
+        # ADR-03 follow-up null-space regularization module — lazily created
+        # on first call in ``_compute_null_space_reg_loss``.
+        self._null_space_loss_module: Optional[NullSpaceRegularizationLoss] = None
+        # ADR-07 — learned ExpressionProposerHead + score-based loss.
+        self._expression_proposer: Optional[ExpressionProposerHead] = None
+        self._proposer_loss_fn: Optional[ProposerRuleFourLoss] = None
 
         # v2 sub-modules live on a container attached to the model so
         # state_dict() round-trip captures them without needing trainer-side
@@ -187,6 +200,11 @@ class CASTrainer:
         # Training state.
         self.global_step = 0
         self.best_val_loss = float("inf")
+        # Wave 8A v2-aware checkpoint selection — composite_v2 is in [0, 1]
+        # higher-is-better, so ``best`` starts at -inf and is bumped on each
+        # improvement. ``best_val_loss`` remains tracked for the nccs /
+        # v7.4-parity path.
+        self.best_composite_v2: float = float("-inf")
         self.device = next(model.parameters()).device
 
         # Gumbel-softmax current temperature — annealed per step.
@@ -267,6 +285,23 @@ class CASTrainer:
                 cache_capacity=hp.rust_cache_capacity,
             )
 
+        # ADR-07 — learned ExpressionProposerHead + ProposerRuleFourLoss.
+        if flags.use_expression_proposer:
+            proposer = ExpressionProposerHead(
+                d_model=self.model.config.d_model,
+                bottleneck_dim=hp.proposer_bottleneck_dim,
+                max_operands=hp.proposer_max_operands,
+            )
+            self.model.v2_components["expression_proposer"] = proposer
+            self._expression_proposer = proposer
+            self._proposer_loss_fn = ProposerRuleFourLoss(
+                lambda_noetic=hp.lambda_proposer_noetic,
+                lambda_domain=hp.lambda_proposer_domain,
+                lambda_register=hp.lambda_proposer_register,
+                lambda_count=hp.lambda_proposer_count,
+                lambda_named_emergent=hp.lambda_proposer_named_emergent,
+            )
+
     # ------------------------------------------------------------------ v2 props
 
     @property
@@ -285,6 +320,16 @@ class CASTrainer:
     def rust_bridge(self):
         return self._rust_bridge
 
+    @property
+    def expression_proposer(self):
+        """Access the ADR-07 ExpressionProposerHead (None when disabled)."""
+        return self._expression_proposer
+
+    @property
+    def proposer_loss_fn(self):
+        """Access the ADR-07 ProposerRuleFourLoss (None when disabled)."""
+        return self._proposer_loss_fn
+
     # ------------------------------------------------------------------ checkpoints
 
     def _save_checkpoint(self, tag: str = "step") -> Path:
@@ -298,6 +343,7 @@ class CASTrainer:
             "optimizer_state_dict": self.optimizer.state_dict(),
             "scheduler_state_dict": self.scheduler.state_dict(),
             "best_val_loss": self.best_val_loss,
+            "best_composite_v2": self.best_composite_v2,
             "current_tau": self.current_tau,
         }
         if self.training_config is not None:
@@ -334,6 +380,9 @@ class CASTrainer:
                 pass
         self.global_step = ckpt.get("global_step", 0)
         self.best_val_loss = ckpt.get("best_val_loss", float("inf"))
+        self.best_composite_v2 = float(
+            ckpt.get("best_composite_v2", float("-inf"))
+        )
         self.current_tau = float(
             ckpt.get("current_tau", self.v2_hp.gumbel_tau_initial)
         )
@@ -889,6 +938,289 @@ class CASTrainer:
         )
         return tensor.mean()
 
+    # ----------------------------------------------- null-space regularization
+    # ADR-03 follow-up: unused Omega_* registry slots drift toward noise
+    # patterns that can accidentally match real Omega_* at inference. Pull
+    # them toward a "null" point to preserve separation.
+
+    def _compute_null_space_reg_loss(self) -> Optional[torch.Tensor]:
+        """Null-space regularization over unused Omega_* registry slots.
+
+        Returns:
+          - ``None`` when ``use_emergent_register`` is False (no registry to
+            regularize).
+          - ``None`` when the registry is fully saturated (zero unused slots).
+          - Otherwise: a scalar tensor equal to
+            ``NullSpaceRegularizationLoss(strategy, lambda_null)`` applied to
+            ``registry.unused_slot_embeddings()``.
+
+        The underlying ``NullSpaceRegularizationLoss`` module is instantiated
+        lazily on first call so the strategy / lambda combination from
+        ``V2Hyperparameters`` is respected even when the hyperparameter
+        block is mutated after trainer construction (uncommon but legal).
+        """
+        if not self.v2_flags.use_emergent_register:
+            return None
+        if self._emergent_pipeline is None:
+            return None
+
+        registry = self._emergent_pipeline.registry
+        unused = registry.unused_slot_embeddings()
+        if unused.numel() == 0:
+            return None
+
+        if getattr(self, "_null_space_loss_module", None) is None:
+            strategy = getattr(
+                self.v2_hp, "null_space_reg_strategy", "origin"
+            )
+            lambda_null = float(
+                getattr(self.v2_hp, "lambda_null_space_reg", 0.01)
+            )
+            # ``lambda_null`` in the loss module is the scalar applied inside
+            # the loss. We pass 1.0 here and multiply by the configured
+            # lambda in the aggregation step — this keeps the loss module's
+            # output numerically comparable when we inspect it via
+            # ``extras["null_space_reg_loss"]``.
+            self._null_space_loss_module = NullSpaceRegularizationLoss(
+                strategy=strategy,
+                lambda_null=1.0,
+                d_model=(
+                    registry.d_model if strategy == "learned_anchor" else None
+                ),
+            )
+            self._null_space_loss_module.to(registry.registry.device)
+            # Register on the model's v2_components so its learned anchor (if
+            # any) participates in state_dict serialization.
+            if strategy == "learned_anchor":
+                self.model.v2_components["null_space_reg"] = (
+                    self._null_space_loss_module
+                )
+
+        return self._null_space_loss_module(unused)
+
+    # ---------------------------------------- ADR-07 proposer score-based loss
+
+    def _compute_proposer_rule_four_loss(
+        self,
+        hidden_states: torch.Tensor,
+        register_labels_batch: list[list[dict[str, Any]]],
+        omega_labels_batch: list[list[dict[str, Any]]],
+    ) -> Optional[torch.Tensor]:
+        """Score-based proposer loss for the learned ExpressionProposerHead
+        (ADR-07).
+
+        This method closes the gradient-flow gap identified by Codex 5.4 in
+        the Wave 7B panel review. Unlike ``_compute_rule_four_loss`` — which
+        builds expression operands from **labels** and wraps Rust-returned
+        floats in a non-gradient-bearing tensor — this method:
+
+        1. Runs the learned ``ExpressionProposerHead`` on the model's hidden
+           states (the proposer is a submodule of the model, so its
+           parameters are in the optimizer and its forward is on the graph).
+        2. Derives per-example label targets from the register / Ω_* label
+           streams already carried by the training batch (see
+           ``training/data_format.md``).
+        3. Computes a weighted sum of five component losses (Noetic CE,
+           Domain CE, per-operand Register CE, operand-count smooth-L1,
+           named-emergent CE) against those targets.
+
+        Because the proposer logits are produced by a linear projection of
+        the hidden states, the loss is gradient-bearing to every model
+        component upstream of the proposer's input. This is the critical
+        property the legacy ``_compute_rule_four_loss`` lacked.
+
+        Label derivation rules:
+
+        * **Noetic / Domain target**: the scaffold data pipeline carries
+          per-position register labels but does not yet emit explicit
+          noetic/domain expression labels. The v1 proposer loss derives
+          a surrogate target from the omega_labels_batch when present
+          (``target_noetic`` / ``target_domain`` keys on the omega entry),
+          OR uses a neutral target (``noetic=3, domain=0`` — the Rule 4
+          ``^3^P|…`` template encoded in ``_compute_rule_four_loss``) when
+          only register labels are available.
+        * **Per-operand Register target**: from the ordered register list
+          at each labelled example's first Rule-4-eligible position
+          (position with >= 2 distinct registers active). Operand slots
+          beyond the label count are masked out of the CE.
+        * **Operand-count target**: the count of distinct registers at the
+          chosen position.
+        * **Named-emergent target**: 1 when the example carries any omega
+          label at that position, else 0.
+
+        Masking: examples with zero register labels contribute zero to
+        every proposer component. ``None`` is returned only when NO
+        example in the batch has any proposer-trainable label (same
+        zero-contribution pattern as the other v2 losses).
+
+        Args:
+            hidden_states: (B, seq_len, d_model) or (B, d_model) — the
+                same d_model-width hidden-state tensor the other v2
+                losses consume.
+            register_labels_batch: per-example list of register
+                annotations (see ``training/data_format.md``).
+            omega_labels_batch: per-example list of Ω_* annotations.
+
+        Returns:
+            Scalar loss tensor (gradient-bearing to model params via the
+            proposer head), or ``None`` when no example is trainable.
+        """
+        if self._expression_proposer is None or self._proposer_loss_fn is None:
+            return None
+
+        batch_size = hidden_states.shape[0]
+        if batch_size == 0:
+            return None
+
+        # Derive per-example targets from the label streams.
+        noetic_targets: list[int] = []
+        domain_targets: list[int] = []
+        operand_count_targets: list[int] = []
+        named_emergent_targets: list[int] = []
+        register_targets_rows: list[list[int]] = []
+        matched_indices: list[int] = []
+
+        max_operands = self._expression_proposer.max_operands
+        count_to_bucket = {c: i for i, c in enumerate(OPERAND_COUNT_BUCKETS)}
+        max_bucket = len(OPERAND_COUNT_BUCKETS) - 1
+
+        for i in range(batch_size):
+            reg_list = (
+                register_labels_batch[i]
+                if i < len(register_labels_batch)
+                else []
+            )
+            if not reg_list:
+                continue
+
+            # Group registers by position.
+            by_pos: dict[int, list[int]] = {}
+            for entry in reg_list:
+                pos = entry.get("position")
+                reg = entry.get("register")
+                if pos is None or reg is None:
+                    continue
+                r_idx = REGISTER_INDEX.get(reg)
+                if r_idx is None:
+                    continue
+                try:
+                    pos_int = int(pos)
+                except (TypeError, ValueError):
+                    continue
+                by_pos.setdefault(pos_int, []).append(r_idx)
+
+            if not by_pos:
+                continue
+
+            # Pick the position with the largest register set — this is
+            # the Rule-4-eligible position for the example.
+            chosen_pos = max(by_pos.keys(), key=lambda p: (len(by_pos[p]), -p))
+            regs_at_pos = by_pos[chosen_pos]
+
+            # Noetic / Domain targets — prefer explicit labels on the omega
+            # entry when present, else fall back to the Rule 4 template
+            # (^3^P | …) encoded in ``_compute_rule_four_loss``.
+            target_noetic = 3
+            target_domain = 0
+            has_named = 0
+            omega_list = (
+                omega_labels_batch[i]
+                if i < len(omega_labels_batch)
+                else []
+            )
+            for omega_entry in omega_list or []:
+                try:
+                    omega_pos = int(omega_entry.get("position", -1))
+                except (TypeError, ValueError):
+                    continue
+                if omega_pos != chosen_pos:
+                    continue
+                has_named = 1
+                if "target_noetic" in omega_entry:
+                    try:
+                        target_noetic = int(omega_entry["target_noetic"])
+                    except (TypeError, ValueError):
+                        pass
+                if "target_domain" in omega_entry:
+                    try:
+                        target_domain = int(omega_entry["target_domain"])
+                    except (TypeError, ValueError):
+                        pass
+                break
+
+            target_noetic = max(0, min(target_noetic, 9))
+            target_domain = max(0, min(target_domain, 3))
+
+            # Deduplicate + truncate register sequence to max_operands.
+            seen: set[int] = set()
+            ordered_regs: list[int] = []
+            for r in regs_at_pos:
+                if r in seen:
+                    continue
+                seen.add(r)
+                ordered_regs.append(r)
+                if len(ordered_regs) >= max_operands:
+                    break
+
+            if not ordered_regs:
+                continue
+
+            count = len(ordered_regs)
+            count_bucket = count_to_bucket.get(count)
+            if count_bucket is None:
+                count_bucket = max_bucket
+
+            matched_indices.append(i)
+            noetic_targets.append(target_noetic)
+            domain_targets.append(target_domain)
+            operand_count_targets.append(count_bucket)
+            named_emergent_targets.append(has_named)
+            register_targets_rows.append(ordered_regs)
+
+        if not matched_indices:
+            return None
+
+        device = hidden_states.device
+
+        # Run the proposer on matched examples only. ``index_select`` is
+        # differentiable so the graph remains connected.
+        idx_tensor = torch.tensor(
+            matched_indices, dtype=torch.long, device=device
+        )
+        matched_hidden = hidden_states.index_select(0, idx_tensor)
+        proposer_out = self._expression_proposer(
+            matched_hidden,
+            mode="training",
+            tau=max(self.current_tau, 1e-3),
+        )
+
+        n_tgt = torch.tensor(noetic_targets, dtype=torch.long, device=device)
+        d_tgt = torch.tensor(domain_targets, dtype=torch.long, device=device)
+        c_tgt = torch.tensor(
+            operand_count_targets, dtype=torch.long, device=device
+        )
+        e_tgt = torch.tensor(
+            named_emergent_targets, dtype=torch.long, device=device
+        )
+
+        K = len(matched_indices)
+        reg_tgt = torch.zeros((K, max_operands), dtype=torch.long, device=device)
+        reg_mask = torch.zeros((K, max_operands), dtype=torch.bool, device=device)
+        for k, row in enumerate(register_targets_rows):
+            for slot, r in enumerate(row[:max_operands]):
+                reg_tgt[k, slot] = r
+                reg_mask[k, slot] = True
+
+        return self._proposer_loss_fn(
+            proposer_out,
+            noetic_targets=n_tgt,
+            domain_targets=d_tgt,
+            register_targets=reg_tgt,
+            register_target_mask=reg_mask,
+            operand_count_targets=c_tgt,
+            named_emergent_targets=e_tgt,
+        )
+
     # ------------------------------------------------------------------ step
 
     def _anneal_tau_for_step(self, step: int) -> float:
@@ -1018,6 +1350,39 @@ class CASTrainer:
                 total_loss = total_loss + weighted
                 extras["rule_four_loss"] = rule_four_loss
 
+        # ADR-07 expression proposer loss aggregation
+        # Score-based CE + smooth-L1 loss for the learned
+        # ``ExpressionProposerHead``. Gradient-bearing via the proposer's
+        # direct projection of d_model hidden states — this is the
+        # gradient-flow gap closure for Rule 4 identified by Codex 5.4.
+        # Returns None when no example in the batch has any register
+        # labels (zero-contribution pattern matching the other v2 losses).
+        if self.v2_flags.use_expression_proposer:
+            proposer_loss = self._compute_proposer_rule_four_loss(
+                d_model_hidden,
+                register_labels_batch,
+                omega_labels_batch,
+            )
+            if proposer_loss is not None:
+                weighted = (
+                    self.v2_hp.lambda_proposer_rule_four * proposer_loss
+                )
+                total_loss = total_loss + weighted
+                extras["proposer_rule_four_loss"] = proposer_loss
+
+        # ADR-03 follow-up null-space regularization aggregation
+        # Pulls unused Omega_* registry slots toward a null point (strategy
+        # "origin" by default) so they don't drift toward patterns that match
+        # real Omega_* at inference. Low weight by default (0.01) — this is
+        # regularization only, not primary signal. Returns None when emergent
+        # register flag is off or the registry is fully saturated, in which
+        # case the total_loss is unchanged (backward compat guard).
+        null_space_loss = self._compute_null_space_reg_loss()
+        if null_space_loss is not None:
+            weighted = self.v2_hp.lambda_null_space_reg * null_space_loss
+            total_loss = total_loss + weighted
+            extras["null_space_reg_loss"] = null_space_loss
+
         # Update component dict with any v2 extras.
         for k, v in extras.items():
             components[k] = v
@@ -1085,10 +1450,101 @@ class CASTrainer:
         if num_batches == 0:
             return {}
 
-        return {
+        out: dict[str, float] = {
             "val_loss": total_loss / num_batches,
             "val_rpm_satisfaction": total_rpm_sat / num_batches,
         }
+
+        # Wave 8A v2-aware evaluation: compute composite_v2 when the
+        # configured metric is ``composite_v2`` and v2 flags are on. This
+        # lets the best-checkpoint logic consult a v2-native score.
+        if self._use_composite_v2_selection():
+            try:
+                composite_info = self._compute_composite_v2_for_val()
+            except Exception as exc:  # pragma: no cover - defensive
+                warnings.warn(
+                    f"composite_v2 computation raised {exc!r}; falling back "
+                    "to val_loss-based best-checkpoint selection.",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                composite_info = None
+            if composite_info is not None:
+                composite_value = composite_info.get("composite")
+                if composite_value is not None:
+                    out["composite_v2"] = float(composite_value)
+                    # Surface the component scores individually too — useful
+                    # for W&B dashboards and eyeballing regressions.
+                    for k, v in composite_info.get("components", {}).items():
+                        out[f"composite_v2.{k}"] = float(v)
+
+        return out
+
+    # ------------------------------------------------------------------
+    # Wave 8A checkpoint selection helpers.
+    # ------------------------------------------------------------------
+
+    def _use_composite_v2_selection(self) -> bool:
+        """True when best-checkpoint should use composite_v2 (not val_loss).
+
+        Uses ``TrainingConfig.effective_checkpoint_selection_metric`` when a
+        TrainingConfig was passed, else falls back to the legacy val_loss
+        path (backward compat for ``config: dict`` callers).
+        """
+        if self.training_config is None:
+            return False
+        return self.training_config.effective_checkpoint_selection_metric() == "composite_v2"
+
+    def _compute_composite_v2_for_val(self) -> Optional[dict[str, Any]]:
+        """Compute composite_v2 against ``self.val_loader``.
+
+        Instantiates a ``CASEvaluator`` bound to the trainer's model and
+        injects the trainer's ``rust_bridge`` so Rule 4 compliance uses the
+        same cache that produced training signal. Returns the dict from
+        ``CASEvaluator.composite_v2_score`` or ``None`` when no val loader
+        is configured.
+        """
+        if self.val_loader is None:
+            return None
+        # Local import to avoid circular import at module load.
+        from ..evaluation.evaluate import CASEvaluator
+
+        evaluator = CASEvaluator(self.model, device=self.device)
+        return evaluator.composite_v2_score(
+            self.val_loader, rust_bridge=self._rust_bridge
+        )
+
+    def _should_save_best_checkpoint(self, val_metrics: dict[str, float]) -> bool:
+        """Decide whether to save a ``best``-tagged checkpoint.
+
+        Selection rule:
+          - When the configured metric is ``composite_v2`` AND a composite_v2
+            score is present in ``val_metrics``, higher-is-better comparison
+            against ``self.best_composite_v2`` determines the save.
+          - Otherwise the legacy ``val_loss`` lower-is-better comparison
+            against ``self.best_val_loss`` applies.
+
+        Both tracking scalars are updated on improvement so switching the
+        selection metric mid-run doesn't falsely trigger a "first improvement"
+        on the new metric.
+        """
+        saved = False
+
+        if (
+            self._use_composite_v2_selection()
+            and "composite_v2" in val_metrics
+        ):
+            score = float(val_metrics["composite_v2"])
+            if score > self.best_composite_v2:
+                self.best_composite_v2 = score
+                saved = True
+        else:
+            # Legacy / nccs path.
+            if val_metrics.get("val_loss", float("inf")) < self.best_val_loss:
+                self.best_val_loss = float(val_metrics["val_loss"])
+                saved = True
+
+        return saved
 
     def train(self) -> dict[str, Any]:
         """Run the full training loop.
@@ -1140,8 +1596,13 @@ class CASTrainer:
                 val_metrics = self.evaluate()
                 if val_metrics:
                     print(f"  Eval @ step {self.global_step}: {val_metrics}")
-                    if val_metrics.get("val_loss", float("inf")) < self.best_val_loss:
-                        self.best_val_loss = val_metrics["val_loss"]
+
+                    # Wave 8A: consult the configured checkpoint-selection
+                    # metric. ``_should_save_best_checkpoint`` inspects the
+                    # training config and val_metrics to decide; when the
+                    # configured metric is ``composite_v2`` and no v2 score
+                    # is available, it transparently falls back to val_loss.
+                    if self._should_save_best_checkpoint(val_metrics):
                         self._save_checkpoint(tag="best")
 
                     if self.wandb_enabled and self._wandb is not None:

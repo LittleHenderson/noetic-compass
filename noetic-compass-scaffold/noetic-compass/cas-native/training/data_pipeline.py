@@ -16,7 +16,21 @@ Features:
   - Collate function for batching variable-length sequences
   - Inversion engine augmentation for training data expansion
   - CAS ontology validation (open simplex, score ranges)
+
+Wave 8A Agent 36 — compiler-sourced Phenomenological Register activations.
+When an example carries a ``cas_expression`` string field, the dataset
+compiles the expression via ``api.notation.compile_expression`` and uses
+``extract_register_activations`` on the parsed AST to produce a
+``list[RegisterActivation]`` per example. Examples without a
+``cas_expression`` but with ``register_labels`` fall back to building
+equivalent ``RegisterActivation`` records from the raw label dicts so the
+trainer path is uniform. The ``register_activations_batch`` field in the
+collated batch is the single source of truth the trainer consumes; the
+original ``register_labels`` list is retained for backward compatibility
+with earlier callers that bypass the compiler.
 """
+
+from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -24,6 +38,27 @@ from typing import Any, Optional
 
 import torch
 from torch.utils.data import Dataset, DataLoader, random_split
+
+# The notation compiler lives in the sibling `api/notation/` package.
+# Conftest / scaffold setup places `noetic-compass/` on sys.path so this
+# import resolves without editable installs. Import-time failure is caught
+# and the compiler-sourced path silently degrades to the label-only fallback
+# so callers that never set a `cas_expression` field continue to work.
+try:
+    from api.notation import (
+        RegisterActivation,
+        VALID_REGISTERS,
+        compile_expression,
+        extract_register_activations,
+    )
+
+    _COMPILER_AVAILABLE = True
+except Exception:  # pragma: no cover - defensive; compiler is expected to import
+    RegisterActivation = None  # type: ignore[assignment]
+    VALID_REGISTERS = ("T", "A", "f", "E")
+    compile_expression = None  # type: ignore[assignment]
+    extract_register_activations = None  # type: ignore[assignment]
+    _COMPILER_AVAILABLE = False
 
 
 class SimpleTokenizer:
@@ -69,6 +104,140 @@ class SimpleTokenizer:
 
     def pad_id(self) -> int:
         return self.PAD_ID
+
+
+def build_register_activations_from_labels(
+    register_labels: list[dict[str, Any]],
+    omega_labels: Optional[list[dict[str, Any]]] = None,
+) -> list[Any]:
+    """Fallback path: construct ``list[RegisterActivation]`` from raw label dicts.
+
+    Matches the same emit order and field semantics as
+    ``api.notation.extract_register_activations`` so trainer code is
+    agnostic to whether the activations originated from a compiled CAS
+    expression or from a hand-authored ``register_labels`` list.
+
+    Emission order per position (deterministic by sorted position):
+      1. One :class:`RegisterActivation` per (position, register) pair in
+         ``register_labels`` (single-register single-element frozenset,
+         ``is_register_set=False``, ``emergent_name`` attached from the
+         matching ``omega_labels`` entry if any).
+      2. One trailing :class:`RegisterActivation` per position that has a
+         matching ``omega_labels`` entry AND at least 2 distinct registers
+         at that position, carrying the union frozenset and the omega name
+         (mirrors the trailing emergent record emitted by the compiler for
+         a named ``= ^n^D|Ω_name`` assignment).
+
+    Returns an empty list if the compiler is unavailable at import time and
+    the `RegisterActivation` type has not been loaded — in that case the
+    trainer's legacy fallback path handles the batch via raw label dicts.
+    """
+    if not _COMPILER_AVAILABLE or RegisterActivation is None:
+        return []
+
+    # Per-position collection of registers in source order.
+    per_position: dict[int, list[str]] = {}
+    for entry in register_labels or []:
+        pos = entry.get("position")
+        reg = entry.get("register")
+        if pos is None or reg is None:
+            continue
+        try:
+            pos_int = int(pos)
+        except (TypeError, ValueError):
+            continue
+        if reg not in VALID_REGISTERS:
+            continue
+        per_position.setdefault(pos_int, []).append(reg)
+
+    # Map omega names by position for emergent_name attachment.
+    omega_by_position: dict[int, str] = {}
+    for entry in omega_labels or []:
+        pos = entry.get("position")
+        name = entry.get("omega_name")
+        if pos is None or name is None:
+            continue
+        try:
+            pos_int = int(pos)
+        except (TypeError, ValueError):
+            continue
+        omega_by_position[pos_int] = str(name)
+
+    out: list[Any] = []
+    # Sort positions for deterministic output ordering across Python runs.
+    for pos_int in sorted(per_position.keys()):
+        regs = per_position[pos_int]
+        emergent_name = omega_by_position.get(pos_int)
+        for reg in regs:
+            out.append(
+                RegisterActivation(
+                    position=pos_int,
+                    registers_active=frozenset((reg,)),
+                    is_register_set=False,
+                    emergent_name=emergent_name,
+                )
+            )
+        # Trailing emergent record when the fallback is reconstructing a
+        # named emergent-result assignment with >= 2 co-active registers.
+        if emergent_name is not None and len(set(regs)) >= 2:
+            out.append(
+                RegisterActivation(
+                    position=pos_int,
+                    registers_active=frozenset(regs),
+                    is_register_set=False,
+                    emergent_name=emergent_name,
+                )
+            )
+    return out
+
+
+def activations_for_example(item: dict[str, Any]) -> list[Any]:
+    """Produce ``list[RegisterActivation]`` for a single training example.
+
+    Preference order:
+      1. If the example carries a ``cas_expression`` string, compile it via
+         the notation compiler and call ``extract_register_activations`` on
+         the parsed AST. This is the single source of truth whenever a CAS
+         expression is available.
+      2. Otherwise, fall back to building equivalent records from
+         ``register_labels`` + ``omega_labels`` via
+         :func:`build_register_activations_from_labels`.
+
+    Design decision (documented for the panel): compilation happens at
+    ``__getitem__`` time (per-example, lazy) rather than at collate time
+    (per-batch). Rationale: (a) keeps the collate function trivially
+    parallelizable and free of compiler imports; (b) DataLoader workers
+    amortize the compilation cost across epochs when ``num_workers>0``;
+    (c) per-example caching via ``functools.lru_cache`` on the compiled
+    expression string is a trivial future optimization that does not
+    change the call site. Per-batch caching would require managing a
+    dataset-global cache keyed by example id, which is not justified at
+    the current batch sizes.
+
+    Returns an empty list when neither source is usable; the trainer's
+    fallback path then consumes the raw ``register_labels_batch`` dicts.
+    """
+    if not _COMPILER_AVAILABLE:
+        return []
+
+    expr = item.get("cas_expression")
+    if expr is not None and compile_expression is not None and extract_register_activations is not None:
+        try:
+            artifact = compile_expression(str(expr))
+        except Exception:
+            artifact = None
+        if artifact is not None and getattr(artifact, "valid", False) and getattr(artifact, "ast", None) is not None:
+            try:
+                return list(extract_register_activations(artifact.ast))
+            except Exception:
+                # Malformed AST — fall through to the label-derived path
+                # rather than crashing the training loop.
+                pass
+
+    return build_register_activations_from_labels(
+        item.get("register_labels", []),
+        item.get("omega_labels", []),
+    )
 
 
 class CASDataset(Dataset):
@@ -131,6 +300,12 @@ class CASDataset(Dataset):
         omega_labels = item.get("omega_labels", [])
         production_target = item.get("production_target", None)
 
+        # Wave 8A Agent 36: compile-time register activations. Prefers the
+        # compiler output when a ``cas_expression`` string is present;
+        # otherwise reconstructs equivalent records from raw labels so the
+        # trainer always consumes a uniform ``list[RegisterActivation]``.
+        register_activations = activations_for_example(item)
+
         return {
             "input_ids": input_ids,
             "targets": targets,
@@ -139,6 +314,7 @@ class CASDataset(Dataset):
             "register_labels": register_labels,
             "omega_labels": omega_labels,
             "production_target": production_target,
+            "register_activations": register_activations,
         }
 
 
@@ -158,6 +334,7 @@ def cas_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
     register_labels_list = []
     omega_labels_list = []
     production_targets_list = []
+    register_activations_list: list[list[Any]] = []
 
     pad_id = 0  # [PAD] token ID
 
@@ -184,6 +361,11 @@ def cas_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
         register_labels_list.append(item.get("register_labels", []))
         omega_labels_list.append(item.get("omega_labels", []))
         production_targets_list.append(item.get("production_target", None))
+        # Wave 8A Agent 36: per-example compiler output passed through as a
+        # list-of-lists so the trainer's _compute_emergent_binding_loss can
+        # consume the RegisterActivation dataclasses directly without
+        # reconstructing them from raw label dicts.
+        register_activations_list.append(item.get("register_activations", []) or [])
 
     return {
         "input_ids": torch.stack(padded_input_ids),
@@ -193,6 +375,7 @@ def cas_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
         "register_labels": register_labels_list,
         "omega_labels": omega_labels_list,
         "production_target": production_targets_list,
+        "register_activations_batch": register_activations_list,
     }
 
 

@@ -638,6 +638,115 @@ class CASEvaluator:
 
         return results
 
+    # ------------------------------------------------------------------
+    # Composite v2 score — Wave 8A evaluation extension.
+    # ------------------------------------------------------------------
+
+    # Default composite weights — equal quarters across the four v2 metrics.
+    # Documented constant so tests and checkpoint-selection callers stay in
+    # sync with the evaluator.
+    COMPOSITE_V2_WEIGHTS: dict[str, float] = {
+        "register_prediction_accuracy": 0.25,
+        "rule_four_compliance_rate": 0.25,
+        "omega_activation_accuracy": 0.25,
+        "production_semantics_accuracy": 0.25,
+    }
+
+    def composite_v2_score(
+        self,
+        dataloader: DataLoader,
+        rust_bridge: Optional[Any] = None,
+        weights: Optional[dict[str, float]] = None,
+    ) -> dict[str, Any]:
+        """Weighted composite of the four v2 metrics + per-component scores.
+
+        The composite is used as a checkpoint-selection criterion while v2
+        training is active (see ``TrainingConfig.effective_checkpoint_selection_metric``).
+        Returns a dict with:
+
+          - ``"components"``: per-metric float dict (subset of the four v2
+            metrics; metrics whose v2 component is absent are omitted).
+          - ``"weights"``: the weight applied to each component.
+          - ``"composite"``: weighted mean of the components that WERE
+            computed — i.e. when a metric is absent its weight is removed
+            from the denominator so the composite remains in ``[0, 1]``.
+            ``None`` when no v2 metric could be computed at all.
+          - ``"production_yield_mae"`` (optional): forwarded from the
+            production-semantics metric when that metric returns a
+            ``yield_mae`` sub-field (lower is better — informational only,
+            not part of the composite).
+
+        The composite specifically consumes ``prereq_accuracy`` from the
+        production-semantics metric (a ``[0, 1]`` accuracy) — ``yield_mae``
+        is reported alongside for diagnostic use but never enters the sum.
+
+        Args:
+            dataloader: Validation loader with v2-labeled batches.
+            rust_bridge: Optional pre-built ``RustValidationBridge``. When
+                ``None``, the evaluator's owning trainer may inject its own
+                bridge — so callers at the trainer level should thread
+                ``self._rust_bridge`` through.
+            weights: Optional override for the default 25/25/25/25 weighting.
+                Unknown keys are silently ignored; missing keys default to
+                the class-level ``COMPOSITE_V2_WEIGHTS``.
+        """
+        w = dict(self.COMPOSITE_V2_WEIGHTS)
+        if weights is not None:
+            for k, v in weights.items():
+                if k in w:
+                    w[k] = float(v)
+
+        metrics = self.evaluate_v2_metrics(dataloader, rust_bridge=rust_bridge)
+        components: dict[str, float] = {}
+
+        if "register_prediction_accuracy" in metrics:
+            components["register_prediction_accuracy"] = float(
+                metrics["register_prediction_accuracy"]
+            )
+        if "rule_four_compliance_rate" in metrics:
+            components["rule_four_compliance_rate"] = float(
+                metrics["rule_four_compliance_rate"]
+            )
+        if "omega_activation_accuracy" in metrics:
+            components["omega_activation_accuracy"] = float(
+                metrics["omega_activation_accuracy"]
+            )
+
+        yield_mae: Optional[float] = None
+        if "production_semantics_accuracy" in metrics:
+            prod = metrics["production_semantics_accuracy"]
+            # ``production_semantics_accuracy`` returns a sub-dict with
+            # ``prereq_accuracy`` and/or ``yield_mae``. Only ``prereq_accuracy``
+            # is a ``[0,1]`` accuracy suitable for the composite.
+            if isinstance(prod, dict):
+                if "prereq_accuracy" in prod:
+                    components["production_semantics_accuracy"] = float(
+                        prod["prereq_accuracy"]
+                    )
+                if "yield_mae" in prod:
+                    yield_mae = float(prod["yield_mae"])
+            else:
+                components["production_semantics_accuracy"] = float(prod)
+
+        # Compute weighted composite only over present components; re-normalize
+        # the denominator so missing metrics do not pull the composite toward 0.
+        active_weight_sum = sum(w[k] for k in components.keys())
+        if active_weight_sum > 0:
+            composite: Optional[float] = sum(
+                w[k] * components[k] for k in components.keys()
+            ) / active_weight_sum
+        else:
+            composite = None
+
+        result: dict[str, Any] = {
+            "components": components,
+            "weights": {k: w[k] for k in components.keys()},
+            "composite": composite,
+        }
+        if yield_mae is not None:
+            result["production_yield_mae"] = yield_mae
+        return result
+
     def evaluate_and_save(
         self,
         dataloader: DataLoader,

@@ -350,6 +350,167 @@ class InvolutionConstraintLoss(nn.Module):
         return self.involution_loss(source)
 
 
+class ProposerRuleFourLoss(nn.Module):
+    """Score-based loss for the learned ExpressionProposerHead (ADR-07).
+
+    Closes the gradient-flow gap identified by Codex 5.4: the legacy
+    ``_compute_rule_four_loss`` in ``training/trainer.py`` built expression
+    operands from labels (not model outputs) and wrapped the Rust-returned
+    distances in a fresh ``torch.tensor`` with ``requires_grad=False``. The
+    legacy loss was therefore a metric, not a training signal.
+
+    This loss consumes the five parallel logit heads emitted by
+    ``ExpressionProposerHead.forward`` and compares each to a
+    label-derived target. Because the logits are produced by a linear
+    projection of ``hidden_states``, the loss is gradient-bearing to every
+    component upstream of the proposer input (token embedding, transformer
+    layers, final norm).
+
+    Components:
+
+        L_noetic       — cross-entropy on noetic_logits         (B, 10)
+        L_domain       — cross-entropy on domain_logits         (B,  4)
+        L_register     — cross-entropy on register_logits       (B, M, 4)
+                         masked by operand-slot presence
+        L_count        — smooth-L1 on soft-argmax of operand_count_logits
+                         vs target count
+        L_named_emg    — cross-entropy on named_emergent_logits (B,  2)
+
+        L = w_n * L_noetic + w_d * L_domain
+          + w_r * L_register + w_c * L_count
+          + w_e * L_named_emg
+
+    Default component weights (all 1.0) are passed through from the
+    trainer's ``V2Hyperparameters.lambda_proposer_*`` fields, and the
+    outer ``lambda_proposer_rule_four`` applies in the trainer's loss
+    aggregation (see ``_compute_proposer_rule_four_loss``).
+
+    All five components are per-example-masked: examples missing a given
+    label stream contribute zero to that component but still contribute to
+    the others when their labels are present. ``None`` is returned only
+    when NO example in the batch has any proposer-trainable label.
+
+    Args:
+        lambda_noetic: weight on the Noetic CE head (default 1.0).
+        lambda_domain: weight on the Domain CE head (default 1.0).
+        lambda_register: weight on the per-operand Register CE head
+            (default 1.0).
+        lambda_count: weight on the operand-count smooth-L1 head
+            (default 0.5, lower than CE heads — count carries less
+            per-batch signal than per-operand registers).
+        lambda_named_emergent: weight on the named-emergent CE head
+            (default 1.0).
+    """
+
+    def __init__(
+        self,
+        lambda_noetic: float = 1.0,
+        lambda_domain: float = 1.0,
+        lambda_register: float = 1.0,
+        lambda_count: float = 0.5,
+        lambda_named_emergent: float = 1.0,
+    ) -> None:
+        super().__init__()
+        self.lambda_noetic = float(lambda_noetic)
+        self.lambda_domain = float(lambda_domain)
+        self.lambda_register = float(lambda_register)
+        self.lambda_count = float(lambda_count)
+        self.lambda_named_emergent = float(lambda_named_emergent)
+
+    def forward(
+        self,
+        proposer_out: dict[str, torch.Tensor],
+        *,
+        noetic_targets: Optional[torch.Tensor] = None,
+        domain_targets: Optional[torch.Tensor] = None,
+        register_targets: Optional[torch.Tensor] = None,
+        register_target_mask: Optional[torch.Tensor] = None,
+        operand_count_targets: Optional[torch.Tensor] = None,
+        named_emergent_targets: Optional[torch.Tensor] = None,
+    ) -> Optional[torch.Tensor]:
+        """Compute the weighted sum of the five components.
+
+        Each ``*_targets`` argument is an index tensor (LongTensor) or
+        ``None`` when the label is absent for every example. When
+        ``register_targets`` is present, ``register_target_mask`` MUST be
+        supplied — a ``(B, M)`` bool mask marking which operand slots
+        carry a register label (shorter expressions have unmasked tails
+        that are excluded from the CE).
+
+        Returns:
+            Scalar loss tensor, or ``None`` when every component's target
+            is ``None``.
+        """
+        components: list[torch.Tensor] = []
+
+        # Noetic CE.
+        if noetic_targets is not None and noetic_targets.numel() > 0:
+            noetic_logits = proposer_out["noetic_logits"]
+            # Per-example selection: noetic_targets has shape (K,) where
+            # K <= B. Caller supplies the matched subset via indexing.
+            ce = F.cross_entropy(noetic_logits, noetic_targets)
+            components.append(self.lambda_noetic * ce)
+
+        # Domain CE.
+        if domain_targets is not None and domain_targets.numel() > 0:
+            domain_logits = proposer_out["domain_logits"]
+            ce = F.cross_entropy(domain_logits, domain_targets)
+            components.append(self.lambda_domain * ce)
+
+        # Per-operand Register CE — operand-slot masked.
+        if (
+            register_targets is not None
+            and register_targets.numel() > 0
+            and register_target_mask is not None
+        ):
+            register_logits = proposer_out["register_logits"]  # (B, M, R)
+            B, M, R = register_logits.shape
+            # Flatten (B, M, R) to (B*M, R) and (B, M) mask to (B*M,).
+            flat_logits = register_logits.reshape(B * M, R)
+            flat_targets = register_targets.reshape(B * M)
+            flat_mask = register_target_mask.reshape(B * M)
+            if flat_mask.any():
+                masked_logits = flat_logits[flat_mask]
+                masked_targets = flat_targets[flat_mask]
+                ce = F.cross_entropy(masked_logits, masked_targets)
+                components.append(self.lambda_register * ce)
+
+        # Operand-count smooth-L1 on the soft-argmax of the logits.
+        #
+        # Cross-entropy would work too, but the count axis is ordinal
+        # (a proposal of 3 operands is closer to 4 than to 0), so smooth-L1
+        # on the soft-argmax respects the ordering while remaining fully
+        # differentiable.
+        if (
+            operand_count_targets is not None
+            and operand_count_targets.numel() > 0
+        ):
+            count_logits = proposer_out["operand_count_logits"]  # (B, K)
+            K = count_logits.shape[-1]
+            probs = F.softmax(count_logits, dim=-1)
+            bucket_idx = torch.arange(
+                K, device=count_logits.device, dtype=count_logits.dtype
+            )
+            soft_argmax = (probs * bucket_idx.unsqueeze(0)).sum(dim=-1)
+            target_f = operand_count_targets.to(count_logits.dtype)
+            sl1 = F.smooth_l1_loss(soft_argmax, target_f)
+            components.append(self.lambda_count * sl1)
+
+        # Named-emergent binary CE.
+        if (
+            named_emergent_targets is not None
+            and named_emergent_targets.numel() > 0
+        ):
+            named_logits = proposer_out["named_emergent_logits"]  # (B, 2)
+            ce = F.cross_entropy(named_logits, named_emergent_targets)
+            components.append(self.lambda_named_emergent * ce)
+
+        if not components:
+            return None
+
+        return torch.stack(components).sum()
+
+
 class LacunarityRegularizationLoss(nn.Module):
     """Penalizes extreme concentration in the 40-slot activation vector.
 
@@ -384,3 +545,119 @@ class LacunarityRegularizationLoss(nn.Module):
 
         loss = self.alpha * ((lacunarity - self.target) ** 2).mean()
         return loss
+
+
+class NullSpaceRegularizationLoss(nn.Module):
+    """Pull unused Omega_* registry slots toward a null point in ER-space.
+
+    Unused registry slots (v1 has k=2 admitted and 18 unused in a capacity-20
+    table) receive minimal gradient during training — no training label ever
+    lands on them — yet they still participate in cosine-similarity comparisons
+    at inference. Without regularization those random-initialized embeddings
+    drift into patterns that can accidentally match real Omega_* (false
+    positives). This loss is the ADR-03 follow-up: pull unused embeddings
+    toward a "null" point so they remain cleanly separated from admitted
+    emergent registers.
+
+    Null-point strategies (all supported; choose via ``strategy`` kwarg):
+
+      - ``"origin"`` — pull unused embeddings toward the zero vector. Simplest,
+        introduces zero additional parameters, aligns directly with "pull
+        toward null" semantics. **Default**, chosen as the v1 strategy per
+        ADR-03 Section 'Training signal' follow-up.
+      - ``"learned_anchor"`` — pull unused embeddings toward a learned anchor
+        parameter (one d_model vector). Slightly more flexible — the anchor
+        can drift to the region of ER-space least occupied by admitted
+        Omega_*; paid for with d_model extra parameters.
+      - ``"mean_inactive"`` — pull unused embeddings toward the mean of unused
+        embeddings (collective centering — softer, doesn't force any
+        particular direction). No extra parameters but weaker separation
+        guarantee from admitted slots.
+
+    The v1 default ``"origin"`` rationale: the simplest well-defined target,
+    no extra parameters, and alignment with "pull toward null" semantics.
+    The other strategies remain available for future tuning once empirical
+    evidence from training runs motivates a more sophisticated anchor.
+
+    Formula (for ``strategy == "origin"``):
+
+        L_null = lambda_null * (1 / unused_count) * sum_i ||registry[i]||^2
+
+    where the sum runs over unused slot indices. When ``unused_count == 0``
+    (registry fully saturated) the loss is zero.
+
+    Args:
+        strategy: Null-point strategy — one of
+            ``{"origin", "learned_anchor", "mean_inactive"}``.
+        lambda_null: Scalar weight on the regularizer. Default ``0.01`` —
+            low weight; this is regularization only, not a primary training
+            signal.
+        d_model: Required only for ``strategy == "learned_anchor"`` (used to
+            size the learned anchor parameter).
+    """
+
+    _VALID_STRATEGIES = ("origin", "learned_anchor", "mean_inactive")
+
+    def __init__(
+        self,
+        strategy: str = "origin",
+        lambda_null: float = 0.01,
+        d_model: Optional[int] = None,
+    ) -> None:
+        super().__init__()
+        if strategy not in self._VALID_STRATEGIES:
+            raise ValueError(
+                f"Unknown null-space strategy {strategy!r}; "
+                f"expected one of {self._VALID_STRATEGIES}"
+            )
+        self.strategy = strategy
+        self.lambda_null = float(lambda_null)
+
+        # Only ``learned_anchor`` introduces extra parameters — keep the
+        # parameter budget at zero for ``origin`` / ``mean_inactive``.
+        if strategy == "learned_anchor":
+            if d_model is None:
+                raise ValueError(
+                    "strategy='learned_anchor' requires d_model to size the "
+                    "anchor parameter"
+                )
+            self.anchor: Optional[nn.Parameter] = nn.Parameter(torch.zeros(d_model))
+        else:
+            self.anchor = None
+
+    def forward(self, unused_embeddings: torch.Tensor) -> torch.Tensor:
+        """Compute the null-space regularization loss.
+
+        Args:
+            unused_embeddings: Tensor of shape ``(unused_count, d_model)``
+                holding the registry rows at unused slot indices (typically
+                produced by ``OmegaRegistry.unused_slot_embeddings()``).
+
+        Returns:
+            Scalar tensor ``lambda_null * mean(||embedding_i - target||^2)``.
+            Zero (as a tensor) when ``unused_count == 0``.
+        """
+        if unused_embeddings.numel() == 0:
+            return torch.zeros(
+                (),
+                device=unused_embeddings.device,
+                dtype=unused_embeddings.dtype,
+            )
+
+        if self.strategy == "origin":
+            target = torch.zeros_like(unused_embeddings)
+        elif self.strategy == "learned_anchor":
+            assert self.anchor is not None  # guaranteed by __init__ branch
+            # Broadcast the learned anchor against every unused row.
+            target = self.anchor.unsqueeze(0).expand_as(unused_embeddings)
+        elif self.strategy == "mean_inactive":
+            # Pull every unused row toward the mean of unused rows — a soft
+            # centering; detach() keeps the mean from acting as a free moving
+            # target that would trivially minimize the loss.
+            mean = unused_embeddings.mean(dim=0, keepdim=True).detach()
+            target = mean.expand_as(unused_embeddings)
+        else:  # pragma: no cover - guarded by __init__ validation
+            raise AssertionError(f"unreachable strategy {self.strategy}")
+
+        sq_err = (unused_embeddings - target).pow(2).sum(dim=-1)  # (unused_count,)
+        return self.lambda_null * sq_err.mean()
