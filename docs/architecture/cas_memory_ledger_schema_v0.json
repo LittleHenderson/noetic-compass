@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noetic-compass.local/schemas/memory_ledger_v0.json",
+  "title": "CAS Memory Ledger V0",
+  "description": "JSON Schema for the V0 thin CAS-structured memory ledger. Used to store memories with cognitive annotations prior to V1 Graph migration.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Unique identifier for the memory record (e.g., mem_YYYYMMDD_XXXX).",
+      "type": "string"
+    },
+    "content": {
+      "description": "The raw text or core semantic content of the memory.",
+      "type": "string"
+    },
+    "summary": {
+      "description": "A brief, one-sentence summary of the memory content.",
+      "type": "string"
+    },
+    "source": {
+      "description": "Provenance of the memory.",
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["session", "document", "user_edit", "synthetic_generation"]
+        },
+        "path": {
+          "type": ["string", "null"],
+          "description": "File path or origin identifier."
+        },
+        "span": {
+          "type": ["string", "null"],
+          "description": "Line numbers or specific section within the source."
+        }
+      },
+      "required": ["kind"]
+    },
+    "created_at": {
+      "description": "ISO 8601 timestamp of memory creation.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "description": "ISO 8601 timestamp of last memory update.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "cas": {
+      "description": "CAS-specific cognitive metadata for indexing, retrieval, and lacunarity.",
+      "type": "object",
+      "properties": {
+        "noetics": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of active Noetics (e.g., 'Integration', 'Structure')."
+        },
+        "domains": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of active Domains (e.g., 'Cognitive', 'Operational')."
+        },
+        "registers": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["T", "A", "f", "E"] },
+          "description": "Phenomenological registers active during encoding."
+        },
+        "drives": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Relevant Core Drives or Foundations for salience."
+        },
+        "rpm_prerequisites": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Required prior context or memory IDs needed to understand this memory."
+        },
+        "omega_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Named emergent registers (Ω_*) attached to this memory."
+        },
+        "production_roles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Roles this memory plays in production semantics (e.g., reagent, catalyst)."
+        },
+        "lacunarity_notes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Identified gaps or missing structures related to this memory."
+        }
+      }
+    },
+    "salience": {
+      "description": "Importance score of the memory [0.0, 1.0].",
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "confidence": {
+      "description": "Confidence in the accuracy of the CAS annotations [0.0, 1.0].",
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "status": {
+      "description": "Current status of the memory.",
+      "type": "string",
+      "enum": ["active", "archived", "superseded", "redacted"]
+    },
+    "supersedes": {
+      "description": "List of older memory IDs this record replaces.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "superseded_by": {
+      "description": "List of newer memory IDs that replace this record.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "embedding_ref": {
+      "description": "Pointer to external vector embedding storage.",
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["id", "content", "source", "created_at", "status", "cas"]
+}

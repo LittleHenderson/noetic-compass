@@ -1252,3 +1252,45 @@ Framework fidelity satisfied. USPTO #64/037,173 provisional patent posture uncha
 | `tests/test_loss_refinement.py` | ADAPT 1 test (zero-grad on latent, not view) |
 
 Total Option E delta: ~600 LoC added, ~150 LoC modified, 45 new tests, 8 adapted tests. ADR-08 preserves the CAS framework vocabulary unchanged and improves architectural coupling between the two FiLM surfaces.
+
+---
+
+# ADR-09: CAS Memory Substrate (Future Architecture)
+
+**Numbering note:** Originally drafted as ADR-08 in a parallel side conversation (Gemini + Codex Memory Substrate collaboration) that landed in `noetic-compass-scaffold/noetic-compass/docs/architecture/cas_native_v2_adrs.md`. In parallel, the panel's Option E implementation was committed as ADR-08 in this canonical file (commit `b7341e3`). Reconciled to ADR-09 here to resolve the collision and establish `docs/architecture/cas_native_v2_adrs.md` as the single canonical ADR location going forward.
+
+## Status
+Accepted as Future Work — 2026-04-22 (CAS-Native v2 Wave 8A)
+
+## Context
+
+Current AI memory systems (MemGPT, Letta, LangGraph) effectively solve the *mechanics* of memory (storage tiers, vector similarity, core/archival blocks). However, they lack a formal cognitive indexing ontology.
+
+The CAS framework contains rich cognitive structures that could ground a fundamentally superior memory system. Specifically:
+- **40 Cognitive States & Registers:** Allow memories to be indexed by the cognitive mode in which they were formed or apply.
+- **Drives & Foundations:** Provide a natural schema for memory salience and weighting.
+- **RPM & Production Semantics:** Naturally encode memories as relational graphs (prerequisites, catalysts, yields) rather than isolated text chunks.
+- **Lacunarity:** Allows an agent to detect *missing* structural memories (e.g., high analytical knowledge but zero practical/embodied knowledge on a topic).
+
+While the theoretical value is immense, building a full graph-based, CAS-annotated memory system is a massive undertaking. It requires a memory record schema, annotation pipeline, CAS-aware reranking algorithms, and evaluation benchmarks. Attempting to build this now would distract from the core goal of validating CAS-Native v2.
+
+## Decision
+
+Establish the **CAS Memory Substrate** as a formal architectural design for future implementation (v7.8+ or v8.0), but **strictly defer implementation** until CAS-Native v2 and the Synthetic Data Generator are stable.
+
+1. **Overlay Architecture:** The substrate will *not* replace existing vector stores or databases. It will act as a cognitive schema that rides on top of them.
+2. **V0 Memory Ledger:** A JSONL-compatible schema (`cas_memory_ledger_schema_v0.json`, located alongside this ADR at `docs/architecture/`) has been defined for early, file-backed experimentation.
+3. **Auto-Tagging via Proposer:** The `ExpressionProposerHead` (ADR-07) will eventually be utilized in inference mode as the primary automated annotator, mapping agent thoughts/hidden states to structured CAS metadata.
+4. **Relational Target (V1):** The ultimate architecture will rely on a Graph Database (e.g., Neo4j) augmented with vector embeddings to natively support RPM prerequisite traversal and Production Semantics linking.
+
+## Consequences
+
+- **Scope Containment:** Prevents feature creep. Current memory needs (project continuity) will continue to rely on standard tools (`CLAUDE.md`, ADRs, git).
+- **Clear Roadmap:** We have a formally validated blueprint for how CAS translates to agent memory when the time is right.
+- **Schema Validation:** The V0 JSON schema provides a concrete artifact that can be used to manually structure critical project insights today without building the full software pipeline.
+
+## Companion artifacts (in `docs/architecture/`)
+
+- `CAS_MEMORY_SUBSTRATE_PDR_AND_DESIGN.md` — full PDR and design document (~17 KB)
+- `CAS_MEMORY_SUBSTRATE_PDR_AND_DESIGN.pdf` — typeset copy of the PDR (~222 KB)
+- `cas_memory_ledger_schema_v0.json` — V0 ledger schema referenced in Decision point 2 (~4.5 KB)
