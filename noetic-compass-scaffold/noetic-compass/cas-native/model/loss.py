@@ -22,6 +22,7 @@ from typing import Optional, Union
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from .composition import composition_loss as _composition_loss
 from .register_film import (
