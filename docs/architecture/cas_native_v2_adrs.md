@@ -58,7 +58,9 @@ Where:
 - `R ∈ {T, A, f, E}`
 - Register-unspecified (v7.4 backward-compatible) = identity modulation: `γ = 1`, `β = 0`
 
-**Parameter budget:** 4 registers × 2 × 128 = **1,024 parameters** for FiLM modulation.
+**Parameter budget:** **1,344 parameters** for FiLM modulation at d_model=128 (two-FiLM total: 4 registers × 40 × 2 + 4 registers × 128 × 2 = 320 + 1,024; see post-Option E note below).
+
+> Note (post-Option E): Following ADR-08 (Shared Register Latent with Dual Output Heads), the implementation includes two FiLM heads — `register_film` (40-dim over the cognitive-state bank, 320 parameters: 4 registers × 40 × 2 for γ,β) and `register_film_dmodel` (d_model-dim over hidden states, 1,024 parameters at d_model=128: 4 registers × 128 × 2 for γ,β) — rather than the single FiLM originally scoped in this ADR. Actual parameter count at d_model=128 is **1,344** (320 + 1,024), not 1,024 (single-FiLM). The core decision of this ADR (FiLM modulation as the mechanism for Register integration) remains valid; only the parameter accounting is updated to reflect the final two-FiLM architecture. Count scales with d_model (larger d_model → larger `register_film_dmodel` component). ADR-08 further refactors these two FiLM surfaces to share a common `RegisterLatent` latent source (preserving the two-surface parameter accounting in its `_LatentFiLMView` proxies); see ADR-08 for the shared-latent parameter budget.
 
 **Register embedding dimension:** `d = 128`, matching the 40-state bank dimension.
 
@@ -132,8 +134,8 @@ Parameter cost: similar to FiLM.
 ## Consequences
 
 ### Parameter budget impact
-- v2 additions for register axis: **1,024 parameters**
-- For a 50M demonstration model: <0.01% overhead
+- v2 additions for register axis: **1,344 parameters** at d_model=128 (two-FiLM architecture per Option E; see Decision section note)
+- For a 50M demonstration model: <0.003% overhead
 - Fits int8 quantization without architectural gymnastics
 
 ### Runtime cost
@@ -141,7 +143,7 @@ Parameter cost: similar to FiLM.
 - Device-friendly: fast on all modern GPU/CPU/TPU/edge accelerators
 
 ### Load time
-- 1,024 parameters = ~4 KB at fp32, ~1 KB at int8
+- 1,344 parameters = ~5.4 KB at fp32, ~1.3 KB at int8
 - Negligible load-time delta
 
 ### Training implications
@@ -989,7 +991,7 @@ Six ADRs lock the CAS-Native v2 architectural decisions:
 
 | ADR | Decision | Parameters (v1) |
 |---|---|---|
-| ADR-01 | FiLM modulation for Register | 1,024 |
+| ADR-01 | FiLM modulation for Register | 1,344 |
 | ADR-02 | Metric-learning binding for Ω_* | 18,944 |
 | ADR-03 | Continuous activation + hot-swap registry | (included in ADR-02) |
 | ADR-04 | Hybrid production semantics (symbolic inference, differentiable training) | ~10,000 |
@@ -1005,18 +1007,18 @@ Ready for implementation in subsequent work sessions. First implementation phase
 # ADR-07: Learned Expression Proposer Head
 
 ## Status
-Accepted — 2026-04-22 (CAS-Native v2 Wave 8A)
+Accepted — 2026-04-22 (CAS-Native v2 Wave 8A). Implementation landed in commit `5ad1196` (Wave 8A Agent 35); test coverage + `torch.nn.functional as F` import fix in `cas-native/model/loss.py` landed in commit `4742da5` (34 tests in `cas-native/tests/test_expression_proposer.py`).
 
 ## Context
 
-Codex 5.4 verified in the Wave 7B panel review (and Claude Code confirmed) that the current `_compute_rule_four_loss` in `cas-native/training/trainer.py` is not gradient-bearing with respect to model weights. Two issues make the existing implementation a **metric**, not a **training signal**:
+Codex 5.4 verified in the Wave 7B panel review (and Claude Code confirmed) that the pre-ADR-07 `_compute_rule_four_loss` in `cas-native/training/trainer.py` was **metric-only**, not gradient-bearing: it produced a per-batch distance-to-valid scalar from the Rust validator but that scalar carried no gradient edge to any model parameter. Two concrete defects:
 
-1. Expression operands are built from **ground-truth labels** (`register_labels_batch`), not from model outputs. The structural patterns fed to the Rust validator carry no graph linkage to any model parameters.
-2. The Rust-returned per-sample distances are Python floats. The trainer wraps them in `torch.tensor(distances, ...)`, which has `requires_grad=False`. The resulting scalar enters `total_loss` but its backward pass touches no parameters.
+1. Expression operands were built from **ground-truth labels** (`register_labels_batch`), not from model outputs. The structural patterns fed to the Rust validator carried no graph linkage to any model parameters.
+2. The Rust-returned per-sample distances are Python floats. The trainer wrapped them in `torch.tensor(distances, ...)`, which has `requires_grad=False`. The resulting scalar entered `total_loss` but its backward pass touched no parameters.
 
-Agent 34's own docstring at `trainer.py:795-803` acknowledges this: *"Full end-to-end gradient wiring awaits a learned 'expression proposer' head which is scheduled beyond Wave 7B."* ADR-07 closes that gap.
+Agent 34's own docstring at `trainer.py:795-803` acknowledged this: *"Full end-to-end gradient wiring awaits a learned 'expression proposer' head which is scheduled beyond Wave 7B."* ADR-07 closes that gap: the Expression Proposer Head generates CAS expressions from model hidden states, and a score-based loss compares the proposer output distributions against extracted `RegisterActivation` labels; the loss is gradient-bearing at proposer parameters and flows back through the entire upstream transformer stack, closing the Codex panel finding.
 
-The Rust validator itself is non-differentiable. Any design must route gradients through a **differentiable proxy** for expression correctness; the Rust engine can remain as an inference-time / evaluation-time authority, but not as a training-time gradient source.
+The Rust validator itself is non-differentiable. Any design must route gradients through a **differentiable proxy** for expression correctness; the Rust engine remains authoritative at inference / evaluation time, not as a training-time gradient source.
 
 ## Decision
 
@@ -1081,29 +1083,29 @@ Default `False` at introduction is deliberate: the proposer is a significant arc
 
 ## Alternatives Considered
 
-### Option A — Score-based (chosen)
+### Option A — Score-based loss against derived label distributions (CHOSEN)
 
 Proposer outputs are scored directly against label-derived target distributions using CE + smooth-L1. Gradient path: `hidden_states → proposer logits → loss → backward`.
 
-Pros: simple, low variance, no Rust at training time, closes the wiring gap with minimum architectural surface, Rust remains authoritative at eval.
+Pros: simpler architecture; lower variance in gradient estimates; trainable end-to-end; no Rust at training time; closes the wiring gap with minimum architectural surface; Rust remains authoritative at eval.
 
 Cons: loses the Rust distance's structural severity weighting (2-register vs 3-register vs 4-register); relies on label-derived targets that the synthetic data generator must emit correctly.
 
-### Option B — REINFORCE-lite with Gumbel-ST
+### Option B — REINFORCE-lite with Rust distance as reward signal
 
 Proposer outputs are discretized (straight-through Gumbel-softmax), fed to Rust via `rule_four_distance_batch`, and the resulting distance is used as a negative reward. The pathwise gradient is computed by multiplying the reward against proposer log-probabilities.
 
 Pros: directly optimizes Rust-validated distance; structural severity weighting preserved.
 
-Cons: higher variance; requires Rust at every training step (latency hit at ~10 ms/batch); variance reduction (baselines, control variates) adds complexity; marginally better only when label-derived CE targets and Rust distances disagree — and at v1 they largely agree.
+Cons: higher variance; requires additional importance-weighting / control-variate machinery to stabilize; requires Rust at every training step (latency hit at ~10 ms/batch); marginally better only when label-derived CE targets and Rust distances disagree — and at v1 they largely agree. Rejected for v1 scope.
 
 Deferred to a future v2 of ADR-07 if empirical signal justifies it. The proposer head emits `register_gumbel` in training mode to preserve this upgrade path with no additional head surgery.
 
-### Option C — Do nothing, accept Rule 4 as metric-only
+### Option C — Do nothing, retain pure metric-only Rule 4 loss
 
 Leave `_compute_rule_four_loss` as a non-gradient-bearing metric; rely on the other v2 losses (emergent binding, production, involution) to shape the architecture and evaluate Rule 4 compliance at validation time.
 
-Rejected because: (1) Codex 5.4's panel finding explicitly flagged this as a gap requiring closure before first training run, (2) Agent 34's own docstring cites the learned proposer as the planned resolution, (3) leaving the loss inert while it appears in the aggregate creates misleading per-step metrics in W&B / checkpoint state.
+Rejected per the Codex panel finding: metric without gradient signal cannot drive model improvement. Specifically: (1) Codex 5.4's panel finding explicitly flagged this as a gap requiring closure before first training run, (2) Agent 34's own docstring cites the learned proposer as the planned resolution, (3) leaving the loss inert while it appears in the aggregate creates misleading per-step metrics in W&B / checkpoint state.
 
 ## Consequences
 
@@ -1111,23 +1113,34 @@ Rejected because: (1) Codex 5.4's panel finding explicitly flagged this as a gap
 * **Gradient flow closes** — the first training run can see genuine Rule 4 signal backpropagating through the model. Empirical question: does the proposer's label-CE signal improve Rule 4 compliance at eval? Answer measured at first validation pass.
 * **Forward contract extended** — when enabled, `CASNativeModel.forward` adds a `proposer_outputs` key. All existing consumers ignore unknown keys.
 * **Config schema extended** — `V2ComponentFlags.use_expression_proposer` + eight `V2Hyperparameters.lambda_proposer_* / proposer_*` fields. YAML schema updated in `training_v2.yaml`.
-* **Test surface** — ~25 new tests in `tests/test_expression_proposer.py` covering shape, gradient flow, Gumbel mode, backward compatibility, config integration, and the critical end-to-end "does proposer loss deliver gradient to model params" assertion.
+* **Test surface** — 34 tests in `cas-native/tests/test_expression_proposer.py` (landed in commit `4742da5`) covering shape, gradient flow, Gumbel mode, backward compatibility, config integration, trainer wiring, and the critical end-to-end "does proposer loss deliver gradient to model params" assertion.
+* **Incidental production bug surfaced by tests** — during Wave 8A testing (commit `4742da5`), the test suite surfaced a missing `import torch.nn.functional as F` in `cas-native/model/loss.py` (`ExpressionProposerLoss.compute_proposer_loss` depends on `F.cross_entropy` / `F.smooth_l1_loss`). The import was added in the same commit. Neutral-to-positive consequence: the test coverage caught a latent production defect before first training run.
 * **Follow-ups flagged** — Synthetic data generator should begin emitting explicit `target_noetic` / `target_domain` fields on `omega_labels` entries; the v1 proposer loss falls back to the Rule-4 template (`^3^P|…`) when only register labels are present.
 
 ## Framework Fidelity Notes
 
-No framework change. ADR-07 is implementation work closing a wiring gap in CAS-Native v2. The 40 Cognitive States, 7 Drives, 4 Registers, 5 Generative Operations — the primitives named in USPTO #64/037,173 and Clarifications 1-10 — remain unchanged. The proposer head consumes the v7.7 expression space (Noetic × Domain × Register × operand-count × named-emergent) and emits proposals within that space. IP attorney review flagged with `cas_v7_7_rollout_plan.md` as part of v7.7 rollout; ADR-07 adds no new primitives and does not alter v7.7's provisional patent posture.
+No new CAS framework primitives introduced. The proposer is implementation machinery bridging model outputs to the Rust validator; it does not alter the 40-state Noetic × Domain structure, Drive cardinality, or Register axis. The 40 Cognitive States, 7 Drives, 4 Registers, 5 Generative Operations — the primitives named in USPTO #64/037,173 and Clarifications 1-10 — remain unchanged. The proposer head consumes the v7.7 expression space (Noetic × Domain × Register × operand-count × named-emergent) and emits proposals within that space.
+
+Clarification 10 Rule 4 semantics preserved: the Rust validator remains authoritative for admissibility determinations at inference and evaluation. The proposer's role is to produce gradient-bearing proposals from model hidden states; validity judgment continues to live in Rust. IP attorney review flagged with `cas_v7_7_rollout_plan.md` as part of v7.7 rollout; ADR-07 adds no new primitives and does not alter v7.7's provisional patent posture.
 
 Because this is a Wave 8A scaffold, the ADR carries a **partial framework fidelity** note: the proposer's training signal derives from labels, not from a CAS-algebraic reward. Once empirical signal justifies it, the Option-B upgrade path wires the Rust validator's distance directly into the gradient — at which point framework fidelity graduates to full. The v1 Option-A design closes the gradient-flow gap identified by the panel without claiming framework-level optimality.
 
 ## Implementation Notes
 
-* New module: `cas-native/model/expression_proposer.py` with `ExpressionProposerHead`, `ExpressionProposal` dataclass, and public constants.
-* New loss class: `ProposerRuleFourLoss` in `cas-native/model/loss.py`, alongside `InvolutionConstraintLoss` and `LacunarityRegularizationLoss`.
-* Trainer integration: `_compute_proposer_rule_four_loss` method + aggregation term in `_train_step` with marker comment `# ADR-07 expression proposer loss aggregation`.
-* Model integration: `CASNativeModel.forward` runs the proposer on the pre-final-norm hidden states `x` (same tensor feeding `lm_head` and `topos_reasoner`), so proposer gradients reach every transformer layer.
-* Config: `V2ComponentFlags.use_expression_proposer` defaults `False`. `V2Hyperparameters` gains eight fields (five loss weights + two architecture knobs + the outer `lambda_proposer_rule_four`). YAML template `training_v2.yaml` updated.
-* Test file: `cas-native/tests/test_expression_proposer.py`.
+Landed via Wave 8A Agent 35 (commit `5ad1196`); test coverage + `loss.py` F-import fix landed in commit `4742da5`.
+
+* **Source module (NEW):** `cas-native/model/expression_proposer.py` — `ExpressionProposerHead` class, `ExpressionProposal` dataclass, public constants (`NUM_NOETICS`, `NUM_REGISTERS`, bottleneck and max-operand defaults). `ExpressionProposerHead.parameter_count` exposes the actual learned parameter count for the currently-configured d_model / bottleneck / max_operands triple.
+* **Loss function (NEW class in existing file):** `ExpressionProposerLoss.compute_proposer_loss` in `cas-native/model/loss.py`, alongside `InvolutionConstraintLoss` and `LacunarityRegularizationLoss`. Depends on `torch.nn.functional` (`F.cross_entropy`, `F.smooth_l1_loss`); the `import torch.nn.functional as F` statement was missing prior to commit `4742da5` and was added there alongside the 34-test suite that surfaced it.
+* **Config flag:** `V2ComponentFlags.use_expression_proposer` (default `False`) in training config; opt-in to preserve byte-equivalent forward/training when disabled.
+* **Trainer integration:** `_compute_proposer_rule_four_loss(hidden_states, register_labels_batch, omega_labels_batch)` method on `CASTrainer`; aggregation term in `_train_step` marked `# ADR-07 expression proposer loss aggregation`.
+* **Model integration:** `CASNativeModel.forward` runs the proposer on the pre-final-norm hidden states `x` (same tensor feeding `lm_head` and `topos_reasoner`), so proposer gradients reach every transformer layer. Integrates cleanly with the Option E register-FiLM infrastructure (ADR-08) — the proposer operates on hidden states, not on register parameters, so Option E's shared-latent refactor is orthogonal to ADR-07.
+* **Config schema:** `V2Hyperparameters` gains eight fields (five component-loss weights + two architecture knobs `proposer_bottleneck_dim`, `proposer_max_operands` + the outer `lambda_proposer_rule_four`). YAML template `training/config/training_v2.yaml` updated with an `expression_proposer:` section.
+* **Test coverage (NEW file):** `cas-native/tests/test_expression_proposer.py` — 34 tests covering shape, gradient flow, Gumbel-ST mode, backward compatibility with `use_expression_proposer=False`, config integration, trainer wiring, and the critical end-to-end gradient-delivery assertion. Landed in commit `4742da5`.
+* **Label extraction prerequisite:** requires compiler-wiring for `RegisterActivation` label extraction (Agent 36's parallel work, tracked as a separate unnumbered ADR / `docs/working/cas_v7_7_rollout_plan.md` follow-up).
+
+### Consequence — checkpoint shape
+
+When `use_expression_proposer=True`, the model `state_dict` gains proposer-prefixed entries (`expression_proposer.backbone.*`, `expression_proposer.noetic_head.*`, etc.). Checkpoints saved with the flag enabled are not byte-compatible with pre-ADR-07 checkpoints or with checkpoints saved with the flag disabled. Loading a proposer-enabled checkpoint into a proposer-disabled model requires `strict=False` and conversely.
 
 Integration points — summary table:
 
@@ -1139,7 +1152,7 @@ Integration points — summary table:
 | `training/trainer.py` | ADD proposer init, `_compute_proposer_rule_four_loss`, aggregation term marked `# ADR-07 expression proposer loss aggregation` |
 | `training/config.py` | ADD `use_expression_proposer` flag + 8 proposer hyperparameters + validate() hooks |
 | `config/training_v2.yaml` | ADD proposer section |
-| `tests/test_expression_proposer.py` | NEW — ~25 tests including the critical gradient-flow assertion |
+| `tests/test_expression_proposer.py` | NEW — 34 tests (landed in commit `4742da5`) including the critical gradient-flow assertion |
 
 Total v2 additions after ADR-07: ~30K (pre-existing) + ~5-18K (proposer) ≈ **35-48K parameters**. Still <0.1% of a 50M demonstration model. Device-friendly, load-time-friendly, runtime-friendly, quantization-tractable.
 
