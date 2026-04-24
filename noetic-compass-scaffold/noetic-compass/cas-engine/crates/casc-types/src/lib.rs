@@ -19,6 +19,10 @@ pub enum PrimitiveType {
     Rpm,
     Relation,
     Program,
+    Number,
+    MetaSet,
+    MetaSymbol,
+    MetaAssertion,
     Any,
 }
 

@@ -13,12 +13,16 @@ pub const CAS_GRAMMAR_BNF: &str = r#"<program>          ::= <statement> (";" <st
 <typed_param_list> ::= <typed_param> ("," <typed_param>)* ;
 <typed_param>      ::= <ident> (":" <type_expr>)? ;
 <type_expr>        ::= <type_name> ("[" <domain_list> "]")? ;
-<type_name>        ::= "state" | "drive" | "string" | "fractal" | "rpm" | "relation" | "program" | "any" ;
+<type_name>        ::= "state" | "drive" | "string" | "fractal" | "rpm" | "relation" | "program" | "number" | "meta_set" | "meta_symbol" | "meta_assertion" | "any" ;
 <domain_list>      ::= <domain> ("," <domain>)* ;
-<expression>       ::= <relation> ;
+<expression>       ::= <meta_relation> ;
+<meta_relation>    ::= <relation> (("∈" | "∉" | "⊂" | "⊆" | "⊃" | "⊇") <relation>)* ;
 <relation>         ::= <composition> (("->") <composition>)* ;
 <composition>      ::= <primary> (("*" | "/" | "circ") <primary>)* ;
-<primary>          ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <call> | <ident> | <string> | "(" <expression> ")" ;
+<primary>          ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <cardinality> | <meta_set> | <meta_symbol> | "∅" | <number> | <call> | <ident> | <string> | "(" <expression> ")" ;
+<cardinality>      ::= "|" <meta_set> "|" ;
+<meta_set>         ::= "Noetics" | "Domains" | "Worlds" | "Drives" | "Registers" | "States" | "Foundations" | "SubFoundations" | "Foundation_1" | ... | "Foundation_7" ;
+<meta_symbol>      ::= <domain> | "T" | "A" | "f" | "E" ;
 <call>             ::= <ident> "(" <arg_list>? ")" ;
 <arg_list>         ::= <expression> ("," <expression>)* ;
 <rpm_call>         ::= "RPM" "(" (<state> | <state_ref> | <drive_ref>) ")" ;
@@ -92,6 +96,13 @@ pub enum TokenKind {
     String,
     Number,
     Arrow,
+    Member,
+    NotMember,
+    Subset,
+    SubsetEq,
+    Superset,
+    SupersetEq,
+    EmptySet,
     Times,
     Divide,
     Circ,
@@ -105,6 +116,7 @@ pub enum TokenKind {
     RBracket,
     LAngle,
     RAngle,
+    Pipe,
     Colon,
     Comma,
     Equals,
@@ -120,7 +132,7 @@ pub struct LexToken {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum TypeKind {
     Any,
     State,
@@ -130,6 +142,10 @@ pub enum TypeKind {
     Rpm,
     Relation,
     Program,
+    Number,
+    MetaSet,
+    MetaSymbol,
+    MetaAssertion,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
@@ -188,12 +204,24 @@ pub enum BinaryOp {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub enum MetaOp {
+    Member,
+    NotMember,
+    Subset,
+    SubsetEq,
+    Superset,
+    SupersetEq,
+    Equals,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(tag = "node")]
 pub enum AstNode {
     StateLiteral {
         operator: u8,
         domain: String,
         drive: Option<u8>,
+        domain_explicit: bool,
     },
     DriveLiteral {
         drive: u8,
@@ -209,6 +237,25 @@ pub enum AstNode {
     },
     StringLiteral {
         value: String,
+    },
+    NumberLiteral {
+        value: i64,
+    },
+    MetaSetLiteral {
+        name: String,
+    },
+    MetaSymbol {
+        name: String,
+        symbol_kind: String,
+    },
+    EmptySetLiteral,
+    CardinalityExpr {
+        collection: Box<AstNode>,
+    },
+    MetaAssertion {
+        op: MetaOp,
+        left: Box<AstNode>,
+        right: Box<AstNode>,
     },
     CallExpr {
         callee: String,
@@ -252,12 +299,45 @@ fn type_keyword_to_kind(name: &str) -> Result<TypeKind, LanguageError> {
         "rpm" => Ok(TypeKind::Rpm),
         "relation" => Ok(TypeKind::Relation),
         "program" => Ok(TypeKind::Program),
+        "number" => Ok(TypeKind::Number),
+        "meta_set" => Ok(TypeKind::MetaSet),
+        "meta_symbol" => Ok(TypeKind::MetaSymbol),
+        "meta_assertion" => Ok(TypeKind::MetaAssertion),
         _ => Err(LanguageError::new(
             Stage::Parsing,
             format!("unknown type {name}"),
             None,
         )),
     }
+}
+
+fn canonical_meta_set_name(name: &str) -> Option<&'static str> {
+    match name {
+        "Noetics" => Some("Noetics"),
+        "Domains" | "Worlds" => Some("Domains"),
+        "Drives" => Some("Drives"),
+        "Registers" => Some("Registers"),
+        "States" => Some("States"),
+        "Foundations" => Some("Foundations"),
+        "SubFoundations" | "DriveRegisterPositions" | "SubFoundationPositions" => {
+            Some("SubFoundations")
+        }
+        "Foundation_1" => Some("Foundation_1"),
+        "Foundation_2" => Some("Foundation_2"),
+        "Foundation_3" => Some("Foundation_3"),
+        "Foundation_4" => Some("Foundation_4"),
+        "Foundation_5" => Some("Foundation_5"),
+        "Foundation_6" => Some("Foundation_6"),
+        "Foundation_7" => Some("Foundation_7"),
+        "EmptySet" => Some("EmptySet"),
+        _ => None,
+    }
+}
+
+fn parse_drive_token_value(value: &str) -> Result<u8, LanguageError> {
+    let body = value.strip_prefix("F_").or_else(|| value.strip_prefix('F'));
+    body.and_then(|digits| digits.parse::<u8>().ok())
+        .ok_or_else(|| LanguageError::new(Stage::Parsing, format!("invalid drive {value}"), None))
 }
 
 pub fn lex(source: &str) -> Result<Vec<LexToken>, LanguageError> {
@@ -292,6 +372,69 @@ pub fn lex(source: &str) -> Result<Vec<LexToken>, LanguageError> {
                 position: index,
             });
             index += 2;
+            continue;
+        }
+        if ch == '\u{2209}' {
+            tokens.push(LexToken {
+                kind: TokenKind::NotMember,
+                value: ch.to_string(),
+                position: index,
+            });
+            index += ch.len_utf8();
+            continue;
+        }
+        if ch == '\u{2208}' {
+            tokens.push(LexToken {
+                kind: TokenKind::Member,
+                value: ch.to_string(),
+                position: index,
+            });
+            index += ch.len_utf8();
+            continue;
+        }
+        if ch == '\u{2286}' {
+            tokens.push(LexToken {
+                kind: TokenKind::SubsetEq,
+                value: ch.to_string(),
+                position: index,
+            });
+            index += ch.len_utf8();
+            continue;
+        }
+        if ch == '\u{2282}' {
+            tokens.push(LexToken {
+                kind: TokenKind::Subset,
+                value: ch.to_string(),
+                position: index,
+            });
+            index += ch.len_utf8();
+            continue;
+        }
+        if ch == '\u{2287}' {
+            tokens.push(LexToken {
+                kind: TokenKind::SupersetEq,
+                value: ch.to_string(),
+                position: index,
+            });
+            index += ch.len_utf8();
+            continue;
+        }
+        if ch == '\u{2283}' {
+            tokens.push(LexToken {
+                kind: TokenKind::Superset,
+                value: ch.to_string(),
+                position: index,
+            });
+            index += ch.len_utf8();
+            continue;
+        }
+        if ch == '\u{2205}' {
+            tokens.push(LexToken {
+                kind: TokenKind::EmptySet,
+                value: ch.to_string(),
+                position: index,
+            });
+            index += ch.len_utf8();
             continue;
         }
         if rest.starts_with("CO-") {
@@ -343,9 +486,18 @@ pub fn lex(source: &str) -> Result<Vec<LexToken>, LanguageError> {
             }
             continue;
         }
-        if ch == 'F' {
+        if ch == 'F'
+            && source[index + ch.len_utf8()..]
+                .chars()
+                .next()
+                .map(|next| next.is_ascii_digit() || next == '_')
+                .unwrap_or(false)
+        {
             let start = index;
             index += 1;
+            if source[index..].starts_with('_') {
+                index += 1;
+            }
             while index < source.len() && source[index..].chars().next().unwrap().is_ascii_digit() {
                 index += 1;
             }
@@ -463,6 +615,7 @@ pub fn lex(source: &str) -> Result<Vec<LexToken>, LanguageError> {
             ':' => Some(TokenKind::Colon),
             ',' => Some(TokenKind::Comma),
             '=' => Some(TokenKind::Equals),
+            '|' => Some(TokenKind::Pipe),
             ';' => Some(TokenKind::Semi),
             _ => None,
         };
@@ -573,7 +726,7 @@ impl Parser {
                 Ok(AstNode::LetStatement(LetStatement {
                     name,
                     annotation,
-                    expr: Box::new(self.parse_relation()?),
+                    expr: Box::new(self.parse_expression()?),
                 }))
             }
             TokenKind::Fn => {
@@ -610,7 +763,7 @@ impl Parser {
                     params,
                     param_types,
                     return_type,
-                    body: Box::new(self.parse_relation()?),
+                    body: Box::new(self.parse_expression()?),
                 }))
             }
             TokenKind::Use => {
@@ -618,7 +771,7 @@ impl Parser {
                 let path = decode_path_literal(&self.expect(TokenKind::String)?.value);
                 Ok(AstNode::UseStatement(UseStatement { path }))
             }
-            _ => self.parse_relation(),
+            _ => self.parse_expression(),
         }
     }
 
@@ -641,8 +794,54 @@ impl Parser {
                 | TypeKind::String
                 | TypeKind::Fractal
                 | TypeKind::Rpm
+                | TypeKind::Number
+                | TypeKind::MetaSet
+                | TypeKind::MetaSymbol
+                | TypeKind::MetaAssertion
         );
         Ok(TypeInfo::new(kind, domains, singular))
+    }
+
+    fn parse_expression(&mut self) -> Result<AstNode, LanguageError> {
+        let mut expr = self.parse_relation()?;
+        while matches!(
+            self.current().kind,
+            TokenKind::Member
+                | TokenKind::NotMember
+                | TokenKind::Subset
+                | TokenKind::SubsetEq
+                | TokenKind::Superset
+                | TokenKind::SupersetEq
+        ) {
+            let token = self.advance();
+            let rhs = self.parse_relation()?;
+            let op = match token.kind {
+                TokenKind::Member => MetaOp::Member,
+                TokenKind::NotMember => MetaOp::NotMember,
+                TokenKind::Subset => MetaOp::Subset,
+                TokenKind::SubsetEq => MetaOp::SubsetEq,
+                TokenKind::Superset => MetaOp::Superset,
+                TokenKind::SupersetEq => MetaOp::SupersetEq,
+                _ => unreachable!(),
+            };
+            expr = AstNode::MetaAssertion {
+                op,
+                left: Box::new(expr),
+                right: Box::new(rhs),
+            };
+        }
+        if self.current().kind == TokenKind::Equals
+            && matches!(expr, AstNode::CardinalityExpr { .. })
+        {
+            self.advance();
+            let rhs = self.parse_expression()?;
+            expr = AstNode::MetaAssertion {
+                op: MetaOp::Equals,
+                left: Box::new(expr),
+                right: Box::new(rhs),
+            };
+        }
+        Ok(expr)
     }
 
     fn parse_relation(&mut self) -> Result<AstNode, LanguageError> {
@@ -686,14 +885,15 @@ impl Parser {
         match self.current().kind {
             TokenKind::LParen => {
                 self.advance();
-                let expr = self.parse_relation()?;
+                let expr = self.parse_expression()?;
                 self.expect(TokenKind::RParen)?;
                 Ok(expr)
             }
+            TokenKind::Pipe => self.parse_cardinality(),
             TokenKind::Rpm => {
                 self.advance();
                 self.expect(TokenKind::LParen)?;
-                let expr = self.parse_relation()?;
+                let expr = self.parse_expression()?;
                 self.expect(TokenKind::RParen)?;
                 Ok(AstNode::RpmCall {
                     expr: Box::new(expr),
@@ -707,10 +907,22 @@ impl Parser {
                     operator: token.value[1..].parse::<u8>().unwrap(),
                     domain: token.value[..1].to_string(),
                     drive: None,
+                    domain_explicit: true,
                 })
             }
             TokenKind::String => Ok(AstNode::StringLiteral {
                 value: decode_string_literal(&self.advance().value),
+            }),
+            TokenKind::Number => Ok(AstNode::NumberLiteral {
+                value: self.advance().value.parse::<i64>().unwrap(),
+            }),
+            TokenKind::EmptySet => {
+                self.advance();
+                Ok(AstNode::EmptySetLiteral)
+            }
+            TokenKind::Domain => Ok(AstNode::MetaSymbol {
+                name: self.advance().value,
+                symbol_kind: "domain".to_string(),
             }),
             TokenKind::Ident => {
                 let name = self.advance().value;
@@ -719,7 +931,7 @@ impl Parser {
                     let mut args = Vec::new();
                     if self.current().kind != TokenKind::RParen {
                         loop {
-                            args.push(self.parse_relation()?);
+                            args.push(self.parse_expression()?);
                             if self.current().kind != TokenKind::Comma {
                                 break;
                             }
@@ -728,13 +940,20 @@ impl Parser {
                     }
                     self.expect(TokenKind::RParen)?;
                     Ok(AstNode::CallExpr { callee: name, args })
+                } else if let Some(canonical) = canonical_meta_set_name(&name) {
+                    Ok(AstNode::MetaSetLiteral {
+                        name: canonical.to_string(),
+                    })
+                } else if matches!(name.as_str(), "T" | "A" | "f" | "E") {
+                    Ok(AstNode::MetaSymbol {
+                        name,
+                        symbol_kind: "register".to_string(),
+                    })
                 } else {
                     Ok(AstNode::Identifier { name })
                 }
             }
-            TokenKind::Drive => Ok(AstNode::DriveLiteral {
-                drive: self.advance().value[1..].parse::<u8>().unwrap(),
-            }),
+            TokenKind::Drive => self.parse_drive_or_drive_register_symbol(),
             _ => Err(LanguageError::new(
                 Stage::Parsing,
                 format!("unexpected token {:?}", self.current().kind),
@@ -746,25 +965,56 @@ impl Parser {
     fn parse_state(&mut self) -> Result<AstNode, LanguageError> {
         let token = self.expect(TokenKind::Co)?;
         let mut domain = "P".to_string();
+        let mut domain_explicit = false;
         let mut drive = None;
         if self.current().kind == TokenKind::Caret {
             self.advance();
             domain = self.expect(TokenKind::Domain)?.value;
+            domain_explicit = true;
         }
         if self.current().kind == TokenKind::Underscore {
             self.advance();
             self.expect(TokenKind::LBrace)?;
-            drive = Some(
-                self.expect(TokenKind::Drive)?.value[1..]
-                    .parse::<u8>()
-                    .unwrap(),
-            );
+            drive = Some(parse_drive_token_value(
+                &self.expect(TokenKind::Drive)?.value,
+            )?);
             self.expect(TokenKind::RBrace)?;
         }
         Ok(AstNode::StateLiteral {
             operator: token.value[3..].parse::<u8>().unwrap(),
             domain,
             drive,
+            domain_explicit,
+        })
+    }
+
+    fn parse_drive_or_drive_register_symbol(&mut self) -> Result<AstNode, LanguageError> {
+        let token = self.expect(TokenKind::Drive)?;
+        let drive = parse_drive_token_value(&token.value)?;
+        if self.current().kind == TokenKind::Pipe {
+            self.advance();
+            let reg = self.expect(TokenKind::Ident)?.value;
+            if !matches!(reg.as_str(), "T" | "A" | "f" | "E") {
+                return Err(LanguageError::new(
+                    Stage::Parsing,
+                    format!("invalid register {reg}"),
+                    Some(token.position),
+                ));
+            }
+            return Ok(AstNode::MetaSymbol {
+                name: format!("F{drive}|{reg}"),
+                symbol_kind: "drive_register".to_string(),
+            });
+        }
+        Ok(AstNode::DriveLiteral { drive })
+    }
+
+    fn parse_cardinality(&mut self) -> Result<AstNode, LanguageError> {
+        self.expect(TokenKind::Pipe)?;
+        let collection = self.parse_relation()?;
+        self.expect(TokenKind::Pipe)?;
+        Ok(AstNode::CardinalityExpr {
+            collection: Box::new(collection),
         })
     }
 

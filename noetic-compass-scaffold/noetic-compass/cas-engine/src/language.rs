@@ -5,8 +5,9 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use casc_ir::{
-    CompilationArtifact, FractalValue, FunctionValue, Instruction, ModuleValue, RelationValue,
-    RpmValue, StateValue, Value,
+    CardinalityValue, CompilationArtifact, FractalValue, FunctionValue, Instruction,
+    MetaAssertionValue, MetaSetValue, MetaSymbolValue, ModuleValue, RelationValue, RpmValue,
+    StateValue, Value,
 };
 use casc_syntax::{self as syntax, LanguageError as SyntaxLanguageError};
 use casc_types::{
@@ -26,12 +27,16 @@ pub const CAS_GRAMMAR_BNF: &str = r#"<program>          ::= <statement> (";" <st
 <typed_param_list> ::= <typed_param> ("," <typed_param>)* ;
 <typed_param>      ::= <ident> (":" <type_expr>)? ;
 <type_expr>        ::= <type_name> ("[" <domain_list> "]")? ;
-<type_name>        ::= "state" | "drive" | "string" | "fractal" | "rpm" | "relation" | "program" | "any" ;
+<type_name>        ::= "state" | "drive" | "string" | "fractal" | "rpm" | "relation" | "program" | "number" | "meta_set" | "meta_symbol" | "meta_assertion" | "any" ;
 <domain_list>      ::= <domain> ("," <domain>)* ;
-<expression>       ::= <relation> ;
+<expression>       ::= <meta_relation> ;
+<meta_relation>    ::= <relation> (("∈" | "∉" | "⊂" | "⊆" | "⊃" | "⊇") <relation>)* ;
 <relation>         ::= <composition> (("->") <composition>)* ;
 <composition>      ::= <primary> (("*" | "/" | "circ") <primary>)* ;
-<primary>          ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <call> | <ident> | <string> | "(" <expression> ")" ;
+<primary>          ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <cardinality> | <meta_set> | <meta_symbol> | "∅" | <number> | <call> | <ident> | <string> | "(" <expression> ")" ;
+<cardinality>      ::= "|" <meta_set> "|" ;
+<meta_set>         ::= "Noetics" | "Domains" | "Worlds" | "Drives" | "Registers" | "States" | "Foundations" | "SubFoundations" | "Foundation_1" | ... | "Foundation_7" ;
+<meta_symbol>      ::= <domain> | "T" | "A" | "f" | "E" ;
 <call>             ::= <ident> "(" <arg_list>? ")" ;
 <arg_list>         ::= <expression> ("," <expression>)* ;
 <rpm_call>         ::= "RPM" "(" (<state> | <state_ref> | <drive_ref>) ")" ;
@@ -189,6 +194,10 @@ fn format_type(info: &TypeInfo) -> String {
         TypeKind::Rpm => "rpm",
         TypeKind::Relation => "relation",
         TypeKind::Program => "program",
+        TypeKind::Number => "number",
+        TypeKind::MetaSet => "meta_set",
+        TypeKind::MetaSymbol => "meta_symbol",
+        TypeKind::MetaAssertion => "meta_assertion",
     }
     .to_string();
     if !info.domains.is_empty() {
@@ -260,6 +269,102 @@ fn union_domains(left: &[String], right: &[String]) -> Vec<String> {
     out
 }
 
+const VALID_REGISTERS: [&str; 4] = ["T", "A", "f", "E"];
+
+fn canonical_meta_set_name(name: &str) -> Option<String> {
+    match name {
+        "Noetics" => Some("Noetics".to_string()),
+        "Domains" | "Worlds" => Some("Domains".to_string()),
+        "Drives" => Some("Drives".to_string()),
+        "Registers" => Some("Registers".to_string()),
+        "States" => Some("States".to_string()),
+        "Foundations" => Some("Foundations".to_string()),
+        "SubFoundations" | "DriveRegisterPositions" | "SubFoundationPositions" => {
+            Some("SubFoundations".to_string())
+        }
+        "Foundation_1" | "Foundation_2" | "Foundation_3" | "Foundation_4" | "Foundation_5"
+        | "Foundation_6" | "Foundation_7" => Some(name.to_string()),
+        "EmptySet" => Some("EmptySet".to_string()),
+        _ => None,
+    }
+}
+
+fn drive_key(drive: u8) -> String {
+    format!("F{drive}")
+}
+
+fn drive_register_key(drive: u8, register: &str) -> String {
+    format!("F{drive}|{register}")
+}
+
+fn state_key(operator: u8, domain: &str) -> String {
+    format!("{domain}{operator}")
+}
+
+fn meta_set_elements(name: &str) -> Option<Vec<String>> {
+    let canonical = canonical_meta_set_name(name)?;
+    let mut elements = match canonical.as_str() {
+        "Noetics" => (0..10).map(|index| format!("CO-{index}")).collect(),
+        "Domains" => ["C", "E", "O", "P"]
+            .into_iter()
+            .map(str::to_string)
+            .collect(),
+        "Drives" => (1..=7).map(drive_key).collect(),
+        "Registers" => VALID_REGISTERS
+            .iter()
+            .map(|value| value.to_string())
+            .collect(),
+        "States" => ["P", "C", "E", "O"]
+            .into_iter()
+            .flat_map(|domain| (0..10).map(move |operator| format!("{domain}{operator}")))
+            .collect(),
+        "Foundations" => (1..=7).map(|index| format!("Foundation_{index}")).collect(),
+        "SubFoundations" => (1..=7)
+            .flat_map(|drive| {
+                VALID_REGISTERS
+                    .iter()
+                    .map(move |register| drive_register_key(drive, register))
+            })
+            .collect(),
+        "EmptySet" => Vec::new(),
+        foundation if foundation.starts_with("Foundation_") => {
+            let drive = foundation["Foundation_".len()..].parse::<u8>().ok()?;
+            if !(1..=7).contains(&drive) {
+                return None;
+            }
+            VALID_REGISTERS
+                .iter()
+                .map(|register| drive_register_key(drive, register))
+                .collect()
+        }
+        _ => return None,
+    };
+    elements.sort();
+    elements.dedup();
+    Some(elements)
+}
+
+fn meta_set_value(name: &str) -> Result<MetaSetValue, LanguageError> {
+    let canonical = canonical_meta_set_name(name).ok_or_else(|| {
+        LanguageError::new(
+            Stage::Typecheck,
+            format!("unknown CAS meta-set {name}"),
+            None,
+        )
+    })?;
+    let elements = meta_set_elements(&canonical).ok_or_else(|| {
+        LanguageError::new(
+            Stage::Typecheck,
+            format!("unknown CAS meta-set {canonical}"),
+            None,
+        )
+    })?;
+    Ok(MetaSetValue {
+        name: canonical,
+        elements,
+    })
+}
+
 fn hm_error_to_language(error: HmInferenceError) -> LanguageError {
     LanguageError::new(
         Stage::Typecheck,
@@ -278,6 +383,10 @@ fn hm_primitive_from_type_info(info: &TypeInfo) -> Option<PrimitiveType> {
         TypeKind::Rpm => Some(PrimitiveType::Rpm),
         TypeKind::Relation => Some(PrimitiveType::Relation),
         TypeKind::Program => Some(PrimitiveType::Program),
+        TypeKind::Number => Some(PrimitiveType::Number),
+        TypeKind::MetaSet => Some(PrimitiveType::MetaSet),
+        TypeKind::MetaSymbol => Some(PrimitiveType::MetaSymbol),
+        TypeKind::MetaAssertion => Some(PrimitiveType::MetaAssertion),
     }
 }
 
@@ -296,6 +405,10 @@ fn type_info_from_hm_primitive(kind: PrimitiveType, domains: Vec<String>) -> Typ
         PrimitiveType::Rpm => (TypeKind::Rpm, true),
         PrimitiveType::Relation => (TypeKind::Relation, false),
         PrimitiveType::Program => (TypeKind::Program, false),
+        PrimitiveType::Number => (TypeKind::Number, true),
+        PrimitiveType::MetaSet => (TypeKind::MetaSet, true),
+        PrimitiveType::MetaSymbol => (TypeKind::MetaSymbol, true),
+        PrimitiveType::MetaAssertion => (TypeKind::MetaAssertion, true),
         PrimitiveType::Any => (TypeKind::Any, false),
     };
     TypeInfo::new(kind, domains, singular)
@@ -369,6 +482,18 @@ fn hm_infer_expr(
         AstNode::DriveLiteral { .. } => Ok(MonoType::Primitive(PrimitiveType::Drive)),
         AstNode::FractalLiteral { .. } => Ok(MonoType::Primitive(PrimitiveType::Fractal)),
         AstNode::StringLiteral { .. } => Ok(MonoType::Primitive(PrimitiveType::String)),
+        AstNode::NumberLiteral { .. } => Ok(MonoType::Primitive(PrimitiveType::Number)),
+        AstNode::MetaSetLiteral { .. } | AstNode::EmptySetLiteral => {
+            Ok(MonoType::Primitive(PrimitiveType::MetaSet))
+        }
+        AstNode::MetaSymbol { .. } => Ok(MonoType::Primitive(PrimitiveType::MetaSymbol)),
+        AstNode::CardinalityExpr { collection } => {
+            let collection_ty = hm_infer_expr(collection, ctx, env, locals)?;
+            ctx.unify(&collection_ty, &MonoType::Primitive(PrimitiveType::MetaSet))
+                .map_err(hm_error_to_language)?;
+            Ok(MonoType::Primitive(PrimitiveType::Number))
+        }
+        AstNode::MetaAssertion { .. } => Ok(MonoType::Primitive(PrimitiveType::MetaAssertion)),
         AstNode::RpmCall { expr } => {
             let arg = hm_infer_expr(expr, ctx, env, locals)?;
             let state = MonoType::Primitive(PrimitiveType::State);
@@ -601,6 +726,12 @@ fn constrain_expr(
         | AstNode::DriveLiteral { .. }
         | AstNode::FractalLiteral { .. }
         | AstNode::StringLiteral { .. }
+        | AstNode::NumberLiteral { .. }
+        | AstNode::MetaSetLiteral { .. }
+        | AstNode::MetaSymbol { .. }
+        | AstNode::EmptySetLiteral
+        | AstNode::CardinalityExpr { .. }
+        | AstNode::MetaAssertion { .. }
         | AstNode::LetStatement(_)
         | AstNode::FunctionDef(_)
         | AstNode::UseStatement(_)
@@ -620,6 +751,7 @@ fn infer(
             operator,
             domain,
             drive,
+            domain_explicit: _,
         } => {
             let _ = parse_operator_index(*operator)?;
             let _ = parse_domain_code(domain).ok_or_else(|| {
@@ -652,6 +784,78 @@ fn infer(
             Ok(TypeInfo::new(TypeKind::Fractal, Vec::new(), true))
         }
         AstNode::StringLiteral { .. } => Ok(TypeInfo::new(TypeKind::String, Vec::new(), true)),
+        AstNode::NumberLiteral { .. } => Ok(TypeInfo::new(TypeKind::Number, Vec::new(), true)),
+        AstNode::MetaSetLiteral { name } => {
+            let _ = meta_set_value(name)?;
+            Ok(TypeInfo::new(TypeKind::MetaSet, Vec::new(), true))
+        }
+        AstNode::EmptySetLiteral => Ok(TypeInfo::new(TypeKind::MetaSet, Vec::new(), true)),
+        AstNode::MetaSymbol { .. } => Ok(TypeInfo::new(TypeKind::MetaSymbol, Vec::new(), true)),
+        AstNode::CardinalityExpr { collection } => {
+            let collection_type = infer(collection, warnings, env)?;
+            if !matches!(collection_type.kind, TypeKind::MetaSet | TypeKind::Any) {
+                return Err(LanguageError::new(
+                    Stage::Typecheck,
+                    format!(
+                        "cardinality `|X|` requires a meta-set, got {}",
+                        format_type(&collection_type)
+                    ),
+                    None,
+                ));
+            }
+            Ok(TypeInfo::new(TypeKind::Number, Vec::new(), true))
+        }
+        AstNode::MetaAssertion { op, left, right } => {
+            let left_type = infer(left, warnings, env)?;
+            let right_type = infer(right, warnings, env)?;
+            match op {
+                syntax::MetaOp::Member | syntax::MetaOp::NotMember => {
+                    if !matches!(right_type.kind, TypeKind::MetaSet | TypeKind::Any) {
+                        return Err(LanguageError::new(
+                            Stage::Typecheck,
+                            "membership requires a meta-set on the right",
+                            None,
+                        ));
+                    }
+                }
+                syntax::MetaOp::Subset
+                | syntax::MetaOp::SubsetEq
+                | syntax::MetaOp::Superset
+                | syntax::MetaOp::SupersetEq => {
+                    if !matches!(left_type.kind, TypeKind::MetaSet | TypeKind::Any) {
+                        return Err(LanguageError::new(
+                            Stage::Typecheck,
+                            "subset/superset requires a meta-set on the left",
+                            None,
+                        ));
+                    }
+                    if !matches!(right_type.kind, TypeKind::MetaSet | TypeKind::Any) {
+                        return Err(LanguageError::new(
+                            Stage::Typecheck,
+                            "subset/superset requires a meta-set on the right",
+                            None,
+                        ));
+                    }
+                }
+                syntax::MetaOp::Equals => {
+                    if !matches!(left_type.kind, TypeKind::Number | TypeKind::Any) {
+                        return Err(LanguageError::new(
+                            Stage::Typecheck,
+                            "equals requires a numeric left operand",
+                            None,
+                        ));
+                    }
+                    if !matches!(right_type.kind, TypeKind::Number | TypeKind::Any) {
+                        return Err(LanguageError::new(
+                            Stage::Typecheck,
+                            "equals requires a numeric right operand",
+                            None,
+                        ));
+                    }
+                }
+            }
+            Ok(TypeInfo::new(TypeKind::MetaAssertion, Vec::new(), true))
+        }
         AstNode::Identifier { name } => env.vars.get(name).cloned().ok_or_else(|| {
             LanguageError::new(Stage::Typecheck, format!("undefined variable {name}"), None)
         }),
@@ -1136,14 +1340,38 @@ fn lower(node: &AstNode, out: &mut Vec<Instruction>) {
             operator,
             domain,
             drive,
+            domain_explicit,
         } => out.push(Instruction::PushState {
             operator: *operator,
             domain: domain.clone(),
             drive: *drive,
+            domain_explicit: *domain_explicit,
         }),
         AstNode::DriveLiteral { drive } => out.push(Instruction::PushDrive(*drive)),
         AstNode::FractalLiteral { sequence } => {
             out.push(Instruction::PushFractal(sequence.clone()))
+        }
+        AstNode::NumberLiteral { value } => out.push(Instruction::PushNumber(*value)),
+        AstNode::MetaSetLiteral { name } => {
+            out.push(Instruction::PushMetaSet { name: name.clone() })
+        }
+        AstNode::MetaSymbol { name, symbol_kind } => out.push(Instruction::PushMetaSymbol {
+            name: name.clone(),
+            symbol_kind: symbol_kind.clone(),
+        }),
+        AstNode::EmptySetLiteral => out.push(Instruction::PushMetaSet {
+            name: "EmptySet".to_string(),
+        }),
+        AstNode::CardinalityExpr { collection } => {
+            lower(collection, out);
+            out.push(Instruction::Cardinality);
+        }
+        AstNode::MetaAssertion { op, left, right } => {
+            lower(left, out);
+            lower(right, out);
+            out.push(Instruction::MetaAssert {
+                op: format!("{op:?}"),
+            });
         }
         AstNode::RpmCall { expr } => {
             lower(expr, out);
@@ -1218,11 +1446,162 @@ fn value_matches_type(value: &Value, expected: &TypeInfo) -> bool {
         TypeKind::State => matches!(value, Value::State(_)),
         TypeKind::Drive => matches!(value, Value::Drive(_)),
         TypeKind::String => matches!(value, Value::String(_)),
+        TypeKind::Number => matches!(value, Value::Number(_) | Value::Cardinality(_)),
+        TypeKind::MetaSet => matches!(value, Value::MetaSet(_)),
+        TypeKind::MetaSymbol => matches!(value, Value::MetaSymbol(_)),
+        TypeKind::MetaAssertion => matches!(value, Value::MetaAssertion(_)),
         TypeKind::Fractal => matches!(value, Value::Fractal(_)),
         TypeKind::Rpm => matches!(value, Value::Rpm(_)),
         TypeKind::Relation => matches!(value, Value::Relation(_)),
         TypeKind::Program => matches!(value, Value::Program(_)),
         TypeKind::Any => true,
+    }
+}
+
+fn require_meta_set(value: Value, context: &str) -> Result<MetaSetValue, LanguageError> {
+    match value {
+        Value::MetaSet(set) => Ok(set),
+        _ => Err(LanguageError::new(
+            Stage::Execution,
+            format!("{context} requires a meta-set value"),
+            None,
+        )),
+    }
+}
+
+fn numeric_value(value: &Value, context: &str) -> Result<i64, LanguageError> {
+    match value {
+        Value::Number(value) => Ok(*value),
+        Value::Cardinality(value) => Ok(value.value as i64),
+        _ => Err(LanguageError::new(
+            Stage::Execution,
+            format!("{context} requires a numeric value"),
+            None,
+        )),
+    }
+}
+
+fn meta_member_keys(value: &Value) -> Vec<String> {
+    match value {
+        Value::State(state) => {
+            let mut keys = vec![state_key(state.operator, &state.domain)];
+            if !state.domain_explicit && state.drive.is_none() {
+                keys.push(format!("CO-{}", state.operator));
+            }
+            keys
+        }
+        Value::Drive(drive) => vec![drive_key(*drive)],
+        Value::MetaSymbol(symbol) => vec![symbol.name.clone()],
+        Value::MetaSet(set) => vec![set.name.clone()],
+        Value::String(value) => vec![value.clone()],
+        _ => Vec::new(),
+    }
+}
+
+fn meta_value_label(value: &Value) -> String {
+    match value {
+        Value::State(state) if !state.domain_explicit && state.drive.is_none() => {
+            format!("CO-{}", state.operator)
+        }
+        Value::State(state) => state_key(state.operator, &state.domain),
+        Value::Drive(drive) => drive_key(*drive),
+        Value::MetaSymbol(symbol) => symbol.name.clone(),
+        Value::MetaSet(set) => set.name.clone(),
+        Value::Cardinality(cardinality) => format!("|{}|", cardinality.set),
+        Value::Number(value) => value.to_string(),
+        _ => format!("{value:?}"),
+    }
+}
+
+fn evaluate_meta_assertion(op: &str, left: Value, right: Value) -> Result<Value, LanguageError> {
+    match op {
+        "Member" | "NotMember" => {
+            let right_set = require_meta_set(right, op)?;
+            let base_holds = meta_member_keys(&left)
+                .iter()
+                .any(|key| right_set.elements.contains(key));
+            let holds = if op == "NotMember" {
+                !base_holds
+            } else {
+                base_holds
+            };
+            let operator = if op == "NotMember" { "∉" } else { "∈" }.to_string();
+            let verb = if op == "NotMember" {
+                "is not a member of"
+            } else {
+                "is a member of"
+            };
+            let message = format!("{} {verb} {}", meta_value_label(&left), right_set.name);
+            Ok(Value::MetaAssertion(MetaAssertionValue {
+                operator,
+                holds,
+                message,
+                left: Box::new(left),
+                right: Box::new(Value::MetaSet(right_set)),
+            }))
+        }
+        "Subset" | "SubsetEq" | "Superset" | "SupersetEq" => {
+            let left_set = require_meta_set(left, op)?;
+            let right_set = require_meta_set(right, op)?;
+            let (candidate, container, proper, operator, relation) = match op {
+                "Superset" => (
+                    &right_set.elements,
+                    &left_set.elements,
+                    true,
+                    "⊃",
+                    "proper superset",
+                ),
+                "SupersetEq" => (
+                    &right_set.elements,
+                    &left_set.elements,
+                    false,
+                    "⊇",
+                    "superset",
+                ),
+                "Subset" => (
+                    &left_set.elements,
+                    &right_set.elements,
+                    true,
+                    "⊂",
+                    "proper subset",
+                ),
+                _ => (
+                    &left_set.elements,
+                    &right_set.elements,
+                    false,
+                    "⊆",
+                    "subset",
+                ),
+            };
+            let base_holds = candidate.iter().all(|item| container.contains(item));
+            let holds = base_holds && (!proper || candidate != container);
+            let message = format!("{} is a {relation} of {}", left_set.name, right_set.name);
+            Ok(Value::MetaAssertion(MetaAssertionValue {
+                operator: operator.to_string(),
+                holds,
+                message,
+                left: Box::new(Value::MetaSet(left_set)),
+                right: Box::new(Value::MetaSet(right_set)),
+            }))
+        }
+        "Equals" => {
+            let left_number = numeric_value(&left, op)?;
+            let right_number = numeric_value(&right, op)?;
+            let holds = left_number == right_number;
+            let message = format!("{} = {right_number}", meta_value_label(&left));
+            Ok(Value::MetaAssertion(MetaAssertionValue {
+                operator: "=".to_string(),
+                holds,
+                message,
+                left: Box::new(left),
+                right: Box::new(right),
+            }))
+        }
+        _ => Err(LanguageError::new(
+            Stage::Execution,
+            format!("unsupported meta assertion {op}"),
+            None,
+        )),
     }
 }
 
@@ -1251,6 +1630,7 @@ fn execute_instruction(
             operator,
             domain,
             drive,
+            domain_explicit,
         } => {
             let _ = parse_operator_index(*operator)?;
             let _ = parse_domain_code(domain).ok_or_else(|| {
@@ -1263,6 +1643,7 @@ fn execute_instruction(
                 operator: *operator,
                 domain: domain.clone(),
                 drive: *drive,
+                domain_explicit: *domain_explicit,
             }));
         }
         Instruction::PushDrive(drive) => {
@@ -1284,6 +1665,28 @@ fn execute_instruction(
             }));
         }
         Instruction::PushString(value) => stack.push(Value::String(value.clone())),
+        Instruction::PushNumber(value) => stack.push(Value::Number(*value)),
+        Instruction::PushMetaSet { name } => {
+            stack.push(Value::MetaSet(meta_set_value(name).map_err(|error| {
+                LanguageError::new(Stage::Execution, error.message, None)
+            })?));
+        }
+        Instruction::PushMetaSymbol { name, symbol_kind } => {
+            stack.push(Value::MetaSymbol(MetaSymbolValue {
+                name: name.clone(),
+                symbol_kind: symbol_kind.clone(),
+            }));
+        }
+        Instruction::Cardinality => {
+            let value = stack.pop().ok_or_else(|| {
+                LanguageError::new(Stage::Execution, "stack underflow on CARDINALITY", None)
+            })?;
+            let set = require_meta_set(value, "CARDINALITY")?;
+            stack.push(Value::Cardinality(CardinalityValue {
+                set: set.name,
+                value: set.elements.len(),
+            }));
+        }
         Instruction::LoadVar(name) => stack.push(env.vars.get(name).cloned().ok_or_else(|| {
             LanguageError::new(Stage::Execution, format!("undefined variable {name}"), None)
         })?),
@@ -1407,6 +1810,7 @@ fn execute_instruction(
                             operator,
                             domain: left.domain.clone(),
                             drive: left.drive.or(right.drive),
+                            domain_explicit: true,
                         }));
                     }
                     _ => {
@@ -1523,6 +1927,15 @@ fn execute_instruction(
                 }
             }
         }
+        Instruction::MetaAssert { op } => {
+            let right = stack.pop().ok_or_else(|| {
+                LanguageError::new(Stage::Execution, "stack underflow on META_ASSERT", None)
+            })?;
+            let left = stack.pop().ok_or_else(|| {
+                LanguageError::new(Stage::Execution, "stack underflow on META_ASSERT", None)
+            })?;
+            stack.push(evaluate_meta_assertion(op, left, right)?);
+        }
         Instruction::Arrow | Instruction::Times | Instruction::Divide | Instruction::Circ => {
             execute_binary(stack, instruction)?
         }
@@ -1605,6 +2018,7 @@ fn execute_binary(stack: &mut Vec<Value>, instruction: &Instruction) -> Result<(
                     operator,
                     domain: left.domain,
                     drive: left.drive.or(right.drive),
+                    domain_explicit: true,
                 }));
                 Ok(())
             }
@@ -1621,6 +2035,7 @@ fn execute_binary(stack: &mut Vec<Value>, instruction: &Instruction) -> Result<(
                     operator: operator as u8,
                     domain: left.domain,
                     drive: left.drive.or(right.drive),
+                    domain_explicit: true,
                 }));
                 Ok(())
             }

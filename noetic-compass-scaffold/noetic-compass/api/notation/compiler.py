@@ -87,6 +87,13 @@ UNICODE_DIVIDE = "\u00f7"
 UNICODE_PHI = "\u03a6"
 UNICODE_LANGLE = "\u27e8"
 UNICODE_RANGLE = "\u27e9"
+UNICODE_MEMBER = "\u2208"
+UNICODE_NOT_MEMBER = "\u2209"
+UNICODE_SUBSET = "\u2282"
+UNICODE_SUBSET_EQ = "\u2286"
+UNICODE_SUPERSET = "\u2283"
+UNICODE_SUPERSET_EQ = "\u2287"
+UNICODE_EMPTY_SET = "\u2205"
 
 # CAS v7.6 Stoichiometric Production Semantics (Clarification 9) Unicode
 # symbols. Recipe notation introduces Greek letters plus the middle-dot
@@ -153,13 +160,17 @@ CAS_GRAMMAR_BNF = """<program>       ::= <statement> (";" <statement>)* ;
 <typed_param_list> ::= <typed_param> ("," <typed_param>)* ;
 <typed_param>   ::= <ident> (":" <type_expr>)? ;
 <type_expr>     ::= <type_name> ("[" <domain_list> "]")? ;
-<type_name>     ::= "state" | "drive" | "string" | "void" | "function" | "fractal" | "rpm" | "relation" | "program" | "any" ;
+<type_name>     ::= "state" | "drive" | "string" | "void" | "function" | "fractal" | "rpm" | "relation" | "program" | "number" | "meta_set" | "meta_symbol" | "meta_assertion" | "any" ;
 <domain_list>   ::= <domain> ("," <domain>)* ;
-<expression>    ::= <relation> ;
+<expression>    ::= <meta_relation> ;
+<meta_relation> ::= <relation> (("∈" | "∉" | "⊂" | "⊆" | "⊃" | "⊇") <relation>)* ;
 <relation>      ::= <sum> (("->" | "<-" | "<->") <sum>)* ;
 <sum>           ::= <product> (("+" | "-") <product>)* ;
 <product>       ::= <primary> (("*" | "/" | "∘" | "×" | "÷") <primary>)* ;
-<primary>       ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <call> | <ident> | <string> | "(" <expression> ")" ;
+<primary>       ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <cardinality> | <meta_set> | <meta_symbol> | "∅" | <number> | <call> | <ident> | <string> | "(" <expression> ")" ;
+<cardinality>   ::= "|" <meta_set> "|" ;
+<meta_set>      ::= "Noetics" | "Domains" | "Worlds" | "Drives" | "Registers" | "States" | "Foundations" | "SubFoundations" | "Foundation_1" | ... | "Foundation_7" ;
+<meta_symbol>   ::= <domain> | "T" | "A" | "f" | "E" ;
 <call>          ::= <ident> "(" <arg_list>? ")" ;
 <arg_list>      ::= <expression> ("," <expression>)* ;
 <rpm_call>      ::= "RPM" "(" (<state> | <state_ref> | <drive_ref>) ")" ;
@@ -222,6 +233,13 @@ class TokenKind(Enum):
     ARROW = "ARROW"
     LARROW = "LARROW"
     BIARROW = "BIARROW"
+    MEMBER = "MEMBER"
+    NOT_MEMBER = "NOT_MEMBER"
+    SUBSET = "SUBSET"
+    SUBSET_EQ = "SUBSET_EQ"
+    SUPERSET = "SUPERSET"
+    SUPERSET_EQ = "SUPERSET_EQ"
+    EMPTY_SET = "EMPTY_SET"
     CARET = "CARET"
     UNDERSCORE = "UNDERSCORE"
     LBRACE = "LBRACE"
@@ -265,6 +283,10 @@ class TypeKind(Enum):
     RPM = "rpm"
     RELATION = "relation"
     PROGRAM = "program"
+    NUMBER = "number"
+    META_SET = "meta_set"
+    META_SYMBOL = "meta_symbol"
+    META_ASSERTION = "meta_assertion"
 
 
 @dataclass(frozen=True)
@@ -337,6 +359,12 @@ class StateLiteral:
     # `drive_register` follows the same extension.
     register: str | tuple[str, ...] | None = None
     drive_register: str | tuple[str, ...] | None = None
+    # True when the source explicitly specified a processing Domain
+    # (`^n^D`, `CO-n^D`, or shorthand `D n`). Bare `CO-n` / `^n` keeps the
+    # legacy default P-domain runtime behavior, but meta-logic can still
+    # distinguish "Noetic primitive" from "explicit P-state" when checking
+    # assertions such as `CO-3 in Noetics`.
+    domain_explicit: bool = False
 
 
 @dataclass
@@ -384,6 +412,39 @@ class CallExpr:
 
 @dataclass
 class BinaryExpr:
+    op: str
+    left: Any
+    right: Any
+
+
+@dataclass
+class NumberLiteral:
+    value: int | float
+
+
+@dataclass
+class MetaSetLiteral:
+    name: str
+
+
+@dataclass
+class MetaSymbol:
+    name: str
+    symbol_kind: str = "symbol"
+
+
+@dataclass
+class EmptySetLiteral:
+    pass
+
+
+@dataclass
+class CardinalityExpr:
+    collection: Any
+
+
+@dataclass
+class MetaAssertion:
     op: str
     left: Any
     right: Any
@@ -626,6 +687,7 @@ class StateValue:
     states: dict[int, float]
     drive_weights: dict[int, float] = field(default_factory=dict)
     explicit_drive: bool = False
+    domain_explicit: bool = True
     # CAS v7.5 Phenomenological Register (Clarification 8). Optional; None
     # means the state is register-neutral (v7.4-compatible). `register`
     # carries the Noetic/compound-level register; `drive_register` carries
@@ -664,6 +726,7 @@ class StateValue:
                 else {}
             ),
             explicit_drive=self.explicit_drive,
+            domain_explicit=self.domain_explicit,
             register=self.register,
             drive_register=self.drive_register,
             # CAS v7.7 Clarification 10 §4: preserve named emergent register
@@ -895,6 +958,78 @@ class YieldExpressionValue:
         }
 
 
+@dataclass(frozen=True)
+class MetaSetValue:
+    """Runtime value for a built-in finite CAS meta-set.
+
+    Meta-sets are the compiler's assertion layer over CAS objects. They do
+    not replace state/drive/register objects; they let the compiler check
+    claims about them (`x in States`, `Foundation_1 subset SubFoundations`,
+    `|States| = 40`).
+    """
+
+    name: str
+    elements: frozenset[str]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "kind": "meta_set",
+            "name": self.name,
+            "cardinality": len(self.elements),
+            "elements": sorted(self.elements),
+        }
+
+
+@dataclass(frozen=True)
+class MetaSymbolValue:
+    """Runtime value for an atomic symbol used in meta-logic assertions."""
+
+    name: str
+    symbol_kind: str = "symbol"
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "kind": "meta_symbol",
+            "name": self.name,
+            "symbol_kind": self.symbol_kind,
+        }
+
+
+@dataclass(frozen=True)
+class CardinalityValue:
+    collection: MetaSetValue
+
+    @property
+    def value(self) -> int:
+        return len(self.collection.elements)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "kind": "cardinality",
+            "set": self.collection.name,
+            "value": self.value,
+        }
+
+
+@dataclass(frozen=True)
+class MetaAssertionValue:
+    op: str
+    left: Any
+    right: Any
+    holds: bool
+    message: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "kind": "meta_assertion",
+            "operator": self.op,
+            "holds": self.holds,
+            "message": self.message,
+            "left": serialize_value(self.left),
+            "right": serialize_value(self.right),
+        }
+
+
 @dataclass
 class UserFunction:
     name: str
@@ -938,6 +1073,57 @@ class RuntimeEnv:
 
 
 BUILTIN_NAMES = {"dominant_state", "dominant_domain", "dominant_operator", "compose", "rpm_of", "fractal"}
+
+
+_FOUNDATION_SET_NAMES = tuple(f"Foundation_{i}" for i in range(1, 8))
+
+
+def _drive_key(drive: int) -> str:
+    return f"F{drive}"
+
+
+def _drive_register_key(drive: int, register: str) -> str:
+    return f"F{drive}|{register}"
+
+
+def _state_key(index: int) -> str:
+    return f"{'PCEO'[index // 10]}{index % 10}"
+
+
+def _build_builtin_meta_sets() -> dict[str, frozenset[str]]:
+    noetics = frozenset(f"CO-{index}" for index in range(10))
+    domains = frozenset(DOMAIN_NAMES)
+    drives = frozenset(_drive_key(index) for index in range(1, 8))
+    registers = frozenset(VALID_REGISTERS)
+    states = frozenset(_state_key(index) for index in range(40))
+    foundation_sets = {
+        name: frozenset(
+            _drive_register_key(index, register)
+            for register in VALID_REGISTERS
+        )
+        for index, name in enumerate(_FOUNDATION_SET_NAMES, start=1)
+    }
+    subfoundations = frozenset().union(*foundation_sets.values())
+    return {
+        "Noetics": noetics,
+        "Domains": domains,
+        "Drives": drives,
+        "Registers": registers,
+        "States": states,
+        "Foundations": frozenset(_FOUNDATION_SET_NAMES),
+        "SubFoundations": subfoundations,
+        "EmptySet": frozenset(),
+        **foundation_sets,
+    }
+
+
+BUILTIN_META_SETS = _build_builtin_meta_sets()
+META_SET_ALIASES = {
+    "Worlds": "Domains",
+    "DriveRegisterPositions": "SubFoundations",
+    "SubFoundationPositions": "SubFoundations",
+}
+BUILTIN_META_SET_NAMES = set(BUILTIN_META_SETS) | set(META_SET_ALIASES)
 
 
 @dataclass
@@ -1005,6 +1191,13 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     (r"<->|" + re.escape(UNICODE_BIARROW), TokenKind.BIARROW),
     (r"->|" + re.escape(UNICODE_ARROW), TokenKind.ARROW),
     (r"<-|" + re.escape(UNICODE_LARROW), TokenKind.LARROW),
+    (re.escape(UNICODE_NOT_MEMBER), TokenKind.NOT_MEMBER),
+    (re.escape(UNICODE_MEMBER), TokenKind.MEMBER),
+    (re.escape(UNICODE_SUBSET_EQ), TokenKind.SUBSET_EQ),
+    (re.escape(UNICODE_SUBSET), TokenKind.SUBSET),
+    (re.escape(UNICODE_SUPERSET_EQ), TokenKind.SUPERSET_EQ),
+    (re.escape(UNICODE_SUPERSET), TokenKind.SUPERSET),
+    (re.escape(UNICODE_EMPTY_SET), TokenKind.EMPTY_SET),
     (r"RPM\b", TokenKind.RPM),
     (r"Phi\b|" + re.escape(UNICODE_PHI), TokenKind.PHI),
     # CAS v7.6 yield-query keywords `Y_T` and `Y_A`. Listed BEFORE the
@@ -1034,6 +1227,10 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     (r"S\b", TokenKind.STATE_VECTOR),
     (r'"(?:[^"\\]|\\.)*"', TokenKind.STRING),
     (r"CO-\d+", TokenKind.CO),
+    # CAS v7.8 meta-logic cardinality `|X|`. This lookahead lets a leading
+    # bar before a collection name tokenize as PIPE without stealing legacy
+    # register suffixes such as `|A` after state/drive primitives.
+    (r"\|(?=(?:[A-Z][A-Za-z0-9_]*|" + re.escape(UNICODE_EMPTY_SET) + r")\|)", TokenKind.PIPE),
     # CAS v7.5: `|R` register suffix. Matched permissively as `|<letter>` so
     # invalid values like `|Q` are lexed and rejected at parse time with a
     # helpful CAS v7.5 error rather than a generic lexing failure.
@@ -1068,7 +1265,7 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     # (bare `T` raised a lexing error), so adding this pattern expands
     # the lexable surface without conflicting with any pre-v7.7 valid
     # token.
-    (r"[A-Z]\b", TokenKind.IDENT),
+    (r"[A-Z][A-Za-z0-9_]*", TokenKind.IDENT),
     # Numeric literal: integer or decimal. CAS v7.6 recipe coefficients may
     # be floats (e.g. `0.3·Ω_procrastination`); v7.4/v7.5 integer-only
     # callers still lex NUMBER on integers unchanged because the decimal
@@ -1103,6 +1300,24 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
 
 def _state_index(operator: int, domain: str) -> int:
     return DOMAIN_ORDER[domain] * 10 + operator
+
+
+def _canonical_meta_set_name(name: str) -> str:
+    return META_SET_ALIASES.get(name, name)
+
+
+def _is_builtin_meta_set_name(name: str) -> bool:
+    return name in BUILTIN_META_SET_NAMES
+
+
+def _meta_set_value(name: str) -> MetaSetValue:
+    canonical = _canonical_meta_set_name(name)
+    if canonical not in BUILTIN_META_SETS:
+        raise CompilerError(
+            CompilerStage.TYPECHECK,
+            f"unknown CAS meta-set {name!r}",
+        )
+    return MetaSetValue(name=canonical, elements=BUILTIN_META_SETS[canonical])
 
 
 def _validate_register_token(token: "LexToken") -> str:
@@ -1193,6 +1408,10 @@ def _type_keyword_to_kind(name: str) -> TypeKind:
         "rpm": TypeKind.RPM,
         "relation": TypeKind.RELATION,
         "program": TypeKind.PROGRAM,
+        "number": TypeKind.NUMBER,
+        "meta_set": TypeKind.META_SET,
+        "meta_symbol": TypeKind.META_SYMBOL,
+        "meta_assertion": TypeKind.META_ASSERTION,
     }
     if name not in mapping:
         raise CompilerError(CompilerStage.PARSING, f"unknown type {name}")
@@ -1338,7 +1557,7 @@ class Parser:
                 self.advance()
                 annotation = self.parse_type()
             self.expect(TokenKind.EQUALS)
-            return LetStatement(name=name, expr=self.parse_relation(), annotation=annotation)
+            return LetStatement(name=name, expr=self.parse_expression(), annotation=annotation)
         if token.kind == TokenKind.FN:
             self.advance()
             name = self.expect(TokenKind.IDENT).value
@@ -1369,7 +1588,7 @@ class Parser:
             return FunctionDef(
                 name=name,
                 params=params,
-                body=self.parse_relation(),
+                body=self.parse_expression(),
                 param_types=param_types,
                 return_type=return_type,
             )
@@ -1383,7 +1602,7 @@ class Parser:
         # program.
         if token.kind == TokenKind.STATE_VECTOR:
             return self.parse_state_vector()
-        expr = self.parse_relation()
+        expr = self.parse_expression()
         # CAS v7.7 Clarification 10 §4: named emergent result assignment.
         # If the expression is followed by `=` and a register-named identifier,
         # wrap it in an EmergentResult node. Example:
@@ -1394,6 +1613,9 @@ class Parser:
         # unambiguously indicates an emergent-result assignment.
         if self.current().kind == TokenKind.EQUALS:
             self.advance()
+            if isinstance(expr, CardinalityExpr):
+                rhs = self.parse_expression()
+                return MetaAssertion(op="EQUALS", left=expr, right=rhs)
             assigned_name = self._parse_emergent_register_name()
             return EmergentResult(inner=expr, assigned_name=assigned_name)
         return expr
@@ -1500,8 +1722,31 @@ class Parser:
             TypeKind.FUNCTION,
             TypeKind.FRACTAL,
             TypeKind.RPM,
+            TypeKind.NUMBER,
+            TypeKind.META_SET,
+            TypeKind.META_SYMBOL,
+            TypeKind.META_ASSERTION,
         }
         return TypeInfo(kind=kind, domains=tuple(domains), singular=singular)
+
+    def parse_expression(self) -> Any:
+        expr = self.parse_relation()
+        while self.current().kind in {
+            TokenKind.MEMBER,
+            TokenKind.NOT_MEMBER,
+            TokenKind.SUBSET,
+            TokenKind.SUBSET_EQ,
+            TokenKind.SUPERSET,
+            TokenKind.SUPERSET_EQ,
+        }:
+            token = self.advance()
+            rhs = self.parse_relation()
+            expr = MetaAssertion(op=token.kind.value, left=expr, right=rhs)
+        if self.current().kind == TokenKind.EQUALS and isinstance(expr, CardinalityExpr):
+            self.advance()
+            rhs = self.parse_expression()
+            expr = MetaAssertion(op="EQUALS", left=expr, right=rhs)
+        return expr
 
     def parse_relation(self) -> Any:
         expr = self.parse_additive()
@@ -1531,13 +1776,15 @@ class Parser:
         token = self.current()
         if token.kind == TokenKind.LPAREN:
             self.advance()
-            expr = self.parse_relation()
+            expr = self.parse_expression()
             self.expect(TokenKind.RPAREN)
             return expr
+        if token.kind == TokenKind.PIPE:
+            return self.parse_cardinality()
         if token.kind == TokenKind.RPM:
             self.advance()
             self.expect(TokenKind.LPAREN)
-            expr = self.parse_relation()
+            expr = self.parse_expression()
             self.expect(TokenKind.RPAREN)
             return RpmCall(expr=expr)
         if token.kind == TokenKind.PHI:
@@ -1568,18 +1815,29 @@ class Parser:
             return self.parse_state_ref()
         if token.kind == TokenKind.STRING:
             return StringLiteral(value=_decode_string_literal(self.advance().value))
+        if token.kind == TokenKind.NUMBER:
+            return self.parse_number()
+        if token.kind == TokenKind.EMPTY_SET:
+            self.advance()
+            return EmptySetLiteral()
+        if token.kind == TokenKind.DOMAIN:
+            return MetaSymbol(name=self.advance().value, symbol_kind="domain")
         if token.kind == TokenKind.IDENT:
             name = self.advance().value
             if self.current().kind == TokenKind.LPAREN:
                 self.advance()
                 args: list[Any] = []
                 if self.current().kind != TokenKind.RPAREN:
-                    args.append(self.parse_relation())
+                    args.append(self.parse_expression())
                     while self.current().kind == TokenKind.COMMA:
                         self.advance()
-                        args.append(self.parse_relation())
+                        args.append(self.parse_expression())
                 self.expect(TokenKind.RPAREN)
                 return CallExpr(callee=name, args=args)
+            if _is_builtin_meta_set_name(name):
+                return MetaSetLiteral(name=_canonical_meta_set_name(name))
+            if name in VALID_REGISTERS:
+                return MetaSymbol(name=name, symbol_kind="register")
             return Identifier(name=name)
         if token.kind == TokenKind.DRIVE:
             drive_token = self.advance()
@@ -1610,6 +1868,24 @@ class Parser:
             f"unexpected token {token.value!r}",
             position=token.position,
         )
+
+    def parse_number(self) -> NumberLiteral:
+        token = self.expect(TokenKind.NUMBER)
+        if "." in token.value:
+            return NumberLiteral(value=float(token.value))
+        return NumberLiteral(value=int(token.value))
+
+    def parse_cardinality(self) -> CardinalityExpr:
+        start = self.expect(TokenKind.PIPE)
+        if self.current().kind == TokenKind.PIPE:
+            raise CompilerError(
+                CompilerStage.PARSING,
+                "cardinality expression `|X|` requires a collection name",
+                position=start.position,
+            )
+        collection = self.parse_relation()
+        self.expect(TokenKind.PIPE)
+        return CardinalityExpr(collection=collection)
 
     def parse_fractal(self) -> FractalLiteral:
         self.expect(TokenKind.PHI)
@@ -1775,6 +2051,7 @@ class Parser:
             domain=token.value[0],
             drive=None,
             register=register,
+            domain_explicit=True,
         )
 
     def parse_state(self) -> StateLiteral:
@@ -1806,6 +2083,7 @@ class Parser:
             )
 
         domain = "P"
+        domain_explicit = False
         drive: int | None = None
         drive_register: str | None = None
 
@@ -1815,6 +2093,7 @@ class Parser:
         if self.current().kind == TokenKind.CARET:
             self.advance()
             domain = self.expect(TokenKind.DOMAIN).value
+            domain_explicit = True
         if self.current().kind == TokenKind.UNDERSCORE:
             self.advance()
             self.expect(TokenKind.LBRACE)
@@ -1852,6 +2131,7 @@ class Parser:
             drive=drive,
             register=register,
             drive_register=drive_register,
+            domain_explicit=domain_explicit,
         )
 
     # ----------------------------------------------------------------------
@@ -2523,6 +2803,64 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
     if isinstance(node, StringLiteral):
         return TypeInfo(kind=TypeKind.STRING, singular=True)
 
+    if isinstance(node, NumberLiteral):
+        return TypeInfo(kind=TypeKind.NUMBER, singular=True)
+
+    if isinstance(node, MetaSetLiteral):
+        _meta_set_value(node.name)
+        return TypeInfo(kind=TypeKind.META_SET, singular=True)
+
+    if isinstance(node, EmptySetLiteral):
+        return TypeInfo(kind=TypeKind.META_SET, singular=True)
+
+    if isinstance(node, MetaSymbol):
+        return TypeInfo(kind=TypeKind.META_SYMBOL, singular=True)
+
+    if isinstance(node, CardinalityExpr):
+        collection_type = _infer(node.collection, warnings, env)
+        if collection_type.kind not in {TypeKind.META_SET, TypeKind.ANY}:
+            raise CompilerError(
+                CompilerStage.TYPECHECK,
+                f"cardinality `|X|` requires a meta-set, got {collection_type.kind.value}",
+            )
+        return TypeInfo(kind=TypeKind.NUMBER, singular=True)
+
+    if isinstance(node, MetaAssertion):
+        left = _infer(node.left, warnings, env)
+        right = _infer(node.right, warnings, env)
+        if node.op in {"MEMBER", "NOT_MEMBER"}:
+            if right.kind not in {TypeKind.META_SET, TypeKind.ANY}:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.op} requires a meta-set on the right",
+                )
+            return TypeInfo(kind=TypeKind.META_ASSERTION, singular=True)
+        if node.op in {"SUBSET", "SUBSET_EQ", "SUPERSET", "SUPERSET_EQ"}:
+            if left.kind not in {TypeKind.META_SET, TypeKind.ANY}:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.op} requires a meta-set on the left",
+                )
+            if right.kind not in {TypeKind.META_SET, TypeKind.ANY}:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.op} requires a meta-set on the right",
+                )
+            return TypeInfo(kind=TypeKind.META_ASSERTION, singular=True)
+        if node.op == "EQUALS":
+            if left.kind not in {TypeKind.NUMBER, TypeKind.ANY}:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.op} requires a numeric left operand",
+                )
+            if right.kind not in {TypeKind.NUMBER, TypeKind.ANY}:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.op} requires a numeric right operand",
+                )
+            return TypeInfo(kind=TypeKind.META_ASSERTION, singular=True)
+        raise CompilerError(CompilerStage.TYPECHECK, f"unsupported meta assertion {node.op}")
+
     # CAS v7.6 (Clarification 9): production-semantics AST nodes are
     # parse-only from the Python compiler's perspective. We type them as
     # ANY so they compose freely with recipe-algebra forms at the
@@ -2863,6 +3201,7 @@ def lower(node: Any) -> list[Instruction]:
                         # means register-neutral (v7.4-compatible).
                         "register": expr.register,
                         "drive_register": expr.drive_register,
+                        "domain_explicit": expr.domain_explicit,
                     },
                 )
             )
@@ -2885,6 +3224,32 @@ def lower(node: Any) -> list[Instruction]:
             return
         if isinstance(expr, StringLiteral):
             bytecode.append(Instruction("PUSH_STRING", expr.value))
+            return
+        if isinstance(expr, NumberLiteral):
+            bytecode.append(Instruction("PUSH_NUMBER", expr.value))
+            return
+        if isinstance(expr, MetaSetLiteral):
+            bytecode.append(Instruction("PUSH_META_SET", {"name": expr.name}))
+            return
+        if isinstance(expr, EmptySetLiteral):
+            bytecode.append(Instruction("PUSH_META_SET", {"name": "EmptySet"}))
+            return
+        if isinstance(expr, MetaSymbol):
+            bytecode.append(
+                Instruction(
+                    "PUSH_META_SYMBOL",
+                    {"name": expr.name, "symbol_kind": expr.symbol_kind},
+                )
+            )
+            return
+        if isinstance(expr, CardinalityExpr):
+            emit(expr.collection)
+            bytecode.append(Instruction("CARDINALITY"))
+            return
+        if isinstance(expr, MetaAssertion):
+            emit(expr.left)
+            emit(expr.right)
+            bytecode.append(Instruction("META_ASSERT", {"op": expr.op}))
             return
         # CAS v7.6 (Clarification 9): production-semantics literals lower to
         # opaque PUSH_* instructions. The runtime just wraps the AST in a
@@ -3039,6 +3404,14 @@ def _value_matches_type(value: Any, expected: TypeInfo) -> bool:
         return True
     if expected.kind == TypeKind.STRING:
         return isinstance(value, str)
+    if expected.kind == TypeKind.NUMBER:
+        return isinstance(value, (int, float, CardinalityValue))
+    if expected.kind == TypeKind.META_SET:
+        return isinstance(value, MetaSetValue)
+    if expected.kind == TypeKind.META_SYMBOL:
+        return isinstance(value, MetaSymbolValue)
+    if expected.kind == TypeKind.META_ASSERTION:
+        return isinstance(value, MetaAssertionValue)
     if expected.kind == TypeKind.DRIVE:
         return isinstance(value, DriveLiteral)
     if expected.kind == TypeKind.STATE:
@@ -3060,6 +3433,122 @@ def _value_matches_type(value: Any, expected: TypeInfo) -> bool:
     if expected.kind == TypeKind.VOID:
         return value is None
     return True
+
+
+def _require_meta_set_value(value: Any, *, context: str) -> MetaSetValue:
+    if isinstance(value, MetaSetValue):
+        return value
+    raise CompilerError(
+        CompilerStage.EXECUTION,
+        f"{context} requires a meta-set value",
+    )
+
+
+def _numeric_value(value: Any, *, context: str) -> int | float:
+    if isinstance(value, CardinalityValue):
+        return value.value
+    if isinstance(value, (int, float)):
+        return value
+    raise CompilerError(
+        CompilerStage.EXECUTION,
+        f"{context} requires a numeric value",
+    )
+
+
+def _meta_member_keys(value: Any) -> frozenset[str]:
+    if isinstance(value, StateValue):
+        dominant = value.dominant_state()
+        keys = {_state_key(dominant)}
+        if not value.domain_explicit and not value.explicit_drive:
+            keys.add(f"CO-{value.dominant_operator()}")
+        return frozenset(keys)
+    if isinstance(value, DriveLiteral):
+        keys = {_drive_key(value.drive)}
+        if isinstance(value.register, str):
+            keys.add(_drive_register_key(value.drive, value.register))
+        return frozenset(keys)
+    if isinstance(value, MetaSymbolValue):
+        return frozenset({value.name})
+    if isinstance(value, MetaSetValue):
+        return frozenset({value.name})
+    if isinstance(value, str):
+        return frozenset({value})
+    return frozenset()
+
+
+def _meta_value_label(value: Any) -> str:
+    if isinstance(value, StateValue):
+        if not value.domain_explicit and not value.explicit_drive:
+            return f"CO-{value.dominant_operator()}"
+        return _state_key(value.dominant_state())
+    if isinstance(value, DriveLiteral):
+        base = _drive_key(value.drive)
+        if isinstance(value.register, str):
+            return _drive_register_key(value.drive, value.register)
+        return base
+    if isinstance(value, MetaSymbolValue):
+        return value.name
+    if isinstance(value, MetaSetValue):
+        return value.name
+    if isinstance(value, CardinalityValue):
+        return f"|{value.collection.name}|"
+    return str(value)
+
+
+def _evaluate_meta_assertion(op: str, left: Any, right: Any) -> MetaAssertionValue:
+    if op in {"MEMBER", "NOT_MEMBER"}:
+        right_set = _require_meta_set_value(right, context=op)
+        member_keys = _meta_member_keys(left)
+        base_holds = any(key in right_set.elements for key in member_keys)
+        holds = not base_holds if op == "NOT_MEMBER" else base_holds
+        symbol = UNICODE_NOT_MEMBER if op == "NOT_MEMBER" else UNICODE_MEMBER
+        verb = "is not a member of" if op == "NOT_MEMBER" else "is a member of"
+        return MetaAssertionValue(
+            op=symbol,
+            left=left,
+            right=right,
+            holds=holds,
+            message=f"{_meta_value_label(left)} {verb} {right_set.name}",
+        )
+
+    if op in {"SUBSET", "SUBSET_EQ", "SUPERSET", "SUPERSET_EQ"}:
+        left_set = _require_meta_set_value(left, context=op)
+        right_set = _require_meta_set_value(right, context=op)
+        if op in {"SUPERSET", "SUPERSET_EQ"}:
+            candidate = right_set.elements
+            container = left_set.elements
+            proper = op == "SUPERSET"
+            symbol = UNICODE_SUPERSET if proper else UNICODE_SUPERSET_EQ
+            relation = "proper superset" if proper else "superset"
+        else:
+            candidate = left_set.elements
+            container = right_set.elements
+            proper = op == "SUBSET"
+            symbol = UNICODE_SUBSET if proper else UNICODE_SUBSET_EQ
+            relation = "proper subset" if proper else "subset"
+        base_holds = candidate.issubset(container)
+        holds = base_holds and (candidate != container if proper else True)
+        return MetaAssertionValue(
+            op=symbol,
+            left=left,
+            right=right,
+            holds=holds,
+            message=f"{left_set.name} is a {relation} of {right_set.name}",
+        )
+
+    if op == "EQUALS":
+        left_number = _numeric_value(left, context=op)
+        right_number = _numeric_value(right, context=op)
+        holds = math.isclose(float(left_number), float(right_number))
+        return MetaAssertionValue(
+            op="=",
+            left=left,
+            right=right,
+            holds=holds,
+            message=f"{_meta_value_label(left)} = {right_number}",
+        )
+
+    raise CompilerError(CompilerStage.EXECUTION, f"unsupported meta assertion {op}")
 
 
 def _execute_instruction(stack: list[Any], instruction: Instruction, env: RuntimeEnv) -> None:
@@ -3100,6 +3589,7 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
             register = tuple(register)
         if isinstance(drive_register, list):
             drive_register = tuple(drive_register)
+        domain_explicit = bool(instruction.arg.get("domain_explicit", True))
         state_index = _state_index(operator, domain)
         drives = {drive: 1.0} if drive is not None else {}
         stack.append(
@@ -3107,6 +3597,7 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
                 states={state_index: 1.0},
                 drive_weights=drives,
                 explicit_drive=drive is not None,
+                domain_explicit=domain_explicit,
                 register=register,
                 drive_register=drive_register,
             )
@@ -3115,6 +3606,30 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
 
     if opcode == "PUSH_STRING":
         stack.append(instruction.arg)
+        return
+
+    if opcode == "PUSH_NUMBER":
+        stack.append(instruction.arg)
+        return
+
+    if opcode == "PUSH_META_SET":
+        payload = instruction.arg
+        stack.append(_meta_set_value(str(payload["name"])))
+        return
+
+    if opcode == "PUSH_META_SYMBOL":
+        payload = instruction.arg
+        stack.append(
+            MetaSymbolValue(
+                name=str(payload["name"]),
+                symbol_kind=str(payload.get("symbol_kind", "symbol")),
+            )
+        )
+        return
+
+    if opcode == "CARDINALITY":
+        collection = _require_meta_set_value(stack.pop(), context="CARDINALITY")
+        stack.append(CardinalityValue(collection=collection))
         return
 
     if opcode == "PUSH_DRIVE":
@@ -3416,6 +3931,11 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
     right = stack.pop()
     left = stack.pop()
 
+    if opcode == "META_ASSERT":
+        payload = instruction.arg
+        stack.append(_evaluate_meta_assertion(str(payload["op"]), left, right))
+        return
+
     if opcode == "PLUS":
         # State + State: merge probability distributions
         if isinstance(left, StateValue) and isinstance(right, StateValue):
@@ -3678,6 +4198,23 @@ def serialize_ast(node: Any) -> Any:
             "inner": serialize_ast(node.inner),
             "assigned_name": node.assigned_name,
         }
+    if isinstance(node, NumberLiteral):
+        return {"node": "NumberLiteral", "value": node.value}
+    if isinstance(node, MetaSetLiteral):
+        return {"node": "MetaSetLiteral", "name": node.name}
+    if isinstance(node, MetaSymbol):
+        return {"node": "MetaSymbol", "name": node.name, "symbol_kind": node.symbol_kind}
+    if isinstance(node, EmptySetLiteral):
+        return {"node": "EmptySetLiteral"}
+    if isinstance(node, CardinalityExpr):
+        return {"node": "CardinalityExpr", "collection": serialize_ast(node.collection)}
+    if isinstance(node, MetaAssertion):
+        return {
+            "node": "MetaAssertion",
+            "op": node.op,
+            "left": serialize_ast(node.left),
+            "right": serialize_ast(node.right),
+        }
     if isinstance(node, StringLiteral):
         return {"node": "StringLiteral", "value": node.value}
     if isinstance(node, Identifier):
@@ -3801,6 +4338,8 @@ def serialize_instruction_arg(arg: Any) -> Any:
 def serialize_value(value: Any) -> Any:
     if value is None:
         return None
+    if isinstance(value, (int, float)):
+        return value
     if isinstance(value, str):
         return value
     if isinstance(value, StateValue):
@@ -3818,6 +4357,14 @@ def serialize_value(value: Any) -> Any:
     if isinstance(value, FunctionValue):
         return value.to_dict()
     if isinstance(value, ModuleValue):
+        return value.to_dict()
+    if isinstance(value, MetaSetValue):
+        return value.to_dict()
+    if isinstance(value, MetaSymbolValue):
+        return value.to_dict()
+    if isinstance(value, CardinalityValue):
+        return value.to_dict()
+    if isinstance(value, MetaAssertionValue):
         return value.to_dict()
     if isinstance(value, DriveLiteral):
         payload: dict[str, Any] = {"kind": "drive", "drive": f"F{value.drive}"}

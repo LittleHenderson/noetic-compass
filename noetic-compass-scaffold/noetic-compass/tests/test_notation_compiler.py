@@ -13,6 +13,14 @@ from api.notation.compiler import (
 )
 
 
+MEMBER = chr(0x2208)
+NOT_MEMBER = chr(0x2209)
+SUBSET = chr(0x2282)
+SUBSET_EQ = chr(0x2286)
+SUPERSET = chr(0x2283)
+EMPTY_SET = chr(0x2205)
+
+
 def _local_tmp_dir() -> Path:
     base = Path("_tmp_lang_tests").resolve()
     base.mkdir(exist_ok=True)
@@ -953,6 +961,112 @@ def test_v77_fractal_composition_with_register_sets():
     """
     artifact = compile_expression("^9|⟨A,E⟩ ∘ ^4|f")
     assert artifact.valid, artifact.error
+
+
+# ---------------------------------------------------------------------------
+# CAS v7.8 typed meta-logic tests.
+#
+# This layer reasons over existing CAS objects. It does not redefine CAS
+# algebra: `*` / `x` remains state integration, while set notation produces
+# meta_assertion/cardinality/meta_set values.
+# ---------------------------------------------------------------------------
+
+
+def test_v78_membership_state_and_noetic_sets():
+    artifact = compile_expression(f"^3^P {MEMBER} States")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "meta_assertion"
+    assert result["operator"] == MEMBER
+    assert result["holds"] is True
+    assert result["right"]["name"] == "States"
+
+    noetic_artifact = compile_expression(f"CO-3 {MEMBER} Noetics")
+    assert noetic_artifact.valid, noetic_artifact.error
+    noetic_result = noetic_artifact.to_dict()["result"]
+    assert noetic_result["holds"] is True
+    assert noetic_result["right"]["cardinality"] == 10
+
+
+def test_v78_membership_domains_registers_and_foundation_positions():
+    cases = [
+        (f"P {MEMBER} Domains", "Domains"),
+        (f"T {MEMBER} Registers", "Registers"),
+        (f"f {MEMBER} Registers", "Registers"),
+        (f"F_1|T {MEMBER} Foundation_1", "Foundation_1"),
+    ]
+    for source, set_name in cases:
+        artifact = compile_expression(source)
+        assert artifact.valid, f"{source}: {artifact.error}"
+        result = artifact.to_dict()["result"]
+        assert result["holds"] is True
+        assert result["right"]["name"] == set_name
+
+
+def test_v78_subset_and_empty_set_assertions():
+    cases = [
+        f"Foundation_1 {SUBSET_EQ} SubFoundations",
+        f"Foundation_1 {SUBSET} SubFoundations",
+        f"SubFoundations {SUPERSET} Foundation_1",
+        f"{EMPTY_SET} {SUBSET_EQ} States",
+    ]
+    for source in cases:
+        artifact = compile_expression(source)
+        assert artifact.valid, f"{source}: {artifact.error}"
+        assert artifact.to_dict()["result"]["holds"] is True
+
+
+def test_v78_cardinality_assertions_for_canonical_finite_sets():
+    cases = {
+        "Noetics": 10,
+        "Domains": 4,
+        "Worlds": 4,
+        "Drives": 7,
+        "Registers": 4,
+        "States": 40,
+        "Foundations": 7,
+        "SubFoundations": 28,
+        "Foundation_1": 4,
+    }
+    for set_name, expected in cases.items():
+        artifact = compile_expression(f"|{set_name}| = {expected}")
+        assert artifact.valid, f"{set_name}: {artifact.error}"
+        result = artifact.to_dict()["result"]
+        assert result["kind"] == "meta_assertion"
+        assert result["operator"] == "="
+        assert result["holds"] is True
+        assert result["left"]["value"] == expected
+
+
+def test_v78_false_assertions_compile_as_false_not_parse_failures():
+    artifact = compile_expression(f"P {MEMBER} Drives")
+    assert artifact.valid, artifact.error
+    assert artifact.to_dict()["result"]["holds"] is False
+
+    cardinality = compile_expression("|States| = 41")
+    assert cardinality.valid, cardinality.error
+    assert cardinality.to_dict()["result"]["holds"] is False
+
+    non_member = compile_expression(f"P {NOT_MEMBER} Drives")
+    assert non_member.valid, non_member.error
+    assert non_member.to_dict()["result"]["holds"] is True
+
+
+def test_v78_meta_logic_does_not_overload_cas_times():
+    artifact = compile_expression("States * Noetics")
+    assert not artifact.valid
+    assert artifact.error is not None
+    assert "TIMES" in artifact.error
+    assert "state expressions" in artifact.error
+
+
+def test_v78_cardinality_assertion_can_be_bound_as_meta_assertion():
+    artifact = compile_expression("let ok: meta_assertion = |States| = 40; ok")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "program"
+    assert result["final_result"]["kind"] == "meta_assertion"
+    assert result["final_result"]["holds"] is True
 
 
 # ---------------------------------------------------------------------------
