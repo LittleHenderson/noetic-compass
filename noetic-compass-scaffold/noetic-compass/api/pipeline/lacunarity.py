@@ -64,7 +64,7 @@ def generate_gap_map(
     domain_scores: list[float],
     drive_scores: list[float],
     op_threshold: float = 4.0,
-    dom_threshold: float = 0.3,
+    dom_threshold: float = 0.2,
     drv_threshold: float = 0.2,
 ) -> dict:
     op_names = [

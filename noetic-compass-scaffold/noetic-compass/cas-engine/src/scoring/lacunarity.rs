@@ -206,7 +206,7 @@ pub fn compute_lacunarity_profile(
     );
     let composite = compute_composite_lacunarity(state, fractal, domain, drive, rpm);
     let classification = LacunarityClass::from_score(composite);
-    let gap_map = generate_gap_map(operator_scores, domain_scores, drive_scores, 4.0, 0.3, 0.2);
+    let gap_map = generate_gap_map(operator_scores, domain_scores, drive_scores, 4.0, 0.2, 0.2);
 
     LacunarityProfile {
         state_lacunarity: (state * 1000.0).round() / 1000.0,
@@ -296,6 +296,15 @@ mod tests {
         assert!(gm.absent_operators.contains(&0)); // CO-0 = 1.0 < 4.0
         assert!(gm.absent_operators.contains(&2)); // CO-2 = 2.0 < 4.0
         assert!(!gm.absent_operators.contains(&1)); // CO-1 = 8.0 >= 4.0
+    }
+
+    #[test]
+    fn test_gap_map_balanced_domain_simplex_is_active() {
+        let op = [6.0; 10];
+        let dom = [0.25; 4];
+        let drv = [0.5; 7];
+        let profile = compute_lacunarity_profile(&op, &dom, &drv, &[0, 2, 3, 5, 6, 8, 9], true, true, true, true);
+        assert!(profile.gap_map.absent_domains.is_empty());
     }
 
     #[test]
