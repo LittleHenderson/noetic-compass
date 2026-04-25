@@ -38,6 +38,7 @@ def test_balanced_profile_returns_low_or_watch_risk(client, auth_headers):
     assert data["mode"] == "predictive_lacunarity_risk"
     assert data["risk_band"] in {"low", "watch"}
     assert data["lacunarity"]["gap_map"]["absent_domains"] == []
+    assert all(item["risk_band"] in {"low", "watch"} for item in data["forecasts"])
     assert data["validation_status"] == "heuristic_preview_not_prospectively_validated"
     assert len(data["forecasts"]) == 6
 

@@ -60,6 +60,12 @@ def _as_percent(value: float) -> int:
     return int(round(_clamp(value) * 100))
 
 
+def _deficit(value: float, threshold: float) -> float:
+    if threshold <= 0:
+        return 0.0
+    return _clamp((threshold - value) / threshold)
+
+
 def _weak_names(values: list[float], names: list[str], threshold: float) -> list[str]:
     return [names[i] for i, value in enumerate(values[: len(names)]) if value < threshold]
 
@@ -139,8 +145,8 @@ def compute_predictive_lacunarity_forecast(
     agency_pressure = _clamp(drives[4])
     consequence_gap = 1.0 - _clamp(ops[9] / 10.0)
     causal_pressure = _clamp(ops[8] / 10.0)
-    evaluative_gap = 1.0 - _clamp(domains[2])
-    operational_gap = 1.0 - _clamp(domains[3])
+    evaluative_gap = _deficit(domains[2], 0.2)
+    operational_gap = _deficit(domains[3], 0.2)
 
     forecasts = [
         _forecast(
