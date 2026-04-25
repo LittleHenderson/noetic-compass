@@ -291,6 +291,74 @@ class WrapResponse(BaseModel):
         return v
 
 
+class ForecastRequest(BaseModel):
+    """Direct structural-risk forecast from CAS metric outputs.
+
+    This is a research-preview forecast over CAS structure. It is not a
+    clinical, personnel, insurance, or deterministic behavior prediction.
+    """
+
+    context_label: str | None = Field(default=None, max_length=200)
+    source: Literal["manual", "wrap_pipeline", "synthetic", "research"] = "manual"
+    operator_scores: list[float] = Field(min_length=10, max_length=10)
+    domain_scores: list[float] = Field(min_length=4, max_length=4)
+    drive_scores: list[float] = Field(min_length=7, max_length=7)
+    rpm_completeness: float = Field(default=1.0, ge=0.0, le=1.0)
+    fractal_sequence: list[int] = Field(default_factory=list, max_length=100)
+    resolution_details: list[dict] = Field(default_factory=list)
+
+    @field_validator("operator_scores")
+    @classmethod
+    def validate_operator_scores(cls, v: list[float]) -> list[float]:
+        for i, val in enumerate(v):
+            if val < 0.0 or val > 10.0:
+                raise ValueError(f"operator_scores[{i}] must be in [0, 10]")
+        return v
+
+    @field_validator("domain_scores", "drive_scores")
+    @classmethod
+    def validate_unit_scores(cls, v: list[float]) -> list[float]:
+        for i, val in enumerate(v):
+            if val < 0.0 or val > 1.0:
+                raise ValueError(f"score[{i}] must be in [0, 1]")
+        return v
+
+    @field_validator("fractal_sequence")
+    @classmethod
+    def validate_fractal_sequence(cls, v: list[int]) -> list[int]:
+        for i, val in enumerate(v):
+            if val < 0 or val > 9:
+                raise ValueError(f"fractal_sequence[{i}] must be a Noetic index in [0, 9]")
+        return v
+
+
+class ForecastItemSchema(BaseModel):
+    """One ranked structural-risk forecast."""
+
+    id: str
+    label: str
+    risk_score: int = Field(ge=0, le=100)
+    risk_band: Literal["low", "watch", "elevated", "high"]
+    summary: str
+    drivers: list[str]
+    recommended_checks: list[str]
+
+
+class ForecastResponse(BaseModel):
+    """Predictive Lacunarity Risk response."""
+
+    mode: Literal["predictive_lacunarity_risk"] = "predictive_lacunarity_risk"
+    context_label: str | None = None
+    source: str
+    overall_risk_score: float = Field(ge=0.0, le=100.0)
+    risk_band: Literal["low", "watch", "elevated", "high"]
+    lacunarity: dict
+    forecasts: list[ForecastItemSchema]
+    dominant_structural_gaps: dict
+    validation_status: str
+    limitations: list[str]
+
+
 class BatchResponse(BaseModel):
     """Batch assessment response."""
 

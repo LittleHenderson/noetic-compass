@@ -150,6 +150,52 @@ export interface WrapResult {
 
 // ── Validation types ──
 
+export type ForecastSource = 'manual' | 'wrap_pipeline' | 'synthetic' | 'research';
+export type ForecastRiskBand = 'low' | 'watch' | 'elevated' | 'high';
+
+export interface ForecastRequest {
+  context_label?: string | null;
+  source?: ForecastSource;
+  operator_scores: number[];
+  domain_scores: number[];
+  drive_scores: number[];
+  rpm_completeness?: number;
+  fractal_sequence?: number[];
+  resolution_details?: Record<string, unknown>[];
+}
+
+export interface ForecastItem {
+  id: string;
+  label: string;
+  risk_score: number;
+  risk_band: ForecastRiskBand;
+  summary: string;
+  drivers: string[];
+  recommended_checks: string[];
+}
+
+export interface ForecastResponse {
+  mode: 'predictive_lacunarity_risk';
+  context_label: string | null;
+  source: string;
+  overall_risk_score: number;
+  risk_band: ForecastRiskBand;
+  lacunarity: NonNullable<WrapResult['lacunarity']>;
+  forecasts: ForecastItem[];
+  dominant_structural_gaps: {
+    weak_noetics?: string[];
+    weak_domains?: string[];
+    weak_drives?: string[];
+    largest_involution_gap?: {
+      pair: string;
+      gap: number;
+    };
+    [key: string]: unknown;
+  };
+  validation_status: string;
+  limitations: string[];
+}
+
 export interface ValidationNextItem {
   item_index: number | null;
   prompt: string;

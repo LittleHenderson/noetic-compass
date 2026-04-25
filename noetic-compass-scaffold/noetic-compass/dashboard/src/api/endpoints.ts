@@ -34,6 +34,8 @@ import type {
   ValidationAdminBaselineResponse,
   ValidationAdminSuiteMatrixRequest,
   ValidationAdminSuiteMatrixResponse,
+  ForecastRequest,
+  ForecastResponse,
 } from './types';
 
 export interface LiveNotationResult {
@@ -148,6 +150,13 @@ export function postCohortCompare(req: CohortCompareRequest): Promise<CohortComp
 
 export function postBenchmark(req: BenchmarkRequest): Promise<BenchmarkResponse> {
   return apiFetch<BenchmarkResponse>('/benchmark', {
+    method: 'POST',
+    body: JSON.stringify(req),
+  });
+}
+
+export function postForecast(req: ForecastRequest): Promise<ForecastResponse> {
+  return apiFetch<ForecastResponse>('/forecast', {
     method: 'POST',
     body: JSON.stringify(req),
   });

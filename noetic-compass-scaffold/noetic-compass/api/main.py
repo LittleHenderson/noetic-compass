@@ -21,7 +21,22 @@ from api.middleware.auth import JWTAuthMiddleware
 from api.middleware.rate_limit import RateLimitMiddleware
 from api.middleware.audit import AuditLogMiddleware
 from api.middleware.request_id import RequestIdMiddleware
-from api.routes import assess, auth, batch, benchmark, cohort, config, export, health, notation, reproducibility, scenarios, validation, wrap
+from api.routes import (
+    assess,
+    auth,
+    batch,
+    benchmark,
+    cohort,
+    config,
+    export,
+    forecast,
+    health,
+    notation,
+    reproducibility,
+    scenarios,
+    validation,
+    wrap,
+)
 
 
 def _parse_cors_origins(raw: str) -> list[str]:
@@ -102,6 +117,7 @@ app.include_router(benchmark.router)
 app.include_router(cohort.router)
 app.include_router(config.router)
 app.include_router(export.router)
+app.include_router(forecast.router)
 app.include_router(scenarios.router)
 app.include_router(validation.router)
 app.include_router(notation.router)
