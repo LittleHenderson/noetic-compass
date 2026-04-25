@@ -216,6 +216,10 @@ export interface RadialArchitectureDisplayProps {
    * Optional className passed to the outer container.
    */
   className?: string;
+  /**
+   * Optional Domain highlight used by the Temporal Cognitive Score sync hook.
+   */
+  highlightDomain?: Domain | null;
 }
 
 /* --------------------------------------------------------------------------
@@ -227,6 +231,7 @@ export function RadialArchitectureDisplay({
   title = 'Radial Architecture Display',
   showTextAlternative = false,
   className,
+  highlightDomain = null,
 }: RadialArchitectureDisplayProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [altVisible, setAltVisible] = useState<boolean>(showTextAlternative);
@@ -361,6 +366,7 @@ export function RadialArchitectureDisplay({
     <div
       className={`radial-architecture-display${className ? ` ${className}` : ''}`}
       data-testid="radial-architecture-display"
+      data-active-domain={highlightDomain ?? 'none'}
     >
       <div className="radial-architecture-display__header">
         <h3 id={labelId} className="radial-architecture-display__title">
@@ -433,6 +439,9 @@ export function RadialArchitectureDisplay({
           return (
             <g
               key={`domain-${r.domain}`}
+              className={`radial-architecture-display__domain-band${
+                highlightDomain === r.domain ? ' radial-architecture-display__domain-band--active' : ''
+              }`}
               data-testid={`domain-band-${r.domain}`}
               data-domain={r.domain}
               data-angle={r.angleDeg}

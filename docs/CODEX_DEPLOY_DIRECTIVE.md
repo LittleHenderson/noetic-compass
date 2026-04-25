@@ -9,7 +9,9 @@
 
 ## Honest scope statement (read first)
 
-This directive deploys **everything that exists in the repository**. One feature in the original session brief — the **Temporal Cognitive Score** (audio sonification) — exists ONLY as specification (`docs/design/cas_v7_5_multimodal_display_specification.md` Phase B+) with **zero implementation files** in the repo. Codex must NOT fabricate it. Treat it as roadmap with a "coming soon" placeholder. If user wants it built, that's a separate directive.
+This directive deploys **everything that exists in the repository**. The **Temporal Cognitive Score** now has a Phase B implementation in the dashboard: Tone.js synthesized playback, formal CAS-to-audio mappings, user-initiated controls, visual transcript, and cross-modal Domain sync with the Radial Architecture Display.
+
+Be precise in copy: Phase B audio is deployable. Phase C-E export notation, key-signature derivation, and generative variation remain roadmap. Do not fabricate those future capabilities.
 
 Everything else IS implemented and deployable.
 
@@ -21,13 +23,14 @@ Everything else IS implemented and deployable.
 
 **Location:** `noetic-compass-scaffold/noetic-compass/dashboard/`
 **Stack:** Vite + React + TypeScript, with existing `vercel.json` and `package.json`
-**14 pages already built:**
+**15 pages already built:**
 
 | Page | File | Description |
 |---|---|---|
 | Home / How it works | `HowItWorksPage.tsx` | Framework overview, marketing surface |
 | Assessment | `AssessmentPage.tsx` | Run a new CAS assessment |
 | Forecast | `ForecastPage.tsx` | **NEW — lacunarity forecast feature Codex just shipped (parity-fixed)** |
+| Visualization | `VisualizationPage.tsx` | **NEW — Multi-Modal Cognitive Signature with Radial Display + Temporal Cognitive Score Phase B** |
 | Compiler | `CompilerPage.tsx` | Interactive CAS notation compiler |
 | Configuration | `ConfigPage.tsx` | Dial settings, wrap pipeline config |
 | Details | `DetailsPage.tsx` | Drill-down into a specific assessment |
@@ -43,7 +46,8 @@ Everything else IS implemented and deployable.
 
 **Components of note:**
 
-- `RadialArchitectureDisplay.tsx` — the visual "mandala" component (Phase A static SVG, 19 passing tests). Deployable today, mountable on any page that wants the visualization.
+- `RadialArchitectureDisplay.tsx` — the visual architecture component (Phase A static SVG). Deployable today.
+- `TemporalCognitiveScore.tsx` — the audio sonification component (Phase B Tone.js synthesis). Deployable today, but must remain click-to-play with no auto-play.
 
 ### 2. Backend API (FastAPI)
 
@@ -74,17 +78,13 @@ These serve `/research`, `/research/book`, `/research/papers`, `/docs` pages on 
 
 ## What is NOT deployable (be honest in user-facing copy)
 
-### Temporal Cognitive Score (audio sonification)
+### Temporal Cognitive Score Phase C-E
 
-- **Specification only:** `docs/design/cas_v7_5_multimodal_display_specification.md` Phases B-E
-- **Implementation:** ZERO files. No audio engine, no Web Audio code, no sonification mappings translated from CAS algebra to actual sound.
-- **What to ship instead:** A "Coming Soon" panel on the `/visualization` page. Suggested copy:
+- **Phase B implementation:** Exists and is deployable in `TemporalCognitiveScore.tsx`.
+- **Not deployable yet:** export formats, key-signature derivation, VexFlow-style notation rendering, and generative variation.
+- **User-facing copy:** Say Phase B is live. Say Phase C-E is roadmap. Do not imply export notation or generative composition exists.
 
-> ### The Temporal Cognitive Score (in development)
->
-> A coming auditory companion to the Radial Architecture Display. Every pitch, dynamic, tempo, and rhythm mapping will derive directly from CAS algebra — turning a cognitive profile into a listenable signature. Currently in design specification; implementation roadmap published in our research notes.
-
-DO NOT fabricate audio playback. DO NOT use stock music. DO NOT promise a launch date.
+DO NOT use stock music. DO NOT enable auto-play. DO NOT promise a Phase C-E launch date.
 
 ### CAS-Native v2 neural architecture
 
@@ -133,17 +133,18 @@ vercel deploy
 
 If the API needs to live at `api.noeticcompass.com` as a separate subdomain, configure DNS and Vercel project routing accordingly. If it goes under `noeticcompass.com/api/*`, set rewrites in `vercel.ts` to route `/api/*` to the API project.
 
-### Phase 3 — Mount the Radial Architecture Display visually
+### Phase 3 — Verify the Multi-Modal Cognitive Signature page
 
-`RadialArchitectureDisplay.tsx` exists as a component but is NOT wired into any page yet (per Wave 4 Agent 16 follow-up notes). Mount it:
+`VisualizationPage.tsx` mounts both display halves:
 
-1. On `HowItWorksPage.tsx` as a hero visual with sample data fixture
-2. On a new dedicated `/visualization` page if the marketing site is a separate Next.js app
-3. Provide demo controls (load different cognitive profiles to see visualization change)
+1. `RadialArchitectureDisplay.tsx` for the visual state.
+2. `TemporalCognitiveScore.tsx` for Phase B synthesized audio.
+3. Demo controls for switching sample cognitive profiles.
+4. Cross-modal Domain sync from audio playback back into the radial display.
 
-### Phase 4 — Add "Coming Soon" placeholder for Temporal Cognitive Score
+### Phase 4 — Keep Phase C-E honest
 
-On `/visualization` (or wherever the Radial Display lives), add a sibling section explicitly labeled "Coming Soon" for the audio companion. Use the suggested copy above.
+On `/visualization`, label the audio implementation as Phase B live. Keep export notation, key-signature derivation, and generative variation explicitly marked as roadmap if mentioned.
 
 ### Phase 5 — Wire static documentation pages
 
@@ -217,22 +218,18 @@ When deployment lands, Codex should report:
 - Lighthouse score (Performance, Accessibility, Best Practices, SEO)
 - Any pages that didn't deploy and why
 - Any feature spec items that needed clarification
-- Confirmation that "Coming Soon" placeholder is in place for Temporal Cognitive Score (NOT a fabricated audio player)
+- Confirmation that Temporal Cognitive Score Phase B is live and that Phase C-E remains marked as roadmap
 
 ---
 
-## If user wants the Temporal Cognitive Score built
+## If user wants Temporal Cognitive Score Phase C-E built
 
-This requires a separate "build, then deploy" directive. Scope estimate: 4-8 hours of focused work to:
+This requires a separate future directive. Scope estimate: 4-8 hours per phase to:
 
-1. Read the multi-modal display spec (`docs/design/cas_v7_5_multimodal_display_specification.md` Phases B-E)
-2. Implement Web Audio API mappings translating CAS algebra to pitch / dynamic / tempo / rhythm
-3. Build playback UI component pairing with Radial Architecture Display
-4. Add tests
-5. Deploy to dashboard
-6. Update the "Coming Soon" placeholder to a live demo
-
-Recommend doing this AFTER Phase 1-6 above lands, so the rest of the site is live first.
+1. Add export formats and notation rendering.
+2. Implement key-signature derivation beyond the current fixed C4/C5 mapping.
+3. Add controlled generative variation while preserving traceability to CAS primitives.
+4. Extend tests and deployment verification.
 
 ---
 

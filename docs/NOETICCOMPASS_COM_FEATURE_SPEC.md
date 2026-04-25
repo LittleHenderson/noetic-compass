@@ -30,7 +30,7 @@
 /                         — Home (hero + value props + CTAs)
 /product                  — The assessment platform (NCCS, Wrap Pipeline, dashboard)
 /framework                — CAS overview (10 Noetics, 4 Domains, 4 Registers, 7 Drives)
-/visualization            — Radial Architecture Display (live demo)
+/visualization            — Multi-Modal Cognitive Signature (visual + audio live demo)
 /research                 — Book, ADRs, peer-review paper status
 /research/book            — Thinking in Cognitive Architecture (purchase + sample chapters)
 /research/papers          — Forthcoming paper list (Categorical Hutchinson Theory, etc.)
@@ -157,15 +157,15 @@ A four-axis cube or starburst showing how 10 × 4 × 4 × 7 = 1,120 distinct cog
 
 ---
 
-## /visualization — Radial Architecture Display
+## /visualization - Multi-Modal Cognitive Signature
 
 ### Hero
 
 **Headline:**
-> See your cognitive architecture at a glance
+> See and hear your cognitive architecture
 
 **Subhead:**
-> The Radial Architecture Display renders all four CAS axes simultaneously: 10 Noetics across 4 Domains, modulated by 4 Registers, weighted by 7 Drives. Static SVG, print-quality, accessibility-first.
+> The Radial Architecture Display renders all four CAS axes visually. The Temporal Cognitive Score sonifies the same state with formal pitch, expression, tempo, Domain stave, and lacunarity-rest mappings. No stock samples; every sound traces to a CAS primitive.
 
 ### How to read it (educational subsection)
 
@@ -182,16 +182,17 @@ A four-axis cube or starburst showing how 10 × 4 × 4 × 7 = 1,120 distinct cog
 - **Text-alternative view** — full accessibility for screen readers
 - **Domain descent encoded** as ring brightness gradient (P brightest 1.0 → O most muted 0.55)
 - **Involution pairs** color-family marked (^2/^3 warm, ^5/^6 cool, ^8/^9 green; self-duals ^0/^1/^4/^7 distinct neutrals)
-- **Phase A (live):** static rendering, SVG/PNG export
-- **Phase B-E (roadmap):** hover states, click-to-zoom, register layer toggles, comparison mode, animation
+- **Radial Phase A (live):** static rendering, SVG/PNG export
+- **Temporal Phase B (live):** Tone.js synthesized playback, four Domain staves, controls, transcript, cross-modal Domain sync
+- **Roadmap:** Radial hover/click comparison modes plus Temporal Phase C-E export, key-signature algorithm, and generative variation
 
 ### Live demo
 
-Mount the existing `RadialArchitectureDisplay.tsx` component (in `noetic-compass-scaffold/noetic-compass/dashboard/src/components/`). Feed it a sample `CognitiveStateData` fixture for the demo. Component is already tested with 19 passing tests.
+Mount `VisualizationPage.tsx`, which combines `RadialArchitectureDisplay.tsx` and `TemporalCognitiveScore.tsx` from `noetic-compass-scaffold/noetic-compass/dashboard/src/components/`. Feed it a sample `CognitiveStateData` fixture for the demo. The audio player must remain user-initiated: no auto-play.
 
-### The audio companion (roadmap)
+### The audio companion (live Phase B)
 
-> The **Temporal Cognitive Score** is the auditory companion to the Radial Architecture Display — a sonification with formal pitch, dynamic, tempo, and rhythm mappings derived from CAS algebra. Every audio mapping is traceable to a formal CAS primitive. Specification is complete; implementation is on the roadmap (Phase B+).
+> The **Temporal Cognitive Score** is the auditory companion to the Radial Architecture Display. Phase B is live: synthesized notes derive from Noetics, expression derives from Registers, tempo derives from the dominant Drive, Domain selects the stave/instrument family, and lacunarity becomes rests. Phase C-E export notation, key-signature derivation, and generative variation remain roadmap.
 
 ---
 
@@ -292,13 +293,14 @@ Transparency page. Real status:
 - ✅ Python notation compiler with typed meta-logic layer
 - ✅ CAS-Native v2 neural architecture (research-grade implementation)
 - ✅ Radial Architecture Display Phase A (static SVG)
+- ✅ Temporal Cognitive Score Phase B (synthesized audio sonification)
 - ✅ Synthetic Data Generator Level 2 scaffold
 - ✅ 9 Architectural Decision Records published
 - ✅ 10 Foundational Clarifications published
 
 ### Roadmap
 
-- ⏳ Temporal Cognitive Score (audio sonification — Phase B+)
+- ⏳ Temporal Cognitive Score Phase C-E (export, key-signature algorithm, generative variation)
 - ⏳ Radial Architecture Display interactivity (Phase B-E: hover, click-to-zoom, comparison)
 - ⏳ Public assessment platform (live API + dashboard)
 - ⏳ Paper 1 (Categorical Hutchinson Theory)
@@ -379,7 +381,7 @@ Before launch, verify:
 
 3. **Phase 3 (post-launch):** /product live with limited assessment access. /docs published. /status updated to reflect platform availability.
 
-4. **Phase 4 (future):** Temporal Cognitive Score Phase B audio. Interactive Radial Display. Full assessment platform with auth + persistence.
+4. **Phase 4 (future):** Temporal Cognitive Score Phase C-E. Interactive Radial Display. Expanded assessment platform with auth + persistence.
 
 ---
 

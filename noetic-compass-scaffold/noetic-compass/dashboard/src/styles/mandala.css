@@ -74,6 +74,12 @@
   dominant-baseline: middle;
 }
 
+.radial-architecture-display__domain-band--active path {
+  stroke: #2dd4bf;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.75));
+}
+
 .radial-architecture-display__drive-marker circle {
   stroke: #e2e8f0;
   stroke-width: 1;
