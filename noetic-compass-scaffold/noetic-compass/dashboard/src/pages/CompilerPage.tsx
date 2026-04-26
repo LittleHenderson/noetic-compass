@@ -241,36 +241,42 @@ function highlightSyntax(text: string): React.ReactNode[] {
       i += len;
       continue;
     }
-    // Operations (incl. middle-dot · for recipe coefficients)
-    if ('*×/÷∘·'.includes(s[i])) {
-      parts.push(<span key={i} className="text-white font-bold">{s[i]}</span>);
+    // Multiplicative ops × ÷ ∘ (and ASCII aliases * /) — matches Operations key color
+    if ('*×/÷∘'.includes(s[i])) {
+      parts.push(<span key={i} className="text-orange-400">{s[i]}</span>);
+      i += 1;
+      continue;
+    }
+    // Recipe coefficient · — matches Operations key color
+    if (s[i] === '·') {
+      parts.push(<span key={i} className="text-slate-300">{s[i]}</span>);
       i += 1;
       continue;
     }
     if (s.slice(i, i + 2) === '->') {
-      parts.push(<span key={i} className="text-white font-bold">→</span>);
+      parts.push(<span key={i} className="text-white">→</span>);
       i += 2;
       continue;
     }
     if (s[i] === '→' || s[i] === '←' || s[i] === '↔') {
-      parts.push(<span key={i} className="text-white font-bold">{s[i]}</span>);
+      parts.push(<span key={i} className="text-white">{s[i]}</span>);
       i += 1;
       continue;
     }
-    // Bare pipe (recipe condition separator, e.g. Θ(Ω) | κ_n = ...)
+    // Bare pipe — cardinality wrapper |Set| OR recipe-condition separator (key: slate-300)
     if (s[i] === '|') {
-      parts.push(<span key={i} className="text-slate-400 font-bold">{s[i]}</span>);
+      parts.push(<span key={i} className="text-slate-300">{s[i]}</span>);
       i += 1;
       continue;
     }
     // = (recipe definition / emergent assignment)
     if (s[i] === '=') {
-      parts.push(<span key={i} className="text-slate-400 font-bold">{s[i]}</span>);
+      parts.push(<span key={i} className="text-slate-300">{s[i]}</span>);
       i += 1;
       continue;
     }
     if (s[i] === '+' || s[i] === '-') {
-      parts.push(<span key={i} className="text-slate-300 font-bold">{s[i]}</span>);
+      parts.push(<span key={i} className="text-slate-300">{s[i]}</span>);
       i += 1;
       continue;
     }
@@ -510,10 +516,10 @@ function RefPanelContent({ onPickExample }: { onPickExample: (expr: string) => v
                   <button
                     key={ex.expr}
                     onClick={() => onPickExample(ex.expr)}
-                    className="w-full text-left rounded px-2 py-1.5 text-[10px] font-mono text-slate-400 hover:text-accent-teal hover:bg-white/[0.04] transition-colors"
+                    className="w-full text-left rounded px-2 py-1.5 text-[10px] font-mono hover:bg-white/[0.04] transition-colors"
                   >
-                    <span className="text-slate-500 block text-[9px]">{ex.label}</span>
-                    {ex.expr}
+                    <span className="text-slate-500 block text-[9px] font-sans mb-0.5">{ex.label}</span>
+                    <span className="block">{highlightSyntax(ex.expr)}</span>
                   </button>
                 ))}
               </div>
@@ -875,17 +881,27 @@ export function CompilerPage() {
           <span className={`font-mono text-sm font-bold shrink-0 ${mode === 'nl' ? 'text-purple-400' : 'text-accent-teal'}`}>
             {mode === 'nl' ? 'nl>' : 'cas>'}
           </span>
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={mode === 'nl' ? 'Type any sentence or paragraph...' : 'CO-3^P_{F2} * CO-8^P_{F6}'}
-            className={`flex-1 bg-transparent border-none outline-none text-sm text-slate-200 placeholder-slate-700 min-h-[44px] ${mode === 'nl' ? 'font-sans caret-purple-400' : 'font-mono caret-accent-teal'}`}
-            autoComplete="off"
-            spellCheck={false}
-          />
+          <div className="flex-1 relative min-h-[44px] flex items-center">
+            {mode === 'cas' && input && (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 flex items-center font-mono text-sm whitespace-pre overflow-hidden"
+              >
+                {highlightSyntax(input)}
+              </div>
+            )}
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={mode === 'nl' ? 'Type any sentence or paragraph...' : 'Θ(Ω_focus)|κ_n = 0.6·^2^P_{F2}|A + 0.4·^5^C → Ω_focus;  ^2 ∈ Noetics'}
+              className={`absolute inset-0 w-full bg-transparent border-none outline-none text-sm placeholder-slate-700 ${mode === 'nl' ? 'font-sans caret-purple-400 text-slate-200' : 'font-mono caret-accent-teal text-transparent selection:bg-accent-teal/30'}`}
+              autoComplete="off"
+              spellCheck={false}
+            />
+          </div>
           <button
             onClick={() => setShowRef(!showRef)}
             className="shrink-0 px-2 py-1 rounded text-[10px] font-mono text-slate-500 hover:text-slate-300 border border-white/[0.06] hover:border-white/[0.12] transition-colors min-h-[36px]"
