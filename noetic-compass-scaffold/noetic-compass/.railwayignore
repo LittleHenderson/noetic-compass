@@ -1,0 +1,12 @@
+# Exclude local test artifacts and ephemera that the Railway CLI's
+# directory walk can't read on Windows (causes "Access is denied").
+.pytest-tmp/
+**/.pytest-tmp/
+**/_tmp_runtime/
+**/__pycache__/
+**/node_modules/
+dashboard/dist/
+dashboard/.vercel/
+.vercel/
+**/*.pyc
+.git/
