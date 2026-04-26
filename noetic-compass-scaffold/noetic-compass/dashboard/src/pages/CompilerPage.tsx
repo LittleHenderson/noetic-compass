@@ -23,6 +23,11 @@ const HELP_TEXT = `Commands:
   :clear     Clear output
   :history   Show command history
 
+Editing:
+  Enter        Submit the expression
+  Shift+Enter  Insert a newline (write multi-statement programs)
+  ↑ / ↓        Recall command history (only when textbox is empty)
+
 Type any CAS expression to compile it.`;
 
 interface Example {
@@ -98,11 +103,18 @@ const SYMBOL_PALETTE: { sym: string; title: string }[] = [
   { sym: '⟩', title: 'Close angle ⟩' },
 ];
 
-// ASCII fallbacks for users without easy Unicode entry — expanded to canonical
-// Unicode on submit so the compiler (which only tokenizes Unicode) accepts them.
+// Frontend pre-processing of input before the compiler sees it. Two passes:
+// 1. Newlines (Shift+Enter) become `;` so multi-line layout renders as a real
+//    multi-statement program — the compiler treats `\n` as ordinary whitespace
+//    and would otherwise smash statements together. Existing `;` is preserved
+//    (a trailing `;` before the newline is collapsed, not doubled).
+// 2. ASCII fallbacks for users without easy Unicode entry — `in`, `notin`,
+//    `subset`, etc. become their Unicode equivalents so the compiler (which
+//    only tokenizes Unicode) accepts them.
 // Order matters: longer aliases first so `notin` doesn't match as `not`+`in`.
 function expandAsciiAliases(text: string): string {
   return text
+    .replace(/;?\s*\n\s*/g, '; ')     // multi-line program → ;-separated
     .replace(/\bnotin\b/g, '∉')
     .replace(/\bsubseteq\b/g, '⊆')
     .replace(/\bsubset\b/g, '⊂')
@@ -714,7 +726,8 @@ export function CompilerPage() {
   const [historyIdx, setHistoryIdx] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [showRef, setShowRef] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const mirrorRef = useRef<HTMLDivElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -724,6 +737,14 @@ export function CompilerPage() {
   useEffect(() => {
     outputRef.current?.scrollTo({ top: outputRef.current.scrollHeight, behavior: 'smooth' });
   }, [history]);
+
+  // Auto-resize the textarea to fit its contents (capped to keep input area sane)
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 240) + 'px';
+  }, [input]);
 
   const addEntry = useCallback((entry: HistoryEntry) => {
     setHistory((prev) => [...prev, entry]);
@@ -856,18 +877,22 @@ export function CompilerPage() {
     }
   }
 
-  function handleKeyDown(e: React.KeyboardEvent) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
+      // Plain Enter submits; Shift+Enter inserts a newline (textarea default)
       e.preventDefault();
       handleSubmit();
+      return;
     }
-    if (e.key === 'ArrowUp') {
+    // History recall: only when the textarea is empty, so multi-line editing
+    // can use arrows naturally once any text is present.
+    if (e.key === 'ArrowUp' && input.length === 0) {
       e.preventDefault();
       const next = Math.min(historyIdx + 1, cmdHistory.length - 1);
       setHistoryIdx(next);
       if (cmdHistory[next]) setInput(cmdHistory[next]);
     }
-    if (e.key === 'ArrowDown') {
+    if (e.key === 'ArrowDown' && input.length === 0) {
       e.preventDefault();
       const next = historyIdx - 1;
       if (next < 0) {
@@ -974,34 +999,46 @@ export function CompilerPage() {
               ))}
             </div>
           )}
-          <div className="p-3 pt-1 flex items-center gap-2">
-          <span className={`font-mono text-sm font-bold shrink-0 ${mode === 'nl' ? 'text-purple-400' : 'text-accent-teal'}`}>
+          <div className="p-3 pt-1 flex items-start gap-2">
+          <span className={`font-mono text-sm font-bold shrink-0 pt-2 ${mode === 'nl' ? 'text-purple-400' : 'text-accent-teal'}`}>
             {mode === 'nl' ? 'nl>' : 'cas>'}
           </span>
-          <div className="flex-1 relative min-h-[44px] flex items-center">
+          <div className="flex-1 relative min-h-[44px]">
             {mode === 'cas' && input && (
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex items-center font-mono text-sm whitespace-pre overflow-hidden"
+                className="pointer-events-none absolute inset-0 font-mono text-sm overflow-hidden"
               >
-                {highlightSyntax(input)}
+                <div ref={mirrorRef} className="whitespace-pre-wrap break-words py-2">
+                  {highlightSyntax(input)}
+                </div>
               </div>
             )}
-            <input
+            <textarea
               ref={inputRef}
-              type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={mode === 'nl' ? 'Type any sentence or paragraph...' : 'Θ(Ω_focus)|κ_n = 0.6·^2^P_{F2}|A + 0.4·^5^C → Ω_focus;  ^2 ∈ Noetics'}
-              className={`absolute inset-0 w-full bg-transparent border-none outline-none text-sm placeholder-slate-700 ${mode === 'nl' ? 'font-sans caret-purple-400 text-slate-200' : 'font-mono caret-accent-teal text-transparent selection:bg-accent-teal/30'}`}
+              onScroll={(e) => {
+                // Keep the colored mirror in lockstep with the textarea's scroll
+                if (mirrorRef.current) {
+                  mirrorRef.current.style.transform =
+                    `translateY(${-e.currentTarget.scrollTop}px)`;
+                }
+              }}
+              placeholder={mode === 'nl'
+                ? 'Type any sentence or paragraph...'
+                : 'Θ(Ω_focus)|κ_n = 0.6·^2^P_{F2}|A + 0.4·^5^C → Ω_focus;  ^2 ∈ Noetics'}
+              rows={1}
+              className={`block w-full bg-transparent border-none outline-none text-sm placeholder-slate-700 resize-none whitespace-pre-wrap break-words py-2 px-0 leading-normal ${mode === 'nl' ? 'font-sans caret-purple-400 text-slate-200' : 'font-mono caret-accent-teal text-transparent selection:bg-accent-teal/30'}`}
+              style={{ maxHeight: '240px', overflowY: 'auto' }}
               autoComplete="off"
               spellCheck={false}
             />
           </div>
           <button
             onClick={() => setShowRef(!showRef)}
-            className="shrink-0 px-2 py-1 rounded text-[10px] font-mono text-slate-500 hover:text-slate-300 border border-white/[0.06] hover:border-white/[0.12] transition-colors min-h-[36px]"
+            className="shrink-0 px-2 py-1 rounded text-[10px] font-mono text-slate-500 hover:text-slate-300 border border-white/[0.06] hover:border-white/[0.12] transition-colors min-h-[36px] mt-1"
           >
             {showRef ? 'Hide Ref' : 'Ref'}
           </button>
