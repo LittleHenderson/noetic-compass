@@ -18,6 +18,7 @@ NOT_MEMBER = chr(0x2209)
 SUBSET = chr(0x2282)
 SUBSET_EQ = chr(0x2286)
 SUPERSET = chr(0x2283)
+SUPERSET_EQ = chr(0x2287)
 EMPTY_SET = chr(0x2205)
 UNION = chr(0x222A)
 INTERSECTION = chr(0x2229)
@@ -1232,6 +1233,33 @@ def test_diagram_export_for_clusters_relations_and_recipes():
     assert any(edge["kind"] == "dependency" for edge in diagram["edges"])
     assert any(edge["kind"] == "recipe_prerequisite" for edge in diagram["edges"])
     assert any(container["kind"] == "noetic_cluster" for container in diagram["containers"])
+
+
+def test_diagram_export_distinguishes_superset_edges():
+    artifact = compile_expression(f"NoeticCluster{{^2, ^7}} {SUPERSET_EQ} Noetics")
+    assert artifact.valid, artifact.error
+    diagram = artifact.diagram()
+    edge = next(edge for edge in diagram["edges"] if edge["label"] == SUPERSET_EQ)
+    assert edge["kind"] == "superset"
+
+
+def test_diagram_export_specialized_layout_hints():
+    product = compile_expression("Product(Noetics, Domains)")
+    assert product.valid, product.error
+    product_diagram = product.diagram()
+    assert "grid" in product_diagram["layouts"]
+    assert any(edge["kind"] == "product_axis" for edge in product_diagram["edges"])
+
+    all_foundations = ", ".join(f"Foundation_{i}" for i in range(1, 8))
+    cover = compile_expression(f"CoverOf(SubFoundations, {all_foundations})")
+    assert cover.valid, cover.error
+    cover_diagram = cover.diagram()
+    assert "petals" in cover_diagram["layouts"]
+    assert any(edge["kind"] == "cover_member" for edge in cover_diagram["edges"])
+
+    fractal = compile_expression("Phi<3:8:5:2>")
+    assert fractal.valid, fractal.error
+    assert "fractal" in fractal.diagram()["layouts"]
 
 
 # ---------------------------------------------------------------------------

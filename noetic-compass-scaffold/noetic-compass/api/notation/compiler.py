@@ -5353,7 +5353,13 @@ class _DiagramBuilder:
                     "SUPERSET": UNICODE_SUPERSET,
                     "SUPERSET_EQ": UNICODE_SUPERSET_EQ,
                 }[node.op]
-                self.add_edge(left, right, "subset", label=label)
+                edge_kind = {
+                    "SUBSET": "proper_subset",
+                    "SUBSET_EQ": "subset",
+                    "SUPERSET": "proper_superset",
+                    "SUPERSET_EQ": "superset",
+                }[node.op]
+                self.add_edge(left, right, edge_kind, label=label)
             elif node.op == "EQUALS":
                 self.add_edge(left, right, "equals", label="=")
             return right
@@ -5400,6 +5406,7 @@ class _DiagramBuilder:
             self.add_layout("branch")
             return target
         if isinstance(node, FractalLiteral):
+            self.add_layout("fractal")
             self.add_layout("radial")
             previous: str | None = None
             root: str | None = None
@@ -5487,10 +5494,32 @@ class _DiagramBuilder:
             return self.add_node("string", node.value, role="string_literal")
         if isinstance(node, CallExpr):
             call_id = self.anon_node("call", node.callee, role="function_call")
-            for arg in node.args:
+            if node.callee == "Product":
+                self.add_layout("grid")
+            elif node.callee in {"CoverOf", "PartitionOf"}:
+                self.add_layout("petals")
+                self.add_layout("containment")
+            elif node.callee == "Pullback":
+                self.add_layout("topos")
+                self.add_layout("containment")
+            for index, arg in enumerate(node.args):
                 arg_id = self.walk(arg)
                 if arg_id is not None:
-                    self.add_edge(arg_id, call_id, "argument")
+                    edge_kind = "argument"
+                    edge_label: str | None = None
+                    if node.callee == "Product":
+                        edge_kind = "product_axis"
+                        edge_label = "axis" if index == 0 else str(index + 1)
+                    elif node.callee == "CoverOf":
+                        edge_kind = "cover_base" if index == 0 else "cover_member"
+                        edge_label = "base" if index == 0 else "covers"
+                    elif node.callee == "PartitionOf":
+                        edge_kind = "partition_base" if index == 0 else "partition_member"
+                        edge_label = "base" if index == 0 else "part"
+                    elif node.callee == "Pullback":
+                        edge_kind = "pullback_leg"
+                        edge_label = "meet"
+                    self.add_edge(arg_id, call_id, edge_kind, label=edge_label)
             return call_id
         if isinstance(node, FunctionDef):
             return self.add_node("function", node.name, role="function_definition")

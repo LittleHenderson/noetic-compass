@@ -168,6 +168,8 @@ interface DiagramNode {
   kind: string;
   label: string;
   role?: string;
+  step?: number;
+  [key: string]: unknown;
 }
 
 interface DiagramEdge {
@@ -456,6 +458,8 @@ function diagramColor(kind: string): string {
   if (kind === 'drive') return '#f59e0b';
   if (kind === 'domain') return '#34d399';
   if (kind === 'register') return '#f472b6';
+  if (kind === 'foundation' || kind === 'subfoundation') return '#fbbf24';
+  if (kind === 'call' || kind === 'operator') return '#c084fc';
   if (kind === 'production_target' || kind === 'emergent') return '#a78bfa';
   return '#94a3b8';
 }
@@ -465,9 +469,37 @@ function diagramColor(kind: string): string {
 // containment rendering.
 type Pos = { x: number; y: number };
 type Region = { cx: number; cy: number; rx: number; ry: number };
+type GridSpec = {
+  x0: number;
+  y0: number;
+  cellW: number;
+  cellH: number;
+  rows: string[];
+  cols: string[];
+  title: string;
+};
+type PetalSector = {
+  id: string;
+  start: number;
+  end: number;
+  label: string;
+  color: string;
+};
+type PetalSpec = {
+  cx: number;
+  cy: number;
+  innerR: number;
+  outerR: number;
+  sectors: PetalSector[];
+  title: string;
+};
+type FractalBranch = { x1: number; y1: number; x2: number; y2: number; opacity: number };
 type LayoutResult = {
   positions: Map<string, Pos>;
   regions?: Map<string, Region>;
+  grid?: GridSpec;
+  petals?: PetalSpec;
+  fractalBranches?: FractalBranch[];
   // Containers that should be drawn as a single small circle (atom-style)
   // inside their target's region — used for ∈ membership where the LHS is a
   // set being asserted as one element of another set.
@@ -574,6 +606,157 @@ function dependencyLayout(items: DiagramNode[], edges: DiagramEdge[], w: number,
   return { positions: out };
 }
 
+function gridLayout(items: DiagramNode[], containers: DiagramContainer[], w: number, h: number): LayoutResult {
+  const out = new Map<string, Pos>();
+  const noetics = items
+    .filter(it => it.kind === 'noetic')
+    .sort((a, b) => parseInt(a.label.replace(/\D/g, '') || '0') - parseInt(b.label.replace(/\D/g, '') || '0'));
+  const domains = items
+    .filter(it => it.kind === 'domain')
+    .sort((a, b) => ['P', 'C', 'E', 'O'].indexOf(a.label) - ['P', 'C', 'E', 'O'].indexOf(b.label));
+
+  const rows = noetics.length ? noetics : items.filter(it => it.role === 'atomic_noetic');
+  const cols = domains.length ? domains : items.filter(it => it.role === 'processing_domain');
+  const x0 = 150;
+  const y0 = 72;
+  const gridW = w - x0 - 42;
+  const gridH = h - y0 - 38;
+  const cellW = gridW / Math.max(cols.length, 1);
+  const cellH = gridH / Math.max(rows.length, 1);
+
+  rows.forEach((row, i) => {
+    out.set(row.id, { x: x0 - 42, y: y0 + cellH * (i + 0.5) });
+  });
+  cols.forEach((col, i) => {
+    out.set(col.id, { x: x0 + cellW * (i + 0.5), y: y0 - 26 });
+  });
+
+  containers.forEach(container => {
+    if (container.element_type === 'noetic') {
+      out.set(container.id, { x: x0 - 42, y: 30 });
+    } else if (container.element_type === 'domain') {
+      out.set(container.id, { x: x0 + gridW / 2, y: 30 });
+    }
+  });
+
+  const call = items.find(it => it.kind === 'call' && it.label === 'Product');
+  if (call) out.set(call.id, { x: x0 + gridW - 42, y: h - 24 });
+
+  return {
+    positions: out,
+    grid: {
+      x0,
+      y0,
+      cellW,
+      cellH,
+      rows: rows.map(row => row.label),
+      cols: cols.map(col => col.label),
+      title: `${rows.length || '?'} × ${cols.length || '?'} finite product coordinates`,
+    },
+  };
+}
+
+function wedgePath(cx: number, cy: number, innerR: number, outerR: number, start: number, end: number): string {
+  const largeArc = end - start > Math.PI ? 1 : 0;
+  const p0 = { x: cx + Math.cos(start) * outerR, y: cy + Math.sin(start) * outerR };
+  const p1 = { x: cx + Math.cos(end) * outerR, y: cy + Math.sin(end) * outerR };
+  const p2 = { x: cx + Math.cos(end) * innerR, y: cy + Math.sin(end) * innerR };
+  const p3 = { x: cx + Math.cos(start) * innerR, y: cy + Math.sin(start) * innerR };
+  return [
+    `M ${p0.x} ${p0.y}`,
+    `A ${outerR} ${outerR} 0 ${largeArc} 1 ${p1.x} ${p1.y}`,
+    `L ${p2.x} ${p2.y}`,
+    `A ${innerR} ${innerR} 0 ${largeArc} 0 ${p3.x} ${p3.y}`,
+    'Z',
+  ].join(' ');
+}
+
+function petalLayout(items: DiagramNode[], containers: DiagramContainer[], edges: DiagramEdge[], w: number, h: number): LayoutResult {
+  const out = new Map<string, Pos>();
+  const cx = w / 2;
+  const cy = h / 2 + 10;
+  const outerR = Math.min(w, h) * 0.38;
+  const innerR = 46;
+  const call = items.find(it => it.kind === 'call' && (it.label === 'CoverOf' || it.label === 'PartitionOf'));
+  const baseEdge = edges.find(edge => edge.kind === 'cover_base' || edge.kind === 'partition_base');
+  const baseId = baseEdge?.source;
+  const memberIds = edges
+    .filter(edge => edge.kind === 'cover_member' || edge.kind === 'partition_member')
+    .map(edge => edge.source);
+  const memberContainers = memberIds
+    .map(id => containers.find(container => container.id === id))
+    .filter((container): container is DiagramContainer => !!container);
+  const fallbackMembers = containers.filter(container => container.id !== baseId);
+  const sectorsSource = memberContainers.length ? memberContainers : fallbackMembers;
+  const sectors: PetalSector[] = [];
+
+  if (baseId) out.set(baseId, { x: cx, y: cy });
+  if (call) out.set(call.id, { x: cx, y: cy });
+
+  sectorsSource.forEach((container, i) => {
+    const start = -Math.PI / 2 + (Math.PI * 2 * i) / Math.max(sectorsSource.length, 1);
+    const end = -Math.PI / 2 + (Math.PI * 2 * (i + 1)) / Math.max(sectorsSource.length, 1);
+    const mid = (start + end) / 2;
+    const color = diagramColor(container.kind);
+    sectors.push({ id: container.id, start, end, label: container.label, color });
+    out.set(container.id, {
+      x: cx + Math.cos(mid) * (outerR + 24),
+      y: cy + Math.sin(mid) * (outerR + 24),
+    });
+    container.contains.forEach((childId, j) => {
+      const spread = (j - (container.contains.length - 1) / 2) * ((end - start) * 0.16);
+      const radius = innerR + (outerR - innerR) * (0.48 + 0.12 * (j % 2));
+      out.set(childId, {
+        x: cx + Math.cos(mid + spread) * radius,
+        y: cy + Math.sin(mid + spread) * radius,
+      });
+    });
+  });
+
+  items.filter(item => !out.has(item.id)).forEach((item, i) => {
+    out.set(item.id, { x: 52 + i * 42, y: h - 26 });
+  });
+
+  return {
+    positions: out,
+    petals: {
+      cx,
+      cy,
+      innerR,
+      outerR,
+      sectors,
+      title: call?.label === 'PartitionOf' ? 'disjoint finite partition' : 'finite cover family',
+    },
+  };
+}
+
+function fractalLayout(items: DiagramNode[], edges: DiagramEdge[], w: number, h: number): LayoutResult {
+  const out = new Map<string, Pos>();
+  const stepNodes = items
+    .filter(item => item.role === 'fractal_step' || edges.some(edge => edge.kind === 'fractal_step' && (edge.source === item.id || edge.target === item.id)))
+    .sort((a, b) => Number(a.step ?? 0) - Number(b.step ?? 0));
+  const ordered = stepNodes.length ? stepNodes : items;
+  const branches: FractalBranch[] = [];
+  const startY = 48;
+  const stepY = Math.min(72, (h - 96) / Math.max(ordered.length - 1, 1));
+  ordered.forEach((item, i) => {
+    const amplitude = Math.max(28, 120 / (i + 1));
+    const x = i === 0 ? w / 2 : w / 2 + (i % 2 === 0 ? 1 : -1) * amplitude;
+    const y = startY + i * stepY;
+    out.set(item.id, { x, y });
+    if (i < ordered.length - 1) {
+      branches.push(
+        { x1: x, y1: y + 18, x2: x - amplitude * 0.48, y2: y + stepY * 0.58, opacity: 0.18 },
+        { x1: x, y1: y + 18, x2: x + amplitude * 0.48, y2: y + stepY * 0.58, opacity: 0.18 },
+      );
+    }
+  });
+  items.filter(item => !out.has(item.id)).forEach((item, i) => {
+    out.set(item.id, { x: 46 + i * 46, y: h - 28 });
+  });
+  return { positions: out, fractalBranches: branches };
+}
+
 function containmentLayout(items: DiagramNode[], containers: DiagramContainer[], edges: DiagramEdge[], w: number, h: number): LayoutResult {
   // Build a containment graph using both explicit `contains` AND subset/⊆ edges
   // between containers. The compiler exports e.g. `NoeticCluster{^2,^7} ⊆
@@ -621,9 +804,37 @@ function containmentLayout(items: DiagramNode[], containers: DiagramContainer[],
   const outer = sortedRoots[0];
   const outerContainer = containers.find(c => c.id === outer.id)!;
 
-  // Atoms that belong to the outer container go on the main ring.
+  const childContainersByParent = new Map<string, string[]>();
+  containedIn.forEach((parentId, childId) => {
+    if (!containerIds.has(childId)) return;
+    const children = childContainersByParent.get(parentId) ?? [];
+    children.push(childId);
+    childContainersByParent.set(parentId, children);
+  });
+  const atomsForContainer = (containerId: string, seen = new Set<string>()): Set<string> => {
+    if (seen.has(containerId)) return new Set();
+    seen.add(containerId);
+    const container = containers.find(c => c.id === containerId);
+    const atomIds = new Set<string>();
+    (container?.contains ?? []).forEach(childId => {
+      if (containerIds.has(childId)) {
+        atomsForContainer(childId, seen).forEach(id => atomIds.add(id));
+      } else {
+        atomIds.add(childId);
+      }
+    });
+    (childContainersByParent.get(containerId) ?? []).forEach(childId => {
+      atomsForContainer(childId, seen).forEach(id => atomIds.add(id));
+    });
+    return atomIds;
+  };
+
+  // Atoms in the outer container and in any nested containers go on the main
+  // ring. This prevents reversed superset diagrams from dumping the target
+  // universe's atoms as orphans.
+  const outerAtomIds = atomsForContainer(outerContainer.id);
   const directAtoms = items.filter(
-    it => !it.id.startsWith('container:') && outerContainer.contains.includes(it.id),
+    it => !it.id.startsWith('container:') && outerAtomIds.has(it.id),
   );
   const r = Math.min(w, h) * 0.32;
   directAtoms.forEach((m, i) => {
@@ -738,6 +949,9 @@ function clipRay(from: Pos, to: Pos, shape: { kind: 'circle'; r: number } | { ki
 const LAYOUT_FAMILY: Record<string, string> = {
   containment: 'containment',
   topos: 'containment',
+  grid: 'grid',
+  petals: 'petals',
+  fractal: 'fractal',
   radial: 'radial',
   branch: 'radial',
   semantic: 'radial',
@@ -755,6 +969,12 @@ function computeLayout(
 ): LayoutResult {
   const family = LAYOUT_FAMILY[layout] ?? layout;
   switch (family) {
+    case 'grid':
+      return gridLayout(items, containers, w, h);
+    case 'petals':
+      return petalLayout(items, containers, edges, w, h);
+    case 'fractal':
+      return fractalLayout(items, edges, w, h);
     case 'dependency':
       return dependencyLayout(items, edges, w, h);
     case 'containment':
@@ -786,6 +1006,15 @@ function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | null; resu
       seen.add(family);
       return true;
     });
+    if (list.includes('grid')) {
+      return ['grid', ...list.filter(l => l !== 'grid')];
+    }
+    if (list.includes('petals')) {
+      return ['petals', ...list.filter(l => l !== 'petals')];
+    }
+    if (list.includes('fractal')) {
+      return ['fractal', ...list.filter(l => l !== 'fractal')];
+    }
     if ((diagram?.containers.length ?? 0) > 0 && list.includes('containment')) {
       return ['containment', ...list.filter(l => l !== 'containment')];
     }
@@ -812,19 +1041,22 @@ function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | null; resu
       role: c.element_type,
     })),
     ...diagram.nodes,
-  ].slice(0, 24);
+  ].slice(0, 48);
 
   const VIEW_W = 620;
   const VIEW_H = 360;
   const layoutResult = computeLayout(activeLayout, displayItems, diagram.edges, diagram.containers, VIEW_W, VIEW_H);
   const positions = layoutResult.positions;
   const regions = layoutResult.regions;
+  const grid = layoutResult.grid;
+  const petals = layoutResult.petals;
+  const fractalBranches = layoutResult.fractalBranches ?? [];
   const pointMembers = layoutResult.pointMembers ?? new Set<string>();
   const useVenn = !!regions && regions.size > 0;
-  // Edge stroke colour: green when assertion holds, red when it doesn't, red as
-  // generic "you can see the arrow" default for non-assertion edges.
-  const edgeStroke = assertionHolds === true ? '#22c55e' : '#ef4444';
-  const edgeAccent = assertionHolds === true ? 'fill-emerald-300' : 'fill-red-300';
+  // Edge stroke colour: green/red only for truth-valued assertions; neutral
+  // cyan for structural edges so ordinary diagrams do not look like errors.
+  const edgeStroke = assertionHolds === true ? '#22c55e' : assertionHolds === false ? '#ef4444' : '#38bdf8';
+  const edgeAccent = assertionHolds === true ? 'fill-emerald-300' : assertionHolds === false ? 'fill-red-300' : 'fill-cyan-300';
   const truthBadge = assertionHolds === true ? '✓' : assertionHolds === false ? '✗' : '';
   const visibleIds = new Set(displayItems.map(item => item.id));
   const visibleEdges = diagram.edges.filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target)).slice(0, 32);
@@ -858,6 +1090,90 @@ function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | null; resu
             <path d="M0,0 L9,4.5 L0,9 Z" fill={edgeStroke} />
           </marker>
         </defs>
+        {grid && (
+          <g>
+            <rect
+              x={grid.x0}
+              y={grid.y0}
+              width={grid.cellW * Math.max(grid.cols.length, 1)}
+              height={grid.cellH * Math.max(grid.rows.length, 1)}
+              rx="12"
+              fill="#0f172a"
+              stroke="#14b8a6"
+              strokeOpacity="0.45"
+            />
+            {Array.from({ length: grid.cols.length + 1 }, (_, i) => (
+              <line
+                key={`grid-v-${i}`}
+                x1={grid.x0 + i * grid.cellW}
+                y1={grid.y0}
+                x2={grid.x0 + i * grid.cellW}
+                y2={grid.y0 + grid.cellH * grid.rows.length}
+                stroke="#14b8a6"
+                strokeOpacity="0.18"
+              />
+            ))}
+            {Array.from({ length: grid.rows.length + 1 }, (_, i) => (
+              <line
+                key={`grid-h-${i}`}
+                x1={grid.x0}
+                y1={grid.y0 + i * grid.cellH}
+                x2={grid.x0 + grid.cellW * grid.cols.length}
+                y2={grid.y0 + i * grid.cellH}
+                stroke="#14b8a6"
+                strokeOpacity="0.18"
+              />
+            ))}
+            {grid.rows.flatMap((_, row) =>
+              grid.cols.map((_, col) => (
+                <circle
+                  key={`grid-cell-${row}-${col}`}
+                  cx={grid.x0 + grid.cellW * (col + 0.5)}
+                  cy={grid.y0 + grid.cellH * (row + 0.5)}
+                  r="2.2"
+                  fill="#67e8f9"
+                  opacity="0.34"
+                />
+              )),
+            )}
+            <text x={grid.x0} y={grid.y0 - 48} className="fill-cyan-200 text-[10px] font-semibold">
+              {grid.title}
+            </text>
+          </g>
+        )}
+        {petals && (
+          <g>
+            {petals.sectors.map(sector => (
+              <path
+                key={`petal-${sector.id}`}
+                d={wedgePath(petals.cx, petals.cy, petals.innerR, petals.outerR, sector.start + 0.015, sector.end - 0.015)}
+                fill={`${sector.color}24`}
+                stroke={sector.color}
+                strokeOpacity="0.75"
+                strokeWidth="1.2"
+              />
+            ))}
+            <circle cx={petals.cx} cy={petals.cy} r={petals.innerR - 6} fill="#020617" stroke="#38bdf8" strokeOpacity="0.5" />
+            <text x={petals.cx} y={petals.cy - 4} textAnchor="middle" className="fill-cyan-200 text-[10px] font-semibold">
+              {petals.title}
+            </text>
+            <text x={petals.cx} y={petals.cy + 10} textAnchor="middle" className="fill-slate-400 text-[8px]">
+              {petals.sectors.length} pieces
+            </text>
+          </g>
+        )}
+        {fractalBranches.map((branch, i) => (
+          <line
+            key={`fractal-branch-${i}`}
+            x1={branch.x1}
+            y1={branch.y1}
+            x2={branch.x2}
+            y2={branch.y2}
+            stroke="#38bdf8"
+            strokeWidth="1"
+            strokeOpacity={branch.opacity}
+          />
+        ))}
         {/* Venn-style background regions for containment layout — drawn first so
             atoms and edges sit on top */}
         {useVenn && [...regions!.entries()].map(([id, region]) => {
