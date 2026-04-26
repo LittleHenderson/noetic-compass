@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { apiFetch } from '../api/client';
 
 // ── Constants ──
@@ -465,7 +465,14 @@ function diagramColor(kind: string): string {
 // containment rendering.
 type Pos = { x: number; y: number };
 type Region = { cx: number; cy: number; rx: number; ry: number };
-type LayoutResult = { positions: Map<string, Pos>; regions?: Map<string, Region> };
+type LayoutResult = {
+  positions: Map<string, Pos>;
+  regions?: Map<string, Region>;
+  // Containers that should be drawn as a single small circle (atom-style)
+  // inside their target's region — used for ∈ membership where the LHS is a
+  // set being asserted as one element of another set.
+  pointMembers?: Set<string>;
+};
 
 function radialLayout(items: DiagramNode[], w: number, h: number): LayoutResult {
   // Containers (small labels) sit along the top row; atomic nodes ring around
@@ -577,14 +584,23 @@ function containmentLayout(items: DiagramNode[], containers: DiagramContainer[],
   containers.forEach(c => c.contains.forEach(member => containedIn.set(member, c.id)));
 
   const containerIds = new Set(containers.map(c => c.id));
-  // For every subset/⊆/⊂ edge linking two containers, nest the smaller into the
-  // larger (or just direction source⊆target → source nests into target).
+  // Track which container is rendered as a single point INSIDE another (for ∈
+  // membership assertions where the LHS is a set being treated as one element).
+  const memberOf = new Map<string, string>();
+  // Read edge.label (which is reliable across operators) — edge.kind is buggy
+  // upstream (the compiler emits kind="subset" for ⊇ too, so we can't trust it).
   edges.forEach(e => {
     if (!containerIds.has(e.source) || !containerIds.has(e.target)) return;
-    const k = (e.kind || '').toLowerCase();
-    if (k.includes('subset') || k.includes('member') || e.label === '⊆' || e.label === '⊂' || e.label === '∈') {
-      // source is smaller / contained
+    const lbl = (e.label || '').trim();
+    if (lbl === '⊆' || lbl === '⊂') {
+      // source ⊆/⊂ target: source nests inside target
       if (!containedIn.has(e.source)) containedIn.set(e.source, e.target);
+    } else if (lbl === '⊇' || lbl === '⊃') {
+      // source ⊇/⊃ target: REVERSED — target nests inside source
+      if (!containedIn.has(e.target)) containedIn.set(e.target, e.source);
+    } else if (lbl === '∈') {
+      // source ∈ target: source rendered as a single point inside target's region
+      memberOf.set(e.source, e.target);
     }
   });
 
@@ -656,13 +672,27 @@ function containmentLayout(items: DiagramNode[], containers: DiagramContainer[],
     regions.set(c.id, { cx: innerCx, cy: innerCy, rx, ry });
   });
 
+  // Containers asserted as single-point ∈ members: position them inside their
+  // target's region as small atom-style circles (rendered as such by the
+  // renderer based on the pointMembers set).
+  memberOf.forEach((targetId, sourceId) => {
+    const targetRegion = regions.get(targetId) ?? regions.get(outer.id)!;
+    if (!targetRegion) return;
+    // Park the point member just inside the target's right edge so it doesn't
+    // overlap whatever is already on the ring.
+    out.set(sourceId, {
+      x: targetRegion.cx + targetRegion.rx * 0.55,
+      y: targetRegion.cy - targetRegion.ry * 0.45,
+    });
+  });
+
   // Any remaining unpositioned orphan items: drop them into the lower-right
   // corner area as a fallback.
   const orphans = items.filter(it => !out.has(it.id));
   orphans.forEach((m, i) => {
     out.set(m.id, { x: w - 60 - (i * 50), y: h - 30 });
   });
-  return { positions: out, regions };
+  return { positions: out, regions, pointMembers: new Set(memberOf.keys()) };
 }
 
 // Visual constants used by both layout (for spacing) and rendering (for size)
@@ -702,6 +732,19 @@ function clipRay(from: Pos, to: Pos, shape: { kind: 'circle'; r: number } | { ki
   return { x: from.x + ux * t, y: from.y + uy * t };
 }
 
+// Several layout names returned by the compiler currently map to the same
+// underlying renderer. We dedupe the chips by family so the user only sees one
+// button per genuinely distinct visual.
+const LAYOUT_FAMILY: Record<string, string> = {
+  containment: 'containment',
+  topos: 'containment',
+  radial: 'radial',
+  branch: 'radial',
+  semantic: 'radial',
+  dependency: 'dependency',
+  recipe: 'dependency',
+};
+
 function computeLayout(
   layout: string,
   items: DiagramNode[],
@@ -710,23 +753,37 @@ function computeLayout(
   w: number,
   h: number,
 ): LayoutResult {
-  switch (layout) {
+  const family = LAYOUT_FAMILY[layout] ?? layout;
+  switch (family) {
     case 'dependency':
-    case 'recipe':
       return dependencyLayout(items, edges, w, h);
     case 'containment':
-    case 'topos':
       return containmentLayout(items, containers, edges, w, h);
     case 'radial':
-    case 'branch':
-    case 'semantic':
     default:
       return radialLayout(items, w, h);
   }
 }
 
-function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
-  const availableLayouts = diagram?.layouts ?? [];
+function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | null; result?: Record<string, unknown> | null }) {
+  // Truth-value of a set-theory assertion (only present for kind=meta_assertion).
+  // Used to colour edges green for holds, red for not-holds.
+  const assertionHolds: boolean | undefined =
+    result && (result as { kind?: string }).kind === 'meta_assertion'
+      ? ((result as { holds?: boolean }).holds ?? undefined)
+      : undefined;
+  // Dedupe the API-supplied layouts by family so we only show one chip per
+  // distinct underlying renderer (e.g. containment+topos collapse to one).
+  const availableLayouts = useMemo(() => {
+    const seen = new Set<string>();
+    return (diagram?.layouts ?? []).filter(layout => {
+      const family = LAYOUT_FAMILY[layout] ?? layout;
+      if (seen.has(family)) return false;
+      seen.add(family);
+      return true;
+    });
+  }, [diagram]);
+
   const [activeLayout, setActiveLayout] = useState<string>(availableLayouts[0] ?? 'radial');
 
   // When a brand-new diagram comes in, reset to its first available layout
@@ -754,7 +811,13 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
   const layoutResult = computeLayout(activeLayout, displayItems, diagram.edges, diagram.containers, VIEW_W, VIEW_H);
   const positions = layoutResult.positions;
   const regions = layoutResult.regions;
+  const pointMembers = layoutResult.pointMembers ?? new Set<string>();
   const useVenn = !!regions && regions.size > 0;
+  // Edge stroke colour: green when assertion holds, red when it doesn't, red as
+  // generic "you can see the arrow" default for non-assertion edges.
+  const edgeStroke = assertionHolds === true ? '#22c55e' : '#ef4444';
+  const edgeAccent = assertionHolds === true ? 'fill-emerald-300' : 'fill-red-300';
+  const truthBadge = assertionHolds === true ? '✓' : assertionHolds === false ? '✗' : '';
   const visibleIds = new Set(displayItems.map(item => item.id));
   const visibleEdges = diagram.edges.filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target)).slice(0, 32);
 
@@ -784,7 +847,7 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
       <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className="h-72 w-full rounded bg-slate-950/50">
         <defs>
           <marker id="cas-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
-            <path d="M0,0 L9,4.5 L0,9 Z" fill="#ef4444" />
+            <path d="M0,0 L9,4.5 L0,9 Z" fill={edgeStroke} />
           </marker>
         </defs>
         {/* Venn-style background regions for containment layout — drawn first so
@@ -824,6 +887,7 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
           // node.
           const start = clipRay(a, b, sourceShape);
           const end = clipRay(b, a, targetShape);
+          const labelText = edge.label ? `${edge.label}${truthBadge ? ' ' + truthBadge : ''}` : '';
           return (
             <g key={edge.id}>
               <line
@@ -831,14 +895,14 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
                 y1={start.y}
                 x2={end.x}
                 y2={end.y}
-                stroke="#ef4444"
+                stroke={edgeStroke}
                 strokeWidth="1.8"
                 strokeOpacity="0.95"
                 markerEnd={edge.directed === false ? undefined : 'url(#cas-arrow)'}
               />
-              {edge.label && (
-                <text x={(start.x + end.x) / 2} y={(start.y + end.y) / 2 - 4} textAnchor="middle" className="fill-red-300 text-[9px] font-semibold">
-                  {edge.label}
+              {labelText && (
+                <text x={(start.x + end.x) / 2} y={(start.y + end.y) / 2 - 4} textAnchor="middle" className={`${edgeAccent} text-[10px] font-semibold`}>
+                  {labelText}
                 </text>
               )}
             </g>
@@ -851,6 +915,21 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
           const isContainer = item.id.startsWith('container:');
           const label = truncateLabel(item.label);
           if (isContainer) {
+            // Containers asserted as ∈ members render as a small atom-style
+            // circle inside their target's region, with a label tag below.
+            if (pointMembers.has(item.id)) {
+              return (
+                <g key={item.id} transform={`translate(${pos.x}, ${pos.y})`}>
+                  <circle r={ATOM_RADIUS - 4} fill={`${color}26`} stroke={color} strokeWidth="1.4" />
+                  <text y="3" textAnchor="middle" className="fill-slate-100 text-[9px] font-semibold">
+                    {label.replace('NoeticCluster', 'NC').replace('StateCluster', 'SC').replace(/\(\d+\)/, '').slice(0, 6)}
+                  </text>
+                  <text y={ATOM_RADIUS + 8} textAnchor="middle" className="fill-slate-300 text-[8px]">
+                    {label}
+                  </text>
+                </g>
+              );
+            }
             const w = rectWidthFor(item.label);
             const useVennPill = useVenn;
             const h = useVennPill ? RECT_HEIGHT_PILL : RECT_HEIGHT_FULL;
@@ -1046,7 +1125,7 @@ function ResultCard({ entry }: { entry: HistoryEntry }) {
         </div>
       )}
 
-      {r.diagram && <DiagramPreview diagram={r.diagram} />}
+      {r.diagram && <DiagramPreview diagram={r.diagram} result={r.result} />}
 
       {r.warnings && r.warnings.length > 0 && (
         <div className="mt-2">
