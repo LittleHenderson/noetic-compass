@@ -460,7 +460,237 @@ function diagramColor(kind: string): string {
   return '#94a3b8';
 }
 
+// Layout strategies. Each returns a LayoutResult with node positions and an
+// optional regions map (container id → {cx, cy, rx, ry}) for Venn-style
+// containment rendering.
+type Pos = { x: number; y: number };
+type Region = { cx: number; cy: number; rx: number; ry: number };
+type LayoutResult = { positions: Map<string, Pos>; regions?: Map<string, Region> };
+
+function radialLayout(items: DiagramNode[], w: number, h: number): LayoutResult {
+  // Containers (small labels) sit along the top row; atomic nodes ring around
+  // a centre pushed enough below the row that the topmost atom clears the
+  // container labels. An angular offset rotates the ring by a half-step so no
+  // atom lands directly beneath a container anchor.
+  const out = new Map<string, Pos>();
+  const containers = items.filter(it => it.id.startsWith('container:'));
+  const atoms = items.filter(it => !it.id.startsWith('container:'));
+
+  const containerRowY = 32;
+  const containerRowH = 38; // matches the rect height in the renderer
+  const atomR = 20;
+  // Centre the ring far enough below the container row that even the top atom
+  // clears it: top of ring = cy - r must exceed (containerRowY + containerRowH/2 + atomR + padding)
+  const r = Math.min(w, h) * 0.34;
+  const cy = Math.max(h / 2 + 22, containerRowY + containerRowH / 2 + atomR + 14 + r);
+
+  const cx = w / 2;
+  // Half-step angular offset so atoms straddle the vertical, not sit on it
+  const angleOffset = atoms.length > 0 ? Math.PI / atoms.length : 0;
+  atoms.forEach((item, i) => {
+    const angle = (Math.PI * 2 * i) / Math.max(atoms.length, 1) - Math.PI / 2 + angleOffset;
+    out.set(item.id, { x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r });
+  });
+
+  if (containers.length === 1) {
+    out.set(containers[0].id, { x: cx, y: containerRowY });
+  } else if (containers.length > 1) {
+    const slotW = (w - 120) / (containers.length - 1);
+    containers.forEach((c, i) => {
+      out.set(c.id, { x: 60 + i * slotW, y: containerRowY });
+    });
+  }
+  return { positions: out };
+}
+
+function dependencyLayout(items: DiagramNode[], edges: DiagramEdge[], w: number, h: number): LayoutResult {
+  // BFS layering: rank = longest incoming-edge path. Sources on the left.
+  const ids = new Set(items.map(i => i.id));
+  const inEdges = new Map<string, string[]>();
+  const outEdges = new Map<string, string[]>();
+  items.forEach(it => { inEdges.set(it.id, []); outEdges.set(it.id, []); });
+  edges.forEach(e => {
+    if (ids.has(e.source) && ids.has(e.target)) {
+      inEdges.get(e.target)!.push(e.source);
+      outEdges.get(e.source)!.push(e.target);
+    }
+  });
+  const rank = new Map<string, number>();
+  const queue: string[] = [];
+  items.forEach(it => {
+    if (inEdges.get(it.id)!.length === 0) {
+      rank.set(it.id, 0);
+      queue.push(it.id);
+    }
+  });
+  while (queue.length) {
+    const id = queue.shift()!;
+    const r0 = rank.get(id)!;
+    for (const tgt of outEdges.get(id) || []) {
+      const cur = rank.get(tgt);
+      if (cur === undefined || cur < r0 + 1) {
+        rank.set(tgt, r0 + 1);
+        queue.push(tgt);
+      }
+    }
+  }
+  items.forEach(it => { if (!rank.has(it.id)) rank.set(it.id, 0); });
+  const byRank = new Map<number, string[]>();
+  rank.forEach((r, id) => {
+    if (!byRank.has(r)) byRank.set(r, []);
+    byRank.get(r)!.push(id);
+  });
+  const ranks = [...byRank.keys()].sort((a, b) => a - b);
+  const out = new Map<string, Pos>();
+  const padX = 70;
+  const padY = 36;
+  const stepX = ranks.length > 1 ? (w - padX * 2) / (ranks.length - 1) : 0;
+  ranks.forEach((r, i) => {
+    const lane = byRank.get(r)!;
+    const stepY = (h - padY * 2) / Math.max(lane.length, 1);
+    lane.forEach((id, j) => {
+      out.set(id, {
+        x: ranks.length > 1 ? padX + i * stepX : w / 2,
+        y: padY + (j + 0.5) * stepY,
+      });
+    });
+  });
+  return { positions: out };
+}
+
+function containmentLayout(items: DiagramNode[], containers: DiagramContainer[], edges: DiagramEdge[], w: number, h: number): LayoutResult {
+  // Build a containment graph using both explicit `contains` AND subset/⊆ edges
+  // between containers. The compiler exports e.g. `NoeticCluster{^2,^7} ⊆
+  // Noetics` as a subset *edge* between two ROOT containers (neither lists the
+  // other in its `contains`), so the only way to recover the visual nesting is
+  // to read those edges.
+  const containedIn = new Map<string, string>();
+  containers.forEach(c => c.contains.forEach(member => containedIn.set(member, c.id)));
+
+  const containerIds = new Set(containers.map(c => c.id));
+  // For every subset/⊆/⊂ edge linking two containers, nest the smaller into the
+  // larger (or just direction source⊆target → source nests into target).
+  edges.forEach(e => {
+    if (!containerIds.has(e.source) || !containerIds.has(e.target)) return;
+    const k = (e.kind || '').toLowerCase();
+    if (k.includes('subset') || k.includes('member') || e.label === '⊆' || e.label === '⊂' || e.label === '∈') {
+      // source is smaller / contained
+      if (!containedIn.has(e.source)) containedIn.set(e.source, e.target);
+    }
+  });
+
+  const roots = containers.filter(c => !containedIn.has(c.id));
+  if (roots.length === 0) return radialLayout(items, w, h);
+
+  const out = new Map<string, Pos>();
+  const regions = new Map<string, Region>();
+  const cx = w / 2;
+  const cy = h / 2 + 14; // ring centre — slightly below visual centre
+
+  // Pick the largest root as the outer (Venn-style "universe") region.
+  const sortedRoots = [...roots].sort(
+    (a, b) =>
+      (containers.find(c => c.id === b.id)?.contains.length ?? 0) -
+      (containers.find(c => c.id === a.id)?.contains.length ?? 0),
+  );
+  const outer = sortedRoots[0];
+  const outerContainer = containers.find(c => c.id === outer.id)!;
+
+  // Atoms that belong to the outer container go on the main ring.
+  const directAtoms = items.filter(
+    it => !it.id.startsWith('container:') && outerContainer.contains.includes(it.id),
+  );
+  const r = Math.min(w, h) * 0.32;
+  directAtoms.forEach((m, i) => {
+    const angle = (Math.PI * 2 * i) / Math.max(directAtoms.length, 1) - Math.PI / 2;
+    out.set(m.id, { x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r });
+  });
+
+  // Outer container is rendered as a big translucent ellipse enclosing the
+  // ring. Position it at the ring centre; size enough to wrap around all
+  // direct atoms with padding.
+  out.set(outer.id, { x: cx, y: cy });
+  regions.set(outer.id, {
+    cx,
+    cy,
+    rx: r + 36,
+    ry: r + 36,
+  });
+
+  // Inner / nested containers: render as smaller translucent ellipses sized
+  // to enclose only their own members (subset of the ring).
+  const innerContainers = containers.filter(c => c.id !== outer.id);
+  innerContainers.forEach(c => {
+    const memberPositions = c.contains
+      .map(mid => out.get(mid))
+      .filter((p): p is Pos => !!p);
+    if (memberPositions.length === 0) {
+      // No anchored members; place this inner container as a small ellipse off
+      // to the side so it doesn't crash into anything else.
+      out.set(c.id, { x: cx, y: cy });
+      regions.set(c.id, { cx, cy, rx: 60, ry: 30 });
+      return;
+    }
+    const xs = memberPositions.map(p => p.x);
+    const ys = memberPositions.map(p => p.y);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const innerCx = (minX + maxX) / 2;
+    const innerCy = (minY + maxY) / 2;
+    // Pad enough to enclose the atom circles (radius 20) plus breathing room.
+    const padding = 30;
+    const rx = Math.max((maxX - minX) / 2 + padding, 70);
+    const ry = Math.max((maxY - minY) / 2 + padding, 40);
+    out.set(c.id, { x: innerCx, y: innerCy - ry - 6 }); // label perches above the ellipse
+    regions.set(c.id, { cx: innerCx, cy: innerCy, rx, ry });
+  });
+
+  // Any remaining unpositioned orphan items: drop them into the lower-right
+  // corner area as a fallback.
+  const orphans = items.filter(it => !out.has(it.id));
+  orphans.forEach((m, i) => {
+    out.set(m.id, { x: w - 60 - (i * 50), y: h - 30 });
+  });
+  return { positions: out, regions };
+}
+
+function computeLayout(
+  layout: string,
+  items: DiagramNode[],
+  edges: DiagramEdge[],
+  containers: DiagramContainer[],
+  w: number,
+  h: number,
+): LayoutResult {
+  switch (layout) {
+    case 'dependency':
+    case 'recipe':
+      return dependencyLayout(items, edges, w, h);
+    case 'containment':
+    case 'topos':
+      return containmentLayout(items, containers, edges, w, h);
+    case 'radial':
+    case 'branch':
+    case 'semantic':
+    default:
+      return radialLayout(items, w, h);
+  }
+}
+
 function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
+  const availableLayouts = diagram?.layouts ?? [];
+  const [activeLayout, setActiveLayout] = useState<string>(availableLayouts[0] ?? 'radial');
+
+  // When a brand-new diagram comes in, reset to its first available layout
+  useEffect(() => {
+    if (availableLayouts.length && !availableLayouts.includes(activeLayout)) {
+      setActiveLayout(availableLayouts[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [diagram]);
+
   if (!diagram || (diagram.nodes.length === 0 && diagram.containers.length === 0)) return null;
 
   const displayItems: DiagramNode[] = [
@@ -471,38 +701,66 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
       role: c.element_type,
     })),
     ...diagram.nodes,
-  ].slice(0, 18);
+  ].slice(0, 24);
 
-  const positions = new Map<string, { x: number; y: number }>();
-  const center = { x: 210, y: 118 };
-  const radius = displayItems.length <= 6 ? 74 : 94;
-  displayItems.forEach((item, index) => {
-    const angle = (Math.PI * 2 * index) / Math.max(displayItems.length, 1) - Math.PI / 2;
-    positions.set(item.id, {
-      x: center.x + Math.cos(angle) * radius,
-      y: center.y + Math.sin(angle) * radius,
-    });
-  });
+  const VIEW_W = 620;
+  const VIEW_H = 360;
+  const layoutResult = computeLayout(activeLayout, displayItems, diagram.edges, diagram.containers, VIEW_W, VIEW_H);
+  const positions = layoutResult.positions;
+  const regions = layoutResult.regions;
+  const useVenn = !!regions && regions.size > 0;
   const visibleIds = new Set(displayItems.map(item => item.id));
-  const visibleEdges = diagram.edges.filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target)).slice(0, 26);
+  const visibleEdges = diagram.edges.filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target)).slice(0, 32);
 
   return (
     <div className="mt-3 rounded border border-cyan-500/20 bg-cyan-500/[0.035] p-3">
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500">CAS Diagram</p>
-        {diagram.layouts.slice(0, 5).map(layout => (
-          <span key={layout} className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[9px] text-slate-400">
-            {layout}
-          </span>
-        ))}
+        {availableLayouts.slice(0, 6).map(layout => {
+          const isActive = layout === activeLayout;
+          return (
+            <button
+              key={layout}
+              type="button"
+              onClick={() => setActiveLayout(layout)}
+              className={`rounded-full border px-2 py-0.5 text-[9px] transition-colors ${
+                isActive
+                  ? 'border-cyan-400/60 bg-cyan-500/15 text-cyan-300'
+                  : 'border-white/[0.08] bg-white/[0.04] text-slate-400 hover:border-white/[0.16] hover:text-slate-200'
+              }`}
+            >
+              {layout}
+            </button>
+          );
+        })}
       </div>
 
-      <svg viewBox="0 0 420 236" className="h-56 w-full rounded bg-slate-950/50">
+      <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className="h-72 w-full rounded bg-slate-950/50">
         <defs>
-          <marker id="cas-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-            <path d="M0,0 L8,4 L0,8 Z" fill="#64748b" />
+          <marker id="cas-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 Z" fill="#ef4444" />
           </marker>
         </defs>
+        {/* Venn-style background regions for containment layout — drawn first so
+            atoms and edges sit on top */}
+        {useVenn && [...regions!.entries()].map(([id, region]) => {
+          const container = diagram.containers.find(c => c.id === id);
+          if (!container) return null;
+          const color = diagramColor(container.kind);
+          return (
+            <ellipse
+              key={`region-${id}`}
+              cx={region.cx}
+              cy={region.cy}
+              rx={region.rx}
+              ry={region.ry}
+              fill={`${color}15`}
+              stroke={color}
+              strokeWidth="1.4"
+              strokeDasharray="4 3"
+            />
+          );
+        })}
         {visibleEdges.map(edge => {
           const a = positions.get(edge.source);
           const b = positions.get(edge.target);
@@ -514,13 +772,13 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
                 y1={a.y}
                 x2={b.x}
                 y2={b.y}
-                stroke="#64748b"
-                strokeWidth="1.4"
-                strokeOpacity="0.68"
+                stroke="#ef4444"
+                strokeWidth="1.8"
+                strokeOpacity="0.95"
                 markerEnd={edge.directed === false ? undefined : 'url(#cas-arrow)'}
               />
               {edge.label && (
-                <text x={(a.x + b.x) / 2} y={(a.y + b.y) / 2 - 3} textAnchor="middle" className="fill-slate-400 text-[9px]">
+                <text x={(a.x + b.x) / 2} y={(a.y + b.y) / 2 - 4} textAnchor="middle" className="fill-red-300 text-[9px] font-semibold">
                   {edge.label}
                 </text>
               )}
@@ -532,15 +790,27 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
           if (!pos) return null;
           const color = diagramColor(item.kind);
           const isContainer = item.id.startsWith('container:');
-          const label = item.label.length > 18 ? `${item.label.slice(0, 17)}...` : item.label;
+          const label = item.label.length > 22 ? `${item.label.slice(0, 21)}…` : item.label;
+          // In Venn mode, containers are drawn as the background ellipses above;
+          // here we just render the LABEL on the ellipse boundary, no separate rect.
+          if (isContainer && useVenn) {
+            return (
+              <g key={item.id} transform={`translate(${pos.x}, ${pos.y})`}>
+                <rect x="-58" y="-12" width="116" height="22" rx="6" fill="#0d1117" stroke={color} strokeWidth="1.2" />
+                <text y="3" textAnchor="middle" className="fill-slate-100 text-[10px] font-semibold">
+                  {label}
+                </text>
+              </g>
+            );
+          }
           return (
             <g key={item.id} transform={`translate(${pos.x}, ${pos.y})`}>
               {isContainer ? (
-                <rect x="-42" y="-17" width="84" height="34" rx="10" fill={`${color}22`} stroke={color} strokeWidth="1.2" />
+                <rect x="-58" y="-19" width="116" height="38" rx="10" fill={`${color}22`} stroke={color} strokeWidth="1.4" />
               ) : (
-                <circle r="18" fill={`${color}26`} stroke={color} strokeWidth="1.2" />
+                <circle r="20" fill={`${color}26`} stroke={color} strokeWidth="1.4" />
               )}
-              <text y="3" textAnchor="middle" className="fill-slate-100 text-[9px] font-semibold">
+              <text y="3" textAnchor="middle" className="fill-slate-100 text-[10px] font-semibold">
                 {label}
               </text>
             </g>
