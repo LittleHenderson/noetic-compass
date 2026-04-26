@@ -23,11 +23,12 @@ Everything else IS implemented and deployable.
 
 **Location:** `noetic-compass-scaffold/noetic-compass/dashboard/`
 **Stack:** Vite + React + TypeScript, with existing `vercel.json` and `package.json`
-**15 pages already built:**
+**16 pages already built:**
 
 | Page | File | Description |
 |---|---|---|
 | Home / How it works | `HowItWorksPage.tsx` | Framework overview, marketing surface |
+| Start Here | `TutorialPage.tsx` | **NEW — five-step plain-language onboarding with optional technical mode** |
 | Assessment | `AssessmentPage.tsx` | Run a new CAS assessment |
 | Forecast | `ForecastPage.tsx` | **NEW — lacunarity forecast feature Codex just shipped (parity-fixed)** |
 | Visualization | `VisualizationPage.tsx` | **NEW — Multi-Modal Cognitive Signature with Radial Display + Temporal Cognitive Score Phase B** |
@@ -141,6 +142,18 @@ If the API needs to live at `api.noeticcompass.com` as a separate subdomain, con
 2. `TemporalCognitiveScore.tsx` for Phase B synthesized audio.
 3. Demo controls for switching sample cognitive profiles.
 4. Cross-modal Domain sync from audio playback back into the radial display.
+
+### Phase 3A - Verify tutorial / onboarding copy
+
+The `/tutorial` page should give first-time users a plain-language path before CAS notation. The `/visualization` page should introduce the Multi-Modal Cognitive Signature in plain language before CAS notation. Use the tutorial copy from `docs/NOETICCOMPASS_COM_FEATURE_SPEC.md`: explain that the Radial Architecture Display is the picture, the Temporal Cognitive Score is optional user-initiated audio, and the same cognitive state drives both.
+
+Implementation checks:
+
+- Do not add auto-play. Audio remains click-to-play only.
+- Do not imply Phase C-E features are live.
+- Keep CAS notation optional and secondary; first-time users should understand the page without reading equations.
+- Preserve exact public names: Radial Architecture Display, Temporal Cognitive Score, Multi-Modal Cognitive Signature.
+- Preserve lowercase `|f` everywhere register notation appears.
 
 ### Phase 4 — Keep Phase C-E honest
 

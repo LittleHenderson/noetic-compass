@@ -1,5 +1,14 @@
 # Noetic Compass — Progress Log
 
+## Session 35: Start Here Tutorial Onboarding (April 26, 2026)
+
+**Objective.** Reduce first-run friction by adding a plain-language guided tour before users encounter the densest CAS surfaces.
+
+- **`dashboard/src/pages/TutorialPage.tsx`** (NEW) — five-step tutorial with Simple/Technical modes, progress state, local completion marker, and links into How It Works, Visual + Audio, Risk Forecast, Compiler, and Assessment.
+- **Navigation.** Added `/tutorial` lazy route and a first-position `Start Here` sidebar item.
+- **Welcome flow.** First-run modal now prioritizes the 5-minute tour while preserving direct assessment access.
+- **Docs.** Site/deploy specs updated so tutorial onboarding is part of the deployable feature surface.
+
 ## Session 34: Temporal Cognitive Score Phase B (April 25, 2026)
 
 **Objective.** Ship the audio half of the Multi-Modal Cognitive Signature without fabricating roadmap capabilities.

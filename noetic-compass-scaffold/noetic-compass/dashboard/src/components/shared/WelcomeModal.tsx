@@ -1,18 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const STORAGE_KEY = 'nc-welcome-dismissed';
 
 export function WelcomeModal() {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(() => localStorage.getItem(STORAGE_KEY) !== '1');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const dismissed = localStorage.getItem(STORAGE_KEY);
-    if (!dismissed) {
-      setShow(true);
-    }
-  }, []);
 
   function dismiss() {
     localStorage.setItem(STORAGE_KEY, '1');
@@ -26,6 +19,11 @@ export function WelcomeModal() {
         prefill: 'A hospital has one ventilator and two patients — a 30-year-old parent of three and a 70-year-old retired scientist who pioneered the treatment being used. How should the doctor decide?',
       },
     });
+  }
+
+  function startTutorial() {
+    dismiss();
+    navigate('/tutorial');
   }
 
   if (!show) return null;
@@ -79,12 +77,18 @@ export function WelcomeModal() {
           </div>
         </div>
 
-        {/* CTA */}
         <button
-          onClick={startAssessment}
+          onClick={startTutorial}
           className="w-full rounded-lg bg-gradient-to-r from-accent-teal to-accent-cyan px-4 py-3 text-sm font-semibold text-dark-900 hover:opacity-90 transition-opacity min-h-[44px]"
         >
-          Start with an Assessment
+          Take the 5-minute tour
+        </button>
+
+        <button
+          onClick={startAssessment}
+          className="w-full mt-2 rounded-lg border border-accent-teal/25 bg-accent-teal/[0.06] px-4 py-2.5 text-xs font-semibold text-accent-teal hover:bg-accent-teal/[0.1] transition-colors min-h-[44px]"
+        >
+          Skip tour and start an assessment
         </button>
 
         <button

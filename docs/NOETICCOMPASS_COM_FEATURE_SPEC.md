@@ -28,6 +28,7 @@
 
 ```
 /                         — Home (hero + value props + CTAs)
+/tutorial                 — Start Here guided tour (plain-language onboarding)
 /product                  — The assessment platform (NCCS, Wrap Pipeline, dashboard)
 /framework                — CAS overview (10 Noetics, 4 Domains, 4 Registers, 7 Drives)
 /visualization            — Multi-Modal Cognitive Signature (visual + audio live demo)
@@ -194,6 +195,21 @@ Mount `VisualizationPage.tsx`, which combines `RadialArchitectureDisplay.tsx` an
 
 > The **Temporal Cognitive Score** is the auditory companion to the Radial Architecture Display. Phase B is live: synthesized notes derive from Noetics, expression derives from Registers, tempo derives from the dominant Drive, Domain selects the stave/instrument family, and lacunarity becomes rests. Phase C-E export notation, key-signature derivation, and generative variation remain roadmap.
 
+### Tutorial / onboarding copy (plain-language first)
+
+Use this as a short text block above the `/visualization` demo. Keep the plain-language path first; make CAS notation optional for readers who want the formal layer.
+
+**Start here**
+> The Multi-Modal Cognitive Signature shows the same cognitive state in two ways. The Radial Architecture Display is the picture: longer petals mean stronger activity, quiet areas show gaps, and the outer markers show which drives are active. The Temporal Cognitive Score is the optional audio version of that same state. Press play only if you want to hear it; audio must never auto-play.
+
+**Three-step walkthrough**
+1. **Look at the shape first.** Notice where the Radial Architecture Display is dense, balanced, sparse, or uneven before reading the technical labels.
+2. **Read the labels next.** Domains show the level of operation; Noetics show the kind of cognitive move; Registers show the mode of operation (`|T`, `|A`, `|f`, `|E`); Drives show motivational pressure.
+3. **Use audio as a companion.** If the user clicks play, the Temporal Cognitive Score turns the same data into synthesized sound. Rests indicate lacunarity, not a broken player.
+
+**Optional CAS detail**
+> A petal can be read formally as a CAS state such as `^3^P|f`: Noetic `^3`, Domain `P`, and lowercase `|f` Affective Register. Put this after the plain-language walkthrough so first-time users can understand the display without learning notation first.
+
 ---
 
 ## /research — Research and Publications
@@ -294,6 +310,7 @@ Transparency page. Real status:
 - ✅ CAS-Native v2 neural architecture (research-grade implementation)
 - ✅ Radial Architecture Display Phase A (static SVG)
 - ✅ Temporal Cognitive Score Phase B (synthesized audio sonification)
+- ✅ Start Here tutorial (plain-language onboarding with optional technical mode)
 - ✅ Synthetic Data Generator Level 2 scaffold
 - ✅ 9 Architectural Decision Records published
 - ✅ 10 Foundational Clarifications published
