@@ -94,6 +94,10 @@ UNICODE_SUBSET_EQ = "\u2286"
 UNICODE_SUPERSET = "\u2283"
 UNICODE_SUPERSET_EQ = "\u2287"
 UNICODE_EMPTY_SET = "\u2205"
+UNICODE_UNION = "\u222a"
+UNICODE_INTERSECTION = "\u2229"
+UNICODE_SET_MINUS = "\u2216"
+UNICODE_TENSOR = "\u2297"
 
 # CAS v7.6 Stoichiometric Production Semantics (Clarification 9) Unicode
 # symbols. Recipe notation introduces Greek letters plus the middle-dot
@@ -160,16 +164,19 @@ CAS_GRAMMAR_BNF = """<program>       ::= <statement> (";" <statement>)* ;
 <typed_param_list> ::= <typed_param> ("," <typed_param>)* ;
 <typed_param>   ::= <ident> (":" <type_expr>)? ;
 <type_expr>     ::= <type_name> ("[" <domain_list> "]")? ;
-<type_name>     ::= "state" | "drive" | "string" | "void" | "function" | "fractal" | "rpm" | "relation" | "program" | "number" | "meta_set" | "meta_symbol" | "meta_assertion" | "any" ;
+<type_name>     ::= "state" | "drive" | "string" | "void" | "function" | "fractal" | "rpm" | "relation" | "program" | "number" | "tuple" | "meta_set" | "meta_symbol" | "meta_assertion" | "any" ;
 <domain_list>   ::= <domain> ("," <domain>)* ;
 <expression>    ::= <meta_relation> ;
-<meta_relation> ::= <relation> (("∈" | "∉" | "⊂" | "⊆" | "⊃" | "⊇") <relation>)* ;
+<meta_relation> ::= <set_expr> (("∈" | "∉" | "⊂" | "⊆" | "⊃" | "⊇") <set_expr>)* ;
+<set_expr>      ::= <relation> (("∪" | "∩" | "∖" | "union" | "intersect" | "setminus") <relation>)* ;
 <relation>      ::= <sum> (("->" | "<-" | "<->") <sum>)* ;
 <sum>           ::= <product> (("+" | "-") <product>)* ;
 <product>       ::= <primary> (("*" | "/" | "∘" | "×" | "÷") <primary>)* ;
-<primary>       ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <cardinality> | <meta_set> | <meta_symbol> | "∅" | <number> | <call> | <ident> | <string> | "(" <expression> ")" ;
-<cardinality>   ::= "|" <meta_set> "|" ;
+<primary>       ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <tuple_literal> | <cardinality> | <meta_set> | <typed_meta_set> | <meta_symbol> | "∅" | <number> | <call> | <ident> | <string> | "(" <expression> ")" ;
+<cardinality>   ::= "|" <relation> "|" ;
 <meta_set>      ::= "Noetics" | "Domains" | "Worlds" | "Drives" | "Registers" | "States" | "Foundations" | "SubFoundations" | "Foundation_1" | ... | "Foundation_7" ;
+<typed_meta_set> ::= "{" <arg_list>? "}" | ("NoeticSet" | "NoeticCluster" | "Cluster" | "StateSet" | "StateCluster" | "StateVariantSet" | "StateVariantCluster" | "RelationSet" | "RelationCluster" | "DriveSet" | "DomainSet" | "RegisterSet" | "FoundationSet" | "SubFoundationSet") "{" <arg_list>? "}" ;
+<tuple_literal> ::= ("Tuple" | "Coordinate") "{" <arg_list>? "}" | ("⟨" | "<") <arg_list>? ("⟩" | ">") ;
 <meta_symbol>   ::= <domain> | "T" | "A" | "f" | "E" ;
 <call>          ::= <ident> "(" <arg_list>? ")" ;
 <arg_list>      ::= <expression> ("," <expression>)* ;
@@ -198,6 +205,10 @@ CAS_LANGUAGE_NOTES = {
     "module": "use imports another .cas file relative to the current file when executed from compile_file or the CLI; explicit export statements constrain the imported surface.",
     "types": "Type expressions such as state[C], relation, rpm, or any drive static checking and document intended contracts.",
     "aliases": "Unicode aliases are accepted for arrows (→, ←, ↔), product/division (×, ÷), and fractal composition (∘).",
+    "typed_meta_sets": "Finite typed clusters such as NoeticSet{^2, ^7}, NoeticCluster{^2, ^7}, StateCluster{^2^P, C7}, RelationCluster{^5^P -> ^5^C}, and StateVariantCluster{^2^P_{F2}|A, C7|f} compile as meta_set values for membership, subset, and cardinality assertions.",
+    "set_operations": "Finite meta-sets support ∪ union, ∩ intersection, ∖ set difference, Pullback(A, B) as a finite subobject meet, Product(A, B) as a namespaced Cartesian product, and validated CoverOf/PartitionOf over an explicit base universe.",
+    "tuples": "Tuple{^2, P, F2, A}, Coordinate{^2, P, F2, A}, and ⟨^2, P, F2, A⟩ compile as typed tuple/coordinate values.",
+    "diagrams": "Every valid compiled artifact can be projected to a graph diagram with nodes, edges, containment boxes, and layout hints for radial, dependency, recipe, and topos-style renderers.",
 }
 
 
@@ -239,6 +250,9 @@ class TokenKind(Enum):
     SUBSET_EQ = "SUBSET_EQ"
     SUPERSET = "SUPERSET"
     SUPERSET_EQ = "SUPERSET_EQ"
+    UNION = "UNION"
+    INTERSECTION = "INTERSECTION"
+    SET_DIFF = "SET_DIFF"
     EMPTY_SET = "EMPTY_SET"
     CARET = "CARET"
     UNDERSCORE = "UNDERSCORE"
@@ -284,6 +298,7 @@ class TypeKind(Enum):
     RELATION = "relation"
     PROGRAM = "program"
     NUMBER = "number"
+    TUPLE = "tuple"
     META_SET = "meta_set"
     META_SYMBOL = "meta_symbol"
     META_ASSERTION = "meta_assertion"
@@ -425,6 +440,19 @@ class NumberLiteral:
 @dataclass
 class MetaSetLiteral:
     name: str
+
+
+@dataclass
+class TypedMetaSetLiteral:
+    constructor: str
+    element_type: str
+    elements: list[Any]
+
+
+@dataclass
+class TupleLiteral:
+    constructor: str
+    elements: list[Any]
 
 
 @dataclass
@@ -970,11 +998,14 @@ class MetaSetValue:
 
     name: str
     elements: frozenset[str]
+    element_type: str = "meta"
+    origin: str = "builtin"
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "kind": "meta_set",
             "name": self.name,
+            "element_type": self.element_type,
             "cardinality": len(self.elements),
             "elements": sorted(self.elements),
         }
@@ -1030,6 +1061,21 @@ class MetaAssertionValue:
         }
 
 
+@dataclass(frozen=True)
+class TupleValue:
+    constructor: str
+    elements: tuple[Any, ...]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "kind": "tuple",
+            "constructor": self.constructor,
+            "arity": len(self.elements),
+            "elements": [serialize_value(element) for element in self.elements],
+            "labels": [_meta_value_label(element) for element in self.elements],
+        }
+
+
 @dataclass
 class UserFunction:
     name: str
@@ -1072,10 +1118,57 @@ class RuntimeEnv:
         raise CompilerError(CompilerStage.EXECUTION, f"undefined function {name}")
 
 
-BUILTIN_NAMES = {"dominant_state", "dominant_domain", "dominant_operator", "compose", "rpm_of", "fractal"}
+BUILTIN_NAMES = {
+    "dominant_state",
+    "dominant_domain",
+    "dominant_operator",
+    "compose",
+    "rpm_of",
+    "fractal",
+    "Pullback",
+    "Product",
+    "Union",
+    "Intersection",
+    "Difference",
+    "CoverOf",
+    "PartitionOf",
+}
 
 
 _FOUNDATION_SET_NAMES = tuple(f"Foundation_{i}" for i in range(1, 8))
+
+TYPED_META_SET_CONSTRUCTORS = {
+    "Set": "meta",
+    "MetaSet": "meta",
+    "NoeticSet": "noetic",
+    "NoeticCluster": "noetic",
+    "Cluster": "noetic",
+    "StateSet": "state",
+    "StateCluster": "state",
+    "StateVariantSet": "state_variant",
+    "StateVariantCluster": "state_variant",
+    "RelationSet": "relation",
+    "RelationCluster": "relation",
+    "DriveSet": "drive",
+    "DomainSet": "domain",
+    "RegisterSet": "register",
+    "FoundationSet": "foundation",
+    "SubFoundationSet": "subfoundation",
+}
+
+TUPLE_CONSTRUCTORS = {"Tuple", "Coordinate", "CASTuple", "CASCoordinate"}
+
+_BUILTIN_META_SET_TYPES = {
+    "Noetics": "noetic",
+    "Domains": "domain",
+    "Drives": "drive",
+    "Registers": "register",
+    "States": "state",
+    "Foundations": "foundation",
+    "SubFoundations": "subfoundation",
+    "EmptySet": "empty",
+    **{name: "subfoundation" for name in _FOUNDATION_SET_NAMES},
+}
 
 
 def _drive_key(drive: int) -> str:
@@ -1178,6 +1271,12 @@ class CompilationArtifact:
             return []
         return extract_register_activations(self.ast)
 
+    def diagram(self) -> dict[str, Any]:
+        """Graph/geometry view for real-time CAS teaching surfaces."""
+        if self.ast is None or not self.valid:
+            return empty_diagram()
+        return build_diagram(self.ast)
+
 
 TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     (r"[ \t\r]+", None),
@@ -1197,6 +1296,9 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     (re.escape(UNICODE_SUBSET), TokenKind.SUBSET),
     (re.escape(UNICODE_SUPERSET_EQ), TokenKind.SUPERSET_EQ),
     (re.escape(UNICODE_SUPERSET), TokenKind.SUPERSET),
+    (r"union\b|" + re.escape(UNICODE_UNION), TokenKind.UNION),
+    (r"intersect(?:ion)?\b|" + re.escape(UNICODE_INTERSECTION), TokenKind.INTERSECTION),
+    (r"setminus\b|difference\b|diff\b|" + re.escape(UNICODE_SET_MINUS), TokenKind.SET_DIFF),
     (re.escape(UNICODE_EMPTY_SET), TokenKind.EMPTY_SET),
     (r"RPM\b", TokenKind.RPM),
     (r"Phi\b|" + re.escape(UNICODE_PHI), TokenKind.PHI),
@@ -1230,7 +1332,10 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     # CAS v7.8 meta-logic cardinality `|X|`. This lookahead lets a leading
     # bar before a collection name tokenize as PIPE without stealing legacy
     # register suffixes such as `|A` after state/drive primitives.
-    (r"\|(?=(?:[A-Z][A-Za-z0-9_]*|" + re.escape(UNICODE_EMPTY_SET) + r")\|)", TokenKind.PIPE),
+    (
+        r"\|(?=(?:[A-Za-z_][A-Za-z0-9_]*(?:\{|\|)|\{|" + re.escape(UNICODE_EMPTY_SET) + r"\|))",
+        TokenKind.PIPE,
+    ),
     # CAS v7.5: `|R` register suffix. Matched permissively as `|<letter>` so
     # invalid values like `|Q` are lexed and rejected at parse time with a
     # helpful CAS v7.5 error rather than a generic lexing failure.
@@ -1251,6 +1356,10 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     # and `Fn` (CAS v7.4 compatibility) for drive primitives.
     (r"F_\d+", TokenKind.DRIVE),
     (r"F\d+", TokenKind.DRIVE),
+    # Uppercase constructors/builtins that begin with P/C/E/O must be claimed
+    # before the single-letter DOMAIN rule, otherwise `Pullback(...)` would
+    # tokenize as DOMAIN `P` + IDENT `ullback`.
+    (r"(?:Pullback|Product|Coordinate|CASCoordinate|CoverOf|PartitionOf)\b", TokenKind.IDENT),
     (r"[PCEO]", TokenKind.DOMAIN),
     # CAS v7.7 (Clarification 10 §2): single uppercase letters lex as
     # IDENT. This enables the register-set form `|⟨T,A,f⟩` where each
@@ -1317,7 +1426,12 @@ def _meta_set_value(name: str) -> MetaSetValue:
             CompilerStage.TYPECHECK,
             f"unknown CAS meta-set {name!r}",
         )
-    return MetaSetValue(name=canonical, elements=BUILTIN_META_SETS[canonical])
+    return MetaSetValue(
+        name=canonical,
+        elements=BUILTIN_META_SETS[canonical],
+        element_type=_BUILTIN_META_SET_TYPES.get(canonical, "meta"),
+        origin="builtin",
+    )
 
 
 def _validate_register_token(token: "LexToken") -> str:
@@ -1409,6 +1523,7 @@ def _type_keyword_to_kind(name: str) -> TypeKind:
         "relation": TypeKind.RELATION,
         "program": TypeKind.PROGRAM,
         "number": TypeKind.NUMBER,
+        "tuple": TypeKind.TUPLE,
         "meta_set": TypeKind.META_SET,
         "meta_symbol": TypeKind.META_SYMBOL,
         "meta_assertion": TypeKind.META_ASSERTION,
@@ -1723,6 +1838,7 @@ class Parser:
             TypeKind.FRACTAL,
             TypeKind.RPM,
             TypeKind.NUMBER,
+            TypeKind.TUPLE,
             TypeKind.META_SET,
             TypeKind.META_SYMBOL,
             TypeKind.META_ASSERTION,
@@ -1730,7 +1846,7 @@ class Parser:
         return TypeInfo(kind=kind, domains=tuple(domains), singular=singular)
 
     def parse_expression(self) -> Any:
-        expr = self.parse_relation()
+        expr = self.parse_set_expression()
         while self.current().kind in {
             TokenKind.MEMBER,
             TokenKind.NOT_MEMBER,
@@ -1740,12 +1856,20 @@ class Parser:
             TokenKind.SUPERSET_EQ,
         }:
             token = self.advance()
-            rhs = self.parse_relation()
+            rhs = self.parse_set_expression()
             expr = MetaAssertion(op=token.kind.value, left=expr, right=rhs)
         if self.current().kind == TokenKind.EQUALS and isinstance(expr, CardinalityExpr):
             self.advance()
             rhs = self.parse_expression()
             expr = MetaAssertion(op="EQUALS", left=expr, right=rhs)
+        return expr
+
+    def parse_set_expression(self) -> Any:
+        expr = self.parse_relation()
+        while self.current().kind in {TokenKind.UNION, TokenKind.INTERSECTION, TokenKind.SET_DIFF}:
+            token = self.advance()
+            rhs = self.parse_relation()
+            expr = BinaryExpr(op=token.kind.value, left=expr, right=rhs)
         return expr
 
     def parse_relation(self) -> Any:
@@ -1779,6 +1903,10 @@ class Parser:
             expr = self.parse_expression()
             self.expect(TokenKind.RPAREN)
             return expr
+        if token.kind == TokenKind.LANGLE:
+            return self.parse_tuple_literal("Tuple", close_kind=TokenKind.RANGLE)
+        if token.kind == TokenKind.LBRACE:
+            return self.parse_typed_meta_set("Set")
         if token.kind == TokenKind.PIPE:
             return self.parse_cardinality()
         if token.kind == TokenKind.RPM:
@@ -1824,6 +1952,10 @@ class Parser:
             return MetaSymbol(name=self.advance().value, symbol_kind="domain")
         if token.kind == TokenKind.IDENT:
             name = self.advance().value
+            if self.current().kind == TokenKind.LBRACE and name in TYPED_META_SET_CONSTRUCTORS:
+                return self.parse_typed_meta_set(name)
+            if self.current().kind == TokenKind.LBRACE and name in TUPLE_CONSTRUCTORS:
+                return self.parse_tuple_literal(name, close_kind=TokenKind.RBRACE)
             if self.current().kind == TokenKind.LPAREN:
                 self.advance()
                 args: list[Any] = []
@@ -1869,6 +2001,48 @@ class Parser:
             position=token.position,
         )
 
+    def parse_typed_meta_set(self, constructor: str) -> TypedMetaSetLiteral:
+        """Parse a finite typed meta-set or cluster literal.
+
+        Examples:
+          - `{^2, ^7}` generic finite meta-set
+          - `NoeticSet{^2, ^7}` typed Noetic collection
+          - `NoeticCluster{^2, ^7}` semantic alias for a NoeticSet
+          - `StateSet{^2^P, C7}` typed Cognitive State collection
+          - `StateCluster{^2^P, C7}` teaching-friendly StateSet alias
+          - `StateVariantCluster{^2^P_{F2}|A, C7|f}` full
+            Drive/Register-qualified state collection
+        """
+        element_type = TYPED_META_SET_CONSTRUCTORS[constructor]
+        self.expect(TokenKind.LBRACE)
+        elements: list[Any] = []
+        if self.current().kind != TokenKind.RBRACE:
+            elements.append(self.parse_expression())
+            while self.current().kind == TokenKind.COMMA:
+                self.advance()
+                elements.append(self.parse_expression())
+        self.expect(TokenKind.RBRACE)
+        return TypedMetaSetLiteral(
+            constructor=constructor,
+            element_type=element_type,
+            elements=elements,
+        )
+
+    def parse_tuple_literal(self, constructor: str, *, close_kind: TokenKind) -> TupleLiteral:
+        open_kind = TokenKind.RBRACE if close_kind == TokenKind.RBRACE else TokenKind.RANGLE
+        if open_kind == TokenKind.RBRACE:
+            self.expect(TokenKind.LBRACE)
+        else:
+            self.expect(TokenKind.LANGLE)
+        elements: list[Any] = []
+        if self.current().kind != close_kind:
+            elements.append(self.parse_expression())
+            while self.current().kind == TokenKind.COMMA:
+                self.advance()
+                elements.append(self.parse_expression())
+        self.expect(close_kind)
+        return TupleLiteral(constructor=constructor, elements=elements)
+
     def parse_number(self) -> NumberLiteral:
         token = self.expect(TokenKind.NUMBER)
         if "." in token.value:
@@ -1883,7 +2057,7 @@ class Parser:
                 "cardinality expression `|X|` requires a collection name",
                 position=start.position,
             )
-        collection = self.parse_relation()
+        collection = self.parse_set_expression()
         self.expect(TokenKind.PIPE)
         return CardinalityExpr(collection=collection)
 
@@ -2810,6 +2984,67 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
         _meta_set_value(node.name)
         return TypeInfo(kind=TypeKind.META_SET, singular=True)
 
+    if isinstance(node, TypedMetaSetLiteral):
+        for element in node.elements:
+            element_type = _infer(element, warnings, env)
+            if element_type.kind not in {
+                TypeKind.STATE,
+                TypeKind.DRIVE,
+                TypeKind.RELATION,
+                TypeKind.RPM,
+                TypeKind.FRACTAL,
+                TypeKind.TUPLE,
+                TypeKind.META_SET,
+                TypeKind.META_SYMBOL,
+                TypeKind.STRING,
+                TypeKind.ANY,
+            }:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    (
+                        f"{node.constructor}{{...}} elements must be CAS "
+                        f"objects or meta-symbols, got {element_type.kind.value}"
+                    ),
+                )
+        return TypeInfo(kind=TypeKind.META_SET, singular=True)
+
+    if isinstance(node, TupleLiteral):
+        element_types = [_infer(element, warnings, env) for element in node.elements]
+        if node.constructor in {"Coordinate", "CASCoordinate"}:
+            if len(element_types) != 4:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.constructor}{{...}} requires 4 slots: Noetic, Domain, Drive, Register",
+                )
+            expected = (
+                TypeKind.STATE,
+                TypeKind.META_SYMBOL,
+                TypeKind.DRIVE,
+                TypeKind.META_SYMBOL,
+            )
+            for index, (actual, expected_kind) in enumerate(zip(element_types, expected), start=1):
+                if actual.kind not in {expected_kind, TypeKind.ANY}:
+                    raise CompilerError(
+                        CompilerStage.TYPECHECK,
+                        (
+                            f"{node.constructor} slot {index} must be "
+                            f"{expected_kind.value}, got {actual.kind.value}"
+                        ),
+                    )
+            domain_node = node.elements[1]
+            register_node = node.elements[3]
+            if not (isinstance(domain_node, MetaSymbol) and domain_node.symbol_kind == "domain"):
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.constructor} slot 2 must be a processing Domain symbol (P, C, E, or O)",
+                )
+            if not (isinstance(register_node, MetaSymbol) and register_node.symbol_kind == "register"):
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.constructor} slot 4 must be a Register symbol (T, A, f, or E)",
+                )
+        return TypeInfo(kind=TypeKind.TUPLE, singular=True)
+
     if isinstance(node, EmptySetLiteral):
         return TypeInfo(kind=TypeKind.META_SET, singular=True)
 
@@ -2971,6 +3206,32 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
                     if domains == () and arg_type.domains:
                         domains = arg_type.domains
                 return TypeInfo(kind=TypeKind.FRACTAL, domains=domains, singular=True)
+            if node.callee in {"Pullback", "Product", "Union", "Intersection", "Difference"}:
+                if len(arg_types) != 2:
+                    raise CompilerError(
+                        CompilerStage.TYPECHECK,
+                        f"builtin {node.callee} expects 2 arguments, got {len(arg_types)}",
+                    )
+                for index, arg_type in enumerate(arg_types, start=1):
+                    if arg_type.kind not in {TypeKind.META_SET, TypeKind.ANY}:
+                        raise CompilerError(
+                            CompilerStage.TYPECHECK,
+                            f"builtin {node.callee} argument {index} must be a meta_set",
+                        )
+                return TypeInfo(kind=TypeKind.META_SET, singular=True)
+            if node.callee in {"CoverOf", "PartitionOf"}:
+                if len(arg_types) < 2:
+                    raise CompilerError(
+                        CompilerStage.TYPECHECK,
+                        f"builtin {node.callee} expects a base meta_set plus at least one family member",
+                    )
+                for index, arg_type in enumerate(arg_types, start=1):
+                    if arg_type.kind not in {TypeKind.META_SET, TypeKind.ANY}:
+                        raise CompilerError(
+                            CompilerStage.TYPECHECK,
+                            f"builtin {node.callee} argument {index} must be a meta_set",
+                        )
+                return TypeInfo(kind=TypeKind.META_SET, singular=True)
         if node.callee not in env.funcs:
             raise CompilerError(CompilerStage.TYPECHECK, f"undefined function {node.callee}")
         signature = env.funcs[node.callee]
@@ -3025,6 +3286,19 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
                 return TypeInfo(kind=TypeKind.STATE, domains=domains, singular=False)
             # Mixed types: produce a program-like result
             return TypeInfo(kind=TypeKind.STATE, domains=(), singular=False)
+
+        if node.op in {"UNION", "INTERSECTION", "SET_DIFF"}:
+            if left.kind not in {TypeKind.META_SET, TypeKind.ANY}:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.op} requires a meta-set on the left",
+                )
+            if right.kind not in {TypeKind.META_SET, TypeKind.ANY}:
+                raise CompilerError(
+                    CompilerStage.TYPECHECK,
+                    f"{node.op} requires a meta-set on the right",
+                )
+            return TypeInfo(kind=TypeKind.META_SET, singular=True)
 
         if node.op in {"TIMES", "DIVIDE"}:
             require_stateish(left, node.op)
@@ -3231,6 +3505,33 @@ def lower(node: Any) -> list[Instruction]:
         if isinstance(expr, MetaSetLiteral):
             bytecode.append(Instruction("PUSH_META_SET", {"name": expr.name}))
             return
+        if isinstance(expr, TypedMetaSetLiteral):
+            for element in expr.elements:
+                emit(element)
+            bytecode.append(
+                Instruction(
+                    "BUILD_META_SET",
+                    {
+                        "constructor": expr.constructor,
+                        "element_type": expr.element_type,
+                        "count": len(expr.elements),
+                    },
+                )
+            )
+            return
+        if isinstance(expr, TupleLiteral):
+            for element in expr.elements:
+                emit(element)
+            bytecode.append(
+                Instruction(
+                    "BUILD_TUPLE",
+                    {
+                        "constructor": expr.constructor,
+                        "count": len(expr.elements),
+                    },
+                )
+            )
+            return
         if isinstance(expr, EmptySetLiteral):
             bytecode.append(Instruction("PUSH_META_SET", {"name": "EmptySet"}))
             return
@@ -3406,6 +3707,8 @@ def _value_matches_type(value: Any, expected: TypeInfo) -> bool:
         return isinstance(value, str)
     if expected.kind == TypeKind.NUMBER:
         return isinstance(value, (int, float, CardinalityValue))
+    if expected.kind == TypeKind.TUPLE:
+        return isinstance(value, TupleValue)
     if expected.kind == TypeKind.META_SET:
         return isinstance(value, MetaSetValue)
     if expected.kind == TypeKind.META_SYMBOL:
@@ -3459,6 +3762,7 @@ def _meta_member_keys(value: Any) -> frozenset[str]:
     if isinstance(value, StateValue):
         dominant = value.dominant_state()
         keys = {_state_key(dominant)}
+        keys.add(_state_variant_key(value))
         if not value.domain_explicit and not value.explicit_drive:
             keys.add(f"CO-{value.dominant_operator()}")
         return frozenset(keys)
@@ -3471,6 +3775,8 @@ def _meta_member_keys(value: Any) -> frozenset[str]:
         return frozenset({value.name})
     if isinstance(value, MetaSetValue):
         return frozenset({value.name})
+    if isinstance(value, TupleValue):
+        return frozenset({_tuple_key(value)})
     if isinstance(value, str):
         return frozenset({value})
     return frozenset()
@@ -3478,6 +3784,13 @@ def _meta_member_keys(value: Any) -> frozenset[str]:
 
 def _meta_value_label(value: Any) -> str:
     if isinstance(value, StateValue):
+        if (
+            value.explicit_drive
+            or value.register is not None
+            or value.drive_register is not None
+            or value.emergent_register is not None
+        ):
+            return _state_variant_key(value)
         if not value.domain_explicit and not value.explicit_drive:
             return f"CO-{value.dominant_operator()}"
         return _state_key(value.dominant_state())
@@ -3492,7 +3805,233 @@ def _meta_value_label(value: Any) -> str:
         return value.name
     if isinstance(value, CardinalityValue):
         return f"|{value.collection.name}|"
+    if isinstance(value, RelationValue):
+        return _relation_key(value)
+    if isinstance(value, TupleValue):
+        return _tuple_key(value)
     return str(value)
+
+
+def _meta_register_suffix(register: str | tuple[str, ...] | None) -> str:
+    if isinstance(register, tuple):
+        return "|<" + ",".join(register) + ">"
+    if register is not None:
+        return f"|{register}"
+    return ""
+
+
+def _state_variant_key(value: StateValue) -> str:
+    label = _state_key(value.dominant_state())
+    drive = max(value.drive_weights, key=value.drive_weights.get) if value.drive_weights else None
+    if drive is not None and value.explicit_drive:
+        drive_label = f"F{drive}{_meta_register_suffix(value.drive_register)}"
+        label += f"_{{{drive_label}}}"
+    elif value.drive_register is not None:
+        label += f"_{{{_meta_register_suffix(value.drive_register).lstrip('|')}}}"
+    label += _meta_register_suffix(value.register)
+    if value.emergent_register is not None:
+        label += f"={value.emergent_register}"
+    return label
+
+
+def _relation_key(value: RelationValue) -> str:
+    arrows = {
+        "dependency": "->",
+        "results_from": "<-",
+        "bidirectional": "<->",
+    }
+    return (
+        f"{_meta_value_label(value.source)}"
+        f"{arrows.get(value.relation, '->')}"
+        f"{_meta_value_label(value.target)}"
+    )
+
+
+def _tuple_key(value: TupleValue) -> str:
+    opener = "Coordinate" if value.constructor in {"Coordinate", "CASCoordinate"} else "Tuple"
+    return f"{opener}<" + ",".join(_meta_value_label(element) for element in value.elements) + ">"
+
+
+def _canonical_meta_set_element(value: Any, element_type: str, *, context: str) -> str:
+    label = _meta_value_label(value)
+    if element_type == "meta":
+        return label
+    if element_type == "state_variant":
+        if not isinstance(value, StateValue):
+            raise CompilerError(
+                CompilerStage.EXECUTION,
+                f"{context} requires state_variant elements; got {_meta_value_label(value)}",
+            )
+        if (
+            not value.domain_explicit
+            and not value.explicit_drive
+            and value.register is None
+            and value.drive_register is None
+        ):
+            raise CompilerError(
+                CompilerStage.EXECUTION,
+                (
+                    f"{context} requires explicit State variants; got "
+                    f"{_meta_value_label(value)} (use ^n^D, ^n^D_{{Fk}}, "
+                    f"or ^n^D|R rather than bare ^n)"
+                ),
+            )
+        return _state_variant_key(value)
+    if element_type == "relation":
+        if not isinstance(value, RelationValue):
+            raise CompilerError(
+                CompilerStage.EXECUTION,
+                f"{context} requires relation elements; got {_meta_value_label(value)}",
+            )
+        return _relation_key(value)
+    if element_type == "meta_set":
+        if not isinstance(value, MetaSetValue):
+            raise CompilerError(
+                CompilerStage.EXECUTION,
+                f"{context} requires meta_set elements; got {_meta_value_label(value)}",
+            )
+        return value.name
+    if element_type == "tuple":
+        if not isinstance(value, TupleValue):
+            raise CompilerError(
+                CompilerStage.EXECUTION,
+                f"{context} requires tuple elements; got {_meta_value_label(value)}",
+            )
+        return _tuple_key(value)
+
+    universes = {
+        "noetic": BUILTIN_META_SETS["Noetics"],
+        "state": BUILTIN_META_SETS["States"],
+        "drive": BUILTIN_META_SETS["Drives"],
+        "domain": BUILTIN_META_SETS["Domains"],
+        "register": BUILTIN_META_SETS["Registers"],
+        "foundation": BUILTIN_META_SETS["Foundations"],
+        "subfoundation": BUILTIN_META_SETS["SubFoundations"],
+    }
+    universe = universes.get(element_type)
+    if universe is None:
+        raise CompilerError(
+            CompilerStage.EXECUTION,
+            f"{context} uses unsupported meta-set element type {element_type!r}",
+        )
+    if label in universe:
+        return label
+    if element_type == "noetic":
+        hint = "use bare Noetics such as ^2 or CO-2, not explicit states such as ^2^P"
+    elif element_type == "state":
+        hint = "use explicit Cognitive States such as ^2^P, P2, or C7"
+    else:
+        hint = f"use elements from {element_type} universe"
+    raise CompilerError(
+        CompilerStage.EXECUTION,
+        f"{context} requires {element_type} elements; got {_meta_value_label(value)} ({hint})",
+    )
+
+
+def _build_typed_meta_set_value(
+    constructor: str,
+    element_type: str,
+    values: list[Any],
+) -> MetaSetValue:
+    elements = frozenset(
+        _canonical_meta_set_element(value, element_type, context=constructor)
+        for value in values
+    )
+    name = f"{constructor}{{{', '.join(sorted(elements))}}}"
+    return MetaSetValue(
+        name=name,
+        elements=elements,
+        element_type=element_type,
+        origin="literal",
+    )
+
+
+def _compatible_meta_set_element_type(left: MetaSetValue, right: MetaSetValue, *, op: str) -> str:
+    if left.element_type == right.element_type:
+        return left.element_type
+    if left.element_type == "empty":
+        return right.element_type
+    if right.element_type == "empty":
+        return left.element_type
+    if left.element_type == "meta" or right.element_type == "meta":
+        return "meta"
+    raise CompilerError(
+        CompilerStage.EXECUTION,
+        (
+            f"{op} requires compatible typed meta-sets "
+            f"(got {left.element_type} and {right.element_type})"
+        ),
+    )
+
+
+def _set_operation_value(op: str, left: MetaSetValue, right: MetaSetValue) -> MetaSetValue:
+    element_type = _compatible_meta_set_element_type(left, right, op=op)
+    if op == "UNION":
+        elements = left.elements | right.elements
+        symbol = UNICODE_UNION
+    elif op in {"INTERSECTION", "PULLBACK"}:
+        elements = left.elements & right.elements
+        symbol = UNICODE_INTERSECTION if op == "INTERSECTION" else "Pullback"
+    elif op == "SET_DIFF":
+        elements = left.elements - right.elements
+        element_type = left.element_type
+        symbol = UNICODE_SET_MINUS
+    else:
+        raise CompilerError(CompilerStage.EXECUTION, f"unsupported set operation {op}")
+    name = f"({left.name} {symbol} {right.name})"
+    return MetaSetValue(name=name, elements=frozenset(elements), element_type=element_type, origin="derived")
+
+
+def _product_value(left: MetaSetValue, right: MetaSetValue) -> MetaSetValue:
+    elements = frozenset(f"<{a},{b}>" for a in sorted(left.elements) for b in sorted(right.elements))
+    return MetaSetValue(
+        name=f"Product({left.name}, {right.name})",
+        elements=elements,
+        element_type="tuple",
+        origin="derived",
+    )
+
+
+def _cover_family_value(base: MetaSetValue, members: list[MetaSetValue], *, partition: bool) -> MetaSetValue:
+    if not members:
+        raise CompilerError(
+            CompilerStage.EXECUTION,
+            "CoverOf/PartitionOf requires at least one family member",
+        )
+    covered: set[str] = set()
+    seen: set[str] = set()
+    for member in members:
+        _compatible_meta_set_element_type(base, member, op="CoverOf")
+        if not member.elements.issubset(base.elements):
+            raise CompilerError(
+                CompilerStage.EXECUTION,
+                f"{'PartitionOf' if partition else 'CoverOf'} member {member.name} is not a subset of base {base.name}",
+            )
+        if partition:
+            overlap = seen & set(member.elements)
+            if overlap:
+                raise CompilerError(
+                    CompilerStage.EXECUTION,
+                    f"PartitionOf requires disjoint members; overlap: {sorted(overlap)}",
+                )
+            seen.update(member.elements)
+        covered.update(member.elements)
+    missing = base.elements - frozenset(covered)
+    if missing:
+        raise CompilerError(
+            CompilerStage.EXECUTION,
+            (
+                f"{'PartitionOf' if partition else 'CoverOf'} does not cover "
+                f"base {base.name}; missing {sorted(missing)}"
+            )
+        )
+    name = f"{'PartitionOf' if partition else 'CoverOf'}({base.name}; {', '.join(member.name for member in members)})"
+    return MetaSetValue(
+        name=name,
+        elements=frozenset(member.name for member in members),
+        element_type="meta_set",
+        origin="derived",
+    )
 
 
 def _evaluate_meta_assertion(op: str, left: Any, right: Any) -> MetaAssertionValue:
@@ -3617,6 +4156,43 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
         stack.append(_meta_set_value(str(payload["name"])))
         return
 
+    if opcode == "BUILD_META_SET":
+        payload = instruction.arg
+        count = int(payload.get("count", 0))
+        if count > len(stack):
+            raise CompilerError(
+                CompilerStage.EXECUTION,
+                "internal meta-set stack underflow",
+            )
+        values = [stack.pop() for _ in range(count)]
+        values.reverse()
+        stack.append(
+            _build_typed_meta_set_value(
+                constructor=str(payload["constructor"]),
+                element_type=str(payload["element_type"]),
+                values=values,
+            )
+        )
+        return
+
+    if opcode == "BUILD_TUPLE":
+        payload = instruction.arg
+        count = int(payload.get("count", 0))
+        if count > len(stack):
+            raise CompilerError(
+                CompilerStage.EXECUTION,
+                "internal tuple stack underflow",
+            )
+        values = [stack.pop() for _ in range(count)]
+        values.reverse()
+        stack.append(
+            TupleValue(
+                constructor=str(payload.get("constructor", "Tuple")),
+                elements=tuple(values),
+            )
+        )
+        return
+
     if opcode == "PUSH_META_SYMBOL":
         payload = instruction.arg
         stack.append(
@@ -3663,6 +4239,13 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
             raise CompilerError(
                 CompilerStage.EXECUTION,
                 f"binding {name} violated its declared type {_format_typeinfo(annotation)}",
+            )
+        if isinstance(value, MetaSetValue) and value.origin == "literal":
+            value = MetaSetValue(
+                name=name,
+                elements=value.elements,
+                element_type=value.element_type,
+                origin="binding",
             )
         env.vars[name] = value
         stack.append(BindingValue(name=name, value=value))
@@ -3903,6 +4486,35 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
                 composed = _compose_operators(composed, op)
             stack.append(FractalValue(sequence=sequence, composed_operator=composed, orbit_length=len(sequence), domain=domain))
             return
+        if name in {"Pullback", "Product", "Union", "Intersection", "Difference"}:
+            if len(args) != 2:
+                raise CompilerError(CompilerStage.EXECUTION, f"{name} expects two meta_set arguments")
+            left_set = _require_meta_set_value(args[0], context=name)
+            right_set = _require_meta_set_value(args[1], context=name)
+            if name == "Product":
+                stack.append(_product_value(left_set, right_set))
+                return
+            op = {
+                "Pullback": "PULLBACK",
+                "Union": "UNION",
+                "Intersection": "INTERSECTION",
+                "Difference": "SET_DIFF",
+            }[name]
+            stack.append(_set_operation_value(op, left_set, right_set))
+            return
+        if name in {"CoverOf", "PartitionOf"}:
+            if len(args) < 2:
+                raise CompilerError(
+                    CompilerStage.EXECUTION,
+                    f"{name} expects a base meta_set plus at least one family member",
+                )
+            base = _require_meta_set_value(args[0], context=name)
+            members = [
+                _require_meta_set_value(arg, context=name)
+                for arg in args[1:]
+            ]
+            stack.append(_cover_family_value(base, members, partition=name == "PartitionOf"))
+            return
 
         func = env.resolve_func(name)
         if len(func.params) != len(args):
@@ -3934,6 +4546,12 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
     if opcode == "META_ASSERT":
         payload = instruction.arg
         stack.append(_evaluate_meta_assertion(str(payload["op"]), left, right))
+        return
+
+    if opcode in {"UNION", "INTERSECTION", "SET_DIFF"}:
+        left_set = _require_meta_set_value(left, context=opcode)
+        right_set = _require_meta_set_value(right, context=opcode)
+        stack.append(_set_operation_value(opcode, left_set, right_set))
         return
 
     if opcode == "PLUS":
@@ -4202,6 +4820,19 @@ def serialize_ast(node: Any) -> Any:
         return {"node": "NumberLiteral", "value": node.value}
     if isinstance(node, MetaSetLiteral):
         return {"node": "MetaSetLiteral", "name": node.name}
+    if isinstance(node, TypedMetaSetLiteral):
+        return {
+            "node": "TypedMetaSetLiteral",
+            "constructor": node.constructor,
+            "element_type": node.element_type,
+            "elements": [serialize_ast(element) for element in node.elements],
+        }
+    if isinstance(node, TupleLiteral):
+        return {
+            "node": "TupleLiteral",
+            "constructor": node.constructor,
+            "elements": [serialize_ast(element) for element in node.elements],
+        }
     if isinstance(node, MetaSymbol):
         return {"node": "MetaSymbol", "name": node.name, "symbol_kind": node.symbol_kind}
     if isinstance(node, EmptySetLiteral):
@@ -4366,6 +4997,8 @@ def serialize_value(value: Any) -> Any:
         return value.to_dict()
     if isinstance(value, MetaAssertionValue):
         return value.to_dict()
+    if isinstance(value, TupleValue):
+        return value.to_dict()
     if isinstance(value, DriveLiteral):
         payload: dict[str, Any] = {"kind": "drive", "drive": f"F{value.drive}"}
         # CAS v7.5: surface register metadata when present.
@@ -4396,6 +5029,492 @@ def serialize_value(value: Any) -> Any:
     if isinstance(value, YieldExpressionValue):
         return value.to_dict()
     return repr(value)
+
+
+# ---------------------------------------------------------------------------
+# CAS diagram export.
+#
+# This view is intentionally descriptive: it does not add new CAS semantics.
+# It projects already-valid AST structures into a graph schema suitable for
+# SVG/canvas renderers: nodes, edges, containment boxes, and layout hints.
+# ---------------------------------------------------------------------------
+
+
+def empty_diagram() -> dict[str, Any]:
+    return {
+        "kind": "cas_diagram",
+        "schema_version": "1.0",
+        "layouts": ["semantic"],
+        "nodes": [],
+        "edges": [],
+        "containers": [],
+    }
+
+
+def _diagram_slug(value: str) -> str:
+    slug = re.sub(r"[^A-Za-z0-9_.:-]+", "_", value).strip("_")
+    return slug or "item"
+
+
+def _register_suffix(register: str | tuple[str, ...] | None) -> str:
+    if isinstance(register, tuple):
+        return "|<" + ",".join(register) + ">"
+    if register is not None:
+        return f"|{register}"
+    return ""
+
+
+def _state_literal_label(node: StateLiteral) -> str:
+    base = (
+        f"{node.domain}{node.operator}"
+        if node.domain_explicit or node.drive is not None
+        else f"CO-{node.operator}"
+    )
+    if node.drive is not None:
+        base += f"_F{node.drive}"
+    base += _register_suffix(node.register)
+    return base
+
+
+def _drive_literal_label(node: DriveLiteral) -> str:
+    label = f"F{node.drive}"
+    if node.domain is not None:
+        label += f"^{node.domain}"
+    label += _register_suffix(node.register)
+    return label
+
+
+def _ast_diagram_label(node: Any) -> str:
+    if isinstance(node, StateLiteral):
+        return _state_literal_label(node)
+    if isinstance(node, DriveLiteral):
+        return _drive_literal_label(node)
+    if isinstance(node, MetaSymbol):
+        return node.name
+    if isinstance(node, MetaSetLiteral):
+        return node.name
+    if isinstance(node, TupleLiteral):
+        return f"{node.constructor}<" + ",".join(_ast_diagram_label(element) for element in node.elements) + ">"
+    if isinstance(node, BinaryExpr) and node.op in {"ARROW", "LARROW", "BIARROW"}:
+        arrows = {"ARROW": "->", "LARROW": "<-", "BIARROW": "<->"}
+        return f"{_ast_diagram_label(node.left)}{arrows[node.op]}{_ast_diagram_label(node.right)}"
+    return type(node).__name__
+
+
+def _typed_set_label(node: TypedMetaSetLiteral) -> str:
+    parts = [_ast_diagram_label(element) for element in node.elements]
+    return f"{node.constructor}{{{', '.join(parts)}}}"
+
+
+class _DiagramBuilder:
+    def __init__(self) -> None:
+        self.nodes: dict[str, dict[str, Any]] = {}
+        self.edges: list[dict[str, Any]] = []
+        self.containers: dict[str, dict[str, Any]] = {}
+        self.layouts: set[str] = {"semantic"}
+        self._edge_index = 0
+        self._anon_index = 0
+
+    def add_layout(self, layout: str) -> None:
+        self.layouts.add(layout)
+
+    def add_node(
+        self,
+        kind: str,
+        label: str,
+        *,
+        role: str | None = None,
+        id_hint: str | None = None,
+        **attrs: Any,
+    ) -> str:
+        node_id = id_hint or f"{kind}:{_diagram_slug(label)}"
+        payload = self.nodes.setdefault(
+            node_id,
+            {"id": node_id, "kind": kind, "label": label},
+        )
+        if role is not None:
+            payload["role"] = role
+        for key, value in attrs.items():
+            if value is not None:
+                payload[key] = value
+        return node_id
+
+    def add_edge(
+        self,
+        source: str,
+        target: str,
+        kind: str,
+        *,
+        label: str | None = None,
+        directed: bool = True,
+        **attrs: Any,
+    ) -> str:
+        self._edge_index += 1
+        edge_id = f"edge:{self._edge_index}"
+        payload: dict[str, Any] = {
+            "id": edge_id,
+            "source": source,
+            "target": target,
+            "kind": kind,
+            "directed": directed,
+        }
+        if label is not None:
+            payload["label"] = label
+        for key, value in attrs.items():
+            if value is not None:
+                payload[key] = value
+        self.edges.append(payload)
+        return edge_id
+
+    def add_container(
+        self,
+        label: str,
+        *,
+        kind: str = "meta_set",
+        id_hint: str | None = None,
+        contains: list[str] | None = None,
+        **attrs: Any,
+    ) -> str:
+        container_id = id_hint or f"container:{_diagram_slug(label)}"
+        payload = self.containers.setdefault(
+            container_id,
+            {
+                "id": container_id,
+                "kind": kind,
+                "label": label,
+                "contains": [],
+            },
+        )
+        for child in contains or []:
+            if child not in payload["contains"]:
+                payload["contains"].append(child)
+        for key, value in attrs.items():
+            if value is not None:
+                payload[key] = value
+        self.add_layout("containment")
+        return container_id
+
+    def anon_node(self, kind: str, label: str, **attrs: Any) -> str:
+        self._anon_index += 1
+        return self.add_node(kind, label, id_hint=f"{kind}:{self._anon_index}", **attrs)
+
+    def add_meta_element_node(self, key: str, element_type: str) -> str:
+        if element_type == "noetic":
+            self.add_layout("radial")
+            return self.add_node("noetic", key, role="atomic_noetic")
+        if element_type == "state":
+            return self.add_node("state", key, role="cognitive_state")
+        if element_type == "state_variant":
+            return self.add_node("state_variant", key, role="cognitive_state_variant")
+        if element_type == "drive":
+            return self.add_node("drive", key, role="foundation_drive")
+        if element_type == "domain":
+            return self.add_node("domain", key, role="processing_domain")
+        if element_type == "register":
+            return self.add_node("register", key, role="phenomenological_register")
+        if element_type == "subfoundation":
+            return self.add_node("subfoundation", key, role="drive_register_position")
+        if element_type == "foundation":
+            return self.add_node("foundation", key, role="foundation_family")
+        if element_type == "relation":
+            return self.add_node("relation", key, role="relation_element")
+        if element_type == "tuple":
+            return self.add_node("tuple", key, role="tuple_element")
+        return self.add_node("symbol", key, role="meta_symbol")
+
+    def walk(self, node: Any) -> str | None:
+        if node is None:
+            return None
+        if isinstance(node, Program):
+            roots = [self.walk(statement) for statement in node.statements]
+            roots = [root for root in roots if root is not None]
+            program_id = self.anon_node("program", "CAS program", statement_count=len(roots))
+            for index, root in enumerate(roots, start=1):
+                self.add_edge(program_id, root, "statement", label=str(index))
+            return program_id
+        if isinstance(node, StateLiteral):
+            bare_noetic = not node.domain_explicit and node.drive is None
+            if bare_noetic:
+                noetic_id = self.add_node(
+                    "noetic",
+                    f"CO-{node.operator}",
+                    role="atomic_noetic",
+                    operator=node.operator,
+                    register=node.register,
+                )
+                self.add_layout("radial")
+                return noetic_id
+            label = _state_literal_label(node)
+            state_id = self.add_node(
+                "state",
+                label,
+                role="cognitive_state",
+                operator=node.operator,
+                noetic=f"CO-{node.operator}",
+                domain=node.domain,
+                drive=f"F{node.drive}" if node.drive is not None else None,
+                register=node.register,
+            )
+            noetic_id = self.add_node("noetic", f"CO-{node.operator}", role="atomic_noetic")
+            domain_id = self.add_node("domain", node.domain, role="processing_domain")
+            self.add_edge(noetic_id, state_id, "instantiates", label="Noetic")
+            self.add_edge(domain_id, state_id, "locates", label="Domain")
+            if node.drive is not None:
+                drive_id = self.add_node("drive", f"F{node.drive}", role="foundation_drive")
+                self.add_edge(drive_id, state_id, "modulates", label="Drive")
+            if node.register is not None:
+                regs = node.register if isinstance(node.register, tuple) else (node.register,)
+                for reg in regs:
+                    reg_id = self.add_node("register", reg, role="phenomenological_register")
+                    self.add_edge(reg_id, state_id, "register", label="Register")
+            return state_id
+        if isinstance(node, DriveLiteral):
+            return self.add_node(
+                "drive",
+                _drive_literal_label(node),
+                role="foundation_drive",
+                drive=node.drive,
+                domain=node.domain,
+                register=node.register,
+            )
+        if isinstance(node, MetaSymbol):
+            return self.add_node(node.symbol_kind, node.name, role=f"{node.symbol_kind}_symbol")
+        if isinstance(node, MetaSetLiteral):
+            value = _meta_set_value(node.name)
+            container_id = self.add_container(
+                value.name,
+                kind="meta_set",
+                element_type=value.element_type,
+                cardinality=len(value.elements),
+                expanded=len(value.elements) <= 12,
+            )
+            if len(value.elements) <= 12:
+                for element in sorted(value.elements):
+                    child = self.add_meta_element_node(element, value.element_type)
+                    self.containers[container_id]["contains"].append(child)
+            return container_id
+        if isinstance(node, TypedMetaSetLiteral):
+            container_kind = "typed_meta_set"
+            if node.element_type == "noetic":
+                container_kind = "noetic_cluster"
+            elif node.element_type == "state_variant":
+                container_kind = "state_variant_cluster"
+            elif node.element_type == "state":
+                container_kind = "state_cluster"
+            elif node.element_type == "relation":
+                container_kind = "relation_cluster"
+            container_id = self.add_container(
+                _typed_set_label(node),
+                kind=container_kind,
+                element_type=node.element_type,
+                cardinality=len(node.elements),
+            )
+            if node.element_type == "noetic":
+                self.add_layout("radial")
+            for element in node.elements:
+                child = self.walk(element)
+                if child is not None and child not in self.containers[container_id]["contains"]:
+                    self.containers[container_id]["contains"].append(child)
+            return container_id
+        if isinstance(node, TupleLiteral):
+            tuple_id = self.anon_node(
+                "coordinate" if node.constructor in {"Coordinate", "CASCoordinate"} else "tuple",
+                node.constructor,
+                role="typed_tuple",
+                arity=len(node.elements),
+            )
+            for index, element in enumerate(node.elements, start=1):
+                child = self.walk(element)
+                if child is not None:
+                    self.add_edge(child, tuple_id, "tuple_slot", label=str(index))
+            return tuple_id
+        if isinstance(node, EmptySetLiteral):
+            return self.add_container("EmptySet", kind="meta_set", element_type="empty", cardinality=0)
+        if isinstance(node, CardinalityExpr):
+            collection = self.walk(node.collection)
+            card_id = self.anon_node("cardinality", "|X|", role="cardinality_query")
+            if collection is not None:
+                self.add_edge(collection, card_id, "cardinality", label="| |")
+            return card_id
+        if isinstance(node, MetaAssertion):
+            left = self.walk(node.left)
+            right = self.walk(node.right)
+            if left is None or right is None:
+                return left or right
+            if node.op in {"MEMBER", "NOT_MEMBER"}:
+                self.add_layout("topos")
+                self.add_edge(left, right, "membership", label=UNICODE_MEMBER if node.op == "MEMBER" else UNICODE_NOT_MEMBER)
+            elif node.op in {"SUBSET", "SUBSET_EQ", "SUPERSET", "SUPERSET_EQ"}:
+                self.add_layout("topos")
+                self.add_layout("containment")
+                label = {
+                    "SUBSET": UNICODE_SUBSET,
+                    "SUBSET_EQ": UNICODE_SUBSET_EQ,
+                    "SUPERSET": UNICODE_SUPERSET,
+                    "SUPERSET_EQ": UNICODE_SUPERSET_EQ,
+                }[node.op]
+                self.add_edge(left, right, "subset", label=label)
+            elif node.op == "EQUALS":
+                self.add_edge(left, right, "equals", label="=")
+            return right
+        if isinstance(node, BinaryExpr):
+            left = self.walk(node.left)
+            right = self.walk(node.right)
+            if left is None or right is None:
+                return left or right
+            if node.op in {"ARROW", "LARROW", "BIARROW"}:
+                self.add_layout("dependency")
+                if node.op == "LARROW":
+                    self.add_edge(right, left, "results_from", label=UNICODE_LARROW)
+                    return left
+                if node.op == "BIARROW":
+                    self.add_edge(left, right, "bidirectional", label=UNICODE_BIARROW, directed=False)
+                    return right
+                self.add_edge(left, right, "dependency", label=UNICODE_ARROW)
+                return right
+            operator_labels = {
+                "PLUS": "+",
+                "MINUS": "-",
+                "TIMES": UNICODE_TIMES,
+                "DIVIDE": UNICODE_DIVIDE,
+                "CIRC": "compose",
+                "UNION": UNICODE_UNION,
+                "INTERSECTION": UNICODE_INTERSECTION,
+                "SET_DIFF": UNICODE_SET_MINUS,
+            }
+            op_id = self.anon_node(
+                "operator",
+                operator_labels.get(node.op, node.op),
+                role="cas_operator",
+                operator=node.op,
+            )
+            self.add_layout("branch")
+            self.add_edge(left, op_id, "operand", label="left")
+            self.add_edge(right, op_id, "operand", label="right")
+            return op_id
+        if isinstance(node, EmergentResult):
+            inner = self.walk(node.inner)
+            target = self.add_node("emergent", node.assigned_name, role="named_emergent_result")
+            if inner is not None:
+                self.add_edge(inner, target, "emerges_as", label="=")
+            self.add_layout("branch")
+            return target
+        if isinstance(node, FractalLiteral):
+            self.add_layout("radial")
+            previous: str | None = None
+            root: str | None = None
+            for index, op in enumerate(node.sequence, start=1):
+                current = self.add_node("noetic", f"CO-{op}", role="fractal_step", step=index)
+                root = root or current
+                if previous is not None:
+                    self.add_edge(previous, current, "fractal_step", label="compose")
+                previous = current
+            return previous or root
+        if isinstance(node, RpmCall):
+            self.add_layout("dependency")
+            root = self.walk(node.expr)
+            drive: int | None = None
+            if isinstance(node.expr, DriveLiteral):
+                drive = node.expr.drive
+            elif isinstance(node.expr, StateLiteral):
+                drive = node.expr.drive
+            if drive is None:
+                rpm_id = self.anon_node("rpm", "RPM", role="prerequisite_chain")
+                if root is not None:
+                    self.add_edge(root, rpm_id, "rpm_query", label="RPM")
+                return rpm_id
+            labels = ["A0", f"D{drive}", f"W{drive}", f"P{drive}"]
+            ids = [self.add_node("rpm_stage", label, role="rpm_stage") for label in labels]
+            for source, target in zip(ids, ids[1:]):
+                self.add_edge(source, target, "rpm_descent", label="section")
+            if root is not None:
+                self.add_edge(root, ids[0], "rpm_query", label="RPM")
+            return ids[-1]
+        if isinstance(node, ProductionTargetLiteral):
+            return self.add_node("production_target", f"Omega_{node.name}", role="production_target")
+        if isinstance(node, RecipeLiteral):
+            self.add_layout("recipe")
+            target = self.walk(node.target)
+            for prereq in node.prerequisites:
+                source = self.walk(prereq.primitive)
+                if source is not None and target is not None:
+                    self.add_edge(source, target, "recipe_prerequisite", label=str(prereq.coefficient), coefficient=prereq.coefficient)
+            for condition in node.catalysts:
+                condition_id = self.add_node("catalyst", condition.name or "kappa", role="recipe_condition")
+                if target is not None:
+                    self.add_edge(condition_id, target, "catalyst", label="kappa")
+            for condition in node.inhibitors:
+                condition_id = self.add_node("inhibitor", condition.name or "iota", role="recipe_condition")
+                if target is not None:
+                    self.add_edge(condition_id, target, "inhibitor", label="iota")
+            for leakage in node.leakages:
+                side = self.walk(leakage.target)
+                if target is not None and side is not None:
+                    self.add_edge(target, side, "leakage", label=str(leakage.coefficient), coefficient=leakage.coefficient)
+            return target
+        if isinstance(node, StateVectorLiteral):
+            vector_id = self.anon_node("state_vector", "S", role="activation_vector")
+            for primitive, activation in node.entries:
+                child = self.walk(primitive)
+                if child is not None:
+                    self.add_edge(child, vector_id, "activation", label=str(activation), activation=activation)
+            return vector_id
+        if isinstance(node, YieldExpression):
+            target = self.walk(node.target)
+            yield_id = self.anon_node("yield", node.kind, role="yield_query")
+            if target is not None:
+                self.add_edge(target, yield_id, "yield_query", label=node.kind)
+            if node.state is not None:
+                state = self.walk(node.state)
+                if state is not None:
+                    self.add_edge(state, yield_id, "yield_input", label="state")
+            if node.recipe is not None:
+                recipe = self.walk(node.recipe)
+                if recipe is not None:
+                    self.add_edge(recipe, yield_id, "yield_input", label="recipe")
+            return yield_id
+        if isinstance(node, LetStatement):
+            value = self.walk(node.expr)
+            binding = self.add_node("binding", node.name, role="let_binding")
+            if value is not None:
+                self.add_edge(value, binding, "binds", label="let")
+            return binding
+        if isinstance(node, Identifier):
+            return self.add_node("identifier", node.name, role="bound_reference")
+        if isinstance(node, NumberLiteral):
+            return self.add_node("number", str(node.value), role="numeric_literal")
+        if isinstance(node, StringLiteral):
+            return self.add_node("string", node.value, role="string_literal")
+        if isinstance(node, CallExpr):
+            call_id = self.anon_node("call", node.callee, role="function_call")
+            for arg in node.args:
+                arg_id = self.walk(arg)
+                if arg_id is not None:
+                    self.add_edge(arg_id, call_id, "argument")
+            return call_id
+        if isinstance(node, FunctionDef):
+            return self.add_node("function", node.name, role="function_definition")
+        if isinstance(node, ExportStatement):
+            return self.walk(node.statement)
+        if isinstance(node, UseStatement):
+            return self.add_node("module", node.path, role="module_import")
+        return None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "kind": "cas_diagram",
+            "schema_version": "1.0",
+            "layouts": sorted(self.layouts),
+            "nodes": list(self.nodes.values()),
+            "edges": self.edges,
+            "containers": list(self.containers.values()),
+        }
+
+
+def build_diagram(ast: Any) -> dict[str, Any]:
+    builder = _DiagramBuilder()
+    builder.walk(ast)
+    return builder.to_dict()
 
 
 # ---------------------------------------------------------------------------

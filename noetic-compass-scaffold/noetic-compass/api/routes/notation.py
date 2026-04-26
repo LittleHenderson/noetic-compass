@@ -33,7 +33,9 @@ def compile_notation(req: NotationCompileRequest) -> dict:
     artifact = compile_expression(req.expression)
     if not artifact.valid:
         raise HTTPException(status_code=422, detail=artifact.error)
-    return artifact.to_dict()
+    payload = artifact.to_dict()
+    payload["diagram"] = artifact.diagram()
+    return payload
 
 
 @router.post("/analyze")
@@ -186,6 +188,7 @@ def natural_language_pipeline(req: NaturalLanguageRequest) -> dict:
             "warnings": artifact.warnings,
             "ast": artifact.to_dict().get("ast") if artifact.valid else None,
             "result": artifact.to_dict().get("result") if artifact.valid else None,
+            "diagram": artifact.diagram() if artifact.valid else None,
         }
 
     # 4. Interpretation

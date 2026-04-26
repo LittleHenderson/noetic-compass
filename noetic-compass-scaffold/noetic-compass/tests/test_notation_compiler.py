@@ -19,6 +19,9 @@ SUBSET = chr(0x2282)
 SUBSET_EQ = chr(0x2286)
 SUPERSET = chr(0x2283)
 EMPTY_SET = chr(0x2205)
+UNION = chr(0x222A)
+INTERSECTION = chr(0x2229)
+SET_MINUS = chr(0x2216)
 
 
 def _local_tmp_dir() -> Path:
@@ -1067,6 +1070,168 @@ def test_v78_cardinality_assertion_can_be_bound_as_meta_assertion():
     assert result["kind"] == "program"
     assert result["final_result"]["kind"] == "meta_assertion"
     assert result["final_result"]["holds"] is True
+
+
+def test_v78_typed_noetic_sets_and_clusters():
+    artifact = compile_expression(f"NoeticSet{{^2, ^7}} {SUBSET_EQ} Noetics")
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["holds"] is True
+    assert result["left"]["element_type"] == "noetic"
+    assert result["left"]["elements"] == ["CO-2", "CO-7"]
+
+    nested = compile_expression(f"NoeticSet{{^2}} {SUBSET} NoeticCluster{{^2, ^7}}")
+    assert nested.valid, nested.error
+    assert nested.to_dict()["result"]["holds"] is True
+
+    member = compile_expression(f"^7 {MEMBER} NoeticCluster{{^2, ^7}}")
+    assert member.valid, member.error
+    assert member.to_dict()["result"]["holds"] is True
+
+
+def test_v78_typed_state_sets_and_bound_cluster_cardinality():
+    states = compile_expression(f"StateSet{{^2^P, C7}} {SUBSET_EQ} States")
+    assert states.valid, states.error
+    result = states.to_dict()["result"]
+    assert result["holds"] is True
+    assert result["left"]["element_type"] == "state"
+    assert result["left"]["elements"] == ["C7", "P2"]
+
+    cluster = compile_expression(f"StateCluster{{^2^P, C7}} {SUBSET_EQ} States")
+    assert cluster.valid, cluster.error
+    assert cluster.to_dict()["result"]["holds"] is True
+
+    bound = compile_expression(
+        f"let safety: meta_set = NoeticCluster{{^2, ^7}}; safety {SUBSET_EQ} Noetics; |safety| = 2"
+    )
+    assert bound.valid, bound.error
+    final = bound.to_dict()["result"]["final_result"]
+    assert final["kind"] == "meta_assertion"
+    assert final["holds"] is True
+    assert final["left"]["set"] == "safety"
+
+
+def test_v78_typed_state_variant_clusters_preserve_drive_and_registers():
+    source = "StateVariantCluster{^3^P_{F2}|A, ^2^C|f}"
+    artifact = compile_expression(source)
+    assert artifact.valid, artifact.error
+    result = artifact.to_dict()["result"]
+    assert result["kind"] == "meta_set"
+    assert result["element_type"] == "state_variant"
+    assert result["elements"] == ["C2|f", "P3_{F2}|A"]
+
+    member = compile_expression(f"^3^P_{{F2}}|A {MEMBER} {source}")
+    assert member.valid, member.error
+    assert member.to_dict()["result"]["holds"] is True
+
+    nested = compile_expression(
+        f"StateVariantCluster{{^3^P_{{F2}}|A}} {SUBSET} {source}"
+    )
+    assert nested.valid, nested.error
+    assert nested.to_dict()["result"]["holds"] is True
+
+
+def test_v78_set_operations_pullback_and_product():
+    union = compile_expression(f"NoeticCluster{{^2, ^7}} {UNION} NoeticCluster{{^7, ^8}}")
+    assert union.valid, union.error
+    assert union.to_dict()["result"]["elements"] == ["CO-2", "CO-7", "CO-8"]
+
+    intersection = compile_expression(
+        f"NoeticCluster{{^2, ^7}} {INTERSECTION} NoeticCluster{{^7, ^8}}"
+    )
+    assert intersection.valid, intersection.error
+    assert intersection.to_dict()["result"]["elements"] == ["CO-7"]
+
+    difference = compile_expression(f"NoeticCluster{{^2, ^7}} {SET_MINUS} NoeticCluster{{^7}}")
+    assert difference.valid, difference.error
+    assert difference.to_dict()["result"]["elements"] == ["CO-2"]
+
+    pullback = compile_expression("Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})")
+    assert pullback.valid, pullback.error
+    assert pullback.to_dict()["result"]["elements"] == ["CO-7"]
+
+    product = compile_expression("Product(Noetics, Domains)")
+    assert product.valid, product.error
+    result = product.to_dict()["result"]
+    assert result["element_type"] == "tuple"
+    assert result["cardinality"] == 40
+
+
+def test_v78_relation_clusters_tuples_covers_and_partitions():
+    relations = compile_expression("RelationCluster{^5^P -> ^5^C, ^5^C -> ^5^E}")
+    assert relations.valid, relations.error
+    result = relations.to_dict()["result"]
+    assert result["element_type"] == "relation"
+    assert result["elements"] == ["C5->E5", "P5->C5"]
+
+    coord = compile_expression("Coordinate{^2, P, F2, A}")
+    assert coord.valid, coord.error
+    coord_result = coord.to_dict()["result"]
+    assert coord_result["kind"] == "tuple"
+    assert coord_result["constructor"] == "Coordinate"
+    assert coord_result["labels"] == ["CO-2", "P", "F2", "A"]
+
+    invalid_coord = compile_expression("Coordinate{^2, F2, P, A}")
+    assert not invalid_coord.valid
+    assert invalid_coord.error is not None
+    assert "slot 2 must be" in invalid_coord.error
+
+    angle = compile_expression("<^2, P, F2, A>")
+    assert angle.valid, angle.error
+    assert angle.to_dict()["result"]["arity"] == 4
+
+    all_foundations = ", ".join(f"Foundation_{i}" for i in range(1, 8))
+    cover = compile_expression(f"CoverOf(SubFoundations, {all_foundations})")
+    assert cover.valid, cover.error
+    assert cover.to_dict()["result"]["element_type"] == "meta_set"
+
+    partition = compile_expression(f"PartitionOf(SubFoundations, {all_foundations})")
+    assert partition.valid, partition.error
+
+    incomplete = compile_expression("CoverOf(SubFoundations, Foundation_1, Foundation_2)")
+    assert not incomplete.valid
+    assert incomplete.error is not None
+    assert "does not cover base" in incomplete.error
+
+    overlapping = compile_expression("PartitionOf(Noetics, NoeticSet{^2}, NoeticSet{^2})")
+    assert not overlapping.valid
+    assert overlapping.error is not None
+    assert "requires disjoint members" in overlapping.error
+
+
+def test_v78_typed_noetic_sets_reject_explicit_states():
+    artifact = compile_expression("NoeticSet{^2^P}")
+    assert not artifact.valid
+    assert artifact.error is not None
+    assert "requires noetic elements" in artifact.error
+
+    subset = compile_expression(f"^2 {SUBSET} ^7")
+    assert not subset.valid
+    assert subset.error is not None
+    assert "SUBSET requires a meta-set on the left" in subset.error
+
+    variant = compile_expression("StateVariantCluster{^2}")
+    assert not variant.valid
+    assert variant.error is not None
+    assert "requires explicit State variants" in variant.error
+
+
+def test_diagram_export_for_clusters_relations_and_recipes():
+    artifact = compile_expression(
+        f"NoeticSet{{^2, ^7}} {SUBSET_EQ} Noetics; "
+        "^5^P -> ^5^C; "
+        "Theta(Omega_safe) = 0.4*^3^P + 0.6*^2^C -> Omega_safe"
+    )
+    assert artifact.valid, artifact.error
+    diagram = artifact.diagram()
+    assert diagram["kind"] == "cas_diagram"
+    assert {"containment", "dependency", "radial", "recipe", "topos"}.issubset(
+        set(diagram["layouts"])
+    )
+    assert any(node["kind"] == "noetic" and node["label"] == "CO-2" for node in diagram["nodes"])
+    assert any(edge["kind"] == "dependency" for edge in diagram["edges"])
+    assert any(edge["kind"] == "recipe_prerequisite" for edge in diagram["edges"])
+    assert any(container["kind"] == "noetic_cluster" for container in diagram["containers"])
 
 
 # ---------------------------------------------------------------------------

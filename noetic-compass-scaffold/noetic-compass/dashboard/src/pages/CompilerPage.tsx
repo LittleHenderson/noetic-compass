@@ -25,8 +25,13 @@ const HELP_TEXT = `Commands:
 
 Editing:
   Enter        Submit the expression
-  Shift+Enter  Insert a newline (write multi-statement programs)
+  Shift+Enter  Insert a newline
   ↑ / ↓        Recall command history (only when textbox is empty)
+
+Multi-line layout:
+  Blank line     → ; (statement separator)
+  Single newline → continuation (a long recipe may wrap across lines)
+  Or just write ; yourself at line ends — both work.
 
 Type any CAS expression to compile it.`;
 
@@ -62,6 +67,14 @@ const EXAMPLES: Example[] = [
 
   // Meta-logic — Set theory / discrete math layer
   { expr: '^2 ∈ Noetics', label: 'Membership (^N ∈ Noetics)', category: 'Set Theory' },
+  { expr: 'NoeticCluster{^2, ^7} subseteq Noetics', label: 'Typed Noetic cluster', category: 'Set Theory' },
+  { expr: 'StateVariantCluster{^3^P_{F2}|A, ^2^C|f}', label: 'State variant cluster', category: 'Set Theory' },
+  { expr: 'StateCluster{^2^P, ^7^O} subseteq States', label: 'Typed State cluster', category: 'Set Theory' },
+  { expr: 'NoeticCluster{^2, ^7} ∪ NoeticCluster{^7, ^8}', label: 'Set union', category: 'Set Theory' },
+  { expr: 'RelationCluster{^5^P -> ^5^C, ^5^C -> ^5^E}', label: 'Relation cluster', category: 'Set Theory' },
+  { expr: 'Coordinate{^2, P, F2, A}', label: 'CAS coordinate tuple', category: 'Set Theory' },
+  { expr: 'Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})', label: 'Finite subobject meet', category: 'Set Theory' },
+  { expr: 'Product(Noetics, Domains)', label: 'Namespaced product', category: 'Set Theory' },
   { expr: '^2^P ∈ States', label: 'Compound state ∈ 40-state space', category: 'Set Theory' },
   { expr: 'F2 ∈ Drives', label: 'Drive membership', category: 'Set Theory' },
   { expr: 'Foundation_1 ⊂ SubFoundations', label: 'Proper subset (28 sub-foundations)', category: 'Set Theory' },
@@ -104,17 +117,24 @@ const SYMBOL_PALETTE: { sym: string; title: string }[] = [
 ];
 
 // Frontend pre-processing of input before the compiler sees it. Two passes:
-// 1. Newlines (Shift+Enter) become `;` so multi-line layout renders as a real
-//    multi-statement program — the compiler treats `\n` as ordinary whitespace
-//    and would otherwise smash statements together. Existing `;` is preserved
-//    (a trailing `;` before the newline is collapsed, not doubled).
+// 1. Multi-line layout normalization. The compiler treats `\n` as ordinary
+//    whitespace, so we have to convert visual line breaks to the right thing.
+//    Convention:
+//      - **Blank line** (one or more `\n` with only whitespace between them)
+//        → `;`  — separates statements.
+//      - **Single newline** → ` ` — treated as line-continuation, so a long
+//        recipe can wrap across multiple lines without breaking.
+//    Users may also write `;` explicitly at line ends; in that case the `;` is
+//    already the separator and the newline collapses to whitespace harmlessly.
 // 2. ASCII fallbacks for users without easy Unicode entry — `in`, `notin`,
 //    `subset`, etc. become their Unicode equivalents so the compiler (which
 //    only tokenizes Unicode) accepts them.
-// Order matters: longer aliases first so `notin` doesn't match as `not`+`in`.
+// Order matters: blank-line collapse before single-newline collapse, and
+// longer ASCII aliases before shorter (so `notin` doesn't match as `not`+`in`).
 function expandAsciiAliases(text: string): string {
   return text
-    .replace(/;?\s*\n\s*/g, '; ')     // multi-line program → ;-separated
+    .replace(/\n[ \t]*\n+/g, '; ')      // blank line(s) → ; statement separator
+    .replace(/[ \t]*\n[ \t]*/g, ' ')    // single newline → space (continuation)
     .replace(/\bnotin\b/g, '∉')
     .replace(/\bsubseteq\b/g, '⊆')
     .replace(/\bsubset\b/g, '⊂')
@@ -140,6 +160,41 @@ interface CompileResult {
   type?: { kind: string; domains: string[]; singular: boolean } | null;
   bytecode?: unknown[];
   result?: Record<string, unknown> | null;
+  diagram?: CasDiagram | null;
+}
+
+interface DiagramNode {
+  id: string;
+  kind: string;
+  label: string;
+  role?: string;
+}
+
+interface DiagramEdge {
+  id: string;
+  source: string;
+  target: string;
+  kind: string;
+  label?: string;
+  directed?: boolean;
+}
+
+interface DiagramContainer {
+  id: string;
+  kind: string;
+  label: string;
+  contains: string[];
+  cardinality?: number;
+  element_type?: string;
+}
+
+interface CasDiagram {
+  kind: string;
+  schema_version: string;
+  layouts: string[];
+  nodes: DiagramNode[];
+  edges: DiagramEdge[];
+  containers: DiagramContainer[];
 }
 
 interface NlPipelineResult {
@@ -162,6 +217,7 @@ interface NlPipelineResult {
     warnings: string[];
     ast?: Record<string, unknown> | null;
     result?: Record<string, unknown> | null;
+    diagram?: CasDiagram | null;
   } | null;
   interpretation: string;
 }
@@ -275,18 +331,17 @@ function highlightSyntax(text: string): React.ReactNode[] {
       i += word.length;
       continue;
     }
-    // Meta-set names (Set Theory layer): Noetics, Domains, Worlds, Drives,
-    // Registers, States, Foundations, SubFoundations, Foundation_1..7, EmptySet
+    // Meta-set names and typed cluster constructors (Set Theory layer).
     const metaSetMatch = s.slice(i).match(
-      /^(?:Noetics|Domains|Worlds|Drives|Registers|States|SubFoundations|Foundations|Foundation_[1-7]|EmptySet)\b/
+      /^(?:Noetics|Domains|Worlds|Drives|Registers|States|SubFoundations|Foundations|Foundation_[1-7]|EmptySet|NoeticSet|NoeticCluster|Cluster|StateSet|StateCluster|StateVariantSet|StateVariantCluster|RelationSet|RelationCluster|DriveSet|DomainSet|RegisterSet|FoundationSet|SubFoundationSet|Tuple|Coordinate|Product|Pullback|CoverOf|PartitionOf|Union|Intersection|Difference)\b/
     );
     if (metaSetMatch && (i === 0 || !/[A-Za-z0-9_]/.test(s[i - 1] ?? ''))) {
       parts.push(<span key={i} className="text-violet-300">{metaSetMatch[0]}</span>);
       i += metaSetMatch[0].length;
       continue;
     }
-    // Set-theory operators (∈ ∉ ⊂ ⊆ ⊃ ⊇)
-    if ('∈∉⊂⊆⊃⊇'.includes(s[i])) {
+    // Set-theory operators (membership, subset, union/intersection/difference)
+    if ('∈∉⊂⊆⊃⊇∪∩∖'.includes(s[i])) {
       parts.push(<span key={i} className="text-teal-300 font-bold">{s[i]}</span>);
       i += 1;
       continue;
@@ -394,6 +449,114 @@ function describeResult(r: CompileResult): string {
   return JSON.stringify(res).slice(0, 120);
 }
 
+function diagramColor(kind: string): string {
+  if (kind.includes('cluster') || kind === 'meta_set') return '#14b8a6';
+  if (kind === 'state') return '#38bdf8';
+  if (kind === 'noetic') return '#22d3ee';
+  if (kind === 'drive') return '#f59e0b';
+  if (kind === 'domain') return '#34d399';
+  if (kind === 'register') return '#f472b6';
+  if (kind === 'production_target' || kind === 'emergent') return '#a78bfa';
+  return '#94a3b8';
+}
+
+function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
+  if (!diagram || (diagram.nodes.length === 0 && diagram.containers.length === 0)) return null;
+
+  const displayItems: DiagramNode[] = [
+    ...diagram.containers.map(c => ({
+      id: c.id,
+      kind: c.kind,
+      label: `${c.label}${typeof c.cardinality === 'number' ? ` (${c.cardinality})` : ''}`,
+      role: c.element_type,
+    })),
+    ...diagram.nodes,
+  ].slice(0, 18);
+
+  const positions = new Map<string, { x: number; y: number }>();
+  const center = { x: 210, y: 118 };
+  const radius = displayItems.length <= 6 ? 74 : 94;
+  displayItems.forEach((item, index) => {
+    const angle = (Math.PI * 2 * index) / Math.max(displayItems.length, 1) - Math.PI / 2;
+    positions.set(item.id, {
+      x: center.x + Math.cos(angle) * radius,
+      y: center.y + Math.sin(angle) * radius,
+    });
+  });
+  const visibleIds = new Set(displayItems.map(item => item.id));
+  const visibleEdges = diagram.edges.filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target)).slice(0, 26);
+
+  return (
+    <div className="mt-3 rounded border border-cyan-500/20 bg-cyan-500/[0.035] p-3">
+      <div className="mb-2 flex flex-wrap items-center gap-2">
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500">CAS Diagram</p>
+        {diagram.layouts.slice(0, 5).map(layout => (
+          <span key={layout} className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[9px] text-slate-400">
+            {layout}
+          </span>
+        ))}
+      </div>
+
+      <svg viewBox="0 0 420 236" className="h-56 w-full rounded bg-slate-950/50">
+        <defs>
+          <marker id="cas-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#64748b" />
+          </marker>
+        </defs>
+        {visibleEdges.map(edge => {
+          const a = positions.get(edge.source);
+          const b = positions.get(edge.target);
+          if (!a || !b) return null;
+          return (
+            <g key={edge.id}>
+              <line
+                x1={a.x}
+                y1={a.y}
+                x2={b.x}
+                y2={b.y}
+                stroke="#64748b"
+                strokeWidth="1.4"
+                strokeOpacity="0.68"
+                markerEnd={edge.directed === false ? undefined : 'url(#cas-arrow)'}
+              />
+              {edge.label && (
+                <text x={(a.x + b.x) / 2} y={(a.y + b.y) / 2 - 3} textAnchor="middle" className="fill-slate-400 text-[9px]">
+                  {edge.label}
+                </text>
+              )}
+            </g>
+          );
+        })}
+        {displayItems.map(item => {
+          const pos = positions.get(item.id);
+          if (!pos) return null;
+          const color = diagramColor(item.kind);
+          const isContainer = item.id.startsWith('container:');
+          const label = item.label.length > 18 ? `${item.label.slice(0, 17)}...` : item.label;
+          return (
+            <g key={item.id} transform={`translate(${pos.x}, ${pos.y})`}>
+              {isContainer ? (
+                <rect x="-42" y="-17" width="84" height="34" rx="10" fill={`${color}22`} stroke={color} strokeWidth="1.2" />
+              ) : (
+                <circle r="18" fill={`${color}26`} stroke={color} strokeWidth="1.2" />
+              )}
+              <text y="3" textAnchor="middle" className="fill-slate-100 text-[9px] font-semibold">
+                {label}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+
+      <div className="mt-2 grid gap-1 text-[10px] text-slate-400 sm:grid-cols-3">
+        <span>{diagram.nodes.length} nodes</span>
+        <span>{diagram.edges.length} edges</span>
+        <span>{diagram.containers.length} containment boxes</span>
+      </div>
+    </div>
+  );
+}
+
 function ResultCard({ entry }: { entry: HistoryEntry }) {
   if (entry.isCommand) {
     return (
@@ -462,6 +625,8 @@ function ResultCard({ entry }: { entry: HistoryEntry }) {
             <span className="text-slate-600">bytecode: {nl.compilation.bytecode}</span>
           </div>
         )}
+
+        {nl.compilation?.diagram && <DiagramPreview diagram={nl.compilation.diagram} />}
 
         {/* Interpretation */}
         <div className="rounded border border-purple-500/20 bg-purple-500/[0.03] p-3">
@@ -545,6 +710,8 @@ function ResultCard({ entry }: { entry: HistoryEntry }) {
           <p className="text-accent-teal text-[12px]">{describeResult(r)}</p>
         </div>
       )}
+
+      {r.diagram && <DiagramPreview diagram={r.diagram} />}
 
       {r.warnings && r.warnings.length > 0 && (
         <div className="mt-2">
@@ -675,7 +842,24 @@ function RefPanelContent({ onPickExample }: { onPickExample: (expr: string) => v
           <div><span className="text-teal-300 font-mono">⊃ ⊇</span> <span className="text-slate-500">Proper superset / superset</span></div>
           <div><span className="text-violet-300 font-mono">∅</span> <span className="text-slate-500">Empty set</span></div>
           <div><span className="text-slate-300 font-mono">|S|</span> <span className="text-slate-500">Cardinality of S</span></div>
+          <div><span className="text-violet-300 font-mono">NoeticCluster{'{^2,^7}'}</span> <span className="text-slate-500">Typed Noetic collection</span></div>
+          <div><span className="text-violet-300 font-mono">StateCluster{'{^2^P,C7}'}</span> <span className="text-slate-500">Typed State collection</span></div>
+          <div><span className="text-violet-300 font-mono">StateVariantCluster{'{^3^P_{F2}|A}'}</span> <span className="text-slate-500">Drive/Register variants</span></div>
         </div>
+        <p className="text-[9px] text-slate-600 mt-2 mb-1 uppercase tracking-wider">Topos-safe reference</p>
+        <div className="space-y-0.5 text-[10px]">
+          <div><span className="text-slate-400 font-mono">A ∪ B / A ∩ B / A ∖ B</span> <span className="text-slate-500">Set union, meet, difference</span></div>
+          <div><span className="text-slate-400 font-mono">RelationCluster{'{^5^P -> ^5^C}'}</span> <span className="text-slate-500">Typed dependency rows</span></div>
+          <div><span className="text-slate-400 font-mono">Tuple{'{^2,P,F2,A}'}</span> <span className="text-slate-500">Ordered product element</span></div>
+          <div><span className="text-slate-400 font-mono">Coordinate{'{^2,P,F2,A}'}</span> <span className="text-slate-500">CAS coordinate tag</span></div>
+          <div><span className="text-slate-400 font-mono">Product(Noetics, Domains)</span> <span className="text-slate-500">Namespaced Cartesian product</span></div>
+          <div><span className="text-slate-400 font-mono">Pullback(A, B)</span> <span className="text-slate-500">Finite subobject meet</span></div>
+          <div><span className="text-slate-400 font-mono">CoverOf(Base, U1...)</span> <span className="text-slate-500">Validated cover of base</span></div>
+          <div><span className="text-slate-400 font-mono">PartitionOf(Base, U1...)</span> <span className="text-slate-500">Validated disjoint cover</span></div>
+        </div>
+        <p className="text-[9px] text-slate-600 mt-2 leading-relaxed">
+          These are compiler-backed finite meta-logic constructs. Pullback here means finite meet/intersection, not a general categorical pullback with maps.
+        </p>
         <p className="text-[9px] text-slate-600 mt-2 mb-1 uppercase tracking-wider">Built-in sets</p>
         <div className="space-y-0.5 text-[10px]">
           <div><span className="text-violet-300 font-mono">Noetics</span> <span className="text-slate-500">{'{^0…^9}, |·|=10'}</span></div>
