@@ -495,9 +495,18 @@ function radialLayout(items: DiagramNode[], w: number, h: number): LayoutResult 
   if (containers.length === 1) {
     out.set(containers[0].id, { x: cx, y: containerRowY });
   } else if (containers.length > 1) {
-    const slotW = (w - 120) / (containers.length - 1);
+    // Pack containers in the top row using their actual rendered widths so
+    // wide labels (e.g. "NoeticCluster{CO-2, CO-7}") get enough horizontal
+    // breathing room and don't visually collide with each other.
+    const widths = containers.map(c => rectWidthFor(c.label));
+    const totalContent = widths.reduce((s, x) => s + x, 0);
+    const gap = Math.max(20, (w - 80 - totalContent) / Math.max(containers.length - 1, 1));
+    let x = 40 + widths[0] / 2;
     containers.forEach((c, i) => {
-      out.set(c.id, { x: 60 + i * slotW, y: containerRowY });
+      out.set(c.id, { x, y: containerRowY });
+      if (i < containers.length - 1) {
+        x += widths[i] / 2 + gap + widths[i + 1] / 2;
+      }
     });
   }
   return { positions: out };
@@ -656,6 +665,43 @@ function containmentLayout(items: DiagramNode[], containers: DiagramContainer[],
   return { positions: out, regions };
 }
 
+// Visual constants used by both layout (for spacing) and rendering (for size)
+const ATOM_RADIUS = 20;
+const RECT_HEIGHT_FULL = 38;   // radial-mode container box
+const RECT_HEIGHT_PILL = 22;   // venn-mode container label pill
+const RECT_PAD_X = 16;         // horizontal padding inside container rect
+const CHAR_W = 6.5;            // approx width per char at text-[10px] font-mono
+
+function truncateLabel(label: string, max = 22): string {
+  return label.length > max ? `${label.slice(0, max - 1)}…` : label;
+}
+
+function rectWidthFor(label: string): number {
+  return Math.max(truncateLabel(label).length * CHAR_W + RECT_PAD_X * 2, 48);
+}
+
+// Walk a ray from `from` toward `to` and return the point where it exits the
+// shape centred at `from`. Used to clip edge endpoints to the boundary of the
+// source/target node so arrow tips touch the outer edge instead of piercing
+// through the middle.
+function clipRay(from: Pos, to: Pos, shape: { kind: 'circle'; r: number } | { kind: 'rect'; w: number; h: number }): Pos {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const dist = Math.hypot(dx, dy);
+  if (dist === 0) return from;
+  const ux = dx / dist;
+  const uy = dy / dist;
+  if (shape.kind === 'circle') {
+    return { x: from.x + ux * shape.r, y: from.y + uy * shape.r };
+  }
+  const halfW = shape.w / 2;
+  const halfH = shape.h / 2;
+  const tx = ux === 0 ? Infinity : halfW / Math.abs(ux);
+  const ty = uy === 0 ? Infinity : halfH / Math.abs(uy);
+  const t = Math.min(tx, ty);
+  return { x: from.x + ux * t, y: from.y + uy * t };
+}
+
 function computeLayout(
   layout: string,
   items: DiagramNode[],
@@ -765,20 +811,33 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
           const a = positions.get(edge.source);
           const b = positions.get(edge.target);
           if (!a || !b) return null;
+          const sourceItem = displayItems.find(it => it.id === edge.source);
+          const targetItem = displayItems.find(it => it.id === edge.target);
+          const sourceShape = edge.source.startsWith('container:')
+            ? { kind: 'rect' as const, w: rectWidthFor(sourceItem?.label ?? ''), h: useVenn ? RECT_HEIGHT_PILL : RECT_HEIGHT_FULL }
+            : { kind: 'circle' as const, r: ATOM_RADIUS };
+          const targetShape = edge.target.startsWith('container:')
+            ? { kind: 'rect' as const, w: rectWidthFor(targetItem?.label ?? ''), h: useVenn ? RECT_HEIGHT_PILL : RECT_HEIGHT_FULL }
+            : { kind: 'circle' as const, r: ATOM_RADIUS };
+          // Clip the line endpoints to each shape's outer boundary so the
+          // arrow tip kisses the edge of the target rather than piercing the
+          // node.
+          const start = clipRay(a, b, sourceShape);
+          const end = clipRay(b, a, targetShape);
           return (
             <g key={edge.id}>
               <line
-                x1={a.x}
-                y1={a.y}
-                x2={b.x}
-                y2={b.y}
+                x1={start.x}
+                y1={start.y}
+                x2={end.x}
+                y2={end.y}
                 stroke="#ef4444"
                 strokeWidth="1.8"
                 strokeOpacity="0.95"
                 markerEnd={edge.directed === false ? undefined : 'url(#cas-arrow)'}
               />
               {edge.label && (
-                <text x={(a.x + b.x) / 2} y={(a.y + b.y) / 2 - 4} textAnchor="middle" className="fill-red-300 text-[9px] font-semibold">
+                <text x={(start.x + end.x) / 2} y={(start.y + end.y) / 2 - 4} textAnchor="middle" className="fill-red-300 text-[9px] font-semibold">
                   {edge.label}
                 </text>
               )}
@@ -790,13 +849,23 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
           if (!pos) return null;
           const color = diagramColor(item.kind);
           const isContainer = item.id.startsWith('container:');
-          const label = item.label.length > 22 ? `${item.label.slice(0, 21)}…` : item.label;
-          // In Venn mode, containers are drawn as the background ellipses above;
-          // here we just render the LABEL on the ellipse boundary, no separate rect.
-          if (isContainer && useVenn) {
+          const label = truncateLabel(item.label);
+          if (isContainer) {
+            const w = rectWidthFor(item.label);
+            const useVennPill = useVenn;
+            const h = useVennPill ? RECT_HEIGHT_PILL : RECT_HEIGHT_FULL;
             return (
               <g key={item.id} transform={`translate(${pos.x}, ${pos.y})`}>
-                <rect x="-58" y="-12" width="116" height="22" rx="6" fill="#0d1117" stroke={color} strokeWidth="1.2" />
+                <rect
+                  x={-w / 2}
+                  y={-h / 2}
+                  width={w}
+                  height={h}
+                  rx={useVennPill ? 6 : 10}
+                  fill={useVennPill ? '#0d1117' : `${color}22`}
+                  stroke={color}
+                  strokeWidth={useVennPill ? 1.2 : 1.4}
+                />
                 <text y="3" textAnchor="middle" className="fill-slate-100 text-[10px] font-semibold">
                   {label}
                 </text>
@@ -805,11 +874,7 @@ function DiagramPreview({ diagram }: { diagram?: CasDiagram | null }) {
           }
           return (
             <g key={item.id} transform={`translate(${pos.x}, ${pos.y})`}>
-              {isContainer ? (
-                <rect x="-58" y="-19" width="116" height="38" rx="10" fill={`${color}22`} stroke={color} strokeWidth="1.4" />
-              ) : (
-                <circle r="20" fill={`${color}26`} stroke={color} strokeWidth="1.4" />
-              )}
+              <circle r={ATOM_RADIUS} fill={`${color}26`} stroke={color} strokeWidth="1.4" />
               <text y="3" textAnchor="middle" className="fill-slate-100 text-[10px] font-semibold">
                 {label}
               </text>
