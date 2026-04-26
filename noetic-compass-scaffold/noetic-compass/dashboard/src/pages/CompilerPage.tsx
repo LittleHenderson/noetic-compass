@@ -25,24 +25,54 @@ const HELP_TEXT = `Commands:
 
 Type any CAS expression to compile it.`;
 
-const EXAMPLES = [
-  { expr: 'CO-3^P_{F2} * CO-8^P_{F6}', label: 'Operator Composition' },
-  { expr: 'CO-5^P -> CO-5^C', label: 'Domain Descent' },
-  { expr: 'CO-2^P / CO-3^P', label: 'Involution Division' },
-  { expr: 'CO-5^E + CO-2^E', label: 'Co-Presence' },
-  { expr: 'CO-3^P - CO-8^P', label: 'Subtraction' },
-  { expr: 'RPM(F5)', label: 'Prerequisite Chain' },
-  { expr: 'Phi<3:8:5:2>', label: 'Fractal Analysis' },
-  { expr: '(CO-3^P_{F2} * CO-8^P_{F6}) -> (CO-5^E_{F4} + CO-2^E_{F1})', label: 'Full Expression' },
+interface Example {
+  expr: string;
+  label: string;
+  category: string;
+}
+
+const EXAMPLES: Example[] = [
+  // CAS v7.4 — Foundational notation
+  { expr: '^2^P_{F2} × ^8^P_{F6}', label: 'Operator Composition (×)', category: 'Foundational' },
+  { expr: '^5^P -> ^5^C', label: 'Domain Descent (P → C)', category: 'Foundational' },
+  { expr: '^2^P / ^3^P', label: 'Involution Division', category: 'Foundational' },
+  { expr: '^5^E + ^2^E', label: 'Co-Presence (+)', category: 'Foundational' },
+  { expr: 'RPM(F5)', label: 'Prerequisite Chain', category: 'Foundational' },
+  { expr: 'Phi<3:8:5:2>', label: 'Fractal Analysis', category: 'Foundational' },
+
+  // CAS v7.5 — Phenomenological Registers
+  { expr: '^3^P|A', label: 'Analytical-register Negative', category: 'v7.5 Registers' },
+  { expr: '^3^P|f', label: 'Affective-register Negative', category: 'v7.5 Registers' },
+  { expr: '^2^C_{F2}|T', label: 'Compound state, Transcendent', category: 'v7.5 Registers' },
+
+  // CAS v7.6 — Production Semantics
+  { expr: 'Θ(Ω_focus) = 0.6·^1^C + 0.4·^7^O → Ω_focus', label: 'Recipe definition', category: 'v7.6 Production' },
+  { expr: 'Y_T(Ω_focus)', label: 'Theoretical yield query', category: 'v7.6 Production' },
+  { expr: 'Θ(Ω_book) | κ_deadline = 0.5·^7^P + 0.5·^6^C → Ω_book', label: 'Recipe with catalyst', category: 'v7.6 Production' },
+
+  // CAS v7.7 — Register Multiplicity & Operator Discipline
+  { expr: '^3^P|⟨A,f,T⟩', label: 'Register-set specification', category: 'v7.7 Operator Discipline' },
+  { expr: '^3^P|A + ^3^P|f + ^3^P|T', label: 'Register co-presence (defeasible)', category: 'v7.7 Operator Discipline' },
+  { expr: '(^3^P|A × ^3^P|f × ^3^P|T) = Ω_refusal', label: 'Cross-register integration → emergent', category: 'v7.7 Operator Discipline' },
+
+  // Meta-logic — Set theory / discrete math layer
+  { expr: '^2 ∈ Noetics', label: 'Membership (^N ∈ Noetics)', category: 'Set Theory' },
+  { expr: '^2^P ∈ States', label: 'Compound state ∈ 40-state space', category: 'Set Theory' },
+  { expr: 'F2 ∈ Drives', label: 'Drive membership', category: 'Set Theory' },
+  { expr: 'Foundation_1 ⊂ SubFoundations', label: 'Proper subset (28 sub-foundations)', category: 'Set Theory' },
+  { expr: '∅ ⊆ Noetics', label: 'Empty set is subset of every set', category: 'Set Theory' },
+  { expr: '|Noetics|', label: 'Cardinality of Noetics (= 10)', category: 'Set Theory' },
+  { expr: '|States|', label: 'Cardinality of state space (= 40)', category: 'Set Theory' },
 ];
 
 const OPERATOR_NAMES = [
-  'Generative Potential', 'Directed Attention', 'Attraction/Affinity', 'Aversion/Critical Eval',
-  'Encoding Intensity', 'Receptive Integration', 'Projective Assertion', 'Pattern Entrainment',
-  'Causal Initiation', 'Consequential Grounding',
+  'Idea', 'Mind', 'Positive', 'Negative',
+  'Vibration', 'Female', 'Male', 'Rhythm',
+  'Above/Cause', 'Below/Effect',
 ];
 const DOMAIN_NAMES: Record<string, string> = { P: 'Principled', C: 'Cognitive', E: 'Evaluative', O: 'Operational' };
 const DRIVE_NAMES = ['Unity', 'Wisdom', 'Vitality', 'Connection', 'Agency', 'Structure', 'Purpose'];
+const REGISTER_NAMES: Record<string, string> = { T: 'Transcendent', A: 'Analytical', f: 'Affective', E: 'Embodied' };
 
 // ── Types ──
 
@@ -100,11 +130,17 @@ function highlightSyntax(text: string): React.ReactNode[] {
   const s = text;
 
   while (i < s.length) {
-    // CO-N operator
+    // CO-N operator (legacy form)
     const coMatch = s.slice(i).match(/^CO-\d+/);
     if (coMatch) {
       parts.push(<span key={i} className="text-cyan-400">{coMatch[0]}</span>);
       i += coMatch[0].length;
+      continue;
+    }
+    // ^N operator (caret form)
+    if (s[i] === '^' && /[0-9]/.test(s[i + 1] ?? '')) {
+      parts.push(<span key={i} className="text-cyan-400">^{s[i + 1]}</span>);
+      i += 2;
       continue;
     }
     // ^Domain
@@ -127,10 +163,75 @@ function highlightSyntax(text: string): React.ReactNode[] {
       i += fnMatch[0].length;
       continue;
     }
+    // |⟨R1,R2,...⟩ register-set (CAS v7.7)
+    const regSetMatch = s.slice(i).match(/^\|⟨[^⟩]+⟩/);
+    if (regSetMatch) {
+      parts.push(<span key={i} className="text-fuchsia-400">{regSetMatch[0]}</span>);
+      i += regSetMatch[0].length;
+      continue;
+    }
+    // |R single register (CAS v7.5)
+    if (s[i] === '|' && /[TAfE]/.test(s[i + 1] ?? '') && !/[{a-zA-Z]/.test(s[i + 2] ?? '')) {
+      parts.push(<span key={i} className="text-fuchsia-400">|{s[i + 1]}</span>);
+      i += 2;
+      continue;
+    }
+    // Y_T( / Y_A( yield query (CAS v7.6)
+    const yieldMatch = s.slice(i).match(/^Y_[TA]\b/);
+    if (yieldMatch) {
+      parts.push(<span key={i} className="text-purple-400">{yieldMatch[0]}</span>);
+      i += yieldMatch[0].length;
+      continue;
+    }
+    // Recipe / production tokens (CAS v7.6)
+    if (s.slice(i, i + 5) === 'Theta' || s[i] === 'Θ') {
+      const len = s[i] === 'Θ' ? 1 : 5;
+      parts.push(<span key={i} className="text-pink-400">{s.slice(i, i + len)}</span>);
+      i += len;
+      continue;
+    }
+    // Ω_name production target (with optional _name suffix)
+    if (s.slice(i, i + 5) === 'Omega' || s[i] === 'Ω') {
+      const headLen = s[i] === 'Ω' ? 1 : 5;
+      const tailMatch = s.slice(i + headLen).match(/^_(?:\{[^}]+\}|[A-Za-z][A-Za-z0-9_]*)/);
+      const totalLen = headLen + (tailMatch ? tailMatch[0].length : 0);
+      parts.push(<span key={i} className="text-orange-400">{s.slice(i, i + totalLen)}</span>);
+      i += totalLen;
+      continue;
+    }
+    // Λ leakage / κ catalyst / ι inhibitor (with optional _name)
+    const recipeSym = s.slice(i).match(/^(Lambda|Λ|kappa|κ|iota|ι|eta|η)(_(?:\{[^}]+\}|[A-Za-z][A-Za-z0-9_]*))?/);
+    if (recipeSym) {
+      parts.push(<span key={i} className="text-orange-400">{recipeSym[0]}</span>);
+      i += recipeSym[0].length;
+      continue;
+    }
     // RPM
     if (s.slice(i, i + 3) === 'RPM') {
       parts.push(<span key={i} className="text-purple-400">RPM</span>);
       i += 3;
+      continue;
+    }
+    // Meta-set names (Set Theory layer): Noetics, Domains, Worlds, Drives,
+    // Registers, States, Foundations, SubFoundations, Foundation_1..7, EmptySet
+    const metaSetMatch = s.slice(i).match(
+      /^(?:Noetics|Domains|Worlds|Drives|Registers|States|SubFoundations|Foundations|Foundation_[1-7]|EmptySet)\b/
+    );
+    if (metaSetMatch && (i === 0 || !/[A-Za-z0-9_]/.test(s[i - 1] ?? ''))) {
+      parts.push(<span key={i} className="text-violet-300">{metaSetMatch[0]}</span>);
+      i += metaSetMatch[0].length;
+      continue;
+    }
+    // Set-theory operators (∈ ∉ ⊂ ⊆ ⊃ ⊇)
+    if ('∈∉⊂⊆⊃⊇'.includes(s[i])) {
+      parts.push(<span key={i} className="text-teal-300 font-bold">{s[i]}</span>);
+      i += 1;
+      continue;
+    }
+    // ∅ empty-set literal
+    if (s[i] === '∅') {
+      parts.push(<span key={i} className="text-violet-300">{s[i]}</span>);
+      i += 1;
       continue;
     }
     // Phi / Φ
@@ -140,8 +241,8 @@ function highlightSyntax(text: string): React.ReactNode[] {
       i += len;
       continue;
     }
-    // Operations
-    if ('*×/÷∘'.includes(s[i])) {
+    // Operations (incl. middle-dot · for recipe coefficients)
+    if ('*×/÷∘·'.includes(s[i])) {
       parts.push(<span key={i} className="text-white font-bold">{s[i]}</span>);
       i += 1;
       continue;
@@ -153,6 +254,18 @@ function highlightSyntax(text: string): React.ReactNode[] {
     }
     if (s[i] === '→' || s[i] === '←' || s[i] === '↔') {
       parts.push(<span key={i} className="text-white font-bold">{s[i]}</span>);
+      i += 1;
+      continue;
+    }
+    // Bare pipe (recipe condition separator, e.g. Θ(Ω) | κ_n = ...)
+    if (s[i] === '|') {
+      parts.push(<span key={i} className="text-slate-400 font-bold">{s[i]}</span>);
+      i += 1;
+      continue;
+    }
+    // = (recipe definition / emergent assignment)
+    if (s[i] === '=') {
+      parts.push(<span key={i} className="text-slate-400 font-bold">{s[i]}</span>);
       i += 1;
       continue;
     }
@@ -372,6 +485,155 @@ function ResultCard({ entry }: { entry: HistoryEntry }) {
         </div>
       )}
     </div>
+  );
+}
+
+// ── Reference panel content (shared by desktop side panel + mobile overlay) ──
+
+function RefPanelContent({ onPickExample }: { onPickExample: (expr: string) => void }) {
+  const grouped = EXAMPLES.reduce<Record<string, Example[]>>((acc, ex) => {
+    (acc[ex.category] ||= []).push(ex);
+    return acc;
+  }, {});
+
+  return (
+    <>
+      {/* Examples — grouped by framework version */}
+      <div>
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Examples</p>
+        <div className="space-y-3">
+          {Object.entries(grouped).map(([category, items]) => (
+            <div key={category}>
+              <p className="text-[9px] font-mono uppercase tracking-wider text-fuchsia-400/70 mb-1">{category}</p>
+              <div className="space-y-1">
+                {items.map((ex) => (
+                  <button
+                    key={ex.expr}
+                    onClick={() => onPickExample(ex.expr)}
+                    className="w-full text-left rounded px-2 py-1.5 text-[10px] font-mono text-slate-400 hover:text-accent-teal hover:bg-white/[0.04] transition-colors"
+                  >
+                    <span className="text-slate-500 block text-[9px]">{ex.label}</span>
+                    {ex.expr}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Noetics (10 cognitive operators — authoritative names) */}
+      <div>
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Noetics (^0 – ^9)</p>
+        <div className="space-y-0.5">
+          {OPERATOR_NAMES.map((name, i) => (
+            <div key={i} className="flex items-center gap-2 text-[10px]">
+              <span className="text-cyan-400 font-mono w-8">^{i}</span>
+              <span className="text-slate-500">{name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Domains */}
+      <div>
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Domains (P ≻ C ≻ E ≻ O)</p>
+        {Object.entries(DOMAIN_NAMES).map(([code, name]) => (
+          <div key={code} className="flex items-center gap-2 text-[10px]">
+            <span className="text-emerald-400 font-mono w-6">^{code}</span>
+            <span className="text-slate-500">{name}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Drives */}
+      <div>
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Drives (F1 – F7)</p>
+        {DRIVE_NAMES.map((name, i) => (
+          <div key={i} className="flex items-center gap-2 text-[10px]">
+            <span className="text-amber-400 font-mono w-6">F{i + 1}</span>
+            <span className="text-slate-500">{name}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Phenomenological Registers — CAS v7.5 */}
+      <div>
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Registers (v7.5)</p>
+        {Object.entries(REGISTER_NAMES).map(([code, name]) => (
+          <div key={code} className="flex items-center gap-2 text-[10px]">
+            <span className="text-fuchsia-400 font-mono w-6">|{code}</span>
+            <span className="text-slate-500">{name}</span>
+          </div>
+        ))}
+        <p className="text-[9px] text-slate-600 mt-1.5 leading-relaxed">
+          Specifies operational character. Optional — omit for register-neutral.
+        </p>
+      </div>
+
+      {/* Production Semantics — CAS v7.6 */}
+      <div>
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Production (v7.6)</p>
+        <div className="space-y-0.5 text-[10px]">
+          <div><span className="text-pink-400 font-mono">Θ(Ω)</span> <span className="text-slate-500">Recipe for target Ω</span></div>
+          <div><span className="text-orange-400 font-mono">Ω_name</span> <span className="text-slate-500">Production target</span></div>
+          <div><span className="text-purple-400 font-mono">Y_T / Y_A</span> <span className="text-slate-500">Theoretical / actual yield</span></div>
+          <div><span className="text-orange-400 font-mono">Λ_n</span> <span className="text-slate-500">Leakage / side-reaction</span></div>
+          <div><span className="text-orange-400 font-mono">κ_n</span> <span className="text-slate-500">Catalyst</span></div>
+          <div><span className="text-orange-400 font-mono">ι_n</span> <span className="text-slate-500">Inhibitor</span></div>
+        </div>
+      </div>
+
+      {/* Operator Discipline — CAS v7.7 */}
+      <div>
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Operator Discipline (v7.7)</p>
+        <div className="space-y-1 text-[10px]">
+          <div><span className="text-fuchsia-400 font-mono">|⟨…⟩</span> <span className="text-slate-500">Register-set specification</span></div>
+          <div><span className="text-slate-300 font-mono">+</span> <span className="text-slate-500">Co-presence (defeasible)</span></div>
+          <div><span className="text-orange-400 font-mono">×</span> <span className="text-slate-500">Integration → emergent Ω</span></div>
+        </div>
+        <p className="text-[9px] text-slate-600 mt-1.5 leading-relaxed">
+          Same-Noetic <span className="font-mono">×</span> requires named <span className="font-mono">Ω</span> result.
+        </p>
+      </div>
+
+      {/* Set Theory / discrete-math layer */}
+      <div>
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Set Theory</p>
+        <div className="space-y-0.5 text-[10px]">
+          <div><span className="text-teal-300 font-mono">∈ ∉</span> <span className="text-slate-500">Member / not member</span></div>
+          <div><span className="text-teal-300 font-mono">⊂ ⊆</span> <span className="text-slate-500">Proper subset / subset</span></div>
+          <div><span className="text-teal-300 font-mono">⊃ ⊇</span> <span className="text-slate-500">Proper superset / superset</span></div>
+          <div><span className="text-violet-300 font-mono">∅</span> <span className="text-slate-500">Empty set</span></div>
+          <div><span className="text-slate-300 font-mono">|S|</span> <span className="text-slate-500">Cardinality of S</span></div>
+        </div>
+        <p className="text-[9px] text-slate-600 mt-2 mb-1 uppercase tracking-wider">Built-in sets</p>
+        <div className="space-y-0.5 text-[10px]">
+          <div><span className="text-violet-300 font-mono">Noetics</span> <span className="text-slate-500">{'{^0…^9}, |·|=10'}</span></div>
+          <div><span className="text-violet-300 font-mono">Domains</span> <span className="text-slate-500">{'{P,C,E,O}, |·|=4'}</span></div>
+          <div><span className="text-violet-300 font-mono">Drives</span> <span className="text-slate-500">{'{F1…F7}, |·|=7'}</span></div>
+          <div><span className="text-violet-300 font-mono">Registers</span> <span className="text-slate-500">{'{T,A,f,E}, |·|=4'}</span></div>
+          <div><span className="text-violet-300 font-mono">States</span> <span className="text-slate-500">{'10×4 = 40 cog. states'}</span></div>
+          <div><span className="text-violet-300 font-mono">Foundations</span> <span className="text-slate-500">{'7 named foundations'}</span></div>
+          <div><span className="text-violet-300 font-mono">SubFoundations</span> <span className="text-slate-500">{'7×4 = 28 sub-foundations'}</span></div>
+          <div><span className="text-violet-300 font-mono">Foundation_1…7</span> <span className="text-slate-500">{'individual foundation set'}</span></div>
+          <div><span className="text-violet-300 font-mono">EmptySet</span> <span className="text-slate-500">{'≡ ∅'}</span></div>
+        </div>
+      </div>
+
+      {/* Operations */}
+      <div>
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Operations</p>
+        <div className="space-y-0.5 text-[10px]">
+          <div><span className="text-orange-400 font-mono">×</span> <span className="text-slate-500">Composition / integration</span></div>
+          <div><span className="text-orange-400 font-mono">÷</span> <span className="text-slate-500">Division (algebraic)</span></div>
+          <div><span className="text-orange-400 font-mono">∘</span> <span className="text-slate-500">Fractal (algebraic)</span></div>
+          <div><span className="text-slate-300 font-mono">+</span> <span className="text-slate-500">Co-presence (syntactic)</span></div>
+          <div><span className="text-slate-300 font-mono">·</span> <span className="text-slate-500">Recipe coefficient</span></div>
+          <div><span className="text-white font-mono">→</span> <span className="text-slate-500">Dependency / yields</span></div>
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -634,72 +896,33 @@ export function CompilerPage() {
         </div>
       </div>
 
-      {/* Side panel */}
+      {/* Desktop side panel — only renders at sm and up */}
       {showRef && (
-        <div className="w-72 border-l border-white/[0.06] overflow-y-auto p-4 space-y-5 shrink-0 hidden sm:block" style={{ backgroundColor: '#0d1117' }}>
-          {/* Examples */}
-          <div>
-            <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Examples</p>
-            <div className="space-y-1">
-              {EXAMPLES.map((ex) => (
-                <button
-                  key={ex.expr}
-                  onClick={() => { setInput(ex.expr); inputRef.current?.focus(); }}
-                  className="w-full text-left rounded px-2 py-1.5 text-[10px] font-mono text-slate-400 hover:text-accent-teal hover:bg-white/[0.04] transition-colors"
-                >
-                  <span className="text-slate-500 block text-[9px]">{ex.label}</span>
-                  {ex.expr}
-                </button>
-              ))}
-            </div>
-          </div>
+        <div className="hidden sm:block w-72 border-l border-white/[0.06] overflow-y-auto p-4 space-y-5 shrink-0" style={{ backgroundColor: '#0d1117' }}>
+          <RefPanelContent onPickExample={(expr) => { setInput(expr); inputRef.current?.focus(); }} />
+        </div>
+      )}
 
-          {/* Operators */}
-          <div>
-            <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Operators</p>
-            <div className="space-y-0.5">
-              {OPERATOR_NAMES.map((name, i) => (
-                <div key={i} className="flex items-center gap-2 text-[10px]">
-                  <span className="text-cyan-400 font-mono w-8">CO-{i}</span>
-                  <span className="text-slate-500">{name}</span>
-                </div>
-              ))}
-            </div>
+      {/* Mobile full-screen overlay — only renders below sm. No slide-out side panel. */}
+      {showRef && (
+        <div className="sm:hidden fixed inset-0 z-50 flex flex-col" style={{ backgroundColor: '#0d1117' }}>
+          <div className="flex items-center justify-between border-b border-white/[0.06] p-3 shrink-0">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-300">Reference</span>
+            <button
+              onClick={() => setShowRef(false)}
+              className="px-3 py-1.5 rounded text-[11px] font-mono text-slate-200 border border-white/[0.12] hover:border-white/[0.24] active:bg-white/[0.04]"
+            >
+              Close
+            </button>
           </div>
-
-          {/* Domains */}
-          <div>
-            <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Domains</p>
-            {Object.entries(DOMAIN_NAMES).map(([code, name]) => (
-              <div key={code} className="flex items-center gap-2 text-[10px]">
-                <span className="text-emerald-400 font-mono w-4">{code}</span>
-                <span className="text-slate-500">{name}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Drives */}
-          <div>
-            <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Drives</p>
-            {DRIVE_NAMES.map((name, i) => (
-              <div key={i} className="flex items-center gap-2 text-[10px]">
-                <span className="text-amber-400 font-mono w-6">F{i + 1}</span>
-                <span className="text-slate-500">{name}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Operations */}
-          <div>
-            <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Operations</p>
-            <div className="space-y-0.5 text-[10px]">
-              <div><span className="text-orange-400 font-mono">×</span> <span className="text-slate-500">Composition (algebraic)</span></div>
-              <div><span className="text-orange-400 font-mono">÷</span> <span className="text-slate-500">Division (algebraic)</span></div>
-              <div><span className="text-orange-400 font-mono">∘</span> <span className="text-slate-500">Fractal (algebraic)</span></div>
-              <div><span className="text-slate-300 font-mono">+</span> <span className="text-slate-500">Co-presence (syntactic)</span></div>
-              <div><span className="text-slate-300 font-mono">-</span> <span className="text-slate-500">Removal (syntactic)</span></div>
-              <div><span className="text-white font-mono">→</span> <span className="text-slate-500">Dependency (relation)</span></div>
-            </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-5">
+            <RefPanelContent
+              onPickExample={(expr) => {
+                setInput(expr);
+                setShowRef(false);
+                inputRef.current?.focus();
+              }}
+            />
           </div>
         </div>
       )}
