@@ -70,6 +70,47 @@ const OPERATOR_NAMES = [
   'Vibration', 'Female', 'Male', 'Rhythm',
   'Above/Cause', 'Below/Effect',
 ];
+
+// Quick-insert palette: every Unicode symbol that's hard to type on a US keyboard
+const SYMBOL_PALETTE: { sym: string; title: string }[] = [
+  // Production semantics (v7.6)
+  { sym: 'Θ', title: 'Recipe Θ' },
+  { sym: 'Ω_', title: 'Production target Ω_name' },
+  { sym: 'Λ_', title: 'Leakage Λ_name' },
+  { sym: 'κ_', title: 'Catalyst κ_name' },
+  { sym: 'ι_', title: 'Inhibitor ι_name' },
+  { sym: 'η', title: 'Efficiency η' },
+  { sym: 'Φ', title: 'Fractal Φ' },
+  // Operations
+  { sym: '×', title: 'Compose / multiply ×' },
+  { sym: '·', title: 'Recipe coefficient ·' },
+  { sym: '→', title: 'Yields / dependency →' },
+  // Set theory
+  { sym: '∈', title: 'Member ∈' },
+  { sym: '∉', title: 'Not member ∉' },
+  { sym: '⊂', title: 'Proper subset ⊂' },
+  { sym: '⊆', title: 'Subset ⊆' },
+  { sym: '⊃', title: 'Proper superset ⊃' },
+  { sym: '⊇', title: 'Superset ⊇' },
+  { sym: '∅', title: 'Empty set ∅' },
+  // Angle brackets (register-set notation)
+  { sym: '⟨', title: 'Open angle ⟨ (register-set)' },
+  { sym: '⟩', title: 'Close angle ⟩' },
+];
+
+// ASCII fallbacks for users without easy Unicode entry — expanded to canonical
+// Unicode on submit so the compiler (which only tokenizes Unicode) accepts them.
+// Order matters: longer aliases first so `notin` doesn't match as `not`+`in`.
+function expandAsciiAliases(text: string): string {
+  return text
+    .replace(/\bnotin\b/g, '∉')
+    .replace(/\bsubseteq\b/g, '⊆')
+    .replace(/\bsubset\b/g, '⊂')
+    .replace(/\bsupseteq\b/g, '⊇')
+    .replace(/\bsupset\b/g, '⊃')
+    .replace(/\bemptyset\b/g, '∅')
+    .replace(/\bin\b/g, '∈');
+}
 const DOMAIN_NAMES: Record<string, string> = { P: 'Principled', C: 'Cognitive', E: 'Evaluative', O: 'Operational' };
 const DRIVE_NAMES = ['Unity', 'Wisdom', 'Vitality', 'Connection', 'Agency', 'Structure', 'Purpose'];
 const REGISTER_NAMES: Record<string, string> = { T: 'Transcendent', A: 'Analytical', f: 'Affective', E: 'Embodied' };
@@ -210,6 +251,16 @@ function highlightSyntax(text: string): React.ReactNode[] {
     if (s.slice(i, i + 3) === 'RPM') {
       parts.push(<span key={i} className="text-purple-400">RPM</span>);
       i += 3;
+      continue;
+    }
+    // ASCII aliases for set-theory operators — colored same as their Unicode
+    // equivalents so users see the alias is recognized. Expanded on submit.
+    const aliasMatch = s.slice(i).match(/^(notin|subseteq|subset|supseteq|supset|emptyset|in)\b/);
+    if (aliasMatch && (i === 0 || !/[A-Za-z0-9_]/.test(s[i - 1] ?? ''))) {
+      const word = aliasMatch[0];
+      const cls = word === 'emptyset' ? 'text-violet-300' : 'text-teal-300 font-bold';
+      parts.push(<span key={i} className={cls}>{word}</span>);
+      i += word.length;
       continue;
     }
     // Meta-set names (Set Theory layer): Noetics, Domains, Worlds, Drives,
@@ -625,6 +676,16 @@ function RefPanelContent({ onPickExample }: { onPickExample: (expr: string) => v
           <div><span className="text-violet-300 font-mono">Foundation_1…7</span> <span className="text-slate-500">{'individual foundation set'}</span></div>
           <div><span className="text-violet-300 font-mono">EmptySet</span> <span className="text-slate-500">{'≡ ∅'}</span></div>
         </div>
+        <p className="text-[9px] text-slate-600 mt-2 leading-relaxed">
+          ASCII fallbacks accepted (auto-expanded on submit):{' '}
+          <span className="font-mono text-teal-300">in</span>,{' '}
+          <span className="font-mono text-teal-300">notin</span>,{' '}
+          <span className="font-mono text-teal-300">subset</span>,{' '}
+          <span className="font-mono text-teal-300">subseteq</span>,{' '}
+          <span className="font-mono text-teal-300">supset</span>,{' '}
+          <span className="font-mono text-teal-300">supseteq</span>,{' '}
+          <span className="font-mono text-violet-300">emptyset</span>.
+        </p>
       </div>
 
       {/* Operations */}
@@ -667,6 +728,24 @@ export function CompilerPage() {
   const addEntry = useCallback((entry: HistoryEntry) => {
     setHistory((prev) => [...prev, entry]);
   }, []);
+
+  // Insert a symbol from the palette at the input cursor position
+  function insertSymbol(sym: string) {
+    const el = inputRef.current;
+    if (!el) {
+      setInput((cur) => cur + sym);
+      return;
+    }
+    const start = el.selectionStart ?? el.value.length;
+    const end = el.selectionEnd ?? el.value.length;
+    const newValue = el.value.slice(0, start) + sym + el.value.slice(end);
+    setInput(newValue);
+    setTimeout(() => {
+      el.focus();
+      const pos = start + sym.length;
+      try { el.setSelectionRange(pos, pos); } catch { /* selection range may be unsupported on some inputs */ }
+    }, 0);
+  }
 
   async function handleSubmit() {
     const trimmed = input.trim();
@@ -729,13 +808,15 @@ export function CompilerPage() {
       return;
     }
 
-    // CAS notation mode — compile expression
+    // CAS notation mode — compile expression. Expand ASCII aliases (in, notin,
+    // subset, etc.) to canonical Unicode before the compiler sees them.
+    const compileSource = expandAsciiAliases(trimmed);
     try {
       const result = await apiFetch<CompileResult>('/notation/compile', {
         method: 'POST',
-        body: JSON.stringify({ expression: trimmed }),
+        body: JSON.stringify({ expression: compileSource }),
       });
-      addEntry({ input: trimmed, result, isCommand: false, timestamp: ts });
+      addEntry({ input: compileSource, result, isCommand: false, timestamp: ts });
     } catch (err) {
       // If compile returns 422, the error detail has the compilation error
       const detail = err instanceof Error ? err.message : String(err);
@@ -744,28 +825,28 @@ export function CompilerPage() {
         const raw = await fetch(`${import.meta.env.PROD ? '/api' : (import.meta.env.VITE_API_URL ?? '/api')}/notation/compile`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ expression: trimmed }),
+          body: JSON.stringify({ expression: compileSource }),
         });
         if (raw.status === 422) {
           const body = await raw.json();
           addEntry({
-            input: trimmed,
-            result: { source: trimmed, valid: false, error: body.detail ?? detail, engine: 'rust+python' },
+            input: compileSource,
+            result: { source: compileSource, valid: false, error: body.detail ?? detail, engine: 'rust+python' },
             isCommand: false,
             timestamp: ts,
           });
         } else {
           addEntry({
-            input: trimmed,
-            result: { source: trimmed, valid: false, error: detail },
+            input: compileSource,
+            result: { source: compileSource, valid: false, error: detail },
             isCommand: false,
             timestamp: ts,
           });
         }
       } catch {
         addEntry({
-          input: trimmed,
-          result: { source: trimmed, valid: false, error: detail },
+          input: compileSource,
+          result: { source: compileSource, valid: false, error: detail },
           isCommand: false,
           timestamp: ts,
         });
@@ -877,6 +958,22 @@ export function CompilerPage() {
               Natural Language
             </button>
           </div>
+          {/* Quick-insert symbol palette — Unicode chars hard to type on a US keyboard */}
+          {mode === 'cas' && (
+            <div className="px-3 pt-2 pb-0 flex items-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-thin">
+              {SYMBOL_PALETTE.map((item) => (
+                <button
+                  key={item.sym}
+                  onClick={() => insertSymbol(item.sym)}
+                  title={item.title}
+                  type="button"
+                  className="shrink-0 px-2 py-1 rounded text-xs font-mono border border-white/[0.06] hover:border-accent-teal/50 hover:bg-white/[0.04] transition-colors leading-none min-h-[28px]"
+                >
+                  {highlightSyntax(item.sym)}
+                </button>
+              ))}
+            </div>
+          )}
           <div className="p-3 pt-1 flex items-center gap-2">
           <span className={`font-mono text-sm font-bold shrink-0 ${mode === 'nl' ? 'text-purple-400' : 'text-accent-teal'}`}>
             {mode === 'nl' ? 'nl>' : 'cas>'}
