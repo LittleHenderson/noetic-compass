@@ -774,14 +774,22 @@ function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | null; resu
       : undefined;
   // Dedupe the API-supplied layouts by family so we only show one chip per
   // distinct underlying renderer (e.g. containment+topos collapse to one).
+  // When the expression has containers (e.g. cluster intersection/union/subset),
+  // hoist `containment` to the front so the Venn renderer is the default —
+  // otherwise the compiler often prefers `branch` and the Venn semantics get
+  // hidden behind a less-informative ring layout.
   const availableLayouts = useMemo(() => {
     const seen = new Set<string>();
-    return (diagram?.layouts ?? []).filter(layout => {
+    const list = (diagram?.layouts ?? []).filter(layout => {
       const family = LAYOUT_FAMILY[layout] ?? layout;
       if (seen.has(family)) return false;
       seen.add(family);
       return true;
     });
+    if ((diagram?.containers.length ?? 0) > 0 && list.includes('containment')) {
+      return ['containment', ...list.filter(l => l !== 'containment')];
+    }
+    return list;
   }, [diagram]);
 
   const [activeLayout, setActiveLayout] = useState<string>(availableLayouts[0] ?? 'radial');
