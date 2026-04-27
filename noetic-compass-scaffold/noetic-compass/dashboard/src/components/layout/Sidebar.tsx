@@ -1,7 +1,15 @@
 import { NavLink } from 'react-router-dom';
 import { useHealth } from '../../hooks/useHealth';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
 
-const NAV_ITEMS = [
+export interface NavItem {
+  to: string;
+  label: string;
+  tip: string;
+  icon: string;
+}
+
+export const NAV_ITEMS: NavItem[] = [
   { to: '/tutorial', label: 'Start Here', tip: 'A five-minute guided tour', icon: 'M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z' },
   { to: '/scenarios', label: 'Scenarios', tip: 'Browse 238 pre-built test prompts', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
   { to: '/assessment', label: 'Assessment', tip: "Score an AI's cognitive architecture", icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
@@ -20,14 +28,60 @@ const NAV_ITEMS = [
   { to: '/faq', label: 'FAQ', tip: 'Frequently asked questions', icon: 'M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
 ];
 
+/** Shared nav item list used by Sidebar (desktop) and MobileMenu (drawer). */
+export function NavItems({ onNavigate }: { onNavigate?: () => void }) {
+  return (
+    <nav className="flex flex-col gap-0.5 overflow-y-auto scroll-glow pr-1 -mr-1 md:flex-1 md:min-h-0">
+      {NAV_ITEMS.map((item) => (
+        <NavLink
+          key={item.to}
+          to={item.to}
+          onClick={onNavigate}
+          title={item.tip}
+          className={({ isActive }) =>
+            `flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-all duration-150 min-h-[44px] ${
+              isActive
+                ? 'bg-accent-teal/10 text-accent-teal'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
+            }`
+          }
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d={item.icon} />
+          </svg>
+          {item.label}
+        </NavLink>
+      ))}
+
+      {/* Download: Noetic Topos paper */}
+      <a
+        href="/noetic-topos.pdf"
+        download="Noetic_Topos_CAS_v7.4.pdf"
+        onClick={onNavigate}
+        className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-400 hover:text-accent-teal hover:bg-white/[0.04] transition-colors min-h-[44px] mt-2 border-t border-white/[0.04] pt-3"
+      >
+        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3" />
+        </svg>
+        Noetic Topos (PDF)
+      </a>
+    </nav>
+  );
+}
+
 export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const health = useHealth();
   const isHealthy = health.data?.status === 'ok';
+  const { isMobile } = useBreakpoint();
 
   return (
     <>
-      {open && (
-        <div className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm md:hidden" onClick={onClose} />
+      {open && isMobile && (
+        <div
+          className="fixed inset-0 z-30 bg-slate-950/70 backdrop-blur-sm md:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
       )}
 
       <aside
@@ -51,40 +105,7 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
           </span>
         </div>
 
-        <nav className="flex flex-col gap-0.5 overflow-y-auto scroll-glow pr-1 -mr-1 md:flex-1 md:min-h-0">
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={onClose}
-              title={item.tip}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-all duration-150 min-h-[44px] ${
-                  isActive
-                    ? 'bg-accent-teal/10 text-accent-teal'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-                }`
-              }
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d={item.icon} />
-              </svg>
-              {item.label}
-            </NavLink>
-          ))}
-
-          {/* Download: Noetic Topos paper */}
-          <a
-            href="/noetic-topos.pdf"
-            download="Noetic_Topos_CAS_v7.4.pdf"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-400 hover:text-accent-teal hover:bg-white/[0.04] transition-colors min-h-[44px] mt-2 border-t border-white/[0.04] pt-3"
-          >
-            <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3" />
-            </svg>
-            Noetic Topos (PDF)
-          </a>
-        </nav>
+        <NavItems onNavigate={onClose} />
       </aside>
     </>
   );
