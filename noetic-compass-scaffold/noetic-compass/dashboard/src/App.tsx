@@ -20,6 +20,7 @@ const ValidationPage = lazy(() => import('./pages/ValidationPage').then(m => ({ 
 const ValidationLeaderboardPage = lazy(() => import('./pages/ValidationLeaderboardPage').then(m => ({ default: m.ValidationLeaderboardPage })));
 const ReproducibilityPage = lazy(() => import('./pages/ReproducibilityPage').then(m => ({ default: m.ReproducibilityPage })));
 const CompilerPage = lazy(() => import('./pages/CompilerPage').then(m => ({ default: m.CompilerPage })));
+const IdeaAtlasPage = lazy(() => import('./pages/IdeaAtlasPage').then(m => ({ default: m.IdeaAtlasPage })));
 const ForecastPage = lazy(() => import('./pages/ForecastPage').then(m => ({ default: m.ForecastPage })));
 const VisualizationPage = lazy(() => import('./pages/VisualizationPage').then(m => ({ default: m.VisualizationPage })));
 const TutorialPage = lazy(() => import('./pages/TutorialPage').then(m => ({ default: m.TutorialPage })));
@@ -58,6 +59,7 @@ export default function App() {
                     <Route path="/validation/leaderboard" element={<ValidationLeaderboardPage />} />
                     <Route path="/reproducibility" element={<ReproducibilityPage />} />
                     <Route path="/compiler" element={<CompilerPage />} />
+                    <Route path="/idea-atlas" element={<IdeaAtlasPage />} />
                     <Route path="/forecast" element={<ForecastPage />} />
                     <Route path="/visualization" element={<VisualizationPage />} />
                     <Route path="/tutorial" element={<TutorialPage />} />
