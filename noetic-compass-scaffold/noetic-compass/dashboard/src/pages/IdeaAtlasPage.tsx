@@ -85,7 +85,9 @@ export function IdeaAtlasPage() {
     (async () => {
       try {
         const data = await apiFetch<AtlasEdge[]>(
-          '/idea_atlas/edges?threshold=0.5',
+          // similarity_threshold is the backend's param name; 0.3 is gentler
+          // than the backend default 0.5 — surfaces more edges for new users.
+          '/idea_atlas/edges?similarity_threshold=0.3',
         );
         if (cancelled) return;
         setEdges(Array.isArray(data) ? data : []);
