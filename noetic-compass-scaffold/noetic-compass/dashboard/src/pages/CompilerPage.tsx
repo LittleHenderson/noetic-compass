@@ -906,6 +906,276 @@ function containmentLayout(items: DiagramNode[], containers: DiagramContainer[],
   return { positions: out, regions, pointMembers: new Set(memberOf.keys()) };
 }
 
+// Categorical / commutative-diagram style: containers are nodes in a directed
+// graph laid out on a grid, with morphism edges flowing along grid axes. Unlike
+// containmentLayout, nothing nests visually — the morphism structure (subset,
+// intersection, union, etc.) is read from the directed arrows between nodes.
+// Atoms (non-container items) are placed in a fallback row beneath the grid so
+// they don't disrupt the categorical reading.
+function toposLayout(items: DiagramNode[], containers: DiagramContainer[], edges: DiagramEdge[], w: number, h: number): LayoutResult {
+  const out = new Map<string, Pos>();
+  const containerIds = new Set(containers.map(c => c.id));
+  if (containers.length === 0) return dependencyLayout(items, edges, w, h);
+
+  // Build container-to-container adjacency from edges so we can rank by depth
+  // (sources on top row, sinks on bottom). Edges between container and atom
+  // are ignored for ranking — they're rendered but don't shape the grid.
+  const inEdges = new Map<string, Set<string>>();
+  const outEdgesC = new Map<string, Set<string>>();
+  containers.forEach(c => { inEdges.set(c.id, new Set()); outEdgesC.set(c.id, new Set()); });
+  edges.forEach(e => {
+    if (!containerIds.has(e.source) || !containerIds.has(e.target)) return;
+    if (e.source === e.target) return;
+    outEdgesC.get(e.source)!.add(e.target);
+    inEdges.get(e.target)!.add(e.source);
+  });
+
+  // BFS rank: longest incoming path. Pure sources land on row 0.
+  const rank = new Map<string, number>();
+  const queue: string[] = [];
+  containers.forEach(c => {
+    if (inEdges.get(c.id)!.size === 0) {
+      rank.set(c.id, 0);
+      queue.push(c.id);
+    }
+  });
+  while (queue.length) {
+    const id = queue.shift()!;
+    const r0 = rank.get(id)!;
+    for (const tgt of outEdgesC.get(id) ?? []) {
+      const cur = rank.get(tgt);
+      if (cur === undefined || cur < r0 + 1) {
+        rank.set(tgt, r0 + 1);
+        queue.push(tgt);
+      }
+    }
+  }
+  containers.forEach(c => { if (!rank.has(c.id)) rank.set(c.id, 0); });
+
+  // Bucket containers per rank, then lay out as a grid: ranks become rows,
+  // position within rank becomes column. We cap rows so very tall diagrams
+  // don't push atoms off the canvas.
+  const byRank = new Map<number, DiagramContainer[]>();
+  containers.forEach(c => {
+    const r = rank.get(c.id) ?? 0;
+    if (!byRank.has(r)) byRank.set(r, []);
+    byRank.get(r)!.push(c);
+  });
+  const ranks = [...byRank.keys()].sort((a, b) => a - b);
+  const rowCount = Math.max(ranks.length, 1);
+  const padX = 80;
+  const padY = 56;
+  const usableH = h - padY * 2 - 40; // reserve bottom strip for atoms
+  const rowStep = rowCount > 1 ? usableH / (rowCount - 1) : 0;
+
+  ranks.forEach((r, rowIdx) => {
+    const row = byRank.get(r)!;
+    const colCount = row.length;
+    const colStep = colCount > 1 ? (w - padX * 2) / (colCount - 1) : 0;
+    const y = padY + rowIdx * rowStep;
+    row.forEach((c, colIdx) => {
+      const x = colCount > 1 ? padX + colIdx * colStep : w / 2;
+      out.set(c.id, { x, y });
+    });
+  });
+
+  // Atoms: drop into a single bottom strip so the categorical grid stays clean.
+  const atoms = items.filter(it => !it.id.startsWith('container:'));
+  if (atoms.length > 0) {
+    const stripY = h - 30;
+    const stripStep = (w - padX * 2) / Math.max(atoms.length, 1);
+    atoms.forEach((a, i) => {
+      out.set(a.id, { x: padX + (i + 0.5) * stripStep, y: stripY });
+    });
+  }
+
+  // Anything still unpositioned (rare): tuck into the corner.
+  items.filter(it => !out.has(it.id)).forEach((it, i) => {
+    out.set(it.id, { x: w - 60 - i * 50, y: h - 30 });
+  });
+  return { positions: out };
+}
+
+// Cluster nodes by ontological kind (Noetic / Domain / Drive / Register /
+// State / Container / other). Each kind gets its own vertical lane, with
+// items sorted within the lane. Distinct from radial because there is no
+// single ring — buckets sit side-by-side and items of the same kind cluster
+// together visually, exposing the kind-composition of the expression.
+function semanticLayout(items: DiagramNode[], containers: DiagramContainer[], edges: DiagramEdge[], w: number, h: number): LayoutResult {
+  const out = new Map<string, Pos>();
+
+  // Bucket-key extraction. Containers are bucketed by their declared
+  // element_type when available so that e.g. NoeticCluster sits in the
+  // noetic lane next to its members; otherwise they fall into a "set" lane.
+  const bucketOf = (it: DiagramNode): string => {
+    if (it.id.startsWith('container:')) {
+      const c = containers.find(cc => cc.id === it.id);
+      return c?.element_type ? `set:${c.element_type}` : 'set';
+    }
+    return it.kind || 'other';
+  };
+
+  // Preferred lane order — matches CAS axis precedence so a v7.5 register
+  // expression reads left-to-right as Noetic → Domain → Drive → Register.
+  const laneOrder = [
+    'set:noetic', 'set:domain', 'set:drive', 'set:register', 'set:state',
+    'set',
+    'noetic', 'domain', 'drive', 'register', 'state',
+    'foundation', 'subfoundation', 'meta_set',
+    'call', 'operator',
+    'production_target', 'emergent',
+    'other',
+  ];
+
+  const buckets = new Map<string, DiagramNode[]>();
+  items.forEach(it => {
+    const key = bucketOf(it);
+    if (!buckets.has(key)) buckets.set(key, []);
+    buckets.get(key)!.push(it);
+  });
+
+  // Stable lane sequence: known lanes first in canonical order, then any
+  // unrecognised lane keys appended in insertion order so we never silently
+  // drop content.
+  const presentLanes = [
+    ...laneOrder.filter(k => buckets.has(k)),
+    ...[...buckets.keys()].filter(k => !laneOrder.includes(k)),
+  ];
+
+  // Sort each bucket. For atoms, sort by label (e.g. ^0..^9 by leading digit
+  // when present). Containers keep arrival order so the user-typed ordering is
+  // preserved.
+  const numericLead = (s: string): number => {
+    const m = s.match(/\d+/);
+    return m ? parseInt(m[0], 10) : Number.MAX_SAFE_INTEGER;
+  };
+  presentLanes.forEach(key => {
+    const arr = buckets.get(key)!;
+    if (!key.startsWith('set')) {
+      arr.sort((a, b) => numericLead(a.label) - numericLead(b.label) || a.label.localeCompare(b.label));
+    }
+  });
+
+  const padX = 60;
+  const padY = 56;
+  const headerY = 28;
+  const laneCount = Math.max(presentLanes.length, 1);
+  const laneW = (w - padX * 2) / laneCount;
+  const usableH = h - padY - 30;
+
+  presentLanes.forEach((key, laneIdx) => {
+    const arr = buckets.get(key)!;
+    const cx = padX + laneW * (laneIdx + 0.5);
+    const itemStep = usableH / Math.max(arr.length, 1);
+    arr.forEach((it, i) => {
+      out.set(it.id, { x: cx, y: padY + (i + 0.5) * itemStep });
+    });
+  });
+
+  // Mark unused: edges and lane labels are passed through to caller via the
+  // standard render path; this layout keeps the LayoutResult shape minimal so
+  // edges still draw between buckets, exposing cross-kind relationships.
+  void edges;
+  void headerY;
+
+  items.filter(it => !out.has(it.id)).forEach((it, i) => {
+    out.set(it.id, { x: w - 60 - i * 50, y: h - 30 });
+  });
+  return { positions: out };
+}
+
+// Top-down hierarchical tree. Root is the first edge source (or, failing
+// edges, the largest container by `contains` count). Children fan downward.
+// Distinct from radial because it's tree-structured, not circular.
+function branchLayout(items: DiagramNode[], containers: DiagramContainer[], edges: DiagramEdge[], w: number, h: number): LayoutResult {
+  const out = new Map<string, Pos>();
+  const ids = new Set(items.map(it => it.id));
+
+  // Build child adjacency from BOTH container.contains AND directed edges,
+  // so cross-register fusion `(A × B × C) = Ω` (where Ω is an emergent node
+  // with edges from each register state) renders as a fan-in/fan-out tree.
+  const children = new Map<string, string[]>();
+  const parents = new Map<string, Set<string>>();
+  const addEdge = (src: string, tgt: string) => {
+    if (!ids.has(src) || !ids.has(tgt) || src === tgt) return;
+    if (!children.has(src)) children.set(src, []);
+    if (!children.get(src)!.includes(tgt)) children.get(src)!.push(tgt);
+    if (!parents.has(tgt)) parents.set(tgt, new Set());
+    parents.get(tgt)!.add(src);
+  };
+  containers.forEach(c => {
+    c.contains.forEach(childId => addEdge(c.id, childId));
+  });
+  edges.forEach(e => addEdge(e.source, e.target));
+
+  // Root selection: prefer a node with outgoing edges and no incoming edges.
+  // If none, fall back to the largest container, then to the first item.
+  const rootCandidates = items.filter(it => (children.get(it.id)?.length ?? 0) > 0 && !(parents.get(it.id)?.size));
+  let rootId: string | undefined = rootCandidates[0]?.id;
+  if (!rootId) {
+    const biggestContainer = [...containers].sort((a, b) => b.contains.length - a.contains.length)[0];
+    rootId = biggestContainer?.id ?? items[0]?.id;
+  }
+  if (!rootId) return radialLayout(items, w, h);
+
+  // BFS depth assignment. Items unreachable from root get parked at the
+  // deepest layer + 1 so they don't visually overlap the tree.
+  const depth = new Map<string, number>();
+  depth.set(rootId, 0);
+  const queue: string[] = [rootId];
+  const visited = new Set<string>([rootId]);
+  while (queue.length) {
+    const id = queue.shift()!;
+    const d = depth.get(id)!;
+    for (const ch of children.get(id) ?? []) {
+      if (!visited.has(ch)) {
+        visited.add(ch);
+        depth.set(ch, d + 1);
+        queue.push(ch);
+      } else {
+        // Re-visit only if a longer path exists (keeps nodes BELOW their
+        // deepest parent so fan-in arrows point downward).
+        const cur = depth.get(ch) ?? 0;
+        if (d + 1 > cur) depth.set(ch, d + 1);
+      }
+    }
+  }
+  const maxDepth = Math.max(0, ...depth.values());
+  items.forEach(it => {
+    if (!depth.has(it.id)) depth.set(it.id, maxDepth + 1);
+  });
+
+  // Bucket by depth, lay out top-down. Within a layer, position by insertion
+  // order (which approximates left-to-right pre-order for typical diagrams).
+  const byDepth = new Map<number, string[]>();
+  items.forEach(it => {
+    const d = depth.get(it.id) ?? 0;
+    if (!byDepth.has(d)) byDepth.set(d, []);
+    byDepth.get(d)!.push(it.id);
+  });
+  const depthsSorted = [...byDepth.keys()].sort((a, b) => a - b);
+  const padX = 60;
+  const padY = 50;
+  const layerCount = Math.max(depthsSorted.length, 1);
+  const layerStep = layerCount > 1 ? (h - padY * 2) / (layerCount - 1) : 0;
+
+  depthsSorted.forEach((d, layerIdx) => {
+    const layer = byDepth.get(d)!;
+    const cnt = layer.length;
+    const colStep = cnt > 1 ? (w - padX * 2) / (cnt - 1) : 0;
+    const y = padY + layerIdx * layerStep;
+    layer.forEach((id, i) => {
+      const x = cnt > 1 ? padX + i * colStep : w / 2;
+      out.set(id, { x, y });
+    });
+  });
+
+  items.filter(it => !out.has(it.id)).forEach((it, i) => {
+    out.set(it.id, { x: w - 60 - i * 50, y: h - 30 });
+  });
+  return { positions: out };
+}
+
 // Visual constants used by both layout (for spacing) and rendering (for size)
 const ATOM_RADIUS = 20;
 const RECT_HEIGHT_FULL = 38;   // radial-mode container box
@@ -948,13 +1218,13 @@ function clipRay(from: Pos, to: Pos, shape: { kind: 'circle'; r: number } | { ki
 // button per genuinely distinct visual.
 const LAYOUT_FAMILY: Record<string, string> = {
   containment: 'containment',
-  topos: 'containment',
+  topos: 'topos',
   grid: 'grid',
   petals: 'petals',
   fractal: 'fractal',
   radial: 'radial',
-  branch: 'radial',
-  semantic: 'radial',
+  branch: 'branch',
+  semantic: 'semantic',
   dependency: 'dependency',
   recipe: 'dependency',
 };
@@ -979,6 +1249,12 @@ function computeLayout(
       return dependencyLayout(items, edges, w, h);
     case 'containment':
       return containmentLayout(items, containers, edges, w, h);
+    case 'topos':
+      return toposLayout(items, containers, edges, w, h);
+    case 'semantic':
+      return semanticLayout(items, containers, edges, w, h);
+    case 'branch':
+      return branchLayout(items, containers, edges, w, h);
     case 'radial':
     default:
       return radialLayout(items, w, h);
