@@ -85,9 +85,11 @@ export function IdeaAtlasPage() {
     (async () => {
       try {
         const data = await apiFetch<AtlasEdge[]>(
-          // similarity_threshold is the backend's param name; 0.3 is gentler
-          // than the backend default 0.5 — surfaces more edges for new users.
-          '/idea_atlas/edges?similarity_threshold=0.3',
+          // similarity_threshold is the backend's param name. Default 0.2 —
+          // gentle enough to surface domain-only matches (which score ~0.25)
+          // so new users see structural connections immediately. Anything
+          // below 0.2 is genuine noise.
+          '/idea_atlas/edges?similarity_threshold=0.2',
         );
         if (cancelled) return;
         setEdges(Array.isArray(data) ? data : []);
