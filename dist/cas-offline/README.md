@@ -35,6 +35,11 @@ as the online compiler:
 ```text
 :help
 :examples
+:natural
+:mirror
+:dict
+:dict noetic
+:learn
 :example 16
 :palette
 :ref
@@ -60,6 +65,11 @@ cas_diagram.html
 
 ```powershell
 python cas.py --examples
+python cas.py --natural
+python cas.py --mirror
+python cas.py --dict
+python cas.py --dict noetic
+python cas.py --learn
 python cas.py --example 16 --auto-files
 python cas.py "Product(Noetics, Domains)" --svg product.svg --html product.html
 python cas.py "NoeticCluster{^2, ^7} subseteq Noetics" --auto-files

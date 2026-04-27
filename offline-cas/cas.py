@@ -37,9 +37,11 @@ from cas_terminal import (  # noqa: E402
     ansi,
     banner_text,
     compiler_shell_html,
+    dictionary_text,
     example_by_index,
     examples_text,
     highlight_ansi,
+    learning_text,
     palette_text,
     play_banner_wave,
     play_compiling_spinner,
@@ -73,6 +75,10 @@ Commands:
   :help          Show this message
   :grammar       Print the BNF grammar
   :examples      Show the same grouped examples as the online compiler
+  :natural       Show examples in natural language
+  :mirror        Show (CAS expression) natural-language mirror pairs
+  :dict [TERM]   Show the CAS dictionary, optionally filtered
+  :learn         Show the guided compiler learning path
   :example N     Compile example number N
   :demo          Compile every example and write demo SVG/HTML files
   :palette       Show hard-to-type CAS symbols
@@ -435,6 +441,19 @@ def repl() -> int:
         if raw == ":examples":
             print(examples_text())
             continue
+        if raw == ":natural":
+            print(examples_text("natural"))
+            continue
+        if raw == ":mirror":
+            print(examples_text("mirror"))
+            continue
+        if raw == ":dict" or raw.startswith(":dict "):
+            query = raw.split(maxsplit=1)[1] if " " in raw else ""
+            print(dictionary_text(query))
+            continue
+        if raw == ":learn":
+            print(learning_text())
+            continue
         if raw.startswith(":example "):
             try:
                 idx = int(raw.split(maxsplit=1)[1])
@@ -568,6 +587,18 @@ def compile_once(args: argparse.Namespace) -> int:
     if args.examples:
         print(examples_text())
         return 0
+    if args.natural:
+        print(examples_text("natural"))
+        return 0
+    if args.mirror:
+        print(examples_text("mirror"))
+        return 0
+    if args.dictionary is not None:
+        print(dictionary_text(args.dictionary))
+        return 0
+    if args.learn:
+        print(learning_text())
+        return 0
     if args.palette:
         print(palette_text())
         return 0
@@ -618,6 +649,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--auto-files", action="store_true", help="Write both cas_diagram.svg and cas_diagram.html.")
     parser.add_argument("--no-terminal-diagram", action="store_true", help="Suppress terminal diagram preview.")
     parser.add_argument("--examples", action="store_true", help="Print grouped examples.")
+    parser.add_argument("--natural", action="store_true", help="Print examples in natural language.")
+    parser.add_argument("--mirror", action="store_true", help="Print (CAS expression) natural-language mirror pairs.")
+    parser.add_argument("--dict", nargs="?", const="", dest="dictionary", help="Print the CAS dictionary, optionally filtered by term.")
+    parser.add_argument("--learn", action="store_true", help="Print the guided compiler learning path.")
     parser.add_argument("--example", type=int, help="Compile example number N.")
     parser.add_argument("--demo", action="store_true", help="Compile every example and write SVG/HTML demo files.")
     parser.add_argument("--demo-dir", default="examples", help="Output folder for --demo.")
@@ -634,6 +669,10 @@ def main(argv: list[str] | None = None) -> int:
     direct = (
         args.expression
         or args.examples
+        or args.natural
+        or args.mirror
+        or args.dictionary is not None
+        or args.learn
         or args.example is not None
         or args.demo
         or args.palette

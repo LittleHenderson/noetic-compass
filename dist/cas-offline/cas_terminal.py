@@ -27,6 +27,9 @@ U = {
     "subseteq": "\u2286",
     "supset": "\u2283",
     "supseteq": "\u2287",
+    "union": "\u222a",
+    "intersection": "\u2229",
+    "difference": "\u2216",
     "empty": "\u2205",
     "theta": "\u0398",
     "omega": "\u03a9",
@@ -270,36 +273,36 @@ BANNER = [
 
 
 EXAMPLES: list[dict[str, str]] = [
-    {"expr": f"^2^P_{{F2}} {U['times']} ^8^P_{{F6}}", "label": "Operator Composition (x)", "category": "Foundational"},
-    {"expr": f"^5^P {U['arrow']} ^5^C", "label": "Domain Descent (P -> C)", "category": "Foundational"},
-    {"expr": "^2^P / ^3^P", "label": "Involution Division", "category": "Foundational"},
-    {"expr": "^5^E + ^2^E", "label": "Co-Presence (+)", "category": "Foundational"},
-    {"expr": "RPM(F5)", "label": "Prerequisite Chain", "category": "Foundational"},
-    {"expr": "Phi<3:8:5:2>", "label": "Fractal Analysis", "category": "Foundational"},
-    {"expr": "^3^P|A", "label": "Analytical-register Negative", "category": "v7.5 Registers"},
-    {"expr": "^3^P|f", "label": "Affective-register Negative", "category": "v7.5 Registers"},
-    {"expr": "^2^C_{F2}|T", "label": "Compound state, Transcendent", "category": "v7.5 Registers"},
-    {"expr": f"{U['theta']}({U['omega']}_focus) = 0.6{U['dot']}^1^C + 0.4{U['dot']}^7^O {U['arrow']} {U['omega']}_focus", "label": "Recipe definition", "category": "v7.6 Production"},
-    {"expr": f"Y_T({U['omega']}_focus)", "label": "Theoretical yield query", "category": "v7.6 Production"},
-    {"expr": f"{U['theta']}({U['omega']}_book) | {U['kappa']}_deadline = 0.5{U['dot']}^7^P + 0.5{U['dot']}^6^C {U['arrow']} {U['omega']}_book", "label": "Recipe with catalyst", "category": "v7.6 Production"},
-    {"expr": f"^3^P|{U['open_angle']}A,f,T{U['close_angle']}", "label": "Register-set specification", "category": "v7.7 Operator Discipline"},
-    {"expr": "^3^P|A + ^3^P|f + ^3^P|T", "label": "Register co-presence (defeasible)", "category": "v7.7 Operator Discipline"},
-    {"expr": f"(^3^P|A {U['times']} ^3^P|f {U['times']} ^3^P|T) = {U['omega']}_refusal", "label": "Cross-register integration -> emergent", "category": "v7.7 Operator Discipline"},
-    {"expr": f"^2 {U['in']} Noetics", "label": "Membership (^N in Noetics)", "category": "Set Theory"},
-    {"expr": "NoeticCluster{^2, ^7} subseteq Noetics", "label": "Typed Noetic cluster", "category": "Set Theory"},
-    {"expr": "StateVariantCluster{^3^P_{F2}|A, ^2^C|f}", "label": "State variant cluster", "category": "Set Theory"},
-    {"expr": "StateCluster{^2^P, ^7^O} subseteq States", "label": "Typed State cluster", "category": "Set Theory"},
-    {"expr": f"NoeticCluster{{^2, ^7}} {U['subseteq']} Noetics", "label": "Cluster subset assertion", "category": "Set Theory"},
-    {"expr": f"RelationCluster{{^5^P {U['arrow']} ^5^C, ^5^C {U['arrow']} ^5^E}}", "label": "Relation cluster", "category": "Set Theory"},
-    {"expr": "Coordinate{^2, P, F2, A}", "label": "CAS coordinate tuple", "category": "Set Theory"},
-    {"expr": "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})", "label": "Finite subobject meet", "category": "Set Theory"},
-    {"expr": "Product(Noetics, Domains)", "label": "Namespaced product", "category": "Set Theory"},
-    {"expr": f"^2^P {U['in']} States", "label": "Compound state in 40-state space", "category": "Set Theory"},
-    {"expr": f"F2 {U['in']} Drives", "label": "Drive membership", "category": "Set Theory"},
-    {"expr": f"Foundation_1 {U['subset']} SubFoundations", "label": "Proper subset (28 sub-foundations)", "category": "Set Theory"},
-    {"expr": f"{U['empty']} {U['subseteq']} Noetics", "label": "Empty set is subset of every set", "category": "Set Theory"},
-    {"expr": "|Noetics|", "label": "Cardinality of Noetics (= 10)", "category": "Set Theory"},
-    {"expr": "|States|", "label": "Cardinality of state space (= 40)", "category": "Set Theory"},
+    {"expr": f"^2^P_{{F2}} {U['times']} ^8^P_{{F6}}", "label": "Operator Composition (x)", "category": "Foundational", "natural": "Positive/affirming structure in the Principled domain under Vitality integrates with Above/Cause structure in the Principled domain under Purpose."},
+    {"expr": f"^5^P {U['arrow']} ^5^C", "label": "Domain Descent (P -> C)", "category": "Foundational", "natural": "Female/Differentiation moves from a high-level principle into a concrete cognitive interpretation."},
+    {"expr": "^2^P / ^3^P", "label": "Involution Division", "category": "Foundational", "natural": "A Positive principled state is compared against its Negative involution pair to expose contrast or missing balance."},
+    {"expr": "^5^E + ^2^E", "label": "Co-Presence (+)", "category": "Foundational", "natural": "Female/Differentiation and Positive are both present in the Evaluative domain without forcing them into a single integrated result."},
+    {"expr": "RPM(F5)", "label": "Prerequisite Chain", "category": "Foundational", "natural": "Show the prerequisite ladder for Foundation 5, the Agency drive."},
+    {"expr": "Phi<3:8:5:2>", "label": "Fractal Analysis", "category": "Foundational", "natural": "Read the operator sequence Negative, Above/Cause, Female/Differentiation, Positive as a composed cognitive fractal."},
+    {"expr": "^3^P|A", "label": "Analytical-register Negative", "category": "v7.5 Registers", "natural": "Negative/Boundary is operating as a principled analytical judgment."},
+    {"expr": "^3^P|f", "label": "Affective-register Negative", "category": "v7.5 Registers", "natural": "Negative/Boundary is operating as a principled felt or affective stance."},
+    {"expr": "^2^C_{F2}|T", "label": "Compound state, Transcendent", "category": "v7.5 Registers", "natural": "Positive in the Cognitive domain, under the Vitality drive, is expressed through the Transcendent register."},
+    {"expr": f"{U['theta']}({U['omega']}_focus) = 0.6{U['dot']}^1^C + 0.4{U['dot']}^7^O {U['arrow']} {U['omega']}_focus", "label": "Recipe definition", "category": "v7.6 Production", "natural": "Focus is produced from a 60 percent Mind/Cognitive ingredient plus a 40 percent Rhythm/Operational ingredient."},
+    {"expr": f"Y_T({U['omega']}_focus)", "label": "Theoretical yield query", "category": "v7.6 Production", "natural": "Ask for the ideal or maximum expected yield of the focus production recipe."},
+    {"expr": f"{U['theta']}({U['omega']}_book) | {U['kappa']}_deadline = 0.5{U['dot']}^7^P + 0.5{U['dot']}^6^C {U['arrow']} {U['omega']}_book", "label": "Recipe with catalyst", "category": "v7.6 Production", "natural": "A book-output recipe uses a deadline catalyst while combining Rhythm/Principled and Male/Structure/Cognitive ingredients evenly."},
+    {"expr": f"^3^P|{U['open_angle']}A,f,T{U['close_angle']}", "label": "Register-set specification", "category": "v7.7 Operator Discipline", "natural": "The same Negative/Principled operation is explicitly viewed across Analytical, Affective, and Transcendent registers."},
+    {"expr": "^3^P|A + ^3^P|f + ^3^P|T", "label": "Register co-presence (defeasible)", "category": "v7.7 Operator Discipline", "natural": "Analytical, affective, and transcendent forms of the same Negative/Principled operation are present together but not yet fused."},
+    {"expr": f"(^3^P|A {U['times']} ^3^P|f {U['times']} ^3^P|T) = {U['omega']}_refusal", "label": "Cross-register integration -> emergent", "category": "v7.7 Operator Discipline", "natural": "Analytical, affective, and transcendent boundary signals integrate into the named emergent result refusal."},
+    {"expr": f"^2 {U['in']} Noetics", "label": "Membership (^N in Noetics)", "category": "Set Theory", "natural": "Positive is one member of the ten Noetic operators."},
+    {"expr": "NoeticCluster{^2, ^7} subseteq Noetics", "label": "Typed Noetic cluster", "category": "Set Theory", "natural": "The cluster containing Positive and Rhythm is a subset of the full Noetics set."},
+    {"expr": "StateVariantCluster{^3^P_{F2}|A, ^2^C|f}", "label": "State variant cluster", "category": "Set Theory", "natural": "Group two richly annotated state variants: an Analytical Negative/Principled/Vitality state and an Affective Positive/Cognitive state."},
+    {"expr": "StateCluster{^2^P, ^7^O} subseteq States", "label": "Typed State cluster", "category": "Set Theory", "natural": "The states Positive/Principled and Rhythm/Operational form a valid subset of the forty-state CAS space."},
+    {"expr": f"NoeticCluster{{^2, ^7}} {U['union']} NoeticCluster{{^7, ^8}}", "label": "Set union", "category": "Set Theory", "natural": "Combine the two Noetic clusters into one cluster containing Positive, Rhythm, and Above/Cause."},
+    {"expr": f"RelationCluster{{^5^P {U['arrow']} ^5^C, ^5^C {U['arrow']} ^5^E}}", "label": "Relation cluster", "category": "Set Theory", "natural": "Represent a dependency chain where Female/Differentiation descends from Principled to Cognitive to Evaluative."},
+    {"expr": "Coordinate{^2, P, F2, A}", "label": "CAS coordinate tuple", "category": "Set Theory", "natural": "Name the coordinate Positive, Principled domain, Vitality drive, Analytical register."},
+    {"expr": "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})", "label": "Finite subobject meet", "category": "Set Theory", "natural": "Find the shared overlap between two Noetic clusters; here the common member is Rhythm."},
+    {"expr": "Product(Noetics, Domains)", "label": "Namespaced product", "category": "Set Theory", "natural": "Construct all pairings of the ten Noetics with the four Domains, producing the forty CAS state positions."},
+    {"expr": f"^2^P {U['in']} States", "label": "Compound state in 40-state space", "category": "Set Theory", "natural": "Positive in the Principled domain is one member of the forty-state CAS space."},
+    {"expr": f"F2 {U['in']} Drives", "label": "Drive membership", "category": "Set Theory", "natural": "Vitality is one member of the seven CAS drives."},
+    {"expr": f"Foundation_1 {U['subset']} SubFoundations", "label": "Proper subset (28 sub-foundations)", "category": "Set Theory", "natural": "Foundation 1 names a proper subset inside the complete twenty-eight SubFoundations collection."},
+    {"expr": f"{U['empty']} {U['subseteq']} Noetics", "label": "Empty set is subset of every set", "category": "Set Theory", "natural": "The empty set is validly contained inside the Noetics set."},
+    {"expr": "|Noetics|", "label": "Cardinality of Noetics (= 10)", "category": "Set Theory", "natural": "Count the Noetics set; it contains ten operators."},
+    {"expr": "|States|", "label": "Cardinality of state space (= 40)", "category": "Set Theory", "natural": "Count the CAS state space; ten Noetics times four Domains gives forty states."},
 ]
 
 
@@ -320,6 +323,9 @@ SYMBOL_PALETTE: list[tuple[str, str]] = [
     (U["subseteq"], "Subset"),
     (U["supset"], "Proper superset"),
     (U["supseteq"], "Superset"),
+    (U["union"], "Union"),
+    (U["intersection"], "Intersection"),
+    (U["difference"], "Difference"),
     (U["empty"], "Empty set"),
     (U["open_angle"], "Open angle register-set"),
     (U["close_angle"], "Close angle register-set"),
@@ -341,6 +347,117 @@ OPERATOR_NAMES = [
 DOMAIN_NAMES = {"P": "Principled", "C": "Cognitive", "E": "Evaluative", "O": "Operational"}
 DRIVE_NAMES = ["Unity", "Wisdom", "Vitality", "Connection", "Agency", "Structure", "Purpose"]
 REGISTER_NAMES = {"T": "Transcendent", "A": "Analytical", "f": "Affective", "E": "Embodied"}
+
+
+DICTIONARY: list[dict[str, str]] = [
+    {"term": "CAS", "category": "Framework", "notation": "Cognitive Architecture Syntax", "definition": "The compiler notation for representing cognitive operators, domains, drives, registers, production recipes, and finite meta-logic.", "example": "Product(Noetics, Domains)", "learn": "Start with axes before composing expressions."},
+    {"term": "Noetic", "category": "Axes", "notation": "^0..^9", "definition": "One of the ten cognitive operators used as the primary operator axis.", "example": "^2 ∈ Noetics", "learn": "Read the leftmost caret-number first."},
+    {"term": "Domain", "category": "Axes", "notation": "^P ^C ^E ^O", "definition": "The processing domain in which a Noetic operates: Principled, Cognitive, Evaluative, or Operational.", "example": "^5^P -> ^5^C", "learn": "Domain descent moves from abstract to concrete processing."},
+    {"term": "Drive", "category": "Axes", "notation": "_{F1}.._{F7}", "definition": "A foundation or motivational drive annotation applied to a state.", "example": "^2^P_{F2}", "learn": "Drive subscripts answer what pressure or foundation is active."},
+    {"term": "Register", "category": "Axes", "notation": "|T |A |f |E", "definition": "The phenomenological character of an operation: Transcendent, Analytical, Affective, or Embodied.", "example": "^3^P|A", "learn": "Registers say how an operation appears or is carried."},
+    {"term": "State", "category": "Axes", "notation": "^n^D", "definition": "A Noetic paired with a Domain, one cell of the 40-state CAS space.", "example": "^2^P ∈ States", "learn": "State = Noetic x Domain."},
+    {"term": "State Variant", "category": "Axes", "notation": "^n^D_{Fk}|R", "definition": "A richer state with optional Drive and Register annotations.", "example": "^3^P_{F2}|A", "learn": "Use variants when the state needs context beyond Noetic and Domain."},
+    {"term": "Noetics", "category": "Built-in Sets", "notation": "Noetics", "definition": "The built-in finite set of all ten Noetic operators.", "example": "|Noetics|", "learn": "Use membership with Noetic symbols: ^2 ∈ Noetics."},
+    {"term": "Domains", "category": "Built-in Sets", "notation": "Domains", "definition": "The built-in finite set {P, C, E, O}.", "example": "Product(Noetics, Domains)", "learn": "Product(Noetics, Domains) builds the 40 state positions."},
+    {"term": "Drives", "category": "Built-in Sets", "notation": "Drives", "definition": "The built-in finite set of F1 through F7.", "example": "F2 ∈ Drives", "learn": "Use Drives for membership claims about F-symbols."},
+    {"term": "Registers", "category": "Built-in Sets", "notation": "Registers", "definition": "The built-in finite set {T, A, f, E}.", "example": "|Registers|", "learn": "The affective register is lowercase |f."},
+    {"term": "States", "category": "Built-in Sets", "notation": "States", "definition": "The built-in finite set of 40 Noetic x Domain state positions.", "example": "|States|", "learn": "States do not replace variants; variants add Drive/Register detail."},
+    {"term": "Foundations", "category": "Built-in Sets", "notation": "Foundations", "definition": "The built-in finite set of seven foundation families.", "example": "|Foundations|", "learn": "Foundations sit above SubFoundations."},
+    {"term": "SubFoundations", "category": "Built-in Sets", "notation": "SubFoundations", "definition": "The built-in finite set of 28 foundation-domain substructures.", "example": "Foundation_1 ⊂ SubFoundations", "learn": "Each foundation family contributes subfoundation members."},
+    {"term": "Empty Set", "category": "Built-in Sets", "notation": "∅ / EmptySet", "definition": "The finite empty meta-set.", "example": "∅ ⊆ Noetics", "learn": "The empty set is a subset of every finite set."},
+    {"term": "Composition / Integration", "category": "Dynamics", "notation": "×", "definition": "Combines compatible CAS structures. Same-Noetic cross-register integration requires a named Ω result.", "example": "(^3^P|A × ^3^P|f × ^3^P|T) = Ω_refusal", "learn": "Use × only when the result is integrated, not merely co-present."},
+    {"term": "Co-Presence", "category": "Dynamics", "notation": "+", "definition": "Marks simultaneous presence without claiming an integrated emergent result.", "example": "^3^P|A + ^3^P|f + ^3^P|T", "learn": "Use + before you can defend a named Ω integration."},
+    {"term": "Division / Contrast", "category": "Dynamics", "notation": "/", "definition": "Compares or separates a state against another state, often useful for involution contrast.", "example": "^2^P / ^3^P", "learn": "Use division to inspect contrast rather than production."},
+    {"term": "Domain Descent", "category": "Dynamics", "notation": "→", "definition": "A directed move from one domain expression toward another.", "example": "^5^P -> ^5^C", "learn": "Read arrows as dependency, descent, or yield depending on context."},
+    {"term": "Fractal Sequence", "category": "Dynamics", "notation": "Phi<...>", "definition": "A sequence of Noetic operators read as a composed cognitive pattern.", "example": "Phi<3:8:5:2>", "learn": "Read the numbers in order, then inspect the composed operator."},
+    {"term": "RPM", "category": "Dynamics", "notation": "RPM(Fk)", "definition": "Prerequisite-chain analysis for a foundation or drive.", "example": "RPM(F5)", "learn": "Use RPM when the question is what must be present first."},
+    {"term": "Recipe", "category": "Production", "notation": "Θ(Ω_name)", "definition": "A production expression defining how a named outcome is generated.", "example": "Θ(Ω_focus) = 0.6·^1^C + 0.4·^7^O → Ω_focus", "learn": "Recipe terms are weighted ingredients that yield a target."},
+    {"term": "Production Target", "category": "Production", "notation": "Ω_name", "definition": "A named emergent output or production result.", "example": "Ω_refusal", "learn": "Use meaningful Ω names for integrated results."},
+    {"term": "Coefficient", "category": "Production", "notation": "0.6·", "definition": "A recipe weight assigned to a prerequisite ingredient.", "example": "0.6·^1^C", "learn": "Weights describe recipe proportions, not absolute truth."},
+    {"term": "Theoretical Yield", "category": "Production", "notation": "Y_T(Ω)", "definition": "The ideal expected yield for a production target.", "example": "Y_T(Ω_focus)", "learn": "Ask Y_T when evaluating expected output."},
+    {"term": "Catalyst", "category": "Production", "notation": "κ_name", "definition": "A factor that helps a recipe proceed without becoming the target itself.", "example": "Θ(Ω_book) | κ_deadline = ...", "learn": "Catalysts change production conditions."},
+    {"term": "Inhibitor", "category": "Production", "notation": "ι_name", "definition": "A factor that suppresses or slows a production recipe.", "example": "Θ(Ω_focus) | ι_noise = ...", "learn": "Use inhibitors for blockers, not missing ingredients."},
+    {"term": "Leakage", "category": "Production", "notation": "Λ_name", "definition": "A side-channel or loss path in production semantics.", "example": "Λ_distraction", "learn": "Use leakage for where production energy goes instead."},
+    {"term": "Membership", "category": "Set Theory", "notation": "∈ / ∉", "definition": "Claims that an object is or is not an element of a typed finite set.", "example": "^2 ∈ Noetics", "learn": "Left side is an object; right side is a meta-set."},
+    {"term": "Subset", "category": "Set Theory", "notation": "⊂ / ⊆", "definition": "Claims one finite meta-set is contained in another.", "example": "NoeticCluster{^2, ^7} ⊆ Noetics", "learn": "Both sides must be meta-sets."},
+    {"term": "Superset", "category": "Set Theory", "notation": "⊃ / ⊇", "definition": "The reverse containment relation: the left set contains the right set.", "example": "Noetics ⊇ NoeticCluster{^2, ^7}", "learn": "Superset diagrams reverse the nesting direction."},
+    {"term": "Union", "category": "Set Theory", "notation": "∪ / Union(A,B)", "definition": "Combines finite typed sets into their combined membership.", "example": "NoeticCluster{^2, ^7} ∪ NoeticCluster{^7, ^8}", "learn": "Union removes duplicate members."},
+    {"term": "Intersection / Pullback", "category": "Set Theory", "notation": "∩ / Pullback(A,B)", "definition": "Finds the common overlap of finite typed sets; Pullback is used here as finite subobject meet.", "example": "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})", "learn": "This is finite meet behavior, not arbitrary categorical maps."},
+    {"term": "Difference", "category": "Set Theory", "notation": "∖ / Difference(A,B)", "definition": "Keeps members of the left set that are not in the right set.", "example": "Difference(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})", "learn": "Read difference left-to-right."},
+    {"term": "Cardinality", "category": "Set Theory", "notation": "|X|", "definition": "Counts the number of elements in a finite meta-set.", "example": "|States|", "learn": "Cardinality applies to sets, not individual Noetics."},
+    {"term": "Noetic Cluster", "category": "Set Theory", "notation": "NoeticCluster{...}", "definition": "A typed finite cluster whose members are Noetic operators.", "example": "NoeticCluster{^2, ^7}", "learn": "Use this when nesting Noetics inside a set-like structure."},
+    {"term": "State Cluster", "category": "Set Theory", "notation": "StateCluster{...}", "definition": "A typed finite cluster whose members are 40-space states.", "example": "StateCluster{^2^P, ^7^O}", "learn": "Use state clusters when domains matter."},
+    {"term": "State Variant Cluster", "category": "Set Theory", "notation": "StateVariantCluster{...}", "definition": "A typed finite cluster whose members can carry Drive and Register annotations.", "example": "StateVariantCluster{^3^P_{F2}|A, ^2^C|f}", "learn": "Use variant clusters for richer annotated states."},
+    {"term": "Relation Cluster", "category": "Set Theory", "notation": "RelationCluster{a → b}", "definition": "A finite typed cluster of directed relation rows.", "example": "RelationCluster{^5^P → ^5^C, ^5^C → ^5^E}", "learn": "Use relation clusters for dependency rows."},
+    {"term": "Coordinate", "category": "Set Theory", "notation": "Coordinate{n,D,F,R}", "definition": "A coordinate tag naming a Noetic, Domain, Drive, and Register position.", "example": "Coordinate{^2, P, F2, A}", "learn": "Coordinates are compact locator tags."},
+    {"term": "Product", "category": "Set Theory", "notation": "Product(A,B)", "definition": "A namespaced finite Cartesian product that avoids collision with CAS integration ×.", "example": "Product(Noetics, Domains)", "learn": "Use Product for set products; use × for CAS integration."},
+    {"term": "Cover", "category": "Set Theory", "notation": "CoverOf(Base, U1...)", "definition": "A validated family of finite subsets whose members cover the base.", "example": "CoverOf(NoeticCluster{^0, ^1, ^2, ^3}, NoeticCluster{^0, ^1}, NoeticCluster{^1, ^2, ^3})", "learn": "Every cover member must be a subset of the base, and the family must cover the base."},
+    {"term": "Partition", "category": "Set Theory", "notation": "PartitionOf(Base, U1...)", "definition": "A validated disjoint cover of a finite base set.", "example": "PartitionOf(NoeticCluster{^0, ^1, ^2, ^3}, NoeticCluster{^0, ^1}, NoeticCluster{^2, ^3})", "learn": "Partitions must cover and not overlap."},
+    {"term": "Diagram Node", "category": "Diagrams", "notation": "node", "definition": "A visual object emitted in the compiler diagram payload.", "example": "artifact.diagram().nodes", "learn": "Nodes represent individual states, symbols, or operators."},
+    {"term": "Diagram Edge", "category": "Diagrams", "notation": "edge", "definition": "A visual relation between diagram nodes or containers.", "example": "source → target", "learn": "Edges carry dependency, membership, subset, or recipe relations."},
+    {"term": "Containment Box", "category": "Diagrams", "notation": "container", "definition": "A diagram container used for sets, clusters, and nesting.", "example": "NoeticCluster{^2, ^7} ⊆ Noetics", "learn": "Containment boxes teach nesting in real time."},
+    {"term": "Grid Layout", "category": "Diagrams", "notation": "grid", "definition": "A diagram layout for finite products such as Noetics x Domains.", "example": "Product(Noetics, Domains)", "learn": "Grid layout is best for Cartesian combinations."},
+    {"term": "Petals Layout", "category": "Diagrams", "notation": "petals", "definition": "A diagram layout for cover and partition families.", "example": "CoverOf(...)", "learn": "Petals show multiple members arranged around a base."},
+    {"term": "Recipe Layout", "category": "Diagrams", "notation": "recipe", "definition": "A dependency diagram for production ingredients and targets.", "example": "Θ(Ω_focus) = ...", "learn": "Recipe diagrams show what feeds the outcome."},
+    {"term": "Rule 4", "category": "Principles", "notation": "operator admissibility", "definition": "The discipline that prevents invalid operator composition and requires named emergent results for certain integrations.", "example": "(^3^P|A × ^3^P|f × ^3^P|T) = Ω_refusal", "learn": "If integration creates a new thing, name the Ω."},
+    {"term": "Object Language", "category": "Principles", "notation": "CAS expressions", "definition": "The core CAS expression layer for states, domains, operators, recipes, and dynamics.", "example": "^5^P -> ^5^C", "learn": "Object-language expressions describe cognitive structure."},
+    {"term": "Meta-Logic", "category": "Principles", "notation": "typed finite set layer", "definition": "The compiler layer for set membership, subset, clusters, products, covers, and finite topos-safe constructs.", "example": "^2 ∈ Noetics", "learn": "Meta-logic talks about CAS objects without replacing them."},
+    {"term": "Topos-Safe", "category": "Principles", "notation": "finite typed constructs", "definition": "A construct admitted because it preserves finite typing, containment, and compiler-checkable semantics.", "example": "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})", "learn": "Topos-safe features add structure without breaking the framework."},
+]
+
+DICTIONARY.extend(
+    {
+        "term": name,
+        "category": "Noetic Operators",
+        "notation": f"^{i}",
+        "definition": f"Noetic operator {i}: {name}.",
+        "example": f"^{i} ∈ Noetics",
+        "learn": "Pair it with a Domain to form a state, e.g. ^n^P.",
+    }
+    for i, name in enumerate(OPERATOR_NAMES)
+)
+DICTIONARY.extend(
+    {
+        "term": name,
+        "category": "Domains",
+        "notation": f"^{code}",
+        "definition": f"The {name} processing domain.",
+        "example": f"^2^{code}",
+        "learn": "Domains locate where the Noetic operation is happening.",
+    }
+    for code, name in DOMAIN_NAMES.items()
+)
+DICTIONARY.extend(
+    {
+        "term": name,
+        "category": "Drives",
+        "notation": f"F{i + 1}",
+        "definition": f"Drive/Foundation {i + 1}: {name}.",
+        "example": f"F{i + 1} ∈ Drives",
+        "learn": "Drive notation appears as Fk or as a state subscript _{Fk}.",
+    }
+    for i, name in enumerate(DRIVE_NAMES)
+)
+DICTIONARY.extend(
+    {
+        "term": name,
+        "category": "Registers",
+        "notation": f"|{code}",
+        "definition": f"The {name} phenomenological register.",
+        "example": f"^3^P|{code}",
+        "learn": "Registers specify the operational character of a state.",
+    }
+    for code, name in REGISTER_NAMES.items()
+)
+
+LEARNING_PATH: list[dict[str, str]] = [
+    {"title": "1. Read The Axes", "goal": "Learn Noetic, Domain, Drive, and Register as the four main coordinates.", "terms": "Noetic, Domain, Drive, Register, State", "practice": "^2^C_{F2}|T"},
+    {"title": "2. Compare Dynamics", "goal": "Distinguish co-presence, domain descent, contrast, and integration.", "terms": "Co-Presence, Domain Descent, Division / Contrast, Composition / Integration", "practice": "^3^P|A + ^3^P|f + ^3^P|T"},
+    {"title": "3. Name Emergence", "goal": "Use Ω when multiple signals integrate into a named result.", "terms": "Rule 4, Production Target, Register", "practice": "(^3^P|A × ^3^P|f × ^3^P|T) = Ω_refusal"},
+    {"title": "4. Read Recipes", "goal": "Understand Θ, coefficients, catalysts, and yield queries.", "terms": "Recipe, Coefficient, Catalyst, Theoretical Yield", "practice": "Θ(Ω_focus) = 0.6·^1^C + 0.4·^7^O → Ω_focus"},
+    {"title": "5. Use Typed Meta-Logic", "goal": "Separate CAS objects from finite sets that contain or relate them.", "terms": "Meta-Logic, Membership, Subset, Noetic Cluster, State Cluster", "practice": "NoeticCluster{^2, ^7} ⊆ Noetics"},
+    {"title": "6. Read Diagrams", "goal": "Use compiler diagrams to see nodes, edges, containment, products, and recipes.", "terms": "Diagram Node, Diagram Edge, Containment Box, Grid Layout, Recipe Layout", "practice": "Product(Noetics, Domains)"},
+]
 
 
 def terminal_width(default: int = 96) -> int:
@@ -499,12 +616,16 @@ def startup_hint_text() -> str:
         f"{ansi('for commands, ', 'slate_500')}"
         f"{ansi(':examples', 'slate_300', bold=True)} "
         f"{ansi('for sample expressions, ', 'slate_500')}"
+        f"{ansi(':mirror', 'slate_300', bold=True)} "
+        f"{ansi('for 1:1 translations, ', 'slate_500')}"
+        f"{ansi(':dict', 'slate_300', bold=True)} "
+        f"{ansi('for terms, ', 'slate_500')}"
         f"{ansi(':quit', 'slate_300', bold=True)} "
         f"{ansi('to exit.', 'slate_500')}"
     )
 
 
-def examples_text() -> str:
+def examples_text(view: str = "cas") -> str:
     rows: list[str] = []
     grouped: dict[str, list[tuple[int, dict[str, str]]]] = defaultdict(list)
     for i, ex in enumerate(EXAMPLES, 1):
@@ -512,8 +633,19 @@ def examples_text() -> str:
     for category, items in grouped.items():
         rows.append(line(category, 92))
         for i, ex in items:
-            rows.append(f"{ansi(f'{i:>2}.', 'slate_500')} {highlight_ansi(ex['expr'])}")
-            rows.append(f"    {ansi('->', 'slate_500')} {ansi(ex['label'], 'slate_400')}")
+            if view == "natural":
+                rows.append(f"{ansi(f'{i:>2}.', 'slate_500')} {ansi(ex['natural'], 'slate_300')}")
+                rows.append(f"    {ansi('CAS:', 'slate_500')} {highlight_ansi(ex['expr'])}")
+            elif view == "mirror":
+                rows.append(
+                    f"{ansi(f'{i:>2}.', 'slate_500')} {ansi('(', 'slate_600')}"
+                    f"{highlight_ansi(ex['expr'])}{ansi(')', 'slate_600')} "
+                    f"{ansi(ex['natural'], 'slate_300')}"
+                )
+            else:
+                rows.append(f"{ansi(f'{i:>2}.', 'slate_500')} {highlight_ansi(ex['expr'])}")
+                rows.append(f"    {ansi('->', 'slate_500')} {ansi(ex['label'], 'slate_400')}")
+                rows.append(f"    {ansi('NL:', 'slate_500')} {ansi(ex['natural'], 'slate_300')}")
     return "\n".join(rows)
 
 
@@ -538,6 +670,53 @@ def reference_text() -> str:
     rows.append("")
     rows.append(ansi("Registers", "slate_500", bold=True))
     rows.extend(f"  {ansi(f'|{code:<2}', 'fuchsia')} {ansi(name, 'slate_400')}" for code, name in REGISTER_NAMES.items())
+    return "\n".join(rows)
+
+
+def dictionary_text(query: str = "") -> str:
+    needle = query.strip().lower()
+    entries = [
+        entry
+        for entry in DICTIONARY
+        if not needle
+        or needle in entry["term"].lower()
+        or needle in entry["category"].lower()
+        or needle in entry["notation"].lower()
+        or needle in entry["definition"].lower()
+    ]
+    if not entries:
+        return f"  no dictionary entries match {query!r}"
+
+    rows: list[str] = []
+    grouped: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for entry in entries:
+        grouped[entry["category"]].append(entry)
+
+    title = "CAS Dictionary" if not needle else f"CAS Dictionary: {query}"
+    rows.append(line(title, 92))
+    for category, items in grouped.items():
+        rows.append("")
+        rows.append(ansi(category, "slate_500", bold=True))
+        for entry in items:
+            rows.append(f"  {ansi(entry['term'], 'accent_light', bold=True)} {ansi(entry['notation'], 'violet')}")
+            rows.append(f"    {ansi(entry['definition'], 'slate_300')}")
+            if entry.get("example"):
+                rows.append(f"    {ansi('example:', 'slate_500')} {highlight_ansi(entry['example'])}")
+            if entry.get("learn"):
+                rows.append(f"    {ansi('learn:', 'slate_500')} {ansi(entry['learn'], 'slate_400')}")
+    return "\n".join(rows)
+
+
+def learning_text() -> str:
+    rows = [line("CAS Learning Path", 92)]
+    for step in LEARNING_PATH:
+        rows.append("")
+        rows.append(ansi(step["title"], "accent_light", bold=True))
+        rows.append(f"  {ansi('goal:', 'slate_500')} {ansi(step['goal'], 'slate_300')}")
+        rows.append(f"  {ansi('terms:', 'slate_500')} {ansi(step['terms'], 'slate_400')}")
+        rows.append(f"  {ansi('try:', 'slate_500')} {highlight_ansi(step['practice'])}")
+    rows.append("")
+    rows.append(ansi("Use :dict TERM to look up any term, then paste the try-expression at cas>.", "slate_500"))
     return "\n".join(rows)
 
 
@@ -776,7 +955,9 @@ def _examples_html() -> str:
     for category, items in grouped.items():
         rows = "".join(
             f'<div class="example"><div class="example-label">{escape(ex["label"])}</div>'
-            f'<code>{highlight_html(ex["expr"])}</code></div>'
+            f'<code>{highlight_html(ex["expr"])}</code>'
+            f'<p>{escape(ex["natural"])}</p>'
+            f'<div class="example-mirror">({highlight_html(ex["expr"])}) {escape(ex["natural"])}</div></div>'
             for ex in items
         )
         chunks.append(f'<section><h3>{escape(category)}</h3>{rows}</section>')
@@ -801,6 +982,35 @@ def _reference_html() -> str:
 <section><h3>Drives</h3>{drives}</section>
 <section><h3>Registers</h3>{registers}</section>
 """
+
+
+def _dictionary_html() -> str:
+    grouped: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for entry in DICTIONARY:
+        grouped[entry["category"]].append(entry)
+    sections: list[str] = []
+    for category, entries in grouped.items():
+        rows = "".join(
+            f'<div class="dict-entry"><div><strong>{escape(entry["term"])}</strong> '
+            f'<code>{highlight_html(entry["notation"])}</code></div>'
+            f'<p>{escape(entry["definition"])}</p>'
+            f'<div class="dict-example">example: {highlight_html(entry["example"])}</div>'
+            f'<div class="dict-learn">learn: {escape(entry["learn"])}</div></div>'
+            for entry in entries
+        )
+        sections.append(f'<section><h3>{escape(category)}</h3>{rows}</section>')
+    return "".join(sections)
+
+
+def _learning_html() -> str:
+    rows = "".join(
+        f'<div class="learn-step"><strong>{escape(step["title"])}</strong>'
+        f'<p>{escape(step["goal"])}</p>'
+        f'<div>terms: {escape(step["terms"])}</div>'
+        f'<div>try: <code>{highlight_html(step["practice"])}</code></div></div>'
+        for step in LEARNING_PATH
+    )
+    return f"<section><h3>Learning Path</h3>{rows}</section>"
 
 
 def result_summary_html(data: dict[str, Any]) -> str:
@@ -956,6 +1166,12 @@ def compiler_shell_html(
   .side h3 {{ margin: 18px 0 8px; color: {THEME['fuchsia']}; opacity: .85; font: 10px ui-monospace, Consolas, monospace; text-transform: uppercase; letter-spacing: .08em; }}
   .example {{ border-radius: 8px; padding: 7px 8px; margin: 3px 0; background: rgba(255,255,255,.018); }}
   .example-label {{ color: var(--slate-500); font-size: 9px; margin-bottom: 3px; }}
+  .example p {{ color: var(--slate-400); font-size: 10px; line-height: 1.4; margin: 5px 0 0; }}
+  .example-mirror {{ color: var(--slate-500); font-size: 9px; line-height: 1.45; margin-top: 5px; }}
+  .dict-entry, .learn-step {{ border-radius: 8px; padding: 7px 8px; margin: 3px 0; background: rgba(255,255,255,.018); }}
+  .dict-entry strong, .learn-step strong {{ color: var(--accent-light); font-size: 10px; }}
+  .dict-entry p, .learn-step p {{ color: var(--slate-400); font-size: 10px; line-height: 1.4; margin: 4px 0; }}
+  .dict-example, .dict-learn, .learn-step div {{ color: var(--slate-500); font-size: 9px; line-height: 1.45; margin-top: 3px; }}
   code {{ font-family: ui-monospace, Consolas, monospace; }}
   .side section div {{ color: var(--slate-500); font-size: 11px; margin: 3px 0; }}
   @media (max-width: 900px) {{ .shell {{ grid-template-columns: 1fr; }} .side {{ border-left: 0; border-top: 1px solid var(--border); }} }}
@@ -964,7 +1180,7 @@ def compiler_shell_html(
   <section class="main">
     <div class="terminal">
       {logo_html()}
-      <p class="hint">Type <code>:help</code> for commands, <code>:grammar</code> for the BNF, <code>:examples</code> for sample expressions.</p>
+      <p class="hint">Type <code>:help</code> for commands, <code>:grammar</code> for the BNF, <code>:examples</code> for sample expressions, <code>:dict</code> for terms.</p>
       <div class="card">
         <div class="prompt-line">
           <span class="prompt">cas&gt;</span>
@@ -985,6 +1201,8 @@ def compiler_shell_html(
   <aside class="side">
     <h2>Reference</h2>
     <section><h3>Examples</h3>{_examples_html()}</section>
+    <section><h3>Dictionary</h3>{_dictionary_html()}</section>
+    {_learning_html()}
     {_reference_html()}
   </aside>
 </main>
