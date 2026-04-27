@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { highlightSyntax } from '../../pages/CompilerPage';
+import { apiFetch } from '../../api/client';
+import {
+  DiagramPreview,
+  highlightSyntax,
+  type CasDiagram,
+} from '../../pages/CompilerPage';
 
 export interface Idea {
   id: string;
@@ -17,6 +22,13 @@ export interface NodeDetailPanelProps {
   onClose: () => void;
   onInvertClicked?: (idea: Idea) => void;
   onDeleteClicked?: (idea: Idea) => void;
+}
+
+interface CompileDiagramResponse {
+  valid: boolean;
+  error?: string | null;
+  result?: Record<string, unknown> | null;
+  diagram?: CasDiagram | null;
 }
 
 function formatTimestamp(iso: string): string {
@@ -44,6 +56,9 @@ export function NodeDetailPanel({
   // Track open state separately so we can animate the slide-in transition
   // even on the very first render. We start "closed" and flip on next tick.
   const [open, setOpen] = useState(false);
+  const [diagramResult, setDiagramResult] = useState<CompileDiagramResponse | null>(null);
+  const [diagramLoading, setDiagramLoading] = useState(false);
+  const [diagramError, setDiagramError] = useState<string | null>(null);
 
   useEffect(() => {
     if (idea) {
@@ -54,6 +69,40 @@ export function NodeDetailPanel({
       setOpen(false);
     }
   }, [idea?.id, idea]);
+
+  useEffect(() => {
+    if (!idea?.cas_expression || idea.compile_error) {
+      setDiagramResult(null);
+      setDiagramError(null);
+      setDiagramLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    setDiagramLoading(true);
+    setDiagramError(null);
+    setDiagramResult(null);
+
+    (async () => {
+      try {
+        const result = await apiFetch<CompileDiagramResponse>('/notation/compile', {
+          method: 'POST',
+          body: JSON.stringify({ expression: idea.cas_expression }),
+        });
+        if (!cancelled) setDiagramResult(result);
+      } catch (err) {
+        if (!cancelled) {
+          setDiagramError(err instanceof Error ? err.message : String(err));
+        }
+      } finally {
+        if (!cancelled) setDiagramLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [idea?.id, idea?.cas_expression, idea?.compile_error]);
 
   const handleDelete = () => {
     if (!idea || !onDeleteClicked) return;
@@ -138,6 +187,38 @@ export function NodeDetailPanel({
               {formatTimestamp(idea.created_at)}
             </p>
           </section>
+
+          {/* Compiler-level structure diagram */}
+          {idea.cas_expression && !idea.compile_error && (
+            <section>
+              <div className="mb-2">
+                <p className="text-[10px] uppercase tracking-wider text-slate-500 font-mono">
+                  CAS Structure
+                </p>
+                <p className="mt-1 text-[11px] text-slate-500 font-sans leading-relaxed">
+                  Internal compiler diagram for this expression. The graph view
+                  shows relationships between ideas; this shows the structure
+                  inside this one idea.
+                </p>
+              </div>
+              {diagramLoading && (
+                <div className="rounded border border-cyan-500/15 bg-cyan-500/[0.04] p-3 text-[11px] text-cyan-300 font-mono animate-pulse">
+                  Building CAS structure diagram...
+                </div>
+              )}
+              {!diagramLoading && diagramError && (
+                <div className="rounded border border-red-500/20 bg-red-500/[0.05] p-3 text-[11px] text-red-300 font-mono">
+                  {diagramError}
+                </div>
+              )}
+              {!diagramLoading && !diagramError && diagramResult?.diagram && (
+                <DiagramPreview
+                  diagram={diagramResult.diagram}
+                  result={diagramResult.result ?? null}
+                />
+              )}
+            </section>
+          )}
 
           {/* AST */}
           {astPayload !== undefined && astPayload !== null && (

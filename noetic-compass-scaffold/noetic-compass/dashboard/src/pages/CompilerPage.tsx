@@ -353,7 +353,7 @@ interface CompileResult {
   diagram?: CasDiagram | null;
 }
 
-interface DiagramNode {
+export interface DiagramNode {
   id: string;
   kind: string;
   label: string;
@@ -362,7 +362,7 @@ interface DiagramNode {
   [key: string]: unknown;
 }
 
-interface DiagramEdge {
+export interface DiagramEdge {
   id: string;
   source: string;
   target: string;
@@ -371,7 +371,7 @@ interface DiagramEdge {
   directed?: boolean;
 }
 
-interface DiagramContainer {
+export interface DiagramContainer {
   id: string;
   kind: string;
   label: string;
@@ -380,7 +380,7 @@ interface DiagramContainer {
   element_type?: string;
 }
 
-interface CasDiagram {
+export interface CasDiagram {
   kind: string;
   schema_version: string;
   layouts: string[];
@@ -1451,7 +1451,7 @@ function computeLayout(
   }
 }
 
-function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | null; result?: Record<string, unknown> | null }) {
+export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | null; result?: Record<string, unknown> | null }) {
   // Truth-value of a set-theory assertion (only present for kind=meta_assertion).
   // Used to colour edges green for holds, red for not-holds.
   const assertionHolds: boolean | undefined =

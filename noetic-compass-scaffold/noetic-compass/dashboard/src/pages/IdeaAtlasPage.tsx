@@ -60,6 +60,55 @@ function formatTimestamp(iso: string): string {
   }
 }
 
+interface SpeechAlternativeLike {
+  transcript: string;
+}
+
+interface SpeechResultLike {
+  readonly length: number;
+  readonly isFinal: boolean;
+  [index: number]: SpeechAlternativeLike | undefined;
+}
+
+interface SpeechResultListLike {
+  readonly length: number;
+  [index: number]: SpeechResultLike | undefined;
+}
+
+interface SpeechRecognitionResultEventLike extends Event {
+  resultIndex: number;
+  results: SpeechResultListLike;
+}
+
+interface SpeechRecognitionErrorEventLike extends Event {
+  error?: string;
+  message?: string;
+}
+
+interface SpeechRecognitionLike {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onstart: (() => void) | null;
+  onresult: ((event: SpeechRecognitionResultEventLike) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEventLike) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+  abort: () => void;
+}
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
+
+function getSpeechRecognitionCtor(): SpeechRecognitionConstructor | null {
+  if (typeof window === 'undefined') return null;
+  const speechWindow = window as Window & {
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  };
+  return speechWindow.SpeechRecognition ?? speechWindow.webkitSpeechRecognition ?? null;
+}
+
 export function IdeaAtlasPage() {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [input, setInput] = useState('');
@@ -67,7 +116,12 @@ export function IdeaAtlasPage() {
   const [loadingList, setLoadingList] = useState(true);
   const [backendState, setBackendState] = useState<BackendState>('unknown');
   const [error, setError] = useState<string | null>(null);
+  const [speechStatus, setSpeechStatus] = useState<string | null>(null);
+  const [listening, setListening] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const speechBaseRef = useRef('');
+  const speechSupported = useMemo(() => getSpeechRecognitionCtor() !== null, []);
 
   // ── Sprint 2 additions: view-mode toggle, graph edges, selected node ──
   const [viewMode, setViewMode] = useState<ViewMode>('list');
@@ -128,6 +182,13 @@ export function IdeaAtlasPage() {
     el.style.height = 'auto';
     el.style.height = Math.min(Math.max(el.scrollHeight, 56), 240) + 'px';
   }, [input]);
+
+  useEffect(() => {
+    return () => {
+      recognitionRef.current?.abort();
+      recognitionRef.current = null;
+    };
+  }, []);
 
   // Load existing ideas on mount
   useEffect(() => {
@@ -219,6 +280,75 @@ export function IdeaAtlasPage() {
     }
   }, [input, submitting]);
 
+  const stopSpeechCapture = useCallback(() => {
+    const recognition = recognitionRef.current;
+    if (!recognition) {
+      setListening(false);
+      return;
+    }
+    recognition.stop();
+  }, []);
+
+  const startSpeechCapture = useCallback(() => {
+    if (listening) return;
+    if (backendState === 'unavailable') {
+      setSpeechStatus('Speech capture is disabled while the Idea Atlas backend is unavailable.');
+      return;
+    }
+
+    const RecognitionCtor = getSpeechRecognitionCtor();
+    if (!RecognitionCtor) {
+      setSpeechStatus('Speech capture is not available in this browser. Chrome and Edge support it best.');
+      return;
+    }
+
+    try {
+      const recognition = new RecognitionCtor();
+      speechBaseRef.current = input.trim();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+      recognition.onstart = () => {
+        setListening(true);
+        setSpeechStatus('Listening... release the button to stop.');
+      };
+      recognition.onresult = (event) => {
+        let spoken = '';
+        for (let i = 0; i < event.results.length; i += 1) {
+          spoken += event.results[i]?.[0]?.transcript ?? '';
+        }
+        const transcript = spoken.trim();
+        const base = speechBaseRef.current;
+        setInput([base, transcript].filter(Boolean).join(base ? ' ' : ''));
+      };
+      recognition.onerror = (event) => {
+        const errorCode = event.error ?? 'speech_error';
+        const friendly =
+          errorCode === 'not-allowed'
+            ? 'Microphone permission was blocked.'
+            : errorCode === 'no-speech'
+              ? 'No speech was detected. Hold the button and speak clearly.'
+              : event.message || `Speech capture stopped: ${errorCode}.`;
+        setSpeechStatus(friendly);
+      };
+      recognition.onend = () => {
+        setListening(false);
+        recognitionRef.current = null;
+        setSpeechStatus((current) =>
+          current === 'Listening... release the button to stop.'
+            ? 'Speech captured. Edit the text or press Capture.'
+            : current,
+        );
+      };
+      recognitionRef.current = recognition;
+      recognition.start();
+    } catch (err) {
+      setListening(false);
+      recognitionRef.current = null;
+      setSpeechStatus(err instanceof Error ? err.message : String(err));
+    }
+  }, [backendState, input, listening]);
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -261,6 +391,12 @@ export function IdeaAtlasPage() {
 
   const handleDeleteClicked = useCallback(async (idea: Idea) => {
     if (!window.confirm(`Delete this idea?\n\n${idea.text}`)) return;
+    if (idea.id.startsWith('pending-')) {
+      setIdeas((prev) => prev.filter((it) => it.id !== idea.id));
+      setSelectedId((cur) => (cur === idea.id ? null : cur));
+      setEdgesLoaded(false);
+      return;
+    }
     try {
       await apiFetch(`/idea_atlas/ideas/${idea.id}`, { method: 'DELETE' });
       setIdeas((prev) => prev.filter((it) => it.id !== idea.id));
@@ -289,7 +425,7 @@ export function IdeaAtlasPage() {
             Idea Atlas
           </h1>
           <p className="text-slate-500 text-xs mt-1 font-sans">
-            Personal cognitive map. Capture ideas; see their CAS structure.
+            Your personal cognitive map. Capture your ideas; see their CAS structure.
           </p>
         </div>
         {/* View-mode toggle: LIST (default — preserves Sprint-1 behavior) | GRAPH */}
@@ -345,23 +481,66 @@ export function IdeaAtlasPage() {
               style={{ minHeight: '56px', maxHeight: '240px' }}
               disabled={backendState === 'unavailable'}
             />
-            <div className="mt-2 flex items-center justify-between gap-3">
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
               <span className="text-[10px] text-slate-600 font-mono">
                 Enter to capture, Shift+Enter for newline
               </span>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={
-                  !input.trim() ||
-                  submitting ||
-                  backendState === 'unavailable'
-                }
-                className="rounded border border-accent-teal/30 bg-accent-teal/10 px-3 py-1.5 font-mono text-xs text-accent-teal transition-colors hover:bg-accent-teal/20 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent-teal/10"
-              >
-                {submitting ? 'Capturing...' : 'Capture'}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  aria-pressed={listening}
+                  title={speechSupported ? 'Hold while speaking to add words to the idea box.' : 'Speech capture is not available in this browser.'}
+                  onPointerDown={(event) => {
+                    event.preventDefault();
+                    startSpeechCapture();
+                  }}
+                  onPointerUp={(event) => {
+                    event.preventDefault();
+                    stopSpeechCapture();
+                  }}
+                  onPointerLeave={() => {
+                    if (listening) stopSpeechCapture();
+                  }}
+                  onPointerCancel={stopSpeechCapture}
+                  onKeyDown={(event) => {
+                    if ((event.key === 'Enter' || event.key === ' ') && !listening) {
+                      event.preventDefault();
+                      startSpeechCapture();
+                    }
+                  }}
+                  onKeyUp={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      stopSpeechCapture();
+                    }
+                  }}
+                  className={`rounded border px-3 py-1.5 font-mono text-xs transition-colors ${
+                    listening
+                      ? 'border-red-400/50 bg-red-500/15 text-red-200 shadow-[0_0_18px_rgba(248,113,113,0.18)]'
+                      : 'border-cyan-400/25 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20'
+                  }`}
+                >
+                  {listening ? 'Listening...' : 'Hold to Speak'}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={
+                    !input.trim() ||
+                    submitting ||
+                    backendState === 'unavailable'
+                  }
+                  className="rounded border border-accent-teal/30 bg-accent-teal/10 px-3 py-1.5 font-mono text-xs text-accent-teal transition-colors hover:bg-accent-teal/20 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent-teal/10"
+                >
+                  {submitting ? 'Capturing...' : 'Capture'}
+                </button>
+              </div>
             </div>
+            {speechStatus && (
+              <p className={`mt-2 text-[10px] font-mono ${listening ? 'text-red-300' : 'text-slate-500'}`}>
+                {speechStatus}
+              </p>
+            )}
           </div>
         </div>
 
@@ -457,9 +636,19 @@ export function IdeaAtlasPage() {
                 )}
 
                 {/* Meta line */}
-                <p className="mt-2 text-[9px] uppercase tracking-wider text-slate-600">
-                  {formatTimestamp(idea.created_at)}
-                </p>
+                <div className="mt-2 flex items-center justify-between gap-2">
+                  <p className="text-[9px] uppercase tracking-wider text-slate-600">
+                    {formatTimestamp(idea.created_at)}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteClicked(idea)}
+                    disabled={isPending(idea)}
+                    className="rounded border border-red-500/20 bg-red-500/[0.04] px-2 py-1 font-mono text-[10px] text-red-400 transition-colors hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-red-500/[0.04]"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             ))}
           </div>
