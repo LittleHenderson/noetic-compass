@@ -13,13 +13,9 @@ interface Idea {
   compile_error?: string | null;
 }
 
-interface CaptureResponse {
-  idea: Idea;
-}
-
-interface ListResponse {
-  ideas: Idea[];
-}
+// Backend returns flat shapes — Idea on POST, Idea[] on GET — not wrapped.
+type CaptureResponse = Idea;
+type ListResponse = Idea[];
 
 // ── Backend availability state ──
 type BackendState = 'available' | 'unavailable' | 'unknown';
@@ -73,7 +69,7 @@ export function IdeaAtlasPage() {
       try {
         const data = await apiFetch<ListResponse>('/idea_atlas/ideas');
         if (cancelled) return;
-        setIdeas(Array.isArray(data.ideas) ? data.ideas : []);
+        setIdeas(Array.isArray(data) ? data : []);
         setBackendState('available');
       } catch (err) {
         if (cancelled) return;
@@ -119,7 +115,7 @@ export function IdeaAtlasPage() {
       });
       // Replace placeholder with real idea
       setIdeas((prev) =>
-        prev.map((it) => (it.id === placeholderId ? data.idea : it)),
+        prev.map((it) => (it.id === placeholderId ? data : it)),
       );
       setBackendState('available');
     } catch (err) {
