@@ -13,7 +13,9 @@ import os
 from pathlib import Path
 import re
 import sys
+import tempfile
 import threading
+import webbrowser
 from typing import Any
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -80,6 +82,8 @@ Commands:
   :diagram       Print the last diagram JSON
   :svg PATH      Save the last diagram as SVG
   :html PATH     Save the last diagram as standalone HTML
+  :open          Open the last diagram in your default browser
+  :preview       Alias for :open
   :json on/off   Toggle full JSON output
   :files on/off  Toggle automatic cas_diagram.svg/html writes
   :quit          Exit
@@ -352,7 +356,60 @@ def clear_screen() -> None:
     os.system("cls" if os.name == "nt" else "clear")
 
 
+# Cache paths used by the :open / :preview REPL commands.
+# After every successful compile in the REPL we write the rendered diagram
+# to these paths so :open always has something fresh to show. If the user
+# explicitly saves via :svg PATH or :html PATH that path takes precedence.
+CACHE_HTML_PATH = Path(tempfile.gettempdir()) / "cas_last_diagram.html"
+CACHE_SVG_PATH = Path(tempfile.gettempdir()) / "cas_last_diagram.svg"
+
+# Most-recent explicit path, set by :svg PATH or :html PATH. Preferred by :open.
+_LAST_EXPLICIT_PATH: Path | None = None
+
+
+def _cache_last_diagram(artifact: Any, title: str) -> Path | None:
+    """Write the artifact's diagram to the OS-temp cache so :open can find it.
+
+    Returns the cached HTML path on success, or None if the artifact has no
+    renderable diagram. Failures (permission, disk full, etc.) are swallowed
+    silently so they never disrupt the REPL flow.
+    """
+    try:
+        diagram = artifact.diagram()
+        if not diagram or (not diagram.get("nodes") and not diagram.get("containers")):
+            return None
+        return render_outputs(
+            artifact,
+            svg_path=CACHE_SVG_PATH,
+            html_path=CACHE_HTML_PATH,
+            title=title,
+        )[1]
+    except Exception:
+        return None
+
+
+def _open_last_diagram() -> bool:
+    """Open the most recent diagram in the default browser.
+
+    Preference order: explicit user-saved path (from :svg/:html) > cached HTML.
+    Returns True if a diagram was opened, False if nothing was available.
+    """
+    candidate: Path | None = None
+    if _LAST_EXPLICIT_PATH is not None and _LAST_EXPLICIT_PATH.exists():
+        candidate = _LAST_EXPLICIT_PATH
+    elif CACHE_HTML_PATH.exists():
+        candidate = CACHE_HTML_PATH
+    elif CACHE_SVG_PATH.exists():
+        candidate = CACHE_SVG_PATH
+    if candidate is None:
+        return False
+    url = "file://" + str(candidate.resolve()).replace("\\", "/")
+    webbrowser.open(url)
+    return True
+
+
 def repl() -> int:
+    global _LAST_EXPLICIT_PATH
     play_banner_wave()
     print(f"\n{startup_hint_text()}\n")
     last_artifact: Any | None = None
@@ -398,6 +455,8 @@ def repl() -> int:
                 echo_source=False,
             )
             last_source = expand(expr)
+            if last_artifact is not None and last_artifact.valid:
+                _cache_last_diagram(last_artifact, last_source)
             continue
         if raw == ":demo":
             demo()
@@ -447,7 +506,17 @@ def repl() -> int:
                 html_path=path if cmd == ":html" else None,
                 title=last_source,
             )
-            print(f"  saved: {saved_svg or saved_html}")
+            saved = saved_svg or saved_html
+            if saved is not None:
+                _LAST_EXPLICIT_PATH = Path(saved).resolve()
+            print(f"  saved: {saved}")
+            continue
+        if raw in {":open", ":preview"}:
+            if _open_last_diagram():
+                target = _LAST_EXPLICIT_PATH if _LAST_EXPLICIT_PATH else CACHE_HTML_PATH
+                print(f"  opening {target} in default browser")
+            else:
+                print("  (no diagram yet — compile something first)")
             continue
 
         expr, opts, errors = parse_repl_inline_options(raw)
@@ -477,7 +546,7 @@ def repl() -> int:
             continue
 
         history.insert(0, expr)
-        last_artifact, _, _ = compile_and_show(
+        last_artifact, inline_svg, inline_html = compile_and_show(
             expr,
             full_json=opts["full_json"] if opts["full_json"] is not None else full_json,
             show_terminal_diagram=opts["show_terminal_diagram"] if opts["show_terminal_diagram"] is not None else True,
@@ -487,6 +556,12 @@ def repl() -> int:
             echo_source=False,
         )
         last_source = expand(expr)
+        if last_artifact is not None and last_artifact.valid:
+            _cache_last_diagram(last_artifact, last_source)
+            # An inline --svg/--html save also counts as an explicit path for :open.
+            explicit = inline_html or inline_svg
+            if explicit is not None:
+                _LAST_EXPLICIT_PATH = Path(explicit).resolve()
 
 
 def compile_once(args: argparse.Namespace) -> int:

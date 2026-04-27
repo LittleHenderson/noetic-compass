@@ -394,7 +394,6 @@ def _open_last_diagram() -> bool:
     Preference order: explicit user-saved path (from :svg/:html) > cached HTML.
     Returns True if a diagram was opened, False if nothing was available.
     """
-    global _LAST_EXPLICIT_PATH
     candidate: Path | None = None
     if _LAST_EXPLICIT_PATH is not None and _LAST_EXPLICIT_PATH.exists():
         candidate = _LAST_EXPLICIT_PATH
@@ -410,6 +409,7 @@ def _open_last_diagram() -> bool:
 
 
 def repl() -> int:
+    global _LAST_EXPLICIT_PATH
     play_banner_wave()
     print(f"\n{startup_hint_text()}\n")
     last_artifact: Any | None = None
@@ -455,6 +455,8 @@ def repl() -> int:
                 echo_source=False,
             )
             last_source = expand(expr)
+            if last_artifact is not None and last_artifact.valid:
+                _cache_last_diagram(last_artifact, last_source)
             continue
         if raw == ":demo":
             demo()
@@ -504,7 +506,17 @@ def repl() -> int:
                 html_path=path if cmd == ":html" else None,
                 title=last_source,
             )
-            print(f"  saved: {saved_svg or saved_html}")
+            saved = saved_svg or saved_html
+            if saved is not None:
+                _LAST_EXPLICIT_PATH = Path(saved).resolve()
+            print(f"  saved: {saved}")
+            continue
+        if raw in {":open", ":preview"}:
+            if _open_last_diagram():
+                target = _LAST_EXPLICIT_PATH if _LAST_EXPLICIT_PATH else CACHE_HTML_PATH
+                print(f"  opening {target} in default browser")
+            else:
+                print("  (no diagram yet — compile something first)")
             continue
 
         expr, opts, errors = parse_repl_inline_options(raw)
@@ -534,7 +546,7 @@ def repl() -> int:
             continue
 
         history.insert(0, expr)
-        last_artifact, _, _ = compile_and_show(
+        last_artifact, inline_svg, inline_html = compile_and_show(
             expr,
             full_json=opts["full_json"] if opts["full_json"] is not None else full_json,
             show_terminal_diagram=opts["show_terminal_diagram"] if opts["show_terminal_diagram"] is not None else True,
@@ -544,6 +556,12 @@ def repl() -> int:
             echo_source=False,
         )
         last_source = expand(expr)
+        if last_artifact is not None and last_artifact.valid:
+            _cache_last_diagram(last_artifact, last_source)
+            # An inline --svg/--html save also counts as an explicit path for :open.
+            explicit = inline_html or inline_svg
+            if explicit is not None:
+                _LAST_EXPLICIT_PATH = Path(explicit).resolve()
 
 
 def compile_once(args: argparse.Namespace) -> int:
