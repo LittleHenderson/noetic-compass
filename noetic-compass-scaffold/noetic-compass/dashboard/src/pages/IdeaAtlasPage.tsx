@@ -1,6 +1,9 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { apiFetch, ApiError } from '../api/client';
 import { highlightSyntax } from './CompilerPage';
+import { GraphView } from '../components/idea-atlas/GraphView';
+import { NodeDetailPanel } from '../components/idea-atlas/NodeDetailPanel';
+import { InversionModal } from '../components/idea-atlas/InversionModal';
 
 // ── Types ──
 
@@ -11,7 +14,17 @@ interface Idea {
   cas_english?: string | null;
   created_at: string; // ISO timestamp
   compile_error?: string | null;
+  ast?: unknown;
 }
+
+interface AtlasEdge {
+  source: string;
+  target: string;
+  score: number;
+  breakdown?: Record<string, number>;
+}
+
+type ViewMode = 'list' | 'graph';
 
 // Backend returns flat shapes — Idea on POST, Idea[] on GET — not wrapped.
 type CaptureResponse = Idea;
@@ -53,6 +66,52 @@ export function IdeaAtlasPage() {
   const [backendState, setBackendState] = useState<BackendState>('unknown');
   const [error, setError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // ── Sprint 2 additions: view-mode toggle, graph edges, selected node ──
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
+  const [edges, setEdges] = useState<AtlasEdge[]>([]);
+  const [edgesLoaded, setEdgesLoaded] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // ── Sprint 3 wiring: inversion modal ──
+  const [invertingIdea, setInvertingIdea] = useState<Idea | null>(null);
+
+  // Fetch edges lazily — first time the user switches into GRAPH view.
+  // Backend Agent I exposes GET /idea_atlas/edges?threshold=0.5; if 404,
+  // we fall back to no edges and the graph still renders nodes only.
+  useEffect(() => {
+    if (viewMode !== 'graph' || edgesLoaded) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const data = await apiFetch<AtlasEdge[]>(
+          '/idea_atlas/edges?threshold=0.5',
+        );
+        if (cancelled) return;
+        setEdges(Array.isArray(data) ? data : []);
+      } catch (err) {
+        if (cancelled) return;
+        // 404 / 503 / network — backend not yet shipping edges. Render nodes
+        // without edges; not an error worth surfacing in the UI.
+        if (!isBackendMissingError(err)) {
+          // Other errors: surface but keep graph visible
+          const detail = err instanceof Error ? err.message : String(err);
+          setError(detail);
+        }
+        setEdges([]);
+      } finally {
+        if (!cancelled) setEdgesLoaded(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [viewMode, edgesLoaded]);
+
+  const selectedIdea = useMemo(
+    () => (selectedId ? ideas.find((i) => i.id === selectedId) ?? null : null),
+    [ideas, selectedId],
+  );
 
   // Auto-resize textarea like CompilerPage
   useEffect(() => {
@@ -149,6 +208,51 @@ export function IdeaAtlasPage() {
     }
   }
 
+  // ── Sprint 3 handlers: invert + delete ──
+  const handleInvertClicked = useCallback((idea: Idea) => {
+    setInvertingIdea(idea);
+  }, []);
+
+  const handleInvertConfirm = useCallback(
+    async ({ invertedCas, axis }: { invertedCas: string; axis: string }) => {
+      if (!invertingIdea) return;
+      // Persist the inverted result as a NEW idea so the graph keeps the
+      // original alongside its inversion. Annotate text with the axis tag.
+      const invertedText = `${invertingIdea.text}  [inverted via axis ${axis}]`;
+      try {
+        const data = await apiFetch<CaptureResponse>('/idea_atlas/ideas', {
+          method: 'POST',
+          body: JSON.stringify({
+            text: invertedText,
+            cas_expression: invertedCas,
+          }),
+        });
+        setIdeas((prev) => [data, ...prev]);
+        setInvertingIdea(null);
+        // Force edges refetch on next graph view so the new node connects.
+        setEdgesLoaded(false);
+        setSelectedId(data.id);
+      } catch (err) {
+        const detail = err instanceof Error ? err.message : String(err);
+        setError(detail);
+      }
+    },
+    [invertingIdea],
+  );
+
+  const handleDeleteClicked = useCallback(async (idea: Idea) => {
+    if (!window.confirm(`Delete this idea?\n\n${idea.text}`)) return;
+    try {
+      await apiFetch(`/idea_atlas/ideas/${idea.id}`, { method: 'DELETE' });
+      setIdeas((prev) => prev.filter((it) => it.id !== idea.id));
+      setSelectedId((cur) => (cur === idea.id ? null : cur));
+      setEdgesLoaded(false);
+    } catch (err) {
+      const detail = err instanceof Error ? err.message : String(err);
+      setError(detail);
+    }
+  }, []);
+
   const isPending = (it: Idea) =>
     it.id.startsWith('pending-') &&
     !it.cas_expression &&
@@ -160,13 +264,48 @@ export function IdeaAtlasPage() {
       style={{ backgroundColor: '#0d1117' }}
     >
       {/* Header */}
-      <div className="border-b border-white/[0.06] px-6 py-4">
-        <h1 className="text-accent-teal font-mono text-lg font-semibold">
-          Idea Atlas
-        </h1>
-        <p className="text-slate-500 text-xs mt-1 font-sans">
-          Personal cognitive map. Capture ideas; see their CAS structure.
-        </p>
+      <div className="border-b border-white/[0.06] px-6 py-4 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-accent-teal font-mono text-lg font-semibold">
+            Idea Atlas
+          </h1>
+          <p className="text-slate-500 text-xs mt-1 font-sans">
+            Personal cognitive map. Capture ideas; see their CAS structure.
+          </p>
+        </div>
+        {/* View-mode toggle: LIST (default — preserves Sprint-1 behavior) | GRAPH */}
+        <div
+          role="tablist"
+          aria-label="View mode"
+          className="inline-flex shrink-0 rounded border border-white/[0.06] bg-black/30 p-0.5 font-mono text-[11px]"
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={viewMode === 'list'}
+            onClick={() => setViewMode('list')}
+            className={`px-3 py-1 rounded transition-colors ${
+              viewMode === 'list'
+                ? 'bg-accent-teal/20 text-accent-teal'
+                : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            LIST
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={viewMode === 'graph'}
+            onClick={() => setViewMode('graph')}
+            className={`px-3 py-1 rounded transition-colors ${
+              viewMode === 'graph'
+                ? 'bg-accent-teal/20 text-accent-teal'
+                : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            GRAPH
+          </button>
+        </div>
       </div>
 
       {/* Capture area */}
@@ -214,7 +353,8 @@ export function IdeaAtlasPage() {
         )}
       </div>
 
-      {/* List area */}
+      {/* List area (default) — preserved as Agent F shipped it */}
+      {viewMode === 'list' && (
       <div className="flex-1 overflow-y-auto px-6 py-4">
         {/* Backend-unavailable empty state — distinct from no-ideas-yet state */}
         {backendState === 'unavailable' && (
@@ -306,6 +446,51 @@ export function IdeaAtlasPage() {
           </div>
         )}
       </div>
+      )}
+
+      {/* Graph view — Sprint 2 */}
+      {viewMode === 'graph' && (
+        <div className="flex-1 overflow-hidden px-6 py-4">
+          {backendState === 'unavailable' ? (
+            <div className="rounded-lg border border-amber-500/20 bg-amber-500/[0.04] p-6 text-center">
+              <p className="text-amber-400 font-mono text-sm">
+                Backend not yet available
+              </p>
+              <p className="text-slate-500 text-xs mt-2 font-sans">
+                The Idea Atlas API endpoint hasn&apos;t been deployed yet.
+              </p>
+            </div>
+          ) : (
+            <div className="flex justify-center">
+              <GraphView
+                ideas={ideas}
+                edges={edges}
+                selectedId={selectedId}
+                onSelectIdea={setSelectedId}
+                width={800}
+                height={560}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Sliding detail panel — overlay above graph */}
+      {viewMode === 'graph' && (
+        <NodeDetailPanel
+          idea={selectedIdea}
+          onClose={() => setSelectedId(null)}
+          onInvertClicked={handleInvertClicked}
+          onDeleteClicked={handleDeleteClicked}
+        />
+      )}
+
+      {/* Inversion modal — Sprint 3 */}
+      <InversionModal
+        idea={invertingIdea}
+        onClose={() => setInvertingIdea(null)}
+        onConfirm={handleInvertConfirm}
+      />
     </div>
   );
 }
