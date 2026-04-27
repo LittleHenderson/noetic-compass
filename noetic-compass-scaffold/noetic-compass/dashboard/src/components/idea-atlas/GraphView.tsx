@@ -22,6 +22,7 @@ export interface GraphViewProps {
   ideas: Idea[];
   edges: Edge[];
   selectedId: string | null;
+  pulseId?: string | null;
   onSelectIdea: (id: string | null) => void;
   width?: number;
   height?: number;
@@ -196,6 +197,7 @@ export function GraphView({
   ideas,
   edges,
   selectedId,
+  pulseId,
   onSelectIdea,
   width = 800,
   height = 560,
@@ -238,7 +240,7 @@ export function GraphView({
     return (
       <div
         className="flex items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.02]"
-        style={{ width, height }}
+        style={{ width: '100%', maxWidth: width, height }}
       >
         <p className="text-slate-500 font-mono text-xs text-center px-6">
           No ideas yet — capture one above to start your atlas.
@@ -253,12 +255,12 @@ export function GraphView({
   return (
     <div
       className="relative rounded-lg border border-white/[0.06] bg-black/30"
-      style={{ width, height }}
+      style={{ width: '100%', maxWidth: width, height }}
     >
       <svg
         ref={svgRef}
-        width={width}
-        height={height}
+        width="100%"
+        height="100%"
         viewBox={`0 0 ${width} ${height}`}
         className="cursor-default"
         onClick={(e) => {
@@ -306,9 +308,18 @@ export function GraphView({
                 key={idea.id}
                 transform={`translate(${pos.x}, ${pos.y})`}
                 style={{ cursor: 'pointer' }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Select idea: ${truncate(idea.text, 80)}`}
                 onClick={(ev) => {
                   ev.stopPropagation();
                   onSelectIdea(idea.id);
+                }}
+                onKeyDown={(ev) => {
+                  if (ev.key === 'Enter' || ev.key === ' ') {
+                    ev.preventDefault();
+                    onSelectIdea(idea.id);
+                  }
                 }}
                 onMouseEnter={() => setHoverId(idea.id)}
                 onMouseLeave={() =>
@@ -323,6 +334,29 @@ export function GraphView({
                   strokeOpacity={isSelected ? 1 : isHover ? 0.95 : 0.7}
                   strokeWidth={isSelected ? 2.5 : 1.5}
                 />
+                {idea.id === pulseId && (
+                  <circle
+                    key={`pulse-${pulseId}`}
+                    r={21}
+                    fill="none"
+                    stroke={fill}
+                    strokeWidth={2}
+                    strokeOpacity={0.75}
+                  >
+                    <animate
+                      attributeName="r"
+                      values="21;34"
+                      dur="900ms"
+                      fill="freeze"
+                    />
+                    <animate
+                      attributeName="stroke-opacity"
+                      values="0.75;0"
+                      dur="900ms"
+                      fill="freeze"
+                    />
+                  </circle>
+                )}
                 {/* Inner dot for visual punch */}
                 <circle r={4} fill={fill} fillOpacity={0.9} />
               </g>

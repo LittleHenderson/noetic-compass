@@ -187,6 +187,25 @@ def test_edges_returns_one_edge_for_two_similar_ideas(client, auth_headers):
     assert set(edge["breakdown"]) >= {"noetic", "domain", "drive"}
 
 
+def test_edges_default_threshold_surfaces_domain_only_match(client, auth_headers):
+    """Default graph edges should include a single shared structural axis.
+
+    This keeps a small, early Idea Atlas from looking disconnected when two
+    ideas share only the same processing Domain.
+    """
+    a = _create_idea(client, auth_headers, "principled positive", "^2^P")
+    b = _create_idea(client, auth_headers, "principled rhythm", "^7^P")
+
+    resp = client.get("/idea_atlas/edges", headers=auth_headers)
+    assert resp.status_code == 200, resp.text
+    edges = resp.json()
+    assert len(edges) == 1
+    edge = edges[0]
+    assert {edge["source"], edge["target"]} == {a, b}
+    assert edge["score"] >= 0.2
+    assert edge["breakdown"]["domain"] == 1.0
+
+
 def test_edges_respects_threshold_filter(client, auth_headers):
     """An impossibly high threshold must yield an empty edge set."""
     _create_idea(client, auth_headers, "first", "CO-2^C_{F2}")

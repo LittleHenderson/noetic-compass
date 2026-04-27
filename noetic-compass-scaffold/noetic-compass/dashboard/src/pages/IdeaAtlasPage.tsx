@@ -4,6 +4,7 @@ import { highlightSyntax } from './CompilerPage';
 import { GraphView } from '../components/idea-atlas/GraphView';
 import { NodeDetailPanel } from '../components/idea-atlas/NodeDetailPanel';
 import { InversionModal } from '../components/idea-atlas/InversionModal';
+import { useRippleAnimation } from '../components/idea-atlas/useRippleAnimation';
 
 // ── Types ──
 
@@ -15,6 +16,7 @@ interface Idea {
   created_at: string; // ISO timestamp
   compile_error?: string | null;
   ast?: unknown;
+  ast_json?: unknown;
 }
 
 interface AtlasEdge {
@@ -72,15 +74,17 @@ export function IdeaAtlasPage() {
   const [edges, setEdges] = useState<AtlasEdge[]>([]);
   const [edgesLoaded, setEdgesLoaded] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [recentIdeaId, setRecentIdeaId] = useState<string | null>(null);
+  const { rippleClass } = useRippleAnimation(recentIdeaId);
 
   // ── Sprint 3 wiring: inversion modal ──
   const [invertingIdea, setInvertingIdea] = useState<Idea | null>(null);
 
   // Fetch edges lazily — first time the user switches into GRAPH view.
-  // Backend Agent I exposes GET /idea_atlas/edges?threshold=0.5; if 404,
+  // Backend exposes GET /idea_atlas/edges?similarity_threshold=0.2; if 404,
   // we fall back to no edges and the graph still renders nodes only.
   useEffect(() => {
-    if (viewMode !== 'graph' || edgesLoaded) return;
+    if (viewMode !== 'graph' || edgesLoaded || loadingList) return;
     let cancelled = false;
     (async () => {
       try {
@@ -110,7 +114,7 @@ export function IdeaAtlasPage() {
     return () => {
       cancelled = true;
     };
-  }, [viewMode, edgesLoaded]);
+  }, [viewMode, edgesLoaded, loadingList]);
 
   const selectedIdea = useMemo(
     () => (selectedId ? ideas.find((i) => i.id === selectedId) ?? null : null),
@@ -133,6 +137,7 @@ export function IdeaAtlasPage() {
         const data = await apiFetch<ListResponse>('/idea_atlas/ideas');
         if (cancelled) return;
         setIdeas(Array.isArray(data) ? data : []);
+        setEdgesLoaded(false);
         setBackendState('available');
       } catch (err) {
         if (cancelled) return;
@@ -152,6 +157,13 @@ export function IdeaAtlasPage() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!selectedId) return;
+    if (!ideas.some((idea) => idea.id === selectedId)) {
+      setSelectedId(null);
+    }
+  }, [ideas, selectedId]);
 
   const handleSubmit = useCallback(async () => {
     const trimmed = input.trim();
@@ -180,6 +192,8 @@ export function IdeaAtlasPage() {
       setIdeas((prev) =>
         prev.map((it) => (it.id === placeholderId ? data : it)),
       );
+      setRecentIdeaId(data.id);
+      setEdgesLoaded(false);
       setBackendState('available');
     } catch (err) {
       if (isBackendMissingError(err)) {
@@ -235,6 +249,7 @@ export function IdeaAtlasPage() {
         setInvertingIdea(null);
         // Force edges refetch on next graph view so the new node connects.
         setEdgesLoaded(false);
+        setRecentIdeaId(data.id);
         setSelectedId(data.id);
       } catch (err) {
         const detail = err instanceof Error ? err.message : String(err);
@@ -400,7 +415,7 @@ export function IdeaAtlasPage() {
             {ideas.map((idea) => (
               <div
                 key={idea.id}
-                className={`animate-[fadeSlideIn_0.25s_ease-out] rounded-lg border p-4 font-mono text-xs ${
+                className={`animate-[fadeSlideIn_0.25s_ease-out] rounded-lg border p-4 font-mono text-xs ${rippleClass(idea.id)} ${
                   idea.compile_error
                     ? 'border-red-500/20 bg-red-500/[0.03]'
                     : isPending(idea)
@@ -470,6 +485,7 @@ export function IdeaAtlasPage() {
                 ideas={ideas}
                 edges={edges}
                 selectedId={selectedId}
+                pulseId={recentIdeaId}
                 onSelectIdea={setSelectedId}
                 width={800}
                 height={560}

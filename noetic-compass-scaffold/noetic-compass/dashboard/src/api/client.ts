@@ -15,6 +15,16 @@ export class ApiError extends Error {
   }
 }
 
+function stringifyDetail(detail: unknown, fallback: string): string {
+  if (typeof detail === 'string') return detail;
+  if (detail == null) return fallback;
+  try {
+    return JSON.stringify(detail);
+  } catch {
+    return fallback;
+  }
+}
+
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {},
@@ -44,7 +54,7 @@ export async function apiFetch<T>(
     let errorType = 'api_error';
     try {
       const body = await res.json();
-      detail = body.detail ?? detail;
+      detail = stringifyDetail(body.detail, detail);
       errorType = body.error_type ?? errorType;
     } catch {
       // use statusText

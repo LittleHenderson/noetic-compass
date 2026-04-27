@@ -9,6 +9,7 @@ export interface Idea {
   created_at: string;
   compile_error?: string | null;
   ast?: unknown;
+  ast_json?: unknown;
 }
 
 export interface NodeDetailPanelProps {
@@ -56,17 +57,14 @@ export function NodeDetailPanel({
 
   const handleDelete = () => {
     if (!idea || !onDeleteClicked) return;
-    if (
-      typeof window !== 'undefined' &&
-      window.confirm('Delete this idea? This cannot be undone.')
-    ) {
-      onDeleteClicked(idea);
-    }
+    onDeleteClicked(idea);
   };
 
   // Render the panel at all times when idea is non-null; visibility is driven
   // by the translate-x class so the slide-in works.
   if (!idea) return null;
+
+  const astPayload = idea.ast ?? idea.ast_json;
 
   return (
     <div
@@ -142,14 +140,14 @@ export function NodeDetailPanel({
           </section>
 
           {/* AST */}
-          {idea.ast !== undefined && idea.ast !== null && (
+          {astPayload !== undefined && astPayload !== null && (
             <section>
               <details className="rounded border border-white/[0.06] bg-white/[0.02]">
                 <summary className="cursor-pointer px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-slate-500 hover:text-slate-300">
                   AST
                 </summary>
                 <pre className="overflow-x-auto px-3 pb-3 text-[10px] font-mono text-slate-400 leading-relaxed">
-                  {JSON.stringify(idea.ast, null, 2)}
+                  {JSON.stringify(astPayload, null, 2)}
                 </pre>
               </details>
             </section>

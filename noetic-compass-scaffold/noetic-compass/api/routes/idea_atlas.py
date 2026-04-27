@@ -40,6 +40,8 @@ from api.similarity.cosine import cas_similarity
 
 router = APIRouter(prefix="/idea_atlas", tags=["idea_atlas"])
 
+DEFAULT_SIMILARITY_THRESHOLD = 0.2
+
 
 # ---------------------------------------------------------------------------
 # Request / response schemas
@@ -359,9 +361,14 @@ async def _db_get(user_id: str, idea_id: str) -> dict[str, Any] | None:
     from api.db import async_session_factory
     from api.models_db import Idea
 
+    try:
+        parsed_id = uuid.UUID(idea_id)
+    except ValueError:
+        return None
+
     async with async_session_factory() as session:
         stmt = select(Idea).where(
-            Idea.id == uuid.UUID(idea_id),
+            Idea.id == parsed_id,
             Idea.user_id == user_id,
             Idea.deleted_at.is_(None),
         )
@@ -375,9 +382,14 @@ async def _db_delete(user_id: str, idea_id: str) -> bool:
     from api.db import async_session_factory
     from api.models_db import Idea
 
+    try:
+        parsed_id = uuid.UUID(idea_id)
+    except ValueError:
+        return False
+
     async with async_session_factory() as session:
         stmt = select(Idea).where(
-            Idea.id == uuid.UUID(idea_id),
+            Idea.id == parsed_id,
             Idea.user_id == user_id,
             Idea.deleted_at.is_(None),
         )
@@ -515,14 +527,17 @@ async def delete_idea_route(idea_id: str, request: Request) -> dict:
 
 @router.get("/edges", response_model=list[EdgeRecord])
 async def list_edges_route(
-    request: Request, similarity_threshold: float = 0.5
+    request: Request, similarity_threshold: float = DEFAULT_SIMILARITY_THRESHOLD
 ) -> list[EdgeRecord]:
     """Compute pairwise CAS similarity edges across the user's ideas.
 
     Returns a flat array of ``{source, target, score, breakdown}`` entries
     sorted by descending score. Pairs with ``score < similarity_threshold``
-    are filtered out. Ideas with no compiled CAS expression are skipped
-    (they cannot participate in a similarity comparison).
+    are filtered out. The default is intentionally gentle enough to surface
+    single-axis matches, such as two ideas sharing only a Domain, so first-use
+    graphs do not look falsely disconnected. Ideas with no compiled CAS
+    expression are skipped (they cannot participate in a similarity
+    comparison).
 
     The threshold is clamped to ``[0, 1]``.
     """
