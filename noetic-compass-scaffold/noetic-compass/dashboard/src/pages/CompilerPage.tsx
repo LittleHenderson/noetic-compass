@@ -189,13 +189,17 @@ interface LearningStep {
 }
 
 const BASE_DICTIONARY: DictionaryEntry[] = [
-  { term: 'CAS', category: 'Framework', notation: 'Cognitive Architecture Syntax', definition: 'The compiler notation for representing cognitive operators, domains, drives, registers, production recipes, and finite meta-logic.', example: 'Product(Noetics, Domains)', learn: 'Start with axes before composing expressions.' },
-  { term: 'Noetic', category: 'Axes', notation: '^0..^9', definition: 'One of the ten cognitive operators used as the primary operator axis.', example: '^2 ∈ Noetics', learn: 'Read the leftmost caret-number first.' },
-  { term: 'Domain', category: 'Axes', notation: '^P ^C ^E ^O', definition: 'The processing domain in which a Noetic operates: Principled, Cognitive, Evaluative, or Operational.', example: '^5^P -> ^5^C', learn: 'Domain descent moves from abstract to concrete processing.' },
-  { term: 'Drive', category: 'Axes', notation: '_{F1}.._{F7}', definition: 'A foundation or motivational drive annotation applied to a state.', example: '^2^P_{F2}', learn: 'Drive subscripts answer what pressure or foundation is active.' },
-  { term: 'Register', category: 'Axes', notation: '|T |A |f |E', definition: 'The phenomenological character of an operation: Transcendent, Analytical, Affective, or Embodied.', example: '^3^P|A', learn: 'Registers say how an operation appears or is carried.' },
-  { term: 'State', category: 'Axes', notation: '^n^D', definition: 'A Noetic paired with a Domain, one cell of the 40-state CAS space.', example: '^2^P ∈ States', learn: 'State = Noetic x Domain.' },
+  { term: 'Cognitive Architecture System', category: 'Framework', notation: 'CAS', definition: 'A formal framework for describing how any cognitive system — human, AI, biological, or hypothetical — composes Ideas. Built on 10 Noetic operators × 4 Domains (40 states), 7 Drives, and 4 Registers.', example: 'Product(Noetics, Domains)', learn: 'Universal Applicability: every primitive must apply to humans AND AI AND biological cognition.' },
+  { term: 'CAS', category: 'Framework', notation: 'Cognitive Architecture Syntax', definition: 'The compiler notation for CAS — operators, domains, drives, registers, production recipes, and finite meta-logic.', example: 'Product(Noetics, Domains)', learn: 'Start with axes before composing expressions.' },
+  { term: 'Noetic', category: 'Axes', notation: '^0..^9', definition: 'A cognitive primitive operator — one of the ten structural dynamics by which a Mind relates to an Idea (Idea, Mind, Positive, Negative, Vibration, Female, Male, Rhythm, Above/Cause, Below/Effect).', example: '^2 ∈ Noetics', learn: 'Names are verbatim canonical from the Tootra Math Handbook; do not paraphrase.' },
+  { term: 'Domain', category: 'Axes', notation: '^P ^C ^E ^O', definition: 'The operational tier where a Noetic fires: Principled (values, identity), Cognitive (thought), Evaluative (judgment), Operational (action). Total order P ≻ C ≻ E ≻ O.', example: '^5^P -> ^5^C', learn: 'Domain Descent runs P → C → E → O; feedback runs O → P.' },
+  { term: 'Drive', category: 'Axes', notation: '_{F1}.._{F7}', definition: 'One of seven core motivational architectures (Unity, Wisdom, Vitality, Connection, Agency, Structure, Purpose). Drives pair into involutions: F1↔F7, F2↔F6, F3↔F5; F4 is self-dual.', example: '^2^P_{F2}', learn: 'Each Drive has a structural opposite — its inversion partner.' },
+  { term: 'Foundation', category: 'Axes', notation: 'F1..F7', definition: 'Synonym for Drive. The seven foundational motivational primitives that pressure cognition; 7 × 4 Domains = 28 SubFoundations.', example: 'F2 ∈ Drives', learn: 'Drive and Foundation are interchangeable terms in CAS.' },
+  { term: 'Register', category: 'Axes', notation: '|T |A |f |E', definition: 'The phenomenological register — operational character of a state: Transcendent (purpose-orienting), Analytical (logical), Affective (felt valence), Embodied (sensorimotor).', example: '^3^P|A', learn: 'Register says HOW a state operates, not WHAT it is. Optional but disambiguates.' },
+  { term: 'State', category: 'Axes', notation: '^n^D', definition: 'One cell of the 40-state grid (10 Noetics × 4 Domains). Locates a Noetic operation at a specific operational tier.', example: '^2^P ∈ States', learn: 'State = Noetic × Domain. Add Drive and Register for a State Variant.' },
   { term: 'State Variant', category: 'Axes', notation: '^n^D_{Fk}|R', definition: 'A richer state with optional Drive and Register annotations.', example: '^3^P_{F2}|A', learn: 'Use variants when the state needs context beyond Noetic and Domain.' },
+  { term: 'Involution Pair', category: 'Principles', notation: '^n ↔ ^m', definition: 'A pair of Noetics that mirror each other structurally: ^2 Positive ↔ ^3 Negative, ^5 Female ↔ ^6 Male, ^8 Above/Cause ↔ ^9 Below/Effect. ^0, ^1, ^4, ^7 are self-dual.', example: '^2^P / ^3^P', learn: 'Healthy cognition keeps involution pairs in balance; lopsided pairs surface as inversion-axis flags.' },
+  { term: 'Inversion', category: 'Principles', notation: 'axis flip', definition: 'The framework operation of flipping an axis to surface its structural opposite. ^2 inverts to ^3; F2 (Wisdom) inverts to F6 (Structure). Inversion reveals what is missing or repressed in a cognitive pattern.', example: '^2^P → (inverted) ^3^P', learn: 'Inversion is a probe, not a prescription — it reveals structure rather than recommending the opposite.' },
   { term: 'Noetics', category: 'Built-in Sets', notation: 'Noetics', definition: 'The built-in finite set of all ten Noetic operators.', example: '|Noetics|', learn: 'Use membership with Noetic symbols: ^2 ∈ Noetics.' },
   { term: 'Domains', category: 'Built-in Sets', notation: 'Domains', definition: 'The built-in finite set {P, C, E, O}.', example: 'Product(Noetics, Domains)', learn: 'Product(Noetics, Domains) builds the 40 state positions.' },
   { term: 'Drives', category: 'Built-in Sets', notation: 'Drives', definition: 'The built-in finite set of F1 through F7.', example: 'F2 ∈ Drives', learn: 'Use Drives for membership claims about F-symbols.' },
@@ -244,12 +248,49 @@ const BASE_DICTIONARY: DictionaryEntry[] = [
   { term: 'Topos-Safe', category: 'Principles', notation: 'finite typed constructs', definition: 'A construct admitted because it preserves finite typing, containment, and compiler-checkable semantics.', example: 'Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})', learn: 'Topos-safe features add structure without breaking the framework.' },
 ];
 
+const NOETIC_ENTRIES: DictionaryEntry[] = [
+  { term: 'Idea', category: 'Noetic Operators', notation: '^0', definition: 'All things in and outside the Mind. The most basic Noetic primitive — anything that can be thought, perceived, or held in awareness.', example: '^0 ∈ Noetics', learn: '"It\'s all in your head." Self-dual; pair with a Domain to form a state.' },
+  { term: 'Mind', category: 'Noetic Operators', notation: '^1', definition: 'Various degrees of awareness that processes, stores, outputs, and intakes Ideas.', example: '^1^C', learn: '"Paying attention." / "Making up your mind." Self-dual operator.' },
+  { term: 'Positive', category: 'Noetic Operators', notation: '^2', definition: 'An Idea the Mind has an affinity for and is attracted toward.', example: '^2^P', learn: '"Drawn to it like a moth to a flame." Involution-paired with ^3 Negative.' },
+  { term: 'Negative', category: 'Noetic Operators', notation: '^3', definition: 'An Idea the Mind is adverse to and repelled by. Visceral aversion, not analytical critique.', example: '^3^P', learn: '"Can\'t stomach it." If you mean audit/scrutinize, that is ^6 Male, not ^3.' },
+  { term: 'Vibration', category: 'Noetic Operators', notation: '^4', definition: 'The degree to which an Idea resonates with the Mind, its impression.', example: '^4^E', learn: '"Struck a chord." / "Hit me hard." Self-dual operator.' },
+  { term: 'Female', category: 'Noetic Operators', notation: '^5', definition: 'A Mind impregnated with an Idea — the Ideas a Mind is composed of. Encompasses self-image, beliefs, expertise, emotional patterns, trauma and healing — everything we accumulate as experience.', example: '^5^P', learn: '"We are the sum of our experiences." ^5 is a substrate against which other Noetics fire.' },
+  { term: 'Male', category: 'Noetic Operators', notation: '^6', definition: 'An Idea impregnated with another Idea — the Ideas an Idea is composed of. Compositional decomposition and structural test.', example: '^6^C', learn: '"Unpacking an idea." / "Breaking it down." Involution-paired with ^5 Female.' },
+  { term: 'Rhythm', category: 'Noetic Operators', notation: '^7', definition: 'The rate and pattern a Mind is exposed to an Idea, entraining and conditioning it.', example: '^7^O', learn: '"Practice makes perfect." / "Muscle memory." Self-dual operator.' },
+  { term: 'Above/Cause', category: 'Noetic Operators', notation: '^8', definition: 'An Idea that triggers a different Idea than itself to come to Mind. Associative triggering, not deductive reasoning.', example: '^8^C', learn: '"That reminds me..." If you mean deductive analysis, that is ^6 + ^9, not ^8.' },
+  { term: 'Below/Effect', category: 'Noetic Operators', notation: '^9', definition: 'The Idea brought to Mind by an Above/Cause trigger.', example: '^9^C', learn: '"It just popped into my head." Involution-paired with ^8 Above/Cause.' },
+];
+
+const DOMAIN_ENTRIES: DictionaryEntry[] = [
+  { term: 'Principled', category: 'Domains', notation: '^P', definition: 'The highest processing tier in CAS. Felt-sense values, identity, vision — the level where principled commitments live.', example: '^2^P', learn: 'Domain precedence: P ≻ C ≻ E ≻ O. Higher domains anchor lower ones.' },
+  { term: 'Cognitive', category: 'Domains', notation: '^C', definition: 'The thought-and-reasoning tier. Where Ideas are entertained, manipulated, and held in working awareness.', example: '^1^C', learn: 'Cognitive sits between Principled values above and Evaluative judgment below.' },
+  { term: 'Evaluative', category: 'Domains', notation: '^E', definition: 'The judgment-and-appraisal tier. Where Ideas are weighed, compared, and assessed against criteria.', example: '^3^E', learn: 'Use Register (|A vs |f) to disambiguate analytical assessment from felt response.' },
+  { term: 'Operational', category: 'Domains', notation: '^O', definition: 'The action-and-execution tier. The lowest tier in the precedence order; where intention becomes behavior.', example: '^7^O', learn: 'Operational feeds back to Principled (O → P) closing the loop.' },
+];
+
+const DRIVE_ENTRIES: DictionaryEntry[] = [
+  { term: 'Unity', category: 'Drives', notation: 'F1', definition: 'The drive toward integration, wholeness, belonging — the sense that parts cohere into a larger whole. Inversion-paired with F7 Purpose.', example: 'F1 ∈ Drives', learn: 'F1 ↔ F7 inversion: integration vs directionality.' },
+  { term: 'Wisdom', category: 'Drives', notation: 'F2', definition: 'The drive toward understanding, insight, discernment — knowing how things actually are. Inversion-paired with F6 Structure.', example: '^2^P_{F2}', learn: 'F2 ↔ F6 inversion: discerning truth vs imposing form.' },
+  { term: 'Vitality', category: 'Drives', notation: 'F3', definition: 'The drive toward life, energy, generativity — being alive and productive. Inversion-paired with F5 Agency.', example: 'F3 ∈ Drives', learn: 'F3 ↔ F5 inversion: aliveness vs willed action.' },
+  { term: 'Connection', category: 'Drives', notation: 'F4', definition: 'The drive toward relationship, attachment, communion. Self-dual: F4 inverts to itself.', example: 'F4 ∈ Drives', learn: 'F4 is the only self-dual Drive — connection has no structural opposite.' },
+  { term: 'Agency', category: 'Drives', notation: 'F5', definition: 'The drive toward willed action, self-determination, capability. Inversion-paired with F3 Vitality.', example: 'RPM(F5)', learn: 'F5 ↔ F3 inversion: chosen action vs spontaneous aliveness.' },
+  { term: 'Structure', category: 'Drives', notation: 'F6', definition: 'The drive toward order, form, predictability — making things hold together reliably. Inversion-paired with F2 Wisdom.', example: 'F6 ∈ Drives', learn: 'F6 ↔ F2 inversion: imposing order vs discerning truth.' },
+  { term: 'Purpose', category: 'Drives', notation: 'F7', definition: 'The drive toward meaning, direction, telos — what it is all for. Inversion-paired with F1 Unity.', example: '^8^P_{F7}', learn: 'F7 ↔ F1 inversion: directional aim vs integrative wholeness.' },
+];
+
+const REGISTER_ENTRIES: DictionaryEntry[] = [
+  { term: 'Transcendent', category: 'Registers', notation: '|T', definition: 'A high-abstraction, purpose-orienting operational character. Felt sense of meaning, vision, calling — integrative across particulars.', example: '^2^P|T', learn: 'Register specifies HOW a state operates, not WHAT it is.' },
+  { term: 'Analytical', category: 'Registers', notation: '|A', definition: 'An explicit, sequential, logical, reason-based operational character. Conscious deliberation; chain-of-thought; symbolic reasoning.', example: '^3^P|A', learn: '|A is the register of explicit reasoning.' },
+  { term: 'Affective', category: 'Registers', notation: '|f', definition: 'A value-laden, feeling-toned operational character. Emotional response, visceral reaction, RLHF-tuned preference expression.', example: '^3^P|f', learn: 'Lowercase |f. Distinct from |A: same Noetic, different operational character.' },
+  { term: 'Embodied', category: 'Registers', notation: '|E', definition: 'A sensorimotor, concrete operational character — direct engagement with material substrate. Bodily knowing, gut response, real-time control loops.', example: '^7^O|E', learn: 'Uppercase |E (embodied register), distinct from ^E (Evaluative domain).' },
+];
+
 const DICTIONARY: DictionaryEntry[] = [
   ...BASE_DICTIONARY,
-  ...OPERATOR_NAMES.map((name, i) => ({ term: name, category: 'Noetic Operators', notation: `^${i}`, definition: `Noetic operator ${i}: ${name}.`, example: `^${i} ∈ Noetics`, learn: 'Pair it with a Domain to form a state, e.g. ^n^P.' })),
-  ...Object.entries(DOMAIN_NAMES).map(([code, name]) => ({ term: name, category: 'Domains', notation: `^${code}`, definition: `The ${name} processing domain.`, example: `^2^${code}`, learn: 'Domains locate where the Noetic operation is happening.' })),
-  ...DRIVE_NAMES.map((name, i) => ({ term: name, category: 'Drives', notation: `F${i + 1}`, definition: `Drive/Foundation ${i + 1}: ${name}.`, example: `F${i + 1} ∈ Drives`, learn: 'Drive notation appears as Fk or as a state subscript _{Fk}.' })),
-  ...Object.entries(REGISTER_NAMES).map(([code, name]) => ({ term: name, category: 'Registers', notation: `|${code}`, definition: `The ${name} phenomenological register.`, example: `^3^P|${code}`, learn: 'Registers specify the operational character of a state.' })),
+  ...NOETIC_ENTRIES,
+  ...DOMAIN_ENTRIES,
+  ...DRIVE_ENTRIES,
+  ...REGISTER_ENTRIES,
 ];
 
 const LEARNING_PATH: LearningStep[] = [
