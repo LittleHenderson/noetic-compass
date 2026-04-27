@@ -31,6 +31,7 @@ from api.routes import (
     export,
     forecast,
     health,
+    idea_atlas,
     notation,
     reproducibility,
     scenarios,
@@ -122,3 +123,4 @@ app.include_router(scenarios.router)
 app.include_router(validation.router)
 app.include_router(notation.router)
 app.include_router(reproducibility.router)
+app.include_router(idea_atlas.router)
