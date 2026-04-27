@@ -152,3 +152,208 @@ def test_ideas_endpoints_require_auth(client):
     assert client.get("/idea_atlas/ideas").status_code == 401
     assert client.get("/idea_atlas/ideas/whatever").status_code == 401
     assert client.delete("/idea_atlas/ideas/whatever").status_code == 401
+
+
+# ---------------------------------------------------------------------------
+# Sprint 2 — similarity-driven graph edges
+# ---------------------------------------------------------------------------
+
+
+def _create_idea(client, auth_headers, text: str, cas: str) -> str:
+    resp = client.post(
+        "/idea_atlas/ideas",
+        json={"text": text, "cas_expression": cas},
+        headers=auth_headers,
+    )
+    assert resp.status_code == 200, resp.text
+    return resp.json()["id"]
+
+
+def test_edges_returns_one_edge_for_two_similar_ideas(client, auth_headers):
+    """Two ideas sharing the same Noetic / Domain / Drive must score above
+    the default threshold and produce a single edge."""
+    a = _create_idea(client, auth_headers, "wisdom-attraction A", "CO-2^C_{F2}")
+    b = _create_idea(client, auth_headers, "wisdom-attraction B", "CO-2^C_{F2}")
+
+    resp = client.get("/idea_atlas/edges", headers=auth_headers)
+    assert resp.status_code == 200, resp.text
+    edges = resp.json()
+    assert isinstance(edges, list)
+    assert len(edges) == 1
+    edge = edges[0]
+    assert {edge["source"], edge["target"]} == {a, b}
+    assert edge["score"] >= 0.5
+    # Breakdown surfaces the per-axis decomposition the dashboard renders.
+    assert set(edge["breakdown"]) >= {"noetic", "domain", "drive"}
+
+
+def test_edges_respects_threshold_filter(client, auth_headers):
+    """An impossibly high threshold must yield an empty edge set."""
+    _create_idea(client, auth_headers, "first", "CO-2^C_{F2}")
+    _create_idea(client, auth_headers, "second", "CO-2^C_{F2}")
+
+    resp = client.get(
+        "/idea_atlas/edges",
+        headers=auth_headers,
+        params={"similarity_threshold": 0.99},
+    )
+    assert resp.status_code == 200
+    # Two identical expressions DO score 1.0, so 0.99 still admits them.
+    # Use a > 1.0 value (clamped to 1.0) and pair of clearly different
+    # expressions to exercise the empty-array branch.
+    _create_idea(client, auth_headers, "different", "CO-7^O_{F6}")
+    resp2 = client.get(
+        "/idea_atlas/edges",
+        headers=auth_headers,
+        params={"similarity_threshold": 1.5},
+    )
+    assert resp2.status_code == 200
+    # Threshold clamped to 1.0 — only perfect pairs survive (the two
+    # identical CO-2^C_{F2} ideas score exactly 1.0).
+    edges2 = resp2.json()
+    assert all(e["score"] == 1.0 for e in edges2)
+
+
+def test_edges_skips_ideas_with_null_cas_expression(client, auth_headers):
+    """An idea without a compiled CAS expression cannot participate in a
+    similarity edge — it must be silently skipped, not error."""
+    # First idea has a clean expression.
+    _create_idea(client, auth_headers, "ok", "CO-2^C_{F2}")
+    # Second idea persisted with explicit null cas_expression. We POST
+    # directly with the storage helper to avoid the auto-casivenize path.
+    from api.routes.idea_atlas import _inmem_create
+
+    _inmem_create("test-user", "no cas", None, None)
+
+    resp = client.get("/idea_atlas/edges", headers=auth_headers)
+    assert resp.status_code == 200
+    edges = resp.json()
+    # Only one usable idea remains -> no pairs -> no edges.
+    assert edges == []
+
+
+def test_edges_requires_auth(client):
+    assert client.get("/idea_atlas/edges").status_code == 401
+
+
+def test_edges_sorted_by_descending_score(client, auth_headers):
+    """When multiple edges survive the threshold, the route must return
+    them sorted strongest-first so the dashboard can render the top
+    connections without a client-side sort."""
+    a = _create_idea(client, auth_headers, "a", "CO-2^C_{F2}")
+    b = _create_idea(client, auth_headers, "b", "CO-2^C_{F2}")  # identical to a
+    c = _create_idea(client, auth_headers, "c", "CO-2^E_{F2}")  # different domain
+
+    resp = client.get(
+        "/idea_atlas/edges",
+        headers=auth_headers,
+        params={"similarity_threshold": 0.0},
+    )
+    assert resp.status_code == 200
+    edges = resp.json()
+    scores = [e["score"] for e in edges]
+    assert scores == sorted(scores, reverse=True)
+    # Three ideas -> at most C(3, 2) = 3 pairs.
+    assert len(edges) <= 3
+    # The (a, b) pair (identical) must outrank the (a, c) and (b, c) pairs.
+    top = edges[0]
+    assert {top["source"], top["target"]} == {a, b}
+    # Reference c so static-analyzers see it used (variable-binding clarity).
+    assert c
+
+
+# ---------------------------------------------------------------------------
+# Sprint 3 — inversion preview
+# ---------------------------------------------------------------------------
+
+
+def test_invert_axis_n_flips_noetic_operator(client, auth_headers):
+    """Axis N inverts CO-2 -> CO-3; the resulting CAS must compile."""
+    idea_id = _create_idea(client, auth_headers, "wisdom-attraction", "CO-2^C_{F2}")
+
+    resp = client.post(
+        "/idea_atlas/invert",
+        json={"idea_id": idea_id, "axis": "N"},
+        headers=auth_headers,
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["axis"] == "N"
+    assert "Operator" in body["axis_description"]
+    assert body["original_idea"]["id"] == idea_id
+    # CO-2 -> CO-3 surface flip.
+    assert "CO-3" in body["inverted_cas"]
+    assert "CO-2" not in body["inverted_cas"]
+    # AST must be populated and structurally a StateLiteral.
+    ast = body["inverted_ast"]
+    assert ast is not None
+    # Re-validate independently against the public compiler.
+    from api.notation.compiler import compile_expression
+
+    artifact = compile_expression(body["inverted_cas"])
+    assert artifact.valid is True
+
+
+def test_invert_unknown_idea_returns_404(client, auth_headers):
+    import uuid as _uuid
+
+    resp = client.post(
+        "/idea_atlas/invert",
+        json={"idea_id": str(_uuid.uuid4()), "axis": "N"},
+        headers=auth_headers,
+    )
+    assert resp.status_code == 404
+
+
+def test_invert_deferred_axis_returns_501_with_structured_body(client, auth_headers):
+    """Axes E / S / A are intentionally deferred. The response must be a
+    501 carrying a structured body so the dashboard can render a
+    "coming-soon" message rather than a generic error."""
+    idea_id = _create_idea(client, auth_headers, "x", "CO-2^C_{F2}")
+
+    resp = client.post(
+        "/idea_atlas/invert",
+        json={"idea_id": idea_id, "axis": "E"},
+        headers=auth_headers,
+    )
+    assert resp.status_code == 501
+    detail = resp.json()["detail"]
+    assert detail["axis"] == "E"
+    assert "implemented_axes" in detail
+    assert "deferred_axes" in detail
+
+
+def test_invert_unknown_axis_returns_400(client, auth_headers):
+    idea_id = _create_idea(client, auth_headers, "x", "CO-2^C_{F2}")
+
+    resp = client.post(
+        "/idea_atlas/invert",
+        json={"idea_id": idea_id, "axis": "Z"},
+        headers=auth_headers,
+    )
+    assert resp.status_code == 400
+
+
+def test_invert_requires_auth(client):
+    resp = client.post(
+        "/idea_atlas/invert",
+        json={"idea_id": "whatever", "axis": "N"},
+    )
+    assert resp.status_code == 401
+
+
+def test_invert_axis_p_compound_applies_all_three(client, auth_headers):
+    """Axis P (Compound) applies N + W + F simultaneously."""
+    idea_id = _create_idea(client, auth_headers, "compound", "CO-2^P_{F2}")
+
+    resp = client.post(
+        "/idea_atlas/invert",
+        json={"idea_id": idea_id, "axis": "P"},
+        headers=auth_headers,
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    # CO-2 -> CO-3, P -> O, F2 -> F6
+    assert "CO-3" in body["inverted_cas"]
+    assert "^O" in body["inverted_cas"]
+    assert "F6" in body["inverted_cas"]

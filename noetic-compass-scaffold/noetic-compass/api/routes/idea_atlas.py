@@ -28,6 +28,14 @@ from pydantic import BaseModel, Field
 from api.config import settings
 from api.llm_connectors.registry import get_connector
 from api.notation.compiler import compile_expression
+from api.notation.inversion import (
+    AXIS_DESCRIPTIONS,
+    DEFERRED_AXES,
+    DeferredAxisError,
+    UnknownAxisError,
+    invert_expression,
+)
+from api.similarity.cosine import cas_similarity
 
 
 router = APIRouter(prefix="/idea_atlas", tags=["idea_atlas"])
@@ -63,6 +71,34 @@ class IdeaRecord(BaseModel):
     created_at: str
     updated_at: str
     deleted_at: str | None = None
+
+
+class EdgeRecord(BaseModel):
+    """One similarity edge between two of the user's persisted ideas.
+
+    Sprint 2: drives the dashboard force-directed graph view. The
+    ``breakdown`` mirrors :func:`api.similarity.cosine.cas_similarity`'s
+    per-axis decomposition (noetic / domain / drive / register / metaset)
+    so the frontend can render the dominant overlap reason on hover.
+    """
+
+    source: str
+    target: str
+    score: float
+    breakdown: dict[str, float]
+
+
+class InvertRequest(BaseModel):
+    idea_id: str = Field(min_length=1)
+    axis: str = Field(min_length=1, max_length=2)
+
+
+class InvertResponse(BaseModel):
+    original_idea: IdeaRecord
+    inverted_cas: str
+    inverted_ast: dict | None
+    axis: str
+    axis_description: str
 
 
 # ---------------------------------------------------------------------------
@@ -470,3 +506,140 @@ async def delete_idea_route(idea_id: str, request: Request) -> dict:
     if not ok:
         raise HTTPException(status_code=404, detail="Idea not found")
     return {"id": idea_id, "deleted": True}
+
+
+# ---------------------------------------------------------------------------
+# Sprint 2: similarity-driven graph edges
+# ---------------------------------------------------------------------------
+
+
+@router.get("/edges", response_model=list[EdgeRecord])
+async def list_edges_route(
+    request: Request, similarity_threshold: float = 0.5
+) -> list[EdgeRecord]:
+    """Compute pairwise CAS similarity edges across the user's ideas.
+
+    Returns a flat array of ``{source, target, score, breakdown}`` entries
+    sorted by descending score. Pairs with ``score < similarity_threshold``
+    are filtered out. Ideas with no compiled CAS expression are skipped
+    (they cannot participate in a similarity comparison).
+
+    The threshold is clamped to ``[0, 1]``.
+    """
+    user_id = _current_user(request)
+    threshold = max(0.0, min(1.0, float(similarity_threshold)))
+
+    rows = await list_ideas(user_id)
+    # Only ideas with a non-null cas_expression can produce a similarity
+    # edge. The cosine module tolerates a non-compiling expression by
+    # returning score=0, but we filter pre-emptively to skip wasted work.
+    candidates = [r for r in rows if r.get("cas_expression")]
+
+    edges: list[EdgeRecord] = []
+    for i in range(len(candidates)):
+        for j in range(i + 1, len(candidates)):
+            a = candidates[i]
+            b = candidates[j]
+            sim = cas_similarity(a["cas_expression"], b["cas_expression"])
+            score = float(sim.get("score", 0.0))
+            if score < threshold:
+                continue
+            edges.append(
+                EdgeRecord(
+                    source=a["id"],
+                    target=b["id"],
+                    score=score,
+                    breakdown={k: float(v) for k, v in sim.get("breakdown", {}).items()},
+                )
+            )
+
+    edges.sort(key=lambda e: e.score, reverse=True)
+    return edges
+
+
+# ---------------------------------------------------------------------------
+# Sprint 3: 7-axis inversion preview
+# ---------------------------------------------------------------------------
+
+
+@router.post("/invert", response_model=InvertResponse)
+async def invert_idea_route(req: InvertRequest, request: Request) -> InvertResponse:
+    """Preview an axis-specific inversion of one persisted idea.
+
+    Does NOT mutate or persist a new idea — that is the dashboard's job
+    after the user reviews the preview. Returns the original idea record
+    alongside the inverted CAS expression and AST.
+
+    Failure modes:
+      - 404 — idea not found / not owned by the caller.
+      - 400 — idea has no compiled CAS expression to invert.
+      - 422 — the inverted source did not compile cleanly (the axis
+              transformation produced something the parser rejected).
+      - 501 — axis is one of E / S / A (deferred to a later sprint).
+    """
+    user_id = _current_user(request)
+    axis = req.axis.upper()
+
+    record = await get_idea(user_id, req.idea_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Idea not found")
+    cas = record.get("cas_expression")
+    if not cas:
+        raise HTTPException(
+            status_code=400,
+            detail="Idea has no CAS expression to invert. Casivenize it first.",
+        )
+
+    if axis in DEFERRED_AXES:
+        # 501 with a structured body so the frontend can render
+        # "coming in a later sprint" rather than a generic error.
+        raise HTTPException(
+            status_code=501,
+            detail={
+                "axis": axis,
+                "message": (
+                    f"Inversion axis '{axis}' is not implemented in Sprint 3. "
+                    "It is scheduled for a future sprint."
+                ),
+                "description": AXIS_DESCRIPTIONS.get(axis, ""),
+                "implemented_axes": ["N", "W", "F", "P"],
+                "deferred_axes": list(DEFERRED_AXES),
+            },
+        )
+
+    try:
+        result = invert_expression(cas, axis)
+    except DeferredAxisError as exc:  # safety net — invert_expression already raises
+        raise HTTPException(
+            status_code=501,
+            detail={
+                "axis": exc.axis,
+                "message": str(exc),
+                "description": exc.description,
+            },
+        ) from exc
+    except UnknownAxisError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unknown inversion axis '{axis}'. "
+            f"Valid axes: N, W, F, E, S, A, P.",
+        ) from exc
+
+    if not result.valid:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "axis": axis,
+                "message": "Inverted expression failed to compile.",
+                "inverted_source": result.inverted,
+                "compiler_error": result.error,
+            },
+        )
+
+    return InvertResponse(
+        original_idea=IdeaRecord(**record),
+        inverted_cas=result.inverted,
+        inverted_ast=result.ast,
+        axis=axis,
+        axis_description=result.description,
+    )
