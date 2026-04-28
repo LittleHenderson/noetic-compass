@@ -1,0 +1,67 @@
+{
+  "ok": true,
+  "total": 29181,
+  "metrics": {
+    "total": 29181,
+    "bucket_counts": {
+      "v75_register": 7500,
+      "v77_rule_four": 3681,
+      "v77_omega": 6000,
+      "v74_baseline": 6000,
+      "v76_production": 3000,
+      "meta_logic": 3000
+    },
+    "unique_user_prompts": 8910,
+    "prompt_unique_ratio": 0.305336,
+    "unique_assistant_responses": 28304,
+    "response_unique_ratio": 0.969946,
+    "short_prompt_count": 0,
+    "short_prompt_fraction": 0.0,
+    "short_response_count": 0,
+    "short_response_fraction": 0.0,
+    "missing_expression_in_response": 0
+  },
+  "bucket_metrics": {
+    "meta_logic": {
+      "total": 3000,
+      "unique_cas_expressions": 847,
+      "unique_user_prompts": 768,
+      "prompt_unique_ratio": 0.256
+    },
+    "v74_baseline": {
+      "total": 6000,
+      "unique_cas_expressions": 1344,
+      "unique_user_prompts": 1945,
+      "prompt_unique_ratio": 0.324167
+    },
+    "v75_register": {
+      "total": 7500,
+      "unique_cas_expressions": 2192,
+      "unique_user_prompts": 3134,
+      "prompt_unique_ratio": 0.417867
+    },
+    "v76_production": {
+      "total": 3000,
+      "unique_cas_expressions": 1000,
+      "unique_user_prompts": 654,
+      "prompt_unique_ratio": 0.218
+    },
+    "v77_omega": {
+      "total": 6000,
+      "unique_cas_expressions": 1762,
+      "unique_user_prompts": 1454,
+      "prompt_unique_ratio": 0.242333
+    },
+    "v77_rule_four": {
+      "total": 3681,
+      "unique_cas_expressions": 1197,
+      "unique_user_prompts": 955,
+      "prompt_unique_ratio": 0.25944
+    }
+  },
+  "failures": [],
+  "warnings": [
+    "prompt diversity passes the hard gate but remains low enough to merit manual sample review before training"
+  ],
+  "sample_count": 12
+}

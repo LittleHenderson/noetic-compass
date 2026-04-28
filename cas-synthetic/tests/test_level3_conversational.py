@@ -11,6 +11,11 @@ from cas_synthetic.generator.conversational import Level3ConversationalGenerator
 from cas_synthetic.validation.level3_conversation_validator import (
     Level3ConversationValidator,
 )
+from cas_synthetic.validation.level3_review_gate import (
+    Level3ReviewThresholds,
+    review_records,
+    write_review_markdown,
+)
 
 
 @dataclass
@@ -234,3 +239,68 @@ def test_cli_prints_counts_and_returns_nonzero(capsys):
     finally:
         if path.exists():
             path.unlink()
+
+
+def test_review_gate_passes_diverse_records_and_writes_markdown():
+    records = []
+    for index in range(12):
+        records.append(
+            _valid_record(
+                id=f"lvl3-{index:03d}",
+                bucket="v75_register" if index % 2 else "v77_omega",
+                cas_expression=f"^{index % 10}^P",
+                user_prompt=f"How should I read case {index} as a CAS conversation?",
+                assistant_response=(
+                    f"The expression ^{index % 10}^P preserves the target for "
+                    f"case {index} and should be treated as a structured map."
+                ),
+            )
+        )
+
+    result = review_records(
+        records,
+        thresholds=Level3ReviewThresholds(
+            min_prompt_unique_ratio=0.80,
+            min_response_unique_ratio=0.80,
+            min_bucket_prompt_unique_ratio=0.80,
+        ),
+    )
+    report_path = _fixture_path("_level3_review_report.md")
+    try:
+        write_review_markdown(result, report_path)
+
+        assert result.ok
+        assert result.metrics["unique_user_prompts"] == 12
+        assert report_path.read_text(encoding="utf-8").startswith(
+            "# Level 3 Conversational Review"
+        )
+    finally:
+        if report_path.exists():
+            report_path.unlink()
+
+
+def test_review_gate_fails_low_prompt_diversity():
+    records = [
+        _valid_record(
+            id=f"lvl3-low-{index}",
+            bucket="v77_rule_four",
+            cas_expression=f"^{index % 10}^P",
+            user_prompt="Explain this CAS expression.",
+            assistant_response=(
+                f"The expression ^{index % 10}^P is a structured map for "
+                "the pattern, not a final judgment."
+            ),
+        )
+        for index in range(20)
+    ]
+
+    result = review_records(
+        records,
+        thresholds=Level3ReviewThresholds(
+            min_prompt_unique_ratio=0.50,
+            min_bucket_prompt_unique_ratio=0.50,
+        ),
+    )
+
+    assert not result.ok
+    assert any("prompt uniqueness ratio" in failure for failure in result.failures)

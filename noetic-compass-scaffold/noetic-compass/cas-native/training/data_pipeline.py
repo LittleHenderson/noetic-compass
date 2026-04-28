@@ -39,6 +39,12 @@ from typing import Any, Optional
 import torch
 from torch.utils.data import Dataset, DataLoader, random_split
 
+from cas_native.training.level3_conversation_ingest import (
+    conversation_text as _conversation_text,
+    domain_targets_as_list as _domain_targets_as_list,
+    score_payload as _score_payload,
+)
+
 # The notation compiler lives in the sibling `api/notation/` package.
 # Conftest / scaffold setup places `noetic-compass/` on sys.path so this
 # import resolves without editable installs. Import-time failure is caught
@@ -67,7 +73,7 @@ except Exception:  # pragma: no cover - defensive; compiler is expected to impor
     VALID_REGISTERS = ("T", "A", "f", "E")
     compile_expression = None  # type: ignore[assignment]
     extract_register_activations = None  # type: ignore[assignment]
-    _COMPILER_AVAILABLE = False
+_COMPILER_AVAILABLE = False
 
 
 class SimpleTokenizer:
@@ -276,8 +282,8 @@ class CASDataset(Dataset):
         item = self.data[idx]
 
         # Get prompt and response text
-        prompt = item.get("prompt", item.get("text", ""))
-        response = item.get("response", item.get("output", ""))
+        prompt = _conversation_text(item, "prompt", "user_prompt")
+        response = _conversation_text(item, "response", "assistant_response")
 
         # Tokenize: combine prompt + response
         combined = f"{prompt} {response}".strip()
@@ -292,16 +298,9 @@ class CASDataset(Dataset):
         # Attention mask (all real tokens)
         attention_mask = torch.ones(len(input_ids), dtype=torch.long)
 
-        # CAS scores (if available)
-        cas_scores = {}
-        if "scores" in item:
-            cas_scores = item["scores"]
-        elif "operator_scores" in item:
-            cas_scores["operator_scores"] = item["operator_scores"]
-        if "domain_scores" in item:
-            cas_scores["domain_scores"] = item["domain_scores"]
-        if "nccs" in item:
-            cas_scores["nccs"] = item["nccs"]
+        # CAS scores (if available). Level 3 conversational records use
+        # soft_*_targets, which are normalized here for the trainer.
+        cas_scores = _score_payload(item)
 
         # v2 label streams (ADR-01 / ADR-02 / ADR-04). All optional; absent
         # fields default to empty list / None so per-example masking applies.
@@ -537,14 +536,22 @@ def validate_cas_item(item: dict[str, Any]) -> bool:
     - domain_averages: 4 values, all > 0, sum ≈ 1.0 (open simplex)
     - composite: in [0, 100]
     """
-    ops = item.get("operator_scores", [])
+    ops = item.get("operator_scores")
+    if ops is None:
+        ops = item.get("soft_operator_targets", [])
     if ops:
         if len(ops) != 10:
             return False
         if not all(0.0 <= s <= 1.0 for s in ops):
             return False
 
-    doms = item.get("domain_averages", [])
+    doms = item.get("domain_averages")
+    if doms is None:
+        doms = item.get("domain_scores")
+    if doms is None:
+        doms = _domain_targets_as_list(item.get("soft_domain_targets"))
+    if doms is None:
+        doms = []
     if doms:
         if len(doms) != 4:
             return False

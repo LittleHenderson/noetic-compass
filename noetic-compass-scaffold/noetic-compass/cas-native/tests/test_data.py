@@ -187,6 +187,37 @@ class TestDataLoading:
         data = load_cas_data(path)
         assert len(data) == 1
 
+    def test_level3_conversational_jsonl_ingests_for_training(self, tmp_path):
+        """Level 3 conversation records should load without a conversion shim."""
+        record = {
+            "id": "l3conv-001",
+            "source_level2_id": "lvl2-001",
+            "bucket": "v77_omega",
+            "cas_expression": "(^1^E_{F3}|A × ^1^E_{F3}|f) = ^1^E|Ω_clarity",
+            "user_prompt": "How would CAS explain this named emergent?",
+            "assistant_response": (
+                "The expression (^1^E_{F3}|A × ^1^E_{F3}|f) = ^1^E|Ω_clarity "
+                "keeps the register integration explicit."
+            ),
+            "soft_operator_targets": [0.01, 0.91, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
+            "soft_domain_targets": [0.01, 0.01, 0.97, 0.01],
+            "tags": ["level3", "conversational"],
+            "provenance": {"generation_method": "deterministic_template"},
+        }
+        path = tmp_path / "level3.jsonl"
+        path.write_text(json.dumps(record, ensure_ascii=False) + "\n", encoding="utf-8")
+
+        data = load_cas_data(path)
+        dataset = CASDataset(data)
+        item = dataset[0]
+
+        assert len(data) == 1
+        assert item["input_ids"].numel() > 4
+        assert item["targets"].numel() == item["input_ids"].numel()
+        assert item["cas_scores"]["operator_scores"] == record["soft_operator_targets"]
+        assert item["cas_scores"]["domain_scores"] == record["soft_domain_targets"]
+        assert item["cas_scores"]["domain_averages"] == record["soft_domain_targets"]
+
 
 class TestSplitRatios:
 
@@ -250,6 +281,20 @@ class TestValidation:
     def test_empty_item_is_valid(self):
         """Items without scores are valid (no constraints to violate)."""
         assert validate_cas_item({}) is True
+
+    def test_level3_soft_targets_are_valid_cas_item(self):
+        item = {
+            "soft_operator_targets": [0.1] * 10,
+            "soft_domain_targets": [0.25, 0.25, 0.25, 0.25],
+        }
+        assert validate_cas_item(item) is True
+
+    def test_invalid_level3_soft_domain_targets(self):
+        item = {
+            "soft_operator_targets": [0.1] * 10,
+            "soft_domain_targets": [0.0, 0.5, 0.25, 0.25],
+        }
+        assert validate_cas_item(item) is False
 
 
 # ---- Training Data Augmentation ----
