@@ -73,7 +73,7 @@ except Exception:  # pragma: no cover - defensive; compiler is expected to impor
     VALID_REGISTERS = ("T", "A", "f", "E")
     compile_expression = None  # type: ignore[assignment]
     extract_register_activations = None  # type: ignore[assignment]
-_COMPILER_AVAILABLE = False
+    _COMPILER_AVAILABLE = False
 
 
 class SimpleTokenizer:
