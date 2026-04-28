@@ -591,6 +591,60 @@ _IS_IN_NEGATIVE_CONTEXTS = (
 _NOETIC_REF = re.compile(r"\^(\d)\b|CO-(\d)\b")
 # Regex for a domain-qualified state, e.g. ^2^P or CO-3^E or shorthand C7
 _STATE_REF = re.compile(r"\^(\d)\^([PCEO])\b|CO-(\d)\^([PCEO])\b|\b([PCEO])(\d)\b")
+_NUMBER_WORDS = {
+    "zero": "0",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "four": "4",
+    "five": "5",
+    "six": "6",
+    "seven": "7",
+    "eight": "8",
+    "nine": "9",
+}
+
+
+def _normalize_numeric_meta_refs(text: str) -> str:
+    """Normalize common spoken/written carrier refs to compiler tokens.
+
+    Examples:
+      "Foundations 1 and 7" -> "Foundation_1 and Foundation_7"
+      "Drives two and three" -> "F2 and F3"
+
+    This intentionally covers only CAS carrier nouns whose numeric members are
+    unambiguous. Vague prose still falls through to the baseline synthesizer.
+    """
+    if not text:
+        return text
+
+    number = r"(?:[0-9]|zero|one|two|three|four|five|six|seven|eight|nine)"
+    number_list = rf"{number}(?:\s*(?:,|and)\s*{number})*"
+    carrier_specs = (
+        (re.compile(rf"\bfoundations?\s+({number_list})\b", re.IGNORECASE), "Foundation_"),
+        (re.compile(rf"\bdrives?\s+({number_list})\b", re.IGNORECASE), "F"),
+        (re.compile(rf"\bnoetics?\s+({number_list})\b", re.IGNORECASE), "^"),
+    )
+
+    def normalize_number(raw: str) -> str:
+        return _NUMBER_WORDS.get(raw.lower(), raw)
+
+    def split_numbers(raw: str) -> list[str]:
+        return [
+            normalize_number(part)
+            for part in re.findall(number, raw, flags=re.IGNORECASE)
+        ]
+
+    normalized = text
+    for pattern, prefix in carrier_specs:
+        def replace(match: re.Match[str]) -> str:
+            values = split_numbers(match.group(1))
+            if not values:
+                return match.group(0)
+            return " and ".join(f"{prefix}{value}" for value in values)
+
+        normalized = pattern.sub(replace, normalized)
+    return normalized
 
 
 def _detect_set_operation_vocabulary(text: str) -> Optional[str]:
@@ -942,6 +996,7 @@ def _try_meta_logic_emission(source_text: str | None) -> Optional[str]:
     """
     if not source_text:
         return None
+    source_text = _normalize_numeric_meta_refs(source_text)
 
     # ---- 1. Set-operation triggers (Union / Intersection / Difference) ----
     op = _detect_set_operation_vocabulary(source_text)
@@ -1008,6 +1063,10 @@ def _wrap_singleton_for_set_op(operand: str) -> str:
         return f"NoeticCluster{{{operand}}}"
     if re.fullmatch(r"\^\d\^[PCEO]", operand):
         return f"StateCluster{{{operand}}}"
+    if re.fullmatch(r"[PCEO]", operand):
+        return f"DomainSet{{{operand}}}"
+    if re.fullmatch(r"F[1-7]", operand):
+        return f"DriveSet{{{operand}}}"
     return operand
 
 
@@ -1023,6 +1082,16 @@ def _carriers_compatible(lhs: str, rhs: str, operation: str) -> bool:
             return "noetic"
         if s.startswith("StateCluster") or s.startswith("StateSet") or re.fullmatch(r"\^\d\^[PCEO]", s):
             return "state"
+        if s.startswith("DomainSet"):
+            return "domain"
+        if s.startswith("DriveSet"):
+            return "drive"
+        if s.startswith("RegisterSet"):
+            return "register"
+        if s.startswith("FoundationSet"):
+            return "foundation"
+        if s.startswith("SubFoundationSet"):
+            return "subfoundation"
         if re.fullmatch(r"[PCEO]", s):
             return "domain"
         if re.fullmatch(r"F[1-7]", s):

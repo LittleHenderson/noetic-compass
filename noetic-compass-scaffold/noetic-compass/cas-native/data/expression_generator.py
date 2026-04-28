@@ -15,10 +15,19 @@ try:
     from cas_native.model.meta_logic_constructs import META_LOGIC_EXEMPLARS
 except Exception:  # pragma: no cover - script-mode fallback
     META_LOGIC_EXEMPLARS = (
+        "NoeticSet{^2, ^7}",
         "NoeticCluster{^2, ^7}",
+        "StateSet{^2^P, ^7^O}",
         "StateCluster{^2^P, ^7^O}",
+        "StateVariantSet{^3^P_{F2}|A, ^2^C|f}",
         "StateVariantCluster{^3^P_{F2}|A, ^2^C|f}",
+        "RelationSet{^5^P -> ^5^C, ^5^C -> ^5^E}",
         "RelationCluster{^5^P -> ^5^C, ^5^C -> ^5^E}",
+        "DriveSet{F2, F3}",
+        "DomainSet{P, C}",
+        "RegisterSet{A, f}",
+        "FoundationSet{Foundation_1, Foundation_7}",
+        "SubFoundationSet{F1|A, F2|f}",
         "NoeticCluster{^2, ^7} ∩ NoeticCluster{^7}",
         "^2 ∈ Noetics",
         "NoeticCluster{^2, ^7} ⊆ Noetics",
@@ -73,10 +82,19 @@ V77_REGISTER_INTEGRATION_EXEMPLARS = (
 )
 
 TYPED_META_LOGIC_EXEMPLARS = (
+    "NoeticSet{^2, ^7}",
     "NoeticCluster{^2, ^7}",
+    "StateSet{^2^P, ^7^O}",
     "StateCluster{^2^P, ^7^O}",
+    "StateVariantSet{^3^P_{F2}|A, ^2^C|f}",
     "StateVariantCluster{^3^P_{F2}|A, ^2^C|f}",
+    "RelationSet{^5^P -> ^5^C, ^5^C -> ^5^E}",
     "RelationCluster{^5^P -> ^5^C, ^5^C -> ^5^E}",
+    "DriveSet{F2, F3}",
+    "DomainSet{P, C}",
+    "RegisterSet{A, f}",
+    "FoundationSet{Foundation_1, Foundation_7}",
+    "SubFoundationSet{F1|A, F2|f}",
     f"NoeticCluster{{^2, ^7}} {INTERSECTION} NoeticCluster{{^7}}",
     f"^2 {MEMBER} Noetics",
     f"NoeticCluster{{^2, ^7}} {SUBSET_EQ} Noetics",
@@ -89,14 +107,10 @@ TYPED_META_LOGIC_EXEMPLARS = (
     "CoverOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7)",
     "PartitionOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7)",
     # Day-1 SDG sprint, Track A: extended typed meta-logic surfaces.
-    # Eight token classes (Union, Difference, ∅, ∉, ⊂, ⊃, ⊇, NoeticSet/StateSet)
-    # were audited per docs/working/generator_compiler_coverage_audit.md. Of the
-    # eight, NoeticSet/StateSet are admitted by the compiler grammar but are NOT
-    # enumerated in cas-native/model/meta_logic_constructs.py CONSTRUCT_SPECS;
-    # per the FAILURE PROTOCOL they are deliberately skipped here pending a
-    # CONSTRUCT_SPECS update by a separate agent. The remaining seven classes
-    # are admitted both by the compiler grammar and CONSTRUCT_SPECS — exemplars
-    # below are individually verified against api.notation.compiler.
+    # Eight token classes (Union, Difference, ∅, ∉, ⊂, ⊃, ⊇, typed Set
+    # constructors) were audited per
+    # docs/working/generator_compiler_coverage_audit.md. The typed Set family
+    # now mirrors CONSTRUCT_SPECS instead of being a carve-out.
     # Union ∪ — finite set union over typed meta-sets.
     f"NoeticCluster{{^2, ^7}} {UNION} NoeticCluster{{^5}}",
     "NoeticCluster{^2, ^7} union NoeticCluster{^5}",
