@@ -1,0 +1,43 @@
+[13:50:24] === CAS-Native v2 first full training run ===
+[13:50:24] Run dir: /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-135024
+[13:50:24] Dataset: /root/workspace/cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl
+[13:50:24] [1/5] Initializing model...
+[13:50:25]       params: 73,063,424
+[13:50:25] [2/5] Loading dataset...
+[13:50:26]       stages: {'1_load': {'items': 10000, 'sources': 1}, '2_augment': {'skipped': True}, '3_validate': {'valid': 10000, 'rejected': 0}, '4_split': {'train': 8000, 'val': 1000, 'test': 1000}, '5_tokenize': {'max_length': 512, 'batch_size': 32}}
+[13:50:26]       train batches/epoch: 250 | total steps: 750
+[13:50:26] [3/5] Building trainer with v2 flags...
+[13:50:28]       v2 sub-modules: register_embedding, emergent_register, production_semantics, expression_proposer
+[13:50:28] [4/5] Training: 3 epochs, batch=32, lr=0.0001, bf16, warmup=500
+[13:50:28]       checkpoint every 500 steps, eval every 250 steps, log every 50
+[13:50:28] --- Epoch 1/3 ---
+[13:50:29]   step    0/750 ep=0: total=435.9261  mem=2.08GB  [cognitive_drift=2.692, inversion_penalty=3.416, involution_loss=0.033, lm_loss=10.409, null_space_reg_loss=511.812, production_loss=410.692, proposer_rule_four_loss=6.131, rpm_satisfaction=0.501]
+[13:50:43]   step   50/750 ep=0: total=437.2521  mem=2.88GB  [cognitive_drift=2.734, inversion_penalty=0.062, involution_loss=0.033, lm_loss=10.190, null_space_reg_loss=511.608, production_loss=415.540, proposer_rule_four_loss=6.154, rpm_satisfaction=0.499]
+[13:50:56]   step  100/750 ep=0: total=432.3908  mem=2.88GB  [cognitive_drift=2.670, inversion_penalty=0.036, involution_loss=0.033, lm_loss=9.674, null_space_reg_loss=511.258, production_loss=411.371, proposer_rule_four_loss=6.009, rpm_satisfaction=0.489]
+[13:51:09]   step  150/750 ep=0: total=431.1804  mem=2.88GB  [cognitive_drift=2.675, inversion_penalty=0.025, involution_loss=0.033, lm_loss=9.116, null_space_reg_loss=510.736, production_loss=410.865, proposer_rule_four_loss=5.784, rpm_satisfaction=0.467]
+[13:51:23]   step  200/750 ep=0: total=418.7754  mem=2.88GB  [cognitive_drift=2.703, inversion_penalty=0.018, involution_loss=0.033, lm_loss=8.517, null_space_reg_loss=510.220, production_loss=399.197, proposer_rule_four_loss=5.564, rpm_satisfaction=0.424]
+[13:51:36] --- Epoch 2/3 ---
+[13:51:36]   step  250/750 ep=1: total=400.7233  mem=2.93GB  [cognitive_drift=2.668, inversion_penalty=0.010, involution_loss=0.033, lm_loss=8.016, null_space_reg_loss=509.640, production_loss=381.835, proposer_rule_four_loss=5.389, rpm_satisfaction=0.370]
+[13:51:36]   [eval] step 250 — running validation pass...
+[13:51:36]   [eval] exception in eval batch: element 0 of tensors does not require grad and does not have a grad_fn
+[13:51:36]   [eval] val avg total=0.0000 over 0 batches
+[13:51:49]   step  300/750 ep=1: total=384.2268  mem=2.93GB  [cognitive_drift=2.700, domain_coherence=0.012, inversion_penalty=0.007, involution_loss=0.033, lm_loss=7.415, null_space_reg_loss=508.986, production_loss=366.072, proposer_rule_four_loss=5.203, rpm_satisfaction=0.297]
+[13:52:03]   step  350/750 ep=1: total=331.1783  mem=2.93GB  [cognitive_drift=2.706, inversion_penalty=0.003, involution_loss=0.033, lm_loss=6.941, null_space_reg_loss=508.290, production_loss=313.722, proposer_rule_four_loss=4.914, rpm_satisfaction=0.233]
+[13:52:16]   step  400/750 ep=1: total=294.1629  mem=2.93GB  [cognitive_drift=2.719, inversion_penalty=0.002, involution_loss=0.033, lm_loss=6.478, null_space_reg_loss=507.469, production_loss=277.378, proposer_rule_four_loss=4.558, rpm_satisfaction=0.200]
+[13:52:29]   step  450/750 ep=1: total=16.0275  mem=2.93GB  [cognitive_drift=2.712, inversion_penalty=0.001, involution_loss=0.033, lm_loss=6.081, null_space_reg_loss=506.462, proposer_rule_four_loss=3.999, rpm_satisfaction=0.137]
+[13:52:42] --- Epoch 3/3 ---
+[13:52:42]   step  500/750 ep=2: total=215.6666  mem=2.93GB  [cognitive_drift=2.680, inversion_penalty=0.000, involution_loss=0.033, lm_loss=6.056, null_space_reg_loss=505.912, production_loss=199.667, proposer_rule_four_loss=4.016, rpm_satisfaction=0.164]
+[13:52:43]   [ckpt] wrote /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-135024/checkpoints/step_500.pt
+[13:52:43]   [eval] step 500 — running validation pass...
+[13:52:43]   [eval] exception in eval batch: element 0 of tensors does not require grad and does not have a grad_fn
+[13:52:43]   [eval] val avg total=0.0000 over 0 batches
+[13:52:57]   step  550/750 ep=2: total=189.8759  mem=2.93GB  [cognitive_drift=2.718, inversion_penalty=0.000, involution_loss=0.033, lm_loss=5.790, null_space_reg_loss=504.802, production_loss=174.342, proposer_rule_four_loss=3.597, rpm_satisfaction=0.146]
+[13:53:10]   step  600/750 ep=2: total=179.7104  mem=2.93GB  [cognitive_drift=2.718, inversion_penalty=0.000, involution_loss=0.033, lm_loss=5.641, null_space_reg_loss=504.099, production_loss=164.299, proposer_rule_four_loss=3.583, rpm_satisfaction=0.188]
+[13:53:23]   step  650/750 ep=2: total=142.8665  mem=2.93GB  [cognitive_drift=2.667, inversion_penalty=0.000, involution_loss=0.033, lm_loss=5.678, null_space_reg_loss=503.939, production_loss=127.660, proposer_rule_four_loss=3.290, rpm_satisfaction=0.145]
+[13:53:36]   step  700/750 ep=2: total=141.9603  mem=2.93GB  [cognitive_drift=2.664, inversion_penalty=0.000, involution_loss=0.033, lm_loss=5.706, null_space_reg_loss=503.751, production_loss=126.638, proposer_rule_four_loss=3.407, rpm_satisfaction=0.179]
+[13:53:49] === Training complete ===
+[13:53:49]   Final step: 750/750
+[13:53:49]   Wall-clock: 201.7s = 3.4 min
+[13:53:49]   Peak GPU memory: 2.93 GB
+[13:53:50]   Final checkpoint: /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-135024/checkpoints/final.pt
+[13:53:51] [5/5] Metrics + checkpoint saved to /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-135024

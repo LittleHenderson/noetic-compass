@@ -10,3 +10,5 @@ build/
 *.pyd
 
 cas-native/data/test_batch_*.jsonl
+
+cas-native/training/runs/**/checkpoints/*.pt
