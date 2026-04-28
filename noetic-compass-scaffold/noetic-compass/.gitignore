@@ -8,3 +8,5 @@ build/
 .terraform/
 *.tfstate*
 *.pyd
+
+cas-native/data/test_batch_*.jsonl
