@@ -217,6 +217,31 @@ def activations_for_example(item: dict[str, Any]) -> list[Any]:
     )
 
 
+def training_text_for_item(item: dict[str, Any], target_mode: str = "response") -> str:
+    """Return the language-model training sequence for one record.
+
+    ``target_mode="cas_expression"`` is the CAS-Native expression-generation
+    task: natural language prompt in, canonical CAS expression out. This is
+    intentionally separate from the default prose-response mode so training
+    runs can choose whether they are teaching conversational explanation or
+    symbolic expression generation.
+    """
+    prompt = _conversation_text(item, "prompt", "user_prompt")
+    response = _conversation_text(item, "response", "assistant_response")
+    cas_expression = str(item.get("cas_expression") or "").strip()
+
+    if target_mode == "cas_expression" and cas_expression:
+        return f"[TASK_EXPR] [PROMPT] {prompt} [RESPONSE] {cas_expression}".strip()
+    if target_mode == "explain":
+        source = cas_expression or prompt
+        return f"[TASK_EXPLAIN] [CAS] {source} [/CAS] [RESPONSE] {response}".strip()
+    if target_mode == "chat":
+        return f"[TASK_CHAT] [PROMPT] {prompt} [RESPONSE] {response}".strip()
+
+    combined = f"{prompt} {response}".strip()
+    return combined or "empty"
+
+
 class CASDataset(Dataset):
     """Dataset for CAS-Native training.
 
@@ -232,10 +257,12 @@ class CASDataset(Dataset):
         data: list[dict[str, Any]],
         tokenizer: Optional[TokenizerLike] = None,
         max_length: int = 512,
+        target_mode: str = "response",
     ):
         self.data = data
         self.tokenizer = tokenizer or SimpleTokenizer()
         self.max_length = max_length
+        self.target_mode = target_mode
 
     def __len__(self) -> int:
         return len(self.data)
@@ -243,14 +270,10 @@ class CASDataset(Dataset):
     def __getitem__(self, idx: int) -> dict[str, Any]:
         item = self.data[idx]
 
-        # Get prompt and response text
-        prompt = _conversation_text(item, "prompt", "user_prompt")
-        response = _conversation_text(item, "response", "assistant_response")
-
-        # Tokenize: combine prompt + response
-        combined = f"{prompt} {response}".strip()
-        if not combined:
-            combined = "empty"
+        # Tokenize the configured training task. CAS expression generation
+        # uses `[TASK_EXPR] prompt [RESPONSE] cas_expression`; prose runs keep
+        # the historical prompt+response behavior.
+        combined = training_text_for_item(item, self.target_mode)
         token_ids = self.tokenizer.encode(combined, max_length=self.max_length)
 
         # Input: all tokens except last; Target: all tokens except first
@@ -443,6 +466,7 @@ def create_data_loaders(
     seed: int = 42,
     tokenizer: Optional[TokenizerLike] = None,
     use_cas_tokenizer: bool = True,
+    target_mode: str = "response",
 ) -> tuple[DataLoader, DataLoader, DataLoader]:
     """Create train/val/test DataLoaders with specified split ratios.
 
@@ -460,6 +484,8 @@ def create_data_loaders(
         use_cas_tokenizer: Build the new CAS-aware tokenizer for production
             training paths. Tests can pass ``False`` or explicit
             ``SimpleTokenizer`` for tiny-vocab compatibility.
+        target_mode: LM target surface. ``response`` preserves the historical
+            prompt+response task; ``cas_expression`` teaches prompt-to-CAS.
 
     Returns:
         Tuple of (train_loader, val_loader, test_loader)
@@ -468,9 +494,20 @@ def create_data_loaders(
         f"Ratios must sum to 1.0, got {train_ratio + val_ratio + test_ratio}"
 
     if tokenizer is None:
-        tokenizer = build_tokenizer_from_records(data) if use_cas_tokenizer else SimpleTokenizer()
+        tokenizer = (
+            HybridCASTokenizer.from_texts(
+                training_text_for_item(item, target_mode) for item in data
+            )
+            if use_cas_tokenizer
+            else SimpleTokenizer()
+        )
 
-    dataset = CASDataset(data, tokenizer=tokenizer, max_length=max_length)
+    dataset = CASDataset(
+        data,
+        tokenizer=tokenizer,
+        max_length=max_length,
+        target_mode=target_mode,
+    )
 
     # Compute split sizes
     total = len(dataset)
@@ -566,6 +603,7 @@ def run_pipeline(
     batch_size: int = 8,
     max_length: int = 512,
     seed: int = 42,
+    target_mode: str = "response",
 ) -> tuple[DataLoader, DataLoader, DataLoader, dict[str, Any]]:
     """Run the full 5-stage CAS-Native data pipeline.
 
@@ -622,6 +660,7 @@ def run_pipeline(
         batch_size=batch_size,
         max_length=max_length,
         seed=seed,
+        target_mode=target_mode,
     )
     stats["stages"]["4_split"] = {
         "train": len(train_loader.dataset),
@@ -631,6 +670,7 @@ def run_pipeline(
     stats["stages"]["5_tokenize"] = {
         "max_length": max_length,
         "batch_size": batch_size,
+        "target_mode": target_mode,
     }
     tokenizer = tokenizer_from_loader(train_loader)
     if isinstance(tokenizer, HybridCASTokenizer):

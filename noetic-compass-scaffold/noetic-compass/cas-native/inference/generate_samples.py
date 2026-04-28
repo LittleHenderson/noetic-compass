@@ -54,6 +54,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--top-p", type=float, default=0.9)
     p.add_argument("--seed", type=int, default=42)
     p.add_argument(
+        "--task",
+        choices=("expr", "raw"),
+        default="expr",
+        help="Prompt formatting. expr uses [TASK_EXPR] [PROMPT] ... [RESPONSE].",
+    )
+    p.add_argument(
         "--tokenizer",
         type=Path,
         default=None,
@@ -155,6 +161,15 @@ def generate(
                 break
 
     return decode_ids(tokenizer, new_token_ids), new_token_ids
+
+
+def format_generation_prompt(prompt: str, task: str) -> str:
+    if task == "expr":
+        # Training uses "[RESPONSE] {cas_expression}", so keep the trailing
+        # space token in the inference prefix. Without it the model often
+        # predicts EOS immediately after the response sentinel.
+        return f"[TASK_EXPR] [PROMPT] {prompt} [RESPONSE] "
+    return prompt
 
 
 _CAS_FRAGMENT_RE = re.compile(
@@ -310,11 +325,12 @@ def main() -> int:
         bucket_results = []
         for i, rec in enumerate(chosen):
             prompt = rec.get("prompt") or rec.get("user_prompt") or ""
+            generation_prompt = format_generation_prompt(prompt, args.task)
             try:
                 generated, token_ids = generate(
                     model,
                     tokenizer,
-                    prompt,
+                    generation_prompt,
                     max_new_tokens=args.max_new_tokens,
                     temperature=args.temperature,
                     top_p=args.top_p,
@@ -329,6 +345,7 @@ def main() -> int:
                 "bucket": bucket,
                 "sample_idx": i,
                 "prompt": prompt,
+                "generation_prompt": generation_prompt,
                 "ground_truth_response": rec.get("response") or rec.get("assistant_response") or "",
                 "ground_truth_cas_expression": rec.get("cas_expression", ""),
                 "generated_response": generated,
@@ -373,6 +390,7 @@ def main() -> int:
                 "temperature": args.temperature,
                 "top_p": args.top_p,
                 "seed": args.seed,
+                "task": args.task,
                 "tokenizer": tokenizer.metadata(),
                 "tokenizer_path": str(tokenizer_path) if tokenizer_path is not None else None,
                 "overall_valid_rate": sum(1 for s in all_samples if s["compile_valid_anywhere"]) / max(len(all_samples), 1),

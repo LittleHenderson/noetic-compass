@@ -24,6 +24,9 @@ SPECIAL_TOKENS = [
     "[SEP]",
     "[CAS]",
     "[/CAS]",
+    "[TASK_EXPR]",
+    "[TASK_EXPLAIN]",
+    "[TASK_CHAT]",
     "[PROMPT]",
     "[RESPONSE]",
     "[SP]",
@@ -396,6 +399,9 @@ class HybridCASTokenizer:
             self.BOS_ID,
             self.word2id.get("[PROMPT]", -1),
             self.word2id.get("[RESPONSE]", -1),
+            self.word2id.get("[TASK_EXPR]", -1),
+            self.word2id.get("[TASK_EXPLAIN]", -1),
+            self.word2id.get("[TASK_CHAT]", -1),
         } - {-1}
 
     def pad_id(self) -> int:

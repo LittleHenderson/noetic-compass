@@ -68,6 +68,7 @@ CHECKPOINT_EVERY = int(os.environ.get("CAS_V2_CHECKPOINT_EVERY", 100))
 # untrained-head noise spike that produced step-450's production_loss=0 dip in
 # the first full v2 run (commit e6cd8e4).
 PRODUCTION_WARMUP_STEPS = int(os.environ.get("CAS_V2_PRODUCTION_WARMUP", 100))
+TARGET_MODE = os.environ.get("CAS_V2_TARGET_MODE", "response")
 
 # ------------------------------------------------------------ logging
 
@@ -95,6 +96,7 @@ train_loader, val_loader, test_loader, stats = run_pipeline(
     batch_size=BATCH_SIZE,
     max_length=MAX_LENGTH,
     seed=42,
+    target_mode=TARGET_MODE,
 )
 log("      stages: " + str(stats["stages"]))
 steps_per_epoch = len(train_loader)
@@ -148,6 +150,7 @@ v2_hp = V2Hyperparameters(production_warmup_steps=PRODUCTION_WARMUP_STEPS)
 # data_mix_meta_logic=0.00 (Level 3 NOT in mix). Default already 0.0.
 assert v2_hp.data_mix_meta_logic == 0.0, "directive: data_mix_meta_logic must be 0.00"
 log("      production_warmup_steps: " + str(v2_hp.production_warmup_steps))
+log("      target_mode: " + TARGET_MODE)
 
 cfg = TrainingConfig(
     component_flags=V2ComponentFlags(
@@ -314,6 +317,7 @@ with open(RUN_DIR / "metrics.json", "w") as f:
             "lr": LR,
             "warmup_steps": WARMUP_STEPS,
             "production_warmup_steps": v2_hp.production_warmup_steps,
+            "target_mode": TARGET_MODE,
             "log_every": LOG_EVERY,
             "eval_every": EVAL_EVERY,
             "checkpoint_every": CHECKPOINT_EVERY,

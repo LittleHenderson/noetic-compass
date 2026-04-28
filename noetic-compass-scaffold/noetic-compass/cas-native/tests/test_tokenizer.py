@@ -54,6 +54,23 @@ def test_hybrid_tokenizer_persists_id_contract():
     assert loaded.decode(loaded.encode(CAS_EXPRESSIONS[1])) == CAS_EXPRESSIONS[1]
 
 
+def test_task_expression_format_trains_prompt_to_cas():
+    pytest.importorskip("torch.utils.data")
+    from cas_native.training.data_pipeline import training_text_for_item
+
+    item = {
+        "prompt": "Describe the register structure.",
+        "response": "This is a prose explanation.",
+        "cas_expression": "(^3^P_{F2}|A × ^3^P_{F2}|f) = ^3^P|Ω_refusal",
+    }
+
+    text = training_text_for_item(item, "cas_expression")
+
+    assert text.startswith("[TASK_EXPR] [PROMPT] Describe")
+    assert "[RESPONSE] (^3^P_{F2}|A × ^3^P_{F2}|f) = ^3^P|Ω_refusal" in text
+    assert "prose explanation" not in text
+
+
 def test_create_data_loaders_uses_frozen_cas_tokenizer():
     pytest.importorskip("torch.utils.data")
     from cas_native.training.data_pipeline import create_data_loaders
@@ -82,6 +99,7 @@ def test_create_data_loaders_uses_frozen_cas_tokenizer():
         train_ratio=1.0,
         val_ratio=0.0,
         test_ratio=0.0,
+        target_mode="cas_expression",
     )
     tokenizer = tokenizer_from_loader(train)
     before = tokenizer.vocab_size
