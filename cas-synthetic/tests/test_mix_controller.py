@@ -27,6 +27,7 @@ class TestLevel2MixController:
         assert abs(sizes["v77_rule_four"] - 1500) <= 2
         assert abs(sizes["v77_omega"] - 2000) <= 2
         assert abs(sizes["v76_production"] - 1000) <= 2
+        assert abs(sizes["meta_logic"] - 1000) <= 2
 
     def test_iter_examples_count(self):
         ctrl = Level2MixController(Level2MixConfig(seed=1))
@@ -37,12 +38,13 @@ class TestLevel2MixController:
         ctrl = Level2MixController(Level2MixConfig(seed=1))
         out = list(ctrl.iter_examples(100))
         counts = Counter(ex.bucket for ex in out)
-        # Level 2 for n=100: 30/25/15/20/10
-        assert counts["v74_baseline"] == 30
+        # Level 2 with meta-logic bucket for n=100: 20/25/15/20/10/10
+        assert counts["v74_baseline"] == 20
         assert counts["v75_register"] == 25
         assert counts["v77_rule_four"] == 15
         assert counts["v77_omega"] == 20
         assert counts["v76_production"] == 10
+        assert counts["meta_logic"] == 10
 
     def test_reproducible_with_seed(self):
         c1 = Level2MixController(Level2MixConfig(seed=42))

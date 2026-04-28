@@ -1,13 +1,14 @@
-"""Level 2 mix controller — authoritative 30/25/15/20/10 ratios.
+"""Level 2 mix controller with the meta-logic / set-theory bucket.
 
 Given a target count N, produces a sequence of GeneratedExample instances
-with exactly the bucket distribution specified in the Level 2 directive:
+with exactly the configured bucket distribution:
 
-  v7.4 baseline:      30% (e.g. 3000 of 10000)
+  v7.4 baseline:      20% (e.g. 2000 of 10000)
   v7.5 register:      25% (e.g. 2500 of 10000)
   v7.7 Rule 4:        15% (e.g. 1500 of 10000) — 20% of these are violations
   v7.7 Ω_*:           20% (e.g. 2000 of 10000)
   v7.6 production:    10% (e.g. 1000 of 10000)
+  meta-logic:         10% (e.g. 1000 of 10000)
 
 Rounding: floor for all buckets, with any remainder allocated to the
 baseline bucket. This keeps total exactly = N.
@@ -22,7 +23,7 @@ to skip already-written examples and continue to target N.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterator
 
@@ -32,16 +33,18 @@ from ..generator.v75_register import V75RegisterGenerator
 from ..generator.v77_rule_four import V77RuleFourGenerator
 from ..generator.v77_omega import V77OmegaGenerator
 from ..generator.v76_production import V76ProductionGenerator
+from ..generator.meta_logic import MetaLogicGenerator
 
 
 @dataclass
 class Level2MixConfig:
     # Bucket fractions — authoritative, locked.
-    v74_fraction: float = 0.30
+    v74_fraction: float = 0.20
     v75_fraction: float = 0.25
     v77_rule_four_fraction: float = 0.15
     v77_omega_fraction: float = 0.20
     v76_production_fraction: float = 0.10
+    meta_logic_fraction: float = 0.10
 
     seed: int = 42
     llm_provider: Any = None
@@ -54,6 +57,7 @@ class Level2MixConfig:
             "v77_rule_four": self.v77_rule_four_fraction,
             "v77_omega": self.v77_omega_fraction,
             "v76_production": self.v76_production_fraction,
+            "meta_logic": self.meta_logic_fraction,
         }
 
     def validate(self) -> None:
@@ -75,6 +79,7 @@ class Level2MixController:
             "v77_rule_four": V77RuleFourGenerator(seed=seed + 2, llm_provider=prov),
             "v77_omega": V77OmegaGenerator(seed=seed + 3, llm_provider=prov),
             "v76_production": V76ProductionGenerator(seed=seed + 4, llm_provider=prov),
+            "meta_logic": MetaLogicGenerator(seed=seed + 5, llm_provider=prov),
         }
 
     def bucket_sizes(self, n: int) -> dict[str, int]:

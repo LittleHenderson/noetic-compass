@@ -50,12 +50,13 @@ class TestLevel2EndToEnd:
         ctrl = Level2MixController(Level2MixConfig(seed=42))
         out = list(ctrl.iter_examples(100))
         counts = Counter(ex.bucket for ex in out)
-        # Exact integer match at n=100 per spec
-        assert counts["v74_baseline"] == 30
+        # Exact integer match at n=100 for Level 2 with meta-logic bucket.
+        assert counts["v74_baseline"] == 20
         assert counts["v75_register"] == 25
         assert counts["v77_rule_four"] == 15
         assert counts["v77_omega"] == 20
         assert counts["v76_production"] == 10
+        assert counts["meta_logic"] == 10
 
     def test_rule_four_violation_labels(self):
         """Generator-declared violations must round-trip through Rust engine."""
@@ -120,3 +121,15 @@ class TestLevel2EndToEnd:
                 assert ex.production_target is not None
                 assert ex.production_target["prereqs"]
         assert production_count == 10
+
+    def test_meta_logic_bucket_present_and_valid(self):
+        ctrl = Level2MixController(Level2MixConfig(seed=42))
+        schema = SchemaValidator(strict=False)
+        composite = CompositeValidator()
+        examples = [ex for ex in ctrl.iter_examples(100) if ex.bucket == "meta_logic"]
+        assert len(examples) == 10
+        for ex in examples:
+            d = ex.to_dict()
+            assert schema.validate(d) == []
+            report = composite.validate(d)
+            assert report.ok, report.issues

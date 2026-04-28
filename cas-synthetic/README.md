@@ -1,6 +1,6 @@
 # CAS Synthetic Data Generator — Level 2 Scaffold
 
-Generates training data for the CAS-Native v2 model across CAS versions 7.4 through 7.7.
+Generates training data for the CAS-Native v2 model across CAS versions 7.4 through 7.7 plus a meta-logic / set-theory bucket.
 
 ## Architectural decision (Option 2 — fresh at repo root)
 
@@ -12,27 +12,30 @@ Chose Option 2: fresh `cas-synthetic/` at repo root implementing the authoritati
 
 ```
 cas-synthetic/
-  generator/        — v7.4, v7.5, v7.6, v7.7 generators (streaming, seedable)
+  generator/        — v7.4, v7.5, v7.6, v7.7, meta-logic generators (streaming, seedable)
   templates/        — YAML templates (structural correctness per version)
   llm_interface/    — Claude, OpenAI, Local paraphrase providers
   validation/       — schema / Rust / composite validators
-  mix_controller/   — 30/25/15/20/10 weighted mixture controller
+  mix_controller/   — 20/25/15/20/10/10 weighted mixture controller
   scripts/          — generate, validate, inspect
   tests/            — 40+ pytest tests
   data/level2_scaffold/ — git-ignored output directory
 ```
 
-## Mix ratios (Level 2, locked)
+## Mix ratios (Level 2 with meta-logic bucket)
 
 | Bucket | Fraction | Example at n=10,000 |
 |---|---|---|
-| v7.4 baseline (Noetic × Domain) | 30% | 3,000 |
+| v7.4 baseline (Noetic × Domain) | 20% | 2,000 |
 | v7.5 register (single register per state) | 25% | 2,500 |
 | v7.7 Rule 4 (compliant + 20% violations) | 15% | 1,500 |
 | v7.7 Ω_* named emergent | 20% | 2,000 |
 | v7.6 production semantics | 10% | 1,000 |
+| meta-logic / cluster / diagram-capable finite constructs | 10% | 1,000 |
 
 Within the v7.7 Rule 4 bucket, 20% of examples are deliberate `same_noetic_cross_no_emergent` violations labeled `is_valid=false, distance_to_valid > 0`. The remaining 80% are compliant — either `+` co-presence or `×` with a named emergent result drawn from `cas-native/config/omega_registry.yaml`.
+
+The meta-logic bucket emits only newly admitted finite CAS constructs: `NoeticCluster`, `StateCluster`, `StateVariantCluster`, `RelationCluster`, finite set operations (`∪`, `∩`, `∖`), typed membership/subset assertions, `Coordinate{...}`, `<...>` tuple coordinates, `Product(Noetics, Domains)`, `CoverOf(...)`, `PartitionOf(...)`, and `Pullback(...)` strictly as a finite meet/intersection constructor over compiler-valid finite clusters. It does not claim support for general categorical pullbacks.
 
 ## Running
 
@@ -71,7 +74,7 @@ When no keys are configured, the scaffold falls back to template-only generation
 40+ tests across:
 
 - `test_base.py` — abstract class interface
-- `test_v74_generator.py`, `test_v75_generator.py`, `test_v77_rule_four_generator.py`, `test_v77_omega_generator.py`, `test_v76_production_generator.py` — per-version invariants
+- `test_v74_generator.py`, `test_v75_generator.py`, `test_v77_rule_four_generator.py`, `test_v77_omega_generator.py`, `test_v76_production_generator.py`, `test_meta_logic_generator.py` — per-version invariants
 - `test_schema_validation.py` — data_format.md conformance
 - `test_rust_validator.py` — integration with the vendored cas_engine 0.1.1 wheel
 - `test_composite_validator.py` — semantic coherence
@@ -102,6 +105,7 @@ No generator code change is required — `V77OmegaGenerator` reads the registry 
 - Multiprocessing-based parallel generation (Level 2 is sequential; hooks already in mix controller)
 - Round-trip verification (feed generated text back through signal analyzer to catch LLM hallucination)
 - Additional Ω_* as Appendix I admits them
+- Compiler-backed validation for meta-logic diagram export once that path is exposed directly inside `cas-synthetic`
 - Mix ratio tuning from training telemetry (current ratios frozen for Level 2)
 
 ## Authoritative references

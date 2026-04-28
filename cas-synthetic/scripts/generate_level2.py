@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""End-to-end Level 2 generation: produces 10K examples in the canonical
-30/25/15/20/10 mix.
+"""End-to-end Level 2 generation: produces 10K examples in the configured
+20/25/15/20/10/10 mix with the meta-logic / set-theory bucket.
 
 Usage:
     python -m cas_synthetic.scripts.generate_level2 --n 10000 \

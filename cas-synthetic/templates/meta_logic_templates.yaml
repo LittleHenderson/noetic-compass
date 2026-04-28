@@ -1,0 +1,129 @@
+# Admitted CAS meta-logic / cluster / diagram-capable templates.
+# Pullback examples are finite meet/intersection constructors only; this bucket
+# does not claim general categorical pullbacks.
+
+constructs:
+  - family: noetic_cluster
+    expression: "NoeticCluster{^2, ^7}"
+    prompt: "Describe a typed noetic cluster containing noetics 2 and 7."
+    response: "NoeticCluster{^2, ^7} groups two admitted noetic atoms as a typed Noetics-level cluster."
+    states:
+      - [2, "P"]
+      - [7, "O"]
+
+  - family: state_cluster
+    expression: "StateCluster{^2^P, ^7^O}"
+    prompt: "Describe a typed state cluster spanning noetic 2 in P and noetic 7 in O."
+    response: "StateCluster{^2^P, ^7^O} collects admitted state atoms without collapsing their domains."
+    states:
+      - [2, "P"]
+      - [7, "O"]
+
+  - family: state_variant_cluster
+    expression: "StateVariantCluster{^3^P_{F2}|A, ^2^C|f}"
+    prompt: "Describe a typed cluster of state variants with register annotations."
+    response: "StateVariantCluster{^3^P_{F2}|A, ^2^C|f} keeps the F2-indexed affective variant and the cognitive f-register variant as typed variants."
+    states:
+      - [3, "P"]
+      - [2, "C"]
+    registers: ["A", "f"]
+
+  - family: relation_cluster
+    expression: "RelationCluster{^5^P -> ^5^C, ^5^C -> ^5^E}"
+    prompt: "Describe a typed relation cluster linking P, C, and E states for noetic 5."
+    response: "RelationCluster{^5^P -> ^5^C, ^5^C -> ^5^E} records two admitted typed arrows as a finite relation cluster."
+    states:
+      - [5, "P"]
+      - [5, "C"]
+      - [5, "E"]
+
+  - family: set_ops
+    expression: "StateCluster{^2^P, ^7^O} ∪ StateCluster{^3^P, ^4^C}"
+    prompt: "Describe an admitted finite union of typed state clusters."
+    response: "The union combines two finite StateCluster terms while preserving the typed state atoms."
+    states:
+      - [2, "P"]
+      - [7, "O"]
+      - [3, "P"]
+      - [4, "C"]
+
+  - family: set_ops
+    expression: "StateCluster{^2^P, ^7^O} ∩ StateCluster{^7^O, ^4^C}"
+    prompt: "Describe an admitted finite intersection of typed state clusters."
+    response: "The intersection denotes the shared finite typed state content, here centered on ^7^O."
+    states:
+      - [2, "P"]
+      - [7, "O"]
+      - [4, "C"]
+
+  - family: set_ops
+    expression: "StateCluster{^2^P, ^7^O} ∖ StateCluster{^7^O}"
+    prompt: "Describe an admitted finite set difference over typed state clusters."
+    response: "The set difference removes the finite typed state cluster on the right from the cluster on the left."
+    states:
+      - [2, "P"]
+      - [7, "O"]
+
+  - family: typed_membership
+    expression: "^2 ∈ Noetics"
+    prompt: "Explain a typed membership assertion for a noetic atom."
+    response: "^2 ∈ Noetics asserts that noetic atom 2 is a member of the Noetics type."
+    states:
+      - [2, "P"]
+
+  - family: typed_subset
+    expression: "StateCluster{^2^P, ^7^O} ⊆ States"
+    prompt: "Explain a typed subset assertion for a state cluster."
+    response: "StateCluster{^2^P, ^7^O} ⊆ States asserts that every finite member of the cluster is typed as a State."
+    states:
+      - [2, "P"]
+      - [7, "O"]
+
+  - family: coordinate
+    expression: "Coordinate{^2, P, F2, A}"
+    prompt: "Describe a typed coordinate with noetic, domain, foundation, and register axes."
+    response: "Coordinate{^2, P, F2, A} names a typed coordinate at noetic 2, domain P, foundation F2, and register A."
+    states:
+      - [2, "P"]
+
+  - family: coordinate_tuple
+    expression: "<^2, P, F2, A>"
+    prompt: "Describe the angle-bracket coordinate form for noetic 2 in P."
+    response: "<^2, P, F2, A> is the tuple form of the same typed coordinate axes."
+    states:
+      - [2, "P"]
+
+  - family: product
+    expression: "Product(Noetics, Domains)"
+    prompt: "Describe the admitted product constructor over Noetics and Domains."
+    response: "Product(Noetics, Domains) denotes the typed finite product space used for noetic-domain coordinates."
+    states:
+      - [2, "P"]
+      - [7, "O"]
+
+  - family: finite_pullback
+    expression: "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})"
+    prompt: "Describe a finite-meet Pullback expression in this admitted CAS fragment."
+    response: "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8}) is used here only as the admitted finite meet/intersection constructor over two finite clusters, not as a claim of general categorical pullbacks."
+    states:
+      - [2, "P"]
+      - [7, "P"]
+      - [8, "P"]
+
+  - family: cover
+    expression: "CoverOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7)"
+    prompt: "Describe a cover over the SubFoundations base."
+    response: "CoverOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7) states that the listed foundations cover the SubFoundations base."
+    states:
+      - [1, "P"]
+      - [2, "P"]
+      - [3, "P"]
+
+  - family: partition
+    expression: "PartitionOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7)"
+    prompt: "Describe a partition over the SubFoundations base."
+    response: "PartitionOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7) states that the listed foundations form the admitted partition of the SubFoundations base."
+    states:
+      - [1, "P"]
+      - [2, "P"]
+      - [3, "P"]

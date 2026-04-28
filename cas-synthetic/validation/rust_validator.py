@@ -45,13 +45,28 @@ def _ensure_cas_engine_importable() -> Any:
         raise RustValidatorUnavailable(
             f"cas_engine wheel not importable at {_VENDOR_PATH}: {exc}"
         ) from exc
+    required = (
+        "validate_same_noetic_cross_product_batch",
+        "rule_four_distance_batch",
+        "verify_named_emergent_register_batch",
+        "NamedEmergentRegister",
+        "RegisterSet",
+    )
+    missing = [name for name in required if not hasattr(cas_engine, name)]
+    if missing:
+        raise RustValidatorUnavailable(
+            "cas_engine wheel is importable but missing required Level 2 "
+            f"bindings: {', '.join(missing)}"
+        )
     return cas_engine
 
 
 # Pattern matching operand instances inside a cas_expression string.
-# Handles: ^N | R , ^N ^D | R , ^N ^D | R _{Fk} — with the register
-# following the `|` glyph.
-_OPERAND_RE = re.compile(r"\^(\d+)(?:\^([PCEO]))?\|([TAfE])(?:_\{F(\d)\})?")
+# Handles: ^N|R, ^N^D|R, ^N^D|R_{Fk}, and compiler state variants
+# such as ^N^D_{Fk}|R.
+_OPERAND_RE = re.compile(
+    r"\^(\d+)(?:\^([PCEO]))?(?:_\{F(\d)\})?\|([TAfE])(?:_\{F(\d)\})?"
+)
 
 # Rule 4 relevant tokens: `x` (ASCII times) or `×` between operands.
 _TIMES_TOKENS = (" x ", " × ")
@@ -173,7 +188,7 @@ class RustValidator:
         emergent_name: str | None = None
         if "=" in expression:
             lhs, rhs = expression.split("=", 1)
-            m = re.search(r"\|(Omega_\w+)", rhs)
+            m = re.search(r"\|((?:Omega|Ω)_\w+)", rhs)
             if m:
                 emergent_name = m.group(1)
             work = lhs
@@ -190,8 +205,9 @@ class RustValidator:
         for m in matches:
             noetic = int(m.group(1))
             dom = m.group(2)
-            drive = int(m.group(4)) if m.group(4) else None
-            reg = m.group(3)
+            drive_raw = m.group(3) or m.group(5)
+            drive = int(drive_raw) if drive_raw else None
+            reg = m.group(4)
             operands.append(
                 (
                     noetic,

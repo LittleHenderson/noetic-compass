@@ -1,5 +1,6 @@
 data/level2_scaffold/*
 !data/level2_scaffold/.gitkeep
+data/pytest-tmp/
 __pycache__/
 *.pyc
 .pytest_cache/
