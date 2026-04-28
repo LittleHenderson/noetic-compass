@@ -404,27 +404,72 @@ def cas_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
 def load_cas_data(
     json_path: str | Path,
 ) -> list[dict[str, Any]]:
-    """Load CAS data from a JSON file.
+    """Load CAS data from a JSON or JSONL file.
 
-    Supports both:
-      - List of records: [{"prompt": ..., "response": ..., "scores": ...}, ...]
-      - Dict with "results" key: {"results": [...]}
+    Tries standard ``json.loads`` first. On a multi-document parse error
+    (typical for JSONL — newline-delimited JSON), falls back to line-by-line
+    parsing.
+
+    JSON shapes supported:
+      - List of records: ``[{"prompt": ..., "response": ..., "scores": ...}, ...]``
+      - Dict with "results" key: ``{"results": [...]}``
+      - Single record dict: ``{"prompt": ..., ...}``
+
+    JSONL: one JSON object per line; blank lines ignored. This is the format
+    the cas-synthetic Level 2 generator emits at
+    ``cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl``.
     """
     path = Path(json_path)
     if not path.exists():
         return []
 
     with open(path, "r", encoding="utf-8") as f:
-        raw = json.load(f)
+        content = f.read()
+
+    # Strip BOM and leading whitespace; bail on empty file.
+    stripped = content.lstrip("﻿").lstrip()
+    if not stripped:
+        return []
+
+    # First, try parsing as a single JSON document. This catches JSON arrays,
+    # single-record dicts, and the {"results": [...]} shape.
+    try:
+        raw = json.loads(stripped)
+    except json.JSONDecodeError as exc:
+        # JSONL signature: the first record parsed cleanly, but extra data
+        # follows. Re-parse line-by-line.
+        if exc.msg == "Extra data":
+            return _load_jsonl(stripped, path)
+        # Anything else (e.g. malformed first record) is a real error.
+        raise
 
     if isinstance(raw, list):
         return raw
-    elif isinstance(raw, dict) and "results" in raw:
+    if isinstance(raw, dict) and "results" in raw:
         return raw["results"]
-    elif isinstance(raw, dict):
-        # Single record
+    if isinstance(raw, dict):
         return [raw]
     return []
+
+
+def _load_jsonl(content: str, source_path: Path) -> list[dict[str, Any]]:
+    """Parse JSONL content (one JSON object per non-empty line)."""
+    out: list[dict[str, Any]] = []
+    for line_num, line in enumerate(content.splitlines(), start=1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise json.JSONDecodeError(
+                f"JSONL parse error in {source_path} at line {line_num}: {exc.msg}",
+                exc.doc,
+                exc.pos,
+            ) from exc
+        if isinstance(record, dict):
+            out.append(record)
+    return out
 
 
 def create_data_loaders(
