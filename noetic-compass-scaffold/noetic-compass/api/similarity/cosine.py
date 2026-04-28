@@ -26,26 +26,59 @@ NOETIC_AXIS: tuple[str, ...] = tuple(f"CO-{n}" for n in range(10))  # CO-0..CO-9
 DOMAIN_AXIS: tuple[str, ...] = ("P", "C", "E", "O")
 DRIVE_AXIS: tuple[str, ...] = tuple(f"F{k}" for k in range(1, 8))   # F1..F7
 REGISTER_AXIS: tuple[str, ...] = ("T", "A", "f", "E")
+FOUNDATION_AXIS: tuple[str, ...] = tuple(
+    f"Foundation_{i}" for i in range(1, 8)
+)  # Foundation_1..Foundation_7
 
 # Default weights -- reasoned in README.md "Default Weights" section.
+# Day 3 sprint Phase 1 added the Foundation axis at 0.10 (per directive).
+# The total now sums to 1.10; the active-weight renormalization in
+# :func:`cas_similarity` (which excludes vacuous axes) means this does not
+# change scores when foundation is unspecified on both sides, preserving
+# backward compatibility with the pre-Day-3 sixteen tests.
 DEFAULT_WEIGHTS: dict[str, float] = {
     "noetic": 0.40,
     "domain": 0.20,
     "drive": 0.20,
     "register": 0.10,
     "metaset": 0.10,
+    "foundation": 0.10,
 }
 
 # Sprint 1 inversion-pair policy default. See README.md "Inversion-Pair
 # Semantics" for the full rationale and the alternative values.
 DEFAULT_INVERSION_POLICY: str = "neutral"
 
-# Involution pairs (CLAUDE.md "Structural invariants"). Used only when the
-# inversion_policy is "merge".
+# Day 3 sprint Phase 1: cross-pair proximity boost added to the final
+# weighted-sum score whenever expression A activates one half of an
+# involution pair AND expression B activates the partner. This is a
+# multiplicative-on-top adjustment, NOT part of the normalized axis weights.
+# The boost is independent of the inversion_policy knob (which controls
+# how the pairs are treated WITHIN the noetic component score).
+INVOLUTION_PAIR_BOOST: float = 0.20
+
+# Involution pairs (CLAUDE.md "Structural invariants"). Used by:
+# - inversion_policy="merge" (collapse pairs into shared slots)
+# - inversion_policy="penalize" (subtract penalty when only inverted partners present)
+# - cross-pair proximity boost (add INVOLUTION_PAIR_BOOST to final score
+#   when expressions reference partner Noetics)
 _INVOLUTION_PAIRS: tuple[tuple[str, str], ...] = (
     ("CO-2", "CO-3"),
     ("CO-5", "CO-6"),
     ("CO-8", "CO-9"),
+)
+
+# Compiler tokens that count as Foundation references for the Foundation
+# similarity axis. We accept both the bare meta-set names ("Foundation_1"
+# .. "Foundation_7") and the family-level names ("Foundations",
+# "SubFoundations") plus the typed-set constructors ("FoundationSet",
+# "SubFoundationSet"). Family-level references contribute to a synthetic
+# "any-foundation" slot (slot 0..6 are filled by index). Family-level
+# references contribute uniformly across all 7 slots so two expressions
+# both referencing the family are similar but not aligned to a specific
+# Foundation_k.
+_FOUNDATION_FAMILY_TOKENS: frozenset[str] = frozenset(
+    {"Foundations", "SubFoundations", "FoundationSet", "SubFoundationSet"}
 )
 
 
@@ -114,6 +147,14 @@ def extract_features(artifact_dict: dict[str, Any]) -> dict[str, list[float]]:
                        alignment internally; ``extract_features`` exposes
                        the unaligned per-side counts so callers can inspect
                        which names appeared.
+    - ``"foundation"`` -- 7-dim, one slot per ``Foundation_1`` ..
+                       ``Foundation_7``. Specific ``Foundation_k`` tokens
+                       fill slot ``k-1``. Family-level tokens
+                       (``Foundations``, ``SubFoundations``,
+                       ``FoundationSet``, ``SubFoundationSet``) contribute
+                       uniformly across all 7 slots, so family-vs-family
+                       references match while family-vs-specific references
+                       partially overlap.
 
     A failed-compile artifact (``valid is False``) returns all-zero vectors.
     """
@@ -122,6 +163,7 @@ def extract_features(artifact_dict: dict[str, Any]) -> dict[str, list[float]]:
     domain = [0.0] * len(DOMAIN_AXIS)
     drive = [0.0] * len(DRIVE_AXIS)
     register = [0.0] * len(REGISTER_AXIS)
+    foundation = [0.0] * len(FOUNDATION_AXIS)
     metaset_counts: dict[str, float] = {}
 
     if not artifact_dict.get("valid", False):
@@ -131,6 +173,7 @@ def extract_features(artifact_dict: dict[str, Any]) -> dict[str, list[float]]:
             "drive": drive,
             "register": register,
             "metaset": _metaset_vector_from_counts(metaset_counts),
+            "foundation": foundation,
         }
 
     ast = artifact_dict.get("ast")
@@ -141,12 +184,14 @@ def extract_features(artifact_dict: dict[str, Any]) -> dict[str, list[float]]:
             "drive": drive,
             "register": register,
             "metaset": _metaset_vector_from_counts(metaset_counts),
+            "foundation": foundation,
         }
 
     noetic_index = {name: i for i, name in enumerate(NOETIC_AXIS)}
     domain_index = {name: i for i, name in enumerate(DOMAIN_AXIS)}
     drive_index = {name: i for i, name in enumerate(DRIVE_AXIS)}
     register_index = {name: i for i, name in enumerate(REGISTER_AXIS)}
+    foundation_index = {name: i for i, name in enumerate(FOUNDATION_AXIS)}
 
     for node in _walk_ast(ast):
         kind = node.get("node")
@@ -196,11 +241,26 @@ def extract_features(artifact_dict: dict[str, Any]) -> dict[str, list[float]]:
             name = node.get("name")
             if isinstance(name, str) and name:
                 metaset_counts[name] = metaset_counts.get(name, 0.0) + 1.0
+                # Foundation axis: specific Foundation_k tokens fill their
+                # exact slot; family-level tokens distribute one unit
+                # uniformly across all 7 slots so two family references
+                # match each other but only partially align with a
+                # specific Foundation_k.
+                if name in foundation_index:
+                    foundation[foundation_index[name]] += 1.0
+                elif name in _FOUNDATION_FAMILY_TOKENS:
+                    share = 1.0 / len(FOUNDATION_AXIS)
+                    for i in range(len(foundation)):
+                        foundation[i] += share
 
         elif kind == "TypedMetaSetLiteral":
             ctor = node.get("constructor")
             if isinstance(ctor, str) and ctor:
                 metaset_counts[ctor] = metaset_counts.get(ctor, 0.0) + 1.0
+                if ctor in _FOUNDATION_FAMILY_TOKENS:
+                    share = 1.0 / len(FOUNDATION_AXIS)
+                    for i in range(len(foundation)):
+                        foundation[i] += share
             # Elements are walked separately by _walk_ast (they are nested
             # dicts), so their StateLiteral / DriveLiteral counts are
             # picked up automatically without double-counting here.
@@ -217,6 +277,7 @@ def extract_features(artifact_dict: dict[str, Any]) -> dict[str, list[float]]:
         "drive": drive,
         "register": register,
         "metaset": _metaset_vector_from_counts(metaset_counts),
+        "foundation": foundation,
     }
 
 
@@ -365,6 +426,37 @@ def _apply_inversion_policy(
     )
 
 
+def _involution_pair_match(
+    noetic_a: list[float], noetic_b: list[float]
+) -> bool:
+    """True when expressions reference partner Noetics across an involution pair.
+
+    The Day 3 sprint Phase 1 cross-pair proximity boost fires when one
+    expression activates a Noetic that's part of an involution pair AND
+    the other expression activates the partner Noetic. The pairs are the
+    canonical CAS involution pairs (CO-2/CO-3, CO-5/CO-6, CO-8/CO-9). This
+    is a coarse "did the conversation cross the involution" detector --
+    independent of the inversion_policy knob, which controls how the
+    pairs are treated WITHIN the noetic-axis cosine score.
+
+    Symmetric: ``_involution_pair_match(a, b) == _involution_pair_match(b, a)``.
+    Returns False on identical-Noetic activations (both sides on the same
+    side of the pair); only true cross-pair contact counts.
+    """
+
+    for left, right in _INVOLUTION_PAIRS:
+        li = NOETIC_AXIS.index(left)
+        ri = NOETIC_AXIS.index(right)
+        a_left = noetic_a[li] > 0
+        a_right = noetic_a[ri] > 0
+        b_left = noetic_b[li] > 0
+        b_right = noetic_b[ri] > 0
+        # A on left and B on right, or vice versa.
+        if (a_left and b_right) or (a_right and b_left):
+            return True
+    return False
+
+
 def _inversion_penalty(
     noetic_a: list[float], noetic_b: list[float]
 ) -> float:
@@ -426,6 +518,7 @@ def cas_similarity(
         "drive": 0.0,
         "register": 0.0,
         "metaset": 0.0,
+        "foundation": 0.0,
     }
 
     if not (valid_a and valid_b):
@@ -459,12 +552,17 @@ def cas_similarity(
     aligned_a, aligned_b = _aligned_metaset_vectors(counts_a, counts_b)
     metaset_score = cosine_similarity(aligned_a, aligned_b)
 
+    foundation_score = cosine_similarity(
+        feats_a["foundation"], feats_b["foundation"]
+    )
+
     breakdown = {
         "noetic": noetic_score,
         "domain": domain_score,
         "drive": drive_score,
         "register": register_score,
         "metaset": metaset_score,
+        "foundation": foundation_score,
     }
 
     # Track which axes were "vacuous" -- both sides all-zero on that axis.
@@ -482,6 +580,8 @@ def cas_similarity(
         "register": _is_zero_vec(feats_a["register"])
         and _is_zero_vec(feats_b["register"]),
         "metaset": _is_zero_vec(aligned_a) and _is_zero_vec(aligned_b),
+        "foundation": _is_zero_vec(feats_a["foundation"])
+        and _is_zero_vec(feats_b["foundation"]),
     }
     active_weight_total = sum(
         w for axis, w in used_weights.items() if not vacuous[axis]
@@ -496,6 +596,16 @@ def cas_similarity(
         # Every axis is vacuous on both sides -- both expressions are
         # essentially "empty" structurally. Treat as identical.
         score = 1.0
+
+    # Day 3 sprint Phase 1: cross-pair proximity boost. When one expression
+    # activates a Noetic and the other activates its involution partner,
+    # add INVOLUTION_PAIR_BOOST to the weighted-average score. This is
+    # multiplicative-on-top, NOT part of the normalized axis weights, so
+    # the boost still applies to expressions whose only signal is the
+    # cross-pair contact. Final score is clamped to [0, 1].
+    if _involution_pair_match(feats_a["noetic"], feats_b["noetic"]):
+        score += INVOLUTION_PAIR_BOOST
+
     # Numerical safety: clamp to [0, 1].
     score = max(0.0, min(1.0, score))
 

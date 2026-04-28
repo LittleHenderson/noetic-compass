@@ -261,3 +261,86 @@ def test_cas_similarity_inversion_policy_penalize_subtracts():
     result_pen = cas_similarity("^2", "^3", inversion_policy="penalize")
     result_neu = cas_similarity("^2", "^3")
     assert result_pen["breakdown"]["noetic"] <= result_neu["breakdown"]["noetic"]
+
+
+# ---------------------------------------------------------------------------
+# Day 3 sprint Phase 1: Foundation axis
+# ---------------------------------------------------------------------------
+
+
+def test_foundation_axis_specific_token_fills_exact_slot():
+    # Foundation_3 -> slot 2 (zero-indexed). Other slots zero.
+    src = f"Foundation_3 {MEMBER} Foundations"
+    art = compile_expression(src)
+    assert art.valid, art.to_dict()
+    feats = extract_features(art.to_dict())
+    assert len(feats["foundation"]) == 7
+    # Foundations is a family token that fills all slots uniformly with
+    # 1/7 = 0.142857; Foundation_3 adds an additional 1.0 to slot 2.
+    # We check that slot 2 is the strict maximum.
+    foundation = feats["foundation"]
+    assert foundation[2] == max(foundation)
+    assert foundation[2] > foundation[0]
+    assert foundation[2] > foundation[6]
+
+
+def test_foundation_axis_same_specific_foundation_high_similarity():
+    # Two expressions both invoking Foundation_3 should have foundation
+    # score 1.0 (perfect cosine alignment on the foundation axis). We use
+    # a tight tolerance because cosine_similarity over a non-uniform
+    # vector accumulates floating-point error on the order of 1e-16.
+    src_a = f"Foundation_3 {MEMBER} Foundations"
+    src_b = f"Foundation_3 {MEMBER} Foundations"
+    result = cas_similarity(src_a, src_b)
+    assert result["valid_a"] and result["valid_b"]
+    assert abs(result["breakdown"]["foundation"] - 1.0) < 1e-9
+    # Identical expressions overall -> overall score 1.0 (clamped).
+    assert result["score"] == 1.0
+
+
+def test_foundation_axis_different_foundations_lower_breakdown():
+    # Foundation_1 vs Foundation_3 -- both invoke the family Foundations
+    # (so the family-uniform component is identical) but the specific-slot
+    # spike is in different slots. Similarity should be strictly less than
+    # 1.0 on the foundation axis but strictly greater than 0.0 (because
+    # the family-level uniform contribution overlaps).
+    src_a = f"Foundation_1 {MEMBER} Foundations"
+    src_b = f"Foundation_3 {MEMBER} Foundations"
+    result = cas_similarity(src_a, src_b)
+    assert result["valid_a"] and result["valid_b"]
+    foundation_score = result["breakdown"]["foundation"]
+    assert 0.0 < foundation_score < 1.0
+
+
+# ---------------------------------------------------------------------------
+# Day 3 sprint Phase 1: cross-pair (involution) proximity boost
+# ---------------------------------------------------------------------------
+
+
+def test_involution_pair_boost_applies_for_partner_noetics():
+    # ^2 (Positive) vs ^3 (Negative) -- canonical involution pair. Under
+    # the default neutral policy the noetic-axis cosine is 0 (orthogonal
+    # slots), but the cross-pair boost adds +0.2 to the final score on
+    # top of the weighted average.
+    result_with_boost = cas_similarity("^2", "^3")
+    # Compare to a non-pair pair-of-noetics that have no boost: ^2 vs ^7
+    # (which is also orthogonal in noetic space and has the same domain).
+    # Default domain is P for both; both compute the same weighted-sum
+    # score. The boost should make ^2 vs ^3 strictly higher than ^2 vs ^7.
+    result_no_boost = cas_similarity("^2", "^7")
+    assert result_with_boost["score"] > result_no_boost["score"]
+    # Specifically, the difference should be approximately 0.2 (the boost).
+    assert abs(
+        (result_with_boost["score"] - result_no_boost["score"]) - 0.2
+    ) < 1e-9
+
+
+def test_involution_pair_boost_does_not_apply_for_non_pair():
+    # ^2 vs ^4 -- not an involution pair (CO-4 is self-dual). No boost
+    # should fire. Score should match the no-boost weighted-sum baseline.
+    result = cas_similarity("^2", "^4")
+    # ^2 vs ^7 is also non-pair with the same default domain; both should
+    # produce the same score (both are orthogonal noetics, identical
+    # domains, no drives, no registers, no metasets, no foundations).
+    baseline = cas_similarity("^2", "^7")
+    assert abs(result["score"] - baseline["score"]) < 1e-9
