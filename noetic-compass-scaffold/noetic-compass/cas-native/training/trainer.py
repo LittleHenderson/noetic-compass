@@ -210,7 +210,10 @@ class CASTrainer:
         # improvement. ``best_val_loss`` remains tracked for the nccs /
         # v7.4-parity path.
         self.best_composite_v2: float = float("-inf")
-        self.device = next(model.parameters()).device
+        # ``self.device`` is exposed as a property below — it always re-reads
+        # from ``next(self.model.parameters()).device`` so callers see the
+        # current device even if the model was moved (e.g. ``model.to("cuda")``)
+        # after the trainer was constructed.
 
         # Gumbel-softmax current temperature — annealed per step.
         self.current_tau: float = float(self.v2_hp.gumbel_tau_initial)
@@ -320,6 +323,46 @@ class CASTrainer:
                 lambda_count=hp.lambda_proposer_count,
                 lambda_named_emergent=hp.lambda_proposer_named_emergent,
             )
+
+        # Newly-created v2 sub-modules default to CPU. If the model was already
+        # on a non-CPU device when the trainer was constructed, these modules
+        # would stay on CPU and trigger device-mismatch errors on first forward.
+        # Align all v2 components (registered submodules and trainer-side
+        # auxiliary modules alike) to the model's current device.
+        self._align_v2_components_to_model_device()
+
+    def _align_v2_components_to_model_device(self) -> None:
+        """Move all v2 sub-modules to the model's current device.
+
+        ``nn.Module.to()`` is recursive over registered submodules, but
+        modules added to ``model.v2_components`` AFTER the model has been
+        moved to a non-CPU device stay on CPU until explicitly moved. This
+        helper ensures every v2 component — whether registered on the model
+        or held only as a trainer attribute — lives on the same device as
+        the rest of the model.
+        """
+        target_device = next(self.model.parameters()).device
+        # Registered submodules: ModuleDict.to() is recursive.
+        self.model.v2_components.to(target_device)
+        # Trainer-attribute modules not registered in v2_components.
+        for attr in (
+            "_involution_loss",
+            "_latent_involution_loss",
+            "_proposer_loss_fn",
+        ):
+            mod = getattr(self, attr, None)
+            if mod is not None and isinstance(mod, nn.Module):
+                mod.to(target_device)
+
+    @property
+    def device(self) -> torch.device:
+        """Current device of the model — re-read each access.
+
+        Implemented as a property (not a cached attribute) so callers see
+        the current device even if the model was moved (``model.to(...)``)
+        after the trainer was constructed.
+        """
+        return next(self.model.parameters()).device
 
     # ------------------------------------------------------------------ v2 props
 
