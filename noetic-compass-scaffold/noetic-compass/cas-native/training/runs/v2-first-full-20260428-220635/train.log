@@ -1,0 +1,152 @@
+[22:06:35] === CAS-Native v2 first full training run ===
+[22:06:35] Run dir: /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635
+[22:06:35] Dataset: /root/workspace/cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl
+[22:06:35] [1/5] Loading dataset + fitting frozen CAS tokenizer...
+[22:06:39]       stages: {'1_load': {'items': 10000, 'sources': 1}, '2_augment': {'skipped': True}, '3_validate': {'valid': 10000, 'rejected': 0}, '4_split': {'train': 8000, 'val': 1000, 'test': 1000}, '5_tokenize': {'max_length': 512, 'batch_size': 32, 'target_mode': 'cas_expression', 'tokenizer': {'type': 'HybridCASTokenizer', 'version': 'hybrid-cas-v1', 'vocab_size': 698, 'hash': '2339a510d298afed', 'frozen': True, 'special_tokens': ['[PAD]', '[UNK]', '[BOS]', '[EOS]', '[SEP]', '[CAS]', '[/CAS]', '[TASK_EXPR]', '[TASK_EXPLAIN]', '[TASK_CHAT]', '[PROMPT]', '[RESPONSE]', '[SP]', '[NL]', '[TAB]'], 'reserved_token_count': 198}, 'cas_expression_unk_rate': 0.0}}
+[22:06:39]       train batches/epoch: 250 | epochs scheduled: 6 | total steps: 1500
+[22:06:39]       tokenizer: {'type': 'HybridCASTokenizer', 'version': 'hybrid-cas-v1', 'vocab_size': 698, 'hash': '2339a510d298afed', 'frozen': True, 'special_tokens': ['[PAD]', '[UNK]', '[BOS]', '[EOS]', '[SEP]', '[CAS]', '[/CAS]', '[TASK_EXPR]', '[TASK_EXPLAIN]', '[TASK_CHAT]', '[PROMPT]', '[RESPONSE]', '[SP]', '[NL]', '[TAB]'], 'reserved_token_count': 198}
+[22:06:39]       tokenizer artifact: /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/tokenizer.json
+[22:06:39] [2/5] Initializing model...
+[22:06:39]       params: 41,010,176
+[22:06:39]       vocab_size: 698
+[22:06:39]       causal_lm: True
+[22:06:39] [3/5] Building trainer with v2 flags...
+[22:06:39]       production_warmup_steps: 100
+[22:06:39]       target_mode: cas_expression
+[22:06:40]       v2 sub-modules: register_embedding, emergent_register, production_semantics, expression_proposer
+[22:06:40] [4/5] Training: 6 epochs, batch=32, lr=0.0001, bf16, warmup=500
+[22:06:40]       checkpoint every 250 steps, eval every 250 steps, log every 25
+[22:06:40] --- Epoch 1/6 ---
+[22:06:43]   step    0/1500 ep=0: total=21.7378  mem=7.17GB  [cognitive_drift=2.775, inversion_penalty=2.921, involution_loss=0.056, lm_loss=7.317, null_space_reg_loss=503.436, proposer_rule_four_loss=6.269, rpm_satisfaction=0.500]
+[22:07:34]   step   25/1500 ep=0: total=119.5978  mem=12.52GB  [cognitive_drift=2.722, inversion_penalty=0.376, involution_loss=0.056, lm_loss=6.597, null_space_reg_loss=503.387, production_loss=404.665, production_weight=0.250, proposer_rule_four_loss=6.293, rpm_satisfaction=0.500]
+[22:08:25]   step   50/1500 ep=0: total=219.7292  mem=12.52GB  [cognitive_drift=2.739, inversion_penalty=0.117, involution_loss=0.056, lm_loss=5.078, null_space_reg_loss=503.263, production_loss=406.160, production_weight=0.500, proposer_rule_four_loss=6.254, rpm_satisfaction=0.500]
+[22:09:16]   step   75/1500 ep=0: total=316.7832  mem=12.52GB  [cognitive_drift=2.621, inversion_penalty=0.083, involution_loss=0.055, lm_loss=4.595, null_space_reg_loss=503.118, production_loss=401.067, production_weight=0.750, proposer_rule_four_loss=6.194, rpm_satisfaction=0.499]
+[22:10:04]   step  100/1500 ep=0: total=412.4936  mem=12.52GB  [cognitive_drift=2.656, inversion_penalty=0.073, involution_loss=0.055, lm_loss=4.166, null_space_reg_loss=502.943, production_loss=396.960, production_weight=1.000, proposer_rule_four_loss=6.113, rpm_satisfaction=0.498]
+[22:10:53]   step  125/1500 ep=0: total=406.6900  mem=12.52GB  [cognitive_drift=2.673, inversion_penalty=0.045, involution_loss=0.055, lm_loss=3.997, null_space_reg_loss=502.732, production_loss=391.319, production_weight=1.000, proposer_rule_four_loss=6.152, rpm_satisfaction=0.497]
+[22:11:43]   step  150/1500 ep=0: total=400.7242  mem=12.52GB  [cognitive_drift=2.640, inversion_penalty=0.042, involution_loss=0.055, lm_loss=4.194, null_space_reg_loss=502.622, production_loss=385.211, production_weight=1.000, proposer_rule_four_loss=6.121, rpm_satisfaction=0.495]
+[22:12:33]   step  175/1500 ep=0: total=394.5949  mem=12.52GB  [cognitive_drift=2.629, inversion_penalty=0.045, involution_loss=0.055, lm_loss=4.114, null_space_reg_loss=502.475, production_loss=379.169, production_weight=1.000, proposer_rule_four_loss=6.128, rpm_satisfaction=0.494]
+[22:13:24]   step  200/1500 ep=0: total=384.0450  mem=12.52GB  [cognitive_drift=2.691, inversion_penalty=0.049, involution_loss=0.055, lm_loss=3.838, null_space_reg_loss=502.277, production_loss=368.857, production_weight=1.000, proposer_rule_four_loss=6.079, rpm_satisfaction=0.492]
+[22:14:13]   step  225/1500 ep=0: total=369.1064  mem=12.52GB  [cognitive_drift=2.672, inversion_penalty=0.023, involution_loss=0.055, lm_loss=4.848, null_space_reg_loss=502.003, production_loss=352.983, production_weight=1.000, proposer_rule_four_loss=6.036, rpm_satisfaction=0.488]
+[22:14:59] --- Epoch 2/6 ---
+[22:15:01]   step  250/1500 ep=1: total=334.8873  mem=12.52GB  [cognitive_drift=2.718, inversion_penalty=0.025, involution_loss=0.055, lm_loss=3.754, null_space_reg_loss=501.739, production_loss=319.871, production_weight=1.000, proposer_rule_four_loss=5.927, rpm_satisfaction=0.484]
+[22:15:02]   [ckpt] wrote /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/checkpoints/step_250.pt
+[22:15:02]   [eval] step 250 — running validation pass...
+[22:15:22]   [eval] val avg total=320.7516 over 32 batches
+[22:15:22]   [eval]   cognitive_drift=2.6916
+[22:15:22]   [eval]   inversion_penalty=0.0234
+[22:15:22]   [eval]   involution_loss=0.0553
+[22:15:22]   [eval]   lm_loss=3.9369
+[22:15:22]   [eval]   null_space_reg_loss=501.7192
+[22:15:22]   [eval]   production_loss=325.9511
+[22:15:22]   [eval]   production_weight=1.0000
+[22:15:22]   [eval]   proposer_rule_four_loss=5.9308
+[22:15:22]   [eval]   rpm_satisfaction=0.4828
+[22:16:12]   step  275/1500 ep=1: total=309.6271  mem=12.52GB  [cognitive_drift=2.655, inversion_penalty=0.015, involution_loss=0.055, lm_loss=4.319, null_space_reg_loss=501.449, production_loss=294.180, production_weight=1.000, proposer_rule_four_loss=5.819, rpm_satisfaction=0.478]
+[22:17:03]   step  300/1500 ep=1: total=271.1016  mem=12.52GB  [cognitive_drift=2.708, inversion_penalty=0.008, involution_loss=0.055, lm_loss=3.619, null_space_reg_loss=501.263, production_loss=256.291, production_weight=1.000, proposer_rule_four_loss=5.855, rpm_satisfaction=0.479]
+[22:17:53]   step  325/1500 ep=1: total=249.1226  mem=12.52GB  [cognitive_drift=2.645, inversion_penalty=0.009, involution_loss=0.055, lm_loss=3.729, null_space_reg_loss=501.118, production_loss=234.274, production_weight=1.000, proposer_rule_four_loss=5.848, rpm_satisfaction=0.475]
+[22:18:43]   step  350/1500 ep=1: total=208.4297  mem=12.52GB  [cognitive_drift=2.651, inversion_penalty=0.010, involution_loss=0.055, lm_loss=4.178, null_space_reg_loss=500.551, production_loss=193.239, production_weight=1.000, proposer_rule_four_loss=5.655, rpm_satisfaction=0.464]
+[22:19:34]   step  375/1500 ep=1: total=185.4270  mem=12.52GB  [cognitive_drift=2.597, inversion_penalty=0.011, involution_loss=0.055, lm_loss=3.863, null_space_reg_loss=500.363, production_loss=170.603, production_weight=1.000, proposer_rule_four_loss=5.664, rpm_satisfaction=0.462]
+[22:20:23]   step  400/1500 ep=1: total=168.8419  mem=12.52GB  [cognitive_drift=2.686, inversion_penalty=0.007, involution_loss=0.055, lm_loss=4.009, null_space_reg_loss=500.016, production_loss=153.850, production_weight=1.000, proposer_rule_four_loss=5.566, rpm_satisfaction=0.452]
+[22:21:11]   step  425/1500 ep=1: total=140.4317  mem=12.52GB  [cognitive_drift=2.642, inversion_penalty=0.002, involution_loss=0.055, lm_loss=3.777, null_space_reg_loss=499.398, production_loss=125.794, production_weight=1.000, proposer_rule_four_loss=5.475, rpm_satisfaction=0.431]
+[22:22:00]   step  450/1500 ep=1: total=102.1339  mem=12.52GB  [cognitive_drift=2.700, inversion_penalty=0.001, involution_loss=0.055, lm_loss=3.456, null_space_reg_loss=498.800, production_loss=88.025, production_weight=1.000, proposer_rule_four_loss=5.005, rpm_satisfaction=0.406]
+[22:22:49]   step  475/1500 ep=1: total=72.0132  mem=12.52GB  [cognitive_drift=2.683, inversion_penalty=0.002, involution_loss=0.055, lm_loss=3.593, null_space_reg_loss=497.996, production_loss=57.764, production_weight=1.000, proposer_rule_four_loss=5.052, rpm_satisfaction=0.411]
+[22:23:37] --- Epoch 3/6 ---
+[22:23:39]   step  500/1500 ep=2: total=59.5437  mem=12.52GB  [cognitive_drift=2.712, inversion_penalty=0.001, involution_loss=0.055, lm_loss=3.719, null_space_reg_loss=497.818, production_loss=45.182, production_weight=1.000, proposer_rule_four_loss=4.999, rpm_satisfaction=0.396]
+[22:23:40]   [ckpt] wrote /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/checkpoints/step_500.pt
+[22:23:40]   [eval] step 500 — running validation pass...
+[22:24:00]   [eval] val avg total=49.3411 over 32 batches
+[22:24:00]   [eval]   cognitive_drift=2.6900
+[22:24:00]   [eval]   inversion_penalty=0.0013
+[22:24:00]   [eval]   involution_loss=0.0548
+[22:24:00]   [eval]   lm_loss=3.5960
+[22:24:00]   [eval]   null_space_reg_loss=497.8120
+[22:24:00]   [eval]   production_loss=37.5226
+[22:24:00]   [eval]   production_weight=1.0000
+[22:24:00]   [eval]   proposer_rule_four_loss=4.8989
+[22:24:00]   [eval]   rpm_satisfaction=0.3941
+[22:24:50]   step  525/1500 ep=2: total=41.5549  mem=12.52GB  [cognitive_drift=2.601, inversion_penalty=0.001, involution_loss=0.055, lm_loss=3.633, null_space_reg_loss=497.439, production_loss=27.486, production_weight=1.000, proposer_rule_four_loss=4.857, rpm_satisfaction=0.376]
+[22:25:40]   step  550/1500 ep=2: total=30.9346  mem=12.52GB  [cognitive_drift=2.674, inversion_penalty=0.000, involution_loss=0.055, lm_loss=3.613, null_space_reg_loss=497.018, production_loss=16.844, production_weight=1.000, proposer_rule_four_loss=4.818, rpm_satisfaction=0.369]
+[22:26:30]   step  575/1500 ep=2: total=21.1996  mem=12.52GB  [cognitive_drift=2.666, inversion_penalty=0.001, involution_loss=0.055, lm_loss=3.680, null_space_reg_loss=496.150, production_loss=7.406, production_weight=1.000, proposer_rule_four_loss=4.200, rpm_satisfaction=0.331]
+[22:27:20]   step  600/1500 ep=2: total=16.5455  mem=12.52GB  [cognitive_drift=2.697, inversion_penalty=0.001, involution_loss=0.054, lm_loss=3.521, null_space_reg_loss=495.685, production_loss=2.756, production_weight=1.000, proposer_rule_four_loss=4.420, rpm_satisfaction=0.349]
+[22:28:12]   step  625/1500 ep=2: total=14.4941  mem=12.52GB  [cognitive_drift=2.580, inversion_penalty=0.000, involution_loss=0.054, lm_loss=3.458, null_space_reg_loss=494.986, production_loss=1.078, production_weight=1.000, proposer_rule_four_loss=4.085, rpm_satisfaction=0.331]
+[22:29:03]   step  650/1500 ep=2: total=13.5826  mem=12.52GB  [cognitive_drift=2.699, inversion_penalty=0.000, involution_loss=0.054, lm_loss=3.188, null_space_reg_loss=493.675, production_loss=0.483, production_weight=1.000, proposer_rule_four_loss=3.823, rpm_satisfaction=0.310]
+[22:29:53]   step  675/1500 ep=2: total=13.2339  mem=12.52GB  [cognitive_drift=2.666, inversion_penalty=0.000, involution_loss=0.054, lm_loss=3.341, null_space_reg_loss=492.446, production_loss=0.196, production_weight=1.000, proposer_rule_four_loss=3.539, rpm_satisfaction=0.283]
+[22:30:43]   step  700/1500 ep=2: total=14.2080  mem=12.52GB  [cognitive_drift=2.667, inversion_penalty=0.000, involution_loss=0.054, lm_loss=3.363, null_space_reg_loss=491.219, production_loss=1.254, production_weight=1.000, proposer_rule_four_loss=3.354, rpm_satisfaction=0.281]
+[22:31:32]   step  725/1500 ep=2: total=13.5186  mem=12.52GB  [cognitive_drift=2.686, inversion_penalty=0.000, involution_loss=0.054, lm_loss=3.323, null_space_reg_loss=490.112, production_loss=0.764, production_weight=1.000, proposer_rule_four_loss=3.017, rpm_satisfaction=0.282]
+[22:32:22] --- Epoch 4/6 ---
+[22:32:24]   step  750/1500 ep=3: total=12.4690  mem=12.52GB  [cognitive_drift=2.693, inversion_penalty=0.000, involution_loss=0.054, lm_loss=2.833, null_space_reg_loss=488.885, production_loss=0.329, production_weight=1.000, proposer_rule_four_loss=2.777, rpm_satisfaction=0.283]
+[22:32:24]   [ckpt] wrote /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/checkpoints/step_750.pt
+[22:32:24]   [eval] step 750 — running validation pass...
+[22:32:45]   [eval] val avg total=12.4610 over 32 batches
+[22:32:45]   [eval]   cognitive_drift=2.6837
+[22:32:45]   [eval]   domain_coherence=0.0000
+[22:32:45]   [eval]   inversion_penalty=0.0000
+[22:32:45]   [eval]   involution_loss=0.0535
+[22:32:45]   [eval]   lm_loss=2.9796
+[22:32:45]   [eval]   null_space_reg_loss=488.8248
+[22:32:45]   [eval]   production_loss=0.2255
+[22:32:45]   [eval]   production_weight=1.0000
+[22:32:45]   [eval]   proposer_rule_four_loss=2.7537
+[22:32:45]   [eval]   rpm_satisfaction=0.2676
+[22:33:36]   step  775/1500 ep=3: total=12.2572  mem=12.52GB  [cognitive_drift=2.695, inversion_penalty=0.000, involution_loss=0.053, lm_loss=2.912, null_space_reg_loss=487.273, production_loss=0.151, production_weight=1.000, proposer_rule_four_loss=2.592, rpm_satisfaction=0.277]
+[22:34:27]   step  800/1500 ep=3: total=12.1933  mem=12.52GB  [cognitive_drift=2.715, inversion_penalty=0.000, involution_loss=0.053, lm_loss=2.806, null_space_reg_loss=485.786, production_loss=0.282, production_weight=1.000, proposer_rule_four_loss=2.403, rpm_satisfaction=0.278]
+[22:35:18]   step  825/1500 ep=3: total=11.3348  mem=12.52GB  [cognitive_drift=2.714, inversion_penalty=0.000, involution_loss=0.053, lm_loss=2.294, null_space_reg_loss=484.354, production_loss=0.013, production_weight=1.000, proposer_rule_four_loss=2.337, rpm_satisfaction=0.248]
+[22:36:08]   step  850/1500 ep=3: total=11.2887  mem=12.52GB  [cognitive_drift=2.715, inversion_penalty=0.000, involution_loss=0.053, lm_loss=2.180, null_space_reg_loss=482.701, production_loss=0.115, production_weight=1.000, proposer_rule_four_loss=2.254, rpm_satisfaction=0.272]
+[22:36:58]   step  875/1500 ep=3: total=10.7808  mem=12.52GB  [cognitive_drift=2.654, inversion_penalty=0.000, involution_loss=0.052, lm_loss=1.846, null_space_reg_loss=481.120, production_loss=0.032, production_weight=1.000, proposer_rule_four_loss=2.241, rpm_satisfaction=0.264]
+[22:37:50]   step  900/1500 ep=3: total=10.8560  mem=12.52GB  [cognitive_drift=2.629, inversion_penalty=0.000, involution_loss=0.052, lm_loss=1.998, null_space_reg_loss=479.844, production_loss=0.030, production_weight=1.000, proposer_rule_four_loss=2.194, rpm_satisfaction=0.252]
+[22:38:41]   step  925/1500 ep=3: total=10.9345  mem=12.52GB  [cognitive_drift=2.698, inversion_penalty=0.000, involution_loss=0.052, lm_loss=2.018, null_space_reg_loss=478.513, production_loss=0.005, production_weight=1.000, proposer_rule_four_loss=2.207, rpm_satisfaction=0.273]
+[22:39:31]   step  950/1500 ep=3: total=10.6234  mem=12.52GB  [cognitive_drift=2.703, inversion_penalty=0.000, involution_loss=0.052, lm_loss=1.703, null_space_reg_loss=477.314, production_loss=0.030, production_weight=1.000, proposer_rule_four_loss=2.175, rpm_satisfaction=0.275]
+[22:40:21]   step  975/1500 ep=3: total=10.5119  mem=12.52GB  [cognitive_drift=2.681, inversion_penalty=0.000, involution_loss=0.052, lm_loss=1.678, null_space_reg_loss=476.200, production_loss=0.017, production_weight=1.000, proposer_rule_four_loss=2.119, rpm_satisfaction=0.262]
+[22:41:08] --- Epoch 5/6 ---
+[22:41:10]   step 1000/1500 ep=4: total=10.4174  mem=12.52GB  [cognitive_drift=2.720, inversion_penalty=0.000, involution_loss=0.052, lm_loss=1.537, null_space_reg_loss=475.147, production_loss=0.001, production_weight=1.000, proposer_rule_four_loss=2.157, rpm_satisfaction=0.277]
+[22:41:11]   [ckpt] wrote /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/checkpoints/step_1000.pt
+[22:41:11]   [eval] step 1000 — running validation pass...
+[22:41:31]   [eval] val avg total=10.1260 over 32 batches
+[22:41:31]   [eval]   cognitive_drift=2.6828
+[22:41:31]   [eval]   domain_coherence=0.0001
+[22:41:31]   [eval]   inversion_penalty=0.0000
+[22:41:31]   [eval]   involution_loss=0.0516
+[22:41:31]   [eval]   lm_loss=1.3228
+[22:41:31]   [eval]   null_space_reg_loss=475.1058
+[22:41:31]   [eval]   production_loss=0.0132
+[22:41:31]   [eval]   production_weight=1.0000
+[22:41:31]   [eval]   proposer_rule_four_loss=2.0878
+[22:41:31]   [eval]   rpm_satisfaction=0.2613
+[22:42:24]   step 1025/1500 ep=4: total=10.2694  mem=12.52GB  [cognitive_drift=2.638, inversion_penalty=0.000, involution_loss=0.052, lm_loss=1.498, null_space_reg_loss=474.186, production_loss=0.010, production_weight=1.000, proposer_rule_four_loss=2.117, rpm_satisfaction=0.271]
+[22:43:15]   step 1050/1500 ep=4: total=10.0400  mem=12.52GB  [cognitive_drift=2.686, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.273, null_space_reg_loss=473.280, production_loss=0.006, production_weight=1.000, proposer_rule_four_loss=2.053, rpm_satisfaction=0.264]
+[22:44:05]   step 1075/1500 ep=4: total=10.1834  mem=12.52GB  [cognitive_drift=2.659, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.407, null_space_reg_loss=472.457, production_loss=0.032, production_weight=1.000, proposer_rule_four_loss=2.088, rpm_satisfaction=0.266]
+[22:44:56]   step 1100/1500 ep=4: total=10.0703  mem=12.52GB  [cognitive_drift=2.669, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.355, null_space_reg_loss=471.744, production_loss=0.008, production_weight=1.000, proposer_rule_four_loss=2.041, rpm_satisfaction=0.249]
+[22:45:47]   step 1125/1500 ep=4: total=10.0274  mem=12.52GB  [cognitive_drift=2.700, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.276, null_space_reg_loss=471.148, production_loss=0.010, production_weight=1.000, proposer_rule_four_loss=2.037, rpm_satisfaction=0.261]
+[22:46:36]   step 1150/1500 ep=4: total=9.8223  mem=12.52GB  [cognitive_drift=2.653, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.124, null_space_reg_loss=470.551, production_loss=0.002, production_weight=1.000, proposer_rule_four_loss=2.064, rpm_satisfaction=0.256]
+[22:47:27]   step 1175/1500 ep=4: total=9.9649  mem=12.52GB  [cognitive_drift=2.646, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.256, null_space_reg_loss=470.030, production_loss=0.010, production_weight=1.000, proposer_rule_four_loss=2.107, rpm_satisfaction=0.249]
+[22:48:18]   step 1200/1500 ep=4: total=9.9435  mem=12.52GB  [cognitive_drift=2.648, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.241, null_space_reg_loss=469.578, production_loss=0.010, production_weight=1.000, proposer_rule_four_loss=2.078, rpm_satisfaction=0.259]
+[22:49:06]   step 1225/1500 ep=4: total=9.8702  mem=12.52GB  [cognitive_drift=2.652, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.165, null_space_reg_loss=469.187, production_loss=0.003, production_weight=1.000, proposer_rule_four_loss=2.102, rpm_satisfaction=0.257]
+[22:49:55] --- Epoch 6/6 ---
+[22:49:57]   step 1250/1500 ep=5: total=9.8809  mem=12.52GB  [cognitive_drift=2.724, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.139, null_space_reg_loss=468.857, production_loss=0.009, production_weight=1.000, proposer_rule_four_loss=2.019, rpm_satisfaction=0.260]
+[22:49:57]   [ckpt] wrote /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/checkpoints/step_1250.pt
+[22:49:57]   [eval] step 1250 — running validation pass...
+[22:50:18]   [eval] val avg total=9.7752 over 32 batches
+[22:50:18]   [eval]   cognitive_drift=2.6828
+[22:50:18]   [eval]   domain_coherence=0.0000
+[22:50:18]   [eval]   involution_loss=0.0508
+[22:50:18]   [eval]   lm_loss=1.0704
+[22:50:18]   [eval]   null_space_reg_loss=468.8454
+[22:50:18]   [eval]   production_loss=0.0133
+[22:50:18]   [eval]   production_weight=1.0000
+[22:50:18]   [eval]   proposer_rule_four_loss=2.0424
+[22:50:18]   [eval]   rpm_satisfaction=0.2492
+[22:51:07]   step 1275/1500 ep=5: total=9.8993  mem=12.52GB  [cognitive_drift=2.659, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.188, null_space_reg_loss=468.600, production_loss=0.020, production_weight=1.000, proposer_rule_four_loss=2.076, rpm_satisfaction=0.257]
+[22:51:57]   step 1300/1500 ep=5: total=9.7623  mem=12.52GB  [cognitive_drift=2.664, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.056, null_space_reg_loss=468.379, production_loss=0.018, production_weight=1.000, proposer_rule_four_loss=2.063, rpm_satisfaction=0.258]
+[22:52:46]   step 1325/1500 ep=5: total=9.7896  mem=12.52GB  [cognitive_drift=2.669, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.085, null_space_reg_loss=468.191, production_loss=0.000, production_weight=1.000, proposer_rule_four_loss=2.076, rpm_satisfaction=0.265]
+[22:53:36]   step 1350/1500 ep=5: total=9.8185  mem=12.52GB  [cognitive_drift=2.667, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.111, null_space_reg_loss=468.047, production_loss=0.031, production_weight=1.000, proposer_rule_four_loss=2.061, rpm_satisfaction=0.248]
+[22:54:24]   step 1375/1500 ep=5: total=9.8146  mem=12.52GB  [cognitive_drift=2.721, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.094, null_space_reg_loss=467.944, production_loss=0.005, production_weight=1.000, proposer_rule_four_loss=2.046, rpm_satisfaction=0.242]
+[22:55:14]   step 1400/1500 ep=5: total=9.8362  mem=12.52GB  [cognitive_drift=2.636, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.204, null_space_reg_loss=467.866, production_loss=0.008, production_weight=1.000, proposer_rule_four_loss=2.023, rpm_satisfaction=0.247]
+[22:56:04]   step 1425/1500 ep=5: total=9.7970  mem=12.52GB  [cognitive_drift=2.724, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.049, null_space_reg_loss=467.811, production_loss=0.001, production_weight=1.000, proposer_rule_four_loss=2.074, rpm_satisfaction=0.258]
+[22:56:51]   step 1450/1500 ep=5: total=9.7908  mem=12.52GB  [cognitive_drift=2.638, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.140, null_space_reg_loss=467.772, production_loss=0.001, production_weight=1.000, proposer_rule_four_loss=2.075, rpm_satisfaction=0.246]
+[22:57:40]   step 1475/1500 ep=5: total=9.9339  mem=12.52GB  [cognitive_drift=2.682, inversion_penalty=0.000, involution_loss=0.051, lm_loss=1.181, null_space_reg_loss=467.746, production_loss=0.060, production_weight=1.000, proposer_rule_four_loss=2.063, rpm_satisfaction=0.251]
+[22:58:26] === Training complete ===
+[22:58:26]   Final step: 1500/1500
+[22:58:26]   Wall-clock: 3106.1s = 51.8 min
+[22:58:26]   Peak GPU memory: 12.52 GB
+[22:58:27]   Final checkpoint: /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/checkpoints/final.pt
+[22:58:27] [5/5] Metrics + checkpoint saved to /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635
