@@ -11,6 +11,12 @@ from .v77_rule_four import V77RuleFourGenerator
 from .v77_omega import V77OmegaGenerator
 from .v76_production import V76ProductionGenerator
 from .meta_logic import MetaLogicGenerator
+from .conversational import (
+    ConversationalExample,
+    Level3ConversationalGenerator,
+    infer_soft_domain_targets,
+    infer_soft_operator_targets,
+)
 
 __all__ = [
     "BaseGenerator",
@@ -21,4 +27,8 @@ __all__ = [
     "V77OmegaGenerator",
     "V76ProductionGenerator",
     "MetaLogicGenerator",
+    "ConversationalExample",
+    "Level3ConversationalGenerator",
+    "infer_soft_operator_targets",
+    "infer_soft_domain_targets",
 ]
