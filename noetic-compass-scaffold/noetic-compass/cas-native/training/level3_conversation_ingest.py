@@ -35,7 +35,20 @@ def domain_targets_as_list(value: Any) -> list[float] | None:
 
 
 def score_payload(item: dict[str, Any]) -> dict[str, Any]:
-    """Normalize legacy and Level 3 soft labels into trainer score keys."""
+    """Normalize legacy and Level 3 soft labels into trainer score keys.
+
+    Precedence when a record carries both legacy and Level 3 fields:
+
+    - ``operator_scores`` and ``domain_scores`` are **overwritten** by
+      ``soft_operator_targets`` and ``soft_domain_targets`` respectively.
+      Level 3 soft targets are the richer signal (probability distributions
+      vs one-hot), so they win when both are present.
+    - ``domain_averages`` is preserved via ``setdefault``: an existing legacy
+      value stays put; the soft-target list is only used to fill the slot
+      when ``domain_averages`` is absent. This asymmetry is intentional so
+      callers that already populated ``domain_averages`` (e.g. legacy
+      pipeline outputs) aren't silently overridden.
+    """
     scores = item.get("scores")
     cas_scores = dict(scores) if isinstance(scores, dict) else {}
 
