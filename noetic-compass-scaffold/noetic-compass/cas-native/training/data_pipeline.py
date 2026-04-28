@@ -230,7 +230,9 @@ def training_text_for_item(item: dict[str, Any], target_mode: str = "response") 
     response = _conversation_text(item, "response", "assistant_response")
     cas_expression = str(item.get("cas_expression") or "").strip()
 
-    if target_mode == "cas_expression" and cas_expression:
+    if target_mode == "cas_expression":
+        if not cas_expression:
+            raise ValueError("target_mode='cas_expression' requires cas_expression")
         return f"[TASK_EXPR] [PROMPT] {prompt} [RESPONSE] {cas_expression}".strip()
     if target_mode == "explain":
         source = cas_expression or prompt
@@ -240,6 +242,30 @@ def training_text_for_item(item: dict[str, Any], target_mode: str = "response") 
 
     combined = f"{prompt} {response}".strip()
     return combined or "empty"
+
+
+def _mask_prompt_targets_after_response(
+    token_ids: list[int],
+    targets: torch.Tensor,
+    tokenizer: TokenizerLike,
+) -> torch.Tensor:
+    """Ignore prompt-prefix LM loss for task-formatted examples.
+
+    The shifted target at index ``response_pos`` predicts the first token after
+    ``[RESPONSE]``. Earlier targets only teach the model to reconstruct the
+    task/prompt wrapper, which is not the objective for prompt -> CAS runs.
+    """
+    word2id = getattr(tokenizer, "word2id", {})
+    response_id = word2id.get("[RESPONSE]", word2id.get("[response]"))
+    if response_id is None:
+        return targets
+    try:
+        response_pos = token_ids.index(int(response_id))
+    except ValueError:
+        return targets
+    masked = targets.clone()
+    masked[:response_pos] = -100
+    return masked
 
 
 class CASDataset(Dataset):
@@ -279,6 +305,12 @@ class CASDataset(Dataset):
         # Input: all tokens except last; Target: all tokens except first
         input_ids = torch.tensor(token_ids[:-1], dtype=torch.long)
         targets = torch.tensor(token_ids[1:], dtype=torch.long)
+        if self.target_mode in {"cas_expression", "explain", "chat"}:
+            targets = _mask_prompt_targets_after_response(
+                token_ids,
+                targets,
+                self.tokenizer,
+            )
 
         # Attention mask (all real tokens)
         attention_mask = torch.ones(len(input_ids), dtype=torch.long)

@@ -69,6 +69,10 @@ CHECKPOINT_EVERY = int(os.environ.get("CAS_V2_CHECKPOINT_EVERY", 100))
 # the first full v2 run (commit e6cd8e4).
 PRODUCTION_WARMUP_STEPS = int(os.environ.get("CAS_V2_PRODUCTION_WARMUP", 100))
 TARGET_MODE = os.environ.get("CAS_V2_TARGET_MODE", "response")
+CAUSAL_LM = os.environ.get(
+    "CAS_V2_CAUSAL_LM",
+    "1" if TARGET_MODE == "cas_expression" else "0",
+).lower() in {"1", "true", "yes", "on"}
 
 # ------------------------------------------------------------ logging
 
@@ -128,10 +132,12 @@ else:
 
 model_vocab_size = int(getattr(tokenizer, "vocab_size", 32000))
 log("[2/5] Initializing model...")
-model = CASNativeModel(CASNativeConfig(vocab_size=model_vocab_size))
+model_config = CASNativeConfig(vocab_size=model_vocab_size, causal_lm=CAUSAL_LM)
+model = CASNativeModel(model_config)
 n_params = sum(p.numel() for p in model.parameters())
 log("      params: " + format(n_params, ","))
 log("      vocab_size: " + str(model_vocab_size))
+log("      causal_lm: " + str(CAUSAL_LM))
 
 
 # ------------------------------------------------------------ trainer
@@ -238,6 +244,7 @@ for epoch in range(EPOCHS):
                     "model_state_dict": trainer.model.state_dict(),
                     "optimizer_state_dict": trainer.optimizer.state_dict(),
                     "tokenizer": tokenizer_meta,
+                    "model_config": trainer.model.config.__dict__,
                 }, ckpt_path)
                 log("  [ckpt] wrote " + str(ckpt_path))
             except Exception as e:
@@ -301,6 +308,7 @@ try:
         "model_state_dict": trainer.model.state_dict(),
         "optimizer_state_dict": trainer.optimizer.state_dict(),
         "tokenizer": tokenizer_meta,
+        "model_config": trainer.model.config.__dict__,
     }, final_ckpt)
     log("  Final checkpoint: " + str(final_ckpt))
 except Exception as e:
@@ -318,6 +326,7 @@ with open(RUN_DIR / "metrics.json", "w") as f:
             "warmup_steps": WARMUP_STEPS,
             "production_warmup_steps": v2_hp.production_warmup_steps,
             "target_mode": TARGET_MODE,
+            "causal_lm": CAUSAL_LM,
             "log_every": LOG_EVERY,
             "eval_every": EVAL_EVERY,
             "checkpoint_every": CHECKPOINT_EVERY,

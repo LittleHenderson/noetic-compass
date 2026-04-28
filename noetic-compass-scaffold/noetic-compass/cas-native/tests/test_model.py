@@ -137,6 +137,33 @@ class TestCASNativeModel:
             atol=1e-5,
         )
 
+    def test_causal_lm_future_token_invariance(self):
+        """Causal LM mode must not let suffix tokens affect prefix logits."""
+        torch.manual_seed(0)
+        config = CASNativeConfig(
+            d_model=32,
+            n_layers=1,
+            n_heads=4,
+            vocab_size=64,
+            max_seq_len=16,
+            fractal_depth=1,
+            num_ethical_propositions=3,
+            dropout=0.0,
+            causal_lm=True,
+        )
+        model = CASNativeModel(config)
+        model.eval()
+
+        base = torch.tensor([[1, 2, 3, 4, 5, 6, 7, 8]], dtype=torch.long)
+        mutated = base.clone()
+        mutated[:, 4:] = torch.tensor([[31, 32, 33, 34]], dtype=torch.long)
+
+        with torch.no_grad():
+            base_logits = model(base)["logits"][:, :4, :]
+            mutated_logits = model(mutated)["logits"][:, :4, :]
+
+        assert torch.allclose(base_logits, mutated_logits, atol=1e-5)
+
     def test_default_config(self):
         """Model should work with default config."""
         model = CASNativeModel()

@@ -68,6 +68,7 @@ class CASNativeConfig:
     dropout: float = 0.1
     rpm_threshold: float = 0.5
     num_ifs_maps: int = 4
+    causal_lm: bool = False
 
 
 class PositionalEncoding(nn.Module):
@@ -147,6 +148,7 @@ class CASTransformerLayer(nn.Module):
         x: torch.Tensor,
         cognitive_state: torch.Tensor,
         attention_mask: torch.Tensor | None = None,
+        causal: bool = False,
     ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
         """
         Args:
@@ -166,8 +168,13 @@ class CASTransformerLayer(nn.Module):
             self.norm1(x),
             cognitive_state,
             attention_mask=attention_mask,
+            causal=causal,
         )
-        fractal_out = self.fractal_attn(self.norm2(x), attention_mask=attention_mask)
+        fractal_out = self.fractal_attn(
+            self.norm2(x),
+            attention_mask=attention_mask,
+            causal=causal,
+        )
 
         gate = torch.sigmoid(self.fractal_gate)
         attn_out = gate * domain_out + (1.0 - gate) * fractal_out
@@ -558,6 +565,7 @@ class CASNativeModel(nn.Module):
                 x,
                 layer_cognitive_state,
                 attention_mask=attention_mask,
+                causal=self.config.causal_lm,
             )
             all_rpm_satisfaction.append(rpm_sat)
 

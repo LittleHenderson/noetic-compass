@@ -52,12 +52,26 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--max-new-tokens", type=int, default=80)
     p.add_argument("--temperature", type=float, default=0.7)
     p.add_argument("--top-p", type=float, default=0.9)
+    p.add_argument("--min-new-tokens", type=int, default=8)
     p.add_argument("--seed", type=int, default=42)
     p.add_argument(
         "--task",
         choices=("expr", "raw"),
         default="expr",
         help="Prompt formatting. expr uses [TASK_EXPR] [PROMPT] ... [RESPONSE].",
+    )
+    p.add_argument(
+        "--causal-lm",
+        dest="causal_lm",
+        action="store_true",
+        default=None,
+        help="Force causal LM mode even if the checkpoint has no model_config.",
+    )
+    p.add_argument(
+        "--no-causal-lm",
+        dest="causal_lm",
+        action="store_false",
+        help="Force bidirectional mode for legacy checkpoints.",
     )
     p.add_argument(
         "--tokenizer",
@@ -103,12 +117,16 @@ def sample_token(
     top_p: float,
     *,
     tokenizer: HybridCASTokenizer,
+    blocked_ids: set[int] | None = None,
 ) -> int:
     """Top-p nucleus sampling with invalid-token masking."""
     logits = logits.float().clone()
     if logits.numel() > tokenizer.vocab_size:
         logits[tokenizer.vocab_size:] = float("-inf")
     for token_id in tokenizer.disallowed_generation_ids():
+        if 0 <= token_id < logits.numel():
+            logits[token_id] = float("-inf")
+    for token_id in blocked_ids or set():
         if 0 <= token_id < logits.numel():
             logits[token_id] = float("-inf")
     logits = logits / max(temperature, 1e-6)
@@ -118,6 +136,9 @@ def sample_token(
     cumprobs = torch.cumsum(probs, dim=-1)
     mask = cumprobs <= top_p
     mask[..., 0] = True
+    over_threshold = torch.nonzero(cumprobs > top_p, as_tuple=False)
+    if over_threshold.numel() > 0:
+        mask[over_threshold[0].item()] = True
     sorted_logits = sorted_logits.masked_fill(~mask, float("-inf"))
 
     kept_logits = torch.full_like(logits, float("-inf"))
@@ -131,6 +152,7 @@ def generate(
     tokenizer: HybridCASTokenizer,
     prompt: str,
     max_new_tokens: int,
+    min_new_tokens: int,
     temperature: float,
     top_p: float,
     device: torch.device,
@@ -146,11 +168,15 @@ def generate(
         for _ in range(max_new_tokens):
             out = model(input_ids)
             last_logits = out["logits"][0, -1, :]
+            blocked_ids = set()
+            if len(new_token_ids) < min_new_tokens:
+                blocked_ids.add(tokenizer.EOS_ID)
             tok = sample_token(
                 last_logits,
                 temperature,
                 top_p,
                 tokenizer=tokenizer,
+                blocked_ids=blocked_ids,
             )
             if tok == tokenizer.EOS_ID:
                 break
@@ -277,7 +303,16 @@ def main() -> int:
     ckpt = torch.load(str(args.checkpoint), map_location=device, weights_only=False)
     model_state = ckpt.get("model_state_dict", ckpt)
     model_vocab_size = checkpoint_vocab_size(model_state) or tokenizer.vocab_size
-    model = CASNativeModel(CASNativeConfig(vocab_size=model_vocab_size))
+    checkpoint_config = dict(ckpt.get("model_config") or {})
+    if args.causal_lm is not None:
+        causal_lm = bool(args.causal_lm)
+    else:
+        causal_lm = bool(checkpoint_config.get("causal_lm", args.task == "expr"))
+    model = CASNativeModel(CASNativeConfig(
+        vocab_size=model_vocab_size,
+        causal_lm=causal_lm,
+    ))
+    print(f"      causal_lm = {causal_lm}")
 
     own_state = model.state_dict()
     own_keys = set(own_state.keys())
@@ -332,6 +367,7 @@ def main() -> int:
                     tokenizer,
                     generation_prompt,
                     max_new_tokens=args.max_new_tokens,
+                    min_new_tokens=args.min_new_tokens,
                     temperature=args.temperature,
                     top_p=args.top_p,
                     device=device,
@@ -387,10 +423,12 @@ def main() -> int:
                 "dataset": str(args.dataset),
                 "samples_per_bucket": args.samples_per_bucket,
                 "max_new_tokens": args.max_new_tokens,
+                "min_new_tokens": args.min_new_tokens,
                 "temperature": args.temperature,
                 "top_p": args.top_p,
                 "seed": args.seed,
                 "task": args.task,
+                "causal_lm": causal_lm,
                 "tokenizer": tokenizer.metadata(),
                 "tokenizer_path": str(tokenizer_path) if tokenizer_path is not None else None,
                 "overall_valid_rate": sum(1 for s in all_samples if s["compile_valid_anywhere"]) / max(len(all_samples), 1),

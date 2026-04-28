@@ -146,11 +146,13 @@ class FractalAttentionHead(nn.Module):
         self,
         x: torch.Tensor,
         attention_mask: Optional[torch.Tensor] = None,
+        causal: bool = False,
     ) -> torch.Tensor:
         """
         Args:
             x: Input tensor of shape (batch, seq, d_model)
             attention_mask: Optional padding mask of shape (batch, seq)
+            causal: If True, mask future keys for autoregressive generation.
 
         Returns:
             Output tensor of shape (batch, seq, d_model)
@@ -181,6 +183,14 @@ class FractalAttentionHead(nn.Module):
                 ~token_mask.unsqueeze(1).unsqueeze(1),
                 -1e9,
             )
+            if causal:
+                causal_mask = torch.tril(
+                    torch.ones(seq_len, seq_len, device=x.device, dtype=torch.bool)
+                )
+                attn_weights = attn_weights.masked_fill(
+                    ~causal_mask.unsqueeze(0).unsqueeze(0),
+                    -1e9,
+                )
             attn_weights = F.softmax(attn_weights, dim=-1)
             query_mask = token_mask.unsqueeze(1).unsqueeze(-1).to(attn_weights.dtype)
             attn_weights = attn_weights * query_mask

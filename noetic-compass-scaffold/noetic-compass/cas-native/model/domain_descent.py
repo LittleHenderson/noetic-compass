@@ -120,12 +120,14 @@ class DomainDescentAttention(nn.Module):
         x: torch.Tensor,
         slot_weights: torch.Tensor,
         attention_mask: Optional[torch.Tensor] = None,
+        causal: bool = False,
     ) -> torch.Tensor:
         """
         Args:
             x: Input tensor of shape (batch, seq, d_model)
             slot_weights: Token-to-slot weights of shape (batch, seq, 40)
             attention_mask: Optional padding mask of shape (batch, seq)
+            causal: If True, each token position aggregates only its prefix.
 
         Returns:
             Output tensor of shape (batch, seq, d_model)
@@ -138,6 +140,53 @@ class DomainDescentAttention(nn.Module):
             )
 
         token_mask = self._normalize_attention_mask(attention_mask, batch, seq_len, x.device)
+        if causal:
+            outputs = []
+            for pos in range(seq_len):
+                prefix_x = x[:, : pos + 1, :]
+                prefix_slot_weights = slot_weights[:, : pos + 1, :]
+                prefix_mask = token_mask[:, : pos + 1]
+                slot_states, slot_mask, masked_prefix_weights = self._aggregate_slots(
+                    prefix_x,
+                    prefix_slot_weights,
+                    prefix_mask,
+                )
+
+                q = self.q_proj(slot_states).view(batch, self.num_states, self.n_heads, self.head_dim).transpose(1, 2)
+                k = self.k_proj(slot_states).view(batch, self.num_states, self.n_heads, self.head_dim).transpose(1, 2)
+                v = self.v_proj(slot_states).view(batch, self.num_states, self.n_heads, self.head_dim).transpose(1, 2)
+
+                attn_logits = torch.matmul(q, k.transpose(-2, -1)) / self.scale
+                allowed = self.domain_mask.unsqueeze(0).unsqueeze(0) & slot_mask.unsqueeze(1).unsqueeze(1)
+                attn_logits = attn_logits.masked_fill(~allowed, -1e9)
+
+                attn_weights = F.softmax(attn_logits, dim=-1)
+                query_mask = slot_mask.unsqueeze(1).unsqueeze(-1).to(attn_weights.dtype)
+                attn_weights = attn_weights * query_mask
+                attn_weights = attn_weights / attn_weights.sum(dim=-1, keepdim=True).clamp_min(1e-8)
+
+                slot_output = torch.matmul(attn_weights, v)
+                slot_output = slot_output.transpose(1, 2).contiguous().view(batch, self.num_states, self.d_model)
+                slot_output = self.out_proj(slot_output)
+                slot_output = slot_output * slot_mask.unsqueeze(-1).to(slot_output.dtype)
+
+                # Preserve the same O -> P feedback behavior, but only over
+                # slots visible in the current prefix.
+                o_mask = slot_mask[:, 30:40]
+                if o_mask.any():
+                    o_states = slot_output[:, 30:40, :]
+                    feedback_denom = o_mask.sum(dim=1, keepdim=True).clamp_min(1).to(o_states.dtype)
+                    feedback = (o_states * o_mask.unsqueeze(-1).to(o_states.dtype)).sum(dim=1, keepdim=True)
+                    feedback = self.feedback_proj(feedback / feedback_denom.unsqueeze(-1))
+                    slot_output = slot_output.clone()
+                    slot_output[:, 0:10, :] = slot_output[:, 0:10, :] + feedback
+
+                current_slot_weights = masked_prefix_weights[:, -1, :]
+                outputs.append(torch.einsum("bkd,bk->bd", slot_output, current_slot_weights))
+
+            token_output = torch.stack(outputs, dim=1)
+            return token_output * token_mask.unsqueeze(-1).to(token_output.dtype)
+
         slot_states, slot_mask, masked_slot_weights = self._aggregate_slots(
             x, slot_weights, token_mask
         )
