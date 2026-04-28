@@ -10,7 +10,7 @@ CASDataset and data pipeline for CAS-Native training.
 
 Features:
   - Load from JSON files (validation/baseline_results.json format)
-  - Simple whitespace tokenizer (or HuggingFace tokenizer if available)
+  - CAS-aware frozen tokenizer for symbolic CAS + prose
   - CAS scores attached as training labels
   - Train/val/test split (80/10/10)
   - Collate function for batching variable-length sequences
@@ -44,6 +44,13 @@ from cas_native.training.level3_conversation_ingest import (
     domain_targets_as_list as _domain_targets_as_list,
     score_payload as _score_payload,
 )
+from cas_native.training.tokenizer import (
+    HybridCASTokenizer,
+    SimpleTokenizer,
+    TokenizerLike,
+    build_tokenizer_from_records,
+    tokenizer_from_loader,
+)
 
 # The notation compiler lives in the sibling `api/notation/` package.
 # Conftest / scaffold setup places `noetic-compass/` on sys.path so this
@@ -74,51 +81,6 @@ except Exception:  # pragma: no cover - defensive; compiler is expected to impor
     compile_expression = None  # type: ignore[assignment]
     extract_register_activations = None  # type: ignore[assignment]
     _COMPILER_AVAILABLE = False
-
-
-class SimpleTokenizer:
-    """Simple whitespace tokenizer for when HuggingFace is not available.
-
-    Maps words to integer IDs. Includes special tokens:
-      0 = [PAD], 1 = [UNK], 2 = [BOS], 3 = [EOS]
-    """
-
-    PAD_ID = 0
-    UNK_ID = 1
-    BOS_ID = 2
-    EOS_ID = 3
-
-    def __init__(self, vocab_size: int = 32000):
-        self.vocab_size = vocab_size
-        self.word2id: dict[str, int] = {
-            "[PAD]": self.PAD_ID,
-            "[UNK]": self.UNK_ID,
-            "[BOS]": self.BOS_ID,
-            "[EOS]": self.EOS_ID,
-        }
-        self._next_id = 4
-
-    def _get_or_add(self, word: str) -> int:
-        """Get word ID, adding it to vocabulary if new."""
-        if word not in self.word2id:
-            if self._next_id < self.vocab_size:
-                self.word2id[word] = self._next_id
-                self._next_id += 1
-            else:
-                return self.UNK_ID
-        return self.word2id[word]
-
-    def encode(self, text: str, max_length: int = 512) -> list[int]:
-        """Tokenize text into a list of integer IDs."""
-        words = text.lower().split()
-        ids = [self.BOS_ID]
-        for w in words[: max_length - 2]:
-            ids.append(self._get_or_add(w))
-        ids.append(self.EOS_ID)
-        return ids
-
-    def pad_id(self) -> int:
-        return self.PAD_ID
 
 
 def build_register_activations_from_labels(
@@ -268,7 +230,7 @@ class CASDataset(Dataset):
     def __init__(
         self,
         data: list[dict[str, Any]],
-        tokenizer: Optional[SimpleTokenizer] = None,
+        tokenizer: Optional[TokenizerLike] = None,
         max_length: int = 512,
     ):
         self.data = data
@@ -479,6 +441,8 @@ def create_data_loaders(
     val_ratio: float = 0.1,
     test_ratio: float = 0.1,
     seed: int = 42,
+    tokenizer: Optional[TokenizerLike] = None,
+    use_cas_tokenizer: bool = True,
 ) -> tuple[DataLoader, DataLoader, DataLoader]:
     """Create train/val/test DataLoaders with specified split ratios.
 
@@ -490,6 +454,12 @@ def create_data_loaders(
         val_ratio: Fraction for validation (default 0.1)
         test_ratio: Fraction for test (default 0.1)
         seed: Random seed for reproducible splits
+        tokenizer: Optional prebuilt tokenizer. If omitted and
+            ``use_cas_tokenizer`` is true, a frozen ``HybridCASTokenizer`` is
+            fit once on the full dataset before split.
+        use_cas_tokenizer: Build the new CAS-aware tokenizer for production
+            training paths. Tests can pass ``False`` or explicit
+            ``SimpleTokenizer`` for tiny-vocab compatibility.
 
     Returns:
         Tuple of (train_loader, val_loader, test_loader)
@@ -497,7 +467,10 @@ def create_data_loaders(
     assert abs(train_ratio + val_ratio + test_ratio - 1.0) < 1e-6, \
         f"Ratios must sum to 1.0, got {train_ratio + val_ratio + test_ratio}"
 
-    dataset = CASDataset(data, max_length=max_length)
+    if tokenizer is None:
+        tokenizer = build_tokenizer_from_records(data) if use_cas_tokenizer else SimpleTokenizer()
+
+    dataset = CASDataset(data, tokenizer=tokenizer, max_length=max_length)
 
     # Compute split sizes
     total = len(dataset)
@@ -659,6 +632,16 @@ def run_pipeline(
         "max_length": max_length,
         "batch_size": batch_size,
     }
+    tokenizer = tokenizer_from_loader(train_loader)
+    if isinstance(tokenizer, HybridCASTokenizer):
+        stats["stages"]["5_tokenize"]["tokenizer"] = tokenizer.metadata()
+        exprs = [str(item.get("cas_expression", "")) for item in valid_data if item.get("cas_expression")]
+        stats["stages"]["5_tokenize"]["cas_expression_unk_rate"] = tokenizer.unk_rate(exprs)
+    elif tokenizer is not None:
+        stats["stages"]["5_tokenize"]["tokenizer"] = {
+            "type": tokenizer.__class__.__name__,
+            "vocab_size": getattr(tokenizer, "vocab_size", None),
+        }
     stats["total_items"] = len(valid_data)
 
     return train_loader, val_loader, test_loader, stats

@@ -38,6 +38,7 @@ if torch.cuda.is_available():
 
 from cas_native.training.trainer import CASTrainer
 from cas_native.training.data_pipeline import run_pipeline
+from cas_native.training.tokenizer import HybridCASTokenizer, tokenizer_from_loader
 from cas_native.training.config import (
     TrainingConfig, V2ComponentFlags, V2Hyperparameters, V74Hyperparameters,
 )
@@ -84,14 +85,9 @@ log("Run dir: " + str(RUN_DIR))
 log("Dataset: " + str(DATASET_PATH))
 
 
-# ------------------------------------------------------------ model + data
+# ------------------------------------------------------------ data + model
 
-log("[1/5] Initializing model...")
-model = CASNativeModel(CASNativeConfig())
-n_params = sum(p.numel() for p in model.parameters())
-log("      params: " + format(n_params, ","))
-
-log("[2/5] Loading dataset...")
+log("[1/5] Loading dataset + fitting frozen CAS tokenizer...")
 train_loader, val_loader, test_loader, stats = run_pipeline(
     json_paths=[str(DATASET_PATH)],
     augment=False,
@@ -103,6 +99,24 @@ log("      stages: " + str(stats["stages"]))
 steps_per_epoch = len(train_loader)
 total_steps = EPOCHS * steps_per_epoch
 log("      train batches/epoch: " + str(steps_per_epoch) + " | total steps: " + str(total_steps))
+tokenizer = tokenizer_from_loader(train_loader)
+tokenizer_meta = {}
+if isinstance(tokenizer, HybridCASTokenizer):
+    tokenizer_path = RUN_DIR / "tokenizer.json"
+    tokenizer.save(tokenizer_path)
+    tokenizer_meta = tokenizer.metadata()
+    log("      tokenizer: " + str(tokenizer_meta))
+    log("      tokenizer artifact: " + str(tokenizer_path))
+else:
+    tokenizer_path = None
+    log("      tokenizer: legacy/unknown")
+
+model_vocab_size = int(getattr(tokenizer, "vocab_size", 32000))
+log("[2/5] Initializing model...")
+model = CASNativeModel(CASNativeConfig(vocab_size=model_vocab_size))
+n_params = sum(p.numel() for p in model.parameters())
+log("      params: " + format(n_params, ","))
+log("      vocab_size: " + str(model_vocab_size))
 
 
 # ------------------------------------------------------------ trainer
@@ -207,6 +221,7 @@ for epoch in range(EPOCHS):
                     "epoch": epoch,
                     "model_state_dict": trainer.model.state_dict(),
                     "optimizer_state_dict": trainer.optimizer.state_dict(),
+                    "tokenizer": tokenizer_meta,
                 }, ckpt_path)
                 log("  [ckpt] wrote " + str(ckpt_path))
             except Exception as e:
@@ -269,6 +284,7 @@ try:
         "step": final_step,
         "model_state_dict": trainer.model.state_dict(),
         "optimizer_state_dict": trainer.optimizer.state_dict(),
+        "tokenizer": tokenizer_meta,
     }, final_ckpt)
     log("  Final checkpoint: " + str(final_ckpt))
 except Exception as e:
@@ -290,6 +306,8 @@ with open(RUN_DIR / "metrics.json", "w") as f:
             "total_steps": total_steps,
             "v2_flags": [k for k, v in cfg.component_flags.__dict__.items() if v],
             "data_mix_meta_logic": v2_hp.data_mix_meta_logic,
+            "tokenizer": tokenizer_meta,
+            "tokenizer_path": str(tokenizer_path) if tokenizer_path is not None else None,
         },
         "all_metrics": all_metrics,
         "summary": {
