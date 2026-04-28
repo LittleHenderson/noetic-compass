@@ -38,6 +38,67 @@ def test_surface_exemplar_groups_cover_requested_constructs():
     assert any(expr.startswith("CoverOf(") for expr in TYPED_META_LOGIC_EXEMPLARS)
 
 
+def test_typed_meta_logic_exemplars_cover_extended_token_classes():
+    """Day-1 SDG sprint Track A: surface coverage for the eight token classes
+    audited in docs/working/generator_compiler_coverage_audit.md.
+
+    Seven of the eight classes (Union, Difference, ∅, ∉, ⊂, ⊃, ⊇) are
+    represented here. NoeticSet/StateSet are deliberately excluded pending a
+    CONSTRUCT_SPECS update — the compiler grammar admits them but
+    cas-native/model/meta_logic_constructs.py does not yet enumerate them.
+    """
+
+    joined = "\n".join(TYPED_META_LOGIC_EXEMPLARS)
+
+    # Union ∪ — Unicode + ASCII keyword + call-form + empty-set edge.
+    assert chr(0x222A) in joined
+    assert any("union" in expr for expr in TYPED_META_LOGIC_EXEMPLARS)
+    assert any(expr.startswith("Union(") for expr in TYPED_META_LOGIC_EXEMPLARS)
+
+    # Difference ∖ — Unicode + ASCII keyword + call-form + empty-set edge.
+    assert chr(0x2216) in joined
+    assert any("setminus" in expr for expr in TYPED_META_LOGIC_EXEMPLARS)
+    assert any(expr.startswith("Difference(") for expr in TYPED_META_LOGIC_EXEMPLARS)
+
+    # Empty set ∅ — subset assertion, cardinality, reflexive subset edge.
+    assert chr(0x2205) in joined
+    assert f"|{chr(0x2205)}| = 0" in TYPED_META_LOGIC_EXEMPLARS
+
+    # Not-member ∉ — typed-but-carrier-incompatible cases.
+    assert chr(0x2209) in joined
+
+    # Strict subset ⊂ — cluster strictly inside carrier.
+    assert chr(0x2282) in joined
+
+    # Superset ⊃ and superset-or-equal ⊇.
+    assert chr(0x2283) in joined
+    assert chr(0x2287) in joined
+
+
+def test_extended_token_class_invalid_counterparts_are_rejected():
+    """Verify directive-specified invalid counterparts fail at typecheck.
+
+    These are NOT exemplars — they are negative cases ensuring the Python
+    compiler enforces meta-set typing for set-operation operands. Each must
+    return ``valid=False``.
+    """
+
+    invalid_cases = [
+        # Bare-noetic operand on a set operation should fail.
+        ("^2 " + chr(0x222A) + " ^7", "UNION requires a meta-set"),
+        ("Noetics " + chr(0x2216) + " ^2", "SET_DIFF requires a meta-set"),
+        ("^2 " + chr(0x2282) + " Noetics", "SUBSET requires a meta-set"),
+    ]
+
+    for expression, fragment in invalid_cases:
+        artifact = compile_expression(expression)
+        assert not artifact.valid, f"expected rejection: {expression}"
+        assert artifact.error is not None
+        assert fragment in artifact.error, (
+            f"unexpected rejection reason for {expression}: {artifact.error}"
+        )
+
+
 def test_named_generation_modes_validate_through_compiler():
     modes = [
         "v75_register",

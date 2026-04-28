@@ -14,7 +14,14 @@ from api.notation.compiler import compile_expression
 
 
 MEMBER = chr(0x2208)
+NOT_MEMBER = chr(0x2209)
+SUBSET = chr(0x2282)
 SUBSET_EQ = chr(0x2286)
+SUPERSET = chr(0x2283)
+SUPERSET_EQ = chr(0x2287)
+UNION = chr(0x222A)
+SET_MINUS = chr(0x2216)
+EMPTY_SET = chr(0x2205)
 
 
 VALID_GENERATED_SURFACE_CASES = [
@@ -58,6 +65,90 @@ VALID_GENERATED_SURFACE_CASES = [
         "Foundation_4, Foundation_5, Foundation_6, Foundation_7)",
         "meta_set",
         id="meta-cover",
+    ),
+    # Day-1 SDG sprint Track A: extended typed-meta-logic surfaces. Seven of
+    # the eight audited token classes (Union, Difference, ∅, ∉, ⊂, ⊃, ⊇);
+    # NoeticSet/StateSet are admitted by the grammar but absent from
+    # CONSTRUCT_SPECS, so they are skipped here per the FAILURE PROTOCOL.
+    pytest.param(
+        f"NoeticCluster{{^2, ^7}} {UNION} NoeticCluster{{^5}}",
+        "meta_set",
+        id="meta-union-unicode",
+    ),
+    pytest.param(
+        "Union(NoeticCluster{^2, ^7}, NoeticCluster{^5})",
+        "meta_set",
+        id="meta-union-call",
+    ),
+    pytest.param(
+        f"{EMPTY_SET} {UNION} Noetics",
+        "meta_set",
+        id="meta-union-empty-edge",
+    ),
+    pytest.param(
+        f"Noetics {SET_MINUS} NoeticCluster{{^2, ^7}}",
+        "meta_set",
+        id="meta-difference-unicode",
+    ),
+    pytest.param(
+        "Noetics setminus NoeticCluster{^2, ^7}",
+        "meta_set",
+        id="meta-difference-ascii",
+    ),
+    pytest.param(
+        "Difference(Noetics, NoeticCluster{^2, ^7})",
+        "meta_set",
+        id="meta-difference-call",
+    ),
+    pytest.param(
+        f"Noetics {SET_MINUS} {EMPTY_SET}",
+        "meta_set",
+        id="meta-difference-empty-edge",
+    ),
+    pytest.param(
+        f"{EMPTY_SET} {SUBSET} Noetics",
+        "meta_assertion",
+        id="meta-empty-strict-subset",
+    ),
+    pytest.param(
+        f"|{EMPTY_SET}| = 0",
+        "meta_assertion",
+        id="meta-empty-cardinality",
+    ),
+    pytest.param(
+        f"{EMPTY_SET} {SUBSET_EQ} {EMPTY_SET}",
+        "meta_assertion",
+        id="meta-empty-reflexive-subseteq",
+    ),
+    pytest.param(
+        f"^2^P {NOT_MEMBER} Noetics",
+        "meta_assertion",
+        id="meta-not-member-state-in-noetics",
+    ),
+    pytest.param(
+        f"^9 {NOT_MEMBER} States",
+        "meta_assertion",
+        id="meta-not-member-noetic-in-states",
+    ),
+    pytest.param(
+        f"NoeticCluster{{^2, ^7}} {SUBSET} Noetics",
+        "meta_assertion",
+        id="meta-strict-subset",
+    ),
+    pytest.param(
+        f"Noetics {SUPERSET} NoeticCluster{{^2, ^7}}",
+        "meta_assertion",
+        id="meta-strict-superset",
+    ),
+    pytest.param(
+        f"Noetics {SUPERSET_EQ} Noetics",
+        "meta_assertion",
+        id="meta-superseteq-reflexive",
+    ),
+    pytest.param(
+        f"Noetics {SUPERSET_EQ} NoeticCluster{{^2}}",
+        "meta_assertion",
+        id="meta-superseteq-strict",
     ),
 ]
 

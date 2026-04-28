@@ -39,8 +39,15 @@ INVOLUTION_PAIRS = [(2, 3), (5, 6), (8, 9)]
 REGISTER_SET_OPEN = chr(0x27E8)
 REGISTER_SET_CLOSE = chr(0x27E9)
 MEMBER = chr(0x2208)
+NOT_MEMBER = chr(0x2209)
+SUBSET = chr(0x2282)
 SUBSET_EQ = chr(0x2286)
+SUPERSET = chr(0x2283)
+SUPERSET_EQ = chr(0x2287)
 INTERSECTION = chr(0x2229)
+UNION = chr(0x222A)
+SET_MINUS = chr(0x2216)
+EMPTY_SET = chr(0x2205)
 
 V75_REGISTER_EXEMPLARS = (
     "CO-2|T",
@@ -81,6 +88,49 @@ TYPED_META_LOGIC_EXEMPLARS = (
     "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})",
     "CoverOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7)",
     "PartitionOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7)",
+    # Day-1 SDG sprint, Track A: extended typed meta-logic surfaces.
+    # Eight token classes (Union, Difference, ∅, ∉, ⊂, ⊃, ⊇, NoeticSet/StateSet)
+    # were audited per docs/working/generator_compiler_coverage_audit.md. Of the
+    # eight, NoeticSet/StateSet are admitted by the compiler grammar but are NOT
+    # enumerated in cas-native/model/meta_logic_constructs.py CONSTRUCT_SPECS;
+    # per the FAILURE PROTOCOL they are deliberately skipped here pending a
+    # CONSTRUCT_SPECS update by a separate agent. The remaining seven classes
+    # are admitted both by the compiler grammar and CONSTRUCT_SPECS — exemplars
+    # below are individually verified against api.notation.compiler.
+    # Union ∪ — finite set union over typed meta-sets.
+    f"NoeticCluster{{^2, ^7}} {UNION} NoeticCluster{{^5}}",
+    "NoeticCluster{^2, ^7} union NoeticCluster{^5}",
+    "Union(NoeticCluster{^2, ^7}, NoeticCluster{^5})",
+    f"{EMPTY_SET} {UNION} Noetics",
+    # Difference ∖ — relative complement (set minus). The compiler accepts the
+    # ASCII keywords `setminus` / `difference` / `diff`; `Difference(...)` is
+    # also an admitted call form.
+    f"Noetics {SET_MINUS} NoeticCluster{{^2, ^7}}",
+    "Noetics setminus NoeticCluster{^2, ^7}",
+    "Difference(Noetics, NoeticCluster{^2, ^7})",
+    f"Noetics {SET_MINUS} {EMPTY_SET}",
+    # Empty set ∅ — element/identity used in subset, cardinality, and union/diff
+    # edge expressions. Note: the directive's ASCII keyword `emptyset` is NOT
+    # admitted by the Python compiler grammar (parses as undefined variable);
+    # only the Unicode form is admitted. Same applies to ASCII `subset`,
+    # `supset`, `supseteq`, `notin` — see report.
+    f"{EMPTY_SET} {SUBSET} Noetics",
+    f"|{EMPTY_SET}| = 0",
+    f"{EMPTY_SET} {SUBSET_EQ} {EMPTY_SET}",
+    # Not-member ∉ — element wrongly typed against carrier. ^11 (the directive's
+    # suggested out-of-range case) is rejected at typecheck (`operator index
+    # must be 0-9`) before the ∉ assertion is evaluated, so we use a typed-but-
+    # carrier-incompatible shape instead: a State as a non-Noetic, and a bare
+    # Noetic as a non-State.
+    f"^2^P {NOT_MEMBER} Noetics",
+    f"^9 {NOT_MEMBER} States",
+    # Strict subset ⊂ — proper subset assertion (cluster strictly inside carrier).
+    f"NoeticCluster{{^2, ^7}} {SUBSET} Noetics",
+    # Superset ⊃ — orientation-reversed proper subset.
+    f"Noetics {SUPERSET} NoeticCluster{{^2, ^7}}",
+    # SupersetEq ⊇ — superset-or-equal; covers reflexive and strict cases.
+    f"Noetics {SUPERSET_EQ} Noetics",
+    f"Noetics {SUPERSET_EQ} NoeticCluster{{^2}}",
 )
 
 COMPILER_SURFACE_EXEMPLARS = (
