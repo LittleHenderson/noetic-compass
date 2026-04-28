@@ -39,7 +39,10 @@ class TestV77Omega:
     def test_expression_contains_equals_and_omega(self):
         gen = V77OmegaGenerator(seed=1)
         for ex in gen.iter_examples(20):
-            assert "Omega_" in ex.cas_expression
+            # Compiler-canonical Greek `Ω_` glyph per CAS v7.7 spec
+            # (compiler also accepts ASCII `Omega_`, but the generator
+            # renders Unicode `Ω_` to match the canonical notation).
+            assert "Ω_" in ex.cas_expression
             assert "=" in ex.cas_expression
 
     def test_is_valid_true(self):

@@ -7,7 +7,9 @@ import re
 from cas_synthetic.generator import V75RegisterGenerator
 
 
-_OPERAND_RE = re.compile(r"\^(\d+)\^([PCEO])\|([TAfE])_\{F(\d)\}")
+# Canonical v7.5 compound shape per Clarification 8 / compiler grammar:
+# drive subscript precedes the register pipe suffix.
+_OPERAND_RE = re.compile(r"\^(\d+)\^([PCEO])_\{F(\d)\}\|([TAfE])")
 
 
 class TestV75Register:
@@ -28,7 +30,8 @@ class TestV75Register:
         for ex in gen.iter_examples(20):
             matches = _OPERAND_RE.findall(ex.cas_expression)
             assert matches
-            regs_in_expr = [m[2] for m in matches]
+            # Operand groups: (noetic, domain, drive, register).
+            regs_in_expr = [m[3] for m in matches]
             regs_in_labels = [lbl["register"] for lbl in ex.register_labels]
             assert regs_in_expr == regs_in_labels
 

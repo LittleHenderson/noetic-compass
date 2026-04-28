@@ -67,13 +67,15 @@ class V77RuleFourGenerator(BaseGenerator):
         use_copresence = self.rng.random() < 0.5
 
         if use_copresence:
-            # Build `^n^D|R1 + ^n^D|R2 [+ ^n^D|R3]` — same-Noetic co-presence
+            # Build `^n^D_{Fk}|R1 + ^n^D_{Fk}|R2 [+ ^n^D_{Fk}|R3]` —
+            # same-Noetic co-presence. Drive subscript precedes the register
+            # pipe suffix per CAS v7.5 Clarification 8 / compiler grammar.
             noetic = self.rng.choice(self.NOETICS)
             domain = self.rng.choice(self.DOMAINS)
             k = self.rng.choice([2, 3])
             registers = self.rng.sample(self.REGISTERS, k)
             drive = self.rng.choice(self.DRIVES)
-            terms = [f"^{noetic}^{domain}|{r}_{{F{drive}}}" for r in registers]
+            terms = [f"^{noetic}^{domain}_{{F{drive}}}|{r}" for r in registers]
             expression = " + ".join(terms)
             register_labels = [
                 {"position": i, "register": r} for i, r in enumerate(registers)
@@ -90,15 +92,37 @@ class V77RuleFourGenerator(BaseGenerator):
             combo = self.rng.choice(self.templates["valid_emergent_combinations"])
             noetic = combo["noetic"]
             domain = combo["domain"] if combo.get("domain") else self.rng.choice(self.DOMAINS)
-            registers = combo["registers"]
+            registers = list(combo["registers"])
+            self.rng.shuffle(registers)  # any register-order permutation is admissible
             omega_name = combo["omega_name"]
             if omega_name not in self.admitted_omega_names:
                 # Registry admits this name; fallback to co-presence if not
                 return self._generate_compliant()
             dom_part = f"^{domain}" if combo.get("domain") else ""
-            drive = self.rng.choice(self.DRIVES)
-            terms = [f"^{noetic}{dom_part}|{r}" for r in registers]
-            expression = "(" + " x ".join(terms) + f") = ^{noetic}{dom_part}|{omega_name}"
+            # Per-register drive sampling regime — always include drive
+            # subscripts to avoid the degenerate small-pool cases for
+            # Ω_presence (k! = 2 without domain) and Ω_refusal (k! = 6
+            # with domain locked to P).
+            #   40% uniform drive across operands
+            #   60% independent drive per operand (maximum diversity)
+            if self.rng.random() < 0.4:
+                d = self.rng.choice(self.DRIVES)
+                drive_strs = [f"_{{F{d}}}" for _ in registers]
+            else:
+                drive_strs = [
+                    f"_{{F{self.rng.choice(self.DRIVES)}}}" for _ in registers
+                ]
+            # Compiler-canon: Unicode `×` for cross-register integration; the
+            # named emergent uses the Greek `Ω_*` prefix (the omega registry
+            # stores names with the ASCII `Omega_` spelling for traceability,
+            # but the lexer accepts both — we render Unicode `Ω_` here per
+            # CAS v7.7 Clarification 10 spec).
+            unicode_omega = omega_name.replace("Omega_", "Ω_")
+            terms = [
+                f"^{noetic}{dom_part}{drive_strs[i]}|{r}"
+                for i, r in enumerate(registers)
+            ]
+            expression = "(" + " × ".join(terms) + f") = ^{noetic}{dom_part}|{unicode_omega}"
             register_labels = [
                 {"position": i, "register": r} for i, r in enumerate(registers)
             ]
@@ -137,8 +161,13 @@ class V77RuleFourGenerator(BaseGenerator):
         registers = list(pattern["registers"])
         drive = self.rng.choice(self.DRIVES)
 
-        terms = [f"^{noetic}^{domain}|{r}_{{F{drive}}}" for r in registers]
-        expression = " x ".join(terms)  # no emergent result — deliberate violation
+        # Drive subscript precedes the register pipe suffix per the CAS v7.5
+        # canonical compound shape; the violation is the use of `×` to join
+        # same-Noetic register manifestations WITHOUT a named emergent result
+        # (Clarification 10 §4 admissibility rule). The compiler rejects
+        # these at typecheck — that is the supervised-loss signal.
+        terms = [f"^{noetic}^{domain}_{{F{drive}}}|{r}" for r in registers]
+        expression = " × ".join(terms)  # no emergent result — deliberate violation
 
         register_labels = [
             {"position": i, "register": r} for i, r in enumerate(registers)

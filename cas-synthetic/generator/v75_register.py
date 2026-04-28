@@ -41,14 +41,16 @@ class V75RegisterGenerator(BaseGenerator):
         noetic_phrases = self.v74_templates["noetic_phrases"]
         domain_phrases = self.v74_templates["domain_phrases"]
 
-        # 50% single-state register, 50% two-state register
+        # 50% single-state register, 50% two-state register.
+        # Canonical compound shape per CAS v7.5 Clarification 8 / compiler grammar:
+        # `^N^D_{Fk}|R` — drive subscript precedes the register pipe suffix.
         single = self.rng.random() < 0.5
         if single:
             noetic = self.rng.choice(self.NOETICS)
             domain = self.rng.choice(self.DOMAINS)
             drive = self.rng.choice(self.DRIVES)
             register = self.rng.choice(self.REGISTERS)
-            expression = f"^{noetic}^{domain}|{register}_{{F{drive}}}"
+            expression = f"^{noetic}^{domain}_{{F{drive}}}|{register}"
             states = [(noetic, domain)]
             register_labels = [{"position": 0, "register": register}]
         else:
@@ -59,7 +61,7 @@ class V75RegisterGenerator(BaseGenerator):
             r1 = self.rng.choice(self.REGISTERS)
             r2 = self.rng.choice(self.REGISTERS)
             expression = (
-                f"^{n1}^{domain}|{r1}_{{F{drive}}} * ^{n2}^{domain}|{r2}_{{F{drive}}}"
+                f"^{n1}^{domain}_{{F{drive}}}|{r1} * ^{n2}^{domain}_{{F{drive}}}|{r2}"
             )
             states = [(n1, domain), (n2, domain)]
             register_labels = [

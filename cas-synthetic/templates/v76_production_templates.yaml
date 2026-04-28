@@ -1,72 +1,261 @@
 # v7.6 production-semantics templates — recipes with prerequisites, optional
 # leakages, and observed yields per Clarification 9.
-# State ids are 0..39 (P0..P9 = 0..9, C0..C9 = 10..19, E0..E9 = 20..29, O0..O9 = 30..39).
+#
+# State ids encode (noetic, domain) per the cas-native convention:
+#   P0..P9 = 0..9, C0..C9 = 10..19, E0..E9 = 20..29, O0..O9 = 30..39.
+# So state_id = domain_index * 10 + noetic where domain_index is
+# {P:0, C:1, E:2, O:3}.
+#
+# Each prereq/leakage carries an optional `drive` (1..7) and `register`
+# (T/A/f/E) so the emitted CAS expression can render the canonical
+# compound state literal `^N^D_{Fk}|R` rather than a `state_N` placeholder
+# (the compiler does not admit `state_N` as a primitive). Drive and
+# register may be null; when null the state literal is rendered without
+# the corresponding annotation.
+#
+# Pool size note: the directive requires ≥10 unique production recipes.
+# We provide 12 archetypes covering all four domains, multiple drive
+# axes, both registered and register-neutral compositions, and several
+# leakage / catalyst patterns. The generator further diversifies through
+# per-example yield noise.
 
 recipe_archetypes:
   - name: "focused_refusal"
     description: "principled refusal built from attention, aversion, and commitment"
     prereqs:
-      - state_id: 1      # ^1^P directed attention in principled
+      - state_id: 1                # ^1^P directed attention in principled
         coefficient: 1.0
-      - state_id: 3      # ^3^P principled aversion
+        drive: 1
+        register: A
+      - state_id: 3                # ^3^P principled aversion
         coefficient: 2.0
-      - state_id: 7      # ^7^P principled entrainment
+        drive: 2
+        register: A
+      - state_id: 7                # ^7^P principled entrainment
         coefficient: 0.5
+        drive: 7
+        register: T
     leakages: []
     observed_yield: 1.1
 
   - name: "grounded_creative_insight"
     description: "cognitive decomposition composed with evaluative resonance"
     prereqs:
-      - state_id: 16     # ^6^C cognitive decomposition
+      - state_id: 16               # ^6^C cognitive decomposition
         coefficient: 1.5
-      - state_id: 24     # ^4^E evaluative resonance
+        drive: 2
+        register: A
+      - state_id: 24               # ^4^E evaluative resonance
         coefficient: 1.0
-      - state_id: 18     # ^8^C cognitive associative trigger
+        drive: 4
+        register: f
+      - state_id: 18               # ^8^C cognitive associative trigger
         coefficient: 0.8
+        drive: 3
+        register: A
     leakages:
-      - state_id: 23     # ^3^E evaluative aversion (side reaction)
+      - state_id: 23               # ^3^E evaluative aversion (side reaction)
         magnitude: 0.1
+        side_name: "aversion_overflow"
     observed_yield: 1.25
 
   - name: "principled_decision_execution"
     description: "principled evaluation descending to operational completion"
     prereqs:
-      - state_id: 0      # ^0^P generative potential
+      - state_id: 0                # ^0^P generative potential
         coefficient: 0.7
-      - state_id: 1      # ^1^P attention
+        drive: null
+        register: null
+      - state_id: 1                # ^1^P attention
         coefficient: 1.0
-      - state_id: 36     # ^6^O operational projection
+        drive: 1
+        register: A
+      - state_id: 36               # ^6^O operational projection
         coefficient: 1.2
-      - state_id: 39     # ^9^O operational consequence landing
+        drive: 5
+        register: E
+      - state_id: 39               # ^9^O operational consequence landing
         coefficient: 1.0
+        drive: 7
+        register: E
     leakages: []
     observed_yield: 1.0
 
   - name: "pattern_entrainment_learning"
     description: "cognitive rhythm entrainment with evaluative integration"
     prereqs:
-      - state_id: 17     # ^7^C cognitive rhythm
+      - state_id: 17               # ^7^C cognitive rhythm
         coefficient: 2.0
-      - state_id: 15     # ^5^C cognitive integration
+        drive: 7
+        register: A
+      - state_id: 15               # ^5^C cognitive integration
         coefficient: 1.0
-      - state_id: 11     # ^1^C cognitive attention
+        drive: 1
+        register: f
+      - state_id: 11               # ^1^C cognitive attention
         coefficient: 0.5
+        drive: 1
+        register: A
     leakages:
-      - state_id: 25     # ^5^E evaluative integration leak
+      - state_id: 25               # ^5^E evaluative integration leak
         magnitude: 0.15
+        side_name: "evaluative_drift"
     observed_yield: 0.9
 
   - name: "compassionate_adaptive_response"
     description: "evaluative reception combined with operational adjustment"
     prereqs:
-      - state_id: 25     # ^5^E evaluative reception
+      - state_id: 25               # ^5^E evaluative reception
         coefficient: 1.5
-      - state_id: 34     # ^4^O operational impression
+        drive: 4
+        register: f
+      - state_id: 34               # ^4^O operational impression
         coefficient: 0.8
-      - state_id: 30     # ^0^O operational potential
+        drive: 4
+        register: E
+      - state_id: 30               # ^0^O operational potential
         coefficient: 0.7
+        drive: null
+        register: null
     leakages: []
+    observed_yield: 1.05
+
+  - name: "embodied_safety_check"
+    description: "embodied attention to environmental cues coupled with principled evaluation"
+    prereqs:
+      - state_id: 31               # ^1^O operational attention
+        coefficient: 1.0
+        drive: 5
+        register: E
+      - state_id: 4                # ^4^P principled resonance
+        coefficient: 1.3
+        drive: 4
+        register: f
+      - state_id: 2                # ^2^P principled affinity
+        coefficient: 0.6
+        drive: 6
+        register: T
+    leakages:
+      - state_id: 33               # ^3^O operational aversion (over-reaction)
+        magnitude: 0.08
+        side_name: "operational_jitter"
+    observed_yield: 0.95
+
+  - name: "transparent_explanation"
+    description: "cognitive decomposition rendered through analytical evaluative communication"
+    prereqs:
+      - state_id: 16               # ^6^C cognitive decomposition
+        coefficient: 1.0
+        drive: 2
+        register: A
+      - state_id: 21               # ^1^E evaluative attention
+        coefficient: 1.0
+        drive: 2
+        register: A
+      - state_id: 38               # ^8^O operational triggering output
+        coefficient: 0.7
+        drive: 3
+        register: A
+    leakages: []
+    observed_yield: 1.0
+
+  - name: "deliberate_practice_loop"
+    description: "rhythmic operational repetition feeding principled refinement"
+    prereqs:
+      - state_id: 37               # ^7^O operational rhythm
+        coefficient: 2.5
+        drive: 7
+        register: E
+      - state_id: 6                # ^6^P principled decomposition
+        coefficient: 1.0
+        drive: 2
+        register: A
+      - state_id: 14               # ^4^C cognitive resonance
+        coefficient: 0.5
+        drive: 4
+        register: f
+    leakages:
+      - state_id: 19               # ^9^C cognitive landing leak
+        magnitude: 0.2
+        side_name: "premature_closure"
+    observed_yield: 0.85
+
+  - name: "negotiated_consensus"
+    description: "evaluative attraction balanced with cognitive composition across parties"
+    prereqs:
+      - state_id: 22               # ^2^E evaluative affinity
+        coefficient: 1.4
+        drive: 4
+        register: f
+      - state_id: 15               # ^5^C cognitive composition
+        coefficient: 1.0
+        drive: 1
+        register: A
+      - state_id: 8                # ^8^P principled triggering
+        coefficient: 0.8
+        drive: 6
+        register: T
+    leakages: []
+    observed_yield: 1.15
+
+  - name: "structured_creative_generation"
+    description: "principled generative potential channeled through cognitive decomposition into operational form"
+    prereqs:
+      - state_id: 0                # ^0^P generative potential
+        coefficient: 1.0
+        drive: 6
+        register: T
+      - state_id: 16               # ^6^C cognitive decomposition
+        coefficient: 1.5
+        drive: 2
+        register: A
+      - state_id: 36               # ^6^O operational projection
+        coefficient: 1.0
+        drive: 5
+        register: E
+    leakages:
+      - state_id: 13               # ^3^C cognitive aversion (over-pruning)
+        magnitude: 0.12
+        side_name: "creative_stall"
+    observed_yield: 1.0
+
+  - name: "recovery_after_failure"
+    description: "evaluative landing of consequence integrated with principled re-orientation"
+    prereqs:
+      - state_id: 29               # ^9^E evaluative landing
+        coefficient: 1.0
+        drive: 3
+        register: f
+      - state_id: 5                # ^5^P principled composition
+        coefficient: 1.2
+        drive: 1
+        register: T
+      - state_id: 11               # ^1^C cognitive attention
+        coefficient: 0.6
+        drive: 1
+        register: A
+    leakages: []
+    observed_yield: 0.92
+
+  - name: "mentored_skill_transfer"
+    description: "principled rhythm entraining cognitive composition through embodied operational practice"
+    prereqs:
+      - state_id: 7                # ^7^P principled rhythm
+        coefficient: 1.8
+        drive: 7
+        register: T
+      - state_id: 15               # ^5^C cognitive composition
+        coefficient: 1.0
+        drive: 5
+        register: A
+      - state_id: 35               # ^5^O operational composition
+        coefficient: 1.2
+        drive: 5
+        register: E
+    leakages:
+      - state_id: 32               # ^2^O operational affinity (favoritism leak)
+        magnitude: 0.1
+        side_name: "favoritism"
     observed_yield: 1.05
 
 scenarios:
@@ -75,3 +264,6 @@ scenarios:
   - "A coach helping an athlete integrate feedback into their form"
   - "A clinician titrating care across cognitive, evaluative, and operational steps"
   - "A teacher pacing a lesson across principled, cognitive, and operational work"
+  - "A negotiator brokering a settlement across affective and analytical registers"
+  - "An engineer recovering from a deployment regression"
+  - "A mentor walking a junior through their first independent project"

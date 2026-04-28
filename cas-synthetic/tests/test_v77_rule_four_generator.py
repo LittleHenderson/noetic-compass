@@ -51,8 +51,10 @@ class TestV77RuleFour:
         gen = V77RuleFourGenerator(seed=42)
         for ex in gen.iter_examples(500):
             if not ex.is_valid:
-                # Must include times operator without `=` (no emergent)
-                assert " x " in ex.cas_expression
+                # Must include Unicode `×` cross-register integration operator
+                # without `=` (no named emergent — the deliberate Rule 4
+                # violation pattern that the compiler rejects at typecheck).
+                assert " × " in ex.cas_expression
                 assert "=" not in ex.cas_expression
 
     def test_valid_emergent_expression_has_omega_label(self):
@@ -62,7 +64,9 @@ class TestV77RuleFour:
             if ex.is_valid and ex.omega_labels:
                 saw_omega = True
                 assert "=" in ex.cas_expression
-                assert "Omega_" in ex.cas_expression
+                # Compiler-canonical Greek `Ω_` glyph per CAS v7.7 spec
+                # (compiler also accepts ASCII `Omega_`, but we render Ω).
+                assert "Ω_" in ex.cas_expression
         assert saw_omega, "expected at least some valid examples to carry omega labels"
 
     def test_copresence_uses_plus(self):
@@ -71,7 +75,7 @@ class TestV77RuleFour:
         for ex in gen.iter_examples(500):
             if ex.is_valid and not ex.omega_labels and " + " in ex.cas_expression:
                 saw_copresence = True
-                assert " x " not in ex.cas_expression
+                assert " × " not in ex.cas_expression
         assert saw_copresence, "expected at least some co-presence examples"
 
     def test_same_noetic_only(self):
@@ -79,6 +83,6 @@ class TestV77RuleFour:
         gen = V77RuleFourGenerator(seed=42)
         noetic_re = re.compile(r"\^(\d+)")
         for ex in gen.iter_examples(50):
-            if " + " in ex.cas_expression or " x " in ex.cas_expression:
+            if " + " in ex.cas_expression or " × " in ex.cas_expression:
                 noetics = set(noetic_re.findall(ex.cas_expression.split("=")[0]))
                 assert len(noetics) == 1
