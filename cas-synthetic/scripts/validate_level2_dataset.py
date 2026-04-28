@@ -27,6 +27,17 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+# Windows cp1252 hardening: ensure stdout/stderr can emit Unicode CAS glyphs
+# (⟨ ⟩ ∈ ∪ ∩ ∖ Ω Θ →) without UnicodeEncodeError. Surfaced during Phase 2
+# 10K validation when a failing example printed ⟨ on a default Windows codepage.
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+except (AttributeError, OSError):
+    # Older Python or non-reconfigurable streams: fall through; the rest of the
+    # script writes JSON via open(..., encoding="utf-8") which is unaffected.
+    pass
+
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _COMPILER_PATH = (
