@@ -45,6 +45,15 @@ from torch.utils.data import Dataset, DataLoader, random_split
 # and the compiler-sourced path silently degrades to the label-only fallback
 # so callers that never set a `cas_expression` field continue to work.
 try:
+    from cas_native.model.meta_logic_constructs import (
+        classify_expression,
+        construct_tokens,
+    )
+except Exception:  # pragma: no cover - import alias unavailable in script mode
+    classify_expression = None  # type: ignore[assignment]
+    construct_tokens = None  # type: ignore[assignment]
+
+try:
     from api.notation import (
         RegisterActivation,
         VALID_REGISTERS,
@@ -299,6 +308,15 @@ class CASDataset(Dataset):
         register_labels = item.get("register_labels", [])
         omega_labels = item.get("omega_labels", [])
         production_target = item.get("production_target", None)
+        cas_expression = item.get("cas_expression")
+        construct_metadata: dict[str, Any] | None = None
+        if cas_expression is not None and classify_expression is not None and construct_tokens is not None:
+            expr_text = str(cas_expression)
+            construct_metadata = {
+                "expression_kind": classify_expression(expr_text).value,
+                "construct_tokens": list(construct_tokens(expr_text)),
+                "cas_expression": expr_text,
+            }
 
         # Wave 8A Agent 36: compile-time register activations. Prefers the
         # compiler output when a ``cas_expression`` string is present;
@@ -315,6 +333,7 @@ class CASDataset(Dataset):
             "omega_labels": omega_labels,
             "production_target": production_target,
             "register_activations": register_activations,
+            "construct_metadata": construct_metadata,
         }
 
 
@@ -335,6 +354,7 @@ def cas_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
     omega_labels_list = []
     production_targets_list = []
     register_activations_list: list[list[Any]] = []
+    construct_metadata_list = []
 
     pad_id = 0  # [PAD] token ID
 
@@ -366,6 +386,7 @@ def cas_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
         # consume the RegisterActivation dataclasses directly without
         # reconstructing them from raw label dicts.
         register_activations_list.append(item.get("register_activations", []) or [])
+        construct_metadata_list.append(item.get("construct_metadata", None))
 
     return {
         "input_ids": torch.stack(padded_input_ids),
@@ -376,6 +397,7 @@ def cas_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
         "omega_labels": omega_labels_list,
         "production_target": production_targets_list,
         "register_activations_batch": register_activations_list,
+        "construct_metadata": construct_metadata_list,
     }
 
 
@@ -490,6 +512,24 @@ def validate_cas_item(item: dict[str, Any]) -> bool:
     comp = item.get("composite")
     if comp is not None:
         if not (0.0 <= comp <= 100.0):
+            return False
+
+    expression_kind = item.get("expression_kind")
+    if expression_kind is None and "construct_metadata" in item:
+        metadata = item.get("construct_metadata") or {}
+        expression_kind = metadata.get("expression_kind")
+    if expression_kind is not None and classify_expression is not None:
+        # Validate against the shared label vocabulary without requiring a
+        # compiler call in the data pipeline's cheap ontology pass.
+        from cas_native.model.meta_logic_constructs import EXPRESSION_KIND_LABELS
+
+        if str(expression_kind) not in EXPRESSION_KIND_LABELS:
+            return False
+
+    expr = item.get("cas_expression")
+    if expr is not None and classify_expression is not None:
+        kind = classify_expression(str(expr)).value
+        if expression_kind is not None and str(expression_kind) != kind:
             return False
 
     return True

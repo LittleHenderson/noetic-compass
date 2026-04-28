@@ -49,6 +49,13 @@ contributes (or does not contribute) to the corresponding v2 loss term.
       [9, 0.1]                        // optional side-reactions
     ],
     "observed_yield": 1.2             // Y_A
+  },
+
+  // --- CAS meta-logic / diagram-capable construct metadata ---
+  "cas_expression": "NoeticCluster{^2, ^7} ∩ NoeticCluster{^7}",
+  "construct_metadata": {
+    "expression_kind": "set_operation",
+    "construct_tokens": ["NoeticCluster", "∩"]
   }
 }
 ```
@@ -69,6 +76,14 @@ contributes (or does not contribute) to the corresponding v2 loss term.
   `[0, 40)` (40 register-neutral cognitive states) and coefficient > 0.
   `leakages` is an optional list of `[state_id, magnitude]` side-reactions.
   `observed_yield` is the observed actual yield Y_A (scalar).
+- `construct_metadata` — optional symbolic metadata for compiler-admitted
+  meta-logic constructs. Supported `expression_kind` labels include
+  `noetic_cluster`, `state_cluster`, `state_variant_cluster`,
+  `relation_cluster`, `set_operation`, `typed_membership`, `typed_subset`,
+  `coordinate`, `product`, `pullback_finite_meet`, `cover`, and `partition`.
+  This is representation support only; it does not imply trained weights.
+  `Pullback(...)` is represented strictly as a finite subobject
+  meet/intersection, not as a general categorical pullback.
 
 ### Masking semantics
 
@@ -133,3 +148,5 @@ per-example masking logic still applies.
 5. `observed_yield` is a non-negative float.
 6. Invariants 1–5 are enforced by `validate_cas_item` (to be extended) and
    any generator-level sanity checks.
+7. `construct_metadata.expression_kind`, when present, must match the shared
+   CAS-Native construct vocabulary and the `cas_expression` classifier.

@@ -114,6 +114,9 @@ class V2Hyperparameters:
     # ADR cross-cutting — training data mix (sum ≈ 1.0).
     data_mix_cross_register: float = 0.60
     data_mix_production: float = 0.40
+    # Optional symbolic construct coverage. Kept separate from the 60/40 v2
+    # loss-bearing mix because these examples may carry metadata only.
+    data_mix_meta_logic: float = 0.0
 
     # ADR-07 — ExpressionProposerHead hyperparameters. The outer weight
     # (``lambda_proposer_rule_four``) is applied in the trainer's loss
@@ -208,6 +211,10 @@ class V2Hyperparameters:
             raise ValueError(
                 "data_mix_cross_register + data_mix_production should sum to "
                 f"1.0, got {mix_sum}"
+            )
+        if self.data_mix_meta_logic < 0:
+            raise ValueError(
+                f"data_mix_meta_logic must be >= 0, got {self.data_mix_meta_logic}"
             )
         if self.lambda_null_space_reg < 0:
             raise ValueError(
