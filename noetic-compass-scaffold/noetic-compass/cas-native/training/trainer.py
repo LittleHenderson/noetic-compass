@@ -1426,10 +1426,22 @@ class CASTrainer:
         frac = step / n
         return t0 + (t1 - t0) * frac
 
-    def _train_step(self, batch: dict[str, Any]) -> dict[str, float]:
-        """Execute a single training step."""
-        self.model.train()
+    def _compute_forward_and_loss_components(
+        self, batch: dict[str, Any]
+    ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+        """Forward pass + loss aggregation, no gradient application.
 
+        Shared between :meth:`_train_step` (which then runs backward + optimizer
+        step on the returned ``total_loss``) and :meth:`_eval_step` (which wraps
+        the call in ``torch.no_grad()`` and skips gradient application). Reading
+        ``self.global_step`` is intentional — eval evaluates the model AS OF the
+        last completed train step.
+
+        Returns:
+            ``(total_loss, components)`` where ``components`` is a dict of
+            torch.Tensor scalars including the v7.4 base losses, all enabled v2
+            component losses, and a ``"total"`` key that aliases ``total_loss``.
+        """
         input_ids = batch["input_ids"].to(self.device)
         targets = batch["targets"].to(self.device)
         attention_mask = batch.get("attention_mask")
@@ -1590,6 +1602,32 @@ class CASTrainer:
             components[k] = v
         components["total"] = total_loss
 
+        return total_loss, components
+
+    def _components_to_metrics(self, components: dict[str, torch.Tensor]) -> dict[str, float]:
+        """Materialize tensor components to a float-valued metrics dict.
+
+        Common tail used by both :meth:`_train_step` and :meth:`_eval_step` to
+        produce the metrics dict downstream code (loggers, eval loops) consumes.
+        Includes the v2 register-FiLM diagnostic surface when enabled.
+        """
+        metrics = {k: v.item() for k, v in components.items() if isinstance(v, torch.Tensor)}
+        metrics["lr"] = self.scheduler.get_last_lr()[0]
+        metrics["current_tau"] = self.current_tau
+        if self.v2_flags.use_register_film:
+            for k, v in self._latent_film_metrics().items():
+                try:
+                    metrics[k] = float(v.item()) if v.ndim == 0 else float(v.detach().cpu().mean().item())
+                except Exception:
+                    pass
+        return metrics
+
+    def _train_step(self, batch: dict[str, Any]) -> dict[str, float]:
+        """Execute a single training step (forward + loss + backward + step)."""
+        self.model.train()
+
+        total_loss, components = self._compute_forward_and_loss_components(batch)
+
         # Backward pass.
         self.optimizer.zero_grad()
         total_loss.backward()
@@ -1611,20 +1649,30 @@ class CASTrainer:
         if self.v2_flags.use_register_film:
             self._maybe_unfreeze_scales(self.global_step + 1)
 
-        # Return metrics.
-        metrics = {k: v.item() for k, v in components.items() if isinstance(v, torch.Tensor)}
-        metrics["lr"] = self.scheduler.get_last_lr()[0]
-        metrics["current_tau"] = self.current_tau
+        return self._components_to_metrics(components)
 
-        # ADR-08 — surface the latent/FiLM diagnostic metrics on every step.
-        if self.v2_flags.use_register_film:
-            for k, v in self._latent_film_metrics().items():
-                try:
-                    metrics[k] = float(v.item()) if v.ndim == 0 else float(v.detach().cpu().mean().item())
-                except Exception:
-                    pass
+    def _eval_step(self, batch: dict[str, Any]) -> dict[str, float]:
+        """Execute a single evaluation step (forward + loss only).
 
-        return metrics
+        Mirrors :meth:`_train_step` for loss aggregation but skips backward,
+        optimizer.step, scheduler.step, tau annealing, and scale-warmup logic.
+        Sets the model to eval mode for the duration of the call and restores
+        the prior mode on exit. Wrapped in ``torch.no_grad()`` so it is safe to
+        call from a validation loop without grad_fn errors.
+
+        Used by run_v2_full / run_v2_progressive / future inference paths to
+        compute validation metrics during training without polluting parameters
+        or the LR schedule. Returns the same keys as :meth:`_train_step`.
+        """
+        was_training = self.model.training
+        self.model.eval()
+        try:
+            with torch.no_grad():
+                _, components = self._compute_forward_and_loss_components(batch)
+            return self._components_to_metrics(components)
+        finally:
+            if was_training:
+                self.model.train()
 
     @torch.no_grad()
     def evaluate(self) -> dict[str, float]:

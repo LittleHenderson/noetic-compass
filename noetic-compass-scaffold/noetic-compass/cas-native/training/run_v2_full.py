@@ -196,44 +196,42 @@ for epoch in range(EPOCHS):
             except Exception as e:
                 log("  [ckpt] write FAILED: " + str(e))
 
-        # Validation
+        # Validation — uses trainer._eval_step (forward-only, no_grad-safe).
+        # Fixed in the same commit that added _eval_step to trainer.py.
         if step > 0 and step % EVAL_EVERY == 0:
             log("  [eval] step " + str(step) + " — running validation pass...")
-            trainer.model.eval()
             val_total = 0.0
             val_n = 0
             val_components = {}
-            with torch.no_grad():
-                for vb_idx, vb in enumerate(val_loader):
-                    if vb_idx >= 32:  # cap eval batches to keep eval fast
-                        break
+            for vb_idx, vb in enumerate(val_loader):
+                if vb_idx >= 32:  # cap eval batches to keep eval fast
+                    break
+                try:
+                    with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
+                        vm = trainer._eval_step(vb)
+                except Exception as e:
+                    log("  [eval] exception in eval batch: " + str(e))
+                    break
+                vm_floats = {}
+                for k, v in vm.items():
+                    if isinstance(v, torch.Tensor):
+                        v = v.item()
                     try:
-                        with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
-                            vm = trainer._train_step(vb)
-                    except Exception as e:
-                        log("  [eval] exception in eval batch: " + str(e))
-                        break
-                    vm_floats = {}
-                    for k, v in vm.items():
-                        if isinstance(v, torch.Tensor):
-                            v = v.item()
-                        try:
-                            vm_floats[k] = float(v)
-                        except (TypeError, ValueError):
-                            pass
-                    val_total += vm_floats.get("total", 0.0)
-                    val_n += 1
-                    for k, v in vm_floats.items():
-                        if k in ("total", "lr", "current_tau") or k.startswith("register_latent/"):
-                            continue
-                        val_components.setdefault(k, []).append(v)
+                        vm_floats[k] = float(v)
+                    except (TypeError, ValueError):
+                        pass
+                val_total += vm_floats.get("total", 0.0)
+                val_n += 1
+                for k, v in vm_floats.items():
+                    if k in ("total", "lr", "current_tau") or k.startswith("register_latent/"):
+                        continue
+                    val_components.setdefault(k, []).append(v)
             val_avg = val_total / max(val_n, 1)
             comp_avgs = {k: sum(v) / len(v) for k, v in val_components.items() if v}
             log("  [eval] val avg total=" + format(val_avg, ".4f") + " over " + str(val_n) + " batches")
             for k, v in sorted(comp_avgs.items()):
                 if abs(v) > 1e-6:
                     log("  [eval]   " + k + "=" + format(v, ".4f"))
-            trainer.model.train()
 
         trainer.global_step += 1
 
