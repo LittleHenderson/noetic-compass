@@ -22,8 +22,9 @@ compiler artifact, and provenance metadata.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Optional
 
 from api.notation.compiler import (
     compile_expression,
@@ -525,6 +526,687 @@ def _build_expression(
     return "; ".join(statements)
 
 
+# ---------------------------------------------------------------------------
+# Meta-logic trigger vocabulary (CAS v7.8 set/membership/subset assertions)
+# ---------------------------------------------------------------------------
+#
+# Conservative discipline: emit typed meta-logic assertions ONLY when the
+# source text uses explicit set-reference language AND we can resolve the
+# operands to compiler-admitted carriers. False-fire cost > miss cost. When
+# in doubt, return None and let the existing v7.4-v7.7 emission paths run.
+#
+# Compiler-admitted forms (validated against api/notation/compiler.py):
+#   ^N ∈ Noetics                         CO-N ∈ Noetics
+#   ^N^D ∈ States                        Cn / Pn ∈ States
+#   NoeticCluster{^a, ^b} ⊆ Noetics      StateCluster{^a^P, ^b^O} ⊆ States
+#   NoeticCluster{...} ∩ NoeticCluster{...}    same-carrier ∪/∩/∖ only
+#   Noetics ∖ NoeticCluster{^4}          named-meta minus matching cluster
+
+_CANONICAL_META_SETS: dict[str, str] = {
+    "noetics": "Noetics",
+    "domains": "Domains",
+    "worlds": "Domains",
+    "drives": "Drives",
+    "registers": "Registers",
+    "states": "States",
+    "foundations": "Foundations",
+    "subfoundations": "SubFoundations",
+}
+
+# Words that, when adjacent to "union" / "intersection" / "contains" / "is in",
+# definitively indicate everyday senses, NOT set-theoretic ones.
+_UNION_NEGATIVE_CONTEXTS = (
+    "labor union", "trade union", "credit union", "european union",
+    "soviet union", "civil union", "students union", "student union",
+    "union jack", "union square", "union member", "union dues",
+    "union of soviet",
+)
+_INTERSECTION_NEGATIVE_CONTEXTS = (
+    "street intersection", "intersection of his", "intersection of her",
+    "intersection of their", "intersection of my", "intersection of our",
+    "busy intersection", "traffic intersection", "intersection of life",
+    "intersection of lives", "intersection of identity",
+    "intersection of identities", "at the intersection",
+)
+_DIFFERENCE_NEGATIVE_CONTEXTS = (
+    "difference between us", "difference between them", "difference between you",
+    "the difference is", "made a difference", "make a difference",
+    "no difference", "all the difference", "world of difference",
+)
+_CONTAINS_NEGATIVE_CONTEXTS = (
+    "contains nuts", "contains gluten", "contains alcohol", "contains caffeine",
+    "contains sugar", "contains traces", "contains lead", "contains asbestos",
+    "this contains", "package contains", "bottle contains", "box contains",
+)
+_IS_IN_NEGATIVE_CONTEXTS = (
+    "is in trouble", "is in love", "is in danger", "is in pain",
+    "is in charge", "is in town", "is in stock", "is in line",
+    "is in shape", "is in tune", "is in fact", "is in front",
+    "is in back", "is in there", "is in here", "is in question",
+    "is in doubt", "is in error", "is in luck", "is in ruins",
+)
+
+
+# Regex for individual Noetic operator references in prose.
+_NOETIC_REF = re.compile(r"\^(\d)\b|CO-(\d)\b")
+# Regex for a domain-qualified state, e.g. ^2^P or CO-3^E or shorthand C7
+_STATE_REF = re.compile(r"\^(\d)\^([PCEO])\b|CO-(\d)\^([PCEO])\b|\b([PCEO])(\d)\b")
+
+
+def _detect_set_operation_vocabulary(text: str) -> Optional[str]:
+    """Detect explicit set-operation vocabulary.
+
+    Returns 'Union', 'Intersection', 'Difference', or None.
+
+    Conservative: requires the prose to be explicitly framing a set
+    operation. Common everyday senses ("labor union", "street intersection",
+    "the difference between us") are filtered out before firing.
+    """
+    if not text:
+        return None
+    lower = text.lower()
+
+    # Difference triggers (check first since "everything in X except Y" is
+    # the most explicit set-difference phrase and shouldn't be shadowed).
+    diff_patterns = (
+        "everything in ", "all of ", "all that are in ", "all things in ",
+    )
+    has_except_pattern = (
+        any(p in lower for p in diff_patterns) and
+        (" except " in lower or " excluding " in lower or " but not " in lower)
+    )
+    has_aint_pattern = (
+        " that aren't " in lower or " that are not " in lower or
+        " that isn't " in lower or " that is not " in lower
+    ) and any(p in lower for p in diff_patterns)
+    has_minus_pattern = bool(
+        re.search(
+            r"\b(noetics|domains|states|drives|registers|foundations|subfoundations)"
+            r"\s+(?:minus|excluding)\s+",
+            lower,
+        )
+    )
+    if (has_except_pattern or has_aint_pattern or has_minus_pattern) and not any(
+        ctx in lower for ctx in _DIFFERENCE_NEGATIVE_CONTEXTS
+    ):
+        return "Difference"
+
+    # Union triggers
+    union_phrases = (
+        "union of ", "combined set of ", "all of ",
+    )
+    union_together_phrases = (
+        "all of ", "both of ",
+    )
+    has_union_phrase = any(p in lower for p in union_phrases) and " and " in lower
+    has_together_phrase = (
+        any(p in lower for p in union_together_phrases)
+        and " together" in lower
+        and " and " in lower
+    )
+    if (has_union_phrase or has_together_phrase) and not any(
+        ctx in lower for ctx in _UNION_NEGATIVE_CONTEXTS
+    ):
+        # Require an actual "union of" or "combined set of" or "together"
+        # construction — NOT a bare "all of <one thing>".
+        if "union of " in lower or "combined set of " in lower or " together" in lower:
+            return "Union"
+
+    # Intersection triggers
+    intersection_phrases = (
+        "intersection of ", "common to both ", "overlap of ", "what ",
+    )
+    has_intersection_of = "intersection of " in lower
+    has_common_to_both = "common to both " in lower
+    has_overlap_of = "overlap of " in lower
+    has_what_share = bool(re.search(r"\bwhat\b.+?\band\b.+?\bshare\b", lower))
+    if (
+        (has_intersection_of or has_common_to_both or has_overlap_of or has_what_share)
+        and not any(ctx in lower for ctx in _INTERSECTION_NEGATIVE_CONTEXTS)
+    ):
+        return "Intersection"
+
+    return None
+
+
+def _detect_membership_vocabulary(text: str) -> Optional[str]:
+    """Detect membership / non-membership trigger vocabulary.
+
+    Returns 'Member', 'NotMember', or None. Requires pairing with a
+    recognized meta-set name; bare "is in" without a meta-set falls through.
+    """
+    if not text:
+        return None
+    lower = text.lower()
+
+    # Build meta-set alternation for trigger phrasing
+    set_alt = "|".join(_CANONICAL_META_SETS.keys())
+
+    not_member_patterns = (
+        rf"\bis\s+not\s+a\s+member\s+of\s+({set_alt})\b",
+        rf"\bisn't\s+a\s+member\s+of\s+({set_alt})\b",
+        rf"\bdoes\s+not\s+belong\s+to\s+({set_alt})\b",
+        rf"\bdoesn't\s+belong\s+to\s+({set_alt})\b",
+        rf"\bis\s+not\s+in\s+({set_alt})\b",
+        rf"\bisn't\s+in\s+({set_alt})\b",
+    )
+    for pat in not_member_patterns:
+        if re.search(pat, lower):
+            return "NotMember"
+
+    member_patterns = (
+        rf"\bis\s+a\s+member\s+of\s+({set_alt})\b",
+        rf"\bbelongs\s+to\s+({set_alt})\b",
+        rf"\bis\s+in\s+({set_alt})\b",
+    )
+    for pat in member_patterns:
+        if re.search(pat, lower):
+            # Defensive: require meta-set is the actual NEXT noun, so we
+            # don't mis-fire on "is in trouble" etc.
+            if not any(neg in lower for neg in _IS_IN_NEGATIVE_CONTEXTS):
+                return "Member"
+
+    return None
+
+
+def _detect_subset_vocabulary(text: str) -> Optional[str]:
+    """Detect subset / superset trigger vocabulary.
+
+    Returns 'Subset', 'SubsetEq', 'Superset', 'SupersetEq', or None.
+    Requires pairing with a recognized meta-set carrier.
+    """
+    if not text:
+        return None
+    lower = text.lower()
+    set_alt = "|".join(_CANONICAL_META_SETS.keys())
+
+    # Order matters — check ⊆/⊇ before bare ⊂/⊃ so "is at most" wins over
+    # plain "is a subset of".
+    subseteq_patterns = (
+        rf"\bis\s+a\s+subset\s+of\s+or\s+equals?\s+({set_alt})\b",
+        rf"\bis\s+at\s+most\s+({set_alt})\b",
+    )
+    for pat in subseteq_patterns:
+        if re.search(pat, lower):
+            return "SubsetEq"
+
+    supseteq_patterns = (
+        rf"\b({set_alt})\s+contains\s+or\s+equals?\s+",
+        rf"\bis\s+at\s+least\s+({set_alt})\b",
+    )
+    for pat in supseteq_patterns:
+        if re.search(pat, lower):
+            return "SupersetEq"
+
+    subset_patterns = (
+        rf"\bis\s+contained\s+in\s+({set_alt})\b",
+        rf"\bis\s+a\s+subset\s+of\s+({set_alt})\b",
+        rf"\bis\s+part\s+of\s+({set_alt})\b",
+    )
+    for pat in subset_patterns:
+        if re.search(pat, lower):
+            return "Subset"
+
+    superset_patterns = (
+        rf"\b({set_alt})\s+contains\s+",
+        rf"\b({set_alt})\s+includes\s+",
+    )
+    for pat in superset_patterns:
+        if re.search(pat, lower):
+            if not any(neg in lower for neg in _CONTAINS_NEGATIVE_CONTEXTS):
+                return "Superset"
+
+    return None
+
+
+def _resolve_meta_set_operand(text_fragment: str) -> Optional[str]:
+    """Resolve a text fragment to a canonical meta-set name OR cluster.
+
+    Priority:
+      1. If the fragment is a bare canonical meta-set name → return it
+         capitalized ("Noetics", "Domains", "States", ...).
+      2. If the fragment is a single bare Domain code (P/C/E/O) →
+         return it (singular Domain element for membership).
+      3. If the fragment is a single bare Drive ref (F1..F7) → return it.
+      4. If the fragment contains state references (^N^D / Cn / Pn) →
+         single ref returns bare `^N^D`; multiple → StateCluster{...}.
+      5. If the fragment contains Noetic references (^N / CO-N) →
+         single ref returns bare `^N`; multiple → NoeticCluster{...}.
+      6. Otherwise → None (resolution failed).
+    """
+    if not text_fragment:
+        return None
+    lower = text_fragment.strip().lower()
+
+    # Strip trailing punctuation and leading articles for the bare-name
+    # check.
+    stripped = re.sub(r"^(the\s+|a\s+|an\s+)", "", lower)
+    stripped = re.sub(r"[.,;:!?\)]+$", "", stripped).strip()
+
+    if stripped in _CANONICAL_META_SETS:
+        return _CANONICAL_META_SETS[stripped]
+
+    # Bare singular Domain code (P/C/E/O) — match against original-case fragment
+    cleaned = text_fragment.strip()
+    cleaned = re.sub(r"^(the\s+|a\s+|an\s+)", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"[.,;:!?\)]+$", "", cleaned).strip()
+    if re.fullmatch(r"[PCEO]", cleaned):
+        return cleaned
+
+    # Bare singular Drive ref (F1..F7)
+    drive_match = re.fullmatch(r"F([1-7])", cleaned)
+    if drive_match:
+        return cleaned
+
+    # Foundation_1..Foundation_7 (singular Foundation references)
+    found_match = re.fullmatch(r"Foundation_[1-7]", cleaned)
+    if found_match:
+        return cleaned
+
+    # Already-formed cluster expressions appearing literally in prose
+    cluster_match = re.search(
+        r"(NoeticCluster|StateCluster|StateVariantCluster|RelationCluster|"
+        r"NoeticSet|StateSet|StateVariantSet|RelationSet|"
+        r"DriveSet|DomainSet|RegisterSet|FoundationSet|SubFoundationSet)"
+        r"\s*\{[^}]*\}",
+        text_fragment,
+    )
+    if cluster_match:
+        return cluster_match.group(0)
+
+    # Look for explicit state references first (more specific than ^N alone)
+    states: list[str] = []
+    for match in _STATE_REF.finditer(text_fragment):
+        groups = match.groups()
+        if groups[0] and groups[1]:  # ^N^D
+            states.append(f"^{groups[0]}^{groups[1]}")
+        elif groups[2] and groups[3]:  # CO-N^D
+            states.append(f"^{groups[2]}^{groups[3]}")
+        elif groups[4] and groups[5]:  # Dn shorthand
+            states.append(f"^{groups[5]}^{groups[4]}")
+    if states:
+        # Deduplicate while preserving order
+        seen: set[str] = set()
+        unique = [s for s in states if not (s in seen or seen.add(s))]
+        if len(unique) == 1:
+            return unique[0]
+        return "StateCluster{" + ", ".join(unique) + "}"
+
+    # Fall back to bare Noetic operators
+    noetics: list[str] = []
+    for match in _NOETIC_REF.finditer(text_fragment):
+        op = match.group(1) or match.group(2)
+        noetics.append(f"^{op}")
+    if noetics:
+        seen2: set[str] = set()
+        unique_n = [n for n in noetics if not (n in seen2 or seen2.add(n))]
+        if len(unique_n) == 1:
+            return unique_n[0]
+        return "NoeticCluster{" + ", ".join(unique_n) + "}"
+
+    return None
+
+
+def _construct_meta_logic_assertion(operation: str, operands: list[str]) -> str:
+    """Build a typed assertion string from operation + resolved operands.
+
+    Caller is responsible for validating that operand count matches
+    operation arity (binary ops require 2 operands; the assertion ops
+    require LHS + RHS in that order).
+    """
+    if operation in ("Union", "Intersection", "Difference") and len(operands) >= 2:
+        symbol = {"Union": "∪", "Intersection": "∩", "Difference": "∖"}[operation]
+        return f"{operands[0]} {symbol} {operands[1]}"
+    if operation == "Member" and len(operands) >= 2:
+        return f"{operands[0]} ∈ {operands[1]}"
+    if operation == "NotMember" and len(operands) >= 2:
+        return f"{operands[0]} ∉ {operands[1]}"
+    if operation == "Subset" and len(operands) >= 2:
+        return f"{operands[0]} ⊂ {operands[1]}"
+    if operation == "SubsetEq" and len(operands) >= 2:
+        return f"{operands[0]} ⊆ {operands[1]}"
+    if operation == "Superset" and len(operands) >= 2:
+        return f"{operands[0]} ⊃ {operands[1]}"
+    if operation == "SupersetEq" and len(operands) >= 2:
+        return f"{operands[0]} ⊇ {operands[1]}"
+    return ""
+
+
+def _split_around_keyword(text: str, keyword: str) -> Optional[tuple[str, str]]:
+    """Split lower-cased text around the first occurrence of ``keyword``.
+
+    Returns (left_fragment, right_fragment) using the original-case text,
+    or None if keyword not found. Used by trigger handlers to extract
+    candidate operand fragments.
+    """
+    lower = text.lower()
+    idx = lower.find(keyword)
+    if idx < 0:
+        return None
+    return text[:idx], text[idx + len(keyword):]
+
+
+def _build_set_op_assertion(op: str, left_frag: str, right_frag: str) -> Optional[str]:
+    """Resolve, wrap, compile-validate, and emit a set-op assertion."""
+    # Trim right fragment at first sentence-ending punctuation
+    right_frag = re.split(r"[.;,]", right_frag, maxsplit=1)[0]
+    lhs = _resolve_meta_set_operand(left_frag)
+    rhs = _resolve_meta_set_operand(right_frag)
+    if not lhs or not rhs:
+        return None
+    if not _carriers_compatible(lhs, rhs, op):
+        return None
+    lhs_w = _wrap_singleton_for_set_op(lhs)
+    rhs_w = _wrap_singleton_for_set_op(rhs)
+    assertion = _construct_meta_logic_assertion(op, [lhs_w, rhs_w])
+    if assertion and compile_expression(assertion).valid:
+        return assertion
+    return None
+
+
+def _try_union_or_intersection_emission(
+    source_text: str,
+    *,
+    op: str,
+    keywords: tuple[str, ...],
+    together_keywords: tuple[str, ...],
+) -> Optional[str]:
+    """Try each "<keyword> A and B" phrasing for ∪/∩."""
+    for keyword in keywords:
+        split = _split_around_keyword(source_text, keyword)
+        if split is None:
+            continue
+        _, after = split
+        conj_split = _split_around_keyword(after, " and ")
+        if conj_split is None:
+            continue
+        left_frag, right_frag = conj_split
+        assertion = _build_set_op_assertion(op, left_frag, right_frag)
+        if assertion:
+            return assertion
+    return None
+
+
+def _try_meta_logic_emission(source_text: str | None) -> Optional[str]:
+    """Try to emit a typed meta-logic assertion from explicit prose signals.
+
+    Returns a compiler-admitted assertion string if the prose explicitly
+    invokes set-theoretic vocabulary AND operands resolve to canonical
+    carriers. Returns None otherwise — caller must fall back to existing
+    v7.4-v7.7 emission paths.
+
+    This is conservative by design: the false-fire cost is high (a wrong
+    assertion gets propagated as the synthesized notation), the miss cost
+    is low (existing emission paths still produce a valid compiled
+    expression).
+    """
+    if not source_text:
+        return None
+
+    # ---- 1. Set-operation triggers (Union / Intersection / Difference) ----
+    op = _detect_set_operation_vocabulary(source_text)
+    if op is not None:
+        if op == "Union":
+            assertion = _try_union_or_intersection_emission(
+                source_text,
+                op="Union",
+                keywords=("union of ", "combined set of "),
+                together_keywords=(),
+            )
+            if assertion:
+                return assertion
+        elif op == "Intersection":
+            assertion = _try_union_or_intersection_emission(
+                source_text,
+                op="Intersection",
+                keywords=("intersection of ", "common to both ", "overlap of "),
+                together_keywords=(),
+            )
+            if assertion:
+                return assertion
+            # "what A and B share" phrasing
+            share_pat = re.search(
+                r"what\s+(.+?)\s+and\s+(.+?)\s+share\b",
+                source_text.lower(),
+            )
+            if share_pat:
+                left_frag = _slice_original_case(source_text, share_pat.group(1))
+                right_frag = _slice_original_case(source_text, share_pat.group(2))
+                assertion = _build_set_op_assertion("Intersection", left_frag, right_frag)
+                if assertion:
+                    return assertion
+        elif op == "Difference":
+            assertion = _try_difference_emission(source_text)
+            if assertion:
+                return assertion
+
+    # ---- 2. Membership / NotMember triggers ----
+    mem_op = _detect_membership_vocabulary(source_text)
+    if mem_op is not None:
+        assertion = _try_membership_emission(source_text, mem_op)
+        if assertion:
+            return assertion
+
+    # ---- 3. Subset / Superset triggers ----
+    sub_op = _detect_subset_vocabulary(source_text)
+    if sub_op is not None:
+        assertion = _try_subset_emission(source_text, sub_op)
+        if assertion:
+            return assertion
+
+    return None
+
+
+def _wrap_singleton_for_set_op(operand: str) -> str:
+    """Promote a bare singleton ref to a typed cluster for ∪/∩/∖.
+
+    Compiler-admitted set operations require typed meta-sets on both sides.
+    Bare `^N`, `^N^D`, etc. must be wrapped as singleton clusters.
+    Named-meta sets (Noetics, States, ...) and existing clusters pass through.
+    """
+    if re.fullmatch(r"\^\d", operand):
+        return f"NoeticCluster{{{operand}}}"
+    if re.fullmatch(r"\^\d\^[PCEO]", operand):
+        return f"StateCluster{{{operand}}}"
+    return operand
+
+
+def _carriers_compatible(lhs: str, rhs: str, operation: str) -> bool:
+    """Approximate carrier-type compatibility check.
+
+    The compiler enforces this strictly; we filter the obviously incompatible
+    pairs here so we don't emit assertions we know will fail. The compile
+    check at the end of `_try_meta_logic_emission` is the real safety net.
+    """
+    def _carrier_kind(s: str) -> str:
+        if s.startswith("NoeticCluster") or s.startswith("NoeticSet") or re.fullmatch(r"\^\d", s):
+            return "noetic"
+        if s.startswith("StateCluster") or s.startswith("StateSet") or re.fullmatch(r"\^\d\^[PCEO]", s):
+            return "state"
+        if re.fullmatch(r"[PCEO]", s):
+            return "domain"
+        if re.fullmatch(r"F[1-7]", s):
+            return "drive"
+        if re.fullmatch(r"Foundation_[1-7]", s):
+            return "foundation"
+        if s in ("Noetics",):
+            return "noetic"
+        if s in ("States",):
+            return "state"
+        if s in ("Domains",):
+            return "domain"
+        if s in ("Drives",):
+            return "drive"
+        if s in ("Registers",):
+            return "register"
+        if s in ("Foundations", "SubFoundations"):
+            return "foundation"
+        return "unknown"
+
+    lk = _carrier_kind(lhs)
+    rk = _carrier_kind(rhs)
+    if lk == "unknown" or rk == "unknown":
+        return False
+    return lk == rk
+
+
+def _try_difference_emission(source_text: str) -> Optional[str]:
+    """Build an A ∖ B assertion from any of the recognized phrasings."""
+    lower = source_text.lower()
+    # Pattern 1: "everything in A except B" / "all things in A except B"
+    pat1 = re.search(
+        r"(?:everything|all\s+things|all\s+of)\s+in\s+(.+?)\s+(?:except|excluding|but\s+not)\s+(.+?)(?:[.;,]|$)",
+        lower,
+    )
+    # Pattern 2: "<meta-set> minus|excluding <something>"
+    pat2 = re.search(
+        r"\b(noetics|domains|states|drives|registers|foundations|subfoundations)"
+        r"\s+(?:minus|excluding)\s+(.+?)(?:[.;,]|$)",
+        lower,
+    )
+    # Pattern 3: "all A that aren't B" / "all A that are not B"
+    pat3 = re.search(
+        r"all\s+(.+?)\s+that\s+(?:aren't|are\s+not|isn't|is\s+not)\s+(.+?)(?:[.;,]|$)",
+        lower,
+    )
+    match_groups: list[tuple[str, str]] = []
+    if pat1:
+        match_groups.append((pat1.group(1), pat1.group(2)))
+    if pat2:
+        match_groups.append((pat2.group(1), pat2.group(2)))
+    if pat3:
+        match_groups.append((pat3.group(1), pat3.group(2)))
+
+    for left_frag, right_frag in match_groups:
+        left_orig = _slice_original_case(source_text, left_frag)
+        right_orig = _slice_original_case(source_text, right_frag)
+        lhs = _resolve_meta_set_operand(left_orig)
+        rhs = _resolve_meta_set_operand(right_orig)
+        if lhs and rhs and _carriers_compatible(lhs, rhs, "Difference"):
+            lhs_wrapped = _wrap_singleton_for_set_op(lhs)
+            rhs_wrapped = _wrap_singleton_for_set_op(rhs)
+            assertion = _construct_meta_logic_assertion(
+                "Difference", [lhs_wrapped, rhs_wrapped]
+            )
+            if assertion and compile_expression(assertion).valid:
+                return assertion
+    return None
+
+
+def _try_membership_emission(source_text: str, op: str) -> Optional[str]:
+    """Build a `X ∈ M` / `X ∉ M` assertion from explicit phrasing."""
+    lower = source_text.lower()
+    set_alt = "|".join(_CANONICAL_META_SETS.keys())
+    if op == "Member":
+        pat = re.search(
+            rf"(.+?)\s+(?:is\s+a\s+member\s+of|belongs\s+to|is\s+in)\s+({set_alt})\b",
+            lower,
+        )
+    else:
+        pat = re.search(
+            rf"(.+?)\s+(?:is\s+not\s+a\s+member\s+of|isn't\s+a\s+member\s+of|"
+            rf"does\s+not\s+belong\s+to|doesn't\s+belong\s+to|"
+            rf"is\s+not\s+in|isn't\s+in)\s+({set_alt})\b",
+            lower,
+        )
+    if not pat:
+        return None
+    left_frag = pat.group(1)
+    right_meta = pat.group(2)
+    left_orig = _slice_original_case(source_text, left_frag)
+    lhs = _resolve_meta_set_operand(left_orig)
+    rhs = _CANONICAL_META_SETS.get(right_meta.lower())
+    if not lhs or not rhs:
+        return None
+    # For membership, LHS must be a singular item (^N or ^N^D).
+    # Reject cluster wrappers — they'd be subset assertions, not membership.
+    if lhs.startswith("NoeticCluster") or lhs.startswith("StateCluster"):
+        return None
+    assertion = _construct_meta_logic_assertion(op, [lhs, rhs])
+    if assertion and compile_expression(assertion).valid:
+        return assertion
+    return None
+
+
+def _try_subset_emission(source_text: str, op: str) -> Optional[str]:
+    """Build a subset/superset assertion from explicit phrasing."""
+    lower = source_text.lower()
+    set_alt = "|".join(_CANONICAL_META_SETS.keys())
+
+    if op in ("Subset", "SubsetEq"):
+        if op == "SubsetEq":
+            pat = re.search(
+                rf"(.+?)\s+(?:is\s+a\s+subset\s+of\s+or\s+equals?|"
+                rf"is\s+at\s+most)\s+({set_alt})\b",
+                lower,
+            )
+        else:
+            pat = re.search(
+                rf"(.+?)\s+(?:is\s+contained\s+in|is\s+a\s+subset\s+of|"
+                rf"is\s+part\s+of)\s+({set_alt})\b",
+                lower,
+            )
+        if not pat:
+            return None
+        left_frag = pat.group(1)
+        right_meta = pat.group(2)
+        left_orig = _slice_original_case(source_text, left_frag)
+        lhs = _resolve_meta_set_operand(left_orig)
+        rhs = _CANONICAL_META_SETS.get(right_meta.lower())
+        if not lhs or not rhs:
+            return None
+        # Subset/SubsetEq requires a meta-set on the LHS — wrap bare singleton
+        # refs into typed clusters before emission.
+        lhs_wrapped = _wrap_singleton_for_set_op(lhs)
+        assertion = _construct_meta_logic_assertion(op, [lhs_wrapped, rhs])
+        if assertion and compile_expression(assertion).valid:
+            return assertion
+        return None
+
+    # Superset / SupersetEq: "<meta-set> contains [or equals] X"
+    if op == "SupersetEq":
+        pat = re.search(
+            rf"\b({set_alt})\s+(?:contains\s+or\s+equals?|is\s+at\s+least)\s+(.+?)(?:[.;,]|$)",
+            lower,
+        )
+    else:
+        pat = re.search(
+            rf"\b({set_alt})\s+(?:contains|includes)\s+(.+?)(?:[.;,]|$)",
+            lower,
+        )
+    if not pat:
+        return None
+    left_meta = pat.group(1)
+    right_frag = pat.group(2)
+    right_orig = _slice_original_case(source_text, right_frag)
+    lhs = _CANONICAL_META_SETS.get(left_meta.lower())
+    rhs = _resolve_meta_set_operand(right_orig)
+    if not lhs or not rhs:
+        return None
+    # Superset/SupersetEq requires a meta-set on the RHS — wrap bare singleton
+    # refs into typed clusters before emission.
+    rhs_wrapped = _wrap_singleton_for_set_op(rhs)
+    assertion = _construct_meta_logic_assertion(op, [lhs, rhs_wrapped])
+    if assertion and compile_expression(assertion).valid:
+        return assertion
+    return None
+
+
+def _slice_original_case(source_text: str, lower_fragment: str) -> str:
+    """Return the original-case slice of ``source_text`` that matches
+    ``lower_fragment``. Falls back to the lower fragment itself when the
+    case-insensitive search fails (rare; only when fragment was synthesized
+    rather than excerpted)."""
+    needle = lower_fragment.strip()
+    if not needle:
+        return ""
+    haystack = source_text.lower()
+    idx = haystack.find(needle)
+    if idx < 0:
+        return lower_fragment
+    return source_text[idx:idx + len(needle)]
+
+
 def synthesize_notation(
     *,
     operator_scores: list[float],
@@ -551,6 +1233,43 @@ def synthesize_notation(
     )
     rpm_drives, plain_drives = _pick_significant_drives(drive_chains, a0_score)
     flagged_inversions = _pick_flagged_inversions(inversion_axis_scores)
+
+    # Try meta-logic emission first. On a hit, short-circuit with a typed
+    # assertion. On a miss, fall through to the existing v7.4-v7.7 paths
+    # exactly as before.
+    meta_logic_source = _try_meta_logic_emission(source_text)
+    if meta_logic_source:
+        artifact = compile_expression(meta_logic_source)
+        if artifact.valid:
+            registers = _infer_registers(source_text)
+            english = _render_english(
+                operators, domains, rpm_drives, plain_drives, fractal_classification
+            )
+            provenance = {
+                "operators_found": len(operators),
+                "operators": [f"CO-{op}" for op in operators],
+                "domains_found": len(domains),
+                "domains": domains,
+                "rpm_drives": [f"F{d + 1}" for d in rpm_drives],
+                "plain_drives": [f"F{d + 1}" for d in plain_drives],
+                "flagged_inversions": flagged_inversions,
+                "registers": registers,
+                "production_recipe": False,
+                "register_copresence": False,
+                "fractal_classification": fractal_classification,
+                "rpm_completeness": round(rpm_completeness, 4),
+                "compiler_engine": artifact.engine,
+                "compiler_valid": artifact.valid,
+                "compiler_error": artifact.error,
+                "meta_logic_emission": True,
+            }
+            return SynthesizedNotation(
+                source=meta_logic_source,
+                valid=True,
+                english=english or meta_logic_source,
+                compiler_artifact=artifact.to_dict(),
+                provenance=provenance,
+            )
 
     # Build a rich expression using all 5 generative operations
     source = _build_expression(

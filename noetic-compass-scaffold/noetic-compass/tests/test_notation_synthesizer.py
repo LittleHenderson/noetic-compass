@@ -11,6 +11,12 @@ from api.pipeline.notation_synthesizer import (
     _pick_significant_drives,
     _pick_flagged_inversions,
     _build_expression,
+    _detect_set_operation_vocabulary,
+    _detect_membership_vocabulary,
+    _detect_subset_vocabulary,
+    _resolve_meta_set_operand,
+    _construct_meta_logic_assertion,
+    _try_meta_logic_emission,
 )
 
 
@@ -281,3 +287,405 @@ class TestSynthesizeNotation:
         assert "|f + " in result.source
         assert "|T" in result.source
         assert compile_expression(result.source).valid is True
+
+
+# ---------------------------------------------------------------------------
+# Meta-logic trigger vocabulary tests (Track B SDG sprint)
+# ---------------------------------------------------------------------------
+
+class TestSetOperationDetection:
+    """Trigger-phrase detection for ∪ / ∩ / ∖."""
+
+    @pytest.mark.parametrize("text", [
+        "the union of Noetics and Domains",
+        "union of ^2 and ^7",
+        "combined set of ^2 and ^7",
+    ])
+    def test_union_phrases_detected(self, text):
+        assert _detect_set_operation_vocabulary(text) == "Union"
+
+    @pytest.mark.parametrize("text", [
+        "intersection of ^2 and ^7",
+        "common to both ^2 and ^7",
+        "overlap of ^2 and ^7",
+        "what ^2 and ^7 share",
+    ])
+    def test_intersection_phrases_detected(self, text):
+        assert _detect_set_operation_vocabulary(text) == "Intersection"
+
+    @pytest.mark.parametrize("text", [
+        "everything in Noetics except ^4",
+        "all things in Noetics except ^4",
+        "Noetics minus ^4",
+        "Noetics excluding ^4",
+        "all of Noetics except ^4",
+    ])
+    def test_difference_phrases_detected(self, text):
+        assert _detect_set_operation_vocabulary(text) == "Difference"
+
+    @pytest.mark.parametrize("text", [
+        "the labor union met yesterday",
+        "credit union announced rates",
+        "union jack flag",
+        "trade union representative",
+    ])
+    def test_union_negative_contexts_no_fire(self, text):
+        # Trigger detector may fire on the keyword, but emission must not
+        assert _try_meta_logic_emission(text) is None
+
+    @pytest.mark.parametrize("text", [
+        "street intersection was crowded",
+        "busy traffic intersection",
+        "lives lived at the intersection of identity",
+        "the intersection of his career",
+    ])
+    def test_intersection_negative_contexts_no_fire(self, text):
+        assert _detect_set_operation_vocabulary(text) is None
+
+    @pytest.mark.parametrize("text", [
+        "the difference between us",
+        "made a difference",
+        "world of difference",
+    ])
+    def test_difference_negative_contexts_no_fire(self, text):
+        assert _detect_set_operation_vocabulary(text) is None
+
+
+class TestMembershipDetection:
+    """Trigger-phrase detection for ∈ / ∉ — paired with meta-set."""
+
+    @pytest.mark.parametrize("text", [
+        "^2 is a member of Noetics",
+        "CO-3 belongs to Noetics",
+        "P is in Domains",
+        "F2 is in Drives",
+    ])
+    def test_member_phrases_detected(self, text):
+        assert _detect_membership_vocabulary(text) == "Member"
+
+    @pytest.mark.parametrize("text", [
+        "^2 is not a member of Noetics",
+        "CO-3 doesn't belong to Noetics",
+        "^4 isn't in Drives",
+    ])
+    def test_not_member_phrases_detected(self, text):
+        assert _detect_membership_vocabulary(text) == "NotMember"
+
+    @pytest.mark.parametrize("text", [
+        "is in trouble",
+        "is in love",
+        "is in danger",
+        "is in stock",
+        "is in luck",
+    ])
+    def test_is_in_negative_contexts_no_fire(self, text):
+        # No meta-set in trigger position → must not fire.
+        assert _detect_membership_vocabulary(text) is None
+
+    def test_belongs_to_without_meta_set_no_fire(self):
+        # "belongs to" without meta-set name → must not fire.
+        assert _detect_membership_vocabulary("she belongs to the team") is None
+
+
+class TestSubsetDetection:
+    """Trigger-phrase detection for ⊂ / ⊆ / ⊃ / ⊇."""
+
+    @pytest.mark.parametrize("text", [
+        "NoeticCluster{^2, ^7} is a subset of Noetics",
+        "is contained in Noetics",
+        "^2 is part of Noetics",
+    ])
+    def test_subset_phrases_detected(self, text):
+        assert _detect_subset_vocabulary(text) == "Subset"
+
+    @pytest.mark.parametrize("text", [
+        "^4 is at most Noetics",
+        "NoeticCluster{^2} is a subset of or equals Noetics",
+    ])
+    def test_subseteq_phrases_detected(self, text):
+        assert _detect_subset_vocabulary(text) == "SubsetEq"
+
+    @pytest.mark.parametrize("text", [
+        "Noetics contains ^2 and ^7",
+        "Noetics includes ^4",
+    ])
+    def test_superset_phrases_detected(self, text):
+        assert _detect_subset_vocabulary(text) == "Superset"
+
+    @pytest.mark.parametrize("text", [
+        "Noetics contains or equals NoeticCluster{^2}",
+    ])
+    def test_superseteq_phrases_detected(self, text):
+        assert _detect_subset_vocabulary(text) == "SupersetEq"
+
+    @pytest.mark.parametrize("text", [
+        "this contains nuts",
+        "package contains gluten",
+        "bottle contains alcohol",
+    ])
+    def test_contains_negative_contexts_no_fire(self, text):
+        # Detector may fire (no meta-set), but emission must not
+        assert _try_meta_logic_emission(text) is None
+
+
+class TestMetaSetOperandResolution:
+    """`_resolve_meta_set_operand` returns canonical names or None."""
+
+    def test_canonical_meta_set_names(self):
+        assert _resolve_meta_set_operand("Noetics") == "Noetics"
+        assert _resolve_meta_set_operand("Domains") == "Domains"
+        assert _resolve_meta_set_operand("States") == "States"
+        assert _resolve_meta_set_operand("Drives") == "Drives"
+        assert _resolve_meta_set_operand("Foundations") == "Foundations"
+
+    def test_canonical_handles_articles_and_punctuation(self):
+        assert _resolve_meta_set_operand("the Noetics") == "Noetics"
+        assert _resolve_meta_set_operand("Noetics.") == "Noetics"
+
+    def test_singular_noetic_ref(self):
+        assert _resolve_meta_set_operand("^2") == "^2"
+        assert _resolve_meta_set_operand("CO-3") == "^3"
+
+    def test_singular_state_ref(self):
+        assert _resolve_meta_set_operand("^2^P") == "^2^P"
+
+    def test_singular_domain_code(self):
+        assert _resolve_meta_set_operand("P") == "P"
+        assert _resolve_meta_set_operand("E") == "E"
+
+    def test_singular_drive_ref(self):
+        assert _resolve_meta_set_operand("F2") == "F2"
+
+    def test_foundation_ref(self):
+        assert _resolve_meta_set_operand("Foundation_1") == "Foundation_1"
+
+    def test_multiple_noetics_become_cluster(self):
+        # The order is preserved
+        assert _resolve_meta_set_operand("^2 and ^7") == "NoeticCluster{^2, ^7}"
+
+    def test_unresolvable_returns_none(self):
+        assert _resolve_meta_set_operand("a vague noun") is None
+        assert _resolve_meta_set_operand("") is None
+        assert _resolve_meta_set_operand("distractions") is None
+
+
+class TestConstructMetaLogicAssertion:
+    """Pure-function shape of `_construct_meta_logic_assertion`."""
+
+    def test_set_op_assertions(self):
+        assert _construct_meta_logic_assertion(
+            "Union", ["NoeticCluster{^2}", "NoeticCluster{^7}"]
+        ) == "NoeticCluster{^2} ∪ NoeticCluster{^7}"
+        assert _construct_meta_logic_assertion(
+            "Intersection", ["NoeticCluster{^2}", "NoeticCluster{^7}"]
+        ) == "NoeticCluster{^2} ∩ NoeticCluster{^7}"
+        assert _construct_meta_logic_assertion(
+            "Difference", ["Noetics", "NoeticCluster{^4}"]
+        ) == "Noetics ∖ NoeticCluster{^4}"
+
+    def test_membership_assertions(self):
+        assert _construct_meta_logic_assertion("Member", ["^2", "Noetics"]) == "^2 ∈ Noetics"
+        assert _construct_meta_logic_assertion("NotMember", ["^2", "Noetics"]) == "^2 ∉ Noetics"
+
+    def test_subset_assertions(self):
+        assert _construct_meta_logic_assertion(
+            "Subset", ["NoeticCluster{^2}", "Noetics"]
+        ) == "NoeticCluster{^2} ⊂ Noetics"
+        assert _construct_meta_logic_assertion(
+            "SubsetEq", ["NoeticCluster{^2}", "Noetics"]
+        ) == "NoeticCluster{^2} ⊆ Noetics"
+        assert _construct_meta_logic_assertion(
+            "Superset", ["Noetics", "NoeticCluster{^2}"]
+        ) == "Noetics ⊃ NoeticCluster{^2}"
+        assert _construct_meta_logic_assertion(
+            "SupersetEq", ["Noetics", "NoeticCluster{^2}"]
+        ) == "Noetics ⊇ NoeticCluster{^2}"
+
+    def test_unknown_operation_returns_empty(self):
+        assert _construct_meta_logic_assertion("Bogus", ["a", "b"]) == ""
+
+
+class TestMetaLogicEmissionHits:
+    """Happy-path: prose triggers meta-logic AND operand resolves AND
+    the emitted assertion compiles."""
+
+    @pytest.mark.parametrize("text,expected", [
+        ("union of ^2 and ^7", "NoeticCluster{^2} ∪ NoeticCluster{^7}"),
+        ("combined set of ^2 and ^7", "NoeticCluster{^2} ∪ NoeticCluster{^7}"),
+        ("intersection of ^2 and ^7", "NoeticCluster{^2} ∩ NoeticCluster{^7}"),
+        ("common to both ^2 and ^7", "NoeticCluster{^2} ∩ NoeticCluster{^7}"),
+        ("overlap of ^2 and ^7", "NoeticCluster{^2} ∩ NoeticCluster{^7}"),
+        ("what ^2 and ^7 share", "NoeticCluster{^2} ∩ NoeticCluster{^7}"),
+        ("everything in Noetics except ^4", "Noetics ∖ NoeticCluster{^4}"),
+        ("all things in Noetics except ^4", "Noetics ∖ NoeticCluster{^4}"),
+        ("Noetics minus ^4", "Noetics ∖ NoeticCluster{^4}"),
+        ("^2 is a member of Noetics", "^2 ∈ Noetics"),
+        ("CO-3 belongs to Noetics", "^3 ∈ Noetics"),
+        ("P is in Domains", "P ∈ Domains"),
+        ("F2 is in Drives", "F2 ∈ Drives"),
+        ("Foundation_1 is in Foundations", "Foundation_1 ∈ Foundations"),
+        ("^2 is not a member of Noetics", "^2 ∉ Noetics"),
+        ("CO-3 doesn't belong to Noetics", "^3 ∉ Noetics"),
+        ("NoeticCluster{^2, ^7} is contained in Noetics",
+         "NoeticCluster{^2, ^7} ⊂ Noetics"),
+        ("NoeticCluster{^2, ^7} is a subset of Noetics",
+         "NoeticCluster{^2, ^7} ⊂ Noetics"),
+        ("^4 is at most Noetics", "NoeticCluster{^4} ⊆ Noetics"),
+        ("Noetics contains ^2 and ^7", "Noetics ⊃ NoeticCluster{^2, ^7}"),
+        ("Noetics includes ^4", "Noetics ⊃ NoeticCluster{^4}"),
+        ("Noetics contains or equals NoeticCluster{^2}",
+         "Noetics ⊇ NoeticCluster{^2}"),
+    ])
+    def test_emission_matches(self, text, expected):
+        emitted = _try_meta_logic_emission(text)
+        assert emitted == expected, f"input={text!r} emit={emitted!r}"
+        # Each emitted form must compile through the real compiler
+        assert compile_expression(emitted).valid
+
+
+class TestMetaLogicEmissionMisses:
+    """No-fire: vague prose, everyday senses, or unresolvable operands."""
+
+    @pytest.mark.parametrize("text", [
+        # Negative-fire contexts from spec
+        "the labor union met yesterday",
+        "credit union announced rates",
+        "trade union representative",
+        "street intersection was crowded",
+        "busy traffic intersection",
+        "lives lived at the intersection of identity",
+        "the intersection of his career",
+        "the difference between us is real",
+        "world of difference",
+        "this contains nuts",
+        "package contains gluten",
+        "bottle contains alcohol",
+        "is in trouble",
+        "is in love",
+        "is in danger",
+        "is in stock",
+        # Unrelated content
+        "I think about creativity and rhythm",
+        "the team works on a new feature",
+        "set the table for dinner",
+    ])
+    def test_no_emission(self, text):
+        assert _try_meta_logic_emission(text) is None
+
+    @pytest.mark.parametrize("text", [
+        # Trigger present but operand unresolvable
+        "the union of distractions and obligations",
+        "common to both apples and oranges",
+        "what cats and dogs share",
+        "all things in patience except joy",
+    ])
+    def test_trigger_with_unresolvable_operand_no_emission(self, text):
+        assert _try_meta_logic_emission(text) is None
+
+    def test_incompatible_carriers_no_emission(self):
+        # Union of bare meta-sets of different carrier kinds → must not emit
+        # (compile would fail with "incompatible typed meta-sets").
+        assert _try_meta_logic_emission("the union of Noetics and Domains") is None
+
+    def test_empty_or_none_source(self):
+        assert _try_meta_logic_emission(None) is None
+        assert _try_meta_logic_emission("") is None
+
+
+class TestSynthesizeNotationMetaLogicIntegration:
+    """End-to-end: synthesize_notation short-circuits to meta-logic when
+    prose triggers it; otherwise falls through to v7.4-v7.7 paths."""
+
+    def test_meta_logic_short_circuits_synthesizer(self):
+        result = synthesize_notation(**_default_kwargs(
+            source_text="^2 is a member of Noetics",
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        assert result.source == "^2 ∈ Noetics"
+        assert result.provenance.get("meta_logic_emission") is True
+        assert compile_expression(result.source).valid
+
+    def test_meta_logic_difference_short_circuits(self):
+        result = synthesize_notation(**_default_kwargs(
+            source_text="everything in Noetics except ^4",
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        assert result.source == "Noetics ∖ NoeticCluster{^4}"
+        assert result.provenance.get("meta_logic_emission") is True
+
+    def test_meta_logic_union_short_circuits(self):
+        result = synthesize_notation(**_default_kwargs(
+            source_text="union of ^2 and ^7",
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        assert "∪" in result.source
+        assert result.provenance.get("meta_logic_emission") is True
+
+    def test_no_meta_logic_falls_through_to_baseline(self):
+        # No meta-logic vocabulary → existing baseline emission still fires
+        result = synthesize_notation(**_default_kwargs(
+            source_text="creativity and rhythm working together",
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        # No meta-logic emission flag
+        assert not result.provenance.get("meta_logic_emission")
+        # Baseline form is preserved (operator/domain expression structure)
+        assert "CO-" in result.source
+
+    def test_v75_register_path_unaffected_by_meta_logic_addition(self):
+        # Same prompt as the existing v7.5 test — must continue producing
+        # register-tagged output (NOT meta-logic).
+        result = synthesize_notation(**_default_kwargs(
+            source_text=(
+                "Use analytical logic and evidence while honoring affective "
+                "feeling and embodied gut response."
+            ),
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        assert "|A" in result.source
+        assert "|f" in result.source
+        assert "|E" in result.source
+        assert not result.provenance.get("meta_logic_emission")
+        assert compile_expression(result.source).valid
+
+    def test_v76_recipe_path_unaffected_by_meta_logic_addition(self):
+        result = synthesize_notation(**_default_kwargs(
+            source_text=(
+                "Create an insight recipe from analytical evidence and affective "
+                "feeling; deadline support is a catalyst, fatigue is an inhibitor."
+            ),
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        assert "Theta(Omega_insight)" in result.source
+        assert not result.provenance.get("meta_logic_emission")
+        assert compile_expression(result.source).valid
+
+    def test_v77_register_set_path_unaffected_by_meta_logic_addition(self):
+        result = synthesize_notation(**_default_kwargs(
+            source_text=(
+                "Synthesize analytical reasoning, affective feeling, and "
+                "transcendent purpose into one integrated judgment."
+            ),
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        assert "|<A,f,T>" in result.source
+        assert not result.provenance.get("meta_logic_emission")
+        assert compile_expression(result.source).valid
+
+    def test_negative_fire_falls_through_cleanly(self):
+        # "labor union" must NOT short-circuit to meta-logic emission;
+        # baseline path runs as if source_text contained no meta-logic.
+        result = synthesize_notation(**_default_kwargs(
+            source_text="the labor union members met to discuss benefits",
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        assert "∪" not in result.source
+        assert not result.provenance.get("meta_logic_emission")
