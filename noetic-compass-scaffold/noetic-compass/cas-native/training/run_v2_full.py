@@ -56,7 +56,8 @@ CKPT_DIR.mkdir(exist_ok=True)
 
 BATCH_SIZE = int(os.environ.get("CAS_V2_BATCH_SIZE", 128))
 MAX_LENGTH = 512
-EPOCHS = 3
+EPOCHS = int(os.environ.get("CAS_V2_EPOCHS", 3))
+REQUESTED_MAX_STEPS = int(os.environ.get("CAS_V2_MAX_STEPS", 0))
 LR = 1e-4
 WARMUP_STEPS = 500
 LOG_EVERY = int(os.environ.get("CAS_V2_LOG_EVERY", 25))
@@ -97,8 +98,20 @@ train_loader, val_loader, test_loader, stats = run_pipeline(
 )
 log("      stages: " + str(stats["stages"]))
 steps_per_epoch = len(train_loader)
-total_steps = EPOCHS * steps_per_epoch
-log("      train batches/epoch: " + str(steps_per_epoch) + " | total steps: " + str(total_steps))
+if REQUESTED_MAX_STEPS > 0:
+    total_steps = REQUESTED_MAX_STEPS
+    # Ensure the outer epoch loop covers the requested step budget.
+    EPOCHS = max(EPOCHS, math.ceil(total_steps / max(steps_per_epoch, 1)))
+else:
+    total_steps = EPOCHS * steps_per_epoch
+log(
+    "      train batches/epoch: "
+    + str(steps_per_epoch)
+    + " | epochs scheduled: "
+    + str(EPOCHS)
+    + " | total steps: "
+    + str(total_steps)
+)
 tokenizer = tokenizer_from_loader(train_loader)
 tokenizer_meta = {}
 if isinstance(tokenizer, HybridCASTokenizer):
@@ -297,6 +310,7 @@ with open(RUN_DIR / "metrics.json", "w") as f:
             "batch_size": BATCH_SIZE,
             "max_length": MAX_LENGTH,
             "epochs": EPOCHS,
+            "requested_max_steps": REQUESTED_MAX_STEPS,
             "lr": LR,
             "warmup_steps": WARMUP_STEPS,
             "production_warmup_steps": v2_hp.production_warmup_steps,
