@@ -1,15 +1,16 @@
 """CAS-Native v2 first full training run on Level 2 dataset.
 
 Implements the Tuesday training directive:
-  - batch_size=32, seq_len=512, epochs=3
+  - batch_size=128, seq_len=512, epochs=3
   - lr=1e-4 with linear warmup 500 steps
   - bf16 mixed precision (autocast)
   - gradient checkpointing off
   - v2 flags: register_film, emergent_register, production_semantics, expression_proposer
   - use_rust_validation: False
   - data_mix_meta_logic: 0.00 (Level 3 NOT in mix; symbolic-only)
-  - validation split 10%, checkpoint every 500 steps, log every 50 steps
-  - evaluation every 250 steps
+  - validation split 10%, checkpoint every 100 steps, log every 25 steps
+  - evaluation every 100 steps
+  - production_warmup_steps=100 so short batch=128 runs reach full weight
   - output to cas-native/training/runs/v2-first-full-<timestamp>/
 
 Designed to run UNATTENDED in the background on the pod. Logs to a file
@@ -43,14 +44,19 @@ RUN_DIR.mkdir(parents=True, exist_ok=True)
 CKPT_DIR = RUN_DIR / "checkpoints"
 CKPT_DIR.mkdir(exist_ok=True)
 
-BATCH_SIZE = 32
+BATCH_SIZE = int(os.environ.get("CAS_V2_BATCH_SIZE", 128))
 MAX_LENGTH = 512
 EPOCHS = 3
 LR = 1e-4
 WARMUP_STEPS = 500
-LOG_EVERY = 50
-EVAL_EVERY = 250
-CHECKPOINT_EVERY = 500
+LOG_EVERY = int(os.environ.get("CAS_V2_LOG_EVERY", 25))
+EVAL_EVERY = int(os.environ.get("CAS_V2_EVAL_EVERY", 100))
+CHECKPOINT_EVERY = int(os.environ.get("CAS_V2_CHECKPOINT_EVERY", 100))
+# Curriculum delay on production_loss outer weight: ramps 0 → lambda_production
+# linearly over the first PRODUCTION_WARMUP_STEPS training steps. Smooths the
+# untrained-head noise spike that produced step-450's production_loss=0 dip in
+# the first full v2 run (commit e6cd8e4).
+PRODUCTION_WARMUP_STEPS = int(os.environ.get("CAS_V2_PRODUCTION_WARMUP", 100))
 
 # ------------------------------------------------------------ logging
 
@@ -102,9 +108,10 @@ v74_hp = V74Hyperparameters(
     eval_every=EVAL_EVERY,
     checkpoint_dir=str(CKPT_DIR),
 )
-v2_hp = V2Hyperparameters()
+v2_hp = V2Hyperparameters(production_warmup_steps=PRODUCTION_WARMUP_STEPS)
 # data_mix_meta_logic=0.00 (Level 3 NOT in mix). Default already 0.0.
 assert v2_hp.data_mix_meta_logic == 0.0, "directive: data_mix_meta_logic must be 0.00"
+log("      production_warmup_steps: " + str(v2_hp.production_warmup_steps))
 
 cfg = TrainingConfig(
     component_flags=V2ComponentFlags(
@@ -267,6 +274,10 @@ with open(RUN_DIR / "metrics.json", "w") as f:
             "epochs": EPOCHS,
             "lr": LR,
             "warmup_steps": WARMUP_STEPS,
+            "production_warmup_steps": v2_hp.production_warmup_steps,
+            "log_every": LOG_EVERY,
+            "eval_every": EVAL_EVERY,
+            "checkpoint_every": CHECKPOINT_EVERY,
             "total_steps": total_steps,
             "v2_flags": [k for k, v in cfg.component_flags.__dict__.items() if v],
             "data_mix_meta_logic": v2_hp.data_mix_meta_logic,

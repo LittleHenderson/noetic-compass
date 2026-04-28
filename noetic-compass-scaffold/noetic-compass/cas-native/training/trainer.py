@@ -1604,14 +1604,30 @@ class CASTrainer:
 
         return total_loss, components
 
-    def _components_to_metrics(self, components: dict[str, torch.Tensor]) -> dict[str, float]:
+    def _components_to_metrics(self, components: dict[str, Any]) -> dict[str, float]:
         """Materialize tensor components to a float-valued metrics dict.
 
         Common tail used by both :meth:`_train_step` and :meth:`_eval_step` to
         produce the metrics dict downstream code (loggers, eval loops) consumes.
-        Includes the v2 register-FiLM diagnostic surface when enabled.
+        Includes scalar Python diagnostics such as ``production_weight`` plus
+        the v2 register-FiLM diagnostic surface when enabled.
         """
-        metrics = {k: v.item() for k, v in components.items() if isinstance(v, torch.Tensor)}
+        metrics: dict[str, float] = {}
+        for k, v in components.items():
+            if isinstance(v, torch.Tensor):
+                try:
+                    tensor_value = v.detach()
+                    if tensor_value.ndim == 0:
+                        metrics[k] = float(tensor_value.cpu().item())
+                    else:
+                        metrics[k] = float(tensor_value.cpu().mean().item())
+                except Exception:
+                    pass
+                continue
+            try:
+                metrics[k] = float(v)
+            except (TypeError, ValueError):
+                pass
         metrics["lr"] = self.scheduler.get_last_lr()[0]
         metrics["current_tau"] = self.current_tau
         if self.v2_flags.use_register_film:

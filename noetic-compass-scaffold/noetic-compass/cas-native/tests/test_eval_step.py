@@ -107,6 +107,24 @@ class TestEvalStepStructure:
         assert "optimizer.step" in body_src
         assert "scheduler.step" in body_src
 
+    def test_components_to_metrics_accepts_python_float_scalars(self):
+        """production_weight is a Python float; metrics must not drop it."""
+        tree = _trainer_module_ast()
+        method = _find_method(tree, "CASTrainer", "_components_to_metrics")
+        body_src = ast.unparse(_executable_body(method))
+        assert "float(v)" in body_src
+        assert "TypeError" in body_src
+        assert "ValueError" in body_src
+
+    def test_run_v2_full_defaults_fire_eval_for_batch_128_run(self):
+        """Batch=128 gives 189 steps; eval/checkpoint defaults must fire."""
+        run_path = REPO_ROOT / "cas-native" / "training" / "run_v2_full.py"
+        run_src = run_path.read_text(encoding="utf-8")
+        assert 'CAS_V2_BATCH_SIZE", 128' in run_src
+        assert 'CAS_V2_EVAL_EVERY", 100' in run_src
+        assert 'CAS_V2_CHECKPOINT_EVERY", 100' in run_src
+        assert 'CAS_V2_PRODUCTION_WARMUP", 100' in run_src
+
 
 # ------------------------------------------------------------ runtime tier
 #
