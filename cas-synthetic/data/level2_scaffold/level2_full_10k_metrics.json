@@ -1,0 +1,448 @@
+{
+  "dataset_path": "cas-synthetic\\data\\level2_scaffold\\level2_full_10k.jsonl",
+  "total": 10000,
+  "compilation": {
+    "valid": 9727,
+    "invalid": 273,
+    "pass_rate": 0.9727
+  },
+  "bucket_distribution": {
+    "v75_register": 2500,
+    "v77_rule_four": 1500,
+    "v77_omega": 2000,
+    "v74_baseline": 2000,
+    "v76_production": 1000,
+    "meta_logic": 1000
+  },
+  "bucket_valid": {
+    "v75_register": 2500,
+    "v77_rule_four": 1227,
+    "v77_omega": 2000,
+    "v74_baseline": 2000,
+    "v76_production": 1000,
+    "meta_logic": 1000
+  },
+  "bucket_invalid": {
+    "v77_rule_four": 273
+  },
+  "bucket_pass_rate": {
+    "v75_register": 1.0,
+    "v77_rule_four": 0.818,
+    "v77_omega": 1.0,
+    "v74_baseline": 1.0,
+    "v76_production": 1.0,
+    "meta_logic": 1.0
+  },
+  "bucket_avg_expr_length": {
+    "v75_register": 18.27,
+    "v77_rule_four": 41.81,
+    "v77_omega": 48.88,
+    "v74_baseline": 16.49,
+    "v76_production": 129.16,
+    "meta_logic": 49.18
+  },
+  "duplicates": {
+    "count": 913,
+    "total_extra_copies": 1480,
+    "examples": {
+      "(^1^E_{F3}|A × ^1^E_{F3}|f) = ^1^E|Ω_clarity": 3,
+      "^4^P_{F2} * ^3^P_{F2}": 2,
+      "^6^E_{F5}|E": 3,
+      "(^1_{F6}|A × ^1_{F1}|f) = ^1|Ω_clarity": 2,
+      "^1^C_{F2}": 4,
+      "^3^O_{F5} * ^8^O_{F5}": 2,
+      "^5^P_{F1}": 4,
+      "(^6^O_{F1}|A × ^6^O_{F1}|T) = ^6^O|Ω_resolve": 3,
+      "^5^C_{F3}": 4,
+      "^9^E_{F2}": 4
+    }
+  },
+  "coverage_overall": {
+    "noetics": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "domains": [
+      "C",
+      "E",
+      "O",
+      "P"
+    ],
+    "drives": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "registers": [
+      "A",
+      "E",
+      "T",
+      "f"
+    ],
+    "foundations": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "coverage_per_bucket": {
+    "v75_register": {
+      "noetics": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "domains": [
+        "C",
+        "E",
+        "O",
+        "P"
+      ],
+      "drives": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "registers": [
+        "A",
+        "E",
+        "T",
+        "f"
+      ],
+      "foundations": []
+    },
+    "v77_rule_four": {
+      "noetics": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "domains": [
+        "C",
+        "E",
+        "O",
+        "P"
+      ],
+      "drives": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "registers": [
+        "A",
+        "E",
+        "T",
+        "f"
+      ],
+      "foundations": []
+    },
+    "v77_omega": {
+      "noetics": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "domains": [
+        "C",
+        "E",
+        "O",
+        "P"
+      ],
+      "drives": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "registers": [
+        "A",
+        "E",
+        "T",
+        "f"
+      ],
+      "foundations": []
+    },
+    "v74_baseline": {
+      "noetics": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "domains": [
+        "C",
+        "E",
+        "O",
+        "P"
+      ],
+      "drives": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "registers": [],
+      "foundations": []
+    },
+    "v76_production": {
+      "noetics": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "domains": [
+        "C",
+        "E",
+        "O",
+        "P"
+      ],
+      "drives": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "registers": [
+        "A",
+        "E",
+        "T",
+        "f"
+      ],
+      "foundations": []
+    },
+    "meta_logic": {
+      "noetics": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "domains": [
+        "C",
+        "E",
+        "O",
+        "P"
+      ],
+      "drives": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "registers": [
+        "A",
+        "E",
+        "T",
+        "f"
+      ],
+      "foundations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    }
+  },
+  "compilation_failures": [
+    {
+      "index": 23,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^6^P|A × ^6^P|T × ^6^P|f",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^6^P|A × ^6^P|T × ^6^P|f`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^6^P|A + ^6^P|T`) or `|⟨…⟩` (specification, e.g. `^6^P|⟨A,T,f⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^6^P|A × ^6^P|T × ^6^P|f) = ^6^P|Ω`."
+    },
+    {
+      "index": 61,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^0^E_{F2}|T × ^0^E_{F2}|A × ^0^E_{F2}|E × ^0^E_{F2}|f",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^0^E_{F2}|T × ^0^E_{F2}|A × ^0^E_{F2}|E × ^0^E_{F2}|f`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^0^E_{F2}|T + ^0^E_{F2}|A`) or `|⟨…⟩` (specification, e.g. `^0^E|⟨T,A,E,f⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^0^E_{F2}|T × ^0^E_{F2}|A × ^0^E_{F2}|E × ^0^E_{F2}|f) = ^0^E|Ω`."
+    },
+    {
+      "index": 100,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^3^O_{F4}|f × ^3^O_{F4}|A",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^3^O_{F4}|f × ^3^O_{F4}|A`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^3^O_{F4}|f + ^3^O_{F4}|A`) or `|⟨…⟩` (specification, e.g. `^3^O|⟨f,A⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^3^O_{F4}|f × ^3^O_{F4}|A) = ^3^O|Ω`."
+    },
+    {
+      "index": 103,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^9^E|f × ^9^E|A × ^9^E|E",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^9^E|f × ^9^E|A × ^9^E|E`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^9^E|f + ^9^E|A`) or `|⟨…⟩` (specification, e.g. `^9^E|⟨f,A,E⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^9^E|f × ^9^E|A × ^9^E|E) = ^9^E|Ω`."
+    },
+    {
+      "index": 105,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^6^O|E × ^6^O|T",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^6^O|E × ^6^O|T`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^6^O|E + ^6^O|T`) or `|⟨…⟩` (specification, e.g. `^6^O|⟨E,T⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^6^O|E × ^6^O|T) = ^6^O|Ω`."
+    },
+    {
+      "index": 110,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^0^E|A × ^0^E|f",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^0^E|A × ^0^E|f`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^0^E|A + ^0^E|f`) or `|⟨…⟩` (specification, e.g. `^0^E|⟨A,f⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^0^E|A × ^0^E|f) = ^0^E|Ω`."
+    },
+    {
+      "index": 124,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^3^P|A × ^3^P|T",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^3^P|A × ^3^P|T`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^3^P|A + ^3^P|T`) or `|⟨…⟩` (specification, e.g. `^3^P|⟨A,T⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^3^P|A × ^3^P|T) = ^3^P|Ω`."
+    },
+    {
+      "index": 152,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^4^O_{F2}|A × ^4^O_{F2}|f",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^4^O_{F2}|A × ^4^O_{F2}|f`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^4^O_{F2}|A + ^4^O_{F2}|f`) or `|⟨…⟩` (specification, e.g. `^4^O|⟨A,f⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^4^O_{F2}|A × ^4^O_{F2}|f) = ^4^O|Ω`."
+    },
+    {
+      "index": 170,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^7^E|A × ^7^E|f",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^7^E|A × ^7^E|f`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^7^E|A + ^7^E|f`) or `|⟨…⟩` (specification, e.g. `^7^E|⟨A,f⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^7^E|A × ^7^E|f) = ^7^E|Ω`."
+    },
+    {
+      "index": 192,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^3^O|E × ^3^O|A",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^3^O|E × ^3^O|A`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^3^O|E + ^3^O|A`) or `|⟨…⟩` (specification, e.g. `^3^O|⟨E,A⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^3^O|E × ^3^O|A) = ^3^O|Ω`."
+    },
+    {
+      "index": 228,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^7^C_{F3}|A × ^7^C_{F3}|f × ^7^C_{F3}|T",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^7^C_{F3}|A × ^7^C_{F3}|f × ^7^C_{F3}|T`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^7^C_{F3}|A + ^7^C_{F3}|f`) or `|⟨…⟩` (specification, e.g. `^7^C|⟨A,f,T⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^7^C_{F3}|A × ^7^C_{F3}|f × ^7^C_{F3}|T) = ^7^C|Ω`."
+    },
+    {
+      "index": 277,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^7^O_{F3}|A × ^7^O_{F3}|T × ^7^O_{F3}|E",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^7^O_{F3}|A × ^7^O_{F3}|T × ^7^O_{F3}|E`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^7^O_{F3}|A + ^7^O_{F3}|T`) or `|⟨…⟩` (specification, e.g. `^7^O|⟨A,T,E⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^7^O_{F3}|A × ^7^O_{F3}|T × ^7^O_{F3}|E) = ^7^O|Ω`."
+    },
+    {
+      "index": 404,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^2^C|T × ^2^C|A",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^2^C|T × ^2^C|A`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^2^C|T + ^2^C|A`) or `|⟨…⟩` (specification, e.g. `^2^C|⟨T,A⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^2^C|T × ^2^C|A) = ^2^C|Ω`."
+    },
+    {
+      "index": 436,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^0^E_{F4}|T × ^0^E_{F4}|A × ^0^E_{F4}|f",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^0^E_{F4}|T × ^0^E_{F4}|A × ^0^E_{F4}|f`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^0^E_{F4}|T + ^0^E_{F4}|A`) or `|⟨…⟩` (specification, e.g. `^0^E|⟨T,A,f⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^0^E_{F4}|T × ^0^E_{F4}|A × ^0^E_{F4}|f) = ^0^E|Ω`."
+    },
+    {
+      "index": 496,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^3^E_{F1}|E × ^3^E_{F1}|T × ^3^E_{F1}|f",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^3^E_{F1}|E × ^3^E_{F1}|T × ^3^E_{F1}|f`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^3^E_{F1}|E + ^3^E_{F1}|T`) or `|⟨…⟩` (specification, e.g. `^3^E|⟨E,T,f⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^3^E_{F1}|E × ^3^E_{F1}|T × ^3^E_{F1}|f) = ^3^E|Ω`."
+    },
+    {
+      "index": 513,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^9^E_{F1}|A × ^9^E_{F1}|f × ^9^E_{F1}|E × ^9^E_{F1}|T",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^9^E_{F1}|A × ^9^E_{F1}|f × ^9^E_{F1}|E × ^9^E_{F1}|T`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^9^E_{F1}|A + ^9^E_{F1}|f`) or `|⟨…⟩` (specification, e.g. `^9^E|⟨A,f,E,T⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^9^E_{F1}|A × ^9^E_{F1}|f × ^9^E_{F1}|E × ^9^E_{F1}|T) = ^9^E|Ω`."
+    },
+    {
+      "index": 550,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^8^O_{F5}|T × ^8^O_{F5}|E",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^8^O_{F5}|T × ^8^O_{F5}|E`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^8^O_{F5}|T + ^8^O_{F5}|E`) or `|⟨…⟩` (specification, e.g. `^8^O|⟨T,E⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^8^O_{F5}|T × ^8^O_{F5}|E) = ^8^O|Ω`."
+    },
+    {
+      "index": 575,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^9^O|E × ^9^O|f × ^9^O|A × ^9^O|T",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^9^O|E × ^9^O|f × ^9^O|A × ^9^O|T`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^9^O|E + ^9^O|f`) or `|⟨…⟩` (specification, e.g. `^9^O|⟨E,f,A,T⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^9^O|E × ^9^O|f × ^9^O|A × ^9^O|T) = ^9^O|Ω`."
+    },
+    {
+      "index": 579,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^3^O_{F3}|T × ^3^O_{F3}|A × ^3^O_{F3}|E × ^3^O_{F3}|f",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^3^O_{F3}|T × ^3^O_{F3}|A × ^3^O_{F3}|E × ^3^O_{F3}|f`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^3^O_{F3}|T + ^3^O_{F3}|A`) or `|⟨…⟩` (specification, e.g. `^3^O|⟨T,A,E,f⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^3^O_{F3}|T × ^3^O_{F3}|A × ^3^O_{F3}|E × ^3^O_{F3}|f) = ^3^O|Ω`."
+    },
+    {
+      "index": 594,
+      "bucket": "v77_rule_four",
+      "cas_expression": "^4^O|E × ^4^O|A",
+      "error": "typecheck: CAS v7.7 Clarification 10 Section 4 admissibility rule: same-Noetic multi-register `×` expression is invalid by default. Offending expression: `^4^O|E × ^4^O|A`. The `×` operator is reserved for genuine generative integration; same-state multi-register co-presence must use `+` (co-presence, e.g. `^4^O|E + ^4^O|A`) or `|⟨…⟩` (specification, e.g. `^4^O|⟨E,A⟩`). If true integration into a fused state is intended, assign a named emergent result: `(^4^O|E × ^4^O|A) = ^4^O|Ω`."
+    }
+  ],
+  "compilation_failure_count_total": 273
+}

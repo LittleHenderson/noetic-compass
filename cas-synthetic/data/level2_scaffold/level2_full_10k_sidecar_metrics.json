@@ -1,0 +1,451 @@
+{
+  "dataset_path": "cas-synthetic\\data\\level2_scaffold\\level2_full_10k.jsonl",
+  "total": 10000,
+  "length_distribution_per_bucket": {
+    "v75_register": {
+      "min": 4,
+      "p25": 11,
+      "p50": 25,
+      "p75": 25,
+      "max": 25
+    },
+    "v77_rule_four": {
+      "min": 15,
+      "p25": 38,
+      "p50": 44,
+      "p75": 53,
+      "max": 75
+    },
+    "v77_omega": {
+      "min": 28,
+      "p25": 44,
+      "p50": 45,
+      "p75": 58,
+      "max": 75
+    },
+    "v74_baseline": {
+      "min": 9,
+      "p25": 9,
+      "p50": 21,
+      "p75": 21,
+      "max": 22
+    },
+    "v76_production": {
+      "min": 93,
+      "p25": 111,
+      "p50": 135,
+      "p75": 144,
+      "max": 153
+    },
+    "meta_logic": {
+      "min": 12,
+      "p25": 24,
+      "p50": 43,
+      "p75": 62,
+      "max": 125
+    }
+  },
+  "cross_bucket_noetic_jaccard": {
+    "meta_logic": {
+      "meta_logic": 1.0,
+      "v74_baseline": 1.0,
+      "v75_register": 1.0,
+      "v76_production": 1.0,
+      "v77_omega": 1.0,
+      "v77_rule_four": 1.0
+    },
+    "v74_baseline": {
+      "v74_baseline": 1.0,
+      "v75_register": 1.0,
+      "v76_production": 1.0,
+      "v77_omega": 1.0,
+      "v77_rule_four": 1.0
+    },
+    "v75_register": {
+      "v75_register": 1.0,
+      "v76_production": 1.0,
+      "v77_omega": 1.0,
+      "v77_rule_four": 1.0
+    },
+    "v76_production": {
+      "v76_production": 1.0,
+      "v77_omega": 1.0,
+      "v77_rule_four": 1.0
+    },
+    "v77_omega": {
+      "v77_omega": 1.0,
+      "v77_rule_four": 1.0
+    },
+    "v77_rule_four": {
+      "v77_rule_four": 1.0
+    }
+  },
+  "top_20_state_literals": [
+    [
+      "^3^P",
+      1193
+    ],
+    [
+      "^5^P",
+      1090
+    ],
+    [
+      "^2^C",
+      1051
+    ],
+    [
+      "^6^O",
+      984
+    ],
+    [
+      "^1^C",
+      948
+    ],
+    [
+      "^1^P",
+      866
+    ],
+    [
+      "^1^O",
+      807
+    ],
+    [
+      "^1^E",
+      772
+    ],
+    [
+      "^0^O",
+      641
+    ],
+    [
+      "^7^P",
+      632
+    ],
+    [
+      "^4^O",
+      576
+    ],
+    [
+      "^8^C",
+      569
+    ],
+    [
+      "^0^P",
+      563
+    ],
+    [
+      "^6^C",
+      548
+    ],
+    [
+      "^7^C",
+      539
+    ],
+    [
+      "^4^E",
+      524
+    ],
+    [
+      "^5^C",
+      512
+    ],
+    [
+      "^8^O",
+      506
+    ],
+    [
+      "^1",
+      505
+    ],
+    [
+      "^8^P",
+      504
+    ]
+  ],
+  "top_20_omega_names": [
+    [
+      "Ω_invocation",
+      238
+    ],
+    [
+      "Ω_clarity",
+      234
+    ],
+    [
+      "Ω_witness",
+      234
+    ],
+    [
+      "Ω_refusal",
+      233
+    ],
+    [
+      "Ω_genesis",
+      230
+    ],
+    [
+      "Ω_cadence",
+      228
+    ],
+    [
+      "Ω_grounding",
+      216
+    ],
+    [
+      "Ω_alignment",
+      212
+    ],
+    [
+      "Ω_presence",
+      206
+    ],
+    [
+      "Ω_attunement",
+      203
+    ],
+    [
+      "Ω_grounded_creative_insight",
+      198
+    ],
+    [
+      "Ω_focused_refusal",
+      196
+    ],
+    [
+      "Ω_landing",
+      191
+    ],
+    [
+      "Ω_pattern_entrainment_learning",
+      190
+    ],
+    [
+      "Ω_principled_decision_execution",
+      176
+    ],
+    [
+      "Ω_resolve",
+      174
+    ],
+    [
+      "Ω_mentored_skill_transfer",
+      172
+    ],
+    [
+      "Ω_embodied_safety_check",
+      172
+    ],
+    [
+      "Ω_compassionate_adaptive_response",
+      170
+    ],
+    [
+      "Ω_structured_creative_generation",
+      158
+    ]
+  ],
+  "random_examples_per_bucket": {
+    "v75_register": [
+      {
+        "cas_expression": "^6^E_{F1}|f + ^6^P_{F2}|E",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A surgeon who must decide whether to operate holds two co-present register manifestations."
+      },
+      {
+        "cas_expression": "^9^E|A",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "An AI safety reviewer inspecting a model's output must act with a clear register."
+      },
+      {
+        "cas_expression": "^8^O_{F4}|T + ^6^C_{F3}|A",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A manager noticing a team member's silent distress holds two co-present register manifestations."
+      },
+      {
+        "cas_expression": "^5^C_{F5}|f + ^8^O_{F6}|T",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A meditator noticing a subtle sensation holds two co-present register manifestations."
+      },
+      {
+        "cas_expression": "^8^E_{F7}|T + ^2^E_{F4}|T",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A pilot handling an in-flight emergency holds two co-present register manifestations."
+      }
+    ],
+    "v77_rule_four": [
+      {
+        "cas_expression": "^0^E_{F1}|E + ^0^E_{F3}|T",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe the register structure of this state."
+      },
+      {
+        "cas_expression": "(^4^E_{F7}|T × ^4^E_{F7}|f) = ^4^E|Ω_attunement",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe the register structure of this state."
+      },
+      {
+        "cas_expression": "(^9^O_{F2}|E × ^9^O_{F2}|A × ^9^O_{F2}|f) = ^9^O|Ω_landing",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe the register structure of this state."
+      },
+      {
+        "cas_expression": "^2^C_{F3}|E × ^2^C_{F3}|f × ^2^C_{F3}|A",
+        "is_valid": false,
+        "violation_type": "same_noetic_cross_no_emergent",
+        "prompt_excerpt": "Analyze the register structure of this expression."
+      },
+      {
+        "cas_expression": "^5^O_{F6}|f + ^5^O_{F6}|E + ^5^O_{F5}|A",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe the register structure of this state."
+      }
+    ],
+    "v77_omega": [
+      {
+        "cas_expression": "(^2^C_{F3}|f × ^2^C_{F1}|E) = ^2^C|Ω_grounding",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe a situation in which the emergent register Omega_grounding arises."
+      },
+      {
+        "cas_expression": "(^6^O|T × ^6^O|A) = ^6^O|Ω_resolve",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe a situation in which the emergent register Omega_resolve arises."
+      },
+      {
+        "cas_expression": "(^8^C_{F7}|A × ^8^C_{F5}|f × ^8^C_{F2}|T) = ^8^C|Ω_invocation",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe a situation in which the emergent register Omega_invocation arises."
+      },
+      {
+        "cas_expression": "(^7^O_{F1}|A × ^7^O_{F1}|f × ^7^O_{F1}|E) = ^7^O|Ω_cadence",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe a situation in which the emergent register Omega_cadence arises."
+      },
+      {
+        "cas_expression": "(^2^C_{F7}|f × ^2^C_{F1}|A × ^2^C_{F5}|E) = ^2^C|Ω_grounding",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe a situation in which the emergent register Omega_grounding arises."
+      }
+    ],
+    "v74_baseline": [
+      {
+        "cas_expression": "^6^P_{F4}",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A scientist confronting a surprising result is asked to give their perspective."
+      },
+      {
+        "cas_expression": "^8^O_{F6}",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A manager delivering a difficult review is asked to give their perspective."
+      },
+      {
+        "cas_expression": "^2^P_{F5}",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A pilot handling an unexpected instrument reading is asked to give their perspective."
+      },
+      {
+        "cas_expression": "^7^O_{F4} * ^3^O_{F4}",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A librarian handling a book-ban challenge is asked to give their perspective."
+      },
+      {
+        "cas_expression": "^2^C_{F1} -> ^5^E_{F1}",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A therapist during a tense session is asked to give their perspective."
+      }
+    ],
+    "v76_production": [
+      {
+        "cas_expression": "Θ(Ω_pattern_entrainment_learning) = 0.48*^1^C_{F1}|A + 1.96*^7^C_{F7}|A + 0.99*^5^C_{F1}|f → Ω_pattern_entrainment_learning + 0.15*Λ·Ω_evaluative_drift",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "An engineer recovering from a deployment regression: what recipe produces this outcome?"
+      },
+      {
+        "cas_expression": "Θ(Ω_grounded_creative_insight) = 0.88*^8^C_{F3}|A + 0.98*^4^E_{F4}|f + 1.44*^6^C_{F2}|A → Ω_grounded_creative_insight + 0.1*Λ·Ω_aversion_overflow",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "An engineer recovering from a deployment regression: what recipe produces this outcome?"
+      },
+      {
+        "cas_expression": "Θ(Ω_compassionate_adaptive_response) = 0.73*^4^O_{F4}|E + 0.71*^0^O + 1.59*^5^E_{F4}|f → Ω_compassionate_adaptive_response",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "An engineer recovering from a deployment regression: what recipe produces this outcome?"
+      },
+      {
+        "cas_expression": "Θ(Ω_focused_refusal) = 1.03*^1^P_{F1}|A + 0.49*^7^P_{F7}|T + 2.01*^3^P_{F2}|A → Ω_focused_refusal",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A clinician titrating care across cognitive, evaluative, and operational steps: what recipe produces this outcome?"
+      },
+      {
+        "cas_expression": "Θ(Ω_deliberate_practice_loop) = 0.49*^4^C_{F4}|f + 2.62*^7^O_{F7}|E + 1.08*^6^P_{F2}|A → Ω_deliberate_practice_loop + 0.2*Λ·Ω_premature_closure",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "A clinician titrating care across cognitive, evaluative, and operational steps: what recipe produces this outcome?"
+      }
+    ],
+    "meta_logic": [
+      {
+        "cas_expression": "<^3, E, F5, f>",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Explain the ⟨3, E, F5, f⟩ angle-bracket coordinate."
+      },
+      {
+        "cas_expression": "^5 ∈ Noetics",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "State the typed membership of noetic 5 in the Noetics carrier."
+      },
+      {
+        "cas_expression": "StateCluster{^7^O} ∪ StateCluster{^7^E, ^9^C}",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Explain how two finite StateCluster terms combine under ∪."
+      },
+      {
+        "cas_expression": "Coordinate{^5, O, F6, f}",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe a typed coordinate with noetic, domain, foundation, and register axes."
+      },
+      {
+        "cas_expression": "Pullback(NoeticCluster{^3, ^6, ^7}, NoeticCluster{^3, ^5})",
+        "is_valid": true,
+        "violation_type": null,
+        "prompt_excerpt": "Describe a finite-meet Pullback expression in this admitted CAS fragment."
+      }
+    ]
+  },
+  "compile_retry_fallback_per_bucket": {
+    "v75_register": {
+      "compile_retries": 0,
+      "compile_fallbacks": 0
+    },
+    "v77_rule_four": {
+      "compile_retries": 0,
+      "compile_fallbacks": 0
+    }
+  }
+}
