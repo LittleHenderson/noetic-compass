@@ -1,129 +1,208 @@
 # Admitted CAS meta-logic / cluster / diagram-capable templates.
 # Pullback examples are finite meet/intersection constructors only; this bucket
 # does not claim general categorical pullbacks.
+#
+# Each construct declares a `expression_template` with `${slot}` placeholders
+# and a `slots` map describing how to randomize each slot. Slot kinds are
+# interpreted by `meta_logic.py::_render_construct`. Every emitted expression
+# is compile-validated; on failure the generator retries with new operands
+# (capped at ~10 retries) and falls back to the literal example expression.
+#
+# A `expression` field is preserved on every construct for the
+# template-coverage test in `tests/test_meta_logic_generator.py` and as the
+# fallback literal when randomization can't produce a valid form.
 
 constructs:
   - family: noetic_cluster
     expression: "NoeticCluster{^2, ^7}"
-    prompt: "Describe a typed noetic cluster containing noetics 2 and 7."
-    response: "NoeticCluster{^2, ^7} groups two admitted noetic atoms as a typed Noetics-level cluster."
-    states:
-      - [2, "P"]
-      - [7, "O"]
+    expression_template: "NoeticCluster{${noetics}}"
+    slots:
+      noetics: {kind: noetic_subset, min: 1, max: 5}
+    prompt_templates:
+      - "Describe a typed noetic cluster containing noetics ${noetic_list}."
+      - "Explain the typed NoeticCluster over noetics ${noetic_list}."
+      - "Characterize a NoeticCluster grouping ${noetic_count} admitted noetic atoms."
+    response_templates:
+      - "NoeticCluster{${noetics}} groups ${noetic_count} admitted noetic atoms as a typed Noetics-level cluster."
+      - "The cluster NoeticCluster{${noetics}} is a typed finite subset of the Noetics carrier."
 
   - family: state_cluster
     expression: "StateCluster{^2^P, ^7^O}"
-    prompt: "Describe a typed state cluster spanning noetic 2 in P and noetic 7 in O."
-    response: "StateCluster{^2^P, ^7^O} collects admitted state atoms without collapsing their domains."
-    states:
-      - [2, "P"]
-      - [7, "O"]
+    expression_template: "StateCluster{${states}}"
+    slots:
+      states: {kind: state_subset, min: 1, max: 5, mix_domains: true}
+    prompt_templates:
+      - "Describe a typed state cluster spanning ${state_list}."
+      - "Explain the StateCluster collecting ${state_count} typed state atoms."
+      - "Characterize a typed cluster of admitted states across ${domain_list}."
+    response_templates:
+      - "StateCluster{${states}} collects ${state_count} admitted state atoms without collapsing their domains."
+      - "The cluster StateCluster{${states}} keeps each admitted (noetic, domain) state atom distinct as a typed State."
 
   - family: state_variant_cluster
     expression: "StateVariantCluster{^3^P_{F2}|A, ^2^C|f}"
-    prompt: "Describe a typed cluster of state variants with register annotations."
-    response: "StateVariantCluster{^3^P_{F2}|A, ^2^C|f} keeps the F2-indexed affective variant and the cognitive f-register variant as typed variants."
-    states:
-      - [3, "P"]
-      - [2, "C"]
-    registers: ["A", "f"]
+    expression_template: "StateVariantCluster{${variants}}"
+    slots:
+      variants: {kind: state_variant_subset, min: 1, max: 4}
+    prompt_templates:
+      - "Describe a typed cluster of state variants with register annotations."
+      - "Explain a StateVariantCluster covering ${variant_count} register-annotated state variants."
+      - "Characterize a typed cluster of admitted state variants combining drives and registers."
+    response_templates:
+      - "StateVariantCluster{${variants}} keeps each register-annotated state variant as a typed admitted variant."
+      - "The cluster StateVariantCluster{${variants}} carries ${variant_count} typed variants with explicit register annotations."
 
   - family: relation_cluster
     expression: "RelationCluster{^5^P -> ^5^C, ^5^C -> ^5^E}"
-    prompt: "Describe a typed relation cluster linking P, C, and E states for noetic 5."
-    response: "RelationCluster{^5^P -> ^5^C, ^5^C -> ^5^E} records two admitted typed arrows as a finite relation cluster."
-    states:
-      - [5, "P"]
-      - [5, "C"]
-      - [5, "E"]
+    expression_template: "RelationCluster{${relations}}"
+    slots:
+      relations: {kind: relation_chain, min: 2, max: 4}
+    prompt_templates:
+      - "Describe a typed relation cluster linking domain-descent state arrows."
+      - "Explain a RelationCluster recording ${relation_count} typed arrows along ${domain_chain}."
+    response_templates:
+      - "RelationCluster{${relations}} records ${relation_count} admitted typed arrows as a finite relation cluster."
+      - "The relation cluster carries ${relation_count} typed (source, target) state arrows along ${domain_chain}."
 
   - family: set_ops
     expression: "StateCluster{^2^P, ^7^O} ∪ StateCluster{^3^P, ^4^C}"
-    prompt: "Describe an admitted finite union of typed state clusters."
-    response: "The union combines two finite StateCluster terms while preserving the typed state atoms."
-    states:
-      - [2, "P"]
-      - [7, "O"]
-      - [3, "P"]
-      - [4, "C"]
+    expression_template: "${left} ∪ ${right}"
+    slots:
+      left: {kind: state_cluster, min: 1, max: 4}
+      right: {kind: state_cluster, min: 1, max: 4}
+    prompt_templates:
+      - "Describe an admitted finite union of typed state clusters."
+      - "Explain how two finite StateCluster terms combine under ∪."
+    response_templates:
+      - "The union combines two finite StateCluster terms while preserving the typed state atoms."
+      - "The ∪ of two typed state clusters is itself a finite typed state cluster of admitted atoms."
 
   - family: set_ops
     expression: "StateCluster{^2^P, ^7^O} ∩ StateCluster{^7^O, ^4^C}"
-    prompt: "Describe an admitted finite intersection of typed state clusters."
-    response: "The intersection denotes the shared finite typed state content, here centered on ^7^O."
-    states:
-      - [2, "P"]
-      - [7, "O"]
-      - [4, "C"]
+    expression_template: "${left} ∩ ${right}"
+    slots:
+      left: {kind: state_cluster, min: 1, max: 4}
+      right: {kind: state_cluster, min: 1, max: 4, share_with: left, share_min: 1}
+    prompt_templates:
+      - "Describe an admitted finite intersection of typed state clusters."
+      - "Explain the StateCluster ∩ StateCluster intersection over admitted state atoms."
+    response_templates:
+      - "The intersection denotes the shared finite typed state content."
+      - "The ∩ of two typed state clusters is itself a typed state cluster of admitted atoms shared by both."
 
   - family: set_ops
     expression: "StateCluster{^2^P, ^7^O} ∖ StateCluster{^7^O}"
-    prompt: "Describe an admitted finite set difference over typed state clusters."
-    response: "The set difference removes the finite typed state cluster on the right from the cluster on the left."
-    states:
-      - [2, "P"]
-      - [7, "O"]
+    expression_template: "${left} ∖ ${right}"
+    slots:
+      left: {kind: state_cluster, min: 2, max: 4}
+      right: {kind: state_cluster, min: 1, max: 2, subset_of: left}
+    prompt_templates:
+      - "Describe an admitted finite set difference over typed state clusters."
+      - "Explain the StateCluster ∖ StateCluster set-difference operation."
+    response_templates:
+      - "The set difference removes the finite typed state cluster on the right from the cluster on the left."
+      - "The ∖ of two typed state clusters keeps the admitted state atoms in the left cluster that are not in the right."
 
   - family: typed_membership
     expression: "^2 ∈ Noetics"
-    prompt: "Explain a typed membership assertion for a noetic atom."
-    response: "^2 ∈ Noetics asserts that noetic atom 2 is a member of the Noetics type."
-    states:
-      - [2, "P"]
+    expression_template: "^${noetic} ∈ Noetics"
+    slots:
+      noetic: {kind: single_noetic}
+    prompt_templates:
+      - "Explain a typed membership assertion for a noetic atom."
+      - "State the typed membership of noetic ${noetic} in the Noetics carrier."
+    response_templates:
+      - "^${noetic} ∈ Noetics asserts that noetic atom ${noetic} is a member of the Noetics type."
+      - "Noetic atom ^${noetic} is typed as a member of the Noetics finite carrier."
 
   - family: typed_subset
     expression: "StateCluster{^2^P, ^7^O} ⊆ States"
-    prompt: "Explain a typed subset assertion for a state cluster."
-    response: "StateCluster{^2^P, ^7^O} ⊆ States asserts that every finite member of the cluster is typed as a State."
-    states:
-      - [2, "P"]
-      - [7, "O"]
+    expression_template: "${cluster} ⊆ States"
+    slots:
+      cluster: {kind: state_cluster, min: 1, max: 4}
+    prompt_templates:
+      - "Explain a typed subset assertion for a state cluster."
+      - "State that a finite StateCluster is typed-subset to the States carrier."
+    response_templates:
+      - "${cluster} ⊆ States asserts that every finite member of the cluster is typed as a State."
+      - "The typed StateCluster sits inside the States carrier as a finite typed subset."
 
   - family: coordinate
     expression: "Coordinate{^2, P, F2, A}"
-    prompt: "Describe a typed coordinate with noetic, domain, foundation, and register axes."
-    response: "Coordinate{^2, P, F2, A} names a typed coordinate at noetic 2, domain P, foundation F2, and register A."
-    states:
-      - [2, "P"]
+    expression_template: "Coordinate{^${noetic}, ${domain}, F${drive}, ${register}}"
+    slots:
+      noetic: {kind: single_noetic}
+      domain: {kind: single_domain}
+      drive: {kind: single_drive}
+      register: {kind: single_register}
+    prompt_templates:
+      - "Describe a typed coordinate with noetic, domain, foundation, and register axes."
+      - "Explain the Coordinate{...} form at noetic ${noetic}, domain ${domain}, drive F${drive}, register ${register}."
+    response_templates:
+      - "Coordinate{^${noetic}, ${domain}, F${drive}, ${register}} names a typed coordinate at noetic ${noetic}, domain ${domain}, foundation F${drive}, and register ${register}."
+      - "The coordinate fixes a typed point on the (Noetics × Domains × Drives × Registers) cross-product."
 
   - family: coordinate_tuple
     expression: "<^2, P, F2, A>"
-    prompt: "Describe the angle-bracket coordinate form for noetic 2 in P."
-    response: "<^2, P, F2, A> is the tuple form of the same typed coordinate axes."
-    states:
-      - [2, "P"]
+    expression_template: "<^${noetic}, ${domain}, F${drive}, ${register}>"
+    slots:
+      noetic: {kind: single_noetic}
+      domain: {kind: single_domain}
+      drive: {kind: single_drive}
+      register: {kind: single_register}
+    prompt_templates:
+      - "Describe the angle-bracket coordinate form for a typed CAS axis tuple."
+      - "Explain the ⟨${noetic}, ${domain}, F${drive}, ${register}⟩ angle-bracket coordinate."
+    response_templates:
+      - "<^${noetic}, ${domain}, F${drive}, ${register}> is the tuple form of the same typed coordinate axes."
+      - "The angle-bracket tuple <^${noetic}, ${domain}, F${drive}, ${register}> is the dual form of Coordinate{^${noetic}, ${domain}, F${drive}, ${register}}."
 
   - family: product
     expression: "Product(Noetics, Domains)"
-    prompt: "Describe the admitted product constructor over Noetics and Domains."
-    response: "Product(Noetics, Domains) denotes the typed finite product space used for noetic-domain coordinates."
-    states:
-      - [2, "P"]
-      - [7, "O"]
+    expression_template: "Product(${left_carrier}, ${right_carrier})"
+    slots:
+      left_carrier: {kind: builtin_carrier}
+      right_carrier: {kind: builtin_carrier}
+    prompt_templates:
+      - "Describe the admitted product constructor over typed CAS carriers."
+      - "Explain the Product(${left_carrier}, ${right_carrier}) typed Cartesian product."
+    response_templates:
+      - "Product(${left_carrier}, ${right_carrier}) denotes the typed finite product space over the ${left_carrier} and ${right_carrier} carriers."
+      - "The typed product Product(${left_carrier}, ${right_carrier}) is the admitted finite Cartesian product."
 
   - family: finite_pullback
     expression: "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})"
-    prompt: "Describe a finite-meet Pullback expression in this admitted CAS fragment."
-    response: "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8}) is used here only as the admitted finite meet/intersection constructor over two finite clusters, not as a claim of general categorical pullbacks."
-    states:
-      - [2, "P"]
-      - [7, "P"]
-      - [8, "P"]
+    expression_template: "Pullback(${left}, ${right})"
+    slots:
+      left: {kind: noetic_cluster, min: 2, max: 4}
+      right: {kind: noetic_cluster, min: 2, max: 4, share_with: left, share_min: 1}
+    prompt_templates:
+      - "Describe a finite-meet Pullback expression in this admitted CAS fragment."
+      - "Explain Pullback(...) as the admitted finite meet over two typed clusters."
+    response_templates:
+      - "${expression} is used here only as the admitted finite meet/intersection constructor over two finite clusters, not as a claim of general categorical pullbacks."
+      - "The Pullback constructor is finite meet over two NoeticCluster operands; not a claim of general categorical pullbacks."
 
   - family: cover
     expression: "CoverOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7)"
-    prompt: "Describe a cover over the SubFoundations base."
-    response: "CoverOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7) states that the listed foundations cover the SubFoundations base."
-    states:
-      - [1, "P"]
-      - [2, "P"]
-      - [3, "P"]
+    expression_template: "CoverOf(SubFoundations, ${foundations})"
+    slots:
+      foundations: {kind: foundation_permutation}
+    prompt_templates:
+      - "Describe a cover over the SubFoundations base."
+      - "Explain how Foundation_1..Foundation_7 cover SubFoundations as a typed CAS family."
+    response_templates:
+      - "CoverOf(SubFoundations, ${foundations}) states that the listed foundations cover the SubFoundations base."
+      - "The seven Foundation_k carriers cover SubFoundations; their union is the full sub-foundation universe."
 
   - family: partition
     expression: "PartitionOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7)"
-    prompt: "Describe a partition over the SubFoundations base."
-    response: "PartitionOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7) states that the listed foundations form the admitted partition of the SubFoundations base."
-    states:
-      - [1, "P"]
-      - [2, "P"]
-      - [3, "P"]
+    expression_template: "PartitionOf(SubFoundations, ${foundations})"
+    slots:
+      foundations: {kind: foundation_permutation}
+    prompt_templates:
+      - "Describe a partition over the SubFoundations base."
+      - "Explain how Foundation_1..Foundation_7 partition SubFoundations as a typed CAS family."
+    response_templates:
+      - "PartitionOf(SubFoundations, ${foundations}) states that the listed foundations form the admitted partition of the SubFoundations base."
+      - "The seven Foundation_k carriers partition SubFoundations into pairwise-disjoint typed pieces."

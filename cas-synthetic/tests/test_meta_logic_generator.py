@@ -70,8 +70,18 @@ class TestMetaLogicGenerator:
             item for item in gen.constructs
             if item["expression"] == "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^8})"
         ][0]
-        assert "finite meet/intersection" in pullback["response"]
-        assert "not as a claim of general categorical pullbacks" in pullback["response"]
+        # The Pullback construct must be documented as the finite meet
+        # constructor (not a general categorical pullback) somewhere in
+        # its response copy — either the literal `response` field (legacy)
+        # or in the response_templates pool used by operand-randomized
+        # rendering (current).
+        candidates = list(pullback.get("response_templates") or [])
+        if "response" in pullback:
+            candidates.append(pullback["response"])
+        assert any("finite meet/intersection" in t for t in candidates), candidates
+        assert any(
+            "not a claim of general categorical pullbacks" in t for t in candidates
+        ), candidates
 
     def test_seed_reproducibility(self):
         g1 = MetaLogicGenerator(seed=99)
