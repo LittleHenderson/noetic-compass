@@ -97,13 +97,20 @@ def _load_compiler():
 # Sampling distribution across the six form families. Tuned for diversity
 # at n=2500 while preserving a strong compound baseline (the simplest form
 # is also the most pedagogically central, so it earns the largest share).
+#
+# Pool-saturation calibration: at n=2500 the small-pool families
+# (noetic_only=40 forms, drive_only=28 forms, compound_no_drive=160 forms)
+# saturate well below the original 8/7/10% weights. The weights below
+# keep small-pool sampling at-or-below the pool size while letting the
+# large-pool families (paired ~1.25M, compound 1120, independent 4480)
+# absorb the bulk of the volume.
 _FORM_WEIGHTS: dict[str, float] = {
-    "compound": 0.35,            # ^N^D_{Fk}|R
-    "paired": 0.35,              # S1 + S2 distinct states
-    "compound_no_drive": 0.10,   # ^N^D|R
-    "noetic_only": 0.08,         # ^N|R
-    "drive_only": 0.07,          # F_k|R
-    "independent": 0.05,         # ^N^D_{Fk|R_d}|R_n
+    "compound": 0.30,            # ^N^D_{Fk}|R    — 1120 forms
+    "paired": 0.55,              # S1 + S2        — ~1.25M unique pairs
+    "compound_no_drive": 0.06,   # ^N^D|R         — 160 forms (≈150 samples at n=2500)
+    "noetic_only": 0.02,         # ^N|R           — 40 forms (≈50 samples; 1-2 unavoidable repeats)
+    "drive_only": 0.02,          # F_k|R          — 28 forms (≈50 samples; 1-2 unavoidable repeats)
+    "independent": 0.05,         # ^N^D_{Fk|R_d}|R_n — 4480 forms
 }
 
 
