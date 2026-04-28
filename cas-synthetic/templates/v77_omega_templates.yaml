@@ -16,6 +16,42 @@ omega_scenarios:
     - "A safety-aligned model turning down an instruction that violates its core principles"
     - "A professional firmly saying no on principle, felt across reasoning, feeling, and meaning"
 
+  Omega_grounding:
+    - "An athlete whose attraction to the goal is reasoned, felt, and embodied at once"
+    - "A learner drawn to a subject across analytical interest, felt curiosity, and hands-on engagement"
+    - "A craftsperson whose love of the work integrates thinking, feeling, and bodily skill"
+    - "A clinician whose attraction to a treatment plan converges across reasoning, valuation, and embodied confidence"
+
+  Omega_alignment:
+    - "A leader whose accumulated experience aligns across reasoning, feeling, and meaning"
+    - "A team whose composition coheres analytically, affectively, and in shared purpose"
+    - "An organization whose identity integrates evidence, values, and vision"
+    - "A practitioner whose self-image converges across reasoned, felt, and meaning-laden registers"
+
+  Omega_clarity:
+    - "A researcher whose analytical attention and felt sense of the problem converge"
+    - "A student whose understanding lands across reasoning and felt grasp simultaneously"
+    - "An analyst whose insight integrates explicit logic with intuitive recognition"
+    - "A diagnostician whose mind's analytical and affective registers agree on the picture"
+
+  Omega_resolve:
+    - "An operator whose decomposition of a task lands across analytical and meaning-laden registers as a fused commitment"
+    - "An engineer whose breakdown of an architecture integrates reasoning and orienting purpose"
+    - "A planner whose unpacking of a strategy converges analytical detail and high-level direction"
+    - "A program lead whose component-level analysis fuses with mission-level resolve"
+
+  Omega_witness:
+    - "A meditator whose awareness integrates analytical noticing, transcendent witnessing, and embodied presence"
+    - "A clinician whose mind tracks a patient across analytical observation, holistic orientation, and embodied attentiveness"
+    - "An observer whose attention integrates reasoning, meaning, and bodily knowing of a scene"
+    - "A coach whose awareness of an athlete consolidates analytical, transcendent, and embodied tracking"
+
+  Omega_attunement:
+    - "A musician whose vibrational resonance with the ensemble integrates reasoning, feeling, meaning, and embodiment"
+    - "A negotiator whose felt sense of the room resonates across analytical, affective, transcendent, and embodied registers"
+    - "A therapist whose attunement to a client integrates explicit reasoning, felt valence, orienting purpose, and bodily presence"
+    - "A facilitator whose resonance with the group converges across all four phenomenological registers"
+
 # Scenario scaffolds — used as prompt framing for Ω_* bucket examples.
 scaffolds:
   - "A {profession} {situation} where {omega_description}."

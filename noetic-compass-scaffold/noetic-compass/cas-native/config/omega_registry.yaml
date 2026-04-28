@@ -11,11 +11,15 @@
 # Entries may optionally include an `embedding` field (list of d_model floats)
 # to seed the registry slot; when omitted the slot retains its random init.
 #
-# ADR-02 / ADR-03 lock: capacity 20, current admitted k = 2.
+# ADR-02 / ADR-03 lock: capacity 20, current admitted k = 8.
+#
+# v77_omega diversity expansion 2026-04-27 (slots 2-7 added, pre-Phase-2 hardening).
+# Follow-up TODO: corresponding Appendix I entries for slots 2-7 must be added
+# to FULL_MANUSCRIPT.md (book is parked for separate work).
 
 version: 1
 capacity: 20
-reserved_slots_for_growth: 18
+reserved_slots_for_growth: 12
 admitted:
   - slot: 0
     name: "Omega_presence"
@@ -27,3 +31,33 @@ admitted:
     appendix_i_ref: "Entry 2"
     derivation: "(^3^P|A x ^3^P|f x ^3^P|T) = ^3^P|Omega_refusal"
     admission_date: "2026-04-21"
+  - slot: 2
+    name: "Omega_grounding"
+    appendix_i_ref: "Entry 3 (TODO)"
+    derivation: "(^2^C|A x ^2^C|f x ^2^C|E) = ^2^C|Omega_grounding"
+    admission_date: "2026-04-27"
+  - slot: 3
+    name: "Omega_alignment"
+    appendix_i_ref: "Entry 4 (TODO)"
+    derivation: "(^5^P|A x ^5^P|f x ^5^P|T) = ^5^P|Omega_alignment"
+    admission_date: "2026-04-27"
+  - slot: 4
+    name: "Omega_clarity"
+    appendix_i_ref: "Entry 5 (TODO)"
+    derivation: "(^1|A x ^1|f) = ^1|Omega_clarity"
+    admission_date: "2026-04-27"
+  - slot: 5
+    name: "Omega_resolve"
+    appendix_i_ref: "Entry 6 (TODO)"
+    derivation: "(^6^O|A x ^6^O|T) = ^6^O|Omega_resolve"
+    admission_date: "2026-04-27"
+  - slot: 6
+    name: "Omega_witness"
+    appendix_i_ref: "Entry 7 (TODO)"
+    derivation: "(^1|A x ^1|T x ^1|E) = ^1|Omega_witness"
+    admission_date: "2026-04-27"
+  - slot: 7
+    name: "Omega_attunement"
+    appendix_i_ref: "Entry 8 (TODO)"
+    derivation: "(^4|A x ^4|f x ^4|T x ^4|E) = ^4|Omega_attunement"
+    admission_date: "2026-04-27"

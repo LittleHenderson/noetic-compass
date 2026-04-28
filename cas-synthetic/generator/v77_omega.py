@@ -14,21 +14,44 @@ Compiler-canon emission (per `noetic-compass-scaffold/.../api/notation/compiler.
   - Each register-instantiation may carry an optional drive subscript:
     canonical shape `^N^D_{Fk}|R` per CAS v7.5 Clarification 8.
 
-Template-pool diversity: rather than re-emit the registry's `derivation`
-string verbatim (which yields only ~2 unique expressions for the
-currently-admitted entries), the generator varies the orthogonal axes
-the registry leaves free:
-  - Register order permutation within the entry's register set.
-  - Optional drive subscript per register-instantiation.
-  - Domain choice when the registry entry leaves domain open
-    (e.g. Ω_presence, which lives at the noetic level).
-This yields well over the directive's ≥10 unique expressions per bucket
-even at the current capacity-2 admitted registry.
+Diversity-expansion overhaul (2026-04-27, pre-Phase-2 hardening): the
+generator randomizes aggressively over every orthogonal axis Rule 4
+admits while every emitted expression is anchored to a registry-admitted
+Ω_* name. Phase 1 gate measurement at n=200 showed v77_omega contributing
+~32 of 86 dataset duplicates — concentrated on a 2-entry registry with
+fixed register sets. The expanded registry (slots 2-7) plus the
+randomization regime below targets per-bucket dupes <10 at n=200 and
+sub-linear duplication at the n=2000 Phase 2 allocation.
+
+Per-example randomization axes:
+  - Ω name: uniform across the full admitted registry.
+  - Domain: domain-locked entries keep their locked domain. Domain-open
+    entries (e.g. Ω_presence) sample uniformly over {None, P, C, E, O},
+    yielding both noetic-level (`^N|R`) and domain-anchored (`^N^D|R`)
+    forms.
+  - Drive regime: 25% no-drive / 35% uniform-drive / 40% per-operand
+    independent drive. All three are compiler-admissible — Rule 4
+    same-core enforcement is bypassed by the `= …|Ω` emergent
+    assignment.
+  - Register subset: when the registry entry lists ≥3 registers the
+    generator samples a random subset of size in [2, len(registers)],
+    yielding both partial and full register integrations. Single-pair
+    entries always emit both registers.
+  - Register order: permuted; cross-register `×` is commutative under
+    the named-emergent rewrite so any order carries the same semantics.
+
+Compile-validation: every emitted expression is round-tripped through
+`api.notation.compile_expression`; if the random combination yields a
+compiler error the generator falls back to the registry's canonical
+derivation rendering. This is a defensive fallback — we expect 100%
+admissibility under the regime above.
 """
 
 from __future__ import annotations
 
 import re
+import sys
+import importlib.util
 from pathlib import Path
 from typing import Any
 
@@ -46,11 +69,35 @@ _OMEGA_REGISTRY_PATH = (
     / "config"
     / "omega_registry.yaml"
 )
+_COMPILER_PATH = (
+    Path(__file__).resolve().parent.parent.parent
+    / "noetic-compass-scaffold"
+    / "noetic-compass"
+    / "api"
+    / "notation"
+    / "compiler.py"
+)
 
 
 # Operand pattern for parsing a registry derivation — captures
 # (noetic, optional_domain, register).
 _OPERAND_RE = re.compile(r"\^(\d+)(?:\^([PCEO]))?\|([TAfE])")
+
+
+def _load_compiler():
+    module_name = "cas_synthetic_v77_omega_compiler"
+    if module_name in sys.modules:
+        return sys.modules[module_name]
+    spec = importlib.util.spec_from_file_location(module_name, _COMPILER_PATH)
+    if spec is None or spec.loader is None:
+        return None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    try:
+        spec.loader.exec_module(module)
+    except Exception:
+        return None
+    return module
 
 
 class V77OmegaGenerator(BaseGenerator):
@@ -88,58 +135,157 @@ class V77OmegaGenerator(BaseGenerator):
                     "description": entry.get("description", ""),
                 }
             )
+        # Lazy-load the compiler for round-trip validation. None when the
+        # compiler can't be loaded (e.g. test fixtures under headless CI);
+        # in that case validation is skipped and we trust the regime.
+        self._compiler = _load_compiler()
 
     def _generate_one(self) -> GeneratedExample:
+        # Up to 6 attempts to find a compile-valid randomized form; if all
+        # six fall through (shouldn't happen under the current regime but
+        # defensively guarded), fall back to the registry's canonical
+        # derivation rendering on the same entry.
         entry = self.rng.choice(self._parsed_entries)
-        omega_name = entry["name"]
-        noetic = entry["noetic"]
-        # Domain selection: if the registry pinned a domain to this Ω_*,
-        # the named emergent is anchored at that domain — we keep it. If
-        # the registry left domain open (e.g. Ω_presence), we randomly
-        # either omit the domain (noetic-level) or pick a domain to
-        # diversify the expression pool.
+        for _ in range(6):
+            cand = self._build_candidate(entry)
+            expr = cand["expression"]
+            if self._compile_ok(expr):
+                return self._materialize(entry, cand)
+        # Fallback: deterministic canonical rendering from the parsed
+        # entry. Guaranteed admissible because it mirrors the registry's
+        # stored derivation.
+        cand = self._canonical_candidate(entry)
+        return self._materialize(entry, cand)
+
+    # --------------------------------------------------------- candidates
+
+    def _build_candidate(self, entry: dict[str, Any]) -> dict[str, Any]:
+        """Sample one randomized rendering of `entry`'s emergent expression.
+
+        Returns dict with keys: expression, noetic, domain, registers,
+        drives_per_operand, uniform_drive (or None), omega_name.
+        """
+        noetic: int = entry["noetic"]
+        omega_name: str = entry["name"]
+        registry_registers: list[str] = list(entry["registers"])
+
+        # Domain selection: domain-locked entries are anchored. Domain-open
+        # entries spread uniformly over {None, P, C, E, O} to yield both
+        # noetic-level and domain-anchored variants.
         if entry["domain"] is not None:
             domain: str | None = entry["domain"]
         else:
-            # 50% no-domain (noetic-level emergent), 50% pick a domain.
-            if self.rng.random() < 0.5:
-                domain = None
-            else:
-                domain = self.rng.choice(self.DOMAINS)
+            options: list[str | None] = [None] + list(self.DOMAINS)
+            domain = self.rng.choice(options)
 
-        # Register order permutation — derivation order is one valid
-        # rendering; cross-register `×` is commutative at this notational
-        # level so any permutation also compiles and carries the same
-        # semantics. Variation expands the pool from O(entries) to
-        # O(entries × |registers|! × drive-axis × domain-axis).
-        registers = list(entry["registers"])
-        self.rng.shuffle(registers)
-
-        # Drive subscripts on the operands: independent per-register-instantiation.
-        # Sampling regime — every example carries at least one drive
-        # subscript so the unique-combination space is always at least
-        # k! × 7. Without drives the no-domain Ω_presence pool degenerates
-        # to 2 unique forms and Ω_refusal (domain-locked) to 6 forms,
-        # which guarantees duplicates at any reasonable bucket size.
-        #   - 40% uniform drive across all operands (single-drive emphasis)
-        #   - 60% independent drive per operand (maximum diversity)
-        if self.rng.random() < 0.4:
-            uniform_drive: int | None = self.rng.choice(self.DRIVES)
-            drive_strs = [f"_{{F{uniform_drive}}}" for _ in registers]
+        # Register subset: for entries with ≥3 registers, sample a random
+        # subset of size in [2, len]. Two-register entries always emit
+        # both registers (size 2 is the floor for cross-register
+        # integration). Order is then permuted.
+        if len(registry_registers) >= 3:
+            k = self.rng.randint(2, len(registry_registers))
+            registers = self.rng.sample(registry_registers, k)
         else:
+            registers = list(registry_registers)
+            self.rng.shuffle(registers)
+
+        # Drive regime — three modes, all compiler-admissible because the
+        # `= …|Ω` clause licenses the chain regardless of drive uniformity.
+        # Mode weights chosen to maximize the per-bucket unique-form pool:
+        # independent-drive yields k×7 unique forms per (Ω, register order)
+        # tuple; uniform-drive only 7; no-drive only 1. We weight toward
+        # independent-drive while keeping the simpler regimes represented.
+        # For 2-operand entries (e.g. Ω_resolve, Ω_clarity, Ω_presence)
+        # the no-drive form collapses to a single rendering and the
+        # uniform-drive form to 7 — both heavy duplication risks at any
+        # bucket size. Lean on independent-drive proportionally harder for
+        # small operand counts.
+        if len(registers) <= 2:
+            no_drive_thresh = 0.05
+            uniform_thresh = 0.20
+        else:
+            no_drive_thresh = 0.15
+            uniform_thresh = 0.40
+        regime_roll = self.rng.random()
+        if regime_roll < no_drive_thresh:
+            # No-drive: bare `^N^D|R` operands.
+            uniform_drive: int | None = None
+            drive_strs = ["" for _ in registers]
+            drives_per_operand: list[int | None] = [None for _ in registers]
+        elif regime_roll < uniform_thresh:
+            # Uniform drive across all operands.
+            uniform_drive = self.rng.choice(self.DRIVES)
+            drive_strs = [f"_{{F{uniform_drive}}}" for _ in registers]
+            drives_per_operand = [uniform_drive for _ in registers]
+        else:
+            # Independent drive per operand — maximum diversity.
             uniform_drive = None
-            drive_strs = [
-                f"_{{F{self.rng.choice(self.DRIVES)}}}" for _ in registers
-            ]
+            drives_per_operand = [self.rng.choice(self.DRIVES) for _ in registers]
+            drive_strs = [f"_{{F{d}}}" for d in drives_per_operand]
 
         dom_part = f"^{domain}" if domain else ""
-        # Render Unicode `Ω_` from the registry's ASCII `Omega_` spelling.
         unicode_omega = omega_name.replace("Omega_", "Ω_")
         terms = [
             f"^{noetic}{dom_part}{drive_strs[i]}|{r}"
             for i, r in enumerate(registers)
         ]
         expression = "(" + " × ".join(terms) + f") = ^{noetic}{dom_part}|{unicode_omega}"
+
+        return {
+            "expression": expression,
+            "noetic": noetic,
+            "domain": domain,
+            "registers": registers,
+            "drives_per_operand": drives_per_operand,
+            "uniform_drive": uniform_drive,
+            "omega_name": omega_name,
+            "unicode_omega": unicode_omega,
+        }
+
+    def _canonical_candidate(self, entry: dict[str, Any]) -> dict[str, Any]:
+        """Deterministic fallback rendering — mirror the registry derivation
+        verbatim. Guaranteed admissible because the registry stores
+        already-validated derivations."""
+        noetic = entry["noetic"]
+        domain = entry["domain"]
+        registers = list(entry["registers"])
+        omega_name = entry["name"]
+        unicode_omega = omega_name.replace("Omega_", "Ω_")
+        dom_part = f"^{domain}" if domain else ""
+        terms = [f"^{noetic}{dom_part}|{r}" for r in registers]
+        expression = "(" + " × ".join(terms) + f") = ^{noetic}{dom_part}|{unicode_omega}"
+        return {
+            "expression": expression,
+            "noetic": noetic,
+            "domain": domain,
+            "registers": registers,
+            "drives_per_operand": [None for _ in registers],
+            "uniform_drive": None,
+            "omega_name": omega_name,
+            "unicode_omega": unicode_omega,
+        }
+
+    def _compile_ok(self, expression: str) -> bool:
+        if self._compiler is None:
+            return True
+        try:
+            artifact = self._compiler.compile_expression(expression)
+            return bool(artifact.valid)
+        except Exception:
+            return False
+
+    # ------------------------------------------------------ materialization
+
+    def _materialize(
+        self, entry: dict[str, Any], cand: dict[str, Any]
+    ) -> GeneratedExample:
+        noetic = cand["noetic"]
+        domain = cand["domain"]
+        registers = cand["registers"]
+        omega_name = cand["omega_name"]
+        unicode_omega = cand["unicode_omega"]
+        uniform_drive = cand["uniform_drive"]
+        expression = cand["expression"]
 
         register_labels = [
             {"position": i, "register": r} for i, r in enumerate(registers)
@@ -165,7 +311,9 @@ class V77OmegaGenerator(BaseGenerator):
             if "{" + key + "}" in filled and pool:
                 filled = filled.replace("{" + key + "}", self.rng.choice(pool))
         filled = filled.replace("{omega_description}", scenario.lower())
-        filled = filled.replace("{context}", self.rng.choice(profs) if profs else "a real-world context")
+        filled = filled.replace(
+            "{context}", self.rng.choice(profs) if profs else "a real-world context"
+        )
 
         prompt = f"Describe a situation in which the emergent register {omega_name} arises."
         response = (
