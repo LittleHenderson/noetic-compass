@@ -93,6 +93,14 @@ class V2Hyperparameters:
     lambda_production_limiting_reagent: float = 1.0  # w_LR — CE over LR distribution
     lambda_production_yield: float = 1.0              # w_Y  — MSE on Y_T prediction
     lambda_production_efficiency: float = 0.5         # w_eff — derived, lower weight
+    # Curriculum delay: production_loss multiplier ramps linearly from 0
+    # to ``lambda_production`` over the first ``production_warmup_steps``
+    # training steps. Set to 0 (default) to apply full production weight
+    # from step 0; set to a non-zero value when the production head's
+    # untrained outputs would otherwise destabilize early training (the
+    # 2026-04-28 progressive smoke campaign showed production_loss
+    # oscillating between ~0 and ~409 at all batch sizes).
+    production_warmup_steps: int = 0
 
     # ADR-06 — Rule 4 compliance loss weight (distance-to-valid penalty).
     lambda_rule_four: float = 1.0
@@ -195,6 +203,11 @@ class V2Hyperparameters:
         if self.rust_cache_capacity <= 0:
             raise ValueError(
                 f"rust_cache_capacity must be > 0, got {self.rust_cache_capacity}"
+            )
+        if self.production_warmup_steps < 0:
+            raise ValueError(
+                f"production_warmup_steps must be >= 0, got "
+                f"{self.production_warmup_steps}"
             )
         if self.proposer_bottleneck_dim <= 0:
             raise ValueError(

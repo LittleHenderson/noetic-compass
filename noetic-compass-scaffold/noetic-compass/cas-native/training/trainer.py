@@ -1526,9 +1526,22 @@ class CASTrainer:
                 d_model_hidden, production_targets_batch
             )
             if prod_loss is not None:
-                weighted = self.v2_hp.lambda_production * prod_loss
+                # Curriculum: linear ramp of the production-loss outer weight
+                # from 0 → lambda_production over production_warmup_steps.
+                # Mitigates the early-training instability surfaced in the
+                # 2026-04-28 progressive smoke campaign (untrained
+                # ProductionSemanticsHead emits high-magnitude noise on
+                # first forward).
+                warmup = int(self.v2_hp.production_warmup_steps)
+                ramp = (
+                    1.0 if warmup <= 0
+                    else min(1.0, float(self.global_step) / float(warmup))
+                )
+                effective_weight = float(self.v2_hp.lambda_production) * ramp
+                weighted = effective_weight * prod_loss
                 total_loss = total_loss + weighted
                 extras["production_loss"] = prod_loss
+                extras["production_weight"] = effective_weight
 
         if self.v2_flags.use_rust_validation:
             rule_four_loss = self._compute_rule_four_loss(
