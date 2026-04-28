@@ -59,6 +59,42 @@ MAX_OPERATORS = 4
 MAX_DRIVES = 3
 
 INVERSION_AXIS_NAMES = ("N", "W", "F", "E", "S", "A", "P")
+REGISTER_CODES = ("T", "A", "f", "E")
+
+REGISTER_SIGNAL_PATTERNS = {
+    "T": (
+        "transcendent", "meaning", "purpose", "vision", "calling", "ultimate",
+        "sacred", "spiritual", "beyond", "integrative", "higher order",
+    ),
+    "A": (
+        "analytic", "analytical", "analysis", "logic", "logical", "reason",
+        "rational", "evidence", "deduce", "infer", "step by step", "explicit",
+    ),
+    "f": (
+        "affective", "emotion", "emotional", "feeling", "feel", "felt",
+        "value-laden", "visceral", "heart", "care", "love", "fear", "empathy",
+    ),
+    "E": (
+        "embodied", "body", "bodily", "somatic", "sensorimotor", "physical",
+        "concrete", "kinesthetic", "hands-on", "breath", "gut", "material",
+    ),
+}
+
+PRODUCTION_SIGNAL_PATTERNS = (
+    "produce", "production", "generate", "create", "build", "make",
+    "synthesize", "recipe", "yield", "output", "result", "turn into",
+    "convert", "from inputs", "ingredients",
+)
+
+CATALYST_SIGNAL_PATTERNS = (
+    "catalyst", "catalyze", "enable", "accelerate", "support", "scaffold",
+    "deadline", "context", "resource", "mentor", "feedback",
+)
+
+INHIBITOR_SIGNAL_PATTERNS = (
+    "inhibitor", "inhibit", "block", "constraint", "fatigue", "noise",
+    "friction", "risk", "obstacle", "delay", "resistance", "interference",
+)
 
 
 # ---------------------------------------------------------------------------
@@ -159,6 +195,72 @@ def _pick_flagged_inversions(axis_scores: list[float]) -> list[str]:
     return flagged
 
 
+def _text_has_any(text_lower: str, patterns: tuple[str, ...]) -> bool:
+    return any(pattern in text_lower for pattern in patterns)
+
+
+def _infer_registers(source_text: str | None) -> list[str]:
+    """Return register codes strongly signaled by source text, in CAS order."""
+    if not source_text:
+        return []
+    text_lower = source_text.lower()
+    return [
+        register
+        for register in REGISTER_CODES
+        if _text_has_any(text_lower, REGISTER_SIGNAL_PATTERNS[register])
+    ]
+
+
+def _select_register_for_domain(domain: str, registers: list[str]) -> str | None:
+    """Pick the most natural register for a domain from detected registers."""
+    if not registers:
+        return None
+    preferred = {
+        "P": "T",
+        "C": "A",
+        "E": "f",
+        "O": "E",
+    }.get(domain)
+    if preferred in registers:
+        return preferred
+    return registers[0]
+
+
+def _sanitize_omega_name(source_text: str | None, registers: list[str]) -> str:
+    """Build a stable v7.6 production target name from text signals."""
+    if not source_text:
+        return "synthesis"
+    text_lower = source_text.lower()
+    if "insight" in text_lower or "understand" in text_lower:
+        return "insight"
+    if "decision" in text_lower or "decide" in text_lower:
+        return "decision"
+    if "plan" in text_lower or "workflow" in text_lower:
+        return "plan"
+    if "refusal" in text_lower or "boundary" in text_lower:
+        return "refusal"
+    if {"A", "f", "T"}.issubset(set(registers)):
+        return "integrated_judgment"
+    return "synthesis"
+
+
+def _condition_name(source_text: str | None, patterns: tuple[str, ...], default: str) -> str | None:
+    if not source_text:
+        return None
+    text_lower = source_text.lower()
+    if not _text_has_any(text_lower, patterns):
+        return None
+    names = (
+        ("deadline", "context", "mentor", "feedback")
+        if default == "context"
+        else ("fatigue", "noise", "risk", "constraint")
+    )
+    for name in names:
+        if name in text_lower:
+            return name
+    return default
+
+
 _INVOLUTION_PAIRS = {(2, 3), (3, 2), (5, 6), (6, 5), (8, 9), (9, 8)}
 _OP_INVOLUTION_MAP = {2: 3, 3: 2, 5: 6, 6: 5, 8: 9, 9: 8}
 
@@ -179,6 +281,7 @@ def _state_with_drive(
     dom: str,
     drive_rank: list[int],
     op_index_in_group: int,
+    register: str | None = None,
 ) -> str:
     """Build a state expression like CO-3^P_{F2}.
 
@@ -188,8 +291,20 @@ def _state_with_drive(
     """
     if drive_rank:
         drv = drive_rank[op_index_in_group % len(drive_rank)]
-        return f"CO-{op}^{dom}_{{F{drv + 1}}}"
-    return f"CO-{op}^{dom}"
+        state = f"CO-{op}^{dom}_{{F{drv + 1}}}"
+    else:
+        state = f"CO-{op}^{dom}"
+    return f"{state}|{register}" if register else state
+
+
+def _state_with_register_set(
+    op: int,
+    dom: str,
+    drive_rank: list[int],
+    registers: list[str],
+) -> str:
+    state = _state_with_drive(op, dom, drive_rank, 0)
+    return f"{state}|<{','.join(registers)}>"
 
 
 def _build_expression(
@@ -202,6 +317,7 @@ def _build_expression(
     flagged_inversions: list[str] | None = None,
     drive_chains: list[list[float]] | None = None,
     raw_scores: list[float] | None = None,
+    source_text: str | None = None,
 ) -> str:
     """Assemble a rich, varied CAS expression using all 5 generative operations.
 
@@ -222,6 +338,8 @@ def _build_expression(
     scores = raw_scores or [5.0] * 10
     flagged = flagged_inversions or []
     drive_rank = _drive_ranking(chains)
+    registers = _infer_registers(source_text)
+    register_set = [reg for reg in ("A", "f", "T") if reg in registers]
 
     # --- 1. Separate involution pairs for ÷ ---
     division_parts: list[str] = []
@@ -234,8 +352,9 @@ def _build_expression(
                 continue
             if (a, b) in _INVOLUTION_PAIRS:
                 dom = domains[0] if domains else "P"
-                la = _state_with_drive(a, dom, drive_rank, 0)
-                lb = _state_with_drive(b, dom, drive_rank, 1)
+                reg = _select_register_for_domain(dom, registers)
+                la = _state_with_drive(a, dom, drive_rank, 0, reg)
+                lb = _state_with_drive(b, dom, drive_rank, 1, reg)
                 division_parts.append(f"({la} / {lb})")
                 used_in_div.add(a)
                 used_in_div.add(b)
@@ -253,7 +372,13 @@ def _build_expression(
         states = []
         overflow = []
         for idx, op in enumerate(remaining):
-            s = _state_with_drive(op, dom, drive_rank, idx)
+            s = _state_with_drive(
+                op,
+                dom,
+                drive_rank,
+                idx,
+                _select_register_for_domain(dom, registers),
+            )
             if len(states) < ARROW_MAX_OPS:
                 states.append(s)
             else:
@@ -279,7 +404,13 @@ def _build_expression(
     if rpm_drives and remaining and dom_order:
         lead_op = remaining[0]
         lead_dom = dom_order[0]
-        lead_state = _state_with_drive(lead_op, lead_dom, drive_rank, 0)
+        lead_state = _state_with_drive(
+            lead_op,
+            lead_dom,
+            drive_rank,
+            0,
+            _select_register_for_domain(lead_dom, registers),
+        )
         rpm_stmt = f"RPM({lead_state})"
 
     # --- 4. Connect top 2 domains with → (descent) ---
@@ -301,8 +432,9 @@ def _build_expression(
         if inv:
             idx, dom = inv
             partner = _OP_INVOLUTION_MAP.get(idx, (idx + 5) % 10)
-            la = _state_with_drive(idx, dom, drive_rank, 0)
-            lb = _state_with_drive(partner, dom, drive_rank, 1)
+            reg = _select_register_for_domain(dom, registers)
+            la = _state_with_drive(idx, dom, drive_rank, 0, reg)
+            lb = _state_with_drive(partner, dom, drive_rank, 1, reg)
             minus_parts.append(f"({la} - {lb})")
 
     # --- 6. Build fractal Φ⟨...⟩ from operator activation order ---
@@ -355,6 +487,41 @@ def _build_expression(
     if fractal_part:
         statements.append(fractal_part)
 
+    # v7.7: same-state multi-register signals must use co-presence (`+`) or
+    # register-set specification, not generative multiplication.
+    if len(register_set) >= 3 and remaining:
+        dom = dom_order[0] if dom_order else (domains[0] if domains else "P")
+        op = remaining[0]
+        statements.append(
+            " + ".join(
+                _state_with_drive(op, dom, drive_rank, 0, reg)
+                for reg in register_set
+            )
+        )
+        statements.append(_state_with_register_set(op, dom, drive_rank, register_set))
+
+    # v7.6: emit production recipes only for strong production-language text.
+    text_lower = source_text.lower() if source_text else ""
+    if source_text and _text_has_any(text_lower, PRODUCTION_SIGNAL_PATTERNS) and remaining:
+        target = _sanitize_omega_name(source_text, registers)
+        condition_parts: list[str] = []
+        catalyst = _condition_name(source_text, CATALYST_SIGNAL_PATTERNS, "context")
+        inhibitor = _condition_name(source_text, INHIBITOR_SIGNAL_PATTERNS, "constraint")
+        if catalyst:
+            condition_parts.append(f"kappa_{catalyst}")
+        if inhibitor:
+            condition_parts.append(f"iota_{inhibitor}")
+        condition_clause = f" | {', '.join(condition_parts)}" if condition_parts else ""
+        recipe_dom = dom_order[0] if dom_order else (domains[0] if domains else "P")
+        recipe_states = []
+        for idx, op in enumerate(remaining[:3]):
+            reg = registers[idx % len(registers)] if registers else None
+            recipe_states.append(_state_with_drive(op, recipe_dom, drive_rank, idx, reg))
+        terms = " + ".join(f"1*{state}" for state in recipe_states)
+        statements.append(
+            f"Theta(Omega_{target}){condition_clause} = {terms} -> Omega_{target}"
+        )
+
     return "; ".join(statements)
 
 
@@ -369,6 +536,7 @@ def synthesize_notation(
     inversion_axis_scores: list[float],
     fractal_sequence: list[int] | None = None,
     fractal_classification: str | None = None,
+    source_text: str | None = None,
 ) -> SynthesizedNotation:
     """Synthesize a CAS notation expression from real pipeline results.
 
@@ -395,6 +563,7 @@ def synthesize_notation(
         flagged_inversions=flagged_inversions,
         drive_chains=drive_chains,
         raw_scores=raw_scores_0_to_10,
+        source_text=source_text,
     )
 
     if not source.strip():
@@ -412,6 +581,7 @@ def synthesize_notation(
 
     # Compile through the real compiler
     artifact: CompilationArtifact = compile_expression(source)
+    registers = _infer_registers(source_text)
 
     # If compiler rejects it, try progressively simpler fallbacks
     if not artifact.valid and operators:
@@ -449,6 +619,9 @@ def synthesize_notation(
         "rpm_drives": [f"F{d + 1}" for d in rpm_drives],
         "plain_drives": [f"F{d + 1}" for d in plain_drives],
         "flagged_inversions": flagged_inversions,
+        "registers": registers,
+        "production_recipe": "Theta(Omega_" in source,
+        "register_copresence": "|<" in source or any(f"|{reg}" in source for reg in registers),
         "fractal_classification": fractal_classification,
         "rpm_completeness": round(rpm_completeness, 4),
         "compiler_engine": artifact.engine,

@@ -2,6 +2,7 @@
 
 import pytest
 
+from api.notation.compiler import compile_expression
 from api.pipeline.notation_synthesizer import (
     SynthesizedNotation,
     synthesize_notation,
@@ -236,3 +237,47 @@ class TestSynthesizeNotation:
         r2 = synthesize_notation(**kwargs)
         assert r1.source == r2.source
         assert r1.valid == r2.valid
+
+    def test_v75_registers_from_natural_language_compile(self):
+        result = synthesize_notation(**_default_kwargs(
+            source_text=(
+                "Use analytical logic and evidence while honoring affective "
+                "feeling and embodied gut response."
+            ),
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        assert "|A" in result.source
+        assert "|f" in result.source
+        assert "|E" in result.source
+        assert compile_expression(result.source).valid is True
+
+    def test_v76_recipe_with_conditions_from_strong_production_language_compiles(self):
+        result = synthesize_notation(**_default_kwargs(
+            source_text=(
+                "Create an insight recipe from analytical evidence and affective "
+                "feeling; deadline support is a catalyst, fatigue is an inhibitor."
+            ),
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        assert "Theta(Omega_insight)" in result.source
+        assert "-> Omega_insight" in result.source
+        assert "kappa_deadline" in result.source
+        assert "iota_fatigue" in result.source
+        assert compile_expression(result.source).valid is True
+
+    def test_v77_register_set_and_copresence_when_modes_cooccur(self):
+        result = synthesize_notation(**_default_kwargs(
+            source_text=(
+                "Synthesize analytical reasoning, affective feeling, and "
+                "transcendent purpose into one integrated judgment."
+            ),
+            fractal_classification="neutral",
+        ))
+        assert result.valid is True
+        assert "|<A,f,T>" in result.source
+        assert "|A + " in result.source
+        assert "|f + " in result.source
+        assert "|T" in result.source
+        assert compile_expression(result.source).valid is True

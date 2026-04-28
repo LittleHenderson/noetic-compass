@@ -69,6 +69,28 @@ def test_create_idea_auto_casivenizes_when_expression_missing(client, auth_heade
     assert record["deleted_at"] is None
 
 
+def test_create_idea_auto_casivenize_can_emit_rich_recipe(client, auth_headers):
+    resp = client.post(
+        "/idea_atlas/ideas",
+        json={
+            "text": (
+                "Create an insight recipe from analytical evidence and "
+                "affective feeling; deadline support is a catalyst, fatigue "
+                "is an inhibitor."
+            )
+        },
+        headers=auth_headers,
+    )
+    assert resp.status_code == 200, resp.text
+    record = resp.json()
+    assert "Theta(Omega_insight)" in record["cas_expression"]
+    assert "|A" in record["cas_expression"]
+    assert "|f" in record["cas_expression"]
+    assert "kappa_deadline" in record["cas_expression"]
+    assert "iota_fatigue" in record["cas_expression"]
+    assert record["ast_json"] is not None
+
+
 def test_create_idea_with_explicit_expression_skips_casivenize(client, auth_headers):
     resp = client.post(
         "/idea_atlas/ideas",

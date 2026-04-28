@@ -33,3 +33,25 @@ def test_grammar_route_returns_bnf(client, auth_headers):
     assert "<export_stmt>" in data["grammar"]
     assert "state" in data["notes"]
     assert "types" in data["notes"]
+
+
+def test_analyze_route_passes_text_to_rich_synthesizer(client, auth_headers):
+    resp = client.post(
+        "/notation/analyze",
+        json={
+            "text": (
+                "Create an insight recipe from analytical evidence and "
+                "affective feeling; deadline support is a catalyst, fatigue "
+                "is an inhibitor."
+            )
+        },
+        headers=auth_headers,
+    )
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    assert data["valid"] is True
+    assert "Theta(Omega_insight)" in data["source"]
+    assert "|A" in data["source"]
+    assert "|f" in data["source"]
+    assert "kappa_deadline" in data["source"]
+    assert "iota_fatigue" in data["source"]

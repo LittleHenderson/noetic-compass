@@ -69,6 +69,7 @@ def analyze_text_to_notation(req: TextAnalyzeRequest) -> dict:
         inversion_axis_scores=[0.8] * 7,  # no inversion data from text alone
         fractal_sequence=None,
         fractal_classification=None,
+        source_text=req.text,
     )
 
     return {
@@ -173,6 +174,7 @@ def natural_language_pipeline(req: NaturalLanguageRequest) -> dict:
         inversion_axis_scores=[0.8] * 7,
         fractal_sequence=None,
         fractal_classification=None,
+        source_text=req.text,
     )
 
     # 3. Compilation (optional but default)

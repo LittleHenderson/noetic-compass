@@ -349,6 +349,7 @@ class WrapPipelineRunner:
             inversion_axis_scores=inv_result.axis_scores,
             fractal_sequence=fractal.dominant_sequence,
             fractal_classification=fractal.classification,
+            source_text=text,
         )
         compiled_notation = CompiledNotationSchema(
             source=synthesized.source,

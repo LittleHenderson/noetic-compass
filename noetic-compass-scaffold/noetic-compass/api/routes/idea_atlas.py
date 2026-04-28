@@ -217,6 +217,7 @@ def _synthesize_from_signals(text: str) -> str:
         inversion_axis_scores=[0.8] * 7,
         fractal_sequence=None,
         fractal_classification=None,
+        source_text=text,
     )
     # If the synthesizer produced nothing usable, emit a safe identity-state
     # so the compiler always has a chance to succeed. Otherwise return the
