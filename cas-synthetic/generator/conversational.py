@@ -51,6 +51,18 @@ _NOETIC_NAMES = {
     8: "association",
     9: "consequence",
 }
+_DOMAIN_STORY_NAMES = {
+    "P": "values or first-principles judgment",
+    "C": "thinking through the idea",
+    "E": "felt evaluation",
+    "O": "practical action",
+}
+_REGISTER_STORY_NAMES = {
+    "T": "meaning-level",
+    "A": "analytical",
+    "f": "felt",
+    "E": "embodied",
+}
 
 
 @dataclass
@@ -307,12 +319,33 @@ class Level3ConversationalGenerator:
         feature_summary = _feature_summary(expression)
         focus_summary = _focus_summary(expression)
         style_id = str(style.get("id", f"style_{variant_index}"))
+        noetic = _top_noetic(expression)
+        domain = _top_domain(expression)
+        noetic_name = _NOETIC_NAMES.get(noetic, "the main CAS dynamic")
+        domain_phrase = _DOMAIN_STORY_NAMES.get(domain or "", "the situation")
+        registers = _registers(expression)
+        register_phrase = _register_story(registers)
+        omega = _omega_label(expression) or "the named outcome"
+        case_context = _case_context(source_bucket, expression, rng=self.rng)
 
         values = {
             "cas_expression": expression,
             "source_prompt": source_prompt or "No source prompt was supplied.",
             "source_response": source_response or "No source response was supplied.",
             "source_bucket": source_bucket,
+            "case_context": case_context,
+            "noetic_name": noetic_name,
+            "domain_phrase": domain_phrase,
+            "register_phrase": register_phrase,
+            "omega": omega,
+            "plain_situation": _plain_situation(
+                source_bucket,
+                expression,
+                source_prompt=source_prompt,
+                rng=self.rng,
+            ),
+            "cas_reading": _cas_reading(expression),
+            "conversation_need": _conversation_need(source_bucket, expression, self.rng),
             "focus_summary": focus_summary,
             "feature_summary": feature_summary,
             "operator_summary": _target_summary(operator_targets, "noetic"),
@@ -487,6 +520,183 @@ def _feature_summary(expression: str) -> str:
     return "; ".join(parts)
 
 
+def _plain_situation(
+    source_bucket: str,
+    expression: str,
+    *,
+    source_prompt: str,
+    rng: random.Random,
+) -> str:
+    noetic = _top_noetic(expression)
+    domain = _top_domain(expression)
+    noetic_name = _NOETIC_NAMES.get(noetic, "the main dynamic")
+    domain_phrase = _DOMAIN_STORY_NAMES.get(domain or "", "the situation")
+    registers = _registers(expression)
+    register_phrase = _register_story(registers)
+    omega = _omega_label(expression)
+
+    bucket_templates = {
+        "v74_baseline": [
+            "I'm trying to understand a moment where {noetic_name} shows up through {domain_phrase}.",
+            "Something in this situation feels like {noetic_name}, but I need a plain-language CAS read.",
+            "Can CAS help me name a pattern of {noetic_name} without making it sound fixed or final?",
+        ],
+        "v75_register": [
+            "The same pattern seems to come through a {register_phrase} register, and I want to explain that clearly.",
+            "I can name the content, but the way it is showing up feels {register_phrase}.",
+            "How would CAS describe a {register_phrase} version of {noetic_name} in {domain_phrase}?",
+        ],
+        "v76_production": [
+            "It feels like several ingredients are combining into {omega}, and I want the recipe explained simply.",
+            "I can see pieces of the outcome, but I need help describing how they produce {omega}.",
+            "Can CAS explain what is being produced here without treating it as a certainty?",
+        ],
+        "v77_omega": [
+            "Different registers seem to converge into {omega}, and I want to understand the fusion.",
+            "Part of this is {register_phrase}, but the combined result feels like {omega}.",
+            "How would CAS explain a named emergent like {omega} in ordinary language?",
+        ],
+        "v77_rule_four": [
+            "I'm comparing registers and need to know when integration requires a named result.",
+            "This looks like multiple registers around the same state; how should CAS keep it disciplined?",
+            "Can you explain why this register pattern needs a careful CAS reading?",
+        ],
+        "meta_logic": [
+            "I want to group CAS pieces together without saying they are identical.",
+            "Can CAS talk about containment, overlap, or membership in a way a non-math reader can follow?",
+            "Help me explain this set-level CAS claim without turning it into a math lecture.",
+        ],
+    }
+    templates = bucket_templates.get(source_bucket, bucket_templates["v74_baseline"])
+    fallback = source_prompt or "this situation"
+    values = {
+        "noetic_name": noetic_name,
+        "domain_phrase": domain_phrase,
+        "register_phrase": register_phrase,
+        "omega": omega or "the named outcome",
+        "source_prompt": fallback,
+    }
+    return rng.choice(templates).format_map(_SafeFormat(values))
+
+
+def _case_context(
+    source_bucket: str,
+    expression: str,
+    *,
+    rng: random.Random,
+) -> str:
+    """Build an expression-specific conversational scenario phrase."""
+    noetic = _top_noetic(expression)
+    domain = _top_domain(expression)
+    noetic_name = _NOETIC_NAMES.get(noetic, "the main CAS dynamic")
+    domain_phrase = _DOMAIN_STORY_NAMES.get(domain or "", "the situation")
+    registers = _registers(expression)
+    register_phrase = _register_story(registers)
+    omega = _omega_label(expression) or "the named outcome"
+    state_hint = _state_hint(expression)
+
+    bucket_templates = {
+        "v74_baseline": [
+            "{state_hint}: a {domain_phrase} moment where {noetic_name} is the main signal",
+            "a first-pass CAS read of {noetic_name} moving through {domain_phrase}",
+            "a baseline state pattern centered on {state_hint}",
+        ],
+        "v75_register": [
+            "{state_hint} carried through a {register_phrase} register",
+            "a {domain_phrase} case where {noetic_name} arrives in a {register_phrase} mode",
+            "a register-aware reading of {state_hint}",
+        ],
+        "v76_production": [
+            "a production recipe where {state_hint} contributes to {omega}",
+            "an outcome-building case around {omega}, with {noetic_name} visible in the ingredients",
+            "a provisional recipe for {omega} in {domain_phrase}",
+        ],
+        "v77_omega": [
+            "a cross-register integration where {register_phrase} evidence converges into {omega}",
+            "a named-emergent case where {noetic_name} is organized as {omega}",
+            "{state_hint} integrated into {omega} through {register_phrase} registers",
+        ],
+        "v77_rule_four": [
+            "a Rule 4 check where {state_hint} appears across {register_phrase} registers and resolves to {omega}",
+            "a cross-register discipline case for {noetic_name} in {domain_phrase}",
+            "a same-state integration pattern where {register_phrase} registers must not be flattened",
+            "{state_hint} becoming a named emergent instead of loose register co-presence",
+        ],
+        "meta_logic": [
+            "a typed set-level relation involving {state_hint}",
+            "a grouping or containment claim about CAS objects rather than a single state",
+            "a meta-logic statement where the relation matters more than a single atom",
+        ],
+    }
+    templates = bucket_templates.get(source_bucket, bucket_templates["v74_baseline"])
+    values = {
+        "state_hint": state_hint,
+        "noetic_name": noetic_name,
+        "domain_phrase": domain_phrase,
+        "register_phrase": register_phrase,
+        "omega": omega,
+    }
+    return rng.choice(templates).format_map(_SafeFormat(values))
+
+
+def _cas_reading(expression: str) -> str:
+    noetic = _top_noetic(expression)
+    domain = _top_domain(expression)
+    pieces: list[str] = []
+    if noetic is not None:
+        pieces.append(f"{_NOETIC_NAMES.get(noetic, f'Noetic ^{noetic}')} as the main noetic signal")
+    if domain is not None:
+        pieces.append(f"{_DOMAIN_STORY_NAMES.get(domain, domain)} as the main domain")
+    registers = _registers(expression)
+    if registers:
+        pieces.append(f"{_register_story(registers)} register evidence")
+    omega = _omega_label(expression)
+    if omega:
+        pieces.append(f"the named emergent {omega}")
+    if any(token in expression for token in ("Cluster{", "Set{", "Product(", "Pullback(", "CoverOf(", "PartitionOf(")):
+        pieces.append("a set-level relationship rather than a single state")
+    if not pieces:
+        return "a compact CAS structural reading"
+    return "; ".join(pieces)
+
+
+def _conversation_need(source_bucket: str, expression: str, rng: random.Random) -> str:
+    options = {
+        "v74_baseline": [
+            "name the pattern without over-reading it",
+            "turn the notation into a plain first pass",
+            "separate the signal from any conclusion",
+        ],
+        "v75_register": [
+            "explain the register without changing the state",
+            "show how the same content can arrive in a different mode",
+            "make the register distinction easy to hear",
+        ],
+        "v76_production": [
+            "describe the ingredients and the resulting outcome",
+            "keep the recipe provisional instead of predictive",
+            "explain what is being produced without claiming certainty",
+        ],
+        "v77_omega": [
+            "explain the fused outcome without flattening the registers",
+            "show why the named emergent matters",
+            "keep the integration explicit",
+        ],
+        "v77_rule_four": [
+            "show why cross-register integration needs discipline",
+            "distinguish co-presence from a named emergent result",
+            "explain the rule without sounding punitive",
+        ],
+        "meta_logic": [
+            "make the set-level claim readable",
+            "show grouping or containment without collapsing the parts",
+            "translate the formal relation into a practical explanation",
+        ],
+    }
+    del expression
+    return rng.choice(options.get(source_bucket, options["v74_baseline"]))
+
+
 def _focus_summary(expression: str) -> str:
     noetic_counts = extract_noetic_counts(expression)
     domain_counts = extract_domain_counts(expression)
@@ -543,6 +753,53 @@ def _registers(expression: str) -> list[str]:
             if register in {"T", "A", "f", "E"}:
                 found.append(register)
     return sorted(set(found), key=lambda r: ["T", "A", "f", "E"].index(r))
+
+
+def _top_noetic(expression: str) -> int | None:
+    counts = extract_noetic_counts(expression)
+    if not any(counts):
+        return None
+    return max(range(len(counts)), key=lambda i: counts[i])
+
+
+def _top_domain(expression: str) -> str | None:
+    counts = extract_domain_counts(expression)
+    if not any(counts):
+        return None
+    labels = ["P", "C", "E", "O"]
+    return labels[max(range(len(counts)), key=lambda i: counts[i])]
+
+
+def _register_story(registers: Sequence[str]) -> str:
+    if not registers:
+        return "unspecified"
+    described = [_REGISTER_STORY_NAMES.get(register, register) for register in registers]
+    if len(described) == 1:
+        return described[0]
+    if len(described) == 2:
+        return f"{described[0]} and {described[1]}"
+    return ", ".join(described[:-1]) + f", and {described[-1]}"
+
+
+def _omega_label(expression: str) -> str | None:
+    match = _OMEGA_RE.search(expression)
+    if not match:
+        return None
+    return match.group(0)
+
+
+def _state_hint(expression: str) -> str:
+    """Return a compact first state-like token for conversational context."""
+    match = re.search(r"\^[0-9](?:\^[PCEO])?(?:_\{F[1-7]\})?(?:\|[TAfE])?", expression)
+    if match:
+        return match.group(0)
+    cluster_match = re.search(r"[A-Za-z]+Cluster\{[^}]+\}", expression)
+    if cluster_match:
+        return cluster_match.group(0)
+    carrier_match = re.search(r"\b(Noetics|States|Domains|Drives|Registers|Foundations)\b", expression)
+    if carrier_match:
+        return carrier_match.group(0)
+    return "the CAS expression"
 
 
 def _tags_for(

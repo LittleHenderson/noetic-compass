@@ -6,12 +6,18 @@ styles:
     user_prompt_templates:
       - "Can you map this situation into CAS notation and explain the main axes? Situation: {source_prompt}"
       - "Translate the following case into CAS while keeping the notation precise: {source_prompt}"
+      - "{plain_situation} Can you give me a CAS-grounded explanation?"
+      - "I need to {conversation_need}. How would CAS frame it?"
+      - "How would CAS explain {case_context} in ordinary language?"
+      - "Map {case_context} into a user-friendly CAS explanation."
     natural_language_mapping_templates:
       - "The Level 2 source says: {source_response} The conversational mapping highlights {focus_summary}."
       - "The prompt asks for a direct CAS read of the situation. The source explanation points to {focus_summary}."
     assistant_response_templates:
       - "This maps to the CAS expression {cas_expression}. In conversational terms, the important structure is {feature_summary}; the soft targets emphasize {operator_summary} and {domain_summary}."
       - "The preserved CAS form is {cas_expression}. I would explain it as {feature_summary}, with target emphasis on {operator_summary} and {domain_summary}."
+      - "A plain reading is that CAS is tracking {cas_reading}. The exact expression is {cas_expression}; I would use it as a structured lens, not as a final judgment."
+      - "CAS would use {cas_expression} to hold the structure steady. In ordinary language, the task is to {conversation_need}, with the strongest soft emphasis on {operator_summary} and {domain_summary}."
     follow_up_question_templates:
       - "Would you like the operator target distribution or the domain target distribution unpacked first?"
       - "Should we inspect why this expression lands in the {source_bucket} bucket?"
@@ -20,12 +26,18 @@ styles:
     user_prompt_templates:
       - "Walk me through the CAS interpretation of this example as if I am learning the notation: {source_prompt}"
       - "I am trying to learn the notation. How should I read this source case in CAS terms? {source_prompt}"
+      - "{plain_situation} Explain it like a first lesson in CAS."
+      - "I am learning CAS and need to {conversation_need}. What should I notice first?"
+      - "Teach me how to read {case_context} without losing the formal structure."
+      - "If {case_context} is the situation, what parts of the CAS notation should I notice?"
     natural_language_mapping_templates:
       - "The teaching path is to start from the source response, then connect it to {focus_summary}."
       - "For a learner, the source text becomes a bridge from ordinary language into {focus_summary}."
     assistant_response_templates:
       - "Read the expression as {cas_expression}. The notation is not being rewritten; it is being explained. Its visible features are {feature_summary}, and the soft labels point most strongly to {operator_summary} and {domain_summary}."
       - "The exact expression is {cas_expression}. A useful first reading is: {feature_summary}. The inferred soft targets put the strongest mass on {operator_summary} and {domain_summary}."
+      - "Start with the ordinary-language reading: {cas_reading}. Then connect that back to {cas_expression}. The expression is the target; the explanation is just the bridge."
+      - "First notice the purpose: {conversation_need}. The CAS expression {cas_expression} keeps that structure precise while the soft labels lean toward {operator_summary} and {domain_summary}."
     follow_up_question_templates:
       - "Do you want a slower pass over each symbol in the expression?"
       - "Would an example of a nearby but different CAS expression help?"
@@ -34,12 +46,18 @@ styles:
     user_prompt_templates:
       - "Review this CAS mapping for an analyst and identify what the expression is emphasizing: {source_prompt}"
       - "Give me an analyst-style readout of the CAS structure behind this case: {source_prompt}"
+      - "{plain_situation} Give me an analyst read without overstating it."
+      - "For review purposes, help me {conversation_need}."
+      - "Give an analyst read of {case_context}, but keep the conclusion provisional."
+      - "What is the structural readout for {case_context}?"
     natural_language_mapping_templates:
       - "Analyst mapping: the source bucket is {source_bucket}, the source response is summarized by {source_response}, and the structural focus is {focus_summary}."
       - "The analyst view keeps the Level 2 expression stable and treats {focus_summary} as the explanatory center."
     assistant_response_templates:
       - "The expression to preserve is {cas_expression}. I would flag {feature_summary} as the main structure. The inferred soft targets are led by {operator_summary} and {domain_summary}."
       - "CAS readout: {cas_expression}. The expression mainly carries {feature_summary}; target inference is strongest at {operator_summary} and {domain_summary}."
+      - "Analyst read: the expression preserves {cas_reading}. I would treat {cas_expression} as a structured annotation, not a prediction."
+      - "The review finding is: {conversation_need}. The CAS target remains {cas_expression}, and the strongest distributional emphasis is {operator_summary} / {domain_summary}."
     follow_up_question_templates:
       - "Should the next turn compare this with another {source_bucket} example?"
       - "Do you want the record checked for register, omega, production, or meta-logic features?"
@@ -48,12 +66,18 @@ styles:
     user_prompt_templates:
       - "If I give you this scenario, can you preserve the CAS expression and explain what should not be changed? {source_prompt}"
       - "Help me verify the CAS expression for this case without normalizing away important structure: {source_prompt}"
+      - "{plain_situation} What should stay fixed in the CAS target?"
+      - "I want to {conversation_need} without accidentally rewriting the structure. Can you help?"
+      - "For {case_context}, what should stay fixed when I paraphrase the CAS result?"
+      - "Help me preserve the target for {case_context} without collapsing the axes."
     natural_language_mapping_templates:
       - "The mapping should not alter the source expression. The stable interpretation is {focus_summary}."
       - "Preservation matters here: the natural language maps onto {focus_summary}, while the CAS string remains the supervised target."
     assistant_response_templates:
       - "Keep the expression exactly as {cas_expression}. The safe explanation is {feature_summary}; the inferred labels give primary weight to {operator_summary} and {domain_summary}."
       - "Do not rewrite the CAS target: {cas_expression}. The conversational explanation can mention {feature_summary}, but the expression itself remains fixed."
+      - "The fixed target is {cas_expression}. You can paraphrase it as {cas_reading}, but you should not change the registers, operators, or named result."
+      - "Preserve {cas_expression}. The conversational job is to {conversation_need}; the notation keeps the structure from drifting while the explanation stays readable."
     follow_up_question_templates:
       - "Would you like a checklist for which parts of the expression are safe to paraphrase and which are not?"
       - "Should I contrast the preserved expression with a possible invalid rewrite?"
@@ -62,12 +86,18 @@ styles:
     user_prompt_templates:
       - "Continue the conversation from this source example and answer with a CAS-grounded explanation: {source_prompt}"
       - "Suppose a user asks a follow-up about this Level 2 example. How would you answer conversationally? {source_prompt}"
+      - "{plain_situation} What would you say next in the conversation?"
+      - "The next user turn is basically asking to {conversation_need}. Give the CAS-grounded answer."
+      - "A user is asking about {case_context}. What is the next helpful CAS-grounded response?"
+      - "Continue the dialogue by explaining {case_context} in a practical way."
     natural_language_mapping_templates:
       - "The follow-up answer should connect the user's ordinary-language situation to {focus_summary}, using the source response as context: {source_response}"
       - "The dialogue context asks for a concise bridge from the scenario into {focus_summary}."
     assistant_response_templates:
       - "In this conversation, I would keep the target as {cas_expression}. The plain-language bridge is {feature_summary}, with inferred soft emphasis on {operator_summary} and {domain_summary}."
       - "A concise answer is: {cas_expression}. That expression captures {feature_summary}; the soft target view is led by {operator_summary} and {domain_summary}."
+      - "I would answer by saying: CAS is reading this as {cas_reading}. The expression behind that read is {cas_expression}, and it should be treated as a map of the pattern, not a verdict."
+      - "The conversational move is to {conversation_need}. CAS keeps that anchored with {cas_expression}, while the soft targets show the strongest emphasis at {operator_summary} and {domain_summary}."
     follow_up_question_templates:
       - "Would you like to ask a second follow-up about the same expression?"
       - "Should I explain the natural-language mapping or the soft targets next?"
