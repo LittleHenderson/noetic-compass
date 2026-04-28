@@ -11,15 +11,19 @@
 # Entries may optionally include an `embedding` field (list of d_model floats)
 # to seed the registry slot; when omitted the slot retains its random init.
 #
-# ADR-02 / ADR-03 lock: capacity 20, current admitted k = 8.
+# ADR-02 / ADR-03 lock: capacity 20, current admitted k = 12.
 #
 # v77_omega diversity expansion 2026-04-27 (slots 2-7 added, pre-Phase-2 hardening).
-# Follow-up TODO: corresponding Appendix I entries for slots 2-7 must be added
+# v77_omega Noetic-coverage expansion 2026-04-28 (slots 8-11 added — Noetics 0/7/8/9
+# closure pre-Phase-2-retry per Day 2 directive). Pre-Phase-2 10K analysis showed
+# v77_omega only spanning Noetics 1-6; the four new entries close the gap so the
+# bucket exercises every Noetic the model must learn.
+# Follow-up TODO: corresponding Appendix I entries for slots 2-11 must be added
 # to FULL_MANUSCRIPT.md (book is parked for separate work).
 
 version: 1
 capacity: 20
-reserved_slots_for_growth: 12
+reserved_slots_for_growth: 8
 admitted:
   - slot: 0
     name: "Omega_presence"
@@ -61,3 +65,23 @@ admitted:
     appendix_i_ref: "Entry 8 (TODO)"
     derivation: "(^4|A x ^4|f x ^4|T x ^4|E) = ^4|Omega_attunement"
     admission_date: "2026-04-27"
+  - slot: 8
+    name: "Omega_genesis"
+    appendix_i_ref: "Entry 9 (TODO)"
+    derivation: "(^0|A x ^0|f x ^0|T) = ^0|Omega_genesis"
+    admission_date: "2026-04-28"
+  - slot: 9
+    name: "Omega_cadence"
+    appendix_i_ref: "Entry 10 (TODO)"
+    derivation: "(^7|A x ^7|f x ^7|E) = ^7|Omega_cadence"
+    admission_date: "2026-04-28"
+  - slot: 10
+    name: "Omega_invocation"
+    appendix_i_ref: "Entry 11 (TODO)"
+    derivation: "(^8|A x ^8|f x ^8|T) = ^8|Omega_invocation"
+    admission_date: "2026-04-28"
+  - slot: 11
+    name: "Omega_landing"
+    appendix_i_ref: "Entry 12 (TODO)"
+    derivation: "(^9|A x ^9|f x ^9|E) = ^9|Omega_landing"
+    admission_date: "2026-04-28"
