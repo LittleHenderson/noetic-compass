@@ -27,6 +27,15 @@ sys.modules["cas_native"] = pkg
 sys.path.insert(0, str(REPO_ROOT))
 
 import torch
+
+# Seed before any torch random init so model weight initialization is
+# deterministic across re-runs at the same seed (modulo CUDA/cuDNN/bf16
+# nondeterminism which we don't suppress — they cost throughput).
+_SEED = int(os.environ.get("CAS_V2_SEED", 42))
+torch.manual_seed(_SEED)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(_SEED)
+
 from cas_native.training.trainer import CASTrainer
 from cas_native.training.data_pipeline import run_pipeline
 from cas_native.training.config import (

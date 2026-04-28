@@ -1,0 +1,64 @@
+[16:08:04] === CAS-Native v2 first full training run ===
+[16:08:04] Run dir: /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-160804
+[16:08:04] Dataset: /root/workspace/cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl
+[16:08:04] [1/5] Initializing model...
+[16:08:04]       params: 73,063,424
+[16:08:04] [2/5] Loading dataset...
+[16:08:05]       stages: {'1_load': {'items': 10000, 'sources': 1}, '2_augment': {'skipped': True}, '3_validate': {'valid': 10000, 'rejected': 0}, '4_split': {'train': 8000, 'val': 1000, 'test': 1000}, '5_tokenize': {'max_length': 512, 'batch_size': 128}}
+[16:08:05]       train batches/epoch: 63 | total steps: 189
+[16:08:05] [3/5] Building trainer with v2 flags...
+[16:08:05]       production_warmup_steps: 100
+[16:08:06]       v2 sub-modules: register_embedding, emergent_register, production_semantics, expression_proposer
+[16:08:06] [4/5] Training: 3 epochs, batch=128, lr=0.0001, bf16, warmup=500
+[16:08:06]       checkpoint every 100 steps, eval every 50 steps, log every 25
+[16:08:06] --- Epoch 1/3 ---
+[16:08:07]   step    0/189 ep=0: total=24.3225  mem=6.91GB  [cognitive_drift=2.682, inversion_penalty=2.531, involution_loss=0.040, lm_loss=10.377, null_space_reg_loss=509.426, production_loss=411.858, proposer_rule_four_loss=6.196, rpm_satisfaction=0.500]
+[16:08:14]   step   25/189 ep=0: total=125.7904  mem=7.84GB  [cognitive_drift=2.692, inversion_penalty=0.308, involution_loss=0.040, lm_loss=10.322, null_space_reg_loss=509.375, production_loss=415.015, production_weight=0.250, proposer_rule_four_loss=6.165, rpm_satisfaction=0.499]
+[16:08:21]   step   50/189 ep=0: total=226.7621  mem=7.84GB  [cognitive_drift=2.655, inversion_penalty=0.030, involution_loss=0.040, lm_loss=10.131, null_space_reg_loss=509.230, production_loss=410.512, production_weight=0.500, proposer_rule_four_loss=6.119, rpm_satisfaction=0.498]
+[16:08:21]   [eval] step 50 — running validation pass...
+[16:08:22]   [eval] val avg total=226.9548 over 8 batches
+[16:08:22]   [eval]   cognitive_drift=2.6913
+[16:08:22]   [eval]   inversion_penalty=0.0216
+[16:08:22]   [eval]   involution_loss=0.0400
+[16:08:22]   [eval]   lm_loss=10.1125
+[16:08:22]   [eval]   null_space_reg_loss=509.2230
+[16:08:22]   [eval]   production_loss=410.8814
+[16:08:22]   [eval]   production_weight=0.5000
+[16:08:22]   [eval]   proposer_rule_four_loss=6.1182
+[16:08:22]   [eval]   rpm_satisfaction=0.4975
+[16:08:25] --- Epoch 2/3 ---
+[16:08:29]   step   75/189 ep=1: total=329.0241  mem=8.06GB  [cognitive_drift=2.673, inversion_penalty=0.029, involution_loss=0.040, lm_loss=9.870, null_space_reg_loss=509.048, production_loss=410.387, production_weight=0.750, proposer_rule_four_loss=6.073, rpm_satisfaction=0.495]
+[16:08:35]   step  100/189 ep=1: total=430.1499  mem=8.06GB  [cognitive_drift=2.694, inversion_penalty=0.030, involution_loss=0.040, lm_loss=9.564, null_space_reg_loss=508.841, production_loss=409.257, production_weight=1.000, proposer_rule_four_loss=5.972, rpm_satisfaction=0.491]
+[16:08:37]   [ckpt] wrote /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-160804/checkpoints/step_100.pt
+[16:08:37]   [eval] step 100 — running validation pass...
+[16:08:38]   [eval] val avg total=428.3138 over 8 batches
+[16:08:38]   [eval]   cognitive_drift=2.6907
+[16:08:38]   [eval]   inversion_penalty=0.0239
+[16:08:38]   [eval]   involution_loss=0.0399
+[16:08:38]   [eval]   lm_loss=9.5268
+[16:08:38]   [eval]   null_space_reg_loss=508.8322
+[16:08:38]   [eval]   production_loss=407.4633
+[16:08:38]   [eval]   production_weight=1.0000
+[16:08:38]   [eval]   proposer_rule_four_loss=5.9799
+[16:08:38]   [eval]   rpm_satisfaction=0.4909
+[16:08:45]   step  125/189 ep=1: total=428.6148  mem=8.06GB  [cognitive_drift=2.698, inversion_penalty=0.027, involution_loss=0.040, lm_loss=9.242, null_space_reg_loss=508.597, production_loss=408.087, production_weight=1.000, proposer_rule_four_loss=5.902, rpm_satisfaction=0.485]
+[16:08:45] --- Epoch 3/3 ---
+[16:08:52]   step  150/189 ep=2: total=419.9560  mem=8.06GB  [cognitive_drift=2.686, inversion_penalty=0.024, involution_loss=0.040, lm_loss=8.831, null_space_reg_loss=508.280, production_loss=399.923, production_weight=1.000, proposer_rule_four_loss=5.783, rpm_satisfaction=0.478]
+[16:08:52]   [eval] step 150 — running validation pass...
+[16:08:53]   [eval] val avg total=421.5708 over 8 batches
+[16:08:53]   [eval]   cognitive_drift=2.6892
+[16:08:53]   [eval]   inversion_penalty=0.0208
+[16:08:53]   [eval]   involution_loss=0.0399
+[16:08:53]   [eval]   lm_loss=8.7774
+[16:08:53]   [eval]   null_space_reg_loss=508.2653
+[16:08:53]   [eval]   production_loss=401.6021
+[16:08:53]   [eval]   production_weight=1.0000
+[16:08:53]   [eval]   proposer_rule_four_loss=5.7637
+[16:08:53]   [eval]   rpm_satisfaction=0.4769
+[16:09:00]   step  175/189 ep=2: total=417.8700  mem=8.06GB  [cognitive_drift=2.699, inversion_penalty=0.020, involution_loss=0.040, lm_loss=8.354, null_space_reg_loss=507.876, production_loss=398.396, production_weight=1.000, proposer_rule_four_loss=5.632, rpm_satisfaction=0.466]
+[16:09:03] === Training complete ===
+[16:09:03]   Final step: 189/189
+[16:09:03]   Wall-clock: 57.7s = 1.0 min
+[16:09:03]   Peak GPU memory: 8.06 GB
+[16:09:05]   Final checkpoint: /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-160804/checkpoints/final.pt
+[16:09:05] [5/5] Metrics + checkpoint saved to /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-160804
