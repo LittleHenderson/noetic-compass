@@ -15,6 +15,8 @@ from __future__ import annotations
 
 from typing import Optional
 
+from .meta_logic_constructs import CASConstructKind, classify_expression
+
 try:
     import torch
     import torch.nn.functional as F
@@ -83,6 +85,41 @@ def validate_fractal_type(sequence: list[int]) -> bool:
     if not sequence:
         return False
     return all(0 <= idx <= 9 for idx in sequence)
+
+
+def validate_cluster_members(
+    kind: str,
+    members: list[int | str],
+) -> bool:
+    """Validate typed set/cluster member shape for native metadata.
+
+    This is a lightweight Python-side guard; compiler validation remains
+    authoritative for concrete syntax and typechecking.
+    """
+    if not members:
+        return False
+    if kind == "Noetics":
+        return all(isinstance(m, int) and 0 <= m <= 9 for m in members)
+    if kind == "Domains":
+        return all(isinstance(m, str) and m in {"P", "C", "E", "O"} for m in members)
+    if kind == "States":
+        return all(isinstance(m, str) and "^" in m for m in members)
+    return False
+
+
+def validate_meta_logic_expression_kind(expression: str, expected_kind: str | None = None) -> bool:
+    """Validate an expression-kind label against the shared construct taxonomy."""
+    kind = classify_expression(expression)
+    if kind is CASConstructKind.UNKNOWN:
+        return False
+    if expected_kind is not None and kind.value != expected_kind:
+        return False
+    return True
+
+
+def validate_pullback_as_finite_meet(expression: str) -> bool:
+    """Admit Pullback only as finite subobject meet/intersection metadata."""
+    return classify_expression(expression) is CASConstructKind.PULLBACK_FINITE_MEET
 
 
 # --- PyTorch loss regularizers (require torch) ---

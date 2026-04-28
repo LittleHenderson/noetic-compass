@@ -9,6 +9,9 @@ from pathlib import Path
 import pytest
 import torch
 
+if not hasattr(torch, "manual_seed"):
+    torch.manual_seed = lambda _seed: None  # type: ignore[attr-defined]
+
 
 # Ensure the project root is importable, then alias the historical
 # `cas-native/` package directory to the importable `cas_native` name

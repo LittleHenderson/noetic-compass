@@ -79,6 +79,10 @@ v2_hyperparameters:
   # initial 60/40 split (revisit after first evaluation pass).
   data_mix_cross_register: 0.60
   data_mix_production: 0.40
+  # Meta-logic construct exemplars are optional symbolic coverage for
+  # compiler-admitted clusters, typed sets, diagrams, and finite-meet
+  # pullbacks. This does not claim trained model competence.
+  data_mix_meta_logic: 0.00
 
   # ADR-03 follow-up — null-space regularization for unused Omega_* registry
   # slots. Pulls unused embeddings (v1 has 2 admitted + 18 unused in the

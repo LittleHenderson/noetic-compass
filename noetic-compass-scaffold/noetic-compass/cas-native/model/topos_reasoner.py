@@ -26,6 +26,16 @@ TRUTH_FALSE = 1
 TRUTH_UNDETERMINED = 2
 NUM_TRUTH_VALUES = 3
 
+TOPOS_PROPOSITION_LABELS = (
+    "typed_membership",
+    "typed_subset",
+    "finite_union",
+    "finite_intersection",
+    "finite_relative_complement",
+    "pullback_as_finite_meet",
+    "cover_or_partition",
+)
+
 
 class CognitiveToposReasoner(nn.Module):
     """Neural 3-valued proposition classifier.
@@ -35,10 +45,20 @@ class CognitiveToposReasoner(nn.Module):
     something proven by this module alone.
     """
 
-    def __init__(self, d_model: int, num_propositions: int = 7):
+    def __init__(
+        self,
+        d_model: int,
+        num_propositions: int = 7,
+        proposition_labels: tuple[str, ...] | None = None,
+    ):
         super().__init__()
         self.d_model = d_model
         self.num_propositions = num_propositions
+        self.proposition_labels = (
+            tuple(proposition_labels)
+            if proposition_labels is not None
+            else TOPOS_PROPOSITION_LABELS[:num_propositions]
+        )
 
         # Project from model dimension to proposition representations
         self.proposition_proj = nn.Linear(d_model, num_propositions * d_model)

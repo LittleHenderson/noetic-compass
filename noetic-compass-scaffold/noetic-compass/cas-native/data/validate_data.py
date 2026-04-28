@@ -6,6 +6,12 @@ import json
 from collections import Counter
 from pathlib import Path
 
+try:
+    from cas_native.model.meta_logic_constructs import classify_expression, construct_tokens
+except Exception:  # pragma: no cover - script-mode fallback
+    classify_expression = None  # type: ignore[assignment]
+    construct_tokens = None  # type: ignore[assignment]
+
 
 def validate_dataset(path: str | Path) -> dict:
     """Run quality checks on a generated JSONL dataset."""
@@ -47,6 +53,8 @@ def validate_dataset(path: str | Path) -> dict:
     dom_dist = Counter()
     drv_dist = Counter()
     complexity_dist = Counter()
+    construct_kind_dist = Counter()
+    construct_token_dist = Counter()
 
     for e in entries:
         scores = e.get("scores", {})
@@ -60,6 +68,10 @@ def validate_dataset(path: str | Path) -> dict:
             if s > 0:
                 drv_dist[i + 1] += 1
         complexity_dist[e.get("complexity", "unknown")] += 1
+        expr = e.get("cas_expression", "")
+        if expr and classify_expression is not None and construct_tokens is not None:
+            construct_kind_dist[classify_expression(expr).value] += 1
+            construct_token_dist.update(construct_tokens(expr))
 
     # 4. Duplicates
     expressions = [e.get("cas_expression", "") for e in entries]
@@ -92,5 +104,7 @@ def validate_dataset(path: str | Path) -> dict:
         "domain_distribution": dict(sorted(dom_dist.items())),
         "drive_distribution": dict(sorted(drv_dist.items())),
         "complexity_distribution": dict(complexity_dist),
+        "construct_kind_distribution": dict(construct_kind_dist),
+        "construct_token_distribution": dict(construct_token_dist),
         "warnings": warnings,
     }

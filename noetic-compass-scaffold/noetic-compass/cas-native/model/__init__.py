@@ -22,6 +22,14 @@ from .register_film import (
     INVOLUTION_REGISTER_PAIRS,
 )
 from .topos_reasoner import CognitiveToposReasoner
+from .meta_logic_constructs import (
+    CASConstructKind,
+    CONSTRUCT_VOCABULARY,
+    EXPRESSION_KIND_LABELS,
+    META_LOGIC_EXEMPLARS,
+    classify_expression,
+    construct_tokens,
+)
 from .cas_native_model import CASNativeModel, CASNativeConfig
 
 __all__ = [
@@ -46,6 +54,12 @@ __all__ = [
     "REGISTER_SYMBOL",
     "INVOLUTION_REGISTER_PAIRS",
     "CognitiveToposReasoner",
+    "CASConstructKind",
+    "CONSTRUCT_VOCABULARY",
+    "EXPRESSION_KIND_LABELS",
+    "META_LOGIC_EXEMPLARS",
+    "classify_expression",
+    "construct_tokens",
     "CASNativeModel",
     "CASNativeConfig",
 ]

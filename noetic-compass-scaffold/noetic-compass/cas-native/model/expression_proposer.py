@@ -92,6 +92,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from .register_film import NUM_REGISTERS
+from .meta_logic_constructs import EXPRESSION_KIND_LABELS
 
 
 __all__ = [
@@ -102,6 +103,7 @@ __all__ = [
     "DEFAULT_MAX_OPERANDS",
     "DEFAULT_BOTTLENECK_DIM",
     "OPERAND_COUNT_BUCKETS",
+    "EXPRESSION_KIND_LABELS",
 ]
 
 
