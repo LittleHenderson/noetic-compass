@@ -15,6 +15,59 @@ The Day 1 sprint closed two coverage gaps that were previously listed as residua
 
 Both tracks are guarded by a runtime safety net: every emitted form is piped through `compile_expression` before being returned to the caller, so a misfiring trigger cannot propagate an invalid assertion.
 
+## Post-Audit Follow-Up (2026-04-28)
+
+Codex audit closed two Day 1 residuals locally:
+
+- `cas-native/model/meta_logic_constructs.py::CONSTRUCT_SPECS` now enumerates the compiler-admitted typed Set family (`NoeticSet`, `StateSet`, `StateVariantSet`, `RelationSet`, `DriveSet`, `DomainSet`, `RegisterSet`, `FoundationSet`, `SubFoundationSet`) instead of leaving `NoeticSet`/`StateSet` as grammar-only support.
+- `api/pipeline/notation_synthesizer.py` now normalizes common numeric natural-language carrier references before meta-logic emission, so prompts such as `the union of Foundations 1 and 7` and `Foundation 1 is in Foundations` emit compiler-valid meta-logic instead of falling through to v7.4.
+
+Focused verification after the follow-up: `tests/test_notation_synthesizer.py` + `tests/test_generator_compiler_coverage_gate.py` = 187 passed / 3 xfailed; `cas-native/tests/test_expression_generator_surfaces.py` = 6 passed. `cas-native/tests/test_meta_logic_constructs.py` still cannot collect in this local environment because `cas_native.model.__init__` eagerly imports torch-dependent modules and `torch.nn` is unavailable; that is an environment/package-boundary issue, not a compiler/synthesizer failure.
+
+## Day 2 Sprint Closure — Level 2 Dataset (2026-04-28)
+
+The Day 2 sprint produced and committed the Level 2 v1 training dataset for the first CAS-Native v2 training run. Full dataset documentation lives at `cas-synthetic/data/README.md`; this section only records the audit-relevant outcome.
+
+**Committed dataset**: `74e5350` — `cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl` (10,000 examples, 6.92 MB) plus paired metrics and replayable sidecar script. Mix ratios 20/25/15/20/10/10 across (v74_baseline, v75_register, v77_rule_four, v77_omega, v76_production, meta_logic). Compilation pass rate 97.27% overall — 100% on five non-rule_four buckets; v77_rule_four 81.8% with the remaining 18.2% being deliberate Rule 4 violations preserved as `is_valid=false` supervised-loss signal.
+
+**Generator chain** (closes notation drift and diversifies all six buckets):
+
+- `e8cd9dd` — 4-bucket notation fix (v75/v77_rule_four register order; v77_omega Unicode `× Ω_*`; v76_production `Θ Ω_ →` + real state literals)
+- `c054c9b` — meta_logic operand randomization (parametrized templates with 12 typed slot kinds across 7 axes)
+- `ede9e22` — v77_omega diversity expansion (registry 2→8, drive-arity-aware drive sampling)
+- `b9d5a28` — v77_rule_four diversification (full 10-Noetic / 4-Domain / 7-Drive / variable register subsets)
+- `cbd9bab` — v75_register diversification (paired co-presence `+` primary diversifier + 5 single-state form variants)
+- `c61a3fe` — v75_register weight recalibration (small-pool saturation correction)
+
+**Registry chain**: `ce8dee4` → `ede9e22` → `40e11d2` (12 admitted Ω entries spanning Noetics 0-9: Ω_presence, Ω_refusal, Ω_grounding, Ω_alignment, Ω_clarity, Ω_resolve, Ω_witness, Ω_attunement, Ω_genesis, Ω_cadence, Ω_invocation, Ω_landing).
+
+**Validator chain**: `ec09594` (`validate_level2_dataset.py`) → `edc09fa` (Windows cp1252 stdout UTF-8 fix). Per-example compile-validation against `api.notation.compile_expression`; 0 retries and 0 fallbacks observed across 10K generation.
+
+**Coverage at the dataset level**: all 10 Noetics, all 4 Domains, all 7 Drives, all 4 Registers, all 7 Foundations present. Cross-bucket Noetic Jaccard = 1.0 across all bucket pairs.
+
+**Per-bucket dupe redundancy** at n=10000:
+
+| Bucket | Redundancy | Disposition |
+|---|---|---|
+| v76_production | 0.00% | Per-example Gaussian coefficient noise eliminates duplicates |
+| v77_rule_four | 2.13% | Phase 2.5 fix (down from 38.5% — load-bearing for constraint-learning quality) |
+| v77_omega | 11.90% | Phase 2.5 registry expansion + drive/register randomization |
+| v75_register | 12.32% | Phase 2.6 paired co-presence (down from 19.96%) |
+| meta_logic | 15.30% | Parametrized templates; small-cardinality constructs saturate inherently |
+| v74_baseline | 32.80% | Structurally bounded; bare state-literal repetition benign for vocabulary learning (intentionally not diversified) |
+
+Total dataset duplicates: 1480 extra copies (14.8% of dataset).
+
+## Remaining Follow-Ups (Deferred, Not Blocking)
+
+- **ASCII keyword grammar parity** for `∅`, `∉`, `⊂`, `⊃`, `⊇` — would require lockstep parser changes in `api/notation/compiler.py` and `cas-engine/crates/casc-syntax/src/lib.rs`. Optional; generated fixtures use Unicode forms throughout.
+- **Torch decoupling** for symbolic-only construct imports — `cas_native.model.__init__` eagerly imports torch.nn-dependent modules, blocking `cas-native/tests/test_meta_logic_constructs.py` collection in no-torch environments. Cleanest fix: split `cas-native/model/__init__.py` into a thin symbolic re-export layer and a separate `cas_native.neural` namespace for the torch-dependent stack.
+- **Conversational layer (Level 3)** — multi-turn dialogue training data with retained CAS state across turns. Deferred to Month 3+; not in Level 2 scope.
+- **Appendix I manuscript entries** for the 10 newly admitted Ω names (`Ω_grounding` through `Ω_landing`) — book/manuscript work parked for separate weekend session.
+- **v74_baseline duplication** is acknowledged structural saturation (280 unique combos × 7.1× sampling at n=2000). Not a sprint target; if Level 3 needs lower vocabulary redundancy, the cleanest path is to reduce the bucket's allocation rather than diversify the parameter space.
+
+The Level 2 v1 dataset is closed. See `cas-synthetic/data/README.md` for full dataset documentation including schema, reproducibility commands, top-token frequency tables, and intended-use tiers.
+
 ## Compiler-Accepted Surfaces Relevant to Generation
 
 The public gate is `api.notation.compiler.compile_expression`. A generated `cas_expression` is compiler-compatible when it returns a valid artifact for valid examples, or a targeted invalid artifact for intentionally invalid training examples.
@@ -55,7 +108,7 @@ Relevant accepted surfaces:
 | Meta-logic Strict subset (`⊂`) — generator | `TYPED_META_LOGIC_EXEMPLARS` (Track A) | Accepted | ✅ Blocking compile case |
 | Meta-logic Superset (`⊃`) — generator | `TYPED_META_LOGIC_EXEMPLARS` (Track A) | Accepted | ✅ Blocking compile case |
 | Meta-logic SupersetEq (`⊇`) — generator | `TYPED_META_LOGIC_EXEMPLARS` (Track A) | Accepted | ✅ Blocking compile case |
-| Meta-logic NoeticSet / StateSet — generator | Carve-out (see below) | ⚠️ Accepted by compiler grammar; not enumerated in `CONSTRUCT_SPECS` | ⚠️ Pending follow-up |
+| Meta-logic typed Set constructors | `TYPED_META_LOGIC_EXEMPLARS` + `CONSTRUCT_SPECS` | Accepted by compiler grammar and construct taxonomy | Blocking compile case |
 | Synthesizer NL → Union / Intersection / Difference | `_try_meta_logic_emission` (Track B) | Accepted | Blocking emission test |
 | Synthesizer NL → Member / NotMember | `_try_membership_emission` (Track B) | Accepted | Blocking emission test |
 | Synthesizer NL → Subset / SubsetEq / Superset / SupersetEq | `_try_subset_emission` (Track B) | Accepted | Blocking emission test |
@@ -122,14 +175,14 @@ The gate has three roles:
 
 Synthesizer-side coverage is asserted in `tests/test_notation_synthesizer.py` (140 tests as of Track B), exercising both positive triggers (set-theoretic prose → typed assertion) and negative-fire cases (everyday vocabulary → fall-through to v7.4–v7.7 emission).
 
-## Carve-Out: NoeticSet / StateSet
+## Closed Carve-Out: Typed Set Constructors
 
 The Day 1 audit listed NoeticSet and StateSet as residual gaps for the generator. Empirically:
 
 - **The compiler grammar accepts** `NoeticSet{...}` and `StateSet{...}` (and the related variant `*Set` constructors) — `compile_expression` returns valid artifacts for those forms.
-- **`cas-native/model/meta_logic_constructs.py::CONSTRUCT_SPECS` does NOT enumerate** NoeticSet/StateSet — only `NoeticCluster` and the `*Cluster` family are listed.
+- **`cas-native/model/meta_logic_constructs.py::CONSTRUCT_SPECS` now enumerates** the typed Set family as first-class symbolic constructs.
 
-Because the generator uses `CONSTRUCT_SPECS` as its source of truth for which constructs may be sampled, adding `NoeticSet`/`StateSet` exemplars to `TYPED_META_LOGIC_EXEMPLARS` without first extending `CONSTRUCT_SPECS` would create generator/spec drift. Per the failure protocol, NoeticSet/StateSet were deliberately skipped in Track A and flagged for follow-up: *first* extend `CONSTRUCT_SPECS` so generator and grammar agree, *then* add the exemplars and the matching coverage-gate cases.
+Because the generator uses `CONSTRUCT_SPECS` as its source of truth for which constructs may be sampled, the correct fix was to extend `CONSTRUCT_SPECS` first, then add the exemplars and matching coverage-gate cases. That follow-up is complete locally for `NoeticSet`, `StateSet`, `StateVariantSet`, `RelationSet`, `DriveSet`, `DomainSet`, `RegisterSet`, `FoundationSet`, and `SubFoundationSet`.
 
 ## Remaining Gaps
 
@@ -138,6 +191,6 @@ Because the generator uses `CONSTRUCT_SPECS` as its source of truth for which co
 - Decide whether `state_<id>` recipe prerequisites are a stable accepted shorthand or should remain banned in favor of explicit state primitives such as `^n^D`.
 - Current generators should continue avoiding `x` as a cross-register separator unless compiler support is deliberately added in a separate parser task.
 - Keep meta-logic generator templates encoded and emitted in compiler-recognized token forms; ASCII aliases such as `union`, `intersect`, `setminus`, `subseteq`, and `in` are safer for generated fixtures when encoding is uncertain. There are NO admitted ASCII aliases for `∅`, `∉`, `⊂`, `⊃`, or `⊇`; generators must use the Unicode forms (or extend the grammar in a separate parser task).
-- **NoeticSet / StateSet exemplars** — blocked on `CONSTRUCT_SPECS` extension in `cas-native/model/meta_logic_constructs.py`. Follow-up task: extend `CONSTRUCT_SPECS` to enumerate NoeticSet/StateSet/StateVariantSet/RelationSet/etc., then add matching exemplars to `TYPED_META_LOGIC_EXEMPLARS` and the coverage gate.
+- **CAS-Native symbolic tests in no-torch environments** — `cas_native.model.__init__` eagerly imports torch-dependent modules before symbolic-only modules can be collected. Optional follow-up: make symbolic construct imports available without importing the full neural stack, or install a complete torch environment for these tests.
 - **ASCII keyword variants for `∅`, `∉`, `⊂`, `⊃`, `⊇`** — blocked on grammar extension. Optional follow-up: if generated fixtures need encoding-resilient ASCII forms for these symbols, add the aliases to the Python and Rust grammars in lockstep.
 - Add fixture-based integration once generator output snapshots stabilize. The current gate uses representative static expressions plus direct generator tests to avoid overfitting to random output.
