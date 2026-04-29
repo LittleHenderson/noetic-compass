@@ -73,7 +73,7 @@ BUCKET_PRIMERS: dict[str, list[str]] = {
         "^3^P_{F2}|A × ",          # 1: first half + cross
         "(^5^O_{F3}|T × ^5^O_{F3}|f) = ^5^O|",  # 2: full Ω-emergent shell
         "^4^E_{F1}|A + ^4^E_{F1}|f + ",         # 3: + co-presence start
-        "^N^D_{F",                 # 4: minimal compound start
+        "^2^P_{F",                 # 4: minimal compound start
         "^6^P_{F1}|A × ^6^P_{F1}|f × ",          # 5: 2-of-3 register cross
     ],
     "v77_omega": [

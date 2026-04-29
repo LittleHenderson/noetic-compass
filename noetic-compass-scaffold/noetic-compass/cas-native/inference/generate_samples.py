@@ -28,6 +28,7 @@ sys.path.insert(0, str(REPO_ROOT))
 import torch  # noqa: E402
 
 from api.notation import compile_expression  # noqa: E402
+from cas_native.inference.constrained_sampling import CandidateTrieConstraint  # noqa: E402
 from cas_native.model import CASNativeConfig, CASNativeModel  # noqa: E402
 from cas_native.training.data_pipeline import load_cas_data  # noqa: E402
 from cas_native.training.tokenizer import HybridCASTokenizer  # noqa: E402
@@ -79,6 +80,18 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Path to tokenizer.json. Defaults to the checkpoint run directory when present.",
     )
+    p.add_argument(
+        "--decode-mode",
+        choices=("free", "grammar"),
+        default="free",
+        help="free uses raw model sampling; grammar masks next tokens to compiler-valid bucket candidates.",
+    )
+    p.add_argument(
+        "--constraint-max-candidates",
+        type=int,
+        default=5000,
+        help="Maximum compiler-valid candidates to build per bucket for grammar-constrained decoding.",
+    )
     return p.parse_args()
 
 
@@ -118,17 +131,26 @@ def sample_token(
     *,
     tokenizer: HybridCASTokenizer,
     blocked_ids: set[int] | None = None,
+    allowed_token_ids: set[int] | None = None,
 ) -> int:
     """Top-p nucleus sampling with invalid-token masking."""
     logits = logits.float().clone()
     if logits.numel() > tokenizer.vocab_size:
         logits[tokenizer.vocab_size:] = float("-inf")
+    if allowed_token_ids is not None:
+        allowed = torch.zeros_like(logits, dtype=torch.bool)
+        for token_id in allowed_token_ids:
+            if 0 <= token_id < logits.numel():
+                allowed[token_id] = True
+        logits = logits.masked_fill(~allowed, float("-inf"))
     for token_id in tokenizer.disallowed_generation_ids():
         if 0 <= token_id < logits.numel():
             logits[token_id] = float("-inf")
     for token_id in blocked_ids or set():
         if 0 <= token_id < logits.numel():
             logits[token_id] = float("-inf")
+    if not torch.isfinite(logits).any():
+        raise RuntimeError("no finite logits remain after sampling masks")
     logits = logits / max(temperature, 1e-6)
 
     sorted_logits, sorted_idx = torch.sort(logits, descending=True)
@@ -156,20 +178,42 @@ def generate(
     temperature: float,
     top_p: float,
     device: torch.device,
-) -> tuple[str, list[int]]:
+    constraint: CandidateTrieConstraint | None = None,
+) -> tuple[str, list[int], dict]:
     encoded = tokenizer.encode(prompt, max_length=512)
     if encoded and encoded[-1] == tokenizer.EOS_ID:
         encoded = encoded[:-1]
     input_ids = torch.tensor([encoded], dtype=torch.long, device=device)
 
     new_token_ids: list[int] = []
+    diagnostics = {
+        "decode_mode": "grammar" if constraint is not None else "free",
+        "candidate_count": constraint.candidate_count if constraint is not None else 0,
+        "dead_end_count": 0,
+        "allowed_token_counts": [],
+        "termination_reason": "max_new_tokens",
+    }
     model.eval()
     with torch.no_grad():
         for _ in range(max_new_tokens):
             out = model(input_ids)
             last_logits = out["logits"][0, -1, :]
             blocked_ids = set()
-            if len(new_token_ids) < min_new_tokens:
+            allowed_token_ids = None
+            if constraint is not None:
+                decision = constraint.decision(new_token_ids)
+                diagnostics["allowed_token_counts"].append(len(decision.allowed_token_ids) + int(decision.allow_eos))
+                if not decision.valid_prefix:
+                    diagnostics["dead_end_count"] += 1
+                    diagnostics["termination_reason"] = "constraint_dead_end"
+                    break
+                allowed_token_ids = set(decision.allowed_token_ids)
+                if decision.allow_eos:
+                    allowed_token_ids.add(tokenizer.EOS_ID)
+                if not allowed_token_ids:
+                    diagnostics["termination_reason"] = "constraint_no_legal_tokens"
+                    break
+            elif len(new_token_ids) < min_new_tokens:
                 blocked_ids.add(tokenizer.EOS_ID)
             tok = sample_token(
                 last_logits,
@@ -177,16 +221,19 @@ def generate(
                 top_p,
                 tokenizer=tokenizer,
                 blocked_ids=blocked_ids,
+                allowed_token_ids=allowed_token_ids,
             )
             if tok == tokenizer.EOS_ID:
+                diagnostics["termination_reason"] = "eos"
                 break
             new_token_ids.append(tok)
             next_tensor = torch.tensor([[tok]], dtype=torch.long, device=device)
             input_ids = torch.cat([input_ids, next_tensor], dim=1)
             if input_ids.shape[1] >= 512:
+                diagnostics["termination_reason"] = "context_limit"
                 break
 
-    return decode_ids(tokenizer, new_token_ids), new_token_ids
+    return decode_ids(tokenizer, new_token_ids), new_token_ids, diagnostics
 
 
 def format_generation_prompt(prompt: str, task: str) -> str:
@@ -259,11 +306,15 @@ def try_compile(text: str, bucket: str) -> dict:
                 "error": f"{type(exc).__name__}: {exc}",
             }
 
-    out["compile_attempts"].append(_attempt("whole", text.strip()))
+    whole_attempt = _attempt("whole", text.strip())
+    out["compile_attempts"].append(whole_attempt)
     for frag in extract_cas_fragments(text)[:3]:
         out["compile_attempts"].append(_attempt("fragment", frag))
 
+    out["whole_valid"] = bool(whole_attempt["valid"])
+    out["whole_error"] = whole_attempt["error"]
     out["any_valid"] = any(a["valid"] for a in out["compile_attempts"])
+    out["fragment_valid"] = any(a["valid"] for a in out["compile_attempts"] if a["label"] == "fragment")
     out["valid_candidates"] = [a["candidate"] for a in out["compile_attempts"] if a["valid"]]
     out["structured_valid_candidates"] = [
         a["candidate"]
@@ -346,6 +397,18 @@ def main() -> int:
     for b in BUCKETS:
         print(f"      {b}: {len(by_bucket.get(b, []))} records")
 
+    constraints: dict[str, CandidateTrieConstraint] = {}
+    if args.decode_mode == "grammar":
+        print("[4b/5] Building grammar constraints...")
+        for b in BUCKETS:
+            constraint = CandidateTrieConstraint(
+                tokenizer,
+                b,
+                max_candidates=args.constraint_max_candidates,
+            )
+            constraints[b] = constraint
+            print(f"      {b}: {constraint.candidate_count} compiler-valid candidates")
+
     print("[5/5] Generating samples...")
     rng = random.Random(args.seed)
     all_samples: list[dict] = []
@@ -361,8 +424,9 @@ def main() -> int:
         for i, rec in enumerate(chosen):
             prompt = rec.get("prompt") or rec.get("user_prompt") or ""
             generation_prompt = format_generation_prompt(prompt, args.task)
+            constraint = constraints.get(bucket)
             try:
-                generated, token_ids = generate(
+                generated, token_ids, decode_diagnostics = generate(
                     model,
                     tokenizer,
                     generation_prompt,
@@ -371,11 +435,19 @@ def main() -> int:
                     temperature=args.temperature,
                     top_p=args.top_p,
                     device=device,
+                    constraint=constraint,
                 )
             except Exception as exc:
                 print(f"  [{bucket} #{i}] generation FAILED: {type(exc).__name__}: {exc}")
                 generated = ""
                 token_ids = []
+                decode_diagnostics = {
+                    "decode_mode": args.decode_mode,
+                    "candidate_count": constraint.candidate_count if constraint is not None else 0,
+                    "dead_end_count": 1 if constraint is not None else 0,
+                    "allowed_token_counts": [],
+                    "termination_reason": f"error:{type(exc).__name__}",
+                }
             compile_result = try_compile(generated, bucket)
             sample = {
                 "bucket": bucket,
@@ -386,7 +458,11 @@ def main() -> int:
                 "ground_truth_cas_expression": rec.get("cas_expression", ""),
                 "generated_response": generated,
                 "generated_token_ids": token_ids,
+                "decode_mode": args.decode_mode,
+                "decode_diagnostics": decode_diagnostics,
+                "whole_compile_valid": compile_result["whole_valid"],
                 "compile_valid_anywhere": compile_result["any_valid"],
+                "fragment_compile_valid": compile_result["fragment_valid"],
                 "structured_cas_valid": compile_result["structured_valid"],
                 "compile_valid_candidates": compile_result["valid_candidates"],
                 "structured_valid_candidates": compile_result["structured_valid_candidates"],
@@ -402,8 +478,12 @@ def main() -> int:
 
         bucket_summary[bucket] = {
             "n_total": len(bucket_results),
+            "n_whole_valid": sum(1 for s in bucket_results if s["whole_compile_valid"]),
+            "whole_valid_rate": sum(1 for s in bucket_results if s["whole_compile_valid"]) / max(len(bucket_results), 1),
             "n_valid": sum(1 for s in bucket_results if s["compile_valid_anywhere"]),
             "valid_rate": sum(1 for s in bucket_results if s["compile_valid_anywhere"]) / max(len(bucket_results), 1),
+            "n_fragment_valid": sum(1 for s in bucket_results if s["fragment_compile_valid"]),
+            "fragment_valid_rate": sum(1 for s in bucket_results if s["fragment_compile_valid"]) / max(len(bucket_results), 1),
             "n_structured_valid": sum(1 for s in bucket_results if s["structured_cas_valid"]),
             "structured_valid_rate": sum(1 for s in bucket_results if s["structured_cas_valid"]) / max(len(bucket_results), 1),
             "ground_truth_examples": [r.get("cas_expression", "") for r in bucket_records[:3]],
@@ -428,10 +508,14 @@ def main() -> int:
                 "top_p": args.top_p,
                 "seed": args.seed,
                 "task": args.task,
+                "decode_mode": args.decode_mode,
+                "constraint_max_candidates": args.constraint_max_candidates,
                 "causal_lm": causal_lm,
                 "tokenizer": tokenizer.metadata(),
                 "tokenizer_path": str(tokenizer_path) if tokenizer_path is not None else None,
+                "overall_whole_valid_rate": sum(1 for s in all_samples if s["whole_compile_valid"]) / max(len(all_samples), 1),
                 "overall_valid_rate": sum(1 for s in all_samples if s["compile_valid_anywhere"]) / max(len(all_samples), 1),
+                "overall_fragment_valid_rate": sum(1 for s in all_samples if s["fragment_compile_valid"]) / max(len(all_samples), 1),
                 "overall_structured_valid_rate": sum(1 for s in all_samples if s["structured_cas_valid"]) / max(len(all_samples), 1),
                 "buckets": bucket_summary,
             },
