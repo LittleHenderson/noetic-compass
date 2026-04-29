@@ -1,0 +1,142 @@
+{
+  "checkpoint": "/root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/checkpoints/final.pt",
+  "dataset": "/root/workspace/cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl",
+  "samples_per_bucket": 5,
+  "max_new_tokens": 96,
+  "min_new_tokens": 8,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "seed": 42,
+  "task": "expr",
+  "decode_mode": "grammar",
+  "constraint_max_candidates": 5000,
+  "causal_lm": true,
+  "tokenizer": {
+    "type": "HybridCASTokenizer",
+    "version": "hybrid-cas-v1",
+    "vocab_size": 698,
+    "hash": "2339a510d298afed",
+    "frozen": true,
+    "special_tokens": [
+      "[PAD]",
+      "[UNK]",
+      "[BOS]",
+      "[EOS]",
+      "[SEP]",
+      "[CAS]",
+      "[/CAS]",
+      "[TASK_EXPR]",
+      "[TASK_EXPLAIN]",
+      "[TASK_CHAT]",
+      "[PROMPT]",
+      "[RESPONSE]",
+      "[SP]",
+      "[NL]",
+      "[TAB]"
+    ],
+    "reserved_token_count": 198
+  },
+  "tokenizer_path": "/root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/tokenizer.json",
+  "overall_whole_valid_rate": 1.0,
+  "overall_valid_rate": 1.0,
+  "overall_fragment_valid_rate": 1.0,
+  "overall_structured_valid_rate": 1.0,
+  "buckets": {
+    "v74_baseline": {
+      "n_total": 5,
+      "n_whole_valid": 5,
+      "whole_valid_rate": 1.0,
+      "n_valid": 5,
+      "valid_rate": 1.0,
+      "n_fragment_valid": 5,
+      "fragment_valid_rate": 1.0,
+      "n_structured_valid": 5,
+      "structured_valid_rate": 1.0,
+      "ground_truth_examples": [
+        "^4^P_{F2} * ^3^P_{F2}",
+        "^1^C_{F2}",
+        "^3^O_{F5} * ^8^O_{F5}"
+      ]
+    },
+    "v75_register": {
+      "n_total": 5,
+      "n_whole_valid": 5,
+      "whole_valid_rate": 1.0,
+      "n_valid": 5,
+      "valid_rate": 1.0,
+      "n_fragment_valid": 5,
+      "fragment_valid_rate": 1.0,
+      "n_structured_valid": 5,
+      "structured_valid_rate": 1.0,
+      "ground_truth_examples": [
+        "^2^O_{F3}|T",
+        "^6^E_{F5}|E",
+        "^6^C_{F1}|A + ^8^O_{F2}|E"
+      ]
+    },
+    "v77_rule_four": {
+      "n_total": 5,
+      "n_whole_valid": 5,
+      "whole_valid_rate": 1.0,
+      "n_valid": 5,
+      "valid_rate": 1.0,
+      "n_fragment_valid": 5,
+      "fragment_valid_rate": 1.0,
+      "n_structured_valid": 5,
+      "structured_valid_rate": 1.0,
+      "ground_truth_examples": [
+        "(^3^P_{F2}|f × ^3^P_{F2}|A) = ^3^P|Ω_refusal",
+        "^8^E_{F6}|E + ^8^E_{F3}|f + ^8^E_{F3}|A",
+        "^2^P_{F6}|T + ^2^P_{F6}|A + ^2^P_{F6}|f"
+      ]
+    },
+    "v77_omega": {
+      "n_total": 5,
+      "n_whole_valid": 5,
+      "whole_valid_rate": 1.0,
+      "n_valid": 5,
+      "valid_rate": 1.0,
+      "n_fragment_valid": 5,
+      "fragment_valid_rate": 1.0,
+      "n_structured_valid": 5,
+      "structured_valid_rate": 1.0,
+      "ground_truth_examples": [
+        "(^1^E_{F3}|A × ^1^E_{F3}|f) = ^1^E|Ω_clarity",
+        "(^1_{F6}|A × ^1_{F1}|f) = ^1|Ω_clarity",
+        "(^9^E_{F1}|E × ^9^E_{F1}|f) = ^9^E|Ω_landing"
+      ]
+    },
+    "v76_production": {
+      "n_total": 5,
+      "n_whole_valid": 5,
+      "whole_valid_rate": 1.0,
+      "n_valid": 5,
+      "valid_rate": 1.0,
+      "n_fragment_valid": 5,
+      "fragment_valid_rate": 1.0,
+      "n_structured_valid": 5,
+      "structured_valid_rate": 1.0,
+      "ground_truth_examples": [
+        "Θ(Ω_grounded_creative_insight) = 0.73*^8^C_{F3}|A + 1.42*^6^C_{F2}|A + 1.01*^4^E_{F4}|f → Ω_grounded_creative_insight + 0.1*Λ·Ω_aversion_overflow",
+        "Θ(Ω_focused_refusal) = 0.49*^7^P_{F7}|T + 1.98*^3^P_{F2}|A + 1.06*^1^P_{F1}|A → Ω_focused_refusal",
+        "Θ(Ω_negotiated_consensus) = 0.75*^8^P_{F6}|T + 1.47*^2^E_{F4}|f + 0.96*^5^C_{F1}|A → Ω_negotiated_consensus"
+      ]
+    },
+    "meta_logic": {
+      "n_total": 5,
+      "n_whole_valid": 5,
+      "whole_valid_rate": 1.0,
+      "n_valid": 5,
+      "valid_rate": 1.0,
+      "n_fragment_valid": 5,
+      "fragment_valid_rate": 1.0,
+      "n_structured_valid": 5,
+      "structured_valid_rate": 1.0,
+      "ground_truth_examples": [
+        "StateCluster{^6^O} ∩ StateCluster{^6^O, ^4^P, ^8^C}",
+        "Coordinate{^0, O, F6, T}",
+        "StateCluster{^8^E, ^0^P, ^5^P, ^9^P} ∪ StateCluster{^3^E, ^3^O, ^8^C, ^8^P}"
+      ]
+    }
+  }
+}

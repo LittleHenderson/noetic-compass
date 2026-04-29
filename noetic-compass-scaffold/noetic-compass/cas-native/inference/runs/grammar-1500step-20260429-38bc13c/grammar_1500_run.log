@@ -1,0 +1,64 @@
+/usr/local/lib/python3.11/dist-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[setup] dataset = /root/workspace/cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl
+[setup] checkpoint = /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/checkpoints/final.pt
+[setup] out_dir = /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/grammar-1500step-20260429-38bc13c
+[1/5] Loading dataset records...
+      10000 records loaded
+[2/5] Loading tokenizer artifact...
+      tokenizer path: /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/tokenizer.json
+      tokenizer meta: {'type': 'HybridCASTokenizer', 'version': 'hybrid-cas-v1', 'vocab_size': 698, 'hash': '2339a510d298afed', 'frozen': True, 'special_tokens': ['[PAD]', '[UNK]', '[BOS]', '[EOS]', '[SEP]', '[CAS]', '[/CAS]', '[TASK_EXPR]', '[TASK_EXPLAIN]', '[TASK_CHAT]', '[PROMPT]', '[RESPONSE]', '[SP]', '[NL]', '[TAB]'], 'reserved_token_count': 198}
+[3/5] Loading model + checkpoint...
+      causal_lm = True
+      INFO: 32 checkpoint keys ignored for inference
+      params: 41,010,176
+      model vocab size: 698
+      device: cuda
+[4/5] Grouping records by bucket...
+      v74_baseline: 2000 records
+      v75_register: 2500 records
+      v77_rule_four: 1500 records
+      v77_omega: 2000 records
+      v76_production: 1000 records
+      meta_logic: 1000 records
+[4b/5] Building grammar constraints...
+      v74_baseline: 851 compiler-valid candidates
+      v75_register: 2320 compiler-valid candidates
+      v77_rule_four: 480 compiler-valid candidates
+      v77_omega: 36 compiler-valid candidates
+      v76_production: 5 compiler-valid candidates
+      meta_logic: 14 compiler-valid candidates
+[5/5] Generating samples...
+  [v74_baseline #0] valid=True structured=True prompt='A doctor facing an unfamiliar diagnosis is asked to give the...' generated='^2^O_{F1} + ^4^O_{F2}...'
+  [v74_baseline #1] valid=True structured=True prompt='A scientist confronting a surprising result is asked to give...' generated='^7^P_{F3} + ^9^P_{F4}...'
+  [v74_baseline #2] valid=True structured=True prompt='A programmer discovering a security flaw is asked to give th...' generated='^5^E_{F5} + ^7^E_{F6}...'
+  [v74_baseline #3] valid=True structured=True prompt='A chef responding to a contamination report is asked to give...' generated='^0^E_{F4} + ^2^E_{F5}...'
+  [v74_baseline #4] valid=True structured=True prompt='An engineer reviewing a safety anomaly is asked to give thei...' generated='^3^C_{F5}...'
+  [v75_register #0] valid=True structured=True prompt='A chef tasting a dish before service holds two co-present re...' generated='^4^O_{F5}|T + ^5^O_{F6}|A...'
+  [v75_register #1] valid=True structured=True prompt='A meditator noticing a subtle sensation must act with a clea...' generated='^9^E_{F3}|f + ^0^E_{F4}|E...'
+  [v75_register #2] valid=True structured=True prompt='A manager noticing a team member's silent distress must act ...' generated='^8^C_{F3}|A + ^9^C_{F4}|f...'
+  [v75_register #3] valid=True structured=True prompt='A surgeon who must decide whether to operate holds two co-pr...' generated='^7^O_{F5}|f + ^8^O_{F6}|E...'
+  [v75_register #4] valid=True structured=True prompt='A pilot handling an in-flight emergency must act with a clea...' generated='^3^C_{F7}|A + ^4^C_{F1}|f...'
+  [v77_rule_four #0] valid=True structured=True prompt='Describe the register structure of this state....' generated='^5^O_{F2}|T + ^5^O_{F2}|A + ^5^O_{F2}|f...'
+  [v77_rule_four #1] valid=True structured=True prompt='Describe the register structure of this state....' generated='^0^E_{F3}|T + ^0^E_{F3}|A + ^0^E_{F3}|f...'
+  [v77_rule_four #2] valid=True structured=True prompt='Analyze the register structure of this expression....' generated='^6^P_{F1}|T + ^6^P_{F1}|A + ^6^P_{F1}|f...'
+  [v77_rule_four #3] valid=True structured=True prompt='Describe the register structure of this state....' generated='(^5^C_{F3}|A × ^5^C_{F3}|f × ^5^C_{F3}|T) = ^5^C|Ω_genesis...'
+  [v77_rule_four #4] valid=True structured=True prompt='Describe the register structure of this state....' generated='^5^P_{F1}|T + ^5^P_{F1}|A + ^5^P_{F1}|f...'
+  [v77_omega #0] valid=True structured=True prompt='Describe a situation in which the emergent register Omega_ca...' generated='(^4^P_{F5}|A × ^4^P_{F5}|f × ^4^P_{F5}|T) = ^4^P|Ω_clarity...'
+  [v77_omega #1] valid=True structured=True prompt='Describe a situation in which the emergent register Omega_in...' generated='(^1^C_{F2}|T × ^1^C_{F2}|E) = ^1^C|Ω_refusal...'
+  [v77_omega #2] valid=True structured=True prompt='Describe a situation in which the emergent register Omega_in...' generated='(^1^O_{F5}|T × ^1^O_{F5}|E) = ^1^O|Ω_landing...'
+  [v77_omega #3] valid=True structured=True prompt='Describe a situation in which the emergent register Omega_cl...' generated='(^1^O_{F5}|T × ^1^O_{F5}|E) = ^1^O|Ω_landing...'
+  [v77_omega #4] valid=True structured=True prompt='Describe a situation in which the emergent register Omega_re...' generated='(^1^C_{F2}|T × ^1^C_{F2}|E) = ^1^C|Ω_refusal...'
+  [v76_production #0] valid=True structured=True prompt='An engineer recovering from a deployment regression: what re...' generated='Θ(Ω_embodied_safety_check) = 0.60·^4^O_{F2}|E + 0.25·^6^O_{F...'
+  [v76_production #1] valid=True structured=True prompt='A product team balancing principled user safety with feature...' generated='Θ(Ω_pattern_entrainment_learning) = 0.45·^2^C_{F3}|A + 0.35·...'
+  [v76_production #2] valid=True structured=True prompt='A product team balancing principled user safety with feature...' generated='Θ(Ω_pattern_entrainment_learning) = 0.45·^2^C_{F3}|A + 0.35·...'
+  [v76_production #3] valid=True structured=True prompt='A clinician titrating care across cognitive, evaluative, and...' generated='Θ(Ω_grounded_creative_insight) = 0.40·^0^E_{F5}|f + 0.40·^1^...'
+  [v76_production #4] valid=True structured=True prompt='A teacher pacing a lesson across principled, cognitive, and ...' generated='Θ(Ω_focused_refusal) = 0.50·^1^P_{F1}|A + 0.30·^3^P_{F2}|f +...'
+  [meta_logic #0] valid=True structured=True prompt='Explain how Foundation_1..Foundation_7 cover SubFoundations ...' generated='^2 ∈ Noetics...'
+  [meta_logic #1] valid=True structured=True prompt='Explain the Product(Foundations, Domains) typed Cartesian pr...' generated='StateCluster{^2^P, ^7^O} ⊆ States...'
+  [meta_logic #2] valid=True structured=True prompt='Explain how two finite StateCluster terms combine under ∪....' generated='^2 ∈ Noetics...'
+  [meta_logic #3] valid=True structured=True prompt='Describe a typed coordinate with noetic, domain, foundation,...' generated='^2 ∈ Noetics...'
+  [meta_logic #4] valid=True structured=True prompt='Explain the typed NoeticCluster over noetics 8, 3....' generated='StateCluster{^2^P, ^7^O} ⊆ States...'
+
+Wrote 30 samples to /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/grammar-1500step-20260429-38bc13c/samples.jsonl
+Wrote bucket summary to /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/grammar-1500step-20260429-38bc13c/bucket_summary.json
