@@ -666,6 +666,10 @@ def _formal_axis_reading(expression: str) -> str:
     if families:
         pieces.append(f"families: {', '.join(families)}")
 
+    production_reading = _production_recipe_reading(expression)
+    if production_reading:
+        pieces.append(production_reading)
+
     state_parts: list[str] = []
     seen_states: set[str] = set()
     for match in _STATE_TOKEN_RE.finditer(expression):
@@ -739,12 +743,60 @@ def _formal_family_names(expression: str) -> list[str]:
     return families
 
 
+_PRODUCTION_TARGET_RE = re.compile(r"(?:Theta|\u0398)\(([^)]+)\)")
+_RECIPE_TERM_RE = re.compile(
+    r"([0-9]+(?:\.[0-9]+)?)\s*(?:\*|\u00b7)\s*"
+    r"(\^[0-9](?:\^[PCEO])?(?:_\{F[1-7](?:\|[TAfE])?\})?(?:\|[TAfE])?)"
+)
+_LEAKAGE_TERM_RE = re.compile(
+    r"([0-9]+(?:\.[0-9]+)?)\s*(?:\*|\u00b7)\s*(?:Lambda|\u039b)\s*(?:\*|\u00b7)\s*"
+    r"((?:Omega|\u03a9)_[A-Za-z0-9_]+)"
+)
+
+
+def _production_recipe_reading(expression: str) -> str:
+    target_match = _PRODUCTION_TARGET_RE.search(expression)
+    if not target_match:
+        return ""
+
+    parts = [f"production target {target_match.group(1)}"]
+    recipe_terms: list[str] = []
+    for coeff, state_token in _RECIPE_TERM_RE.findall(expression):
+        state_desc = _describe_state_token(state_token)
+        if state_desc:
+            recipe_terms.append(f"{coeff} times {state_desc}")
+    if recipe_terms:
+        parts.append("recipe coefficients: " + " / ".join(recipe_terms[:8]))
+
+    leakage_terms = [
+        f"{coeff} leakage to {omega}"
+        for coeff, omega in _LEAKAGE_TERM_RE.findall(expression)
+    ]
+    if leakage_terms:
+        parts.append("leakage: " + " / ".join(leakage_terms[:4]))
+    return "; ".join(parts)
+
+
+def _describe_state_token(state_token: str) -> str:
+    match = _STATE_TOKEN_RE.fullmatch(state_token)
+    if not match:
+        return state_token
+    noetic_raw, domain, drive, drive_register, outer_register = match.groups()
+    desc: list[str] = [f"Noetic ^{noetic_raw}"]
+    if domain:
+        desc.append(f"domain {domain} ({_DOMAIN_NAMES[domain]})")
+    if drive:
+        desc.append(f"drive F{drive}")
+    register = outer_register or drive_register
+    if register:
+        desc.append(f"register |{register} ({_REGISTER_STORY_NAMES[register]})")
+    return "; ".join(desc)
+
+
 def _formal_operator_names(expression: str) -> list[str]:
     operator_map = [
         ("->", "directed arrow"),
         ("\u2192", "directed arrow"),
-        ("*", "composition star"),
-        (" + ", "plus co-presence"),
         ("\u00d7", "cross-register integration"),
         ("=", "emergent assignment"),
         ("\u2208", "membership"),
@@ -758,6 +810,11 @@ def _formal_operator_names(expression: str) -> list[str]:
         ("\u2216", "difference"),
     ]
     out: list[str] = []
+    is_production = bool(_PRODUCTION_TARGET_RE.search(expression))
+    if "*" in expression:
+        out.append("coefficient multiplication" if is_production else "composition star")
+    if " + " in expression:
+        out.append("ingredient sum" if is_production else "plus co-presence")
     for token, name in operator_map:
         if token in expression and name not in out:
             out.append(name)
