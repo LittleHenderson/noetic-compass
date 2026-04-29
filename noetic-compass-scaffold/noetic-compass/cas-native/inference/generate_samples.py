@@ -32,12 +32,15 @@ from cas_native.inference.constrained_sampling import (  # noqa: E402
     CandidateTrieConstraint,
     build_candidate_expressions,
     build_dataset_candidate_expressions,
+    candidate_matches_slot_policy,
     candidate_matches_slots,
     candidate_matches_required_terms,
+    expression_product_operands,
     expression_slots,
     expression_families,
     filter_candidates_for_prompt,
     infer_prompt_families,
+    infer_prompt_slot_policies,
     infer_prompt_slots,
     infer_prompt_required_terms,
 )
@@ -615,11 +618,13 @@ def main() -> int:
                 "prompt_families": list(infer_prompt_families(prompt, bucket)),
                 "prompt_required_terms": list(infer_prompt_required_terms(prompt)),
                 "prompt_slots": {key: list(value) for key, value in infer_prompt_slots(prompt, bucket).items()},
+                "prompt_slot_policies": {key: list(value) for key, value in infer_prompt_slot_policies(prompt, bucket).items()},
                 "pre_filter_candidate_count": len(base_candidates),
                 "post_filter_candidate_count": len(base_candidates),
                 "family_filter_fallback": False,
                 "term_filter_fallback": False,
                 "slot_filter_fallback": False,
+                "policy_filter_fallback": False,
             }
             sample_candidates = base_candidates
             if args.decode_mode in {"grammar", "rerank"} and args.family_filter == "prompt":
@@ -672,12 +677,15 @@ def main() -> int:
             prompt_families = filter_diagnostics.get("prompt_families", [])
             prompt_required_terms = filter_diagnostics.get("prompt_required_terms", [])
             prompt_slots = filter_diagnostics.get("prompt_slots", {})
+            prompt_slot_policies = filter_diagnostics.get("prompt_slot_policies", {})
             family_match = not prompt_families or bool(set(prompt_families) & set(generated_families))
             required_terms_applicable = bool(prompt_required_terms)
             required_terms_match = candidate_matches_required_terms(generated, prompt_required_terms)
             generated_slots = expression_slots(generated)
             slot_match_applicable = any(prompt_slots.values())
             slot_match = candidate_matches_slots(generated, prompt_slots)
+            slot_policy_match_applicable = any(prompt_slot_policies.values())
+            slot_policy_match = candidate_matches_slot_policy(generated, prompt_slots, prompt_slot_policies)
             sample = {
                 "bucket": bucket,
                 "sample_idx": i,
@@ -697,9 +705,13 @@ def main() -> int:
                 "required_terms_applicable": required_terms_applicable,
                 "required_terms_match": required_terms_match,
                 "generated_slots": {key: list(value) for key, value in generated_slots.items()},
+                "generated_product_operands": list(expression_product_operands(generated)),
                 "prompt_slots": prompt_slots,
                 "slot_match_applicable": slot_match_applicable,
                 "slot_match": slot_match,
+                "prompt_slot_policies": prompt_slot_policies,
+                "slot_policy_match_applicable": slot_policy_match_applicable,
+                "slot_policy_match": slot_policy_match,
                 "whole_compile_valid": compile_result["whole_valid"],
                 "compile_valid_anywhere": compile_result["any_valid"],
                 "fragment_compile_valid": compile_result["fragment_valid"],
@@ -713,7 +725,7 @@ def main() -> int:
             print(
                 f"  [{bucket} #{i}] valid={compile_result['any_valid']} "
                 f"structured={compile_result['structured_valid']} "
-                f"family={family_match} terms={required_terms_match} slots={slot_match} "
+                f"family={family_match} terms={required_terms_match} slots={slot_match} policy={slot_policy_match} "
                 f"prompt='{prompt[:60]}...' generated='{generated[:60]}...'"
             )
 
@@ -723,6 +735,8 @@ def main() -> int:
         )
         slot_match_applicable_count = sum(1 for s in bucket_results if s["slot_match_applicable"])
         slot_match_count = sum(1 for s in bucket_results if s["slot_match_applicable"] and s["slot_match"])
+        slot_policy_match_applicable_count = sum(1 for s in bucket_results if s["slot_policy_match_applicable"])
+        slot_policy_match_count = sum(1 for s in bucket_results if s["slot_policy_match_applicable"] and s["slot_policy_match"])
         bucket_summary[bucket] = {
             "n_total": len(bucket_results),
             "n_exact_match": sum(1 for s in bucket_results if s["exact_match"]),
@@ -735,6 +749,9 @@ def main() -> int:
             "n_slot_match_applicable": slot_match_applicable_count,
             "n_slot_match": slot_match_count,
             "slot_match_rate": slot_match_count / max(slot_match_applicable_count, 1),
+            "n_slot_policy_match_applicable": slot_policy_match_applicable_count,
+            "n_slot_policy_match": slot_policy_match_count,
+            "slot_policy_match_rate": slot_policy_match_count / max(slot_policy_match_applicable_count, 1),
             "n_whole_valid": sum(1 for s in bucket_results if s["whole_compile_valid"]),
             "whole_valid_rate": sum(1 for s in bucket_results if s["whole_compile_valid"]) / max(len(bucket_results), 1),
             "n_valid": sum(1 for s in bucket_results if s["compile_valid_anywhere"]),
@@ -757,6 +774,8 @@ def main() -> int:
     required_terms_match_count = sum(1 for s in all_samples if s["required_terms_applicable"] and s["required_terms_match"])
     slot_match_applicable_count = sum(1 for s in all_samples if s["slot_match_applicable"])
     slot_match_count = sum(1 for s in all_samples if s["slot_match_applicable"] and s["slot_match"])
+    slot_policy_match_applicable_count = sum(1 for s in all_samples if s["slot_policy_match_applicable"])
+    slot_policy_match_count = sum(1 for s in all_samples if s["slot_policy_match_applicable"] and s["slot_policy_match"])
     with open(summary_path, "w", encoding="utf-8") as f:
         json.dump(
             {
@@ -785,6 +804,8 @@ def main() -> int:
                 "overall_required_terms_match_rate": required_terms_match_count / max(required_terms_applicable_count, 1),
                 "overall_slot_match_applicable": slot_match_applicable_count,
                 "overall_slot_match_rate": slot_match_count / max(slot_match_applicable_count, 1),
+                "overall_slot_policy_match_applicable": slot_policy_match_applicable_count,
+                "overall_slot_policy_match_rate": slot_policy_match_count / max(slot_policy_match_applicable_count, 1),
                 "overall_whole_valid_rate": sum(1 for s in all_samples if s["whole_compile_valid"]) / max(len(all_samples), 1),
                 "overall_valid_rate": sum(1 for s in all_samples if s["compile_valid_anywhere"]) / max(len(all_samples), 1),
                 "overall_fragment_valid_rate": sum(1 for s in all_samples if s["fragment_compile_valid"]) / max(len(all_samples), 1),

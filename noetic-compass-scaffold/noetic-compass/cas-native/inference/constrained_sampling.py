@@ -594,6 +594,21 @@ def expression_slots(expr: str) -> dict[str, tuple[str, ...]]:
     return {key: value for key, value in slots.items() if value}
 
 
+def _canonical_carrier(name: str) -> str:
+    lowered = str(name or "").strip().lower()
+    for carrier in _CARRIERS:
+        if carrier.lower() == lowered:
+            return carrier
+    return str(name or "").strip()
+
+
+def expression_product_operands(expr: str) -> tuple[str, ...]:
+    match = re.search(r"\bProduct\(([^)]*)\)", str(expr or ""))
+    if not match:
+        return ()
+    return tuple(_canonical_carrier(part) for part in match.group(1).split(",") if part.strip())
+
+
 def infer_prompt_slots(prompt: str, bucket: str) -> dict[str, tuple[str, ...]]:
     """Infer concrete typed CAS slots requested by a prompt.
 
@@ -661,6 +676,26 @@ def infer_prompt_slots(prompt: str, bucket: str) -> dict[str, tuple[str, ...]]:
     return slots
 
 
+def infer_prompt_slot_policies(prompt: str, bucket: str) -> dict[str, tuple[str, ...]]:
+    """Infer stricter policies for closed-set and ordered-slot prompts."""
+    text = _normalize_symbol_text(prompt)
+    families = set(infer_prompt_families(prompt, bucket))
+    slots = infer_prompt_slots(prompt, bucket)
+    policies: dict[str, tuple[str, ...]] = {}
+
+    product_match = re.search(r"\bproduct\(([^)]*)\)", prompt, re.IGNORECASE)
+    if product_match:
+        operands = tuple(_canonical_carrier(part) for part in product_match.group(1).split(",") if part.strip())
+        if len(operands) >= 2:
+            policies["ordered_carriers"] = operands
+
+    if slots.get("noetics") and {"noetic_cluster", "noetic_cluster_literal"} & families:
+        if _has_any(text, ("over noetics", "containing noetics", "containing noetic", "typed noeticcluster", "typed noetic cluster")):
+            policies["exact_noetics"] = slots["noetics"]
+
+    return policies
+
+
 def candidate_matches_slots(expr: str, slots: dict[str, Iterable[str]]) -> bool:
     candidate_slots = expression_slots(expr)
     for key, raw_values in slots.items():
@@ -672,11 +707,43 @@ def candidate_matches_slots(expr: str, slots: dict[str, Iterable[str]]) -> bool:
     return True
 
 
+def candidate_matches_slot_policy(
+    expr: str,
+    slots: dict[str, Iterable[str]],
+    policies: dict[str, Iterable[str]],
+) -> bool:
+    if not policies:
+        return True
+
+    if "ordered_carriers" in policies:
+        wanted_operands = tuple(policies["ordered_carriers"])
+        if expression_product_operands(expr) != wanted_operands:
+            return False
+
+    if "exact_noetics" in policies:
+        if "noetic_cluster_literal" not in expression_families(expr):
+            return False
+        wanted_noetics = set(policies["exact_noetics"])
+        candidate_noetics = set(expression_slots(expr).get("noetics", ()))
+        if candidate_noetics != wanted_noetics:
+            return False
+
+    return candidate_matches_slots(expr, slots)
+
+
 def filter_candidates_by_slots(
     candidates: Iterable[str],
     slots: dict[str, Iterable[str]],
 ) -> tuple[str, ...]:
     return tuple(expr for expr in candidates if candidate_matches_slots(expr, slots))
+
+
+def filter_candidates_by_slot_policy(
+    candidates: Iterable[str],
+    slots: dict[str, Iterable[str]],
+    policies: dict[str, Iterable[str]],
+) -> tuple[str, ...]:
+    return tuple(expr for expr in candidates if candidate_matches_slot_policy(expr, slots, policies))
 
 
 _SPECIFIC_FILTER_FAMILIES = {
@@ -727,6 +794,7 @@ def filter_candidates_for_prompt(
     prompt_families = infer_prompt_families(prompt, bucket)
     required_terms = infer_prompt_required_terms(prompt)
     prompt_slots = infer_prompt_slots(prompt, bucket)
+    prompt_slot_policies = infer_prompt_slot_policies(prompt, bucket)
 
     by_family = filter_candidates_by_family(original, prompt_families)
     selected = by_family if len(by_family) >= min_candidates else original
@@ -749,19 +817,31 @@ def filter_candidates_for_prompt(
         else:
             slot_fallback = True
 
+    policy_fallback = False
+    by_policy = tuple()
+    if prompt_slot_policies:
+        by_policy = filter_candidates_by_slot_policy(selected, prompt_slots, prompt_slot_policies)
+        if len(by_policy) >= min_candidates:
+            selected = by_policy
+        else:
+            policy_fallback = True
+
     diagnostics = {
         "family_filter": "prompt",
         "prompt_families": list(prompt_families),
         "prompt_required_terms": list(required_terms),
         "prompt_slots": {key: list(value) for key, value in prompt_slots.items()},
+        "prompt_slot_policies": {key: list(value) for key, value in prompt_slot_policies.items()},
         "pre_filter_candidate_count": len(original),
         "post_family_candidate_count": len(by_family),
         "post_term_candidate_count": len(by_terms) if required_terms else len(selected),
         "post_slot_candidate_count": len(by_slots) if prompt_slots else len(selected),
+        "post_policy_candidate_count": len(by_policy) if prompt_slot_policies else len(selected),
         "post_filter_candidate_count": len(selected),
         "family_filter_fallback": bool(family_fallback),
         "term_filter_fallback": bool(term_fallback),
         "slot_filter_fallback": bool(slot_fallback),
+        "policy_filter_fallback": bool(policy_fallback),
     }
     return selected, diagnostics
 

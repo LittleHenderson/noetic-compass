@@ -8,12 +8,16 @@ from cas_native.inference.constrained_sampling import (
     CandidateTrieConstraint,
     build_candidate_expressions,
     build_dataset_candidate_expressions,
+    candidate_matches_slot_policy,
     candidate_matches_slots,
     classify_expression_family,
+    expression_product_operands,
     expression_slots,
     expression_families,
+    filter_candidates_by_slots,
     filter_candidates_for_prompt,
     infer_prompt_families,
+    infer_prompt_slot_policies,
     infer_prompt_slots,
     infer_prompt_required_terms,
 )
@@ -153,7 +157,46 @@ def test_prompt_slot_filter_selects_product_carriers():
     assert diagnostics["slot_filter_fallback"] is False
 
 
+def test_prompt_slot_policy_selects_ordered_product_carriers():
+    candidates = (
+        "Product(Domains, Foundations)",
+        "Product(Foundations, Domains)",
+        "Product(States, Drives)",
+    )
+
+    filtered, diagnostics = filter_candidates_for_prompt(
+        candidates,
+        "Explain the Product(Foundations, Domains) typed Cartesian product.",
+        "meta_logic",
+    )
+
+    assert expression_product_operands(filtered[0]) == ("Foundations", "Domains")
+    assert filtered == ("Product(Foundations, Domains)",)
+    assert infer_prompt_slot_policies(
+        "Explain the Product(Foundations, Domains) typed Cartesian product.",
+        "meta_logic",
+    ) == {"ordered_carriers": ("Foundations", "Domains")}
+    assert diagnostics["prompt_slot_policies"] == {"ordered_carriers": ["Foundations", "Domains"]}
+    assert diagnostics["post_policy_candidate_count"] == 1
+    assert diagnostics["policy_filter_fallback"] is False
+
+
 def test_prompt_slot_filter_selects_cluster_members_when_available():
+    candidates = (
+        "NoeticCluster{^0, ^5, ^6, ^1, ^7}",
+        "NoeticCluster{^8, ^3}",
+        "NoeticCluster{^8, ^3, ^4}",
+    )
+
+    slots = infer_prompt_slots("Explain the typed NoeticCluster over noetics 8, 3.", "meta_logic")
+    filtered = filter_candidates_by_slots(candidates, slots)
+
+    assert filtered == ("NoeticCluster{^8, ^3}", "NoeticCluster{^8, ^3, ^4}")
+    assert candidate_matches_slots(filtered[0], {"noetics": ("8", "3")})
+    assert slots == {"noetics": ("8", "3")}
+
+
+def test_prompt_slot_policy_selects_exact_noetic_cluster_when_available():
     candidates = (
         "NoeticCluster{^0, ^5, ^6, ^1, ^7}",
         "NoeticCluster{^8, ^3}",
@@ -166,9 +209,18 @@ def test_prompt_slot_filter_selects_cluster_members_when_available():
         "meta_logic",
     )
 
-    assert filtered == ("NoeticCluster{^8, ^3}", "NoeticCluster{^8, ^3, ^4}")
-    assert candidate_matches_slots(filtered[0], {"noetics": ("8", "3")})
-    assert diagnostics["prompt_slots"] == {"noetics": ["8", "3"]}
+    assert filtered == ("NoeticCluster{^8, ^3}",)
+    assert infer_prompt_slot_policies(
+        "Explain the typed NoeticCluster over noetics 8, 3.",
+        "meta_logic",
+    ) == {"exact_noetics": ("8", "3")}
+    assert candidate_matches_slot_policy(
+        filtered[0],
+        {"noetics": ("8", "3")},
+        {"exact_noetics": ("8", "3")},
+    )
+    assert diagnostics["prompt_slot_policies"] == {"exact_noetics": ["8", "3"]}
+    assert diagnostics["post_policy_candidate_count"] == 1
 
 
 def test_prompt_filter_falls_back_when_no_candidate_survives():
