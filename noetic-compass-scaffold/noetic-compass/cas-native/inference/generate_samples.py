@@ -443,7 +443,7 @@ _STRUCTURED_BY_BUCKET = {
     "v77_rule_four": re.compile(r"\([^)]*(?:×|\+)[^)]*\)\s*=\s*(?:\^\d+(?:\^[PCEO])?\|)?Ω_\w+|(?:×|\+)"),
     "v77_omega": re.compile(r"\([^)]*×[^)]*\)\s*=\s*\^\d+(?:\^[PCEO])?\|Ω_\w+"),
     "v76_production": re.compile(r"Θ\(Ω_\w+\)\s*=[^→]+→\s*Ω_\w+"),
-    "meta_logic": re.compile(r"NoeticCluster|StateCluster|StateVariantCluster|RelationCluster|Product|Pullback|CoverOf|PartitionOf|∈|⊆|⊂|∪|∩|∖"),
+    "meta_logic": re.compile(r"NoeticCluster|StateCluster|StateVariantCluster|RelationCluster|Product|Coordinate|CASCoordinate|Pullback|CoverOf|PartitionOf|∈|⊆|⊂|∪|∩|∖"),
 }
 
 
