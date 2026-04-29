@@ -1,0 +1,64 @@
+/usr/local/lib/python3.11/dist-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[setup] dataset = /root/workspace/cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl
+[setup] checkpoint = /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/checkpoints/final.pt
+[setup] out_dir = /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/family-rerank-1500step-20260429-7e3a479
+[1/5] Loading dataset records...
+      10000 records loaded
+[2/5] Loading tokenizer artifact...
+      tokenizer path: /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/tokenizer.json
+      tokenizer meta: {'type': 'HybridCASTokenizer', 'version': 'hybrid-cas-v1', 'vocab_size': 698, 'hash': '2339a510d298afed', 'frozen': True, 'special_tokens': ['[PAD]', '[UNK]', '[BOS]', '[EOS]', '[SEP]', '[CAS]', '[/CAS]', '[TASK_EXPR]', '[TASK_EXPLAIN]', '[TASK_CHAT]', '[PROMPT]', '[RESPONSE]', '[SP]', '[NL]', '[TAB]'], 'reserved_token_count': 198}
+[3/5] Loading model + checkpoint...
+      causal_lm = True
+      INFO: 32 checkpoint keys ignored for inference
+      params: 41,010,176
+      model vocab size: 698
+      device: cuda
+[4/5] Grouping records by bucket...
+      v74_baseline: 2000 records
+      v75_register: 2500 records
+      v77_rule_four: 1500 records
+      v77_omega: 2000 records
+      v76_production: 1000 records
+      meta_logic: 1000 records
+[4b/5] Building candidate banks...
+      v74_baseline: 1852 compiler-valid candidates (hybrid)
+      v75_register: 2000 compiler-valid candidates (hybrid)
+      v77_rule_four: 1673 compiler-valid candidates (hybrid)
+      v77_omega: 1798 compiler-valid candidates (hybrid)
+      v76_production: 1005 compiler-valid candidates (hybrid)
+      meta_logic: 858 compiler-valid candidates (hybrid)
+[5/5] Generating samples...
+  [v74_baseline #0] valid=True structured=True family=True terms=True prompt='A doctor facing an unfamiliar diagnosis is asked to give the...' generated='^6^P_{F3} -> ^0^E_{F3}...'
+  [v74_baseline #1] valid=True structured=True family=True terms=True prompt='A scientist confronting a surprising result is asked to give...' generated='^6^P_{F3} -> ^0^E_{F3}...'
+  [v74_baseline #2] valid=True structured=True family=True terms=True prompt='A programmer discovering a security flaw is asked to give th...' generated='^3^P_{F3} * ^0^P_{F3}...'
+  [v74_baseline #3] valid=True structured=True family=True terms=True prompt='A chef responding to a contamination report is asked to give...' generated='^3^E_{F3} * ^2^E_{F3}...'
+  [v74_baseline #4] valid=True structured=True family=True terms=True prompt='An engineer reviewing a safety anomaly is asked to give thei...' generated='^6^P_{F3} -> ^0^E_{F3}...'
+  [v75_register #0] valid=True structured=True family=True terms=True prompt='A chef tasting a dish before service holds two co-present re...' generated='^3^P_{F3}|A + ^6^P_{F3}|f...'
+  [v75_register #1] valid=True structured=True family=True terms=True prompt='A meditator noticing a subtle sensation must act with a clea...' generated='^7^P_{F6}|E + ^0^E_{F3}|f...'
+  [v75_register #2] valid=True structured=True family=True terms=True prompt='A manager noticing a team member's silent distress must act ...' generated='^3^P_{F6}|f...'
+  [v75_register #3] valid=True structured=True family=True terms=True prompt='A surgeon who must decide whether to operate holds two co-pr...' generated='^0^P_{F6}|f + ^9^C_{F4}|f...'
+  [v75_register #4] valid=True structured=True family=True terms=True prompt='A pilot handling an in-flight emergency must act with a clea...' generated='^3^P_{F3}|A + ^6^P_{F3}|f...'
+  [v77_rule_four #0] valid=True structured=True family=True terms=True prompt='Describe the register structure of this state....' generated='^0^E_{F4}|T + ^0^E_{F4}|A + ^0^E_{F4}|f...'
+  [v77_rule_four #1] valid=True structured=True family=True terms=True prompt='Describe the register structure of this state....' generated='^0^E_{F4}|T + ^0^E_{F4}|A + ^0^E_{F4}|f...'
+  [v77_rule_four #2] valid=True structured=True family=True terms=True prompt='Analyze the register structure of this expression....' generated='^0^E_{F4}|T + ^0^E_{F4}|A + ^0^E_{F4}|f...'
+  [v77_rule_four #3] valid=True structured=True family=True terms=True prompt='Describe the register structure of this state....' generated='^0^E_{F4}|T + ^0^E_{F4}|A + ^0^E_{F4}|f...'
+  [v77_rule_four #4] valid=True structured=True family=True terms=True prompt='Describe the register structure of this state....' generated='^0^E_{F4}|T + ^0^E_{F4}|A + ^0^E_{F4}|f...'
+  [v77_omega #0] valid=True structured=True family=True terms=True prompt='Describe a situation in which the emergent register Omega_ca...' generated='(^7_{F4}|A × ^7_{F7}|f × ^7_{F6}|E) = ^7|Ω_cadence...'
+  [v77_omega #1] valid=True structured=True family=True terms=True prompt='Describe a situation in which the emergent register Omega_in...' generated='(^8_{F1}|A × ^8_{F1}|f × ^8_{F1}|T) = ^8|Ω_invocation...'
+  [v77_omega #2] valid=True structured=True family=True terms=True prompt='Describe a situation in which the emergent register Omega_in...' generated='(^8_{F1}|A × ^8_{F1}|f × ^8_{F1}|T) = ^8|Ω_invocation...'
+  [v77_omega #3] valid=True structured=True family=True terms=True prompt='Describe a situation in which the emergent register Omega_cl...' generated='(^4^P_{F5}|A × ^4^P_{F5}|f × ^4^P_{F5}|T) = ^4^P|Ω_clarity...'
+  [v77_omega #4] valid=True structured=True family=True terms=True prompt='Describe a situation in which the emergent register Omega_re...' generated='(^3^P_{F3}|A × ^3^P_{F3}|f × ^3^P_{F3}|T) = ^3^P|Ω_refusal...'
+  [v76_production #0] valid=True structured=True family=True terms=True prompt='An engineer recovering from a deployment regression: what re...' generated='Θ(Ω_principled_decision_execution) = 0.68*^0^P + 1*^9^O_{F7}...'
+  [v76_production #1] valid=True structured=True family=True terms=True prompt='A product team balancing principled user safety with feature...' generated='Θ(Ω_pattern_entrainment_learning) = 1.96*^7^C_{F7}|A + 0.98*...'
+  [v76_production #2] valid=True structured=True family=True terms=True prompt='A product team balancing principled user safety with feature...' generated='Θ(Ω_pattern_entrainment_learning) = 1.96*^7^C_{F7}|A + 0.98*...'
+  [v76_production #3] valid=True structured=True family=True terms=True prompt='A clinician titrating care across cognitive, evaluative, and...' generated='Θ(Ω_pattern_entrainment_learning) = 1*^5^C_{F1}|f + 2.01*^7^...'
+  [v76_production #4] valid=True structured=True family=True terms=True prompt='A teacher pacing a lesson across principled, cognitive, and ...' generated='Θ(Ω_pattern_entrainment_learning) = 0.52*^1^C_{F1}|A + 2*^7^...'
+  [meta_logic #0] valid=True structured=True family=True terms=True prompt='Explain how Foundation_1..Foundation_7 cover SubFoundations ...' generated='CoverOf(SubFoundations, Foundation_3, Foundation_1, Foundati...'
+  [meta_logic #1] valid=True structured=True family=True terms=True prompt='Explain the Product(Foundations, Domains) typed Cartesian pr...' generated='Product(Noetics, Noetics)...'
+  [meta_logic #2] valid=True structured=True family=True terms=True prompt='Explain how two finite StateCluster terms combine under ∪....' generated='StateCluster{^0^P, ^4^C, ^9^E, ^4^O} ∪ StateCluster{^2^C, ^4...'
+  [meta_logic #3] valid=True structured=True family=True terms=True prompt='Describe a typed coordinate with noetic, domain, foundation,...' generated='Coordinate{^3, E, F6, A}...'
+  [meta_logic #4] valid=True structured=True family=True terms=True prompt='Explain the typed NoeticCluster over noetics 8, 3....' generated='NoeticCluster{^0, ^5, ^6, ^1, ^7}...'
+
+Wrote 30 samples to /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/family-rerank-1500step-20260429-7e3a479/samples.jsonl
+Wrote bucket summary to /root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/family-rerank-1500step-20260429-7e3a479/bucket_summary.json
