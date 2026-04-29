@@ -36,6 +36,7 @@ def test_candidate_banks_are_nonempty_and_compiler_valid():
 def test_dataset_candidate_bank_filters_by_bucket_and_compile_validity():
     records = [
         {"_meta": {"bucket": "v75_register"}, "cas_expression": "^2^P_{F2}|A"},
+        {"bucket": "v75_register", "cas_expression": "^3^C_{F1}|f"},
         {"_meta": {"bucket": "v75_register"}, "cas_expression": "^2^P_{F2}|A"},
         {"_meta": {"bucket": "v75_register"}, "cas_expression": "^2, ^3}"},
         {"_meta": {"bucket": "meta_logic"}, "cas_expression": "^2 ∈ Noetics"},
@@ -48,7 +49,7 @@ def test_dataset_candidate_bank_filters_by_bucket_and_compile_validity():
         include_builtin=False,
     )
 
-    assert candidates == ("^2^P_{F2}|A",)
+    assert candidates == ("^2^P_{F2}|A", "^3^C_{F1}|f")
 
 
 def test_expression_family_classifier_covers_major_structures():

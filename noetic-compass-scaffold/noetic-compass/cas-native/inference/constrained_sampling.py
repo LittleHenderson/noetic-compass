@@ -253,7 +253,7 @@ def build_dataset_candidate_expressions(
             candidates.append(expr)
 
     for record in records:
-        if record.get("_meta", {}).get("bucket") != bucket:
+        if _record_bucket(record) != bucket:
             continue
         add(record.get("cas_expression", ""))
         if len(candidates) >= max_candidates:
@@ -266,6 +266,15 @@ def build_dataset_candidate_expressions(
                 break
 
     return tuple(candidates)
+
+
+def _record_bucket(record: dict) -> str:
+    """Return Level 2 `_meta.bucket` or Level 3 top-level `bucket`."""
+
+    meta = record.get("_meta")
+    if isinstance(meta, dict) and meta.get("bucket"):
+        return str(meta["bucket"])
+    return str(record.get("bucket") or "")
 
 
 _MEMBER = "\u2208"

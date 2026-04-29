@@ -92,6 +92,13 @@ def target_expression(record: dict[str, Any]) -> str:
     return str(record.get("cas_expression") or "").strip()
 
 
+def record_bucket(record: dict[str, Any]) -> str:
+    meta = record.get("_meta")
+    if isinstance(meta, dict) and meta.get("bucket"):
+        return str(meta["bucket"])
+    return str(record.get("bucket") or "")
+
+
 def format_generation_prompt(prompt: str) -> str:
     return f"[TASK_EXPR] [PROMPT] {prompt} [RESPONSE]".strip()
 
@@ -99,7 +106,7 @@ def format_generation_prompt(prompt: str) -> str:
 def records_by_bucket(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     by_bucket: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in records:
-        bucket = record.get("_meta", {}).get("bucket")
+        bucket = record_bucket(record)
         if bucket in BUCKETS:
             by_bucket[str(bucket)].append(record)
     return by_bucket
@@ -180,7 +187,7 @@ def make_training_pairs(
             continue
         if len(pairs) >= train_records * negatives_per_positive:
             break
-        bucket = record.get("_meta", {}).get("bucket")
+        bucket = record_bucket(record)
         if bucket not in BUCKETS:
             diagnostics["skipped_bucket"] += 1
             continue
@@ -329,7 +336,7 @@ def evaluate(
     samples: list[dict[str, Any]] = []
     by_bucket: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for idx, record in enumerate(eval_records):
-        bucket = str(record.get("_meta", {}).get("bucket") or "")
+        bucket = record_bucket(record)
         prompt = prompt_text(record)
         target = target_expression(record)
         candidates, filter_diagnostics = filtered_candidates(
