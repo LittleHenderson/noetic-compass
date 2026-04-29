@@ -7,6 +7,7 @@ from cas_native.inference.constrained_sampling import (
     BUCKETS,
     CandidateTrieConstraint,
     build_candidate_expressions,
+    build_dataset_candidate_expressions,
 )
 from cas_native.training.tokenizer import HybridCASTokenizer
 
@@ -18,6 +19,24 @@ def test_candidate_banks_are_nonempty_and_compiler_valid():
         assert expressions, bucket
         for expr in expressions[:10]:
             assert compile_expression(expr).valid, (bucket, expr)
+
+
+def test_dataset_candidate_bank_filters_by_bucket_and_compile_validity():
+    records = [
+        {"_meta": {"bucket": "v75_register"}, "cas_expression": "^2^P_{F2}|A"},
+        {"_meta": {"bucket": "v75_register"}, "cas_expression": "^2^P_{F2}|A"},
+        {"_meta": {"bucket": "v75_register"}, "cas_expression": "^2, ^3}"},
+        {"_meta": {"bucket": "meta_logic"}, "cas_expression": "^2 ∈ Noetics"},
+    ]
+
+    candidates = build_dataset_candidate_expressions(
+        records,
+        "v75_register",
+        max_candidates=10,
+        include_builtin=False,
+    )
+
+    assert candidates == ("^2^P_{F2}|A",)
 
 
 def test_trie_constraint_allows_only_candidate_prefixes_and_terminal_eos():

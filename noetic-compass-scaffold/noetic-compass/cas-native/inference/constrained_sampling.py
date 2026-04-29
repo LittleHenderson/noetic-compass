@@ -227,6 +227,46 @@ def build_candidate_expressions(bucket: str, max_candidates: int = 5000) -> tupl
     return tuple(candidates)
 
 
+def build_dataset_candidate_expressions(
+    records: Iterable[dict],
+    bucket: str,
+    *,
+    max_candidates: int = 5000,
+    include_builtin: bool = True,
+) -> tuple[str, ...]:
+    """Build compiler-valid candidates from dataset records for a bucket.
+
+    Dataset candidates are the next step after the small hand-authored grammar
+    bank: they preserve the same compiler-validity guarantee while giving the
+    model a much broader, dataset-grounded set of expressions to rerank.
+    """
+    candidates: list[str] = []
+    seen: set[str] = set()
+
+    def add(expr: str) -> None:
+        expr = str(expr or "").strip()
+        if not expr or expr in seen:
+            return
+        if _compile_valid(expr):
+            seen.add(expr)
+            candidates.append(expr)
+
+    for record in records:
+        if record.get("_meta", {}).get("bucket") != bucket:
+            continue
+        add(record.get("cas_expression", ""))
+        if len(candidates) >= max_candidates:
+            break
+
+    if include_builtin and len(candidates) < max_candidates:
+        for expr in build_candidate_expressions(bucket, max_candidates):
+            add(expr)
+            if len(candidates) >= max_candidates:
+                break
+
+    return tuple(candidates)
+
+
 class CandidateTrieConstraint:
     """Token-level finite-state constraint over compiler-valid candidates."""
 

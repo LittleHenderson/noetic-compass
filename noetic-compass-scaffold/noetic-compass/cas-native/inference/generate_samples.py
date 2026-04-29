@@ -28,7 +28,11 @@ sys.path.insert(0, str(REPO_ROOT))
 import torch  # noqa: E402
 
 from api.notation import compile_expression  # noqa: E402
-from cas_native.inference.constrained_sampling import CandidateTrieConstraint  # noqa: E402
+from cas_native.inference.constrained_sampling import (  # noqa: E402
+    CandidateTrieConstraint,
+    build_candidate_expressions,
+    build_dataset_candidate_expressions,
+)
 from cas_native.model import CASNativeConfig, CASNativeModel  # noqa: E402
 from cas_native.training.data_pipeline import load_cas_data  # noqa: E402
 from cas_native.training.tokenizer import HybridCASTokenizer  # noqa: E402
@@ -82,15 +86,33 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--decode-mode",
-        choices=("free", "grammar"),
+        choices=("free", "grammar", "rerank"),
         default="free",
-        help="free uses raw model sampling; grammar masks next tokens to compiler-valid bucket candidates.",
+        help="free samples raw tokens; grammar masks next tokens; rerank scores compiler-valid candidates.",
     )
     p.add_argument(
         "--constraint-max-candidates",
         type=int,
         default=5000,
         help="Maximum compiler-valid candidates to build per bucket for grammar-constrained decoding.",
+    )
+    p.add_argument(
+        "--candidate-source",
+        choices=("builtin", "dataset", "hybrid"),
+        default="builtin",
+        help="Candidate source for grammar/rerank modes. hybrid uses dataset candidates plus builtins.",
+    )
+    p.add_argument(
+        "--rerank-max-candidates",
+        type=int,
+        default=2000,
+        help="Maximum candidates per bucket to score in rerank mode.",
+    )
+    p.add_argument(
+        "--rerank-batch-size",
+        type=int,
+        default=64,
+        help="Number of candidate expressions scored per model forward pass in rerank mode.",
     )
     return p.parse_args()
 
@@ -234,6 +256,144 @@ def generate(
                 break
 
     return decode_ids(tokenizer, new_token_ids), new_token_ids, diagnostics
+
+
+def candidate_expressions_for_bucket(
+    records: list[dict],
+    bucket: str,
+    *,
+    source: str,
+    max_candidates: int,
+) -> tuple[str, ...]:
+    if source == "builtin":
+        return build_candidate_expressions(bucket, max_candidates)
+    if source == "dataset":
+        return build_dataset_candidate_expressions(
+            records,
+            bucket,
+            max_candidates=max_candidates,
+            include_builtin=False,
+        )
+    return build_dataset_candidate_expressions(
+        records,
+        bucket,
+        max_candidates=max_candidates,
+        include_builtin=True,
+    )
+
+
+def score_candidate_batch(
+    model: CASNativeModel,
+    tokenizer: HybridCASTokenizer,
+    prompt: str,
+    candidates: list[str],
+    device: torch.device,
+) -> list[dict]:
+    """Teacher-force score candidates by prompt-conditioned mean log-prob."""
+    prompt_ids = tokenizer.encode(prompt, max_length=512)
+    if prompt_ids and prompt_ids[-1] == tokenizer.EOS_ID:
+        prompt_ids = prompt_ids[:-1]
+    if not prompt_ids:
+        raise ValueError("prompt encoded to no tokens")
+
+    encoded_candidates: list[tuple[str, list[int], list[int], list[bool]]] = []
+    max_len = 0
+    for candidate in candidates:
+        candidate_ids = tokenizer.encode(candidate, max_length=512, add_special=False)
+        if not candidate_ids:
+            continue
+        full = prompt_ids + candidate_ids + [tokenizer.EOS_ID]
+        if len(full) < 2 or len(full) > 512:
+            continue
+        input_ids = full[:-1]
+        target_ids = full[1:]
+        # The logit at position len(prompt_ids)-1 predicts the first candidate
+        # token. Everything before that belongs to the prompt and is ignored.
+        target_mask = [idx >= len(prompt_ids) - 1 for idx in range(len(target_ids))]
+        encoded_candidates.append((candidate, input_ids, target_ids, target_mask))
+        max_len = max(max_len, len(input_ids))
+
+    if not encoded_candidates:
+        return []
+
+    pad_id = tokenizer.pad_id()
+    input_tensor = torch.full((len(encoded_candidates), max_len), pad_id, dtype=torch.long, device=device)
+    target_tensor = torch.full((len(encoded_candidates), max_len), pad_id, dtype=torch.long, device=device)
+    mask_tensor = torch.zeros((len(encoded_candidates), max_len), dtype=torch.bool, device=device)
+
+    for row, (_, input_ids, target_ids, target_mask) in enumerate(encoded_candidates):
+        seq_len = len(input_ids)
+        input_tensor[row, :seq_len] = torch.tensor(input_ids, dtype=torch.long, device=device)
+        target_tensor[row, :seq_len] = torch.tensor(target_ids, dtype=torch.long, device=device)
+        mask_tensor[row, :seq_len] = torch.tensor(target_mask, dtype=torch.bool, device=device)
+
+    out = model(input_tensor)
+    log_probs = torch.log_softmax(out["logits"], dim=-1)
+    gathered = log_probs.gather(-1, target_tensor.unsqueeze(-1)).squeeze(-1)
+    gathered = gathered.masked_fill(~mask_tensor, 0.0)
+    token_counts = mask_tensor.sum(dim=1).clamp(min=1)
+    sum_logprobs = gathered.sum(dim=1)
+    mean_logprobs = sum_logprobs / token_counts
+
+    scored = []
+    for row, (candidate, candidate_input, _, _) in enumerate(encoded_candidates):
+        scored.append(
+            {
+                "candidate": candidate,
+                "token_count": int(token_counts[row].item()),
+                "candidate_token_count": max(len(candidate_input) - len(prompt_ids), 0),
+                "sum_logprob": float(sum_logprobs[row].item()),
+                "mean_logprob": float(mean_logprobs[row].item()),
+            }
+        )
+    return scored
+
+
+def rerank_generate(
+    model: CASNativeModel,
+    tokenizer: HybridCASTokenizer,
+    prompt: str,
+    candidates: tuple[str, ...],
+    device: torch.device,
+    *,
+    batch_size: int,
+) -> tuple[str, list[int], dict]:
+    """Choose the highest-probability compiler-valid candidate."""
+    scored: list[dict] = []
+    model.eval()
+    with torch.no_grad():
+        for start in range(0, len(candidates), batch_size):
+            scored.extend(
+                score_candidate_batch(
+                    model,
+                    tokenizer,
+                    prompt,
+                    list(candidates[start : start + batch_size]),
+                    device,
+                )
+            )
+    if not scored:
+        return "", [], {
+            "decode_mode": "rerank",
+            "candidate_count": len(candidates),
+            "scored_candidate_count": 0,
+            "termination_reason": "no_scoreable_candidates",
+        }
+
+    scored.sort(key=lambda item: (item["mean_logprob"], item["sum_logprob"]), reverse=True)
+    best = scored[0]
+    generated = str(best["candidate"])
+    token_ids = tokenizer.encode(generated, max_length=512, add_special=False)
+    return generated, token_ids, {
+        "decode_mode": "rerank",
+        "candidate_count": len(candidates),
+        "scored_candidate_count": len(scored),
+        "termination_reason": "reranked_candidate",
+        "best_mean_logprob": best["mean_logprob"],
+        "best_sum_logprob": best["sum_logprob"],
+        "best_token_count": best["token_count"],
+        "top_candidates": scored[:5],
+    }
 
 
 def format_generation_prompt(prompt: str, task: str) -> str:
@@ -397,17 +557,22 @@ def main() -> int:
     for b in BUCKETS:
         print(f"      {b}: {len(by_bucket.get(b, []))} records")
 
+    candidate_banks: dict[str, tuple[str, ...]] = {}
     constraints: dict[str, CandidateTrieConstraint] = {}
-    if args.decode_mode == "grammar":
-        print("[4b/5] Building grammar constraints...")
+    if args.decode_mode in {"grammar", "rerank"}:
+        print("[4b/5] Building candidate banks...")
         for b in BUCKETS:
-            constraint = CandidateTrieConstraint(
-                tokenizer,
+            max_candidates = args.rerank_max_candidates if args.decode_mode == "rerank" else args.constraint_max_candidates
+            candidates = candidate_expressions_for_bucket(
+                records,
                 b,
-                max_candidates=args.constraint_max_candidates,
+                source=args.candidate_source,
+                max_candidates=max_candidates,
             )
-            constraints[b] = constraint
-            print(f"      {b}: {constraint.candidate_count} compiler-valid candidates")
+            candidate_banks[b] = candidates
+            print(f"      {b}: {len(candidates)} compiler-valid candidates ({args.candidate_source})")
+            if args.decode_mode == "grammar":
+                constraints[b] = CandidateTrieConstraint(tokenizer, b, candidates=candidates)
 
     print("[5/5] Generating samples...")
     rng = random.Random(args.seed)
@@ -426,17 +591,27 @@ def main() -> int:
             generation_prompt = format_generation_prompt(prompt, args.task)
             constraint = constraints.get(bucket)
             try:
-                generated, token_ids, decode_diagnostics = generate(
-                    model,
-                    tokenizer,
-                    generation_prompt,
-                    max_new_tokens=args.max_new_tokens,
-                    min_new_tokens=args.min_new_tokens,
-                    temperature=args.temperature,
-                    top_p=args.top_p,
-                    device=device,
-                    constraint=constraint,
-                )
+                if args.decode_mode == "rerank":
+                    generated, token_ids, decode_diagnostics = rerank_generate(
+                        model,
+                        tokenizer,
+                        generation_prompt,
+                        candidate_banks.get(bucket, ()),
+                        device,
+                        batch_size=args.rerank_batch_size,
+                    )
+                else:
+                    generated, token_ids, decode_diagnostics = generate(
+                        model,
+                        tokenizer,
+                        generation_prompt,
+                        max_new_tokens=args.max_new_tokens,
+                        min_new_tokens=args.min_new_tokens,
+                        temperature=args.temperature,
+                        top_p=args.top_p,
+                        device=device,
+                        constraint=constraint,
+                    )
             except Exception as exc:
                 print(f"  [{bucket} #{i}] generation FAILED: {type(exc).__name__}: {exc}")
                 generated = ""
@@ -449,17 +624,19 @@ def main() -> int:
                     "termination_reason": f"error:{type(exc).__name__}",
                 }
             compile_result = try_compile(generated, bucket)
+            ground_truth = str(rec.get("cas_expression", "") or "").strip()
             sample = {
                 "bucket": bucket,
                 "sample_idx": i,
                 "prompt": prompt,
                 "generation_prompt": generation_prompt,
                 "ground_truth_response": rec.get("response") or rec.get("assistant_response") or "",
-                "ground_truth_cas_expression": rec.get("cas_expression", ""),
+                "ground_truth_cas_expression": ground_truth,
                 "generated_response": generated,
                 "generated_token_ids": token_ids,
                 "decode_mode": args.decode_mode,
                 "decode_diagnostics": decode_diagnostics,
+                "exact_match": generated.strip() == ground_truth,
                 "whole_compile_valid": compile_result["whole_valid"],
                 "compile_valid_anywhere": compile_result["any_valid"],
                 "fragment_compile_valid": compile_result["fragment_valid"],
@@ -478,6 +655,8 @@ def main() -> int:
 
         bucket_summary[bucket] = {
             "n_total": len(bucket_results),
+            "n_exact_match": sum(1 for s in bucket_results if s["exact_match"]),
+            "exact_match_rate": sum(1 for s in bucket_results if s["exact_match"]) / max(len(bucket_results), 1),
             "n_whole_valid": sum(1 for s in bucket_results if s["whole_compile_valid"]),
             "whole_valid_rate": sum(1 for s in bucket_results if s["whole_compile_valid"]) / max(len(bucket_results), 1),
             "n_valid": sum(1 for s in bucket_results if s["compile_valid_anywhere"]),
@@ -509,10 +688,14 @@ def main() -> int:
                 "seed": args.seed,
                 "task": args.task,
                 "decode_mode": args.decode_mode,
+                "candidate_source": args.candidate_source,
                 "constraint_max_candidates": args.constraint_max_candidates,
+                "rerank_max_candidates": args.rerank_max_candidates,
+                "rerank_batch_size": args.rerank_batch_size,
                 "causal_lm": causal_lm,
                 "tokenizer": tokenizer.metadata(),
                 "tokenizer_path": str(tokenizer_path) if tokenizer_path is not None else None,
+                "overall_exact_match_rate": sum(1 for s in all_samples if s["exact_match"]) / max(len(all_samples), 1),
                 "overall_whole_valid_rate": sum(1 for s in all_samples if s["whole_compile_valid"]) / max(len(all_samples), 1),
                 "overall_valid_rate": sum(1 for s in all_samples if s["compile_valid_anywhere"]) / max(len(all_samples), 1),
                 "overall_fragment_valid_rate": sum(1 for s in all_samples if s["fragment_compile_valid"]) / max(len(all_samples), 1),
