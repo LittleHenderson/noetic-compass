@@ -8,10 +8,13 @@ from cas_native.inference.constrained_sampling import (
     CandidateTrieConstraint,
     build_candidate_expressions,
     build_dataset_candidate_expressions,
+    candidate_matches_slots,
     classify_expression_family,
+    expression_slots,
     expression_families,
     filter_candidates_for_prompt,
     infer_prompt_families,
+    infer_prompt_slots,
     infer_prompt_required_terms,
 )
 from cas_native.training.tokenizer import HybridCASTokenizer
@@ -102,6 +105,70 @@ def test_prompt_required_terms_filter_anchors_omega_name():
 
     assert filtered == (candidates[0],)
     assert diagnostics["prompt_required_terms"] == ["omega_clarity"]
+
+
+def test_expression_slots_extract_typed_components():
+    slots = expression_slots("Θ(Ω_safe_judgment) = 0.5*^2^P_{F2}|A + 0.5*^7^O_{F3}|f → Ω_safe_judgment")
+
+    assert slots["omega_terms"] == ("omega_safe_judgment",)
+    assert slots["noetics"] == ("2", "7")
+    assert slots["domains"] == ("P", "O")
+    assert slots["drives"] == ("F2", "F3")
+    assert slots["registers"] == ("A", "f")
+
+
+def test_prompt_slots_extract_carriers_foundations_and_cluster_noetics():
+    assert infer_prompt_slots(
+        "Explain the Product(Foundations, Domains) typed Cartesian product.",
+        "meta_logic",
+    ) == {"carriers": ("Domains", "Foundations")}
+
+    assert infer_prompt_slots(
+        "Explain how Foundation_1..Foundation_7 cover SubFoundations as a typed CAS family.",
+        "meta_logic",
+    ) == {"carriers": ("SubFoundations",), "foundations": ("F1", "F2", "F3", "F4", "F5", "F6", "F7")}
+
+    assert infer_prompt_slots(
+        "Explain the typed NoeticCluster over noetics 8, 3.",
+        "meta_logic",
+    ) == {"noetics": ("8", "3")}
+
+
+def test_prompt_slot_filter_selects_product_carriers():
+    candidates = (
+        "Product(Noetics, Noetics)",
+        "Product(Foundations, Domains)",
+        "Product(States, Drives)",
+    )
+
+    filtered, diagnostics = filter_candidates_for_prompt(
+        candidates,
+        "Explain the Product(Foundations, Domains) typed Cartesian product.",
+        "meta_logic",
+    )
+
+    assert filtered == ("Product(Foundations, Domains)",)
+    assert diagnostics["prompt_slots"] == {"carriers": ["Domains", "Foundations"]}
+    assert diagnostics["post_slot_candidate_count"] == 1
+    assert diagnostics["slot_filter_fallback"] is False
+
+
+def test_prompt_slot_filter_selects_cluster_members_when_available():
+    candidates = (
+        "NoeticCluster{^0, ^5, ^6, ^1, ^7}",
+        "NoeticCluster{^8, ^3}",
+        "NoeticCluster{^8, ^3, ^4}",
+    )
+
+    filtered, diagnostics = filter_candidates_for_prompt(
+        candidates,
+        "Explain the typed NoeticCluster over noetics 8, 3.",
+        "meta_logic",
+    )
+
+    assert filtered == ("NoeticCluster{^8, ^3}", "NoeticCluster{^8, ^3, ^4}")
+    assert candidate_matches_slots(filtered[0], {"noetics": ("8", "3")})
+    assert diagnostics["prompt_slots"] == {"noetics": ["8", "3"]}
 
 
 def test_prompt_filter_falls_back_when_no_candidate_survives():

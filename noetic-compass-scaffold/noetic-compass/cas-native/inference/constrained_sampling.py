@@ -285,6 +285,24 @@ _RIGHT_ANGLE = "\u27e9"
 
 _REGISTER_STATE_RE = re.compile(r"\^\d+(?:\^[PCEO])?(?:_\{F_?\d+\})?\|[TAfE]")
 _STATE_RE = re.compile(r"\^\d+\^[PCEO](?:_\{F_?\d+\})?")
+_FOUNDATION_RE = re.compile(r"\bFoundation[_\s-]?([1-7])\b", re.IGNORECASE)
+_DRIVE_RE = re.compile(r"\bF_?([1-7])\b", re.IGNORECASE)
+_NOETIC_REF_RE = re.compile(r"\^([0-9])")
+
+_CARRIERS = ("Noetics", "Domains", "Drives", "Registers", "States", "Foundations", "SubFoundations")
+_DOMAIN_WORDS = {
+    "principled": "P",
+    "principle": "P",
+    "cognitive": "C",
+    "evaluative": "E",
+    "operational": "O",
+}
+_REGISTER_WORDS = {
+    "transcendent": "T",
+    "analytical": "A",
+    "affective": "f",
+    "embodied": "E",
+}
 
 
 def _normalize_symbol_text(text: str) -> str:
@@ -304,6 +322,10 @@ def _has_any(text: str, needles: Iterable[str]) -> bool:
 
 def _has_word(text: str, word: str) -> bool:
     return bool(re.search(rf"\b{re.escape(word)}\b", text))
+
+
+def _ordered_unique(items: Iterable[str]) -> tuple[str, ...]:
+    return tuple(dict.fromkeys(str(item) for item in items if str(item)))
 
 
 def expression_families(expr: str) -> frozenset[str]:
@@ -534,6 +556,129 @@ def candidate_matches_required_terms(expr: str, required_terms: Iterable[str]) -
     return all(term in text for term in required_terms)
 
 
+def _numbers_after_keyword(text: str, keyword_pattern: str) -> tuple[str, ...]:
+    numbers: list[str] = []
+    for match in re.finditer(rf"{keyword_pattern}\s+([0-9](?:\s*(?:,|and)\s*[0-9])*)", text):
+        numbers.extend(re.findall(r"[0-9]", match.group(1)))
+    return _ordered_unique(numbers)
+
+
+def _foundation_range(text: str) -> tuple[str, ...]:
+    for match in re.finditer(r"foundation[_\s-]?([1-7])\s*(?:\.\.|-|through|to)\s*foundation?[_\s-]?([1-7])", text):
+        start, end = int(match.group(1)), int(match.group(2))
+        if start <= end:
+            return tuple(f"F{i}" for i in range(start, end + 1))
+    return ()
+
+
+def expression_slots(expr: str) -> dict[str, tuple[str, ...]]:
+    """Extract typed slot values from a CAS expression candidate."""
+    expr = str(expr or "")
+    slots: dict[str, tuple[str, ...]] = {
+        "omega_terms": infer_prompt_required_terms(expr),
+        "carriers": _ordered_unique(carrier for carrier in _CARRIERS if re.search(rf"\b{carrier}\b", expr)),
+        "noetics": _ordered_unique(_NOETIC_REF_RE.findall(expr)),
+        "domains": _ordered_unique(re.findall(r"\^\d+\^([PCEO])", expr)),
+        "drives": _ordered_unique(f"F{drive}" for drive in _DRIVE_RE.findall(expr)),
+        "foundations": _ordered_unique(f"F{n}" for n in _FOUNDATION_RE.findall(expr)),
+        "registers": _ordered_unique(re.findall(r"\|([TAfE])", expr)),
+    }
+
+    coordinate = re.search(r"(?:Coordinate\{|<)\s*\^\d+\s*,\s*([PCEO])\s*,\s*F_?([1-7])\s*,\s*([TAfE])", expr)
+    if coordinate:
+        domain, drive, register = coordinate.groups()
+        slots["domains"] = _ordered_unique((*slots["domains"], domain))
+        slots["drives"] = _ordered_unique((*slots["drives"], f"F{drive}"))
+        slots["registers"] = _ordered_unique((*slots["registers"], register))
+
+    return {key: value for key, value in slots.items() if value}
+
+
+def infer_prompt_slots(prompt: str, bucket: str) -> dict[str, tuple[str, ...]]:
+    """Infer concrete typed CAS slots requested by a prompt.
+
+    This is intentionally conservative: it only extracts explicit slot
+    evidence. Generic words like "domain" or "register" do not force values.
+    """
+    text = _normalize_symbol_text(prompt)
+    slots: dict[str, tuple[str, ...]] = {}
+
+    omega_terms = infer_prompt_required_terms(prompt)
+    if omega_terms:
+        slots["omega_terms"] = omega_terms
+
+    explicit_noetics = _ordered_unique(_NOETIC_REF_RE.findall(prompt))
+    named_noetics = _numbers_after_keyword(text, r"\bnoetics?\b")
+
+    carriers = _ordered_unique(carrier for carrier in _CARRIERS if re.search(rf"\b{carrier.lower()}\b", text))
+    if named_noetics:
+        carriers = tuple(carrier for carrier in carriers if carrier != "Noetics")
+    if carriers:
+        slots["carriers"] = carriers
+
+    if explicit_noetics or named_noetics:
+        slots["noetics"] = _ordered_unique((*explicit_noetics, *named_noetics))
+
+    domains = _ordered_unique(
+        domain
+        for word, domain in _DOMAIN_WORDS.items()
+        if _has_word(text, word)
+    )
+    explicit_domains = _ordered_unique(re.findall(r"\b(?:domain|domains?)\s+([PCEO])\b", prompt))
+    if domains or explicit_domains:
+        slots["domains"] = _ordered_unique((*domains, *explicit_domains))
+
+    registers = _ordered_unique(
+        register
+        for word, register in _REGISTER_WORDS.items()
+        if _has_word(text, word)
+    )
+    explicit_register_matches = re.findall(r"(?:\|([TAfE])\b|\bregister\s+([TAfE])\b)", prompt)
+    flattened_registers = _ordered_unique(
+        item
+        for pair in explicit_register_matches
+        for item in pair
+        if item
+    )
+    if registers or flattened_registers:
+        slots["registers"] = _ordered_unique((*registers, *flattened_registers))
+
+    foundation_values = _ordered_unique((
+        *_foundation_range(text),
+        *(f"F{n}" for n in _FOUNDATION_RE.findall(prompt)),
+        *(f"F{n}" for n in _DRIVE_RE.findall(prompt)),
+    ))
+    named_foundations = _numbers_after_keyword(text, r"\bfoundations?\b")
+    if named_foundations:
+        foundation_values = _ordered_unique((*foundation_values, *(f"F{n}" for n in named_foundations)))
+    if foundation_values:
+        # Foundation_N and F_N occupy the same finite 1..7 slot space in these
+        # prompt/candidate filters; the compiler still owns final type checks.
+        slots["foundations"] = foundation_values
+        if bucket != "meta_logic":
+            slots["drives"] = foundation_values
+
+    return slots
+
+
+def candidate_matches_slots(expr: str, slots: dict[str, Iterable[str]]) -> bool:
+    candidate_slots = expression_slots(expr)
+    for key, raw_values in slots.items():
+        wanted = set(raw_values)
+        if not wanted:
+            continue
+        if not wanted.issubset(set(candidate_slots.get(key, ()))):
+            return False
+    return True
+
+
+def filter_candidates_by_slots(
+    candidates: Iterable[str],
+    slots: dict[str, Iterable[str]],
+) -> tuple[str, ...]:
+    return tuple(expr for expr in candidates if candidate_matches_slots(expr, slots))
+
+
 _SPECIFIC_FILTER_FAMILIES = {
     "production",
     "omega_integration",
@@ -581,6 +726,7 @@ def filter_candidates_for_prompt(
     original = tuple(candidates)
     prompt_families = infer_prompt_families(prompt, bucket)
     required_terms = infer_prompt_required_terms(prompt)
+    prompt_slots = infer_prompt_slots(prompt, bucket)
 
     by_family = filter_candidates_by_family(original, prompt_families)
     selected = by_family if len(by_family) >= min_candidates else original
@@ -594,16 +740,28 @@ def filter_candidates_for_prompt(
         else:
             term_fallback = True
 
+    slot_fallback = False
+    by_slots = tuple()
+    if prompt_slots:
+        by_slots = filter_candidates_by_slots(selected, prompt_slots)
+        if len(by_slots) >= min_candidates:
+            selected = by_slots
+        else:
+            slot_fallback = True
+
     diagnostics = {
         "family_filter": "prompt",
         "prompt_families": list(prompt_families),
         "prompt_required_terms": list(required_terms),
+        "prompt_slots": {key: list(value) for key, value in prompt_slots.items()},
         "pre_filter_candidate_count": len(original),
         "post_family_candidate_count": len(by_family),
         "post_term_candidate_count": len(by_terms) if required_terms else len(selected),
+        "post_slot_candidate_count": len(by_slots) if prompt_slots else len(selected),
         "post_filter_candidate_count": len(selected),
         "family_filter_fallback": bool(family_fallback),
         "term_filter_fallback": bool(term_fallback),
+        "slot_filter_fallback": bool(slot_fallback),
     }
     return selected, diagnostics
 
