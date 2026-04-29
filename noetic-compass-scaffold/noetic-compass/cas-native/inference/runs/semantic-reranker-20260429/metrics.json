@@ -1,0 +1,92 @@
+{
+  "dataset": "/root/workspace/cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl",
+  "tokenizer": "/root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-fifth-full-20260428-194518/tokenizer.json",
+  "train_record_limit": 9000,
+  "train_pair_count": 33244,
+  "eval_record_count": 30,
+  "candidate_bank_sizes": {
+    "v74_baseline": 1852,
+    "v75_register": 3964,
+    "v77_rule_four": 1673,
+    "v77_omega": 1798,
+    "v76_production": 1005,
+    "meta_logic": 858
+  },
+  "pair_build": {
+    "eligible_records": 8311,
+    "skipped_eval_records": 30,
+    "skipped_no_prompt_or_target": 0,
+    "skipped_bucket": 0,
+    "skipped_target_not_scoreable": 1659,
+    "per_bucket_pairs": {
+      "v75_register": 9312,
+      "v77_rule_four": 4892,
+      "v77_omega": 7980,
+      "v74_baseline": 4840,
+      "meta_logic": 3192,
+      "v76_production": 3028
+    }
+  },
+  "epochs": 8,
+  "batch_size": 512,
+  "learning_rate": 0.001,
+  "seed": 42,
+  "device": "cuda",
+  "epoch_metrics": [
+    {
+      "loss": 0.6641357513574454,
+      "pairwise_accuracy": 0.5521250816491934,
+      "batches": 65.0,
+      "epoch": 1
+    },
+    {
+      "loss": 0.5970130324363708,
+      "pairwise_accuracy": 0.6058136719923753,
+      "batches": 65.0,
+      "epoch": 2
+    },
+    {
+      "loss": 0.586017985527332,
+      "pairwise_accuracy": 0.6169105025438162,
+      "batches": 65.0,
+      "epoch": 3
+    },
+    {
+      "loss": 0.5782071993901179,
+      "pairwise_accuracy": 0.629997324026548,
+      "batches": 65.0,
+      "epoch": 4
+    },
+    {
+      "loss": 0.5718975177178016,
+      "pairwise_accuracy": 0.6358402857413659,
+      "batches": 65.0,
+      "epoch": 5
+    },
+    {
+      "loss": 0.5643612907483028,
+      "pairwise_accuracy": 0.6457033780904916,
+      "batches": 65.0,
+      "epoch": 6
+    },
+    {
+      "loss": 0.557295444378486,
+      "pairwise_accuracy": 0.6534320464501014,
+      "batches": 65.0,
+      "epoch": 7
+    },
+    {
+      "loss": 0.5525207684590266,
+      "pairwise_accuracy": 0.6567542525438163,
+      "batches": 65.0,
+      "epoch": 8
+    }
+  ],
+  "wall_clock_seconds": 360.57920241355896,
+  "model_config": {
+    "vocab_size": 698,
+    "d_model": 192,
+    "hidden_dim": 384,
+    "dropout": 0.1
+  }
+}
