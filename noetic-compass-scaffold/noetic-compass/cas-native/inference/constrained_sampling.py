@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from functools import lru_cache
+import re
 from typing import Iterable, Protocol
 
 from api.notation import compile_expression
@@ -265,6 +266,342 @@ def build_dataset_candidate_expressions(
                 break
 
     return tuple(candidates)
+
+
+_MEMBER = "\u2208"
+_NOT_MEMBER = "\u2209"
+_SUBSET = "\u2282"
+_SUBSET_EQ = "\u2286"
+_SUPERSET = "\u2283"
+_SUPERSET_EQ = "\u2287"
+_UNION = "\u222a"
+_INTERSECTION = "\u2229"
+_DIFFERENCE = "\u2216"
+_PRODUCT = "\u00d7"
+_OMEGA = "\u03a9"
+_THETA = "\u0398"
+_LEFT_ANGLE = "\u27e8"
+_RIGHT_ANGLE = "\u27e9"
+
+_REGISTER_STATE_RE = re.compile(r"\^\d+(?:\^[PCEO])?(?:_\{F_?\d+\})?\|[TAfE]")
+_STATE_RE = re.compile(r"\^\d+\^[PCEO](?:_\{F_?\d+\})?")
+
+
+def _normalize_symbol_text(text: str) -> str:
+    normalized = str(text or "").lower()
+    return (
+        normalized.replace("\u03c9_", "omega_")
+        .replace("\u03a9_", "omega_")
+        .replace("omega-", "omega_")
+        .replace("omega ", "omega_")
+        .replace("theta", "\u03b8")
+    )
+
+
+def _has_any(text: str, needles: Iterable[str]) -> bool:
+    return any(needle in text for needle in needles)
+
+
+def expression_families(expr: str) -> frozenset[str]:
+    """Return structural families present in a compiler candidate expression."""
+    expr = str(expr or "").strip()
+    normalized = _normalize_symbol_text(expr)
+    families: set[str] = set()
+
+    if expr.startswith(f"{_THETA}(") or normalized.startswith("\u03b8("):
+        families.add("production")
+    if _OMEGA in expr or "omega_" in normalized:
+        families.add("omega")
+    if _PRODUCT in expr:
+        families.add("register_integration")
+        if "omega_" in normalized or _OMEGA in expr:
+            families.add("omega_integration")
+    if " + " in expr and "|" in expr:
+        families.add("register_copresence")
+    if f"|{_LEFT_ANGLE}" in expr or "|<" in expr:
+        families.add("register_set")
+    if _REGISTER_STATE_RE.search(expr):
+        families.add("register_state")
+
+    if expr.startswith("Product("):
+        families.add("product")
+    if expr.startswith("Coordinate{") or expr.startswith("CASCoordinate{") or (
+        expr.startswith(_LEFT_ANGLE) and expr.endswith(_RIGHT_ANGLE)
+    ):
+        families.add("coordinate")
+    if expr.startswith("Pullback("):
+        families.add("pullback")
+    if expr.startswith("CoverOf("):
+        families.add("cover")
+    if expr.startswith("PartitionOf("):
+        families.add("partition")
+
+    if _UNION in expr or "Union(" in expr:
+        families.add("set_union")
+        families.add("set_operation")
+    if _INTERSECTION in expr or "Intersection(" in expr:
+        families.add("set_intersection")
+        families.add("set_operation")
+    if _DIFFERENCE in expr or "Difference(" in expr:
+        families.add("set_difference")
+        families.add("set_operation")
+    if _has_any(expr, (_MEMBER, _NOT_MEMBER)):
+        families.add("membership")
+    if _has_any(expr, (_SUBSET, _SUBSET_EQ, _SUPERSET, _SUPERSET_EQ)):
+        families.add("subset")
+    if expr.startswith("|") and expr.endswith("|") and len(expr) > 2:
+        families.add("cardinality")
+
+    contains_set_operator = bool({"set_operation", "membership", "subset", "cardinality"} & families)
+    if expr.startswith("RelationCluster{"):
+        families.add("relation_cluster")
+    if expr.startswith("StateVariantCluster{"):
+        families.add("state_variant_cluster")
+    if expr.startswith("StateCluster{"):
+        families.add("state_cluster")
+        if not contains_set_operator:
+            families.add("state_cluster_literal")
+    if expr.startswith("NoeticCluster{"):
+        families.add("noetic_cluster")
+        if not contains_set_operator:
+            families.add("noetic_cluster_literal")
+
+    if expr.startswith("\u03a6<") or expr.startswith("Phi<"):
+        families.add("fractal")
+    if expr.startswith("RPM("):
+        families.add("rpm")
+    if _STATE_RE.search(expr):
+        families.add("v74_state")
+    if any(op in expr for op in (" * ", " -> ", " \u2192 ")) and _STATE_RE.search(expr):
+        families.add("v74_composition")
+
+    if not families:
+        families.add("unknown")
+    return frozenset(families)
+
+
+_FAMILY_PRIORITY = (
+    "production",
+    "omega_integration",
+    "register_integration",
+    "register_copresence",
+    "register_set",
+    "register_state",
+    "pullback",
+    "partition",
+    "cover",
+    "product",
+    "coordinate",
+    "set_union",
+    "set_intersection",
+    "set_difference",
+    "set_operation",
+    "membership",
+    "subset",
+    "cardinality",
+    "relation_cluster",
+    "state_variant_cluster",
+    "state_cluster_literal",
+    "state_cluster",
+    "noetic_cluster_literal",
+    "noetic_cluster",
+    "fractal",
+    "rpm",
+    "v74_composition",
+    "v74_state",
+    "unknown",
+)
+
+
+def classify_expression_family(expr: str) -> str:
+    """Return the primary family for diagnostics and tests."""
+    families = expression_families(expr)
+    for family in _FAMILY_PRIORITY:
+        if family in families:
+            return family
+    return "unknown"
+
+
+def infer_prompt_families(prompt: str, bucket: str) -> tuple[str, ...]:
+    """Infer which structural families a natural-language prompt is asking for."""
+    text = _normalize_symbol_text(prompt)
+    families: list[str] = []
+
+    def add(*items: str) -> None:
+        for item in items:
+            if item not in families:
+                families.append(item)
+
+    if _has_any(text, ("recipe", "produces", "produce", "production", "ingredient", "yield", "catalyst", "inhibitor", "leakage", "outcome")):
+        add("production")
+    if _has_any(text, ("emergent register", "omega_", "arises", "unified", "integrat", "cross-register")):
+        add("omega_integration", "register_integration")
+    if _has_any(text, ("co-present", "copresent", "co presence", "co-presence")):
+        add("register_copresence")
+    if _has_any(text, ("clear register", "register manifestation", "register state")):
+        add("register_state")
+    if "register set" in text:
+        add("register_set")
+
+    if _has_any(text, ("finite-meet", "pullback")):
+        add("pullback")
+    if "partition" in text:
+        add("partition")
+    if "cover" in text:
+        add("cover")
+    if _has_any(text, ("cartesian product", "typed product", "product(")):
+        add("product")
+    elif "product" in text and bucket == "meta_logic":
+        add("product")
+    if _has_any(text, ("coordinate", "angle-bracket", "angle bracket")):
+        add("coordinate")
+    if "union" in text or "\u222a" in text:
+        add("set_union")
+    if "intersection" in text or "\u2229" in text:
+        add("set_intersection")
+    if _has_any(text, ("set-difference", "set difference", "difference operation")) or "\u2216" in text:
+        add("set_difference")
+    if _has_any(text, ("union", "intersection", "set-difference", "set difference", "difference operation", "combine under")):
+        add("set_operation")
+    if _has_any(text, ("belongs", "membership", "member of", "element of")):
+        add("membership")
+    if _has_any(text, ("subset", "contained", "typed-subset", "superset")):
+        add("subset")
+    if _has_any(text, ("cardinality", "how many", "count of")):
+        add("cardinality")
+    if "relation cluster" in text:
+        add("relation_cluster")
+    if "statevariantcluster" in text or "state variant" in text:
+        add("state_variant_cluster")
+    if "statecluster" in text or "state cluster" in text:
+        if "collect" in text or "typed state cluster" in text or "spanning" in text:
+            add("state_cluster_literal")
+        add("state_cluster")
+    if "noeticcluster" in text or "noetic cluster" in text:
+        if "containing" in text or "typed noetic cluster" in text or "over noetics" in text:
+            add("noetic_cluster_literal")
+        add("noetic_cluster")
+
+    if _has_any(text, ("fractal", "phi<", "\u03c6<")):
+        add("fractal")
+    if "rpm" in text:
+        add("rpm")
+    if _has_any(text, ("composition", "transition", "pathway")) and bucket == "v74_baseline":
+        add("v74_composition")
+
+    if not families:
+        if bucket == "v76_production":
+            add("production")
+        elif bucket == "v77_omega":
+            add("omega_integration", "register_integration")
+        elif bucket == "v77_rule_four":
+            add("register_copresence", "omega_integration", "register_integration")
+        elif bucket == "v75_register":
+            add("register_state", "register_copresence", "register_set")
+        elif bucket == "v74_baseline":
+            add("v74_state", "v74_composition", "fractal", "rpm")
+
+    return tuple(families)
+
+
+_KNOWN_OMEGA_TERMS = {
+    _normalize_symbol_text(name)
+    for name in (*OMEGA_NAMES, *PRODUCTION_NAMES)
+}
+
+
+def infer_prompt_required_terms(prompt: str) -> tuple[str, ...]:
+    """Extract exact semantic anchors, such as Omega_clarity, when present."""
+    text = _normalize_symbol_text(prompt)
+    terms: list[str] = []
+    for match in re.finditer(r"\bomega([_\s-]+)([a-z][a-z0-9_]*)", text):
+        separator, stem = match.groups()
+        term = f"omega_{stem.strip('_')}"
+        # Plain "omega names" should not force a bogus target; exact
+        # underscore form or known Omega names are safe enough to filter by.
+        if "_" in separator or term in _KNOWN_OMEGA_TERMS:
+            if term not in terms:
+                terms.append(term)
+    return tuple(terms)
+
+
+def candidate_matches_required_terms(expr: str, required_terms: Iterable[str]) -> bool:
+    text = _normalize_symbol_text(expr)
+    return all(term in text for term in required_terms)
+
+
+_SPECIFIC_FILTER_FAMILIES = {
+    "production",
+    "omega_integration",
+    "register_copresence",
+    "register_set",
+    "register_state",
+    "pullback",
+    "partition",
+    "cover",
+    "product",
+    "coordinate",
+    "set_union",
+    "set_intersection",
+    "set_difference",
+    "membership",
+    "subset",
+    "cardinality",
+    "relation_cluster",
+    "state_variant_cluster",
+    "state_cluster_literal",
+    "noetic_cluster_literal",
+    "fractal",
+    "rpm",
+    "v74_composition",
+}
+
+
+def filter_candidates_by_family(candidates: Iterable[str], families: Iterable[str]) -> tuple[str, ...]:
+    wanted = set(families)
+    if not wanted:
+        return tuple(candidates)
+    specific_wanted = wanted & _SPECIFIC_FILTER_FAMILIES
+    active_wanted = specific_wanted or wanted
+    return tuple(expr for expr in candidates if expression_families(expr) & active_wanted)
+
+
+def filter_candidates_for_prompt(
+    candidates: Iterable[str],
+    prompt: str,
+    bucket: str,
+    *,
+    min_candidates: int = 1,
+) -> tuple[tuple[str, ...], dict]:
+    """Apply prompt-inferred family and exact-term filters with safe fallback."""
+    original = tuple(candidates)
+    prompt_families = infer_prompt_families(prompt, bucket)
+    required_terms = infer_prompt_required_terms(prompt)
+
+    by_family = filter_candidates_by_family(original, prompt_families)
+    selected = by_family if len(by_family) >= min_candidates else original
+    family_fallback = selected is original and bool(prompt_families)
+
+    by_terms = tuple(expr for expr in selected if candidate_matches_required_terms(expr, required_terms))
+    term_fallback = False
+    if required_terms:
+        if len(by_terms) >= min_candidates:
+            selected = by_terms
+        else:
+            term_fallback = True
+
+    diagnostics = {
+        "family_filter": "prompt",
+        "prompt_families": list(prompt_families),
+        "prompt_required_terms": list(required_terms),
+        "pre_filter_candidate_count": len(original),
+        "post_family_candidate_count": len(by_family),
+        "post_term_candidate_count": len(by_terms) if required_terms else len(selected),
+        "post_filter_candidate_count": len(selected),
+        "family_filter_fallback": bool(family_fallback),
+        "term_filter_fallback": bool(term_fallback),
+    }
+    return selected, diagnostics
 
 
 class CandidateTrieConstraint:

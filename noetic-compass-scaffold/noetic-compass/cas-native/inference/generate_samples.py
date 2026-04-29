@@ -32,6 +32,11 @@ from cas_native.inference.constrained_sampling import (  # noqa: E402
     CandidateTrieConstraint,
     build_candidate_expressions,
     build_dataset_candidate_expressions,
+    candidate_matches_required_terms,
+    expression_families,
+    filter_candidates_for_prompt,
+    infer_prompt_families,
+    infer_prompt_required_terms,
 )
 from cas_native.model import CASNativeConfig, CASNativeModel  # noqa: E402
 from cas_native.training.data_pipeline import load_cas_data  # noqa: E402
@@ -113,6 +118,18 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=64,
         help="Number of candidate expressions scored per model forward pass in rerank mode.",
+    )
+    p.add_argument(
+        "--family-filter",
+        choices=("none", "prompt"),
+        default="none",
+        help="prompt filters candidate banks by inferred structural family before grammar/rerank decoding.",
+    )
+    p.add_argument(
+        "--family-filter-min-candidates",
+        type=int,
+        default=1,
+        help="Minimum candidates required after a prompt-family filter before falling back.",
     )
     return p.parse_args()
 
@@ -589,14 +606,34 @@ def main() -> int:
         for i, rec in enumerate(chosen):
             prompt = rec.get("prompt") or rec.get("user_prompt") or ""
             generation_prompt = format_generation_prompt(prompt, args.task)
+            base_candidates = candidate_banks.get(bucket, ())
+            filter_diagnostics = {
+                "family_filter": args.family_filter,
+                "prompt_families": list(infer_prompt_families(prompt, bucket)),
+                "prompt_required_terms": list(infer_prompt_required_terms(prompt)),
+                "pre_filter_candidate_count": len(base_candidates),
+                "post_filter_candidate_count": len(base_candidates),
+                "family_filter_fallback": False,
+                "term_filter_fallback": False,
+            }
+            sample_candidates = base_candidates
+            if args.decode_mode in {"grammar", "rerank"} and args.family_filter == "prompt":
+                sample_candidates, filter_diagnostics = filter_candidates_for_prompt(
+                    base_candidates,
+                    prompt,
+                    bucket,
+                    min_candidates=args.family_filter_min_candidates,
+                )
             constraint = constraints.get(bucket)
+            if args.decode_mode == "grammar" and args.family_filter == "prompt":
+                constraint = CandidateTrieConstraint(tokenizer, bucket, candidates=sample_candidates)
             try:
                 if args.decode_mode == "rerank":
                     generated, token_ids, decode_diagnostics = rerank_generate(
                         model,
                         tokenizer,
                         generation_prompt,
-                        candidate_banks.get(bucket, ()),
+                        sample_candidates,
                         device,
                         batch_size=args.rerank_batch_size,
                     )
@@ -623,8 +660,15 @@ def main() -> int:
                     "allowed_token_counts": [],
                     "termination_reason": f"error:{type(exc).__name__}",
                 }
+            decode_diagnostics.update(filter_diagnostics)
             compile_result = try_compile(generated, bucket)
             ground_truth = str(rec.get("cas_expression", "") or "").strip()
+            generated_families = sorted(expression_families(generated))
+            prompt_families = filter_diagnostics.get("prompt_families", [])
+            prompt_required_terms = filter_diagnostics.get("prompt_required_terms", [])
+            family_match = not prompt_families or bool(set(prompt_families) & set(generated_families))
+            required_terms_applicable = bool(prompt_required_terms)
+            required_terms_match = candidate_matches_required_terms(generated, prompt_required_terms)
             sample = {
                 "bucket": bucket,
                 "sample_idx": i,
@@ -637,6 +681,12 @@ def main() -> int:
                 "decode_mode": args.decode_mode,
                 "decode_diagnostics": decode_diagnostics,
                 "exact_match": generated.strip() == ground_truth,
+                "generated_families": generated_families,
+                "prompt_families": prompt_families,
+                "family_match": family_match,
+                "prompt_required_terms": prompt_required_terms,
+                "required_terms_applicable": required_terms_applicable,
+                "required_terms_match": required_terms_match,
                 "whole_compile_valid": compile_result["whole_valid"],
                 "compile_valid_anywhere": compile_result["any_valid"],
                 "fragment_compile_valid": compile_result["fragment_valid"],
@@ -650,13 +700,23 @@ def main() -> int:
             print(
                 f"  [{bucket} #{i}] valid={compile_result['any_valid']} "
                 f"structured={compile_result['structured_valid']} "
+                f"family={family_match} terms={required_terms_match} "
                 f"prompt='{prompt[:60]}...' generated='{generated[:60]}...'"
             )
 
+        required_terms_applicable_count = sum(1 for s in bucket_results if s["required_terms_applicable"])
+        required_terms_match_count = sum(
+            1 for s in bucket_results if s["required_terms_applicable"] and s["required_terms_match"]
+        )
         bucket_summary[bucket] = {
             "n_total": len(bucket_results),
             "n_exact_match": sum(1 for s in bucket_results if s["exact_match"]),
             "exact_match_rate": sum(1 for s in bucket_results if s["exact_match"]) / max(len(bucket_results), 1),
+            "n_family_match": sum(1 for s in bucket_results if s["family_match"]),
+            "family_match_rate": sum(1 for s in bucket_results if s["family_match"]) / max(len(bucket_results), 1),
+            "n_required_terms_applicable": required_terms_applicable_count,
+            "n_required_terms_match": required_terms_match_count,
+            "required_terms_match_rate": required_terms_match_count / max(required_terms_applicable_count, 1),
             "n_whole_valid": sum(1 for s in bucket_results if s["whole_compile_valid"]),
             "whole_valid_rate": sum(1 for s in bucket_results if s["whole_compile_valid"]) / max(len(bucket_results), 1),
             "n_valid": sum(1 for s in bucket_results if s["compile_valid_anywhere"]),
@@ -675,6 +735,8 @@ def main() -> int:
     print(f"\nWrote {len(all_samples)} samples to {samples_path}")
 
     summary_path = args.out_dir / "bucket_summary.json"
+    required_terms_applicable_count = sum(1 for s in all_samples if s["required_terms_applicable"])
+    required_terms_match_count = sum(1 for s in all_samples if s["required_terms_applicable"] and s["required_terms_match"])
     with open(summary_path, "w", encoding="utf-8") as f:
         json.dump(
             {
@@ -689,6 +751,8 @@ def main() -> int:
                 "task": args.task,
                 "decode_mode": args.decode_mode,
                 "candidate_source": args.candidate_source,
+                "family_filter": args.family_filter,
+                "family_filter_min_candidates": args.family_filter_min_candidates,
                 "constraint_max_candidates": args.constraint_max_candidates,
                 "rerank_max_candidates": args.rerank_max_candidates,
                 "rerank_batch_size": args.rerank_batch_size,
@@ -696,6 +760,9 @@ def main() -> int:
                 "tokenizer": tokenizer.metadata(),
                 "tokenizer_path": str(tokenizer_path) if tokenizer_path is not None else None,
                 "overall_exact_match_rate": sum(1 for s in all_samples if s["exact_match"]) / max(len(all_samples), 1),
+                "overall_family_match_rate": sum(1 for s in all_samples if s["family_match"]) / max(len(all_samples), 1),
+                "overall_required_terms_applicable": required_terms_applicable_count,
+                "overall_required_terms_match_rate": required_terms_match_count / max(required_terms_applicable_count, 1),
                 "overall_whole_valid_rate": sum(1 for s in all_samples if s["whole_compile_valid"]) / max(len(all_samples), 1),
                 "overall_valid_rate": sum(1 for s in all_samples if s["compile_valid_anywhere"]) / max(len(all_samples), 1),
                 "overall_fragment_valid_rate": sum(1 for s in all_samples if s["fragment_compile_valid"]) / max(len(all_samples), 1),

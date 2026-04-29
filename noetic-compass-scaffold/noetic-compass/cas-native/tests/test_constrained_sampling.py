@@ -8,6 +8,11 @@ from cas_native.inference.constrained_sampling import (
     CandidateTrieConstraint,
     build_candidate_expressions,
     build_dataset_candidate_expressions,
+    classify_expression_family,
+    expression_families,
+    filter_candidates_for_prompt,
+    infer_prompt_families,
+    infer_prompt_required_terms,
 )
 from cas_native.training.tokenizer import HybridCASTokenizer
 
@@ -37,6 +42,72 @@ def test_dataset_candidate_bank_filters_by_bucket_and_compile_validity():
     )
 
     assert candidates == ("^2^P_{F2}|A",)
+
+
+def test_expression_family_classifier_covers_major_structures():
+    assert classify_expression_family("\u0398(\u03a9_safe_judgment) = 0.5*^2^P_{F2}|A \u2192 \u03a9_safe_judgment") == "production"
+    assert classify_expression_family("(^3^P_{F2}|A \u00d7 ^3^P_{F2}|f) = ^3^P|\u03a9_refusal") == "omega_integration"
+    assert classify_expression_family("^3^P_{F2}|A + ^3^P_{F2}|f") == "register_copresence"
+    assert classify_expression_family("Product(Noetics, Domains)") == "product"
+    assert classify_expression_family("Coordinate{^6, P, F2, T}") == "coordinate"
+    assert classify_expression_family("NoeticCluster{^2, ^7} \u2286 Noetics") == "subset"
+    assert "state_cluster_literal" in expression_families("StateCluster{^2^P, ^7^O}")
+
+
+def test_prompt_family_inference_for_meta_logic_examples():
+    assert infer_prompt_families("Describe a typed coordinate with noetic, domain, foundation, and register axes.", "meta_logic") == ("coordinate",)
+    assert infer_prompt_families("Explain how two finite StateCluster terms combine under \u222a.", "meta_logic") == ("set_union", "set_operation", "state_cluster")
+    assert infer_prompt_families("Describe a finite-meet Pullback expression in this admitted CAS fragment.", "meta_logic") == ("pullback",)
+
+
+def test_prompt_family_filter_selects_requested_candidate_shape():
+    candidates = (
+        "Product(Noetics, Domains)",
+        "Coordinate{^6, P, F2, T}",
+        "NoeticCluster{^2, ^7} \u2286 Noetics",
+        "StateCluster{^1^P, ^2^C} \u222a StateCluster{^3^O}",
+    )
+
+    filtered, diagnostics = filter_candidates_for_prompt(
+        candidates,
+        "Describe a typed coordinate with noetic, domain, foundation, and register axes.",
+        "meta_logic",
+    )
+
+    assert filtered == ("Coordinate{^6, P, F2, T}",)
+    assert diagnostics["prompt_families"] == ["coordinate"]
+    assert diagnostics["pre_filter_candidate_count"] == 4
+    assert diagnostics["post_filter_candidate_count"] == 1
+
+
+def test_prompt_required_terms_filter_anchors_omega_name():
+    candidates = (
+        "(^1^E_{F3}|A \u00d7 ^1^E_{F3}|f) = ^1^E|\u03a9_clarity",
+        "(^9^E_{F1}|E \u00d7 ^9^E_{F1}|f) = ^9^E|\u03a9_landing",
+    )
+
+    assert infer_prompt_required_terms("Describe a situation in which the emergent register Omega_clarity arises.") == ("omega_clarity",)
+    filtered, diagnostics = filter_candidates_for_prompt(
+        candidates,
+        "Describe a situation in which the emergent register Omega_clarity arises.",
+        "v77_omega",
+    )
+
+    assert filtered == (candidates[0],)
+    assert diagnostics["prompt_required_terms"] == ["omega_clarity"]
+
+
+def test_prompt_filter_falls_back_when_no_candidate_survives():
+    candidates = ("Product(Noetics, Domains)",)
+
+    filtered, diagnostics = filter_candidates_for_prompt(
+        candidates,
+        "Describe a typed coordinate with noetic, domain, foundation, and register axes.",
+        "meta_logic",
+    )
+
+    assert filtered == candidates
+    assert diagnostics["family_filter_fallback"] is True
 
 
 def test_trie_constraint_allows_only_candidate_prefixes_and_terminal_eos():
