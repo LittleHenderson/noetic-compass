@@ -1,0 +1,89 @@
+{
+  "n_total": 30,
+  "n_exact_match": 12,
+  "exact_match_rate": 0.4,
+  "n_whole_compile_valid": 30,
+  "n_structured_cas_valid": 30,
+  "n_ground_truth_scoreable": 27,
+  "n_ground_truth_top1": 12,
+  "n_ground_truth_top5": 24,
+  "mean_ground_truth_rank": 5.111111111111111,
+  "n_family_match": 29,
+  "n_required_terms_match": 13,
+  "n_slot_match": 3,
+  "n_slot_policy_match": 0,
+  "by_bucket": {
+    "v74_baseline": {
+      "n_total": 5,
+      "n_exact_match": 2,
+      "exact_match_rate": 0.4,
+      "n_whole_compile_valid": 5,
+      "n_structured_cas_valid": 5,
+      "n_ground_truth_scoreable": 4,
+      "n_ground_truth_top1": 2,
+      "n_ground_truth_top5": 4,
+      "mean_ground_truth_rank": 2.5,
+      "n_family_match": 5
+    },
+    "v75_register": {
+      "n_total": 5,
+      "n_exact_match": 2,
+      "exact_match_rate": 0.4,
+      "n_whole_compile_valid": 5,
+      "n_structured_cas_valid": 5,
+      "n_ground_truth_scoreable": 5,
+      "n_ground_truth_top1": 2,
+      "n_ground_truth_top5": 5,
+      "mean_ground_truth_rank": 2.2,
+      "n_family_match": 5
+    },
+    "v77_rule_four": {
+      "n_total": 5,
+      "n_exact_match": 4,
+      "exact_match_rate": 0.8,
+      "n_whole_compile_valid": 5,
+      "n_structured_cas_valid": 5,
+      "n_ground_truth_scoreable": 5,
+      "n_ground_truth_top1": 4,
+      "n_ground_truth_top5": 5,
+      "mean_ground_truth_rank": 1.2,
+      "n_family_match": 5
+    },
+    "v77_omega": {
+      "n_total": 5,
+      "n_exact_match": 1,
+      "exact_match_rate": 0.2,
+      "n_whole_compile_valid": 5,
+      "n_structured_cas_valid": 5,
+      "n_ground_truth_scoreable": 5,
+      "n_ground_truth_top1": 1,
+      "n_ground_truth_top5": 4,
+      "mean_ground_truth_rank": 5.0,
+      "n_family_match": 5
+    },
+    "v76_production": {
+      "n_total": 5,
+      "n_exact_match": 2,
+      "exact_match_rate": 0.4,
+      "n_whole_compile_valid": 5,
+      "n_structured_cas_valid": 5,
+      "n_ground_truth_scoreable": 5,
+      "n_ground_truth_top1": 2,
+      "n_ground_truth_top5": 4,
+      "mean_ground_truth_rank": 3.2,
+      "n_family_match": 5
+    },
+    "meta_logic": {
+      "n_total": 5,
+      "n_exact_match": 1,
+      "exact_match_rate": 0.2,
+      "n_whole_compile_valid": 5,
+      "n_structured_cas_valid": 5,
+      "n_ground_truth_scoreable": 3,
+      "n_ground_truth_top1": 1,
+      "n_ground_truth_top5": 2,
+      "mean_ground_truth_rank": 23.333333333333332,
+      "n_family_match": 4
+    }
+  }
+}
