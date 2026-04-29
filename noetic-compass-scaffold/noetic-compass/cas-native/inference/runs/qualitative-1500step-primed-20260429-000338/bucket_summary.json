@@ -1,0 +1,43 @@
+{
+  "checkpoint": "noetic-compass-scaffold/noetic-compass/cas-native/training/runs/v2-first-full-20260428-220635/checkpoints/final.pt",
+  "primer_strategy": "bucket_conditional_prefix",
+  "samples_per_bucket": 5,
+  "max_new_tokens": 80,
+  "temperature": 0.4,
+  "top_p": 0.9,
+  "seed": 42,
+  "overall_loose_valid": 30,
+  "overall_structured_valid": 1,
+  "buckets": {
+    "v74_baseline": {
+      "n_total": 5,
+      "n_loose_valid": 5,
+      "n_structured_valid": 0
+    },
+    "v75_register": {
+      "n_total": 5,
+      "n_loose_valid": 5,
+      "n_structured_valid": 0
+    },
+    "v77_rule_four": {
+      "n_total": 5,
+      "n_loose_valid": 5,
+      "n_structured_valid": 1
+    },
+    "v77_omega": {
+      "n_total": 5,
+      "n_loose_valid": 5,
+      "n_structured_valid": 0
+    },
+    "v76_production": {
+      "n_total": 5,
+      "n_loose_valid": 5,
+      "n_structured_valid": 0
+    },
+    "meta_logic": {
+      "n_total": 5,
+      "n_loose_valid": 5,
+      "n_structured_valid": 0
+    }
+  }
+}
