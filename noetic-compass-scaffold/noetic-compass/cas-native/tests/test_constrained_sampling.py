@@ -60,6 +60,13 @@ def test_prompt_family_inference_for_meta_logic_examples():
     assert infer_prompt_families("Describe a finite-meet Pullback expression in this admitted CAS fragment.", "meta_logic") == ("pullback",)
 
 
+def test_prompt_family_inference_does_not_match_cover_inside_discovering():
+    assert infer_prompt_families(
+        "A programmer discovering a security flaw is asked to give their perspective.",
+        "v74_baseline",
+    ) == ("v74_state", "v74_composition", "fractal", "rpm")
+
+
 def test_prompt_family_filter_selects_requested_candidate_shape():
     candidates = (
         "Product(Noetics, Domains)",

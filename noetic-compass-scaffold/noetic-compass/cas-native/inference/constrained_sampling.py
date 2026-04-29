@@ -302,6 +302,10 @@ def _has_any(text: str, needles: Iterable[str]) -> bool:
     return any(needle in text for needle in needles)
 
 
+def _has_word(text: str, word: str) -> bool:
+    return bool(re.search(rf"\b{re.escape(word)}\b", text))
+
+
 def expression_families(expr: str) -> frozenset[str]:
     """Return structural families present in a compiler candidate expression."""
     expr = str(expr or "").strip()
@@ -445,9 +449,9 @@ def infer_prompt_families(prompt: str, bucket: str) -> tuple[str, ...]:
 
     if _has_any(text, ("finite-meet", "pullback")):
         add("pullback")
-    if "partition" in text:
+    if _has_word(text, "partition") or "partitionof" in text:
         add("partition")
-    if "cover" in text:
+    if _has_word(text, "cover") or "coverof" in text:
         add("cover")
     if _has_any(text, ("cartesian product", "typed product", "product(")):
         add("product")
