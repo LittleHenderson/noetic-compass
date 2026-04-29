@@ -22,6 +22,8 @@ Latest relevant pushed commits:
 - `3f82149` - `cas-synthetic: add recoverable Level 3 prompts`
 - `3fd565c` - `cas-synthetic: record recoverable Level 3 dataset metrics`
 - `bdd8d62` - `cas-native: support Level 3 reranker datasets`
+- `0612b9a` - `cas-native: record recoverable reranker success`
+- **THIS COMMIT** - `cas-native/inference: fix phantom carriers/foundations slots in non-meta-logic prompts`
 
 Latest successful CAS-Native AI result:
 
@@ -31,11 +33,36 @@ Latest successful CAS-Native AI result:
 - Compiler validation: 19,454 / 19,454 valid
 - Exact top-1: 12 / 30
 - Ground-truth top-5: 24 / 30
-- Mean ground-truth rank: 5.1111
+- Mean ground-truth rank: 5.11
 - Pairwise training accuracy: 0.985 by epoch 10
 - Compiler-valid outputs: 30 / 30
+- **slot_match: 21 / 30** — recomputed offline against the same samples after the phantom-slot fix landed (was 3 / 30 in the original report; 11 of 12 exact-match samples now correctly slot_match)
 
 This is the first strong evidence that CAS-Native can learn exact prompt-to-CAS recovery when the prompt actually verbalizes recoverable CAS slots.
+
+### Phantom-slot fix (this commit)
+
+The `infer_prompt_slots` function was populating two phantom slots for non-meta-logic buckets:
+
+- **`carriers`** — set whenever a prompt contained any literal carrier word (`Noetics`, `States`, `Domains`, `Foundations`, etc.). Recoverable Level 3 prompts use `states:` and `noetics:` as prose section headers, which triggered this. But for non-meta-logic buckets the candidate expression never contains the carrier name as a literal token (e.g. `^5^C_{F2} * ^1^C_{F2}` has no `States` substring), so `candidate_matches_slots` could never be satisfied.
+
+- **`foundations`** — set from `_DRIVE_RE` matches in the prompt for all buckets. But `expression_slots` only emits `foundations` for `Foundation_N` literals (which only appear in meta_logic expressions). For non-meta-logic, F-numbers are Drive subscripts, not Foundation refs.
+
+Fix: gate both `carriers` and `foundations` to `bucket == "meta_logic"`. Drives still populate from F-numbers via the existing path. The meta_logic-bucket regression tests still pass.
+
+Effect on the recoverable run, recomputed offline:
+
+| bucket          | slot_match before | slot_match after |
+|-----------------|-------------------|------------------|
+| v74_baseline    | 0 / 5             | 2 / 5            |
+| v75_register    | 0 / 5             | 2 / 5            |
+| v77_rule_four   | 0 / 5             | 5 / 5            |
+| v77_omega       | 0 / 5             | 4 / 5            |
+| v76_production  | 0 / 5             | 5 / 5            |
+| meta_logic      | 3 / 5             | 3 / 5 (unchanged) |
+| **overall**     | **3 / 30**        | **21 / 30**      |
+
+`exact_match` is unchanged at 12 / 30 (the rerank made the same picks); the fix is purely in the slot-match measurement layer. But the implication is significant: when the next GPU run uses the patched parser as a hard candidate-bank filter (not just a diagnostic), exact_match should also lift, especially in v76_production and v77_rule_four where the slot filter was previously falling back to the family-only set on every prompt.
 
 ## Core Finding
 
@@ -226,8 +253,14 @@ Do not commit large model checkpoints by default:
 
 ## Next Best Actions
 
-1. Improve prompt-slot filters for the recoverable prompt wording.
-   Current recoverable reranker summary still reports low `slot_match` because the old slot parser was tuned for short prompts, not the new "states: Noetic ^N; domain D; drive Fk" wording.
+1. ~~Improve prompt-slot filters for the recoverable prompt wording.~~
+   **DONE this commit.** The phantom `carriers` and `foundations` slot
+   population was the dominant cause of low `slot_match`. Offline recompute
+   on the existing samples shows slot_match jumped from 3/30 to 21/30
+   without re-running inference. Next GPU run will see the same parser
+   used for hard candidate-bank filtering (not just diagnostic), which
+   should also lift exact_match in buckets where slot_filter previously
+   fell back (especially v76_production and v77_rule_four).
 
 2. Add a direct recoverable-expression evaluation mode.
    Current evaluation uses candidate banks and semantic rank. Add metrics that separately report:

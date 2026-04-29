@@ -139,6 +139,56 @@ def test_prompt_slots_extract_carriers_foundations_and_cluster_noetics():
     ) == {"noetics": ("8", "3")}
 
 
+def test_recoverable_prompt_does_not_populate_phantom_slots_outside_meta_logic():
+    """Recoverable Level 3 prompts use 'states:' / 'noetics:' / 'foundations:'
+    as prose section headers. For non-meta-logic buckets these are NOT carrier
+    references in the candidate expression, so they must not be populated as
+    slot requirements. Likewise, F-numbers in non-meta-logic prompts are Drive
+    subscripts, not Foundation references — they must populate ``drives`` only,
+    not ``foundations``. This regression guards the
+    semantic-reranker-recoverable-20260429 finding where slot_match was 3/30
+    despite 12/30 exact match (phantom carriers/foundations forced False even
+    when the rerank picked the exact ground truth).
+    """
+    v75_prompt = (
+        "I am learning CAS. The target structure is families: state expression; "
+        "states: Noetic ^2; domain E (evaluative); drive F4; register |f (felt) / "
+        "Noetic ^7; domain E (evaluative); drive F2; register |E (embodied); "
+        "operators: plus co-presence. What is the precise notation?"
+    )
+    slots = infer_prompt_slots(v75_prompt, "v75_register")
+    # carriers and foundations must NOT be populated for v75_register even
+    # though "states:" and Drive F-numbers appear in the prompt prose.
+    assert "carriers" not in slots, f"phantom carriers slot leaked: {slots.get('carriers')}"
+    assert "foundations" not in slots, f"phantom foundations slot leaked: {slots.get('foundations')}"
+    # drives must still be populated from the F-numbers.
+    assert slots["drives"] == ("F4", "F2")
+    # All the other expression-bearing slots must still extract correctly.
+    assert slots["noetics"] == ("2", "7")
+    assert slots["domains"] == ("E",)
+    assert set(slots["registers"]) == {"f", "E"}
+
+
+def test_recoverable_prompt_slot_match_round_trip_for_exact_candidate():
+    """When the rerank-chosen candidate IS the ground-truth expression for a
+    recoverable Level 3 v74_baseline prompt, ``candidate_matches_slots`` must
+    return True. Before the phantom-slot fix this returned False because the
+    prompt populated ``foundations``/``carriers`` slots that the candidate
+    expression had no way to satisfy.
+    """
+    v74_prompt = (
+        "Turn this formal natural-language CAS reading into the exact expression: "
+        "families: state expression; states: Noetic ^5; domain C (cognitive); drive F2 / "
+        "Noetic ^1; domain C (cognitive); drive F2; operators: composition star."
+    )
+    candidate = "^5^C_{F2} * ^1^C_{F2}"  # the exact ground truth for this prompt shape
+    slots = infer_prompt_slots(v74_prompt, "v74_baseline")
+    assert candidate_matches_slots(candidate, slots), (
+        f"exact-ground-truth candidate must match prompt slots; "
+        f"prompt_slots={slots}, candidate_slots={dict((k, list(v)) for k, v in slots.items())}"
+    )
+
+
 def test_prompt_slot_filter_selects_product_carriers():
     candidates = (
         "Product(Noetics, Noetics)",

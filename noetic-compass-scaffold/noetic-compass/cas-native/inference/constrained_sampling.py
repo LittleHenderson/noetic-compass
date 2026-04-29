@@ -634,11 +634,25 @@ def infer_prompt_slots(prompt: str, bucket: str) -> dict[str, tuple[str, ...]]:
     explicit_noetics = _ordered_unique(_NOETIC_REF_RE.findall(prompt))
     named_noetics = _numbers_after_keyword(text, r"\bnoetics?\b")
 
-    carriers = _ordered_unique(carrier for carrier in _CARRIERS if re.search(rf"\b{carrier.lower()}\b", text))
-    if named_noetics:
-        carriers = tuple(carrier for carrier in carriers if carrier != "Noetics")
-    if carriers:
-        slots["carriers"] = carriers
+    # ``carriers`` is only an expression-bearing slot in the ``meta_logic``
+    # bucket — there CAS expressions literally name carriers (e.g.
+    # ``Product(Foundations, Domains)``, ``^N ∈ Noetics``,
+    # ``NoeticCluster ⊆ States``). For all other buckets the carrier names
+    # never appear in the candidate expression, so populating ``slots["carriers"]``
+    # from prose like the recoverable Level 3 ``states:`` / ``noetics:`` section
+    # headers creates a phantom requirement that no candidate can satisfy.
+    # That phantom was the dominant reason ``slot_match`` reported False even
+    # when the rerank picked the exact ground-truth expression (see
+    # semantic-reranker-recoverable-20260429: 3/30 slot_match despite
+    # 12/30 exact match).
+    if bucket == "meta_logic":
+        carriers = _ordered_unique(
+            carrier for carrier in _CARRIERS if re.search(rf"\b{carrier.lower()}\b", text)
+        )
+        if named_noetics:
+            carriers = tuple(carrier for carrier in carriers if carrier != "Noetics")
+        if carriers:
+            slots["carriers"] = carriers
 
     if explicit_noetics or named_noetics:
         slots["noetics"] = _ordered_unique((*explicit_noetics, *named_noetics))
@@ -678,8 +692,17 @@ def infer_prompt_slots(prompt: str, bucket: str) -> dict[str, tuple[str, ...]]:
     if foundation_values:
         # Foundation_N and F_N occupy the same finite 1..7 slot space in these
         # prompt/candidate filters; the compiler still owns final type checks.
-        slots["foundations"] = foundation_values
-        if bucket != "meta_logic":
+        # ``foundations`` is only an expression-bearing slot in ``meta_logic``
+        # (where expressions like ``CoverOf(SubFoundations, Foundation_1, …)``
+        # literally name them). For all other buckets, F-numbers in the prompt
+        # are Drive subscripts; populate ``slots["drives"]`` only so the slot
+        # filter doesn't impose a phantom ``foundations`` requirement that
+        # candidate expressions like ``^N^D_{Fk}`` can never satisfy
+        # (``expression_slots`` only emits ``foundations`` from ``Foundation_N``
+        # literals, not from drive subscripts).
+        if bucket == "meta_logic":
+            slots["foundations"] = foundation_values
+        else:
             slots["drives"] = foundation_values
 
     return slots
