@@ -293,3 +293,23 @@ def test_sample_token_applies_allowed_ids_before_top_p():
     )
 
     assert chosen == first_id
+
+
+def test_ground_truth_rank_diagnostics_reports_rank_and_margin():
+    pytest.importorskip("torch")
+    pytest.importorskip("torch.nn")
+    from cas_native.inference.generate_samples import ground_truth_rank_diagnostics
+
+    scored = [
+        {"candidate": "A", "mean_logprob": -0.5, "sum_logprob": -1.0},
+        {"candidate": "B", "mean_logprob": -0.7, "sum_logprob": -1.4},
+        {"candidate": "C", "mean_logprob": -1.0, "sum_logprob": -2.0},
+    ]
+
+    diagnostics = ground_truth_rank_diagnostics(scored, "B")
+
+    assert diagnostics["ground_truth_scoreable"] is True
+    assert diagnostics["ground_truth_rank"] == 2
+    assert diagnostics["ground_truth_top1"] is False
+    assert diagnostics["ground_truth_top5"] is True
+    assert diagnostics["ground_truth_score_margin_mean_logprob"] == pytest.approx(0.2)

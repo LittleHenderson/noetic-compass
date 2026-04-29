@@ -372,6 +372,44 @@ def score_candidate_batch(
     return scored
 
 
+def ground_truth_rank_diagnostics(scored: list[dict], ground_truth: str | None) -> dict:
+    """Rank diagnostics for the supervised target inside scored candidates."""
+    target = str(ground_truth or "").strip()
+    diagnostics = {
+        "ground_truth_scoreable": False,
+        "ground_truth_rank": None,
+        "ground_truth_rank_percentile": None,
+        "ground_truth_top1": False,
+        "ground_truth_top5": False,
+        "ground_truth_mean_logprob": None,
+        "ground_truth_sum_logprob": None,
+        "ground_truth_score_margin_mean_logprob": None,
+        "ground_truth_score_margin_sum_logprob": None,
+    }
+    if not target or not scored:
+        return diagnostics
+
+    best = scored[0]
+    for idx, item in enumerate(scored, start=1):
+        if str(item.get("candidate", "")).strip() != target:
+            continue
+        diagnostics.update(
+            {
+                "ground_truth_scoreable": True,
+                "ground_truth_rank": idx,
+                "ground_truth_rank_percentile": idx / max(len(scored), 1),
+                "ground_truth_top1": idx == 1,
+                "ground_truth_top5": idx <= 5,
+                "ground_truth_mean_logprob": item["mean_logprob"],
+                "ground_truth_sum_logprob": item["sum_logprob"],
+                "ground_truth_score_margin_mean_logprob": best["mean_logprob"] - item["mean_logprob"],
+                "ground_truth_score_margin_sum_logprob": best["sum_logprob"] - item["sum_logprob"],
+            }
+        )
+        break
+    return diagnostics
+
+
 def rerank_generate(
     model: CASNativeModel,
     tokenizer: HybridCASTokenizer,
@@ -380,6 +418,7 @@ def rerank_generate(
     device: torch.device,
     *,
     batch_size: int,
+    ground_truth: str | None = None,
 ) -> tuple[str, list[int], dict]:
     """Choose the highest-probability compiler-valid candidate."""
     scored: list[dict] = []
@@ -401,6 +440,7 @@ def rerank_generate(
             "candidate_count": len(candidates),
             "scored_candidate_count": 0,
             "termination_reason": "no_scoreable_candidates",
+            **ground_truth_rank_diagnostics([], ground_truth),
         }
 
     scored.sort(key=lambda item: (item["mean_logprob"], item["sum_logprob"]), reverse=True)
@@ -416,6 +456,7 @@ def rerank_generate(
         "best_sum_logprob": best["sum_logprob"],
         "best_token_count": best["token_count"],
         "top_candidates": scored[:5],
+        **ground_truth_rank_diagnostics(scored, ground_truth),
     }
 
 
@@ -611,6 +652,7 @@ def main() -> int:
         bucket_results = []
         for i, rec in enumerate(chosen):
             prompt = rec.get("prompt") or rec.get("user_prompt") or ""
+            ground_truth = str(rec.get("cas_expression", "") or "").strip()
             generation_prompt = format_generation_prompt(prompt, args.task)
             base_candidates = candidate_banks.get(bucket, ())
             filter_diagnostics = {
@@ -625,6 +667,8 @@ def main() -> int:
                 "term_filter_fallback": False,
                 "slot_filter_fallback": False,
                 "policy_filter_fallback": False,
+                "ground_truth_in_base_candidate_bank": ground_truth in base_candidates,
+                "ground_truth_in_filtered_candidate_bank": ground_truth in base_candidates,
             }
             sample_candidates = base_candidates
             if args.decode_mode in {"grammar", "rerank"} and args.family_filter == "prompt":
@@ -634,6 +678,8 @@ def main() -> int:
                     bucket,
                     min_candidates=args.family_filter_min_candidates,
                 )
+                filter_diagnostics["ground_truth_in_base_candidate_bank"] = ground_truth in base_candidates
+                filter_diagnostics["ground_truth_in_filtered_candidate_bank"] = ground_truth in sample_candidates
             constraint = constraints.get(bucket)
             if args.decode_mode == "grammar" and args.family_filter == "prompt":
                 constraint = CandidateTrieConstraint(tokenizer, bucket, candidates=sample_candidates)
@@ -646,6 +692,7 @@ def main() -> int:
                         sample_candidates,
                         device,
                         batch_size=args.rerank_batch_size,
+                        ground_truth=ground_truth,
                     )
                 else:
                     generated, token_ids, decode_diagnostics = generate(
@@ -672,7 +719,6 @@ def main() -> int:
                 }
             decode_diagnostics.update(filter_diagnostics)
             compile_result = try_compile(generated, bucket)
-            ground_truth = str(rec.get("cas_expression", "") or "").strip()
             generated_families = sorted(expression_families(generated))
             prompt_families = filter_diagnostics.get("prompt_families", [])
             prompt_required_terms = filter_diagnostics.get("prompt_required_terms", [])
@@ -698,6 +744,13 @@ def main() -> int:
                 "decode_mode": args.decode_mode,
                 "decode_diagnostics": decode_diagnostics,
                 "exact_match": generated.strip() == ground_truth,
+                "ground_truth_in_base_candidate_bank": decode_diagnostics.get("ground_truth_in_base_candidate_bank", False),
+                "ground_truth_in_filtered_candidate_bank": decode_diagnostics.get("ground_truth_in_filtered_candidate_bank", False),
+                "ground_truth_scoreable": decode_diagnostics.get("ground_truth_scoreable", False),
+                "ground_truth_rank": decode_diagnostics.get("ground_truth_rank"),
+                "ground_truth_rank_percentile": decode_diagnostics.get("ground_truth_rank_percentile"),
+                "ground_truth_top1": decode_diagnostics.get("ground_truth_top1", False),
+                "ground_truth_top5": decode_diagnostics.get("ground_truth_top5", False),
                 "generated_families": generated_families,
                 "prompt_families": prompt_families,
                 "family_match": family_match,
@@ -726,6 +779,7 @@ def main() -> int:
                 f"  [{bucket} #{i}] valid={compile_result['any_valid']} "
                 f"structured={compile_result['structured_valid']} "
                 f"family={family_match} terms={required_terms_match} slots={slot_match} policy={slot_policy_match} "
+                f"gt_rank={decode_diagnostics.get('ground_truth_rank')} "
                 f"prompt='{prompt[:60]}...' generated='{generated[:60]}...'"
             )
 
@@ -737,10 +791,27 @@ def main() -> int:
         slot_match_count = sum(1 for s in bucket_results if s["slot_match_applicable"] and s["slot_match"])
         slot_policy_match_applicable_count = sum(1 for s in bucket_results if s["slot_policy_match_applicable"])
         slot_policy_match_count = sum(1 for s in bucket_results if s["slot_policy_match_applicable"] and s["slot_policy_match"])
+        ground_truth_ranks = [s["ground_truth_rank"] for s in bucket_results if s["ground_truth_rank"] is not None]
+        ground_truth_rank_percentiles = [
+            s["ground_truth_rank_percentile"]
+            for s in bucket_results
+            if s["ground_truth_rank_percentile"] is not None
+        ]
         bucket_summary[bucket] = {
             "n_total": len(bucket_results),
             "n_exact_match": sum(1 for s in bucket_results if s["exact_match"]),
             "exact_match_rate": sum(1 for s in bucket_results if s["exact_match"]) / max(len(bucket_results), 1),
+            "n_ground_truth_in_base_candidate_bank": sum(1 for s in bucket_results if s["ground_truth_in_base_candidate_bank"]),
+            "n_ground_truth_in_filtered_candidate_bank": sum(1 for s in bucket_results if s["ground_truth_in_filtered_candidate_bank"]),
+            "n_ground_truth_scoreable": sum(1 for s in bucket_results if s["ground_truth_scoreable"]),
+            "n_ground_truth_top1": sum(1 for s in bucket_results if s["ground_truth_top1"]),
+            "n_ground_truth_top5": sum(1 for s in bucket_results if s["ground_truth_top5"]),
+            "mean_ground_truth_rank": sum(ground_truth_ranks) / len(ground_truth_ranks) if ground_truth_ranks else None,
+            "mean_ground_truth_rank_percentile": (
+                sum(ground_truth_rank_percentiles) / len(ground_truth_rank_percentiles)
+                if ground_truth_rank_percentiles
+                else None
+            ),
             "n_family_match": sum(1 for s in bucket_results if s["family_match"]),
             "family_match_rate": sum(1 for s in bucket_results if s["family_match"]) / max(len(bucket_results), 1),
             "n_required_terms_applicable": required_terms_applicable_count,
@@ -776,6 +847,12 @@ def main() -> int:
     slot_match_count = sum(1 for s in all_samples if s["slot_match_applicable"] and s["slot_match"])
     slot_policy_match_applicable_count = sum(1 for s in all_samples if s["slot_policy_match_applicable"])
     slot_policy_match_count = sum(1 for s in all_samples if s["slot_policy_match_applicable"] and s["slot_policy_match"])
+    ground_truth_ranks = [s["ground_truth_rank"] for s in all_samples if s["ground_truth_rank"] is not None]
+    ground_truth_rank_percentiles = [
+        s["ground_truth_rank_percentile"]
+        for s in all_samples
+        if s["ground_truth_rank_percentile"] is not None
+    ]
     with open(summary_path, "w", encoding="utf-8") as f:
         json.dump(
             {
@@ -799,6 +876,17 @@ def main() -> int:
                 "tokenizer": tokenizer.metadata(),
                 "tokenizer_path": str(tokenizer_path) if tokenizer_path is not None else None,
                 "overall_exact_match_rate": sum(1 for s in all_samples if s["exact_match"]) / max(len(all_samples), 1),
+                "overall_ground_truth_in_base_candidate_bank": sum(1 for s in all_samples if s["ground_truth_in_base_candidate_bank"]) / max(len(all_samples), 1),
+                "overall_ground_truth_in_filtered_candidate_bank": sum(1 for s in all_samples if s["ground_truth_in_filtered_candidate_bank"]) / max(len(all_samples), 1),
+                "overall_ground_truth_scoreable_rate": sum(1 for s in all_samples if s["ground_truth_scoreable"]) / max(len(all_samples), 1),
+                "overall_ground_truth_top1_rate": sum(1 for s in all_samples if s["ground_truth_top1"]) / max(len(all_samples), 1),
+                "overall_ground_truth_top5_rate": sum(1 for s in all_samples if s["ground_truth_top5"]) / max(len(all_samples), 1),
+                "overall_mean_ground_truth_rank": sum(ground_truth_ranks) / len(ground_truth_ranks) if ground_truth_ranks else None,
+                "overall_mean_ground_truth_rank_percentile": (
+                    sum(ground_truth_rank_percentiles) / len(ground_truth_rank_percentiles)
+                    if ground_truth_rank_percentiles
+                    else None
+                ),
                 "overall_family_match_rate": sum(1 for s in all_samples if s["family_match"]) / max(len(all_samples), 1),
                 "overall_required_terms_applicable": required_terms_applicable_count,
                 "overall_required_terms_match_rate": required_terms_match_count / max(required_terms_applicable_count, 1),
