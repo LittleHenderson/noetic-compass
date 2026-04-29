@@ -124,6 +124,43 @@ def test_generator_is_deterministic_for_same_seed():
     assert first == second
 
 
+def test_generator_can_emit_recoverable_translation_style():
+    source = _level2_source(cas_expression="^2^P_{F3}|A")
+    generator = Level3ConversationalGenerator(
+        seed=3,
+        variants_per_source=2,
+        style_ids=["recoverable_translation"],
+    )
+
+    records = [
+        ex.to_dict()
+        for ex in generator.iter_source_record(
+            source,
+            source_index=0,
+            source_line=1,
+            source_path="level2_fixture.jsonl",
+        )
+    ]
+
+    assert len(records) == 2
+    for record in records:
+        assert "Noetic ^2" in record["user_prompt"]
+        assert "domain P" in record["user_prompt"]
+        assert "drive F3" in record["user_prompt"]
+        assert "register |A" in record["user_prompt"]
+        assert record["cas_expression"] == "^2^P_{F3}|A"
+        assert record["provenance"]["template_id"] == "recoverable_translation"
+
+
+def test_generator_rejects_unknown_style_id():
+    try:
+        Level3ConversationalGenerator(style_ids=["does_not_exist"])
+    except RuntimeError as exc:
+        assert "does_not_exist" in str(exc)
+    else:
+        raise AssertionError("expected unknown style id to fail")
+
+
 def test_generator_skips_invalid_level2_sources_by_default():
     path = _fixture_path("_level3_level2_sources.jsonl")
     valid_source = _level2_source(cas_expression="^2^P")

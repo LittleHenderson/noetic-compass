@@ -2,6 +2,26 @@
 # All templates are API-free and preserve the source CAS expression verbatim.
 
 styles:
+  - id: recoverable_translation
+    user_prompt_templates:
+      - "Translate this exact CAS slot description into notation, then explain it briefly: {formal_axis_reading}."
+      - "I need the CAS expression for this recoverable structure: {formal_axis_reading}. What notation should I use?"
+      - "Turn this formal natural-language CAS reading into the exact expression: {formal_axis_reading}."
+      - "As a notation exercise, map this structure into CAS: {formal_axis_reading}."
+      - "Given these CAS axes in words, produce the expression and a plain explanation: {formal_axis_reading}."
+      - "I am learning CAS. The target structure is {formal_axis_reading}. What is the precise notation?"
+    natural_language_mapping_templates:
+      - "This prompt is intentionally recoverable: it verbalizes the formal slots before asking for notation. The source situation remains: {source_prompt}"
+      - "Recoverable mapping: the user prompt states {formal_axis_reading}, so the expression can be reconstructed instead of guessed from scenario context."
+    assistant_response_templates:
+      - "The exact CAS expression is {cas_expression}. In plain language, it tracks {cas_reading}. The recoverable clues were {formal_axis_reading}."
+      - "Use {cas_expression}. The notation preserves {feature_summary}; the prompt supplied enough slot evidence to reconstruct the expression."
+      - "The precise notation is {cas_expression}. Read it as {cas_reading}, with target emphasis on {operator_summary} and {domain_summary}."
+      - "This maps to {cas_expression}. The ordinary-language bridge is {feature_summary}, while the formal slots prevent the target from drifting."
+    follow_up_question_templates:
+      - "Would you like the same structure rewritten as a less formal user prompt?"
+      - "Should I unpack each symbol in the expression one at a time?"
+
   - id: direct_translation
     user_prompt_templates:
       - "Can you map this situation into CAS notation and explain the main axes? Situation: {source_prompt}"

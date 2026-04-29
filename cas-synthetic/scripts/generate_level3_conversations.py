@@ -63,6 +63,15 @@ def main() -> int:
     )
     parser.add_argument("--seed", type=int, default=42, help="RNG seed")
     parser.add_argument(
+        "--style-id",
+        action="append",
+        default=None,
+        help=(
+            "Restrict generation to a Level 3 style id. May be passed more "
+            "than once; useful for recoverable_translation-only datasets."
+        ),
+    )
+    parser.add_argument(
         "--progress-every",
         type=int,
         default=1000,
@@ -93,6 +102,7 @@ def main() -> int:
     generator = Level3ConversationalGenerator(
         seed=args.seed,
         variants_per_source=args.variants_per_source,
+        style_ids=args.style_id,
     )
 
     t0 = time.monotonic()

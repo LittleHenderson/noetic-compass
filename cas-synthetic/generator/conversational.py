@@ -156,6 +156,7 @@ class Level3ConversationalGenerator:
         seed: int = 42,
         template_path: str | Path | None = None,
         variants_per_source: int = 3,
+        style_ids: Sequence[str] | None = None,
     ) -> None:
         self.seed = seed
         self.rng = random.Random(seed)
@@ -165,6 +166,13 @@ class Level3ConversationalGenerator:
             loaded = yaml.safe_load(f) or {}
         self.templates = loaded
         self.styles = list(loaded.get("styles", []))
+        if style_ids is not None:
+            wanted = {str(style_id) for style_id in style_ids}
+            self.styles = [style for style in self.styles if str(style.get("id")) in wanted]
+            found = {str(style.get("id")) for style in self.styles}
+            missing = sorted(wanted - found)
+            if missing:
+                raise RuntimeError(f"Unknown Level 3 conversational style id(s): {', '.join(missing)}")
         if not self.styles:
             raise RuntimeError(f"No Level 3 conversational styles found in {path}")
 
@@ -345,6 +353,7 @@ class Level3ConversationalGenerator:
                 rng=self.rng,
             ),
             "cas_reading": _cas_reading(expression),
+            "formal_axis_reading": _formal_axis_reading(expression),
             "conversation_need": _conversation_need(source_bucket, expression, self.rng),
             "focus_summary": focus_summary,
             "feature_summary": feature_summary,
@@ -637,6 +646,122 @@ def _case_context(
         "omega": omega,
     }
     return rng.choice(templates).format_map(_SafeFormat(values))
+
+
+_STATE_TOKEN_RE = re.compile(
+    r"\^([0-9])(?:\^([PCEO]))?(?:_\{F([1-7])(?:\|([TAfE]))?\})?(?:\|([TAfE]))?"
+)
+
+
+def _formal_axis_reading(expression: str) -> str:
+    """Verbalize exact CAS slots without copying the CAS expression.
+
+    This is for recoverable Level 3 prompts: the user-facing prompt states the
+    formal slots in natural language so expression generation is learnable
+    instead of hidden behind an arbitrary scenario.
+    """
+
+    pieces: list[str] = []
+    families = _formal_family_names(expression)
+    if families:
+        pieces.append(f"families: {', '.join(families)}")
+
+    state_parts: list[str] = []
+    seen_states: set[str] = set()
+    for match in _STATE_TOKEN_RE.finditer(expression):
+        noetic_raw, domain, drive, drive_register, outer_register = match.groups()
+        if not noetic_raw:
+            continue
+        desc: list[str] = [f"Noetic ^{noetic_raw}"]
+        if domain:
+            desc.append(f"domain {domain} ({_DOMAIN_NAMES[domain]})")
+        if drive:
+            desc.append(f"drive F{drive}")
+        register = outer_register or drive_register
+        if register:
+            desc.append(f"register |{register} ({_REGISTER_STORY_NAMES[register]})")
+        rendered = "; ".join(desc)
+        if rendered not in seen_states:
+            seen_states.add(rendered)
+            state_parts.append(rendered)
+    if state_parts:
+        pieces.append("states: " + " / ".join(state_parts[:6]))
+
+    omega_terms = sorted(set(_OMEGA_RE.findall(expression)))
+    if omega_terms:
+        pieces.append("named emergent target: " + ", ".join(omega_terms))
+
+    foundation_terms = sorted(set(re.findall(r"Foundation_\d+", expression)))
+    if foundation_terms:
+        pieces.append("foundations: " + ", ".join(foundation_terms))
+
+    carriers = [
+        carrier
+        for carrier in (
+            "Noetics",
+            "Domains",
+            "Drives",
+            "Registers",
+            "States",
+            "Foundations",
+            "SubFoundations",
+        )
+        if carrier in expression
+    ]
+    if carriers:
+        pieces.append("carriers: " + ", ".join(carriers))
+
+    operators = _formal_operator_names(expression)
+    if operators:
+        pieces.append("operators: " + ", ".join(operators))
+
+    return "; ".join(pieces) if pieces else "a compact CAS expression with no separately verbalized slots"
+
+
+def _formal_family_names(expression: str) -> list[str]:
+    families: list[str] = []
+    if "Theta(" in expression or "\u0398(" in expression:
+        families.append("production recipe")
+    if "Product(" in expression:
+        families.append("Cartesian product")
+    if "Cluster{" in expression:
+        families.append("typed cluster")
+    if "CoverOf(" in expression:
+        families.append("cover")
+    if "PartitionOf(" in expression:
+        families.append("partition")
+    if "Pullback(" in expression:
+        families.append("pullback")
+    if _OMEGA_RE.search(expression):
+        families.append("named emergent")
+    if not families and _STATE_TOKEN_RE.search(expression):
+        families.append("state expression")
+    return families
+
+
+def _formal_operator_names(expression: str) -> list[str]:
+    operator_map = [
+        ("->", "directed arrow"),
+        ("\u2192", "directed arrow"),
+        ("*", "composition star"),
+        (" + ", "plus co-presence"),
+        ("\u00d7", "cross-register integration"),
+        ("=", "emergent assignment"),
+        ("\u2208", "membership"),
+        ("\u2209", "not-membership"),
+        ("\u2282", "strict subset"),
+        ("\u2286", "subset-or-equal"),
+        ("\u2283", "strict superset"),
+        ("\u2287", "superset-or-equal"),
+        ("\u222a", "union"),
+        ("\u2229", "intersection"),
+        ("\u2216", "difference"),
+    ]
+    out: list[str] = []
+    for token, name in operator_map:
+        if token in expression and name not in out:
+            out.append(name)
+    return out
 
 
 def _cas_reading(expression: str) -> str:
