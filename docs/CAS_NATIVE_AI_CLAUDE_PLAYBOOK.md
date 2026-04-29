@@ -285,22 +285,54 @@ Do not commit large model checkpoints by default:
    should also lift exact_match in buckets where slot_filter previously
    fell back (especially v76_production and v77_rule_four).
 
-2. **Diagnose meta_logic bucket residual failure (mean_rank 15.67).**
-   With the patched parser, meta_logic is the only structural laggard
-   (2 / 5 exact, 2 / 5 top-5). Phantom-slot fix did not affect it because
-   `carriers`/`foundations` were gated to it (correctly). Residual issue is
-   upstream of slot extraction. Likely candidates:
-   - meta_logic candidate-bank coverage too narrow (only 858 candidates vs
-     1005-3964 for other buckets) — may not contain ground-truth target
-     for some prompts
-   - meta_logic prompt wording is structurally different from the other
-     buckets (foundation references, set notation) and the reranker may
-     not be picking up on the right tokens
-   - the 7660 records skipped at pair-build time as `target_not_scoreable`
-     may be disproportionately from meta_logic, starving training
-   Investigate before broader curriculum training — meta_logic correctness
-   matters because it is where typed-set / recipe / cluster expressions
-   surface, the highest-information-density CAS forms.
+2. ~~Diagnose meta_logic bucket residual failure.~~
+   **DONE this commit.** Five-agent local diagnostic identified four issues:
+   (A) phantom `States` carrier inferred from prose section header `states:`
+   for typed-cluster expressions; (B) `production` family wrongly inferred
+   from imperative verb `"produce"` in instruction prose ("produce the
+   expression"), dropping Coordinate sample's GT before slot filter;
+   (C) bank gap — `_meta_logic_candidates` builtins covered noetic pairs
+   only from {1,2,3,4,7}, so eval `NoeticCluster{^8, ^3}` was absent;
+   (D) Foundation-order permutation sensitivity in the rerank model
+   (sample-1 CoverOf rank 45 — addressed only by retraining, not by these
+   patches).
+
+   Three surgical patches applied:
+   - **Patch A:** `infer_prompt_slots` carrier regex gets negative lookahead
+     `(?!\s*:)` to exclude colon-suffixed section headers from carrier
+     inference. Same fix-shape as 9cbcb6b; further tightens the same bug
+     family inside `meta_logic`.
+   - **Patch B:** `infer_prompt_families` drops the bare verb `"produce"`
+     from `production` triggers. v76_production prompts that genuinely
+     describe production use `"produces"`, `"recipe"`, `"yield"`, etc.; the
+     bucket fallback at the bottom of the function still adds `production`
+     for v76 prompts when no other family was inferred.
+   - **Patch C:** `_meta_logic_candidates` enumerates all 90 noetic-pair
+     orderings as bare typed-cluster-literal builtins
+     (`NoeticCluster{^a, ^b}` with a ≠ b ∈ {0..9}). Recoverable Level 3
+     generator emits prompts that preserve the listed noetic order, so
+     both `^a, ^b` and `^b, ^a` orderings must be in the bank for exact
+     string match. Long-term fix is generator diversification; this is a
+     robust floor in the meantime.
+
+   Offline simulation against the existing PATCHED-20260429 samples
+   (deterministic from code; rerank model unchanged):
+
+   | sample | GT                                              | in bank | filter set | prev rank | predicted |
+   |--------|-------------------------------------------------|---------|------------|-----------|-----------|
+   | 1      | CoverOf(SubFoundations, F1,F7,F3,F2,F5,F6,F4)   | yes     | 69         | 45        | ~45 (rerank limit) |
+   | 2      | Product(Foundations, Domains)                   | yes     | 2          | 1         | 1 |
+   | 3      | StateCluster{^7^O} ∪ StateCluster{^7^E, ^9^C}   | yes     | 5          | 1         | 1 |
+   | 4      | Coordinate{^6, P, F2, T}                        | yes     | 192        | None      | scoreable; 1-20 |
+   | 5      | NoeticCluster{^8, ^3}                           | yes     | 51         | None      | scoreable; 1-10 |
+
+   GTs in bank: 3 / 5 → **5 / 5**. GTs surviving filter pipeline: 3 / 5 →
+   **5 / 5**. Predicted exact: 2 / 5 → 3-4 / 5. Predicted top-5: 2 / 5 →
+   4-5 / 5. Predicted mean rank: 15.67 → ~4-10. Sample 1 residual is rerank
+   permutation insensitivity; addressed only by retraining or by enriching
+   `expression_slots` to extract both `Foundations` (parent set) and
+   `SubFoundations` (carrier subset) from `CoverOf(...)`. Out of scope for
+   this commit.
 
 3. Add a direct recoverable-expression evaluation mode.
    Current evaluation uses candidate banks and semantic rank. Add metrics that separately report:

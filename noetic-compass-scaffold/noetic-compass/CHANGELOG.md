@@ -1,5 +1,34 @@
 # Noetic Compass — Progress Log
 
+## Session 37: meta_logic Local Diagnosis — Three Surgical Patches (April 29, 2026)
+
+**Objective.** Diagnose meta_logic bucket residual failure (2/5 exact, 2/5 top-5, mean_rank 15.67 in the PATCHED-20260429 A/B run) locally before any further GPU spend, per dual-expert review consensus that bank coverage / filter logic / prompt-slot inference is the proper next investigation, not training scale.
+
+**Method.** Five parallel Explore agents fanned out over the five investigation paths the experts flagged: GT bank coverage, filter attrition, subfamily breakdown, prompt-slot vs expression-slot diff, bank construction audit. All agents read-only, all running against the same PATCHED-20260429 artifacts.
+
+**Findings (synthesized).** Four distinct issues across the 5 meta_logic eval samples:
+
+- **(A) Phantom `States` carrier** from prose section header `"states: Noetic ^N"` — `\bstates\b` matched the lowercased header, inferring a phantom carrier slot that typed-cluster expressions (`NoeticCluster{...}`, `StateCluster{...}`, `Coordinate{...}`) cannot literally satisfy. Same bug-family as 9cbcb6b but inside meta_logic.
+- **(B) `production` family wrongly inferred** from the imperative verb `"produce"` in instruction prose (`"produce the expression and a plain explanation"`), dropping sample 4 (Coordinate GT) before slot filter ever ran.
+- **(C) Bank gap.** `_meta_logic_candidates` builtins covered noetic pairs only from {1,2,3,4,7}; sample 5's GT `NoeticCluster{^8, ^3}` was absent from both the dataset-derived and the builtin bank.
+- **(D) Foundation-order permutation sensitivity** in the rerank model — sample 1's GT `CoverOf(SubFoundations, F1,F7,F3,F2,F5,F6,F4)` is in bank as canonical `F1..F7` ordering and ranked 45/69. Addressable only by retraining or by enriching `expression_slots` semantics. Out of scope for this commit.
+
+**Patches.** Three surgical changes in `cas-native/inference/constrained_sampling.py`:
+
+1. `infer_prompt_slots` — carrier regex gets negative lookahead `(?!\s*:)` so colon-suffixed section headers don't trigger phantom carrier inference.
+2. `infer_prompt_families` — bare verb `"produce"` dropped from `production` triggers; specific terms (`"produces"`, `"production"`, `"recipe"`, `"yield"`, etc.) and the bucket fallback retain coverage of legitimate v76_production prompts.
+3. `_meta_logic_candidates` — enumerates all 90 noetic-pair orderings as bare typed-cluster-literal builtins (`NoeticCluster{^a, ^b}` for a ≠ b ∈ {0..9}). Builtin bank: 14 → 104. Full meta_logic bank: 858 → 940.
+
+**Verification.**
+
+- `pytest cas-native/tests/test_constrained_sampling.py` — 18 passed, 2 skipped.
+- `pytest cas-synthetic/tests/test_level3_conversational.py` — 13 passed.
+- Offline filter-pipeline simulation against PATCHED-20260429 samples (rerank model unchanged): GTs in bank 3/5 → **5/5**. GTs surviving full filter pipeline 3/5 → **5/5**. Filter-set sizes: sample 2 → 2 candidates, sample 3 → 5 candidates, sample 5 → 51 candidates (very tight; rerank should pick GT in top-N).
+
+**Predicted GPU re-run impact.** Exact 2/5 → 3-4/5; top-5 2/5 → 4-5/5; mean_rank 15.67 → ~4-10. Sample 1 residual (rank ≈45) is rerank-permutation-sensitivity, not addressable by these patches.
+
+**Next steps.** Once user terminates the current pod, the next GPU session re-runs the same `train_semantic_reranker.py` recipe with the patched parser to verify the predicted lift on the held-out 30-sample eval. After that, the larger validation set (300-600 examples + second paraphrase style) flagged by both experts becomes the stakeholder-defensible test.
+
 ## Session 36: CAS-Native Reranker A/B Validation — Patched Slot Filter (April 29, 2026)
 
 **Objective.** Run a clean A/B validation of the patched `infer_prompt_slots` parser (commit `9cbcb6b`) against the recoverable Level 3 dataset. Same hyperparameters and tokenizer bytes as the baseline (commit `0612b9a`) so any difference is attributable to the parser fix, not to training-side variance. Forbidden mixing: no `generate_samples.py --decode-mode rerank`, no 1500-step CAS-Native checkpoint, no extra epochs.

@@ -198,6 +198,20 @@ def _meta_logic_candidates() -> Iterable[str]:
     yield "NoeticCluster{^1, ^2, ^3} ∖ NoeticCluster{^2}"
     yield "StateCluster{^2^P, ^7^O} ⊆ States"
     yield "CoverOf(SubFoundations, Foundation_1, Foundation_2, Foundation_3, Foundation_4, Foundation_5, Foundation_6, Foundation_7)"
+    # Bare typed-cluster-literal coverage for noetic pairs from {0,1,...,9}.
+    # The recoverable Level 3 generator emits prompts of the form
+    # ``families: typed cluster; states: Noetic ^a / Noetic ^b`` with arbitrary
+    # noetic pairs (a,b ∈ 0..9), and the GT canonical form preserves the
+    # prompt's listed order rather than canonicalising. So the bank must hold
+    # both orderings of every pair (e.g., both ``NoeticCluster{^3, ^8}`` and
+    # ``NoeticCluster{^8, ^3}``) to support exact-string match against any
+    # eval ground truth. Enumerate all 2-permutations of {0..9}: 90 entries.
+    # Long-term fix is generator diversification; this builtin enumeration is
+    # a robust floor in the meantime.
+    for a in range(10):
+        for b in range(10):
+            if a != b:
+                yield f"NoeticCluster{{^{a}, ^{b}}}"
 
 
 def _raw_candidates(bucket: str) -> Iterable[str]:
@@ -467,7 +481,16 @@ def infer_prompt_families(prompt: str, bucket: str) -> tuple[str, ...]:
             if item not in families:
                 families.append(item)
 
-    if _has_any(text, ("recipe", "produces", "produce", "production", "ingredient", "yield", "catalyst", "inhibitor", "leakage", "outcome")):
+    # The bare verb "produce" is dropped here intentionally: it's instructional
+    # prose ("produce the expression and a plain explanation") rather than a
+    # CAS production-family signal. Sample 28 (Coordinate GT) was previously
+    # misclassified into the "production" family because of its bare-verb
+    # imperative. v76_production prompts that genuinely describe production
+    # use the noun ("produces", "production", "recipe", "ingredient", "yield",
+    # "catalyst", "inhibitor", "leakage", "outcome"), and the bucket fallback
+    # at the end of this function still adds "production" for v76_production
+    # whenever no other family was inferred.
+    if _has_any(text, ("recipe", "produces", "production", "ingredient", "yield", "catalyst", "inhibitor", "leakage", "outcome")):
         add("production")
     if _has_any(text, ("emergent register", "omega_", "arises", "unified", "integrat", "cross-register")):
         add("omega_integration", "register_integration")
@@ -646,8 +669,15 @@ def infer_prompt_slots(prompt: str, bucket: str) -> dict[str, tuple[str, ...]]:
     # semantic-reranker-recoverable-20260429: 3/30 slot_match despite
     # 12/30 exact match).
     if bucket == "meta_logic":
+        # Negative lookahead `(?!\s*:)` excludes recoverable Level 3 section
+        # headers like "states:", "carriers:", "foundations:" from carrier
+        # inference. Without it, `\bstates\b` matches the prose header in
+        # "states: Noetic ^N" and infers a phantom `States` carrier, which no
+        # typed-cluster expression (NoeticCluster{...}, StateCluster{...},
+        # Coordinate{...}) can satisfy because the literal word `States`
+        # appears nowhere in those expressions. Same fix-shape as 9cbcb6b.
         carriers = _ordered_unique(
-            carrier for carrier in _CARRIERS if re.search(rf"\b{carrier.lower()}\b", text)
+            carrier for carrier in _CARRIERS if re.search(rf"\b{carrier.lower()}\b(?!\s*:)", text)
         )
         if named_noetics:
             carriers = tuple(carrier for carrier in carriers if carrier != "Noetics")
