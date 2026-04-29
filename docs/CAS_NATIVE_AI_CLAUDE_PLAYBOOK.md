@@ -23,22 +23,45 @@ Latest relevant pushed commits:
 - `3fd565c` - `cas-synthetic: record recoverable Level 3 dataset metrics`
 - `bdd8d62` - `cas-native: support Level 3 reranker datasets`
 - `0612b9a` - `cas-native: record recoverable reranker success`
-- **THIS COMMIT** - `cas-native/inference: fix phantom carriers/foundations slots in non-meta-logic prompts`
+- `9cbcb6b` - `cas-native/inference: fix phantom carriers/foundations slots in non-meta-logic prompts`
+- **THIS COMMIT** - `cas-native: PATCHED-parser A/B validation run (recoverable Level 3) — all gates clear`
 
-Latest successful CAS-Native AI result:
+Latest successful CAS-Native AI result (PATCHED parser, A/B validation, 2026-04-29):
 
-- Run path: `noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/semantic-reranker-recoverable-20260429/`
-- Dataset: `cas-synthetic/data/level2_scaffold/level3_recoverable_full.jsonl`
-- Records: 19,454 recoverable Level 3 prompt-to-CAS examples
-- Compiler validation: 19,454 / 19,454 valid
-- Exact top-1: 12 / 30
-- Ground-truth top-5: 24 / 30
-- Mean ground-truth rank: 5.11
-- Pairwise training accuracy: 0.985 by epoch 10
-- Compiler-valid outputs: 30 / 30
-- **slot_match: 21 / 30** — recomputed offline against the same samples after the phantom-slot fix landed (was 3 / 30 in the original report; 11 of 12 exact-match samples now correctly slot_match)
+- Run path: `noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/semantic-reranker-recoverable-PATCHED-20260429/`
+- Dataset: `cas-synthetic/data/level2_scaffold/level3_recoverable_full.jsonl` (identical to baseline)
+- Tokenizer: identical bytes to the baseline (same `tokenizer.json`, vocab=665, hash `b7552dbf2ebef0a5`)
+- Hyperparameters: identical to baseline (epochs 10, batch 512, lr 0.001, seed 42, train-records 19000, max-candidates 5000, negatives-per-positive 4)
+- Hardware: A6000 48 GB, bf16, CUDA torch 2.5.1+cu124
+- Wall clock: 2841.0 s (≈ 47 min; baseline was 1784 s ≈ 30 min — patched parser admits tighter slot-filtered candidate pools, so harder per-pair discrimination)
+- Pairwise training accuracy: 0.917 by epoch 10 (lower than baseline 0.985 — *expected and correct*: tighter slot filter → harder negatives per pair → better top-1 selection despite lower per-pair accuracy)
 
-This is the first strong evidence that CAS-Native can learn exact prompt-to-CAS recovery when the prompt actually verbalizes recoverable CAS slots.
+A/B gate clearance:
+
+| Metric                | Baseline   | Gate            | This run        | Margin              |
+|-----------------------|------------|-----------------|-----------------|---------------------|
+| Exact top-1           | 12 / 30    | ≥ 15 / 30       | **21 / 30**     | +6 above gate, +9 vs baseline (+75 %) |
+| Ground-truth top-5    | 24 / 30    | ≥ 24 / 30       | **26 / 30**     | +2                  |
+| Mean ground-truth rank | 5.11      | < 5.11          | **2.89**        | −43 %               |
+| Ground-truth scoreable | 27 / 30   | ≥ 27 / 30       | **27 / 30**     | at gate             |
+| slot_match (live measurement) | 3 / 30 (baseline raw) → 21 / 30 (offline-recompute prediction) | — | **28 / 30** | confirmed and exceeded |
+
+Per-bucket result:
+
+| bucket          | exact      | top-5      | mean_rank |
+|-----------------|------------|------------|-----------|
+| v74_baseline    | 4 / 5      | 4 / 5      | 1.0       |
+| v75_register    | 5 / 5      | 5 / 5      | 1.0       |
+| v77_rule_four   | 5 / 5      | 5 / 5      | 1.0       |
+| v77_omega       | 3 / 5      | 5 / 5      | 1.6       |
+| v76_production  | 2 / 5      | 5 / 5      | 1.8       |
+| meta_logic      | **2 / 5**  | **2 / 5**  | **15.67** |
+
+Five of six buckets now near-saturated on top-5 (≥ 4/5). meta_logic is the lone laggard and it dominates the mean-rank average — the patched parser left meta_logic slot_match unchanged at 3/5 (the phantom-slot fix gated `carriers`/`foundations` to meta_logic only, so meta_logic's prompt-side parsing was already correct; meta_logic's residual failure mode is upstream of slot extraction).
+
+This is the empirical confirmation that the prediction in `9cbcb6b` was correct: the patched parser used as a hard candidate-bank filter (not just a diagnostic) lifts exact_match materially in the buckets where slot_filter previously fell back. v77_rule_four 0 → 5 exact, v77_omega 0 → 3 exact, v76_production 0 → 2 exact.
+
+Validation report at: `runs/semantic-reranker-recoverable-PATCHED-20260429/SEMANTIC_RERANKER_VALIDATION_REPORT.md`. Trained `.pt` checkpoint (2.0 MB) is present locally but kept off-VCS per existing policy. Available for next experiment without retraining.
 
 ### Phantom-slot fix (this commit)
 
@@ -262,19 +285,36 @@ Do not commit large model checkpoints by default:
    should also lift exact_match in buckets where slot_filter previously
    fell back (especially v76_production and v77_rule_four).
 
-2. Add a direct recoverable-expression evaluation mode.
+2. **Diagnose meta_logic bucket residual failure (mean_rank 15.67).**
+   With the patched parser, meta_logic is the only structural laggard
+   (2 / 5 exact, 2 / 5 top-5). Phantom-slot fix did not affect it because
+   `carriers`/`foundations` were gated to it (correctly). Residual issue is
+   upstream of slot extraction. Likely candidates:
+   - meta_logic candidate-bank coverage too narrow (only 858 candidates vs
+     1005-3964 for other buckets) — may not contain ground-truth target
+     for some prompts
+   - meta_logic prompt wording is structurally different from the other
+     buckets (foundation references, set notation) and the reranker may
+     not be picking up on the right tokens
+   - the 7660 records skipped at pair-build time as `target_not_scoreable`
+     may be disproportionately from meta_logic, starving training
+   Investigate before broader curriculum training — meta_logic correctness
+   matters because it is where typed-set / recipe / cluster expressions
+   surface, the highest-information-density CAS forms.
+
+3. Add a direct recoverable-expression evaluation mode.
    Current evaluation uses candidate banks and semantic rank. Add metrics that separately report:
    - family recovery
    - slot recovery
    - exact expression recovery
    - top-k exact recovery
 
-3. Train the main CAS-Native generator on a mixed curriculum:
+4. Train the main CAS-Native generator on a mixed curriculum:
    - Level 2 symbolic corpus for formal vocabulary
    - Level 3 recoverable prompts for exact prompt-to-expression translation
    - Level 3 conversational prompts for explanation/conversation
 
-4. Re-run qualitative sample generation after curriculum training.
+5. Re-run qualitative sample generation after curriculum training.
    Success criterion should not be raw text fluency first. Track:
    - compiler-valid complete expression rate
    - exact/top-k recovery on recoverable prompts

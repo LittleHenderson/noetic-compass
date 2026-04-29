@@ -1,5 +1,27 @@
 # Noetic Compass — Progress Log
 
+## Session 36: CAS-Native Reranker A/B Validation — Patched Slot Filter (April 29, 2026)
+
+**Objective.** Run a clean A/B validation of the patched `infer_prompt_slots` parser (commit `9cbcb6b`) against the recoverable Level 3 dataset. Same hyperparameters and tokenizer bytes as the baseline (commit `0612b9a`) so any difference is attributable to the parser fix, not to training-side variance. Forbidden mixing: no `generate_samples.py --decode-mode rerank`, no 1500-step CAS-Native checkpoint, no extra epochs.
+
+**Result.** All four measurable gates cleared by significant margins.
+
+| Metric | Baseline | Gate | A/B run |
+|---|---|---|---|
+| Exact top-1 | 12 / 30 | ≥ 15 | **21 / 30** |
+| Top-5 | 24 / 30 | ≥ 24 | **26 / 30** |
+| Mean rank | 5.11 | < 5.11 | **2.89** |
+| GT scoreable | 27 / 30 | ≥ 27 | **27 / 30** |
+| slot_match (live measurement) | 3 / 30 | — | **28 / 30** |
+
+Per-bucket: v75_register, v77_rule_four 5/5 exact; v74_baseline 4/5; v77_omega 3/5; v76_production 2/5; meta_logic 2/5 (lone laggard, mean_rank 15.67 — patched parser correctly left meta_logic unchanged because phantom-slot fix gated `carriers`/`foundations` to meta_logic only).
+
+Pairwise training accuracy ended at 0.917 vs baseline's 0.985 — *expected and correct*. Tighter slot filter admits harder negatives per pair, so per-pair discrimination is harder but final ranking is better. Higher signal, harder problem, better outcome.
+
+- **Run path.** `noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/semantic-reranker-recoverable-PATCHED-20260429/` — committed: `eval_summary.json`, `metrics.json`, `samples.jsonl` (99 KB), `SEMANTIC_RERANKER_VALIDATION_REPORT.md`, `tokenizer.json` (identical bytes to baseline). The 2 MB `semantic_reranker.pt` checkpoint kept off-VCS per policy; available locally for further experiments.
+- **Reproduction.** RunPod A6000 48 GB; 47 minutes wall clock; bf16 autocast; identical seed 42, identical tokenizer hash `b7552dbf2ebef0a5`. Full command in `docs/CAS_NATIVE_AI_CLAUDE_PLAYBOOK.md`.
+- **Next actions.** (1) Diagnose meta_logic bucket residual failure — its candidate bank is the smallest at 858 entries and disproportionately many records may be skipped at pair-build time. (2) Add direct recoverable-expression evaluation mode (family/slot/exact/top-k metrics independent of candidate-bank rerank). (3) Mixed-curriculum CAS-Native generator training, only after meta_logic is understood.
+
 ## Session 35: Start Here Tutorial Onboarding (April 26, 2026)
 
 **Objective.** Reduce first-run friction by adding a plain-language guided tour before users encounter the densest CAS surfaces.
