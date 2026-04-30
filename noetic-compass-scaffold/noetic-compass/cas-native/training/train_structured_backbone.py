@@ -47,9 +47,120 @@ from cas_native.training.structured_prediction_ingest import (
 from cas_native.training.tokenizer import HybridCASTokenizer
 from cas_native.training.train_structured_prediction import (
     _is_heldout_eval_path,
-    evaluate_structured_prediction,
     filter_eval_overlapping_records,
 )
+
+
+def checkpoint_state_dict(payload: Any) -> dict[str, torch.Tensor]:
+    """Extract a model state dict from common checkpoint payload shapes."""
+
+    if isinstance(payload, dict):
+        for key in ("model_state_dict", "state_dict", "model"):
+            value = payload.get(key)
+            if isinstance(value, dict):
+                return dict(value)
+        if payload and all(isinstance(key, str) for key in payload.keys()):
+            tensor_values = [value for value in payload.values() if torch.is_tensor(value)]
+            if tensor_values:
+                return dict(payload)
+    raise ValueError("checkpoint does not contain a recognized model state dict")
+
+
+def cas_config_from_metadata(
+    *,
+    tokenizer: HybridCASTokenizer,
+    checkpoint_payload: dict[str, Any] | None = None,
+    metrics_payload: dict[str, Any] | None = None,
+    d_model: int = 64,
+    n_layers: int = 1,
+    n_heads: int = 4,
+    max_length: int = 128,
+) -> CASNativeConfig:
+    """Build ``CASNativeConfig`` from checkpoint/metrics metadata when present."""
+
+    source: dict[str, Any] = {}
+    for payload in (metrics_payload, checkpoint_payload):
+        if not isinstance(payload, dict):
+            continue
+        candidates = (
+            payload.get("model_config"),
+            payload.get("config", {}).get("model_config")
+            if isinstance(payload.get("config"), dict)
+            else None,
+            payload.get("config"),
+            payload,
+        )
+        for candidate in candidates:
+            if isinstance(candidate, dict) and any(
+                key in candidate for key in ("d_model", "n_layers", "n_heads", "vocab_size")
+            ):
+                source.update(candidate)
+
+    vocab_size = int(source.get("vocab_size", tokenizer.vocab_size))
+    if vocab_size != tokenizer.vocab_size:
+        raise ValueError(
+            "tokenizer vocab_size does not match backbone config: "
+            f"tokenizer={tokenizer.vocab_size} config={vocab_size}"
+        )
+
+    return CASNativeConfig(
+        d_model=int(source.get("d_model", d_model)),
+        n_layers=int(source.get("n_layers", n_layers)),
+        n_heads=int(source.get("n_heads", n_heads)),
+        vocab_size=vocab_size,
+        max_seq_len=int(source.get("max_seq_len", source.get("max_length", max_length))),
+        fractal_depth=int(source.get("fractal_depth", 1)),
+        num_ethical_propositions=int(source.get("num_ethical_propositions", 3)),
+        dropout=float(source.get("dropout", 0.0)),
+        rpm_threshold=float(source.get("rpm_threshold", 0.5)),
+        num_ifs_maps=int(source.get("num_ifs_maps", 4)),
+        causal_lm=bool(source.get("causal_lm", False)),
+    )
+
+
+def load_compatible_backbone_state_dict(
+    backbone: CASNativeModel,
+    state_dict: dict[str, torch.Tensor],
+) -> dict[str, Any]:
+    """Load only checkpoint tensors compatible with this backbone instance."""
+
+    current = backbone.state_dict()
+    compatible: dict[str, torch.Tensor] = {}
+    skipped_shape: dict[str, dict[str, tuple[int, ...]]] = {}
+    skipped_unknown = 0
+    for key, value in state_dict.items():
+        if key not in current:
+            skipped_unknown += 1
+            continue
+        if tuple(current[key].shape) != tuple(value.shape):
+            skipped_shape[key] = {
+                "checkpoint": tuple(value.shape),
+                "model": tuple(current[key].shape),
+            }
+            continue
+        compatible[key] = value
+
+    load_result = backbone.load_state_dict(compatible, strict=False)
+    return {
+        "loaded": len(compatible),
+        "missing": len(load_result.missing_keys),
+        "unexpected": len(load_result.unexpected_keys),
+        "skipped_unknown": skipped_unknown,
+        "skipped_shape": skipped_shape,
+    }
+
+
+def default_tokenizer_path_for_checkpoint(path: Path) -> Path | None:
+    """Return a sibling tokenizer.json path if a training run layout is detected."""
+
+    candidates = [
+        path.parent / "tokenizer.json",
+        path.parent.parent / "tokenizer.json",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return None
 
 
 def evaluate_backbone_structured_prediction(
@@ -189,6 +300,8 @@ def train_backbone_structured_local(
     device: torch.device | str = "cpu",
     max_length: int = 128,
     freeze_backbone: bool = False,
+    model_config: CASNativeConfig | None = None,
+    backbone_state_dict: dict[str, torch.Tensor] | None = None,
     filter_eval_overlaps: bool = True,
     progress_print: bool = True,
     out_dir: Path | None = None,
@@ -215,7 +328,7 @@ def train_backbone_structured_local(
     torch.manual_seed(seed)
     rng = random.Random(seed)
     dev = torch.device(device)
-    config = CASNativeConfig(
+    config = model_config or CASNativeConfig(
         d_model=d_model,
         n_layers=n_layers,
         n_heads=n_heads,
@@ -226,7 +339,13 @@ def train_backbone_structured_local(
         dropout=0.0,
     )
     backbone = CASNativeModel(config)
-    head = StructuredPredictionHead(d_model=d_model, bottleneck_dim=bottleneck_dim)
+    checkpoint_load_report: dict[str, Any] | None = None
+    if backbone_state_dict is not None:
+        checkpoint_load_report = load_compatible_backbone_state_dict(
+            backbone,
+            backbone_state_dict,
+        )
+    head = StructuredPredictionHead(d_model=config.d_model, bottleneck_dim=bottleneck_dim)
     model = CASBackboneStructuredPredictor(
         backbone,
         head,
@@ -346,9 +465,11 @@ def train_backbone_structured_local(
     manifest = {
         "config": {
             "mode": "backbone_structured_prediction",
-            "d_model": d_model,
-            "n_layers": n_layers,
-            "n_heads": n_heads,
+            "d_model": config.d_model,
+            "n_layers": config.n_layers,
+            "n_heads": config.n_heads,
+            "vocab_size": config.vocab_size,
+            "max_seq_len": config.max_seq_len,
             "bottleneck_dim": bottleneck_dim,
             "batch_size": batch_size,
             "epochs": epochs,
@@ -362,6 +483,7 @@ def train_backbone_structured_local(
             "n_train": len(train_records),
             "n_eval": len(eval_records) if eval_records else 0,
             "eval_overlap_filter": overlap_report,
+            "checkpoint_load": checkpoint_load_report,
         },
         "training": {
             "total_steps": global_step,
@@ -415,6 +537,22 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--freeze-backbone", action="store_true")
+    parser.add_argument(
+        "--backbone-checkpoint",
+        default=None,
+        help="Optional CASNativeModel checkpoint (.pt) to initialize the backbone.",
+    )
+    parser.add_argument(
+        "--tokenizer",
+        default=None,
+        help="Tokenizer JSON matching the checkpoint/training run. If omitted with "
+        "--backbone-checkpoint, sibling tokenizer.json is used when present.",
+    )
+    parser.add_argument(
+        "--config-from-metrics",
+        default=None,
+        help="Optional metrics.json containing model_config/config metadata.",
+    )
     parser.add_argument("--allow-eval-overlap", action="store_true")
     parser.add_argument("--allow-heldout-train", action="store_true")
     parser.add_argument("--out-dir", default=None)
@@ -433,9 +571,38 @@ def main() -> None:
         if args.eval_input
         else None
     )
-    tokenizer = HybridCASTokenizer.from_texts(
-        [str(record.get("user_prompt") or "") for record in train_records],
-        freeze=True,
+    checkpoint_payload: dict[str, Any] | None = None
+    backbone_state_dict: dict[str, torch.Tensor] | None = None
+    if args.backbone_checkpoint:
+        checkpoint_path = Path(args.backbone_checkpoint)
+        checkpoint_payload = torch.load(checkpoint_path, map_location="cpu")
+        if not isinstance(checkpoint_payload, dict):
+            raise SystemExit("backbone checkpoint payload must be a dict")
+        backbone_state_dict = checkpoint_state_dict(checkpoint_payload)
+
+    tokenizer_path = Path(args.tokenizer) if args.tokenizer else None
+    if tokenizer_path is None and args.backbone_checkpoint:
+        tokenizer_path = default_tokenizer_path_for_checkpoint(Path(args.backbone_checkpoint))
+    if tokenizer_path is not None:
+        tokenizer = HybridCASTokenizer.load(tokenizer_path)
+    else:
+        tokenizer = HybridCASTokenizer.from_texts(
+            [str(record.get("user_prompt") or "") for record in train_records],
+            freeze=True,
+        )
+
+    metrics_payload: dict[str, Any] | None = None
+    if args.config_from_metrics:
+        metrics_payload = json.loads(Path(args.config_from_metrics).read_text(encoding="utf-8"))
+
+    model_config = cas_config_from_metadata(
+        tokenizer=tokenizer,
+        checkpoint_payload=checkpoint_payload,
+        metrics_payload=metrics_payload,
+        d_model=args.d_model,
+        n_layers=args.n_layers,
+        n_heads=args.n_heads,
+        max_length=args.max_length,
     )
 
     out_dir = Path(args.out_dir) if args.out_dir else None
@@ -443,9 +610,9 @@ def main() -> None:
         train_records,
         eval_records,
         tokenizer=tokenizer,
-        d_model=args.d_model,
-        n_layers=args.n_layers,
-        n_heads=args.n_heads,
+        d_model=model_config.d_model,
+        n_layers=model_config.n_layers,
+        n_heads=model_config.n_heads,
         bottleneck_dim=args.bottleneck_dim,
         batch_size=args.batch_size,
         epochs=args.epochs,
@@ -455,6 +622,8 @@ def main() -> None:
         device=args.device,
         max_length=args.max_length,
         freeze_backbone=args.freeze_backbone,
+        model_config=model_config,
+        backbone_state_dict=backbone_state_dict,
         filter_eval_overlaps=not args.allow_eval_overlap,
         out_dir=out_dir,
     )

@@ -4,10 +4,16 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
+from cas_native.model import CASNativeConfig, CASNativeModel
 from cas_native.training.tokenizer import HybridCASTokenizer
 from cas_native.training.train_structured_backbone import (
     _is_heldout_eval_path,
+    cas_config_from_metadata,
+    checkpoint_state_dict,
     evaluate_backbone_structured_prediction,
+    load_compatible_backbone_state_dict,
     train_backbone_structured_local,
 )
 
@@ -121,3 +127,97 @@ def test_backbone_eval_reports_per_bucket_metrics():
 def test_heldout_training_input_guard_is_specific():
     assert _is_heldout_eval_path(Path("level3_recoverable_eval_1000.jsonl"))
     assert not _is_heldout_eval_path(Path("level3_recoverable_full.jsonl"))
+
+
+def test_config_from_checkpoint_metadata_uses_checkpoint_shape():
+    records = _records()
+    tokenizer = _tokenizer(records)
+    payload = {
+        "model_config": {
+            "d_model": 32,
+            "n_layers": 1,
+            "n_heads": 4,
+            "vocab_size": tokenizer.vocab_size,
+            "max_seq_len": 64,
+            "fractal_depth": 1,
+            "num_ethical_propositions": 3,
+            "dropout": 0.0,
+            "causal_lm": True,
+        }
+    }
+
+    config = cas_config_from_metadata(
+        tokenizer=tokenizer,
+        checkpoint_payload=payload,
+        d_model=999,
+        n_layers=9,
+        n_heads=9,
+        max_length=999,
+    )
+
+    assert config.d_model == 32
+    assert config.n_layers == 1
+    assert config.n_heads == 4
+    assert config.vocab_size == tokenizer.vocab_size
+    assert config.max_seq_len == 64
+    assert config.causal_lm is True
+
+
+def test_config_from_checkpoint_metadata_rejects_tokenizer_mismatch():
+    records = _records()
+    tokenizer = _tokenizer(records)
+    payload = {
+        "model_config": {
+            "d_model": 32,
+            "n_layers": 1,
+            "n_heads": 4,
+            "vocab_size": tokenizer.vocab_size + 1,
+        }
+    }
+
+    with pytest.raises(ValueError, match="tokenizer vocab_size does not match"):
+        cas_config_from_metadata(tokenizer=tokenizer, checkpoint_payload=payload)
+
+
+def test_checkpoint_state_dict_extracts_wrapped_model_state_dict():
+    model = CASNativeModel(
+        CASNativeConfig(
+            d_model=32,
+            n_layers=1,
+            n_heads=4,
+            vocab_size=64,
+            max_seq_len=32,
+            fractal_depth=1,
+            num_ethical_propositions=3,
+            dropout=0.0,
+        )
+    )
+
+    extracted = checkpoint_state_dict({"model_state_dict": model.state_dict()})
+
+    assert "token_embedding.weight" in extracted
+
+
+def test_load_compatible_backbone_state_dict_reports_skipped_shapes():
+    target = CASNativeModel(
+        CASNativeConfig(
+            d_model=32,
+            n_layers=1,
+            n_heads=4,
+            vocab_size=64,
+            max_seq_len=32,
+            fractal_depth=1,
+            num_ethical_propositions=3,
+            dropout=0.0,
+        )
+    )
+    source = CASNativeModel(target.config)
+    state = dict(source.state_dict())
+    state["lm_head.weight"] = state["lm_head.weight"][:10]
+    state["v2_components.extra.weight"] = state["token_embedding.weight"]
+
+    report = load_compatible_backbone_state_dict(target, state)
+
+    assert report["loaded"] > 0
+    assert report["skipped_unknown"] == 1
+    assert "lm_head.weight" in report["skipped_shape"]
