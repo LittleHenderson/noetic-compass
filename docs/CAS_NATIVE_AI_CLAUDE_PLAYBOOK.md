@@ -410,6 +410,78 @@ initialized backbone on CPU, then with a loaded CAS-Native checkpoint on GPU.
 Do not compare performance against the hash-feature wedge until the backbone
 runner uses the same held-out 1K eval file and the same overlap filter.
 
+## CAS Transformer Step 10 Backbone Train/Eval Runner
+
+Step 10 runner is complete locally. It is a metric-compatible train/eval harness
+for `CASBackboneStructuredPredictor`.
+
+Files:
+
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/train_structured_backbone.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/tests/test_train_structured_backbone.py`
+
+What it does:
+
+- Uses the same held-out discipline as the leak-fixed hash-feature wedge.
+- Uses `HybridCASTokenizer` over `user_prompt` only.
+- Builds `CASNativeModel` + `StructuredPredictionHead` through
+  `CASBackboneStructuredPredictor`.
+- Supports frozen-backbone and trainable-backbone mode.
+- Reports the same `all_heads_exact`, per-head accuracy, per-bucket accuracy,
+  and sample-level correctness shape as the hash-feature harness.
+
+Validation command:
+
+```powershell
+pytest noetic-compass-scaffold\noetic-compass\cas-native\tests\test_structured_backbone_adapter.py noetic-compass-scaffold\noetic-compass\cas-native\tests\test_train_structured_backbone.py -q
+```
+
+Validation result:
+
+```text
+7 passed in 1.65s
+```
+
+Frozen random-backbone CLI smoke:
+
+```powershell
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\python.exe noetic-compass-scaffold\noetic-compass\cas-native\training\train_structured_backbone.py --input cas-synthetic\data\level2_scaffold\level3_recoverable_full.jsonl --limit 64 --eval-input cas-synthetic\data\level2_scaffold\level3_recoverable_eval_1000.jsonl --eval-limit 60 --epochs 1 --batch-size 16 --d-model 32 --n-layers 1 --n-heads 4 --bottleneck-dim 16 --max-length 64 --lr 0.001 --seed 20260430 --freeze-backbone
+```
+
+Result:
+
+```text
+steps=4
+train_loss_avg=17.5579
+eval_all_heads_exact=0/60
+```
+
+Trainable random-backbone CLI smoke:
+
+```powershell
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\python.exe noetic-compass-scaffold\noetic-compass\cas-native\training\train_structured_backbone.py --input cas-synthetic\data\level2_scaffold\level3_recoverable_full.jsonl --limit 64 --eval-input cas-synthetic\data\level2_scaffold\level3_recoverable_eval_1000.jsonl --eval-limit 60 --epochs 2 --batch-size 16 --d-model 32 --n-layers 1 --n-heads 4 --bottleneck-dim 16 --max-length 64 --lr 0.001 --seed 20260430
+```
+
+Result:
+
+```text
+steps=8
+train_loss_avg: 17.1991 -> 16.2787
+eval_all_heads_exact=0/60
+```
+
+Interpretation: the runner is wired correctly and gradients flow through the
+backbone path, but a tiny randomly initialized backbone is not expected to beat
+the hash-feature wedge. The next meaningful experiment is either:
+
+1. Load an existing CAS-Native checkpoint into the backbone and train only the
+   structured head first.
+2. Run a longer GPU trainable-backbone experiment with the same held-out 1K
+   eval and overlap filter.
+
+Do not treat the random-backbone smoke as a capability result; it is a wiring
+result only.
+
 ## Current Known-Good State
 
 Latest relevant pushed commits:
