@@ -1,0 +1,156 @@
+/root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/training/train_structured_backbone.py:578: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint_payload = torch.load(checkpoint_path, map_location="cpu")
+{"epoch": 0, "event": "epoch_end", "step": 281, "train_loss_avg": 11.55585}
+{"all_heads_exact": 0, "epoch": 0, "event": "eval", "n_eval": 1000, "rate": 0.0, "step": 281, "train_loss_avg": 11.55585}
+{"epoch": 1, "event": "epoch_end", "step": 562, "train_loss_avg": 10.939459}
+{"all_heads_exact": 1, "epoch": 1, "event": "eval", "n_eval": 1000, "rate": 0.001, "step": 562, "train_loss_avg": 10.939459}
+{"epoch": 2, "event": "epoch_end", "step": 843, "train_loss_avg": 10.728634}
+{"all_heads_exact": 2, "epoch": 2, "event": "eval", "n_eval": 1000, "rate": 0.002, "step": 843, "train_loss_avg": 10.728634}
+{"epoch": 3, "event": "epoch_end", "step": 1124, "train_loss_avg": 10.621398}
+{"all_heads_exact": 2, "epoch": 3, "event": "eval", "n_eval": 1000, "rate": 0.002, "step": 1124, "train_loss_avg": 10.621398}
+{"epoch": 4, "event": "epoch_end", "step": 1405, "train_loss_avg": 10.476567}
+{"all_heads_exact": 6, "epoch": 4, "event": "eval", "n_eval": 1000, "rate": 0.006, "step": 1405, "train_loss_avg": 10.476567}
+{"epoch": 5, "event": "epoch_end", "step": 1686, "train_loss_avg": 10.364263}
+{"all_heads_exact": 6, "epoch": 5, "event": "eval", "n_eval": 1000, "rate": 0.006, "step": 1686, "train_loss_avg": 10.364263}
+{"epoch": 6, "event": "epoch_end", "step": 1967, "train_loss_avg": 10.259472}
+{"all_heads_exact": 5, "epoch": 6, "event": "eval", "n_eval": 1000, "rate": 0.005, "step": 1967, "train_loss_avg": 10.259472}
+{"epoch": 7, "event": "epoch_end", "step": 2248, "train_loss_avg": 10.257067}
+{"all_heads_exact": 3, "epoch": 7, "event": "eval", "n_eval": 1000, "rate": 0.003, "step": 2248, "train_loss_avg": 10.257067}
+{"epoch": 8, "event": "epoch_end", "step": 2529, "train_loss_avg": 10.172234}
+{"all_heads_exact": 3, "epoch": 8, "event": "eval", "n_eval": 1000, "rate": 0.003, "step": 2529, "train_loss_avg": 10.172234}
+{"epoch": 9, "event": "epoch_end", "step": 2810, "train_loss_avg": 10.121252}
+{"all_heads_exact": 7, "epoch": 9, "event": "eval", "n_eval": 1000, "rate": 0.007, "step": 2810, "train_loss_avg": 10.121252}
+{"epoch": 10, "event": "epoch_end", "step": 3091, "train_loss_avg": 10.044909}
+{"all_heads_exact": 3, "epoch": 10, "event": "eval", "n_eval": 1000, "rate": 0.003, "step": 3091, "train_loss_avg": 10.044909}
+{"epoch": 11, "event": "epoch_end", "step": 3372, "train_loss_avg": 10.065094}
+{"all_heads_exact": 4, "epoch": 11, "event": "eval", "n_eval": 1000, "rate": 0.004, "step": 3372, "train_loss_avg": 10.065094}
+{"epoch": 12, "event": "epoch_end", "step": 3653, "train_loss_avg": 10.018801}
+{"all_heads_exact": 10, "epoch": 12, "event": "eval", "n_eval": 1000, "rate": 0.01, "step": 3653, "train_loss_avg": 10.018801}
+{"epoch": 13, "event": "epoch_end", "step": 3934, "train_loss_avg": 9.931452}
+{"all_heads_exact": 4, "epoch": 13, "event": "eval", "n_eval": 1000, "rate": 0.004, "step": 3934, "train_loss_avg": 9.931452}
+{"epoch": 14, "event": "epoch_end", "step": 4215, "train_loss_avg": 9.911632}
+{"all_heads_exact": 15, "epoch": 14, "event": "eval", "n_eval": 1000, "rate": 0.015, "step": 4215, "train_loss_avg": 9.911632}
+{"epoch": 15, "event": "epoch_end", "step": 4496, "train_loss_avg": 9.947228}
+{"all_heads_exact": 12, "epoch": 15, "event": "eval", "n_eval": 1000, "rate": 0.012, "step": 4496, "train_loss_avg": 9.947228}
+{"epoch": 16, "event": "epoch_end", "step": 4777, "train_loss_avg": 9.860971}
+{"all_heads_exact": 11, "epoch": 16, "event": "eval", "n_eval": 1000, "rate": 0.011, "step": 4777, "train_loss_avg": 9.860971}
+{"epoch": 17, "event": "epoch_end", "step": 5058, "train_loss_avg": 9.886447}
+{"all_heads_exact": 5, "epoch": 17, "event": "eval", "n_eval": 1000, "rate": 0.005, "step": 5058, "train_loss_avg": 9.886447}
+{"epoch": 18, "event": "epoch_end", "step": 5339, "train_loss_avg": 9.841089}
+{"all_heads_exact": 4, "epoch": 18, "event": "eval", "n_eval": 1000, "rate": 0.004, "step": 5339, "train_loss_avg": 9.841089}
+{"epoch": 19, "event": "epoch_end", "step": 5620, "train_loss_avg": 9.786943}
+{"all_heads_exact": 4, "epoch": 19, "event": "eval", "n_eval": 1000, "rate": 0.004, "step": 5620, "train_loss_avg": 9.786943}
+{
+  "config": {
+    "batch_size": 64,
+    "bottleneck_dim": 64,
+    "checkpoint_load": {
+      "loaded": 556,
+      "missing": 0,
+      "skipped_shape": {},
+      "skipped_unknown": 32,
+      "unexpected": 0
+    },
+    "d_model": 512,
+    "epochs": 20,
+    "eval_overlap_filter": {
+      "by_key": {
+        "cas_expression": 1480,
+        "id": 0,
+        "source_level2_id": 1000
+      },
+      "enabled": true,
+      "removed": 1480
+    },
+    "freeze_backbone": true,
+    "lr": 0.001,
+    "max_length": 128,
+    "max_seq_len": 2048,
+    "mode": "backbone_structured_prediction",
+    "n_eval": 1000,
+    "n_heads": 8,
+    "n_layers": 6,
+    "n_train": 17974,
+    "n_train_raw": 19454,
+    "seed": 42,
+    "tokenizer": {
+      "frozen": true,
+      "hash": "2339a510d298afed",
+      "reserved_token_count": 198,
+      "special_tokens": [
+        "[PAD]",
+        "[UNK]",
+        "[BOS]",
+        "[EOS]",
+        "[SEP]",
+        "[CAS]",
+        "[/CAS]",
+        "[TASK_EXPR]",
+        "[TASK_EXPLAIN]",
+        "[TASK_CHAT]",
+        "[PROMPT]",
+        "[RESPONSE]",
+        "[SP]",
+        "[NL]",
+        "[TAB]"
+      ],
+      "type": "HybridCASTokenizer",
+      "version": "hybrid-cas-v1",
+      "vocab_size": 698
+    },
+    "vocab_size": 698,
+    "weight_decay": 0.0001
+  },
+  "eval": {
+    "all_heads_exact": 15,
+    "all_heads_exact_rate": 0.015,
+    "by_bucket_summary": {
+      "meta_logic": {
+        "all_heads_exact": 11,
+        "all_heads_exact_rate": 0.09482758620689655,
+        "n": 116
+      },
+      "v74_baseline": {
+        "all_heads_exact": 0,
+        "all_heads_exact_rate": 0.0,
+        "n": 194
+      },
+      "v75_register": {
+        "all_heads_exact": 0,
+        "all_heads_exact_rate": 0.0,
+        "n": 262
+      },
+      "v76_production": {
+        "all_heads_exact": 2,
+        "all_heads_exact_rate": 0.019230769230769232,
+        "n": 104
+      },
+      "v77_omega": {
+        "all_heads_exact": 2,
+        "all_heads_exact_rate": 0.009174311926605505,
+        "n": 218
+      },
+      "v77_rule_four": {
+        "all_heads_exact": 0,
+        "all_heads_exact_rate": 0.0,
+        "n": 106
+      }
+    },
+    "n": 1000,
+    "per_head_acc": {
+      "authority": 1.0,
+      "domain": 0.389,
+      "drive": 0.298,
+      "expression_family": 0.58,
+      "has_meta_logic": 0.926,
+      "has_omega": 0.722,
+      "meta_relations": 0.907,
+      "noetic": 0.174,
+      "register_mode": 0.648,
+      "registers": 0.27,
+      "transition_kind": 0.703,
+      "turn_type": 1.0
+    }
+  },
+  "total_steps": 5620
+}

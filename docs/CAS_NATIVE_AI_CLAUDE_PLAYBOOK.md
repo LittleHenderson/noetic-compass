@@ -482,6 +482,63 @@ the hash-feature wedge. The next meaningful experiment is either:
 Do not treat the random-backbone smoke as a capability result; it is a wiring
 result only.
 
+## CAS Transformer Step 10 Frozen Checkpoint Diagnostic
+
+Frozen CAS-Native checkpoint experiment completed on 2026-04-30.
+
+Run path:
+
+```text
+noetic-compass-scaffold/noetic-compass/cas-native/training/runs/structured-pred-backbone-frozen-gpu-20260430/
+```
+
+Configuration:
+
+- Backbone checkpoint: `v2-first-full-20260428-220635/checkpoints/final.pt`
+- Tokenizer: matching `v2-first-full-20260428-220635/tokenizer.json`
+- CAS-Native config: d_model=512, n_layers=6, n_heads=8, vocab_size=698
+- Mode: frozen backbone, structured head only
+- Epochs: 20
+- Batch size: 64
+- Eval: fixed held-out `level3_recoverable_eval_1000.jsonl`
+- Overlap filter: enabled, removed 1,480 train records
+
+Result:
+
+```text
+all_heads_exact = 15/1000 = 1.5%
+hash-feature leak-fixed wedge = 487/1000 = 48.7%
+```
+
+Per-bucket exact:
+
+```text
+meta_logic     11/116  = 9.5%
+v76_production  2/104  = 1.9%
+v77_omega       2/218  = 0.9%
+v74_baseline    0/194  = 0.0%
+v75_register    0/262  = 0.0%
+v77_rule_four   0/106  = 0.0%
+```
+
+Interpretation:
+
+The frozen CAS-expression causal LM checkpoint is not a useful natural-language
+intent encoder. It is approximately 32x worse than primitive hash features on
+all-heads-exact. The per-head pattern pins the cause: heads tied to CAS-literal
+tokens in the prompt retain partial signal (`has_meta_logic`, `meta_relations`,
+`has_omega`), while heads that require natural-language inference collapse
+(`noetic`, `domain`, `drive`, `registers`).
+
+Architectural conclusion:
+
+Do not use a frozen CAS-expression LM as the natural-language front door for CAS
+Transformer. The next viable path is a CAS/NL encoder or IntentIR recovery layer
+trained on natural-language prompts, feeding structured heads and deterministic
+compiler/admissibility builders. An unfrozen checkpoint diagnostic may still be
+run once as a bounded control, but it should not be treated as the main
+architecture unless it shows a large early recovery over this baseline.
+
 ## Current Known-Good State
 
 Latest relevant pushed commits:
