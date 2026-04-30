@@ -47,10 +47,15 @@ class TestCASNativeModel:
 
         expected_keys = {
             "logits",
+            "hidden_states",
+            "pooled_hidden_state",
             "cognitive_state",
+            "raw_cognitive_state",
             "rpm_satisfaction",
             "inversion_flags",
             "topos_truth_values",
+            "lacunarity_scores",
+            "lacunarity_meta",
         }
         assert set(output.keys()) == expected_keys
 
@@ -59,6 +64,14 @@ class TestCASNativeModel:
         with torch.no_grad():
             output = model(sample_input)
         assert output["logits"].shape == (2, 40, config.vocab_size)
+
+    def test_hidden_state_adapter_shapes(self, model, config, sample_input):
+        """Forward exposes final hidden states for structured prediction."""
+        with torch.no_grad():
+            output = model(sample_input)
+
+        assert output["hidden_states"].shape == (2, 40, config.d_model)
+        assert output["pooled_hidden_state"].shape == (2, config.d_model)
 
     def test_cognitive_state_on_simplex(self, model, sample_input):
         """Cognitive state should be valid open simplex vectors."""

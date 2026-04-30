@@ -4,6 +4,13 @@
 
 At the beginning of every CAS-Native AI work session, read this file before making a plan.
 
+If the session concerns next-generation CAS-Native architecture, also read:
+
+- `docs/architecture/CAS_TRANSFORMER_ARCHITECTURE.md`
+- `docs/working/CAS_TRANSFORMER_CLAUDE_HANDOFF_STEP5.md`
+
+Current architectural north star: CAS Transformer, not CAS wrapper. The target is a model whose primary decoded unit is a typed CAS transition and whose surface language is rendered only from compiler-valid, trace-linked CAS state. Do not frame future work as "LLM plus CAS safety/checking layer" unless explicitly describing a rejected fallback or near-term bridge.
+
 At the end of every CAS-Native AI work session, update this file with:
 
 - Latest known-good commit hash.
@@ -13,6 +20,395 @@ At the end of every CAS-Native AI work session, update this file with:
 - Next safest action.
 
 Do not rely on memory alone. This file is the session handoff contract between Claude and Codex.
+
+## CAS Transformer Step 5 Held-Out Eval Set
+
+Step 5 is complete: the 1,000-record held-out recoverable Level 3 eval set exists and validates cleanly.
+
+Files:
+
+- `cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000.jsonl`
+- `cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000_metrics.json`
+- `cas-synthetic/data/level2_scaffold/LEVEL3_RECOVERABLE_EVAL_1000_REPORT.md`
+
+Generation command:
+
+```powershell
+python cas-synthetic\scripts\generate_level3_conversations.py --input cas-synthetic\data\level2_scaffold\level2_full_10k.jsonl --output cas-synthetic\data\level2_scaffold\level3_recoverable_eval_1000.jsonl --style-id recoverable_translation --variants-per-source 2 --start-source-record 9000 --max-source-records 1000 --max-output-records 1000 --seed 20260429 --progress-every 250
+```
+
+Generation result:
+
+- `written`: 1000
+- `source_records_used`: 500
+- `source_index_range`: 9000..9516
+- `source_records_skipped`: 17
+- `variants_per_source`: 2
+
+Validation command:
+
+```powershell
+python cas-synthetic\scripts\validate_level3_conversations.py cas-synthetic\data\level2_scaffold\level3_recoverable_eval_1000.jsonl
+```
+
+Validation result:
+
+- `Total records`: 1000
+- `Valid records`: 1000
+- `Invalid records`: 0
+- `Compiler checked`: 1000
+- `Compiler skipped`: 0
+
+Bucket counts:
+
+- `v75_register`: 262
+- `v77_omega`: 218
+- `v74_baseline`: 194
+- `meta_logic`: 116
+- `v77_rule_four`: 106
+- `v76_production`: 104
+
+Held-out rule: do not use this dataset for training. Step 7 structured-prediction head work is now unblocked, but it must use this file as fixed eval data.
+
+## CAS Transformer Step 7 Structured-Prediction Base
+
+Step 7 local base is complete. This is not GPU training yet; it is the
+trainable model surface and deterministic label-ingest bridge needed before a
+cloud run.
+
+Files:
+
+- `noetic-compass-scaffold/noetic-compass/cas-native/model/structured_prediction.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/structured_prediction_ingest.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/train_structured_prediction.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/tests/test_structured_prediction_head.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/tests/test_structured_prediction_ingest.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/tests/test_train_structured_prediction.py`
+
+What it does:
+
+- Adds `StructuredPredictionHead`, a PyTorch multi-head predictor for typed CAS
+  structure from hidden states.
+- Predicts turn type, expression family, transition kind, Noetic, Domain, Drive,
+  Registers, register mode, authority status, Omega presence, and meta-logic
+  presence.
+- Adds `structured_prediction_loss` for supervised multi-head training.
+- Adds Level 3 label ingestion from recoverable records into the target tensor
+  shape consumed by the head.
+- Adds a local smoke trainer with deterministic hashed text features so the
+  Step 7 data/model path can be exercised before GPU work.
+- The trainer refuses to train on `level3_recoverable_eval_1000.jsonl` unless
+  explicitly passed `--allow-heldout-train`; the held-out set remains eval-only.
+- Fixes one important label bug: coefficient multiplication in production
+  recipes (`0.40*state`) is not register integration. Only cross-register
+  integration (`x` / `times` rendered as CAS multiplication glyph) should map to
+  `integration`; production recipes with multiple register-tagged ingredients
+  map to `co_presence`.
+
+Validation command:
+
+```powershell
+pytest noetic-compass-scaffold\noetic-compass\cas-native\tests\test_structured_prediction_head.py noetic-compass-scaffold\noetic-compass\cas-native\tests\test_structured_prediction_ingest.py noetic-compass-scaffold\noetic-compass\cas-native\tests\test_train_structured_prediction.py -q
+```
+
+Validation result:
+
+```text
+11 passed in 1.52s
+```
+
+Local smoke-trainer command:
+
+```powershell
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\python.exe noetic-compass-scaffold\noetic-compass\cas-native\training\train_structured_prediction.py --input cas-synthetic\data\level2_scaffold\level3_recoverable_smoke.jsonl --limit 8 --steps 2 --d-model 32 --bottleneck-dim 16
+```
+
+Important environment note: this workstation's default `python` is
+`C:\Python314\python.exe`, which does not have usable Torch (`torch.nn` is
+missing). Use the Python 3.12 interpreter above for local Torch smoke runs.
+
+Smoke result:
+
+```text
+records=4
+loss=13.8498
+domain_acc=1.0
+drive_acc=0.75
+expression_family_acc=0.5
+```
+
+Tiny overfit check:
+
+```powershell
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\python.exe noetic-compass-scaffold\noetic-compass\cas-native\training\train_structured_prediction.py --input cas-synthetic\data\level2_scaffold\level3_recoverable_smoke.jsonl --limit 8 --steps 80 --d-model 64 --bottleneck-dim 32
+```
+
+Tiny overfit result:
+
+```text
+records=4
+loss=0.0077
+all reported scalar and multi-label heads at 1.0 accuracy
+```
+
+First local train/eval harness run:
+
+```powershell
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\python.exe noetic-compass-scaffold\noetic-compass\cas-native\training\train_structured_prediction.py --input cas-synthetic\data\level2_scaffold\level3_recoverable_full.jsonl --limit 512 --eval-input cas-synthetic\data\level2_scaffold\level3_recoverable_eval_1000.jsonl --eval-limit 200 --epochs 2 --batch-size 64 --d-model 64 --bottleneck-dim 32 --lr 0.01 --seed 20260430
+```
+
+Result:
+
+```text
+train_raw=512
+train_after_overlap_filter=510
+eval=200
+steps=16
+train_loss_avg: 13.3376 -> 9.2959
+all_heads_exact: 1/200 = 0.005
+```
+
+Per-head held-out accuracy:
+
+```text
+authority=1.0
+turn_type=1.0
+has_meta_logic=0.93
+has_omega=0.93
+meta_relations=0.90
+register_mode=0.85
+transition_kind=0.75
+domain=0.675
+expression_family=0.68
+registers=0.415
+noetic=0.39
+drive=0.375
+```
+
+Interpretation: the train/eval harness is working and the held-out discipline is
+enforced. The low all-head-exact score is not a blocker at this stage because
+this run uses hashed prompt features and only 16 optimizer steps.
+
+Larger CPU baseline:
+
+```powershell
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\python.exe noetic-compass-scaffold\noetic-compass\cas-native\training\train_structured_prediction.py --input cas-synthetic\data\level2_scaffold\level3_recoverable_full.jsonl --limit 2000 --eval-input cas-synthetic\data\level2_scaffold\level3_recoverable_eval_1000.jsonl --eval-limit 1000 --epochs 5 --batch-size 128 --d-model 128 --bottleneck-dim 64 --lr 0.01 --seed 20260430
+```
+
+Result:
+
+```text
+train_raw=2000
+train_after_overlap_filter=1974
+eval=1000
+steps=80
+train_loss_avg: 9.3360 -> 2.0260
+all_heads_exact: 352/1000 = 0.352
+```
+
+Per-bucket all-head exact:
+
+```text
+v74_baseline=100/194 = 0.515
+v77_omega=108/218 = 0.495
+v75_register=88/262 = 0.336
+meta_logic=25/116 = 0.216
+v76_production=21/104 = 0.202
+v77_rule_four=10/106 = 0.094
+```
+
+Per-head held-out accuracy:
+
+```text
+turn_type=1.0
+authority=1.0
+has_omega=1.0
+has_meta_logic=0.994
+meta_relations=0.954
+register_mode=0.939
+expression_family=0.917
+transition_kind=0.913
+domain=0.902
+registers=0.867
+drive=0.736
+noetic=0.724
+```
+
+Interpretation: even with a primitive hashed prompt encoder, the structured
+head learns meaningful held-out CAS slots locally. The weakest buckets are
+`v77_rule_four`, `v76_production`, and `meta_logic`; these are exactly the
+buckets that need typed solvers / stronger slot extraction rather than only
+more neural capacity. Next safest action: connect this same head to a real text
+encoder or CAS-Native backbone hidden states, while keeping the held-out 1K eval
+file untouched for final evaluation only.
+
+## Leak Audit Correction - 2026-04-30
+
+Two leakage channels were found and corrected. Do not cite pre-audit reranker
+numbers as an honest M2 baseline.
+
+### Leak 1: Reranker candidate-bank leakage
+
+Mechanism: the semantic reranker is a prompt/candidate string-retrieval system.
+When its candidate bank was built from the full Level 3 corpus, the bank
+included held-out eval expressions by shared `source_level2_id` and by identical
+`cas_expression`. That made the reranker look like it was recovering structure
+when it was often retrieving memorized strings.
+
+Correction:
+
+- Use `cas-native/inference/eval_semantic_reranker_on_heldout.py` for held-out
+  reranker comparisons.
+- This script builds the candidate bank from the training corpus after removing
+  records overlapping the held-out eval set by `id`, `source_level2_id`, or
+  `cas_expression`.
+
+Artifact:
+
+- `noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/semantic-reranker-PATCHED-on-heldout-1000-leakfix-20260430/`
+
+Leak-fixed reranker result:
+
+```text
+candidate_source_record_count_raw=19454
+candidate_source_record_count_filtered=17974
+removed=1480
+removed_by_source_level2_id=1000
+removed_by_cas_expression=1480
+exact=105/1000 = 10.5%
+```
+
+Per-bucket leak-fixed reranker exact:
+
+```text
+v74_baseline=15/194 = 7.7%
+v75_register=88/262 = 33.6%
+v77_rule_four=2/106 = 1.9%
+v77_omega=0/218 = 0.0%
+v76_production=0/104 = 0.0%
+meta_logic=0/116 = 0.0%
+```
+
+### Leak 2: Wedge answer-in-features leakage
+
+Mechanism: the first structured-prediction text features joined
+`user_prompt + natural_language_mapping + assistant_response`. In the
+recoverable Level 3 corpus, `assistant_response` contains the literal target CAS
+expression. That is answer leakage.
+
+Correction:
+
+- `train_structured_prediction.py::_record_text()` now returns only
+  `user_prompt`.
+- `train_structured_prediction_local()` filters train records that overlap eval
+  records by `id`, `source_level2_id`, or `cas_expression`.
+- The CLI refuses to train directly on `level3_recoverable_eval_1000.jsonl`
+  unless `--allow-heldout-train` is passed for an explicit throwaway debug run.
+
+Artifact:
+
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/runs/structured-pred-5epoch-leakfix-20260430/`
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/runs/structured-pred-20epoch-leakfix-20260430/`
+
+Leak-fixed wedge result:
+
+```text
+5 epoch all-head exact=452/1000 = 45.2%
+20 epoch all-head exact=487/1000 = 48.7%
+```
+
+Per-bucket 20 epoch leak-fixed wedge exact:
+
+```text
+v74_baseline=117/194 = 60.3%
+v75_register=122/262 = 46.6%
+v77_rule_four=29/106 = 27.4%
+v77_omega=121/218 = 55.5%
+v76_production=20/104 = 19.2%
+meta_logic=78/116 = 67.2%
+overall=487/1000 = 48.7%
+```
+
+Per-head 20 epoch leak-fixed wedge accuracy:
+
+```text
+turn_type=1.000
+authority=1.000
+has_omega=1.000
+has_meta_logic=1.000
+meta_relations=0.998
+registers=0.982
+register_mode=0.950
+expression_family=0.940
+transition_kind=0.940
+domain=0.904
+noetic=0.764
+drive=0.761
+```
+
+### Corrected thesis readout
+
+The honest comparison is not "reranker beats wedge." That was a contaminated
+comparison. The leak-fixed comparison is:
+
+```text
+semantic reranker=105/1000 = 10.5%
+structured wedge=487/1000 = 48.7%
+margin=+38.2 percentage points for the wedge
+```
+
+Architectural implication: the structured wedge is less leak-vulnerable than the
+candidate-reranker baseline. Removing answer text from wedge features produces a
+small drop because the recoverable `user_prompt` already verbalizes the formal
+slots. Removing eval strings from the reranker's candidate bank collapses it
+because the reranker is fundamentally a candidate-retrieval system. This is
+evidence for the CAS Transformer direction: predict typed structure first; do
+not make exact CAS recovery depend on memorized candidate strings.
+
+## CAS Transformer Step 10 Backbone Hidden-State Adapter
+
+Step 10 foundation is complete: the structured-prediction wedge can now consume
+pooled hidden states from `CASNativeModel`, not only temporary hashed prompt
+features.
+
+Files:
+
+- `noetic-compass-scaffold/noetic-compass/cas-native/model/cas_native_model.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/structured_backbone_adapter.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/tests/test_structured_backbone_adapter.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/tests/test_model.py`
+
+What changed:
+
+- `CASNativeModel.forward()` now returns:
+  - `hidden_states`: final sequence hidden states `(batch, seq, d_model)`
+  - `pooled_hidden_state`: masked-mean pooled hidden state `(batch, d_model)`
+- `records_to_backbone_batch()` tokenizes only `user_prompt`, preserving the
+  leak-fix discipline.
+- `pooled_backbone_hidden_states()` runs the CAS-Native backbone and extracts the
+  pooled state.
+- `CASBackboneStructuredPredictor` composes `CASNativeModel` with
+  `StructuredPredictionHead`.
+- The adapter supports frozen-backbone mode for head-only training and unfrozen
+  mode for full gradient flow through the backbone.
+
+Validation command:
+
+```powershell
+pytest noetic-compass-scaffold\noetic-compass\cas-native\tests\test_model.py noetic-compass-scaffold\noetic-compass\cas-native\tests\test_structured_backbone_adapter.py noetic-compass-scaffold\noetic-compass\cas-native\tests\test_structured_prediction_head.py noetic-compass-scaffold\noetic-compass\cas-native\tests\test_structured_prediction_ingest.py -q
+```
+
+Validation result:
+
+```text
+27 passed in 1.19s
+```
+
+Next safest action: build a small backbone train/eval runner that uses
+`CASBackboneStructuredPredictor` directly, first with a tiny randomly
+initialized backbone on CPU, then with a loaded CAS-Native checkpoint on GPU.
+Do not compare performance against the hash-feature wedge until the backbone
+runner uses the same held-out 1K eval file and the same overlap filter.
 
 ## Current Known-Good State
 

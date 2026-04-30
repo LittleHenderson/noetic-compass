@@ -542,6 +542,9 @@ class CASNativeModel(nn.Module):
         Returns:
             Dict with keys:
               - logits: LM logits (batch, seq, vocab_size)
+              - hidden_states: Final hidden states (batch, seq, d_model)
+              - pooled_hidden_state: Masked-mean pooled hidden state
+                (batch, d_model)
               - cognitive_state: Cognitive state on simplex (batch, seq, 40)
               - rpm_satisfaction: Mean RPM satisfaction scalar
               - inversion_flags: Inversion scores (batch, 7)
@@ -609,6 +612,8 @@ class CASNativeModel(nn.Module):
 
         output = {
             "logits": logits,
+            "hidden_states": x,
+            "pooled_hidden_state": pooled,
             "cognitive_state": corrected_state,
             "raw_cognitive_state": cognitive_state,
             "rpm_satisfaction": mean_rpm,
