@@ -1,0 +1,25 @@
+{
+  "mode": "eval_only_on_heldout",
+  "dataset": "cas-synthetic\\data\\level2_scaffold\\level3_recoverable_full.jsonl",
+  "tokenizer": "noetic-compass-scaffold\\noetic-compass\\cas-native\\inference\\runs\\semantic-reranker-recoverable-PATCHED-20260429\\tokenizer.json",
+  "checkpoint": "noetic-compass-scaffold\\noetic-compass\\cas-native\\inference\\runs\\semantic-reranker-recoverable-PATCHED-20260429\\semantic_reranker.pt",
+  "eval_input": "cas-synthetic\\data\\level2_scaffold\\level3_recoverable_eval_1000.jsonl",
+  "eval_record_count": 1000,
+  "candidate_bank_sizes": {
+    "v74_baseline": 1852,
+    "v75_register": 3964,
+    "v77_rule_four": 1673,
+    "v77_omega": 1798,
+    "v76_production": 1005,
+    "meta_logic": 940
+  },
+  "device": "cpu",
+  "batch_size": 128,
+  "min_filter_candidates": 1,
+  "max_candidates": 5000,
+  "wall_clock_seconds": 45.53421330451965,
+  "checkpoint_metadata": {
+    "tokenizer_path": "/root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/semantic-reranker-recoverable-PATCHED-20260429/tokenizer.json",
+    "dataset": "/root/workspace/cas-synthetic/data/level2_scaffold/level3_recoverable_full.jsonl"
+  }
+}

@@ -1,0 +1,854 @@
+{
+  "config": {
+    "batch_size": 128,
+    "bottleneck_dim": 64,
+    "d_model": 128,
+    "epochs": 5,
+    "eval_every_steps": null,
+    "eval_overlap_filter": {
+      "by_key": {
+        "cas_expression": 1480,
+        "id": 0,
+        "source_level2_id": 1000
+      },
+      "enabled": true,
+      "removed": 1480
+    },
+    "lr": 0.001,
+    "n_eval": 1000,
+    "n_train": 17974,
+    "n_train_raw": 19454,
+    "seed": 42,
+    "weight_decay": 0.0001
+  },
+  "eval": {
+    "all_heads_exact": 452,
+    "all_heads_exact_rate": 0.452,
+    "by_bucket": {
+      "meta_logic": {
+        "all_heads_exact": 36,
+        "all_heads_exact_rate": 0.3103448275862069,
+        "n": 116,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.9051724137931034,
+          "drive": 0.9827586206896551,
+          "expression_family": 1.0,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.603448275862069,
+          "noetic": 0.7672413793103449,
+          "register_mode": 0.9482758620689655,
+          "registers": 1.0,
+          "transition_kind": 1.0,
+          "turn_type": 1.0
+        }
+      },
+      "v74_baseline": {
+        "all_heads_exact": 126,
+        "all_heads_exact_rate": 0.6494845360824743,
+        "n": 194,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 1.0,
+          "drive": 1.0,
+          "expression_family": 1.0,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.6494845360824743,
+          "register_mode": 1.0,
+          "registers": 1.0,
+          "transition_kind": 1.0,
+          "turn_type": 1.0
+        }
+      },
+      "v75_register": {
+        "all_heads_exact": 118,
+        "all_heads_exact_rate": 0.45038167938931295,
+        "n": 262,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.8091603053435115,
+          "drive": 0.7366412213740458,
+          "expression_family": 1.0,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.7404580152671756,
+          "register_mode": 0.8206106870229007,
+          "registers": 0.9312977099236641,
+          "transition_kind": 1.0,
+          "turn_type": 1.0
+        }
+      },
+      "v76_production": {
+        "all_heads_exact": 22,
+        "all_heads_exact_rate": 0.21153846153846154,
+        "n": 104,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.5673076923076923,
+          "drive": 0.5961538461538461,
+          "expression_family": 1.0,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.3269230769230769,
+          "register_mode": 1.0,
+          "registers": 1.0,
+          "transition_kind": 1.0,
+          "turn_type": 1.0
+        }
+      },
+      "v77_omega": {
+        "all_heads_exact": 120,
+        "all_heads_exact_rate": 0.5504587155963303,
+        "n": 218,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 1.0,
+          "drive": 0.5504587155963303,
+          "expression_family": 1.0,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 1.0,
+          "register_mode": 1.0,
+          "registers": 1.0,
+          "transition_kind": 1.0,
+          "turn_type": 1.0
+        }
+      },
+      "v77_rule_four": {
+        "all_heads_exact": 30,
+        "all_heads_exact_rate": 0.2830188679245283,
+        "n": 106,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 1.0,
+          "drive": 0.7452830188679245,
+          "expression_family": 0.4339622641509434,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.9528301886792453,
+          "register_mode": 1.0,
+          "registers": 1.0,
+          "transition_kind": 0.4339622641509434,
+          "turn_type": 1.0
+        }
+      }
+    },
+    "n": 1000,
+    "per_head_acc": {
+      "authority": 1.0,
+      "domain": 0.894,
+      "drive": 0.762,
+      "expression_family": 0.94,
+      "has_meta_logic": 1.0,
+      "has_omega": 1.0,
+      "meta_relations": 0.954,
+      "noetic": 0.762,
+      "register_mode": 0.947,
+      "registers": 0.982,
+      "transition_kind": 0.94,
+      "turn_type": 1.0
+    }
+  },
+  "training": {
+    "history": [
+      {
+        "all_heads_exact": 207,
+        "all_heads_exact_rate": 0.207,
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 9,
+            "all_heads_exact_rate": 0.07758620689655173,
+            "n": 116,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8103448275862069,
+              "drive": 0.9827586206896551,
+              "expression_family": 0.9655172413793104,
+              "has_meta_logic": 0.9482758620689655,
+              "has_omega": 1.0,
+              "meta_relations": 0.5172413793103449,
+              "noetic": 0.6206896551724138,
+              "register_mode": 0.9482758620689655,
+              "registers": 0.9655172413793104,
+              "transition_kind": 0.9051724137931034,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 99,
+            "all_heads_exact_rate": 0.5103092783505154,
+            "n": 194,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9845360824742269,
+              "drive": 0.8298969072164949,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.6701030927835051,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 45,
+            "all_heads_exact_rate": 0.1717557251908397,
+            "n": 262,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.816793893129771,
+              "drive": 0.7137404580152672,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.7061068702290076,
+              "register_mode": 0.8244274809160306,
+              "registers": 0.366412213740458,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 1,
+            "all_heads_exact_rate": 0.009615384615384616,
+            "n": 104,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.5192307692307693,
+              "drive": 0.6153846153846154,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.4519230769230769,
+              "register_mode": 0.9134615384615384,
+              "registers": 0.36538461538461536,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 52,
+            "all_heads_exact_rate": 0.23853211009174313,
+            "n": 218,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.573394495412844,
+              "expression_family": 0.9954128440366973,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9908256880733946,
+              "register_mode": 1.0,
+              "registers": 0.4036697247706422,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 1,
+            "all_heads_exact_rate": 0.009433962264150943,
+            "n": 106,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.6509433962264151,
+              "expression_family": 0.20754716981132076,
+              "has_meta_logic": 1.0,
+              "has_omega": 0.9622641509433962,
+              "meta_relations": 1.0,
+              "noetic": 0.9245283018867925,
+              "register_mode": 0.9811320754716981,
+              "registers": 0.32075471698113206,
+              "transition_kind": 0.2358490566037736,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 0,
+        "global_step": 141,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.877,
+          "drive": 0.72,
+          "expression_family": 0.911,
+          "has_meta_logic": 0.994,
+          "has_omega": 0.996,
+          "meta_relations": 0.944,
+          "noetic": 0.748,
+          "register_mode": 0.937,
+          "registers": 0.562,
+          "transition_kind": 0.908,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 7.696434700742681
+      },
+      {
+        "all_heads_exact": 406,
+        "all_heads_exact_rate": 0.406,
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 28,
+            "all_heads_exact_rate": 0.2413793103448276,
+            "n": 116,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8448275862068966,
+              "drive": 0.9655172413793104,
+              "expression_family": 0.9827586206896551,
+              "has_meta_logic": 0.9913793103448276,
+              "has_omega": 1.0,
+              "meta_relations": 0.5775862068965517,
+              "noetic": 0.7155172413793104,
+              "register_mode": 0.9568965517241379,
+              "registers": 0.9482758620689655,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 127,
+            "all_heads_exact_rate": 0.654639175257732,
+            "n": 194,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9845360824742269,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.6701030927835051,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 108,
+            "all_heads_exact_rate": 0.4122137404580153,
+            "n": 262,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8320610687022901,
+              "drive": 0.6984732824427481,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.7099236641221374,
+              "register_mode": 0.8244274809160306,
+              "registers": 0.9122137404580153,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 18,
+            "all_heads_exact_rate": 0.17307692307692307,
+            "n": 104,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.5480769230769231,
+              "drive": 0.6538461538461539,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.4326923076923077,
+              "register_mode": 1.0,
+              "registers": 0.8653846153846154,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 104,
+            "all_heads_exact_rate": 0.47706422018348627,
+            "n": 218,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.5825688073394495,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.7798165137614679,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 21,
+            "all_heads_exact_rate": 0.19811320754716982,
+            "n": 106,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.6886792452830188,
+              "expression_family": 0.41509433962264153,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9528301886792453,
+              "register_mode": 1.0,
+              "registers": 0.8584905660377359,
+              "transition_kind": 0.4339622641509434,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 1,
+        "global_step": 282,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.891,
+          "drive": 0.754,
+          "expression_family": 0.936,
+          "has_meta_logic": 0.999,
+          "has_omega": 1.0,
+          "meta_relations": 0.951,
+          "noetic": 0.763,
+          "register_mode": 0.949,
+          "registers": 0.894,
+          "transition_kind": 0.94,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 2.8667369801947413
+      },
+      {
+        "all_heads_exact": 442,
+        "all_heads_exact_rate": 0.442,
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 35,
+            "all_heads_exact_rate": 0.3017241379310345,
+            "n": 116,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8448275862068966,
+              "drive": 0.9827586206896551,
+              "expression_family": 0.9827586206896551,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 0.6551724137931034,
+              "noetic": 0.7586206896551724,
+              "register_mode": 0.9482758620689655,
+              "registers": 0.9741379310344828,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 122,
+            "all_heads_exact_rate": 0.6288659793814433,
+            "n": 194,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9948453608247423,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.634020618556701,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 112,
+            "all_heads_exact_rate": 0.42748091603053434,
+            "n": 262,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.7862595419847328,
+              "drive": 0.732824427480916,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.7442748091603053,
+              "register_mode": 0.8244274809160306,
+              "registers": 0.9236641221374046,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 22,
+            "all_heads_exact_rate": 0.21153846153846154,
+            "n": 104,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.6057692307692307,
+              "drive": 0.6153846153846154,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.3173076923076923,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 124,
+            "all_heads_exact_rate": 0.5688073394495413,
+            "n": 218,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.591743119266055,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.9495412844036697,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 27,
+            "all_heads_exact_rate": 0.25471698113207547,
+            "n": 106,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.6886792452830188,
+              "expression_family": 0.41509433962264153,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9433962264150944,
+              "register_mode": 1.0,
+              "registers": 0.9245283018867925,
+              "transition_kind": 0.4339622641509434,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 2,
+        "global_step": 423,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.884,
+          "drive": 0.766,
+          "expression_family": 0.936,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.96,
+          "noetic": 0.757,
+          "register_mode": 0.948,
+          "registers": 0.958,
+          "transition_kind": 0.94,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 2.1778114907285
+      },
+      {
+        "all_heads_exact": 443,
+        "all_heads_exact_rate": 0.443,
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 41,
+            "all_heads_exact_rate": 0.35344827586206895,
+            "n": 116,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8793103448275862,
+              "drive": 0.9827586206896551,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 0.6206896551724138,
+              "noetic": 0.7844827586206896,
+              "register_mode": 0.9482758620689655,
+              "registers": 0.9741379310344828,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 117,
+            "all_heads_exact_rate": 0.6030927835051546,
+            "n": 194,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.6030927835051546,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 109,
+            "all_heads_exact_rate": 0.41603053435114506,
+            "n": 262,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.7977099236641222,
+              "drive": 0.7366412213740458,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.7251908396946565,
+              "register_mode": 0.8244274809160306,
+              "registers": 0.9312977099236641,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 22,
+            "all_heads_exact_rate": 0.21153846153846154,
+            "n": 104,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.5673076923076923,
+              "drive": 0.6442307692307693,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.34615384615384615,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 127,
+            "all_heads_exact_rate": 0.5825688073394495,
+            "n": 218,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.5825688073394495,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.9908256880733946,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 27,
+            "all_heads_exact_rate": 0.25471698113207547,
+            "n": 106,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.7264150943396226,
+              "expression_family": 0.39622641509433965,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9528301886792453,
+              "register_mode": 1.0,
+              "registers": 0.9716981132075472,
+              "transition_kind": 0.42452830188679247,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 3,
+        "global_step": 564,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.888,
+          "drive": 0.772,
+          "expression_family": 0.936,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.956,
+          "noetic": 0.753,
+          "register_mode": 0.948,
+          "registers": 0.974,
+          "transition_kind": 0.939,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 1.9489151738214154
+      },
+      {
+        "all_heads_exact": 452,
+        "all_heads_exact_rate": 0.452,
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 36,
+            "all_heads_exact_rate": 0.3103448275862069,
+            "n": 116,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9051724137931034,
+              "drive": 0.9827586206896551,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 0.603448275862069,
+              "noetic": 0.7672413793103449,
+              "register_mode": 0.9482758620689655,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 126,
+            "all_heads_exact_rate": 0.6494845360824743,
+            "n": 194,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.6494845360824743,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 118,
+            "all_heads_exact_rate": 0.45038167938931295,
+            "n": 262,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8091603053435115,
+              "drive": 0.7366412213740458,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.7404580152671756,
+              "register_mode": 0.8206106870229007,
+              "registers": 0.9312977099236641,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 22,
+            "all_heads_exact_rate": 0.21153846153846154,
+            "n": 104,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.5673076923076923,
+              "drive": 0.5961538461538461,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.3269230769230769,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 120,
+            "all_heads_exact_rate": 0.5504587155963303,
+            "n": 218,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.5504587155963303,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 30,
+            "all_heads_exact_rate": 0.2830188679245283,
+            "n": 106,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.7452830188679245,
+              "expression_family": 0.4339622641509434,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9528301886792453,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.4339622641509434,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 4,
+        "global_step": 705,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.894,
+          "drive": 0.762,
+          "expression_family": 0.94,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.954,
+          "noetic": 0.762,
+          "register_mode": 0.947,
+          "registers": 0.982,
+          "transition_kind": 0.94,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 1.8370244714385229
+      }
+    ],
+    "total_steps": 705
+  }
+}
