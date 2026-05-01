@@ -1,5 +1,33 @@
 # Noetic Compass — Progress Log
 
+## Session 38: CAS-Native Tokenizer — Wave 1 (Foundation, May 1, 2026)
+
+**Objective.** Pivot away from the failed frozen-CAS-CLM-as-encoder approach (~100x worse than hash baseline, modality mismatch diagnosed in Session 37 follow-up) toward an original CAS-native tokenizer that pre-decodes CAS-axis structure at the input layer. Build the deterministic, no-GPU foundation pieces (Wave 1) so subsequent learned-tagger and encoder waves have a stable substrate.
+
+**Architectural commitment (locked in this session).** The tokenizer is the FIRST layer of CAS reasoning, not a vocabulary mapping. Every output token carries: `surface_span` provenance to original characters; an explicit `cas_signature` over the four CAS axes (Noetic / Domain / Drive / Register) plus role tags; a `source` flag (LEXICON / LEARNED / CAS_NOTATION / FALLBACK) recording how the signature was assigned. Encoder is no longer asked to discover CAS structure from generic IDs; it is handed the structure pre-decoded at the surface level.
+
+**Wave 1 deliverables (all shipped, all green).**
+
+- `cas-native/tokenizer/structured_token.py` — `StructuredToken` + `CASSignature` schema. 10/4/7/4 axis cardinality locked to CAS v7.7 ontology. Negative drive values (depletion) admitted.
+- `cas-native/tokenizer/pretokenizer.py` — span-tracking segmentation. Words / punctuation / whitespace / cas_candidate kinds. Apostrophes preserved inside words. Round-trip lossless.
+- `cas-native/tokenizer/cas_notation.py` — CAS v7.7 notation recognizer. Coverage: full compound state (`^n^D_{F_k}|R`), partial compounds, bare Noetic / Domain / Drive / Register, register-set spec (`|⟨…⟩`), `Ω_*`, `Θ(`, arrows, set relations. Longest-match-first.
+- `cas-native/tokenizer/lexicon/schema.py` — `LexiconEntry` + `CASLexicon`. Single-word O(1) lookup; multi-word greedy-longest with context-required / context-blocked regex predicates (joined-window with ␟ separator).
+- `cas-native/tokenizer/lexicon/build_seed.py` + `seed_lexicon.jsonl` — 98 seed entries. Anti-drift discipline applied: `^3` Negative entries are visceral (`can't stomach`, `rubs me the wrong way`); analytical critique (`audit`, `scrutinize`, `find flaws`) routes to `^6` Male. `^8` Above/Cause is associative triggering only. `^4` Vibration uses etymological cognates (`struck a chord`). Demographic register variants (academic / working_class / child) collapse to identical CAS axes.
+- `cas-native/tokenizer/assembler.py` — end-to-end `tokenize(text) -> list[StructuredToken]`. Resolution order: CAS notation → multi-word lexicon → single-word lexicon → fallback.
+
+**Verification.**
+
+- `pytest cas-native/tests/tokenizer/` — 64 passed in 0.35s.
+- `pytest cas-native/tests/tokenizer/ + test_runtime_frame + test_turn_execution + test_intent_ir + test_intent_level3_ingest` — 82 passed, 1 skipped in 0.44s. No regressions in neighboring runtime/intent layers.
+- `pytest test_train_structured_prediction + test_structured_prediction_head + test_structured_prediction_ingest` — 14 passed, 1 skipped in 4.18s.
+- Fixed the shared CAS-Native `tmp_path` fixture to use UUID directories via `Path.mkdir()` instead of `tempfile.mkdtemp(dir=...)`, which creates Python-unwritable directories on this Windows/OneDrive workspace.
+- Anti-drift assertions tested as load-bearing properties: `audit` does NOT fire `^3`, `can't stomach` does NOT fire `^6`, `reminds me of` fires `^8` not a deductive compound.
+- Demographic robustness asserted: `exhausted` / `hella tired` / `super sleepy` / `profoundly fatigued` all collapse onto `F3` vitality depletion despite different surface registers.
+
+**Handoff document.** `docs/working/cas_tokenizer_wave1_handoff.md` — full record of the pivot, role of the tokenizer in the existing stack, what's done, what's next, and how the Wave 2 specialist agents should be engaged.
+
+**Next.** Wave 2 dispatched as background specialist work: lexicon-scaling methodology, learned CAS-axis tagger architecture, encoder-integration path. Codex review selected strict word/phrase IDs + char-CNN fallback as the first encoder vocabulary path; BPE-on-our-corpus is contingency only. Wave 3+ (SDG demographic extension, GPU-side training) gated on Wave 2 designs.
+
 ## Session 37: meta_logic Local Diagnosis — Three Surgical Patches (April 29, 2026)
 
 **Objective.** Diagnose meta_logic bucket residual failure (2/5 exact, 2/5 top-5, mean_rank 15.67 in the PATCHED-20260429 A/B run) locally before any further GPU spend, per dual-expert review consensus that bank coverage / filter logic / prompt-slot inference is the proper next investigation, not training scale.

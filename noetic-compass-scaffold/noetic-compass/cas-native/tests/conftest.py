@@ -2,8 +2,8 @@
 
 import shutil
 import sys
-import tempfile
 import types
+import uuid
 from pathlib import Path
 
 import pytest
@@ -45,7 +45,12 @@ def set_random_seed():
 @pytest.fixture
 def tmp_path():
     """Workspace-local tmp_path to avoid blocked system temp directories."""
-    path = Path(tempfile.mkdtemp(dir=_tmp_root))
+    # On Windows + OneDrive, tempfile.mkdtemp(dir=_tmp_root) can create
+    # directories that Python cannot subsequently write into. Path.mkdir()
+    # with a UUID path preserves the workspace-local guarantee without the
+    # permission failure.
+    path = _tmp_root / f"tmp_{uuid.uuid4().hex}"
+    path.mkdir(parents=True, exist_ok=False)
     try:
         yield path
     finally:
