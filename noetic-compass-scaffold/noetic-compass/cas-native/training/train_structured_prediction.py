@@ -52,13 +52,20 @@ from cas_native.model.structured_prediction import (
     StructuredPredictionHead,
     structured_prediction_loss,
 )
+from cas_native.model.structured_token_embedding import (
+    StructuredTokenEmbedding,
+    StructuredTokenStructuredPredictor,
+)
+from cas_native.tokenizer.vocabulary import StructuredTokenVocabulary
 from cas_native.training.structured_prediction_ingest import (
     batch_targets_from_records,
     load_level3_jsonl,
 )
+from cas_native.training.structured_token_adapter import records_to_structured_token_batch
 
 
 DEFAULT_D_MODEL = 128
+HASH_FEATURE_BASELINE_ALL_HEADS_EXACT_RATE = 0.487
 
 
 DISJOINTNESS_KEYS = ("id", "source_level2_id", "cas_expression")
@@ -142,64 +149,20 @@ _SCALAR_HEAD_PAIRS: tuple[tuple[str, str], ...] = (
     ("has_meta_logic", "meta_logic_logits"),
 )
 
+_EVAL_LOGIT_KEYS: tuple[str, ...] = tuple(pair[1] for pair in _SCALAR_HEAD_PAIRS) + (
+    "register_logits",
+    "meta_relation_logits",
+)
 
-def evaluate_structured_prediction(
-    head: StructuredPredictionHead,
+
+def _eval_manifest_from_outputs(
+    outputs: dict[str, torch.Tensor],
+    targets_all: dict[str, torch.Tensor],
     records: list[dict[str, Any]],
-    *,
-    d_model: int,
-    device: torch.device | str = "cpu",
-    batch_size: int = 64,
 ) -> dict[str, Any]:
-    """Run the held-out eval pass and return a manifest with per-sample,
-    overall, and per-bucket metrics.
-
-    The returned dict has shape::
-
-        {
-          "n": int,
-          "all_heads_exact": int,
-          "all_heads_exact_rate": float,
-          "per_head_acc": {head_name: float, ...},
-          "by_bucket": {bucket: {n, all_heads_exact, all_heads_exact_rate,
-                                  per_head_acc}, ...},
-          "samples": [
-            {"id": ..., "bucket": ..., "all_heads_exact": bool,
-             "head_correct": {head_name: bool, ...}}, ...
-          ],
-        }
-
-    ``all_heads_exact`` is the strictest sample-level metric: every prediction
-    head must match its target on the sample. Per-head accuracies are looser.
-    Per-bucket stratification is mandatory because the held-out 1K is not
-    evenly distributed (v75_register=262 vs v76_production=104).
-    """
-
-    if not records:
-        raise ValueError("records must be non-empty to evaluate")
-
-    dev = torch.device(device)
-    head.eval()
-
-    features_all = text_features(records, d_model=d_model, device=dev)
-    targets_all = batch_targets_from_records(records, device=dev)
+    """Build the strict all-heads-exact manifest from model outputs."""
 
     n = len(records)
-    logit_keys = [pair[1] for pair in _SCALAR_HEAD_PAIRS] + [
-        "register_logits",
-        "meta_relation_logits",
-    ]
-    chunks: dict[str, list[torch.Tensor]] = {key: [] for key in logit_keys}
-    with torch.no_grad():
-        for start in range(0, n, batch_size):
-            end = min(start + batch_size, n)
-            batch_features = features_all[start:end]
-            batch_outputs = head(batch_features)
-            for key in logit_keys:
-                chunks[key].append(batch_outputs[key])
-    outputs = {key: torch.cat(parts, dim=0) for key, parts in chunks.items()}
-
-    # Per-sample boolean correctness per head.
     correct: dict[str, list[bool]] = {}
     for target_key, logit_key in _SCALAR_HEAD_PAIRS:
         if target_key in targets_all:
@@ -254,8 +217,6 @@ def evaluate_structured_prediction(
             "per_head_acc": per_head_acc,
         }
 
-    head.train()
-
     return {
         "n": n,
         "all_heads_exact": int(sum(all_exact)),
@@ -264,6 +225,116 @@ def evaluate_structured_prediction(
         "by_bucket": by_bucket,
         "samples": samples,
     }
+
+
+def baseline_comparison(
+    all_heads_exact_rate: float,
+    *,
+    baseline_rate: float = HASH_FEATURE_BASELINE_ALL_HEADS_EXACT_RATE,
+) -> dict[str, float | bool | str]:
+    """Compare a run to the honest leak-fixed hash-feature baseline."""
+
+    delta = float(all_heads_exact_rate) - float(baseline_rate)
+    return {
+        "baseline_name": "leak_fixed_hash_feature_20ep",
+        "baseline_all_heads_exact_rate": float(baseline_rate),
+        "candidate_all_heads_exact_rate": float(all_heads_exact_rate),
+        "delta_abs": delta,
+        "delta_pp": delta * 100.0,
+        "beats_baseline": delta > 0.0,
+    }
+
+
+def evaluate_structured_prediction(
+    head: StructuredPredictionHead,
+    records: list[dict[str, Any]],
+    *,
+    d_model: int,
+    device: torch.device | str = "cpu",
+    batch_size: int = 64,
+) -> dict[str, Any]:
+    """Run the held-out eval pass and return a manifest with per-sample,
+    overall, and per-bucket metrics.
+
+    The returned dict has shape::
+
+        {
+          "n": int,
+          "all_heads_exact": int,
+          "all_heads_exact_rate": float,
+          "per_head_acc": {head_name: float, ...},
+          "by_bucket": {bucket: {n, all_heads_exact, all_heads_exact_rate,
+                                  per_head_acc}, ...},
+          "samples": [
+            {"id": ..., "bucket": ..., "all_heads_exact": bool,
+             "head_correct": {head_name: bool, ...}}, ...
+          ],
+        }
+
+    ``all_heads_exact`` is the strictest sample-level metric: every prediction
+    head must match its target on the sample. Per-head accuracies are looser.
+    Per-bucket stratification is mandatory because the held-out 1K is not
+    evenly distributed (v75_register=262 vs v76_production=104).
+    """
+
+    if not records:
+        raise ValueError("records must be non-empty to evaluate")
+
+    dev = torch.device(device)
+    head.eval()
+
+    features_all = text_features(records, d_model=d_model, device=dev)
+    targets_all = batch_targets_from_records(records, device=dev)
+
+    n = len(records)
+    chunks: dict[str, list[torch.Tensor]] = {key: [] for key in _EVAL_LOGIT_KEYS}
+    with torch.no_grad():
+        for start in range(0, n, batch_size):
+            end = min(start + batch_size, n)
+            batch_features = features_all[start:end]
+            batch_outputs = head(batch_features)
+            for key in _EVAL_LOGIT_KEYS:
+                chunks[key].append(batch_outputs[key])
+    outputs = {key: torch.cat(parts, dim=0) for key, parts in chunks.items()}
+
+    head.train()
+    return _eval_manifest_from_outputs(outputs, targets_all, records)
+
+
+def evaluate_structured_token_prediction(
+    model: StructuredTokenStructuredPredictor,
+    records: list[dict[str, Any]],
+    vocabulary: StructuredTokenVocabulary,
+    *,
+    device: torch.device | str = "cpu",
+    batch_size: int = 64,
+    max_length: int = 256,
+) -> dict[str, Any]:
+    """Evaluate the structured-token adapter path with Step-7 metrics."""
+
+    if not records:
+        raise ValueError("records must be non-empty to evaluate")
+
+    dev = torch.device(device)
+    model.eval()
+    targets_all = batch_targets_from_records(records, device=dev)
+    chunks: dict[str, list[torch.Tensor]] = {key: [] for key in _EVAL_LOGIT_KEYS}
+    with torch.no_grad():
+        for start in range(0, len(records), batch_size):
+            batch_records = records[start:start + batch_size]
+            batch = records_to_structured_token_batch(
+                batch_records,
+                vocabulary,
+                max_length=max_length,
+                device=dev,
+            )
+            batch_outputs = model(batch)
+            for key in _EVAL_LOGIT_KEYS:
+                chunks[key].append(batch_outputs[key])
+    outputs = {key: torch.cat(parts, dim=0) for key, parts in chunks.items()}
+
+    model.train()
+    return _eval_manifest_from_outputs(outputs, targets_all, records)
 
 
 def train_structured_prediction_local(
@@ -435,6 +506,7 @@ def train_structured_prediction_local(
 
     manifest = {
         "config": {
+            "mode": "hash_feature",
             "d_model": d_model,
             "bottleneck_dim": bottleneck_dim,
             "batch_size": batch_size,
@@ -456,6 +528,9 @@ def train_structured_prediction_local(
             "n": final_eval.get("n", 0),
             "all_heads_exact": final_eval.get("all_heads_exact", 0),
             "all_heads_exact_rate": final_eval.get("all_heads_exact_rate", 0.0),
+            "baseline_comparison": baseline_comparison(
+                float(final_eval.get("all_heads_exact_rate", 0.0))
+            ),
             "per_head_acc": dict(final_eval.get("per_head_acc", {})),
             "by_bucket": {
                 bucket: {
@@ -480,6 +555,256 @@ def train_structured_prediction_local(
                     f.write(json.dumps(sample, sort_keys=True) + "\n")
 
     return head, manifest
+
+
+def train_structured_token_prediction_local(
+    train_records: list[dict[str, Any]],
+    eval_records: list[dict[str, Any]] | None,
+    *,
+    d_model: int = DEFAULT_D_MODEL,
+    bottleneck_dim: int = 64,
+    batch_size: int = 64,
+    epochs: int = 3,
+    eval_every_steps: int | None = None,
+    lr: float = 1e-3,
+    weight_decay: float = 0.0,
+    seed: int = 42,
+    device: torch.device | str = "cpu",
+    out_dir: Path | None = None,
+    progress_print: bool = True,
+    filter_eval_overlaps: bool = True,
+    max_length: int = 256,
+    vocab_min_count: int = 1,
+    vocab_max_size: int | None = None,
+    embedding_dropout: float = 0.0,
+) -> tuple[StructuredTokenStructuredPredictor, StructuredTokenVocabulary, dict[str, Any]]:
+    """Mini-batched train/eval harness for the structured-token input path.
+
+    This is the first trainable local runner that consumes Wave-1 structured
+    tokens directly. The vocabulary is built only from post-filtered training
+    prompts, then reused for held-out eval so eval labels and answer strings
+    cannot leak into the input representation.
+    """
+
+    if not train_records:
+        raise ValueError("train_records must be non-empty")
+
+    raw_train_count = len(train_records)
+    overlap_report: dict[str, Any] = {
+        "enabled": bool(filter_eval_overlaps and eval_records),
+        "removed": 0,
+        "by_key": {key: 0 for key in DISJOINTNESS_KEYS},
+    }
+    if eval_records and filter_eval_overlaps:
+        train_records, overlap_report = filter_eval_overlapping_records(
+            train_records,
+            eval_records,
+        )
+        if not train_records:
+            raise ValueError(
+                "all train_records overlap eval_records by id/source_level2_id/"
+                "cas_expression; provide a disjoint training split or disable "
+                "filter_eval_overlaps only for debug"
+            )
+
+    torch.manual_seed(seed)
+    rng = random.Random(seed)
+    dev = torch.device(device)
+
+    vocabulary = StructuredTokenVocabulary.from_records(
+        train_records,
+        text_field="user_prompt",
+        min_count=vocab_min_count,
+        max_size=vocab_max_size,
+    )
+    embedding = StructuredTokenEmbedding(
+        vocab_size=len(vocabulary),
+        d_model=d_model,
+        dropout=embedding_dropout,
+    )
+    head = StructuredPredictionHead(d_model=d_model, bottleneck_dim=bottleneck_dim)
+    model = StructuredTokenStructuredPredictor(embedding, head).to(dev)
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=lr,
+        weight_decay=weight_decay,
+    )
+
+    history: list[dict[str, Any]] = []
+    best_eval: dict[str, Any] | None = None
+    best_state: dict[str, torch.Tensor] | None = None
+    global_step = 0
+
+    def _maybe_eval(epoch_index: int, train_loss_avg: float) -> None:
+        nonlocal best_eval, best_state
+        if not eval_records:
+            return
+        snapshot = evaluate_structured_token_prediction(
+            model,
+            eval_records,
+            vocabulary,
+            device=dev,
+            batch_size=batch_size,
+            max_length=max_length,
+        )
+        snapshot_entry = {
+            "epoch": epoch_index,
+            "global_step": global_step,
+            "train_loss_avg": train_loss_avg,
+            "n_eval": snapshot["n"],
+            "all_heads_exact": snapshot["all_heads_exact"],
+            "all_heads_exact_rate": snapshot["all_heads_exact_rate"],
+            "baseline_comparison": baseline_comparison(snapshot["all_heads_exact_rate"]),
+            "per_head_acc": dict(snapshot["per_head_acc"]),
+            "by_bucket": {
+                bucket: {
+                    "n": entry["n"],
+                    "all_heads_exact": entry["all_heads_exact"],
+                    "all_heads_exact_rate": entry["all_heads_exact_rate"],
+                    "per_head_acc": dict(entry["per_head_acc"]),
+                }
+                for bucket, entry in snapshot["by_bucket"].items()
+            },
+        }
+        history.append(snapshot_entry)
+        if (
+            best_eval is None
+            or snapshot["all_heads_exact_rate"] > best_eval["all_heads_exact_rate"]
+        ):
+            best_eval = snapshot
+            best_state = {
+                key: value.detach().cpu().clone()
+                for key, value in model.state_dict().items()
+            }
+        if progress_print:
+            comparison = snapshot_entry["baseline_comparison"]
+            print(
+                json.dumps(
+                    {
+                        "event": "eval",
+                        "mode": "structured_token",
+                        "epoch": epoch_index,
+                        "step": global_step,
+                        "train_loss_avg": round(train_loss_avg, 6),
+                        "all_heads_exact": snapshot["all_heads_exact"],
+                        "n_eval": snapshot["n"],
+                        "rate": round(snapshot["all_heads_exact_rate"], 6),
+                        "delta_vs_hash_baseline_pp": round(
+                            float(comparison["delta_pp"]),
+                            3,
+                        ),
+                    },
+                    sort_keys=True,
+                )
+            )
+
+    indices = list(range(len(train_records)))
+    for epoch in range(epochs):
+        rng.shuffle(indices)
+        epoch_loss_total = 0.0
+        epoch_batches = 0
+        model.train()
+        for batch_start in range(0, len(train_records), batch_size):
+            batch_idx = indices[batch_start:batch_start + batch_size]
+            batch_records = [train_records[i] for i in batch_idx]
+            batch = records_to_structured_token_batch(
+                batch_records,
+                vocabulary,
+                max_length=max_length,
+                device=dev,
+            )
+            targets = batch_targets_from_records(batch_records, device=dev)
+
+            optimizer.zero_grad(set_to_none=True)
+            outputs = model(batch)
+            loss = structured_prediction_loss(outputs, targets)
+            loss.backward()
+            optimizer.step()
+
+            epoch_loss_total += float(loss.item())
+            epoch_batches += 1
+            global_step += 1
+
+            if eval_every_steps and eval_records and global_step % eval_every_steps == 0:
+                _maybe_eval(epoch, epoch_loss_total / max(epoch_batches, 1))
+
+        avg_train_loss = epoch_loss_total / max(epoch_batches, 1)
+        if progress_print:
+            print(
+                json.dumps(
+                    {
+                        "event": "epoch_end",
+                        "mode": "structured_token",
+                        "epoch": epoch,
+                        "step": global_step,
+                        "train_loss_avg": round(avg_train_loss, 6),
+                    },
+                    sort_keys=True,
+                )
+            )
+        _maybe_eval(epoch, avg_train_loss)
+
+    if best_state is not None:
+        model.load_state_dict({key: value.to(dev) for key, value in best_state.items()})
+
+    final_eval = best_eval if best_eval is not None else {}
+    manifest = {
+        "config": {
+            "mode": "structured_token",
+            "d_model": d_model,
+            "bottleneck_dim": bottleneck_dim,
+            "batch_size": batch_size,
+            "epochs": epochs,
+            "eval_every_steps": eval_every_steps,
+            "lr": lr,
+            "weight_decay": weight_decay,
+            "seed": seed,
+            "max_length": max_length,
+            "embedding_dropout": embedding_dropout,
+            "vocab_min_count": vocab_min_count,
+            "vocab_max_size": vocab_max_size,
+            "vocab_size": len(vocabulary),
+            "n_train": len(train_records),
+            "n_train_raw": raw_train_count,
+            "eval_overlap_filter": overlap_report,
+            "n_eval": len(eval_records) if eval_records else 0,
+        },
+        "training": {
+            "total_steps": global_step,
+            "history": history,
+        },
+        "eval": {
+            "n": final_eval.get("n", 0),
+            "all_heads_exact": final_eval.get("all_heads_exact", 0),
+            "all_heads_exact_rate": final_eval.get("all_heads_exact_rate", 0.0),
+            "baseline_comparison": baseline_comparison(
+                float(final_eval.get("all_heads_exact_rate", 0.0))
+            ),
+            "per_head_acc": dict(final_eval.get("per_head_acc", {})),
+            "by_bucket": {
+                bucket: {
+                    "n": entry["n"],
+                    "all_heads_exact": entry["all_heads_exact"],
+                    "all_heads_exact_rate": entry["all_heads_exact_rate"],
+                    "per_head_acc": dict(entry["per_head_acc"]),
+                }
+                for bucket, entry in final_eval.get("by_bucket", {}).items()
+            },
+        },
+    }
+
+    if out_dir is not None:
+        out_dir.mkdir(parents=True, exist_ok=True)
+        with (out_dir / "manifest.json").open("w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2, sort_keys=True)
+        vocabulary.save(out_dir / "structured_token_vocab.json")
+        torch.save(model.state_dict(), out_dir / "best_structured_token_model.pt")
+        if final_eval:
+            with (out_dir / "samples.jsonl").open("w", encoding="utf-8") as f:
+                for sample in final_eval.get("samples", []):
+                    f.write(json.dumps(sample, sort_keys=True) + "\n")
+
+    return model, vocabulary, manifest
 
 
 def structured_prediction_accuracy(
@@ -520,10 +845,21 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", required=True, help="Level 3 JSONL training records")
     parser.add_argument("--limit", type=int, default=128)
+    parser.add_argument(
+        "--input-mode",
+        choices=("hash", "structured_token"),
+        default="hash",
+        help="Input feature path. 'hash' preserves the leak-fixed baseline; "
+        "'structured_token' uses StructuredTokenVocabulary + StructuredTokenEmbedding.",
+    )
     parser.add_argument("--steps", type=int, default=25, help="Smoke-mode gradient steps")
     parser.add_argument("--d-model", type=int, default=DEFAULT_D_MODEL)
     parser.add_argument("--bottleneck-dim", type=int, default=64)
     parser.add_argument("--lr", type=float, default=0.01)
+    parser.add_argument("--max-length", type=int, default=256)
+    parser.add_argument("--vocab-min-count", type=int, default=1)
+    parser.add_argument("--vocab-max-size", type=int, default=None)
+    parser.add_argument("--embedding-dropout", type=float, default=0.0)
     parser.add_argument(
         "--allow-heldout-train",
         action="store_true",
@@ -568,6 +904,27 @@ def main() -> None:
     train_records = load_level3_jsonl(path, limit=args.limit)
 
     if args.eval_input is None:
+        if args.input_mode == "structured_token":
+            _model, _vocab, manifest = train_structured_token_prediction_local(
+                train_records,
+                eval_records=None,
+                d_model=args.d_model,
+                bottleneck_dim=args.bottleneck_dim,
+                batch_size=args.batch_size,
+                epochs=args.epochs,
+                lr=args.lr,
+                weight_decay=args.weight_decay,
+                seed=args.seed,
+                device=args.device,
+                out_dir=Path(args.out_dir) if args.out_dir else None,
+                progress_print=False,
+                max_length=args.max_length,
+                vocab_min_count=args.vocab_min_count,
+                vocab_max_size=args.vocab_max_size,
+                embedding_dropout=args.embedding_dropout,
+            )
+            print(json.dumps(manifest, indent=2, sort_keys=True))
+            return
         _head, metrics = train_structured_prediction_smoke(
             train_records,
             d_model=args.d_model,
@@ -595,21 +952,42 @@ def main() -> None:
     eval_records = load_level3_jsonl(eval_path, limit=args.eval_limit)
 
     out_dir = Path(args.out_dir) if args.out_dir else None
-    _head, manifest = train_structured_prediction_local(
-        train_records,
-        eval_records,
-        d_model=args.d_model,
-        bottleneck_dim=args.bottleneck_dim,
-        batch_size=args.batch_size,
-        epochs=args.epochs,
-        eval_every_steps=args.eval_every_steps,
-        lr=args.lr,
-        weight_decay=args.weight_decay,
-        seed=args.seed,
-        device=args.device,
-        out_dir=out_dir,
-        filter_eval_overlaps=not args.allow_eval_overlap,
-    )
+    if args.input_mode == "structured_token":
+        _model, _vocab, manifest = train_structured_token_prediction_local(
+            train_records,
+            eval_records,
+            d_model=args.d_model,
+            bottleneck_dim=args.bottleneck_dim,
+            batch_size=args.batch_size,
+            epochs=args.epochs,
+            eval_every_steps=args.eval_every_steps,
+            lr=args.lr,
+            weight_decay=args.weight_decay,
+            seed=args.seed,
+            device=args.device,
+            out_dir=out_dir,
+            filter_eval_overlaps=not args.allow_eval_overlap,
+            max_length=args.max_length,
+            vocab_min_count=args.vocab_min_count,
+            vocab_max_size=args.vocab_max_size,
+            embedding_dropout=args.embedding_dropout,
+        )
+    else:
+        _head, manifest = train_structured_prediction_local(
+            train_records,
+            eval_records,
+            d_model=args.d_model,
+            bottleneck_dim=args.bottleneck_dim,
+            batch_size=args.batch_size,
+            epochs=args.epochs,
+            eval_every_steps=args.eval_every_steps,
+            lr=args.lr,
+            weight_decay=args.weight_decay,
+            seed=args.seed,
+            device=args.device,
+            out_dir=out_dir,
+            filter_eval_overlaps=not args.allow_eval_overlap,
+        )
     summary = {
         "config": manifest["config"],
         "total_steps": manifest["training"]["total_steps"],
@@ -617,6 +995,7 @@ def main() -> None:
             "n": manifest["eval"]["n"],
             "all_heads_exact": manifest["eval"]["all_heads_exact"],
             "all_heads_exact_rate": manifest["eval"]["all_heads_exact_rate"],
+            "baseline_comparison": manifest["eval"]["baseline_comparison"],
             "per_head_acc": manifest["eval"]["per_head_acc"],
             "by_bucket_summary": {
                 bucket: {

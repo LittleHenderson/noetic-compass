@@ -1,5 +1,25 @@
 # Noetic Compass — Progress Log
 
+## Session 40: Structured-Token Train/Eval Runner Mode (May 1, 2026)
+
+**Objective.** Add the first train/eval runner path that consumes `StructuredTokenEmbedding + StructuredPredictionHead` over Level 3 data and reports directly against the honest leak-fixed hash-feature baseline (48.7% all-heads-exact).
+
+**Deliverables.**
+
+- `cas-native/training/train_structured_prediction.py` now accepts `--input-mode structured_token` alongside the original `hash` mode. Hash remains the default for reproducibility.
+- New `train_structured_token_prediction_local(...)` builds `StructuredTokenVocabulary` from post-overlap-filtered training prompts only, trains `StructuredTokenEmbedding + StructuredPredictionHead`, evaluates on held-out records, tracks the best eval checkpoint, writes `manifest.json`, `samples.jsonl`, `structured_token_vocab.json`, and `best_structured_token_model.pt`.
+- New `evaluate_structured_token_prediction(...)` shares the strict all-heads-exact/per-head/per-bucket metric shape with the hash-feature harness.
+- Manifests now include `baseline_comparison` with `baseline_name=leak_fixed_hash_feature_20ep`, `baseline_all_heads_exact_rate=0.487`, `candidate_all_heads_exact_rate`, absolute delta, pp delta, and `beats_baseline`.
+
+**Verification.**
+
+- Direct/runner tests: `23 passed`.
+- Structured/tokenizer regression suite: `96 passed`.
+- Model/runtime/backbone neighbor suite: `36 passed`.
+- Real CLI smoke over Level 3 files: `--input-mode structured_token --limit 256 --eval-limit 60 --epochs 1` completed, wrote artifacts to `C:/tmp/cas_structured_token_runner_smoke`, and produced the expected explicit baseline comparison (`0/60`, `-48.7pp`). This was a wiring smoke, not a performance claim.
+
+**Next.** Run a real local structured-token comparison with non-trivial settings (for example 20 epochs over the full non-held-out Level 3 set, same held-out 1K eval, `d_model=128`, `batch_size=128`, `weight_decay=1e-4`) and compare to the 48.7% hash baseline. If it fails below hash, the next bottleneck is lexicon scale/tagger coverage, not runner plumbing.
+
 ## Session 39: CAS-Native Structured-Token Vocabulary + Embedding Adapter (May 1, 2026)
 
 **Objective.** Turn Wave 1 structured tokens into a real encoder-consumable stream. The tokenizer already emitted CAS-signature-bearing `StructuredToken` records; this session adds stable vocabulary IDs, tensor batching, and a model-side embedding adapter so the structured-prediction head can consume CAS-native token streams instead of raw token IDs.

@@ -10,11 +10,15 @@ import pytest
 
 from cas_native.training.train_structured_prediction import (
     _is_heldout_eval_path,
+    HASH_FEATURE_BASELINE_ALL_HEADS_EXACT_RATE,
+    evaluate_structured_token_prediction,
     evaluate_structured_prediction,
     train_structured_prediction_local,
     train_structured_prediction_smoke,
+    train_structured_token_prediction_local,
 )
 from cas_native.model.structured_prediction import StructuredPredictionHead
+from cas_native.tokenizer import StructuredTokenVocabulary
 
 
 def _records():
@@ -186,3 +190,133 @@ def test_train_structured_prediction_local_runs_without_eval_records():
     assert manifest["training"]["total_steps"] == 2
     assert manifest["eval"]["n"] == 0
     assert manifest["training"]["history"] == []
+
+
+def test_structured_token_train_eval_runner_returns_manifest_and_comparison():
+    records = _records()
+    _model, vocab, manifest = train_structured_token_prediction_local(
+        records,
+        records,
+        d_model=32,
+        bottleneck_dim=16,
+        batch_size=2,
+        epochs=2,
+        lr=0.01,
+        seed=23,
+        progress_print=False,
+        filter_eval_overlaps=False,
+        max_length=32,
+    )
+
+    assert manifest["config"]["mode"] == "structured_token"
+    assert manifest["config"]["vocab_size"] == len(vocab)
+    assert manifest["config"]["n_train"] == 4
+    assert manifest["config"]["n_eval"] == 4
+    assert manifest["training"]["total_steps"] == 4
+    assert len(manifest["training"]["history"]) == 2
+    assert manifest["eval"]["n"] == 4
+    comparison = manifest["eval"]["baseline_comparison"]
+    assert comparison["baseline_all_heads_exact_rate"] == HASH_FEATURE_BASELINE_ALL_HEADS_EXACT_RATE
+    assert comparison["candidate_all_heads_exact_rate"] == manifest["eval"]["all_heads_exact_rate"]
+
+
+def test_structured_token_eval_reports_per_bucket_metrics():
+    records = _records()
+    model, vocab, _manifest = train_structured_token_prediction_local(
+        records,
+        eval_records=None,
+        d_model=32,
+        bottleneck_dim=16,
+        batch_size=2,
+        epochs=1,
+        lr=0.01,
+        seed=29,
+        progress_print=False,
+        max_length=32,
+    )
+
+    eval_manifest = evaluate_structured_token_prediction(
+        model,
+        records,
+        vocab,
+        batch_size=2,
+        max_length=32,
+    )
+
+    assert eval_manifest["n"] == 4
+    assert set(eval_manifest["by_bucket"].keys()) == {
+        "v75_register",
+        "v76_production",
+        "v77_omega",
+        "meta_logic",
+    }
+    assert len(eval_manifest["samples"]) == 4
+
+
+def test_structured_token_vocabulary_builds_from_train_prompts_only():
+    train_records = [
+        {
+            "id": "train",
+            "bucket": "v74_baseline",
+            "cas_expression": "^1^P_{F1}|T",
+            "user_prompt": "plain train prompt only",
+            "assistant_response": "answer leak ^9^O_{F7}|E",
+        }
+    ]
+
+    _model, vocab, manifest = train_structured_token_prediction_local(
+        train_records,
+        eval_records=None,
+        d_model=16,
+        bottleneck_dim=8,
+        batch_size=1,
+        epochs=1,
+        lr=0.01,
+        seed=31,
+        progress_print=False,
+        max_length=16,
+    )
+
+    assert manifest["config"]["mode"] == "structured_token"
+    assert "cas:^9^O_{F7}|E" not in vocab.token_to_id
+    assert "surf:plain" in vocab.token_to_id
+
+
+def test_structured_token_train_eval_writes_artifacts():
+    records = _records()
+    tmp_root = Path("C:/tmp")
+    if not tmp_root.exists():
+        pytest.skip("C:/tmp is not available for artifact-write smoke")
+    out_dir = tmp_root / "cas_structured_token_prediction_artifact_test"
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    try:
+        try:
+            _model, _vocab, manifest = train_structured_token_prediction_local(
+                records,
+                records,
+                d_model=32,
+                bottleneck_dim=16,
+                batch_size=2,
+                epochs=1,
+                lr=0.01,
+                seed=37,
+                out_dir=out_dir,
+                progress_print=False,
+                filter_eval_overlaps=False,
+                max_length=32,
+            )
+        except PermissionError as exc:
+            pytest.skip(f"artifact-write smoke blocked by filesystem permissions: {exc}")
+
+        assert (out_dir / "manifest.json").exists()
+        assert (out_dir / "best_structured_token_model.pt").exists()
+        assert (out_dir / "structured_token_vocab.json").exists()
+        assert (out_dir / "samples.jsonl").exists()
+
+        on_disk = json.loads((out_dir / "manifest.json").read_text(encoding="utf-8"))
+        loaded_vocab = StructuredTokenVocabulary.load(out_dir / "structured_token_vocab.json")
+        assert on_disk["config"]["vocab_size"] == len(loaded_vocab)
+        assert on_disk["eval"]["n"] == manifest["eval"]["n"]
+    finally:
+        shutil.rmtree(out_dir, ignore_errors=True)

@@ -26,6 +26,39 @@ Role in the stack: this update is the first encoder-consumable CAS-native input 
 
 ---
 
+## 0.1 Session 40 update - structured-token train/eval runner landed
+
+The train/eval mode named above now exists.
+
+- `cas-native/training/train_structured_prediction.py --input-mode structured_token` trains `StructuredTokenEmbedding + StructuredPredictionHead`.
+- The runner builds `StructuredTokenVocabulary` from filtered training `user_prompt` text only; eval prompts reuse the training vocabulary. Assistant responses, CAS expressions, and held-out eval answers are not used to build input features.
+- Output artifacts: `manifest.json`, `samples.jsonl`, `structured_token_vocab.json`, and `best_structured_token_model.pt`.
+- Every eval manifest includes `baseline_comparison` against the honest leak-fixed hash-feature baseline: `487/1000 = 48.7% all-heads-exact`.
+- Real CLI smoke completed over Level 3 files with `--limit 256 --eval-limit 60 --epochs 1`; it produced `0/60` all-heads-exact, which is expected for a tiny wiring smoke. The value of that run is that the pipeline executes, writes artifacts, and reports the baseline delta explicitly.
+
+Recommended next command shape for a real local comparison:
+
+```powershell
+& "C:\Users\wakil\AppData\Local\Programs\Python\Python312\python.exe" `
+  noetic-compass-scaffold/noetic-compass/cas-native/training/train_structured_prediction.py `
+  --input cas-synthetic/data/level2_scaffold/level3_recoverable_full.jsonl `
+  --eval-input cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000.jsonl `
+  --input-mode structured_token `
+  --limit 19454 `
+  --epochs 20 `
+  --batch-size 128 `
+  --d-model 128 `
+  --bottleneck-dim 64 `
+  --lr 0.001 `
+  --weight-decay 0.0001 `
+  --max-length 256 `
+  --out-dir noetic-compass-scaffold/noetic-compass/cas-native/training/runs/structured-token-20epoch-local-YYYYMMDD
+```
+
+Interpretation gate: if the structured-token runner beats 48.7%, the CAS-native token substrate is already carrying useful signal beyond hashing. If it lands far below 48.7%, the runner is not the bottleneck; lexicon scale and learned CAS-axis tagger coverage are.
+
+---
+
 ## 1. Why this exists — the pivot in one paragraph
 
 On 2026-04-30 a frozen-CAS-CLM-as-encoder run on an A6000 produced ~0.3-0.7% all-heads-exact through 11 epochs over 19,454 Level 3 records. The hash-feature baseline reached 48.7%. The frozen pretrained CAS-CLM backbone underperformed primitive token-hash features by ~100x. Diagnosed as **modality mismatch**: the CAS-CLM was trained as a causal LM on CAS expressions, so its hidden states are optimized for next-CAS-token prediction, not for encoding natural-language prompts. Its tokenizer (HybridCASTokenizer, vocab=698) collapses NL prompts to mostly `[UNK]`. CAS-CLM is the right tool for the OUTPUT/decoding side of the pipeline; it is the wrong tool for INPUT encoding.
