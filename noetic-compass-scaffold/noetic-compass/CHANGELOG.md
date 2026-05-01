@@ -1,5 +1,24 @@
 # Noetic Compass — Progress Log
 
+## Session 39: CAS-Native Structured-Token Vocabulary + Embedding Adapter (May 1, 2026)
+
+**Objective.** Turn Wave 1 structured tokens into a real encoder-consumable stream. The tokenizer already emitted CAS-signature-bearing `StructuredToken` records; this session adds stable vocabulary IDs, tensor batching, and a model-side embedding adapter so the structured-prediction head can consume CAS-native token streams instead of raw token IDs.
+
+**Deliverables.**
+
+- `cas-native/tokenizer/vocabulary.py` - source-aware `StructuredTokenVocabulary` with stable reserved IDs (`<pad>`, `<bos>`, `<eos>`, `<unk>`, `<mask>`, `<cas_literal>`, `<lexicon_hit>`, `<fallback_neutral>`), deterministic frequency ordering, JSON round-trip, and leak-safe `from_records(..., text_field="user_prompt")`.
+- `cas-native/training/structured_token_adapter.py` - `StructuredTokenBatch` tensors: `input_ids`, `attention_mask`, 25-dim CAS signature features, confidence features, source IDs, and normalized surface-span features.
+- `cas-native/model/structured_token_embedding.py` - `StructuredTokenEmbedding` with gated fusion between surface vocabulary embeddings and CAS-side features; `StructuredTokenStructuredPredictor` composes the embedding with `StructuredPredictionHead`.
+- Package exports updated in `cas-native/tokenizer/__init__.py` and `cas-native/model/__init__.py`.
+
+**Verification.**
+
+- New direct tests: 13 passed across vocabulary, batch adapter, and embedding adapter.
+- Neighbor suite: 100 passed across tokenizer, structured-token adapter/embedding, structured-backbone adapter, structured-prediction head, runtime frame, turn execution, and IntentIR.
+- Model/training regression suite: 26 passed, 1 skipped across `test_model.py`, `test_train_structured_backbone.py`, and `test_train_structured_prediction.py`.
+
+**Architectural note.** This is still not the full CAS Transformer encoder. It is the first honest input substrate for it: character-span-provenanced tokens now become model tensors with explicit CAS-axis side channels. The next implementation step is a local train/eval runner mode that uses `StructuredTokenEmbedding` + `StructuredPredictionHead` on Level 3 data and compares against the 48.7% leak-fixed hash-feature baseline.
+
 ## Session 38: CAS-Native Tokenizer — Wave 1 (Foundation, May 1, 2026)
 
 **Objective.** Pivot away from the failed frozen-CAS-CLM-as-encoder approach (~100x worse than hash baseline, modality mismatch diagnosed in Session 37 follow-up) toward an original CAS-native tokenizer that pre-decodes CAS-axis structure at the input layer. Build the deterministic, no-GPU foundation pieces (Wave 1) so subsequent learned-tagger and encoder waves have a stable substrate.

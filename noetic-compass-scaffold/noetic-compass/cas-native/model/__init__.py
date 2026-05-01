@@ -28,6 +28,10 @@ from .structured_prediction import (
     StructuredPredictionHead,
     structured_prediction_loss,
 )
+from .structured_token_embedding import (
+    StructuredTokenEmbedding,
+    StructuredTokenStructuredPredictor,
+)
 from .register_film import (
     RegisterFiLM,
     NUM_REGISTERS,
@@ -74,6 +78,8 @@ __all__ = [
     "StructuredPrediction",
     "StructuredPredictionHead",
     "structured_prediction_loss",
+    "StructuredTokenEmbedding",
+    "StructuredTokenStructuredPredictor",
     "RegisterFiLM",
     "NUM_REGISTERS",
     "REGISTER_INDEX",

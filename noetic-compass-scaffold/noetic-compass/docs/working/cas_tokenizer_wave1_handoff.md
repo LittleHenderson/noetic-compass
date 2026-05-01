@@ -8,6 +8,24 @@
 
 ---
 
+## 0. Session 39 update - vocabulary and embedding bridge landed
+
+Wave 1 is no longer only a tokenizer artifact. The next bridge is now implemented:
+
+- `cas-native/tokenizer/vocabulary.py` assigns stable, source-aware vocabulary IDs to `StructuredToken` streams. It preserves the distinction between CAS literals (`cas:^2^P_{F4}|f`), lexicon phrases (`lex:drawn to`), learned tags, and fallback surfaces.
+- `cas-native/training/structured_token_adapter.py` converts token streams into `StructuredTokenBatch`: `input_ids`, `attention_mask`, 25-dim CAS signature features, confidence, source IDs, and normalized span features.
+- `cas-native/model/structured_token_embedding.py` fuses surface embeddings with CAS-side features through a gated adapter and can feed `StructuredPredictionHead` directly via `StructuredTokenStructuredPredictor`.
+
+Verification for this update:
+
+- `13 passed` for the direct vocabulary/adapter/embedding tests.
+- `100 passed` for tokenizer + neighboring runtime/intent/structured-prediction tests.
+- `26 passed, 1 skipped` for model/training regressions.
+
+Role in the stack: this update is the first encoder-consumable CAS-native input substrate. It does not yet train a full CAS Transformer, but it gives the upcoming runner a real path from natural-language prompt -> structured tokens -> CAS-axis tensors -> hidden states -> structured prediction heads. The next implementation step is a train/eval mode over Level 3 data using `StructuredTokenEmbedding` + `StructuredPredictionHead`, measured against the 48.7% leak-fixed hash-feature baseline.
+
+---
+
 ## 1. Why this exists — the pivot in one paragraph
 
 On 2026-04-30 a frozen-CAS-CLM-as-encoder run on an A6000 produced ~0.3-0.7% all-heads-exact through 11 epochs over 19,454 Level 3 records. The hash-feature baseline reached 48.7%. The frozen pretrained CAS-CLM backbone underperformed primitive token-hash features by ~100x. Diagnosed as **modality mismatch**: the CAS-CLM was trained as a causal LM on CAS expressions, so its hidden states are optimized for next-CAS-token prediction, not for encoding natural-language prompts. Its tokenizer (HybridCASTokenizer, vocab=698) collapses NL prompts to mostly `[UNK]`. CAS-CLM is the right tool for the OUTPUT/decoding side of the pipeline; it is the wrong tool for INPUT encoding.
