@@ -35,6 +35,14 @@ EVAL_PARAPHRASE_TEMPLATES: tuple[str, ...] = (
 # but with surface forms the eval will not test on, so the model is forced
 # to learn what they have in common (the slot block) rather than memorize
 # any one frame.
+#
+# The 9th entry "{slots}" is the bare-slot template: the model receives
+# only the slot block with no surrounding prefix string. Added 2026-05-02
+# (PR #2) to break template-prefix memorization — diagnosis was that
+# v74_baseline and meta_logic content heads had memorized prefix → label
+# associations on the 8 framed templates and collapsed under unfamiliar
+# eval-template prefixes. The bare-slot variant has no prefix to
+# memorize, forcing direct slot-content learning.
 TRAINING_PARAPHRASE_TEMPLATES: tuple[str, ...] = (
     "Convert these CAS slots into formal notation: {slots}",
     "From the slot reading {slots}, write the CAS expression.",
@@ -44,6 +52,7 @@ TRAINING_PARAPHRASE_TEMPLATES: tuple[str, ...] = (
     "Given {slots}, what does the CAS expression look like?",
     "Output the CAS expression that matches: {slots}",
     "Encode the following into CAS form: {slots}.",
+    "{slots}",
 )
 
 
