@@ -61,7 +61,10 @@ from cas_native.training.structured_prediction_ingest import (
     batch_targets_from_records,
     load_level3_jsonl,
 )
-from cas_native.training.structured_token_adapter import records_to_structured_token_batch
+from cas_native.training.structured_token_adapter import (
+    records_to_structured_token_sequences,
+    tokens_to_structured_token_batch,
+)
 
 
 DEFAULT_D_MODEL = 128
@@ -306,6 +309,7 @@ def evaluate_structured_token_prediction(
     records: list[dict[str, Any]],
     vocabulary: StructuredTokenVocabulary,
     *,
+    token_sequences: list[list[Any]] | None = None,
     device: torch.device | str = "cpu",
     batch_size: int = 64,
     max_length: int = 256,
@@ -318,12 +322,19 @@ def evaluate_structured_token_prediction(
     dev = torch.device(device)
     model.eval()
     targets_all = batch_targets_from_records(records, device=dev)
+    if token_sequences is None:
+        token_sequences = records_to_structured_token_sequences(records)
+    if len(token_sequences) != len(records):
+        raise ValueError(
+            "token_sequences length must match records length: "
+            f"{len(token_sequences)} != {len(records)}"
+        )
     chunks: dict[str, list[torch.Tensor]] = {key: [] for key in _EVAL_LOGIT_KEYS}
     with torch.no_grad():
         for start in range(0, len(records), batch_size):
-            batch_records = records[start:start + batch_size]
-            batch = records_to_structured_token_batch(
-                batch_records,
+            batch_sequences = token_sequences[start:start + batch_size]
+            batch = tokens_to_structured_token_batch(
+                batch_sequences,
                 vocabulary,
                 max_length=max_length,
                 device=dev,
@@ -611,12 +622,70 @@ def train_structured_token_prediction_local(
     rng = random.Random(seed)
     dev = torch.device(device)
 
-    vocabulary = StructuredTokenVocabulary.from_records(
-        train_records,
-        text_field="user_prompt",
+    if progress_print:
+        print(
+            json.dumps(
+                {
+                    "event": "startup",
+                    "mode": "structured_token",
+                    "stage": "tokenize_train",
+                    "n_train": len(train_records),
+                },
+                sort_keys=True,
+            ),
+            flush=True,
+        )
+    train_token_sequences = records_to_structured_token_sequences(train_records)
+    if progress_print:
+        print(
+            json.dumps(
+                {
+                    "event": "startup",
+                    "mode": "structured_token",
+                    "stage": "build_vocabulary",
+                    "n_train": len(train_records),
+                },
+                sort_keys=True,
+            ),
+            flush=True,
+        )
+    vocabulary = StructuredTokenVocabulary.from_token_sequences(
+        train_token_sequences,
         min_count=vocab_min_count,
         max_size=vocab_max_size,
     )
+    eval_token_sequences: list[list[Any]] | None = None
+    if eval_records:
+        if progress_print:
+            print(
+                json.dumps(
+                    {
+                        "event": "startup",
+                        "mode": "structured_token",
+                        "stage": "tokenize_eval",
+                        "n_eval": len(eval_records),
+                        "vocab_size": len(vocabulary),
+                    },
+                    sort_keys=True,
+                ),
+                flush=True,
+            )
+        eval_token_sequences = records_to_structured_token_sequences(eval_records)
+    if progress_print:
+        print(
+            json.dumps(
+                {
+                    "event": "startup",
+                    "mode": "structured_token",
+                    "stage": "model_init",
+                    "vocab_size": len(vocabulary),
+                    "n_train": len(train_records),
+                    "n_eval": len(eval_records) if eval_records else 0,
+                },
+                sort_keys=True,
+            ),
+            flush=True,
+        )
     embedding = StructuredTokenEmbedding(
         vocab_size=len(vocabulary),
         d_model=d_model,
@@ -643,6 +712,7 @@ def train_structured_token_prediction_local(
             model,
             eval_records,
             vocabulary,
+            token_sequences=eval_token_sequences,
             device=dev,
             batch_size=batch_size,
             max_length=max_length,
@@ -707,8 +777,9 @@ def train_structured_token_prediction_local(
         for batch_start in range(0, len(train_records), batch_size):
             batch_idx = indices[batch_start:batch_start + batch_size]
             batch_records = [train_records[i] for i in batch_idx]
-            batch = records_to_structured_token_batch(
-                batch_records,
+            batch_sequences = [train_token_sequences[i] for i in batch_idx]
+            batch = tokens_to_structured_token_batch(
+                batch_sequences,
                 vocabulary,
                 max_length=max_length,
                 device=dev,
