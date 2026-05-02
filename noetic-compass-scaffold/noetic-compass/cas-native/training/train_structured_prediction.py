@@ -72,6 +72,10 @@ from cas_native.training.structured_prediction_ingest import (
     batch_targets_from_records,
     load_level3_jsonl,
 )
+from cas_native.training.paraphrase_augmentation import (
+    PARAPHRASE_SOURCE_LABEL as TRAINING_PARAPHRASE_SOURCE_LABEL,
+    expand_with_paraphrases,
+)
 from cas_native.training.structured_token_adapter import (
     records_to_structured_token_sequences,
     tokens_to_structured_token_batch,
@@ -689,6 +693,7 @@ def train_structured_token_prediction_local(
     vocab_min_count: int = 1,
     vocab_max_size: int | None = None,
     embedding_dropout: float = 0.0,
+    paraphrase_augment_train: int = 0,
 ) -> tuple[StructuredTokenStructuredPredictor, StructuredTokenVocabulary, dict[str, Any]]:
     """Mini-batched train/eval harness for the structured-token input path.
 
@@ -719,6 +724,25 @@ def train_structured_token_prediction_local(
                 "filter_eval_overlaps only for debug"
             )
 
+    # Apply paraphrase augmentation AFTER the overlap filter so paraphrased
+    # records inherit the canonical's leak-safe status (paraphrases share
+    # source_level2_id and cas_expression with their canonical; if the
+    # canonical was filtered, no augmented form of it exists in train).
+    n_train_canonical_post_filter = len(train_records)
+    if paraphrase_augment_train > 0:
+        train_records = expand_with_paraphrases(
+            train_records, variants_per_record=paraphrase_augment_train
+        )
+    paraphrase_augmentation_report = {
+        "variants_per_record": paraphrase_augment_train,
+        "n_canonical_post_filter": n_train_canonical_post_filter,
+        "n_paraphrases": len(train_records) - n_train_canonical_post_filter,
+        "n_total": len(train_records),
+        "training_template_source": (
+            TRAINING_PARAPHRASE_SOURCE_LABEL if paraphrase_augment_train > 0 else None
+        ),
+    }
+
     torch.manual_seed(seed)
     rng = random.Random(seed)
     dev = torch.device(device)
@@ -731,6 +755,8 @@ def train_structured_token_prediction_local(
                     "mode": "structured_token",
                     "stage": "tokenize_train",
                     "n_train": len(train_records),
+                    "n_canonical": n_train_canonical_post_filter,
+                    "paraphrase_variants_per_record": paraphrase_augment_train,
                 },
                 sort_keys=True,
             ),
@@ -947,6 +973,7 @@ def train_structured_token_prediction_local(
             "n_train": len(train_records),
             "n_train_raw": raw_train_count,
             "eval_overlap_filter": overlap_report,
+            "paraphrase_augmentation": paraphrase_augmentation_report,
             "n_eval": len(eval_records) if eval_records else 0,
         },
         "training": {
@@ -1042,6 +1069,14 @@ def main() -> None:
     parser.add_argument("--vocab-max-size", type=int, default=None)
     parser.add_argument("--embedding-dropout", type=float, default=0.0)
     parser.add_argument(
+        "--paraphrase-augment-train",
+        type=int,
+        default=0,
+        help="Training-side paraphrase augmentation. K>0 expands each canonical "
+        "training record with K deterministic paraphrases (TRAINING_PARAPHRASE_TEMPLATES, "
+        "disjoint from the eval template set). 0 disables augmentation.",
+    )
+    parser.add_argument(
         "--allow-heldout-train",
         action="store_true",
         help="Allow training on the held-out eval file for debug only.",
@@ -1103,6 +1138,7 @@ def main() -> None:
                 vocab_min_count=args.vocab_min_count,
                 vocab_max_size=args.vocab_max_size,
                 embedding_dropout=args.embedding_dropout,
+                paraphrase_augment_train=args.paraphrase_augment_train,
             )
             print(json.dumps(manifest, indent=2, sort_keys=True))
             return
@@ -1152,6 +1188,7 @@ def main() -> None:
             vocab_min_count=args.vocab_min_count,
             vocab_max_size=args.vocab_max_size,
             embedding_dropout=args.embedding_dropout,
+            paraphrase_augment_train=args.paraphrase_augment_train,
         )
     else:
         _head, manifest = train_structured_prediction_local(

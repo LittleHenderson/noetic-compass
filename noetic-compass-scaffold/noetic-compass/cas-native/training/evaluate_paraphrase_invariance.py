@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import copy
 import json
 import sys
 import types
@@ -42,33 +41,19 @@ from cas_native.training.train_structured_prediction import (
 )
 
 
-PARAPHRASE_TEMPLATES: tuple[str, ...] = (
-    "Map this recoverable CAS slot reading into notation, then explain it briefly: {slots}.",
-    "Please reconstruct the exact CAS expression from these stated slots: {slots}.",
-    "As a CAS notation check, translate this slot list into the formal expression: {slots}.",
-    "Given this recoverable structure, return the CAS notation and a concise explanation: {slots}.",
-)
-
-KNOWN_SUFFIXES: tuple[str, ...] = (
-    ". What notation should I use?",
-    ". What is the precise notation?",
-    ".",
+from cas_native.training.paraphrase_templates import (
+    EVAL_PARAPHRASE_TEMPLATES,
+    KNOWN_SUFFIXES,
+    apply_template,
+    extract_recoverable_slots,
 )
 
 
-def extract_recoverable_slots(prompt: str) -> str:
-    """Extract the formal slot reading from a recoverable Level 3 prompt."""
+# Backward-compat: the prior module name. Prefer EVAL_PARAPHRASE_TEMPLATES
+# in new callers.
+PARAPHRASE_TEMPLATES: tuple[str, ...] = EVAL_PARAPHRASE_TEMPLATES
 
-    marker = "families:"
-    start = prompt.find(marker)
-    if start < 0:
-        return prompt.strip()
-    slots = prompt[start:].strip()
-    for suffix in KNOWN_SUFFIXES:
-        if slots.endswith(suffix):
-            slots = slots[: -len(suffix)].strip()
-            break
-    return slots
+EVAL_PARAPHRASE_SOURCE_LABEL = "deterministic_recoverable_slot_template"
 
 
 def paraphrase_record(
@@ -76,17 +61,17 @@ def paraphrase_record(
     *,
     paraphrase_index: int,
 ) -> dict[str, Any]:
-    """Return a copy of a Level 3 record with a deterministic paraphrased prompt."""
+    """Return a copy of a Level 3 record with a deterministic eval paraphrase."""
 
-    template = PARAPHRASE_TEMPLATES[paraphrase_index % len(PARAPHRASE_TEMPLATES)]
-    slots = extract_recoverable_slots(str(record.get("user_prompt") or ""))
-    out = copy.deepcopy(record)
-    out["base_id"] = record.get("id")
-    out["paraphrase_index"] = paraphrase_index
-    out["id"] = f"{record.get('id')}::para{paraphrase_index}"
-    out["user_prompt"] = template.format(slots=slots)
-    out["paraphrase_source"] = "deterministic_recoverable_slot_template"
-    return out
+    template = EVAL_PARAPHRASE_TEMPLATES[
+        paraphrase_index % len(EVAL_PARAPHRASE_TEMPLATES)
+    ]
+    return apply_template(
+        record,
+        template,
+        paraphrase_index=paraphrase_index,
+        paraphrase_source=EVAL_PARAPHRASE_SOURCE_LABEL,
+    )
 
 
 def make_paraphrase_records(

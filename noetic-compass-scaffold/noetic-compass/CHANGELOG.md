@@ -1,5 +1,29 @@
 # Noetic Compass — Progress Log
 
+## Session 46: Deterministic Paraphrase Augmentation in Training (May 2, 2026)
+
+**Objective.** Address the load-bearing finding from Sessions 43–44: the 47.9 pp paraphrase-eval collapse (canonical 85.1% → paraphrase 37.2%) is *not* explained by lexicon OOV (Session 44 diagnostic showed only -0.98 pp coverage delta), so it must be template memorization. The fix is to expose the model to varied surface forms during training so it can't memorize a single canonical Level 3 template.
+
+**Deliverables.**
+
+- New `cas-native/training/paraphrase_templates.py` — shared module hosting `EVAL_PARAPHRASE_TEMPLATES` (4 templates, the existing eval set) and `TRAINING_PARAPHRASE_TEMPLATES` (8 templates, **strictly disjoint** from eval), plus `extract_recoverable_slots` and `apply_template`. The disjointness invariant is locked in by a property test (`test_train_eval_template_sets_are_disjoint`); without it, training-augmented models would be memorizing the eval set's templates and the paraphrase-invariance number would be meaningless.
+- New `cas-native/training/paraphrase_augmentation.py` — `expand_with_paraphrases(records, variants_per_record=K)` returns canonical-then-paraphrase-interleaved records. K=0 is identity pass-through. Each paraphrase preserves all CAS target fields; only `user_prompt`, `id`, `base_id`, `paraphrase_index`, and `paraphrase_source` differ.
+- `evaluate_paraphrase_invariance.py` refactored to consume the shared template module. Backward-compat alias `PARAPHRASE_TEMPLATES = EVAL_PARAPHRASE_TEMPLATES` preserved; existing `paraphrase_record` / `make_paraphrase_records` API unchanged.
+- `train_structured_prediction.py` — new `paraphrase_augment_train: int = 0` parameter on `train_structured_token_prediction_local`, plus matching `--paraphrase-augment-train K` CLI flag. Augmentation applies AFTER the eval-overlap filter so paraphrased records inherit the canonical's leak-safe status. Manifest now records `config.paraphrase_augmentation` block (variants_per_record, n_canonical_post_filter, n_paraphrases, n_total, training_template_source).
+- 14 new property tests in `cas-native/tests/test_paraphrase_augmentation.py` covering: training-eval template disjointness invariant; slot-block preservation; target-field round-trip; deterministic generation; index-modulo template selection; canonical-paraphrase interleaving; identity at K=0; negative-K rejection.
+
+**Verification.**
+
+- `pytest cas-native/tests/test_paraphrase_augmentation.py cas-native/tests/tokenizer/` — 93 passed (was 79; +14 paraphrase-augmentation tests).
+- All three load-bearing anti-drift tests still green.
+- Integration check: `expand_with_paraphrases` + tokenize + `summarize_token_provenance` round-trips correctly on a recoverable Level 3 record. Augmented records preserve the CAS_NOTATION literals; only the surface frame changes.
+
+**Why disjoint training/eval template sets.** If the model sees the eval templates at training time, the paraphrase-eval number measures template memorization rather than surface-form generalization. Held-out discipline requires that the surface forms used at eval are *never* in the training distribution. The eval set carries 4 canonical templates from Session 43; this commit adds 8 training-only templates and asserts disjointness as a property test that fails CI if anyone ever adds an overlapping template.
+
+**Why augmentation lands AFTER the leak filter.** Paraphrased records share `source_level2_id` and `cas_expression` with their canonical parent. If the canonical is filtered for overlapping eval, all its augmented forms are also filtered (because they would never have been generated). Applying augmentation post-filter preserves leak discipline by construction.
+
+**Next.** Pod retrain with `--paraphrase-augment-train 3`. The new manifest will carry both the previously-wired `eval.token_provenance` block and the new `config.paraphrase_augmentation` block, so the next checkpoint is auditable on both axes against the 85.1% baseline. Expected outcome: paraphrase-eval accuracy rises from 37.2% toward canonical, which would be evidence the architectural pivot ("CAS structure as input substrate") generalizes — currently we only know it works on the data distribution it was trained on.
+
 ## Session 45: Token-Provenance Block in Runner Manifest (May 2, 2026)
 
 **Objective.** Wire the per-eval token-source breakdown (Session 44 lexicon-coverage diagnostic finding) into the structured-token runner's manifest as a tracked metric on every training run, so future runs carry provenance data alongside accuracy and the lexicon-vs-encoder bottleneck remains diagnosable from the manifest alone.
