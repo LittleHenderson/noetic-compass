@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## Session 43: Paraphrase-Invariance Evaluator Baseline (May 2, 2026)
+
+**Objective.** Begin Priority 1 from the pickup list: evaluate paraphrase invariance against the 85.1% structured-token checkpoint before any GPU retraining.
+
+**Deliverables.**
+
+- New `cas-native/training/evaluate_paraphrase_invariance.py` builds deterministic recoverable-slot paraphrases, evaluates a saved structured-token run, and reports target accuracy plus prediction stability against canonical prompts.
+- New tests cover recoverable-slot extraction, paraphrase record generation, and invariance-report aggregation.
+- Generated full current-eval paraphrase artifacts in `cas-native/training/runs/structured-token-20epoch-gpu-20260502-001907/`:
+  - `paraphrase_current_eval_canonical_manifest.json`
+  - `paraphrase_current_eval_manifest.json`
+  - `paraphrase_current_eval_samples.jsonl`
+  - `paraphrase_current_eval_report.json`
+  - `paraphrase_current_eval_report.md`
+
+**Result.** On the current 1,000-record unique-source eval set, using 3 deterministic paraphrases per record: canonical exact remains **851/1000 (85.1%)**, paraphrase exact is **1117/3000 (37.2%)**, prediction consistency vs canonical is **44.4%**, and canonical-exact retention is **42.4%**. This fails the Wave 2-C paraphrase robustness gate by a wide margin and confirms template sensitivity as the next training/data issue.
+
+**Bucket signal.** `v77_omega` is robust under these paraphrases (87.8% exact, 87.5% consistency). `v74_baseline` and `v75_register` are brittle (8.3% and 19.1% exact respectively), with largest consistency losses on noetic, drive, registers, and domain heads. `v77_rule_four` remains low exact (27.1%) but relatively stable in its wrong family/transition behavior (80.8% consistency).
+
+**Verification.** `python312 -m pytest cas-native/tests/test_paraphrase_invariance_eval.py cas-native/tests/test_train_structured_prediction.py -q` — 11 passed, 2 skipped. `python312 -m py_compile` passed for the paraphrase and structured-prediction eval modules.
+
 ## Session 42: Structured-Token Eval Instrumentation + Current Eval Confusion (May 2, 2026)
 
 **Objective.** Make the structured-token eval path debuggable at sample level before paraphrase-invariance work.

@@ -237,6 +237,8 @@ def _eval_manifest_from_outputs(
         samples.append(
             {
                 "id": record.get("id"),
+                "base_id": record.get("base_id"),
+                "paraphrase_index": record.get("paraphrase_index"),
                 "bucket": record.get("bucket"),
                 "source_level2_id": record.get("source_level2_id"),
                 "cas_expression": record.get("cas_expression"),
