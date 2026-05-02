@@ -1,5 +1,9 @@
 data/level2_scaffold/*
 !data/level2_scaffold/.gitkeep
+!data/level2_scaffold/level3_recoverable_eval_1000.jsonl
+!data/level2_scaffold/level3_recoverable_eval_1000_v77_relabeled.jsonl
+!data/level2_scaffold/level3_recoverable_eval_1000_metrics.json
+!data/level2_scaffold/LEVEL3_RECOVERABLE_EVAL_1000_REPORT.md
 data/pytest-tmp/
 __pycache__/
 *.pyc

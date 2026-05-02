@@ -1,0 +1,70 @@
+{
+  "all_heads_prediction_consistency_rate": 0.48433333333333334,
+  "all_heads_prediction_consistent": 1453,
+  "by_bucket": {
+    "meta_logic": {
+      "all_heads_prediction_consistency_rate": 0.21895424836601307,
+      "all_heads_prediction_consistent": 67,
+      "n": 306,
+      "paraphrase_all_heads_exact": 52,
+      "paraphrase_all_heads_exact_rate": 0.16993464052287582
+    },
+    "v74_baseline": {
+      "all_heads_prediction_consistency_rate": 0.18833333333333332,
+      "all_heads_prediction_consistent": 113,
+      "n": 600,
+      "paraphrase_all_heads_exact": 112,
+      "paraphrase_all_heads_exact_rate": 0.18666666666666668
+    },
+    "v75_register": {
+      "all_heads_prediction_consistency_rate": 0.23863636363636365,
+      "all_heads_prediction_consistent": 189,
+      "n": 792,
+      "paraphrase_all_heads_exact": 194,
+      "paraphrase_all_heads_exact_rate": 0.24494949494949494
+    },
+    "v76_production": {
+      "all_heads_prediction_consistency_rate": 0.7716049382716049,
+      "all_heads_prediction_consistent": 250,
+      "n": 324,
+      "paraphrase_all_heads_exact": 245,
+      "paraphrase_all_heads_exact_rate": 0.7561728395061729
+    },
+    "v77_omega": {
+      "all_heads_prediction_consistency_rate": 0.8751560549313359,
+      "all_heads_prediction_consistent": 701,
+      "n": 801,
+      "paraphrase_all_heads_exact": 699,
+      "paraphrase_all_heads_exact_rate": 0.8726591760299626
+    },
+    "v77_rule_four": {
+      "all_heads_prediction_consistency_rate": 0.751412429378531,
+      "all_heads_prediction_consistent": 133,
+      "n": 177,
+      "paraphrase_all_heads_exact": 106,
+      "paraphrase_all_heads_exact_rate": 0.5988700564971752
+    }
+  },
+  "canonical_all_heads_exact": 932,
+  "canonical_exact_retained": 1385,
+  "canonical_exact_retention_rate": 0.49535050071530756,
+  "n_canonical": 1000,
+  "n_comparable": 3000,
+  "n_paraphrase": 3000,
+  "paraphrase_all_heads_exact": 1408,
+  "paraphrase_all_heads_exact_rate": 0.4693333333333333,
+  "per_head_prediction_consistency": {
+    "authority": 1.0,
+    "domain": 0.7743333333333333,
+    "drive": 0.794,
+    "expression_family": 0.9596666666666667,
+    "has_meta_logic": 0.9903333333333333,
+    "has_omega": 0.9946666666666667,
+    "meta_relations": 0.97,
+    "noetic": 0.7153333333333334,
+    "register_mode": 0.9836666666666667,
+    "registers": 0.791,
+    "transition_kind": 0.982,
+    "turn_type": 1.0
+  }
+}

@@ -43,6 +43,30 @@
 
 **Continuation note.** The live operational log for this RunPod session is `docs/working/runpod_paraphrase_retrain_handoff_20260502.md`. It records the wrong-corpus false start, the correct corpus transfer, relabel counts, exact commands, and monitoring checkpoints.
 
+### Session 48 Addendum: Clean-Eval Rescore (May 2, 2026)
+
+The Session 48 numbers above (canonical 86.8%, paraphrase 41.3%) were computed against the contaminated held-out eval — the eval still labeled 64 `omega_emergent`-shaped records as `v77_rule_four` even though the relabeled training data and the `d99810a` checkpoint correctly treat them as `v77_omega`. The eval was relabeled with the same `cas-synthetic/scripts/relabel_v77_overlap.py` script used on the training data (idempotent, 64 records moved `v77_rule_four` → `v77_omega`), producing `cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000_v77_relabeled.jsonl`. The same `d99810a` checkpoint was rescored against the clean eval; no retrain.
+
+**Clean canonical.**
+
+- All-heads exact: **932/1000 = 93.2%** (was 868/1000 = 86.8% on contaminated eval).
+- **+8.1 pp vs prior current-eval baseline (85.1%)**, +44.5 pp vs hash (48.7%).
+- The contamination was suppressing the canonical score by 6.4 pp; every one of the 64 relabeled records was already being predicted correctly under the new label scheme.
+
+**Clean paraphrase.**
+
+- Paraphrase all-heads exact: **46.9%** (was 41.3% on contaminated eval, 37.2% on prior baseline) — **+9.7 pp vs prior baseline**.
+- Prediction consistency vs canonical: 48.4% (unchanged — label-independent).
+- Canonical-exact retention: 49.5% (was 46.7%).
+
+**Per-head consistency diagnostic.** Boolean/categorical heads are essentially invariant under surface change (turn_type 100%, authority 100%, has_omega 99.5%, has_meta_logic 99.0%, register_mode 98.4%, transition_kind 98.2%, meta_relations 97.0%, expression_family 96.0%). The four *content* heads collapse under paraphrase: drive 79.4%, registers 79.1%, domain 77.4%, **noetic 71.5%**. The next training lever should target the content axes specifically, not general invariance.
+
+**Real residual on v77_rule_four.** Post-relabel, 17/59 = 28.8% canonical failures remain. All 17 are `+` co-presence records where the model emits `expression_family=register_state` instead of `rule_four`, and `transition_kind=state` instead of `relation`. This is a real signal — same-Noetic `+` co-presence is genuinely close to a register-state expression, and worth designing into the next augmentation pass.
+
+**Worst paraphrase buckets.** `v74_baseline` (canonical 99.5% → paraphrase 18.7%) and `meta_logic` (canonical 78.4% → paraphrase 17.0%) — surface memorization without invariance. These two buckets account for most of the residual paraphrase headroom. The lexicon + augmentation lever applied here clearly worked for v77_omega (87.3% paraphrase) and v76_production (75.6%) but didn't reach v74_baseline or meta_logic.
+
+**Artifacts.** `relabeled_eval_confusion.md/json`, `relabeled_eval_manifest.json`, `relabeled_eval_samples.jsonl`, `paraphrase_relabeled_eval_report.md/json`, `paraphrase_relabeled_eval_canonical_manifest.json`, `paraphrase_relabeled_eval_manifest.json`, `paraphrase_relabeled_eval_samples.jsonl` — all in the Session 48 run dir. The `STRUCTURED_TOKEN_PARAPHRASE_RETRAIN_REPORT.md` in that run dir carries a matching addendum.
+
 ## Session 47: v77_rule_four / v77_omega Structural Overlap Fix (May 2, 2026)
 
 **Diagnosis.** Session 41's confusion report (`runs/structured-token-20epoch-gpu-20260502-001907/current_unique_eval_confusion.md`) showed v77_rule_four had 84/123 head failures, with **64 of those records (the entire `omega_emergent` sub-pattern) misclassified 100% as v77_omega family/transition**. Investigation showed why the model could not distinguish them: the v77_rule_four compliant arm had a 50/50 split between `+` co-presence and `×` with named emergent (`(X × Y × Z) = ^N|Ω_*`); the second sub-arm produces expressions structurally identical to v77_omega output, drawn from the same `omega_registry.yaml`. Recoverable Level 3 prompts are built from `_formal_axis_reading(expression)`, which describes only structural slots, so the user_prompt for these records carries no bucket-distinguishing signal. The original bucket label was a generator-provenance artifact, not a structural property — and the 85.1% checkpoint correctly learned that these prompts produce v77_omega-shaped outputs.

@@ -121,6 +121,19 @@ Expected pod state:
   - Prediction consistency vs canonical: `0.484` (was `0.444`).
   - Canonical-exact retention: `0.467` (was `0.424`).
 - 2026-05-02 15:00 Added run report `STRUCTURED_TOKEN_PARAPHRASE_RETRAIN_REPORT.md` and Session 48 changelog entry.
+- 2026-05-02 17:00 Held-out eval relabeled with `cas-synthetic/scripts/relabel_v77_overlap.py`:
+  - Input: `cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000.jsonl`.
+  - Output: `cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000_v77_relabeled.jsonl`.
+  - Counts: `n_total=1000`, `n_relabeled_to_v77_omega=64`, `n_v77_rule_four_input=123`, `n_v77_rule_four_remaining=59`.
+  - Idempotence dry-run on the relabeled file: `n_relabeled_to_v77_omega=0`.
+- 2026-05-02 17:05 Same `d99810a` checkpoint rescored against the relabeled eval on the pod (no retrain):
+  - Canonical: `932/1000 = 0.932` (was `868/1000 = 0.868` on contaminated eval; **+8.1 pp vs prior 85.1% baseline**).
+  - Paraphrase exact: `0.469` (was `0.413`; **+9.7 pp vs prior 37.2% baseline**).
+  - Prediction consistency: `0.484` (unchanged — label-independent).
+  - Canonical-exact retention: `0.495` (was `0.467`).
+- 2026-05-02 17:10 Per-head paraphrase consistency: turn_type/authority 100%, has_omega 99.5%, has_meta_logic 99.0%, register_mode 98.4%, transition_kind 98.2%, meta_relations 97.0%, expression_family 96.0%, drive 79.4%, registers 79.1%, domain 77.4%, **noetic 71.5%**. Boolean/categorical heads invariant; four content heads (Noetic/Domain/Drive/Register) collapse — next training lever should be content-axis-specific.
+- 2026-05-02 17:15 Post-relabel `v77_rule_four` bucket has a real residual: 17/59 canonical failures, all `+` co-presence records collapsing to `expression_family=register_state` / `transition_kind=state`.
+- 2026-05-02 17:20 Clean-eval artifacts pulled to local run dir: `relabeled_eval_*` + `paraphrase_relabeled_eval_*`. `STRUCTURED_TOKEN_PARAPHRASE_RETRAIN_REPORT.md` updated with Addendum, CHANGELOG.md Session 48 entry updated with Clean-Eval Rescore Addendum, `cas-synthetic/.gitignore` updated to track the relabeled eval file alongside the original.
 
 Monitoring commands:
 
