@@ -1,5 +1,28 @@
 # Noetic Compass — Progress Log
 
+## Session 47: v77_rule_four / v77_omega Structural Overlap Fix (May 2, 2026)
+
+**Diagnosis.** Session 41's confusion report (`runs/structured-token-20epoch-gpu-20260502-001907/current_unique_eval_confusion.md`) showed v77_rule_four had 84/123 head failures, with **64 of those records (the entire `omega_emergent` sub-pattern) misclassified 100% as v77_omega family/transition**. Investigation showed why the model could not distinguish them: the v77_rule_four compliant arm had a 50/50 split between `+` co-presence and `×` with named emergent (`(X × Y × Z) = ^N|Ω_*`); the second sub-arm produces expressions structurally identical to v77_omega output, drawn from the same `omega_registry.yaml`. Recoverable Level 3 prompts are built from `_formal_axis_reading(expression)`, which describes only structural slots, so the user_prompt for these records carries no bucket-distinguishing signal. The original bucket label was a generator-provenance artifact, not a structural property — and the 85.1% checkpoint correctly learned that these prompts produce v77_omega-shaped outputs.
+
+**Fix.** Two parts.
+
+1. **Generator** (`cas-synthetic/generator/v77_rule_four.py`): the compliant arm now emits `+` co-presence ONLY. The `_generate_compliant_emergent` method remains in the file for reference and future re-enable should a bucket-distinguishing signal be added to the recoverable prompt, but it is no longer reachable through `_generate_compliant`. Updated module docstring + historical-note comment explain the change.
+2. **In-place relabeler** (`cas-synthetic/scripts/relabel_v77_overlap.py`): processes an existing Level 3 JSONL and relabels v77_rule_four records whose expression matches `(X × ... × Z) = ^N|Ω_*` with same-Noetic operands → `v77_omega`, adding `bucket_relabeled_from` and `bucket_relabel_reason` fields for audit. Idempotent. Required to fix the existing training set in place before the upcoming retrain — the generator fix only helps future regenerations.
+
+**Why this is the right fix, not prompt-side cueing.** Adding bucket-specific framing to the recoverable user_prompt (e.g., "this is a Rule 4 compliance check") would teach the model to look for that string — a label leak masquerading as content. The structural fix is honest: post-fix, v77_rule_four's compliant `+` arm is operator-distinguishable from v77_omega (`+` vs `×`), and the violation arm is emergent-distinguishable (no `Ω_*`). The Rule-4-compliance training signal is preserved by both arms; the `valid emergent` records that DO overlap v77_omega are now correctly labeled v77_omega.
+
+**Verification.**
+
+- `pytest cas-synthetic/tests/test_v77_rule_four_no_emergent_overlap.py cas-synthetic/tests/test_relabel_v77_overlap.py` — 21 passed. Property tests lock the structural-overlap invariant (compliant arm never emits same-Noetic ×=Ω; violation arm preserved; relabeler idempotent and non-mutating).
+- Existing `test_v77_rule_four_generator.py::test_valid_emergent_expression_has_omega_label` was inverted to `test_valid_compliant_records_do_not_carry_omega_labels` — locks the new contract.
+- `pytest cas-synthetic/tests/ -k "v77 or rule_four or omega"` — 43 passed, 3 skipped, 0 failures. No regressions.
+
+**Action required before retrain.** Run on the existing Level 3 training file:
+```
+python cas-synthetic/scripts/relabel_v77_overlap.py --in <train.jsonl> --out <train_relabeled.jsonl>
+```
+Expected: ~40% of v77_rule_four records relabel to v77_omega. After the relabel, the bucket counts shift but every record's bucket is structurally consistent with its expression. The retrain then trains on a clean dataset where bucket prediction is genuinely learnable from the prompt.
+
 ## Session 46: Deterministic Paraphrase Augmentation in Training (May 2, 2026)
 
 **Objective.** Address the load-bearing finding from Sessions 43–44: the 47.9 pp paraphrase-eval collapse (canonical 85.1% → paraphrase 37.2%) is *not* explained by lexicon OOV (Session 44 diagnostic showed only -0.98 pp coverage delta), so it must be template memorization. The fix is to expose the model to varied surface forms during training so it can't memorize a single canonical Level 3 template.

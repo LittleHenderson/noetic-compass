@@ -57,17 +57,25 @@ class TestV77RuleFour:
                 assert " × " in ex.cas_expression
                 assert "=" not in ex.cas_expression
 
-    def test_valid_emergent_expression_has_omega_label(self):
+    def test_valid_compliant_records_do_not_carry_omega_labels(self):
+        """Post-2026-05-02 contract: the compliant arm is `+` co-presence
+        ONLY. The previous valid `×=Ω_*` arm was structurally identical to
+        v77_omega output and 100% misclassified at the 85.1% checkpoint
+        because the recoverable user_prompt could not distinguish it from
+        v77_omega; removing it preserves the bucket distinction. See
+        cas-native/training/runs/structured-token-20epoch-gpu-20260502-001907/
+        current_unique_eval_confusion.md and the historical-note comment in
+        v77_rule_four._generate_compliant.
+        """
+
         gen = V77RuleFourGenerator(seed=42)
-        saw_omega = False
         for ex in gen.iter_examples(500):
             if ex.is_valid and ex.omega_labels:
-                saw_omega = True
-                assert "=" in ex.cas_expression
-                # Compiler-canonical Greek `Ω_` glyph per CAS v7.7 spec
-                # (compiler also accepts ASCII `Omega_`, but we render Ω).
-                assert "Ω_" in ex.cas_expression
-        assert saw_omega, "expected at least some valid examples to carry omega labels"
+                pytest.fail(
+                    "v77_rule_four compliant arm must not produce records with "
+                    "omega_labels post-2026-05-02 fix; got: "
+                    f"{ex.cas_expression!r}"
+                )
 
     def test_copresence_uses_plus(self):
         gen = V77RuleFourGenerator(seed=42)

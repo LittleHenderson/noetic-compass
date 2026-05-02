@@ -1,11 +1,19 @@
 """v7.7 Rule 4 generator — same-Noetic multi-register expressions.
 
 Emits two sub-types:
-  compliant (80%): either `+` co-presence (same-Noetic register manifestations
-                   joined by `+`), or `×` with named emergent result drawn
-                   from the authoritative omega_registry.yaml.
+  compliant (80%): `+` co-presence only — same-Noetic register manifestations
+                   joined by `+`. Distinguishable from v77_omega (which uses
+                   `×` with named emergent) via the operator.
   violation (20%): same-Noetic `×` WITHOUT a named emergent result —
                    deliberate Rule 4 violations for supervised compliance loss.
+                   Distinguishable from v77_omega (always has named emergent)
+                   via the absence of `Ω_*`.
+
+(2026-05-02) The compliant arm previously also emitted `×` with named
+emergent; that output is structurally identical to v77_omega and produced
+100% misclassification on the 85.1% checkpoint. See `_generate_compliant`
+for the historical note. The `_generate_compliant_emergent` method remains
+for reference but is no longer reachable through the public branch.
 
 Every example carries register_labels. Violations carry `is_valid=false`
 and a `distance_to_valid` value populated via the Rust engine.
@@ -159,10 +167,28 @@ class V77RuleFourGenerator(BaseGenerator):
     # ---------------------------------------------------- compliant branch
 
     def _generate_compliant(self) -> GeneratedExample:
-        # 50/50 split: + co-presence OR × with valid named emergent.
-        if self.rng.random() < 0.5:
-            return self._generate_compliant_copresence()
-        return self._generate_compliant_emergent()
+        # Compliant arm = `+` co-presence only.
+        #
+        # Historical note (2026-05-02): the compliant arm previously also
+        # emitted `(X × Y × Z) = ^N|Ω_*` (same-Noetic × with valid named
+        # emergent). That output is structurally indistinguishable from
+        # v77_omega — both generators emit the same shape of expression
+        # using the same omega_registry.yaml. The recoverable Level 3
+        # prompt is built from _formal_axis_reading(expression), which
+        # describes only structural slots, so the user_prompt for these
+        # records carries no bucket-distinguishing signal. Result: in the
+        # 85.1% checkpoint, 64/64 records using this arm were classified
+        # as v77_omega (correctly so — they ARE v77_omega-shaped). Keeping
+        # them in v77_rule_four taught the model nothing learnable.
+        #
+        # The Rule-4-compliance training signal is preserved by the `+`
+        # co-presence arm (distinguishable from v77_omega via the operator)
+        # and the violation arm (same-Noetic × WITHOUT emergent —
+        # distinguishable from v77_omega's always-emergent output).
+        # `_generate_compliant_emergent` remains in the file for reference
+        # and future re-enable should the bucket distinction become
+        # signalable in the recoverable prompt.
+        return self._generate_compliant_copresence()
 
     def _generate_compliant_copresence(self) -> GeneratedExample:
         """Same-Noetic register co-presence joined by `+`.
