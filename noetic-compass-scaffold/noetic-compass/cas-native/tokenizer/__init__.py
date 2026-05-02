@@ -27,6 +27,11 @@ from .assembler import TokenizeStats, tokenize, tokenize_with_stats
 from .cas_notation import CASNotationMatch, find_all_cas_notation, match_cas_notation
 from .lexicon import CASLexicon, LexiconEntry, LexiconLookup, load_seed_lexicon, seed_lexicon_path
 from .pretokenizer import PretokenSpan, pretokenize, reassemble
+from .provenance import (
+    SIGNAL_BEARING_LABELS,
+    SOURCE_LABELS,
+    summarize_token_provenance,
+)
 from .structured_token import (
     DOMAIN_AXIS_LEN,
     DOMAIN_LABELS,
@@ -73,9 +78,12 @@ __all__ = [
     "LexiconEntry",
     "LexiconLookup",
     "PretokenSpan",
+    "SIGNAL_BEARING_LABELS",
+    "SOURCE_LABELS",
     "StructuredToken",
     "TokenSource",
     "TokenizeStats",
+    "summarize_token_provenance",
     "BOS_ID",
     "BOS_TOKEN",
     "CAS_LITERAL_ID",

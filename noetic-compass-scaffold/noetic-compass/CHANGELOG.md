@@ -1,5 +1,25 @@
 # Noetic Compass — Progress Log
 
+## Session 45: Token-Provenance Block in Runner Manifest (May 2, 2026)
+
+**Objective.** Wire the per-eval token-source breakdown (Session 44 lexicon-coverage diagnostic finding) into the structured-token runner's manifest as a tracked metric on every training run, so future runs carry provenance data alongside accuracy and the lexicon-vs-encoder bottleneck remains diagnosable from the manifest alone.
+
+**Deliverables.**
+
+- New `cas-native/tokenizer/provenance.py` exports `summarize_token_provenance(sequences, records=None)` returning the canonical breakdown shape (overall + per-bucket × LEXICON / CAS_NOTATION / LEARNED / FALLBACK). Re-exported from `cas_native.tokenizer` package.
+- `evaluate_structured_token_prediction` in `train_structured_prediction.py` now computes provenance from the eval token sequences (already cached by the prior `--cache-batches` refactor) and attaches it to the eval manifest as `manifest["token_provenance"]`. Same field flows through `train_structured_token_prediction_local` into `manifest["eval"]["token_provenance"]`.
+- `diagnose_lexicon_coverage.py` refactored to consume the shared helper; the standalone diagnostic and the runner-side manifest produce identical block shapes so canonical and paraphrase provenance can be diffed across runs without format normalization.
+- 9 new property tests in `cas-native/tests/tokenizer/test_provenance.py` covering canonical shape, signal-bearing label invariant (drift guard: only LEXICON+CAS_NOTATION count as signal), per-bucket grouping, missing-bucket → "unknown", length-mismatch raises, and end-to-end pipeline integration with the real tokenizer.
+
+**Verification.**
+
+- `pytest cas-native/tests/tokenizer/` — 79 passed (was 70; +9 provenance tests). All three load-bearing anti-drift property tests still green.
+- Diagnostic re-run on the canonical 1K + 3K paraphrase eval produces byte-identical JSON to Session 44's report, confirming the refactor is behaviorally equivalent.
+
+**Why it matters.** Session 44 surfaced that the 47.9 pp paraphrase-eval collapse is mostly NOT explained by OOV (canonical signal 13.3% vs paraphrase 12.3% — only -0.98 pp). Without provenance carried in every manifest, that diagnostic would have been a one-shot finding. Now every training run since Session 45 records the same breakdown as a tracked metric, so the next retraining run produces apples-to-apples provenance against the 85.1% checkpoint and the lexicon-vs-encoder-bottleneck split is auditable in the manifest alone.
+
+**Next.** Task #77 — deterministic paraphrase augmentation in training data. The Session 44 finding shifts this from "useful next step" to "load-bearing fix" for paraphrase invariance. After that lands and a retrain runs, the new manifest will carry both the provenance breakdown AND the new accuracy numbers in one artifact.
+
 ## Session 44: Wave 2-A Phase 1A — Lexicon Synonym/Morphology Expansion (May 2, 2026)
 
 **Objective.** Address the Session 43 paraphrase-invariance collapse (canonical 85.1% → paraphrase 37.2%, -47.9 pp; consistency 44.4%) by expanding lexicon synonym coverage on the unstable axes (noetic, drive, registers, domain). The audit hypothesis is OOV bottleneck: with vocab=290 at the 85.1% checkpoint, paraphrases push surface tokens through fallback IDs and the cas_signature features that drove the canonical accuracy go neutral. Phase 1A is the lexicon-side response.

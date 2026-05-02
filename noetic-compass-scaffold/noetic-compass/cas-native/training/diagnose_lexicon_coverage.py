@@ -26,7 +26,6 @@ import argparse
 import json
 import sys
 import types
-from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -48,8 +47,9 @@ if "cas_native" not in sys.modules:
 
 from cas_native.tokenizer import (
     CASLexicon,
-    TokenSource,
+    SOURCE_LABELS,
     load_seed_lexicon,
+    summarize_token_provenance,
     tokenize,
 )
 
@@ -69,7 +69,8 @@ def load_level3_jsonl(path: Path, limit: int | None = None) -> list[dict[str, An
     return records
 
 
-SOURCE_LABELS: tuple[str, ...] = ("LEXICON", "CAS_NOTATION", "LEARNED", "FALLBACK")
+# SOURCE_LABELS imported from cas_native.tokenizer.provenance via the
+# tokenizer package re-export.
 
 # Inlined to keep this diagnostic torch-free. Mirror of
 # evaluate_paraphrase_invariance.py PARAPHRASE_TEMPLATES /
@@ -125,93 +126,6 @@ def make_paraphrase_records(
     ]
 
 
-def classify_tokens(tokens) -> Counter[str]:
-    """Count tokens by ``TokenSource`` label."""
-
-    counts: Counter[str] = Counter()
-    for token in tokens:
-        counts[token.source.name] += 1
-    return counts
-
-
-def compute_record_coverage(
-    record: dict[str, Any], lexicon: CASLexicon | None = None
-) -> dict[str, Any]:
-    """Return per-record token-source counts plus signal-bearing fraction."""
-
-    text = str(record.get("user_prompt") or "")
-    tokens = tokenize(text, lexicon=lexicon)
-    counts = classify_tokens(tokens)
-    total = sum(counts.values())
-    # "signal-bearing" = LEXICON or CAS_NOTATION; FALLBACK and LEARNED-without-tagger
-    # contribute neutral cas_signature, so they cap the encoder's available signal.
-    signal = counts.get("LEXICON", 0) + counts.get("CAS_NOTATION", 0)
-    return {
-        "id": record.get("id"),
-        "bucket": record.get("bucket"),
-        "n_tokens": total,
-        "by_source": dict(counts),
-        "signal_bearing": signal,
-        "signal_fraction": (signal / total) if total else 0.0,
-    }
-
-
-def aggregate(per_record: list[dict[str, Any]]) -> dict[str, Any]:
-    """Aggregate per-record coverage into overall + per-bucket summaries."""
-
-    overall = Counter()
-    total_tokens = 0
-    total_signal = 0
-    by_bucket: dict[str, dict[str, Any]] = defaultdict(
-        lambda: {"n_records": 0, "total_tokens": 0, "total_signal": 0, "by_source": Counter()}
-    )
-
-    for entry in per_record:
-        bucket = str(entry.get("bucket") or "unknown")
-        for label, count in entry["by_source"].items():
-            overall[label] += count
-            by_bucket[bucket]["by_source"][label] += count
-        total_tokens += entry["n_tokens"]
-        total_signal += entry["signal_bearing"]
-        by_bucket[bucket]["n_records"] += 1
-        by_bucket[bucket]["total_tokens"] += entry["n_tokens"]
-        by_bucket[bucket]["total_signal"] += entry["signal_bearing"]
-
-    return {
-        "n_records": len(per_record),
-        "total_tokens": total_tokens,
-        "total_signal_bearing": total_signal,
-        "overall_signal_fraction": (total_signal / total_tokens) if total_tokens else 0.0,
-        "by_source": {label: int(overall.get(label, 0)) for label in SOURCE_LABELS},
-        "by_source_fraction": {
-            label: (overall.get(label, 0) / total_tokens) if total_tokens else 0.0
-            for label in SOURCE_LABELS
-        },
-        "by_bucket": {
-            bucket: {
-                "n_records": data["n_records"],
-                "total_tokens": data["total_tokens"],
-                "total_signal_bearing": data["total_signal"],
-                "signal_fraction": (
-                    data["total_signal"] / data["total_tokens"]
-                    if data["total_tokens"]
-                    else 0.0
-                ),
-                "by_source": {label: int(data["by_source"].get(label, 0)) for label in SOURCE_LABELS},
-                "by_source_fraction": {
-                    label: (
-                        data["by_source"].get(label, 0) / data["total_tokens"]
-                        if data["total_tokens"]
-                        else 0.0
-                    )
-                    for label in SOURCE_LABELS
-                },
-            }
-            for bucket, data in sorted(by_bucket.items())
-        },
-    }
-
-
 def diagnose(
     canonical_path: Path,
     *,
@@ -225,15 +139,21 @@ def diagnose(
         canonical_records, variants_per_record=variants_per_record
     )
 
-    canonical_per_record = [
-        compute_record_coverage(r, lexicon=lexicon) for r in canonical_records
+    canonical_sequences = [
+        tokenize(str(r.get("user_prompt") or ""), lexicon=lexicon)
+        for r in canonical_records
     ]
-    paraphrase_per_record = [
-        compute_record_coverage(r, lexicon=lexicon) for r in paraphrase_records
+    paraphrase_sequences = [
+        tokenize(str(r.get("user_prompt") or ""), lexicon=lexicon)
+        for r in paraphrase_records
     ]
 
-    canonical_summary = aggregate(canonical_per_record)
-    paraphrase_summary = aggregate(paraphrase_per_record)
+    canonical_summary = summarize_token_provenance(
+        canonical_sequences, records=canonical_records
+    )
+    paraphrase_summary = summarize_token_provenance(
+        paraphrase_sequences, records=paraphrase_records
+    )
 
     delta = {
         "signal_fraction_canonical": canonical_summary["overall_signal_fraction"],

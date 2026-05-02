@@ -65,6 +65,7 @@ from cas_native.model.structured_token_embedding import (
 )
 from cas_native.tokenizer.assembler import tokenize
 from cas_native.tokenizer.lexicon.schema import load_seed_lexicon
+from cas_native.tokenizer.provenance import summarize_token_provenance
 from cas_native.tokenizer.structured_token import StructuredToken
 from cas_native.tokenizer.vocabulary import StructuredTokenVocabulary
 from cas_native.training.structured_prediction_ingest import (
@@ -441,7 +442,11 @@ def evaluate_structured_token_prediction(
     outputs = {key: torch.cat(parts, dim=0) for key, parts in chunks.items()}
 
     model.train()
-    return _eval_manifest_from_outputs(outputs, targets_all, records)
+    manifest = _eval_manifest_from_outputs(outputs, targets_all, records)
+    manifest["token_provenance"] = summarize_token_provenance(
+        token_sequences, records=records
+    )
+    return manifest
 
 
 def train_structured_prediction_local(
@@ -965,6 +970,7 @@ def train_structured_token_prediction_local(
                 }
                 for bucket, entry in final_eval.get("by_bucket", {}).items()
             },
+            "token_provenance": final_eval.get("token_provenance", {}),
         },
     }
 
