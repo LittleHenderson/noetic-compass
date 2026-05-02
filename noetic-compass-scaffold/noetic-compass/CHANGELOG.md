@@ -1,5 +1,32 @@
 # Noetic Compass — Progress Log
 
+## Session 44: Wave 2-A Phase 1A — Lexicon Synonym/Morphology Expansion (May 2, 2026)
+
+**Objective.** Address the Session 43 paraphrase-invariance collapse (canonical 85.1% → paraphrase 37.2%, -47.9 pp; consistency 44.4%) by expanding lexicon synonym coverage on the unstable axes (noetic, drive, registers, domain). The audit hypothesis is OOV bottleneck: with vocab=290 at the 85.1% checkpoint, paraphrases push surface tokens through fallback IDs and the cas_signature features that drove the canonical accuracy go neutral. Phase 1A is the lexicon-side response.
+
+**Deliverables.**
+
+- 93 new entries added to `cas-native/tokenizer/lexicon/build_seed.py` (the typed source-of-truth per methodology Section 3.1). `seed_lexicon.jsonl` regenerated to 191 entries (was 98).
+- Coverage by axis: ^2 Positive 11→23, ^3 Negative 11→23, ^4 Vibration 6→14, ^5 Female 4→8, ^6 Male 9→19, ^7 Rhythm 6→12, ^8 Above/Cause 5→11, ^9 Below/Effect 5→10. F-axis Drives F3 4→9, F4 2→5, F7 2→5, F5 1→4, F6 1→3, F2 1→3, F1 1→3. Registers |T 3→4, |f 4→6, |A 2→4, |E 2→3.
+- All ^3 entries strictly visceral (e.g., `makes me sick`, `turns my stomach`, `makes my skin crawl` — etymological cognates carrying |E embodied register). All ^8 entries strictly associative-trigger (e.g., `brought to mind`, `sparked`, `conjured`). All ^4 entries prefer etymological cognates (`resonate`, `resonance`, `hit home`).
+
+**Adjustments after review pass.**
+
+- Skipped from this batch: `spent` (multi-sense — money/time/energy), `body` (anatomy vs embodied), `then` (temporal sequence dominates). Held for Phase 1B with context-disambiguation rules.
+- Lowered confidences: `profound` 0.7 → 0.6 (broadly polysemous), `sense` 0.8 → 0.65 with `context_required` regex anchoring the felt-sense reading.
+- Swapped: bare `horizon` → multiword `broaden my horizons` |T 0.85 (literal-spatial sense falls to fallback as designed).
+- Compound signatures deferred: `second nature` ^5 overlap and `shaped me` ^7 overlap flagged in `notes` for Wave 2-B tagger to learn from corpus evidence rather than committing speculative secondary axes at lexicon time, per methodology Section 4.2 #4.
+- `myself` lowered to 0.6 with `reflexive` role tag to differentiate from existing `I/me/my` self-reference entries.
+
+**Verification.** `python -m pytest cas-native/tests/tokenizer/` — 70 passed, including all three load-bearing anti-drift property tests:
+- `test_seed_lexicon_anti_drift_visceral_negatives` — `audit` and `scrutinize` still NOT firing ^3.
+- `test_seed_lexicon_anti_drift_associative_triggers` — `reminds me of` and `triggered` still firing ^8.
+- `test_seed_lexicon_etymological_cognate_for_vibration` — `struck a chord` still firing ^4 ≥ 0.9.
+
+Anti-drift discipline preserved at scale; the new entries cohabit with existing canonical anchors without contaminating the load-bearing test exemplars.
+
+**Next.** Add `eval_token_provenance` block to the structured-token runner manifest (no-GPU diagnostic). Re-tokenize the held-out 1K canonical and paraphrase eval sets with the new lexicon and report the lexicon-coverage delta. If paraphrase coverage rises substantially more than canonical coverage, the OOV-bottleneck hypothesis is confirmed and Phase 1B prioritization shifts toward the surface families that didn't get covered. Pod retrain is gated on this measurement.
+
 ## Session 43: Paraphrase-Invariance Evaluator Baseline (May 2, 2026)
 
 **Objective.** Begin Priority 1 from the pickup list: evaluate paraphrase invariance against the 85.1% structured-token checkpoint before any GPU retraining.
