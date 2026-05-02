@@ -1,5 +1,22 @@
 # Noetic Compass — Progress Log
 
+## Session 49: Paraphrase Residual Diagnosis — v74_baseline + meta_logic (May 2, 2026)
+
+**Objective.** Diagnose why `v74_baseline` (canonical 99.5% → paraphrase 18.7%) and `meta_logic` (canonical 78.4% → paraphrase 17.0%) did not benefit from the K=3 augmentation lever that drove `v77_omega` to 87.3% paraphrase accuracy. Propose a concrete next experiment.
+
+**Diagnosis.** Root cause is **template-prefix memorization combined with sparse CAS notation in the slot blocks** — not lexicon OOV, not class imbalance. Per-template accuracy breakdown from `paraphrase_relabeled_eval_samples.jsonl` (d99810a checkpoint, clean eval):
+
+- `v74_baseline` template 0 ("Map this recoverable CAS slot reading..."): 36.5%; template 1 ("Please reconstruct..."): 2.5%; template 2 ("As a CAS notation check, translate..."): 17.0%.
+- `meta_logic` template 0: 31.4%; template 1: 12.7%; template 2: 6.9%.
+
+Every paraphrase variant contains the same slot block. The 97 pp accuracy swing on identical content (2.5% vs 36.5% for v74_baseline) proves the model has memorized prefix-string → content-head associations rather than learning slot-token → label mappings. Under OOD eval-template prefixes, content heads fall back to priors — including hallucinating `registers: ['E']` (157×) or `['A']` (136×) for v74_baseline records that must have `registers: []`.
+
+`v77_omega` is immune because its slot blocks contain rich, distinctive CAS_NOTATION tokens (`Ω_*`, `×`, compound states) that override any prefix feature. `v74_baseline` slots (`^N`, `Fk`, bare domain letter) and `meta_logic` slots provide insufficient override signal at K=3.
+
+**Proposed experiment.** Add a bare-slot training template (`"{slots}"` — no prefix) as the 9th entry in `TRAINING_PARAPHRASE_TEMPLATES`, raise `--paraphrase-augment-train` from 3 to 9. The bare-slot variant forces direct slot-content learning with no prefix signal to memorize. Combined with K=9 saturation of all 9 templates per canonical, the model cannot rely on any prefix pattern. Training records: ~165,700 (was 66,280; ~2.5×). No architecture or corpus changes. One template entry + one CLI flag.
+
+**Artifact.** `docs/working/paraphrase_residual_v74_meta_proposal.md`. PR #2: `paraphrase residual proposal: v74_baseline + meta_logic`.
+
 ## Session 48: Correct-Corpus Paraphrase Retrain Clears Prior Canonical Baseline (May 2, 2026)
 
 **Objective.** Run the prepared v7.7-overlap relabel + deterministic paraphrase-augmentation retrain on GPU, then evaluate both canonical accuracy and paraphrase invariance against the held-out 1K.
