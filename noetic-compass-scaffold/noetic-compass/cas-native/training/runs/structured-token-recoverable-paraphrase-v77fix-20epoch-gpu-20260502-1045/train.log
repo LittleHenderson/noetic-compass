@@ -1,0 +1,211 @@
+/usr/local/lib/python3.11/dist-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+{"event": "startup", "mode": "structured_token", "n_canonical": 16570, "n_train": 66280, "paraphrase_variants_per_record": 3, "stage": "tokenize_train"}
+{"done": 1000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 2000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 3000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 4000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 5000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 6000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 7000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 8000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 9000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 10000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 11000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 12000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 13000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 14000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 15000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 16000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 17000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 18000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 19000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 20000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 21000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 22000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 23000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 24000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 25000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 26000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 27000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 28000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 29000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 30000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 31000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 32000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 33000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 34000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 35000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 36000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 37000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 38000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 39000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 40000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 41000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 42000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 43000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 44000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 45000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 46000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 47000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 48000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 49000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 50000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 51000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 52000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 53000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 54000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 55000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 56000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 57000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 58000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 59000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 60000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 61000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 62000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 63000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 64000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 65000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 66000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"done": 66280, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_train", "total": 66280}
+{"event": "startup", "mode": "structured_token", "n_train": 66280, "stage": "build_vocabulary"}
+{"event": "startup", "mode": "structured_token", "n_eval": 1000, "stage": "tokenize_eval", "vocab_size": 293}
+{"done": 1000, "event": "startup_progress", "mode": "structured_token", "stage": "tokenize_eval", "total": 1000}
+{"event": "startup", "mode": "structured_token", "n_eval": 1000, "n_train": 66280, "stage": "model_init", "vocab_size": 293}
+{"epoch": 0, "event": "epoch_end", "mode": "structured_token", "step": 518, "train_loss_avg": 4.088054}
+{"all_heads_exact": 450, "delta_vs_hash_baseline_pp": -3.7, "epoch": 0, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.45, "step": 518, "train_loss_avg": 4.088054}
+{"epoch": 1, "event": "epoch_end", "mode": "structured_token", "step": 1036, "train_loss_avg": 1.330965}
+{"all_heads_exact": 638, "delta_vs_hash_baseline_pp": 15.1, "epoch": 1, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.638, "step": 1036, "train_loss_avg": 1.330965}
+{"epoch": 2, "event": "epoch_end", "mode": "structured_token", "step": 1554, "train_loss_avg": 0.770165}
+{"all_heads_exact": 715, "delta_vs_hash_baseline_pp": 22.8, "epoch": 2, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.715, "step": 1554, "train_loss_avg": 0.770165}
+{"epoch": 3, "event": "epoch_end", "mode": "structured_token", "step": 2072, "train_loss_avg": 0.552506}
+{"all_heads_exact": 755, "delta_vs_hash_baseline_pp": 26.8, "epoch": 3, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.755, "step": 2072, "train_loss_avg": 0.552506}
+{"epoch": 4, "event": "epoch_end", "mode": "structured_token", "step": 2590, "train_loss_avg": 0.434028}
+{"all_heads_exact": 826, "delta_vs_hash_baseline_pp": 33.9, "epoch": 4, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.826, "step": 2590, "train_loss_avg": 0.434028}
+{"epoch": 5, "event": "epoch_end", "mode": "structured_token", "step": 3108, "train_loss_avg": 0.353972}
+{"all_heads_exact": 839, "delta_vs_hash_baseline_pp": 35.2, "epoch": 5, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.839, "step": 3108, "train_loss_avg": 0.353972}
+{"epoch": 6, "event": "epoch_end", "mode": "structured_token", "step": 3626, "train_loss_avg": 0.305014}
+{"all_heads_exact": 837, "delta_vs_hash_baseline_pp": 35.0, "epoch": 6, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.837, "step": 3626, "train_loss_avg": 0.305014}
+{"epoch": 7, "event": "epoch_end", "mode": "structured_token", "step": 4144, "train_loss_avg": 0.264502}
+{"all_heads_exact": 841, "delta_vs_hash_baseline_pp": 35.4, "epoch": 7, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.841, "step": 4144, "train_loss_avg": 0.264502}
+{"epoch": 8, "event": "epoch_end", "mode": "structured_token", "step": 4662, "train_loss_avg": 0.253848}
+{"all_heads_exact": 857, "delta_vs_hash_baseline_pp": 37.0, "epoch": 8, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.857, "step": 4662, "train_loss_avg": 0.253848}
+{"epoch": 9, "event": "epoch_end", "mode": "structured_token", "step": 5180, "train_loss_avg": 0.232916}
+{"all_heads_exact": 866, "delta_vs_hash_baseline_pp": 37.9, "epoch": 9, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.866, "step": 5180, "train_loss_avg": 0.232916}
+{"epoch": 10, "event": "epoch_end", "mode": "structured_token", "step": 5698, "train_loss_avg": 0.210777}
+{"all_heads_exact": 868, "delta_vs_hash_baseline_pp": 38.1, "epoch": 10, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.868, "step": 5698, "train_loss_avg": 0.210777}
+{"epoch": 11, "event": "epoch_end", "mode": "structured_token", "step": 6216, "train_loss_avg": 0.205904}
+{"all_heads_exact": 844, "delta_vs_hash_baseline_pp": 35.7, "epoch": 11, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.844, "step": 6216, "train_loss_avg": 0.205904}
+{"epoch": 12, "event": "epoch_end", "mode": "structured_token", "step": 6734, "train_loss_avg": 0.194059}
+{"all_heads_exact": 856, "delta_vs_hash_baseline_pp": 36.9, "epoch": 12, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.856, "step": 6734, "train_loss_avg": 0.194059}
+{"epoch": 13, "event": "epoch_end", "mode": "structured_token", "step": 7252, "train_loss_avg": 0.185067}
+{"all_heads_exact": 854, "delta_vs_hash_baseline_pp": 36.7, "epoch": 13, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.854, "step": 7252, "train_loss_avg": 0.185067}
+{"epoch": 14, "event": "epoch_end", "mode": "structured_token", "step": 7770, "train_loss_avg": 0.180177}
+{"all_heads_exact": 842, "delta_vs_hash_baseline_pp": 35.5, "epoch": 14, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.842, "step": 7770, "train_loss_avg": 0.180177}
+{"epoch": 15, "event": "epoch_end", "mode": "structured_token", "step": 8288, "train_loss_avg": 0.167713}
+{"all_heads_exact": 857, "delta_vs_hash_baseline_pp": 37.0, "epoch": 15, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.857, "step": 8288, "train_loss_avg": 0.167713}
+{"epoch": 16, "event": "epoch_end", "mode": "structured_token", "step": 8806, "train_loss_avg": 0.163089}
+{"all_heads_exact": 857, "delta_vs_hash_baseline_pp": 37.0, "epoch": 16, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.857, "step": 8806, "train_loss_avg": 0.163089}
+{"epoch": 17, "event": "epoch_end", "mode": "structured_token", "step": 9324, "train_loss_avg": 0.161057}
+{"all_heads_exact": 859, "delta_vs_hash_baseline_pp": 37.2, "epoch": 17, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.859, "step": 9324, "train_loss_avg": 0.161057}
+{"epoch": 18, "event": "epoch_end", "mode": "structured_token", "step": 9842, "train_loss_avg": 0.150523}
+{"all_heads_exact": 831, "delta_vs_hash_baseline_pp": 34.4, "epoch": 18, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.831, "step": 9842, "train_loss_avg": 0.150523}
+{"epoch": 19, "event": "epoch_end", "mode": "structured_token", "step": 10360, "train_loss_avg": 0.144416}
+{"all_heads_exact": 852, "delta_vs_hash_baseline_pp": 36.5, "epoch": 19, "event": "eval", "mode": "structured_token", "n_eval": 1000, "rate": 0.852, "step": 10360, "train_loss_avg": 0.144416}
+{
+  "config": {
+    "batch_size": 128,
+    "bottleneck_dim": 64,
+    "d_model": 128,
+    "embedding_dropout": 0.0,
+    "epochs": 20,
+    "eval_every_steps": null,
+    "eval_overlap_filter": {
+      "by_key": {
+        "cas_expression": 2884,
+        "id": 0,
+        "source_level2_id": 2000
+      },
+      "enabled": true,
+      "removed": 2884
+    },
+    "lr": 0.001,
+    "max_length": 256,
+    "mode": "structured_token",
+    "n_eval": 1000,
+    "n_train": 66280,
+    "n_train_raw": 19454,
+    "paraphrase_augmentation": {
+      "n_canonical_post_filter": 16570,
+      "n_paraphrases": 49710,
+      "n_total": 66280,
+      "training_template_source": "training_augmentation",
+      "variants_per_record": 3
+    },
+    "seed": 42,
+    "vocab_max_size": null,
+    "vocab_min_count": 1,
+    "vocab_size": 293,
+    "weight_decay": 0.0001
+  },
+  "eval": {
+    "all_heads_exact": 868,
+    "all_heads_exact_rate": 0.868,
+    "baseline_comparison": {
+      "baseline_all_heads_exact_rate": 0.487,
+      "baseline_name": "leak_fixed_hash_feature_20ep",
+      "beats_baseline": true,
+      "candidate_all_heads_exact_rate": 0.868,
+      "delta_abs": 0.381,
+      "delta_pp": 38.1
+    },
+    "by_bucket_summary": {
+      "meta_logic": {
+        "all_heads_exact": 80,
+        "all_heads_exact_rate": 0.7843137254901961,
+        "n": 102
+      },
+      "v74_baseline": {
+        "all_heads_exact": 199,
+        "all_heads_exact_rate": 0.995,
+        "n": 200
+      },
+      "v75_register": {
+        "all_heads_exact": 244,
+        "all_heads_exact_rate": 0.9242424242424242,
+        "n": 264
+      },
+      "v76_production": {
+        "all_heads_exact": 102,
+        "all_heads_exact_rate": 0.9444444444444444,
+        "n": 108
+      },
+      "v77_omega": {
+        "all_heads_exact": 201,
+        "all_heads_exact_rate": 0.9901477832512315,
+        "n": 203
+      },
+      "v77_rule_four": {
+        "all_heads_exact": 42,
+        "all_heads_exact_rate": 0.34146341463414637,
+        "n": 123
+      }
+    },
+    "n": 1000,
+    "per_head_acc": {
+      "authority": 1.0,
+      "domain": 0.993,
+      "drive": 0.986,
+      "expression_family": 0.916,
+      "has_meta_logic": 1.0,
+      "has_omega": 1.0,
+      "meta_relations": 1.0,
+      "noetic": 0.979,
+      "register_mode": 0.992,
+      "registers": 0.988,
+      "transition_kind": 0.916,
+      "turn_type": 1.0
+    }
+  },
+  "total_steps": 10360
+}

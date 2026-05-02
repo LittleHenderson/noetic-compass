@@ -1,0 +1,194 @@
+{
+  "all_heads_exact": 868,
+  "all_heads_failures": 132,
+  "by_bucket": {
+    "meta_logic": {
+      "all_heads_failures": 22,
+      "head_failures": {
+        "authority": 0,
+        "domain": 6,
+        "drive": 2,
+        "expression_family": 1,
+        "has_meta_logic": 0,
+        "has_omega": 0,
+        "meta_relations": 0,
+        "noetic": 16,
+        "register_mode": 0,
+        "registers": 0,
+        "transition_kind": 1,
+        "turn_type": 0
+      },
+      "n": 102
+    },
+    "v74_baseline": {
+      "all_heads_failures": 1,
+      "head_failures": {
+        "authority": 0,
+        "domain": 0,
+        "drive": 0,
+        "expression_family": 0,
+        "has_meta_logic": 0,
+        "has_omega": 0,
+        "meta_relations": 0,
+        "noetic": 1,
+        "register_mode": 0,
+        "registers": 0,
+        "transition_kind": 0,
+        "turn_type": 0
+      },
+      "n": 200
+    },
+    "v75_register": {
+      "all_heads_failures": 20,
+      "head_failures": {
+        "authority": 0,
+        "domain": 0,
+        "drive": 9,
+        "expression_family": 3,
+        "has_meta_logic": 0,
+        "has_omega": 0,
+        "meta_relations": 0,
+        "noetic": 0,
+        "register_mode": 8,
+        "registers": 12,
+        "transition_kind": 2,
+        "turn_type": 0
+      },
+      "n": 264
+    },
+    "v76_production": {
+      "all_heads_failures": 6,
+      "head_failures": {
+        "authority": 0,
+        "domain": 1,
+        "drive": 1,
+        "expression_family": 0,
+        "has_meta_logic": 0,
+        "has_omega": 0,
+        "meta_relations": 0,
+        "noetic": 4,
+        "register_mode": 0,
+        "registers": 0,
+        "transition_kind": 0,
+        "turn_type": 0
+      },
+      "n": 108
+    },
+    "v77_omega": {
+      "all_heads_failures": 2,
+      "head_failures": {
+        "authority": 0,
+        "domain": 0,
+        "drive": 2,
+        "expression_family": 0,
+        "has_meta_logic": 0,
+        "has_omega": 0,
+        "meta_relations": 0,
+        "noetic": 0,
+        "register_mode": 0,
+        "registers": 0,
+        "transition_kind": 0,
+        "turn_type": 0
+      },
+      "n": 203
+    },
+    "v77_rule_four": {
+      "all_heads_failures": 81,
+      "head_failures": {
+        "authority": 0,
+        "domain": 0,
+        "drive": 0,
+        "expression_family": 80,
+        "has_meta_logic": 0,
+        "has_omega": 0,
+        "meta_relations": 0,
+        "noetic": 0,
+        "register_mode": 0,
+        "registers": 0,
+        "transition_kind": 81,
+        "turn_type": 0
+      },
+      "n": 123
+    }
+  },
+  "confusion": {
+    "expression_family": [
+      {
+        "count": 64,
+        "prediction": "omega",
+        "target": "rule_four"
+      },
+      {
+        "count": 16,
+        "prediction": "register_state",
+        "target": "rule_four"
+      }
+    ],
+    "transition_kind": [
+      {
+        "count": 64,
+        "prediction": "omega_bind",
+        "target": "relation"
+      },
+      {
+        "count": 17,
+        "prediction": "state",
+        "target": "relation"
+      }
+    ]
+  },
+  "focus_bucket": "v77_rule_four",
+  "focus_patterns": {
+    "omega_emergent": {
+      "exact": 0,
+      "head_failures": {
+        "authority": 0,
+        "domain": 0,
+        "drive": 0,
+        "expression_family": 64,
+        "has_meta_logic": 0,
+        "has_omega": 0,
+        "meta_relations": 0,
+        "noetic": 0,
+        "register_mode": 0,
+        "registers": 0,
+        "transition_kind": 64,
+        "turn_type": 0
+      },
+      "n": 64
+    },
+    "plus_copresence": {
+      "exact": 42,
+      "head_failures": {
+        "authority": 0,
+        "domain": 0,
+        "drive": 0,
+        "expression_family": 16,
+        "has_meta_logic": 0,
+        "has_omega": 0,
+        "meta_relations": 0,
+        "noetic": 0,
+        "register_mode": 0,
+        "registers": 0,
+        "transition_kind": 17,
+        "turn_type": 0
+      },
+      "n": 59
+    }
+  },
+  "head_failures": {
+    "authority": 0,
+    "domain": 7,
+    "drive": 14,
+    "expression_family": 84,
+    "has_meta_logic": 0,
+    "has_omega": 0,
+    "meta_relations": 0,
+    "noetic": 21,
+    "register_mode": 8,
+    "registers": 12,
+    "transition_kind": 84,
+    "turn_type": 0
+  },
+  "n": 1000
+}

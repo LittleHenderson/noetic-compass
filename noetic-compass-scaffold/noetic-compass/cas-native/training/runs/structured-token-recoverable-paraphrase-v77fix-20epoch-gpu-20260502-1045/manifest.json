@@ -1,0 +1,3233 @@
+{
+  "config": {
+    "batch_size": 128,
+    "bottleneck_dim": 64,
+    "d_model": 128,
+    "embedding_dropout": 0.0,
+    "epochs": 20,
+    "eval_every_steps": null,
+    "eval_overlap_filter": {
+      "by_key": {
+        "cas_expression": 2884,
+        "id": 0,
+        "source_level2_id": 2000
+      },
+      "enabled": true,
+      "removed": 2884
+    },
+    "lr": 0.001,
+    "max_length": 256,
+    "mode": "structured_token",
+    "n_eval": 1000,
+    "n_train": 66280,
+    "n_train_raw": 19454,
+    "paraphrase_augmentation": {
+      "n_canonical_post_filter": 16570,
+      "n_paraphrases": 49710,
+      "n_total": 66280,
+      "training_template_source": "training_augmentation",
+      "variants_per_record": 3
+    },
+    "seed": 42,
+    "vocab_max_size": null,
+    "vocab_min_count": 1,
+    "vocab_size": 293,
+    "weight_decay": 0.0001
+  },
+  "eval": {
+    "all_heads_exact": 868,
+    "all_heads_exact_rate": 0.868,
+    "baseline_comparison": {
+      "baseline_all_heads_exact_rate": 0.487,
+      "baseline_name": "leak_fixed_hash_feature_20ep",
+      "beats_baseline": true,
+      "candidate_all_heads_exact_rate": 0.868,
+      "delta_abs": 0.381,
+      "delta_pp": 38.1
+    },
+    "by_bucket": {
+      "meta_logic": {
+        "all_heads_exact": 80,
+        "all_heads_exact_rate": 0.7843137254901961,
+        "n": 102,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.9411764705882353,
+          "drive": 0.9803921568627451,
+          "expression_family": 0.9901960784313726,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.8431372549019608,
+          "register_mode": 1.0,
+          "registers": 1.0,
+          "transition_kind": 0.9901960784313726,
+          "turn_type": 1.0
+        }
+      },
+      "v74_baseline": {
+        "all_heads_exact": 199,
+        "all_heads_exact_rate": 0.995,
+        "n": 200,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 1.0,
+          "drive": 1.0,
+          "expression_family": 1.0,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.995,
+          "register_mode": 1.0,
+          "registers": 1.0,
+          "transition_kind": 1.0,
+          "turn_type": 1.0
+        }
+      },
+      "v75_register": {
+        "all_heads_exact": 244,
+        "all_heads_exact_rate": 0.9242424242424242,
+        "n": 264,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 1.0,
+          "drive": 0.9659090909090909,
+          "expression_family": 0.9886363636363636,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 1.0,
+          "register_mode": 0.9696969696969697,
+          "registers": 0.9545454545454546,
+          "transition_kind": 0.9924242424242424,
+          "turn_type": 1.0
+        }
+      },
+      "v76_production": {
+        "all_heads_exact": 102,
+        "all_heads_exact_rate": 0.9444444444444444,
+        "n": 108,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.9907407407407407,
+          "drive": 0.9907407407407407,
+          "expression_family": 1.0,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.9629629629629629,
+          "register_mode": 1.0,
+          "registers": 1.0,
+          "transition_kind": 1.0,
+          "turn_type": 1.0
+        }
+      },
+      "v77_omega": {
+        "all_heads_exact": 201,
+        "all_heads_exact_rate": 0.9901477832512315,
+        "n": 203,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 1.0,
+          "drive": 0.9901477832512315,
+          "expression_family": 1.0,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 1.0,
+          "register_mode": 1.0,
+          "registers": 1.0,
+          "transition_kind": 1.0,
+          "turn_type": 1.0
+        }
+      },
+      "v77_rule_four": {
+        "all_heads_exact": 42,
+        "all_heads_exact_rate": 0.34146341463414637,
+        "n": 123,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 1.0,
+          "drive": 1.0,
+          "expression_family": 0.34959349593495936,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 1.0,
+          "register_mode": 1.0,
+          "registers": 1.0,
+          "transition_kind": 0.34146341463414637,
+          "turn_type": 1.0
+        }
+      }
+    },
+    "n": 1000,
+    "per_head_acc": {
+      "authority": 1.0,
+      "domain": 0.993,
+      "drive": 0.986,
+      "expression_family": 0.916,
+      "has_meta_logic": 1.0,
+      "has_omega": 1.0,
+      "meta_relations": 1.0,
+      "noetic": 0.979,
+      "register_mode": 0.992,
+      "registers": 0.988,
+      "transition_kind": 0.916,
+      "turn_type": 1.0
+    },
+    "token_provenance": {
+      "by_bucket": {
+        "meta_logic": {
+          "by_source": {
+            "CAS_NOTATION": 249,
+            "FALLBACK": 3971,
+            "LEARNED": 0,
+            "LEXICON": 172
+          },
+          "by_source_fraction": {
+            "CAS_NOTATION": 0.05669398907103825,
+            "FALLBACK": 0.904143897996357,
+            "LEARNED": 0.0,
+            "LEXICON": 0.039162112932604735
+          },
+          "n_records": 102,
+          "signal_fraction": 0.09585610200364299,
+          "total_signal_bearing": 421,
+          "total_tokens": 4392
+        },
+        "v74_baseline": {
+          "by_source": {
+            "CAS_NOTATION": 630,
+            "FALLBACK": 7575,
+            "LEARNED": 0,
+            "LEXICON": 373
+          },
+          "by_source_fraction": {
+            "CAS_NOTATION": 0.07344369316857076,
+            "FALLBACK": 0.8830729773840056,
+            "LEARNED": 0.0,
+            "LEXICON": 0.04348332944742364
+          },
+          "n_records": 200,
+          "signal_fraction": 0.1169270226159944,
+          "total_signal_bearing": 1003,
+          "total_tokens": 8578
+        },
+        "v75_register": {
+          "by_source": {
+            "CAS_NOTATION": 1184,
+            "FALLBACK": 12013,
+            "LEARNED": 0,
+            "LEXICON": 680
+          },
+          "by_source_fraction": {
+            "CAS_NOTATION": 0.08532103480579376,
+            "FALLBACK": 0.8656770195287166,
+            "LEARNED": 0.0,
+            "LEXICON": 0.04900194566548966
+          },
+          "n_records": 264,
+          "signal_fraction": 0.1343229804712834,
+          "total_signal_bearing": 1864,
+          "total_tokens": 13877
+        },
+        "v76_production": {
+          "by_source": {
+            "CAS_NOTATION": 2286,
+            "FALLBACK": 16772,
+            "LEARNED": 0,
+            "LEXICON": 403
+          },
+          "by_source_fraction": {
+            "CAS_NOTATION": 0.11746570063203329,
+            "FALLBACK": 0.8618262165356354,
+            "LEARNED": 0.0,
+            "LEXICON": 0.020708082832331328
+          },
+          "n_records": 108,
+          "signal_fraction": 0.13817378346436462,
+          "total_signal_bearing": 2689,
+          "total_tokens": 19461
+        },
+        "v77_omega": {
+          "by_source": {
+            "CAS_NOTATION": 1833,
+            "FALLBACK": 15148,
+            "LEARNED": 0,
+            "LEXICON": 599
+          },
+          "by_source_fraction": {
+            "CAS_NOTATION": 0.10426621160409556,
+            "FALLBACK": 0.8616609783845278,
+            "LEARNED": 0.0,
+            "LEXICON": 0.03407281001137656
+          },
+          "n_records": 203,
+          "signal_fraction": 0.13833902161547212,
+          "total_signal_bearing": 2432,
+          "total_tokens": 17580
+        },
+        "v77_rule_four": {
+          "by_source": {
+            "CAS_NOTATION": 1100,
+            "FALLBACK": 8987,
+            "LEARNED": 0,
+            "LEXICON": 382
+          },
+          "by_source_fraction": {
+            "CAS_NOTATION": 0.1050721176807718,
+            "FALLBACK": 0.8584392014519057,
+            "LEARNED": 0.0,
+            "LEXICON": 0.03648868086732257
+          },
+          "n_records": 123,
+          "signal_fraction": 0.14156079854809436,
+          "total_signal_bearing": 1482,
+          "total_tokens": 10469
+        }
+      },
+      "by_source": {
+        "CAS_NOTATION": 7282,
+        "FALLBACK": 64466,
+        "LEARNED": 0,
+        "LEXICON": 2609
+      },
+      "by_source_fraction": {
+        "CAS_NOTATION": 0.09793294511612895,
+        "FALLBACK": 0.8669795715265544,
+        "LEARNED": 0.0,
+        "LEXICON": 0.03508748335731673
+      },
+      "n_records": 1000,
+      "overall_signal_fraction": 0.13302042847344567,
+      "total_signal_bearing": 9891,
+      "total_tokens": 74357
+    }
+  },
+  "training": {
+    "history": [
+      {
+        "all_heads_exact": 450,
+        "all_heads_exact_rate": 0.45,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": false,
+          "candidate_all_heads_exact_rate": 0.45,
+          "delta_abs": -0.03699999999999998,
+          "delta_pp": -3.6999999999999975
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 20,
+            "all_heads_exact_rate": 0.19607843137254902,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8431372549019608,
+              "drive": 0.9705882352941176,
+              "expression_family": 0.9901960784313726,
+              "has_meta_logic": 0.9705882352941176,
+              "has_omega": 1.0,
+              "meta_relations": 0.49019607843137253,
+              "noetic": 0.7450980392156863,
+              "register_mode": 0.9607843137254902,
+              "registers": 1.0,
+              "transition_kind": 0.9607843137254902,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 144,
+            "all_heads_exact_rate": 0.72,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.96,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.745,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 133,
+            "all_heads_exact_rate": 0.5037878787878788,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8106060606060606,
+              "drive": 0.7878787878787878,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.803030303030303,
+              "register_mode": 0.8371212121212122,
+              "registers": 0.946969696969697,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 14,
+            "all_heads_exact_rate": 0.12962962962962962,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.6018518518518519,
+              "drive": 0.5,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.2962962962962963,
+              "register_mode": 0.9074074074074074,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 125,
+            "all_heads_exact_rate": 0.6157635467980296,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.625615763546798,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.9852216748768473,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 14,
+            "all_heads_exact_rate": 0.11382113821138211,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.6504065040650406,
+              "expression_family": 0.3170731707317073,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.8699186991869918,
+              "transition_kind": 0.3170731707317073,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 0,
+        "global_step": 518,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.883,
+          "drive": 0.768,
+          "expression_family": 0.915,
+          "has_meta_logic": 0.997,
+          "has_omega": 1.0,
+          "meta_relations": 0.948,
+          "noetic": 0.795,
+          "register_mode": 0.943,
+          "registers": 0.967,
+          "transition_kind": 0.912,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 4.0880539633592585
+      },
+      {
+        "all_heads_exact": 638,
+        "all_heads_exact_rate": 0.638,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.638,
+          "delta_abs": 0.15100000000000002,
+          "delta_pp": 15.100000000000001
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 28,
+            "all_heads_exact_rate": 0.27450980392156865,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.803921568627451,
+              "drive": 0.9803921568627451,
+              "expression_family": 0.9901960784313726,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 0.5098039215686274,
+              "noetic": 0.7352941176470589,
+              "register_mode": 0.9901960784313726,
+              "registers": 1.0,
+              "transition_kind": 0.9901960784313726,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 186,
+            "all_heads_exact_rate": 0.93,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.99,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.935,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 175,
+            "all_heads_exact_rate": 0.6628787878787878,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8598484848484849,
+              "drive": 0.9393939393939394,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9507575757575758,
+              "register_mode": 0.8371212121212122,
+              "registers": 0.9545454545454546,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 28,
+            "all_heads_exact_rate": 0.25925925925925924,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.6944444444444444,
+              "drive": 0.7314814814814815,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.48148148148148145,
+              "register_mode": 0.9722222222222222,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 187,
+            "all_heads_exact_rate": 0.9211822660098522,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9211822660098522,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 34,
+            "all_heads_exact_rate": 0.2764227642276423,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.943089430894309,
+              "expression_family": 0.3170731707317073,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.3170731707317073,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 1,
+        "global_step": 1036,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.908,
+          "drive": 0.93,
+          "expression_family": 0.915,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.95,
+          "noetic": 0.891,
+          "register_mode": 0.953,
+          "registers": 0.988,
+          "transition_kind": 0.915,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 1.3309646277584164
+      },
+      {
+        "all_heads_exact": 715,
+        "all_heads_exact_rate": 0.715,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.715,
+          "delta_abs": 0.22799999999999998,
+          "delta_pp": 22.799999999999997
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 45,
+            "all_heads_exact_rate": 0.4411764705882353,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8823529411764706,
+              "drive": 0.9803921568627451,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 0.6470588235294118,
+              "noetic": 0.7745098039215687,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 197,
+            "all_heads_exact_rate": 0.985,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.985,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 186,
+            "all_heads_exact_rate": 0.7045454545454546,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9318181818181818,
+              "drive": 0.8901515151515151,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.8484848484848485,
+              "registers": 0.9507575757575758,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 46,
+            "all_heads_exact_rate": 0.42592592592592593,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.6851851851851852,
+              "drive": 0.7777777777777778,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.7222222222222222,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 202,
+            "all_heads_exact_rate": 0.9950738916256158,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9950738916256158,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 39,
+            "all_heads_exact_rate": 0.3170731707317073,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9512195121951219,
+              "expression_family": 0.3170731707317073,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.3170731707317073,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 2,
+        "global_step": 1554,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.936,
+          "drive": 0.938,
+          "expression_family": 0.916,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.964,
+          "noetic": 0.944,
+          "register_mode": 0.96,
+          "registers": 0.987,
+          "transition_kind": 0.916,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.7701649270577781
+      },
+      {
+        "all_heads_exact": 755,
+        "all_heads_exact_rate": 0.755,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.755,
+          "delta_abs": 0.268,
+          "delta_pp": 26.8
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 67,
+            "all_heads_exact_rate": 0.6568627450980392,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8921568627450981,
+              "drive": 0.9803921568627451,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 0.9313725490196079,
+              "noetic": 0.7745098039215687,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 189,
+            "all_heads_exact_rate": 0.945,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.97,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.975,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 202,
+            "all_heads_exact_rate": 0.7651515151515151,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.8522727272727273,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9128787878787878,
+              "registers": 0.9545454545454546,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 58,
+            "all_heads_exact_rate": 0.5370370370370371,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8888888888888888,
+              "drive": 0.8055555555555556,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.7314814814814815,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 0.9852216748768473,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9852216748768473,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 39,
+            "all_heads_exact_rate": 0.3170731707317073,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.959349593495935,
+              "expression_family": 0.3170731707317073,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.983739837398374,
+              "registers": 1.0,
+              "transition_kind": 0.3170731707317073,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 3,
+        "global_step": 2072,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.977,
+          "drive": 0.924,
+          "expression_family": 0.916,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.993,
+          "noetic": 0.943,
+          "register_mode": 0.975,
+          "registers": 0.988,
+          "transition_kind": 0.916,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.5525056267567123
+      },
+      {
+        "all_heads_exact": 826,
+        "all_heads_exact_rate": 0.826,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.826,
+          "delta_abs": 0.33899999999999997,
+          "delta_pp": 33.9
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 76,
+            "all_heads_exact_rate": 0.7450980392156863,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9411764705882353,
+              "drive": 0.9803921568627451,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 0.9607843137254902,
+              "noetic": 0.8333333333333334,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 1.0,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 229,
+            "all_heads_exact_rate": 0.8674242424242424,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.946969696969697,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9166666666666666,
+              "registers": 0.9545454545454546,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 81,
+            "all_heads_exact_rate": 0.75,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8611111111111112,
+              "drive": 0.9351851851851852,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8981481481481481,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 201,
+            "all_heads_exact_rate": 0.9901477832512315,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9901477832512315,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 39,
+            "all_heads_exact_rate": 0.3170731707317073,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.983739837398374,
+              "expression_family": 0.3170731707317073,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.3170731707317073,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 4,
+        "global_step": 2590,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.979,
+          "drive": 0.973,
+          "expression_family": 0.916,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.996,
+          "noetic": 0.972,
+          "register_mode": 0.978,
+          "registers": 0.988,
+          "transition_kind": 0.916,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.43402828451634373
+      },
+      {
+        "all_heads_exact": 839,
+        "all_heads_exact_rate": 0.839,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.839,
+          "delta_abs": 0.352,
+          "delta_pp": 35.199999999999996
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 82,
+            "all_heads_exact_rate": 0.803921568627451,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9607843137254902,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 0.9901960784313726,
+              "noetic": 0.8431372549019608,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 1.0,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 231,
+            "all_heads_exact_rate": 0.875,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9962121212121212,
+              "drive": 0.9204545454545454,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.9507575757575758,
+              "transition_kind": 0.9886363636363636,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 84,
+            "all_heads_exact_rate": 0.7777777777777778,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.8796296296296297,
+              "drive": 0.9074074074074074,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9537037037037037,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 203,
+            "all_heads_exact_rate": 1.0,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 39,
+            "all_heads_exact_rate": 0.3170731707317073,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.975609756097561,
+              "expression_family": 0.3252032520325203,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.3252032520325203,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 5,
+        "global_step": 3108,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.982,
+          "drive": 0.965,
+          "expression_family": 0.917,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.999,
+          "noetic": 0.979,
+          "register_mode": 0.992,
+          "registers": 0.987,
+          "transition_kind": 0.914,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.3539715481195671
+      },
+      {
+        "all_heads_exact": 837,
+        "all_heads_exact_rate": 0.837,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.837,
+          "delta_abs": 0.35,
+          "delta_pp": 35.0
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 78,
+            "all_heads_exact_rate": 0.7647058823529411,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9215686274509803,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8431372549019608,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 1.0,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 234,
+            "all_heads_exact_rate": 0.8863636363636364,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9962121212121212,
+              "drive": 0.928030303030303,
+              "expression_family": 0.9962121212121212,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.9545454545454546,
+              "transition_kind": 0.9962121212121212,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 87,
+            "all_heads_exact_rate": 0.8055555555555556,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9814814814814815,
+              "drive": 0.9444444444444444,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8703703703703703,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 199,
+            "all_heads_exact_rate": 0.9802955665024631,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9802955665024631,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 39,
+            "all_heads_exact_rate": 0.3170731707317073,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.975609756097561,
+              "expression_family": 0.3170731707317073,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.3170731707317073,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 6,
+        "global_step": 3626,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.989,
+          "drive": 0.967,
+          "expression_family": 0.915,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.97,
+          "register_mode": 0.992,
+          "registers": 0.988,
+          "transition_kind": 0.915,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.3050135592120955
+      },
+      {
+        "all_heads_exact": 841,
+        "all_heads_exact_rate": 0.841,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.841,
+          "delta_abs": 0.354,
+          "delta_pp": 35.4
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 78,
+            "all_heads_exact_rate": 0.7647058823529411,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9607843137254902,
+              "drive": 0.9803921568627451,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 0.9705882352941176,
+              "noetic": 0.803921568627451,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 198,
+            "all_heads_exact_rate": 0.99,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.995,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.995,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 242,
+            "all_heads_exact_rate": 0.9166666666666666,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.946969696969697,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.9545454545454546,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 87,
+            "all_heads_exact_rate": 0.8055555555555556,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9444444444444444,
+              "drive": 0.9166666666666666,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9166666666666666,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 196,
+            "all_heads_exact_rate": 0.9655172413793104,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9655172413793104,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 40,
+            "all_heads_exact_rate": 0.3252032520325203,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 0.3252032520325203,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.3252032520325203,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 7,
+        "global_step": 4144,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.989,
+          "drive": 0.968,
+          "expression_family": 0.917,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.997,
+          "noetic": 0.97,
+          "register_mode": 0.992,
+          "registers": 0.988,
+          "transition_kind": 0.917,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.26450174356519485
+      },
+      {
+        "all_heads_exact": 857,
+        "all_heads_exact_rate": 0.857,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.857,
+          "delta_abs": 0.37,
+          "delta_pp": 37.0
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 78,
+            "all_heads_exact_rate": 0.7647058823529411,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9803921568627451,
+              "drive": 0.9803921568627451,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 0.9803921568627451,
+              "noetic": 0.8137254901960784,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 199,
+            "all_heads_exact_rate": 0.995,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.995,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 243,
+            "all_heads_exact_rate": 0.9204545454545454,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9545454545454546,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.946969696969697,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 103,
+            "all_heads_exact_rate": 0.9537037037037037,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9722222222222222,
+              "drive": 0.9907407407407407,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9722222222222222,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 197,
+            "all_heads_exact_rate": 0.9704433497536946,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9753694581280788,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.9950738916256158,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 37,
+            "all_heads_exact_rate": 0.3008130081300813,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.975609756097561,
+              "expression_family": 0.3252032520325203,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.991869918699187,
+              "transition_kind": 0.3252032520325203,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 8,
+        "global_step": 4662,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.995,
+          "drive": 0.977,
+          "expression_family": 0.917,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 0.998,
+          "noetic": 0.977,
+          "register_mode": 0.992,
+          "registers": 0.984,
+          "transition_kind": 0.917,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.2538479174771364
+      },
+      {
+        "all_heads_exact": 866,
+        "all_heads_exact_rate": 0.866,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.866,
+          "delta_abs": 0.379,
+          "delta_pp": 37.9
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 82,
+            "all_heads_exact_rate": 0.803921568627451,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9509803921568627,
+              "drive": 0.9803921568627451,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8529411764705882,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 198,
+            "all_heads_exact_rate": 0.99,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.99,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 243,
+            "all_heads_exact_rate": 0.9204545454545454,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.946969696969697,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.9583333333333334,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 103,
+            "all_heads_exact_rate": 0.9537037037037037,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9814814814814815,
+              "drive": 0.9814814814814815,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9814814814814815,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 201,
+            "all_heads_exact_rate": 0.9901477832512315,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9901477832512315,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 39,
+            "all_heads_exact_rate": 0.3170731707317073,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.983739837398374,
+              "expression_family": 0.3252032520325203,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.991869918699187,
+              "transition_kind": 0.3252032520325203,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 9,
+        "global_step": 5180,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.993,
+          "drive": 0.978,
+          "expression_family": 0.917,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.981,
+          "register_mode": 0.992,
+          "registers": 0.988,
+          "transition_kind": 0.917,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.23291640478441614
+      },
+      {
+        "all_heads_exact": 868,
+        "all_heads_exact_rate": 0.868,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.868,
+          "delta_abs": 0.381,
+          "delta_pp": 38.1
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 80,
+            "all_heads_exact_rate": 0.7843137254901961,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9411764705882353,
+              "drive": 0.9803921568627451,
+              "expression_family": 0.9901960784313726,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8431372549019608,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.9901960784313726,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 199,
+            "all_heads_exact_rate": 0.995,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.995,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 244,
+            "all_heads_exact_rate": 0.9242424242424242,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9659090909090909,
+              "expression_family": 0.9886363636363636,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.9545454545454546,
+              "transition_kind": 0.9924242424242424,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 102,
+            "all_heads_exact_rate": 0.9444444444444444,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9907407407407407,
+              "drive": 0.9907407407407407,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9629629629629629,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 201,
+            "all_heads_exact_rate": 0.9901477832512315,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9901477832512315,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 42,
+            "all_heads_exact_rate": 0.34146341463414637,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 0.34959349593495936,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.34146341463414637,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 10,
+        "global_step": 5698,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.993,
+          "drive": 0.986,
+          "expression_family": 0.916,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.979,
+          "register_mode": 0.992,
+          "registers": 0.988,
+          "transition_kind": 0.916,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.21077700451189027
+      },
+      {
+        "all_heads_exact": 844,
+        "all_heads_exact_rate": 0.844,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.844,
+          "delta_abs": 0.357,
+          "delta_pp": 35.699999999999996
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 79,
+            "all_heads_exact_rate": 0.7745098039215687,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9607843137254902,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.803921568627451,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 199,
+            "all_heads_exact_rate": 0.995,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.995,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 235,
+            "all_heads_exact_rate": 0.8901515151515151,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9204545454545454,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9962121212121212,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.9545454545454546,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 91,
+            "all_heads_exact_rate": 0.8425925925925926,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9351851851851852,
+              "drive": 0.9907407407407407,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8981481481481481,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 0.9852216748768473,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9852216748768473,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 40,
+            "all_heads_exact_rate": 0.3252032520325203,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.983739837398374,
+              "expression_family": 0.34146341463414637,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.3333333333333333,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 11,
+        "global_step": 6216,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.989,
+          "drive": 0.972,
+          "expression_family": 0.919,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.967,
+          "register_mode": 0.992,
+          "registers": 0.988,
+          "transition_kind": 0.918,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.2059037620669166
+      },
+      {
+        "all_heads_exact": 856,
+        "all_heads_exact_rate": 0.856,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.856,
+          "delta_abs": 0.369,
+          "delta_pp": 36.9
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 77,
+            "all_heads_exact_rate": 0.7549019607843137,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9607843137254902,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.7941176470588235,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 194,
+            "all_heads_exact_rate": 0.97,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.97,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 240,
+            "all_heads_exact_rate": 0.9090909090909091,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.946969696969697,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.9545454545454546,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 104,
+            "all_heads_exact_rate": 0.9629629629629629,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9907407407407407,
+              "drive": 0.9907407407407407,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9814814814814815,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 203,
+            "all_heads_exact_rate": 1.0,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 38,
+            "all_heads_exact_rate": 0.3089430894308943,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.983739837398374,
+              "expression_family": 0.3252032520325203,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.3252032520325203,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 12,
+        "global_step": 6734,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.995,
+          "drive": 0.982,
+          "expression_family": 0.917,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.971,
+          "register_mode": 0.992,
+          "registers": 0.988,
+          "transition_kind": 0.917,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.19405923277484866
+      },
+      {
+        "all_heads_exact": 854,
+        "all_heads_exact_rate": 0.854,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.854,
+          "delta_abs": 0.367,
+          "delta_pp": 36.7
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 83,
+            "all_heads_exact_rate": 0.8137254901960784,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9411764705882353,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8725490196078431,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 1.0,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 228,
+            "all_heads_exact_rate": 0.8636363636363636,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9393939393939394,
+              "expression_family": 0.9772727272727273,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.9545454545454546,
+              "transition_kind": 0.9507575757575758,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 97,
+            "all_heads_exact_rate": 0.8981481481481481,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9722222222222222,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9259259259259259,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 203,
+            "all_heads_exact_rate": 1.0,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 43,
+            "all_heads_exact_rate": 0.34959349593495936,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 0.34959349593495936,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.34959349593495936,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 13,
+        "global_step": 7252,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.991,
+          "drive": 0.983,
+          "expression_family": 0.914,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.979,
+          "register_mode": 0.992,
+          "registers": 0.988,
+          "transition_kind": 0.907,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.18506691340198847
+      },
+      {
+        "all_heads_exact": 842,
+        "all_heads_exact_rate": 0.842,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.842,
+          "delta_abs": 0.355,
+          "delta_pp": 35.5
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 85,
+            "all_heads_exact_rate": 0.8333333333333334,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9607843137254902,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8725490196078431,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 1.0,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 216,
+            "all_heads_exact_rate": 0.8181818181818182,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9242424242424242,
+              "expression_family": 0.9356060606060606,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9621212121212122,
+              "registers": 0.946969696969697,
+              "transition_kind": 0.9393939393939394,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 97,
+            "all_heads_exact_rate": 0.8981481481481481,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9907407407407407,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9074074074074074,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 202,
+            "all_heads_exact_rate": 0.9950738916256158,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9950738916256158,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 42,
+            "all_heads_exact_rate": 0.34146341463414637,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.975609756097561,
+              "expression_family": 0.36585365853658536,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.36585365853658536,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 14,
+        "global_step": 7770,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.996,
+          "drive": 0.974,
+          "expression_family": 0.905,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.977,
+          "register_mode": 0.99,
+          "registers": 0.986,
+          "transition_kind": 0.906,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.1801766964128694
+      },
+      {
+        "all_heads_exact": 857,
+        "all_heads_exact_rate": 0.857,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.857,
+          "delta_abs": 0.37,
+          "delta_pp": 37.0
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 83,
+            "all_heads_exact_rate": 0.8137254901960784,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9803921568627451,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8333333333333334,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 1.0,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 220,
+            "all_heads_exact_rate": 0.8333333333333334,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9583333333333334,
+              "expression_family": 0.9621212121212122,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9962121212121212,
+              "register_mode": 0.9204545454545454,
+              "registers": 0.9318181818181818,
+              "transition_kind": 0.9583333333333334,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 106,
+            "all_heads_exact_rate": 0.9814814814814815,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9907407407407407,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9907407407407407,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 203,
+            "all_heads_exact_rate": 1.0,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 45,
+            "all_heads_exact_rate": 0.36585365853658536,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.983739837398374,
+              "expression_family": 0.3821138211382114,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.3821138211382114,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 15,
+        "global_step": 8288,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.997,
+          "drive": 0.986,
+          "expression_family": 0.914,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.981,
+          "register_mode": 0.979,
+          "registers": 0.982,
+          "transition_kind": 0.913,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.16771259847812672
+      },
+      {
+        "all_heads_exact": 857,
+        "all_heads_exact_rate": 0.857,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.857,
+          "delta_abs": 0.37,
+          "delta_pp": 37.0
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 82,
+            "all_heads_exact_rate": 0.803921568627451,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9607843137254902,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8431372549019608,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 1.0,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 226,
+            "all_heads_exact_rate": 0.8560606060606061,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9318181818181818,
+              "expression_family": 0.9659090909090909,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.946969696969697,
+              "transition_kind": 0.9659090909090909,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 103,
+            "all_heads_exact_rate": 0.9537037037037037,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9907407407407407,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9629629629629629,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 202,
+            "all_heads_exact_rate": 0.9950738916256158,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9950738916256158,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 44,
+            "all_heads_exact_rate": 0.35772357723577236,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 0.36585365853658536,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.35772357723577236,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 16,
+        "global_step": 8806,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.996,
+          "drive": 0.979,
+          "expression_family": 0.913,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.98,
+          "register_mode": 0.992,
+          "registers": 0.986,
+          "transition_kind": 0.912,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.16308927428854708
+      },
+      {
+        "all_heads_exact": 859,
+        "all_heads_exact_rate": 0.859,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.859,
+          "delta_abs": 0.372,
+          "delta_pp": 37.2
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 84,
+            "all_heads_exact_rate": 0.8235294117647058,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9705882352941176,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8529411764705882,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 196,
+            "all_heads_exact_rate": 0.98,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.98,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 228,
+            "all_heads_exact_rate": 0.8636363636363636,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9356060606060606,
+              "expression_family": 0.9772727272727273,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9962121212121212,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.9507575757575758,
+              "transition_kind": 0.9659090909090909,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 105,
+            "all_heads_exact_rate": 0.9722222222222222,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9722222222222222,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 203,
+            "all_heads_exact_rate": 1.0,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 43,
+            "all_heads_exact_rate": 0.34959349593495936,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.991869918699187,
+              "expression_family": 0.35772357723577236,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 0.36585365853658536,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 17,
+        "global_step": 9324,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.997,
+          "drive": 0.981,
+          "expression_family": 0.915,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.977,
+          "register_mode": 0.992,
+          "registers": 0.987,
+          "transition_kind": 0.913,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.16105664353889618
+      },
+      {
+        "all_heads_exact": 831,
+        "all_heads_exact_rate": 0.831,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.831,
+          "delta_abs": 0.344,
+          "delta_pp": 34.4
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 78,
+            "all_heads_exact_rate": 0.7647058823529411,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9705882352941176,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.7941176470588235,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 199,
+            "all_heads_exact_rate": 0.995,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.995,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 202,
+            "all_heads_exact_rate": 0.7651515151515151,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.928030303030303,
+              "expression_family": 0.9015151515151515,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9583333333333334,
+              "registers": 0.9242424242424242,
+              "transition_kind": 0.9015151515151515,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 104,
+            "all_heads_exact_rate": 0.9629629629629629,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9722222222222222,
+              "drive": 0.9907407407407407,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 203,
+            "all_heads_exact_rate": 1.0,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 45,
+            "all_heads_exact_rate": 0.36585365853658536,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.975609756097561,
+              "expression_family": 0.3983739837398374,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.991869918699187,
+              "transition_kind": 0.3983739837398374,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 18,
+        "global_step": 9842,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.994,
+          "drive": 0.976,
+          "expression_family": 0.9,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.979,
+          "register_mode": 0.989,
+          "registers": 0.978,
+          "transition_kind": 0.9,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.15052267798298113
+      },
+      {
+        "all_heads_exact": 852,
+        "all_heads_exact_rate": 0.852,
+        "baseline_comparison": {
+          "baseline_all_heads_exact_rate": 0.487,
+          "baseline_name": "leak_fixed_hash_feature_20ep",
+          "beats_baseline": true,
+          "candidate_all_heads_exact_rate": 0.852,
+          "delta_abs": 0.365,
+          "delta_pp": 36.5
+        },
+        "by_bucket": {
+          "meta_logic": {
+            "all_heads_exact": 84,
+            "all_heads_exact_rate": 0.8235294117647058,
+            "n": 102,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 0.9705882352941176,
+              "drive": 0.9901960784313726,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.8627450980392157,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v74_baseline": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 1.0,
+            "n": 200,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 1.0,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v75_register": {
+            "all_heads_exact": 220,
+            "all_heads_exact_rate": 0.8333333333333334,
+            "n": 264,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9128787878787878,
+              "expression_family": 0.9659090909090909,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 0.9696969696969697,
+              "registers": 0.9431818181818182,
+              "transition_kind": 0.9659090909090909,
+              "turn_type": 1.0
+            }
+          },
+          "v76_production": {
+            "all_heads_exact": 104,
+            "all_heads_exact_rate": 0.9629629629629629,
+            "n": 108,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9814814814814815,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 0.9814814814814815,
+              "register_mode": 1.0,
+              "registers": 1.0,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_omega": {
+            "all_heads_exact": 200,
+            "all_heads_exact_rate": 0.9852216748768473,
+            "n": 203,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.9950738916256158,
+              "expression_family": 1.0,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.9901477832512315,
+              "transition_kind": 1.0,
+              "turn_type": 1.0
+            }
+          },
+          "v77_rule_four": {
+            "all_heads_exact": 44,
+            "all_heads_exact_rate": 0.35772357723577236,
+            "n": 123,
+            "per_head_acc": {
+              "authority": 1.0,
+              "domain": 1.0,
+              "drive": 0.991869918699187,
+              "expression_family": 0.37398373983739835,
+              "has_meta_logic": 1.0,
+              "has_omega": 1.0,
+              "meta_relations": 1.0,
+              "noetic": 1.0,
+              "register_mode": 1.0,
+              "registers": 0.991869918699187,
+              "transition_kind": 0.37398373983739835,
+              "turn_type": 1.0
+            }
+          }
+        },
+        "epoch": 19,
+        "global_step": 10360,
+        "n_eval": 1000,
+        "per_head_acc": {
+          "authority": 1.0,
+          "domain": 0.997,
+          "drive": 0.972,
+          "expression_family": 0.914,
+          "has_meta_logic": 1.0,
+          "has_omega": 1.0,
+          "meta_relations": 1.0,
+          "noetic": 0.984,
+          "register_mode": 0.992,
+          "registers": 0.982,
+          "transition_kind": 0.914,
+          "turn_type": 1.0
+        },
+        "train_loss_avg": 0.14441646960596322
+      }
+    ],
+    "total_steps": 10360
+  }
+}

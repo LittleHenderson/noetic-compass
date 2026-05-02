@@ -1,5 +1,48 @@
 # Noetic Compass — Progress Log
 
+## Session 48: Correct-Corpus Paraphrase Retrain Clears Prior Canonical Baseline (May 2, 2026)
+
+**Objective.** Run the prepared v7.7-overlap relabel + deterministic paraphrase-augmentation retrain on GPU, then evaluate both canonical accuracy and paraphrase invariance against the held-out 1K.
+
+**Operational correction.** The first RunPod attempt used `cas-synthetic/data/level3_pilot_full.jsonl`, which is now a conversational/free-form Level 3 corpus. That was the wrong input for the structured-token prediction harness and collapsed to **14/1000 (1.4%)** all-heads exact. A no-augmentation control on the same wrong corpus also failed through epoch 5, confirming the issue was corpus selection, not the model. The correct training corpus is `cas-synthetic/data/level2_scaffold/level3_recoverable_full.jsonl`, as named in the Session 41 run report.
+
+**Correct run.**
+
+- Transferred `level3_recoverable_full.jsonl` to RunPod and relabeled it with `cas-synthetic/scripts/relabel_v77_overlap.py`.
+- Relabel counts: `n_total=19454`, `n_relabeled_to_v77_omega=1198`, `n_v77_rule_four_input=2454`, `n_v77_rule_four_remaining=1256`.
+- Training command used the same core Session 41 hparams plus `--paraphrase-augment-train 3`.
+- Eval-overlap filter removed 2,884 records; canonical post-filter train count was 16,570; paraphrase augmentation expanded train to 66,280.
+- Vocabulary size was 293, confirming the run was back on the intended recoverable slot-reading signal path.
+
+**Result.** New run directory:
+
+`cas-native/training/runs/structured-token-recoverable-paraphrase-v77fix-20epoch-gpu-20260502-1045/`
+
+- Canonical all-heads exact: **868/1000 (86.8%)**.
+- Prior current-eval checkpoint: **851/1000 (85.1%)**.
+- Delta vs prior current-eval checkpoint: **+1.7 pp**.
+- Delta vs hash baseline: **+38.1 pp**.
+- Best epoch: 10.
+
+**Paraphrase invariance.**
+
+- Paraphrase all-heads exact: **41.3%** (was 37.2%; +4.1 pp).
+- Prediction consistency vs canonical: **48.4%** (was 44.4%; +4.0 pp).
+- Canonical-exact retention: **46.7%** (was 42.4%; +4.3 pp).
+
+**Bucket signal.** Canonical strength is broad except for the known historical eval-label issue: `v74_baseline` 99.5%, `v75_register` 92.4%, `v76_production` 94.4%, `v77_omega` 99.0%, `meta_logic` 78.4%, `v77_rule_four` 34.1%. The `v77_rule_four` failures are still dominated by the 64 old held-out `omega_emergent` records, which are structurally `v77_omega` but remain labeled as Rule-4 in the current eval file. The new training data correctly relabels that shape as omega; the held-out eval set should be relabeled or regenerated before treating Rule-4 bucket accuracy as a fair number.
+
+**Artifacts.**
+
+- `STRUCTURED_TOKEN_PARAPHRASE_RETRAIN_REPORT.md`
+- `manifest.json`
+- `current_unique_eval_confusion.md/json`
+- `paraphrase_current_eval_report.md/json`
+- `paraphrase_current_eval_manifest.json`
+- `paraphrase_current_eval_samples.jsonl`
+
+**Continuation note.** The live operational log for this RunPod session is `docs/working/runpod_paraphrase_retrain_handoff_20260502.md`. It records the wrong-corpus false start, the correct corpus transfer, relabel counts, exact commands, and monitoring checkpoints.
+
 ## Session 47: v77_rule_four / v77_omega Structural Overlap Fix (May 2, 2026)
 
 **Diagnosis.** Session 41's confusion report (`runs/structured-token-20epoch-gpu-20260502-001907/current_unique_eval_confusion.md`) showed v77_rule_four had 84/123 head failures, with **64 of those records (the entire `omega_emergent` sub-pattern) misclassified 100% as v77_omega family/transition**. Investigation showed why the model could not distinguish them: the v77_rule_four compliant arm had a 50/50 split between `+` co-presence and `×` with named emergent (`(X × Y × Z) = ^N|Ω_*`); the second sub-arm produces expressions structurally identical to v77_omega output, drawn from the same `omega_registry.yaml`. Recoverable Level 3 prompts are built from `_formal_axis_reading(expression)`, which describes only structural slots, so the user_prompt for these records carries no bucket-distinguishing signal. The original bucket label was a generator-provenance artifact, not a structural property — and the 85.1% checkpoint correctly learned that these prompts produce v77_omega-shaped outputs.
