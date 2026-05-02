@@ -47,9 +47,16 @@ if "cas_native" not in sys.modules:
     sys.modules["cas_native"] = package
 
 from cas_native.model.structured_prediction import (
+    AUTHORITY_LABELS,
+    DOMAIN_LABELS,
+    DRIVE_LABELS,
+    EXPRESSION_FAMILY_LABELS,
     META_RELATION_LABELS,
     REGISTER_LABELS,
+    REGISTER_MODE_LABELS,
     StructuredPredictionHead,
+    TRANSITION_KIND_LABELS,
+    TURN_TYPE_LABELS,
     structured_prediction_loss,
 )
 from cas_native.model.structured_token_embedding import (
@@ -155,6 +162,19 @@ _SCALAR_HEAD_PAIRS: tuple[tuple[str, str], ...] = (
     ("has_meta_logic", "meta_logic_logits"),
 )
 
+_SCALAR_HEAD_LABELS: dict[str, tuple[Any, ...]] = {
+    "turn_type": TURN_TYPE_LABELS,
+    "expression_family": EXPRESSION_FAMILY_LABELS,
+    "transition_kind": TRANSITION_KIND_LABELS,
+    "noetic": tuple(range(10)),
+    "domain": DOMAIN_LABELS,
+    "drive": DRIVE_LABELS,
+    "register_mode": REGISTER_MODE_LABELS,
+    "authority": AUTHORITY_LABELS,
+    "has_omega": (False, True),
+    "has_meta_logic": (False, True),
+}
+
 _EVAL_LOGIT_KEYS: tuple[str, ...] = tuple(pair[1] for pair in _SCALAR_HEAD_PAIRS) + (
     "register_logits",
     "meta_relation_logits",
@@ -170,10 +190,20 @@ def _eval_manifest_from_outputs(
 
     n = len(records)
     correct: dict[str, list[bool]] = {}
+    predictions: dict[str, list[Any]] = {}
+    targets: dict[str, list[Any]] = {}
     for target_key, logit_key in _SCALAR_HEAD_PAIRS:
         if target_key in targets_all:
             preds = outputs[logit_key].argmax(dim=-1)
             correct[target_key] = (preds == targets_all[target_key]).cpu().tolist()
+            predictions[target_key] = _scalar_label_values(
+                preds,
+                _SCALAR_HEAD_LABELS[target_key],
+            )
+            targets[target_key] = _scalar_label_values(
+                targets_all[target_key],
+                _SCALAR_HEAD_LABELS[target_key],
+            )
     if "registers" in targets_all:
         register_pred = (outputs["register_logits"].sigmoid() >= 0.5).to(
             targets_all["registers"].dtype
@@ -181,12 +211,22 @@ def _eval_manifest_from_outputs(
         correct["registers"] = (
             (register_pred == targets_all["registers"]).all(dim=-1).cpu().tolist()
         )
+        predictions["registers"] = _multi_label_values(register_pred, REGISTER_LABELS)
+        targets["registers"] = _multi_label_values(targets_all["registers"], REGISTER_LABELS)
     if "meta_relations" in targets_all:
         mr_pred = (outputs["meta_relation_logits"].sigmoid() >= 0.5).to(
             targets_all["meta_relations"].dtype
         )
         correct["meta_relations"] = (
             (mr_pred == targets_all["meta_relations"]).all(dim=-1).cpu().tolist()
+        )
+        predictions["meta_relations"] = _multi_label_values(
+            mr_pred,
+            META_RELATION_LABELS,
+        )
+        targets["meta_relations"] = _multi_label_values(
+            targets_all["meta_relations"],
+            META_RELATION_LABELS,
         )
 
     head_keys = list(correct.keys())
@@ -199,8 +239,12 @@ def _eval_manifest_from_outputs(
                 "id": record.get("id"),
                 "bucket": record.get("bucket"),
                 "source_level2_id": record.get("source_level2_id"),
+                "cas_expression": record.get("cas_expression"),
+                "user_prompt": record.get("user_prompt"),
                 "all_heads_exact": bool(all_exact[i]),
                 "head_correct": {key: bool(correct[key][i]) for key in head_keys},
+                "prediction": {key: predictions[key][i] for key in head_keys},
+                "target": {key: targets[key][i] for key in head_keys},
             }
         )
 
@@ -231,6 +275,17 @@ def _eval_manifest_from_outputs(
         "by_bucket": by_bucket,
         "samples": samples,
     }
+
+
+def _scalar_label_values(indices: torch.Tensor, labels: tuple[Any, ...]) -> list[Any]:
+    return [labels[int(index)] for index in indices.detach().cpu().tolist()]
+
+
+def _multi_label_values(values: torch.Tensor, labels: tuple[str, ...]) -> list[list[str]]:
+    rows: list[list[str]] = []
+    for row in values.detach().cpu():
+        rows.append([labels[i] for i, value in enumerate(row.tolist()) if float(value) >= 0.5])
+    return rows
 
 
 def baseline_comparison(

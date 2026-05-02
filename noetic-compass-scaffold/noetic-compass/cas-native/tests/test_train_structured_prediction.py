@@ -97,6 +97,15 @@ def test_evaluate_structured_prediction_returns_per_bucket_metrics():
         assert bucket_metrics["per_head_acc"]["turn_type"] in (0.0, 1.0)
     assert len(manifest["samples"]) == 4
     assert all("head_correct" in sample for sample in manifest["samples"])
+    assert all("prediction" in sample for sample in manifest["samples"])
+    assert all("target" in sample for sample in manifest["samples"])
+    sample = manifest["samples"][0]
+    assert isinstance(sample["prediction"]["turn_type"], str)
+    assert sample["target"]["turn_type"] == "ANSWER"
+    assert sample["target"]["expression_family"] == "register_state"
+    assert isinstance(sample["target"]["registers"], list)
+    assert sample["cas_expression"] == "^2^C_{F4}|f"
+    assert "Noetic 2" in sample["user_prompt"]
 
 
 def test_train_structured_prediction_local_runs_one_epoch_and_returns_manifest():
@@ -169,6 +178,7 @@ def test_train_structured_prediction_local_writes_artifacts():
             "v77_omega",
             "meta_logic",
         }
+        assert all("prediction" in sample and "target" in sample for sample in parsed)
     finally:
         shutil.rmtree(out_dir, ignore_errors=True)
 
@@ -251,6 +261,7 @@ def test_structured_token_eval_reports_per_bucket_metrics():
         "meta_logic",
     }
     assert len(eval_manifest["samples"]) == 4
+    assert all("prediction" in sample and "target" in sample for sample in eval_manifest["samples"])
 
 
 def test_structured_token_vocabulary_builds_from_train_prompts_only():

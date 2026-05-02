@@ -1,5 +1,25 @@
 # Noetic Compass — Progress Log
 
+## Session 42: Structured-Token Eval Instrumentation + Current Eval Confusion (May 2, 2026)
+
+**Objective.** Make the structured-token eval path debuggable at sample level before paraphrase-invariance work.
+
+**Deliverables.**
+
+- `train_structured_prediction.py` now writes enriched eval samples with `cas_expression`, `user_prompt`, per-head `prediction`, per-head `target`, and the existing `head_correct` booleans.
+- New `cas-native/training/evaluate_structured_token_run.py` loads a saved structured-token run directory, evaluates a checkpoint against a JSONL eval file, writes enriched manifest/samples, and emits JSON + Markdown confusion reports.
+- Generated current unique-source eval artifacts under `cas-native/training/runs/structured-token-20epoch-gpu-20260502-001907/`:
+  - `current_unique_eval_manifest.json`
+  - `current_unique_eval_samples.jsonl`
+  - `current_unique_eval_confusion.json`
+  - `current_unique_eval_confusion.md`
+
+**Result.** The saved Session 41 checkpoint scores **851/1000 all-heads-exact (85.1%)** on the current 1,000-unique-source eval set, preserving the +36pp win over the 48.7% hash baseline.
+
+**Diagnosis.** The bottleneck is sharply localized: `v77_rule_four` accounts for 84/149 failures. Within that bucket, every `omega_emergent` Rule-4 expression is misclassified as `omega/omega_bind` (64/64), while `plus_copresence` Rule-4 cases are 39/59 exact. This confirms the remaining weakness is a family/transition distinction around named emergent Rule-4 expressions, not core CAS-axis recovery.
+
+**Verification.** `python312 -m pytest cas-native/tests/test_train_structured_prediction.py -q` — 8 passed, 2 skipped. `python312 -m py_compile` passed for the modified eval/training modules.
+
 ## Session 41: Structured-Token GPU Comparison Clears Hash Baseline (May 2, 2026)
 
 **Objective.** Run the first full structured-token train/eval comparison against the honest leak-fixed hash-feature baseline.
