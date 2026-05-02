@@ -1,5 +1,30 @@
 # Noetic Compass — Progress Log
 
+## Session 41: Structured-Token GPU Comparison Clears Hash Baseline (May 2, 2026)
+
+**Objective.** Run the first full structured-token train/eval comparison against the honest leak-fixed hash-feature baseline.
+
+**Result.** The structured-token path cleared the baseline decisively: **853/1000 all-heads-exact (85.3%)** vs the hash baseline's **487/1000 (48.7%)**, a **+36.6pp** lift on the same held-out recoverable Level 3 eval set.
+
+**Run.** `cas-native/training/runs/structured-token-20epoch-gpu-20260502-001907/`
+
+- Input mode: `structured_token`
+- Model: `StructuredTokenEmbedding + StructuredPredictionHead`
+- Train: `level3_recoverable_full.jsonl`, filtered to 17,974 non-overlapping records
+- Eval: `level3_recoverable_eval_1000.jsonl`
+- Vocab size: 290
+- Epochs: 20
+- Best epoch: 19
+- Hardware: RunPod RTX A6000
+
+**Per-bucket exact.** v74_baseline 194/194 (100%); v75_register 217/262 (82.8%); v76_production 72/104 (69.2%); v77_rule_four 46/106 (43.4%); v77_omega 218/218 (100%); meta_logic 106/116 (91.4%). The remaining bottleneck is `v77_rule_four`, specifically expression-family / transition-kind confusion, not the core axes.
+
+**Engineering fix during run.** The first launch exposed CPU-bound startup. `2366628` caches structured-token sequences, loads the seed lexicon once per corpus pass, and logs tokenization progress every 1,000 records. This converted the silent startup stall into a visible ~3-4 minute corpus-tokenization phase.
+
+**Artifacts.** Committed: `manifest.json`, `samples.jsonl`, `structured_token_vocab.json`, `launch.log`, and `STRUCTURED_TOKEN_RUN_REPORT.md`. Off-VCS/local only: `best_structured_token_model.pt`.
+
+**Next.** Build a precomputed tensor-cache dataset for structured-token batches to raise GPU utilization, then rerun to confirm reproducibility and shorten wall-clock. After that, diagnose `v77_rule_four` family/transition-kind confusion.
+
 ## Session 40: Structured-Token Train/Eval Runner Mode (May 1, 2026)
 
 **Objective.** Add the first train/eval runner path that consumes `StructuredTokenEmbedding + StructuredPredictionHead` over Level 3 data and reports directly against the honest leak-fixed hash-feature baseline (48.7% all-heads-exact).

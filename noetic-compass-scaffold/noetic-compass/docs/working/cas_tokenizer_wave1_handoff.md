@@ -59,6 +59,36 @@ Interpretation gate: if the structured-token runner beats 48.7%, the CAS-native 
 
 ---
 
+## 0.2 Session 41 update - structured-token run beat hash baseline
+
+The interpretation gate was cleared.
+
+Run: `cas-native/training/runs/structured-token-20epoch-gpu-20260502-001907/`
+
+Result:
+
+- Hash baseline: `487/1000 = 48.7%`
+- Structured-token run: `853/1000 = 85.3%`
+- Delta: `+36.6pp`
+- Vocab size: `290`
+- Train records after overlap filtering: `17,974`
+- Held-out eval: `1,000`
+
+Per-bucket exact:
+
+- `v74_baseline`: `194/194 = 100.0%`
+- `v75_register`: `217/262 = 82.8%`
+- `v76_production`: `72/104 = 69.2%`
+- `v77_rule_four`: `46/106 = 43.4%`
+- `v77_omega`: `218/218 = 100.0%`
+- `meta_logic`: `106/116 = 91.4%`
+
+Interpretation: the CAS-native tokenizer/structured-token substrate is empirically useful, not decorative. It beats the deterministic hash feature baseline by a large margin on the same leakage-fixed held-out eval. The remaining weakness is not global CAS-axis recovery; most heads are above 94%. The main failure mode is `v77_rule_four` expression-family / transition-kind classification.
+
+Engineering note: the first GPU attempt exposed a CPU-bound startup path. Commit `2366628` fixed it by caching token sequences once, loading the seed lexicon once per corpus pass, and logging tokenization progress every 1,000 records. GPU utilization is still low because tensor batches are built in Python per batch; next engineering step is a prebuilt tensor-cache dataset.
+
+---
+
 ## 1. Why this exists — the pivot in one paragraph
 
 On 2026-04-30 a frozen-CAS-CLM-as-encoder run on an A6000 produced ~0.3-0.7% all-heads-exact through 11 epochs over 19,454 Level 3 records. The hash-feature baseline reached 48.7%. The frozen pretrained CAS-CLM backbone underperformed primitive token-hash features by ~100x. Diagnosed as **modality mismatch**: the CAS-CLM was trained as a causal LM on CAS expressions, so its hidden states are optimized for next-CAS-token prediction, not for encoding natural-language prompts. Its tokenizer (HybridCASTokenizer, vocab=698) collapses NL prompts to mostly `[UNK]`. CAS-CLM is the right tool for the OUTPUT/decoding side of the pipeline; it is the wrong tool for INPUT encoding.
