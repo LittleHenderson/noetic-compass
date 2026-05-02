@@ -1,0 +1,298 @@
+{
+  "by_bucket_delta": {
+    "meta_logic": {
+      "canonical_signal_fraction": 0.09585610200364299,
+      "delta_pp": -1.2619375826967816,
+      "paraphrase_signal_fraction": 0.08323672617667517
+    },
+    "v74_baseline": {
+      "canonical_signal_fraction": 0.1169270226159944,
+      "delta_pp": -1.8371708940949874,
+      "paraphrase_signal_fraction": 0.09855531367504453
+    },
+    "v75_register": {
+      "canonical_signal_fraction": 0.1343229804712834,
+      "delta_pp": -1.4698838801605052,
+      "paraphrase_signal_fraction": 0.11962414166967836
+    },
+    "v76_production": {
+      "canonical_signal_fraction": 0.13817378346436462,
+      "delta_pp": -0.3320296052065824,
+      "paraphrase_signal_fraction": 0.1348534874122988
+    },
+    "v77_omega": {
+      "canonical_signal_fraction": 0.13833902161547212,
+      "delta_pp": -0.9276527593244377,
+      "paraphrase_signal_fraction": 0.12906249402222775
+    },
+    "v77_rule_four": {
+      "canonical_signal_fraction": 0.14156079854809436,
+      "delta_pp": -0.8587200552334112,
+      "paraphrase_signal_fraction": 0.13297359799576025
+    }
+  },
+  "canonical": {
+    "by_bucket": {
+      "meta_logic": {
+        "by_source": {
+          "CAS_NOTATION": 249,
+          "FALLBACK": 3971,
+          "LEARNED": 0,
+          "LEXICON": 172
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.05669398907103825,
+          "FALLBACK": 0.904143897996357,
+          "LEARNED": 0.0,
+          "LEXICON": 0.039162112932604735
+        },
+        "n_records": 102,
+        "signal_fraction": 0.09585610200364299,
+        "total_signal_bearing": 421,
+        "total_tokens": 4392
+      },
+      "v74_baseline": {
+        "by_source": {
+          "CAS_NOTATION": 630,
+          "FALLBACK": 7575,
+          "LEARNED": 0,
+          "LEXICON": 373
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.07344369316857076,
+          "FALLBACK": 0.8830729773840056,
+          "LEARNED": 0.0,
+          "LEXICON": 0.04348332944742364
+        },
+        "n_records": 200,
+        "signal_fraction": 0.1169270226159944,
+        "total_signal_bearing": 1003,
+        "total_tokens": 8578
+      },
+      "v75_register": {
+        "by_source": {
+          "CAS_NOTATION": 1184,
+          "FALLBACK": 12013,
+          "LEARNED": 0,
+          "LEXICON": 680
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.08532103480579376,
+          "FALLBACK": 0.8656770195287166,
+          "LEARNED": 0.0,
+          "LEXICON": 0.04900194566548966
+        },
+        "n_records": 264,
+        "signal_fraction": 0.1343229804712834,
+        "total_signal_bearing": 1864,
+        "total_tokens": 13877
+      },
+      "v76_production": {
+        "by_source": {
+          "CAS_NOTATION": 2286,
+          "FALLBACK": 16772,
+          "LEARNED": 0,
+          "LEXICON": 403
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.11746570063203329,
+          "FALLBACK": 0.8618262165356354,
+          "LEARNED": 0.0,
+          "LEXICON": 0.020708082832331328
+        },
+        "n_records": 108,
+        "signal_fraction": 0.13817378346436462,
+        "total_signal_bearing": 2689,
+        "total_tokens": 19461
+      },
+      "v77_omega": {
+        "by_source": {
+          "CAS_NOTATION": 1833,
+          "FALLBACK": 15148,
+          "LEARNED": 0,
+          "LEXICON": 599
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.10426621160409556,
+          "FALLBACK": 0.8616609783845278,
+          "LEARNED": 0.0,
+          "LEXICON": 0.03407281001137656
+        },
+        "n_records": 203,
+        "signal_fraction": 0.13833902161547212,
+        "total_signal_bearing": 2432,
+        "total_tokens": 17580
+      },
+      "v77_rule_four": {
+        "by_source": {
+          "CAS_NOTATION": 1100,
+          "FALLBACK": 8987,
+          "LEARNED": 0,
+          "LEXICON": 382
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.1050721176807718,
+          "FALLBACK": 0.8584392014519057,
+          "LEARNED": 0.0,
+          "LEXICON": 0.03648868086732257
+        },
+        "n_records": 123,
+        "signal_fraction": 0.14156079854809436,
+        "total_signal_bearing": 1482,
+        "total_tokens": 10469
+      }
+    },
+    "by_source": {
+      "CAS_NOTATION": 7282,
+      "FALLBACK": 64466,
+      "LEARNED": 0,
+      "LEXICON": 2609
+    },
+    "by_source_fraction": {
+      "CAS_NOTATION": 0.09793294511612895,
+      "FALLBACK": 0.8669795715265544,
+      "LEARNED": 0.0,
+      "LEXICON": 0.03508748335731673
+    },
+    "n_records": 1000,
+    "overall_signal_fraction": 0.13302042847344567,
+    "total_signal_bearing": 9891,
+    "total_tokens": 74357
+  },
+  "canonical_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\level2_scaffold\\level3_recoverable_eval_1000.jsonl",
+  "delta": {
+    "delta_signal_fraction_pp": -0.9819119677032209,
+    "signal_fraction_canonical": 0.13302042847344567,
+    "signal_fraction_paraphrase": 0.12320130879641346
+  },
+  "lexicon_size": 191,
+  "paraphrase": {
+    "by_bucket": {
+      "meta_logic": {
+        "by_source": {
+          "CAS_NOTATION": 747,
+          "FALLBACK": 11862,
+          "LEARNED": 0,
+          "LEXICON": 330
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.05773243681891955,
+          "FALLBACK": 0.9167632738233248,
+          "LEARNED": 0.0,
+          "LEXICON": 0.025504289357755623
+        },
+        "n_records": 306,
+        "signal_fraction": 0.08323672617667517,
+        "total_signal_bearing": 1077,
+        "total_tokens": 12939
+      },
+      "v74_baseline": {
+        "by_source": {
+          "CAS_NOTATION": 1890,
+          "FALLBACK": 22775,
+          "LEARNED": 0,
+          "LEXICON": 600
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.07480704531961212,
+          "FALLBACK": 0.9014446863249554,
+          "LEARNED": 0.0,
+          "LEXICON": 0.023748268355432416
+        },
+        "n_records": 600,
+        "signal_fraction": 0.09855531367504453,
+        "total_signal_bearing": 2490,
+        "total_tokens": 25265
+      },
+      "v75_register": {
+        "by_source": {
+          "CAS_NOTATION": 3552,
+          "FALLBACK": 36540,
+          "LEARNED": 0,
+          "LEXICON": 1413
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.0855800505963137,
+          "FALLBACK": 0.8803758583303216,
+          "LEARNED": 0.0,
+          "LEXICON": 0.03404409107336465
+        },
+        "n_records": 792,
+        "signal_fraction": 0.11962414166967836,
+        "total_signal_bearing": 4965,
+        "total_tokens": 41505
+      },
+      "v76_production": {
+        "by_source": {
+          "CAS_NOTATION": 6858,
+          "FALLBACK": 50310,
+          "LEARNED": 0,
+          "LEXICON": 984
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.11793231531159719,
+          "FALLBACK": 0.8651465125877011,
+          "LEARNED": 0.0,
+          "LEXICON": 0.01692117210070161
+        },
+        "n_records": 324,
+        "signal_fraction": 0.1348534874122988,
+        "total_signal_bearing": 7842,
+        "total_tokens": 58152
+      },
+      "v77_omega": {
+        "by_source": {
+          "CAS_NOTATION": 5499,
+          "FALLBACK": 45530,
+          "LEARNED": 0,
+          "LEXICON": 1248
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.10518966275800065,
+          "FALLBACK": 0.8709375059777722,
+          "LEARNED": 0.0,
+          "LEXICON": 0.0238728312642271
+        },
+        "n_records": 609,
+        "signal_fraction": 0.12906249402222775,
+        "total_signal_bearing": 6747,
+        "total_tokens": 52277
+      },
+      "v77_rule_four": {
+        "by_source": {
+          "CAS_NOTATION": 3300,
+          "FALLBACK": 26994,
+          "LEARNED": 0,
+          "LEXICON": 840
+        },
+        "by_source_fraction": {
+          "CAS_NOTATION": 0.10599344767777992,
+          "FALLBACK": 0.8670264020042397,
+          "LEARNED": 0.0,
+          "LEXICON": 0.02698015031798034
+        },
+        "n_records": 369,
+        "signal_fraction": 0.13297359799576025,
+        "total_signal_bearing": 4140,
+        "total_tokens": 31134
+      }
+    },
+    "by_source": {
+      "CAS_NOTATION": 21846,
+      "FALLBACK": 194011,
+      "LEARNED": 0,
+      "LEXICON": 5415
+    },
+    "by_source_fraction": {
+      "CAS_NOTATION": 0.0987291659134459,
+      "FALLBACK": 0.8767986912035866,
+      "LEARNED": 0.0,
+      "LEXICON": 0.02447214288296757
+    },
+    "n_records": 3000,
+    "overall_signal_fraction": 0.12320130879641346,
+    "total_signal_bearing": 27261,
+    "total_tokens": 221272
+  },
+  "variants_per_record": 3
+}
