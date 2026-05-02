@@ -56,6 +56,9 @@ from cas_native.model.structured_token_embedding import (
     StructuredTokenEmbedding,
     StructuredTokenStructuredPredictor,
 )
+from cas_native.tokenizer.assembler import tokenize
+from cas_native.tokenizer.lexicon.schema import load_seed_lexicon
+from cas_native.tokenizer.structured_token import StructuredToken
 from cas_native.tokenizer.vocabulary import StructuredTokenVocabulary
 from cas_native.training.structured_prediction_ingest import (
     batch_targets_from_records,
@@ -246,6 +249,42 @@ def baseline_comparison(
         "delta_pp": delta * 100.0,
         "beats_baseline": delta > 0.0,
     }
+
+
+def _tokenize_records_with_progress(
+    records: list[dict[str, Any]],
+    *,
+    stage: str,
+    progress_print: bool,
+    every: int = 1000,
+) -> list[list[StructuredToken]]:
+    """Tokenize user prompts once, with bounded progress visibility."""
+
+    lexicon = load_seed_lexicon()
+    sequences: list[list[StructuredToken]] = []
+    total = len(records)
+    for index, record in enumerate(records, start=1):
+        sequences.append(
+            tokenize(
+                str(record.get("user_prompt") or ""),
+                lexicon=lexicon,
+            )
+        )
+        if progress_print and (index == total or index % every == 0):
+            print(
+                json.dumps(
+                    {
+                        "event": "startup_progress",
+                        "mode": "structured_token",
+                        "stage": stage,
+                        "done": index,
+                        "total": total,
+                    },
+                    sort_keys=True,
+                ),
+                flush=True,
+            )
+    return sequences
 
 
 def evaluate_structured_prediction(
@@ -635,7 +674,11 @@ def train_structured_token_prediction_local(
             ),
             flush=True,
         )
-    train_token_sequences = records_to_structured_token_sequences(train_records)
+    train_token_sequences = _tokenize_records_with_progress(
+        train_records,
+        stage="tokenize_train",
+        progress_print=progress_print,
+    )
     if progress_print:
         print(
             json.dumps(
@@ -670,7 +713,11 @@ def train_structured_token_prediction_local(
                 ),
                 flush=True,
             )
-        eval_token_sequences = records_to_structured_token_sequences(eval_records)
+        eval_token_sequences = _tokenize_records_with_progress(
+            eval_records,
+            stage="tokenize_eval",
+            progress_print=progress_print,
+        )
     if progress_print:
         print(
             json.dumps(

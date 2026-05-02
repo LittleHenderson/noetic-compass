@@ -19,7 +19,7 @@ from typing import Any, Iterable, Sequence
 import torch
 
 from cas_native.tokenizer.assembler import tokenize
-from cas_native.tokenizer.lexicon.schema import CASLexicon
+from cas_native.tokenizer.lexicon.schema import CASLexicon, load_seed_lexicon
 from cas_native.tokenizer.structured_token import (
     DOMAIN_AXIS_LEN,
     DRIVE_AXIS_LEN,
@@ -210,10 +210,11 @@ def records_to_structured_token_sequences(
     record_list = list(records)
     if not record_list:
         raise ValueError("records must be non-empty")
+    active_lexicon = lexicon or load_seed_lexicon()
     return [
         tokenize(
             str(record.get(text_field) or ""),
-            lexicon=lexicon,
+            lexicon=active_lexicon,
             include_whitespace=include_whitespace,
         )
         for record in record_list
