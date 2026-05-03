@@ -1,5 +1,68 @@
 # Noetic Compass — Progress Log
 
+## Session 49: Diagram-Loop Self-Reference Lever — Phases 1–7 (May 3, 2026)
+
+**Objective.** Implement the diagram-loop lever (`proposal/diagram-loop-impl`): feed the typed compiler graph produced from the model's prior CAS prediction back as input via a GraphEncoder fused with the text encoder by cross-attention. This is the architecturally honest sibling of PR #4 (linear self-reference loop).
+
+**Motivation.** The Session 48 clean-eval diagnostic (`docs/working/compiler_graph_schema_for_diagram_loop.md`) identified that the four content heads (noetic 71.5%, domain 77.4%, drive 79.4%, registers 79.1%) collapse under paraphrase while boolean heads remain near-perfect. Feeding the compiled graph back as prior context targets exactly these content axes: the graph encodes operator, domain, drive, and register directly via feature vectors, bypassing the surface string entirely.
+
+**Implementation — 8 phases, 7 committed.**
+
+### Phase 1: Compiler graph schema doc
+- `docs/working/compiler_graph_schema_for_diagram_loop.md` — full walkthrough of `compile_expression()` / `build_diagram()` / `empty_diagram()` callable API, diagram dict structure, all 23 node kinds, 33 edge kinds, 49-dim node feature encoding, 34-dim edge feature encoding, containers-vs-nodes distinction.
+
+### Phase 2: `diagram_serialization.py` + 12 tests
+- `cas-native/training/diagram_serialization.py` — `compile_to_graph(cas_expression) → dict`, `serialize_diagram_for_batch(graphs, *, device) → dict[str, Tensor]`.
+- Node features: 49-dim = 24 (node-kind one-hot) + 25 CAS (10 noetic + 4 domain + 7 drive + 4 register multi-hot).
+- Edge features: 34-dim one-hot over 33 edge kinds + "other".
+- Batched tensors: `node_features (B,32,49)`, `edge_index (B,2,128)`, `edge_features (B,128,34)`, `node_mask`, `edge_mask`.
+- 12 tests: round-trip counts, feature dims, determinism, invalid-expression fallback, batch shape, zero-padding, mask count.
+
+### Phase 3: `graph_encoder.py` + 7 tests
+- `cas-native/model/graph_encoder.py` — hand-rolled 2-layer GAT (`_GATLayer`), edge-feature bias, scatter-add message aggregation (no torch_geometric), hidden_dim=64, n_heads=4.
+- Exports: `forward()` → `(B, hidden_dim)` mean-pooled; `forward_nodes_dict()` → `((B, N, hidden_dim), node_mask)` for cross-attention.
+- 7 tests: shape (single/batch/custom-hidden/3-layers), padded nodes don't affect output, empty graph, gradient flow.
+
+### Phase 4: `graph_text_fusion.py` + 6 tests
+- `cas-native/model/graph_text_fusion.py` — cross-attention layer: text hidden states `(B,T,d_text)` query over graph node embeddings `(B,N,d_graph)`, residual + LayerNorm.
+- None graph path: identity pass-through (text-only backward compat).
+- 6 tests: output shape, different d_graph, None graph returns text unchanged, all-masked-nodes path, partial masking, gradient flow.
+
+### Phase 5: `diagram_loop_augmentation.py` + 9 tests
+- `cas-native/training/diagram_loop_augmentation.py` — `expand_with_diagram_loop_pairs(records, *, variants_per_record)`.
+- K=0: pass-through (canonical records unchanged). K>0: for each canonical, compile `cas_expression → prior_diagram` graph dict; generate K paraphrase variants via `TRAINING_PARAPHRASE_TEMPLATES`; each variant carries `prior_diagram`. Total = `len(records) × (1 + K)`.
+- 9 tests: K=0 passthrough, K=1/K=3 counts, negative K raises, prior_diagram populated, canonical records clean, diagram matches compile_to_graph, cas_expression inherited.
+
+### Phase 6: Training loop integration + 6 smoke tests
+- `cas-native/model/structured_token_embedding.py` — `StructuredTokenStructuredPredictor` extended: optional `graph_encoder + graph_text_fusion`; `forward(batch, graph_batch=None)` routes through graph path when both are present and `graph_batch` is provided.
+- `cas-native/training/structured_prediction_ingest.py` — added `get_prior_diagram(record) → dict | None`.
+- `cas-native/training/train_structured_prediction.py` — new `--diagram-loop-pairs K` CLI flag; augmentation block; graph encoder + fusion initialised when K > 0; training step serialises prior_diagram graphs and passes `graph_batch`; both call sites updated.
+- `cas-native/training/diagram_serialization.py` — `device` kwarg added to `serialize_diagram_for_batch`.
+- 6 smoke tests: augmentation count, prior_diagram population, get_prior_diagram canonical/augmented, full forward pass with graph path (correct logit shapes), text-only backward compat.
+
+### Phase 7: `evaluate_diagram_loop_invariance.py` + 9 smoke tests
+- `cas-native/training/evaluate_diagram_loop_invariance.py` — two-pass CPU-only evaluator.
+  - Pass 1: canonical records (text-only path).
+  - Pass 2: same records + `prior_diagram` from ground-truth `cas_expression` compiled to graph dict.
+  - Metrics: `canonical_all_heads_exact_rate`, `diagram_loop_all_heads_exact_rate`, `accuracy_delta`, `all_heads_prediction_consistency_rate`, per-head consistency, bucket breakdown.
+  - Auto-detects graph path from manifest `diagram_loop_augmentation_report`; `--with-graph-path` override.
+- 9 smoke tests: record helpers, report keys, perfect/zero consistency, accuracy_delta sign, no-match raises, end-to-end `_eval_pass` on text-only model.
+
+**Test counts.** 6 + 7 + 6 + 9 + 6 + 9 = 43 new tests added across all phases. All pass; pre-existing 699 tests unaffected.
+
+**Branch.** `proposal/diagram-loop-impl` (commits: Phase 1–5, Phase 6, Phase 7). Phase 8 (PR) is next.
+
+**Asymmetry diagnostic (motivation for graph path vs linear loop).**
+
+| Axis | PR #4 (linear loop: text prior) | This PR (graph loop) |
+|---|---|---|
+| Noetic | String `^N` prefix — surface-level | Node feature dim 24–33 — structural |
+| Domain | `^D` character in prefix | Node feature dim 34–37 |
+| Drive | `_{F_k}` substring | Node feature dim 38–44 |
+| Register | `\|R` suffix | Node feature dim 45–48 |
+| Edge structure | Not available | Edge kinds 0–33 (34-dim) |
+| Composability | Works with PR #4 (different augmentation path) | Yes |
+
 ## Session 48: Correct-Corpus Paraphrase Retrain Clears Prior Canonical Baseline (May 2, 2026)
 
 **Objective.** Run the prepared v7.7-overlap relabel + deterministic paraphrase-augmentation retrain on GPU, then evaluate both canonical accuracy and paraphrase invariance against the held-out 1K.
