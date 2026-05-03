@@ -431,8 +431,13 @@ def evaluate_structured_token_prediction(
             f"{len(token_sequences)} != {len(records)}"
         )
     chunks: dict[str, list[torch.Tensor]] = {key: [] for key in _EVAL_LOGIT_KEYS}
+    _has_graph_path = (
+        getattr(model, "graph_encoder", None) is not None
+        and getattr(model, "graph_text_fusion", None) is not None
+    )
     with torch.no_grad():
         for start in range(0, len(records), batch_size):
+            batch_records = records[start:start + batch_size]
             batch_sequences = token_sequences[start:start + batch_size]
             batch = tokens_to_structured_token_batch(
                 batch_sequences,
@@ -440,7 +445,29 @@ def evaluate_structured_token_prediction(
                 max_length=max_length,
                 device=dev,
             )
-            batch_outputs = model(batch)
+            graph_batch: dict | None = None
+            if _has_graph_path:
+                try:
+                    from cas_native.training.diagram_serialization import (
+                        compile_to_graph as _ctg,
+                        serialize_diagram_for_batch as _sdfb,
+                    )
+                    prior_diagrams = [
+                        _ctg(str(r.get("cas_expression") or ""))
+                        for r in batch_records
+                    ]
+                    if any(g.get("n_nodes", 0) > 0 for g in prior_diagrams):
+                        filled = [
+                            g if g.get("n_nodes", 0) > 0 else _ctg("")
+                            for g in prior_diagrams
+                        ]
+                        graph_batch = _sdfb(filled, device=dev)
+                except Exception:
+                    pass
+            if _has_graph_path:
+                batch_outputs = model(batch, graph_batch=graph_batch)
+            else:
+                batch_outputs = model(batch)
             for key in _EVAL_LOGIT_KEYS:
                 chunks[key].append(batch_outputs[key])
     outputs = {key: torch.cat(parts, dim=0) for key, parts in chunks.items()}
