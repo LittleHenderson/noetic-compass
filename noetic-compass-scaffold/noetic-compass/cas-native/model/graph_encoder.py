@@ -235,6 +235,43 @@ class GraphEncoder(nn.Module):
 
         return self.dropout(pooled)
 
+    def forward_nodes(
+        self,
+        node_features: torch.Tensor,
+        edge_index: torch.Tensor,
+        edge_features: torch.Tensor,
+        node_mask: torch.Tensor,
+        edge_mask: torch.Tensor,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Return per-node hidden states for cross-attention in GraphTextFusion.
+
+        Unlike ``forward``, which mean-pools to a single graph vector, this
+        method returns the full ``(B, N, hidden_dim)`` node representation after
+        all GAT layers, plus the ``node_mask`` needed to mask padded nodes in
+        cross-attention.
+
+        Returns:
+            Tuple of:
+              - node_hidden: (B, N, hidden_dim)
+              - node_mask:   (B, N) bool
+        """
+        h = self.input_proj(node_features)
+        for layer in self.layers:
+            h = layer(h, edge_index, edge_features, node_mask, edge_mask)
+        return h, node_mask
+
+    def forward_nodes_dict(
+        self, batch: dict[str, torch.Tensor]
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Convenience wrapper for ``forward_nodes`` from a serialized batch dict."""
+        return self.forward_nodes(
+            batch["node_features"],
+            batch["edge_index"],
+            batch["edge_features"],
+            batch["node_mask"],
+            batch["edge_mask"],
+        )
+
     def forward_dict(self, batch: dict[str, torch.Tensor]) -> torch.Tensor:
         """Convenience wrapper accepting a ``serialize_diagram_for_batch`` dict."""
         return self(

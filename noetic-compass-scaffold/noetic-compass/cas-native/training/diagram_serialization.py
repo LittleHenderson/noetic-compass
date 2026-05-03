@@ -155,6 +155,7 @@ def serialize_diagram_for_batch(
     *,
     max_nodes: int = 32,
     max_edges: int = 128,
+    device: str | torch.device | None = None,
 ) -> dict[str, torch.Tensor]:
     """Pack a list of graph dicts into padded batched tensors.
 
@@ -173,12 +174,13 @@ def serialize_diagram_for_batch(
     Padded positions have feature vectors of all zeros and mask=False.
     """
     batch_size = len(graphs)
+    dev = torch.device(device) if device is not None else None
 
-    node_features_batch = torch.zeros(batch_size, max_nodes, NODE_FEATURE_DIM)
-    edge_index_batch = torch.zeros(batch_size, 2, max_edges, dtype=torch.long)
-    edge_features_batch = torch.zeros(batch_size, max_edges, EDGE_FEATURE_DIM)
-    node_mask_batch = torch.zeros(batch_size, max_nodes, dtype=torch.bool)
-    edge_mask_batch = torch.zeros(batch_size, max_edges, dtype=torch.bool)
+    node_features_batch = torch.zeros(batch_size, max_nodes, NODE_FEATURE_DIM, device=dev)
+    edge_index_batch = torch.zeros(batch_size, 2, max_edges, dtype=torch.long, device=dev)
+    edge_features_batch = torch.zeros(batch_size, max_edges, EDGE_FEATURE_DIM, device=dev)
+    node_mask_batch = torch.zeros(batch_size, max_nodes, dtype=torch.bool, device=dev)
+    edge_mask_batch = torch.zeros(batch_size, max_edges, dtype=torch.bool, device=dev)
 
     for b, graph in enumerate(graphs):
         nodes = graph.get("nodes", [])

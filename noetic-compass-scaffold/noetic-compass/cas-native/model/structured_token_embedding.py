@@ -108,19 +108,57 @@ class StructuredTokenEmbedding(nn.Module):
 
 
 class StructuredTokenStructuredPredictor(nn.Module):
-    """Structured-token embedding adapter followed by a prediction head."""
+    """Structured-token embedding adapter followed by a prediction head.
+
+    Optionally accepts a ``GraphEncoder`` + ``GraphTextFusion`` pair for the
+    diagram-loop lever. When both are provided and a ``graph_batch`` dict is
+    passed to ``forward``, the text hidden states are enriched with per-node
+    graph context before being passed to the prediction head.
+
+    Backward compat: ``graph_encoder`` and ``graph_text_fusion`` both default to
+    ``None``. Callers that don't pass either get the original text-only path.
+    """
 
     def __init__(
         self,
         embedding: StructuredTokenEmbedding,
         head: nn.Module,
+        graph_encoder: nn.Module | None = None,
+        graph_text_fusion: nn.Module | None = None,
     ) -> None:
         super().__init__()
         self.embedding = embedding
         self.head = head
+        self.graph_encoder = graph_encoder
+        self.graph_text_fusion = graph_text_fusion
 
-    def forward(self, batch: StructuredTokenBatch) -> dict[str, torch.Tensor]:
+    def forward(
+        self,
+        batch: StructuredTokenBatch,
+        graph_batch: dict[str, torch.Tensor] | None = None,
+    ) -> dict[str, torch.Tensor]:
+        """Forward pass.
+
+        Args:
+            batch:       structured-token batch (text path).
+            graph_batch: optional batched graph tensors from
+                         ``serialize_diagram_for_batch``. When provided and
+                         the model has a graph encoder + fusion layer, the text
+                         hidden states attend over the graph node embeddings.
+
+        Returns:
+            Dict of head logits + ``hidden_states``.
+        """
         hidden_states = self.embedding.forward_batch(batch)
+
+        if (
+            graph_batch is not None
+            and self.graph_encoder is not None
+            and self.graph_text_fusion is not None
+        ):
+            node_hidden, node_mask = self.graph_encoder.forward_nodes_dict(graph_batch)
+            hidden_states = self.graph_text_fusion(hidden_states, node_hidden, node_mask)
+
         output = self.head(hidden_states, attention_mask=batch.attention_mask)
         return {
             **output,

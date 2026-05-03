@@ -76,6 +76,15 @@ from cas_native.training.paraphrase_augmentation import (
     PARAPHRASE_SOURCE_LABEL as TRAINING_PARAPHRASE_SOURCE_LABEL,
     expand_with_paraphrases,
 )
+from cas_native.training.diagram_loop_augmentation import expand_with_diagram_loop_pairs
+from cas_native.training.diagram_serialization import (
+    EDGE_FEATURE_DIM,
+    NODE_FEATURE_DIM,
+    serialize_diagram_for_batch,
+)
+from cas_native.training.structured_prediction_ingest import get_prior_diagram  # noqa: F401 (used below)
+from cas_native.model.graph_encoder import GraphEncoder
+from cas_native.model.graph_text_fusion import GraphTextFusion
 from cas_native.training.structured_token_adapter import (
     records_to_structured_token_sequences,
     tokens_to_structured_token_batch,
@@ -694,6 +703,7 @@ def train_structured_token_prediction_local(
     vocab_max_size: int | None = None,
     embedding_dropout: float = 0.0,
     paraphrase_augment_train: int = 0,
+    diagram_loop_augment_train: int = 0,
 ) -> tuple[StructuredTokenStructuredPredictor, StructuredTokenVocabulary, dict[str, Any]]:
     """Mini-batched train/eval harness for the structured-token input path.
 
@@ -741,6 +751,33 @@ def train_structured_token_prediction_local(
         "training_template_source": (
             TRAINING_PARAPHRASE_SOURCE_LABEL if paraphrase_augment_train > 0 else None
         ),
+    }
+
+    # Diagram-loop augmentation (--diagram-loop-pairs K) is applied AFTER the
+    # standard paraphrase augmentation so canonical records from the
+    # post-filter set are expanded with prior_diagram variants without
+    # interfering with the paraphrase-augmented records. The canonical list
+    # before any augmentation is preserved and re-used here so diagram-loop
+    # pairs are always rooted in canonical records (not in paraphrase variants).
+    n_pre_diagram_loop = len(train_records)
+    if diagram_loop_augment_train > 0:
+        # Re-expand from canonical records (pre-paraphrase list) to avoid
+        # creating diagram-loop pairs of paraphrase variants.
+        canonical_records = train_records[:n_train_canonical_post_filter]
+        diagram_loop_records = expand_with_diagram_loop_pairs(
+            canonical_records, variants_per_record=diagram_loop_augment_train
+        )
+        # Keep existing records (canonical + standard paraphrases) and append
+        # diagram-loop variants only (skip the canonical duplicates from
+        # diagram_loop_records which are already in train_records).
+        diagram_loop_variants_only = [
+            r for r in diagram_loop_records if r.get("prior_diagram") is not None
+        ]
+        train_records = train_records + diagram_loop_variants_only
+    diagram_loop_augmentation_report = {
+        "variants_per_record": diagram_loop_augment_train,
+        "n_diagram_loop_variants": len(train_records) - n_pre_diagram_loop,
+        "n_total_with_diagram_loop": len(train_records),
     }
 
     torch.manual_seed(seed)
@@ -827,7 +864,19 @@ def train_structured_token_prediction_local(
         dropout=embedding_dropout,
     )
     head = StructuredPredictionHead(d_model=d_model, bottleneck_dim=bottleneck_dim)
-    model = StructuredTokenStructuredPredictor(embedding, head).to(dev)
+    _graph_encoder: GraphEncoder | None = None
+    _graph_fusion: GraphTextFusion | None = None
+    if diagram_loop_augment_train > 0:
+        _graph_encoder = GraphEncoder(
+            node_feature_dim=NODE_FEATURE_DIM,
+            edge_feature_dim=EDGE_FEATURE_DIM,
+            hidden_dim=64,
+            n_layers=2,
+        )
+        _graph_fusion = GraphTextFusion(d_text=d_model, d_graph=64)
+    model = StructuredTokenStructuredPredictor(
+        embedding, head, _graph_encoder, _graph_fusion
+    ).to(dev)
     optimizer = torch.optim.AdamW(
         model.parameters(),
         lr=lr,
@@ -921,8 +970,19 @@ def train_structured_token_prediction_local(
             )
             targets = batch_targets_from_records(batch_records, device=dev)
 
+            # Build graph batch for diagram-loop records in this mini-batch.
+            # Records without prior_diagram pass None (text-only path).
+            prior_diagrams = [r.get("prior_diagram") for r in batch_records]
+            graph_batch: dict | None = None
+            if any(pd is not None for pd in prior_diagrams):
+                # Fill missing prior_diagrams with empty graphs so the batch
+                # has uniform shape; the node_mask zeros them out.
+                from cas_native.training.diagram_serialization import compile_to_graph as _ctg
+                filled = [pd if pd is not None else _ctg("") for pd in prior_diagrams]
+                graph_batch = serialize_diagram_for_batch(filled, device=dev)
+
             optimizer.zero_grad(set_to_none=True)
-            outputs = model(batch)
+            outputs = model(batch, graph_batch=graph_batch)
             loss = structured_prediction_loss(outputs, targets)
             loss.backward()
             optimizer.step()
@@ -974,6 +1034,7 @@ def train_structured_token_prediction_local(
             "n_train_raw": raw_train_count,
             "eval_overlap_filter": overlap_report,
             "paraphrase_augmentation": paraphrase_augmentation_report,
+            "diagram_loop_augmentation": diagram_loop_augmentation_report,
             "n_eval": len(eval_records) if eval_records else 0,
         },
         "training": {
@@ -1077,6 +1138,16 @@ def main() -> None:
         "disjoint from the eval template set). 0 disables augmentation.",
     )
     parser.add_argument(
+        "--diagram-loop-pairs",
+        type=int,
+        default=0,
+        dest="diagram_loop_pairs",
+        help="Diagram-loop self-reference augmentation. K>0 adds K paraphrase "
+        "variants per canonical where the canonical CAS expression is compiled "
+        "into a typed graph (prior_diagram) fed to the GraphEncoder + "
+        "GraphTextFusion path. 0 disables (text-only, backward compatible).",
+    )
+    parser.add_argument(
         "--allow-heldout-train",
         action="store_true",
         help="Allow training on the held-out eval file for debug only.",
@@ -1139,6 +1210,7 @@ def main() -> None:
                 vocab_max_size=args.vocab_max_size,
                 embedding_dropout=args.embedding_dropout,
                 paraphrase_augment_train=args.paraphrase_augment_train,
+                diagram_loop_augment_train=args.diagram_loop_pairs,
             )
             print(json.dumps(manifest, indent=2, sort_keys=True))
             return
@@ -1189,6 +1261,7 @@ def main() -> None:
             vocab_max_size=args.vocab_max_size,
             embedding_dropout=args.embedding_dropout,
             paraphrase_augment_train=args.paraphrase_augment_train,
+            diagram_loop_augment_train=args.diagram_loop_pairs,
         )
     else:
         _head, manifest = train_structured_prediction_local(

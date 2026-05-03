@@ -117,6 +117,19 @@ def batch_targets_from_records(
     }
 
 
+def get_prior_diagram(record: dict[str, Any]) -> dict[str, Any] | None:
+    """Return the ``prior_diagram`` graph dict for a record, or ``None``.
+
+    Diagram-loop augmented records carry ``prior_diagram`` (a dict returned by
+    ``compile_to_graph``). Records without this field return ``None``, which
+    signals the training step to use the text-only forward path.
+
+    Backward compatible: all pre-existing records (canonical and standard
+    paraphrase) have no ``prior_diagram`` and return ``None`` here.
+    """
+    return record.get("prior_diagram") or None
+
+
 def load_level3_jsonl(path: str | Path, limit: int | None = None) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     with open(path, encoding="utf-8") as f:
