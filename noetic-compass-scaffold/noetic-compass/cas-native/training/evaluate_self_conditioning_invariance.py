@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Evaluate self-conditioning invariance: oracle-prior paraphrase consistency.
+"""Evaluate self-conditioning invariance: prediction-prior paraphrase consistency.
 
-This harness measures the ceiling on what self-conditioning can achieve when
-the model receives its own canonical CAS prediction as a [PRIOR] block
-prepended to a paraphrase prompt.
+This harness measures self-conditioning behavior when the model receives its
+own canonical CAS prediction as a [PRIOR] block prepended to a paraphrase
+prompt.
 
 Two passes per eval run:
   1. Canonical eval (no prior) — standard forward pass on each eval record.
   2. Paraphrase-with-prior eval — for each paraphrase variant, set
-     prior_cas_state = canonical's cas_expression (oracle prior), then
+     prior_cas_state from the canonical prediction heads, then
      forward-pass with the [PRIOR] block prepended.
 
 Metrics reported:
@@ -55,14 +55,18 @@ if "cas_native" not in sys.modules:
     package.__path__ = [str(_CAS_NATIVE_ROOT)]
     sys.modules["cas_native"] = package
 
-from cas_native.model.structured_prediction import StructuredPredictionHead
+from cas_native.model.structured_prediction import (
+    DOMAIN_LABELS,
+    DRIVE_LABELS,
+    REGISTER_LABELS,
+    StructuredPredictionHead,
+)
 from cas_native.model.structured_token_embedding import (
     StructuredTokenEmbedding,
     StructuredTokenStructuredPredictor,
 )
 from cas_native.tokenizer.vocabulary import StructuredTokenVocabulary
 from cas_native.training.structured_prediction_ingest import (
-    get_effective_prompt,
     load_level3_jsonl,
 )
 from cas_native.training.train_structured_prediction import (
@@ -106,20 +110,27 @@ def _load_model(
 def make_sc_paraphrase_records(
     canonical_records: list[dict[str, Any]],
     *,
+    canonical_samples: list[dict[str, Any]],
     variants_per_record: int,
 ) -> list[dict[str, Any]]:
-    """Build paraphrase records with oracle prior_cas_state.
+    """Build paraphrase records with canonical-prediction prior_cas_state.
 
     Uses the EVAL_PARAPHRASE_TEMPLATES (same as evaluate_paraphrase_invariance).
-    Sets prior_cas_state to the canonical record's cas_expression so that
-    get_effective_prompt prepends the [PRIOR] block at tokenization time.
+    Sets prior_cas_state from the canonical sample's predicted content axes so
+    that get_effective_prompt prepends the [PRIOR] block at tokenization time.
     """
 
     if variants_per_record <= 0:
         raise ValueError("variants_per_record must be positive")
+    canonical_sample_by_id = {sample.get("id"): sample for sample in canonical_samples}
     records: list[dict[str, Any]] = []
     for canonical in canonical_records:
-        oracle_prior = str(canonical.get("cas_expression") or "")
+        sample = canonical_sample_by_id.get(canonical.get("id"))
+        if sample is None:
+            raise ValueError(
+                f"missing canonical prediction sample for record {canonical.get('id')!r}"
+            )
+        predicted_prior = prediction_to_prior_cas_state(sample)
         for index in range(variants_per_record):
             template = EVAL_PARAPHRASE_TEMPLATES[index % len(EVAL_PARAPHRASE_TEMPLATES)]
             para = apply_template(
@@ -128,9 +139,43 @@ def make_sc_paraphrase_records(
                 paraphrase_index=index,
                 paraphrase_source=EVAL_PARAPHRASE_SOURCE_LABEL,
             )
-            para["prior_cas_state"] = oracle_prior
+            para["prior_cas_state"] = predicted_prior
             records.append(para)
     return records
+
+
+def prediction_to_prior_cas_state(sample: dict[str, Any]) -> str:
+    """Render a compact CAS content-axis prior from a canonical prediction sample."""
+
+    prediction = dict(sample.get("prediction") or {})
+    noetic = _prediction_noetic(prediction.get("noetic"))
+    domain = _prediction_label(prediction.get("domain"), DOMAIN_LABELS, default="P")
+    drive = _prediction_label(prediction.get("drive"), DRIVE_LABELS, default="F1")
+    registers = [
+        register
+        for register in prediction.get("registers", [])
+        if register in REGISTER_LABELS
+    ]
+
+    base = f"^{noetic}^{domain}_{{{drive}}}"
+    if not registers:
+        return base
+    if len(registers) == 1:
+        return f"{base}|{registers[0]}"
+    return f"{base}|<{','.join(registers)}>"
+
+
+def _prediction_noetic(value: Any) -> int:
+    try:
+        noetic = int(value)
+    except (TypeError, ValueError):
+        return 0
+    return noetic if 0 <= noetic <= 9 else 0
+
+
+def _prediction_label(value: Any, labels: tuple[str, ...], *, default: str) -> str:
+    text = str(value)
+    return text if text in labels else default
 
 
 def evaluate_records_with_model(
@@ -158,11 +203,11 @@ def build_sc_invariance_report(
     sc_paraphrase_samples: list[dict[str, Any]],
     standard_paraphrase_rate: float | None = None,
 ) -> dict[str, Any]:
-    """Compute oracle-prior consistency metrics.
+    """Compute prediction-prior consistency metrics.
 
     Args:
         canonical_samples: samples from the canonical forward pass (no prior).
-        sc_paraphrase_samples: samples from the paraphrase-with-oracle-prior pass.
+        sc_paraphrase_samples: samples from the paraphrase-with-prediction-prior pass.
         standard_paraphrase_rate: optional all_heads_exact_rate from a standard
             paraphrase eval (no prior), used to compute the prior_lift_pp metric.
     """
@@ -238,15 +283,15 @@ def build_sc_invariance_report(
 
 def write_sc_invariance_markdown(report: dict[str, Any], path: Path) -> None:
     lines = [
-        "# Self-Conditioning Invariance Report (Oracle Prior)",
+        "# Self-Conditioning Invariance Report (Prediction Prior)",
         "",
         f"Canonical samples: {report['n_canonical']}",
-        f"SC paraphrase samples (with oracle prior): {report['n_sc_paraphrase']}",
+        f"SC paraphrase samples (with prediction prior): {report['n_sc_paraphrase']}",
         f"Comparable: {report['n_comparable']}",
         "",
         "| Metric | Value |",
         "|---|---:|",
-        f"| SC paraphrase all-heads exact (oracle prior) | "
+        f"| SC paraphrase all-heads exact (prediction prior) | "
         f"{report['sc_paraphrase_all_heads_exact_rate']:.3f} |",
         f"| Prediction consistency vs canonical | "
         f"{report['all_heads_prediction_consistency_rate']:.3f} |",
@@ -259,7 +304,7 @@ def write_sc_invariance_markdown(report: dict[str, Any], path: Path) -> None:
             f"{report['standard_paraphrase_all_heads_exact_rate']:.3f} |"
         )
         lines.append(
-            f"| Prior lift (pp, oracle) | {report['prior_lift_pp']:+.2f} |"
+            f"| Prior lift (pp, prediction prior) | {report['prior_lift_pp']:+.2f} |"
         )
     lines += [
         "",
@@ -360,13 +405,11 @@ def main() -> int:
     parser.add_argument("--d-model", type=int, default=None)
     parser.add_argument("--bottleneck-dim", type=int, default=None)
     args = parser.parse_args()
+    if str(args.device).lower() != "cpu":
+        raise SystemExit("evaluate_self_conditioning_invariance.py is CPU-only; use --device cpu")
 
     canonical_records = load_level3_jsonl(args.eval_input, limit=args.limit)
-    sc_paraphrase_records = make_sc_paraphrase_records(
-        canonical_records, variants_per_record=args.variants_per_record
-    )
-
-    model, vocabulary, d_model, max_length = _load_model(
+    model, vocabulary, _d_model, max_length = _load_model(
         args.run_dir,
         checkpoint=args.checkpoint,
         d_model=args.d_model,
@@ -383,6 +426,11 @@ def main() -> int:
     )
 
     canonical_manifest = evaluate_records_with_model(canonical_records, **common_eval_kwargs)
+    sc_paraphrase_records = make_sc_paraphrase_records(
+        canonical_records,
+        canonical_samples=list(canonical_manifest.get("samples", [])),
+        variants_per_record=args.variants_per_record,
+    )
     sc_manifest = evaluate_records_with_model(sc_paraphrase_records, **common_eval_kwargs)
 
     report = build_sc_invariance_report(

@@ -26,6 +26,8 @@
 
 **Test results.** 18 new tests pass; 39 total tests pass across self-conditioning + paraphrase + ingest + invariance eval suites. 1 pre-existing skip (local-file guard) unchanged.
 
+**Local review addendum.** Follow-up Codex review fixed three integration issues before retrain: default structured-token record tokenization now honors `prior_cas_state` when callers do not pass pre-tokenized sequences; self-conditioning training expansion now preserves the true canonical list before standard paraphrase interleaving, so `--paraphrase-augment-train K` composes with `--self-conditioning-pairs K`; and the self-conditioning eval harness now enforces CPU-only execution and uses the model's canonical prediction as the prior rather than a ground-truth oracle label. Added four regression tests, bringing the self-conditioning test file to 22 tests. Local syntax verification passed via `python -m compileall`; local pytest could not complete because this machine's default Python 3.14 has an incomplete `torch` namespace and Python 3.11 has neither `pytest` nor `torch` installed.
+
 **No retrain included.** This PR is proposal + implementation + tests only. Retrain decision is the reviewer's after PR review. The in-flight K=9 run on `feature/paraphrase-augment-9-templates` was not touched.
 
 **PR opened**: `self-reference invariance lever (proposal + impl + tests)` on branch `proposal/self-reference-lever`.

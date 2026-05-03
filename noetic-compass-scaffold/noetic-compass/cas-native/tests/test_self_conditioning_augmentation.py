@@ -39,7 +39,17 @@ from cas_native.training.self_conditioning_augmentation import (
     SELF_CONDITIONING_SOURCE_LABEL,
     expand_with_self_conditioning_pairs,
 )
+from cas_native.training.structured_token_adapter import (
+    records_to_structured_token_sequences,
+)
 from cas_native.training.structured_prediction_ingest import get_effective_prompt
+from cas_native.training.train_structured_prediction import (
+    _expand_structured_token_training_records,
+)
+from cas_native.training.evaluate_self_conditioning_invariance import (
+    make_sc_paraphrase_records,
+    prediction_to_prior_cas_state,
+)
 
 
 def _canonical_record() -> dict:
@@ -226,6 +236,17 @@ def test_augmented_prompt_tokenizes_without_error():
     assert isinstance(tokens, list)
 
 
+def test_default_record_tokenization_uses_prior_block():
+    """Default structured-token record tokenization honors prior_cas_state."""
+    record = _record_with_prior()
+    sequences = records_to_structured_token_sequences([record])
+    surfaces = [token.surface_text for token in sequences[0]]
+
+    assert "PRIOR" in surfaces
+    assert "QUERY" in surfaces
+    assert record["prior_cas_state"] in surfaces
+
+
 # ---------------------------------------------------------------------------
 # Phase 3 end-to-end smoke: augmentation expansion with K=2
 # ---------------------------------------------------------------------------
@@ -251,3 +272,65 @@ def test_phase3_smoke_prior_cas_state_populated_on_augmented():
     assert len(augmented) == 10  # 5 records × 2 augmented
     for r in augmented:
         assert r["prior_cas_state"] == _canonical_record()["cas_expression"]
+
+
+def test_training_expansion_self_conditioning_uses_true_canonicals_after_paraphrase():
+    """SC pairs compose with standard paraphrases without second-order base IDs."""
+    records = [
+        _canonical_record() | {"id": f"l3conv-{i:04d}"}
+        for i in range(3)
+    ]
+    expanded, paraphrase_report, sc_report = _expand_structured_token_training_records(
+        records,
+        paraphrase_augment_train=2,
+        self_conditioning_pairs=2,
+    )
+    canonical_ids = {record["id"] for record in records}
+    sc_records = [
+        record
+        for record in expanded
+        if record.get("paraphrase_source") == SELF_CONDITIONING_SOURCE_LABEL
+    ]
+
+    assert paraphrase_report["n_paraphrases"] == 6
+    assert sc_report["n_self_conditioning_pairs"] == 6
+    assert len(expanded) == 15
+    assert {record["base_id"] for record in sc_records} <= canonical_ids
+    assert not any("::para" in str(record["base_id"]) for record in sc_records)
+    assert all(str(record["id"]).count("::para") == 1 for record in sc_records)
+
+
+def test_prediction_to_prior_cas_state_renders_content_axis_prediction():
+    sample = {
+        "id": "l3conv-0001",
+        "prediction": {
+            "noetic": 9,
+            "domain": "O",
+            "drive": "F7",
+            "registers": ["A", "E"],
+        },
+    }
+
+    assert prediction_to_prior_cas_state(sample) == "^9^O_{F7}|<A,E>"
+
+
+def test_eval_sc_records_use_canonical_prediction_not_ground_truth_expression():
+    record = _canonical_record()
+    canonical_sample = {
+        "id": record["id"],
+        "prediction": {
+            "noetic": 9,
+            "domain": "O",
+            "drive": "F7",
+            "registers": ["T"],
+        },
+    }
+
+    out = make_sc_paraphrase_records(
+        [record],
+        canonical_samples=[canonical_sample],
+        variants_per_record=1,
+    )
+
+    assert out[0]["prior_cas_state"] == "^9^O_{F7}|T"
+    assert out[0]["prior_cas_state"] != record["cas_expression"]
