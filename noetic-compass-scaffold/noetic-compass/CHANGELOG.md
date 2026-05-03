@@ -1,5 +1,40 @@
 # Noetic Compass — Progress Log
 
+## Session 49: CAS Value-Keyed Color Palette v1.0 (May 3, 2026)
+
+**Objective.** Lock the value-keyed color palette for all four CAS axes (Noetic, Domain, Drive, Register). Foundation work for the tri-channel benchmark (notation + diagram + color-coded axes).
+
+**Branch.** `feature/cas-value-keyed-palette` — 3 commits, PR open.
+
+**Phase 1 — Spec doc.**
+- New `docs/working/cas_color_palette_specification.md` with full design rationale, palette tables, WCAG contrast ratios, and colorblind simulation analysis (deuteranopia / protanopia / tritanopia).
+- Palette basis: Paul Tol "muted" 10-class for Noetics; Paul Tol "bright" for Drives; medium-saturation tier for Domains; border-style overlays for Registers.
+- All colors meet WCAG 3:1 contrast on both `#0d1117` (dashboard dark bg) and `#ffffff` (paper bg); target luminance window L∈[0.12,0.30].
+- Colorblind safety: no pair within any axis becomes indistinguishable under a single colorblind condition; marginal pairs (^1/^7, F1/F7) retain ΔL fallback distinguishability.
+
+**Phase 2 — Python module.**
+- New `api/notation/color_palette.py`: `noetic_color`, `domain_color`, `drive_color`, `register_treatment`, `axis_color_for_node`. No external dependencies.
+- `PALETTE_VERSION = "v1.0"` — breaking-change sentinel for downstream consumers.
+- 49 tests in `tests/test_color_palette.py`: all axes valid/invalid, all-distinct assertions, determinism, precedence, cross-axis separation. All 49 pass.
+
+**Phase 3 — TypeScript module + dashboard.**
+- New `dashboard/src/lib/casColorPalette.ts`: exact hex mirror of Python module. PALETTE_VERSION identical.
+- New `dashboard/src/lib/__tests__/casColorPalette.test.ts`: mirrors Python test list.
+- Updated `dashboard/src/pages/CompilerPage.tsx` `diagramColor()`: now accepts optional node arg; delegates to `axisColorForNode` when `node.noetic / .domain / .drive` are present; falls back to existing kind-keyed logic. Backward-compatible.
+- 167 vitest tests pass across 14 test files (13 existing + 1 new palette test).
+
+**Hex tables (quick reference).**
+
+Noetic: ^0=#3388BB ^1=#117733 ^2=#CC7700 ^3=#CC6677 ^4=#2E7A6E ^5=#CC3388 ^6=#5B55C0 ^7=#7A7A25 ^8=#AA4499 ^9=#6B778C
+
+Domain: P=#7B7EC4 C=#4490B0 E=#4A9068 O=#C0883C
+
+Drive: F1=#4477AA F2=#7755CC F3=#228866 F4=#997700 F5=#BB4488 F6=#BB6699 F7=#446688
+
+Register treatments: T=solid/#D4A020 A=double/#4488CC f=dashed/#CC4477 E=dotted/#44AA77
+
+**Downstream notes.** Compiler emission, eval harness color-consistency check, and diagram-diff color-awareness are separate downstream PRs. Each must import from this module and pin `PALETTE_VERSION == "v1.0"`. The existing `colors.ts` DOMAIN_COLORS / DRIVE_COLORS remain unchanged (kind-keyed fallback and non-diagram components).
+
 ## Session 48: Correct-Corpus Paraphrase Retrain Clears Prior Canonical Baseline (May 2, 2026)
 
 **Objective.** Run the prepared v7.7-overlap relabel + deterministic paraphrase-augmentation retrain on GPU, then evaluate both canonical accuracy and paraphrase invariance against the held-out 1K.
