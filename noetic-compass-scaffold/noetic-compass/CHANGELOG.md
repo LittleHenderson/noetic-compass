@@ -1,5 +1,23 @@
 # Noetic Compass — Progress Log
 
+## Session 51: Cross-Channel Consistency Eval Harness (May 3, 2026)
+
+**Objective.** Implement the headline methodology contribution of the CAS-SDG-Bench tri-channel benchmark paper: a three-channel eval harness that independently scores notation (exact string match), diagram (structural graph comparison), and color (palette metadata) dimensions, then measures cross-channel consistency to distinguish surface mistakes from structural mistakes.
+
+**New files.**
+
+- `cas-synthetic/schemas/diagram_graph.py` — `canonical_graph_keys` function (already provided in fuller form by PR #11 diagram-diff utility, retained from that merge). Used as the graph identity primitive by the harness.
+- `cas-native/training/evaluate_cross_channel_consistency.py` — Full three-channel eval harness. Phase 1 (scoring functions) is complete; Phase 2 (model wiring to checkpoint) is wired and calls `evaluate_structured_token_prediction` then reconstructs predicted expressions from head-label outputs. CLI matches the existing eval harness shape: `--run-dir`, `--eval-input`, `--out-dir`, `--prefix`, `--device`, `--diagram-similarity-threshold`. Outputs: `<prefix>_report.md`, `<prefix>_report.json`, `<prefix>_samples.jsonl`.
+- `cas-native/tests/test_evaluate_cross_channel_consistency.py` — 15 smoke tests covering: three-channel scoring on synthetic pairs, cross-channel consistency rate computation, color channel None when metadata absent, color channel rate when metadata present.
+
+**Diagram diff stub.** `_diagram_similarity_stub` uses Jaccard overlap over `canonical_graph_keys` as a temporary approximation. Clearly marked `TODO: replace once feature/diagram-diff-utility lands` — that utility is now merged via PR #11 and the stub call is the next refactor target.
+
+**Forward-compat: Session 50 palette (PR #10).** Color channel checks for `color` field on predicted/GT nodes. Currently returns None (no color metadata emitted by compiler). Once compiler starts emitting `color`, the color dimension activates automatically — no second PR needed.
+
+**Test results.** 15 new tests passed. 7 pre-existing tests (paraphrase invariance + structured prediction ingest) still pass, 1 skipped (requires local data file).
+
+**Branch.** `feature/cross-channel-consistency-eval`.
+
 ## Session 50: CAS Value-Keyed Color Palette v1.0 (May 3, 2026)
 
 **Objective.** Lock the value-keyed color palette for all four CAS axes (Noetic, Domain, Drive, Register). Foundation work for the tri-channel benchmark (notation + diagram + color-coded axes).
