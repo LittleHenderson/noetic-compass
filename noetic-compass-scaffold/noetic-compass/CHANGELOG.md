@@ -1,5 +1,23 @@
 # Noetic Compass — Progress Log
 
+## Session 49: Cross-Channel Consistency Eval Harness (May 3, 2026)
+
+**Objective.** Implement the headline methodology contribution of the CAS-SDG-Bench tri-channel benchmark paper: a three-channel eval harness that independently scores notation (exact string match), diagram (structural graph comparison), and color (palette metadata) dimensions, then measures cross-channel consistency to distinguish surface mistakes from structural mistakes.
+
+**New files.**
+
+- `cas-synthetic/schemas/diagram_graph.py` — `canonical_graph_keys` function: converts a CAS diagram dict (from `build_diagram` in `api/notation/compiler.py`) to a frozenset of stable canonical keys (`node:{kind}:{label}`, `edge:{kind}:{src_label}:{tgt_label}`). Used as the graph identity primitive by the harness stub and by the future `diagram_diff.py` utility on `feature/diagram-diff-utility`.
+- `cas-native/training/evaluate_cross_channel_consistency.py` — Full three-channel eval harness. Phase 1 (scoring functions) is complete; Phase 2 (model wiring to checkpoint) is wired and calls `evaluate_structured_token_prediction` then reconstructs predicted expressions from head-label outputs. CLI matches the existing eval harness shape: `--run-dir`, `--eval-input`, `--out-dir`, `--prefix`, `--device`, `--diagram-similarity-threshold`. Outputs: `<prefix>_report.md`, `<prefix>_report.json`, `<prefix>_samples.jsonl`.
+- `cas-native/tests/test_evaluate_cross_channel_consistency.py` — 15 smoke tests covering: three-channel scoring on synthetic pairs, cross-channel consistency rate computation, color channel None when metadata absent, color channel rate when metadata present.
+
+**Diagram diff stub.** `_diagram_similarity_stub` uses Jaccard overlap over `canonical_graph_keys` as a temporary approximation. Clearly marked `TODO: replace once feature/diagram-diff-utility lands`. No changes to `diagram_diff.py` dependency; once that PR merges, the stub call is the only line to update.
+
+**Forward-compat: PR #9 (feature/cas-value-keyed-palette).** Color channel checks for `color` field on predicted/GT nodes. Currently returns None (no color metadata emitted by compiler). Once PR #9 lands and compiler starts emitting `color`, the color dimension activates automatically — no second PR needed.
+
+**Test results.** 15 new tests passed. 7 pre-existing tests (paraphrase invariance + structured prediction ingest) still pass, 1 skipped (requires local data file).
+
+**Branch.** `feature/cross-channel-consistency-eval`.
+
 ## Session 48: Correct-Corpus Paraphrase Retrain Clears Prior Canonical Baseline (May 2, 2026)
 
 **Objective.** Run the prepared v7.7-overlap relabel + deterministic paraphrase-augmentation retrain on GPU, then evaluate both canonical accuracy and paraphrase invariance against the held-out 1K.
