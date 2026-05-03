@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { axisColorForNode } from '../lib/casColorPalette';
 import { apiFetch } from '../api/client';
 
 // ── Constants ──
@@ -641,7 +642,17 @@ function describeResult(r: CompileResult): string {
   return JSON.stringify(res).slice(0, 120);
 }
 
-function diagramColor(kind: string): string {
+function diagramColor(kind: string, node?: { noetic?: number | null; domain?: string | null; drive?: number | null }): string {
+  // When a node carries specific axis values, delegate to the value-keyed palette
+  // (Noetic > Domain > Drive precedence). Falls back to kind-keyed colors below.
+  if (node) {
+    try {
+      const axisColor = axisColorForNode(node);
+      if (axisColor !== null) return axisColor;
+    } catch {
+      // out-of-range axis value — fall through to kind-keyed fallback
+    }
+  }
   if (kind.includes('cluster') || kind === 'meta_set') return '#14b8a6';
   if (kind === 'state') return '#38bdf8';
   if (kind === 'noetic') return '#22d3ee';
@@ -1701,7 +1712,11 @@ export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | nul
         {displayItems.map(item => {
           const pos = positions.get(item.id);
           if (!pos) return null;
-          const color = diagramColor(item.kind);
+          const color = diagramColor(item.kind, {
+            noetic: typeof item.noetic === 'number' ? item.noetic : null,
+            domain: typeof item.domain === 'string' ? item.domain : null,
+            drive: typeof item.drive === 'number' ? item.drive : null,
+          });
           const isContainer = item.id.startsWith('container:');
           const label = truncateLabel(item.label);
           if (isContainer) {
