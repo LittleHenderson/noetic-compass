@@ -70,6 +70,7 @@ from cas_native.tokenizer.structured_token import StructuredToken
 from cas_native.tokenizer.vocabulary import StructuredTokenVocabulary
 from cas_native.training.structured_prediction_ingest import (
     batch_targets_from_records,
+    get_effective_prompt,
     load_level3_jsonl,
 )
 from cas_native.training.paraphrase_augmentation import (
@@ -328,7 +329,7 @@ def _tokenize_records_with_progress(
     for index, record in enumerate(records, start=1):
         sequences.append(
             tokenize(
-                str(record.get("user_prompt") or ""),
+                get_effective_prompt(record),
                 lexicon=lexicon,
             )
         )

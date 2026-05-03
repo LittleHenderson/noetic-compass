@@ -3,6 +3,13 @@
 The first Step-7 target source is the held-out recoverable Level 3 dataset.
 These helpers convert Level 3 records into stable class IDs and multi-hot
 targets consumed by ``StructuredPredictionHead``.
+
+Self-conditioning records carry an optional ``prior_cas_state`` field (a
+serialized CAS expression string). When present, ``get_effective_prompt``
+prepends a ``[PRIOR] ... \\n[QUERY] ...`` block so the tokenizer receives the
+canonical CAS expression as context alongside the paraphrase query. Records
+without ``prior_cas_state`` are passed through unchanged for full backward
+compatibility.
 """
 
 from __future__ import annotations
@@ -13,6 +20,8 @@ from pathlib import Path
 from typing import Any, Iterable
 
 import torch
+
+from .self_conditioning_serialization import serialize_prior_cas_state
 
 from cas_native.model.structured_prediction import (
     AUTHORITY_LABELS,
@@ -115,6 +124,21 @@ def batch_targets_from_records(
             device=dev,
         ),
     }
+
+
+def get_effective_prompt(record: dict[str, Any]) -> str:
+    """Return the tokenizer-input string for a record.
+
+    When ``prior_cas_state`` is present and truthy, prepends the canonical CAS
+    expression as a ``[PRIOR]`` block so the model can condition its content-axis
+    predictions on that context. Records without ``prior_cas_state`` return their
+    raw ``user_prompt`` unchanged — backward compatible with all pre-existing
+    training and eval records.
+    """
+
+    if record.get("prior_cas_state"):
+        return serialize_prior_cas_state(record)
+    return str(record.get("user_prompt") or "")
 
 
 def load_level3_jsonl(path: str | Path, limit: int | None = None) -> list[dict[str, Any]]:
