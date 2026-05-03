@@ -1,5 +1,35 @@
 # Noetic Compass — Progress Log
 
+## Session 49: Self-Reference Invariance Lever — Proposal + Implementation (May 3, 2026)
+
+**Objective.** Implement the self-reference invariance lever for the CAS-Native AI structured-prediction harness. This is a third paraphrase-consistency lever, composable with PR #2 (bare-slot K=9 augmentation) and PR #3 (KL-on-content-heads regularizer).
+
+**Motivation.** Session 48 addendum showed a 95-98% canonical-wins asymmetry across all four content heads (noetic 71.5%, domain 77.4%, drive 79.4%, registers 79.1%) when canonical and paraphrase predictions disagree. The model has the right answer in canonical form and loses it under paraphrase — a pure invariance failure, not a knowledge gap. The lever: give the model its canonical CAS expression as a `[PRIOR]` block prepended to the paraphrase prompt so it can learn one low-capacity rule ("trust the [PRIOR] block for content axes").
+
+**Deliverables — 4 phases on `proposal/self-reference-lever`.**
+
+- **Phase 1** (`docs: self-reference invariance lever proposal`): Proposal doc at `docs/working/self_reference_invariance_lever_proposal.md`. Full diagnosis with asymmetry table, architectural finding, loss/data finding, proposed mechanism, A/B test plan, risk analysis, composability with PR #2 and PR #3.
+
+- **Phase 2** (`cas-native: self-conditioning augmentation + tokenizer prepend`):
+  - NEW: `cas-native/training/self_conditioning_serialization.py` — `serialize_prior_cas_state(record) -> str` returning `f"[PRIOR] {prior_cas_state}\n[QUERY] {user_prompt}"`.
+  - NEW: `cas-native/training/self_conditioning_augmentation.py` — `expand_with_self_conditioning_pairs(records, *, variants_per_record)` generating paraphrase variants with `prior_cas_state` populated from canonical's `cas_expression`.
+  - MODIFIED: `cas-native/training/structured_prediction_ingest.py` — adds `get_effective_prompt(record)` which calls `serialize_prior_cas_state` when `prior_cas_state` is truthy; backward compatible.
+  - MODIFIED: `cas-native/training/train_structured_prediction.py` — `_tokenize_records_with_progress` uses `get_effective_prompt(record)` instead of raw `user_prompt`.
+  - NEW: `cas-native/tests/test_self_conditioning_augmentation.py` — 16 tests covering all 5 brief requirements (backward compat, deterministic serialization, expansion count, prior_cas_state propagation, tokenizer round-trip).
+
+- **Phase 3** (`cas-native: --self-conditioning-pairs CLI flag in training`):
+  - MODIFIED: `train_structured_prediction.py` — `train_structured_token_prediction_local` gains `self_conditioning_pairs: int = 0` parameter; CLI gains `--self-conditioning-pairs K`. Expansion applied to canonical slice after standard paraphrase augmentation; SC paraphrases appended (no canonical duplication). Manifest reports `self_conditioning_augmentation` section.
+  - EXTENDED test file: Phase 3 smoke tests (5 canonicals × K=2 → 15 records; augmented records have prior_cas_state populated).
+
+- **Phase 4** (`cas-native: self-conditioning eval harness`):
+  - NEW: `cas-native/training/evaluate_self_conditioning_invariance.py` — CPU-only eval harness analogous to `evaluate_paraphrase_invariance.py`. Two-pass: canonical eval (no prior), then paraphrase-with-oracle-prior eval (prior_cas_state = ground-truth cas_expression). Reports all_heads exact + per-head consistency + optional `prior_lift_pp` vs standard paraphrase. Writes JSON + markdown report.
+
+**Test results.** 18 new tests pass; 39 total tests pass across self-conditioning + paraphrase + ingest + invariance eval suites. 1 pre-existing skip (local-file guard) unchanged.
+
+**No retrain included.** This PR is proposal + implementation + tests only. Retrain decision is the reviewer's after PR review. The in-flight K=9 run on `feature/paraphrase-augment-9-templates` was not touched.
+
+**PR opened**: `self-reference invariance lever (proposal + impl + tests)` on branch `proposal/self-reference-lever`.
+
 ## Session 48: Correct-Corpus Paraphrase Retrain Clears Prior Canonical Baseline (May 2, 2026)
 
 **Objective.** Run the prepared v7.7-overlap relabel + deterministic paraphrase-augmentation retrain on GPU, then evaluate both canonical accuracy and paraphrase invariance against the held-out 1K.
