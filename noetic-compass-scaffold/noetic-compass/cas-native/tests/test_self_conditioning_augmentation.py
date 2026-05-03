@@ -224,3 +224,30 @@ def test_augmented_prompt_tokenizes_without_error():
     lexicon = load_seed_lexicon()
     tokens = tokenize(prompt_text, lexicon=lexicon)
     assert isinstance(tokens, list)
+
+
+# ---------------------------------------------------------------------------
+# Phase 3 end-to-end smoke: augmentation expansion with K=2
+# ---------------------------------------------------------------------------
+
+def test_phase3_smoke_5_canonicals_k2_gives_15_records():
+    """Load 5 canonicals, expand with K=2, expect 15 records (5 × (1+2))."""
+    records = [
+        _canonical_record() | {"id": f"l3conv-{i:04d}"}
+        for i in range(5)
+    ]
+    out = expand_with_self_conditioning_pairs(records, variants_per_record=2)
+    assert len(out) == 15
+
+
+def test_phase3_smoke_prior_cas_state_populated_on_augmented():
+    """In the Phase 3 smoke expansion, augmented records have prior_cas_state."""
+    records = [
+        _canonical_record() | {"id": f"l3conv-{i:04d}"}
+        for i in range(5)
+    ]
+    out = expand_with_self_conditioning_pairs(records, variants_per_record=2)
+    augmented = [r for r in out if r.get("paraphrase_source") == SELF_CONDITIONING_SOURCE_LABEL]
+    assert len(augmented) == 10  # 5 records × 2 augmented
+    for r in augmented:
+        assert r["prior_cas_state"] == _canonical_record()["cas_expression"]
