@@ -123,7 +123,7 @@ class FractalAttentionHead(nn.Module):
             HutchinsonOperator(
                 self.head_dim,
                 num_ifs_maps,
-                cas_ratios[min(i, len(cas_ratios) - 1)],
+                cas_ratios[min(i, len(cas_ratios) - 1)][:num_ifs_maps],
             )
             for i in range(fractal_depth)
         ])
