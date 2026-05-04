@@ -54,6 +54,39 @@ CAS_LITERAL_ID = 5
 LEXICON_HIT_ID = 6
 FALLBACK_NEUTRAL_ID = 7
 
+# Reserved CAS-literal tokens — vocabulary entries that MUST exist regardless
+# of corpus frequency. These cover meta-logic typed constructors and v7.6
+# bare production-semantics symbols which are absent or low-frequency in many
+# training corpora. Keeping them in the vocabulary ensures the model can
+# learn distinct embeddings for them rather than collapsing them to <unk> or
+# to a surface-level fallback. See:
+#   docs/working/v76_meta_logic_deep_dive_2026_05_04.md
+#   docs/working/vocab14_prep_memo_2026_05_04.md
+#
+# Order is stable; do not reorder. New entries should be APPENDED so existing
+# IDs (8..21) remain unchanged across patches.
+RESERVED_CAS_TOKENS: tuple[str, ...] = (
+    # 7 typed meta-logic constructors (set-theoretic on CAS primitives).
+    "cas:NoeticCluster",
+    "cas:StateSet",
+    "cas:StateCluster",
+    "cas:RelationCluster",
+    "cas:CoverOf",
+    "cas:PartitionOf",
+    "cas:Product",
+    # 4 set-relation operators most load-bearing for meta_logic bucket.
+    "cas:∪",
+    "cas:∩",
+    "cas:∈",
+    "cas:⊆",
+    # 3 bare v7.6 production-semantics symbols (Lambda, Omega, Theta) without
+    # the qualifier-suffix forms (Ω_label, Θ() ) already covered by other
+    # patterns. Bare forms are needed for recipe and side-reaction notation.
+    "cas:Λ",
+    "cas:Ω",
+    "cas:Θ",
+)
+
 
 def normalize_surface(surface_text: str) -> str:
     """Normalize natural-language surfaces while preserving internal spacing."""
@@ -92,13 +125,31 @@ class StructuredTokenVocabulary:
                 raise ValueError(
                     f"reserved token {token!r} must have id {expected_id}, got {actual_id}"
                 )
+        # Reserved CAS tokens must occupy IDs immediately after the special
+        # tokens. They are seeded by ``empty()`` and ``from_token_sequences``;
+        # the contiguity check below guarantees no gaps and the per-token
+        # check below guarantees stable ordering.
+        base = len(RESERVED_TOKENS)
+        for offset, token in enumerate(RESERVED_CAS_TOKENS):
+            expected = base + offset
+            actual = self.token_to_id.get(token)
+            if actual != expected:
+                raise ValueError(
+                    f"reserved CAS token {token!r} must have id {expected}, got {actual}"
+                )
         ids = sorted(self.token_to_id.values())
         if ids != list(range(len(ids))):
             raise ValueError("token_to_id must be contiguous from 0")
 
     @classmethod
     def empty(cls) -> "StructuredTokenVocabulary":
-        return cls({token: idx for idx, token in enumerate(RESERVED_TOKENS)})
+        seed: dict[str, int] = {}
+        for idx, token in enumerate(RESERVED_TOKENS):
+            seed[token] = idx
+        offset = len(RESERVED_TOKENS)
+        for idx, token in enumerate(RESERVED_CAS_TOKENS):
+            seed[token] = offset + idx
+        return cls(seed)
 
     @classmethod
     def from_token_sequences(
@@ -111,25 +162,36 @@ class StructuredTokenVocabulary:
     ) -> "StructuredTokenVocabulary":
         """Build a deterministic vocabulary from already-tokenized records."""
 
+        seed_size = len(RESERVED_TOKENS) + len(RESERVED_CAS_TOKENS)
         if min_count <= 0:
             raise ValueError(f"min_count must be > 0, got {min_count}")
-        if max_size is not None and max_size < len(RESERVED_TOKENS):
+        if max_size is not None and max_size < seed_size:
             raise ValueError(
-                f"max_size must be at least {len(RESERVED_TOKENS)}, got {max_size}"
+                f"max_size must be at least {seed_size}, got {max_size}"
             )
+
+        # Seed the vocabulary with both the special-token reserved set and
+        # the reserved CAS-literal set. The reserved CAS tokens are present
+        # regardless of corpus frequency so the model can learn distinct
+        # embeddings for them; see RESERVED_CAS_TOKENS docstring.
+        token_to_id: dict[str, int] = {}
+        for idx, token in enumerate(RESERVED_TOKENS):
+            token_to_id[token] = idx
+        offset = len(RESERVED_TOKENS)
+        for idx, token in enumerate(RESERVED_CAS_TOKENS):
+            token_to_id[token] = offset + idx
 
         counts: Counter[str] = Counter()
         for sequence in token_sequences:
             for token in sequence:
                 key = structured_token_key(token)
-                if key not in RESERVED_TOKENS:
+                if key not in token_to_id:
                     counts[key] += 1
         for token in extra_tokens:
             key = str(token)
-            if key not in RESERVED_TOKENS:
+            if key not in token_to_id:
                 counts[key] += max(min_count, 1)
 
-        token_to_id = {token: idx for idx, token in enumerate(RESERVED_TOKENS)}
         candidates = [
             (key, count)
             for key, count in counts.items()
@@ -279,6 +341,7 @@ __all__ = [
     "LEXICON_HIT_TOKEN",
     "FALLBACK_NEUTRAL_TOKEN",
     "RESERVED_TOKENS",
+    "RESERVED_CAS_TOKENS",
     "PAD_ID",
     "BOS_ID",
     "EOS_ID",
