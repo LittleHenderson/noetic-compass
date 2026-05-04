@@ -34,7 +34,7 @@ from cas_native.tokenizer.vocabulary import (
     PAD_ID,
     StructuredTokenVocabulary,
 )
-from cas_native.training.structured_prediction_ingest import get_effective_prompt
+from cas_native.training.self_conditioning_serialization import get_effective_prompt
 
 
 SIGNATURE_FEATURE_DIM = (

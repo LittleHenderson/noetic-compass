@@ -39,4 +39,26 @@ def serialize_prior_cas_state(record: dict[str, Any]) -> str:
     return f"[PRIOR] {prior}\n[QUERY] {query}"
 
 
-__all__ = ["serialize_prior_cas_state"]
+def get_effective_prompt(record: dict[str, Any]) -> str:
+    """Return the tokenizer-input string for a record.
+
+    When ``prior_cas_state`` is present and truthy, prepends the canonical CAS
+    expression as a ``[PRIOR]`` block so the model can condition its content-axis
+    predictions on that context. Records without ``prior_cas_state`` return their
+    raw ``user_prompt`` unchanged — backward compatible with all pre-existing
+    training and eval records.
+
+    This helper lives in ``self_conditioning_serialization`` (rather than in
+    ``structured_prediction_ingest``) so that ``structured_token_adapter`` —
+    which is imported by ``cas_native.model.structured_token_embedding`` during
+    ``cas_native.model`` package initialization — can consume it without
+    pulling ``cas_native.model.structured_prediction`` back through
+    ``structured_prediction_ingest`` and closing a circular import.
+    """
+
+    if record.get("prior_cas_state"):
+        return serialize_prior_cas_state(record)
+    return str(record.get("user_prompt") or "")
+
+
+__all__ = ["serialize_prior_cas_state", "get_effective_prompt"]
