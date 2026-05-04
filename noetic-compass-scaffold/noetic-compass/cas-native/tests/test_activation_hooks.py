@@ -326,3 +326,17 @@ def test_cas_aligned_class_names_match_documented_components():
         "CognitiveToposReasoner",
     }
     assert must_include.issubset(set(CAS_ALIGNED_CLASS_NAMES))
+
+
+@pytest.mark.parametrize("input_name,expected", [
+    ("DomainDescentAttention", "domain_descent_attention"),
+    ("FractalAttentionHead", "fractal_attention_head"),
+    ("PrerequisiteGateLayer", "prerequisite_gate_layer"),
+    ("CASTransformerLayer", "cas_transformer_layer"),
+    ("CASNativeModel", "cas_native_model"),
+    ("CognitiveStateEmbedding", "cognitive_state_embedding"),
+    ("StructuredTokenEmbedding", "structured_token_embedding"),
+])
+def test_to_camel_snake_handles_acronym_prefixes(input_name, expected):
+    from cas_native.model.activation_hooks import _to_camel_snake
+    assert _to_camel_snake(input_name) == expected

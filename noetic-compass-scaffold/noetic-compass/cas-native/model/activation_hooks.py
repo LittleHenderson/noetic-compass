@@ -95,16 +95,27 @@ CAS_ALIGNED_CLASS_NAMES: Tuple[str, ...] = (
 
 def _to_camel_snake(name: str) -> str:
     """Convert a class name like ``DomainDescentAttention`` to
-    ``domain_descent_attention``.
+    ``domain_descent_attention``. Also handles leading-acronym names
+    like ``CASTransformerLayer`` -> ``cas_transformer_layer``.
 
     Used to derive a stable, CAS-aligned hook name from the layer's
     Python class name when the layer is not addressed by an attribute
-    path.
+    path. The conversion handles two boundary types:
+
+    * uppercase-after-lowercase (the standard CamelCase boundary), and
+    * uppercase-after-uppercase-then-lowercase (the boundary at the end
+      of a leading acronym such as ``CAS`` in ``CASTransformerLayer``).
+
+    Both boundaries receive an underscore so acronym-prefixed class
+    names produce the expected snake_case form.
     """
     out: List[str] = []
     for i, ch in enumerate(name):
-        if ch.isupper() and i > 0 and not name[i - 1].isupper():
-            out.append("_")
+        if ch.isupper() and i > 0:
+            prev_upper = name[i - 1].isupper()
+            next_lower = (i + 1 < len(name)) and name[i + 1].islower()
+            if not prev_upper or (prev_upper and next_lower):
+                out.append("_")
         out.append(ch.lower())
     return "".join(out)
 
