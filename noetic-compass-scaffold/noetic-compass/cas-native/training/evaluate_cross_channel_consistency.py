@@ -118,10 +118,22 @@ def _diagram_similarity_stub(
 ) -> float:
     """Jaccard overlap over canonical_graph_keys.
 
+    ``canonical_graph_keys`` returns a dict with three lists
+    (``node_keys``, ``container_keys``, ``edge_keys``); callers are expected
+    to convert to sets for set-diff operations.  We flatten all three lists
+    into a single combined key set so Jaccard captures structural overlap
+    across nodes, containers, and edges in one number.
+
     TODO: replace once feature/diagram-diff-utility lands.
     """
-    predicted_keys = _canonical_graph_keys(predicted_graph)
-    gt_keys = _canonical_graph_keys(gt_graph)
+    predicted_keys_dict = _canonical_graph_keys(predicted_graph)
+    gt_keys_dict = _canonical_graph_keys(gt_graph)
+    predicted_keys: set[str] = set(predicted_keys_dict.get("node_keys", []))
+    predicted_keys.update(predicted_keys_dict.get("container_keys", []))
+    predicted_keys.update(predicted_keys_dict.get("edge_keys", []))
+    gt_keys: set[str] = set(gt_keys_dict.get("node_keys", []))
+    gt_keys.update(gt_keys_dict.get("container_keys", []))
+    gt_keys.update(gt_keys_dict.get("edge_keys", []))
     if not predicted_keys and not gt_keys:
         return 1.0
     if not predicted_keys or not gt_keys:
