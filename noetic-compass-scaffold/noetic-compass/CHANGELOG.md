@@ -1,5 +1,90 @@
 # Noetic Compass — Progress Log
 
+## Session 51: Cross-Channel Consistency Eval Harness (May 3, 2026)
+
+**Objective.** Implement the headline methodology contribution of the CAS-SDG-Bench tri-channel benchmark paper: a three-channel eval harness that independently scores notation (exact string match), diagram (structural graph comparison), and color (palette metadata) dimensions, then measures cross-channel consistency to distinguish surface mistakes from structural mistakes.
+
+**New files.**
+
+- `cas-synthetic/schemas/diagram_graph.py` — `canonical_graph_keys` function (already provided in fuller form by PR #11 diagram-diff utility, retained from that merge). Used as the graph identity primitive by the harness.
+- `cas-native/training/evaluate_cross_channel_consistency.py` — Full three-channel eval harness. Phase 1 (scoring functions) is complete; Phase 2 (model wiring to checkpoint) is wired and calls `evaluate_structured_token_prediction` then reconstructs predicted expressions from head-label outputs. CLI matches the existing eval harness shape: `--run-dir`, `--eval-input`, `--out-dir`, `--prefix`, `--device`, `--diagram-similarity-threshold`. Outputs: `<prefix>_report.md`, `<prefix>_report.json`, `<prefix>_samples.jsonl`.
+- `cas-native/tests/test_evaluate_cross_channel_consistency.py` — 15 smoke tests covering: three-channel scoring on synthetic pairs, cross-channel consistency rate computation, color channel None when metadata absent, color channel rate when metadata present.
+
+**Diagram diff stub.** `_diagram_similarity_stub` uses Jaccard overlap over `canonical_graph_keys` as a temporary approximation. Clearly marked `TODO: replace once feature/diagram-diff-utility lands` — that utility is now merged via PR #11 and the stub call is the next refactor target.
+
+**Forward-compat: Session 50 palette (PR #10).** Color channel checks for `color` field on predicted/GT nodes. Currently returns None (no color metadata emitted by compiler). Once compiler starts emitting `color`, the color dimension activates automatically — no second PR needed.
+
+**Test results.** 15 new tests passed. 7 pre-existing tests (paraphrase invariance + structured prediction ingest) still pass, 1 skipped (requires local data file).
+
+**Branch.** `feature/cross-channel-consistency-eval`.
+
+## Session 50: CAS Value-Keyed Color Palette v1.0 (May 3, 2026)
+
+**Objective.** Lock the value-keyed color palette for all four CAS axes (Noetic, Domain, Drive, Register). Foundation work for the tri-channel benchmark (notation + diagram + color-coded axes).
+
+**Branch.** `feature/cas-value-keyed-palette` — 3 commits, PR open.
+
+**Phase 1 — Spec doc.**
+- New `docs/working/cas_color_palette_specification.md` with full design rationale, palette tables, WCAG contrast ratios, and colorblind simulation analysis (deuteranopia / protanopia / tritanopia).
+- Palette basis: Paul Tol "muted" 10-class for Noetics; Paul Tol "bright" for Drives; medium-saturation tier for Domains; border-style overlays for Registers.
+- All colors meet WCAG 3:1 contrast on both `#0d1117` (dashboard dark bg) and `#ffffff` (paper bg); target luminance window L∈[0.12,0.30].
+- Colorblind safety: no pair within any axis becomes indistinguishable under a single colorblind condition; marginal pairs (^1/^7, F1/F7) retain ΔL fallback distinguishability.
+
+**Phase 2 — Python module.**
+- New `api/notation/color_palette.py`: `noetic_color`, `domain_color`, `drive_color`, `register_treatment`, `axis_color_for_node`. No external dependencies.
+- `PALETTE_VERSION = "v1.0"` — breaking-change sentinel for downstream consumers.
+- 49 tests in `tests/test_color_palette.py`: all axes valid/invalid, all-distinct assertions, determinism, precedence, cross-axis separation. All 49 pass.
+
+**Phase 3 — TypeScript module + dashboard.**
+- New `dashboard/src/lib/casColorPalette.ts`: exact hex mirror of Python module. PALETTE_VERSION identical.
+- New `dashboard/src/lib/__tests__/casColorPalette.test.ts`: mirrors Python test list.
+- Updated `dashboard/src/pages/CompilerPage.tsx` `diagramColor()`: now accepts optional node arg; delegates to `axisColorForNode` when `node.noetic / .domain / .drive` are present; falls back to existing kind-keyed logic. Backward-compatible.
+- 167 vitest tests pass across 14 test files (13 existing + 1 new palette test).
+
+**Hex tables (quick reference).**
+
+Noetic: ^0=#3388BB ^1=#117733 ^2=#CC7700 ^3=#CC6677 ^4=#2E7A6E ^5=#CC3388 ^6=#5B55C0 ^7=#7A7A25 ^8=#AA4499 ^9=#6B778C
+
+Domain: P=#7B7EC4 C=#4490B0 E=#4A9068 O=#C0883C
+
+Drive: F1=#4477AA F2=#7755CC F3=#228866 F4=#997700 F5=#BB4488 F6=#BB6699 F7=#446688
+
+Register treatments: T=solid/#D4A020 A=double/#4488CC f=dashed/#CC4477 E=dotted/#44AA77
+
+**Downstream notes.** Compiler emission, eval harness color-consistency check, and diagram-diff color-awareness are separate downstream PRs. Each must import from this module and pin `PALETTE_VERSION == "v1.0"`. The existing `colors.ts` DOMAIN_COLORS / DRIVE_COLORS remain unchanged (kind-keyed fallback and non-diagram components).
+
+## Session 49: Self-Reference Invariance Lever — Proposal + Implementation (May 3, 2026)
+
+**Objective.** Implement the self-reference invariance lever for the CAS-Native AI structured-prediction harness. This is a third paraphrase-consistency lever, composable with PR #2 (bare-slot K=9 augmentation) and PR #3 (KL-on-content-heads regularizer).
+
+**Motivation.** Session 48 addendum showed a 95-98% canonical-wins asymmetry across all four content heads (noetic 71.5%, domain 77.4%, drive 79.4%, registers 79.1%) when canonical and paraphrase predictions disagree. The model has the right answer in canonical form and loses it under paraphrase — a pure invariance failure, not a knowledge gap. The lever: give the model its canonical CAS expression as a `[PRIOR]` block prepended to the paraphrase prompt so it can learn one low-capacity rule ("trust the [PRIOR] block for content axes").
+
+**Deliverables — 4 phases on `proposal/self-reference-lever`.**
+
+- **Phase 1** (`docs: self-reference invariance lever proposal`): Proposal doc at `docs/working/self_reference_invariance_lever_proposal.md`. Full diagnosis with asymmetry table, architectural finding, loss/data finding, proposed mechanism, A/B test plan, risk analysis, composability with PR #2 and PR #3.
+
+- **Phase 2** (`cas-native: self-conditioning augmentation + tokenizer prepend`):
+  - NEW: `cas-native/training/self_conditioning_serialization.py` — `serialize_prior_cas_state(record) -> str` returning `f"[PRIOR] {prior_cas_state}\n[QUERY] {user_prompt}"`.
+  - NEW: `cas-native/training/self_conditioning_augmentation.py` — `expand_with_self_conditioning_pairs(records, *, variants_per_record)` generating paraphrase variants with `prior_cas_state` populated from canonical's `cas_expression`.
+  - MODIFIED: `cas-native/training/structured_prediction_ingest.py` — adds `get_effective_prompt(record)` which calls `serialize_prior_cas_state` when `prior_cas_state` is truthy; backward compatible.
+  - MODIFIED: `cas-native/training/train_structured_prediction.py` — `_tokenize_records_with_progress` uses `get_effective_prompt(record)` instead of raw `user_prompt`.
+  - NEW: `cas-native/tests/test_self_conditioning_augmentation.py` — 16 tests covering all 5 brief requirements (backward compat, deterministic serialization, expansion count, prior_cas_state propagation, tokenizer round-trip).
+
+- **Phase 3** (`cas-native: --self-conditioning-pairs CLI flag in training`):
+  - MODIFIED: `train_structured_prediction.py` — `train_structured_token_prediction_local` gains `self_conditioning_pairs: int = 0` parameter; CLI gains `--self-conditioning-pairs K`. Expansion applied to canonical slice after standard paraphrase augmentation; SC paraphrases appended (no canonical duplication). Manifest reports `self_conditioning_augmentation` section.
+  - EXTENDED test file: Phase 3 smoke tests (5 canonicals × K=2 → 15 records; augmented records have prior_cas_state populated).
+
+- **Phase 4** (`cas-native: self-conditioning eval harness`):
+  - NEW: `cas-native/training/evaluate_self_conditioning_invariance.py` — CPU-only eval harness analogous to `evaluate_paraphrase_invariance.py`. Two-pass: canonical eval (no prior), then paraphrase-with-oracle-prior eval (prior_cas_state = ground-truth cas_expression). Reports all_heads exact + per-head consistency + optional `prior_lift_pp` vs standard paraphrase. Writes JSON + markdown report.
+
+**Test results.** 18 new tests pass; 39 total tests pass across self-conditioning + paraphrase + ingest + invariance eval suites. 1 pre-existing skip (local-file guard) unchanged.
+
+**Local review addendum.** Follow-up Codex review fixed three integration issues before retrain: default structured-token record tokenization now honors `prior_cas_state` when callers do not pass pre-tokenized sequences; self-conditioning training expansion now preserves the true canonical list before standard paraphrase interleaving, so `--paraphrase-augment-train K` composes with `--self-conditioning-pairs K`; and the self-conditioning eval harness now enforces CPU-only execution and uses the model's canonical prediction as the prior rather than a ground-truth oracle label. Added four regression tests, bringing the self-conditioning test file to 22 tests. Local syntax verification passed via `python -m compileall`; local pytest could not complete because this machine's default Python 3.14 has an incomplete `torch` namespace and Python 3.11 has neither `pytest` nor `torch` installed.
+
+**No retrain included.** This PR is proposal + implementation + tests only. Retrain decision is the reviewer's after PR review. The in-flight K=9 run on `feature/paraphrase-augment-9-templates` was not touched.
+
+**PR opened**: `self-reference invariance lever (proposal + impl + tests)` on branch `proposal/self-reference-lever`.
+
 ## Session 48: Correct-Corpus Paraphrase Retrain Clears Prior Canonical Baseline (May 2, 2026)
 
 **Objective.** Run the prepared v7.7-overlap relabel + deterministic paraphrase-augmentation retrain on GPU, then evaluate both canonical accuracy and paraphrase invariance against the held-out 1K.

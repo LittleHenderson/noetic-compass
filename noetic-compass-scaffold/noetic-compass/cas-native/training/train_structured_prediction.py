@@ -70,11 +70,16 @@ from cas_native.tokenizer.structured_token import StructuredToken
 from cas_native.tokenizer.vocabulary import StructuredTokenVocabulary
 from cas_native.training.structured_prediction_ingest import (
     batch_targets_from_records,
+    get_effective_prompt,
     load_level3_jsonl,
 )
 from cas_native.training.paraphrase_augmentation import (
     PARAPHRASE_SOURCE_LABEL as TRAINING_PARAPHRASE_SOURCE_LABEL,
     expand_with_paraphrases,
+)
+from cas_native.training.self_conditioning_augmentation import (
+    SELF_CONDITIONING_SOURCE_LABEL,
+    expand_with_self_conditioning_pairs,
 )
 from cas_native.training.structured_token_adapter import (
     records_to_structured_token_sequences,
@@ -247,6 +252,7 @@ def _eval_manifest_from_outputs(
                 "bucket": record.get("bucket"),
                 "source_level2_id": record.get("source_level2_id"),
                 "cas_expression": record.get("cas_expression"),
+                "prior_cas_state": record.get("prior_cas_state"),
                 "user_prompt": record.get("user_prompt"),
                 "all_heads_exact": bool(all_exact[i]),
                 "head_correct": {key: bool(correct[key][i]) for key in head_keys},
@@ -328,7 +334,7 @@ def _tokenize_records_with_progress(
     for index, record in enumerate(records, start=1):
         sequences.append(
             tokenize(
-                str(record.get("user_prompt") or ""),
+                get_effective_prompt(record),
                 lexicon=lexicon,
             )
         )
@@ -673,6 +679,70 @@ def train_structured_prediction_local(
     return head, manifest
 
 
+def _expand_structured_token_training_records(
+    train_records: list[dict[str, Any]],
+    *,
+    paraphrase_augment_train: int,
+    self_conditioning_pairs: int,
+) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any]]:
+    """Apply structured-token train-time augmentation.
+
+    Self-conditioning records are generated from the canonical post-filter
+    records, not from the interleaved canonical+paraphrase list produced by
+    ``expand_with_paraphrases``. That preserves one self-conditioning pair set
+    per original canonical and avoids second-order paraphrase IDs.
+    """
+
+    canonical_records = list(train_records)
+    n_canonical_post_filter = len(canonical_records)
+
+    expanded_records = canonical_records
+    if paraphrase_augment_train > 0:
+        expanded_records = expand_with_paraphrases(
+            canonical_records,
+            variants_per_record=paraphrase_augment_train,
+        )
+    n_after_standard_paraphrase = len(expanded_records)
+    paraphrase_augmentation_report = {
+        "variants_per_record": paraphrase_augment_train,
+        "n_canonical_post_filter": n_canonical_post_filter,
+        "n_paraphrases": n_after_standard_paraphrase - n_canonical_post_filter,
+        "n_total": n_after_standard_paraphrase,
+        "training_template_source": (
+            TRAINING_PARAPHRASE_SOURCE_LABEL if paraphrase_augment_train > 0 else None
+        ),
+    }
+
+    self_conditioning_augmentation_report: dict[str, Any] = {
+        "variants_per_record": self_conditioning_pairs,
+        "n_canonical_post_filter": n_canonical_post_filter,
+        "n_self_conditioning_pairs": 0,
+        "n_total": n_after_standard_paraphrase,
+    }
+    if self_conditioning_pairs > 0:
+        sc_expanded = expand_with_self_conditioning_pairs(
+            canonical_records,
+            variants_per_record=self_conditioning_pairs,
+        )
+        sc_paraphrases = [
+            record for record in sc_expanded if record.get("prior_cas_state")
+        ]
+        expanded_records = expanded_records + sc_paraphrases
+        self_conditioning_augmentation_report.update(
+            {
+                "n_self_conditioning_pairs": len(sc_paraphrases),
+                "n_total": len(expanded_records),
+                "source_label": SELF_CONDITIONING_SOURCE_LABEL,
+            }
+        )
+
+    return (
+        expanded_records,
+        paraphrase_augmentation_report,
+        self_conditioning_augmentation_report,
+    )
+
+
 def train_structured_token_prediction_local(
     train_records: list[dict[str, Any]],
     eval_records: list[dict[str, Any]] | None,
@@ -694,6 +764,7 @@ def train_structured_token_prediction_local(
     vocab_max_size: int | None = None,
     embedding_dropout: float = 0.0,
     paraphrase_augment_train: int = 0,
+    self_conditioning_pairs: int = 0,
 ) -> tuple[StructuredTokenStructuredPredictor, StructuredTokenVocabulary, dict[str, Any]]:
     """Mini-batched train/eval harness for the structured-token input path.
 
@@ -701,6 +772,14 @@ def train_structured_token_prediction_local(
     tokens directly. The vocabulary is built only from post-filtered training
     prompts, then reused for held-out eval so eval labels and answer strings
     cannot leak into the input representation.
+
+    Args:
+        self_conditioning_pairs: When > 0, after the standard paraphrase
+            augmentation step, also generates this many self-conditioning
+            paraphrase variants per canonical. Each variant carries the
+            canonical's ``cas_expression`` in ``prior_cas_state`` so the model
+            learns to condition its content-axis predictions on the prior block.
+            0 disables self-conditioning augmentation.
     """
 
     if not train_records:
@@ -724,24 +803,20 @@ def train_structured_token_prediction_local(
                 "filter_eval_overlaps only for debug"
             )
 
-    # Apply paraphrase augmentation AFTER the overlap filter so paraphrased
-    # records inherit the canonical's leak-safe status (paraphrases share
-    # source_level2_id and cas_expression with their canonical; if the
-    # canonical was filtered, no augmented form of it exists in train).
-    n_train_canonical_post_filter = len(train_records)
-    if paraphrase_augment_train > 0:
-        train_records = expand_with_paraphrases(
-            train_records, variants_per_record=paraphrase_augment_train
-        )
-    paraphrase_augmentation_report = {
-        "variants_per_record": paraphrase_augment_train,
-        "n_canonical_post_filter": n_train_canonical_post_filter,
-        "n_paraphrases": len(train_records) - n_train_canonical_post_filter,
-        "n_total": len(train_records),
-        "training_template_source": (
-            TRAINING_PARAPHRASE_SOURCE_LABEL if paraphrase_augment_train > 0 else None
-        ),
-    }
+    # Apply augmentation AFTER the overlap filter so generated records inherit
+    # the canonical's leak-safe status.
+    (
+        train_records,
+        paraphrase_augmentation_report,
+        self_conditioning_augmentation_report,
+    ) = _expand_structured_token_training_records(
+        train_records,
+        paraphrase_augment_train=paraphrase_augment_train,
+        self_conditioning_pairs=self_conditioning_pairs,
+    )
+    n_train_canonical_post_filter = paraphrase_augmentation_report[
+        "n_canonical_post_filter"
+    ]
 
     torch.manual_seed(seed)
     rng = random.Random(seed)
@@ -974,6 +1049,7 @@ def train_structured_token_prediction_local(
             "n_train_raw": raw_train_count,
             "eval_overlap_filter": overlap_report,
             "paraphrase_augmentation": paraphrase_augmentation_report,
+            "self_conditioning_augmentation": self_conditioning_augmentation_report,
             "n_eval": len(eval_records) if eval_records else 0,
         },
         "training": {
@@ -1077,6 +1153,15 @@ def main() -> None:
         "disjoint from the eval template set). 0 disables augmentation.",
     )
     parser.add_argument(
+        "--self-conditioning-pairs",
+        type=int,
+        default=0,
+        help="Self-conditioning augmentation. K>0 adds K paraphrase variants per "
+        "canonical where the canonical's cas_expression is prepended as a [PRIOR] "
+        "block. Applied after --paraphrase-augment-train. 0 disables. Composable "
+        "with --paraphrase-augment-train.",
+    )
+    parser.add_argument(
         "--allow-heldout-train",
         action="store_true",
         help="Allow training on the held-out eval file for debug only.",
@@ -1139,6 +1224,7 @@ def main() -> None:
                 vocab_max_size=args.vocab_max_size,
                 embedding_dropout=args.embedding_dropout,
                 paraphrase_augment_train=args.paraphrase_augment_train,
+                self_conditioning_pairs=args.self_conditioning_pairs,
             )
             print(json.dumps(manifest, indent=2, sort_keys=True))
             return
@@ -1189,6 +1275,7 @@ def main() -> None:
             vocab_max_size=args.vocab_max_size,
             embedding_dropout=args.embedding_dropout,
             paraphrase_augment_train=args.paraphrase_augment_train,
+            self_conditioning_pairs=args.self_conditioning_pairs,
         )
     else:
         _head, manifest = train_structured_prediction_local(

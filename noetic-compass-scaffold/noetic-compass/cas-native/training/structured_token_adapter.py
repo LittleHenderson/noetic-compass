@@ -34,6 +34,7 @@ from cas_native.tokenizer.vocabulary import (
     PAD_ID,
     StructuredTokenVocabulary,
 )
+from cas_native.training.self_conditioning_serialization import get_effective_prompt
 
 
 SIGNATURE_FEATURE_DIM = (
@@ -213,12 +214,18 @@ def records_to_structured_token_sequences(
     active_lexicon = lexicon or load_seed_lexicon()
     return [
         tokenize(
-            str(record.get(text_field) or ""),
+            _effective_record_text(record, text_field=text_field),
             lexicon=active_lexicon,
             include_whitespace=include_whitespace,
         )
         for record in record_list
     ]
+
+
+def _effective_record_text(record: dict[str, Any], *, text_field: str) -> str:
+    if text_field == "user_prompt":
+        return get_effective_prompt(record)
+    return str(record.get(text_field) or "")
 
 
 def records_to_structured_token_batch(

@@ -3,6 +3,13 @@
 The first Step-7 target source is the held-out recoverable Level 3 dataset.
 These helpers convert Level 3 records into stable class IDs and multi-hot
 targets consumed by ``StructuredPredictionHead``.
+
+Self-conditioning records carry an optional ``prior_cas_state`` field (a
+serialized CAS expression string). When present, ``get_effective_prompt``
+prepends a ``[PRIOR] ... \\n[QUERY] ...`` block so the tokenizer receives the
+canonical CAS expression as context alongside the paraphrase query. Records
+without ``prior_cas_state`` are passed through unchanged for full backward
+compatibility.
 """
 
 from __future__ import annotations
@@ -13,6 +20,11 @@ from pathlib import Path
 from typing import Any, Iterable
 
 import torch
+
+from .self_conditioning_serialization import (
+    get_effective_prompt,
+    serialize_prior_cas_state,
+)
 
 from cas_native.model.structured_prediction import (
     AUTHORITY_LABELS,
