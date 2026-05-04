@@ -86,6 +86,9 @@ from cas_native.model.structured_token_embedding import (
     StructuredTokenEmbedding,
     StructuredTokenStructuredPredictor,
 )
+from cas_native.model.graph_encoder import GraphEncoder
+from cas_native.model.graph_text_fusion import GraphTextFusion
+from cas_native.training.diagram_serialization import NODE_FEATURE_DIM, EDGE_FEATURE_DIM
 from cas_native.tokenizer.vocabulary import StructuredTokenVocabulary
 from cas_native.training.structured_prediction_ingest import (
     batch_targets_from_records,
@@ -456,7 +459,9 @@ def evaluate_diagram_loop_honest(
     embedding = StructuredTokenEmbedding(vocab_size=len(vocabulary), d_model=d_model)
     from cas_native.model.structured_prediction import StructuredPredictionHead
     head = StructuredPredictionHead(d_model=d_model, bottleneck_dim=bottleneck_dim)
-    model = StructuredTokenStructuredPredictor(embedding, head)
+    graph_encoder = GraphEncoder(NODE_FEATURE_DIM, EDGE_FEATURE_DIM, hidden_dim=64)
+    graph_fusion = GraphTextFusion(d_text=d_model, d_graph=64)
+    model = StructuredTokenStructuredPredictor(embedding, head, graph_encoder, graph_fusion)
     model.load_state_dict(
         torch.load(checkpoint, map_location=device, weights_only=True)
     )
