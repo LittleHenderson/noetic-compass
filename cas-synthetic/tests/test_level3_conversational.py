@@ -152,6 +152,29 @@ def test_generator_can_emit_recoverable_translation_style():
         assert record["provenance"]["template_id"] == "recoverable_translation"
 
 
+def test_generator_can_emit_single_recoverable_translation_variant():
+    source = _level2_source(cas_expression="^2^P_{F3}|A")
+    generator = Level3ConversationalGenerator(
+        seed=3,
+        variants_per_source=1,
+        style_ids=["recoverable_translation"],
+    )
+
+    records = [
+        ex.to_dict()
+        for ex in generator.iter_source_record(
+            source,
+            source_index=0,
+            source_line=1,
+            source_path="level2_fixture.jsonl",
+        )
+    ]
+
+    assert len(records) == 1
+    assert records[0]["cas_expression"] == "^2^P_{F3}|A"
+    assert records[0]["provenance"]["template_id"] == "recoverable_translation"
+
+
 def test_generator_rejects_unknown_style_id():
     try:
         Level3ConversationalGenerator(style_ids=["does_not_exist"])
@@ -188,6 +211,58 @@ def test_generator_skips_invalid_level2_sources_by_default():
     finally:
         if path.exists():
             path.unlink()
+
+
+def test_generator_supports_start_source_record_and_output_limit():
+    input_path = _fixture_path("_level3_split_sources.jsonl")
+    output_path = _fixture_path("_level3_split_output.jsonl")
+    sources = [
+        _level2_source(cas_expression="^0^P_{F1}|A"),
+        _level2_source(cas_expression="^1^C_{F2}|f"),
+        _level2_source(cas_expression="^2^E_{F3}|T"),
+        _level2_source(cas_expression="^3^O_{F4}|E"),
+    ]
+
+    try:
+        input_path.write_text(
+            "\n".join(json.dumps(source) for source in sources) + "\n",
+            encoding="utf-8",
+        )
+        report = Level3ConversationalGenerator(
+            seed=17,
+            variants_per_source=2,
+            style_ids=["recoverable_translation"],
+        ).generate_to_jsonl(
+            input_path,
+            output_path,
+            start_source_record=2,
+            max_source_records=2,
+            max_output_records=3,
+            variants_per_source=2,
+            progress_every=0,
+        )
+        records = [
+            json.loads(line)
+            for line in output_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+
+        assert report["start_source_record"] == 2
+        assert report["selected_source_records"] == 2
+        assert report["written"] == 3
+        assert [record["provenance"]["source_index"] for record in records] == [2, 2, 3]
+        assert {record["source_level2_id"] for record in records} == {
+            "level2-000002",
+            "level2-000003",
+        }
+        assert all(
+            record["provenance"]["template_id"] == "recoverable_translation"
+            for record in records
+        )
+    finally:
+        for path in (input_path, output_path):
+            if path.exists():
+                path.unlink()
 
 
 def test_jsonl_loader_flags_missing_required_field_and_bad_distribution():

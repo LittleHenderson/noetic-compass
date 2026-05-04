@@ -181,32 +181,38 @@ class Level3ConversationalGenerator:
         input_path: str | Path,
         *,
         max_source_records: int | None = None,
+        start_source_record: int = 0,
         variants_per_source: int | None = None,
         include_invalid_sources: bool = False,
     ) -> Iterator[ConversationalExample]:
         """Stream conversational variants from a Level 2 JSONL file."""
         path = Path(input_path)
         max_records = _validate_max_source_records(max_source_records)
-        record_count = 0
+        start_record = _validate_start_source_record(start_source_record)
+        source_records_seen = 0
+        selected_records = 0
         with open(path, encoding="utf-8") as f:
             for line_number, line in enumerate(f, start=1):
                 line = line.strip()
                 if not line:
                     continue
-                if max_records is not None and record_count >= max_records:
+                source_index = source_records_seen
+                source_records_seen += 1
+                if source_index < start_record:
+                    continue
+                if max_records is not None and selected_records >= max_records:
                     break
+                selected_records += 1
                 source = json.loads(line)
                 if not include_invalid_sources and _source_is_invalid(source):
-                    record_count += 1
                     continue
                 yield from self.iter_source_record(
                     source,
-                    source_index=record_count,
+                    source_index=source_index,
                     source_line=line_number,
                     source_path=path,
                     variants_per_source=variants_per_source,
                 )
-                record_count += 1
 
     def iter_source_record(
         self,
@@ -247,6 +253,8 @@ class Level3ConversationalGenerator:
         output_path: str | Path,
         *,
         max_source_records: int | None = None,
+        start_source_record: int = 0,
+        max_output_records: int | None = None,
         variants_per_source: int | None = None,
         progress_every: int = 1000,
         include_invalid_sources: bool = False,
@@ -257,10 +265,13 @@ class Level3ConversationalGenerator:
 
         written = 0
         source_indices: set[int] = set()
-        source_records_read = 0
+        source_records_seen = 0
+        selected_source_records = 0
         source_records_skipped = 0
         bucket_counts: dict[str, int] = {}
         max_records = _validate_max_source_records(max_source_records)
+        start_record = _validate_start_source_record(start_source_record)
+        max_outputs = _validate_max_output_records(max_output_records)
         with open(input_path, encoding="utf-8") as source_file, open(
             out_path, "w", encoding="utf-8"
         ) as f:
@@ -268,11 +279,16 @@ class Level3ConversationalGenerator:
                 line = line.strip()
                 if not line:
                     continue
-                if max_records is not None and source_records_read >= max_records:
+                source_index = source_records_seen
+                source_records_seen += 1
+                if source_index < start_record:
+                    continue
+                if max_records is not None and selected_source_records >= max_records:
+                    break
+                if max_outputs is not None and written >= max_outputs:
                     break
                 source = json.loads(line)
-                source_index = source_records_read
-                source_records_read += 1
+                selected_source_records += 1
                 if not include_invalid_sources and _source_is_invalid(source):
                     source_records_skipped += 1
                     continue
@@ -283,6 +299,8 @@ class Level3ConversationalGenerator:
                     source_path=input_path,
                     variants_per_source=variants_per_source,
                 ):
+                    if max_outputs is not None and written >= max_outputs:
+                        break
                     f.write(json.dumps(ex.to_dict(), ensure_ascii=False) + "\n")
                     written += 1
                     source_indices.add(int(ex.provenance["source_index"]))
@@ -294,8 +312,11 @@ class Level3ConversationalGenerator:
             "input_path": str(input_path),
             "output_path": str(out_path),
             "source_records": len(source_indices),
-            "source_records_read": source_records_read,
+            "source_records_seen": source_records_seen,
+            "start_source_record": start_record,
+            "selected_source_records": selected_source_records,
             "source_records_skipped": source_records_skipped,
+            "max_output_records": max_outputs,
             "written": written,
             "variants_per_source": (
                 self.variants_per_source
@@ -436,8 +457,8 @@ def _normalize_soft(values: Sequence[float | int], *, smoothing: float) -> list[
 def _validate_variants_per_source(value: int) -> int:
     if not isinstance(value, int):
         raise TypeError("variants_per_source must be an integer")
-    if value < 2 or value > 5:
-        raise ValueError("variants_per_source must be between 2 and 5")
+    if value < 1 or value > 5:
+        raise ValueError("variants_per_source must be between 1 and 5")
     return value
 
 
@@ -446,6 +467,24 @@ def _validate_max_source_records(value: int | None) -> int | None:
         return None
     if value < 0:
         raise ValueError("max_source_records must be non-negative")
+    return value
+
+
+def _validate_start_source_record(value: int) -> int:
+    if not isinstance(value, int):
+        raise TypeError("start_source_record must be an integer")
+    if value < 0:
+        raise ValueError("start_source_record must be non-negative")
+    return value
+
+
+def _validate_max_output_records(value: int | None) -> int | None:
+    if value is None:
+        return None
+    if not isinstance(value, int):
+        raise TypeError("max_output_records must be an integer")
+    if value < 0:
+        raise ValueError("max_output_records must be non-negative")
     return value
 
 
