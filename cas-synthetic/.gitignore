@@ -4,6 +4,9 @@ data/level2_scaffold/*
 !data/level2_scaffold/level3_recoverable_eval_1000_v77_relabeled.jsonl
 !data/level2_scaffold/level3_recoverable_eval_1000_metrics.json
 !data/level2_scaffold/LEVEL3_RECOVERABLE_EVAL_1000_REPORT.md
+# Throughput / scratch benchmark artifacts (T8 and similar). The wildcard above
+# already excludes this directory; the explicit rule below is documentation.
+data/level2_scaffold/_bench/
 data/pytest-tmp/
 __pycache__/
 *.pyc
