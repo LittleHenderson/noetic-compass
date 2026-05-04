@@ -1,5 +1,43 @@
 # Noetic Compass — Progress Log
 
+## Session 52: Diagram-Loop Investigation Arc — Bug, Oracle Leak, Honest Eval (May 3-4, 2026)
+
+**Objective.** Land the diagram-loop architecture (PR #6) at full scale and validate the +5pp Drive / +13.7pp Noetic per-head consistency lifts seen at smoke scale.
+
+**The arc.**
+
+1. **Full retrain v1 launched** on `proposal/diagram-loop-impl` files synced to pod. Trajectory regressed: epoch 0 = 63.2%, epoch 1 = 42.9%, epoch 2 = 28.1%; train loss 2.19 → 0.47 → 0.28. Killed at epoch 2 because the regression + train-loss-collapse signature looked like topological memorization shortcut.
+
+2. **User pushback caught the wrong diagnosis.** Code reading discovered the actual bug: `evaluate_structured_token_prediction` line 452 calls `model(batch)` without `graph_batch`, while training loop line 985 calls `model(batch, graph_batch=...)`. Per-epoch eval was running the model in text-only mode while training supervised the fused mode 25% of the time. Train/eval distribution mismatch, not memorization.
+
+3. **Four-agent investigation team spawned.** PR #15 (architecture detective) confirmed the bug at the code level. PR #16 (empirical verifier) confirmed trajectory matched the mismatch hypothesis. PR #17 (counter-skeptic) caught a deeper issue: the existing `evaluate_diagram_loop_invariance.py --with-graph-path` builds `prior_diagram` by compiling **ground-truth** `cas_expression` — an oracle leak. The K9_DiagLoop smoke's celebrated +34.8 pp / +13.7 pp Noetic / +5 pp Drive numbers were produced on this leaky path and reflect oracle exploitation, not generalization.
+
+4. **PR #18 (solution architect)** wrote a fix that copied the oracle leak. CLOSED, not merged.
+
+5. **Corrective routine spawned** producing PR #19 with an honest two-pass eval: pass 1 text-only canonical prediction, pass 2 uses model's own (sometimes-wrong) prediction as graph prior — never ground truth. Tests include monkeypatch invariant verifying `compile_to_graph` is never called on `cas_expression`.
+
+6. **PR #19 patched** for graph-component model construction (`GraphEncoder` + `GraphTextFusion` initialised before `load_state_dict`) so it can load checkpoints from `--diagram-loop-pairs > 0` training. Fix landed via commit `0696761` on `team/diagloop-honest-eval`.
+
+7. **Honest smoke v2 result on K9_DiagLoop_smoke_5k checkpoint:**
+   - Canonical text-only: 47.9%
+   - Paraphrase text-only: 26.6%
+   - Paraphrase with self-prior: 45.4%
+   - **Honest lever lift: +18.8 pp** (real, not oracle)
+   - Per-head consistency under self-prior: drive 71.6%, domain 81.0%, noetic 85.1%, **registers 98.6%** (above canonical baseline — strongest single-head result across all experiments).
+   - Per-bucket weakness on v76_production (24.4%) and meta_logic (7.5%) — real architectural constraint, not oracle artifact.
+
+8. **K9_DiagLoop full v2 honest retrain in flight** (PID 9383, started 22:44 UTC May 3, ETA ~08:00 UTC May 4). Per-epoch eval rates collapsing toward 0% as expected (buggy text-only path, ignored). Train loss continues descending. Honest two-pass eval scheduled at completion to produce the load-bearing numbers.
+
+**Lessons captured.**
+
+- `train_structured_prediction.py` defaults `--limit` to 128, which silently produces ~114-canonical garbage runs unless overridden with `--limit 100000`. Caught after burning training time on a 128-canonical run.
+- Reference implementations should be audited for oracle leakage before mirroring. The leaky reference's docstring explicitly said "tells the model exactly what structure the expression encodes" — a leak hidden in plain sight.
+- When per-epoch eval and training use different forward signatures, per-epoch trajectory is not a reliable kill signal for multi-modal architectures.
+
+**Open PRs from this arc:** #14 (consolidation tier-1), #15-#17 (investigation analysis docs), #19 (honest eval, with patch). PR #18 closed as superseded.
+
+**Next step pending K9_DiagLoop full v2 completion.** Honest eval will produce the real paraphrase-with-self-prior number at full scale. If ≥60% with ≥20 pp lift, architecture validates and Paper A v2 §5.7 has its empirical anchor. If <50%, smoke +18.8 pp lift was a scale artifact and architecture deprecates in favor of K=9 baseline + alternative levers (PR #4 self-reference linear, PR #3 KL invariance).
+
 ## Session 48: Correct-Corpus Paraphrase Retrain Clears Prior Canonical Baseline (May 2, 2026)
 
 **Objective.** Run the prepared v7.7-overlap relabel + deterministic paraphrase-augmentation retrain on GPU, then evaluate both canonical accuracy and paraphrase invariance against the held-out 1K.
