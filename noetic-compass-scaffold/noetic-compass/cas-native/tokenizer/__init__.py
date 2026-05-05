@@ -65,6 +65,34 @@ from .vocabulary import (
     structured_token_key,
 )
 
+
+def __getattr__(name: str):  # pragma: no cover - lazy import shim
+    """Lazy re-export for the English BPE extension.
+
+    The English-side extension lives in
+    ``cas_native.training.english_bpe_extension`` to avoid a hard import
+    cycle (the training module already imports from the tokenizer package).
+    Importing it lazily here lets notebook users write::
+
+        from cas_native.tokenizer import ExtendedHybridCASTokenizer
+
+    without forcing every tokenizer-package import to pull the training
+    module on startup.
+    """
+
+    if name in {
+        "ExtendedHybridCASTokenizer",
+        "extend_hybrid_tokenizer",
+        "tokenize_with_provenance",
+        "train_english_bpe",
+        "load_english_bpe_artifact",
+        "BPEArtifact",
+    }:
+        from cas_native.training import english_bpe_extension as _bpe
+
+        return getattr(_bpe, name)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
 __all__ = [
     "DOMAIN_AXIS_LEN",
     "DOMAIN_LABELS",

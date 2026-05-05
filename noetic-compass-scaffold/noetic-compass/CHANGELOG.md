@@ -1,5 +1,25 @@
 # Noetic Compass — Progress Log
 
+## Session 50: Native English BPE Tokenizer Extension (May 4, 2026)
+
+**Objective.** First deliverable for the Version B Phase 4 NL Generation Head — extend `HybridCASTokenizer` with English BPE trained from scratch on the project's own SDG corpus. No foreign tokenizer downloads, no pretrained merges, no HuggingFace/sentencepiece imports. CAS gets the glory.
+
+**Deliverables.**
+
+- NEW: `cas-native/training/english_bpe_extension.py` (881 LOC) — stdlib-only byte-level BPE training (`train_english_bpe`), artifact load/save, and `ExtendedHybridCASTokenizer` that composes the existing CAS-aware hybrid tokenizer with a freshly-trained English vocab. CAS reserved tokens get IDs `0..N_CAS-1`; English BPE pieces follow at `IDs >= N_CAS`. Every artifact carries `vocab_version`, `trained_from_corpus_hash` (SHA-256), `trained_at_timestamp`, `bpe_merge_count`, `english_vocab_size`, `cas_reserved_token_count`, `min_frequency`, `target_vocab_size`, and `n_records_trained_on`. `tokenize_with_provenance(text, tokenizer)` stamps every tokenization output with the live `vocab_version` so downstream consumers can audit which vocab produced which token sequence.
+- MODIFIED: `cas-native/training/tokenizer.py` — single ergonomic addition: `HybridCASTokenizer.with_english_bpe(path)` returns the composed extended tokenizer. Existing callers untouched.
+- MODIFIED: `cas-native/tokenizer/__init__.py` — lazy `__getattr__` re-export of `ExtendedHybridCASTokenizer`, `train_english_bpe`, `extend_hybrid_tokenizer`, `tokenize_with_provenance`, etc., so notebooks can import from `cas_native.tokenizer` directly.
+- NEW: `cas-native/tests/training/test_english_bpe_extension.py` (503 LOC, 28 tests) covering deterministic merge order, vocab cap enforcement, min-frequency filtering, ASCII + multi-byte UTF-8 roundtrip, CAS reserved-token preservation, corpus-hash detection, end-to-end save/load/compose, error paths.
+- NEW: `docs/working/native_nl_tokenizer_extension_spec_2026_05_04.md` (~1,650 words) — full spec covering goal, vocab partition strategy, BPE training procedure, traceability fields, integration points, testing strategy.
+
+**Test results.** `pytest cas-native/tests/training/test_english_bpe_extension.py -v` → 28 passed in 0.53s. Existing `pytest cas-native/tests/test_tokenizer.py` → 6 passed unchanged.
+
+**Architectural rule preserved.** Pure stdlib implementation; no third-party BPE libraries, no pretrained merges loaded from disk. Greedy byte-level BPE with deterministic lexicographic tie-breaking — same input corpus always produces byte-identical merge sequences. SHA-256 of the merges list is the reproducibility anchor.
+
+**Sample run on a 10-record mini-corpus** (vocab cap 400, min_freq 2): 43 merges learned, `english_vocab_size=303`, `cas_reserved_token_count=334`, total composed vocab 637. Merges-list SHA-256 stable across runs. Sample tokenization of `"The Mind has an affinity for ^2 Positive."` round-trips identically; CAS literal `^2` survives as a single ID-17 token while English text fragments into compact BPE pieces (`'T', 'he', 'M', 'in', 'd', ...`).
+
+**Next.** Awaiting parallel SDG agent's `cas-synthetic/data/native_nl/v1_seed_5k.jsonl` to train the production v1.0 vocab. Training command will be `python -m cas_native.training.english_bpe_extension train --corpus cas-synthetic/data/native_nl/v1_seed_5k.jsonl --out cas-native/training/runs/english_bpe_v1.json --vocab-size 24000 --min-frequency 2`. Expected wall-clock <30s on 5K records.
+
 ## Session 49: Self-Reference Invariance Lever — Proposal + Implementation (May 3, 2026)
 
 **Objective.** Implement the self-reference invariance lever for the CAS-Native AI structured-prediction harness. This is a third paraphrase-consistency lever, composable with PR #2 (bare-slot K=9 augmentation) and PR #3 (KL-on-content-heads regularizer).

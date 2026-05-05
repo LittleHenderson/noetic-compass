@@ -319,6 +319,23 @@ class HybridCASTokenizer:
             raise ValueError(f"Unsupported tokenizer version: {payload.get('version')!r}")
         return cls(token_to_id=dict(payload["token_to_id"]), frozen=bool(payload.get("frozen", True)))
 
+    def with_english_bpe(self, english_vocab_path: str | Path) -> Any:
+        """Compose this tokenizer with an English BPE artifact.
+
+        Returns an ``ExtendedHybridCASTokenizer`` whose CAS reserved tokens
+        keep their stable low IDs and whose English BPE pieces follow at
+        ``IDs >= self.vocab_size``. The English BPE artifact must have been
+        trained from scratch on the project's own SDG corpus — see
+        ``cas_native.training.english_bpe_extension.train_english_bpe``.
+
+        This is the only modification to the base ``HybridCASTokenizer``
+        for the English BPE extension. Existing callers that don't invoke
+        this method are unaffected.
+        """
+        from cas_native.training.english_bpe_extension import extend_hybrid_tokenizer
+
+        return extend_hybrid_tokenizer(self, english_vocab_path)
+
     def save(self, path: str | Path) -> Path:
         out = Path(path)
         out.parent.mkdir(parents=True, exist_ok=True)
