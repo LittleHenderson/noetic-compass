@@ -52,14 +52,16 @@ For each feature: **SHIPPED** = running in production, **WIRED** = working code 
 
 ## NL Generation (the actual LLM ask — model writes English back)
 
+**Architectural rule (user-ratified 2026-05-04):** No foreign pretrained models. No TinyLlama, no Llama, no Qwen, no Mistral, no GPT-2, nothing borrowed. The generation head is built natively on the existing CAS-Native classifier or as a CAS-Native generation model from scratch. CAS gets the glory or the project doesn't ship.
+
 | Feature | Status | What it does today | What it'd take to ship more |
 |---|---|---|---|
-| Generation SDG v1 — 5K (prompt, CAS, fluent reply) triples | IN PROGRESS | Agent generating via Claude API tonight. ~$50-100 cost. | Land tonight, used by training tomorrow |
-| Generation Head architecture spec | IN PROGRESS | Agent writing tonight. Recommendation: TinyLlama-1.1B + LoRA + CAS prefix conditioning. | Land tonight |
-| Training script (`train_generation_head.py`) + smoke test | IN PROGRESS | Same agent | Land tonight |
-| Eval harness (CAS-grounding rate + perplexity + diversity) | IN PROGRESS | Same agent | Land tonight |
-| **Actual trained generation model** | NOT STARTED | n/a | **Tomorrow on a fresh A6000 pod, ~$25-30, 6-8 hours wall-time** |
-| Two-stage inference (classify → generate) | NOT STARTED | n/a | After training completes |
+| Generation SDG — paired (prompt, CAS, fluent reply) triples | NOT STARTED | n/a (the SDG agent stalled; will re-launch with native-generation framing) | Re-launch agent. Generate 50K-200K paired examples — native generation needs more data than a fine-tune does. |
+| Native CAS generation head architecture spec | NOT STARTED | n/a (TinyLlama spec was deleted on user instruction) | Write spec from scratch: decoder bolted onto existing CAS-Native bottleneck, sized to 100M-300M params, pretrained on CAS-themed corpus + general English, fine-tuned on paired SDG data. Multi-week build. |
+| Training pipeline | NOT STARTED | n/a | Build after spec lands. Will need significant GPU time (multiple long pod runs, ~$200-500 total). |
+| Two-stage inference (classify → native generate) | NOT STARTED | n/a | After training completes. |
+
+The honest timeline: native generation is 4-8 weeks of work. The project does not have a fluent English generation model this week. The classifier + belief substrate + atlas + Mode 7 trace are the demoable surfaces today.
 
 ## Three-instance dialectic (rotating-axis architecture)
 
@@ -88,7 +90,7 @@ For each feature: **SHIPPED** = running in production, **WIRED** = working code 
 
 ## What I will tell a stakeholder TODAY (the elevator pitch, honest)
 
-> "Noetic Compass has a working CAS scoring engine, an LLM-wrapped scoring API, a dashboard, and a CAS-Native model that's a structured-prediction classifier — English in, 12 CAS labels out, 93% accuracy on its training distribution. Tonight we're building the belief substrate that turns those labels into a real epistemic engine — facts get locked in via ^4 Vibration + ^7 Rhythm + RPM + Inversion Scan, dynamic and revisable. Tomorrow we start training a 1.1B-parameter generation model that will turn the classifier's CAS prediction into fluent English replies. The classifier is the structural backbone; the generation model gives it a mouth. Two-stage inference, end of the week."
+> "Noetic Compass has a working CAS scoring engine, an LLM-wrapped scoring API, a dashboard, and a CAS-Native model that's a structured-prediction classifier — English in, 12 CAS labels out, 93% accuracy on its training distribution. The classifier is wrapped by a CAS belief substrate that locks claims in via ^4 Vibration + ^7 Rhythm + RPM + Inversion Scan, dynamic and revisable. Every prediction surfaces a full trace — activations, attribution, belief gates, CAS expression. The generation layer that gives it a mouth is the next build — fully CAS-Native from scratch, no borrowed pretrained models. Multi-week effort, but the architecture stays pure: CAS, end to end."
 
 That's the honest version.
 
