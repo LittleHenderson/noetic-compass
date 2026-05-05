@@ -1,0 +1,170 @@
+"""Tests for the 7-axis inversion scan."""
+
+from __future__ import annotations
+
+import pytest
+
+from cas_native.belief import (
+    ALL_AXES,
+    PLACEHOLDER_AXES,
+    run_inversion_scan,
+)
+from cas_native.belief.inversion_gate import (
+    axis_a_check,
+    axis_e_check,
+    axis_f_check,
+    axis_n_check,
+    axis_p_check,
+    axis_s_check,
+    axis_w_check,
+)
+
+
+# ---------------------------------------------------------------------------
+# Per-axis primitives
+# ---------------------------------------------------------------------------
+
+
+def test_axis_n_clean_for_self_dual():
+    out = axis_n_check("^4^P")
+    assert out["clean"] is True
+
+
+def test_axis_n_flags_2_and_3_without_integrator():
+    out = axis_n_check("^2^P ^3^P")
+    assert out["clean"] is False
+    assert (2, 3) in out["flagged_pairs"]
+
+
+def test_axis_n_clean_when_integrator_present():
+    out = axis_n_check("^2^P + ^3^P")
+    assert out["clean"] is True
+
+
+def test_axis_n_flags_when_contradiction_history_nonempty():
+    out = axis_n_check("^4^P", contradiction_count=1)
+    assert out["clean"] is False
+    assert "contradiction" in out["reason"].lower()
+
+
+def test_axis_w_clean_when_only_one_domain():
+    out = axis_w_check("^4^P")
+    assert out["clean"] is True
+
+
+def test_axis_w_clean_for_descending_p_then_o():
+    out = axis_w_check("^4^P + ^2^O")
+    assert out["clean"] is True
+
+
+def test_axis_w_flags_for_ascending_o_then_p():
+    out = axis_w_check("^4^O + ^2^P")
+    assert out["clean"] is False
+    assert "precedence" in out["reason"].lower()
+
+
+def test_axis_w_clean_for_p_c_e_descent():
+    out = axis_w_check("^4^P -> ^4^C -> ^4^E")
+    assert out["clean"] is True
+
+
+def test_axis_f_clean_for_self_dual():
+    out = axis_f_check("^4^P_{F4}")
+    assert out["clean"] is True
+
+
+def test_axis_f_flags_f1_f7_without_integrator():
+    out = axis_f_check("F1 F7")
+    assert out["clean"] is False
+
+
+def test_axis_f_clean_with_integrator():
+    out = axis_f_check("F1 + F7")
+    assert out["clean"] is True
+
+
+def test_axis_e_is_placeholder():
+    out = axis_e_check()
+    assert out["clean"] is True
+    assert out.get("placeholder") is True
+
+
+def test_axis_s_is_placeholder():
+    out = axis_s_check()
+    assert out["clean"] is True
+    assert out.get("placeholder") is True
+
+
+def test_axis_a_uses_rpm_satisfied():
+    assert axis_a_check(rpm_satisfied=True)["clean"] is True
+    assert axis_a_check(rpm_satisfied=False)["clean"] is False
+
+
+def test_axis_p_clean_when_zero_other_failures():
+    others = {
+        "N": {"clean": True},
+        "W": {"clean": True},
+        "F": {"clean": True},
+        "A": {"clean": True},
+    }
+    assert axis_p_check(others)["clean"] is True
+
+
+def test_axis_p_clean_when_one_other_failure():
+    others = {
+        "N": {"clean": False},
+        "W": {"clean": True},
+        "F": {"clean": True},
+        "A": {"clean": True},
+    }
+    out = axis_p_check(others)
+    assert out["clean"] is True
+
+
+def test_axis_p_flags_when_two_or_more_failures():
+    others = {
+        "N": {"clean": False},
+        "W": {"clean": False},
+        "F": {"clean": True},
+        "A": {"clean": True},
+    }
+    out = axis_p_check(others)
+    assert out["clean"] is False
+    assert "compound" in out["reason"].lower()
+
+
+# ---------------------------------------------------------------------------
+# Top-level scan
+# ---------------------------------------------------------------------------
+
+
+def test_top_level_clean_expression_passes():
+    scan = run_inversion_scan("^4^P", history=[], rpm_satisfied=True)
+    assert scan.clean is True
+    for axis in ALL_AXES:
+        assert axis in scan.axes
+
+
+def test_top_level_unsatisfied_rpm_fails_axis_a():
+    scan = run_inversion_scan("^4^P", history=[], rpm_satisfied=False)
+    assert scan.clean is False
+    assert scan.axes["A"]["clean"] is False
+
+
+def test_top_level_w_violation_unsatisfied_rpm_compound_fires():
+    # W will fail (O before P) AND A fails -> P should fire.
+    scan = run_inversion_scan(
+        "^4^O + ^2^P", history=[], rpm_satisfied=False
+    )
+    assert scan.clean is False
+    assert scan.axes["W"]["clean"] is False
+    assert scan.axes["A"]["clean"] is False
+    assert scan.axes["P"]["clean"] is False
+
+
+def test_placeholder_axes_never_block_clean():
+    scan = run_inversion_scan("^4^P", history=[], rpm_satisfied=True)
+    for axis in PLACEHOLDER_AXES:
+        assert scan.axes[axis]["clean"] is True
+        assert scan.axes[axis].get("placeholder") is True
+    assert scan.clean is True
