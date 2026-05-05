@@ -1,0 +1,75 @@
+{
+  "schema_version": "native_nl.v1",
+  "generation_version": "native_nl_v1",
+  "trace_id": "975b7d16-3dba-4e0e-9d67-4090ac0b08c5",
+  "seed": 20260504,
+  "tier1_target": 2500,
+  "tier2_target": 2500,
+  "tier1_records": 2500,
+  "tier2_records": 0,
+  "total_records": 2500,
+  "validator_pass_count": 2500,
+  "validator_pass_rate": 1.0,
+  "primary_model": "claude-sonnet-4-6",
+  "final_model": "claude-sonnet-4-6",
+  "api_key_status": "unused",
+  "distributions": {
+    "tier": {
+      "tier1": 2500
+    },
+    "noetic": {
+      "^4": 249,
+      "^6": 253,
+      "^3": 250,
+      "^5": 250,
+      "^7": 247,
+      "^1": 251,
+      "^2": 248,
+      "^9": 252,
+      "^0": 248,
+      "^8": 252
+    },
+    "domain": {
+      "P": 620,
+      "E": 623,
+      "O": 635,
+      "C": 622
+    },
+    "drive": {
+      "F7": 355,
+      "F2": 356,
+      "F6": 368,
+      "F3": 345,
+      "F1": 359,
+      "F5": 359,
+      "F4": 358
+    },
+    "register": {
+      "f": 615,
+      "A": 637,
+      "E": 625,
+      "T": 623
+    },
+    "demographic_profile": {
+      "neutral": 2500
+    },
+    "tone": {
+      "neutral": 2500
+    },
+    "generator_model": {
+      "deterministic": 2500
+    }
+  },
+  "total_cost_usd": 0.0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "api_calls": 0,
+  "hard_cost_cap_usd": 50.0,
+  "cost_aborted": false,
+  "failure_counts": {},
+  "generation_started": "2026-05-05T03:13:34.166664+00:00",
+  "generation_completed": "2026-05-05T03:13:34.248165+00:00",
+  "out_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\native_nl\\v1_seed_5k.jsonl",
+  "round_trip_validator": "deferred",
+  "notes": []
+}
