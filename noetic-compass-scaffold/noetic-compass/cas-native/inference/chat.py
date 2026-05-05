@@ -38,6 +38,7 @@ from cas_native.inference.rewrite_shim import (  # noqa: E402
     detect_cas_signal,
     rewrite_to_training_surface,
 )
+from cas_native.trace.live_capture import LiveTrace  # noqa: E402
 
 try:
     from rich.console import Console
@@ -72,6 +73,7 @@ COLOR_ERROR = "red"
 COLOR_MUTED = "grey62"
 COLOR_BELIEF_LOCKED = "bold green"
 COLOR_BELIEF_OPEN = "yellow"
+COLOR_TRACE = "magenta"
 
 CHEVRON = "›"  # U+203A ›
 
@@ -117,6 +119,8 @@ def _emit_banner(console: "Console | None") -> None:
     body.append("explain belief gates for a claim\n", style=COLOR_MUTED)
     body.append("  /forget <claim>", style=COLOR_BANNER)
     body.append(" record a contradiction\n", style=COLOR_MUTED)
+    body.append("  /trace ", style=COLOR_BANNER)
+    body.append("show Mode 7 mechanistic trace of last prediction (--raw for JSON)\n", style=COLOR_MUTED)
     body.append("  /help  ", style=COLOR_BANNER)
     body.append("show this banner\n", style=COLOR_MUTED)
     body.append("  /exit  ", style=COLOR_BANNER)
@@ -326,7 +330,7 @@ def _expression_from_prediction(prediction: dict[str, Any]) -> str:
 
 
 def _predict_and_show(
-    predictor: Callable[[str], dict[str, Any]],
+    predictor: Callable[..., Any],
     text: str,
     *,
     console: "Console | None",
@@ -334,8 +338,14 @@ def _predict_and_show(
     apply_rewrite: bool,
     extra_notes: list[str] | None = None,
     belief_store: BeliefStore | None = None,
-) -> None:
-    """Run detection + (optional) rewrite + prediction, render the turn."""
+    capture_trace: bool = False,
+) -> LiveTrace | None:
+    """Run detection + (optional) rewrite + prediction, render the turn.
+
+    When ``capture_trace=True`` and the predictor supports the
+    ``with_trace`` keyword, the live mechanistic trace is captured during
+    the same forward pass and returned. Otherwise returns ``None``.
+    """
     signal: dict[str, Any] | None = None
     rewritten: str | None = None
     notes = list(extra_notes or [])
@@ -355,8 +365,20 @@ def _predict_and_show(
                 "limitation)."
             )
 
+    trace: LiveTrace | None = None
     try:
-        prediction = predictor(target_text)
+        if capture_trace:
+            try:
+                result = predictor(target_text, with_trace=True)
+                if isinstance(result, tuple) and len(result) == 2:
+                    prediction, trace = result
+                else:
+                    prediction = result  # type: ignore[assignment]
+            except TypeError:
+                # Predictor signature does not support with_trace yet.
+                prediction = predictor(target_text)
+        else:
+            prediction = predictor(target_text)
     except Exception as exc:  # pragma: no cover - defensive
         if console is not None:
             console.print(
@@ -368,7 +390,7 @@ def _predict_and_show(
             )
         else:
             _print_plain(f"ERROR: prediction failed: {exc}")
-        return
+        return None
 
     expression = _expression_from_prediction(prediction)
     english = render_cas_prediction(prediction)
@@ -400,6 +422,7 @@ def _predict_and_show(
         belief_status=belief_status,
         belief_locked=belief_locked,
     )
+    return trace
 
 
 # ---------------------------------------------------------------------------
@@ -450,13 +473,14 @@ def _build_menu_table() -> "Table":
 
 
 def _show_menu(
-    predictor: Callable[[str], dict[str, Any]],
+    predictor: Callable[..., Any],
     *,
     console: "Console | None",
     show_raw: bool,
     read_line: Callable[[str], str],
     belief_store: BeliefStore | None = None,
-) -> None:
+    capture_trace: bool = False,
+) -> LiveTrace | None:
     if console is not None:
         console.print(_build_menu_table())
     else:
@@ -467,20 +491,20 @@ def _show_menu(
         choice = read_line("Pick a number (1-21), or anything else to cancel: ").strip()
     except (EOFError, KeyboardInterrupt):
         _print_plain("")
-        return
+        return None
 
     if not choice.isdigit():
-        return
+        return None
     pick = int(choice)
     if not 1 <= pick <= len(DEMO_PROMPTS):
-        return
+        return None
 
     entry = DEMO_PROMPTS[pick - 1]
     note = (
         f"demo entry {pick}/{len(DEMO_PROMPTS)} | bucket={entry['bucket']} | "
         f"ground_truth={entry['ground_truth']}"
     )
-    _predict_and_show(
+    return _predict_and_show(
         predictor,
         entry["prompt"],
         console=console,
@@ -488,22 +512,24 @@ def _show_menu(
         apply_rewrite=False,  # already in training-surface format
         extra_notes=[note],
         belief_store=belief_store,
+        capture_trace=capture_trace,
     )
 
 
 def _show_random_demo(
-    predictor: Callable[[str], dict[str, Any]],
+    predictor: Callable[..., Any],
     *,
     console: "Console | None",
     show_raw: bool,
     belief_store: BeliefStore | None = None,
-) -> None:
+    capture_trace: bool = False,
+) -> LiveTrace | None:
     entry = random.choice(DEMO_PROMPTS)
     note = (
         f"random demo | bucket={entry['bucket']} | feature={entry['feature']} | "
         f"ground_truth={entry['ground_truth']}"
     )
-    _predict_and_show(
+    return _predict_and_show(
         predictor,
         entry["prompt"],
         console=console,
@@ -511,6 +537,7 @@ def _show_random_demo(
         apply_rewrite=False,
         extra_notes=[note],
         belief_store=belief_store,
+        capture_trace=capture_trace,
     )
 
 
@@ -746,6 +773,163 @@ def _do_forget(
 
 
 # ---------------------------------------------------------------------------
+# Mode 7 trace commands
+# ---------------------------------------------------------------------------
+
+
+def _show_trace(
+    trace: LiveTrace | None,
+    *,
+    console: "Console | None",
+    raw: bool = False,
+) -> None:
+    """Render Mode 7 mechanistic trace summary or raw JSON.
+
+    When ``raw=True``, dumps the full trace as JSON to stdout. Otherwise
+    renders a compact human-readable summary: per-head argmax + confidence,
+    top-3 bottleneck attribution dims per head, last-block (embedding) live
+    activation magnitudes, attention/gate entropy summary.
+    """
+    if trace is None:
+        msg = "(no trace available — predict something first)"
+        if console is not None:
+            console.print(Text(msg, style=COLOR_MUTED))
+        else:
+            _print_plain(msg)
+        return
+
+    if raw:
+        _do_trace_raw(trace, console=console)
+        return
+
+    if console is None:
+        _print_plain("")
+        _print_plain(f"TRACE  input={trace.input_text!r}")
+        _print_plain(f"  schema: {trace.schema_version}")
+        timing = trace.timing or {}
+        _print_plain(
+            f"  timing: forward={timing.get('forward_ms', 0):.2f}ms "
+            f"attribution={timing.get('attribution_ms', 0):.2f}ms"
+        )
+        _print_plain("  Live activations per layer:")
+        for la in trace.layer_activations:
+            _print_plain(
+                f"    {la.name:<28} shape={la.shape} "
+                f"L2={la.l2_norm:.3f} mean|.|={la.mean_abs:.3f}"
+            )
+        ent = trace.attention_entropy_summary or {}
+        _print_plain(
+            "  Attention/gate entropy: "
+            f"mean={ent.get('mean', 0):.3f} "
+            f"H={ent.get('entropy', 0):.3f} "
+            f"tokens={int(ent.get('token_count', 0))}"
+        )
+        _print_plain("  Per-head argmax + top-3 bottleneck attribution:")
+        for h in trace.heads:
+            attr = ", ".join(
+                f"d{d}={s:+.3f}" for d, s in h.top_k_attribution
+            ) or "(no attribution)"
+            label = (
+                h.argmax_label if h.argmax_label is not None
+                else str(h.argmax_index)
+            )
+            _print_plain(
+                f"    {h.name:<18} argmax={label!r:<14} conf={h.confidence:.3f}  "
+                f"top3=[{attr}]"
+            )
+        if trace.diagnostics:
+            _print_plain(f"  Diagnostics: {trace.diagnostics}")
+        _print_plain("")
+        return
+
+    body = Text()
+    body.append(f"input={trace.input_text!r}\n", style=COLOR_INPUT)
+    body.append(f"schema: {trace.schema_version}\n", style=COLOR_MUTED)
+    timing = trace.timing or {}
+    body.append(
+        f"timing: forward={timing.get('forward_ms', 0):.2f}ms "
+        f"attribution={timing.get('attribution_ms', 0):.2f}ms\n\n",
+        style=COLOR_MUTED,
+    )
+
+    body.append("Live activations per layer:\n", style=f"bold {COLOR_TRACE}")
+    for la in trace.layer_activations:
+        body.append(
+            f"  {la.name:<28} shape={la.shape} "
+            f"L2={la.l2_norm:.3f} mean|.|={la.mean_abs:.3f}\n",
+            style=COLOR_MUTED,
+        )
+
+    ent = trace.attention_entropy_summary or {}
+    body.append(
+        "\nAttention/gate entropy: ",
+        style=f"bold {COLOR_TRACE}",
+    )
+    body.append(
+        f"mean={ent.get('mean', 0):.3f}  "
+        f"H={ent.get('entropy', 0):.3f}  "
+        f"tokens={int(ent.get('token_count', 0))}\n",
+        style=COLOR_MUTED,
+    )
+
+    panel = Panel(
+        body,
+        title=Text("Mode 7 trace", style=f"bold {COLOR_TRACE}"),
+        border_style=COLOR_TRACE,
+        padding=(1, 2),
+    )
+    console.print(panel)
+
+    table = Table(
+        title=Text(
+            "Per-head argmax + top-3 bottleneck attribution",
+            style=f"bold {COLOR_TRACE}",
+        ),
+        title_justify="left",
+        border_style=COLOR_TRACE,
+        header_style=f"bold {COLOR_TRACE}",
+        show_lines=False,
+        expand=True,
+    )
+    table.add_column("head", style=COLOR_PRED, no_wrap=True, width=18)
+    table.add_column("argmax", style=COLOR_INPUT, no_wrap=True)
+    table.add_column("conf", style=COLOR_INPUT, justify="right", width=6)
+    table.add_column("top-3 attribution dims", style=COLOR_MUTED)
+    for h in trace.heads:
+        label = (
+            h.argmax_label if h.argmax_label is not None
+            else str(h.argmax_index)
+        )
+        attr = ", ".join(
+            f"d{d}={s:+.3f}" for d, s in h.top_k_attribution
+        )
+        table.add_row(
+            h.name,
+            label,
+            f"{h.confidence:.3f}",
+            attr or "(none)",
+        )
+    console.print(table)
+
+    if trace.diagnostics:
+        console.print(
+            Text(f"diagnostics: {trace.diagnostics}", style=COLOR_MUTED)
+        )
+
+
+def _do_trace_raw(trace: LiveTrace, *, console: "Console | None") -> None:
+    """Dump the full trace as JSON to stdout."""
+    import json as _json
+
+    payload = _json.dumps(trace.to_dict(), indent=2)
+    if console is None:
+        _print_plain(payload)
+    else:
+        # Rich's Console.print on a long JSON string keeps it as-is.
+        console.print(payload, soft_wrap=True)
+
+
+# ---------------------------------------------------------------------------
 # Loading + REPL
 # ---------------------------------------------------------------------------
 
@@ -832,6 +1016,7 @@ def main() -> int:
         )
 
     show_raw = False
+    last_trace: LiveTrace | None = None
     line_reader = _read_line(console)
 
     try:
@@ -853,21 +1038,27 @@ def main() -> int:
                 _emit_banner(console)
                 continue
             if cmd_token in ("/menu", "/m"):
-                _show_menu(
+                trace = _show_menu(
                     predictor,
                     console=console,
                     show_raw=show_raw,
                     read_line=line_reader,
                     belief_store=belief_store,
+                    capture_trace=True,
                 )
+                if trace is not None:
+                    last_trace = trace
                 continue
             if cmd_token in ("/sample", "/s"):
-                _show_random_demo(
+                trace = _show_random_demo(
                     predictor,
                     console=console,
                     show_raw=show_raw,
                     belief_store=belief_store,
+                    capture_trace=True,
                 )
+                if trace is not None:
+                    last_trace = trace
                 continue
             if cmd_token == "/raw":
                 show_raw = not show_raw
@@ -887,6 +1078,10 @@ def main() -> int:
             if cmd_token == "/forget":
                 _do_forget(belief_store, cmd_arg, console=console)
                 continue
+            if cmd_token == "/trace":
+                raw_flag = "--raw" in cmd_arg.split()
+                _show_trace(last_trace, console=console, raw=raw_flag)
+                continue
             if text.startswith("/"):
                 msg = f"(unknown command: {text} - try /help)"
                 if console is not None:
@@ -895,14 +1090,17 @@ def main() -> int:
                     _print_plain(msg)
                 continue
 
-            _predict_and_show(
+            trace = _predict_and_show(
                 predictor,
                 text,
                 console=console,
                 show_raw=show_raw,
                 apply_rewrite=True,
                 belief_store=belief_store,
+                capture_trace=True,
             )
+            if trace is not None:
+                last_trace = trace
     finally:
         belief_store.close()
 
