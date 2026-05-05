@@ -1,5 +1,72 @@
 # Noetic Compass — Progress Log
 
+## Session 52: Native CAS-Native NL Generator Architecture Push + Belief Substrate + Mode 7 Live Wire-Up (May 4, 2026 evening)
+
+**Frame.** Single-night sprint that delivered three new architectural surfaces (CAS-as-Belief-Substrate, Mode 7 live network attribution, Idea Atlas adapter), the full native CAS-Native NL generation stack (tokenizer extension, NLGenerationHead module, training pipeline, eval harness, generation trace, SDG seed corpus), and ratified two hard architectural rules (no foreign pretrained weights anywhere; object traceability load-bearing on every artifact). Sessions 50 and 51 below are partial reports from sub-agents in this same sprint.
+
+**Architectural rules ratified.**
+- **No foreign pretrained models.** Generation head is fully native — random-init weights, NO TinyLlama / Llama / Qwen / Mistral / Phi / Gemma / GPT-2 / BERT anywhere in the production stack. Decision triggered after a TinyLlama LoRA infrastructure commit was prepared and then hard-reset out of git history before reaching origin. Rule is enforced in code via static docstring scan in `cas-native/model/nl_generation_head.py` test suite.
+- **Object traceability is load-bearing.** Every domain object — checkpoints, training events, eval results, generation traces, beliefs, atlas posts, tokenization output — carries `id` (UUID or sha256), `created_at`, `schema_version` or `code_version`, `parent_ids`, `source`, `trace_id`. No silent black boxes.
+
+**Tonight's commits (8, in chronological order).**
+
+1. **`21ff240` HONEST_STATUS + Idea Atlas adapter.**
+   - NEW: `noetic-compass-scaffold/noetic-compass/HONEST_STATUS.md` — single source of truth labeling every feature SHIPPED / WIRED / SCAFFOLD / IN PROGRESS / NOT STARTED. Stops the scaffold-as-built confusion that triggered tonight's correction sprint.
+   - NEW: `cas-native/inference/atlas_adapter.py` (10 tests passing) — thin Python bridge from `predict_cas` output to the shipped `/idea_atlas/ideas` API. POSTs when the API server is reachable and a JWT is present; falls back to `~/.cas-native/atlas_local.jsonl` when either is missing. `replay_local_fallback()` drains the local buffer when the API comes back up.
+   - Companion test file at `cas-native/tests/inference/test_atlas_adapter.py`.
+
+2. **`fbf44e0` CAS-as-Belief-Substrate (CABS) — belief store using ^4 Vibration + ^7 Rhythm + RPM + Inversion Scan gates.**
+   - NEW: `cas-native/belief/` package — `belief.py` (Belief dataclass), `vibration.py` (^4 confidence with 30-day half-life decay + saturating reinforcement), `rhythm.py` (^7 exposure count), `rpm_gate.py` (RPM chain check via the existing notation compiler), `inversion_gate.py` (7-axis: N/W/F/E/S/A/P), `persistence.py` (SQLite at `~/.cas-native/beliefs.db` with three tables: beliefs, observations, contradictions), `belief_store.py` (BeliefStore facade with `record_observation` / `check_belief` / `add_contradiction` / `decay_all` / `list_locked`).
+   - Lock rule: `locked == (rpm_chain_satisfied AND vibration > 0.7 AND inversion_scan_clean AND rhythm_count >= 3)`.
+   - MODIFIED: `cas-native/inference/chat.py` — adds `BELIEF STATUS` line to every prediction render plus `/beliefs`, `/why <claim>`, `/forget <claim>` REPL commands. Belief substrate hooks the existing prediction path; `/menu`, `/sample`, `/raw`, `/help`, `/exit` preserved unchanged.
+   - 98 tests passing; existing tests preserved.
+
+3. **`d79ad12` Scrub TinyLlama from HONEST_STATUS — CAS-Native architecture is end-to-end native.** Documentation-only follow-up to the architectural rule ratification. Removed all references to TinyLlama-1.1B / LoRA / pretrained-backbone path from HONEST_STATUS. Companion to the hard-reset of commit `0e66b14` (TinyLlama LoRA infrastructure, never pushed).
+
+4. **`32a76d5` Mode 7 live wire-up — real PyTorch hooks capture activations during predict_cas.**
+   - NEW: `cas-native/trace/live_capture.py` (~430 LOC) — registers `register_forward_hook` on the embedding fused output, `embedding.output_norm`, `embedding.fusion_gate`, `head.backbone` (post-bottleneck z), and all 12 head linear layers. Hooks installed via `try/finally` — removed even on exception. Returns `LiveTrace` with detached + CPU-moved + JSON-serializable activations and per-head attribution.
+   - Real `gradient × input` attribution on the bottleneck dims — one backward per head against the head's argmax/most-confident logit, `retain_graph=True` for all but the last head. Top-K dims by `|score|` returned per head.
+   - MODIFIED: `cas-native/inference/predict_cas.py` — `Predictor.__call__` accepts `with_trace: bool = False` (and `trace_top_k: int = 3`); existing positional callers unaffected (defaults to no-trace, no-grad path).
+   - MODIFIED: `cas-native/inference/chat.py` — adds `/trace` and `/trace --raw` REPL commands (rich-styled with magenta theme + plaintext fallback); coexists with belief commands from `fbf44e0`.
+   - MODIFIED: `cas-native/trace/__init__.py` — lazy re-export of `LiveTrace`, `HeadInfo`, `LayerActivation`, `capture_live_trace`.
+   - 17 new tests in `cas-native/tests/trace/test_live_capture.py` + `test_sample_trace_output.py` + `_capture_sample_output.py`. Combined regression: 148 tests pass (17 new + 98 belief + 16 trace + 17 model).
+
+5. **`e645296` Native NLGenerationHead module — 6-layer transformer decoder, random init, full object traceability.**
+   - NEW: `cas-native/model/nl_generation_head.py` (982 LOC) — `NLGenerationHead`, `NLGenerationHeadConfig` (frozen), `GenerationTrace`, `TokenStep`, `_VERSION = "v0.1.0"`. Module docstring carries the literal string `"NO foreign pretrained models"` and the class names `TinyLlama / Llama / Qwen / Mistral / Phi / Gemma / GPT-2 / BERT` — all enforced by `test_module_docstring_no_foreign_pretrained` static substring scan.
+   - 6-layer decoder, d_model=512, n_heads=8, ffn=2048, ~50.2M params at default config (`vocab_size=24000`). Random init throughout.
+   - Conditioning: discrete CAS-prefix tokens prepended to decoder input + 4-position bottleneck soft-prefix + cross-attention to encoder outputs with caller-supplied domain validity mask. Output-side register FiLM modulation (per-example for heterogeneous register IDs in a batch).
+   - Object traceability: `forward(return_meta=True)` returns `output_id` (UUID), `model_code_version`, `model_weights_sha` (sha256 of state_dict), `cas_conditioning_id`, `attention_summary`. `generate(with_trace=True)` returns a `GenerationTrace` with per-token `TokenStep` records (`position`, `token_id`, `attn_to_cas_prefix`, `attn_to_prior_tokens`, `layer_activation_l2`, `selected_via`).
+   - Reuses `cas_native.model.domain_descent.build_domain_descent_mask`, `cas_native.model.register_film.RegisterFiLM`, `NUM_REGISTERS`. No reinvented layers.
+   - MODIFIED: `cas-native/model/cas_native_model.py` — adds `attach_nl_gen_head()` and `forward_with_lm()` minimally; existing `forward()` path UNCHANGED (regression test asserts no `nl_gen_head` exists by default and the regular forward returns no `lm_logits`).
+   - MODIFIED: `cas-native/model/__init__.py` — exports `NLGenerationHead`, `NLGenerationHeadConfig`, `GenerationTrace`, `TokenStep`.
+   - 18 new tests; 168 total pass (new + belief + trace + model + forward_path).
+   - **Known divergence with the architecture spec at `docs/working/native_nl_generation_head_spec_2026_05_04.md`:** model uses free-floating learned soft-prefix; spec recommends `Linear(d_model, 4*d_model)` projection of `pooled_hidden_state` for trace fidelity. Reconciliation pass tracked.
+
+6. **`e4bbad8` Native English BPE tokenizer extension — random-init merges trained on SDG corpus.** Recorded above as Session 50.
+
+7. **`bd70c05` Native NL gen training + eval + generation trace surface — full object provenance.** Recorded above as Session 51.
+
+8. **`4d81618` Native NL SDG strategy + Tier 1 seed (2.5K records, deterministic).**
+   - NEW: `docs/working/native_nl_sdg_strategy_2026_05_04.md` (16KB) — three-tier corpus strategy (Tier 1 template / Tier 2 Claude rewrites / Tier 3 dialogue), CAS coverage requirements (10×4×7×4 axes + compound expressions + recipes + meta-logic + anti-drift slices), object-traceability schema, cost+timeline.
+   - NEW: `cas-synthetic/scripts/generate_native_nl_sdg_v1.py` (55KB) — Tier 1 enumerates `english_generator.py` templates across 10×4×7×4 axes; Tier 2 calls Claude API (concurrency 5, cost cap $50, retries with backoff). Idempotent re-runs via deterministic sha256 IDs.
+   - NEW: `cas-synthetic/tests/test_native_nl_sdg.py` (17 tests passing): schema, axis coverage, deterministic IDs, idempotent re-runs, validator (jargon filter, template-opener filter, length, density), CAS v7.5 register format, manifest completeness, API key fallback, cost cap, parent lineage, anti-drift vocabulary checks.
+   - NEW: `cas-synthetic/data/native_nl/v1_seed_5k_manifest.json` — provenance manifest with full distribution stats. `trace_id` grouping cohort, `schema_version=native_nl.v1`.
+   - NEW: `cas-synthetic/data/native_nl/v1_seed_5k.jsonl` — 2,500 Tier 1 records (gitignored — data). Each record carries `id` (sha256), `schema_version`, `trace_id`, `tier`, `parent_ids`, `source`, `source_template_id`, `generator_model`, `generation_timestamp`, `cas_expression`, axes, `prompt`, `reply`, `demographic_profile`, `tone`, `validator_pass`, `validator_reasons`.
+   - **KNOWN GAP:** SDG agent never made Tier 2 API calls (`api_calls: 0`, `api_key_status: "unused"`). Tier 2 follow-up scheduled — `~$10-30` Claude spend to reach 5K total seed.
+
+**Stack now in place for Phase 4 NL Generation training.** Architecture spec → tokenizer (CAS reserved + English BPE) → 50.2M-param random-init decoder → joint training pipeline with β-curriculum → eval harness (CAS-grounding rate / fluency / diversity) → generation trace surface → 2.5K Tier 1 seed corpus. End-to-end runnable. First training run blocked only on Tier 2 SDG completing the 5K seed (and ideally scaling Tier 1 to 40K + Tier 2 to 100K for fluency from-scratch).
+
+**Combined test results across the night's work.** 213+ tests passing across belief, trace, model, training, eval, atlas adapter, tokenizer, SDG. Full regression on existing test suites preserved.
+
+**Three reconciliation items (none blocking):**
+1. Soft-prefix design: model uses free embeddings; spec recommends `Linear(d_model, 4·d_model)` projection of `pooled_hidden_state`.
+2. `NLGenerationHead.forward()` signature handoff between model and training agents — adapter present, 30-min cleanup before first GPU run.
+3. `TokenStep.log_prob` field — model uses `selected_via` (argmax/topp/temp); per-token log-probability is a follow-on PR.
+
+**Architecture spec §14 "open questions" — 5 of 6 redundant.** Deep grep confirmed: tokenizer ID stability already built (`vocab14` patch), frozen-vs-unfrozen settled empirically (memory: `project_cas_transformer_modality_mismatch_pivot.md`), default trace mode answered by Mode 7's `with_trace=False` default, refusal/authority pattern substantially built (DST `dialog_grammar.py` + `api/notation/turn_admissibility.py`), three-instance dialectic sequencing decided (memory: `project_three_instance_dialectic_proposal_2026_05_04.md`). Only "CAS-themed pretraining as fluency bridge" is genuinely open — curriculum decision, not new code. Methodology rule saved to memory: "If the answer is in the codebase, the question isn't open."
+
+**v1 Full Stack retrain on the pod (separate, in-flight from earlier in the day).** Started 2026-05-04T23:29:45Z. PID 11128 alive, log silent since `model_init` event at 00:55:48 UTC, zero `epoch_end` events as of session close, GPU at 13% util. Investigation pending; not blocking the native gen track.
+
 ## Session 51: Native NL Generation Training + Eval + Generation Trace (May 4, 2026)
 
 **Objective.** Third deliverable for the Version B Phase 4 NL Generation Head — the training pipeline, eval harness, and per-token generation trace surface for the fully-native CAS NL generation head. Bridge between the model and how we know it works. No foreign pretrained weights. Object provenance load-bearing on every artifact.
