@@ -21,7 +21,10 @@ from typing import Any, Iterable
 
 import torch
 
-from .self_conditioning_serialization import serialize_prior_cas_state
+from .self_conditioning_serialization import (
+    get_effective_prompt,
+    serialize_prior_cas_state,
+)
 
 from cas_native.model.structured_prediction import (
     AUTHORITY_LABELS,
@@ -124,21 +127,6 @@ def batch_targets_from_records(
             device=dev,
         ),
     }
-
-
-def get_effective_prompt(record: dict[str, Any]) -> str:
-    """Return the tokenizer-input string for a record.
-
-    When ``prior_cas_state`` is present and truthy, prepends the canonical CAS
-    expression as a ``[PRIOR]`` block so the model can condition its content-axis
-    predictions on that context. Records without ``prior_cas_state`` return their
-    raw ``user_prompt`` unchanged — backward compatible with all pre-existing
-    training and eval records.
-    """
-
-    if record.get("prior_cas_state"):
-        return serialize_prior_cas_state(record)
-    return str(record.get("user_prompt") or "")
 
 
 def load_level3_jsonl(path: str | Path, limit: int | None = None) -> list[dict[str, Any]]:

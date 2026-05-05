@@ -1,8 +1,8 @@
 # Noetic Compass — Progress Log
 
-## Session 52: Native CAS-Native NL Generator Architecture Push + Belief Substrate + Mode 7 Live Wire-Up (May 4, 2026 evening)
+## Session 55: Native CAS-Native NL Generator Architecture Push + Belief Substrate + Mode 7 Live Wire-Up (May 4, 2026 evening)
 
-**Frame.** Single-night sprint that delivered three new architectural surfaces (CAS-as-Belief-Substrate, Mode 7 live network attribution, Idea Atlas adapter), the full native CAS-Native NL generation stack (tokenizer extension, NLGenerationHead module, training pipeline, eval harness, generation trace, SDG seed corpus), and ratified two hard architectural rules (no foreign pretrained weights anywhere; object traceability load-bearing on every artifact). Sessions 50 and 51 below are partial reports from sub-agents in this same sprint.
+**Frame.** Single-night sprint that delivered three new architectural surfaces (CAS-as-Belief-Substrate, Mode 7 live network attribution, Idea Atlas adapter), the full native CAS-Native NL generation stack (tokenizer extension, NLGenerationHead module, training pipeline, eval harness, generation trace, SDG seed corpus), and ratified two hard architectural rules (no foreign pretrained weights anywhere; object traceability load-bearing on every artifact). Sessions 53 and 54 below are partial reports from sub-agents in this same sprint.
 
 **Architectural rules ratified.**
 - **No foreign pretrained models.** Generation head is fully native — random-init weights, NO TinyLlama / Llama / Qwen / Mistral / Phi / Gemma / GPT-2 / BERT anywhere in the production stack. Decision triggered after a TinyLlama LoRA infrastructure commit was prepared and then hard-reset out of git history before reaching origin. Rule is enforced in code via static docstring scan in `cas-native/model/nl_generation_head.py` test suite.
@@ -67,7 +67,7 @@
 
 **v1 Full Stack retrain on the pod (separate, in-flight from earlier in the day).** Started 2026-05-04T23:29:45Z. PID 11128 alive, log silent since `model_init` event at 00:55:48 UTC, zero `epoch_end` events as of session close, GPU at 13% util. Investigation pending; not blocking the native gen track.
 
-## Session 51: Native NL Generation Training + Eval + Generation Trace (May 4, 2026)
+## Session 54: Native NL Generation Training + Eval + Generation Trace (May 4, 2026)
 
 **Objective.** Third deliverable for the Version B Phase 4 NL Generation Head — the training pipeline, eval harness, and per-token generation trace surface for the fully-native CAS NL generation head. Bridge between the model and how we know it works. No foreign pretrained weights. Object provenance load-bearing on every artifact.
 
@@ -106,7 +106,7 @@
 
 **Next.** Awaiting parallel SDG corpus + parallel tokenizer agent's HybridCASTokenizer integration. The training script's `_records_to_batch` adapter currently consumes pre-tokenized `input_ids` / `target_ids`; once HybridCASTokenizer exposes the join API, swap the adapter to call it directly. The trace surface is wire-ready for the model agent's `NLGenerationHead.generate(..., with_trace=True)` real signature (`decoder_input_ids`, `bottleneck_z`, `cas_prefix_ids`, etc.) — the wrapper composes its own provenance over the model's `GenerationTrace`.
 
-## Session 50: Native English BPE Tokenizer Extension (May 4, 2026)
+## Session 53: Native English BPE Tokenizer Extension (May 4, 2026)
 
 **Objective.** First deliverable for the Version B Phase 4 NL Generation Head — extend `HybridCASTokenizer` with English BPE trained from scratch on the project's own SDG corpus. No foreign tokenizer downloads, no pretrained merges, no HuggingFace/sentencepiece imports. CAS gets the glory.
 
@@ -125,6 +125,152 @@
 **Sample run on a 10-record mini-corpus** (vocab cap 400, min_freq 2): 43 merges learned, `english_vocab_size=303`, `cas_reserved_token_count=334`, total composed vocab 637. Merges-list SHA-256 stable across runs. Sample tokenization of `"The Mind has an affinity for ^2 Positive."` round-trips identically; CAS literal `^2` survives as a single ID-17 token while English text fragments into compact BPE pieces (`'T', 'he', 'M', 'in', 'd', ...`).
 
 **Next.** Awaiting parallel SDG agent's `cas-synthetic/data/native_nl/v1_seed_5k.jsonl` to train the production v1.0 vocab. Training command will be `python -m cas_native.training.english_bpe_extension train --corpus cas-synthetic/data/native_nl/v1_seed_5k.jsonl --out cas-native/training/runs/english_bpe_v1.json --vocab-size 24000 --min-frequency 2`. Expected wall-clock <30s on 5K records.
+## Session 52: Diagram-Loop Investigation Arc — Bug, Oracle Leak, Honest Eval (May 3-4, 2026)
+
+**Objective.** Land the diagram-loop architecture (PR #6) at full scale and validate the +5pp Drive / +13.7pp Noetic per-head consistency lifts seen at smoke scale.
+
+**The arc.**
+
+1. **Full retrain v1 launched** on `proposal/diagram-loop-impl` files synced to pod. Trajectory regressed: epoch 0 = 63.2%, epoch 1 = 42.9%, epoch 2 = 28.1%; train loss 2.19 → 0.47 → 0.28. Killed at epoch 2 because the regression + train-loss-collapse signature looked like topological memorization shortcut.
+
+2. **User pushback caught the wrong diagnosis.** Code reading discovered the actual bug: `evaluate_structured_token_prediction` line 452 calls `model(batch)` without `graph_batch`, while training loop line 985 calls `model(batch, graph_batch=...)`. Per-epoch eval was running the model in text-only mode while training supervised the fused mode 25% of the time. Train/eval distribution mismatch, not memorization.
+
+3. **Four-agent investigation team spawned.** PR #15 (architecture detective) confirmed the bug at the code level. PR #16 (empirical verifier) confirmed trajectory matched the mismatch hypothesis. PR #17 (counter-skeptic) caught a deeper issue: the existing `evaluate_diagram_loop_invariance.py --with-graph-path` builds `prior_diagram` by compiling **ground-truth** `cas_expression` — an oracle leak. The K9_DiagLoop smoke's celebrated +34.8 pp / +13.7 pp Noetic / +5 pp Drive numbers were produced on this leaky path and reflect oracle exploitation, not generalization.
+
+4. **PR #18 (solution architect)** wrote a fix that copied the oracle leak. CLOSED, not merged.
+
+5. **Corrective routine spawned** producing PR #19 with an honest two-pass eval: pass 1 text-only canonical prediction, pass 2 uses model's own (sometimes-wrong) prediction as graph prior — never ground truth. Tests include monkeypatch invariant verifying `compile_to_graph` is never called on `cas_expression`.
+
+6. **PR #19 patched** for graph-component model construction (`GraphEncoder` + `GraphTextFusion` initialised before `load_state_dict`) so it can load checkpoints from `--diagram-loop-pairs > 0` training. Fix landed via commit `0696761` on `team/diagloop-honest-eval`.
+
+7. **Honest smoke v2 result on K9_DiagLoop_smoke_5k checkpoint:**
+   - Canonical text-only: 47.9%
+   - Paraphrase text-only: 26.6%
+   - Paraphrase with self-prior: 45.4%
+   - **Honest lever lift: +18.8 pp** (real, not oracle)
+   - Per-head consistency under self-prior: drive 71.6%, domain 81.0%, noetic 85.1%, **registers 98.6%** (above canonical baseline — strongest single-head result across all experiments).
+   - Per-bucket weakness on v76_production (24.4%) and meta_logic (7.5%) — real architectural constraint, not oracle artifact.
+
+8. **K9_DiagLoop full v2 honest retrain in flight** (PID 9383, started 22:44 UTC May 3, ETA ~08:00 UTC May 4). Per-epoch eval rates collapsing toward 0% as expected (buggy text-only path, ignored). Train loss continues descending. Honest two-pass eval scheduled at completion to produce the load-bearing numbers.
+
+**Lessons captured.**
+
+- `train_structured_prediction.py` defaults `--limit` to 128, which silently produces ~114-canonical garbage runs unless overridden with `--limit 100000`. Caught after burning training time on a 128-canonical run.
+- Reference implementations should be audited for oracle leakage before mirroring. The leaky reference's docstring explicitly said "tells the model exactly what structure the expression encodes" — a leak hidden in plain sight.
+- When per-epoch eval and training use different forward signatures, per-epoch trajectory is not a reliable kill signal for multi-modal architectures.
+
+**Open PRs from this arc:** #14 (consolidation tier-1), #15-#17 (investigation analysis docs), #19 (honest eval, with patch). PR #18 closed as superseded.
+
+**Next step pending K9_DiagLoop full v2 completion.** Honest eval will produce the real paraphrase-with-self-prior number at full scale. If ≥60% with ≥20 pp lift, architecture validates and Paper A v2 §5.7 has its empirical anchor. If <50%, smoke +18.8 pp lift was a scale artifact and architecture deprecates in favor of K=9 baseline + alternative levers (PR #4 self-reference linear, PR #3 KL invariance).
+
+### Session 52 Final Verdict — K9_DiagLoop Full v2 Honest Retrain (May 4, 2026, ~08:55 UTC)
+
+**Completion details.** K9_DiagLoop full v2 honest retrain completed: 31,080 steps / 20 epochs / final train loss 0.063. Honest two-pass eval run on `level3_recoverable_eval_1000_v77_relabeled.jsonl` (the v7.7-relabeled held-out set; do NOT use the un-suffixed `level3_recoverable_eval_1000.jsonl`).
+
+**Honest eval headline numbers.**
+
+| Metric | K9_DiagLoop full v2 | K=9 baseline | Delta vs K=9 baseline |
+|---|---:|---:|---:|
+| Canonical text-only | **63.0%** | 93.2% | **−30.2 pp** |
+| Paraphrase text-only | 28.7% | — | — |
+| Paraphrase with self-prior | **46.4%** | 46.9% | **−0.5 pp (TIED)** |
+| Honest lever lift (paraphrase self-prior − text-only) | **+17.6 pp** | — | confirms smoke +18.8 pp at scale |
+
+The +17.6 pp honest lever lift confirms the smoke +18.8 pp at full scale. The 30 pp canonical regression dominates the joint metric.
+
+**Per-head paraphrase-with-self-prior breakdown.**
+
+- 100% — authority, has_omega, turn_type
+- 99.1% — has_meta_logic
+- 96.9% — expression_family
+- 95.7% — transition_kind
+- 94.5% — meta_relations
+- 91.8% — registers (smoke 98.6% → full 91.8%, **−6.8 pp**: smoke per-head signal did not survive at full-record all-heads-exact)
+- 89.9% — domain
+- 89.5% — register_mode
+- 76.3% — noetic
+- 75.4% — drive
+
+**Per-bucket paraphrase breakdown.**
+
+- 79.5% — v77_omega
+- 70.8% — v74_baseline
+- 42.9% — v77_rule_four
+- 32.4% — v76_production
+- 19.6% — meta_logic
+- **11.1% — v75_register (worst bucket)** — the architectural canary, given v75_register is the bucket exercising the Register axis the smoke result had nominally dominated.
+
+**Verdict: outcome C — diagloop deprecates as a primary lever.**
+
+The pre-run decision matrix specified: ≥60% canonical with ≥20 pp lift → architecture validates; <50% paraphrase-with-self-prior → architecture deprecates. The full v2 result hits 46.4% paraphrase-with-self-prior (below 60% validation threshold) and +17.6 pp lift (below ≥20 pp validation threshold), with the canonical regression dominating. Both Gemini's "capacity-stealing at scale" diagnosis AND DeepSeek's "channels carry non-redundant info" diagnosis are correct simultaneously: the graph channel adds real signal (+17.6 pp lift confirms non-redundancy), but the same 64-dim shared bottleneck cannot host both feature paths without sacrificing canonical recovery (−30 pp confirms capacity-stealing). K=9 baseline (93.2% canonical / 46.9% paraphrase) remains production architecture.
+
+**Methodology lessons captured.**
+
+- **Smoke per-head signals can mislead at full-record all-heads-exact scoring.** Registers head 98.6% (smoke) → 91.8% (full) is a 6.8 pp drop on the strongest smoke indicator; the canonical regression that dominated full-scale was below the threshold of detection at smoke. Smoke runs validate that a lever is real; they do not validate that the lever is net-positive against a different baseline at full scale.
+- **Both prior diagnoses can be simultaneously correct.** Capacity-stealing and non-redundant channel signal are not competing theories; they are two true descriptions of the same architecture under one set of training conditions. The architecture pays the price of both. Diagnostic prediction at the level of "this lever will or will not work" is too coarse for tri-channel architectures; the appropriate prediction unit is which metric will move which way under which capacity allocation.
+- **Eval-mode-mismatch was a real bug; bug correction was necessary but not sufficient.** PR #19's honest two-pass eval correctly fixed the train/eval distribution mismatch and the oracle leak that reference `evaluate_diagram_loop_invariance.py --with-graph-path` carried. The corrected eval revealed an architecture that is also not net-positive at scale on the joint metric. Fixing the eval did not save the architecture; it produced an honest negative result.
+
+**Implications captured forward.**
+
+- Tri-channel framework as a benchmark methodology (Paper A v2 §4.1–§4.4) is unaffected: cross-channel consistency rate is a benchmark-level diagnostic metric whose value does not depend on whether any particular tri-channel-trained model outperforms baseline.
+- What is deprecated is the specific architectural realization (graph-encoder fusion of a prior CAS expression with the text input through a shared 64-dim bottleneck), not the tri-channel framework itself.
+- Per-head channel routing (separate parameters for canonical path and graph-fusion path, eliminating capacity-stealing at the bottleneck) is a candidate future architecture deferred to research after Version B Phase 2-3 milestones (DST + NL generation head). Not a v2 paper claim.
+- Paper A v2 §5.7 rewritten 2026-05-04 to report this as a publishable negative result ("tri-channel architecture: smoke-positive, capacity-stealing failure mode at full scale"). Section 4 headline contribution unchanged.
+
+**Status of investigation arc.** Closed. K9_DiagLoop full v2 honest retrain delivered the load-bearing numbers; arc does not branch into more retrains on this architecture.
+
+## Session 51: Cross-Channel Consistency Eval Harness (May 3, 2026)
+
+**Objective.** Implement the headline methodology contribution of the CAS-SDG-Bench tri-channel benchmark paper: a three-channel eval harness that independently scores notation (exact string match), diagram (structural graph comparison), and color (palette metadata) dimensions, then measures cross-channel consistency to distinguish surface mistakes from structural mistakes.
+
+**New files.**
+
+- `cas-synthetic/schemas/diagram_graph.py` — `canonical_graph_keys` function (already provided in fuller form by PR #11 diagram-diff utility, retained from that merge). Used as the graph identity primitive by the harness.
+- `cas-native/training/evaluate_cross_channel_consistency.py` — Full three-channel eval harness. Phase 1 (scoring functions) is complete; Phase 2 (model wiring to checkpoint) is wired and calls `evaluate_structured_token_prediction` then reconstructs predicted expressions from head-label outputs. CLI matches the existing eval harness shape: `--run-dir`, `--eval-input`, `--out-dir`, `--prefix`, `--device`, `--diagram-similarity-threshold`. Outputs: `<prefix>_report.md`, `<prefix>_report.json`, `<prefix>_samples.jsonl`.
+- `cas-native/tests/test_evaluate_cross_channel_consistency.py` — 15 smoke tests covering: three-channel scoring on synthetic pairs, cross-channel consistency rate computation, color channel None when metadata absent, color channel rate when metadata present.
+
+**Diagram diff stub.** `_diagram_similarity_stub` uses Jaccard overlap over `canonical_graph_keys` as a temporary approximation. Clearly marked `TODO: replace once feature/diagram-diff-utility lands` — that utility is now merged via PR #11 and the stub call is the next refactor target.
+
+**Forward-compat: Session 50 palette (PR #10).** Color channel checks for `color` field on predicted/GT nodes. Currently returns None (no color metadata emitted by compiler). Once compiler starts emitting `color`, the color dimension activates automatically — no second PR needed.
+
+**Test results.** 15 new tests passed. 7 pre-existing tests (paraphrase invariance + structured prediction ingest) still pass, 1 skipped (requires local data file).
+
+**Branch.** `feature/cross-channel-consistency-eval`.
+
+## Session 50: CAS Value-Keyed Color Palette v1.0 (May 3, 2026)
+
+**Objective.** Lock the value-keyed color palette for all four CAS axes (Noetic, Domain, Drive, Register). Foundation work for the tri-channel benchmark (notation + diagram + color-coded axes).
+
+**Branch.** `feature/cas-value-keyed-palette` — 3 commits, PR open.
+
+**Phase 1 — Spec doc.**
+- New `docs/working/cas_color_palette_specification.md` with full design rationale, palette tables, WCAG contrast ratios, and colorblind simulation analysis (deuteranopia / protanopia / tritanopia).
+- Palette basis: Paul Tol "muted" 10-class for Noetics; Paul Tol "bright" for Drives; medium-saturation tier for Domains; border-style overlays for Registers.
+- All colors meet WCAG 3:1 contrast on both `#0d1117` (dashboard dark bg) and `#ffffff` (paper bg); target luminance window L∈[0.12,0.30].
+- Colorblind safety: no pair within any axis becomes indistinguishable under a single colorblind condition; marginal pairs (^1/^7, F1/F7) retain ΔL fallback distinguishability.
+
+**Phase 2 — Python module.**
+- New `api/notation/color_palette.py`: `noetic_color`, `domain_color`, `drive_color`, `register_treatment`, `axis_color_for_node`. No external dependencies.
+- `PALETTE_VERSION = "v1.0"` — breaking-change sentinel for downstream consumers.
+- 49 tests in `tests/test_color_palette.py`: all axes valid/invalid, all-distinct assertions, determinism, precedence, cross-axis separation. All 49 pass.
+
+**Phase 3 — TypeScript module + dashboard.**
+- New `dashboard/src/lib/casColorPalette.ts`: exact hex mirror of Python module. PALETTE_VERSION identical.
+- New `dashboard/src/lib/__tests__/casColorPalette.test.ts`: mirrors Python test list.
+- Updated `dashboard/src/pages/CompilerPage.tsx` `diagramColor()`: now accepts optional node arg; delegates to `axisColorForNode` when `node.noetic / .domain / .drive` are present; falls back to existing kind-keyed logic. Backward-compatible.
+- 167 vitest tests pass across 14 test files (13 existing + 1 new palette test).
+
+**Hex tables (quick reference).**
+
+Noetic: ^0=#3388BB ^1=#117733 ^2=#CC7700 ^3=#CC6677 ^4=#2E7A6E ^5=#CC3388 ^6=#5B55C0 ^7=#7A7A25 ^8=#AA4499 ^9=#6B778C
+
+Domain: P=#7B7EC4 C=#4490B0 E=#4A9068 O=#C0883C
+
+Drive: F1=#4477AA F2=#7755CC F3=#228866 F4=#997700 F5=#BB4488 F6=#BB6699 F7=#446688
+
+Register treatments: T=solid/#D4A020 A=double/#4488CC f=dashed/#CC4477 E=dotted/#44AA77
+
+**Downstream notes.** Compiler emission, eval harness color-consistency check, and diagram-diff color-awareness are separate downstream PRs. Each must import from this module and pin `PALETTE_VERSION == "v1.0"`. The existing `colors.ts` DOMAIN_COLORS / DRIVE_COLORS remain unchanged (kind-keyed fallback and non-diagram components).
 
 ## Session 49: Self-Reference Invariance Lever — Proposal + Implementation (May 3, 2026)
 
@@ -157,6 +303,7 @@
 **No retrain included.** This PR is proposal + implementation + tests only. Retrain decision is the reviewer's after PR review. The in-flight K=9 run on `feature/paraphrase-augment-9-templates` was not touched.
 
 **PR opened**: `self-reference invariance lever (proposal + impl + tests)` on branch `proposal/self-reference-lever`.
+
 
 ## Session 48: Correct-Corpus Paraphrase Retrain Clears Prior Canonical Baseline (May 2, 2026)
 

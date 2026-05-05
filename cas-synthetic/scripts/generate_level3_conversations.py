@@ -56,10 +56,22 @@ def main() -> int:
         help="Maximum Level 2 source records to read",
     )
     parser.add_argument(
+        "--start-source-record",
+        type=int,
+        default=0,
+        help="Zero-based Level 2 source-record offset for deterministic held-out splits",
+    )
+    parser.add_argument(
+        "--max-output-records",
+        type=int,
+        default=None,
+        help="Maximum Level 3 output records to write after variant expansion",
+    )
+    parser.add_argument(
         "--variants-per-source",
         type=int,
         default=3,
-        help="Conversational variants per Level 2 record; must be 2-5",
+        help="Conversational variants per Level 2 record; must be 1-5",
     )
     parser.add_argument("--seed", type=int, default=42, help="RNG seed")
     parser.add_argument(
@@ -110,6 +122,8 @@ def main() -> int:
         input_path,
         output_path,
         max_source_records=args.max_source_records,
+        start_source_record=args.start_source_record,
+        max_output_records=args.max_output_records,
         variants_per_source=args.variants_per_source,
         progress_every=args.progress_every,
         include_invalid_sources=args.include_invalid_sources,

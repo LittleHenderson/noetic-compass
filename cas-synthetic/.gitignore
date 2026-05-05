@@ -6,6 +6,9 @@ data/level2_scaffold/*
 !data/level2_scaffold/LEVEL3_RECOVERABLE_EVAL_1000_REPORT.md
 data/native_nl/*.jsonl
 !data/native_nl/.gitkeep
+# Throughput / scratch benchmark artifacts (T8 and similar). The wildcard above
+# already excludes this directory; the explicit rule below is documentation.
+data/level2_scaffold/_bench/
 data/pytest-tmp/
 __pycache__/
 *.pyc
