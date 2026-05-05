@@ -272,6 +272,11 @@ class CASNativeModel(nn.Module):
         self.lacunarity_gate = LacunarityGate(num_slots=40)
         self.lacunarity_head = LacunarityHead(config.d_model)
 
+        # Optional native English NL generation head — attached lazily by the
+        # trainer / harness via attach_nl_gen_head(). Default None preserves
+        # backward-compat with all existing CASNativeModel callers.
+        self.nl_gen_head = None  # type: ignore[assignment]
+
         # Initialize weights
         self._init_weights()
 
@@ -636,3 +641,108 @@ class CASNativeModel(nn.Module):
             output["proposer_outputs"] = proposer(x, mode="training")
 
         return output
+
+    # ------------------------------------------------------------------ NL gen
+    def attach_nl_gen_head(self, head: nn.Module) -> None:
+        """Attach a native :class:`NLGenerationHead` to this model.
+
+        Kept as a setter rather than a constructor argument so the existing
+        ``CASNativeModel.__init__`` signature stays backward-compatible. The
+        trainer instantiates the head against the tokenizer agent's vocab
+        size, then attaches it here.
+        """
+        self.nl_gen_head = head
+
+    def forward_with_lm(
+        self,
+        input_ids: torch.Tensor,
+        lm_decoder_input_ids: torch.Tensor,
+        *,
+        attention_mask: torch.Tensor | None = None,
+        register_activations: Optional[torch.Tensor] = None,
+        cas_prefix_ids: Optional[torch.Tensor] = None,
+        register_id: Optional[torch.Tensor] = None,
+        bottleneck_z: Optional[torch.Tensor] = None,
+        return_lm_meta: bool = False,
+    ) -> dict[str, torch.Tensor]:
+        """Run the existing forward and the attached NL generation head.
+
+        The structured forward is unchanged — we just additionally route the
+        pooled hidden state (projected to the head's bottleneck dim if
+        needed) into the NL head together with the encoder stream and the
+        optional CAS prefix.
+
+        Args:
+            input_ids: Encoder token IDs ``(B, S)``.
+            lm_decoder_input_ids: Decoder token IDs ``(B, L)``.
+            attention_mask: Optional encoder padding mask.
+            register_activations: Optional ``(B, 40, 4)`` register mask for
+                the structured forward (unchanged contract).
+            cas_prefix_ids: Optional ``(B, K)`` CAS-expression prefix.
+            register_id: Optional ``(B,)`` register IDs for the NL head's
+                FiLM modulation.
+            bottleneck_z: Optional ``(B, bottleneck_dim)`` to override the
+                pooled-hidden-state-derived bottleneck. Default behavior:
+                use a sliced/projected version of pooled_hidden_state.
+            return_lm_meta: When True, request metadata from the NL head.
+
+        Returns:
+            Dict containing all keys from :meth:`forward` plus
+            ``lm_logits`` (and optionally ``lm_meta``).
+        """
+        if self.nl_gen_head is None:
+            raise RuntimeError(
+                "forward_with_lm called but no nl_gen_head is attached. "
+                "Use attach_nl_gen_head() first."
+            )
+
+        outputs = self.forward(
+            input_ids,
+            attention_mask=attention_mask,
+            register_activations=register_activations,
+        )
+
+        head_config = self.nl_gen_head.config  # type: ignore[union-attr]
+        bottleneck_dim = head_config.bottleneck_dim
+
+        if bottleneck_z is None:
+            pooled = outputs["pooled_hidden_state"]  # (B, d_model)
+            if pooled.shape[-1] >= bottleneck_dim:
+                bottleneck_z = pooled[..., :bottleneck_dim].contiguous()
+            else:
+                # Pad with zeros if d_model < bottleneck_dim (rare).
+                pad = torch.zeros(
+                    pooled.shape[0],
+                    bottleneck_dim - pooled.shape[-1],
+                    device=pooled.device,
+                    dtype=pooled.dtype,
+                )
+                bottleneck_z = torch.cat([pooled, pad], dim=-1)
+
+        encoder_outputs = outputs["hidden_states"]  # (B, S, d_model)
+
+        if return_lm_meta:
+            lm_logits, lm_meta = self.nl_gen_head(
+                lm_decoder_input_ids,
+                bottleneck_z,
+                cas_prefix_ids=cas_prefix_ids,
+                encoder_outputs=encoder_outputs,
+                domain_mask=attention_mask,
+                register_id=register_id,
+                return_meta=True,
+            )
+            outputs["lm_logits"] = lm_logits
+            outputs["lm_meta"] = lm_meta
+        else:
+            lm_logits = self.nl_gen_head(
+                lm_decoder_input_ids,
+                bottleneck_z,
+                cas_prefix_ids=cas_prefix_ids,
+                encoder_outputs=encoder_outputs,
+                domain_mask=attention_mask,
+                register_id=register_id,
+                return_meta=False,
+            )
+            outputs["lm_logits"] = lm_logits
+
+        return outputs

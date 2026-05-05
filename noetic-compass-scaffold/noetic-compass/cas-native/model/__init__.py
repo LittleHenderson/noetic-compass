@@ -49,6 +49,12 @@ from .meta_logic_constructs import (
     construct_tokens,
 )
 from .cas_native_model import CASNativeModel, CASNativeConfig
+from .nl_generation_head import (
+    GenerationTrace,
+    NLGenerationHead,
+    NLGenerationHeadConfig,
+    TokenStep,
+)
 
 __all__ = [
     "CognitiveStateEmbedding",
@@ -94,4 +100,8 @@ __all__ = [
     "construct_tokens",
     "CASNativeModel",
     "CASNativeConfig",
+    "NLGenerationHead",
+    "NLGenerationHeadConfig",
+    "GenerationTrace",
+    "TokenStep",
 ]
