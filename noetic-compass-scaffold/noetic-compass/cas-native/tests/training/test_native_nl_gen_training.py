@@ -94,7 +94,12 @@ def test_joint_loss_combines_alpha_and_beta_correctly():
     # Minimal direct check: the trainer's smoke step computes
     # total = alpha * structured + beta * lm. Verify with a tiny model.
     model = trainer._build_nl_generation_head(
-        vocab_size=32, d_model=16, n_layers=1, n_heads=2, seed=1
+        vocab_size=32,
+        d_model=16,
+        n_layers=1,
+        n_heads=2,
+        seed=1,
+        use_fallback=True,
     )
     batch = trainer._build_smoke_batch(vocab_size=32, seq_len=4, batch_size=2, seed=1)
     out = model(**batch)
@@ -168,7 +173,12 @@ def test_same_seed_yields_same_weights_sha(tmp_path):
 def test_resume_preserves_step_counter(tmp_path):
     # Build a fake state dict and verify the load path picks up the step.
     model = trainer._build_nl_generation_head(
-        vocab_size=32, d_model=16, n_layers=1, n_heads=2, seed=2
+        vocab_size=32,
+        d_model=16,
+        n_layers=1,
+        n_heads=2,
+        seed=2,
+        use_fallback=True,
     )
     state = {"model": model.state_dict(), "step": 4242, "epoch": 7}
     ckpt = tmp_path / "ckpt.pt"
@@ -205,7 +215,9 @@ def test_corpus_hash_is_deterministic(tmp_path):
 # ---------------------------------------------------------------------------
 
 
-def test_training_event_json_validates(capsys):
+def test_training_event_json_validates():
+    import io
+    stream = io.StringIO()
     event = trainer.emit_train_step_event(
         event_id="evt-1",
         checkpoint_id="ckpt-1",
@@ -216,6 +228,7 @@ def test_training_event_json_validates(capsys):
         loss_lm=0.5,
         beta=0.4,
         lr=2e-4,
+        out_stream=stream,
     )
     expected_keys = {
         "event",
@@ -235,13 +248,11 @@ def test_training_event_json_validates(capsys):
     assert not missing, f"event missing keys: {missing}"
     assert event["event"] == "train_step"
     assert event["schema_version"] == "train_event.v1"
-    # Ensure the printed line is JSON-parseable.
-    captured = capsys.readouterr()
-    last_line = [
-        line for line in captured.out.splitlines() if line.strip().startswith("{")
-    ][-1]
-    parsed = json.loads(last_line)
+    # The line written to the stream is parseable JSON.
+    written = stream.getvalue().strip()
+    parsed = json.loads(written)
     assert parsed["event_id"] == "evt-1"
+    assert parsed["schema_version"] == "train_event.v1"
 
 
 # ---------------------------------------------------------------------------
@@ -267,7 +278,12 @@ def test_deterministic_split():
 
 def test_hash_state_dict_changes_when_weights_change():
     model = trainer._build_nl_generation_head(
-        vocab_size=32, d_model=16, n_layers=1, n_heads=2, seed=3
+        vocab_size=32,
+        d_model=16,
+        n_layers=1,
+        n_heads=2,
+        seed=3,
+        use_fallback=True,
     )
     h_a = trainer.hash_state_dict(model.state_dict())
     # Perturb one parameter.

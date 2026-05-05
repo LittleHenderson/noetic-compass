@@ -31,6 +31,13 @@ __all__ = [
     "HeadInfo",
     "LayerActivation",
     "capture_live_trace",
+    "GenerationTrace",
+    "GenerationTraceCapture",
+    "NearestNeighborIndex",
+    "TokenStep",
+    "capture_generation_trace",
+    "live_cas_grounding_score",
+    "trace_to_dict",
 ]
 
 
@@ -61,4 +68,16 @@ def __getattr__(name: str):  # PEP 562 lazy attribute access
         from cas_native.trace import live_capture  # noqa: WPS433
 
         return getattr(live_capture, name)
+    if name in {
+        "GenerationTrace",
+        "GenerationTraceCapture",
+        "NearestNeighborIndex",
+        "TokenStep",
+        "capture_generation_trace",
+        "live_cas_grounding_score",
+        "trace_to_dict",
+    }:
+        from cas_native.trace import generation_trace  # noqa: WPS433
+
+        return getattr(generation_trace, name)
     raise AttributeError(f"module 'cas_native.trace' has no attribute {name!r}")

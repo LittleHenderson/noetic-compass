@@ -1,5 +1,44 @@
 # Noetic Compass — Progress Log
 
+## Session 51: Native NL Generation Training + Eval + Generation Trace (May 4, 2026)
+
+**Objective.** Third deliverable for the Version B Phase 4 NL Generation Head — the training pipeline, eval harness, and per-token generation trace surface for the fully-native CAS NL generation head. Bridge between the model and how we know it works. No foreign pretrained weights. Object provenance load-bearing on every artifact.
+
+**Deliverables.**
+
+- NEW: `cas-native/training/train_native_nl_gen.py` (703 LOC) — runnable training script. CLI: `--data-path`, `--output-dir`, `--epochs`, `--batch-size`, `--limit`, `--smoke-test`, `--resume-from`, `--alpha-structured`, `--beta-lm-start`, `--beta-lm-end`, `--beta-curriculum-steps`, `--lr`, `--seed`, `--device`, `--logging-steps`, `--vocab-size`. Random-init weights, joint loss `L = α · L_structured + β(step) · L_LM` with curriculum on β, per-step JSON event emission, full-provenance checkpoint manifest (`checkpoint_id`, `code_version`, `weights_sha`, `trained_from_corpus_hash`, `trained_at_timestamp`, `n_train_records`, `n_epochs_completed`, `final_loss_total`, `git_commit_sha`, `schema_version="checkpoint.v1"`). `--smoke-test` runs 1 step on CPU and exits 0. Imports the parallel agent's `NLGenerationHead` when available; falls back to a tiny inline decoder for hermetic smoke.
+- NEW: `cas-native/training/native_nl_gen_curriculum.py` (131 LOC) — `compute_beta(step, beta_start, beta_end, curriculum_steps)` linear-ramp-clipped curriculum + stateful `BetaScheduler` class with `to_provenance()` for run manifests.
+- NEW: `cas-native/evaluation/native_nl_generation_eval.py` (580 LOC) — three-metric eval harness: (1) `evaluate_cas_grounding_rate` (generate → classify → match per axis, per-bucket breakdown over all 10×4×7×4 axes), (2) `evaluate_fluency_perplexity` (held-out val PPL with pad-mask), (3) `evaluate_diversity_distinct2` (distinct-2 bigram ratio). Every result is an `EvalResult` carrying `eval_id`, `checkpoint_id`, `eval_dataset_id`, `eval_dataset_hash`, `metric_name`, `value`, `per_bucket_breakdown`, `timestamp`, `schema_version="eval_result.v1"`. `render_eval_report_markdown` + `write_eval_artifacts` produce a markdown report alongside per-eval JSON.
+- NEW: `cas-native/trace/generation_trace.py` (617 LOC) — extends Mode 7 from `live_capture.py` to the generative path. `GenerationTraceCapture` wraps the model agent's `GenerationTrace` (which owns the per-token decoder trace) and adds trace-side provenance (`trace_id`, `model_checkpoint_id`, `created_at`, `schema_version="generation_trace_capture.v1"`), nearest-neighbor lookup against the training data via `NearestNeighborIndex`, and live CAS-grounding score. `capture_generation_trace(...)` is the main entrypoint; hook safety via `try/finally`.
+- MODIFIED: `cas-native/trace/__init__.py` — lazy re-export of `GenerationTrace`, `GenerationTraceCapture`, `NearestNeighborIndex`, `TokenStep`, `capture_generation_trace`, `live_cas_grounding_score`, `trace_to_dict`.
+- NEW: `cas-native/tests/training/test_native_nl_gen_training.py` (298 LOC, 14 tests) — smoke 1-step exit 0, curriculum boundaries + clip + midpoint, scheduler provenance, joint-loss combination, manifest-fields completeness, weights-SHA determinism, resume preserves step counter, corpus hash stability, training-event JSON validation, deterministic split.
+- NEW: `cas-native/tests/evaluation/test_native_nl_generation_eval.py` (302 LOC, 9 tests) — CAS-grounding perfect-match=1.0, axis-mismatch detection, fluency returns finite PPL, diversity distinct-2 = 1.0 unique, distinct-2 collapse on identical generations, EvalResult provenance fields, full 10×4×7×4 bucket coverage on empty input, markdown render + write_eval_artifacts roundtrip, deterministic dataset hash.
+- NEW: `cas-native/tests/trace/test_generation_trace.py` (318 LOC, 8 tests) — populates all TokenStep fields, NN top-K returns ordered IDs, live CAS-grounding score (match + mismatch), no hook leaks across two consecutive captures, JSON-serializable end-to-end with model_trace preserved verbatim, identity fields stamped, `NearestNeighborIndex` JSON round-trip, `GenerationTrace` alias points to capture wrapper.
+
+**Test results.** `pytest cas-native/tests/training/test_native_nl_gen_training.py cas-native/tests/evaluation/test_native_nl_generation_eval.py cas-native/tests/trace/test_generation_trace.py -v` → 31 passed in 2.36s. Regression: `pytest cas-native/tests/belief/ cas-native/tests/trace/test_live_capture.py` → 111 passed unchanged. Total = 142 passed.
+
+**Architectural rules preserved.** No foreign pretrained model loaded. Object traceability is load-bearing on every artifact (checkpoint manifest, training event, eval result, generation trace). Every captured trace carries `trace_id`, `model_checkpoint_id`, `schema_version`, `created_at` so given a JSON artifact on disk the reader knows which checkpoint produced it. Hooks installed during generation are removed via `try/finally`; verified by no-leak test across two consecutive captures.
+
+**Sample checkpoint manifest** from smoke test:
+```json
+{
+  "checkpoint_id": "68f5c69d-e85d-4cd5-a29a-900e85361c40",
+  "code_version": "v0.1.0",
+  "final_loss_total": 4.775742530822754,
+  "git_commit_sha": "...",
+  "n_epochs_completed": 0,
+  "n_train_records": 2,
+  "schema_version": "checkpoint.v1",
+  "trained_at_timestamp": "2026-05-05T03:19:58Z",
+  "trained_from_corpus_hash": "smoke_synthetic",
+  "weights_sha": "aa325df4fed339e70f6a9a594c388dc5bdd61a7dfc720bd6bc1588eecccd25cf"
+}
+```
+
+**Multi-day training launch command** (A6000 ~$0.79/hr): `python cas-native/training/train_native_nl_gen.py --data-path cas-synthetic/data/native_nl/v1_seed_5k.jsonl --output-dir runs/native_nl_v1 --epochs 12 --batch-size 8 --lr 2e-4 --beta-lm-start 0.1 --beta-lm-end 1.0 --beta-curriculum-steps 10000 --logging-steps 50 --device cuda --seed 42`. Expected wall time on a 100K-record run: ~150K steps at ~0.5s/step on A6000 ≈ 21h ≈ $17 GPU spend; the multi-day budget covers larger 300-500K corpora and any retries / longer schedules within the planned $200-500 envelope.
+
+**Next.** Awaiting parallel SDG corpus + parallel tokenizer agent's HybridCASTokenizer integration. The training script's `_records_to_batch` adapter currently consumes pre-tokenized `input_ids` / `target_ids`; once HybridCASTokenizer exposes the join API, swap the adapter to call it directly. The trace surface is wire-ready for the model agent's `NLGenerationHead.generate(..., with_trace=True)` real signature (`decoder_input_ids`, `bottleneck_z`, `cas_prefix_ids`, etc.) — the wrapper composes its own provenance over the model's `GenerationTrace`.
+
 ## Session 50: Native English BPE Tokenizer Extension (May 4, 2026)
 
 **Objective.** First deliverable for the Version B Phase 4 NL Generation Head — extend `HybridCASTokenizer` with English BPE trained from scratch on the project's own SDG corpus. No foreign tokenizer downloads, no pretrained merges, no HuggingFace/sentencepiece imports. CAS gets the glory.
