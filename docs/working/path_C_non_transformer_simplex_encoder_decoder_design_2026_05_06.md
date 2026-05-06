@@ -10,19 +10,22 @@ This note preserves a future research/build direction:
 
 > Can CAS-Native eventually replace a transformer reasoning backbone with a Simplex Delta^o_39 + Fisher-Rao state engine, while still generating fluent conversational English?
 
-Short answer:
+**The "Agent Team" Verdict (Session 56, defensible form):**
 
-Yes for the CAS reasoning core. Not yet for the entire language generator. The likely winning design is a hybrid-but-non-transformer sequence model:
+Yes as a research direction, with one important boundary: the simplex can replace the opaque reasoning substrate, but not the whole language-generation mechanism by itself. The preferred future architecture is the **Simplex Core + SSM Decoder** hybrid.
+
+- **The Mind (Simplex Core):** Uses Mirror Descent on Delta^o_39 to map intent. The Fisher-Rao metric provides boundary-aware geometry: as probability mass approaches the simplex boundary, the geometric distance grows sharply. In implementation this must be paired with a positive `simplex_floor`, finite-gradient safeguards, and explicit RPM/meta-logic gates. This can make collapse measurable and penalizable; it does not magically make unsafe states impossible.
+- **The Voice (SSM Decoder):** Uses a State-Space Model (for example an RWKV-style recurrent mixer or a Mamba-style selective SSM) conditioned on the Simplex state. This may offer linear-time generation and strong CAS conditioning, but fluency must be proven against the transformer baseline by blind review and generation metrics.
+
+This architecture moves from "learning a fully opaque hidden space" toward "learning to map English onto a known cognitive geometry, then speaking from that geometry."
 
 ```text
 NL prompt
-  -> Simplex CAS encoder
-  -> RPM/meta-logic constrained CAS state
-  -> non-transformer autoregressive NL decoder
-  -> fluent reply + trace
+  -> Simplex Mirror Descent Encoder (The Mind)
+  -> RPM/Meta-logic Valve (The Gate)
+  -> SSM Autoregressive Decoder (The Voice)
+  -> Fluent reply + Trace
 ```
-
-The Simplex Delta^o_39 system should become the model's structured mind-state space. The decoder still needs a sequence mechanism to emit English tokens in order. That mechanism does not have to be a transformer, but it must handle recurrence, memory, style, and turn context.
 
 ## 2. Non-Goals
 
@@ -504,4 +507,3 @@ After Path B v0:
 6. Connect encoder + RPM + decoder end to end.
 7. Add meta-logic proof layer only after RPM behavior is stable.
 8. Compare against transformer baseline and decide whether this becomes Path C mainline.
-
