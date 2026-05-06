@@ -372,6 +372,132 @@ def test_validation_retry_path_uses_provider_not_legacy_client():
     )
 
 
+def test_records_carry_provider_specific_source_field(tmp_path):
+    """Regression test for the provenance leak Codex caught:
+    records.source was hardcoded to 'claude_api' regardless of which
+    provider actually generated the dialogue. After the fix, every
+    accepted record's ``source`` must walk back to the active provider
+    and ``generator_model`` must reflect the model name that was used.
+
+    This test uses an injected fake Gemini factory so no live API call
+    is made; the run_tier3_api code path is exercised end-to-end and
+    we read the resulting JSONL records to verify provenance fields."""
+    generator = _load("_test_tier3_generator_provenance", _GENERATOR_PATH)
+
+    # Build a fake JSON-shaped Gemini response (one prompt+reply per turn).
+    # Use exactly the shape the validator+parser expects so the records
+    # actually land in the shard rather than being dropped.
+    def _fake_response_text(num_turns: int) -> str:
+        turns = []
+        for i in range(num_turns):
+            turns.append({
+                "turn_index": i,
+                "prompt_text": f"What did you do today, friend? (turn {i})",
+                "reply_text": (
+                    "I went for a long walk by the lake and the light "
+                    "felt warm on my face. I noticed the way the water "
+                    "moved and it stayed with me."
+                ),
+            })
+        return json.dumps({"turns": turns})
+
+    class _FakeGeminiResponseDynamic:
+        def __init__(self, text: str, in_t: int = 100, out_t: int = 50) -> None:
+            self.text = text
+            self.usage_metadata = SimpleNamespace(
+                prompt_token_count=in_t, candidates_token_count=out_t,
+            )
+
+    class _FakeGeminiModelDynamic:
+        def __init__(self, model_name: str) -> None:
+            self.model_name = model_name
+
+        async def generate_content_async(self, *a, **kw):
+            # Look at the user message (last positional arg or in args)
+            # and infer turn count from the user_message text. The
+            # generator includes "turns_count: N" in the user message.
+            msg = ""
+            if a and isinstance(a[0], list):
+                msg = str(a[0][0]["parts"][0]) if a[0] else ""
+            elif a and isinstance(a[0], str):
+                msg = a[0]
+            num_turns = 5
+            for line in msg.splitlines():
+                line = line.strip().lower()
+                if "turns" in line and ":" in line:
+                    try:
+                        num_turns = int(line.split(":", 1)[1].strip())
+                        break
+                    except (ValueError, IndexError):
+                        continue
+            return _FakeGeminiResponseDynamic(_fake_response_text(num_turns))
+
+    fake_factory = lambda model_name: _FakeGeminiModelDynamic(model_name)
+
+    # Inject the fake provider via make_provider's client_factory hook
+    fake_provider = providers.make_provider(
+        "gemini",
+        client_factory=fake_factory,
+    )
+
+    out_prefix = tmp_path / "shard"
+    manifest = tmp_path / "manifest.json"
+    cost_tracker = providers.ProviderCostTracker(
+        hard_cap_usd=10.0,
+        price_per_m_input=providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT,
+        price_per_m_output=providers.GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT,
+    )
+
+    # Build 3 dialogue jobs and run the worker loop directly (skip the
+    # full run() driver since we don't need its env-file / cost-cap
+    # preflight scaffolding here — we just need to verify the records
+    # the worker writes carry the right provenance fields).
+    jobs = generator.build_dialogue_jobs(
+        target_records=20, seed_value=42, skip_conversation_ids=set(),
+    )[:3]
+    writer = generator.ShardWriter(
+        out_prefix=out_prefix,
+        records_per_shard=500,
+        existing_count=0,
+    )
+    cost_tracker_async, failures, final_model, written = asyncio.run(
+        generator.run_tier3_api(
+            jobs=jobs,
+            cost_cap_usd=10.0,
+            cost_tracker=cost_tracker,
+            concurrency=1,
+            primary_model=fake_provider.primary_model,
+            fallback_model=fake_provider.fallback_model,
+            api_key=None,
+            trace_id="test-trace-id",
+            writer=writer,
+            provider=fake_provider,
+            provider_name="gemini",
+        )
+    )
+    assert written > 0, f"expected records written, got {written}; failures: {failures}"
+
+    # Read every record from the shard and verify provenance
+    shards = sorted(tmp_path.glob("shard*.jsonl"))
+    assert shards, "expected at least one shard"
+    records = []
+    for shard in shards:
+        for line in shard.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if line:
+                records.append(json.loads(line))
+    assert records, "expected at least one record"
+    for r in records:
+        assert r["source"] == "gemini_api", (
+            f"record source must be gemini_api for Gemini-generated records, "
+            f"got {r['source']!r}"
+        )
+        assert r["generator_model"].startswith("gemini-"), (
+            f"generator_model must reflect the actual Gemini model used, "
+            f"got {r['generator_model']!r}"
+        )
+
+
 def test_generator_validator_unchanged_for_gemini_path(tmp_path):
     """The reply validator behavior must NOT be provider-dependent.
     The dry-run write goes through the same validator as the live path."""

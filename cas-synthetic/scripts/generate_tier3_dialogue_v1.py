@@ -804,12 +804,19 @@ async def generate_dialogue_records(ctx: Tier3RunContext, job: DialogueJob) -> l
         turns = turns2
         model_used = model_used2
 
+    # Source must reflect the provider that actually generated the text,
+    # not a hardcoded value. Object provenance is load-bearing — every
+    # record must walk back to the right API.
+    if ctx.provider is not None:
+        record_source = f"{ctx.provider.name}_api"
+    else:
+        record_source = "claude_api"
     return records_from_turns(
         job=job,
         turn_payloads=turns,
         trace_id=ctx.trace_id,
         model_used=model_used,
-        source="claude_api",
+        source=record_source,
     )
 
 
