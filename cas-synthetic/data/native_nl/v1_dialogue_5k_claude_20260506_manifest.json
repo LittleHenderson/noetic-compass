@@ -1,0 +1,103 @@
+{
+  "schema_version": "native_nl.v1",
+  "generation_version": "native_nl_tier3_dialogue_v1",
+  "trace_id": "9c0655ad-f3d5-4643-b99b-f4f29fd044d7",
+  "seed": 20260506,
+  "target_records": 5000,
+  "total_records": 5000,
+  "tier3_records": 5000,
+  "total_conversations": 1002,
+  "resumed_records": 0,
+  "validator_pass_count": 5000,
+  "validator_pass_rate": 1.0,
+  "primary_model": "claude-sonnet-4-6",
+  "final_model": "claude-sonnet-4-6",
+  "api_key_status": "present",
+  "dry_run": false,
+  "distributions": {
+    "tier": {
+      "tier3": 5000
+    },
+    "noetic": {
+      "^4": 496,
+      "^3": 510,
+      "^5": 503,
+      "^9": 504,
+      "^2": 497,
+      "^7": 495,
+      "^0": 491,
+      "^6": 495,
+      "^1": 513,
+      "^8": 496
+    },
+    "domain": {
+      "P": 1256,
+      "C": 1241,
+      "E": 1249,
+      "O": 1254
+    },
+    "drive": {
+      "F7": 708,
+      "F4": 710,
+      "F3": 710,
+      "F6": 717,
+      "F1": 716,
+      "F5": 723,
+      "F2": 716
+    },
+    "register": {
+      "f": 1258,
+      "T": 1254,
+      "A": 1244,
+      "E": 1244
+    },
+    "expression_family": {
+      "base": 3914,
+      "copresence": 270,
+      "register_set": 435,
+      "omega_emergent": 209,
+      "recipe": 172
+    },
+    "demographic_profile": {
+      "skeptical_analyst": 626,
+      "lay_casual": 664,
+      "young_professional_technical": 618,
+      "global_english_indirect": 636,
+      "confident_veteran": 628,
+      "anxious_first_timer": 644,
+      "mid_career_clinician_direct": 617,
+      "senior_academic_humanities": 567
+    },
+    "tone": {
+      "frustrated": 1003,
+      "neutral": 1004,
+      "reflective": 968,
+      "excited": 1016,
+      "anxious": 1009
+    },
+    "generator_model": {
+      "claude-sonnet-4-6": 5000
+    }
+  },
+  "total_cost_usd": 15.0556,
+  "input_tokens": 1180650,
+  "output_tokens": 767577,
+  "api_calls": 1112,
+  "hard_cost_cap_usd": 75.0,
+  "cost_aborted": false,
+  "failure_counts": {
+    "validation:too_long": 1,
+    "validation:jargon:\\bregister[s]?\\b": 17,
+    "validation:jargon:\\bdrive[s]?\\b": 1,
+    "json_parse:JSONDecodeError": 1
+  },
+  "generation_started": "2026-05-06T16:33:24.396909+00:00",
+  "generation_completed": "2026-05-06T17:42:30.118412+00:00",
+  "out_prefix": "cas-synthetic\\data\\native_nl\\v1_dialogue_5k_claude_20260506",
+  "records_per_shard": 5000,
+  "shard_paths": [
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_5k_claude_20260506_0000.jsonl"
+  ],
+  "round_trip_validator": "deferred",
+  "notes": []
+}
