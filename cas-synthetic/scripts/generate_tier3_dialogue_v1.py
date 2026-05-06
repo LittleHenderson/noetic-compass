@@ -55,12 +55,36 @@ def _load_seed_module():
 seed = _load_seed_module()
 
 
+# Local provider abstraction (Claude + Gemini). Imported lazily-friendly:
+# this module imports without requiring either SDK to be installed,
+# concrete providers raise on construction if their SDK is missing.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from tier3_providers import (  # noqa: E402
+    BatchDialogueProvider,
+    ClaudeBatchDialogueProvider,
+    GeminiBatchDialogueProvider,
+    ProviderCallResult,
+    make_provider,
+    load_gemini_api_key,
+    CLAUDE_DEFAULT_PRIMARY,
+    CLAUDE_DEFAULT_FALLBACK,
+    CLAUDE_PRICE_PER_M_INPUT,
+    CLAUDE_PRICE_PER_M_OUTPUT,
+    GEMINI_DEFAULT_PRIMARY,
+    GEMINI_DEFAULT_FALLBACK,
+    GEMINI_FLASH_LITE_PRICE_PER_M_INPUT,
+    GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT,
+)
+
+
 SCHEMA_VERSION = seed.SCHEMA_VERSION
 GENERATION_VERSION = "native_nl_tier3_dialogue_v1"
 PRIMARY_MODEL = seed.PRIMARY_MODEL
 FALLBACK_MODEL = seed.FALLBACK_MODEL
 PRICE_PER_M_INPUT = seed.PRICE_PER_M_INPUT
 PRICE_PER_M_OUTPUT = seed.PRICE_PER_M_OUTPUT
+SUPPORTED_PROVIDERS = ("claude", "gemini")
+DEFAULT_PROVIDER = "claude"
 DEFAULT_CONCURRENCY = 5
 DEFAULT_COST_CAP_USD = 500.0
 DEFAULT_TARGET_RECORDS = 500
@@ -128,7 +152,7 @@ class DialogueJob:
 
 @dataclass
 class Tier3RunContext:
-    client: Any
+    client: Any  # legacy: AsyncAnthropic. Kept for backwards-compat with tests.
     cost_tracker: Any
     trace_id: str
     writer: "ShardWriter"
@@ -137,6 +161,7 @@ class Tier3RunContext:
     max_output_tokens: int
     failure_counter: Counter[str]
     current_model: str
+    provider: BatchDialogueProvider | None = None
     records_written: int = 0
     last_logged_at: int = 0
     records_lock: asyncio.Lock | None = None
@@ -509,6 +534,35 @@ def render_dry_turns(job: DialogueJob) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 
+async def call_dialogue(
+    provider: BatchDialogueProvider,
+    user_message: str,
+    *,
+    system_prompt: str,
+    model: str,
+    cost_tracker: Any,
+    max_output_tokens: int,
+    temperature: float = DEFAULT_TEMPERATURE,
+) -> tuple[str | None, str, str | None]:
+    """Provider-agnostic dialogue call with retries.
+
+    Returns ``(text, model_used, error_reason)`` for compatibility with the
+    existing orchestration code. Provider handles retries internally; cost
+    tracking is enforced inside ``provider.call`` against ``cost_tracker``.
+    """
+    result = await provider.call(
+        system_prompt=system_prompt,
+        user_message=user_message,
+        model=model,
+        cost_tracker=cost_tracker,
+        max_output_tokens=max_output_tokens,
+        temperature=temperature,
+    )
+    if result.error_reason is None:
+        return result.text, result.model_used, None
+    return None, result.model_used, result.error_reason
+
+
 async def call_claude_dialogue(
     client: Any,
     user_message: str,
@@ -644,16 +698,10 @@ async def generate_dialogue_records(ctx: Tier3RunContext, job: DialogueJob) -> l
     if ctx.cost_tracker.aborted:
         return []
 
-    text, model_used, err = await call_claude_dialogue(
-        ctx.client,
-        job.user_message,
-        system_prompt=TIER3_SYSTEM_PROMPT,
-        model=ctx.current_model,
-        cost_tracker=ctx.cost_tracker,
-        max_output_tokens=ctx.max_output_tokens,
-    )
-    if text is None and err == "api_status_404" and ctx.current_model == ctx.primary_model:
-        ctx.current_model = ctx.fallback_model
+    if ctx.provider is None:
+        # Defensive: orchestration should always set provider before calling.
+        # Fall back to Claude-direct path for any legacy test that builds a
+        # ctx with only `client` populated.
         text, model_used, err = await call_claude_dialogue(
             ctx.client,
             job.user_message,
@@ -662,6 +710,35 @@ async def generate_dialogue_records(ctx: Tier3RunContext, job: DialogueJob) -> l
             cost_tracker=ctx.cost_tracker,
             max_output_tokens=ctx.max_output_tokens,
         )
+    else:
+        text, model_used, err = await call_dialogue(
+            ctx.provider,
+            job.user_message,
+            system_prompt=TIER3_SYSTEM_PROMPT,
+            model=ctx.current_model,
+            cost_tracker=ctx.cost_tracker,
+            max_output_tokens=ctx.max_output_tokens,
+        )
+    if text is None and err == "api_status_404" and ctx.current_model == ctx.primary_model:
+        ctx.current_model = ctx.fallback_model
+        if ctx.provider is None:
+            text, model_used, err = await call_claude_dialogue(
+                ctx.client,
+                job.user_message,
+                system_prompt=TIER3_SYSTEM_PROMPT,
+                model=ctx.current_model,
+                cost_tracker=ctx.cost_tracker,
+                max_output_tokens=ctx.max_output_tokens,
+            )
+        else:
+            text, model_used, err = await call_dialogue(
+                ctx.provider,
+                job.user_message,
+                system_prompt=TIER3_SYSTEM_PROMPT,
+                model=ctx.current_model,
+                cost_tracker=ctx.cost_tracker,
+                max_output_tokens=ctx.max_output_tokens,
+            )
     if text is None:
         ctx.failure_counter[err or "unknown_api_error"] += 1
         return []
@@ -830,6 +907,10 @@ def write_manifest(
     dry_run: bool,
     resumed_records: int,
     notes: Sequence[str],
+    provider_name: str = DEFAULT_PROVIDER,
+    fallback_model: str | None = None,
+    price_per_m_input_usd: float | None = None,
+    price_per_m_output_usd: float | None = None,
 ) -> dict:
     validator_pass_count = sum(1 for rec in records if rec.get("validator_pass"))
     conversation_ids = {str(rec.get("conversation_id")) for rec in records}
@@ -845,8 +926,12 @@ def write_manifest(
         "resumed_records": resumed_records,
         "validator_pass_count": validator_pass_count,
         "validator_pass_rate": validator_pass_count / max(1, len(records)),
+        "provider": provider_name,
         "primary_model": primary_model,
+        "fallback_model": fallback_model,
         "final_model": final_model,
+        "price_per_m_input_usd": price_per_m_input_usd,
+        "price_per_m_output_usd": price_per_m_output_usd,
         "api_key_status": api_key_status,
         "dry_run": dry_run,
         "distributions": compute_distributions(records),
@@ -891,22 +976,37 @@ async def run_tier3_api(
     concurrency: int,
     primary_model: str,
     fallback_model: str,
-    api_key: str,
+    api_key: str | None = None,
     trace_id: str,
     writer: ShardWriter,
+    provider: BatchDialogueProvider | None = None,
+    provider_name: str = "claude",
 ) -> tuple[Any, Counter[str], str, int]:
+    """Drive the API loop with retries + cost tracking.
+
+    The provider is the source of truth for SDK-level semantics (call shape,
+    error mapping, token usage, pricing). Callers can either pass a fully
+    constructed ``provider`` or pass ``provider_name`` + ``api_key`` and let
+    this function build it. Defaulting to claude preserves prior behavior
+    for callers that did not pass ``provider_name``.
+    """
     if cost_tracker is None:
         cost_tracker = seed.CostTracker(cost_cap_usd)
     if not jobs:
         return cost_tracker, Counter(), primary_model, 0
-    if AsyncAnthropic is None:
-        raise RuntimeError("anthropic SDK not installed. Run: pip install anthropic")
 
-    client = AsyncAnthropic(api_key=api_key)
+    if provider is None:
+        provider = make_provider(
+            provider_name,
+            primary_model=primary_model,
+            fallback_model=fallback_model,
+            api_key=api_key,
+        )
+
     max_turns = max(len(job.turn_specs) for job in jobs)
     max_output_tokens = max_turns * MAX_OUTPUT_TOKENS_PER_TURN
     ctx = Tier3RunContext(
-        client=client,
+        client=getattr(provider, "client", None),
         cost_tracker=cost_tracker,
         trace_id=trace_id,
         writer=writer,
@@ -915,10 +1015,11 @@ async def run_tier3_api(
         max_output_tokens=max_output_tokens,
         failure_counter=Counter(),
         current_model=primary_model,
+        provider=provider,
     )
 
-    probe_text, _probe_model, probe_err = await call_claude_dialogue(
-        client,
+    probe_text, _probe_model, probe_err = await call_dialogue(
+        provider,
         "Return JSON only: {\"turns\":[{\"turn_index\":0,\"prompt_text\":\"ok\","
         "\"reply_text\":\"ok\"}]}",
         system_prompt=TIER3_SYSTEM_PROMPT,
@@ -934,8 +1035,8 @@ async def run_tier3_api(
             flush=True,
         )
         ctx.current_model = fallback_model
-        probe_text, _probe_model, probe_err = await call_claude_dialogue(
-            client,
+        probe_text, _probe_model, probe_err = await call_dialogue(
+            provider,
             "Return JSON only: {\"turns\":[{\"turn_index\":0,\"prompt_text\":\"ok\","
             "\"reply_text\":\"ok\"}]}",
             system_prompt=TIER3_SYSTEM_PROMPT,
@@ -946,7 +1047,10 @@ async def run_tier3_api(
         )
     if probe_text is None:
         raise RuntimeError(f"preflight call failed: {probe_err}")
-    print(f"[preflight] using model {ctx.current_model}; probe ok", flush=True)
+    print(
+        f"[preflight] provider={provider.name} model={ctx.current_model}; probe ok",
+        flush=True,
+    )
 
     sem = asyncio.Semaphore(concurrency)
     tasks = [asyncio.create_task(tier3_worker(ctx, sem, job)) for job in jobs]
@@ -968,6 +1072,7 @@ def run(
     env_file: Path,
     dry_run: bool,
     resume: bool,
+    provider_name: str = DEFAULT_PROVIDER,
 ) -> int:
     started_iso = seed.utc_now_iso()
     trace_id = str(uuid.uuid4())
@@ -1021,15 +1126,34 @@ def run(
                 writer.append_records(records)
             print(f"[tier3 dry-run] wrote {prepared_records} records", flush=True)
         else:
-            api_key = seed.load_api_key(env_file)
-            if not api_key or not api_key.startswith("sk-ant-"):
-                print(
-                    f"[abort] NC_ANTHROPIC_API_KEY missing or malformed in {env_file}",
-                    flush=True,
-                )
-                api_key_status = "missing"
-                notes.append("API key missing or invalid; no API spend occurred.")
+            if provider_name == "claude":
+                api_key = seed.load_api_key(env_file)
+                key_ok = bool(api_key and api_key.startswith("sk-ant-"))
+                if not key_ok:
+                    print(
+                        f"[abort] NC_ANTHROPIC_API_KEY missing or malformed in {env_file}",
+                        flush=True,
+                    )
+                    api_key_status = "missing"
+                    notes.append("API key missing or invalid; no API spend occurred.")
+            elif provider_name == "gemini":
+                api_key = load_gemini_api_key(env_file)
+                key_ok = bool(api_key)
+                if not key_ok:
+                    print(
+                        f"[abort] gemini API key missing in {env_file} "
+                        f"(NC_GEMINI_API_KEY / GEMINI_API_KEY / GOOGLE_API_KEY)",
+                        flush=True,
+                    )
+                    api_key_status = "missing"
+                    notes.append("Gemini API key missing; no API spend occurred.")
             else:
+                api_key = None
+                key_ok = False
+                api_key_status = "unknown_provider"
+                notes.append(f"Unknown provider {provider_name!r}.")
+
+            if key_ok:
                 api_key_status = "present"
                 max_rounds = 8
                 for round_index in range(max_rounds):
@@ -1086,6 +1210,7 @@ def run(
                                 api_key=api_key,
                                 trace_id=trace_id,
                                 writer=writer,
+                                provider_name=provider_name,
                             )
                         )
                         failure_counter.update(round_failures)
@@ -1111,6 +1236,12 @@ def run(
 
     all_records = load_existing_records(out_prefix)
     completed_iso = seed.utc_now_iso()
+    if provider_name == "gemini":
+        price_in = GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
+        price_out = GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
+    else:
+        price_in = CLAUDE_PRICE_PER_M_INPUT
+        price_out = CLAUDE_PRICE_PER_M_OUTPUT
     write_manifest(
         manifest_path,
         records=all_records,
@@ -1129,6 +1260,10 @@ def run(
         dry_run=dry_run,
         resumed_records=len(existing_records),
         notes=notes,
+        provider_name=provider_name,
+        fallback_model=fallback_model,
+        price_per_m_input_usd=price_in,
+        price_per_m_output_usd=price_out,
     )
     print(
         f"[done] total={len(all_records)} "
@@ -1160,8 +1295,28 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=20260506)
     parser.add_argument("--concurrency", type=int, default=DEFAULT_CONCURRENCY)
     parser.add_argument("--cost-cap", type=float, default=DEFAULT_COST_CAP_USD)
-    parser.add_argument("--primary-model", default=PRIMARY_MODEL)
-    parser.add_argument("--fallback-model", default=FALLBACK_MODEL)
+    parser.add_argument(
+        "--provider",
+        choices=SUPPORTED_PROVIDERS,
+        default=DEFAULT_PROVIDER,
+        help="LLM provider for dialogue generation. Default: claude.",
+    )
+    parser.add_argument(
+        "--primary-model",
+        default=None,
+        help=(
+            "Primary model name. Default per-provider: "
+            f"claude={CLAUDE_DEFAULT_PRIMARY}, gemini={GEMINI_DEFAULT_PRIMARY}."
+        ),
+    )
+    parser.add_argument(
+        "--fallback-model",
+        default=None,
+        help=(
+            "Fallback model when primary returns 404. Default per-provider: "
+            f"claude={CLAUDE_DEFAULT_FALLBACK}, gemini={GEMINI_DEFAULT_FALLBACK}."
+        ),
+    )
     parser.add_argument("--env-file", type=Path, default=ENV_FILE_DEFAULT)
     parser.add_argument(
         "--dry-run",
@@ -1176,8 +1331,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def _provider_default_models(provider_name: str) -> tuple[str, str]:
+    if provider_name == "gemini":
+        return GEMINI_DEFAULT_PRIMARY, GEMINI_DEFAULT_FALLBACK
+    return CLAUDE_DEFAULT_PRIMARY, CLAUDE_DEFAULT_FALLBACK
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    default_primary, default_fallback = _provider_default_models(args.provider)
+    primary_model = args.primary_model or default_primary
+    fallback_model = args.fallback_model or default_fallback
     return run(
         target_records=args.target_records,
         out_prefix=args.out_prefix,
@@ -1186,11 +1350,12 @@ def main(argv: list[str] | None = None) -> int:
         seed_value=args.seed,
         concurrency=args.concurrency,
         cost_cap_usd=args.cost_cap,
-        primary_model=args.primary_model,
-        fallback_model=args.fallback_model,
+        primary_model=primary_model,
+        fallback_model=fallback_model,
         env_file=args.env_file,
         dry_run=args.dry_run,
         resume=not args.no_resume,
+        provider_name=args.provider,
     )
 
 
