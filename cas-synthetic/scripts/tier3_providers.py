@@ -45,11 +45,28 @@ GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT = 0.40
 GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT = 0.05
 GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_OUTPUT = 0.20
 
+# Google Gemini 3.1 Pro-Preview — current Pro tier as of 2026-05-06.
+# Source: https://ai.google.dev/gemini-api/docs/gemini-3 — verified.
+# Standard tier (≤200k tokens) is what dialogue SDG uses; the higher
+# tier ($4/$18) only applies above 200k tokens per call which Tier 3
+# dialogue never approaches.
+GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT = 2.00
+GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT = 12.00
+GEMINI_PRO_PREVIEW_HIGH_TIER_PRICE_PER_M_INPUT = 4.00
+GEMINI_PRO_PREVIEW_HIGH_TIER_PRICE_PER_M_OUTPUT = 18.00
+GEMINI_PRO_PREVIEW_TIER_BREAK_TOKENS = 200_000
+
 CLAUDE_DEFAULT_PRIMARY = "claude-sonnet-4-6"
 CLAUDE_DEFAULT_FALLBACK = "claude-3-5-sonnet-20241022"
 
-GEMINI_DEFAULT_PRIMARY = "gemini-2.5-flash-lite"
-GEMINI_DEFAULT_FALLBACK = "gemini-2.5-flash"
+# Per user directive 2026-05-06 (memory: feedback_gemini_default_model.md):
+# the default Gemini model for Tier 3 SDG is gemini-3.1-pro-preview, NOT
+# Flash-Lite. Flash-Lite failed the manual blind review (20/20
+# distinguishable, replies 51% the length of Claude's). Flash-Lite
+# remains useful for auxiliary / non-load-bearing tasks but requires an
+# explicit `--primary-model gemini-2.5-flash-lite` to opt into.
+GEMINI_DEFAULT_PRIMARY = "gemini-3.1-pro-preview"
+GEMINI_DEFAULT_FALLBACK = "gemini-2.5-pro"
 
 DEFAULT_MAX_RETRIES = 5
 
@@ -474,6 +491,34 @@ def load_gemini_api_key(env_file: Optional[Path] = None) -> Optional[str]:
     return None
 
 
+def _gemini_pricing_for_model(
+    model_name: str,
+    *,
+    use_batch_pricing: bool = False,
+) -> tuple[float, float]:
+    """Return (price_per_m_input, price_per_m_output) for a Gemini model.
+
+    Pro-preview is the durable default per user directive 2026-05-06.
+    Falls back to Flash-Lite pricing for explicitly-named flash-lite
+    models. Update this map when Google rotates pricing.
+    """
+    n = (model_name or "").strip().lower()
+    if "pro-preview" in n or "pro" in n.replace("preview", ""):
+        # Pro-preview standard tier ($2/$12, ≤200k tokens). Tier 3 dialogue
+        # SDG never approaches the 200k threshold per call.
+        return GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT, GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT
+    if "flash-lite" in n:
+        if use_batch_pricing:
+            return (
+                GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT,
+                GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_OUTPUT,
+            )
+        return GEMINI_FLASH_LITE_PRICE_PER_M_INPUT, GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
+    # Conservative default: Pro-preview rates. Over-estimating cost in
+    # the cap math is safer than under-estimating.
+    return GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT, GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT
+
+
 def make_provider(
     name: str,
     *,
@@ -487,6 +532,10 @@ def make_provider(
 ) -> BatchDialogueProvider:
     """Construct a provider by name. ``client`` / ``client_factory`` lets
     tests inject a mock without touching SDK init.
+
+    Pricing for Gemini is derived from ``primary_model`` automatically:
+    pro-preview models get Pro-preview rates ($2/$12), flash-lite models
+    get Flash-Lite rates ($0.10/$0.40 or $0.05/$0.20 with batch).
 
     Raises:
         RuntimeError: if the SDK for ``name`` is not importable AND no
@@ -515,12 +564,10 @@ def make_provider(
         )
 
     if n == "gemini":
-        if use_batch_pricing:
-            in_price = GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT
-            out_price = GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_OUTPUT
-        else:
-            in_price = GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
-            out_price = GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
+        active_primary = primary_model or GEMINI_DEFAULT_PRIMARY
+        in_price, out_price = _gemini_pricing_for_model(
+            active_primary, use_batch_pricing=use_batch_pricing
+        )
         if client_factory is None:
             try:
                 import google.generativeai as genai  # type: ignore[import-not-found]
@@ -536,7 +583,7 @@ def make_provider(
             client_factory = lambda model_name: genai.GenerativeModel(model_name)
         return GeminiBatchDialogueProvider(
             client_factory=client_factory,
-            primary_model=primary_model or GEMINI_DEFAULT_PRIMARY,
+            primary_model=active_primary,
             fallback_model=fallback_model or GEMINI_DEFAULT_FALLBACK,
             price_per_m_input=in_price,
             price_per_m_output=out_price,
@@ -617,4 +664,9 @@ __all__ = [
     "GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT",
     "GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT",
     "GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_OUTPUT",
+    "GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT",
+    "GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT",
+    "GEMINI_PRO_PREVIEW_HIGH_TIER_PRICE_PER_M_INPUT",
+    "GEMINI_PRO_PREVIEW_HIGH_TIER_PRICE_PER_M_OUTPUT",
+    "GEMINI_PRO_PREVIEW_TIER_BREAK_TOKENS",
 ]

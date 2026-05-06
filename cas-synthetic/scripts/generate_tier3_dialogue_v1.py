@@ -1126,21 +1126,19 @@ def run(
 
     failure_counter: Counter[str] = Counter()
     if provider_name == "gemini":
-        cost_tracker = ProviderCostTracker(
-            cost_cap_usd,
-            price_per_m_input=GEMINI_FLASH_LITE_PRICE_PER_M_INPUT,
-            price_per_m_output=GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT,
-        )
-        est_in_price = GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
-        est_out_price = GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
+        # Pricing follows the active primary model name (Pro-preview by
+        # default per durable directive 2026-05-06; Flash-Lite only when
+        # explicitly named on --primary-model).
+        from tier3_providers import _gemini_pricing_for_model
+        est_in_price, est_out_price = _gemini_pricing_for_model(primary_model)
     else:
-        cost_tracker = ProviderCostTracker(
-            cost_cap_usd,
-            price_per_m_input=CLAUDE_PRICE_PER_M_INPUT,
-            price_per_m_output=CLAUDE_PRICE_PER_M_OUTPUT,
-        )
         est_in_price = CLAUDE_PRICE_PER_M_INPUT
         est_out_price = CLAUDE_PRICE_PER_M_OUTPUT
+    cost_tracker = ProviderCostTracker(
+        cost_cap_usd,
+        price_per_m_input=est_in_price,
+        price_per_m_output=est_out_price,
+    )
     final_model = primary_model
     api_key_status = "dry-run" if dry_run else "unused"
 
@@ -1282,8 +1280,11 @@ def run(
     all_records = load_existing_records(out_prefix)
     completed_iso = seed.utc_now_iso()
     if provider_name == "gemini":
-        price_in = GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
-        price_out = GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
+        # Manifest pricing must reflect the actual active model, not a
+        # hardcoded Flash-Lite default. Pro-preview = $2/$12, Flash-Lite
+        # = $0.10/$0.40.
+        from tier3_providers import _gemini_pricing_for_model
+        price_in, price_out = _gemini_pricing_for_model(primary_model)
     else:
         price_in = CLAUDE_PRICE_PER_M_INPUT
         price_out = CLAUDE_PRICE_PER_M_OUTPUT

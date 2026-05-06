@@ -173,6 +173,88 @@ def test_gemini_pricing_is_strictly_cheaper_than_claude():
     assert providers.GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT < providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
 
 
+def test_gemini_pro_preview_pricing_matches_official_table():
+    """Verify the Pro-preview pricing constants match Google's published
+    table at https://ai.google.dev/gemini-api/docs/gemini-3 (verified
+    2026-05-06). Standard tier ≤200k tokens per call: $2/$12.
+    Higher tier >200k tokens: $4/$18 (irrelevant for SDG which never
+    crosses 200k per call).
+    """
+    assert providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT == 2.00
+    assert providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT == 12.00
+    assert providers.GEMINI_PRO_PREVIEW_HIGH_TIER_PRICE_PER_M_INPUT == 4.00
+    assert providers.GEMINI_PRO_PREVIEW_HIGH_TIER_PRICE_PER_M_OUTPUT == 18.00
+    assert providers.GEMINI_PRO_PREVIEW_TIER_BREAK_TOKENS == 200_000
+    # Pro-preview is more expensive than Flash-Lite (it's the better model).
+    assert providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT > providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
+    # But still cheaper than Claude on input AND output.
+    assert providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT < providers.CLAUDE_PRICE_PER_M_INPUT
+    assert providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT < providers.CLAUDE_PRICE_PER_M_OUTPUT
+
+
+def test_gemini_default_primary_is_pro_preview():
+    """Per durable user directive 2026-05-06 (memory file
+    feedback_gemini_default_model.md): the default Gemini model must
+    be Pro-preview, not Flash-Lite. Flash-Lite failed manual blind
+    review (20/20 distinguishable)."""
+    assert providers.GEMINI_DEFAULT_PRIMARY == "gemini-3.1-pro-preview"
+
+
+def test_make_provider_gemini_default_uses_pro_preview_pricing():
+    """When Gemini is constructed without an explicit --primary-model,
+    pricing should be Pro-preview rates ($2/$12), NOT Flash-Lite rates."""
+    p = providers.make_provider(
+        "gemini",
+        client_factory=lambda m: _FakeGeminiModel(m),
+    )
+    assert p.primary_model == "gemini-3.1-pro-preview"
+    assert p.price_per_m_input == providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT
+    assert p.price_per_m_output == providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT
+
+
+def test_make_provider_gemini_explicit_flash_lite_uses_flash_lite_pricing():
+    """Flash-Lite remains available via explicit --primary-model. When
+    requested, pricing must follow Flash-Lite rates so cost reporting
+    stays accurate."""
+    p = providers.make_provider(
+        "gemini",
+        primary_model="gemini-2.5-flash-lite",
+        client_factory=lambda m: _FakeGeminiModel(m),
+    )
+    assert p.primary_model == "gemini-2.5-flash-lite"
+    assert p.price_per_m_input == providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
+    assert p.price_per_m_output == providers.GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
+
+
+def test_gemini_pricing_for_model_recognizes_pro_and_flash_lite_variants():
+    """The pricing dispatcher should recognize Pro-preview and Flash-Lite
+    by substring, with Pro-preview as the conservative default for
+    unknown model names (over-estimating cost is safer than
+    under-estimating)."""
+    helper = providers._gemini_pricing_for_model
+    assert helper("gemini-3.1-pro-preview") == (
+        providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT,
+        providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT,
+    )
+    assert helper("gemini-2.5-pro") == (
+        providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT,
+        providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT,
+    )
+    assert helper("gemini-2.5-flash-lite") == (
+        providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT,
+        providers.GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT,
+    )
+    assert helper("gemini-2.5-flash-lite", use_batch_pricing=True) == (
+        providers.GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT,
+        providers.GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_OUTPUT,
+    )
+    # Unknown model -> conservative default (Pro-preview)
+    assert helper("gemini-unknown-future-model") == (
+        providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT,
+        providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT,
+    )
+
+
 def test_gemini_provider_404_swap_signal():
     """A 404-style error must surface as api_status_404 so orchestration
     can swap to fallback model. Uses a Mock that raises a 404-flavored
@@ -226,9 +308,13 @@ def test_make_provider_gemini_with_injected_factory():
     assert isinstance(p, providers.GeminiBatchDialogueProvider)
 
 
-def test_make_provider_gemini_batch_pricing_flag():
+def test_make_provider_gemini_batch_pricing_flag_with_explicit_flash_lite():
+    """Batch pricing only applies when Flash-Lite is the active model
+    (Pro-preview doesn't have a batch tier). User must opt into both
+    Flash-Lite AND batch explicitly."""
     p = providers.make_provider(
         "gemini",
+        primary_model="gemini-2.5-flash-lite",
         client_factory=lambda m: _FakeGeminiModel(m),
         use_batch_pricing=True,
     )
@@ -309,8 +395,9 @@ def test_generator_provider_flag_routes_to_gemini_in_dry_run(tmp_path):
     assert payload["provider"] == "gemini"
     assert payload["primary_model"] == providers.GEMINI_DEFAULT_PRIMARY
     assert payload["fallback_model"] == providers.GEMINI_DEFAULT_FALLBACK
-    assert payload["price_per_m_input_usd"] == providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
-    assert payload["price_per_m_output_usd"] == providers.GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
+    # Default model is Pro-preview, so manifest pricing is Pro-preview rates.
+    assert payload["price_per_m_input_usd"] == providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT
+    assert payload["price_per_m_output_usd"] == providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT
 
 
 def test_provider_cost_tracker_uses_provider_pricing():
