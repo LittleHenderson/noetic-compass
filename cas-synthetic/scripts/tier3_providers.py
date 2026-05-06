@@ -383,9 +383,15 @@ class GeminiBatchDialogueProvider(BatchDialogueProvider):
             # versions; on 0.8.x it accepts a system_instruction param.
             # Pass it via the call config when supported, otherwise
             # prepend to the user message defensively.
-            generation_config = {
+            #
+            # response_mime_type="application/json" forces JSON output:
+            # eliminates the markdown-fence / preamble parsing failures
+            # that Pro-preview was producing in the bakeoff. Falls back
+            # gracefully if the SDK rejects the field.
+            generation_config: dict[str, Any] = {
                 "max_output_tokens": int(max_output_tokens),
                 "temperature": float(temperature),
+                "response_mime_type": "application/json",
             }
             try:
                 resp = await gm.generate_content_async(
@@ -393,13 +399,38 @@ class GeminiBatchDialogueProvider(BatchDialogueProvider):
                     generation_config=generation_config,
                     system_instruction=system_prompt,
                 )
+            except ValueError:
+                # Modern API surface, older SDK config: drop JSON-mode and
+                # retry once. The parser still handles markdown fences.
+                generation_config.pop("response_mime_type", None)
+                try:
+                    resp = await gm.generate_content_async(
+                        [{"role": "user", "parts": [user_message]}],
+                        generation_config=generation_config,
+                        system_instruction=system_prompt,
+                    )
+                except TypeError:
+                    folded = f"{system_prompt}\n\n{user_message}"
+                    resp = await gm.generate_content_async(
+                        folded,
+                        generation_config=generation_config,
+                    )
             except TypeError:
-                # Older API surface — fold system prompt into user content.
+                # Older API surface: fold system prompt into user content.
                 folded = f"{system_prompt}\n\n{user_message}"
-                resp = await gm.generate_content_async(
-                    folded,
-                    generation_config=generation_config,
-                )
+                try:
+                    resp = await gm.generate_content_async(
+                        folded,
+                        generation_config=generation_config,
+                    )
+                except (TypeError, ValueError):
+                    # Some SDK versions reject response_mime_type: drop
+                    # it and re-try. Parser still handles markdown fences.
+                    generation_config.pop("response_mime_type", None)
+                    resp = await gm.generate_content_async(
+                        folded,
+                        generation_config=generation_config,
+                    )
         except Exception as exc:  # noqa: BLE001
             text = f"{type(exc).__name__}:{exc}"
             lower = text.lower()
@@ -419,12 +450,20 @@ class GeminiBatchDialogueProvider(BatchDialogueProvider):
             )
 
         # Token counting: google.generativeai exposes usage_metadata on the
-        # response when supported.
+        # response when supported. Pro-preview uses "thinking" tokens that
+        # are billed as output but not surfaced in candidates_token_count;
+        # they show up only in total_token_count. Charge them to the
+        # output bucket so cost reporting matches what Google bills.
         try:
             usage = getattr(resp, "usage_metadata", None)
             if usage is not None:
                 in_tokens = int(getattr(usage, "prompt_token_count", 0) or 0)
-                out_tokens = int(getattr(usage, "candidates_token_count", 0) or 0)
+                visible_out = int(getattr(usage, "candidates_token_count", 0) or 0)
+                total = int(getattr(usage, "total_token_count", 0) or 0)
+                # Hidden reasoning tokens = total - prompt - visible_out.
+                # Always non-negative; clamp at 0 if total is missing.
+                hidden = max(0, total - in_tokens - visible_out)
+                out_tokens = visible_out + hidden
             else:
                 in_tokens = 0
                 out_tokens = 0

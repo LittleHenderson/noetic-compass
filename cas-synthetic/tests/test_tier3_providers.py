@@ -118,12 +118,21 @@ def test_claude_provider_manifest_block():
 # ---------------------------------------------------------------------------
 
 class _FakeGeminiResponse:
-    def __init__(self, text: str = "gemini reply", in_tokens: int = 20, out_tokens: int = 40) -> None:
+    def __init__(
+        self,
+        text: str = "gemini reply",
+        in_tokens: int = 20,
+        out_tokens: int = 40,
+        total_tokens: int | None = None,
+    ) -> None:
         self.text = text
-        self.usage_metadata = SimpleNamespace(
-            prompt_token_count=in_tokens,
-            candidates_token_count=out_tokens,
-        )
+        usage = {
+            "prompt_token_count": in_tokens,
+            "candidates_token_count": out_tokens,
+        }
+        if total_tokens is not None:
+            usage["total_token_count"] = total_tokens
+        self.usage_metadata = SimpleNamespace(**usage)
 
 
 class _FakeGeminiModel:
@@ -154,6 +163,66 @@ def test_gemini_provider_happy_path():
     assert result.output_tokens == 40
     assert factory_calls == ["gemini-2.5-flash-lite"]
     assert tracker.input_tokens == 20
+
+
+def test_gemini_provider_requests_json_mime_type():
+    fake_model = _FakeGeminiModel("gemini-3.1-pro-preview")
+    p = providers.GeminiBatchDialogueProvider(client_factory=lambda m: fake_model)
+    tracker = _FakeCostTracker()
+
+    result = asyncio.run(p.call(
+        system_prompt="sys", user_message="hi", model="gemini-3.1-pro-preview",
+        cost_tracker=tracker, max_output_tokens=50, temperature=0.5,
+    ))
+
+    assert result.error_reason is None
+    kwargs = fake_model.generate_content_async.call_args.kwargs
+    assert kwargs["generation_config"]["response_mime_type"] == "application/json"
+
+
+def test_gemini_provider_retries_without_json_mime_type_when_rejected():
+    class _RejectsMimeGeminiModel:
+        def __init__(self) -> None:
+            self.configs: list[dict[str, object]] = []
+
+        async def generate_content_async(self, *_args, **kwargs):
+            config = dict(kwargs.get("generation_config") or {})
+            self.configs.append(config)
+            if "response_mime_type" in config:
+                raise ValueError("unknown field response_mime_type")
+            return _FakeGeminiResponse()
+
+    fake_model = _RejectsMimeGeminiModel()
+    p = providers.GeminiBatchDialogueProvider(client_factory=lambda m: fake_model)
+    tracker = _FakeCostTracker()
+
+    result = asyncio.run(p.call(
+        system_prompt="sys", user_message="hi", model="gemini-3.1-pro-preview",
+        cost_tracker=tracker, max_output_tokens=50, temperature=0.5,
+    ))
+
+    assert result.error_reason is None
+    assert len(fake_model.configs) == 2
+    assert fake_model.configs[0]["response_mime_type"] == "application/json"
+    assert "response_mime_type" not in fake_model.configs[1]
+
+
+def test_gemini_provider_charges_hidden_thinking_tokens_from_total_count():
+    response = _FakeGeminiResponse(in_tokens=100, out_tokens=50, total_tokens=1200)
+    p = providers.GeminiBatchDialogueProvider(
+        client_factory=lambda m: _FakeGeminiModel(m, response=response)
+    )
+    tracker = _FakeCostTracker()
+
+    result = asyncio.run(p.call(
+        system_prompt="sys", user_message="hi", model="gemini-3.1-pro-preview",
+        cost_tracker=tracker, max_output_tokens=50, temperature=0.5,
+    ))
+
+    assert result.error_reason is None
+    assert result.input_tokens == 100
+    assert result.output_tokens == 1100
+    assert tracker.output_tokens == 1100
 
 
 def test_gemini_provider_manifest_block_default_pricing():

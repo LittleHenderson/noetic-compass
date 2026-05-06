@@ -93,6 +93,12 @@ DEFAULT_RECORDS_PER_SHARD = 5_000
 DEFAULT_TEMPERATURE = 0.8
 MAX_RETRIES = seed.MAX_RETRIES
 MAX_OUTPUT_TOKENS_PER_TURN = 210
+# Gemini Pro-preview burns ~1000 hidden "thinking" tokens before producing
+# any visible output. The 210/turn budget that works for Claude truncates
+# Pro-preview's JSON output mid-string. Bump the per-turn budget for
+# Gemini so thinking + actual JSON both fit. Cost tracker charges the
+# thinking tokens too, so the manifest reflects real spend.
+MAX_OUTPUT_TOKENS_PER_TURN_GEMINI = 800
 COST_LOG_INTERVAL = 1_000
 
 DEFAULT_OUT_PREFIX = _REPO_ROOT / "cas-synthetic" / "data" / "native_nl" / "v1_dialogue"
@@ -1030,7 +1036,14 @@ async def run_tier3_api(
         )
 
     max_turns = max(len(job.turn_specs) for job in jobs)
-    max_output_tokens = max_turns * MAX_OUTPUT_TOKENS_PER_TURN
+    # Gemini's reasoning models need a much larger output budget to leave
+    # room for hidden thinking + actual JSON. Claude doesn't.
+    per_turn_budget = (
+        MAX_OUTPUT_TOKENS_PER_TURN_GEMINI
+        if provider.name == "gemini"
+        else MAX_OUTPUT_TOKENS_PER_TURN
+    )
+    max_output_tokens = max_turns * per_turn_budget
     ctx = Tier3RunContext(
         client=getattr(provider, "client", None),
         cost_tracker=cost_tracker,
@@ -1044,6 +1057,11 @@ async def run_tier3_api(
         provider=provider,
     )
 
+    # Preflight budget must accommodate Gemini's hidden thinking tokens.
+    # Claude's 80-token probe was fine for non-thinking models; Pro-preview
+    # eats ~1000 tokens reasoning before producing any output, so the
+    # probe needs at least the per-turn budget the real run uses.
+    probe_max_tokens = max(80, per_turn_budget * 2)
     probe_text, _probe_model, probe_err = await call_dialogue(
         provider,
         "Return JSON only: {\"turns\":[{\"turn_index\":0,\"prompt_text\":\"ok\","
@@ -1051,7 +1069,7 @@ async def run_tier3_api(
         system_prompt=TIER3_SYSTEM_PROMPT,
         model=primary_model,
         cost_tracker=cost_tracker,
-        max_output_tokens=80,
+        max_output_tokens=probe_max_tokens,
         temperature=0.0,
     )
     if probe_text is None and probe_err == "api_status_404":
@@ -1068,7 +1086,7 @@ async def run_tier3_api(
             system_prompt=TIER3_SYSTEM_PROMPT,
             model=fallback_model,
             cost_tracker=cost_tracker,
-            max_output_tokens=80,
+            max_output_tokens=probe_max_tokens,
             temperature=0.0,
         )
     if probe_text is None:
