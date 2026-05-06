@@ -29,6 +29,7 @@ import hashlib
 import json
 import os
 import random
+import shutil
 import subprocess
 import sys
 import time
@@ -170,16 +171,20 @@ def _build_nl_generation_head(
 ) -> nn.Module:
     """Build the NL generation head, random-initialized, no foreign weights.
 
-    The real run uses the parallel agent's
-    ``cas_native.model.nl_generation_head.NLGenerationHead`` (whose forward
-    signature is ``forward(decoder_input_ids, bottleneck_z, ...)``).
+    Two paths:
 
-    Smoke tests, hermetic unit tests, and any caller that doesn't yet have
-    a CAS bottleneck wired up can pass ``use_fallback=True`` to receive a
-    tiny inline decoder with the simpler ``forward(input_ids, target_ids,
-    struct_targets, ...)`` signature documented on
-    :class:`_FallbackNLGenerationHead`. The fallback is also used when the
-    parallel agent's module isn't importable yet.
+    * Real path (default): build the production
+      :class:`cas_native.model.nl_generation_head.NLGenerationHead`. This
+      head is meant to be attached to a :class:`CASNativeModel` via
+      ``attach_nl_gen_head`` and driven through ``forward_with_lm``; calling
+      its ``forward`` directly without the encoder will fail with a
+      missing-argument error.
+    * Fallback path: opt-in via ``use_fallback=True``. Returns the tiny
+      :class:`_FallbackNLGenerationHead` whose ``forward(input_ids,
+      target_ids, struct_targets, ...)`` shape is suitable for hermetic CPU
+      smoke tests and for legacy callers that have not yet wired the
+      encoder. The real path NEVER silently falls back — an import or
+      construction error raises rather than downgrading.
     """
     torch.manual_seed(int(seed))
     if use_fallback:
@@ -189,25 +194,129 @@ def _build_nl_generation_head(
             n_layers=int(n_layers),
             n_heads=int(n_heads),
         )
-    try:
-        from cas_native.model.nl_generation_head import (  # type: ignore[import-not-found]
-            NLGenerationHead,
-            NLGenerationHeadConfig,
+    from cas_native.model.nl_generation_head import (  # type: ignore[import-not-found]
+        NLGenerationHead,
+        NLGenerationHeadConfig,
+    )
+    cfg = NLGenerationHeadConfig(
+        vocab_size=int(vocab_size),
+        d_model=int(d_model),
+        n_layers=int(n_layers),
+        n_heads=int(n_heads),
+    )
+    return NLGenerationHead(cfg)
+
+
+def save_tokenizer_artifacts(
+    tokenizer: Any,
+    out_dir: Path,
+    *,
+    english_bpe_path: str = "",
+) -> dict[str, Any]:
+    """Persist the tokenizer (and any composed BPE artifact) under ``out_dir``.
+
+    A checkpoint is only reusable if the vocab that produced it is colocated.
+    This helper ensures ``tokenizer.json`` is always written when a real
+    tokenizer is in play. For the composed ``ExtendedHybridCASTokenizer``
+    (CAS reserved + English BPE), the helper writes the base tokenizer to
+    ``tokenizer.json`` and copies the BPE artifact to ``english_bpe.json``
+    so the checkpoint directory is fully self-contained — no dependency on
+    the original source paths surviving.
+
+    Returns a dict suitable for inclusion in ``CheckpointManifest.extra``.
+
+    Raises:
+        RuntimeError: if neither the tokenizer nor its ``.base`` exposes
+            ``save()``. Silent skip is unacceptable — a generation
+            checkpoint without its tokenizer cannot be loaded back.
+    """
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    provenance: dict[str, Any] = {}
+    base_for_save = getattr(tokenizer, "base", None)
+    is_extended = base_for_save is not None and base_for_save is not tokenizer
+
+    tokenizer_out = out_dir / "tokenizer.json"
+    if hasattr(tokenizer, "save") and not is_extended:
+        tokenizer.save(tokenizer_out)
+    elif base_for_save is not None and hasattr(base_for_save, "save"):
+        base_for_save.save(tokenizer_out)
+    else:
+        raise RuntimeError(
+            "tokenizer cannot be saved for checkpoint provenance — "
+            "neither tokenizer nor tokenizer.base exposes save()"
         )
-        cfg = NLGenerationHeadConfig(
-            vocab_size=int(vocab_size),
-            d_model=int(d_model),
-            n_layers=int(n_layers),
-            n_heads=int(n_heads),
+    provenance["tokenizer_path"] = str(tokenizer_out)
+    provenance["tokenizer_hash"] = hash_corpus_file(tokenizer_out)
+    provenance["vocab_size"] = int(getattr(tokenizer, "vocab_size", 0))
+    provenance["tokenizer_kind"] = type(tokenizer).__name__
+
+    if english_bpe_path:
+        bpe_src = Path(english_bpe_path)
+        if not bpe_src.exists():
+            raise FileNotFoundError(
+                f"english_bpe_path does not exist: {english_bpe_path}"
+            )
+        bpe_dst = out_dir / "english_bpe.json"
+        shutil.copy2(bpe_src, bpe_dst)
+        provenance["english_bpe_path"] = str(bpe_dst)
+        provenance["english_bpe_hash"] = hash_corpus_file(bpe_dst)
+        provenance["english_bpe_source_path"] = str(bpe_src)
+        if hasattr(tokenizer, "metadata"):
+            try:
+                provenance["tokenizer_metadata"] = tokenizer.metadata()
+            except Exception:
+                pass
+
+    return provenance
+
+
+def _build_cas_native_model_with_head(
+    *,
+    vocab_size: int,
+    d_model: int = 512,
+    n_layers: int = 6,
+    n_heads: int = 8,
+    head_n_layers: int = 6,
+    head_n_heads: int = 8,
+    seed: int = 42,
+) -> nn.Module:
+    """Build a full :class:`CASNativeModel` and attach a real :class:`NLGenerationHead`.
+
+    d_model is enforced to match between encoder and head. Mismatch raises
+    rather than silently projecting.
+    """
+    from cas_native.model.cas_native_model import CASNativeConfig, CASNativeModel
+    from cas_native.model.nl_generation_head import (
+        NLGenerationHead,
+        NLGenerationHeadConfig,
+    )
+
+    torch.manual_seed(int(seed))
+    enc_cfg = CASNativeConfig(
+        d_model=int(d_model),
+        n_layers=int(n_layers),
+        n_heads=int(n_heads),
+        vocab_size=int(vocab_size),
+    )
+    encoder = CASNativeModel(enc_cfg)
+
+    head_cfg = NLGenerationHeadConfig(
+        vocab_size=int(vocab_size),
+        d_model=int(d_model),
+        n_heads=int(head_n_heads),
+        n_layers=int(head_n_layers),
+    )
+    head = NLGenerationHead(head_cfg)
+
+    if encoder.config.d_model != head.config.d_model:
+        raise ValueError(
+            f"d_model mismatch: CASNativeModel={encoder.config.d_model}, "
+            f"NLGenerationHead={head.config.d_model}. Match them at construction."
         )
-        return NLGenerationHead(cfg)
-    except Exception:
-        return _FallbackNLGenerationHead(
-            vocab_size=int(vocab_size),
-            d_model=int(d_model),
-            n_layers=int(n_layers),
-            n_heads=int(n_heads),
-        )
+    encoder.attach_nl_gen_head(head)
+    return encoder
 
 
 class _FallbackNLGenerationHead(nn.Module):
@@ -464,10 +573,38 @@ def run_smoke_test(args: argparse.Namespace) -> int:
 
 
 def run_training(args: argparse.Namespace) -> int:
-    """Full training run. Loads corpus, splits, trains, saves with provenance."""
+    """Full training run.
+
+    Two execution modes, both load the corpus from ``--data-path``:
+
+    * Real path (default): builds a full ``CASNativeModel``, attaches a
+      ``NLGenerationHead`` via ``attach_nl_gen_head``, runs every batch
+      through ``forward_with_lm``, and computes a reply-only masked
+      cross-entropy on ``out["lm_logits"]``. Records are tokenized live
+      via ``NativeNLCollator``. Records must carry ``prompt_text`` /
+      ``reply_text`` / ``cas_expression``; pre-tokenized records are
+      ignored on this path.
+    * Fallback path (``--use-fallback-head``): legacy
+      ``_FallbackNLGenerationHead`` driven by the pre-tokenized
+      ``input_ids`` / ``target_ids`` records. For hermetic CI and legacy
+      callers; not used for production training.
+    """
+    from cas_native.training.datasets.native_nl_collator import NativeNLCollator
+    from cas_native.training.masked_ce_loss import masked_cross_entropy
+
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     events_path = out_dir / "training_events.jsonl"
+
+    # Validate observability cadence — modulo-by-zero is silent and corrupts
+    # the train_progress signal, so reject early.
+    if int(args.train_log_every_steps) <= 0:
+        print(json.dumps({
+            "event": "fatal",
+            "reason": "train_log_every_steps_must_be_positive",
+            "got": int(args.train_log_every_steps),
+        }))
+        return 4
 
     if not args.data_path:
         print(json.dumps({"event": "fatal", "reason": "no_data_path"}))
@@ -481,21 +618,78 @@ def run_training(args: argparse.Namespace) -> int:
         records, val_fraction=0.05, seed=int(args.seed)
     )
 
-    # Vocab size is taken from the corpus or default. Real run gets it from the
-    # parallel tokenizer agent's HybridCASTokenizer.
-    vocab_size = int(getattr(args, "vocab_size", 0) or 32000)
     seed = int(args.seed)
     torch.manual_seed(seed)
     random.seed(seed)
-
     device = torch.device(args.device)
-    model = _build_nl_generation_head(
-        vocab_size=vocab_size,
-        d_model=512,
-        n_layers=6,
-        n_heads=8,
-        seed=seed,
-    ).to(device)
+
+    use_fallback = bool(getattr(args, "use_fallback_head", False))
+    use_cas_prefix = bool(getattr(args, "use_cas_prefix", False))
+
+    # Tokenizer provenance — recorded in checkpoint_manifest so a checkpoint
+    # is never separated from the vocab needed to decode it.
+    tokenizer_provenance: dict[str, Any] = {}
+
+    if use_fallback:
+        # Legacy path: pre-tokenized records, fallback head, single forward call.
+        vocab_size = int(getattr(args, "vocab_size", 0) or 32000)
+        model = _build_nl_generation_head(
+            vocab_size=vocab_size,
+            d_model=int(args.d_model),
+            n_layers=int(args.head_n_layers),
+            n_heads=int(args.head_n_heads),
+            seed=seed,
+            use_fallback=True,
+        ).to(device)
+        collator = None
+        tokenizer = None
+    else:
+        # Real path: build tokenizer (frozen on this corpus's text), build the
+        # full encoder + head pipeline, prepare a live collator.
+        from cas_native.training.tokenizer import HybridCASTokenizer
+
+        loaded_from_path = ""
+        if getattr(args, "tokenizer_path", ""):
+            tokenizer = HybridCASTokenizer.load(args.tokenizer_path)
+            loaded_from_path = str(args.tokenizer_path)
+        else:
+            tokenizer = HybridCASTokenizer.from_records(train_records, freeze=True)
+
+        # Optional English BPE composition for fluent generation. The base
+        # HybridCASTokenizer alone is acceptable for CPU smoke; production
+        # generation uses the extended path.
+        english_bpe_path = str(getattr(args, "english_bpe_path", "") or "")
+        if english_bpe_path:
+            tokenizer = tokenizer.with_english_bpe(english_bpe_path)
+
+        # Save tokenizer + (when set) BPE artifact into out_dir; raises
+        # loudly if the tokenizer cannot be persisted (silent skip is
+        # unacceptable for checkpoint provenance).
+        tokenizer_provenance = save_tokenizer_artifacts(
+            tokenizer,
+            out_dir,
+            english_bpe_path=english_bpe_path,
+        )
+        if loaded_from_path:
+            tokenizer_provenance["loaded_from_path"] = loaded_from_path
+        tokenizer_provenance["use_cas_prefix"] = use_cas_prefix
+
+        vocab_size = int(tokenizer.vocab_size)
+        model = _build_cas_native_model_with_head(
+            vocab_size=vocab_size,
+            d_model=int(args.d_model),
+            n_layers=int(args.encoder_n_layers),
+            n_heads=int(args.encoder_n_heads),
+            head_n_layers=int(args.head_n_layers),
+            head_n_heads=int(args.head_n_heads),
+            seed=seed,
+        ).to(device)
+        collator = NativeNLCollator(
+            tokenizer,
+            max_prompt_len=int(args.max_prompt_len),
+            max_reply_len=int(args.max_reply_len),
+            max_cas_prefix_len=int(args.max_cas_prefix_len),
+        )
 
     if args.resume_from:
         resume_path = Path(args.resume_from)
@@ -518,27 +712,83 @@ def run_training(args: argparse.Namespace) -> int:
     global_step = starting_step
     final_loss = 0.0
     epochs_completed = starting_epoch
+    train_start_time = time.perf_counter()
 
     with events_path.open("a", encoding="utf-8") as event_stream:
         for epoch in range(starting_epoch, int(args.epochs)):
             random.shuffle(train_records)
+            batches_per_epoch = max(1, (len(train_records) + int(args.batch_size) - 1) // int(args.batch_size))
+            batch_in_epoch = 0
             for batch_start in range(0, len(train_records), int(args.batch_size)):
                 batch_records = train_records[batch_start : batch_start + int(args.batch_size)]
-                batch = _records_to_batch(batch_records, device=device)
-                if batch is None:
-                    continue
-                out = model(**batch)
-                loss_lm = out.get("lm_loss", torch.tensor(0.0, device=device))
-                loss_struct = out.get(
-                    "structured_loss", torch.tensor(0.0, device=device)
-                )
+                if use_fallback:
+                    batch = _records_to_batch(batch_records, device=device)
+                    if batch is None:
+                        continue
+                    out = model(**batch)
+                    loss_lm_t = out.get("lm_loss", torch.tensor(0.0, device=device))
+                    loss_struct_t = out.get(
+                        "structured_loss", torch.tensor(0.0, device=device)
+                    )
+                else:
+                    assert collator is not None
+                    batch = collator(batch_records, device=device)
+                    if batch is None:
+                        continue
+                    # CAS prefix is opt-in: NLGenerationHead.forward has no
+                    # cas_prefix_mask parameter, so PAD tokens in a padded
+                    # prefix would be consumed as real conditioning. Until the
+                    # head exposes a mask (or callers bucket by prefix
+                    # length), default to passing None. Bottleneck-z and
+                    # register-id continue to carry CAS state.
+                    cas_prefix_arg = batch["cas_prefix_ids"] if use_cas_prefix else None
+                    out = model.forward_with_lm(
+                        batch["input_ids"],
+                        batch["lm_decoder_input_ids"],
+                        attention_mask=batch["attention_mask"],
+                        cas_prefix_ids=cas_prefix_arg,
+                        register_id=batch["register_id"],
+                    )
+                    loss_lm_t = masked_cross_entropy(
+                        out["lm_logits"],
+                        batch["lm_targets"],
+                        batch["loss_mask"],
+                    )
+                    # First bridge: structured loss path is wired separately
+                    # (B-2.5 follow-on). LM-only here.
+                    loss_struct_t = torch.tensor(0.0, device=device)
+
                 beta = scheduler.value_at(global_step)
-                total = float(args.alpha_structured) * loss_struct + beta * loss_lm
+                total = float(args.alpha_structured) * loss_struct_t + beta * loss_lm_t
                 optim.zero_grad(set_to_none=True)
                 total.backward()
                 optim.step()
                 global_step += 1
+                batch_in_epoch += 1
                 final_loss = float(total.item())
+
+                # train_progress: always-print for batches 1, 3, 5 of epoch 0,
+                # then every --train-log-every-steps. Disambiguates "stuck"
+                # from "slow."
+                tps_now = batch_in_epoch / max(time.perf_counter() - train_start_time, 1e-6)
+                always_log = (epoch == starting_epoch and batch_in_epoch in (1, 3, 5))
+                if always_log or global_step % int(args.train_log_every_steps) == 0:
+                    elapsed = time.perf_counter() - train_start_time
+                    eta_min = (batches_per_epoch - batch_in_epoch) / max(tps_now, 1e-6) / 60.0
+                    progress = {
+                        "event": "train_progress",
+                        "epoch": epoch,
+                        "batch_in_epoch": batch_in_epoch,
+                        "batches_per_epoch": batches_per_epoch,
+                        "global_step": global_step,
+                        "train_loss_avg": float(final_loss),
+                        "elapsed_sec": float(elapsed),
+                        "batches_per_sec": float(tps_now),
+                        "eta_epoch_min": float(eta_min),
+                        "mode": "fallback" if use_fallback else "real",
+                    }
+                    print(json.dumps(progress, sort_keys=True), flush=True)
+
                 if global_step % int(args.logging_steps) == 0:
                     emit_train_step_event(
                         event_id=str(uuid.uuid4()),
@@ -546,8 +796,8 @@ def run_training(args: argparse.Namespace) -> int:
                         step=global_step,
                         epoch=epoch,
                         loss_total=final_loss,
-                        loss_structured=float(loss_struct.item()),
-                        loss_lm=float(loss_lm.item()),
+                        loss_structured=float(loss_struct_t.item()),
+                        loss_lm=float(loss_lm_t.item()),
                         beta=beta,
                         lr=float(args.lr),
                         out_stream=event_stream,
@@ -577,6 +827,9 @@ def run_training(args: argparse.Namespace) -> int:
             "global_step": global_step,
             "curriculum": scheduler.to_provenance(),
             "checkpoint_path": str(ckpt_path),
+            "tokenizer": tokenizer_provenance,
+            "use_fallback_head": use_fallback,
+            "use_cas_prefix": use_cas_prefix,
         },
     )
     with (out_dir / "checkpoint_manifest.json").open("w", encoding="utf-8") as fh:
@@ -661,6 +914,51 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--device", type=str, default="cuda")
     p.add_argument("--logging-steps", type=int, default=50)
     p.add_argument("--vocab-size", type=int, default=32000)
+    # Real-path wiring (default: real). Use --use-fallback-head for the
+    # legacy pre-tokenized smoke path.
+    p.add_argument(
+        "--use-fallback-head",
+        action="store_true",
+        help=(
+            "Use the legacy _FallbackNLGenerationHead with pre-tokenized "
+            "input_ids/target_ids records. Default is the real path: full "
+            "CASNativeModel + NLGenerationHead via attach_nl_gen_head + "
+            "forward_with_lm."
+        ),
+    )
+    p.add_argument("--tokenizer-path", type=str, default="")
+    p.add_argument(
+        "--english-bpe-path",
+        type=str,
+        default="",
+        help=(
+            "Path to a saved English-BPE artifact (see "
+            "cas_native.training.english_bpe_extension.train_english_bpe). "
+            "When set, composes the base HybridCASTokenizer with the BPE "
+            "merges to produce an ExtendedHybridCASTokenizer for fluent "
+            "English generation. Recommended for any production training run."
+        ),
+    )
+    p.add_argument(
+        "--use-cas-prefix",
+        action="store_true",
+        help=(
+            "Pass cas_prefix_ids into NLGenerationHead.forward via "
+            "forward_with_lm. OFF by default: NLGenerationHead has no "
+            "cas_prefix_mask, so padded prefixes leak PAD tokens into "
+            "conditioning. Enable only after the head exposes a mask or "
+            "callers bucket records by prefix length."
+        ),
+    )
+    p.add_argument("--d-model", type=int, default=512)
+    p.add_argument("--encoder-n-layers", type=int, default=6)
+    p.add_argument("--encoder-n-heads", type=int, default=8)
+    p.add_argument("--head-n-layers", type=int, default=6)
+    p.add_argument("--head-n-heads", type=int, default=8)
+    p.add_argument("--max-prompt-len", type=int, default=256)
+    p.add_argument("--max-reply-len", type=int, default=256)
+    p.add_argument("--max-cas-prefix-len", type=int, default=32)
+    p.add_argument("--train-log-every-steps", type=int, default=20)
     return p
 
 
