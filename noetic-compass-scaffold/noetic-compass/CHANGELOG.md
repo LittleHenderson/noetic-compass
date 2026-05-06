@@ -1,5 +1,56 @@
 # Noetic Compass — Progress Log
 
+## Session 56: Path B-2 lands + class-weighted-loss MISS closes the classifier-band-aid track (May 6, 2026)
+
+**Frame.** Two outcomes: (1) the long-running class-weighted-loss smoke missed all four verdict gates, closing the loss/sampler-side experiments for Drive-head imbalance; (2) Path B-2 (Native NL generation training bridge) committed locally and ready to scale once Codex's Tier 3 dialogue SDG reaches volume. K=9 (commit `d99810a`, 93.2% canonical / 46.9% paraphrase / 79.4% drive) stays production. Path B is the forward path.
+
+**Commits**
+- `385c5a2` cas-native: wire native NL generation training bridge (B-2)
+
+**Class-weighted-loss smoke verdict (PID 16433, run dir `v1_smoke_drive_class_weighted_loss_2026_05_06`).** 4h 30m on RTX A6000. 3-epoch run, paraphrase-augment-train=3, inverse-frequency-mean-one drive weights (F1=0.46, F2-F7≈1.13-1.34). Final results:
+- Overall all-heads-exact: **53.2%** (epoch trajectory 49.8% → 51.8% → 53.2%). MISS: target ≥55%.
+- Drive head accuracy: **72.2%**. MISS: target ≥80%; also **−7.2pp below K=9 baseline** of 79.4%.
+- F1 over-prediction: **+32.2%**. MISS: required to beat BOTH paraphrase smoke (+42%) AND balanced sampler (+15%); only beats paraphrase.
+- F6 sink: **+111.3%**. MISS catastrophically — worst F6 over-prediction across all three runs (paraphrase had +16%, balanced sampler +106%).
+- All four targets MISS → per Codex's branching, K=9 stays production, move to conversational v0 path.
+- Full per-bucket and per-head data in `manifest.json`; samples + Drive predicted-vs-target distribution in `samples.jsonl`.
+
+**Diagnostic read.** Class-weighted loss shifted the imbalance rather than fixed it — same failure mode as the balanced sampler, just biased differently. Inverse-frequency weights made the model under-predict F1 less aggressively but redirected the variance into F6, producing the worst F6 sink yet. Both class-balancing levers (sampler and weighted loss) demonstrate that drive head imbalance is **not addressable from the loss/sampling side alone**. The sink keeps moving but doesn't disappear. Loss/sampler-side experiments are closed.
+
+**Path B-2 — Native NL generation training bridge.** Commit `385c5a2`, 8 files +1743/−50 LOC, 67 tests passing. Codex audited the design twice (v1 and v3) and caught a load-bearing silent-skip bug; v4 is the audit-clean state.
+
+- `cas-native/training/datasets/native_nl_collator.py` — `NativeNLCollator` converts Tier 3 dialogue records to `forward_with_lm` kwargs (input_ids/attention_mask/decoder_input_ids/cas_prefix_ids/register_id) plus loss-side fields (lm_targets/loss_mask) plus provenance (record_ids/trace_ids).
+- `cas-native/training/masked_ce_loss.py` — `masked_cross_entropy` reply-only LM loss, ignore_index + explicit mask combined.
+- `cas-native/training/train_native_nl_gen.py` — real path builds full `CASNativeModel`, attaches `NLGenerationHead` via `attach_nl_gen_head`, drives every batch through `forward_with_lm`. Fallback path (`--use-fallback-head`) gated explicitly; no silent downgrade. d_model hard-equality guard at construction (no projection).
+- `save_tokenizer_artifacts()` helper persists `tokenizer.json` + copies any `--english-bpe-path` artifact into `out_dir` as `english_bpe.json`. Raises if unsavable rather than silently skipping (the Codex-caught bug). Manifest extra carries `tokenizer_kind`, `tokenizer_hash`, `english_bpe_path` (out_dir), `english_bpe_hash`, `english_bpe_source_path`, `vocab_size`, `use_cas_prefix`, `use_fallback_head`.
+- `--use-cas-prefix` opt-in (default OFF) prevents PAD-token leakage into NLGenerationHead conditioning until the head exposes a `cas_prefix_mask`. Bottleneck-z and register-id continue to carry CAS state.
+- `--train-log-every-steps` rejects 0/negative at run_training entry; modulo-by-zero would have silently corrupted the train_progress signal.
+- Always-print `train_progress` events for batches 1, 3, 5 of epoch 0 plus every N batches per the durable observability rule.
+
+**Tests landed (B-2 commit, 67 passing):**
+- `test_native_nl_collator.py` (14 tests including `test_mixed_length_cas_prefix_pads_with_pad_id` documenting the leakage point)
+- `test_masked_ce_loss.py` (7 tests covering all-ones-mask reduction, ignore_index, all-zero-mask safe-divide, label smoothing, reduction modes, shape guards)
+- `test_save_tokenizer_artifacts.py` (5 tests pinning the four save branches + the previously silent skip bug)
+- Existing `test_native_nl_gen_training.py` (14) and `test_nl_generation_head.py` (27) unchanged
+
+**Out of scope for B-2 (intentional).**
+- Structured loss reattach — first bridge LM-only (α=0); structured path is B-2.5 follow-on against the existing `CASNativeModel.forward()` outputs.
+- B-3 GPU training run — blocked on Codex's Tier 3 dialogue SDG reaching ≥10K records.
+- B-4 chat REPL two-stage inference — blocked on B-3 producing a usable checkpoint.
+- `train_structured_prediction.py` / `structured_prediction.py` — closed classifier-band-aid experiments, intentionally excluded.
+
+**Object provenance preserved.** Every B-2 record-batch carries `record_ids` and `trace_ids` lists in order. The collator preserves them through to the trainer, where they get folded into the `GenerationTrace` records when `--trace-mode=full` is set. Mode 7 surface populates with real model values when the real path runs.
+
+**Path B status now.**
+
+| Track | State |
+|---|---|
+| B-1 Tier 3 dialogue SDG | In flight under Codex; 477-record paid proof passed quality review; ready to scale 5K → 50K |
+| **B-2 Batcher reconciliation** | **DONE — committed `385c5a2`** |
+| B-3 First native generation training | Blocked on B-1 reaching ≥10K records |
+| B-4 Two-stage inference in chat REPL | Blocked on B-3 |
+| Path C Simplex Δ°₃₉ rebuild | Parked POST v0 demo |
+
 ## Session 55: Native CAS-Native NL Generator Architecture Push + Belief Substrate + Mode 7 Live Wire-Up (May 4, 2026 evening)
 
 **Frame.** Single-night sprint that delivered three new architectural surfaces (CAS-as-Belief-Substrate, Mode 7 live network attribution, Idea Atlas adapter), the full native CAS-Native NL generation stack (tokenizer extension, NLGenerationHead module, training pipeline, eval harness, generation trace, SDG seed corpus), and ratified two hard architectural rules (no foreign pretrained weights anywhere; object traceability load-bearing on every artifact). Sessions 53 and 54 below are partial reports from sub-agents in this same sprint.
