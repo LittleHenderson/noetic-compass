@@ -5,7 +5,7 @@
 **Frame.** Two outcomes: (1) the long-running class-weighted-loss smoke missed all four verdict gates, closing the loss/sampler-side experiments for Drive-head imbalance; (2) Path B-2 (Native NL generation training bridge) committed locally and ready to scale once Codex's Tier 3 dialogue SDG reaches volume. K=9 (commit `d99810a`, 93.2% canonical / 46.9% paraphrase / 79.4% drive) stays production. Path B is the forward path.
 
 **Commits**
-- `385c5a2` cas-native: wire native NL generation training bridge (B-2)
+- `62f0299` cas-native: wire native NL generation training bridge (B-2)
 
 **Class-weighted-loss smoke verdict (PID 16433, run dir `v1_smoke_drive_class_weighted_loss_2026_05_06`).** 4h 30m on RTX A6000. 3-epoch run, paraphrase-augment-train=3, inverse-frequency-mean-one drive weights (F1=0.46, F2-F7≈1.13-1.34). Final results:
 - Overall all-heads-exact: **53.2%** (epoch trajectory 49.8% → 51.8% → 53.2%). MISS: target ≥55%.
@@ -17,7 +17,7 @@
 
 **Diagnostic read.** Class-weighted loss shifted the imbalance rather than fixed it — same failure mode as the balanced sampler, just biased differently. Inverse-frequency weights made the model under-predict F1 less aggressively but redirected the variance into F6, producing the worst F6 sink yet. Both class-balancing levers (sampler and weighted loss) demonstrate that drive head imbalance is **not addressable from the loss/sampling side alone**. The sink keeps moving but doesn't disappear. Loss/sampler-side experiments are closed.
 
-**Path B-2 — Native NL generation training bridge.** Commit `385c5a2`, 8 files +1743/−50 LOC, 67 tests passing. Codex audited the design twice (v1 and v3) and caught a load-bearing silent-skip bug; v4 is the audit-clean state.
+**Path B-2 — Native NL generation training bridge.** Commit `62f0299`, 8 files +1743/−50 LOC, 67 tests passing. Codex audited the design twice (v1 and v3) and caught a load-bearing silent-skip bug; v4 is the audit-clean state.
 
 - `cas-native/training/datasets/native_nl_collator.py` — `NativeNLCollator` converts Tier 3 dialogue records to `forward_with_lm` kwargs (input_ids/attention_mask/decoder_input_ids/cas_prefix_ids/register_id) plus loss-side fields (lm_targets/loss_mask) plus provenance (record_ids/trace_ids).
 - `cas-native/training/masked_ce_loss.py` — `masked_cross_entropy` reply-only LM loss, ignore_index + explicit mask combined.
@@ -46,7 +46,7 @@
 | Track | State |
 |---|---|
 | B-1 Tier 3 dialogue SDG | In flight under Codex; 477-record paid proof passed quality review; ready to scale 5K → 50K |
-| **B-2 Batcher reconciliation** | **DONE — committed `385c5a2`** |
+| **B-2 Batcher reconciliation** | **DONE — committed `62f0299`** |
 | B-3 First native generation training | Blocked on B-1 reaching ≥10K records |
 | B-4 Two-stage inference in chat REPL | Blocked on B-3 |
 | Path C Simplex Δ°₃₉ rebuild | Parked POST v0 demo |
