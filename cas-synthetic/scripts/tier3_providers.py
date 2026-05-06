@@ -546,11 +546,65 @@ def make_provider(
     raise ValueError(f"unknown provider: {name!r} (expected 'claude' or 'gemini')")
 
 
+class ProviderCostTracker:
+    """Async cost tracker with provider-aware pricing.
+
+    The seed Tier 1/2 CostTracker hardcodes Claude pricing via module-level
+    constants. For Tier 3 we need accurate dollar accounting per provider —
+    a Gemini run charged at Claude rates over-estimates by ~30x and would
+    falsely trip a tight ``--cost-cap`` set on the actual provider's
+    economics.
+
+    API matches seed.CostTracker exactly (``input_tokens``,
+    ``output_tokens``, ``api_calls``, ``total_usd``, ``aborted``,
+    ``hard_cap_usd``, ``async add(in, out) -> bool``) so the field can be
+    swapped in without touching consumers.
+    """
+
+    def __init__(
+        self,
+        hard_cap_usd: float,
+        *,
+        price_per_m_input: float,
+        price_per_m_output: float,
+    ) -> None:
+        self.hard_cap_usd = float(hard_cap_usd)
+        self.price_per_m_input = float(price_per_m_input)
+        self.price_per_m_output = float(price_per_m_output)
+        self.input_tokens = 0
+        self.output_tokens = 0
+        self.api_calls = 0
+        self._lock = asyncio.Lock()
+        self._aborted = False
+
+    @property
+    def total_usd(self) -> float:
+        return (
+            self.input_tokens * self.price_per_m_input / 1_000_000.0
+            + self.output_tokens * self.price_per_m_output / 1_000_000.0
+        )
+
+    async def add(self, in_tokens: int, out_tokens: int) -> bool:
+        async with self._lock:
+            self.input_tokens += int(in_tokens)
+            self.output_tokens += int(out_tokens)
+            self.api_calls += 1
+            if self.total_usd > self.hard_cap_usd:
+                self._aborted = True
+                return False
+            return True
+
+    @property
+    def aborted(self) -> bool:
+        return self._aborted
+
+
 __all__ = [
     "BatchDialogueProvider",
     "ClaudeBatchDialogueProvider",
     "GeminiBatchDialogueProvider",
     "ProviderCallResult",
+    "ProviderCostTracker",
     "make_provider",
     "load_gemini_api_key",
     "CLAUDE_DEFAULT_PRIMARY",

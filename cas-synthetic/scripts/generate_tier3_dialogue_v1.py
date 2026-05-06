@@ -64,6 +64,7 @@ from tier3_providers import (  # noqa: E402
     ClaudeBatchDialogueProvider,
     GeminiBatchDialogueProvider,
     ProviderCallResult,
+    ProviderCostTracker,
     make_provider,
     load_gemini_api_key,
     CLAUDE_DEFAULT_PRIMARY,
@@ -760,15 +761,26 @@ async def generate_dialogue_records(ctx: Tier3RunContext, job: DialogueJob) -> l
             failures.extend(reasons)
     if failures:
         # One lower-temperature retry for validation failures.
-        text2, model_used2, err2 = await call_claude_dialogue(
-            ctx.client,
-            job.user_message,
-            system_prompt=TIER3_SYSTEM_PROMPT,
-            model=ctx.current_model,
-            cost_tracker=ctx.cost_tracker,
-            max_output_tokens=ctx.max_output_tokens,
-            temperature=0.55,
-        )
+        if ctx.provider is not None:
+            text2, model_used2, err2 = await call_dialogue(
+                ctx.provider,
+                job.user_message,
+                system_prompt=TIER3_SYSTEM_PROMPT,
+                model=ctx.current_model,
+                cost_tracker=ctx.cost_tracker,
+                max_output_tokens=ctx.max_output_tokens,
+                temperature=0.55,
+            )
+        else:
+            text2, model_used2, err2 = await call_claude_dialogue(
+                ctx.client,
+                job.user_message,
+                system_prompt=TIER3_SYSTEM_PROMPT,
+                model=ctx.current_model,
+                cost_tracker=ctx.cost_tracker,
+                max_output_tokens=ctx.max_output_tokens,
+                temperature=0.55,
+            )
         if text2 is None:
             ctx.failure_counter[f"retry_api:{err2 or 'unknown'}"] += 1
             return []
@@ -957,14 +969,21 @@ def write_manifest(
     return manifest
 
 
-def estimate_cost_usd(target_records: int) -> float:
+def estimate_cost_usd(
+    target_records: int,
+    *,
+    price_per_m_input: float = PRICE_PER_M_INPUT,
+    price_per_m_output: float = PRICE_PER_M_OUTPUT,
+) -> float:
+    """Conservative cost estimate. Defaults to Claude pricing for backward
+    compatibility; Gemini callers pass their own per-1M rates."""
     # Dialogue prompt is amortized over 3-7 turns. These values are deliberately
     # conservative enough to catch bad targets without blocking the 500 proof.
     input_tokens_per_record = 320
     output_tokens_per_record = 130
     return (
-        target_records * input_tokens_per_record * PRICE_PER_M_INPUT / 1_000_000.0
-        + target_records * output_tokens_per_record * PRICE_PER_M_OUTPUT / 1_000_000.0
+        target_records * input_tokens_per_record * price_per_m_input / 1_000_000.0
+        + target_records * output_tokens_per_record * price_per_m_output / 1_000_000.0
     )
 
 
@@ -1099,7 +1118,22 @@ def run(
     )
 
     failure_counter: Counter[str] = Counter()
-    cost_tracker = seed.CostTracker(cost_cap_usd)
+    if provider_name == "gemini":
+        cost_tracker = ProviderCostTracker(
+            cost_cap_usd,
+            price_per_m_input=GEMINI_FLASH_LITE_PRICE_PER_M_INPUT,
+            price_per_m_output=GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT,
+        )
+        est_in_price = GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
+        est_out_price = GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
+    else:
+        cost_tracker = ProviderCostTracker(
+            cost_cap_usd,
+            price_per_m_input=CLAUDE_PRICE_PER_M_INPUT,
+            price_per_m_output=CLAUDE_PRICE_PER_M_OUTPUT,
+        )
+        est_in_price = CLAUDE_PRICE_PER_M_INPUT
+        est_out_price = CLAUDE_PRICE_PER_M_OUTPUT
     final_model = primary_model
     api_key_status = "dry-run" if dry_run else "unused"
 
@@ -1181,7 +1215,11 @@ def run(
                         f"(remaining={remaining})",
                         flush=True,
                     )
-                    estimate = estimate_cost_usd(prepared_records)
+                    estimate = estimate_cost_usd(
+                        prepared_records,
+                        price_per_m_input=est_in_price,
+                        price_per_m_output=est_out_price,
+                    )
                     print(
                         f"[preflight] estimated tier3 cost for {prepared_records} "
                         f"records this round: ~${estimate:.2f} "

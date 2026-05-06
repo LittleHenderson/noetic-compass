@@ -313,6 +313,65 @@ def test_generator_provider_flag_routes_to_gemini_in_dry_run(tmp_path):
     assert payload["price_per_m_output_usd"] == providers.GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
 
 
+def test_provider_cost_tracker_uses_provider_pricing():
+    """The Tier 3 cost tracker must charge tokens at the provider's actual
+    rate, not Claude's. This is the bakeoff fix that prevents 30x
+    over-reporting on Gemini runs (and false cost-cap aborts)."""
+    tracker = providers.ProviderCostTracker(
+        hard_cap_usd=10.0,
+        price_per_m_input=providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT,
+        price_per_m_output=providers.GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT,
+    )
+    # 100K input + 50K output tokens
+    asyncio.run(tracker.add(100_000, 50_000))
+    expected = (
+        100_000 * providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT / 1_000_000.0
+        + 50_000 * providers.GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT / 1_000_000.0
+    )
+    assert abs(tracker.total_usd - expected) < 1e-9
+    # Should be much less than the same volume at Claude pricing
+    claude_cost = (
+        100_000 * providers.CLAUDE_PRICE_PER_M_INPUT / 1_000_000.0
+        + 50_000 * providers.CLAUDE_PRICE_PER_M_OUTPUT / 1_000_000.0
+    )
+    assert tracker.total_usd < claude_cost * 0.1  # at least 10x cheaper
+
+
+def test_provider_cost_tracker_aborts_when_cap_exceeded():
+    tracker = providers.ProviderCostTracker(
+        hard_cap_usd=0.0001,
+        price_per_m_input=providers.CLAUDE_PRICE_PER_M_INPUT,
+        price_per_m_output=providers.CLAUDE_PRICE_PER_M_OUTPUT,
+    )
+    ok = asyncio.run(tracker.add(1000, 1000))
+    assert ok is False
+    assert tracker.aborted is True
+
+
+def test_validation_retry_path_uses_provider_not_legacy_client():
+    """Regression test for the bakeoff bug: when a turn fails validation,
+    the lower-temperature retry must call ctx.provider, not the legacy
+    ctx.client.messages.create path. With ctx.client=None (Gemini case),
+    the legacy path raises AttributeError(NoneType.messages); the
+    provider path produces an honest failure_counter entry instead."""
+    generator = _load("_test_tier3_generator_retry_path", _GENERATOR_PATH)
+    src = (Path(_GENERATOR_PATH).read_text(encoding="utf-8"))
+    # The retry block must branch on ctx.provider before calling
+    # call_claude_dialogue. If anyone reverts the fix, the literal
+    # ``ctx.provider is not None`` guard around the retry call should
+    # be present right before the ``call_dialogue`` block.
+    retry_block_start = src.find("# One lower-temperature retry for validation failures.")
+    assert retry_block_start > 0, "retry block comment should exist"
+    retry_window = src[retry_block_start: retry_block_start + 1000]
+    assert "ctx.provider is not None" in retry_window, (
+        "retry-after-validation block must guard on ctx.provider before "
+        "calling the legacy claude path"
+    )
+    assert "call_dialogue(" in retry_window, (
+        "retry block must call provider-aware call_dialogue"
+    )
+
+
 def test_generator_validator_unchanged_for_gemini_path(tmp_path):
     """The reply validator behavior must NOT be provider-dependent.
     The dry-run write goes through the same validator as the live path."""
