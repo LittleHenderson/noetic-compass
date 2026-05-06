@@ -161,8 +161,8 @@ def test_gemini_provider_manifest_block_default_pricing():
     block = p.manifest_block()
     assert block["provider"] == "gemini"
     assert block["primary_model"] == providers.GEMINI_DEFAULT_PRIMARY
-    assert block["price_per_m_input_usd"] == providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
-    assert block["price_per_m_output_usd"] == providers.GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
+    assert block["price_per_m_input_usd"] == providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT
+    assert block["price_per_m_output_usd"] == providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT
 
 
 def test_gemini_pricing_is_strictly_cheaper_than_claude():
@@ -184,6 +184,10 @@ def test_gemini_pro_preview_pricing_matches_official_table():
     assert providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT == 12.00
     assert providers.GEMINI_PRO_PREVIEW_HIGH_TIER_PRICE_PER_M_INPUT == 4.00
     assert providers.GEMINI_PRO_PREVIEW_HIGH_TIER_PRICE_PER_M_OUTPUT == 18.00
+    assert providers.GEMINI_PRO_PREVIEW_BATCH_PRICE_PER_M_INPUT == 1.00
+    assert providers.GEMINI_PRO_PREVIEW_BATCH_PRICE_PER_M_OUTPUT == 6.00
+    assert providers.GEMINI_PRO_PREVIEW_BATCH_HIGH_TIER_PRICE_PER_M_INPUT == 2.00
+    assert providers.GEMINI_PRO_PREVIEW_BATCH_HIGH_TIER_PRICE_PER_M_OUTPUT == 9.00
     assert providers.GEMINI_PRO_PREVIEW_TIER_BREAK_TOKENS == 200_000
     # Pro-preview is more expensive than Flash-Lite (it's the better model).
     assert providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT > providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
@@ -218,10 +222,10 @@ def test_make_provider_gemini_explicit_flash_lite_uses_flash_lite_pricing():
     stays accurate."""
     p = providers.make_provider(
         "gemini",
-        primary_model="gemini-2.5-flash-lite",
+        primary_model="gemini-3.1-flash-lite-preview",
         client_factory=lambda m: _FakeGeminiModel(m),
     )
-    assert p.primary_model == "gemini-2.5-flash-lite"
+    assert p.primary_model == "gemini-3.1-flash-lite-preview"
     assert p.price_per_m_input == providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT
     assert p.price_per_m_output == providers.GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT
 
@@ -236,15 +240,19 @@ def test_gemini_pricing_for_model_recognizes_pro_and_flash_lite_variants():
         providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT,
         providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT,
     )
+    assert helper("gemini-3.1-pro-preview", use_batch_pricing=True) == (
+        providers.GEMINI_PRO_PREVIEW_BATCH_PRICE_PER_M_INPUT,
+        providers.GEMINI_PRO_PREVIEW_BATCH_PRICE_PER_M_OUTPUT,
+    )
     assert helper("gemini-2.5-pro") == (
         providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT,
         providers.GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT,
     )
-    assert helper("gemini-2.5-flash-lite") == (
+    assert helper("gemini-3.1-flash-lite-preview") == (
         providers.GEMINI_FLASH_LITE_PRICE_PER_M_INPUT,
         providers.GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT,
     )
-    assert helper("gemini-2.5-flash-lite", use_batch_pricing=True) == (
+    assert helper("gemini-3.1-flash-lite-preview", use_batch_pricing=True) == (
         providers.GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT,
         providers.GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_OUTPUT,
     )
@@ -308,18 +316,25 @@ def test_make_provider_gemini_with_injected_factory():
     assert isinstance(p, providers.GeminiBatchDialogueProvider)
 
 
-def test_make_provider_gemini_batch_pricing_flag_with_explicit_flash_lite():
-    """Batch pricing only applies when Flash-Lite is the active model
-    (Pro-preview doesn't have a batch tier). User must opt into both
-    Flash-Lite AND batch explicitly."""
-    p = providers.make_provider(
+def test_make_provider_gemini_batch_pricing_flag_uses_active_model():
+    """Batch pricing follows the active model's official batch tier."""
+    pro = providers.make_provider(
         "gemini",
-        primary_model="gemini-2.5-flash-lite",
         client_factory=lambda m: _FakeGeminiModel(m),
         use_batch_pricing=True,
     )
-    assert p.price_per_m_input == providers.GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT
-    assert p.price_per_m_output == providers.GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_OUTPUT
+    assert pro.primary_model == providers.GEMINI_DEFAULT_PRIMARY
+    assert pro.price_per_m_input == providers.GEMINI_PRO_PREVIEW_BATCH_PRICE_PER_M_INPUT
+    assert pro.price_per_m_output == providers.GEMINI_PRO_PREVIEW_BATCH_PRICE_PER_M_OUTPUT
+
+    flash_lite = providers.make_provider(
+        "gemini",
+        primary_model="gemini-3.1-flash-lite-preview",
+        client_factory=lambda m: _FakeGeminiModel(m),
+        use_batch_pricing=True,
+    )
+    assert flash_lite.price_per_m_input == providers.GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT
+    assert flash_lite.price_per_m_output == providers.GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_OUTPUT
 
 
 # ---------------------------------------------------------------------------

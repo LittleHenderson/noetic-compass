@@ -36,14 +36,14 @@ from typing import Any, Optional
 CLAUDE_PRICE_PER_M_INPUT = 3.00
 CLAUDE_PRICE_PER_M_OUTPUT = 15.00
 
-# Google Gemini 2.5 Flash-Lite (paid, non-batch).
-# Source: https://ai.google.dev/pricing — verified 2026-05-06.
-GEMINI_FLASH_LITE_PRICE_PER_M_INPUT = 0.10
-GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT = 0.40
+# Google Gemini 3.1 Flash-Lite Preview (paid, non-batch).
+# Source: https://ai.google.dev/gemini-api/docs/pricing — verified 2026-05-06.
+GEMINI_FLASH_LITE_PRICE_PER_M_INPUT = 0.25
+GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT = 1.50
 
-# Google Gemini 2.5 Flash-Lite, Batch API (50% discount).
-GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT = 0.05
-GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_OUTPUT = 0.20
+# Google Gemini 3.1 Flash-Lite Preview, Batch API (50% discount).
+GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_INPUT = 0.125
+GEMINI_FLASH_LITE_BATCH_PRICE_PER_M_OUTPUT = 0.75
 
 # Google Gemini 3.1 Pro-Preview — current Pro tier as of 2026-05-06.
 # Source: https://ai.google.dev/gemini-api/docs/gemini-3 — verified.
@@ -54,6 +54,10 @@ GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT = 2.00
 GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT = 12.00
 GEMINI_PRO_PREVIEW_HIGH_TIER_PRICE_PER_M_INPUT = 4.00
 GEMINI_PRO_PREVIEW_HIGH_TIER_PRICE_PER_M_OUTPUT = 18.00
+GEMINI_PRO_PREVIEW_BATCH_PRICE_PER_M_INPUT = 1.00
+GEMINI_PRO_PREVIEW_BATCH_PRICE_PER_M_OUTPUT = 6.00
+GEMINI_PRO_PREVIEW_BATCH_HIGH_TIER_PRICE_PER_M_INPUT = 2.00
+GEMINI_PRO_PREVIEW_BATCH_HIGH_TIER_PRICE_PER_M_OUTPUT = 9.00
 GEMINI_PRO_PREVIEW_TIER_BREAK_TOKENS = 200_000
 
 CLAUDE_DEFAULT_PRIMARY = "claude-sonnet-4-6"
@@ -64,7 +68,7 @@ CLAUDE_DEFAULT_FALLBACK = "claude-3-5-sonnet-20241022"
 # Flash-Lite. Flash-Lite failed the manual blind review (20/20
 # distinguishable, replies 51% the length of Claude's). Flash-Lite
 # remains useful for auxiliary / non-load-bearing tasks but requires an
-# explicit `--primary-model gemini-2.5-flash-lite` to opt into.
+# explicit `--primary-model gemini-3.1-flash-lite-preview` to opt into.
 GEMINI_DEFAULT_PRIMARY = "gemini-3.1-pro-preview"
 GEMINI_DEFAULT_FALLBACK = "gemini-2.5-pro"
 
@@ -341,15 +345,16 @@ class GeminiBatchDialogueProvider(BatchDialogueProvider):
         client_factory: Any,
         primary_model: str = GEMINI_DEFAULT_PRIMARY,
         fallback_model: str = GEMINI_DEFAULT_FALLBACK,
-        price_per_m_input: float = GEMINI_FLASH_LITE_PRICE_PER_M_INPUT,
-        price_per_m_output: float = GEMINI_FLASH_LITE_PRICE_PER_M_OUTPUT,
+        price_per_m_input: Optional[float] = None,
+        price_per_m_output: Optional[float] = None,
         max_retries: int = DEFAULT_MAX_RETRIES,
     ) -> None:
+        default_in_price, default_out_price = _gemini_pricing_for_model(primary_model)
         super().__init__(
             primary_model=primary_model,
             fallback_model=fallback_model,
-            price_per_m_input=price_per_m_input,
-            price_per_m_output=price_per_m_output,
+            price_per_m_input=default_in_price if price_per_m_input is None else price_per_m_input,
+            price_per_m_output=default_out_price if price_per_m_output is None else price_per_m_output,
             max_retries=max_retries,
         )
         self.client_factory = client_factory
@@ -506,6 +511,11 @@ def _gemini_pricing_for_model(
     if "pro-preview" in n or "pro" in n.replace("preview", ""):
         # Pro-preview standard tier ($2/$12, ≤200k tokens). Tier 3 dialogue
         # SDG never approaches the 200k threshold per call.
+        if use_batch_pricing:
+            return (
+                GEMINI_PRO_PREVIEW_BATCH_PRICE_PER_M_INPUT,
+                GEMINI_PRO_PREVIEW_BATCH_PRICE_PER_M_OUTPUT,
+            )
         return GEMINI_PRO_PREVIEW_PRICE_PER_M_INPUT, GEMINI_PRO_PREVIEW_PRICE_PER_M_OUTPUT
     if "flash-lite" in n:
         if use_batch_pricing:
@@ -534,8 +544,8 @@ def make_provider(
     tests inject a mock without touching SDK init.
 
     Pricing for Gemini is derived from ``primary_model`` automatically:
-    pro-preview models get Pro-preview rates ($2/$12), flash-lite models
-    get Flash-Lite rates ($0.10/$0.40 or $0.05/$0.20 with batch).
+    pro-preview models get Pro-preview rates ($2/$12 or $1/$6 with batch), flash-lite models
+    get Flash-Lite rates ($0.25/$1.50 or $0.125/$0.75 with batch).
 
     Raises:
         RuntimeError: if the SDK for ``name`` is not importable AND no
