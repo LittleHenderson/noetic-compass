@@ -137,6 +137,148 @@ _HEAD_CONFIDENCE_KEYS = (
 )
 
 
+# ---------------------------------------------------------------------------
+# CAS surface-token pre-filter (Step E calibration)
+# ---------------------------------------------------------------------------
+#
+# Pre-calibration audit (cas-native/evaluation/runs/
+# b4_product_routing_eval_b3_full_50k_prodshape.json) showed the K=9 OOD
+# verdict over-fires on prompts that explicitly contain CAS notation: the
+# classifier emits "no CAS signal detected" because the surface form (Θ, Ω,
+# ⟨2:3:6⟩, NoeticCluster{...}) sits outside the rewrite shim's recognized
+# patterns, and the gate then blocks the pipeline. Result: 100% fail on
+# valid_cas_notation, v76_production, v77_omega, meta_logic, and
+# fractal_composition; 25% route_match overall.
+#
+# The pre-filter below detects CAS surface tokens deterministically and,
+# when matched, OVERRIDES the OOD verdict. Coverage spans seven categories;
+# meta-logic constructors and Cognitive Fractal angle-bracket sequences are
+# both included — these were the categories the v0 corpus / earlier regex
+# sketches forgot.
+#
+# Coverage policy: false-positive (treating non-CAS as CAS) is much cheaper
+# than false-negative (blocking real CAS). Default to PIPELINE when ambiguous.
+#
+# 1. State literals — ``^N`` (Noetic 0..9) and ``^N^D`` where D ∈ {P,C,E,O}.
+#    Permits trailing extras like ``_{F2}``, ``|A``, ``|⟨A,f,T⟩``.
+_CAS_STATE_LITERAL_RE = re.compile(r"\^[0-9](?:\^[PCEO])?")
+# 2. Drive subscripts — ``F1``..``F7`` and ``_{F1}``..``_{F7}``.
+_CAS_DRIVE_RE = re.compile(r"(?:_\{F[1-7]\}|F[1-7])(?![0-9])")
+# 3a. Single register tags — ``|T``, ``|A``, ``|f``, ``|E``.
+_CAS_SINGLE_REGISTER_RE = re.compile(r"\|[TAfE](?![A-Za-z])")
+# 3b. Multi-register set notation — ``|⟨A,f,T⟩`` (Unicode) or ``|<A,f,T>`` ASCII.
+_CAS_MULTI_REGISTER_UNICODE_RE = re.compile(
+    r"\|⟨\s*[TAfE](?:\s*,\s*[TAfE])*\s*⟩"
+)
+_CAS_MULTI_REGISTER_ASCII_RE = re.compile(
+    r"\|<\s*[TAfE](?:\s*,\s*[TAfE])+\s*>"
+)
+# 4a. CAS operator unicode glyphs (Ω, Θ, ∘, →, ×, ⊗, ⊆, ∈, ∪, ∩, ∖, ⟨, ⟩).
+#     ``+`` and ``=`` and ``*`` are too generic to flag on their own; we use
+#     them only as part of richer patterns below.
+_CAS_OPERATOR_GLYPH_RE = re.compile(r"[ΩΘ∘→×⊗⊆∈∪∩∖⟨⟩]")
+# 4b. ASCII operator forms used in fixture surface forms (-> arrow, *, =).
+#     We match these only when they co-occur with CAS-y context (state
+#     literal, named omega, recipe word, set-constructor) — matching ``->``
+#     unconditionally would flag non-CAS English. Captured by the
+#     compound-recipe rule below.
+# 4c. Named emergent omega — ``Ω_<name>`` (Unicode) or ``Omega_<name>`` ASCII.
+_CAS_NAMED_OMEGA_RE = re.compile(
+    r"(?:Ω|\bOmega)_[A-Za-z][A-Za-z0-9_]*"
+)
+# 5a. Production recipe (v7.6) — ``Θ(...)`` or ``Theta(...)``.
+_CAS_THETA_RECIPE_RE = re.compile(
+    r"(?:Θ|\bTheta)\s*\(\s*(?:Ω|Omega)"
+)
+# 5b. ``Recipe Theta(...) = ... -> Omega_X`` (free-form recipe surface).
+#     Fires when both the Theta keyword AND a recipe arrow appear in the
+#     prompt. Caught by the union of _CAS_THETA_RECIPE_RE and the named
+#     emergent regex above.
+# 5c. Coefficient-times-state pattern: ``0.53*^7^P``, ``2*^3``, ``1.0*^4^E``.
+_CAS_COEFF_STATE_RE = re.compile(
+    r"\d+(?:\.\d+)?\s*\*\s*\^[0-9]"
+)
+# 6a. Meta-logic / set constructors (the category the v0 corpus FORGOT).
+#     ``NoeticCluster{...}``, ``StateSet{...}``, ``RelationCluster{...}``,
+#     ``Tuple(...)``, ``Coordinate(...)``, ``Product(...)``,
+#     ``CoverOf(...)``, ``PartitionOf(...)``.
+_CAS_META_CONSTRUCTOR_RE = re.compile(
+    r"\b(?:NoeticCluster|StateSet|RelationCluster|Tuple|Coordinate|Product|"
+    r"CoverOf|PartitionOf|ChainEntails|Involute|PrecedesDomain)\s*[\(\{]"
+)
+# 6b. ``let`` bindings — ``let X = ^3^P``, ``let cluster = NoeticCluster{...}``.
+#     Conservative: only fire when ``let <ident> = ^...`` or ``let <ident> = <CAS-y RHS>``.
+_CAS_LET_BINDING_RE = re.compile(
+    r"\blet\s+[A-Za-z_][A-Za-z0-9_]*\s*=\s*"
+    r"(?:\^[0-9]|NoeticCluster|StateSet|RelationCluster|Tuple|Coordinate|"
+    r"Product|CoverOf|PartitionOf|Ω|Θ|Omega|Theta)"
+)
+# 6c. Membership / subset relations in CAS context — ``^3^P ∈ NoeticCluster``,
+#     ``X ⊆ StateSet{...}``. ASCII fallbacks ``in`` / ``subset`` are too
+#     generic to fire on alone — we cover only the unicode glyphs (already
+#     in _CAS_OPERATOR_GLYPH_RE) plus explicit constructor co-occurrence.
+# 6d. Diagram-export keywords (compiler surface form: ``diagram { ... }``,
+#     ``DiagramOf``, ``export_diagram``).
+_CAS_DIAGRAM_KEYWORD_RE = re.compile(
+    r"\b(?:diagram\s*\{|DiagramOf|export_diagram)\b"
+)
+# 6e. RPM capability-pathway nodes — ``A0 -> D2 -> W2 -> P2``. Pure A0/Dn/Wn/Pn
+#     tokens are too generic on their own (P2 could mean "page 2") so we only
+#     fire when at least two distinct capability-pathway tokens co-occur with
+#     an arrow (Unicode → or ASCII ->) between them. ``A0`` alone with an
+#     arrow is also load-bearing (A0 is the unique Pure-Desire root).
+_CAS_RPM_CHAIN_RE = re.compile(
+    r"\b(?:A0|[DWP][1-7])\s*(?:→|->)\s*(?:A0|[DWP][1-7])\b"
+)
+# 7a. Cognitive Fractal angle-bracket sequence — ``⟨2:3:6⟩`` or
+#     ``⟨k₁:k₂:⋯:kₙ⟩``. Each kᵢ is a Noetic index 0..9.
+_CAS_FRACTAL_SEQ_UNICODE_RE = re.compile(
+    r"⟨\s*[0-9](?:\s*[:∶]\s*[0-9])+\s*⟩"
+)
+# 7b. ASCII fallback — ``<k1:k2:k3>`` with digits only.
+_CAS_FRACTAL_SEQ_ASCII_RE = re.compile(
+    r"<\s*[0-9](?:\s*:\s*[0-9])+\s*>"
+)
+# 7c. X.Y.Z fractal composition — ``^5.^7.^2``, ``^a.^b`` Noetic dot chain.
+_CAS_FRACTAL_DOTCHAIN_RE = re.compile(
+    r"\^[0-9](?:(?:\^[PCEO])?\.\^[0-9])+"
+)
+# 7d. FractalClass / FractalConvergence / Cognitive Fractal keywords.
+_CAS_FRACTAL_KEYWORD_RE = re.compile(
+    r"\b(?:FractalClass|FractalConvergence|CognitiveFractal)\b"
+)
+
+
+# All CAS surface-token detectors, in evaluation order. The pre-filter
+# returns True on the first match; ordering is informational only.
+_CAS_SURFACE_TOKEN_PATTERNS: tuple[re.Pattern[str], ...] = (
+    # 1. State literals
+    _CAS_STATE_LITERAL_RE,
+    # 2. Drive subscripts
+    _CAS_DRIVE_RE,
+    # 3. Register tags (single + multi-register)
+    _CAS_SINGLE_REGISTER_RE,
+    _CAS_MULTI_REGISTER_UNICODE_RE,
+    _CAS_MULTI_REGISTER_ASCII_RE,
+    # 4. Operators / named omegas
+    _CAS_OPERATOR_GLYPH_RE,
+    _CAS_NAMED_OMEGA_RE,
+    # 5. Production recipes
+    _CAS_THETA_RECIPE_RE,
+    _CAS_COEFF_STATE_RE,
+    # 6. Meta-logic / set constructors / let / diagram
+    _CAS_META_CONSTRUCTOR_RE,
+    _CAS_LET_BINDING_RE,
+    _CAS_DIAGRAM_KEYWORD_RE,
+    _CAS_RPM_CHAIN_RE,
+    # 7. Cognitive Fractal sequences / dot-chains / keywords
+    _CAS_FRACTAL_SEQ_UNICODE_RE,
+    _CAS_FRACTAL_SEQ_ASCII_RE,
+    _CAS_FRACTAL_DOTCHAIN_RE,
+    _CAS_FRACTAL_KEYWORD_RE,
+)
+
+
 # Canned replies. Plain-English on purpose — no CAS notation, no register
 # vocabulary. The point of the gate is precisely to avoid shipping CAS in
 # response to non-CAS input.
@@ -183,6 +325,7 @@ class OODGate:
         self,
         confidence_threshold: float = 0.4,
         casual_word_limit: int = 10,
+        cas_surface_bypass: bool = True,
     ) -> None:
         if not 0.0 <= confidence_threshold <= 1.0:
             raise ValueError(
@@ -194,6 +337,54 @@ class OODGate:
             )
         self.confidence_threshold = float(confidence_threshold)
         self.casual_word_limit = int(casual_word_limit)
+        self.cas_surface_bypass = bool(cas_surface_bypass)
+
+    # ------------------------------------------------------------------
+    # CAS surface-token pre-filter (Step E calibration)
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _has_cas_surface_tokens(prompt: str) -> bool:
+        """Return True iff the prompt contains an unambiguous CAS surface token.
+
+        The K=9 OOD detector flags prompts whose surface form falls outside
+        its training distribution — including prompts that explicitly contain
+        CAS notation (Θ recipes, named Ω targets, ⟨k₁:k₂:k₃⟩ fractal
+        sequences, NoeticCluster{...} constructors, |⟨A,f,T⟩ register sets).
+        Pre-calibration eval showed those buckets at 100% fail rate because
+        the gate consulted the OOD verdict blindly and blocked pipeline
+        entry. This helper deterministically detects CAS surface tokens
+        across the seven required coverage categories:
+
+          1. State literals (``^N`` and ``^N^D``).
+          2. Drive subscripts (``F1``..``F7``, ``_{F1}``..``_{F7}``).
+          3. Register tags (``|T``, ``|A``, ``|f``, ``|E``, plus
+             multi-register ``|⟨A,f,T⟩`` / ``|<A,f,T>``).
+          4. Operators (``Ω``, ``Θ``, ``∘``, ``→``, ``×``, ``⊗``, ``∈``,
+             ``⊆``, ``∪``, ``∩``, ``∖``, ``⟨…⟩``, plus named ``Ω_<name>`` /
+             ``Omega_<name>``).
+          5. Production recipes (``Θ(Ω_X) = ...``, ``Theta(Omega_X) = ...``,
+             coefficient-times-state ``0.53*^7^P``).
+          6. Meta-logic / set constructors (``NoeticCluster``, ``StateSet``,
+             ``RelationCluster``, ``Tuple``, ``Coordinate``, ``Product``,
+             ``CoverOf``, ``PartitionOf``, plus relations like
+             ``ChainEntails``, ``Involute``, ``PrecedesDomain``, plus
+             ``let`` bindings and diagram keywords).
+          7. Cognitive Fractal angle-bracket sequences (``⟨2:3:6⟩``,
+             ``<2:3:6>``), X.Y.Z dot-chains (``^5.^7.^2``), and Fractal
+             keywords (``FractalClass``, ``FractalConvergence``,
+             ``CognitiveFractal``).
+
+        Returns True on the first match — ordering is informational, not
+        load-bearing. False positives (treating non-CAS as CAS) are
+        cheap; false negatives (blocking real CAS) are not.
+        """
+        if not isinstance(prompt, str) or not prompt:
+            return False
+        for pattern in _CAS_SURFACE_TOKEN_PATTERNS:
+            if pattern.search(prompt):
+                return True
+        return False
 
     # ------------------------------------------------------------------
     # Public API
@@ -216,6 +407,22 @@ class OODGate:
         if not isinstance(k9_result, dict):
             raise TypeError(
                 f"k9_result must be dict (or None), got {type(k9_result).__name__}"
+            )
+
+        # 0. CAS surface-token bypass (Step E calibration). The K=9 OOD
+        #    detector over-fires on prompts that contain CAS notation it
+        #    doesn't surface-match (Θ recipes, ⟨k₁:k₂:k₃⟩ fractal
+        #    sequences, NoeticCluster{...}, |⟨A,f,T⟩, named Ω targets, …).
+        #    When the prompt explicitly carries CAS surface tokens we route
+        #    to the pipeline regardless of the OOD verdict — false-positive
+        #    pipeline-entry is much cheaper than false-negative blocking of
+        #    real CAS. The bypass is opt-out via ``cas_surface_bypass=False``
+        #    so test suites can exercise the pure OOD-only logic path.
+        if self.cas_surface_bypass and self._has_cas_surface_tokens(prompt):
+            return GateResult(
+                decision=RouteDecision.CAS_PIPELINE,
+                canned_response=None,
+                reason="cas_surface_tokens_detected",
             )
 
         # 1. OOD-detector sentinel takes priority — the K=9 detector itself

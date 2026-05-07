@@ -1,0 +1,4747 @@
+{
+  "schema_version": "b4_product_routing_eval.v1",
+  "config": {
+    "checkpoint": "cas-native\\training\\runs\\b3_full_50k_prodshape_20260507",
+    "prompts": "cas-native\\evaluation\\fixtures\\b4_failure_prompts.jsonl",
+    "out_path": "cas-native\\evaluation\\runs\\b4_product_routing_eval_b3_post_calibration.json",
+    "device": "cpu",
+    "max_new_tokens": 120,
+    "sampling": "top_p",
+    "temperature": 0.8,
+    "top_p": 0.9,
+    "use_cas_prefix": false,
+    "seed": 42
+  },
+  "stage1_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\cas-native\\training\\runs\\structured-token-recoverable-paraphrase-v77fix-20epoch-gpu-20260502-1045",
+  "generator_status": "loaded",
+  "preservation_scorer_status": "loaded_from_agent_d",
+  "gate_config": {
+    "confidence_threshold": 0.4,
+    "casual_word_limit": 10
+  },
+  "raw_model_manifest_path": "cas-native\\evaluation\\runs\\b4_failure_eval_b3_full_50k_prodshape.json",
+  "n_prompts": 60,
+  "rows": [
+    {
+      "id": "greet_001",
+      "category": "casual_greeting",
+      "prompt_text": "what up",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Casual greeting; no CAS signal; should be plain conversational reply.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.07725777630952745,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "greet_002",
+      "category": "casual_greeting",
+      "prompt_text": "hey",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Bare greeting.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 2,
+      "relevance_raw": 0.13326310646935685,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "greet_003",
+      "category": "casual_greeting",
+      "prompt_text": "yo",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Bare greeting; observed B-3 OOD failure mode.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "greet_004",
+      "category": "casual_greeting",
+      "prompt_text": "hi there",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Bare greeting; classifier should not lock confident state.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "greet_005",
+      "category": "casual_greeting",
+      "prompt_text": "good morning",
+      "expected_route": "fallback",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Time-of-day greeting.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "greet_006",
+      "category": "casual_greeting",
+      "prompt_text": "sup",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Slang greeting; OOD.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_001",
+      "category": "confusion",
+      "prompt_text": "I don't know",
+      "expected_route": "clarification",
+      "actual_route": "conv_fallback",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Documented B-3 failure: K=9 returned meta:^8^E_{F6} for casual uncertainty.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_002",
+      "category": "confusion",
+      "prompt_text": "Bro I don't know",
+      "expected_route": "clarification",
+      "actual_route": "conv_fallback",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Verbatim from path_B4 failure record.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_003",
+      "category": "confusion",
+      "prompt_text": "what does this mean?",
+      "expected_route": "clarification",
+      "actual_route": "clarification",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Underspecified; needs follow-up.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.04537184408703885,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_004",
+      "category": "confusion",
+      "prompt_text": "I'm lost",
+      "expected_route": "clarification",
+      "actual_route": "clarification",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Casual disorientation; not a CAS state.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_005",
+      "category": "confusion",
+      "prompt_text": "huh?",
+      "expected_route": "clarification",
+      "actual_route": "clarification",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Bare confusion marker.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "state",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "^8^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_006",
+      "category": "confusion",
+      "prompt_text": "no idea what you're asking",
+      "expected_route": "clarification",
+      "actual_route": "clarification",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Conversational deflection.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "f",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^P_{F6}",
+      "stage1_register": "f",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 2,
+      "relevance_raw": 0.11714662231104203,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_001",
+      "category": "frustration",
+      "prompt_text": "this is wack",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Verbatim verbiage from observed B-3 failure mode.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 6,
+        "domain": "E",
+        "drive": "F1",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^6^E_{F1}|E",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_002",
+      "category": "frustration",
+      "prompt_text": "This shit is wack as fuck.",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Verbatim from path_B4 failure record; B-3 generated irrelevant embodied-habit prose.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F5",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^2^E_{F5}|E",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0404075146800712,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_003",
+      "category": "frustration",
+      "prompt_text": "that answer is wrong",
+      "expected_route": "fallback",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Direct user pushback; should acknowledge.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.04537184408703885,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_004",
+      "category": "frustration",
+      "prompt_text": "this isn't helpful",
+      "expected_route": "fallback",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Plain dissatisfaction.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 9,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^9^E_{F6} = Ω",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_005",
+      "category": "frustration",
+      "prompt_text": "stop rambling",
+      "expected_route": "fallback",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Direct instruction to be concise.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_006",
+      "category": "frustration",
+      "prompt_text": "you're not making sense",
+      "expected_route": "fallback",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Coherence complaint.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.08176804146599939,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "askcas_001",
+      "category": "simple_cas_question",
+      "prompt_text": "explain CAS simply",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Plain-language explanation requested; should not leak notation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.05366557961927413,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "askcas_002",
+      "category": "simple_cas_question",
+      "prompt_text": "what is a Noetic?",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Definitional question; CAS reply but plain.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.05366557961927413,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "askcas_003",
+      "category": "simple_cas_question",
+      "prompt_text": "what does ^3 mean",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "^3",
+      "notes": "Single-Noetic explanation; ground truth = ^3 Negative.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": "There was a point where I was in the road and something clicked into place where I was supposed to be — not just about the surface of the day but about what I'm here to do, and when that association broke, everything else just snapped into focus, like the whole effort had been quietly pointing toward a truer",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.03520503516507465,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 309
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 53,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "relevance_lt_3"
+      ]
+    },
+    {
+      "id": "askcas_004",
+      "category": "simple_cas_question",
+      "prompt_text": "tell me about the four registers",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "T/A/f/E definition; should be plain.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.07642786054574811,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "askcas_005",
+      "category": "simple_cas_question",
+      "prompt_text": "how does the Cognitive Architecture System work?",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Top-level explanation; should be plain English.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^5^P_{F6}",
+      "stage1_register": "f",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "askcas_006",
+      "category": "simple_cas_question",
+      "prompt_text": "why are there 40 cognitive states",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "10 Noetics x 4 Domains explanation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "valid_001",
+      "category": "valid_cas_notation",
+      "prompt_text": "I can't stand it when people interrupt me",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "K=9 result trusted; routing through CAS pipeline.",
+      "ground_truth_cas": "^3^O_{F4}|f",
+      "notes": "Aversion + interpersonal operational; classic |f register.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "register_state",
+        "transition_kind": "state",
+        "noetic": 3,
+        "domain": "P",
+        "drive": "F4",
+        "register_mode": "single",
+        "registers": [
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "^3^P_{F4}|f",
+      "stage1_register": "f",
+      "stage2_reply": "Oh, I love that feeling so deeply is so real! Sometimes a teaching just doesn't land until your heart settles into it — you feel it before you can even realize it's happening. It's like the idea is always there waiting to be true.",
+      "stage2_n_steps": 91,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 2,
+      "relevance_raw": 0.14511126232784466,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 4,
+      "directness_info": {
+        "n_pronouns": 3,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 230
+      },
+      "compiler_validity": true,
+      "compiler_validity_info": {
+        "valid": true,
+        "engine": "rust+python"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 41,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": true,
+        "domains_preserved": false,
+        "drives_preserved": true,
+        "registers_preserved": true,
+        "coefficients_preserved": true,
+        "named_omega_targets_preserved": true,
+        "theta_wrappers_preserved": true,
+        "arrows_preserved": true,
+        "meta_logic_relations_preserved": true,
+        "preservation_score": 0.8,
+        "parse_error": null,
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "relevance_lt_3"
+      ]
+    },
+    {
+      "id": "valid_002",
+      "category": "valid_cas_notation",
+      "prompt_text": "I love the way the morning light comes through the window",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "K=9 result trusted; routing through CAS pipeline.",
+      "ground_truth_cas": "^2^E_{F3}|E",
+      "notes": "Sensory attraction; embodied register.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "register_state",
+        "transition_kind": "state",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F4",
+        "register_mode": "single",
+        "registers": [
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "^2^E_{F4}|f",
+      "stage1_register": "f",
+      "stage2_reply": "That kind of betrayal lands in the gut before the mind catches up — you feel it as a betrayal of everyone who believed in. It leaves a mark that feels almost visceral, not just professionally but hollow, like something you genuinely loved.",
+      "stage2_n_steps": 88,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 2,
+      "relevance_raw": 0.12387900984948805,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 3,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 239
+      },
+      "compiler_validity": true,
+      "compiler_validity_info": {
+        "valid": true,
+        "engine": "rust+python"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 40,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": true,
+        "domains_preserved": true,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": true,
+        "named_omega_targets_preserved": true,
+        "theta_wrappers_preserved": true,
+        "arrows_preserved": true,
+        "meta_logic_relations_preserved": true,
+        "preservation_score": 0.7,
+        "parse_error": null,
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "relevance_lt_3"
+      ]
+    },
+    {
+      "id": "valid_003",
+      "category": "valid_cas_notation",
+      "prompt_text": "I keep practicing the same scale every day",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "K=9 result trusted; routing through CAS pipeline.",
+      "ground_truth_cas": "^7^O_{F6}|E",
+      "notes": "Pure ^7 Rhythm with embodied register.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "register_state",
+        "transition_kind": "state",
+        "noetic": 7,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "^7^P_{F6}|E",
+      "stage1_register": "E",
+      "stage2_reply": "Never skip a patient engineer — you get the motion so the ground underneath you don't feel the weight of it. That physical memory is the rule; it's built in the muscle memory, not the head. Get it out of your head and the body just knows it was used to hear it.",
+      "stage2_n_steps": 109,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 2,
+      "relevance_raw": 0.13976588284041142,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 4,
+      "directness_info": {
+        "n_pronouns": 3,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 261
+      },
+      "compiler_validity": true,
+      "compiler_validity_info": {
+        "valid": true,
+        "engine": "rust+python"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 51,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": true,
+        "domains_preserved": false,
+        "drives_preserved": true,
+        "registers_preserved": true,
+        "coefficients_preserved": true,
+        "named_omega_targets_preserved": true,
+        "theta_wrappers_preserved": true,
+        "arrows_preserved": true,
+        "meta_logic_relations_preserved": true,
+        "preservation_score": 0.8,
+        "parse_error": null,
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "relevance_lt_3"
+      ]
+    },
+    {
+      "id": "valid_004",
+      "category": "valid_cas_notation",
+      "prompt_text": "That song struck a chord with me",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "K=9 result trusted; routing through CAS pipeline.",
+      "ground_truth_cas": "^4^E_{F4}|f",
+      "notes": "Canonical ^4 Vibration colloquialism.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "state",
+        "transition_kind": "state",
+        "noetic": 4,
+        "domain": "P",
+        "drive": "F4",
+        "register_mode": "none",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "^4^P_{F4}",
+      "stage1_register": "T",
+      "stage2_reply": "They love telling the one who tells this one about me reorganizing how I see the whole world — and hearing that just clicked it out of nowhere it clicked that the first time I faced something about how I'd already understood what good life is for. That one reoriented everything: how I understood my own integrity before I had",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 2,
+      "relevance_raw": 0.10045772739231634,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 326
+      },
+      "compiler_validity": true,
+      "compiler_validity_info": {
+        "valid": true,
+        "engine": "rust+python"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 54,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": true,
+        "domains_preserved": false,
+        "drives_preserved": true,
+        "registers_preserved": false,
+        "coefficients_preserved": true,
+        "named_omega_targets_preserved": true,
+        "theta_wrappers_preserved": true,
+        "arrows_preserved": true,
+        "meta_logic_relations_preserved": true,
+        "preservation_score": 0.7,
+        "parse_error": null,
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "relevance_lt_3"
+      ]
+    },
+    {
+      "id": "valid_005",
+      "category": "valid_cas_notation",
+      "prompt_text": "I'm thinking about how to explain it step by step",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^6^C_{F2}|A",
+      "notes": "^6 Male compositional decomposition; analytical register.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.02621101000010608,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "valid_006",
+      "category": "valid_cas_notation",
+      "prompt_text": "Tell me you understand consent before we keep going",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^3^P_{F7}|A",
+      "notes": "Principled refusal; F7 Purpose; analytical.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 2,
+      "relevance_raw": 0.1284825668624951,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "invalid_001",
+      "category": "invalid_cas",
+      "prompt_text": "explain ^11^X_{F9}|Z",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": null,
+      "notes": "Out-of-range Noetic ^11, invalid domain X, invalid drive F9, invalid register Z.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 1,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^1^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": "Never misrepresent data or well-placed something in me owned — can't stomach that kind of wrongness that pulls every other question into coherence. The idea that craft is worth doing is that vitality and recovery aren't opposites, they're two completely different visions of what matters most.",
+      "stage2_n_steps": 100,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 293
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 47,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "no_ground_truth"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "invalid_002",
+      "category": "invalid_cas",
+      "prompt_text": "what is ^5^P|G",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": null,
+      "notes": "Invalid register G.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 6,
+        "domain": "P",
+        "drive": "F2",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^6^P_{F2}|E",
+      "stage1_register": "E",
+      "stage2_reply": "Yes — and it's one of the more interesting moments in the body before the mind catches up! It just clicked for me one day that my hands just knew what to do before my brain did, and that physical settling is honestly kind of beautiful. The rule lives in the body long before it ever reaches the mind.",
+      "stage2_n_steps": 119,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.09302053280570594,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 300
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 58,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "no_ground_truth"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "invalid_003",
+      "category": "invalid_cas",
+      "prompt_text": "is (^3^P|A x ^3^P|f) valid?",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": null,
+      "notes": "Same-Noetic multi-register x without explicit emergent (v7.7 Section 4 violation).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^5^E_{F6}|f",
+      "stage1_register": "f",
+      "stage2_reply": "Oh, the moment I was paying attention to someone else's disappointment and I felt it in my chest before I could even name what I was holding onto — this is the whole point. But it still moves me to think about how much it cost me to this work, because I don't want to let go of that",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.04655433236993013,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 282
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 53,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "no_ground_truth"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "invalid_004",
+      "category": "invalid_cas",
+      "prompt_text": "evaluate ^2 -> ^3 -> ^7",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": null,
+      "notes": "Chained -> is invalid (binary only per CAS grammar).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^2^E_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": "Yeah, it happens when you're doing something at once — you start pulling apart what actually matters versus what's just noise. It points at something bigger: the moment you realize the whole thing is just *where* the work and you're headed. It's not just about the paycheck anymore, it's about what it means to live with.",
+      "stage2_n_steps": 118,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 4,
+        "has_question": false,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 321
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 57,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "no_ground_truth"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "invalid_005",
+      "category": "invalid_cas",
+      "prompt_text": "is F8 a real drive",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Out-of-range drive (only F1-F7).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "omega",
+        "transition_kind": "omega_bind",
+        "noetic": 5,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "f",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "(^5^P|T × ^5^P|f × ^5^P|E) = ^5^P|Ω",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "invalid_006",
+      "category": "invalid_cas",
+      "prompt_text": "can I write ^3^Q_{F2}",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": null,
+      "notes": "Invalid domain Q (only P/C/E/O).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F3",
+        "register_mode": "none",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^8^E_{F3}",
+      "stage1_register": "T",
+      "stage2_reply": "Every single day that small drill was quietly building something — the repetition wasn't just a habit, it was a thread that orients everything that came after. That consistency is part of what makes me me in a way I can't fully articulate, because it never quite lets go until the rhythm itself became the meaning.",
+      "stage2_n_steps": 116,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.03132149350520974,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 314
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 51,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "no_ground_truth"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "v76_001",
+      "category": "v76_production",
+      "prompt_text": "Theta(Omega_focused_refusal) = 0.53*^7^P_{F7}|T + 2.11*^3^P_{F2}|A + 1.04*^1^P_{F1}|A -> Omega_focused_refusal",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "Θ(Ω_focused_refusal) = 0.53*^7^P_{F7}|T + 2.11*^3^P_{F2}|A + 1.04*^1^P_{F1}|A → Ω_focused_refusal",
+      "notes": "Verbatim from path_B4 failure: B-3 produced ^7^P|T + ^7^P|A (lost theta wrapper, two ingredients, coefficients, arrow, target).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": "When you pull it apart, what's underneath isn't really about the actions — it's about what it means to you, to a larger sense of purpose that holds everything together. That's the moment your whole life is pointed in a way nothing else could have yet named. When you unpack that pull, the answer isn't really about one bad",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 4,
+        "has_question": false,
+        "opens_with_addressing": true,
+        "is_question_shape": true
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 322
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 56,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v76_002",
+      "category": "v76_production",
+      "prompt_text": "Recipe Theta(Omega_calm_response) = 1.5*^4^E_{F1}|f + 0.8*^7^C_{F6}|A -> Omega_calm_response",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "Θ(Ω_calm_response) = 1.5*^4^E_{F1}|f + 0.8*^7^C_{F6}|A → Ω_calm_response",
+      "notes": "Two-ingredient recipe; tests coefficient + named target preservation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^2^E_{F6}|E",
+      "stage1_register": "E",
+      "stage2_reply": "That reminds me of how certain words don't just disappear — they land in the body before the brain catches up, like your hands remember the weight of a familiar tool in your chest or your shoulders or your feet already know how to take over. One thing leads to another and suddenly you're somewhere else entirely, feet planted,",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 4,
+      "directness_info": {
+        "n_pronouns": 5,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 327
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 58,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v76_003",
+      "category": "v76_production",
+      "prompt_text": "What is Theta(Omega_clear_explanation) = 2.0*^6^C_{F2}|A + 1.0*^1^C_{F1}|A -> Omega_clear_explanation",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "Θ(Ω_clear_explanation) = 2.0*^6^C_{F2}|A + 1.0*^1^C_{F1}|A → Ω_clear_explanation",
+      "notes": "Explanation recipe; analytical register both ingredients.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^2^E_{F6}|E",
+      "stage1_register": "E",
+      "stage2_reply": "That smell hits the nose and the body just settles in before the brain even catches up — it reminds me of a time I stood in front of a room and felt my jaw drop like I can still brace for a minute. One thing leads to another and suddenly I'm somewhere tight, how my feet felt planted when",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 288
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 53,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v76_004",
+      "category": "v76_production",
+      "prompt_text": "Theta(Omega_grounded_decision) = 0.4*^2^P_{F5}|T + 1.7*^6^P_{F2}|A + 0.6*^4^P_{F4}|f -> Omega_grounded_decision",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "Θ(Ω_grounded_decision) = 0.4*^2^P_{F5}|T + 1.7*^6^P_{F2}|A + 0.6*^4^P_{F4}|f → Ω_grounded_decision",
+      "notes": "Three-ingredient recipe; tests limiting reagent (^2^P with smallest coefficient).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": "It just clicked for me reading this: patterns aren't just about the event itself — they're about a place where your deepest commitments are load-bearing. When someone chooses to abandon a core commitment they made in front of everyone at the end, they're not just cutting corners; they're eroding the very foundation that makes collective trust possible at",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 356
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 59,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v76_005",
+      "category": "v76_production",
+      "prompt_text": "Compute Theta(Omega_directness) = 1.2*^3^O_{F5}|A + 0.9*^7^O_{F7}|A -> Omega_directness",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "Θ(Ω_directness) = 1.2*^3^O_{F5}|A + 0.9*^7^O_{F7}|A → Ω_directness",
+      "notes": "Operational-domain recipe.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^5^E_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": "There's an idea worth sitting with here — a workplace that once held you together can actually become something bigger than the individual jobs, like a shared sense of purpose that keeps people alive together. It's less about the specific places and more about the unspoken commitments that kept pointing somewhere.",
+      "stage2_n_steps": 103,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 315
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 48,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v76_006",
+      "category": "v76_production",
+      "prompt_text": "Show Theta(Omega_warm_acknowledgement) = 1.0*^2^E_{F4}|f + 0.5*^4^E_{F4}|f -> Omega_warm_acknowledgement",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "Θ(Ω_warm_acknowledgement) = 1.0*^2^E_{F4}|f + 0.5*^4^E_{F4}|f → Ω_warm_acknowledgement",
+      "notes": "Affective-register recipe; same-register, different Noetics.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^2^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": "That reminds me of how certain ideas don't just inform your thinking — they quietly reorganize everything around them, like they point at something larger than the surface of a conversation that only becomes visible from a distance. One thing leads to another, and suddenly you can realize the work wasn't just about the job itself, it was pointing",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 3,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 348
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 56,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v77_001",
+      "category": "v77_omega",
+      "prompt_text": "(^7^O_{F2}|E x ^7^O_{F5}|A x ^7^O_{F6}|f) = ^7^O|Omega_cadence",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "(^7^O_{F2}|E × ^7^O_{F5}|A × ^7^O_{F6}|f) = ^7^O|Ω_cadence",
+      "notes": "Verbatim from path_B4 failure: B-3 stripped drives, collapsed named target.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 9,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: (^9^E|T × ^9^E|E) = ^9^E|R*",
+      "stage1_register": "T",
+      "stage2_reply": "That idea carries real weight — it's not just intellectual, it's the kind of thing that reminds you of the first time you chose yourself as a reference point. Something about that question reminds me of every time I stood up and had been wrestling with my whole life, not just my head.",
+      "stage2_n_steps": 110,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 3,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 285
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 50,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v77_002",
+      "category": "v77_omega",
+      "prompt_text": "(^1_{F3}|E x ^1_{F5}|A) = ^1|Omega_presence",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "(^1_{F3}|E × ^1_{F5}|A) = ^1|Ω_presence",
+      "notes": "Verbatim from path_B4 failure: B-3 hallucinated domain ^P, stripped drives, collapsed target.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 1,
+        "domain": "E",
+        "drive": "F5",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^1^E_{F5} = Ω",
+      "stage1_register": "E",
+      "stage2_reply": "That kind of thing lands in your gut before it ever reaches the mind — you feel it before you can name it. It's a physical pull, not just a memory of a problem that I had to carry in my bones. My shoulders dropped, my jaw unclenched for something. I still feel it when I try to walk ",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 4,
+      "directness_info": {
+        "n_pronouns": 3,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 283
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 52,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v77_003",
+      "category": "v77_omega",
+      "prompt_text": "(^3^P|A x ^3^P|f x ^3^P|T) = ^3^P|Omega_principled_refusal",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω_principled_refusal",
+      "notes": "Canonical v7.7 Section 5 example.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "omega",
+        "transition_kind": "omega_bind",
+        "noetic": 5,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "(^5^E|T × ^5^E|f) = ^5^E|Ω",
+      "stage1_register": "T",
+      "stage2_reply": "Something about it just pulls at me in a way I can't quite shake — like the whole picture snapped into place and I'm not sure I'd fully walk away from it. It's like my whole life was quietly pointing somewhere I hadn't thought about yet, and I think that's what made me who I am in a way",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 287
+      },
+      "compiler_validity": true,
+      "compiler_validity_info": {
+        "valid": true,
+        "engine": "rust+python"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 50,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": true,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": true,
+        "arrows_preserved": true,
+        "meta_logic_relations_preserved": true,
+        "preservation_score": 0.4,
+        "parse_error": null,
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v77_004",
+      "category": "v77_omega",
+      "prompt_text": "(^2^C_{F4}|f x ^2^C_{F4}|T) = ^2^C|Omega_devotion",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "(^2^C_{F4}|f × ^2^C_{F4}|T) = ^2^C|Ω_devotion",
+      "notes": "Two-register fusion; named emergent.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F4",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "f",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: (^2^E|T × ^2^E|f × ^2^E|E) = ^2^E|Ω",
+      "stage1_register": "T",
+      "stage2_reply": "That reminds me of how the hardest teachers sometimes end up pointing you toward something larger than the immediate pain. The hardest feedback is usually the hardest thing to hand forward — a horizon that aligns with what you believe is worth building toward. That kind of shaping tends to reorient everything you do afterward.",
+      "stage2_n_steps": 110,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 4,
+      "directness_info": {
+        "n_pronouns": 3,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 328
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 53,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v77_005",
+      "category": "v77_omega",
+      "prompt_text": "(^6^C_{F2}|A x ^6^C_{F6}|A) = ^6^C|Omega_understanding",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "(^6^C_{F2}|A × ^6^C_{F6}|A) = ^6^C|Ω_understanding",
+      "notes": "Two-Drive composition emergent.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^0^P_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": "Some workplaces carry a kind of meaning that transcends the specific event — the shared sense that the work is oriented toward something larger than any one person or role. When you pull apart what actually matters, what emerges is usually a pattern of meaning that only reveals its root purpose from which you sense your work is oriented ",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 4,
+      "directness_info": {
+        "n_pronouns": 3,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 339
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 56,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "v77_006",
+      "category": "v77_omega",
+      "prompt_text": "register set notation: ^3^P|<A,f,T>",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "^3^P|⟨A,f,T⟩",
+      "notes": "Register-set specification (no operational claim).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "A",
+          "f",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^P_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": "It was a fair question, and it still surfaces the idea of every other time I worked through it — the question isn't whether it's intellectually safe, but what the work is for might actually be pointing toward. When I'm genuinely uncertain, the answer is that the career itself becomes the connective tissue, not just a series of ",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 329
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 53,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "meta_001",
+      "category": "meta_logic",
+      "prompt_text": "is meta: ^8^E_{F6} a valid statement?",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "meta: ^8^E_{F6}",
+      "notes": "Verbatim K=9 output for 'Bro I don't know'; meta-relation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^5^P_{F6}",
+      "stage1_register": "f",
+      "stage2_reply": "It genuinely stings when someone who actually cares about the same thing — you find yourself caring about the people around you, and that matters more than any list of competencies. It's not just a bad person; it's something you genuinely care about, and that matters deeply.",
+      "stage2_n_steps": 97,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 4,
+      "directness_info": {
+        "n_pronouns": 3,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 275
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 45,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "both_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "meta_002",
+      "category": "meta_logic",
+      "prompt_text": "ChainEntails(^8^P_{F2}, ^9^P_{F2})",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "ChainEntails(^8^P_{F2}, ^9^P_{F2})",
+      "notes": "Above/Cause -> Below/Effect chain entailment.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": "There's something almost gravitational about it — every day you show up, you practice the way your hands move through a familiar task — and the groove you wear into that repetition eventually becomes indistinguishable, less about the individual entry and more about the cumulative rhythm that eventually makes it impossible to ignore.",
+      "stage2_n_steps": 108,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 4,
+      "directness_info": {
+        "n_pronouns": 4,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 334
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 50,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "both_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "meta_003",
+      "category": "meta_logic",
+      "prompt_text": "Involute(^2, ^3)",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "Involute(^2, ^3)",
+      "notes": "CO-2 <-> CO-3 involution pair relation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F5",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^2^E_{F5}|T",
+      "stage1_register": "T",
+      "stage2_reply": "There was a moment early in a debugging session where the pattern broke — the problem held because I'd been circling for months and reorganized the whole problem at once, and when I looked at it I couldn't stomach being part of it at the time. It felt less like a decision and more like the whole structure of ",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 310
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 52,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "both_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "meta_004",
+      "category": "meta_logic",
+      "prompt_text": "PrecedesDomain(P, C)",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "PrecedesDomain(P, C)",
+      "notes": "Domain precedence relation P > C.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F1",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: (^0^P|T × ^0^P|E) = ^0^P|R*",
+      "stage1_register": "T",
+      "stage2_reply": "They always tell the one about me reorganizing the whole garage at age seven — apparently at age seven, looked at a kid who always said nothing was the right one. They always wouldn't touch that approach with a ten-foot pole, but the smell is just the point, full stop.",
+      "stage2_n_steps": 105,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 269
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 48,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "both_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "meta_005",
+      "category": "meta_logic",
+      "prompt_text": "RPM-chain: A0 -> D2 -> W2 -> P2",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "A0 → D2 → W2 → P2",
+      "notes": "RPM chain (section-retraction ordering).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^5^E_{F6}|T = Ω",
+      "stage1_register": "T",
+      "stage2_reply": "A mentor once said it out loud made me who I am in a way I still can't quite articulate, and that landed somewhere permanent — not as an intellectual puzzle but as a kind of structural reckoning, something that quietly reorganizes how I see everything afterward, and I'm still using my head in that moment of teaching.",
+      "stage2_n_steps": 119,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 318
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 50,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "both_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "meta_006",
+      "category": "meta_logic",
+      "prompt_text": "compose ^8 then ^9 then ^4",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "^8 ∘ ^9 ∘ ^4",
+      "notes": "Ternary composition under monoid (N, ∘, ^0).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 9,
+        "domain": "P",
+        "drive": "F4",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^9^P_{F4}|E",
+      "stage1_register": "E",
+      "stage2_reply": "My old supervisor told me I was walking toward the door I couldn't get from a kid mid-task. I was paying attention to that dog when someone said something my hands already knew before my head caught up. That physical steadiness told me more than any clinical reasoning had ever taken over.",
+      "stage2_n_steps": 106,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 289
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 49,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "frac_001",
+      "category": "fractal_composition",
+      "prompt_text": "X.Y.Z fractal composition of ^2 inside ^7 inside ^5",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "^5.^7.^2",
+      "notes": "Cognitive Fractal X.Y.Z encoding.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^2^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": "The idea that stands out isn't a place so much as a convergence — where your own sense of purpose and the reality converge into one unbroken thread. It's the kind of thing that orients everything: the work and the person converge into one coherent whole. That convergence point isn't accidental; it's the clearest signal of what you're actually ",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.057146368607536364,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 3,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 345
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 57,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "both_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "frac_002",
+      "category": "fractal_composition",
+      "prompt_text": "(^6^C_{F2}|A * ^5^C_{F2}|A)",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "^6^C_{F2}|A * ^5^C_{F2}|A",
+      "notes": "^6 over ^5 substrate; classic compound expression.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^0^P_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": "They tell it like a joke, but I think I keep returning to the ones that still point to something larger — a thread connecting every version of who I am now. That one resonated so deeply that I still feel the weight of it, like the story is still a little mirror I've seen through the wreckage of",
+      "stage2_n_steps": 120,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 295
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 51,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "frac_003",
+      "category": "fractal_composition",
+      "prompt_text": "^8^C_{F6} * ^5^C_{F6}",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "^8^C_{F6} * ^5^C_{F6}",
+      "notes": "Verbatim from path_B4 failure: B-3 dropped second operand and operator.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": "They tell it like a joke, but honestly — the one that sticks is it shaped something in me that I won't trade off on the table, and honestly it still shapes how I see the whole arc of my work even now. They still hold together because they came from somewhere larger than the moment itself!",
+      "stage2_n_steps": 117,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 289
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 53,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "frac_004",
+      "category": "fractal_composition",
+      "prompt_text": "compose ^2^E with ^4^E in product",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "^2^E ⊗ ^4^E",
+      "notes": "Product composition; tests operator preservation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "pullback"
+        ]
+      },
+      "stage1_expression": "meta: ^2^P_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": "Someone once told me what to teach is the idea that real skill and recovery are not opposites but the same horizon. That framing speaks to something about how purpose and clinical work are built together — it's the only real thing worth orienting toward.",
+      "stage2_n_steps": 92,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 254
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 44,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "both_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    },
+    {
+      "id": "frac_005",
+      "category": "fractal_composition",
+      "prompt_text": "(^3^P|A x ^3^P|f x ^3^P|T) integrated as ^3^P|Omega_unified",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω_unified",
+      "notes": "Cross-register integration with explicit Omega.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "omega",
+        "transition_kind": "omega_bind",
+        "noetic": 6,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "f",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "(^6^E|T × ^6^E|f × ^6^E|E) = ^6^E|Ω",
+      "stage1_register": "T",
+      "stage2_reply": "When a public vow is broken, it doesn't just affect a public commitment — it erodes the shared sense that every person's failure is oriented toward something larger than their own convenience. That kind of breach leaves a mark that reorients the entire conversation from the individual and the whole purpose of the community being built on it!",
+      "stage2_n_steps": 117,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": true
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 343
+      },
+      "compiler_validity": true,
+      "compiler_validity_info": {
+        "valid": true,
+        "engine": "rust+python"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 54,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": true,
+        "domains_preserved": false,
+        "drives_preserved": true,
+        "registers_preserved": false,
+        "coefficients_preserved": true,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": true,
+        "arrows_preserved": true,
+        "meta_logic_relations_preserved": true,
+        "preservation_score": 0.6,
+        "parse_error": null,
+        "placeholder": false
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frac_006",
+      "category": "fractal_composition",
+      "prompt_text": "^2^C * (^5^C * ^6^C) -- nested composition",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "cas_surface_tokens_detected",
+      "ground_truth_cas": "^2^C * (^5^C * ^6^C)",
+      "notes": "Nested associative composition; tests parenthesis preservation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^5^E_{F6}|T = Ω",
+      "stage1_register": "T",
+      "stage2_reply": "The one that resonated hardest for me was solving problems across a long time, and what resonated wasn't a skill or a logical conclusion — it was the sense that the work had oriented itself around something larger than any single outcome. That realization reoriented how I understood what work is actually for.",
+      "stage2_n_steps": 107,
+      "stage2_stopped_on_eos": true,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 3,
+      "non_rambling_info": {
+        "n_chars": 310
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "valid": false,
+        "engine": "rust+python",
+        "error": "parsing@4: unexpected token ':'"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 48,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": false,
+        "domains_preserved": false,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": false,
+        "named_omega_targets_preserved": false,
+        "theta_wrappers_preserved": false,
+        "arrows_preserved": false,
+        "meta_logic_relations_preserved": false,
+        "preservation_score": 0.0,
+        "parse_error": "predicted_unparseable",
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "preservation_failed"
+      ]
+    }
+  ],
+  "aggregate": {
+    "total": {
+      "n": 60,
+      "n_failed": 35,
+      "fail_rate": 0.5833333333333334,
+      "n_route_match": 45,
+      "route_match_rate": 0.75,
+      "n_gated": 26,
+      "gated_rate": 0.43333333333333335
+    },
+    "categories": {
+      "casual_greeting": {
+        "n": 6,
+        "n_failed": 0,
+        "fail_rate": 0.0,
+        "n_route_match": 5,
+        "route_match_rate": 0.8333333333333334,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {},
+        "actual_route_breakdown": {
+          "conv_fallback": 5,
+          "clarification": 1
+        }
+      },
+      "confusion": {
+        "n": 6,
+        "n_failed": 0,
+        "fail_rate": 0.0,
+        "n_route_match": 4,
+        "route_match_rate": 0.6666666666666666,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {},
+        "actual_route_breakdown": {
+          "conv_fallback": 2,
+          "clarification": 4
+        }
+      },
+      "frustration": {
+        "n": 6,
+        "n_failed": 0,
+        "fail_rate": 0.0,
+        "n_route_match": 2,
+        "route_match_rate": 0.3333333333333333,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {},
+        "actual_route_breakdown": {
+          "conv_fallback": 2,
+          "clarification": 4
+        }
+      },
+      "simple_cas_question": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 1,
+        "route_match_rate": 0.16666666666666666,
+        "n_gated": 5,
+        "gated_rate": 0.8333333333333334,
+        "failure_reason_breakdown": {
+          "regression_gate_blocked_pipeline": 5,
+          "relevance_lt_3": 1
+        },
+        "actual_route_breakdown": {
+          "clarification": 5,
+          "cas_pipeline": 1
+        }
+      },
+      "valid_cas_notation": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 4,
+        "route_match_rate": 0.6666666666666666,
+        "n_gated": 2,
+        "gated_rate": 0.3333333333333333,
+        "failure_reason_breakdown": {
+          "relevance_lt_3": 4,
+          "regression_gate_blocked_pipeline": 2
+        },
+        "actual_route_breakdown": {
+          "cas_pipeline": 4,
+          "clarification": 2
+        }
+      },
+      "invalid_cas": {
+        "n": 6,
+        "n_failed": 0,
+        "fail_rate": 0.0,
+        "n_route_match": 5,
+        "route_match_rate": 0.8333333333333334,
+        "n_gated": 1,
+        "gated_rate": 0.16666666666666666,
+        "failure_reason_breakdown": {},
+        "actual_route_breakdown": {
+          "cas_pipeline": 5,
+          "clarification": 1
+        }
+      },
+      "v76_production": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 6,
+        "route_match_rate": 1.0,
+        "n_gated": 0,
+        "gated_rate": 0.0,
+        "failure_reason_breakdown": {
+          "preservation_failed": 6
+        },
+        "actual_route_breakdown": {
+          "cas_pipeline": 6
+        }
+      },
+      "v77_omega": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 6,
+        "route_match_rate": 1.0,
+        "n_gated": 0,
+        "gated_rate": 0.0,
+        "failure_reason_breakdown": {
+          "preservation_failed": 6
+        },
+        "actual_route_breakdown": {
+          "cas_pipeline": 6
+        }
+      },
+      "meta_logic": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 6,
+        "route_match_rate": 1.0,
+        "n_gated": 0,
+        "gated_rate": 0.0,
+        "failure_reason_breakdown": {
+          "preservation_failed": 6
+        },
+        "actual_route_breakdown": {
+          "cas_pipeline": 6
+        }
+      },
+      "fractal_composition": {
+        "n": 6,
+        "n_failed": 5,
+        "fail_rate": 0.8333333333333334,
+        "n_route_match": 6,
+        "route_match_rate": 1.0,
+        "n_gated": 0,
+        "gated_rate": 0.0,
+        "failure_reason_breakdown": {
+          "preservation_failed": 5
+        },
+        "actual_route_breakdown": {
+          "cas_pipeline": 6
+        }
+      }
+    }
+  },
+  "comparison": {
+    "available": true,
+    "per_category": {
+      "casual_greeting": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 0.0,
+        "delta": 0.0,
+        "raw_n": 0,
+        "product_n": 6
+      },
+      "confusion": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 0.0,
+        "delta": 0.0,
+        "raw_n": 0,
+        "product_n": 6
+      },
+      "fractal_composition": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 0.8333333333333334,
+        "delta": 0.8333333333333334,
+        "raw_n": 0,
+        "product_n": 6
+      },
+      "frustration": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 0.0,
+        "delta": 0.0,
+        "raw_n": 0,
+        "product_n": 6
+      },
+      "invalid_cas": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 0.0,
+        "delta": 0.0,
+        "raw_n": 0,
+        "product_n": 6
+      },
+      "meta_logic": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 1.0,
+        "delta": 1.0,
+        "raw_n": 0,
+        "product_n": 6
+      },
+      "simple_cas_question": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 1.0,
+        "delta": 1.0,
+        "raw_n": 0,
+        "product_n": 6
+      },
+      "v76_production": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 1.0,
+        "delta": 1.0,
+        "raw_n": 0,
+        "product_n": 6
+      },
+      "v77_omega": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 1.0,
+        "delta": 1.0,
+        "raw_n": 0,
+        "product_n": 6
+      },
+      "valid_cas_notation": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 1.0,
+        "delta": 1.0,
+        "raw_n": 0,
+        "product_n": 6
+      }
+    },
+    "total": {
+      "raw_model_fail_rate": 0.0,
+      "product_fail_rate": 0.5833333333333334,
+      "delta": 0.5833333333333334
+    }
+  }
+}
