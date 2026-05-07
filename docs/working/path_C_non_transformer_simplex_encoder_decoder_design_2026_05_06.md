@@ -83,16 +83,34 @@ P(Domain = C) = Σ over noetics: P(noetic, C)
 
 ### 3.1.2 The six-component CAS state stack
 
-| # | Component | Type | Atoms / structure | Role |
-|---|---|---|---|---|
-| 1 | Cognitive State | open simplex Δ°39 | 40 atoms = (Noetic × Domain) | "What state is the mind in?" |
-| 2 | Drive | open simplex Δ°6 | 7 atoms = F1..F7 | "What motive is active?" |
-| 3 | Register | structured (see 3.1.3) | T / A / f / E | "How should this surface in language?" |
-| 4 | Operation / transition | discrete head | `+`, `→`, `×`, `∘`, `Ω`, ... | "What operation is being performed?" |
-| 5 | Meta-logic proof | typed relational module (NOT a simplex — see 3.2) | relation / operand / truth-status | "What relation holds between which states?" |
-| 6 | RPM gate | constraint / boolean over (1, 2) | prerequisite chain over (state, drive) | "Is this transition admissible?" |
+The geometric metaphor is **base manifold + typed fibers + typed constraints**. Cognitive State is the ground; Drive and Register modulate the ground; Operations / Meta-logic / RPM regulate which transitions on the ground are admissible.
 
-### 3.1.3 Register: Bernoulli gates, not a simplex (CAS v7.7 multiplicity)
+| # | Component | Geometry | Atoms / structure | Role |
+|---|---|---|---|---|
+| 1 | Cognitive State | open simplex Δ°39 — **base manifold** | 40 atoms = (Noetic × Domain) | "What state is the mind in?" |
+| 2 | Drive | 7-dim non-negative intensity vector — **fiber, NOT simplex** (see §3.1.3a) | 7 dims = F1..F7 | "What motive is active? At what intensity?" |
+| 3 | Register | 4-dim Bernoulli activation — **fiber, NOT simplex** (see §3.1.3b) | 4 gates = T / A / f / E | "How should this surface in language?" |
+| 4 | Operation / transition | discrete head — **fiber** | `+`, `→`, `×`, `∘`, `Ω`, ... | "What operation is being performed?" |
+| 5 | Meta-logic proof | typed relational module — **constraint** (NOT a simplex — see §3.2) | relation / operand / truth-status | "What relation holds between which states?" |
+| 6 | RPM gate | typed gate over state transitions — **constraint** | prerequisite chain over (state, drive) | "Is this transition admissible?" |
+
+The asymmetry is load-bearing: state is the ground; everything else modulates or constrains it. Capturing this asymmetry geometrically is what prevents the silhouette-without-content failure mode the v0 audit revealed.
+
+### 3.1.3a Drive: non-negative intensity vector, not a simplex (drives co-present)
+
+A simplex Δ°6 over F1..F7 forces exactly one drive active at full intensity (with mass distributed across the 7 atoms summing to 1). But drives genuinely co-present in real cognition — F1 Unity AND F5 Agency simultaneously is not a 60/40 split between mutually exclusive options; it's two motives both active at high intensity. A simplex distorts this by forcing the model to give up F1 mass to give F5 mass.
+
+The right structure is a **7-dim non-negative intensity vector**:
+
+```python
+drive_intensity: torch.Tensor  # shape (7,), values in [0, +inf) (typically softplus or relu output)
+# Single-dominant case: drive_intensity = [0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 2.3]  → F7 dominant
+# Co-present case:      drive_intensity = [2.5, 0.0, 0.0, 0.0, 2.1, 0.0, 0.1]  → F1 + F5 both active
+```
+
+A softmax projection (normalize to sum-1) is computable as a derived "which drive dominates" marginal but is NOT the primary representation. The intensity vector's load-bearing semantics is *how strong each drive is*, not *which drive among mutually exclusive options*.
+
+### 3.1.3b Register: Bernoulli gates, not a simplex (CAS v7.7 multiplicity)
 
 A simplex Δ°3 over T/A/f/E forces exactly one register active. CAS v7.7 supports three notations:
 
@@ -110,13 +128,22 @@ g_register: torch.Tensor  # shape (4,), values in [0, 1]
 
 A simplex projection of `g_register` (normalize to sum-1) is computable as a derived single-register marginal but is NOT the primary representation.
 
+### 3.1.3c General principle: simplex iff mutual exclusivity holds
+
+The decision rule is uniform across all CAS axes:
+
+- **Use a simplex** when atoms are mutually exclusive at any instant (Cognitive State: the mind is in one cognitive state at a time, even if smoothly transitioning).
+- **Use independent intensity / Bernoulli gates** when atoms can co-present (Drive: motives co-active; Register: CAS v7.7 multi-register notation).
+
+Forcing a simplex on a non-mutually-exclusive axis is exactly the geometric mistake that v0's flat-vocab transformer made implicitly via softmax classification heads. Path C corrects it explicitly per axis.
+
 ### 3.1.4 Why this beats one-giant-joint-simplex AND four-independent-axis-simplexes
 
 **One giant joint over Noetic × Domain × Drive × Register**: 10 × 4 × 7 × 4 = 1,120 atoms. Most combinations are sparse in real data; learning a 1,120-state Δ°1119 is hard; loses the framework's natural decomposition.
 
-**Four independent simplexes (Noetic Δ°9 + Domain Δ°3 + Drive Δ°6 + Register Δ°3)**: 14 dims total, but breaks the 40-Cognitive-State patent primitive. Cannot represent "70% on `^3^P`, 20% on `^6^O`" — must approximate as separate Noetic and Domain marginals, losing correlation.
+**Four independent simplexes (Noetic Δ°9 + Domain Δ°3 + Drive Δ°6 + Register Δ°3)**: 14 dims total, but breaks the 40-Cognitive-State patent primitive AND violates mutual-exclusivity for Drive and Register. Cannot represent "70% on `^3^P`, 20% on `^6^O`" — must approximate as separate Noetic and Domain marginals, losing correlation. Also forces F1+F5 co-presence to compete on the Drive simplex incorrectly.
 
-**Three structures (Cognitive Δ°39 + Drive Δ°6 + Register Bernoulli)**: 49 + 4 = 53 dims. Preserves the 40-state primitive. Drive and Register decouple cleanly because the framework already treats them as specifications layered on top of Cognitive State. Multi-register expressivity preserved via Bernoulli gates.
+**Three structures with mixed geometry (Cognitive State Δ°39 base manifold + Drive 7-dim intensity vector + Register 4-dim Bernoulli)**: 40 + 7 + 4 = 51 dims. Preserves the 40-state patent primitive (cognitive states are mutually exclusive — simplex correct). Drive and Register decouple from the base via independent intensity / Bernoulli structures (atoms co-present — simplex incorrect). Multi-register expressivity preserved via Bernoulli gates. Drive co-presence preserved via independent intensities. Geometric structure matches the framework's actual semantics axis-by-axis.
 
 ## 3.2. Meta-logic is a verb, not a noun (do NOT make it a simplex)
 
@@ -161,7 +188,7 @@ The original Section 8 prototype phasing is correct but doesn't fully sequence t
 | Phase | Build | Falsification gate |
 |---|---|---|
 | **C1** | Cognitive State Δ°39 encoder + Fisher-Rao loss + RPM stub. Keep transformer decoder. | Within 5-10pp of K=9 on CAS prediction; better trace quality than K=9; no Drive/Domain collapse worse than K=9. |
-| **C2** | Add Drive Δ°6 simplex. Joint state = (p_state, p_drive). | Drive head accuracy improves vs K=9 baseline. No regression on Cognitive State. |
+| **C2** | Add Drive 7-dim non-negative intensity vector (NOT Δ°6 simplex; drives co-present per §3.1.3a). Joint state = (p_state, drive_intensity). | Drive head accuracy improves vs K=9 baseline. Drive co-presence (e.g., F1+F5 simultaneously high) representable. No regression on Cognitive State. |
 | **C3** | Add Register Bernoulli gates. Test single-register backward-compat AND multi-register `|⟨...⟩` expressivity. | Single-register accuracy holds; multi-register expressions decode without forcing onto a single register. |
 | **C4** | Add meta-logic proof module. Surface verdicts as TRACE only (Mode 7), not as gate evidence yet. | Held-out `(state, transition, expected_admissibility)` test set ≥90% accuracy. If <90%, do NOT advance to C5. |
 | **C5** | RPM uses meta-logic proofs as gate evidence (instead of scalar gate). | RPM admissibility decisions match expert annotations on a held-out adversarial set. Generation refusals/repairs become inspectable. |
