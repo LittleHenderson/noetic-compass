@@ -1,5 +1,41 @@
 # Noetic Compass — Progress Log
 
+## Session 57: Path B reaches v0 promotion gate + Path C compiler-fluency framing (May 7, 2026)
+
+**Frame.** Path B fully wired through B-4. B-1 (50K Tier 3 SDG, $153.26) → B-2 (Session 56 commit) → B-3 (first production-shape GPU training run, 5 epochs, $0.54, coherent register-grounded sample replies) → B-3.5 (round-trip K=9 grounding eval calibrated pass) → B-4 (chat REPL two-stage wiring with 6-bug Codex audit repair, 67 tests passing). B-4.1 human PoC audit form ready — 31 prompts staged at `docs/working/path_B4_1_human_audit_form_2026_05_07.md`; user runs the audit next as the v0 promotion gate. Promotion criteria: avg relevance ≥3.5, avg register fit ≥4, leakage = 0. If passes, v0 ships. If fails, audit failure-mode tells the next remediation track.
+
+**Path C architectural captures (this commit).** Path C's §3 expanded with four sub-sections that together specify what gets built after v0 ships:
+
+- **§3.1 Refined CAS state space — typed product of simplexes.** Replaces the original single-`p_t ∈ Δ°₃₉` framing with three structures: Cognitive State Δ°₃₉ (40 atoms = 10 Noetics × 4 Domains, the patent-named primitive), Drive Δ°₆ (F1–F7), and Register Bernoulli gates (NOT a 4-atom simplex — supports CAS v7.7 multi-register `|⟨...⟩` notation natively). Reading A correction: Δ°39 is the joint Cognitive State, not Noetic alone. Six-component stack (state simplex / drive simplex / register Bernoulli / operation decoder / meta-logic proof module / RPM gate). Why 53-dim three-structure beats both 1,120-atom one-giant-joint and 14-dim four-independent-axis decompositions.
+- **§3.2 Meta-logic is a verb, not a noun.** Simplexes answer noun questions ("which state is active?"); meta-logic answers verb questions ("does X cover Y? is this transition admissible?"). Meta-logic is NOT a flat categorical axis like Drive or Register. Small typed mini-distributions (relation type, operand role, truth status) live INSIDE the meta-logic module without making the module itself a simplex. Meta-logic is the runtime extension of `api/notation/compiler.py` — compile-time validates syntax; runtime meta-logic checks whether assertions hold over the model's current state distribution. Pre-gen (constraint, mask logits at decoding) vs post-gen (explanation, full proof object for Mode 7 trace) — production target is both, in sequence.
+- **§3.3 Refined Path C phasing — axis-by-axis prototype.** C1 (Cognitive State Δ°₃₉ + Fisher-Rao loss + RPM stub) → C2 (add Drive Δ°₆) → C3 (add Register Bernoulli, test multi-register expressivity) → C4 (add meta-logic proof module, observation only) → C5 (RPM uses meta-logic proofs as gate evidence). C4-before-C5 is a HARD gate — meta-logic must hit ≥90% accuracy on held-out admissibility tests before promotion to RPM evidence; otherwise RPM-with-broken-evidence is strictly worse than scalar RPM.
+- **§3.4 CAS-Native is to the CAS compiler what Codex is to language compilers.** Single load-bearing north-star framing for post-v0 training direction. Model = fluent speaker; compiler = law/judge. Long-term inference architecture: English → CAS-Native proposes CAS expression → CAS compiler validates → RPM/meta-logic checks admissibility → CAS-Native explains in English. Six-task compiler-fluency curriculum (CAS↔English, invalid→explanation, invalid→corrected, operation→outcome, expression→compiler trace) is the next training era — NOT more dialogue corpus. Five operational requirements: vocab parity / corpus parity / compiler-validated training / constrained decoding / compiler-as-evaluator. Reframed v0 → Path C → Phase 4 progression mapped to "Codex that knows expressions" → "Codex that covers full language" → "Codex with linter integration in the loss." Slogan: "Model knows everything the compiler can SAY. Compiler decides whether what the model said is TRUE." Captured as durable memory; next training-track design conversations default to compiler-fluency over dialogue scaling.
+
+**Today's commits in chronological order**
+- `788148b` docs: record B-3 5K sample-reply smoke
+- `f8ed357` docs: record B-3 full 50K run verdict
+- `585591e` cas-native: add round-trip grounding eval
+- `61b6f3b` docs: record B-3.5 diverse CAS grounding pass
+- `d6d16be` cas-native: fix B-4 native-generator wiring + add regression tests
+- (this commit) docs: Path C §3.1–3.4 captures + B-4.1 audit form ready
+
+**Path B status.**
+
+| Track | State |
+|---|---|
+| B-1 Tier 3 dialogue SDG | DONE — 50K records, $153.26, 100% validator pass, 0 leakage |
+| B-2 Batcher reconciliation | DONE — Session 56 commit `62f0299` |
+| B-3 First native generation training | DONE — 50K corpus, 5 epochs, $0.54, coherent register-grounded sample replies |
+| B-3.5 Round-trip K=9 grounding eval | DONE — calibrated pass (commit `585591e`) |
+| B-4 Two-stage inference in chat REPL | DONE — 6 Codex audit bugs repaired, 67 tests (commit `d6d16be`) |
+| **B-4.1 human PoC audit (31 prompts)** | **READY — user runs next; v0 promotion gate** |
+| Path C Simplex Δ°₃₉ rebuild | §3.1–3.4 captured; build POST v0 promotion |
+
+**After-v0 short list (queued for surfacing once the audit lands).**
+- meta_logic 14-token vocab expansion (~1.5 pod-hours; closes a known structural gap on the compiler-fluency axis).
+- Path C-1 prototype (Cognitive State Δ°₃₉ encoder + Fisher-Rao loss + RPM stub; transformer decoder retained).
+- Compiler-fluency curriculum SDG design (six task slices with compiler-validated samples).
+
 ## Session 56: Path B-2 lands + class-weighted-loss MISS closes the classifier-band-aid track (May 6, 2026)
 
 **Frame.** Two outcomes: (1) the long-running class-weighted-loss smoke missed all four verdict gates, closing the loss/sampler-side experiments for Drive-head imbalance; (2) Path B-2 (Native NL generation training bridge) committed locally and ready to scale once Codex's Tier 3 dialogue SDG reaches volume. K=9 (commit `d99810a`, 93.2% canonical / 46.9% paraphrase / 79.4% drive) stays production. Path B is the forward path.
