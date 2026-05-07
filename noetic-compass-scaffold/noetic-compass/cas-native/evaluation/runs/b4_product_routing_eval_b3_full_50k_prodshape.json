@@ -4387,9 +4387,9 @@
         "product_n": 6
       },
       "invalid_cas": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 1.0,
         "product_fail_rate": 0.0,
-        "delta": 0.0,
+        "delta": -1.0,
         "raw_n": 6,
         "product_n": 6
       },
@@ -4430,9 +4430,9 @@
       }
     },
     "total": {
-      "raw_model_fail_rate": 0.8666666666666667,
+      "raw_model_fail_rate": 0.9666666666666667,
       "product_fail_rate": 0.6,
-      "delta": -0.2666666666666667
+      "delta": -0.3666666666666667
     }
   }
 }

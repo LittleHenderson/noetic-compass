@@ -769,8 +769,14 @@ def build_comparison_block(
         return {"available": False}
 
     raw_agg = (raw_manifest or {}).get("aggregate", {})
-    raw_cats = raw_agg.get("categories", {})
-    raw_total = raw_agg.get("total", {})
+
+    # Schema-tolerance: the raw-model harness (b4_failure_eval) writes a flat
+    # aggregate (`aggregate.fail_rate`, `aggregate.per_category[cat].fail_rate`),
+    # while this product-routing harness writes a nested schema
+    # (`aggregate.total.fail_rate`, `aggregate.categories[cat].fail_rate`).
+    # Accept both shapes so the comparison block works against either.
+    raw_cats = raw_agg.get("categories") or raw_agg.get("per_category", {})
+    raw_total_block = raw_agg.get("total") or raw_agg  # flat schema keeps fail_rate at top-level
 
     prod_cats = product_aggregate.get("categories", {})
     prod_total = product_aggregate.get("total", {})
@@ -792,10 +798,10 @@ def build_comparison_block(
         "available": True,
         "per_category": per_category,
         "total": {
-            "raw_model_fail_rate": float(raw_total.get("fail_rate", 0.0)),
+            "raw_model_fail_rate": float(raw_total_block.get("fail_rate", 0.0)),
             "product_fail_rate": float(prod_total.get("fail_rate", 0.0)),
             "delta": float(prod_total.get("fail_rate", 0.0))
-            - float(raw_total.get("fail_rate", 0.0)),
+            - float(raw_total_block.get("fail_rate", 0.0)),
         },
     }
 

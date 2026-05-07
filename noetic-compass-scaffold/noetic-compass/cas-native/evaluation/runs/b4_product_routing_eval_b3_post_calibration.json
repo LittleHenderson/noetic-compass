@@ -4668,80 +4668,80 @@
     "available": true,
     "per_category": {
       "casual_greeting": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 1.0,
         "product_fail_rate": 0.0,
-        "delta": 0.0,
-        "raw_n": 0,
+        "delta": -1.0,
+        "raw_n": 6,
         "product_n": 6
       },
       "confusion": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 1.0,
         "product_fail_rate": 0.0,
-        "delta": 0.0,
-        "raw_n": 0,
+        "delta": -1.0,
+        "raw_n": 6,
         "product_n": 6
       },
       "fractal_composition": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 0.8333333333333334,
         "product_fail_rate": 0.8333333333333334,
-        "delta": 0.8333333333333334,
-        "raw_n": 0,
+        "delta": 0.0,
+        "raw_n": 6,
         "product_n": 6
       },
       "frustration": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 1.0,
         "product_fail_rate": 0.0,
-        "delta": 0.0,
-        "raw_n": 0,
+        "delta": -1.0,
+        "raw_n": 6,
         "product_n": 6
       },
       "invalid_cas": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 1.0,
         "product_fail_rate": 0.0,
-        "delta": 0.0,
-        "raw_n": 0,
+        "delta": -1.0,
+        "raw_n": 6,
         "product_n": 6
       },
       "meta_logic": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 1.0,
         "product_fail_rate": 1.0,
-        "delta": 1.0,
-        "raw_n": 0,
+        "delta": 0.0,
+        "raw_n": 6,
         "product_n": 6
       },
       "simple_cas_question": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 1.0,
         "product_fail_rate": 1.0,
-        "delta": 1.0,
-        "raw_n": 0,
+        "delta": 0.0,
+        "raw_n": 6,
         "product_n": 6
       },
       "v76_production": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 1.0,
         "product_fail_rate": 1.0,
-        "delta": 1.0,
-        "raw_n": 0,
+        "delta": 0.0,
+        "raw_n": 6,
         "product_n": 6
       },
       "v77_omega": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 1.0,
         "product_fail_rate": 1.0,
-        "delta": 1.0,
-        "raw_n": 0,
+        "delta": 0.0,
+        "raw_n": 6,
         "product_n": 6
       },
       "valid_cas_notation": {
-        "raw_model_fail_rate": 0.0,
+        "raw_model_fail_rate": 0.8333333333333334,
         "product_fail_rate": 1.0,
-        "delta": 1.0,
-        "raw_n": 0,
+        "delta": 0.16666666666666663,
+        "raw_n": 6,
         "product_n": 6
       }
     },
     "total": {
-      "raw_model_fail_rate": 0.0,
+      "raw_model_fail_rate": 0.9666666666666667,
       "product_fail_rate": 0.5833333333333334,
-      "delta": 0.5833333333333334
+      "delta": -0.3833333333333333
     }
   }
 }
