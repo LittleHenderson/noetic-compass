@@ -1,0 +1,342 @@
+{
+  "schema_version": "cas_hybrid_tokenizer_manifest.v1",
+  "artifact_path": "cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json",
+  "artifact_hash": "463c32f027afd89f",
+  "tokenizer_version": "hybrid-cas-v1",
+  "produced_at": "2026-05-07T18:09:15+00:00",
+  "deliverable": "Path D Wave 1A — tokenizer expansion",
+  "design_doc": "docs/working/path_D_corpus_pipeline_design_2026_05_07.md",
+  "runbook": "docs/working/path_D_compiler_fluency_curriculum_2026_05_07.md",
+  "source": {
+    "tokenizer_module": "noetic-compass-scaffold/noetic-compass/cas-native/training/tokenizer.py",
+    "v1_reference_artifact_dir": "tmp/native_nl_b3_smoke_50k_20260507/",
+    "english_bpe_companion": "cas-synthetic/data/native_nl/english_bpe_50k_20260507.json"
+  },
+  "vocab_sizes": {
+    "before_total": 333,
+    "after_total": 388,
+    "v1_reserved_tokens": 198,
+    "v2_reserved_tokens": 253,
+    "delta_reserved_tokens": 55,
+    "special_tokens": 15,
+    "char_tokens": 120
+  },
+  "added_tokens": [
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^0^P",
+      "id": 213
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^0^C",
+      "id": 214
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^0^E",
+      "id": 215
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^0^O",
+      "id": 216
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^1^P",
+      "id": 217
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^1^C",
+      "id": 218
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^1^E",
+      "id": 219
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^1^O",
+      "id": 220
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^2^P",
+      "id": 221
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^2^C",
+      "id": 222
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^2^E",
+      "id": 223
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^2^O",
+      "id": 224
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^3^P",
+      "id": 225
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^3^C",
+      "id": 226
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^3^E",
+      "id": 227
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^3^O",
+      "id": 228
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^4^P",
+      "id": 229
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^4^C",
+      "id": 230
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^4^E",
+      "id": 231
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^4^O",
+      "id": 232
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^5^P",
+      "id": 233
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^5^C",
+      "id": 234
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^5^E",
+      "id": 235
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^5^O",
+      "id": 236
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^6^P",
+      "id": 237
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^6^C",
+      "id": 238
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^6^E",
+      "id": 239
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^6^O",
+      "id": 240
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^7^P",
+      "id": 241
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^7^C",
+      "id": 242
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^7^E",
+      "id": 243
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^7^O",
+      "id": 244
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^8^P",
+      "id": 245
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^8^C",
+      "id": 246
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^8^E",
+      "id": 247
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^8^O",
+      "id": 248
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^9^P",
+      "id": 249
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^9^C",
+      "id": 250
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^9^E",
+      "id": 251
+    },
+    {
+      "category": "1_state_literals_compound",
+      "surface": "^9^O",
+      "id": 252
+    },
+    {
+      "category": "2_drive_subscript_wrappers",
+      "surface": "_{F1}",
+      "id": 253
+    },
+    {
+      "category": "2_drive_subscript_wrappers",
+      "surface": "_{F2}",
+      "id": 254
+    },
+    {
+      "category": "2_drive_subscript_wrappers",
+      "surface": "_{F3}",
+      "id": 255
+    },
+    {
+      "category": "2_drive_subscript_wrappers",
+      "surface": "_{F4}",
+      "id": 256
+    },
+    {
+      "category": "2_drive_subscript_wrappers",
+      "surface": "_{F5}",
+      "id": 257
+    },
+    {
+      "category": "2_drive_subscript_wrappers",
+      "surface": "_{F6}",
+      "id": 258
+    },
+    {
+      "category": "2_drive_subscript_wrappers",
+      "surface": "_{F7}",
+      "id": 259
+    },
+    {
+      "category": "3_register_set_opener",
+      "surface": "|⟨",
+      "id": 260
+    },
+    {
+      "category": "7_fractal_class_keywords",
+      "surface": "FractalClass",
+      "id": 261
+    },
+    {
+      "category": "7_fractal_class_keywords",
+      "surface": "FractalConvergence",
+      "id": 262
+    },
+    {
+      "category": "7_fractal_class_keywords",
+      "surface": "CognitiveFractal",
+      "id": 263
+    },
+    {
+      "category": "7_fractal_class_keywords",
+      "surface": "Stabilizing",
+      "id": 264
+    },
+    {
+      "category": "7_fractal_class_keywords",
+      "surface": "Amplifying",
+      "id": 265
+    },
+    {
+      "category": "7_fractal_class_keywords",
+      "surface": "Oscillatory",
+      "id": 266
+    },
+    {
+      "category": "7_fractal_class_keywords",
+      "surface": "Neutral",
+      "id": 267
+    }
+  ],
+  "n_added": 55,
+  "id_stability": {
+    "all_v1_token_ids_preserved": true,
+    "verification_script": "tmp/path_d_v1_compat_check.py"
+  },
+  "category_coverage": {
+    "1_state_literals": {
+      "total": 54,
+      "single_token": 54
+    },
+    "2_drive_subscripts": {
+      "total": 21,
+      "single_token": 21
+    },
+    "3_register_tags": {
+      "total": 6,
+      "single_token": 6
+    },
+    "4_operators": {
+      "total": 7,
+      "single_token": 7
+    },
+    "5_production_recipes": {
+      "total": 2,
+      "single_token": 1,
+      "note": "'→ Ω' is whitespace-separated, two tokens by CAS grammar"
+    },
+    "6_metalogic": {
+      "total": 14,
+      "single_token": 14
+    },
+    "7_fractals": {
+      "total": 6,
+      "single_token": 6
+    }
+  },
+  "audit_findings": [
+    "Parametric Ω_NAME emergents (e.g. Ω_safe_judgment) remain multi-token unless individually pre-registered. The Ω_ prefix morpheme is in vocab; full names fall through to char tokens under frozen mode. Path D corpus generation should pre-register the Ω_ names that appear in the corpus before freezing.",
+    "Cognitive Fractal index digits (3, 8, 5, 2 inside ⟨3:8:5:2⟩) tokenize as char tokens because the spec did not list digits 0-9 in the 7-category coverage. Compiler grammar treats them as integer literals (TokenKind.NUMBER); future work may add 0-9 as single tokens.",
+    "Backward compatibility verified: existing v1 tokenizer.json files load and tokenize identically — the dynamic regex includes the compound `^N^D` and `_{Fk}` patterns only when the corresponding v2 tokens are present in vocab."
+  ]
+}

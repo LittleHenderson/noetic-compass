@@ -203,6 +203,41 @@ CAS_RESERVED_TOKENS = [
     "meta_symbol",
     "meta_assertion",
     "any",
+    # ----------------------------------------------------------------------
+    # Path D Wave 1A (2026-05-07): seven-category surface-form coverage
+    # extension. Every entry below is APPENDED at the end of the v1
+    # reserved-token list so all v1 token IDs are preserved verbatim;
+    # only NEW IDs are introduced. This is load-bearing for
+    # backward-compatible loading of v1 tokenizer.json artifacts.
+    # See: docs/working/path_D_corpus_pipeline_design_2026_05_07.md
+    # See: docs/working/path_D_tokenizer_v2_coverage_2026_05_07.md
+    # See: memory feedback_cas_token_enum_must_include_metalogic_and_fractals.md
+    # ----------------------------------------------------------------------
+    # Cat 1: 40 compound state literals (the patent-named 40 Cognitive
+    # States) admitted as single tokens. Order: Noetic varies fastest
+    # (^0^P, ^0^C, ^0^E, ^0^O, ^1^P, ...), preserving structural
+    # invariant. Activation is gated by the v2-aware dynamic regex
+    # below — if `^0^P` is present in vocab, the dynamic pattern
+    # `\^\d+\^[PCEO]` is prepended so compound matches win over
+    # single-Noetic matches.
+    *[f"^{n}^{d}" for n in range(10) for d in "PCEO"],
+    # Cat 2: drive-subscript wrappers `_{F1}`..`_{F7}` so `_{Fk}`
+    # encodes as one token. Reached via the longest-prefix reserved
+    # match; no dynamic-regex change needed for these (they don't
+    # collide with any v1 dynamic pattern).
+    *[f"_{{F{i}}}" for i in range(1, 8)],
+    # Cat 3: register-set opener `|⟨` for CAS v7.7 `|⟨T,A,f⟩`.
+    "|⟨",
+    # Cat 7: Cognitive Fractal class taxonomy keywords + IFS-stability
+    # discriminants (cas-engine convergence.rs Def 8.20) + ood_gate
+    # keywords.
+    "FractalClass",
+    "FractalConvergence",
+    "CognitiveFractal",
+    "Stabilizing",
+    "Amplifying",
+    "Oscillatory",
+    "Neutral",
 ]
 
 
@@ -217,6 +252,16 @@ _DYNAMIC_CAS_PATTERNS = [
     r"\^[PCEO]",
     r"\|[TAfE]",
 ]
+
+
+# Path D Wave 1A (2026-05-07): v2 dynamic patterns admitted only when the
+# corresponding compound tokens are present in vocab. The activation
+# probe checks for `^0^P` (compound state literal) before adding the
+# `\^\d+\^[PCEO]` pattern to the dynamic regex. v1 vocabs without these
+# tokens see no behavioral change — their dynamic regex is identical
+# to the original list above.
+_DYNAMIC_CAS_PATTERNS_V2_COMPOUND_STATE = r"\^\d+\^[PCEO]"
+_DYNAMIC_CAS_PATTERNS_V2_DRIVE_SUBSCRIPT = r"_\{F\d+\}"
 
 
 def _char_token(ch: str) -> str:
@@ -277,7 +322,19 @@ class HybridCASTokenizer:
             key=len,
             reverse=True,
         )
-        self._dynamic_re = re.compile("|".join(f"(?:{p})" for p in _DYNAMIC_CAS_PATTERNS))
+        # Path D Wave 1A (2026-05-07): if the v2 compound-state-literal
+        # tokens are present in vocab (e.g. `^0^P`), prepend the longer
+        # `\^\d+\^[PCEO]` pattern to the dynamic regex so the compound
+        # match wins over the v1 single-noetic match `\^\d+`. Likewise
+        # for `_{F1}`. v1 vocabs without these tokens use the legacy
+        # pattern list verbatim — bit-identical behavior preserved.
+        patterns: list[str] = []
+        if "^0^P" in self.word2id:
+            patterns.append(_DYNAMIC_CAS_PATTERNS_V2_COMPOUND_STATE)
+        if "_{F1}" in self.word2id:
+            patterns.append(_DYNAMIC_CAS_PATTERNS_V2_DRIVE_SUBSCRIPT)
+        patterns.extend(_DYNAMIC_CAS_PATTERNS)
+        self._dynamic_re = re.compile("|".join(f"(?:{p})" for p in patterns))
 
     @property
     def vocab_size(self) -> int:
