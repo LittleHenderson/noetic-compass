@@ -1,0 +1,118 @@
+{
+  "schema_version": "native_nl.v1",
+  "generation_version": "native_nl_tier3_dialogue_v1",
+  "trace_id": "115e5e62-8f1b-4642-b2db-dacf9bd49689",
+  "seed": 20260507,
+  "target_records": 50000,
+  "total_records": 50000,
+  "tier3_records": 50000,
+  "total_conversations": 10064,
+  "resumed_records": 17756,
+  "validator_pass_count": 50000,
+  "validator_pass_rate": 1.0,
+  "provider": "claude",
+  "primary_model": "claude-sonnet-4-6",
+  "fallback_model": "claude-3-5-sonnet-20241022",
+  "final_model": "claude-sonnet-4-6",
+  "price_per_m_input_usd": 3.0,
+  "price_per_m_output_usd": 15.0,
+  "api_key_status": "present",
+  "dry_run": false,
+  "distributions": {
+    "tier": {
+      "tier3": 50000
+    },
+    "noetic": {
+      "^5": 4973,
+      "^2": 5008,
+      "^9": 5003,
+      "^0": 4970,
+      "^6": 5005,
+      "^3": 5020,
+      "^7": 5016,
+      "^4": 4971,
+      "^1": 5025,
+      "^8": 5009
+    },
+    "domain": {
+      "C": 12502,
+      "O": 12496,
+      "P": 12488,
+      "E": 12514
+    },
+    "drive": {
+      "F5": 7183,
+      "F3": 7174,
+      "F2": 7140,
+      "F4": 7130,
+      "F6": 7110,
+      "F1": 7136,
+      "F7": 7127
+    },
+    "register": {
+      "T": 12558,
+      "f": 12584,
+      "E": 12372,
+      "A": 12486
+    },
+    "expression_family": {
+      "base": 39114,
+      "register_set": 4349,
+      "omega_emergent": 2090,
+      "copresence": 2720,
+      "recipe": 1727
+    },
+    "demographic_profile": {
+      "confident_veteran": 6339,
+      "global_english_indirect": 6222,
+      "anxious_first_timer": 6381,
+      "skeptical_analyst": 6153,
+      "senior_academic_humanities": 6030,
+      "lay_casual": 6398,
+      "mid_career_clinician_direct": 6235,
+      "young_professional_technical": 6242
+    },
+    "tone": {
+      "anxious": 10122,
+      "reflective": 9871,
+      "neutral": 9919,
+      "excited": 10035,
+      "frustrated": 10053
+    },
+    "generator_model": {
+      "claude-sonnet-4-6": 50000
+    }
+  },
+  "total_cost_usd": 98.759,
+  "input_tokens": 7760021,
+  "output_tokens": 5031930,
+  "api_calls": 7326,
+  "hard_cost_cap_usd": 110.0,
+  "cost_aborted": false,
+  "failure_counts": {
+    "validation:jargon:\\bregister[s]?\\b": 145,
+    "validation:jargon:\\bdrive[s]?\\b": 25,
+    "turn_count_mismatch": 3,
+    "validation:jargon:\\bdomain[s]?\\b": 1,
+    "validation:too_long": 2
+  },
+  "generation_started": "2026-05-06T22:33:53.301389+00:00",
+  "generation_completed": "2026-05-07T02:20:08.120298+00:00",
+  "out_prefix": "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507",
+  "records_per_shard": 5000,
+  "shard_paths": [
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0000.jsonl",
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0001.jsonl",
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0002.jsonl",
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0003.jsonl",
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0004.jsonl",
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0005.jsonl",
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0006.jsonl",
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0007.jsonl",
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0008.jsonl",
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0009.jsonl",
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_50k_claude_20260507_0010.jsonl"
+  ],
+  "round_trip_validator": "deferred",
+  "notes": []
+}

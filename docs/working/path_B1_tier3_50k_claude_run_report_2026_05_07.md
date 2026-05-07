@@ -181,12 +181,50 @@ copresence: 2720
 recipe: 1727
 ```
 
+## English BPE Artifact
+
+Trained a project-native English BPE artifact on the completed 50K corpus using the same settings as the earlier 5K artifact.
+
+Training input:
+
+```text
+tmp/v1_dialogue_50k_claude_20260507_all.jsonl
+```
+
+The temporary combined JSONL was built from the 11 shard files and contained exactly 50,000 records. It was used only as the BPE training input; the canonical corpus remains the sharded files under `cas-synthetic/data/native_nl/`.
+
+Artifact:
+
+```text
+cas-synthetic/data/native_nl/english_bpe_50k_claude_20260507.json
+```
+
+Settings/result:
+
+```text
+vocab_version: english-bpe-tier3-50k-claude-20260507
+vocab_size target: 24000
+min_frequency: 2
+n_records_trained_on: 50000
+english_vocab_size: 24000
+bpe_merge_count: 23740
+trained_from_corpus_hash: 3ad2596d71945b8c371d0cc38835e09d853be73ae86c9bd84783e70939050af4
+wall time: 197.33 seconds
+```
+
+Verification:
+
+```text
+Artifact loads via load_english_bpe_artifact.
+ExtendedHybridCASTokenizer composes with HybridCASTokenizer.
+Round-trip smoke passed on mixed English + CAS text.
+Focused tests passed: 33/33
+```
+
 ## Recommended Next Execution Order
 
 1. Do not regenerate the 50K corpus.
-2. Spot-review 20-50 random records for conversational quality.
-3. Train or update the English BPE/tokenizer artifact on this corpus.
-4. Run the B-3 native generation smoke using the committed B-2 trainer bridge.
-5. If B-3 smoke passes, proceed to B-4 two-stage inference wiring.
-6. Keep Path C Simplex/SSM work parked until conversational v0 exists.
-
+2. Use `english_bpe_50k_claude_20260507.json` as the BPE artifact for B-3.
+3. Run the B-3 native generation smoke using the committed B-2 trainer bridge.
+4. If B-3 smoke passes, proceed to B-4 two-stage inference wiring.
+5. Keep Path C Simplex/SSM work parked until conversational v0 exists.
