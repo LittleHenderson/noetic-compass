@@ -693,7 +693,14 @@ _CATEGORY_FAIL_POLICY: dict[str, list[str]] = {
     "frustration":         ["leakage", "non_rambling_lt_3", "relevance_lt_3", "directness_lt_3", "stage2_empty"],
     "simple_cas_question": ["leakage", "plain_lt_3", "relevance_lt_3", "stage2_empty"],
     "valid_cas_notation":  ["leakage", "relevance_lt_3", "stage2_empty"],
-    "invalid_cas":         ["stage2_empty"],
+    # invalid_cas: the model must engage with the invalidity. Acceptable
+    # responses are clarifying questions, plain-language acknowledgement
+    # that the input is broken, or a compiler-valid repair. The original
+    # ["stage2_empty"]-only policy let irrelevant ramble pass; tightened
+    # 2026-05-07 (post-Codex audit) to mirror the casual categories: any
+    # reply with leakage, low relevance to the broken input, weak
+    # user-addressing, or empty Stage 2 fails.
+    "invalid_cas":         ["leakage", "relevance_lt_3", "directness_lt_3", "stage2_empty"],
     "v76_production":      ["preservation_failed", "stage2_empty"],
     "v77_omega":           ["preservation_failed", "stage2_empty"],
     "meta_logic":          ["preservation_failed", "stage2_empty"],
