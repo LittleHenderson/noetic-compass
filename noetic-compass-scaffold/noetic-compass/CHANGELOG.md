@@ -1,5 +1,80 @@
 # Noetic Compass — Progress Log
 
+## Session 58: B-4.1 audit failed — v0 NOT promoted; four-step v1 plan launched (May 7, 2026)
+
+**Frame.** The B-4.1 human relevance audit ran on the `b3_full_50k_prodshape_20260507` checkpoint and **failed catastrophically. v0 does NOT promote.** Five failure modes documented in `docs/working/path_B4_human_relevance_failure_2026_05_07.md` (Codex's note, this commit). User and Codex converged on a four-step v1 plan: A (commit failure as project truth, this commit) + B (automated failure eval harness) + C (OOD gate + chat.py routing) + D (compiler-preservation scorer). B/C/D are running as parallel background agents.
+
+**Status correction (load-bearing):**
+- B-4 engineering loop: **live locally**
+- B-4 product status: **failed human relevance audit**
+- B-4 stakeholder/demo status: **not ready**
+
+The model is currently a CAS-conditioned reflective prose generator with weak relevance and weak compiler alignment. **Do NOT describe as "fluid conversation" until v1 clears the automated gate.**
+
+**Five failure modes from the audit trace:**
+
+1. **Irrelevance** — replies fluent but don't address prompts. Decorative not responsive.
+2. **Drunk coherence** — token-level fluent, discourse-level incoherent.
+3. **OOD ships anyway** — K=9 detects OOD ("no CAS signal detected ... documented modality limitation") but ships confident CAS classification regardless. Routing failure, not detection failure. "this shit is wack" → `^2^E_{F5}|E` (Positive — opposite of user's affect).
+4. **Compiler round-trip catastrophic** — ground truth `Θ(Ω_focused_refusal) = 0.53*^7^P_{F7}|T + 2.11*^3^P_{F2}|A + 1.04*^1^P_{F1}|A → Ω_focused_refusal` produced `^7^P|T + ^7^P|A`. Lost Θ wrapper, all coefficients, two ingredients, arrow, named target.
+5. **Structural-shape-without-content** — model memorized v77_omega and v76_production silhouettes; hollows out drives, coefficients, named Ω targets while preserving the silhouette. Hallucinated Domain `^P` on v77_omega presence example where ground truth specified no Domain. Per-bucket failure pattern: drives stripped 100%, named Ω targets collapsed 100%, Θ wrappers lost on recipes 100%.
+6. **Bonus: belief substrate `Inv✗(A)` fires correctly but is advisory only** — RPM/inversion telemetry visible in trace but doesn't gate output.
+
+**Four-step v1 plan (user + Codex convergence, locked):**
+
+| Step | Track | Owner | State |
+|---|---|---|---|
+| **A** | Commit failure as project truth + CHANGELOG status correction | foreground | THIS COMMIT |
+| **B** | B-4 automated failure eval harness (50–100 prompts × 7 user-facing dimensions × 9 structural-preservation sub-checks) | background agent | running |
+| **C** | OOD gate (`cas-native/inference/ood_gate.py`) + `chat.py` routing fix | background agent | running |
+| **D** | Compiler-preservation scorer (`cas-native/evaluation/compiler_preservation_scorer.py`) | background agent | running |
+
+A blocks nothing else. B consumes D's API; B uses placeholder import until D lands.
+
+**Slogan locked:** *"Fluency last. Object preservation first."*
+
+**v1 long-arc plan** (post-A/B/C/D):
+
+1. Eval set lands (B's harness)
+2. Path C / Path D doc split (Path C = simplex-native architecture; Path D = compiler-fluency curriculum)
+3. Generate full compiler-fluency corpus from compiler-validated objects (the entire CAS system, not a dialogue slice)
+4. Build simplex-native content-preservation architecture (Path C §3.1 corrected: Δ°₃₉ base manifold + drive intensity vector — NOT Δ°₆ — + Bernoulli register + typed constraints)
+5. Train Path C + Path D together (compiler-in-the-loop validation; contrastive readout supervision)
+6. Conversational discipline slice retrofit on top
+7. Auto re-gate against B's eval set
+8. Human audit by non-creator only after gate passes
+
+**Path C §3.1 architectural correction (memo-only this commit; doc edit follows post-eval-gate):** Drive reframed Δ°₆ → 7-dim intensity vector because drives co-present (F1 + F5 simultaneously is real cognition, not mutually exclusive). Domain and Noetic = derived marginals from Δ°₃₉, not primary heads. Geometry: **base manifold + typed fibers + typed constraints**. Captured in durable memory `project_path_c_base_manifold_typed_fibers_correction_2026_05_07.md`.
+
+**Inversions axis-count question (user surfaced today):** TKS heritage searched end-to-end. No "28 inversions" or "33 inversions" exists anywhere. TKS has 3 dualities (ν2↔ν3, ν5↔ν6, ν8↔ν9) + 28 Sub-Foundations (drives × worlds, NOT inversions). CAS canonical 7 inversion axes stays default for v1; expansion only on empirical evidence. Inversions live in the typed-constraint layer alongside RPM and meta-logic — *not* a state simplex. Gemini's claim of "Indices 28–33 in `_tmp_playground_bundle.js` lines 898–910 and 2030–2080" was **hallucinated**: file is 1053 lines (not 2080), lines 898–910 are bundled markdown parser code, no inversion data anywhere.
+
+**Durable lessons captured as memory** (cross-session):
+- `feedback_audit_only_after_automated_checks.md` — human audit only after automated diagnostics pass; creator is wrong auditor; compile rate is missing eval layer.
+- `project_v1_locked_plan_path_c_d_2026_05_07.md` — 8-step execution order; 7-dim user-facing eval gate; 9-check structural preservation.
+- `project_path_c_base_manifold_typed_fibers_correction_2026_05_07.md` — Path C §3.1 architectural correction (drive ≠ simplex).
+- `feedback_gemini_citations_need_verification.md` — to be added: Gemini hallucinated specific file/line citations on this codebase; verify before acting.
+
+**This commit:**
+- Stages `docs/working/path_B4_human_relevance_failure_2026_05_07.md` (Codex's failure note; covers all three trace-derived findings: structural-shape-without-content addendum, OOD-detected-but-not-gated, inversion-advisory-only).
+- Adds Session 58 to CHANGELOG.
+
+**Path B / v1 status:**
+
+| Track | State |
+|---|---|
+| B-1 Tier 3 dialogue SDG | DONE |
+| B-2 Batcher reconciliation | DONE |
+| B-3 First native generation training | DONE |
+| B-3.5 Round-trip K=9 grounding eval | DONE — calibrated pass |
+| B-4 Two-stage inference in chat REPL | engineering live; product failed; demo NOT ready |
+| **B-4.1 human PoC audit** | **DONE 2026-05-07 — NEGATIVE; v0 NOT promoted** |
+| **v1 Step A** | **THIS COMMIT** |
+| v1 Step B (eval harness) | background agent running |
+| v1 Step C (OOD gate) | background agent running |
+| v1 Step D (compiler-preservation scorer) | background agent running |
+| Path C Simplex Δ°₃₉ rebuild | §3.1–3.4 captured + §3.1 corrected (memo); build post-v1-eval-gate |
+| Path D Compiler-fluency curriculum | doc split scheduled post-A/B/C/D |
+
 ## Session 57: Path B reaches v0 promotion gate + Path C compiler-fluency framing (May 7, 2026)
 
 **Frame.** Path B fully wired through B-4. B-1 (50K Tier 3 SDG, $153.26) → B-2 (Session 56 commit) → B-3 (first production-shape GPU training run, 5 epochs, $0.54, coherent register-grounded sample replies) → B-3.5 (round-trip K=9 grounding eval calibrated pass) → B-4 (chat REPL two-stage wiring with 6-bug Codex audit repair, 67 tests passing). B-4.1 human PoC audit form ready — 31 prompts staged at `docs/working/path_B4_1_human_audit_form_2026_05_07.md`; user runs the audit next as the v0 promotion gate. Promotion criteria: avg relevance ≥3.5, avg register fit ≥4, leakage = 0. If passes, v0 ships. If fails, audit failure-mode tells the next remediation track.
