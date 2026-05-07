@@ -34,6 +34,11 @@ from cas_native.belief import BeliefStore  # noqa: E402
 from cas_native.inference.cas_renderer import render_cas_prediction  # noqa: E402
 from cas_native.inference.demo_prompts import DEMO_PROMPTS  # noqa: E402
 from cas_native.inference.native_nl_generate import generate_reply  # noqa: E402
+from cas_native.inference.ood_gate import (  # noqa: E402
+    GateResult,
+    OODGate,
+    RouteDecision,
+)
 from cas_native.inference.predict_cas import load_predictor  # noqa: E402
 from cas_native.inference.rewrite_shim import (  # noqa: E402
     detect_cas_signal,
@@ -347,6 +352,9 @@ def _expression_from_prediction(prediction: dict[str, Any]) -> str:
     return rendered
 
 
+_OOD_GATE = OODGate()
+
+
 def _predict_and_show(
     predictor: Callable[..., Any],
     text: str,
@@ -358,16 +366,27 @@ def _predict_and_show(
     belief_store: BeliefStore | None = None,
     capture_trace: bool = False,
     native_generator: dict[str, Any] | None = None,
+    ood_gate: OODGate | None = None,
+    verbose_gate: bool = False,
 ) -> LiveTrace | None:
     """Run detection + (optional) rewrite + prediction, render the turn.
 
     When ``native_generator`` is provided, runs the two-stage inference loop:
     Stage 1 (K=9) -> Stage 2 (B-3 native generation).
+
+    The ``OODGate`` is consulted *before* invoking the native generator. If
+    the gate returns anything other than ``CAS_PIPELINE`` we emit the
+    gate's canned plain-English reply and SKIP the native generator entirely.
+    This is the routing fix for the v0 human-relevance audit failure
+    (``docs/working/path_B4_human_relevance_failure_2026_05_07.md``):
+    the K=9 detector already flags casual prompts as out-of-distribution; we
+    just stop shipping confident CAS classifications when it does.
     """
     signal: dict[str, Any] | None = None
     rewritten: str | None = None
     notes = list(extra_notes or [])
     target_text = text
+    ood_note: str | None = None
 
     if apply_rewrite:
         signal = detect_cas_signal(text)
@@ -376,12 +395,13 @@ def _predict_and_show(
             target_text = rewritten
         else:
             signal = None
-            notes.append(
+            ood_note = (
                 "no CAS signal detected in free-form input; predicting on the "
                 "raw text. The K=9 baseline tends to collapse to its prior on "
                 "out-of-distribution colloquial English (documented modality "
                 "limitation)."
             )
+            notes.append(ood_note)
 
     trace: LiveTrace | None = None
     try:
@@ -412,6 +432,50 @@ def _predict_and_show(
 
     expression = _expression_from_prediction(prediction)
     is_native = False
+
+    # ---- OOD gate ---------------------------------------------------------
+    # Consult the routing gate before considering the native generator. We
+    # build a k9_result dict that surfaces the OOD-detection note (when one
+    # exists) so the gate can match on it, plus the prediction dict itself
+    # so the gate can read top-head confidences.
+    gate = ood_gate if ood_gate is not None else _OOD_GATE
+    k9_result_for_gate: dict[str, Any] = dict(prediction)
+    gate_notes: list[str] = []
+    if ood_note is not None:
+        gate_notes.append(ood_note)
+    if gate_notes:
+        k9_result_for_gate["notes"] = gate_notes
+    gate_result: GateResult = gate.route(text, k9_result_for_gate)
+
+    if gate_result.decision is not RouteDecision.CAS_PIPELINE:
+        # Gate has decided we should NOT ship a CAS classification + native
+        # generation for this prompt. Emit the canned plain-English reply,
+        # optionally surface the gate reason in verbose mode, and skip the
+        # native generator entirely. We still render the turn so the user
+        # sees what happened (input + gate decision + canned reply), but
+        # the CAS PREDICTION row is replaced with the gate verdict and the
+        # ENGLISH row carries the canned response, not a confidently-wrong
+        # native reply.
+        canned = gate_result.canned_response or ""
+        gate_label = f"[gate: {gate_result.decision.value}]"
+        if verbose_gate:
+            notes.append(f"OOD gate: {gate_result.reason}")
+        else:
+            notes.append(f"OOD gate routed to {gate_result.decision.value}.")
+        _render_turn(
+            console,
+            user_text=text,
+            signal=signal,
+            rewritten=rewritten,
+            expression=gate_label,
+            english=canned,
+            raw_prediction=prediction if show_raw else None,
+            notes=notes,
+            belief_status=None,
+            belief_locked=False,
+            is_native=False,
+        )
+        return trace
 
     if native_generator is not None:
         try:
