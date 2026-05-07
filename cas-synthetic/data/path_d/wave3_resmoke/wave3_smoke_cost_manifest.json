@@ -1,0 +1,63 @@
+{
+  "schema_version": "path_d_wave3_smoke_v1",
+  "generation_version": "wave3_smoke_2026_05_07",
+  "started_at": "2026-05-07T22:44:45Z",
+  "ended_at": "2026-05-07T22:58:57Z",
+  "stopped_reason": "completed",
+  "smoke_target_total": 400,
+  "cost_cap_usd": 5.0,
+  "total_cost_usd": 0.63004,
+  "per_slot_cost": {
+    "cas_to_english": 0.0751,
+    "english_to_cas": 0.14076,
+    "invalid_to_explanation": 0.20262,
+    "invalid_to_corrected": 0.21155
+  },
+  "per_slot_count": {
+    "cas_to_english": 120,
+    "english_to_cas": 127,
+    "invalid_to_explanation": 80,
+    "invalid_to_corrected": 80
+  },
+  "per_slot_compiler_rejection_rate": {
+    "cas_to_english": 0.0,
+    "english_to_cas": 0.0231,
+    "invalid_to_explanation": 0.0,
+    "invalid_to_corrected": 0.0
+  },
+  "per_slot_rejection_count": {
+    "english_to_cas": 3
+  },
+  "per_category_rejection_rate": {
+    "inversion": {
+      "english_to_cas": 2
+    },
+    "meta_logic_relation": {
+      "english_to_cas": 1
+    }
+  },
+  "leakage_rate_per_slot": {
+    "cas_to_english": 0.0083,
+    "english_to_cas": 0.0,
+    "invalid_to_explanation": 0.0,
+    "invalid_to_corrected": 0.0
+  },
+  "leakage_count_per_slot": {
+    "cas_to_english": 1
+  },
+  "total_input_tokens": 163346,
+  "total_output_tokens": 19347,
+  "per_model_input_tokens": {
+    "claude-haiku-4-5-20251001": 52989,
+    "claude-sonnet-4-6": 110357
+  },
+  "per_model_output_tokens": {
+    "claude-haiku-4-5-20251001": 4423,
+    "claude-sonnet-4-6": 14924
+  },
+  "actual_cost_per_sample": {
+    "haiku_avg": 0.000626,
+    "sonnet_avg": 0.001934
+  },
+  "ready_for_full_scale_decision": "smoke produced 407 samples for $0.6300; blended cost $0.001548/sample; projected full 26000-sample cost $40.25. Smoke completed within cap; review quality + per-category rejection before scaling."
+}

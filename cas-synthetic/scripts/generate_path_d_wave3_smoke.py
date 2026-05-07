@@ -316,11 +316,89 @@ def stratified_sample(
 # ---------------------------------------------------------------------------
 
 # Plain-language guard rails reused across slots.
+#
+# Patched 2026-05-07 post-Codex audit: added explicit anti-drift rules.
+# The first smoke pass (5K samples) showed Haiku 4.5 occasionally invented
+# chemistry metaphors ("carbon-based / oxygen-based" — confusing CAS
+# Domains C and O with elements) and unsupported cardinalities ("seven out
+# of nine") that weren't in the source expression. Both make CAS sound
+# incoherent to outsiders, which is the same failure shape as v0.
 _PLAIN_LANGUAGE_GUIDANCE = (
     "Write a concise, plain-English description aimed at a curious adult "
     "reader. Do NOT echo CAS notation, operator symbols, or jargon like "
     "'noetic', 'register', 'RPM', or 'F1' in your reply. Describe the meaning "
-    "in everyday language. Keep it under 60 words."
+    "in everyday language. Keep it under 60 words.\n"
+    "\n"
+    "STRICT anti-drift rules:\n"
+    "- Do NOT use chemistry / physics / biology / finance metaphors. Never "
+    "  describe CAS Domains as elements (no 'carbon', 'oxygen', 'hydrogen'); "
+    "  Domain letters (P, C, E, O) are abstract abbreviations, not chemical "
+    "  shorthand.\n"
+    "- Do NOT invent cardinalities or counts that aren't literally in the "
+    "  source expression. If the expression doesn't say '7 out of 9', don't "
+    "  introduce that ratio. Quantify only what the expression itself "
+    "  quantifies.\n"
+    "- Do NOT invent intensity, strength, weight, or probability quantities. "
+    "  If the expression has no numeric coefficient, don't introduce one.\n"
+    "- Describe the relation as it literally is, not as an analogy. "
+    "  'A connects to B' is fine; 'A is like a parent to B' is invented "
+    "  framing unless the source says 'parent'.\n"
+    "- Stay neutral on emotional valence unless the expression explicitly "
+    "  encodes it (e.g., explicit ^2 Positive or ^3 Negative).\n"
+    "- NEVER describe Noetic operators as 'levels' or 'tiers'. No "
+    "  'fourth-level', 'seventh-tier', 'fifth-order', 'level of "
+    "  intensity', 'level of complexity', 'level of abstraction', or "
+    "  'level of detail'. Noetic indices 0-9 are operator slots in a "
+    "  formal vocabulary, not a hierarchy. Use the approved everyday "
+    "  phrasings below (Mind, Positive, Vibration, Female, Male, "
+    "  Rhythm, etc.) instead — they are the right English for each "
+    "  operator."
+)
+
+
+# Approved everyday English phrasings for each Noetic operator. Layered
+# into the cas_to_english prompt 2026-05-07 post-Codex+user audit. These
+# are CAS-canonical colloquialisms (verbatim from the Tootra Math
+# Handbook per docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md Clarification 6),
+# used as APPROVED ALIASES for cognitive operators — NOT as decoration.
+# Codex's guidance: "Preserve the structure first, naturalize second."
+# Use ONLY in cas_to_english (and later conversational-response slots);
+# do NOT contaminate english_to_cas which needs strict compiler syntax.
+_COLLOQUIALISM_GUIDANCE = (
+    "Approved everyday English phrasings for each Noetic operator (use "
+    "only when one fits naturally — NEVER force):\n"
+    "- ^0 Idea: 'it's all in your head', 'a thought', 'something on your mind'\n"
+    "- ^1 Mind: 'paying attention', 'using your head', 'making up your mind', "
+    "'becoming aware'\n"
+    "- ^2 Positive: 'drawn to it', 'speaks to me', \"can't resist\", "
+    "'pulled toward'\n"
+    "- ^3 Negative: \"can't stomach it\", 'rubs the wrong way', "
+    "\"wouldn't touch with a ten-foot pole\", 'pushed away from'\n"
+    "- ^4 Vibration: 'hit hard', 'struck a chord', 'resonated', "
+    "'made an impression'\n"
+    "- ^5 Female: 'sum of one's experiences', 'who one is', "
+    "'what makes someone themselves', 'shaped by'\n"
+    "- ^6 Male: 'unpacking an idea', 'breaking it down', "
+    "'pulling apart the argument', \"looking at what's underneath\"\n"
+    "- ^7 Rhythm: 'practice makes perfect', 'muscle memory', "
+    "'in a groove', 'getting used to it'\n"
+    "- ^8 Above/Cause: 'that reminds me', 'triggered a memory', "
+    "'one thing leads to another', 'made me think of'\n"
+    "- ^9 Below/Effect: 'popped into mind', 'out of nowhere', "
+    "'it just clicked', 'the thought came'\n"
+    "\n"
+    "Rules for using these phrasings:\n"
+    "- Preserve the structural relation FIRST, naturalize SECOND. "
+    "Faithfulness to the expression beats stylistic smoothness.\n"
+    "- Use a colloquialism only when it fits the source structure. "
+    "Don't force one. Don't pile multiple together.\n"
+    "- Domain context: P = principled/foundational, C = cognitive/mental, "
+    "E = evaluative/judging, O = operational/behavioral. Don't use a "
+    "feel-toned colloquialism (e.g., 'gut reaction') for a P-Domain "
+    "expression — that's a category error.\n"
+    "- These are aliases for the OPERATORS, not decoration. Each phrase "
+    "maps to a specific Noetic; using one is making a structural claim, "
+    "not just adding flavor."
 )
 
 
@@ -331,12 +409,15 @@ def build_cas_to_english_prompt(seed: dict[str, Any]) -> tuple[str, str]:
         "You are a translator that turns formal CAS (Cognitive Architecture "
         "System) expressions into clear English paraphrases. CAS is a formal "
         "notation describing cognitive states and operations. Your job is to "
-        "express what an expression MEANS in plain English."
+        "express what an expression MEANS in plain English, using approved "
+        "colloquial aliases for cognitive operators where they fit the "
+        "structure naturally."
     )
     user = (
         f"CAS expression (grammar category: {cat}):\n\n"
         f"    {expr}\n\n"
         f"{_PLAIN_LANGUAGE_GUIDANCE}\n\n"
+        f"{_COLLOQUIALISM_GUIDANCE}\n\n"
         f"Reply with ONLY the English paraphrase. No preamble, no list, no "
         f"explanation of CAS notation, no quotes around the answer."
     )

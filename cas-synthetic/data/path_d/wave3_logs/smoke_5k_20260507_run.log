@@ -1,0 +1,21 @@
+{
+  "main_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\wave3_smoke_20260507T192508Z.jsonl",
+  "rejected_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\wave3_smoke_rejected.jsonl",
+  "leakage_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\wave3_smoke_leakage.jsonl",
+  "cost_manifest_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\wave3_smoke_cost_manifest.json",
+  "exemplars_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\wave3_smoke_exemplars.md",
+  "stopped_reason": "completed",
+  "total_cost_usd": 5.96406899999999,
+  "per_slot_count": {
+    "cas_to_english": 1500,
+    "english_to_cas": 1561,
+    "invalid_to_explanation": 997,
+    "invalid_to_corrected": 991
+  },
+  "rejection_counts": {
+    "english_to_cas": 38
+  },
+  "leakage_counts": {
+    "cas_to_english": 5
+  }
+}
