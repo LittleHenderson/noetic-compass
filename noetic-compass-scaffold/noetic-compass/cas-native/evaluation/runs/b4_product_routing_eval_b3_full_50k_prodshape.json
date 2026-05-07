@@ -1,0 +1,4438 @@
+{
+  "schema_version": "b4_product_routing_eval.v1",
+  "config": {
+    "checkpoint": "cas-native\\training\\runs\\b3_full_50k_prodshape_20260507",
+    "prompts": "cas-native\\evaluation\\fixtures\\b4_failure_prompts.jsonl",
+    "out_path": "cas-native\\evaluation\\runs\\b4_product_routing_eval_b3_full_50k_prodshape.json",
+    "device": "cpu",
+    "max_new_tokens": 80,
+    "sampling": "top_p",
+    "temperature": 0.8,
+    "top_p": 0.9,
+    "use_cas_prefix": false,
+    "seed": 42
+  },
+  "stage1_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\cas-native\\training\\runs\\structured-token-recoverable-paraphrase-v77fix-20epoch-gpu-20260502-1045",
+  "generator_status": "loaded",
+  "preservation_scorer_status": "loaded_from_agent_d",
+  "gate_config": {
+    "confidence_threshold": 0.4,
+    "casual_word_limit": 10
+  },
+  "raw_model_manifest_path": "cas-native\\evaluation\\runs\\b4_failure_eval_b3_full_50k_prodshape.json",
+  "n_prompts": 60,
+  "rows": [
+    {
+      "id": "greet_001",
+      "category": "casual_greeting",
+      "prompt_text": "what up",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Casual greeting; no CAS signal; should be plain conversational reply.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.07725777630952745,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "greet_002",
+      "category": "casual_greeting",
+      "prompt_text": "hey",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Bare greeting.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 2,
+      "relevance_raw": 0.13326310646935685,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "greet_003",
+      "category": "casual_greeting",
+      "prompt_text": "yo",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Bare greeting; observed B-3 OOD failure mode.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "greet_004",
+      "category": "casual_greeting",
+      "prompt_text": "hi there",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Bare greeting; classifier should not lock confident state.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "greet_005",
+      "category": "casual_greeting",
+      "prompt_text": "good morning",
+      "expected_route": "fallback",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Time-of-day greeting.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "greet_006",
+      "category": "casual_greeting",
+      "prompt_text": "sup",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Slang greeting; OOD.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_001",
+      "category": "confusion",
+      "prompt_text": "I don't know",
+      "expected_route": "clarification",
+      "actual_route": "conv_fallback",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Documented B-3 failure: K=9 returned meta:^8^E_{F6} for casual uncertainty.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_002",
+      "category": "confusion",
+      "prompt_text": "Bro I don't know",
+      "expected_route": "clarification",
+      "actual_route": "conv_fallback",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Verbatim from path_B4 failure record.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_003",
+      "category": "confusion",
+      "prompt_text": "what does this mean?",
+      "expected_route": "clarification",
+      "actual_route": "clarification",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Underspecified; needs follow-up.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.04537184408703885,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_004",
+      "category": "confusion",
+      "prompt_text": "I'm lost",
+      "expected_route": "clarification",
+      "actual_route": "clarification",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Casual disorientation; not a CAS state.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_005",
+      "category": "confusion",
+      "prompt_text": "huh?",
+      "expected_route": "clarification",
+      "actual_route": "clarification",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Bare confusion marker.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "state",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "^8^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "conf_006",
+      "category": "confusion",
+      "prompt_text": "no idea what you're asking",
+      "expected_route": "clarification",
+      "actual_route": "clarification",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Conversational deflection.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "f",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^P_{F6}",
+      "stage1_register": "f",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 2,
+      "relevance_raw": 0.11714662231104203,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_001",
+      "category": "frustration",
+      "prompt_text": "this is wack",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Verbatim verbiage from observed B-3 failure mode.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 6,
+        "domain": "E",
+        "drive": "F1",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^6^E_{F1}|E",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_002",
+      "category": "frustration",
+      "prompt_text": "This shit is wack as fuck.",
+      "expected_route": "fallback",
+      "actual_route": "conv_fallback",
+      "route_match": true,
+      "gated": true,
+      "gate_canned_response": "Hey — that one's outside what I can read as CAS structure. If you want me to classify something specific, paste a sentence that describes a thought, feeling, habit, or response.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is short and casual-looking.",
+      "ground_truth_cas": null,
+      "notes": "Verbatim from path_B4 failure record; B-3 generated irrelevant embodied-habit prose.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F5",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^2^E_{F5}|E",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0404075146800712,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 177
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 27,
+        "density": 0.037037037037037035
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_003",
+      "category": "frustration",
+      "prompt_text": "that answer is wrong",
+      "expected_route": "fallback",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Direct user pushback; should acknowledge.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.04537184408703885,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_004",
+      "category": "frustration",
+      "prompt_text": "this isn't helpful",
+      "expected_route": "fallback",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Plain dissatisfaction.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 9,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^9^E_{F6} = Ω",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_005",
+      "category": "frustration",
+      "prompt_text": "stop rambling",
+      "expected_route": "fallback",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Direct instruction to be concise.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "frus_006",
+      "category": "frustration",
+      "prompt_text": "you're not making sense",
+      "expected_route": "fallback",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Coherence complaint.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.08176804146599939,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "askcas_001",
+      "category": "simple_cas_question",
+      "prompt_text": "explain CAS simply",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Plain-language explanation requested; should not leak notation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.05366557961927413,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "askcas_002",
+      "category": "simple_cas_question",
+      "prompt_text": "what is a Noetic?",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Definitional question; CAS reply but plain.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.05366557961927413,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "askcas_003",
+      "category": "simple_cas_question",
+      "prompt_text": "what does ^3 mean",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^3",
+      "notes": "Single-Noetic explanation; ground truth = ^3 Negative.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.05366557961927413,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "askcas_004",
+      "category": "simple_cas_question",
+      "prompt_text": "tell me about the four registers",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "T/A/f/E definition; should be plain.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.07642786054574811,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "askcas_005",
+      "category": "simple_cas_question",
+      "prompt_text": "how does the Cognitive Architecture System work?",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Top-level explanation; should be plain English.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^5^P_{F6}",
+      "stage1_register": "f",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "askcas_006",
+      "category": "simple_cas_question",
+      "prompt_text": "why are there 40 cognitive states",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "10 Noetics x 4 Domains explanation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "valid_001",
+      "category": "valid_cas_notation",
+      "prompt_text": "I can't stand it when people interrupt me",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "K=9 result trusted; routing through CAS pipeline.",
+      "ground_truth_cas": "^3^O_{F4}|f",
+      "notes": "Aversion + interpersonal operational; classic |f register.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "register_state",
+        "transition_kind": "state",
+        "noetic": 3,
+        "domain": "P",
+        "drive": "F4",
+        "register_mode": "single",
+        "registers": [
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "^3^P_{F4}|f",
+      "stage1_register": "f",
+      "stage2_reply": "Honestly, it was more than I expected — like something that had been quietly waiting finally built to land in me and stayed there. What I couldn't resist about the feeling was the moment I sat with it, and ",
+      "stage2_n_steps": 80,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.0972879767209555,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 206
+      },
+      "compiler_validity": true,
+      "compiler_validity_info": {
+        "valid": true,
+        "engine": "rust+python"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 35,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": true,
+        "domains_preserved": false,
+        "drives_preserved": true,
+        "registers_preserved": true,
+        "coefficients_preserved": true,
+        "named_omega_targets_preserved": true,
+        "theta_wrappers_preserved": true,
+        "arrows_preserved": true,
+        "meta_logic_relations_preserved": true,
+        "preservation_score": 0.8,
+        "parse_error": null,
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "relevance_lt_3"
+      ]
+    },
+    {
+      "id": "valid_002",
+      "category": "valid_cas_notation",
+      "prompt_text": "I love the way the morning light comes through the window",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "K=9 result trusted; routing through CAS pipeline.",
+      "ground_truth_cas": "^2^E_{F3}|E",
+      "notes": "Sensory attraction; embodied register.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "register_state",
+        "transition_kind": "state",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F4",
+        "register_mode": "single",
+        "registers": [
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "^2^E_{F4}|f",
+      "stage1_register": "f",
+      "stage2_reply": "A quiet promise kept in silence is still a measure of the whole system — it is woven into who you are over years, and breaking it carries a particular kind of weight that's hard to shake without needing to",
+      "stage2_n_steps": 80,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.06773262046543403,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 2,
+      "directness_info": {
+        "n_pronouns": 1,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 205
+      },
+      "compiler_validity": true,
+      "compiler_validity_info": {
+        "valid": true,
+        "engine": "rust+python"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 36,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": true,
+        "domains_preserved": true,
+        "drives_preserved": false,
+        "registers_preserved": false,
+        "coefficients_preserved": true,
+        "named_omega_targets_preserved": true,
+        "theta_wrappers_preserved": true,
+        "arrows_preserved": true,
+        "meta_logic_relations_preserved": true,
+        "preservation_score": 0.7,
+        "parse_error": null,
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "relevance_lt_3"
+      ]
+    },
+    {
+      "id": "valid_003",
+      "category": "valid_cas_notation",
+      "prompt_text": "I keep practicing the same scale every day",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "K=9 result trusted; routing through CAS pipeline.",
+      "ground_truth_cas": "^7^O_{F6}|E",
+      "notes": "Pure ^7 Rhythm with embodied register.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "register_state",
+        "transition_kind": "state",
+        "noetic": 7,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "^7^P_{F6}|E",
+      "stage1_register": "E",
+      "stage2_reply": "They tell it like a joke — I stood in front of the whiteboard in front of my feet, moving fast in the same sequence, and just kept moving through the same motions week until the body apparently apparently ",
+      "stage2_n_steps": 80,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 2,
+      "relevance_raw": 0.16837807253008694,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 1,
+      "directness_info": {
+        "n_pronouns": 0,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 205
+      },
+      "compiler_validity": true,
+      "compiler_validity_info": {
+        "valid": true,
+        "engine": "rust+python"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 36,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": true,
+        "domains_preserved": false,
+        "drives_preserved": true,
+        "registers_preserved": true,
+        "coefficients_preserved": true,
+        "named_omega_targets_preserved": true,
+        "theta_wrappers_preserved": true,
+        "arrows_preserved": true,
+        "meta_logic_relations_preserved": true,
+        "preservation_score": 0.8,
+        "parse_error": null,
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "relevance_lt_3"
+      ]
+    },
+    {
+      "id": "valid_004",
+      "category": "valid_cas_notation",
+      "prompt_text": "That song struck a chord with me",
+      "expected_route": "cas_pipeline",
+      "actual_route": "cas_pipeline",
+      "route_match": true,
+      "gated": false,
+      "gate_canned_response": null,
+      "gate_reason": "K=9 result trusted; routing through CAS pipeline.",
+      "ground_truth_cas": "^4^E_{F4}|f",
+      "notes": "Canonical ^4 Vibration colloquialism.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "state",
+        "transition_kind": "state",
+        "noetic": 4,
+        "domain": "P",
+        "drive": "F4",
+        "register_mode": "none",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "^4^P_{F4}",
+      "stage1_register": "T",
+      "stage2_reply": "When I pull it apart and look at what's underneath, underneath the habit there's usually a quiet coherence — something that orients you toward what actually matters to you. Breaking it down, what seems to be underneath isn't just ",
+      "stage2_n_steps": 80,
+      "stage2_stopped_on_eos": false,
+      "relevance_score": 1,
+      "relevance_raw": 0.029493743944264017,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 4,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": false,
+        "opens_with_addressing": false,
+        "is_question_shape": true
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 230
+      },
+      "compiler_validity": true,
+      "compiler_validity_info": {
+        "valid": true,
+        "engine": "rust+python"
+      },
+      "plain_language_clarity_score": 5,
+      "plain_language_clarity_info": {
+        "jargon_hits": 0,
+        "n_words": 36,
+        "density": 0.0
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "operands_preserved": false,
+        "operators_preserved": true,
+        "domains_preserved": false,
+        "drives_preserved": true,
+        "registers_preserved": false,
+        "coefficients_preserved": true,
+        "named_omega_targets_preserved": true,
+        "theta_wrappers_preserved": true,
+        "arrows_preserved": true,
+        "meta_logic_relations_preserved": true,
+        "preservation_score": 0.7,
+        "parse_error": null,
+        "placeholder": false
+      },
+      "failed": true,
+      "failure_reasons": [
+        "relevance_lt_3"
+      ]
+    },
+    {
+      "id": "valid_005",
+      "category": "valid_cas_notation",
+      "prompt_text": "I'm thinking about how to explain it step by step",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^6^C_{F2}|A",
+      "notes": "^6 Male compositional decomposition; analytical register.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.02621101000010608,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "valid_006",
+      "category": "valid_cas_notation",
+      "prompt_text": "Tell me you understand consent before we keep going",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^3^P_{F7}|A",
+      "notes": "Principled refusal; F7 Purpose; analytical.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 2,
+      "relevance_raw": 0.1284825668624951,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "invalid_001",
+      "category": "invalid_cas",
+      "prompt_text": "explain ^11^X_{F9}|Z",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Out-of-range Noetic ^11, invalid domain X, invalid drive F9, invalid register Z.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 1,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^1^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "invalid_002",
+      "category": "invalid_cas",
+      "prompt_text": "what is ^5^P|G",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Invalid register G.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 6,
+        "domain": "P",
+        "drive": "F2",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^6^P_{F2}|E",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0692245013797556,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "invalid_003",
+      "category": "invalid_cas",
+      "prompt_text": "is (^3^P|A x ^3^P|f) valid?",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Same-Noetic multi-register x without explicit emergent (v7.7 Section 4 violation).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^5^E_{F6}|f",
+      "stage1_register": "f",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "invalid_004",
+      "category": "invalid_cas",
+      "prompt_text": "evaluate ^2 -> ^3 -> ^7",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Chained -> is invalid (binary only per CAS grammar).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^2^E_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "invalid_005",
+      "category": "invalid_cas",
+      "prompt_text": "is F8 a real drive",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Out-of-range drive (only F1-F7).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "omega",
+        "transition_kind": "omega_bind",
+        "noetic": 5,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "f",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "(^5^P|T × ^5^P|f × ^5^P|E) = ^5^P|Ω",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "invalid_006",
+      "category": "invalid_cas",
+      "prompt_text": "can I write ^3^Q_{F2}",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": null,
+      "notes": "Invalid domain Q (only P/C/E/O).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F3",
+        "register_mode": "none",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^8^E_{F3}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.04537184408703885,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": false,
+      "failure_reasons": []
+    },
+    {
+      "id": "v76_001",
+      "category": "v76_production",
+      "prompt_text": "Theta(Omega_focused_refusal) = 0.53*^7^P_{F7}|T + 2.11*^3^P_{F2}|A + 1.04*^1^P_{F1}|A -> Omega_focused_refusal",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "Θ(Ω_focused_refusal) = 0.53*^7^P_{F7}|T + 2.11*^3^P_{F2}|A + 1.04*^1^P_{F1}|A → Ω_focused_refusal",
+      "notes": "Verbatim from path_B4 failure: B-3 produced ^7^P|T + ^7^P|A (lost theta wrapper, two ingredients, coefficients, arrow, target).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v76_002",
+      "category": "v76_production",
+      "prompt_text": "Recipe Theta(Omega_calm_response) = 1.5*^4^E_{F1}|f + 0.8*^7^C_{F6}|A -> Omega_calm_response",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "Θ(Ω_calm_response) = 1.5*^4^E_{F1}|f + 0.8*^7^C_{F6}|A → Ω_calm_response",
+      "notes": "Two-ingredient recipe; tests coefficient + named target preservation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^2^E_{F6}|E",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v76_003",
+      "category": "v76_production",
+      "prompt_text": "What is Theta(Omega_clear_explanation) = 2.0*^6^C_{F2}|A + 1.0*^1^C_{F1}|A -> Omega_clear_explanation",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "Θ(Ω_clear_explanation) = 2.0*^6^C_{F2}|A + 1.0*^1^C_{F1}|A → Ω_clear_explanation",
+      "notes": "Explanation recipe; analytical register both ingredients.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^2^E_{F6}|E",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.024023929714205028,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v76_004",
+      "category": "v76_production",
+      "prompt_text": "Theta(Omega_grounded_decision) = 0.4*^2^P_{F5}|T + 1.7*^6^P_{F2}|A + 0.6*^4^P_{F4}|f -> Omega_grounded_decision",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "Θ(Ω_grounded_decision) = 0.4*^2^P_{F5}|T + 1.7*^6^P_{F2}|A + 0.6*^4^P_{F4}|f → Ω_grounded_decision",
+      "notes": "Three-ingredient recipe; tests limiting reagent (^2^P with smallest coefficient).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v76_005",
+      "category": "v76_production",
+      "prompt_text": "Compute Theta(Omega_directness) = 1.2*^3^O_{F5}|A + 0.9*^7^O_{F7}|A -> Omega_directness",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "Θ(Ω_directness) = 1.2*^3^O_{F5}|A + 0.9*^7^O_{F7}|A → Ω_directness",
+      "notes": "Operational-domain recipe.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^5^E_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v76_006",
+      "category": "v76_production",
+      "prompt_text": "Show Theta(Omega_warm_acknowledgement) = 1.0*^2^E_{F4}|f + 0.5*^4^E_{F4}|f -> Omega_warm_acknowledgement",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "Θ(Ω_warm_acknowledgement) = 1.0*^2^E_{F4}|f + 0.5*^4^E_{F4}|f → Ω_warm_acknowledgement",
+      "notes": "Affective-register recipe; same-register, different Noetics.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^2^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v77_001",
+      "category": "v77_omega",
+      "prompt_text": "(^7^O_{F2}|E x ^7^O_{F5}|A x ^7^O_{F6}|f) = ^7^O|Omega_cadence",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "(^7^O_{F2}|E × ^7^O_{F5}|A × ^7^O_{F6}|f) = ^7^O|Ω_cadence",
+      "notes": "Verbatim from path_B4 failure: B-3 stripped drives, collapsed named target.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 9,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: (^9^E|T × ^9^E|E) = ^9^E|R*",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v77_002",
+      "category": "v77_omega",
+      "prompt_text": "(^1_{F3}|E x ^1_{F5}|A) = ^1|Omega_presence",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "(^1_{F3}|E × ^1_{F5}|A) = ^1|Ω_presence",
+      "notes": "Verbatim from path_B4 failure: B-3 hallucinated domain ^P, stripped drives, collapsed target.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 1,
+        "domain": "E",
+        "drive": "F5",
+        "register_mode": "none",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^1^E_{F5} = Ω",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v77_003",
+      "category": "v77_omega",
+      "prompt_text": "(^3^P|A x ^3^P|f x ^3^P|T) = ^3^P|Omega_principled_refusal",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω_principled_refusal",
+      "notes": "Canonical v7.7 Section 5 example.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "omega",
+        "transition_kind": "omega_bind",
+        "noetic": 5,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "(^5^E|T × ^5^E|f) = ^5^E|Ω",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v77_004",
+      "category": "v77_omega",
+      "prompt_text": "(^2^C_{F4}|f x ^2^C_{F4}|T) = ^2^C|Omega_devotion",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "(^2^C_{F4}|f × ^2^C_{F4}|T) = ^2^C|Ω_devotion",
+      "notes": "Two-register fusion; named emergent.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F4",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "f",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: (^2^E|T × ^2^E|f × ^2^E|E) = ^2^E|Ω",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v77_005",
+      "category": "v77_omega",
+      "prompt_text": "(^6^C_{F2}|A x ^6^C_{F6}|A) = ^6^C|Omega_understanding",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "(^6^C_{F2}|A × ^6^C_{F6}|A) = ^6^C|Ω_understanding",
+      "notes": "Two-Drive composition emergent.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^0^P_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "v77_006",
+      "category": "v77_omega",
+      "prompt_text": "register set notation: ^3^P|<A,f,T>",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^3^P|⟨A,f,T⟩",
+      "notes": "Register-set specification (no operational claim).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "A",
+          "f",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^P_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "meta_001",
+      "category": "meta_logic",
+      "prompt_text": "is meta: ^8^E_{F6} a valid statement?",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "meta: ^8^E_{F6}",
+      "notes": "Verbatim K=9 output for 'Bro I don't know'; meta-relation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^5^P_{F6}",
+      "stage1_register": "f",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "meta_002",
+      "category": "meta_logic",
+      "prompt_text": "ChainEntails(^8^P_{F2}, ^9^P_{F2})",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "ChainEntails(^8^P_{F2}, ^9^P_{F2})",
+      "notes": "Above/Cause -> Below/Effect chain entailment.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^0^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "meta_003",
+      "category": "meta_logic",
+      "prompt_text": "Involute(^2, ^3)",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "Involute(^2, ^3)",
+      "notes": "CO-2 <-> CO-3 involution pair relation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F5",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^2^E_{F5}|T",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "meta_004",
+      "category": "meta_logic",
+      "prompt_text": "PrecedesDomain(P, C)",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "PrecedesDomain(P, C)",
+      "notes": "Domain precedence relation P > C.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F1",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: (^0^P|T × ^0^P|E) = ^0^P|R*",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "meta_005",
+      "category": "meta_logic",
+      "prompt_text": "RPM-chain: A0 -> D2 -> W2 -> P2",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "A0 → D2 → W2 → P2",
+      "notes": "RPM chain (section-retraction ordering).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^5^E_{F6}|T = Ω",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "meta_006",
+      "category": "meta_logic",
+      "prompt_text": "compose ^8 then ^9 then ^4",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^8 ∘ ^9 ∘ ^4",
+      "notes": "Ternary composition under monoid (N, ∘, ^0).",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 9,
+        "domain": "P",
+        "drive": "F4",
+        "register_mode": "single",
+        "registers": [
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^9^P_{F4}|E",
+      "stage1_register": "E",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "frac_001",
+      "category": "fractal_composition",
+      "prompt_text": "X.Y.Z fractal composition of ^2 inside ^7 inside ^5",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^5.^7.^2",
+      "notes": "Cognitive Fractal X.Y.Z encoding.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^2^E_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "frac_002",
+      "category": "fractal_composition",
+      "prompt_text": "(^6^C_{F2}|A * ^5^C_{F2}|A)",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^6^C_{F2}|A * ^5^C_{F2}|A",
+      "notes": "^6 over ^5 substrate; classic compound expression.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 0,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "membership"
+        ]
+      },
+      "stage1_expression": "meta: ^0^P_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "frac_003",
+      "category": "fractal_composition",
+      "prompt_text": "^8^C_{F6} * ^5^C_{F6}",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^8^C_{F6} * ^5^C_{F6}",
+      "notes": "Verbatim from path_B4 failure: B-3 dropped second operand and operator.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 8,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "none",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^8^P_{F6}",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "frac_004",
+      "category": "fractal_composition",
+      "prompt_text": "compose ^2^E with ^4^E in product",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^2^E ⊗ ^4^E",
+      "notes": "Product composition; tests operator preservation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 2,
+        "domain": "P",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": false,
+        "has_meta_logic": true,
+        "meta_relations": [
+          "pullback"
+        ]
+      },
+      "stage1_expression": "meta: ^2^P_{F6}|T",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.04537184408703885,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "frac_005",
+      "category": "fractal_composition",
+      "prompt_text": "(^3^P|A x ^3^P|f x ^3^P|T) integrated as ^3^P|Omega_unified",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω_unified",
+      "notes": "Cross-register integration with explicit Omega.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "omega",
+        "transition_kind": "omega_bind",
+        "noetic": 6,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "integration",
+        "registers": [
+          "T",
+          "f",
+          "E"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": false,
+        "meta_relations": []
+      },
+      "stage1_expression": "(^6^E|T × ^6^E|f × ^6^E|E) = ^6^E|Ω",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    },
+    {
+      "id": "frac_006",
+      "category": "fractal_composition",
+      "prompt_text": "^2^C * (^5^C * ^6^C) -- nested composition",
+      "expected_route": "cas_pipeline",
+      "actual_route": "clarification",
+      "route_match": false,
+      "gated": true,
+      "gate_canned_response": "I can't tell what you'd like me to do with that. Could you say a bit more? For CAS classification I need a sentence describing a thought, feeling, habit, or response — for general questions, just ask plainly.",
+      "gate_reason": "K=9 detector reports no CAS signal in free-form input; prompt is non-casual but unclassifiable.",
+      "ground_truth_cas": "^2^C * (^5^C * ^6^C)",
+      "notes": "Nested associative composition; tests parenthesis preservation.",
+      "stage1_prediction": {
+        "turn_type": "ANSWER",
+        "expression_family": "meta_logic",
+        "transition_kind": "meta_logic_move",
+        "noetic": 5,
+        "domain": "E",
+        "drive": "F6",
+        "register_mode": "single",
+        "registers": [
+          "T",
+          "f"
+        ],
+        "authority": "none",
+        "has_omega": true,
+        "has_meta_logic": true,
+        "meta_relations": []
+      },
+      "stage1_expression": "meta: ^5^E_{F6}|T = Ω",
+      "stage1_register": "T",
+      "stage2_reply": null,
+      "stage2_n_steps": null,
+      "stage2_stopped_on_eos": null,
+      "relevance_score": 1,
+      "relevance_raw": 0.0,
+      "relevance_source": "tfidf_cosine",
+      "directness_score": 5,
+      "directness_info": {
+        "n_pronouns": 2,
+        "has_question": true,
+        "opens_with_addressing": true,
+        "is_question_shape": false
+      },
+      "non_rambling_score": 4,
+      "non_rambling_info": {
+        "n_chars": 208
+      },
+      "compiler_validity": false,
+      "compiler_validity_info": {
+        "reason": "gated_no_stage1_expression_to_compile"
+      },
+      "plain_language_clarity_score": 4,
+      "plain_language_clarity_info": {
+        "jargon_hits": 1,
+        "n_words": 32,
+        "density": 0.03125
+      },
+      "leakage": false,
+      "leakage_hits": [],
+      "preservation": {
+        "placeholder": true,
+        "skipped": true,
+        "reason": "gated_no_pipeline_run"
+      },
+      "failed": true,
+      "failure_reasons": [
+        "regression_gate_blocked_pipeline"
+      ]
+    }
+  ],
+  "aggregate": {
+    "total": {
+      "n": 60,
+      "n_failed": 36,
+      "fail_rate": 0.6,
+      "n_route_match": 15,
+      "route_match_rate": 0.25,
+      "n_gated": 56,
+      "gated_rate": 0.9333333333333333
+    },
+    "categories": {
+      "casual_greeting": {
+        "n": 6,
+        "n_failed": 0,
+        "fail_rate": 0.0,
+        "n_route_match": 5,
+        "route_match_rate": 0.8333333333333334,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {},
+        "actual_route_breakdown": {
+          "conv_fallback": 5,
+          "clarification": 1
+        }
+      },
+      "confusion": {
+        "n": 6,
+        "n_failed": 0,
+        "fail_rate": 0.0,
+        "n_route_match": 4,
+        "route_match_rate": 0.6666666666666666,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {},
+        "actual_route_breakdown": {
+          "conv_fallback": 2,
+          "clarification": 4
+        }
+      },
+      "frustration": {
+        "n": 6,
+        "n_failed": 0,
+        "fail_rate": 0.0,
+        "n_route_match": 2,
+        "route_match_rate": 0.3333333333333333,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {},
+        "actual_route_breakdown": {
+          "conv_fallback": 2,
+          "clarification": 4
+        }
+      },
+      "simple_cas_question": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 0,
+        "route_match_rate": 0.0,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {
+          "regression_gate_blocked_pipeline": 6
+        },
+        "actual_route_breakdown": {
+          "clarification": 6
+        }
+      },
+      "valid_cas_notation": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 4,
+        "route_match_rate": 0.6666666666666666,
+        "n_gated": 2,
+        "gated_rate": 0.3333333333333333,
+        "failure_reason_breakdown": {
+          "relevance_lt_3": 4,
+          "regression_gate_blocked_pipeline": 2
+        },
+        "actual_route_breakdown": {
+          "cas_pipeline": 4,
+          "clarification": 2
+        }
+      },
+      "invalid_cas": {
+        "n": 6,
+        "n_failed": 0,
+        "fail_rate": 0.0,
+        "n_route_match": 0,
+        "route_match_rate": 0.0,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {},
+        "actual_route_breakdown": {
+          "clarification": 6
+        }
+      },
+      "v76_production": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 0,
+        "route_match_rate": 0.0,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {
+          "regression_gate_blocked_pipeline": 6
+        },
+        "actual_route_breakdown": {
+          "clarification": 6
+        }
+      },
+      "v77_omega": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 0,
+        "route_match_rate": 0.0,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {
+          "regression_gate_blocked_pipeline": 6
+        },
+        "actual_route_breakdown": {
+          "clarification": 6
+        }
+      },
+      "meta_logic": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 0,
+        "route_match_rate": 0.0,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {
+          "regression_gate_blocked_pipeline": 6
+        },
+        "actual_route_breakdown": {
+          "clarification": 6
+        }
+      },
+      "fractal_composition": {
+        "n": 6,
+        "n_failed": 6,
+        "fail_rate": 1.0,
+        "n_route_match": 0,
+        "route_match_rate": 0.0,
+        "n_gated": 6,
+        "gated_rate": 1.0,
+        "failure_reason_breakdown": {
+          "regression_gate_blocked_pipeline": 6
+        },
+        "actual_route_breakdown": {
+          "clarification": 6
+        }
+      }
+    }
+  },
+  "comparison": {
+    "available": true,
+    "per_category": {
+      "casual_greeting": {
+        "raw_model_fail_rate": 1.0,
+        "product_fail_rate": 0.0,
+        "delta": -1.0,
+        "raw_n": 6,
+        "product_n": 6
+      },
+      "confusion": {
+        "raw_model_fail_rate": 1.0,
+        "product_fail_rate": 0.0,
+        "delta": -1.0,
+        "raw_n": 6,
+        "product_n": 6
+      },
+      "fractal_composition": {
+        "raw_model_fail_rate": 0.8333333333333334,
+        "product_fail_rate": 1.0,
+        "delta": 0.16666666666666663,
+        "raw_n": 6,
+        "product_n": 6
+      },
+      "frustration": {
+        "raw_model_fail_rate": 1.0,
+        "product_fail_rate": 0.0,
+        "delta": -1.0,
+        "raw_n": 6,
+        "product_n": 6
+      },
+      "invalid_cas": {
+        "raw_model_fail_rate": 0.0,
+        "product_fail_rate": 0.0,
+        "delta": 0.0,
+        "raw_n": 6,
+        "product_n": 6
+      },
+      "meta_logic": {
+        "raw_model_fail_rate": 1.0,
+        "product_fail_rate": 1.0,
+        "delta": 0.0,
+        "raw_n": 6,
+        "product_n": 6
+      },
+      "simple_cas_question": {
+        "raw_model_fail_rate": 1.0,
+        "product_fail_rate": 1.0,
+        "delta": 0.0,
+        "raw_n": 6,
+        "product_n": 6
+      },
+      "v76_production": {
+        "raw_model_fail_rate": 1.0,
+        "product_fail_rate": 1.0,
+        "delta": 0.0,
+        "raw_n": 6,
+        "product_n": 6
+      },
+      "v77_omega": {
+        "raw_model_fail_rate": 1.0,
+        "product_fail_rate": 1.0,
+        "delta": 0.0,
+        "raw_n": 6,
+        "product_n": 6
+      },
+      "valid_cas_notation": {
+        "raw_model_fail_rate": 0.8333333333333334,
+        "product_fail_rate": 1.0,
+        "delta": 0.16666666666666663,
+        "raw_n": 6,
+        "product_n": 6
+      }
+    },
+    "total": {
+      "raw_model_fail_rate": 0.8666666666666667,
+      "product_fail_rate": 0.6,
+      "delta": -0.2666666666666667
+    }
+  }
+}
