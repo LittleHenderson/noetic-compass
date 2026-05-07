@@ -33,11 +33,13 @@ sys.path.insert(0, str(REPO_ROOT))
 from cas_native.belief import BeliefStore  # noqa: E402
 from cas_native.inference.cas_renderer import render_cas_prediction  # noqa: E402
 from cas_native.inference.demo_prompts import DEMO_PROMPTS  # noqa: E402
+from cas_native.inference.native_nl_generate import generate_reply  # noqa: E402
 from cas_native.inference.predict_cas import load_predictor  # noqa: E402
 from cas_native.inference.rewrite_shim import (  # noqa: E402
     detect_cas_signal,
     rewrite_to_training_surface,
 )
+from cas_native.training.tokenizer import HybridCASTokenizer  # noqa: E402
 from cas_native.trace.live_capture import LiveTrace  # noqa: E402
 
 try:
@@ -58,7 +60,15 @@ CHECKPOINT_RUN_DIR = (
     / "structured-token-recoverable-paraphrase-v77fix-20epoch-gpu-20260502-1045"
 )
 
+NATIVE_GEN_RUN_DIR = (
+    Path(__file__).resolve().parents[1]
+    / "training"
+    / "runs"
+    / "b3_full_50k_prodshape_20260507"
+)
+
 CHECKPOINT_METRIC = "K=9 baseline | 93.2% canonical exact on held-out 1K"
+NATIVE_GEN_METRIC = "B-3 127M | CAS-grounded native generation (experimental)"
 
 # Paul Tol-muted palette aliases (project standard from cas_diagram_and_clusters)
 COLOR_BANNER = "cyan"
@@ -95,8 +105,8 @@ def _print_plain(message: str) -> None:
 
 
 def _emit_banner(console: "Console | None") -> None:
-    title = f"CAS-Native v0 {CHEVRON} conversational REPL"
-    subtitle = f"checkpoint: {CHECKPOINT_METRIC}"
+    title = f"CAS-Native v0 {CHEVRON} conversational REPL (B-4 Experimental)"
+    subtitle = f"K=9 baseline: {CHECKPOINT_METRIC}\nB-3 native: {NATIVE_GEN_METRIC}"
     if console is None:
         _print_plain("=" * 60)
         _print_plain(title)
@@ -107,6 +117,8 @@ def _emit_banner(console: "Console | None") -> None:
     body.append(subtitle, style=COLOR_MUTED)
     body.append("\n\n")
     body.append("Type free-form English to predict, or use a command:\n", style=COLOR_MUTED)
+    body.append("  /native", style=COLOR_BANNER)
+    body.append(" toggle B-3 native generation (default OFF)\n", style=COLOR_MUTED)
     body.append("  /menu  ", style=COLOR_BANNER)
     body.append("browse the 21 curated demo prompts\n", style=COLOR_MUTED)
     body.append("  /sample", style=COLOR_BANNER)
@@ -150,6 +162,7 @@ def _build_turn_table(
     notes: list[str] | None = None,
     belief_status: str | None = None,
     belief_locked: bool = False,
+    is_native: bool = False,
 ) -> "Table":
     """Build a rich Table with one row per logical section."""
     table = Table(
@@ -182,8 +195,10 @@ def _build_turn_table(
         Text("CAS PREDICTION", style=f"bold {COLOR_PRED}"),
         Text(expression, style=f"bold {COLOR_PRED}"),
     )
+
+    english_label = "NATIVE ENGLISH" if is_native else "ENGLISH"
     table.add_row(
-        Text("ENGLISH", style=f"bold {COLOR_ENGLISH}"),
+        Text(english_label, style=f"bold {COLOR_ENGLISH}"),
         Text(english, style=COLOR_ENGLISH),
     )
 
@@ -270,6 +285,7 @@ def _render_turn(
     notes: list[str] | None = None,
     belief_status: str | None = None,
     belief_locked: bool = False,
+    is_native: bool = False,
 ) -> None:
     if console is None:
         _print_plain("")
@@ -279,7 +295,8 @@ def _render_turn(
         if rewritten is not None and rewritten != user_text:
             _print_plain(f"REWRITTEN: {rewritten}")
         _print_plain(f"CAS PREDICTION: {expression}")
-        _print_plain(f"ENGLISH: {english}")
+        english_label = "NATIVE ENGLISH" if is_native else "ENGLISH"
+        _print_plain(f"{english_label}: {english}")
         if belief_status is not None:
             _print_plain(f"BELIEF STATUS  {belief_status}")
         for note in notes or []:
@@ -299,6 +316,7 @@ def _render_turn(
         notes=notes,
         belief_status=belief_status,
         belief_locked=belief_locked,
+        is_native=is_native,
     )
     panel = Panel(
         table,
@@ -339,12 +357,12 @@ def _predict_and_show(
     extra_notes: list[str] | None = None,
     belief_store: BeliefStore | None = None,
     capture_trace: bool = False,
+    native_generator: dict[str, Any] | None = None,
 ) -> LiveTrace | None:
     """Run detection + (optional) rewrite + prediction, render the turn.
 
-    When ``capture_trace=True`` and the predictor supports the
-    ``with_trace`` keyword, the live mechanistic trace is captured during
-    the same forward pass and returned. Otherwise returns ``None``.
+    When ``native_generator`` is provided, runs the two-stage inference loop:
+    Stage 1 (K=9) -> Stage 2 (B-3 native generation).
     """
     signal: dict[str, Any] | None = None
     rewritten: str | None = None
@@ -393,7 +411,45 @@ def _predict_and_show(
         return None
 
     expression = _expression_from_prediction(prediction)
-    english = render_cas_prediction(prediction)
+    is_native = False
+
+    if native_generator is not None:
+        try:
+            # Stage 2: Native generation
+            # Extract first register label (e.g. "T") from predicted list.
+            # Defensive: K=9 may return [] for registers; fall back to "T".
+            registers_list = prediction.get("registers") or []
+            register = str(registers_list[0]) if registers_list else "T"
+            # use_cas_prefix=False matches the trainer default and how
+            # the diverse-CAS B-3.5 evaluation was measured. Conditioning
+            # is via register + bottleneck-z + prompt encoder pass; CAS
+            # expression is recorded as metadata but does not enter the
+            # head's discrete-prefix path until the head exposes a
+            # cas_prefix_mask (B-4 followup).
+            gen_out = generate_reply(
+                model=native_generator["model"],
+                tokenizer=native_generator["tokenizer"],
+                prompt_text=text,
+                cas_expression=expression,
+                register=register,
+                max_new_tokens=200,
+                sampling="top_p",
+                temperature=0.8,
+                top_p=0.9,
+                use_cas_prefix=False,
+                device=native_generator["device"],
+            )
+            english = gen_out["reply_text"]
+            is_native = True
+            notes.append(
+                f"Stage 2 (B-3): generated {gen_out['n_steps']} tokens "
+                f"with top-p=0.9, temp=0.8."
+            )
+        except Exception as exc:
+            notes.append(f"Stage 2 (native generation) failed: {exc}. Falling back to rule-based English.")
+            english = render_cas_prediction(prediction)
+    else:
+        english = render_cas_prediction(prediction)
 
     belief_status: str | None = None
     belief_locked = False
@@ -421,6 +477,7 @@ def _predict_and_show(
         notes=notes,
         belief_status=belief_status,
         belief_locked=belief_locked,
+        is_native=is_native,
     )
     return trace
 
@@ -480,6 +537,7 @@ def _show_menu(
     read_line: Callable[[str], str],
     belief_store: BeliefStore | None = None,
     capture_trace: bool = False,
+    native_generator: dict | None = None,
 ) -> LiveTrace | None:
     if console is not None:
         console.print(_build_menu_table())
@@ -513,6 +571,7 @@ def _show_menu(
         extra_notes=[note],
         belief_store=belief_store,
         capture_trace=capture_trace,
+        native_generator=native_generator,
     )
 
 
@@ -523,6 +582,7 @@ def _show_random_demo(
     show_raw: bool,
     belief_store: BeliefStore | None = None,
     capture_trace: bool = False,
+    native_generator: dict | None = None,
 ) -> LiveTrace | None:
     entry = random.choice(DEMO_PROMPTS)
     note = (
@@ -538,6 +598,7 @@ def _show_random_demo(
         extra_notes=[note],
         belief_store=belief_store,
         capture_trace=capture_trace,
+        native_generator=native_generator,
     )
 
 
@@ -954,6 +1015,60 @@ def _load_with_spinner(console: "Console | None") -> Any:
     return predictor
 
 
+def _load_native_generator(console: "Console | None", device: str = "cpu") -> dict[str, Any] | None:
+    if not NATIVE_GEN_RUN_DIR.exists():
+        return None
+
+    import torch
+    from cas_native.model.cas_native_model import CASNativeConfig, CASNativeModel
+    from cas_native.model.nl_generation_head import NLGenerationHead, NLGenerationHeadConfig
+
+    if console is None or not _HAVE_RICH:
+        _print_plain("Loading B-3 native generator...")
+    else:
+        progress = Progress(
+            SpinnerColumn(style=COLOR_BANNER),
+            TextColumn("[bold cyan]{task.description}[/bold cyan]"),
+            console=console,
+            transient=True,
+        )
+        progress.start()
+        task = progress.add_task("Loading B-3 native generator...", total=None)
+
+    try:
+        tokenizer_path = NATIVE_GEN_RUN_DIR / "tokenizer.json"
+        bpe_path = NATIVE_GEN_RUN_DIR / "english_bpe.json"
+        tokenizer = HybridCASTokenizer.load(tokenizer_path)
+        if bpe_path.exists():
+            tokenizer = tokenizer.with_english_bpe(bpe_path)
+
+        vocab_size = int(tokenizer.vocab_size)
+        torch_device = torch.device(device)
+
+        # Build model + head (hardcoded B-3 prodshape params for now)
+        enc_cfg = CASNativeConfig(d_model=512, n_layers=6, n_heads=8, vocab_size=vocab_size)
+        model = CASNativeModel(enc_cfg).to(torch_device)
+        head_cfg = NLGenerationHeadConfig(vocab_size=vocab_size, d_model=512, n_heads=8, n_layers=6)
+        head = NLGenerationHead(head_cfg).to(torch_device)
+        model.attach_nl_gen_head(head)
+
+        ckpt_path = NATIVE_GEN_RUN_DIR / "model_final.pt"
+        state = torch.load(ckpt_path, map_location=torch_device)
+        model.load_state_dict(state["model"])
+        model.eval()
+
+        if console is not None and _HAVE_RICH:
+            progress.update(task, completed=1)
+            progress.stop()
+
+        return {"model": model, "tokenizer": tokenizer, "device": torch_device}
+    except Exception as exc:
+        if console is not None and _HAVE_RICH:
+            progress.stop()
+        _print_plain(f"Warning: failed to load native generator: {exc}")
+        return None
+
+
 def _read_prompt(console: "Console | None") -> str:
     if console is None:
         return input(f"cas-native {CHEVRON} ").strip()
@@ -999,18 +1114,26 @@ def main() -> int:
             _print_plain(f"FATAL: {exc}")
         return 2
 
+    import torch
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    native_gen_loaded = _load_native_generator(console, device=device)
+    use_native = False
+
     belief_store = BeliefStore()
 
     if console is not None:
-        console.print(
-            Text(f"Ready. {len(DEMO_PROMPTS)} curated demo prompts loaded. "
-                 f"Belief substrate: {len(belief_store.list_all())} known, "
-                 f"{len(belief_store.list_locked())} locked.\n",
-                 style=COLOR_MUTED)
-        )
+        ready_msg = f"Ready. {len(DEMO_PROMPTS)} curated demo prompts loaded. "
+        if native_gen_loaded:
+            ready_msg += "B-3 native generator AVAILABLE (/native to toggle). "
+        else:
+            ready_msg += "B-3 native generator not found. "
+        ready_msg += f"Belief substrate: {len(belief_store.list_all())} known, {len(belief_store.list_locked())} locked.\n"
+        console.print(Text(ready_msg, style=COLOR_MUTED))
     else:
+        status = "AVAILABLE" if native_gen_loaded else "NOT FOUND"
         _print_plain(
             f"Ready. {len(DEMO_PROMPTS)} curated demo prompts loaded. "
+            f"B-3 native generator {status}. "
             f"Belief substrate: {len(belief_store.list_all())} known, "
             f"{len(belief_store.list_locked())} locked.\n"
         )
@@ -1037,6 +1160,18 @@ def main() -> int:
             if cmd_token in ("/help", "/h"):
                 _emit_banner(console)
                 continue
+            if cmd_token == "/native":
+                if not native_gen_loaded:
+                    msg = "Error: B-3 native generator not loaded (check NATIVE_GEN_RUN_DIR)."
+                else:
+                    use_native = not use_native
+                    state = "ON" if use_native else "OFF"
+                    msg = f"B-3 native generation now {state}"
+                if console is not None:
+                    console.print(Text(msg, style=COLOR_MUTED))
+                else:
+                    _print_plain(msg)
+                continue
             if cmd_token in ("/menu", "/m"):
                 trace = _show_menu(
                     predictor,
@@ -1045,6 +1180,7 @@ def main() -> int:
                     read_line=line_reader,
                     belief_store=belief_store,
                     capture_trace=True,
+                    native_generator=native_gen_loaded if use_native else None,
                 )
                 if trace is not None:
                     last_trace = trace
@@ -1056,6 +1192,7 @@ def main() -> int:
                     show_raw=show_raw,
                     belief_store=belief_store,
                     capture_trace=True,
+                    native_generator=native_gen_loaded if use_native else None,
                 )
                 if trace is not None:
                     last_trace = trace
@@ -1098,6 +1235,7 @@ def main() -> int:
                 apply_rewrite=True,
                 belief_store=belief_store,
                 capture_trace=True,
+                native_generator=native_gen_loaded if use_native else None,
             )
             if trace is not None:
                 last_trace = trace
@@ -1142,11 +1280,15 @@ def _smoke() -> int:
             _print_plain(f"FATAL: {exc}")
         return 2
 
+    import torch
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    native_gen = _load_native_generator(console, device=device)
+
     if console is not None:
-        console.print(
-            Text(f"--smoke: predicting first 3 of {len(DEMO_PROMPTS)} demo prompts\n",
-                 style=COLOR_MUTED)
-        )
+        msg = f"--smoke: predicting first 3 of {len(DEMO_PROMPTS)} demo prompts"
+        if native_gen:
+            msg += " (NATIVE MODE ENABLED)"
+        console.print(Text(msg + "\n", style=COLOR_MUTED))
     else:
         _print_plain(f"--smoke: predicting first 3 of {len(DEMO_PROMPTS)} demo prompts\n")
 
@@ -1162,6 +1304,7 @@ def _smoke() -> int:
             show_raw=False,
             apply_rewrite=False,
             extra_notes=[note],
+            native_generator=native_gen,
         )
 
     if console is not None:
