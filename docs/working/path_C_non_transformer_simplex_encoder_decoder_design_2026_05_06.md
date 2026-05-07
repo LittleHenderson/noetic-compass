@@ -168,124 +168,19 @@ The original Section 8 prototype phasing is correct but doesn't fully sequence t
 
 C4-before-C5 is a **hard gate**. If meta-logic in C4 produces noisy or wrong proofs, RPM-with-proof-evidence in C5 is downstream of broken evidence — strictly worse than scalar RPM. Soft-rollout: meta-logic ships as observation first, gates second.
 
-## 3.4. CAS-Native is to the CAS compiler what Codex is to language compilers
+## 3.4. Compiler-fluency framing → see Path D
 
-The single load-bearing framing for what CAS-Native should eventually become.
+The compiler-fluency framing — what CAS-Native should eventually become, the six-task curriculum, the five operational requirements, the contrastive readout supervision pattern — moved to its own runbook on 2026-05-07 when the v1 plan locked into a paired Path C / Path D structure.
 
-### 3.4.1 The analogy
+→ **`docs/working/path_D_compiler_fluency_curriculum_2026_05_07.md`**
 
-Claude/Codex do not BECOME the Python compiler. They learn enough Python that they can:
+Path C focuses on the simplex-native architecture (Sections 3.1–3.3 and 4 onward). Path D specifies the curriculum, corpus, and compiler-in-the-loop training that the architecture consumes. They ship together as v1.
 
-- read code
-- write code
-- explain code
-- predict likely compiler errors
-- fix invalid code
-- use the compiler as feedback
+Headline preserved here for cross-reference:
 
-CAS-Native should do the same with CAS notation. It should not replace the CAS compiler. It should become fluent in the compiler's language:
-
-- read CAS
-- write CAS
-- explain CAS
-- translate English → CAS
-- translate CAS → English
-- predict likely invalidity
-- repair invalid CAS
-- use compiler feedback
-
-The right target is **not** "model that emits CAS-shaped tokens." It is **model that genuinely understands what CAS expressions mean, what makes them valid, and how to translate fluently in either direction**.
-
-### 3.4.2 The long-term inference architecture
-
-```
-Human English
-  → CAS-Native proposes CAS expression / intent
-  → CAS compiler validates it
-  → RPM / meta-logic checks admissibility
-  → CAS-Native explains or responds in natural English
-```
-
-The model is the **bidirectional translator + hypothesis generator**. The compiler is the **parser + admissibility judge**. Together they produce traceable, auditable, conversationally natural CAS reasoning. This pipeline is the load-bearing structure for traceability — every reply walks back through compiler validation, and the compiler verdict is what's surfaced in Mode 7 / Mode 3 trace.
-
-### 3.4.3 What "fluent" means concretely
-
-Eventually the model understands every construct the compiler validates:
-
-- state expressions (`^n^D`, the 40 Cognitive States)
-- domains (P/C/E/O)
-- drives (F1–F7)
-- registers (T/A/f/E and multi-register `|⟨…⟩`)
-- operations (`+`, `×`, `→`, `∘`, `=`, `Ω`)
-- fractal composition (Cognitive Fractal sequences `⟨k₁:k₂:⋯:kₙ⟩`)
-- RPM (prerequisite chain admissibility)
-- meta-logic (relations, proofs, set constructors)
-- production semantics (recipes `Θ(Ω) = a·X₁ + b·X₂ → Ω`)
-- register multiplicity (operator discipline: `+` vs `×` vs `|⟨…⟩`)
-- invalid / underdefined forms (predicting failure before the compiler does)
-- compiler errors and repairs (verbalizing what went wrong, proposing the nearest valid form)
-
-### 3.4.4 Roles, not redundancy
-
-| Role | Who plays it | Why |
-|---|---|---|
-| Law / judge | CAS compiler | Deterministic. Same expression → same verdict, every time. Not creative. |
-| Fluent speaker / writer / explainer | CAS-Native model | Creative and conversational. Approximately compiler-aligned but not perfectly. Can hypothesize, paraphrase, translate in either direction, repair invalid forms. |
-
-The strength is the **asymmetry**:
-
-- Codex without rustc is a hallucinator.
-- rustc without Codex is a parser, not a writing assistant.
-- Both together is what makes the system work.
-
-CAS-Native model + CAS compiler is the same pattern. The model can be creative *because* the compiler keeps it honest.
-
-### 3.4.5 Post-v0 training direction — compiler-fluency curriculum (NOT more dialogue)
-
-The next training track after conversational v0 is **not** "more dialogue corpus." It is a **compiler-fluency curriculum**. Six core training tasks:
-
-| # | Task | Input | Target | Compiler role |
-|---|---|---|---|---|
-| 1 | CAS → English | CAS expression | natural-language paraphrase | validates expression before training; rejects invalid sources |
-| 2 | English → CAS | natural-language description | compiler-valid CAS expression | accept-sample-only training; invalid generations rejected |
-| 3 | Invalid CAS → explanation | malformed expression | natural-language description of why it's invalid | compiler emits the error; model learns to verbalize it |
-| 4 | Invalid CAS → corrected CAS | malformed expression | nearest valid expression | compiler validates the correction |
-| 5 | CAS operation → outcome | source state + operation | resulting state / admissibility verdict | compiler / engine runs the transition; model predicts |
-| 6 | CAS expression → compiler trace | full expression | compile trace (parse tree, admissibility, RPM result, fractal canonical form) | compiler emits the trace; model learns to predict it |
-
-These are **not random new tasks**. They are the bidirectional symbolic ↔ NL translation tasks that turn a "CAS-conditioned" model (one that emits CAS-shaped tokens because we trained it to) into a "CAS-native" model (one that genuinely understands what CAS expressions mean and what makes them valid).
-
-This is the missing piece between conversational v0 and a model that can actually be a CAS reasoning partner.
-
-### 3.4.6 Reframed v0 → Path C → Phase 4 progression
-
-Under the Codex analogy:
-
-- **v0 today** — covers a subset of the grammar (state literals + basic operators + register prediction). Analog: "Codex that knows Python expressions but not classes, decorators, or async/await." Useful, bounded.
-- **Path C** — closes the grammar gap. Vocab parity + corpus parity + compiler-validated training across the full grammar. Analog: "Codex that covers the full Python language."
-- **Phase 4+** — structural alignment via auxiliary losses + constrained decoding + compiler-fluency curriculum (Section 3.4.5). Analog: "Codex with linter integration in the loss + compile rate as a first-class eval metric."
-
-### 3.4.7 Five operational requirements
-
-Five concrete things that must be true for CAS-Native to reach compiler-fluency:
-
-1. **Vocab parity with grammar.** Every atom the compiler parses is a model token. (The meta_logic 53.6% failure mode was exactly this gap — 8 set-constructors + 6 operators absent from the 293-token vocab. Cheap fix, ~1.5 pod-hours.)
-
-2. **Corpus parity with grammar.** For every construct in the grammar, the SDG corpus has natural-language examples that round-trip to that construct. Recipes, set constructors, `let` bindings, diagram exports, multi-register `|⟨…⟩`, fractal sequences, set ops (`∪ ∩ ∖`) — all need representation. Same engineering pattern as "add more Rust traits to the pretraining mix."
-
-3. **Compiler-validated training.** Every training example, after generation, round-trips through the compiler. Samples that fail to parse or fail admissibility get rejected before they enter the corpus. Same as code-LLM compiler-rejection sampling.
-
-4. **Constrained decoding.** At inference, mask logits the compiler would reject. Syntax-aware autocomplete pattern.
-
-5. **Compiler-as-evaluator.** "Compile rate" becomes a first-class eval metric alongside loss / sample quality / round-trip K=9 / traceability. CAS-Native's HumanEval-equivalent.
-
-### 3.4.8 Slogan
-
-**Compiler = law. Model = fluent speaker. Together = traceable conversational reasoning.**
-
-The model knows everything the compiler can SAY. The compiler decides whether what the model said is TRUE.
-
-That is how CAS-Native becomes genuinely native, not just CAS-conditioned.
+> *Compiler = law. Model = fluent speaker. Together = traceable conversational reasoning.*
+>
+> The model knows everything the compiler can SAY. The compiler decides whether what the model said is TRUE.
 
 ## 4. Proposed Architecture
 
