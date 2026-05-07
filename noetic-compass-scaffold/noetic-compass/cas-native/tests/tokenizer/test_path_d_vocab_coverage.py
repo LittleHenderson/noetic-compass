@@ -199,8 +199,20 @@ def test_compound_expressions_tokenize_tightly(
 
 
 # ---------------------------------------------------------------------------
-# v1 ID-stability test — every v1 token's ID is preserved in v2.
+# v1 ID-stability tests — special + reserved IDs preserved; char IDs shift +55.
 # ---------------------------------------------------------------------------
+#
+# Precise claim (corrected post-Codex audit 2026-05-07):
+#   - v1 SPECIAL_TOKENS IDs preserved verbatim in v2 (IDs 0..N).
+#   - v1 CAS_RESERVED_TOKENS IDs preserved verbatim in v2 (IDs continue from N).
+#   - 55 added tokens slot in at IDs 213..267 (END of v1 reserved range,
+#     BEFORE char tokens in vocab assembly order).
+#   - Char/BPE token IDs shift by +55 in v2.
+#
+# A v1 model checkpoint CANNOT directly use this v2 tokenizer artifact
+# (char-token embedding indices would mismatch). v1 tokenizer artifacts
+# on disk remain safe to load with v1 code (the v2 dynamic regex doesn't
+# activate when v2 tokens are absent — see test_v1_only_vocab_load_preserves_v1_tokenization).
 
 V2_ADDED_TOKENS: frozenset[str] = frozenset(
     [f"^{n}^{d}" for n in range(10) for d in "PCEO"]
@@ -218,12 +230,16 @@ V2_ADDED_TOKENS: frozenset[str] = frozenset(
 )
 
 
-def test_v1_token_ids_preserved_in_v2_vocab(v2_tokenizer: HybridCASTokenizer) -> None:
-    """Reconstruct the v1 reserved-token ordering and verify ID stability.
+def test_v1_special_and_reserved_token_ids_preserved(v2_tokenizer: HybridCASTokenizer) -> None:
+    """v1 SPECIAL_TOKENS + v1 CAS_RESERVED_TOKENS IDs are preserved
+    verbatim in v2.
 
-    This is the load-bearing constraint from the Path D Wave 1A spec:
-    "preserve all existing tokens and IDs." If a v1 token's ID shifted,
-    every existing v1-trained checkpoint would silently mis-tokenize.
+    Char/BPE token IDs are NOT covered by this test — they shift by +55.
+    See test_v1_char_token_ids_shift_by_55_in_v2 for the char-shift check.
+
+    Load-bearing for compatibility: the model's CAS-state embedding head
+    indexes by reserved-token ID, so if a reserved-token ID shifted we'd
+    silently mis-tokenize CAS expressions in any v1 checkpoint.
     """
     # Re-derive the v1 reserved-token list by removing the v2 additions.
     v1_only_reserved = [t for t in CAS_RESERVED_TOKENS if t not in V2_ADDED_TOKENS]
@@ -243,6 +259,39 @@ def test_v1_token_ids_preserved_in_v2_vocab(v2_tokenizer: HybridCASTokenizer) ->
             f"got {v2_tokenizer.word2id[tok]}"
         )
         expected_id += 1
+
+
+def test_v1_char_token_ids_shift_by_55_in_v2(v2_tokenizer: HybridCASTokenizer) -> None:
+    """Char/BPE token IDs shift by +55 in v2.
+
+    The 55 new reserved tokens slot in at the END of CAS_RESERVED_TOKENS,
+    pushing every char/BPE token forward by 55. This is the breaking
+    change for v1 model checkpoint reuse: a v1 model expects <CHAR:0020>
+    at ID 213; v2 puts it at ID 268.
+
+    Verify the shift is exactly +55 and consistent across multiple
+    char tokens.
+    """
+    # In v1, char tokens started right after the v1 reserved range:
+    # SPECIAL_TOKENS (3) + v1 reserved (210) = 213. So <CHAR:0020> was 213.
+    # In v2, the 55 added reserved tokens push char tokens to 213 + 55 = 268.
+    space_id = v2_tokenizer.word2id.get("<CHAR:0020>")
+    assert space_id == 268, (
+        f"<CHAR:0020> should be at v2 ID 268 (was 213 in v1, +55 shift); "
+        f"got {space_id}. If this assertion fails, vocab assembly order "
+        f"changed — investigate before claiming any v1↔v2 compatibility."
+    )
+
+    # Spot-check at least one more char token to confirm the shift is
+    # uniform (not just a one-off bug).
+    a_id = v2_tokenizer.word2id.get("<CHAR:0061>")
+    assert a_id == 333, (
+        f"<CHAR:0061> should be at v2 ID 333 (was 278 in v1, +55 shift); "
+        f"got {a_id}."
+    )
+
+    # Sanity: shift should be exactly the count of v2 additions.
+    assert (a_id - 278) == len(V2_ADDED_TOKENS) == 55
 
 
 def test_v1_only_vocab_load_preserves_v1_tokenization() -> None:
@@ -306,7 +355,10 @@ def test_v2_manifest_exists_and_records_added_tokens(v2_manifest_path: Path) -> 
     assert "FractalClass" in surfaces
     assert manifest["vocab_sizes"]["before_total"] == 333
     assert manifest["vocab_sizes"]["after_total"] == 388
-    assert manifest["id_stability"]["all_v1_token_ids_preserved"] is True
+    assert manifest["id_stability"]["v1_special_token_ids_preserved"] is True
+    assert manifest["id_stability"]["v1_reserved_token_ids_preserved"] is True
+    assert manifest["id_stability"]["v1_char_bpe_token_ids_shift_by"] == 55
+    assert manifest["id_stability"]["added_token_id_range"] == [213, 267]
 
 
 # ---------------------------------------------------------------------------

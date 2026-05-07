@@ -26,10 +26,29 @@ forgotten-Cognitive-Fractal-keywords gap (`feedback_cas_token_enum_must_include_
 | **Total**             |  **333** | **388** |
 | Tokens added          |      — |    55 |
 
-ID stability: every v1 token's id is preserved verbatim in v2 (verified
-in `test_v1_token_ids_preserved_in_v2_vocab`). The 55 added tokens are
-appended at the END of the reserved-token list, so all v1 IDs in the
-range 0..332 are unchanged.
+ID stability (precise — corrected post-Codex audit 2026-05-07):
+
+- **v1 special tokens and v1 CAS reserved tokens preserved verbatim**
+  (IDs 0..212; verified in `test_v1_special_and_reserved_token_ids_preserved`).
+- **55 added tokens slot in at IDs 213..267** (the END of the v1
+  reserved-token range — directly *after* v1 reserved tokens but
+  *before* char tokens in vocab assembly order).
+- **Char/BPE token IDs shift by +55 in v2.** Example: `<CHAR:0020>`
+  (space) v1 ID 213 → v2 ID 268; `<CHAR:0061>` (a) v1 ID 278 → v2 ID 333.
+  Verified in `test_v1_char_token_ids_shift_by_55_in_v2`.
+
+**Compatibility implications:**
+
+- Existing v1 tokenizer.json artifacts on disk remain safe to load with
+  v1 code (the v2 dynamic regex doesn't activate v2 patterns when v2
+  tokens are absent — see §5).
+- **v1 model checkpoints CANNOT directly use the v2 tokenizer artifact.**
+  Char/BPE embedding indices would mismatch (a v1 model expects
+  `<CHAR:0020>` at ID 213; v2 puts it at ID 268). To use a v1-trained
+  model with v2-tokenized data: re-tokenize the data with v1, or retrain
+  the model with v2.
+- Path D corpus generation runs end-to-end on v2; no v1↔v2 token mixing
+  is required or supported.
 
 ## 2. Per-category coverage
 
@@ -99,7 +118,7 @@ that surrounding fragmentation.
 | 3 — register-set opener | 1 | `\|⟨` |
 | 7 — fractal class keywords | 7 | `FractalClass`, `FractalConvergence`, `CognitiveFractal`, `Stabilizing`, `Amplifying`, `Oscillatory`, `Neutral` |
 
-ID range of added tokens: 333–387. All v1 IDs (0..332) preserved.
+ID range of added tokens: **213..267** (slotted at the END of the v1 reserved-token range, BEFORE char tokens in vocab assembly order). v1 special and reserved IDs (0..212) preserved verbatim. Char/BPE IDs shift by +55 in v2 (was 213..332 in v1, becomes 268..387 in v2). See §1 *Compatibility implications* — v1 model checkpoints cannot directly use v2 tokenizer artifact.
 
 ## 4. Compound-expression tightness
 

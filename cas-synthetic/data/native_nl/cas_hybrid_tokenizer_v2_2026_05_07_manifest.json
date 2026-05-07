@@ -300,7 +300,13 @@
   ],
   "n_added": 55,
   "id_stability": {
-    "all_v1_token_ids_preserved": true,
+    "v1_special_token_ids_preserved": true,
+    "v1_reserved_token_ids_preserved": true,
+    "v1_char_bpe_token_ids_shift_by": 55,
+    "added_token_id_range": [213, 267],
+    "v1_char_token_id_range_in_v1": [213, 332],
+    "v1_char_token_id_range_in_v2": [268, 387],
+    "rationale": "55 new reserved tokens slot in at IDs 213..267 (END of v1 reserved range, before char tokens in vocab assembly order). v1 special and reserved token IDs (0..212) preserved verbatim. Char/BPE token IDs shift by +55 in v2 (was 213..332 in v1, becomes 268..387 in v2). v1 tokenizer artifacts on disk remain safe to load with v1 code (v2 dynamic regex doesn't activate when v2 tokens absent), but v1 model checkpoints CANNOT directly use this v2 tokenizer artifact: char-token embedding indices would mismatch.",
     "verification_script": "tmp/path_d_v1_compat_check.py"
   },
   "category_coverage": {
