@@ -296,3 +296,122 @@ def test_hash_state_dict_changes_when_weights_change():
     # Reset perturbation.
     h_c = trainer.hash_state_dict(model.state_dict())
     assert h_b == h_c
+
+
+# ---------------------------------------------------------------------------
+# 11. B-3 periodic generation samples
+# ---------------------------------------------------------------------------
+
+
+def _write_native_nl_corpus(path: Path, *, n_records: int = 12) -> None:
+    rows = []
+    for i in range(n_records):
+        rows.append(
+            {
+                "id": f"rec-{i}",
+                "trace_id": f"trace-{i}",
+                "conversation_id": f"conv-{i // 3}",
+                "turn_index": i % 3,
+                "schema_version": "native_nl.v1",
+                "prompt_text": f"I am weighing option {i} today.",
+                "reply_text": f"Give the choice time to become clear {i}.",
+                "cas_expression": "^3^E_{F4}|f",
+                "register": "f",
+            }
+        )
+    path.write_text(
+        "\n".join(json.dumps(row, sort_keys=True) for row in rows) + "\n",
+        encoding="utf-8",
+    )
+
+
+def test_training_emits_sample_reply_events_on_real_path(tmp_path):
+    corpus = tmp_path / "native_nl.jsonl"
+    out_dir = tmp_path / "out"
+    _write_native_nl_corpus(corpus, n_records=12)
+
+    rc = trainer.main(
+        [
+            "--data-path",
+            str(corpus),
+            "--output-dir",
+            str(out_dir),
+            "--epochs",
+            "1",
+            "--batch-size",
+            "4",
+            "--device",
+            "cpu",
+            "--d-model",
+            "32",
+            "--encoder-n-layers",
+            "1",
+            "--encoder-n-heads",
+            "4",
+            "--head-n-layers",
+            "1",
+            "--head-n-heads",
+            "4",
+            "--max-prompt-len",
+            "32",
+            "--max-reply-len",
+            "32",
+            "--max-cas-prefix-len",
+            "8",
+            "--logging-steps",
+            "1",
+            "--train-log-every-steps",
+            "1",
+            "--sample-every-steps",
+            "1",
+            "--sample-max-new-tokens",
+            "4",
+            "--sample-sampling",
+            "greedy",
+            "--seed",
+            "123",
+        ]
+    )
+    assert rc == 0
+
+    events = [
+        json.loads(line)
+        for line in (out_dir / "training_events.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    sample_events = [event for event in events if event["event"] == "sample_reply"]
+    error_events = [event for event in events if event["event"] == "sample_reply_error"]
+    assert sample_events, "real-path training must emit periodic generated samples"
+    assert not error_events
+    first = sample_events[0]
+    assert first["schema_version"] == "train_event.v1"
+    assert first["prompt_text"]
+    assert isinstance(first["generated_reply_text"], str)
+    assert first["n_steps"] <= 4
+    assert first["sampling_config"]["sampling"] == "greedy"
+
+    manifest = json.loads((out_dir / "checkpoint_manifest.json").read_text(encoding="utf-8"))
+    assert manifest["extra"]["sample_reply"]["sample_every_steps"] == 1
+    assert manifest["extra"]["sample_reply"]["sample_max_new_tokens"] == 4
+
+
+def test_sample_reply_rejects_fallback_path(tmp_path):
+    corpus = tmp_path / "native_nl.jsonl"
+    _write_native_nl_corpus(corpus, n_records=3)
+
+    rc = trainer.main(
+        [
+            "--data-path",
+            str(corpus),
+            "--output-dir",
+            str(tmp_path / "out"),
+            "--use-fallback-head",
+            "--sample-every-steps",
+            "1",
+            "--sample-max-new-tokens",
+            "4",
+            "--device",
+            "cpu",
+        ]
+    )
+    assert rc == 5

@@ -494,6 +494,98 @@ def emit_train_step_event(
     return event
 
 
+def emit_sample_reply_event(
+    *,
+    event_id: str,
+    checkpoint_id: str,
+    step: int,
+    epoch: int,
+    sample_index: int,
+    record: dict[str, Any],
+    generated: dict[str, Any],
+    out_stream: Any = sys.stdout,
+) -> dict[str, Any]:
+    """Write a ``sample_reply`` event for qualitative B-3 monitoring."""
+    event = {
+        "event": "sample_reply",
+        "schema_version": TRAIN_EVENT_SCHEMA_VERSION,
+        "event_id": event_id,
+        "checkpoint_id": checkpoint_id,
+        "step": int(step),
+        "epoch": int(epoch),
+        "sample_index": int(sample_index),
+        "record_id": str(record.get("id", "")),
+        "trace_id": str(record.get("trace_id", "")),
+        "conversation_id": str(record.get("conversation_id", "")),
+        "turn_index": record.get("turn_index"),
+        "prompt_text": _record_text(record, ("prompt_text", "prompt")),
+        "target_reply_text": _record_text(record, ("reply_text", "reply")),
+        "generated_reply_text": str(generated.get("reply_text", "")),
+        "cas_expression": _record_text(record, ("cas_expression",)),
+        "register": str(record.get("register", "T")),
+        "n_steps": int(generated.get("n_steps", 0)),
+        "stopped_on_eos": bool(generated.get("stopped_on_eos", False)),
+        "sampling_config": dict(generated.get("config", {})),
+        "token_ids_preview": list(generated.get("token_ids", []))[:32],
+        "timestamp": utc_iso_now(),
+    }
+    line = json.dumps(event, sort_keys=True)
+    try:
+        out_stream.write(line + "\n")
+        out_stream.flush()
+    except Exception:  # pragma: no cover
+        pass
+    print(line, flush=True)
+    return event
+
+
+def emit_sample_reply_error_event(
+    *,
+    event_id: str,
+    checkpoint_id: str,
+    step: int,
+    epoch: int,
+    sample_index: int,
+    record: dict[str, Any],
+    error: Exception,
+    out_stream: Any = sys.stdout,
+) -> dict[str, Any]:
+    """Write a non-fatal sampling error event and keep training moving."""
+    event = {
+        "event": "sample_reply_error",
+        "schema_version": TRAIN_EVENT_SCHEMA_VERSION,
+        "event_id": event_id,
+        "checkpoint_id": checkpoint_id,
+        "step": int(step),
+        "epoch": int(epoch),
+        "sample_index": int(sample_index),
+        "record_id": str(record.get("id", "")),
+        "trace_id": str(record.get("trace_id", "")),
+        "prompt_text": _record_text(record, ("prompt_text", "prompt")),
+        "cas_expression": _record_text(record, ("cas_expression",)),
+        "error_type": type(error).__name__,
+        "error_message": str(error),
+        "timestamp": utc_iso_now(),
+    }
+    line = json.dumps(event, sort_keys=True)
+    try:
+        out_stream.write(line + "\n")
+        out_stream.flush()
+    except Exception:  # pragma: no cover
+        pass
+    print(line, flush=True)
+    return event
+
+
+def _record_text(record: dict[str, Any], keys: tuple[str, ...]) -> str:
+    """Return the first non-empty string value for ``keys``."""
+    for key in keys:
+        value = record.get(key)
+        if isinstance(value, str) and value.strip():
+            return value
+    return ""
+
+
 # ---------------------------------------------------------------------------
 # Smoke-test runner
 # ---------------------------------------------------------------------------
@@ -625,6 +717,38 @@ def run_training(args: argparse.Namespace) -> int:
 
     use_fallback = bool(getattr(args, "use_fallback_head", False))
     use_cas_prefix = bool(getattr(args, "use_cas_prefix", False))
+    sample_every_steps = int(getattr(args, "sample_every_steps", 0) or 0)
+    sample_max_new_tokens = int(getattr(args, "sample_max_new_tokens", 0) or 0)
+    if sample_every_steps < 0:
+        print(json.dumps({
+            "event": "fatal",
+            "reason": "sample_every_steps_must_be_non_negative",
+            "got": sample_every_steps,
+        }))
+        return 5
+    if sample_every_steps > 0 and sample_max_new_tokens <= 0:
+        print(json.dumps({
+            "event": "fatal",
+            "reason": "sample_max_new_tokens_must_be_positive",
+            "got": sample_max_new_tokens,
+        }))
+        return 5
+    if sample_every_steps > 0 and use_fallback:
+        print(json.dumps({
+            "event": "fatal",
+            "reason": "sample_reply_requires_real_generation_path",
+        }))
+        return 5
+
+    generate_reply_fn = None
+    sample_record: dict[str, Any] | None = None
+    sample_record_index = int(getattr(args, "sample_record_index", 0) or 0)
+    if sample_every_steps > 0:
+        from cas_native.inference.native_nl_generate import generate_reply
+
+        generate_reply_fn = generate_reply
+        sample_pool = val_records if val_records else train_records
+        sample_record = sample_pool[sample_record_index % len(sample_pool)]
 
     # Tokenizer provenance — recorded in checkpoint_manifest so a checkpoint
     # is never separated from the vocab needed to decode it.
@@ -802,6 +926,54 @@ def run_training(args: argparse.Namespace) -> int:
                         lr=float(args.lr),
                         out_stream=event_stream,
                     )
+
+                if sample_every_steps > 0 and global_step % sample_every_steps == 0:
+                    assert generate_reply_fn is not None
+                    assert sample_record is not None
+                    was_training = bool(model.training)
+                    try:
+                        generated = generate_reply_fn(
+                            model=model,
+                            tokenizer=tokenizer,
+                            prompt_text=_record_text(sample_record, ("prompt_text", "prompt")),
+                            cas_expression=_record_text(sample_record, ("cas_expression",)) or None,
+                            register=str(sample_record.get("register", "T")),
+                            max_prompt_len=int(args.max_prompt_len),
+                            max_cas_prefix_len=int(args.max_cas_prefix_len),
+                            max_new_tokens=sample_max_new_tokens,
+                            sampling=str(args.sample_sampling),
+                            temperature=float(args.sample_temperature),
+                            top_p=float(args.sample_top_p),
+                            use_cas_prefix=use_cas_prefix,
+                            device=device,
+                            return_trace=bool(args.sample_return_trace),
+                        )
+                        emit_sample_reply_event(
+                            event_id=str(uuid.uuid4()),
+                            checkpoint_id=checkpoint_id,
+                            step=global_step,
+                            epoch=epoch,
+                            sample_index=sample_record_index,
+                            record=sample_record,
+                            generated=generated,
+                            out_stream=event_stream,
+                        )
+                    except Exception as exc:
+                        emit_sample_reply_error_event(
+                            event_id=str(uuid.uuid4()),
+                            checkpoint_id=checkpoint_id,
+                            step=global_step,
+                            epoch=epoch,
+                            sample_index=sample_record_index,
+                            record=sample_record,
+                            error=exc,
+                            out_stream=event_stream,
+                        )
+                    finally:
+                        if was_training:
+                            model.train()
+                        else:
+                            model.eval()
             epochs_completed = epoch + 1
 
     # Save final checkpoint with full manifest.
@@ -830,6 +1002,15 @@ def run_training(args: argparse.Namespace) -> int:
             "tokenizer": tokenizer_provenance,
             "use_fallback_head": use_fallback,
             "use_cas_prefix": use_cas_prefix,
+            "sample_reply": {
+                "sample_every_steps": sample_every_steps,
+                "sample_record_index": sample_record_index,
+                "sample_max_new_tokens": sample_max_new_tokens,
+                "sample_sampling": str(getattr(args, "sample_sampling", "greedy")),
+                "sample_temperature": float(getattr(args, "sample_temperature", 0.8)),
+                "sample_top_p": float(getattr(args, "sample_top_p", 0.9)),
+                "sample_return_trace": bool(getattr(args, "sample_return_trace", False)),
+            },
         },
     )
     with (out_dir / "checkpoint_manifest.json").open("w", encoding="utf-8") as fh:
@@ -959,6 +1140,32 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--max-reply-len", type=int, default=256)
     p.add_argument("--max-cas-prefix-len", type=int, default=32)
     p.add_argument("--train-log-every-steps", type=int, default=20)
+    p.add_argument(
+        "--sample-every-steps",
+        type=int,
+        default=0,
+        help=(
+            "When >0, periodically run autoregressive generate_reply() on a "
+            "held-out record and emit sample_reply events. Real path only; "
+            "disabled by default."
+        ),
+    )
+    p.add_argument(
+        "--sample-record-index",
+        type=int,
+        default=0,
+        help="Index into the validation split for periodic sample_reply events.",
+    )
+    p.add_argument("--sample-max-new-tokens", type=int, default=80)
+    p.add_argument(
+        "--sample-sampling",
+        type=str,
+        default="greedy",
+        choices=("greedy", "temperature", "top_p"),
+    )
+    p.add_argument("--sample-temperature", type=float, default=0.8)
+    p.add_argument("--sample-top-p", type=float, default=0.9)
+    p.add_argument("--sample-return-trace", action="store_true")
     return p
 
 
@@ -991,6 +1198,8 @@ __all__ = [
     "TRAIN_EVENT_SCHEMA_VERSION",
     "build_parser",
     "deterministic_split",
+    "emit_sample_reply_error_event",
+    "emit_sample_reply_event",
     "emit_train_step_event",
     "hash_corpus_file",
     "hash_state_dict",
