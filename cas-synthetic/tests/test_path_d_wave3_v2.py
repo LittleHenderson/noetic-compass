@@ -100,6 +100,127 @@ def test_cas_to_english_v2_includes_colloquialisms():
     assert "rubs the wrong way" in user_p
 
 
+# Group 1b: NO-NOTATION block + per-slot guidance wiring (added 2026-05-08
+# after the paid preflight found the model leaking CAS notation in 8 of 10
+# cas_to_english categories. The earlier "do not echo notation" line was
+# too soft. The new block names every forbidden token AND its plain-English
+# replacement, and per-slot guidance gives a worked example per category.)
+
+
+def test_cas_to_english_v2_includes_no_notation_block_for_every_category():
+    m = _load_module()
+    for cat in (
+        "state_literal",
+        "binary_composition",
+        "cross_register_omega",
+        "rpm_chain",
+        "let_binding",
+        "inversion",
+        "diagram_export",
+        "recipe",
+        "fractal_sequence",
+        "meta_logic_relation",
+    ):
+        seed = {"expression": "placeholder", "grammar_category": cat}
+        _, user_p = m.build_cas_to_english_prompt_v2(seed)
+        assert "NO-NOTATION RULE" in user_p, f"missing NO-NOTATION for {cat}"
+        assert "FORBIDDEN — Ω" in user_p, f"missing Ω forbidden for {cat}"
+        assert "FORBIDDEN — drive labels F1 F2" in user_p
+        assert "FORBIDDEN — domain letters as labels" in user_p
+        assert "FORBIDDEN — register labels T A f E" in user_p
+        # Replacement table must be present so the model has a concrete map.
+        assert "F7 → purpose" in user_p
+        assert "C → cognitive" in user_p
+        assert "T → transcendent" in user_p
+
+
+def test_cas_to_english_v2_state_literal_guidance_wired():
+    m = _load_module()
+    seed = {"expression": "^7^E_{F3}|A", "grammar_category": "state_literal"}
+    _, user_p = m.build_cas_to_english_prompt_v2(seed)
+    assert "STATE-LITERAL RULES" in user_p
+    assert "BINARY-COMPOSITION RULES" not in user_p
+    assert "CROSS-REGISTER OMEGA RULES" not in user_p
+
+
+def test_cas_to_english_v2_binary_composition_guidance_wired():
+    m = _load_module()
+    seed = {"expression": "^3^O + ^7^P", "grammar_category": "binary_composition"}
+    _, user_p = m.build_cas_to_english_prompt_v2(seed)
+    assert "BINARY-COMPOSITION RULES" in user_p
+    assert "STATE-LITERAL RULES" not in user_p
+
+
+def test_cas_to_english_v2_cross_register_omega_guidance_wired():
+    m = _load_module()
+    seed = {
+        "expression": "(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω_alignment",
+        "grammar_category": "cross_register_omega",
+    }
+    _, user_p = m.build_cas_to_english_prompt_v2(seed)
+    assert "CROSS-REGISTER OMEGA RULES" in user_p
+    # The worked example shows stem-only rendering, never Ω_ prefix.
+    assert "the outcome called alignment" in user_p
+
+
+def test_cas_to_english_v2_rpm_chain_guidance_wired():
+    m = _load_module()
+    seed = {
+        "expression": "^0^P → ^1^C → ^2^E → ^7^O",
+        "grammar_category": "rpm_chain",
+    }
+    _, user_p = m.build_cas_to_english_prompt_v2(seed)
+    assert "RPM-CHAIN RULES" in user_p
+
+
+def test_cas_to_english_v2_let_binding_guidance_wired():
+    m = _load_module()
+    seed = {
+        "expression": "let anchor_03 = ^1^P_{F2}|T",
+        "grammar_category": "let_binding",
+    }
+    _, user_p = m.build_cas_to_english_prompt_v2(seed)
+    assert "LET-BINDING RULES" in user_p
+
+
+def test_cas_to_english_v2_inversion_guidance_wired():
+    m = _load_module()
+    seed = {"expression": "^3^P_{F1}", "grammar_category": "inversion"}
+    _, user_p = m.build_cas_to_english_prompt_v2(seed)
+    assert "INVERSION RULES" in user_p
+
+
+def test_cas_to_english_v2_diagram_export_guidance_wired():
+    m = _load_module()
+    seed = {
+        "expression": "NoeticCluster{^1, ^3, ^4}",
+        "grammar_category": "diagram_export",
+    }
+    _, user_p = m.build_cas_to_english_prompt_v2(seed)
+    assert "DIAGRAM-EXPORT RULES" in user_p
+
+
+def test_cas_to_english_v2_per_slot_guidance_is_mutually_exclusive():
+    """Each category should receive at most one slot-specific guidance
+    block (recipe / fractal can also fire shape-based, which is fine, but
+    the new categories are category-only matched and should not collide
+    with each other)."""
+    m = _load_module()
+    new_blocks = [
+        "STATE-LITERAL RULES",
+        "BINARY-COMPOSITION RULES",
+        "CROSS-REGISTER OMEGA RULES",
+        "RPM-CHAIN RULES",
+        "LET-BINDING RULES",
+        "INVERSION RULES",
+        "DIAGRAM-EXPORT RULES",
+    ]
+    seed = {"expression": "^3^P|A", "grammar_category": "state_literal"}
+    _, user_p = m.build_cas_to_english_prompt_v2(seed)
+    fires = [b for b in new_blocks if b in user_p]
+    assert fires == ["STATE-LITERAL RULES"]
+
+
 # ---------------------------------------------------------------------------
 # Group 2: english_to_cas v2 — no source CAS in prompt
 # ---------------------------------------------------------------------------

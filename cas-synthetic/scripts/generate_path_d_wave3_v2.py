@@ -153,11 +153,8 @@ def _load_compiler():
 
 _PLAIN_LANGUAGE_GUIDANCE_V2 = (
     "Write a concise, plain-English description aimed at a curious adult "
-    "reader. Do NOT echo CAS notation, operator symbols, or jargon like "
-    "'noetic', 'register', 'RPM', or 'F1' in your reply EXCEPT where the "
-    "rules below explicitly require it (named Ω targets, numeric "
-    "coefficients). Describe the meaning in everyday language. Keep it "
-    "under 70 words.\n"
+    "reader. Describe the meaning in everyday language. Keep it under 70 "
+    "words.\n"
     "\n"
     "STRICT anti-drift rules:\n"
     "- Do NOT use chemistry / physics / biology / finance metaphors. Domain "
@@ -166,12 +163,80 @@ _PLAIN_LANGUAGE_GUIDANCE_V2 = (
     "  expression itself quantifies.\n"
     "- Do NOT invent intensity, strength, weight, or probability quantities. "
     "  Reproduce coefficients faithfully when the expression has them; "
-    "  introduce no others.\n"
+    "  introduce no others. Numeric coefficients (e.g., 0.7, 1.5) are the "
+    "  ONLY numbers that may appear in the English.\n"
     "- Stay neutral on emotional valence unless the expression explicitly "
-    "  encodes ^2 Positive or ^3 Negative.\n"
+    "  encodes a Positive or Negative operator.\n"
     "- NEVER describe Noetic operators as 'levels' or 'tiers'. Noetic "
     "  indices 0-9 are operator slots in a formal vocabulary, not a "
     "  hierarchy."
+)
+
+
+# Strong, explicit anti-notation block. Added 2026-05-08 after the first paid
+# Wave 2.5 preflight (run 20260508T081835Z) accepted 179 records of which 80
+# leaked CAS notation: 14 Ω_<name> leaks, 15 ^N^D state-literal leaks, 32
+# F[1-7] drive leaks, 17 P/C/E/O domain-letter leaks, 2 register-letter leaks.
+# The earlier _PLAIN_LANGUAGE_GUIDANCE_V2 said "do not echo notation" but did
+# not provide explicit replacement rules; the model leaked anyway. This block
+# names every forbidden token AND the plain-English replacement.
+_NO_NOTATION_GUIDANCE_V2 = (
+    "NO-NOTATION RULE (load-bearing — overrides any temptation to copy "
+    "tokens from the source):\n"
+    "\n"
+    "The English output must NEVER contain any of these CAS notation tokens. "
+    "For each forbidden token, use the plain-English replacement instead.\n"
+    "\n"
+    "FORBIDDEN — Ω (Greek capital omega):\n"
+    "  - Never write Ω anywhere in the English. Never write 'Ω_'.\n"
+    "  - Replace with the name STEM (the part after Ω_).\n"
+    "  - Example: Ω_alignment → 'the outcome called alignment' or "
+    "'named outcome alignment' or simply 'alignment'. NEVER 'Ω_alignment'.\n"
+    "\n"
+    "FORBIDDEN — state-literal markers ^0 ^1 ^2 ^3 ^4 ^5 ^6 ^7 ^8 ^9:\n"
+    "  - Never write a caret followed by a digit. Never write '^N^D'.\n"
+    "  - Replace with the operator name or an approved colloquialism (see "
+    "colloquialism map below).\n"
+    "\n"
+    "FORBIDDEN — drive labels F1 F2 F3 F4 F5 F6 F7:\n"
+    "  - Never write F followed by a digit as a label.\n"
+    "  - Replace with the drive name:\n"
+    "      F1 → unity / cohesion\n"
+    "      F2 → wisdom / insight\n"
+    "      F3 → vitality / energy\n"
+    "      F4 → connection / belonging\n"
+    "      F5 → agency / self-determination\n"
+    "      F6 → structure / order\n"
+    "      F7 → purpose / meaning\n"
+    "\n"
+    "FORBIDDEN — domain letters as labels (P-Domain, C-Domain, E-Domain, "
+    "O-Domain, 'domain C', 'the P domain', 'in the O domain'):\n"
+    "  - Never use a single letter to label a domain.\n"
+    "  - Replace with the domain word:\n"
+    "      P → principled / foundational\n"
+    "      C → cognitive / mental\n"
+    "      E → evaluative / judging\n"
+    "      O → operational / behavioral\n"
+    "\n"
+    "FORBIDDEN — register labels T A f E (when used as register specifiers, "
+    "e.g. 'register T', 'the A register', 'across two registers'):\n"
+    "  - Never use a single letter to label a register.\n"
+    "  - Replace with the register character:\n"
+    "      T → transcendent / strategic / big-picture\n"
+    "      A → analytical / reasoned / step-by-step\n"
+    "      f → affective / felt / emotional\n"
+    "      E (register) → embodied / bodily / sensorimotor\n"
+    "\n"
+    "FORBIDDEN — bare CAS jargon: 'Noetic', 'Noetics', 'RPM', 'compile-time', "
+    "or the word 'register' used in a CAS-jargon framing. Use plain English "
+    "instead — operator name, drive name, register character, etc.\n"
+    "\n"
+    "PRESERVE STRUCTURE THROUGH ORDINARY LANGUAGE, NOT NOTATION. The English "
+    "must capture every load-bearing element of the source: every operator, "
+    "every coefficient, every named outcome, every domain, every drive, "
+    "every register — but expressed in plain English a curious adult could "
+    "read aloud. Test: a careful reader of the English alone (with no source "
+    "CAS) should be able to reconstruct the same structural commitments."
 )
 
 
@@ -257,11 +322,138 @@ _FRACTAL_K_INDEX_GUIDANCE = (
     "- The ':' inside the angle brackets is a step-separator, not an "
     "  operator. Treat the sequence as 'first this, then that, then …'.\n"
     "- Worked example: 'Φ⟨9:4:7⟩' should surface as: 'A thought that "
-    "  popped into mind (^9 Below/Effect) led to something that struck a "
-    "  chord (^4 Vibration), which then turned into muscle memory (^7 "
-    "  Rhythm).' Three steps, each one rendering its k-value as an "
-    "  operator. NEVER 'a sequence of three stages with operations 9, 4, "
-    "  and 7' — that drops the operator-index meaning."
+    "  popped into mind led to something that struck a chord, which then "
+    "  turned into muscle memory.' Three steps, each one rendering its "
+    "  k-value as an operator (or its colloquialism). NEVER 'a sequence "
+    "  of three stages with operations 9, 4, and 7' — that drops the "
+    "  operator-index meaning. NEVER include the '^N' notation in the "
+    "  English."
+)
+
+
+# Per-slot guidance for the categories that previously had no specific
+# preservation rules. Added 2026-05-08 after the global-leakage agent run
+# found that recipe + fractal validators alone were too narrow — the other
+# 8 cas_to_english categories passed through without category-specific
+# guidance and the model leaked CAS notation in 80 of 179 records. Each
+# block follows the same pattern: rule + worked example + explicit "NOT"
+# counter-examples that mirror the actual leak patterns observed.
+
+_STATE_LITERAL_GUIDANCE_V2 = (
+    "STATE-LITERAL RULES (this expression is a single state literal — "
+    "^N^D[_{Fk}][|R]):\n"
+    "- A state literal names: a Noetic operator (the ^N part), a Domain "
+    "(^D), optionally a Drive (_{Fk}), optionally a Register (|R). All "
+    "components present in the source MUST surface in the English via "
+    "their plain-English replacements — NEVER as the raw notation.\n"
+    "- Worked example: '^7^E_{F3}|A' should surface as: 'Practice and "
+    "muscle memory in evaluative judgment, driven by a need for "
+    "vitality, expressed through analytical reasoning.' All four parts "
+    "(Rhythm, Evaluative, F3 vitality, A analytical) appear as plain "
+    "English; no '^', no 'F3', no 'A register'.\n"
+    "- BAD: 'Rhythm in E domain with F3 drive at A register.' Echoes "
+    "^E, F3, A — three jargon leaks.\n"
+    "- BAD: 'Repetition.' Drops domain, drive, and register."
+)
+
+
+_BINARY_COMPOSITION_GUIDANCE_V2 = (
+    "BINARY-COMPOSITION RULES (two state literals joined by + or ×):\n"
+    "- Each operand MUST surface independently in English with its Noetic "
+    "(via colloquialism or operator name) AND its Domain (as the domain "
+    "word).\n"
+    "- The operator '+' reads as 'and' / 'combined with' / 'together "
+    "with'. The operator '×' reads as 'integrated with' / 'merged into' / "
+    "'fused with'.\n"
+    "- Worked example: '^3^O + ^7^P' should surface as: 'A felt aversion "
+    "in the operational arena combined with a practiced rhythm in the "
+    "principled arena.' Both operands' noetics and domains appear; no "
+    "'^N', no 'O', no 'P' as labels.\n"
+    "- BAD: '^3 in O combined with ^7 in P.' Echoes notation.\n"
+    "- BAD: 'Aversion and rhythm.' Drops both domains."
+)
+
+
+_CROSS_REGISTER_OMEGA_GUIDANCE_V2 = (
+    "CROSS-REGISTER OMEGA RULES (three same-Noetic register-instantiations "
+    "fused into a named outcome — (^N^D|R1 × ^N^D|R2 × ^N^D|R3) = "
+    "^N^D|Ω_X):\n"
+    "- This represents an integrated/emergent state. Render as: the same "
+    "noetic + domain expressed across the three registers (analytical, "
+    "affective, embodied, transcendent — pick the three the source uses) "
+    "fusing into a named outcome.\n"
+    "- The emergent outcome's STEM (after Ω_) MUST surface; the Ω_ prefix "
+    "NEVER does. All three register characters MUST be described in plain "
+    "English. The shared noetic + domain MUST surface.\n"
+    "- Worked example: '(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω_alignment' "
+    "should surface as: 'A principled aversion expressed through "
+    "analytical reasoning, felt emotion, and transcendent strategic "
+    "conviction — all three modes fusing into the outcome called "
+    "alignment.' Stem 'alignment' surfaces, all three register characters "
+    "(analytical, felt, transcendent) appear, noetic and domain "
+    "(aversion, principled) appear; Ω_ never appears.\n"
+    "- BAD: '^3^P in registers A, f, T.' Echoes every part.\n"
+    "- BAD: '...the outcome Ω_alignment.' Ω_ prefix leak."
+)
+
+
+_RPM_CHAIN_GUIDANCE_V2 = (
+    "RPM-CHAIN RULES (an arrow chain A → B → C → D ...):\n"
+    "- Each → is a step. Order matters. Render as a sequenced flow with "
+    "explicit step connectives ('then', 'leads to', 'becomes', 'next', "
+    "'in turn', 'and finally').\n"
+    "- Each operand's Noetic + Domain MUST surface in plain English in "
+    "the order they appear.\n"
+    "- Worked example: '^0^P → ^1^C → ^2^E → ^7^O' should surface as: "
+    "'A foundational thought leads to attention in the cognitive arena, "
+    "which in turn becomes a positive draw in the evaluative arena, and "
+    "finally becomes muscle memory in the operational arena.' Four steps, "
+    "four noetics, four domains; no notation.\n"
+    "- BAD: '^0 then ^1 then ^2 then ^7.' Notation echo.\n"
+    "- BAD: 'A thought leads to other things.' Drops domains and chain."
+)
+
+
+_LET_BINDING_GUIDANCE_V2 = (
+    "LET-BINDING RULES (let X = ...):\n"
+    "- The variable name X is a label. The name (or its stem) MUST "
+    "surface in the English so the reader knows the bound expression is "
+    "being labeled. The bound expression's content (Noetic + Domain + "
+    "any drive/register) MUST be rendered in plain English.\n"
+    "- Worked example: 'let anchor_03 = ^1^P_{F2}|T' should surface as: "
+    "'Let \"anchor_03\" name attention to a principled foundation, "
+    "driven by wisdom, expressed through transcendent strategic framing.' "
+    "Variable name surfaces, all four bound-expression parts surface.\n"
+    "- BAD: 'let anchor_03 = ^1 in P with F2 in T.' Notation.\n"
+    "- BAD: 'A label is set.' Drops the binding's content."
+)
+
+
+_INVERSION_GUIDANCE_V2 = (
+    "INVERSION RULES (single state literal in inversion-axis context):\n"
+    "- Render the same way as a state literal: the Noetic + Domain + "
+    "(any drive and/or register) MUST all surface in plain English.\n"
+    "- Worked example: '^3^P_{F1}' should surface as: 'A principled "
+    "aversion driven by a need for unity.' Aversion, principled, unity "
+    "all appear; no '^', no 'F1'.\n"
+    "- BAD: '^3 in P with F1.' Notation.\n"
+    "- BAD: 'Aversion.' Drops domain and drive."
+)
+
+
+_DIAGRAM_EXPORT_GUIDANCE_V2 = (
+    "DIAGRAM-EXPORT RULES (cluster constructs — NoeticCluster{...}, "
+    "RelationCluster{...}, CoverOf(...), PartitionOf(...)):\n"
+    "- Render as a cluster / grouping / collection of its members. Each "
+    "member's Noetic MUST surface (via colloquialism or operator name). "
+    "Do not add or drop members. Do not echo the cluster-constructor "
+    "name verbatim ('NoeticCluster' is jargon).\n"
+    "- Worked example: 'NoeticCluster{^1, ^3, ^4}' should surface as: "
+    "'A cluster of three operations: paying attention, an aversion, and "
+    "something that struck a chord.' Three members, three operator "
+    "renderings, no '^N'.\n"
+    "- BAD: 'A NoeticCluster of ^1, ^3, ^4.' Two notation echoes.\n"
+    "- BAD: 'A cluster.' Drops every member."
 )
 
 
@@ -293,12 +485,27 @@ def build_cas_to_english_prompt_v2(
     parts = [
         f"CAS expression (grammar category: {cat}):\n\n    {expr}\n",
         _PLAIN_LANGUAGE_GUIDANCE_V2,
+        _NO_NOTATION_GUIDANCE_V2,
         _COLLOQUIALISM_GUIDANCE_V2,
     ]
     if cat == "recipe" or "Θ" in expr or "Theta" in expr:
         parts.append(_RECIPE_PRESERVATION_GUIDANCE)
     if cat == "fractal_sequence" or "Φ" in expr or re.search(r"\bPhi\s*[<⟨]", expr):
         parts.append(_FRACTAL_K_INDEX_GUIDANCE)
+    if cat == "state_literal":
+        parts.append(_STATE_LITERAL_GUIDANCE_V2)
+    if cat == "binary_composition":
+        parts.append(_BINARY_COMPOSITION_GUIDANCE_V2)
+    if cat == "cross_register_omega":
+        parts.append(_CROSS_REGISTER_OMEGA_GUIDANCE_V2)
+    if cat == "rpm_chain":
+        parts.append(_RPM_CHAIN_GUIDANCE_V2)
+    if cat == "let_binding":
+        parts.append(_LET_BINDING_GUIDANCE_V2)
+    if cat == "inversion":
+        parts.append(_INVERSION_GUIDANCE_V2)
+    if cat == "diagram_export":
+        parts.append(_DIAGRAM_EXPORT_GUIDANCE_V2)
     parts.append(
         "Reply with ONLY the English paraphrase. No preamble, no list, no "
         "explanation of CAS notation, no quotes around the answer."
