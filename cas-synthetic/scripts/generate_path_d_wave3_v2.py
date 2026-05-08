@@ -107,10 +107,12 @@ NOETIC_VALIDATION_TOKENS: dict[int, tuple[str, ...]] = {
     1: ("mind", "paying attention", "using your head", "becoming aware",
         "making up your mind"),
     2: ("positive", "drawn to", "drawn toward", "draw toward",
-        "pull toward", "pulls toward", "pulled toward", "speaks to",
-        "can't resist"),
+        "draws toward", "draws you toward", "pull toward",
+        "pulls toward", "pulled toward", "speaks to", "can't resist",
+        "attraction"),
     3: ("negative", "can't stomach", "rubs the wrong way",
         "wouldn't touch", "pushed away", "aversion", "averse",
+        "repulsion",
         "turned away", "repelled", "repulsed", "push away",
         "pushes away", "pushed-away", "pushed-away-from", "push-away"),
     4: ("vibration", "hit hard", "struck a chord", "strike a chord",
@@ -122,11 +124,13 @@ NOETIC_VALIDATION_TOKENS: dict[int, tuple[str, ...]] = {
     6: ("male", "unpacking", "unpack", "break down", "breaks down",
         "breaking down", "breaking it down", "broken down", "pulling apart",
         "looking at what's underneath"),
-    7: ("rhythm", "practice makes perfect", "muscle memory", "in a groove",
-        "getting used to it"),
+    7: ("rhythm", "practice makes perfect", "practice", "practiced",
+        "repeatedly", "second nature", "habitual", "automatic",
+        "muscle memory", "in a groove", "getting used to it"),
     8: ("above", "cause", "that reminds", "reminds", "reminds you",
-        "reminds me", "triggered", "one thing leads", "made me think",
-        "brought to mind", "bring to mind"),
+        "reminds me", "trigger", "triggers", "triggered", "triggering",
+        "one thing leads", "made me think", "brought to mind",
+        "bring to mind"),
     9: ("below", "effect", "popped into mind", "out of nowhere",
         "it just clicked", "just clicked", "the thought came"),
 }
@@ -499,6 +503,13 @@ _CROSS_REGISTER_OMEGA_GUIDANCE_V2 = (
     "means transcendent / strategic / big-picture expression. |A means "
     "analytical / reasoned expression. |f means felt / affective / "
     "emotional expression.\n"
+    "- Exact-register checklist: before writing, list the source registers "
+    "mentally and render ONLY those registers. If the source includes |E, "
+    "the English must include embodied / bodily / sensorimotor language. "
+    "If the source lacks |A, do not say analytical / reasoned / "
+    "step-by-step. If the source lacks |f, do not say felt / emotional. "
+    "If the source lacks |T, do not say transcendent / strategic / "
+    "big-picture.\n"
     "- Worked example (three registers): "
     "'(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω_alignment' should surface as: "
     "'A principled aversion expressed through analytical reasoning, felt "
@@ -516,7 +527,13 @@ _CROSS_REGISTER_OMEGA_GUIDANCE_V2 = (
     "- BAD: '...the outcome Ω_alignment.' Ω_ prefix leak.\n"
     "- BAD: a two-register source rendered as 'analytical, felt, and "
     "embodied — all three modes.' Invents a register that is not in the "
-    "source."
+    "source.\n"
+    "- BAD: '(^4^C|E × ^4^C|f)' rendered as 'analytical reasoning and "
+    "felt emotion.' Source has |E and |f, so it must be embodied + felt, "
+    "not analytical + felt.\n"
+    "- BAD: '(^5^P|f × ^5^P|T)' rendered as 'felt emotion and analytical "
+    "reasoning.' Source has |f and |T, so it must be felt + transcendent "
+    "or strategic, not analytical."
 )
 
 
@@ -2023,7 +2040,7 @@ def validate_anti_copy_english_to_cas(
 # capture state literals (with optional ``_{Fk}`` and ``|R``), numeric
 # coefficients, ``Ω_<name>`` targets, and the operator surface set.
 _RE_STATE_LITERAL = re.compile(
-    r"\^(\d+)\^([A-Za-z])"           # ^N^D
+    r"\^(\d+)(?:\^([A-Za-z]))?"      # ^N or ^N^D
     r"(?:_\{(F\d+)\})?"              # optional _{Fk}
     r"(?:\|([A-Za-z]|⟨[^⟩]+⟩))?"     # optional |R or |⟨R1,R2,…⟩
 )
@@ -2041,7 +2058,9 @@ def _extract_state_literal_set(s: str) -> Counter:
     bag: Counter = Counter()
     for m in _RE_STATE_LITERAL.finditer(s):
         n, d, drive, reg = m.group(1), m.group(2), m.group(3), m.group(4)
-        tok = f"^{n}^{d}"
+        tok = f"^{n}"
+        if d:
+            tok += f"^{d}"
         if drive:
             tok += f"_{{{drive}}}"
         if reg:
@@ -2379,6 +2398,7 @@ def run_validators_for_cas_to_english(
     results.append(
         validate_no_cas_jargon_leakage(english_output=english_output)
     )
+    is_recipe_shape = bool(re.search(r"(?:Θ|Theta)\s*\(", expr))
     # Recipe — fires when category matches OR the source has a Θ(...) shape.
     if cat == "recipe" or "Θ" in expr or "Theta" in expr:
         results.append(
@@ -2393,16 +2413,18 @@ def run_validators_for_cas_to_english(
                 source_cas=expr, english_output=english_output
             )
         )
-    # Cross-register omega — fires on category match OR ``= ^N|Ω_stem`` shape.
-    if cat == "cross_register_omega" or re.search(
-        r"=\s*[^=]*?Ω_[A-Za-z]", expr
+    # Cross-register omega — fires on category match OR ``= ^N|Ω_stem``
+    # shape. Recipe expressions also contain Ω targets, but they are handled
+    # by the recipe validator; routing them here creates false "unexpected
+    # register" failures on valid recipe descriptions.
+    if cat == "cross_register_omega" or (
+        not is_recipe_shape and re.search(r"=\s*[^=]*?Ω_[A-Za-z]", expr)
     ):
         results.append(
             validate_cas_to_english_cross_register_omega(
                 source_cas=expr, english_output=english_output
             )
         )
-    is_recipe_shape = bool(re.search(r"(?:Θ|Theta)\s*\(", expr))
     # RPM chain — fires on category match OR presence of ``->`` / ``→``.
     # Recipe arrows have their own preservation validator; scoring them as
     # RPM chains inflated Wave 2.5 recipe failures with unrelated noetic-flow

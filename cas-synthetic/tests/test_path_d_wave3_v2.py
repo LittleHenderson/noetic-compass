@@ -166,6 +166,8 @@ def test_cas_to_english_v2_cross_register_omega_guidance_wired():
     assert "two or three same-Noetic" in user_p
     assert "Do not invent a third mode" in user_p
     assert "|E means embodied" in user_p
+    assert "Exact-register checklist" in user_p
+    assert "must be embodied + felt" in user_p
 
 
 def test_cas_to_english_v2_rpm_chain_guidance_wired():
@@ -1172,6 +1174,20 @@ def test_noetic_aliases_cover_wave2_5_calibration_phrases():
     assert r.passed, r.reason
 
 
+def test_noetic_aliases_cover_wave2_5_cross_register_phrases():
+    m = _load_module()
+    r = m.validate_cas_to_english_cross_register_omega(
+        source_cas="(^8^C|E × ^8^C|T) = ^8^C|Ω_coherence",
+        english_output=(
+            "When something triggers a memory in the cognitive realm, "
+            "expressed through embodied sensorimotor attention and "
+            "transcendent strategic understanding, those two modes fuse "
+            "into the outcome called coherence."
+        ),
+    )
+    assert r.passed, r.reason
+
+
 def test_binary_composition_fail_on_missing_operand():
     m = _load_module()
     r = m.validate_cas_to_english_binary_composition(
@@ -1233,6 +1249,19 @@ def test_cross_register_omega_accepts_big_picture_t_alias():
             "through big-picture strategic conviction and analytical "
             "reasoning, with those two modes fusing into the outcome "
             "called presence."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_cross_register_omega_accepts_no_domain_register_forms():
+    m = _load_module()
+    r = m.validate_cas_to_english_cross_register_omega(
+        source_cas="(^4|f × ^4|T) = ^4|Ω_refusal",
+        english_output=(
+            "When something strikes a chord in an affective, felt way "
+            "and also in a transcendent strategic way, those two modes "
+            "of resonance fuse into the outcome called refusal."
         ),
     )
     assert r.passed, r.reason
@@ -1314,6 +1343,24 @@ def test_run_validators_do_not_apply_rpm_chain_to_recipe_shape():
         ),
     )
     assert "cas_to_english_rpm_chain" not in [r.name for r in results]
+
+
+def test_run_validators_do_not_apply_cross_register_omega_to_recipe_shape():
+    m = _load_module()
+    results = m.run_validators_for_cas_to_english(
+        seed={
+            "expression": "Θ(Ω_rehearsal_90) = 0.5*^6^C_{F4}|T + 0.5*^6^P → Ω_rehearsal_90",
+            "grammar_category": "recipe",
+        },
+        english_output=(
+            "To build the outcome called rehearsal_90, combine 0.5 of "
+            "breaking down an idea about connection expressed in a "
+            "big-picture way with 0.5 of a foundational principle."
+        ),
+    )
+    assert "cas_to_english_cross_register_omega" not in [
+        r.name for r in results
+    ]
 
 
 def test_let_binding_fail_on_missing_variable_name():
