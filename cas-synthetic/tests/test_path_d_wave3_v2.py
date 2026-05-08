@@ -163,6 +163,9 @@ def test_cas_to_english_v2_cross_register_omega_guidance_wired():
     assert "CROSS-REGISTER OMEGA RULES" in user_p
     # The worked example shows stem-only rendering, never Ω_ prefix.
     assert "the outcome called alignment" in user_p
+    assert "two or three same-Noetic" in user_p
+    assert "Do not invent a third mode" in user_p
+    assert "|E means embodied" in user_p
 
 
 def test_cas_to_english_v2_rpm_chain_guidance_wired():
@@ -1201,6 +1204,35 @@ def test_cross_register_omega_pass_with_stem_and_register_descriptions():
             "An analytical, reasoned aversion to a foundational principle "
             "combined with a felt, affective aversion to that same "
             "foundational principle yields the alignment outcome."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_cross_register_omega_rejects_invented_third_mode():
+    m = _load_module()
+    r = m.validate_cas_to_english_cross_register_omega(
+        source_cas="(^6^P|f × ^6^P|A) = ^6^P|Ω_integration",
+        english_output=(
+            "A principled effort to break down an idea expressed through "
+            "analytical reasoning, felt emotion, and embodied awareness — "
+            "all three modes fusing into the outcome called integration."
+        ),
+    )
+    assert not r.passed
+    assert "unexpected register descriptions" in (r.reason or "")
+    assert "register count mismatch" in (r.reason or "")
+
+
+def test_cross_register_omega_accepts_big_picture_t_alias():
+    m = _load_module()
+    r = m.validate_cas_to_english_cross_register_omega(
+        source_cas="(^4^P|T × ^4^P|A) = ^4^P|Ω_presence",
+        english_output=(
+            "A foundational response that strikes a chord, expressed "
+            "through big-picture strategic conviction and analytical "
+            "reasoning, with those two modes fusing into the outcome "
+            "called presence."
         ),
     )
     assert r.passed, r.reason

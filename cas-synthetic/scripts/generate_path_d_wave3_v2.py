@@ -484,25 +484,39 @@ _BINARY_COMPOSITION_GUIDANCE_V2 = (
 
 
 _CROSS_REGISTER_OMEGA_GUIDANCE_V2 = (
-    "CROSS-REGISTER OMEGA RULES (three same-Noetic register-instantiations "
-    "fused into a named outcome — (^N^D|R1 × ^N^D|R2 × ^N^D|R3) = "
-    "^N^D|Ω_X):\n"
+    "CROSS-REGISTER OMEGA RULES (two or three same-Noetic "
+    "register-instantiations fused into a named outcome — "
+    "(^N^D|R1 × ^N^D|R2 [× ^N^D|R3]) = ^N^D|Ω_X):\n"
     "- This represents an integrated/emergent state. Render as: the same "
-    "noetic + domain expressed across the three registers (analytical, "
-    "affective, embodied, transcendent — pick the three the source uses) "
-    "fusing into a named outcome.\n"
+    "noetic + domain expressed across EXACTLY the source registers, then "
+    "fusing into a named outcome. Do not invent a third mode when the "
+    "source has only two operands.\n"
     "- The emergent outcome's STEM (after Ω_) MUST surface; the Ω_ prefix "
-    "NEVER does. All three register characters MUST be described in plain "
-    "English. The shared noetic + domain MUST surface.\n"
-    "- Worked example: '(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω_alignment' "
-    "should surface as: 'A principled aversion expressed through "
-    "analytical reasoning, felt emotion, and transcendent strategic "
-    "conviction — all three modes fusing into the outcome called "
-    "alignment.' Stem 'alignment' surfaces, all three register characters "
-    "(analytical, felt, transcendent) appear, noetic and domain "
-    "(aversion, principled) appear; Ω_ never appears.\n"
+    "NEVER does. Every operand register character before '=' MUST be "
+    "described in plain English. The shared noetic + domain MUST surface.\n"
+    "- Register disambiguation is load-bearing: |E means embodied / bodily "
+    "/ sensorimotor expression, while ^E means evaluative judgment. |T "
+    "means transcendent / strategic / big-picture expression. |A means "
+    "analytical / reasoned expression. |f means felt / affective / "
+    "emotional expression.\n"
+    "- Worked example (three registers): "
+    "'(^3^P|A × ^3^P|f × ^3^P|T) = ^3^P|Ω_alignment' should surface as: "
+    "'A principled aversion expressed through analytical reasoning, felt "
+    "emotion, and transcendent strategic conviction — all three modes "
+    "fusing into the outcome called alignment.' Stem 'alignment' surfaces, "
+    "all three source registers (analytical, felt, transcendent) appear, "
+    "noetic and domain (aversion, principled) appear; Ω_ never appears.\n"
+    "- Worked example (two registers): "
+    "'(^6^P|f × ^6^P|A) = ^6^P|Ω_integration' should surface as: "
+    "'A principled effort to break down an idea expressed through felt "
+    "emotion and analytical reasoning, with those two modes fusing into "
+    "the outcome called integration.' Exactly two source registers appear; "
+    "no embodied or transcendent mode is invented.\n"
     "- BAD: '^3^P in registers A, f, T.' Echoes every part.\n"
-    "- BAD: '...the outcome Ω_alignment.' Ω_ prefix leak."
+    "- BAD: '...the outcome Ω_alignment.' Ω_ prefix leak.\n"
+    "- BAD: a two-register source rendered as 'analytical, felt, and "
+    "embodied — all three modes.' Invents a register that is not in the "
+    "source."
 )
 
 
@@ -1131,13 +1145,24 @@ DRIVE_ALIASES: dict[int, tuple[str, ...]] = {
 
 # Register letter -> approved English alias substrings.
 REGISTER_ALIASES: dict[str, tuple[str, ...]] = {
-    "T": ("transcendent", "vision", "calling", "purpose-orient", "meaning"),
+    "T": ("transcendent", "vision", "calling", "purpose-orient", "meaning",
+          "strategic", "big-picture", "big picture"),
     "A": ("analytical", "analy", "reason", "logic", "deliberat",
           "explicit", "step-by-step"),
     "f": ("affective", "feeling", "felt", "emotion", "valenc",
           "value-laden", "preference"),
     "E": ("embodied", "bodily", "kinesthetic", "sensorimotor", "physical",
           "concrete", "gut"),
+}
+
+# Strong aliases used only to catch invented cross-register modes. Keep this
+# narrower than REGISTER_ALIASES so ordinary words like "meaning" do not
+# falsely reject a good answer.
+CROSS_REGISTER_EXTRA_MODE_ALIASES: dict[str, tuple[str, ...]] = {
+    "T": ("transcendent", "strategic", "big-picture", "big picture"),
+    "A": ("analytical", "reasoned", "step-by-step", "logic"),
+    "f": ("affective", "felt", "emotional"),
+    "E": ("embodied", "bodily", "sensorimotor", "physical"),
 }
 
 
@@ -1555,10 +1580,24 @@ def validate_cas_to_english_cross_register_omega(
         else:
             operand_regs.append(reg)
     missing_regs: list[str] = []
-    for letter in set(operand_regs):
+    operand_reg_set = set(operand_regs)
+    for letter in operand_reg_set:
         rtoks = REGISTER_ALIASES.get(letter, ())
         if rtoks and not _english_contains_any(out_lower, rtoks):
             missing_regs.append(letter)
+    unexpected_regs: list[str] = []
+    for letter, rtoks in CROSS_REGISTER_EXTRA_MODE_ALIASES.items():
+        if letter in operand_reg_set:
+            continue
+        if _english_contains_any(out_lower, rtoks):
+            unexpected_regs.append(letter)
+    register_count_mismatch = False
+    if len(operand_reg_set) == 2 and re.search(
+        r"\b(?:all\s+three|three\s+(?:modes|ways|registers|forms|"
+        r"expressions))\b",
+        out_lower,
+    ):
+        register_count_mismatch = True
     # Noetic + domain on the operands.
     missing, present = _check_state_literal_preservation(
         source_cas=pre_eq,
@@ -1569,6 +1608,15 @@ def validate_cas_to_english_cross_register_omega(
     diagnostics: list[str] = []
     if missing_regs:
         diagnostics.append(f"missing register descriptions: {missing_regs}")
+    if unexpected_regs:
+        diagnostics.append(
+            f"unexpected register descriptions: {unexpected_regs}"
+        )
+    if register_count_mismatch:
+        diagnostics.append(
+            "register count mismatch: source has two operand registers "
+            "but English says all three/three modes"
+        )
     if missing:
         diagnostics.append(
             f"missing operand components: {missing[:6]}"
@@ -1581,6 +1629,8 @@ def validate_cas_to_english_cross_register_omega(
             detail={
                 "stem": stem,
                 "missing_register_letters": missing_regs,
+                "unexpected_register_letters": unexpected_regs,
+                "register_count_mismatch": register_count_mismatch,
                 "missing_operand_components": missing,
                 "present_operand_components": present,
             },
