@@ -1,0 +1,1491 @@
+"""Path D Wave 3 v2 — content-preservation rewrite (2026-05-08).
+
+The phase-1 corpus at ``cas-synthetic/data/path_d/wave3_phase1_aggregate_20260508.jsonl``
+passed all four numerical anti-drift gates (leakage 0.13%, rejection 2.0%,
+chemistry 0%, level-drift 0.07%) but FAILED content-preservation audit on
+two of four slots. See:
+
+  cas-synthetic/data/path_d/wave3_phase1_aggregate_20260508.NEEDS_REWORK.md
+  docs/working/wave3_generator_codebase_map_2026_05_08.md
+  user memory: feedback_anti_drift_gates_not_content_preservation.md
+
+Defects fixed by this module:
+
+1. ``english_to_cas`` was 100% verbatim copy. The phase-1 prompt embedded
+   the source CAS as a "reference target" and asked the model not to paste
+   it. Fix: this module's ``english_to_cas`` prompt takes ONLY a
+   pre-generated English description (Wave 2.5 artifact) — there is no CAS
+   to copy. An anti-copy guard at validation time catches edge cases.
+
+2. ``invalid_to_corrected`` had ~30% unrelated-correction. Fix: the
+   corrected-expression prompt asks the model for the SMALLEST POSSIBLE
+   EDIT, includes a positive example (single-token fix) and a bad example
+   (whole-expression rewrite), and the generator runs a Jaccard guard
+   against the invalid input (rejects when <0.6, re-rolls up to 3 attempts).
+
+3. ``cas_to_english`` recipes dropped numeric coefficients. Fix: the
+   prompt explicitly requires every coefficient (e.g. ``0.7``, ``1.5``)
+   and every named ``Ω_*`` target to be reproduced verbatim in the
+   English output. A regex-based validator rejects records that drop them.
+
+4. ``cas_to_english`` fractals misread ``Φ⟨k:k:…⟩`` k-values as counts.
+   Fix: the prompt explicitly tells the model that each k is an OPERATOR
+   INDEX (0-9 selecting one of the 10 Noetics), not a count. A validator
+   requires the canonical operator name or colloquialism to appear for
+   each k.
+
+This module is **library + CLI** for the Wave 2.5 step (pre-generate
+English descriptions) and the v2 prompt builders + validators for Wave 3
+phase 2 (paid generation, run by user as a separate decision).
+
+NO API CALLS HAPPEN INSIDE THIS MODULE WITHOUT A USER-PROVIDED CLIENT.
+The validators and prompt builders are dry-run-safe and unit-testable.
+
+Per ``feedback_traceability_is_the_whole_purpose.md`` every record produced
+by this pipeline carries: ``seed_id``, ``source_cas``,
+``prompt_template_version``, ``validators_run``, ``validators_passed``,
+``validators_failed_reasons``, ``generated_at``.
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib.util
+import json
+import re
+import sys
+import uuid
+from collections import Counter
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Callable, Iterable, Optional
+
+
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
+
+PROMPT_TEMPLATE_VERSION = "wave3_v2_2026_05_08"
+WAVE_2_5_TEMPLATE_VERSION = "wave3_step2_5_v1_2026_05_08"
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+_COMPILER_PATH = (
+    _REPO_ROOT
+    / "noetic-compass-scaffold"
+    / "noetic-compass"
+    / "api"
+    / "notation"
+    / "compiler.py"
+)
+
+
+# ---------------------------------------------------------------------------
+# Canonical Noetic operator names + colloquialisms (for fractal validation
+# and the cas_to_english prompt). Map matches CLAUDE.md and
+# feedback_use_canonical_colloquialisms_as_operator_aliases.md.
+# ---------------------------------------------------------------------------
+
+NOETIC_NAMES: dict[int, str] = {
+    0: "Idea",
+    1: "Mind",
+    2: "Positive",
+    3: "Negative",
+    4: "Vibration",
+    5: "Female",
+    6: "Male",
+    7: "Rhythm",
+    8: "Above/Cause",
+    9: "Below/Effect",
+}
+
+# Lower-cased substrings to look for when validating that a fractal k-index
+# was rendered. Matching is case-insensitive and substring-based; we accept
+# either the operator name or any of its canonical colloquialisms.
+NOETIC_VALIDATION_TOKENS: dict[int, tuple[str, ...]] = {
+    0: ("idea", "thought", "in your head", "on your mind"),
+    1: ("mind", "paying attention", "using your head", "becoming aware",
+        "making up your mind"),
+    2: ("positive", "drawn to", "speaks to", "can't resist", "pulled toward"),
+    3: ("negative", "can't stomach", "rubs the wrong way",
+        "wouldn't touch", "pushed away"),
+    4: ("vibration", "hit hard", "struck a chord", "resonated",
+        "made an impression"),
+    5: ("female", "sum of", "experiences", "who one is", "shaped by",
+        "what makes someone"),
+    6: ("male", "unpacking", "breaking it down", "pulling apart",
+        "looking at what's underneath"),
+    7: ("rhythm", "practice makes perfect", "muscle memory", "in a groove",
+        "getting used to it"),
+    8: ("above", "cause", "that reminds", "triggered", "one thing leads",
+        "made me think"),
+    9: ("below", "effect", "popped into mind", "out of nowhere",
+        "it just clicked", "the thought came"),
+}
+
+
+# ---------------------------------------------------------------------------
+# Compiler loader (matches generate_path_d_wave3_smoke.py pattern).
+# ---------------------------------------------------------------------------
+
+
+def _load_compiler():
+    module_name = "cas_synthetic_path_d_wave3_v2_compiler"
+    if module_name in sys.modules:
+        return sys.modules[module_name]
+    spec = importlib.util.spec_from_file_location(module_name, _COMPILER_PATH)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"could not load compiler module from {_COMPILER_PATH}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+# ---------------------------------------------------------------------------
+# Shared anti-drift guidance (subset reused from phase 1 with light editing
+# for the v2 prompts).
+# ---------------------------------------------------------------------------
+
+
+_PLAIN_LANGUAGE_GUIDANCE_V2 = (
+    "Write a concise, plain-English description aimed at a curious adult "
+    "reader. Do NOT echo CAS notation, operator symbols, or jargon like "
+    "'noetic', 'register', 'RPM', or 'F1' in your reply EXCEPT where the "
+    "rules below explicitly require it (named Ω targets, numeric "
+    "coefficients). Describe the meaning in everyday language. Keep it "
+    "under 70 words.\n"
+    "\n"
+    "STRICT anti-drift rules:\n"
+    "- Do NOT use chemistry / physics / biology / finance metaphors. Domain "
+    "  letters (P, C, E, O) are abstract abbreviations, never elements.\n"
+    "- Do NOT invent cardinalities or counts. Quantify only what the "
+    "  expression itself quantifies.\n"
+    "- Do NOT invent intensity, strength, weight, or probability quantities. "
+    "  Reproduce coefficients faithfully when the expression has them; "
+    "  introduce no others.\n"
+    "- Stay neutral on emotional valence unless the expression explicitly "
+    "  encodes ^2 Positive or ^3 Negative.\n"
+    "- NEVER describe Noetic operators as 'levels' or 'tiers'. Noetic "
+    "  indices 0-9 are operator slots in a formal vocabulary, not a "
+    "  hierarchy."
+)
+
+
+_COLLOQUIALISM_GUIDANCE_V2 = (
+    "Approved everyday English phrasings for each Noetic operator (use only "
+    "when one fits naturally — NEVER force):\n"
+    "- ^0 Idea: 'a thought', 'something on your mind', 'it's all in your head'\n"
+    "- ^1 Mind: 'paying attention', 'using your head', 'becoming aware'\n"
+    "- ^2 Positive: 'drawn to it', 'speaks to me', 'pulled toward'\n"
+    "- ^3 Negative: \"can't stomach it\", 'rubs the wrong way', "
+    "'pushed away from'\n"
+    "- ^4 Vibration: 'hit hard', 'struck a chord', 'resonated', "
+    "'made an impression'\n"
+    "- ^5 Female: 'sum of one's experiences', 'who one is', 'shaped by'\n"
+    "- ^6 Male: 'unpacking an idea', 'breaking it down', 'pulling apart "
+    "the argument'\n"
+    "- ^7 Rhythm: 'practice makes perfect', 'muscle memory', 'in a groove'\n"
+    "- ^8 Above/Cause: 'that reminds me', 'triggered a memory', "
+    "'one thing leads to another'\n"
+    "- ^9 Below/Effect: 'popped into mind', 'out of nowhere', "
+    "'it just clicked'\n"
+    "\n"
+    "Rules:\n"
+    "- Preserve the structural relation FIRST, naturalize SECOND.\n"
+    "- Use a colloquialism only when it fits the source structure naturally. "
+    "Don't force one. Don't pile multiple together.\n"
+    "- Aliases for OPERATORS, not decoration. Each phrase makes a structural "
+    "claim; using one is a structural commitment, not flavor."
+)
+
+
+# Recipe-specific guidance: explicit coefficient + named-Ω-stem preservation.
+# Patched in v2 because phase 1's recipe outputs dropped coefficients in
+# ~83% of recipe samples. Patched again on 2026-05-08 so that the named
+# outcome STEM (e.g. ``reasoning_02``) is what surfaces in English — not
+# the full ``Ω_*`` token. The earlier rule contradicted the no-CAS-jargon
+# rule and would have trained the model to leak ``Ω_*`` tokens in plain
+# English replies.
+_RECIPE_PRESERVATION_GUIDANCE = (
+    "RECIPE-SPECIFIC RULES (this expression is a recipe — Θ(Ω_...) = ... → ...):\n"
+    "- Every numeric coefficient MUST appear in your English output as a "
+    "  digit-form number. Example: '0.7*X' must surface as 'weighted at 0.7' "
+    "  or '0.7 of X' or 'a 0.7 contribution from X' — NEVER paraphrased away "
+    "  as 'mostly' or 'a small amount' or 'partial'.\n"
+    "- If the recipe targets a named outcome (e.g. Ω_decision_47, "
+    "  Ω_reasoning_02), you MUST reference the outcome by its NAME STEM "
+    "  (the part after the Ω_ prefix — e.g. 'decision_47', 'reasoning_02') "
+    "  in your English output. Do NOT echo the 'Ω_' symbol or any other CAS "
+    "  notation. Render the name as a plain-English noun phrase: "
+    "  '\"the named outcome reasoning_02\"', 'the outcome called "
+    "  reasoning_02', 'named outcome reasoning_02', or simply quoting the "
+    "  stem 'reasoning_02' all work. The stem itself appears verbatim; the "
+    "  Ω_ prefix never does.\n"
+    "- The recipe arrow → means 'produces'. State the production explicitly: "
+    "  'these inputs produce the outcome called <stem>'.\n"
+    "- GOOD example: '0.7*^9^C|A + 1.5*^1^P|A → Ω_reasoning_50' should "
+    "  surface as: 'When reasoning weighs 0.7 of analytical thought-"
+    "emergence and 1.5 of analytical attention to a foundational principle, "
+    "  that produces the outcome called reasoning_50.' Both coefficients "
+    "  (0.7, 1.5) and the stem (reasoning_50) appear; the Ω_ prefix does "
+    "  not appear.\n"
+    "- BAD example — DO NOT do this: '...produces Ω_reasoning_50.' That "
+    "  echoes the Ω_ symbol, which is CAS notation, not English. It is a "
+    "  jargon leak and will be rejected."
+)
+
+
+# Fractal-specific guidance: k-values are operator indices, not counts.
+# Patched in v2 because phase 1's fractal outputs misread k-values as
+# counts (~60-80% of fractal samples).
+_FRACTAL_K_INDEX_GUIDANCE = (
+    "FRACTAL-SPECIFIC RULES (this expression is a fractal sequence — "
+    "Φ⟨k₁:k₂:…:kₙ⟩ or Phi<k:k:…:k>):\n"
+    "- Each k-value is an OPERATOR INDEX (an integer 0-9 selecting one of the "
+    "  10 Noetic operators). It is NOT a count of anything.\n"
+    "- DO NOT say '9 domains', '4 operations', 'a sequence of 8 stages', or "
+    "  similar count-language. Each k picks one of: 0=Idea, 1=Mind, "
+    "  2=Positive, 3=Negative, 4=Vibration, 5=Female, 6=Male, 7=Rhythm, "
+    "  8=Above/Cause, 9=Below/Effect.\n"
+    "- Render each k as the corresponding operator name OR an approved "
+    "  colloquialism for that operator (see the colloquialism map above), "
+    "  in the order they appear.\n"
+    "- The ':' inside the angle brackets is a step-separator, not an "
+    "  operator. Treat the sequence as 'first this, then that, then …'.\n"
+    "- Worked example: 'Φ⟨9:4:7⟩' should surface as: 'A thought that "
+    "  popped into mind (^9 Below/Effect) led to something that struck a "
+    "  chord (^4 Vibration), which then turned into muscle memory (^7 "
+    "  Rhythm).' Three steps, each one rendering its k-value as an "
+    "  operator. NEVER 'a sequence of three stages with operations 9, 4, "
+    "  and 7' — that drops the operator-index meaning."
+)
+
+
+# ---------------------------------------------------------------------------
+# v2 prompt builders.
+# ---------------------------------------------------------------------------
+
+
+def build_cas_to_english_prompt_v2(
+    seed: dict[str, Any],
+) -> tuple[str, str]:
+    """Build the v2 cas_to_english prompt.
+
+    The system message is unchanged in spirit. The user message conditionally
+    appends recipe / fractal preservation guidance based on the seed's
+    grammar category. Keeps the colloquialism guidance from phase 1.
+    """
+    expr = seed["expression"]
+    cat = seed.get("grammar_category", "unknown")
+    system = (
+        "You are a translator that turns formal CAS (Cognitive Architecture "
+        "System) expressions into clear English paraphrases. CAS is a formal "
+        "notation describing cognitive states and operations. Your job is to "
+        "express what an expression MEANS in plain English while preserving "
+        "every load-bearing element: numeric coefficients, named outcome "
+        "targets (Ω_*), operator-index sequences inside fractal angle "
+        "brackets, and the structural relation between elements."
+    )
+    parts = [
+        f"CAS expression (grammar category: {cat}):\n\n    {expr}\n",
+        _PLAIN_LANGUAGE_GUIDANCE_V2,
+        _COLLOQUIALISM_GUIDANCE_V2,
+    ]
+    if cat == "recipe" or "Θ" in expr or "Theta" in expr:
+        parts.append(_RECIPE_PRESERVATION_GUIDANCE)
+    if cat == "fractal_sequence" or "Φ" in expr or re.search(r"\bPhi\s*[<⟨]", expr):
+        parts.append(_FRACTAL_K_INDEX_GUIDANCE)
+    parts.append(
+        "Reply with ONLY the English paraphrase. No preamble, no list, no "
+        "explanation of CAS notation, no quotes around the answer."
+    )
+    return system, "\n\n".join(parts)
+
+
+def build_english_to_cas_prompt_v2(
+    english_description: str,
+    *,
+    grammar_category: str,
+    prior_attempt: Optional[str] = None,
+    prior_error: Optional[str] = None,
+) -> tuple[str, str]:
+    """Build the v2 english_to_cas prompt.
+
+    KEY CHANGE FROM PHASE 1: there is NO reference target and NO source CAS
+    in this prompt. The model must produce a CAS expression based ONLY on
+    the English description. The English description is generated by the
+    Wave 2.5 step from the source CAS — the model translates English back
+    to CAS without ever seeing the source.
+
+    Validation against verbatim-copy is enforced separately by
+    ``validate_anti_copy_english_to_cas``.
+    """
+    system = (
+        "You are a translator that produces compiler-valid CAS (Cognitive "
+        "Architecture System) expressions from English descriptions. CAS is a "
+        "formal notation. Your output must parse and admissibility-check via "
+        "the CAS compiler. Surface the structural relations described in the "
+        "English: state literals (^N^D|R), operators (+, ×, →, ∘), recipes "
+        "(Θ(Ω_*) = ...), fractals (Φ⟨k:k:…⟩), meta-logic (NoeticCluster, "
+        "PartitionOf, CoverOf), let-bindings, etc. The grammar category is "
+        "given as a hint — match it."
+    )
+    parts = [
+        f"Grammar category target: {grammar_category}\n",
+        f"English description to translate to CAS:\n\n    {english_description}\n",
+        (
+            "Reply with ONLY the CAS expression on a single line. No preamble, "
+            "no markdown fences, no commentary. The expression alone."
+        ),
+    ]
+    if prior_attempt is not None and prior_error is not None:
+        parts.append(
+            f"Your previous attempt was:\n\n    {prior_attempt}\n\n"
+            f"It failed compiler validation with:\n\n    {prior_error}\n\n"
+            f"Try again. Produce a corrected expression."
+        )
+    return system, "\n\n".join(parts)
+
+
+def build_invalid_to_explanation_prompt_v2(
+    invalid: dict[str, Any],
+) -> tuple[str, str]:
+    """Build the v2 invalid_to_explanation prompt.
+
+    The audit rated this slot clean (18/25 FAITHFUL, 0 major drift). Carry
+    forward the phase-1 prompt with minor language tightening.
+    """
+    expr = invalid["expression"]
+    err = invalid.get("compiler_error_message", "")
+    cls = invalid.get("error_class", "unknown")
+    system = (
+        "You are an explainer that describes why a CAS (Cognitive "
+        "Architecture System) expression is invalid. CAS is a formal notation "
+        "with a strict compiler. Your job is to say in plain English what is "
+        "wrong with a malformed expression and why a careful reader should "
+        "spot it. Stay clinical — clarity beats colloquial smoothing here."
+    )
+    user = (
+        f"Invalid CAS expression (error class: {cls}):\n\n"
+        f"    {expr}\n\n"
+        f"Compiler error message:\n\n"
+        f"    {err}\n\n"
+        f"{_PLAIN_LANGUAGE_GUIDANCE_V2}\n\n"
+        f"Explain in plain English what is wrong with the expression. Do NOT "
+        f"echo the compiler error verbatim — describe it in your own words. "
+        f"Reply with ONLY the explanation. No preamble, no markdown."
+    )
+    return system, user
+
+
+def build_invalid_to_corrected_repair_prompt_v2(
+    invalid: dict[str, Any],
+) -> tuple[str, str]:
+    """Produce the model-generated corrected expression (CAS, not English).
+
+    KEY CHANGE FROM PHASE 1: the v2 invalid_to_corrected slot has TWO
+    outputs: the corrected CAS expression (this prompt) and the English
+    narration (the next prompt). The corrected-expression prompt asks for
+    the smallest possible edit, with positive and negative worked examples.
+
+    A Jaccard guard is applied at validation time
+    (``validate_invalid_to_corrected_jaccard``).
+    """
+    expr = invalid["expression"]
+    err = invalid.get("compiler_error_message", "")
+    cls = invalid.get("error_class", "unknown")
+    system = (
+        "You are a CAS (Cognitive Architecture System) repair assistant. CAS "
+        "is a formal notation with a strict compiler. The user shows you a "
+        "malformed expression and the compiler error. Your job: produce the "
+        "SMALLEST POSSIBLE EDIT that makes the expression compiler-valid. "
+        "Replace only what is broken. Preserve every other token."
+    )
+    user = (
+        f"Invalid CAS expression (error class: {cls}):\n\n"
+        f"    {expr}\n\n"
+        f"Compiler error on the invalid form:\n\n"
+        f"    {err}\n\n"
+        f"REPAIR RULES:\n"
+        f"- Produce the smallest possible edit. The corrected expression "
+        f"  MUST share the majority of its tokens with the invalid one.\n"
+        f"- Replace, insert, or delete ONLY the broken token(s). Do not "
+        f"  rewrite, simplify, or restructure the expression.\n"
+        f"- Do not substitute a different valid expression for the broken "
+        f"  one. Repair the specific surface error.\n"
+        f"- If the error is a typo (wrong domain letter, wrong noetic "
+        f"  index, missing closing bracket, missing register, etc.), fix "
+        f"  exactly that token.\n"
+        f"\n"
+        f"GOOD EXAMPLE — minimal edit:\n"
+        f"  invalid:    ^13^E|f + ^1^E|E\n"
+        f"  error:      typecheck: operator index must be 0-9, got 13\n"
+        f"  corrected:  ^1^E|f + ^1^E|E   (changed only `^13` to `^1`)\n"
+        f"\n"
+        f"BAD EXAMPLE — DO NOT do this:\n"
+        f"  invalid:    ^13^E|f + ^1^E|E\n"
+        f"  corrected:  ^2^P + ^4^C|T → Ω_demo   (replaced the whole expression "
+        f"with a different valid one — wrong)\n"
+        f"\n"
+        f"Reply with ONLY the corrected CAS expression on a single line. No "
+        f"preamble, no markdown fences, no commentary."
+    )
+    return system, user
+
+
+def build_invalid_to_corrected_narration_prompt_v2(
+    invalid: dict[str, Any],
+    *,
+    corrected_expression: str,
+) -> tuple[str, str]:
+    """Produce the English narration of the actual minimal change.
+
+    Takes the model's corrected expression (already validated by Jaccard +
+    compiler) and asks for an English description of the specific change.
+    """
+    expr = invalid["expression"]
+    err = invalid.get("compiler_error_message", "")
+    cls = invalid.get("error_class", "unknown")
+    system = (
+        "You are a CAS (Cognitive Architecture System) repair narrator. The "
+        "user shows you a malformed expression, the compiler error, and the "
+        "specific corrected form. Your job: describe the FIX in plain "
+        "English — what was wrong, what specific change makes it valid. "
+        "Reference the actual minimal change, not a generic 'replaced with a "
+        "self-contained expression' phrasing."
+    )
+    user = (
+        f"Invalid CAS expression (error class: {cls}):\n\n"
+        f"    {expr}\n\n"
+        f"Corrected expression (the minimal-edit valid form):\n\n"
+        f"    {corrected_expression}\n\n"
+        f"Compiler error on the invalid form:\n\n"
+        f"    {err}\n\n"
+        f"{_PLAIN_LANGUAGE_GUIDANCE_V2}\n\n"
+        f"Describe the repair in plain English. Be specific about what "
+        f"single change was made. Examples of good narration phrasing:\n"
+        f"- 'Changed the operator index from 13 to 1 — only single digits "
+        f"  0 through 9 are valid.'\n"
+        f"- 'Added the missing domain letter after the second caret.'\n"
+        f"- 'Replaced the comma with the colon separator the fractal sequence "
+        f"  requires.'\n"
+        f"\n"
+        f"DO NOT use generic language like 'the fix replaces the whole "
+        f"construct with a self-contained expression' — that phrasing came "
+        f"from the audit's failure cases. Name the specific token or "
+        f"surface element that changed.\n"
+        f"\n"
+        f"Reply with ONLY the description. No preamble, no markdown."
+    )
+    return system, user
+
+
+# ---------------------------------------------------------------------------
+# Validators
+# ---------------------------------------------------------------------------
+
+
+# Match `<digit(s)>.<digit(s)> *` or `<digit(s)> *` immediately followed by
+# `*` (the recipe coefficient marker). Anchored to the recipe shape:
+# `<coeff>*<primitive>` where `<coeff>` is a positive number.
+_RE_RECIPE_COEFFICIENT = re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*\*")
+_RE_OMEGA_NAMED = re.compile(r"Ω_([A-Za-z][A-Za-z0-9_]*)")
+_RE_OMEGA_PREFIX_LEAK = re.compile(r"Ω_[A-Za-z]")
+_RE_FRACTAL_BODY = re.compile(r"(?:Φ|Phi)\s*[⟨<]\s*([0-9:\s]+?)\s*[⟩>]")
+
+
+def _tokenize_for_jaccard(s: str) -> set[str]:
+    """Tokenize a CAS expression for word-level Jaccard comparison.
+
+    Split on whitespace and a small punctuation set. Preserves operator
+    tokens like `+`, `→`, `×`, `=` as their own tokens. Used by tests that
+    inspect word-level token overlap; the production Jaccard guard
+    (``validate_invalid_to_corrected_jaccard``) uses character n-gram
+    Jaccard via ``_char_ngrams`` because word-level Jaccard penalizes
+    legitimate single-character fixes (e.g. `^13` → `^1`) too heavily.
+    """
+    if not s:
+        return set()
+    # Insert spaces around structural punctuation so `^3^P|A+^4^P|A` becomes
+    # `^3^P|A + ^4^P|A` for split.
+    spaced = re.sub(r"([+×→=∘\(\)\{\}⟨⟩<>;,])", r" \1 ", s)
+    spaced = re.sub(r"->", " → ", spaced)
+    parts = [t for t in spaced.split() if t]
+    return set(parts)
+
+
+def _char_ngrams(s: str, n: int = 3) -> set[str]:
+    """Character n-gram set for fuzzy minimal-edit Jaccard.
+
+    Whitespace-collapsed; n-grams are over the raw string. Used by
+    ``validate_invalid_to_corrected_jaccard`` because single-character
+    fixes (operator-index 13 → 1, missing closing bracket, missing domain
+    letter) preserve most n-grams while differing on one or two tokens.
+    A whole-expression rewrite shares almost no n-grams with the invalid
+    one and is correctly flagged.
+    """
+    if not s:
+        return set()
+    s = re.sub(r"\s+", " ", s.strip())
+    if len(s) < n:
+        return {s}
+    return {s[i : i + n] for i in range(len(s) - n + 1)}
+
+
+def jaccard(a: set[str], b: set[str]) -> float:
+    if not a and not b:
+        return 1.0
+    union = a | b
+    if not union:
+        return 1.0
+    return len(a & b) / len(union)
+
+
+@dataclass
+class ValidatorResult:
+    name: str
+    passed: bool
+    reason: Optional[str] = None
+    detail: dict[str, Any] = field(default_factory=dict)
+
+
+def validate_cas_to_english_recipe_preservation(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> ValidatorResult:
+    """Recipe slot only — every numeric coefficient and named-Ω-target STEM
+    must surface in the English output, and the ``Ω_`` prefix must NOT
+    appear in the English output.
+
+    Stems: ``Ω_reasoning_02`` -> stem ``reasoning_02``. The English output
+    must reference the stem (verbatim, possibly within a quoting / naming
+    phrase like 'the outcome called reasoning_02') without echoing the
+    ``Ω_`` symbol. Echoing ``Ω_`` is CAS notation leakage and is rejected.
+
+    Skipped (returns passed=True) when the source CAS has no recipe shape
+    (no coefficients AND no named Ω targets).
+
+    Patched 2026-05-08 to fix the original verbatim-Ω rule, which
+    contradicted the no-CAS-jargon rule and would have trained the model
+    to leak Ω_* tokens in plain English replies.
+    """
+    coefficients = _RE_RECIPE_COEFFICIENT.findall(source_cas)
+    omega_stems = _RE_OMEGA_NAMED.findall(source_cas)
+    if not coefficients and not omega_stems:
+        return ValidatorResult(
+            name="cas_to_english_recipe_preservation",
+            passed=True,
+            reason="not a recipe — validator skipped",
+            detail={"coefficients_found": [], "omega_stems_found": []},
+        )
+    missing_coefficients: list[str] = []
+    for c in coefficients:
+        # Look for the coefficient as a digit-form number, possibly with
+        # leading/trailing word boundaries. We accept `0.7`, `0.70`, `.7`
+        # all as the same value to be tolerant.
+        if c not in english_output:
+            # Also try without leading-zero variants.
+            try:
+                f = float(c)
+            except ValueError:
+                missing_coefficients.append(c)
+                continue
+            # Try canonical forms.
+            forms = {c, f"{f:g}", f"{f:.1f}", f"{f:.2f}"}
+            if not any(form in english_output for form in forms):
+                missing_coefficients.append(c)
+    missing_stems: list[str] = []
+    for stem in omega_stems:
+        if stem not in english_output:
+            missing_stems.append(stem)
+    # Anti-leak guard: the Ω_ prefix must not appear in the English output.
+    omega_leak_hits = _RE_OMEGA_PREFIX_LEAK.findall(english_output)
+    if missing_coefficients or missing_stems or omega_leak_hits:
+        reasons = []
+        if missing_coefficients:
+            reasons.append(
+                f"missing coefficients: {missing_coefficients}"
+            )
+        if missing_stems:
+            reasons.append(
+                f"missing named Ω target stems: {missing_stems}"
+            )
+        if omega_leak_hits:
+            reasons.append(
+                f"Ω_ prefix leaked into English output: {omega_leak_hits}"
+            )
+        return ValidatorResult(
+            name="cas_to_english_recipe_preservation",
+            passed=False,
+            reason="; ".join(reasons),
+            detail={
+                "coefficients_found": coefficients,
+                "omega_stems_found": omega_stems,
+                "missing_coefficients": missing_coefficients,
+                "missing_omega_stems": missing_stems,
+                "omega_prefix_leaks": omega_leak_hits,
+            },
+        )
+    return ValidatorResult(
+        name="cas_to_english_recipe_preservation",
+        passed=True,
+        detail={
+            "coefficients_found": coefficients,
+            "omega_stems_found": omega_stems,
+        },
+    )
+
+
+def validate_cas_to_english_fractal_k_indices(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> ValidatorResult:
+    """Fractal slot only — for each k-value in `Φ⟨k:k:…⟩`, the corresponding
+    operator name OR a canonical colloquialism for that operator must appear
+    in the English output.
+
+    Also rejects count-misread phrasings like 'sequence of N stages' /
+    'N domains' / 'N operations' where N matches one of the k-values.
+
+    Skipped (passed=True) when the source CAS has no fractal shape.
+    """
+    body_match = _RE_FRACTAL_BODY.search(source_cas)
+    if not body_match:
+        return ValidatorResult(
+            name="cas_to_english_fractal_k_indices",
+            passed=True,
+            reason="not a fractal — validator skipped",
+        )
+    body = body_match.group(1)
+    try:
+        k_values = [int(s.strip()) for s in body.split(":") if s.strip()]
+    except ValueError:
+        return ValidatorResult(
+            name="cas_to_english_fractal_k_indices",
+            passed=False,
+            reason=f"could not parse k-values from fractal body: {body!r}",
+        )
+    if not k_values:
+        return ValidatorResult(
+            name="cas_to_english_fractal_k_indices",
+            passed=False,
+            reason="empty k-value list",
+        )
+    out_lower = english_output.lower()
+    # Light morphological normalization — strip 's' suffix on the last
+    # word of multi-word tokens to catch "hits hard" matching "hit hard".
+    # Keep this conservative; we still prefer a literal substring hit.
+    out_normalized_singular = re.sub(r"(\w+)s\b", r"\1", out_lower)
+    missing_ks: list[int] = []
+    for k in k_values:
+        if k not in NOETIC_VALIDATION_TOKENS:
+            # Out-of-range k — the source is malformed; flag.
+            missing_ks.append(k)
+            continue
+        tokens = NOETIC_VALIDATION_TOKENS[k]
+        matched = any(
+            tok in out_lower or tok in out_normalized_singular
+            for tok in tokens
+        )
+        if not matched:
+            missing_ks.append(k)
+    # Count-misread heuristic — "N domains", "N stages", "N operations",
+    # "sequence of N" patterns where N is in the k-values list.
+    count_misread_patterns = []
+    for k in k_values:
+        for noun in ("domains", "stages", "operations", "pathways", "steps", "elements"):
+            pat = re.compile(rf"\b{k}\s+{noun}\b", re.IGNORECASE)
+            if pat.search(english_output):
+                count_misread_patterns.append(f"{k} {noun}")
+        seq_pat = re.compile(rf"sequence\s+of\s+{len(k_values)}\b", re.IGNORECASE)
+        # only check seq once
+    seq_pat = re.compile(rf"sequence\s+of\s+{len(k_values)}\b", re.IGNORECASE)
+    if seq_pat.search(english_output):
+        count_misread_patterns.append(f"sequence of {len(k_values)}")
+    if missing_ks or count_misread_patterns:
+        reasons = []
+        if missing_ks:
+            reasons.append(
+                f"k-values not rendered as operators: {missing_ks}"
+            )
+        if count_misread_patterns:
+            reasons.append(
+                f"count-misread patterns detected: {count_misread_patterns}"
+            )
+        return ValidatorResult(
+            name="cas_to_english_fractal_k_indices",
+            passed=False,
+            reason="; ".join(reasons),
+            detail={
+                "k_values": k_values,
+                "missing_ks": missing_ks,
+                "count_misread_patterns": count_misread_patterns,
+            },
+        )
+    return ValidatorResult(
+        name="cas_to_english_fractal_k_indices",
+        passed=True,
+        detail={"k_values": k_values},
+    )
+
+
+def validate_anti_copy_english_to_cas(
+    *,
+    prompt_text: str,
+    generated_cas: str,
+) -> ValidatorResult:
+    """Reject when the generated CAS is byte-equal to any non-trivial
+    contiguous substring of the prompt.
+
+    Defense in depth: the v2 prompt redesign already removes the source CAS
+    from the english_to_cas prompt. This validator catches edge cases where
+    the prompt's English description accidentally contains a verbatim CAS
+    fragment that the model could echo.
+    """
+    if not generated_cas or not generated_cas.strip():
+        return ValidatorResult(
+            name="anti_copy_english_to_cas",
+            passed=False,
+            reason="empty generated CAS",
+        )
+    candidate = generated_cas.strip()
+    # Allow short outputs (fewer than 4 characters) without copy check —
+    # those are too generic to fingerprint.
+    if len(candidate) < 4:
+        return ValidatorResult(
+            name="anti_copy_english_to_cas",
+            passed=True,
+            detail={"reason": "candidate too short for copy detection"},
+        )
+    if candidate in prompt_text:
+        return ValidatorResult(
+            name="anti_copy_english_to_cas",
+            passed=False,
+            reason=(
+                f"generated CAS is a verbatim substring of the prompt — "
+                f"copy detected"
+            ),
+            detail={"candidate_length": len(candidate)},
+        )
+    return ValidatorResult(
+        name="anti_copy_english_to_cas",
+        passed=True,
+        detail={"candidate_length": len(candidate)},
+    )
+
+
+# Token regexes used by validate_english_to_cas_structural_match. These are
+# token-level extractors over a CAS expression — no AST dependency. They
+# capture state literals (with optional ``_{Fk}`` and ``|R``), numeric
+# coefficients, ``Ω_<name>`` targets, and the operator surface set.
+_RE_STATE_LITERAL = re.compile(
+    r"\^(\d+)\^([A-Za-z])"           # ^N^D
+    r"(?:_\{(F\d+)\})?"              # optional _{Fk}
+    r"(?:\|([A-Za-z]|⟨[^⟩]+⟩))?"     # optional |R or |⟨R1,R2,…⟩
+)
+_RE_COEFFICIENT_TOKEN = re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*\*")
+# Operator surface: capture the structural / glue symbols. Each is a single
+# token. The set Jaccard over these is the operator-structure check.
+_OPERATOR_TOKENS = ("+", "×", "→", "->", "Λ", "Θ", "∘", "=")
+
+
+def _extract_state_literal_set(s: str) -> Counter:
+    """Multiset of state-literal tokens normalized for comparison.
+
+    Each token is rendered as ``^N^D[_{Fk}][|R]`` after capture.
+    """
+    bag: Counter = Counter()
+    for m in _RE_STATE_LITERAL.finditer(s):
+        n, d, drive, reg = m.group(1), m.group(2), m.group(3), m.group(4)
+        tok = f"^{n}^{d}"
+        if drive:
+            tok += f"_{{{drive}}}"
+        if reg:
+            tok += f"|{reg}"
+        bag[tok] += 1
+    return bag
+
+
+def _extract_coefficient_set(s: str) -> Counter:
+    bag: Counter = Counter()
+    for c in _RE_COEFFICIENT_TOKEN.findall(s):
+        # Normalize: float-canonical so "0.7" and "0.70" compare equal.
+        try:
+            bag[f"{float(c):g}"] += 1
+        except ValueError:
+            bag[c] += 1
+    return bag
+
+
+def _extract_omega_set(s: str) -> set[str]:
+    return set(_RE_OMEGA_NAMED.findall(s))
+
+
+def _extract_operator_token_set(s: str) -> set[str]:
+    present: set[str] = set()
+    for op in _OPERATOR_TOKENS:
+        if op in s:
+            present.add(op)
+    # Fold the ASCII '->' alias into '→' for Jaccard purposes — they are
+    # the same operator.
+    if "->" in present:
+        present.discard("->")
+        present.add("→")
+    return present
+
+
+def validate_english_to_cas_structural_match(
+    *,
+    source_cas: str,
+    generated_cas: str,
+    operator_jaccard_threshold: float = 0.7,
+) -> ValidatorResult:
+    """Structural-equivalence check between hidden source CAS and the
+    model-generated CAS.
+
+    Necessary because the v2 ``english_to_cas`` prompt does NOT show the
+    source CAS — the validator must catch outputs that compile cleanly
+    while being structurally wrong relative to the hidden source.
+
+    Token-level (no AST dependency). Checks four dimensions:
+
+      * ``state_literal_drift`` — multiset of ``^N^D[_{Fk}][|R]`` tokens
+        must be equal between source and generated.
+      * ``coefficient_mismatch`` — multiset of recipe coefficients
+        (float-canonicalized) must be equal.
+      * ``omega_target_mismatch`` — set of ``Ω_<name>`` tokens must be
+        equal.
+      * ``operator_structure_mismatch`` — Jaccard over the operator-token
+        surface (`+`, `×`, `→`, `Λ`, `Θ`, `∘`, `=`) must be ≥
+        ``operator_jaccard_threshold``.
+
+    Pass = all four dimensions match. Fail = report the diverged
+    dimension(s) in the result reason / detail for traceability.
+
+    Reordering is tolerated by design: the state-literal and coefficient
+    checks are MULTISET equality, and Ω is a set, so ``A + B`` and
+    ``B + A`` both pass.
+    """
+    source_states = _extract_state_literal_set(source_cas)
+    gen_states = _extract_state_literal_set(generated_cas)
+    source_coefs = _extract_coefficient_set(source_cas)
+    gen_coefs = _extract_coefficient_set(generated_cas)
+    source_omegas = _extract_omega_set(source_cas)
+    gen_omegas = _extract_omega_set(generated_cas)
+    source_ops = _extract_operator_token_set(source_cas)
+    gen_ops = _extract_operator_token_set(generated_cas)
+    op_j = jaccard(source_ops, gen_ops)
+
+    diverged: list[str] = []
+    detail: dict[str, Any] = {
+        "source_state_literals": dict(source_states),
+        "generated_state_literals": dict(gen_states),
+        "source_coefficients": dict(source_coefs),
+        "generated_coefficients": dict(gen_coefs),
+        "source_omegas": sorted(source_omegas),
+        "generated_omegas": sorted(gen_omegas),
+        "source_operators": sorted(source_ops),
+        "generated_operators": sorted(gen_ops),
+        "operator_jaccard": round(op_j, 4),
+        "operator_jaccard_threshold": operator_jaccard_threshold,
+    }
+    if source_states != gen_states:
+        missing = source_states - gen_states
+        extra = gen_states - source_states
+        diverged.append(
+            "state_literal_drift "
+            f"(missing={dict(missing)} extra={dict(extra)})"
+        )
+    if source_coefs != gen_coefs:
+        missing_c = source_coefs - gen_coefs
+        extra_c = gen_coefs - source_coefs
+        diverged.append(
+            "coefficient_mismatch "
+            f"(missing={dict(missing_c)} extra={dict(extra_c)})"
+        )
+    if source_omegas != gen_omegas:
+        diverged.append(
+            "omega_target_mismatch "
+            f"(missing={sorted(source_omegas - gen_omegas)} "
+            f"extra={sorted(gen_omegas - source_omegas)})"
+        )
+    if op_j < operator_jaccard_threshold:
+        diverged.append(
+            f"operator_structure_mismatch (jaccard={op_j:.3f} "
+            f"< threshold={operator_jaccard_threshold})"
+        )
+    if diverged:
+        return ValidatorResult(
+            name="english_to_cas_structural_match",
+            passed=False,
+            reason="; ".join(diverged),
+            detail=detail,
+        )
+    return ValidatorResult(
+        name="english_to_cas_structural_match",
+        passed=True,
+        detail=detail,
+    )
+
+
+def validate_invalid_to_corrected_jaccard(
+    *,
+    invalid_expression: str,
+    corrected_expression: str,
+    threshold: float = 0.6,
+    short_string_edit_distance_floor: int = 4,
+) -> ValidatorResult:
+    """Reject when the corrected expression diverges too much from the
+    invalid one.
+
+    Decision logic (in order):
+      1. If both inputs are SHORT (< 12 chars), use character-level
+         Levenshtein-style edit distance as the metric: pass when the
+         number of differing characters is at most
+         ``short_string_edit_distance_floor`` AND the longer string is at
+         most 1.5× the shorter (catches insertion of small substring vs
+         replacement of whole expression).
+      2. Otherwise use char-3gram Jaccard with ``threshold``.
+
+    Why two-mode: a legitimate minimal edit like `Phi<6 2` -> `Phi<6:2>`
+    is a single-character insertion on a 7-character string. Char-3gram
+    Jaccard on such a short string measures ~0.4 because the local
+    context shifts most of its trigrams — well below the 0.6 threshold,
+    even though the change is structurally minimal. Edit distance is a
+    better metric for short strings.
+
+    Catches the audit's ~30% unrelated-correction failure mode without
+    over-rejecting legitimate single-character fixes on short inputs.
+    """
+    inv_len = len(invalid_expression or "")
+    cor_len = len(corrected_expression or "")
+    if inv_len < 12 and cor_len < 12:
+        # Short-string mode — edit distance + length-ratio sanity.
+        edit = _levenshtein(invalid_expression, corrected_expression)
+        longer = max(inv_len, cor_len)
+        shorter = max(1, min(inv_len, cor_len))
+        ratio = longer / shorter
+        if edit <= short_string_edit_distance_floor and ratio <= 1.5:
+            return ValidatorResult(
+                name="invalid_to_corrected_jaccard",
+                passed=True,
+                detail={
+                    "metric": "edit_distance",
+                    "edit_distance": edit,
+                    "ratio": round(ratio, 3),
+                    "edit_floor": short_string_edit_distance_floor,
+                },
+            )
+        return ValidatorResult(
+            name="invalid_to_corrected_jaccard",
+            passed=False,
+            reason=(
+                f"short-string edit distance {edit} > floor "
+                f"{short_string_edit_distance_floor} or length ratio "
+                f"{ratio:.2f} > 1.5 — corrected expression diverges too "
+                f"much from invalid"
+            ),
+            detail={
+                "metric": "edit_distance",
+                "edit_distance": edit,
+                "ratio": round(ratio, 3),
+                "edit_floor": short_string_edit_distance_floor,
+            },
+        )
+    a = _char_ngrams(invalid_expression, n=3)
+    b = _char_ngrams(corrected_expression, n=3)
+    j = jaccard(a, b)
+    if j < threshold:
+        return ValidatorResult(
+            name="invalid_to_corrected_jaccard",
+            passed=False,
+            reason=(
+                f"char-3gram Jaccard {j:.3f} < threshold {threshold} — "
+                f"corrected expression diverges too much from invalid"
+            ),
+            detail={
+                "metric": "char3gram_jaccard",
+                "jaccard": round(j, 4),
+                "threshold": threshold,
+                "invalid_ngrams": len(a),
+                "corrected_ngrams": len(b),
+            },
+        )
+    return ValidatorResult(
+        name="invalid_to_corrected_jaccard",
+        passed=True,
+        detail={
+            "metric": "char3gram_jaccard",
+            "jaccard": round(j, 4),
+            "threshold": threshold,
+        },
+    )
+
+
+def _levenshtein(a: str, b: str) -> int:
+    """Standard Levenshtein edit distance (insert/delete/substitute = 1)."""
+    if a == b:
+        return 0
+    if not a:
+        return len(b)
+    if not b:
+        return len(a)
+    # Two-row DP, len(a)+1 wide.
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, start=1):
+        curr = [i] + [0] * len(b)
+        for j, cb in enumerate(b, start=1):
+            cost = 0 if ca == cb else 1
+            curr[j] = min(
+                curr[j - 1] + 1,        # insertion
+                prev[j] + 1,            # deletion
+                prev[j - 1] + cost,     # substitution
+            )
+        prev = curr
+    return prev[-1]
+
+
+def validate_invalid_to_corrected_compiles(
+    *,
+    corrected_expression: str,
+    compile_expression: Callable[[str], Any],
+) -> ValidatorResult:
+    """Reject when the corrected expression does not compile."""
+    try:
+        artifact = compile_expression(corrected_expression)
+        valid = bool(getattr(artifact, "valid", False))
+        if valid:
+            return ValidatorResult(
+                name="invalid_to_corrected_compiles",
+                passed=True,
+            )
+        err = getattr(artifact, "error", None) or "compiler returned valid=False"
+        return ValidatorResult(
+            name="invalid_to_corrected_compiles",
+            passed=False,
+            reason=f"compiler rejected: {err}",
+        )
+    except Exception as exc:  # noqa: BLE001
+        return ValidatorResult(
+            name="invalid_to_corrected_compiles",
+            passed=False,
+            reason=f"compiler raised: {type(exc).__name__}: {exc}",
+        )
+
+
+# ---------------------------------------------------------------------------
+# Wave 2.5 step — pre-generate English descriptions from seed CAS
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class Wave2_5Record:
+    """Per-record schema for the Wave 2.5 artifact.
+
+    This artifact is the bridge between phase-1 cas_to_english and phase-2
+    english_to_cas. The english_description here is the input the
+    english_to_cas v2 prompt translates back to CAS.
+    """
+
+    seed_id: str
+    source_cas: str
+    grammar_category: str
+    english_description: str
+    prompt_template_version: str
+    validators_run: list[str]
+    validators_passed: list[str]
+    validators_failed_reasons: dict[str, str]
+    model_used: str
+    raw_response: str
+    input_tokens: int
+    output_tokens: int
+    estimated_cost_usd: float
+    generated_at: str
+
+    def to_record(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+def run_validators_for_cas_to_english(
+    *,
+    seed: dict[str, Any],
+    english_output: str,
+) -> list[ValidatorResult]:
+    """Run the cas_to_english content-preservation validators on a record.
+
+    Returns the list of ValidatorResults; empty list means no validators
+    were applicable (e.g., a state_literal seed bypasses both recipe and
+    fractal checks).
+    """
+    expr = seed["expression"]
+    cat = seed.get("grammar_category", "unknown")
+    results: list[ValidatorResult] = []
+    if cat == "recipe" or "Θ" in expr or "Theta" in expr:
+        results.append(
+            validate_cas_to_english_recipe_preservation(
+                source_cas=expr, english_output=english_output
+            )
+        )
+    if cat == "fractal_sequence" or "Φ" in expr or re.search(r"\bPhi\s*[<⟨]", expr):
+        results.append(
+            validate_cas_to_english_fractal_k_indices(
+                source_cas=expr, english_output=english_output
+            )
+        )
+    return results
+
+
+def run_validators_for_english_to_cas(
+    *,
+    prompt_text: str,
+    generated_cas: str,
+    source_cas: Optional[str] = None,
+    compile_expression: Optional[Callable[[str], Any]] = None,
+    operator_jaccard_threshold: float = 0.7,
+) -> list[ValidatorResult]:
+    """Run the english_to_cas content-preservation + compile validators.
+
+    When ``source_cas`` is provided (the hidden source CAS that was used
+    to produce the English description in the Wave 2.5 step), the
+    structural-match validator runs in addition to the verbatim-copy
+    guard. This catches outputs that compile cleanly but are structurally
+    wrong relative to the hidden source — the failure mode the
+    verbatim-copy guard alone cannot catch.
+    """
+    results: list[ValidatorResult] = [
+        validate_anti_copy_english_to_cas(
+            prompt_text=prompt_text, generated_cas=generated_cas
+        )
+    ]
+    if source_cas is not None:
+        results.append(
+            validate_english_to_cas_structural_match(
+                source_cas=source_cas,
+                generated_cas=generated_cas,
+                operator_jaccard_threshold=operator_jaccard_threshold,
+            )
+        )
+    if compile_expression is not None:
+        results.append(
+            validate_invalid_to_corrected_compiles(
+                corrected_expression=generated_cas,
+                compile_expression=compile_expression,
+            )
+        )
+    return results
+
+
+def run_validators_for_invalid_to_corrected(
+    *,
+    invalid_expression: str,
+    corrected_expression: str,
+    compile_expression: Optional[Callable[[str], Any]] = None,
+    jaccard_threshold: float = 0.6,
+) -> list[ValidatorResult]:
+    """Run the invalid_to_corrected content-preservation + compile validators."""
+    results: list[ValidatorResult] = [
+        validate_invalid_to_corrected_jaccard(
+            invalid_expression=invalid_expression,
+            corrected_expression=corrected_expression,
+            threshold=jaccard_threshold,
+        )
+    ]
+    if compile_expression is not None:
+        results.append(
+            validate_invalid_to_corrected_compiles(
+                corrected_expression=corrected_expression,
+                compile_expression=compile_expression,
+            )
+        )
+    return results
+
+
+# ---------------------------------------------------------------------------
+# Helpers shared with phase-1 pipeline (re-imported when used as a module)
+# ---------------------------------------------------------------------------
+
+
+def _now_utc_iso() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _timestamp_slug() -> str:
+    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+
+def parse_cas_from_response(text: str) -> str:
+    """Strip markdown fences / preambles around a CAS expression.
+
+    Re-implemented locally to keep the v2 module self-contained.
+    """
+    if not text:
+        return ""
+    s = text.strip()
+    fence_re = re.compile(r"```[a-zA-Z0-9_-]*\n?(.*?)```", re.DOTALL)
+    m = fence_re.search(s)
+    if m:
+        s = m.group(1).strip()
+    s = re.sub(r"^(?:CAS|Expression|Output|Answer)\s*:\s*", "", s, flags=re.IGNORECASE)
+    for line in s.splitlines():
+        line = line.strip()
+        if line:
+            return line
+    return s
+
+
+def load_jsonl(path: Path) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    with path.open("r", encoding="utf-8") as fp:
+        for line in fp:
+            line = line.strip()
+            if not line:
+                continue
+            out.append(json.loads(line))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Wave 2.5 dry-run scaffold (no API calls).
+#
+# The full Wave 2.5 step (with API calls) will live in
+# ``cas-synthetic/scripts/generate_wave3_step2_5_english_descriptions.py``
+# which imports from this module. This function is the dry-run-safe core
+# loop: caller supplies a ``model_callable`` that takes ``(system, user)``
+# and returns ``(text, input_tokens, output_tokens)``. For dry runs the
+# caller passes a function that returns deterministic fixture text.
+# ---------------------------------------------------------------------------
+
+
+def wave2_5_iterate(
+    seeds: Iterable[dict[str, Any]],
+    *,
+    model_callable: Callable[[str, str], tuple[str, int, int]],
+    model_name: str,
+    cost_per_in_token: float,
+    cost_per_out_token: float,
+    accept_writer: Callable[[Wave2_5Record], None],
+    reject_writer: Callable[[dict[str, Any]], None],
+) -> dict[str, int]:
+    """Generate English descriptions for a sequence of seeds.
+
+    Pure function modulo the writer callbacks. No API calls happen here —
+    the caller supplies ``model_callable``. Validators are applied to each
+    output; rejected records go to ``reject_writer`` with the failure
+    reason. Returns aggregate counts.
+    """
+    counts = {"accepted": 0, "rejected": 0, "errored": 0}
+    for seed in seeds:
+        try:
+            system, user = build_cas_to_english_prompt_v2(seed)
+            text, in_tok, out_tok = model_callable(system, user)
+            if not text:
+                counts["errored"] += 1
+                reject_writer({
+                    "seed_id": seed.get("seed_id", "unknown"),
+                    "source_cas": seed["expression"],
+                    "reason": "empty model response",
+                    "validators_run": [],
+                    "validators_failed_reasons": {},
+                })
+                continue
+            results = run_validators_for_cas_to_english(
+                seed=seed, english_output=text
+            )
+            failed = [r for r in results if not r.passed]
+            if failed:
+                counts["rejected"] += 1
+                reject_writer({
+                    "seed_id": seed.get("seed_id", "unknown"),
+                    "source_cas": seed["expression"],
+                    "reason": "; ".join(r.reason or "unknown" for r in failed),
+                    "validators_run": [r.name for r in results],
+                    "validators_failed_reasons": {
+                        r.name: (r.reason or "unspecified") for r in failed
+                    },
+                    "english_output": text,
+                })
+                continue
+            cost = (in_tok * cost_per_in_token) + (out_tok * cost_per_out_token)
+            rec = Wave2_5Record(
+                seed_id=seed.get("seed_id", f"unknown_{uuid.uuid4().hex[:8]}"),
+                source_cas=seed["expression"],
+                grammar_category=seed.get("grammar_category", "unknown"),
+                english_description=text,
+                prompt_template_version=WAVE_2_5_TEMPLATE_VERSION,
+                validators_run=[r.name for r in results],
+                validators_passed=[r.name for r in results if r.passed],
+                validators_failed_reasons={},
+                model_used=model_name,
+                raw_response=text,
+                input_tokens=in_tok,
+                output_tokens=out_tok,
+                estimated_cost_usd=round(cost, 6),
+                generated_at=_now_utc_iso(),
+            )
+            accept_writer(rec)
+            counts["accepted"] += 1
+        except Exception as exc:  # noqa: BLE001
+            counts["errored"] += 1
+            reject_writer({
+                "seed_id": seed.get("seed_id", "unknown"),
+                "source_cas": seed.get("expression", ""),
+                "reason": f"exception: {type(exc).__name__}: {exc}",
+                "validators_run": [],
+                "validators_failed_reasons": {},
+            })
+    return counts
+
+
+# ---------------------------------------------------------------------------
+# CLI entrypoint (dry-run only — paid generation is launched separately).
+# ---------------------------------------------------------------------------
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    p = argparse.ArgumentParser(
+        description=(
+            "Path D Wave 3 v2 — content-preservation rewrite. "
+            "Library + CLI for Wave 2.5 (pre-generate English) and the "
+            "v2 prompt builders / validators. Dry-run only by default."
+        )
+    )
+    p.add_argument(
+        "--demo-validators",
+        action="store_true",
+        help=(
+            "Run the validators on hand-constructed example outputs and "
+            "print accept/reject results. No API calls. Good for unit-style "
+            "smoke."
+        ),
+    )
+    return p.parse_args(argv)
+
+
+def _demo_validators() -> int:
+    """Print validator behavior on hand-constructed examples."""
+    print("=== validate_cas_to_english_recipe_preservation ===")
+    cases = [
+        # (label, source_cas, english_output, expected_pass)
+        (
+            "good — coefficients + Ω stem present",
+            "Θ(Ω_reasoning_02) = 1.5*^6^E + 1.5*^6^P|T → Ω_reasoning_02",
+            "When 1.5 of unpacking in evaluative judgment combines with "
+            "1.5 of unpacking principled foundations, the production yields "
+            "the outcome called reasoning_02.",
+            True,
+        ),
+        (
+            "bad — coefficients dropped",
+            "Θ(Ω_reasoning_02) = 1.5*^6^E + 1.5*^6^P|T → Ω_reasoning_02",
+            "Breaking down evaluative judgment combines with breaking down "
+            "principled foundations to produce reasoning.",
+            False,
+        ),
+        (
+            "bad — Ω_ prefix leaked into English",
+            "Θ(Ω_reasoning_02) = 1.5*^6^E + 1.5*^6^P|T → Ω_reasoning_02",
+            "1.5 of evaluative unpacking and 1.5 of principled unpacking "
+            "produce Ω_reasoning_02.",
+            False,
+        ),
+        (
+            "skip — not a recipe",
+            "^3^P|A + ^4^E|f",
+            "Principled aversion mixes with evaluative resonance.",
+            True,
+        ),
+    ]
+    for label, src, eng, exp in cases:
+        r = validate_cas_to_english_recipe_preservation(
+            source_cas=src, english_output=eng
+        )
+        ok = (r.passed == exp)
+        print(f"  [{'OK' if ok else 'FAIL'}] {label} -> passed={r.passed}, reason={r.reason}")
+    print()
+    print("=== validate_cas_to_english_fractal_k_indices ===")
+    cases = [
+        (
+            "good — operator names present",
+            "Φ⟨9:4:7⟩",
+            "A thought popped into mind, then struck a chord, then became "
+            "muscle memory.",
+            True,
+        ),
+        (
+            "bad — count misread",
+            "Φ⟨2:9:6:7:8:9:2:5⟩",
+            "A sequence of 8 stages moving through the operations 2, 9, 6, "
+            "7, 8, 9, 2, 5.",
+            False,
+        ),
+    ]
+    for label, src, eng, exp in cases:
+        r = validate_cas_to_english_fractal_k_indices(
+            source_cas=src, english_output=eng
+        )
+        ok = (r.passed == exp)
+        print(f"  [{'OK' if ok else 'FAIL'}] {label} -> passed={r.passed}, reason={r.reason}")
+    print()
+    print("=== validate_invalid_to_corrected_jaccard ===")
+    cases = [
+        (
+            "good — minimal edit",
+            "^13^E|f + ^1^E|E",
+            "^1^E|f + ^1^E|E",
+            True,
+        ),
+        (
+            "bad — whole-expression rewrite",
+            "^13^E|f + ^1^E|E",
+            "^2^P + ^4^C|T → Ω_demo",
+            False,
+        ),
+    ]
+    for label, inv, cor, exp in cases:
+        r = validate_invalid_to_corrected_jaccard(
+            invalid_expression=inv, corrected_expression=cor
+        )
+        ok = (r.passed == exp)
+        print(f"  [{'OK' if ok else 'FAIL'}] {label} -> passed={r.passed}, reason={r.reason}")
+    print()
+    print("=== validate_anti_copy_english_to_cas ===")
+    cases = [
+        (
+            "good — independent generation",
+            "Translate to CAS: a thought drawn toward foundations.",
+            "^0 ∘ ^2^P",
+            True,
+        ),
+        (
+            "bad — verbatim copy of prompt fragment",
+            "reference target: ^0^P|A + ^0^P|T (do not paste verbatim)",
+            "^0^P|A + ^0^P|T",
+            False,
+        ),
+    ]
+    for label, prompt, gen, exp in cases:
+        r = validate_anti_copy_english_to_cas(
+            prompt_text=prompt, generated_cas=gen
+        )
+        ok = (r.passed == exp)
+        print(f"  [{'OK' if ok else 'FAIL'}] {label} -> passed={r.passed}, reason={r.reason}")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+    if args.demo_validators:
+        return _demo_validators()
+    print(
+        "Path D Wave 3 v2 — library + CLI. Use --demo-validators to "
+        "exercise the validators on hand-constructed examples. Paid "
+        "generation is launched separately by the user."
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
