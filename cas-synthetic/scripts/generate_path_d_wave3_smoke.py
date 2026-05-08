@@ -101,8 +101,8 @@ HAIKU_PRICE_PER_M_INPUT = 1.00
 HAIKU_PRICE_PER_M_OUTPUT = 5.00
 SONNET_PRICE_PER_M_INPUT = 3.00
 SONNET_PRICE_PER_M_OUTPUT = 15.00
-OPUS_PRICE_PER_M_INPUT = 15.00
-OPUS_PRICE_PER_M_OUTPUT = 75.00
+OPUS_PRICE_PER_M_INPUT = 5.00   # Opus 4.7 (was $15 on Opus 4.1)
+OPUS_PRICE_PER_M_OUTPUT = 25.00  # Opus 4.7 (was $75 on Opus 4.1)
 
 PRICING = {
     HAIKU_MODEL: (HAIKU_PRICE_PER_M_INPUT, HAIKU_PRICE_PER_M_OUTPUT),
@@ -624,16 +624,25 @@ class AnthropicClient:
             RateLimitError,
         )
 
+        # Opus 4.7+ deprecated the ``temperature`` parameter and returns
+        # 400 if it's passed. Detect and omit it for those models. Other
+        # newer models may follow the same pattern; fail loudly if we see
+        # the same message body for a model not in this list and add it.
+        _NO_TEMPERATURE_MODELS = ("claude-opus-4-7",)
+        omit_temperature = any(model.startswith(m) for m in _NO_TEMPERATURE_MODELS)
+
         last_err: Optional[str] = None
         for attempt in range(1, self.max_retries + 1):
             try:
-                resp = self._client.messages.create(
+                kwargs = dict(
                     model=model,
                     max_tokens=max_output_tokens,
-                    temperature=temperature,
                     system=system_prompt,
                     messages=[{"role": "user", "content": user_message}],
                 )
+                if not omit_temperature:
+                    kwargs["temperature"] = temperature
+                resp = self._client.messages.create(**kwargs)
             except RateLimitError:
                 last_err = "rate_limit"
                 _backoff_sleep(attempt)
