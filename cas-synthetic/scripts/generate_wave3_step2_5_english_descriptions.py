@@ -364,6 +364,37 @@ def _build_paid_model_callable(
     return callable_, ledger_path
 
 
+# Lookup tables used by the corrective-prompt formatter for clear naming
+# of the (domain, noetic), (drive, noetic) bindings the SFE diff reports.
+_NOETIC_NAME = {
+    0: "Idea / a thought / on your mind",
+    1: "Mind / paying attention",
+    2: "Positive / drawn toward",
+    3: "Negative / aversion / pushed away",
+    4: "Vibration / struck a chord / resonated",
+    5: "Female / shaped by experience / who one is",
+    6: "Male / breaking it down / unpacking",
+    7: "Rhythm / muscle memory / practice",
+    8: "Above-Cause / triggered / reminds you",
+    9: "Below-Effect / popped into mind / just clicked",
+}
+_DOMAIN_NAME = {
+    "P": "principled / foundational",
+    "C": "cognitive / mental",
+    "E": "evaluative / judging",
+    "O": "operational / behavioral",
+}
+_DRIVE_NAME = {
+    1: "F1 unity / cohesion",
+    2: "F2 wisdom / insight",
+    3: "F3 vitality / energy",
+    4: "F4 connection / belonging",
+    5: "F5 agency / self-determination",
+    6: "F6 structure / order",
+    7: "F7 purpose / meaning",
+}
+
+
 def _build_sfe_correction_prompt(
     *,
     base_user_prompt: str,
@@ -406,17 +437,60 @@ def _sfe_diff_human_readable(diff: dict[str, Any]) -> str:
             f"muscle-memory, 8=Above/triggered, 9=Below/just-clicked.)"
         )
     if diff.get("domains_missing"):
-        parts.append(
-            f"- Source has these domains that did NOT surface: "
-            f"{diff['domains_missing']}. (P=principled, C=cognitive, "
-            f"E=evaluative, O=operational.)"
-        )
+        # Format: list of (domain, noetic) pairs that need to bind in the
+        # same clause. Make the binding requirement explicit since the raw
+        # tuple format is opaque to the model.
+        pairs = diff["domains_missing"]
+        binding_hints = []
+        for item in pairs:
+            if isinstance(item, (list, tuple)) and len(item) >= 2:
+                d, n = item[0], item[1]
+                binding_hints.append(
+                    f"  domain {d} ({_DOMAIN_NAME.get(d, d)}) must appear "
+                    f"in the SAME clause as a ^{n} alias "
+                    f"({_NOETIC_NAME.get(n, '^'+str(n))})"
+                )
+        if binding_hints:
+            parts.append(
+                "- Source has these (domain, noetic) bindings that did NOT "
+                "surface together in your English. Each pair must appear "
+                "TOGETHER in one clause (not in separate clauses connected "
+                "by 'same X' or 'this' anaphor):\n"
+                + "\n".join(binding_hints)
+                + "\n  (Domains: P=principled, C=cognitive, E=evaluative, "
+                "O=operational.)"
+            )
+        else:
+            parts.append(
+                f"- Source has these domains that did NOT surface: "
+                f"{pairs}. (P=principled, C=cognitive, E=evaluative, "
+                f"O=operational.)"
+            )
     if diff.get("drives_missing"):
-        parts.append(
-            f"- Source has these drives that did NOT surface: "
-            f"{diff['drives_missing']}. (1=unity, 2=wisdom, 3=vitality, "
-            f"4=connection, 5=agency, 6=structure, 7=purpose.)"
-        )
+        pairs = diff["drives_missing"]
+        binding_hints = []
+        for item in pairs:
+            if isinstance(item, (list, tuple)) and len(item) >= 2:
+                k, n = item[0], item[1]
+                binding_hints.append(
+                    f"  drive F{k} ({_DRIVE_NAME.get(k, 'F'+str(k))}) must "
+                    f"appear with a ^{n} alias "
+                    f"({_NOETIC_NAME.get(n, '^'+str(n))})"
+                )
+        if binding_hints:
+            parts.append(
+                "- Source has these (drive, noetic) bindings that did NOT "
+                "surface together. The drive name MUST be the source's "
+                "drive — do not substitute a different drive (e.g. don't "
+                "render F1 'unity' as 'agency' which is F5):\n"
+                + "\n".join(binding_hints)
+            )
+        else:
+            parts.append(
+                f"- Source has these drives that did NOT surface: "
+                f"{pairs}. (1=unity, 2=wisdom, 3=vitality, "
+                f"4=connection, 5=agency, 6=structure, 7=purpose.)"
+            )
     if diff.get("registers_missing"):
         parts.append(
             f"- Source has these registers that did NOT surface: "
