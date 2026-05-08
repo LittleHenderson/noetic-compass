@@ -691,6 +691,263 @@ def test_wave2_5_iterate_uses_deterministic_renderer_for_cross_register_omega():
     assert "felt emotion and analytical reasoning" in accepted[0].english_description
 
 
+def test_render_rpm_chain_deterministic_preserves_stage_domains():
+    m = _load_module()
+    src = (
+        "let stageA0_2_0109 = ^0^P; let stageD2_2_0109 = ^8^P_{F2}; "
+        "let stageW2_2_0109 = ^8^C_{F2}; let stageP2_2_0109 = ^8^E_{F2}; "
+        "stageW2_2_0109 -> stageP2_2_0109"
+    )
+    out = m.render_rpm_chain_deterministic(src)
+    assert "stageA0_2_0109 names a thought in a foundational frame" in out
+    assert "stageD2_2_0109 names something that triggered a memory in a foundational frame" in out
+    assert "stageW2_2_0109 names something that triggered a memory in cognitive thinking" in out
+    assert "stageP2_2_0109 names something that triggered a memory in evaluative judgment" in out
+    assert "stageW2_2_0109 leads to stageP2_2_0109" in out
+    results = m.run_validators_for_cas_to_english(
+        seed={"expression": src, "grammar_category": "rpm_chain"},
+        english_output=out,
+    )
+    assert all(r.passed for r in results), [
+        (r.name, r.reason) for r in results
+    ]
+
+
+def test_wave2_5_iterate_uses_deterministic_renderer_for_rpm_chain():
+    m = _load_module()
+    accepted = []
+    rejected = []
+    calls = []
+
+    def model_callable(system, user):
+        calls.append((system, user))
+        return "this model should not be called", 10, 10
+
+    counts = m.wave2_5_iterate(
+        [{
+            "seed_id": "seed_rpm_chain_x",
+            "expression": (
+                "let stageA0_6_0002 = ^0^P; "
+                "let stageD6_6_0002 = ^3^P_{F6}; "
+                "let stageW6_6_0002 = ^3^C_{F6}; "
+                "let stageP6_6_0002 = ^3^E_{F6}; "
+                "stageD6_6_0002 -> stageW6_6_0002"
+            ),
+            "grammar_category": "rpm_chain",
+        }],
+        model_callable=model_callable,
+        model_name="paid-model",
+        cost_per_in_token=1.0,
+        cost_per_out_token=1.0,
+        accept_writer=accepted.append,
+        reject_writer=rejected.append,
+    )
+    assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
+    assert calls == []
+    assert rejected == []
+    assert accepted[0].model_used == "deterministic_rpm_chain_renderer"
+    assert accepted[0].estimated_cost_usd == 0.0
+    assert "stageD6_6_0002 names an aversion in a foundational frame" in accepted[0].english_description
+    assert "stageW6_6_0002 names an aversion in cognitive thinking" in accepted[0].english_description
+
+
+def test_render_meta_logic_relation_deterministic_avoids_jargon():
+    m = _load_module()
+    src = "NoeticCluster{^3, ^5, ^7, ^8, ^9}"
+    out = m.render_meta_logic_relation_deterministic(src)
+    assert "cognitive operations" not in out.lower()
+    assert "noetic" not in out.lower()
+    assert "an aversion" in out
+    assert "identity shaped by experience" in out
+    assert "muscle memory" in out
+    results = m.run_validators_for_cas_to_english(
+        seed={"expression": src, "grammar_category": "meta_logic_relation"},
+        english_output=out,
+    )
+    assert all(r.passed for r in results), [
+        (r.name, r.reason) for r in results
+    ]
+
+
+def test_render_meta_logic_coordinate_does_not_make_drive_an_outcome():
+    m = _load_module()
+    src = "Coordinate{^3, O, F2, T}"
+    out = m.render_meta_logic_relation_deterministic(src)
+    assert "outcome called wisdom" not in out
+    assert "wisdom as the guiding need" in out
+    assert "operational behavior" in out
+    assert "big-picture perspective" in out
+    results = m.run_validators_for_cas_to_english(
+        seed={"expression": src, "grammar_category": "meta_logic_relation"},
+        english_output=out,
+    )
+    assert all(r.passed for r in results), [
+        (r.name, r.reason) for r in results
+    ]
+
+
+def test_wave2_5_iterate_uses_deterministic_renderer_for_meta_logic():
+    m = _load_module()
+    accepted = []
+    rejected = []
+    calls = []
+
+    def model_callable(system, user):
+        calls.append((system, user))
+        return "this model should not be called", 10, 10
+
+    counts = m.wave2_5_iterate(
+        [{
+            "seed_id": "seed_meta_logic_relation_x",
+            "expression": "PartitionOf(Noetics, NoeticCluster{^0, ^2}, NoeticCluster{^3})",
+            "grammar_category": "meta_logic_relation",
+        }],
+        model_callable=model_callable,
+        model_name="paid-model",
+        cost_per_in_token=1.0,
+        cost_per_out_token=1.0,
+        accept_writer=accepted.append,
+        reject_writer=rejected.append,
+    )
+    assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
+    assert calls == []
+    assert rejected == []
+    assert accepted[0].model_used == "deterministic_meta_logic_renderer"
+    assert accepted[0].estimated_cost_usd == 0.0
+    assert "partition" in accepted[0].english_description.lower()
+
+
+def test_render_inversion_deterministic_preserves_direct_arrow_domains():
+    m = _load_module()
+    src = "^5^C -> ^5^E"
+    out = m.render_inversion_deterministic(src)
+    assert "cognitive thinking leads to" in out
+    assert "evaluative judgment" in out
+    results = m.run_validators_for_cas_to_english(
+        seed={"expression": src, "grammar_category": "inversion"},
+        english_output=out,
+    )
+    assert all(r.passed for r in results), [
+        (r.name, r.reason) for r in results
+    ]
+
+
+def test_render_inversion_deterministic_delegates_let_chain():
+    m = _load_module()
+    src = (
+        "let stageA0_axisA_7 = ^0^P; "
+        "let stageP7_axisA_7 = ^8^E_{F7}; "
+        "stageA0_axisA_7 -> stageP7_axisA_7"
+    )
+    out = m.render_inversion_deterministic(src)
+    assert "stageA0_axisA_7 names a thought in a foundational frame" in out
+    assert "stageP7_axisA_7 names something that triggered a memory in evaluative judgment" in out
+    results = m.run_validators_for_cas_to_english(
+        seed={"expression": src, "grammar_category": "inversion"},
+        english_output=out,
+    )
+    assert all(r.passed for r in results), [
+        (r.name, r.reason) for r in results
+    ]
+
+
+def test_wave2_5_iterate_uses_deterministic_renderer_for_inversion():
+    m = _load_module()
+    accepted = []
+    rejected = []
+    calls = []
+
+    def model_callable(system, user):
+        calls.append((system, user))
+        return "this model should not be called", 10, 10
+
+    counts = m.wave2_5_iterate(
+        [{
+            "seed_id": "seed_inversion_x",
+            "expression": "^2^C_{F2} + ^3^C_{F6}",
+            "grammar_category": "inversion",
+        }],
+        model_callable=model_callable,
+        model_name="paid-model",
+        cost_per_in_token=1.0,
+        cost_per_out_token=1.0,
+        accept_writer=accepted.append,
+        reject_writer=rejected.append,
+    )
+    assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
+    assert calls == []
+    assert rejected == []
+    assert accepted[0].model_used == "deterministic_inversion_renderer"
+    assert accepted[0].estimated_cost_usd == 0.0
+
+
+def test_simple_lanes_render_deterministically_and_validate():
+    m = _load_module()
+    examples = [
+        ("state_literal", "^9^O_{F3}|E", m.render_state_literal_deterministic),
+        ("binary_composition", "^8^P -> ^1^O", m.render_binary_composition_deterministic),
+        ("let_binding", "let trace_0055 = ^9^O_{F3}|E", m.render_let_binding_deterministic),
+    ]
+    for category, source, renderer in examples:
+        out = renderer(source)
+        results = m.run_validators_for_cas_to_english(
+            seed={"expression": source, "grammar_category": category},
+            english_output=out,
+        )
+        assert all(r.passed for r in results), [
+            category,
+            out,
+            [(r.name, r.reason) for r in results],
+        ]
+
+
+def test_wave2_5_iterate_uses_deterministic_renderer_for_simple_lanes():
+    m = _load_module()
+    accepted = []
+    rejected = []
+    calls = []
+
+    def model_callable(system, user):
+        calls.append((system, user))
+        return "this model should not be called", 10, 10
+
+    seeds = [
+        {
+            "seed_id": "seed_state_literal_x",
+            "expression": "^9^O_{F3}|E",
+            "grammar_category": "state_literal",
+        },
+        {
+            "seed_id": "seed_binary_composition_x",
+            "expression": "^8^P -> ^1^O",
+            "grammar_category": "binary_composition",
+        },
+        {
+            "seed_id": "seed_let_binding_x",
+            "expression": "let trace_0055 = ^9^O_{F3}|E",
+            "grammar_category": "let_binding",
+        },
+    ]
+    counts = m.wave2_5_iterate(
+        seeds,
+        model_callable=model_callable,
+        model_name="paid-model",
+        cost_per_in_token=1.0,
+        cost_per_out_token=1.0,
+        accept_writer=accepted.append,
+        reject_writer=rejected.append,
+    )
+    assert counts == {"accepted": 3, "rejected": 0, "errored": 0}
+    assert calls == []
+    assert rejected == []
+    assert [r.model_used for r in accepted] == [
+        "deterministic_state_literal_renderer",
+        "deterministic_binary_composition_renderer",
+        "deterministic_let_binding_renderer",
+    ]
+    assert all(r.estimated_cost_usd == 0.0 for r in accepted)
+
+
 def test_fractal_k_indices_fail_on_count_misread():
     m = _load_module()
     r = m.validate_cas_to_english_fractal_k_indices(

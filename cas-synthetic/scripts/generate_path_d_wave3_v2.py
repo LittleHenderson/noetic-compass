@@ -3723,6 +3723,377 @@ def render_cross_register_omega_deterministic(source_cas: str) -> str:
     )
 
 
+def _plain_noetic_phrase(n: int) -> str:
+    return {
+        0: "a thought",
+        1: "paying attention",
+        2: "being drawn toward something",
+        3: "an aversion",
+        4: "something that struck a chord",
+        5: "identity shaped by experience",
+        6: "breaking down an idea",
+        7: "muscle memory",
+        8: "something that triggered a memory",
+        9: "something that just clicked",
+    }.get(n, f"state {n}")
+
+
+def _plain_domain_phrase(domain: str | None) -> str:
+    return {
+        "P": "in a foundational frame",
+        "C": "in cognitive thinking",
+        "E": "in evaluative judgment",
+        "O": "in operational behavior",
+    }.get(domain or "", "")
+
+
+def _plain_drive_phrase(drive: int | None) -> str:
+    return {
+        1: "with unity as the guiding need",
+        2: "with wisdom as the guiding need",
+        3: "with vitality as the guiding need",
+        4: "with connection as the guiding need",
+        5: "with agency as the guiding need",
+        6: "with structure as the guiding need",
+        7: "with purpose as the guiding need",
+    }.get(drive or -1, "")
+
+
+def _plain_register_phrase(register: str | None) -> str:
+    return {
+        "T": "expressed through big-picture perspective",
+        "A": "expressed through analytical reasoning",
+        "f": "expressed through felt emotion",
+        "E": "expressed through embodied awareness",
+    }.get(register or "", "")
+
+
+def _render_state_component_plain(comp: dict[str, Any]) -> str:
+    phrase = _plain_noetic_phrase(comp["noetic"])
+    for part in (
+        _plain_domain_phrase(comp.get("domain")),
+        _plain_drive_phrase(comp.get("drive")),
+        _plain_register_phrase(comp.get("register")),
+    ):
+        if part:
+            phrase = f"{phrase} {part}"
+    return phrase
+
+
+_META_CLUSTER_CONSTRUCTORS = (
+    "NoeticCluster",
+    "RelationCluster",
+    "StateCluster",
+    "StateSet",
+    "StateVariantCluster",
+)
+_RE_META_CLUSTER = re.compile(
+    r"\b(?:NoeticCluster|RelationCluster|StateCluster|StateSet|"
+    r"StateVariantCluster)\s*\{([^{}]*)\}"
+)
+
+
+def _extract_constructor_bodies(source_cas: str, names: tuple[str, ...]) -> list[str]:
+    bodies: list[str] = []
+    for name in names:
+        start = 0
+        pat = re.compile(rf"\b{re.escape(name)}\s*\{{")
+        while True:
+            m = pat.search(source_cas, start)
+            if not m:
+                break
+            body_start = m.end()
+            depth = 1
+            i = body_start
+            while i < len(source_cas) and depth:
+                ch = source_cas[i]
+                if ch == "{":
+                    depth += 1
+                elif ch == "}":
+                    depth -= 1
+                i += 1
+            if depth == 0:
+                bodies.append(source_cas[body_start:i - 1])
+                start = i
+            else:
+                break
+    return bodies
+
+
+def _render_meta_cluster_body(body: str) -> str:
+    comps = _state_literal_components(body)
+    if not comps:
+        raise ValueError(f"meta cluster has no renderable members: {body!r}")
+    return _join_natural([_render_state_component_plain(c) for c in comps])
+
+
+def _render_meta_clusters(source_cas: str) -> list[str]:
+    bodies = _extract_constructor_bodies(source_cas, _META_CLUSTER_CONSTRUCTORS)
+    if not bodies:
+        bodies = _RE_META_CLUSTER.findall(source_cas)
+    return [_render_meta_cluster_body(body) for body in bodies]
+
+
+def _render_tuple_or_coordinate(source_cas: str) -> str | None:
+    m = re.search(r"\b(Tuple|Coordinate)\s*\{([^{}]*)\}", source_cas)
+    if not m:
+        return None
+    label = "tuple" if m.group(1) == "Tuple" else "coordinate"
+    parts = [part.strip() for part in m.group(2).split(",") if part.strip()]
+    if not parts:
+        return f"A {label} group."
+    noetic: int | None = None
+    domain: str | None = None
+    drive: int | None = None
+    register: str | None = None
+    for part in parts:
+        if part.startswith("^") and part[1:].isdigit():
+            noetic = int(part[1:])
+        elif re.fullmatch(r"[PCEO]", part) and domain is None:
+            domain = part
+        elif re.fullmatch(r"F\d+", part):
+            drive = int(part[1:])
+        elif re.fullmatch(r"[TAfE]", part):
+            register = part
+    if noetic is None:
+        return f"A {label} group."
+    return (
+        f"A {label} group combining "
+        f"{_render_state_component_plain({'noetic': noetic, 'domain': domain, 'drive': drive, 'register': register})}."
+    )
+
+
+def render_meta_logic_relation_deterministic(source_cas: str) -> str:
+    """Render regular meta-logic relation seeds without an LLM call.
+
+    The paid calibrations showed that free rendering leaks CAS jargon
+    ("noetic", "cognitive operation", "operator slot") and sometimes frames
+    drives as outcomes. This renderer preserves the relation shape while
+    using the same plain aliases as the validators.
+    """
+    src = source_cas.strip()
+    clusters = _render_meta_clusters(src)
+
+    if src.startswith("PartitionOf("):
+        if clusters:
+            groups = [
+                f"group {idx + 1} contains {cluster}"
+                for idx, cluster in enumerate(clusters)
+            ]
+            return "A partition of the complete basic-pattern set: " + "; ".join(groups) + "."
+        return "A partition of the complete basic-pattern set."
+
+    if src.startswith("CoverOf("):
+        if clusters:
+            groups = [
+                f"cover group {idx + 1} contains {cluster}"
+                for idx, cluster in enumerate(clusters)
+            ]
+            return "A cover of the complete basic-pattern set: " + "; ".join(groups) + "."
+        return "A cover of the complete basic-pattern set."
+
+    if src.startswith("Product("):
+        if len(clusters) >= 2:
+            return (
+                "A product grouping pairs the first group, "
+                f"{clusters[0]}, with the second group, {clusters[1]}."
+            )
+        if clusters:
+            return f"A product grouping built from {clusters[0]}."
+
+    if src.startswith("Tuple{") or src.startswith("Coordinate{"):
+        rendered = _render_tuple_or_coordinate(src)
+        if rendered:
+            return rendered
+
+    if "\u2208" in src:
+        left, right = [part.strip() for part in src.split("\u2208", 1)]
+        comps = _state_literal_components(left)
+        if comps:
+            member = _render_state_component_plain(comps[0])
+        elif left.startswith("F") and left[1:].isdigit():
+            member = _plain_drive_phrase(int(left[1:])).replace(
+                "with ", "", 1
+            )
+        else:
+            member = left
+        target = "the complete state collection"
+        if "Drives" in right:
+            target = "the guiding-need collection"
+        elif "Noetics" in right:
+            target = "the complete basic-pattern set"
+        return f"{member.capitalize()} belongs to {target}."
+
+    if src.startswith("|") and src.endswith("|"):
+        inner = src[1:-1]
+        clusters = _render_meta_clusters(inner)
+        if clusters:
+            return f"The size of the group containing {clusters[0]} is being counted."
+        if "Drives" in inner:
+            return "The size of the guiding-need collection is being counted."
+        if "States" in inner:
+            return "The size of the complete state collection is being counted."
+        if "Noetics" in inner:
+            return "The size of the complete basic-pattern set is being counted."
+
+    if "\u2229" in src and clusters:
+        return "An intersection of groups: " + "; ".join(
+            f"group {idx + 1} contains {cluster}"
+            for idx, cluster in enumerate(clusters)
+        ) + "."
+
+    if ("\u222a" in src or "\u2216" in src) and len(clusters) >= 2:
+        relation = "union" if "\u222a" in src else "set difference"
+        return f"A {relation} relation between groups: " + "; ".join(
+            f"group {idx + 1} contains {cluster}"
+            for idx, cluster in enumerate(clusters)
+        ) + "."
+
+    if "\u2282" in src and clusters:
+        return (
+            "A subset relation where the group containing "
+            f"{clusters[0]} sits inside the complete basic-pattern set."
+        )
+
+    if len(clusters) >= 2:
+        return "A relation between groups: " + "; ".join(
+            f"group {idx + 1} contains {cluster}"
+            for idx, cluster in enumerate(clusters)
+        ) + "."
+
+    if clusters:
+        return "A group containing " + clusters[0] + "."
+
+    comps = _state_literal_components(src)
+    if comps:
+        return "A group containing " + _render_state_component_plain(comps[0]) + "."
+
+    raise ValueError(f"unsupported meta-logic relation: {source_cas!r}")
+
+
+def render_rpm_chain_deterministic(source_cas: str) -> str:
+    """Render RPM-chain ``let stage = state; stageA -> stageB`` shapes.
+
+    The 2026-05-08 layer-3 filter showed that free English generation kept
+    stage names but drifted stage-local domains. RPM-chain seeds are regular
+    compiler objects, so render the stage table directly instead of asking
+    the model to infer it.
+    """
+    bindings = _RE_LET_BINDING.findall(source_cas)
+    if not bindings:
+        raise ValueError(f"rpm_chain deterministic renderer needs let bindings: {source_cas!r}")
+
+    stage_parts: list[str] = []
+    seen_names: set[str] = set()
+    for name, expr in bindings:
+        if name in seen_names:
+            continue
+        seen_names.add(name)
+        lit = _state_literal_components(expr)
+        if not lit:
+            continue
+        comp = lit[0]
+        phrase = _render_state_component_plain(comp)
+        stage_parts.append(f"{name} names {phrase}")
+
+    if not stage_parts:
+        raise ValueError(f"rpm_chain deterministic renderer found no state stages: {source_cas!r}")
+
+    # Parse the trailing chain expression after the final semicolon. The seed
+    # grammar emits stage identifiers joined by one or more arrow operators.
+    tail = source_cas.rsplit(";", 1)[-1]
+    chain_names = [
+        part.strip()
+        for part in re.split(r"\s*(?:->|â†’)\s*", tail)
+        if part.strip()
+    ]
+    chain_parts: list[str] = []
+    if len(chain_names) >= 2:
+        for left, right in zip(chain_names, chain_names[1:]):
+            chain_parts.append(f"{left} leads to {right}")
+    chain_sentence = ""
+    if chain_parts:
+        chain_sentence = " The chain says " + "; then ".join(chain_parts) + "."
+
+    return "Stage definitions: " + "; ".join(stage_parts) + "." + chain_sentence
+
+
+def render_inversion_deterministic(source_cas: str) -> str:
+    """Render inversion-category seeds without free-form model drift."""
+    src = source_cas.strip()
+    if _RE_LET_BINDING.search(src) and ("->" in src or "â†’" in src):
+        return render_rpm_chain_deterministic(src)
+    if _RE_OMEGA_NAMED.search(src) and "=" in src:
+        return render_cross_register_omega_deterministic(src)
+    if any(name in src for name in _DIAGRAM_CLUSTER_NAMES):
+        return render_meta_logic_relation_deterministic(src)
+
+    comps = _state_literal_components(src)
+    if not comps:
+        raise ValueError(f"unsupported inversion expression: {source_cas!r}")
+    rendered = [_render_state_component_plain(comp) for comp in comps]
+    if "->" in src or "â†’" in src:
+        if len(rendered) >= 2:
+            return f"{rendered[0].capitalize()} leads to {rendered[1]}."
+        return rendered[0].capitalize() + "."
+    if "+" in src:
+        return f"{_join_natural(rendered).capitalize()} combine in the same expression."
+    if "Ã—" in src or "*" in src:
+        return f"{_join_natural(rendered).capitalize()} fuse in the same expression."
+    return "A group containing " + _join_natural(rendered) + "."
+
+
+def render_state_literal_deterministic(source_cas: str) -> str:
+    comps = _state_literal_components(source_cas)
+    if not comps:
+        raise ValueError(f"state_literal deterministic renderer found no states: {source_cas!r}")
+    return "A group containing " + _join_natural(
+        [_render_state_component_plain(comp) for comp in comps]
+    ) + "."
+
+
+def render_binary_composition_deterministic(source_cas: str) -> str:
+    comps = _state_literal_components(source_cas)
+    co_ops = _extract_co_n_operators(source_cas)
+    rendered = [_render_state_component_plain(comp) for comp in comps]
+    rendered.extend(_plain_noetic_phrase(op) for op in co_ops)
+    if not rendered:
+        raise ValueError(f"binary_composition deterministic renderer found no operands: {source_cas!r}")
+    if "->" in source_cas or "â†’" in source_cas:
+        if len(rendered) >= 2:
+            return f"{rendered[0].capitalize()} leads to {rendered[1]}."
+        return rendered[0].capitalize() + "."
+    if "+" in source_cas:
+        return f"{_join_natural(rendered).capitalize()} combine in the same expression."
+    if "Ã—" in source_cas or "*" in source_cas or "âˆ˜" in source_cas:
+        return f"{_join_natural(rendered).capitalize()} fuse in the same expression."
+    return "A group containing " + _join_natural(rendered) + "."
+
+
+def render_let_binding_deterministic(source_cas: str) -> str:
+    if "->" in source_cas or "â†’" in source_cas:
+        return render_rpm_chain_deterministic(source_cas)
+    bindings = _RE_LET_BINDING.findall(source_cas)
+    if not bindings:
+        raise ValueError(f"let_binding deterministic renderer found no bindings: {source_cas!r}")
+    parts: list[str] = []
+    for name, expr in bindings:
+        comps = _state_literal_components(expr)
+        if comps:
+            rendered = _join_natural(
+                [_render_state_component_plain(comp) for comp in comps]
+            )
+        elif any(cluster_name in expr for cluster_name in _DIAGRAM_CLUSTER_NAMES):
+            rendered = render_meta_logic_relation_deterministic(expr)
+        elif _RE_OMEGA_NAMED.search(expr) or "Omega_" in expr:
+            rendered = render_inversion_deterministic(expr)
+        else:
+            rendered = expr
+        rendered = rendered.rstrip(".")
+        parts.append(f"Let {name} name {rendered}")
+    return "; ".join(parts) + "."
+
+
 # ---------------------------------------------------------------------------
 # Wave 2.5 dry-run scaffold (no API calls).
 #
@@ -3765,6 +4136,36 @@ def wave2_5_iterate(
                 in_tok = 0
                 out_tok = 0
                 record_model_name = "deterministic_cross_register_omega_renderer"
+            elif seed.get("grammar_category") == "rpm_chain":
+                text = render_rpm_chain_deterministic(seed["expression"])
+                in_tok = 0
+                out_tok = 0
+                record_model_name = "deterministic_rpm_chain_renderer"
+            elif seed.get("grammar_category") == "meta_logic_relation":
+                text = render_meta_logic_relation_deterministic(seed["expression"])
+                in_tok = 0
+                out_tok = 0
+                record_model_name = "deterministic_meta_logic_renderer"
+            elif seed.get("grammar_category") == "inversion":
+                text = render_inversion_deterministic(seed["expression"])
+                in_tok = 0
+                out_tok = 0
+                record_model_name = "deterministic_inversion_renderer"
+            elif seed.get("grammar_category") == "state_literal":
+                text = render_state_literal_deterministic(seed["expression"])
+                in_tok = 0
+                out_tok = 0
+                record_model_name = "deterministic_state_literal_renderer"
+            elif seed.get("grammar_category") == "binary_composition":
+                text = render_binary_composition_deterministic(seed["expression"])
+                in_tok = 0
+                out_tok = 0
+                record_model_name = "deterministic_binary_composition_renderer"
+            elif seed.get("grammar_category") == "let_binding":
+                text = render_let_binding_deterministic(seed["expression"])
+                in_tok = 0
+                out_tok = 0
+                record_model_name = "deterministic_let_binding_renderer"
             else:
                 system, user = build_cas_to_english_prompt_v2(seed)
                 text, in_tok, out_tok = model_callable(system, user)
