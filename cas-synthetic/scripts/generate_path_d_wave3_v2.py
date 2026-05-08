@@ -2622,6 +2622,88 @@ def render_fractal_sequence_deterministic(source_cas: str) -> str:
     return f"A fractal sequence where {head}, and finally {phrases[-1]}."
 
 
+def _join_natural(items: list[str]) -> str:
+    if not items:
+        return ""
+    if len(items) == 1:
+        return items[0]
+    if len(items) == 2:
+        return f"{items[0]} and {items[1]}"
+    return f"{', '.join(items[:-1])}, and {items[-1]}"
+
+
+def render_cross_register_omega_deterministic(source_cas: str) -> str:
+    """Render cross-register Ω expressions without an LLM call.
+
+    Paid Wave 2.5 calibrations showed Haiku repeatedly substituting
+    analytical/felt/embodied/transcendent modes that were not present in
+    the source. Cross-register Ω is a regular compiler shape, so we render
+    its noetic/domain/register/outcome content directly and let validators
+    verify the result.
+    """
+    eq_match = re.search(r"=\s*[^=]*?Ω_([A-Za-z][A-Za-z0-9_]*)", source_cas)
+    if not eq_match:
+        raise ValueError(f"not a cross-register omega expression: {source_cas!r}")
+    stem = eq_match.group(1)
+    pre_eq = source_cas.split("=", 1)[0]
+    lits = _state_literal_components(pre_eq)
+    if len(lits) < 2:
+        raise ValueError(f"cross-register omega needs at least two operands: {source_cas!r}")
+    noetic = lits[0]["noetic"]
+    domain = lits[0]["domain"]
+    registers: list[str] = []
+    for lit in lits:
+        reg = lit.get("register")
+        if not reg:
+            continue
+        if isinstance(reg, str) and reg.startswith("⟨") and reg.endswith("⟩"):
+            for part in reg[1:-1].split(","):
+                part = part.strip()
+                if part and part not in registers:
+                    registers.append(part)
+        elif reg not in registers:
+            registers.append(reg)
+    if not registers:
+        raise ValueError(f"cross-register omega has no operand registers: {source_cas!r}")
+    noetic_phrase = {
+        0: "a thought",
+        1: "paying attention",
+        2: "being drawn toward something",
+        3: "an aversion",
+        4: "something that strikes a chord",
+        5: "who you are, shaped by lived experience",
+        6: "breaking down an idea",
+        7: "practice becoming second nature",
+        8: "something that triggers a memory",
+        9: "something that just clicked",
+    }.get(noetic, f"state {noetic}")
+    domain_phrase = {
+        "P": "in a principled foundational frame",
+        "C": "in cognitive thinking",
+        "E": "in evaluative judgment",
+        "O": "in operational behavior",
+    }.get(domain, "")
+    register_phrase = {
+        "T": "transcendent strategic perspective",
+        "A": "analytical reasoning",
+        "f": "felt emotion",
+        "E": "embodied sensorimotor awareness",
+    }
+    rendered_registers = [
+        register_phrase.get(reg, f"{reg} expression") for reg in registers
+    ]
+    base = noetic_phrase
+    if domain_phrase:
+        base = f"{base} {domain_phrase}"
+    mode_word = "mode" if len(rendered_registers) == 1 else "modes"
+    return (
+        f"{base.capitalize()} expressed through "
+        f"{_join_natural(rendered_registers)}, with those "
+        f"{len(rendered_registers)} {mode_word} fusing into the outcome "
+        f"called {stem}."
+    )
+
+
 # ---------------------------------------------------------------------------
 # Wave 2.5 dry-run scaffold (no API calls).
 #
@@ -2659,6 +2741,11 @@ def wave2_5_iterate(
                 in_tok = 0
                 out_tok = 0
                 record_model_name = "deterministic_fractal_renderer"
+            elif seed.get("grammar_category") == "cross_register_omega":
+                text = render_cross_register_omega_deterministic(seed["expression"])
+                in_tok = 0
+                out_tok = 0
+                record_model_name = "deterministic_cross_register_omega_renderer"
             else:
                 system, user = build_cas_to_english_prompt_v2(seed)
                 text, in_tok, out_tok = model_callable(system, user)

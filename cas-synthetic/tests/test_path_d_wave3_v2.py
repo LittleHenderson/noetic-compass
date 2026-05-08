@@ -451,6 +451,58 @@ def test_wave2_5_iterate_uses_deterministic_renderer_for_fractals():
     assert "breaking it down" in accepted[0].english_description
 
 
+def test_render_cross_register_omega_deterministic_preserves_exact_registers():
+    m = _load_module()
+    out = m.render_cross_register_omega_deterministic(
+        "(^4^C|E × ^4^C|f) = ^4^C|Ω_calm"
+    )
+    assert "embodied sensorimotor awareness" in out
+    assert "felt emotion" in out
+    assert "analytical reasoning" not in out
+    assert "calm" in out
+    results = m.run_validators_for_cas_to_english(
+        seed={
+            "expression": "(^4^C|E × ^4^C|f) = ^4^C|Ω_calm",
+            "grammar_category": "cross_register_omega",
+        },
+        english_output=out,
+    )
+    assert all(r.passed for r in results), [
+        (r.name, r.reason) for r in results
+    ]
+
+
+def test_wave2_5_iterate_uses_deterministic_renderer_for_cross_register_omega():
+    m = _load_module()
+    accepted = []
+    rejected = []
+    calls = []
+
+    def model_callable(system, user):
+        calls.append((system, user))
+        return "this model should not be called", 10, 10
+
+    counts = m.wave2_5_iterate(
+        [{
+            "seed_id": "seed_cross_register_omega_x",
+            "expression": "(^6^P|f × ^6^P|A) = ^6^P|Ω_integration",
+            "grammar_category": "cross_register_omega",
+        }],
+        model_callable=model_callable,
+        model_name="paid-model",
+        cost_per_in_token=1.0,
+        cost_per_out_token=1.0,
+        accept_writer=accepted.append,
+        reject_writer=rejected.append,
+    )
+    assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
+    assert calls == []
+    assert rejected == []
+    assert accepted[0].model_used == "deterministic_cross_register_omega_renderer"
+    assert accepted[0].estimated_cost_usd == 0.0
+    assert "felt emotion and analytical reasoning" in accepted[0].english_description
+
+
 def test_fractal_k_indices_fail_on_count_misread():
     m = _load_module()
     r = m.validate_cas_to_english_fractal_k_indices(
