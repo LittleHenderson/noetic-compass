@@ -127,7 +127,7 @@ NOETIC_VALIDATION_TOKENS: dict[int, tuple[str, ...]] = {
         "reminds me", "triggered", "one thing leads", "made me think",
         "brought to mind", "bring to mind"),
     9: ("below", "effect", "popped into mind", "out of nowhere",
-        "it just clicked", "the thought came"),
+        "it just clicked", "just clicked", "the thought came"),
 }
 
 
@@ -1755,6 +1755,7 @@ def validate_cas_to_english_inversion(
 _DIAGRAM_CLUSTER_NAMES = (
     "NoeticCluster",
     "RelationCluster",
+    "StateCluster",
     "StateSet",
     "StateVariantCluster",
     "CoverOf",
@@ -2425,6 +2426,44 @@ def load_jsonl(path: Path) -> list[dict[str, Any]]:
     return out
 
 
+def render_fractal_sequence_deterministic(source_cas: str) -> str:
+    """Render ``Phi<k:k:...>`` / ``Φ⟨k:k:...⟩`` without an LLM call.
+
+    The paid Wave 2.5 calibrations showed Haiku repeatedly hallucinating
+    different k-sequences even under an explicit deterministic table. Fractal
+    expressions are already fully explicit index lists, so render them
+    locally and let the regular validators verify the result.
+    """
+    m = _RE_FRACTAL_BODY.search(source_cas)
+    if not m:
+        raise ValueError(f"not a fractal sequence: {source_cas!r}")
+    values = [int(v.strip()) for v in m.group(1).split(":") if v.strip()]
+    if not values:
+        raise ValueError(f"empty fractal sequence: {source_cas!r}")
+    phrase_by_k = {
+        0: "a thought",
+        1: "paying attention",
+        2: "being drawn to something",
+        3: "an aversion",
+        4: "something that struck a chord",
+        5: "what is shaped by experience",
+        6: "breaking it down",
+        7: "muscle memory",
+        8: "something that triggered a memory",
+        9: "something that just clicked",
+    }
+    try:
+        phrases = [phrase_by_k[v] for v in values]
+    except KeyError as exc:
+        raise ValueError(f"fractal k-value out of range: {exc.args[0]}") from exc
+    if len(phrases) == 1:
+        return f"A fractal sequence with one step: {phrases[0]}."
+    if len(phrases) == 2:
+        return f"A fractal sequence where {phrases[0]} leads to {phrases[1]}."
+    head = ", then ".join(phrases[:-1])
+    return f"A fractal sequence where {head}, and finally {phrases[-1]}."
+
+
 # ---------------------------------------------------------------------------
 # Wave 2.5 dry-run scaffold (no API calls).
 #
@@ -2457,8 +2496,15 @@ def wave2_5_iterate(
     counts = {"accepted": 0, "rejected": 0, "errored": 0}
     for seed in seeds:
         try:
-            system, user = build_cas_to_english_prompt_v2(seed)
-            text, in_tok, out_tok = model_callable(system, user)
+            if seed.get("grammar_category") == "fractal_sequence":
+                text = render_fractal_sequence_deterministic(seed["expression"])
+                in_tok = 0
+                out_tok = 0
+                record_model_name = "deterministic_fractal_renderer"
+            else:
+                system, user = build_cas_to_english_prompt_v2(seed)
+                text, in_tok, out_tok = model_callable(system, user)
+                record_model_name = model_name
             if not text:
                 counts["errored"] += 1
                 reject_writer({
@@ -2496,7 +2542,7 @@ def wave2_5_iterate(
                 validators_run=[r.name for r in results],
                 validators_passed=[r.name for r in results if r.passed],
                 validators_failed_reasons={},
-                model_used=model_name,
+                model_used=record_model_name,
                 raw_response=text,
                 input_tokens=in_tok,
                 output_tokens=out_tok,

@@ -387,6 +387,62 @@ def test_fractal_k_indices_pass_with_operator_names():
     assert r.detail["k_values"] == [9, 4, 7]
 
 
+def test_render_fractal_sequence_deterministic_preserves_k_values():
+    m = _load_module()
+    out = m.render_fractal_sequence_deterministic("Phi<2:6:8>")
+    assert "being drawn to something" in out
+    assert "breaking it down" in out
+    assert "triggered a memory" in out
+    r = m.validate_cas_to_english_fractal_k_indices(
+        source_cas="Phi<2:6:8>",
+        english_output=out,
+    )
+    assert r.passed, r.reason
+
+
+def test_render_fractal_sequence_deterministic_accepts_k9_phrase():
+    m = _load_module()
+    out = m.render_fractal_sequence_deterministic("Phi<1:9:2>")
+    assert "something that just clicked" in out
+    r = m.validate_cas_to_english_fractal_k_indices(
+        source_cas="Phi<1:9:2>",
+        english_output=out,
+    )
+    assert r.passed, r.reason
+
+
+def test_wave2_5_iterate_uses_deterministic_renderer_for_fractals():
+    m = _load_module()
+    accepted = []
+    rejected = []
+    calls = []
+
+    def model_callable(system, user):
+        calls.append((system, user))
+        return "this model should not be called", 10, 10
+
+    counts = m.wave2_5_iterate(
+        [{
+            "seed_id": "seed_fractal_sequence_x",
+            "expression": "Phi<2:6>",
+            "grammar_category": "fractal_sequence",
+        }],
+        model_callable=model_callable,
+        model_name="paid-model",
+        cost_per_in_token=1.0,
+        cost_per_out_token=1.0,
+        accept_writer=accepted.append,
+        reject_writer=rejected.append,
+    )
+    assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
+    assert calls == []
+    assert rejected == []
+    assert accepted[0].model_used == "deterministic_fractal_renderer"
+    assert accepted[0].estimated_cost_usd == 0.0
+    assert "being drawn to something" in accepted[0].english_description
+    assert "breaking it down" in accepted[0].english_description
+
+
 def test_fractal_k_indices_fail_on_count_misread():
     m = _load_module()
     r = m.validate_cas_to_english_fractal_k_indices(
@@ -410,6 +466,19 @@ def test_fractal_k_indices_skip_for_non_fractal():
         english_output="Principled aversion.",
     )
     assert r.passed
+
+
+def test_diagram_export_statecluster_requires_member_coverage():
+    m = _load_module()
+    r = m.validate_cas_to_english_diagram_export(
+        source_cas="StateCluster{^4^O, ^0^E, ^8^P}",
+        english_output=(
+            "A cognitive state composed of three linked elements, "
+            "but without their actual operator meanings."
+        ),
+    )
+    assert not r.passed
+    assert "missing member noetics" in (r.reason or "")
 
 
 def test_anti_copy_pass_when_independent_generation():
@@ -648,31 +717,15 @@ def test_wave2_5_iterate_rejects_recipe_with_dropped_coefficients():
            "missing named Ω target stems" in rejected[0]["reason"]
 
 
-def test_wave2_5_iterate_rejects_fractal_with_count_misread():
+def test_fractal_validator_rejects_count_misread_prose():
     m = _load_module()
-    seeds = [
-        {
-            "seed_id": "seed_fractal_x",
-            "expression": "Φ⟨9:4:7⟩",
-            "grammar_category": "fractal_sequence",
-        },
-    ]
-    accepted: list[Any] = []
-    rejected: list[dict[str, Any]] = []
-
-    def bad_model(system: str, user: str) -> tuple[str, int, int]:
-        return ("A sequence of 3 stages with operations 9, 4, and 7.", 100, 10)
-
-    counts = m.wave2_5_iterate(
-        seeds,
-        model_callable=bad_model,
-        model_name="test-model",
-        cost_per_in_token=0.0,
-        cost_per_out_token=0.0,
-        accept_writer=accepted.append,
-        reject_writer=rejected.append,
+    r = m.validate_cas_to_english_fractal_k_indices(
+        source_cas="Φ⟨9:4:7⟩",
+        english_output="A sequence of 3 stages with operations 9, 4, and 7.",
     )
-    assert counts["rejected"] == 1
+    assert not r.passed
+    assert ("count-misread" in (r.reason or "")
+            or "k-values not rendered" in (r.reason or ""))
 
 
 def test_wave2_5_iterate_records_carry_full_traceability():
