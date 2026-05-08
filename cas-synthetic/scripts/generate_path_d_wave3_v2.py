@@ -111,7 +111,8 @@ NOETIC_VALIDATION_TOKENS: dict[int, tuple[str, ...]] = {
         "can't resist"),
     3: ("negative", "can't stomach", "rubs the wrong way",
         "wouldn't touch", "pushed away", "aversion", "averse",
-        "turned away", "repelled", "repulsed"),
+        "turned away", "repelled", "repulsed", "push away",
+        "pushes away", "pushed-away", "pushed-away-from", "push-away"),
     4: ("vibration", "hit hard", "struck a chord", "strike a chord",
         "striking a chord", "strikes a chord", "resonated", "resonate",
         "resonates", "resonance", "resonant", "resonating",
@@ -119,7 +120,7 @@ NOETIC_VALIDATION_TOKENS: dict[int, tuple[str, ...]] = {
     5: ("female", "sum of", "experiences", "who one is", "shaped by",
         "what makes someone"),
     6: ("male", "unpacking", "unpack", "break down", "breaks down",
-        "breaking it down", "broken down", "pulling apart",
+        "breaking down", "breaking it down", "broken down", "pulling apart",
         "looking at what's underneath"),
     7: ("rhythm", "practice makes perfect", "muscle memory", "in a groove",
         "getting used to it"),
@@ -1583,6 +1584,12 @@ def validate_cas_to_english_rpm_chain(
     operand's noetic referenced. Operand resolution accommodates
     ``let X = ^N^D; ... X -> Y`` shape used in the preflight corpus.
     """
+    if re.search(r"(?:Θ|Theta)\s*\(", source_cas):
+        return ValidatorResult(
+            name="cas_to_english_rpm_chain",
+            passed=True,
+            reason="recipe shape — rpm-chain validator skipped",
+        )
     arrow_count = source_cas.count("→") + len(re.findall(r"->", source_cas))
     if arrow_count == 0:
         return ValidatorResult(
@@ -1595,6 +1602,8 @@ def validate_cas_to_english_rpm_chain(
     flow_re = re.compile(
         r"\b(?:then|next|leads?\s+to|leading\s+to|becomes?|"
         r"becoming|produces?|producing|yields?|yielding|creates?|creating|"
+        r"transforms?\s+into|transforming\s+into|morphs?\s+into|"
+        r"morphing\s+into|turns?\s+into|turning\s+into|"
         r"results?\s+in|resulting\s+in|gives?\s+rise|"
         r"feeds?\s+into|flows?\s+into|prompts?|prompting|"
         r"triggers?|triggering|after\s+that|in\s+turn|"
@@ -2324,8 +2333,12 @@ def run_validators_for_cas_to_english(
                 source_cas=expr, english_output=english_output
             )
         )
+    is_recipe_shape = bool(re.search(r"(?:Θ|Theta)\s*\(", expr))
     # RPM chain — fires on category match OR presence of ``->`` / ``→``.
-    if cat == "rpm_chain" or "→" in expr or "->" in expr:
+    # Recipe arrows have their own preservation validator; scoring them as
+    # RPM chains inflated Wave 2.5 recipe failures with unrelated noetic-flow
+    # diagnostics.
+    if (cat == "rpm_chain" or "→" in expr or "->" in expr) and not is_recipe_shape:
         results.append(
             validate_cas_to_english_rpm_chain(
                 source_cas=expr, english_output=english_output

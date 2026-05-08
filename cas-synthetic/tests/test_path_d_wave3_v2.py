@@ -1142,6 +1142,18 @@ def test_binary_composition_pass_with_both_operands():
     assert r.passed, r.reason
 
 
+def test_binary_composition_accepts_hyphenated_negative_alias():
+    m = _load_module()
+    r = m.validate_cas_to_english_binary_composition(
+        source_cas="^3^O × ^6^O",
+        english_output=(
+            "A pushed-away-from response in the operational arena fused "
+            "with breaking down an idea in the operational arena."
+        ),
+    )
+    assert r.passed, r.reason
+
+
 def test_noetic_aliases_cover_wave2_5_calibration_phrases():
     m = _load_module()
     r = m.validate_cas_to_english_binary_composition(
@@ -1216,6 +1228,18 @@ def test_rpm_chain_pass_with_chain_flow_words():
     assert r.passed, r.reason
 
 
+def test_rpm_chain_accepts_transforms_into_flow_marker():
+    m = _load_module()
+    r = m.validate_cas_to_english_rpm_chain(
+        source_cas="^1^P -> ^1^C",
+        english_output=(
+            "Paying attention to a principled foundation transforms into "
+            "using your head in a cognitive frame."
+        ),
+    )
+    assert r.passed, r.reason
+
+
 def test_rpm_chain_accepts_produces_as_flow_marker():
     m = _load_module()
     r = m.validate_cas_to_english_rpm_chain(
@@ -1226,6 +1250,35 @@ def test_rpm_chain_accepts_produces_as_flow_marker():
         ),
     )
     assert r.passed, r.reason
+
+
+def test_rpm_chain_skips_recipe_arrows():
+    m = _load_module()
+    r = m.validate_cas_to_english_rpm_chain(
+        source_cas="Θ(Ω_decision_58) = 0.5*^3^E + 0.5*^5^E → Ω_decision_58",
+        english_output=(
+            "To produce decision_58, combine 0.5 of an aversion with "
+            "0.5 of what experience has shaped."
+        ),
+    )
+    assert r.passed, r.reason
+    assert "recipe shape" in (r.reason or "")
+
+
+def test_run_validators_do_not_apply_rpm_chain_to_recipe_shape():
+    m = _load_module()
+    results = m.run_validators_for_cas_to_english(
+        seed={
+            "expression": "Θ(Ω_decision_58) = 0.5*^3^E + 0.5*^5^E → Ω_decision_58",
+            "grammar_category": "recipe",
+        },
+        english_output=(
+            "To produce the outcome called decision_58, combine 0.5 of "
+            "an aversion in evaluative judgment with 0.5 of who one is "
+            "in evaluative judgment."
+        ),
+    )
+    assert "cas_to_english_rpm_chain" not in [r.name for r in results]
 
 
 def test_let_binding_fail_on_missing_variable_name():
@@ -1259,6 +1312,18 @@ def test_inversion_pass_with_full_state_components():
         english_output=(
             "Paying attention to a foundational principle leads to "
             "becoming aware of it as a thought."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_inversion_accepts_push_away_negative_alias():
+    m = _load_module()
+    r = m.validate_cas_to_english_inversion(
+        source_cas="^2^C + ^3^C",
+        english_output=(
+            "A pull toward something expressed in cognitive thinking added "
+            "to a push away from something expressed in cognitive thinking."
         ),
     )
     assert r.passed, r.reason
