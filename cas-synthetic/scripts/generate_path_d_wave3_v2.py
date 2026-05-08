@@ -611,6 +611,44 @@ _INVERSION_GUIDANCE_V2 = (
 )
 
 
+_META_LOGIC_GUIDANCE_V2 = (
+    "META-LOGIC RULES (this expression is a meta-logic relation — "
+    "NoeticCluster, StateCluster, PartitionOf, CoverOf, set operations "
+    "∩ ∪ ∖, membership ∈, subset/superset ⊂ ⊆ ⊃ ⊇, cardinality |·|):\n"
+    "\n"
+    "- Render the cluster with a plain framing word: 'a cluster of', "
+    "'a group of', 'a set of'. Then enumerate members directly using "
+    "their colloquialisms or operator names — NOT generic 'operators' / "
+    "'cognitive operations' / 'noetic operators' framing.\n"
+    "- FORBIDDEN voice for this slot: 'operator', 'operators', "
+    "'cognitive operation', 'noetic', 'noetics', 'mental operation', "
+    "'cognitive vocabulary'. The model defaults to these for cluster "
+    "descriptions; you must NOT use them. Use the operator names "
+    "themselves.\n"
+    "- For set operations, name the operation: ∩ → 'intersection of "
+    "two clusters', ∪ → 'union of two clusters', ∖ → 'the difference "
+    "between cluster A and cluster B' / 'cluster A minus cluster B', "
+    "∈ → 'X belongs to', ⊂/⊆ → 'subset of', ⊃/⊇ → 'superset of'.\n"
+    "- Worked example 1 (NoeticCluster{^1, ^3, ^4}): 'A cluster of "
+    "three: paying attention, an aversion, and something that struck "
+    "a chord.' NOT 'a cluster of three operators' — operators is "
+    "forbidden voice for this slot.\n"
+    "- Worked example 2 (PartitionOf with 3 NoeticClusters): 'The "
+    "ten ways of thinking partition into three groups: group 1 "
+    "contains [members], group 2 contains [members], group 3 "
+    "contains [members].' NEVER 'cognitive operations partition'.\n"
+    "- Worked example 3 (NoeticCluster{^2, ^4} ∖ NoeticCluster"
+    "{^0, ^2, ^3, ^4}): 'The difference between cluster A (drawn to, "
+    "struck a chord) and cluster B (a thought, drawn to, an aversion, "
+    "struck a chord). Members in A but not B: none — A is a subset of "
+    "B.' Name the set-difference operation explicitly.\n"
+    "- BAD: 'A noetic cluster of two operators.' Two jargon hits "
+    "in five words. REJECT.\n"
+    "- BAD: 'The set of all noetic operators is partitioned...'. Three "
+    "jargon hits. REJECT."
+)
+
+
 _DIAGRAM_EXPORT_GUIDANCE_V2 = (
     "DIAGRAM-EXPORT RULES (cluster constructs — NoeticCluster{...}, "
     "RelationCluster{...}, CoverOf(...), PartitionOf(...)):\n"
@@ -685,6 +723,12 @@ def build_cas_to_english_prompt_v2(
         parts.append(_INVERSION_GUIDANCE_V2)
     if cat == "diagram_export":
         parts.append(_DIAGRAM_EXPORT_GUIDANCE_V2)
+    if cat == "meta_logic_relation" or any(
+        marker in expr for marker in
+        ("NoeticCluster", "StateCluster", "RelationCluster",
+         "PartitionOf", "CoverOf", "∩", "∪", "∖", "⊂", "⊆", "⊃", "⊇")
+    ):
+        parts.append(_META_LOGIC_GUIDANCE_V2)
     parts.append(
         "Reply with ONLY the English paraphrase. No preamble, no list, no "
         "explanation of CAS notation, no quotes around the answer."

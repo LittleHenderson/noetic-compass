@@ -1124,20 +1124,25 @@ def compare_fingerprints(
                     )
                     break
 
-    # Cluster type. Suppressed when the source is a distributive cluster
+    # Cluster type. Suppressed when the source is ANY cluster source
     # AND every source tuple is satisfied — the cluster's content is
     # faithfully rendered even without an explicit "cluster"/"group"
-    # word in the English (e.g. "Each shaped by experience: one P, one
-    # C, one E, one O" is a structurally-faithful distributive
-    # rendering).
-    distributive_fully_satisfied = (
-        is_distributive_source
+    # word. Covers both:
+    #   - distributive same-noetic clusters: "Each shaped by experience:
+    #     one P, one C, one E, one O" (no "cluster" word)
+    #   - different-noetic clusters: "A unified mental constellation of
+    #     four thoughts: paying attention, drawn to something, ..." —
+    #     "constellation" / "pattern" / "structure" not in the
+    #     _CLUSTER_FRAMINGS dict, but the members all surface.
+    cluster_fully_satisfied = (
+        source.cluster_type is not None
         and not diff.noetics_missing
         and not diff.domains_missing
         and not diff.drives_missing
         and not diff.registers_missing
+        and not diff.coefficients_missing
     )
-    if source.cluster_type and not distributive_fully_satisfied:
+    if source.cluster_type and not cluster_fully_satisfied:
         if english.cluster_type is None:
             diff.cluster_type_mismatch = (
                 f"source cluster type {source.cluster_type} not surfaced in English"
