@@ -304,6 +304,41 @@ def test_co_n_composition_misrender_rejects(sfe):
 # ---------------------------------------------------------------------------
 
 
+def test_distributive_cluster_phrasing_accepts(sfe):
+    """User-caught false negative: StateCluster{^5^P, ^5^C, ^5^E, ^5^O}
+    rendered with distributive phrasing (one noetic alias mention applies
+    to four enumerated domains) is structurally faithful but the strict
+    clause-level binding rejected it. Cluster-source detection +
+    set-level relaxation accepts it now."""
+    src = "StateCluster{^5^P, ^5^C, ^5^E, ^5^O}"
+    eng = (
+        "Each shaped by accumulated experience: one grounded in "
+        "principled foundations, one cognitive, one evaluative, one "
+        "operational."
+    )
+    result = sfe.validate_sfe_round_trip(source_cas=src, english=eng)
+    assert result["passed"], (
+        "Distributive cluster phrasing must accept. Got: " + result["reason"]
+    )
+
+
+def test_distributive_only_relaxes_for_clusters_not_for_chains(sfe):
+    """Sanity check: the distributive relaxation must NOT apply to
+    non-cluster sources. ``^1^P -> ^4^P`` rendered with second operand
+    swapped to ^O still rejects (the original false-positive regression)."""
+    src = "^1^P -> ^4^P"  # arrow chain, not a cluster
+    eng_bad = (
+        "Paying attention to something in the principled arena leads "
+        "to it resonating deeply in the operational arena."
+    )
+    result = sfe.validate_sfe_round_trip(source_cas=src, english=eng_bad)
+    assert not result["passed"], (
+        "Cross-clause domain swap on a NON-cluster source must still "
+        "reject — distributive relaxation only applies to cluster sources. "
+        "Got: " + result["reason"]
+    )
+
+
 def test_subset_relation_accepts_either_proper_form(sfe):
     src = "NoeticCluster{^1, ^6, ^8} ⊂ Noetics"
     eng = (

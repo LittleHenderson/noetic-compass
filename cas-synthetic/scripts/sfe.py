@@ -155,6 +155,15 @@ class CASFingerprint:
     # cardinality |·|). Compared by set inclusion (source ⊆ english).
     meta_logic_operators: set = field(default_factory=set)
 
+    # Raw axis-presence (not paired with noetics) — used for distributive
+    # cluster comparisons where one noetic alias mention applies to N
+    # enumerated domain words across separate clauses. State-literal-
+    # occurrence binding misses these because it requires per-noetic
+    # pairing; raw presence captures them.
+    domains_present: set = field(default_factory=set)
+    drives_present: set = field(default_factory=set)
+    registers_present: set = field(default_factory=set)
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "state_literal_occurrences": {str(k): v for k, v in self.state_literal_occurrences.items()},
@@ -674,6 +683,11 @@ def extract_english_fingerprint(english: str) -> CASFingerprint:
     for _s, _e, n in noetic_spans:
         fp.bare_noetics[n] += 1
 
+    # Raw axis-presence sets (used by distributive cluster comparison)
+    fp.domains_present = {d for _s, _e, d in domain_spans}
+    fp.drives_present = {k for _s, _e, k in drive_spans}
+    fp.registers_present = {r for _s, _e, r in register_spans}
+
     # Bound state-literal occurrences via window-based association.
     bound_tuples = _bind_state_literals(
         text_lower,
@@ -905,12 +919,38 @@ def compare_fingerprints(
     # same tuple repeated (CRO three-register fusion), English needs at
     # least one matching tuple, not three. Repeated identical tuples
     # collapse to a single requirement.
+    #
+    # DISTRIBUTIVE CLUSTER RELAXATION (2026-05-08, second pass): when
+    # source is a cluster (StateCluster / NoeticCluster / etc.) AND has
+    # the SAME noetic across multiple domains/registers, English may
+    # legitimately use distributive phrasing: ``each shaped by
+    # experience: one principled, one cognitive, one evaluative, one
+    # operational``. The noetic alias appears ONCE; the domains appear
+    # in separate clauses. Strict clause-level binding rejects this
+    # (validator false negative). For distributive cluster sources, fall
+    # back to set-level matching: noetic anywhere + each domain anywhere.
     src_tuples = set(source.state_literal_occurrences.keys())
-    # Filter out source tuples that have a None noetic (e.g. those
-    # introduced only by domain/drive/register without a noetic anchor —
-    # the source extractor doesn't produce these, but defensive).
     src_tuples = {t for t in src_tuples if t[0] is not None}
     eng_tuples = set(english.state_literal_occurrences.keys())
+
+    # Detect distributive source: cluster_type set AND multiple tuples
+    # share the same noetic.
+    is_distributive_source = False
+    if source.cluster_type is not None:
+        from collections import defaultdict as _dd
+        _by_n: dict[int, list] = _dd(list)
+        for t in src_tuples:
+            _by_n[t[0]].append(t)
+        is_distributive_source = any(len(g) > 1 for g in _by_n.values())
+
+    # Build english axis-presence sets for the relaxed distributive check.
+    # Use RAW presence (english.domains_present etc.), not bound tuples,
+    # because distributive phrasing puts domains in clauses that don't
+    # contain a noetic alias — they would never appear in bound tuples.
+    eng_noetic_set_local = set(english.bare_noetics.keys())
+    eng_domain_set_local = set(english.domains_present)
+    eng_drive_set_local = set(english.drives_present)
+    eng_register_set_local = set(english.registers_present)
 
     # noetics_missing: distinct noetics in source not in English (fast
     # diagnostic; subset of bound-tuple check).
@@ -943,10 +983,27 @@ def compare_fingerprints(
                 return False
         return True
 
+    def _distributive_satisfied(st) -> bool:
+        """For distributive cluster sources, fall back to set-level
+        matching: noetic anywhere + each non-None axis anywhere."""
+        sn, sd, sdrive, sreg = st
+        if sn is not None and sn not in eng_noetic_set_local:
+            return False
+        if sd is not None and sd not in eng_domain_set_local:
+            return False
+        if sdrive is not None and sdrive not in eng_drive_set_local:
+            return False
+        if sreg is not None and sreg not in eng_register_set_local:
+            return False
+        return True
+
     # Track which axis-binding failures occur most often, to populate
     # the diff fields the corrective prompt knows how to format.
     for st in src_tuples:
         if any(_tuple_matches(st, et) for et in eng_tuples):
+            continue
+        # Distributive cluster: relaxed set-level match
+        if is_distributive_source and _distributive_satisfied(st):
             continue
         # No match. Diagnose which axes are missing.
         sn, sd, sdrive, sreg = st
@@ -1030,8 +1087,20 @@ def compare_fingerprints(
                     )
                     break
 
-    # Cluster type
-    if source.cluster_type:
+    # Cluster type. Suppressed when the source is a distributive cluster
+    # AND every source tuple is satisfied — the cluster's content is
+    # faithfully rendered even without an explicit "cluster"/"group"
+    # word in the English (e.g. "Each shaped by experience: one P, one
+    # C, one E, one O" is a structurally-faithful distributive
+    # rendering).
+    distributive_fully_satisfied = (
+        is_distributive_source
+        and not diff.noetics_missing
+        and not diff.domains_missing
+        and not diff.drives_missing
+        and not diff.registers_missing
+    )
+    if source.cluster_type and not distributive_fully_satisfied:
         if english.cluster_type is None:
             diff.cluster_type_mismatch = (
                 f"source cluster type {source.cluster_type} not surfaced in English"
