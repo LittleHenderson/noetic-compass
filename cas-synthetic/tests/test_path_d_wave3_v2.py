@@ -382,6 +382,194 @@ def test_recipe_preservation_skip_for_non_recipe():
     assert "skipped" in (r.reason or "").lower()
 
 
+# ---------------------------------------------------------------------------
+# Per-occurrence operator-alias check (Wave 2.5 catch-3 closure 2026-05-08)
+# ---------------------------------------------------------------------------
+
+
+def test_recipe_per_occurrence_pass_clean_recipe():
+    """Pass case — every operand's alias surfaces near its coefficient."""
+    m = _load_module()
+    r = m.validate_cas_to_english_recipe_per_occurrence(
+        source_cas="Θ(Ω_decision_47) = 0.7*^9^C|A + 1.5*^1^P|A → Ω_decision_47",
+        english_output=(
+            "To produce the outcome called decision_47, take 0.7 of "
+            "a thought that popped into mind in cognitive thinking "
+            "expressed in an analytical way, plus 1.5 of paying "
+            "attention to a foundational principle expressed in an "
+            "analytical way."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_recipe_per_occurrence_fail_noetic_3_to_5_swap():
+    """Fail case — ^3^C_{F5} mis-rendered as ^5 alias (who-you-are).
+
+    Mirrors seed_recipe_00407, the original target bug.
+    """
+    m = _load_module()
+    r = m.validate_cas_to_english_recipe_per_occurrence(
+        source_cas=(
+            "Θ(Ω_judgment_07) = 0.7*^7^O + 1.5*^5^C_{F4} + 2*^3^C_{F5} "
+            "→ Ω_judgment_07"
+        ),
+        english_output=(
+            "To produce the outcome called judgment_07, combine 0.7 of "
+            "practice-makes-perfect operational behavior, plus 1.5 of "
+            "who-you-are cognitive thinking shaped by the need for "
+            "connection, plus 2 of who-you-are cognitive thinking "
+            "shaped by the need for self-determination."
+        ),
+    )
+    assert not r.passed
+    assert "operator_misrender_at_coeff_2" in (r.reason or "")
+    assert "^3" in (r.reason or "")
+
+
+def test_recipe_per_occurrence_fail_noetic_2_to_6_swap():
+    """Fail case — ^2^C_{F3}|A mis-rendered as ^6 alias (breaking down).
+
+    Mirrors seed_recipe_00061.
+    """
+    m = _load_module()
+    r = m.validate_cas_to_english_recipe_per_occurrence(
+        source_cas=(
+            "Θ(Ω_withdrawal_61) = 0.7*^9^E + 2*^2^C_{F3}|A → Ω_withdrawal_61"
+        ),
+        english_output=(
+            "Take 0.7 of something that popped into mind in evaluative "
+            "judging, and add 2 of breaking down a thought about "
+            "vitality and energy expressed in an analytical way — "
+            "together these produce the outcome called withdrawal_61."
+        ),
+    )
+    assert not r.passed
+    assert "operator_misrender_at_coeff_2" in (r.reason or "")
+
+
+def test_recipe_per_occurrence_fail_register_E_to_A_swap():
+    """Fail case — |E source rendered with conflicting |A alias.
+
+    Mirrors seed_recipe_00165.
+    """
+    m = _load_module()
+    r = m.validate_cas_to_english_recipe_per_occurrence(
+        source_cas=(
+            "Θ(Ω_rehearsal_65) = 2*^1^P_{F1}|E + 0.5*^0^C_{F2} → Ω_rehearsal_65"
+        ),
+        english_output=(
+            "To produce the outcome called rehearsal_65, combine 2 of "
+            "paying attention to a need for cohesion in foundational "
+            "thinking, expressed in an analytical way, plus 0.5 of a "
+            "thought about a need for insight in cognitive thinking, "
+            "expressed in an analytical way."
+        ),
+    )
+    assert not r.passed
+    # Conflict-based register check should report |E source missing AND
+    # conflicting |A alias near the coefficient.
+    assert "register_misplaced_at_coeff_2" in (r.reason or "")
+    assert "|E" in (r.reason or "")
+
+
+def test_recipe_per_occurrence_pass_repeated_noetic_one_alias_per_coeff():
+    """Edge case — recipe with three operands sharing the same noetic
+    ^3 must accept when the ^3 alias appears at least once near each
+    coefficient. Order tolerance via greedy backtracking.
+    """
+    m = _load_module()
+    r = m.validate_cas_to_english_recipe_per_occurrence(
+        source_cas=(
+            "Θ(Ω_collapse_03) = 0.5*^3^P + 0.7*^3^C + 1*^3^E → Ω_collapse_03"
+        ),
+        english_output=(
+            "To produce the outcome called collapse_03, combine 0.5 of "
+            "an aversion to a foundational principle, add 0.7 of an "
+            "aversion in cognitive thinking, and add 1 of an aversion "
+            "in evaluative judgment."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_recipe_per_occurrence_skip_for_non_recipe():
+    """Pass-by-skip — non-recipe source emits no ``<coeff>*<state>`` pairs."""
+    m = _load_module()
+    r = m.validate_cas_to_english_recipe_per_occurrence(
+        source_cas="^3^P|A + ^4^E|f",
+        english_output="Aversion to a foundational principle plus an "
+        "evaluative resonance.",
+    )
+    assert r.passed
+    assert "skipped" in (r.reason or "").lower()
+
+
+def test_recipe_per_occurrence_fail_when_coefficient_anchor_missing():
+    """Fail case — coefficient ``1`` rendered as ``a full measure``;
+    digit anchor not found, so the per-occurrence check cannot resolve
+    the operand and reports anchor-not-found.
+
+    Mirrors seed_recipe_00361. The original recipe-preservation
+    validator misses this because ``1 in english_output`` substring-
+    matches inside ``rehearsal_61``.
+    """
+    m = _load_module()
+    r = m.validate_cas_to_english_recipe_per_occurrence(
+        source_cas=(
+            "Θ(Ω_rehearsal_61) = 1*^8^C|E + 0.5*^4^E_{F1} + 0.5*^7^P "
+            "→ Ω_rehearsal_61"
+        ),
+        english_output=(
+            "To produce the outcome called rehearsal_61, combine a full "
+            "measure of what triggered a memory in cognitive thinking "
+            "and mental reasoning, add 0.5 of what struck a chord in "
+            "evaluative judgment tied to the need for unity, and add "
+            "0.5 of practice making perfect in foundational thinking."
+        ),
+    )
+    assert not r.passed
+    assert "anchor not found" in (r.reason or "").lower()
+
+
+def test_recipe_per_occurrence_pass_register_absent_no_conflict():
+    """Pass case — register descriptor omitted from English window.
+
+    Pure-absence is tolerated by design. The conflict-based register
+    check only fails when a DIFFERENT register's alias is in the
+    window. If the operand has |T but no transcendent / strategic /
+    big-picture alias surfaces, AND no conflicting register alias
+    surfaces, the validator passes.
+    """
+    m = _load_module()
+    r = m.validate_cas_to_english_recipe_per_occurrence(
+        source_cas="Θ(Ω_outcome) = 1*^2^P|T + 0.5*^9^O → Ω_outcome",
+        english_output=(
+            "To produce the outcome called outcome, take 1 of being "
+            "drawn toward a foundational principle, and add 0.5 of "
+            "something that popped into mind operationally."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_recipe_per_occurrence_order_tolerant_duplicate_coeffs():
+    """Edge case — two operands share the same coefficient string and
+    appear in PERMUTED order in the English. Greedy backtracking must
+    find a satisfying assignment.
+    """
+    m = _load_module()
+    # Source order: ^2^C then ^6^P. English order: ^6 first, ^2 second.
+    r = m.validate_cas_to_english_recipe_per_occurrence(
+        source_cas="Θ(Ω_demo) = 0.5*^2^C + 0.5*^6^P → Ω_demo",
+        english_output=(
+            "Combine 0.5 of breaking down a foundational principle "
+            "and 0.5 of being drawn toward something cognitive."
+        ),
+    )
+    assert r.passed, r.reason
+
+
 def test_fractal_k_indices_pass_with_operator_names():
     m = _load_module()
     r = m.validate_cas_to_english_fractal_k_indices(
@@ -1533,3 +1721,474 @@ def test_tokenize_for_jaccard_separates_operators():
     assert "+" in toks
     assert "^3^P|A" in toks
     assert "^4^P|f" in toks
+
+
+# ---------------------------------------------------------------------------
+# Group 10: validate_no_phantom_outcome_framing
+#
+# The Wave 2.5 stratified audit (2026-05-08) found inversion + rpm_chain +
+# diagram_export + binary_composition + recipe records that rendered DRIVE
+# subscripts (``_{Fk}``) as if they were named OUTCOME targets (``Ω_<stem>``).
+# This validator closes that gap. It is a structural safety check, NOT a
+# category-specific content-preservation check.
+# ---------------------------------------------------------------------------
+
+
+def test_phantom_outcome_audit_seed_inversion_00038():
+    """Concrete audit-cited record: ^2^O_{F2} + ^3^O_{F6} rendered with
+    'outcome called wisdom' / 'outcome called structure' (F2/F6 are drives,
+    wisdom/structure are drive aliases). Source has no Ω_ token."""
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas="^2^O_{F2} + ^3^O_{F6}",
+        english=(
+            "A positive pull toward the outcome called wisdom, combined "
+            "with a negative push away from the outcome called structure."
+        ),
+    )
+    assert not r.passed
+    assert "outcome_called_or_named" in r.detail["triggers"]
+    assert any(
+        "wisdom" in p.lower() or "structure" in p.lower()
+        for p in r.detail["phantom_phrases"]
+    )
+
+
+def test_phantom_outcome_audit_seed_inversion_00042():
+    """Audit-cited: ^2^O_{F3} + ^3^O_{F5} -> 'outcome named vitality' /
+    'outcome named agency'."""
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas="^2^O_{F3} + ^3^O_{F5}",
+        english=(
+            "A cognitive state drawn toward the outcome named vitality, "
+            "combined with a cognitive state pushed away from the "
+            "outcome named agency."
+        ),
+    )
+    assert not r.passed
+    assert "outcome_called_or_named" in r.detail["triggers"]
+
+
+def test_phantom_outcome_audit_seed_rpm_chain_00350():
+    """Audit-cited: ``^6^P_{F2}`` rendered as 'in the realm of wisdom'.
+    F2 drive surfaces as a realm-style outcome."""
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas="let stageD2_2_0349 = ^6^P_{F2}",
+        english=(
+            "Let stageD2_2_0349 name breaking down an idea in the realm "
+            "of wisdom."
+        ),
+    )
+    assert not r.passed
+    assert "realm_of_axis_word" in r.detail["triggers"]
+
+
+def test_phantom_outcome_passes_when_no_outcome_framing_present():
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas="^3^P_{F1}|A",
+        english=(
+            "A principled aversion driven by a need for unity, expressed "
+            "through analytical reasoning."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_phantom_outcome_passes_with_matching_omega_stem():
+    """When source has Ω_<stem> and English uses 'outcome called <stem>'
+    referencing that exact stem, the framing is legitimate."""
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas="Θ(Ω_patience) = 0.7*^9^P + 0.3*^1^P → Ω_patience",
+        english="The recipe yields the outcome called patience.",
+    )
+    assert r.passed, r.reason
+
+
+def test_phantom_outcome_passes_with_ascii_omega_spelling():
+    """diagram_export records use the ASCII pre-compile spelling
+    ``Theta(Omega_decision)`` and ``Omega_X`` rather than ``Θ(Ω_X)``.
+    The validator must accept that spelling as a legitimate source Ω."""
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas=(
+            "export let epsilon_0343 = Theta(Omega_decision) = 1*^0^C + "
+            "1*^1^C -> Omega_decision"
+        ),
+        english=(
+            "Export 'epsilon_0343' as a recipe for the outcome called "
+            "decision: together these produce the named outcome decision."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_phantom_outcome_fails_when_omega_stem_mismatched():
+    """Source has Ω_alignment but English claims 'outcome called wisdom'.
+    The captured stem doesn't match any source Ω target — reject."""
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas="Θ(Ω_alignment) = 0.5*^2^P → Ω_alignment",
+        english="A pull toward the outcome called wisdom.",
+    )
+    assert not r.passed, r.reason
+
+
+def test_phantom_outcome_passes_for_plain_outcome_of_game():
+    """Plain English 'the outcome of the game' must pass — 'of' follows
+    'outcome' so this is a prepositional phrase, not phantom framing."""
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas="^3^P",
+        english="The outcome of the game was uncertain.",
+    )
+    assert r.passed, r.reason
+
+
+def test_phantom_outcome_passes_for_realm_of_mathematics():
+    """Plain English 'in the realm of mathematics' must pass — mathematics
+    is not a CAS axis word."""
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas="^6^C",
+        english="A new theorem in the realm of mathematics.",
+    )
+    assert r.passed, r.reason
+
+
+def test_phantom_outcome_passes_for_realm_of_art():
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas="^2^P",
+        english="A masterpiece in the realm of art.",
+    )
+    assert r.passed, r.reason
+
+
+def test_phantom_outcome_fails_for_outcome_called_drive_alias_no_omega():
+    """When source has no Ω_ AND English says 'outcome called wisdom',
+    that's drive→outcome confusion — reject regardless of which drive
+    alias was used."""
+    m = _load_module()
+    for alias in ("wisdom", "vitality", "agency", "structure", "unity",
+                  "connection", "purpose"):
+        r = m.validate_no_phantom_outcome_framing(
+            source_cas="^2^O_{F2}",
+            english=f"A pull toward the outcome called {alias}.",
+        )
+        assert not r.passed, f"alias={alias} should fail: {r.reason}"
+
+
+def test_phantom_outcome_named_outcome_X_pattern_caught():
+    """The 'named outcome X' construction (used in seed_diagram_export_00442
+    audit case where ^0^O_{F4} was rendered as 'an outcome named connection')
+    must trigger rejection."""
+    m = _load_module()
+    r = m.validate_no_phantom_outcome_framing(
+        source_cas="export let tau_0441 = ^0^O_{F4}",
+        english=(
+            "Export tau_0441 as a thought paired with an outcome named "
+            "connection or belonging."
+        ),
+    )
+    assert not r.passed, r.reason
+    assert "outcome_called_or_named" in r.detail["triggers"]
+
+
+def test_phantom_outcome_runs_in_pipeline_for_every_category():
+    """The phantom-outcome validator must always fire from
+    run_validators_for_cas_to_english, regardless of grammar_category."""
+    m = _load_module()
+    seed = {
+        "seed_id": "audit_38",
+        "expression": "^2^O_{F2} + ^3^O_{F6}",
+        "grammar_category": "inversion",
+    }
+    results = m.run_validators_for_cas_to_english(
+        seed=seed,
+        english_output=(
+            "A positive pull toward the outcome called wisdom, combined "
+            "with a negative push away from the outcome called structure."
+        ),
+    )
+    names = [r.name for r in results]
+    assert "no_phantom_outcome_framing" in names
+    failed_names = {r.name for r in results if not r.passed}
+    assert "no_phantom_outcome_framing" in failed_names
+
+
+def test_phantom_outcome_runs_for_state_literal_category_too():
+    """state_literal category must also receive the phantom-outcome
+    check — it is a global safety gate, not category-specific."""
+    m = _load_module()
+    seed = {
+        "seed_id": "sl",
+        "expression": "^3^P|A",
+        "grammar_category": "state_literal",
+    }
+    results = m.run_validators_for_cas_to_english(
+        seed=seed,
+        english_output="A principled aversion expressed analytically.",
+    )
+    names = [r.name for r in results]
+    assert "no_phantom_outcome_framing" in names
+
+
+# ---------------------------------------------------------------------------
+# Group 10: CO-N composition handling in binary_composition
+#
+# Added 2026-05-08 after a Wave 2.5 audit found that ``CO-N ∘ CO-M`` source
+# expressions slipped past the state-literal-only validator. Audit case:
+# seed_binary_composition_00498 had source ``CO-9 ∘ CO-7`` and English
+# rendering ``something that struck a chord ... something that hit hard``
+# — both ^4 (Vibration) aliases, none of ^9 (Below/Effect) or ^7 (Rhythm).
+# ---------------------------------------------------------------------------
+
+
+def test_extract_co_n_operators_finds_indices():
+    m = _load_module()
+    assert m._extract_co_n_operators("CO-9 ∘ CO-7") == [9, 7]
+    assert m._extract_co_n_operators("CO-3 ∘ CO-3") == [3, 3]
+    assert m._extract_co_n_operators("^3^P|A") == []
+
+
+def test_co_n_binary_composition_pass_with_correct_aliases():
+    """CO-9 ∘ CO-7 rendered with ^9 + ^7 aliases passes."""
+    m = _load_module()
+    r = m.validate_cas_to_english_binary_composition(
+        source_cas="CO-9 ∘ CO-7",
+        english_output=(
+            "Something that just clicked combined with muscle memory."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_co_n_binary_composition_fail_audit_case_misrender():
+    """Audit case: CO-9 ∘ CO-7 rendered with ^4 aliases (struck a chord /
+    hit hard) — must fail with operator_misrender_in_co_n_composition."""
+    m = _load_module()
+    r = m.validate_cas_to_english_binary_composition(
+        source_cas="CO-9 ∘ CO-7",
+        english_output=(
+            "A composition where something that struck a chord in the "
+            "operational arena is then integrated with something that "
+            "hit hard in the evaluative arena."
+        ),
+    )
+    assert not r.passed
+    assert "operator_misrender_in_co_n_composition" in (r.reason or "")
+    # Both source operators (9, 7) should be reported missing.
+    assert 9 in r.detail.get("co_n_missing", [])
+    assert 7 in r.detail.get("co_n_missing", [])
+    # The intruder ^4 should surface in detail.
+    assert 4 in r.detail.get("co_n_intruder_operators", [])
+
+
+def test_co_n_binary_composition_fail_silent_drop():
+    """If the source operator's aliases are simply absent (not replaced by
+    a wrong one), still fail — but with the simpler 'missing' diagnostic
+    rather than the misrender flag."""
+    m = _load_module()
+    r = m.validate_cas_to_english_binary_composition(
+        source_cas="CO-2 ∘ CO-7",
+        english_output="A composition of two things that go together.",
+    )
+    assert not r.passed
+    assert "missing CO-N operator aliases" in (r.reason or "")
+
+
+def test_co_n_binary_composition_repeated_operator():
+    """CO-3 ∘ CO-3 needs a ^3 alias — exists for both occurrences via
+    one rendering."""
+    m = _load_module()
+    r = m.validate_cas_to_english_binary_composition(
+        source_cas="CO-3 ∘ CO-3",
+        english_output=(
+            "Two aversions composed together, both rubbing the wrong way."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_co_n_and_caret_n_mixed_source_both_checked():
+    """Edge case: source mixes ``CO-N`` and ``^N^D``. Both shapes should
+    be checked; failures from either branch surface together."""
+    m = _load_module()
+    # ^3^P needs a ^3 alias AND a P-domain word; CO-7 needs a ^7 alias.
+    # English provides ^3 + P + ^7 — should pass.
+    r_pass = m.validate_cas_to_english_binary_composition(
+        source_cas="^3^P + CO-7",
+        english_output=(
+            "An aversion to a foundational principle paired with practiced "
+            "muscle memory."
+        ),
+    )
+    assert r_pass.passed, r_pass.reason
+    # And a fail case where CO-7 alias is missing.
+    r_fail = m.validate_cas_to_english_binary_composition(
+        source_cas="^3^P + CO-7",
+        english_output=(
+            "An aversion to a foundational principle paired with another "
+            "behavior."
+        ),
+    )
+    assert not r_fail.passed
+
+
+def test_run_validators_dispatches_co_n_composition_with_or_without_category():
+    """The wiring should invoke the binary_composition validator on a
+    CO-N ∘ CO-M source even when grammar_category is missing or wrong."""
+    m = _load_module()
+    seed = {
+        "expression": "CO-9 ∘ CO-7",
+        # No grammar_category — exercises the shape-based trigger.
+    }
+    results = m.run_validators_for_cas_to_english(
+        seed=seed,
+        english_output=(
+            "Something that struck a chord plus something that hit hard."
+        ),
+    )
+    names = [r.name for r in results]
+    assert "cas_to_english_binary_composition" in names
+    bc = next(r for r in results if r.name == "cas_to_english_binary_composition")
+    assert not bc.passed
+    assert "operator_misrender_in_co_n_composition" in (bc.reason or "")
+
+
+# ---------------------------------------------------------------------------
+# Group 11: per-stage noetic preservation in rpm_chain
+#
+# Audit case: seed_rpm_chain_00110 had four ^8 stages but only stageD2
+# rendered the ^8 alias ('triggered'); stageW2/P2 dropped the alias and
+# said 'cognitive judgment' / 'evaluative judgment'. seed_rpm_chain_00350
+# had the same shape with ^6.
+# ---------------------------------------------------------------------------
+
+
+def test_per_stage_noetic_pass_when_each_stage_has_alias():
+    m = _load_module()
+    src = (
+        "let stageA = ^0^P; let stageB = ^8^P_{F2}; "
+        "let stageC = ^8^C_{F2}; let stageD = ^8^E_{F2}; "
+        "stageA -> stageB"
+    )
+    eng = (
+        "Let stageA name a foundational thought, stageB name something "
+        "triggered in the cognitive realm, stageC name a triggered "
+        "memory in the cognitive realm, stageD name a triggered "
+        "association in the evaluative realm. stageA leads to stageB."
+    )
+    failed, ok = m._check_per_stage_noetic_preservation(
+        source_cas=src, english_output=eng
+    )
+    assert failed == []
+    # Four stages all OK.
+    assert {s["name"] for s in ok} == {"stageA", "stageB", "stageC", "stageD"}
+
+
+def test_per_stage_noetic_fail_audit_case_seed_rpm_chain_00110():
+    """The exact audit example: stages 2-4 of a 4-stage ^8 chain drop
+    the ^8 alias. Per-stage check should flag stageW2 + stageP2."""
+    m = _load_module()
+    src = (
+        "let stageA0_2_0109 = ^0^P; let stageD2_2_0109 = ^8^P_{F2}; "
+        "let stageW2_2_0109 = ^8^C_{F2}; let stageP2_2_0109 = ^8^E_{F2}; "
+        "stageW2_2_0109 -> stageP2_2_0109"
+    )
+    eng = (
+        "Let stageA0_2_0109 name a foundational thought, stageD2_2_0109 "
+        "name something triggered in the realm of wisdom and insight, "
+        "stageW2_2_0109 name a cognitive judgment in the realm of wisdom "
+        "and insight, and stageP2_2_0109 name an evaluative judgment in "
+        "the realm of wisdom and insight. stageW2_2_0109 leads to "
+        "stageP2_2_0109."
+    )
+    failed, _ok = m._check_per_stage_noetic_preservation(
+        source_cas=src, english_output=eng
+    )
+    failed_names = {f["name"] for f in failed}
+    assert "stageW2_2_0109" in failed_names
+    assert "stageP2_2_0109" in failed_names
+    # And the rpm_chain validator surfaces the same diagnostic.
+    r = m.validate_cas_to_english_rpm_chain(
+        source_cas=src, english_output=eng
+    )
+    assert not r.passed
+    assert "stage_noetic_dropped" in (r.reason or "")
+
+
+def test_per_stage_noetic_pass_with_anaphor_continues():
+    """Anaphor exception: 'continues the same' / 'this same' permits a
+    stage clause to inherit the alias without restating it."""
+    m = _load_module()
+    src = (
+        "let stageA = ^0^P; let stageB = ^6^P_{F2}; "
+        "let stageC = ^6^C_{F2}; let stageD = ^6^E_{F2}; "
+        "stageA -> stageB"
+    )
+    eng = (
+        "Let stageA name a foundational thought, stageB name breaking "
+        "down a principled idea, stageC continues the same operation in "
+        "the cognitive realm, and stageD repeats it again in the "
+        "evaluative realm. stageA then leads to stageB."
+    )
+    failed, ok = m._check_per_stage_noetic_preservation(
+        source_cas=src, english_output=eng
+    )
+    assert failed == []
+    # stageC and stageD pass via anaphor.
+    anaphor_names = {s["name"] for s in ok if s["anaphor"]}
+    assert "stageC" in anaphor_names
+    assert "stageD" in anaphor_names
+
+
+def test_per_stage_clause_window_handles_underscored_digit_names():
+    """Stage names like 'stageW2_2_0109' contain digits and underscores;
+    clause extraction must match them correctly."""
+    m = _load_module()
+    eng = (
+        "alpha, stageW2_2_0109 name a triggered memory in the cognitive "
+        "realm, beta."
+    )
+    clause = m._stage_clause_window(
+        english_output=eng, stage_name="stageW2_2_0109"
+    )
+    assert clause is not None
+    assert "stageW2_2_0109" in clause
+    assert "triggered" in clause
+
+
+def test_per_stage_clause_window_returns_none_for_missing_stage():
+    m = _load_module()
+    clause = m._stage_clause_window(
+        english_output="No stage names here.", stage_name="stageZ_0099"
+    )
+    assert clause is None
+
+
+def test_rpm_chain_pass_when_audit_case_fixed():
+    """Sanity: if the audit case is rewritten so stageW2/P2 also surface
+    'triggered' (or use anaphor), the rpm_chain validator passes."""
+    m = _load_module()
+    src = (
+        "let stageA0_2_0109 = ^0^P; let stageD2_2_0109 = ^8^P_{F2}; "
+        "let stageW2_2_0109 = ^8^C_{F2}; let stageP2_2_0109 = ^8^E_{F2}; "
+        "stageW2_2_0109 -> stageP2_2_0109"
+    )
+    eng = (
+        "Let stageA0_2_0109 name a foundational thought, stageD2_2_0109 "
+        "name something triggered in the realm of wisdom, stageW2_2_0109 "
+        "name a triggered cognitive shift in the realm of wisdom, and "
+        "stageP2_2_0109 name an evaluative judgment that triggered "
+        "follow-on action in the realm of wisdom. stageW2_2_0109 leads "
+        "to stageP2_2_0109."
+    )
+    r = m.validate_cas_to_english_rpm_chain(
+        source_cas=src, english_output=eng
+    )
+    assert r.passed, r.reason

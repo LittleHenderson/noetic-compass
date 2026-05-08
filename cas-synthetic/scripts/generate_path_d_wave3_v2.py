@@ -1027,6 +1027,418 @@ def validate_cas_to_english_recipe_preservation(
     )
 
 
+_RE_RECIPE_OPERAND = re.compile(
+    r"(?P<coeff>\d+(?:\.\d+)?)\s*\*\s*"
+    r"(?P<state>"
+    r"\^\d+(?:\^[A-Za-z])?(?:_\{F\d+\})?(?:\|(?:[A-Za-z]|⟨[^⟩]+⟩))?"
+    r")"
+)
+
+
+# Extended noetic-alias substrings for the per-occurrence validator only.
+# Adds variants observed in run 20260508T110453Z that
+# NOETIC_VALIDATION_TOKENS (used by the fractal validator) lacks.
+# Scoped to this validator so the fractal validator's behavior is
+# unchanged.
+#
+# Tolerances added: hyphenated forms (``breaking-down`` for
+# ``break down``), inserted-pronoun forms (``rubs you the wrong way``
+# for ``rubs the wrong way``), small set of canonical synonyms
+# (``realization`` for ^9, ``analysis`` for ^6).
+_NOETIC_PER_OCCURRENCE_EXTRA: dict[int, tuple[str, ...]] = {
+    0: ("realization",),
+    1: ("attention",),
+    2: ("draw to", "drawn-to"),
+    3: ("rubs you the wrong way", "rub the wrong way",
+        "rubs the wrong way", "rubbed the wrong way",
+        "rubbing the wrong way", "wrong way"),
+    4: ("resonant",),
+    5: ("who you are", "who-you-are", "shaped by"),
+    6: ("breaking-down", "break-down", "broken-down",
+        "analysis", "analyse", "analyze", "analyzing", "analysing"),
+    7: ("practice makes perfect", "practice-makes-perfect",
+        "practice making perfect", "mental practice"),
+    8: ("triggered a memory", "trigger a memory"),
+    9: ("realization", "realisation",
+        "popped into", "the thought came", "came to mind"),
+}
+
+
+def _noetic_aliases_per_occurrence(n: int) -> tuple[str, ...]:
+    """Combined alias tuple = NOETIC_VALIDATION_TOKENS[n] + extras."""
+    base = NOETIC_VALIDATION_TOKENS.get(n, ())
+    extra = _NOETIC_PER_OCCURRENCE_EXTRA.get(n, ())
+    return tuple(base) + tuple(extra)
+
+
+def _parse_recipe_operands(source_cas: str) -> list[dict[str, Any]]:
+    """Parse ``<coeff>*<state>`` pairs from a recipe LHS.
+
+    Returns a list of dicts with keys: ``coeff_str`` (raw digit form),
+    ``coeff_value`` (canonical float form ``f"{f:g}"``), ``noetic`` (int),
+    ``domain`` (str|None), ``drive`` (int|None), ``register`` (str|None),
+    ``state_repr`` (the raw state-literal substring).
+
+    Only the LHS of the recipe (everything before the first chain arrow)
+    is parsed; the RHS is the production target Omega, not an operand.
+    """
+    lhs = source_cas
+    for arrow in ("→", "->"):
+        idx = lhs.find(arrow)
+        if idx >= 0:
+            lhs = lhs[:idx]
+    operands: list[dict[str, Any]] = []
+    for m in _RE_RECIPE_OPERAND.finditer(lhs):
+        coeff_str = m.group("coeff")
+        state = m.group("state")
+        sm = _RE_STATE_LITERAL.match(state)
+        if not sm:
+            continue
+        try:
+            n = int(sm.group(1))
+        except (TypeError, ValueError):
+            continue
+        d = sm.group(2)
+        drive_raw = sm.group(3)
+        reg = sm.group(4)
+        drive_idx: Optional[int] = None
+        if drive_raw and drive_raw.startswith("F"):
+            try:
+                drive_idx = int(drive_raw[1:])
+            except ValueError:
+                drive_idx = None
+        try:
+            coeff_value = f"{float(coeff_str):g}"
+        except ValueError:
+            coeff_value = coeff_str
+        operands.append({
+            "coeff_str": coeff_str,
+            "coeff_value": coeff_value,
+            "noetic": n,
+            "domain": d,
+            "drive": drive_idx,
+            "register": reg,
+            "state_repr": state,
+        })
+    return operands
+
+
+def _coefficient_anchor_spans(
+    coeff_str: str, coeff_value: str, english: str
+) -> list[tuple[int, int]]:
+    """Find character-span occurrences of a coefficient in the English.
+
+    Tolerates trailing-zero / leading-dot variants by trying multiple
+    canonical forms. Each match is anchored on a digit boundary so
+    ``0.7`` does not match inside ``0.75`` and ``2`` does not match
+    inside ``2026``.
+    """
+    spans: list[tuple[int, int]] = []
+    forms: set[str] = {coeff_str, coeff_value}
+    try:
+        f = float(coeff_str)
+        forms.update({f"{f:g}", f"{f:.1f}", f"{f:.2f}"})
+        if f == int(f):
+            forms.add(f"{int(f)}")
+    except ValueError:
+        pass
+    seen_starts: set[int] = set()
+    for form in sorted(forms, key=len, reverse=True):
+        if not form:
+            continue
+        pat = re.compile(rf"(?<![\w.]){re.escape(form)}(?![\w.])")
+        for m in pat.finditer(english):
+            if m.start() in seen_starts:
+                continue
+            overlap = any(
+                start <= m.start() < end for (start, end) in spans
+            )
+            if overlap:
+                continue
+            spans.append((m.start(), m.end()))
+            seen_starts.add(m.start())
+    spans.sort()
+    return spans
+
+
+def _phrase_window(
+    english: str, start: int, end: int, radius: int = 120
+) -> str:
+    """Return a phrase-bounded substring around span [start, end).
+
+    Up to ``radius`` characters before ``start`` and after ``end``,
+    trimmed at the nearest conjunctive-phrase boundary so a coefficient
+    sitting in operand-1's clause does not see operand-2's alias on the
+    other side of a strong boundary.
+
+    Boundary set deliberately excludes plain ``and`` / ``plus`` -- those
+    are within-clause connectives in many recipe descriptions (``a need
+    for cohesion in foundational thinking, expressed in an analytical
+    way``) where cutting at ``and`` would orphan the register
+    descriptor from its operand. Strong boundaries only: ``, and ``,
+    ``, plus ``, ``; ``, em-dash, en-dash, period.
+    """
+    lo = max(0, start - radius)
+    hi = min(len(english), end + radius)
+    snippet = english[lo:hi]
+    rel_start = start - lo
+    rel_end = end - lo
+    boundary_tokens = (
+        ", and ", ", plus ", "; ", " — ", " – ", "—", "–", ". ",
+    )
+    left_text = snippet[:rel_start]
+    left_cut = 0
+    for token in boundary_tokens:
+        idx = left_text.rfind(token)
+        if idx > left_cut:
+            left_cut = idx + len(token)
+    right_text = snippet[rel_end:]
+    right_cut = len(snippet)
+    for token in boundary_tokens:
+        idx = right_text.find(token)
+        if idx >= 0:
+            candidate = rel_end + idx
+            if candidate < right_cut:
+                right_cut = candidate
+    return snippet[left_cut:right_cut]
+
+
+def validate_cas_to_english_recipe_per_occurrence(
+    *,
+    source_cas: str,
+    english_output: str,
+    window_radius: int = 120,
+) -> ValidatorResult:
+    """Recipe slot -- per-occurrence operator-alias check.
+
+    Sibling validator to ``validate_cas_to_english_recipe_preservation``.
+    For each ``<coeff>*<state_literal>`` operand on the recipe LHS:
+
+      * locate the coefficient digit-form in the English with a strict
+        digit-boundary anchor (so ``1`` does not match inside
+        ``rehearsal_61``);
+      * within a phrase-bounded window (~``window_radius`` chars,
+        trimmed at strong conjunctive boundaries: ``, and ``,
+        ``, plus ``, ``; ``, em-dash, en-dash, period), require the
+        operand's noetic alias from ``NOETIC_VALIDATION_TOKENS`` to
+        appear;
+      * register check is CONFLICT-BASED. If the operand has a register
+        ``|R`` and the operand's window contains a DIFFERENT register
+        letter's alias (mode confusion such as |E source rendered with
+        |A "analytical" alias), fail. Pure absence of the source
+        register's alias is allowed (the model often renders register
+        positionally outside the window or omits register
+        descriptors when fluent context already conveys it).
+
+    Operand resolution is order-tolerant by greedy assignment with
+    backtracking-lite: when two operands share the same coefficient
+    string, every pairing is tried.
+
+    Skipped (passed=True) when the source CAS has no recipe operands.
+
+    Tone discipline: this is a window-based heuristic, not an AST-level
+    semantic check. Some legitimate phrasings may still be reported as
+    misrenders when the alias surfaces outside the heuristic window,
+    and some genuine misrenders may slip past when the wrong noetic
+    happens to share substrings with the right one. False-positive risk
+    is nonzero; treat the validator as a catch-most-cases gate, not a
+    proof.
+
+    Closes 3 known operator-confusion patterns missed by the original
+    recipe validator (see seed_recipe_00407 ^3->^5, seed_recipe_00061
+    ^2->^6, seed_recipe_00165 |E->|A; module header has details).
+    """
+    operands = _parse_recipe_operands(source_cas)
+    if not operands:
+        return ValidatorResult(
+            name="cas_to_english_recipe_per_occurrence",
+            passed=True,
+            reason="not a recipe — validator skipped",
+            detail={"operands_found": 0},
+        )
+
+    operand_candidates: list[list[dict[str, Any]]] = []
+    missing_anchor: list[str] = []
+    for op in operands:
+        spans = _coefficient_anchor_spans(
+            op["coeff_str"], op["coeff_value"], english_output
+        )
+        cand: list[dict[str, Any]] = []
+        for s, e in spans:
+            window = _phrase_window(
+                english_output, s, e, radius=window_radius
+            )
+            cand.append({
+                "span": (s, e),
+                "window": window,
+                "window_lower": window.lower(),
+                "window_singular": re.sub(
+                    r"(\w+)s\b", r"\1", window.lower()
+                ),
+            })
+        if not cand:
+            missing_anchor.append(
+                f"coeff_{op['coeff_str']}@{op['state_repr']}"
+            )
+        operand_candidates.append(cand)
+
+    if missing_anchor:
+        return ValidatorResult(
+            name="cas_to_english_recipe_per_occurrence",
+            passed=False,
+            reason=(
+                f"recipe coefficient(s) missing from English (anchor not "
+                f"found): {missing_anchor}"
+            ),
+            detail={"missing_anchors": missing_anchor},
+        )
+
+    def _try_assignment(
+        order: list[int],
+        claimed: set[tuple[int, int]],
+    ) -> tuple[bool, list[dict[str, Any]], list[dict[str, Any]]]:
+        if not order:
+            return True, [], []
+        idx = order[0]
+        rest = order[1:]
+        op = operands[idx]
+        n = op["noetic"]
+        ntoks = _noetic_aliases_per_occurrence(n)
+        reg = op["register"]
+        reg_letters: list[str] = []
+        if reg:
+            if reg.startswith("⟨") and reg.endswith("⟩"):
+                reg_letters = [
+                    x.strip() for x in reg[1:-1].split(",") if x.strip()
+                ]
+            else:
+                reg_letters = [reg]
+        last_fail: Optional[dict[str, Any]] = None
+        for cand in operand_candidates[idx]:
+            if cand["span"] in claimed:
+                continue
+            wl = cand["window_lower"]
+            ws = cand["window_singular"]
+            noetic_ok = (
+                any(tok in wl or tok in ws for tok in ntoks)
+                if ntoks else True
+            )
+            if not noetic_ok:
+                last_fail = {
+                    "operand_index": idx,
+                    "operand": op["state_repr"],
+                    "coefficient": op["coeff_str"],
+                    "reason": (
+                        f"operator_misrender_at_coeff_"
+                        f"{op['coeff_str']}: ^{n} alias not found near "
+                        f"coefficient"
+                    ),
+                    "snippet": cand["window"].strip(),
+                }
+                continue
+            # Conflict-based register check. Only fires when the
+            # operand has a source register AND that register's alias
+            # is missing from the window AND a DIFFERENT register
+            # letter's alias is present in the window. Pure absence is
+            # tolerated (register descriptors often surface outside the
+            # heuristic window or are dropped in fluent prose). This
+            # is the seed_recipe_00165 |E->|A pattern.
+            reg_fail: Optional[str] = None
+            for letter in reg_letters:
+                rtoks = REGISTER_ALIASES.get(letter, ())
+                source_reg_present = bool(rtoks) and any(
+                    rt in wl for rt in rtoks
+                )
+                if source_reg_present:
+                    continue
+                # Source register alias is absent; look for a
+                # conflicting register letter's STRICT alias set
+                # (CROSS_REGISTER_EXTRA_MODE_ALIASES is narrower than
+                # REGISTER_ALIASES so common words like "meaning" do
+                # not trigger).
+                conflicting: list[str] = []
+                for other in ("T", "A", "f", "E"):
+                    if other == letter:
+                        continue
+                    other_strict = CROSS_REGISTER_EXTRA_MODE_ALIASES.get(
+                        other, ()
+                    )
+                    if other_strict and any(
+                        rt in wl for rt in other_strict
+                    ):
+                        conflicting.append(other)
+                if conflicting:
+                    reg_fail = (
+                        f"register_misplaced_at_coeff_"
+                        f"{op['coeff_str']}: |{letter} source register "
+                        f"missing AND conflicting alias for "
+                        f"|{','.join(conflicting)} present near "
+                        f"coefficient"
+                    )
+                    break
+            if reg_fail is not None:
+                last_fail = {
+                    "operand_index": idx,
+                    "operand": op["state_repr"],
+                    "coefficient": op["coeff_str"],
+                    "reason": reg_fail,
+                    "snippet": cand["window"].strip(),
+                }
+                continue
+            new_claimed = claimed | {cand["span"]}
+            ok, fails, passes = _try_assignment(rest, new_claimed)
+            if ok:
+                passes.append({
+                    "operand_index": idx,
+                    "operand": op["state_repr"],
+                    "coefficient": op["coeff_str"],
+                    "snippet": cand["window"].strip(),
+                })
+                return True, fails, passes
+            if fails and last_fail is None:
+                last_fail = fails[0]
+        return (
+            False,
+            [last_fail] if last_fail else [{
+                "operand_index": idx,
+                "operand": op["state_repr"],
+                "coefficient": op["coeff_str"],
+                "reason": (
+                    f"operator_misrender_at_coeff_"
+                    f"{op['coeff_str']}: no candidate window satisfied "
+                    f"operand checks"
+                ),
+                "snippet": "",
+            }],
+            [],
+        )
+
+    success, fail_records, pass_records = _try_assignment(
+        list(range(len(operands))), set()
+    )
+    if success:
+        return ValidatorResult(
+            name="cas_to_english_recipe_per_occurrence",
+            passed=True,
+            detail={
+                "operands_found": len(operands),
+                "operand_passes": pass_records,
+            },
+        )
+    return ValidatorResult(
+        name="cas_to_english_recipe_per_occurrence",
+        passed=False,
+        reason="; ".join(
+            f"{f['reason']} — snippet: {f['snippet']!r}"
+            for f in fail_records
+        ),
+        detail={
+            "operands_found": len(operands),
+            "operand_failures": fail_records,
+        },
+    )
+
+
 def validate_cas_to_english_fractal_k_indices(
     *,
     source_cas: str,
@@ -1378,6 +1790,28 @@ def _english_contains_any(out_lower: str, tokens: Iterable[str]) -> bool:
     return any(tok.lower() in out_lower for tok in tokens)
 
 
+# Match the ``CO-N`` operator surface form. CAS notation accepts both ``^N``
+# and ``CO-N`` — same operator, different surface form (CLAUDE.md). The
+# ``CO-N`` form appears in a small subset of binary_composition seeds (e.g.
+# ``CO-9 ∘ CO-7``); the ``^N`` form covers the rest. The state-literal
+# regex above does NOT match ``CO-N`` because there's no caret.
+_RE_CO_N_OPERATOR = re.compile(r"\bCO-(\d+)\b")
+
+
+def _extract_co_n_operators(source_cas: str) -> list[int]:
+    """Return the list of operator indices that surface as ``CO-N`` in
+    source. Order-preserving; duplicates retained (a record can legitimately
+    repeat the same operator, e.g. ``CO-3 ∘ CO-3``).
+    """
+    out: list[int] = []
+    for raw in _RE_CO_N_OPERATOR.findall(source_cas):
+        try:
+            out.append(int(raw))
+        except ValueError:  # pragma: no cover — regex restricts to digits
+            continue
+    return out
+
+
 def _state_literal_components(source_cas: str) -> list[dict[str, Any]]:
     """Return the list of state literals in source with their parsed
     components. Each entry: ``{noetic: int, domain: str|None, drive: int|None,
@@ -1519,34 +1953,110 @@ def validate_cas_to_english_binary_composition(
     we do NOT fail on operator phrasing. Drive + register checks are
     relaxed here (binary compositions tend to be drive-less in the
     preflight corpus).
+
+    Two source surface forms are supported:
+
+    1. ``^N^D + ^M^D`` (state-literal form) — handled by
+       ``_check_state_literal_preservation``.
+    2. ``CO-N ∘ CO-M`` (operator-only form, no domain) — checked via
+       ``_extract_co_n_operators``. For each ``CO-N`` source operator,
+       require an alias from ``NOETIC_VALIDATION_TOKENS[N]`` to surface
+       in English. When an operator's alias is missing AND an alias for
+       a DIFFERENT operator (one not present in the source) is being
+       used in its place, flag ``operator_misrender_in_co_n_composition``
+       — this catches the audit case ``CO-9 ∘ CO-7`` rendered with two
+       ``^4`` aliases ('struck a chord' + 'hit hard').
+
+    Mixed source — both ``^N`` and ``CO-N`` — is handled by running both
+    branches; failures from either branch surface together.
     """
     state_lits = _state_literal_components(source_cas)
-    if len(state_lits) < 2:
+    co_n_ops = _extract_co_n_operators(source_cas)
+    # Treat the source as a binary composition when total operands across
+    # both surface forms (``^N^D`` literals + ``CO-N``) is >= 2. Mixed
+    # sources like ``^3^P + CO-7`` are valid and should be evaluated on
+    # both branches.
+    total_operands = len(state_lits) + len(co_n_ops)
+    if total_operands < 2:
         return ValidatorResult(
             name="cas_to_english_binary_composition",
             passed=True,
             reason="not a binary composition (fewer than 2 operands)",
         )
-    missing, present = _check_state_literal_preservation(
-        source_cas=source_cas,
-        english_output=english_output,
-        require_drive=False,
-        require_register=False,
-    )
-    if missing:
+    diagnostics: list[str] = []
+    detail: dict[str, Any] = {}
+    if state_lits:
+        missing, present = _check_state_literal_preservation(
+            source_cas=source_cas,
+            english_output=english_output,
+            require_drive=False,
+            require_register=False,
+        )
+        detail["missing"] = missing
+        detail["present"] = present
+        if missing:
+            diagnostics.append(
+                f"missing operand components in binary composition: "
+                f"{missing[:6]}"
+            )
+    if co_n_ops:
+        out_lower = english_output.lower()
+        out_singular = re.sub(r"(\w+)s\b", r"\1", out_lower)
+        source_op_set = set(co_n_ops)
+        co_n_missing: list[int] = []
+        co_n_present: list[int] = []
+        for n in co_n_ops:
+            ntoks = NOETIC_VALIDATION_TOKENS.get(n, ())
+            if ntoks and (
+                _english_contains_any(out_lower, ntoks)
+                or _english_contains_any(out_singular, ntoks)
+            ):
+                co_n_present.append(n)
+            else:
+                co_n_missing.append(n)
+        # Misrender detection: for each missing source operator, are aliases
+        # for operators NOT in the source present in the English instead?
+        # The phenomenon to catch is the audit case where CO-9 ∘ CO-7 was
+        # rendered with two ^4 aliases.
+        intruder_ops: list[int] = []
+        for k in range(10):
+            if k in source_op_set:
+                continue
+            ktoks = NOETIC_VALIDATION_TOKENS.get(k, ())
+            if ktoks and (
+                _english_contains_any(out_lower, ktoks)
+                or _english_contains_any(out_singular, ktoks)
+            ):
+                intruder_ops.append(k)
+        # Deduplicate while preserving order for stable diagnostics.
+        co_n_missing_unique = sorted(set(co_n_missing))
+        detail["co_n_source_operators"] = co_n_ops
+        detail["co_n_missing"] = co_n_missing_unique
+        detail["co_n_present"] = sorted(set(co_n_present))
+        detail["co_n_intruder_operators"] = intruder_ops
+        if co_n_missing_unique and intruder_ops:
+            diagnostics.append(
+                "operator_misrender_in_co_n_composition: source "
+                f"CO-{co_n_missing_unique} aliases missing while aliases "
+                f"for non-source operators ^{intruder_ops} surfaced "
+                "instead"
+            )
+        elif co_n_missing_unique:
+            diagnostics.append(
+                "missing CO-N operator aliases: "
+                f"CO-{co_n_missing_unique}"
+            )
+    if diagnostics:
         return ValidatorResult(
             name="cas_to_english_binary_composition",
             passed=False,
-            reason=(
-                f"missing operand components in binary composition: "
-                f"{missing[:6]}"
-            ),
-            detail={"missing": missing, "present": present},
+            reason="; ".join(diagnostics),
+            detail=detail,
         )
     return ValidatorResult(
         name="cas_to_english_binary_composition",
         passed=True,
-        detail={"present": present},
+        detail=detail,
     )
 
 
@@ -1659,6 +2169,169 @@ def validate_cas_to_english_cross_register_omega(
     )
 
 
+# Anaphor markers that license a stage clause referring back to a previously
+# established noetic without restating the alias. The audit case shows that
+# stages 2-4 of a 4-stage same-noetic chain commonly drop the noetic; some
+# of those are real drops (the audit failure mode) and some legitimately
+# refer back via "the same X" / "this same X" / "again" / "continues". The
+# anaphor exception keeps the validator from flagging legitimate references.
+_RPM_STAGE_ANAPHOR_RE = re.compile(
+    r"\b(?:same|this|again|continues?|continuing|likewise|similarly|"
+    r"another|repeats?|repeating|repeated|more of)\b",
+    re.IGNORECASE,
+)
+
+
+def _stage_clause_window(
+    *, english_output: str, stage_name: str
+) -> Optional[str]:
+    """Return the clause (within the same sentence) that mentions
+    ``stage_name``. Sentence boundary = ``.`` or ``;`` or string start/end.
+    Clause boundary within a sentence = ``,`` or ``and ``. Returns ``None``
+    when ``stage_name`` does not appear.
+
+    The returned window is the substring from the nearest preceding clause
+    boundary to the next clause / sentence boundary. Stage-name match is
+    case-insensitive. NO lookback into prior clauses — adjacent stages'
+    aliases must not bleed in. Anaphor evidence is checked separately
+    (``_stage_anaphor_window``) with a controlled lookback.
+    """
+    lower_output = english_output.lower()
+    lower_stage = stage_name.lower()
+    pos = lower_output.find(lower_stage)
+    if pos < 0:
+        return None
+    # Find the nearest preceding sentence boundary.
+    sent_start = max(
+        lower_output.rfind(".", 0, pos),
+        lower_output.rfind(";", 0, pos),
+        -1,
+    ) + 1
+    # Find the nearest preceding clause boundary within the sentence. We
+    # treat ``,`` and the conjunction `` and `` as clause boundaries —
+    # they're how the corpus chains stage descriptions.
+    clause_start = sent_start
+    last_comma = lower_output.rfind(",", sent_start, pos)
+    if last_comma >= 0:
+        clause_start = max(clause_start, last_comma + 1)
+    last_and = lower_output.rfind(" and ", sent_start, pos)
+    if last_and >= 0:
+        clause_start = max(clause_start, last_and + len(" and "))
+    # Find the nearest following clause boundary.
+    next_sent = min(
+        (i for i in (
+            lower_output.find(".", pos),
+            lower_output.find(";", pos),
+        ) if i >= 0),
+        default=len(lower_output),
+    )
+    next_comma = lower_output.find(",", pos, next_sent)
+    if next_comma < 0:
+        next_comma = next_sent
+    return english_output[clause_start:next_comma]
+
+
+def _stage_anaphor_window(
+    *, english_output: str, stage_name: str, lookback_chars: int = 60
+) -> Optional[str]:
+    """Return the anaphor-evidence window for ``stage_name``: the stage's
+    own clause PLUS up to ``lookback_chars`` of the immediately preceding
+    text within the same sentence. Used only for anaphor detection so a
+    stage clause referring back via 'the same X' / 'continues' / etc. can
+    inherit the prior stage's alias.
+
+    Critically, this window is consulted ONLY for anaphor presence — never
+    for noetic-alias presence — so adjacent stages' aliases do NOT bleed
+    into the alias check.
+    """
+    lower_output = english_output.lower()
+    lower_stage = stage_name.lower()
+    pos = lower_output.find(lower_stage)
+    if pos < 0:
+        return None
+    sent_start = max(
+        lower_output.rfind(".", 0, pos),
+        lower_output.rfind(";", 0, pos),
+        -1,
+    ) + 1
+    last_comma = lower_output.rfind(",", sent_start, pos)
+    last_and = lower_output.rfind(" and ", sent_start, pos)
+    clause_start = sent_start
+    if last_comma >= 0:
+        clause_start = max(clause_start, last_comma + 1)
+    if last_and >= 0:
+        clause_start = max(clause_start, last_and + len(" and "))
+    next_sent = min(
+        (i for i in (
+            lower_output.find(".", pos),
+            lower_output.find(";", pos),
+        ) if i >= 0),
+        default=len(lower_output),
+    )
+    next_comma = lower_output.find(",", pos, next_sent)
+    if next_comma < 0:
+        next_comma = next_sent
+    extended_start = max(sent_start, clause_start - lookback_chars)
+    return english_output[extended_start:next_comma]
+
+
+def _check_per_stage_noetic_preservation(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """For each ``let stageNAME = ^N^D[...]`` binding in source, verify
+    that an alias for ``^N`` surfaces inside the English clause that
+    mentions ``stageNAME``. Returns (failed_stages, ok_stages); each entry
+    is a dict with ``name``, ``noetic``, ``clause`` (truncated), and
+    ``anaphor`` for ok stages.
+    """
+    failed: list[dict[str, Any]] = []
+    ok: list[dict[str, Any]] = []
+    for name, expr in _RE_LET_BINDING.findall(source_cas):
+        # Only check stages with a state-literal RHS; skip e.g. ``let a =
+        # NoeticCluster{...}`` (different shape, not in scope here).
+        sl_match = _RE_STATE_LITERAL.search(expr)
+        if not sl_match:
+            continue
+        try:
+            n = int(sl_match.group(1))
+        except ValueError:
+            continue
+        ntoks = NOETIC_VALIDATION_TOKENS.get(n, ())
+        if not ntoks:
+            continue
+        clause = _stage_clause_window(
+            english_output=english_output, stage_name=name
+        )
+        if clause is None:
+            # Stage name absent from English entirely. The let_binding
+            # validator will already flag this; per-stage noetic check
+            # cannot evaluate without locating the clause, so skip.
+            continue
+        clause_lower = clause.lower()
+        clause_singular = re.sub(r"(\w+)s\b", r"\1", clause_lower)
+        if _english_contains_any(clause_lower, ntoks) or \
+                _english_contains_any(clause_singular, ntoks):
+            ok.append({"name": name, "noetic": n, "anaphor": False})
+            continue
+        # Anaphor exception: clause (or a small lookback window into the
+        # prior clause within the same sentence) carries an explicit
+        # back-reference like ``the same`` / ``continues`` / ``again``.
+        anaphor_window = _stage_anaphor_window(
+            english_output=english_output, stage_name=name
+        )
+        if anaphor_window and _RPM_STAGE_ANAPHOR_RE.search(anaphor_window):
+            ok.append({"name": name, "noetic": n, "anaphor": True})
+            continue
+        failed.append({
+            "name": name,
+            "noetic": n,
+            "clause": clause.strip()[:200],
+        })
+    return failed, ok
+
+
 def validate_cas_to_english_rpm_chain(
     *,
     source_cas: str,
@@ -1669,6 +2342,15 @@ def validate_cas_to_english_rpm_chain(
     Checks: arrow count <= count of flow connectives in English. Each
     operand's noetic referenced. Operand resolution accommodates
     ``let X = ^N^D; ... X -> Y`` shape used in the preflight corpus.
+
+    Per-stage noetic check (added 2026-05-08): when source contains
+    ``let stageX = ^N^D[...]`` bindings, every stage's noetic alias must
+    surface inside the clause that mentions ``stageX`` — not merely
+    somewhere in the output. Anaphor exception: a clause referring back
+    via ``same`` / ``this`` / ``again`` / ``continues`` etc. counts as
+    inheriting the alias from the prior clause. Catches the audit case
+    where a 4-stage ^8 chain rendered only the first stage with
+    ``triggered`` and dropped the alias on stages 2-4.
     """
     if re.search(r"(?:Θ|Theta)\s*\(", source_cas):
         return ValidatorResult(
@@ -1718,6 +2400,20 @@ def validate_cas_to_english_rpm_chain(
         diagnostics.append(
             f"missing noetic operator descriptions: {missing_noetics}"
         )
+    # Per-stage noetic preservation — catches the repeated-noetic stage
+    # operator drop where the chain narration uses the alias on the first
+    # stage only and then describes later stages by domain alone.
+    stage_failed, stage_ok = _check_per_stage_noetic_preservation(
+        source_cas=source_cas,
+        english_output=english_output,
+    )
+    if stage_failed:
+        names = [s["name"] for s in stage_failed]
+        diagnostics.append(
+            "stage_noetic_dropped: stage(s) "
+            f"{names} mention the stage name but their clause "
+            "lacks the bound noetic's alias and no anaphor"
+        )
     if diagnostics:
         return ValidatorResult(
             name="cas_to_english_rpm_chain",
@@ -1727,6 +2423,8 @@ def validate_cas_to_english_rpm_chain(
                 "arrow_count": arrow_count,
                 "flow_connective_count": flow_count,
                 "missing_noetics": missing_noetics,
+                "stage_noetic_failed": stage_failed,
+                "stage_noetic_ok": stage_ok,
             },
         )
     return ValidatorResult(
@@ -1735,6 +2433,7 @@ def validate_cas_to_english_rpm_chain(
         detail={
             "arrow_count": arrow_count,
             "flow_connective_count": flow_count,
+            "stage_noetic_ok": stage_ok,
         },
     )
 
@@ -1842,6 +2541,221 @@ def validate_cas_to_english_inversion(
         name="cas_to_english_inversion",
         passed=True,
         detail={"present": present},
+    )
+
+
+# ---- Phantom-outcome (drive→outcome confusion) gate ----------------------
+#
+# Wave 2.5 stratified audit (2026-05-08) of the 398-record green run found
+# inversion + rpm_chain records where the model rendered DRIVE subscripts
+# (``_{F2}``, ``_{F3}``, ``_{F5}``, ``_{F6}``) as if they were named OUTCOME
+# targets (``Ω_<stem>``). Concrete failures:
+#
+#   * ``^2^O_{F2} + ^3^O_{F6}`` rendered as "a positive pull toward the
+#     outcome called wisdom, combined with a negative push away from the
+#     outcome called structure". F2/F6 are drives (wisdom/structure are
+#     the canonical drive aliases). The source has NO ``Ω_`` token.
+#   * ``^2^O_{F3} + ^3^O_{F5}`` rendered as "drawn toward the outcome
+#     named vitality... pushed away from the outcome named agency".
+#   * ``^6^P_{F2}`` rendered as "in the realm of wisdom" — the F2 drive
+#     subscript surfaces as if it were a domain/outcome label.
+#
+# All three slipped past the existing inversion / rpm_chain / state-literal
+# validators, which only check that the noetic + domain alias surface in
+# English. They do not catch "drive rendered as named outcome", which is a
+# structural drift: it teaches a downstream model that drives and outcomes
+# are interchangeable, breaking compiler round-trip.
+#
+# This gate fires on EVERY cas_to_english record (it is a safety check, not
+# a category-specific structural check). Two trigger families:
+#
+#   1. Diagnostic phrases — "outcome called X", "outcome named X", "named
+#      outcome X". Natural English rarely uses these constructions; in the
+#      Wave 2.5 corpus they are nearly diagnostic of phantom-outcome
+#      framing. Flagged whenever the captured stem is NOT one of the
+#      source's ``Ω_`` stems.
+#
+#   2. Axis-word phrases — "the outcome X", "in the realm of X", "realm
+#      of X" — flagged only when X is a CAS axis word (drive alias).
+#      ``the outcome of the game`` and ``in the realm of mathematics`` are
+#      plain English and must NOT match.
+#
+# Pass conditions: no phantom phrase hits, OR every captured stem appears
+# in the source's ``Ω_<stem>`` token set (the framing is justified).
+
+# Diagnostic phrases: "outcome called X", "outcome named X", "named
+# outcome X". Capture the immediately following identifier (single word,
+# possibly with underscore + alphanumeric suffix like ``reasoning_02``).
+# These phrases are nearly diagnostic of phantom-outcome framing; flagged
+# regardless of what X is, as long as X is not a source Ω_ stem.
+_RE_OUTCOME_CALLED_NAMED = re.compile(
+    r"\b(?:outcome\s+called|outcome\s+named|named\s+outcome)\s+"
+    r"([A-Za-z][A-Za-z0-9_\-]*)\b",
+    re.IGNORECASE,
+)
+
+# "the outcome <X>" — only flag when X is a CAS axis word AND not followed
+# by a preposition (which would indicate plain-English usage like
+# ``the outcome of the game`` or ``the outcome from the meeting``).
+# We capture X and additionally require X is followed by sentence-end /
+# punctuation / non-preposition continuation so plain English passes.
+_RE_THE_OUTCOME_AXIS = re.compile(
+    r"\bthe\s+outcome\s+"
+    r"([A-Za-z][A-Za-z0-9_\-]*)"
+    r"(?!\s+(?:of|for|in|to|from|on|at|by|with|that|which|was|is|"
+    r"were|will|would|might|may|seemed|appeared|became|might))"
+    r"\b",
+    re.IGNORECASE,
+)
+
+# "(in the )realm of X" — only flag when X is a CAS axis word. Plain
+# English uses like "the realm of mathematics" must pass.
+_RE_REALM_OF_AXIS = re.compile(
+    r"\b(?:in\s+the\s+realm\s+of|realm\s+of)\s+"
+    r"([A-Za-z][A-Za-z0-9_\-]*)\b",
+    re.IGNORECASE,
+)
+
+# CAS axis words: drive aliases (wisdom/vitality/agency/structure/unity/
+# connection/purpose) plus close lexical variants from DRIVE_ALIASES.
+# These are the words that, when surfaced as if they were Ω-style outcome
+# targets, signal drive→outcome confusion.
+#
+# Built lazily inside the validator so it stays in sync with DRIVE_ALIASES
+# without a separate manual list.
+
+
+def _cas_axis_outcome_words() -> set[str]:
+    """Return the lowercase set of words that, when used as a phantom
+    outcome target, signal drive→outcome confusion.
+
+    Drawn from ``DRIVE_ALIASES``. Multi-word aliases (``act with intent``)
+    and compound forms (``life-energy``) are included as their first word
+    for the single-token captures we extract from the regex.
+    """
+    words: set[str] = set()
+    for aliases in DRIVE_ALIASES.values():
+        for a in aliases:
+            # Single-token form for matching against captured X.
+            head = a.split()[0].lower()
+            words.add(head)
+            # Also include the full alias as a fallback (used only when
+            # building a friendly hit list, not for matching a single-
+            # word capture).
+            words.add(a.lower())
+    return words
+
+
+def validate_no_phantom_outcome_framing(
+    *,
+    source_cas: str,
+    english: str,
+) -> ValidatorResult:
+    """Reject English outputs that frame DRIVE subscripts as if they were
+    named OUTCOME targets (``Ω_<stem>``).
+
+    Background: in the Wave 2.5 green-run audit (2026-05-08), the model
+    rendered ``^2^O_{F2}`` as "the outcome called wisdom" (F2 = wisdom
+    drive). The source has no ``Ω_`` token, so the "outcome called X"
+    framing is a hallucination. Same failure class as the original
+    structural-shape-without-content drift.
+
+    Triggers:
+
+      * ``outcome called X`` / ``outcome named X`` / ``named outcome X``
+        (where X is any single-word stem). These constructions are
+        nearly diagnostic of named-outcome framing in our corpus.
+      * ``the outcome X`` (where X is a single word that is NOT followed
+        by a preposition, AND X is a CAS axis word — drive alias). This
+        avoids false positives on plain English like "the outcome of the
+        game".
+      * ``realm of X`` / ``in the realm of X`` (where X is a CAS axis
+        word). Plain English uses like "the realm of mathematics" pass
+        because "mathematics" is not a CAS axis word.
+
+    Pass conditions:
+
+      * No phantom phrase hits in the English output, OR
+      * The source CAS contains at least one ``Ω_<stem>`` token AND
+        every captured X matches one of the source's ``Ω_`` stems
+        (the framing is justified by an actual named outcome target).
+
+    Returns a ``ValidatorResult`` with ``detail.phantom_phrases`` listing
+    the matched fragments and ``detail.source_omega_stems`` for context.
+    """
+    text = english or ""
+    src = source_cas or ""
+
+    # Source Ω_<stem> set. When the source has Ω targets, "outcome
+    # called <stem>" is legitimate iff <stem> matches one of them.
+    # Accept both the canonical Ω_<stem> spelling and the ASCII fallback
+    # ``Omega_<stem>`` that some diagram_export source records use as a
+    # pre-compile representation.
+    source_omega_stems = {s.lower() for s in _RE_OMEGA_NAMED.findall(src)}
+    source_omega_stems |= {
+        s.lower()
+        for s in re.findall(r"\bOmega_([A-Za-z][A-Za-z0-9_]*)", src)
+    }
+
+    axis_words = _cas_axis_outcome_words()
+
+    phantom_phrases: list[str] = []
+    triggers: list[str] = []
+
+    # 1. Diagnostic phrases — "outcome called/named X", "named outcome X".
+    for m in _RE_OUTCOME_CALLED_NAMED.finditer(text):
+        captured_stem = m.group(1).lower()
+        if captured_stem in source_omega_stems:
+            # Legitimate — references an actual source Ω target.
+            continue
+        phantom_phrases.append(m.group(0))
+        triggers.append("outcome_called_or_named")
+
+    # 2. "the outcome X" — flag only when X is a CAS axis word.
+    for m in _RE_THE_OUTCOME_AXIS.finditer(text):
+        captured = m.group(1).lower()
+        if captured not in axis_words:
+            continue
+        if captured in source_omega_stems:
+            continue
+        phantom_phrases.append(m.group(0))
+        triggers.append("the_outcome_axis_word")
+
+    # 3. "realm of X" / "in the realm of X" — flag only when X is a CAS
+    #    axis word.
+    for m in _RE_REALM_OF_AXIS.finditer(text):
+        captured = m.group(1).lower()
+        if captured not in axis_words:
+            continue
+        if captured in source_omega_stems:
+            continue
+        phantom_phrases.append(m.group(0))
+        triggers.append("realm_of_axis_word")
+
+    if phantom_phrases:
+        return ValidatorResult(
+            name="no_phantom_outcome_framing",
+            passed=False,
+            reason=(
+                "phantom outcome framing — drive (or other non-Ω) "
+                "subscript rendered as a named outcome target: "
+                f"{phantom_phrases[:6]}"
+            ),
+            detail={
+                "phantom_phrases": phantom_phrases,
+                "triggers": sorted(set(triggers)),
+                "source_omega_stems": sorted(source_omega_stems),
+                "source_has_omega": bool(source_omega_stems),
+            },
+        )
+    return ValidatorResult(
+        name="no_phantom_outcome_framing",
+        passed=True,
+        detail={
+            "phantom_phrases": [],
+            "source_omega_stems": sorted(source_omega_stems),
+            "source_has_omega": bool(source_omega_stems),
+        },
     )
 
 
@@ -2398,11 +3312,27 @@ def run_validators_for_cas_to_english(
     results.append(
         validate_no_cas_jargon_leakage(english_output=english_output)
     )
+    # Global phantom-outcome (drive→outcome confusion) guard — always
+    # fires. Catches the Wave 2.5 audit's drive-subscript-rendered-as-Ω
+    # failure class regardless of grammar_category.
+    results.append(
+        validate_no_phantom_outcome_framing(
+            source_cas=expr, english=english_output
+        )
+    )
     is_recipe_shape = bool(re.search(r"(?:Θ|Theta)\s*\(", expr))
     # Recipe — fires when category matches OR the source has a Θ(...) shape.
     if cat == "recipe" or "Θ" in expr or "Theta" in expr:
         results.append(
             validate_cas_to_english_recipe_preservation(
+                source_cas=expr, english_output=english_output
+            )
+        )
+        # Sibling per-occurrence operator-alias check. Catches
+        # operand-by-operand misrenders the set-based recipe validator
+        # passes (e.g. ^3 rendered as a ^5 alias next to its coefficient).
+        results.append(
+            validate_cas_to_english_recipe_per_occurrence(
                 source_cas=expr, english_output=english_output
             )
         )
@@ -2451,8 +3381,12 @@ def run_validators_for_cas_to_english(
                 source_cas=expr, english_output=english_output
             )
         )
-    # Binary composition — fires on category match.
-    if cat == "binary_composition":
+    # Binary composition — fires on category match OR when source contains
+    # any ``CO-N`` operator (CO-N notation does not parse as a state literal
+    # so it would otherwise slip past the category-only trigger). The
+    # validator's own threshold (>= 2 total operands) decides whether the
+    # check is actually applicable.
+    if cat == "binary_composition" or _RE_CO_N_OPERATOR.search(expr):
         results.append(
             validate_cas_to_english_binary_composition(
                 source_cas=expr, english_output=english_output
