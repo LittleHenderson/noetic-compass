@@ -481,6 +481,32 @@ def test_diagram_export_statecluster_requires_member_coverage():
     assert "missing member noetics" in (r.reason or "")
 
 
+def test_diagram_export_rejects_wrong_cluster_cardinality():
+    m = _load_module()
+    r = m.validate_cas_to_english_diagram_export(
+        source_cas="StateCluster{^4^O, ^0^E, ^8^P}",
+        english_output=(
+            "A cognitive state clustering together four distinct elements: "
+            "something that struck a chord, a thought, a triggered memory, "
+            "and an operational behavior."
+        ),
+    )
+    assert not r.passed
+    assert "wrong explicit cluster cardinality" in (r.reason or "")
+
+
+def test_diagram_export_accepts_correct_cluster_cardinality():
+    m = _load_module()
+    r = m.validate_cas_to_english_diagram_export(
+        source_cas="StateCluster{^4^O, ^0^E, ^8^P}",
+        english_output=(
+            "A cluster of three elements: something that struck a chord, "
+            "a thought, and something that triggered a memory."
+        ),
+    )
+    assert r.passed, r.reason
+
+
 def test_anti_copy_pass_when_independent_generation():
     m = _load_module()
     r = m.validate_anti_copy_english_to_cas(

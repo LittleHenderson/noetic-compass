@@ -1769,6 +1769,45 @@ _DIAGRAM_GROUP_HINTS = (
     "grouping", "divides", "divid", "tuple", "pair", "structure",
     "comprising", "consisting", "consists",
 )
+_COUNT_WORD_TO_INT = {
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+}
+
+
+def _first_cluster_member_count(source_cas: str) -> int | None:
+    m = re.search(
+        r"\b(?:NoeticCluster|RelationCluster|StateCluster|StateSet|"
+        r"StateVariantCluster)\s*\{([^{}]*)\}",
+        source_cas,
+    )
+    if not m:
+        return None
+    items = [part.strip() for part in m.group(1).split(",") if part.strip()]
+    return len(items) if items else None
+
+
+def _explicit_cluster_counts(english_output: str) -> list[int]:
+    count_word_re = "|".join(_COUNT_WORD_TO_INT)
+    pat = re.compile(
+        rf"\b({count_word_re}|\d+)\s+(?:distinct\s+|linked\s+|"
+        rf"interconnected\s+)?(?:elements|components|operations|operators|"
+        rf"states|members|items)\b",
+        re.IGNORECASE,
+    )
+    counts: list[int] = []
+    for m in pat.finditer(english_output):
+        raw = m.group(1).lower()
+        counts.append(_COUNT_WORD_TO_INT.get(raw, int(raw) if raw.isdigit() else -1))
+    return [c for c in counts if c > 0]
 
 
 def validate_cas_to_english_diagram_export(
@@ -1797,6 +1836,17 @@ def validate_cas_to_english_diagram_export(
     if not has_group_hint:
         diagnostics.append(
             "no group/cluster/collection word in English"
+        )
+    expected_member_count = _first_cluster_member_count(source_cas)
+    rendered_counts = _explicit_cluster_counts(english_output)
+    wrong_counts = [
+        count for count in rendered_counts
+        if expected_member_count is not None and count != expected_member_count
+    ]
+    if wrong_counts:
+        diagnostics.append(
+            f"wrong explicit cluster cardinality: expected "
+            f"{expected_member_count}, saw {wrong_counts}"
         )
     # Member noetics: every ``^N`` in source must have its alias surface.
     member_re = re.compile(r"\^(\d)\b")
@@ -1828,6 +1878,8 @@ def validate_cas_to_english_diagram_export(
                 "member_ks": member_ks,
                 "missing_ks": missing_ks,
                 "has_group_hint": has_group_hint,
+                "expected_member_count": expected_member_count,
+                "rendered_counts": rendered_counts,
             },
         )
     return ValidatorResult(
@@ -1837,6 +1889,8 @@ def validate_cas_to_english_diagram_export(
             "member_ks": member_ks,
             "missing_ks": missing_ks,
             "has_group_hint": has_group_hint,
+            "expected_member_count": expected_member_count,
+            "rendered_counts": rendered_counts,
         },
     )
 
