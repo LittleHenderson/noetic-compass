@@ -426,6 +426,136 @@ def _scan_for_aliases(
     return counter
 
 
+def _scan_with_positions(
+    text_lower: str, alias_to_value: dict[str, Any], min_alias_len: int = 3
+) -> list[tuple[int, int, Any]]:
+    """Like ``_scan_for_aliases`` but returns position spans for each
+    match instead of a count. Used by the bound-state-literal
+    extraction to associate each noetic position with the nearest
+    domain / drive / register hit.
+
+    Returns list of (start, end, value) tuples, sorted by start position.
+    """
+    spans: list[tuple[int, int, Any]] = []
+    sorted_aliases = sorted(
+        (a for a in alias_to_value if len(a) >= min_alias_len),
+        key=len, reverse=True,
+    )
+    work = list(text_lower)  # mutable so we can mask matched spans
+    for alias in sorted_aliases:
+        n = len(alias)
+        i = 0
+        while True:
+            joined = "".join(work)
+            pos = joined.find(alias, i)
+            if pos == -1:
+                break
+            spans.append((pos, pos + n, alias_to_value[alias]))
+            # Mask the matched span so shorter aliases nested inside
+            # don't double-count.
+            for j in range(pos, pos + n):
+                work[j] = " "
+            i = pos + n
+    spans.sort(key=lambda s: s[0])
+    return spans
+
+
+_CLAUSE_BOUNDARY_RE = re.compile(
+    r"\.\s|;\s|,\s+(?:and|but|then|next|which|leads|produces|while|"
+    r"combined|added|together|with(?:\s+those)?|fusing|"
+    r"fused|merged|expressed)\s+|"
+    r"\bleads\s+to\b|\bproduces?\b|\bbecomes?\b|\bturns\s+into\b|"
+    r"\btransforms\s+into\b|\bin\s+turn\b|\band\s+finally\b|"
+    r"\byields?\b|\bthe\s+chain\s+says\b",
+    re.IGNORECASE,
+)
+
+
+def _split_into_clauses(text_lower: str) -> list[tuple[int, int]]:
+    """Split text into clause spans by sentence/clause boundaries.
+
+    Returns list of (start, end) character offsets, end-exclusive.
+    Used for clause-level binding of noetic+domain pairs (strict),
+    while registers are checked globally (relaxed) — see
+    ``_bind_state_literals``.
+    """
+    boundaries = [0]
+    for m in _CLAUSE_BOUNDARY_RE.finditer(text_lower):
+        boundaries.append(m.start())
+    boundaries.append(len(text_lower))
+    spans = []
+    for i in range(len(boundaries) - 1):
+        s, e = boundaries[i], boundaries[i + 1]
+        if e > s:
+            spans.append((s, e))
+    return spans
+
+
+def _clause_for_position(pos: int, clauses: list[tuple[int, int]]) -> int:
+    for i, (s, e) in enumerate(clauses):
+        if s <= pos < e:
+            return i
+    return -1
+
+
+def _bind_state_literals(
+    text_lower: str,
+    *,
+    noetic_spans: list[tuple[int, int, int]],
+    domain_spans: list[tuple[int, int, str]],
+    drive_spans: list[tuple[int, int, int]],
+    register_spans: list[tuple[int, int, str]],
+) -> list[tuple[int, Optional[str], Optional[int], Optional[str]]]:
+    """Build bound (noetic, domain, drive, register) tuples by:
+
+    - **Clause-level binding** for domain and drive: a noetic position is
+      bound to a domain word ONLY if both are in the same clause. Catches
+      cross-clause domain swaps like ``^1^P -> ^4^P`` rendered as
+      "paying attention in principled arena leads to resonating in
+      operational arena" (where ^4 is in clause 2 with O, not P).
+
+    - **Set-level binding** for register: each noetic position gets a
+      tuple PER register that appears anywhere in the text. This handles
+      the CRO pattern where one noetic mention covers multiple registers
+      ("resonates in foundational way, expressed through felt emotion
+      AND transcendent conviction" — one ^4 mention, two registers).
+
+    Returns a list of bound tuples (one per noetic-position × matching
+    register pair, plus a base tuple per noetic position with no register).
+    """
+    clauses = _split_into_clauses(text_lower)
+    # Pre-compute domain/drive spans per clause for fast lookup
+    clause_domains: dict[int, list[str]] = {}
+    clause_drives: dict[int, list[int]] = {}
+    for ds, de, d in domain_spans:
+        ci = _clause_for_position((ds + de) // 2, clauses)
+        clause_domains.setdefault(ci, []).append(d)
+    for ds, de, k in drive_spans:
+        ci = _clause_for_position((ds + de) // 2, clauses)
+        clause_drives.setdefault(ci, []).append(k)
+
+    # All registers present anywhere (set-level)
+    all_registers = list({r for _s, _e, r in register_spans})
+
+    bound: list[tuple[int, Optional[str], Optional[int], Optional[str]]] = []
+    for nstart, nend, n in noetic_spans:
+        ncenter = (nstart + nend) // 2
+        ci = _clause_for_position(ncenter, clauses)
+        # Domain candidates: in same clause as noetic
+        domains_here = list(set(clause_domains.get(ci, []))) or [None]
+        # Drive candidates: same
+        drives_here = list(set(clause_drives.get(ci, []))) or [None]
+        # Register candidates: global set + None for "no register"
+        registers_here = list(all_registers) + [None]
+        # Cross-product: every (domain, drive, register) combination
+        # within the noetic's clause-context is a valid bound tuple
+        for d in domains_here:
+            for drv in drives_here:
+                for reg in registers_here:
+                    bound.append((n, d, drv, reg))
+    return bound
+
+
 # Recognized cluster framings in English. Order matters — we check most
 # specific first. Map keys are case-insensitive substrings to scan for.
 _CLUSTER_FRAMINGS = {
@@ -526,33 +656,34 @@ def extract_english_fingerprint(english: str) -> CASFingerprint:
     fp = CASFingerprint()
     text_lower = english.lower()
 
-    # Noetic mentions.
-    noetic_counts = _scan_for_aliases(text_lower, _REVERSE_NOETIC_MAP)
-    # We don't know per-occurrence which noetic pairs with which domain;
-    # for the round-trip check we compare bare-noetic multisets at the
-    # whole-text level. That's the SFE simplification.
-    for n, c in noetic_counts.items():
-        fp.bare_noetics[n] += c
+    # Position-aware scans for each axis. We need positions (not just
+    # counts) so we can BIND each noetic to the nearest domain / drive /
+    # register hit. The 2026-05-08 false-positive on ``^1^P -> ^4^P``
+    # rendered with second operand as ^O slipped through count-based
+    # matching because the noetic-set {^1, ^4} and domain-set {P, O}
+    # checks looked correct in isolation. Bound-tuple comparison fixes
+    # that: source tuple ``(^4, P)`` requires ENGLISH ^4 alias near a
+    # P-domain word.
+    noetic_spans = _scan_with_positions(text_lower, _REVERSE_NOETIC_MAP)
+    domain_spans = _scan_with_positions(text_lower, _REVERSE_DOMAIN_MAP, min_alias_len=4)
+    drive_spans = _scan_with_positions(text_lower, _REVERSE_DRIVE_MAP, min_alias_len=5)
+    register_spans = _scan_with_positions(text_lower, _REVERSE_REGISTER_MAP, min_alias_len=5)
 
-    # Domain mentions (aggregate; not per-occurrence).
-    # Aggregate counts; comparison is "every source domain appears at
-    # least source-count times in the English."
-    domain_counts = _scan_for_aliases(text_lower, _REVERSE_DOMAIN_MAP, min_alias_len=4)
-    # We model domains as state_literal_occurrences[(None, D, None, None)]
-    # for the aggregate check — the comparison merges these.
-    # (Keeping the same Counter shape lets compare_fingerprints be uniform.)
-    for d, c in domain_counts.items():
-        fp.state_literal_occurrences[(None, d, None, None)] += c
+    # Bare noetics: count noetic mentions overall (informational, used
+    # only for fractal-sequence comparison and noetics_extra).
+    for _s, _e, n in noetic_spans:
+        fp.bare_noetics[n] += 1
 
-    # Drive mentions.
-    drive_counts = _scan_for_aliases(text_lower, _REVERSE_DRIVE_MAP, min_alias_len=5)
-    for k, c in drive_counts.items():
-        fp.state_literal_occurrences[(None, None, k, None)] += c
-
-    # Register mentions.
-    register_counts = _scan_for_aliases(text_lower, _REVERSE_REGISTER_MAP, min_alias_len=5)
-    for r, c in register_counts.items():
-        fp.state_literal_occurrences[(None, None, None, r)] += c
+    # Bound state-literal occurrences via window-based association.
+    bound_tuples = _bind_state_literals(
+        text_lower,
+        noetic_spans=noetic_spans,
+        domain_spans=domain_spans,
+        drive_spans=drive_spans,
+        register_spans=register_spans,
+    )
+    for tup in bound_tuples:
+        fp.state_literal_occurrences[tup] += 1
 
     # Ω stems — try all patterns, accumulate matches.
     # The patterns themselves are anchored on "outcome"/"produce"/"yield" so
@@ -759,68 +890,82 @@ def compare_fingerprints(
     """
     diff = FingerprintDiff()
 
-    # Noetic check: DISTINCT-SET semantics, not multiset count match.
-    # Rationale: when a CRO source has the same noetic in 3 register
-    # slots, the natural English rendering says the noetic ONCE and lists
-    # 3 register descriptors. Counting noetic mentions strictly would
-    # over-reject natural writing. So we require: for each DISTINCT
-    # noetic in source, English has at least 1 alias mention.
+    # BOUND TUPLE check (load-bearing): for each distinct (noetic,
+    # domain, drive, register) tuple in source, English must contain
+    # a tuple with the SAME bindings. Source's None positions are
+    # wildcards (English can have anything there); source's non-None
+    # positions are required matches.
+    #
+    # Catches the 2026-05-08 false positive: ^1^P -> ^4^P rendered with
+    # second operand as ^O. Source tuples include (^4, P, None, None);
+    # English binds ^4 alias to nearest "operational" producing
+    # (^4, O, None, None) — no source-matching tuple → FAIL.
+    #
+    # Distinct-tuple semantics (set, not multiset): when source has the
+    # same tuple repeated (CRO three-register fusion), English needs at
+    # least one matching tuple, not three. Repeated identical tuples
+    # collapse to a single requirement.
+    src_tuples = set(source.state_literal_occurrences.keys())
+    # Filter out source tuples that have a None noetic (e.g. those
+    # introduced only by domain/drive/register without a noetic anchor —
+    # the source extractor doesn't produce these, but defensive).
+    src_tuples = {t for t in src_tuples if t[0] is not None}
+    eng_tuples = set(english.state_literal_occurrences.keys())
+
+    # noetics_missing: distinct noetics in source not in English (fast
+    # diagnostic; subset of bound-tuple check).
     src_noetic_set: set = set()
     for n in source.bare_noetics:
         src_noetic_set.add(n)
-    for (n, _d, _drive, _reg) in source.state_literal_occurrences:
+    for (n, _d, _drive, _reg) in src_tuples:
         if n is not None:
             src_noetic_set.add(n)
-    eng_noetic_set = set(english.bare_noetics.keys())
     for n in src_noetic_set:
-        eng_count = english.bare_noetics.get(n, 0)
-        if eng_count < 1:
+        if english.bare_noetics.get(n, 0) < 1:
             diff.noetics_missing[n] = 1
-    # noetics_extra: noetics in English that aren't in source. Tolerate
-    # one off-by-one (verbose phrasing may double-count an alias), but
-    # flag when English has noetics not present in source at all.
+
+    # noetics_extra (informational only; not blocking).
+    eng_noetic_set = set(english.bare_noetics.keys())
     for n in eng_noetic_set:
         if n not in src_noetic_set:
             diff.noetics_extra[n] = english.bare_noetics[n]
 
-    # Domain check (DISTINCT-SET semantics).
-    src_domain_set: set = set()
-    for (_n, d, _drive, _reg) in source.state_literal_occurrences:
-        if d is not None:
-            src_domain_set.add(d)
-    eng_domain_set: set = set()
-    for (_n, d, _drive, _reg) in english.state_literal_occurrences:
-        if d is not None:
-            eng_domain_set.add(d)
-    for d in src_domain_set:
-        if d not in eng_domain_set:
-            diff.domains_missing.append((d, 1, 0))
+    # Bound-tuple match: for each distinct source tuple, look for a
+    # matching English tuple. A "match" means: source's non-None fields
+    # all equal the corresponding English fields. English's extra
+    # non-None fields don't disqualify (the English may name a register
+    # the source didn't mark, e.g.).
+    def _tuple_matches(src_t, eng_t) -> bool:
+        for sv, ev in zip(src_t, eng_t):
+            if sv is None:
+                continue  # source wildcard — anything OK
+            if sv != ev:
+                return False
+        return True
 
-    # Drive check (DISTINCT-SET).
-    src_drive_set: set = set()
-    for (_n, _d, drive, _reg) in source.state_literal_occurrences:
-        if drive is not None:
-            src_drive_set.add(drive)
-    eng_drive_set: set = set()
-    for (_n, _d, drive, _reg) in english.state_literal_occurrences:
-        if drive is not None:
-            eng_drive_set.add(drive)
-    for k in src_drive_set:
-        if k not in eng_drive_set:
-            diff.drives_missing.append((k, 1, 0))
-
-    # Register check (DISTINCT-SET).
-    src_reg_set: set = set()
-    for (_n, _d, _drive, reg) in source.state_literal_occurrences:
-        if reg is not None:
-            src_reg_set.add(reg)
-    eng_reg_set: set = set()
-    for (_n, _d, _drive, reg) in english.state_literal_occurrences:
-        if reg is not None:
-            eng_reg_set.add(reg)
-    for r in src_reg_set:
-        if r not in eng_reg_set:
-            diff.registers_missing.append((r, 1, 0))
+    # Track which axis-binding failures occur most often, to populate
+    # the diff fields the corrective prompt knows how to format.
+    for st in src_tuples:
+        if any(_tuple_matches(st, et) for et in eng_tuples):
+            continue
+        # No match. Diagnose which axes are missing.
+        sn, sd, sdrive, sreg = st
+        # Find the English tuple(s) that share the noetic (so we can
+        # report the BINDING mismatch, not just "noetic missing").
+        partial = [et for et in eng_tuples if et[0] == sn]
+        if not partial:
+            # No English tuple even has this noetic
+            if sn not in diff.noetics_missing:
+                diff.noetics_missing[sn] = 1
+            continue
+        # English has the noetic, but its binding differs. Report which
+        # axis(es) diverged.
+        if sd is not None and not any(et[1] == sd for et in partial):
+            diff.domains_missing.append((sd, sn))
+        if sdrive is not None and not any(et[2] == sdrive for et in partial):
+            diff.drives_missing.append((sdrive, sn))
+        if sreg is not None and not any(et[3] == sreg for et in partial):
+            diff.registers_missing.append((sreg, sn))
 
     # Ω stem check.
     # - omega_stems_missing: every source stem must surface in English (BLOCKING)

@@ -517,6 +517,7 @@ def wave2_5_iterate_with_sfe(
                 counts["errored"] += 1
                 reject_writer({
                     "seed_id": seed.get("seed_id", "unknown"),
+                    "grammar_category": seed.get("grammar_category", "unknown"),
                     "source_cas": seed["expression"],
                     "reason": "empty model response",
                     "validators_run": ["sfe_round_trip"],
@@ -591,6 +592,7 @@ def wave2_5_iterate_with_sfe(
                 counts["rejected"] += 1
                 reject_writer({
                     "seed_id": seed.get("seed_id", "unknown"),
+                    "grammar_category": seed.get("grammar_category", "unknown"),
                     "source_cas": seed["expression"],
                     "reason": sfe_result["reason"],
                     "validators_run": ["sfe_round_trip"],
@@ -603,6 +605,7 @@ def wave2_5_iterate_with_sfe(
             counts["errored"] += 1
             reject_writer({
                 "seed_id": seed.get("seed_id", "unknown"),
+                "grammar_category": seed.get("grammar_category", "unknown"),
                 "source_cas": seed.get("expression", ""),
                 "reason": f"exception: {type(exc).__name__}: {exc}",
                 "validators_run": [],
