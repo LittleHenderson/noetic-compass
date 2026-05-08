@@ -235,6 +235,16 @@ _NO_NOTATION_GUIDANCE_V2 = (
     "or the word 'register' used in a CAS-jargon framing. Use plain English "
     "instead — operator name, drive name, register character, etc.\n"
     "\n"
+    "FORBIDDEN — structural words as labels: do not write 'domain', "
+    "'drive', or 'register' as explanatory labels for CAS axes. Use ordinary "
+    "phrasing instead:\n"
+    "  - domain → arena, frame, context, area, or the domain meaning itself "
+    "(foundational / cognitive / evaluative / operational)\n"
+    "  - drive → need for, pull toward, orientation toward, pressure toward, "
+    "or the drive meaning itself (wisdom / agency / structure / purpose)\n"
+    "  - register → mode, way of expressing, lens, style, or the register "
+    "meaning itself (analytical / felt / embodied / big-picture)\n"
+    "\n"
     "PRESERVE STRUCTURE THROUGH ORDINARY LANGUAGE, NOT NOTATION. The English "
     "must capture every load-bearing element of the source: every operator, "
     "every coefficient, every named outcome, every domain, every drive, "
@@ -1152,6 +1162,28 @@ _RE_DOMAIN_LEAK = re.compile(
     r")"
 )
 
+# Policy B (2026-05-08): the calibration after 17f56d1 still accepted
+# CAS-shaped prose such as "operational domain", "structure-and-order drive",
+# and "emotional register". For Wave 2.5 training data those words are
+# structural labels, not normal conversation, so reject them while preserving
+# unrelated English like "the domain of mathematics" and "cash register".
+_RE_DOMAIN_AXIS_WORD_LEAK = re.compile(
+    r"\b(?:principled|foundational|cognitive|mental|evaluative|judging|"
+    r"judgment|judgement|operational|behavioral|behavioural)\s+domain\b"
+    r"|\bdomain\s+(?:of\s+)?(?:principles?|foundations?|cognition|"
+    r"thinking|thought|evaluation|judg(?:e|ing|ment)|operation|"
+    r"behavior|behaviour)\b",
+    re.IGNORECASE,
+)
+_RE_DRIVE_AXIS_WORD_LEAK = re.compile(
+    r"\bdrive\b",
+    re.IGNORECASE,
+)
+_RE_REGISTER_AXIS_WORD_LEAK = re.compile(
+    r"(?<!\bcash\s)\bregisters?\b",
+    re.IGNORECASE,
+)
+
 
 def validate_no_cas_jargon_leakage(
     *,
@@ -1172,10 +1204,14 @@ def validate_no_cas_jargon_leakage(
     * ``RPM`` (bare CAS-jargon word).
     * ``compile-time`` (bare CAS-jargon word).
     * ``register T`` / ``register F6`` / ``register P`` / ``transcendent
-      register`` etc. (CAS-jargon-shaped — NOT plain ``register``).
+      register`` etc., plus bare ``register``/``registers`` except
+      unrelated plain English like ``cash register``.
     * ``domain P`` / ``P-Domain`` / ``F4 domain`` / ``domain (P)`` /
       ``domain marked P`` / ``domain of E`` etc. (CAS-jargon-shaped — NOT
       plain ``the domain of mathematics``).
+    * ``operational domain`` / ``cognitive domain`` / similar CAS-shaped
+      domain-axis labels.
+    * bare ``drive`` as a CAS-axis label.
 
     Pass when none of those patterns hit. Fail with the list of which
     patterns hit and the captured fragments.
@@ -1210,6 +1246,9 @@ def validate_no_cas_jargon_leakage(
     _add("register_jargon_named", _RE_REGISTER_LEAK_NAMED)
     _add("register_jargon_plural", _RE_REGISTER_LEAK_PLURAL)
     _add("domain_jargon", _RE_DOMAIN_LEAK)
+    _add("domain_axis_word", _RE_DOMAIN_AXIS_WORD_LEAK)
+    _add("drive_axis_word", _RE_DRIVE_AXIS_WORD_LEAK)
+    _add("register_axis_word", _RE_REGISTER_AXIS_WORD_LEAK)
 
     if not hits:
         return ValidatorResult(

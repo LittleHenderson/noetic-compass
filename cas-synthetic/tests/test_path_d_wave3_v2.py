@@ -925,6 +925,43 @@ def test_jargon_leakage_pass_on_plain_english_domain_of_mathematics():
     assert r.passed, r.reason
 
 
+def test_jargon_leakage_fail_on_cas_axis_domain_wording():
+    """Wave 2.5 calibration showed 'operational domain' style leaks."""
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "A pull toward it, expressed through felt emotion, in the "
+            "operational domain."
+        ),
+    )
+    assert not r.passed
+    assert "domain_axis_word" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_bare_drive_axis_word():
+    """Accepted RPM samples used 'structure-and-order drive' as CAS jargon."""
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "Let x name who one is shaped by in the structure-and-order drive."
+        ),
+    )
+    assert not r.passed
+    assert "drive_axis_word" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_bare_register_axis_word():
+    """Bare register labels are not allowed in generated training prose."""
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "The same pattern appears across analytical and embodied registers."
+        ),
+    )
+    assert not r.passed
+    assert "register_axis_word" in (r.reason or "")
+
+
 def test_jargon_leakage_pass_on_registered_nurse_phrase():
     """Critical false-positive test: word 'registered' must NOT trigger
     the bare 'register' jargon detector."""
