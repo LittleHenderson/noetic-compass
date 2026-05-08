@@ -1026,6 +1026,18 @@ def test_binary_composition_pass_with_both_operands():
     assert r.passed, r.reason
 
 
+def test_noetic_aliases_cover_wave2_5_calibration_phrases():
+    m = _load_module()
+    r = m.validate_cas_to_english_binary_composition(
+        source_cas="^4^P + ^6^P",
+        english_output=(
+            "A resonant foundational impression combines with an effort "
+            "to break down a foundational principle."
+        ),
+    )
+    assert r.passed, r.reason
+
+
 def test_binary_composition_fail_on_missing_operand():
     m = _load_module()
     r = m.validate_cas_to_english_binary_composition(
@@ -1083,6 +1095,18 @@ def test_rpm_chain_pass_with_chain_flow_words():
             "Paying attention to a foundational principle leads to it "
             "striking a chord, which then becomes muscle memory through "
             "practice."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_rpm_chain_accepts_produces_as_flow_marker():
+    m = _load_module()
+    r = m.validate_cas_to_english_rpm_chain(
+        source_cas="^4^P -> ^6^P",
+        english_output=(
+            "A resonant foundational impression produces an effort to "
+            "break down a foundational principle."
         ),
     )
     assert r.passed, r.reason

@@ -106,22 +106,26 @@ NOETIC_VALIDATION_TOKENS: dict[int, tuple[str, ...]] = {
     0: ("idea", "thought", "in your head", "on your mind"),
     1: ("mind", "paying attention", "using your head", "becoming aware",
         "making up your mind"),
-    2: ("positive", "drawn to", "speaks to", "can't resist", "pulled toward"),
+    2: ("positive", "drawn to", "drawn toward", "draw toward",
+        "pull toward", "pulls toward", "pulled toward", "speaks to",
+        "can't resist"),
     3: ("negative", "can't stomach", "rubs the wrong way",
         "wouldn't touch", "pushed away", "aversion", "averse",
         "turned away", "repelled", "repulsed"),
     4: ("vibration", "hit hard", "struck a chord", "strike a chord",
         "striking a chord", "strikes a chord", "resonated", "resonate",
-        "resonates", "resonance", "resonating",
+        "resonates", "resonance", "resonant", "resonating",
         "made an impression", "make an impression", "makes an impression"),
     5: ("female", "sum of", "experiences", "who one is", "shaped by",
         "what makes someone"),
-    6: ("male", "unpacking", "breaking it down", "pulling apart",
+    6: ("male", "unpacking", "unpack", "break down", "breaks down",
+        "breaking it down", "broken down", "pulling apart",
         "looking at what's underneath"),
     7: ("rhythm", "practice makes perfect", "muscle memory", "in a groove",
         "getting used to it"),
-    8: ("above", "cause", "that reminds", "triggered", "one thing leads",
-        "made me think"),
+    8: ("above", "cause", "that reminds", "reminds", "reminds you",
+        "reminds me", "triggered", "one thing leads", "made me think",
+        "brought to mind", "bring to mind"),
     9: ("below", "effect", "popped into mind", "out of nowhere",
         "it just clicked", "the thought came"),
 }
@@ -1437,7 +1441,8 @@ def validate_cas_to_english_rpm_chain(
     # Flow connectives — generous list of natural-language flow markers.
     flow_re = re.compile(
         r"\b(?:then|next|leads?\s+to|leading\s+to|becomes?|"
-        r"becoming|results?\s+in|resulting\s+in|gives?\s+rise|"
+        r"becoming|produces?|producing|yields?|yielding|creates?|creating|"
+        r"results?\s+in|resulting\s+in|gives?\s+rise|"
         r"feeds?\s+into|flows?\s+into|prompts?|prompting|"
         r"triggers?|triggering|after\s+that|in\s+turn|"
         r"and\s+then|which\s+then)\b",
