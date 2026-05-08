@@ -108,9 +108,12 @@ NOETIC_VALIDATION_TOKENS: dict[int, tuple[str, ...]] = {
         "making up your mind"),
     2: ("positive", "drawn to", "speaks to", "can't resist", "pulled toward"),
     3: ("negative", "can't stomach", "rubs the wrong way",
-        "wouldn't touch", "pushed away"),
-    4: ("vibration", "hit hard", "struck a chord", "resonated",
-        "made an impression"),
+        "wouldn't touch", "pushed away", "aversion", "averse",
+        "turned away", "repelled", "repulsed"),
+    4: ("vibration", "hit hard", "struck a chord", "strike a chord",
+        "striking a chord", "strikes a chord", "resonated", "resonate",
+        "resonates", "resonance", "resonating",
+        "made an impression", "make an impression", "makes an impression"),
     5: ("female", "sum of", "experiences", "who one is", "shaped by",
         "what makes someone"),
     6: ("male", "unpacking", "breaking it down", "pulling apart",
@@ -732,6 +735,746 @@ def validate_cas_to_english_fractal_k_indices(
     )
 
 
+# ---------------------------------------------------------------------------
+# Global Wave 2.5 jargon-leak validator + slot-specific structural-preservation
+# validators. Added 2026-05-08 in response to a paid preflight that accepted
+# 179 records of which the user reported:
+#   * 14 records leaked ``Ω_<name>`` (bare Ω-underscore-name)
+#   * 15 records leaked state literals like ``^3^P|A`` or ``^5``
+#   * 32 records leaked drive references like ``F7`` standalone
+#   * 17 records leaked CAS-jargon-shaped ``domain X`` phrasing
+#   * 1-2 records leaked the bare CAS-jargon word ``register`` / ``noetic``
+# The phase-1 validators only fired on recipe + fractal slots, so the other
+# eight grammar categories had ZERO content-preservation gating. These
+# validators close that gap.
+# ---------------------------------------------------------------------------
+
+
+# Domain letter -> approved English alias substrings (lower-cased). The
+# generator's prompt uses these aliases; the validator accepts any of them.
+DOMAIN_ALIASES: dict[str, tuple[str, ...]] = {
+    "P": ("principled", "foundational", "principle", "foundation"),
+    "C": ("cognitive", "mental", "thought", "thinking", "mind"),
+    "E": ("evaluative", "judging", "judgment", "judgement", "evaluation",
+          "evaluat", "assess"),
+    "O": ("operational", "behavioral", "behaviour", "behavior", "action",
+          "outcome", "act"),
+}
+
+# Drive subscript Fk -> approved English alias substrings. From CLAUDE.md
+# canonical drive list. Per the colloquialism feedback, also accept the
+# raw drive name word.
+DRIVE_ALIASES: dict[int, tuple[str, ...]] = {
+    1: ("unity", "oneness", "wholeness"),
+    2: ("wisdom", "wise", "insight", "understanding"),
+    3: ("vitality", "vital", "life-energy", "aliveness"),
+    4: ("connection", "connect", "relation", "bond", "tie"),
+    5: ("agency", "agent", "choice", "act with intent"),
+    6: ("structure", "structural", "form", "shape", "framework"),
+    7: ("purpose", "purposeful", "intent", "telos", "meaning"),
+}
+
+# Register letter -> approved English alias substrings.
+REGISTER_ALIASES: dict[str, tuple[str, ...]] = {
+    "T": ("transcendent", "vision", "calling", "purpose-orient", "meaning"),
+    "A": ("analytical", "analy", "reason", "logic", "deliberat",
+          "explicit", "step-by-step"),
+    "f": ("affective", "feeling", "felt", "emotion", "valenc",
+          "value-laden", "preference"),
+    "E": ("embodied", "bodily", "kinesthetic", "sensorimotor", "physical",
+          "concrete", "gut"),
+}
+
+
+# ---- Global jargon-leak regexes -------------------------------------------
+
+# Bare ``Ω`` symbol anywhere -- catches both ``Ω_alignment`` and rare bare
+# ``Ω``. Stricter than ``_RE_OMEGA_PREFIX_LEAK`` (which requires a letter
+# after ``_``). Catches ``Ω_4`` (digit stem) which the older pattern missed.
+_RE_OMEGA_BARE = re.compile(r"Ω")
+
+# State-literal prefix: ``^`` followed by a digit. Catches ``^3``, ``^3^P``,
+# ``^9^P_{F7}``, etc. CAS state literals always start ``^<digit>``.
+_RE_STATE_LITERAL_LEAK = re.compile(r"\^[0-9]")
+
+# Drive reference: bare ``F[1-7]`` as a standalone token. Word boundaries
+# avoid matching ``F1A2`` or compound identifiers. Note: drive subscripts
+# in CAS source are written ``_{F7}`` -- in English leakage they appear
+# as ``F7`` standalone or inside parens like ``(F7)``.
+_RE_DRIVE_LEAK = re.compile(r"\bF[1-7]\b")
+
+# Bare CAS-jargon words: noetic(s), RPM, compile-time. Conservative —
+# these words have no plain-English meaning that would false-positive in
+# our corpus.
+_RE_NOETIC_KEYWORD = re.compile(r"\bnoetic[s]?\b", re.IGNORECASE)
+_RE_RPM_KEYWORD = re.compile(r"\bRPM\b")
+_RE_COMPILE_TIME_KEYWORD = re.compile(r"\bcompile-time\b", re.IGNORECASE)
+
+# Bare ``register`` is jargon ONLY when adjacent to a CAS register letter
+# (T/A/f/E) or following a CAS-jargon word like ``the lens of domain P,
+# register F6``. We flag the word ``register`` only when it co-occurs
+# with a CAS letter token; plain-English uses like ``registered nurse`` or
+# ``cash register`` would not match.
+_RE_REGISTER_LEAK_CONTEXTUAL = re.compile(
+    r"\bregister\s+(?:[TAfE]\b|F[1-9]\b|[PCEO]\b)", re.IGNORECASE
+)
+# Also flag ``transcendent register``, ``analytical register``, etc. — these
+# are CAS-jargon-shaped phrasings.
+_RE_REGISTER_LEAK_NAMED = re.compile(
+    r"\b(?:transcendent|analytical|affective|embodied)\s+register[s]?\b",
+    re.IGNORECASE,
+)
+# Plural ``registers`` is reliably CAS-jargon when the surrounding context
+# is enumerative or comparative. Catches phrases like "across two distinct
+# registers", "three registers", "different registers", "across the
+# registers", which the v7.5 generator template tends to surface verbatim.
+# We require an enumerative or comparative cue word before/after to avoid
+# false-positive matches on "cash registers" / "voter registers" /
+# "musical registers" (none of which co-occur with these cues in plain
+# prose).
+_RE_REGISTER_LEAK_PLURAL = re.compile(
+    r"(?:"
+    r"\b(?:two|three|four|five|several|distinct|different|multiple|"
+    r"separate|various|many|all|both|each)\s+(?:[a-z]+\s+){0,2}registers\b"
+    r"|\bregisters\s+of\s+(?:thought|attention|cognition|experience|mind)\b"
+    r"|\bacross\s+(?:[a-z]+\s+){0,3}registers\b"
+    r"|\bregisters\s+(?:of|in)\s+(?:CAS|the\s+system)\b"
+    r")",
+    re.IGNORECASE,
+)
+
+# Domain-word leaks: only when ``domain`` is adjacent to a CAS letter
+# (P/C/E/O) or drive letter (F[1-9]). Conservative by design — plain
+# uses like ``the domain of mathematics`` MUST NOT match.
+#
+# Patterns flagged:
+#   ``domain P``, ``domain C``, ``domain E``, ``domain O``
+#   ``P-Domain``, ``C-domain``, ``P Domain``  (any case)
+#   ``domain F4``, ``F4 domain``
+#   ``domain (P)``, ``domain marked P``, ``domain of E``
+#   ``in domain E``, ``through domain P``, ``the domain P``
+_RE_DOMAIN_LEAK = re.compile(
+    r"(?:"
+    r"\bdomain\s+[PCEO]\b"                  # domain P
+    r"|\b[PCEO]\s*-\s*[Dd]omain\b"          # P-Domain, C-domain, etc.
+    r"|\b[PCEO]\s+[Dd]omain\b"              # P Domain
+    r"|\bdomain\s+F[1-9]\b"                 # domain F6
+    r"|\bF[1-9]\s+domain\b"                 # F4 domain
+    r"|\bdomain\s*\(\s*[PCEO]\s*\)"         # domain (P)
+    r"|\bdomain\s+(?:marked|labeled|labelled)\s+[PCEO]\b"  # domain marked P
+    r"|\bdomain\s+of\s+[PCEO]\b"            # domain of E
+    r")"
+)
+
+
+def validate_no_cas_jargon_leakage(
+    *,
+    english_output: str,
+) -> ValidatorResult:
+    """Global Wave 2.5 jargon-leak guard.
+
+    Reject when the English output contains CAS-notation or CAS-jargon
+    surface-form leakage. Catches every leakage pattern the user reported
+    after the 2026-05-08 paid preflight.
+
+    Patterns flagged:
+
+    * ``Ω`` (bare or prefixed, e.g. ``Ω_patience``, ``Ω_4``).
+    * ``^[0-9]`` (any state-literal prefix, e.g. ``^3``, ``^9^P_{F7}``).
+    * ``F[1-7]`` standalone (drive reference).
+    * ``noetic`` / ``noetics`` (bare CAS-jargon word).
+    * ``RPM`` (bare CAS-jargon word).
+    * ``compile-time`` (bare CAS-jargon word).
+    * ``register T`` / ``register F6`` / ``register P`` / ``transcendent
+      register`` etc. (CAS-jargon-shaped — NOT plain ``register``).
+    * ``domain P`` / ``P-Domain`` / ``F4 domain`` / ``domain (P)`` /
+      ``domain marked P`` / ``domain of E`` etc. (CAS-jargon-shaped — NOT
+      plain ``the domain of mathematics``).
+
+    Pass when none of those patterns hit. Fail with the list of which
+    patterns hit and the captured fragments.
+
+    Applies to every cas_to_english record regardless of grammar
+    category. The recipe-slot ``Ω_`` prefix-leak guard is a subset of
+    this validator and remains in place for category-specific reporting.
+    """
+    text = english_output or ""
+    hits: dict[str, list[str]] = {}
+
+    def _add(name: str, pat: re.Pattern) -> None:
+        matches = pat.findall(text)
+        if matches:
+            # Some findall patterns return tuples when alternation has
+            # groups; flatten consistently to strings.
+            flat: list[str] = []
+            for m in matches:
+                if isinstance(m, tuple):
+                    flat.append(next((s for s in m if s), str(m)))
+                else:
+                    flat.append(m)
+            hits[name] = flat
+
+    _add("omega_symbol", _RE_OMEGA_BARE)
+    _add("state_literal_prefix", _RE_STATE_LITERAL_LEAK)
+    _add("drive_reference", _RE_DRIVE_LEAK)
+    _add("noetic_keyword", _RE_NOETIC_KEYWORD)
+    _add("rpm_keyword", _RE_RPM_KEYWORD)
+    _add("compile_time_keyword", _RE_COMPILE_TIME_KEYWORD)
+    _add("register_jargon_contextual", _RE_REGISTER_LEAK_CONTEXTUAL)
+    _add("register_jargon_named", _RE_REGISTER_LEAK_NAMED)
+    _add("register_jargon_plural", _RE_REGISTER_LEAK_PLURAL)
+    _add("domain_jargon", _RE_DOMAIN_LEAK)
+
+    if not hits:
+        return ValidatorResult(
+            name="no_cas_jargon_leakage",
+            passed=True,
+        )
+
+    # Build a compact reason string with the pattern names that hit and a
+    # sample of the matched fragments.
+    parts = []
+    for name, frags in hits.items():
+        sample = frags[:3]
+        parts.append(f"{name}={sample}")
+    return ValidatorResult(
+        name="no_cas_jargon_leakage",
+        passed=False,
+        reason="CAS jargon leaked into English output: " + "; ".join(parts),
+        detail={"hits": hits},
+    )
+
+
+# ---- Slot-specific structural-preservation validators ---------------------
+
+
+def _english_contains_any(out_lower: str, tokens: Iterable[str]) -> bool:
+    return any(tok.lower() in out_lower for tok in tokens)
+
+
+def _state_literal_components(source_cas: str) -> list[dict[str, Any]]:
+    """Return the list of state literals in source with their parsed
+    components. Each entry: ``{noetic: int, domain: str|None, drive: int|None,
+    register: str|None}``.
+    """
+    out: list[dict[str, Any]] = []
+    for m in _RE_STATE_LITERAL.finditer(source_cas):
+        try:
+            n = int(m.group(1))
+        except (TypeError, ValueError):
+            continue
+        d = m.group(2)
+        drive_raw = m.group(3)
+        reg = m.group(4)
+        drive_idx: Optional[int] = None
+        if drive_raw and drive_raw.startswith("F"):
+            try:
+                drive_idx = int(drive_raw[1:])
+            except ValueError:
+                drive_idx = None
+        out.append({
+            "noetic": n,
+            "domain": d,
+            "drive": drive_idx,
+            "register": reg,
+        })
+    return out
+
+
+def _check_state_literal_preservation(
+    *,
+    source_cas: str,
+    english_output: str,
+    require_drive: bool = True,
+    require_register: bool = True,
+) -> tuple[list[str], list[str]]:
+    """Shared helper: returns (missing_components, present_components).
+
+    Each entry of missing_components is a string like
+    ``noetic_3@^3^P|A`` describing what didn't surface.
+    """
+    out_lower = english_output.lower()
+    out_singular = re.sub(r"(\w+)s\b", r"\1", out_lower)
+    missing: list[str] = []
+    present: list[str] = []
+    for lit in _state_literal_components(source_cas):
+        n = lit["noetic"]
+        d = lit["domain"]
+        drive = lit["drive"]
+        reg = lit["register"]
+        tok = f"^{n}"
+        if d:
+            tok += f"^{d}"
+        # Noetic alias check
+        ntoks = NOETIC_VALIDATION_TOKENS.get(n, ())
+        if ntoks and (
+            _english_contains_any(out_lower, ntoks)
+            or _english_contains_any(out_singular, ntoks)
+        ):
+            present.append(f"noetic_{n}@{tok}")
+        else:
+            missing.append(f"noetic_{n}@{tok}")
+        # Domain alias check
+        if d and d in DOMAIN_ALIASES:
+            if _english_contains_any(out_lower, DOMAIN_ALIASES[d]):
+                present.append(f"domain_{d}@{tok}")
+            else:
+                missing.append(f"domain_{d}@{tok}")
+        # Drive alias check
+        if drive is not None and require_drive:
+            dtoks = DRIVE_ALIASES.get(drive, ())
+            if dtoks and _english_contains_any(out_lower, dtoks):
+                present.append(f"drive_F{drive}@{tok}")
+            else:
+                missing.append(f"drive_F{drive}@{tok}")
+        # Register alias check
+        if reg and require_register:
+            # Register may be a single letter or a register-set ``⟨...⟩``;
+            # the latter is handled per-letter.
+            letters: list[str] = []
+            if reg.startswith("⟨") and reg.endswith("⟩"):
+                letters = [
+                    x.strip() for x in reg[1:-1].split(",") if x.strip()
+                ]
+            else:
+                letters = [reg]
+            for letter in letters:
+                rtoks = REGISTER_ALIASES.get(letter, ())
+                if rtoks and _english_contains_any(out_lower, rtoks):
+                    present.append(f"register_{letter}@{tok}")
+                else:
+                    missing.append(f"register_{letter}@{tok}")
+    return missing, present
+
+
+def validate_cas_to_english_state_literal_preservation(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> ValidatorResult:
+    """state_literal slot — noetic + domain + drive + register all surface.
+
+    Skipped (passed=True) when the source has no state literals — e.g. a
+    pure NoeticCluster diagram with raw ``^N`` operators is delegated to
+    the diagram_export validator.
+    """
+    if not _RE_STATE_LITERAL.search(source_cas):
+        return ValidatorResult(
+            name="cas_to_english_state_literal_preservation",
+            passed=True,
+            reason="no state literals in source",
+        )
+    missing, present = _check_state_literal_preservation(
+        source_cas=source_cas,
+        english_output=english_output,
+    )
+    if missing:
+        return ValidatorResult(
+            name="cas_to_english_state_literal_preservation",
+            passed=False,
+            reason=f"missing state-literal components: {missing[:6]}",
+            detail={"missing": missing, "present": present},
+        )
+    return ValidatorResult(
+        name="cas_to_english_state_literal_preservation",
+        passed=True,
+        detail={"present": present},
+    )
+
+
+def validate_cas_to_english_binary_composition(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> ValidatorResult:
+    """binary_composition slot — both operands' noetic + domain surface.
+
+    The operator (``+`` vs ``×``) is left to soft-checking via the prompt;
+    we do NOT fail on operator phrasing. Drive + register checks are
+    relaxed here (binary compositions tend to be drive-less in the
+    preflight corpus).
+    """
+    state_lits = _state_literal_components(source_cas)
+    if len(state_lits) < 2:
+        return ValidatorResult(
+            name="cas_to_english_binary_composition",
+            passed=True,
+            reason="not a binary composition (fewer than 2 operands)",
+        )
+    missing, present = _check_state_literal_preservation(
+        source_cas=source_cas,
+        english_output=english_output,
+        require_drive=False,
+        require_register=False,
+    )
+    if missing:
+        return ValidatorResult(
+            name="cas_to_english_binary_composition",
+            passed=False,
+            reason=(
+                f"missing operand components in binary composition: "
+                f"{missing[:6]}"
+            ),
+            detail={"missing": missing, "present": present},
+        )
+    return ValidatorResult(
+        name="cas_to_english_binary_composition",
+        passed=True,
+        detail={"present": present},
+    )
+
+
+def validate_cas_to_english_cross_register_omega(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> ValidatorResult:
+    """cross_register_omega slot — ``(^N^D|R1 × ^N^D|R2 [× ^N^D|R3]) =
+    ^N^D|Ω_<stem>``.
+
+    The emergent result name (the stem after ``Ω_``) MUST surface in
+    English. Each register letter must surface via its alias. The noetic
+    + domain must surface. The Ω anti-leak applies (already covered by
+    the global jargon validator; we still report stem-coverage here for
+    structured traceability).
+    """
+    # Match shape: ``(... ) = ^N^D|Ω_stem`` or ``= ^N|Ω_stem`` etc.
+    # We accept the loose match: any ``Ω_<stem>`` after ``=``.
+    eq_match = re.search(r"=\s*[^=]*?Ω_([A-Za-z][A-Za-z0-9_]*)", source_cas)
+    if not eq_match:
+        return ValidatorResult(
+            name="cas_to_english_cross_register_omega",
+            passed=True,
+            reason="not a cross-register-omega (no Ω_<stem> after =)",
+        )
+    stem = eq_match.group(1)
+    out_lower = english_output.lower()
+    if stem.lower() not in out_lower:
+        return ValidatorResult(
+            name="cas_to_english_cross_register_omega",
+            passed=False,
+            reason=f"emergent omega stem missing from English: {stem!r}",
+            detail={"stem": stem},
+        )
+    # Register coverage on operand register letters (the registers BEFORE
+    # the ``=``, not on the result).
+    pre_eq = source_cas.split("=", 1)[0]
+    operand_regs: list[str] = []
+    for m in _RE_STATE_LITERAL.finditer(pre_eq):
+        reg = m.group(4)
+        if not reg:
+            continue
+        if reg.startswith("⟨") and reg.endswith("⟩"):
+            operand_regs.extend(
+                x.strip() for x in reg[1:-1].split(",") if x.strip()
+            )
+        else:
+            operand_regs.append(reg)
+    missing_regs: list[str] = []
+    for letter in set(operand_regs):
+        rtoks = REGISTER_ALIASES.get(letter, ())
+        if rtoks and not _english_contains_any(out_lower, rtoks):
+            missing_regs.append(letter)
+    # Noetic + domain on the operands.
+    missing, present = _check_state_literal_preservation(
+        source_cas=pre_eq,
+        english_output=english_output,
+        require_drive=False,
+        require_register=False,
+    )
+    diagnostics: list[str] = []
+    if missing_regs:
+        diagnostics.append(f"missing register descriptions: {missing_regs}")
+    if missing:
+        diagnostics.append(
+            f"missing operand components: {missing[:6]}"
+        )
+    if diagnostics:
+        return ValidatorResult(
+            name="cas_to_english_cross_register_omega",
+            passed=False,
+            reason="; ".join(diagnostics),
+            detail={
+                "stem": stem,
+                "missing_register_letters": missing_regs,
+                "missing_operand_components": missing,
+                "present_operand_components": present,
+            },
+        )
+    return ValidatorResult(
+        name="cas_to_english_cross_register_omega",
+        passed=True,
+        detail={"stem": stem, "present_operand_components": present},
+    )
+
+
+def validate_cas_to_english_rpm_chain(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> ValidatorResult:
+    """rpm_chain slot — ``A → B → C [→ D]`` chain.
+
+    Checks: arrow count <= count of flow connectives in English. Each
+    operand's noetic referenced. Operand resolution accommodates
+    ``let X = ^N^D; ... X -> Y`` shape used in the preflight corpus.
+    """
+    arrow_count = source_cas.count("→") + len(re.findall(r"->", source_cas))
+    if arrow_count == 0:
+        return ValidatorResult(
+            name="cas_to_english_rpm_chain",
+            passed=True,
+            reason="no chain arrows in source",
+        )
+    out_lower = english_output.lower()
+    # Flow connectives — generous list of natural-language flow markers.
+    flow_re = re.compile(
+        r"\b(?:then|next|leads?\s+to|leading\s+to|becomes?|"
+        r"becoming|results?\s+in|resulting\s+in|gives?\s+rise|"
+        r"feeds?\s+into|flows?\s+into|prompts?|prompting|"
+        r"triggers?|triggering|after\s+that|in\s+turn|"
+        r"and\s+then|which\s+then)\b",
+        re.IGNORECASE,
+    )
+    flow_count = len(flow_re.findall(english_output))
+    diagnostics: list[str] = []
+    if flow_count < arrow_count:
+        diagnostics.append(
+            f"insufficient flow connectives: arrow_count={arrow_count} "
+            f"but only {flow_count} flow markers in English"
+        )
+    # Each state literal in source must have its noetic surface in English.
+    state_lits = _state_literal_components(source_cas)
+    missing_noetics: list[str] = []
+    out_singular = re.sub(r"(\w+)s\b", r"\1", out_lower)
+    for lit in state_lits:
+        ntoks = NOETIC_VALIDATION_TOKENS.get(lit["noetic"], ())
+        if ntoks and not (
+            _english_contains_any(out_lower, ntoks)
+            or _english_contains_any(out_singular, ntoks)
+        ):
+            missing_noetics.append(f"^{lit['noetic']}")
+    if missing_noetics:
+        diagnostics.append(
+            f"missing noetic operator descriptions: {missing_noetics}"
+        )
+    if diagnostics:
+        return ValidatorResult(
+            name="cas_to_english_rpm_chain",
+            passed=False,
+            reason="; ".join(diagnostics),
+            detail={
+                "arrow_count": arrow_count,
+                "flow_connective_count": flow_count,
+                "missing_noetics": missing_noetics,
+            },
+        )
+    return ValidatorResult(
+        name="cas_to_english_rpm_chain",
+        passed=True,
+        detail={
+            "arrow_count": arrow_count,
+            "flow_connective_count": flow_count,
+        },
+    )
+
+
+# Match ``let <name> = <expr>`` in source CAS; capture name + expr fragment.
+_RE_LET_BINDING = re.compile(
+    r"\blet\s+([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([^;\n]+)"
+)
+
+
+def validate_cas_to_english_let_binding(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> ValidatorResult:
+    """let_binding slot — variable name stem + bound expression content.
+
+    Pass when at least one variable name appears in English (verbatim or
+    quoted) AND the bound expression's noetic/domain at least partially
+    surface (re-uses the state-literal preservation helper, drive+register
+    optional).
+    """
+    bindings = _RE_LET_BINDING.findall(source_cas)
+    if not bindings:
+        return ValidatorResult(
+            name="cas_to_english_let_binding",
+            passed=True,
+            reason="no let-bindings in source",
+        )
+    out_lower = english_output.lower()
+    missing_names: list[str] = []
+    for name, _expr in bindings:
+        # The variable name itself must surface in English. Lowercase
+        # match is sufficient — names are typically alphanumeric.
+        if name.lower() not in out_lower:
+            missing_names.append(name)
+    diagnostics: list[str] = []
+    if missing_names:
+        diagnostics.append(f"missing let-binding names: {missing_names[:5]}")
+    # Noetic coverage — at least one operand from each binding's RHS
+    # surfaces. We pool across all bindings rather than per-binding to be
+    # tolerant of compact narrations.
+    missing, present = _check_state_literal_preservation(
+        source_cas=source_cas,
+        english_output=english_output,
+        require_drive=False,
+        require_register=False,
+    )
+    if missing and not present:
+        # No operand surfaces at all -> definitely a fail. Partial misses
+        # are allowed (the let-binding narration can be terse).
+        diagnostics.append(
+            f"no bound-expression operand surfaces in English: "
+            f"{missing[:6]}"
+        )
+    if diagnostics:
+        return ValidatorResult(
+            name="cas_to_english_let_binding",
+            passed=False,
+            reason="; ".join(diagnostics),
+            detail={
+                "missing_names": missing_names,
+                "missing_operand_components": missing,
+            },
+        )
+    return ValidatorResult(
+        name="cas_to_english_let_binding",
+        passed=True,
+        detail={
+            "let_names": [n for n, _ in bindings],
+            "present_operand_components": present,
+        },
+    )
+
+
+def validate_cas_to_english_inversion(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> ValidatorResult:
+    """inversion slot — re-uses state-literal preservation, drive+register
+    optional. Inversion sources are typically ``^N^D[|R]`` literals or
+    pairs.
+    """
+    if not _RE_STATE_LITERAL.search(source_cas):
+        return ValidatorResult(
+            name="cas_to_english_inversion",
+            passed=True,
+            reason="no state literals in source",
+        )
+    missing, present = _check_state_literal_preservation(
+        source_cas=source_cas,
+        english_output=english_output,
+        require_drive=False,
+        require_register=False,
+    )
+    if missing:
+        return ValidatorResult(
+            name="cas_to_english_inversion",
+            passed=False,
+            reason=f"missing inversion components: {missing[:6]}",
+            detail={"missing": missing, "present": present},
+        )
+    return ValidatorResult(
+        name="cas_to_english_inversion",
+        passed=True,
+        detail={"present": present},
+    )
+
+
+# Diagram cluster constructor names. The English output must signal cluster /
+# group / collection semantics.
+_DIAGRAM_CLUSTER_NAMES = (
+    "NoeticCluster",
+    "RelationCluster",
+    "StateSet",
+    "StateVariantCluster",
+    "CoverOf",
+    "PartitionOf",
+    "Tuple",
+    "Coordinate",
+    "Product",
+)
+_DIAGRAM_GROUP_HINTS = (
+    "cluster", "group", "collection", "set", "partition", "cover",
+    "grouping", "divides", "divid", "tuple", "pair", "structure",
+    "comprising", "consisting", "consists",
+)
+
+
+def validate_cas_to_english_diagram_export(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> ValidatorResult:
+    """diagram_export slot — cluster type referenced AND member noetics
+    surface.
+
+    The "cluster type" is loosely satisfied by any group/collection word
+    (cluster / group / collection / set / partition / etc.).
+    """
+    cluster_present = any(
+        name in source_cas for name in _DIAGRAM_CLUSTER_NAMES
+    )
+    if not cluster_present:
+        return ValidatorResult(
+            name="cas_to_english_diagram_export",
+            passed=True,
+            reason="no diagram-cluster constructor in source",
+        )
+    out_lower = english_output.lower()
+    has_group_hint = any(h in out_lower for h in _DIAGRAM_GROUP_HINTS)
+    diagnostics: list[str] = []
+    if not has_group_hint:
+        diagnostics.append(
+            "no group/cluster/collection word in English"
+        )
+    # Member noetics: every ``^N`` in source must have its alias surface.
+    member_re = re.compile(r"\^(\d)\b")
+    member_ks = sorted({int(m) for m in member_re.findall(source_cas)})
+    out_singular = re.sub(r"(\w+)s\b", r"\1", out_lower)
+    missing_ks: list[int] = []
+    for k in member_ks:
+        ntoks = NOETIC_VALIDATION_TOKENS.get(k, ())
+        if ntoks and not (
+            _english_contains_any(out_lower, ntoks)
+            or _english_contains_any(out_singular, ntoks)
+        ):
+            missing_ks.append(k)
+    # We allow up to 25% of members to be unrendered for diagrams with
+    # many members — the English narration legitimately abstracts when N
+    # is large.
+    threshold = max(1, int(len(member_ks) * 0.25 + 0.5)) if member_ks else 0
+    if member_ks and len(missing_ks) > threshold:
+        diagnostics.append(
+            f"too many missing member noetics: {missing_ks} "
+            f"(allowed {threshold} of {len(member_ks)})"
+        )
+    if diagnostics:
+        return ValidatorResult(
+            name="cas_to_english_diagram_export",
+            passed=False,
+            reason="; ".join(diagnostics),
+            detail={
+                "member_ks": member_ks,
+                "missing_ks": missing_ks,
+                "has_group_hint": has_group_hint,
+            },
+        )
+    return ValidatorResult(
+        name="cas_to_english_diagram_export",
+        passed=True,
+        detail={
+            "member_ks": member_ks,
+            "missing_ks": missing_ks,
+            "has_group_hint": has_group_hint,
+        },
+    )
+
+
 def validate_anti_copy_english_to_cas(
     *,
     prompt_text: str,
@@ -1116,22 +1859,92 @@ def run_validators_for_cas_to_english(
 ) -> list[ValidatorResult]:
     """Run the cas_to_english content-preservation validators on a record.
 
-    Returns the list of ValidatorResults; empty list means no validators
-    were applicable (e.g., a state_literal seed bypasses both recipe and
-    fractal checks).
+    Always fires the global ``no_cas_jargon_leakage`` validator. Then fires
+    category-specific validators that match the seed's grammar shape:
+
+      * recipe → recipe coefficient + Ω-stem preservation
+      * fractal_sequence → fractal k-index rendering
+      * cross_register_omega → emergent Ω stem + register coverage
+      * binary_composition → both operands' noetic + domain
+      * state_literal / inversion → noetic + domain (+ drive + register)
+      * rpm_chain → arrow count vs flow connectives + operand noetics
+      * let_binding → variable name(s) + bound expression operands
+      * diagram_export → cluster word + member noetics
+
+    Multiple validators can fire when the source matches multiple shapes
+    (e.g. a ``let X = Θ(...)`` seed runs both let_binding + recipe).
     """
     expr = seed["expression"]
     cat = seed.get("grammar_category", "unknown")
     results: list[ValidatorResult] = []
+    # Global jargon-leak guard — always fires.
+    results.append(
+        validate_no_cas_jargon_leakage(english_output=english_output)
+    )
+    # Recipe — fires when category matches OR the source has a Θ(...) shape.
     if cat == "recipe" or "Θ" in expr or "Theta" in expr:
         results.append(
             validate_cas_to_english_recipe_preservation(
                 source_cas=expr, english_output=english_output
             )
         )
+    # Fractal — fires when category matches OR the source has Φ⟨...⟩ shape.
     if cat == "fractal_sequence" or "Φ" in expr or re.search(r"\bPhi\s*[<⟨]", expr):
         results.append(
             validate_cas_to_english_fractal_k_indices(
+                source_cas=expr, english_output=english_output
+            )
+        )
+    # Cross-register omega — fires on category match OR ``= ^N|Ω_stem`` shape.
+    if cat == "cross_register_omega" or re.search(
+        r"=\s*[^=]*?Ω_[A-Za-z]", expr
+    ):
+        results.append(
+            validate_cas_to_english_cross_register_omega(
+                source_cas=expr, english_output=english_output
+            )
+        )
+    # RPM chain — fires on category match OR presence of ``->`` / ``→``.
+    if cat == "rpm_chain" or "→" in expr or "->" in expr:
+        results.append(
+            validate_cas_to_english_rpm_chain(
+                source_cas=expr, english_output=english_output
+            )
+        )
+    # let_binding — fires on category match OR ``let X = ...`` shape.
+    if cat == "let_binding" or _RE_LET_BINDING.search(expr):
+        results.append(
+            validate_cas_to_english_let_binding(
+                source_cas=expr, english_output=english_output
+            )
+        )
+    # diagram_export — fires on category match OR cluster constructor shape.
+    if cat == "diagram_export" or any(
+        name in expr for name in _DIAGRAM_CLUSTER_NAMES
+    ):
+        results.append(
+            validate_cas_to_english_diagram_export(
+                source_cas=expr, english_output=english_output
+            )
+        )
+    # Binary composition — fires on category match.
+    if cat == "binary_composition":
+        results.append(
+            validate_cas_to_english_binary_composition(
+                source_cas=expr, english_output=english_output
+            )
+        )
+    # state_literal — fires on category match.
+    if cat == "state_literal":
+        results.append(
+            validate_cas_to_english_state_literal_preservation(
+                source_cas=expr, english_output=english_output
+            )
+        )
+    # inversion — fires on category match.
+    if cat == "inversion":
+        results.append(
+            validate_cas_to_english_inversion(
                 source_cas=expr, english_output=english_output
             )
         )

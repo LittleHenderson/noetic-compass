@@ -472,7 +472,14 @@ def test_wave2_5_iterate_accepts_when_validators_pass():
     rejected: list[Any] = []
 
     def good_model(system: str, user: str) -> tuple[str, int, int]:
-        return ("Principled aversion to a foundational idea.", 100, 20)
+        # ^3^P|A — Negative noetic, Principled domain, Analytical register.
+        # All three must surface to satisfy the state_literal validator.
+        return (
+            "An analytical aversion to a foundational principle, reasoned "
+            "through carefully.",
+            100,
+            20,
+        )
 
     counts = m.wave2_5_iterate(
         seeds,
@@ -483,7 +490,9 @@ def test_wave2_5_iterate_accepts_when_validators_pass():
         accept_writer=accepted.append,
         reject_writer=rejected.append,
     )
-    assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
+    assert counts == {"accepted": 1, "rejected": 0, "errored": 0}, (
+        f"unexpected rejections: {rejected}"
+    )
     assert len(accepted) == 1
     assert accepted[0].seed_id == "seed_x"
 
@@ -558,7 +567,13 @@ def test_wave2_5_iterate_records_carry_full_traceability():
     rejected: list[Any] = []
 
     def model(system: str, user: str) -> tuple[str, int, int]:
-        return ("Principled aversion to a foundational principle.", 100, 20)
+        # ^3^P|A — must satisfy noetic + domain + register coverage now.
+        return (
+            "An analytical aversion to a foundational principle, reasoned "
+            "through carefully.",
+            100,
+            20,
+        )
 
     m.wave2_5_iterate(
         seeds,
@@ -602,6 +617,454 @@ def test_parse_cas_strips_fences_and_labels():
     m = _load_module()
     assert m.parse_cas_from_response("```cas\n^3^P|A\n```") == "^3^P|A"
     assert m.parse_cas_from_response("CAS: ^2^C × ^5^P") == "^2^C × ^5^P"
+
+
+# ---------------------------------------------------------------------------
+# Group 7: validate_no_cas_jargon_leakage (global Wave 2.5 guard)
+#
+# Added 2026-05-08 in response to the paid-preflight validator-coverage gap
+# where 179 records were accepted despite leaking Ω_<name>, state literals,
+# F[1-7] drives, "domain X" CAS-jargon, etc.
+# ---------------------------------------------------------------------------
+
+
+def test_jargon_leakage_pass_on_clean_english():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "Paying attention to a foundational principle leads to it "
+            "striking a chord with you."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_jargon_leakage_fail_on_omega_underscore_name():
+    """User example: 'pulls you toward Ω_patience.' must reject."""
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "When you're drawn to thinking clearly, drawn to staying "
+            "focused, and drawn to acting with care, that combination "
+            "pulls you toward Ω_patience."
+        ),
+    )
+    assert not r.passed
+    assert "omega_symbol" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_omega_with_digit_stem():
+    """Catches Ω_4 (digit stem), which a [A-Za-z]-only regex would miss."""
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "You become aware of something, and that awareness strikes a "
+            "chord with outcome Ω_4."
+        ),
+    )
+    assert not r.passed
+    assert "omega_symbol" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_state_literal_prefix():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "Something rubs the wrong way (^3^P|A) about a foundational "
+            "principle."
+        ),
+    )
+    assert not r.passed
+    assert "state_literal_prefix" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_drive_reference_standalone():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "A thought comes to mind. That triggers a memory involving "
+            "F2, which then reminds you of something about F2."
+        ),
+    )
+    assert not r.passed
+    assert "drive_reference" in (r.reason or "")
+
+
+def test_jargon_leakage_pass_on_compound_identifier_with_F_digit():
+    """Word boundary requirement: 'F1A2' or 'F1' inside a longer token
+    should NOT match — only the standalone digit form is a leak."""
+    m = _load_module()
+    # F1A2 is a synthetic identifier — used in unit fixtures but not a
+    # real drive reference. Word boundaries must protect this.
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "The ticket reference F1A2B5 is being escalated to the "
+            "infrastructure team."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_jargon_leakage_fail_on_noetic_keyword():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "Three noetics combine to produce a unified outcome."
+        ),
+    )
+    assert not r.passed
+    assert "noetic_keyword" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_rpm_keyword():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output="The RPM chain unfolds in four stages.",
+    )
+    assert not r.passed
+    assert "rpm_keyword" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_register_letter_after_word():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "Who you are—shaped by experience—is examined through the "
+            "lens of domain P, register F6."
+        ),
+    )
+    assert not r.passed
+    assert "register_jargon_contextual" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_named_register_phrase():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "An aversion in the analytical register combined with one "
+            "in the affective register."
+        ),
+    )
+    assert not r.passed
+    assert "register_jargon_named" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_plural_registers_in_jargon_context():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "Something resonates with you across two distinct registers."
+        ),
+    )
+    assert not r.passed
+    assert "register_jargon_plural" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_domain_followed_by_letter():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "Who you are, shaped by domain P, combined with who you are, "
+            "shaped by domain E."
+        ),
+    )
+    assert not r.passed
+    assert "domain_jargon" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_letter_dash_domain():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output="A resonance struck a chord with the C-domain function.",
+    )
+    assert not r.passed
+    assert "domain_jargon" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_F_prefixed_domain_phrase():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output="A thought shaped by experiences that hits hard in the F4 domain.",
+    )
+    assert not r.passed
+    assert "domain_jargon" in (r.reason or "")
+
+
+def test_jargon_leakage_pass_on_plain_english_domain_of_mathematics():
+    """Critical false-positive test: 'the domain of mathematics' must NOT
+    flag, even though it contains the bare word 'domain'."""
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "The domain of mathematics has long fascinated philosophers; "
+            "in the domain of biology, the same questions take a different "
+            "form. We move from one domain to another easily."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_jargon_leakage_pass_on_registered_nurse_phrase():
+    """Critical false-positive test: word 'registered' must NOT trigger
+    the bare 'register' jargon detector."""
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "She is a registered nurse who registered to vote last year."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_jargon_leakage_pass_on_cash_register():
+    """Plain English use of 'register' as a noun (cash register) must pass."""
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "She placed the change in the cash register and walked out."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_jargon_leakage_user_verbatim_example():
+    """The user's exact verbatim concrete example must reject."""
+    m = _load_module()
+    seed = {
+        "seed_id": "verbatim_user_example",
+        "expression": "(^2|T × ^2|f × ^2|E) = ^2|Ω_patience",
+        "grammar_category": "cross_register_omega",
+    }
+    english = (
+        "When you're drawn to thinking clearly, drawn to staying focused, "
+        "and drawn to acting with care, that combination pulls you toward "
+        "Ω_patience."
+    )
+    results = m.run_validators_for_cas_to_english(
+        seed=seed, english_output=english
+    )
+    assert any(not r.passed for r in results), (
+        f"user verbatim example must be rejected; results={[r.name for r in results]}"
+    )
+    # Specifically: the global jargon validator must catch the Ω_patience.
+    jargon = [r for r in results if r.name == "no_cas_jargon_leakage"]
+    assert jargon and not jargon[0].passed
+    assert "omega_symbol" in (jargon[0].reason or "")
+
+
+# ---------------------------------------------------------------------------
+# Group 8: slot-specific structural-preservation validators
+# ---------------------------------------------------------------------------
+
+
+def test_state_literal_pass_with_full_components():
+    m = _load_module()
+    r = m.validate_cas_to_english_state_literal_preservation(
+        source_cas="^3^P|A",
+        english_output=(
+            "An analytical aversion to a foundational principle, reasoned "
+            "through carefully."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_state_literal_fail_on_missing_register():
+    m = _load_module()
+    r = m.validate_cas_to_english_state_literal_preservation(
+        source_cas="^3^P|A",
+        english_output="A principled aversion.",  # no analytical signal
+    )
+    assert not r.passed
+    assert "register" in (r.reason or "")
+
+
+def test_state_literal_fail_on_missing_drive():
+    m = _load_module()
+    r = m.validate_cas_to_english_state_literal_preservation(
+        source_cas="^8^C_{F2}",
+        english_output=(
+            "One thing led to another, and that triggered a memory tied "
+            "to how you process information."
+        ),
+    )
+    # No drive (F2 -> wisdom/insight) word and the C-domain ("cognitive"
+    # / "thought") only loosely surfaces. The validator should fail.
+    assert not r.passed
+
+
+def test_binary_composition_pass_with_both_operands():
+    m = _load_module()
+    r = m.validate_cas_to_english_binary_composition(
+        source_cas="^2^P + ^4^P",
+        english_output=(
+            "Drawn toward a foundational principle and struck a chord "
+            "with another foundational principle, together."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_binary_composition_fail_on_missing_operand():
+    m = _load_module()
+    r = m.validate_cas_to_english_binary_composition(
+        source_cas="^1^P + ^4^P",
+        english_output="Paying attention to something.",
+    )
+    assert not r.passed
+    assert "missing operand components" in (r.reason or "")
+
+
+def test_cross_register_omega_fail_on_missing_emergent_stem():
+    m = _load_module()
+    r = m.validate_cas_to_english_cross_register_omega(
+        source_cas="(^3^P|A × ^3^P|f) = ^3^P|Ω_alignment",
+        english_output=(
+            "An analytical aversion to a foundational principle, combined "
+            "with a felt aversion to a foundational principle, produces "
+            "a unified outcome."
+        ),
+    )
+    assert not r.passed
+    assert "alignment" in (r.reason or "")
+
+
+def test_cross_register_omega_pass_with_stem_and_register_descriptions():
+    m = _load_module()
+    r = m.validate_cas_to_english_cross_register_omega(
+        source_cas="(^3^P|A × ^3^P|f) = ^3^P|Ω_alignment",
+        english_output=(
+            "An analytical, reasoned aversion to a foundational principle "
+            "combined with a felt, affective aversion to that same "
+            "foundational principle yields the alignment outcome."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_rpm_chain_fail_on_missing_flow_connectives():
+    m = _load_module()
+    r = m.validate_cas_to_english_rpm_chain(
+        source_cas="^0^P -> ^9^P_{F7} -> ^9^C_{F7} -> ^9^E_{F7}",
+        # Only one flow connective for three arrows.
+        english_output=(
+            "An idea, an effect, an effect, and an effect together."
+        ),
+    )
+    assert not r.passed
+
+
+def test_rpm_chain_pass_with_chain_flow_words():
+    m = _load_module()
+    r = m.validate_cas_to_english_rpm_chain(
+        source_cas="^1^P -> ^4^P -> ^7^P",
+        english_output=(
+            "Paying attention to a foundational principle leads to it "
+            "striking a chord, which then becomes muscle memory through "
+            "practice."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_let_binding_fail_on_missing_variable_name():
+    m = _load_module()
+    r = m.validate_cas_to_english_let_binding(
+        source_cas="let attraction_0019 = ^5^O_{F5}|T",
+        english_output=(
+            "We bind a variable to a state shaped by experiences."
+        ),
+    )
+    assert not r.passed
+    assert "missing let-binding names" in (r.reason or "")
+
+
+def test_let_binding_pass_with_name_and_operand():
+    m = _load_module()
+    r = m.validate_cas_to_english_let_binding(
+        source_cas="let trace_0025 = ^6^P",
+        english_output=(
+            "We define a named reference called trace_0025 that captures "
+            "the act of unpacking a foundational principle."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_inversion_pass_with_full_state_components():
+    m = _load_module()
+    r = m.validate_cas_to_english_inversion(
+        source_cas="^1^P -> ^1^C",
+        english_output=(
+            "Paying attention to a foundational principle leads to "
+            "becoming aware of it as a thought."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+def test_diagram_export_fail_on_missing_member_noetics():
+    m = _load_module()
+    r = m.validate_cas_to_english_diagram_export(
+        source_cas="NoeticCluster{^0, ^2, ^7, ^8}",
+        # No noetic alias for any of {0, 2, 7, 8}.
+        english_output="A grouping of cognitive operations.",
+    )
+    assert not r.passed
+
+
+def test_diagram_export_pass_with_cluster_word_and_member_aliases():
+    m = _load_module()
+    r = m.validate_cas_to_english_diagram_export(
+        source_cas="NoeticCluster{^0, ^2}",
+        english_output=(
+            "A cluster of two thoughts—one foundational and abstract, "
+            "the other drawn toward it—held together as a single unit."
+        ),
+    )
+    assert r.passed, r.reason
+
+
+# ---------------------------------------------------------------------------
+# Group 9: run_validators_for_cas_to_english wiring
+# ---------------------------------------------------------------------------
+
+
+def test_run_validators_always_includes_jargon_check():
+    m = _load_module()
+    seed = {
+        "seed_id": "x",
+        "expression": "^3^P|A",
+        "grammar_category": "state_literal",
+    }
+    results = m.run_validators_for_cas_to_english(
+        seed=seed, english_output="A clean reply with no leakage."
+    )
+    names = [r.name for r in results]
+    assert "no_cas_jargon_leakage" in names
+
+
+def test_run_validators_user_verbatim_example_rejects_via_jargon():
+    """The user's concrete reported leak — Ω_patience — is rejected by
+    the global jargon validator regardless of category."""
+    m = _load_module()
+    seed = {
+        "seed_id": "verbatim",
+        "expression": "(^2|T × ^2|f × ^2|E) = ^2|Ω_patience",
+        "grammar_category": "cross_register_omega",
+    }
+    english = (
+        "When you're drawn to thinking clearly, drawn to staying focused, "
+        "and drawn to acting with care, that combination pulls you toward "
+        "Ω_patience."
+    )
+    results = m.run_validators_for_cas_to_english(
+        seed=seed, english_output=english
+    )
+    failed = [r for r in results if not r.passed]
+    assert failed, "verbatim example must be rejected"
+    fail_names = {r.name for r in failed}
+    assert "no_cas_jargon_leakage" in fail_names
 
 
 def test_tokenize_for_jaccard_separates_operators():
