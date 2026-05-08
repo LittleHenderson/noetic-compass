@@ -1559,6 +1559,16 @@ DOMAIN_ALIASES: dict[str, tuple[str, ...]] = {
           "outcome", "act"),
 }
 
+# Narrower domain aliases used to catch invented domains in a local clause.
+# Avoid generic terms like "thought" and "outcome" here because they occur
+# naturally outside domain labels.
+DOMAIN_STRONG_ALIASES: dict[str, tuple[str, ...]] = {
+    "P": ("principled", "foundational", "principle", "foundation"),
+    "C": ("cognitive", "mental"),
+    "E": ("evaluative", "judging", "judgment", "judgement", "evaluation"),
+    "O": ("operational", "behavioral", "behavioural", "behavior", "behaviour"),
+}
+
 # Drive subscript Fk -> approved English alias substrings. From CLAUDE.md
 # canonical drive list. Per the colloquialism feedback, also accept the
 # raw drive name word.
@@ -1618,6 +1628,14 @@ _RE_DRIVE_LEAK = re.compile(r"\bF[1-7]\b")
 _RE_NOETIC_KEYWORD = re.compile(r"\bnoetic[s]?\b", re.IGNORECASE)
 _RE_RPM_KEYWORD = re.compile(r"\bRPM\b")
 _RE_COMPILE_TIME_KEYWORD = re.compile(r"\bcompile-time\b", re.IGNORECASE)
+_RE_OPERATOR_JARGON = re.compile(
+    r"\boperator\s+(?:slot|slots|position|positions|configuration|"
+    r"configurations)\b"
+    r"|\bcognitive\s+operations?\b"
+    r"|\bCO-\d+\b"
+    r"|\blambda\b",
+    re.IGNORECASE,
+)
 
 # Bare ``register`` is jargon ONLY when adjacent to a CAS register letter
 # (T/A/f/E) or following a CAS-jargon word like ``the lens of domain P,
@@ -1755,6 +1773,7 @@ def validate_no_cas_jargon_leakage(
     _add("noetic_keyword", _RE_NOETIC_KEYWORD)
     _add("rpm_keyword", _RE_RPM_KEYWORD)
     _add("compile_time_keyword", _RE_COMPILE_TIME_KEYWORD)
+    _add("operator_jargon", _RE_OPERATOR_JARGON)
     _add("register_jargon_contextual", _RE_REGISTER_LEAK_CONTEXTUAL)
     _add("register_jargon_named", _RE_REGISTER_LEAK_NAMED)
     _add("register_jargon_plural", _RE_REGISTER_LEAK_PLURAL)
@@ -2332,6 +2351,58 @@ def _check_per_stage_noetic_preservation(
     return failed, ok
 
 
+def _check_per_stage_domain_preservation(
+    *,
+    source_cas: str,
+    english_output: str,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """For each ``let stageNAME = ^N^D[...]`` binding, verify that the
+    stage clause preserves the bound domain and does not introduce a
+    conflicting domain.
+
+    This is stricter than document-level domain coverage. Wave 2.5 accepted
+    records where a stage bound to ``^5^P`` was narrated as "in the
+    evaluative arena" while some other clause carried the principled marker.
+    That is content drift even if the output mentions all domains somewhere.
+    """
+    failed: list[dict[str, Any]] = []
+    ok: list[dict[str, Any]] = []
+    for name, expr in _RE_LET_BINDING.findall(source_cas):
+        sl_match = _RE_STATE_LITERAL.search(expr)
+        if not sl_match:
+            continue
+        domain = sl_match.group(2)
+        if not domain:
+            continue
+        dtoks = DOMAIN_STRONG_ALIASES.get(domain, ())
+        if not dtoks:
+            continue
+        clause = _stage_clause_window(
+            english_output=english_output, stage_name=name
+        )
+        if clause is None:
+            continue
+        clause_lower = clause.lower()
+        has_expected = _english_contains_any(clause_lower, dtoks)
+        unexpected: list[str] = []
+        for other_domain, other_tokens in DOMAIN_STRONG_ALIASES.items():
+            if other_domain == domain:
+                continue
+            if _english_contains_any(clause_lower, other_tokens):
+                unexpected.append(other_domain)
+        if has_expected and not unexpected:
+            ok.append({"name": name, "domain": domain})
+            continue
+        failed.append({
+            "name": name,
+            "domain": domain,
+            "missing_expected": not has_expected,
+            "unexpected_domains": unexpected,
+            "clause": clause.strip()[:200],
+        })
+    return failed, ok
+
+
 def validate_cas_to_english_rpm_chain(
     *,
     source_cas: str,
@@ -2414,6 +2485,17 @@ def validate_cas_to_english_rpm_chain(
             f"{names} mention the stage name but their clause "
             "lacks the bound noetic's alias and no anaphor"
         )
+    stage_domain_failed, stage_domain_ok = _check_per_stage_domain_preservation(
+        source_cas=source_cas,
+        english_output=english_output,
+    )
+    if stage_domain_failed:
+        names = [s["name"] for s in stage_domain_failed]
+        diagnostics.append(
+            "stage_domain_drift: stage(s) "
+            f"{names} mention the stage name but their clause "
+            "drops or contradicts the bound domain"
+        )
     if diagnostics:
         return ValidatorResult(
             name="cas_to_english_rpm_chain",
@@ -2425,6 +2507,8 @@ def validate_cas_to_english_rpm_chain(
                 "missing_noetics": missing_noetics,
                 "stage_noetic_failed": stage_failed,
                 "stage_noetic_ok": stage_ok,
+                "stage_domain_failed": stage_domain_failed,
+                "stage_domain_ok": stage_domain_ok,
             },
         )
     return ValidatorResult(
@@ -2434,6 +2518,7 @@ def validate_cas_to_english_rpm_chain(
             "arrow_count": arrow_count,
             "flow_connective_count": flow_count,
             "stage_noetic_ok": stage_ok,
+            "stage_domain_ok": stage_domain_ok,
         },
     )
 

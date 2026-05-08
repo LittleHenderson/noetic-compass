@@ -1164,6 +1164,26 @@ def test_jargon_leakage_fail_on_noetic_keyword():
     assert "noetic_keyword" in (r.reason or "")
 
 
+def test_jargon_leakage_fail_on_operator_slot_language():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output=(
+            "The set gathers a thought, breaking down, and operator slot 8."
+        ),
+    )
+    assert not r.passed
+    assert "operator_jargon" in (r.reason or "")
+
+
+def test_jargon_leakage_fail_on_cognitive_operation_language():
+    m = _load_module()
+    r = m.validate_no_cas_jargon_leakage(
+        english_output="A cognitive operation CO-9 combines with lambda.",
+    )
+    assert not r.passed
+    assert "operator_jargon" in (r.reason or "")
+
+
 def test_jargon_leakage_fail_on_rpm_keyword():
     m = _load_module()
     r = m.validate_no_cas_jargon_leakage(
@@ -2147,6 +2167,65 @@ def test_per_stage_noetic_pass_with_anaphor_continues():
     assert "stageD" in anaphor_names
 
 
+def test_per_stage_domain_fail_on_stage_domain_swap():
+    """Human review caught stage-level domain swaps that document-level
+    coverage missed: a ^5^P stage narrated as evaluative/cognitive still
+    mentions the noetic, but the bound domain is wrong."""
+    m = _load_module()
+    src = (
+        "let stageA0_7_0128 = ^0^P; let stageD7_7_0128 = ^5^P_{F7}; "
+        "let stageW7_7_0128 = ^5^C_{F7}; let stageP7_7_0128 = ^5^E_{F7}; "
+        "stageD7_7_0128 -> stageW7_7_0128"
+    )
+    eng = (
+        "Let stageA0_7_0128 name a foundational thought, "
+        "stageD7_7_0128 name who one is shaped by a need for purpose "
+        "and meaning in the evaluative arena, stageW7_7_0128 name "
+        "cognitive thinking shaped by a need for purpose and meaning in "
+        "the evaluative arena, and stageP7_7_0128 name evaluative "
+        "judgment shaped by a need for purpose and meaning in the "
+        "evaluative arena. stageD7_7_0128 leads to stageW7_7_0128."
+    )
+    failed, _ok = m._check_per_stage_domain_preservation(
+        source_cas=src, english_output=eng
+    )
+    failed_names = {f["name"] for f in failed}
+    assert "stageD7_7_0128" in failed_names
+    assert "stageW7_7_0128" in failed_names
+    r = m.validate_cas_to_english_rpm_chain(
+        source_cas=src, english_output=eng
+    )
+    assert not r.passed
+    assert "stage_domain_drift" in (r.reason or "")
+
+
+def test_per_stage_domain_pass_when_each_stage_domain_matches():
+    m = _load_module()
+    src = (
+        "let stageA0_7_0128 = ^0^P; let stageD7_7_0128 = ^5^P_{F7}; "
+        "let stageW7_7_0128 = ^5^C_{F7}; let stageP7_7_0128 = ^5^E_{F7}; "
+        "stageD7_7_0128 -> stageW7_7_0128"
+    )
+    eng = (
+        "Let stageA0_7_0128 name a foundational thought, "
+        "stageD7_7_0128 name who one is shaped by purpose in a "
+        "foundational frame, stageW7_7_0128 name who one is shaped by "
+        "purpose in cognitive thinking, and stageP7_7_0128 name who one "
+        "is shaped by purpose in evaluative judgment. stageD7_7_0128 "
+        "leads to stageW7_7_0128."
+    )
+    failed, ok = m._check_per_stage_domain_preservation(
+        source_cas=src, english_output=eng
+    )
+    assert failed == []
+    assert {s["name"] for s in ok} == {
+        "stageA0_7_0128",
+        "stageD7_7_0128",
+        "stageW7_7_0128",
+        "stageP7_7_0128",
+    }
+
+
 def test_per_stage_clause_window_handles_underscored_digit_names():
     """Stage names like 'stageW2_2_0109' contain digits and underscores;
     clause extraction must match them correctly."""
@@ -2182,7 +2261,8 @@ def test_rpm_chain_pass_when_audit_case_fixed():
     )
     eng = (
         "Let stageA0_2_0109 name a foundational thought, stageD2_2_0109 "
-        "name something triggered in the realm of wisdom, stageW2_2_0109 "
+        "name something triggered in a foundational frame and in the realm "
+        "of wisdom, stageW2_2_0109 "
         "name a triggered cognitive shift in the realm of wisdom, and "
         "stageP2_2_0109 name an evaluative judgment that triggered "
         "follow-on action in the realm of wisdom. stageW2_2_0109 leads "

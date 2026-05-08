@@ -1,0 +1,185 @@
+{
+  "created_at": "2026-05-08T14:27:57+00:00",
+  "input": "cas-synthetic\\data\\path_d\\wave3_step2_5_english_descriptions_20260508T110453Z.jsonl",
+  "outputs": {
+    "clean": "cas-synthetic\\data\\path_d\\wave3_step2_5_layer3_clean_20260508T110453Z.jsonl",
+    "rejects": "cas-synthetic\\data\\path_d\\wave3_step2_5_layer3_rejected_20260508T110453Z.jsonl"
+  },
+  "counts": {
+    "total": 398,
+    "clean": 305,
+    "rejected": 93,
+    "clean_rate": 0.7663
+  },
+  "per_category": {
+    "binary_composition": {
+      "clean": 38,
+      "rejected": 7,
+      "total": 45,
+      "clean_rate": 0.8444
+    },
+    "cross_register_omega": {
+      "clean": 50,
+      "rejected": 0,
+      "total": 50,
+      "clean_rate": 1.0
+    },
+    "diagram_export": {
+      "clean": 29,
+      "rejected": 9,
+      "total": 38,
+      "clean_rate": 0.7632
+    },
+    "fractal_sequence": {
+      "clean": 51,
+      "rejected": 0,
+      "total": 51,
+      "clean_rate": 1.0
+    },
+    "inversion": {
+      "clean": 23,
+      "rejected": 2,
+      "total": 25,
+      "clean_rate": 0.92
+    },
+    "let_binding": {
+      "clean": 37,
+      "rejected": 1,
+      "total": 38,
+      "clean_rate": 0.9737
+    },
+    "meta_logic_relation": {
+      "clean": 14,
+      "rejected": 14,
+      "total": 28,
+      "clean_rate": 0.5
+    },
+    "recipe": {
+      "clean": 31,
+      "rejected": 16,
+      "total": 47,
+      "clean_rate": 0.6596
+    },
+    "rpm_chain": {
+      "clean": 2,
+      "rejected": 44,
+      "total": 46,
+      "clean_rate": 0.0435
+    },
+    "state_literal": {
+      "clean": 30,
+      "rejected": 0,
+      "total": 30,
+      "clean_rate": 1.0
+    }
+  },
+  "validator_failures": {
+    "cas_to_english_rpm_chain": 49,
+    "no_phantom_outcome_framing": 18,
+    "no_cas_jargon_leakage": 18,
+    "cas_to_english_recipe_per_occurrence": 16,
+    "cas_to_english_binary_composition": 6
+  },
+  "top_failure_reasons": [
+    {
+      "count": 7,
+      "reason": "phantom outcome framing — drive (or other non-Ω) subscript rendered as a named outcome target: ['in the realm of wisdom', 'in the realm of wisdom', 'in the realm of wisdom']"
+    },
+    {
+      "count": 5,
+      "reason": "CAS jargon leaked into English output: operator_jargon=['cognitive operations']"
+    },
+    {
+      "count": 3,
+      "reason": "phantom outcome framing — drive (or other non-Ω) subscript rendered as a named outcome target: ['in the realm of connection']"
+    },
+    {
+      "count": 3,
+      "reason": "CAS jargon leaked into English output: operator_jargon=['operator slots']"
+    },
+    {
+      "count": 2,
+      "reason": "CAS jargon leaked into English output: operator_jargon=['cognitive operations', 'cognitive operations']"
+    },
+    {
+      "count": 1,
+      "reason": "stage_noetic_dropped: stage(s) ['stageW1_1_0246', 'stageP1_1_0246'] mention the stage name but their clause lacks the bound noetic's alias and no anaphor; stage_domain_drift: stage(s) ['stageD1_1_0246'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "phantom outcome framing — drive (or other non-Ω) subscript rendered as a named outcome target: ['in the realm of wisdom']"
+    },
+    {
+      "count": 1,
+      "reason": "stage_domain_drift: stage(s) ['stageD4_4_0356'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "operator_misrender_at_coeff_0.5: ^6 alias not found near coefficient — snippet: '0.5 from a foundational principle expressed through big-picture thinking'"
+    },
+    {
+      "count": 1,
+      "reason": "stage_domain_drift: stage(s) ['upsilon_0195'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "operator_misrender_in_co_n_composition: source CO-[2] aliases missing while aliases for non-source operators ^[6] surfaced instead"
+    },
+    {
+      "count": 1,
+      "reason": "stage_domain_drift: stage(s) ['stageD7_7_0343'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "stage_noetic_dropped: stage(s) ['stageD5_5_0196', 'stageW5_5_0196', 'stageP5_5_0196'] mention the stage name but their clause lacks the bound noetic's alias and no anaphor; stage_domain_drift: stage(s) ['stageD5_5_0196', 'stageP5_5_0196'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "CAS jargon leaked into English output: operator_jargon=['operator positions']"
+    },
+    {
+      "count": 1,
+      "reason": "CAS jargon leaked into English output: operator_jargon=['Cognitive operation', 'CO-9', 'cognitive operation']"
+    },
+    {
+      "count": 1,
+      "reason": "missing CO-N operator aliases: CO-[1, 9]"
+    },
+    {
+      "count": 1,
+      "reason": "stage_noetic_dropped: stage(s) ['stageD7_7_0379', 'stageW7_7_0379', 'stageP7_7_0379'] mention the stage name but their clause lacks the bound noetic's alias and no anaphor; stage_domain_drift: stage(s) ['stageD7_7_0379'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "stage_domain_drift: stage(s) ['stageD3_3_0080'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "stage_domain_drift: stage(s) ['stageD3_3_0066'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "stage_domain_drift: stage(s) ['stageD4_4_0197'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "CAS jargon leaked into English output: operator_jargon=['operator configurations']"
+    },
+    {
+      "count": 1,
+      "reason": "stage_domain_drift: stage(s) ['stageD7_7_0029'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "register_misplaced_at_coeff_2: |E source register missing AND conflicting alias for |A present near coefficient — snippet: 'To produce the outcome called rehearsal_65, combine 2 of paying attention to a need for cohesion in foundational thinking, expressed in an analytical way'"
+    },
+    {
+      "count": 1,
+      "reason": "stage_domain_drift: stage(s) ['stageD6_6_0003'] mention the stage name but their clause drops or contradicts the bound domain"
+    },
+    {
+      "count": 1,
+      "reason": "stage_noetic_dropped: stage(s) ['stageW2_2_0109', 'stageP2_2_0109'] mention the stage name but their clause lacks the bound noetic's alias and no anaphor; stage_domain_drift: stage(s) ['stageD2_2_0109', 'stageW2_2_0109'] mention the stage name but their clause drops or contradicts the bound domain"
+    }
+  ]
+}
