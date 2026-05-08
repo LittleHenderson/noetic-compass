@@ -63,6 +63,7 @@ def test_cas_to_english_v2_includes_recipe_guidance_for_recipe_seed():
     sys_p, user_p = m.build_cas_to_english_prompt_v2(seed)
     assert "RECIPE-SPECIFIC RULES" in user_p
     assert "MUST appear in your English output as a" in user_p
+    assert "DO NOT confuse ^3 and ^6" in user_p
     assert "Ω_decision_47" not in sys_p  # source not leaked into system msg
 
 
@@ -148,6 +149,7 @@ def test_cas_to_english_v2_binary_composition_guidance_wired():
     seed = {"expression": "^3^O + ^7^P", "grammar_category": "binary_composition"}
     _, user_p = m.build_cas_to_english_prompt_v2(seed)
     assert "BINARY-COMPOSITION RULES" in user_p
+    assert "operator index 2" in user_p
     assert "STATE-LITERAL RULES" not in user_p
 
 
@@ -198,6 +200,7 @@ def test_cas_to_english_v2_diagram_export_guidance_wired():
     }
     _, user_p = m.build_cas_to_english_prompt_v2(seed)
     assert "DIAGRAM-EXPORT RULES" in user_p
+    assert "export let upsilon_0206" in user_p
 
 
 def test_cas_to_english_v2_per_slot_guidance_is_mutually_exclusive():

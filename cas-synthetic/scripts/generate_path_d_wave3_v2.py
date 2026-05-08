@@ -332,7 +332,12 @@ _RECIPE_PRESERVATION_GUIDANCE = (
     "- BAD example — DO NOT do this: 'A 0.7 contribution from the "
     "cognitive domain combined with a 1.5 contribution from the "
     "principled domain produces reasoning_50.' That uses the bare noun "
-    "'domain' twice — REJECT under the axis-word leakage gate."
+    "'domain' twice — REJECT under the axis-word leakage gate.\n"
+    "- BAD example — DO NOT confuse ^3 and ^6 inside recipes: "
+    "'0.5*^3^E_{F6}|f' must NOT be rendered as '0.5 of breaking down "
+    "an idea.' ^3 is Negative/aversion ('rubs the wrong way', 'pushed "
+    "away'); ^6 is Male/analysis ('breaking it down', 'unpacking'). "
+    "If the source says ^3, use aversion language, not analysis language."
 )
 
 
@@ -468,7 +473,12 @@ _BINARY_COMPOSITION_GUIDANCE_V2 = (
     "in the operational arena combined with a practiced rhythm in the "
     "principled arena.' Both operands' noetics and domains appear; no "
     "'^N', no 'O', no 'P' as labels.\n"
+    "- DO NOT describe operands as 'operator index 2' or 'operator index "
+    "9'. The index number is CAS notation; use the corresponding "
+    "operator meaning or colloquialism instead.\n"
     "- BAD: '^3 in O combined with ^7 in P.' Echoes notation.\n"
+    "- BAD: 'the first at operator index 2 and the second at operator "
+    "index 9.' Echoes index numbers instead of meaning.\n"
     "- BAD: 'Aversion and rhythm.' Drops both domains."
 )
 
@@ -581,7 +591,16 @@ _DIAGRAM_EXPORT_GUIDANCE_V2 = (
     "'A cluster of three operations: paying attention, an aversion, and "
     "something that struck a chord.' Three members, three operator "
     "renderings, no '^N'.\n"
+    "- Compound export example: 'export let upsilon_0206 = "
+    "NoeticCluster{^6, ^8}' should surface as: 'Export \"upsilon_0206\" "
+    "as a cluster of two operations: breaking down an idea and something "
+    "that triggered a memory.' The exported name appears verbatim, and "
+    "both cluster members surface. Dropping 'upsilon_0206' is a FAIL "
+    "because the reverse step cannot reconstruct the export binding.\n"
     "- BAD: 'A NoeticCluster of ^1, ^3, ^4.' Two notation echoes.\n"
+    "- BAD: 'A cluster containing two operations: breaking down an idea "
+    "and something that triggered a memory.' Drops the export name from "
+    "'export let upsilon_0206 = ...' — REJECT for compound export shapes.\n"
     "- BAD: 'A cluster.' Drops every member."
 )
 
