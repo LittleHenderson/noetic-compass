@@ -541,6 +541,41 @@ def _sfe_diff_human_readable(diff: dict[str, Any]) -> str:
             f"connectives ('leads to', 'becomes', 'then', etc.). Render "
             f"every arrow as a flow connective."
         )
+    if diff.get("jargon_leaks"):
+        # Each leak is (pattern_name, matched_text). Group by pattern.
+        from collections import Counter as _C
+        jargon_summary = _C()
+        for item in diff["jargon_leaks"]:
+            if isinstance(item, (list, tuple)) and len(item) >= 2:
+                jargon_summary[(item[0], item[1])] += 1
+        leak_lines = []
+        for (pname, text), count in jargon_summary.most_common():
+            leak_lines.append(f"  '{text}' ({count}× — {pname})")
+        parts.append(
+            "- Your reply contains CAS-shaped jargon that must be "
+            "replaced with plain English:\n"
+            + "\n".join(leak_lines)
+            + "\n  Replacements:\n"
+            + "    'operator' / 'operators' → use the operator's name "
+            "directly (e.g., 'attention' for ^1, 'aversion' for ^3) or "
+            "an approved colloquialism. Do NOT write 'operator'.\n"
+            + "    'cognitive operation' → use a colloquialism like 'mental "
+            "move', 'a thought', 'paying attention', etc.\n"
+            + "    'noetic' / 'noetics' → never appears in plain English. "
+            "Use the operator name directly.\n"
+            + "    'drive' / 'drives' → 'driven by a need for X', 'pulled "
+            "by X', 'with X as the driving need' — never the bare word "
+            "'drive'.\n"
+            + "    'register' / 'registers' → 'mode', 'way of expressing', "
+            "'expressed through X' — never the bare word 'register'.\n"
+            + "    'P/C/E/O domain' → use the domain word directly "
+            "(principled / cognitive / evaluative / operational).\n"
+            + "    'CO-N' → use the operator name (e.g., 'CO-7' → 'rhythm' "
+            "or 'muscle memory').\n"
+            + "    'RPM' / 'compile-time' / 'operator slot' / 'operator "
+            "position' / 'operator index' → never use these jargon "
+            "phrases."
+        )
     return "\n".join(parts) if parts else "- (no specific diff captured)"
 
 

@@ -339,6 +339,46 @@ def test_distributive_only_relaxes_for_clusters_not_for_chains(sfe):
     )
 
 
+def test_jargon_leak_operator_word_rejects(sfe):
+    """User-caught regression: structurally-faithful English with the
+    word 'operator' must reject as jargon."""
+    src = "^5^O"
+    eng = "A cognitive operation shaped by experience in the operational arena."
+    result = sfe.validate_sfe_round_trip(source_cas=src, english=eng)
+    assert not result["passed"], (
+        "English with 'cognitive operation' must reject as jargon. Got: "
+        + result["reason"]
+    )
+
+
+def test_jargon_leak_noetic_word_rejects(sfe):
+    src = "^1^P"
+    eng = "A noetic ^1 is paying attention in the principled arena."
+    result = sfe.validate_sfe_round_trip(source_cas=src, english=eng)
+    assert not result["passed"], (
+        "English with 'noetic' must reject. Got: " + result["reason"]
+    )
+
+
+def test_jargon_leak_bare_drive_word_rejects(sfe):
+    src = "^7^O_{F1}"
+    eng = "Practice in operational behavior with unity as the drive."
+    result = sfe.validate_sfe_round_trip(source_cas=src, english=eng)
+    assert not result["passed"], (
+        "English with bare 'drive' must reject. Got: " + result["reason"]
+    )
+
+
+def test_clean_english_passes_jargon_check(sfe):
+    """No jargon → no rejection from the new check."""
+    src = "^7^O_{F1}"
+    eng = "Practice in operational behavior driven by a need for unity."
+    result = sfe.validate_sfe_round_trip(source_cas=src, english=eng)
+    assert result["passed"], (
+        "Clean English (no jargon) must pass. Got: " + result["reason"]
+    )
+
+
 def test_subset_relation_accepts_either_proper_form(sfe):
     src = "NoeticCluster{^1, ^6, ^8} ⊂ Noetics"
     eng = (

@@ -829,6 +829,40 @@ def extract_english_fingerprint(english: str) -> CASFingerprint:
 # ---------------------------------------------------------------------------
 
 
+# Lexical jargon patterns that are CAS-shaped but slip past the structural
+# fingerprint check. Added 2026-05-08 after Henderson audit found 13/177
+# accepted records containing "operator", "cognitive operation", "noetic",
+# or bare "drive" wording — structurally faithful but stiff/jargony for
+# downstream training data. The SFE round-trip alone doesn't catch these
+# because they don't break operand binding.
+_JARGON_PATTERNS: tuple[tuple[str, "re.Pattern[str]"], ...] = (
+    ("noetic_keyword",        re.compile(r"\bnoetic[s]?\b", re.IGNORECASE)),
+    ("operator_bare",         re.compile(r"\boperator[s]?\b", re.IGNORECASE)),
+    ("cognitive_operation",   re.compile(r"\bcognitive\s+operation[s]?\b", re.IGNORECASE)),
+    ("operator_slot",         re.compile(r"\boperator\s+slot[s]?\b", re.IGNORECASE)),
+    ("operator_position",     re.compile(r"\boperator\s+position[s]?\b", re.IGNORECASE)),
+    ("operator_index",        re.compile(r"\boperator\s+ind(?:ex|ices)\b", re.IGNORECASE)),
+    ("rpm_keyword",           re.compile(r"\bRPM\b")),
+    ("compile_time",          re.compile(r"\bcompile-time\b", re.IGNORECASE)),
+    ("co_n_literal",          re.compile(r"\bCO-\d+\b")),
+    ("drive_bare",            re.compile(r"\bdrive[s]?\b", re.IGNORECASE)),
+    ("register_bare",         re.compile(r"\bregister[s]?\b", re.IGNORECASE)),
+    # "domain" is more common in plain English ("the domain of math"); only
+    # flag when paired with a CAS-axis letter.
+    ("domain_with_letter",    re.compile(r"\b(?:[PCEO]\s+domain|domain\s+[PCEO])\b")),
+)
+
+
+def detect_jargon_leaks(english: str) -> list[tuple[str, str]]:
+    """Return list of (pattern_name, matched_text) for each jargon hit.
+    Empty list = clean."""
+    hits: list[tuple[str, str]] = []
+    for name, pat in _JARGON_PATTERNS:
+        for m in pat.finditer(english):
+            hits.append((name, m.group(0)))
+    return hits
+
+
 @dataclass
 class FingerprintDiff:
     """Diff between source CAS fingerprint and English fingerprint.
@@ -856,6 +890,7 @@ class FingerprintDiff:
     cluster_type_mismatch: Optional[str] = None
     meta_logic_missing: list = field(default_factory=list)
     arrow_short: int = 0  # source arrows - english flow connectives, when positive
+    jargon_leaks: list = field(default_factory=list)  # (pattern_name, matched_text)
 
     def is_empty(self) -> bool:
         return (
@@ -870,6 +905,7 @@ class FingerprintDiff:
             and self.cluster_type_mismatch is None
             and not self.meta_logic_missing
             and self.arrow_short == 0
+            and not self.jargon_leaks
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -889,6 +925,7 @@ class FingerprintDiff:
                 "cluster_type_mismatch": self.cluster_type_mismatch,
                 "meta_logic_missing": self.meta_logic_missing,
                 "arrow_short": self.arrow_short,
+                "jargon_leaks": self.jargon_leaks,
             }.items() if v
         }
 
@@ -1163,6 +1200,11 @@ def validate_sfe_round_trip(*, source_cas: str, english: str) -> dict[str, Any]:
     eng_fp = extract_english_fingerprint(english)
     diff = compare_fingerprints(src_fp, eng_fp)
 
+    # Jargon scan — independent of structural binding. Catches "operator",
+    # "cognitive operation", "noetic", bare "drive"/"register" etc. that
+    # are CAS-shaped but not structural drift.
+    diff.jargon_leaks = detect_jargon_leaks(english)
+
     detail = {
         "source_fingerprint": src_fp.to_dict(),
         "english_fingerprint": eng_fp.to_dict(),
@@ -1200,6 +1242,8 @@ def validate_sfe_round_trip(*, source_cas: str, english: str) -> dict[str, Any]:
         reason_parts.append(f"meta_logic_missing={diff.meta_logic_missing}")
     if diff.arrow_short:
         reason_parts.append(f"arrow_short={diff.arrow_short}")
+    if diff.jargon_leaks:
+        reason_parts.append(f"jargon_leaks={diff.jargon_leaks}")
     return {
         "name": "sfe_round_trip",
         "passed": False,
