@@ -67,7 +67,7 @@ from typing import Any, Callable, Iterable, Optional
 # ---------------------------------------------------------------------------
 
 PROMPT_TEMPLATE_VERSION = "wave3_v2_2026_05_08"
-WAVE_2_5_TEMPLATE_VERSION = "wave3_step2_5_v1_2026_05_08"
+WAVE_2_5_TEMPLATE_VERSION = "wave3_step2_5_model_in_loop_v2_2026_05_08"
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 _COMPILER_PATH = (
@@ -4219,60 +4219,9 @@ def wave2_5_iterate(
     counts = {"accepted": 0, "rejected": 0, "errored": 0}
     for seed in seeds:
         try:
-            if seed.get("grammar_category") == "fractal_sequence":
-                text = render_fractal_sequence_deterministic(seed["expression"])
-                in_tok = 0
-                out_tok = 0
-                record_model_name = "deterministic_fractal_renderer"
-            elif seed.get("grammar_category") == "cross_register_omega":
-                text = render_cross_register_omega_deterministic(seed["expression"])
-                in_tok = 0
-                out_tok = 0
-                record_model_name = "deterministic_cross_register_omega_renderer"
-            elif seed.get("grammar_category") == "rpm_chain":
-                text = render_rpm_chain_deterministic(seed["expression"])
-                in_tok = 0
-                out_tok = 0
-                record_model_name = "deterministic_rpm_chain_renderer"
-            elif seed.get("grammar_category") == "meta_logic_relation":
-                text = render_meta_logic_relation_deterministic(seed["expression"])
-                in_tok = 0
-                out_tok = 0
-                record_model_name = "deterministic_meta_logic_renderer"
-            elif seed.get("grammar_category") == "inversion":
-                text = render_inversion_deterministic(seed["expression"])
-                in_tok = 0
-                out_tok = 0
-                record_model_name = "deterministic_inversion_renderer"
-            elif seed.get("grammar_category") == "state_literal":
-                text = render_state_literal_deterministic(seed["expression"])
-                in_tok = 0
-                out_tok = 0
-                record_model_name = "deterministic_state_literal_renderer"
-            elif seed.get("grammar_category") == "binary_composition":
-                text = render_binary_composition_deterministic(seed["expression"])
-                in_tok = 0
-                out_tok = 0
-                record_model_name = "deterministic_binary_composition_renderer"
-            elif seed.get("grammar_category") == "let_binding":
-                text = render_let_binding_deterministic(seed["expression"])
-                in_tok = 0
-                out_tok = 0
-                record_model_name = "deterministic_let_binding_renderer"
-            elif seed.get("grammar_category") == "recipe":
-                text = render_recipe_deterministic(seed["expression"])
-                in_tok = 0
-                out_tok = 0
-                record_model_name = "deterministic_recipe_renderer"
-            elif seed.get("grammar_category") == "diagram_export":
-                text = render_diagram_export_deterministic(seed["expression"])
-                in_tok = 0
-                out_tok = 0
-                record_model_name = "deterministic_diagram_export_renderer"
-            else:
-                system, user = build_cas_to_english_prompt_v2(seed)
-                text, in_tok, out_tok = model_callable(system, user)
-                record_model_name = model_name
+            system, user = build_cas_to_english_prompt_v2(seed)
+            text, in_tok, out_tok = model_callable(system, user)
+            record_model_name = model_name
             if not text:
                 counts["errored"] += 1
                 reject_writer({

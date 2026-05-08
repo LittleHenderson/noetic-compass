@@ -607,20 +607,21 @@ def test_render_fractal_sequence_deterministic_accepts_k9_phrase():
     assert r.passed, r.reason
 
 
-def test_wave2_5_iterate_uses_deterministic_renderer_for_fractals():
+def test_wave2_5_iterate_calls_model_for_fractals():
     m = _load_module()
     accepted = []
     rejected = []
     calls = []
+    source = "Phi<2:6>"
 
     def model_callable(system, user):
         calls.append((system, user))
-        return "this model should not be called", 10, 10
+        return m.render_fractal_sequence_deterministic(source), 10, 10
 
     counts = m.wave2_5_iterate(
         [{
             "seed_id": "seed_fractal_sequence_x",
-            "expression": "Phi<2:6>",
+            "expression": source,
             "grammar_category": "fractal_sequence",
         }],
         model_callable=model_callable,
@@ -631,10 +632,9 @@ def test_wave2_5_iterate_uses_deterministic_renderer_for_fractals():
         reject_writer=rejected.append,
     )
     assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
-    assert calls == []
+    assert len(calls) == 1
     assert rejected == []
-    assert accepted[0].model_used == "deterministic_fractal_renderer"
-    assert accepted[0].estimated_cost_usd == 0.0
+    assert accepted[0].model_used == "paid-model"
     assert "being drawn to something" in accepted[0].english_description
     assert "breaking it down" in accepted[0].english_description
 
@@ -660,20 +660,21 @@ def test_render_cross_register_omega_deterministic_preserves_exact_registers():
     ]
 
 
-def test_wave2_5_iterate_uses_deterministic_renderer_for_cross_register_omega():
+def test_wave2_5_iterate_calls_model_for_cross_register_omega():
     m = _load_module()
     accepted = []
     rejected = []
     calls = []
+    source = "(^6^P|f × ^6^P|A) = ^6^P|Ω_integration"
 
     def model_callable(system, user):
         calls.append((system, user))
-        return "this model should not be called", 10, 10
+        return m.render_cross_register_omega_deterministic(source), 10, 10
 
     counts = m.wave2_5_iterate(
         [{
             "seed_id": "seed_cross_register_omega_x",
-            "expression": "(^6^P|f × ^6^P|A) = ^6^P|Ω_integration",
+            "expression": source,
             "grammar_category": "cross_register_omega",
         }],
         model_callable=model_callable,
@@ -684,10 +685,9 @@ def test_wave2_5_iterate_uses_deterministic_renderer_for_cross_register_omega():
         reject_writer=rejected.append,
     )
     assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
-    assert calls == []
+    assert len(calls) == 1
     assert rejected == []
-    assert accepted[0].model_used == "deterministic_cross_register_omega_renderer"
-    assert accepted[0].estimated_cost_usd == 0.0
+    assert accepted[0].model_used == "paid-model"
     assert "felt emotion and analytical reasoning" in accepted[0].english_description
 
 
@@ -713,26 +713,27 @@ def test_render_rpm_chain_deterministic_preserves_stage_domains():
     ]
 
 
-def test_wave2_5_iterate_uses_deterministic_renderer_for_rpm_chain():
+def test_wave2_5_iterate_calls_model_for_rpm_chain():
     m = _load_module()
     accepted = []
     rejected = []
     calls = []
+    source = (
+        "let stageA0_6_0002 = ^0^P; "
+        "let stageD6_6_0002 = ^3^P_{F6}; "
+        "let stageW6_6_0002 = ^3^C_{F6}; "
+        "let stageP6_6_0002 = ^3^E_{F6}; "
+        "stageD6_6_0002 -> stageW6_6_0002"
+    )
 
     def model_callable(system, user):
         calls.append((system, user))
-        return "this model should not be called", 10, 10
+        return m.render_rpm_chain_deterministic(source), 10, 10
 
     counts = m.wave2_5_iterate(
         [{
             "seed_id": "seed_rpm_chain_x",
-            "expression": (
-                "let stageA0_6_0002 = ^0^P; "
-                "let stageD6_6_0002 = ^3^P_{F6}; "
-                "let stageW6_6_0002 = ^3^C_{F6}; "
-                "let stageP6_6_0002 = ^3^E_{F6}; "
-                "stageD6_6_0002 -> stageW6_6_0002"
-            ),
+            "expression": source,
             "grammar_category": "rpm_chain",
         }],
         model_callable=model_callable,
@@ -743,10 +744,9 @@ def test_wave2_5_iterate_uses_deterministic_renderer_for_rpm_chain():
         reject_writer=rejected.append,
     )
     assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
-    assert calls == []
+    assert len(calls) == 1
     assert rejected == []
-    assert accepted[0].model_used == "deterministic_rpm_chain_renderer"
-    assert accepted[0].estimated_cost_usd == 0.0
+    assert accepted[0].model_used == "paid-model"
     assert "stageD6_6_0002 names an aversion in a foundational frame" in accepted[0].english_description
     assert "stageW6_6_0002 names an aversion in cognitive thinking" in accepted[0].english_description
 
@@ -786,20 +786,21 @@ def test_render_meta_logic_coordinate_does_not_make_drive_an_outcome():
     ]
 
 
-def test_wave2_5_iterate_uses_deterministic_renderer_for_meta_logic():
+def test_wave2_5_iterate_calls_model_for_meta_logic():
     m = _load_module()
     accepted = []
     rejected = []
     calls = []
+    source = "PartitionOf(Noetics, NoeticCluster{^0, ^2}, NoeticCluster{^3})"
 
     def model_callable(system, user):
         calls.append((system, user))
-        return "this model should not be called", 10, 10
+        return m.render_meta_logic_relation_deterministic(source), 10, 10
 
     counts = m.wave2_5_iterate(
         [{
             "seed_id": "seed_meta_logic_relation_x",
-            "expression": "PartitionOf(Noetics, NoeticCluster{^0, ^2}, NoeticCluster{^3})",
+            "expression": source,
             "grammar_category": "meta_logic_relation",
         }],
         model_callable=model_callable,
@@ -810,10 +811,9 @@ def test_wave2_5_iterate_uses_deterministic_renderer_for_meta_logic():
         reject_writer=rejected.append,
     )
     assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
-    assert calls == []
+    assert len(calls) == 1
     assert rejected == []
-    assert accepted[0].model_used == "deterministic_meta_logic_renderer"
-    assert accepted[0].estimated_cost_usd == 0.0
+    assert accepted[0].model_used == "paid-model"
     assert "partition" in accepted[0].english_description.lower()
 
 
@@ -851,20 +851,21 @@ def test_render_inversion_deterministic_delegates_let_chain():
     ]
 
 
-def test_wave2_5_iterate_uses_deterministic_renderer_for_inversion():
+def test_wave2_5_iterate_calls_model_for_inversion():
     m = _load_module()
     accepted = []
     rejected = []
     calls = []
+    source = "^2^C_{F2} + ^3^C_{F6}"
 
     def model_callable(system, user):
         calls.append((system, user))
-        return "this model should not be called", 10, 10
+        return m.render_inversion_deterministic(source), 10, 10
 
     counts = m.wave2_5_iterate(
         [{
             "seed_id": "seed_inversion_x",
-            "expression": "^2^C_{F2} + ^3^C_{F6}",
+            "expression": source,
             "grammar_category": "inversion",
         }],
         model_callable=model_callable,
@@ -875,10 +876,9 @@ def test_wave2_5_iterate_uses_deterministic_renderer_for_inversion():
         reject_writer=rejected.append,
     )
     assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
-    assert calls == []
+    assert len(calls) == 1
     assert rejected == []
-    assert accepted[0].model_used == "deterministic_inversion_renderer"
-    assert accepted[0].estimated_cost_usd == 0.0
+    assert accepted[0].model_used == "paid-model"
 
 
 def test_simple_lanes_render_deterministically_and_validate():
@@ -905,15 +905,20 @@ def test_simple_lanes_render_deterministically_and_validate():
     assert "fuse" in m.render_binary_composition_deterministic("^9^C × ^7^C")
 
 
-def test_wave2_5_iterate_uses_deterministic_renderer_for_simple_lanes():
+def test_wave2_5_iterate_calls_model_for_simple_lanes():
     m = _load_module()
     accepted = []
     rejected = []
     calls = []
+    outputs = iter([
+        m.render_state_literal_deterministic("^9^O_{F3}|E"),
+        m.render_binary_composition_deterministic("^8^P -> ^1^O"),
+        m.render_let_binding_deterministic("let trace_0055 = ^9^O_{F3}|E"),
+    ])
 
     def model_callable(system, user):
         calls.append((system, user))
-        return "this model should not be called", 10, 10
+        return next(outputs), 10, 10
 
     seeds = [
         {
@@ -942,14 +947,9 @@ def test_wave2_5_iterate_uses_deterministic_renderer_for_simple_lanes():
         reject_writer=rejected.append,
     )
     assert counts == {"accepted": 3, "rejected": 0, "errored": 0}
-    assert calls == []
+    assert len(calls) == 3
     assert rejected == []
-    assert [r.model_used for r in accepted] == [
-        "deterministic_state_literal_renderer",
-        "deterministic_binary_composition_renderer",
-        "deterministic_let_binding_renderer",
-    ]
-    assert all(r.estimated_cost_usd == 0.0 for r in accepted)
+    assert [r.model_used for r in accepted] == ["paid-model"] * 3
 
 
 def test_render_recipe_deterministic_disambiguates_embodied_register():
@@ -987,25 +987,34 @@ def test_render_diagram_export_deterministic_preserves_exported_state_domain():
     ]
 
 
-def test_wave2_5_iterate_uses_deterministic_renderer_for_recipe_and_diagram():
+def test_wave2_5_iterate_calls_model_for_recipe_and_diagram():
     m = _load_module()
     accepted = []
     rejected = []
     calls = []
+    recipe_source = "Θ(Ω_demo) = 1*^4^O + 1*^7^O → Ω_demo"
+    diagram_source = (
+        "export let node_0001 = Theta(Omega_demo) = "
+        "1*^4^O + 1*^7^O -> Omega_demo"
+    )
+    outputs = iter([
+        m.render_recipe_deterministic(recipe_source),
+        m.render_diagram_export_deterministic(diagram_source),
+    ])
 
     def model_callable(system, user):
         calls.append((system, user))
-        return "this model should not be called", 10, 10
+        return next(outputs), 10, 10
 
     seeds = [
         {
             "seed_id": "seed_recipe_x",
-            "expression": "Θ(Ω_demo) = 1*^4^O + 1*^7^O → Ω_demo",
+            "expression": recipe_source,
             "grammar_category": "recipe",
         },
         {
             "seed_id": "seed_diagram_export_x",
-            "expression": "export let node_0001 = Theta(Omega_demo) = 1*^4^O + 1*^7^O -> Omega_demo",
+            "expression": diagram_source,
             "grammar_category": "diagram_export",
         },
     ]
@@ -1019,12 +1028,9 @@ def test_wave2_5_iterate_uses_deterministic_renderer_for_recipe_and_diagram():
         reject_writer=rejected.append,
     )
     assert counts == {"accepted": 2, "rejected": 0, "errored": 0}
-    assert calls == []
+    assert len(calls) == 2
     assert rejected == []
-    assert [r.model_used for r in accepted] == [
-        "deterministic_recipe_renderer",
-        "deterministic_diagram_export_renderer",
-    ]
+    assert [r.model_used for r in accepted] == ["paid-model", "paid-model"]
 
 
 def test_fractal_k_indices_fail_on_count_misread():
@@ -1297,7 +1303,7 @@ def test_wave2_5_iterate_accepts_when_validators_pass():
     assert accepted[0].seed_id == "seed_x"
 
 
-def test_wave2_5_iterate_uses_deterministic_recipe_instead_of_bad_model():
+def test_wave2_5_iterate_rejects_bad_model_recipe_output():
     m = _load_module()
     seeds = [
         {
@@ -1324,13 +1330,11 @@ def test_wave2_5_iterate_uses_deterministic_recipe_instead_of_bad_model():
         accept_writer=accepted.append,
         reject_writer=rejected.append,
     )
-    assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
-    assert calls == []
-    assert rejected == []
-    assert accepted[0].model_used == "deterministic_recipe_renderer"
-    assert accepted[0].estimated_cost_usd == 0.0
-    assert "0.7" in accepted[0].english_description
-    assert "test_01" in accepted[0].english_description
+    assert counts == {"accepted": 0, "rejected": 1, "errored": 0}
+    assert len(calls) == 1
+    assert accepted == []
+    assert "missing coefficients" in rejected[0]["reason"] or \
+           "missing named Ω target stems" in rejected[0]["reason"]
 
 
 def test_fractal_validator_rejects_count_misread_prose():

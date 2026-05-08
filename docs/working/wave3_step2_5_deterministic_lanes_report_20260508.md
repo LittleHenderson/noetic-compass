@@ -2,7 +2,13 @@
 
 Date: 2026-05-08
 
-Status: NUMERIC PASS; HUMAN REVIEW STILL REQUIRED
+Status: SUPERSEDED — DO NOT USE AS TRAINING CORPUS
+
+2026-05-08 correction: this deterministic pass is retained only as a failed
+design branch and audit reference. The project decision is **model-in-loop
+only** for Wave 2.5 corpus generation. Deterministic renderers are not the data
+path for training, because they remove the model from the synthesis problem and
+would train against template-shaped English rather than human language.
 
 ## What Changed
 
@@ -125,7 +131,7 @@ This is a spot-read, not a substitute for the project promotion gate.
 
 ## Verdict
 
-This pass clears the numeric gates:
+This pass cleared the numeric gates:
 
 - Aggregate accepted rate is above 70%.
 - Every category is above the 45% floor.
@@ -133,9 +139,8 @@ This pass clears the numeric gates:
   validators.
 - No paid model calls were made.
 
-It is still not automatically promoted. The manual sample-read gate remains
-load-bearing because the project has repeatedly found semantic failures after
-numeric gates passed.
+It is not promoted. The numeric pass is not comparable to the earlier 70-80%
+model-generated runs, because this pass removed the model from generation.
 
 The review pack is:
 
@@ -143,15 +148,12 @@ The review pack is:
 docs/working/wave3_step2_5_500_review_pack_20260508T164739Z.md
 ```
 
-## Promotion Rule
+## Supersession Rule
 
-Promote this Wave 2.5 corpus only if the review pack confirms that:
+Do not use this artifact as Wave 2.5 corpus input. The next valid Wave 2.5 run
+must:
 
-- `recipe` preserves every coefficient, state operand, drive, register, and
-  named outcome.
-- `diagram_export` preserves the exported variable name and the full RHS
-  structure.
-- `state_literal` no longer teaches cluster/group framing for single-state
-  literals.
-- No renderer introduces axis confusion between domain, drive, register, and
-  named outcome.
+- call the selected model for every grammar category;
+- preserve source structure through validators and manual sample review;
+- add `english_to_cas` round-trip validation before scale;
+- compare Haiku/Sonnet/Opus on hard categories before choosing the generator.
