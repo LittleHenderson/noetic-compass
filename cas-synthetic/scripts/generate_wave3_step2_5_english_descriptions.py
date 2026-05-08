@@ -59,14 +59,14 @@ Hard constraints:
   total spend over the cap.
 
 Usage (dry run, no API):
-  python -m cas_synthetic.scripts.generate_wave3_step2_5_english_descriptions \
+  python cas-synthetic/scripts/generate_wave3_step2_5_english_descriptions.py \
       --seeds cas-synthetic/data/path_d/seeds.jsonl \
       --out-dir cas-synthetic/data/path_d \
       --target 50 \
       --dry-run
 
 Usage (paid preflight, prints planned spend then exits, no API call):
-  python -m cas_synthetic.scripts.generate_wave3_step2_5_english_descriptions \
+  python cas-synthetic/scripts/generate_wave3_step2_5_english_descriptions.py \
       --seeds cas-synthetic/data/path_d/seeds.jsonl \
       --out-dir cas-synthetic/data/path_d \
       --target 200 \
@@ -74,7 +74,7 @@ Usage (paid preflight, prints planned spend then exits, no API call):
       --paid
 
 Usage (paid execute — actually calls the API):
-  python -m cas_synthetic.scripts.generate_wave3_step2_5_english_descriptions \
+  python cas-synthetic/scripts/generate_wave3_step2_5_english_descriptions.py \
       --seeds cas-synthetic/data/path_d/seeds.jsonl \
       --out-dir cas-synthetic/data/path_d \
       --target 200 \
