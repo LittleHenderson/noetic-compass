@@ -899,6 +899,10 @@ def test_simple_lanes_render_deterministically_and_validate():
             out,
             [(r.name, r.reason) for r in results],
         ]
+    assert not m.render_state_literal_deterministic("^5^E|E").startswith(
+        "A group containing"
+    )
+    assert "fuse" in m.render_binary_composition_deterministic("^9^C × ^7^C")
 
 
 def test_wave2_5_iterate_uses_deterministic_renderer_for_simple_lanes():
@@ -946,6 +950,81 @@ def test_wave2_5_iterate_uses_deterministic_renderer_for_simple_lanes():
         "deterministic_let_binding_renderer",
     ]
     assert all(r.estimated_cost_usd == 0.0 for r in accepted)
+
+
+def test_render_recipe_deterministic_disambiguates_embodied_register():
+    m = _load_module()
+    src = (
+        "Θ(Ω_rehearsal_65) = 2*^1^P_{F1}|E + "
+        "0.5*^0^C_{F2} → Ω_rehearsal_65"
+    )
+    out = m.render_recipe_deterministic(src)
+    assert "2 of paying attention in a foundational frame" in out
+    assert "expressed through embodied awareness" in out
+    assert "evaluative judgment" not in out.split("0.5", 1)[0]
+    results = m.run_validators_for_cas_to_english(
+        seed={"expression": src, "grammar_category": "recipe"},
+        english_output=out,
+    )
+    assert all(r.passed for r in results), [
+        (r.name, r.reason) for r in results
+    ]
+
+
+def test_render_diagram_export_deterministic_preserves_exported_state_domain():
+    m = _load_module()
+    src = "export let tau_0441 = ^0^O_{F4}"
+    out = m.render_diagram_export_deterministic(src)
+    assert "Export tau_0441" in out
+    assert "operational behavior" in out
+    assert "connection as the guiding need" in out
+    results = m.run_validators_for_cas_to_english(
+        seed={"expression": src, "grammar_category": "diagram_export"},
+        english_output=out,
+    )
+    assert all(r.passed for r in results), [
+        (r.name, r.reason) for r in results
+    ]
+
+
+def test_wave2_5_iterate_uses_deterministic_renderer_for_recipe_and_diagram():
+    m = _load_module()
+    accepted = []
+    rejected = []
+    calls = []
+
+    def model_callable(system, user):
+        calls.append((system, user))
+        return "this model should not be called", 10, 10
+
+    seeds = [
+        {
+            "seed_id": "seed_recipe_x",
+            "expression": "Θ(Ω_demo) = 1*^4^O + 1*^7^O → Ω_demo",
+            "grammar_category": "recipe",
+        },
+        {
+            "seed_id": "seed_diagram_export_x",
+            "expression": "export let node_0001 = Theta(Omega_demo) = 1*^4^O + 1*^7^O -> Omega_demo",
+            "grammar_category": "diagram_export",
+        },
+    ]
+    counts = m.wave2_5_iterate(
+        seeds,
+        model_callable=model_callable,
+        model_name="paid-model",
+        cost_per_in_token=1.0,
+        cost_per_out_token=1.0,
+        accept_writer=accepted.append,
+        reject_writer=rejected.append,
+    )
+    assert counts == {"accepted": 2, "rejected": 0, "errored": 0}
+    assert calls == []
+    assert rejected == []
+    assert [r.model_used for r in accepted] == [
+        "deterministic_recipe_renderer",
+        "deterministic_diagram_export_renderer",
+    ]
 
 
 def test_fractal_k_indices_fail_on_count_misread():
@@ -1218,7 +1297,7 @@ def test_wave2_5_iterate_accepts_when_validators_pass():
     assert accepted[0].seed_id == "seed_x"
 
 
-def test_wave2_5_iterate_rejects_recipe_with_dropped_coefficients():
+def test_wave2_5_iterate_uses_deterministic_recipe_instead_of_bad_model():
     m = _load_module()
     seeds = [
         {
@@ -1229,8 +1308,10 @@ def test_wave2_5_iterate_rejects_recipe_with_dropped_coefficients():
     ]
     accepted: list[Any] = []
     rejected: list[dict[str, Any]] = []
+    calls: list[tuple[str, str]] = []
 
     def bad_model(system: str, user: str) -> tuple[str, int, int]:
+        calls.append((system, user))
         # Drops both the 0.7 coefficient and the test_01 named-stem.
         return ("A thought becomes reasoning.", 100, 10)
 
@@ -1243,9 +1324,13 @@ def test_wave2_5_iterate_rejects_recipe_with_dropped_coefficients():
         accept_writer=accepted.append,
         reject_writer=rejected.append,
     )
-    assert counts == {"accepted": 0, "rejected": 1, "errored": 0}
-    assert "missing coefficients" in rejected[0]["reason"] or \
-           "missing named Ω target stems" in rejected[0]["reason"]
+    assert counts == {"accepted": 1, "rejected": 0, "errored": 0}
+    assert calls == []
+    assert rejected == []
+    assert accepted[0].model_used == "deterministic_recipe_renderer"
+    assert accepted[0].estimated_cost_usd == 0.0
+    assert "0.7" in accepted[0].english_description
+    assert "test_01" in accepted[0].english_description
 
 
 def test_fractal_validator_rejects_count_misread_prose():

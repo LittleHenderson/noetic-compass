@@ -3651,6 +3651,20 @@ def _join_natural(items: list[str]) -> str:
     return f"{', '.join(items[:-1])}, and {items[-1]}"
 
 
+def _has_arrow_operator(text: str) -> bool:
+    return "->" in text or "→" in text or "â†’" in text
+
+
+def _has_product_operator(text: str) -> bool:
+    return (
+        "×" in text
+        or "Ã—" in text
+        or "*" in text
+        or "∘" in text
+        or "âˆ˜" in text
+    )
+
+
 def render_cross_register_omega_deterministic(source_cas: str) -> str:
     """Render cross-register Ω expressions without an LLM call.
 
@@ -4004,7 +4018,7 @@ def render_rpm_chain_deterministic(source_cas: str) -> str:
     tail = source_cas.rsplit(";", 1)[-1]
     chain_names = [
         part.strip()
-        for part in re.split(r"\s*(?:->|â†’)\s*", tail)
+        for part in re.split(r"\s*(?:->|→|â†’)\s*", tail)
         if part.strip()
     ]
     chain_parts: list[str] = []
@@ -4021,7 +4035,7 @@ def render_rpm_chain_deterministic(source_cas: str) -> str:
 def render_inversion_deterministic(source_cas: str) -> str:
     """Render inversion-category seeds without free-form model drift."""
     src = source_cas.strip()
-    if _RE_LET_BINDING.search(src) and ("->" in src or "â†’" in src):
+    if _RE_LET_BINDING.search(src) and _has_arrow_operator(src):
         return render_rpm_chain_deterministic(src)
     if _RE_OMEGA_NAMED.search(src) and "=" in src:
         return render_cross_register_omega_deterministic(src)
@@ -4032,13 +4046,13 @@ def render_inversion_deterministic(source_cas: str) -> str:
     if not comps:
         raise ValueError(f"unsupported inversion expression: {source_cas!r}")
     rendered = [_render_state_component_plain(comp) for comp in comps]
-    if "->" in src or "â†’" in src:
+    if _has_arrow_operator(src):
         if len(rendered) >= 2:
             return f"{rendered[0].capitalize()} leads to {rendered[1]}."
         return rendered[0].capitalize() + "."
     if "+" in src:
         return f"{_join_natural(rendered).capitalize()} combine in the same expression."
-    if "Ã—" in src or "*" in src:
+    if _has_product_operator(src):
         return f"{_join_natural(rendered).capitalize()} fuse in the same expression."
     return "A group containing " + _join_natural(rendered) + "."
 
@@ -4047,6 +4061,8 @@ def render_state_literal_deterministic(source_cas: str) -> str:
     comps = _state_literal_components(source_cas)
     if not comps:
         raise ValueError(f"state_literal deterministic renderer found no states: {source_cas!r}")
+    if len(comps) == 1:
+        return _render_state_component_plain(comps[0]).capitalize() + "."
     return "A group containing " + _join_natural(
         [_render_state_component_plain(comp) for comp in comps]
     ) + "."
@@ -4059,19 +4075,19 @@ def render_binary_composition_deterministic(source_cas: str) -> str:
     rendered.extend(_plain_noetic_phrase(op) for op in co_ops)
     if not rendered:
         raise ValueError(f"binary_composition deterministic renderer found no operands: {source_cas!r}")
-    if "->" in source_cas or "â†’" in source_cas:
+    if _has_arrow_operator(source_cas):
         if len(rendered) >= 2:
             return f"{rendered[0].capitalize()} leads to {rendered[1]}."
         return rendered[0].capitalize() + "."
     if "+" in source_cas:
         return f"{_join_natural(rendered).capitalize()} combine in the same expression."
-    if "Ã—" in source_cas or "*" in source_cas or "âˆ˜" in source_cas:
+    if _has_product_operator(source_cas):
         return f"{_join_natural(rendered).capitalize()} fuse in the same expression."
     return "A group containing " + _join_natural(rendered) + "."
 
 
 def render_let_binding_deterministic(source_cas: str) -> str:
-    if "->" in source_cas or "â†’" in source_cas:
+    if _has_arrow_operator(source_cas):
         return render_rpm_chain_deterministic(source_cas)
     bindings = _RE_LET_BINDING.findall(source_cas)
     if not bindings:
@@ -4092,6 +4108,83 @@ def render_let_binding_deterministic(source_cas: str) -> str:
         rendered = rendered.rstrip(".")
         parts.append(f"Let {name} name {rendered}")
     return "; ".join(parts) + "."
+
+
+def render_recipe_deterministic(source_cas: str) -> str:
+    operands = _parse_recipe_operands(source_cas)
+    if not operands:
+        raise ValueError(f"recipe deterministic renderer found no operands: {source_cas!r}")
+    stems = _RE_OMEGA_NAMED.findall(source_cas)
+    stems.extend(re.findall(r"\bOmega_([A-Za-z][A-Za-z0-9_]*)", source_cas))
+    stem = stems[0] if stems else "unnamed_result"
+    parts = []
+    operand_coeffs = [operand["coeff_str"] for operand in operands]
+    for operand in operands:
+        comp = {
+            "noetic": operand["noetic"],
+            "domain": operand["domain"],
+            "drive": operand["drive"],
+            "register": operand["register"],
+        }
+        parts.append(
+            f"{operand['coeff_str']} of {_render_state_component_plain(comp)}"
+        )
+    all_coeffs = list(_RE_RECIPE_COEFFICIENT.findall(source_cas))
+    for used in operand_coeffs:
+        if used in all_coeffs:
+            all_coeffs.remove(used)
+    for extra_coeff in all_coeffs:
+        parts.append(f"{extra_coeff} side contribution")
+    verb = "produces" if len(parts) == 1 else "produce"
+    related = ""
+    unique_stems = []
+    for s in stems:
+        if s not in unique_stems:
+            unique_stems.append(s)
+    if len(unique_stems) > 1:
+        related = (
+            " Related named outcomes: "
+            + _join_natural(unique_stems)
+            + "."
+        )
+    return (
+        f"Recipe for outcome {stem}: "
+        f"{_join_natural(parts)} {verb} {stem}."
+        f"{related}"
+    )
+
+
+_RE_EXPORT_LET = re.compile(
+    r"\bexport\s+let\s+([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+)\s*$",
+    re.IGNORECASE,
+)
+
+
+def render_diagram_export_deterministic(source_cas: str) -> str:
+    m = _RE_EXPORT_LET.search(source_cas.strip())
+    if not m:
+        raise ValueError(f"diagram_export deterministic renderer needs export let: {source_cas!r}")
+    name = m.group(1)
+    rhs = m.group(2).strip()
+    if re.search(r"(?:Î˜|Theta)\s*\(", rhs):
+        rendered = render_recipe_deterministic(rhs)
+    elif any(cluster_name in rhs for cluster_name in _DIAGRAM_CLUSTER_NAMES):
+        rendered = render_meta_logic_relation_deterministic(rhs)
+    elif _has_arrow_operator(rhs):
+        comps = _state_literal_components(rhs)
+        if len(comps) >= 2:
+            rendered = (
+                f"{_render_state_component_plain(comps[0]).capitalize()}. "
+                f"The exported value leads to "
+                f"{_render_state_component_plain(comps[1])}."
+            )
+        else:
+            rendered = render_inversion_deterministic(rhs)
+    elif _state_literal_components(rhs):
+        rendered = render_state_literal_deterministic(rhs)
+    else:
+        rendered = rhs
+    return f"Export {name} as {rendered[0].lower() + rendered[1:]}"
 
 
 # ---------------------------------------------------------------------------
@@ -4166,6 +4259,16 @@ def wave2_5_iterate(
                 in_tok = 0
                 out_tok = 0
                 record_model_name = "deterministic_let_binding_renderer"
+            elif seed.get("grammar_category") == "recipe":
+                text = render_recipe_deterministic(seed["expression"])
+                in_tok = 0
+                out_tok = 0
+                record_model_name = "deterministic_recipe_renderer"
+            elif seed.get("grammar_category") == "diagram_export":
+                text = render_diagram_export_deterministic(seed["expression"])
+                in_tok = 0
+                out_tok = 0
+                record_model_name = "deterministic_diagram_export_renderer"
             else:
                 system, user = build_cas_to_english_prompt_v2(seed)
                 text, in_tok, out_tok = model_callable(system, user)
