@@ -1,0 +1,177 @@
+{
+  "status": "NEEDS_REWORK",
+  "train_eligible": false,
+  "audit_verdict_at": "2026-05-08T08:00:00+00:00",
+  "audit_verdict_note": "Failed content-preservation audit on english_to_cas (100% verbatim-copy) and invalid_to_corrected (~30% unrelated-correction). cas_to_english has structural drift on recipe coefficients and fractal k-values. invalid_to_explanation is clean. See sibling file wave3_phase1_aggregate_20260508.NEEDS_REWORK.md for details.",
+  "created_at": "2026-05-08T06:47:15.605703+00:00",
+  "source_files": {
+    "D:\\tksCAS_wave3_recovery_20260507\\partial\\wave3_smoke_20260507T232622Z.jsonl": 4491,
+    "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_20260508T024200Z.jsonl": 223,
+    "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_20260508T032143Z.jsonl": 5234,
+    "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl": 2440
+  },
+  "rejected_files": {
+    "D:\\tksCAS_wave3_recovery_20260507\\partial\\wave3_smoke_rejected.jsonl": 20,
+    "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_rejected.jsonl": 22,
+    "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z_rejected.jsonl": 18
+  },
+  "leakage_files": {
+    "D:\\tksCAS_wave3_recovery_20260507\\partial\\wave3_smoke_leakage.jsonl": 2,
+    "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_leakage.jsonl": 3,
+    "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z_leakage.jsonl": 0
+  },
+  "raw_rows": 12388,
+  "raw_rejected_rows": 60,
+  "raw_leakage_rows": 5,
+  "deduped_rows": 11897,
+  "duplicate_rows_removed": 491,
+  "duplicate_key_count": 491,
+  "duplicate_examples": {
+    "invalid_to_corrected::inv_seed_inversion_00077_admissibility_00102": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:8"
+    ],
+    "english_to_cas::seed_binary_composition_00185": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:10"
+    ],
+    "english_to_cas::seed_binary_composition_00454": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:14"
+    ],
+    "cas_to_english::seed_state_literal_00719": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:17"
+    ],
+    "invalid_to_explanation::inv_seed_recipe_00149_recipe_01130": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:31"
+    ],
+    "english_to_cas::seed_cross_register_omega_00566": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:34"
+    ],
+    "invalid_to_corrected::inv_seed_meta_logic_relation_00387_meta_logic_00683": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:36"
+    ],
+    "cas_to_english::seed_meta_logic_relation_00118": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:37"
+    ],
+    "english_to_cas::seed_state_literal_00346": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:46"
+    ],
+    "invalid_to_corrected::inv_seed_rpm_chain_00340_rpm_00567": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:48"
+    ],
+    "invalid_to_corrected::inv_seed_recipe_00061_recipe_00071": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:52"
+    ],
+    "english_to_cas::seed_cross_register_omega_00080": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:66"
+    ],
+    "invalid_to_corrected::inv_seed_recipe_00127_admissibility_01121": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:72"
+    ],
+    "invalid_to_corrected::inv_seed_let_binding_00426_rpm_00729": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:80"
+    ],
+    "cas_to_english::seed_binary_composition_00208": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:81"
+    ],
+    "invalid_to_explanation::inv_seed_recipe_00506_rpm_00230": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:87"
+    ],
+    "cas_to_english::seed_meta_logic_relation_00497": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:89"
+    ],
+    "invalid_to_explanation::inv_seed_meta_logic_relation_00119_meta_logic_00256": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:91"
+    ],
+    "invalid_to_corrected::inv_seed_rpm_chain_00196_parse_00267": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:92"
+    ],
+    "english_to_cas::seed_fractal_sequence_00077": [
+      "D:\\tksCAS_wave3_recovery_20260507\\resume_output\\wave3_resume_continue_20260508T045118Z.jsonl:94"
+    ]
+  },
+  "slot_counts": {
+    "cas_to_english": 3001,
+    "english_to_cas": 2939,
+    "invalid_to_corrected": 2972,
+    "invalid_to_explanation": 2985
+  },
+  "category_counts_by_slot": {
+    "cas_to_english": {
+      "binary_composition": 361,
+      "cross_register_omega": 330,
+      "diagram_export": 258,
+      "fractal_sequence": 314,
+      "inversion": 42,
+      "let_binding": 253,
+      "meta_logic_relation": 400,
+      "recipe": 301,
+      "rpm_chain": 193,
+      "state_literal": 549
+    },
+    "english_to_cas": {
+      "binary_composition": 394,
+      "cross_register_omega": 329,
+      "diagram_export": 243,
+      "fractal_sequence": 299,
+      "inversion": 34,
+      "let_binding": 251,
+      "meta_logic_relation": 380,
+      "recipe": 272,
+      "rpm_chain": 191,
+      "state_literal": 546
+    },
+    "invalid_to_corrected": {
+      "admissibility": 641,
+      "parse": 479,
+      "rpm": 509,
+      "meta_logic": 361,
+      "recipe": 628,
+      "fractal": 354
+    },
+    "invalid_to_explanation": {
+      "parse": 468,
+      "rpm": 476,
+      "admissibility": 672,
+      "meta_logic": 352,
+      "recipe": 643,
+      "fractal": 374
+    }
+  },
+  "estimated_cost_usd_from_records": 24.532,
+  "gates": {
+    "cas_to_english_leakage": {
+      "threshold": "<1%",
+      "hits": 4,
+      "denominator": 3001,
+      "rate": 0.1333,
+      "note": "Accepted-row regex hits plus explicit leakage sidecar hits for cas_to_english."
+    },
+    "english_to_cas_rejection": {
+      "threshold": "<5%",
+      "hits": 60,
+      "denominator": 2999,
+      "rate": 2.0007,
+      "note": "Accepted english_to_cas rows plus rejected sidecar rows."
+    },
+    "chemistry_domain_metaphors": {
+      "threshold": "0",
+      "hits": 0,
+      "denominator": 8958,
+      "rate": 0.0
+    },
+    "noetic_as_level_drift": {
+      "threshold": "<1%",
+      "hits": 2,
+      "denominator": 3001,
+      "rate": 0.0666
+    },
+    "manual_review": {
+      "threshold": "required",
+      "status": "review_pack_created_not_yet_passed"
+    }
+  },
+  "outputs": {
+    "aggregate_jsonl": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\wave3_phase1_aggregate_20260508.jsonl",
+    "manifest": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\wave3_phase1_aggregate_manifest_20260508.json",
+    "review_pack": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\path_D_wave3_phase1_review_pack_2026_05_08.md"
+  }
+}

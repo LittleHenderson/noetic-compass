@@ -1,0 +1,231 @@
+{
+  "jsonl_path": "cas-synthetic\\data\\path_d\\wave3_phase1_aggregate_20260508.jsonl",
+  "total_records": 11897,
+  "by_slot": {
+    "cas_to_english": {
+      "total": 3001,
+      "passes": 568,
+      "pass_rate": 0.1893,
+      "failure_modes": {
+        "domain_or_register_swap_or_drop": 954,
+        "drive_or_noetic_drop": 1916,
+        "omega_target_drop": 376,
+        "fractal_k_drop": 248,
+        "fractal_k_drop::k_as_count": 49,
+        "coefficient_drop": 232
+      }
+    },
+    "english_to_cas": {
+      "total": 2939,
+      "passes": 15,
+      "pass_rate": 0.0051,
+      "failure_modes": {
+        "english_to_cas_verbatim_copy": 2924
+      }
+    },
+    "invalid_to_corrected": {
+      "total": 2972,
+      "passes": 1166,
+      "pass_rate": 0.3923,
+      "failure_modes": {
+        "invalid_corrected_unrelated": 1806
+      }
+    },
+    "invalid_to_explanation": {
+      "total": 2985,
+      "passes": 2985,
+      "pass_rate": 1.0,
+      "failure_modes": {}
+    }
+  },
+  "by_slot_category": {
+    "cas_to_english::binary_composition": {
+      "total": 361,
+      "passes": 188,
+      "pass_rate": 0.5208
+    },
+    "cas_to_english::cross_register_omega": {
+      "total": 330,
+      "passes": 3,
+      "pass_rate": 0.0091
+    },
+    "cas_to_english::diagram_export": {
+      "total": 258,
+      "passes": 61,
+      "pass_rate": 0.2364
+    },
+    "cas_to_english::fractal_sequence": {
+      "total": 314,
+      "passes": 17,
+      "pass_rate": 0.0541
+    },
+    "cas_to_english::inversion": {
+      "total": 42,
+      "passes": 10,
+      "pass_rate": 0.2381
+    },
+    "cas_to_english::let_binding": {
+      "total": 253,
+      "passes": 103,
+      "pass_rate": 0.4071
+    },
+    "cas_to_english::meta_logic_relation": {
+      "total": 400,
+      "passes": 119,
+      "pass_rate": 0.2975
+    },
+    "cas_to_english::recipe": {
+      "total": 301,
+      "passes": 0,
+      "pass_rate": 0.0
+    },
+    "cas_to_english::rpm_chain": {
+      "total": 193,
+      "passes": 22,
+      "pass_rate": 0.114
+    },
+    "cas_to_english::state_literal": {
+      "total": 549,
+      "passes": 45,
+      "pass_rate": 0.082
+    },
+    "english_to_cas::binary_composition": {
+      "total": 394,
+      "passes": 1,
+      "pass_rate": 0.0025
+    },
+    "english_to_cas::cross_register_omega": {
+      "total": 329,
+      "passes": 0,
+      "pass_rate": 0.0
+    },
+    "english_to_cas::diagram_export": {
+      "total": 243,
+      "passes": 0,
+      "pass_rate": 0.0
+    },
+    "english_to_cas::fractal_sequence": {
+      "total": 299,
+      "passes": 0,
+      "pass_rate": 0.0
+    },
+    "english_to_cas::inversion": {
+      "total": 34,
+      "passes": 0,
+      "pass_rate": 0.0
+    },
+    "english_to_cas::let_binding": {
+      "total": 251,
+      "passes": 0,
+      "pass_rate": 0.0
+    },
+    "english_to_cas::meta_logic_relation": {
+      "total": 380,
+      "passes": 12,
+      "pass_rate": 0.0316
+    },
+    "english_to_cas::recipe": {
+      "total": 272,
+      "passes": 2,
+      "pass_rate": 0.0074
+    },
+    "english_to_cas::rpm_chain": {
+      "total": 191,
+      "passes": 0,
+      "pass_rate": 0.0
+    },
+    "english_to_cas::state_literal": {
+      "total": 546,
+      "passes": 0,
+      "pass_rate": 0.0
+    },
+    "invalid_to_corrected::admissibility": {
+      "total": 641,
+      "passes": 184,
+      "pass_rate": 0.2871
+    },
+    "invalid_to_corrected::fractal": {
+      "total": 354,
+      "passes": 0,
+      "pass_rate": 0.0
+    },
+    "invalid_to_corrected::meta_logic": {
+      "total": 361,
+      "passes": 55,
+      "pass_rate": 0.1524
+    },
+    "invalid_to_corrected::parse": {
+      "total": 479,
+      "passes": 299,
+      "pass_rate": 0.6242
+    },
+    "invalid_to_corrected::recipe": {
+      "total": 628,
+      "passes": 628,
+      "pass_rate": 1.0
+    },
+    "invalid_to_corrected::rpm": {
+      "total": 509,
+      "passes": 0,
+      "pass_rate": 0.0
+    },
+    "invalid_to_explanation::admissibility": {
+      "total": 672,
+      "passes": 672,
+      "pass_rate": 1.0
+    },
+    "invalid_to_explanation::fractal": {
+      "total": 374,
+      "passes": 374,
+      "pass_rate": 1.0
+    },
+    "invalid_to_explanation::meta_logic": {
+      "total": 352,
+      "passes": 352,
+      "pass_rate": 1.0
+    },
+    "invalid_to_explanation::parse": {
+      "total": 468,
+      "passes": 468,
+      "pass_rate": 1.0
+    },
+    "invalid_to_explanation::recipe": {
+      "total": 643,
+      "passes": 643,
+      "pass_rate": 1.0
+    },
+    "invalid_to_explanation::rpm": {
+      "total": 476,
+      "passes": 476,
+      "pass_rate": 1.0
+    }
+  },
+  "failure_modes": {
+    "all": {
+      "domain_or_register_swap_or_drop": 954,
+      "drive_or_noetic_drop": 1916,
+      "omega_target_drop": 376,
+      "fractal_k_drop": 248,
+      "fractal_k_drop::k_as_count": 49,
+      "coefficient_drop": 232,
+      "english_to_cas_verbatim_copy": 2924,
+      "invalid_corrected_unrelated": 1806
+    },
+    "by_slot": {
+      "cas_to_english": {
+        "domain_or_register_swap_or_drop": 954,
+        "drive_or_noetic_drop": 1916,
+        "omega_target_drop": 376,
+        "fractal_k_drop": 248,
+        "fractal_k_drop::k_as_count": 49,
+        "coefficient_drop": 232
+      },
+      "english_to_cas": {
+        "english_to_cas_verbatim_copy": 2924
+      },
+      "invalid_to_corrected": {
+        "invalid_corrected_unrelated": 1806
+      }
+    }
+  }
+}
