@@ -251,8 +251,15 @@ def generate_reply(
         bottleneck_z = _resolve_bottleneck_z(pooled, bottleneck_dim)
 
     cas_prefix_tensor: Optional[torch.Tensor] = None
+    cas_prefix_mask_tensor: Optional[torch.Tensor] = None
     if cas_prefix_ids:
         cas_prefix_tensor = torch.tensor([cas_prefix_ids], dtype=torch.long, device=device_t)
+        # Single example, no PAD — every prefix position is real. The
+        # mask is still required so that the head's self-attention path
+        # honors the same B-4 PAD-leak guard regardless of caller.
+        cas_prefix_mask_tensor = torch.ones(
+            (1, len(cas_prefix_ids)), dtype=torch.bool, device=device_t
+        )
 
     register_tensor = torch.tensor([register_id], dtype=torch.long, device=device_t)
 
@@ -278,6 +285,7 @@ def generate_reply(
                 dec_input,
                 bottleneck_z,
                 cas_prefix_ids=cas_prefix_tensor,
+                cas_prefix_mask=cas_prefix_mask_tensor,
                 encoder_outputs=encoder_outputs,
                 domain_mask=attention_mask,
                 register_id=register_tensor,
@@ -309,6 +317,7 @@ def generate_reply(
                         torch.tensor([seq], dtype=torch.long, device=device_t),
                         bottleneck_z,
                         cas_prefix_ids=cas_prefix_tensor,
+                        cas_prefix_mask=cas_prefix_mask_tensor,
                         encoder_outputs=encoder_outputs,
                         domain_mask=attention_mask,
                         register_id=register_tensor,

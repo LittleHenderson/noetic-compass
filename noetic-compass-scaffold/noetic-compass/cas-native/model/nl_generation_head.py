@@ -249,16 +249,21 @@ class _NLDecoderLayer(nn.Module):
         encoder_outputs: Optional[torch.Tensor],
         *,
         self_attn_mask: Optional[torch.Tensor] = None,
+        self_attn_key_padding_mask: Optional[torch.Tensor] = None,
         cross_attn_key_padding_mask: Optional[torch.Tensor] = None,
         cross_attn_mask: Optional[torch.Tensor] = None,
         need_weights: bool = False,
     ) -> tuple[torch.Tensor, dict[str, Optional[torch.Tensor]]]:
         # --- masked self-attention with residual ---
+        # self_attn_key_padding_mask (True=ignore) is the cas-prefix PAD guard:
+        # without it, padded CAS-prefix positions in [cas_prefix | decoder]
+        # leak into decoder conditioning. See B-4 cas_prefix_mask fix.
         residual = x
         h = self.norm_self(x)
         self_out, self_w = self.self_attn(
             h, h, h,
             attn_mask=self_attn_mask,
+            key_padding_mask=self_attn_key_padding_mask,
             need_weights=need_weights,
             average_attn_weights=True,
         )
@@ -519,6 +524,59 @@ class NLGenerationHead(nn.Module):
         # `nn.MultiheadAttention` key_padding_mask convention: True = ignore.
         return ~full
 
+    @staticmethod
+    def _build_self_attn_key_padding_mask(
+        cas_prefix_ids: Optional[torch.Tensor],
+        cas_prefix_mask: Optional[torch.Tensor],
+        cas_prefix_len: int,
+        decoder_len: int,
+        batch_size: int,
+        device: torch.device,
+    ) -> Optional[torch.Tensor]:
+        """Build a self-attention key-padding mask covering ``[cas_prefix | decoder]``.
+
+        The decoder embedding stream is ``[CAS prefix | decoder tokens]``.
+        Without a key-padding mask, padded CAS-prefix positions are
+        attended to as if they were real conditioning — this is the B-4
+        PAD-leak the trainer comment flagged.
+
+        Convention (matches ``nn.MultiheadAttention``): ``True`` = ignore,
+        ``False`` = attend.
+
+        Decoder positions are NOT masked here even when they contain PAD
+        because the ``loss_mask`` already excludes those positions from
+        supervision. Self-attention from a real decoder token to a PAD
+        decoder token at a strictly later index is blocked by the causal
+        mask; PAD decoder tokens never produce a supervised prediction.
+
+        Returns ``None`` when there is no CAS prefix (the existing causal
+        mask is sufficient and we want to avoid building an all-False
+        tensor that some attention backends warn about).
+        """
+        if cas_prefix_ids is None or cas_prefix_len == 0:
+            return None
+        if cas_prefix_mask is None:
+            # No mask supplied: trust caller — assume all CAS prefix tokens
+            # are real. Useful for inference paths that encode a single
+            # example with exact length and no padding.
+            return None
+        if cas_prefix_mask.dim() != 2:
+            raise ValueError(
+                f"cas_prefix_mask must be 2-D (B, K); got "
+                f"{tuple(cas_prefix_mask.shape)}"
+            )
+        if cas_prefix_mask.shape != cas_prefix_ids.shape:
+            raise ValueError(
+                "cas_prefix_mask shape must match cas_prefix_ids shape; "
+                f"got mask {tuple(cas_prefix_mask.shape)} vs ids "
+                f"{tuple(cas_prefix_ids.shape)}"
+            )
+        cas_pad = ~cas_prefix_mask.to(dtype=torch.bool, device=device)  # (B, K)
+        decoder_keep = torch.zeros(
+            (batch_size, decoder_len), dtype=torch.bool, device=device
+        )
+        return torch.cat([cas_pad, decoder_keep], dim=1)  # (B, K + L)
+
     # ------------------------------------------------------------------ forward
 
     def forward(
@@ -527,6 +585,7 @@ class NLGenerationHead(nn.Module):
         bottleneck_z: torch.Tensor,
         *,
         cas_prefix_ids: Optional[torch.Tensor] = None,
+        cas_prefix_mask: Optional[torch.Tensor] = None,
         encoder_outputs: Optional[torch.Tensor] = None,
         domain_mask: Optional[torch.Tensor] = None,
         register_id: Optional[torch.Tensor] = None,
@@ -539,6 +598,11 @@ class NLGenerationHead(nn.Module):
             bottleneck_z: ``(B, bottleneck_dim)`` continuous CAS bottleneck.
             cas_prefix_ids: optional ``(B, K)`` CAS-expression token IDs to
                 prepend to the decoder input.
+            cas_prefix_mask: optional ``(B, K)`` bool tensor; ``True`` =
+                real CAS-prefix token, ``False`` = PAD. When supplied
+                alongside ``cas_prefix_ids``, PAD positions are masked out
+                of self-attention so they do not leak into decoder
+                conditioning. Shape MUST match ``cas_prefix_ids``.
             encoder_outputs: optional ``(B, S, d_model)`` encoder stream
                 (typically the structured-token embedding output).
             domain_mask: optional ``(B, S)`` validity mask over the encoder
@@ -578,6 +642,14 @@ class NLGenerationHead(nn.Module):
 
         # Build masks.
         self_mask = self._causal_mask(seq_len, device=device)
+        self_attn_kp_mask = self._build_self_attn_key_padding_mask(
+            cas_prefix_ids=cas_prefix_ids,
+            cas_prefix_mask=cas_prefix_mask,
+            cas_prefix_len=cas_prefix_len,
+            decoder_len=l,
+            batch_size=b,
+            device=device,
+        )
         cross_kv_padding_mask = self._build_cross_attn_kv_padding_mask(
             soft_prefix_len=soft_prefix.shape[1],
             encoder_outputs=encoder_outputs,
@@ -594,6 +666,7 @@ class NLGenerationHead(nn.Module):
                 x,
                 encoder_outputs=kv,
                 self_attn_mask=self_mask,
+                self_attn_key_padding_mask=self_attn_kp_mask,
                 cross_attn_key_padding_mask=cross_kv_padding_mask,
                 cross_attn_mask=None,
                 need_weights=return_meta,
@@ -674,6 +747,7 @@ class NLGenerationHead(nn.Module):
         bottleneck_z: torch.Tensor,
         *,
         cas_prefix_ids: Optional[torch.Tensor] = None,
+        cas_prefix_mask: Optional[torch.Tensor] = None,
         encoder_outputs: Optional[torch.Tensor] = None,
         domain_mask: Optional[torch.Tensor] = None,
         register_id: Optional[torch.Tensor] = None,
@@ -690,6 +764,10 @@ class NLGenerationHead(nn.Module):
             decoder_input_ids: ``(B, L0)`` initial decoder tokens.
             bottleneck_z: ``(B, bottleneck_dim)`` CAS bottleneck.
             cas_prefix_ids: optional ``(B, K)`` CAS expression token IDs.
+            cas_prefix_mask: optional ``(B, K)`` bool tensor; ``True`` =
+                real, ``False`` = PAD. Forwarded to every per-step
+                ``forward`` call so PAD positions stay masked out of
+                self-attention during autoregressive sampling.
             encoder_outputs: optional ``(B, S, d_model)`` encoder stream.
             domain_mask: optional ``(B, S)`` validity mask.
             register_id: optional ``(B,)`` register indices.
@@ -742,6 +820,7 @@ class NLGenerationHead(nn.Module):
                             current_ids,
                             bottleneck_z,
                             cas_prefix_ids=cas_prefix_ids,
+                            cas_prefix_mask=cas_prefix_mask,
                             encoder_outputs=encoder_outputs,
                             domain_mask=domain_mask,
                             register_id=register_id,
@@ -752,6 +831,7 @@ class NLGenerationHead(nn.Module):
                             current_ids,
                             bottleneck_z,
                             cas_prefix_ids=cas_prefix_ids,
+                            cas_prefix_mask=cas_prefix_mask,
                             encoder_outputs=encoder_outputs,
                             domain_mask=domain_mask,
                             register_id=register_id,
@@ -771,6 +851,7 @@ class NLGenerationHead(nn.Module):
                         token_decoder=token_decoder,
                         current_ids=current_ids,
                         cas_prefix_ids=cas_prefix_ids,
+                        cas_prefix_mask=cas_prefix_mask,
                         encoder_outputs=encoder_outputs,
                         bottleneck_z=bottleneck_z,
                         domain_mask=domain_mask,
@@ -806,6 +887,7 @@ class NLGenerationHead(nn.Module):
         token_decoder: Optional[Any],
         current_ids: torch.Tensor,
         cas_prefix_ids: Optional[torch.Tensor],
+        cas_prefix_mask: Optional[torch.Tensor] = None,
         encoder_outputs: Optional[torch.Tensor],
         bottleneck_z: torch.Tensor,
         domain_mask: Optional[torch.Tensor],
@@ -828,6 +910,14 @@ class NLGenerationHead(nn.Module):
             )
             seq_len = decoder_stream.shape[1]
             self_mask = self._causal_mask(seq_len, device=full_input.device)
+            self_attn_kp_mask = self._build_self_attn_key_padding_mask(
+                cas_prefix_ids=cas_prefix_ids,
+                cas_prefix_mask=cas_prefix_mask,
+                cas_prefix_len=cas_prefix_len,
+                decoder_len=full_input.shape[1],
+                batch_size=full_input.shape[0],
+                device=full_input.device,
+            )
             cross_kv_padding_mask = self._build_cross_attn_kv_padding_mask(
                 soft_prefix_len=soft_prefix.shape[1],
                 encoder_outputs=encoder_outputs,
@@ -842,6 +932,7 @@ class NLGenerationHead(nn.Module):
                     x,
                     encoder_outputs=kv,
                     self_attn_mask=self_mask,
+                    self_attn_key_padding_mask=self_attn_kp_mask,
                     cross_attn_key_padding_mask=cross_kv_padding_mask,
                     need_weights=True,
                 )

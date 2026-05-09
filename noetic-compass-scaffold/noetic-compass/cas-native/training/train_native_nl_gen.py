@@ -859,18 +859,19 @@ def run_training(args: argparse.Namespace) -> int:
                     batch = collator(batch_records, device=device)
                     if batch is None:
                         continue
-                    # CAS prefix is opt-in: NLGenerationHead.forward has no
-                    # cas_prefix_mask parameter, so PAD tokens in a padded
-                    # prefix would be consumed as real conditioning. Until the
-                    # head exposes a mask (or callers bucket by prefix
-                    # length), default to passing None. Bottleneck-z and
-                    # register-id continue to carry CAS state.
+                    # CAS prefix opt-in. NLGenerationHead.forward now
+                    # accepts cas_prefix_mask, so PAD positions in the
+                    # padded prefix are blocked from self-attention.
+                    # Bottleneck-z and register-id continue to carry CAS
+                    # state alongside the discrete prefix.
                     cas_prefix_arg = batch["cas_prefix_ids"] if use_cas_prefix else None
+                    cas_prefix_mask_arg = batch["cas_prefix_mask"] if use_cas_prefix else None
                     out = model.forward_with_lm(
                         batch["input_ids"],
                         batch["lm_decoder_input_ids"],
                         attention_mask=batch["attention_mask"],
                         cas_prefix_ids=cas_prefix_arg,
+                        cas_prefix_mask=cas_prefix_mask_arg,
                         register_id=batch["register_id"],
                     )
                     loss_lm_t = masked_cross_entropy(
@@ -1124,11 +1125,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--use-cas-prefix",
         action="store_true",
         help=(
-            "Pass cas_prefix_ids into NLGenerationHead.forward via "
-            "forward_with_lm. OFF by default: NLGenerationHead has no "
-            "cas_prefix_mask, so padded prefixes leak PAD tokens into "
-            "conditioning. Enable only after the head exposes a mask or "
-            "callers bucket records by prefix length."
+            "Pass cas_prefix_ids + cas_prefix_mask into NLGenerationHead.forward "
+            "via forward_with_lm. As of the B-4 cas_prefix_mask fix "
+            "(2026-05-09), padded prefixes are safely masked from "
+            "self-attention. Defaults to OFF for backwards-compatibility "
+            "with v0 (B-3) checkpoints; enable for new training runs that "
+            "want the head to see the discrete CAS-prefix tokens directly."
         ),
     )
     p.add_argument("--d-model", type=int, default=512)

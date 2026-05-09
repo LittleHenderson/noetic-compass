@@ -175,11 +175,14 @@ class NativeNLCollator:
         k_max = max((len(c) for c in cas_prefix_ids), default=0)
         if k_max > 0:
             cas_prefix_tensor = torch.full((b, k_max), self.pad_id, dtype=torch.long)
+            cas_prefix_mask = torch.zeros((b, k_max), dtype=torch.bool)
             for i, ids in enumerate(cas_prefix_ids):
                 if ids:
                     cas_prefix_tensor[i, : len(ids)] = torch.tensor(ids, dtype=torch.long)
+                    cas_prefix_mask[i, : len(ids)] = True
         else:
             cas_prefix_tensor = None
+            cas_prefix_mask = None
 
         register_tensor = torch.tensor(register_ids, dtype=torch.long)
 
@@ -189,6 +192,7 @@ class NativeNLCollator:
             "attention_mask": attention_mask.to(device_t),
             "lm_decoder_input_ids": decoder_input_ids.to(device_t),
             "cas_prefix_ids": cas_prefix_tensor.to(device_t) if cas_prefix_tensor is not None else None,
+            "cas_prefix_mask": cas_prefix_mask.to(device_t) if cas_prefix_mask is not None else None,
             "register_id": register_tensor.to(device_t),
             # Loss-side artifacts (not passed to forward)
             "lm_targets": lm_targets.to(device_t),

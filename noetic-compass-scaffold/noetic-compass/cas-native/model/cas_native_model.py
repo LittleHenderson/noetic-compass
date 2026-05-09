@@ -661,6 +661,7 @@ class CASNativeModel(nn.Module):
         attention_mask: torch.Tensor | None = None,
         register_activations: Optional[torch.Tensor] = None,
         cas_prefix_ids: Optional[torch.Tensor] = None,
+        cas_prefix_mask: Optional[torch.Tensor] = None,
         register_id: Optional[torch.Tensor] = None,
         bottleneck_z: Optional[torch.Tensor] = None,
         return_lm_meta: bool = False,
@@ -679,6 +680,9 @@ class CASNativeModel(nn.Module):
             register_activations: Optional ``(B, 40, 4)`` register mask for
                 the structured forward (unchanged contract).
             cas_prefix_ids: Optional ``(B, K)`` CAS-expression prefix.
+            cas_prefix_mask: Optional ``(B, K)`` bool tensor; True = real,
+                False = PAD. Forwarded to the NL head so PAD positions in
+                the cas_prefix do not leak into self-attention.
             register_id: Optional ``(B,)`` register IDs for the NL head's
                 FiLM modulation.
             bottleneck_z: Optional ``(B, bottleneck_dim)`` to override the
@@ -726,6 +730,7 @@ class CASNativeModel(nn.Module):
                 lm_decoder_input_ids,
                 bottleneck_z,
                 cas_prefix_ids=cas_prefix_ids,
+                cas_prefix_mask=cas_prefix_mask,
                 encoder_outputs=encoder_outputs,
                 domain_mask=attention_mask,
                 register_id=register_id,
@@ -738,6 +743,7 @@ class CASNativeModel(nn.Module):
                 lm_decoder_input_ids,
                 bottleneck_z,
                 cas_prefix_ids=cas_prefix_ids,
+                cas_prefix_mask=cas_prefix_mask,
                 encoder_outputs=encoder_outputs,
                 domain_mask=attention_mask,
                 register_id=register_id,

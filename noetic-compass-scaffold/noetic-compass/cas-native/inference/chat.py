@@ -484,12 +484,15 @@ def _predict_and_show(
             # Defensive: K=9 may return [] for registers; fall back to "T".
             registers_list = prediction.get("registers") or []
             register = str(registers_list[0]) if registers_list else "T"
-            # use_cas_prefix=False matches the trainer default and how
-            # the diverse-CAS B-3.5 evaluation was measured. Conditioning
-            # is via register + bottleneck-z + prompt encoder pass; CAS
-            # expression is recorded as metadata but does not enter the
-            # head's discrete-prefix path until the head exposes a
-            # cas_prefix_mask (B-4 followup).
+            # use_cas_prefix=False matches the legacy B-3.5 trainer
+            # default and the v0 (B-3) checkpoint that this REPL loads
+            # by default. As of the B-4 cas_prefix_mask fix
+            # (2026-05-09), the head exposes a safe discrete-prefix
+            # path: enabling use_cas_prefix=True now passes both ids
+            # and an all-True mask through generate_reply, which honors
+            # PAD masking via NLGenerationHead's
+            # self_attn_key_padding_mask. Switch to True only when the
+            # loaded checkpoint was trained with --use-cas-prefix.
             gen_out = generate_reply(
                 model=native_generator["model"],
                 tokenizer=native_generator["tokenizer"],
