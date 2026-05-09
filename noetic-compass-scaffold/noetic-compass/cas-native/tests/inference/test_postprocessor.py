@@ -134,6 +134,47 @@ def test_postprocess_flags_jargon_leak() -> None:
     assert any("jargon_count" in f for f in result.quality_failures)
 
 
+def test_postprocess_flags_truncation_when_eos_not_reached() -> None:
+    """Reproduces the v1 PREFIX128 5ep records 7-8 failure pattern:
+    generation hit max_new_tokens without emitting EOS, producing
+    the same incomplete sentence. The truncated flag + quality
+    failure must surface so callers can retry or display
+    '[response truncated]'."""
+    result = postprocess(
+        source_cas="^4^P|A",
+        raw_gen="When something struck a chord in a principled way, expressed analytically, and a careful reader would noti",
+        stopped_on_eos=False,
+    )
+    assert result.truncated is True
+    assert result.quality_passed is False
+    assert "truncated_at_max_tokens" in result.quality_failures
+
+
+def test_postprocess_does_not_flag_truncation_when_eos_reached() -> None:
+    """Clean EOS termination must NOT surface a truncation flag
+    even if the gen happens to be short."""
+    result = postprocess(
+        source_cas="^4^P|A",
+        raw_gen="When something struck a chord in a principled way.",
+        stopped_on_eos=True,
+    )
+    assert result.truncated is False
+    assert "truncated_at_max_tokens" not in result.quality_failures
+
+
+def test_postprocess_skips_truncation_check_when_signal_unknown() -> None:
+    """When the caller doesn't pass stopped_on_eos (e.g. unit tests
+    on raw text snippets), we don't flag truncation. The check
+    requires explicit signal from the generation layer."""
+    result = postprocess(
+        source_cas="^4^P|A",
+        raw_gen="When something struck a chord in a principled way, expressed analytically.",
+        stopped_on_eos=None,
+    )
+    assert result.truncated is False
+    assert "truncated_at_max_tokens" not in result.quality_failures
+
+
 def test_postprocess_clean_text_passes_quality() -> None:
     result = postprocess(
         source_cas="^4^P|A",

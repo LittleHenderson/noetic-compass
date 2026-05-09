@@ -84,7 +84,11 @@ class PostprocessResult:
     was routed and any error diagnostics. ``repair_log`` captures every
     identifier substitution applied. ``quality`` carries hard-notation
     / jargon counts and identifier-recovery scores both BEFORE and
-    AFTER repair so callers can audit the delta.
+    AFTER repair so callers can audit the delta. ``truncated`` is True
+    when the underlying generation hit ``max_new_tokens`` without
+    emitting EOS — this catches the v1-PREFIX128-5ep failure pattern
+    where records 7 and 8 produced the same incomplete sentence
+    "...A careful reader would noti..." for two different tasks.
     """
     final_text: str
     raw_text: str
@@ -95,6 +99,7 @@ class PostprocessResult:
     recovery_post_repair: Optional[IdentifierRecoveryScore] = None
     hard_notation_count: int = 0
     jargon_count: int = 0
+    truncated: bool = False
     quality_passed: bool = True
     quality_failures: list[str] = field(default_factory=list)
 
@@ -123,6 +128,7 @@ class PostprocessResult:
             ),
             "hard_notation_count": self.hard_notation_count,
             "jargon_count": self.jargon_count,
+            "truncated": self.truncated,
             "quality_passed": self.quality_passed,
             "quality_failures": list(self.quality_failures),
         }
@@ -140,6 +146,7 @@ def postprocess(
     apply_repair: bool = False,
     score_recovery: bool = True,
     quality_check: bool = True,
+    stopped_on_eos: Optional[bool] = None,
 ) -> PostprocessResult:
     """Run the post-generation pipeline.
 
@@ -158,6 +165,11 @@ def postprocess(
             post-repair identifier-recovery scores.
         quality_check: when True, count hard-notation and jargon hits
             in ``final_text`` and set ``quality_passed`` accordingly.
+        stopped_on_eos: pass-through from generate_reply's metadata.
+            When False, the generation hit ``max_new_tokens`` without
+            emitting EOS — flagged as ``truncated`` in the result and
+            counted as a quality failure. Pass ``None`` to skip the
+            truncation check (e.g. for unit tests on raw text snippets).
 
     The return value is always populated; specific fields may be
     ``None`` when the corresponding option is disabled.
@@ -187,6 +199,7 @@ def postprocess(
     jargon = 0
     quality_passed = True
     quality_failures: list[str] = []
+    truncated = False
     if quality_check:
         hard = count_hard_notation(final_text)
         jargon = count_jargon(final_text)
@@ -196,6 +209,14 @@ def postprocess(
         if jargon > 0:
             quality_passed = False
             quality_failures.append(f"jargon_count={jargon}")
+        # Truncation check: stopped_on_eos=False means generation
+        # hit max_new_tokens without emitting EOS — caller should
+        # either retry with a higher budget or surface the gen as
+        # incomplete rather than ship a clipped sentence.
+        if stopped_on_eos is False:
+            truncated = True
+            quality_passed = False
+            quality_failures.append("truncated_at_max_tokens")
 
     return PostprocessResult(
         final_text=final_text,
@@ -207,6 +228,7 @@ def postprocess(
         recovery_post_repair=recovery_post,
         hard_notation_count=hard,
         jargon_count=jargon,
+        truncated=truncated,
         quality_passed=quality_passed,
         quality_failures=quality_failures,
     )
