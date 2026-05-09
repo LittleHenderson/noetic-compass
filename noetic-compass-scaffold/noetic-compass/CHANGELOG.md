@@ -1,5 +1,86 @@
 # Noetic Compass — Progress Log
 
+## Session 59: Path D Wave 2.5 promoted — first end-to-end SFE-gated CAS-to-English corpus (May 8, 2026)
+
+**Headline.** 5,268 SFE-certified CAS-to-English records produced via the model-in-loop pipeline (Haiku draft + SFE round-trip gate + self-correction retries). All four promotion gates clear; human review pack thumbs-upped. **Wave 2.5 promoted as the v1 cas_to_english training mix candidate.**
+
+**Pipeline shape (now operational, repeatable):**
+- Seed enumerator (own) → Haiku translator (rented) → SFE structural-fingerprint comparator (own) → corrective re-prompt loop (own) → anti-jargon + anti-notation gates (own) → accepted JSONL.
+- Model-agnostic by design: SFE accepts any drafter (Haiku/Sonnet/Opus/future). Translator is swappable; pipeline is ours.
+
+**Run accounting (`20260508T203848Z` + 2 backfills):**
+
+| Metric | Value |
+|---|---|
+| Seeds in pool | 5,802 |
+| Processed | 5,802 (100%, after 6-seed backfill) |
+| Accepted | 5,268 (90.80%) |
+| Rejected | 534 (9.20%) |
+| Errored | 0 |
+| Spend | $30.56 + ~$0.05 backfill / $40 cap |
+| Wall clock | ~3h 20m main run |
+
+**Gates (all PASS):**
+
+| Gate | Threshold | Result |
+|---|---|---|
+| Aggregate accept | ≥80% | 90.80% |
+| Per-category floor | ≥70% | 80.8% (inversion) |
+| Hard CAS notation in English | = 0 | 0 |
+| Jargon (operator/noetic/cognitive operation/bare drive) | = 0 | 0 |
+
+**Per-category acceptance:**
+
+| Category | Accepted | Rejected | Rate |
+|---|---:|---:|---:|
+| binary_composition | 732 | 13 | 98.3% |
+| state_literal | 1,019 | 37 | 96.5% |
+| rpm_chain | 359 | 25 | 93.5% |
+| meta_logic_relation | 710 | 58 | 92.4% |
+| let_binding | 441 | 39 | 91.9% |
+| cross_register_omega | 579 | 79 | 88.0% |
+| diagram_export | 417 | 63 | 86.9% |
+| recipe | 481 | 95 | 83.5% |
+| fractal_sequence | 466 | 110 | 80.9% |
+| inversion | 63 | 15 | 80.8% |
+
+**Rejection structural buckets (534 rejects, all caught by SFE — exactly its job):** fractal k-multiset mismatch 20.6%, register dropped 19.9%, drive missing/wrong 18.4%, noetic count off 15.2%, Ω target name leak 10.1%, domain binding 9.4%, RPM arrow count 6.0%, cluster + other 0.4%.
+
+**SFE retry distribution (accepted):** 1 try 46.7%, 2 tries 41.9%, 3 tries 8.2%, 4 tries 3.2%. First-pass acceptance 46.7% confirms retries do real corrective work.
+
+**Architecture note — what's ours vs rented:**
+- **Owned (the IP):** seed enumerator from compiler grammar, SFE structural fingerprinter (`cas-synthetic/scripts/sfe.py`), self-correction loop, anti-jargon/anti-notation gates, retry-prompt corrective machinery, pipeline orchestration.
+- **Rented (replaceable):** Haiku as English drafter — the translator slot is swappable.
+
+This means the next corpus generation cycle is: change seed mix, hit go, $30 + ~3h, certified data.
+
+**Stakeholder framing (locked):** "CAS is the speaker. Haiku is the U.N. translator. SFE is the translation auditor. Only certified translations enter training."
+
+**Status discipline (per user feedback):**
+- Pipeline: WIRED + WORKS + GATE-PASSED + HUMAN-REVIEWED.
+- 5,268-record corpus: VALIDATED as a CAS-to-English training source.
+- v1 training mix: not yet built (Wave 4 aggregator track).
+- v1 model: not yet trained.
+
+Do not describe this as a trained model, an evaluation, or product readiness. It is a **certified corpus for training**, nothing more, nothing less.
+
+**Files of record:**
+- `cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260508T203848Z.jsonl` (5,263 records, main run)
+- `cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260509T002355Z.jsonl` (4 records, backfill round 1)
+- `cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260509T002541Z.jsonl` (1 record, backfill round 2)
+- `cas-synthetic/data/path_d/wave3_step2_5_rejected_20260508T203848Z.jsonl` (533 records)
+- `cas-synthetic/data/path_d/wave3_step2_5_rejected_20260509T002355Z.jsonl` (1 record)
+- `cas-synthetic/data/path_d/wave3_step2_5_manifest_20260508T203848Z.json` (main manifest with prompt template version `wave3_step2_5_model_in_loop_v2_2026_05_08`)
+- `cas-synthetic/data/path_d/wave3_step2_5_review_pack_50_20260508T203848Z.jsonl` (50-record stratified review pack, human-reviewed PASS)
+- `cas-synthetic/scripts/sfe.py` (Structural Fingerprint Extractor)
+- `cas-synthetic/scripts/generate_wave3_step2_5_english_descriptions.py` (model-in-loop orchestrator)
+- `cas-synthetic/tests/test_sfe.py` (21 SFE regression tests)
+
+**Open follow-ups (not blockers):**
+- Wave 4 corpus aggregator (task #129) — combine Wave 2.5 with Wave 3 v2 cas_to_english + invalid_to_explanation + invalid_to_corrected.
+- Reject-set triage: 534 rejects preserved for targeted future repair (fractal-aware sub-prompt or Opus drafter on the 110 fractal-sequence misses).
+- Compile-rate evaluation as separate eval layer (round-trip via english_to_cas + compiler).
+
 ## Session 58: B-4.1 audit failed — v0 NOT promoted; four-step v1 plan launched (May 7, 2026)
 
 **Frame.** The B-4.1 human relevance audit ran on the `b3_full_50k_prodshape_20260507` checkpoint and **failed catastrophically. v0 does NOT promote.** Five failure modes documented in `docs/working/path_B4_human_relevance_failure_2026_05_07.md` (Codex's note, this commit). User and Codex converged on a four-step v1 plan: A (commit failure as project truth, this commit) + B (automated failure eval harness) + C (OOD gate + chat.py routing) + D (compiler-preservation scorer). B/C/D are running as parallel background agents.

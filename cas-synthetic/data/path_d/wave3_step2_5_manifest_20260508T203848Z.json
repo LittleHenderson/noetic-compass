@@ -1,0 +1,36 @@
+{
+  "started_at": "2026-05-08T23:58:40Z",
+  "wave2_5_run_id": "22575606bf47477facc5dc7286be5db2",
+  "args": {
+    "seeds": "cas-synthetic\\data\\path_d\\seeds.jsonl",
+    "out_dir": "cas-synthetic\\data\\path_d",
+    "target": 5802,
+    "max_records": 5802,
+    "wave2_5_fraction": 0.999,
+    "seed": 4242,
+    "dry_run": false,
+    "paid": true,
+    "model": "claude-haiku-4-5-20251001",
+    "cost_cap_usd": 40.0
+  },
+  "counts": {
+    "accepted": 5263,
+    "rejected": 533,
+    "errored": 0,
+    "first_try_pass": 2459,
+    "retry_pass": 2804,
+    "total_retries": 5169
+  },
+  "outputs": {
+    "accepted": "cas-synthetic\\data\\path_d\\wave3_step2_5_english_descriptions_20260508T203848Z.jsonl",
+    "rejected": "cas-synthetic\\data\\path_d\\wave3_step2_5_rejected_20260508T203848Z.jsonl",
+    "ledger": "cas-synthetic\\data\\path_d\\wave3_step2_5_ledger_22575606bf47477facc5dc7286be5db2.jsonl"
+  },
+  "prompt_template_version": "wave3_step2_5_model_in_loop_v2_2026_05_08",
+  "spend": {
+    "total_cost_usd": 30.557537,
+    "total_input_tokens": 28112297,
+    "total_output_tokens": 489048,
+    "cost_cap_usd": 40.0
+  }
+}
