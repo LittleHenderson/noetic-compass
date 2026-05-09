@@ -493,6 +493,18 @@ def _predict_and_show(
             # PAD masking via NLGenerationHead's
             # self_attn_key_padding_mask. Switch to True only when the
             # loaded checkpoint was trained with --use-cas-prefix.
+            #
+            # Post-generation pipeline (also B-4 follow-up): the
+            # ``cas_native.inference.postprocessor.postprocess()``
+            # function composes compilability-based task routing,
+            # identifier repair (Ω names / coefficients / variables),
+            # and quality checks (hard-notation / jargon counts) into
+            # a single audit-friendly call. This REPL does NOT wire
+            # it in by default — the v0 checkpoint loaded here was
+            # trained without the cas_prefix_mask path, so the
+            # routing/repair affordances are most valuable for v1+
+            # checkpoints. See identifier_repair_and_rpm_routing
+            # docs/working note for the full diagnostic.
             gen_out = generate_reply(
                 model=native_generator["model"],
                 tokenizer=native_generator["tokenizer"],

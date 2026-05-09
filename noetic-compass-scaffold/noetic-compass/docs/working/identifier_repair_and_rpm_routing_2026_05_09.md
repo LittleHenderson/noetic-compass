@@ -204,3 +204,42 @@ v1 PREFIX128 5ep + identifier_repair postprocessor:
    eliminate the structural ambiguity at training time (Option B).
 3. Pointer/copy head in the decoder for in-architecture identifier
    binding (long-term clean answer).
+
+## Step 3 update (2026-05-09 follow-on)
+
+Step 3 landed as a separate commit. New library modules:
+
+- ``cas-native/inference/cas_routing.py`` — compilability-based task
+  routing. ``route_by_compilability(source_cas)`` returns a
+  :class:`RoutingDecision` with ``task_type`` ∈ {cas_to_english,
+  invalid_to_explanation} based on the compiler's ``CompilationArtifact.valid``
+  field. ``build_prompt_from_routing(...)`` reproduces the Path D
+  corpus wrapper for the routed task.
+- ``cas-native/inference/postprocessor.py`` — gated post-generation
+  pipeline. ``postprocess(source_cas, raw_gen, ..., apply_repair=False)``
+  orchestrates routing + identifier repair + quality checks (hard-
+  notation count, jargon count) and returns a :class:`PostprocessResult`
+  carrying both ``raw_text`` and ``final_text`` plus full repair log
+  and pre/post recovery scores. Repair is OPT-IN by design — the
+  default does not mutate the generation, only scores and routes.
+
+Implementation note from the integration: ``compile_expression`` from
+``api.notation`` does NOT raise ``CompilerError`` on invalid input —
+it returns a ``CompilationArtifact`` with ``valid=False`` and an
+``error: str`` of shape ``"<stage>: <message>"`` or
+``"<stage>@<position>: <message>"``. The routing module parses this
+string back into a stage / position / error_class so the constructed
+invalid prompt matches the Path D training corpus shape.
+
+Tests added:
+- ``cas-native/tests/inference/test_cas_routing.py`` — 9 tests
+- ``cas-native/tests/inference/test_postprocessor.py`` — 14 tests
+
+The chat REPL itself (``cas-native/inference/chat.py``) is **NOT
+modified functionally** in this commit. Reasoning: the REPL is
+hardcoded to load the v0 (B-3) checkpoint with ``use_cas_prefix=False``,
+so the routing/repair affordances are most valuable only when the
+loaded checkpoint was trained with ``--use-cas-prefix`` (i.e., v1+).
+A pointer comment in chat.py directs readers to the new postprocessor
+module. Wiring the REPL to load v1 checkpoints + run the postprocessor
+is a follow-up commit.
