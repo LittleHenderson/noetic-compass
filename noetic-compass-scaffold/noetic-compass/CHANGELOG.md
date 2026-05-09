@@ -1,5 +1,65 @@
 # Noetic Compass — Progress Log
 
+## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
+
+**Headline.** This session changed the project state materially. The B-4 architectural fix (cas_prefix_mask) **solved the source-binding bottleneck** that B-4.1 audit had flagged as the v0 failure mode. v1 PREFIX128 5-epoch retrain on the Wave 4 corpus hit content correctness 0/8 → 5/8 (strict/strong). Two follow-up libraries landed for the residual gaps: identifier_repair (Ω-name copy at 100%, coefficient at 67% gen-ceiling) and cas_routing (compilability-based task routing that bypasses the rpm_chain misroute). **Corpus was not the blocker; conditioning and symbolic copy/routing were.**
+
+### The journey
+
+1. **v1 mix initial training (no prefix)** — 7,395 records × 2 epochs × K=64. Diverse-record eval: 4/8 wrong silhouettes, 0/8 content-correct. Same B-4.1 hollow-silhouette failure as v0.
+2. **Diagnostic: 32-record overfit test** — model overfit to 0.05 LM loss (memorized teacher-forced) but autoregressive greedy gave 9.4% verbatim, 11.3% Ω recovery, 44.3% coefficient recovery. Records 4-6 emitted *byte-identical previous-record outputs* for different prompts. The model **knew where the slot was but couldn't bind it to source**. Diagnosis: bottleneck-z conditioning is too lossy to disambiguate 32 unique recipe-shape prompts.
+3. **B-4 architectural fix: cas_prefix_mask** (commit `2530d1b`). The trainer comment had flagged this as deferred technical debt: NLGenerationHead.forward took cas_prefix_ids but no cas_prefix_mask, so PAD positions in padded prefixes leaked into self-attention. Fix plumbs cas_prefix_mask through 7 surfaces (head, decoder layer, model.forward_with_lm, collator, trainer, generate_reply, chat comment). Six new tests pin the behavior.
+4. **Overfit retest with --use-cas-prefix** — same 32 records, 100 epochs. **Verbatim 9.4% → 87.5%, Ω recovery 11.3% → 88.7%, coefficient recovery 44.3% → 93.7%.** Architectural diagnosis confirmed: discrete prefix conditioning is the right path.
+5. **Full v1 retrain with --use-cas-prefix --max-cas-prefix-len 128** (5 epochs). Diverse 8-record eval: task routing 4/8 → **7/8**, N/D/F/R binding from minimal → strong, content correctness 0/8 → **5/8 combined** (1 strict + 4 strong-partial). Hard notation + jargon = 0 throughout.
+6. **Residual analysis** — Ω-name recovery flatlined at 0% (model still hallucinates Ω names: "decision_60" → "rehearsal_67" / "withdrawal_60") even at 5 epochs. Hypothesis: Ω names are arbitrary long-tail identifiers (1000+ unique Ω names ÷ 7K records ÷ 5 epochs = each Ω seen ~35 times — not enough to memorize against parameter competition). This is a **copy-mechanism problem, not a learning problem.**
+7. **identifier_repair library** (commit `760f3f0`). Post-generation positional-substitution of Ω names, coefficients, variable names extracted from source CAS. Greedy diverse eval: **Ω 33% → 100%**, coefficient 33% → 67% (gen-completeness ceiling). 26 tests.
+8. **rpm_chain routing diagnosis** — record 7 still failed even with K=128 + 5 epochs + repair available. Empirical evidence:
+   - 5/5 wrapper-text variants produced byte-identical output under greedy → encoder/bottleneck-z is insensitive to wrapper differences when cas_prefix dominates
+   - 20/20 high-entropy samples routed to invalid_to_explanation → valid trajectory has zero probability mass
+   - Variable prefix `stageA0` is shared 323 (valid rpm_chain) / 207 (invalid rpm) — no disambiguation in cas_prefix
+   - Class imbalance: 425 invalid vs 323 valid for similar shapes
+   - **Side-effect of cas_prefix_mask fix:** discrete prefix now dominates conditioning so wrapper signal is effectively dead at inference
+9. **cas_routing + postprocessor libraries** (commit `c79294f`). Compilability gate: route by `compile_expression(source).valid`. Postprocessor orchestrates routing + repair (opt-in) + quality checks. 23 tests. Library-shaped, NOT wired into chat REPL by design.
+
+### Final 3-way comparison (diverse 8-record eval, greedy)
+
+| Metric | v1 NO-PREFIX | v1 PREFIX 2ep K=64 | **v1 PREFIX128 5ep + repair** |
+|---|---:|---:|---:|
+| Task routing | 4/8 | 7/8 | **7/8** (record 7 deferred to compilability gate) |
+| N/D/F/R binding | minimal | partial | **strong (3-4/4 axes per record)** |
+| Ω-name recovery | 0% | 0% (prefix sometimes preserved) | **100% post-repair** ✅ |
+| Coefficient recovery | 0% | 0% | **67% post-repair** (gen-completeness ceiling) |
+| Hard notation leaks | 0 | 0 | **0** |
+| Jargon leaks | 0 | 0 | **0** |
+| Strict + strong-partial content | 0/8 | 2/8 | **5/8** ✅ above gate |
+
+### Status discipline
+
+- B-4 cas_prefix_mask fix: **WIRED + WORKS + tested + verified at corpus scale**
+- v1 PREFIX128 5ep checkpoint: **VALIDATED structurally** (5/8 above content gate); NOT yet validated by human relevance audit
+- identifier_repair / cas_routing / postprocessor libraries: **WIRED + WORKS + tested locally + tested on pod**
+- Chat REPL integration: **NOT done** (deferred — REPL still loads v0 checkpoint)
+- Production readiness: **NO** (v0 still default in REPL; v1 unscaled to user-facing audit)
+
+### Files of record
+
+- Patches: `cas-native/model/nl_generation_head.py`, `cas_native_model.py`, `training/datasets/native_nl_collator.py`, `training/train_native_nl_gen.py`, `inference/native_nl_generate.py`, `inference/chat.py`
+- New libraries: `cas-native/inference/identifier_repair.py`, `cas-native/inference/cas_routing.py`, `cas-native/inference/postprocessor.py`
+- New tests: `cas-native/tests/model/test_cas_prefix_mask.py` (6), `tests/inference/test_identifier_repair.py` (26), `test_cas_routing.py` (9), `test_postprocessor.py` (14) = **55 new tests**
+- Diagnostic: `docs/working/identifier_repair_and_rpm_routing_2026_05_09.md`
+- Run artifacts on pod: `runs/v1_path_d_PREFIX128_5ep_20260509T035024Z/{model_final.pt, diverse_eval_with_repair_v3.log}`
+
+### Open follow-ups
+
+1. **Wire chat REPL to load v1 checkpoint + use postprocessor.** Requires `NATIVE_GEN_RUN_DIR` reconfig + `use_cas_prefix=True` flag flip. Held until v1 stability confirmed by human relevance audit.
+2. **Future training run with explicit task tokens in cas_prefix.** `[VALID]` / `[INVALID]` discrete tokens eliminate the rpm_chain structural ambiguity at training time.
+3. **Pointer/copy attention head in decoder.** Long-term clean answer for arbitrary identifier binding, replacing post-gen substitution.
+4. **Coefficient gen-completeness gap.** Model dropped 1 of 3 coef slots on the recipe gen — the repair ceiling at 67% is bounded by what the model emitted. More training or constrained decoding required.
+
+### Slogan locked
+
+*"Corpus was not the blocker; conditioning and symbolic copy/routing were."*
+
 ## Session 60: Path D Wave 4 — v1 training mix aggregator + first v1 mix output (May 8, 2026)
 
 **Headline.** Aggregator script `cas-synthetic/scripts/build_path_d_v1_mix.py` lands; first run produces the v1 training mix (8,219 rows) with deterministic 90/5/5 splits stratified by `(task_type, grammar_category_or_error_class)`. Two promotion-grade slots wired in; two broken slots documented as gaps with rebuild scheduled.
