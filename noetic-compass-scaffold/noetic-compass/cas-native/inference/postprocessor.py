@@ -67,6 +67,34 @@ def count_jargon(text: str) -> int:
     return len(_JARGON_RX.findall(text))
 
 
+_WORD_RX = re.compile(r"[A-Za-z][A-Za-z'-]*")
+
+
+def count_adjacent_duplicate_words(text: str) -> int:
+    """Count immediate duplicate words such as ``concept concept``."""
+    words = [m.group(0).lower() for m in _WORD_RX.finditer(text)]
+    return sum(1 for a, b in zip(words, words[1:]) if a == b)
+
+
+def count_repeated_phrase_windows(
+    text: str,
+    *,
+    ngram_size: int = 3,
+    min_occurrences: int = 3,
+) -> int:
+    """Count repeated n-gram windows that indicate looping text."""
+    if ngram_size <= 0 or min_occurrences <= 1:
+        raise ValueError("ngram_size must be > 0 and min_occurrences > 1")
+    words = [m.group(0).lower() for m in _WORD_RX.finditer(text)]
+    if len(words) < ngram_size * min_occurrences:
+        return 0
+    counts: dict[tuple[str, ...], int] = {}
+    for i in range(0, len(words) - ngram_size + 1):
+        window = tuple(words[i : i + ngram_size])
+        counts[window] = counts.get(window, 0) + 1
+    return sum(1 for count in counts.values() if count >= min_occurrences)
+
+
 # ---------------------------------------------------------------------------
 # Result dataclass
 # ---------------------------------------------------------------------------
@@ -99,6 +127,8 @@ class PostprocessResult:
     recovery_post_repair: Optional[IdentifierRecoveryScore] = None
     hard_notation_count: int = 0
     jargon_count: int = 0
+    adjacent_duplicate_count: int = 0
+    repeated_phrase_count: int = 0
     truncated: bool = False
     quality_passed: bool = True
     quality_failures: list[str] = field(default_factory=list)
@@ -128,6 +158,8 @@ class PostprocessResult:
             ),
             "hard_notation_count": self.hard_notation_count,
             "jargon_count": self.jargon_count,
+            "adjacent_duplicate_count": self.adjacent_duplicate_count,
+            "repeated_phrase_count": self.repeated_phrase_count,
             "truncated": self.truncated,
             "quality_passed": self.quality_passed,
             "quality_failures": list(self.quality_failures),
@@ -197,18 +229,32 @@ def postprocess(
 
     hard = 0
     jargon = 0
+    adjacent_duplicates = 0
+    repeated_phrases = 0
     quality_passed = True
     quality_failures: list[str] = []
     truncated = False
     if quality_check:
         hard = count_hard_notation(final_text)
         jargon = count_jargon(final_text)
+        adjacent_duplicates = count_adjacent_duplicate_words(final_text)
+        repeated_phrases = count_repeated_phrase_windows(final_text)
         if hard > 0:
             quality_passed = False
             quality_failures.append(f"hard_notation_count={hard}")
         if jargon > 0:
             quality_passed = False
             quality_failures.append(f"jargon_count={jargon}")
+        if adjacent_duplicates > 0:
+            quality_passed = False
+            quality_failures.append(
+                f"adjacent_duplicate_count={adjacent_duplicates}"
+            )
+        if repeated_phrases > 0:
+            quality_passed = False
+            quality_failures.append(
+                f"repeated_phrase_count={repeated_phrases}"
+            )
         # Truncation check: stopped_on_eos=False means generation
         # hit max_new_tokens without emitting EOS — caller should
         # either retry with a higher budget or surface the gen as
@@ -228,6 +274,8 @@ def postprocess(
         recovery_post_repair=recovery_post,
         hard_notation_count=hard,
         jargon_count=jargon,
+        adjacent_duplicate_count=adjacent_duplicates,
+        repeated_phrase_count=repeated_phrases,
         truncated=truncated,
         quality_passed=quality_passed,
         quality_failures=quality_failures,
@@ -239,6 +287,8 @@ __all__ = [
     "postprocess",
     "count_hard_notation",
     "count_jargon",
+    "count_adjacent_duplicate_words",
+    "count_repeated_phrase_windows",
     "build_prompt_from_routing",
     "route_by_compilability",
 ]

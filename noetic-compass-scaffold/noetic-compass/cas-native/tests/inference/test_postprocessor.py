@@ -6,8 +6,10 @@ import pytest
 from cas_native.inference.postprocessor import (
     PostprocessResult,
     postprocess,
+    count_adjacent_duplicate_words,
     count_hard_notation,
     count_jargon,
+    count_repeated_phrase_windows,
 )
 
 
@@ -33,6 +35,28 @@ def test_count_jargon_catches_operator_word() -> None:
 def test_count_jargon_clean_text() -> None:
     text = "When you pay attention, two ideas integrate."
     assert count_jargon(text) == 0
+
+
+def test_count_adjacent_duplicate_words_flags_visible_stutter() -> None:
+    text = "The concept concept is broken."
+    assert count_adjacent_duplicate_words(text) == 1
+
+
+def test_count_adjacent_duplicate_words_clean_text() -> None:
+    text = "The concept is clean."
+    assert count_adjacent_duplicate_words(text) == 0
+
+
+def test_count_repeated_phrase_windows_flags_looping_phrase() -> None:
+    text = (
+        "A memory or association appeared, memory or association returned, "
+        "and memory or association stayed."
+    )
+    assert count_repeated_phrase_windows(text) >= 1
+
+
+def test_count_repeated_phrase_windows_clean_text() -> None:
+    assert count_repeated_phrase_windows("A clean short sentence.") == 0
 
 
 # ---------------------------------------------------------------------------
@@ -132,6 +156,29 @@ def test_postprocess_flags_jargon_leak() -> None:
     )
     assert result.quality_passed is False
     assert any("jargon_count" in f for f in result.quality_failures)
+
+
+def test_postprocess_flags_adjacent_duplicate_words() -> None:
+    result = postprocess(
+        source_cas="^1^P",
+        raw_gen="The concept concept is visible.",
+    )
+    assert result.quality_passed is False
+    assert result.adjacent_duplicate_count == 1
+    assert any("adjacent_duplicate_count" in f for f in result.quality_failures)
+
+
+def test_postprocess_flags_repeated_phrase_loop() -> None:
+    result = postprocess(
+        source_cas="^8^P",
+        raw_gen=(
+            "A memory or association appeared, memory or association returned, "
+            "and memory or association stayed."
+        ),
+    )
+    assert result.quality_passed is False
+    assert result.repeated_phrase_count >= 1
+    assert any("repeated_phrase_count" in f for f in result.quality_failures)
 
 
 def test_postprocess_flags_truncation_when_eos_not_reached() -> None:
