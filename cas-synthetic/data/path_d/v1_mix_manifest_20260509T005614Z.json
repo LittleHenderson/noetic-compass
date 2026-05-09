@@ -1,0 +1,259 @@
+{
+  "tag": "v1",
+  "created_at": "2026-05-09T00:56:14Z",
+  "inclusion_rules": {
+    "version": "v1_path_d_2026_05_08",
+    "slices_included": [
+      {
+        "slice_id": "wave2_5_cas_to_english",
+        "task_type": "cas_to_english",
+        "files": [
+          "cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260508T203848Z.jsonl",
+          "cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260509T002355Z.jsonl",
+          "cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260509T002541Z.jsonl"
+        ],
+        "sfe_certified": true,
+        "rationale": "Wave 2.5 SFE-gated, all 4 promotion gates passed, human review PASS."
+      },
+      {
+        "slice_id": "phase1_invalid_to_explanation",
+        "task_type": "invalid_to_explanation",
+        "files": [
+          "cas-synthetic/data/path_d/wave3_phase1_aggregate_20260508.jsonl"
+        ],
+        "sfe_certified": false,
+        "rationale": "Phase 1 audit (2026-05-08) flagged this slot CLEAN. The other 3 phase 1 slots are NEEDS_REWORK."
+      }
+    ],
+    "slices_excluded": [
+      {
+        "slice_id": "phase1_cas_to_english",
+        "reason": "Replaced by wave2_5_cas_to_english (SFE-gated, structurally certified)."
+      },
+      {
+        "slice_id": "phase1_english_to_cas",
+        "reason": "Phase 1 audit found 100% verbatim-copy. Needs SFE-equivalent rebuild before inclusion."
+      },
+      {
+        "slice_id": "phase1_invalid_to_corrected",
+        "reason": "Phase 1 audit found ~30% unrelated-correction. Needs SFE-equivalent rebuild before inclusion."
+      }
+    ]
+  },
+  "inclusion_rules_hash": "efe80fc8b790d7e1",
+  "split_seed": 20260509,
+  "split_fractions": {
+    "train": 0.9,
+    "val": 0.05,
+    "test": 0.05
+  },
+  "min_stratum_size": 20,
+  "loaded_counts": {
+    "cas_to_english_raw": 5268,
+    "cas_to_english_after_dedupe": 5268,
+    "cas_to_english_dups_dropped": 0,
+    "invalid_to_explanation_raw": 2985,
+    "invalid_to_explanation_after_dedupe": 2951,
+    "invalid_to_explanation_dups_dropped": 34,
+    "total_after_dedupe": 8219
+  },
+  "split_counts": {
+    "train": 7395,
+    "val": 412,
+    "test": 412
+  },
+  "split_diagnostics": {
+    "min_stratum_size": 20,
+    "seed": 20260509,
+    "fractions": {
+      "train": 0.9,
+      "val": 0.05,
+      "test": 0.05
+    },
+    "strata": [
+      {
+        "task_type": "cas_to_english",
+        "grammar_category_or_error_class": "binary_composition",
+        "n": 733,
+        "train": 659,
+        "val": 37,
+        "test": 37
+      },
+      {
+        "task_type": "cas_to_english",
+        "grammar_category_or_error_class": "cross_register_omega",
+        "n": 579,
+        "train": 521,
+        "val": 29,
+        "test": 29
+      },
+      {
+        "task_type": "cas_to_english",
+        "grammar_category_or_error_class": "diagram_export",
+        "n": 417,
+        "train": 375,
+        "val": 21,
+        "test": 21
+      },
+      {
+        "task_type": "cas_to_english",
+        "grammar_category_or_error_class": "fractal_sequence",
+        "n": 466,
+        "train": 420,
+        "val": 23,
+        "test": 23
+      },
+      {
+        "task_type": "cas_to_english",
+        "grammar_category_or_error_class": "inversion",
+        "n": 63,
+        "train": 57,
+        "val": 3,
+        "test": 3
+      },
+      {
+        "task_type": "cas_to_english",
+        "grammar_category_or_error_class": "let_binding",
+        "n": 441,
+        "train": 397,
+        "val": 22,
+        "test": 22
+      },
+      {
+        "task_type": "cas_to_english",
+        "grammar_category_or_error_class": "meta_logic_relation",
+        "n": 710,
+        "train": 638,
+        "val": 36,
+        "test": 36
+      },
+      {
+        "task_type": "cas_to_english",
+        "grammar_category_or_error_class": "recipe",
+        "n": 481,
+        "train": 433,
+        "val": 24,
+        "test": 24
+      },
+      {
+        "task_type": "cas_to_english",
+        "grammar_category_or_error_class": "rpm_chain",
+        "n": 359,
+        "train": 323,
+        "val": 18,
+        "test": 18
+      },
+      {
+        "task_type": "cas_to_english",
+        "grammar_category_or_error_class": "state_literal",
+        "n": 1019,
+        "train": 917,
+        "val": 51,
+        "test": 51
+      },
+      {
+        "task_type": "invalid_to_explanation",
+        "grammar_category_or_error_class": "admissibility",
+        "n": 665,
+        "train": 599,
+        "val": 33,
+        "test": 33
+      },
+      {
+        "task_type": "invalid_to_explanation",
+        "grammar_category_or_error_class": "fractal",
+        "n": 373,
+        "train": 335,
+        "val": 19,
+        "test": 19
+      },
+      {
+        "task_type": "invalid_to_explanation",
+        "grammar_category_or_error_class": "meta_logic",
+        "n": 349,
+        "train": 315,
+        "val": 17,
+        "test": 17
+      },
+      {
+        "task_type": "invalid_to_explanation",
+        "grammar_category_or_error_class": "parse",
+        "n": 460,
+        "train": 414,
+        "val": 23,
+        "test": 23
+      },
+      {
+        "task_type": "invalid_to_explanation",
+        "grammar_category_or_error_class": "recipe",
+        "n": 631,
+        "train": 567,
+        "val": 32,
+        "test": 32
+      },
+      {
+        "task_type": "invalid_to_explanation",
+        "grammar_category_or_error_class": "rpm",
+        "n": 473,
+        "train": 425,
+        "val": 24,
+        "test": 24
+      }
+    ],
+    "small_strata_train_only": []
+  },
+  "sanity": {
+    "total_rows": 8219,
+    "task_distribution": {
+      "cas_to_english": 5268,
+      "invalid_to_explanation": 2951
+    },
+    "char_stats_per_task": {
+      "cas_to_english": {
+        "input_chars": {
+          "n": 5268,
+          "min": 2,
+          "max": 155,
+          "mean": 38.87509491268033,
+          "p50": 26,
+          "p95": 155
+        },
+        "target_chars": {
+          "n": 5268,
+          "min": 22,
+          "max": 596,
+          "mean": 176.6854593773728,
+          "p50": 140,
+          "p95": 373
+        }
+      },
+      "invalid_to_explanation": {
+        "input_chars": {
+          "n": 2951,
+          "min": 119,
+          "max": 621,
+          "mean": 239.2361911216537,
+          "p50": 197,
+          "p95": 621
+        },
+        "target_chars": {
+          "n": 2951,
+          "min": 182,
+          "max": 521,
+          "mean": 330.03117587258555,
+          "p50": 328,
+          "p95": 406
+        }
+      }
+    },
+    "cas_to_english_target_hard_notation_hits": 0,
+    "cas_to_english_target_jargon_hits": 0,
+    "verbatim_input_equals_target": 0,
+    "cross_task_source_id_overlap": 0
+  },
+  "outputs": {
+    "train": "cas-synthetic\\data\\path_d\\v1_mix_train.jsonl",
+    "val": "cas-synthetic\\data\\path_d\\v1_mix_val.jsonl",
+    "test": "cas-synthetic\\data\\path_d\\v1_mix_test.jsonl"
+  }
+}

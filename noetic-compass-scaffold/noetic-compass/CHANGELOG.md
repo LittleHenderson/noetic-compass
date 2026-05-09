@@ -1,5 +1,97 @@
 # Noetic Compass — Progress Log
 
+## Session 60: Path D Wave 4 — v1 training mix aggregator + first v1 mix output (May 8, 2026)
+
+**Headline.** Aggregator script `cas-synthetic/scripts/build_path_d_v1_mix.py` lands; first run produces the v1 training mix (8,219 rows) with deterministic 90/5/5 splits stratified by `(task_type, grammar_category_or_error_class)`. Two promotion-grade slots wired in; two broken slots documented as gaps with rebuild scheduled.
+
+**v1 mix composition (inclusion rules hash `efe80fc8b790d7e1`):**
+
+| Slot | Source | Rows | Notes |
+|---|---|---:|---|
+| cas_to_english | Wave 2.5 SFE-certified (Session 59) | 5,268 | All 4 promotion gates + human review PASS |
+| invalid_to_explanation | Phase 1 audit-clean | 2,951 | Phase 1 audit-clean; 34 cross-file duplicates dropped |
+| **Total** | | **8,219** | |
+
+**Excluded slots (documented gaps, scheduled for SFE-equivalent rebuild):**
+
+- `phase1_english_to_cas` — 100% verbatim-copy in phase 1 audit. Needs rebuild via compiler-validation gate.
+- `phase1_invalid_to_corrected` — ~30% unrelated-correction in phase 1 audit. Needs rebuild via "compiler validates the correction" gate.
+
+**Splits (deterministic seed 20260509):**
+
+- train: 7,395 (89.97%)
+- val: 412 (5.01%)
+- test: 412 (5.01%)
+- Every (task, category) stratum got proper val/test allocations; no train-only fallbacks needed (smallest stratum n=78 ≥ min_stratum_size 20).
+
+**Schema (unified across tasks):**
+
+```json
+{
+  "row_id": "v1mix_<task>_<seq>",
+  "task_type": "cas_to_english" | "invalid_to_explanation",
+  "input": "<raw payload only — no instructions>",
+  "target": "<model target>",
+  "split": "train" | "val" | "test",
+  "meta": {
+    "source_slice": "wave2_5" | "phase1",
+    "source_id": "...",
+    "grammar_category_or_error_class": "...",
+    "source_path": "...",
+    "sfe_certified": true | false,
+    "sfe_tries": null | int
+  }
+}
+```
+
+Decision: input is the **raw task payload only** (CAS expression, OR invalid CAS + compiler error). Trainer wraps with task-specific prompts at training time. This keeps the corpus model-agnostic: same data trains a CAS-Native model with custom prompt formatting OR a standard transformer with `<<TASK>>` tokens.
+
+**Sanity-check red flags (must all be 0; all PASS):**
+
+| Check | Count |
+|---|---:|
+| `cas_to_english` target hard-notation hits | 0 |
+| `cas_to_english` target jargon hits | 0 |
+| Verbatim input==target rows (parrot regression) | 0 |
+
+**Char-length stats (chars, trainer should tokenize for true counts):**
+
+| Task | Field | Mean | p50 | p95 | Max |
+|---|---|---:|---:|---:|---:|
+| cas_to_english | input | 39 | 26 | 155 | 155 |
+| cas_to_english | target | 177 | 140 | 373 | 596 |
+| invalid_to_explanation | input | 239 | 197 | 621 | 621 |
+| invalid_to_explanation | target | 330 | 328 | 406 | 521 |
+
+**Aggregator design notes:**
+
+- Inclusion rules are first-class: every change to "what goes into the mix" updates the rules dict and produces a new `inclusion_rules_hash`. Re-running with same rules + same seed produces byte-identical splits.
+- Within-task dedupe by `source_id`. Cross-task collisions deliberately allowed (cas_to_english seed namespace ≠ invalid_to_explanation seed namespace).
+- Stratification uses `(task_type, grammar_category_or_error_class)` as the stratum key. Strata smaller than `--min-stratum-size` (default 20) go entirely to train, listed in `split_diagnostics.small_strata_train_only`.
+- The aggregator is the durable artifact. Each new corpus generation cycle (rebuilt english_to_cas, external dialogue data, etc.) gets added to the inclusion rules and re-run; no manual re-aggregation work.
+
+**Files of record:**
+
+- `cas-synthetic/scripts/build_path_d_v1_mix.py` (aggregator)
+- `cas-synthetic/data/path_d/v1_mix_train.jsonl` (7,395 rows)
+- `cas-synthetic/data/path_d/v1_mix_val.jsonl` (412 rows)
+- `cas-synthetic/data/path_d/v1_mix_test.jsonl` (412 rows)
+- `cas-synthetic/data/path_d/v1_mix_manifest_20260509T005614Z.json`
+
+**Status discipline:**
+
+- Aggregator: WIRED + WORKS + PRODUCED CORPUS.
+- v1 training mix (8,219 rows): VALIDATED STRUCTURALLY (all sanity red flags = 0).
+- v1 mix as a *training-quality* artifact: NOT yet validated against a trained model. The first model trained on this corpus will be the empirical test.
+- v1 mix is **incomplete by design** (2 of 4 Path D slots; no external dialogue data yet). Do not describe as "complete" or "v1 training-ready" until the gaps close.
+
+**Open follow-ups:**
+
+- english_to_cas rebuild via compiler-validation gate (~$30, ~3h).
+- invalid_to_corrected rebuild via "compiler validates the correction" gate (~$30, ~3h).
+- External dialogue data integration (per dataset scout reports, conversational discipline mix).
+- First v1 model training run on this corpus (validates whether the structural quality translates to model behavior).
+
 ## Session 59: Path D Wave 2.5 promoted — first end-to-end SFE-gated CAS-to-English corpus (May 8, 2026)
 
 **Headline.** 5,268 SFE-certified CAS-to-English records produced via the model-in-loop pipeline (Haiku draft + SFE round-trip gate + self-correction retries). All four promotion gates clear; human review pack thumbs-upped. **Wave 2.5 promoted as the v1 cas_to_english training mix candidate.**
