@@ -232,6 +232,82 @@ _RELATION_ROOT: dict[str, str] = {
 }
 
 
+# Idiom-pattern rewrites for cross-relation phrase swaps. When the
+# rendered text uses a verb-into-group idiom from the WRONG relation
+# (e.g., "X partition into Y groups" where source says CoverOf), we
+# rewrite the whole idiom rather than just swapping the root word
+# (the bare swap "partition" -> "cover" produced grammatically rough
+# output like "thinking cover into two groups" — the audit on commit
+# d5e0864 flagged this and asked for "are covered by" passive voice).
+#
+# Patterns are tried IN ORDER; the first matching pattern is applied
+# and supersedes the bare word swap. When no idiom pattern matches,
+# the bare swap (preserving suffix + case) is used as the fallback.
+_IDIOM_REWRITES: dict[tuple[str, str], list[tuple[re.Pattern, str]]] = {
+    ("PartitionOf", "CoverOf"): [
+        # "X partitions into N groups" -> "X is covered by N groups"
+        # (3rd-person singular subject)
+        (
+            re.compile(
+                r"\bpartitions\s+into\s+(\w+\s+(?:groups?|clusters?|sets?))\b",
+                re.IGNORECASE,
+            ),
+            r"is covered by \1",
+        ),
+        # "X partitioned into N groups" -> "X covered by N groups"
+        (
+            re.compile(
+                r"\bpartitioned\s+into\s+(\w+\s+(?:groups?|clusters?|sets?))\b",
+                re.IGNORECASE,
+            ),
+            r"covered by \1",
+        ),
+        # "X partition into N groups" -> "X are covered by N groups"
+        # (collective/plural subject — matches the audit's record-18
+        # case where "ten ways of thinking partition into two groups"
+        # should become "are covered by two groups")
+        (
+            re.compile(
+                r"\bpartition\s+into\s+(\w+\s+(?:groups?|clusters?|sets?))\b",
+                re.IGNORECASE,
+            ),
+            r"are covered by \1",
+        ),
+        # "by partitioning" -> "by covering"
+        (
+            re.compile(r"\bby\s+partitioning\b", re.IGNORECASE),
+            "by covering",
+        ),
+    ],
+    ("CoverOf", "PartitionOf"): [
+        # "X are covered by N groups" -> "X partition into N groups"
+        (
+            re.compile(
+                r"\bare\s+covered\s+by\s+(\w+\s+(?:groups?|clusters?|sets?))\b",
+                re.IGNORECASE,
+            ),
+            r"partition into \1",
+        ),
+        # "X is covered by N groups" -> "X partitions into N groups"
+        (
+            re.compile(
+                r"\bis\s+covered\s+by\s+(\w+\s+(?:groups?|clusters?|sets?))\b",
+                re.IGNORECASE,
+            ),
+            r"partitions into \1",
+        ),
+        # "by covering" -> "by partitioning"
+        (
+            re.compile(r"\bby\s+covering\b", re.IGNORECASE),
+            "by partitioning",
+        ),
+    ],
+    # Product idioms are less common as drift targets in the audit;
+    # fall back to bare-word swap for Product mismatches until we have
+    # evidence a phrase-level rewrite would help.
+}
+
+
 def _find_first_relation_word(text: str) -> Optional[tuple[str, re.Match]]:
     """Return (relation_type, match) for the earliest relation word
     found in ``text``, or None if no relation word is present."""
@@ -243,6 +319,36 @@ def _find_first_relation_word(text: str) -> Optional[tuple[str, re.Match]]:
         if earliest is None or m.start() < earliest[1].start():
             earliest = (rel_type, m)
     return earliest
+
+
+def _try_idiom_rewrite(
+    text: str, found_relation: str, expected_relation: str,
+) -> Optional[tuple[str, str, str]]:
+    """Try to apply an idiom-level rewrite for the (found, expected)
+    relation pair. Returns ``(new_text, found_phrase, new_phrase)``
+    when a pattern matched; ``None`` when no idiom matched and the
+    caller should fall back to the bare word swap.
+
+    Patterns are tried in declaration order; the first match wins.
+    Only the first occurrence of the matched pattern is rewritten
+    (count=1) so we don't accidentally over-edit a long passage.
+    """
+    key = (found_relation, expected_relation)
+    patterns = _IDIOM_REWRITES.get(key)
+    if not patterns:
+        return None
+    for pat, replacement in patterns:
+        m = pat.search(text)
+        if m is None:
+            continue
+        new_text = pat.sub(replacement, text, count=1)
+        # Compute the actual replacement string for logging. ``pat.sub``
+        # returns the substituted text, but the substitution we want
+        # to log is the post-expansion form of ``replacement`` for
+        # this match.
+        new_phrase = m.expand(replacement) if "\\" in replacement else replacement
+        return new_text, m.group(0), new_phrase
+    return None
 
 
 def _swap_relation_root(
@@ -384,18 +490,34 @@ def repair_meta_logic_rendering(
         log.found_relation_pre_repair = None
         log.relation_matched_pre_repair = False
 
-    # ---- Phase 1 repair: relation-type word only ----
+    # ---- Phase 1 repair: relation-type word/phrase ----
+    # Two-stage repair: first try an idiom-pattern rewrite for the
+    # (found, expected) relation pair (e.g., "X partition into N
+    # groups" -> "X are covered by N groups" for CoverOf source).
+    # If no idiom pattern matches, fall back to the bare suffix-
+    # preserving word swap (e.g., partitions -> covers).
     text = rendered
     if found_pre is not None and found_pre[0] != relation.relation_type:
         rel_type_found, m = found_pre
-        new_word = _swap_relation_root(m, relation.relation_type)
-        log.repairs.append(MetaLogicRepair(
-            kind="relation_type",
-            source_relation=relation.relation_type,
-            found_word=m.group(0),
-            new_word=new_word,
-        ))
-        text = text[: m.start()] + new_word + text[m.end():]
+        idiom = _try_idiom_rewrite(text, rel_type_found, relation.relation_type)
+        if idiom is not None:
+            new_text, found_phrase, new_phrase = idiom
+            log.repairs.append(MetaLogicRepair(
+                kind="relation_phrase",
+                source_relation=relation.relation_type,
+                found_word=found_phrase,
+                new_word=new_phrase,
+            ))
+            text = new_text
+        else:
+            new_word = _swap_relation_root(m, relation.relation_type)
+            log.repairs.append(MetaLogicRepair(
+                kind="relation_type",
+                source_relation=relation.relation_type,
+                found_word=m.group(0),
+                new_word=new_word,
+            ))
+            text = text[: m.start()] + new_word + text[m.end():]
 
     # ---- Post-repair detection ----
     found_post = _find_first_relation_word(text)

@@ -123,7 +123,9 @@ def test_repair_no_changes_when_relation_already_correct():
 
 def test_repair_cover_rendered_as_partition_record_18_pattern():
     """Audit's record-18 finding: source is CoverOf but rendered
-    text says 'partition'. Phase 1 must rewrite to 'cover'."""
+    text says 'partitions into N groups'. With the idiom-rewrite
+    layer (audit d5e0864 follow-up), this should produce passive
+    'is covered by N groups' — not bare 'covers into N groups'."""
     cas = (
         "CoverOf(Noetics, NoeticCluster{^1, ^2, ^3}, "
         "NoeticCluster{^4, ^5, ^6})"
@@ -133,14 +135,13 @@ def test_repair_cover_rendered_as_partition_record_18_pattern():
         "two groups."
     )
     out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
-    assert "covers" in out
-    assert "partitions" not in out
+    # New behavior: idiom rewrite produces passive voice.
+    assert "is covered by two groups" in out
+    assert "partitions into" not in out
     assert log.relation_matched_pre_repair is False
     assert log.relation_matched_post_repair is True
     assert len(log.repairs) == 1
-    assert log.repairs[0].kind == "relation_type"
-    assert log.repairs[0].found_word == "partitions"
-    assert log.repairs[0].new_word == "covers"
+    assert log.repairs[0].kind == "relation_phrase"
 
 
 def test_repair_partition_rendered_as_cover():
@@ -294,6 +295,98 @@ def test_no_member_drift_when_all_indicators_present():
 # ---------------------------------------------------------------------------
 # Log structure
 # ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# Idiom-pattern rewrites (CoverOf grammar polish — audit d5e0864)
+# ---------------------------------------------------------------------------
+
+def test_idiom_rewrites_partition_into_to_are_covered_by():
+    """Audit d5e0864 fix: 'X partition into N groups' should rewrite
+    to 'X are covered by N groups' for CoverOf source, not bare
+    'cover into N groups' as Phase 1 word-swap produced."""
+    cas = (
+        "CoverOf(Noetics, NoeticCluster{^1, ^2, ^3, ^4, ^5, ^6, ^7}, "
+        "NoeticCluster{^0, ^8, ^9})"
+    )
+    rendered = (
+        "The ten ways of thinking partition into two groups: "
+        "one group contains paying attention. The second contains a thought."
+    )
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert "are covered by two groups" in out
+    assert "partition into two groups" not in out
+    # The repair was a phrase-level rewrite, not a bare word swap.
+    assert log.repairs[0].kind == "relation_phrase"
+    assert log.relation_matched_post_repair is True
+
+
+def test_idiom_rewrites_partitions_into_to_is_covered_by():
+    """3rd-person singular verb form gets passive 'is covered by'."""
+    cas = "CoverOf(Noetics, NoeticCluster{^1}, NoeticCluster{^2})"
+    rendered = "This set partitions into two groups."
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert "is covered by two groups" in out
+    assert "partitions into" not in out
+    assert log.repairs[0].kind == "relation_phrase"
+
+
+def test_idiom_rewrites_partitioned_into_to_covered_by():
+    """Past participle gets 'covered by' (no auxiliary)."""
+    cas = "CoverOf(Noetics, NoeticCluster{^1}, NoeticCluster{^2})"
+    rendered = "The set was partitioned into two clusters."
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert "was covered by two clusters" in out
+    assert "partitioned into" not in out
+
+
+def test_idiom_rewrites_by_partitioning_to_by_covering():
+    """Verbal-noun form 'partitioning' becomes 'covering'."""
+    cas = "CoverOf(Noetics, NoeticCluster{^1}, NoeticCluster{^2})"
+    rendered = "By partitioning the set, we get two regions."
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert "By covering" in out or "by covering" in out
+    assert "partitioning" not in out
+
+
+def test_idiom_rewrites_reverse_are_covered_by_to_partition():
+    """Reverse direction: source PartitionOf, rendered uses CoverOf
+    passive idiom -> rewrite to active partition idiom."""
+    cas = "PartitionOf(Noetics, NoeticCluster{^1}, NoeticCluster{^2})"
+    rendered = "The ten ways of thinking are covered by two groups."
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert "partition into two groups" in out
+    assert "are covered by" not in out
+
+
+def test_idiom_rewrites_reverse_is_covered_by_to_partitions():
+    cas = "PartitionOf(Noetics, NoeticCluster{^1}, NoeticCluster{^2})"
+    rendered = "This set is covered by two groups."
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert "partitions into two groups" in out
+    assert "is covered by" not in out
+
+
+def test_idiom_falls_back_to_bare_swap_when_no_pattern_matches():
+    """If the rendered text has a relation word but doesn't match
+    any idiom pattern, the bare suffix-preserving word swap should
+    still fire as the fallback."""
+    cas = "CoverOf(Noetics, NoeticCluster{^1}, NoeticCluster{^2})"
+    rendered = "The partitions of this set are interesting."
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert "covers" in out
+    assert "partitions" not in out
+    # No idiom pattern matched — fell back to bare word swap.
+    assert log.repairs[0].kind == "relation_type"
+
+
+def test_idiom_does_not_fire_when_relation_already_correct():
+    """When source matches rendered, no repair attempt at all."""
+    cas = "CoverOf(Noetics, NoeticCluster{^1}, NoeticCluster{^2})"
+    rendered = "The set is covered by two groups."
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert out == rendered
+    assert log.n_repairs == 0
+
 
 def test_log_to_dict_serializable():
     cas = (
