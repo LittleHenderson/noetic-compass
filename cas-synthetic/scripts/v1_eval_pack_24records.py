@@ -91,6 +91,14 @@ DEFAULT_CHECKPOINT_DIR = Path(
 # prepend_task_token=True). Set to False for the original v1 path
 # (preserves comparability with the prior 24-record audit log).
 USE_V1C_TASK_TOKENS = bool(int(os.environ.get("USE_V1C_TASK_TOKENS", "0")))
+# When set, runs the inference-side rpm_chain decoder seed: if routing
+# says ``cas_to_english`` AND source CAS is a let-binding shape, prime
+# the decoder with ``"Let <first_var_name> name "`` so the model is
+# forced onto the let-binding silhouette. Per the v1c human audit
+# (commit 0d641df), the [VALID] task token alone left rpm_chain hijack
+# at 3/3; this seed is the proven Option A diagnostic patch and the
+# next-experiment recommendation from the audit.
+USE_V1C_RPM_SEED = bool(int(os.environ.get("USE_V1C_RPM_SEED", "0")))
 CHECKPOINT_DIR_OVERRIDE = os.environ.get("CHECKPOINT_DIR")
 CHECKPOINT_DIR = Path(CHECKPOINT_DIR_OVERRIDE) if CHECKPOINT_DIR_OVERRIDE else DEFAULT_CHECKPOINT_DIR
 VAL_PATH = REPO_ROOT / "cas-synthetic" / "data" / "path_d" / "v1_mix_nlgen_val.jsonl"
@@ -104,6 +112,7 @@ def _utc_now_compact() -> str:
 def load_checkpoint():
     print(f"loading checkpoint from {CHECKPOINT_DIR}")
     print(f"  USE_V1C_TASK_TOKENS={USE_V1C_TASK_TOKENS}")
+    print(f"  USE_V1C_RPM_SEED={USE_V1C_RPM_SEED}")
     tokenizer = HybridCASTokenizer.load(CHECKPOINT_DIR / "tokenizer.json")
     bpe = CHECKPOINT_DIR / "english_bpe.json"
     if bpe.exists():
@@ -347,6 +356,7 @@ def main() -> int:
                 use_cas_prefix=True,
                 device=device,
                 prepend_task_token=USE_V1C_TASK_TOKENS,
+                seed_rpm_silhouette=USE_V1C_RPM_SEED,
             )
 
         pp = r.postprocess_result
@@ -371,6 +381,8 @@ def main() -> int:
             "n_var_subs": len(pp.repair_log.variable_substitutions) if pp.repair_log else 0,
             "n_steps": r.generation_metadata.get("n_steps"),
             "max_new_tokens": r.generation_metadata.get("max_new_tokens"),
+            "seed_decoder_text": r.seed_decoder_text,
+            "rpm_seed_fired": r.seed_decoder_text is not None,
         }
         results.append(result)
 
