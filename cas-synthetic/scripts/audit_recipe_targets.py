@@ -85,7 +85,9 @@ _LAMBDA_RX = re.compile(r"Λ\s*[·.]")
 _NOETIC_INDICATORS: dict[int, tuple[str, ...]] = {
     0: ("foundational thought", "an idea", "a thought", "in your head"),
     1: ("paying attention", "make up your mind", "cognitive attention",
-        "using your head"),
+        "using your head", "pay attention", "pays attention",
+        "paid attention", "give attention", "gives attention",
+        "given attention"),
     2: ("drawn to", "speaks to", "attracted toward", "drawn toward",
         "attracted"),
     3: ("rubs the wrong way", "averse to", "repelled", "pushed away",
@@ -93,7 +95,7 @@ _NOETIC_INDICATORS: dict[int, tuple[str, ...]] = {
         "averse"),
     4: ("struck a chord", "made an impression", "resonated",
         "resonates", "resonates with", "strikes a chord",
-        "strike a chord", "hits me"),
+        "strike a chord", "hits me", "resonance"),
     5: ("who one is", "who you are", "shaped by experiences",
         "shaped by experience", "sum of experiences", "sense of self",
         "one's sense of self", "one's experiences",
@@ -102,9 +104,9 @@ _NOETIC_INDICATORS: dict[int, tuple[str, ...]] = {
     7: ("muscle memory", "practice makes perfect", "practiced rhythm",
         "practice-based"),
     8: ("that reminds", "one thing leads", "triggered a memory",
-        "made me think"),
+        "made me think", "memory trigger", "memory triggers"),
     9: ("popped into mind", "popped to mind", "just clicked", "popped",
-        "clicked"),
+        "clicked", "came to me"),
 }
 _DOMAIN_INDICATORS: dict[str, tuple[str, ...]] = {
     "P": ("principled", "foundational"),
