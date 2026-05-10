@@ -445,15 +445,23 @@ def _detect_cluster_word_count(text: str) -> int:
 # are FLAGGED, not rewritten.
 _NOETIC_INDICATORS: dict[int, tuple[str, ...]] = {
     0: ("foundational thought", "an idea", "a thought", "in your head"),
-    1: ("paying attention", "make up your mind", "cognitive attention"),
-    2: ("drawn to", "speaks to", "attracted toward"),
-    3: ("rubs the wrong way", "averse to", "repelled"),
-    4: ("struck a chord", "made an impression", "resonated"),
-    5: ("who one is", "who you are", "shaped by experiences"),
+    1: ("paying attention", "make up your mind", "cognitive attention",
+        "using your head"),
+    2: ("drawn to", "speaks to", "attracted toward", "drawn toward",
+        "attracted"),
+    3: ("rubs the wrong way", "averse to", "repelled", "pushed away",
+        "an aversion", "the aversion", "aversion", "averse"),
+    4: ("struck a chord", "made an impression", "resonated",
+        "resonates", "resonates with", "strikes a chord",
+        "strike a chord", "hits me"),
+    5: ("who one is", "who you are", "shaped by experiences",
+        "shaped by experience", "sense of self",
+        "one's sense of self", "one's experiences"),
     6: ("breaking it down", "unpacking", "pulling apart"),
     7: ("muscle memory", "practice makes perfect", "practiced rhythm"),
-    8: ("that reminds", "one thing leads", "triggered a memory"),
-    9: ("popped into mind", "just clicked", "popped"),
+    8: ("that reminds", "one thing leads", "triggered a memory",
+        "made me think"),
+    9: ("popped into mind", "just clicked", "popped", "clicked"),
 }
 
 

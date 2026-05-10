@@ -255,8 +255,32 @@ def build_recipe_prompt(row: dict) -> tuple[str, str]:
     return system, user
 
 
+_NOETIC_EXAMPLE_PER_K: dict[int, str] = {
+    0: 'a foundational thought / an idea',
+    1: 'paying attention / cognitive attention',
+    2: 'drawn to / speaks to',
+    3: 'an aversion / rubs the wrong way / pushed away',
+    4: 'struck a chord / made an impression / resonated',
+    5: 'who one is / shaped by experiences',
+    6: 'breaking it down / unpacking',
+    7: 'practiced rhythm / muscle memory / practice makes perfect',
+    8: 'triggered a memory / one thing leads to another / that reminds me',
+    9: 'popped into mind / just clicked',
+}
+
+
 def build_meta_logic_prompt(row: dict) -> tuple[str, str]:
-    """Meta-logic regen prompt: stress full membership listing."""
+    """Meta-logic regen prompt: force per-cluster numbered enumeration.
+
+    Per user directive 2026-05-10 (post v1d smoke 0/5): Haiku omits
+    1-2 members when enumerating 7-8 noetics in a flowing paragraph.
+    The fix is to make the enumeration MECHANICALLY HARDER TO SKIP —
+    explicit per-cluster member checklist, numbered format requirement,
+    and "do not summarize" / "do not say 'and others'" instructions.
+
+    Falls back to the older flowing-paragraph prompt only if the
+    source CAS doesn't parse as meta-logic (defensive).
+    """
     cas = row["cas_expression"]
     expected_rel = row["expected_relation"]
     rel_word = {
@@ -264,22 +288,59 @@ def build_meta_logic_prompt(row: dict) -> tuple[str, str]:
         "CoverOf": "cover",
         "Product": "product",
     }[expected_rel]
+    # Parse source clusters from the audit_meta_logic module (which
+    # already imports parse_meta_logic at module load time).
+    audit_mod = _load_audit_meta_logic()
+    parsed = audit_mod.parse_meta_logic(cas)
+    if parsed is None or not parsed.clusters:
+        # Defensive fallback — should not normally hit since the
+        # audit row already passed parse_meta_logic during audit.
+        system = _BASE_GUIDANCE
+        user = (
+            f"CAS expression (meta-logic relation, type: {expected_rel}):\n\n"
+            f"    {cas}\n\nRender in plain English."
+        )
+        return system, user
+
+    # Build per-cluster numbered enumeration scaffolding.
+    cluster_blocks: list[str] = []
+    for i, cluster in enumerate(parsed.clusters, start=1):
+        n_members = len(cluster.noetics)
+        member_lines: list[str] = []
+        for j, k in enumerate(cluster.noetics, start=1):
+            example = _NOETIC_EXAMPLE_PER_K.get(k, "")
+            member_lines.append(
+                f"    {j}. ^{k} — use a ^{k} colloquialism, "
+                f"e.g., \"{example}\""
+            )
+        block = (
+            f"Cluster {i} must contain EXACTLY {n_members} members:\n"
+            + "\n".join(member_lines)
+        )
+        cluster_blocks.append(block)
+    cluster_section = "\n\n".join(cluster_blocks)
+    n_clusters = len(parsed.clusters)
+
     system = _BASE_GUIDANCE
     user = (
         f"CAS expression (meta-logic relation, type: {expected_rel}):\n\n"
         f"    {cas}\n\n"
-        "Render this relation in plain English. EVERY Noetic in EVERY "
-        "cluster must be named via its colloquialism — do not omit any.\n\n"
-        f"{_NOETIC_ALIAS_TABLE}\n"
-        "Constraints:\n"
-        f"  - Use the relation word '{rel_word}' "
-        f"(matching the source's {expected_rel}).\n"
-        "  - Name the exact number of clusters/groups present in source.\n"
-        "  - For each cluster, list EVERY ^N member by colloquialism. "
-        "If a cluster has 7 members, list 7. Do not summarize.\n"
-        "  - Do not add Noetics that aren't in the source clusters.\n\n"
-        "Reply with ONLY the English paraphrase. No preamble, no list, "
-        "no quotes."
+        f"You are rendering a {expected_rel} relation. Use the relation "
+        f"word '{rel_word}'. Name EXACTLY {n_clusters} clusters/groups.\n\n"
+        f"{cluster_section}\n\n"
+        "FORMAT REQUIREMENTS (these are the load-bearing instructions):\n"
+        "  - Use a numbered or semicolon-separated list of members "
+        "WITHIN each cluster description. Do not flow members into a "
+        "single paragraph clause.\n"
+        "  - Do NOT summarize a cluster. Do NOT write 'and others', "
+        "'and so on', 'etc.', or 'and the rest'.\n"
+        "  - Do NOT omit any listed member. Every member above must "
+        "appear by colloquialism in the corresponding cluster.\n"
+        "  - Do NOT add Noetics that aren't in the source clusters.\n"
+        "  - Connect the clusters with a transition phrase appropriate "
+        f"to '{rel_word}' (e.g., 'partitions into', 'covers', "
+        "'the product of').\n\n"
+        "Reply with ONLY the English paraphrase. No preamble, no quotes."
     )
     return system, user
 
@@ -391,31 +452,50 @@ def regenerate_one_row(
                 "user_preview": user[:160] + "...",
             })
             break  # dry-run does not iterate retries
-        # Real API call
-        text, in_tok, out_tok = client.complete(
-            system=system,
-            user=user,
+        # Real API call. ApiCallResult has text/input_tokens/output_tokens
+        # /error_reason; the wrapper handles transient retries internally.
+        result = client.call(
             model=model,
-            max_tokens=400,
+            system_prompt=system,
+            user_message=user,
+            max_output_tokens=400,
             temperature=0.4,
         )
-        cost = cost_tracker.add(model, in_tok, out_tok)
-        passed, log = validator(audit_row, text.strip())
+        if result.text is None:
+            # API error path — record and try next attempt.
+            attempts.append({
+                "attempt": attempt_idx,
+                "model": model,
+                "input_tokens": int(result.input_tokens),
+                "output_tokens": int(result.output_tokens),
+                "cost_usd": 0.0,
+                "passed_strict": False,
+                "validator_log": {
+                    "reason": f"api_error: {result.error_reason}",
+                },
+                "candidate_target": None,
+            })
+            continue
+        cost = cost_tracker.add(
+            slot=category,
+            model=model,
+            input_tokens=int(result.input_tokens),
+            output_tokens=int(result.output_tokens),
+        )
+        text = (result.text or "").strip()
+        passed, log = validator(audit_row, text)
         attempts.append({
             "attempt": attempt_idx,
             "model": model,
-            "input_tokens": in_tok,
-            "output_tokens": out_tok,
+            "input_tokens": int(result.input_tokens),
+            "output_tokens": int(result.output_tokens),
             "cost_usd": cost,
             "passed_strict": passed,
-            "validator_log": log if not passed else {
-                # On pass we keep a small subset for compactness.
-                "passed": True,
-            },
-            "candidate_target": text.strip(),
+            "validator_log": log if not passed else {"passed": True},
+            "candidate_target": text,
         })
         if passed:
-            accepted_target = text.strip()
+            accepted_target = text
             accepted_log = log
             break
 
@@ -692,12 +772,12 @@ def main() -> int:
         )
         return 2
     client = phase1.AnthropicClient(api_key)
-    cost_tracker = phase1.CostTracker(cap_usd=args.cost_cap_usd)
+    cost_tracker = phase1.CostTracker(cost_cap_usd=args.cost_cap_usd)
     validators = {cat: make_validator(cat) for cat in categories}
 
     results: list[dict] = []
     for i, (cat, row) in enumerate(work, 1):
-        if cost_tracker.would_exceed_cap(reserve_usd=0.05):
+        if cost_tracker.would_exceed(projected_call_cost=0.05):
             print(
                 f"[cap] would exceed cost cap; stopping at row {i-1}/{len(work)}."
             )
@@ -732,7 +812,7 @@ def main() -> int:
             accepted = sum(1 for x in results if x["accepted"])
             print(
                 f"  [{i}/{len(work)}] accepted={accepted}, "
-                f"spend=${cost_tracker.total_usd:.3f}"
+                f"spend=${cost_tracker.total_cost_usd:.3f}"
             )
 
     paths = write_outputs(
@@ -740,14 +820,14 @@ def main() -> int:
         timestamp=timestamp,
         dry_run=False,
         summary_extra={
-            "spend_usd": round(cost_tracker.total_usd, 4),
+            "spend_usd": round(cost_tracker.total_cost_usd, 4),
             "model": args.model,
             "max_retries": args.max_retries,
             "by_category_queued": dict(by_cat_count),
         },
     )
     print()
-    print(f"Total spend: ${cost_tracker.total_usd:.3f}")
+    print(f"Total spend: ${cost_tracker.total_cost_usd:.3f}")
     print()
     print("Artifacts:")
     for k, v in paths.items():

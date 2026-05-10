@@ -1,0 +1,23 @@
+{
+  "timestamp": "20260510T164759Z",
+  "dry_run": false,
+  "total_rows_processed": 5,
+  "accepted": 0,
+  "rejected": 5,
+  "pass_rate_overall": 0.0,
+  "by_category": {
+    "meta_logic": {
+      "total": 5,
+      "accepted": 0,
+      "rejected": 5,
+      "pass_rate": 0.0,
+      "avg_attempts": 3.0
+    }
+  },
+  "spend_usd": 0.0159,
+  "model": "claude-haiku-4-5-20251001",
+  "max_retries": 3,
+  "by_category_queued": {
+    "meta_logic": 5
+  }
+}
