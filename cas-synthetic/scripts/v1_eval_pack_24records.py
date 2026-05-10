@@ -407,6 +407,10 @@ def main() -> int:
                 pp.generation_cleanup_log.to_dict()
                 if pp.generation_cleanup_log is not None else None
             ),
+            "fractal_repair_log": (
+                pp.fractal_repair_log.to_dict()
+                if pp.fractal_repair_log is not None else None
+            ),
         }
         results.append(result)
 
@@ -453,6 +457,28 @@ def main() -> int:
         f"needed cleanup ({cleanup_subs} substitution"
         f"{'' if cleanup_subs == 1 else 's'} total). "
         "Broad cleanup is a regression signal."
+    )
+
+    # Fractal verifier aggregate (Codex-team R&D directive 2026-05-10):
+    # log-only Phase 1, so we report parsed/cardinality/sequence
+    # diagnostics rather than substitution counts.
+    fractal_parsed = [
+        r for r in results
+        if (r.get("fractal_repair_log") or {}).get("sequence_parsed")
+    ]
+    fractal_card_match = sum(
+        1 for r in fractal_parsed
+        if (r.get("fractal_repair_log") or {}).get("cardinality_matches")
+    )
+    fractal_seq_match = sum(
+        1 for r in fractal_parsed
+        if (r.get("fractal_repair_log") or {}).get("sequence_matches")
+    )
+    print(
+        f"fractal_repair: {len(fractal_parsed)}/{len(results)} records "
+        f"parsed as fractal; cardinality_match {fractal_card_match}/"
+        f"{len(fractal_parsed)}; sequence_match {fractal_seq_match}/"
+        f"{len(fractal_parsed)}. Phase 1 is log-only."
     )
     return 0
 

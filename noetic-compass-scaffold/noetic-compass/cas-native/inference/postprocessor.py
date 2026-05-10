@@ -47,6 +47,10 @@ from cas_native.inference.generation_cleanup import (
     GenerationCleanupLog,
     cleanup_generation,
 )
+from cas_native.inference.fractal_repair import (
+    FractalRepairLog,
+    verify_fractal_rendering,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -147,6 +151,7 @@ class PostprocessResult:
     rpm_repair_log: Optional[RpmRepairLog] = None
     meta_logic_repair_log: Optional[MetaLogicRepairLog] = None
     generation_cleanup_log: Optional[GenerationCleanupLog] = None
+    fractal_repair_log: Optional[FractalRepairLog] = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -190,6 +195,10 @@ class PostprocessResult:
                 self.generation_cleanup_log.to_dict()
                 if self.generation_cleanup_log is not None else None
             ),
+            "fractal_repair_log": (
+                self.fractal_repair_log.to_dict()
+                if self.fractal_repair_log is not None else None
+            ),
         }
 
 
@@ -206,6 +215,7 @@ def postprocess(
     apply_rpm_repair: bool = True,
     apply_meta_logic_repair: bool = True,
     apply_generation_cleanup: bool = True,
+    apply_fractal_repair: bool = True,
     score_recovery: bool = True,
     quality_check: bool = True,
     stopped_on_eos: Optional[bool] = None,
@@ -285,6 +295,18 @@ def postprocess(
     if apply_generation_cleanup:
         final_text, cleanup_log = cleanup_generation(final_text)
 
+    # Phase 1 fractal verifier: log-only. Per Codex-team R&D directive
+    # 2026-05-10, the verifier produces evidence on records 13/14/15
+    # (Φ-sequence drift) without mutating the rendered text. The next
+    # round decides whether to retry, clean targets, or train. Gated
+    # on cas_to_english routing AND parse_fractal returning non-None.
+    fractal_log: Optional[FractalRepairLog] = None
+    if apply_fractal_repair and routing.task_type == "cas_to_english":
+        # Verifier returns the input verbatim — Phase 1 invariant.
+        _unchanged, fractal_log = verify_fractal_rendering(
+            source_cas=source_cas, rendered=final_text,
+        )
+
     recovery_pre: Optional[IdentifierRecoveryScore] = None
     recovery_post: Optional[IdentifierRecoveryScore] = None
     if score_recovery:
@@ -351,6 +373,7 @@ def postprocess(
         rpm_repair_log=rpm_log,
         meta_logic_repair_log=meta_logic_log,
         generation_cleanup_log=cleanup_log,
+        fractal_repair_log=fractal_log,
     )
 
 
