@@ -67,7 +67,14 @@ OUT_DIR = REPO_ROOT / "cas-synthetic/data/path_d"
 
 def audit_one_record(rec: dict) -> dict | None:
     """Run the verifier on one corpus row. Returns audit row when the
-    source is a fractal expression; ``None`` for non-fractal rows."""
+    source is a fractal expression; ``None`` for non-fractal rows.
+
+    Filters to cas_to_english only — fractal shapes also appear in
+    invalid_to_explanation rows where the target is an error
+    explanation, not a rendering of the sequence."""
+    task_type = rec.get("v1mix_task_type") or rec.get("task_type") or ""
+    if task_type and task_type != "cas_to_english":
+        return None
     cas = rec.get("cas_expression", "")
     target = rec.get("reply_text", "")
     if not cas or not target:
