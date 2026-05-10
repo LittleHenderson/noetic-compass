@@ -31,6 +31,7 @@ output (per ``feedback_grade_samples_dont_hand_procedure.md``).
 from __future__ import annotations
 
 import json
+import os
 import random
 import sys
 import textwrap
@@ -82,10 +83,16 @@ RECORDS_PER_BUCKET = 3
 SAMPLE_SEED = 20260509
 
 
-CHECKPOINT_DIR = Path(
+DEFAULT_CHECKPOINT_DIR = Path(
     r"D:\tksCAS-archive\runpod_runs\2026-05-09_session_61_v1_milestone"
     r"\runs\v1_path_d_PREFIX128_5ep_20260509T035024Z"
 )
+# Set to True to load a v1c checkpoint (TaskTokenExtendedTokenizer +
+# prepend_task_token=True). Set to False for the original v1 path
+# (preserves comparability with the prior 24-record audit log).
+USE_V1C_TASK_TOKENS = bool(int(os.environ.get("USE_V1C_TASK_TOKENS", "0")))
+CHECKPOINT_DIR_OVERRIDE = os.environ.get("CHECKPOINT_DIR")
+CHECKPOINT_DIR = Path(CHECKPOINT_DIR_OVERRIDE) if CHECKPOINT_DIR_OVERRIDE else DEFAULT_CHECKPOINT_DIR
 VAL_PATH = REPO_ROOT / "cas-synthetic" / "data" / "path_d" / "v1_mix_nlgen_val.jsonl"
 OUT_DIR = REPO_ROOT / "cas-synthetic" / "data" / "path_d"
 
@@ -96,10 +103,20 @@ def _utc_now_compact() -> str:
 
 def load_checkpoint():
     print(f"loading checkpoint from {CHECKPOINT_DIR}")
+    print(f"  USE_V1C_TASK_TOKENS={USE_V1C_TASK_TOKENS}")
     tokenizer = HybridCASTokenizer.load(CHECKPOINT_DIR / "tokenizer.json")
     bpe = CHECKPOINT_DIR / "english_bpe.json"
     if bpe.exists():
         tokenizer = tokenizer.with_english_bpe(bpe)
+    if USE_V1C_TASK_TOKENS:
+        from cas_native.training.tokenizer_task_tokens import (
+            extend_with_task_tokens,
+        )
+        tokenizer = extend_with_task_tokens(tokenizer)
+        print(
+            f"  v1c task tokens: VALID={tokenizer.task_token_ids.valid}, "
+            f"INVALID={tokenizer.task_token_ids.invalid}"
+        )
     vocab_size = int(tokenizer.vocab_size)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"  device={device}, vocab_size={vocab_size}")
@@ -329,6 +346,7 @@ def main() -> int:
                 sampling="greedy",
                 use_cas_prefix=True,
                 device=device,
+                prepend_task_token=USE_V1C_TASK_TOKENS,
             )
 
         pp = r.postprocess_result

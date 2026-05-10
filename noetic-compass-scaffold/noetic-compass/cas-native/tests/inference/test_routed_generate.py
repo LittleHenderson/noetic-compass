@@ -31,7 +31,7 @@ def _make_fake_generate_reply(
 
     def fake(*, model, tokenizer, prompt_text, cas_expression, register,
              max_new_tokens, sampling, temperature, top_p, use_cas_prefix,
-             device, seed_decoder_text=None):
+             device, seed_decoder_text=None, prepend_cas_prefix_token_id=None):
         captured["prompt_text"] = prompt_text
         captured["cas_expression"] = cas_expression
         captured["max_new_tokens"] = max_new_tokens
@@ -39,6 +39,7 @@ def _make_fake_generate_reply(
         captured["sampling"] = sampling
         captured["register"] = register
         captured["seed_decoder_text"] = seed_decoder_text
+        captured["prepend_cas_prefix_token_id"] = prepend_cas_prefix_token_id
         return {
             "reply_text": reply_text,
             "stopped_on_eos": stopped_on_eos,
@@ -359,6 +360,81 @@ def test_seed_rpm_silhouette_extracts_first_var_when_multiple_lets(monkeypatch):
     )
     # First let-binding wins.
     assert captured_seed["seed"] == "Let stageA0_5_0296 name "
+
+
+# ---------------------------------------------------------------------------
+# Option C v1c: prepend_task_token flag
+# ---------------------------------------------------------------------------
+
+class _FakeTaskTokenIds:
+    valid = 38683
+    invalid = 38684
+
+    def for_task_type(self, task_type: str) -> int:
+        if task_type == "cas_to_english":
+            return self.valid
+        if task_type == "invalid_to_explanation":
+            return self.invalid
+        raise ValueError(f"unknown task_type {task_type!r}")
+
+
+class _FakeTaskTokenizer:
+    """Minimal stub that satisfies the .task_token_ids contract for
+    routed_generate. Doesn't need to encode anything because
+    generate_reply is monkeypatched."""
+    task_token_ids = _FakeTaskTokenIds()
+
+
+def test_prepend_task_token_passes_VALID_id_for_cas_to_english(monkeypatch):
+    fake, captured = _make_fake_generate_reply()
+    monkeypatch.setattr(rg_module, "generate_reply", fake)
+    routed_generate(
+        model=None, tokenizer=_FakeTaskTokenizer(),
+        source_cas="^4^P|A",  # valid -> cas_to_english
+        sampling="greedy",
+        prepend_task_token=True,
+    )
+    assert captured["prepend_cas_prefix_token_id"] == 38683
+
+
+def test_prepend_task_token_passes_INVALID_id_for_invalid(monkeypatch):
+    fake, captured = _make_fake_generate_reply()
+    monkeypatch.setattr(rg_module, "generate_reply", fake)
+    routed_generate(
+        model=None, tokenizer=_FakeTaskTokenizer(),
+        source_cas="let X = ^0^P; X -> Y",  # undef Y -> invalid
+        sampling="greedy",
+        prepend_task_token=True,
+    )
+    assert captured["prepend_cas_prefix_token_id"] == 38684
+
+
+def test_prepend_task_token_default_false_passes_None(monkeypatch):
+    fake, captured = _make_fake_generate_reply()
+    monkeypatch.setattr(rg_module, "generate_reply", fake)
+    routed_generate(
+        model=None, tokenizer=_FakeTaskTokenizer(),
+        source_cas="^4^P|A",
+        sampling="greedy",
+        # prepend_task_token defaults to False
+    )
+    assert captured["prepend_cas_prefix_token_id"] is None
+
+
+def test_prepend_task_token_raises_when_tokenizer_lacks_task_token_ids(monkeypatch):
+    fake, _ = _make_fake_generate_reply()
+    monkeypatch.setattr(rg_module, "generate_reply", fake)
+
+    class _PlainTokenizer:
+        pass
+
+    with pytest.raises(RuntimeError, match="task_token_ids"):
+        routed_generate(
+            model=None, tokenizer=_PlainTokenizer(),
+            source_cas="^4^P|A",
+            sampling="greedy",
+            prepend_task_token=True,
+        )
 
 
 def test_result_to_dict_serializes_audit_friendly(monkeypatch):

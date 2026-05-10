@@ -151,6 +151,7 @@ def generate_reply(
     device: str | torch.device = "cpu",
     return_trace: bool = False,
     seed_decoder_text: Optional[str] = None,
+    prepend_cas_prefix_token_id: Optional[int] = None,
 ) -> dict[str, Any]:
     """Generate a reply by sampling from CASNativeModel + NLGenerationHead.
 
@@ -250,6 +251,18 @@ def generate_reply(
         encoder_outputs = encoder_out["hidden_states"]
         pooled = encoder_out["pooled_hidden_state"]
         bottleneck_z = _resolve_bottleneck_z(pooled, bottleneck_dim)
+
+    # Option C: prepend [VALID]/[INVALID] task token at cas_prefix_ids[0]
+    # for v1c+ checkpoints. The caller (routed_generate) decides which
+    # ID based on the compilability gate. Symmetric with the trainer's
+    # collator-time injection path.
+    if (
+        cas_prefix_ids
+        and prepend_cas_prefix_token_id is not None
+    ):
+        cas_prefix_ids = [int(prepend_cas_prefix_token_id)] + cas_prefix_ids
+        if len(cas_prefix_ids) > max_cas_prefix_len:
+            cas_prefix_ids = cas_prefix_ids[:max_cas_prefix_len]
 
     cas_prefix_tensor: Optional[torch.Tensor] = None
     cas_prefix_mask_tensor: Optional[torch.Tensor] = None

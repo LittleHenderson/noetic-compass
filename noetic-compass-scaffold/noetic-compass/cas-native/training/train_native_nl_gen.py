@@ -786,6 +786,21 @@ def run_training(args: argparse.Namespace) -> int:
         if english_bpe_path:
             tokenizer = tokenizer.with_english_bpe(english_bpe_path)
 
+        # Option C task-token overlay (commit ebd5be1 + this bundle).
+        # When --prepend-task-token is set, wrap the (already-extended)
+        # tokenizer with [VALID]/[INVALID] at IDs vocab_size and
+        # vocab_size+1. The wrapped tokenizer claims +2 vocab, which
+        # the model construction below picks up automatically.
+        prepend_task_token = bool(getattr(args, "prepend_task_token", False))
+        task_token_id_for_callback = None
+        wrapped_pre_task_vocab = int(tokenizer.vocab_size)
+        if prepend_task_token:
+            from cas_native.training.tokenizer_task_tokens import (
+                extend_with_task_tokens,
+            )
+            tokenizer = extend_with_task_tokens(tokenizer)
+            task_token_id_for_callback = tokenizer.task_token_ids.for_task_type
+
         # Save tokenizer + (when set) BPE artifact into out_dir; raises
         # loudly if the tokenizer cannot be persisted (silent skip is
         # unacceptable for checkpoint provenance).
@@ -797,6 +812,12 @@ def run_training(args: argparse.Namespace) -> int:
         if loaded_from_path:
             tokenizer_provenance["loaded_from_path"] = loaded_from_path
         tokenizer_provenance["use_cas_prefix"] = use_cas_prefix
+        tokenizer_provenance["prepend_task_token"] = prepend_task_token
+        if prepend_task_token:
+            tokenizer_provenance["task_token_ids"] = {
+                "valid": tokenizer.task_token_ids.valid,
+                "invalid": tokenizer.task_token_ids.invalid,
+            }
 
         vocab_size = int(tokenizer.vocab_size)
         model = _build_cas_native_model_with_head(
@@ -813,12 +834,79 @@ def run_training(args: argparse.Namespace) -> int:
             max_prompt_len=int(args.max_prompt_len),
             max_reply_len=int(args.max_reply_len),
             max_cas_prefix_len=int(args.max_cas_prefix_len),
+            prepend_task_token=prepend_task_token,
+            task_token_id_for=task_token_id_for_callback,
         )
 
     if args.resume_from:
         resume_path = Path(args.resume_from)
         state = torch.load(resume_path, map_location=device)
-        model.load_state_dict(state["model"])
+        model_state = state["model"]
+        # If the checkpoint's vocab is smaller than the model's
+        # current vocab (Option C v1 -> v1c), expand embedding rows
+        # via warm-start from semantic anchors.
+        # Detect by inspecting any state-dict tensor whose first dim
+        # is supposed to be vocab. We assume the model has at least
+        # one such weight matching the pattern.
+        old_vocab_candidates = set()
+        for k, v in model_state.items():
+            if isinstance(v, torch.Tensor) and "embedding" in k.lower() and v.dim() >= 2:
+                old_vocab_candidates.add(int(v.shape[0]))
+        old_vocab = min(old_vocab_candidates) if old_vocab_candidates else vocab_size
+        warm_start_log = None
+        if old_vocab != vocab_size:
+            from cas_native.training.vocab_expansion import (
+                WarmStartCopy,
+                expand_state_dict_for_vocab_extension,
+            )
+            if not prepend_task_token:
+                raise RuntimeError(
+                    f"checkpoint vocab {old_vocab} != current vocab "
+                    f"{vocab_size} but --prepend-task-token is OFF; "
+                    "cannot vocab-expand without warm-start anchors"
+                )
+            # Anchor IDs are the existing [TASK_EXPR] / [TASK_EXPLAIN]
+            # special-token positions in the wrapped tokenizer's base.
+            # Their IDs are in the underlying HybridCASTokenizer at
+            # the canonical SPECIAL_TOKENS positions (7 and 8).
+            from cas_native.training.tokenizer import SPECIAL_TOKENS
+            task_expr_id = SPECIAL_TOKENS.index("[TASK_EXPR]")
+            task_explain_id = SPECIAL_TOKENS.index("[TASK_EXPLAIN]")
+            valid_id = tokenizer.task_token_ids.valid
+            invalid_id = tokenizer.task_token_ids.invalid
+            warm_starts = [
+                WarmStartCopy(
+                    source_id=task_expr_id, source_token="[TASK_EXPR]",
+                    target_id=valid_id, target_token="[VALID]",
+                ),
+                WarmStartCopy(
+                    source_id=task_explain_id, source_token="[TASK_EXPLAIN]",
+                    target_id=invalid_id, target_token="[INVALID]",
+                ),
+            ]
+            model_state, warm_start_log = expand_state_dict_for_vocab_extension(
+                state_dict=model_state,
+                old_vocab=old_vocab,
+                new_vocab=vocab_size,
+                warm_starts=warm_starts,
+            )
+            print(json.dumps({
+                "event": "vocab_expansion",
+                "old_vocab": old_vocab,
+                "new_vocab": vocab_size,
+                "expanded_keys": warm_start_log.expanded_keys,
+                "warm_starts": [
+                    {
+                        "source_id": w.source_id,
+                        "source_token": w.source_token,
+                        "target_id": w.target_id,
+                        "target_token": w.target_token,
+                    }
+                    for w in warm_start_log.warm_starts
+                ],
+            }))
+            tokenizer_provenance["vocab_expansion"] = warm_start_log.to_dict()
+        model.load_state_dict(model_state)
         starting_step = int(state.get("step", 0))
         starting_epoch = int(state.get("epoch", 0))
     else:
@@ -1141,6 +1229,19 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--max-prompt-len", type=int, default=256)
     p.add_argument("--max-reply-len", type=int, default=256)
     p.add_argument("--max-cas-prefix-len", type=int, default=32)
+    p.add_argument(
+        "--prepend-task-token",
+        action="store_true",
+        help=(
+            "Option C: prepend [VALID]/[INVALID] task token at "
+            "cas_prefix_ids[0] based on the record's task_type. "
+            "Wraps the tokenizer in TaskTokenExtendedTokenizer "
+            "(vocab grows by +2). When --resume-from points at a "
+            "smaller-vocab checkpoint, embedding/lm_head rows are "
+            "expanded with warm-start: [TASK_EXPR] -> [VALID], "
+            "[TASK_EXPLAIN] -> [INVALID]."
+        ),
+    )
     p.add_argument("--train-log-every-steps", type=int, default=20)
     p.add_argument(
         "--sample-every-steps",

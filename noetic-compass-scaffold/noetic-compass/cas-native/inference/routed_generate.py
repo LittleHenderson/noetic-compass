@@ -142,6 +142,7 @@ def routed_generate(
     use_cas_prefix: bool = True,
     device: Any = None,
     seed_rpm_silhouette: bool = False,
+    prepend_task_token: bool = False,
 ) -> RoutedGenerationResult:
     """Run the unified routing + generation + postprocess pipeline.
 
@@ -176,6 +177,13 @@ def routed_generate(
             Diagnostic patch for the v1 PREFIX128 5ep rpm_chain
             misroute. Default ``False`` — opt-in only, never silently
             mutating generations.
+        prepend_task_token: Option C v1c — when True, the tokenizer
+            MUST be a ``TaskTokenExtendedTokenizer`` exposing
+            ``task_token_ids``. The compilability gate's task_type
+            is converted to the matching ``[VALID]`` / ``[INVALID]``
+            token ID and prepended to ``cas_prefix_ids`` at position
+            0 inside ``generate_reply``. Default ``False`` so v1
+            checkpoints continue to work unchanged.
     """
     routing = route_by_compilability(source_cas)
     prompt_text = build_prompt_from_routing(
@@ -186,6 +194,19 @@ def routed_generate(
     seed_text: Optional[str] = None
     if seed_rpm_silhouette and routing.task_type == "cas_to_english":
         seed_text = _build_rpm_silhouette_seed(source_cas)
+
+    prepend_token_id: Optional[int] = None
+    if prepend_task_token:
+        # The tokenizer must be a TaskTokenExtendedTokenizer with
+        # task_token_ids. Pull the matching ID from the routing.
+        task_ids = getattr(tokenizer, "task_token_ids", None)
+        if task_ids is None:
+            raise RuntimeError(
+                "prepend_task_token=True requires a "
+                "TaskTokenExtendedTokenizer with .task_token_ids; "
+                f"got {type(tokenizer).__name__} with no task_token_ids"
+            )
+        prepend_token_id = int(task_ids.for_task_type(routing.task_type))
 
     gen_out = generate_reply(
         model=model,
@@ -200,6 +221,7 @@ def routed_generate(
         use_cas_prefix=use_cas_prefix,
         device=device,
         seed_decoder_text=seed_text,
+        prepend_cas_prefix_token_id=prepend_token_id,
     )
     raw_text = str(gen_out.get("reply_text", ""))
     stopped_on_eos = bool(gen_out.get("stopped_on_eos", False))
