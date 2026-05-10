@@ -35,6 +35,10 @@ from cas_native.inference.identifier_repair import (
     repair_identifiers,
     score_identifier_recovery,
 )
+from cas_native.inference.rpm_repair import (
+    RpmRepairLog,
+    repair_rpm_rendering,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -132,6 +136,7 @@ class PostprocessResult:
     truncated: bool = False
     quality_passed: bool = True
     quality_failures: list[str] = field(default_factory=list)
+    rpm_repair_log: Optional[RpmRepairLog] = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -163,6 +168,10 @@ class PostprocessResult:
             "truncated": self.truncated,
             "quality_passed": self.quality_passed,
             "quality_failures": list(self.quality_failures),
+            "rpm_repair_log": (
+                self.rpm_repair_log.to_dict()
+                if self.rpm_repair_log is not None else None
+            ),
         }
 
 
@@ -176,6 +185,7 @@ def postprocess(
     raw_gen: str,
     routing: Optional[RoutingDecision] = None,
     apply_repair: bool = False,
+    apply_rpm_repair: bool = True,
     score_recovery: bool = True,
     quality_check: bool = True,
     stopped_on_eos: Optional[bool] = None,
@@ -193,6 +203,14 @@ def postprocess(
             the result is consistent.
         apply_repair: when True, run identifier repair and use the
             repaired text as ``final_text``. Default False (opt-in).
+        apply_rpm_repair: when True (default), run Phase 1 rpm_chain
+            symbolic repair on the (already identifier-repaired)
+            text. The pass auto-gates on whether the source CAS is
+            an rpm_chain shape (let-binding present); non-RPM sources
+            no-op via ``parse_rpm_chain`` returning None. The pass
+            runs ONLY for ``cas_to_english`` routing — invalid CAS
+            never gets rpm-repaired. Pass ``apply_rpm_repair=False``
+            in comparison evals that need raw model behavior.
         score_recovery: when True, compute pre-repair and (if applied)
             post-repair identifier-recovery scores.
         quality_check: when True, count hard-notation and jargon hits
@@ -214,6 +232,15 @@ def postprocess(
     if apply_repair:
         final_text, repair_log = repair_identifiers(
             source_cas=source_cas, english=raw_gen,
+        )
+
+    # Phase 1 rpm_chain repair: gated on cas_to_english routing AND
+    # source containing a let-binding. parse_rpm_chain returns None
+    # for non-RPM shapes, which makes repair_rpm_rendering a no-op.
+    rpm_log: Optional[RpmRepairLog] = None
+    if apply_rpm_repair and routing.task_type == "cas_to_english":
+        final_text, rpm_log = repair_rpm_rendering(
+            source_cas=source_cas, rendered=final_text,
         )
 
     recovery_pre: Optional[IdentifierRecoveryScore] = None
@@ -279,6 +306,7 @@ def postprocess(
         truncated=truncated,
         quality_passed=quality_passed,
         quality_failures=quality_failures,
+        rpm_repair_log=rpm_log,
     )
 
 

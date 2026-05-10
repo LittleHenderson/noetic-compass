@@ -383,6 +383,10 @@ def main() -> int:
             "max_new_tokens": r.generation_metadata.get("max_new_tokens"),
             "seed_decoder_text": r.seed_decoder_text,
             "rpm_seed_fired": r.seed_decoder_text is not None,
+            "rpm_repair_log": (
+                pp.rpm_repair_log.to_dict()
+                if pp.rpm_repair_log is not None else None
+            ),
         }
         results.append(result)
 
