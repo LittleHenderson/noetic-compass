@@ -31,17 +31,19 @@ def _make_fake_generate_reply(
 
     def fake(*, model, tokenizer, prompt_text, cas_expression, register,
              max_new_tokens, sampling, temperature, top_p, use_cas_prefix,
-             device):
+             device, seed_decoder_text=None):
         captured["prompt_text"] = prompt_text
         captured["cas_expression"] = cas_expression
         captured["max_new_tokens"] = max_new_tokens
         captured["use_cas_prefix"] = use_cas_prefix
         captured["sampling"] = sampling
         captured["register"] = register
+        captured["seed_decoder_text"] = seed_decoder_text
         return {
             "reply_text": reply_text,
             "stopped_on_eos": stopped_on_eos,
             "n_steps": n_steps,
+            "seed_token_count": 0,
             "config": {"sampling": sampling, "temperature": temperature, "top_p": top_p},
             "token_ids": [],
         }
@@ -239,6 +241,125 @@ def test_repair_can_be_disabled(monkeypatch):
 # ---------------------------------------------------------------------------
 # Result serialization for trace logging
 # ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# Decoder-seeding for valid rpm_chain silhouette (diagnostic patch A)
+# ---------------------------------------------------------------------------
+
+def test_seed_rpm_silhouette_off_by_default(monkeypatch):
+    fake, captured = _make_fake_generate_reply()
+    monkeypatch.setattr(rg_module, "generate_reply", fake)
+
+    result = routed_generate(
+        model=None, tokenizer=None,
+        source_cas="let stageA0_3_0234 = ^0^P; stageA0_3_0234 -> stageW3_3_0234",
+        sampling="greedy",
+    )
+    # Default: no seeding fires even when source matches the let pattern.
+    assert result.seed_decoder_text is None
+    # Fake generate_reply is called without a seed text either.
+    # (We don't capture seed_decoder_text in the fake, but we can assert
+    # it via the result.)
+
+
+def test_seed_rpm_silhouette_fires_for_valid_let_binding(monkeypatch):
+    fake, captured = _make_fake_generate_reply(
+        reply_text="Let stageA0_3_0234 name a foundational thought, ...",
+    )
+    # Need to capture the seed_decoder_text passed through.
+    captured_seed: dict = {}
+
+    def fake_with_seed(*, seed_decoder_text=None, **kwargs):
+        captured_seed["seed"] = seed_decoder_text
+        return fake(**kwargs)
+
+    monkeypatch.setattr(rg_module, "generate_reply", fake_with_seed)
+
+    cas = (
+        "let stageA0_3_0234 = ^0^P; let stageD3_3_0234 = ^9^P_{F3}; "
+        "stageA0_3_0234 -> stageD3_3_0234"
+    )
+    result = routed_generate(
+        model=None, tokenizer=None,
+        source_cas=cas, sampling="greedy",
+        seed_rpm_silhouette=True,
+    )
+
+    assert result.routing.task_type == "cas_to_english"
+    assert result.seed_decoder_text == "Let stageA0_3_0234 name "
+    assert captured_seed["seed"] == "Let stageA0_3_0234 name "
+
+
+def test_seed_rpm_silhouette_does_not_fire_on_non_let_cas(monkeypatch):
+    fake, _ = _make_fake_generate_reply()
+    captured_seed: dict = {}
+
+    def fake_with_seed(*, seed_decoder_text=None, **kwargs):
+        captured_seed["seed"] = seed_decoder_text
+        return fake(**kwargs)
+
+    monkeypatch.setattr(rg_module, "generate_reply", fake_with_seed)
+
+    result = routed_generate(
+        model=None, tokenizer=None,
+        source_cas="^4^P|A",  # state literal, not a let-binding
+        sampling="greedy",
+        seed_rpm_silhouette=True,
+    )
+    # Even with the flag on, non-let sources don't get seeded.
+    assert result.seed_decoder_text is None
+    assert captured_seed["seed"] is None
+
+
+def test_seed_rpm_silhouette_does_not_fire_on_invalid_routing(monkeypatch):
+    """If the compiler routes to invalid_to_explanation, the seed must
+    NOT fire — that path doesn't want a let-binding silhouette."""
+    fake, _ = _make_fake_generate_reply()
+    captured_seed: dict = {}
+
+    def fake_with_seed(*, seed_decoder_text=None, **kwargs):
+        captured_seed["seed"] = seed_decoder_text
+        return fake(**kwargs)
+
+    monkeypatch.setattr(rg_module, "generate_reply", fake_with_seed)
+
+    # Invalid: undefined target var
+    cas = "let X = ^0^P; X -> Y"
+    result = routed_generate(
+        model=None, tokenizer=None,
+        source_cas=cas, sampling="greedy",
+        seed_rpm_silhouette=True,
+    )
+    assert result.routing.task_type == "invalid_to_explanation"
+    assert result.seed_decoder_text is None
+    assert captured_seed["seed"] is None
+
+
+def test_seed_rpm_silhouette_extracts_first_var_when_multiple_lets(monkeypatch):
+    fake, _ = _make_fake_generate_reply()
+    captured_seed: dict = {}
+
+    def fake_with_seed(*, seed_decoder_text=None, **kwargs):
+        captured_seed["seed"] = seed_decoder_text
+        return fake(**kwargs)
+
+    monkeypatch.setattr(rg_module, "generate_reply", fake_with_seed)
+
+    # Use a CAS that compiles cleanly: P -> P descent + arrow within P.
+    # CAS Domain Descent rule (P >= C >= E >= O) means C cannot descend
+    # to P, so a chain that mixes domains needs to be top-down only.
+    cas = (
+        "let stageA0_5_0296 = ^0^P; let stageD5_5_0296 = ^7^P_{F5}; "
+        "let stageW5_5_0296 = ^7^P_{F5}; stageA0_5_0296 -> stageD5_5_0296"
+    )
+    routed_generate(
+        model=None, tokenizer=None,
+        source_cas=cas, sampling="greedy",
+        seed_rpm_silhouette=True,
+    )
+    # First let-binding wins.
+    assert captured_seed["seed"] == "Let stageA0_5_0296 name "
+
 
 def test_result_to_dict_serializes_audit_friendly(monkeypatch):
     fake, _ = _make_fake_generate_reply()

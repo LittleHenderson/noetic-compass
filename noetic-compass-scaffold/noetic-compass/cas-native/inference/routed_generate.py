@@ -27,6 +27,7 @@ Callers that want the same budget for both tasks can override
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
@@ -37,6 +38,34 @@ from cas_native.inference.cas_routing import (
 )
 from cas_native.inference.native_nl_generate import generate_reply
 from cas_native.inference.postprocessor import PostprocessResult, postprocess
+
+
+# rpm_chain decoder-seeding regex — extracts the FIRST let-binding's
+# variable name from a source CAS expression like:
+#   "let stageA0_3_0234 = ^0^P; let stageD3_3_0234 = ^9^P_{F3}; ..."
+# The seed text "Let <var> name " forces the decoder onto the canonical
+# rpm_chain English silhouette (the v1 PREFIX128 5ep 24-record audit
+# found that bare cas_to_english routing did NOT change the model's
+# output for valid rpm_chain — it still emitted invalid-explanation
+# language. Decoder-seeding is a diagnostic patch that answers: if we
+# force the opening, can the model continue correctly?).
+_LET_VAR_RX = re.compile(r"^\s*let\s+([A-Za-z_][A-Za-z0-9_]*)\s*=", re.MULTILINE)
+
+
+def _build_rpm_silhouette_seed(source_cas: str) -> Optional[str]:
+    """Return the decoder-seed text for valid rpm_chain / let_binding
+    sources, or None when the source is not a let-binding shape.
+
+    The seed is ``"Let <first_var_name> name "``. Picking the FIRST
+    variable matches how Path D Wave 2.5 records always open: the
+    target reply introduces variables in source order, starting with
+    ``stageA0_*`` (the canonical RPM A0 axis).
+    """
+    m = _LET_VAR_RX.search(source_cas)
+    if not m:
+        return None
+    var_name = m.group(1)
+    return f"Let {var_name} name "
 
 
 # Task-aware token budget defaults (see module docstring for derivation).
@@ -55,7 +84,9 @@ class RoutedGenerationResult:
     selected the task, the prompt that was actually fed to the model,
     the full postprocess result (repair log, recovery scores, quality
     flags including truncation), and the generation metadata for any
-    deeper trace work.
+    deeper trace work. ``seed_decoder_text`` records the seed text
+    used to prime the decoder when ``seed_rpm_silhouette`` was
+    enabled (None when no seeding fired).
     """
     final_text: str
     raw_text: str
@@ -63,6 +94,7 @@ class RoutedGenerationResult:
     prompt_used: str
     postprocess_result: PostprocessResult
     generation_metadata: dict[str, Any] = field(default_factory=dict)
+    seed_decoder_text: Optional[str] = None
 
     @property
     def task_type(self) -> str:
@@ -109,6 +141,7 @@ def routed_generate(
     top_p: float = 0.9,
     use_cas_prefix: bool = True,
     device: Any = None,
+    seed_rpm_silhouette: bool = False,
 ) -> RoutedGenerationResult:
     """Run the unified routing + generation + postprocess pipeline.
 
@@ -135,12 +168,24 @@ def routed_generate(
         use_cas_prefix: passes both cas_prefix_ids and cas_prefix_mask
             to the head. Default True (the B-4 architectural fix).
         device: torch device. Defaults to the model's device.
+        seed_rpm_silhouette: when True, AND routing says
+            ``cas_to_english``, AND source starts with ``let ...``,
+            prime the decoder with ``"Let <first_var_name> name "``
+            so the model is forced onto the let-binding silhouette
+            instead of collapsing to invalid-explanation language.
+            Diagnostic patch for the v1 PREFIX128 5ep rpm_chain
+            misroute. Default ``False`` — opt-in only, never silently
+            mutating generations.
     """
     routing = route_by_compilability(source_cas)
     prompt_text = build_prompt_from_routing(
         source_cas=source_cas, routing=routing,
     )
     budget = _resolve_max_new_tokens(routing, max_new_tokens)
+
+    seed_text: Optional[str] = None
+    if seed_rpm_silhouette and routing.task_type == "cas_to_english":
+        seed_text = _build_rpm_silhouette_seed(source_cas)
 
     gen_out = generate_reply(
         model=model,
@@ -154,6 +199,7 @@ def routed_generate(
         top_p=top_p,
         use_cas_prefix=use_cas_prefix,
         device=device,
+        seed_decoder_text=seed_text,
     )
     raw_text = str(gen_out.get("reply_text", ""))
     stopped_on_eos = bool(gen_out.get("stopped_on_eos", False))
@@ -172,8 +218,10 @@ def routed_generate(
         routing=routing,
         prompt_used=prompt_text,
         postprocess_result=pp,
+        seed_decoder_text=seed_text,
         generation_metadata={
             "n_steps": gen_out.get("n_steps"),
+            "seed_token_count": gen_out.get("seed_token_count", 0),
             "stopped_on_eos": stopped_on_eos,
             "max_new_tokens": budget,
             "sampling_config": gen_out.get("config", {}),

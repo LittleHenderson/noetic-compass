@@ -150,6 +150,7 @@ def generate_reply(
     use_cas_prefix: bool = False,
     device: str | torch.device = "cpu",
     return_trace: bool = False,
+    seed_decoder_text: Optional[str] = None,
 ) -> dict[str, Any]:
     """Generate a reply by sampling from CASNativeModel + NLGenerationHead.
 
@@ -273,6 +274,26 @@ def generate_reply(
     disallowed: set[int] = {pad_id, unk_id, bos_id}
 
     seq: list[int] = [bos_id]
+    seed_token_count = 0
+    if seed_decoder_text:
+        # Decoder-seeding: force the autoregressive trajectory to start
+        # from a specific surface form. Used as a diagnostic patch for
+        # the v1 PREFIX128 5ep rpm_chain misroute (the model's cas_prefix
+        # is locked into invalid-explanation language for `let X = ...;
+        # X -> Y` shapes; seeding the decoder with `"Let X name "` forces
+        # it onto the let-binding silhouette so we can test whether the
+        # rpm_chain content is recoverable). Seeded tokens are part of
+        # `seq` and become part of the output reply; `n_steps` counts
+        # only NEWLY GENERATED tokens after the seed.
+        seed_ids = list(
+            tokenizer.encode(
+                seed_decoder_text,
+                max_length=1024,
+                add_special=False,
+            )
+        )
+        seq.extend(seed_ids)
+        seed_token_count = len(seed_ids)
     stopped_on_eos = False
     final_meta: Optional[dict[str, Any]] = None
 
@@ -338,7 +359,10 @@ def generate_reply(
     return {
         "reply_text": reply_text,
         "token_ids": list(output_ids),
-        "n_steps": len(seq) - 1,
+        # n_steps counts NEWLY GENERATED tokens only — the BOS and the
+        # optional decoder-seed prefix do not count as model "steps."
+        "n_steps": len(seq) - 1 - seed_token_count,
+        "seed_token_count": seed_token_count,
         "stopped_on_eos": stopped_on_eos,
         "prompt_text": prompt_text,
         "cas_expression": cas_expression,
