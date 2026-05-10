@@ -16,8 +16,12 @@ from cas_native.inference.rpm_repair import (
     RpmChain,
     RpmRepairLog,
     StageBinding,
+    StageSemantics,
+    find_stage_clauses,
     parse_rpm_chain,
+    parse_stage_semantics,
     repair_rpm_rendering,
+    verify_rpm_semantics,
 )
 
 
@@ -292,6 +296,179 @@ def test_log_to_dict_round_trip_serializable():
     # JSON-serializable smoke (no exotic types).
     import json
     json.dumps(d)
+
+
+# ---------------------------------------------------------------------------
+# Phase 2 — semantic verifier (flag-only, never rewrites)
+# ---------------------------------------------------------------------------
+
+def test_parse_stage_semantics_basic():
+    """Decompose source expressions across all four axes."""
+    s = parse_stage_semantics("^0^P")
+    assert s == StageSemantics(noetic=0, domain="P", drive=None, register=None)
+
+    s = parse_stage_semantics("^9^P_{F3}")
+    assert s == StageSemantics(noetic=9, domain="P", drive=3, register=None)
+
+    s = parse_stage_semantics("^4^C|A")
+    assert s == StageSemantics(noetic=4, domain="C", drive=None, register="A")
+
+    s = parse_stage_semantics("^9^P_{F3}|T")
+    assert s == StageSemantics(noetic=9, domain="P", drive=3, register="T")
+
+
+def test_parse_stage_semantics_handles_optional_fields():
+    """When axes are missing in source, parser returns None for those."""
+    s = parse_stage_semantics("^7")
+    assert s.noetic == 7
+    assert s.domain is None
+    assert s.drive is None
+    assert s.register is None
+
+
+def test_find_stage_clauses_segments_at_next_stage():
+    """Each stage_var maps to text from its first occurrence to the
+    next stage_var's first occurrence (or end of text)."""
+    text = (
+        "Let stageA0 name a foundational thought, "
+        "let stageW name cognitive thinking shaped by wisdom, "
+        "and stageA0 leads to stageW."
+    )
+    clauses = find_stage_clauses(text, ["stageA0", "stageW"])
+    # stageA0 clause runs to the first occurrence of stageW.
+    assert "foundational thought" in clauses["stageA0"]
+    assert "cognitive thinking" not in clauses["stageA0"]
+    # stageW clause runs to end of text and includes the closing edge.
+    assert "cognitive thinking" in clauses["stageW"]
+
+
+def test_find_stage_clauses_missing_stage_returns_empty_string():
+    """Stages that don't appear in rendered text map to ''."""
+    text = "Let stageA0 name a foundational thought."
+    clauses = find_stage_clauses(text, ["stageA0", "stageMISSING"])
+    assert "foundational thought" in clauses["stageA0"]
+    assert clauses["stageMISSING"] == ""
+
+
+def test_verify_returns_no_drift_when_clause_is_faithful():
+    """A clause that hits all expected indicators produces no drift."""
+    chain = RpmChain(
+        stages=[
+            StageBinding(var="stageA0", expr="^0^P"),
+            StageBinding(var="stageD", expr="^9^P_{F3}"),
+        ],
+        edge=FinalEdge(head="stageA0", tail="stageD"),
+    )
+    rendered = (
+        "Let stageA0 name a foundational thought, "
+        "let stageD name something that popped into mind in the "
+        "principled foundation driven by vitality and energy. "
+        "stageA0 leads to stageD."
+    )
+    drifts = verify_rpm_semantics(rendered, chain)
+    assert drifts == []
+
+
+def test_verify_flags_noetic_wrong_when_struck_a_chord_replaces_popped():
+    """The audit's record-19 finding: target ^9 wants
+    'popped to mind' but model emitted 'struck a chord' (^4 indicator).
+    Phase 2 must flag both noetic_missing AND noetic_wrong."""
+    chain = RpmChain(
+        stages=[
+            StageBinding(var="stageA0_3_0234", expr="^0^P"),
+            StageBinding(var="stageD3_3_0234", expr="^9^P_{F3}"),
+        ],
+        edge=FinalEdge(head="stageA0_3_0234", tail="stageD3_3_0234"),
+    )
+    rendered = (
+        "Let stageA0_3_0234 name a foundational thought, "
+        "let stageD3_3_0234 name something that struck a chord in the "
+        "realm of wisdom and insight."
+    )
+    drifts = verify_rpm_semantics(rendered, chain)
+    # stageA0 has clean ^0^P content; stageD has both noetic AND drive drift.
+    drift_for_d = [d for d in drifts if d.stage_var == "stageD3_3_0234"]
+    assert len(drift_for_d) == 1
+    d = drift_for_d[0]
+    assert "noetic_missing" in d.drift_kinds
+    assert "noetic_wrong" in d.drift_kinds
+    # Drive ^F3 expected (vitality), F2 (wisdom) found instead.
+    assert "drive_missing" in d.drift_kinds
+    assert "drive_wrong" in d.drift_kinds
+    assert d.expected_noetic == 9
+    assert d.expected_drive == 3
+
+
+def test_verify_flags_domain_wrong():
+    """When source says ^E but rendered clause uses 'cognitive'
+    instead of 'evaluative', flag domain_wrong."""
+    chain = RpmChain(
+        stages=[StageBinding(var="stageA", expr="^4^E_{F1}")],
+        edge=None,
+    )
+    rendered = (
+        "Let stageA name something that struck a chord in the "
+        "cognitive thinking arena driven by unity."
+    )
+    drifts = verify_rpm_semantics(rendered, chain)
+    assert len(drifts) == 1
+    d = drifts[0]
+    assert "domain_missing" in d.drift_kinds
+    assert "domain_wrong" in d.drift_kinds
+    assert d.expected_domain == "E"
+
+
+def test_verify_phase2_does_not_rewrite_final_text():
+    """Phase 2 directive 2026-05-10: log only, never rewrite. Even
+    when drifts are detected, ``final_text`` from repair_rpm_rendering
+    must equal the post-Phase-1 text verbatim."""
+    cas = "let stageA0 = ^0^P; let stageD = ^9^P_{F3}; stageA0 -> stageD"
+    rendered = (
+        "Let stageA0 name a foundational thought, "
+        "let stageD name something that struck a chord in the realm "
+        "of wisdom and insight. stageA0 leads to stageD."
+    )
+    out, log = repair_rpm_rendering(source_cas=cas, rendered=rendered)
+    # Drifts logged.
+    assert len(log.semantic_drifts) >= 1
+    # But final_text NOT rewritten — "struck a chord" still present,
+    # "popped" still absent, "wisdom" still present, "vitality" still absent.
+    assert "struck a chord" in out
+    assert "wisdom" in out
+    assert "popped" not in out
+    assert "vitality" not in out
+
+
+def test_verify_returns_empty_when_chain_has_no_stages():
+    """Defensive: if for some reason the chain came back with empty
+    stages, semantic verifier produces no drifts."""
+    drifts = verify_rpm_semantics(
+        "anything", RpmChain(stages=[], edge=None),
+    )
+    assert drifts == []
+
+
+def test_to_dict_serializes_semantic_drifts_with_axis_fields():
+    cas = "let stageA0 = ^0^P; let stageD = ^9^P_{F3}; stageA0 -> stageD"
+    rendered = (
+        "Let stageA0 name a foundational thought, "
+        "let stageD name something that struck a chord in the realm "
+        "of wisdom. stageA0 leads to stageD."
+    )
+    _, log = repair_rpm_rendering(source_cas=cas, rendered=rendered)
+    d = log.to_dict()
+    drifts = d["semantic_drifts"]
+    assert len(drifts) >= 1
+    sample = drifts[0]
+    # All structured fields present + serializable.
+    for key in [
+        "stage_var", "expected_expr", "rendered_clause",
+        "expected_noetic", "expected_domain", "expected_drive",
+        "drift_kinds", "notes",
+    ]:
+        assert key in sample, key
+    import json
+    json.dumps(d)  # smoke
 
 
 def test_chain_parsed_flag_true_for_rpm_false_otherwise():

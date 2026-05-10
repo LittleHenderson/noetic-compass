@@ -136,15 +136,45 @@ class RpmRepair:
     found: str
 
 
+@dataclass(frozen=True)
+class StageSemantics:
+    """Decomposed semantic content of a ``let stageX = <expr>;`` clause.
+
+    Any field may be ``None`` when the source expression doesn't carry
+    that axis. Examples:
+      - ``^0^P`` -> noetic=0, domain='P', drive=None, register=None
+      - ``^9^P_{F3}`` -> noetic=9, domain='P', drive=3, register=None
+      - ``^4^C|A`` -> noetic=4, domain='C', drive=None, register='A'
+      - ``^9^P_{F3}|T`` -> noetic=9, domain='P', drive=3, register='T'
+    """
+    noetic: Optional[int]
+    domain: Optional[str]
+    drive: Optional[int]
+    register: Optional[str]
+
+
 @dataclass
 class SemanticDrift:
-    """A flagged-only mismatch between source CAS semantics and rendered
-    English. Phase 1 does NOT rewrite these; the audit JSONL surfaces
-    them so Phase 2 has a calibration target."""
+    """A flagged-only semantic mismatch between source CAS and rendered
+    English for one rpm_chain stage. Phase 2 directive (2026-05-10):
+    log only, do NOT rewrite. The audit JSONL surfaces these so the
+    next round can decide whether to promote semantic substitution.
+
+    ``drift_kinds`` is a list of short identifiers describing which
+    axis drifted. Possible values:
+      - ``"noetic_missing"`` — expected ^N indicator absent from clause
+      - ``"noetic_wrong"`` — clause carries indicator for a different ^M
+      - ``"domain_missing"`` / ``"domain_wrong"``
+      - ``"drive_missing"`` / ``"drive_wrong"``
+    """
     stage_var: str
     expected_expr: str
     rendered_clause: str
-    notes: str = ""
+    expected_noetic: Optional[int] = None
+    expected_domain: Optional[str] = None
+    expected_drive: Optional[int] = None
+    drift_kinds: list[str] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -184,7 +214,11 @@ class RpmRepairLog:
                     "stage_var": d.stage_var,
                     "expected_expr": d.expected_expr,
                     "rendered_clause": d.rendered_clause,
-                    "notes": d.notes,
+                    "expected_noetic": d.expected_noetic,
+                    "expected_domain": d.expected_domain,
+                    "expected_drive": d.expected_drive,
+                    "drift_kinds": list(d.drift_kinds),
+                    "notes": list(d.notes),
                 }
                 for d in self.semantic_drifts
             ],
@@ -384,6 +418,231 @@ def _edge_in_text(text: str, edge: FinalEdge) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Phase 2 — flag-only semantic verifier
+# ---------------------------------------------------------------------------
+#
+# Parses each let-binding's expression into (Noetic, Domain, Drive,
+# Register), finds the matching clause in the rendered text, and
+# checks whether the canonical colloquialism for each axis appears.
+# When the expected indicator is missing, OR a different axis's
+# indicator appears in its place, a SemanticDrift is logged. NO
+# rewriting in Phase 2 — that decision is deferred per user audit
+# 2026-05-10 (post commit 702a910).
+
+_NOETIC_RX = re.compile(r"\^([0-9])")
+_DOMAIN_RX = re.compile(r"\^([0-9])\^([PCEO])")
+_DRIVE_RX = re.compile(r"_\{F([1-7])\}")
+_REGISTER_RX = re.compile(r"\|([TAfE])(?![A-Za-z])")
+
+
+def parse_stage_semantics(expr: str) -> StageSemantics:
+    """Decompose a let-binding RHS like ``^9^P_{F3}|T`` into structured
+    fields. Any field is ``None`` when the corresponding axis is
+    absent from the expression.
+
+    Robust to optional axes:
+      - ``^0^P`` -> noetic=0, domain='P', drive=None, register=None
+      - ``^9^P_{F3}`` -> noetic=9, domain='P', drive=3
+      - ``^4^C|A`` -> noetic=4, domain='C', register='A'
+    """
+    noetic_match = _DOMAIN_RX.search(expr)
+    if noetic_match is not None:
+        noetic = int(noetic_match.group(1))
+        domain = noetic_match.group(2)
+    else:
+        # No domain attached; just look for the bare ^N
+        nm = _NOETIC_RX.search(expr)
+        noetic = int(nm.group(1)) if nm else None
+        domain = None
+    drive_match = _DRIVE_RX.search(expr)
+    drive = int(drive_match.group(1)) if drive_match else None
+    register_match = _REGISTER_RX.search(expr)
+    register = register_match.group(1) if register_match else None
+    return StageSemantics(
+        noetic=noetic, domain=domain, drive=drive, register=register,
+    )
+
+
+# Canonical colloquialism map (CLAUDE.md Clarification 6). Each entry
+# is a list of lower-case substrings; presence of ANY indicator in a
+# rendered clause counts as "this axis is verbalized." Indicators
+# stay narrow on purpose — overly generic words like "thought" alone
+# would create false positives across all 10 Noetics.
+_NOETIC_INDICATORS: dict[int, tuple[str, ...]] = {
+    0: ("foundational thought", "in your head", "all in",
+        "an idea", "an thought", "a thought"),
+    1: ("paying attention", "make up your mind",
+        "using your head", "cognitive attention"),
+    2: ("drawn to", "speaks to", "can't resist",
+        "drawn toward", "attracted toward"),
+    3: ("rubs the wrong way", "can't stomach", "wouldn't touch",
+        "averse to", "repelled"),
+    4: ("struck a chord", "hit me", "resonated",
+        "made an impression", "strikes a chord"),
+    5: ("who one is", "who you are", "shaped by",
+        "sum of experiences", "part of what makes",
+        "shaped by experiences"),
+    6: ("breaking it down", "unpacking",
+        "what's underneath", "pulling apart", "decomposition"),
+    7: ("muscle memory", "practice makes perfect",
+        "into a groove", "repeatedly do",
+        "practiced rhythm", "practice-based"),
+    8: ("that reminds", "one thing leads",
+        "triggered a memory", "made me think",
+        "triggers", "trigger"),
+    9: ("popped into", "popped to mind",
+        "out of nowhere", "came to me",
+        "just clicked", "popped into mind",
+        "popped"),
+}
+
+_DOMAIN_INDICATORS: dict[str, tuple[str, ...]] = {
+    "P": ("principled", "foundational", "principled foundation"),
+    "C": ("cognitive thinking", "cognitive attention",
+          "cognitive judgment", "cognitive"),
+    "E": ("evaluative judgment", "evaluative arena", "evaluative"),
+    "O": ("operational behavior", "operational"),
+}
+
+_DRIVE_INDICATORS: dict[int, tuple[str, ...]] = {
+    1: ("unity", "togetherness", "union"),
+    2: ("wisdom", "insight"),
+    3: ("vitality", "energy and vitality", "life force"),
+    4: ("connection", "attachment"),
+    5: ("agency", "self-determination"),
+    6: ("structure", "order", "organization"),
+    7: ("purpose", "meaning"),
+}
+
+
+def find_stage_clauses(
+    text: str, stage_vars: list[str],
+) -> dict[str, str]:
+    """Map each stage_var to the substring of ``text`` that describes
+    it. The clause for stage_var N runs from the FIRST occurrence of
+    that var to the FIRST occurrence of stage_var N+1 (in source
+    order), or to end of text for the last stage.
+
+    Stage vars not found in the text map to an empty string. The
+    caller can use that to distinguish "stage missing" from "stage
+    present with semantic drift."
+    """
+    positions: list[tuple[int, str]] = []
+    for var in stage_vars:
+        m = re.search(rf"\b{re.escape(var)}\b", text)
+        if m is not None:
+            positions.append((m.start(), var))
+    positions.sort()
+
+    clauses: dict[str, str] = {var: "" for var in stage_vars}
+    for i, (start, var) in enumerate(positions):
+        if i + 1 < len(positions):
+            end = positions[i + 1][0]
+        else:
+            end = len(text)
+        clauses[var] = text[start:end].strip().rstrip(",.")
+    return clauses
+
+
+def _check_axis(
+    clause_lower: str,
+    expected_value: object,
+    indicator_map: dict,
+    axis_name: str,
+) -> tuple[list[str], list[str]]:
+    """Return (drift_kinds, notes) for one axis. Empty when no drift."""
+    drift_kinds: list[str] = []
+    notes: list[str] = []
+    if expected_value is None:
+        return drift_kinds, notes
+    expected_indicators = indicator_map.get(expected_value, ())
+    has_expected = any(ind in clause_lower for ind in expected_indicators)
+    if not has_expected:
+        drift_kinds.append(f"{axis_name}_missing")
+        label = f"^{expected_value}" if axis_name == "noetic" else (
+            f"F{expected_value}" if axis_name == "drive"
+            else f"^{expected_value}"
+        )
+        notes.append(
+            f"expected {label} indicator missing from clause"
+        )
+        # Look for a different axis-value's indicator to identify a
+        # plausible "wrong" substitute.
+        for value, indicators in indicator_map.items():
+            if value == expected_value:
+                continue
+            if any(ind in clause_lower for ind in indicators):
+                drift_kinds.append(f"{axis_name}_wrong")
+                wrong_label = f"^{value}" if axis_name == "noetic" else (
+                    f"F{value}" if axis_name == "drive"
+                    else f"^{value}"
+                )
+                notes.append(
+                    f"clause carries {wrong_label} indicator instead"
+                )
+                break
+    return drift_kinds, notes
+
+
+def verify_rpm_semantics(
+    rendered: str, chain: RpmChain,
+) -> list[SemanticDrift]:
+    """Phase 2 entry point. Returns one SemanticDrift per stage that
+    has a detectable axis mismatch. Stages with all axes verbalized
+    correctly produce NO drift entry — the absence is the signal.
+    """
+    drifts: list[SemanticDrift] = []
+    if not chain.stages:
+        return drifts
+    clauses = find_stage_clauses(
+        rendered, [s.var for s in chain.stages],
+    )
+    for stage in chain.stages:
+        clause = clauses.get(stage.var, "")
+        if not clause:
+            # Stage missing entirely from rendered text. Phase 1's
+            # n_stages_found_post_repair already surfaces this; we
+            # don't double-flag at the semantic layer.
+            continue
+        expected = parse_stage_semantics(stage.expr)
+        clause_lower = clause.lower()
+
+        all_kinds: list[str] = []
+        all_notes: list[str] = []
+
+        n_kinds, n_notes = _check_axis(
+            clause_lower, expected.noetic, _NOETIC_INDICATORS, "noetic",
+        )
+        all_kinds.extend(n_kinds)
+        all_notes.extend(n_notes)
+
+        d_kinds, d_notes = _check_axis(
+            clause_lower, expected.domain, _DOMAIN_INDICATORS, "domain",
+        )
+        all_kinds.extend(d_kinds)
+        all_notes.extend(d_notes)
+
+        dr_kinds, dr_notes = _check_axis(
+            clause_lower, expected.drive, _DRIVE_INDICATORS, "drive",
+        )
+        all_kinds.extend(dr_kinds)
+        all_notes.extend(dr_notes)
+
+        if all_kinds:
+            drifts.append(SemanticDrift(
+                stage_var=stage.var,
+                expected_expr=stage.expr,
+                rendered_clause=clause,
+                expected_noetic=expected.noetic,
+                expected_domain=expected.domain,
+                expected_drive=expected.drive,
+                drift_kinds=all_kinds,
+                notes=all_notes,
+            ))
+    return drifts
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
@@ -423,6 +682,12 @@ def repair_rpm_rendering(
     if chain.edge is not None:
         log.edge_matched_post_repair = _edge_in_text(text, chain.edge)
 
+    # Phase 2 semantic verifier (flag-only). Runs on the post-repair
+    # text so it sees the canonical stage names, then checks each
+    # stage's clause against the expected Noetic/Domain/Drive. Drifts
+    # are LOGGED only — no rewrite of ``text``.
+    log.semantic_drifts = verify_rpm_semantics(text, chain)
+
     return text, log
 
 
@@ -433,6 +698,10 @@ __all__ = [
     "RpmRepairLog",
     "SemanticDrift",
     "StageBinding",
+    "StageSemantics",
+    "find_stage_clauses",
     "parse_rpm_chain",
+    "parse_stage_semantics",
     "repair_rpm_rendering",
+    "verify_rpm_semantics",
 ]
