@@ -1,0 +1,48 @@
+{
+  "timestamp": "20260510T183018Z",
+  "v1_mix_input_rows": {
+    "train": 7395,
+    "val": 412,
+    "test": 412,
+    "total": 8219
+  },
+  "cleanup_artifacts_consumed": {
+    "regen_clean_files": [
+      "v1d_regen_clean_20260510T161741Z.jsonl",
+      "v1d_regen_clean_20260510T162755Z.jsonl",
+      "v1d_regen_clean_20260510T164759Z.jsonl",
+      "v1d_regen_clean_20260510T165347Z.jsonl",
+      "v1d_regen_clean_20260510T165742Z.jsonl"
+    ],
+    "recovered_files": [
+      "v1d_regen_recovered_20260510T165742Z_revalidated.jsonl",
+      "v1d_regen_recovered_20260510T185000Z_recipe_register_recovered.jsonl"
+    ],
+    "infill_files": [
+      "v1d_infill_long_fractal_clean_20260510T180640Z.jsonl",
+      "v1d_infill_long_fractal_clean_20260510T182342Z.jsonl"
+    ]
+  },
+  "aggregation_counts": {
+    "v1_rows_total": 8219,
+    "not_audited_kept": 7384,
+    "audited_pass_kept": 390,
+    "audited_fail_replaced": 345,
+    "audited_fail_dropped": 100,
+    "infill_added": 65,
+    "v1d_total": 8184
+  },
+  "split_sizes": {
+    "train": 7364,
+    "val": 410,
+    "test": 410
+  },
+  "stratification_key": "v1mix_task_type | grammar_category | fractal_k_bucket",
+  "split_seed": 42,
+  "split_ratio": "90/5/5 (deterministic, stratified)",
+  "replacement_sources_used": {
+    "recovered_via_register_policy": 116,
+    "regen_initial": 225,
+    "recovered_via_vocab_patch": 4
+  }
+}
