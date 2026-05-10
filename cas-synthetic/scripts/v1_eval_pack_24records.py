@@ -105,6 +105,11 @@ USE_V1C_RPM_SEED = bool(int(os.environ.get("USE_V1C_RPM_SEED", "1")))
 # axes. Retry accepted only if it strictly beats the original; falls
 # back otherwise. Cost ~+12.5% per eval (3 of 24 records retry).
 USE_V1C_RPM_RETRY = bool(int(os.environ.get("USE_V1C_RPM_RETRY", "0")))
+# v1e Phase 1B — opt-in fractal-aware constrained decoder. Default 0
+# (matches routed_generate's apply_fractal_decoder default). Set to 1
+# only for shadow-mode evals. The v0 canary pins this to "0" to
+# guarantee v0-rc1 byte-equality.
+USE_FRACTAL_DECODER = bool(int(os.environ.get("USE_FRACTAL_DECODER", "0")))
 CHECKPOINT_DIR_OVERRIDE = os.environ.get("CHECKPOINT_DIR")
 CHECKPOINT_DIR = Path(CHECKPOINT_DIR_OVERRIDE) if CHECKPOINT_DIR_OVERRIDE else DEFAULT_CHECKPOINT_DIR
 VAL_PATH = REPO_ROOT / "cas-synthetic" / "data" / "path_d" / "v1_mix_nlgen_val.jsonl"
@@ -120,6 +125,7 @@ def load_checkpoint():
     print(f"  USE_V1C_TASK_TOKENS={USE_V1C_TASK_TOKENS}")
     print(f"  USE_V1C_RPM_SEED={USE_V1C_RPM_SEED}")
     print(f"  USE_V1C_RPM_RETRY={USE_V1C_RPM_RETRY}")
+    print(f"  USE_FRACTAL_DECODER={USE_FRACTAL_DECODER}")
     tokenizer = HybridCASTokenizer.load(CHECKPOINT_DIR / "tokenizer.json")
     bpe = CHECKPOINT_DIR / "english_bpe.json"
     if bpe.exists():
@@ -365,6 +371,7 @@ def main() -> int:
                 prepend_task_token=USE_V1C_TASK_TOKENS,
                 seed_rpm_silhouette=USE_V1C_RPM_SEED,
                 apply_rpm_retry=USE_V1C_RPM_RETRY,
+                apply_fractal_decoder=USE_FRACTAL_DECODER,
             )
 
         pp = r.postprocess_result
@@ -410,6 +417,10 @@ def main() -> int:
             "fractal_repair_log": (
                 pp.fractal_repair_log.to_dict()
                 if pp.fractal_repair_log is not None else None
+            ),
+            "fractal_decoder_log": (
+                r.fractal_decoder_log.to_dict()
+                if r.fractal_decoder_log is not None else None
             ),
         }
         results.append(result)

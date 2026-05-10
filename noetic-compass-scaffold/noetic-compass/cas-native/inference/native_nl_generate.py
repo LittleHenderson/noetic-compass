@@ -43,9 +43,19 @@ inside the loop and is a follow-on if Mode 7 needs per-token attribution.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 import torch
+
+
+# A step callback receives the current sequence (list of token ids,
+# including BOS and any seed tokens), the current decoder step index
+# (0-indexed: 0 is the very first newly-generated token), and the
+# unmasked logits vector for the next-token prediction. It returns a
+# (possibly modified) logits vector to be consumed by ``_sample_token``.
+# Used by ``cas_native.inference.fractal_decoder`` to apply phrase-trie
+# constraints; ``None`` means no transformation.
+StepCallback = Callable[[list[int], int, torch.Tensor], torch.Tensor]
 
 
 # Match the collator's register-to-id mapping so generated samples are
@@ -152,6 +162,7 @@ def generate_reply(
     return_trace: bool = False,
     seed_decoder_text: Optional[str] = None,
     prepend_cas_prefix_token_id: Optional[int] = None,
+    step_callback: Optional[StepCallback] = None,
 ) -> dict[str, Any]:
     """Generate a reply by sampling from CASNativeModel + NLGenerationHead.
 
@@ -332,6 +343,12 @@ def generate_reply(
                 logits = head_out
 
         next_logits = logits[0, -1, :]
+        if step_callback is not None:
+            # Allow an external constraint layer to mask or bias the
+            # logits before sampling. Used by the v1e Phase 1B
+            # fractal-aware decoder; ``None`` keeps the original
+            # behavior for v0 callers.
+            next_logits = step_callback(seq, step, next_logits)
         next_id = _sample_token(
             next_logits,
             sampling=config.sampling,
@@ -392,4 +409,9 @@ def generate_reply(
     }
 
 
-__all__ = ["generate_reply", "GenerateConfig", "DEFAULT_REGISTER_TO_ID"]
+__all__ = [
+    "DEFAULT_REGISTER_TO_ID",
+    "GenerateConfig",
+    "StepCallback",
+    "generate_reply",
+]

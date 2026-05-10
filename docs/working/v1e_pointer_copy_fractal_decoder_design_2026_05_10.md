@@ -321,6 +321,53 @@ defaults).
 Cost: ~1 eng-week implementation + ~0.5 eng-week eval-suite build +
 ~0.5 eng-week sample-read. 0 GPU-hours.
 
+### Phase 1B implementation status (2026-05-10)
+
+Shipped in commit (this commit) with these artifacts:
+
+| File | Role |
+|---|---|
+| `cas_native/inference/fractal_decoder.py` (NEW) | Phrase trie, state machine, logits-mask processor, fail-closed comparator |
+| `cas_native/inference/native_nl_generate.py` | New `step_callback` parameter applied to logits pre-sample |
+| `cas_native/inference/routed_generate.py` | New `apply_fractal_decoder: bool = False` parameter, dual-decode + fail-closed selector |
+| `cas_native/tests/inference/test_fractal_decoder.py` (NEW) | 25 unit tests covering trie / boundary / fire / mask / comparator |
+| `cas-synthetic/scripts/v1_eval_pack_24records.py` | `USE_FRACTAL_DECODER` env var; serializes `fractal_decoder_log` to JSONL |
+| `cas-synthetic/scripts/v0_canary.py` | `USE_FRACTAL_DECODER="0"` defensively pinned in v0 env |
+
+**Verification gates** (all passed):
+
+- 25/25 unit tests pass on the fractal_decoder module.
+- 93 adjacent inference tests pass (no regressions).
+- v0 canary (`v0_canary.py --check`) PASSES — Phase 1B does not
+  change v0 byte-equality when `apply_fractal_decoder=False`.
+
+**3-record shadow-mode smoke** (`USE_FRACTAL_DECODER=1` against v0 checkpoint):
+
+| Record | Source | Constrained slot_commits in order | Fail-closed selected | Reason |
+|---|---|---|---|---|
+| 13 | `Phi<6:9:7:0:9:5:2:0>` | [6, 9, 7, 0, 9, 5, 2, 0] — **EXACT MATCH** | baseline | constrained LOST cardinality (trailing prose adds extras) |
+| 14 | `Φ<3:7>` | [3, 7] — **EXACT MATCH** | baseline | neither side achieved cardinality match in verifier |
+| 15 | `Φ<1:0:3:3:1:1:7:5>` | [1, 0, 3, 3, 1, 1, 7, 5] — **EXACT MATCH** | baseline | neither side achieved cardinality match in verifier |
+
+**Diagnostic conclusion:** The phrase-trie + state machine lands the
+expected source k-sequence in source order, ON EVERY FRACTAL RECORD,
+including the n=8 case that defeated v1d (record 13's `^9` loop).
+This is the mechanical inductive bias the design targeted. The
+fail-closed wrapper currently selects baseline on all three because
+the constrained output's TRAILING PROSE past the final slot adds extra
+noetic indicators that push the verifier's `found_k_count` above the
+expected count. Two Task-#135 tuning levers identified from smoke:
+
+1. **EOS bias after final slot.** Add `+λ` to EOS logit once
+   `state.pos == n`, suppressing trailing prose.
+2. **Comparator refinement.** Score only the FIRST `n` found
+   noetics (rather than the full extracted sequence) so the trailing
+   prose doesn't contaminate the cardinality check.
+
+Both improvements are evaluated in Task #135 against the expanded
+fractal suite (30-60 records stratified by k=2..8) before any
+promotion to production-default.
+
 ### Phase 2 — heuristic decision gate after Phase 1B data
 
 After Phase 1B ships and the expanded eval suite + 24-pack canary

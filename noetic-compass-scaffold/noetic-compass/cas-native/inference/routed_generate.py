@@ -36,6 +36,18 @@ from cas_native.inference.cas_routing import (
     build_prompt_from_routing,
     route_by_compilability,
 )
+from cas_native.inference.fractal_decoder import (
+    FractalConstraintState,
+    FractalDecoderLog,
+    build_fractal_phrase_trie,
+    constrained_strictly_beats_baseline,
+    make_logits_processor,
+)
+from cas_native.inference.fractal_repair import (
+    FractalRepairLog,
+    parse_fractal,
+    verify_fractal_rendering,
+)
 from cas_native.inference.native_nl_generate import generate_reply
 from cas_native.inference.postprocessor import PostprocessResult, postprocess
 from cas_native.inference.rpm_retry import (
@@ -102,6 +114,7 @@ class RoutedGenerationResult:
     generation_metadata: dict[str, Any] = field(default_factory=dict)
     seed_decoder_text: Optional[str] = None
     rpm_retry_log: Optional[RpmRetryLog] = None
+    fractal_decoder_log: Optional[FractalDecoderLog] = None
 
     @property
     def task_type(self) -> str:
@@ -126,6 +139,10 @@ class RoutedGenerationResult:
             "rpm_retry_log": (
                 self.rpm_retry_log.to_dict()
                 if self.rpm_retry_log is not None else None
+            ),
+            "fractal_decoder_log": (
+                self.fractal_decoder_log.to_dict()
+                if self.fractal_decoder_log is not None else None
             ),
         }
 
@@ -155,6 +172,7 @@ def routed_generate(
     seed_rpm_silhouette: bool = True,
     prepend_task_token: bool = False,
     apply_rpm_retry: bool = False,
+    apply_fractal_decoder: bool = False,
 ) -> RoutedGenerationResult:
     """Run the unified routing + generation + postprocess pipeline.
 
@@ -230,6 +248,26 @@ def routed_generate(
             the hint can bias the output. The experiment will tell
             us whether that's enough; falling back to the original
             on rejection means worst case is no regression.
+        apply_fractal_decoder: v1e Phase 1B opt-in shadow mode
+            (default ``False`` — production-default earned by data,
+            not asserted). When True, AND routing is cas_to_english,
+            AND ``parse_fractal(source_cas)`` returns non-None, the
+            orchestrator runs TWO generations: a baseline
+            (unconstrained) pass and a constrained pass that biases
+            the decoder via a phrase-trie over the canonical Noetic
+            colloquialism phrases for each fractal slot. The
+            fail-closed comparator
+            (``fractal_decoder.constrained_strictly_beats_baseline``)
+            selects the constrained output ONLY when its verifier
+            strictly improves on baseline AND its prose-quality is
+            within 0.2 of baseline AND the constrained run did not
+            hit a mid-decode failure state. Otherwise the baseline
+            is returned and the failed constrained attempt is
+            preserved in ``fractal_decoder_log`` for diagnosis.
+            Per audit 2026-05-10: phrase-trie not first-token mask
+            alone; fail-closed; preserve both outputs in eval
+            artifacts. See ``docs/working/v1e_pointer_copy_fractal_
+            decoder_design_2026_05_10.md`` for the full design.
     """
     routing = route_by_compilability(source_cas)
     prompt_text = build_prompt_from_routing(
@@ -280,6 +318,116 @@ def routed_generate(
         stopped_on_eos=stopped_on_eos,
     )
 
+    # Default outputs: baseline pass. Subsequent opt-in blocks
+    # (fractal decoder, rpm retry) may replace these.
+    final_pp = pp
+    final_text = pp.final_text
+    fractal_decoder_log: Optional[FractalDecoderLog] = None
+
+    # v1e Phase 1B — opt-in shadow-mode fractal-aware constrained
+    # decoder. Per audit 2026-05-10: dual-decode (baseline + constrained)
+    # with fail-closed comparator; preserve both outputs in eval
+    # artifacts. Default OFF until eval data proves promotion.
+    if apply_fractal_decoder and routing.task_type == "cas_to_english":
+        fractal_seq = parse_fractal(source_cas)
+        if fractal_seq is not None:
+            fractal_decoder_log = FractalDecoderLog(
+                enabled=True,
+                fired=True,
+                notation=fractal_seq.notation,
+                expected_k_values=list(fractal_seq.k_values),
+                baseline_text=pp.final_text,
+                baseline_verifier=(
+                    pp.fractal_repair_log.to_dict()
+                    if pp.fractal_repair_log is not None else None
+                ),
+            )
+            trie = build_fractal_phrase_trie(tokenizer)
+            state = FractalConstraintState(expected_k=fractal_seq.k_values)
+            callback = make_logits_processor(state, trie, tokenizer)
+            constrained_gen_out = generate_reply(
+                model=model,
+                tokenizer=tokenizer,
+                prompt_text=prompt_text,
+                cas_expression=source_cas,
+                register=register,
+                max_new_tokens=budget,
+                sampling=sampling,
+                temperature=temperature,
+                top_p=top_p,
+                use_cas_prefix=use_cas_prefix,
+                device=device,
+                seed_decoder_text=seed_text,
+                prepend_cas_prefix_token_id=prepend_token_id,
+                step_callback=callback,
+            )
+            constrained_raw = str(constrained_gen_out.get("reply_text", ""))
+            constrained_stopped_on_eos = bool(
+                constrained_gen_out.get("stopped_on_eos", False)
+            )
+            constrained_pp = postprocess(
+                source_cas=source_cas,
+                raw_gen=constrained_raw,
+                routing=routing,
+                apply_repair=apply_repair,
+                stopped_on_eos=constrained_stopped_on_eos,
+            )
+            fractal_decoder_log.constrained_text = constrained_pp.final_text
+            fractal_decoder_log.constrained_verifier = (
+                constrained_pp.fractal_repair_log.to_dict()
+                if constrained_pp.fractal_repair_log is not None else None
+            )
+            fractal_decoder_log.slot_commits = list(state.slot_commits)
+            if state.failure_reason:
+                fractal_decoder_log.notes.append(
+                    f"constraint mid-decode failure: {state.failure_reason}"
+                )
+            # Fail-closed selection: constrained wins ONLY if its
+            # verifier strictly improves AND prose-quality is within
+            # 0.2 of baseline AND no mid-decode failure occurred.
+            if (
+                pp.fractal_repair_log is not None
+                and constrained_pp.fractal_repair_log is not None
+            ):
+                better, reason = constrained_strictly_beats_baseline(
+                    constrained_text=constrained_pp.final_text,
+                    constrained_stopped_on_eos=constrained_stopped_on_eos,
+                    constrained_verifier=constrained_pp.fractal_repair_log,
+                    baseline_text=pp.final_text,
+                    baseline_stopped_on_eos=stopped_on_eos,
+                    baseline_verifier=pp.fractal_repair_log,
+                    constraint_failure_reason=state.failure_reason,
+                )
+                if better:
+                    fractal_decoder_log.selected = "constrained"
+                    fractal_decoder_log.notes.append(reason)
+                    final_pp = constrained_pp
+                    final_text = constrained_pp.final_text
+                else:
+                    fractal_decoder_log.selected = "baseline"
+                    fractal_decoder_log.fallback_reason = reason
+            else:
+                fractal_decoder_log.selected = "baseline"
+                fractal_decoder_log.fallback_reason = (
+                    "missing fractal_repair_log on one or both passes"
+                )
+        else:
+            # Flag on but source isn't a fractal — log the no-fire so
+            # the eval artifact carries proof the gate was respected.
+            fractal_decoder_log = FractalDecoderLog(
+                enabled=True, fired=False,
+                fallback_reason="parse_fractal returned None",
+            )
+    elif apply_fractal_decoder:
+        # Flag on but routing is invalid_to_explanation — log no-fire.
+        fractal_decoder_log = FractalDecoderLog(
+            enabled=True, fired=False,
+            fallback_reason=(
+                f"routing.task_type={routing.task_type!r}, "
+                "fractal decoder only fires on cas_to_english"
+            ),
+        )
+
     # Phase 3 — corrective retry experiment. Opt-in via
     # apply_rpm_retry=True. Only fires when the original generation
     # had detectable Phase 2 drifts AND structural skeleton is
@@ -290,8 +438,6 @@ def routed_generate(
     # labels yet" guard is satisfied: the retry produces a fresh
     # generation; nothing is substituted in the post-generated text.
     rpm_retry_log: Optional[RpmRetryLog] = None
-    final_pp = pp
-    final_text = pp.final_text
     if apply_rpm_retry and pp.rpm_repair_log is not None:
         rpm_retry_log = RpmRetryLog()
         gate_ok, gate_reason = should_attempt_retry(pp.rpm_repair_log)
@@ -363,6 +509,7 @@ def routed_generate(
         postprocess_result=final_pp,
         seed_decoder_text=seed_text,
         rpm_retry_log=rpm_retry_log,
+        fractal_decoder_log=fractal_decoder_log,
         generation_metadata={
             "n_steps": gen_out.get("n_steps"),
             "seed_token_count": gen_out.get("seed_token_count", 0),

@@ -71,11 +71,14 @@ BASELINE_PATH = DATA_DIR / "v0_canary_baseline.jsonl"
 # Existing eval-pack driver (unchanged; we drive it via env vars).
 EVAL_PACK_SCRIPT = SCRIPTS_DIR / "v1_eval_pack_24records.py"
 
-# v0 flag profile — must match V0_RELEASE_CANDIDATE.md §3
+# v0 flag profile — must match V0_RELEASE_CANDIDATE.md §3.
+# USE_FRACTAL_DECODER="0" is explicit defensive pinning: v0 byte-equality
+# requires the v1e Phase 1B fractal decoder OFF.
 V0_ENV = {
     "USE_V1C_TASK_TOKENS": "1",
     "USE_V1C_RPM_SEED": "1",
     "USE_V1C_RPM_RETRY": "0",
+    "USE_FRACTAL_DECODER": "0",
     "CHECKPOINT_DIR": str(ARCHIVE_DIR),
 }
 
