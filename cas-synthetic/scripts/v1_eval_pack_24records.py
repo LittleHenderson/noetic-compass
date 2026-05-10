@@ -91,14 +91,14 @@ DEFAULT_CHECKPOINT_DIR = Path(
 # prepend_task_token=True). Set to False for the original v1 path
 # (preserves comparability with the prior 24-record audit log).
 USE_V1C_TASK_TOKENS = bool(int(os.environ.get("USE_V1C_TASK_TOKENS", "0")))
-# When set, runs the inference-side rpm_chain decoder seed: if routing
-# says ``cas_to_english`` AND source CAS is a let-binding shape, prime
-# the decoder with ``"Let <first_var_name> name "`` so the model is
-# forced onto the let-binding silhouette. Per the v1c human audit
-# (commit 0d641df), the [VALID] task token alone left rpm_chain hijack
-# at 3/3; this seed is the proven Option A diagnostic patch and the
-# next-experiment recommendation from the audit.
-USE_V1C_RPM_SEED = bool(int(os.environ.get("USE_V1C_RPM_SEED", "0")))
+# Inference-side rpm_chain decoder seed. Default ``1`` (on) per the
+# v1c+seed audit (commit b281202): the seed flipped rpm_chain hijack
+# 3/3 -> 0/3 with no leak to invalid_to_explanation, and was promoted
+# to a gated production fallback. Three layers of automatic gating in
+# routed_generate keep it surgical (flag, routing.task_type, let-
+# binding regex). Set USE_V1C_RPM_SEED=0 explicitly when running a
+# v1-vs-v1c-vs-seed comparison eval that needs raw model behavior.
+USE_V1C_RPM_SEED = bool(int(os.environ.get("USE_V1C_RPM_SEED", "1")))
 CHECKPOINT_DIR_OVERRIDE = os.environ.get("CHECKPOINT_DIR")
 CHECKPOINT_DIR = Path(CHECKPOINT_DIR_OVERRIDE) if CHECKPOINT_DIR_OVERRIDE else DEFAULT_CHECKPOINT_DIR
 VAL_PATH = REPO_ROOT / "cas-synthetic" / "data" / "path_d" / "v1_mix_nlgen_val.jsonl"

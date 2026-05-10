@@ -141,7 +141,7 @@ def routed_generate(
     top_p: float = 0.9,
     use_cas_prefix: bool = True,
     device: Any = None,
-    seed_rpm_silhouette: bool = False,
+    seed_rpm_silhouette: bool = True,
     prepend_task_token: bool = False,
 ) -> RoutedGenerationResult:
     """Run the unified routing + generation + postprocess pipeline.
@@ -174,9 +174,28 @@ def routed_generate(
             prime the decoder with ``"Let <first_var_name> name "``
             so the model is forced onto the let-binding silhouette
             instead of collapsing to invalid-explanation language.
-            Diagnostic patch for the v1 PREFIX128 5ep rpm_chain
-            misroute. Default ``False`` — opt-in only, never silently
-            mutating generations.
+            Default ``True`` (promoted to gated production fallback
+            per user audit 2026-05-10, commit b281202): the v1c
+            VALIDTOK 5ep retrain shipped the [VALID]/[INVALID] task
+            tokens but at 5-epoch scale they did NOT have enough
+            leverage to override the decoder's learned
+            "The expression..." opener for valid rpm_chain shapes;
+            human grading was 3/3 hijack. The seed flipped that to
+            0/3 (commit e51f061) without leaking to the
+            invalid_to_explanation path. Three layers of automatic
+            gating keep this surgical:
+              1. The flag itself.
+              2. ``routing.task_type == "cas_to_english"`` — invalid
+                 CAS routes to invalid_to_explanation and the seed
+                 does not fire.
+              3. ``_LET_VAR_RX`` matches only sources beginning with
+                 ``let <var> = ...`` — non-let shapes (state
+                 literals, recipes, fractals, meta-logic, CRO)
+                 cause ``_build_rpm_silhouette_seed`` to return
+                 ``None`` and no seed text is prepended.
+            Pass ``seed_rpm_silhouette=False`` explicitly when
+            running v1-vs-v1c-vs-seed comparison evals or any
+            diagnostic that needs the raw model behavior.
         prepend_task_token: Option C v1c — when True, the tokenizer
             MUST be a ``TaskTokenExtendedTokenizer`` exposing
             ``task_token_ids``. The compilability gate's task_type

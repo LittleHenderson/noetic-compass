@@ -247,20 +247,54 @@ def test_repair_can_be_disabled(monkeypatch):
 # Decoder-seeding for valid rpm_chain silhouette (diagnostic patch A)
 # ---------------------------------------------------------------------------
 
-def test_seed_rpm_silhouette_off_by_default(monkeypatch):
-    fake, captured = _make_fake_generate_reply()
-    monkeypatch.setattr(rg_module, "generate_reply", fake)
+def test_seed_rpm_silhouette_default_on_for_valid_let_binding(monkeypatch):
+    """Default policy as of commit b281202 audit: the rpm_chain decoder
+    seed is the gated production fallback. Calling routed_generate
+    WITHOUT the flag fires the seed for any cas_to_english route whose
+    source matches the let-binding regex. Three layers of automatic
+    gating (flag, routing, regex) keep it surgical to rpm_chain shapes.
+    """
+    captured_seed: dict = {}
+
+    def fake_with_seed(*, seed_decoder_text=None, **kwargs):
+        captured_seed["seed"] = seed_decoder_text
+        return {"reply_text": "Let stageA0_3_0234 name ...", "n_steps": 0,
+                "stopped_on_eos": True, "config": {}, "token_ids": []}
+
+    monkeypatch.setattr(rg_module, "generate_reply", fake_with_seed)
 
     result = routed_generate(
         model=None, tokenizer=None,
-        source_cas="let stageA0_3_0234 = ^0^P; stageA0_3_0234 -> stageW3_3_0234",
+        source_cas="let stageA0_3_0234 = ^0^P; let stageW3_3_0234 = ^9^C_{F3}; stageA0_3_0234 -> stageW3_3_0234",
         sampling="greedy",
     )
-    # Default: no seeding fires even when source matches the let pattern.
+    # New default: seeding fires on valid let-binding without explicit flag.
+    assert result.seed_decoder_text == "Let stageA0_3_0234 name "
+    assert captured_seed["seed"] == "Let stageA0_3_0234 name "
+
+
+def test_seed_rpm_silhouette_can_be_disabled_explicitly(monkeypatch):
+    """Callers running comparison evals (v1 vs v1c vs seed) or any
+    diagnostic that needs raw model behavior must be able to opt out
+    by passing ``seed_rpm_silhouette=False``."""
+    captured_seed: dict = {}
+
+    def fake_with_seed(*, seed_decoder_text=None, **kwargs):
+        captured_seed["seed"] = seed_decoder_text
+        return {"reply_text": "...", "n_steps": 0,
+                "stopped_on_eos": True, "config": {}, "token_ids": []}
+
+    monkeypatch.setattr(rg_module, "generate_reply", fake_with_seed)
+
+    result = routed_generate(
+        model=None, tokenizer=None,
+        source_cas="let stageA0_3_0234 = ^0^P; let stageW3_3_0234 = ^9^C_{F3}; stageA0_3_0234 -> stageW3_3_0234",
+        sampling="greedy",
+        seed_rpm_silhouette=False,
+    )
+    # Explicit off: no seed even though source matches let-binding shape.
     assert result.seed_decoder_text is None
-    # Fake generate_reply is called without a seed text either.
-    # (We don't capture seed_decoder_text in the fake, but we can assert
-    # it via the result.)
+    assert captured_seed["seed"] is None
 
 
 def test_seed_rpm_silhouette_fires_for_valid_let_binding(monkeypatch):
