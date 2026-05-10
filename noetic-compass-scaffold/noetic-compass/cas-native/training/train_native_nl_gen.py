@@ -931,11 +931,33 @@ def run_training(args: argparse.Namespace) -> int:
         # Detect by inspecting any state-dict tensor whose first dim
         # is supposed to be vocab. We assume the model has at least
         # one such weight matching the pattern.
+        # Probe canonical vocab-shaped keys directly. The earlier
+        # heuristic "min first-dim of any 'embedding'-keyed tensor"
+        # is wrong: ``cognitive_embedding.projection.*`` also contains
+        # the word ``embedding`` and has first dim 40 (the cognitive
+        # state count), which collapsed ``old_vocab`` to 40 and caused
+        # the warm-start to incorrectly resize every cognitive head.
+        # Token-vocab tensors live at well-known keys; use those.
+        canonical_vocab_keys = (
+            "token_embedding.weight",
+            "nl_gen_head.token_embedding.weight",
+            "lm_head.weight",
+            "nl_gen_head.lm_head.weight",
+        )
         old_vocab_candidates = set()
-        for k, v in model_state.items():
-            if isinstance(v, torch.Tensor) and "embedding" in k.lower() and v.dim() >= 2:
-                old_vocab_candidates.add(int(v.shape[0]))
-        old_vocab = min(old_vocab_candidates) if old_vocab_candidates else vocab_size
+        for key in canonical_vocab_keys:
+            tensor = model_state.get(key)
+            if isinstance(tensor, torch.Tensor) and tensor.dim() >= 2:
+                old_vocab_candidates.add(int(tensor.shape[0]))
+        if not old_vocab_candidates:
+            old_vocab = vocab_size  # nothing to detect; assume no resize
+        elif len(old_vocab_candidates) > 1:
+            raise RuntimeError(
+                f"checkpoint has inconsistent vocab dims across "
+                f"canonical keys: {sorted(old_vocab_candidates)}"
+            )
+        else:
+            old_vocab = next(iter(old_vocab_candidates))
         warm_start_log = None
         if old_vocab != vocab_size:
             from cas_native.training.vocab_expansion import (

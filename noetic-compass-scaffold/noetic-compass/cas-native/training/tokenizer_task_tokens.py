@@ -118,6 +118,42 @@ class TaskTokenExtendedTokenizer:
             invalid=self._task_token_to_id[TASK_TOKENS[1]],
         )
 
+    @property
+    def base(self) -> Any:
+        """Return the deepest ``HybridCASTokenizer`` for serialization.
+
+        ``save_tokenizer_artifacts`` walks ``tokenizer.base`` to find the
+        savable serialization root. The task-token overlay is reapplied
+        at load time via ``extend_with_task_tokens(...)``, so we do NOT
+        serialize the wrapper — only the base. This matches the design
+        of ``ExtendedHybridCASTokenizer``: composed BPE is also stored
+        as a separate artifact and reapplied at load time.
+        """
+        # ExtendedHybridCASTokenizer exposes ``.base`` -> HybridCASTokenizer.
+        inner = getattr(self._wrapped, "base", self._wrapped)
+        return inner
+
+    def metadata(self) -> dict[str, Any]:
+        """Tokenizer-introspection block included in the checkpoint
+        manifest's tokenizer provenance entry."""
+        wrapped_meta: dict[str, Any] = {}
+        if hasattr(self._wrapped, "metadata"):
+            try:
+                wrapped_meta = dict(self._wrapped.metadata())
+            except Exception:
+                wrapped_meta = {}
+        wrapped_meta.update({
+            "task_token_overlay_version": self.VERSION,
+            "task_tokens": list(self._task_tokens),
+            "task_token_ids": {
+                "valid": self._task_token_to_id[TASK_TOKENS[0]],
+                "invalid": self._task_token_to_id[TASK_TOKENS[1]],
+            },
+            "wrapped_vocab_size": int(self._wrapped_vocab_size),
+            "extended_vocab_size": int(self.vocab_size),
+        })
+        return wrapped_meta
+
     # ------------------------------------------------------------------
     # Encode / decode with task-token override
     # ------------------------------------------------------------------
