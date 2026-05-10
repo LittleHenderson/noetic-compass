@@ -54,6 +54,8 @@ class NativeNLCollator:
         max_cas_prefix_len: int = 32,
         register_to_id: dict[str, int] | None = None,
         ignore_index: int = -100,
+        prepend_task_token: bool = False,
+        task_token_id_for: Any = None,
     ) -> None:
         if not hasattr(tokenizer, "encode"):
             raise TypeError(
@@ -87,6 +89,21 @@ class NativeNLCollator:
         self.bos_id = int(tokenizer.BOS_ID)
         self.eos_id = int(tokenizer.EOS_ID)
         self.pad_id = int(tokenizer.PAD_ID)
+
+        # Option C task-token injection (commit 6b23755 design):
+        # when prepend_task_token=True, look up the per-record task
+        # token id via task_token_id_for(task_type) and prepend to
+        # cas_prefix_ids at position 0. The token_id_for callback
+        # receives the record's "v1mix_task_type" / "task_type" /
+        # "slot" string (whichever is set on the record). This keeps
+        # the data file format unchanged (Path A in the design doc).
+        self.prepend_task_token = bool(prepend_task_token)
+        if self.prepend_task_token and task_token_id_for is None:
+            raise ValueError(
+                "prepend_task_token=True requires task_token_id_for "
+                "callable that maps task_type strings to int token IDs"
+            )
+        self.task_token_id_for = task_token_id_for
 
     # --- public API -----------------------------------------------------
 
@@ -127,6 +144,23 @@ class NativeNLCollator:
                 if cas_expr
                 else []
             )
+            # Option C: prepend per-record task token to cas_prefix_ids.
+            # Cap is applied AFTER prepending so the task token always
+            # survives even when the encoded CAS is at max length.
+            if self.prepend_task_token and c_ids:
+                task_type = (
+                    rec.get("v1mix_task_type")
+                    or rec.get("task_type")
+                    or rec.get("slot")
+                )
+                if task_type:
+                    tok_id = int(self.task_token_id_for(task_type))
+                    c_ids = [tok_id] + c_ids
+                    if len(c_ids) > self.max_cas_prefix_len:
+                        # Drop trailing CAS tokens, NOT the task token,
+                        # if we exceeded the cap. The task token must
+                        # always be at index 0.
+                        c_ids = c_ids[: self.max_cas_prefix_len]
             reg_id = self._parse_register(rec.get("register"))
 
             prompt_ids.append(p_ids)
