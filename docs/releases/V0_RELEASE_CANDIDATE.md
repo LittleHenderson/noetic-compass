@@ -165,30 +165,101 @@ This is the baseline the v0-canary CI gate locks in.
 
 ---
 
-## 5. v0-canary CI gate (DETERMINISTIC, AUTOMATED)
+## 5. v0-canary regression gate
 
-Per audit-modified design doc §3.1 step 4:
+Per audit-modified design doc §3.1 step 4: deterministic byte-diff
+gate, no fresh human grading per PR. The canary catches drift; it
+does not grade quality.
 
-- **Trigger:** any PR touching `noetic-compass-scaffold/noetic-compass/cas-native/inference/**` or `noetic-compass-scaffold/noetic-compass/cas-native/model/**`.
-- **Action:** run the 24-record eval pack
-  (`cas-synthetic/scripts/v1_eval_pack_24records.py`) against the
-  archived `v1c_VALIDTOK_5ep` checkpoint with the `routed_generate`
-  flag profile from §3.
-- **Comparison:** per-record `final_text` byte-for-byte against the
-  archived baseline outputs in
-  `v1_eval_pack_24records_20260510T072551Z.jsonl` (specifically the
-  `final_text` field per record).
-- **Behavior on diff:** any byte-level diff BLOCKS the PR and surfaces
-  the diff for human review. The diff is the failure signal.
-- **What this is NOT:** the canary does NOT require fresh human grading
-  per PR. It compares to a frozen-text baseline. Re-baseline only when
-  the user explicitly approves a `v0.N-rc` bump.
+### 5.1 Canary harness
 
-Implementation note: the CI harness needs the archived checkpoint
-accessible at a known path. The simplest production setup is to mount
-the `D:\tksCAS-archive\v0_rc1\v1c_VALIDTOK_5ep\` directory into the CI
-runner; alternatively, the CI runner pulls the checkpoint at start by
-SHA-256 from a content-addressed store.
+| Field | Value |
+|---|---|
+| Script | `cas-synthetic/scripts/v0_canary.py` |
+| Frozen baseline | `cas-synthetic/data/path_d/v0_canary_baseline.jsonl` (24 records) |
+| Baseline generated | 2026-05-10 from `v0-rc1` (`255b2a7`) against archived `v1c_VALIDTOK_5ep` checkpoint |
+
+### 5.2 Drift signals (any one fails the canary)
+
+The canary diffs 19 top-level fields + 5 nested repair-log dicts
+per record against the frozen baseline:
+
+| Signal | Fields checked |
+|---|---|
+| BYTE DRIFT | `final_text` |
+| ROUTING DRIFT | `task_routed` |
+| ROUTING-TIER DRIFT | `compiled`, `truncated`, `quality_passed`, `quality_failures` |
+| HARD NOTATION | `hard_notation_count` |
+| JARGON | `jargon_count` |
+| REPAIR-LOG DRIFT (counts) | `n_omega_subs`, `n_coef_subs`, `n_var_subs`, `rpm_seed_fired`, `seed_decoder_text`, `omega_recovered_pre/post`, `coef_recovered_pre/post`, `n_steps` |
+| REPAIR-LOG DRIFT (dicts) | `rpm_repair_log`, `rpm_retry_log`, `meta_logic_repair_log`, `generation_cleanup_log`, `fractal_repair_log` |
+
+### 5.3 Local invocation
+
+**Check mode (default — used for regression gating):**
+```
+python cas-synthetic/scripts/v0_canary.py
+```
+Exits 0 on PASS (all 24 records match baseline byte-for-byte), 1 on
+drift (per-record drift report printed to stdout), 2 on setup error
+(missing checkpoint / baseline / eval pack script).
+
+**Freeze mode (re-baseline — only on explicit `v0.N-rc` bump):**
+```
+python cas-synthetic/scripts/v0_canary.py --freeze
+```
+Writes current outputs as the new `v0_canary_baseline.jsonl`. Do NOT
+run this on any PR unless the user has explicitly authorized a
+v0.N-rc tag bump. Per §7: the prior baseline should remain in git
+history.
+
+Wall-clock cost on CPU (greedy, 24 records): ~120-180 seconds per
+canary run. Most of that is checkpoint load + 24 sequential decodes.
+
+### 5.4 Determinism verification
+
+The canary was validated on 2026-05-10 by running `--freeze` then
+`--check` back-to-back on the same machine; the diff returned PASS
+(all 24 records byte-identical). CPU greedy generation is
+deterministic for this checkpoint/PyTorch combination.
+
+**Determinism caveat:** byte-level reproducibility depends on the
+PyTorch version, the CPU/GPU mix, and platform-level float ordering.
+If you bump PyTorch or change the runner CPU, expect a `--check`
+failure on first run; investigate before re-baselining. PyTorch
+version pinning is part of the canary contract.
+
+### 5.5 GH Actions CI integration (deferred)
+
+The current canary is a LOCAL gate. GitHub Actions integration
+requires distributing the 558MB checkpoint to the CI runner. Three
+options under consideration (not yet decided):
+
+1. **Self-hosted runner** with the `D:\tksCAS-archive\v0_rc1\` path
+   mounted. Lowest friction; runner has to be kept available.
+2. **Cloud storage** (S3 / R2 / GCS) with `model_final.pt` etc.
+   pulled at job start by SHA-256 from a content-addressed store
+   (the §2.2 hashes are the lookup keys).
+3. **Git LFS** for the 558MB checkpoint. Borderline file size for
+   LFS; would put the checkpoint into the repo at the cost of
+   ~1GB LFS bandwidth per `git clone`.
+
+Decision deferred until v1e Phase 1B implementation reveals whether
+the canary needs to run on every PR or only on inference/model
+changes. For now: canary is run locally before any PR that touches
+`cas_native/inference/**` or `cas_native/model/**`.
+
+### 5.6 What this is NOT
+
+- The canary does NOT require fresh human grading per PR.
+- The canary does NOT score quality (acceptable+ band, strong band).
+- The canary does NOT replace the user-audit-graded baseline at §4.
+- The canary catches DRIFT, not absolute correctness.
+
+A canary PASS means "v0 inference behavior has not changed
+byte-for-byte from the frozen state." It does NOT mean "v0 is
+correct" — that's what §4's 18/24 acceptable+ human grade
+established.
 
 ---
 
@@ -235,7 +306,10 @@ When a re-baseline happens:
 - [x] Verify the archived `checkpoint_manifest.json` references the
   v1c VALIDTOK 5ep run-dir on the pod and has distinct
   `checkpoint_id` + vocab size 38685 vs base. (See §2.1)
-- [ ] Commit the release doc + push `v0-rc1` tag to `origin` (awaiting
-  user go-ahead).
-- [ ] Implement the v0-canary CI harness per §5 (separate task,
-  blocks v1e Phase 1B per task #133).
+- [x] Commit the release doc + push `v0-rc1` tag to `origin`.
+  (2026-05-10 via commit `2e9e893`)
+- [x] Implement the v0-canary harness per §5. Local gate working;
+  baseline frozen; freeze+check round-trip verified deterministic.
+  (2026-05-10)
+- [ ] Decide GH Actions integration approach for the canary (self-hosted
+  vs cloud storage vs Git LFS). Currently local-only.
