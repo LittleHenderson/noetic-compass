@@ -403,6 +403,10 @@ def main() -> int:
                 pp.meta_logic_repair_log.to_dict()
                 if pp.meta_logic_repair_log is not None else None
             ),
+            "generation_cleanup_log": (
+                pp.generation_cleanup_log.to_dict()
+                if pp.generation_cleanup_log is not None else None
+            ),
         }
         results.append(result)
 
@@ -429,9 +433,27 @@ def main() -> int:
             }
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
+    # Cleanup-pass aggregate (guardrail 4 per the postprocessor
+    # policy line, 2026-05-10): a small count is benign hygiene; a
+    # broad count is a regression signal worth investigating.
+    cleanup_records = sum(
+        1 for res in results
+        if (res.get("generation_cleanup_log") or {}).get("n_substitutions", 0) > 0
+    )
+    cleanup_subs = sum(
+        (res.get("generation_cleanup_log") or {}).get("n_substitutions", 0)
+        for res in results
+    )
+
     print()
     print(f"wrote grading template: {template_path}")
     print(f"wrote structured raw:   {raw_path}")
+    print(
+        f"generation_cleanup: {cleanup_records}/{len(results)} records "
+        f"needed cleanup ({cleanup_subs} substitution"
+        f"{'' if cleanup_subs == 1 else 's'} total). "
+        "Broad cleanup is a regression signal."
+    )
     return 0
 
 

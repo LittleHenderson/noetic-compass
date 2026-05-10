@@ -43,6 +43,10 @@ from cas_native.inference.meta_logic_repair import (
     MetaLogicRepairLog,
     repair_meta_logic_rendering,
 )
+from cas_native.inference.generation_cleanup import (
+    GenerationCleanupLog,
+    cleanup_generation,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -142,6 +146,7 @@ class PostprocessResult:
     quality_failures: list[str] = field(default_factory=list)
     rpm_repair_log: Optional[RpmRepairLog] = None
     meta_logic_repair_log: Optional[MetaLogicRepairLog] = None
+    generation_cleanup_log: Optional[GenerationCleanupLog] = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -181,6 +186,10 @@ class PostprocessResult:
                 self.meta_logic_repair_log.to_dict()
                 if self.meta_logic_repair_log is not None else None
             ),
+            "generation_cleanup_log": (
+                self.generation_cleanup_log.to_dict()
+                if self.generation_cleanup_log is not None else None
+            ),
         }
 
 
@@ -196,6 +205,7 @@ def postprocess(
     apply_repair: bool = False,
     apply_rpm_repair: bool = True,
     apply_meta_logic_repair: bool = True,
+    apply_generation_cleanup: bool = True,
     score_recovery: bool = True,
     quality_check: bool = True,
     stopped_on_eos: Optional[bool] = None,
@@ -263,6 +273,18 @@ def postprocess(
             source_cas=source_cas, rendered=final_text,
         )
 
+    # Generic generation cleanup: token-corruption (merged-prefix
+    # like "Amemory" -> "A memory") + adjacent duplicate collapse
+    # ("memory memory" -> "memory"). Runs LATE in postprocessing on
+    # all routes (state-literal record 3 was the audit's flagged
+    # case but the patterns are not source-shape specific). Cleanup
+    # is deterministic, model-free, and gated only by the
+    # apply_generation_cleanup flag — non-rendering paths can opt
+    # out by setting it False.
+    cleanup_log: Optional[GenerationCleanupLog] = None
+    if apply_generation_cleanup:
+        final_text, cleanup_log = cleanup_generation(final_text)
+
     recovery_pre: Optional[IdentifierRecoveryScore] = None
     recovery_post: Optional[IdentifierRecoveryScore] = None
     if score_recovery:
@@ -328,6 +350,7 @@ def postprocess(
         quality_failures=quality_failures,
         rpm_repair_log=rpm_log,
         meta_logic_repair_log=meta_logic_log,
+        generation_cleanup_log=cleanup_log,
     )
 
 

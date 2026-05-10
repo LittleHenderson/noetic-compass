@@ -158,17 +158,35 @@ def test_postprocess_flags_jargon_leak() -> None:
     assert any("jargon_count" in f for f in result.quality_failures)
 
 
-def test_postprocess_flags_adjacent_duplicate_words() -> None:
+def test_postprocess_repairs_adjacent_duplicate_words_and_passes_quality() -> None:
+    """As of generation_cleanup wiring (audit a2f1a90 follow-up):
+    adjacent duplicate words are REPAIRED by the cleanup pass before
+    the quality check fires. Both the repair (via cleanup_log) and
+    the now-clean quality state are recorded."""
     result = postprocess(
         source_cas="^1^P",
         raw_gen="The concept concept is visible.",
     )
-    assert result.quality_passed is False
-    assert result.adjacent_duplicate_count == 1
-    assert any("adjacent_duplicate_count" in f for f in result.quality_failures)
+    # Cleanup repaired the duplicate; final text no longer contains it.
+    assert result.final_text == "The concept is visible."
+    assert result.adjacent_duplicate_count == 0
+    # Cleanup log records the substitution for audit trail.
+    assert result.generation_cleanup_log is not None
+    assert len(result.generation_cleanup_log.adjacent_duplicate_substitutions) == 1
+    sub = result.generation_cleanup_log.adjacent_duplicate_substitutions[0]
+    assert sub.word == "concept"
+    # raw_text preserves the original (model output) verbatim.
+    assert "concept concept" in result.raw_text
+    # Quality check sees the cleaned text -> passes.
+    assert result.quality_passed is True
+    assert all("adjacent_duplicate" not in f for f in result.quality_failures)
 
 
 def test_postprocess_flags_repeated_phrase_loop() -> None:
+    """Multi-word repeated phrases (3-word windows repeating 3+
+    times) are NOT auto-repaired — only adjacent single-word
+    duplicates are. The repeated_phrase_count gate continues to
+    flag these for human review."""
     result = postprocess(
         source_cas="^8^P",
         raw_gen=(
