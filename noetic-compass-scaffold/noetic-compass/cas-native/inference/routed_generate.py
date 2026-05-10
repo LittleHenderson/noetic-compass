@@ -38,6 +38,12 @@ from cas_native.inference.cas_routing import (
 )
 from cas_native.inference.native_nl_generate import generate_reply
 from cas_native.inference.postprocessor import PostprocessResult, postprocess
+from cas_native.inference.rpm_retry import (
+    RpmRetryLog,
+    build_corrective_prompt,
+    retry_strictly_beats_original,
+    should_attempt_retry,
+)
 
 
 # rpm_chain decoder-seeding regex — extracts the FIRST let-binding's
@@ -95,6 +101,7 @@ class RoutedGenerationResult:
     postprocess_result: PostprocessResult
     generation_metadata: dict[str, Any] = field(default_factory=dict)
     seed_decoder_text: Optional[str] = None
+    rpm_retry_log: Optional[RpmRetryLog] = None
 
     @property
     def task_type(self) -> str:
@@ -116,6 +123,10 @@ class RoutedGenerationResult:
             "prompt_used": self.prompt_used,
             "postprocess": self.postprocess_result.to_dict(),
             "generation_metadata": dict(self.generation_metadata),
+            "rpm_retry_log": (
+                self.rpm_retry_log.to_dict()
+                if self.rpm_retry_log is not None else None
+            ),
         }
 
 
@@ -143,6 +154,7 @@ def routed_generate(
     device: Any = None,
     seed_rpm_silhouette: bool = True,
     prepend_task_token: bool = False,
+    apply_rpm_retry: bool = False,
 ) -> RoutedGenerationResult:
     """Run the unified routing + generation + postprocess pipeline.
 
@@ -203,6 +215,21 @@ def routed_generate(
             token ID and prepended to ``cas_prefix_ids`` at position
             0 inside ``generate_reply``. Default ``False`` so v1
             checkpoints continue to work unchanged.
+        apply_rpm_retry: Phase 3 experiment (default ``False`` —
+            opt-in). When True, AND the first generation produced
+            a non-empty ``rpm_repair_log.semantic_drifts`` AND the
+            structural skeleton is intact, ``generate_reply`` is
+            called a second time with a corrective prompt that
+            includes vocabulary hints derived from the drifted
+            axes. The retry result is postprocessed through
+            Phase 1 + Phase 2; if it has STRICTLY FEWER drifts
+            AND preserves stage coverage AND the edge match, it
+            replaces the original. Otherwise the original stands.
+            The model was NOT trained on corrective prompts, so
+            in-context learning is the only mechanism by which
+            the hint can bias the output. The experiment will tell
+            us whether that's enough; falling back to the original
+            on rejection means worst case is no regression.
     """
     routing = route_by_compilability(source_cas)
     prompt_text = build_prompt_from_routing(
@@ -253,13 +280,89 @@ def routed_generate(
         stopped_on_eos=stopped_on_eos,
     )
 
+    # Phase 3 — corrective retry experiment. Opt-in via
+    # apply_rpm_retry=True. Only fires when the original generation
+    # had detectable Phase 2 drifts AND structural skeleton is
+    # intact. The retry calls generate_reply a second time with a
+    # corrective prompt (vocabulary hints derived from drifted axes)
+    # and is accepted only if it strictly beats the original by the
+    # comparison heuristic. The user's "don't auto-rewrite semantic
+    # labels yet" guard is satisfied: the retry produces a fresh
+    # generation; nothing is substituted in the post-generated text.
+    rpm_retry_log: Optional[RpmRetryLog] = None
+    final_pp = pp
+    final_text = pp.final_text
+    if apply_rpm_retry and pp.rpm_repair_log is not None:
+        rpm_retry_log = RpmRetryLog()
+        gate_ok, gate_reason = should_attempt_retry(pp.rpm_repair_log)
+        if not gate_ok:
+            rpm_retry_log.attempted = False
+            rpm_retry_log.reason = gate_reason
+        else:
+            corrective_prompt, hint_axes = build_corrective_prompt(
+                source_cas=source_cas,
+                drifts=pp.rpm_repair_log.semantic_drifts,
+            )
+            rpm_retry_log.attempted = True
+            rpm_retry_log.hint_axes = hint_axes
+            rpm_retry_log.corrective_prompt = corrective_prompt
+            rpm_retry_log.n_drifts_original = len(
+                pp.rpm_repair_log.semantic_drifts
+            )
+            if not hint_axes:
+                rpm_retry_log.attempted = False
+                rpm_retry_log.reason = "no actionable hints derivable from drifts"
+            else:
+                retry_gen_out = generate_reply(
+                    model=model,
+                    tokenizer=tokenizer,
+                    prompt_text=corrective_prompt,
+                    cas_expression=source_cas,
+                    register=register,
+                    max_new_tokens=budget,
+                    sampling=sampling,
+                    temperature=temperature,
+                    top_p=top_p,
+                    use_cas_prefix=use_cas_prefix,
+                    device=device,
+                    seed_decoder_text=seed_text,
+                    prepend_cas_prefix_token_id=prepend_token_id,
+                )
+                retry_raw = str(retry_gen_out.get("reply_text", ""))
+                retry_stopped_on_eos = bool(
+                    retry_gen_out.get("stopped_on_eos", False)
+                )
+                retry_pp = postprocess(
+                    source_cas=source_cas,
+                    raw_gen=retry_raw,
+                    routing=routing,
+                    apply_repair=apply_repair,
+                    stopped_on_eos=retry_stopped_on_eos,
+                )
+                rpm_retry_log.n_drifts_retry = (
+                    len(retry_pp.rpm_repair_log.semantic_drifts)
+                    if retry_pp.rpm_repair_log is not None else 0
+                )
+                better, reason = retry_strictly_beats_original(
+                    original_log=pp.rpm_repair_log,
+                    retry_log=retry_pp.rpm_repair_log,
+                ) if retry_pp.rpm_repair_log is not None else (
+                    False, "retry produced no rpm_repair_log"
+                )
+                rpm_retry_log.reason = reason
+                if better:
+                    rpm_retry_log.used_retry = True
+                    final_pp = retry_pp
+                    final_text = retry_pp.final_text
+
     return RoutedGenerationResult(
-        final_text=pp.final_text,
+        final_text=final_text,
         raw_text=raw_text,
         routing=routing,
         prompt_used=prompt_text,
-        postprocess_result=pp,
+        postprocess_result=final_pp,
         seed_decoder_text=seed_text,
+        rpm_retry_log=rpm_retry_log,
         generation_metadata={
             "n_steps": gen_out.get("n_steps"),
             "seed_token_count": gen_out.get("seed_token_count", 0),

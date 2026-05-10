@@ -99,6 +99,12 @@ USE_V1C_TASK_TOKENS = bool(int(os.environ.get("USE_V1C_TASK_TOKENS", "0")))
 # binding regex). Set USE_V1C_RPM_SEED=0 explicitly when running a
 # v1-vs-v1c-vs-seed comparison eval that needs raw model behavior.
 USE_V1C_RPM_SEED = bool(int(os.environ.get("USE_V1C_RPM_SEED", "1")))
+# Phase 3 corrective retry experiment (default 0 — opt-in). When set
+# to 1, records with non-empty Phase 2 drift logs trigger a second
+# generate_reply call with vocabulary hints derived from the drifted
+# axes. Retry accepted only if it strictly beats the original; falls
+# back otherwise. Cost ~+12.5% per eval (3 of 24 records retry).
+USE_V1C_RPM_RETRY = bool(int(os.environ.get("USE_V1C_RPM_RETRY", "0")))
 CHECKPOINT_DIR_OVERRIDE = os.environ.get("CHECKPOINT_DIR")
 CHECKPOINT_DIR = Path(CHECKPOINT_DIR_OVERRIDE) if CHECKPOINT_DIR_OVERRIDE else DEFAULT_CHECKPOINT_DIR
 VAL_PATH = REPO_ROOT / "cas-synthetic" / "data" / "path_d" / "v1_mix_nlgen_val.jsonl"
@@ -113,6 +119,7 @@ def load_checkpoint():
     print(f"loading checkpoint from {CHECKPOINT_DIR}")
     print(f"  USE_V1C_TASK_TOKENS={USE_V1C_TASK_TOKENS}")
     print(f"  USE_V1C_RPM_SEED={USE_V1C_RPM_SEED}")
+    print(f"  USE_V1C_RPM_RETRY={USE_V1C_RPM_RETRY}")
     tokenizer = HybridCASTokenizer.load(CHECKPOINT_DIR / "tokenizer.json")
     bpe = CHECKPOINT_DIR / "english_bpe.json"
     if bpe.exists():
@@ -357,6 +364,7 @@ def main() -> int:
                 device=device,
                 prepend_task_token=USE_V1C_TASK_TOKENS,
                 seed_rpm_silhouette=USE_V1C_RPM_SEED,
+                apply_rpm_retry=USE_V1C_RPM_RETRY,
             )
 
         pp = r.postprocess_result
@@ -386,6 +394,10 @@ def main() -> int:
             "rpm_repair_log": (
                 pp.rpm_repair_log.to_dict()
                 if pp.rpm_repair_log is not None else None
+            ),
+            "rpm_retry_log": (
+                r.rpm_retry_log.to_dict()
+                if r.rpm_retry_log is not None else None
             ),
         }
         results.append(result)
