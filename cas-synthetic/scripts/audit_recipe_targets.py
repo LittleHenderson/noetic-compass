@@ -310,6 +310,13 @@ def audit_one_record(rec: dict) -> dict | None:
         if "register_present" in axes_status and not axes_status["register_present"]:
             register_misses.append(i)
 
+    # Per user directive 2026-05-10 + CAS v7.5 spec (CLAUDE.md
+    # Clarification 8): "Register is optional. CAS v7.4 expressions
+    # remain valid in v7.5". The strict_match check therefore does
+    # NOT require register_per_term. Register misses are LOGGED in
+    # ``register_misses_at_terms`` so audits can still surface the
+    # signal, but a row with register-only misses is treated as
+    # passing strict structural validation.
     strict_match = (
         primary_omega_match
         and side_omega_match
@@ -318,7 +325,17 @@ def audit_one_record(rec: dict) -> dict | None:
         and not noetic_misses
         and not domain_misses
         and not drive_misses
-        and not register_misses
+        # register_misses intentionally NOT required (flag-only).
+    )
+    register_only_failure = (
+        bool(register_misses)
+        and primary_omega_match
+        and side_omega_match
+        and coef_match
+        and side_kw_match
+        and not noetic_misses
+        and not domain_misses
+        and not drive_misses
     )
 
     return {
@@ -338,6 +355,7 @@ def audit_one_record(rec: dict) -> dict | None:
         "domain_misses_at_terms": domain_misses,
         "drive_misses_at_terms": drive_misses,
         "register_misses_at_terms": register_misses,
+        "register_only_failure": register_only_failure,
         "strict_match": strict_match,
     }
 

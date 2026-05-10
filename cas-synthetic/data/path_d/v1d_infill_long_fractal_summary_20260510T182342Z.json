@@ -1,0 +1,25 @@
+{
+  "timestamp": "20260510T182342Z",
+  "dry_run": false,
+  "total_planned": 60,
+  "accepted": 21,
+  "rejected": 39,
+  "by_k": {
+    "6": {
+      "planned": 0,
+      "accepted": 0
+    },
+    "7": {
+      "planned": 30,
+      "accepted": 13
+    },
+    "8": {
+      "planned": 30,
+      "accepted": 8
+    }
+  },
+  "spend_usd": 0.1489,
+  "model": "claude-haiku-4-5-20251001",
+  "max_retries": 3,
+  "round": "k7_k8_followup"
+}
