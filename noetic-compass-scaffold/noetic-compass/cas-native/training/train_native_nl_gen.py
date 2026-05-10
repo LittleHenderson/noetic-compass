@@ -494,6 +494,33 @@ def emit_train_step_event(
     return event
 
 
+def _record_task_type(record: dict[str, Any]) -> str:
+    """Best-effort extraction of the per-record task type for logging.
+
+    Path D records carry ``v1mix_task_type``; older records may carry
+    ``task_type`` or ``slot``. Returns an empty string when none are
+    set (event field stays present but empty for downstream parsers).
+    """
+    for key in ("v1mix_task_type", "task_type", "slot"):
+        value = record.get(key)
+        if isinstance(value, str) and value.strip():
+            return value
+    return ""
+
+
+def _record_category(record: dict[str, Any]) -> str:
+    """Best-effort extraction of the per-record category for logging.
+
+    Path D Wave 2.5 records carry ``category`` (e.g. ``rpm_chain``,
+    ``compound_state``, ``v76_production``). Returns empty when not
+    present.
+    """
+    value = record.get("category")
+    if isinstance(value, str) and value.strip():
+        return value
+    return ""
+
+
 def emit_sample_reply_event(
     *,
     event_id: str,
@@ -518,6 +545,8 @@ def emit_sample_reply_event(
         "trace_id": str(record.get("trace_id", "")),
         "conversation_id": str(record.get("conversation_id", "")),
         "turn_index": record.get("turn_index"),
+        "task_type": _record_task_type(record),
+        "category": _record_category(record),
         "prompt_text": _record_text(record, ("prompt_text", "prompt")),
         "target_reply_text": _record_text(record, ("reply_text", "reply")),
         "generated_reply_text": str(generated.get("reply_text", "")),
@@ -561,6 +590,8 @@ def emit_sample_reply_error_event(
         "sample_index": int(sample_index),
         "record_id": str(record.get("id", "")),
         "trace_id": str(record.get("trace_id", "")),
+        "task_type": _record_task_type(record),
+        "category": _record_category(record),
         "prompt_text": _record_text(record, ("prompt_text", "prompt")),
         "cas_expression": _record_text(record, ("cas_expression",)),
         "error_type": type(error).__name__,
@@ -741,14 +772,66 @@ def run_training(args: argparse.Namespace) -> int:
         return 5
 
     generate_reply_fn = None
-    sample_record: dict[str, Any] | None = None
     sample_record_index = int(getattr(args, "sample_record_index", 0) or 0)
+    sample_indices_arg = str(getattr(args, "sample_record_indices", "") or "").strip()
+    sample_pool: list[dict[str, Any]] = []
+    sample_rotation: list[tuple[int, dict[str, Any]]] = []
+    sample_rotation_pos = 0
     if sample_every_steps > 0:
         from cas_native.inference.native_nl_generate import generate_reply
 
         generate_reply_fn = generate_reply
         sample_pool = val_records if val_records else train_records
-        sample_record = sample_pool[sample_record_index % len(sample_pool)]
+        if not sample_pool:
+            print(json.dumps({
+                "event": "fatal",
+                "reason": "sample_reply_requested_but_no_val_or_train_records",
+            }))
+            return 5
+        # Resolve rotation indices. --sample-record-indices wins when set;
+        # otherwise fall back to a single-element rotation built from the
+        # legacy --sample-record-index flag (preserves prior behavior).
+        raw_indices: list[int] = []
+        if sample_indices_arg:
+            for token in sample_indices_arg.split(","):
+                token = token.strip()
+                if not token:
+                    continue
+                try:
+                    raw_indices.append(int(token))
+                except ValueError:
+                    print(json.dumps({
+                        "event": "fatal",
+                        "reason": "sample_record_indices_not_integer",
+                        "token": token,
+                    }))
+                    return 5
+        else:
+            raw_indices = [sample_record_index]
+        # Dedupe while preserving order; clamp into pool bounds.
+        seen: set[int] = set()
+        for idx in raw_indices:
+            wrapped = idx % len(sample_pool)
+            if wrapped in seen:
+                continue
+            seen.add(wrapped)
+            sample_rotation.append((wrapped, sample_pool[wrapped]))
+        if not sample_rotation:
+            print(json.dumps({
+                "event": "fatal",
+                "reason": "sample_rotation_empty_after_resolution",
+            }))
+            return 5
+        # Emit a rotation manifest so the run history names which records
+        # are being sampled before the first generation event fires.
+        print(json.dumps({
+            "event": "sample_rotation_pool",
+            "n_records": len(sample_rotation),
+            "indices": [i for i, _ in sample_rotation],
+            "record_ids": [str(r.get("id", "")) for _, r in sample_rotation],
+            "task_types": [_record_task_type(r) for _, r in sample_rotation],
+            "categories": [_record_category(r) for _, r in sample_rotation],
+        }))
 
     # Tokenizer provenance — recorded in checkpoint_manifest so a checkpoint
     # is never separated from the vocab needed to decode it.
@@ -1018,7 +1101,11 @@ def run_training(args: argparse.Namespace) -> int:
 
                 if sample_every_steps > 0 and global_step % sample_every_steps == 0:
                     assert generate_reply_fn is not None
-                    assert sample_record is not None
+                    assert sample_rotation, "sample_rotation must be non-empty when sample_every_steps>0"
+                    rot_idx, sample_record = sample_rotation[
+                        sample_rotation_pos % len(sample_rotation)
+                    ]
+                    sample_rotation_pos += 1
                     was_training = bool(model.training)
                     try:
                         generated = generate_reply_fn(
@@ -1042,7 +1129,7 @@ def run_training(args: argparse.Namespace) -> int:
                             checkpoint_id=checkpoint_id,
                             step=global_step,
                             epoch=epoch,
-                            sample_index=sample_record_index,
+                            sample_index=rot_idx,
                             record=sample_record,
                             generated=generated,
                             out_stream=event_stream,
@@ -1053,7 +1140,7 @@ def run_training(args: argparse.Namespace) -> int:
                             checkpoint_id=checkpoint_id,
                             step=global_step,
                             epoch=epoch,
-                            sample_index=sample_record_index,
+                            sample_index=rot_idx,
                             record=sample_record,
                             error=exc,
                             out_stream=event_stream,
@@ -1094,6 +1181,18 @@ def run_training(args: argparse.Namespace) -> int:
             "sample_reply": {
                 "sample_every_steps": sample_every_steps,
                 "sample_record_index": sample_record_index,
+                "sample_record_indices_arg": sample_indices_arg,
+                "sample_rotation_indices": [i for i, _ in sample_rotation],
+                "sample_rotation_record_ids": [
+                    str(r.get("id", "")) for _, r in sample_rotation
+                ],
+                "sample_rotation_task_types": [
+                    _record_task_type(r) for _, r in sample_rotation
+                ],
+                "sample_rotation_categories": [
+                    _record_category(r) for _, r in sample_rotation
+                ],
+                "sample_rotation_n_events_emitted": int(sample_rotation_pos),
                 "sample_max_new_tokens": sample_max_new_tokens,
                 "sample_sampling": str(getattr(args, "sample_sampling", "greedy")),
                 "sample_temperature": float(getattr(args, "sample_temperature", 0.8)),
@@ -1257,7 +1356,25 @@ def build_parser() -> argparse.ArgumentParser:
         "--sample-record-index",
         type=int,
         default=0,
-        help="Index into the validation split for periodic sample_reply events.",
+        help=(
+            "Index into the validation split for periodic sample_reply "
+            "events. Used only when --sample-record-indices is empty."
+        ),
+    )
+    p.add_argument(
+        "--sample-record-indices",
+        type=str,
+        default="",
+        help=(
+            "Comma-separated list of record indices to rotate through "
+            "for periodic sample_reply events. Round-robin: the Nth "
+            "sampling event picks indices[N %% len]. When set, overrides "
+            "--sample-record-index. Recommended for any run that should "
+            "monitor sample diversity across tasks/categories (the "
+            "rotation pool is logged at startup as a "
+            "'sample_rotation_pool' event so the run history names "
+            "which records are being watched)."
+        ),
     )
     p.add_argument("--sample-max-new-tokens", type=int, default=80)
     p.add_argument(
