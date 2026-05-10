@@ -1,0 +1,39 @@
+{
+  "timestamp": "20260510T162755Z",
+  "dry_run": false,
+  "total_rows_processed": 15,
+  "accepted": 9,
+  "rejected": 6,
+  "pass_rate_overall": 0.6,
+  "by_category": {
+    "fractal": {
+      "total": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "pass_rate": 1.0,
+      "avg_attempts": 1.2
+    },
+    "recipe": {
+      "total": 5,
+      "accepted": 3,
+      "rejected": 2,
+      "pass_rate": 0.6,
+      "avg_attempts": 2.0
+    },
+    "meta_logic": {
+      "total": 5,
+      "accepted": 1,
+      "rejected": 4,
+      "pass_rate": 0.2,
+      "avg_attempts": 3.0
+    }
+  },
+  "spend_usd": 0.0274,
+  "model": "claude-haiku-4-5-20251001",
+  "max_retries": 3,
+  "by_category_queued": {
+    "fractal": 5,
+    "recipe": 5,
+    "meta_logic": 5
+  }
+}

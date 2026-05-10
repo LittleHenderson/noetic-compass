@@ -385,9 +385,26 @@ _NUMBER_WORDS = {
     "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
 }
 _GROUP_NOUNS = ("group", "groups", "cluster", "clusters", "set", "sets")
-_GROUP_COUNT_RX = re.compile(
-    r"\b(" + "|".join(_NUMBER_WORDS.keys()) + r"|\d+)\s+("
-    + "|".join(_GROUP_NOUNS) + r")\b",
+# Three cardinality patterns (most specific first):
+#   A. "<number> [adjective]{0,2} <group_noun>"   e.g. "three distinct groups"
+#   B. ordinal repetition: "first group ... second group ... third group"
+#   C. (a|the|another) <group_noun> repetition: "a group ... a group"
+_GROUP_COUNT_RX_A = re.compile(
+    r"\b(?P<num>" + "|".join(_NUMBER_WORDS.keys()) + r"|\d+)\b"
+    r"(?:\s+\w+){0,2}"
+    r"\s+(?:" + "|".join(_GROUP_NOUNS) + r")\b",
+    re.IGNORECASE,
+)
+_ORDINAL_GROUP_RX = re.compile(
+    r"\b(?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)\s+"
+    r"(?:\w+\s+){0,2}"
+    r"(?:" + "|".join(_GROUP_NOUNS) + r")\b",
+    re.IGNORECASE,
+)
+_REPEAT_GROUP_RX = re.compile(
+    r"\b(?:a|the|another|second|third)\s+"
+    r"(?:\w+\s+){0,2}"
+    r"(?:" + "|".join(_GROUP_NOUNS) + r")\b",
     re.IGNORECASE,
 )
 
@@ -396,15 +413,29 @@ def _detect_cluster_word_count(text: str) -> int:
     """Best-effort estimate of how many groups/clusters the rendered
     text claims. Returns 0 when no countable phrase is found.
 
+    Tries three patterns in order: direct ``<number> [adj]{0,2} <noun>``,
+    ordinal-list (``first group / second group / third group``), and
+    article-repetition (``a group ... a group``).
+
     Phase 1 only LOGS this; downstream audits compare to source
     cluster_count to surface cardinality drift."""
-    m = _GROUP_COUNT_RX.search(text)
-    if m is None:
-        return 0
-    word = m.group(1).lower()
-    if word.isdigit():
-        return int(word)
-    return _NUMBER_WORDS.get(word, 0)
+    m = _GROUP_COUNT_RX_A.search(text)
+    if m is not None:
+        word = m.group("num").lower()
+        if word.isdigit():
+            return int(word)
+        if word in _NUMBER_WORDS:
+            return _NUMBER_WORDS[word]
+    ordinals_seen: set[str] = set()
+    for om in _ORDINAL_GROUP_RX.finditer(text):
+        ordinal = om.group(0).split()[0].lower()
+        ordinals_seen.add(ordinal)
+    if len(ordinals_seen) >= 2:
+        return len(ordinals_seen)
+    repetitions = list(_REPEAT_GROUP_RX.finditer(text))
+    if len(repetitions) >= 2:
+        return len(repetitions)
+    return 0
 
 
 # Canonical Noetic colloquialisms (mirrors rpm_repair Phase 2 map but

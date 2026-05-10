@@ -228,6 +228,65 @@ def test_cluster_count_matches_when_rendered_text_says_correct_count():
     assert log.cluster_count_matches is True
 
 
+def test_cluster_count_handles_intervening_adjective():
+    """Smoke 2026-05-10 regression fix: 'three distinct groups' must
+    detect cardinality 3, not 0. Intervening adjective between number
+    and group noun should not break the match."""
+    cas = (
+        "PartitionOf(Noetics, NoeticCluster{^5}, "
+        "NoeticCluster{^1, ^2}, NoeticCluster{^0})"
+    )
+    rendered = "The set partitions into three distinct groups."
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert log.found_cluster_word_count == 3
+    assert log.cluster_count_matches is True
+
+
+def test_cluster_count_handles_two_intervening_adjectives():
+    cas = (
+        "PartitionOf(Noetics, NoeticCluster{^5}, NoeticCluster{^0})"
+    )
+    rendered = "Partitions into two clearly separate groups."
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert log.found_cluster_word_count == 2
+
+
+def test_cluster_count_handles_ordinal_repetition():
+    """When the model uses 'first group / second group / third group'
+    enumeration without ever stating a numeric count, count by ordinals."""
+    cas = (
+        "PartitionOf(Noetics, NoeticCluster{^5}, "
+        "NoeticCluster{^1}, NoeticCluster{^0})"
+    )
+    rendered = (
+        "The first group contains the first noetic. "
+        "The second group contains the second. "
+        "The third group contains the third."
+    )
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    assert log.found_cluster_word_count == 3
+
+
+def test_cluster_count_handles_article_repetition_pattern():
+    """Smoke 2026-05-10 case: 'covers a group of three noetics ... cover
+    a larger group of nine noetics' should count as 2 clusters via the
+    'a group' / 'a group' repetition pattern (not as 3 from 'group of
+    three' which is members, not clusters)."""
+    cas = (
+        "CoverOf(Noetics, NoeticCluster{^0, ^2, ^4}, "
+        "NoeticCluster{^0, ^1, ^3, ^5, ^6, ^7, ^8, ^9})"
+    )
+    rendered = (
+        "Covers a group of three noetics, which together cover "
+        "a larger group of nine noetics."
+    )
+    out, log = repair_meta_logic_rendering(source_cas=cas, rendered=rendered)
+    # Pattern A would match "three noetics" but "noetics" isn't in
+    # _GROUP_NOUNS, so Pattern A returns nothing. Pattern C catches
+    # the "a group" / "a group" repetition for cardinality 2.
+    assert log.found_cluster_word_count == 2
+
+
 def test_cluster_count_logged_when_rendered_says_wrong_count():
     """Phase 1 must FLAG cluster cardinality drift but NOT rewrite
     it. Audit's record-16 hint: source has 3 clusters, rendered

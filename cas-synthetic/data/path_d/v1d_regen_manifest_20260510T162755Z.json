@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260510T162755Z",
+  "dry_run": false,
+  "outputs": {
+    "clean": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\v1d_regen_clean_20260510T162755Z.jsonl",
+    "rejects": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\v1d_regen_rejects_20260510T162755Z.jsonl",
+    "summary": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\v1d_regen_summary_20260510T162755Z.json",
+    "manifest": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\v1d_regen_manifest_20260510T162755Z.json"
+  },
+  "v1d_corpus_intent": "Replace these audit_row_id rows in v1_mix_nlgen_train.jsonl (and val/test analogs) with the corresponding v1d_regen_clean rows. The replacement keys on original_id.",
+  "replacement_ids": [
+    "v1mix_cas_to_english_000012",
+    "v1mix_cas_to_english_000033",
+    "v1mix_cas_to_english_000036",
+    "v1mix_cas_to_english_000047",
+    "v1mix_cas_to_english_000091",
+    "v1mix_cas_to_english_000111",
+    "v1mix_cas_to_english_000161",
+    "v1mix_cas_to_english_000173",
+    "v1mix_cas_to_english_000328"
+  ],
+  "still_failing_ids": [
+    "v1mix_cas_to_english_000011",
+    "v1mix_cas_to_english_000154",
+    "v1mix_cas_to_english_000107",
+    "v1mix_cas_to_english_000181",
+    "v1mix_cas_to_english_000241",
+    "v1mix_cas_to_english_000418"
+  ]
+}

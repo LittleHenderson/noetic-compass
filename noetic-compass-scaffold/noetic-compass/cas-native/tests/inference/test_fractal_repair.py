@@ -114,6 +114,47 @@ def test_extract_returns_empty_when_no_indicators_present():
 
 
 # ---------------------------------------------------------------------------
+# Abutting-same-Noetic dedup (smoke 2026-05-10 regression fix)
+# ---------------------------------------------------------------------------
+
+def test_abutting_who_one_is_shaped_by_experiences_counts_as_one_5():
+    """'who one is' and 'shaped by experiences' both match ^5 and the
+    smoke run found models rendering them as a single elaborated phrase.
+    The dedup should treat that as ONE ^5 emission, not two."""
+    out = extract_noetic_sequence("Who one is shaped by experiences.")
+    assert out == [5]
+
+
+def test_abutting_dedup_preserves_distant_same_noetic_repeat():
+    """When the same noetic appears at clearly-separated positions
+    (more than ~5 chars between them), both should emit. Source
+    Φ<5:5> is a legitimate doubled k that the model must render
+    as two distinct stages."""
+    out = extract_noetic_sequence(
+        "Who one is, then later who one is again."
+    )
+    # Two separate ^5 emissions: "who one is" + "who one is again"
+    assert out == [5, 5]
+
+
+def test_abutting_dedup_does_not_collapse_different_noetics():
+    """Different noetics adjacent to each other must both emit."""
+    out = extract_noetic_sequence(
+        "Who one is then breaking it down then practiced rhythm."
+    )
+    assert out == [5, 6, 7]
+
+
+def test_abutting_dedup_handles_three_same_noetic_indicators():
+    """Three abutting ^5 indicators in one phrase still emit one ^5."""
+    out = extract_noetic_sequence(
+        "Who one is shaped by experiences who you are."
+    )
+    # All three are ^5 indicators packed together — emit once.
+    assert out == [5]
+
+
+# ---------------------------------------------------------------------------
 # Comparison + log structure
 # ---------------------------------------------------------------------------
 

@@ -118,17 +118,46 @@ def _build_indicator_table() -> list[tuple[str, int]]:
 _INDICATOR_TABLE = _build_indicator_table()
 
 
+# When two same-Noetic indicators abut on pure whitespace (e.g., "who
+# one is shaped by experiences" matches both "who one is" AND "shaped
+# by experiences" — both ^5 — separated only by a space), the second
+# match is an ELABORATION of the first, not a separate stage emission.
+# We dedup on PURE-WHITESPACE-AND-SHORT gap, NOT on punctuation gap.
+#
+# Trace examples:
+#   "who one is shaped by experiences"   gap=" "    -> dedup (elaboration)
+#   "who one is who you are"             gap=" "    -> dedup (chained elaboration)
+#   "paying attention, paying attention" gap=", "   -> NO dedup (enumeration)
+#   "who one is, then who one is again"  gap=", then " -> NO dedup (enumeration)
+#
+# The dedup is keyed on LAST-SEEN-same-k end position (whether the
+# previous same-k match was emitted or suppressed) so a 3-indicator
+# elaboration chain collapses to one emission.
+_ELABORATION_GAP_MAX_CHARS = 3  # at most 3 whitespace chars between matches
+
+
 def extract_noetic_sequence(text: str) -> list[int]:
     """Scan ``text`` left-to-right and return the ordered list of
     Noetic k-values detected via the colloquialism map. Each detected
     indicator contributes one item; longest-match-wins at each
     starting position; word boundaries enforced so "thought" doesn't
-    match inside "thoughtful"."""
+    match inside "thoughtful".
+
+    Abutting same-Noetic matches (e.g., "who one is shaped by
+    experiences" matching both `who one is` and `shaped by
+    experiences` for ^5) are collapsed when separated only by pure
+    whitespace. Comma-separated repetitions ("paying attention,
+    paying attention") are preserved as distinct stages.
+    """
     if not text:
         return []
     text_lower = text.lower()
     n = len(text_lower)
-    result: list[int] = []
+    # Track last-seen end position per k (whether emitted or suppressed)
+    # so a 3-indicator chain can dedup against the most recent same-k
+    # match even if the middle one was suppressed.
+    last_seen_end_per_k: dict[int, int] = {}
+    emitted: list[tuple[int, int, int]] = []
     i = 0
     while i < n:
         matched = False
@@ -138,10 +167,6 @@ def extract_noetic_sequence(text: str) -> list[int]:
                 continue
             if text_lower[i:i + ind_len] != ind:
                 continue
-            # Word-boundary check: char before must be non-alnum (or
-            # at string start), char after must be non-alnum (or at
-            # string end). Apostrophes and hyphens treated as part
-            # of the word for this check.
             before_ok = (i == 0) or not (
                 text_lower[i - 1].isalnum() or text_lower[i - 1] in "'-"
             )
@@ -151,13 +176,28 @@ def extract_noetic_sequence(text: str) -> list[int]:
                 or text_lower[after_idx] in "'-"
             )
             if before_ok and after_ok:
-                result.append(k)
+                # Elaboration dedup: same k AND gap is pure whitespace
+                # AND short -> suppress as elaboration of prior match.
+                should_emit = True
+                if k in last_seen_end_per_k:
+                    prev_end = last_seen_end_per_k[k]
+                    gap_text = text_lower[prev_end:i]
+                    if (
+                        gap_text.strip() == ""
+                        and len(gap_text) <= _ELABORATION_GAP_MAX_CHARS
+                    ):
+                        should_emit = False
+                if should_emit:
+                    emitted.append((i, i + ind_len, k))
+                # Always update last-seen tracker, whether emitted or
+                # suppressed — chained elaborations need this.
+                last_seen_end_per_k[k] = i + ind_len
                 i += ind_len
                 matched = True
                 break
         if not matched:
             i += 1
-    return result
+    return [k for _, _, k in emitted]
 
 
 # ---------------------------------------------------------------------------

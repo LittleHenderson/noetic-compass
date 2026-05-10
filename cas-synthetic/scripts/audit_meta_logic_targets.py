@@ -68,15 +68,32 @@ _RELATION_PATTERNS: dict[str, re.Pattern] = {
     "Product":     re.compile(r"\bproduct\w*\b",   re.IGNORECASE),
 }
 
-# Group-count detection (mirrors meta_logic_repair).
+# Group-count detection. Three patterns (most specific first):
+#   A. "<number> [adjective]{0,2} <group_noun>"   e.g. "three distinct groups"
+#   B. ordinal-list: "<ordinal> ... <group_noun>" repeated  e.g. "the first group ... the second group ... the third group"
+#   C. repetition: 2+ occurrences of "(a|the|another) [adj]{0,2} <group_noun>"
+#                  e.g. "covers a group of three noetics ... cover a larger group of nine noetics"
 _NUMBER_WORDS = {
     "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
     "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
 }
 _GROUP_NOUNS = ("group", "groups", "cluster", "clusters", "set", "sets")
-_GROUP_COUNT_RX = re.compile(
-    r"\b(" + "|".join(_NUMBER_WORDS.keys()) + r"|\d+)\s+(?:"
-    + "|".join(_GROUP_NOUNS) + r")\b",
+_GROUP_COUNT_RX_A = re.compile(
+    r"\b(?P<num>" + "|".join(_NUMBER_WORDS.keys()) + r"|\d+)\b"
+    r"(?:\s+\w+){0,2}"
+    r"\s+(?:" + "|".join(_GROUP_NOUNS) + r")\b",
+    re.IGNORECASE,
+)
+_ORDINAL_GROUP_RX = re.compile(
+    r"\b(?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)\s+"
+    r"(?:\w+\s+){0,2}"
+    r"(?:" + "|".join(_GROUP_NOUNS) + r")\b",
+    re.IGNORECASE,
+)
+_REPEAT_GROUP_RX = re.compile(
+    r"\b(?:a|the|another|second|third)\s+"
+    r"(?:\w+\s+){0,2}"
+    r"(?:" + "|".join(_GROUP_NOUNS) + r")\b",
     re.IGNORECASE,
 )
 
@@ -114,14 +131,36 @@ def _detect_relation_in_target(target: str) -> str | None:
 
 
 def _detect_cluster_count(target: str) -> int:
-    """Best-effort cluster-cardinality estimate from the target text."""
-    m = _GROUP_COUNT_RX.search(target)
-    if m is None:
-        return 0
-    word = m.group(1).lower()
-    if word.isdigit():
-        return int(word)
-    return _NUMBER_WORDS.get(word, 0)
+    """Best-effort cluster-cardinality estimate from the target text.
+
+    Tries three patterns in order:
+      A. ``<number> [adjective]{0,2} <group_noun>`` ("three distinct
+         groups") — extracts the number directly.
+      B. ordinal mentions ("first group / second group / third group")
+         — counts the unique ordinals.
+      C. repetition: count occurrences of ``a/the/another <group_noun>``
+         when there are >= 2 hits.
+    """
+    # Pattern A — direct number + optional adjectives + group noun.
+    m = _GROUP_COUNT_RX_A.search(target)
+    if m is not None:
+        word = m.group("num").lower()
+        if word.isdigit():
+            return int(word)
+        if word in _NUMBER_WORDS:
+            return _NUMBER_WORDS[word]
+    # Pattern B — count unique ordinals modifying group nouns.
+    ordinals_seen: set[str] = set()
+    for om in _ORDINAL_GROUP_RX.finditer(target):
+        ordinal = om.group(0).split()[0].lower()
+        ordinals_seen.add(ordinal)
+    if len(ordinals_seen) >= 2:
+        return len(ordinals_seen)
+    # Pattern C — repetition of "(a|the|another|second|third) ... <noun>".
+    repetitions = list(_REPEAT_GROUP_RX.finditer(target))
+    if len(repetitions) >= 2:
+        return len(repetitions)
+    return 0
 
 
 def _noetic_present_in_target(noetic: int, target_lower: str) -> bool:
