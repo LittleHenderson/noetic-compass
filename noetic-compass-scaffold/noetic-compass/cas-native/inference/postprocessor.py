@@ -39,6 +39,10 @@ from cas_native.inference.rpm_repair import (
     RpmRepairLog,
     repair_rpm_rendering,
 )
+from cas_native.inference.meta_logic_repair import (
+    MetaLogicRepairLog,
+    repair_meta_logic_rendering,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -137,6 +141,7 @@ class PostprocessResult:
     quality_passed: bool = True
     quality_failures: list[str] = field(default_factory=list)
     rpm_repair_log: Optional[RpmRepairLog] = None
+    meta_logic_repair_log: Optional[MetaLogicRepairLog] = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -172,6 +177,10 @@ class PostprocessResult:
                 self.rpm_repair_log.to_dict()
                 if self.rpm_repair_log is not None else None
             ),
+            "meta_logic_repair_log": (
+                self.meta_logic_repair_log.to_dict()
+                if self.meta_logic_repair_log is not None else None
+            ),
         }
 
 
@@ -186,6 +195,7 @@ def postprocess(
     routing: Optional[RoutingDecision] = None,
     apply_repair: bool = False,
     apply_rpm_repair: bool = True,
+    apply_meta_logic_repair: bool = True,
     score_recovery: bool = True,
     quality_check: bool = True,
     stopped_on_eos: Optional[bool] = None,
@@ -240,6 +250,16 @@ def postprocess(
     rpm_log: Optional[RpmRepairLog] = None
     if apply_rpm_repair and routing.task_type == "cas_to_english":
         final_text, rpm_log = repair_rpm_rendering(
+            source_cas=source_cas, rendered=final_text,
+        )
+
+    # Phase 1 meta-logic repair: gated on cas_to_english routing AND
+    # source containing PartitionOf/CoverOf/Product. parse_meta_logic
+    # returns None for non-meta-logic shapes, which makes
+    # repair_meta_logic_rendering a no-op pass-through.
+    meta_logic_log: Optional[MetaLogicRepairLog] = None
+    if apply_meta_logic_repair and routing.task_type == "cas_to_english":
+        final_text, meta_logic_log = repair_meta_logic_rendering(
             source_cas=source_cas, rendered=final_text,
         )
 
@@ -307,6 +327,7 @@ def postprocess(
         quality_passed=quality_passed,
         quality_failures=quality_failures,
         rpm_repair_log=rpm_log,
+        meta_logic_repair_log=meta_logic_log,
     )
 
 

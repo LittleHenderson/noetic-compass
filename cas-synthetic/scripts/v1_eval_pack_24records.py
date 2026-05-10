@@ -399,6 +399,10 @@ def main() -> int:
                 r.rpm_retry_log.to_dict()
                 if r.rpm_retry_log is not None else None
             ),
+            "meta_logic_repair_log": (
+                pp.meta_logic_repair_log.to_dict()
+                if pp.meta_logic_repair_log is not None else None
+            ),
         }
         results.append(result)
 
