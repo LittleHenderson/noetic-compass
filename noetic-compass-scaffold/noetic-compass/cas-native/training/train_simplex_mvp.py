@@ -564,6 +564,349 @@ def run_integration_step(
     }
 
 
+def stratified_sample(
+    records: list[dict[str, Any]],
+    target_n: int,
+    *,
+    category_key: str = "v1mix_grammar_category_or_error_class",
+    seed: int = 1729,
+) -> list[dict[str, Any]]:
+    """Stratified sample of ``target_n`` records.
+
+    Ensures at least one record per category when categories are present.
+    Falls back to a deterministic shuffle when category_key is missing.
+    Used by Stage 5 CPU smoke per execution plan §Stage 5
+    ("200-record stratified sample, ≥1 per grammar category").
+    """
+    import random as _random
+    rng = _random.Random(seed)
+    if not records:
+        return []
+
+    # Group by category
+    by_cat: dict[str, list[dict[str, Any]]] = {}
+    for rec in records:
+        cat = rec.get(category_key) or "unk"
+        by_cat.setdefault(cat, []).append(rec)
+
+    # Shuffle each group deterministically
+    for cat in by_cat:
+        rng.shuffle(by_cat[cat])
+
+    if not by_cat:
+        shuffled = list(records)
+        rng.shuffle(shuffled)
+        return shuffled[:target_n]
+
+    # Round-robin: pull one record from each category in turn until we hit target_n
+    sampled: list[dict[str, Any]] = []
+    cats = sorted(by_cat.keys())
+    cursors = {c: 0 for c in cats}
+    exhausted = set()
+    while len(sampled) < target_n and len(exhausted) < len(cats):
+        for cat in cats:
+            if len(sampled) >= target_n:
+                break
+            if cursors[cat] < len(by_cat[cat]):
+                sampled.append(by_cat[cat][cursors[cat]])
+                cursors[cat] += 1
+            else:
+                exhausted.add(cat)
+    return sampled
+
+
+def evaluate_gates(
+    *,
+    loss_history: list[dict[str, float]],
+    simplex_min_p_history: list[float],
+    simplex_entropy_history: list[float],
+) -> dict[str, Any]:
+    """Apply the Stage 5 CPU-smoke gate criteria to a training-step history.
+
+    Returns a dict with:
+      - per-gate pass/fail booleans
+      - per-gate evidence (numeric values from the run)
+      - overall verdict (PASS / FAIL)
+    """
+    gates: dict[str, Any] = {}
+
+    # Gate 1: no NaN/Inf in any loss term at any step
+    nan_steps: list[int] = []
+    for i, h in enumerate(loss_history):
+        for k, v in h.items():
+            if not (isinstance(v, (int, float)) and (v == v) and v != float("inf") and v != float("-inf")):
+                nan_steps.append(i)
+                break
+    gates["no_nan_inf"] = {
+        "pass": len(nan_steps) == 0,
+        "nan_steps": nan_steps[:5],
+    }
+
+    # Gate 2: simplex_min_p > 0 at every step
+    min_simplex = min(simplex_min_p_history) if simplex_min_p_history else 0.0
+    gates["simplex_min_above_floor"] = {
+        "pass": min_simplex > 0.0,
+        "min_observed": min_simplex,
+    }
+
+    # Gate 3: entropy does not collapse — bounded below by some heuristic
+    # (uniform = log(40) ≈ 3.689; collapse threshold ~ 0.5)
+    min_entropy = min(simplex_entropy_history) if simplex_entropy_history else 0.0
+    gates["entropy_does_not_collapse"] = {
+        "pass": min_entropy > 0.5,
+        "min_entropy_observed": min_entropy,
+    }
+
+    # Gate 4: LM loss does not explode (final LM <= initial * 2)
+    lm_values = [h.get("loss_lm", 0.0) for h in loss_history]
+    gates["lm_does_not_explode"] = {
+        "pass": (
+            len(lm_values) >= 2
+            and lm_values[-1] <= max(lm_values[0] * 2.0, lm_values[0] + 2.0)
+        ),
+        "lm_initial": lm_values[0] if lm_values else 0.0,
+        "lm_final": lm_values[-1] if lm_values else 0.0,
+    }
+
+    # Gate 5: LM trends down over a 10-step smoothing window
+    if len(lm_values) >= 20:
+        first10 = sum(lm_values[:10]) / 10.0
+        last10 = sum(lm_values[-10:]) / 10.0
+        gates["lm_decreasing"] = {
+            "pass": last10 < first10,
+            "first10_mean": first10,
+            "last10_mean": last10,
+            "delta": last10 - first10,
+        }
+    else:
+        gates["lm_decreasing"] = {
+            "pass": True,  # not enough data; don't fail
+            "note": "fewer than 20 steps; window check skipped",
+        }
+
+    # Gate 6: FR loss finite and moving toward zero (or at least not exploding)
+    fr_values = [h.get("loss_fr", 0.0) for h in loss_history]
+    all_fr_finite = all(
+        (v == v) and v != float("inf") and v != float("-inf") for v in fr_values
+    )
+    if len(fr_values) >= 20:
+        first10 = sum(fr_values[:10]) / 10.0
+        last10 = sum(fr_values[-10:]) / 10.0
+        gates["fr_finite_and_directional"] = {
+            "pass": all_fr_finite and last10 <= first10 + 0.5,
+            "first10_mean": first10,
+            "last10_mean": last10,
+            "delta": last10 - first10,
+        }
+    else:
+        gates["fr_finite_and_directional"] = {
+            "pass": all_fr_finite,
+            "note": "fewer than 20 steps; trend check skipped",
+        }
+
+    # Gate 7: gradients nonzero for encoder AND decoder
+    enc_norms = [h.get("grad_norm_encoder", 0.0) for h in loss_history]
+    dec_norms = [h.get("grad_norm_decoder", 0.0) for h in loss_history]
+    gates["gradients_flow_both_paths"] = {
+        "pass": (
+            len(enc_norms) > 0 and len(dec_norms) > 0
+            and any(n > 0 for n in enc_norms)
+            and any(n > 0 for n in dec_norms)
+        ),
+        "encoder_grad_norm_min": min(enc_norms) if enc_norms else 0.0,
+        "decoder_grad_norm_min": min(dec_norms) if dec_norms else 0.0,
+    }
+
+    overall_pass = all(g.get("pass", False) for g in gates.values())
+    return {
+        "verdict": "PASS" if overall_pass else "FAIL",
+        "gates": gates,
+        "n_steps": len(loss_history),
+    }
+
+
+def run_cpu_smoke(
+    cfg: SimplexTrainConfig,
+    records: list[dict[str, Any]],
+    *,
+    output_dir: Path,
+    n_steps: int = 50,
+) -> dict[str, Any]:
+    """Stage 5 CPU smoke: 50 steps × batch 4 with all 5 losses live.
+
+    Per execution plan §Stage 5:
+      - Build tokenizer from stratified 200-record sample
+      - Build model at smoke config (d_model=64, 2/2 layers, 4 heads)
+      - Run 50 steps, emit train_progress every --train-log-every-steps
+      - Validate gates at end; write smoke_report.json
+      - Halt on any NaN/Inf
+
+    Returns dict with per-step history + gate verdict.
+    """
+    from cas_native.training.datasets.simplex_collator import SimplexCollator
+    from cas_native.training.fisher_rao_loss import FisherRaoLoss
+    import torch.optim as optim
+    import random as _random
+
+    device = torch.device(cfg.device)
+    torch.manual_seed(cfg.seed)
+
+    tokenizer = build_tokenizer_for_smoke(records)
+    collator = SimplexCollator(tokenizer, enable_simplex_aux=True)
+
+    vocab_size = int(tokenizer.vocab_size)
+    model = build_simplex_mvp_model(
+        cfg, vocab_size=vocab_size, vocab_size_english=vocab_size,
+    ).to(device)
+    fisher_rao_loss = FisherRaoLoss().to(device)
+    optimizer = optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay)
+
+    rng = _random.Random(cfg.seed)
+    loss_history: list[dict[str, float]] = []
+    min_p_history: list[float] = []
+    entropy_history: list[float] = []
+    halted: Optional[str] = None
+    log_path = output_dir / "trainer_log.jsonl"
+    t_run_start = time.time()
+
+    for step in range(1, n_steps + 1):
+        # Sample batch of cfg.batch_size records (with replacement when needed)
+        if len(records) >= cfg.batch_size:
+            batch_records = rng.sample(records, cfg.batch_size)
+        else:
+            batch_records = [records[rng.randrange(len(records))] for _ in range(cfg.batch_size)]
+        batch = collator(batch_records, device=device)
+        if batch is None:
+            continue
+
+        t_step_start = time.time()
+        optimizer.zero_grad(set_to_none=True)
+        out = model(batch)
+        total, parts = compute_losses(
+            out, batch, fisher_rao_loss=fisher_rao_loss, weights=cfg.loss_weights,
+        )
+
+        # Halt on NaN/Inf — kill-switch per plan §Stage 5
+        if not torch.isfinite(total):
+            halted = f"NaN/Inf in total loss at step {step}"
+            break
+
+        total.backward()
+        enc_norm = compute_grad_norm(model.encoder.parameters())
+        dec_norm = compute_grad_norm(model.decoder.parameters())
+        if cfg.grad_clip and cfg.grad_clip > 0:
+            torch.nn.utils.clip_grad_norm_(model.parameters(), cfg.grad_clip)
+        optimizer.step()
+        step_elapsed = time.time() - t_step_start
+
+        # Per-step telemetry
+        with torch.no_grad():
+            simplex = out["simplex_trajectory"]
+            min_p = float(simplex.min().item())
+            entropy = float(-(simplex * simplex.clamp_min(1e-12).log()).sum(dim=-1).mean().item())
+        min_p_history.append(min_p)
+        entropy_history.append(entropy)
+
+        # Halt on simplex_min_p <= 0
+        if min_p <= 0.0:
+            halted = f"simplex_min_p <= 0 at step {step}: {min_p}"
+            break
+
+        step_record = {
+            "step": step,
+            "loss_total": float(parts["loss_total"].item()),
+            "loss_lm": float(parts["loss_lm"].item()),
+            "loss_fr": float(parts["loss_fr"].item()),
+            "loss_slot_type": float(parts["loss_slot_type"].item()),
+            "loss_copy": float(parts["loss_copy"].item()),
+            "loss_phrase_bias_aux": float(parts["loss_phrase_bias_aux"].item()),
+            "grad_norm_encoder": enc_norm,
+            "grad_norm_decoder": dec_norm,
+            "simplex_min_p": min_p,
+            "simplex_entropy_mean": entropy,
+            "elapsed_sec": step_elapsed,
+        }
+        loss_history.append(step_record)
+
+        # Emit train_progress every --train-log-every-steps OR at boundary steps
+        log_now = (
+            step <= 3
+            or step % max(1, cfg.train_log_every_steps) == 0
+            or step == n_steps
+        )
+        if log_now:
+            fr_metrics = {k: v for k, v in fisher_rao_loss.last_metrics.items()}
+            fr_metrics["simplex_entropy_mean"] = entropy
+            fr_metrics["simplex_min_p"] = min_p
+            extras = {
+                "ablation": cfg.ablation,
+                "loss_weights_active": cfg.loss_weights,
+                "vocab_size": vocab_size,
+                "batch_size": cfg.batch_size,
+                "L_src": int(batch["cas_prefix_ids"].shape[1])
+                         if isinstance(batch.get("cas_prefix_ids"), torch.Tensor) else 0,
+                "L_out": int(batch["lm_targets"].shape[1])
+                         if isinstance(batch.get("lm_targets"), torch.Tensor) else 0,
+            }
+            emit_train_progress(
+                output_path=log_path,
+                epoch=0,
+                batch_in_epoch=step,
+                batches_per_epoch=n_steps,
+                global_step=step,
+                loss_parts=parts,
+                fr_metrics=fr_metrics,
+                elapsed_sec=step_elapsed,
+                batches_per_sec=(1.0 / step_elapsed) if step_elapsed > 0 else 0.0,
+                eta_epoch_min=((n_steps - step) * step_elapsed / 60.0) if step_elapsed > 0 else 0.0,
+                grad_norm_encoder=enc_norm,
+                grad_norm_decoder=dec_norm,
+                lr_now=cfg.lr,
+                extras=extras,
+            )
+
+    # Validate gates
+    gate_report = evaluate_gates(
+        loss_history=loss_history,
+        simplex_min_p_history=min_p_history,
+        simplex_entropy_history=entropy_history,
+    )
+    if halted is not None:
+        gate_report["verdict"] = "HALT"
+        gate_report["halt_reason"] = halted
+
+    smoke_report = {
+        "event": "cpu_smoke_report",
+        "config_summary": {
+            "d_model": cfg.d_model,
+            "encoder_n_layers": cfg.encoder_n_layers,
+            "decoder_n_layers": cfg.decoder_n_layers,
+            "encoder_n_heads": cfg.encoder_n_heads,
+            "decoder_n_heads": cfg.decoder_n_heads,
+            "batch_size": cfg.batch_size,
+            "lr": cfg.lr,
+            "n_steps_planned": n_steps,
+            "n_steps_completed": len(loss_history),
+            "ablation": cfg.ablation,
+            "device": cfg.device,
+            "n_records_loaded": len(records),
+        },
+        "wall_clock_sec": time.time() - t_run_start,
+        "verdict": gate_report["verdict"],
+        "gates": gate_report["gates"],
+        "halt_reason": gate_report.get("halt_reason"),
+        "first_step": loss_history[0] if loss_history else None,
+        "last_step": loss_history[-1] if loss_history else None,
+        "loss_lm_trajectory": [h["loss_lm"] for h in loss_history],
+        "loss_fr_trajectory": [h["loss_fr"] for h in loss_history],
+    }
+    (output_dir / "smoke_report.json").write_text(
+        json.dumps(smoke_report, indent=2, ensure_ascii=False), encoding="utf-8",
+    )
+    print(json.dumps(smoke_report, ensure_ascii=False, sort_keys=True), flush=True)
+    return smoke_report
+
+
 def main(argv: Optional[list[str]] = None) -> int:
     """Stage 3 entry point: integration wiring.
 
@@ -614,10 +957,26 @@ def main(argv: Optional[list[str]] = None) -> int:
         print(json.dumps(smoke_summary, ensure_ascii=False, sort_keys=True), flush=True)
         return 0
 
-    # Full training run not wired in Stage 3 (per execution plan §Stage 3 +
-    # user-named "no training loop expansion beyond the integration test
-    # path"). Stage 8 wires the full training loop.
-    return 0
+    # Stage 5 CPU smoke path: real multi-step training (default 50 steps)
+    # under the actual smoke config (d_model=64, 2/2 layers, 4 heads),
+    # all 5 losses live, CPU only. Per execution plan §Stage 5.
+    #
+    # Triggered when --smoke-test is NOT set but a real --data-path and
+    # --limit are provided. Stage 8 (GPU long-run) builds on this loop.
+    records = load_jsonl_records(cfg.data_path, limit=cfg.limit or 200)
+    if not records:
+        print(json.dumps({
+            "event": "trainer_halt",
+            "reason": f"no records loaded from {cfg.data_path!r}",
+        }, ensure_ascii=False), flush=True)
+        return 1
+
+    # Stratified subsample to ensure all categories represented per
+    # execution plan §Stage 5 ("≥1 record per grammar category").
+    stratified = stratified_sample(records, target_n=cfg.limit or 200, seed=cfg.seed)
+    n_steps = (cfg.limit or 200) // max(cfg.batch_size, 1)
+    smoke = run_cpu_smoke(cfg, stratified, output_dir=out_dir, n_steps=n_steps)
+    return 0 if smoke["verdict"] in ("PASS", "WARN") else 1
 
 
 if __name__ == "__main__":
