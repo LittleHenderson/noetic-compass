@@ -51,6 +51,7 @@ from cas_native.inference.fractal_repair import (
     FractalRepairLog,
     FractalSequence,
     _NOETIC_INDICATORS,
+    _compare_sequences,
     extract_noetic_sequence,
     parse_fractal,
     verify_fractal_rendering,
@@ -359,6 +360,9 @@ def make_logits_processor(
     state: FractalConstraintState,
     trie: FractalPhraseTrie,
     tokenizer: Any,
+    *,
+    eos_id: Optional[int] = None,
+    eos_bias: float = 0.0,
 ) -> Callable[[list[int], int, torch.Tensor], torch.Tensor]:
     """Return a callable suitable for ``generate_reply(step_callback=…)``.
 
@@ -367,10 +371,25 @@ def make_logits_processor(
     masks ``logits`` to constrain the next token if entering or continuing
     a trie walk.
 
+    Args:
+        state: per-call mutable state, see ``FractalConstraintState``.
+        trie: tokenized phrase trie, see ``FractalPhraseTrie``.
+        tokenizer: the same tokenizer used to build ``trie``.
+        eos_id: token id of the EOS special, optional. When provided
+            along with a positive ``eos_bias``, the processor adds
+            ``eos_bias`` to the EOS logit AFTER all expected slots are
+            committed (``state.pos >= len(state.expected_k)``). This
+            suppresses trailing prose past the final slot, which
+            otherwise contaminates the fractal verifier's
+            ``found_k_count`` by picking up extra Noetic indicators
+            from the post-slot prose. v1e Phase 1B tuning lever 1.
+        eos_bias: log-prob bias added to ``eos_id``'s logit when active.
+            Default 0.0 (no bias). Larger values force EOS sooner.
+
     Side effects: mutates ``state.pos``, ``state.mode``,
     ``state.current_node``, ``state.slot_commits``, and
-    ``state.failure_reason`` over the lifetime of a single ``generate_reply``
-    call.
+    ``state.failure_reason`` over the lifetime of a single
+    ``generate_reply`` call.
     """
 
     def processor(seq: list[int], step: int, logits: torch.Tensor) -> torch.Tensor:
@@ -414,6 +433,16 @@ def make_logits_processor(
         # ----- 2. Decide whether to constrain the NEXT prediction ------
         if state.pos >= len(state.expected_k):
             # All slots committed — free decode for the trailing prose.
+            # Optionally bias toward EOS to suppress trailing prose that
+            # would otherwise contaminate the verifier's noetic count.
+            if (
+                eos_id is not None
+                and eos_bias > 0.0
+                and 0 <= eos_id < logits.shape[0]
+            ):
+                biased = logits.clone()
+                biased[eos_id] = biased[eos_id] + float(eos_bias)
+                return biased
             return logits
 
         if state.mode == "prose":
@@ -526,6 +555,7 @@ def constrained_strictly_beats_baseline(
     baseline_stopped_on_eos: bool,
     baseline_verifier: FractalRepairLog,
     constraint_failure_reason: Optional[str] = None,
+    first_n_mode: bool = False,
 ) -> tuple[bool, str]:
     """Fail-closed comparator.
 
@@ -538,14 +568,38 @@ def constrained_strictly_beats_baseline(
           a heavy prose-quality cost)
       (c) the constraint did not hit a failure_reason mid-decode.
 
+    Args:
+        first_n_mode: v1e Phase 1B tuning lever 2. When True, the
+            comparator scores BOTH baseline and constrained on only the
+            FIRST ``n`` extracted noetics (where ``n`` is the expected
+            k-count). This suppresses contamination from trailing
+            post-slot prose that pushes ``found_k_count`` above
+            expected — a known failure mode where the model commits all
+            slots correctly in order but then keeps emitting prose
+            containing extra Noetic indicators. Default False (compare
+            against full extracted sequence).
+
     Returns ``(better, reason)``. ``better=False`` means return
     baseline; the reason is logged in the FractalDecoderLog.
     """
     if constraint_failure_reason:
         return False, f"constrained run hit failure: {constraint_failure_reason}"
 
-    cs = _verifier_score(constrained_verifier)
-    bs = _verifier_score(baseline_verifier)
+    if first_n_mode:
+        n_expected = constrained_verifier.expected_k_count
+        c_cardinality, c_sequence, c_mismatches = _compare_sequences(
+            list(constrained_verifier.expected_k_values),
+            list(constrained_verifier.found_k_sequence)[:n_expected],
+        )
+        b_cardinality, b_sequence, b_mismatches = _compare_sequences(
+            list(baseline_verifier.expected_k_values),
+            list(baseline_verifier.found_k_sequence)[:n_expected],
+        )
+        cs = (c_sequence, c_cardinality, len(c_mismatches))
+        bs = (b_sequence, b_cardinality, len(b_mismatches))
+    else:
+        cs = _verifier_score(constrained_verifier)
+        bs = _verifier_score(baseline_verifier)
 
     # First check: structural strict improvement.
     structural_better = False

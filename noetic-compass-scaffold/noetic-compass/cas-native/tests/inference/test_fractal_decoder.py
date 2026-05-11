@@ -554,3 +554,189 @@ def test_decoder_log_to_dict_with_slot_events():
     assert sc["pos"] == 0
     assert sc["k_value"] == 3
     assert sc["phrase_chosen"] == "rubs the wrong way"
+
+
+# ---------------------------------------------------------------------------
+# Task #135 tuning lever 1 — EOS bias after final slot
+# ---------------------------------------------------------------------------
+
+def test_eos_bias_inactive_before_final_slot():
+    """While pos < n the EOS-bias parameter must NOT affect logits;
+    constraint logic still drives the mask in trie mode."""
+    tok = _MockCharTokenizer()
+    trie = build_fractal_phrase_trie(tok)
+    state = FractalConstraintState(expected_k=(3, 7), pos=0)
+    proc = make_logits_processor(state, trie, tok, eos_id=2, eos_bias=10.0)
+    logits = _logits(1024, 42)
+    out = proc([1], 0, logits.clone())
+    # Step 0 with pos==0 enters trie mode (soft trigger). The processor
+    # returns MASKED logits, not the unbiased input. The EOS-bias should
+    # not apply during constrained-decode steps — only after pos >= n.
+    # Verify the returned tensor is not byte-equal to the raw input
+    # (mask has been applied).
+    assert not torch.allclose(out, logits)
+    # And verify the EOS slot itself wasn't biased (it's not in the
+    # allowed children of root[3], so it should be -inf).
+    assert math.isinf(float(out[2])) and float(out[2]) < 0
+
+
+def test_eos_bias_applies_after_all_slots_committed():
+    """When pos >= n, the processor passes logits through but adds
+    ``eos_bias`` to the EOS token's logit so the model terminates
+    sooner and trailing prose stops contaminating the verifier."""
+    tok = _MockCharTokenizer()
+    trie = build_fractal_phrase_trie(tok)
+    state = FractalConstraintState(expected_k=(3,), pos=1)  # already committed
+    proc = make_logits_processor(state, trie, tok, eos_id=2, eos_bias=5.0)
+    logits = _logits(1024, 42)
+    # EOS logit pre-bias.
+    orig_eos = float(logits[2])
+    out = proc([1, 10, 20], 5, logits.clone())
+    # Output should be the input + bias on EOS slot.
+    assert math.isclose(float(out[2]), orig_eos + 5.0, abs_tol=1e-6)
+    # Other slots should be unchanged.
+    assert math.isclose(float(out[42]), float(logits[42]), abs_tol=1e-6)
+
+
+def test_eos_bias_zero_is_a_noop_after_final_slot():
+    """``eos_bias=0`` (default) restores byte-equality to the unbiased
+    pass when pos >= n, even when ``eos_id`` is set."""
+    tok = _MockCharTokenizer()
+    trie = build_fractal_phrase_trie(tok)
+    state = FractalConstraintState(expected_k=(3,), pos=1)
+    proc = make_logits_processor(state, trie, tok, eos_id=2, eos_bias=0.0)
+    logits = _logits(1024, 42)
+    out = proc([1, 10, 20], 5, logits.clone())
+    assert torch.allclose(out, logits)
+
+
+def test_eos_bias_skipped_when_no_eos_id():
+    """If ``eos_id`` is None, the bias parameter has no effect."""
+    tok = _MockCharTokenizer()
+    trie = build_fractal_phrase_trie(tok)
+    state = FractalConstraintState(expected_k=(3,), pos=1)
+    proc = make_logits_processor(state, trie, tok, eos_id=None, eos_bias=5.0)
+    logits = _logits(1024, 42)
+    out = proc([1, 10, 20], 5, logits.clone())
+    assert torch.allclose(out, logits)
+
+
+# ---------------------------------------------------------------------------
+# Task #135 tuning lever 2 — comparator first_n_mode
+# ---------------------------------------------------------------------------
+
+def _verifier_with_found(
+    *, expected, found
+) -> FractalRepairLog:
+    """Build a verifier log mimicking what `verify_fractal_rendering`
+    would produce, but with custom expected/found sequences. Computes
+    cardinality/sequence/mismatches inline so the comparator sees
+    consistent fields."""
+    from cas_native.inference.fractal_repair import _compare_sequences
+    cardinality, sequence, mismatches = _compare_sequences(
+        list(expected), list(found),
+    )
+    return FractalRepairLog(
+        sequence_parsed=True,
+        expected_k_count=len(expected),
+        expected_k_values=list(expected),
+        found_k_count=len(found),
+        found_k_sequence=list(found),
+        cardinality_matches=cardinality,
+        sequence_matches=sequence,
+        mismatch_positions=mismatches,
+    )
+
+
+def test_first_n_mode_recovers_constrained_when_trailing_prose_contaminates():
+    """The smoke-evidence failure mode: constrained landed all 8 slots
+    correctly in order but trailing prose added extra noetic
+    indicators. With ``first_n_mode=True`` the comparator should see
+    the constrained as a strict sequence_match win."""
+    expected = [6, 9, 7, 0, 9, 5, 2, 0]
+    # Constrained landed exact sequence then trailing prose added 4 extras.
+    constrained_v = _verifier_with_found(
+        expected=expected,
+        found=expected + [1, 2, 3, 8],
+    )
+    baseline_v = _verifier_with_found(
+        expected=expected,
+        found=[0, 1, 2, 6, 8, 3, 6, 9],
+    )
+    # Default (full sequence) mode: constrained has 12 found vs 8
+    # expected, so cardinality fails, no win.
+    better_default, _ = constrained_strictly_beats_baseline(
+        constrained_text="a" * 100,
+        constrained_stopped_on_eos=True,
+        constrained_verifier=constrained_v,
+        baseline_text="b" * 100,
+        baseline_stopped_on_eos=True,
+        baseline_verifier=baseline_v,
+    )
+    assert not better_default
+
+    # first_n_mode: constrained's first-8 is the exact expected — win.
+    better_firstn, reason_firstn = constrained_strictly_beats_baseline(
+        constrained_text="a" * 100,
+        constrained_stopped_on_eos=True,
+        constrained_verifier=constrained_v,
+        baseline_text="b" * 100,
+        baseline_stopped_on_eos=True,
+        baseline_verifier=baseline_v,
+        first_n_mode=True,
+    )
+    assert better_firstn
+    assert "sequence_matches" in reason_firstn.lower() or "mismatch" in reason_firstn.lower()
+
+
+def test_first_n_mode_still_vetoes_on_constraint_failure():
+    """first_n_mode does NOT bypass the constraint_failure_reason veto:
+    a mid-decode trie failure still forces baseline."""
+    expected = [3, 7]
+    constrained_v = _verifier_with_found(
+        expected=expected, found=expected,
+    )
+    baseline_v = _verifier_with_found(
+        expected=expected, found=[],
+    )
+    better, reason = constrained_strictly_beats_baseline(
+        constrained_text="ok",
+        constrained_stopped_on_eos=True,
+        constrained_verifier=constrained_v,
+        baseline_text="ok",
+        baseline_stopped_on_eos=True,
+        baseline_verifier=baseline_v,
+        constraint_failure_reason="trie_dead_end at pos=1",
+        first_n_mode=True,
+    )
+    assert not better
+    assert "trie_dead_end" in reason
+
+
+def test_first_n_mode_truncates_baseline_too():
+    """first_n_mode applies symmetrically: both baseline and constrained
+    are truncated to first-n. A baseline whose first-n is correct should
+    still beat (or tie) a constrained whose first-n is worse."""
+    expected = [3, 7]
+    # Baseline: first-2 found is the exact expected; trailing prose
+    # adds 4 extras. Constrained: only 1 of 2 correct in first-2.
+    baseline_v = _verifier_with_found(
+        expected=expected, found=expected + [1, 1, 1, 1],
+    )
+    constrained_v = _verifier_with_found(
+        expected=expected, found=[3, 9, 5, 1, 8, 0],
+    )
+    better, reason = constrained_strictly_beats_baseline(
+        constrained_text="x" * 100,
+        constrained_stopped_on_eos=True,
+        constrained_verifier=constrained_v,
+        baseline_text="y" * 100,
+        baseline_stopped_on_eos=True,
+        baseline_verifier=baseline_v,
+        first_n_mode=True,
+    )
+    # Baseline first-2 = [3, 7] (cardinality + sequence match).
+    # Constrained first-2 = [3, 9] (cardinality match but not sequence).
+    # Both cardinality-match in first-n; baseline has 0 mismatches,
+    # constrained has 1 — baseline strictly better, so NOT a constrained win.
+    assert not better

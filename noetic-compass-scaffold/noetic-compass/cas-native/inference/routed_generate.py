@@ -173,6 +173,8 @@ def routed_generate(
     prepend_task_token: bool = False,
     apply_rpm_retry: bool = False,
     apply_fractal_decoder: bool = False,
+    fractal_decoder_eos_bias: float = 0.0,
+    fractal_decoder_first_n_mode: bool = False,
 ) -> RoutedGenerationResult:
     """Run the unified routing + generation + postprocess pipeline.
 
@@ -268,6 +270,23 @@ def routed_generate(
             alone; fail-closed; preserve both outputs in eval
             artifacts. See ``docs/working/v1e_pointer_copy_fractal_
             decoder_design_2026_05_10.md`` for the full design.
+        fractal_decoder_eos_bias: v1e Phase 1B Task #135 tuning
+            lever 1 (default 0.0 — disabled). When > 0, the
+            constrained pass adds this bias to the EOS logit AFTER
+            all expected slots are committed. Suppresses trailing
+            prose past the final slot that would otherwise
+            contaminate the verifier's noetic count. Ignored when
+            ``apply_fractal_decoder=False``. Smoke evidence
+            2026-05-10: the model lands all slots in source order
+            but trailing prose pushes ``found_k_count`` above
+            expected; EOS bias is the targeted fix.
+        fractal_decoder_first_n_mode: v1e Phase 1B Task #135 tuning
+            lever 2 (default False). When True, the fail-closed
+            comparator scores BOTH baseline and constrained on only
+            the FIRST ``n`` extracted noetics (where ``n`` is the
+            expected k-count). Decouples comparator from
+            trailing-prose contamination without changing decode
+            behavior. Ignored when ``apply_fractal_decoder=False``.
     """
     routing = route_by_compilability(source_cas)
     prompt_text = build_prompt_from_routing(
@@ -344,7 +363,17 @@ def routed_generate(
             )
             trie = build_fractal_phrase_trie(tokenizer)
             state = FractalConstraintState(expected_k=fractal_seq.k_values)
-            callback = make_logits_processor(state, trie, tokenizer)
+            # v1e Phase 1B tuning lever 1 — optional EOS bias after the
+            # final slot commits, suppressing trailing prose
+            # contamination of the verifier's found_k_count.
+            eos_id_for_bias: Optional[int] = None
+            if fractal_decoder_eos_bias > 0.0:
+                eos_id_for_bias = int(getattr(tokenizer, "EOS_ID", 0)) or None
+            callback = make_logits_processor(
+                state, trie, tokenizer,
+                eos_id=eos_id_for_bias,
+                eos_bias=float(fractal_decoder_eos_bias),
+            )
             constrained_gen_out = generate_reply(
                 model=model,
                 tokenizer=tokenizer,
@@ -397,6 +426,7 @@ def routed_generate(
                     baseline_stopped_on_eos=stopped_on_eos,
                     baseline_verifier=pp.fractal_repair_log,
                     constraint_failure_reason=state.failure_reason,
+                    first_n_mode=bool(fractal_decoder_first_n_mode),
                 )
                 if better:
                     fractal_decoder_log.selected = "constrained"
