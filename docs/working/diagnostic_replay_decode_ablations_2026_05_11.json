@@ -1,0 +1,2143 @@
+{
+  "modes": [
+    "full",
+    "lm_only",
+    "copy_disabled",
+    "phrase_bias_disabled"
+  ],
+  "summary_by_mode": {
+    "full": {
+      "verdict": "kill",
+      "n": 11,
+      "by_verdict": {
+        "clean": 2,
+        "warn": 5,
+        "kill": 4
+      },
+      "max_severity": 4.0,
+      "mean_severity": 2.09
+    },
+    "lm_only": {
+      "verdict": "kill",
+      "n": 11,
+      "by_verdict": {
+        "clean": 2,
+        "warn": 5,
+        "kill": 4
+      },
+      "max_severity": 4.0,
+      "mean_severity": 2.09
+    },
+    "copy_disabled": {
+      "verdict": "kill",
+      "n": 11,
+      "by_verdict": {
+        "clean": 2,
+        "warn": 5,
+        "kill": 4
+      },
+      "max_severity": 4.0,
+      "mean_severity": 2.09
+    },
+    "phrase_bias_disabled": {
+      "verdict": "kill",
+      "n": 11,
+      "by_verdict": {
+        "clean": 2,
+        "warn": 5,
+        "kill": 4
+      },
+      "max_severity": 4.0,
+      "mean_severity": 2.09
+    }
+  },
+  "per_record": [
+    {
+      "id": "canary_rpm_chain_001",
+      "category": "rpm_chain",
+      "task": "cas_to_english",
+      "cas_expression": "let stageA0_5_0296 = ^0^P; let stageD5_5_0296 = ^7^P_{F5}",
+      "target_text": "Let stageA0_5_0296 name a foundational thought, stageD5_5_0296 name practiced rhythm with agency.",
+      "modes": {
+        "full": {
+          "generated_text": "The expression tries to to multiply two two two two multiplion only of of two two two states of two two states but of the of states of the only of of the of is is is is in the the system system the system in the system the system system in the the system system the system system in ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "two",
+              "count": 4,
+              "first_position": 6
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": "stem the system system in"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.918,
+              "text_len": 283,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "The expression tries to to multiply two two two two multiplion only of of two two two states of two two states but of the of states of the only of of the of is is is is in the the system system the system in the system the system system in the the system system the system system in ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "two",
+              "count": 4,
+              "first_position": 6
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": "stem the system system in"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.918,
+              "text_len": 283,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "The expression tries to to multiply two two two two multiplion only of of two two two states of two two states but of the of states of the only of of the of is is is is in the the system system the system in the system the system system in the the system system the system system in ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "two",
+              "count": 4,
+              "first_position": 6
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": "stem the system system in"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.918,
+              "text_len": 283,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "The expression tries to to multiply two two two two multiplion only of of two two two states of two two states but of the of states of the only of of the of is is is is in the the system system the system in the system the system system in the the system system the system system in ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "two",
+              "count": 4,
+              "first_position": 6
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": "stem the system system in"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.918,
+              "text_len": 283,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_rpm_chain_002",
+      "category": "rpm_chain",
+      "task": "cas_to_english",
+      "cas_expression": "let stageA0_4_0049 = ^0^P; let stageD4_4_0049 = ^8^P_{F4}",
+      "target_text": "Let stageA0_4_0049 name a foundational thought, stageD4_4_0049 name what triggered an evaluative judgment.",
+      "modes": {
+        "full": {
+          "generated_text": "Let stageA0_0_023 name a thought in the arena with a stageD7_02 name a name a thought in the arena stageW3_03_03 name name a name a a in the arena cognitive arena and stageW3_03_03 name name name a something in the the arena arena in the arena ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 1.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "name",
+              "count": 3,
+              "first_position": 33
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.302,
+              "text_len": 244,
+              "target_len": 106,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "Let stageA0_0_023 name a thought in the arena with a stageD7_02 name a name a thought in the arena stageW3_03_03 name name a name a a in the arena cognitive arena and stageW3_03_03 name name name a something in the the arena arena in the arena ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 1.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "name",
+              "count": 3,
+              "first_position": 33
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.302,
+              "text_len": 244,
+              "target_len": 106,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "Let stageA0_0_023 name a thought in the arena with a stageD7_02 name a name a thought in the arena stageW3_03_03 name name a name a a in the arena cognitive arena and stageW3_03_03 name name name a something in the the arena arena in the arena ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 1.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "name",
+              "count": 3,
+              "first_position": 33
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.302,
+              "text_len": 244,
+              "target_len": 106,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "Let stageA0_0_023 name a thought in the arena with a stageD7_02 name a name a thought in the arena stageW3_03_03 name name a name a a in the arena cognitive arena and stageW3_03_03 name name name a something in the the arena arena in the arena ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 1.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "name",
+              "count": 3,
+              "first_position": 33
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.302,
+              "text_len": 244,
+              "target_len": 106,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_fractal_k7_001",
+      "category": "fractal_sequence",
+      "task": "cas_to_english",
+      "cas_expression": "Phi⟨0:1:2:4:5:6:7⟩",
+      "target_text": "A seven-step fractal sequence starting from the universal idea, progressing through awareness, attraction, and resonance.",
+      "modes": {
+        "full": {
+          "generated_text": "The expression tries to uses a numbers number but the number number number number in the number number number in the the number number number number in the number number the number number in the number number in the number the number number number in the number number in the the number number number in the 9 the number number in the 9 ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "number",
+              "count": 4,
+              "first_position": 10
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.785,
+              "text_len": 337,
+              "target_len": 121,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "The expression tries to uses a numbers number but the number number number number in the number number number in the the number number number number in the number number the number number in the number number in the number the number number number in the number number in the the number number number in the 9 the number number in the 9 ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "number",
+              "count": 4,
+              "first_position": 10
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.785,
+              "text_len": 337,
+              "target_len": 121,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "The expression tries to uses a numbers number but the number number number number in the number number number in the the number number number number in the number number the number number in the number number in the number the number number number in the number number in the the number number number in the 9 the number number in the 9 ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "number",
+              "count": 4,
+              "first_position": 10
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.785,
+              "text_len": 337,
+              "target_len": 121,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "The expression tries to uses a numbers number but the number number number number in the number number number in the the number number number number in the number number the number number in the number number in the number the number number number in the number number in the the number number number in the 9 the number number in the 9 ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "number",
+              "count": 4,
+              "first_position": 10
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.785,
+              "text_len": 337,
+              "target_len": 121,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_fractal_k8_001",
+      "category": "fractal_sequence",
+      "task": "cas_to_english",
+      "cas_expression": "Phi⟨0:1:2:3:4:5:7:8⟩",
+      "target_text": "An eight-step fractal sequence beginning with idea, passing through mind, positive, negative, vibration, and rhythm.",
+      "modes": {
+        "full": {
+          "generated_text": "The expression tries to combine two two numbers but the numbers number in the number number is is number in the number is number in the number is number in the number is is in the number number in the number is is is in the number the number number in the number is in the is is is is is ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 3,
+              "first_position": 41
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " is in the is is is is is"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.483,
+              "text_len": 288,
+              "target_len": 116,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "The expression tries to combine two two numbers but the numbers number in the number number is is number in the number is number in the number is number in the number is is in the number number in the number is is is in the number the number number in the number is in the is is is is is ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 3,
+              "first_position": 41
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " is in the is is is is is"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.483,
+              "text_len": 288,
+              "target_len": 116,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "The expression tries to combine two two numbers but the numbers number in the number number is is number in the number is number in the number is number in the number is is in the number number in the number is is is in the number the number number in the number is in the is is is is is ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 3,
+              "first_position": 41
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " is in the is is is is is"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.483,
+              "text_len": 288,
+              "target_len": 116,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "The expression tries to combine two two numbers but the numbers number in the number number is is number in the number is number in the number is number in the number is is in the number number in the number is is is in the number the number number in the number is in the is is is is is ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 3,
+              "first_position": 41
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " is in the is is is is is"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.483,
+              "text_len": 288,
+              "target_len": 116,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_recipe_001",
+      "category": "recipe",
+      "task": "cas_to_english",
+      "cas_expression": "Θ(Ω_grounding) = 2*^2^P + 1*^0^O → Ω_grounding",
+      "target_text": "To produce the outcome called grounding, combine two of principled attraction with one of operational thought.",
+      "modes": {
+        "full": {
+          "generated_text": "The expression tries to multiply two multiplion two multiplion two multiplion two multiplion states states states states states of states states states states of is states is states is states is states is is states is states is is states is is is states is is is is in",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 4.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "states",
+              "count": 5,
+              "first_position": 13
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " is states is is is is in"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.436,
+              "text_len": 268,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "The expression tries to multiply two multiplion two multiplion two multiplion two multiplion states states states states states of states states states states of is states is states is states is states is is states is states is is states is is is states is is is is in",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 4.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "states",
+              "count": 5,
+              "first_position": 13
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " is states is is is is in"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.436,
+              "text_len": 268,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "The expression tries to multiply two multiplion two multiplion two multiplion two multiplion states states states states states of states states states states of is states is states is states is states is is states is states is is states is is is states is is is is in",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 4.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "states",
+              "count": 5,
+              "first_position": 13
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " is states is is is is in"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.436,
+              "text_len": 268,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "The expression tries to multiply two multiplion two multiplion two multiplion two multiplion states states states states states of states states states states of is states is states is states is states is is states is states is is states is is is states is is is is in",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 4.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "states",
+              "count": 5,
+              "first_position": 13
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " is states is is is is in"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.436,
+              "text_len": 268,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_meta_logic_001",
+      "category": "meta_logic",
+      "task": "cas_to_english",
+      "cas_expression": "PartitionOf(NoeticCluster{^4, ^5, ^6, ^9}, NoeticCluster{^4}, NoeticCluster{^5, ^6, ^9})",
+      "target_text": "A partition expression claims that two groups together account for everything in a larger collection of cognitive operators.",
+      "modes": {
+        "full": {
+          "generated_text": "The expression tries to two group two two group two two groups, but but the group group of the group group group in the group the group group of the group group in the the group group the group group in the the group group the group group in the the group the group group the group in the the group group the group",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 1.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "group",
+              "count": 3,
+              "first_position": 19
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.532,
+              "text_len": 314,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "The expression tries to two group two two group two two groups, but but the group group of the group group group in the group the group group of the group group in the the group group the group group in the the group group the group group in the the group the group group the group in the the group group the group",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 1.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "group",
+              "count": 3,
+              "first_position": 19
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.532,
+              "text_len": 314,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "The expression tries to two group two two group two two groups, but but the group group of the group group group in the group the group group of the group group in the the group group the group group in the the group group the group group in the the group the group group the group in the the group group the group",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 1.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "group",
+              "count": 3,
+              "first_position": 19
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.532,
+              "text_len": 314,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "The expression tries to two group two two group two two groups, but but the group group of the group group group in the group the group group of the group group in the the group group the group group in the the group group the group group in the the group the group group the group in the the group group the group",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 1.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "group",
+              "count": 3,
+              "first_position": 19
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.532,
+              "text_len": 314,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_state_literal_001",
+      "category": "state_literal",
+      "task": "cas_to_english",
+      "cas_expression": "^0^C_{F4}",
+      "target_text": "A thought in cognitive thinking, driven by a need for connection.",
+      "modes": {
+        "full": {
+          "generated_text": "A thought in cognitive thinking, driven by a need for for unity, and expressed in an an way.",
+          "n_tokens_generated": 39,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.415,
+              "text_len": 92,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "A thought in cognitive thinking, driven by a need for for unity, and expressed in an an way.",
+          "n_tokens_generated": 39,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.415,
+              "text_len": 92,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "A thought in cognitive thinking, driven by a need for for unity, and expressed in an an way.",
+          "n_tokens_generated": 39,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.415,
+              "text_len": 92,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "A thought in cognitive thinking, driven by a need for for unity, and expressed in an an way.",
+          "n_tokens_generated": 39,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.415,
+              "text_len": 92,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_binary_001",
+      "category": "binary_composition",
+      "task": "cas_to_english",
+      "cas_expression": "^5^C × ^0^C",
+      "target_text": "A sense of self in the cognitive arena integrated with a thought in the same arena.",
+      "modes": {
+        "full": {
+          "generated_text": "A thought in the cognitive arena with a something that a in the cognitive arena.",
+          "n_tokens_generated": 32,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 0.964,
+              "text_len": 80,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "A thought in the cognitive arena with a something that a in the cognitive arena.",
+          "n_tokens_generated": 32,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 0.964,
+              "text_len": 80,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "A thought in the cognitive arena with a something that a in the cognitive arena.",
+          "n_tokens_generated": 32,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 0.964,
+              "text_len": 80,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "A thought in the cognitive arena with a something that a in the cognitive arena.",
+          "n_tokens_generated": 32,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 0.964,
+              "text_len": 80,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_cro_001",
+      "category": "cross_register_omega",
+      "task": "cas_to_english",
+      "cas_expression": "(^7|E × ^7|f) = ^7|Ω_presence",
+      "target_text": "Practice combined with felt resonance fuses into a unified state of presence.",
+      "modes": {
+        "full": {
+          "generated_text": "When you something that struck a chord in a way expressed through an embodied way, and and felt way, and and modes fuse into outcome outcome called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "called",
+              "count": 37,
+              "first_position": 26
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 5.182,
+              "text_len": 399,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "When you something that struck a chord in a way expressed through an embodied way, and and felt way, and and modes fuse into outcome outcome called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "called",
+              "count": 37,
+              "first_position": 26
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 5.182,
+              "text_len": 399,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "When you something that struck a chord in a way expressed through an embodied way, and and felt way, and and modes fuse into outcome outcome called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "called",
+              "count": 37,
+              "first_position": 26
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 5.182,
+              "text_len": 399,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "When you something that struck a chord in a way expressed through an embodied way, and and felt way, and and modes fuse into outcome outcome called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called called",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "called",
+              "count": 37,
+              "first_position": 26
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 5.182,
+              "text_len": 399,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_invalid_001",
+      "category": "fractal",
+      "task": "invalid_to_explanation",
+      "cas_expression": "Phi⟨⟩",
+      "target_text": "The expression has empty angle brackets where a sequence of values should be — the fractal cannot be empty.",
+      "modes": {
+        "full": {
+          "generated_text": "The expression tries to a number but the number number is number is is number is is is is number is is is is the number number number is is is is the number number number is is is the number number is is is the number number is a number number number is the number number number is the number number is the ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 4,
+              "first_position": 15
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " the number number is the"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.869,
+              "text_len": 307,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "The expression tries to a number but the number number is number is is number is is is is number is is is is the number number number is is is is the number number number is is is the number number is is is the number number is a number number number is the number number number is the number number is the ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 4,
+              "first_position": 15
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " the number number is the"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.869,
+              "text_len": 307,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "The expression tries to a number but the number number is number is is number is is is is number is is is is the number number number is is is is the number number number is is is the number number is is is the number number is a number number number is the number number number is the number number is the ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 4,
+              "first_position": 15
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " the number number is the"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.869,
+              "text_len": 307,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "The expression tries to a number but the number number is number is is number is is is is number is is is is the number number number is is is is the number number number is is is the number number is is is the number number is a number number number is the number number number is the number number is the ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "kill",
+          "damage_severity": 3.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 4,
+              "first_position": 15
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " the number number is the"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.869,
+              "text_len": 307,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_invalid_002",
+      "category": "fractal",
+      "task": "invalid_to_explanation",
+      "cas_expression": "Phi⟨1:5:2:7:-1:9:9⟩",
+      "target_text": "The expression contains a negative value in the fractal list, but the system does not allow negative numbers there.",
+      "modes": {
+        "full": {
+          "generated_text": "The expression tries to combine two two numbers but the numbers of is numbers in the numbers is is is in the number number in the number is is is in the number is is in the number is is in the number is is is in the is is is is in the is is is is in the ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 3,
+              "first_position": 17
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": "in the is is is is in the"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.209,
+              "text_len": 254,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "The expression tries to combine two two numbers but the numbers of is numbers in the numbers is is is in the number number in the number is is is in the number is is in the number is is in the number is is is in the is is is is in the is is is is in the ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 3,
+              "first_position": 17
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": "in the is is is is in the"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.209,
+              "text_len": 254,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "The expression tries to combine two two numbers but the numbers of is numbers in the numbers is is is in the number number in the number is is is in the number is is in the number is is in the number is is is in the is is is is in the is is is is in the ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 3,
+              "first_position": 17
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": "in the is is is is in the"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.209,
+              "text_len": 254,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "The expression tries to combine two two numbers but the numbers of is numbers in the numbers is is is in the number number in the number is is is in the number is is in the number is is in the number is is is in the is is is is in the is is is is in the ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "warn",
+          "damage_severity": 2.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": true,
+              "n": 1,
+              "phrase": "is",
+              "count": 3,
+              "first_position": 17
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": "in the is is is is in the"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.209,
+              "text_len": 254,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}
