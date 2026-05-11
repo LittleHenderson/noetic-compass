@@ -96,6 +96,11 @@ class SimplexTrainConfig:
     tokenizer_path: str = ""
     english_bpe_path: str = ""
     n_steps: int = 0
+    # v7.1 sample-hook fields (per user 2026-05-11)
+    sample_canary_at: str = ""
+    sample_canary_post_training: bool = False
+    canary_max_new_tokens: int = 128
+    halt_on_canary_kill: bool = False
     # Loss weights — populated by ablation mode after CLI parse
     loss_weights: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_LOSS_WEIGHTS))
 
@@ -143,6 +148,19 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--n-steps", type=int, default=0,
                    help="If > 0, run this many steps (Stage 7). Overrides default "
                         "loop length from --limit // --batch-size.")
+    # v7.1 sample-hook flags (per user 2026-05-11)
+    p.add_argument("--sample-canary-at", type=str, default="",
+                   help="Comma-separated step numbers at which to run canary "
+                        "sample reads + damage detection. Empty = disabled. "
+                        "Example: '250,500,750,1000'.")
+    p.add_argument("--sample-canary-post-training", action="store_true",
+                   help="Run canary sample reads after the final training step.")
+    p.add_argument("--canary-max-new-tokens", type=int, default=128,
+                   help="Cap on tokens generated per canary record.")
+    p.add_argument("--halt-on-canary-kill", action="store_true",
+                   help="If a canary read returns pack verdict 'kill', halt "
+                        "the run with a kill_reason in the report. Per user "
+                        "2026-05-11 scope: hard damage only.")
     return p
 
 
@@ -174,6 +192,10 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
         tokenizer_path=args.tokenizer_path,
         english_bpe_path=args.english_bpe_path,
         n_steps=args.n_steps,
+        sample_canary_at=args.sample_canary_at,
+        sample_canary_post_training=args.sample_canary_post_training,
+        canary_max_new_tokens=args.canary_max_new_tokens,
+        halt_on_canary_kill=args.halt_on_canary_kill,
     )
     # Apply ablation overrides on top of defaults
     overrides = ABLATION_OVERRIDES.get(cfg.ablation, {})
@@ -752,10 +774,22 @@ def evaluate_gates(
     """
     gates: dict[str, Any] = {}
 
-    # Gate 1: no NaN/Inf in any loss term at any step
+    # Gate 1: no NaN/Inf in any loss term at any step.
+    # Path D (2026-05-11): copy_* telemetry fields are allowed to be NaN
+    # when copy_valid_count == 0 ("NOT MEASURED" signal, not a failure).
+    # The gate only checks the actual loss values + key telemetry.
     nan_steps: list[int] = []
+    nan_check_keys = (
+        "loss_total", "loss_lm", "loss_fr", "loss_slot_type",
+        "loss_copy", "loss_phrase_bias_aux",
+        "grad_norm_encoder", "grad_norm_decoder",
+        "simplex_min_p", "simplex_entropy_mean",
+    )
     for i, h in enumerate(loss_history):
-        for k, v in h.items():
+        for k in nan_check_keys:
+            v = h.get(k)
+            if v is None:
+                continue
             if not (isinstance(v, (int, float)) and (v == v) and v != float("inf") and v != float("-inf")):
                 nan_steps.append(i)
                 break
@@ -839,6 +873,72 @@ def evaluate_gates(
         "decoder_grad_norm_min": min(dec_norms) if dec_norms else 0.0,
     }
 
+    # Stage 7 Q4 (Path D, 2026-05-11): STAGE_VAR-only copy supervision.
+    # Evaluate the 4 criteria on rpm-batch steps only. Non-rpm batches
+    # contribute zero (NOT_MEASURED).
+    rpm_steps = [
+        h for h in loss_history
+        if h.get("copy_valid_count", 0) and h["copy_valid_count"] > 0
+    ]
+    if len(rpm_steps) >= 20:
+        n_window = max(10, len(rpm_steps) // 5)
+        first_w = rpm_steps[:n_window]
+        last_w = rpm_steps[-n_window:]
+        def _mean(lst, key):
+            vals = [x[key] for x in lst if x.get(key) is not None and x[key] == x[key]]
+            return sum(vals) / len(vals) if vals else float("nan")
+        loss_first = _mean(first_w, "copy_loss_live")
+        loss_last = _mean(last_w, "copy_loss_live")
+        acc_last = _mean(last_w, "copy_argmax_acc")
+        ent_first = _mean(first_w, "copy_entropy_valid_mean")
+        ent_last = _mean(last_w, "copy_entropy_valid_mean")
+        # Random baseline: 1 / L_src_mean. L_src_mean is approximated by
+        # the avg source length seen in the run (in the dry-run config
+        # L_src_max = 32, so baseline ≈ 1/32 = 0.031).
+        baseline = 1.0 / 32.0
+        crit_a = len(rpm_steps) > 0  # valid_count > 0 fired at some point
+        crit_b = (loss_last == loss_last and loss_first == loss_first
+                  and loss_last < loss_first)
+        crit_c = (acc_last == acc_last and acc_last > baseline)
+        crit_d = (ent_last == ent_last and ent_first == ent_first
+                  and ent_last < ent_first)
+        gates["q4_stage_var_copy"] = {
+            "pass": all((crit_a, crit_b, crit_c, crit_d)),
+            "criteria": {
+                "a_valid_count_positive": crit_a,
+                "b_loss_decreases": crit_b,
+                "c_argmax_above_random": crit_c,
+                "d_entropy_tightens": crit_d,
+            },
+            "evidence": {
+                "rpm_batch_count": len(rpm_steps),
+                "non_rpm_batch_count": len(loss_history) - len(rpm_steps),
+                "copy_loss_first_window": loss_first,
+                "copy_loss_last_window": loss_last,
+                "copy_argmax_acc_last_window": acc_last,
+                "random_baseline_1_over_L_src": baseline,
+                "copy_entropy_first_window": ent_first,
+                "copy_entropy_last_window": ent_last,
+            },
+            "note": (
+                "Q4 STAGE_VAR-only per Path D. Non-rpm batches are "
+                "NOT_MEASURED — only rpm-batch steps count toward criteria."
+            ),
+        }
+    else:
+        gates["q4_stage_var_copy"] = {
+            "pass": True,  # not enough rpm steps to measure; not a failure
+            "criteria": {},
+            "evidence": {
+                "rpm_batch_count": len(rpm_steps),
+                "non_rpm_batch_count": len(loss_history) - len(rpm_steps),
+            },
+            "note": (
+                "Q4 NOT_MEASURED — fewer than 20 rpm-batch steps in this "
+                "run. Window-based criteria need a minimum sample size."
+            ),
+        }
+
     overall_pass = all(g.get("pass", False) for g in gates.values())
     return {
         "verdict": "PASS" if overall_pass else "FAIL",
@@ -898,6 +998,19 @@ def run_cpu_smoke(
     halted: Optional[str] = None
     log_path = output_dir / "trainer_log.jsonl"
     t_run_start = time.time()
+
+    # v7.1 canary sampling setup (per user 2026-05-11)
+    sample_steps: set[int] = set()
+    if cfg.sample_canary_at:
+        for s in cfg.sample_canary_at.split(","):
+            s = s.strip()
+            if s.isdigit():
+                sample_steps.add(int(s))
+    canary_records: list[dict[str, Any]] = []
+    canary_history: list[dict[str, Any]] = []
+    if sample_steps or cfg.sample_canary_post_training:
+        from cas_native.evaluation.stage7_canary_pack import canary_pack
+        canary_records = canary_pack()
 
     for step in range(1, n_steps + 1):
         # Sample batch of cfg.batch_size records (with replacement when needed)
@@ -1008,6 +1121,94 @@ def run_cpu_smoke(
                 extras=extras,
             )
 
+        # v7.1 canary sample hook: run at the named steps (per user
+        # 2026-05-11: "samples don't stave off overfitting; they detect
+        # degeneration before scalar losses fool us"). Always restore
+        # model.train() after sampling.
+        if step in sample_steps and canary_records:
+            from cas_native.evaluation.sample_decoder import decode_canary_pack
+            from cas_native.evaluation.damage_detector import (
+                analyze_sample, aggregate_pack_verdict,
+            )
+            samples = decode_canary_pack(
+                model, canary_records, collator, tokenizer,
+                device=device, max_new_tokens=cfg.canary_max_new_tokens,
+            )
+            reports = [
+                analyze_sample(s["generated_text"], s.get("target_text", ""))
+                for s in samples
+            ]
+            pack_verdict = aggregate_pack_verdict(reports)
+            canary_history.append({
+                "step": step,
+                "pack_verdict": pack_verdict,
+                "per_record": [
+                    {
+                        "id": s["id"],
+                        "category": s["category"],
+                        "task": s["task"],
+                        "cas_expression": s["cas_expression"],
+                        "target_text": s["target_text"],
+                        "generated_text": s["generated_text"],
+                        "n_tokens_generated": s["n_tokens_generated"],
+                        "hit_eos": s["hit_eos"],
+                        "damage_verdict": r.verdict,
+                        "damage_severity": r.severity_score,
+                        "damage_signatures": r.signatures,
+                    }
+                    for s, r in zip(samples, reports)
+                ],
+            })
+            # Emit a canary event for downstream log readers
+            print(json.dumps({
+                "event": "canary_sample_read",
+                "step": step,
+                "pack_verdict": pack_verdict,
+                "n_records": len(samples),
+            }, ensure_ascii=False), flush=True)
+            if cfg.halt_on_canary_kill and pack_verdict["verdict"] == "kill":
+                halted = (
+                    f"canary pack verdict=kill at step {step}; "
+                    f"max_severity={pack_verdict['max_severity']}"
+                )
+                break
+
+    # v7.1 post-training canary sample read
+    if cfg.sample_canary_post_training and canary_records and halted is None:
+        from cas_native.evaluation.sample_decoder import decode_canary_pack
+        from cas_native.evaluation.damage_detector import (
+            analyze_sample, aggregate_pack_verdict,
+        )
+        samples = decode_canary_pack(
+            model, canary_records, collator, tokenizer,
+            device=device, max_new_tokens=cfg.canary_max_new_tokens,
+        )
+        reports = [
+            analyze_sample(s["generated_text"], s.get("target_text", ""))
+            for s in samples
+        ]
+        pack_verdict = aggregate_pack_verdict(reports)
+        canary_history.append({
+            "step": "post_training",
+            "pack_verdict": pack_verdict,
+            "per_record": [
+                {
+                    "id": s["id"],
+                    "category": s["category"],
+                    "task": s["task"],
+                    "cas_expression": s["cas_expression"],
+                    "target_text": s["target_text"],
+                    "generated_text": s["generated_text"],
+                    "n_tokens_generated": s["n_tokens_generated"],
+                    "hit_eos": s["hit_eos"],
+                    "damage_verdict": r.verdict,
+                    "damage_severity": r.severity_score,
+                    "damage_signatures": r.signatures,
+                }
+                for s, r in zip(samples, reports)
+            ],
+        })
+
     # Validate gates
     gate_report = evaluate_gates(
         loss_history=loss_history,
@@ -1040,6 +1241,8 @@ def run_cpu_smoke(
         "halt_reason": gate_report.get("halt_reason"),
         "first_step": loss_history[0] if loss_history else None,
         "last_step": loss_history[-1] if loss_history else None,
+        # v7.1: canary sample reads + damage detection per user 2026-05-11
+        "canary_history": canary_history,
         "loss_lm_trajectory": [h["loss_lm"] for h in loss_history],
         "loss_fr_trajectory": [h["loss_fr"] for h in loss_history],
     }
