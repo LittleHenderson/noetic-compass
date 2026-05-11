@@ -1,0 +1,366 @@
+{
+  "event": "stage6_dry_run",
+  "timestamp_utc": "2026-05-11T05:50:49Z",
+  "config": {
+    "output_dir": "/workspace/tksCAS/stage6_dry_run_v7_stagevar_omega_20260511T055048Z",
+    "device": "cuda:0",
+    "d_model": 384,
+    "encoder_n_layers": 4,
+    "encoder_n_heads": 6,
+    "decoder_n_layers": 6,
+    "decoder_n_heads": 6,
+    "batch_size": 21,
+    "seed": 1729,
+    "memory_threshold_gb": 20.0,
+    "wallclock_threshold_sec": 10.0,
+    "param_count_target_m": 55.5,
+    "param_count_tolerance_m": 5.0,
+    "vocab_size_override": 0,
+    "tokenizer_path": "/workspace/tksCAS/stage6_v6_artifacts/tokenizer.json",
+    "english_bpe_path": "/workspace/tksCAS/stage6_v6_artifacts/english_bpe.json",
+    "data_path": "/workspace/tksCAS/cas-synthetic/data/path_d/v1_mix_nlgen_train.jsonl",
+    "stratify_categories": "rpm_chain,recipe,fractal,meta_logic,cross_register_omega,state_literal,binary_composition",
+    "records_per_category": 3
+  },
+  "device_name": "NVIDIA RTX A6000",
+  "torch_version": "2.5.1+cu124",
+  "cuda_version": "12.4",
+  "checks": {
+    "1_instantiates_on_gpu": {
+      "pass": true,
+      "encoder_params": 22186608,
+      "decoder_params": 33164312,
+      "total_params": 55350920,
+      "total_params_M": 55.351
+    },
+    "5_param_count_in_budget": {
+      "pass": true,
+      "actual_M": 55.351,
+      "target_M": 55.5,
+      "tolerance_M": 5.0,
+      "delta_M": -0.149,
+      "vocab_size_used_for_model": 38683,
+      "tokenizer_vocab_size": 38683,
+      "note": "build-spec estimate ~48.5M assumes vocab_size=38685 (v1c VALIDTOK tokenizer). Pass --vocab-size-override 38685 to build the model at the real embedding/lm_head size while keeping the tokenizer synthetic for the forward pass."
+    },
+    "6_no_nan_inf": {
+      "pass": true,
+      "loss_total": 19.333755493164062,
+      "per_part": {
+        "loss_total": 19.333755493164062,
+        "loss_lm": 10.725166320800781,
+        "loss_fr": 4.740032196044922,
+        "loss_slot_type": 2.124518632888794,
+        "loss_copy": 3.488076686859131,
+        "loss_phrase_bias_aux": 0.0
+      }
+    },
+    "2_shape_contracts_at_d384": {
+      "pass": true,
+      "shapes": {
+        "source_hidden": [
+          21,
+          32,
+          384
+        ],
+        "simplex_trajectory": [
+          21,
+          32,
+          40
+        ],
+        "simplex_final": [
+          21,
+          40
+        ],
+        "lm_logits": [
+          21,
+          192,
+          38683
+        ],
+        "slot_type_logits": [
+          21,
+          192,
+          9
+        ],
+        "p_copy": [
+          21,
+          192,
+          32
+        ]
+      },
+      "expected": {
+        "source_hidden": [
+          21,
+          32,
+          384
+        ],
+        "simplex_trajectory": [
+          21,
+          32,
+          40
+        ],
+        "simplex_final": [
+          21,
+          40
+        ],
+        "slot_type_logits": [
+          21,
+          192,
+          9
+        ],
+        "p_copy": [
+          21,
+          192,
+          32
+        ]
+      },
+      "actual_batch_size": 21,
+      "args_batch_size": 21
+    },
+    "3_simplex_invariants": {
+      "pass": true,
+      "all_p_gt_zero": true,
+      "rows_sum_to_one": true,
+      "min_p": 0.007314444985240698,
+      "max_row_sum_deviation": 1.1920928955078125e-07
+    },
+    "4_device_and_dtype_contracts": {
+      "pass": true,
+      "all_params_on_cuda": true,
+      "simplex_trajectory_dtype": "torch.float32",
+      "simplex_is_fp32_per_buildspec": true,
+      "source_hidden_dtype": "torch.float32"
+    },
+    "7_gradients_flow_both_paths": {
+      "pass": true,
+      "encoder_grad_norm": 9.05193646059402,
+      "decoder_grad_norm": 44.76937533972198,
+      "all_gradients_finite": true
+    },
+    "8_memory_and_wallclock": {
+      "pass": true,
+      "peak_memory_gb": 4.448,
+      "memory_threshold_gb": 20.0,
+      "wall_clock_sec": 0.6765,
+      "wallclock_threshold_sec": 10.0
+    },
+    "9_train_progress_fields_emit": {
+      "pass": true,
+      "fields": {
+        "loss_total": 19.333755493164062,
+        "loss_lm": 10.725166320800781,
+        "loss_fr": 4.740032196044922,
+        "loss_slot_type": 2.124518632888794,
+        "loss_copy": 3.488076686859131,
+        "loss_phrase_bias_aux": 0.0,
+        "grad_norm_encoder": 9.05193646059402,
+        "grad_norm_decoder": 44.76937533972198,
+        "simplex_entropy_mean": 3.6510634422302246,
+        "simplex_min_p": 0.007314444985240698,
+        "fr_lm_ratio": 0.4419541901976783
+      }
+    },
+    "10_l_copy_live": {
+      "pass": true,
+      "copy_valid_count": 56,
+      "copy_loss_live": 3.488076686859131,
+      "copy_argmax_acc": 0.0,
+      "note": "L_copy LIVE — typed_slot_source emits valid copy targets and L_copy gradient flows back through p_copy."
+    }
+  },
+  "placeholders": {
+    "L_copy": {
+      "value": 3.488076686859131,
+      "status": "LIVE (Stage 6 v5: DOMAIN/DRIVE/REGISTER/OMEGA single-token slots)",
+      "live_signal": true,
+      "copy_valid_count": 56,
+      "copy_loss_live": 3.488076686859131,
+      "copy_argmax_acc": 0.0,
+      "copy_entropy_valid_mean": 3.462535858154297
+    },
+    "L_phrase_bias_aux": {
+      "value": 0.0,
+      "status": "PLACEHOLDER (deferred per user 2026-05-11 — corpus-alignment-heavy work, explicitly non-gating in Stage 7)",
+      "live_signal": false,
+      "wired_for_stage": "deferred"
+    },
+    "warning": "4-of-5 live (LM + FR + slot_type + copy); phrase_bias_aux remains placeholder and is NON-GATING for Stage 7."
+  },
+  "loss_status": {
+    "L_LM": {
+      "value": 10.725166320800781,
+      "status": "LIVE",
+      "live_signal": true
+    },
+    "L_FR": {
+      "value": 4.740032196044922,
+      "status": "LIVE",
+      "live_signal": true
+    },
+    "L_slot_type": {
+      "value": 2.124518632888794,
+      "status": "LIVE",
+      "live_signal": true
+    },
+    "L_copy": {
+      "value": 3.488076686859131,
+      "status": "LIVE (Stage 6 v5: DOMAIN/DRIVE/REGISTER/OMEGA single-token slots)",
+      "live_signal": true,
+      "copy_valid_count": 56,
+      "copy_loss_live": 3.488076686859131,
+      "copy_argmax_acc": 0.0,
+      "copy_entropy_valid_mean": 3.462535858154297
+    },
+    "L_phrase_bias_aux": {
+      "value": 0.0,
+      "status": "PLACEHOLDER (deferred per user 2026-05-11 — corpus-alignment-heavy work, explicitly non-gating in Stage 7)",
+      "live_signal": false,
+      "wired_for_stage": "deferred"
+    },
+    "summary": "4-of-5 live (LM + FR + slot_type + copy); phrase_bias_aux remains placeholder and is NON-GATING for Stage 7."
+  },
+  "v6_per_category_breakdown": {
+    "rpm_chain": {
+      "records": 3,
+      "copy_valid_count": 56,
+      "src_slot_histogram": {
+        "slot_2": 56,
+        "DOMAIN_LETTER": 3
+      },
+      "cas_samples": [
+        {
+          "cas": "let stageA0_5_0296 = ^0^P; let stageD5_5_0296 = ^7^P_{F5}; let stageW5_5_0296 = ",
+          "reply": "Let stageA0_5_0296 name a foundational thought, stageD5_5_0296 name practiced rhythm with agency and self-determination "
+        },
+        {
+          "cas": "let stageA0_4_0049 = ^0^P; let stageD4_4_0049 = ^8^P_{F4}; let stageW4_4_0049 = ",
+          "reply": "Let stageA0_4_0049 name a foundational thought, stageD4_4_0049 name something that triggered an evaluative judgment tied"
+        }
+      ]
+    },
+    "recipe": {
+      "records": 3,
+      "copy_valid_count": 0,
+      "src_slot_histogram": {
+        "DOMAIN_LETTER": 6,
+        "REGISTER_LETTER": 1
+      },
+      "cas_samples": [
+        {
+          "cas": "Θ(Ω_translation_59) = 2*^9^O + 1*^8^O → Ω_translation_59 + 0.1*Λ·Ω_judgment_side",
+          "reply": "To produce the outcome called translation_59, combine 2 of what one thing leads to another in operational thinking with "
+        },
+        {
+          "cas": "Θ(Ω_self_correction_29) = 0.5*^1^O + 2*^0^E|A → Ω_self_correction_29",
+          "reply": "To produce the outcome called self_correction_29, combine 0.5 of something on your mind about operational behavior and 2"
+        }
+      ]
+    },
+    "fractal": {
+      "records": 3,
+      "copy_valid_count": 0,
+      "src_slot_histogram": {},
+      "cas_samples": [
+        {
+          "cas": "Phi⟨⟩",
+          "reply": "The expression opens an angle-bracket pair that is supposed to contain a number, but nothing is written inside it — the "
+        },
+        {
+          "cas": "Phi⟨1:5:2:7:-1:9:9⟩",
+          "reply": "The list of values inside the expression contains a negative number, but this system does not allow negative numbers in "
+        }
+      ]
+    },
+    "meta_logic": {
+      "records": 3,
+      "copy_valid_count": 0,
+      "src_slot_histogram": {},
+      "cas_samples": [
+        {
+          "cas": "PartitionOf(NoeticCluster{^4, ^5, ^6, ^9}, NoeticCluster{^4}, NoeticCluster{^5})",
+          "reply": "The expression claims that two groups together account for everything in a larger collection, but two members of that la"
+        },
+        {
+          "cas": "CoverOf(NoeticCluster{^0, ^2, ^3}, NoeticCluster{^0, ^3, ^7})",
+          "reply": "The expression tries to establish that one group of concepts is fully contained within another, but that cannot hold bec"
+        }
+      ]
+    },
+    "cross_register_omega": {
+      "records": 3,
+      "copy_valid_count": 0,
+      "src_slot_histogram": {
+        "REGISTER_LETTER": 7,
+        "OMEGA": 2,
+        "DOMAIN_LETTER": 3
+      },
+      "cas_samples": [
+        {
+          "cas": "(^7|E × ^7|f) = ^7|Ω_presence",
+          "reply": "When practice and habit—the grooved, embodied way of doing things—combines with the felt, emotional resonance of an expe"
+        },
+        {
+          "cas": "(^2^O|A × ^2^O|f) = ^2^O|Ω_calm",
+          "reply": "When something draws you toward it in an analytical way and also pulls at you through felt emotion, those two modes fuse"
+        }
+      ]
+    },
+    "state_literal": {
+      "records": 3,
+      "copy_valid_count": 0,
+      "src_slot_histogram": {
+        "DOMAIN_LETTER": 3,
+        "DRIVE_LETTER": 3,
+        "REGISTER_LETTER": 1
+      },
+      "cas_samples": [
+        {
+          "cas": "^0^C_{F4}",
+          "reply": "A thought in cognitive thinking, driven by a need for connection."
+        },
+        {
+          "cas": "^3^P_{F2}|T",
+          "reply": "An aversion in the foundational realm, driven by a need for wisdom, expressed in a transcendent way of thinking."
+        }
+      ]
+    },
+    "binary_composition": {
+      "records": 3,
+      "copy_valid_count": 0,
+      "src_slot_histogram": {
+        "DOMAIN_LETTER": 4
+      },
+      "cas_samples": [
+        {
+          "cas": "^5^C × ^0^C",
+          "reply": "A sense of self shaped by experience in the cognitive arena, integrated with a thought in the cognitive arena."
+        },
+        {
+          "cas": "CO-4 ∘ CO-7",
+          "reply": "A practiced rhythm in the cognitive arena composed with something that struck a chord in the cognitive arena, where the "
+        }
+      ]
+    }
+  },
+  "v6_slot_types_observed": [
+    "DOMAIN_LETTER",
+    "DRIVE_LETTER",
+    "OMEGA",
+    "REGISTER_LETTER",
+    "slot_2"
+  ],
+  "v6_uses_real_v1c_tokenizer": true,
+  "v6_uses_real_v1c_corpus": true,
+  "v6_deferred_slot_types_note": "STAGE_VAR, COEFFICIENT, FRACTAL_K_LITERAL remain deferred (multi-token or context-aware). Stage 7 must not penalise their absence. If v6 shows copy supervision misses rpm/fractal rows, extend those derivations before Stage 7.",
+  "v6_categories_with_zero_copy": [
+    "recipe",
+    "fractal",
+    "meta_logic",
+    "cross_register_omega",
+    "state_literal",
+    "binary_composition"
+  ],
+  "verdict": "PASS",
+  "wall_clock_sec_step": 0.6765,
+  "peak_memory_gb": 4.448
+}

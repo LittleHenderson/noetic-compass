@@ -365,3 +365,133 @@ def test_record_without_typed_slots_emits_no_copy_targets():
     assert (out["typed_slot_source"] == -1).all().item(), (
         "no copy targets expected when reply has no literal copy tokens"
     )
+
+
+# ---------------------------------------------------------------------------
+# Stage 6 v7 — STAGE_VAR + OMEGA suffix multi-token-span matching
+# ---------------------------------------------------------------------------
+
+from cas_native.training.datasets.simplex_collator import (
+    SLOT_STAGE_VAR,
+    _is_identifier_continuation,
+    find_omega_suffix_spans,
+    find_stage_var_spans,
+    find_subsequence,
+)
+
+
+def test_identifier_continuation_char_tokens():
+    # Alphanumeric chars
+    assert _is_identifier_continuation("<CHAR:0030>")  # '0'
+    assert _is_identifier_continuation("<CHAR:0061>")  # 'a'
+    assert _is_identifier_continuation("<CHAR:005F>")  # '_'
+    assert _is_identifier_continuation("<CHAR:0041>")  # 'A'
+
+
+def test_identifier_continuation_rejects_specials():
+    assert not _is_identifier_continuation("[SP]")
+    assert not _is_identifier_continuation("[BOS]")
+    assert not _is_identifier_continuation("")
+
+
+def test_identifier_continuation_accepts_word_tokens():
+    assert _is_identifier_continuation("stage")
+    assert _is_identifier_continuation("A")
+    assert _is_identifier_continuation("ran")
+
+
+def test_find_stage_var_spans_simple():
+    # Simulated tokenization of "stageA0_5_0296"
+    toks = ["stage", "A", "<CHAR:0030>", "<CHAR:005F>", "<CHAR:0035>",
+            "<CHAR:005F>", "<CHAR:0030>", "<CHAR:0032>", "<CHAR:0039>",
+            "<CHAR:0036>"]
+    spans = find_stage_var_spans(toks)
+    assert spans == [(0, 10)], f"expected single 10-token span, got {spans}"
+
+
+def test_find_stage_var_spans_terminates_at_space():
+    # "let stageA0 = X" → after "stageA0" the [SP] should terminate the span
+    toks = ["let", "[SP]", "stage", "A", "<CHAR:0030>", "[SP]", "=", "[SP]", "X"]
+    spans = find_stage_var_spans(toks)
+    assert spans == [(2, 5)], f"expected span [2,5), got {spans}"
+
+
+def test_find_stage_var_spans_multiple():
+    toks = ["stage", "A", "<CHAR:0030>", "[SP]", "stage", "D", "<CHAR:0031>"]
+    spans = find_stage_var_spans(toks)
+    assert spans == [(0, 3), (4, 7)], f"expected two spans, got {spans}"
+
+
+def test_find_stage_var_spans_lone_stage_rejected():
+    # Just "stage" with no continuation
+    toks = ["stage", "[SP]", "is", "[SP]", "fine"]
+    spans = find_stage_var_spans(toks)
+    assert spans == [], "lone 'stage' token should not produce a span"
+
+
+def test_find_omega_suffix_spans_simple():
+    # Simulated tokenization of "Ω_translation"
+    toks = ["<CHAR:03A9>", "<CHAR:005F>", "<CHAR:0074>", "<CHAR:0072>",
+            "<CHAR:0061>", "<CHAR:006E>", "<CHAR:0073>"]
+    spans = find_omega_suffix_spans(toks)
+    assert spans == [(0, 2, 7)], f"expected one Ω-suffix span, got {spans}"
+
+
+def test_find_omega_suffix_spans_terminates():
+    # "Ω_X = Y" → after X, the [SP] terminates
+    toks = ["<CHAR:03A9>", "<CHAR:005F>", "<CHAR:0058>", "[SP]", "=", "[SP]"]
+    spans = find_omega_suffix_spans(toks)
+    assert spans == [(0, 2, 3)], f"expected one span ending at idx 3, got {spans}"
+
+
+def test_find_omega_suffix_lone_omega_rejected():
+    # Just Ω without underscore-suffix
+    toks = ["<CHAR:03A9>", "[SP]", "free"]
+    spans = find_omega_suffix_spans(toks)
+    assert spans == [], "Ω without _suffix should not produce a span"
+
+
+def test_find_subsequence_exact():
+    assert find_subsequence([1, 2, 3, 4, 5], [3, 4]) == 2
+    assert find_subsequence([1, 2, 3], [2, 3]) == 1
+    assert find_subsequence([1, 2, 3], [4]) is None
+    assert find_subsequence([1, 2, 3], []) is None
+    assert find_subsequence([], [1]) is None
+
+
+def test_find_subsequence_takes_first_match():
+    assert find_subsequence([5, 1, 2, 5, 1, 2], [5, 1, 2]) == 0
+
+
+def test_stage_var_helpers_compose_correctly():
+    """End-to-end helper composition: given a hand-built source/target
+    token-id pair where the source contains a STAGE_VAR-shape span and
+    the target literally repeats it, ``find_stage_var_spans`` followed
+    by ``find_subsequence`` should locate the copy alignment.
+
+    Empirical v1c-tokenizer validation lives on the GPU pod (v7) — the
+    smoke tokenizer used in local tests doesn't include the English BPE
+    that would let it tokenize ``stageA0_5_0296`` the way v1c does
+    (smoke tokenizer falls back to char-by-char without BPE merges).
+    """
+    src_strs = ["let", "[SP]", "stage", "A", "<CHAR:0030>", "[SP]", "=", "[SP]", "X"]
+    src_ids = [10, 11, 12, 13, 14, 11, 15, 11, 16]
+    target_ids = [50, 11, 12, 13, 14, 11, 51, 52]  # contains stage A 0
+    spans = find_stage_var_spans(src_strs)
+    assert spans == [(2, 5)]
+    # Match the 3-token span [stage, A, 0-char] = ids [12, 13, 14] in target
+    t_start = find_subsequence(target_ids, src_ids[2:5])
+    assert t_start == 2, f"expected target start = 2, got {t_start}"
+
+
+def test_omega_suffix_helpers_compose_correctly():
+    """Same end-to-end check for the Ω-suffix derivation."""
+    src_strs = ["<CHAR:03A9>", "<CHAR:005F>", "<CHAR:0058>", "[SP]"]
+    src_ids = [20, 21, 22, 11]  # Ω _ X [SP]
+    target_ids = [50, 22, 51]  # contains X
+    spans = find_omega_suffix_spans(src_strs)
+    assert spans == [(0, 2, 3)]
+    omega_start, suffix_start, suffix_end = spans[0]
+    suffix_ids = src_ids[suffix_start:suffix_end]
+    t_start = find_subsequence(target_ids, suffix_ids)
+    assert t_start == 1, f"expected target start = 1, got {t_start}"

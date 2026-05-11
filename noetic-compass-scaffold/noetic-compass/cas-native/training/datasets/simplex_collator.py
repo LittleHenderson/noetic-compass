@@ -67,6 +67,117 @@ def classify_source_token(token_string: str) -> int:
     return SLOT_CONNECTIVE
 
 
+# ---------------------------------------------------------------------------
+# Multi-token-span detection (Stage 6 v7, 2026-05-11)
+# ---------------------------------------------------------------------------
+# Per user 2026-05-11: STAGE_VAR and OMEGA-suffix derivations land here as
+# strict multi-token-span matching. No fuzzy alignment — when source and
+# target tokenize the identifier compatibly, the copy fires; otherwise it
+# stays NOT MEASURED. Domain/drive/register single-token classifiers
+# remain (above) because they fire on synthetic copy-bearing fixtures
+# (v5), even though they don't fire on paraphrased v1c replies (v6).
+
+_OMEGA_CHAR_TOKEN = "<CHAR:03A9>"     # Greek capital Omega
+_UNDERSCORE_CHAR_TOKEN = "<CHAR:005F>"  # '_'
+
+
+def _is_identifier_continuation(token_string: str) -> bool:
+    """Return True if the token is an identifier-continuation token —
+    a single alphanumeric/underscore char OR a multi-char alphanumeric
+    word. Excludes special tokens ([SP], [BOS], …) and grammar punctuation.
+
+    Used by multi-token-span detection for STAGE_VAR / OMEGA-suffix.
+    """
+    if not token_string:
+        return False
+    if token_string.startswith("[") and token_string.endswith("]"):
+        return False  # [SP], [BOS], [EOS], [PAD], [UNK], [NL], [TAB], etc.
+    if token_string.startswith("<CHAR:") and token_string.endswith(">"):
+        try:
+            ch = chr(int(token_string[6:-1], 16))
+            return ch.isalnum() or ch == "_"
+        except ValueError:
+            return False
+    return all((c.isalnum() or c == "_") for c in token_string)
+
+
+def find_stage_var_spans(token_strings: list[str]) -> list[tuple[int, int]]:
+    """Detect contiguous STAGE_VAR multi-token spans on the source side.
+
+    Pattern: a ``stage`` token followed by one-or-more identifier-
+    continuation tokens (alphanumeric or underscore chars, or short
+    identifier words). The span terminates at the first non-identifier
+    token (whitespace, ``=``, ``;``, etc.).
+
+    Returns list of ``(start, end_exclusive)`` tuples in token-position
+    space — same indexing as the source ``cas_prefix_ids`` tensor.
+    """
+    spans: list[tuple[int, int]] = []
+    i = 0
+    n = len(token_strings)
+    while i < n:
+        if token_strings[i] == "stage":
+            j = i + 1
+            while j < n and _is_identifier_continuation(token_strings[j]):
+                j += 1
+            if j > i + 1:  # at least one continuation token after "stage"
+                spans.append((i, j))
+            i = j
+        else:
+            i += 1
+    return spans
+
+
+def find_omega_suffix_spans(token_strings: list[str]) -> list[tuple[int, int, int]]:
+    """Detect char-decomposed Ω-suffix spans on the source side.
+
+    Pattern: ``<CHAR:03A9>`` (Ω) followed by ``<CHAR:005F>`` (_) followed
+    by one-or-more identifier-continuation tokens. Fires only on the
+    char-decomposed form — novel Ω-names NOT in ``CAS_RESERVED_TOKENS``.
+    Reserved Ω-names (``Ω_resolve`` etc.) tokenize as a single token and
+    are handled by the single-token classifier above.
+
+    Returns list of ``(omega_start, suffix_start, suffix_end_exclusive)``:
+    - ``omega_start`` is the Ω token position
+    - ``suffix_start = omega_start + 2`` (skip Ω + _)
+    - The full source span tagged as OMEGA is ``[omega_start, suffix_end)``
+    - The target-side match looks for ``token_ids[suffix_start:suffix_end]``
+    """
+    spans: list[tuple[int, int, int]] = []
+    i = 0
+    n = len(token_strings)
+    while i < n - 1:
+        if (
+            token_strings[i] == _OMEGA_CHAR_TOKEN
+            and token_strings[i + 1] == _UNDERSCORE_CHAR_TOKEN
+        ):
+            suffix_start = i + 2
+            j = suffix_start
+            while j < n and _is_identifier_continuation(token_strings[j]):
+                j += 1
+            if j > suffix_start:
+                spans.append((i, suffix_start, j))
+            i = j
+        else:
+            i += 1
+    return spans
+
+
+def find_subsequence(haystack: list[int], needle: list[int]) -> Optional[int]:
+    """Return the first index where ``haystack`` contains ``needle`` as a
+    contiguous subsequence, or None if not found. Strict equality, no
+    fuzzy matching.
+    """
+    if not needle:
+        return None
+    n_len = len(needle)
+    last = len(haystack) - n_len
+    for start in range(last + 1):
+        if haystack[start:start + n_len] == needle:
+            return start
+    return None
+
+
 # Build-spec §2.3 slot ids — must match TypedFiberDecoder.SLOT_TYPE_TO_ID
 SLOT_CONNECTIVE: int = 0
 SLOT_OMEGA: int = 1
@@ -293,6 +404,46 @@ class SimplexCollator(NativeNLCollator):
                         break
                 if src_pos is not None:
                     target_slots.append((j, src_type_by_pos[src_pos], src_pos))
+
+        # ----- Stage 6 v7 multi-token-span derivations (STAGE_VAR + OMEGA) -----
+        # Strict exact-subsequence matching only. No fuzzy alignment.
+        # STAGE_VAR span match (e.g. stageA0_5_0296 → reply contains literal)
+        stage_spans = find_stage_var_spans(src_token_strings)
+        for (s_start, s_end) in stage_spans:
+            # Tag source positions with STAGE_VAR
+            for k in range(s_start, s_end):
+                src_token_types.append((k, SLOT_STAGE_VAR))
+            # Place an FR anchor at the span start (state 0 — neutral)
+            src_anchors.append((s_start, 0))
+            # Find first matching target subsequence; emit per-position copy
+            if r_ids:
+                src_subseq = c_ids[s_start:s_end]
+                t_start = find_subsequence(r_ids, src_subseq)
+                if t_start is not None:
+                    for offset in range(s_end - s_start):
+                        target_slots.append(
+                            (t_start + offset, SLOT_STAGE_VAR, s_start + offset)
+                        )
+
+        # OMEGA-suffix span match (e.g. Ω_translation_59 → reply contains
+        # translation_59). Strict match — fires only when the tokenizer
+        # produces the same token-id subsequence on both sides. v7 will
+        # surface the empirical yield.
+        omega_spans = find_omega_suffix_spans(src_token_strings)
+        for (omega_start, suffix_start, suffix_end) in omega_spans:
+            # Tag the full Ω_X source span with OMEGA
+            for k in range(omega_start, suffix_end):
+                src_token_types.append((k, SLOT_OMEGA))
+            src_anchors.append((omega_start, 0))
+            # Match the SUFFIX (not Ω_ prefix) in target
+            if r_ids:
+                suffix_subseq = c_ids[suffix_start:suffix_end]
+                t_start = find_subsequence(r_ids, suffix_subseq)
+                if t_start is not None:
+                    for offset in range(suffix_end - suffix_start):
+                        target_slots.append(
+                            (t_start + offset, SLOT_OMEGA, suffix_start + offset)
+                        )
 
         if not src_anchors and not target_slots:
             return None
