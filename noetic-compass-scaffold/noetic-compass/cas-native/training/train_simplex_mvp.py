@@ -101,6 +101,9 @@ class SimplexTrainConfig:
     sample_canary_post_training: bool = False
     canary_max_new_tokens: int = 128
     halt_on_canary_kill: bool = False
+    # Diagnostic infra piece 1 (2026-05-11): checkpoint save/load
+    save_checkpoints_at: str = ""
+    save_final_checkpoint: bool = False
     # Loss weights — populated by ablation mode after CLI parse
     loss_weights: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_LOSS_WEIGHTS))
 
@@ -161,6 +164,15 @@ def build_parser() -> argparse.ArgumentParser:
                    help="If a canary read returns pack verdict 'kill', halt "
                         "the run with a kill_reason in the report. Per user "
                         "2026-05-11 scope: hard damage only.")
+    # Diagnostic-infra piece 1 (2026-05-11): checkpoint save/load.
+    p.add_argument("--save-checkpoints-at", type=str, default="",
+                   help="Comma-separated step numbers at which to save a "
+                        "checkpoint (.pt + .manifest.json) to <output-dir>/"
+                        "ckpt_step_<N>.pt. Default empty = no checkpoints. "
+                        "Example: '250,500,750,1000'.")
+    p.add_argument("--save-final-checkpoint", action="store_true",
+                   help="Also save a final checkpoint at end of training "
+                        "to <output-dir>/ckpt_final.pt.")
     return p
 
 
@@ -196,6 +208,8 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
         sample_canary_post_training=args.sample_canary_post_training,
         canary_max_new_tokens=args.canary_max_new_tokens,
         halt_on_canary_kill=args.halt_on_canary_kill,
+        save_checkpoints_at=args.save_checkpoints_at,
+        save_final_checkpoint=args.save_final_checkpoint,
     )
     # Apply ablation overrides on top of defaults
     overrides = ABLATION_OVERRIDES.get(cfg.ablation, {})
@@ -1012,6 +1026,22 @@ def run_cpu_smoke(
         from cas_native.evaluation.stage7_canary_pack import canary_pack
         canary_records = canary_pack()
 
+    # Diagnostic infra piece 1: checkpoint save steps (default-off).
+    checkpoint_steps: set[int] = set()
+    if cfg.save_checkpoints_at:
+        for s in cfg.save_checkpoints_at.split(","):
+            s = s.strip()
+            if s.isdigit():
+                checkpoint_steps.add(int(s))
+    checkpoint_manifests: list[dict[str, Any]] = []
+    if checkpoint_steps or cfg.save_final_checkpoint:
+        from cas_native.training.simplex_checkpoint import build_tokenizer_info
+        tokenizer_info_for_ckpt = build_tokenizer_info(
+            cfg.tokenizer_path, cfg.english_bpe_path, tokenizer=tokenizer,
+        )
+    else:
+        tokenizer_info_for_ckpt = {}
+
     for step in range(1, n_steps + 1):
         # Sample batch of cfg.batch_size records (with replacement when needed)
         if len(records) >= cfg.batch_size:
@@ -1129,6 +1159,33 @@ def run_cpu_smoke(
                 extras=extras,
             )
 
+        # Diagnostic-infra piece 1: checkpoint save at the named steps.
+        # Default-off. Runs BEFORE canary sampling so the saved state is
+        # the post-step state (matches what canary sees).
+        if step in checkpoint_steps:
+            from cas_native.training.simplex_checkpoint import save_checkpoint
+            ckpt_path = output_dir / f"ckpt_step_{step}.pt"
+            try:
+                manifest = save_checkpoint(
+                    str(ckpt_path),
+                    model=model, optimizer=optimizer, step=step, cfg=cfg,
+                    tokenizer_info=tokenizer_info_for_ckpt,
+                    loss_history_tail=loss_history,
+                )
+                checkpoint_manifests.append(manifest)
+                print(json.dumps({
+                    "event": "checkpoint_saved",
+                    "step": step,
+                    "path": str(ckpt_path),
+                    "size_bytes": manifest["checkpoint_size_bytes"],
+                }, ensure_ascii=False), flush=True)
+            except Exception as exc:
+                print(json.dumps({
+                    "event": "checkpoint_save_failed",
+                    "step": step,
+                    "reason": f"{type(exc).__name__}: {exc}",
+                }, ensure_ascii=False), flush=True)
+
         # v7.1 canary sample hook: run at the named steps (per user
         # 2026-05-11: "samples don't stave off overfitting; they detect
         # degeneration before scalar losses fool us"). Always restore
@@ -1180,6 +1237,32 @@ def run_cpu_smoke(
                     f"max_severity={pack_verdict['max_severity']}"
                 )
                 break
+
+    # Diagnostic-infra piece 1: final checkpoint save.
+    if cfg.save_final_checkpoint and halted is None:
+        from cas_native.training.simplex_checkpoint import save_checkpoint
+        ckpt_path = output_dir / "ckpt_final.pt"
+        try:
+            manifest = save_checkpoint(
+                str(ckpt_path),
+                model=model, optimizer=optimizer,
+                step=loss_history[-1]["step"] if loss_history else 0,
+                cfg=cfg, tokenizer_info=tokenizer_info_for_ckpt,
+                loss_history_tail=loss_history,
+            )
+            checkpoint_manifests.append(manifest)
+            print(json.dumps({
+                "event": "checkpoint_saved",
+                "step": "final",
+                "path": str(ckpt_path),
+                "size_bytes": manifest["checkpoint_size_bytes"],
+            }, ensure_ascii=False), flush=True)
+        except Exception as exc:
+            print(json.dumps({
+                "event": "checkpoint_save_failed",
+                "step": "final",
+                "reason": f"{type(exc).__name__}: {exc}",
+            }, ensure_ascii=False), flush=True)
 
     # v7.1 post-training canary sample read
     if cfg.sample_canary_post_training and canary_records and halted is None:
@@ -1251,6 +1334,8 @@ def run_cpu_smoke(
         "last_step": loss_history[-1] if loss_history else None,
         # v7.1: canary sample reads + damage detection per user 2026-05-11
         "canary_history": canary_history,
+        # Diagnostic infra piece 1 (2026-05-11): saved-checkpoint manifests
+        "checkpoint_manifests": checkpoint_manifests,
         "loss_lm_trajectory": [h["loss_lm"] for h in loss_history],
         "loss_fr_trajectory": [h["loss_fr"] for h in loss_history],
     }
