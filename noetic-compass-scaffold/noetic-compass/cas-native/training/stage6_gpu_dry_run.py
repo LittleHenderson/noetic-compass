@@ -80,6 +80,18 @@ def build_parser() -> argparse.ArgumentParser:
     # to match build-spec budget). Tokenizer remains synthetic for the
     # actual forward; only the embedding/lm_head shapes change.
     p.add_argument("--vocab-size-override", type=int, default=0)
+    # v6 (2026-05-11): real v1c tokenizer + stratified v1c corpus.
+    p.add_argument("--tokenizer-path", type=str, default="",
+                   help="Path to v1c tokenizer.json. When set, --vocab-size-override is ignored.")
+    p.add_argument("--english-bpe-path", type=str, default="",
+                   help="Optional path to english_bpe.json for composed tokenizer.")
+    p.add_argument("--data-path", type=str, default="",
+                   help="Path to v1c training JSONL. When set, stratifies a sample by "
+                        "v1mix_grammar_category_or_error_class instead of using synthetic.")
+    p.add_argument("--stratify-categories", type=str,
+                   default="rpm_chain,recipe,fractal,meta_logic,cross_register_omega,state_literal,binary_composition",
+                   help="Comma-separated categories to stratify across (v6 requirement).")
+    p.add_argument("--records-per-category", type=int, default=3)
     return p
 
 
@@ -135,21 +147,58 @@ def main() -> int:
 
         torch.manual_seed(args.seed)
 
-        # Stage 6 v5 (2026-05-11): use the copy-bearing record fixture so
-        # the L_copy path is exercised — reply strings literally contain
-        # source-side typed identifiers (REGISTER_LETTER, OMEGA, etc.)
-        # for the collator to detect as copy targets.
-        records = copy_bearing_records(args.batch_size)
-        tokenizer = HybridCASTokenizer.from_records(records, freeze=True)
+        # v6 (2026-05-11): use real v1c VALIDTOK tokenizer + stratified
+        # v1c corpus when --tokenizer-path and --data-path are set; fall
+        # back to v5 copy-bearing fixture + synthetic-vocab tokenizer.
+        use_real_tokenizer = bool(args.tokenizer_path)
+        use_real_corpus = bool(args.data_path)
+
+        # ---- Records ------------------------------------------------------
+        record_categories: list[str] = []
+        if use_real_corpus:
+            from cas_native.training.train_simplex_mvp import (
+                load_jsonl_records, stratified_sample,
+            )
+            wanted_cats = [c.strip() for c in args.stratify_categories.split(",") if c.strip()]
+            all_records = load_jsonl_records(args.data_path, limit=None)
+            # Filter to wanted categories, then take ``records_per_category`` from each
+            by_cat: dict[str, list[dict]] = {c: [] for c in wanted_cats}
+            for rec in all_records:
+                cat = rec.get("v1mix_grammar_category_or_error_class", "unk")
+                if cat in by_cat and len(by_cat[cat]) < args.records_per_category:
+                    by_cat[cat].append(rec)
+            records = []
+            for c in wanted_cats:
+                for rec in by_cat[c]:
+                    records.append(rec)
+                    record_categories.append(c)
+            if not records:
+                raise RuntimeError(
+                    f"no records loaded from {args.data_path} matching {wanted_cats}"
+                )
+        else:
+            records = copy_bearing_records(args.batch_size)
+            record_categories = ["synthetic_copy"] * len(records)
+
+        # ---- Tokenizer ----------------------------------------------------
+        if use_real_tokenizer:
+            tokenizer = HybridCASTokenizer.load(args.tokenizer_path)
+            if args.english_bpe_path:
+                tokenizer = tokenizer.with_english_bpe(args.english_bpe_path)
+        else:
+            tokenizer = HybridCASTokenizer.from_records(records, freeze=True)
         tokenizer_vocab_size = int(tokenizer.vocab_size)
-        # Embedding/lm_head dimension — use override (e.g. v1c VALIDTOK
-        # 38685) for budget-aligned param-count check; tokenizer remains
-        # synthetic for the forward pass.
-        vocab_size = (
-            args.vocab_size_override
-            if args.vocab_size_override > 0
-            else tokenizer_vocab_size
-        )
+        # When the real v1c tokenizer is loaded, use ITS vocab size for the
+        # model embedding/lm_head — override is for synthetic-tokenizer
+        # runs that need to budget-test against the v1c size. Avoid mixing.
+        if use_real_tokenizer:
+            vocab_size = tokenizer_vocab_size
+        else:
+            vocab_size = (
+                args.vocab_size_override
+                if args.vocab_size_override > 0
+                else tokenizer_vocab_size
+            )
 
         # Real-size encoder + decoder
         enc_cfg = SimplexEncoderConfig(
@@ -306,23 +355,26 @@ def main() -> int:
             "slot_type_logits": list(out["slot_type_logits"].shape),
             "p_copy": list(out["p_copy"].shape),
         }
+        actual_B = out["source_hidden"].shape[0]
         shape_pass = (
-            out["source_hidden"].shape == (args.batch_size, L_src, args.d_model)
-            and out["simplex_trajectory"].shape == (args.batch_size, L_src, NUM_COGNITIVE_STATES)
-            and out["simplex_final"].shape == (args.batch_size, NUM_COGNITIVE_STATES)
-            and out["slot_type_logits"].shape == (args.batch_size, L_out, NUM_SLOT_TYPES)
-            and out["p_copy"].shape == (args.batch_size, L_out, L_src)
+            out["source_hidden"].shape == (actual_B, L_src, args.d_model)
+            and out["simplex_trajectory"].shape == (actual_B, L_src, NUM_COGNITIVE_STATES)
+            and out["simplex_final"].shape == (actual_B, NUM_COGNITIVE_STATES)
+            and out["slot_type_logits"].shape == (actual_B, L_out, NUM_SLOT_TYPES)
+            and out["p_copy"].shape == (actual_B, L_out, L_src)
         )
         report["checks"]["2_shape_contracts_at_d384"] = {
             "pass": shape_pass,
             "shapes": shape_checks,
             "expected": {
-                "source_hidden": [args.batch_size, L_src, args.d_model],
-                "simplex_trajectory": [args.batch_size, L_src, NUM_COGNITIVE_STATES],
-                "simplex_final": [args.batch_size, NUM_COGNITIVE_STATES],
-                "slot_type_logits": [args.batch_size, L_out, NUM_SLOT_TYPES],
-                "p_copy": [args.batch_size, L_out, L_src],
+                "source_hidden": [actual_B, L_src, args.d_model],
+                "simplex_trajectory": [actual_B, L_src, NUM_COGNITIVE_STATES],
+                "simplex_final": [actual_B, NUM_COGNITIVE_STATES],
+                "slot_type_logits": [actual_B, L_out, NUM_SLOT_TYPES],
+                "p_copy": [actual_B, L_out, L_src],
             },
+            "actual_batch_size": actual_B,
+            "args_batch_size": args.batch_size,
         }
 
         # ----- Check 3 (simplex invariants at real size) -----
@@ -509,6 +561,80 @@ def main() -> int:
                 "source-side typed identifiers (DOMAIN/DRIVE/REGISTER/OMEGA)."
             ),
         }
+
+        # v6 (2026-05-11): per-category breakdown when real corpus is in
+        # use. Surfaces (a) how often copy fires per category and (b)
+        # which slot types (DOMAIN/DRIVE/REGISTER/OMEGA) appear in each
+        # category's source. The user-named gate: "copy slots are not
+        # only Ω/register easy cases."
+        if record_categories:
+            from cas_native.training.datasets.simplex_collator import (
+                SLOT_DOMAIN_LETTER, SLOT_DRIVE_LETTER,
+                SLOT_REGISTER_LETTER, SLOT_OMEGA,
+            )
+            type_name = {
+                SLOT_DOMAIN_LETTER: "DOMAIN_LETTER",
+                SLOT_DRIVE_LETTER: "DRIVE_LETTER",
+                SLOT_REGISTER_LETTER: "REGISTER_LETTER",
+                SLOT_OMEGA: "OMEGA",
+            }
+            typed_slot_source_t = batch.get("typed_slot_source")
+            src_token_type_t = batch.get("src_token_type")
+            per_cat: dict[str, dict] = {}
+            for b, cat in enumerate(record_categories):
+                if cat not in per_cat:
+                    per_cat[cat] = {
+                        "records": 0,
+                        "copy_valid_count": 0,
+                        "src_slot_histogram": {},
+                        "cas_samples": [],
+                    }
+                per_cat[cat]["records"] += 1
+                # Copy targets
+                if typed_slot_source_t is not None:
+                    nvalid = int((typed_slot_source_t[b] >= 0).sum().item())
+                    per_cat[cat]["copy_valid_count"] += nvalid
+                # Source-side typed slot histogram
+                if src_token_type_t is not None:
+                    src_types = src_token_type_t[b].tolist()
+                    for t in src_types:
+                        if t > 0:  # not CONNECTIVE
+                            tname = type_name.get(int(t), f"slot_{int(t)}")
+                            per_cat[cat]["src_slot_histogram"][tname] = (
+                                per_cat[cat]["src_slot_histogram"].get(tname, 0) + 1
+                            )
+                if len(per_cat[cat]["cas_samples"]) < 2:
+                    rec = records[b]
+                    per_cat[cat]["cas_samples"].append({
+                        "cas": rec.get("cas_expression", "")[:80],
+                        "reply": rec.get("reply_text", rec.get("reply", ""))[:120],
+                    })
+
+            # Aggregate slot-type fire surface
+            all_slot_types_fired: set[str] = set()
+            for c, info in per_cat.items():
+                for stype in info["src_slot_histogram"]:
+                    all_slot_types_fired.add(stype)
+
+            report["v6_per_category_breakdown"] = per_cat
+            report["v6_slot_types_observed"] = sorted(all_slot_types_fired)
+            report["v6_uses_real_v1c_tokenizer"] = use_real_tokenizer
+            report["v6_uses_real_v1c_corpus"] = use_real_corpus
+            report["v6_deferred_slot_types_note"] = (
+                "STAGE_VAR, COEFFICIENT, FRACTAL_K_LITERAL remain deferred "
+                "(multi-token or context-aware). Stage 7 must not penalise "
+                "their absence. If v6 shows copy supervision misses "
+                "rpm/fractal rows, extend those derivations before Stage 7."
+            )
+            # Surface the per-category copy rate as a check (not pass/fail,
+            # informational). The user's caveat: "if v6 shows copy
+            # supervision mostly misses rpm/fractal rows, extend those
+            # derivations before Stage 7."
+            cats_with_zero = [
+                c for c, info in per_cat.items()
+                if info["copy_valid_count"] == 0
+            ]
+            report["v6_categories_with_zero_copy"] = cats_with_zero
 
         # ----- Final verdict -----
         gate_results = report["checks"]
