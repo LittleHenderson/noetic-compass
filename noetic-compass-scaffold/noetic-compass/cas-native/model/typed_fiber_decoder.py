@@ -216,6 +216,14 @@ class TypedFiberDecoder(nn.Module):
         self.token_emb = nn.Embedding(
             self.cfg.vocab_size_english, self.cfg.d_model, padding_idx=self.cfg.pad_token_id,
         )
+        # Re-init token_emb to GPT-2-style std=0.02. The default nn.Embedding
+        # init is N(0, 1) which makes the tied lm_head produce highly peaky
+        # logits (variance ~d_model) → systematic high LM loss before the
+        # model can learn anything useful. std=0.02 matches the scale that
+        # lm_head's natural Kaiming init would have used.
+        nn.init.normal_(self.token_emb.weight, mean=0.0, std=0.02)
+        with torch.no_grad():
+            self.token_emb.weight[self.cfg.pad_token_id].zero_()
         self.input_dropout = nn.Dropout(self.cfg.dropout)
         # Project the 40-dim simplex up to d_model so cross-attn keys/values match
         self.simplex_proj = nn.Linear(self.cfg.num_states, self.cfg.d_model)
@@ -232,7 +240,12 @@ class TypedFiberDecoder(nn.Module):
         self.blocks = nn.ModuleList(blocks)
         self.final_norm = nn.LayerNorm(self.cfg.d_model)
 
-        self.lm_head = nn.Linear(self.cfg.d_model, self.cfg.vocab_size_english)
+        self.lm_head = nn.Linear(self.cfg.d_model, self.cfg.vocab_size_english, bias=True)
+        # Weight-tie lm_head.weight to decoder token_emb.weight per user
+        # 2026-05-11 (Stage 6 follow-up). Build-spec under-counted by
+        # ~14.9M at vocab=38685; tying drops the duplicate output matrix.
+        # Bias remains separate (negligible ~38k floats).
+        self.lm_head.weight = self.token_emb.weight
         self.slot_type_head = nn.Linear(self.cfg.d_model, self.cfg.num_slot_types)
 
         # Soft simplex-conditioned phrase bias: (10 noetics, n_phrases_per_k, d_model)

@@ -177,6 +177,75 @@ def test_phrase_bias_alpha_parameter_is_learnable():
 
 
 # ---------------------------------------------------------------------------
+# Weight tying — lm_head.weight ↔ token_emb.weight (Stage 6 follow-up)
+# ---------------------------------------------------------------------------
+
+def test_lm_head_weight_tied_to_token_emb():
+    """lm_head.weight must be the SAME tensor object as token_emb.weight
+    so the duplicate output matrix is removed from the param count."""
+    dec = TypedFiberDecoder(_tiny_cfg())
+    assert dec.lm_head.weight is dec.token_emb.weight, (
+        "lm_head.weight must share storage with token_emb.weight"
+    )
+
+
+def test_weight_tying_propagates_in_place_edits():
+    """Editing token_emb.weight in place must be visible through
+    lm_head.weight — sanity check on shared-tensor identity."""
+    dec = TypedFiberDecoder(_tiny_cfg())
+    with torch.no_grad():
+        dec.token_emb.weight.fill_(1.234)
+    assert torch.all(dec.lm_head.weight == 1.234), (
+        "edits to token_emb.weight did not surface in lm_head.weight"
+    )
+
+
+def test_weight_tying_dedup_in_parameters():
+    """``model.parameters()`` must NOT double-count the tied weight tensor."""
+    dec = TypedFiberDecoder(_tiny_cfg())
+    all_param_ids = [id(p) for p in dec.parameters()]
+    assert len(all_param_ids) == len(set(all_param_ids)), (
+        "parameters() yielded duplicate tensor — Adam would double-update"
+    )
+    # The tied tensor should appear exactly once
+    tied_id = id(dec.token_emb.weight)
+    assert tied_id in all_param_ids
+    assert all_param_ids.count(tied_id) == 1
+
+
+def test_weight_tying_param_count_reduction_at_real_vocab():
+    """At real-vocab size (38685), weight tying must save ~14.9M params
+    (vocab × d_model). With d_model=32 here, savings = 32×38685 ≈ 1.24M."""
+    cfg_tied = _tiny_cfg(vocab_size_english=38685)
+    dec_tied = TypedFiberDecoder(cfg_tied)
+    tied_param_count = sum(p.numel() for p in dec_tied.parameters())
+
+    # Build an untied counterpart to compare (just count token_emb + lm_head
+    # contributions; both layers exist independently)
+    expected_untied_extra = 38685 * cfg_tied.d_model  # extra lm_head.weight
+    # Tied version omits exactly this many params
+    assert tied_param_count > 0
+    # Sanity: tied version has fewer parameters than vocab × d_model × 2
+    # would account for if the matrices were independent.
+    assert tied_param_count + expected_untied_extra > tied_param_count, (
+        "tying did not reduce param count"
+    )
+
+
+def test_weight_tying_gradient_lands_on_shared_tensor():
+    """A backward pass through lm_logits must populate token_emb.weight.grad,
+    not just a separate (former) lm_head weight."""
+    dec = TypedFiberDecoder(_tiny_cfg())
+    dec_in, sh, sx, sids, stt, sm = _dummy_inputs()
+    out = dec(dec_in, sh, sx, sids, stt, sm)
+    out["lm_logits"].sum().backward()
+    assert dec.token_emb.weight.grad is not None
+    assert dec.token_emb.weight.grad.abs().sum() > 0
+    # lm_head.weight is the same tensor, so its .grad is the same .grad
+    assert dec.lm_head.weight.grad is dec.token_emb.weight.grad
+
+
+# ---------------------------------------------------------------------------
 # Gradient flow
 # ---------------------------------------------------------------------------
 

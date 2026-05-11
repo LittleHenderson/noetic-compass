@@ -1,0 +1,177 @@
+{
+  "event": "stage6_dry_run",
+  "timestamp_utc": "2026-05-11T05:07:33Z",
+  "config": {
+    "output_dir": "/workspace/tksCAS/stage6_dry_run_v4_tied_init_20260511T050731Z",
+    "device": "cuda:0",
+    "d_model": 384,
+    "encoder_n_layers": 4,
+    "encoder_n_heads": 6,
+    "decoder_n_layers": 6,
+    "decoder_n_heads": 6,
+    "batch_size": 4,
+    "seed": 1729,
+    "memory_threshold_gb": 20.0,
+    "wallclock_threshold_sec": 10.0,
+    "param_count_target_m": 55.5,
+    "param_count_tolerance_m": 3.0,
+    "vocab_size_override": 38685
+  },
+  "device_name": "NVIDIA RTX A6000",
+  "torch_version": "2.5.1+cu124",
+  "cuda_version": "12.4",
+  "checks": {
+    "1_instantiates_on_gpu": {
+      "pass": true,
+      "encoder_params": 22187376,
+      "decoder_params": 33165100,
+      "total_params": 55352476,
+      "total_params_M": 55.352
+    },
+    "5_param_count_in_budget": {
+      "pass": true,
+      "actual_M": 55.352,
+      "target_M": 55.5,
+      "tolerance_M": 3.0,
+      "delta_M": -0.148,
+      "vocab_size_used_for_model": 38685,
+      "tokenizer_vocab_size": 388,
+      "note": "build-spec estimate ~48.5M assumes vocab_size=38685 (v1c VALIDTOK tokenizer). Pass --vocab-size-override 38685 to build the model at the real embedding/lm_head size while keeping the tokenizer synthetic for the forward pass."
+    },
+    "6_no_nan_inf": {
+      "pass": true,
+      "loss_total": 17.14716339111328,
+      "per_part": {
+        "loss_total": 17.14716339111328,
+        "loss_lm": 10.69033432006836,
+        "loss_fr": 4.609879970550537,
+        "loss_slot_type": 1.8469481468200684,
+        "loss_copy": 0.0,
+        "loss_phrase_bias_aux": 0.0
+      }
+    },
+    "2_shape_contracts_at_d384": {
+      "pass": true,
+      "shapes": {
+        "source_hidden": [
+          4,
+          3,
+          384
+        ],
+        "simplex_trajectory": [
+          4,
+          3,
+          40
+        ],
+        "simplex_final": [
+          4,
+          40
+        ],
+        "lm_logits": [
+          4,
+          25,
+          38685
+        ],
+        "slot_type_logits": [
+          4,
+          25,
+          9
+        ],
+        "p_copy": [
+          4,
+          25,
+          3
+        ]
+      },
+      "expected": {
+        "source_hidden": [
+          4,
+          3,
+          384
+        ],
+        "simplex_trajectory": [
+          4,
+          3,
+          40
+        ],
+        "simplex_final": [
+          4,
+          40
+        ],
+        "slot_type_logits": [
+          4,
+          25,
+          9
+        ],
+        "p_copy": [
+          4,
+          25,
+          3
+        ]
+      }
+    },
+    "3_simplex_invariants": {
+      "pass": true,
+      "all_p_gt_zero": true,
+      "rows_sum_to_one": true,
+      "min_p": 0.010831848718225956,
+      "max_row_sum_deviation": 1.1920928955078125e-07
+    },
+    "4_device_and_dtype_contracts": {
+      "pass": true,
+      "all_params_on_cuda": true,
+      "simplex_trajectory_dtype": "torch.float32",
+      "simplex_is_fp32_per_buildspec": true,
+      "source_hidden_dtype": "torch.float32"
+    },
+    "7_gradients_flow_both_paths": {
+      "pass": true,
+      "encoder_grad_norm": 10.32184048630321,
+      "decoder_grad_norm": 38.047494353332056,
+      "all_gradients_finite": true
+    },
+    "8_memory_and_wallclock": {
+      "pass": true,
+      "peak_memory_gb": 1.065,
+      "memory_threshold_gb": 20.0,
+      "wall_clock_sec": 0.5255,
+      "wallclock_threshold_sec": 10.0
+    },
+    "9_train_progress_fields_emit": {
+      "pass": true,
+      "fields": {
+        "loss_total": 17.14716339111328,
+        "loss_lm": 10.69033432006836,
+        "loss_fr": 4.609879970550537,
+        "loss_slot_type": 1.8469481468200684,
+        "loss_copy": 0.0,
+        "loss_phrase_bias_aux": 0.0,
+        "grad_norm_encoder": 10.32184048630321,
+        "grad_norm_decoder": 38.047494353332056,
+        "simplex_entropy_mean": 3.6497762203216553,
+        "simplex_min_p": 0.010831848718225956,
+        "fr_lm_ratio": 0.4312194392177867
+      }
+    }
+  },
+  "placeholders": {
+    "L_copy": {
+      "value": 0.0,
+      "status": "PLACEHOLDER — not exercised in Stage 6",
+      "why_zero": "Collator anchor stub (Stage 1) emits typed_slot_source = -1 for every output position. Pointer-copy path is shape-correct but inactive.",
+      "live_signal": false,
+      "wired_for_stage": 7
+    },
+    "L_phrase_bias_aux": {
+      "value": 0.0,
+      "status": "PLACEHOLDER — Stage 1 zeros placeholder",
+      "why_zero": "Implementation in compute_losses() is a torch.zeros((), requires_grad=False) until the phrase-bias target table is built and corpus-aligned.",
+      "live_signal": false,
+      "wired_for_stage": 7
+    },
+    "warning": "Stage 6 PASS only validates that LM + FR + slot_type are live and the model wiring is sound at real size. It does NOT validate L_copy or L_phrase_bias_aux. Treat the 5-loss assembly as 3-of-5 live until Stage 7."
+  },
+  "verdict": "PASS",
+  "wall_clock_sec_step": 0.5255,
+  "peak_memory_gb": 1.065
+}
