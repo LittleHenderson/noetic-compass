@@ -1,15 +1,20 @@
-"""v1e Phase 1B shadow-mode eval driver (Task #135).
+"""v1e Phase 1B shadow-mode eval driver (Tasks #135 + #138).
 
 Runs the 42-record eval suite
 (``cas-synthetic/data/path_d/v1e_phase1b_eval_suite.jsonl``: 35
 stratified fractals + 7 non-fractal negative controls) against the
-archived v0 checkpoint under FIVE config combinations:
+archived v0 checkpoint under FOUR config combinations focused on
+isolating the lever 3 (leaf-exit boundary) effect:
 
-  - A: control       — apply_fractal_decoder=False (= v0 baseline)
-  - B: smoke         — apply_fractal_decoder=True, no levers
-  - C: eos_bias_only — apply_fractal_decoder=True, fractal_decoder_eos_bias=3.0
-  - D: first_n_only  — apply_fractal_decoder=True, fractal_decoder_first_n_mode=True
-  - E: both          — apply_fractal_decoder=True, eos_bias=3.0 + first_n_mode=True
+  - A: control          — apply_fractal_decoder=False (= v0 baseline)
+  - D: first_n_replay   — first_n_mode=True only (replays Task #135 D)
+  - F: boundary_only    — leaf_exit_boundary=True only (lever 3 alone)
+  - G: boundary_first_n — leaf_exit_boundary=True + first_n_mode=True
+
+Previous Task #135 configs B (smoke) / C (eos_bias) / E (both
+eos+firstN) are retired — B/C were ineffective; E equaled D. The
+β-focused grid above isolates lever 3 against the previous strongest
+config (D).
 
 Per the user's promotion gate (2026-05-10):
   - Exact k-sequence improves materially on fractal suite (B/C/D/E vs A).
@@ -95,33 +100,28 @@ CONFIGS = [
         "kwargs": dict(apply_fractal_decoder=False),
     },
     {
-        "id": "B_smoke",
-        "label": "smoke (decoder on, no levers)",
-        "kwargs": dict(apply_fractal_decoder=True),
-    },
-    {
-        "id": "C_eos_bias",
-        "label": f"eos_bias_only (eos_bias={EOS_BIAS_STRENGTH})",
-        "kwargs": dict(
-            apply_fractal_decoder=True,
-            fractal_decoder_eos_bias=EOS_BIAS_STRENGTH,
-        ),
-    },
-    {
-        "id": "D_first_n",
-        "label": "first_n_only (first_n_mode=True)",
+        "id": "D_first_n_replay",
+        "label": "first_n_only (replays Task #135 D for delta vs lever 3)",
         "kwargs": dict(
             apply_fractal_decoder=True,
             fractal_decoder_first_n_mode=True,
         ),
     },
     {
-        "id": "E_both",
-        "label": f"both (eos_bias={EOS_BIAS_STRENGTH} + first_n_mode=True)",
+        "id": "F_boundary_only",
+        "label": "boundary_only (lever 3 leaf-exit boundary alone, strict comparator)",
         "kwargs": dict(
             apply_fractal_decoder=True,
-            fractal_decoder_eos_bias=EOS_BIAS_STRENGTH,
+            fractal_decoder_leaf_exit_boundary=True,
+        ),
+    },
+    {
+        "id": "G_boundary_first_n",
+        "label": "boundary_first_n (lever 3 + first_n_mode — the β combination)",
+        "kwargs": dict(
+            apply_fractal_decoder=True,
             fractal_decoder_first_n_mode=True,
+            fractal_decoder_leaf_exit_boundary=True,
         ),
     },
 ]
@@ -276,16 +276,19 @@ def summarize(rows: list[dict], suite: list[dict]) -> str:
     out.append("")
     out.append("## Non-fractal drift (negative controls — must byte-match A)")
     out.append("")
-    out.append("| record_id | subcategory | B_smoke=A? | C_eos=A? | D_firstn=A? | E_both=A? |")
-    out.append("|---|---|---|---|---|---|")
+    non_control_cfgs = [c for c in CONFIGS if c["id"] != control_id]
+    header_cells = " | ".join(f"{c['id']}=A?" for c in non_control_cfgs)
+    sep_cells = " | ".join("---" for _ in non_control_cfgs)
+    out.append(f"| record_id | subcategory | {header_cells} |")
+    out.append(f"|---|---|{sep_cells}|")
     neg_drift_count_per_cfg: dict[str, int] = defaultdict(int)
     for rid in negative_ids:
-        a = by_config_record.get(("A_control", rid))
+        a = by_config_record.get((control_id, rid))
         if a is None:
             continue
         a_text = a.get("final_text", "")
         cells = []
-        for cfg in CONFIGS[1:]:
+        for cfg in non_control_cfgs:
             other = by_config_record.get((cfg["id"], rid))
             other_text = other.get("final_text", "") if other else None
             match = (other_text == a_text)
@@ -293,7 +296,8 @@ def summarize(rows: list[dict], suite: list[dict]) -> str:
             if not match:
                 neg_drift_count_per_cfg[cfg["id"]] += 1
         subcat = a.get("subcategory", "?")
-        out.append(f"| {rid} | {subcat} | {cells[0]} | {cells[1]} | {cells[2]} | {cells[3]} |")
+        row_cells = " | ".join(cells)
+        out.append(f"| {rid} | {subcat} | {row_cells} |")
     out.append("")
 
     out.append("## Record 14 prose-quality watch (k=2 `Φ<3:7>`)")
@@ -325,19 +329,22 @@ def summarize(rows: list[dict], suite: list[dict]) -> str:
         out.append("- record-14 analog not found in suite")
     out.append("")
 
-    out.append("## Lever-individual safety (each lever vs B_smoke)")
+    out.append("## Lever-individual safety (each non-control vs A_control)")
     out.append("")
-    b = summary_per_config["B_smoke"]
-    for cid in ("C_eos_bias", "D_first_n", "E_both"):
+    a = summary_per_config[control_id]
+    for cfg in CONFIGS:
+        cid = cfg["id"]
+        if cid == control_id:
+            continue
         s = summary_per_config[cid]
-        seq_delta = s["seq"] - b["seq"]
-        card_delta = s["card"] - b["card"]
-        sel_delta = s["sel"] - b["sel"]
-        hard_delta = s["hard_n"] - b["hard_n"]
-        jarg_delta = s["jarg"] - b["jarg"]
-        trunc_delta = s["trunc"] - b["trunc"]
+        seq_delta = s["seq"] - a["seq"]
+        card_delta = s["card"] - a["card"]
+        sel_delta = s["sel"] - a["sel"]
+        hard_delta = s["hard_n"] - a["hard_n"]
+        jarg_delta = s["jarg"] - a["jarg"]
+        trunc_delta = s["trunc"] - a["trunc"]
         out.append(
-            f"- **{cid}** vs B_smoke: "
+            f"- **{cid}** vs A_control: "
             f"seq Δ={seq_delta:+d}, card Δ={card_delta:+d}, "
             f"selected_constrained Δ={sel_delta:+d}, "
             f"hard_notation Δ={hard_delta:+d}, jargon Δ={jarg_delta:+d}, "
@@ -347,9 +354,12 @@ def summarize(rows: list[dict], suite: list[dict]) -> str:
 
     out.append("## Promotion-gate verdict")
     out.append("")
-    a_summary = summary_per_config["A_control"]
+    a_summary = summary_per_config[control_id]
     promote_checks = []
-    for cid in ("B_smoke", "C_eos_bias", "D_first_n", "E_both"):
+    for cfg in CONFIGS:
+        cid = cfg["id"]
+        if cid == control_id:
+            continue
         s = summary_per_config[cid]
         seq_lift = s["seq"] - a_summary["seq"]
         non_fractal_drift = neg_drift_count_per_cfg.get(cid, 0)

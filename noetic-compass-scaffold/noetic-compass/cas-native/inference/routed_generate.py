@@ -39,6 +39,7 @@ from cas_native.inference.cas_routing import (
 from cas_native.inference.fractal_decoder import (
     FractalConstraintState,
     FractalDecoderLog,
+    build_boundary_token_ids,
     build_fractal_phrase_trie,
     constrained_strictly_beats_baseline,
     make_logits_processor,
@@ -175,6 +176,7 @@ def routed_generate(
     apply_fractal_decoder: bool = False,
     fractal_decoder_eos_bias: float = 0.0,
     fractal_decoder_first_n_mode: bool = False,
+    fractal_decoder_leaf_exit_boundary: bool = False,
 ) -> RoutedGenerationResult:
     """Run the unified routing + generation + postprocess pipeline.
 
@@ -287,6 +289,16 @@ def routed_generate(
             expected k-count). Decouples comparator from
             trailing-prose contamination without changing decode
             behavior. Ignored when ``apply_fractal_decoder=False``.
+        fractal_decoder_leaf_exit_boundary: v1e Phase 1B Task #138
+            tuning lever 3 (default False). When True, on EVERY
+            trie-leaf reach the next decoder step is masked to
+            allow ONLY whitespace / punctuation / conjunction
+            tokens (plus EOS if pos==n). One-shot per leaf; clears
+            after one step. Targets the word-boundary corruption
+            failure mode where the trie commits "averse" but free
+            decode emits "n" next, producing "aversen" which the
+            verifier's word-boundary rule rejects. Ignored when
+            ``apply_fractal_decoder=False``.
     """
     routing = route_by_compilability(source_cas)
     prompt_text = build_prompt_from_routing(
@@ -363,16 +375,34 @@ def routed_generate(
             )
             trie = build_fractal_phrase_trie(tokenizer)
             state = FractalConstraintState(expected_k=fractal_seq.k_values)
+            # Resolve EOS id once — used by both lever 1 (eos_bias) and
+            # lever 3 (boundary mask, which adds EOS to the allowed set
+            # when the boundary fires AFTER the final slot has committed).
+            resolved_eos_id: Optional[int] = int(getattr(tokenizer, "EOS_ID", 0)) or None
             # v1e Phase 1B tuning lever 1 — optional EOS bias after the
             # final slot commits, suppressing trailing prose
             # contamination of the verifier's found_k_count.
             eos_id_for_bias: Optional[int] = None
             if fractal_decoder_eos_bias > 0.0:
-                eos_id_for_bias = int(getattr(tokenizer, "EOS_ID", 0)) or None
+                eos_id_for_bias = resolved_eos_id
+            # v1e Phase 1B tuning lever 3 (Task #138) — leaf-exit
+            # boundary-token bias. On EVERY trie-leaf reach, the
+            # processor masks the next step to whitespace /
+            # punctuation / conjunction tokens (or EOS if at
+            # pos==n). Prevents "averse" → "aversen" corruption.
+            boundary_ids: Optional[set[int]] = None
+            if fractal_decoder_leaf_exit_boundary:
+                boundary_ids = build_boundary_token_ids(tokenizer)
             callback = make_logits_processor(
                 state, trie, tokenizer,
-                eos_id=eos_id_for_bias,
+                eos_id=(
+                    eos_id_for_bias
+                    if eos_id_for_bias is not None
+                    else (resolved_eos_id if fractal_decoder_leaf_exit_boundary else None)
+                ),
                 eos_bias=float(fractal_decoder_eos_bias),
+                enforce_leaf_exit_boundary=bool(fractal_decoder_leaf_exit_boundary),
+                boundary_token_ids=boundary_ids,
             )
             constrained_gen_out = generate_reply(
                 model=model,

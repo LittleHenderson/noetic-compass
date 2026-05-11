@@ -130,6 +130,51 @@ class FractalPhraseTrie:
         return set(root.children.keys())
 
 
+# Phrase/punctuation prefixes that legitimately follow a Noetic
+# colloquialism leaf in the v0 model's prose distribution. Used by
+# lever 3 (leaf-exit boundary-token bias) to enumerate allowed
+# first-tokens at the boundary mask step.
+#
+# Each string is tokenized against the actual tokenizer at processor
+# construction; the FIRST token of each encoding is added to the
+# allowed-boundary set. Multi-char punctuation forms (", ", ". ",
+# "; ") give the BPE encoder a chance to produce a leading-space-
+# joined token. Bare single chars are kept too so non-leading-space
+# variants are covered.
+#
+# The conjunctions match the prose-boundary triggers used by the
+# slot detector (``_BOUNDARY_WORDS``) so the model can resume natural
+# prose from the boundary token onward.
+_LEAF_BOUNDARY_PREFIXES: tuple[str, ...] = (
+    " ", "  ",                          # bare whitespace
+    ",", ".", ";", ":", "!", "?",        # bare punctuation
+    ", ", ". ", "; ", ": ", "! ", "? ",  # punctuation + space
+    " then", " and", " which",           # conjunctions w/ leading space
+    " so", " led", " became",
+    " or", " but", " thereafter", " next",
+    " finally",
+)
+
+
+def build_boundary_token_ids(tokenizer: Any) -> set[int]:
+    """Compute the set of first-token ids the tokenizer produces for
+    every prefix in ``_LEAF_BOUNDARY_PREFIXES``. The result is the
+    allowed-set when lever 3's boundary mask fires after a trie leaf.
+
+    Built ONCE per ``make_logits_processor`` call; cost is ~30
+    tokenizer.encode() invocations on tiny strings. Trivial.
+    """
+    ids: set[int] = set()
+    for prefix in _LEAF_BOUNDARY_PREFIXES:
+        try:
+            encoded = list(tokenizer.encode(prefix, max_length=4, add_special=False))
+        except Exception:
+            continue
+        if encoded:
+            ids.add(int(encoded[0]))
+    return ids
+
+
 def _safe_tokenizer_hash(tokenizer: Any) -> str:
     """Best-effort stable identifier for a tokenizer instance, used to
     cache or invalidate the trie. Falls back to id() if the tokenizer
@@ -262,6 +307,12 @@ class FractalConstraintState:
     ``generate_reply``. Held outside the callback so the orchestrator
     can inspect it after the run completes (e.g., to populate the
     ``FractalDecoderLog.slot_commits``).
+
+    ``boundary_pending`` is the Phase 1B Task #138 (lever 3) flag: when
+    True, the NEXT logits-processor invocation will mask to
+    boundary-only tokens (whitespace / punctuation / conjunctions /
+    EOS-if-final). Set True on every trie-leaf reach when lever 3 is
+    enabled; cleared after one mask application.
     """
     expected_k: tuple[int, ...]
     pos: int = 0
@@ -271,6 +322,7 @@ class FractalConstraintState:
     tokens_since_last_commit: int = 0
     slot_commits: list[SlotCommitEvent] = field(default_factory=list)
     failure_reason: Optional[str] = None
+    boundary_pending: bool = False  # lever 3: force boundary token on next step
 
 
 def _decode_tail_text(
@@ -363,6 +415,8 @@ def make_logits_processor(
     *,
     eos_id: Optional[int] = None,
     eos_bias: float = 0.0,
+    enforce_leaf_exit_boundary: bool = False,
+    boundary_token_ids: Optional[set[int]] = None,
 ) -> Callable[[list[int], int, torch.Tensor], torch.Tensor]:
     """Return a callable suitable for ``generate_reply(step_callback=…)``.
 
@@ -385,12 +439,30 @@ def make_logits_processor(
             from the post-slot prose. v1e Phase 1B tuning lever 1.
         eos_bias: log-prob bias added to ``eos_id``'s logit when active.
             Default 0.0 (no bias). Larger values force EOS sooner.
+        enforce_leaf_exit_boundary: v1e Phase 1B Task #138 (lever 3).
+            When True, on EVERY trie-leaf reach the processor masks
+            the NEXT step's logits to allow only tokens in
+            ``boundary_token_ids`` (whitespace / punctuation /
+            conjunction-with-leading-space) plus ``eos_id`` if
+            ``state.pos == len(state.expected_k)``. After ONE
+            boundary-masked step, the flag clears and free decode
+            resumes. Addresses the smoke-eval finding that the trie
+            commits "averse" correctly but free decode emits "n"
+            next, corrupting the word to "aversen" and breaking
+            the verifier's word-boundary rule.
+        boundary_token_ids: precomputed token-id set for lever 3
+            (output of ``build_boundary_token_ids(tokenizer)``).
+            Required when ``enforce_leaf_exit_boundary=True``;
+            otherwise ignored.
 
     Side effects: mutates ``state.pos``, ``state.mode``,
-    ``state.current_node``, ``state.slot_commits``, and
-    ``state.failure_reason`` over the lifetime of a single
-    ``generate_reply`` call.
+    ``state.current_node``, ``state.slot_commits``,
+    ``state.failure_reason``, and ``state.boundary_pending`` over the
+    lifetime of a single ``generate_reply`` call.
     """
+    boundary_ids_local: set[int] = (
+        set(boundary_token_ids) if boundary_token_ids else set()
+    )
 
     def processor(seq: list[int], step: int, logits: torch.Tensor) -> torch.Tensor:
         # ----- 1. Process the token that was JUST sampled at step-1 -----
@@ -415,6 +487,13 @@ def make_logits_processor(
                     state.mode = "prose"
                     state.current_node = None
                     state.tokens_since_last_commit = 0
+                    # Lever 3 (Task #138) — mark boundary token required
+                    # on the next decoder step. The boundary mask
+                    # forces a whitespace / punctuation / conjunction
+                    # token so the model doesn't corrupt the phrase
+                    # ("averse" → "aversen").
+                    if enforce_leaf_exit_boundary and boundary_ids_local:
+                        state.boundary_pending = True
             else:
                 # Defensive: the mask should have prevented this. If it
                 # happens (e.g., upstream sampler picked a token not in
@@ -431,6 +510,24 @@ def make_logits_processor(
             state.tokens_since_last_commit += 1
 
         # ----- 2. Decide whether to constrain the NEXT prediction ------
+
+        # Lever 3 (Task #138): if a trie leaf was just reached, the
+        # next token must be a boundary (whitespace / punctuation /
+        # conjunction), or EOS if all slots are committed. This fires
+        # BEFORE the slot-fire / EOS-bias paths because boundary
+        # enforcement is more specific.
+        if state.boundary_pending and boundary_ids_local:
+            state.boundary_pending = False  # one-shot
+            allowed_now = set(boundary_ids_local)
+            if state.pos >= len(state.expected_k) and eos_id is not None:
+                allowed_now.add(int(eos_id))
+            masked = torch.full_like(logits, float("-inf"))
+            vocab_size = masked.shape[0]
+            for tok in allowed_now:
+                if 0 <= tok < vocab_size:
+                    masked[tok] = logits[tok]
+            return masked
+
         if state.pos >= len(state.expected_k):
             # All slots committed — free decode for the trailing prose.
             # Optionally bias toward EOS to suppress trailing prose that
@@ -665,6 +762,7 @@ __all__ = [
     "MAX_TOKENS_BETWEEN_SLOTS",
     "SlotCommitEvent",
     "TrieNode",
+    "build_boundary_token_ids",
     "build_fractal_phrase_trie",
     "constrained_strictly_beats_baseline",
     "make_logits_processor",

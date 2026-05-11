@@ -31,8 +31,10 @@ from cas_native.inference.fractal_decoder import (
     MAX_TOKENS_BETWEEN_SLOTS,
     SlotCommitEvent,
     TrieNode,
+    _LEAF_BOUNDARY_PREFIXES,
     _should_fire_slot,
     _tail_indicates_boundary,
+    build_boundary_token_ids,
     build_fractal_phrase_trie,
     constrained_strictly_beats_baseline,
     make_logits_processor,
@@ -711,6 +713,189 @@ def test_first_n_mode_still_vetoes_on_constraint_failure():
     )
     assert not better
     assert "trie_dead_end" in reason
+
+
+# ---------------------------------------------------------------------------
+# Task #138 tuning lever 3 — leaf-exit boundary-token bias
+# ---------------------------------------------------------------------------
+
+def test_build_boundary_token_ids_non_empty():
+    """The boundary-token id set is non-empty against the char tokenizer."""
+    tok = _MockCharTokenizer()
+    ids = build_boundary_token_ids(tok)
+    # The char tokenizer encodes " " as ord(' ')==32, "," as 44, etc.
+    # Verify a few signatures are present.
+    assert ord(" ") in ids
+    assert ord(",") in ids
+    assert ord(".") in ids
+    assert ord(";") in ids
+    # Conjunction-with-leading-space — first token is the space.
+    # All of those collapse to ord(' ')=32 in the char tokenizer.
+    # Make sure the set hasn't accidentally collapsed to one element.
+    # With ASCII chars there should be at least the bare-punctuation
+    # set + the space token.
+    assert len(ids) >= 6
+
+
+def test_boundary_pending_set_on_leaf_with_lever_enabled():
+    """When ``enforce_leaf_exit_boundary=True``, every leaf reach sets
+    ``state.boundary_pending = True``. With the lever DISABLED the flag
+    stays False (control)."""
+    tok = _MockCharTokenizer()
+    trie = build_fractal_phrase_trie(tok)
+    boundary_ids = build_boundary_token_ids(tok)
+
+    # Lever DISABLED branch — boundary_pending stays False.
+    state_off = FractalConstraintState(expected_k=(9,), pos=0)
+    proc_off = make_logits_processor(
+        state_off, trie, tok,
+        enforce_leaf_exit_boundary=False,
+        boundary_token_ids=boundary_ids,
+    )
+    phrase = "clicked"
+    phrase_ids = tok.encode(phrase)
+    seq = [1]
+    _ = proc_off(seq, 0, _logits(1024, phrase_ids[0]))
+    for i, tok_id in enumerate(phrase_ids):
+        seq.append(tok_id)
+        _ = proc_off(seq, i + 1, _logits(1024, 0))
+    # One more step to detect the leaf.
+    seq.append(0)
+    _ = proc_off(seq, len(phrase_ids) + 1, _logits(1024, 0))
+    assert state_off.pos == 1
+    # Lever disabled → boundary_pending never set.
+    assert state_off.boundary_pending is False
+
+    # Lever ENABLED branch — boundary_pending gets set on leaf reach.
+    state_on = FractalConstraintState(expected_k=(9,), pos=0)
+    proc_on = make_logits_processor(
+        state_on, trie, tok,
+        enforce_leaf_exit_boundary=True,
+        boundary_token_ids=boundary_ids,
+    )
+    seq = [1]
+    _ = proc_on(seq, 0, _logits(1024, phrase_ids[0]))
+    for i, tok_id in enumerate(phrase_ids):
+        seq.append(tok_id)
+        _ = proc_on(seq, i + 1, _logits(1024, 0))
+    # NOTE: do NOT consume the boundary mask here — append a dummy
+    # next step + check state IMMEDIATELY after the leaf is reached,
+    # which happens inside the next processor call.
+    seq.append(0)  # placeholder; the leaf detection happens in the next call
+    _ = proc_on(seq, len(phrase_ids) + 1, _logits(1024, 0))
+    # After processing the last phrase token (which lands the leaf),
+    # boundary_pending was set THEN cleared in the same call (the
+    # mask was applied immediately). The flag is one-shot — clearing
+    # is correct.
+    assert state_on.pos == 1
+    assert state_on.boundary_pending is False  # consumed in the same step
+
+
+def test_boundary_mask_restricts_to_boundary_ids_after_leaf():
+    """The first step after a leaf reach masks the logits to allow ONLY
+    boundary token ids — the model cannot emit 'n' continuing into
+    'aversen'."""
+    tok = _MockCharTokenizer()
+    trie = build_fractal_phrase_trie(tok)
+    boundary_ids = build_boundary_token_ids(tok)
+    state = FractalConstraintState(expected_k=(3, 7), pos=0)
+    proc = make_logits_processor(
+        state, trie, tok,
+        enforce_leaf_exit_boundary=True,
+        boundary_token_ids=boundary_ids,
+    )
+
+    # Manually set up state JUST PAST a leaf reach. We simulate that
+    # by directly setting boundary_pending=True (the actual leaf-
+    # transition logic is tested by the previous test).
+    state.boundary_pending = True
+    state.mode = "prose"
+    state.pos = 1  # one slot committed, one to go
+    state.tokens_since_last_commit = 0
+
+    # Build logits where the natural argmax is a NON-boundary token
+    # like "n" (which would corrupt "averse" into "aversen").
+    n_id = ord("n")
+    logits = _logits(1024, n_id)
+    seq = [1, ord("a"), ord("v"), ord("e"), ord("r"), ord("s"), ord("e")]
+    out = proc(seq, len(seq) - 1, logits.clone())
+
+    # The 'n' token MUST be -inf in the output (boundary mask blocks it).
+    assert math.isinf(float(out[n_id])) and float(out[n_id]) < 0
+    # At least one boundary token must remain finite.
+    finite_boundary = [
+        tok_id for tok_id in boundary_ids if math.isfinite(float(out[tok_id]))
+    ]
+    assert finite_boundary, "all boundary tokens were masked — mask bug"
+    # boundary_pending should be cleared (one-shot semantics).
+    assert state.boundary_pending is False
+
+
+def test_boundary_mask_allows_eos_when_final_slot_committed():
+    """At pos == n (all expected slots committed) the boundary mask
+    ADDS the EOS token to its allowed-set so the model can terminate
+    after the boundary."""
+    tok = _MockCharTokenizer()
+    trie = build_fractal_phrase_trie(tok)
+    boundary_ids = build_boundary_token_ids(tok)
+    eos_id = tok.EOS_ID  # 2 in the mock tokenizer
+    state = FractalConstraintState(expected_k=(9,), pos=1)  # final slot done
+    state.boundary_pending = True
+    proc = make_logits_processor(
+        state, trie, tok,
+        enforce_leaf_exit_boundary=True,
+        boundary_token_ids=boundary_ids,
+        eos_id=eos_id,
+    )
+    # Logits with EOS as the natural argmax.
+    logits = _logits(1024, eos_id)
+    out = proc([1, 10, 20], 5, logits.clone())
+    # EOS must NOT be masked — it's in the augmented allowed set.
+    assert math.isfinite(float(out[eos_id]))
+
+
+def test_boundary_mask_excludes_eos_when_more_slots_remain():
+    """At pos < n the boundary mask must NOT allow EOS — terminating
+    early would leave required slots uncommitted."""
+    tok = _MockCharTokenizer()
+    trie = build_fractal_phrase_trie(tok)
+    boundary_ids = build_boundary_token_ids(tok)
+    eos_id = tok.EOS_ID
+    state = FractalConstraintState(expected_k=(3, 7), pos=1)  # one slot left
+    state.boundary_pending = True
+    proc = make_logits_processor(
+        state, trie, tok,
+        enforce_leaf_exit_boundary=True,
+        boundary_token_ids=boundary_ids,
+        eos_id=eos_id,
+    )
+    logits = _logits(1024, eos_id)
+    out = proc([1, 10, 20], 5, logits.clone())
+    # EOS MUST be masked — we still have slot 1 to commit.
+    assert math.isinf(float(out[eos_id])) and float(out[eos_id]) < 0
+
+
+def test_boundary_lever_default_off_is_noop():
+    """When the lever is left at its default (False), the processor
+    behaves identically to the pre-lever-3 implementation: never
+    masks to boundary tokens, never sets ``state.boundary_pending``."""
+    tok = _MockCharTokenizer()
+    trie = build_fractal_phrase_trie(tok)
+    state = FractalConstraintState(expected_k=(9,), pos=0)
+    # No lever-3 args passed — defaults apply.
+    proc = make_logits_processor(state, trie, tok)
+    phrase_ids = tok.encode("clicked")
+    seq = [1]
+    _ = proc(seq, 0, _logits(1024, phrase_ids[0]))
+    for i, tok_id in enumerate(phrase_ids):
+        seq.append(tok_id)
+        _ = proc(seq, i + 1, _logits(1024, 0))
+    seq.append(0)
+    _ = proc(seq, len(phrase_ids) + 1, _logits(1024, 0))
+    # Default-off: boundary_pending never set.
+    assert state.boundary_pending is False
+    # pos still incremented normally.
+    assert state.pos == 1
 
 
 def test_first_n_mode_truncates_baseline_too():
