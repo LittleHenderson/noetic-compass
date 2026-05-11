@@ -1250,25 +1250,39 @@ def run_cpu_smoke(
                         total_copy / max(total_lm + total_copy, 1)
                     ),
                 }
+            # Per-record entries. Always include slot_type_trace
+            # (truncated by decode_canary_pack) so analysis can verify
+            # whether the slot head sustains STAGE_VAR through identifier
+            # spans. Under Candidate C also include emission_route_counts
+            # and the truncated emission_route_trace.
+            per_record_entries: list[dict[str, Any]] = []
+            for s, r in zip(samples, reports):
+                rec_entry = {
+                    "id": s["id"],
+                    "category": s["category"],
+                    "task": s["task"],
+                    "cas_expression": s["cas_expression"],
+                    "target_text": s["target_text"],
+                    "generated_text": s["generated_text"],
+                    "n_tokens_generated": s["n_tokens_generated"],
+                    "hit_eos": s["hit_eos"],
+                    "slot_type_trace": s.get("slot_type_trace", []),
+                    "damage_verdict": r.verdict,
+                    "damage_severity": r.severity_score,
+                    "damage_signatures": r.signatures,
+                }
+                if cfg.hard_typed_emission:
+                    rec_entry["emission_route_counts"] = s.get(
+                        "emission_route_counts", {"lm": 0, "copy": 0},
+                    )
+                    rec_entry["emission_route_trace"] = s.get(
+                        "emission_route_trace", [],
+                    )
+                per_record_entries.append(rec_entry)
             canary_history.append({
                 "step": step,
                 "pack_verdict": pack_verdict,
-                "per_record": [
-                    {
-                        "id": s["id"],
-                        "category": s["category"],
-                        "task": s["task"],
-                        "cas_expression": s["cas_expression"],
-                        "target_text": s["target_text"],
-                        "generated_text": s["generated_text"],
-                        "n_tokens_generated": s["n_tokens_generated"],
-                        "hit_eos": s["hit_eos"],
-                        "damage_verdict": r.verdict,
-                        "damage_severity": r.severity_score,
-                        "damage_signatures": r.signatures,
-                    }
-                    for s, r in zip(samples, reports)
-                ],
+                "per_record": per_record_entries,
             })
             # Emit a canary event for downstream log readers
             print(json.dumps({

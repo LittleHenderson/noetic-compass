@@ -63,7 +63,9 @@ def main() -> int:
         teacher_forced_canary_pack,
     )
     from cas_native.evaluation.sample_decoder import greedy_decode
-    from cas_native.evaluation.decode_ablations import run_decode_ablations_pack
+    from cas_native.evaluation.decode_ablations import (
+        ABLATION_MODES, run_decode_ablations_pack,
+    )
 
     print(json.dumps({"event": "analysis_start"}), flush=True)
 
@@ -152,9 +154,19 @@ def main() -> int:
 
     # ---- Analysis C — Decode-time ablations ----------------------------
     print(json.dumps({"event": "analysis_C_start"}), flush=True)
+    # Under Candidate C, request the 5th "hard_full" mode in addition to
+    # the four baseline ablations. This gives a side-by-side full vs
+    # hard_full comparison on the same checkpoint, surfacing whether
+    # hard routing changes free-decode behavior.
+    abl_modes = ABLATION_MODES
+    if args.hard_typed_emission:
+        abl_modes = abl_modes + ("hard_full",)
     abl_result = run_decode_ablations_pack(
         model, pack, collator, tokenizer,
         device=device, max_new_tokens=args.canary_max_new_tokens,
+        modes=abl_modes,
+        hard_typed_emission=args.hard_typed_emission,
+        copy_confidence_threshold=args.copy_confidence_threshold,
     )
     (out_dir / "decode_ablations.json").write_text(
         json.dumps(abl_result, indent=2, ensure_ascii=False, default=str),

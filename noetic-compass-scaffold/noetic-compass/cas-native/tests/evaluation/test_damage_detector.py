@@ -449,10 +449,27 @@ def test_greedy_decode_trace_on_logs_per_token():
 def _hard_emission_mock_fixtures(slot_argmax_value, p_copy_top_value,
                                  copy_argmax_value=2, lm_argmax_value=5,
                                  src_token_at_copy_pos=42,
-                                 src_mask_valid=True):
+                                 src_mask_valid=True,
+                                 src_token_type_at_copy_pos=None,
+                                 omit_src_token_type=False):
     """Build mock tokenizer/collator/model that lets us inject a precise
-    slot_type / p_copy / lm_logits state for a single decode step.
-    Used by all 5 Candidate C tests below.
+    slot_type / p_copy / lm_logits / src_token_type state for a single
+    decode step. Used by the Candidate C tests below.
+
+    Args:
+        slot_argmax_value: which slot id the slot_type head predicts.
+        p_copy_top_value: how confidently p_copy peaks at copy_argmax_value.
+        copy_argmax_value: which source position p_copy peaks at.
+        lm_argmax_value: which vocab id lm_logits peaks at (LM fallback).
+        src_token_at_copy_pos: the source-side token id at copy_argmax_value.
+        src_mask_valid: when False, mark copy_argmax_value as padded.
+        src_token_type_at_copy_pos: source-side slot-type tag at
+            copy_argmax_value. When None, defaults to slot_argmax_value
+            so that type-match passes (the typical "copy fires" case).
+            Set explicitly to test type-mismatch fallback.
+        omit_src_token_type: when True, the collator omits the
+            src_token_type key entirely — exercises the fail-closed
+            path when the collator wasn't run with enable_simplex_aux.
     """
     class _MockTok:
         BOS_ID = 1
@@ -473,7 +490,17 @@ def _hard_emission_mock_fixtures(slot_argmax_value, p_copy_top_value,
             src_mask = torch.ones((1, L_src), dtype=torch.bool)
             if not src_mask_valid:
                 src_mask[0, copy_argmax_value] = False
-            return {
+            # src_token_type: default to "match the predicted slot at the
+            # copy position" so type-match passes unless the test
+            # explicitly sets a different type.
+            tagged_type = (
+                src_token_type_at_copy_pos
+                if src_token_type_at_copy_pos is not None
+                else slot_argmax_value
+            )
+            src_token_type = torch.zeros((1, L_src), dtype=torch.int8)
+            src_token_type[0, copy_argmax_value] = int(tagged_type)
+            batch = {
                 "input_ids": torch.zeros((1, 4), dtype=torch.long),
                 "attention_mask": torch.ones((1, 4), dtype=torch.bool),
                 "cas_prefix_ids": src_ids,
@@ -483,8 +510,10 @@ def _hard_emission_mock_fixtures(slot_argmax_value, p_copy_top_value,
                 "loss_mask": torch.ones((1, L_out), dtype=torch.float32),
                 "typed_slot_positions": torch.zeros((1, L_out, 9), dtype=torch.float32),
                 "typed_slot_source": torch.full((1, L_out), -1, dtype=torch.int16),
-                "src_token_type": torch.zeros((1, L_src), dtype=torch.int8),
             }
+            if not omit_src_token_type:
+                batch["src_token_type"] = src_token_type
+            return batch
 
     class _MockModel(torch.nn.Module):
         def forward(self, batch):
@@ -530,8 +559,10 @@ def test_hard_typed_emission_default_off():
 
 
 def test_hard_typed_emission_copy_slot_emits_source_token():
-    """When slot_argmax is in {1..7} AND p_copy.max >= threshold AND the
-    source token isn't a special, hard emission emits the source token."""
+    """When slot_argmax is in the eligible scope (STAGE_VAR by default)
+    AND p_copy.max >= threshold AND the source position is unpadded AND
+    the source token isn't a special AND src_token_type at the copy
+    position matches slot_argmax, hard emission emits the source token."""
     tok, coll, model = _hard_emission_mock_fixtures(
         slot_argmax_value=2,  # STAGE_VAR
         p_copy_top_value=0.95,
@@ -632,9 +663,10 @@ def test_hard_typed_emission_rejects_special_token_copy():
     """If the source position holds a PAD/BOS/EOS id, hard emission
     must reject it as a copy candidate and fall back to LM."""
     # PAD_ID is 0 in the mock tokenizer; src_token_at_copy_pos=0 means
-    # we'd be copying a PAD.
+    # we'd be copying a PAD. Use STAGE_VAR (2) slot so the slot-eligibility
+    # guard passes and we exercise the specials-rejection branch.
     tok, coll, model = _hard_emission_mock_fixtures(
-        slot_argmax_value=4,  # REGISTER_LETTER
+        slot_argmax_value=2,  # STAGE_VAR (default-eligible)
         p_copy_top_value=0.99,
         src_token_at_copy_pos=0,  # PAD
         lm_argmax_value=11,
@@ -647,6 +679,169 @@ def test_hard_typed_emission_rejects_special_token_copy():
     )
     assert all(r == "lm" for r in out["emission_route_trace"])
     assert all(tok_id == 11 for tok_id in out["token_ids"])
+
+
+def test_hard_typed_emission_type_mismatch_falls_back_to_lm():
+    """Audit fix 2026-05-11: even if slot_argmax is eligible and p_copy
+    is confident, hard copy must NOT fire when src_token_type at the
+    copy position disagrees with slot_argmax. Without this guard, a
+    STAGE_VAR slot could copy punctuation or a connective."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=2,  # STAGE_VAR
+        p_copy_top_value=0.99,
+        copy_argmax_value=3,
+        src_token_at_copy_pos=42,
+        src_token_type_at_copy_pos=0,  # CONNECTIVE — mismatch with STAGE_VAR
+        lm_argmax_value=13,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+    )
+    assert all(r == "lm" for r in out["emission_route_trace"])
+    assert all(tok_id == 13 for tok_id in out["token_ids"])
+
+
+def test_hard_typed_emission_default_scope_is_stage_var_only():
+    """Audit fix 2026-05-11: the default hard-emission slot scope is
+    {STAGE_VAR}. Even with type-match and high confidence, a non-default
+    copy-eligible slot (e.g. REGISTER_LETTER=4) must fall back to LM
+    unless the caller widens hard_typed_emission_slots."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=4,  # REGISTER_LETTER — copy-eligible but out of default scope
+        p_copy_top_value=0.99,
+        copy_argmax_value=3,
+        src_token_at_copy_pos=77,
+        src_token_type_at_copy_pos=4,  # matches slot — but slot not in default scope
+        lm_argmax_value=21,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+        # hard_typed_emission_slots omitted → default {STAGE_VAR}
+    )
+    assert all(r == "lm" for r in out["emission_route_trace"])
+    assert all(tok_id == 21 for tok_id in out["token_ids"])
+
+
+def test_hard_typed_emission_custom_slot_scope_widens_eligibility():
+    """Caller can opt to widen the hard-emission scope. Passing
+    hard_typed_emission_slots={REGISTER_LETTER} should make a REGISTER_LETTER
+    slot copy-eligible (with all other guards still enforced)."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=4,  # REGISTER_LETTER
+        p_copy_top_value=0.99,
+        copy_argmax_value=3,
+        src_token_at_copy_pos=77,
+        src_token_type_at_copy_pos=4,  # matches slot
+        lm_argmax_value=21,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+        hard_typed_emission_slots={4},  # widen to REGISTER_LETTER
+    )
+    assert all(r == "copy" for r in out["emission_route_trace"])
+    assert all(tok_id == 77 for tok_id in out["token_ids"])
+
+
+def test_hard_typed_emission_custom_slot_scope_cannot_unlock_never_eligible():
+    """Even if the caller passes CONNECTIVE or NOETIC_PHRASE in the slot
+    scope, hard emission must NOT route them to copy — those are
+    LM-only by construction."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=8,  # NOETIC_PHRASE — in _HARD_EMISSION_NEVER
+        p_copy_top_value=0.99,
+        copy_argmax_value=3,
+        src_token_at_copy_pos=77,
+        src_token_type_at_copy_pos=8,
+        lm_argmax_value=22,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+        hard_typed_emission_slots={0, 8, 2},  # caller tries to enable NOETIC_PHRASE
+    )
+    assert all(r == "lm" for r in out["emission_route_trace"])
+    assert all(tok_id == 22 for tok_id in out["token_ids"])
+
+
+def test_hard_typed_emission_missing_src_token_type_fails_closed():
+    """If the collator did not emit src_token_type (e.g. enable_simplex_aux
+    was off), hard emission cannot verify type-match and must fail closed
+    to LM. Otherwise we'd silently copy whatever happens to be at p_copy.argmax."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=2,
+        p_copy_top_value=0.99,
+        copy_argmax_value=3,
+        src_token_at_copy_pos=42,
+        lm_argmax_value=15,
+        omit_src_token_type=True,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+    )
+    assert all(r == "lm" for r in out["emission_route_trace"])
+    assert all(tok_id == 15 for tok_id in out["token_ids"])
+
+
+def test_decode_ablations_hard_full_mode_runs_and_reports_routes():
+    """Audit fix 2026-05-11: when hard_full is requested as a mode and
+    hard_typed_emission is on, run_decode_ablations_one must run it,
+    report emission_route_counts, and have the pack-level aggregator
+    summarize emission_routes_pack."""
+    from cas_native.evaluation.decode_ablations import (
+        run_decode_ablations_pack,
+    )
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=2,  # STAGE_VAR
+        p_copy_top_value=0.95,
+        copy_argmax_value=3,
+        src_token_at_copy_pos=42,
+        src_token_type_at_copy_pos=2,
+        lm_argmax_value=5,
+    )
+    # Only run "full" and "hard_full" to keep the test fast — we don't
+    # care about the other modes here, just that hard_full is recognised
+    # and its route counts are surfaced.
+    result = run_decode_ablations_pack(
+        model,
+        [{"prompt_text": "x", "reply_text": "y", "cas_expression": "z",
+          "v1mix_grammar_category_or_error_class": "rpm_chain",
+          "v1mix_task_type": "test", "id": "test_001"}],
+        coll, tok,
+        device=torch.device("cpu"), max_new_tokens=3,
+        modes=("full", "hard_full"),
+        hard_typed_emission=True,
+        copy_confidence_threshold=0.5,
+    )
+    # Both modes ran on the single record
+    assert "full" in result["summary_by_mode"]
+    assert "hard_full" in result["summary_by_mode"]
+    rec = result["per_record"][0]
+    # hard_full mode should report route counts (all copy under this fixture)
+    hf_counts = rec["modes"]["hard_full"].get("emission_route_counts")
+    assert hf_counts is not None
+    assert hf_counts["copy"] >= 1
+    assert hf_counts["lm"] == 0
+    # Pack-level aggregation should surface emission_routes_pack on hard_full
+    pack = result["summary_by_mode"]["hard_full"].get("emission_routes_pack")
+    assert pack is not None
+    assert pack["copy_emissions"] >= 1
+    assert pack["copy_fraction"] > 0.0
+    # The plain "full" mode (no hard routing) should NOT carry route counts
+    assert rec["modes"]["full"].get("emission_route_counts") is None
 
 
 def test_per_token_trace_lm_entropy_near_zero_when_peaky():

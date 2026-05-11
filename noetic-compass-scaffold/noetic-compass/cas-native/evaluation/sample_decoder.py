@@ -3,11 +3,19 @@
 Per user 2026-05-11. Generates greedy text from the simplex MVP model for
 each canary record, returning decoded strings the damage detector can scan.
 
-Decoder strategy: lm_logits.argmax only. The model's slot_type / p_copy
-heads are NOT used for decode-time token selection — they're loss-side
-supervisory signals. At 1000 steps the model hasn't been trained long
-enough to coordinate them with lm output anyway. Stage 7 is feasibility,
-not product quality; the simplest decode suffices.
+Default decoder strategy: lm_logits.argmax only. The model's slot_type /
+p_copy heads are loss-side supervisory signals and are NOT consulted for
+token selection. Stage 7 is feasibility, not product quality; the
+simplest decode suffices.
+
+Candidate C (2026-05-11, opt-in via ``hard_typed_emission=True``): at
+positions where the slot_type head predicts a hard-emission-eligible
+slot (default ``{SLOT_STAGE_VAR}``), the copy head replaces the lm_head
+for that step IF AND ONLY IF (a) p_copy.max ≥ ``copy_confidence_threshold``,
+(b) the source position pointed at by p_copy.argmax is unpadded, (c) the
+source token is not a PAD/BOS/EOS special, and (d) the source token's
+type ID matches the predicted slot type. If any guard fails, the step
+falls back to lm_logits.argmax.
 
 For typed-slot output positions (when the slot_type head predicts one of
 1..7), an inline trace flag is added to the trace so downstream analysis
@@ -15,10 +23,20 @@ can see whether the model is even ATTEMPTING to use the copy mechanism.
 """
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any, Iterable, Optional
 
 import torch
 from torch import nn
+
+# Default hard-emission slot scope per audit 2026-05-11. STAGE_VAR is the
+# specific identifier-recovery failure mode (canonical_stage_var_recovery
+# 0/4 across the diagnostic baseline). Restricting to STAGE_VAR by default
+# keeps the experiment focused; widen via ``hard_typed_emission_slots``.
+_SLOT_STAGE_VAR = 2
+_DEFAULT_HARD_EMISSION_SLOTS = frozenset({_SLOT_STAGE_VAR})
+# Slots that are NEVER hard-emission-eligible regardless of caller config:
+# CONNECTIVE (0) and NOETIC_PHRASE (8) always emit via LM.
+_HARD_EMISSION_NEVER = frozenset({0, 8})
 
 
 def greedy_decode(
@@ -33,6 +51,7 @@ def greedy_decode(
     topk: int = 5,
     hard_typed_emission: bool = False,
     copy_confidence_threshold: float = 0.5,
+    hard_typed_emission_slots: Optional[Iterable[int]] = None,
 ) -> dict[str, Any]:
     """Greedy-decode one record. Returns dict with text + token ids + trace.
 
@@ -100,20 +119,33 @@ def greedy_decode(
     slot_trace: list[int] = []
     per_token_trace: list[dict[str, Any]] = []  # piece 3 (v7.1b post-mortem)
     hit_eos = False
-    # Slot ids whose presence indicates copy-eligible position
-    # (CONNECTIVE=0 and NOETIC_PHRASE=8 are emit-via-LM).
+    # Slot ids whose presence indicates copy-eligible position (used for
+    # the per_token_trace ``is_copy_eligible_slot`` flag only; the actual
+    # hard-emission slot scope is ``hard_slots`` below, which defaults to
+    # STAGE_VAR-only per audit 2026-05-11).
     _COPY_ELIGIBLE_SLOTS = {1, 2, 3, 4, 5, 6, 7}
+    # Resolve hard-emission slot scope. Caller-supplied set is filtered
+    # against the never-eligible set (CONNECTIVE / NOETIC_PHRASE) so a
+    # caller cannot accidentally route LM-only slots to copy.
+    if hard_typed_emission_slots is None:
+        hard_slots = set(_DEFAULT_HARD_EMISSION_SLOTS)
+    else:
+        hard_slots = {int(s) for s in hard_typed_emission_slots}
+    hard_slots -= _HARD_EMISSION_NEVER
     # Candidate C 2026-05-11: hard-emission routing trace (only populated
     # when hard_typed_emission=True). Each element ∈ {"lm", "copy"}.
     emission_route_trace: list[str] = []
-    # Source-side token ids — needed for hard-copy emission.
+    # Source-side token ids + per-token type tags — needed for hard-copy
+    # emission's type-match guard.
     src_ids = batch.get("cas_prefix_ids")
     src_mask = batch.get("cas_prefix_mask")
+    src_token_type = batch.get("src_token_type")
     if src_ids is None:
         # No source available; hard-emission cannot fire. Synthesize a
         # single-pad source so the decode loop still runs LM-only.
         src_ids = torch.zeros((1, 1), dtype=torch.long, device=device)
         src_mask = torch.zeros((1, 1), dtype=torch.bool, device=device)
+        src_token_type = None
 
     with torch.no_grad():
         for step_idx in range(max_new_tokens):
@@ -137,17 +169,22 @@ def greedy_decode(
             slot_argmax = int(out["slot_type_logits"][0, -1, :].argmax().item())
             slot_trace.append(slot_argmax)
 
-            # Candidate C 2026-05-11: hard typed-fiber emission routing.
-            # Decode-time only; training is unchanged. Per user scope:
-            #   - slot_argmax ∈ copy-eligible slots (1..7) AND
-            #   - p_copy.max ≥ copy_confidence_threshold AND
-            #   - the source position the copy points at is NOT padded
-            #         → emit src_ids[argmax_source_pos]
-            #   - otherwise → emit lm_logits.argmax (LM fallback)
-            # CONNECTIVE (0) and NOETIC_PHRASE (8) always use LM.
+            # Candidate C 2026-05-11 (audit-revised): hard typed-fiber
+            # emission routing. Decode-time only; training is unchanged.
+            # Per audit, hard copy requires ALL of:
+            #   - slot_argmax ∈ hard_slots (default {STAGE_VAR} only)
+            #   - p_copy.max ≥ copy_confidence_threshold
+            #   - the source position p_copy points at is NOT padded
+            #   - the source token there is not a PAD/BOS/EOS special
+            #   - src_token_type[copy_src_pos] == slot_argmax
+            #         (type-match: e.g. STAGE_VAR slot must copy from a
+            #         STAGE_VAR source token, not punctuation/connective)
+            # Any guard failure → LM fallback.
+            # CONNECTIVE (0) and NOETIC_PHRASE (8) are excluded from
+            # hard_slots by construction (_HARD_EMISSION_NEVER).
             next_id = lm_next_id
             route = "lm"
-            if hard_typed_emission and slot_argmax in _COPY_ELIGIBLE_SLOTS:
+            if hard_typed_emission and slot_argmax in hard_slots:
                 p_copy_last = out["p_copy"][0, -1, :]  # (L_src,)
                 if p_copy_last.numel() > 0:
                     top_copy_prob = float(p_copy_last.max().item())
@@ -160,7 +197,17 @@ def greedy_decode(
                             is_valid_src = bool(
                                 src_mask[0, copy_src_pos].item()
                             )
-                        if is_valid_src:
+                        # Type-match guard: source token must carry the
+                        # same slot type the model predicted. Fail closed
+                        # if src_token_type is unavailable — without it
+                        # we cannot verify the type, so we don't copy.
+                        type_matches = False
+                        if is_valid_src and src_token_type is not None:
+                            src_type_at_pos = int(
+                                src_token_type[0, copy_src_pos].item()
+                            )
+                            type_matches = (src_type_at_pos == slot_argmax)
+                        if is_valid_src and type_matches:
                             candidate_id = int(
                                 src_ids[0, copy_src_pos].item()
                             )
@@ -289,6 +336,7 @@ def decode_canary_pack(
     max_new_tokens: int = 128,
     hard_typed_emission: bool = False,
     copy_confidence_threshold: float = 0.5,
+    hard_typed_emission_slots: Optional[Iterable[int]] = None,
 ) -> list[dict[str, Any]]:
     """Decode every record in the canary pack and return per-record results.
 
@@ -304,6 +352,7 @@ def decode_canary_pack(
                 device=device, max_new_tokens=max_new_tokens,
                 hard_typed_emission=hard_typed_emission,
                 copy_confidence_threshold=copy_confidence_threshold,
+                hard_typed_emission_slots=hard_typed_emission_slots,
             )
             entry = {
                 "id": rec.get("id"),

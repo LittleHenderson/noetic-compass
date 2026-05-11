@@ -1,7 +1,8 @@
 """Decode-time ablations — diagnostic infra piece 4.
 
 Per user 2026-05-11 (Stage 7 v7.1b post-mortem). Same checkpoint, four
-decode strategies, compare canary damage scores side-by-side.
+(plus optional fifth) decode strategies, compare canary damage scores
+side-by-side.
 
 Modes:
   - "full"           : the production decode path (lm_logits.argmax with
@@ -19,6 +20,14 @@ Modes:
                        to 0 during decode. Tests whether the soft
                        simplex-conditioned phrase bias is itself the
                        cause of the lm_head's entropy collapse.
+  - "hard_full"      : Candidate C 2026-05-11. Same as "full" but with
+                       hard typed-fiber emission enabled — at
+                       hard_typed_emission_slots positions (default
+                       STAGE_VAR only) with copy.max ≥ threshold AND
+                       source-token-type match, emit src_ids[p_copy.argmax]
+                       instead of lm_logits.argmax. Conditionally
+                       included by the caller (requires
+                       hard_typed_emission=True).
 
 This is the SAME checkpoint, no retraining. The cost is N records ×
 M strategies × max_new_tokens forward passes. With max_new_tokens=128,
@@ -27,7 +36,7 @@ M strategies × max_new_tokens forward passes. With max_new_tokens=128,
 from __future__ import annotations
 
 from contextlib import contextmanager
-from typing import Any
+from typing import Any, Iterable, Optional
 
 import torch
 from torch import nn
@@ -36,6 +45,9 @@ from cas_native.evaluation.sample_decoder import greedy_decode
 
 
 ABLATION_MODES = ("full", "lm_only", "copy_disabled", "phrase_bias_disabled")
+# Modes recognised by run_decode_ablations_one in addition to ABLATION_MODES.
+# "hard_full" is conditionally added by callers when hard_typed_emission=True.
+EXTENDED_ABLATION_MODES = ABLATION_MODES + ("hard_full",)
 
 
 @contextmanager
@@ -144,8 +156,18 @@ def run_decode_ablations_one(
     device: torch.device,
     max_new_tokens: int = 128,
     modes: tuple[str, ...] = ABLATION_MODES,
+    hard_typed_emission: bool = False,
+    copy_confidence_threshold: float = 0.5,
+    hard_typed_emission_slots: Optional[Iterable[int]] = None,
 ) -> dict[str, dict[str, Any]]:
-    """Run the 4 decode ablations on ONE record. Returns dict keyed by mode."""
+    """Run the decode ablations on ONE record. Returns dict keyed by mode.
+
+    Candidate C 2026-05-11: when ``hard_full`` appears in ``modes``, this
+    method runs ``greedy_decode`` with ``hard_typed_emission=True`` plus
+    the caller-supplied copy threshold + slot scope. The other four modes
+    are unaffected by these flags (they remain pure baseline / ablation
+    controls so the comparison stays interpretable).
+    """
     out: dict[str, dict[str, Any]] = {}
     # Decoder reference for phrase_bias_disabled
     decoder = getattr(model, "decoder", None)
@@ -155,6 +177,17 @@ def run_decode_ablations_one(
             out[mode] = greedy_decode(
                 model, record, collator, tokenizer,
                 device=device, max_new_tokens=max_new_tokens,
+            )
+        elif mode == "hard_full":
+            # Candidate C: same decode path as "full" but with hard
+            # typed-fiber emission active. Compared side-by-side against
+            # "full" this isolates the effect of hard routing alone.
+            out[mode] = greedy_decode(
+                model, record, collator, tokenizer,
+                device=device, max_new_tokens=max_new_tokens,
+                hard_typed_emission=True,
+                copy_confidence_threshold=copy_confidence_threshold,
+                hard_typed_emission_slots=hard_typed_emission_slots,
             )
         elif mode == "phrase_bias_disabled":
             if decoder is None:
@@ -202,6 +235,9 @@ def run_decode_ablations_pack(
     device: torch.device,
     max_new_tokens: int = 128,
     modes: tuple[str, ...] = ABLATION_MODES,
+    hard_typed_emission: bool = False,
+    copy_confidence_threshold: float = 0.5,
+    hard_typed_emission_slots: Optional[Iterable[int]] = None,
 ) -> dict[str, Any]:
     """Run the 4 ablations across the full canary pack.
 
@@ -219,6 +255,9 @@ def run_decode_ablations_pack(
             mode_outputs = run_decode_ablations_one(
                 model, rec, collator, tokenizer,
                 device=device, max_new_tokens=max_new_tokens, modes=modes,
+                hard_typed_emission=hard_typed_emission,
+                copy_confidence_threshold=copy_confidence_threshold,
+                hard_typed_emission_slots=hard_typed_emission_slots,
             )
             rec_entry = {
                 "id": rec.get("id"),
@@ -231,7 +270,7 @@ def run_decode_ablations_pack(
             for mode in modes:
                 gen_text = mode_outputs[mode].get("text", "")
                 damage = analyze_sample(gen_text, rec_entry["target_text"])
-                rec_entry["modes"][mode] = {
+                mode_entry: dict[str, Any] = {
                     "generated_text": gen_text,
                     "n_tokens_generated": mode_outputs[mode].get("n_tokens_generated", 0),
                     "hit_eos": mode_outputs[mode].get("hit_eos", False),
@@ -239,6 +278,17 @@ def run_decode_ablations_pack(
                     "damage_severity": damage.severity_score,
                     "damage_signatures": damage.signatures,
                 }
+                # Surface slot-trace + route-counts when present (always
+                # for hard_full; only when hard mode is on for "full").
+                slot_trace = mode_outputs[mode].get("slot_type_trace")
+                if slot_trace is not None:
+                    mode_entry["slot_type_trace"] = list(slot_trace)[:40]
+                route_counts = mode_outputs[mode].get(
+                    "emission_route_counts"
+                )
+                if route_counts is not None:
+                    mode_entry["emission_route_counts"] = route_counts
+                rec_entry["modes"][mode] = mode_entry
                 per_mode_damage[mode].append(damage)
             per_record_results.append(rec_entry)
     finally:
@@ -248,6 +298,25 @@ def run_decode_ablations_pack(
     summary: dict[str, dict[str, Any]] = {}
     for mode in modes:
         summary[mode] = aggregate_pack_verdict(per_mode_damage[mode])
+        # Sum route counts across records for this mode (only meaningful
+        # for "hard_full"; harmless for other modes — their records
+        # don't carry emission_route_counts so the totals stay zero).
+        total_lm = 0
+        total_copy = 0
+        for rec in per_record_results:
+            mode_block = rec["modes"].get(mode, {})
+            counts = mode_block.get("emission_route_counts")
+            if counts is not None:
+                total_lm += int(counts.get("lm", 0))
+                total_copy += int(counts.get("copy", 0))
+        if total_lm + total_copy > 0:
+            summary[mode]["emission_routes_pack"] = {
+                "lm_emissions": total_lm,
+                "copy_emissions": total_copy,
+                "copy_fraction": (
+                    total_copy / max(total_lm + total_copy, 1)
+                ),
+            }
 
     return {
         "modes": list(modes),
