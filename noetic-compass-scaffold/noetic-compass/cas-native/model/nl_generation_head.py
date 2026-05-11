@@ -736,6 +736,10 @@ class NLGenerationHead(nn.Module):
             "model_weights_sha": self.compute_weights_sha(),
             "cas_conditioning_id": _hash_cas_conditioning(cas_repr, register_id),
             "attention_summary": attn_summary,
+            # v1e Phase C — pre-LM-head decoder hidden state needed by the
+            # StopCompleteHead. Only attached when return_meta=True so
+            # default-path callers see no behavior or memory delta.
+            "decoder_hidden_state": decoder_x,
         }
         return logits, meta
 

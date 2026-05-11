@@ -367,11 +367,70 @@ def verify_fractal_rendering(
     return rendered, log
 
 
+def extract_noetic_sequence_with_positions(text: str) -> list[tuple[int, int, int]]:
+    """Same scan as ``extract_noetic_sequence`` but returns positions.
+
+    Returns a list of ``(start_char, end_char, k_value)`` tuples, one
+    per emitted (non-deduped) Noetic match. Used by v1e Phase C
+    aux-label derivation in the training collator: the END character
+    position of the last expected indicator gives us a heuristic for
+    where the H_stop "stop=1" boundary should land in the decoder
+    token stream.
+
+    Behavior matches ``extract_noetic_sequence`` exactly — same
+    longest-match-wins, word-boundary, and abutting-elaboration-dedup
+    semantics. The only difference is the return shape.
+    """
+    if not text:
+        return []
+    text_lower = text.lower()
+    n = len(text_lower)
+    last_seen_end_per_k: dict[int, int] = {}
+    emitted: list[tuple[int, int, int]] = []
+    i = 0
+    while i < n:
+        matched = False
+        for ind, k in _INDICATOR_TABLE:
+            ind_len = len(ind)
+            if i + ind_len > n:
+                continue
+            if text_lower[i:i + ind_len] != ind:
+                continue
+            before_ok = (i == 0) or not (
+                text_lower[i - 1].isalnum() or text_lower[i - 1] in "'-"
+            )
+            after_idx = i + ind_len
+            after_ok = (after_idx == n) or not (
+                text_lower[after_idx].isalnum()
+                or text_lower[after_idx] in "'-"
+            )
+            if before_ok and after_ok:
+                should_emit = True
+                if k in last_seen_end_per_k:
+                    prev_end = last_seen_end_per_k[k]
+                    gap_text = text_lower[prev_end:i]
+                    if (
+                        gap_text.strip() == ""
+                        and len(gap_text) <= _ELABORATION_GAP_MAX_CHARS
+                    ):
+                        should_emit = False
+                if should_emit:
+                    emitted.append((i, i + ind_len, k))
+                last_seen_end_per_k[k] = i + ind_len
+                i += ind_len
+                matched = True
+                break
+        if not matched:
+            i += 1
+    return emitted
+
+
 __all__ = [
     "FractalRepairLog",
     "FractalSequence",
     "RepeatRun",
     "extract_noetic_sequence",
+    "extract_noetic_sequence_with_positions",
     "parse_fractal",
     "verify_fractal_rendering",
 ]

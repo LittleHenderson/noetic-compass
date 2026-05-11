@@ -276,6 +276,7 @@ class CASNativeModel(nn.Module):
         # trainer / harness via attach_nl_gen_head(). Default None preserves
         # backward-compat with all existing CASNativeModel callers.
         self.nl_gen_head = None  # type: ignore[assignment]
+        self.aux_heads = None  # type: ignore[assignment]  # v1e Phase C — attach_aux_heads()
 
         # Initialize weights
         self._init_weights()
@@ -652,6 +653,90 @@ class CASNativeModel(nn.Module):
         size, then attaches it here.
         """
         self.nl_gen_head = head
+
+    # ------------------------------------------------------------------ aux heads
+    def attach_aux_heads(self, aux_heads: nn.Module) -> None:
+        """Attach v1e Phase C auxiliary supervision heads to this model.
+
+        The ``aux_heads`` module owns the four sub-heads (H_card, H_pos,
+        H_stop, H_cluster) per
+        ``docs/working/v1e_phase_c_aux_heads_design_2026_05_11.md``. Kept as
+        a setter so callers that don't need aux supervision (production
+        v0 inference, eval, canary) don't pay the param-count cost.
+
+        After attachment, ``forward_with_aux()`` becomes available. Default
+        ``forward()`` and ``forward_with_lm()`` are unchanged — aux heads
+        only fire when explicitly invoked.
+        """
+        self.aux_heads = aux_heads
+
+    def forward_with_aux(
+        self,
+        input_ids: torch.Tensor,
+        lm_decoder_input_ids: torch.Tensor,
+        *,
+        attention_mask: torch.Tensor | None = None,
+        register_activations: Optional[torch.Tensor] = None,
+        cas_prefix_ids: Optional[torch.Tensor] = None,
+        cas_prefix_mask: Optional[torch.Tensor] = None,
+        register_id: Optional[torch.Tensor] = None,
+        bottleneck_z: Optional[torch.Tensor] = None,
+    ) -> dict[str, torch.Tensor]:
+        """Run the existing forward, the NL gen head, AND the four aux heads.
+
+        Returns a superset of ``forward_with_lm()``'s output dict, adding:
+
+          ``card_logits``    : ``(B, K_max + 1)`` — H_card cardinality
+          ``pos_logits``     : ``(B, K_max, num_noetics)`` — H_pos per-position
+          ``stop_logits``    : ``(B, L_dec, 2)`` — H_stop per-decoder-position
+          ``cluster_logits`` : ``(B, C_max, num_noetics)`` — H_cluster
+
+        The trainer uses these alongside ``lm_logits`` to compute the
+        v1e Phase C multi-task loss
+        (``L_total = β_lm·L_LM + α_card·L_card + α_pos·L_pos +
+          α_stop·L_stop + α_cluster·L_cluster``).
+
+        Raises:
+            RuntimeError if either ``attach_nl_gen_head`` or
+            ``attach_aux_heads`` was not called first.
+        """
+        if self.nl_gen_head is None:
+            raise RuntimeError(
+                "forward_with_aux called but no nl_gen_head is attached. "
+                "Use attach_nl_gen_head() first."
+            )
+        aux = getattr(self, "aux_heads", None)
+        if aux is None:
+            raise RuntimeError(
+                "forward_with_aux called but no aux_heads attached. "
+                "Use attach_aux_heads() first."
+            )
+
+        # Run forward_with_lm in return_meta mode so we get the pre-LM-head
+        # decoder hidden state for H_stop. The encoder pool comes from the
+        # forward()'s "pooled_hidden_state" key (already in outputs).
+        outputs = self.forward_with_lm(
+            input_ids,
+            lm_decoder_input_ids,
+            attention_mask=attention_mask,
+            register_activations=register_activations,
+            cas_prefix_ids=cas_prefix_ids,
+            cas_prefix_mask=cas_prefix_mask,
+            register_id=register_id,
+            bottleneck_z=bottleneck_z,
+            return_lm_meta=True,
+        )
+
+        pooled = outputs["pooled_hidden_state"]  # (B, d_model)
+        decoder_hidden = outputs["lm_meta"]["decoder_hidden_state"]  # (B, L, d_model)
+
+        aux_out = aux(pooled=pooled, decoder_hidden=decoder_hidden)
+        outputs["card_logits"] = aux_out["card_logits"]
+        outputs["pos_logits"] = aux_out["pos_logits"]
+        outputs["stop_logits"] = aux_out["stop_logits"]
+        outputs["cluster_logits"] = aux_out["cluster_logits"]
+
+        return outputs
 
     def forward_with_lm(
         self,
