@@ -75,6 +75,17 @@ def greedy_decode(
         for _ in range(max_new_tokens):
             forward_batch = dict(batch)
             forward_batch["lm_decoder_input_ids"] = dec_input
+            # v7.1 fix (2026-05-11): typed_slot_positions / typed_slot_source
+            # tensors have a fixed L_out from the original collator output
+            # (matches the reply length). During greedy decode, dec_input
+            # grows token-by-token from length 1 upward, so the decoder's
+            # copy_source_indices has the SMALLER L_out_actual and can't
+            # be torch.where()'d against the (stale) L_out_collator
+            # target_typed_positions. Removing these keys forces the
+            # decoder's target_typed_positions branch to skip — copy gating
+            # is loss-side anyway and doesn't affect lm_logits.argmax.
+            forward_batch.pop("typed_slot_positions", None)
+            forward_batch.pop("typed_slot_source", None)
             out = model(forward_batch)
             # Take last position's logits
             last_logits = out["lm_logits"][0, -1, :]  # (V,)

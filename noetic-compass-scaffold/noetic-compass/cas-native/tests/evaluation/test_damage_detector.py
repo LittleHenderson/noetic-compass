@@ -221,3 +221,98 @@ def test_pack_verdict_all_clean_is_clean():
 def test_pack_verdict_no_samples():
     p = aggregate_pack_verdict([])
     assert p["verdict"] == "no_samples"
+
+
+# ---------------------------------------------------------------------------
+# v7.1 regression test (post-mortem of canary shape-mismatch crash 2026-05-11):
+# greedy decode must not pass typed_slot_positions / typed_slot_source into
+# the model — those tensors have the collator's L_out_max (matches reply),
+# while dec_input grows from length 1 upward during sampling. The decoder's
+# torch.where against target_typed_positions then sees mismatched shapes.
+# ---------------------------------------------------------------------------
+
+import torch
+import sys
+
+
+def test_greedy_decode_does_not_crash_on_shape_mismatch():
+    """Reproduces the v7.1 canary crash: a batch with typed_slot_positions
+    of length L_out=44 must NOT crash when greedy decode runs the model
+    with dec_input of length 1, 2, 3, ... The fix is to pop the typed_*
+    keys before forward."""
+    # Mock model + tokenizer + collator that don't need real torch infra
+    class _MockTok:
+        BOS_ID = 1
+        EOS_ID = 2
+        PAD_ID = 0
+
+        def decode(self, ids, skip_special=True):
+            return " ".join(str(i) for i in ids)
+
+    class _MockCollator:
+        def __init__(self):
+            self.tokenizer = _MockTok()
+
+        def __call__(self, records, device="cpu"):
+            # Return a fixed batch that mimics what the v1c collator would
+            # produce: typed_slot_positions has length 44 from the original
+            # reply tokenization.
+            B, L_src, L_out = 1, 5, 44
+            return {
+                "input_ids": torch.zeros((B, 8), dtype=torch.long, device=device),
+                "attention_mask": torch.ones((B, 8), dtype=torch.bool, device=device),
+                "cas_prefix_ids": torch.zeros((B, L_src), dtype=torch.long, device=device),
+                "cas_prefix_mask": torch.ones((B, L_src), dtype=torch.bool, device=device),
+                "lm_decoder_input_ids": torch.tensor([[1, 0, 0]], dtype=torch.long, device=device),
+                "lm_targets": torch.zeros((B, L_out), dtype=torch.long, device=device),
+                "loss_mask": torch.ones((B, L_out), dtype=torch.float32, device=device),
+                "typed_slot_positions": torch.zeros((B, L_out, 9), dtype=torch.float32, device=device),
+                "typed_slot_source": torch.full((B, L_out), -1, dtype=torch.int16, device=device),
+                "src_token_type": torch.zeros((B, L_src), dtype=torch.int8, device=device),
+            }
+
+    # Spy on the model to capture what's passed in
+    captured_batches: list[dict] = []
+
+    class _MockModel(torch.nn.Module):
+        def forward(self, batch):
+            captured_batches.append(batch)
+            L_out = batch["lm_decoder_input_ids"].shape[1]
+            return {
+                "lm_logits": torch.zeros((1, L_out, 10)),
+                "slot_type_logits": torch.zeros((1, L_out, 9)),
+                "source_hidden": torch.zeros((1, 5, 4)),
+                "simplex_trajectory": torch.ones((1, 5, 40)) / 40.0,
+                "simplex_final": torch.ones((1, 40)) / 40.0,
+                "p_copy": torch.zeros((1, L_out, 5)),
+                "copy_source_indices": torch.full((1, L_out), -1, dtype=torch.int16),
+                "decoder_hidden_state": torch.zeros((1, L_out, 4)),
+            }
+
+    # Patch the module load path so cas_native.evaluation.sample_decoder
+    # imports cleanly without conftest. Since conftest already wires it,
+    # we just import.
+    from cas_native.evaluation.sample_decoder import greedy_decode
+
+    rec = {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"}
+    tok = _MockTok()
+    collator = _MockCollator()
+    model = _MockModel()
+    result = greedy_decode(
+        model, rec, collator, tok, device=torch.device("cpu"), max_new_tokens=3,
+    )
+    # The load-bearing assertions:
+    assert "error" not in result, f"greedy_decode errored: {result.get('error')}"
+    assert captured_batches, "model was never called"
+    for b in captured_batches:
+        # The fix: typed_slot_positions and typed_slot_source must be
+        # absent in the forward batch (popped by greedy_decode).
+        assert "typed_slot_positions" not in b, (
+            "greedy_decode passed typed_slot_positions to model — "
+            "this causes shape-mismatch crash in decoder torch.where "
+            "when L_out_collator != L_out_dec_input."
+        )
+        assert "typed_slot_source" not in b, (
+            "greedy_decode passed typed_slot_source to model — "
+            "potentially shape-mismatched against dec_input."
+        )
