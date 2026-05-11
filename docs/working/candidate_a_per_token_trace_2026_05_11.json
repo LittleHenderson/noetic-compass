@@ -1,0 +1,5522 @@
+[
+  {
+    "id": "canary_rpm_chain_001",
+    "category": "rpm_chain",
+    "target_text": "Let stageA0_5_0296 name a foundational thought, stageD5_5_0296 name practiced rhythm with agency.",
+    "generated_text": "                                                                                                                                ",
+    "n_tokens_generated": 128,
+    "per_token_trace": [
+      {
+        "pos": 0,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.34009218215942383,
+            " "
+          ],
+          [
+            372,
+            0.03803051635622978,
+            "that"
+          ],
+          [
+            14717,
+            0.03324717655777931,
+            "\""
+          ],
+          [
+            14729,
+            0.026065902784466743,
+            "."
+          ],
+          [
+            14975,
+            0.021951647475361824,
+            "—"
+          ]
+        ],
+        "lm_entropy": 5.418956279754639,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9998486042022705,
+        "slot_type_entropy": 0.0016592233441770077,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.6254727244377136,
+        "copy_entropy": 1.1004042625427246,
+        "ngram_repeat_count": 0,
+        "ngram_repeat_phrase": "",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 1,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.15246880054473877,
+            " "
+          ],
+          [
+            372,
+            0.06537918746471405,
+            "that"
+          ],
+          [
+            3,
+            0.054566480219364166,
+            "[EOS]"
+          ],
+          [
+            60,
+            0.02482450008392334,
+            ","
+          ],
+          [
+            14717,
+            0.018035192042589188,
+            "\""
+          ]
+        ],
+        "lm_entropy": 6.5332865715026855,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9997908473014832,
+        "slot_type_entropy": 0.0022572469897568226,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.9107682108879089,
+        "copy_entropy": 0.44029778242111206,
+        "ngram_repeat_count": 0,
+        "ngram_repeat_phrase": "",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 2,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.06368639320135117,
+            " "
+          ],
+          [
+            3,
+            0.061835672706365585,
+            "[EOS]"
+          ],
+          [
+            372,
+            0.04025758430361748,
+            "that"
+          ],
+          [
+            2897,
+            0.021190274506807327,
+            "stage"
+          ],
+          [
+            379,
+            0.012888755649328232,
+            "of"
+          ]
+        ],
+        "lm_entropy": 7.5250444412231445,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9991403818130493,
+        "slot_type_entropy": 0.007955478504300117,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.9625294804573059,
+        "copy_entropy": 0.2292303889989853,
+        "ngram_repeat_count": 1,
+        "ngram_repeat_phrase": " ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 3,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.043947599828243256,
+            " "
+          ],
+          [
+            3,
+            0.04327506572008133,
+            "[EOS]"
+          ],
+          [
+            2897,
+            0.02657434344291687,
+            "stage"
+          ],
+          [
+            372,
+            0.02280469425022602,
+            "that"
+          ],
+          [
+            379,
+            0.014171212911605835,
+            "of"
+          ]
+        ],
+        "lm_entropy": 8.01659870147705,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9979197382926941,
+        "slot_type_entropy": 0.017178252339363098,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.960947573184967,
+        "copy_entropy": 0.22657135128974915,
+        "ngram_repeat_count": 2,
+        "ngram_repeat_phrase": "  ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 4,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.03798553720116615,
+            " "
+          ],
+          [
+            3,
+            0.032616689801216125,
+            "[EOS]"
+          ],
+          [
+            2897,
+            0.028252465650439262,
+            "stage"
+          ],
+          [
+            379,
+            0.014799702912569046,
+            "of"
+          ],
+          [
+            372,
+            0.01475973054766655,
+            "that"
+          ]
+        ],
+        "lm_entropy": 8.26372241973877,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9964922070503235,
+        "slot_type_entropy": 0.026878992095589638,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.9506930112838745,
+        "copy_entropy": 0.2649828791618347,
+        "ngram_repeat_count": 2,
+        "ngram_repeat_phrase": "  ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 5,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.03636142611503601,
+            " "
+          ],
+          [
+            2897,
+            0.02842072583734989,
+            "stage"
+          ],
+          [
+            3,
+            0.026676278561353683,
+            "[EOS]"
+          ],
+          [
+            379,
+            0.015299011953175068,
+            "of"
+          ],
+          [
+            439,
+            0.013593914918601513,
+            "something"
+          ]
+        ],
+        "lm_entropy": 8.396374702453613,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9951435327529907,
+        "slot_type_entropy": 0.035402752459049225,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.9396696090698242,
+        "copy_entropy": 0.3067057132720947,
+        "ngram_repeat_count": 3,
+        "ngram_repeat_phrase": "   ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 6,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.03650077059864998,
+            " "
+          ],
+          [
+            2897,
+            0.028015928342938423,
+            "stage"
+          ],
+          [
+            3,
+            0.023012956604361534,
+            "[EOS]"
+          ],
+          [
+            379,
+            0.01577940583229065,
+            "of"
+          ],
+          [
+            439,
+            0.014154640957713127,
+            "something"
+          ]
+        ],
+        "lm_entropy": 8.47110366821289,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9939950108528137,
+        "slot_type_entropy": 0.0423111617565155,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.9294691681861877,
+        "copy_entropy": 0.34452658891677856,
+        "ngram_repeat_count": 3,
+        "ngram_repeat_phrase": "   ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 7,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.03746677190065384,
+            " "
+          ],
+          [
+            2897,
+            0.027413487434387207,
+            "stage"
+          ],
+          [
+            3,
+            0.020540917292237282,
+            "[EOS]"
+          ],
+          [
+            379,
+            0.016245074570178986,
+            "of"
+          ],
+          [
+            439,
+            0.014665862545371056,
+            "something"
+          ]
+        ],
+        "lm_entropy": 8.514175415039062,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.993060827255249,
+        "slot_type_entropy": 0.04773824289441109,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.9203619956970215,
+        "copy_entropy": 0.37749072909355164,
+        "ngram_repeat_count": 4,
+        "ngram_repeat_phrase": "    ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 8,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.038850087672472,
+            " "
+          ],
+          [
+            2897,
+            0.02676895447075367,
+            "stage"
+          ],
+          [
+            3,
+            0.018755823373794556,
+            "[EOS]"
+          ],
+          [
+            379,
+            0.016683252528309822,
+            "of"
+          ],
+          [
+            439,
+            0.015131588093936443,
+            "something"
+          ]
+        ],
+        "lm_entropy": 8.538898468017578,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9923147559165955,
+        "slot_type_entropy": 0.05196959897875786,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.9123024940490723,
+        "copy_entropy": 0.4059745967388153,
+        "ngram_repeat_count": 4,
+        "ngram_repeat_phrase": "    ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 9,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.04044948145747185,
+            " "
+          ],
+          [
+            2897,
+            0.026146864518523216,
+            "stage"
+          ],
+          [
+            3,
+            0.017400581389665604,
+            "[EOS]"
+          ],
+          [
+            379,
+            0.017084065824747086,
+            "of"
+          ],
+          [
+            439,
+            0.015552817843854427,
+            "something"
+          ]
+        ],
+        "lm_entropy": 8.552489280700684,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9917212128639221,
+        "slot_type_entropy": 0.0552787110209465,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.9051803946495056,
+        "copy_entropy": 0.430571973323822,
+        "ngram_repeat_count": 5,
+        "ngram_repeat_phrase": "     ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 10,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.04215746745467186,
+            " "
+          ],
+          [
+            2897,
+            0.025572381913661957,
+            "stage"
+          ],
+          [
+            379,
+            0.017442766577005386,
+            "of"
+          ],
+          [
+            3,
+            0.016332263126969337,
+            "[EOS]"
+          ],
+          [
+            439,
+            0.015931865200400352,
+            "something"
+          ]
+        ],
+        "lm_entropy": 8.559065818786621,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9912482500076294,
+        "slot_type_entropy": 0.0578838586807251,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8988822102546692,
+        "copy_entropy": 0.4518461227416992,
+        "ngram_repeat_count": 5,
+        "ngram_repeat_phrase": "     ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 11,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.043913573026657104,
+            " "
+          ],
+          [
+            2897,
+            0.025052478536963463,
+            "stage"
+          ],
+          [
+            379,
+            0.01775842159986496,
+            "of"
+          ],
+          [
+            439,
+            0.016272149980068207,
+            "something"
+          ],
+          [
+            3,
+            0.015465229749679565,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.561091423034668,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9908704161643982,
+        "slot_type_entropy": 0.0599488727748394,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.893305242061615,
+        "copy_entropy": 0.4702857732772827,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 12,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.04568212479352951,
+            " "
+          ],
+          [
+            2897,
+            0.0245865099132061,
+            "stage"
+          ],
+          [
+            379,
+            0.018032368272542953,
+            "of"
+          ],
+          [
+            439,
+            0.016577553004026413,
+            "something"
+          ],
+          [
+            3,
+            0.014745224267244339,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.560094833374023,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9905675053596497,
+        "slot_type_entropy": 0.06159588694572449,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8883587121963501,
+        "copy_entropy": 0.4863051176071167,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 13,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.04744160175323486,
+            " "
+          ],
+          [
+            2897,
+            0.02417045645415783,
+            "stage"
+          ],
+          [
+            379,
+            0.01826733909547329,
+            "of"
+          ],
+          [
+            439,
+            0.01685204543173313,
+            "something"
+          ],
+          [
+            3,
+            0.014136032201349735,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.557055473327637,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9903241395950317,
+        "slot_type_entropy": 0.06291554868221283,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8839638829231262,
+        "copy_entropy": 0.5002549290657043,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 14,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.049178894609212875,
+            " "
+          ],
+          [
+            2897,
+            0.023799067363142967,
+            "stage"
+          ],
+          [
+            379,
+            0.018466560170054436,
+            "of"
+          ],
+          [
+            439,
+            0.01709924265742302,
+            "something"
+          ],
+          [
+            3,
+            0.01361263357102871,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.552618026733398,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9901284575462341,
+        "slot_type_entropy": 0.06397576630115509,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8800511360168457,
+        "copy_entropy": 0.5124334692955017,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 15,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.050885751843452454,
+            " "
+          ],
+          [
+            2897,
+            0.023467089980840683,
+            "stage"
+          ],
+          [
+            379,
+            0.018633410334587097,
+            "of"
+          ],
+          [
+            439,
+            0.017322426661849022,
+            "something"
+          ],
+          [
+            3,
+            0.013157134875655174,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.547218322753906,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.989971399307251,
+        "slot_type_entropy": 0.06482827663421631,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8765600919723511,
+        "copy_entropy": 0.52309250831604,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 16,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.052557241171598434,
+            " "
+          ],
+          [
+            2897,
+            0.023169511929154396,
+            "stage"
+          ],
+          [
+            379,
+            0.018771270290017128,
+            "of"
+          ],
+          [
+            439,
+            0.017524493858218193,
+            "something"
+          ],
+          [
+            3,
+            0.01275633368641138,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.54116153717041,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9898457527160645,
+        "slot_type_entropy": 0.065513014793396,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8734382390975952,
+        "copy_entropy": 0.5324462056159973,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 17,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.05419077351689339,
+            " "
+          ],
+          [
+            2897,
+            0.022901875898241997,
+            "stage"
+          ],
+          [
+            379,
+            0.01888331025838852,
+            "of"
+          ],
+          [
+            439,
+            0.017707986757159233,
+            "something"
+          ],
+          [
+            3,
+            0.012400382198393345,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.53465461730957,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9897458553314209,
+        "slot_type_entropy": 0.06606098264455795,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8706393241882324,
+        "copy_entropy": 0.5406779646873474,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 18,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.05578448623418808,
+            " "
+          ],
+          [
+            2897,
+            0.022660301998257637,
+            "stage"
+          ],
+          [
+            379,
+            0.018972503021359444,
+            "of"
+          ],
+          [
+            439,
+            0.017874987795948982,
+            "something"
+          ],
+          [
+            3,
+            0.012081644497811794,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.527853012084961,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9896668195724487,
+        "slot_type_entropy": 0.06649744510650635,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8681237697601318,
+        "copy_entropy": 0.5479416847229004,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 19,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.05733804777264595,
+            " "
+          ],
+          [
+            2897,
+            0.022441314533352852,
+            "stage"
+          ],
+          [
+            379,
+            0.019041456282138824,
+            "of"
+          ],
+          [
+            439,
+            0.018027424812316895,
+            "something"
+          ],
+          [
+            3,
+            0.011794228106737137,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.520864486694336,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9896054267883301,
+        "slot_type_entropy": 0.06684133410453796,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8658566474914551,
+        "copy_entropy": 0.5543701648712158,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 20,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.058851491659879684,
+            " "
+          ],
+          [
+            2897,
+            0.02224203199148178,
+            "stage"
+          ],
+          [
+            379,
+            0.01909254863858223,
+            "of"
+          ],
+          [
+            439,
+            0.018166949972510338,
+            "something"
+          ],
+          [
+            3,
+            0.011533414013683796,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.513769149780273,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9895583391189575,
+        "slot_type_entropy": 0.06710895895957947,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8638082146644592,
+        "copy_entropy": 0.5600746870040894,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 21,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.06032506003975868,
+            " "
+          ],
+          [
+            2897,
+            0.022059982642531395,
+            "stage"
+          ],
+          [
+            379,
+            0.01912798173725605,
+            "of"
+          ],
+          [
+            439,
+            0.018294943496584892,
+            "something"
+          ],
+          [
+            3,
+            0.011295409873127937,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.50662612915039,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.989523708820343,
+        "slot_type_entropy": 0.0673125684261322,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.861951470375061,
+        "copy_entropy": 0.5651532411575317,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 22,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.06175965815782547,
+            " "
+          ],
+          [
+            2897,
+            0.021892942488193512,
+            "stage"
+          ],
+          [
+            379,
+            0.019149664789438248,
+            "of"
+          ],
+          [
+            439,
+            0.018412653356790543,
+            "something"
+          ],
+          [
+            3,
+            0.011077159084379673,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.49947738647461,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9894988536834717,
+        "slot_type_entropy": 0.0674632340669632,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8602644205093384,
+        "copy_entropy": 0.5696861743927002,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 23,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.06315619498491287,
+            " "
+          ],
+          [
+            2897,
+            0.02173912338912487,
+            "stage"
+          ],
+          [
+            379,
+            0.019159238785505295,
+            "of"
+          ],
+          [
+            439,
+            0.018521089106798172,
+            "something"
+          ],
+          [
+            3,
+            0.010876115411520004,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.49235725402832,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9894825220108032,
+        "slot_type_entropy": 0.06756935268640518,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8587265610694885,
+        "copy_entropy": 0.5737460851669312,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 24,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.0645156055688858,
+            " "
+          ],
+          [
+            2897,
+            0.021596988663077354,
+            "stage"
+          ],
+          [
+            379,
+            0.01915823109447956,
+            "of"
+          ],
+          [
+            439,
+            0.018621178343892097,
+            "something"
+          ],
+          [
+            3,
+            0.010690184310078621,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.48529052734375,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9894731640815735,
+        "slot_type_entropy": 0.06763816624879837,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8573217391967773,
+        "copy_entropy": 0.577390193939209,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 25,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.065839022397995,
+            " "
+          ],
+          [
+            2897,
+            0.021465091034770012,
+            "stage"
+          ],
+          [
+            379,
+            0.019147954881191254,
+            "of"
+          ],
+          [
+            439,
+            0.018713776022195816,
+            "something"
+          ],
+          [
+            3,
+            0.010517599992454052,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.47829532623291,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9894698858261108,
+        "slot_type_entropy": 0.06767534464597702,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8560342788696289,
+        "copy_entropy": 0.5806722044944763,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 26,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.06712736189365387,
+            " "
+          ],
+          [
+            2897,
+            0.02134232223033905,
+            "stage"
+          ],
+          [
+            379,
+            0.019129617139697075,
+            "of"
+          ],
+          [
+            439,
+            0.01879960112273693,
+            "something"
+          ],
+          [
+            3,
+            0.010356878861784935,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.471384048461914,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9894716143608093,
+        "slot_type_entropy": 0.06768601387739182,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8548513650894165,
+        "copy_entropy": 0.5836363434791565,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 27,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.06838230043649673,
+            " "
+          ],
+          [
+            2897,
+            0.0212276428937912,
+            "stage"
+          ],
+          [
+            379,
+            0.019104203209280968,
+            "of"
+          ],
+          [
+            439,
+            0.018879257142543793,
+            "something"
+          ],
+          [
+            3,
+            0.010206730104982853,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.46456527709961,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9894772171974182,
+        "slot_type_entropy": 0.06767458468675613,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8537611365318298,
+        "copy_entropy": 0.5863217115402222,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 28,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.06960442662239075,
+            " "
+          ],
+          [
+            2897,
+            0.021120218560099602,
+            "stage"
+          ],
+          [
+            379,
+            0.01907259412109852,
+            "of"
+          ],
+          [
+            439,
+            0.018953286111354828,
+            "something"
+          ],
+          [
+            3,
+            0.010066086426377296,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.457845687866211,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.989486575126648,
+        "slot_type_entropy": 0.06764405220746994,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8527540564537048,
+        "copy_entropy": 0.5887607932090759,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 29,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.0707952082157135,
+            " "
+          ],
+          [
+            2897,
+            0.021019259467720985,
+            "stage"
+          ],
+          [
+            379,
+            0.01903568208217621,
+            "of"
+          ],
+          [
+            439,
+            0.01902218908071518,
+            "something"
+          ],
+          [
+            3,
+            0.009934005327522755,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.451233863830566,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9894989728927612,
+        "slot_type_entropy": 0.06759755313396454,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8518211841583252,
+        "copy_entropy": 0.5909829139709473,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 30,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.07195542007684708,
+            " "
+          ],
+          [
+            2897,
+            0.020924121141433716,
+            "stage"
+          ],
+          [
+            439,
+            0.01908644661307335,
+            "something"
+          ],
+          [
+            379,
+            0.018994085490703583,
+            "of"
+          ],
+          [
+            3,
+            0.009809666313230991,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.444730758666992,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.989513635635376,
+        "slot_type_entropy": 0.06753790378570557,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8509552478790283,
+        "copy_entropy": 0.5930118560791016,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 31,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.07308659702539444,
+            " "
+          ],
+          [
+            2897,
+            0.020834216848015785,
+            "stage"
+          ],
+          [
+            439,
+            0.019146405160427094,
+            "something"
+          ],
+          [
+            379,
+            0.018948489800095558,
+            "of"
+          ],
+          [
+            3,
+            0.009692373685538769,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.438337326049805,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9895304441452026,
+        "slot_type_entropy": 0.06746672838926315,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8501490950584412,
+        "copy_entropy": 0.594870924949646,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 32,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.07418937236070633,
+            " "
+          ],
+          [
+            2897,
+            0.020749080926179886,
+            "stage"
+          ],
+          [
+            439,
+            0.01920243166387081,
+            "something"
+          ],
+          [
+            379,
+            0.018899446353316307,
+            "of"
+          ],
+          [
+            3,
+            0.009581482037901878,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.432056427001953,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9895490407943726,
+        "slot_type_entropy": 0.06738616526126862,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8493967056274414,
+        "copy_entropy": 0.5965787172317505,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 33,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.07526469230651855,
+            " "
+          ],
+          [
+            2897,
+            0.020668232813477516,
+            "stage"
+          ],
+          [
+            439,
+            0.019254839047789574,
+            "something"
+          ],
+          [
+            379,
+            0.018847433850169182,
+            "of"
+          ],
+          [
+            3,
+            0.009476474486291409,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.425888061523438,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9895688891410828,
+        "slot_type_entropy": 0.06729776412248611,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8486930727958679,
+        "copy_entropy": 0.598151683807373,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 34,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.07631434500217438,
+            " "
+          ],
+          [
+            2897,
+            0.020591240376234055,
+            "stage"
+          ],
+          [
+            439,
+            0.019303984940052032,
+            "something"
+          ],
+          [
+            379,
+            0.01879284158349037,
+            "of"
+          ],
+          [
+            3,
+            0.009376820176839828,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.419824600219727,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9895898699760437,
+        "slot_type_entropy": 0.06720282137393951,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8480336666107178,
+        "copy_entropy": 0.5996034741401672,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 35,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.07733809947967529,
+            " "
+          ],
+          [
+            2897,
+            0.020517919212579727,
+            "stage"
+          ],
+          [
+            439,
+            0.01934991031885147,
+            "something"
+          ],
+          [
+            379,
+            0.018736081197857857,
+            "of"
+          ],
+          [
+            3,
+            0.00928213819861412,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.413877487182617,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9896118640899658,
+        "slot_type_entropy": 0.06710228323936462,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8474134802818298,
+        "copy_entropy": 0.6009491086006165,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 36,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.07833773642778397,
+            " "
+          ],
+          [
+            2897,
+            0.020447775721549988,
+            "stage"
+          ],
+          [
+            439,
+            0.019393065944314003,
+            "something"
+          ],
+          [
+            379,
+            0.01867753081023693,
+            "of"
+          ],
+          [
+            3,
+            0.009191969409584999,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.408037185668945,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9896346926689148,
+        "slot_type_entropy": 0.06699727475643158,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.846829891204834,
+        "copy_entropy": 0.6021980047225952,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 37,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.07931368052959442,
+            " "
+          ],
+          [
+            2897,
+            0.020380601286888123,
+            "stage"
+          ],
+          [
+            439,
+            0.01943366974592209,
+            "something"
+          ],
+          [
+            379,
+            0.01861748658120632,
+            "of"
+          ],
+          [
+            3,
+            0.009106036275625229,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.402303695678711,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9896580576896667,
+        "slot_type_entropy": 0.0668887123465538,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8462792634963989,
+        "copy_entropy": 0.6033599376678467,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 38,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08026674389839172,
+            " "
+          ],
+          [
+            2897,
+            0.02031623013317585,
+            "stage"
+          ],
+          [
+            439,
+            0.01947173662483692,
+            "something"
+          ],
+          [
+            379,
+            0.018556155264377594,
+            "of"
+          ],
+          [
+            3,
+            0.009024042636156082,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.396677017211914,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9896820187568665,
+        "slot_type_entropy": 0.0667770653963089,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8457587957382202,
+        "copy_entropy": 0.6044439673423767,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 39,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08119836449623108,
+            " "
+          ],
+          [
+            2897,
+            0.02025439962744713,
+            "stage"
+          ],
+          [
+            439,
+            0.019507531076669693,
+            "something"
+          ],
+          [
+            379,
+            0.018493708223104477,
+            "of"
+          ],
+          [
+            3,
+            0.008945629000663757,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.391151428222656,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9897060394287109,
+        "slot_type_entropy": 0.06666335463523865,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8452658653259277,
+        "copy_entropy": 0.6054579615592957,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 40,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08210829645395279,
+            " "
+          ],
+          [
+            2897,
+            0.02019481733441353,
+            "stage"
+          ],
+          [
+            439,
+            0.01954123005270958,
+            "something"
+          ],
+          [
+            379,
+            0.01843048818409443,
+            "of"
+          ],
+          [
+            3,
+            0.008870655670762062,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.385730743408203,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9897304773330688,
+        "slot_type_entropy": 0.06654771417379379,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8447977900505066,
+        "copy_entropy": 0.6064092516899109,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 41,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08299816399812698,
+            " "
+          ],
+          [
+            2897,
+            0.020137466490268707,
+            "stage"
+          ],
+          [
+            439,
+            0.01957298442721367,
+            "something"
+          ],
+          [
+            379,
+            0.018366776406764984,
+            "of"
+          ],
+          [
+            3,
+            0.008798796683549881,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.38040542602539,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9897550940513611,
+        "slot_type_entropy": 0.06643091142177582,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8443527817726135,
+        "copy_entropy": 0.6073030233383179,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 42,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08386822789907455,
+            " "
+          ],
+          [
+            2897,
+            0.020082125440239906,
+            "stage"
+          ],
+          [
+            439,
+            0.019602926447987556,
+            "something"
+          ],
+          [
+            379,
+            0.018302440643310547,
+            "of"
+          ],
+          [
+            3,
+            0.008729814551770687,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.375179290771484,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9897798299789429,
+        "slot_type_entropy": 0.06631305813789368,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8439294695854187,
+        "copy_entropy": 0.6081441640853882,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 43,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08471859991550446,
+            " "
+          ],
+          [
+            2897,
+            0.020028753206133842,
+            "stage"
+          ],
+          [
+            439,
+            0.019631166011095047,
+            "something"
+          ],
+          [
+            379,
+            0.018237831071019173,
+            "of"
+          ],
+          [
+            3,
+            0.008663678541779518,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.370052337646484,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9898045063018799,
+        "slot_type_entropy": 0.06619483977556229,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8435250520706177,
+        "copy_entropy": 0.6089391112327576,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 44,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08555109053850174,
+            " "
+          ],
+          [
+            2897,
+            0.019977018237113953,
+            "stage"
+          ],
+          [
+            439,
+            0.01965770311653614,
+            "something"
+          ],
+          [
+            379,
+            0.018173018470406532,
+            "of"
+          ],
+          [
+            3,
+            0.008600112050771713,
+            "[EOS]"
+          ]
+        ],
+        "lm_entropy": 8.365013122558594,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9898292422294617,
+        "slot_type_entropy": 0.0660761296749115,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8431390523910522,
+        "copy_entropy": 0.6096906661987305,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 45,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08636587858200073,
+            " "
+          ],
+          [
+            2897,
+            0.01992696523666382,
+            "stage"
+          ],
+          [
+            439,
+            0.019682791084051132,
+            "something"
+          ],
+          [
+            379,
+            0.01810808852314949,
+            "of"
+          ],
+          [
+            60,
+            0.008581520989537239,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.360065460205078,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9898537993431091,
+        "slot_type_entropy": 0.06595759093761444,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8427693247795105,
+        "copy_entropy": 0.6104038953781128,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 46,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.087163046002388,
+            " "
+          ],
+          [
+            2897,
+            0.019878461956977844,
+            "stage"
+          ],
+          [
+            439,
+            0.019706599414348602,
+            "something"
+          ],
+          [
+            379,
+            0.018043214455246925,
+            "of"
+          ],
+          [
+            60,
+            0.008626661263406277,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.355208396911621,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9898782968521118,
+        "slot_type_entropy": 0.06583931297063828,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8424150943756104,
+        "copy_entropy": 0.611081063747406,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 47,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08794329315423965,
+            " "
+          ],
+          [
+            2897,
+            0.019831325858831406,
+            "stage"
+          ],
+          [
+            439,
+            0.019728941842913628,
+            "something"
+          ],
+          [
+            379,
+            0.017978401854634285,
+            "of"
+          ],
+          [
+            60,
+            0.00867090467363596,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.350439071655273,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9899026155471802,
+        "slot_type_entropy": 0.06572140008211136,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8420753479003906,
+        "copy_entropy": 0.6117256879806519,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 48,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08870802074670792,
+            " "
+          ],
+          [
+            2897,
+            0.019785650074481964,
+            "stage"
+          ],
+          [
+            439,
+            0.01975005678832531,
+            "something"
+          ],
+          [
+            379,
+            0.017913755029439926,
+            "of"
+          ],
+          [
+            60,
+            0.008714212104678154,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.34575080871582,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9899266958236694,
+        "slot_type_entropy": 0.06560404598712921,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.841748833656311,
+        "copy_entropy": 0.6123403310775757,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 49,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.08945699036121368,
+            " "
+          ],
+          [
+            439,
+            0.019770126789808273,
+            "something"
+          ],
+          [
+            2897,
+            0.01974109560251236,
+            "stage"
+          ],
+          [
+            379,
+            0.017849378287792206,
+            "of"
+          ],
+          [
+            60,
+            0.008756662718951702,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.341144561767578,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9899506568908691,
+        "slot_type_entropy": 0.06548736989498138,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8414342999458313,
+        "copy_entropy": 0.6129283905029297,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 50,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09019053727388382,
+            " "
+          ],
+          [
+            439,
+            0.019788967445492744,
+            "something"
+          ],
+          [
+            2897,
+            0.019697893410921097,
+            "stage"
+          ],
+          [
+            379,
+            0.017785238102078438,
+            "of"
+          ],
+          [
+            60,
+            0.00879824161529541,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.336621284484863,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9899742007255554,
+        "slot_type_entropy": 0.06537187099456787,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8411317467689514,
+        "copy_entropy": 0.6134899854660034,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 51,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09090951085090637,
+            " "
+          ],
+          [
+            439,
+            0.01980692893266678,
+            "something"
+          ],
+          [
+            2897,
+            0.01965571567416191,
+            "stage"
+          ],
+          [
+            379,
+            0.017721591517329216,
+            "of"
+          ],
+          [
+            60,
+            0.008839008398354053,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.332174301147461,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9899978041648865,
+        "slot_type_entropy": 0.06525690108537674,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8408396244049072,
+        "copy_entropy": 0.6140297651290894,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 52,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.0916149839758873,
+            " "
+          ],
+          [
+            439,
+            0.019823886454105377,
+            "something"
+          ],
+          [
+            2897,
+            0.01961464434862137,
+            "stage"
+          ],
+          [
+            379,
+            0.017658162862062454,
+            "of"
+          ],
+          [
+            60,
+            0.008879002183675766,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.327800750732422,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9900210499763489,
+        "slot_type_entropy": 0.06514295935630798,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8405575752258301,
+        "copy_entropy": 0.6145479679107666,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 53,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09230607002973557,
+            " "
+          ],
+          [
+            439,
+            0.01983986794948578,
+            "something"
+          ],
+          [
+            2897,
+            0.01957465521991253,
+            "stage"
+          ],
+          [
+            379,
+            0.0175953209400177,
+            "of"
+          ],
+          [
+            60,
+            0.008918196894228458,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.323503494262695,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9900439977645874,
+        "slot_type_entropy": 0.06503023952245712,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8402848243713379,
+        "copy_entropy": 0.6150460243225098,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 54,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09298336505889893,
+            " "
+          ],
+          [
+            439,
+            0.019854893907904625,
+            "something"
+          ],
+          [
+            2897,
+            0.01953561045229435,
+            "stage"
+          ],
+          [
+            379,
+            0.017532948404550552,
+            "of"
+          ],
+          [
+            60,
+            0.008956622332334518,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.319283485412598,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.990066647529602,
+        "slot_type_entropy": 0.06491866707801819,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8400209546089172,
+        "copy_entropy": 0.6155264973640442,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 55,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09364834427833557,
+            " "
+          ],
+          [
+            439,
+            0.01986934058368206,
+            "something"
+          ],
+          [
+            2897,
+            0.019497497007250786,
+            "stage"
+          ],
+          [
+            379,
+            0.017470985651016235,
+            "of"
+          ],
+          [
+            60,
+            0.008994323201477528,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.315130233764648,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9900891780853271,
+        "slot_type_entropy": 0.06480805575847626,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8397653102874756,
+        "copy_entropy": 0.6159897446632385,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 56,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.094300776720047,
+            " "
+          ],
+          [
+            439,
+            0.019882874563336372,
+            "something"
+          ],
+          [
+            2897,
+            0.019460204988718033,
+            "stage"
+          ],
+          [
+            379,
+            0.0174095556139946,
+            "of"
+          ],
+          [
+            60,
+            0.009031376801431179,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.311044692993164,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9901112914085388,
+        "slot_type_entropy": 0.0646989494562149,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8395172953605652,
+        "copy_entropy": 0.616437554359436,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 57,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09494097530841827,
+            " "
+          ],
+          [
+            439,
+            0.019895736128091812,
+            "something"
+          ],
+          [
+            2897,
+            0.019423745572566986,
+            "stage"
+          ],
+          [
+            379,
+            0.017348771914839745,
+            "of"
+          ],
+          [
+            60,
+            0.009067650884389877,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.307027816772461,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9901330471038818,
+        "slot_type_entropy": 0.06459113210439682,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.839276909828186,
+        "copy_entropy": 0.6168705224990845,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 58,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09556889533996582,
+            " "
+          ],
+          [
+            439,
+            0.01990787871181965,
+            "something"
+          ],
+          [
+            2897,
+            0.019388150423765182,
+            "stage"
+          ],
+          [
+            379,
+            0.01728854700922966,
+            "of"
+          ],
+          [
+            60,
+            0.009103319607675076,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.303079605102539,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.990154504776001,
+        "slot_type_entropy": 0.06448458880186081,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8390434384346008,
+        "copy_entropy": 0.6172898411750793,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 59,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09618614614009857,
+            " "
+          ],
+          [
+            439,
+            0.01991943083703518,
+            "something"
+          ],
+          [
+            2897,
+            0.01935323141515255,
+            "stage"
+          ],
+          [
+            379,
+            0.01722886972129345,
+            "of"
+          ],
+          [
+            60,
+            0.009138275869190693,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.299185752868652,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9901759028434753,
+        "slot_type_entropy": 0.06437908858060837,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8388162851333618,
+        "copy_entropy": 0.6176967024803162,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 60,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09679150581359863,
+            " "
+          ],
+          [
+            439,
+            0.01993033103644848,
+            "something"
+          ],
+          [
+            2897,
+            0.019319193437695503,
+            "stage"
+          ],
+          [
+            379,
+            0.01716974936425686,
+            "of"
+          ],
+          [
+            60,
+            0.009172673337161541,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.29536247253418,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9901968240737915,
+        "slot_type_entropy": 0.06427513062953949,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.838595449924469,
+        "copy_entropy": 0.6180915236473083,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 61,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09738662093877792,
+            " "
+          ],
+          [
+            439,
+            0.019940650090575218,
+            "something"
+          ],
+          [
+            2897,
+            0.01928567886352539,
+            "stage"
+          ],
+          [
+            379,
+            0.017111267894506454,
+            "of"
+          ],
+          [
+            60,
+            0.009206422604620457,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.291596412658691,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.990217387676239,
+        "slot_type_entropy": 0.06417254358530045,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8383803963661194,
+        "copy_entropy": 0.6184754371643066,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 62,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09797082096338272,
+            " "
+          ],
+          [
+            439,
+            0.019950367510318756,
+            "something"
+          ],
+          [
+            2897,
+            0.019252890720963478,
+            "stage"
+          ],
+          [
+            379,
+            0.01705343835055828,
+            "of"
+          ],
+          [
+            60,
+            0.00923959445208311,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.287893295288086,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9902378916740417,
+        "slot_type_entropy": 0.06407112628221512,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8381706476211548,
+        "copy_entropy": 0.6188498735427856,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 63,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09854482859373093,
+            " "
+          ],
+          [
+            439,
+            0.019959695637226105,
+            "something"
+          ],
+          [
+            2897,
+            0.019220825284719467,
+            "stage"
+          ],
+          [
+            379,
+            0.016996268182992935,
+            "of"
+          ],
+          [
+            60,
+            0.00927212368696928,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.284244537353516,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9902578592300415,
+        "slot_type_entropy": 0.06397121399641037,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8379664421081543,
+        "copy_entropy": 0.619213342666626,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 64,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.09910903871059418,
+            " "
+          ],
+          [
+            439,
+            0.019968414679169655,
+            "something"
+          ],
+          [
+            2897,
+            0.019189339131116867,
+            "stage"
+          ],
+          [
+            379,
+            0.016939662396907806,
+            "of"
+          ],
+          [
+            60,
+            0.00930415652692318,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.280652046203613,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9902775883674622,
+        "slot_type_entropy": 0.06387259811162949,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8377675414085388,
+        "copy_entropy": 0.6195675134658813,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 65,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.0996638834476471,
+            " "
+          ],
+          [
+            439,
+            0.019976604729890823,
+            "something"
+          ],
+          [
+            2897,
+            0.01915835402905941,
+            "stage"
+          ],
+          [
+            379,
+            0.01688363030552864,
+            "of"
+          ],
+          [
+            60,
+            0.009335597045719624,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.277113914489746,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9902971386909485,
+        "slot_type_entropy": 0.06377522647380829,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8375723361968994,
+        "copy_entropy": 0.619915246963501,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 66,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10020910203456879,
+            " "
+          ],
+          [
+            439,
+            0.019984476268291473,
+            "something"
+          ],
+          [
+            2897,
+            0.01912805065512657,
+            "stage"
+          ],
+          [
+            379,
+            0.016828231513500214,
+            "of"
+          ],
+          [
+            60,
+            0.009366526268422604,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.273632049560547,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9903163313865662,
+        "slot_type_entropy": 0.06367921829223633,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8373823165893555,
+        "copy_entropy": 0.6202537417411804,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 67,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.1007450744509697,
+            " "
+          ],
+          [
+            439,
+            0.019991889595985413,
+            "something"
+          ],
+          [
+            2897,
+            0.019098246470093727,
+            "stage"
+          ],
+          [
+            379,
+            0.016773631796240807,
+            "of"
+          ],
+          [
+            60,
+            0.009396922774612904,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.2701997756958,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9903353452682495,
+        "slot_type_entropy": 0.06358442455530167,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8371964693069458,
+        "copy_entropy": 0.6205840706825256,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 68,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10127192735671997,
+            " "
+          ],
+          [
+            439,
+            0.019998816773295403,
+            "something"
+          ],
+          [
+            2897,
+            0.019068997353315353,
+            "stage"
+          ],
+          [
+            379,
+            0.016719529405236244,
+            "of"
+          ],
+          [
+            60,
+            0.009426793083548546,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.266823768615723,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9903538227081299,
+        "slot_type_entropy": 0.0634913221001625,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.83701491355896,
+        "copy_entropy": 0.6209073066711426,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 69,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10179027169942856,
+            " "
+          ],
+          [
+            439,
+            0.020005423575639725,
+            "something"
+          ],
+          [
+            2897,
+            0.019040264189243317,
+            "stage"
+          ],
+          [
+            379,
+            0.016666051000356674,
+            "of"
+          ],
+          [
+            60,
+            0.009456225670874119,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.263494491577148,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9903721809387207,
+        "slot_type_entropy": 0.06339910626411438,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8368370532989502,
+        "copy_entropy": 0.6212243437767029,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 70,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10230033844709396,
+            " "
+          ],
+          [
+            439,
+            0.020011646673083305,
+            "something"
+          ],
+          [
+            2897,
+            0.019012052565813065,
+            "stage"
+          ],
+          [
+            379,
+            0.016613267362117767,
+            "of"
+          ],
+          [
+            60,
+            0.009485098533332348,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.260213851928711,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9903903007507324,
+        "slot_type_entropy": 0.06330838799476624,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8366632461547852,
+        "copy_entropy": 0.6215345859527588,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 71,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10280122607946396,
+            " "
+          ],
+          [
+            439,
+            0.0200175940990448,
+            "something"
+          ],
+          [
+            2897,
+            0.01898426190018654,
+            "stage"
+          ],
+          [
+            379,
+            0.01656113751232624,
+            "of"
+          ],
+          [
+            60,
+            0.009513544850051403,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.256986618041992,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9904081225395203,
+        "slot_type_entropy": 0.063218854367733,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8364928364753723,
+        "copy_entropy": 0.6218384504318237,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 72,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10329566895961761,
+            " "
+          ],
+          [
+            439,
+            0.020023059099912643,
+            "something"
+          ],
+          [
+            2897,
+            0.01895693875849247,
+            "stage"
+          ],
+          [
+            379,
+            0.016509519889950752,
+            "of"
+          ],
+          [
+            60,
+            0.009541586972773075,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.25379753112793,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9904256463050842,
+        "slot_type_entropy": 0.06313054263591766,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8363255858421326,
+        "copy_entropy": 0.6221375465393066,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 73,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10378146916627884,
+            " "
+          ],
+          [
+            439,
+            0.020028291270136833,
+            "something"
+          ],
+          [
+            2897,
+            0.018930071964859962,
+            "stage"
+          ],
+          [
+            379,
+            0.016458624973893166,
+            "of"
+          ],
+          [
+            60,
+            0.009569134563207626,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.250656127929688,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9904429316520691,
+        "slot_type_entropy": 0.06304339319467545,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8361620306968689,
+        "copy_entropy": 0.6224303841590881,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 74,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10425981879234314,
+            " "
+          ],
+          [
+            439,
+            0.020033162087202072,
+            "something"
+          ],
+          [
+            2897,
+            0.018903667107224464,
+            "stage"
+          ],
+          [
+            379,
+            0.016408270224928856,
+            "of"
+          ],
+          [
+            60,
+            0.009596224874258041,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.247559547424316,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9904599189758301,
+        "slot_type_entropy": 0.06295761466026306,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8360015749931335,
+        "copy_entropy": 0.6227176189422607,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 75,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10473058372735977,
+            " "
+          ],
+          [
+            439,
+            0.02003784291446209,
+            "something"
+          ],
+          [
+            2897,
+            0.01887773536145687,
+            "stage"
+          ],
+          [
+            379,
+            0.01635849103331566,
+            "of"
+          ],
+          [
+            60,
+            0.009622922167181969,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.244508743286133,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9904767274856567,
+        "slot_type_entropy": 0.06287291646003723,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8358439207077026,
+        "copy_entropy": 0.62300044298172,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 76,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10519418865442276,
+            " "
+          ],
+          [
+            439,
+            0.020042208954691887,
+            "something"
+          ],
+          [
+            2897,
+            0.01885208860039711,
+            "stage"
+          ],
+          [
+            379,
+            0.016309428960084915,
+            "of"
+          ],
+          [
+            60,
+            0.009649189189076424,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.241498947143555,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9904933571815491,
+        "slot_type_entropy": 0.06278938055038452,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8356895446777344,
+        "copy_entropy": 0.6232779026031494,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 77,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10565135627985,
+            " "
+          ],
+          [
+            439,
+            0.020046312361955643,
+            "something"
+          ],
+          [
+            2897,
+            0.01882684789597988,
+            "stage"
+          ],
+          [
+            379,
+            0.016260897740721703,
+            "of"
+          ],
+          [
+            60,
+            0.009675033390522003,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.238525390625,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9905095100402832,
+        "slot_type_entropy": 0.06270712614059448,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.835537850856781,
+        "copy_entropy": 0.6235508918762207,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 78,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10610022395849228,
+            " "
+          ],
+          [
+            439,
+            0.020050106570124626,
+            "something"
+          ],
+          [
+            2897,
+            0.018802085891366005,
+            "stage"
+          ],
+          [
+            379,
+            0.016212981194257736,
+            "of"
+          ],
+          [
+            60,
+            0.00970050971955061,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.235603332519531,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.990525484085083,
+        "slot_type_entropy": 0.06262610107660294,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8353888988494873,
+        "copy_entropy": 0.6238197088241577,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 79,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10654370486736298,
+            " "
+          ],
+          [
+            439,
+            0.02005367912352085,
+            "something"
+          ],
+          [
+            2897,
+            0.018777577206492424,
+            "stage"
+          ],
+          [
+            379,
+            0.01616562530398369,
+            "of"
+          ],
+          [
+            60,
+            0.009725638665258884,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.232711791992188,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.990541398525238,
+        "slot_type_entropy": 0.06254582852125168,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8352424502372742,
+        "copy_entropy": 0.6240843534469604,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 80,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10697954148054123,
+            " "
+          ],
+          [
+            439,
+            0.02005709521472454,
+            "something"
+          ],
+          [
+            2897,
+            0.018753517419099808,
+            "stage"
+          ],
+          [
+            379,
+            0.016118865460157394,
+            "of"
+          ],
+          [
+            60,
+            0.00975034199655056,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.229866027832031,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9905569553375244,
+        "slot_type_entropy": 0.062467049807310104,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8350986242294312,
+        "copy_entropy": 0.6243450045585632,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 81,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10740920156240463,
+            " "
+          ],
+          [
+            439,
+            0.020060231909155846,
+            "something"
+          ],
+          [
+            2897,
+            0.018729817122220993,
+            "stage"
+          ],
+          [
+            379,
+            0.016072692349553108,
+            "of"
+          ],
+          [
+            60,
+            0.009774669073522091,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.227057456970215,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9905722737312317,
+        "slot_type_entropy": 0.06238920986652374,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8349573016166687,
+        "copy_entropy": 0.6246012449264526,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 82,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10783330351114273,
+            " "
+          ],
+          [
+            439,
+            0.020063111558556557,
+            "something"
+          ],
+          [
+            2897,
+            0.01870647817850113,
+            "stage"
+          ],
+          [
+            379,
+            0.016027119010686874,
+            "of"
+          ],
+          [
+            60,
+            0.009798653423786163,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.22428035736084,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9905874133110046,
+        "slot_type_entropy": 0.062312379479408264,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8348181843757629,
+        "copy_entropy": 0.6248540878295898,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 83,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10825106501579285,
+            " "
+          ],
+          [
+            439,
+            0.020065831020474434,
+            "something"
+          ],
+          [
+            2897,
+            0.018683381378650665,
+            "stage"
+          ],
+          [
+            379,
+            0.0159820094704628,
+            "of"
+          ],
+          [
+            60,
+            0.009822309017181396,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.221543312072754,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9906023740768433,
+        "slot_type_entropy": 0.062236666679382324,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8346811532974243,
+        "copy_entropy": 0.6251038312911987,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 84,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10866225510835648,
+            " "
+          ],
+          [
+            439,
+            0.020068414509296417,
+            "something"
+          ],
+          [
+            2897,
+            0.018660685047507286,
+            "stage"
+          ],
+          [
+            379,
+            0.01593748852610588,
+            "of"
+          ],
+          [
+            60,
+            0.009845586493611336,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.218844413757324,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9906169772148132,
+        "slot_type_entropy": 0.062162067741155624,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8345471024513245,
+        "copy_entropy": 0.6253482699394226,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 85,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10906858742237091,
+            " "
+          ],
+          [
+            439,
+            0.020070722326636314,
+            "something"
+          ],
+          [
+            2897,
+            0.01863829791545868,
+            "stage"
+          ],
+          [
+            379,
+            0.01589350588619709,
+            "of"
+          ],
+          [
+            60,
+            0.009868571534752846,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.216175079345703,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9906314611434937,
+        "slot_type_entropy": 0.06208837032318115,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.834414541721344,
+        "copy_entropy": 0.6255910992622375,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 86,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.1094687283039093,
+            " "
+          ],
+          [
+            439,
+            0.020072942599654198,
+            "something"
+          ],
+          [
+            2897,
+            0.01861610822379589,
+            "stage"
+          ],
+          [
+            379,
+            0.01585003174841404,
+            "of"
+          ],
+          [
+            60,
+            0.009891188703477383,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.213541984558105,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9906458854675293,
+        "slot_type_entropy": 0.06201548129320145,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8342840671539307,
+        "copy_entropy": 0.6258304119110107,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 87,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.10986275970935822,
+            " "
+          ],
+          [
+            439,
+            0.02007494494318962,
+            "something"
+          ],
+          [
+            2897,
+            0.01859435625374317,
+            "stage"
+          ],
+          [
+            379,
+            0.015807155519723892,
+            "of"
+          ],
+          [
+            60,
+            0.009913523681461811,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.210945129394531,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9906598925590515,
+        "slot_type_entropy": 0.06194385886192322,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8341554999351501,
+        "copy_entropy": 0.6260668635368347,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 88,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11025234311819077,
+            " "
+          ],
+          [
+            439,
+            0.020076720044016838,
+            "something"
+          ],
+          [
+            2897,
+            0.01857290044426918,
+            "stage"
+          ],
+          [
+            379,
+            0.01576477847993374,
+            "of"
+          ],
+          [
+            60,
+            0.009935528039932251,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.20837688446045,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9906737208366394,
+        "slot_type_entropy": 0.06187325343489647,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8340290188789368,
+        "copy_entropy": 0.6263000965118408,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 89,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11063582450151443,
+            " "
+          ],
+          [
+            439,
+            0.020078420639038086,
+            "something"
+          ],
+          [
+            2897,
+            0.018551651388406754,
+            "stage"
+          ],
+          [
+            379,
+            0.015722893178462982,
+            "of"
+          ],
+          [
+            60,
+            0.00995723344385624,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.20584487915039,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9906873106956482,
+        "slot_type_entropy": 0.061803631484508514,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8339045643806458,
+        "copy_entropy": 0.6265295743942261,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 90,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11101460456848145,
+            " "
+          ],
+          [
+            439,
+            0.02007998898625374,
+            "something"
+          ],
+          [
+            2897,
+            0.018530696630477905,
+            "stage"
+          ],
+          [
+            379,
+            0.015681566670536995,
+            "of"
+          ],
+          [
+            60,
+            0.00997863058000803,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.203339576721191,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9907008409500122,
+        "slot_type_entropy": 0.061734721064567566,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8337819576263428,
+        "copy_entropy": 0.6267567873001099,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 91,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11138711124658585,
+            " "
+          ],
+          [
+            439,
+            0.020081358030438423,
+            "something"
+          ],
+          [
+            2897,
+            0.018510060384869576,
+            "stage"
+          ],
+          [
+            379,
+            0.01564069837331772,
+            "of"
+          ],
+          [
+            60,
+            0.009999752044677734,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.200876235961914,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9907141923904419,
+        "slot_type_entropy": 0.06166677176952362,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8336610198020935,
+        "copy_entropy": 0.6269811987876892,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 92,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11175576597452164,
+            " "
+          ],
+          [
+            439,
+            0.0200826283544302,
+            "something"
+          ],
+          [
+            2897,
+            0.018489651381969452,
+            "stage"
+          ],
+          [
+            379,
+            0.015600359998643398,
+            "of"
+          ],
+          [
+            60,
+            0.010020536370575428,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.198432922363281,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9907273054122925,
+        "slot_type_entropy": 0.06159978359937668,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8335420489311218,
+        "copy_entropy": 0.627202570438385,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 93,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11211995780467987,
+            " "
+          ],
+          [
+            439,
+            0.020083796232938766,
+            "something"
+          ],
+          [
+            2897,
+            0.018469544127583504,
+            "stage"
+          ],
+          [
+            379,
+            0.015560430474579334,
+            "of"
+          ],
+          [
+            60,
+            0.010041137225925922,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.196014404296875,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.990740180015564,
+        "slot_type_entropy": 0.061533547937870026,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8334242701530457,
+        "copy_entropy": 0.6274224519729614,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 94,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11247842758893967,
+            " "
+          ],
+          [
+            439,
+            0.020084738731384277,
+            "something"
+          ],
+          [
+            2897,
+            0.018449600785970688,
+            "stage"
+          ],
+          [
+            379,
+            0.015521074645221233,
+            "of"
+          ],
+          [
+            60,
+            0.010061345994472504,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.193636894226074,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9907529354095459,
+        "slot_type_entropy": 0.06146842613816261,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8333086967468262,
+        "copy_entropy": 0.6276384592056274,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 95,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11283306032419205,
+            " "
+          ],
+          [
+            439,
+            0.02008562535047531,
+            "something"
+          ],
+          [
+            2897,
+            0.018429944291710854,
+            "stage"
+          ],
+          [
+            379,
+            0.015482146292924881,
+            "of"
+          ],
+          [
+            60,
+            0.01008137408643961,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.191276550292969,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9907654523849487,
+        "slot_type_entropy": 0.061403919011354446,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8331943154335022,
+        "copy_entropy": 0.6278529167175293,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 96,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11318238824605942,
+            " "
+          ],
+          [
+            439,
+            0.020086437463760376,
+            "something"
+          ],
+          [
+            2897,
+            0.018410567194223404,
+            "stage"
+          ],
+          [
+            379,
+            0.015443622134625912,
+            "of"
+          ],
+          [
+            60,
+            0.010101125575602055,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.18895149230957,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9907779693603516,
+        "slot_type_entropy": 0.061340272426605225,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8330817222595215,
+        "copy_entropy": 0.6280644536018372,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 97,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11352705955505371,
+            " "
+          ],
+          [
+            439,
+            0.020087094977498055,
+            "something"
+          ],
+          [
+            2897,
+            0.018391452729701996,
+            "stage"
+          ],
+          [
+            379,
+            0.015405562706291676,
+            "of"
+          ],
+          [
+            60,
+            0.010120602324604988,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.186656951904297,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9907902479171753,
+        "slot_type_entropy": 0.061277490109205246,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8329702615737915,
+        "copy_entropy": 0.6282740235328674,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 98,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11386750638484955,
+            " "
+          ],
+          [
+            439,
+            0.020087607204914093,
+            "something"
+          ],
+          [
+            2897,
+            0.018372515216469765,
+            "stage"
+          ],
+          [
+            379,
+            0.015368066728115082,
+            "of"
+          ],
+          [
+            60,
+            0.010139859281480312,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.184385299682617,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9908021092414856,
+        "slot_type_entropy": 0.06121576204895973,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8328609466552734,
+        "copy_entropy": 0.6284803748130798,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 99,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.1142042726278305,
+            " "
+          ],
+          [
+            439,
+            0.02008812688291073,
+            "something"
+          ],
+          [
+            2897,
+            0.018353762105107307,
+            "stage"
+          ],
+          [
+            379,
+            0.015330902300775051,
+            "of"
+          ],
+          [
+            60,
+            0.010158811695873737,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.182137489318848,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9908142685890198,
+        "slot_type_entropy": 0.06115419417619705,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8327521681785583,
+        "copy_entropy": 0.6286866068840027,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 100,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11453660577535629,
+            " "
+          ],
+          [
+            439,
+            0.02008838579058647,
+            "something"
+          ],
+          [
+            2897,
+            0.018335383385419846,
+            "stage"
+          ],
+          [
+            379,
+            0.015294217504560947,
+            "of"
+          ],
+          [
+            60,
+            0.010177507065236568,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.179916381835938,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9908260703086853,
+        "slot_type_entropy": 0.06109386309981346,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8326451778411865,
+        "copy_entropy": 0.6288893222808838,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 101,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11486474424600601,
+            " "
+          ],
+          [
+            439,
+            0.020088650286197662,
+            "something"
+          ],
+          [
+            2897,
+            0.01831710897386074,
+            "stage"
+          ],
+          [
+            379,
+            0.01525797601789236,
+            "of"
+          ],
+          [
+            60,
+            0.010196064598858356,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.17772102355957,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9908375144004822,
+        "slot_type_entropy": 0.061034318059682846,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8325397372245789,
+        "copy_entropy": 0.6290896534919739,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 102,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11518934369087219,
+            " "
+          ],
+          [
+            439,
+            0.02008882164955139,
+            "something"
+          ],
+          [
+            2897,
+            0.018299030140042305,
+            "stage"
+          ],
+          [
+            379,
+            0.015222158282995224,
+            "of"
+          ],
+          [
+            60,
+            0.010214363224804401,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.175545692443848,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9908491373062134,
+        "slot_type_entropy": 0.06097516044974327,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.832435667514801,
+        "copy_entropy": 0.6292884945869446,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 103,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11550888419151306,
+            " "
+          ],
+          [
+            439,
+            0.020088892430067062,
+            "something"
+          ],
+          [
+            2897,
+            0.018281223252415657,
+            "stage"
+          ],
+          [
+            379,
+            0.015186693519353867,
+            "of"
+          ],
+          [
+            60,
+            0.010232376866042614,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.173406600952148,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9908602237701416,
+        "slot_type_entropy": 0.06091722100973129,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8323329091072083,
+        "copy_entropy": 0.6294843554496765,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 104,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11582452803850174,
+            " "
+          ],
+          [
+            439,
+            0.020088911056518555,
+            "something"
+          ],
+          [
+            2897,
+            0.018263623118400574,
+            "stage"
+          ],
+          [
+            379,
+            0.015151728875935078,
+            "of"
+          ],
+          [
+            60,
+            0.010250167921185493,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.171287536621094,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9908713698387146,
+        "slot_type_entropy": 0.06085994839668274,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8322309255599976,
+        "copy_entropy": 0.6296796202659607,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 105,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11613796651363373,
+            " "
+          ],
+          [
+            439,
+            0.020088745281100273,
+            "something"
+          ],
+          [
+            2897,
+            0.018246104940772057,
+            "stage"
+          ],
+          [
+            379,
+            0.015117127448320389,
+            "of"
+          ],
+          [
+            60,
+            0.010267834179103374,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.169180870056152,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.990882396697998,
+        "slot_type_entropy": 0.06080297753214836,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8321308493614197,
+        "copy_entropy": 0.6298717260360718,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 106,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11644574254751205,
+            " "
+          ],
+          [
+            439,
+            0.020088624209165573,
+            "something"
+          ],
+          [
+            2897,
+            0.01822897605597973,
+            "stage"
+          ],
+          [
+            379,
+            0.01508294977247715,
+            "of"
+          ],
+          [
+            60,
+            0.010285183787345886,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.167113304138184,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9908933639526367,
+        "slot_type_entropy": 0.06074685603380203,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8320317268371582,
+        "copy_entropy": 0.6300625205039978,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 107,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11675071716308594,
+            " "
+          ],
+          [
+            439,
+            0.02008846402168274,
+            "something"
+          ],
+          [
+            2897,
+            0.01821184530854225,
+            "stage"
+          ],
+          [
+            379,
+            0.015049109235405922,
+            "of"
+          ],
+          [
+            60,
+            0.010302364826202393,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.165060043334961,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9909041523933411,
+        "slot_type_entropy": 0.06069142371416092,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8319340348243713,
+        "copy_entropy": 0.6302504539489746,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 108,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11705227941274643,
+            " "
+          ],
+          [
+            439,
+            0.02008805237710476,
+            "something"
+          ],
+          [
+            2897,
+            0.018195005133748055,
+            "stage"
+          ],
+          [
+            379,
+            0.015015719458460808,
+            "of"
+          ],
+          [
+            60,
+            0.010319345630705357,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.163029670715332,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9909148216247559,
+        "slot_type_entropy": 0.06063675507903099,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8318373560905457,
+        "copy_entropy": 0.6304371356964111,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 109,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11735022068023682,
+            " "
+          ],
+          [
+            439,
+            0.020087718963623047,
+            "something"
+          ],
+          [
+            2897,
+            0.01817833073437214,
+            "stage"
+          ],
+          [
+            379,
+            0.014982657507061958,
+            "of"
+          ],
+          [
+            60,
+            0.010336115956306458,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.161022186279297,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9909250736236572,
+        "slot_type_entropy": 0.06058289855718613,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8317416906356812,
+        "copy_entropy": 0.6306228637695312,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 110,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11764507740736008,
+            " "
+          ],
+          [
+            439,
+            0.020087264478206635,
+            "something"
+          ],
+          [
+            2897,
+            0.018161892890930176,
+            "stage"
+          ],
+          [
+            379,
+            0.014949925243854523,
+            "of"
+          ],
+          [
+            60,
+            0.010352673009037971,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.159029960632324,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9909355044364929,
+        "slot_type_entropy": 0.060529325157403946,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8316471576690674,
+        "copy_entropy": 0.6308061480522156,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 111,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11793580651283264,
+            " "
+          ],
+          [
+            439,
+            0.020086681470274925,
+            "something"
+          ],
+          [
+            2897,
+            0.01814555935561657,
+            "stage"
+          ],
+          [
+            379,
+            0.014917691238224506,
+            "of"
+          ],
+          [
+            60,
+            0.010369016788899899,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.157069206237793,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.99094557762146,
+        "slot_type_entropy": 0.06047685444355011,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8315535187721252,
+        "copy_entropy": 0.630988597869873,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 112,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11822350323200226,
+            " "
+          ],
+          [
+            439,
+            0.020086122676730156,
+            "something"
+          ],
+          [
+            2897,
+            0.01812945306301117,
+            "stage"
+          ],
+          [
+            379,
+            0.014885726384818554,
+            "of"
+          ],
+          [
+            60,
+            0.010385199449956417,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.155123710632324,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9909557700157166,
+        "slot_type_entropy": 0.060424696654081345,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8314613699913025,
+        "copy_entropy": 0.6311679482460022,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 113,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11850748211145401,
+            " "
+          ],
+          [
+            439,
+            0.020085524767637253,
+            "something"
+          ],
+          [
+            2897,
+            0.018113549798727036,
+            "stage"
+          ],
+          [
+            379,
+            0.014854135923087597,
+            "of"
+          ],
+          [
+            60,
+            0.010401209816336632,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.153203010559082,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.990965723991394,
+        "slot_type_entropy": 0.060373175889253616,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8313702344894409,
+        "copy_entropy": 0.6313461065292358,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 114,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11879003047943115,
+            " "
+          ],
+          [
+            439,
+            0.020084761083126068,
+            "something"
+          ],
+          [
+            2897,
+            0.018097663298249245,
+            "stage"
+          ],
+          [
+            379,
+            0.014822912402451038,
+            "of"
+          ],
+          [
+            60,
+            0.010417044162750244,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.151288032531738,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.990975558757782,
+        "slot_type_entropy": 0.0603221133351326,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8312795162200928,
+        "copy_entropy": 0.6315240263938904,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 115,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11906757950782776,
+            " "
+          ],
+          [
+            439,
+            0.020084043964743614,
+            "something"
+          ],
+          [
+            2897,
+            0.0180820282548666,
+            "stage"
+          ],
+          [
+            379,
+            0.014792021363973618,
+            "of"
+          ],
+          [
+            60,
+            0.010432648472487926,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.149408340454102,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9909852743148804,
+        "slot_type_entropy": 0.06027177721261978,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8311901688575745,
+        "copy_entropy": 0.6316993236541748,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 116,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11934248358011246,
+            " "
+          ],
+          [
+            439,
+            0.02008334919810295,
+            "something"
+          ],
+          [
+            2897,
+            0.01806657575070858,
+            "stage"
+          ],
+          [
+            379,
+            0.014761515893042088,
+            "of"
+          ],
+          [
+            60,
+            0.01044811774045229,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.147541999816895,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9909947514533997,
+        "slot_type_entropy": 0.06022217497229576,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8311020731925964,
+        "copy_entropy": 0.6318725347518921,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 117,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11961407959461212,
+            " "
+          ],
+          [
+            439,
+            0.02008250541985035,
+            "something"
+          ],
+          [
+            2897,
+            0.01805134490132332,
+            "stage"
+          ],
+          [
+            379,
+            0.01473130751401186,
+            "of"
+          ],
+          [
+            60,
+            0.01046334020793438,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.145696640014648,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9910043478012085,
+        "slot_type_entropy": 0.06017289310693741,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8310149312019348,
+        "copy_entropy": 0.6320441365242004,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 118,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.11988411098718643,
+            " "
+          ],
+          [
+            439,
+            0.02008157968521118,
+            "something"
+          ],
+          [
+            2897,
+            0.01803605817258358,
+            "stage"
+          ],
+          [
+            379,
+            0.01470134500414133,
+            "of"
+          ],
+          [
+            60,
+            0.010478479787707329,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.143863677978516,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9910137057304382,
+        "slot_type_entropy": 0.06012418493628502,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8309286832809448,
+        "copy_entropy": 0.6322146058082581,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 119,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.1201496347784996,
+            " "
+          ],
+          [
+            439,
+            0.020080627873539925,
+            "something"
+          ],
+          [
+            2897,
+            0.018021147698163986,
+            "stage"
+          ],
+          [
+            379,
+            0.014671886339783669,
+            "of"
+          ],
+          [
+            60,
+            0.01049340795725584,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.142057418823242,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9910229444503784,
+        "slot_type_entropy": 0.060076236724853516,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8308433890342712,
+        "copy_entropy": 0.6323832273483276,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 120,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.12041331082582474,
+            " "
+          ],
+          [
+            439,
+            0.020079663023352623,
+            "something"
+          ],
+          [
+            2897,
+            0.01800623908638954,
+            "stage"
+          ],
+          [
+            379,
+            0.014642618596553802,
+            "of"
+          ],
+          [
+            60,
+            0.010508145205676556,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.140262603759766,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.991032063961029,
+        "slot_type_entropy": 0.06002875417470932,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8307583928108215,
+        "copy_entropy": 0.6325517892837524,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 121,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.12067339569330215,
+            " "
+          ],
+          [
+            439,
+            0.020078634843230247,
+            "something"
+          ],
+          [
+            2897,
+            0.017991654574871063,
+            "stage"
+          ],
+          [
+            379,
+            0.014613711275160313,
+            "of"
+          ],
+          [
+            60,
+            0.010522770695388317,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.138492584228516,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9910411238670349,
+        "slot_type_entropy": 0.05998176708817482,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8306750059127808,
+        "copy_entropy": 0.6327176094055176,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 122,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.12093003839254379,
+            " "
+          ],
+          [
+            439,
+            0.02007766254246235,
+            "something"
+          ],
+          [
+            2897,
+            0.017977088689804077,
+            "stage"
+          ],
+          [
+            379,
+            0.014585152268409729,
+            "of"
+          ],
+          [
+            60,
+            0.010537202470004559,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.136741638183594,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.991050124168396,
+        "slot_type_entropy": 0.05993521958589554,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8305927515029907,
+        "copy_entropy": 0.6328811645507812,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 123,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.12118589878082275,
+            " "
+          ],
+          [
+            439,
+            0.02007649838924408,
+            "something"
+          ],
+          [
+            2897,
+            0.01796269789338112,
+            "stage"
+          ],
+          [
+            379,
+            0.01455681398510933,
+            "of"
+          ],
+          [
+            60,
+            0.010551479645073414,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.13499641418457,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.991058886051178,
+        "slot_type_entropy": 0.05988931655883789,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.830510675907135,
+        "copy_entropy": 0.6330448985099792,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 124,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.12143783271312714,
+            " "
+          ],
+          [
+            439,
+            0.020075317472219467,
+            "something"
+          ],
+          [
+            2897,
+            0.01794838346540928,
+            "stage"
+          ],
+          [
+            379,
+            0.014528808183968067,
+            "of"
+          ],
+          [
+            60,
+            0.010565669275820255,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.133275032043457,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9910677075386047,
+        "slot_type_entropy": 0.05984386056661606,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8304302096366882,
+        "copy_entropy": 0.6332055330276489,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 125,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.1216876208782196,
+            " "
+          ],
+          [
+            439,
+            0.02007415145635605,
+            "something"
+          ],
+          [
+            2897,
+            0.017934346571564674,
+            "stage"
+          ],
+          [
+            379,
+            0.014501122757792473,
+            "of"
+          ],
+          [
+            60,
+            0.010579603724181652,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.131568908691406,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9910762310028076,
+        "slot_type_entropy": 0.059798918664455414,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8303501009941101,
+        "copy_entropy": 0.6333662271499634,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 126,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.1219344213604927,
+            " "
+          ],
+          [
+            439,
+            0.020073028281331062,
+            "something"
+          ],
+          [
+            2897,
+            0.017920328304171562,
+            "stage"
+          ],
+          [
+            379,
+            0.01447377447038889,
+            "of"
+          ],
+          [
+            60,
+            0.010593419894576073,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.129880905151367,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9910847544670105,
+        "slot_type_entropy": 0.05975450575351715,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8302703499794006,
+        "copy_entropy": 0.6335262060165405,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 127,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.1221785917878151,
+            " "
+          ],
+          [
+            439,
+            0.02007167413830757,
+            "something"
+          ],
+          [
+            2897,
+            0.01790650002658367,
+            "stage"
+          ],
+          [
+            379,
+            0.014446595683693886,
+            "of"
+          ],
+          [
+            60,
+            0.0106071000918746,
+            ","
+          ]
+        ],
+        "lm_entropy": 8.128210067749023,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9910932183265686,
+        "slot_type_entropy": 0.059710610657930374,
+        "copy_argmax": 21,
+        "copy_top_prob": 0.8301919102668762,
+        "copy_entropy": 0.6336838006973267,
+        "ngram_repeat_count": 6,
+        "ngram_repeat_phrase": "      ",
+        "is_copy_eligible_slot": false
+      }
+    ]
+  },
+  {
+    "id": "canary_rpm_chain_002",
+    "category": "rpm_chain",
+    "target_text": "Let stageA0_4_0049 name a foundational thought, stageD4_4_0049 name what triggered an evaluative judgment.",
+    "generated_text": "  ",
+    "n_tokens_generated": 2,
+    "per_token_trace": [
+      {
+        "pos": 0,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.3641936480998993,
+            " "
+          ],
+          [
+            372,
+            0.03993071988224983,
+            "that"
+          ],
+          [
+            14717,
+            0.03380517661571503,
+            "\""
+          ],
+          [
+            14729,
+            0.02759024314582348,
+            "."
+          ],
+          [
+            60,
+            0.019969739019870758,
+            ","
+          ]
+        ],
+        "lm_entropy": 5.196776866912842,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9998829364776611,
+        "slot_type_entropy": 0.0013252909993752837,
+        "copy_argmax": 20,
+        "copy_top_prob": 0.8818901777267456,
+        "copy_entropy": 0.533185601234436,
+        "ngram_repeat_count": 0,
+        "ngram_repeat_phrase": "",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 1,
+        "chosen_id": 12,
+        "chosen_token_str": " ",
+        "lm_top_k": [
+          [
+            12,
+            0.14998549222946167,
+            " "
+          ],
+          [
+            372,
+            0.07282593846321106,
+            "that"
+          ],
+          [
+            3,
+            0.05378866195678711,
+            "[EOS]"
+          ],
+          [
+            60,
+            0.02671082876622677,
+            ","
+          ],
+          [
+            14717,
+            0.01901634968817234,
+            "\""
+          ]
+        ],
+        "lm_entropy": 6.496275901794434,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9998024106025696,
+        "slot_type_entropy": 0.002152698813006282,
+        "copy_argmax": 20,
+        "copy_top_prob": 0.9525686502456665,
+        "copy_entropy": 0.24995025992393494,
+        "ngram_repeat_count": 0,
+        "ngram_repeat_phrase": "",
+        "is_copy_eligible_slot": false
+      },
+      {
+        "pos": 2,
+        "chosen_id": 3,
+        "chosen_token_str": "[EOS]",
+        "lm_top_k": [
+          [
+            3,
+            0.06439392268657684,
+            "[EOS]"
+          ],
+          [
+            12,
+            0.059067778289318085,
+            " "
+          ],
+          [
+            372,
+            0.04620977118611336,
+            "that"
+          ],
+          [
+            2897,
+            0.017263665795326233,
+            "stage"
+          ],
+          [
+            379,
+            0.015577386133372784,
+            "of"
+          ]
+        ],
+        "lm_entropy": 7.4854559898376465,
+        "slot_type_argmax": 0,
+        "slot_type_top_prob": 0.9992908239364624,
+        "slot_type_entropy": 0.006751323118805885,
+        "copy_argmax": 20,
+        "copy_top_prob": 0.9707557559013367,
+        "copy_entropy": 0.17530608177185059,
+        "ngram_repeat_count": 0,
+        "ngram_repeat_phrase": "",
+        "is_copy_eligible_slot": false
+      }
+    ]
+  }
+]

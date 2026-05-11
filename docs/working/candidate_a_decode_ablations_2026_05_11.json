@@ -1,0 +1,2003 @@
+{
+  "modes": [
+    "full",
+    "lm_only",
+    "copy_disabled",
+    "phrase_bias_disabled"
+  ],
+  "summary_by_mode": {
+    "full": {
+      "verdict": "clean",
+      "n": 11,
+      "by_verdict": {
+        "clean": 11,
+        "warn": 0,
+        "kill": 0
+      },
+      "max_severity": 0.5,
+      "mean_severity": 0.14
+    },
+    "lm_only": {
+      "verdict": "clean",
+      "n": 11,
+      "by_verdict": {
+        "clean": 11,
+        "warn": 0,
+        "kill": 0
+      },
+      "max_severity": 0.5,
+      "mean_severity": 0.14
+    },
+    "copy_disabled": {
+      "verdict": "clean",
+      "n": 11,
+      "by_verdict": {
+        "clean": 11,
+        "warn": 0,
+        "kill": 0
+      },
+      "max_severity": 0.5,
+      "mean_severity": 0.14
+    },
+    "phrase_bias_disabled": {
+      "verdict": "clean",
+      "n": 11,
+      "by_verdict": {
+        "clean": 11,
+        "warn": 0,
+        "kill": 0
+      },
+      "max_severity": 0.5,
+      "mean_severity": 0.14
+    }
+  },
+  "per_record": [
+    {
+      "id": "canary_rpm_chain_001",
+      "category": "rpm_chain",
+      "task": "cas_to_english",
+      "cas_expression": "let stageA0_5_0296 = ^0^P; let stageD5_5_0296 = ^7^P_{F5}",
+      "target_text": "Let stageA0_5_0296 name a foundational thought, stageD5_5_0296 name practiced rhythm with agency.",
+      "modes": {
+        "full": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.32,
+              "text_len": 128,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.32,
+              "text_len": 128,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.32,
+              "text_len": 128,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.32,
+              "text_len": 128,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_rpm_chain_002",
+      "category": "rpm_chain",
+      "task": "cas_to_english",
+      "cas_expression": "let stageA0_4_0049 = ^0^P; let stageD4_4_0049 = ^8^P_{F4}",
+      "target_text": "Let stageA0_4_0049 name a foundational thought, stageD4_4_0049 name what triggered an evaluative judgment.",
+      "modes": {
+        "full": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.019,
+              "text_len": 2,
+              "target_len": 106,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.019,
+              "text_len": 2,
+              "target_len": 106,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.019,
+              "text_len": 2,
+              "target_len": 106,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.019,
+              "text_len": 2,
+              "target_len": 106,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_fractal_k7_001",
+      "category": "fractal_sequence",
+      "task": "cas_to_english",
+      "cas_expression": "Phi⟨0:1:2:4:5:6:7⟩",
+      "target_text": "A seven-step fractal sequence starting from the universal idea, progressing through awareness, attraction, and resonance.",
+      "modes": {
+        "full": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.017,
+              "text_len": 2,
+              "target_len": 121,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.017,
+              "text_len": 2,
+              "target_len": 121,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.017,
+              "text_len": 2,
+              "target_len": 121,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.017,
+              "text_len": 2,
+              "target_len": 121,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_fractal_k8_001",
+      "category": "fractal_sequence",
+      "task": "cas_to_english",
+      "cas_expression": "Phi⟨0:1:2:3:4:5:7:8⟩",
+      "target_text": "An eight-step fractal sequence beginning with idea, passing through mind, positive, negative, vibration, and rhythm.",
+      "modes": {
+        "full": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.017,
+              "text_len": 2,
+              "target_len": 116,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.017,
+              "text_len": 2,
+              "target_len": 116,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.017,
+              "text_len": 2,
+              "target_len": 116,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "  ",
+          "n_tokens_generated": 2,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": true,
+              "generic_phrases": [],
+              "length_ratio": 0.017,
+              "text_len": 2,
+              "target_len": 116,
+              "is_too_short": true
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_recipe_001",
+      "category": "recipe",
+      "task": "cas_to_english",
+      "cas_expression": "Θ(Ω_grounding) = 2*^2^P + 1*^0^O → Ω_grounding",
+      "target_text": "To produce the outcome called grounding, combine two of principled attraction with one of operational thought.",
+      "modes": {
+        "full": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.164,
+              "text_len": 128,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.164,
+              "text_len": 128,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.164,
+              "text_len": 128,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.164,
+              "text_len": 128,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_meta_logic_001",
+      "category": "meta_logic",
+      "task": "cas_to_english",
+      "cas_expression": "PartitionOf(NoeticCluster{^4, ^5, ^6, ^9}, NoeticCluster{^4}, NoeticCluster{^5, ^6, ^9})",
+      "target_text": "A partition expression claims that two groups together account for everything in a larger collection of cognitive operators.",
+      "modes": {
+        "full": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.032,
+              "text_len": 128,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.032,
+              "text_len": 128,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.032,
+              "text_len": 128,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.032,
+              "text_len": 128,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_state_literal_001",
+      "category": "state_literal",
+      "task": "cas_to_english",
+      "cas_expression": "^0^C_{F4}",
+      "target_text": "A thought in cognitive thinking, driven by a need for connection.",
+      "modes": {
+        "full": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.969,
+              "text_len": 128,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.969,
+              "text_len": 128,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.969,
+              "text_len": 128,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.969,
+              "text_len": 128,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_binary_001",
+      "category": "binary_composition",
+      "task": "cas_to_english",
+      "cas_expression": "^5^C × ^0^C",
+      "target_text": "A sense of self in the cognitive arena integrated with a thought in the same arena.",
+      "modes": {
+        "full": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.542,
+              "text_len": 128,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.542,
+              "text_len": 128,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.542,
+              "text_len": 128,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.542,
+              "text_len": 128,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_cro_001",
+      "category": "cross_register_omega",
+      "task": "cas_to_english",
+      "cas_expression": "(^7|E × ^7|f) = ^7|Ω_presence",
+      "target_text": "Practice combined with felt resonance fuses into a unified state of presence.",
+      "modes": {
+        "full": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.662,
+              "text_len": 128,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.662,
+              "text_len": 128,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.662,
+              "text_len": 128,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.662,
+              "text_len": 128,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_invalid_001",
+      "category": "fractal",
+      "task": "invalid_to_explanation",
+      "cas_expression": "Phi⟨⟩",
+      "target_text": "The expression has empty angle brackets where a sequence of values should be — the fractal cannot be empty.",
+      "modes": {
+        "full": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.196,
+              "text_len": 128,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.196,
+              "text_len": 128,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.196,
+              "text_len": 128,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.196,
+              "text_len": 128,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_invalid_002",
+      "category": "fractal",
+      "task": "invalid_to_explanation",
+      "cas_expression": "Phi⟨1:5:2:7:-1:9:9⟩",
+      "target_text": "The expression contains a negative value in the fractal list, but the system does not allow negative numbers there.",
+      "modes": {
+        "full": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.113,
+              "text_len": 128,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "lm_only": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.113,
+              "text_len": 128,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "copy_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.113,
+              "text_len": 128,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "                                                                                                                                ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false,
+              "reason": "punctuated"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.113,
+              "text_len": 128,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}
