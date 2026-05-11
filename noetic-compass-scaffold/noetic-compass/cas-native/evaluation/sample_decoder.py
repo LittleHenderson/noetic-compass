@@ -31,6 +31,8 @@ def greedy_decode(
     max_new_tokens: int = 128,
     trace: bool = False,
     topk: int = 5,
+    hard_typed_emission: bool = False,
+    copy_confidence_threshold: float = 0.5,
 ) -> dict[str, Any]:
     """Greedy-decode one record. Returns dict with text + token ids + trace.
 
@@ -99,7 +101,19 @@ def greedy_decode(
     per_token_trace: list[dict[str, Any]] = []  # piece 3 (v7.1b post-mortem)
     hit_eos = False
     # Slot ids whose presence indicates copy-eligible position
+    # (CONNECTIVE=0 and NOETIC_PHRASE=8 are emit-via-LM).
     _COPY_ELIGIBLE_SLOTS = {1, 2, 3, 4, 5, 6, 7}
+    # Candidate C 2026-05-11: hard-emission routing trace (only populated
+    # when hard_typed_emission=True). Each element ∈ {"lm", "copy"}.
+    emission_route_trace: list[str] = []
+    # Source-side token ids — needed for hard-copy emission.
+    src_ids = batch.get("cas_prefix_ids")
+    src_mask = batch.get("cas_prefix_mask")
+    if src_ids is None:
+        # No source available; hard-emission cannot fire. Synthesize a
+        # single-pad source so the decode loop still runs LM-only.
+        src_ids = torch.zeros((1, 1), dtype=torch.long, device=device)
+        src_mask = torch.zeros((1, 1), dtype=torch.bool, device=device)
 
     with torch.no_grad():
         for step_idx in range(max_new_tokens):
@@ -119,9 +133,48 @@ def greedy_decode(
             out = model(forward_batch)
             # Take last position's logits
             last_logits = out["lm_logits"][0, -1, :]  # (V,)
-            next_id = int(last_logits.argmax().item())
+            lm_next_id = int(last_logits.argmax().item())
             slot_argmax = int(out["slot_type_logits"][0, -1, :].argmax().item())
             slot_trace.append(slot_argmax)
+
+            # Candidate C 2026-05-11: hard typed-fiber emission routing.
+            # Decode-time only; training is unchanged. Per user scope:
+            #   - slot_argmax ∈ copy-eligible slots (1..7) AND
+            #   - p_copy.max ≥ copy_confidence_threshold AND
+            #   - the source position the copy points at is NOT padded
+            #         → emit src_ids[argmax_source_pos]
+            #   - otherwise → emit lm_logits.argmax (LM fallback)
+            # CONNECTIVE (0) and NOETIC_PHRASE (8) always use LM.
+            next_id = lm_next_id
+            route = "lm"
+            if hard_typed_emission and slot_argmax in _COPY_ELIGIBLE_SLOTS:
+                p_copy_last = out["p_copy"][0, -1, :]  # (L_src,)
+                if p_copy_last.numel() > 0:
+                    top_copy_prob = float(p_copy_last.max().item())
+                    if top_copy_prob >= copy_confidence_threshold:
+                        copy_src_pos = int(p_copy_last.argmax().item())
+                        # Reject if the source position is padded — no
+                        # meaningful token to copy.
+                        is_valid_src = True
+                        if src_mask is not None and src_mask.numel() > 0:
+                            is_valid_src = bool(
+                                src_mask[0, copy_src_pos].item()
+                            )
+                        if is_valid_src:
+                            candidate_id = int(
+                                src_ids[0, copy_src_pos].item()
+                            )
+                            # Reject PAD / BOS / EOS specials as copy
+                            # targets — they shouldn't appear mid-decode.
+                            specials = {
+                                int(getattr(tokenizer, "PAD_ID", -1)),
+                                int(getattr(tokenizer, "BOS_ID", -1)),
+                                int(getattr(tokenizer, "EOS_ID", -1)),
+                            }
+                            if candidate_id not in specials:
+                                next_id = candidate_id
+                                route = "copy"
+            emission_route_trace.append(route)
 
             if trace:
                 # Piece 3 per-token diagnostics
@@ -212,6 +265,15 @@ def greedy_decode(
         "hit_eos": hit_eos,
         "slot_type_trace": slot_trace,
     }
+    if hard_typed_emission:
+        result["emission_route_trace"] = emission_route_trace
+        # Aggregate route stats — surface in canary_history for analysis
+        from collections import Counter
+        route_counts = Counter(emission_route_trace)
+        result["emission_route_counts"] = {
+            "lm": int(route_counts.get("lm", 0)),
+            "copy": int(route_counts.get("copy", 0)),
+        }
     if trace:
         result["per_token_trace"] = per_token_trace
     return result
@@ -225,6 +287,8 @@ def decode_canary_pack(
     *,
     device: torch.device,
     max_new_tokens: int = 128,
+    hard_typed_emission: bool = False,
+    copy_confidence_threshold: float = 0.5,
 ) -> list[dict[str, Any]]:
     """Decode every record in the canary pack and return per-record results.
 
@@ -238,8 +302,10 @@ def decode_canary_pack(
             decode_result = greedy_decode(
                 model, rec, collator, tokenizer,
                 device=device, max_new_tokens=max_new_tokens,
+                hard_typed_emission=hard_typed_emission,
+                copy_confidence_threshold=copy_confidence_threshold,
             )
-            results.append({
+            entry = {
                 "id": rec.get("id"),
                 "category": rec.get("v1mix_grammar_category_or_error_class"),
                 "task": rec.get("v1mix_task_type"),
@@ -248,8 +314,16 @@ def decode_canary_pack(
                 "generated_text": decode_result["text"],
                 "n_tokens_generated": decode_result["n_tokens_generated"],
                 "hit_eos": decode_result["hit_eos"],
-                "slot_type_trace": decode_result["slot_type_trace"][:20],  # truncate for report size
-            })
+                "slot_type_trace": decode_result["slot_type_trace"][:20],
+            }
+            if hard_typed_emission:
+                entry["emission_route_counts"] = decode_result.get(
+                    "emission_route_counts", {"lm": 0, "copy": 0}
+                )
+                entry["emission_route_trace"] = decode_result.get(
+                    "emission_route_trace", []
+                )[:40]  # truncate for report size
+            results.append(entry)
     finally:
         if was_training:
             model.train()

@@ -106,6 +106,9 @@ class SimplexTrainConfig:
     save_final_checkpoint: bool = False
     # Architecture review Candidate A (2026-05-11): untie lm_head
     no_tie_lm_head: bool = False
+    # Architecture review Candidate C (2026-05-11): hard typed-fiber emission
+    hard_typed_emission: bool = False
+    copy_confidence_threshold: float = 0.5
     # Loss weights — populated by ablation mode after CLI parse
     loss_weights: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_LOSS_WEIGHTS))
 
@@ -181,6 +184,18 @@ def build_parser() -> argparse.ArgumentParser:
                         "Default tied (matches Stage 6 v4+ baseline). "
                         "Per Candidate A architecture review: test "
                         "whether tying was load-bearing in lm-collapse.")
+    # Architecture review Candidate C (2026-05-11): hard typed-fiber emission
+    p.add_argument("--hard-typed-emission", action="store_true",
+                   help="Decode-time hard routing: if slot_type predicts a "
+                        "copy-eligible slot (1..7) AND p_copy.max >= "
+                        "--copy-confidence-threshold AND the source token "
+                        "isn't padded/special, emit the source token; "
+                        "otherwise emit the LM argmax. CONNECTIVE and "
+                        "NOETIC_PHRASE always use LM. Training unchanged.")
+    p.add_argument("--copy-confidence-threshold", type=float, default=0.5,
+                   help="Minimum p_copy.max for hard-emission to fire. "
+                        "Below the threshold, decode falls back to LM. "
+                        "Default 0.5. Only used when --hard-typed-emission set.")
     return p
 
 
@@ -219,6 +234,8 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
         save_checkpoints_at=args.save_checkpoints_at,
         save_final_checkpoint=args.save_final_checkpoint,
         no_tie_lm_head=args.no_tie_lm_head,
+        hard_typed_emission=args.hard_typed_emission,
+        copy_confidence_threshold=args.copy_confidence_threshold,
     )
     # Apply ablation overrides on top of defaults
     overrides = ABLATION_OVERRIDES.get(cfg.ablation, {})
@@ -1210,12 +1227,29 @@ def run_cpu_smoke(
             samples = decode_canary_pack(
                 model, canary_records, collator, tokenizer,
                 device=device, max_new_tokens=cfg.canary_max_new_tokens,
+                hard_typed_emission=cfg.hard_typed_emission,
+                copy_confidence_threshold=cfg.copy_confidence_threshold,
             )
             reports = [
                 analyze_sample(s["generated_text"], s.get("target_text", ""))
                 for s in samples
             ]
             pack_verdict = aggregate_pack_verdict(reports)
+            # Candidate C 2026-05-11: aggregate emission-route counts
+            # across the pack so the canary report shows whether hard
+            # routing actually fired during decode.
+            if cfg.hard_typed_emission:
+                total_lm = sum(s.get("emission_route_counts", {}).get("lm", 0)
+                               for s in samples)
+                total_copy = sum(s.get("emission_route_counts", {}).get("copy", 0)
+                                 for s in samples)
+                pack_verdict["emission_routes_pack"] = {
+                    "lm_emissions": int(total_lm),
+                    "copy_emissions": int(total_copy),
+                    "copy_fraction": (
+                        total_copy / max(total_lm + total_copy, 1)
+                    ),
+                }
             canary_history.append({
                 "step": step,
                 "pack_verdict": pack_verdict,

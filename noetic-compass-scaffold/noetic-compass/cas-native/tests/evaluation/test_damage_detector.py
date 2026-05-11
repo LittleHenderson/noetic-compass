@@ -442,6 +442,213 @@ def test_greedy_decode_trace_on_logs_per_token():
     assert found_repeat, "per-token trace should detect the loop"
 
 
+# ---------------------------------------------------------------------------
+# Architecture review Candidate C (2026-05-11) — hard typed-fiber emission
+# ---------------------------------------------------------------------------
+
+def _hard_emission_mock_fixtures(slot_argmax_value, p_copy_top_value,
+                                 copy_argmax_value=2, lm_argmax_value=5,
+                                 src_token_at_copy_pos=42,
+                                 src_mask_valid=True):
+    """Build mock tokenizer/collator/model that lets us inject a precise
+    slot_type / p_copy / lm_logits state for a single decode step.
+    Used by all 5 Candidate C tests below.
+    """
+    class _MockTok:
+        BOS_ID = 1
+        EOS_ID = 2
+        PAD_ID = 0
+        def decode(self, ids, skip_special=True):
+            return " ".join(str(i) for i in ids)
+
+    class _MockCollator:
+        def __init__(self):
+            self.tokenizer = _MockTok()
+        def __call__(self, records, device="cpu"):
+            L_src = 5
+            L_out = 4
+            # Place the target source token at copy_argmax_value position
+            src_ids = torch.zeros((1, L_src), dtype=torch.long)
+            src_ids[0, copy_argmax_value] = src_token_at_copy_pos
+            src_mask = torch.ones((1, L_src), dtype=torch.bool)
+            if not src_mask_valid:
+                src_mask[0, copy_argmax_value] = False
+            return {
+                "input_ids": torch.zeros((1, 4), dtype=torch.long),
+                "attention_mask": torch.ones((1, 4), dtype=torch.bool),
+                "cas_prefix_ids": src_ids,
+                "cas_prefix_mask": src_mask,
+                "lm_decoder_input_ids": torch.tensor([[1]], dtype=torch.long),
+                "lm_targets": torch.zeros((1, L_out), dtype=torch.long),
+                "loss_mask": torch.ones((1, L_out), dtype=torch.float32),
+                "typed_slot_positions": torch.zeros((1, L_out, 9), dtype=torch.float32),
+                "typed_slot_source": torch.full((1, L_out), -1, dtype=torch.int16),
+                "src_token_type": torch.zeros((1, L_src), dtype=torch.int8),
+            }
+
+    class _MockModel(torch.nn.Module):
+        def forward(self, batch):
+            L_out = batch["lm_decoder_input_ids"].shape[1]
+            L_src = batch["cas_prefix_ids"].shape[1]
+            # lm_logits: peaked at lm_argmax_value
+            lm_logits = torch.full((1, L_out, 100), -50.0)
+            lm_logits[..., lm_argmax_value] = 50.0
+            # slot_type_logits: peaked at slot_argmax_value
+            slot_logits = torch.full((1, L_out, 9), -50.0)
+            slot_logits[..., slot_argmax_value] = 50.0
+            # p_copy: peaked at copy_argmax_value with controllable top prob
+            p_copy = torch.full((1, L_out, L_src), (1.0 - p_copy_top_value) / max(L_src - 1, 1))
+            p_copy[..., copy_argmax_value] = p_copy_top_value
+            return {
+                "lm_logits": lm_logits,
+                "slot_type_logits": slot_logits,
+                "source_hidden": torch.zeros(1, L_src, 4),
+                "simplex_trajectory": torch.ones(1, L_src, 40) / 40.0,
+                "simplex_final": torch.ones(1, 40) / 40.0,
+                "p_copy": p_copy,
+                "copy_source_indices": torch.full((1, L_out), -1, dtype=torch.int16),
+                "decoder_hidden_state": torch.zeros(1, L_out, 4),
+            }
+
+    return _MockTok(), _MockCollator(), _MockModel()
+
+
+def test_hard_typed_emission_default_off():
+    """Default greedy_decode call must not produce emission_route_trace.
+    Per user 2026-05-11 scope: 'opt-in, default off'."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=2,  # STAGE_VAR
+        p_copy_top_value=0.95,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+    )
+    assert "emission_route_trace" not in out
+    assert "emission_route_counts" not in out
+
+
+def test_hard_typed_emission_copy_slot_emits_source_token():
+    """When slot_argmax is in {1..7} AND p_copy.max >= threshold AND the
+    source token isn't a special, hard emission emits the source token."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=2,  # STAGE_VAR
+        p_copy_top_value=0.95,
+        copy_argmax_value=3,
+        src_token_at_copy_pos=42,
+        lm_argmax_value=5,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+    )
+    # Every step should route to copy with src_token = 42
+    assert all(r == "copy" for r in out["emission_route_trace"])
+    assert all(tok_id == 42 for tok_id in out["token_ids"])
+    assert out["emission_route_counts"]["copy"] >= 1
+    assert out["emission_route_counts"]["lm"] == 0
+
+
+def test_hard_typed_emission_connective_uses_lm():
+    """slot_argmax = CONNECTIVE (0) must NEVER route to copy, even with
+    high p_copy.max. Per user: 'do not hard-copy when slot is CONNECTIVE
+    or NOETIC_PHRASE'."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=0,  # CONNECTIVE
+        p_copy_top_value=0.99,  # very confident copy
+        lm_argmax_value=7,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+    )
+    assert all(r == "lm" for r in out["emission_route_trace"])
+    assert all(tok_id == 7 for tok_id in out["token_ids"])
+    assert out["emission_route_counts"]["copy"] == 0
+
+
+def test_hard_typed_emission_noetic_phrase_uses_lm():
+    """slot_argmax = NOETIC_PHRASE (8) must NEVER route to copy."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=8,  # NOETIC_PHRASE
+        p_copy_top_value=0.99,
+        lm_argmax_value=3,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+    )
+    assert all(r == "lm" for r in out["emission_route_trace"])
+    assert all(tok_id == 3 for tok_id in out["token_ids"])
+
+
+def test_hard_typed_emission_low_confidence_falls_back_to_lm():
+    """If slot_argmax is copy-eligible BUT p_copy.max < threshold,
+    fall back to LM."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=2,  # STAGE_VAR — copy-eligible
+        p_copy_top_value=0.35,  # below default 0.5 threshold
+        lm_argmax_value=8,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+    )
+    assert all(r == "lm" for r in out["emission_route_trace"])
+    assert all(tok_id == 8 for tok_id in out["token_ids"])
+
+
+def test_hard_typed_emission_all_pad_source_falls_back():
+    """When the source position the copy points at is marked padded,
+    hard emission must NOT emit that source token. Falls back to LM."""
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=2,
+        p_copy_top_value=0.95,
+        copy_argmax_value=3,
+        src_token_at_copy_pos=42,
+        lm_argmax_value=9,
+        src_mask_valid=False,  # source position is PADDED
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+    )
+    assert all(r == "lm" for r in out["emission_route_trace"])
+    assert all(tok_id == 9 for tok_id in out["token_ids"])
+
+
+def test_hard_typed_emission_rejects_special_token_copy():
+    """If the source position holds a PAD/BOS/EOS id, hard emission
+    must reject it as a copy candidate and fall back to LM."""
+    # PAD_ID is 0 in the mock tokenizer; src_token_at_copy_pos=0 means
+    # we'd be copying a PAD.
+    tok, coll, model = _hard_emission_mock_fixtures(
+        slot_argmax_value=4,  # REGISTER_LETTER
+        p_copy_top_value=0.99,
+        src_token_at_copy_pos=0,  # PAD
+        lm_argmax_value=11,
+    )
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        model, {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        coll, tok, device=torch.device("cpu"), max_new_tokens=3,
+        hard_typed_emission=True, copy_confidence_threshold=0.5,
+    )
+    assert all(r == "lm" for r in out["emission_route_trace"])
+    assert all(tok_id == 11 for tok_id in out["token_ids"])
+
+
 def test_per_token_trace_lm_entropy_near_zero_when_peaky():
     """A heavily-peaked logit distribution should produce near-zero LM entropy."""
     class _MockTok:

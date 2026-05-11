@@ -41,6 +41,11 @@ def main() -> int:
     p.add_argument("--output-dir", required=True)
     p.add_argument("--device", default="cuda:0")
     p.add_argument("--canary-max-new-tokens", type=int, default=128)
+    p.add_argument("--hard-typed-emission", action="store_true",
+                   help="Candidate C: apply hard typed-fiber emission "
+                        "during greedy_decode + decode_ablations 'full' "
+                        "mode comparisons. TF analysis unaffected.")
+    p.add_argument("--copy-confidence-threshold", type=float, default=0.5)
     args = p.parse_args()
 
     out_dir = Path(args.output_dir)
@@ -119,15 +124,23 @@ def main() -> int:
             model, rec, collator, tokenizer,
             device=device, max_new_tokens=args.canary_max_new_tokens,
             trace=True, topk=5,
+            hard_typed_emission=args.hard_typed_emission,
+            copy_confidence_threshold=args.copy_confidence_threshold,
         )
-        traces.append({
+        entry = {
             "id": rec.get("id"),
             "category": rec.get("v1mix_grammar_category_or_error_class"),
             "target_text": rec.get("reply_text"),
             "generated_text": result["text"],
             "n_tokens_generated": result["n_tokens_generated"],
             "per_token_trace": result.get("per_token_trace", []),
-        })
+        }
+        if args.hard_typed_emission:
+            entry["emission_route_trace"] = result.get("emission_route_trace", [])
+            entry["emission_route_counts"] = result.get(
+                "emission_route_counts", {"lm": 0, "copy": 0}
+            )
+        traces.append(entry)
     (out_dir / "per_token_trace.json").write_text(
         json.dumps(traces, indent=2, ensure_ascii=False, default=str),
         encoding="utf-8",
