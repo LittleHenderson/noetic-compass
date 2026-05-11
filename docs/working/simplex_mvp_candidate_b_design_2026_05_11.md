@@ -70,9 +70,26 @@ Damage verdict can still be kill on other axes (notation_leak, generic_collapse 
 
 If B1 kills → Candidate B falsified at stage 1 → next move is Candidate D (SSM decoder) or architectural review reopens. Do NOT tune lr / weight_decay / batch_size on B1 (anti-tuning rule).
 
+### B1 result — qualified pass (recorded 2026-05-11)
+
+B1 completed at 20:46Z. Trajectory: mean_severity 3.64 (step 250) → 1.23 (step 750) → 1.82 (post-training). Both rpm_chain canaries produced 128 tokens and 250+ chars; no triviality / early-EOS / catastrophic-loop signatures.
+
+**Literal binary gate:** `repeated_phrase_loop.found = true` on `canary_rpm_chain_002` due to the article `"a"` repeated 3 consecutive times mid-prose (`"... name a a a and evaluative judgment ..."`).
+
+**Spirit-of-gate read:** function-word stutter inside otherwise structured rpm prose. Not the Candidate-C loop attractor (C had `"to" × 13` consuming whole outputs). Macro-structure was preserved (`Let stage<X>_<n>_<dddd> name ... stage<Y>_<n>_<dddd> name ...`) and stage-var-shaped identifiers emerged WITHOUT slot loss active.
+
+**Decision (user, 2026-05-11):** Qualified pass — proceed to B2. The gate exception is recorded; B1 is not re-run; the anti-tuning rule remains in force. The measurement was the detector being more sensitive than the failure it was meant to catch, not the model coasting on a flattering metric.
+
+**B2 regression guard (added 2026-05-11 per user audit):** if any of the following occur at B2 post-training canary, kill B immediately:
+- Catastrophic loop returns — any phrase_loop with `count ≥ 5` and a non-function-word phrase, OR `count ≥ 8` of any phrase (real attractor like Candidate C's `"to" × 13`).
+- Triviality regression — any rpm_chain with `n_tokens_generated < 50` OR `text_len < 100` (B1 had 128/250+; B2 must not regress this).
+- Prose regression — pack-level `mean_severity` higher than B1's post-training value of 1.82.
+
+This guard ensures B2's added slot loss doesn't re-destabilize what B1 established.
+
 ### B2 — + slot loss, still no copy
 
-**Goal:** the slot gate develops on a stable LM head and sustains STAGE_VAR on rpm_chain inputs, AND does not misfire on non-rpm_chain inputs (no leakage).
+**Goal:** the slot gate develops on a stable LM head and sustains STAGE_VAR on rpm_chain inputs, AND does not misfire on non-rpm_chain inputs (no leakage), AND does not regress B1's prose stability.
 
 Only the rpm_chain canaries have stage_vars in their target text (`canary_rpm_chain_001` and `canary_rpm_chain_002` — 2 records). Other canary categories (fractal_sequence, recipe, meta_logic, state_literal, binary_composition, cross_register_omega, invalid_fractal) have no stage_vars in their targets. A slot head firing STAGE_VAR on those inputs is **leakage**, not progress.
 
@@ -80,6 +97,7 @@ Only the rpm_chain canaries have stage_vars in their target text (`canary_rpm_ch
 - Neither rpm_chain canary shows slot reaching STAGE_VAR (slot id 2) for at least 5 consecutive positions during the identifier-span region.
 - Either rpm_chain canary has slot_trace_counts where CONNECTIVE (slot 0) accounts for >90% of positions (same fingerprint Candidate C showed).
 - **Leakage:** any non-rpm_chain canary record has slot_trace containing STAGE_VAR for ≥3 consecutive positions. The slot gate has overgeneralized — it's firing STAGE_VAR on inputs that shouldn't have any.
+- **B1 regression guard (recorded above):** catastrophic loop (phrase_loop `count ≥ 5` with non-function-word phrase, OR `count ≥ 8` any phrase); triviality regression (any rpm_chain `n_tokens < 50` OR `text_len < 100`); pack-level `mean_severity > 1.82` (B1's post-training value).
 
 **VALIDATE if all of the following:**
 - At least 1 of 2 rpm_chain canaries shows slot reaching STAGE_VAR for ≥5 consecutive positions covering the identifier span.
