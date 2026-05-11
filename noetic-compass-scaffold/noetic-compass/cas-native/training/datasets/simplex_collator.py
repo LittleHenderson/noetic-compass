@@ -405,9 +405,20 @@ class SimplexCollator(NativeNLCollator):
                 if src_pos is not None:
                     target_slots.append((j, src_type_by_pos[src_pos], src_pos))
 
-        # ----- Stage 6 v7 multi-token-span derivations (STAGE_VAR + OMEGA) -----
-        # Strict exact-subsequence matching only. No fuzzy alignment.
-        # STAGE_VAR span match (e.g. stageA0_5_0296 → reply contains literal)
+        # ----- Stage 6 v7 → Path D (2026-05-11) — STAGE_VAR copy only -----
+        # User 2026-05-11: OMEGA suffix copy dropped from MVP because v1c
+        # tokenizer is path-dependent (source 'Ω_X' char-decomposes while
+        # target 'X' BPE-merges; exact subseq match fails). Multi-target-to-
+        # one-source mapping would weaken pointer-copy semantics right
+        # before Stage 7. OMEGA becomes a v1.1 copy-fiber task. The
+        # find_omega_suffix_spans helper is kept in the module for future
+        # use but not wired into _derive_anchors.
+        #
+        # STAGE_VAR span match is the only multi-token-span derivation in
+        # the Path D MVP. It hits exactly the failure mode that v1e Phase
+        # C broke (rpm_chain stage identifier preservation) and aligns
+        # cleanly on the v1c tokenizer (verified in Stage 6 v7: 56 valid
+        # copy slots on 3 rpm_chain records).
         stage_spans = find_stage_var_spans(src_token_strings)
         for (s_start, s_end) in stage_spans:
             # Tag source positions with STAGE_VAR
@@ -423,26 +434,6 @@ class SimplexCollator(NativeNLCollator):
                     for offset in range(s_end - s_start):
                         target_slots.append(
                             (t_start + offset, SLOT_STAGE_VAR, s_start + offset)
-                        )
-
-        # OMEGA-suffix span match (e.g. Ω_translation_59 → reply contains
-        # translation_59). Strict match — fires only when the tokenizer
-        # produces the same token-id subsequence on both sides. v7 will
-        # surface the empirical yield.
-        omega_spans = find_omega_suffix_spans(src_token_strings)
-        for (omega_start, suffix_start, suffix_end) in omega_spans:
-            # Tag the full Ω_X source span with OMEGA
-            for k in range(omega_start, suffix_end):
-                src_token_types.append((k, SLOT_OMEGA))
-            src_anchors.append((omega_start, 0))
-            # Match the SUFFIX (not Ω_ prefix) in target
-            if r_ids:
-                suffix_subseq = c_ids[suffix_start:suffix_end]
-                t_start = find_subsequence(r_ids, suffix_subseq)
-                if t_start is not None:
-                    for offset in range(suffix_end - suffix_start):
-                        target_slots.append(
-                            (t_start + offset, SLOT_OMEGA, suffix_start + offset)
                         )
 
         if not src_anchors and not target_slots:

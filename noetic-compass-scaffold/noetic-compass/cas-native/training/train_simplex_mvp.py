@@ -92,6 +92,10 @@ class SimplexTrainConfig:
     logging_steps: int = 100
     sample_every_steps: int = 0          # 0 = disabled
     sample_record_index: int = 0
+    # Stage 7 additions (2026-05-11): real v1c tokenizer + n-step override
+    tokenizer_path: str = ""
+    english_bpe_path: str = ""
+    n_steps: int = 0
     # Loss weights — populated by ablation mode after CLI parse
     loss_weights: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_LOSS_WEIGHTS))
 
@@ -130,6 +134,15 @@ def build_parser() -> argparse.ArgumentParser:
                    help="Index of the in-flight sample record; in production "
                         "use rotating sample selection per "
                         "feedback_rotating_sample_prompts_required.")
+    # Stage 7 (2026-05-11): real v1c tokenizer + 1000-step pre-flight.
+    p.add_argument("--tokenizer-path", type=str, default="",
+                   help="Path to v1c tokenizer.json. When set, used in place of "
+                        "the from-records synthetic tokenizer.")
+    p.add_argument("--english-bpe-path", type=str, default="",
+                   help="Optional path to english_bpe.json for composed tokenizer.")
+    p.add_argument("--n-steps", type=int, default=0,
+                   help="If > 0, run this many steps (Stage 7). Overrides default "
+                        "loop length from --limit // --batch-size.")
     return p
 
 
@@ -158,6 +171,9 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
         logging_steps=args.logging_steps,
         sample_every_steps=args.sample_every_steps,
         sample_record_index=args.sample_record_index,
+        tokenizer_path=args.tokenizer_path,
+        english_bpe_path=args.english_bpe_path,
+        n_steps=args.n_steps,
     )
     # Apply ablation overrides on top of defaults
     overrides = ABLATION_OVERRIDES.get(cfg.ablation, {})
@@ -857,7 +873,15 @@ def run_cpu_smoke(
     device = torch.device(cfg.device)
     torch.manual_seed(cfg.seed)
 
-    tokenizer = build_tokenizer_for_smoke(records)
+    # Stage 7 (2026-05-11): real v1c tokenizer when --tokenizer-path is
+    # set. Otherwise from-records (Stage 5 CPU smoke shape).
+    if cfg.tokenizer_path:
+        from cas_native.training.tokenizer import HybridCASTokenizer
+        tokenizer = HybridCASTokenizer.load(cfg.tokenizer_path)
+        if cfg.english_bpe_path:
+            tokenizer = tokenizer.with_english_bpe(cfg.english_bpe_path)
+    else:
+        tokenizer = build_tokenizer_for_smoke(records)
     collator = SimplexCollator(tokenizer, enable_simplex_aux=True)
 
     vocab_size = int(tokenizer.vocab_size)
@@ -1093,7 +1117,11 @@ def main(argv: Optional[list[str]] = None) -> int:
     # Stratified subsample to ensure all categories represented per
     # execution plan §Stage 5 ("≥1 record per grammar category").
     stratified = stratified_sample(records, target_n=cfg.limit or 200, seed=cfg.seed)
-    n_steps = (cfg.limit or 200) // max(cfg.batch_size, 1)
+    # Stage 7 (2026-05-11): --n-steps overrides for the 1000-step pre-flight.
+    if cfg.n_steps and cfg.n_steps > 0:
+        n_steps = cfg.n_steps
+    else:
+        n_steps = (cfg.limit or 200) // max(cfg.batch_size, 1)
     smoke = run_cpu_smoke(cfg, stratified, output_dir=out_dir, n_steps=n_steps)
     return 0 if smoke["verdict"] in ("PASS", "WARN") else 1
 
