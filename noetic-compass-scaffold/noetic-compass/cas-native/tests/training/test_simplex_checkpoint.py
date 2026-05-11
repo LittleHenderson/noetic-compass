@@ -157,6 +157,60 @@ def test_save_load_round_trip_optimizer_state(tmp_path):
     )
 
 
+def test_warm_start_loads_model_only_skips_optimizer(tmp_path):
+    """Candidate B warm-start contract (2026-05-11):
+    load_checkpoint(..., optimizer=None) must load model weights but leave
+    the caller's fresh optimizer state untouched. Required for staged
+    training where each stage gets a fresh optimizer per its new loss
+    landscape, but inherits prior-stage model weights.
+    """
+    model_a = _tiny_decoder()
+    cfg = _tiny_cfg()
+    optimizer_a = optim.Adam(model_a.parameters(), lr=1e-4)
+    # Populate optimizer state with one step's worth of moments
+    target = sum(p.sum() for p in model_a.parameters())
+    target.backward()
+    optimizer_a.step()
+
+    ckpt = tmp_path / "warm_start.pt"
+    save_checkpoint(
+        str(ckpt), model=model_a, optimizer=optimizer_a, step=42, cfg=cfg,
+        tokenizer_info=_tokenizer_info_stub(),
+    )
+    saved_weights = {k: v.clone() for k, v in model_a.state_dict().items()}
+
+    # Fresh "stage 2" model + optimizer — these are the equivalent of a
+    # new training run that calls --load-model-from on the stage-1 ckpt.
+    model_b = _tiny_decoder()
+    optimizer_b = optim.Adam(model_b.parameters(), lr=1e-4)
+    # Confirm pre-load state: optimizer_b has NO moments, weights differ
+    assert len(optimizer_b.state_dict()["state"]) == 0
+    pre_load_weights = {k: v.clone() for k, v in model_b.state_dict().items()}
+    any_differ = any(
+        not torch.allclose(pre_load_weights[k], saved_weights[k], atol=1e-6)
+        for k in saved_weights
+    )
+    assert any_differ, "test premise: fresh model B should differ from A"
+
+    # Warm-start: model only, no optimizer, no RNG.
+    load_checkpoint(
+        str(ckpt), model=model_b, optimizer=None,
+        restore_rng=False,
+    )
+
+    # Model weights must now match the saved snapshot exactly
+    for k, expected in saved_weights.items():
+        got = model_b.state_dict()[k]
+        assert torch.allclose(got, expected, atol=1e-6), (
+            f"warm-start failed to load weight {k}"
+        )
+
+    # Optimizer_b must STILL be fresh — no Adam moments inherited
+    assert len(optimizer_b.state_dict()["state"]) == 0, (
+        "warm-start must NOT restore optimizer state (Candidate B contract)"
+    )
+
+
 def test_save_writes_manifest_json_sidecar(tmp_path):
     """A .manifest.json side-car must exist next to the .pt file."""
     model = _tiny_decoder()

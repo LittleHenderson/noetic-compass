@@ -162,6 +162,12 @@ def test_ablation_full_keeps_all_weights():
         ("lm_fr",      ("slot_type", "copy", "phrase_bias_aux")),
         ("lm_slot",    ("fr",        "copy", "phrase_bias_aux")),
         ("lm_fr_slot", ("copy",      "phrase_bias_aux")),
+        # Candidate B (2026-05-11): staged-training preset aliases.
+        # b1 ≡ lm_fr (LM + FR only)
+        # b2 ≡ lm_fr_slot (+ slot, still no copy)
+        # b3 ≡ full (+ copy; intended to be paired with --hard-typed-emission)
+        ("b1",         ("slot_type", "copy", "phrase_bias_aux")),
+        ("b2",         ("copy",      "phrase_bias_aux")),
     ],
 )
 def test_ablation_zeros_correct_weights(ablation, zeroed_keys):
@@ -218,6 +224,71 @@ def test_parse_args_applies_ablation_overrides():
     assert cfg.loss_weights["copy"] == 0.0
     assert cfg.loss_weights["lm"] == 1.0
     assert cfg.loss_weights["fr"] == 1.0
+
+
+# ---------------------------------------------------------------------------
+# 5b. Architecture review Candidate B (2026-05-11)
+#     Staged-training presets b1 / b2 / b3 + --load-model-from warm-start
+# ---------------------------------------------------------------------------
+
+def test_b1_preset_only_lm_and_fr_live():
+    """B1 stage trains LM + FR only — slot/copy/phrase_bias_aux all zero."""
+    cfg = parse_args([
+        "--data-path", "x", "--output-dir", "y", "--ablation", "b1",
+    ])
+    assert cfg.loss_weights["lm"] == 1.0
+    assert cfg.loss_weights["fr"] == 1.0
+    assert cfg.loss_weights["slot_type"] == 0.0
+    assert cfg.loss_weights["copy"] == 0.0
+    assert cfg.loss_weights["phrase_bias_aux"] == 0.0
+
+
+def test_b2_preset_adds_slot_keeps_copy_off():
+    """B2 stage adds slot supervision; copy + phrase_bias_aux stay off."""
+    cfg = parse_args([
+        "--data-path", "x", "--output-dir", "y", "--ablation", "b2",
+    ])
+    assert cfg.loss_weights["lm"] == 1.0
+    assert cfg.loss_weights["fr"] == 1.0
+    assert cfg.loss_weights["slot_type"] == 1.0
+    assert cfg.loss_weights["copy"] == 0.0
+    assert cfg.loss_weights["phrase_bias_aux"] == 0.0
+
+
+def test_b3_preset_equals_full_loss_weights():
+    """B3 stage adds copy + phrase_bias_aux back; equivalent to 'full'."""
+    cfg = parse_args([
+        "--data-path", "x", "--output-dir", "y", "--ablation", "b3",
+    ])
+    for k, v in DEFAULT_LOSS_WEIGHTS.items():
+        assert cfg.loss_weights[k] == v, f"b3 should keep {k} at {v}"
+
+
+def test_load_model_from_flag_threads_into_config():
+    """--load-model-from <path> must thread into SimplexTrainConfig.load_model_from."""
+    cfg = parse_args([
+        "--data-path", "x", "--output-dir", "y",
+        "--load-model-from", "/some/ckpt.pt",
+    ])
+    assert cfg.load_model_from == "/some/ckpt.pt"
+
+
+def test_load_model_from_defaults_to_empty():
+    """Default behavior: --load-model-from omitted → empty string → no warm-start."""
+    cfg = parse_args([
+        "--data-path", "x", "--output-dir", "y",
+    ])
+    assert cfg.load_model_from == ""
+
+
+def test_b1_b2_b3_appear_in_ablation_choices():
+    """CLI parser must accept b1/b2/b3 as --ablation choices."""
+    parser = build_parser()
+    for stage in ("b1", "b2", "b3"):
+        args = parser.parse_args([
+            "--data-path", "x", "--output-dir", "y", "--ablation", stage,
+        ])
+        assert args.ablation == stage
 
 
 # ---------------------------------------------------------------------------

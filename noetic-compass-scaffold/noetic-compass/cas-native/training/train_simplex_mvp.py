@@ -64,6 +64,16 @@ ABLATION_OVERRIDES: dict[str, dict[str, float]] = {
     "lm_fr":      {"slot_type": 0.0, "copy": 0.0, "phrase_bias_aux": 0.0},
     "lm_slot":    {"fr": 0.0,        "copy": 0.0, "phrase_bias_aux": 0.0},
     "lm_fr_slot": {"copy": 0.0,      "phrase_bias_aux": 0.0},
+    # Architecture review Candidate B (2026-05-11): staged training to test
+    # whether joint loss pressure from step 1 collapses the slot gate to
+    # CONNECTIVE before slot routing can stabilize. Each stage warm-starts
+    # from the prior stage's final checkpoint via --load-model-from.
+    #   b1: LM + FR only — establish a baseline LM head that doesn't loop.
+    #   b2: + slot loss  — let the slot gate develop on top of stable LM.
+    #   b3: + copy loss  — add copy supervision; pair with --hard-typed-emission.
+    "b1":         {"slot_type": 0.0, "copy": 0.0, "phrase_bias_aux": 0.0},
+    "b2":         {"copy": 0.0,      "phrase_bias_aux": 0.0},
+    "b3":         {},
 }
 
 
@@ -109,6 +119,11 @@ class SimplexTrainConfig:
     # Architecture review Candidate C (2026-05-11): hard typed-fiber emission
     hard_typed_emission: bool = False
     copy_confidence_threshold: float = 0.5
+    # Architecture review Candidate B (2026-05-11): staged-training warm-start.
+    # When set, the trainer loads model weights (NOT optimizer state, NOT RNG)
+    # from the prior stage's checkpoint before training begins. Step counter
+    # and optimizer state are fresh per stage.
+    load_model_from: str = ""
     # Loss weights — populated by ablation mode after CLI parse
     loss_weights: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_LOSS_WEIGHTS))
 
@@ -196,6 +211,15 @@ def build_parser() -> argparse.ArgumentParser:
                    help="Minimum p_copy.max for hard-emission to fire. "
                         "Below the threshold, decode falls back to LM. "
                         "Default 0.5. Only used when --hard-typed-emission set.")
+    # Architecture review Candidate B (2026-05-11): staged-training warm-start
+    p.add_argument("--load-model-from", type=str, default="",
+                   help="Path to a prior-stage checkpoint (.pt) whose model "
+                        "weights should be warm-started into this run. "
+                        "Optimizer state, step counter, and RNG are NOT "
+                        "restored — they reset per stage. Used for Candidate B "
+                        "staged training: b1 ckpt → b2 warm-start, "
+                        "b2 ckpt → b3 warm-start. Default empty = train from "
+                        "fresh init.")
     return p
 
 
@@ -236,6 +260,7 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
         no_tie_lm_head=args.no_tie_lm_head,
         hard_typed_emission=args.hard_typed_emission,
         copy_confidence_threshold=args.copy_confidence_threshold,
+        load_model_from=args.load_model_from,
     )
     # Apply ablation overrides on top of defaults
     overrides = ABLATION_OVERRIDES.get(cfg.ablation, {})
@@ -1033,6 +1058,32 @@ def run_cpu_smoke(
     ).to(device)
     fisher_rao_loss = FisherRaoLoss().to(device)
     optimizer = optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay)
+
+    # Candidate B (2026-05-11): warm-start from a prior-stage checkpoint
+    # when --load-model-from is set. Only model weights are loaded;
+    # optimizer state, RNG state, and step counter all stay fresh per
+    # stage (the loss landscape changes between stages and stale Adam
+    # moments would mis-condition the new stage). The checkpoint's
+    # architecture must match the current build — same d_model, depths,
+    # vocab — or load_state_dict raises.
+    if cfg.load_model_from:
+        from cas_native.training.simplex_checkpoint import load_checkpoint
+        warm = load_checkpoint(
+            cfg.load_model_from,
+            model=model,
+            optimizer=None,        # do NOT restore optimizer
+            map_location=str(device),
+            strict=True,
+            restore_rng=False,     # do NOT restore RNG
+        )
+        print(json.dumps({
+            "event": "warm_start_loaded",
+            "checkpoint_path": cfg.load_model_from,
+            "source_step": warm.get("step"),
+            "source_ablation": warm.get("ablation_mode"),
+            "source_saved_at_utc": warm.get("saved_at_utc"),
+            "this_stage_ablation": cfg.ablation,
+        }, ensure_ascii=False), flush=True)
 
     rng = _random.Random(cfg.seed)
     loss_history: list[dict[str, float]] = []
