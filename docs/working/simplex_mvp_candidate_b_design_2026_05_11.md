@@ -51,49 +51,136 @@ Each stage:
 
 ### B1 — LM + FR only
 
-**Goal:** establish that the LM head can produce non-looping prose when not under joint pressure from slot/copy.
+**Goal:** establish that the LM head can produce non-trivial, non-looping prose when not under joint pressure from slot/copy.
 
-**KILL if** any rpm_chain canary sample produces a phrase-loop (repeated_phrase_loop.found = true) in the post-training canary. If even the simplest joint signal can't be removed without prose collapse, the framework's LM head is the load-bearing problem — staged training won't fix it, and Candidate B is falsified before B2 starts.
+**KILL if any of the following on the post-training canary:**
+- Any rpm_chain canary sample produces a phrase-loop (`repeated_phrase_loop.found = true`).
+- Any rpm_chain canary has `n_tokens_generated < 30` (early-EOS collapse — guard against Candidate A's "trivial clean" artifact where an empty or 2-token output passes the damage detector by virtue of having nothing to score).
+- Any rpm_chain canary has `text_len < 30` characters.
+- Any rpm_chain canary has `hit_eos = true` AND `n_tokens_generated < 50` (the model gave up before producing meaningful output).
 
-**VALIDATE if** rpm_chain canaries produce coherent prose (whatever it says about CAS), no looping. Damage verdict can still be kill on other axes (notation_leak, generic_collapse) — we're only gating on prose stability here.
+If even the simplest joint signal can't be removed without prose collapse OR the model trivializes its outputs to game the damage detector, the LM head is the load-bearing problem — staged training won't fix it.
+
+**VALIDATE if all rpm_chain canaries:**
+- Produce ≥30 generated tokens AND ≥30 characters of text.
+- No `repeated_phrase_loop.found`.
+- Either no `hit_eos` OR `hit_eos` with ≥50 tokens (eos after a real attempt is fine).
+
+Damage verdict can still be kill on other axes (notation_leak, generic_collapse via length_ratio mismatch, stage_var_corruption from absent STAGE_VAR slot signal) — we're only gating on prose ACTIVITY here, not prose quality.
 
 If B1 kills → Candidate B falsified at stage 1 → next move is Candidate D (SSM decoder) or architectural review reopens. Do NOT tune lr / weight_decay / batch_size on B1 (anti-tuning rule).
 
 ### B2 — + slot loss, still no copy
 
-**Goal:** the slot gate develops on a stable LM head and sustains STAGE_VAR on rpm_chain inputs.
+**Goal:** the slot gate develops on a stable LM head and sustains STAGE_VAR on rpm_chain inputs, AND does not misfire on non-rpm_chain inputs (no leakage).
 
-**KILL if** the post-training canary `slot_type_trace` is mostly CONNECTIVE across rpm_chain records — specifically, ≥8 of 11 records show slot_trace_counts where slot 0 (CONNECTIVE) accounts for >90% of positions. That's the same fingerprint Candidate C showed; staged training didn't fix the attractor.
+Only the rpm_chain canaries have stage_vars in their target text (`canary_rpm_chain_001` and `canary_rpm_chain_002` — 2 records). Other canary categories (fractal_sequence, recipe, meta_logic, state_literal, binary_composition, cross_register_omega, invalid_fractal) have no stage_vars in their targets. A slot head firing STAGE_VAR on those inputs is **leakage**, not progress.
 
-**VALIDATE if** ≥3 of 11 records (and at least 1 of 2 rpm_chain records) show slot reaching STAGE_VAR (slot id 2) for at least 5 consecutive positions in identifier spans.
+**KILL if any of the following on the post-training canary:**
+- Neither rpm_chain canary shows slot reaching STAGE_VAR (slot id 2) for at least 5 consecutive positions during the identifier-span region.
+- Either rpm_chain canary has slot_trace_counts where CONNECTIVE (slot 0) accounts for >90% of positions (same fingerprint Candidate C showed).
+- **Leakage:** any non-rpm_chain canary record has slot_trace containing STAGE_VAR for ≥3 consecutive positions. The slot gate has overgeneralized — it's firing STAGE_VAR on inputs that shouldn't have any.
 
-If B2 kills → B falsified at stage 2 → the slot gate has a deeper structural problem (training schedule isn't the issue). Next move: surface for architectural review on slot head design.
+**VALIDATE if all of the following:**
+- At least 1 of 2 rpm_chain canaries shows slot reaching STAGE_VAR for ≥5 consecutive positions covering the identifier span.
+- Neither rpm_chain canary has slot_trace_counts with CONNECTIVE >90%.
+- No non-rpm_chain canary record shows sustained STAGE_VAR slot output (zero leakage).
+
+If B2 kills due to under-firing on rpm_chain → slot gate has a deeper structural problem (training schedule isn't the issue). If B2 kills due to leakage → slot loss over-generalized; next move is slot supervision review (anchor masking / negative samples), not retraining at the same schedule. Either way, **anti-tuning rule applies**: do not re-run B2 with different lr / slot weight to make the gate pass.
 
 ### B3 — + copy + hard typed emission
 
-**Goal:** hard routing fires across multiple records (not just 1/11 as in C), STAGE_VAR identifier recovery materially improves, kill count drops below C's baseline.
+**Goal:** hard routing fires on BOTH rpm_chain records (not just 1/11 as in C), STAGE_VAR identifier recovery materially improves on rpm_chain specifically, hard_full beats full on rpm_chain, pack-level damage drops below C's baseline.
 
-**Eval gate:** the same battery Candidate C used.
-- `emission_routes_pack.copy_fraction` materially above C's 1.63% at step 1000 (target: ≥10%, i.e. hard routing fires on at least multiple records).
-- `decode_ablations.json`: `hard_full` outperforms `full` (lower mean_severity, fewer kills, more clean).
-- Per-record slot_type_trace shows STAGE_VAR sustained across multiple rpm_chain records.
-- TF analysis A: `canonical_stage_vars_in_argmax` ≥ 1 (any improvement over C's 0/4).
+Only rpm_chain canaries (2 of 11) have stage_vars to copy. Pack-wide `copy_fraction` is the wrong denominator: even perfect routing would put the pack-wide fraction at roughly the ratio of rpm_chain identifier tokens to total emitted tokens (≈5-8%, not anywhere near 100%). The gate must be rpm_chain-scoped.
 
-**VALIDATE if** all four hold. **FALSIFY if** copy_fraction stays ~zero (same pattern as C) or hard_full is no better than full.
+**Eval gate (read from canary_history step=1000 + decode_ablations.json + tf_canary_report.json):**
 
-If B3 validates → surface for direction on next-step architecture (productionize, scale, or move to extended training).
-If B3 falsifies → Candidate B doesn't solve the slot gate either; next move is reopened architectural review (Candidate D / different decoder topology / SSM).
+**1. rpm_chain-specific hard-route firing.**
+- Both `canary_rpm_chain_001` and `canary_rpm_chain_002` show `emission_route_counts.copy ≥ 10` (Candidate C had this on rpm_chain_002 only).
+- At least one rpm_chain record reconstructs a canonical-shaped stage_var identifier in `generated_text` (substring match against the target's stage_var pattern, modulo a small Levenshtein tolerance for trailing-digit-stutter).
+- Non-rpm_chain records: `emission_route_counts.copy = 0` (no leakage — hard routing should not fire on inputs without copy targets).
+
+**2. TF capability improvement.**
+- `tf_canary_report.json.summary.canonical_stage_vars_in_argmax ≥ 1` (Candidate C was 0/4; ANY improvement is real progress).
+- `canonical_recovery_rate > 0` (was 0.0 across diagnostic, A, and C).
+
+**3. Decode ablations: hard_full beats full on rpm_chain.**
+- `decode_ablations.json.per_record` rpm_chain entries: `hard_full.damage_severity` strictly less than `full.damage_severity` on at least one of two rpm_chain records.
+- Pack-level: `hard_full.mean_severity < full.mean_severity` (C had hard_full marginally worse than full — this must invert).
+
+**4. Pack-level damage improvement.**
+- Canary at step 1000 `by_verdict.kill` count drops below Candidate C's baseline of 5/11. Target: ≤3/11 kill.
+
+**VALIDATE if all four gates hold.**
+
+**FALSIFY if any of:**
+- Either rpm_chain record has `copy ≤ 5` (hard routing didn't take on inputs where it should).
+- Any non-rpm_chain record has `copy > 2` (hard routing fired where it shouldn't — leakage at decode).
+- TF analysis A still shows `canonical_stage_vars_in_argmax = 0` (no underlying capability change).
+- `hard_full.mean_severity ≥ full.mean_severity` pack-wide (routing not helping).
+
+If B3 validates → surface for direction on next-step architecture (productionize the staged-training recipe, scale, or extend training to step 2000+).
+If B3 falsifies → Candidate B doesn't solve the slot gate either; next move is reopened architectural review (Candidate D / SSM decoder / different decoder topology). **Do not retune B3** — the staged-training hypothesis itself is what's being tested.
 
 ## Launch commands
 
-The pod has the audit-fixed code from Candidate C plus the new flags. After this commit lands, sync the trainer file and launch B1.
+### Pre-launch sync — files required on pod
 
-### Sync (single file)
+Pod state from Candidate C launch is NOT guaranteed to persist (spot pods can recycle). Before every stage, verify the required files are on pod and match local. B1 and B2 need only the trainer; B3 also needs the Candidate C audit-fixed eval files.
 
+**Files required by stage:**
+
+| File | B1 | B2 | B3 |
+|---|---|---|---|
+| `cas-native/training/train_simplex_mvp.py` (has b1/b2/b3 + `--load-model-from`) | ✓ | ✓ | ✓ |
+| `cas-native/evaluation/sample_decoder.py` (hard-emission with STAGE_VAR scope + type-match) | | | ✓ |
+| `cas-native/evaluation/decode_ablations.py` (has `hard_full` mode) | | | ✓ |
+| `cas-native/evaluation/run_v7_postmortem_analyses.py` (threads hard-emission to `run_decode_ablations_pack`) | | | ✓ |
+
+**Verification (run BEFORE every stage launch):**
+
+```bash
+# Local: compute MD5 of each required file (LF-normalized for cross-platform parity)
+python -c "
+import hashlib
+for f in [
+  'noetic-compass-scaffold/noetic-compass/cas-native/training/train_simplex_mvp.py',
+  'noetic-compass-scaffold/noetic-compass/cas-native/evaluation/sample_decoder.py',
+  'noetic-compass-scaffold/noetic-compass/cas-native/evaluation/decode_ablations.py',
+  'noetic-compass-scaffold/noetic-compass/cas-native/evaluation/run_v7_postmortem_analyses.py',
+]:
+  data = open(f, 'rb').read().replace(b'\r\n', b'\n')
+  print(hashlib.md5(data).hexdigest(), f.split('/')[-1])
+"
+
+# Pod: md5sum the same files
+ssh -p 22026 -i ~/.ssh/id_ed25519 root@194.68.245.88 'cd /workspace/tksCAS/noetic-compass-scaffold/noetic-compass && md5sum \
+  cas-native/training/train_simplex_mvp.py \
+  cas-native/evaluation/sample_decoder.py \
+  cas-native/evaluation/decode_ablations.py \
+  cas-native/evaluation/run_v7_postmortem_analyses.py'
 ```
+
+If any MD5 differs from local, scp the matching files. For B1/B2 only the trainer needs to match. For B3 all four must match.
+
+### Sync command (used after a mismatch or fresh pod)
+
+```bash
+# B1/B2: trainer only
 scp -P 22026 -i ~/.ssh/id_ed25519 \
   noetic-compass-scaffold/noetic-compass/cas-native/training/train_simplex_mvp.py \
   root@194.68.245.88:/workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/training/
+
+# B3: trainer + three Candidate C audit-fixed eval files
+scp -P 22026 -i ~/.ssh/id_ed25519 \
+  noetic-compass-scaffold/noetic-compass/cas-native/training/train_simplex_mvp.py \
+  root@194.68.245.88:/workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/training/
+scp -P 22026 -i ~/.ssh/id_ed25519 \
+  noetic-compass-scaffold/noetic-compass/cas-native/evaluation/sample_decoder.py \
+  noetic-compass-scaffold/noetic-compass/cas-native/evaluation/decode_ablations.py \
+  noetic-compass-scaffold/noetic-compass/cas-native/evaluation/run_v7_postmortem_analyses.py \
+  root@194.68.245.88:/workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/evaluation/
 ```
 
 ### B1 launch
