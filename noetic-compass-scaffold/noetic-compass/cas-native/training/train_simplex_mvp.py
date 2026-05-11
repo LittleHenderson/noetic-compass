@@ -1076,6 +1076,14 @@ def run_cpu_smoke(
                 float(copy_metrics_step["copy_loss_live"].item())
                 if "copy_loss_live" in copy_metrics_step else float("nan")
             ),
+            # v7.1 fix (2026-05-11): previously omitted — Q4 criterion (d)
+            # entropy_tightens reads this from each step record; without
+            # it the Q4 evaluator sees NaN windows and fails (d) by
+            # default even when entropy IS tightening.
+            "copy_entropy_valid_mean": (
+                float(copy_metrics_step["copy_entropy_valid_mean"].item())
+                if "copy_entropy_valid_mean" in copy_metrics_step else float("nan")
+            ),
             "grad_norm_encoder": enc_norm,
             "grad_norm_decoder": dec_norm,
             "simplex_min_p": min_p,
