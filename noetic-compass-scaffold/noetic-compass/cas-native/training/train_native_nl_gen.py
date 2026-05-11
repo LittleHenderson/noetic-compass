@@ -1158,9 +1158,50 @@ def run_training(args: argparse.Namespace) -> int:
                 ],
             }))
             tokenizer_provenance["vocab_expansion"] = warm_start_log.to_dict()
-        model.load_state_dict(model_state)
+        # v1e Phase C — strict=False so aux_heads.* keys can be missing
+        # from the v1c-baseline state_dict. The expected pattern is that
+        # ALL missing keys are aux_heads.* (freshly random-init at attach
+        # time) and there are NO unexpected keys (v1c shouldn't have
+        # surplus keys the current model doesn't define).
+        load_result = model.load_state_dict(model_state, strict=False)
+        if load_result.missing_keys:
+            non_aux_missing = [
+                k for k in load_result.missing_keys if not k.startswith("aux_heads.")
+            ]
+            if non_aux_missing:
+                raise RuntimeError(
+                    "Unexpected non-aux missing keys on checkpoint load: "
+                    f"{non_aux_missing[:10]}... ({len(non_aux_missing)} total). "
+                    "The backbone or NL gen head state_dict is incomplete."
+                )
+            print(
+                f"[v1e Phase C] strict=False load OK: "
+                f"{len(load_result.missing_keys)} aux_heads.* keys initialized fresh."
+            )
+        if load_result.unexpected_keys:
+            raise RuntimeError(
+                f"Unexpected surplus keys in v1c state_dict: "
+                f"{load_result.unexpected_keys[:10]}... "
+                f"({len(load_result.unexpected_keys)} total)."
+            )
         starting_step = int(state.get("step", 0))
         starting_epoch = int(state.get("epoch", 0))
+        # v1e Phase C — when fine-tuning with aux heads from a v1c-style
+        # checkpoint whose ``starting_epoch`` >= ``args.epochs``, the
+        # epoch loop ``range(starting_epoch, args.epochs)`` would be
+        # empty and zero steps would run. Reset starting_epoch=0 so
+        # ``args.epochs`` is interpreted as the number of fine-tune
+        # epochs to add, not as an absolute target. ``global_step``
+        # stays at the resumed value so the existing ``beta_lm``
+        # curriculum stays at its v1c-trained position; the aux
+        # curriculum uses a separate counter (see training loop).
+        if bool(args.enable_aux_heads):
+            print(
+                f"[v1e Phase C] resume fine-tune kickoff: resetting "
+                f"starting_epoch {starting_epoch} -> 0 "
+                f"(global_step stays at {starting_step} for beta_lm)."
+            )
+            starting_epoch = 0
     else:
         starting_step = 0
         starting_epoch = 0
@@ -1243,30 +1284,35 @@ def run_training(args: argparse.Namespace) -> int:
                 aux_losses_dict: dict[str, float] = {}
                 aux_alpha_card_now = aux_alpha_pos_now = aux_alpha_stop_now = aux_alpha_cluster_now = 0.0
                 sum_aux_for_log = 0.0
+                # Aux curriculum uses fine-tune-relative step (0 at the
+                # start of this training run), NOT the resumed global_step,
+                # so the ramp-DOWN starts when fine-tuning starts — not
+                # already past the resumed v1c step count.
+                aux_curriculum_step = max(0, global_step - starting_step)
                 if bool(args.enable_aux_heads) and not use_fallback:
                     total_train_steps = max(
                         1, int(args.epochs) * batches_per_epoch,
                     )
                     aux_alpha_card_now = _aux_alpha_at(
-                        global_step, total_train_steps,
+                        aux_curriculum_step, total_train_steps,
                         float(args.aux_alpha_card),
                         ramp_frac=float(args.aux_curriculum_ramp_frac),
                         hold_frac=float(args.aux_curriculum_hold_frac),
                     )
                     aux_alpha_pos_now = _aux_alpha_at(
-                        global_step, total_train_steps,
+                        aux_curriculum_step, total_train_steps,
                         float(args.aux_alpha_pos),
                         ramp_frac=float(args.aux_curriculum_ramp_frac),
                         hold_frac=float(args.aux_curriculum_hold_frac),
                     )
                     aux_alpha_stop_now = _aux_alpha_at(
-                        global_step, total_train_steps,
+                        aux_curriculum_step, total_train_steps,
                         float(args.aux_alpha_stop),
                         ramp_frac=float(args.aux_curriculum_ramp_frac),
                         hold_frac=float(args.aux_curriculum_hold_frac),
                     )
                     aux_alpha_cluster_now = _aux_alpha_at(
-                        global_step, total_train_steps,
+                        aux_curriculum_step, total_train_steps,
                         float(args.aux_alpha_cluster),
                         ramp_frac=float(args.aux_curriculum_ramp_frac),
                         hold_frac=float(args.aux_curriculum_hold_frac),
@@ -1334,10 +1380,12 @@ def run_training(args: argparse.Namespace) -> int:
                 # step, if loss_lm / sum_aux < threshold, abort training.
                 # The model's LM signal is being dominated by aux losses;
                 # need to reduce α weights before continuing.
+                # Uses fine-tune-relative step (0 at start of this run)
+                # so resumed runs don't skip the check.
                 if (
                     bool(args.enable_aux_heads)
                     and int(args.aux_interference_check_step) > 0
-                    and global_step == int(args.aux_interference_check_step)
+                    and aux_curriculum_step == int(args.aux_interference_check_step)
                     and sum_aux_for_log > 0.0
                 ):
                     ratio = float(loss_lm_t.item()) / max(sum_aux_for_log, 1e-9)

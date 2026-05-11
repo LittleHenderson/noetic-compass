@@ -157,7 +157,30 @@ def load_checkpoint():
         map_location=device,
         weights_only=False,
     )
-    model.load_state_dict(state["model"])
+    # v1e Phase C — strict=False so v1e checkpoints (which carry
+    # aux_heads.* keys) load cleanly into an inference-time model that
+    # doesn't attach aux heads. Validate the only unexpected keys are
+    # aux_heads.* and no real backbone keys are missing.
+    load_result = model.load_state_dict(state["model"], strict=False)
+    if load_result.missing_keys:
+        raise RuntimeError(
+            "Eval pack model missing keys not present in checkpoint: "
+            f"{load_result.missing_keys[:10]}..."
+        )
+    if load_result.unexpected_keys:
+        non_aux_unexpected = [
+            k for k in load_result.unexpected_keys if not k.startswith("aux_heads.")
+        ]
+        if non_aux_unexpected:
+            raise RuntimeError(
+                f"Unexpected non-aux keys in checkpoint: "
+                f"{non_aux_unexpected[:10]}..."
+            )
+        print(
+            f"[eval pack] strict=False load OK: "
+            f"{len(load_result.unexpected_keys)} aux_heads.* keys discarded "
+            f"(not used at inference)."
+        )
     model.eval()
     return model, tokenizer, device
 
