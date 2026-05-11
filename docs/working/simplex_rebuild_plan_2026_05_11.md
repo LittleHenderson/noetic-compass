@@ -165,9 +165,15 @@ not engineered.
 
 ## 4. Minimum viable simplex checkpoint
 
-A buildable target that proves the architecture works WITHOUT trying
-to solve everything. Mapped to what we can ship in ~6-8 eng-weeks
-(rather than the full 10-14 weeks of the synthesis estimate).
+**MVP definition (user-confirmed 2026-05-11):** "the smallest
+simplex-based model we can build that proves whether the simplex
+architecture actually solves the failures v0/v1d/v1e could not solve."
+MVP is not the final product. It is the smallest testable architecture
+that answers: does simplex fix count/order/copy/traceability WITHOUT
+breaking v0 behavior?
+
+Mapped to what we can ship in ~5-6 eng-weeks (rather than the full
+10-14 weeks of the synthesis estimate).
 
 ### 4.1 Core architectural pieces (must-have)
 
@@ -176,9 +182,19 @@ to solve everything. Mapped to what we can ship in ~6-8 eng-weeks
 | **Δ°₃₉ encoder** | Map source CAS expression → simplex sequence in `R^40` with strict `p_k > 0` constraint. The encoder's "pooled hidden state" becomes "trajectory representative" on the simplex. | 2 |
 | **Fisher-Rao geodesic loss** | Loss term that measures the trajectory's distance from the target trajectory in Fisher-Rao metric, not just per-token cross-entropy. Encourages the model to take the right path through state space, not just hit the right tokens. | 1.5 |
 | **Typed fiber decoder** | Decoder is NOT a free LM; it's a typed-fiber projection from Δ°₃₉ coordinates to surface prose. Identifiers (Ω, stage vars, coefficients) flow through typed slots; prose connective tissue flows through a small free-form path. | 2 |
-| **Compiler-validated generation** | Every generated CAS expression must compile. Generation that produces invalid CAS is rejected and retried via Fisher-Rao trajectory adjustment. | 1 |
 
-Total: ~6.5 eng-weeks for the core.
+Total: ~5.5 eng-weeks for the core.
+
+**Explicitly NOT in MVP (per user review 2026-05-11):** compiler-validated
+generation is the wrong gate for CAS→English direction — the model
+reads CAS and emits English, it doesn't generate CAS. Compiler
+validation belongs to **v1.1 / English→CAS** work where the model
+output IS a CAS expression. The CAS→English MVP gate is
+**"source CAS must parse + generated English must pass the existing
+structural validators (fractal_repair, meta_logic_repair, etc.)"** —
+no retry loop, no new repair scaffold. Re-emerged retry mechanisms
+were the v1e Phase 3 / lever-4 failure mode and don't get a second
+attempt here under a new name.
 
 ### 4.2 What the MVP DOES NOT have (deferred to v1+)
 
@@ -203,12 +219,28 @@ Direct comparison to v0-rc1's 18/24 baseline:
   fiber decoder must respect output-length bounds inherently.
 - **Stage-variable copying clean** — same byte equality to v0 on
   rpm_chain identifier slots, ideally better on per-stage content.
-- **v0-canary baseline holds** when MVP simplex is used with
-  decoder-off mode (= v0 backbone path preserved through the
-  architectural change).
+- **v0-canary fallback holds** — the deployment wrapper can route
+  ANY request back to the archived v0-rc1 checkpoint (the v1c
+  VALIDTOK 5ep + scaffolds path), and the v0 canary still passes
+  byte-for-byte on the 24-pack against that route. This is a
+  DEPLOYMENT-LEVEL fallback (separate process, separate weights,
+  separate inference stack), NOT a "decoder-off mode" on the simplex
+  checkpoint itself. The simplex MVP is a NEW architecture; v0 is
+  always reachable by routing to the archived v0 checkpoint, not by
+  configuring the simplex model.
+- **No catastrophic category regression** (user review gate
+  2026-05-11): invalid-CAS explanations, rpm_chain identifiers,
+  and previously-green state_literal / binary_composition /
+  cross_register_omega records must NOT collapse. Specifically:
+  - records 1, 2, 4, 6, 7, 8, 23, 24 (v1c green) → must remain ≥yellow
+  - records 17, 18, 22 (v1c high-yellow/yellow non-fractal) → must remain ≥yellow
+  - records 19, 20, 21 (v1c yellow rpm_chain) → must remain ≥yellow with clean stage identifiers
+  This prevents the simplex MVP from hitting fractals while breaking
+  the things v0 already does well — the v1e Phase C damage signature.
 
 If the MVP simplex hits these targets, the architecture is proven and
-v1.1 (drives + Fractal X.Y.Z + topos reasoner) is funded. If it
+v1.1 (drives + Fractal X.Y.Z + topos reasoner + English→CAS direction
+with compiler-validated generation + CABS retrieval) is funded. If it
 misses, the simplex thesis itself is in question — at that point the
 decision is to either redesign simplex or pivot to a different
 architectural axis (more involved, e.g., a different state-space
@@ -282,43 +314,64 @@ To stay disciplined against the v1e anti-recidivism guardrails
   Phase C proved that aux gradients perturb the LM head.
 - **NOT** more SDG / cleaner corpus / one-more-epoch attempts. v1d
   proved data is not the lever.
+- **NOT** a retry/repair scaffold (user review 2026-05-11). The
+  "compiler-validated generation + retry via Fisher-Rao adjustment"
+  line was removed from §4.1 because it smelled like a re-skinned
+  rpm_retry / fractal_decoder fail-closed loop — the same retry
+  pattern the v1e levers exhausted. Compiler validation belongs to
+  v1.1 (English→CAS direction), and even there it must not be a
+  retry loop on top of the simplex output.
+- **NOT** a same-checkpoint v0 fallback. The v0 fallback is a
+  deployment-level route to the archived v0-rc1 checkpoint, not a
+  flag on the simplex checkpoint. The simplex model produces
+  simplex outputs only; v0 outputs come from the v0 checkpoint.
 
 The simplex rebuild is a NEW architecture trained from scratch on
 the same corpus, with the typed geometry constraint built in. It
 is NOT v1e iteration.
 
-## 7. What I need from user before proceeding
+## 7. User review verdict + applied edits (2026-05-11)
 
-Three sign-off questions:
+User reviewed the initial plan draft and approved direction
+conditional on three edits. All three have been applied:
 
-1. **Does the simplex MVP scope (§4.1: encoder + Fisher-Rao loss +
-   typed fiber decoder + compiler-validated generation, ~6.5
-   eng-weeks) match your appetite?** Or do you want a tighter MVP
-   (e.g., drop compiler-validated generation, just shipping
-   trajectory + decoder)?
+| User edit | Where in this doc |
+|---|---|
+| Drop compiler-validated generation from MVP (CAS→English model doesn't generate CAS; compiler validation belongs to v1.1 English→CAS work; also smells like another retry scaffold) | §4.1 — MVP now 3 components (encoder + Fisher-Rao loss + typed-fiber decoder), ~5.5 eng-weeks. Compiler validation explicitly moved to v1.1. Retry-loop pattern added to §6 NOT-doing list. |
+| Fix fallback wording — v0 fallback is a deployment-level route to the archived v0 checkpoint, NOT a "decoder-off mode" on the simplex checkpoint | §4.3 — gate rewritten as deployment-level fallback. §6 NOT-doing list adds "NOT a same-checkpoint v0 fallback." |
+| Add category-regression guard to promotion gates — invalid explanations, rpm_chain identifiers, and prior green records must not collapse | §4.3 — explicit "No catastrophic category regression" gate naming records 1/2/4/6/7/8/23/24 (must remain ≥yellow), 17/18/22, and 19/20/21 (with clean stage identifiers). |
 
-2. **Does the deferred list (§4.2: CABS, 7-D drives, topos reasoner,
-   Fractal X.Y.Z) match your sequencing?** Or do you want any of
-   these in the MVP?
+Additional clarifications baked in from the same review:
+- MVP definition tightened (§4 preamble): "smallest simplex-based model that proves whether simplex actually solves the failures v0/v1d/v1e could not solve."
+- CABS deferral verified correct; no MVP creep.
 
-3. **Is the promotion gate (§4.3: ≥18/24 acceptable+, ≥20/35
-   fractal full seq_match, no truncations, identifier copy clean,
-   v0-canary holds in fallback mode) correct?** Or do you want
-   stricter / looser thresholds?
+**Plan is now sign-off-ready** per user's stated verdict:
+> "Approve simplex planning after these edits: (1) Drop
+> compiler-validated generation from MVP. (2) Clarify v0 fallback as
+> deployment-level archived v0 route. (3) Add category-regression
+> guard to promotion gates. Then proceed to the 6-agent R&D recon
+> for concrete build specs. No code or GPU yet."
 
-After your sign-off, I would:
+## 7.1 Next action: 6-agent R&D recon
 
-a. Run a **6-agent R&D recon** (Wave-1 specialists × 4 architectural
-   pieces + Wave-2 critics × 2) to produce concrete build specs for
-   the four MVP components. Same pattern as the v1e Phase 1B
-   6-agent R&D team that worked well.
-b. Write a Stage-by-stage execution plan with explicit user-gates
-   for: CPU smoke, RunPod first epoch, MVP eval, promotion gate.
-c. Surface that plan for your sign-off before any code change.
+Mirrors the v1e Phase 1B pattern that worked (Tasks #134 design synthesis):
 
-Total elapsed before any code change: ~2 days of plan work.
-Total elapsed before any GPU spend: ~3 eng-weeks of implementation
-(encoder + decoder + losses) + 1 eng-week of CPU smoke.
+- **Wave 1 (parallel, 3 specialist `Plan` agents):**
+  - Specialist A: Δ°₃₉ encoder — open-simplex parameterization, `p_k > 0` enforcement, masked-mean pool → trajectory representative, gradient stability through the simplex projection
+  - Specialist B: Fisher-Rao trajectory loss — geodesic formulation, per-step vs per-trajectory framing, interaction with cross-entropy, numerical stability at simplex boundaries
+  - Specialist C: typed-fiber decoder — slot-typed output structure (Ω, stage_vars, coefficients, register letters as typed slots), prose-connective-tissue path, training data alignment, surface emission rules
+- **Wave 2 (parallel, 2 critic agents):**
+  - Maximalist: argue for unified end-to-end training of all three components in one optimization
+  - Minimalist: argue for staged training (encoder → freeze → decoder), citing the v1e Phase C lesson that joint gradients perturb representations
+- **Synthesis**: design doc for each MVP component, integration test plan, CPU smoke spec.
+
+After recon: stage-by-stage execution plan with explicit user-gates
+for CPU smoke, RunPod first epoch, MVP eval, promotion gate. Surfaced
+for sign-off before any code change.
+
+**Total elapsed before any code change:** ~2-3 days of plan/recon work.
+**Total elapsed before any GPU spend:** ~3-4 eng-weeks of implementation
+(encoder + decoder + losses) + ~1 eng-week of CPU smoke.
 
 ## 8. Where this fits in durable project memory
 
