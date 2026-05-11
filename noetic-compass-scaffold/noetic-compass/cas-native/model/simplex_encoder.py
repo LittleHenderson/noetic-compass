@@ -137,6 +137,13 @@ class _BidirectionalSelfAttention(nn.Module):
             key_mask = attention_mask[:, None, None, :].to(dtype=torch.bool)
             attn_logits = attn_logits.masked_fill(~key_mask, float("-inf"))
         attn = F.softmax(attn_logits, dim=-1)
+        # Fail-closed for all-PAD source: softmax over all -inf produces NaN
+        # for every (batch, head, query) row whose entire key sequence is
+        # padded. Without this guard, downstream source_hidden becomes NaN
+        # and corrupts the simplex_trajectory + decoder cross-attention.
+        # User-named "all-PAD source copy path fail-closed" (Stage 2) +
+        # Stage 3 "full loss assembly stability" require this.
+        attn = torch.nan_to_num(attn, nan=0.0, posinf=0.0, neginf=0.0)
         attn = self.dropout(attn)
         out = torch.matmul(attn, v)                       # (B, H, L, head_dim)
         out = out.transpose(1, 2).contiguous().view(B, L, -1)

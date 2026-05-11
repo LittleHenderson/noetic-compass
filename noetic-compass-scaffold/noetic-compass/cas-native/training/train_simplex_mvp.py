@@ -27,17 +27,26 @@ import sys
 import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Iterable, Optional
 
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
-# Bound to repository import path
+# Bound to repository import path. When invoked as a script (vs imported by
+# pytest), bootstrap the ``cas_native`` package alias so absolute imports
+# like ``from cas_native.model.simplex_encoder import …`` resolve.
+import types as _types
 _THIS_FILE = Path(__file__).resolve()
 _CAS_NATIVE = _THIS_FILE.parent.parent
-if str(_CAS_NATIVE) not in sys.path:
-    sys.path.insert(0, str(_CAS_NATIVE))
+_PROJECT_ROOT = _CAS_NATIVE.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+if "cas_native" not in sys.modules:
+    _pkg = _types.ModuleType("cas_native")
+    _pkg.__file__ = str(_CAS_NATIVE / "__init__.py")
+    _pkg.__path__ = [str(_CAS_NATIVE)]
+    sys.modules["cas_native"] = _pkg
 
 
 # Loss-weight defaults per build-spec §5. Flat weights, no curriculum.
@@ -183,14 +192,28 @@ def build_simplex_mvp_model(cfg: SimplexTrainConfig, *, vocab_size: int, vocab_s
             self.decoder = TypedFiberDecoder(dec_cfg)
 
         def forward(self, batch: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
-            enc_out = self.encoder(batch["cas_prefix_ids"], attention_mask=batch.get("cas_prefix_mask"))
+            # Fail-closed source synthesis when the collator emits no CAS at all
+            # (every record had empty cas_expression → cas_prefix_ids=None).
+            # Build a single-PAD source with attention_mask all-False so the
+            # encoder treats it as an all-PAD batch; nan_to_num in self-
+            # attention keeps source_hidden finite, and the decoder's cross-
+            # attention sees a valid (B, 1) KV with mask-False everywhere.
+            cas_prefix_ids = batch.get("cas_prefix_ids")
+            cas_prefix_mask = batch.get("cas_prefix_mask")
+            if cas_prefix_ids is None:
+                B = batch["input_ids"].shape[0]
+                device = batch["input_ids"].device
+                cas_prefix_ids = torch.zeros((B, 1), dtype=torch.long, device=device)
+                cas_prefix_mask = torch.zeros((B, 1), dtype=torch.bool, device=device)
+
+            enc_out = self.encoder(cas_prefix_ids, attention_mask=cas_prefix_mask)
             dec_out = self.decoder(
                 decoder_input_ids=batch["lm_decoder_input_ids"],
                 source_hidden=enc_out["source_hidden"],
                 simplex_trajectory=enc_out["simplex_trajectory"],
-                src_ids=batch["cas_prefix_ids"],
+                src_ids=cas_prefix_ids,
                 src_token_type=batch.get("src_token_type"),
-                src_padding_mask=batch.get("cas_prefix_mask"),
+                src_padding_mask=cas_prefix_mask,
                 target_typed_positions=(
                     batch["typed_slot_positions"].argmax(dim=-1)
                     if "typed_slot_positions" in batch else None
@@ -226,11 +249,21 @@ def compute_losses(
     denom = loss_mask.sum().clamp_min(1.0)
     loss_lm = lm_per_tok.sum() / denom
 
-    # L_FR: anchor-masked squared geodesic distance on Δ°₃₉
-    if "fr_target_path" in batch and "fr_target_mask" in batch:
-        loss_fr = fisher_rao_loss(
-            out["simplex_trajectory"], batch["fr_target_path"], batch["fr_target_mask"],
-        )
+    # L_FR: anchor-masked squared geodesic distance on Δ°₃₉.
+    # When the encoder synthesizes a single-PAD source (all records had
+    # empty cas_expression), simplex_trajectory has L_src=1 while the
+    # collator-derived fr_target_path has L_src_max=0. In that case there
+    # are no anchors and L_FR is correctly zero.
+    fr_target = batch.get("fr_target_path")
+    fr_mask = batch.get("fr_target_mask")
+    simplex = out["simplex_trajectory"]
+    if (
+        fr_target is not None
+        and fr_mask is not None
+        and fr_target.shape == simplex.shape
+        and fr_mask.shape == simplex.shape[:2]
+    ):
+        loss_fr = fisher_rao_loss(simplex, fr_target, fr_mask)
     else:
         loss_fr = torch.zeros((), device=lm_logits.device)
 
@@ -332,12 +365,216 @@ def emit_train_progress(
             f.write(line + "\n")
 
 
-def main(argv: Optional[list[str]] = None) -> int:
-    """Skeleton entry point.
+def load_jsonl_records(data_path: str, limit: Optional[int] = None) -> list[dict[str, Any]]:
+    """Load up to ``limit`` records from a JSONL file. Stage 3 helper.
 
-    Stage 1 only verifies that the trainer is importable + parses CLI.
-    Real model construction + DataLoader assembly + training loop lands in
-    Stage 3 once unit tests in Stage 2 force correctness of the components.
+    Used by the integration smoke path; the full DataLoader assembly lands
+    in Stage 8 with the long-run trainer.
+    """
+    path = Path(data_path)
+    records: list[dict[str, Any]] = []
+    if not path.exists():
+        return records
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                records.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+            if limit is not None and len(records) >= limit:
+                break
+    return records
+
+
+def synthetic_records(n: int = 4) -> list[dict[str, Any]]:
+    """Build ``n`` toy records for integration tests when no data file is
+    available. Records satisfy the NativeNLCollator schema."""
+    out: list[dict[str, Any]] = []
+    samples = [
+        ("I feel drawn to this idea", "It speaks to me strongly", "^2^E_{F6}|f", "f"),
+        ("I am repelled by this", "I cannot stomach it",           "^3^P_{F2}|A", "A"),
+        ("This resonates",         "It struck a chord",            "^4^C_{F4}|T", "T"),
+        ("Doing this repeatedly",  "Practice makes perfect",       "^7^O_{F3}|E", "E"),
+    ]
+    for i in range(n):
+        prompt, reply, cas, reg = samples[i % len(samples)]
+        out.append({
+            "id": f"smoke_rec_{i:03d}",
+            "trace_id": f"smoke_trace_{i:03d}",
+            "schema_version": "native_nl.v1",
+            "tier": "tier3",
+            "prompt_text": prompt,
+            "reply_text": reply,
+            "cas_expression": cas,
+            "noetic": cas.split("^")[1][:1].join(["^"]) if "^" in cas else "^0",
+            "domain": "E",
+            "drive": "F6",
+            "register": reg,
+            "v1mix_task_type": "smoke",
+        })
+    return out
+
+
+def build_tokenizer_for_smoke(records: list[dict[str, Any]]):
+    """Build a HybridCASTokenizer fit on the smoke records. Stage 3 only —
+    production trainer (Stage 8) loads the frozen v1c tokenizer."""
+    from cas_native.training.tokenizer import HybridCASTokenizer
+    return HybridCASTokenizer.from_records(records, freeze=True)
+
+
+def compute_grad_norm(params: Iterable[torch.nn.Parameter]) -> float:
+    """L2 norm over a parameter group's gradients (zero if no grads yet)."""
+    total = 0.0
+    for p in params:
+        if p.grad is not None:
+            total += float(p.grad.detach().norm(2).item()) ** 2
+    return total ** 0.5
+
+
+def run_integration_step(
+    cfg: SimplexTrainConfig,
+    records: list[dict[str, Any]],
+    *,
+    output_path: Optional[Path] = None,
+) -> dict[str, Any]:
+    """One forward + backward + optim step on a tiny sample.
+
+    Returns a dict with all telemetry — used by both the CLI smoke path and
+    the Stage 4 integration tests. Keeps the v0 trainer untouched.
+
+    Implements the Stage 3 integration boundary:
+      1. assemble model + simplex collator + 5-term loss
+      2. one-step CPU forward/backward
+      3. gradient flow checked per-group
+      4. train_progress JSON emitted with full telemetry
+      5. ablation modes switch loss weights correctly
+
+    Kill-switch per plan §Stage 3: NaN at integration → halt; surface to user.
+    """
+    from cas_native.training.datasets.simplex_collator import SimplexCollator
+    from cas_native.training.fisher_rao_loss import FisherRaoLoss
+    import torch.optim as optim
+
+    device = torch.device(cfg.device)
+    torch.manual_seed(cfg.seed)
+
+    tokenizer = build_tokenizer_for_smoke(records)
+    collator = SimplexCollator(tokenizer, enable_simplex_aux=True)
+    batch = collator(records, device=device)
+    if batch is None:
+        raise RuntimeError("collator returned None on smoke records — cannot run integration step")
+
+    vocab_size = int(tokenizer.vocab_size)
+    vocab_size_english = int(tokenizer.vocab_size)
+    model = build_simplex_mvp_model(cfg, vocab_size=vocab_size, vocab_size_english=vocab_size_english).to(device)
+    fisher_rao_loss = FisherRaoLoss().to(device)
+    optimizer = optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay)
+
+    # ------------------------------------------------------------------
+    # Forward
+    # ------------------------------------------------------------------
+    t_start = time.time()
+    optimizer.zero_grad(set_to_none=True)
+    out = model(batch)
+    total, loss_parts = compute_losses(
+        out, batch, fisher_rao_loss=fisher_rao_loss, weights=cfg.loss_weights,
+    )
+
+    # NaN guard — kill-switch per plan §Stage 3
+    if not torch.isfinite(total):
+        raise RuntimeError(
+            f"NaN/Inf in total loss after forward; loss parts: {loss_parts}"
+        )
+
+    # ------------------------------------------------------------------
+    # Backward + optim
+    # ------------------------------------------------------------------
+    total.backward()
+
+    # Compute per-group grad norms BEFORE clipping (so the clip itself is
+    # observable downstream).
+    enc_params = list(model.encoder.parameters())
+    dec_params = list(model.decoder.parameters())
+    grad_norm_encoder = compute_grad_norm(enc_params)
+    grad_norm_decoder = compute_grad_norm(dec_params)
+
+    if cfg.grad_clip and cfg.grad_clip > 0:
+        torch.nn.utils.clip_grad_norm_(model.parameters(), cfg.grad_clip)
+    optimizer.step()
+
+    elapsed_sec = time.time() - t_start
+
+    # ------------------------------------------------------------------
+    # Telemetry
+    # ------------------------------------------------------------------
+    fr_metrics = dict(fisher_rao_loss.last_metrics)
+    # Add encoder-side simplex telemetry per build-spec §5
+    with torch.no_grad():
+        simplex = out["simplex_trajectory"]
+        # Shannon entropy per position, mean over batch+positions
+        entropy = -(simplex * simplex.clamp_min(1e-12).log()).sum(dim=-1).mean()
+        fr_metrics["simplex_entropy_mean"] = entropy.detach()
+        fr_metrics["simplex_min_p"] = simplex.min().detach()
+
+    extras = {
+        "ablation": cfg.ablation,
+        "loss_weights_active": cfg.loss_weights,
+        "vocab_size": vocab_size,
+        "batch_size": int(batch["input_ids"].shape[0]),
+        "L_src": int(batch["cas_prefix_ids"].shape[1])
+                 if isinstance(batch.get("cas_prefix_ids"), torch.Tensor) else 0,
+        "L_out": int(batch["lm_targets"].shape[1])
+                 if isinstance(batch.get("lm_targets"), torch.Tensor) else 0,
+    }
+
+    emit_train_progress(
+        output_path=output_path,
+        epoch=0,
+        batch_in_epoch=1,
+        batches_per_epoch=1,
+        global_step=1,
+        loss_parts=loss_parts,
+        fr_metrics=fr_metrics,
+        elapsed_sec=elapsed_sec,
+        batches_per_sec=(1.0 / elapsed_sec) if elapsed_sec > 0 else 0.0,
+        eta_epoch_min=0.0,
+        grad_norm_encoder=grad_norm_encoder,
+        grad_norm_decoder=grad_norm_decoder,
+        lr_now=cfg.lr,
+        extras=extras,
+    )
+
+    return {
+        "loss_total": float(loss_parts["loss_total"].item()),
+        "loss_parts": {k: float(v.item()) for k, v in loss_parts.items()},
+        "fr_metrics": {
+            k: float(v.item()) if isinstance(v, torch.Tensor) else float(v)
+            for k, v in fr_metrics.items()
+        },
+        "grad_norm_encoder": grad_norm_encoder,
+        "grad_norm_decoder": grad_norm_decoder,
+        "elapsed_sec": elapsed_sec,
+        "extras": extras,
+        "model": model,
+        "batch": batch,
+        "out": out,
+    }
+
+
+def main(argv: Optional[list[str]] = None) -> int:
+    """Stage 3 entry point: integration wiring.
+
+    Behavior:
+      --smoke-test: load N records (or synthesize), run 1 forward+backward,
+        emit train_progress JSON to stdout + ``trainer_log.jsonl``, exit 0.
+
+      Full training: not yet wired (Stage 8). Falls through to the
+      manifest-only path so the CLI surface stays stable.
+
+    NaN at any loss term halts with non-zero exit per plan §Stage 3.
     """
     cfg = parse_args(argv)
     out_dir = Path(cfg.output_dir)
@@ -348,12 +585,38 @@ def main(argv: Optional[list[str]] = None) -> int:
         "config": asdict(cfg),
         "loss_weights_active": cfg.loss_weights,
         "ablation": cfg.ablation,
-        "note": "Stage 1 skeleton — full training loop lands in Stage 3.",
     }
     (out_dir / "trainer_manifest.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8",
     )
     print(json.dumps(manifest, ensure_ascii=False, sort_keys=True), flush=True)
+
+    if cfg.smoke_test:
+        records = load_jsonl_records(cfg.data_path, limit=cfg.smoke_records)
+        if not records:
+            records = synthetic_records(cfg.smoke_records)
+        try:
+            result = run_integration_step(
+                cfg, records[: cfg.smoke_records],
+                output_path=out_dir / "trainer_log.jsonl",
+            )
+        except RuntimeError as exc:
+            print(json.dumps({"event": "trainer_halt", "reason": str(exc)}, ensure_ascii=False), flush=True)
+            return 1
+        smoke_summary = {
+            "event": "smoke_test_done",
+            "ok": True,
+            "loss_total": result["loss_total"],
+            "loss_parts": result["loss_parts"],
+            "grad_norm_encoder": result["grad_norm_encoder"],
+            "grad_norm_decoder": result["grad_norm_decoder"],
+        }
+        print(json.dumps(smoke_summary, ensure_ascii=False, sort_keys=True), flush=True)
+        return 0
+
+    # Full training run not wired in Stage 3 (per execution plan §Stage 3 +
+    # user-named "no training loop expansion beyond the integration test
+    # path"). Stage 8 wires the full training loop.
     return 0
 
 
