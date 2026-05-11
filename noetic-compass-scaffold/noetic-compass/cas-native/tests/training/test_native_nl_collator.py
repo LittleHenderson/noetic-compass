@@ -6,7 +6,11 @@ import pytest
 import torch
 
 from cas_native.training.datasets.native_nl_collator import (
+    DEFAULT_AUX_C_MAX,
+    DEFAULT_AUX_K_MAX,
     DEFAULT_REGISTER_TO_ID,
+    LABEL_IGNORE_INDEX,
+    NUM_NOETICS,
     NativeNLCollator,
 )
 from cas_native.training.tokenizer import HybridCASTokenizer
@@ -439,3 +443,196 @@ def test_mixed_length_cas_prefix_pads_with_pad_id():
             else:
                 # This is the leakage cell — PAD without a mask = real token
                 assert int(cas_tensor[i, j].item()) == tok.PAD_ID
+
+
+# ---------------------------------------------------------------------------
+# v1e Phase C — aux label derivation tests
+# ---------------------------------------------------------------------------
+
+def _make_aux_tokenizer() -> HybridCASTokenizer:
+    """Tokenizer enriched with English fragments the aux tests need."""
+    tok = HybridCASTokenizer()
+    for w in [
+        "the", "a", "an", "it", "and", "or", "of", "to", "in",
+        "then", "rubs", "wrong", "way", "muscle", "memory", "popped",
+        "into", "mind", "drawn", "averse", "averted", "struck", "chord",
+        "shaped", "by", "experience", "paying", "attention", "groove",
+        "breaking", "down", "triggered", "thought", "I", "feel", "this",
+        "idea", "speaks", "me", "two", "clusters", "noetics",
+    ]:
+        tok.fit_text(w)
+    tok.freeze()
+    return tok
+
+
+def _record_with(cas: str, reply: str, prompt: str = "test prompt") -> dict:
+    return {
+        "id": "aux_test",
+        "trace_id": "aux_trace",
+        "prompt_text": prompt,
+        "reply_text": reply,
+        "cas_expression": cas,
+        "register": "T",
+    }
+
+
+def test_aux_labels_disabled_by_default():
+    """When enable_aux_labels=False (default), batch contains NONE of the
+    9 aux keys. Existing trainers see no behavior change."""
+    tok = _make_aux_tokenizer()
+    coll = NativeNLCollator(tok)
+    batch = coll(
+        [_record_with(cas="^3^P", reply="averse to it")],
+        device="cpu",
+    )
+    assert batch is not None
+    for key in ("aux_K_target", "aux_pos_targets", "aux_stop_targets",
+                "aux_cluster_mh", "aux_K_sample_weight",
+                "aux_pos_sample_weight", "aux_stop_sample_weight",
+                "aux_cluster_mask", "aux_cluster_sample_wt"):
+        assert key not in batch, "aux key leaked when disabled: " + key
+
+
+def test_aux_labels_enabled_emits_all_9_keys():
+    """When enable_aux_labels=True, batch contains all 9 aux tensor keys
+    with the expected shapes."""
+    tok = _make_aux_tokenizer()
+    coll = NativeNLCollator(tok, enable_aux_labels=True, aux_k_max=8, aux_c_max=4)
+    batch = coll(
+        [_record_with(cas="Phi<3:7>", reply="rubs the wrong way then muscle memory")],
+        device="cpu",
+    )
+    assert batch is not None
+    assert batch["aux_K_target"].shape == (1,)
+    assert batch["aux_K_sample_weight"].shape == (1,)
+    assert batch["aux_pos_targets"].shape == (1, 8)
+    assert batch["aux_pos_sample_weight"].shape == (1,)
+    assert batch["aux_stop_targets"].ndim == 2
+    assert batch["aux_stop_targets"].shape[0] == 1
+    assert batch["aux_stop_sample_weight"].shape == batch["aux_stop_targets"].shape
+    assert batch["aux_cluster_mh"].shape == (1, 4, NUM_NOETICS)
+    assert batch["aux_cluster_mask"].shape == (1, 4)
+    assert batch["aux_cluster_sample_wt"].shape == (1,)
+
+
+def test_aux_K_target_for_fractal_record():
+    """Fractal record: aux_K_target=K, sample_weight=1.0. Non-fractal:
+    target=ignore_index, sample_weight=0.0."""
+    tok = _make_aux_tokenizer()
+    coll = NativeNLCollator(tok, enable_aux_labels=True, aux_k_max=10)
+    batch = coll(
+        [
+            _record_with(cas="Phi<3:7>", reply="rubs the wrong way then muscle memory"),
+            _record_with(cas="^2^E_{F6}|f", reply="I am drawn to it"),
+        ],
+        device="cpu",
+    )
+    assert int(batch["aux_K_target"][0].item()) == 2
+    assert float(batch["aux_K_sample_weight"][0].item()) == 1.0
+    assert float(batch["aux_K_sample_weight"][1].item()) == 0.0
+    assert int(batch["aux_K_target"][1].item()) == LABEL_IGNORE_INDEX
+
+
+def test_aux_pos_targets_for_fractal_record():
+    """Per-position targets match source k_values; positions past K_actual
+    are ignore_index."""
+    tok = _make_aux_tokenizer()
+    coll = NativeNLCollator(tok, enable_aux_labels=True, aux_k_max=8)
+    batch = coll(
+        [_record_with(cas="Phi<3:7>", reply="rubs the wrong way then muscle memory")],
+        device="cpu",
+    )
+    pos = batch["aux_pos_targets"][0].tolist()
+    assert pos[0] == 3
+    assert pos[1] == 7
+    assert all(v == LABEL_IGNORE_INDEX for v in pos[2:])
+
+
+def test_aux_stop_targets_non_fractal_only_eos_is_stop():
+    """Non-fractal record: stop_target=0 for reply token positions,
+    only the EOS-slot position has stop_target=1."""
+    tok = _make_aux_tokenizer()
+    coll = NativeNLCollator(tok, enable_aux_labels=True)
+    batch = coll(
+        [_record_with(cas="^2^E_{F6}|f", reply="I feel drawn to this idea")],
+        device="cpu",
+    )
+    stop = batch["aux_stop_targets"][0].tolist()
+    sw = batch["aux_stop_sample_weight"][0].tolist()
+    last_idx = max(i for i, w in enumerate(sw) if w > 0.0)
+    assert stop[last_idx] == 1
+
+
+def test_aux_stop_targets_fractal_boundary_lands_inside_reply():
+    """Fractal record: stop_target=0 for the prefix containing the
+    expected indicators, then stop_target=1 for the trailing positions."""
+    tok = _make_aux_tokenizer()
+    coll = NativeNLCollator(tok, enable_aux_labels=True)
+    batch = coll(
+        [_record_with(
+            cas="Phi<3:7>",
+            reply="rubs the wrong way then muscle memory and a thought",
+        )],
+        device="cpu",
+    )
+    stop = batch["aux_stop_targets"][0].tolist()
+    sw = batch["aux_stop_sample_weight"][0].tolist()
+    valid = [t for t, w in zip(stop, sw) if w > 0.0]
+    assert 0 in valid
+    assert 1 in valid
+    last_valid_idx = max(i for i, w in enumerate(sw) if w > 0.0)
+    first_one_idx = min(
+        i for i, (t, w) in enumerate(zip(stop, sw))
+        if t == 1 and w > 0.0
+    )
+    assert first_one_idx < last_valid_idx, (
+        "fractal stop boundary should land before EOS"
+    )
+
+
+def test_aux_cluster_for_meta_logic_record():
+    """A meta-logic record has multi-hot cluster targets + sample_wt=1.0;
+    non-meta-logic records have all-zero multi-hot + sample_wt=0.0."""
+    tok = _make_aux_tokenizer()
+    coll = NativeNLCollator(tok, enable_aux_labels=True, aux_c_max=4)
+    batch = coll(
+        [
+            _record_with(
+                cas="PartitionOf(Noetics, NoeticCluster{^5}, NoeticCluster{^1, ^2, ^3})",
+                reply="two clusters of noetics",
+            ),
+            _record_with(
+                cas="Phi<3:7>",
+                reply="rubs the wrong way then muscle memory",
+            ),
+        ],
+        device="cpu",
+    )
+    mh = batch["aux_cluster_mh"]
+    mask = batch["aux_cluster_mask"]
+    sw = batch["aux_cluster_sample_wt"]
+
+    assert float(sw[0].item()) == 1.0
+    assert bool(mask[0, 0].item()) is True
+    assert bool(mask[0, 1].item()) is True
+    assert bool(mask[0, 2].item()) is False
+    assert float(mh[0, 0, 5].item()) == 1.0
+    for j in range(10):
+        if j != 5:
+            assert float(mh[0, 0, j].item()) == 0.0
+    for j in (1, 2, 3):
+        assert float(mh[0, 1, j].item()) == 1.0
+    assert float(mh[0, 1, 0].item()) == 0.0
+    assert float(mh[0, 1, 5].item()) == 0.0
+
+    assert float(sw[1].item()) == 0.0
+    assert torch.allclose(mh[1], torch.zeros_like(mh[1]))
+
+
+def test_aux_labels_default_kmax_cmax_constants():
+    """Default kmax/cmax match the AuxHeadsConfig defaults so collator
+    and heads stay in sync without manual configuration."""
+    tok = _make_aux_tokenizer()
+    coll = NativeNLCollator(tok, enable_aux_labels=True)
+    assert coll.aux_k_max == DEFAULT_AUX_K_MAX
+    assert coll.aux_c_max == DEFAULT_AUX_C_MAX

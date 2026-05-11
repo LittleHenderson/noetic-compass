@@ -21,12 +21,20 @@ each generated token back to its source record.
 
 from __future__ import annotations
 
-from typing import Any, Iterable, Sequence
+from typing import Any, Iterable, Optional, Sequence
 
 import torch
 
 
 DEFAULT_REGISTER_TO_ID: dict[str, int] = {"T": 0, "A": 1, "f": 2, "E": 3}
+
+# v1e Phase C — aux label derivation defaults. K_max and C_max must match
+# the AuxHeadsConfig the trainer attaches; if they diverge the loss
+# computation will silently mask wrong positions.
+DEFAULT_AUX_K_MAX: int = 16
+DEFAULT_AUX_C_MAX: int = 6
+NUM_NOETICS: int = 10
+LABEL_IGNORE_INDEX: int = -100
 
 
 class NativeNLCollator:
@@ -56,6 +64,9 @@ class NativeNLCollator:
         ignore_index: int = -100,
         prepend_task_token: bool = False,
         task_token_id_for: Any = None,
+        enable_aux_labels: bool = False,
+        aux_k_max: int = DEFAULT_AUX_K_MAX,
+        aux_c_max: int = DEFAULT_AUX_C_MAX,
     ) -> None:
         if not hasattr(tokenizer, "encode"):
             raise TypeError(
@@ -105,6 +116,19 @@ class NativeNLCollator:
             )
         self.task_token_id_for = task_token_id_for
 
+        # v1e Phase C — auxiliary supervision label derivation. When
+        # enabled, the collator parses each record's cas_expression at
+        # batch time via parse_fractal / parse_meta_logic and emits
+        # 9 additional tensor keys for the four aux heads. Default OFF
+        # so existing v1 / v1c / v1d trainers see no behavior change.
+        self.enable_aux_labels = bool(enable_aux_labels)
+        if int(aux_k_max) <= 0:
+            raise ValueError(f"aux_k_max must be positive; got {aux_k_max}")
+        if int(aux_c_max) <= 0:
+            raise ValueError(f"aux_c_max must be positive; got {aux_c_max}")
+        self.aux_k_max = int(aux_k_max)
+        self.aux_c_max = int(aux_c_max)
+
     # --- public API -----------------------------------------------------
 
     def __call__(
@@ -117,6 +141,14 @@ class NativeNLCollator:
 
         Returns None if the input is empty or every record fails extraction
         (so the caller can skip the step rather than crash).
+
+        When ``enable_aux_labels=True``, the returned batch additionally
+        includes v1e Phase C aux-supervision keys (``aux_K_target``,
+        ``aux_pos_targets``, ``aux_stop_targets``, ``aux_cluster_mh``,
+        plus matching ``*_sample_weight`` / ``*_mask`` keys). These are
+        derived per-record by parsing ``cas_expression`` and aligning
+        Noetic indicators in ``reply_text``; see
+        ``_derive_aux_labels_for_record``.
         """
         if not records:
             return None
@@ -127,6 +159,8 @@ class NativeNLCollator:
         register_ids: list[int] = []
         record_ids: list[str] = []
         trace_ids: list[str] = []
+        reply_texts: list[str] = []  # kept for aux label derivation
+        cas_exprs: list[str] = []
 
         for rec in records:
             prompt_text = _extract_text(rec, ("prompt_text", "prompt"))
@@ -169,6 +203,10 @@ class NativeNLCollator:
             register_ids.append(reg_id)
             record_ids.append(str(rec.get("id", "")))
             trace_ids.append(str(rec.get("trace_id", "")))
+            # Keep raw text for aux label derivation (only used when
+            # enable_aux_labels=True; cheap to retain otherwise).
+            reply_texts.append(reply_text)
+            cas_exprs.append(cas_expr or "")
 
         if not prompt_ids:
             return None
@@ -220,7 +258,7 @@ class NativeNLCollator:
 
         register_tensor = torch.tensor(register_ids, dtype=torch.long)
 
-        return {
+        batch: dict[str, Any] = {
             # forward_with_lm() kwargs
             "input_ids": input_ids.to(device_t),
             "attention_mask": attention_mask.to(device_t),
@@ -235,6 +273,174 @@ class NativeNLCollator:
             "record_ids": record_ids,
             "trace_ids": trace_ids,
         }
+
+        if self.enable_aux_labels:
+            aux_tensors = self._derive_aux_labels_batch(
+                cas_exprs=cas_exprs,
+                reply_texts=reply_texts,
+                reply_ids_list=reply_ids,
+                l_dec=l_dec,
+                device=device_t,
+            )
+            batch.update(aux_tensors)
+
+        return batch
+
+    # --- aux label derivation (v1e Phase C) -----------------------------
+
+    def _derive_aux_labels_batch(
+        self,
+        *,
+        cas_exprs: list[str],
+        reply_texts: list[str],
+        reply_ids_list: list[list[int]],
+        l_dec: int,
+        device: torch.device,
+    ) -> dict[str, Any]:
+        """Build the 9 aux-label tensors for one batch.
+
+        Lazy-imports the parsers from cas_native.inference to keep the
+        collator's import surface unchanged when aux labels are off.
+
+        Returns a dict mappable straight onto the batch:
+            aux_K_target           (B,)              long
+            aux_K_sample_weight    (B,)              float
+            aux_pos_targets        (B, K_max)        long  (-100 = ignore)
+            aux_pos_sample_weight  (B,)              float
+            aux_stop_targets       (B, L_dec)        long  (-100 = ignore)
+            aux_stop_sample_weight (B, L_dec)        float
+            aux_cluster_mh         (B, C_max, 10)    float
+            aux_cluster_mask       (B, C_max)        bool
+            aux_cluster_sample_wt  (B,)              float
+        """
+        from cas_native.inference.fractal_repair import (
+            parse_fractal,
+            extract_noetic_sequence_with_positions,
+        )
+        from cas_native.inference.meta_logic_repair import parse_meta_logic
+
+        b = len(cas_exprs)
+        k_max = self.aux_k_max
+        c_max = self.aux_c_max
+        ig = LABEL_IGNORE_INDEX
+
+        # Initialize tensors.
+        aux_K_target = torch.full((b,), ig, dtype=torch.long)
+        aux_K_sample_weight = torch.zeros((b,), dtype=torch.float)
+        aux_pos_targets = torch.full((b, k_max), ig, dtype=torch.long)
+        aux_pos_sample_weight = torch.zeros((b,), dtype=torch.float)
+        aux_stop_targets = torch.full((b, l_dec), ig, dtype=torch.long)
+        aux_stop_sample_weight = torch.zeros((b, l_dec), dtype=torch.float)
+        aux_cluster_mh = torch.zeros((b, c_max, NUM_NOETICS), dtype=torch.float)
+        aux_cluster_mask = torch.zeros((b, c_max), dtype=torch.bool)
+        aux_cluster_sample_wt = torch.zeros((b,), dtype=torch.float)
+
+        for i in range(b):
+            cas_expr = cas_exprs[i]
+            reply_text = reply_texts[i]
+            r_ids = reply_ids_list[i]
+            reply_len = len(r_ids)
+            # Decoder len for this record: reply tokens + EOS = reply_len + 1
+            rec_dec_len = reply_len + 1
+
+            # --- H_card / H_pos: fractal-derived labels ------------------
+            fractal_seq = parse_fractal(cas_expr) if cas_expr else None
+            if fractal_seq is not None:
+                k_actual = min(len(fractal_seq.k_values), k_max)
+                aux_K_target[i] = k_actual
+                aux_K_sample_weight[i] = 1.0
+                for j in range(k_actual):
+                    aux_pos_targets[i, j] = int(fractal_seq.k_values[j])
+                aux_pos_sample_weight[i] = 1.0
+            # Else: K_target stays ignore, sample weight 0 → no loss contribution.
+
+            # --- H_stop: per-decoder-position stop target ----------------
+            # Compute the token position where the LAST EXPECTED slot ends:
+            #   fractal records: align expected k against found_with_positions
+            #     in reply_text; approximate token position by char-fraction
+            #   non-fractal records: stop boundary = end of reply (EOS only)
+            stop_boundary_token_pos = self._stop_boundary_token_pos(
+                fractal_seq=fractal_seq,
+                reply_text=reply_text,
+                reply_token_len=reply_len,
+                extract_fn=extract_noetic_sequence_with_positions,
+            )
+            # stop_target = 0 for positions [0, stop_boundary_token_pos)
+            # stop_target = 1 for positions [stop_boundary_token_pos, rec_dec_len)
+            # PAD positions (>= rec_dec_len) stay ignore_index.
+            for t in range(min(rec_dec_len, l_dec)):
+                aux_stop_targets[i, t] = 1 if t >= stop_boundary_token_pos else 0
+                aux_stop_sample_weight[i, t] = 1.0
+
+            # --- H_cluster: meta-logic cluster membership ----------------
+            meta_rel = parse_meta_logic(cas_expr) if cas_expr else None
+            if meta_rel is not None and meta_rel.clusters:
+                aux_cluster_sample_wt[i] = 1.0
+                for c_idx, cluster in enumerate(meta_rel.clusters[:c_max]):
+                    for n_val in cluster.noetics:
+                        if 0 <= int(n_val) < NUM_NOETICS:
+                            aux_cluster_mh[i, c_idx, int(n_val)] = 1.0
+                    aux_cluster_mask[i, c_idx] = True
+            # Else: all zeros + sample weight 0 → no loss contribution.
+
+        return {
+            "aux_K_target": aux_K_target.to(device),
+            "aux_K_sample_weight": aux_K_sample_weight.to(device),
+            "aux_pos_targets": aux_pos_targets.to(device),
+            "aux_pos_sample_weight": aux_pos_sample_weight.to(device),
+            "aux_stop_targets": aux_stop_targets.to(device),
+            "aux_stop_sample_weight": aux_stop_sample_weight.to(device),
+            "aux_cluster_mh": aux_cluster_mh.to(device),
+            "aux_cluster_mask": aux_cluster_mask.to(device),
+            "aux_cluster_sample_wt": aux_cluster_sample_wt.to(device),
+        }
+
+    @staticmethod
+    def _stop_boundary_token_pos(
+        *,
+        fractal_seq: Any,
+        reply_text: str,
+        reply_token_len: int,
+        extract_fn: Any,
+    ) -> int:
+        """Compute the decoder-token position where ``stop_target`` flips
+        from 0 to 1 for one record.
+
+        Algorithm:
+          - Non-fractal record (``fractal_seq is None``): boundary at the
+            EOS-token position (= reply_token_len). All reply tokens are
+            "continue" (0); only the EOS slot is "stop" (1).
+          - Fractal record: align expected k_values against
+            ``extract_noetic_sequence_with_positions(reply_text)`` by
+            greedy longest-prefix matching. Take the END char position of
+            the last aligned indicator and scale to token position by
+            ``int(reply_token_len * (last_end_char / len(reply_text)))``.
+            If alignment fails (expected k sequence not fully found in
+            reply), fall back to EOS-only as for non-fractal.
+        """
+        if fractal_seq is None or not reply_text:
+            return reply_token_len
+        expected = list(fractal_seq.k_values)
+        if not expected:
+            return reply_token_len
+        # Greedy alignment of expected against found.
+        found = extract_fn(reply_text)  # list of (start, end, k)
+        ptr = 0
+        last_end_char: Optional[int] = None
+        for ek in expected:
+            while ptr < len(found) and found[ptr][2] != int(ek):
+                ptr += 1
+            if ptr >= len(found):
+                # Expected k not found — fall back to EOS-only boundary.
+                return reply_token_len
+            last_end_char = found[ptr][1]
+            ptr += 1
+        if last_end_char is None:
+            return reply_token_len
+        text_len = max(1, len(reply_text))
+        token_pos = int(reply_token_len * (last_end_char / text_len))
+        # Clamp to [0, reply_token_len] inclusive.
+        return max(0, min(token_pos, reply_token_len))
 
     # --- internals ------------------------------------------------------
 

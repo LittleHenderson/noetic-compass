@@ -65,6 +65,124 @@ if "cas_native" not in sys.modules:
 from cas_native.training.native_nl_gen_curriculum import BetaScheduler, compute_beta
 
 
+# v1e Phase C aux-heads support (imported lazily inside run_training when
+# --enable-aux-heads is set, to keep the trainer's import surface unchanged
+# for callers that don't use aux heads).
+AUX_LABEL_IGNORE_INDEX = -100
+
+
+def _aux_alpha_at(
+    step: int,
+    total_steps: int,
+    base: float,
+    *,
+    ramp_frac: float = 0.30,
+    hold_frac: float = 0.60,
+) -> float:
+    """v1e Phase C curriculum: ramps DOWN from 2× base to base.
+
+    - step in [0, ramp_frac·total]: α = 2 · base
+    - step in (ramp_frac·total, hold_frac·total): linear decay 2·base → base
+    - step in [hold_frac·total, total]: α = base
+
+    Matches design doc §4 "force the encoder to commit to structural
+    representation early, then let LM loss dominate."
+    """
+    if total_steps <= 0:
+        return float(base)
+    ramp_steps = ramp_frac * total_steps
+    hold_steps = hold_frac * total_steps
+    if step <= ramp_steps:
+        return 2.0 * float(base)
+    if step >= hold_steps:
+        return float(base)
+    span = max(hold_steps - ramp_steps, 1.0)
+    progress = (step - ramp_steps) / span
+    return float(base) * (2.0 - progress)
+
+
+def _compute_aux_losses(
+    *,
+    outputs: dict[str, Any],
+    batch: dict[str, Any],
+) -> dict[str, torch.Tensor]:
+    """Compute the 4 aux losses + their unscaled sum.
+
+    Returns a dict with keys:
+      ``loss_card``, ``loss_pos``, ``loss_stop``, ``loss_cluster``:
+        unscaled scalar tensors, ready for the curriculum-scaled
+        weighted sum.
+
+    Sample weights (``aux_K_sample_weight``, ``aux_pos_sample_weight``,
+    ``aux_cluster_sample_wt``) gate per-record contributions so non-
+    fractal records contribute zero card/pos loss and non-meta-logic
+    records contribute zero cluster loss. ``aux_stop_sample_weight``
+    is per-position; PAD positions (where target == ignore_index)
+    also drop out automatically via cross_entropy's ignore_index.
+    """
+    # --- H_card ---
+    card_logits = outputs["card_logits"]  # (B, K_max+1)
+    card_targets = batch["aux_K_target"]  # (B,)
+    card_weights = batch["aux_K_sample_weight"]  # (B,)
+    card_per = nn.functional.cross_entropy(
+        card_logits, card_targets, reduction="none",
+        ignore_index=AUX_LABEL_IGNORE_INDEX,
+    )
+    card_denom = card_weights.sum() + 1e-9
+    loss_card = (card_per * card_weights).sum() / card_denom
+
+    # --- H_pos ---
+    pos_logits = outputs["pos_logits"]  # (B, K_max, num_noetics)
+    pos_targets = batch["aux_pos_targets"]  # (B, K_max)
+    pos_weights = batch["aux_pos_sample_weight"]  # (B,)
+    bsz, k_max, n_noe = pos_logits.shape
+    pos_flat = nn.functional.cross_entropy(
+        pos_logits.reshape(-1, n_noe),
+        pos_targets.reshape(-1),
+        reduction="none",
+        ignore_index=AUX_LABEL_IGNORE_INDEX,
+    ).reshape(bsz, k_max)
+    pos_per = pos_flat.sum(dim=1) / float(k_max)  # mean over K positions
+    pos_denom = pos_weights.sum() + 1e-9
+    loss_pos = (pos_per * pos_weights).sum() / pos_denom
+
+    # --- H_stop ---
+    stop_logits = outputs["stop_logits"]  # (B, L_dec, 2)
+    stop_targets = batch["aux_stop_targets"]  # (B, L_dec)
+    stop_weights = batch["aux_stop_sample_weight"]  # (B, L_dec)
+    bsz_s, l_dec, _ = stop_logits.shape
+    stop_flat = nn.functional.cross_entropy(
+        stop_logits.reshape(-1, 2),
+        stop_targets.reshape(-1),
+        reduction="none",
+        ignore_index=AUX_LABEL_IGNORE_INDEX,
+    ).reshape(bsz_s, l_dec)
+    stop_denom = stop_weights.sum() + 1e-9
+    loss_stop = (stop_flat * stop_weights).sum() / stop_denom
+
+    # --- H_cluster ---
+    cluster_logits = outputs["cluster_logits"]  # (B, C_max, num_noetics)
+    cluster_mh = batch["aux_cluster_mh"]  # (B, C_max, num_noetics)
+    cluster_mask = batch["aux_cluster_mask"]  # (B, C_max) bool
+    cluster_w = batch["aux_cluster_sample_wt"]  # (B,)
+    cluster_bce = nn.functional.binary_cross_entropy_with_logits(
+        cluster_logits, cluster_mh, reduction="none",
+    )  # (B, C_max, num_noetics)
+    cluster_per_cluster = cluster_bce.mean(dim=2) * cluster_mask.float()  # (B, C_max)
+    # Sum clusters per record, normalize by mask count
+    mask_count = cluster_mask.float().sum(dim=1).clamp_min(1.0)  # (B,)
+    cluster_per_record = cluster_per_cluster.sum(dim=1) / mask_count
+    cluster_denom = cluster_w.sum() + 1e-9
+    loss_cluster = (cluster_per_record * cluster_w).sum() / cluster_denom
+
+    return {
+        "loss_card": loss_card,
+        "loss_pos": loss_pos,
+        "loss_stop": loss_stop,
+        "loss_cluster": loss_cluster,
+    }
+
+
 CODE_VERSION = "v0.1.0"
 CHECKPOINT_SCHEMA_VERSION = "checkpoint.v1"
 TRAIN_EVENT_SCHEMA_VERSION = "train_event.v1"
@@ -919,7 +1037,36 @@ def run_training(args: argparse.Namespace) -> int:
             max_cas_prefix_len=int(args.max_cas_prefix_len),
             prepend_task_token=prepend_task_token,
             task_token_id_for=task_token_id_for_callback,
+            enable_aux_labels=bool(args.enable_aux_heads),
+            aux_k_max=int(args.aux_k_max),
+            aux_c_max=int(args.aux_c_max),
         )
+
+        # v1e Phase C — conditionally attach aux heads. Default OFF
+        # keeps the model byte-identical to the pre-Phase-C path.
+        if bool(args.enable_aux_heads):
+            from cas_native.model.aux_heads import (
+                AuxHeadsConfig, build_aux_heads,
+            )
+            aux_cfg = AuxHeadsConfig(
+                d_model=int(args.d_model),
+                k_max=int(args.aux_k_max),
+                c_max=int(args.aux_c_max),
+            )
+            aux_heads_module = build_aux_heads(aux_cfg).to(device)
+            model.attach_aux_heads(aux_heads_module)
+            print(
+                "[v1e Phase C] aux heads attached: K_max={} C_max={} alphas={}".format(
+                    aux_cfg.k_max, aux_cfg.c_max,
+                    {
+                        "card": float(args.aux_alpha_card),
+                        "pos": float(args.aux_alpha_pos),
+                        "stop": float(args.aux_alpha_stop),
+                        "cluster": float(args.aux_alpha_cluster),
+                    },
+                ),
+                flush=True,
+            )
 
     if args.resume_from:
         resume_path = Path(args.resume_from)
@@ -1059,14 +1206,25 @@ def run_training(args: argparse.Namespace) -> int:
                     # state alongside the discrete prefix.
                     cas_prefix_arg = batch["cas_prefix_ids"] if use_cas_prefix else None
                     cas_prefix_mask_arg = batch["cas_prefix_mask"] if use_cas_prefix else None
-                    out = model.forward_with_lm(
-                        batch["input_ids"],
-                        batch["lm_decoder_input_ids"],
-                        attention_mask=batch["attention_mask"],
-                        cas_prefix_ids=cas_prefix_arg,
-                        cas_prefix_mask=cas_prefix_mask_arg,
-                        register_id=batch["register_id"],
-                    )
+                    if bool(args.enable_aux_heads):
+                        # v1e Phase C — forward returns LM + 4 aux logits.
+                        out = model.forward_with_aux(
+                            batch["input_ids"],
+                            batch["lm_decoder_input_ids"],
+                            attention_mask=batch["attention_mask"],
+                            cas_prefix_ids=cas_prefix_arg,
+                            cas_prefix_mask=cas_prefix_mask_arg,
+                            register_id=batch["register_id"],
+                        )
+                    else:
+                        out = model.forward_with_lm(
+                            batch["input_ids"],
+                            batch["lm_decoder_input_ids"],
+                            attention_mask=batch["attention_mask"],
+                            cas_prefix_ids=cas_prefix_arg,
+                            cas_prefix_mask=cas_prefix_mask_arg,
+                            register_id=batch["register_id"],
+                        )
                     loss_lm_t = masked_cross_entropy(
                         out["lm_logits"],
                         batch["lm_targets"],
@@ -1078,6 +1236,58 @@ def run_training(args: argparse.Namespace) -> int:
 
                 beta = scheduler.value_at(global_step)
                 total = float(args.alpha_structured) * loss_struct_t + beta * loss_lm_t
+
+                # v1e Phase C — aux losses, curriculum-scaled, added to total.
+                # When --enable-aux-heads is OFF, this entire block is skipped
+                # and the loss math is identical to the pre-Phase-C path.
+                aux_losses_dict: dict[str, float] = {}
+                aux_alpha_card_now = aux_alpha_pos_now = aux_alpha_stop_now = aux_alpha_cluster_now = 0.0
+                sum_aux_for_log = 0.0
+                if bool(args.enable_aux_heads) and not use_fallback:
+                    total_train_steps = max(
+                        1, int(args.epochs) * batches_per_epoch,
+                    )
+                    aux_alpha_card_now = _aux_alpha_at(
+                        global_step, total_train_steps,
+                        float(args.aux_alpha_card),
+                        ramp_frac=float(args.aux_curriculum_ramp_frac),
+                        hold_frac=float(args.aux_curriculum_hold_frac),
+                    )
+                    aux_alpha_pos_now = _aux_alpha_at(
+                        global_step, total_train_steps,
+                        float(args.aux_alpha_pos),
+                        ramp_frac=float(args.aux_curriculum_ramp_frac),
+                        hold_frac=float(args.aux_curriculum_hold_frac),
+                    )
+                    aux_alpha_stop_now = _aux_alpha_at(
+                        global_step, total_train_steps,
+                        float(args.aux_alpha_stop),
+                        ramp_frac=float(args.aux_curriculum_ramp_frac),
+                        hold_frac=float(args.aux_curriculum_hold_frac),
+                    )
+                    aux_alpha_cluster_now = _aux_alpha_at(
+                        global_step, total_train_steps,
+                        float(args.aux_alpha_cluster),
+                        ramp_frac=float(args.aux_curriculum_ramp_frac),
+                        hold_frac=float(args.aux_curriculum_hold_frac),
+                    )
+                    aux_l = _compute_aux_losses(outputs=out, batch=batch)
+                    weighted_aux = (
+                        aux_alpha_card_now * aux_l["loss_card"]
+                        + aux_alpha_pos_now * aux_l["loss_pos"]
+                        + aux_alpha_stop_now * aux_l["loss_stop"]
+                        + aux_alpha_cluster_now * aux_l["loss_cluster"]
+                    )
+                    total = total + weighted_aux
+                    aux_losses_dict = {
+                        "loss_card": float(aux_l["loss_card"].item()),
+                        "loss_pos": float(aux_l["loss_pos"].item()),
+                        "loss_stop": float(aux_l["loss_stop"].item()),
+                        "loss_cluster": float(aux_l["loss_cluster"].item()),
+                    }
+                    # Unscaled sum for interference monitor — exclude
+                    # curriculum α, so the ratio is comparable across steps.
+                    sum_aux_for_log = sum(aux_losses_dict.values())
                 optim.zero_grad(set_to_none=True)
                 total.backward()
                 optim.step()
@@ -1104,8 +1314,49 @@ def run_training(args: argparse.Namespace) -> int:
                         "batches_per_sec": float(tps_now),
                         "eta_epoch_min": float(eta_min),
                         "mode": "fallback" if use_fallback else "real",
+                        "loss_lm": float(loss_lm_t.item()),
                     }
+                    # v1e Phase C — aux loss telemetry (only when enabled).
+                    if bool(args.enable_aux_heads) and aux_losses_dict:
+                        progress.update(aux_losses_dict)
+                        progress["sum_aux"] = float(sum_aux_for_log)
+                        ratio = (
+                            float(loss_lm_t.item()) / max(sum_aux_for_log, 1e-9)
+                        )
+                        progress["lm_over_aux_ratio"] = ratio
+                        progress["alpha_card_now"] = float(aux_alpha_card_now)
+                        progress["alpha_pos_now"] = float(aux_alpha_pos_now)
+                        progress["alpha_stop_now"] = float(aux_alpha_stop_now)
+                        progress["alpha_cluster_now"] = float(aux_alpha_cluster_now)
                     print(json.dumps(progress, sort_keys=True), flush=True)
+
+                # v1e Phase C — interference monitor. At the named check
+                # step, if loss_lm / sum_aux < threshold, abort training.
+                # The model's LM signal is being dominated by aux losses;
+                # need to reduce α weights before continuing.
+                if (
+                    bool(args.enable_aux_heads)
+                    and int(args.aux_interference_check_step) > 0
+                    and global_step == int(args.aux_interference_check_step)
+                    and sum_aux_for_log > 0.0
+                ):
+                    ratio = float(loss_lm_t.item()) / max(sum_aux_for_log, 1e-9)
+                    if ratio < float(args.aux_interference_threshold):
+                        print(json.dumps({
+                            "event": "aux_interference_abort",
+                            "global_step": global_step,
+                            "loss_lm": float(loss_lm_t.item()),
+                            "sum_aux": float(sum_aux_for_log),
+                            "lm_over_aux_ratio": ratio,
+                            "threshold": float(args.aux_interference_threshold),
+                            "message": (
+                                "loss_lm / sum_aux below threshold — aux "
+                                "losses dominating LM. Reduce --aux-alpha-* "
+                                "weights and retry. Halting per design doc §4 "
+                                "interference-monitor protocol."
+                            ),
+                        }), flush=True)
+                        return 2
 
                 if global_step % int(args.logging_steps) == 0:
                     emit_train_step_event(
@@ -1408,6 +1659,41 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--sample-temperature", type=float, default=0.8)
     p.add_argument("--sample-top-p", type=float, default=0.9)
     p.add_argument("--sample-return-trace", action="store_true")
+
+    # v1e Phase C — aux heads (default OFF). When --enable-aux-heads is
+    # set, the trainer attaches AuxHeads, enables collator aux labels,
+    # and adds the multi-task loss with the curriculum from
+    # docs/working/v1e_phase_c_aux_heads_design_2026_05_11.md §4.
+    p.add_argument(
+        "--enable-aux-heads",
+        action="store_true",
+        help=(
+            "v1e Phase C: attach 4 aux heads (cardinality, per-pos Noetic, "
+            "stop, cluster membership) and add their multi-task loss with "
+            "ramp-DOWN curriculum. Default OFF — when off, trainer behavior "
+            "is byte-identical to the pre-Phase-C path."
+        ),
+    )
+    p.add_argument("--aux-alpha-card", type=float, default=0.10)
+    p.add_argument("--aux-alpha-pos", type=float, default=0.20)
+    p.add_argument("--aux-alpha-stop", type=float, default=0.15)
+    p.add_argument("--aux-alpha-cluster", type=float, default=0.10)
+    p.add_argument("--aux-curriculum-ramp-frac", type=float, default=0.30,
+                   help="Fraction of total steps held at 2× base α before decay starts.")
+    p.add_argument("--aux-curriculum-hold-frac", type=float, default=0.60,
+                   help="Fraction of total steps after which α holds at base.")
+    p.add_argument(
+        "--aux-interference-check-step",
+        type=int,
+        default=1000,
+        help=(
+            "At this step, abort training if loss_lm / sum_aux < threshold "
+            "(default 0.2). Set to 0 to disable the interference monitor."
+        ),
+    )
+    p.add_argument("--aux-interference-threshold", type=float, default=0.2)
+    p.add_argument("--aux-k-max", type=int, default=16)
+    p.add_argument("--aux-c-max", type=int, default=6)
     return p
 
 
