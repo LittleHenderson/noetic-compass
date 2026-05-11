@@ -158,8 +158,8 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
 
 def build_simplex_mvp_model(cfg: SimplexTrainConfig, *, vocab_size: int, vocab_size_english: int) -> nn.Module:
     """Factory wiring SimplexEncoder + TypedFiberDecoder into a single module."""
-    from model.simplex_encoder import SimplexEncoder, SimplexEncoderConfig
-    from model.typed_fiber_decoder import TypedFiberDecoder, TypedFiberDecoderConfig
+    from cas_native.model.simplex_encoder import SimplexEncoder, SimplexEncoderConfig
+    from cas_native.model.typed_fiber_decoder import TypedFiberDecoder, TypedFiberDecoderConfig
 
     enc_cfg = SimplexEncoderConfig(
         vocab_size=vocab_size,

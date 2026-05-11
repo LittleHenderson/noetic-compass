@@ -93,17 +93,17 @@ class SimplexCollator(NativeNLCollator):
         if batch is None or not self.enable_simplex_aux:
             return batch
 
-        # Hydrate the simplex-MVP keys. We work off batch shapes so the new
-        # tensors match the existing batch device / batch order.
+        # Hydrate the simplex-MVP keys. We always emit the 7 aux keys when
+        # enable_simplex_aux=True — even on malformed/empty records — so the
+        # trainer's forward + loss assembly never trips on a missing key.
+        # User-named "malformed source gives zero/empty aux labels without
+        # crashing" applies here.
         device = batch["input_ids"].device if hasattr(batch.get("input_ids"), "device") else device
         cas_prefix = batch.get("cas_prefix_ids")
-        if cas_prefix is None:
-            return batch
-        B, L_src_max = cas_prefix.shape
         lm_targets = batch.get("lm_targets")
-        if lm_targets is None:
-            return batch
-        L_out = lm_targets.shape[1]
+        B = batch["input_ids"].shape[0] if isinstance(batch.get("input_ids"), torch.Tensor) else 0
+        L_src_max = cas_prefix.shape[1] if isinstance(cas_prefix, torch.Tensor) and cas_prefix.dim() == 2 else 0
+        L_out = lm_targets.shape[1] if isinstance(lm_targets, torch.Tensor) and lm_targets.dim() == 2 else 0
 
         fr_target_path = torch.full(
             (B, L_src_max, NUM_STATES),

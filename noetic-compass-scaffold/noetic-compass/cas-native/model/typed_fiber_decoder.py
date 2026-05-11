@@ -126,6 +126,11 @@ class _CrossAttention(nn.Module):
             mask = kv_mask[:, None, None, :].to(dtype=torch.bool)
             scores = scores.masked_fill(~mask, float("-inf"))
         attn = F.softmax(scores, dim=-1)
+        # Fail-closed for fully-masked rows (all keys are PAD): softmax over
+        # all -inf produces NaN; replace with a uniform-zero attention so the
+        # downstream generative paths (lm_head, slot_type_head) stay finite.
+        # Build-spec §2.3 + user-named "all-PAD source copy path fail-closed".
+        attn = torch.nan_to_num(attn, nan=0.0, posinf=0.0, neginf=0.0)
         attn = self.dropout(attn)
         out = torch.matmul(attn, v).transpose(1, 2).contiguous().view(B, L_q, -1)
         out = self.out_proj(out)
@@ -282,6 +287,10 @@ class TypedFiberDecoder(nn.Module):
             mask = src_padding_mask[:, None, :].to(dtype=torch.bool)
             copy_scores = copy_scores.masked_fill(~mask, float("-inf"))
         p_copy = F.softmax(copy_scores, dim=-1)
+        # Fail-closed for all-PAD source: replace NaN rows with zeros so the
+        # consumer (L_copy loss / argmax / trace) sees a well-defined tensor.
+        # All-PAD is a corpus-edge case; copy is simply not applicable there.
+        p_copy = torch.nan_to_num(p_copy, nan=0.0, posinf=0.0, neginf=0.0)
 
         # Phrase-bias term: gated by predicted slot_type == NOETIC_PHRASE (8).
         # Pick k* from simplex_final pooled over source positions to align
