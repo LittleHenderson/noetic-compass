@@ -11,6 +11,24 @@
 > LM head alone first, then layering slot, then layering copy + hard routing,
 > should let each gate develop in a better-conditioned regime.
 
+## Framework note — Candidate B is the bounded transformer-substrate test (2026-05-11)
+
+Per user 2026-05-11 after B1 qualified pass: Candidate B is now the **last transformer-stage test**, not a parallel exploration. The single question B answers is whether the transformer decoder substrate can sustain CAS slot state with the right training schedule.
+
+- **B2** is the actual gate. If the slot gate still collapses to CONNECTIVE under staged training, the transformer decoder is the wrong substrate.
+- **B3** only runs if B2 clearly proves slot-state sustainment. B3 is no longer a forward commitment — it is contingent on B2.
+- **If B2 fails → pivot to Candidate D (SSM decoder), not retry-with-tuning.** CAS is fundamentally stateful; SSMs are built around state evolution and may naturally fit CAS memory / trajectory / traceability better than a transformer with heads bolted on. SSM is no longer "premature" once B2 falsifies.
+
+Also recording: "best LM for CAS" is not chatbot fluency. It is six specific properties:
+1. Fluent CAS→English output
+2. Stable typed internal state
+3. Recoverable CAS structure (round-trippable)
+4. Identifier/copy fidelity
+5. Per-token / per-span traceability (why this token was produced)
+6. No hidden collapse into generic prose loops
+
+A plain transformer can be a great chat-style LM and still be *bad* for CAS because it learns fluent connective tissue while losing typed state discipline. B2's gate evaluates property 2 specifically; B3 (if reached) would evaluate properties 3 and 4 with hard routing on top.
+
 This is the diagnosis sharpened by Candidate C's findings:
 
 | Component | Status under C |
@@ -104,7 +122,7 @@ Only the rpm_chain canaries have stage_vars in their target text (`canary_rpm_ch
 - Neither rpm_chain canary has slot_trace_counts with CONNECTIVE >90%.
 - No non-rpm_chain canary record shows sustained STAGE_VAR slot output (zero leakage).
 
-If B2 kills due to under-firing on rpm_chain → slot gate has a deeper structural problem (training schedule isn't the issue). If B2 kills due to leakage → slot loss over-generalized; next move is slot supervision review (anchor masking / negative samples), not retraining at the same schedule. Either way, **anti-tuning rule applies**: do not re-run B2 with different lr / slot weight to make the gate pass.
+If B2 kills (under-firing on rpm_chain OR leakage on non-rpm OR B1 regression) → **stop Candidate B immediately. Do NOT run B3.** Per user 2026-05-11: B2 fail = the transformer decoder substrate is exhausted as a candidate for sustaining CAS slot state. Pivot to **Candidate D (SSM decoder)**. The anti-tuning rule applies: do not re-run B2 with different lr / slot weight / schedule to coax a pass.
 
 ### B3 — + copy + hard typed emission
 
