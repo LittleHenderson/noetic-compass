@@ -1,20 +1,25 @@
-"""v1e Phase 1B shadow-mode eval driver (Tasks #135 + #138).
+"""v1e Phase 1B shadow-mode eval driver (Tasks #135 / #138 / #139).
 
 Runs the 42-record eval suite
 (``cas-synthetic/data/path_d/v1e_phase1b_eval_suite.jsonl``: 35
 stratified fractals + 7 non-fractal negative controls) against the
-archived v0 checkpoint under FOUR config combinations focused on
-isolating the lever 3 (leaf-exit boundary) effect:
+archived v0 checkpoint under SIX config combinations focused on
+lever 4 (final-slot tail control). Per user β2 spec 2026-05-11:
+test EOS bias values 5/8/10 separately, plus a length cap separately;
+do NOT combine until individual effects are known.
 
   - A: control          — apply_fractal_decoder=False (= v0 baseline)
-  - D: first_n_replay   — first_n_mode=True only (replays Task #135 D)
-  - F: boundary_only    — leaf_exit_boundary=True only (lever 3 alone)
   - G: boundary_first_n — leaf_exit_boundary=True + first_n_mode=True
+                          (Task #138 G, the post-β baseline)
+  - H1: eos5            — G + fractal_decoder_eos_bias=5.0
+  - H2: eos8            — G + fractal_decoder_eos_bias=8.0
+  - H3: eos10           — G + fractal_decoder_eos_bias=10.0
+  - H4: length_cap      — G + max_new_tokens override = 12*n + 8 (fractals only)
 
-Previous Task #135 configs B (smoke) / C (eos_bias) / E (both
-eos+firstN) are retired — B/C were ineffective; E equaled D. The
-β-focused grid above isolates lever 3 against the previous strongest
-config (D).
+Retired from Task #138 grid: D_first_n_replay, F_boundary_only.
+D's behavior is now subsumed by G+boundary; F was inert (constrained
+never selected without first_n_mode). Both are preserved in earlier
+JSONLs for historical reference.
 
 Per the user's promotion gate (2026-05-10):
   - Exact k-sequence improves materially on fractal suite (B/C/D/E vs A).
@@ -43,7 +48,7 @@ import types
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -93,6 +98,27 @@ V0_FLAGS = {
 EOS_BIAS_STRENGTH = 3.0
 
 
+# Shared post-β baseline: lever 3 boundary + first_n_mode. Lever-4
+# candidates extend this with EOS bias values or a length cap.
+_G_KWARGS = dict(
+    apply_fractal_decoder=True,
+    fractal_decoder_first_n_mode=True,
+    fractal_decoder_leaf_exit_boundary=True,
+)
+
+
+def _length_cap_12n_plus_8(record: dict) -> Optional[int]:
+    """Lever 4b — dynamic max_new_tokens override based on expected_k_count.
+    Applies ONLY to fractal records; returns None for non-fractals
+    (use default task-aware budget)."""
+    if record.get("category") != "fractal":
+        return None
+    n = len(record.get("expected_k_values") or [])
+    if n <= 0:
+        return None
+    return 12 * n + 8
+
+
 CONFIGS = [
     {
         "id": "A_control",
@@ -100,29 +126,30 @@ CONFIGS = [
         "kwargs": dict(apply_fractal_decoder=False),
     },
     {
-        "id": "D_first_n_replay",
-        "label": "first_n_only (replays Task #135 D for delta vs lever 3)",
-        "kwargs": dict(
-            apply_fractal_decoder=True,
-            fractal_decoder_first_n_mode=True,
-        ),
+        "id": "G_baseline",
+        "label": "post-β baseline (lever 3 + first_n_mode, eos_bias=0)",
+        "kwargs": dict(**_G_KWARGS),
     },
     {
-        "id": "F_boundary_only",
-        "label": "boundary_only (lever 3 leaf-exit boundary alone, strict comparator)",
-        "kwargs": dict(
-            apply_fractal_decoder=True,
-            fractal_decoder_leaf_exit_boundary=True,
-        ),
+        "id": "H1_eos5",
+        "label": "lever 4a — G + eos_bias=5.0",
+        "kwargs": dict(**_G_KWARGS, fractal_decoder_eos_bias=5.0),
     },
     {
-        "id": "G_boundary_first_n",
-        "label": "boundary_first_n (lever 3 + first_n_mode — the β combination)",
-        "kwargs": dict(
-            apply_fractal_decoder=True,
-            fractal_decoder_first_n_mode=True,
-            fractal_decoder_leaf_exit_boundary=True,
-        ),
+        "id": "H2_eos8",
+        "label": "lever 4a — G + eos_bias=8.0",
+        "kwargs": dict(**_G_KWARGS, fractal_decoder_eos_bias=8.0),
+    },
+    {
+        "id": "H3_eos10",
+        "label": "lever 4a — G + eos_bias=10.0",
+        "kwargs": dict(**_G_KWARGS, fractal_decoder_eos_bias=10.0),
+    },
+    {
+        "id": "H4_length_cap",
+        "label": "lever 4b — G + max_new_tokens=12n+8 (fractals only)",
+        "kwargs": dict(**_G_KWARGS),
+        "max_new_tokens_fn": _length_cap_12n_plus_8,
     },
 ]
 
@@ -177,12 +204,21 @@ def run_one(
     """Run ``routed_generate`` once for a (record, config). Returns a
     JSONL-serializable dict."""
     cas = record["cas_expression"]
+    # Lever 4b — per-config max_new_tokens override. If the config
+    # provides a ``max_new_tokens_fn`` callable, invoke it with the
+    # record dict; the returned int overrides the default budget.
+    # Returning None means "use the routed_generate task-aware default."
+    mnt_fn = config.get("max_new_tokens_fn")
+    mnt_override: Optional[int] = None
+    if callable(mnt_fn):
+        mnt_override = mnt_fn(record)
     with torch.no_grad():
         r = routed_generate(
             model=model, tokenizer=tokenizer,
             source_cas=cas,
             register="T",
             apply_repair=True,
+            max_new_tokens=mnt_override,
             sampling="greedy",
             use_cas_prefix=True,
             device=device,
