@@ -165,6 +165,25 @@ Falsify A if **any** holds:
 
 This is the discipline that breaks the recurring "tune the failed thing" pattern across Phase C, v1d, v1e Phase 1B, and v7.1b/diagnostic.
 
+**Judgment order locked 2026-05-11 — do NOT judge from scalar gates alone. Apply in this order:**
+
+1. **Teacher-forced canary**
+   - TF top-1 acc materially improves over 0.597 (diagnostic baseline)
+   - canonical stage-var recovery improves above 0/4
+2. **Canary damage**
+   - kill count drops meaningfully from 4/11, target ≤ 2/11
+   - no new Phase-C-shaped damage
+3. **Decode ablations**
+   - `lm_only` must be **cleaner than tied baseline**
+   - not merely different text with the same 2/5/4 profile
+4. **Slot behavior** (per-token trace)
+   - rpm_chain should NOT collapse to CONNECTIVE for the whole span
+   - STAGE_VAR activation should **sustain through identifiers**, not flash briefly and disappear
+
+**If any single criterion fails, A is falsified. Move to C without tuning.**
+
+A needs **real recovery, not just different failure texture.** Partial improvement at one criterion does not validate; all four must hold.
+
 ## Authorization plan for Candidate A
 
 1. **Build offline first** (~30 min). Adds `tie_lm_head: bool` config flag (default True preserves all current behavior + tests). Adds `--no-tie-lm-head` CLI flag.
