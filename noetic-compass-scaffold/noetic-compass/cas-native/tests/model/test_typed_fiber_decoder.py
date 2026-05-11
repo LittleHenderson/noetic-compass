@@ -246,6 +246,82 @@ def test_weight_tying_gradient_lands_on_shared_tensor():
 
 
 # ---------------------------------------------------------------------------
+# Architecture review Candidate A (2026-05-11) — untied lm_head
+# ---------------------------------------------------------------------------
+
+def test_default_config_keeps_tying():
+    """Default config must preserve Stage 6 v4+ behavior (tied)."""
+    cfg = _tiny_cfg()
+    assert cfg.tie_lm_head is True
+
+
+def test_untied_lm_head_independent_tensors():
+    """With tie_lm_head=False, lm_head.weight is NOT shared with token_emb."""
+    dec = TypedFiberDecoder(_tiny_cfg(tie_lm_head=False))
+    assert dec.lm_head.weight is not dec.token_emb.weight, (
+        "untied config should produce independent tensors"
+    )
+
+
+def test_untied_mutation_does_not_propagate():
+    """Modifying token_emb.weight must NOT affect lm_head.weight when untied."""
+    dec = TypedFiberDecoder(_tiny_cfg(tie_lm_head=False))
+    with torch.no_grad():
+        original_lm_head = dec.lm_head.weight.clone()
+        dec.token_emb.weight.fill_(9.99)
+    # lm_head.weight unchanged
+    assert not torch.all(dec.lm_head.weight == 9.99), (
+        "untied lm_head.weight changed when token_emb.weight was mutated"
+    )
+    assert torch.allclose(dec.lm_head.weight, original_lm_head), (
+        "untied lm_head.weight should equal pre-mutation value"
+    )
+
+
+def test_untied_parameters_count_includes_separate_lm_head():
+    """parameters() must yield BOTH token_emb.weight AND lm_head.weight."""
+    dec = TypedFiberDecoder(_tiny_cfg(tie_lm_head=False))
+    param_ids = [id(p) for p in dec.parameters()]
+    assert id(dec.token_emb.weight) in param_ids
+    assert id(dec.lm_head.weight) in param_ids
+    # And those two ids are different
+    assert id(dec.token_emb.weight) != id(dec.lm_head.weight)
+
+
+def test_untied_gradients_flow_to_both_heads():
+    """Backward through lm_logits should populate lm_head.weight.grad
+    INDEPENDENTLY of token_emb.weight.grad in the untied case."""
+    dec = TypedFiberDecoder(_tiny_cfg(tie_lm_head=False))
+    dec_in, sh, sx, sids, stt, sm = _dummy_inputs()
+    out = dec(dec_in, sh, sx, sids, stt, sm)
+    # Loss against lm_logits only — shouldn't touch token_emb except via
+    # the decoder's input pathway (which DOES exist; lm_logits depends
+    # on token_emb via input lookup).
+    out["lm_logits"].sum().backward()
+    assert dec.lm_head.weight.grad is not None
+    assert dec.lm_head.weight.grad.abs().sum() > 0
+    # Untied: lm_head.weight.grad must be a SEPARATE tensor object
+    # from token_emb.weight.grad (different ids), even though both
+    # are non-zero.
+    assert dec.lm_head.weight.grad is not dec.token_emb.weight.grad
+
+
+def test_param_count_diff_tied_vs_untied():
+    """Untied has ~vocab × d_model more parameters than tied (the
+    duplicated lm_head.weight matrix)."""
+    cfg_tied = _tiny_cfg(tie_lm_head=True)
+    cfg_untied = _tiny_cfg(tie_lm_head=False)
+    n_tied = sum(p.numel() for p in TypedFiberDecoder(cfg_tied).parameters())
+    n_untied = sum(p.numel() for p in TypedFiberDecoder(cfg_untied).parameters())
+    expected_delta = cfg_tied.vocab_size_english * cfg_tied.d_model
+    actual_delta = n_untied - n_tied
+    assert actual_delta == expected_delta, (
+        f"untied minus tied = {actual_delta}, "
+        f"expected = {expected_delta} (vocab × d_model)"
+    )
+
+
+# ---------------------------------------------------------------------------
 # Gradient flow
 # ---------------------------------------------------------------------------
 

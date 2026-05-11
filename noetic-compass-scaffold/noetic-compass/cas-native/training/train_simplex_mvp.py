@@ -104,6 +104,8 @@ class SimplexTrainConfig:
     # Diagnostic infra piece 1 (2026-05-11): checkpoint save/load
     save_checkpoints_at: str = ""
     save_final_checkpoint: bool = False
+    # Architecture review Candidate A (2026-05-11): untie lm_head
+    no_tie_lm_head: bool = False
     # Loss weights — populated by ablation mode after CLI parse
     loss_weights: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_LOSS_WEIGHTS))
 
@@ -173,6 +175,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--save-final-checkpoint", action="store_true",
                    help="Also save a final checkpoint at end of training "
                         "to <output-dir>/ckpt_final.pt.")
+    # Architecture review Candidate A (2026-05-11)
+    p.add_argument("--no-tie-lm-head", action="store_true",
+                   help="Disable lm_head <-> token_emb weight tying. "
+                        "Default tied (matches Stage 6 v4+ baseline). "
+                        "Per Candidate A architecture review: test "
+                        "whether tying was load-bearing in lm-collapse.")
     return p
 
 
@@ -210,6 +218,7 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
         halt_on_canary_kill=args.halt_on_canary_kill,
         save_checkpoints_at=args.save_checkpoints_at,
         save_final_checkpoint=args.save_final_checkpoint,
+        no_tie_lm_head=args.no_tie_lm_head,
     )
     # Apply ablation overrides on top of defaults
     overrides = ABLATION_OVERRIDES.get(cfg.ablation, {})
@@ -235,6 +244,9 @@ def build_simplex_mvp_model(cfg: SimplexTrainConfig, *, vocab_size: int, vocab_s
         n_heads=cfg.decoder_n_heads,
         ffn_dim=cfg.d_model * 4,
         n_layers=cfg.decoder_n_layers,
+        # Candidate A 2026-05-11: --no-tie-lm-head inverts the default
+        # tying. Default True preserves Stage 6 v4+ behavior.
+        tie_lm_head=not getattr(cfg, "no_tie_lm_head", False),
     )
 
     class _SimplexMVPModel(nn.Module):

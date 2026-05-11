@@ -63,6 +63,14 @@ class TypedFiberDecoderConfig:
     num_noetics: int = 10               # 10 Noetics for phrase-bias indexing
     n_phrases_per_k: int = 8            # phrase table depth per noetic
     pad_token_id: int = 0
+    # Architectural review Candidate A (2026-05-11): toggleable lm_head
+    # weight tying. Default True preserves Stage 6 v4 behavior. Setting
+    # to False unties lm_head from token_emb so the lm_head can learn an
+    # emission distribution independent of the input embedding geometry.
+    # Per locked architecture-review framing: weight tying was a LATE
+    # budget fix (saves ~14.9M params at v1c vocab) and may have been
+    # load-bearing in the lm-collapse failure mode the diagnostic showed.
+    tie_lm_head: bool = True
 
 
 class _MaskedSelfAttention(nn.Module):
@@ -245,7 +253,12 @@ class TypedFiberDecoder(nn.Module):
         # 2026-05-11 (Stage 6 follow-up). Build-spec under-counted by
         # ~14.9M at vocab=38685; tying drops the duplicate output matrix.
         # Bias remains separate (negligible ~38k floats).
-        self.lm_head.weight = self.token_emb.weight
+        # Toggleable per Candidate A 2026-05-11 architecture review:
+        # cfg.tie_lm_head=False unties the heads so lm_head learns
+        # independently of input embedding geometry. Adds back the
+        # ~14.9M parameters but isolates the lm_head's gradient path.
+        if self.cfg.tie_lm_head:
+            self.lm_head.weight = self.token_emb.weight
         self.slot_type_head = nn.Linear(self.cfg.d_model, self.cfg.num_slot_types)
 
         # Soft simplex-conditioned phrase bias: (10 noetics, n_phrases_per_k, d_model)

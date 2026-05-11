@@ -139,15 +139,54 @@ If at any point a candidate validates, we stop and surface for direction.
 
 Cumulative simplex MVP pod spend to date: ~$1.65 of $60 budget. Plenty of headroom for A → C → B sequence.
 
-## Decision request
+## Decision LOCKED (user 2026-05-11)
 
-Standing by for your direction on:
+**Order: A → C → B → D.** Rationale:
+- A is the cleanest falsification test; weight tying was a late budget fix (Stage 6 v4) and could plausibly be load-bearing.
+- C directly attacks the coordination problem between slot type, copy, and LM emission.
+- B is useful but slower to interpret — staged training can hide architecture issues behind curriculum effects.
+- D stays in the review set but only after the smaller decoder fixes fail. It is the right "different class of decoder" candidate, not the first patch.
 
-1. **Confirm the candidate order** (A → C → B → D, or different)
-2. **Confirm the kill/validate criteria** for whichever candidate goes first (or amend)
-3. **Authorize Candidate A build + replay** once criteria are confirmed (~30 min code + ~50 min pod = ~80 min total, ~$0.44)
+**Strict A criteria (tightened per user 2026-05-11):**
 
-OR
+Validate A if **all four** hold:
+- TF canary top-1 acc improves materially, especially **canonical stage-var recovery above 0/4** (the original diagnostic showed 0.0 — any non-zero is significant)
+- `lm_only` decode becomes **cleaner than the tied baseline** (not just non-identical to `full`)
+- Canary **kill count drops meaningfully**, not just mean severity (e.g. 4 kills → ≤ 2 kills)
+- No simplex / FR / slot regression (simplex stays in Δ°₃₉; FR last-window mean ≤ 0.1; slot_type loss stays ≤ 0.1)
+
+Falsify A if **any** holds:
+- TF argmax remains looped OR stage-var recovery stays 0/4
+- `lm_only` damage remains identical to tied baseline
+- Slot gate still collapses to CONNECTIVE across rpm_chain records
+- Sample veto still trips at the same Phase-C shape (kill ≥ 3 of 11)
+
+**Anti-tuning rule (LOCKED):** If A fails, do NOT tune it. Move to C.
+
+This is the discipline that breaks the recurring "tune the failed thing" pattern across Phase C, v1d, v1e Phase 1B, and v7.1b/diagnostic.
+
+## Authorization plan for Candidate A
+
+1. **Build offline first** (~30 min). Adds `tie_lm_head: bool` config flag (default True preserves all current behavior + tests). Adds `--no-tie-lm-head` CLI flag.
+2. **Test offline.** Full suite must still pass with default True. New tests cover untied path.
+3. **Commit + push.** User can review the code diff before any pod spend.
+4. **Surface for explicit launch authorization** — ~50 min pod + ~$0.44.
+
+Pod replay command (locked, will be in the launch surface):
+```
+... --d-model 384 --encoder-n-layers 4 --decoder-n-layers 6 \
+    --encoder-n-heads 6 --decoder-n-heads 6 \
+    --batch-size 16 --limit 7000 --n-steps 1000 \
+    --lr 1e-4 --weight-decay 1e-4 --grad-clip 1.0 \
+    --no-tie-lm-head  # <-- the ONLY change vs the diagnostic replay
+    --sample-canary-at 250,500,750,1000 --sample-canary-post-training \
+    --save-checkpoints-at 250,500,750,1000 --save-final-checkpoint \
+    --seed 1729
+```
+
+Same protocol as the diagnostic replay (same data, same seed, same canary, same batch_size). Result is directly comparable to v7.1b and to the diagnostic replay baseline.
+
+## Alternative
 
 - **Pause the simplex MVP track entirely** and pivot to other work (Path D Wave 3/4 was paused mid-investigation; the SGGS backlog from 2026-05-06 was deferred; v0-rc1 is healthy and shipped).
 
