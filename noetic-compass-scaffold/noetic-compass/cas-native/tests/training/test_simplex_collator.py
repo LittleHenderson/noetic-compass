@@ -243,3 +243,125 @@ def test_empty_input_returns_none():
     tok = _make_tokenizer()
     sub = SimplexCollator(tok, enable_simplex_aux=True)
     assert sub([]) is None
+
+
+# ---------------------------------------------------------------------------
+# Stage 6 v5 — LIVE typed_slot_source derivation
+# (DOMAIN_LETTER / DRIVE_LETTER / REGISTER_LETTER / OMEGA)
+# ---------------------------------------------------------------------------
+
+from cas_native.training.datasets.simplex_collator import (
+    SLOT_DOMAIN_LETTER,
+    SLOT_DRIVE_LETTER,
+    SLOT_REGISTER_LETTER,
+    SLOT_OMEGA,
+    classify_source_token,
+)
+
+
+def test_classify_source_token_domain_letter():
+    for s in ("^P", "^C", "^E", "^O"):
+        assert classify_source_token(s) == SLOT_DOMAIN_LETTER, f"failed on {s}"
+
+
+def test_classify_source_token_drive_letter():
+    for s in ("F1", "F7", "F_3", "F_6"):
+        assert classify_source_token(s) == SLOT_DRIVE_LETTER, f"failed on {s}"
+
+
+def test_classify_source_token_register_letter():
+    for s in ("|T", "|A", "|f", "|E"):
+        assert classify_source_token(s) == SLOT_REGISTER_LETTER, f"failed on {s}"
+
+
+def test_classify_source_token_omega():
+    for s in ("Ω", "Omega", "Ω_resolve", "Omega_grounding"):
+        assert classify_source_token(s) == SLOT_OMEGA, f"failed on {s}"
+
+
+def test_classify_source_token_defaults_to_connective():
+    for s in ("the", "^2", "<", ">", "1", "a", "foo", None, ""):
+        assert classify_source_token(s) == 0, f"got non-CONNECTIVE for {s!r}"
+
+
+def test_copy_bearing_record_emits_typed_slot_source():
+    """Stage 6 v5 acceptance test: a record whose reply literally contains
+    a source-side typed token MUST emit typed_slot_source pointing at the
+    source position of that token.
+
+    Note: the tokenizer collapses ``^2^P`` into a single compound state
+    token, so ``^P`` standalone only appears when the cas_expression has
+    ``^P`` not preceded by a noetic operator. Same for ``F6`` (collapsed
+    inside ``_{F6}``). REGISTER_LETTER ``|f`` survives standalone inside
+    ``^2^E_{F6}|f``, so that's the cleanest test case.
+    """
+    tok = _make_tokenizer()
+    sub = SimplexCollator(tok, enable_simplex_aux=True)
+    rec = _record(
+        prompt="which register",
+        reply="the register is |f for this expression",
+        cas="^2^E_{F6}|f",
+    )
+    out = sub([rec])
+    assert out is not None
+    has_copy_target = (out["typed_slot_source"] != -1).any().item()
+    assert has_copy_target, "no copy target derived; expected |f to match"
+
+
+def test_copy_bearing_record_typed_slot_positions_typed():
+    """When the copy fires, the target's typed_slot_positions must be
+    one-hot on a typed-slot id (not CONNECTIVE)."""
+    tok = _make_tokenizer()
+    sub = SimplexCollator(tok, enable_simplex_aux=True)
+    rec = _record(
+        prompt="register",
+        reply="register |f",
+        cas="^4^E_{F4}|f",
+    )
+    out = sub([rec])
+    assert out is not None
+    valid = (out["typed_slot_source"] != -1)
+    assert valid.any(), "expected at least one copy target"
+    pos = valid.nonzero(as_tuple=False)
+    for b, j in pos.tolist():
+        slot_argmax = int(out["typed_slot_positions"][b, j].argmax().item())
+        assert slot_argmax in (
+            SLOT_DOMAIN_LETTER, SLOT_DRIVE_LETTER,
+            SLOT_REGISTER_LETTER, SLOT_OMEGA,
+        ), f"expected typed slot at copy position; got {slot_argmax}"
+
+
+def test_src_token_type_marks_register_letter():
+    """The source side should have src_token_type = REGISTER_LETTER at
+    the position of ``|f``."""
+    tok = _make_tokenizer()
+    sub = SimplexCollator(tok, enable_simplex_aux=True)
+    rec = _record(
+        prompt="register here",
+        reply="register |f",
+        cas="^2^P_{F6}|f",
+    )
+    out = sub([rec])
+    assert out is not None
+    src_types = out["src_token_type"][0].tolist()
+    assert SLOT_REGISTER_LETTER in src_types, (
+        f"|f should be classified as REGISTER_LETTER; src_types = {src_types}"
+    )
+
+
+def test_record_without_typed_slots_emits_no_copy_targets():
+    """A record whose reply doesn't contain any typed identifier should
+    leave typed_slot_source = -1 everywhere — copy gate is "not measured."""
+    tok = _make_tokenizer()
+    sub = SimplexCollator(tok, enable_simplex_aux=True)
+    # CAS has typed tokens, but reply is plain English with no literal copy
+    rec = _record(
+        prompt="hello",
+        reply="this idea speaks to me",
+        cas="^2^P_{F6}|f",
+    )
+    out = sub([rec])
+    assert out is not None
+    assert (out["typed_slot_source"] == -1).all().item(), (
+        "no copy targets expected when reply has no literal copy tokens"
+    )

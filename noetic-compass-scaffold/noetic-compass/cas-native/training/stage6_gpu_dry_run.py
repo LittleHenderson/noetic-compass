@@ -128,14 +128,18 @@ def main() -> int:
         from cas_native.training.datasets.simplex_collator import SimplexCollator
         from cas_native.training.tokenizer import HybridCASTokenizer
         from cas_native.training.train_simplex_mvp import (
-            synthetic_records, compute_losses, compute_grad_norm,
+            synthetic_records, copy_bearing_records,
+            compute_losses, compute_grad_norm,
             DEFAULT_LOSS_WEIGHTS,
         )
 
         torch.manual_seed(args.seed)
 
-        # Build synthetic records (no data-file dependency on the pod)
-        records = synthetic_records(args.batch_size)
+        # Stage 6 v5 (2026-05-11): use the copy-bearing record fixture so
+        # the L_copy path is exercised — reply strings literally contain
+        # source-side typed identifiers (REGISTER_LETTER, OMEGA, etc.)
+        # for the collator to detect as copy targets.
+        records = copy_bearing_records(args.batch_size)
         tokenizer = HybridCASTokenizer.from_records(records, freeze=True)
         tokenizer_vocab_size = int(tokenizer.vocab_size)
         # Embedding/lm_head dimension — use override (e.g. v1c VALIDTOK
@@ -249,15 +253,27 @@ def main() -> int:
         )
 
         # ----- Check 6 (no NaN/Inf in forward) -----
+        # Stage 6 v5: parts now contains a __copy_metrics__ sub-dict that
+        # holds NaN-valued telemetry when no valid copy slots exist. NaN
+        # in TELEMETRY is allowed (means "not measured"); NaN in actual
+        # LOSS values is fail. Filter the sub-dict and check losses only.
+        loss_keys = (
+            "loss_total", "loss_lm", "loss_fr",
+            "loss_slot_type", "loss_copy", "loss_phrase_bias_aux",
+        )
         all_finite_forward = bool(torch.isfinite(total).item())
-        for k, v in parts.items():
+        for k in loss_keys:
+            v = parts.get(k)
             if isinstance(v, torch.Tensor):
                 all_finite_forward = all_finite_forward and bool(torch.isfinite(v).item())
         report["checks"]["6_no_nan_inf"] = {
             "pass": all_finite_forward,
             "loss_total": float(parts["loss_total"].item()) if all_finite_forward else None,
-            "per_part": {k: float(v.item()) if isinstance(v, torch.Tensor) else float(v)
-                         for k, v in parts.items()},
+            "per_part": {
+                k: float(parts[k].item())
+                for k in loss_keys
+                if k in parts and isinstance(parts[k], torch.Tensor)
+            },
         }
         if not all_finite_forward:
             report["halt_reason"] = "NaN/Inf in forward"
@@ -393,49 +409,104 @@ def main() -> int:
             "fields": train_progress_fields_present,
         }
 
-        # ----- Section 10: explicit placeholder labeling (user requirement) -----
-        # L_copy is always 0 here because the Stage 1 collator anchor stub
-        # sets typed_slot_source = -1 for every position. The pointer-copy
-        # path is wired and shape-correct (verified in Stage 2 tests),
-        # but produces no live gradient signal until real anchor
-        # derivation lands in Stage 7.
+        # ----- Section 10: explicit live/placeholder labeling (user requirement) -----
+        # Stage 6 v5 (2026-05-11): L_copy is now LIVE for the four single-
+        # token-mappable slot types (DOMAIN_LETTER / DRIVE_LETTER /
+        # REGISTER_LETTER / OMEGA). copy_bearing_records() fixture ensures
+        # the reply text contains literal copies of source-side typed
+        # identifiers so the collator emits typed_slot_source != -1 and
+        # the pointer-copy gradient path is exercised.
         #
-        # L_phrase_bias_aux is always 0 because it is a Stage 1
-        # placeholder (`torch.zeros((), requires_grad=False)`); the
-        # phrase-bias target table needs corpus-aligned labels, also
-        # Stage 7.
-        #
-        # PASSING Stage 6 does NOT imply the full five-loss system is
-        # functionally live. Only LM + FR + slot_type are exercised with
-        # real learning signal here.
-        report["placeholders"] = {
+        # L_phrase_bias_aux REMAINS PLACEHOLDER per user 2026-05-11: the
+        # phrase-bias target table needs corpus-aligned labels, which is
+        # corpus-alignment-heavy work that risks expanding the MVP scope
+        # before the Stage 7 feasibility gate. Explicitly non-gating.
+        loss_copy_value = float(parts["loss_copy"].item())
+        copy_metrics = parts.get("__copy_metrics__", {})
+        copy_valid_count = int(copy_metrics.get(
+            "copy_valid_count", torch.tensor(0.0)
+        ).item()) if "copy_valid_count" in copy_metrics else 0
+        copy_loss_live_val = float(copy_metrics.get(
+            "copy_loss_live", torch.tensor(float("nan"))
+        ).item()) if "copy_loss_live" in copy_metrics else float("nan")
+        copy_argmax_acc_val = float(copy_metrics.get(
+            "copy_argmax_acc", torch.tensor(float("nan"))
+        ).item()) if "copy_argmax_acc" in copy_metrics else float("nan")
+        copy_entropy_val = float(copy_metrics.get(
+            "copy_entropy_valid_mean", torch.tensor(float("nan"))
+        ).item()) if "copy_entropy_valid_mean" in copy_metrics else float("nan")
+
+        l_copy_is_live = (
+            copy_valid_count > 0
+            and not (copy_loss_live_val != copy_loss_live_val)  # not NaN
+            and copy_loss_live_val > 0.0
+        )
+        report["loss_status"] = {
+            "L_LM": {
+                "value": float(parts["loss_lm"].item()),
+                "status": "LIVE",
+                "live_signal": True,
+            },
+            "L_FR": {
+                "value": float(parts["loss_fr"].item()),
+                "status": "LIVE",
+                "live_signal": True,
+            },
+            "L_slot_type": {
+                "value": float(parts["loss_slot_type"].item()),
+                "status": "LIVE",
+                "live_signal": True,
+            },
             "L_copy": {
-                "value": float(parts["loss_copy"].item()),
-                "status": "PLACEHOLDER — not exercised in Stage 6",
-                "why_zero": (
-                    "Collator anchor stub (Stage 1) emits typed_slot_source = -1 "
-                    "for every output position. Pointer-copy path is shape-correct "
-                    "but inactive."
+                "value": loss_copy_value,
+                "status": (
+                    "LIVE (Stage 6 v5: DOMAIN/DRIVE/REGISTER/OMEGA single-token slots)"
+                    if l_copy_is_live else
+                    "PLACEHOLDER — no valid copy slots derived this batch"
                 ),
-                "live_signal": False,
-                "wired_for_stage": 7,
+                "live_signal": l_copy_is_live,
+                "copy_valid_count": copy_valid_count,
+                "copy_loss_live": copy_loss_live_val,
+                "copy_argmax_acc": copy_argmax_acc_val,
+                "copy_entropy_valid_mean": copy_entropy_val,
             },
             "L_phrase_bias_aux": {
                 "value": float(parts["loss_phrase_bias_aux"].item()),
-                "status": "PLACEHOLDER — Stage 1 zeros placeholder",
-                "why_zero": (
-                    "Implementation in compute_losses() is a "
-                    "torch.zeros((), requires_grad=False) until the phrase-bias "
-                    "target table is built and corpus-aligned."
+                "status": (
+                    "PLACEHOLDER (deferred per user 2026-05-11 — corpus-alignment-"
+                    "heavy work, explicitly non-gating in Stage 7)"
                 ),
                 "live_signal": False,
-                "wired_for_stage": 7,
+                "wired_for_stage": "deferred",
             },
-            "warning": (
-                "Stage 6 PASS only validates that LM + FR + slot_type are live "
-                "and the model wiring is sound at real size. It does NOT validate "
-                "L_copy or L_phrase_bias_aux. Treat the 5-loss assembly as "
-                "3-of-5 live until Stage 7."
+            "summary": (
+                "4-of-5 live (LM + FR + slot_type + copy); phrase_bias_aux "
+                "remains placeholder and is NON-GATING for Stage 7."
+                if l_copy_is_live else
+                "3-of-5 live (LM + FR + slot_type only); L_copy did not fire "
+                "this batch — Stage 7 launch NOT authorized."
+            ),
+        }
+        # Backward-compat field for v4 readers
+        report["placeholders"] = {
+            "L_copy": report["loss_status"]["L_copy"],
+            "L_phrase_bias_aux": report["loss_status"]["L_phrase_bias_aux"],
+            "warning": report["loss_status"]["summary"],
+        }
+
+        # New gate: L_copy must be live (4-of-5 live) for Stage 6 PASS
+        report["checks"]["10_l_copy_live"] = {
+            "pass": l_copy_is_live,
+            "copy_valid_count": copy_valid_count,
+            "copy_loss_live": copy_loss_live_val,
+            "copy_argmax_acc": copy_argmax_acc_val,
+            "note": (
+                "L_copy LIVE — typed_slot_source emits valid copy targets "
+                "and L_copy gradient flows back through p_copy."
+                if l_copy_is_live else
+                "L_copy did NOT fire — collator emitted no typed_slot_source. "
+                "Check that the smoke pack contains reply tokens that match "
+                "source-side typed identifiers (DOMAIN/DRIVE/REGISTER/OMEGA)."
             ),
         }
 

@@ -27,11 +27,44 @@ parser dispatch lands in Stage 2-3 alongside the unit-test corpus.
 """
 from __future__ import annotations
 
+import re
 from typing import Any, Optional, Sequence
 
 import torch
 
 from .native_nl_collator import NativeNLCollator
+
+
+# Token-string classifiers for the four single-token-mappable typed slot
+# types. Wired in Stage 6 v5 (2026-05-11). STAGE_VAR / COEFFICIENT /
+# FRACTAL_K_LITERAL remain deferred (multi-token or context-aware).
+DOMAIN_LETTER_RE = re.compile(r"^\^[PCEO]$")
+DRIVE_LETTER_RE = re.compile(r"^F_?[1-7]$")
+REGISTER_LETTER_RE = re.compile(r"^\|[TAfE]$")
+OMEGA_RE = re.compile(r"^(Ω(_\w+)?|Omega(_\w+)?)$")
+
+
+def classify_source_token(token_string: str) -> int:
+    """Map a single decoded source token string to a typed-slot id.
+
+    Returns:
+        SLOT_DOMAIN_LETTER / SLOT_DRIVE_LETTER / SLOT_REGISTER_LETTER /
+        SLOT_OMEGA when the string is one of the recognised single-token
+        identifiers. SLOT_CONNECTIVE otherwise (CONNECTIVE is the default
+        for un-classified tokens — including raw letters, digits, and
+        grammar punctuation).
+    """
+    if token_string is None:
+        return SLOT_CONNECTIVE
+    if DOMAIN_LETTER_RE.match(token_string):
+        return SLOT_DOMAIN_LETTER
+    if DRIVE_LETTER_RE.match(token_string):
+        return SLOT_DRIVE_LETTER
+    if REGISTER_LETTER_RE.match(token_string):
+        return SLOT_REGISTER_LETTER
+    if OMEGA_RE.match(token_string):
+        return SLOT_OMEGA
+    return SLOT_CONNECTIVE
 
 
 # Build-spec §2.3 slot ids — must match TypedFiberDecoder.SLOT_TYPE_TO_ID
@@ -171,34 +204,105 @@ class SimplexCollator(NativeNLCollator):
 
     # -- anchor derivation (Option γ, hybrid) --------------------------------
 
+    # Slot → simplex state index mapping. Used to place FR anchor at the
+    # source position where the typed slot lives. DOMAIN_LETTER P/C/E/O →
+    # state 0/10/20/30 (^0 in each domain — neutral Idea anchor). OMEGA
+    # also anchors at state 0. REGISTER/DRIVE letters anchor at state 0
+    # because they don't carry a domain — the FR anchor here is a coarse
+    # "this source position is typed-significant" signal, not a fine-
+    # grained semantic anchor. The full Option γ derivation lands later.
+    _DOMAIN_STATE = {"^P": 0, "^C": 10, "^E": 20, "^O": 30}
+
     def _derive_anchors(self, record: dict[str, Any]) -> Optional[dict[str, Any]]:
         """Derive anchors for one record. Returns None if no anchors found.
 
-        Stage 1 implementation is intentionally minimal: it produces shape-
-        correct anchor structures from the record's ``cas_expression`` text
-        using simple regex-style heuristics. The full Option-γ derivation
-        (calling ``parse_fractal`` / ``parse_meta_logic`` /
-        ``extract_noetic_sequence_with_positions`` from existing parsers)
-        lands in Stage 2-3 as the unit tests force correctness.
+        Stage 6 v5 (2026-05-11): LIVE typed_slot_source derivation for the
+        four single-token-mappable slot types — DOMAIN_LETTER,
+        DRIVE_LETTER, REGISTER_LETTER, OMEGA. Re-tokenises the record's
+        cas_expression and reply_text using ``self.tokenizer`` (the same
+        tokenizer the base collator uses) so source/target token ids line
+        up exactly with the cas_prefix_ids and lm_targets tensors. Then:
+
+        1. Classifies every source token via ``classify_source_token`` on
+           its decoded string (token_ids_to_tokens).
+        2. For each target token, scans source positions for an id-match
+           where ``src_token_type`` is a typed slot (1..7). First match
+           wins — emits (out_pos, slot_id, source_idx).
+        3. Emits one FR anchor per typed source token, mapping
+           DOMAIN_LETTER P/C/E/O to states 0/10/20/30 (^0 anchor in each
+           domain) and OMEGA/REGISTER/DRIVE to state 0.
+
+        STAGE_VAR, COEFFICIENT, FRACTAL_K_LITERAL classifications are
+        deferred (multi-token / context-aware derivation; future stage).
         """
         cas_expr = record.get("cas_expression") or ""
+        reply_text = record.get("reply_text") or record.get("reply") or ""
         if not cas_expr:
             return None
 
+        # Re-tokenise to match the base collator's encoded ids exactly.
+        c_ids = self._encode_capped(cas_expr, self.max_cas_prefix_len)
+        if not c_ids:
+            return None
+        r_ids = self._encode_capped(reply_text, self.max_reply_len) if reply_text else []
+
+        # Decode source token strings for classification
+        tk = self.tokenizer
+        if not hasattr(tk, "token_ids_to_tokens"):
+            # Fallback: tokenizer doesn't expose token-name decoding;
+            # we can't classify. Return empty derivation rather than crash.
+            return {
+                "src_len": len(c_ids),
+                "strategy": PARSER_NONE,
+                "src_anchors": [],
+                "src_token_types": [],
+                "target_slots": [],
+            }
+        src_token_strings = tk.token_ids_to_tokens(c_ids)
+        src_type_by_pos: list[int] = [
+            classify_source_token(s) for s in src_token_strings
+        ]
+
+        # Anchors + src_token_types
         src_anchors: list[tuple[int, int]] = []
         src_token_types: list[tuple[int, int]] = []
+        for k, slot_id in enumerate(src_type_by_pos):
+            if slot_id == SLOT_CONNECTIVE:
+                continue
+            src_token_types.append((k, slot_id))
+            tok_string = src_token_strings[k]
+            state_idx = self._DOMAIN_STATE.get(tok_string, 0)
+            src_anchors.append((k, state_idx))
+
+        # Target → source copy: for each target token, find first source
+        # position with the same token id AND non-CONNECTIVE classification.
+        # Note: decoder output position j predicts reply_ids[j] (per base
+        # collator: lm_targets[i, j] = reply_ids[i][j] for j < n, EOS at n).
         target_slots: list[tuple[int, int, Optional[int]]] = []
+        if r_ids:
+            for j, target_id in enumerate(r_ids):
+                # Find first source position whose id == target_id and
+                # whose source-side type is a copy-bearing slot.
+                src_pos: Optional[int] = None
+                for k, src_id in enumerate(c_ids):
+                    if (
+                        int(src_id) == int(target_id)
+                        and src_type_by_pos[k] != SLOT_CONNECTIVE
+                    ):
+                        src_pos = k
+                        break
+                if src_pos is not None:
+                    target_slots.append((j, src_type_by_pos[src_pos], src_pos))
 
-        # Very-lightweight Stage 1 placeholder: tag the first source token
-        # with OMEGA type (for shape testing) and place a single anchor at
-        # state index 0 (^0 / Idea in P-domain). Real parser dispatch lands
-        # in Stage 2 when unit tests force it.
-        src_token_types.append((0, SLOT_OMEGA))
-        src_anchors.append((0, 0))
+        if not src_anchors and not target_slots:
+            return None
 
+        strategy = PARSER_HYBRID if (src_anchors and target_slots) else (
+            PARSER_NOETIC_SEQ if src_anchors else PARSER_NONE
+        )
         return {
-            "src_len": 1,
-            "strategy": PARSER_HYBRID,
+            "src_len": len(c_ids),
+            "strategy": strategy,
             "src_anchors": src_anchors,
             "src_token_types": src_token_types,
             "target_slots": target_slots,

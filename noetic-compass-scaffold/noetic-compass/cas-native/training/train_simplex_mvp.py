@@ -277,22 +277,57 @@ def compute_losses(
         loss_slot_type = torch.zeros((), device=lm_logits.device)
 
     # L_copy: -log p_copy(j*) at typed-slot positions; j* from typed_slot_source.
+    # Stage 6 v5 (2026-05-11): also emit 4 telemetry fields so Stage 7 Q4
+    # can evaluate "copy path non-random" only when valid slots exist:
+    #   copy_valid_count        — total positions with typed_slot_source >= 0
+    #   copy_loss_live          — L_copy value when valid_count > 0, else NaN
+    #   copy_argmax_acc         — argmax(p_copy) hit rate at valid positions
+    #   copy_entropy_valid_mean — mean entropy of p_copy at valid positions
+    copy_metrics: dict[str, torch.Tensor] = {}
     if "typed_slot_source" in batch:
         copy_target = batch["typed_slot_source"].to(dtype=torch.long)  # (B, L_out)
         valid = (copy_target >= 0)
+        valid_count = int(valid.sum().item())
+        p_copy = out["p_copy"]                                          # (B, L_out, L_src)
         if valid.any():
-            p_copy = out["p_copy"]                                       # (B, L_out, L_src)
             B, L_out, L_src = p_copy.shape
-            # Clamp to valid range so gather doesn't fault; mask zeroes them.
             safe_idx = copy_target.clamp(min=0, max=L_src - 1).unsqueeze(-1)
             chosen = p_copy.gather(-1, safe_idx).squeeze(-1).clamp_min(1e-9)
             copy_log = -torch.log(chosen)
             denom_c = valid.to(dtype=torch.float32).sum().clamp_min(1.0)
             loss_copy = (copy_log * valid.to(dtype=copy_log.dtype)).sum() / denom_c
+            with torch.no_grad():
+                # argmax hit rate at valid positions
+                argmax_idx = p_copy.argmax(dim=-1)
+                hits = (argmax_idx == copy_target) & valid
+                copy_argmax_acc = (
+                    hits.to(dtype=torch.float32).sum() / denom_c
+                )
+                # entropy at valid positions
+                p_safe = p_copy.clamp_min(1e-12)
+                entropy_per = -(p_copy * p_safe.log()).sum(dim=-1)       # (B, L_out)
+                copy_entropy_valid_mean = (
+                    (entropy_per * valid.to(dtype=torch.float32)).sum() / denom_c
+                )
         else:
             loss_copy = torch.zeros((), device=lm_logits.device)
+            copy_argmax_acc = torch.tensor(float("nan"), device=lm_logits.device)
+            copy_entropy_valid_mean = torch.tensor(float("nan"), device=lm_logits.device)
+        copy_metrics["copy_valid_count"] = torch.tensor(
+            float(valid_count), device=lm_logits.device,
+        )
+        copy_metrics["copy_loss_live"] = (
+            loss_copy.detach() if valid_count > 0
+            else torch.tensor(float("nan"), device=lm_logits.device)
+        )
+        copy_metrics["copy_argmax_acc"] = copy_argmax_acc.detach()
+        copy_metrics["copy_entropy_valid_mean"] = copy_entropy_valid_mean.detach()
     else:
         loss_copy = torch.zeros((), device=lm_logits.device)
+        copy_metrics["copy_valid_count"] = torch.tensor(0.0, device=lm_logits.device)
+        copy_metrics["copy_loss_live"] = torch.tensor(float("nan"), device=lm_logits.device)
+        copy_metrics["copy_argmax_acc"] = torch.tensor(float("nan"), device=lm_logits.device)
+        copy_metrics["copy_entropy_valid_mean"] = torch.tensor(float("nan"), device=lm_logits.device)
 
     # L_phrase_bias_aux: placeholder Stage 1 — zeros until the phrase-table
     # corpus alignment lands in Stage 3. Shape-correct, gradient-safe.
@@ -313,6 +348,11 @@ def compute_losses(
         "loss_copy": loss_copy.detach(),
         "loss_phrase_bias_aux": loss_phrase_bias_aux.detach(),
     }
+    # Attach copy telemetry as a sibling dict — NOT mixed into parts so
+    # tests that assert "every loss part is finite" don't trip on NaN
+    # sentinels that mean "not measured this batch" (e.g. when no valid
+    # copy slots exist). Stage 6 v5 Q4 reads copy_metrics directly.
+    parts["__copy_metrics__"] = copy_metrics
     return total, parts
 
 
@@ -349,6 +389,15 @@ def emit_train_progress(
         "grad_norm_decoder": grad_norm_decoder,
     }
     for k, v in loss_parts.items():
+        if k == "__copy_metrics__":
+            # Stage 6 v5: copy telemetry surfaced as top-level keys
+            # (copy_valid_count / copy_loss_live / copy_argmax_acc /
+            # copy_entropy_valid_mean). NaN means "not measured this batch."
+            for ck, cv in v.items():
+                payload[ck] = (
+                    float(cv.detach().cpu().item()) if isinstance(cv, torch.Tensor) else float(cv)
+                )
+            continue
         payload[k] = float(v.detach().cpu().item()) if isinstance(v, torch.Tensor) else float(v)
     for k, v in fr_metrics.items():
         payload[k] = float(v.detach().cpu().item()) if isinstance(v, torch.Tensor) else float(v)
@@ -414,6 +463,54 @@ def synthetic_records(n: int = 4) -> list[dict[str, Any]]:
             "drive": "F6",
             "register": reg,
             "v1mix_task_type": "smoke",
+        })
+    return out
+
+
+def copy_bearing_records(n: int = 8) -> list[dict[str, Any]]:
+    """Stage 6 v5 (2026-05-11): copy-bearing record fixture for Stage 6
+    dry-run. Each record's reply_text literally contains tokens that the
+    SimplexCollator classifies as typed-slot identifiers (DOMAIN_LETTER,
+    DRIVE_LETTER, REGISTER_LETTER, OMEGA), so L_copy fires with non-zero
+    valid_count and the pointer-copy gradient path can be exercised.
+
+    These reuse the same CAS_RESERVED_TOKENS the v1c tokenizer ships with,
+    so re-tokenisation produces single-token IDs for ``^P``, ``F6``,
+    ``|f``, ``Ω_resolve`` etc. The reply embeds those identifiers
+    verbatim — the model's job is to learn to copy them from source.
+    """
+    out: list[dict[str, Any]] = []
+    # Each tuple: (prompt, reply with embedded literal identifiers, cas, reg).
+    samples = [
+        ("which domain", "the domain is ^P",
+         "^2^P_{F6}|f", "f"),
+        ("which drive", "the drive is F6 here",
+         "^3^P_{F6}|A", "A"),
+        ("which register", "the register is |f on this expression",
+         "^4^E_{F4}|f", "f"),
+        ("target omega name", "the production target is Ω_resolve in this recipe",
+         "Ω_resolve = ^2^P_{F1}|T", "T"),
+        ("domain and drive", "domain ^C with drive F3",
+         "^5^C_{F3}|E", "E"),
+        ("register and omega", "register |T on Ω_grounding",
+         "Ω_grounding = ^6^P_{F2}|T", "T"),
+        ("multi slot", "we see ^O and F7 with |A",
+         "^7^O_{F7}|A", "A"),
+        ("another target", "Ω_clarity sits in ^E under |E",
+         "Ω_clarity = ^8^E_{F5}|E", "E"),
+    ]
+    for i in range(n):
+        prompt, reply, cas, reg = samples[i % len(samples)]
+        out.append({
+            "id": f"copy_rec_{i:03d}",
+            "trace_id": f"copy_trace_{i:03d}",
+            "schema_version": "native_nl.v1",
+            "tier": "tier3",
+            "prompt_text": prompt,
+            "reply_text": reply,
+            "cas_expression": cas,
+            "register": reg,
+            "v1mix_task_type": "smoke_copy",
         })
     return out
 
@@ -547,9 +644,18 @@ def run_integration_step(
         extras=extras,
     )
 
+    copy_metrics_dict = loss_parts.get("__copy_metrics__", {})
     return {
         "loss_total": float(loss_parts["loss_total"].item()),
-        "loss_parts": {k: float(v.item()) for k, v in loss_parts.items()},
+        "loss_parts": {
+            k: float(v.item())
+            for k, v in loss_parts.items()
+            if k != "__copy_metrics__"
+        },
+        "copy_metrics": {
+            k: float(v.item()) if isinstance(v, torch.Tensor) else float(v)
+            for k, v in copy_metrics_dict.items()
+        },
         "fr_metrics": {
             k: float(v.item()) if isinstance(v, torch.Tensor) else float(v)
             for k, v in fr_metrics.items()
@@ -812,6 +918,7 @@ def run_cpu_smoke(
             halted = f"simplex_min_p <= 0 at step {step}: {min_p}"
             break
 
+        copy_metrics_step = parts.get("__copy_metrics__", {})
         step_record = {
             "step": step,
             "loss_total": float(parts["loss_total"].item()),
@@ -820,6 +927,18 @@ def run_cpu_smoke(
             "loss_slot_type": float(parts["loss_slot_type"].item()),
             "loss_copy": float(parts["loss_copy"].item()),
             "loss_phrase_bias_aux": float(parts["loss_phrase_bias_aux"].item()),
+            "copy_valid_count": (
+                float(copy_metrics_step["copy_valid_count"].item())
+                if "copy_valid_count" in copy_metrics_step else 0.0
+            ),
+            "copy_argmax_acc": (
+                float(copy_metrics_step["copy_argmax_acc"].item())
+                if "copy_argmax_acc" in copy_metrics_step else float("nan")
+            ),
+            "copy_loss_live": (
+                float(copy_metrics_step["copy_loss_live"].item())
+                if "copy_loss_live" in copy_metrics_step else float("nan")
+            ),
             "grad_norm_encoder": enc_norm,
             "grad_norm_decoder": dec_norm,
             "simplex_min_p": min_p,
