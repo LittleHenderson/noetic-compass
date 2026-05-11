@@ -316,3 +316,179 @@ def test_greedy_decode_does_not_crash_on_shape_mismatch():
             "greedy_decode passed typed_slot_source to model — "
             "potentially shape-mismatched against dec_input."
         )
+
+
+# ---------------------------------------------------------------------------
+# Diagnostic infra piece 3 — per-token greedy trace (2026-05-11)
+# ---------------------------------------------------------------------------
+
+def test_greedy_decode_trace_off_by_default():
+    """Default invocations of greedy_decode must NOT include per_token_trace."""
+    class _MockTok:
+        BOS_ID = 1
+        EOS_ID = 2
+        PAD_ID = 0
+        def decode(self, ids, skip_special=True):
+            return " ".join(str(i) for i in ids)
+
+    class _MockCollator:
+        def __init__(self):
+            self.tokenizer = _MockTok()
+        def __call__(self, records, device="cpu"):
+            return {
+                "input_ids": torch.zeros((1, 4), dtype=torch.long),
+                "attention_mask": torch.ones((1, 4), dtype=torch.bool),
+                "cas_prefix_ids": torch.zeros((1, 3), dtype=torch.long),
+                "cas_prefix_mask": torch.ones((1, 3), dtype=torch.bool),
+                "lm_decoder_input_ids": torch.tensor([[1]], dtype=torch.long),
+                "lm_targets": torch.zeros((1, 4), dtype=torch.long),
+                "loss_mask": torch.ones((1, 4), dtype=torch.float32),
+                "typed_slot_positions": torch.zeros((1, 4, 9), dtype=torch.float32),
+                "typed_slot_source": torch.full((1, 4), -1, dtype=torch.int16),
+                "src_token_type": torch.zeros((1, 3), dtype=torch.int8),
+            }
+
+    class _MockModel(torch.nn.Module):
+        def forward(self, batch):
+            L_out = batch["lm_decoder_input_ids"].shape[1]
+            return {
+                "lm_logits": torch.randn(1, L_out, 10),
+                "slot_type_logits": torch.randn(1, L_out, 9),
+                "source_hidden": torch.zeros(1, 3, 4),
+                "simplex_trajectory": torch.ones(1, 3, 40) / 40.0,
+                "simplex_final": torch.ones(1, 40) / 40.0,
+                "p_copy": torch.full((1, L_out, 3), 1.0 / 3.0),
+                "copy_source_indices": torch.full((1, L_out), -1, dtype=torch.int16),
+                "decoder_hidden_state": torch.zeros(1, L_out, 4),
+            }
+
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        _MockModel(), {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        _MockCollator(), _MockTok(), device=torch.device("cpu"),
+        max_new_tokens=3,
+    )
+    assert "per_token_trace" not in out
+
+
+def test_greedy_decode_trace_on_logs_per_token():
+    """With trace=True, per_token_trace must be a list of dicts with
+    all the diagnostic fields piece 3 requires."""
+    class _MockTok:
+        BOS_ID = 1
+        EOS_ID = 2
+        PAD_ID = 0
+        def decode(self, ids, skip_special=True):
+            return " ".join(str(i) for i in ids)
+
+    class _MockCollator:
+        def __init__(self):
+            self.tokenizer = _MockTok()
+        def __call__(self, records, device="cpu"):
+            return {
+                "input_ids": torch.zeros((1, 4), dtype=torch.long),
+                "attention_mask": torch.ones((1, 4), dtype=torch.bool),
+                "cas_prefix_ids": torch.zeros((1, 3), dtype=torch.long),
+                "cas_prefix_mask": torch.ones((1, 3), dtype=torch.bool),
+                "lm_decoder_input_ids": torch.tensor([[1]], dtype=torch.long),
+                "lm_targets": torch.zeros((1, 4), dtype=torch.long),
+                "loss_mask": torch.ones((1, 4), dtype=torch.float32),
+                "typed_slot_positions": torch.zeros((1, 4, 9), dtype=torch.float32),
+                "typed_slot_source": torch.full((1, 4), -1, dtype=torch.int16),
+                "src_token_type": torch.zeros((1, 3), dtype=torch.int8),
+            }
+
+    class _MockModel(torch.nn.Module):
+        def forward(self, batch):
+            L_out = batch["lm_decoder_input_ids"].shape[1]
+            # Bias toward token id 3 so we get a loop
+            logits = torch.full((1, L_out, 10), -10.0)
+            logits[..., 3] = 10.0
+            return {
+                "lm_logits": logits,
+                "slot_type_logits": torch.randn(1, L_out, 9),
+                "source_hidden": torch.zeros(1, 3, 4),
+                "simplex_trajectory": torch.ones(1, 3, 40) / 40.0,
+                "simplex_final": torch.ones(1, 40) / 40.0,
+                "p_copy": torch.full((1, L_out, 3), 1.0 / 3.0),
+                "copy_source_indices": torch.full((1, L_out), -1, dtype=torch.int16),
+                "decoder_hidden_state": torch.zeros(1, L_out, 4),
+            }
+
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        _MockModel(), {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        _MockCollator(), _MockTok(), device=torch.device("cpu"),
+        max_new_tokens=5, trace=True, topk=3,
+    )
+    assert "per_token_trace" in out
+    trace = out["per_token_trace"]
+    assert len(trace) > 0
+    required_fields = {
+        "pos", "chosen_id", "chosen_token_str", "lm_top_k", "lm_entropy",
+        "slot_type_argmax", "slot_type_top_prob", "slot_type_entropy",
+        "copy_argmax", "copy_top_prob", "copy_entropy",
+        "ngram_repeat_count", "ngram_repeat_phrase", "is_copy_eligible_slot",
+    }
+    missing = required_fields - set(trace[0].keys())
+    assert not missing, f"per_token_trace[0] missing: {missing}"
+    # top_k is k=3
+    assert len(trace[0]["lm_top_k"]) == 3
+    # The model is biased toward id 3 so we should see a repeat by pos 2
+    # (chosen=3 at pos 0, =3 at pos 1, =3 at pos 2)
+    assert trace[-1]["chosen_id"] == 3
+    # And the n-gram repeat detector should fire at some point
+    found_repeat = any(t["ngram_repeat_count"] > 0 for t in trace)
+    assert found_repeat, "per-token trace should detect the loop"
+
+
+def test_per_token_trace_lm_entropy_near_zero_when_peaky():
+    """A heavily-peaked logit distribution should produce near-zero LM entropy."""
+    class _MockTok:
+        BOS_ID = 1
+        EOS_ID = 2
+        PAD_ID = 0
+        def decode(self, ids, skip_special=True):
+            return ""
+
+    class _MockCollator:
+        def __init__(self):
+            self.tokenizer = _MockTok()
+        def __call__(self, records, device="cpu"):
+            return {
+                "input_ids": torch.zeros((1, 4), dtype=torch.long),
+                "attention_mask": torch.ones((1, 4), dtype=torch.bool),
+                "cas_prefix_ids": torch.zeros((1, 3), dtype=torch.long),
+                "cas_prefix_mask": torch.ones((1, 3), dtype=torch.bool),
+                "lm_decoder_input_ids": torch.tensor([[1]], dtype=torch.long),
+                "lm_targets": torch.zeros((1, 4), dtype=torch.long),
+                "loss_mask": torch.ones((1, 4), dtype=torch.float32),
+                "typed_slot_positions": torch.zeros((1, 4, 9), dtype=torch.float32),
+                "typed_slot_source": torch.full((1, 4), -1, dtype=torch.int16),
+                "src_token_type": torch.zeros((1, 3), dtype=torch.int8),
+            }
+
+    class _MockModel(torch.nn.Module):
+        def forward(self, batch):
+            L_out = batch["lm_decoder_input_ids"].shape[1]
+            # Extremely peaked at id 5 — entropy should be ~0
+            logits = torch.full((1, L_out, 100), -50.0)
+            logits[..., 5] = 50.0
+            return {
+                "lm_logits": logits,
+                "slot_type_logits": torch.zeros(1, L_out, 9),
+                "source_hidden": torch.zeros(1, 3, 4),
+                "simplex_trajectory": torch.ones(1, 3, 40) / 40.0,
+                "simplex_final": torch.ones(1, 40) / 40.0,
+                "p_copy": torch.full((1, L_out, 3), 1.0 / 3.0),
+                "copy_source_indices": torch.full((1, L_out), -1, dtype=torch.int16),
+                "decoder_hidden_state": torch.zeros(1, L_out, 4),
+            }
+
+    from cas_native.evaluation.sample_decoder import greedy_decode
+    out = greedy_decode(
+        _MockModel(), {"prompt_text": "x", "reply_text": "y", "cas_expression": "z"},
+        _MockCollator(), _MockTok(), device=torch.device("cpu"),
+        max_new_tokens=2, trace=True,
+    )
+    assert out["per_token_trace"][0]["lm_entropy"] < 0.01
