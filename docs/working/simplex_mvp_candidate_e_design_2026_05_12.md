@@ -97,7 +97,16 @@ If audit confirms head-only labelling: Stage 1 specifies full-span as a load-bea
    - If audit confirms current labels are head-only, fix the collator/anchor derivation to assign STAGE_VAR (or appropriate slot type) on EVERY sub-token of each identifier, with `typed_slot_source` pointing to the *corresponding* sub-token in the source.
    - If audit confirms full-span: no change needed.
 
-**Stage 1 deliverable:** `cas-synthetic/data/eval/rpm_copy_grounding_v2.jsonl` (size TBD; target ~2000-3000 records to provide counterfactual / hard-negative variance) + a sister non-rpm corpus of comparable size to maintain category balance.
+**Stage 1 deliverables** (per audit 2026-05-12 — corpus paths corrected; training corpora live under `data/path_d/`, eval packs live under `data/eval/`):
+
+| Artifact | Path | Purpose |
+|---|---|---|
+| Training corpus (train-bucket suffixes) | `cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl` | What the model trains on |
+| Dev corpus (dev-bucket suffixes) | `cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.jsonl` | Stage 2 TF grounding probe (held out from training) |
+| Test corpus (test-bucket suffixes) | `cas-synthetic/data/path_d/rpm_copy_grounding_v2_test.jsonl` | Stage 3 on-policy eval (held out from both training and dev) |
+| Source-swap eval pack | `cas-synthetic/data/eval/rpm_copy_grounding_v2_source_swap_eval.jsonl` | Stage 4 source-swap conditionality gate — paired records with same EN target, different source identifiers |
+
+Size targets: ~2000-3000 train records to provide counterfactual / hard-negative variance + a sister non-rpm corpus of comparable size to maintain category balance. Dev / test packs sized to ~200 records each. Source-swap eval pack: ~50 paired records (100 evaluations).
 
 **Stage 1 build review (before pod work):**
 - Sample-read 20 records per template variant to confirm fluency and structural correctness.
@@ -105,25 +114,51 @@ If audit confirms head-only labelling: Stage 1 specifies full-span as a load-bea
 - Verify counterfactual pairs have matching EN structure with different identifiers.
 - Verify suffix partition holds (no train record uses dev or test suffix; no eval pack record uses train suffix).
 
-## Stage 2 — B2 retrain + TF grounding probe
+## Stage 2 — B2 retrain + TF grounding probe (split into E2a + E2b per audit 2026-05-12)
 
 **Goal:** confirm `rpm_copy_grounding_v2` teaches the binding rule under teacher forcing before committing to on-policy.
 
-**Build:**
-- Warm-start from B2's `ckpt_final.pt`. B2 was the strict-validate stage (slot stable, no leakage); use it as the base because B1's regression guard already passed there and we want to test whether the new corpus + same training procedure produces binding.
-- Train through B2-equivalent (LM + FR + slot, no copy yet) for 1000 steps on the new corpus.
-- Then train through B3-equivalent (full preset + hard typed-fiber emission) for 1000 steps.
+The Stage 2 gates measure *source recovery* and *source-swap conditionality* — both require the copy/pointer objective to be live in the trained model. Stage 2 is therefore split into two substages; the TF gate applies after E2b.
 
-**Locked gates** (read at post-training TF eval on FRESH records — dev-bucket suffix):
+### E2a — LM + FR + slot warmup
+
+**Build:**
+- Warm-start from B2's `ckpt_final.pt`. B2 was the strict-validate stage (slot stable, no leakage); use it as the base because B1's regression guard already passed there.
+- Loss preset: `lm=1, fr=1, slot_type=1, copy=0, phrase_bias_aux=0` (identical to `b2` / `d2` ablation).
+- Train on `rpm_copy_grounding_v2_train.jsonl` for 1000 steps.
+
+**Internal sanity checks** (not the locked TF gate — those apply after E2b):
+- Per-batch `train_progress` losses finite.
+- At step 250 / 500 / 750 / 1000: canary read; no phrase loops, no triviality.
+- Slot F1 on dev-bucket records ≥80% before promoting to E2b (cheap LM+slot check; not the binding gate).
+
+### E2b — Add copy / pointer-span / contrastive / coverage objectives under teacher forcing
+
+**Build:**
+- Warm-start from E2a's `ckpt_final.pt`.
+- Loss preset: full set with new objectives active:
+  - `L_lm` (gold-prefix LM, teacher forcing — no model-prefix mix yet; that's Stage 3)
+  - `L_fr` (Fisher-Rao on simplex)
+  - `L_slot` (slot-type CE)
+  - `L_pointer` (per-position copy loss — already exists)
+  - `L_span` (new: span-coherence — penalize per-token copy decisions that don't form a contiguous source-span on STAGE_VAR positions)
+  - `L_contrastive_margin` (new: correct source position scores higher than hard-negative source positions by margin m)
+  - `L_coverage` (new: penalize the same source position being pointed at twice when target has distinct identifiers)
+  - `L_phrase_bias_aux` (existing)
+- Train on `rpm_copy_grounding_v2_train.jsonl` for 1000 steps.
+
+**Locked TF gates** (read at post-E2b TF eval on FRESH dev-bucket records):
 
 | Gate | Threshold | Rationale |
 |---|---|---|
-| TF fresh source recovery | **≥80%** | If the data wedge teaches binding, TF should recover the right identifier almost always (TF has the correct prefix; the only question is "did the model learn to read the source") |
-| Source-swap conditionality | **≥85%** | Same EN target, swap source identifiers → output should swap. Isolates binding from shape memorization. |
+| TF fresh source recovery | **≥80%** | If the data wedge + copy/span objectives teach binding, TF should recover the right identifier almost always (TF has the correct prefix; the only question is "did the model learn to read the source") |
+| Source-swap conditionality | **≥85%** | Same EN target, swap source identifiers → output should swap. Isolates binding from shape memorization. Measured on a held-out source-swap subset of `rpm_copy_grounding_v2_dev.jsonl`. |
 | Slot F1 for copy-bearing slots | **≥90%** | Slot head correctly identifies typed positions in fresh records |
-| Non-rpm leakage | **0** | Same guard as B2/B3: STAGE_VAR slot never fires on non-rpm inputs |
+| Non-rpm leakage | **0** | STAGE_VAR slot never fires on non-rpm inputs |
 
-**Kill rule:** if **any** of the four gates fails, stop. **In particular, if TF fresh recovery stays around 30%, the data/labels are still wrong** — fix the wedge before Stage 3. **Do not run DAgger on a model that hasn't learned binding under TF.**
+**Kill rule:** if **any** of the four gates fails after E2b, stop. **In particular, if TF fresh recovery stays around 30%, the data/labels are still wrong** — fix the wedge before Stage 3. **Do not run DAgger on a model that hasn't learned binding under TF.**
+
+**Why split:** E2a alone (LM+FR+slot, no copy) cannot satisfy the TF source-recovery gate because the copy/pointer objective is the mechanism that learns source binding. Gating TF recovery on E2a would test only template completion, not binding. E2b adds the copy/span/contrastive/coverage signal under teacher forcing; the TF gate then validates that these objectives + the new corpus actually produce source binding before any on-policy work begins.
 
 ## Stage 3 — CAS-DAgger / on-policy training
 
@@ -149,21 +184,35 @@ If audit confirms head-only labelling: Stage 1 specifies full-span as a load-bea
 
 ## Stage 4 — Fresh free-decode gate (the proof gate)
 
-**Eval pack:** the frozen broader B3 24-pack at `cas-synthetic/data/eval/broader_b3_eval_pack_2026_05_12.jsonl`. Same pack B3 failed (0/37). Same 7 locked gates as the prior broader eval plus the binding-specific gates.
+**Eval packs (TWO required per audit 2026-05-12):**
 
-**Locked first-proof gates** (all must hold):
+| Pack | Path | Purpose |
+|---|---|---|
+| **Frozen broader B3 24-pack** | `cas-synthetic/data/eval/broader_b3_eval_pack_2026_05_12.jsonl` | Continuity with the bar B3 failed (0/37). Apples-to-apples with B3 baseline. Locked since 2026-05-12. |
+| **Sibling source-swap eval pack** | `cas-synthetic/data/eval/rpm_copy_grounding_v2_source_swap_eval.jsonl` | Source-swap conditionality cannot be measured on the broader B3 pack alone — it has no paired source-swap records. Generated in Stage 1; held out from all training. |
+
+**Both packs must pass for Stage 4 to validate.** Failure on either falsifies Candidate E.
+
+**Locked first-proof gates:**
+
+*On the frozen broader B3 24-pack (continuity gates):*
 
 | Gate | Threshold | Notes |
 |---|---|---|
 | Exact fresh identifier recovery | **≥50%** | Bounded-regex positional match — same metric as broader B3 runner |
 | Free-decode / TF recovery ratio | **≥70%** | Closes the exposure-bias gap |
-| Source-swap conditionality | **≥85%** | Eval pack must be regenerated with source-swap pairs OR use a sibling eval pack |
 | Non-rpm copy emissions | **= 0** | Same leakage guard as broader B3 Gate 3 |
 | Loop-to-cap rate | **= 0** | No record may reach max_new_tokens via phrase-loop attractor (Gate 6 strengthened) |
 
-**Promotion-later gate:** ≥80% fresh exact recovery. This is the production-ready bar; Stage 4 only needs ≥50%.
+*On the sibling source-swap eval pack (conditionality gate):*
 
-**Kill rule:** if any of the five gates fails on the broader B3 pack, Candidate E falsifies. No retuning. Surface failure analysis; reopen deeper architectural review (Tree Decoder, Two-Pass) at that point.
+| Gate | Threshold | Notes |
+|---|---|---|
+| Source-swap conditionality | **≥85%** | For paired records (same EN target, different source identifiers), the model's output identifier must swap with the source. Per-record: success if generated identifier matches the source-position-correct identifier, not the other pair member's identifier. |
+
+**Promotion-later gate:** ≥80% fresh exact recovery on broader B3 pack AND ≥90% source-swap conditionality on sibling pack. This is the production-ready bar; Stage 4 only needs the first-proof thresholds above.
+
+**Kill rule:** if **any** of the five gates fails on **either** pack, Candidate E falsifies. No retuning. Surface failure analysis; reopen deeper architectural review (Tree Decoder, Two-Pass) at that point.
 
 ## Anti-tuning + anti-overclaim discipline (carried forward)
 
@@ -180,11 +229,12 @@ If audit confirms head-only labelling: Stage 1 specifies full-span as a load-bea
 | Stage | Wall-clock | Pod $ |
 |---|---|---|
 | Pre-Stage-1 audit (full-span labelling check) | 1 hr laptop | $0 |
-| Stage 1 — `rpm_copy_grounding_v2` SDG | 1 week laptop | $0 |
+| Stage 1 — `rpm_copy_grounding_v2` SDG (train/dev/test + source-swap pack) | 1 week laptop | $0 |
 | Stage 1 — sample-read review | 1 day | $0 |
-| Stage 2 — B2 retrain + TF grounding probe | 1 day | ~$1.50 |
-| Stage 3 — CAS-DAgger training | 1 day | ~$2-3 |
-| Stage 4 — broader B3 eval + new gates | minutes | ~$0.10 |
+| Stage 2a — LM+FR+slot warmup retrain | ~half day | ~$0.40 |
+| Stage 2b — add copy/span/contrastive/coverage TF training + TF grounding gates | ~half day | ~$0.60 |
+| Stage 3 — CAS-DAgger on-policy training | 1 day | ~$2-3 |
+| Stage 4 — broader B3 + source-swap eval | minutes | ~$0.15 |
 | **Total** | **~2 weeks** | **~$5** |
 
 Cumulative would reach ~$8.55 of $60 if Stage 4 completes.
@@ -192,10 +242,11 @@ Cumulative would reach ~$8.55 of $60 if Stage 4 completes.
 ## Build order (sequenced, each gated)
 
 1. **Pre-Stage-1 audit** (`docs/working/candidate_e/audit_label_coverage_2026_05_12.md`) — laptop, $0
-2. **Stage 1 SDG + sample-read review** — laptop, $0, surface samples for user approval before pod
-3. **Stage 2 retrain + TF gates** — pod, ~$1.50, surface report for user gate adjudication
-4. **Stage 3 CAS-DAgger** — pod, ~$2-3, only if Stage 2 passes
-5. **Stage 4 fresh free-decode gate** — pod, ~$0.10, single verdict
+2. **Stage 1 SDG (train/dev/test + source-swap pack) + sample-read review** — laptop, $0, surface samples for user approval before pod
+3. **Stage 2a — LM+FR+slot warmup retrain** — pod, ~$0.40, surface internal sanity check before promoting to 2b
+4. **Stage 2b — add copy/span/contrastive/coverage TF training + TF gates** — pod, ~$0.60, surface gate verdict for user adjudication
+5. **Stage 3 CAS-DAgger** — pod, ~$2-3, only if Stage 2b's TF gate passes
+6. **Stage 4 dual-pack eval (broader B3 + source-swap)** — pod, ~$0.15, single verdict
 
 Each stage's kill/validate gate is locked in this doc. No tuning between stages. No bundle-authorization; each stage requires explicit user OK after surface.
 
@@ -221,11 +272,13 @@ Each stage's kill/validate gate is locked in this doc. No tuning between stages.
 Before authorizing Stage 1, confirm:
 
 - [ ] Diagnosis is correctly stated (binding rule failure; not tokenizer; not architecture)
-- [ ] All four rejected hypotheses are correctly labeled and rationaled
+- [ ] Rejected hypotheses are correctly labeled and rationaled (currently 8 rows in the rejected table)
 - [ ] Six structural properties of `rpm_copy_grounding_v2` are sufficient (or flag additions)
-- [ ] Stage 2 TF gates (≥80% / ≥85% / ≥90% / 0) are correctly calibrated
+- [ ] Stage 2 is split into E2a (LM+FR+slot warmup) and E2b (copy/span/contrastive/coverage added); TF gate applies after E2b
+- [ ] Stage 2b TF gates (≥80% / ≥85% / ≥90% / 0) are correctly calibrated
 - [ ] Stage 3 loss list is complete (or flag missing terms)
-- [ ] Stage 4 fresh-decode gates match Codex's locked criteria
+- [ ] Stage 4 requires BOTH the broader B3 24-pack AND the sibling source-swap eval pack to pass
+- [ ] Stage 1 corpus paths put training data under `data/path_d/` and eval packs under `data/eval/`
 - [ ] Anti-tuning rules are intact (no tuning against the 24-pack)
 - [ ] Cost projection is realistic
 - [ ] Companion files exist
