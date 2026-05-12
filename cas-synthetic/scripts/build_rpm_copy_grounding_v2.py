@@ -484,68 +484,131 @@ def gen_source_swap_pair(pair_id: str, bucket: str, rng: random.Random,
 # samples; the full corpus is comparable size to train_rpm.
 # ---------------------------------------------------------------------------
 
+def _article(noun_phrase: str) -> str:
+    """Return 'A' or 'An' based on the first letter of the next word.
+    Patched 2026-05-12 (B2): non-rpm templates emitted 'A aversion'
+    etc. which is grammatically wrong and could teach the LM head
+    a malformed article→noun pattern.
+    """
+    first = noun_phrase.lstrip()[:1].lower()
+    return "An" if first in "aeiou" else "A"
+
+
+# All 6 non-rpm leakage-negative categories: full templates per category.
+# No fallback to "A foundational thought.". Codex audit 2026-05-12 finding 4:
+# previous fallback narrowed full-mode coverage to state_literal +
+# binary_composition only and didn't exercise the meta_logic / recipe /
+# cross_register_omega / fractal_sequence categories that need to teach the
+# slot head NOT to fire STAGE_VAR on these distinct surfaces.
+NON_RPM_CATEGORIES: tuple[str, ...] = (
+    "state_literal",
+    "binary_composition",
+    "recipe",
+    "meta_logic",
+    "cross_register_omega",
+    "fractal_sequence",
+)
+
+
 def gen_non_rpm_record(rec_id: str, category: str, bucket: str,
                        rng: random.Random) -> dict[str, Any]:
-    """Generate a non-rpm record. Categories sampled from existing canary
-    structure: state_literal, binary_composition, recipe, meta_logic,
-    cross_register_omega, fractal_sequence."""
-    # Use a simple template per category. These are deliberately not
-    # source-identifier-bearing; the slot head should NEVER fire STAGE_VAR
-    # on these inputs.
-    templates_per_cat = {
-        "state_literal": {
-            "cas_choices": [
-                "^2^C_{F4}", "^5^P_{F1}|T", "^7^O_{F5}|f",
-                "^4^E_{F1}|T", "^8^O_{F5}|f", "^6^E_{F1}|A",
-            ],
-            "en_template": "A {desc} expressed through {register}.",
-            "desc_choices": [
-                "moment of awareness", "felt resonance", "principled aversion",
-                "embodied stance", "transcendent felt sense", "operational decision",
-            ],
-            "reg_choices": ["analytical reasoning", "felt intuition",
-                            "embodied action", "transcendent vision"],
-        },
-        "binary_composition": {
-            "cas_choices": ["^4^C × ^7^C", "^0^P × ^5^P", "^3^O × ^6^O"],
-            "en_template": "A {desc1} integrated with {desc2}.",
-            "desc1_choices": ["resonance in the cognitive arena",
-                              "thought in principled grounding",
-                              "aversion in operational behavior"],
-            "desc2_choices": ["practiced rhythm in the same arena",
-                              "the accumulated experience that defines a Mind",
-                              "decomposition into components"],
-        },
-    }
-    def _article(noun_phrase: str) -> str:
-        """Return 'A' or 'An' based on the first letter of the next word.
-        Patched 2026-05-12 (B2): non-rpm templates emitted 'A aversion'
-        etc. which is grammatically wrong and could teach the LM head
-        a malformed article→noun pattern.
-        """
-        first = noun_phrase.lstrip()[:1].lower()
-        return "An" if first in "aeiou" else "A"
-
+    """Generate a non-rpm record from one of 6 categories. Reply must
+    contain NO stage_var identifiers — the slot head must learn NOT to
+    fire STAGE_VAR on these surfaces. Audit verifies (a) no stage_var
+    pattern in cas/reply, (b) collator emits zero STAGE_VAR target spans.
+    """
     if category == "state_literal":
-        t = templates_per_cat[category]
-        cas = rng.choice(t["cas_choices"])
-        desc = rng.choice(t["desc_choices"])
-        reg = rng.choice(t["reg_choices"])
-        # state_literal template already starts with "A {desc}" — convert
-        # the "A " prefix to "{article} " based on desc's first letter.
-        article = _article(desc)
-        en = f"{article} {desc} expressed through {reg}."
+        cas_choices = [
+            "^2^C_{F4}", "^5^P_{F1}|T", "^7^O_{F5}|f",
+            "^4^E_{F1}|T", "^8^O_{F5}|f", "^6^E_{F1}|A",
+        ]
+        desc_choices = [
+            "moment of awareness", "felt resonance", "principled aversion",
+            "embodied stance", "transcendent felt sense", "operational decision",
+        ]
+        reg_choices = ["analytical reasoning", "felt intuition",
+                       "embodied action", "transcendent vision"]
+        cas = rng.choice(cas_choices)
+        desc = rng.choice(desc_choices)
+        reg = rng.choice(reg_choices)
+        en = f"{_article(desc)} {desc} expressed through {reg}."
     elif category == "binary_composition":
-        t = templates_per_cat[category]
-        cas = rng.choice(t["cas_choices"])
-        d1 = rng.choice(t["desc1_choices"])
-        d2 = rng.choice(t["desc2_choices"])
-        article = _article(d1)
-        en = f"{article} {d1} integrated with {d2}."
+        cas_choices = ["^4^C × ^7^C", "^0^P × ^5^P", "^3^O × ^6^O",
+                       "^2^E × ^8^E", "^6^C × ^9^C"]
+        d1_choices = ["resonance in the cognitive arena",
+                      "thought in principled grounding",
+                      "aversion in operational behavior",
+                      "attraction in the evaluative arena",
+                      "decomposition in the cognitive arena"]
+        d2_choices = ["practiced rhythm in the same arena",
+                      "the accumulated experience that defines a Mind",
+                      "decomposition into components",
+                      "triggering of an associated idea",
+                      "the unified result that comes to Mind"]
+        cas = rng.choice(cas_choices)
+        d1 = rng.choice(d1_choices)
+        d2 = rng.choice(d2_choices)
+        en = f"{_article(d1)} {d1} integrated with {d2}."
+    elif category == "recipe":
+        # v7.6 recipe surface: Θ(Ω) = a·X + b·Y → Ω
+        omega_choices = ["Ω_clarity", "Ω_focus", "Ω_resilience",
+                         "Ω_decision", "Ω_alignment"]
+        prereqs = [
+            ("0.5", "^1^P", "awareness in principled grounding"),
+            ("0.3", "^2^C_{F2}", "an attractive principle of wisdom"),
+            ("0.4", "^7^C_{F5}", "practiced rhythm with agency"),
+            ("0.2", "^6^P_{F2}", "decomposition under wisdom"),
+            ("0.5", "^4^E", "evaluative resonance"),
+            ("0.6", "^5^O", "accumulated operational experience"),
+        ]
+        omega = rng.choice(omega_choices)
+        n_terms = rng.randint(2, 3)
+        chosen = rng.sample(prereqs, n_terms)
+        cas_terms = [f"{c}·{rhs}" for c, rhs, _ in chosen]
+        cas = f"Θ({omega}) = {' + '.join(cas_terms)} → {omega}"
+        en_terms = []
+        for i, (coeff, _rhs, phrase) in enumerate(chosen):
+            connector = "and " if i == len(chosen) - 1 and len(chosen) > 1 else ""
+            en_terms.append(f"{connector}{coeff} parts {phrase}")
+        en = f"A recipe for {omega.replace('Ω_', '')} requires {', '.join(en_terms)}."
+    elif category == "meta_logic":
+        # v7.7 register-set / co-presence / cross-register surface
+        templates = [
+            ("^3^P|⟨A,f,T⟩",
+             "Principled aversion present across analytical, affective, and transcendent registers."),
+            ("^2^C|A + ^2^C|f",
+             "Cognitive attraction co-present in analytical and affective registers."),
+            ("(^7^P|A × ^7^P|f) = ^7^P|Ω",
+             "Practiced rhythm integrated across analytical and affective registers into a unified result."),
+            ("^4^E|⟨T,A⟩",
+             "Evaluative resonance present in transcendent and analytical registers."),
+            ("^5^O|f + ^5^O|E",
+             "Accumulated operational experience co-present in affective and embodied registers."),
+        ]
+        cas, en = rng.choice(templates)
+    elif category == "cross_register_omega":
+        # Cross-register integration with explicit Ω result
+        templates = [
+            ("(^1^P|A × ^1^P|T) = ^1^P|Ω_meta",
+             "Awareness integrated across analytical and transcendent registers yields meta-awareness."),
+            ("(^6^C|A × ^6^C|T) = ^6^C|Ω_synthesis",
+             "Cognitive decomposition integrated across analytical and transcendent registers yields synthesis."),
+            ("(^2^P|f × ^2^P|E) = ^2^P|Ω_commitment",
+             "Principled attraction integrated across affective and embodied registers yields commitment."),
+            ("(^8^E|A × ^8^E|f) = ^8^E|Ω_insight",
+             "Evaluative triggering integrated across analytical and affective registers yields insight."),
+        ]
+        cas, en = rng.choice(templates)
+    elif category == "fractal_sequence":
+        # Cognitive Fractal ⟨k₁:k₂:⋯:kₙ⟩ surface
+        depths = rng.choice([3, 4, 5])
+        ks = [rng.randint(0, 9) for _ in range(depths)]
+        cas = f"⟨{':'.join(str(k) for k in ks)}⟩"
+        depth_word = {3: "three", 4: "four", 5: "five"}[depths]
+        en = (f"A cognitive fractal of {depth_word} levels with Noetic depths "
+              f"{', '.join(str(k) for k in ks)}.")
     else:
-        # Minimal fallback for other categories — fill in later iterations
-        cas = "^0^P"
-        en = "A foundational thought."
+        raise ValueError(f"unknown non-rpm category: {category!r}")
 
     return {
         "id": rec_id,
@@ -579,16 +642,189 @@ _ARTICLE_A_VOWEL_RE = re.compile(r"\bA [aeiouAEIOU]")
 _ARTICLE_AN_CONSONANT_RE = re.compile(
     r"\ban [b-df-hj-np-tv-z]", re.IGNORECASE,
 )
+# Normalize identifier body suffix for cross-variant invariant comparison.
+# `stageA0_5_41250` -> `stageA0_5_<BODY>`. Within a counterfactual group all
+# canonical stages share a body and distractors share a (separate) body, so
+# this normalization collapses everything that legitimately differs between
+# variants and preserves everything that must match.
+_IDENT_BODY_SUB_RE = re.compile(r"(stage[A-Z]\d+_\d+)_\d+")
 
 
-def audit_records(records: list[dict[str, Any]], require_strict_coverage: bool = True
+def _normalize_identifiers(s: str) -> str:
+    """Replace `_\\d+` body suffix on every stage identifier with `_<BODY>`."""
+    return _IDENT_BODY_SUB_RE.sub(r"\1_<BODY>", s)
+
+
+def compute_strict_collator_coverage(
+    records: list[dict[str, Any]],
+    tokenizer: Any,
+    max_cas_prefix_len: int = 192,
+) -> dict[str, Any]:
+    """Run the production SimplexCollator over each record and count target
+    STAGE_VAR spans vs identifier occurrences in the reply.
+
+    Codex audit finding 2 (2026-05-12, second audit): the previous audit
+    declared 'all_pass' without actually invoking the collator. The strict
+    coverage rule is the load-bearing one: it verifies that find_all_sub-
+    sequences + max_cas_prefix_len=192 jointly label every identifier
+    occurrence in every record's target. Returns per-record findings the
+    caller can fold into the overall audit.
+    """
+    _ensure_cas_native_importable()
+    import importlib
+    sc_mod = importlib.import_module(
+        "cas_native.training.datasets.simplex_collator"
+    )
+    SimplexCollator = sc_mod.SimplexCollator
+    SLOT_STAGE_VAR = sc_mod.SLOT_STAGE_VAR
+
+    coll = SimplexCollator(
+        tokenizer,
+        enable_simplex_aux=True,
+        max_cas_prefix_len=max_cas_prefix_len,
+    )
+
+    rpm_audited = 0
+    non_rpm_audited = 0
+    total_target_identifier_occurrences = 0
+    total_stage_var_spans = 0
+    coverage_violations: list[dict[str, Any]] = []
+    non_rpm_leakage_at_collator: list[str] = []
+    rpm_full_coverage_count = 0
+
+    for r in records:
+        cat = r.get("v1mix_grammar_category_or_error_class")
+        en = r.get("reply_text", "")
+        # Count contiguous identifier occurrences in target reply
+        target_occurrences = len(_IDENT_RE.findall(en))
+        try:
+            batch = coll([r], device="cpu")
+        except Exception as exc:
+            coverage_violations.append({
+                "id": r.get("id"), "error": f"collator_failed: {exc!r}",
+            })
+            continue
+        if batch is None:
+            coverage_violations.append({
+                "id": r.get("id"), "error": "collator_returned_none",
+            })
+            continue
+        tsp = batch.get("typed_slot_positions")
+        if tsp is None:
+            coverage_violations.append({
+                "id": r.get("id"), "error": "no_typed_slot_positions",
+            })
+            continue
+        slot_argmax = tsp[0].argmax(dim=-1)
+        # Count contiguous STAGE_VAR spans
+        spans = 0
+        in_span = False
+        L = int(slot_argmax.shape[0])
+        for k in range(L):
+            is_sv = int(slot_argmax[k].item()) == SLOT_STAGE_VAR
+            if is_sv and not in_span:
+                spans += 1
+                in_span = True
+            elif not is_sv:
+                in_span = False
+        if cat == "rpm_chain":
+            rpm_audited += 1
+            total_target_identifier_occurrences += target_occurrences
+            total_stage_var_spans += spans
+            if spans == target_occurrences and target_occurrences > 0:
+                rpm_full_coverage_count += 1
+            else:
+                coverage_violations.append({
+                    "id": r.get("id"),
+                    "target_identifier_occurrences": target_occurrences,
+                    "stage_var_spans_in_target": spans,
+                })
+        else:
+            non_rpm_audited += 1
+            if spans > 0:
+                non_rpm_leakage_at_collator.append(r.get("id"))
+    return {
+        "max_cas_prefix_len": max_cas_prefix_len,
+        "rpm_records_audited": rpm_audited,
+        "non_rpm_records_audited": non_rpm_audited,
+        "total_target_identifier_occurrences": total_target_identifier_occurrences,
+        "total_stage_var_spans": total_stage_var_spans,
+        "rpm_records_with_full_coverage": rpm_full_coverage_count,
+        "coverage_violations": coverage_violations,
+        "non_rpm_leakage_at_collator": non_rpm_leakage_at_collator,
+        "all_pass": (
+            not coverage_violations
+            and not non_rpm_leakage_at_collator
+            and (total_stage_var_spans == total_target_identifier_occurrences)
+        ),
+    }
+
+
+def _ensure_cas_native_importable() -> None:
+    """Replicate the conftest.py import shim so this script can be invoked
+    standalone (outside pytest). The package directory is ``cas-native/`` —
+    Python can't import a hyphenated name, so the codebase aliases it to
+    ``cas_native`` via the test conftest. We do the same thing here at
+    import time so the strict coverage audit can find the production
+    tokenizer + SimplexCollator modules.
+    """
+    import sys, types
+    if "cas_native" in sys.modules:
+        return
+    project_root = Path(__file__).resolve().parents[2]
+    package_root = (
+        project_root
+        / "noetic-compass-scaffold" / "noetic-compass" / "cas-native"
+    )
+    parent_root = package_root.parent
+    if not package_root.is_dir():
+        raise FileNotFoundError(
+            f"expected cas-native package at {package_root}; not found"
+        )
+    if str(parent_root) not in sys.path:
+        sys.path.insert(0, str(parent_root))
+    package = types.ModuleType("cas_native")
+    package.__file__ = str(package_root / "__init__.py")
+    package.__path__ = [str(package_root)]
+    sys.modules["cas_native"] = package
+
+
+def _load_production_tokenizer() -> Any:
+    """Load Stage 6 v6 tokenizer.json + english_bpe.json from project root.
+    Raises if either is missing — Codex audit requires the audit refuses to
+    pass silently when the production tokenizer isn't available."""
+    project_root = Path(__file__).resolve().parents[2]
+    tk_path = project_root / "stage6_v6_artifacts" / "tokenizer.json"
+    bpe_path = project_root / "stage6_v6_artifacts" / "english_bpe.json"
+    if not tk_path.exists() or not bpe_path.exists():
+        raise FileNotFoundError(
+            f"production tokenizer artifacts not found "
+            f"(expected {tk_path} and {bpe_path}); strict coverage audit "
+            f"requires them. Pass --skip-strict-coverage only for laptop "
+            f"smoke runs in environments without the artifacts."
+        )
+    _ensure_cas_native_importable()
+    import importlib
+    tok_mod = importlib.import_module("cas_native.training.tokenizer")
+    tok = tok_mod.HybridCASTokenizer.load(str(tk_path))
+    tok = tok.with_english_bpe(str(bpe_path))
+    return tok
+
+
+def audit_records(records: list[dict[str, Any]],
+                  require_strict_coverage: bool = True,
+                  tokenizer: Any | None = None,
+                  max_cas_prefix_len: int = 192,
                   ) -> dict[str, Any]:
     """Run the locked audit checks across a list of records.
 
-    Per design doc + Codex non-blocking advice 2026-05-12: post-generation
-    audit must use STRICT rule (span count EQUALS target identifier-
-    occurrence count + source positions match the correct identifier), not
-    the >= rule the unit tests used.
+    Per design doc + Codex audit 2026-05-12: post-generation audit MUST use
+    STRICT rule (span count EQUALS target identifier-occurrence count +
+    source positions match the correct identifier). When
+    ``require_strict_coverage=True``, this function now actually invokes
+    SimplexCollator (via ``compute_strict_collator_coverage``) and records
+    per-record coverage findings — previous behavior accepted the parameter
+    but did nothing with it.
     """
     findings: dict[str, Any] = {
         "n_records": len(records),
@@ -597,6 +833,7 @@ def audit_records(records: list[dict[str, Any]], require_strict_coverage: bool =
         "rpm_count": 0,
         "non_rpm_count": 0,
         "rpm_bodies_seen": Counter(),
+        "non_rpm_category_distribution": Counter(),
         "non_rpm_records_with_stage_var": [],
         "all_pass": True,
     }
@@ -633,14 +870,23 @@ def audit_records(records: list[dict[str, Any]], require_strict_coverage: bool =
                         )
         else:
             findings["non_rpm_count"] += 1
+            findings["non_rpm_category_distribution"][cat] += 1
             # Non-rpm leakage check: no stage* in CAS or EN
             if _IDENT_RE.search(cas + " " + en):
                 findings["non_rpm_records_with_stage_var"].append(r.get("id"))
     # ---- Invariant checks added 2026-05-12 per Codex audit ----
+    #
+    # Codex finding 3 (2026-05-12, second audit): the prefix-only invariant
+    # check failed to verify that noetic bindings / template fillers actually
+    # matched across variants. A future generator bug could leave prefixes
+    # identical while corrupting bindings or template output, and this audit
+    # would miss it. Replaced with body-normalized cas_expression and
+    # reply_text comparison: after replacing `stage<L><d>_<m>_<body>` with
+    # `stage<L><d>_<m>_<BODY>`, the entire CAS and reply must match across
+    # variants — which is true iff noetic RHS, template, distractors, ordering,
+    # and trailing connectives all match.
 
-    # A. Counterfactual group invariants: same prefixes, same noetic
-    #    bindings (via canonical_identifiers prefix structure), same
-    #    template_idx, same distractor structure; only bodies differ.
+    # A. Counterfactual group invariants (NORMALIZED-TEXT VERSION)
     cf_violations: list[tuple[str, str, Any]] = []
     cf_groups: dict[str, list[dict[str, Any]]] = {}
     for r in records:
@@ -652,37 +898,29 @@ def audit_records(records: list[dict[str, Any]], require_strict_coverage: bool =
             continue
         ref = variants[0]
         ref_meta = ref["eval_meta"]
-        ref_prefixes = ref_meta.get("prefixes")
-        ref_template = ref_meta.get("template_idx")
-        ref_distractors = sorted(ref_meta.get("distractors", []))
-        ref_chain_length = ref_meta.get("chain_length")
-        ref_middle = ref_meta.get("middle")
+        ref_cas_norm = _normalize_identifiers(ref.get("cas_expression", ""))
+        ref_en_norm = _normalize_identifiers(ref.get("reply_text", ""))
         seen_bodies_in_group: set[str] = {ref_meta.get("body")}
         for v in variants[1:]:
             vm = v["eval_meta"]
-            if vm.get("prefixes") != ref_prefixes:
-                cf_violations.append((gid, "prefix_mismatch", {
-                    "ref": ref_prefixes, "got": vm.get("prefixes"),
+            v_cas_norm = _normalize_identifiers(v.get("cas_expression", ""))
+            v_en_norm = _normalize_identifiers(v.get("reply_text", ""))
+            if v_cas_norm != ref_cas_norm:
+                cf_violations.append((gid, "cas_normalized_mismatch", {
+                    "ref_prefix": ref_cas_norm[:200],
+                    "got_prefix": v_cas_norm[:200],
                 }))
-            if vm.get("template_idx") != ref_template:
-                cf_violations.append((gid, "template_mismatch", {
-                    "ref": ref_template, "got": vm.get("template_idx"),
+            if v_en_norm != ref_en_norm:
+                cf_violations.append((gid, "reply_normalized_mismatch", {
+                    "ref_prefix": ref_en_norm[:200],
+                    "got_prefix": v_en_norm[:200],
                 }))
-            if sorted(vm.get("distractors", [])) != ref_distractors:
-                cf_violations.append((gid, "distractor_mismatch", {
-                    "ref": ref_distractors,
-                    "got": sorted(vm.get("distractors", [])),
-                }))
-            if vm.get("chain_length") != ref_chain_length:
-                cf_violations.append((gid, "chain_length_mismatch", None))
-            if vm.get("middle") != ref_middle:
-                cf_violations.append((gid, "middle_mismatch", None))
             if vm.get("body") in seen_bodies_in_group:
                 cf_violations.append((gid, "body_duplication", vm.get("body")))
             seen_bodies_in_group.add(vm.get("body"))
 
-    # B. Source-swap pair invariants: same as counterfactual (source-swap
-    #    pairs are 2-variant counterfactual groups in implementation).
+    # B. Source-swap pair invariants — same normalized comparison; swap-pairs
+    # are 2-variant counterfactual groups by construction.
     swap_violations: list[tuple[str, str, Any]] = []
     swap_pairs: dict[str, list[dict[str, Any]]] = {}
     for r in records:
@@ -696,14 +934,22 @@ def audit_records(records: list[dict[str, Any]], require_strict_coverage: bool =
             continue
         ref = pair[0]
         ref_meta = ref["eval_meta"]
+        ref_cas_norm = _normalize_identifiers(ref.get("cas_expression", ""))
+        ref_en_norm = _normalize_identifiers(ref.get("reply_text", ""))
         for v in pair[1:]:
             vm = v["eval_meta"]
-            if vm.get("prefixes") != ref_meta.get("prefixes"):
-                swap_violations.append((sid, "prefix_mismatch", None))
-            if vm.get("template_idx") != ref_meta.get("template_idx"):
-                swap_violations.append((sid, "template_mismatch", None))
-            if sorted(vm.get("distractors", [])) != sorted(ref_meta.get("distractors", [])):
-                swap_violations.append((sid, "distractor_mismatch", None))
+            v_cas_norm = _normalize_identifiers(v.get("cas_expression", ""))
+            v_en_norm = _normalize_identifiers(v.get("reply_text", ""))
+            if v_cas_norm != ref_cas_norm:
+                swap_violations.append((sid, "cas_normalized_mismatch", {
+                    "ref_prefix": ref_cas_norm[:200],
+                    "got_prefix": v_cas_norm[:200],
+                }))
+            if v_en_norm != ref_en_norm:
+                swap_violations.append((sid, "reply_normalized_mismatch", {
+                    "ref_prefix": ref_en_norm[:200],
+                    "got_prefix": v_en_norm[:200],
+                }))
             if vm.get("body") == ref_meta.get("body"):
                 swap_violations.append((sid, "body_not_swapped", None))
 
@@ -736,6 +982,20 @@ def audit_records(records: list[dict[str, Any]], require_strict_coverage: bool =
     findings["lowercase_identifier_violations"] = lowercase_ident_records
     findings["article_violations_non_rpm"] = article_violations
 
+    # ---- Strict collator coverage (Codex audit blocker 2 fix) -----------
+    if require_strict_coverage:
+        if tokenizer is None:
+            tokenizer = _load_production_tokenizer()
+        cov = compute_strict_collator_coverage(
+            records, tokenizer=tokenizer, max_cas_prefix_len=max_cas_prefix_len,
+        )
+        findings["strict_collator_coverage"] = cov
+    else:
+        findings["strict_collator_coverage"] = {
+            "skipped": True,
+            "reason": "require_strict_coverage=False",
+        }
+
     findings["all_pass"] = (
         not findings["blacklist_violations"]
         and not findings["wrong_bucket_records"]
@@ -744,6 +1004,10 @@ def audit_records(records: list[dict[str, Any]], require_strict_coverage: bool =
         and not findings["source_swap_pair_invariant_violations"]
         and not findings["lowercase_identifier_violations"]
         and not findings["article_violations_non_rpm"]
+        and (
+            findings["strict_collator_coverage"].get("skipped")
+            or findings["strict_collator_coverage"].get("all_pass", False)
+        )
     )
     return findings
 
@@ -768,6 +1032,19 @@ def main(argv: list[str] | None = None) -> int:
                         "(20 rpm + 5 cf-groups + 5 swap-pairs + 5 non-rpm). "
                         "Writes to docs/working/candidate_e/sample/ instead "
                         "of the production paths.")
+    p.add_argument("--dry-run", action="store_true",
+                   help="Full-corpus mode with tiny sizes (10 train rpm + "
+                        "10 train non-rpm, 5 dev, 5 swap-dev pairs, 5 test, "
+                        "5 swap-eval pairs). All 5 artifacts written + audited. "
+                        "Per Codex audit 2026-05-12: run --dry-run before any "
+                        "real full corpus generation.")
+    p.add_argument("--skip-strict-coverage", action="store_true",
+                   help="Skip the SimplexCollator strict coverage check. "
+                        "Use ONLY when production tokenizer artifacts are not "
+                        "available in the environment.")
+    p.add_argument("--max-cas-prefix-len", type=int, default=192,
+                   help="Source token cap for strict coverage audit "
+                        "(default 192 = Candidate E spec).")
     args = p.parse_args(argv)
 
     rng = random.Random(args.seed)
@@ -796,9 +1073,10 @@ def main(argv: list[str] | None = None) -> int:
                 f"sample_swap_{i:03d}", "dev", rng
             )
             records.extend(pair)
-        # 5 non-rpm records
+        # Sample non-rpm records: cycle through all 6 categories so the
+        # sample exercises every variant the full corpus will use.
         for i in range(5):
-            cat = rng.choice(["state_literal", "binary_composition"])
+            cat = NON_RPM_CATEGORIES[i % len(NON_RPM_CATEGORIES)]
             records.append(gen_non_rpm_record(f"sample_nonrpm_{i:03d}", cat, "train", rng))
 
         out_dir = Path("docs/working/candidate_e/sample")
@@ -807,7 +1085,11 @@ def main(argv: list[str] | None = None) -> int:
         with out_path.open("w", encoding="utf-8") as f:
             for r in records:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
-        audit = audit_records(records, require_strict_coverage=True)
+        audit = audit_records(
+            records,
+            require_strict_coverage=not args.skip_strict_coverage,
+            max_cas_prefix_len=args.max_cas_prefix_len,
+        )
         audit_path = out_dir / "rpm_copy_grounding_v2_sample.audit.json"
         with audit_path.open("w", encoding="utf-8") as f:
             json.dump(audit, f, indent=2, default=str)
@@ -821,13 +1103,188 @@ def main(argv: list[str] | None = None) -> int:
         }, default=str), flush=True)
         return 0
 
-    # Full corpus mode (not yet implemented in this commit — Stage 1B-3)
+    # ----------------------------------------------------------------------
+    # Full-corpus mode (Codex audit 2026-05-12 blocker 1 resolution).
+    #
+    # Writes 5 artifacts and fail-hard on any per-artifact all_pass=False.
+    # --dry-run uses tiny sizes; otherwise CLI defaults / overrides apply.
+    # Each artifact gets its own audit.json file alongside it.
+    # ----------------------------------------------------------------------
+
+    if args.dry_run:
+        sizes = {
+            "train_rpm": 10, "train_non_rpm": 10,
+            "dev_rpm": 5, "test_rpm": 5,
+            "source_swap_dev_pairs": 5, "source_swap_eval_pairs": 5,
+        }
+        mode_tag = "dry_run"
+    else:
+        sizes = {
+            "train_rpm": args.train_rpm,
+            "train_non_rpm": args.train_non_rpm,
+            "dev_rpm": args.dev,
+            "test_rpm": args.test,
+            "source_swap_dev_pairs": args.source_swap_dev,
+            "source_swap_eval_pairs": args.source_swap_eval,
+        }
+        mode_tag = "full"
+
+    output_root = Path(args.output_dir)
+    path_d_dir = output_root / "path_d"
+    eval_dir = output_root / "eval"
+    path_d_dir.mkdir(parents=True, exist_ok=True)
+    eval_dir.mkdir(parents=True, exist_ok=True)
+
+    artifacts: list[tuple[str, Path, list[dict[str, Any]]]] = []
+
+    # 1. train — rpm chains (with embedded counterfactual groups) + non-rpm
+    train_records: list[dict[str, Any]] = []
+    # Allocate ~1/8 of rpm budget to counterfactual groups (3 variants each)
+    cf_train_records = max(sizes["train_rpm"] // 8, 0)
+    cf_groups_train = cf_train_records // 3
+    standalone_rpm = sizes["train_rpm"] - cf_groups_train * 3
+    for i in range(cf_groups_train):
+        train_records.extend(gen_counterfactual_group(
+            f"train_cf_{i:05d}", "train", rng, n_variants=3,
+            chain_length=rng.choice([2, 3, 4]),
+        ))
+    for i in range(standalone_rpm):
+        train_records.append(gen_rpm_record(
+            f"train_rpm_{i:05d}", "train", rng,
+            chain_length=rng.choice([2, 3, 4]),
+        ))
+    for i in range(sizes["train_non_rpm"]):
+        cat = NON_RPM_CATEGORIES[i % len(NON_RPM_CATEGORIES)]
+        train_records.append(gen_non_rpm_record(
+            f"train_nonrpm_{i:05d}", cat, "train", rng,
+        ))
+    rng_state_after_train = rng.getstate()
+    rng.shuffle(train_records)
+    rng.setstate(rng_state_after_train)
+    artifacts.append((
+        "train",
+        path_d_dir / "rpm_copy_grounding_v2_train.jsonl",
+        train_records,
+    ))
+
+    # 2. dev — rpm chains in dev bucket (no source-swap pairs here; those
+    # go in their own artifact)
+    dev_records: list[dict[str, Any]] = []
+    for i in range(sizes["dev_rpm"]):
+        dev_records.append(gen_rpm_record(
+            f"dev_rpm_{i:05d}", "dev", rng,
+            chain_length=rng.choice([2, 3, 4]),
+        ))
+    artifacts.append((
+        "dev",
+        path_d_dir / "rpm_copy_grounding_v2_dev.jsonl",
+        dev_records,
+    ))
+
+    # 3. source_swap_dev — paired records in dev bucket
+    swap_dev_records: list[dict[str, Any]] = []
+    for i in range(sizes["source_swap_dev_pairs"]):
+        swap_dev_records.extend(gen_source_swap_pair(
+            f"swap_dev_{i:05d}", "dev", rng,
+            chain_length=rng.choice([2, 3, 4]),
+        ))
+    artifacts.append((
+        "source_swap_dev",
+        path_d_dir / "rpm_copy_grounding_v2_source_swap_dev.jsonl",
+        swap_dev_records,
+    ))
+
+    # 4. test — rpm chains in test bucket
+    test_records: list[dict[str, Any]] = []
+    for i in range(sizes["test_rpm"]):
+        test_records.append(gen_rpm_record(
+            f"test_rpm_{i:05d}", "test", rng,
+            chain_length=rng.choice([2, 3, 4]),
+        ))
+    artifacts.append((
+        "test",
+        path_d_dir / "rpm_copy_grounding_v2_test.jsonl",
+        test_records,
+    ))
+
+    # 5. source_swap_eval — paired records in test bucket; goes under
+    # data/eval/ per spec (separate dir from the data/path_d/ training mix).
+    swap_eval_records: list[dict[str, Any]] = []
+    for i in range(sizes["source_swap_eval_pairs"]):
+        swap_eval_records.extend(gen_source_swap_pair(
+            f"swap_eval_{i:05d}", "test", rng,
+            chain_length=rng.choice([2, 3, 4]),
+        ))
+    artifacts.append((
+        "source_swap_eval",
+        eval_dir / "rpm_copy_grounding_v2_source_swap_eval.jsonl",
+        swap_eval_records,
+    ))
+
+    # Per-artifact write + audit. Fail-hard on any all_pass=False.
     print(json.dumps({
-        "event": "full_corpus_mode_not_yet_implemented",
-        "advice": "use --sample-only first to surface samples for review, "
-                  "then run this script with full sizes after user approval.",
+        "event": "full_mode_start",
+        "mode": mode_tag,
+        "sizes": sizes,
+        "n_artifacts": len(artifacts),
     }), flush=True)
-    return 1
+
+    # Load tokenizer once and reuse across all artifacts to amortise the
+    # ~200ms load cost. None if skipping strict coverage.
+    tokenizer = None
+    if not args.skip_strict_coverage:
+        tokenizer = _load_production_tokenizer()
+
+    failed_artifacts: list[str] = []
+    summaries: list[dict[str, Any]] = []
+    for name, out_path, recs in artifacts:
+        with out_path.open("w", encoding="utf-8") as f:
+            for r in recs:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        audit = audit_records(
+            recs,
+            require_strict_coverage=not args.skip_strict_coverage,
+            tokenizer=tokenizer,
+            max_cas_prefix_len=args.max_cas_prefix_len,
+        )
+        audit_path = out_path.with_suffix(".audit.json")
+        with audit_path.open("w", encoding="utf-8") as f:
+            json.dump(audit, f, indent=2, default=str)
+        cov = audit.get("strict_collator_coverage", {})
+        summary = {
+            "artifact": name,
+            "path": str(out_path),
+            "audit_path": str(audit_path),
+            "n_records": audit["n_records"],
+            "rpm_count": audit["rpm_count"],
+            "non_rpm_count": audit["non_rpm_count"],
+            "non_rpm_category_distribution": dict(audit["non_rpm_category_distribution"]),
+            "counterfactual_groups_audited": audit["counterfactual_groups_audited"],
+            "source_swap_pairs_audited": audit["source_swap_pairs_audited"],
+            "strict_coverage_pass": cov.get("skipped") or cov.get("all_pass", False),
+            "rpm_records_with_full_coverage": cov.get("rpm_records_with_full_coverage"),
+            "rpm_records_audited": cov.get("rpm_records_audited"),
+            "all_pass": audit["all_pass"],
+        }
+        summaries.append(summary)
+        print(json.dumps({"event": "artifact_done", **summary}, default=str), flush=True)
+        if not audit["all_pass"]:
+            failed_artifacts.append(name)
+
+    print(json.dumps({
+        "event": "full_mode_done",
+        "mode": mode_tag,
+        "n_artifacts": len(artifacts),
+        "failed_artifacts": failed_artifacts,
+        "all_pass": not failed_artifacts,
+        "summaries": summaries,
+    }, default=str), flush=True)
+
+    if failed_artifacts:
+        # Fail-hard per Codex audit requirement: if any artifact has
+        # all_pass=False, exit non-zero so CI / shell scripts catch it.
+        return 2
+    return 0
 
 
 if __name__ == "__main__":

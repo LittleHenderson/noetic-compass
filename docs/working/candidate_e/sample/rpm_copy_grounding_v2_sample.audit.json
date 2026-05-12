@@ -9,6 +9,13 @@
     "3": 13,
     "4": 16
   },
+  "non_rpm_category_distribution": {
+    "state_literal": 1,
+    "binary_composition": 1,
+    "recipe": 1,
+    "meta_logic": 1,
+    "cross_register_omega": 1
+  },
   "non_rpm_records_with_stage_var": [],
   "all_pass": true,
   "counterfactual_invariant_violations": [],
@@ -16,5 +23,16 @@
   "source_swap_pair_invariant_violations": [],
   "source_swap_pairs_audited": 5,
   "lowercase_identifier_violations": [],
-  "article_violations_non_rpm": []
+  "article_violations_non_rpm": [],
+  "strict_collator_coverage": {
+    "max_cas_prefix_len": 192,
+    "rpm_records_audited": 45,
+    "non_rpm_records_audited": 5,
+    "total_target_identifier_occurrences": 149,
+    "total_stage_var_spans": 149,
+    "rpm_records_with_full_coverage": 45,
+    "coverage_violations": [],
+    "non_rpm_leakage_at_collator": [],
+    "all_pass": true
+  }
 }
