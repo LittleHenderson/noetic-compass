@@ -1,0 +1,4696 @@
+{
+  "modes": [
+    "full",
+    "lm_only",
+    "copy_disabled",
+    "phrase_bias_disabled",
+    "hard_full"
+  ],
+  "summary_by_mode": {
+    "full": {
+      "verdict": "clean",
+      "n": 11,
+      "by_verdict": {
+        "clean": 11,
+        "warn": 0,
+        "kill": 0
+      },
+      "max_severity": 0.5,
+      "mean_severity": 0.09
+    },
+    "lm_only": {
+      "verdict": "clean",
+      "n": 11,
+      "by_verdict": {
+        "clean": 11,
+        "warn": 0,
+        "kill": 0
+      },
+      "max_severity": 0.5,
+      "mean_severity": 0.09
+    },
+    "copy_disabled": {
+      "verdict": "clean",
+      "n": 11,
+      "by_verdict": {
+        "clean": 11,
+        "warn": 0,
+        "kill": 0
+      },
+      "max_severity": 0.5,
+      "mean_severity": 0.09
+    },
+    "phrase_bias_disabled": {
+      "verdict": "clean",
+      "n": 11,
+      "by_verdict": {
+        "clean": 11,
+        "warn": 0,
+        "kill": 0
+      },
+      "max_severity": 0.5,
+      "mean_severity": 0.09
+    },
+    "hard_full": {
+      "verdict": "clean",
+      "n": 11,
+      "by_verdict": {
+        "clean": 11,
+        "warn": 0,
+        "kill": 0
+      },
+      "max_severity": 0.5,
+      "mean_severity": 0.09,
+      "emission_routes_pack": {
+        "lm_emissions": 962,
+        "copy_emissions": 37,
+        "copy_fraction": 0.037037037037037035
+      }
+    }
+  },
+  "per_record": [
+    {
+      "id": "canary_rpm_chain_001",
+      "category": "rpm_chain",
+      "task": "cas_to_english",
+      "cas_expression": "let stageA0_5_0296 = ^0^P; let stageD5_5_0296 = ^7^P_{F5}",
+      "target_text": "Let stageA0_5_0296 name a foundational thought, stageD5_5_0296 name practiced rhythm with agency.",
+      "modes": {
+        "full": {
+          "generated_text": "Let stageA0_5_029 name a foundational thought, stageD5_5_026 name something that popped into mind in the realm of structure and order, stageW5_5_02_026 name a cognitive judgment in the arena of structure and order, and stageP5_5_02_026 name an evaluative judgment in the arena of ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " judgment in the arena of"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.887,
+              "text_len": 280,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "Let stageA0_5_029 name a foundational thought, stageD5_5_026 name something that popped into mind in the realm of structure and order, stageW5_5_02_026 name a cognitive judgment in the arena of structure and order, and stageP5_5_02_026 name an evaluative judgment in the arena of ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " judgment in the arena of"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.887,
+              "text_len": 280,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "Let stageA0_5_029 name a foundational thought, stageD5_5_026 name something that popped into mind in the realm of structure and order, stageW5_5_02_026 name a cognitive judgment in the arena of structure and order, and stageP5_5_02_026 name an evaluative judgment in the arena of ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " judgment in the arena of"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.887,
+              "text_len": 280,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "Let stageA0_5_029 name a foundational thought, stageD5_5_026 name something that popped into mind in the realm of structure and order, stageW5_5_02_026 name a cognitive judgment in the arena of structure and order, and stageP5_5_02_026 name an evaluative judgment in the arena of ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " judgment in the arena of"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.887,
+              "text_len": 280,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "Let stageA0_5_029 name a foundational thought, stageD5_5_0296 name something that popped into mind in the realm of structure and order, stageW5_5_02_026 name a cognitive judgment in the arena of structure and order, and stageP5_5_02_026 name an evaluative judgment in the arena of",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " judgment in the arena of"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 1,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.887,
+              "text_len": 280,
+              "target_len": 97,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 109,
+            "copy": 19
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_rpm_chain_002",
+      "category": "rpm_chain",
+      "task": "cas_to_english",
+      "cas_expression": "let stageA0_4_0049 = ^0^P; let stageD4_4_0049 = ^8^P_{F4}",
+      "target_text": "Let stageA0_4_0049 name a foundational thought, stageD4_4_0049 name what triggered an evaluative judgment.",
+      "modes": {
+        "full": {
+          "generated_text": "Let stageA0_4_0304 name a foundational thought, stageD4_4_0049 name something that struck a chord in the evaluative arena with vitality as the driving need, stageW4_4_0309 name cognitive thinking with vitality as the driving need, and stageP4_4_0309 name evaluative judgment with vitality as the driving need. stageW4",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 4,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": [
+                "stageW4"
+              ]
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.991,
+              "text_len": 317,
+              "target_len": 106,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "Let stageA0_4_0304 name a foundational thought, stageD4_4_0049 name something that struck a chord in the evaluative arena with vitality as the driving need, stageW4_4_0309 name cognitive thinking with vitality as the driving need, and stageP4_4_0309 name evaluative judgment with vitality as the driving need. stageW4",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 4,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": [
+                "stageW4"
+              ]
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.991,
+              "text_len": 317,
+              "target_len": 106,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "Let stageA0_4_0304 name a foundational thought, stageD4_4_0049 name something that struck a chord in the evaluative arena with vitality as the driving need, stageW4_4_0309 name cognitive thinking with vitality as the driving need, and stageP4_4_0309 name evaluative judgment with vitality as the driving need. stageW4",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 4,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": [
+                "stageW4"
+              ]
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.991,
+              "text_len": 317,
+              "target_len": 106,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "Let stageA0_4_0304 name a foundational thought, stageD4_4_0049 name something that struck a chord in the evaluative arena with vitality as the driving need, stageW4_4_0309 name cognitive thinking with vitality as the driving need, and stageP4_4_0309 name evaluative judgment with vitality as the driving need. stageW4",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 4,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": [
+                "stageW4"
+              ]
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.991,
+              "text_len": 317,
+              "target_len": 106,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "Let stageA0_4_0049 name a foundational thought, stageD4_4_0049 name something that struck a chord in the evaluative arena with vitality as the driving need, stageW4_4_0309 name cognitive thinking with vitality as the driving need, and stageP4_4_0309 name evaluative judgment with vitality as the driving need. stageW4",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 4,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": [
+                "stageW4"
+              ]
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.991,
+              "text_len": 317,
+              "target_len": 106,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 110,
+            "copy": 18
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_fractal_k7_001",
+      "category": "fractal_sequence",
+      "task": "cas_to_english",
+      "cas_expression": "Phi⟨0:1:2:4:5:6:7⟩",
+      "target_text": "A seven-step fractal sequence starting from the universal idea, progressing through awareness, attraction, and resonance.",
+      "modes": {
+        "full": {
+          "generated_text": "An idea on the mind led to paying attention, which became drawn to something, then drawn to it, and finally struck a chord, and finally triggered a memory.",
+          "n_tokens_generated": 60,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.281,
+              "text_len": 155,
+              "target_len": 121,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "An idea on the mind led to paying attention, which became drawn to something, then drawn to it, and finally struck a chord, and finally triggered a memory.",
+          "n_tokens_generated": 60,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.281,
+              "text_len": 155,
+              "target_len": 121,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "An idea on the mind led to paying attention, which became drawn to something, then drawn to it, and finally struck a chord, and finally triggered a memory.",
+          "n_tokens_generated": 60,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.281,
+              "text_len": 155,
+              "target_len": 121,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "An idea on the mind led to paying attention, which became drawn to something, then drawn to it, and finally struck a chord, and finally triggered a memory.",
+          "n_tokens_generated": 60,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.281,
+              "text_len": 155,
+              "target_len": 121,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "An idea on the mind led to paying attention, which became drawn to something, then drawn to it, and finally struck a chord, and finally triggered a memory.",
+          "n_tokens_generated": 60,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.281,
+              "text_len": 155,
+              "target_len": 121,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 61,
+            "copy": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_fractal_k8_001",
+      "category": "fractal_sequence",
+      "task": "cas_to_english",
+      "cas_expression": "Phi⟨0:1:2:3:4:5:7:8⟩",
+      "target_text": "An eight-step fractal sequence beginning with idea, passing through mind, positive, negative, vibration, and rhythm.",
+      "modes": {
+        "full": {
+          "generated_text": "An idea on the mind led to paying attention, which became drawn to something, then drawn to it, and finally struck a chord, and finally triggered a memory.",
+          "n_tokens_generated": 60,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.336,
+              "text_len": 155,
+              "target_len": 116,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "An idea on the mind led to paying attention, which became drawn to something, then drawn to it, and finally struck a chord, and finally triggered a memory.",
+          "n_tokens_generated": 60,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.336,
+              "text_len": 155,
+              "target_len": 116,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "An idea on the mind led to paying attention, which became drawn to something, then drawn to it, and finally struck a chord, and finally triggered a memory.",
+          "n_tokens_generated": 60,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.336,
+              "text_len": 155,
+              "target_len": 116,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "An idea on the mind led to paying attention, which became drawn to something, then drawn to it, and finally struck a chord, and finally triggered a memory.",
+          "n_tokens_generated": 60,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.336,
+              "text_len": 155,
+              "target_len": 116,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "An idea on the mind led to paying attention, which became drawn to something, then drawn to it, and finally struck a chord, and finally triggered a memory.",
+          "n_tokens_generated": 60,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.336,
+              "text_len": 155,
+              "target_len": 116,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 61,
+            "copy": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_recipe_001",
+      "category": "recipe",
+      "task": "cas_to_english",
+      "cas_expression": "Θ(Ω_grounding) = 2*^2^P + 1*^0^O → Ω_grounding",
+      "target_text": "To produce the outcome called grounding, combine two of principled attraction with one of operational thought.",
+      "modes": {
+        "full": {
+          "generated_text": "To produce the outcome called rest_22, combine 2 unit of something that speaks to you in operational thinking with 1 unit of a thought in foundational thinking expressed in an analytical way, add 1 of a thought in an operational way — together these inputs yield the named named outcome rest_correction_correction_side as a 0.1 contribution toward",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.155,
+              "text_len": 347,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "To produce the outcome called rest_22, combine 2 unit of something that speaks to you in operational thinking with 1 unit of a thought in foundational thinking expressed in an analytical way, add 1 of a thought in an operational way — together these inputs yield the named named outcome rest_correction_correction_side as a 0.1 contribution toward",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.155,
+              "text_len": 347,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "To produce the outcome called rest_22, combine 2 unit of something that speaks to you in operational thinking with 1 unit of a thought in foundational thinking expressed in an analytical way, add 1 of a thought in an operational way — together these inputs yield the named named outcome rest_correction_correction_side as a 0.1 contribution toward",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.155,
+              "text_len": 347,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "To produce the outcome called rest_22, combine 2 unit of something that speaks to you in operational thinking with 1 unit of a thought in foundational thinking expressed in an analytical way, add 1 of a thought in an operational way — together these inputs yield the named named outcome rest_correction_correction_side as a 0.1 contribution toward",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.155,
+              "text_len": 347,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "To produce the outcome called rest_22, combine 2 unit of something that speaks to you in operational thinking with 1 unit of a thought in foundational thinking expressed in an analytical way, add 1 of a thought in an operational way — together these inputs yield the named named outcome rest_correction_correction_side as a 0.1 contribution toward",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.155,
+              "text_len": 347,
+              "target_len": 110,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 128,
+            "copy": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_meta_logic_001",
+      "category": "meta_logic",
+      "task": "cas_to_english",
+      "cas_expression": "PartitionOf(NoeticCluster{^4, ^5, ^6, ^9}, NoeticCluster{^4}, NoeticCluster{^5, ^6, ^9})",
+      "target_text": "A partition expression claims that two groups together account for everything in a larger collection of cognitive operators.",
+      "modes": {
+        "full": {
+          "generated_text": "The expression tries to split a group into two separate, non-overlapping parts, but one item appears in both parts at the same time. Because a partition requires every item to be separate — the two partition requires every item to be exactly one item with nothing be piece to be be valid.",
+          "n_tokens_generated": 117,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.323,
+              "text_len": 288,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "The expression tries to split a group into two separate, non-overlapping parts, but one item appears in both parts at the same time. Because a partition requires every item to be separate — the two partition requires every item to be exactly one item with nothing be piece to be be valid.",
+          "n_tokens_generated": 117,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.323,
+              "text_len": 288,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "The expression tries to split a group into two separate, non-overlapping parts, but one item appears in both parts at the same time. Because a partition requires every item to be separate — the two partition requires every item to be exactly one item with nothing be piece to be be valid.",
+          "n_tokens_generated": 117,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.323,
+              "text_len": 288,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "The expression tries to split a group into two separate, non-overlapping parts, but one item appears in both parts at the same time. Because a partition requires every item to be separate — the two partition requires every item to be exactly one item with nothing be piece to be be valid.",
+          "n_tokens_generated": 117,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.323,
+              "text_len": 288,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "The expression tries to split a group into two separate, non-overlapping parts, but one item appears in both parts at the same time. Because a partition requires every item to be separate — the two partition requires every item to be exactly one item with nothing be piece to be be valid.",
+          "n_tokens_generated": 117,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.323,
+              "text_len": 288,
+              "target_len": 124,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 118,
+            "copy": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_state_literal_001",
+      "category": "state_literal",
+      "task": "cas_to_english",
+      "cas_expression": "^0^C_{F4}",
+      "target_text": "A thought in cognitive thinking, driven by a need for connection.",
+      "modes": {
+        "full": {
+          "generated_text": "A thought in cognitive thinking, driven by a need for connection.",
+          "n_tokens_generated": 24,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.0,
+              "text_len": 65,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "A thought in cognitive thinking, driven by a need for connection.",
+          "n_tokens_generated": 24,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.0,
+              "text_len": 65,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "A thought in cognitive thinking, driven by a need for connection.",
+          "n_tokens_generated": 24,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.0,
+              "text_len": 65,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "A thought in cognitive thinking, driven by a need for connection.",
+          "n_tokens_generated": 24,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.0,
+              "text_len": 65,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "A thought in cognitive thinking, driven by a need for connection.",
+          "n_tokens_generated": 24,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 1.0,
+              "text_len": 65,
+              "target_len": 65,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 25,
+            "copy": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_binary_001",
+      "category": "binary_composition",
+      "task": "cas_to_english",
+      "cas_expression": "^5^C × ^0^C",
+      "target_text": "A sense of self in the cognitive arena integrated with a thought in the same arena.",
+      "modes": {
+        "full": {
+          "generated_text": "A thought in the cognitive arena integrated with a thought in the cognitive arena.",
+          "n_tokens_generated": 31,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 0.988,
+              "text_len": 82,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "A thought in the cognitive arena integrated with a thought in the cognitive arena.",
+          "n_tokens_generated": 31,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 0.988,
+              "text_len": 82,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "A thought in the cognitive arena integrated with a thought in the cognitive arena.",
+          "n_tokens_generated": 31,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 0.988,
+              "text_len": 82,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "A thought in the cognitive arena integrated with a thought in the cognitive arena.",
+          "n_tokens_generated": 31,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 0.988,
+              "text_len": 82,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "A thought in the cognitive arena integrated with a thought in the cognitive arena.",
+          "n_tokens_generated": 31,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 0.988,
+              "text_len": 82,
+              "target_len": 83,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 32,
+            "copy": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_cro_001",
+      "category": "cross_register_omega",
+      "task": "cas_to_english",
+      "cas_expression": "(^7|E × ^7|f) = ^7|Ω_presence",
+      "target_text": "Practice combined with felt resonance fuses into a unified state of presence.",
+      "modes": {
+        "full": {
+          "generated_text": "When practice and muscle memory expressed through an embodied, sensorimotor way, and through a transcendent, strategic way, those two modes fuse into the outcome called alignment.",
+          "n_tokens_generated": 61,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.325,
+              "text_len": 179,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "When practice and muscle memory expressed through an embodied, sensorimotor way, and through a transcendent, strategic way, those two modes fuse into the outcome called alignment.",
+          "n_tokens_generated": 61,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.325,
+              "text_len": 179,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "When practice and muscle memory expressed through an embodied, sensorimotor way, and through a transcendent, strategic way, those two modes fuse into the outcome called alignment.",
+          "n_tokens_generated": 61,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.325,
+              "text_len": 179,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "When practice and muscle memory expressed through an embodied, sensorimotor way, and through a transcendent, strategic way, those two modes fuse into the outcome called alignment.",
+          "n_tokens_generated": 61,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.325,
+              "text_len": 179,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "When practice and muscle memory expressed through an embodied, sensorimotor way, and through a transcendent, strategic way, those two modes fuse into the outcome called alignment.",
+          "n_tokens_generated": 61,
+          "hit_eos": true,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 2.325,
+              "text_len": 179,
+              "target_len": 77,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 62,
+            "copy": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_invalid_001",
+      "category": "fractal",
+      "task": "invalid_to_explanation",
+      "cas_expression": "Phi⟨⟩",
+      "target_text": "The expression has empty angle brackets where a sequence of values should be — the fractal cannot be empty.",
+      "modes": {
+        "full": {
+          "generated_text": "The expression opens a grouping that is never closed — it empty. The closing bracket is missing — the closing bracket is missing — the closing bracket was empty. The compiler reached the closing bracket and found nothing expected a number and found a number there. The compiler reached a number to nothing to make sense and stops and ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " make sense and stops and"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.121,
+              "text_len": 334,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "The expression opens a grouping that is never closed — it empty. The closing bracket is missing — the closing bracket is missing — the closing bracket was empty. The compiler reached the closing bracket and found nothing expected a number and found a number there. The compiler reached a number to nothing to make sense and stops and ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " make sense and stops and"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.121,
+              "text_len": 334,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "The expression opens a grouping that is never closed — it empty. The closing bracket is missing — the closing bracket is missing — the closing bracket was empty. The compiler reached the closing bracket and found nothing expected a number and found a number there. The compiler reached a number to nothing to make sense and stops and ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " make sense and stops and"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.121,
+              "text_len": 334,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "The expression opens a grouping that is never closed — it empty. The closing bracket is missing — the closing bracket is missing — the closing bracket was empty. The compiler reached the closing bracket and found nothing expected a number and found a number there. The compiler reached a number to nothing to make sense and stops and ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " make sense and stops and"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.121,
+              "text_len": 334,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "The expression opens a grouping that is never closed — it empty. The closing bracket is missing — the closing bracket is missing — the closing bracket was empty. The compiler reached the closing bracket and found nothing expected a number and found a number there. The compiler reached a number to nothing to make sense and stops and ",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.5,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": true,
+              "reason": "ends_on_function_word",
+              "tail": " make sense and stops and"
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.121,
+              "text_len": 334,
+              "target_len": 107,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 128,
+            "copy": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "canary_invalid_002",
+      "category": "fractal",
+      "task": "invalid_to_explanation",
+      "cas_expression": "Phi⟨1:5:2:7:-1:9:9⟩",
+      "target_text": "The expression contains a negative value in the fractal list, but the system does not allow negative numbers there.",
+      "modes": {
+        "full": {
+          "generated_text": "The sequence of values inside the angle brackets is supposed to be a plain number, but instead it contains a plain number or or position or position. The system cannot interpret a plain number as a plain number in that position instead it as a negative number. The compiler cannot interpret it because it rejects the whole expression to be interpret",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.035,
+              "text_len": 349,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "lm_only": {
+          "generated_text": "The sequence of values inside the angle brackets is supposed to be a plain number, but instead it contains a plain number or or position or position. The system cannot interpret a plain number as a plain number in that position instead it as a negative number. The compiler cannot interpret it because it rejects the whole expression to be interpret",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.035,
+              "text_len": 349,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "copy_disabled": {
+          "generated_text": "The sequence of values inside the angle brackets is supposed to be a plain number, but instead it contains a plain number or or position or position. The system cannot interpret a plain number as a plain number in that position instead it as a negative number. The compiler cannot interpret it because it rejects the whole expression to be interpret",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.035,
+              "text_len": 349,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "phrase_bias_disabled": {
+          "generated_text": "The sequence of values inside the angle brackets is supposed to be a plain number, but instead it contains a plain number or or position or position. The system cannot interpret a plain number as a plain number in that position instead it as a negative number. The compiler cannot interpret it because it rejects the whole expression to be interpret",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.035,
+              "text_len": 349,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "hard_full": {
+          "generated_text": "The sequence of values inside the angle brackets is supposed to be a plain number, but instead it contains a plain number or or position or position. The system cannot interpret a plain number as a plain number in that position instead it as a negative number. The compiler cannot interpret it because it rejects the whole expression to be interpret",
+          "n_tokens_generated": 128,
+          "hit_eos": false,
+          "damage_verdict": "clean",
+          "damage_severity": 0.0,
+          "damage_signatures": {
+            "repeated_phrase_loop": {
+              "found": false
+            },
+            "truncation": {
+              "found": false
+            },
+            "stage_var_corruption": {
+              "found": false,
+              "canonical_count": 0,
+              "double_underscore": [],
+              "no_letter": [],
+              "bad_digits": [],
+              "fragments_without_canonical": []
+            },
+            "notation_leak": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            },
+            "generic_collapse": {
+              "found": false,
+              "generic_phrases": [],
+              "length_ratio": 3.035,
+              "text_len": 349,
+              "target_len": 115,
+              "is_too_short": false
+            },
+            "camel_fusion": {
+              "found": false,
+              "matches": [],
+              "count": 0
+            }
+          },
+          "slot_type_trace": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "emission_route_counts": {
+            "lm": 128,
+            "copy": 0
+          }
+        }
+      }
+    }
+  ]
+}
