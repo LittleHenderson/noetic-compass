@@ -38,6 +38,67 @@ Pre-launch verification checklist:
 - Loss weights: `lm=1, fr=1, slot_type=1, copy=0, phrase_bias_aux=0` (functionally identical to b2; named distinctly so logs/manifest show E-era intent)
 - Warm-start source: B2's `ckpt_final.pt`
 
+### USER ACTION REQUIRED - sync patched code and corpora to pod
+
+Do this before resolving `B2_CKPT` or launching. E2a is invalid if the pod
+still has stale B-era trainer/collator/evaluator files.
+
+Required files on `/workspace/tksCAS`:
+
+| Local file | Remote file |
+|---|---|
+| `noetic-compass-scaffold/noetic-compass/cas-native/training/train_simplex_mvp.py` | same path |
+| `noetic-compass-scaffold/noetic-compass/cas-native/training/datasets/simplex_collator.py` | same path |
+| `noetic-compass-scaffold/noetic-compass/cas-native/evaluation/evaluate_candidate_e_stage2.py` | same path |
+| `noetic-compass-scaffold/noetic-compass/cas-native/evaluation/sample_decoder.py` | same path |
+| `cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl` | same path |
+| `cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.jsonl` | same path |
+| `cas-synthetic/data/path_d/rpm_copy_grounding_v2_source_swap_dev.jsonl` | same path |
+| `cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.audit.json` | same path |
+| `cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.audit.json` | same path |
+| `cas-synthetic/data/path_d/rpm_copy_grounding_v2_source_swap_dev.audit.json` | same path |
+
+After sync, verify local and remote MD5s match. From local PowerShell,
+compute local hashes:
+
+```powershell
+$files = @(
+  "noetic-compass-scaffold/noetic-compass/cas-native/training/train_simplex_mvp.py",
+  "noetic-compass-scaffold/noetic-compass/cas-native/training/datasets/simplex_collator.py",
+  "noetic-compass-scaffold/noetic-compass/cas-native/evaluation/evaluate_candidate_e_stage2.py",
+  "noetic-compass-scaffold/noetic-compass/cas-native/evaluation/sample_decoder.py",
+  "cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl",
+  "cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.jsonl",
+  "cas-synthetic/data/path_d/rpm_copy_grounding_v2_source_swap_dev.jsonl",
+  "cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.audit.json",
+  "cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.audit.json",
+  "cas-synthetic/data/path_d/rpm_copy_grounding_v2_source_swap_dev.audit.json"
+)
+$files | ForEach-Object {
+  "{0}  {1}" -f (Get-FileHash -Algorithm MD5 $_).Hash.ToLower(), $_
+}
+```
+
+Then on the pod:
+
+```bash
+cd /workspace/tksCAS
+md5sum \
+  noetic-compass-scaffold/noetic-compass/cas-native/training/train_simplex_mvp.py \
+  noetic-compass-scaffold/noetic-compass/cas-native/training/datasets/simplex_collator.py \
+  noetic-compass-scaffold/noetic-compass/cas-native/evaluation/evaluate_candidate_e_stage2.py \
+  noetic-compass-scaffold/noetic-compass/cas-native/evaluation/sample_decoder.py \
+  cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl \
+  cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.jsonl \
+  cas-synthetic/data/path_d/rpm_copy_grounding_v2_source_swap_dev.jsonl \
+  cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.audit.json \
+  cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.audit.json \
+  cas-synthetic/data/path_d/rpm_copy_grounding_v2_source_swap_dev.audit.json
+```
+
+Launch only if every hash matches. This closes the stale-pod-code failure
+mode observed earlier in the architectural review.
+
 ### USER ACTION REQUIRED — resolve `<B2_TS>` before running
 
 The B2 checkpoint timestamp is unknown locally (B2 ran on the pod;
@@ -218,6 +279,8 @@ stray launch surfaces the gap immediately.
 ## Pre-launch audit checklist (user sign-off before any pod work)
 
 - [ ] B2 checkpoint path resolves to a real file
+- [ ] Patched code and Candidate E corpora are synced to pod
+- [ ] Local MD5s match pod MD5s for all required files listed above
 - [ ] `--max-cas-prefix-len 192` appears verbatim in the E2a command
 - [ ] `--ablation e2a` (not b2) appears in the E2a command
 - [ ] Evaluator command points at `rpm_copy_grounding_v2_dev.jsonl` AND
