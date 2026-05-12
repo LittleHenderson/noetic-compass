@@ -1,0 +1,50 @@
+{
+  "rpm_count_15": true,
+  "non_rpm_count_9": true,
+  "prefix_spread_A2_D4_W4_P3": true,
+  "prefix_letter_counts": {
+    "A": 7,
+    "D": 13,
+    "W": 11,
+    "P": 6
+  },
+  "canonical_identifier_count_20_40": true,
+  "total_canonical_identifiers": 37,
+  "chain_length_spread_3stage_4stage": true,
+  "chain_length_counts": {
+    "2": 10,
+    "3": 3,
+    "4": 2
+  },
+  "no_identifier_collision_with_training": true,
+  "non_rpm_no_stage_identifiers": true,
+  "non_rpm_leakage_records": [],
+  "fluency_basic": true,
+  "fluency_issues": [],
+  "bucket_split": {
+    "canonical_order": 5,
+    "prefix_variety_stress": 10
+  },
+  "bucket_records": {
+    "canonical_order": [
+      "eval_b3_rpm_chain_01",
+      "eval_b3_rpm_chain_02",
+      "eval_b3_rpm_chain_11",
+      "eval_b3_rpm_chain_14",
+      "eval_b3_rpm_chain_15"
+    ],
+    "prefix_variety_stress": [
+      "eval_b3_rpm_chain_03",
+      "eval_b3_rpm_chain_04",
+      "eval_b3_rpm_chain_05",
+      "eval_b3_rpm_chain_06",
+      "eval_b3_rpm_chain_07",
+      "eval_b3_rpm_chain_08",
+      "eval_b3_rpm_chain_09",
+      "eval_b3_rpm_chain_10",
+      "eval_b3_rpm_chain_12",
+      "eval_b3_rpm_chain_13"
+    ]
+  },
+  "all_pass": true
+}
