@@ -86,6 +86,30 @@ if "cas_native" not in sys.modules:
 
 # ---- Per-record scoring ---------------------------------------------------
 
+def longest_stage_var_run(trace: list[int],
+                          stage_var_slot_id: int = 2) -> int:
+    """Length of the longest contiguous STAGE_VAR run in ``trace``.
+
+    Mirrors broader_b3_eval_runner.longest_run; duplicated for evaluator
+    self-containment. SLOT_STAGE_VAR = 2 in
+    cas_native.training.datasets.simplex_collator.
+    """
+    cur = best = 0
+    for s in trace:
+        if s == stage_var_slot_id:
+            cur += 1
+            best = max(best, cur)
+        else:
+            cur = 0
+    return best
+
+
+def stage_var_token_count(trace: list[int],
+                          stage_var_slot_id: int = 2) -> int:
+    """Total STAGE_VAR positions in the slot trace (sum across all spans)."""
+    return sum(1 for s in trace if s == stage_var_slot_id)
+
+
 def per_record_recovery(record: dict[str, Any],
                         generated_text: str) -> dict[str, Any]:
     """Score canonical identifier recovery via positional bounded-regex.
@@ -227,10 +251,27 @@ def main() -> int:
                         "entrypoint lands. Free-decode is the primary "
                         "falsification metric (A/B/C/D postmortem).")
     p.add_argument("--stage", choices=["e2a", "e2b"], default="e2a",
-                   help="Reporting tag; e2a is informational (no gate), "
-                        "e2b is load-bearing. Future PR will activate "
-                        "thresholds when stage=e2b.")
+                   help="Reporting tag. ONLY e2a is implemented today; "
+                        "passing e2b raises NotImplementedError because "
+                        "the evaluator lacks (a) teacher-forced recovery, "
+                        "(b) slot F1 scoring, (c) non-rpm leakage scoring, "
+                        "(d) fail-exit thresholds — all of which the E2b "
+                        "gate semantics require. Per Codex audit "
+                        "2026-05-12 finding 2.")
     args = p.parse_args()
+
+    if args.stage == "e2b":
+        raise NotImplementedError(
+            "--stage e2b is blocked. The Stage 2b gate semantics require "
+            "teacher-forced recovery, slot F1, non-rpm leakage scoring, "
+            "and fail-exit threshold enforcement — none of which are "
+            "implemented in this evaluator yet. Implementing them is "
+            "coupled to the Stage 2b loss PR (L_span + L_contrastive_margin "
+            "+ L_coverage + pair-aware batcher). Use --stage e2a for "
+            "warmup runs; rerun this evaluator with --stage e2b only "
+            "after the Stage 2b PR adds the missing scoring paths AND "
+            "their tests."
+        )
 
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -301,13 +342,24 @@ def main() -> int:
         rec_id = rec.get("id")
         gen = dec.get("generated_text", "")
         rcv = per_record_recovery(rec, gen)
+        full_trace = list(dec.get("slot_type_trace", []))
         dev_per_record.append({
             "id": rec_id,
+            "category": rec.get("v1mix_grammar_category_or_error_class"),
             "n_target": rcv["n_target"],
             "n_recovered": rcv["n_recovered"],
             "recovery_rate": rcv["recovery_rate"],
             "generated_identifiers": rcv["generated_identifiers"],
             "generated_text_prefix": gen[:200],
+            # Slot-trace evidence — load-bearing for E2a LM/slot-head
+            # stability inspection (Codex audit 2026-05-12).
+            "slot_type_trace": full_trace,
+            "slot_type_trace_prefix": full_trace[:40],
+            "longest_stage_var_run": longest_stage_var_run(full_trace),
+            "stage_var_token_count": stage_var_token_count(full_trace),
+            "n_tokens_generated": dec.get("n_tokens_generated"),
+            "hit_eos": dec.get("hit_eos"),
+            "text_len": len(gen),
         })
         if rcv["applicable"]:
             n_dev_applicable += 1
@@ -370,6 +422,7 @@ def main() -> int:
             rcv = per_record_recovery(member_rec, gen)
             other_rec = members[1 - member_idx]
             cross = pair_cross_emission(member_rec, other_rec, gen)
+            full_trace = list(decoded.get("slot_type_trace", []))
             member_results.append({
                 "member_idx": member_idx,
                 "id": member_rec.get("id"),
@@ -380,6 +433,14 @@ def main() -> int:
                 "cross_emission_count": cross,
                 "generated_identifiers": rcv["generated_identifiers"],
                 "generated_text_prefix": gen[:200],
+                # Slot-trace evidence (Codex audit 2026-05-12)
+                "slot_type_trace": full_trace,
+                "slot_type_trace_prefix": full_trace[:40],
+                "longest_stage_var_run": longest_stage_var_run(full_trace),
+                "stage_var_token_count": stage_var_token_count(full_trace),
+                "n_tokens_generated": decoded.get("n_tokens_generated"),
+                "hit_eos": decoded.get("hit_eos"),
+                "text_len": len(gen),
             })
         rate_a = member_results[0]["recovery_rate"]
         rate_b = member_results[1]["recovery_rate"]
@@ -466,17 +527,20 @@ def main() -> int:
     lines.append("")
     lines.append("## Gate semantics")
     lines.append("")
-    if args.stage == "e2a":
-        lines.append("**E2a is warmup.** Identifier recovery is expected near 0 because")
-        lines.append("copy is off (loss_weight `copy=0.0`). Metrics are informational —")
-        lines.append("they inform L_span / L_contrastive_margin / L_coverage design")
-        lines.append("for Stage 2b. The gate the warmup must clear is LM/slot-head")
-        lines.append("stability, NOT recovery; see slot_type_trace inspection of the")
-        lines.append("per-record entries in the JSON report.")
-    else:
-        lines.append("**E2b is the load-bearing gate.** Recovery + pair pass rate")
-        lines.append("must clear the thresholds locked when L_span / L_contrastive_margin /")
-        lines.append("L_coverage are wired. Thresholds: TBD by Stage 2b PR.")
+    # E2b is blocked at parse-time (see --stage handling); this evaluator
+    # only ever reports E2a today. Per Codex audit 2026-05-12 finding 2.
+    lines.append("**E2a is warmup.** Identifier recovery is expected near 0 because")
+    lines.append("copy is off (loss_weight `copy=0.0`). Metrics are informational —")
+    lines.append("they inform L_span / L_contrastive_margin / L_coverage design")
+    lines.append("for Stage 2b. The gate the warmup must clear is LM/slot-head")
+    lines.append("stability, NOT recovery; inspect `slot_type_trace`,")
+    lines.append("`longest_stage_var_run`, and `stage_var_token_count` per record")
+    lines.append("in the JSON report.")
+    lines.append("")
+    lines.append("**E2b is NOT implemented in this evaluator.** When the Stage 2b")
+    lines.append("loss PR lands, this evaluator must be extended with TF recovery,")
+    lines.append("slot F1, non-rpm leakage scoring, and fail-exit thresholds")
+    lines.append("(≥80% / ≥85% / ≥90% / 0). Until then `--stage e2b` raises.")
     with findings_path.open("w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 

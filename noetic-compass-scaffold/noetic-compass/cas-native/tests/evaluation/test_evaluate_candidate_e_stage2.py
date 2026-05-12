@@ -130,3 +130,69 @@ def test_tf_mode_raises_until_wired(evaluator_module):
         assert "tf-mode" in str(exc).lower()
         return
     raise AssertionError("decode_records(tf_mode=True) should have raised")
+
+
+# ---------------------------------------------------------------------------
+# Slot-trace helpers (Codex audit 2026-05-12 finding 1)
+# ---------------------------------------------------------------------------
+
+def test_longest_stage_var_run_basic(evaluator_module):
+    """Longest contiguous STAGE_VAR (id=2) run in the trace."""
+    # SLOT_CONNECTIVE=0, SLOT_OMEGA=1, SLOT_STAGE_VAR=2
+    trace = [0, 2, 2, 2, 0, 2, 2, 0, 2, 2, 2, 2, 0]
+    assert evaluator_module.longest_stage_var_run(trace) == 4
+
+
+def test_longest_stage_var_run_all_other_slots(evaluator_module):
+    """No STAGE_VAR positions → 0."""
+    trace = [0, 1, 3, 4, 5, 6, 7, 0]
+    assert evaluator_module.longest_stage_var_run(trace) == 0
+
+
+def test_longest_stage_var_run_empty_trace(evaluator_module):
+    """Empty trace → 0."""
+    assert evaluator_module.longest_stage_var_run([]) == 0
+
+
+def test_stage_var_token_count(evaluator_module):
+    """Total STAGE_VAR positions across all spans."""
+    trace = [0, 2, 2, 0, 2, 0, 2, 2, 2]
+    assert evaluator_module.stage_var_token_count(trace) == 6
+
+
+def test_stage_var_token_count_zero(evaluator_module):
+    """No STAGE_VAR positions → 0."""
+    assert evaluator_module.stage_var_token_count([0, 1, 0, 1]) == 0
+
+
+# ---------------------------------------------------------------------------
+# CLI gate behavior — e2b is blocked
+# ---------------------------------------------------------------------------
+
+def test_stage_e2b_raises_at_cli(evaluator_module, monkeypatch):
+    """--stage e2b must raise NotImplementedError at CLI parse, BEFORE any
+    model load. The four missing scoring paths must be named in the message
+    so a stray launch surfaces the gap immediately. Per Codex audit
+    2026-05-12 finding 2."""
+    monkeypatch.setattr(
+        "sys.argv",
+        ["evaluate_candidate_e_stage2.py",
+         "--checkpoint", "/tmp/fake.pt",
+         "--dev-path", "/tmp/fake_dev.jsonl",
+         "--source-swap-dev-path", "/tmp/fake_swap.jsonl",
+         "--tokenizer-path", "/tmp/fake_tok.json",
+         "--output-dir", "/tmp/fake_out",
+         "--stage", "e2b"],
+    )
+    try:
+        evaluator_module.main()
+    except NotImplementedError as exc:
+        msg = str(exc)
+        assert "e2b is blocked" in msg
+        # The four missing scoring paths must be cited
+        assert "teacher-forced" in msg.lower()
+        assert "slot f1" in msg.lower()
+        assert "leakage" in msg.lower()
+        assert "threshold" in msg.lower()
+        return
+    raise AssertionError("--stage e2b should raise NotImplementedError at CLI")

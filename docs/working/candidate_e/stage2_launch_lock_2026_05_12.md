@@ -30,17 +30,40 @@ evaluator `evaluate_candidate_e_stage2.py` at this PR.
 | `--save-checkpoints-at` | 250,500,750,1000 | matches B1/B2 |
 | `--save-final-checkpoint` | (flag) | required for warm-start chain |
 
-## E2a launch command (READY)
+## E2a launch command (TEMPLATE — see USER ACTION below before running)
 
 Pre-launch verification checklist:
 - `--ablation e2a` accepted by parse_args (test: `test_trainer_cli_ablation_e2a_loss_weights`)
 - `--max-cas-prefix-len 192` plumbed through to collator (test: `test_trainer_cli_max_cas_prefix_len_override`)
 - Loss weights: `lm=1, fr=1, slot_type=1, copy=0, phrase_bias_aux=0` (functionally identical to b2; named distinctly so logs/manifest show E-era intent)
-- Warm-start source: B2's `ckpt_final.pt` (fill in actual `<B2_TS>`)
+- Warm-start source: B2's `ckpt_final.pt`
+
+### USER ACTION REQUIRED — resolve `<B2_TS>` before running
+
+The B2 checkpoint timestamp is unknown locally (B2 ran on the pod;
+checkpoints live on pod storage, not in the local repo). On the pod,
+discover it with:
+
+```bash
+ls -1dt /workspace/tksCAS/stage7_candidate_b2_lmfr_slot_* | head -3
+# Example output:
+#   /workspace/tksCAS/stage7_candidate_b2_lmfr_slot_20260512T034221Z
+#   /workspace/tksCAS/stage7_candidate_b2_lmfr_slot_20260511T235100Z
+```
+
+Pick the run whose `<TS>/ckpt_final.pt` exists AND was the strict-validate
+B2 run (slot stable, no leakage — the design doc says use this one as
+warm-start base). Then substitute the actual timestamp into the `B2_CKPT`
+line below, verify with `ls -l $B2_CKPT` returns a real file, and only
+then execute the launch block.
+
+### Launch block
 
 ```bash
 TS=$(date -u +%Y%m%dT%H%M%SZ)
+# USER: replace <B2_TS> with the actual timestamp from the ls above.
 B2_CKPT=/workspace/tksCAS/stage7_candidate_b2_lmfr_slot_<B2_TS>/ckpt_final.pt
+test -f "$B2_CKPT" || { echo "B2_CKPT does not exist: $B2_CKPT"; exit 1; }
 OUT=/workspace/tksCAS/stage_e2a_warmup_${TS}
 
 nohup python /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/training/train_simplex_mvp.py \
@@ -107,8 +130,22 @@ Stage 2b implementation. Specifically look at:
   cross-emission at warmup = memorization signature surviving from B2
   initialization, which means L_contrastive_margin is the load-bearing
   Stage 2b add.
-- `dev_per_record[*].slot_type_trace_prefix` — should show STAGE_VAR
-  spans at the right approximate positions if the slot head is healthy.
+- `dev_per_record[*].slot_type_trace` (full) +
+  `dev_per_record[*].slot_type_trace_prefix` (first 40) — should show
+  STAGE_VAR spans (slot id 2) at the right approximate positions if the
+  slot head is healthy. **This is E2a's load-bearing evidence — the
+  warmup's job is slot-head stability, not recovery.** Per Codex audit
+  2026-05-12 finding 1 the evaluator now emits the full trace; without
+  it the run's most important signal would be discarded.
+- `dev_per_record[*].longest_stage_var_run` — should be in a sensible
+  range (~8-12 tokens for a 4-stage rpm chain identifier). 0 = slot head
+  not firing STAGE_VAR at all; >>20 = slot head locked open / phrase loop.
+- `dev_per_record[*].stage_var_token_count` — total STAGE_VAR positions
+  across all spans. Compare to `n_target` × ~10 tokens-per-identifier
+  to detect under-firing.
+- `dev_per_record[*].n_tokens_generated` / `hit_eos` / `text_len` —
+  early-EOS / runaway-generation diagnostics; truncated runs indicate
+  EOS bias, runaway runs indicate decoder collapse.
 
 ## E2b launch command (BLOCKED)
 
@@ -142,17 +179,30 @@ placeholder so the structure is visible:
 #   [+ TBD flags for new loss weights, pair sampling, TF mode]
 ```
 
-## E2b evaluator command (will work once losses land)
+## E2b evaluator command (BLOCKED)
 
-The evaluator script supports `--stage e2b`. When the Stage 2b PR adds
-gate thresholds (TBD), the evaluator will fail-exit on threshold miss
-and `${EVAL_OUT}/evaluate_candidate_e_stage2_findings.md` will state
-pass/fail per the four locked gates:
+`--stage e2b` raises `NotImplementedError` at parse-time. The evaluator
+today has NONE of the four E2b gate paths:
 
-- TF fresh source recovery ≥80%
-- Source-swap conditionality ≥85%
-- Slot F1 for copy-bearing slots ≥90%
-- Non-rpm leakage = 0
+| Gate | Status in evaluator | Required for E2b |
+|---|---|---|
+| TF fresh source recovery ≥80% | absent (`--tf-mode` reserved, raises) | yes |
+| Source-swap conditionality ≥85% | partial — pair-pass rate computed but no fail-exit threshold | yes |
+| Slot F1 for copy-bearing slots ≥90% | absent (no F1 computation across records) | yes |
+| Non-rpm leakage = 0 | absent (evaluator reads dev + swap_dev, both rpm-only) | yes |
+
+E2b unblock requires BOTH:
+
+1. **Trainer-side:** Stage 2b loss PR adds L_span, L_contrastive_margin,
+   L_coverage, pair-aware batcher (`_enforce_e2b_block` is removed
+   from `train_simplex_mvp.py`).
+2. **Evaluator-side:** this evaluator gains a TF entrypoint, slot F1
+   metric, non-rpm leakage scoring path that reads a non-rpm dev subset,
+   and fail-exit threshold enforcement (4 gates above).
+
+Both PRs must land before `--stage e2b` is unblocked. The evaluator
+`--stage e2b` raise lists the four missing scoring paths verbatim so a
+stray launch surfaces the gap immediately.
 
 ## What we are NOT doing in Stage 2 setup
 
