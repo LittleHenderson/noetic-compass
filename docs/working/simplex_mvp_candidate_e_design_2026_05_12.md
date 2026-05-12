@@ -59,11 +59,22 @@ If audit confirms head-only labelling: Stage 1 specifies full-span as a load-bea
 
 **Six required structural properties** (every property must be implemented; partial implementation is not a Stage 1 pass):
 
-1. **Disjoint identifier suffix partition.**
+1. **Disjoint identifier suffix partition** (patched per audit 2026-05-12 — the frozen broader B3 pack is treated as an external reserved eval set, not part of the new partition).
+
    - Train suffixes: 4-digit bodies in `0000-7999` AND 3-digit bodies in `000-799` AND 5-digit bodies in `00000-79999`.
    - Dev suffixes: 4-digit `8000-8999`, 3-digit `800-899`, 5-digit `80000-89999`.
    - Test suffixes: 4-digit `9000-9999`, 3-digit `900-999`, 5-digit `90000-99999`.
-   - Eval (the frozen broader B3 24-pack) must use only test-bucket suffixes. Audit eval pack against this partition before Stage 4.
+
+   **Broader-B3 reserved-eval blacklist:** the frozen broader B3 eval pack (`broader_b3_eval_pack_2026_05_12.jsonl`) uses 15 unique identifier bodies that span all three new buckets (6 train-range, 5 dev-range, 4 test-range). These bodies must be subtracted from ALL generated train/dev/test/source-swap corpora to prevent leakage. The frozen pack itself stays as-is (apples-to-apples B3 comparison preserved).
+
+   Blacklist bodies (extracted from the frozen pack 2026-05-12):
+   ```
+   3-digit (4 bodies): 707, 884, 932, 978
+   4-digit (5 bodies): 5568, 6846, 8472, 8768, 9871
+   5-digit (6 bodies): 19672, 77848, 79730, 81399, 87663, 94055
+   ```
+
+   Stage 1 SDG must enforce: `generated_body not in BROADER_B3_BLACKLIST` for every record in every artifact (train, dev, test, source-swap-dev, source-swap-eval). Verify post-generation via a regex audit pass.
 
 2. **Counterfactual source pairs.**
    - For every base rpm_chain record, generate N (≥3) *parallel* records with:
@@ -102,11 +113,14 @@ If audit confirms head-only labelling: Stage 1 specifies full-span as a load-bea
 | Artifact | Path | Purpose |
 |---|---|---|
 | Training corpus (train-bucket suffixes) | `cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl` | What the model trains on |
-| Dev corpus (dev-bucket suffixes) | `cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.jsonl` | Stage 2 TF grounding probe (held out from training) |
+| Dev corpus (dev-bucket suffixes) | `cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.jsonl` | Stage 2b TF fresh-source-recovery + slot-F1 + non-rpm-leakage gates |
+| **Source-swap dev corpus** (dev-bucket suffixes; paired records) | `cas-synthetic/data/path_d/rpm_copy_grounding_v2_source_swap_dev.jsonl` | Stage 2b source-swap conditionality gate — paired records with same EN target, different source identifiers |
 | Test corpus (test-bucket suffixes) | `cas-synthetic/data/path_d/rpm_copy_grounding_v2_test.jsonl` | Stage 3 on-policy eval (held out from both training and dev) |
-| Source-swap eval pack | `cas-synthetic/data/eval/rpm_copy_grounding_v2_source_swap_eval.jsonl` | Stage 4 source-swap conditionality gate — paired records with same EN target, different source identifiers |
+| Source-swap eval pack (test-bucket suffixes; paired records) | `cas-synthetic/data/eval/rpm_copy_grounding_v2_source_swap_eval.jsonl` | Stage 4 source-swap conditionality gate (production-target validation pack) |
 
-Size targets: ~2000-3000 train records to provide counterfactual / hard-negative variance + a sister non-rpm corpus of comparable size to maintain category balance. Dev / test packs sized to ~200 records each. Source-swap eval pack: ~50 paired records (100 evaluations).
+Size targets: ~2000-3000 train records to provide counterfactual / hard-negative variance + a sister non-rpm corpus of comparable size to maintain category balance. Dev / test packs sized to ~200 records each. Source-swap dev pack: ~50 paired records (100 evaluations). Source-swap eval pack: ~50 paired records (100 evaluations).
+
+**Record metadata:** every record carries an `eval_meta` dict containing the suffix bucket (`train` / `dev` / `test`), the identifier body, the chain length, the prefixes, and (for source-swap records) a `source_swap_pair_id` that links paired records. The regen step verifies no record's body is in the broader-B3 blacklist.
 
 **Stage 1 build review (before pod work):**
 - Sample-read 20 records per template variant to confirm fluency and structural correctness.
@@ -152,7 +166,7 @@ The Stage 2 gates measure *source recovery* and *source-swap conditionality* —
 | Gate | Threshold | Rationale |
 |---|---|---|
 | TF fresh source recovery | **≥80%** | If the data wedge + copy/span objectives teach binding, TF should recover the right identifier almost always (TF has the correct prefix; the only question is "did the model learn to read the source") |
-| Source-swap conditionality | **≥85%** | Same EN target, swap source identifiers → output should swap. Isolates binding from shape memorization. Measured on a held-out source-swap subset of `rpm_copy_grounding_v2_dev.jsonl`. |
+| Source-swap conditionality | **≥85%** | Same EN target, swap source identifiers → output should swap. Isolates binding from shape memorization. **Measured on the dedicated `rpm_copy_grounding_v2_source_swap_dev.jsonl` artifact** (per audit 2026-05-12: a separate file rather than embedded in the dev pack, so the source-swap subset's size and composition are explicit). |
 | Slot F1 for copy-bearing slots | **≥90%** | Slot head correctly identifies typed positions in fresh records |
 | Non-rpm leakage | **0** | STAGE_VAR slot never fires on non-rpm inputs |
 
@@ -279,6 +293,8 @@ Before authorizing Stage 1, confirm:
 - [ ] Stage 3 loss list is complete (or flag missing terms)
 - [ ] Stage 4 requires BOTH the broader B3 24-pack AND the sibling source-swap eval pack to pass
 - [ ] Stage 1 corpus paths put training data under `data/path_d/` and eval packs under `data/eval/`
+- [ ] Broader-B3 reserved-eval blacklist (15 bodies, 3-/4-/5-digit) is explicit and Stage 1 SDG enforces exclusion across all 5 artifacts
+- [ ] Stage 2b source-swap gate references the dedicated `rpm_copy_grounding_v2_source_swap_dev.jsonl` artifact (not a subset of the dev pack)
 - [ ] Anti-tuning rules are intact (no tuning against the 24-pack)
 - [ ] Cost projection is realistic
 - [ ] Companion files exist
