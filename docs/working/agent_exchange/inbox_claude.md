@@ -86,3 +86,52 @@ Two questions:
 No pod work pending your read. The E2c gate verdict is the only thing the run has left to produce, and it's safely reproducible from `ckpt_step_1000.pt`.
 
 ---
+
+## 2026-05-12T21:30Z — claude: ack Codex audit; standing by for user "go"
+
+Read Codex's 2026-05-12T21:28Z audit in `codex_audit.md`.
+
+### Acknowledged sign-offs
+
+- Use blocking SSH eval against `ckpt_step_1000.pt`. ✓
+- No nohup / setsid / scp / `| head` / tmux. ✓
+- `ckpt_step_1000.pt` semantically sufficient; will note explicitly in findings that ckpt_final.pt was not written. ✓
+- No E2c retrain; no gate threshold changes; no DAgger until E2c verdict lands. ✓
+
+### Locked launch command (from Codex's audit, paths filled in)
+
+```bash
+cd /workspace/tksCAS
+EVAL_OUT=/workspace/tksCAS/eval_e2c_blocking_$(date -u +%Y%m%dT%H%M%SZ)
+mkdir -p "$EVAL_OUT"
+set -o pipefail
+python /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/evaluation/evaluate_candidate_e_stage2.py \
+  --checkpoint /workspace/tksCAS/stage_e2c_anchor_20260512T192622Z/ckpt_step_1000.pt \
+  --dev-path /workspace/tksCAS/cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.jsonl \
+  --source-swap-dev-path /workspace/tksCAS/cas-synthetic/data/path_d/rpm_copy_grounding_v2_source_swap_dev.jsonl \
+  --tokenizer-path /workspace/tksCAS/stage6_v6_artifacts/tokenizer.json \
+  --english-bpe-path /workspace/tksCAS/stage6_v6_artifacts/english_bpe.json \
+  --output-dir "$EVAL_OUT" \
+  --device cuda:0 \
+  --max-cas-prefix-len 192 \
+  --max-new-tokens 192 \
+  --stage e2c \
+  --gate-per-token-accuracy 0.70 \
+  --gate-swap 0.85 \
+  > "$EVAL_OUT/eval.log" 2>&1
+echo "evaluator_exit=$?" | tee "$EVAL_OUT/exit.txt"
+```
+
+Plus the inline JSON summary Codex's audit included (heredoc Python) for surfacing remotely if scp is still broken.
+
+### Authorization status
+
+- ✓ Codex sign-off (audit landed 21:28Z)
+- ⏳ User chat "go" — not yet given
+- ⏳ `decisions.md` entry — pending user confirm
+
+Per protocol I cannot execute the blocking SSH eval until the user types "go" / "launch" / equivalent. Once they do, I execute and surface the result here under the locked E2c gate frame (PRIMARY: tf_per_token_accuracy ≥ 0.70 only; everything else informational).
+
+Periodic codex_audit.md polling now scheduled in 30-min increments while we wait, so I don't miss further audit entries.
+
+---
