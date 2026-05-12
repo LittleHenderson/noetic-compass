@@ -145,6 +145,12 @@ class SimplexTrainConfig:
     ssm_d_state: int = 16
     ssm_d_conv: int = 4
     ssm_expand: int = 2
+    # Candidate E pre-Stage-1 audit fix 2026-05-12: max source CAS prefix
+    # length plumbed through to SimplexCollator. Default 32 preserves
+    # backward compatibility with A/B/C/D runs; Candidate E should set
+    # this to 128 or 192 so 4-stage rpm chains (~110 source tokens) fit
+    # without truncating the W/P identifiers out of cas_prefix_ids.
+    max_cas_prefix_len: int = 32
     # Loss weights — populated by ablation mode after CLI parse
     loss_weights: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_LOSS_WEIGHTS))
 
@@ -259,6 +265,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--ssm-expand", type=int, default=2,
                    help="SSM inner-dimension expansion factor. Only used when "
                         "--decoder-arch ssm. Default 2.")
+    # Candidate E pre-Stage-1 audit fix 2026-05-12
+    p.add_argument("--max-cas-prefix-len", type=int, default=32,
+                   help="Cap on tokens in cas_prefix_ids fed to the encoder. "
+                        "Default 32 preserves A/B/C/D backward compatibility. "
+                        "Candidate E sets this to 128 or 192 so 4-stage rpm "
+                        "chains fit without W/P source-identifier truncation. "
+                        "Per audit 2026-05-12, cap=32 silently truncated half of "
+                        "rpm identifier source positions, causing the 'only 2 spans per "
+                        "record' supervision pattern.")
     return p
 
 
@@ -304,6 +319,7 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
         ssm_d_state=args.ssm_d_state,
         ssm_d_conv=args.ssm_d_conv,
         ssm_expand=args.ssm_expand,
+        max_cas_prefix_len=args.max_cas_prefix_len,
     )
     # Apply ablation overrides on top of defaults
     overrides = ABLATION_OVERRIDES.get(cfg.ablation, {})
@@ -735,7 +751,7 @@ def run_integration_step(
     torch.manual_seed(cfg.seed)
 
     tokenizer = build_tokenizer_for_smoke(records)
-    collator = SimplexCollator(tokenizer, enable_simplex_aux=True)
+    collator = SimplexCollator(tokenizer, enable_simplex_aux=True, max_cas_prefix_len=cfg.max_cas_prefix_len)
     batch = collator(records, device=device)
     if batch is None:
         raise RuntimeError("collator returned None on smoke records — cannot run integration step")
@@ -1120,7 +1136,7 @@ def run_cpu_smoke(
             tokenizer = tokenizer.with_english_bpe(cfg.english_bpe_path)
     else:
         tokenizer = build_tokenizer_for_smoke(records)
-    collator = SimplexCollator(tokenizer, enable_simplex_aux=True)
+    collator = SimplexCollator(tokenizer, enable_simplex_aux=True, max_cas_prefix_len=cfg.max_cas_prefix_len)
 
     vocab_size = int(tokenizer.vocab_size)
     model = build_simplex_mvp_model(

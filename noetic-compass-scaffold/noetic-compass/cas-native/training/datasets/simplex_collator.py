@@ -178,6 +178,33 @@ def find_subsequence(haystack: list[int], needle: list[int]) -> Optional[int]:
     return None
 
 
+def find_all_subsequences(haystack: list[int], needle: list[int]) -> list[int]:
+    """Return ALL non-overlapping start indices where ``haystack`` contains
+    ``needle`` as a contiguous subsequence. Non-overlapping: after a match
+    at position i, the next search resumes at i + len(needle).
+
+    Added 2026-05-12 per Candidate E pre-Stage-1 audit. The original
+    ``find_subsequence`` (first-match only) caused repeat target identifier
+    occurrences to go unlabelled — combined with the source-cap truncation
+    bug, this meant only the first 2 of 4 unique rpm-chain identifiers per
+    record received STAGE_VAR copy supervision. Both bugs together produced
+    the universal "2 spans per record" pattern.
+    """
+    if not needle:
+        return []
+    n_len = len(needle)
+    matches: list[int] = []
+    i = 0
+    end = len(haystack) - n_len
+    while i <= end:
+        if haystack[i:i + n_len] == needle:
+            matches.append(i)
+            i += n_len
+        else:
+            i += 1
+    return matches
+
+
 # Build-spec §2.3 slot ids — must match TypedFiberDecoder.SLOT_TYPE_TO_ID
 SLOT_CONNECTIVE: int = 0
 SLOT_OMEGA: int = 1
@@ -426,11 +453,15 @@ class SimplexCollator(NativeNLCollator):
                 src_token_types.append((k, SLOT_STAGE_VAR))
             # Place an FR anchor at the span start (state 0 — neutral)
             src_anchors.append((s_start, 0))
-            # Find first matching target subsequence; emit per-position copy
+            # Find ALL matching target subsequences (every occurrence of
+            # this identifier in the reply gets per-position copy
+            # supervision). Per Candidate E pre-Stage-1 audit 2026-05-12:
+            # was find_subsequence first-match only, which left repeat
+            # occurrences and any post-first-match identifiers unlabelled
+            # (root cause of the "2 spans per record" universal pattern).
             if r_ids:
                 src_subseq = c_ids[s_start:s_end]
-                t_start = find_subsequence(r_ids, src_subseq)
-                if t_start is not None:
+                for t_start in find_all_subsequences(r_ids, src_subseq):
                     for offset in range(s_end - s_start):
                         target_slots.append(
                             (t_start + offset, SLOT_STAGE_VAR, s_start + offset)
