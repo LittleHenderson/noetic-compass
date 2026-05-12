@@ -377,22 +377,26 @@ def main() -> int:
                    help="MUST match the value used at training time. "
                         "Defaults to 192 (Candidate E spec).")
     p.add_argument("--tf-mode", action="store_true",
-                   help="Reserved; raises NotImplementedError until TF "
-                        "entrypoint lands. Free-decode is the primary "
-                        "falsification metric (A/B/C/D postmortem).")
+                   help="Legacy flag for decode_records; teacher-forced "
+                        "evaluation is now always run via teacher_forced_eval() "
+                        "to compute the e2b gate, regardless of this flag. "
+                        "Setting this only affects the secondary free-decode "
+                        "path (which raises if true). Kept for CLI backward "
+                        "compatibility.")
     p.add_argument("--stage", choices=["e2a", "e2b"], default="e2a",
                    help="Reporting tag. e2a is informational (no gate). "
-                        "e2b enforces two fail-exit gates: dev "
-                        "full_recovery_rate >= --gate-recovery (default "
-                        "0.80) and swap pair_pass_rate >= --gate-swap "
-                        "(default 0.85). Exits non-zero if any gate "
-                        "misses. Slot F1 and non-rpm leakage scoring "
-                        "are deferred to a follow-on evaluator PR; the "
-                        "current evaluator covers exact-ID recovery + "
-                        "wrong-pair leakage per user 2026-05-12 directive.")
+                        "e2b enforces two fail-exit gates: TF "
+                        "identifier_recovery_rate >= --gate-recovery "
+                        "(default 0.80, PRIMARY, teacher-forced) and swap "
+                        "pair_pass_rate >= --gate-swap (default 0.85, "
+                        "SECONDARY, free-decode). Exits non-zero (return 2) "
+                        "if any gate misses.")
     p.add_argument("--gate-recovery", type=float, default=0.80,
-                   help="E2b gate: dev_summary.full_recovery_rate must "
-                        "meet or exceed this value. Per design doc §Stage 2b.")
+                   help="E2b PRIMARY gate: teacher-forced "
+                        "tf_dev_summary.identifier_recovery_rate must meet "
+                        "or exceed this value. Per design doc §Stage 2b "
+                        "'fresh source recovery >=80%'. Identifier-level: "
+                        "total_recovered_identifiers / total_target_identifiers.")
     p.add_argument("--gate-swap", type=float, default=0.85,
                    help="E2b gate: swap_summary.pair_pass_rate must meet "
                         "or exceed this value. Per design doc §Stage 2b.")
