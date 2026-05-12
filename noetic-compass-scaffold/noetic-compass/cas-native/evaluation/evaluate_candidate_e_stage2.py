@@ -56,7 +56,7 @@ import re
 import sys
 import types
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import torch
 
@@ -314,27 +314,56 @@ def teacher_forced_eval(
 
             # Score each span: identifier recovered iff every gold-mapped
             # in-span token has correct argmax src.
+            #
+            # Per-span failure-mode diagnostics (Candidate E Stage 2c
+            # 2026-05-12 per user directive): for each failed span,
+            # classify the failure pattern:
+            #   exact:             all in-span tokens correct
+            #   wrong_start:       first in-span gold-mapped token's argmax
+            #                      is wrong (whole-ID lost from the start)
+            #   right_start_drift: first token correct, at least one later
+            #                      token wrong (model started right but
+            #                      pointer slipped mid-ID)
+            # Per-token off-by-one tracking captures the "drift by ±1
+            # source position" failure mode that L_span specifically
+            # targets and L_start_anchor targets the start of.
             per_identifier_correct: list[bool] = []
+            failure_modes: dict[str, int] = {
+                "exact": 0,
+                "wrong_start": 0,
+                "right_start_drift": 0,
+            }
             per_token_correct = 0
             per_token_total = 0
+            per_token_off_by_one = 0  # pred_src in {gold ± 1}
             for sp_s, sp_e in spans:
                 ident_correct = True
                 ident_has_gold = False
+                first_gold_correct: Optional[bool] = None
                 for k in range(sp_s, sp_e):
                     gold_src = int(tss[k].item())
                     if gold_src < 0:
-                        # No supervision at this position; skip (does not
-                        # invalidate the identifier)
                         continue
                     ident_has_gold = True
                     pred_src = int(argmax_src[k].item())
                     per_token_total += 1
-                    if pred_src == gold_src:
+                    token_correct = (pred_src == gold_src)
+                    if first_gold_correct is None:
+                        first_gold_correct = token_correct
+                    if token_correct:
                         per_token_correct += 1
                     else:
                         ident_correct = False
+                        if abs(pred_src - gold_src) == 1:
+                            per_token_off_by_one += 1
                 if ident_has_gold:
                     per_identifier_correct.append(ident_correct)
+                    if ident_correct:
+                        failure_modes["exact"] += 1
+                    elif first_gold_correct is False:
+                        failure_modes["wrong_start"] += 1
+                    else:  # first_gold_correct is True
+                        failure_modes["right_start_drift"] += 1
 
             n_target = len(per_identifier_correct)
             n_recovered = sum(per_identifier_correct)
@@ -348,11 +377,13 @@ def teacher_forced_eval(
                 ),
                 "per_token_correct": per_token_correct,
                 "per_token_total": per_token_total,
+                "per_token_off_by_one": per_token_off_by_one,
                 "per_token_accuracy": (
                     per_token_correct / per_token_total
                     if per_token_total > 0 else None
                 ),
                 "per_identifier_correct": per_identifier_correct,
+                "failure_modes": failure_modes,
                 "applicable": n_target > 0,
             })
     return results
@@ -383,23 +414,32 @@ def main() -> int:
                         "Setting this only affects the secondary free-decode "
                         "path (which raises if true). Kept for CLI backward "
                         "compatibility.")
-    p.add_argument("--stage", choices=["e2a", "e2b"], default="e2a",
+    p.add_argument("--stage", choices=["e2a", "e2b", "e2c"], default="e2a",
                    help="Reporting tag. e2a is informational (no gate). "
-                        "e2b enforces two fail-exit gates: TF "
-                        "identifier_recovery_rate >= --gate-recovery "
-                        "(default 0.80, PRIMARY, teacher-forced) and swap "
-                        "pair_pass_rate >= --gate-swap (default 0.85, "
-                        "SECONDARY, free-decode). Exits non-zero (return 2) "
-                        "if any gate misses.")
+                        "e2b: PRIMARY gate is TF identifier_recovery_rate "
+                        ">= --gate-recovery (default 0.80). e2c: PRIMARY "
+                        "gate is TF per_token_accuracy >= "
+                        "--gate-per-token-accuracy (default 0.70) — "
+                        "intermediate gate before whole-ID recovery, per "
+                        "user 2026-05-12 post-E2b directive. Both e2b and "
+                        "e2c also report swap pair_pass_rate. Exits "
+                        "non-zero (return 2) if PRIMARY gate misses.")
     p.add_argument("--gate-recovery", type=float, default=0.80,
                    help="E2b PRIMARY gate: teacher-forced "
                         "tf_dev_summary.identifier_recovery_rate must meet "
                         "or exceed this value. Per design doc §Stage 2b "
                         "'fresh source recovery >=80%'. Identifier-level: "
                         "total_recovered_identifiers / total_target_identifiers.")
+    p.add_argument("--gate-per-token-accuracy", type=float, default=0.70,
+                   help="E2c PRIMARY gate: teacher-forced "
+                        "tf_dev_summary.per_token_accuracy must meet or "
+                        "exceed this value. Per user 2026-05-12 directive: "
+                        "after E2b's 38% per-token result, target 70%+ "
+                        "before whole-ID recovery is meaningful. "
+                        "Total correct / total in-span gold-mapped tokens.")
     p.add_argument("--gate-swap", type=float, default=0.85,
-                   help="E2b gate: swap_summary.pair_pass_rate must meet "
-                        "or exceed this value. Per design doc §Stage 2b.")
+                   help="Swap gate: swap_summary.pair_pass_rate must meet "
+                        "or exceed this value. Reported at e2b/e2c.")
     args = p.parse_args()
 
     out_dir = Path(args.output_dir)
@@ -475,10 +515,18 @@ def main() -> int:
     )
     tf_per_token_correct = sum(r["per_token_correct"] for r in tf_results)
     tf_per_token_total = sum(r["per_token_total"] for r in tf_results)
+    tf_per_token_off_by_one = sum(r.get("per_token_off_by_one", 0) for r in tf_results)
+    # Aggregate per-span failure-mode counts across records
+    tf_failure_modes = {"exact": 0, "wrong_start": 0, "right_start_drift": 0}
+    for r in tf_results:
+        fm = r.get("failure_modes", {})
+        for k in tf_failure_modes:
+            tf_failure_modes[k] += fm.get(k, 0)
+    tf_total_spans = sum(tf_failure_modes.values())
     tf_dev_summary = {
         "n_records": len(tf_results),
         "n_applicable": tf_n_applicable,
-        # IDENTIFIER-LEVEL recovery (the design doc gate metric)
+        # IDENTIFIER-LEVEL recovery (the E2b design doc gate metric)
         "total_target_identifiers": tf_total_target,
         "total_recovered_identifiers": tf_total_recovered,
         "identifier_recovery_rate": (
@@ -491,13 +539,24 @@ def main() -> int:
             tf_n_full_recovery / tf_n_applicable
             if tf_n_applicable > 0 else None
         ),
-        # PER-TOKEN accuracy (most granular)
+        # PER-TOKEN accuracy (most granular — E2c PRIMARY gate metric)
         "per_token_correct": tf_per_token_correct,
         "per_token_total": tf_per_token_total,
         "per_token_accuracy": (
             tf_per_token_correct / tf_per_token_total
             if tf_per_token_total > 0 else None
         ),
+        "per_token_off_by_one": tf_per_token_off_by_one,
+        "per_token_off_by_one_rate": (
+            tf_per_token_off_by_one / max(tf_per_token_total - tf_per_token_correct, 1)
+            if tf_per_token_total > 0 else None
+        ),
+        # Per-span failure-mode diagnostics (E2c per user 2026-05-12)
+        "span_failure_modes": tf_failure_modes,
+        "span_failure_mode_rates": {
+            k: (v / tf_total_spans if tf_total_spans > 0 else None)
+            for k, v in tf_failure_modes.items()
+        },
     }
     print(json.dumps({"event": "tf_dev_scored", **tf_dev_summary}), flush=True)
 
@@ -723,21 +782,27 @@ def main() -> int:
     lines.append("")
     lines.append("## Gate semantics")
     lines.append("")
-    # E2b gates per design doc §Stage 2b + user audit 2026-05-12:
-    #   PRIMARY: TF identifier-level recovery (NOT free-decode, NOT
-    #     full-record). Under teacher forcing, what fraction of the
-    #     individual canonical identifiers does the model correctly copy?
-    #   SECONDARY: swap pair_pass_rate (free-decode). Memorization-residue
-    #     indicator — distinct phenomenon from copy learning.
+    # E2b/E2c gates per design doc §Stage 2b + user audit 2026-05-12:
+    #   E2b PRIMARY:  TF identifier_recovery_rate >= --gate-recovery
+    #   E2c PRIMARY:  TF per_token_accuracy >= --gate-per-token-accuracy
+    #                 (intermediate gate before whole-ID recovery)
+    #   SECONDARY (both stages): swap pair_pass_rate >= --gate-swap
     tf_recovery_value = tf_dev_summary.get("identifier_recovery_rate") or 0.0
+    tf_per_token_value = tf_dev_summary.get("per_token_accuracy") or 0.0
     swap_value = swap_summary.get("pair_pass_rate") or 0.0
     tf_recovery_gate_pass = tf_recovery_value >= args.gate_recovery
+    tf_per_token_gate_pass = tf_per_token_value >= args.gate_per_token_accuracy
     swap_gate_pass = swap_value >= args.gate_swap
     gates = {
         "tf_identifier_recovery": {
             "value": tf_recovery_value,
             "threshold": args.gate_recovery,
             "pass": tf_recovery_gate_pass,
+        },
+        "tf_per_token_accuracy": {
+            "value": tf_per_token_value,
+            "threshold": args.gate_per_token_accuracy,
+            "pass": tf_per_token_gate_pass,
         },
         "swap": {
             "value": swap_value,
@@ -749,7 +814,7 @@ def main() -> int:
     # not gated, but informative if it's much lower than identifier-level
     # (means model gets most IDs right but misses 1 in long chains).
     tf_full_recovery = tf_dev_summary.get("full_recovery_rate")
-    tf_per_token_acc = tf_dev_summary.get("per_token_accuracy")
+    tf_per_token_acc = tf_per_token_value
     if args.stage == "e2a":
         lines.append("**E2a is warmup.** Identifier recovery is expected near 0 because")
         lines.append("copy is off (loss_weight `copy=0.0`). Metrics are informational —")
@@ -766,12 +831,22 @@ def main() -> int:
     lines.append("")
     lines.append("| gate | value | threshold | pass |")
     lines.append("|---|---|---|---|")
-    lines.append(f"| **TF identifier_recovery_rate** (primary, design doc §Stage 2b) | {tf_recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if tf_recovery_gate_pass else '✗'} |")
-    lines.append(f"| swap pair_pass_rate (free-decode, swap conditionality) | {swap_value:.4f} | {args.gate_swap:.4f} | {'✓' if swap_gate_pass else '✗'} |")
+    if args.stage == "e2c":
+        lines.append(f"| **TF per_token_accuracy** (E2c PRIMARY) | {tf_per_token_value:.4f} | {args.gate_per_token_accuracy:.4f} | {'✓' if tf_per_token_gate_pass else '✗'} |")
+        lines.append(f"| TF identifier_recovery_rate (informational at e2c) | {tf_recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if tf_recovery_gate_pass else '✗'} |")
+    else:
+        lines.append(f"| **TF identifier_recovery_rate** (E2b PRIMARY) | {tf_recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if tf_recovery_gate_pass else '✗'} |")
+        lines.append(f"| TF per_token_accuracy (informational at e2b) | {tf_per_token_value:.4f} | {args.gate_per_token_accuracy:.4f} | {'✓' if tf_per_token_gate_pass else '✗'} |")
+    lines.append(f"| swap pair_pass_rate (SECONDARY, free-decode) | {swap_value:.4f} | {args.gate_swap:.4f} | {'✓' if swap_gate_pass else '✗'} |")
     lines.append("")
     lines.append("**Context (not gated):**")
     lines.append(f"- TF full_recovery_rate (strict whole-record): {tf_full_recovery}")
-    lines.append(f"- TF per_token_accuracy (granular): {tf_per_token_acc}")
+    sfm = tf_dev_summary.get("span_failure_modes", {})
+    sfm_rates = tf_dev_summary.get("span_failure_mode_rates", {})
+    lines.append(f"- TF span failure modes: exact={sfm.get('exact',0)} ({sfm_rates.get('exact')}), wrong_start={sfm.get('wrong_start',0)} ({sfm_rates.get('wrong_start')}), right_start_drift={sfm.get('right_start_drift',0)} ({sfm_rates.get('right_start_drift')})")
+    obo = tf_dev_summary.get("per_token_off_by_one", 0)
+    obo_rate = tf_dev_summary.get("per_token_off_by_one_rate")
+    lines.append(f"- TF per-token off-by-one (of incorrect tokens): {obo} ({obo_rate})")
     lines.append("")
     lines.append("**Not yet implemented in this evaluator** (deferred per user")
     lines.append("2026-05-12 evaluator-upgrade scope decision): slot F1 against")
@@ -780,9 +855,22 @@ def main() -> int:
     lines.append("NOT prerequisites for E2b launch, because exact-ID recovery and")
     lines.append("wrong-pair leakage are the load-bearing E2b signals.")
 
-    overall_pass = tf_recovery_gate_pass and swap_gate_pass
-    report["e2b_gates"] = gates
-    report["e2b_overall_pass"] = overall_pass
+    # Stage-specific overall pass determination:
+    #   e2a: informational only, no fail-exit
+    #   e2b: PRIMARY = tf_identifier_recovery; SECONDARY = swap
+    #   e2c: PRIMARY = tf_per_token_accuracy; SECONDARY = swap
+    if args.stage == "e2c":
+        overall_pass = tf_per_token_gate_pass and swap_gate_pass
+        primary_gate_name = "tf_per_token_accuracy"
+    else:  # e2a or e2b
+        overall_pass = tf_recovery_gate_pass and swap_gate_pass
+        primary_gate_name = "tf_identifier_recovery"
+    report["gate_stage"] = args.stage
+    report["gate_primary"] = primary_gate_name
+    report["e2b_gates"] = gates  # key kept for backward-compatibility
+    report["gates"] = gates
+    report["e2b_overall_pass"] = overall_pass  # legacy key
+    report["overall_pass"] = overall_pass
     # Rewrite report with gate fields added
     with report_path.open("w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, default=str)
@@ -792,17 +880,18 @@ def main() -> int:
     print(json.dumps({
         "event": "eval_done",
         "stage": args.stage,
+        "primary_gate": primary_gate_name,
         "report": str(report_path),
         "findings": str(findings_path),
         "tf_dev_summary": tf_dev_summary,
         "dev_summary": dev_summary,
         "swap_summary": swap_summary,
-        "e2b_gates": gates,
-        "e2b_overall_pass": overall_pass,
+        "gates": gates,
+        "overall_pass": overall_pass,
     }, default=str), flush=True)
-    # Fail-exit on gate miss at --stage e2b (load-bearing).
+    # Fail-exit on PRIMARY gate miss at --stage e2b or e2c.
     # At --stage e2a, gates are informational only.
-    if args.stage == "e2b" and not overall_pass:
+    if args.stage in ("e2b", "e2c") and not overall_pass:
         return 2
     return 0
 

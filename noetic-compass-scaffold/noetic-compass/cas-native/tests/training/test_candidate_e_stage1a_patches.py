@@ -346,6 +346,8 @@ def test_trainer_cli_ablation_e2a_loss_weights():
         "copy": 0.0, "phrase_bias_aux": 0.0,
         # E2b losses default to 0.0 in e2a (warmup); switched on in e2b
         "span": 0.0, "contrastive_margin": 0.0, "coverage": 0.0,
+        # E2c losses also default to 0.0 in e2a; switched on in e2c
+        "start_anchor": 0.0, "anchor_contrastive": 0.0,
     }
 
 

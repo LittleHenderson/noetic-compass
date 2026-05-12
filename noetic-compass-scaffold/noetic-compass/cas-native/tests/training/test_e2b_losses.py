@@ -317,3 +317,196 @@ def test_three_new_losses_produce_gradients():
     assert torch.isfinite(p.grad).all(), "p_copy gradient has non-finite values"
     # Some gradient must be non-zero — the losses actually moved p_copy
     assert p.grad.abs().sum().item() > 0.0, "p_copy.grad is identically zero"
+
+
+# ---------------------------------------------------------------------------
+# E2c losses: L_start_anchor + L_anchor_contrastive (2026-05-12)
+# ---------------------------------------------------------------------------
+
+def _add_src_token_type(batch, L_src, stage_var_starts):
+    """Helper: tag certain source positions as STAGE_VAR for L_anchor_contrastive."""
+    src_type = torch.zeros((1, L_src), dtype=torch.int8)
+    for s in stage_var_starts:
+        # Make a contiguous STAGE_VAR span of length 2 from each start
+        src_type[0, s] = 2
+        if s + 1 < L_src:
+            src_type[0, s + 1] = 2
+    batch["src_token_type"] = src_type
+    return batch
+
+
+def test_loss_start_anchor_zero_when_first_token_argmax_correct(monkeypatch):
+    """L_start_anchor fires CE on first token of each STAGE_VAR span. When
+    p_copy[span_start, gold_src] = 1.0, loss should be near zero."""
+    from cas_native.training.train_simplex_mvp import compute_losses, DEFAULT_LOSS_WEIGHTS
+    B, L_out, L_src = 1, 8, 6
+    # Span at positions 3,4,5 with gold src 0,1,2.
+    # Force first token (pos 3) to point at src 0 with mass 0.999.
+    p = torch.full((B, L_out, L_src), 1e-6)
+    p[0, 3, 0] = 1.0 - 5e-6
+    p[0, 4, 1] = 1.0 - 5e-6
+    p[0, 5, 2] = 1.0 - 5e-6
+    p = p / p.sum(dim=-1, keepdim=True)
+    p.requires_grad_(True)
+    batch, out = _make_batch_and_out(
+        B=B, L_out=L_out, L_src=L_src,
+        is_stage_var_positions=[3, 4, 5],
+        src_positions_for_stage_var=[0, 1, 2],
+        p_copy_override=p,
+    )
+    weights = dict(DEFAULT_LOSS_WEIGHTS)
+    weights["start_anchor"] = 1.0
+    _, parts = compute_losses(
+        out, batch, fisher_rao_loss=_ZeroFRLoss(), weights=weights,
+    )
+    assert parts["loss_start_anchor"].item() < 1e-3, (
+        f"start_anchor should be ~0 when first-token argmax matches gold; "
+        f"got {parts['loss_start_anchor'].item()}"
+    )
+
+
+def test_loss_start_anchor_fires_when_first_token_wrong():
+    """L_start_anchor must produce a substantial loss when first-token-of-span
+    copy distribution puts mass on a wrong source position."""
+    from cas_native.training.train_simplex_mvp import compute_losses, DEFAULT_LOSS_WEIGHTS
+    B, L_out, L_src = 1, 8, 6
+    p = torch.full((B, L_out, L_src), 1e-6)
+    # Span at positions 3,4,5; gold first src = 0 but pred puts 0.99 at src 4
+    p[0, 3, 4] = 0.99
+    p[0, 4, 1] = 0.99
+    p[0, 5, 2] = 0.99
+    p = p / p.sum(dim=-1, keepdim=True)
+    p.requires_grad_(True)
+    batch, out = _make_batch_and_out(
+        B=B, L_out=L_out, L_src=L_src,
+        is_stage_var_positions=[3, 4, 5],
+        src_positions_for_stage_var=[0, 1, 2],
+        p_copy_override=p,
+    )
+    weights = dict(DEFAULT_LOSS_WEIGHTS)
+    weights["start_anchor"] = 1.0
+    _, parts = compute_losses(
+        out, batch, fisher_rao_loss=_ZeroFRLoss(), weights=weights,
+    )
+    # p_copy[3, 0] = 3e-6 (uniform smear), -log(3e-6) ≈ 12.7
+    assert parts["loss_start_anchor"].item() > 5.0, (
+        f"start_anchor should be large when first-token argmax misses gold; "
+        f"got {parts['loss_start_anchor'].item()}"
+    )
+
+
+def test_loss_start_anchor_zero_when_no_spans():
+    """No STAGE_VAR target positions → loss_start_anchor = 0."""
+    from cas_native.training.train_simplex_mvp import compute_losses, DEFAULT_LOSS_WEIGHTS
+    batch, out = _make_batch_and_out(is_stage_var_positions=[])
+    weights = dict(DEFAULT_LOSS_WEIGHTS)
+    weights["start_anchor"] = 1.0
+    _, parts = compute_losses(
+        out, batch, fisher_rao_loss=_ZeroFRLoss(), weights=weights,
+    )
+    assert parts["loss_start_anchor"].item() == 0.0
+
+
+def test_loss_anchor_contrastive_zero_when_gold_dominates_at_span_start():
+    """L_anchor_contrastive: at target span start, when gold src position
+    has much higher log-prob than other source STAGE_VAR span starts, loss
+    should be near zero."""
+    from cas_native.training.train_simplex_mvp import compute_losses, DEFAULT_LOSS_WEIGHTS
+    B, L_out, L_src = 1, 8, 10
+    p = torch.full((B, L_out, L_src), 1e-6)
+    # Span start at pos 3, gold src = 0. Source STAGE_VAR starts at 0, 4, 7.
+    # Gold gets 0.999 at pos 3; rivals at pos 3 are near 0.
+    p[0, 3, 0] = 0.999
+    p = p / p.sum(dim=-1, keepdim=True)
+    p.requires_grad_(True)
+    batch, out = _make_batch_and_out(
+        B=B, L_out=L_out, L_src=L_src,
+        is_stage_var_positions=[3, 4, 5],
+        src_positions_for_stage_var=[0, 1, 2],
+        p_copy_override=p,
+    )
+    batch = _add_src_token_type(batch, L_src, stage_var_starts=[0, 4, 7])
+    weights = dict(DEFAULT_LOSS_WEIGHTS)
+    weights["anchor_contrastive"] = 1.0
+    _, parts = compute_losses(
+        out, batch, fisher_rao_loss=_ZeroFRLoss(), weights=weights,
+    )
+    # log(0.999) ≈ -0.001; rivals (src 4, src 7) have log(1e-6 / norm) ≈ -13.8.
+    # Margin = 1.0 - (-0.001) + (-13.8) = -12.8 → clamped to 0
+    assert parts["loss_anchor_contrastive"].item() < 0.1, (
+        f"anchor_contrastive should be ~0 when gold dominates at span start; "
+        f"got {parts['loss_anchor_contrastive'].item()}"
+    )
+
+
+def test_loss_anchor_contrastive_fires_when_other_stage_competitive():
+    """When the model gives a non-gold source STAGE_VAR span start nearly
+    as much mass as gold, anchor_contrastive should fire (the failure mode
+    is "pointing at the wrong stage ID")."""
+    from cas_native.training.train_simplex_mvp import compute_losses, DEFAULT_LOSS_WEIGHTS
+    B, L_out, L_src = 1, 8, 10
+    p = torch.full((B, L_out, L_src), 1e-6)
+    # Pos 3 is span start, gold src = 0. Put 0.4 at gold, 0.39 at src 4
+    # (which is ALSO a STAGE_VAR span start in source — confusable distractor).
+    p[0, 3, 0] = 0.4
+    p[0, 3, 4] = 0.39
+    p[0, 3, 7] = 0.21 - 8 * 1e-6
+    p = p / p.sum(dim=-1, keepdim=True)
+    p.requires_grad_(True)
+    batch, out = _make_batch_and_out(
+        B=B, L_out=L_out, L_src=L_src,
+        is_stage_var_positions=[3, 4, 5],
+        src_positions_for_stage_var=[0, 1, 2],
+        p_copy_override=p,
+    )
+    batch = _add_src_token_type(batch, L_src, stage_var_starts=[0, 4, 7])
+    weights = dict(DEFAULT_LOSS_WEIGHTS)
+    weights["anchor_contrastive"] = 1.0
+    _, parts = compute_losses(
+        out, batch, fisher_rao_loss=_ZeroFRLoss(), weights=weights,
+    )
+    # log(0.4) ≈ -0.92, log(0.39) ≈ -0.94; margin ≈ 1 - (-0.92) + (-0.94) = 0.98
+    assert parts["loss_anchor_contrastive"].item() > 0.5, (
+        f"anchor_contrastive should fire when another stage span start is "
+        f"competitive with gold at span start; "
+        f"got {parts['loss_anchor_contrastive'].item()}"
+    )
+
+
+def test_loss_anchor_contrastive_zero_without_src_token_type():
+    """When src_token_type is absent from batch (legacy collator paths),
+    L_anchor_contrastive defaults to 0 — no hard negatives derivable."""
+    from cas_native.training.train_simplex_mvp import compute_losses, DEFAULT_LOSS_WEIGHTS
+    B, L_out, L_src = 1, 8, 6
+    p = torch.softmax(torch.randn(B, L_out, L_src), dim=-1).requires_grad_(True)
+    batch, out = _make_batch_and_out(
+        B=B, L_out=L_out, L_src=L_src,
+        is_stage_var_positions=[3, 4],
+        src_positions_for_stage_var=[0, 1],
+        p_copy_override=p,
+    )
+    # Deliberately do NOT add src_token_type
+    assert "src_token_type" not in batch
+    weights = dict(DEFAULT_LOSS_WEIGHTS)
+    weights["anchor_contrastive"] = 1.0
+    _, parts = compute_losses(
+        out, batch, fisher_rao_loss=_ZeroFRLoss(), weights=weights,
+    )
+    assert parts["loss_anchor_contrastive"].item() == 0.0
+
+
+def test_e2c_weights_resolve_to_full_5loss_stack():
+    """--ablation e2c must turn ON all five E2b/E2c losses with the
+    documented weights."""
+    from cas_native.training.train_simplex_mvp import parse_args
+    cfg = parse_args(["--data-path", "x", "--output-dir", "y", "--ablation", "e2c"])
+    assert cfg.ablation == "e2c"
+    # E2b losses still active
+    assert cfg.loss_weights["span"] > 0.0
+    assert cfg.loss_weights["contrastive_margin"] > 0.0
+    assert cfg.loss_weights["coverage"] > 0.0
+    # E2c losses also active
+    assert cfg.loss_weights["start_anchor"] > 0.0
+    assert cfg.loss_weights["anchor_contrastive"] > 0.0
+    # Copy still on
+    assert cfg.loss_weights["copy"] == 0.5

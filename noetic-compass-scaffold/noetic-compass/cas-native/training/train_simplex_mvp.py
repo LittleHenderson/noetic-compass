@@ -62,6 +62,8 @@ DEFAULT_LOSS_WEIGHTS: dict[str, float] = {
     "span": 0.0,
     "contrastive_margin": 0.0,
     "coverage": 0.0,
+    "start_anchor": 0.0,
+    "anchor_contrastive": 0.0,
 }
 
 # Ablation mode → loss-weight overrides per execution plan §Stage 3.
@@ -110,6 +112,19 @@ ABLATION_OVERRIDES: dict[str, dict[str, float]] = {
     #        terms add discipline / margin / decisiveness.
     "e2a":        {"copy": 0.0,      "phrase_bias_aux": 0.0},
     "e2b":        {"span": 1.0, "contrastive_margin": 0.5, "coverage": 0.1},
+    # e2c: source-grounded copying with start-anchor + same-source contrastive.
+    # Built on top of e2b weights; warm-start from e2b ckpt_final.pt. Per user
+    # 2026-05-12: E2b learned span structure (L_span collapsed 3000×) but
+    # per-token argmax accuracy stuck at 38%. E2c teaches the model to
+    # START the copy at the right source token and to distinguish OTHER
+    # same-source stage identifiers (same body, different prefix).
+    #   start_anchor (2.0)        — heavy CE on first-token-of-span copy
+    #   anchor_contrastive (1.0)  — margin loss at span starts, hard negatives
+    #                               are OTHER source-side STAGE_VAR span starts
+    "e2c":        {
+        "span": 1.0, "contrastive_margin": 0.5, "coverage": 0.1,
+        "start_anchor": 2.0, "anchor_contrastive": 1.0,
+    },
 }
 
 # Ablations whose weight schedule is well-defined but whose REQUIRED
@@ -576,9 +591,21 @@ def compute_losses(
     # only over typed STAGE_VAR positions; zero otherwise. Default weights
     # in DEFAULT_LOSS_WEIGHTS are 0.0 so existing runs (full / b1-b3 / d1-d3
     # / e2a) are unaffected; the e2b ablation switches them on.
+    #
+    # E2c losses (Candidate E Stage 2c 2026-05-12) added on top:
+    #   L_start_anchor: heavy weight on first-token-of-span copy. E2b post-
+    #     mortem (TF identifier 0.6%, per-token 38%) showed L_span teaches
+    #     contiguity but copy doesn't anchor the start. If start is wrong,
+    #     the whole identifier fails by drift.
+    #   L_anchor_contrastive: at each target span start, hard negatives are
+    #     OTHER source STAGE_VAR span starts in the same source — i.e.,
+    #     same-body different-prefix distractors. Forces the model to
+    #     distinguish "which stage ID" not just "an identifier".
     loss_span = torch.zeros((), device=lm_logits.device)
     loss_contrastive_margin = torch.zeros((), device=lm_logits.device)
     loss_coverage = torch.zeros((), device=lm_logits.device)
+    loss_start_anchor = torch.zeros((), device=lm_logits.device)
+    loss_anchor_contrastive = torch.zeros((), device=lm_logits.device)
     if (
         "typed_slot_positions" in batch
         and "typed_slot_source" in batch
@@ -652,6 +679,89 @@ def compute_losses(
                 entropy_per * is_stage_var.to(dtype=entropy_per.dtype)
             ).sum() / cov_denom
 
+        # ---- E2c losses (Candidate E Stage 2c 2026-05-12) ---------------
+        # Both losses operate at TARGET SPAN STARTS — first token of each
+        # STAGE_VAR contiguous run in the target. Identified as:
+        #   is_target_span_start[b,k] = is_stage_var[b,k] AND
+        #                                (k==0 OR NOT is_stage_var[b,k-1])
+        # For L_anchor_contrastive we also need SOURCE SPAN STARTS — first
+        # token of each STAGE_VAR run in src_token_type. These are the
+        # other-stage-identifiers in the same source, used as hard negatives.
+
+        # Target span starts: shift-and-mask trick
+        # prev = is_stage_var shifted right by 1, with False at position 0
+        prev_is_sv = torch.zeros_like(is_stage_var)
+        prev_is_sv[:, 1:] = is_stage_var[:, :-1]
+        is_target_span_start = is_stage_var & (~prev_is_sv)               # (B, L_out)
+
+        if is_target_span_start.any():
+            # L_start_anchor: -log p_copy[span_start, gold_src] averaged
+            # over target span starts.
+            log_p_copy_anchor = p_copy_e2b.clamp_min(1e-9).log()
+            safe_idx_anchor = copy_target_l.clamp(
+                min=0, max=L_src_e2b - 1
+            ).unsqueeze(-1)
+            gold_log_p_anchor = log_p_copy_anchor.gather(
+                -1, safe_idx_anchor
+            ).squeeze(-1)                                                  # (B, L_out)
+            anchor_denom = is_target_span_start.to(
+                dtype=gold_log_p_anchor.dtype
+            ).sum().clamp_min(1.0)
+            loss_start_anchor = -(
+                gold_log_p_anchor
+                * is_target_span_start.to(dtype=gold_log_p_anchor.dtype)
+            ).sum() / anchor_denom
+
+            # L_anchor_contrastive: hard negatives = OTHER source STAGE_VAR
+            # span starts. Derive source span starts from src_token_type
+            # if present in batch.
+            src_token_type = batch.get("src_token_type")
+            if src_token_type is not None:
+                src_is_sv = (src_token_type == SLOT_STAGE_VAR_ID)
+                src_prev_is_sv = torch.zeros_like(src_is_sv)
+                src_prev_is_sv[:, 1:] = src_is_sv[:, :-1]
+                src_is_span_start = src_is_sv & (~src_prev_is_sv)          # (B, L_src)
+
+                if src_is_span_start.any():
+                    # For each target span start, find max log_p over
+                    # source span starts EXCLUDING the gold src.
+                    # Build per-batch mask: float tensor where src span
+                    # starts get 0.0 and others get -inf, then exclude gold.
+                    src_anchor_mask = torch.where(
+                        src_is_span_start,
+                        torch.zeros_like(log_p_copy_anchor[..., 0:1]).squeeze(-1)[:, :1].expand(-1, L_src_e2b),
+                        torch.full_like(src_is_span_start, float("-inf"), dtype=log_p_copy_anchor.dtype),
+                    )                                                      # (B, L_src)
+                    # Broadcast to (B, L_out, L_src) and exclude gold per output position
+                    src_anchor_mask_3d = src_anchor_mask.unsqueeze(1).expand(
+                        -1, L_out_e2b, -1
+                    ).clone()
+                    # Zero-out gold positions in the mask
+                    gold_neg_mask = torch.zeros_like(src_anchor_mask_3d)
+                    gold_neg_mask.scatter_(-1, safe_idx_anchor, float("-inf"))
+                    masked_anchor_log_p = log_p_copy_anchor + src_anchor_mask_3d + gold_neg_mask
+                    hard_neg_anchor_log_p, _ = masked_anchor_log_p.max(dim=-1)  # (B, L_out)
+
+                    # Margin loss at target span start positions only
+                    MARGIN_ANCHOR = 1.0
+                    per_pos_anchor_margin = (
+                        MARGIN_ANCHOR - gold_log_p_anchor + hard_neg_anchor_log_p
+                    ).clamp_min(0.0)
+                    # Filter to span starts and ignore -inf cases (no source
+                    # negatives available)
+                    valid_anchor = (
+                        is_target_span_start
+                        & torch.isfinite(hard_neg_anchor_log_p)
+                    )
+                    if valid_anchor.any():
+                        anc_denom = valid_anchor.to(
+                            dtype=per_pos_anchor_margin.dtype
+                        ).sum().clamp_min(1.0)
+                        loss_anchor_contrastive = (
+                            per_pos_anchor_margin
+                            * valid_anchor.to(dtype=per_pos_anchor_margin.dtype)
+                        ).sum() / anc_denom
+
     total = (
         weights["lm"] * loss_lm
         + weights["fr"] * loss_fr
@@ -661,6 +771,8 @@ def compute_losses(
         + weights.get("span", 0.0) * loss_span
         + weights.get("contrastive_margin", 0.0) * loss_contrastive_margin
         + weights.get("coverage", 0.0) * loss_coverage
+        + weights.get("start_anchor", 0.0) * loss_start_anchor
+        + weights.get("anchor_contrastive", 0.0) * loss_anchor_contrastive
     )
     parts = {
         "loss_total": total.detach(),
@@ -672,6 +784,8 @@ def compute_losses(
         "loss_span": loss_span.detach(),
         "loss_contrastive_margin": loss_contrastive_margin.detach(),
         "loss_coverage": loss_coverage.detach(),
+        "loss_start_anchor": loss_start_anchor.detach(),
+        "loss_anchor_contrastive": loss_anchor_contrastive.detach(),
     }
     # Attach copy telemetry as a sibling dict — NOT mixed into parts so
     # tests that assert "every loss part is finite" don't trip on NaN
@@ -1070,6 +1184,7 @@ def evaluate_gates(
         "loss_total", "loss_lm", "loss_fr", "loss_slot_type",
         "loss_copy", "loss_phrase_bias_aux",
         "loss_span", "loss_contrastive_margin", "loss_coverage",
+        "loss_start_anchor", "loss_anchor_contrastive",
         "grad_norm_encoder", "grad_norm_decoder",
         "simplex_min_p", "simplex_entropy_mean",
     )
@@ -1397,6 +1512,8 @@ def run_cpu_smoke(
             "loss_span": float(parts.get("loss_span", torch.tensor(0.0)).item()),
             "loss_contrastive_margin": float(parts.get("loss_contrastive_margin", torch.tensor(0.0)).item()),
             "loss_coverage": float(parts.get("loss_coverage", torch.tensor(0.0)).item()),
+            "loss_start_anchor": float(parts.get("loss_start_anchor", torch.tensor(0.0)).item()),
+            "loss_anchor_contrastive": float(parts.get("loss_anchor_contrastive", torch.tensor(0.0)).item()),
             "copy_valid_count": (
                 float(copy_metrics_step["copy_valid_count"].item())
                 if "copy_valid_count" in copy_metrics_step else 0.0

@@ -1,6 +1,9 @@
 # Candidate E Stage 2 — locked launch commands (2026-05-12)
 
-**Status:** E2a LAUNCHED + EVALUATED 2026-05-12 (run `stage_e2a_warmup_20260512T150330Z`). E2b unblocked — three new losses (L_span, L_contrastive_margin, L_coverage) wired, evaluator has fail-exit gates. **E2b ready to launch pending user pre-launch checks.**
+**Status:**
+- **E2a** LAUNCHED + EVALUATED 2026-05-12 (`stage_e2a_warmup_20260512T150330Z`) — warmup converged, no source binding (copy off, expected).
+- **E2b** LAUNCHED + EVALUATED 2026-05-12 (`stage_e2b_full_20260512T172129Z`) — **FAIL** on both gates. TF identifier_recovery 0.6%, per-token 38%. L_span collapsed 3000×, copy still weak.
+- **E2c** READY TO LAUNCH. Two new losses (L_start_anchor, L_anchor_contrastive) target the E2b failure texture: model couldn't anchor copy at span starts and got confused between same-source stage IDs. Evaluator gate switched to per_token_accuracy ≥ 0.70 (intermediate before whole-ID recovery).
 
 **Locked against:** trainer commit after `Stage 2 setup` PR; corpus
 `rpm_copy_grounding_v2_{train,dev,source_swap_dev}` at commit `4ecddfa`;
@@ -318,10 +321,96 @@ L_contrastive_margin clarification: the original Stage 2 audit summary wrote "pa
 
 ## What we are NOT doing in Stage 2 (after E2b lands)
 
-- Slot F1 against gold target slot tags (deferred — not E2b-blocking)
-- Non-rpm leakage scoring against a non-rpm dev subset (deferred — not E2b-blocking)
-- TF entrypoint in the evaluator (`--tf-mode` reserved; free-decode is the primary falsification metric per A/B/C/D postmortem TF/free-decode divergence pattern)
-- DAgger / on-policy training (Stage 3, gated on E2b gate verdict)
+- Slot F1 against gold target slot tags (deferred — not E2b/E2c-blocking)
+- Non-rpm leakage scoring against a non-rpm dev subset (deferred — not E2b/E2c-blocking)
+- DAgger / on-policy training (Stage 3, gated on E2c gate verdict)
+
+## E2c launch command (READY — locked 2026-05-12)
+
+`--ablation e2c` adds two losses on top of e2b targeting the E2b failure texture (38% per-token accuracy not enough for whole-ID recovery):
+
+```
+E2b weights (carry over): copy=0.5, span=1.0, contrastive_margin=0.5, coverage=0.1
+E2c additions:            start_anchor=2.0, anchor_contrastive=1.0
+```
+
+- **L_start_anchor (2.0)** — heavy CE on first-token-of-span copy. E2b learned "walk through an ID" (L_span 3000× collapse) but not "where to start." This drives the first-token argmax to nail the gold src.
+- **L_anchor_contrastive (1.0)** — margin loss at span starts. Hard negatives are OTHER source-side STAGE_VAR span starts in the same source — i.e., other stage identifiers that share the same body but different prefix. Forces the model to distinguish "which stage ID" not just "an identifier."
+
+### Pre-launch user actions
+
+1. Sync trainer + evaluator to pod (MD5 verify).
+2. Resolve E2b checkpoint:
+   ```bash
+   ls -1dt /workspace/tksCAS/stage_e2b_full_*/ckpt_final.pt | head -3
+   ```
+   This PR's E2b: `/workspace/tksCAS/stage_e2b_full_20260512T172129Z/ckpt_final.pt`
+3. Confirm GPU idle.
+
+### Launch block
+
+```bash
+TS=$(date -u +%Y%m%dT%H%M%SZ)
+E2B_CKPT=/workspace/tksCAS/stage_e2b_full_20260512T172129Z/ckpt_final.pt
+test -f "$E2B_CKPT" || { echo "E2B_CKPT does not exist: $E2B_CKPT"; exit 1; }
+OUT=/workspace/tksCAS/stage_e2c_anchor_${TS}
+
+nohup python /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/training/train_simplex_mvp.py \
+  --data-path /workspace/tksCAS/cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl \
+  --output-dir ${OUT} \
+  --device cuda:0 \
+  --d-model 384 --encoder-n-layers 4 --decoder-n-layers 6 \
+  --encoder-n-heads 6 --decoder-n-heads 6 \
+  --batch-size 16 --limit 100000 --n-steps 1000 \
+  --lr 1e-4 --weight-decay 1e-4 --grad-clip 1.0 \
+  --ablation e2c --max-cas-prefix-len 192 \
+  --train-log-every-steps 50 \
+  --tokenizer-path /workspace/tksCAS/stage6_v6_artifacts/tokenizer.json \
+  --english-bpe-path /workspace/tksCAS/stage6_v6_artifacts/english_bpe.json \
+  --sample-canary-at 1000 --sample-canary-post-training \
+  --save-checkpoints-at 250,500,750,1000 --save-final-checkpoint \
+  --canary-max-new-tokens 128 --seed 1729 \
+  --load-model-from ${E2B_CKPT} \
+  > ${OUT}.log 2>&1 &
+```
+
+### E2c evaluator command (READY)
+
+**PRIMARY gate (E2c):** TF `per_token_accuracy ≥ 0.70` — intermediate gate before whole-ID recovery is meaningful. E2b baseline was 0.38.
+**SECONDARY:** swap `pair_pass_rate ≥ 0.85`.
+
+Identifier-level recovery remains reported but is informational at E2c.
+
+```bash
+EVAL_TS=$(date -u +%Y%m%dT%H%M%SZ)
+EVAL_OUT=/workspace/tksCAS/eval_e2c_${EVAL_TS}
+
+python /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/evaluation/evaluate_candidate_e_stage2.py \
+  --checkpoint ${OUT}/ckpt_final.pt \
+  --dev-path /workspace/tksCAS/cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.jsonl \
+  --source-swap-dev-path /workspace/tksCAS/cas-synthetic/data/path_d/rpm_copy_grounding_v2_source_swap_dev.jsonl \
+  --tokenizer-path /workspace/tksCAS/stage6_v6_artifacts/tokenizer.json \
+  --english-bpe-path /workspace/tksCAS/stage6_v6_artifacts/english_bpe.json \
+  --output-dir ${EVAL_OUT} \
+  --device cuda:0 \
+  --max-cas-prefix-len 192 \
+  --max-new-tokens 192 \
+  --stage e2c \
+  --gate-per-token-accuracy 0.70 \
+  --gate-swap 0.85
+echo "evaluator_exit=$?"
+```
+
+### New diagnostic fields in E2c eval report
+
+The evaluator now surfaces per-span failure-mode classification under `tf_dev_summary.span_failure_modes`:
+- `exact` — full identifier recovered
+- `wrong_start` — first in-span token's argmax src wrong (whole-ID lost from the start)
+- `right_start_drift` — first correct, later tokens wrong (pointer slipped mid-ID)
+
+Plus `per_token_off_by_one_rate` — among incorrect in-span tokens, fraction that point at gold ± 1 (signals "pointer slipped by 1 position" vs "completely wrong span").
+
+If E2c misses the 0.70 per-token gate, the failure-mode breakdown tells you whether the bottleneck is start-anchoring (`wrong_start` dominant) or mid-span drift (`right_start_drift` dominant) — informs next loss tuning, not a corrective change yet.
 
 ## Pre-launch audit checklist (user sign-off before any pod work)
 
