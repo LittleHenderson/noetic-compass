@@ -1,0 +1,20 @@
+{
+  "n_records": 50,
+  "blacklist_violations": [],
+  "wrong_bucket_records": [],
+  "rpm_count": 45,
+  "non_rpm_count": 5,
+  "rpm_bodies_seen": {
+    "5": 16,
+    "3": 13,
+    "4": 16
+  },
+  "non_rpm_records_with_stage_var": [],
+  "all_pass": true,
+  "counterfactual_invariant_violations": [],
+  "counterfactual_groups_audited": 10,
+  "source_swap_pair_invariant_violations": [],
+  "source_swap_pairs_audited": 5,
+  "lowercase_identifier_violations": [],
+  "article_violations_non_rpm": []
+}
