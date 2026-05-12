@@ -337,11 +337,20 @@ def decode_canary_pack(
     hard_typed_emission: bool = False,
     copy_confidence_threshold: float = 0.5,
     hard_typed_emission_slots: Optional[Iterable[int]] = None,
+    truncate_traces: bool = True,
 ) -> list[dict[str, Any]]:
     """Decode every record in the canary pack and return per-record results.
 
     Restores model.train() after decoding so the caller can resume training
     without missing the toggle.
+
+    Args:
+        truncate_traces: when True (default), ``slot_type_trace`` is sliced
+            to the first 20 positions and ``emission_route_trace`` to the
+            first 40, keeping canary-history reports small. When False
+            (broader eval mode), full traces are returned — needed so
+            leakage checks past token 20 are visible. Per user audit
+            2026-05-12.
     """
     was_training = model.training
     results: list[dict[str, Any]] = []
@@ -354,6 +363,7 @@ def decode_canary_pack(
                 copy_confidence_threshold=copy_confidence_threshold,
                 hard_typed_emission_slots=hard_typed_emission_slots,
             )
+            full_slot_trace = decode_result["slot_type_trace"]
             entry = {
                 "id": rec.get("id"),
                 "category": rec.get("v1mix_grammar_category_or_error_class"),
@@ -363,15 +373,21 @@ def decode_canary_pack(
                 "generated_text": decode_result["text"],
                 "n_tokens_generated": decode_result["n_tokens_generated"],
                 "hit_eos": decode_result["hit_eos"],
-                "slot_type_trace": decode_result["slot_type_trace"][:20],
+                "slot_type_trace": (
+                    full_slot_trace[:20] if truncate_traces else list(full_slot_trace)
+                ),
             }
             if hard_typed_emission:
                 entry["emission_route_counts"] = decode_result.get(
                     "emission_route_counts", {"lm": 0, "copy": 0}
                 )
-                entry["emission_route_trace"] = decode_result.get(
+                full_route_trace = decode_result.get(
                     "emission_route_trace", []
-                )[:40]  # truncate for report size
+                )
+                entry["emission_route_trace"] = (
+                    full_route_trace[:40] if truncate_traces
+                    else list(full_route_trace)
+                )
             results.append(entry)
     finally:
         if was_training:

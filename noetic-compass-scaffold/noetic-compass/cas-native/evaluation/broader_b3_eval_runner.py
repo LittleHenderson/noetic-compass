@@ -31,12 +31,26 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import types
 from pathlib import Path
 from typing import Any
 
 import torch
+
+
+# Bounded stage_var identifier regex. Matches the canary identifier shape
+# `stage<Letter><digit>_<digit>_<3-5 digits>` with word boundaries so a
+# longer identifier like ``stageA0_4_004999`` does NOT count as a match
+# for ``stageA0_4_0049``. Per user audit 2026-05-12.
+_BOUNDED_IDENT_RE = re.compile(r"\bstage[ADWP]\d+_\d+_\d{3,5}\b")
+
+
+def extract_identifiers_in_order(text: str) -> list[str]:
+    """Return the list of canonical-shape stage_var identifiers found in
+    `text`, in left-to-right order of appearance."""
+    return _BOUNDED_IDENT_RE.findall(text)
 
 
 _THIS_FILE = Path(__file__).resolve()
@@ -57,29 +71,43 @@ if "cas_native" not in sys.modules:
 
 def per_record_recovery(record: dict[str, Any],
                          generated_text: str) -> dict[str, Any]:
-    """For an rpm_chain record, count canonical identifiers exact-matched
-    in the generated text. Returns a dict with the counts + per-ident hits.
+    """For an rpm_chain record, score canonical identifiers using
+    BOUNDED-REGEX POSITIONAL matching (per user audit 2026-05-12).
+
+    Method:
+      1. Extract the canonical-shape identifiers from `generated_text` in
+         left-to-right order via word-bounded regex (rejects partial
+         matches like stageA0_4_0049 ⊂ stageA0_4_004999).
+      2. For each canonical target identifier at position k, count it as
+         recovered IFF the k-th extracted-generated identifier matches it
+         exactly. This is "per-record ordered exact hits" — the strongest
+         interpretation of "at the correct position" from the design doc.
 
     Non-rpm records get an empty result (recovery is not meaningful).
     """
     meta = record.get("eval_meta", {})
-    idents: list[str] = meta.get("canonical_identifiers", []) or []
-    if not idents:
+    targets: list[str] = meta.get("canonical_identifiers", []) or []
+    if not targets:
         return {"applicable": False, "n_target": 0, "n_recovered": 0,
-                "recovery_rate": None, "per_ident_hits": {}}
-    hits = {}
+                "recovery_rate": None,
+                "per_ident_hits": {},
+                "generated_identifiers": []}
+    gen_idents = extract_identifiers_in_order(generated_text)
+    hits: dict[str, bool] = {}
     n_recovered = 0
-    for ident in idents:
-        present = ident in generated_text
-        hits[ident] = present
-        if present:
+    for k, target_ident in enumerate(targets):
+        if k < len(gen_idents) and gen_idents[k] == target_ident:
+            hits[target_ident] = True
             n_recovered += 1
+        else:
+            hits[target_ident] = False
     return {
         "applicable": True,
-        "n_target": len(idents),
+        "n_target": len(targets),
         "n_recovered": n_recovered,
-        "recovery_rate": n_recovered / len(idents),
+        "recovery_rate": n_recovered / len(targets),
         "per_ident_hits": hits,
+        "generated_identifiers": gen_idents,
     }
 
 
@@ -130,13 +158,17 @@ def build_model_and_load(cfg_template: Any, vocab_size: int,
 def run_decode(model, records, collator, tokenizer, *,
                device, hard_typed_emission: bool,
                max_new_tokens: int = 128) -> list[dict[str, Any]]:
-    """Wrap decode_canary_pack; returns per-record entries."""
+    """Wrap decode_canary_pack with FULL traces (truncate_traces=False)
+    so the runner can apply leakage gates past token 20. Per user audit
+    2026-05-12 blocker fix.
+    """
     from cas_native.evaluation.sample_decoder import decode_canary_pack
     return decode_canary_pack(
         model, records, collator, tokenizer,
         device=device, max_new_tokens=max_new_tokens,
         hard_typed_emission=hard_typed_emission,
         copy_confidence_threshold=0.5,
+        truncate_traces=False,
     )
 
 
@@ -269,41 +301,41 @@ def main() -> int:
     b2_full_per = build_per_record(b2_full, b2_full_dam, "b2_full")
 
     # ---- Apply the 7 locked gate criteria ---------------------------
-    rpm_canon = [r for r in b3_hard_per
-                 if r["category"] == "rpm_chain"
-                 and r["bucket"] == "canonical_order"]
-    rpm_stress = [r for r in b3_hard_per
-                  if r["category"] == "rpm_chain"
-                  and r["bucket"] == "prefix_variety_stress"]
+    rpm_all_hard = [r for r in b3_hard_per if r["category"] == "rpm_chain"]
+    rpm_canon = [r for r in rpm_all_hard if r["bucket"] == "canonical_order"]
+    rpm_stress = [r for r in rpm_all_hard if r["bucket"] == "prefix_variety_stress"]
     non_rpm_hard = [r for r in b3_hard_per if r["category"] != "rpm_chain"]
 
-    # Gate 1: rpm_chain canonical identifier exact-match recovery
-    # First measured on canonical_order bucket separately; then on stress.
+    rpm_all_full = [r for r in b3_full_per if r["category"] == "rpm_chain"]
+    rpm_canon_full = [r for r in rpm_all_full if r["bucket"] == "canonical_order"]
+    rpm_stress_full = [r for r in rpm_all_full if r["bucket"] == "prefix_variety_stress"]
+
     def bucket_recovery(bucket: list[dict[str, Any]]) -> dict[str, Any]:
         n_target = sum(b["recovery"]["n_target"] for b in bucket)
         n_rec = sum(b["recovery"]["n_recovered"] for b in bucket)
         return {"n_target": n_target, "n_recovered": n_rec,
                 "rate": n_rec / max(n_target, 1)}
 
+    # All-rpm recovery (37 identifiers across canonical + stress) — this
+    # is the GATING measurement per user audit 2026-05-12. Bucket-level
+    # recovery is reported separately for diagnostic precision but does
+    # NOT govern the pass/fail decision.
+    all_recovery_hard = bucket_recovery(rpm_all_hard)
+    all_recovery_full = bucket_recovery(rpm_all_full)
     canon_recovery_hard = bucket_recovery(rpm_canon)
-    stress_recovery_hard = bucket_recovery(rpm_stress)
-
-    # full-mode comparison
-    rpm_canon_full = [r for r in b3_full_per
-                      if r["category"] == "rpm_chain"
-                      and r["bucket"] == "canonical_order"]
-    rpm_stress_full = [r for r in b3_full_per
-                       if r["category"] == "rpm_chain"
-                       and r["bucket"] == "prefix_variety_stress"]
     canon_recovery_full = bucket_recovery(rpm_canon_full)
+    stress_recovery_hard = bucket_recovery(rpm_stress)
     stress_recovery_full = bucket_recovery(rpm_stress_full)
 
-    gate1_first_bar = canon_recovery_hard["rate"] >= 0.50
-    gate1_strong = canon_recovery_hard["rate"] >= 0.70
+    # Gate 1: identifier exact-match recovery across ALL rpm records.
+    # Design doc: "across all 30-40 canonical identifiers in target texts."
+    gate1_first_bar = all_recovery_hard["rate"] >= 0.50
+    gate1_strong = all_recovery_hard["rate"] >= 0.70
 
-    # Gate 2: hard_full identifier recovery > full identifier recovery
-    # (use canonical bucket; the more rigorous metric is canonical, not stress)
-    gate2 = canon_recovery_hard["n_recovered"] > canon_recovery_full["n_recovered"]
+    # Gate 2: hard_full identifier recovery > full identifier recovery,
+    # measured pack-wide (all rpm). Bucket-level diagnostic is reported
+    # alongside but does not govern.
+    gate2 = all_recovery_hard["n_recovered"] > all_recovery_full["n_recovered"]
 
     # Gate 3: non-rpm emission_route_counts.copy = 0 on every non-rpm record
     non_rpm_copy_emissions = [
@@ -379,7 +411,9 @@ def main() -> int:
                 "mean_severity": b2_full_pack.get("mean_severity"),
             },
         },
-        "recovery_by_bucket": {
+        "recovery": {
+            "all_rpm_hard_full": all_recovery_hard,
+            "all_rpm_full": all_recovery_full,
             "canonical_order_hard_full": canon_recovery_hard,
             "canonical_order_full": canon_recovery_full,
             "prefix_variety_stress_hard_full": stress_recovery_hard,
@@ -429,19 +463,20 @@ def main() -> int:
         "",
         f"| Gate | Pass | Detail |",
         f"|---|---|---|",
-        f"| 1. Canonical recovery ≥ 50% (first bar) | {gate1_first_bar} | {canon_recovery_hard['n_recovered']}/{canon_recovery_hard['n_target']} = {canon_recovery_hard['rate']:.1%} |",
-        f"| 1+. Canonical recovery ≥ 70% (strong)   | {gate1_strong} | same |",
-        f"| 2. hard_full > full on canonical        | {gate2} | hard {canon_recovery_hard['n_recovered']} vs full {canon_recovery_full['n_recovered']} |",
+        f"| 1. All-rpm recovery ≥ 50% (first bar)   | {gate1_first_bar} | {all_recovery_hard['n_recovered']}/{all_recovery_hard['n_target']} = {all_recovery_hard['rate']:.1%} |",
+        f"| 1+. All-rpm recovery ≥ 70% (strong)     | {gate1_strong} | same |",
+        f"| 2. hard_full > full on all-rpm          | {gate2} | hard {all_recovery_hard['n_recovered']} vs full {all_recovery_full['n_recovered']} |",
         f"| 3. Non-rpm copy = 0                     | {gate3} | offenders: {[t for t in non_rpm_copy_emissions if t[1] > 0]} |",
         f"| 4. Non-rpm STAGE_VAR run < 3            | {gate4} | offenders: {[t for t in non_rpm_stage_var_runs if t[1] >= 3]} |",
         f"| 5. No trivial outputs                   | {gate5} | trivial ids: {trivial} |",
         f"| 6. No catastrophic loops / >2 truncations | {gate6} | loops: {catastrophic_loops} / truncations: {truncations} |",
         f"| 7. B3 sev ≤ B2 + 0.10                   | {gate7} | B3 {b3_hard_pack_sev:.3f} vs B2 {b2_full_pack_sev:.3f} (Δ {b3_hard_pack_sev - b2_full_pack_sev:+.3f}) |",
         "",
-        "## Recovery by bucket",
+        "## Recovery — gate uses all-rpm; bucket split is diagnostic",
         "",
-        f"- canonical_order: hard_full {canon_recovery_hard['n_recovered']}/{canon_recovery_hard['n_target']} = {canon_recovery_hard['rate']:.1%}; full {canon_recovery_full['n_recovered']}/{canon_recovery_full['n_target']} = {canon_recovery_full['rate']:.1%}",
-        f"- prefix_variety_stress: hard_full {stress_recovery_hard['n_recovered']}/{stress_recovery_hard['n_target']} = {stress_recovery_hard['rate']:.1%}; full {stress_recovery_full['n_recovered']}/{stress_recovery_full['n_target']} = {stress_recovery_full['rate']:.1%}",
+        f"- **all-rpm (GATING):** hard_full {all_recovery_hard['n_recovered']}/{all_recovery_hard['n_target']} = {all_recovery_hard['rate']:.1%}; full {all_recovery_full['n_recovered']}/{all_recovery_full['n_target']} = {all_recovery_full['rate']:.1%}",
+        f"- canonical_order (diagnostic): hard_full {canon_recovery_hard['n_recovered']}/{canon_recovery_hard['n_target']} = {canon_recovery_hard['rate']:.1%}; full {canon_recovery_full['n_recovered']}/{canon_recovery_full['n_target']} = {canon_recovery_full['rate']:.1%}",
+        f"- prefix_variety_stress (diagnostic): hard_full {stress_recovery_hard['n_recovered']}/{stress_recovery_hard['n_target']} = {stress_recovery_hard['rate']:.1%}; full {stress_recovery_full['n_recovered']}/{stress_recovery_full['n_target']} = {stress_recovery_full['rate']:.1%}",
         "",
         "## TF analysis (B3)",
         "",

@@ -37,7 +37,13 @@ from torch import nn
 import torch.nn.functional as F
 
 
-_CANONICAL_STAGE_VAR_RE = re.compile(r"\bstage[ADWP]\d+_\d+_\d{4}\b")
+# Bounded canonical stage_var identifier regex.
+# Body width was \d{4} (Stage 6 era when only 4-digit bodies existed in
+# training). 2026-05-12 broader B3 eval pack intentionally includes 3-,
+# 4-, and 5-digit bodies to stress identifier shape variety, so the
+# matcher must accept all three. Widened to \d{3,5}. Backward-compatible
+# (any 4-digit body the original regex matched still matches).
+_CANONICAL_STAGE_VAR_RE = re.compile(r"\bstage[ADWP]\d+_\d+_\d{3,5}\b")
 
 
 @dataclass
