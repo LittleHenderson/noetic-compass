@@ -344,6 +344,8 @@ def test_trainer_cli_ablation_e2a_loss_weights():
     assert cfg.loss_weights == {
         "lm": 1.0, "fr": 1.0, "slot_type": 1.0,
         "copy": 0.0, "phrase_bias_aux": 0.0,
+        # E2b losses default to 0.0 in e2a (warmup); switched on in e2b
+        "span": 0.0, "contrastive_margin": 0.0, "coverage": 0.0,
     }
 
 
@@ -361,23 +363,35 @@ def test_trainer_cli_ablation_e2a_equals_b2_functionally():
     assert cfg_e2a.loss_weights == cfg_b2.loss_weights
 
 
-def test_trainer_cli_ablation_e2b_raises_not_implemented():
-    """e2b is stub-blocked until L_span / L_contrastive_margin / L_coverage
-    + pair-aware batcher land. Must raise at parse-time BEFORE any model
-    is built, so a stray --ablation e2b in a launch command cannot waste
-    pod time. Per Stage 2 setup audit 2026-05-12."""
+def test_trainer_cli_ablation_e2b_parses_with_three_new_losses():
+    """e2b ablation parses (no longer stub-blocked) and sets non-zero
+    weights for the three new E2b loss objectives: span, contrastive_margin,
+    coverage. Per Stage 2b loss-implementation PR 2026-05-12."""
     from cas_native.training.train_simplex_mvp import parse_args
-    try:
-        parse_args([
-            "--data-path", "x", "--output-dir", "y", "--ablation", "e2b",
+    cfg = parse_args([
+        "--data-path", "x", "--output-dir", "y", "--ablation", "e2b",
+    ])
+    assert cfg.ablation == "e2b"
+    # Existing losses unchanged
+    assert cfg.loss_weights["lm"] == 1.0
+    assert cfg.loss_weights["fr"] == 1.0
+    assert cfg.loss_weights["slot_type"] == 1.0
+    assert cfg.loss_weights["copy"] == 0.5  # copy back on for source-grounding
+    # New E2b losses turned on
+    assert cfg.loss_weights["span"] > 0.0
+    assert cfg.loss_weights["contrastive_margin"] > 0.0
+    assert cfg.loss_weights["coverage"] > 0.0
+
+
+def test_trainer_cli_e2b_zero_weights_in_other_ablations():
+    """Existing ablations (full / b1-b3 / d1-d3 / e2a) must NOT enable the
+    three new E2b losses — span/contrastive_margin/coverage weights
+    default to 0.0 there so existing run shapes are preserved."""
+    from cas_native.training.train_simplex_mvp import parse_args
+    for ab in ["full", "b2", "d2", "e2a"]:
+        cfg = parse_args([
+            "--data-path", "x", "--output-dir", "y", "--ablation", ab,
         ])
-    except NotImplementedError as exc:
-        msg = str(exc)
-        assert "stub-blocked" in msg, f"unexpected message: {msg}"
-        assert "L_span" in msg
-        assert "L_contrastive_margin" in msg
-        assert "L_coverage" in msg
-        return
-    raise AssertionError(
-        "parse_args(--ablation e2b) should have raised NotImplementedError"
-    )
+        assert cfg.loss_weights["span"] == 0.0, f"{ab} leaks span weight"
+        assert cfg.loss_weights["contrastive_margin"] == 0.0, f"{ab} leaks contrastive_margin"
+        assert cfg.loss_weights["coverage"] == 0.0, f"{ab} leaks coverage"

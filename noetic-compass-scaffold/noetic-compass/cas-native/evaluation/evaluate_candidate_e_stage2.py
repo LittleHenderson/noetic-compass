@@ -251,27 +251,22 @@ def main() -> int:
                         "entrypoint lands. Free-decode is the primary "
                         "falsification metric (A/B/C/D postmortem).")
     p.add_argument("--stage", choices=["e2a", "e2b"], default="e2a",
-                   help="Reporting tag. ONLY e2a is implemented today; "
-                        "passing e2b raises NotImplementedError because "
-                        "the evaluator lacks (a) teacher-forced recovery, "
-                        "(b) slot F1 scoring, (c) non-rpm leakage scoring, "
-                        "(d) fail-exit thresholds — all of which the E2b "
-                        "gate semantics require. Per Codex audit "
-                        "2026-05-12 finding 2.")
+                   help="Reporting tag. e2a is informational (no gate). "
+                        "e2b enforces two fail-exit gates: dev "
+                        "full_recovery_rate >= --gate-recovery (default "
+                        "0.80) and swap pair_pass_rate >= --gate-swap "
+                        "(default 0.85). Exits non-zero if any gate "
+                        "misses. Slot F1 and non-rpm leakage scoring "
+                        "are deferred to a follow-on evaluator PR; the "
+                        "current evaluator covers exact-ID recovery + "
+                        "wrong-pair leakage per user 2026-05-12 directive.")
+    p.add_argument("--gate-recovery", type=float, default=0.80,
+                   help="E2b gate: dev_summary.full_recovery_rate must "
+                        "meet or exceed this value. Per design doc §Stage 2b.")
+    p.add_argument("--gate-swap", type=float, default=0.85,
+                   help="E2b gate: swap_summary.pair_pass_rate must meet "
+                        "or exceed this value. Per design doc §Stage 2b.")
     args = p.parse_args()
-
-    if args.stage == "e2b":
-        raise NotImplementedError(
-            "--stage e2b is blocked. The Stage 2b gate semantics require "
-            "teacher-forced recovery, slot F1, non-rpm leakage scoring, "
-            "and fail-exit threshold enforcement — none of which are "
-            "implemented in this evaluator yet. Implementing them is "
-            "coupled to the Stage 2b loss PR (L_span + L_contrastive_margin "
-            "+ L_coverage + pair-aware batcher). Use --stage e2a for "
-            "warmup runs; rerun this evaluator with --stage e2b only "
-            "after the Stage 2b PR adds the missing scoring paths AND "
-            "their tests."
-        )
 
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -527,23 +522,58 @@ def main() -> int:
     lines.append("")
     lines.append("## Gate semantics")
     lines.append("")
-    # E2b is blocked at parse-time (see --stage handling); this evaluator
-    # only ever reports E2a today. Per Codex audit 2026-05-12 finding 2.
-    lines.append("**E2a is warmup.** Identifier recovery is expected near 0 because")
-    lines.append("copy is off (loss_weight `copy=0.0`). Metrics are informational —")
-    lines.append("they inform L_span / L_contrastive_margin / L_coverage design")
-    lines.append("for Stage 2b. The gate the warmup must clear is LM/slot-head")
-    lines.append("stability, NOT recovery; inspect `slot_type_trace`,")
-    lines.append("`longest_stage_var_run`, and `stage_var_token_count` per record")
-    lines.append("in the JSON report.")
+    # E2b gate evaluation (informational at e2a, load-bearing at e2b).
+    recovery_value = dev_summary.get("full_recovery_rate") or 0.0
+    swap_value = swap_summary.get("pair_pass_rate") or 0.0
+    recovery_gate_pass = recovery_value >= args.gate_recovery
+    swap_gate_pass = swap_value >= args.gate_swap
+    gates = {
+        "recovery": {
+            "value": recovery_value,
+            "threshold": args.gate_recovery,
+            "pass": recovery_gate_pass,
+        },
+        "swap": {
+            "value": swap_value,
+            "threshold": args.gate_swap,
+            "pass": swap_gate_pass,
+        },
+    }
+    if args.stage == "e2a":
+        lines.append("**E2a is warmup.** Identifier recovery is expected near 0 because")
+        lines.append("copy is off (loss_weight `copy=0.0`). Metrics are informational —")
+        lines.append("they inform L_span / L_contrastive_margin / L_coverage design")
+        lines.append("for Stage 2b. The gate the warmup must clear is LM/slot-head")
+        lines.append("stability, NOT recovery; inspect `slot_type_trace`,")
+        lines.append("`longest_stage_var_run`, and `stage_var_token_count` per record")
+        lines.append("in the JSON report.")
+        lines.append("")
+        lines.append("Gates below are reported but NOT enforced at --stage e2a.")
+    else:
+        lines.append("**E2b enforces fail-exit gates** per design doc §Stage 2b.")
+        lines.append("Evaluator exits non-zero if any gate misses.")
     lines.append("")
-    lines.append("**E2b is NOT implemented in this evaluator.** When the Stage 2b")
-    lines.append("loss PR lands, this evaluator must be extended with TF recovery,")
-    lines.append("slot F1, non-rpm leakage scoring, and fail-exit thresholds")
-    lines.append("(≥80% / ≥85% / ≥90% / 0). Until then `--stage e2b` raises.")
+    lines.append("| gate | value | threshold | pass |")
+    lines.append("|---|---|---|---|")
+    lines.append(f"| dev full_recovery_rate (exact ID recovery) | {recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if recovery_gate_pass else '✗'} |")
+    lines.append(f"| swap pair_pass_rate (source-swap conditionality) | {swap_value:.4f} | {args.gate_swap:.4f} | {'✓' if swap_gate_pass else '✗'} |")
+    lines.append("")
+    lines.append("**Not yet implemented in this evaluator** (deferred per user")
+    lines.append("2026-05-12 evaluator-upgrade scope decision): slot F1 against")
+    lines.append("gold target slot tags, non-rpm leakage scoring against a non-rpm")
+    lines.append("dev subset. These extensions land in a follow-on PR; they are")
+    lines.append("NOT prerequisites for E2b launch, because exact-ID recovery and")
+    lines.append("wrong-pair leakage are the load-bearing E2b signals.")
+
+    report["e2b_gates"] = gates
+    report["e2b_overall_pass"] = recovery_gate_pass and swap_gate_pass
+    # Rewrite report with gate fields added
+    with report_path.open("w", encoding="utf-8") as f:
+        json.dump(report, f, indent=2, default=str)
     with findings_path.open("w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
+    overall_pass = recovery_gate_pass and swap_gate_pass
     print(json.dumps({
         "event": "eval_done",
         "stage": args.stage,
@@ -551,7 +581,13 @@ def main() -> int:
         "findings": str(findings_path),
         "dev_summary": dev_summary,
         "swap_summary": swap_summary,
+        "e2b_gates": gates,
+        "e2b_overall_pass": overall_pass,
     }, default=str), flush=True)
+    # Fail-exit on gate miss at --stage e2b (load-bearing).
+    # At --stage e2a, gates are informational only.
+    if args.stage == "e2b" and not overall_pass:
+        return 2
     return 0
 
 

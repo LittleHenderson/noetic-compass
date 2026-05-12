@@ -50,12 +50,18 @@ if "cas_native" not in sys.modules:
 
 
 # Loss-weight defaults per build-spec §5. Flat weights, no curriculum.
+# Candidate E Stage 2b (2026-05-12) adds span / contrastive_margin / coverage
+# at weight 0.0 by default so existing runs (full / b1-b3 / d1-d3 / e2a) are
+# unaffected. The e2b ablation switches these on; see ABLATION_OVERRIDES.
 DEFAULT_LOSS_WEIGHTS: dict[str, float] = {
     "lm": 1.0,
     "fr": 1.0,
     "slot_type": 1.0,
     "copy": 0.5,
     "phrase_bias_aux": 0.1,
+    "span": 0.0,
+    "contrastive_margin": 0.0,
+    "coverage": 0.0,
 }
 
 # Ablation mode → loss-weight overrides per execution plan §Stage 3.
@@ -89,36 +95,34 @@ ABLATION_OVERRIDES: dict[str, dict[str, float]] = {
     #        manifests are not B-era ambiguous. Pair with the Candidate E
     #        corpus (rpm_copy_grounding_v2_train + dev) and
     #        --max-cas-prefix-len 192.
-    #   e2b: STUB-BLOCKED. Adds L_span + L_contrastive_margin + L_coverage
-    #        to the active objective set on top of e2a; selecting e2b at
-    #        CLI parse-time raises NotImplementedError (see _enforce_e2b_block
-    #        below) until those three losses + pair-aware batching are
-    #        wired in a follow-on PR. Documented this way deliberately:
-    #        E2a evaluator results inform the loss design before code lands.
+    #   e2b: Source-grounded copy with three new objectives on top of e2a.
+    #        L_span (1.0) — within-span source-position adjacency
+    #          (whole-ID discipline; predicted src must advance by +1 per
+    #          token within a STAGE_VAR span).
+    #        L_contrastive_margin (0.5) — gold src position vs hardest
+    #          non-gold src position in same source (paired-ID pressure;
+    #          per-record hard-negative, no pair-aware batcher needed).
+    #        L_coverage (0.1) — sharp src pointing (low entropy) at
+    #          STAGE_VAR positions; penalizes smeared copy that produces
+    #          hallucinated bodies.
+    #        Copy weight retained at 0.5 (DEFAULT) — the existing pointer
+    #        loss is the primary source-binding gradient; the three new
+    #        terms add discipline / margin / decisiveness.
     "e2a":        {"copy": 0.0,      "phrase_bias_aux": 0.0},
-    "e2b":        {},
+    "e2b":        {"span": 1.0, "contrastive_margin": 0.5, "coverage": 0.1},
 }
 
 # Ablations whose weight schedule is well-defined but whose REQUIRED
-# additional loss objectives are not yet wired. Selecting these at CLI
-# parse-time raises NotImplementedError with a descriptive message.
-_BLOCKED_ABLATIONS: dict[str, str] = {
-    "e2b": (
-        "Candidate E Stage 2b is stub-blocked. e2b requires L_span, "
-        "L_contrastive_margin, L_coverage, and pair-aware batch sampling, "
-        "none of which are wired yet. Run --ablation e2a first; loss design "
-        "for 2b follows from E2a evaluator results. See "
-        "docs/working/simplex_mvp_candidate_e_design_2026_05_12.md."
-    ),
-}
+# additional loss objectives are not yet wired. Kept as a hook for future
+# stub-blocks. Empty as of 2026-05-12 — e2b losses landed.
+_BLOCKED_ABLATIONS: dict[str, str] = {}
 
 
 def _enforce_e2b_block(ablation: str) -> None:
     """Hard-raise if the user passed --ablation <name> for an ablation whose
-    additional loss objectives are not yet implemented. Per audit
-    2026-05-12 finding: e2b loss plumbing absent (L_span /
-    L_contrastive_margin / L_coverage). Refuse to silently launch a run
-    that the design says needs those losses."""
+    additional loss objectives are not yet implemented. Kept as a mechanism
+    for future stub-blocks; e2b losses (L_span / L_contrastive_margin /
+    L_coverage) landed 2026-05-12, removing e2b from this dict."""
     msg = _BLOCKED_ABLATIONS.get(ablation)
     if msg is not None:
         raise NotImplementedError(msg)
@@ -567,12 +571,96 @@ def compute_losses(
     # corpus alignment lands in Stage 3. Shape-correct, gradient-safe.
     loss_phrase_bias_aux = torch.zeros((), device=lm_logits.device, requires_grad=False)
 
+    # ---- E2b losses (Candidate E Stage 2b 2026-05-12) ----------------------
+    # Three new objectives that teach source-grounded copying. All compute
+    # only over typed STAGE_VAR positions; zero otherwise. Default weights
+    # in DEFAULT_LOSS_WEIGHTS are 0.0 so existing runs (full / b1-b3 / d1-d3
+    # / e2a) are unaffected; the e2b ablation switches them on.
+    loss_span = torch.zeros((), device=lm_logits.device)
+    loss_contrastive_margin = torch.zeros((), device=lm_logits.device)
+    loss_coverage = torch.zeros((), device=lm_logits.device)
+    if (
+        "typed_slot_positions" in batch
+        and "typed_slot_source" in batch
+        and "p_copy" in out
+    ):
+        SLOT_STAGE_VAR_ID = 2  # cas_native.training.datasets.simplex_collator.SLOT_STAGE_VAR
+        copy_target_l = batch["typed_slot_source"].to(dtype=torch.long)  # (B, L_out)
+        valid_e2b = (copy_target_l >= 0)
+        slot_target_e2b = batch["typed_slot_positions"].argmax(dim=-1)  # (B, L_out)
+        is_stage_var = (slot_target_e2b == SLOT_STAGE_VAR_ID) & valid_e2b
+        p_copy_e2b = out["p_copy"]                                       # (B, L_out, L_src)
+        B_e2b, L_out_e2b, L_src_e2b = p_copy_e2b.shape
+
+        # L_span: within-span source-position adjacency penalty.
+        # E[src_idx | k] = Σ_j j · p_copy[b,k,j]. For each (k, k+1) both in
+        # is_stage_var, penalize (E[k+1] - E[k] - 1.0)^2. Drives the model
+        # to advance source-position by exactly +1 per output token within
+        # an identifier span ("whole-ID discipline" per user 2026-05-12).
+        if is_stage_var.any():
+            src_positions = torch.arange(
+                L_src_e2b, device=p_copy_e2b.device, dtype=p_copy_e2b.dtype,
+            )
+            expected_src = (p_copy_e2b * src_positions).sum(dim=-1)       # (B, L_out)
+            in_span_pair = is_stage_var[:, :-1] & is_stage_var[:, 1:]     # (B, L_out-1)
+            if in_span_pair.any():
+                deltas = expected_src[:, 1:] - expected_src[:, :-1]       # (B, L_out-1)
+                span_err = (deltas - 1.0).pow(2)
+                span_denom = (
+                    in_span_pair.to(dtype=span_err.dtype).sum().clamp_min(1.0)
+                )
+                loss_span = (
+                    span_err * in_span_pair.to(dtype=span_err.dtype)
+                ).sum() / span_denom
+
+        # L_contrastive_margin: gold src vs hardest-non-gold negative.
+        # Per valid copy position k, margin loss in log-prob space:
+        #   gold_log_p     = log p_copy[k, gold]
+        #   hard_neg_log_p = max over j != gold of log p_copy[k, j]
+        #   loss          += max(0, m - gold_log_p + hard_neg_log_p)
+        # Per-record (no pair-aware batcher needed); the negative is the
+        # most-confusable source position WITHIN the same source. Pulls
+        # gold up, pushes hardest negative down (standard triplet form).
+        MARGIN_M = 1.0
+        if valid_e2b.any():
+            log_p_copy = p_copy_e2b.clamp_min(1e-9).log()                 # (B, L_out, L_src)
+            safe_idx = copy_target_l.clamp(min=0, max=L_src_e2b - 1).unsqueeze(-1)
+            gold_log_p = log_p_copy.gather(-1, safe_idx).squeeze(-1)      # (B, L_out)
+            # Mask gold position out of max (use additive -inf)
+            neg_inf_mask = torch.zeros_like(log_p_copy)
+            neg_inf_mask.scatter_(-1, safe_idx, float("-inf"))
+            non_gold_log_p = log_p_copy + neg_inf_mask
+            hard_neg_log_p, _ = non_gold_log_p.max(dim=-1)                # (B, L_out)
+            per_pos_margin = (
+                MARGIN_M - gold_log_p + hard_neg_log_p
+            ).clamp_min(0.0)
+            margin_denom = valid_e2b.to(dtype=per_pos_margin.dtype).sum().clamp_min(1.0)
+            loss_contrastive_margin = (
+                per_pos_margin * valid_e2b.to(dtype=per_pos_margin.dtype)
+            ).sum() / margin_denom
+
+        # L_coverage: entropy of copy distribution at STAGE_VAR positions.
+        # Low entropy = sharp source pointing; high entropy = smeared
+        # distribution = hallucinated bodies. Penalizes smearing.
+        # Note: copy_entropy_valid_mean in copy_metrics is detached; this
+        # is a WITH-GRAD recomputation for use as a loss term.
+        if is_stage_var.any():
+            p_safe = p_copy_e2b.clamp_min(1e-12)
+            entropy_per = -(p_copy_e2b * p_safe.log()).sum(dim=-1)        # (B, L_out)
+            cov_denom = is_stage_var.to(dtype=entropy_per.dtype).sum().clamp_min(1.0)
+            loss_coverage = (
+                entropy_per * is_stage_var.to(dtype=entropy_per.dtype)
+            ).sum() / cov_denom
+
     total = (
         weights["lm"] * loss_lm
         + weights["fr"] * loss_fr
         + weights["slot_type"] * loss_slot_type
         + weights["copy"] * loss_copy
         + weights["phrase_bias_aux"] * loss_phrase_bias_aux
+        + weights.get("span", 0.0) * loss_span
+        + weights.get("contrastive_margin", 0.0) * loss_contrastive_margin
+        + weights.get("coverage", 0.0) * loss_coverage
     )
     parts = {
         "loss_total": total.detach(),
@@ -581,6 +669,9 @@ def compute_losses(
         "loss_slot_type": loss_slot_type.detach(),
         "loss_copy": loss_copy.detach(),
         "loss_phrase_bias_aux": loss_phrase_bias_aux.detach(),
+        "loss_span": loss_span.detach(),
+        "loss_contrastive_margin": loss_contrastive_margin.detach(),
+        "loss_coverage": loss_coverage.detach(),
     }
     # Attach copy telemetry as a sibling dict — NOT mixed into parts so
     # tests that assert "every loss part is finite" don't trip on NaN
@@ -978,6 +1069,7 @@ def evaluate_gates(
     nan_check_keys = (
         "loss_total", "loss_lm", "loss_fr", "loss_slot_type",
         "loss_copy", "loss_phrase_bias_aux",
+        "loss_span", "loss_contrastive_margin", "loss_coverage",
         "grad_norm_encoder", "grad_norm_decoder",
         "simplex_min_p", "simplex_entropy_mean",
     )
@@ -1302,6 +1394,9 @@ def run_cpu_smoke(
             "loss_slot_type": float(parts["loss_slot_type"].item()),
             "loss_copy": float(parts["loss_copy"].item()),
             "loss_phrase_bias_aux": float(parts["loss_phrase_bias_aux"].item()),
+            "loss_span": float(parts.get("loss_span", torch.tensor(0.0)).item()),
+            "loss_contrastive_margin": float(parts.get("loss_contrastive_margin", torch.tensor(0.0)).item()),
+            "loss_coverage": float(parts.get("loss_coverage", torch.tensor(0.0)).item()),
             "copy_valid_count": (
                 float(copy_metrics_step["copy_valid_count"].item())
                 if "copy_valid_count" in copy_metrics_step else 0.0

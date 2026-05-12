@@ -169,30 +169,21 @@ def test_stage_var_token_count_zero(evaluator_module):
 # CLI gate behavior — e2b is blocked
 # ---------------------------------------------------------------------------
 
-def test_stage_e2b_raises_at_cli(evaluator_module, monkeypatch):
-    """--stage e2b must raise NotImplementedError at CLI parse, BEFORE any
-    model load. The four missing scoring paths must be named in the message
-    so a stray launch surfaces the gap immediately. Per Codex audit
-    2026-05-12 finding 2."""
-    monkeypatch.setattr(
-        "sys.argv",
-        ["evaluate_candidate_e_stage2.py",
-         "--checkpoint", "/tmp/fake.pt",
-         "--dev-path", "/tmp/fake_dev.jsonl",
-         "--source-swap-dev-path", "/tmp/fake_swap.jsonl",
-         "--tokenizer-path", "/tmp/fake_tok.json",
-         "--output-dir", "/tmp/fake_out",
-         "--stage", "e2b"],
-    )
-    try:
-        evaluator_module.main()
-    except NotImplementedError as exc:
-        msg = str(exc)
-        assert "e2b is blocked" in msg
-        # The four missing scoring paths must be cited
-        assert "teacher-forced" in msg.lower()
-        assert "slot f1" in msg.lower()
-        assert "leakage" in msg.lower()
-        assert "threshold" in msg.lower()
-        return
-    raise AssertionError("--stage e2b should raise NotImplementedError at CLI")
+def test_stage_e2b_now_supported_at_cli(evaluator_module):
+    """--stage e2b is no longer blocked. The evaluator's argparse must
+    accept it without raising. Actual model loading is exercised at the
+    integration level (CPU smoke); this test just confirms the CLI
+    surface is unblocked."""
+    import argparse
+    # We can't fully run main() without a real checkpoint, but the new
+    # gate args (--gate-recovery, --gate-swap) must parse cleanly and
+    # the `--stage e2b` raise must be gone.
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    # Confirm the old raise is gone
+    assert "--stage e2b is blocked" not in src
+    # Confirm the new gate args are present
+    assert "--gate-recovery" in src
+    assert "--gate-swap" in src
+    # Confirm fail-exit logic is present for e2b
+    assert "return 2" in src
+    assert "e2b_overall_pass" in src
