@@ -1,0 +1,132 @@
+"""Tests for the Candidate E Stage 2 evaluator scoring helpers (2026-05-12).
+
+The model-loading + decode path is not exercised here (requires a real
+checkpoint + GPU); the helpers under test are the per-record recovery
+scoring and the pair cross-emission counter — the metrics that define
+the E2b gate semantics.
+"""
+from __future__ import annotations
+
+import importlib.util
+from pathlib import Path
+
+import pytest
+
+
+_THIS_FILE = Path(__file__).resolve()
+_EVAL_SCRIPT = (
+    _THIS_FILE.parents[2]
+    / "evaluation" / "evaluate_candidate_e_stage2.py"
+)
+
+
+@pytest.fixture(scope="module")
+def evaluator_module():
+    """Load the evaluator script as a module so we can call its helpers
+    without invoking the CLI entrypoint."""
+    spec = importlib.util.spec_from_file_location(
+        "evaluate_candidate_e_stage2", str(_EVAL_SCRIPT),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _rec(rec_id: str, bodies: list[str], pair_id: str, variant_idx: int,
+         middle: int = 5) -> dict:
+    canon = [f"stageA0_{middle}_{bodies[0]}",
+             f"stageD3_{middle}_{bodies[0]}",
+             f"stageW2_{middle}_{bodies[0]}",
+             f"stageP4_{middle}_{bodies[0]}"]
+    return {
+        "id": rec_id,
+        "eval_meta": {
+            "canonical_identifiers": canon,
+            "body": bodies[0],
+            "source_swap_pair_id": pair_id,
+            "counterfactual_variant_idx": variant_idx,
+        },
+    }
+
+
+def test_per_record_recovery_full(evaluator_module):
+    """All four canonicals present in correct order → recovery_rate = 1.0."""
+    rec = _rec("a", ["111"], "p1", 0)
+    gen = ("Let stageA0_5_111 name X, stageD3_5_111 name Y, "
+           "stageW2_5_111 name Z, stageP4_5_111 name W.")
+    r = evaluator_module.per_record_recovery(rec, gen)
+    assert r["applicable"]
+    assert r["n_target"] == 4
+    assert r["n_recovered"] == 4
+    assert r["recovery_rate"] == 1.0
+
+
+def test_per_record_recovery_memorization_signature(evaluator_module):
+    """Member emits OTHER pair member's bodies — recovery=0,
+    cross_emission=4. This is the A/B/C/D failure pattern we are hunting."""
+    rec_a = _rec("a", ["111"], "p1", 0)
+    rec_b = _rec("b", ["222"], "p1", 1)
+    gen_a = ("Let stageA0_5_222 name X, stageD3_5_222 name Y, "
+             "stageW2_5_222 name Z, stageP4_5_222 name W.")
+    r = evaluator_module.per_record_recovery(rec_a, gen_a)
+    ce = evaluator_module.pair_cross_emission(rec_a, rec_b, gen_a)
+    assert r["recovery_rate"] == 0.0
+    assert ce == 4
+
+
+def test_per_record_recovery_wrong_order(evaluator_module):
+    """Right bodies, wrong positions — positional match catches only the
+    two that are at their canonical position."""
+    rec = _rec("a", ["111"], "p1", 0)
+    gen = ("Let stageD3_5_111 name X, stageA0_5_111 name Y, "
+           "stageW2_5_111 name Z, stageP4_5_111 name W.")
+    r = evaluator_module.per_record_recovery(rec, gen)
+    assert r["n_recovered"] == 2, f"expected 2, got {r['n_recovered']}"
+
+
+def test_per_record_recovery_partial(evaluator_module):
+    """Only first canonical emitted; rest missing → 1/4, zero cross."""
+    rec_a = _rec("a", ["111"], "p1", 0)
+    rec_b = _rec("b", ["222"], "p1", 1)
+    gen_a = "Let stageA0_5_111 name X. The rest is missing."
+    r = evaluator_module.per_record_recovery(rec_a, gen_a)
+    ce = evaluator_module.pair_cross_emission(rec_a, rec_b, gen_a)
+    assert r["n_recovered"] == 1
+    assert ce == 0
+
+
+def test_pair_cross_emission_zero_when_other_bodies_absent(evaluator_module):
+    """Pair cross-emission must not flag the SHARED distractor — only
+    the other-member's CANONICAL bodies count."""
+    rec_a = _rec("a", ["111"], "p1", 0)
+    rec_b = _rec("b", ["222"], "p1", 1)
+    # member A's output contains a shared distractor (body 845) but no
+    # member-B canonical bodies → cross-emission should be 0
+    gen_a = "Let stageA0_5_111 name X, distractor stageW3_5_845 elsewhere."
+    ce = evaluator_module.pair_cross_emission(rec_a, rec_b, gen_a)
+    assert ce == 0
+
+
+def test_per_record_recovery_non_applicable(evaluator_module):
+    """A record without canonical_identifiers (e.g. a non-rpm category) is
+    not applicable for recovery scoring."""
+    rec = {"id": "nr", "eval_meta": {}}
+    r = evaluator_module.per_record_recovery(rec, "Some text.")
+    assert r["applicable"] is False
+    assert r["n_target"] == 0
+    assert r["recovery_rate"] is None
+
+
+def test_tf_mode_raises_until_wired(evaluator_module):
+    """--tf-mode is reserved; the helper must refuse until the TF entrypoint
+    is wired, so the user cannot accidentally launch a TF-only eval and
+    miss the free-decode falsification signal."""
+    try:
+        evaluator_module.decode_records(
+            model=None, records=[], collator=None, tokenizer=None,
+            device=None, max_new_tokens=8, tf_mode=True,
+        )
+    except NotImplementedError as exc:
+        assert "tf-mode" in str(exc).lower()
+        return
+    raise AssertionError("decode_records(tf_mode=True) should have raised")

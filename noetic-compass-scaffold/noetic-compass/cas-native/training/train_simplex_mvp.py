@@ -82,7 +82,46 @@ ABLATION_OVERRIDES: dict[str, dict[str, float]] = {
     "d1":         {"slot_type": 0.0, "copy": 0.0, "phrase_bias_aux": 0.0},
     "d2":         {"copy": 0.0,      "phrase_bias_aux": 0.0},
     "d3":         {},
+    # Candidate E Stage 2 (2026-05-12): grounded on-policy CAS-Native.
+    # Stage 2 splits into 2a (warmup) and 2b (full grounded objective).
+    #   e2a: LM + FR + slot warmup, copy + phrase off — functionally
+    #        identical to b2 weights, named distinctly so runs / logs /
+    #        manifests are not B-era ambiguous. Pair with the Candidate E
+    #        corpus (rpm_copy_grounding_v2_train + dev) and
+    #        --max-cas-prefix-len 192.
+    #   e2b: STUB-BLOCKED. Adds L_span + L_contrastive_margin + L_coverage
+    #        to the active objective set on top of e2a; selecting e2b at
+    #        CLI parse-time raises NotImplementedError (see _enforce_e2b_block
+    #        below) until those three losses + pair-aware batching are
+    #        wired in a follow-on PR. Documented this way deliberately:
+    #        E2a evaluator results inform the loss design before code lands.
+    "e2a":        {"copy": 0.0,      "phrase_bias_aux": 0.0},
+    "e2b":        {},
 }
+
+# Ablations whose weight schedule is well-defined but whose REQUIRED
+# additional loss objectives are not yet wired. Selecting these at CLI
+# parse-time raises NotImplementedError with a descriptive message.
+_BLOCKED_ABLATIONS: dict[str, str] = {
+    "e2b": (
+        "Candidate E Stage 2b is stub-blocked. e2b requires L_span, "
+        "L_contrastive_margin, L_coverage, and pair-aware batch sampling, "
+        "none of which are wired yet. Run --ablation e2a first; loss design "
+        "for 2b follows from E2a evaluator results. See "
+        "docs/working/simplex_mvp_candidate_e_design_2026_05_12.md."
+    ),
+}
+
+
+def _enforce_e2b_block(ablation: str) -> None:
+    """Hard-raise if the user passed --ablation <name> for an ablation whose
+    additional loss objectives are not yet implemented. Per audit
+    2026-05-12 finding: e2b loss plumbing absent (L_span /
+    L_contrastive_margin / L_coverage). Refuse to silently launch a run
+    that the design says needs those losses."""
+    msg = _BLOCKED_ABLATIONS.get(ablation)
+    if msg is not None:
+        raise NotImplementedError(msg)
 
 
 @dataclass
@@ -324,6 +363,9 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
     # Apply ablation overrides on top of defaults
     overrides = ABLATION_OVERRIDES.get(cfg.ablation, {})
     cfg.loss_weights = {**DEFAULT_LOSS_WEIGHTS, **overrides}
+    # Hard-fail before any model build if the chosen ablation is blocked
+    # (Candidate E e2b stub-block 2026-05-12).
+    _enforce_e2b_block(cfg.ablation)
     return cfg
 
 

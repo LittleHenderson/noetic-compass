@@ -326,3 +326,58 @@ def test_trainer_cli_max_cas_prefix_len_override():
         "--max-cas-prefix-len", "192",
     ])
     assert cfg.max_cas_prefix_len == 192
+
+
+# ---------------------------------------------------------------------------
+# Candidate E Stage 2 ablation alias tests (2026-05-12)
+# ---------------------------------------------------------------------------
+
+def test_trainer_cli_ablation_e2a_loss_weights():
+    """e2a parses successfully and has copy + phrase_bias_aux zeroed
+    (functionally identical to b2). Per Stage 2 setup design 2026-05-12."""
+    from cas_native.training.train_simplex_mvp import parse_args
+    cfg = parse_args([
+        "--data-path", "x", "--output-dir", "y",
+        "--ablation", "e2a",
+    ])
+    assert cfg.ablation == "e2a"
+    assert cfg.loss_weights == {
+        "lm": 1.0, "fr": 1.0, "slot_type": 1.0,
+        "copy": 0.0, "phrase_bias_aux": 0.0,
+    }
+
+
+def test_trainer_cli_ablation_e2a_equals_b2_functionally():
+    """e2a weights match b2 verbatim (e2a is a renamed warmup, not a new
+    weight schedule). Distinct names exist so logs/manifests show E-era
+    intent even though weights coincide."""
+    from cas_native.training.train_simplex_mvp import parse_args
+    cfg_e2a = parse_args([
+        "--data-path", "x", "--output-dir", "y", "--ablation", "e2a",
+    ])
+    cfg_b2 = parse_args([
+        "--data-path", "x", "--output-dir", "y", "--ablation", "b2",
+    ])
+    assert cfg_e2a.loss_weights == cfg_b2.loss_weights
+
+
+def test_trainer_cli_ablation_e2b_raises_not_implemented():
+    """e2b is stub-blocked until L_span / L_contrastive_margin / L_coverage
+    + pair-aware batcher land. Must raise at parse-time BEFORE any model
+    is built, so a stray --ablation e2b in a launch command cannot waste
+    pod time. Per Stage 2 setup audit 2026-05-12."""
+    from cas_native.training.train_simplex_mvp import parse_args
+    try:
+        parse_args([
+            "--data-path", "x", "--output-dir", "y", "--ablation", "e2b",
+        ])
+    except NotImplementedError as exc:
+        msg = str(exc)
+        assert "stub-blocked" in msg, f"unexpected message: {msg}"
+        assert "L_span" in msg
+        assert "L_contrastive_margin" in msg
+        assert "L_coverage" in msg
+        return
+    raise AssertionError(
+        "parse_args(--ablation e2b) should have raised NotImplementedError"
+    )
