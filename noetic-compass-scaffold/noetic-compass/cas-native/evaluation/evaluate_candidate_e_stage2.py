@@ -206,17 +206,18 @@ def decode_records(model: Any, records: list[dict[str, Any]],
                    collator: Any, tokenizer: Any, *,
                    device: torch.device, max_new_tokens: int,
                    tf_mode: bool) -> list[dict[str, Any]]:
-    """Greedy decode each record. ``tf_mode=True`` is reserved for the
-    teacher-forced path; not implemented in this evaluator's first cut —
-    free-decode is the falsification metric (matches A/B/C/D postmortem
-    pattern where TF passed but free-decode collapsed).
+    """Greedy decode each record (free-decode). ``tf_mode`` here only
+    distinguishes the legacy --tf-mode CLI flag; the actual TF
+    identifier-level recovery is computed by ``teacher_forced_eval`` and
+    is the E2b gate metric per design doc §Stage 2b.
     """
     if tf_mode:
+        # The actual TF metric lives in teacher_forced_eval(), which is
+        # called separately in main(). decode_records is the free-decode
+        # path for slot-trace evidence + swap-pair cross-emission.
         raise NotImplementedError(
-            "tf-mode is reserved; first cut runs free-decode only because "
-            "TF / free-decode divergence is the exposure-bias signature "
-            "we are hunting. Pass --tf-mode in a follow-on PR after the "
-            "TF entrypoint is wired."
+            "decode_records does not implement TF; use teacher_forced_eval() "
+            "for the load-bearing TF identifier-level recovery metric."
         )
     from cas_native.evaluation.sample_decoder import decode_canary_pack
     return decode_canary_pack(
@@ -226,6 +227,135 @@ def decode_records(model: Any, records: list[dict[str, Any]],
         copy_confidence_threshold=0.5,
         truncate_traces=False,
     )
+
+
+# ---- Teacher-forced identifier-level recovery (E2b primary gate) ---------
+
+SLOT_STAGE_VAR_ID = 2  # cas_native.training.datasets.simplex_collator.SLOT_STAGE_VAR
+
+
+def teacher_forced_eval(
+    model: Any, records: list[dict[str, Any]],
+    collator: Any, *, device: torch.device,
+) -> list[dict[str, Any]]:
+    """Run teacher-forced forward pass on each record; compute per-record
+    identifier-level recovery (the design doc §Stage 2b TF gate).
+
+    Method:
+      1. Use SimplexCollator to build the same batch the trainer would see,
+         which includes the GOLD lm_decoder_input_ids (so forward is TF).
+      2. Forward model(batch). Extract p_copy at each output position.
+      3. For each STAGE_VAR target span (contiguous run of slot_id == 2):
+         per-token argmax(p_copy[k]) is the model's predicted source pos
+         under TF. Compare against gold typed_slot_source[k]. The span
+         "recovers" the identifier iff ALL tokens in the span have
+         correct argmax src.
+
+    Per-token correctness IS the standard "fresh source recovery" metric
+    when teacher-forced: under TF, the model sees the correct context,
+    so the only thing that matters is "did the copy/pointer head learn
+    to point at the right source token for each output position." This
+    isolates the copy-learning question from generation drift.
+
+    Returns per-record list with: id, category, n_target_identifiers,
+    n_recovered_identifiers, identifier_recovery_rate, per_token_correct,
+    per_identifier_correct.
+    """
+    model.eval()
+    results: list[dict[str, Any]] = []
+    with torch.no_grad():
+        for rec in records:
+            batch = collator([rec], device=device)
+            if batch is None:
+                results.append({
+                    "id": rec.get("id"), "n_target_identifiers": 0,
+                    "n_recovered_identifiers": 0,
+                    "identifier_recovery_rate": None,
+                    "per_token_correct": 0,
+                    "per_token_total": 0,
+                    "applicable": False,
+                    "error": "collator_returned_none",
+                })
+                continue
+            try:
+                out = model(batch)
+            except Exception as exc:
+                results.append({
+                    "id": rec.get("id"), "n_target_identifiers": 0,
+                    "n_recovered_identifiers": 0,
+                    "identifier_recovery_rate": None,
+                    "per_token_correct": 0,
+                    "per_token_total": 0,
+                    "applicable": False,
+                    "error": f"forward_failed: {exc!r}",
+                })
+                continue
+
+            p_copy = out["p_copy"][0]                                 # (L_out, L_src)
+            argmax_src = p_copy.argmax(dim=-1).to(dtype=torch.long)   # (L_out,)
+            tsp = batch["typed_slot_positions"][0].argmax(dim=-1)     # (L_out,)
+            tss = batch["typed_slot_source"][0].to(dtype=torch.long)  # (L_out,)
+
+            # Find contiguous STAGE_VAR spans in target
+            spans: list[tuple[int, int]] = []
+            in_span = False
+            sp_start = -1
+            L_out = int(tsp.shape[0])
+            for k in range(L_out):
+                is_sv = int(tsp[k].item()) == SLOT_STAGE_VAR_ID
+                if is_sv and not in_span:
+                    in_span = True
+                    sp_start = k
+                elif not is_sv and in_span:
+                    spans.append((sp_start, k))
+                    in_span = False
+            if in_span:
+                spans.append((sp_start, L_out))
+
+            # Score each span: identifier recovered iff every gold-mapped
+            # in-span token has correct argmax src.
+            per_identifier_correct: list[bool] = []
+            per_token_correct = 0
+            per_token_total = 0
+            for sp_s, sp_e in spans:
+                ident_correct = True
+                ident_has_gold = False
+                for k in range(sp_s, sp_e):
+                    gold_src = int(tss[k].item())
+                    if gold_src < 0:
+                        # No supervision at this position; skip (does not
+                        # invalidate the identifier)
+                        continue
+                    ident_has_gold = True
+                    pred_src = int(argmax_src[k].item())
+                    per_token_total += 1
+                    if pred_src == gold_src:
+                        per_token_correct += 1
+                    else:
+                        ident_correct = False
+                if ident_has_gold:
+                    per_identifier_correct.append(ident_correct)
+
+            n_target = len(per_identifier_correct)
+            n_recovered = sum(per_identifier_correct)
+            results.append({
+                "id": rec.get("id"),
+                "category": rec.get("v1mix_grammar_category_or_error_class"),
+                "n_target_identifiers": n_target,
+                "n_recovered_identifiers": n_recovered,
+                "identifier_recovery_rate": (
+                    n_recovered / n_target if n_target > 0 else None
+                ),
+                "per_token_correct": per_token_correct,
+                "per_token_total": per_token_total,
+                "per_token_accuracy": (
+                    per_token_correct / per_token_total
+                    if per_token_total > 0 else None
+                ),
+                "per_identifier_correct": per_identifier_correct,
+                "applicable": n_target > 0,
+            })
+    return results
 
 
 # ---- Main pipeline --------------------------------------------------------
@@ -322,7 +452,52 @@ def main() -> int:
                       "max_cas_prefix_len": args.max_cas_prefix_len}),
           flush=True)
 
-    # ---- Dev (canonical recovery) -------------------------------------
+    # ---- Dev TF identifier-level recovery (E2b primary gate) ----------
+    # Per design doc §Stage 2b + user audit 2026-05-12: E2b is supposed
+    # to answer "Can the model copy the right source ID when the correct
+    # prefix/context is held stable?" That is a TEACHER-FORCED question.
+    # Free-decode metrics (slot trace, swap cross-emission) come AFTER
+    # this TF gate as supplementary evidence.
+    tf_results = teacher_forced_eval(
+        model, dev_records, coll, device=device,
+    )
+    # Aggregate identifier-level + full-record metrics
+    tf_total_target = sum(r["n_target_identifiers"] for r in tf_results)
+    tf_total_recovered = sum(r["n_recovered_identifiers"] for r in tf_results)
+    tf_n_applicable = sum(1 for r in tf_results if r["applicable"])
+    tf_n_full_recovery = sum(
+        1 for r in tf_results
+        if r["applicable"] and r["identifier_recovery_rate"] == 1.0
+    )
+    tf_per_token_correct = sum(r["per_token_correct"] for r in tf_results)
+    tf_per_token_total = sum(r["per_token_total"] for r in tf_results)
+    tf_dev_summary = {
+        "n_records": len(tf_results),
+        "n_applicable": tf_n_applicable,
+        # IDENTIFIER-LEVEL recovery (the design doc gate metric)
+        "total_target_identifiers": tf_total_target,
+        "total_recovered_identifiers": tf_total_recovered,
+        "identifier_recovery_rate": (
+            tf_total_recovered / tf_total_target
+            if tf_total_target > 0 else None
+        ),
+        # FULL-RECORD recovery (stricter, secondary)
+        "n_full_recovery_records": tf_n_full_recovery,
+        "full_recovery_rate": (
+            tf_n_full_recovery / tf_n_applicable
+            if tf_n_applicable > 0 else None
+        ),
+        # PER-TOKEN accuracy (most granular)
+        "per_token_correct": tf_per_token_correct,
+        "per_token_total": tf_per_token_total,
+        "per_token_accuracy": (
+            tf_per_token_correct / tf_per_token_total
+            if tf_per_token_total > 0 else None
+        ),
+    }
+    print(json.dumps({"event": "tf_dev_scored", **tf_dev_summary}), flush=True)
+
+    # ---- Dev free-decode (informational + slot-trace evidence) --------
     dev_decoded = decode_records(
         model, dev_records, coll, tok,
         device=device, max_new_tokens=args.max_new_tokens,
@@ -480,7 +655,9 @@ def main() -> int:
         "max_cas_prefix_len": args.max_cas_prefix_len,
         "max_new_tokens": args.max_new_tokens,
         "tf_mode": bool(args.tf_mode),
-        "dev_summary": dev_summary,
+        "tf_dev_summary": tf_dev_summary,   # PRIMARY e2b gate source
+        "tf_dev_per_record": tf_results,
+        "dev_summary": dev_summary,         # free-decode, informational
         "swap_summary": swap_summary,
         "dev_per_record": dev_per_record,
         "swap_per_pair": pair_results,
@@ -499,9 +676,25 @@ def main() -> int:
     lines.append(f"- source_swap_dev_path: `{args.source_swap_dev_path}`")
     lines.append(f"- max_cas_prefix_len: {args.max_cas_prefix_len}")
     lines.append(f"- max_new_tokens: {args.max_new_tokens}")
-    lines.append(f"- tf_mode: {bool(args.tf_mode)} (False = free-decode)")
+    lines.append(f"- tf_mode legacy flag: {bool(args.tf_mode)} (TF eval is always run for the e2b gate)")
     lines.append("")
-    lines.append("## Dev (canonical recovery)")
+    lines.append("## TF dev (teacher-forced identifier-level recovery — PRIMARY E2b GATE)")
+    lines.append("")
+    lines.append(f"- records:                              {tf_dev_summary['n_records']}")
+    lines.append(f"- applicable rpm records:               {tf_dev_summary['n_applicable']}")
+    lines.append(f"- total target identifiers:             {tf_dev_summary['total_target_identifiers']}")
+    lines.append(f"- total recovered identifiers (TF):     {tf_dev_summary['total_recovered_identifiers']}")
+    lines.append(f"- identifier_recovery_rate (TF):        **{tf_dev_summary['identifier_recovery_rate']}** ← GATE METRIC")
+    lines.append(f"- full_recovery_rate (TF, strict):      {tf_dev_summary['full_recovery_rate']}")
+    lines.append(f"- per_token_accuracy (TF, granular):    {tf_dev_summary['per_token_accuracy']}")
+    lines.append("")
+    lines.append("Identifier-level (gate metric) credits a record-IDs as recovered iff")
+    lines.append("EVERY token in its STAGE_VAR span has correct argmax(p_copy) under TF.")
+    lines.append("Full-record (strict) requires ALL canonical identifiers in a record")
+    lines.append("recovered. Per-token is the most granular: fraction of in-span tokens")
+    lines.append("with correct argmax src.")
+    lines.append("")
+    lines.append("## Dev free-decode (informational — slot-trace + drift evidence)")
     lines.append("")
     lines.append(f"- records:                       {dev_summary['n_records']}")
     lines.append(f"- applicable rpm records:        {dev_summary['n_applicable']}")
@@ -510,6 +703,10 @@ def main() -> int:
     lines.append(f"- aggregate recovery rate:       {dev_summary['aggregate_recovery_rate']}")
     lines.append(f"- full-recovery records:         {dev_summary['n_full_recovery_records']} / {dev_summary['n_applicable']}")
     lines.append(f"- full-recovery rate:            {dev_summary['full_recovery_rate']}")
+    lines.append("")
+    lines.append("Free-decode metrics measure what happens when the model generates its")
+    lines.append("own prefix — drift failure modes show here. TF/free-decode divergence is")
+    lines.append("the exposure-bias signature from the A/B/C/D postmortems.")
     lines.append("")
     lines.append("## Source-swap pairs (swap fidelity)")
     lines.append("")
@@ -522,16 +719,21 @@ def main() -> int:
     lines.append("")
     lines.append("## Gate semantics")
     lines.append("")
-    # E2b gate evaluation (informational at e2a, load-bearing at e2b).
-    recovery_value = dev_summary.get("full_recovery_rate") or 0.0
+    # E2b gates per design doc §Stage 2b + user audit 2026-05-12:
+    #   PRIMARY: TF identifier-level recovery (NOT free-decode, NOT
+    #     full-record). Under teacher forcing, what fraction of the
+    #     individual canonical identifiers does the model correctly copy?
+    #   SECONDARY: swap pair_pass_rate (free-decode). Memorization-residue
+    #     indicator — distinct phenomenon from copy learning.
+    tf_recovery_value = tf_dev_summary.get("identifier_recovery_rate") or 0.0
     swap_value = swap_summary.get("pair_pass_rate") or 0.0
-    recovery_gate_pass = recovery_value >= args.gate_recovery
+    tf_recovery_gate_pass = tf_recovery_value >= args.gate_recovery
     swap_gate_pass = swap_value >= args.gate_swap
     gates = {
-        "recovery": {
-            "value": recovery_value,
+        "tf_identifier_recovery": {
+            "value": tf_recovery_value,
             "threshold": args.gate_recovery,
-            "pass": recovery_gate_pass,
+            "pass": tf_recovery_gate_pass,
         },
         "swap": {
             "value": swap_value,
@@ -539,6 +741,11 @@ def main() -> int:
             "pass": swap_gate_pass,
         },
     }
+    # Also surface the strict full-record recovery rate (TF) for context —
+    # not gated, but informative if it's much lower than identifier-level
+    # (means model gets most IDs right but misses 1 in long chains).
+    tf_full_recovery = tf_dev_summary.get("full_recovery_rate")
+    tf_per_token_acc = tf_dev_summary.get("per_token_accuracy")
     if args.stage == "e2a":
         lines.append("**E2a is warmup.** Identifier recovery is expected near 0 because")
         lines.append("copy is off (loss_weight `copy=0.0`). Metrics are informational —")
@@ -555,8 +762,12 @@ def main() -> int:
     lines.append("")
     lines.append("| gate | value | threshold | pass |")
     lines.append("|---|---|---|---|")
-    lines.append(f"| dev full_recovery_rate (exact ID recovery) | {recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if recovery_gate_pass else '✗'} |")
-    lines.append(f"| swap pair_pass_rate (source-swap conditionality) | {swap_value:.4f} | {args.gate_swap:.4f} | {'✓' if swap_gate_pass else '✗'} |")
+    lines.append(f"| **TF identifier_recovery_rate** (primary, design doc §Stage 2b) | {tf_recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if tf_recovery_gate_pass else '✗'} |")
+    lines.append(f"| swap pair_pass_rate (free-decode, swap conditionality) | {swap_value:.4f} | {args.gate_swap:.4f} | {'✓' if swap_gate_pass else '✗'} |")
+    lines.append("")
+    lines.append("**Context (not gated):**")
+    lines.append(f"- TF full_recovery_rate (strict whole-record): {tf_full_recovery}")
+    lines.append(f"- TF per_token_accuracy (granular): {tf_per_token_acc}")
     lines.append("")
     lines.append("**Not yet implemented in this evaluator** (deferred per user")
     lines.append("2026-05-12 evaluator-upgrade scope decision): slot F1 against")
@@ -565,20 +776,21 @@ def main() -> int:
     lines.append("NOT prerequisites for E2b launch, because exact-ID recovery and")
     lines.append("wrong-pair leakage are the load-bearing E2b signals.")
 
+    overall_pass = tf_recovery_gate_pass and swap_gate_pass
     report["e2b_gates"] = gates
-    report["e2b_overall_pass"] = recovery_gate_pass and swap_gate_pass
+    report["e2b_overall_pass"] = overall_pass
     # Rewrite report with gate fields added
     with report_path.open("w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, default=str)
     with findings_path.open("w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
-    overall_pass = recovery_gate_pass and swap_gate_pass
     print(json.dumps({
         "event": "eval_done",
         "stage": args.stage,
         "report": str(report_path),
         "findings": str(findings_path),
+        "tf_dev_summary": tf_dev_summary,
         "dev_summary": dev_summary,
         "swap_summary": swap_summary,
         "e2b_gates": gates,

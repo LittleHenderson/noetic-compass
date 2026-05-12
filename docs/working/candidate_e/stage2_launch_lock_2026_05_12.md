@@ -264,9 +264,14 @@ nohup python /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native
 
 ## E2b evaluator command (READY)
 
-Two fail-exit gates per design doc §Stage 2b:
-- `dev_summary.full_recovery_rate >= 0.80` (exact ID recovery)
-- `swap_summary.pair_pass_rate >= 0.85` (source-swap conditionality)
+Two fail-exit gates per design doc §Stage 2b (per user audit 2026-05-12):
+- **PRIMARY:** `tf_dev_summary.identifier_recovery_rate >= 0.80` — TEACHER-FORCED identifier-level recovery on FRESH dev-bucket records. Under TF the model gets the correct prefix; we measure ONLY whether the copy/pointer head learned to point at the right source token per identifier. This is the question the design doc §Stage 2b asks.
+- **SECONDARY:** `swap_summary.pair_pass_rate >= 0.85` — free-decode swap-pair conditionality. Memorization-residue indicator.
+
+The evaluator reports three TF recovery levels:
+- `identifier_recovery_rate` (gate metric, identifier-level)
+- `full_recovery_rate` (strict, whole-record — informative for diagnosis)
+- `per_token_accuracy` (granular)
 
 Evaluator returns exit code `2` on any gate miss; CI / shell scripts catch it.
 

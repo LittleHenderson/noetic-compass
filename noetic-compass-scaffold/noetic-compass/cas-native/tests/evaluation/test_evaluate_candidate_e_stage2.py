@@ -117,17 +117,22 @@ def test_per_record_recovery_non_applicable(evaluator_module):
     assert r["recovery_rate"] is None
 
 
-def test_tf_mode_raises_until_wired(evaluator_module):
-    """--tf-mode is reserved; the helper must refuse until the TF entrypoint
-    is wired, so the user cannot accidentally launch a TF-only eval and
-    miss the free-decode falsification signal."""
+def test_decode_records_tf_redirects_to_teacher_forced_eval(evaluator_module):
+    """decode_records is the free-decode path. When called with tf_mode=True
+    it must raise pointing the caller at teacher_forced_eval — the proper
+    TF entrypoint per user audit 2026-05-12. Old test
+    (test_tf_mode_raises_until_wired) renamed to reflect that TF is now
+    actually implemented, just in a different function."""
     try:
         evaluator_module.decode_records(
             model=None, records=[], collator=None, tokenizer=None,
             device=None, max_new_tokens=8, tf_mode=True,
         )
     except NotImplementedError as exc:
-        assert "tf-mode" in str(exc).lower()
+        msg = str(exc).lower()
+        assert "teacher_forced_eval" in msg, (
+            f"raise must point at teacher_forced_eval; got: {msg!r}"
+        )
         return
     raise AssertionError("decode_records(tf_mode=True) should have raised")
 
@@ -174,10 +179,6 @@ def test_stage_e2b_now_supported_at_cli(evaluator_module):
     accept it without raising. Actual model loading is exercised at the
     integration level (CPU smoke); this test just confirms the CLI
     surface is unblocked."""
-    import argparse
-    # We can't fully run main() without a real checkpoint, but the new
-    # gate args (--gate-recovery, --gate-swap) must parse cleanly and
-    # the `--stage e2b` raise must be gone.
     src = open(evaluator_module.__file__, encoding="utf-8").read()
     # Confirm the old raise is gone
     assert "--stage e2b is blocked" not in src
@@ -187,3 +188,62 @@ def test_stage_e2b_now_supported_at_cli(evaluator_module):
     # Confirm fail-exit logic is present for e2b
     assert "return 2" in src
     assert "e2b_overall_pass" in src
+
+
+def test_e2b_gate_is_tf_identifier_recovery(evaluator_module):
+    """Per user audit 2026-05-12: E2b primary gate MUST be teacher-forced
+    identifier-level recovery, NOT free-decode full_recovery_rate.
+
+    Source-level checks (regression pins):
+    - teacher_forced_eval helper exists and computes identifier_recovery_rate
+    - The gate variable name in main() is tf_recovery_value (not the old
+      free-decode recovery_value).
+    - tf_dev_summary is the section the gate reads from.
+    """
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    assert "def teacher_forced_eval(" in src, "TF eval helper missing"
+    assert "tf_dev_summary" in src, "TF dev summary missing in main"
+    assert "tf_recovery_value" in src, "TF recovery gate variable missing"
+    assert 'tf_dev_summary.get("identifier_recovery_rate")' in src, (
+        "Gate metric is not identifier_recovery_rate"
+    )
+    # The OLD gate variable name was `recovery_value` (read from free-decode
+    # dev_summary). The NEW gate variable is `tf_recovery_value` (read from
+    # TF dev summary). Lock the rename so a refactor doesn't silently
+    # reintroduce the wrong gate.
+    assert "tf_recovery_value = tf_dev_summary.get" in src, (
+        "TF recovery gate must read from tf_dev_summary, not free-decode dev_summary"
+    )
+    # The old fail-exit used `recovery_gate_pass`; new uses `tf_recovery_gate_pass`.
+    assert "tf_recovery_gate_pass" in src
+    assert "overall_pass = tf_recovery_gate_pass" in src
+
+
+def test_teacher_forced_eval_returns_identifier_level_metric(evaluator_module):
+    """Smoke: teacher_forced_eval signature has the right shape — takes
+    model + records + collator + device, returns per-record dicts with
+    identifier_recovery_rate / per_token_accuracy keys.
+
+    Real model execution is covered at integration level; here we just
+    verify the function's contract by inspecting its source / globals."""
+    assert hasattr(evaluator_module, "teacher_forced_eval")
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    # Confirm the metric is identifier-level, not record-level
+    assert "identifier_recovery_rate" in src
+    assert "per_token_correct" in src
+    assert "per_token_accuracy" in src
+    # Confirm STAGE_VAR span scoring is present (gold src == argmax check)
+    assert "argmax_src" in src
+    assert "gold_src" in src or "typed_slot_source" in src
+
+
+def test_identifier_level_recovery_distinct_from_full_recovery(evaluator_module):
+    """Per user audit 2026-05-12: full_recovery_rate is record-level
+    (all-or-nothing), identifier_recovery_rate is identifier-level (each
+    ID counted independently). The TF summary must surface both.
+    """
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    # Both keys present in tf_dev_summary
+    assert '"identifier_recovery_rate"' in src
+    assert '"full_recovery_rate"' in src
+    assert '"per_token_accuracy"' in src
