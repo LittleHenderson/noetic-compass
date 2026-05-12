@@ -74,6 +74,14 @@ ABLATION_OVERRIDES: dict[str, dict[str, float]] = {
     "b1":         {"slot_type": 0.0, "copy": 0.0, "phrase_bias_aux": 0.0},
     "b2":         {"copy": 0.0,      "phrase_bias_aux": 0.0},
     "b3":         {},
+    # Architecture review Candidate D (2026-05-12): SSM staged training.
+    # Identical loss-weight schedule to B1/B2/B3 per user decision —
+    # hold schedule constant so the comparison isolates the architecture
+    # variable (transformer vs SSM). Distinct names so CLI history
+    # shows D-stage intent. Use with --decoder-arch ssm.
+    "d1":         {"slot_type": 0.0, "copy": 0.0, "phrase_bias_aux": 0.0},
+    "d2":         {"copy": 0.0,      "phrase_bias_aux": 0.0},
+    "d3":         {},
 }
 
 
@@ -124,6 +132,19 @@ class SimplexTrainConfig:
     # from the prior stage's checkpoint before training begins. Step counter
     # and optimizer state are fresh per stage.
     load_model_from: str = ""
+    # Architecture review Candidate D (2026-05-12): decoder architecture.
+    # "transformer" preserves existing behavior (TypedFiberDecoder).
+    # "ssm" swaps in SsmTypedFiberDecoder — same forward signature,
+    # same heads, different autoregressive token mixer (SSM/S6-style
+    # selective scan instead of masked self-attention). Source cross-
+    # attention is preserved in both.
+    decoder_arch: str = "transformer"
+    # SSM-specific hyperparameters (only used when decoder_arch == "ssm").
+    # Defaults chosen for ~comparable parameter count to transformer at
+    # d_model=384, n_layers=6 (rough order of magnitude).
+    ssm_d_state: int = 16
+    ssm_d_conv: int = 4
+    ssm_expand: int = 2
     # Loss weights — populated by ablation mode after CLI parse
     loss_weights: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_LOSS_WEIGHTS))
 
@@ -220,6 +241,24 @@ def build_parser() -> argparse.ArgumentParser:
                         "staged training: b1 ckpt → b2 warm-start, "
                         "b2 ckpt → b3 warm-start. Default empty = train from "
                         "fresh init.")
+    # Architecture review Candidate D (2026-05-12): decoder architecture
+    p.add_argument("--decoder-arch", type=str, default="transformer",
+                   choices=["transformer", "ssm"],
+                   help="Decoder architecture. 'transformer' uses the existing "
+                        "TypedFiberDecoder (masked self-attention). 'ssm' uses "
+                        "SsmTypedFiberDecoder (SSM/S6-style selective scan). "
+                        "Both share encoder + cross-attention + heads. Per "
+                        "Candidate D (2026-05-12) test of source-grounded "
+                        "state under free decode.")
+    p.add_argument("--ssm-d-state", type=int, default=16,
+                   help="SSM state dimension per channel. Only used when "
+                        "--decoder-arch ssm. Default 16.")
+    p.add_argument("--ssm-d-conv", type=int, default=4,
+                   help="SSM local conv kernel width. Only used when "
+                        "--decoder-arch ssm. Default 4.")
+    p.add_argument("--ssm-expand", type=int, default=2,
+                   help="SSM inner-dimension expansion factor. Only used when "
+                        "--decoder-arch ssm. Default 2.")
     return p
 
 
@@ -261,6 +300,10 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
         hard_typed_emission=args.hard_typed_emission,
         copy_confidence_threshold=args.copy_confidence_threshold,
         load_model_from=args.load_model_from,
+        decoder_arch=args.decoder_arch,
+        ssm_d_state=args.ssm_d_state,
+        ssm_d_conv=args.ssm_d_conv,
+        ssm_expand=args.ssm_expand,
     )
     # Apply ablation overrides on top of defaults
     overrides = ABLATION_OVERRIDES.get(cfg.ablation, {})
@@ -269,7 +312,15 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
 
 
 def build_simplex_mvp_model(cfg: SimplexTrainConfig, *, vocab_size: int, vocab_size_english: int) -> nn.Module:
-    """Factory wiring SimplexEncoder + TypedFiberDecoder into a single module."""
+    """Factory wiring SimplexEncoder + (TypedFiberDecoder | SsmTypedFiberDecoder).
+
+    Decoder is selected by ``cfg.decoder_arch`` (Candidate D 2026-05-12):
+      - "transformer" (default): TypedFiberDecoder, masked self-attention.
+      - "ssm": SsmTypedFiberDecoder, SSM/S6-style selective scan.
+    Both decoders share the same forward signature and return dict, so
+    everything downstream (loss assembly, sample_decoder, evaluation,
+    checkpoint save/load) is decoder-agnostic.
+    """
     from cas_native.model.simplex_encoder import SimplexEncoder, SimplexEncoderConfig
     from cas_native.model.typed_fiber_decoder import TypedFiberDecoder, TypedFiberDecoderConfig
 
@@ -291,11 +342,30 @@ def build_simplex_mvp_model(cfg: SimplexTrainConfig, *, vocab_size: int, vocab_s
         tie_lm_head=not getattr(cfg, "no_tie_lm_head", False),
     )
 
+    decoder_arch = getattr(cfg, "decoder_arch", "transformer")
+    if decoder_arch == "ssm":
+        from cas_native.model.ssm_typed_fiber_decoder import (
+            SsmTypedFiberDecoder, SsmTypedFiberDecoderConfig,
+        )
+        ssm_dec_cfg = SsmTypedFiberDecoderConfig.from_transformer_config(
+            dec_cfg,
+            d_state=getattr(cfg, "ssm_d_state", 16),
+            d_conv=getattr(cfg, "ssm_d_conv", 4),
+            expand=getattr(cfg, "ssm_expand", 2),
+        )
+        _decoder_class = SsmTypedFiberDecoder
+        _decoder_cfg_for_class = ssm_dec_cfg
+    elif decoder_arch == "transformer":
+        _decoder_class = TypedFiberDecoder
+        _decoder_cfg_for_class = dec_cfg
+    else:
+        raise ValueError(f"unknown decoder_arch: {decoder_arch!r}")
+
     class _SimplexMVPModel(nn.Module):
         def __init__(self):
             super().__init__()
             self.encoder = SimplexEncoder(enc_cfg)
-            self.decoder = TypedFiberDecoder(dec_cfg)
+            self.decoder = _decoder_class(_decoder_cfg_for_class)
 
         def forward(self, batch: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
             # Fail-closed source synthesis when the collator emits no CAS at all
