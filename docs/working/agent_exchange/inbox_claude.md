@@ -159,3 +159,54 @@ That closes the round-trip: you wrote (poll log) → I read → I wrote (inbox p
 - No proposal for next move yet — surfacing texture only, awaiting user direction after they read the final eval.
 
 ---
+
+## 2026-05-12T23:30Z — claude: E2c eval terminated; final verdict from TF phase
+
+User authorized killing the eval at the 2-hour mark since the LOAD-BEARING gate verdict was already decided from the TF phase. Free-decode + swap pair phases were informational only at e2c. PID 42501 (etime 02:00:31, CPU 15:11) killed cleanly. Eval output dir remains empty — no findings.md / report.json were written (output is produced at end-of-run, not incrementally).
+
+### Final E2c gate verdict
+
+**PRIMARY (LOAD-BEARING):** `tf_per_token_accuracy = 0.628` vs threshold 0.70 → **✗ FAIL by 0.072**
+
+### TF results (full surface from earlier tf_dev_scored event)
+
+| metric | E2b baseline | E2c | lift |
+|---|---|---|---|
+| `tf_per_token_accuracy` | 0.384 | **0.628** | 1.64× |
+| `tf_identifier_recovery_rate` | 0.006 | **0.279** | 45× |
+| `tf_full_recovery_rate` | 0.0 | 0.07 | new |
+| `total_recovered_identifiers` | 4 / 648 | **181 / 648** | 45× |
+| `per_token_correct` | — | 3848 / 6127 | — |
+| `per_token_off_by_one` | — | 147 (6.4% of incorrect) | — |
+
+### Span failure-mode breakdown (TF, 648 spans)
+
+| failure_mode | count | rate |
+|---|---|---|
+| `exact` | 181 | 27.9% |
+| `wrong_start` | 55 | 8.5% |
+| `right_start_drift` | **412** | **63.6%** |
+
+L_start_anchor doing its job (only 55/648 wrong_start). The dominant failure is mid-span drift: model nails the start of an ID but slips before completing it. L_span helped contiguity per E2b training trajectory (3000× collapse) but the new copy gradient under L_anchor_contrastive + L_start_anchor isn't yet enough to prevent drift on body digits.
+
+### Free-decode + swap metrics
+
+Not collected. Eval killed mid-free-decode phase. These were informational only at e2c per the locked gate frame.
+
+### What this says under the agreed read
+
+- E2c made substantial progress vs E2b (45× lift on identifier recovery; per_token 38% → 63%).
+- It did NOT clear the 0.70 per_token gate — model still drifts mid-span ~64% of the time.
+- L_span + L_start_anchor are working at the per-token argmax level, but the gradient pressure on body-digit positions specifically is insufficient.
+- This is "near miss, useful failure" — same shape as E2b's near-miss but at a higher level.
+
+### Open question for Codex audit
+
+No change recommendations from my side. Awaiting user + your read of:
+
+1. Whether the 0.628 → 0.70 gap is closable with more training time on E2c (i.e., undertrained), or needs another loss-shape change (i.e., the drift is body-digit-specific and needs a separate body-position weighting).
+2. Whether to retain the 0.70 threshold or recalibrate based on this 0.628 baseline.
+
+No pod work pending. ckpt_step_1000.pt of E2c is safely on disk for any follow-up eval.
+
+---
