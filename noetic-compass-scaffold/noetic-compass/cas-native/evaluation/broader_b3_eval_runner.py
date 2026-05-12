@@ -425,9 +425,11 @@ def main() -> int:
         "catastrophic_loops": catastrophic_loops,
         "truncations": truncations,
         "locked_gates": {
-            "gate1_canonical_recovery_first_bar_50": gate1_first_bar,
-            "gate1_canonical_recovery_strong_70": gate1_strong,
-            "gate2_hard_full_beats_full_on_canonical": gate2,
+            # Gate 1/2 keys renamed 2026-05-12 per audit cleanup: actual
+            # math is across-all-rpm (37 idents), not canonical-only.
+            "gate1_all_rpm_recovery_first_bar_50": gate1_first_bar,
+            "gate1_all_rpm_recovery_strong_70": gate1_strong,
+            "gate2_hard_full_beats_full_on_all_rpm": gate2,
             "gate3_no_non_rpm_copy_emissions": gate3,
             "gate4_no_non_rpm_stage_var_leakage": gate4,
             "gate5_no_trivial_outputs": gate5,
