@@ -688,9 +688,25 @@ def compute_strict_collator_coverage(
     non_rpm_audited = 0
     total_target_identifier_occurrences = 0
     total_stage_var_spans = 0
+    total_source_pointer_spans_checked = 0
     coverage_violations: list[dict[str, Any]] = []
     non_rpm_leakage_at_collator: list[str] = []
+    source_pointer_mismatches: list[dict[str, Any]] = []
     rpm_full_coverage_count = 0
+
+    def _decode_id_list(token_ids: list[int]) -> str:
+        """Decode token ids to text via the tokenizer, falling back to
+        token_ids_to_tokens-join when ``decode`` is not present."""
+        if not token_ids:
+            return ""
+        if hasattr(tokenizer, "decode"):
+            try:
+                return tokenizer.decode(token_ids, skip_special=False)
+            except TypeError:
+                # Some tokenizers don't accept skip_special kwarg
+                return tokenizer.decode(token_ids)
+        toks = tokenizer.token_ids_to_tokens(token_ids)
+        return "".join(str(t) for t in toks)
 
     for r in records:
         cat = r.get("v1mix_grammar_category_or_error_class")
@@ -710,23 +726,78 @@ def compute_strict_collator_coverage(
             })
             continue
         tsp = batch.get("typed_slot_positions")
-        if tsp is None:
+        tss = batch.get("typed_slot_source")
+        cas_prefix_ids = batch.get("cas_prefix_ids")
+        lm_targets = batch.get("lm_targets")
+        if tsp is None or tss is None or cas_prefix_ids is None or lm_targets is None:
             coverage_violations.append({
-                "id": r.get("id"), "error": "no_typed_slot_positions",
+                "id": r.get("id"), "error": "missing_batch_tensors",
             })
             continue
         slot_argmax = tsp[0].argmax(dim=-1)
-        # Count contiguous STAGE_VAR spans
-        spans = 0
+        # Find contiguous STAGE_VAR spans as (start, end_exclusive)
+        spans_list: list[tuple[int, int]] = []
         in_span = False
+        sp_start = -1
         L = int(slot_argmax.shape[0])
         for k in range(L):
             is_sv = int(slot_argmax[k].item()) == SLOT_STAGE_VAR
             if is_sv and not in_span:
-                spans += 1
                 in_span = True
-            elif not is_sv:
+                sp_start = k
+            elif not is_sv and in_span:
+                spans_list.append((sp_start, k))
                 in_span = False
+        if in_span:
+            spans_list.append((sp_start, L))
+        spans = len(spans_list)
+
+        # ---- Source-pointer verification (Codex audit 2026-05-12 third pass) ----
+        # For each STAGE_VAR span, follow typed_slot_source back to the source
+        # positions, decode both source and target token sub-sequences, and
+        # require that the body-normalized strings match. This catches the
+        # case where the labeller fires STAGE_VAR on the right number of
+        # target positions but points them at the wrong source identifier
+        # (e.g. an off-by-one or distractor cross-wiring).
+        if cat == "rpm_chain":
+            cas_prefix_row = cas_prefix_ids[0].tolist()
+            lm_row = lm_targets[0].tolist()
+            tss_row = tss[0].tolist()
+            for sp_s, sp_e in spans_list:
+                src_indices_raw = tss_row[sp_s:sp_e]
+                # Strip -1 sentinels (un-pointed positions inside the span;
+                # span pads with -1 when a typed slot has no live source).
+                src_indices = [int(i) for i in src_indices_raw if int(i) >= 0]
+                if not src_indices:
+                    source_pointer_mismatches.append({
+                        "id": r.get("id"),
+                        "span": [sp_s, sp_e],
+                        "issue": "no_typed_slot_source_indices",
+                    })
+                    continue
+                # Source indices must form a contiguous run (the span copies
+                # a contiguous source identifier substring). Allow trailing
+                # repeats / monotonic non-decreasing as a loose form.
+                src_min, src_max = min(src_indices), max(src_indices)
+                # Decode source slice (use inclusive range) and target slice
+                src_slice = cas_prefix_row[src_min:src_max + 1]
+                tgt_slice = lm_row[sp_s:sp_e]
+                src_text = _decode_id_list(src_slice).strip()
+                tgt_text = _decode_id_list(tgt_slice).strip()
+                src_norm = _normalize_identifiers(src_text)
+                tgt_norm = _normalize_identifiers(tgt_text)
+                total_source_pointer_spans_checked += 1
+                if src_norm != tgt_norm:
+                    source_pointer_mismatches.append({
+                        "id": r.get("id"),
+                        "span": [sp_s, sp_e],
+                        "src_indices": [src_min, src_max],
+                        "src_text": src_text[:80],
+                        "tgt_text": tgt_text[:80],
+                        "src_norm": src_norm[:80],
+                        "tgt_norm": tgt_norm[:80],
+                    })
+
         if cat == "rpm_chain":
             rpm_audited += 1
             total_target_identifier_occurrences += target_occurrences
@@ -749,12 +820,15 @@ def compute_strict_collator_coverage(
         "non_rpm_records_audited": non_rpm_audited,
         "total_target_identifier_occurrences": total_target_identifier_occurrences,
         "total_stage_var_spans": total_stage_var_spans,
+        "total_source_pointer_spans_checked": total_source_pointer_spans_checked,
         "rpm_records_with_full_coverage": rpm_full_coverage_count,
         "coverage_violations": coverage_violations,
         "non_rpm_leakage_at_collator": non_rpm_leakage_at_collator,
+        "source_pointer_mismatches": source_pointer_mismatches,
         "all_pass": (
             not coverage_violations
             and not non_rpm_leakage_at_collator
+            and not source_pointer_mismatches
             and (total_stage_var_spans == total_target_identifier_occurrences)
         ),
     }

@@ -30,9 +30,11 @@
     "non_rpm_records_audited": 5,
     "total_target_identifier_occurrences": 149,
     "total_stage_var_spans": 149,
+    "total_source_pointer_spans_checked": 149,
     "rpm_records_with_full_coverage": 45,
     "coverage_violations": [],
     "non_rpm_leakage_at_collator": [],
+    "source_pointer_mismatches": [],
     "all_pass": true
   }
 }
