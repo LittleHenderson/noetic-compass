@@ -1,0 +1,34 @@
+{
+  "n_records": 100,
+  "blacklist_violations": [],
+  "wrong_bucket_records": [],
+  "rpm_count": 100,
+  "non_rpm_count": 0,
+  "rpm_bodies_seen": {
+    "4": 30,
+    "5": 44,
+    "3": 26
+  },
+  "non_rpm_category_distribution": {},
+  "non_rpm_records_with_stage_var": [],
+  "all_pass": true,
+  "counterfactual_invariant_violations": [],
+  "counterfactual_groups_audited": 50,
+  "source_swap_pair_invariant_violations": [],
+  "source_swap_pairs_audited": 50,
+  "lowercase_identifier_violations": [],
+  "article_violations_non_rpm": [],
+  "strict_collator_coverage": {
+    "max_cas_prefix_len": 192,
+    "rpm_records_audited": 100,
+    "non_rpm_records_audited": 0,
+    "total_target_identifier_occurrences": 330,
+    "total_stage_var_spans": 330,
+    "total_source_pointer_spans_checked": 330,
+    "rpm_records_with_full_coverage": 100,
+    "coverage_violations": [],
+    "non_rpm_leakage_at_collator": [],
+    "source_pointer_mismatches": [],
+    "all_pass": true
+  }
+}

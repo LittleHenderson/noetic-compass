@@ -1,0 +1,41 @@
+{
+  "n_records": 3000,
+  "blacklist_violations": [],
+  "wrong_bucket_records": [],
+  "rpm_count": 2000,
+  "non_rpm_count": 1000,
+  "rpm_bodies_seen": {
+    "3": 654,
+    "5": 700,
+    "4": 646
+  },
+  "non_rpm_category_distribution": {
+    "binary_composition": 167,
+    "fractal_sequence": 166,
+    "meta_logic": 167,
+    "recipe": 167,
+    "cross_register_omega": 166,
+    "state_literal": 167
+  },
+  "non_rpm_records_with_stage_var": [],
+  "all_pass": true,
+  "counterfactual_invariant_violations": [],
+  "counterfactual_groups_audited": 83,
+  "source_swap_pair_invariant_violations": [],
+  "source_swap_pairs_audited": 0,
+  "lowercase_identifier_violations": [],
+  "article_violations_non_rpm": [],
+  "strict_collator_coverage": {
+    "max_cas_prefix_len": 192,
+    "rpm_records_audited": 2000,
+    "non_rpm_records_audited": 1000,
+    "total_target_identifier_occurrences": 6247,
+    "total_stage_var_spans": 6247,
+    "total_source_pointer_spans_checked": 6247,
+    "rpm_records_with_full_coverage": 2000,
+    "coverage_violations": [],
+    "non_rpm_leakage_at_collator": [],
+    "source_pointer_mismatches": [],
+    "all_pass": true
+  }
+}
