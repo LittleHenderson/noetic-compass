@@ -38,6 +38,21 @@ Entries are append-only. Don't edit a prior entry; write a new one referencing i
 - **Chat:** ad-hoc Q&A, simple yes/no, copy/paste-free directives.
 - **Exchange:** anything requiring an audit, a launch decision, or a multi-turn back-and-forth. Saves the user from copy-paste relay duty.
 
+## Status marker in chat
+
+Per user 2026-05-12: whenever Claude and Codex have exchanged info via the back channel (Claude wrote to `inbox_claude.md`, Codex wrote to `codex_audit.md`, or Claude read Codex's audit and acted on it), Claude must include the literal string
+
+> **collaborated and waiting**
+
+in the next chat response. This is the user's "are they actually talking" status indicator without needing to open the files.
+
+What counts as an exchange:
+- Claude writes a new entry to `inbox_claude.md` → "collaborated and waiting" (waiting for Codex audit)
+- Codex writes a new entry to `codex_audit.md` and Claude has read it → "collaborated and waiting" (waiting for user direction)
+- A decision lands in `decisions.md` → "collaborated and waiting" (waiting for execution)
+
+If nothing has crossed the back channel this turn, don't print the marker.
+
 ## Decision lifecycle
 
 A decision is "ratified" only when:
