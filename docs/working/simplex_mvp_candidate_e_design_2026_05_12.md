@@ -104,9 +104,15 @@ If audit confirms head-only labelling: Stage 1 specifies full-span as a load-bea
    - Include records that *complete cleanly without repetition* — short rpm chains (2-stage) with concise replies, 3- and 4-stage chains with terminal connectives that close the structure ("and that completes the chain"). Diverse termination patterns.
    - Optional: include adversarial examples where the target reply contains a near-repetition that resolves rather than loops — teaches the model that template-like prefixes do not entail looping.
 
-6. **Full-span labelling** (conditional on pre-Stage-1 audit).
-   - If audit confirms current labels are head-only, fix the collator/anchor derivation to assign STAGE_VAR (or appropriate slot type) on EVERY sub-token of each identifier, with `typed_slot_source` pointing to the *corresponding* sub-token in the source.
-   - If audit confirms full-span: no change needed.
+6. **Full-span labelling** (status after pre-Stage-1 audit 2026-05-12).
+   - Audit result: **within-span coverage is FULL** (every sub-token of each labelled identifier gets STAGE_VAR + sequential `typed_slot_source`). No fix needed on this axis.
+   - Audit file: `docs/working/candidate_e/audit_label_coverage_2026_05_12.md`.
+
+7. **Cross-chain full coverage** (load-bearing per pre-Stage-1 audit 2026-05-12).
+   - Audit result: **partial — current collator labels only 2 of 4 unique identifiers per rpm_chain record (50%), and 0 of any repeat occurrences. Total identifier-occurrence coverage is 33%.** This is the load-bearing labelling defect.
+   - Stage 1 must fix `_derive_anchors` / `find_stage_var_spans` (or equivalent) so that **every distinct identifier occurrence in the target text** (including W-, P-, and repeat-stage identifiers) is labelled with `typed_slot_positions = STAGE_VAR` and a valid `typed_slot_source` pointing at the corresponding source CAS position.
+   - Per-record post-generation verification: STAGE_VAR span count must equal identifier-occurrence count in target text. Audit script script must run on the train + dev + test + source-swap-dev + source-swap-eval corpora.
+   - Audit file: `docs/working/candidate_e/audit_label_coverage_2026_05_12.md` (Sections 4-6 specify the fix).
 
 **Stage 1 deliverables** (per audit 2026-05-12 — corpus paths corrected; training corpora live under `data/path_d/`, eval packs live under `data/eval/`):
 
