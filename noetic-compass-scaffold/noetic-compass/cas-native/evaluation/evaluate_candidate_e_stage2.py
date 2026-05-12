@@ -416,13 +416,15 @@ def main() -> int:
                         "compatibility.")
     p.add_argument("--stage", choices=["e2a", "e2b", "e2c"], default="e2a",
                    help="Reporting tag. e2a is informational (no gate). "
-                        "e2b: PRIMARY gate is TF identifier_recovery_rate "
-                        ">= --gate-recovery (default 0.80). e2c: PRIMARY "
-                        "gate is TF per_token_accuracy >= "
-                        "--gate-per-token-accuracy (default 0.70) — "
-                        "intermediate gate before whole-ID recovery, per "
-                        "user 2026-05-12 post-E2b directive. Both e2b and "
-                        "e2c also report swap pair_pass_rate. Exits "
+                        "e2b: BOTH TF identifier_recovery_rate >= "
+                        "--gate-recovery (default 0.80) AND swap "
+                        "pair_pass_rate >= --gate-swap (default 0.85) are "
+                        "load-bearing. e2c: ONLY TF per_token_accuracy >= "
+                        "--gate-per-token-accuracy (default 0.70) is "
+                        "load-bearing — intermediate gate per user "
+                        "2026-05-12 post-E2b directive. Swap and "
+                        "identifier_recovery_rate are reported as "
+                        "informational diagnostics at e2c. Exits "
                         "non-zero (return 2) if PRIMARY gate misses.")
     p.add_argument("--gate-recovery", type=float, default=0.80,
                    help="E2b PRIMARY gate: teacher-forced "
@@ -829,15 +831,16 @@ def main() -> int:
         lines.append("**E2b enforces fail-exit gates** per design doc §Stage 2b.")
         lines.append("Evaluator exits non-zero if any gate misses.")
     lines.append("")
-    lines.append("| gate | value | threshold | pass |")
-    lines.append("|---|---|---|---|")
+    lines.append("| gate | value | threshold | pass | load-bearing |")
+    lines.append("|---|---|---|---|---|")
     if args.stage == "e2c":
-        lines.append(f"| **TF per_token_accuracy** (E2c PRIMARY) | {tf_per_token_value:.4f} | {args.gate_per_token_accuracy:.4f} | {'✓' if tf_per_token_gate_pass else '✗'} |")
-        lines.append(f"| TF identifier_recovery_rate (informational at e2c) | {tf_recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if tf_recovery_gate_pass else '✗'} |")
+        lines.append(f"| **TF per_token_accuracy** | {tf_per_token_value:.4f} | {args.gate_per_token_accuracy:.4f} | {'✓' if tf_per_token_gate_pass else '✗'} | **YES (E2c PRIMARY)** |")
+        lines.append(f"| TF identifier_recovery_rate | {tf_recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if tf_recovery_gate_pass else '✗'} | informational |")
+        lines.append(f"| swap pair_pass_rate (free-decode) | {swap_value:.4f} | {args.gate_swap:.4f} | {'✓' if swap_gate_pass else '✗'} | informational at e2c |")
     else:
-        lines.append(f"| **TF identifier_recovery_rate** (E2b PRIMARY) | {tf_recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if tf_recovery_gate_pass else '✗'} |")
-        lines.append(f"| TF per_token_accuracy (informational at e2b) | {tf_per_token_value:.4f} | {args.gate_per_token_accuracy:.4f} | {'✓' if tf_per_token_gate_pass else '✗'} |")
-    lines.append(f"| swap pair_pass_rate (SECONDARY, free-decode) | {swap_value:.4f} | {args.gate_swap:.4f} | {'✓' if swap_gate_pass else '✗'} |")
+        lines.append(f"| **TF identifier_recovery_rate** | {tf_recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if tf_recovery_gate_pass else '✗'} | **YES (E2b PRIMARY)** |")
+        lines.append(f"| TF per_token_accuracy | {tf_per_token_value:.4f} | {args.gate_per_token_accuracy:.4f} | {'✓' if tf_per_token_gate_pass else '✗'} | informational at e2b |")
+        lines.append(f"| swap pair_pass_rate (free-decode) | {swap_value:.4f} | {args.gate_swap:.4f} | {'✓' if swap_gate_pass else '✗'} | **YES (E2b SECONDARY)** |")
     lines.append("")
     lines.append("**Context (not gated):**")
     lines.append(f"- TF full_recovery_rate (strict whole-record): {tf_full_recovery}")
@@ -857,10 +860,14 @@ def main() -> int:
 
     # Stage-specific overall pass determination:
     #   e2a: informational only, no fail-exit
-    #   e2b: PRIMARY = tf_identifier_recovery; SECONDARY = swap
-    #   e2c: PRIMARY = tf_per_token_accuracy; SECONDARY = swap
+    #   e2b: BOTH gates load-bearing (TF identifier_recovery + swap pair_pass)
+    #   e2c: ONLY tf_per_token_accuracy load-bearing per user audit
+    #     2026-05-12. Swap pair_pass and identifier_recovery are reported
+    #     as informational diagnostics. Rationale: E2c is the narrow
+    #     "did per-token pointing improve from 38% toward 70%" stage;
+    #     swap is free-decode whole-output behavior, premature here.
     if args.stage == "e2c":
-        overall_pass = tf_per_token_gate_pass and swap_gate_pass
+        overall_pass = tf_per_token_gate_pass
         primary_gate_name = "tf_per_token_accuracy"
     else:  # e2a or e2b
         overall_pass = tf_recovery_gate_pass and swap_gate_pass

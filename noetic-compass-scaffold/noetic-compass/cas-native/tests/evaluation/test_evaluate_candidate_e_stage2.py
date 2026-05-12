@@ -247,3 +247,47 @@ def test_identifier_level_recovery_distinct_from_full_recovery(evaluator_module)
     assert '"identifier_recovery_rate"' in src
     assert '"full_recovery_rate"' in src
     assert '"per_token_accuracy"' in src
+
+
+def test_e2c_gate_only_per_token_load_bearing(evaluator_module):
+    """Per user audit 2026-05-12 post-E2c-build: at --stage e2c, ONLY
+    tf_per_token_accuracy is load-bearing. Swap pair_pass_rate and
+    identifier_recovery_rate are informational diagnostics — a model that
+    hits 75% per-token but stays low on swap is E2c PASS.
+
+    Source-level regression pin: the e2c overall_pass computation must
+    be exactly `tf_per_token_gate_pass` (no AND with swap_gate_pass).
+    """
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    # Find ALL lines that assign overall_pass; the e2c branch must produce
+    # one whose RHS is exactly tf_per_token_gate_pass.
+    op_lines = [
+        line.strip() for line in src.splitlines()
+        if line.strip().startswith("overall_pass =")
+    ]
+    # We expect both an e2c-style line and an e2b-style line.
+    e2c_lines = [
+        l for l in op_lines if l == "overall_pass = tf_per_token_gate_pass"
+    ]
+    e2b_lines = [
+        l for l in op_lines
+        if l == "overall_pass = tf_recovery_gate_pass and swap_gate_pass"
+    ]
+    assert e2c_lines, (
+        f"e2c overall_pass must be exactly 'tf_per_token_gate_pass' "
+        f"(no AND with swap_gate_pass); found assignments: {op_lines!r}"
+    )
+    assert e2b_lines, (
+        f"e2b overall_pass must AND tf_recovery_gate_pass AND "
+        f"swap_gate_pass; found assignments: {op_lines!r}"
+    )
+
+
+def test_e2b_gate_still_requires_both(evaluator_module):
+    """Regression: e2b gate semantics unchanged — both TF identifier
+    recovery AND swap pair_pass must pass for e2b overall_pass=True."""
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    # Look for the e2b/else branch in the gate-pass logic
+    assert "overall_pass = tf_recovery_gate_pass and swap_gate_pass" in src, (
+        "e2b gate must AND swap_gate_pass with tf_recovery_gate_pass"
+    )

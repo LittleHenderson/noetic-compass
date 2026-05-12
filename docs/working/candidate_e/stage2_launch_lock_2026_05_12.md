@@ -376,10 +376,9 @@ nohup python /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native
 
 ### E2c evaluator command (READY)
 
-**PRIMARY gate (E2c):** TF `per_token_accuracy ≥ 0.70` — intermediate gate before whole-ID recovery is meaningful. E2b baseline was 0.38.
-**SECONDARY:** swap `pair_pass_rate ≥ 0.85`.
+**ONLY load-bearing gate at E2c:** TF `per_token_accuracy ≥ 0.70` — intermediate gate before whole-ID recovery is meaningful. E2b baseline was 0.38.
 
-Identifier-level recovery remains reported but is informational at E2c.
+Per user audit 2026-05-12: swap pair_pass_rate and identifier_recovery_rate are reported as **informational diagnostics** at e2c, NOT fail-exit gates. E2c is the narrow "did per-token pointing improve from 38% toward 70%" stage; swap is free-decode whole-output behavior, premature here. A model that hits 75% per-token but stays low on swap is E2c PASS — that's still useful progress toward source binding.
 
 ```bash
 EVAL_TS=$(date -u +%Y%m%dT%H%M%SZ)
