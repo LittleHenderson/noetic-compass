@@ -22,6 +22,45 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T16:30Z — Step 5: CAS conversation shell (REPL) + Step 5B name reserved (Minimal NL Front Door)
+
+DECISION: Build the first real CAS conversation shell as Step 5 of Codex's post-Stage-3 ordering. Plain English Mode is the default reply layer; technical layers behind slash commands; CAS self-explanation is folded into the REPL (not a separate `cas explain-cas` subcommand) per Codex's earlier audit. Free-form NL chat politely declines for now — that's Step 5B (Minimal NL Front Door), authorized by Codex's 2026-05-13 chat directive but NOT in this entry's scope.
+
+Step 5 scope (this entry):
+
+1. New module `noetic-compass-scaffold/noetic-compass/cas-native/inference/stage3_chat_repl.py`:
+   - Loads via `load_stage3_local()` from Step 2
+   - Multi-turn loop with session state (history of explain reports + self-explainer level)
+   - Input classifier: CAS expression / question about CAS itself / free-form NL
+   - For CAS expressions: route through the existing `cas explain` pipeline; Plain Mode default
+   - For CAS-self questions: route through new `cas_self_explainer` module (rule-based depth content: simple / stakeholder / user / builder / technical)
+   - For free-form NL: polite refusal pointing user to one of the two supported paths (NL bridge is Step 5B work)
+2. Slash commands: `/plain` `/technical` `/details` (alias for technical) `/all` `/trace` `/raw` `/deeper` `/simpler` `/help` `/clear` `/quit`
+3. New module `cas_self_explainer.py`: rule-based content store. Public surface: `explain_cas(level, topic)` returns a `{text, example, metaphor, deeper, simpler}` dict. Topics: `what`, `why`, `problem`, `who-cares`, `demo-claim`, `symbol-legend`, `metaphor`, `example`. Five depth levels with example/metaphor populated at the low end.
+4. CLI integration: new subcommand `cas chat-stage3` in `cas_cli.py`. Existing `cas chat` (B-4-era REPL) UNTOUCHED.
+5. Tests in `tests/inference/test_stage3_chat_repl.py` + `tests/inference/test_cas_self_explainer.py`:
+   - Input classifier on positive + negative examples
+   - Each slash command dispatch
+   - Plain mode is the default reply layer (regression pin)
+   - Self-explainer depth graph is valid (simple → stakeholder → user → builder → technical, with deeper/simpler pointers wired)
+   - Self-explainer "does not lie" gates: simple level always has metaphor; stakeholder level uses zero internal labels (STAGE_VAR, slot trace, Δ°₃₉ etc.); technical level uses canonical vocabulary verbatim
+   - Heavy end-to-end test against real archive (skipped if absent)
+
+Naming note (Codex 2026-05-13 chat): for demos, eventually rename to `cas chat` or `cas native`. For now, `cas chat-stage3` keeps old `cas chat` untouched. Surface this as a future rename ticket; do NOT touch the old REPL.
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` 1c54b5f (Plain English Mode PASS + Step 5 "ready after that wording patch") + Codex chat 2026-05-13 ("this is the right next build... go") + user chat (2026-05-13T16:30Z, this turn). Wording patch landed in commit `08238f3`.
+
+BOUNDED SCOPE THIS ENTRY: code work in three new files (REPL + self-explainer + CLI subcommand wire-up). No touching of existing `chat.py` or `cas_cli.py:_cmd_chat`. No Mode 7 wired. No Living Thought Atlas. No pod work. No free-form NL bridging (Step 5B).
+
+EXPLICITLY DEFERRED (Step 5B authorized in principle, NOT in this entry):
+- Minimal NL Front Door: "Explain a thought becoming action." → small CAS expression. Constrained prompts only, not chat-GPT level. Per user 2026-05-13 chat directive. Will get its own AUTHORIZED entry after Step 5 lands and Codex audits.
+
+CONTEXT: Codex's 6-step Plain English plan (point 4): "Make chat REPL use plain mode by default." All prior steps (1 max_cas_prefix_len reporting patch, 2 plain_english.py module, 3 cas explain flags) are committed and pushed. The wording patch (4th item Codex required pre-Step-5) landed in `08238f3`. Step 5 is the live conversation shell that the eventual visual UI sits on top of.
+
+---
+
 ## 2026-05-13T16:00Z — The CAS Report (1T-parameter speculation round-table)
 
 DECISION: Five-agent parallel round-table brainstorming a "1 TRILLION PARAMETER CAS Native" speculation document. Deliverable: `docs/working/cas_report_1T_parameter_speculation_2026_05_13.md`. Same five specialist vantage points the R&D pre-synthesis used (architecture / emergence / safety-and-traceability / compute-and-infra / stakeholder-strategic). Each agent produces a focused brief; Claude synthesizes into "The CAS Report."
