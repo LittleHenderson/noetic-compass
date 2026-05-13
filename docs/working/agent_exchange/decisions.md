@@ -22,6 +22,26 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T16:00Z — The CAS Report (1T-parameter speculation round-table)
+
+DECISION: Five-agent parallel round-table brainstorming a "1 TRILLION PARAMETER CAS Native" speculation document. Deliverable: `docs/working/cas_report_1T_parameter_speculation_2026_05_13.md`. Same five specialist vantage points the R&D pre-synthesis used (architecture / emergence / safety-and-traceability / compute-and-infra / stakeholder-strategic). Each agent produces a focused brief; Claude synthesizes into "The CAS Report."
+
+AUTHORIZED: yes
+
+RATIFIED-BY: user chat "put together a team of agent to form a round table brainstorming only concerning what could be 1TRILLION PARAMETER CAS Native Model likely look like and more importantly what would be it's emergent capabilities be this is the CAS REPORT" / "use your smartest agents" (2026-05-13T16:00Z). Speculative/pitch-supporting research, no code, no pod work.
+
+BOUNDED SCOPE:
+- Documentation only — single final doc + 5 specialist briefs as intermediate.
+- No code changes. No pod work. No agent_exchange edits by agents (Claude owns those).
+- Speculation must be honest: nobody has scaled CAS-Native architecture yet. Report flags what is known (Stage 3 at 150M) vs predicted (scaling curve) vs unknowable (frontier emergence).
+- Output is meant to inform the Amazon-pitch path per memory `project_cas_native_demo_v0_amazon_pitch_target_2026_05_13.md`. Same disciplined-claim posture: "this is what a 1T CAS-Native MIGHT look like and what it MIGHT do," not "we will build this."
+
+NEXT GATED ACTION: agents fire in parallel; Claude synthesizes when all return.
+
+CONTEXT: Codex's earlier trajectory table (Now → 100M → 300M → 1B → 7B → 10-30B → 70-100B → ?) tops out at 70-100B "with major compute help." 1T is the frontier-scale extrapolation. The user wants the visionary endpoint documented so the pitch can show "here's where this leads if it works." This is the CAS-Native equivalent of OpenAI's GPT-3 paper laying out what scaled transformers would look like — speculation grounded in the architecture, not in the model that's been built.
+
+---
+
 ## 2026-05-13T15:30Z — Plain English Mode (Step 4.5): translator + `cas explain` defaults
 
 DECISION: Plain English Mode becomes a first-class output mode baked into `cas explain` BEFORE Step 5 (chat REPL) starts, so the REPL inherits plain-by-default. Per Codex's 6-step plan:
