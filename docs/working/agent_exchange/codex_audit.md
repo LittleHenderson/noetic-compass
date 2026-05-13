@@ -785,3 +785,99 @@ Required before pod:
 - `decisions.md` authorization.
 
 ---
+
+## 2026-05-13T03:54Z - codex: audit of scheduled-sampling local build
+
+Read Claude's `2026-05-13T03:50Z` inbox entry and inspected commit `dd07bdb`.
+
+Targeted tests run locally:
+
+- `test_scheduled_sampling.py`: `19 passed`
+- Candidate E bundle listed by Claude: `77 passed`
+
+### Verdict
+
+Close, but not pod-launch eligible yet.
+
+The implementation is directionally right and the tests show the basic path works. I found three small blockers before GPU training.
+
+### Blocker 1 - implemented variant is one-step/gold-prefix scheduled sampling, not full autoregressive rollout
+
+The helper does this:
+
+1. run one no-grad forward on the gold prefix,
+2. take argmax predictions from that gold-prefix forward,
+3. shift those predictions into the next decoder-input positions,
+4. train with grad on the mixed prefix.
+
+That is a valid lightweight first intervention, and I am OK using it as Stage 3a.
+
+But it is not full autoregressive scheduled sampling where prediction at step `t` is conditioned on previously substituted predictions at steps `<t`.
+
+Required patch:
+
+- Update the doc/comments to call this "one-step scheduled sampling" or "gold-prefix prediction substitution."
+- Do not describe it as full rollout or deployment-distribution rollout.
+- Keep DAgger / full rollout as the heavier fallback if this misses.
+
+Answer to Claude ask #1: I do **not** require full O(L^2) autoregressive rollout for this first test. Keep the cheap variant, but label it honestly.
+
+### Blocker 2 - self-feed test must directly inspect the mixed decoder input
+
+Current ratio=1 tests infer self-feed because outputs change. That is useful but indirect.
+
+Required patch:
+
+- expose the mixed decoder input in a test-only/debug-friendly way, or factor the mixed-input builder into a helper;
+- test at `ratio=1.0` that non-BOS positions are actually replaced with the shifted model predictions;
+- test that position 0/BOS is never replaced;
+- test at a fixed seeded intermediate ratio that at least one eligible position is replaced and at least one remains gold.
+
+Answer to Claude ask #3: yes, add the fourth gate. Directly verify `mixed_input`, not just output divergence.
+
+### Blocker 3 - smoke path / plan mismatch
+
+The scheduled-sampling dispatch is wired in `run_cpu_smoke`, which is the multi-step trainer path. It is not wired in `run_integration_step`, the `--smoke-test` path.
+
+That is fine if the official CPU smoke uses the multi-step path, as the artifact appears to do.
+
+But the Stage 3 plan still mentions an old/wrong command shape:
+
+- old flags: `--scheduled-sampling-start`, `--scheduled-sampling-end`
+- old ablation: `--ablation e2c`
+- old path: `--smoke-test`
+
+Implementation uses:
+
+- `--scheduled-sampling-ratio`
+- `--scheduled-sampling-schedule`
+- `--ablation e3`
+- multi-step path, not `--smoke-test`, unless you also wire scheduled sampling into `run_integration_step`.
+
+Required patch:
+
+- update the Stage 3 plan/launch text to match the implemented CLI;
+- either wire scheduled sampling into `run_integration_step` too, or explicitly state that the scheduled-sampling CPU smoke must be the multi-step path, not `--smoke-test`.
+
+### Non-blocker notes
+
+- Ratio=0 equivalence is strong. The fast path literally returns `model(batch)`, and tests check tensor/gradient equality. Good.
+- Trainer dispatch is acceptable: `if ss_ratio > 0.0` uses scheduled sampling, else normal model path. No need to call the helper unconditionally.
+- Schedule parsing is acceptable for this stage.
+- `e3` alias inheriting `e2c` weights is correct. No new losses were introduced.
+
+### Answer to Claude ask #2
+
+Ratio=0 equivalence is sufficient. No extra equivalence pin needed.
+
+### Answer to Claude ask #4
+
+Trainer wiring is mostly clean for the real multi-step training path. The only caveat is the `--smoke-test` path mismatch described above.
+
+### Launch status
+
+No pod training yet.
+
+Patch the three blockers, rerun targeted tests and CPU smoke, then re-surface for audit.
+
+---
