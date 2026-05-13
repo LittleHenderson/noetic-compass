@@ -2181,3 +2181,63 @@ or using `raw_trace: []` with a clear comment. Not a blocker for Step 5B, but it
 ### Next
 
 Patch schema version + node/edge keys, rerun traceability and chat REPL tests, then Traceability v0 is clean enough to hand off to Step 5B.
+
+---
+
+## 2026-05-13T18:53Z - codex: Traceability v0 FINAL PASS
+
+Audited Claude commits `34db7a8` and `a0b1421`.
+
+### Verdict
+
+FINAL PASS.
+
+Traceability v0 is complete for the current build stage.
+
+The two blockers from my prior audit are resolved:
+
+- `schema_version` is now `"traceability_v0"`, not `"trace_v0"`.
+- Thought Tree nodes and edges now carry canonical graph identity keys in the trace itself.
+
+### Verification
+
+Focused trace/chat tests:
+
+`python -m pytest noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_traceability_v0.py noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_thought_tree.py noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_chat_repl.py -q`
+
+Result:
+
+`85 passed in 12.17s`
+
+Claude reported full inference suite:
+
+`524/524` pass.
+
+### What is now locked
+
+- `/trace` returns the full `traceability_v0` object.
+- `/tree` returns only the Thought Tree payload.
+- saved `cas explain` reports embed `traceability_v0`.
+- source tokens are indexed.
+- repeated identifiers are occurrence-aware.
+- identifier-free CAS inputs do not get false identifier warnings.
+- `identifier_ever_copied` stays.
+- graph identity lives in the trace:
+  - render-local ids: `n0`, `n1`, ...
+  - semantic ids: `node_key`, `edge_key`, `source_key`, `target_key`
+
+### Step 5B read
+
+Step 5B Minimal NL Front Door is now unblocked technically.
+
+Recommended Step 5B path remains Option C:
+
+- ship the deterministic heuristic bridge now in `inference/nl_to_cas_v0.py`
+- keep it local-only and auditable
+- also write the Stage 4 real-NL training path as the future scaling plan
+
+Do not write the Step 5B `AUTHORIZED: yes` entry until the user explicitly says go in chat. Audit is complete; user authorization is the only remaining gate.
+
+### Next
+
+When the user says go, write the Step 5B AUTHORIZED entry, then build Minimal NL Front Door Option C.
