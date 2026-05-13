@@ -414,18 +414,22 @@ def main() -> int:
                         "Setting this only affects the secondary free-decode "
                         "path (which raises if true). Kept for CLI backward "
                         "compatibility.")
-    p.add_argument("--stage", choices=["e2a", "e2b", "e2c"], default="e2a",
+    p.add_argument("--stage",
+                   choices=["e2a", "e2b", "e2c", "e3-baseline", "e3"],
+                   default="e2a",
                    help="Reporting tag. e2a is informational (no gate). "
                         "e2b: BOTH TF identifier_recovery_rate >= "
                         "--gate-recovery (default 0.80) AND swap "
                         "pair_pass_rate >= --gate-swap (default 0.85) are "
                         "load-bearing. e2c: ONLY TF per_token_accuracy >= "
                         "--gate-per-token-accuracy (default 0.70) is "
-                        "load-bearing — intermediate gate per user "
-                        "2026-05-12 post-E2b directive. Swap and "
-                        "identifier_recovery_rate are reported as "
-                        "informational diagnostics at e2c. Exits "
-                        "non-zero (return 2) if PRIMARY gate misses.")
+                        "load-bearing. e3-baseline: pre-Stage-3 free-decode "
+                        "measurement, NO fail-exit (decision point feeding "
+                        "the Stage 3 branch). e3: post-Stage-3-training "
+                        "gate — fails-exit if dev free-decode "
+                        "identifier_recovery_rate < --gate-e3-recovery "
+                        "(default 0.50) OR swap cross_emission_count > 0. "
+                        "Per Codex audit 2026-05-13T02:36Z.")
     p.add_argument("--gate-recovery", type=float, default=0.80,
                    help="E2b PRIMARY gate: teacher-forced "
                         "tf_dev_summary.identifier_recovery_rate must meet "
@@ -442,6 +446,18 @@ def main() -> int:
     p.add_argument("--gate-swap", type=float, default=0.85,
                    help="Swap gate: swap_summary.pair_pass_rate must meet "
                         "or exceed this value. Reported at e2b/e2c.")
+    p.add_argument("--gate-e3-recovery", type=float, default=0.50,
+                   help="E3 PRIMARY gate (load-bearing at --stage e3): "
+                        "free-decode dev identifier_recovery_rate (i.e. "
+                        "dev_summary.aggregate_recovery_rate) must meet or "
+                        "exceed this value. Default 0.50 = Stage 3 first "
+                        "pass per Codex audit 2026-05-13. Reported but not "
+                        "fail-exited at --stage e3-baseline.")
+    p.add_argument("--gate-e3-strong", type=float, default=0.70,
+                   help="E3 strong-pass annotation (informational, NOT "
+                        "fail-exited): free-decode identifier_recovery_rate "
+                        ">= this value indicates 'becoming usable'. Default "
+                        "0.70. Annotated in findings.md.")
     args = p.parse_args()
 
     out_dir = Path(args.output_dir)
@@ -784,17 +800,26 @@ def main() -> int:
     lines.append("")
     lines.append("## Gate semantics")
     lines.append("")
-    # E2b/E2c gates per design doc §Stage 2b + user audit 2026-05-12:
-    #   E2b PRIMARY:  TF identifier_recovery_rate >= --gate-recovery
-    #   E2c PRIMARY:  TF per_token_accuracy >= --gate-per-token-accuracy
-    #                 (intermediate gate before whole-ID recovery)
-    #   SECONDARY (both stages): swap pair_pass_rate >= --gate-swap
+    # E2b/E2c/E3 gates per design + audits:
+    #   E2b PRIMARY:        TF identifier_recovery_rate >= --gate-recovery
+    #   E2c PRIMARY:        TF per_token_accuracy >= --gate-per-token-accuracy
+    #   E3 PRIMARY:         dev free-decode identifier_recovery_rate >=
+    #                       --gate-e3-recovery (default 0.50)
+    #   E3 HARD SAFETY:     swap cross_emission_count == 0
+    #   E3 strong-pass:     free-decode identifier_recovery_rate >=
+    #                       --gate-e3-strong (default 0.70, annotation only)
+    #   SECONDARY at e2b:   swap pair_pass_rate >= --gate-swap
     tf_recovery_value = tf_dev_summary.get("identifier_recovery_rate") or 0.0
     tf_per_token_value = tf_dev_summary.get("per_token_accuracy") or 0.0
     swap_value = swap_summary.get("pair_pass_rate") or 0.0
+    free_decode_recovery_value = dev_summary.get("aggregate_recovery_rate") or 0.0
+    swap_cross_emission_total = swap_summary.get("total_cross_emission_count", 0) or 0
     tf_recovery_gate_pass = tf_recovery_value >= args.gate_recovery
     tf_per_token_gate_pass = tf_per_token_value >= args.gate_per_token_accuracy
     swap_gate_pass = swap_value >= args.gate_swap
+    e3_recovery_gate_pass = free_decode_recovery_value >= args.gate_e3_recovery
+    e3_strong_pass = free_decode_recovery_value >= args.gate_e3_strong
+    e3_safety_gate_pass = (swap_cross_emission_total == 0)
     gates = {
         "tf_identifier_recovery": {
             "value": tf_recovery_value,
@@ -810,6 +835,18 @@ def main() -> int:
             "value": swap_value,
             "threshold": args.gate_swap,
             "pass": swap_gate_pass,
+        },
+        "e3_free_decode_recovery": {
+            "value": free_decode_recovery_value,
+            "threshold": args.gate_e3_recovery,
+            "pass": e3_recovery_gate_pass,
+            "strong_threshold": args.gate_e3_strong,
+            "strong_pass": e3_strong_pass,
+        },
+        "e3_cross_emission_safety": {
+            "value": swap_cross_emission_total,
+            "threshold": 0,  # HARD: must equal 0
+            "pass": e3_safety_gate_pass,
         },
     }
     # Also surface the strict full-record recovery rate (TF) for context —
@@ -827,17 +864,51 @@ def main() -> int:
         lines.append("in the JSON report.")
         lines.append("")
         lines.append("Gates below are reported but NOT enforced at --stage e2a.")
+    elif args.stage == "e3-baseline":
+        lines.append("**E3-baseline is the Stage 3 DECISION POINT.** It measures")
+        lines.append("free-decode behavior of the E2c-continuation checkpoint BEFORE")
+        lines.append("any Stage 3 training. Per Codex audit 2026-05-13:")
+        lines.append("")
+        lines.append("- If `free-decode identifier_recovery_rate >= 0.50`: the model")
+        lines.append("  already clears the first free-decode bar. Do NOT train Stage 3 yet.")
+        lines.append("  Move to broader free-decode confirmation (test pack + swap_eval).")
+        lines.append("- If `< 0.50`: scheduled-sampling Stage 3 training is the next step.")
+        lines.append("")
+        lines.append("Gates below are REPORTED but NOT enforced at e3-baseline; the")
+        lines.append("0.50 threshold is shown as the DECISION threshold, not a fail-exit.")
+    elif args.stage == "e3":
+        lines.append("**E3 enforces the Stage 3 post-training gate.** Per Codex audit")
+        lines.append("2026-05-13:")
+        lines.append("")
+        lines.append("- PRIMARY (LOAD-BEARING): free-decode `identifier_recovery_rate >= 0.50`")
+        lines.append("- HARD SAFETY (LOAD-BEARING): swap `cross_emission_count == 0`")
+        lines.append("- Strong-pass annotation: `identifier_recovery_rate >= 0.70`")
+        lines.append("- Kill / redesign floor (informational): `< 0.30` means scheduled")
+        lines.append("  sampling did not solve exposure; move to DAgger or other design.")
+        lines.append("")
+        lines.append("Evaluator exits non-zero if PRIMARY OR HARD SAFETY misses.")
     else:
         lines.append("**E2b enforces fail-exit gates** per design doc §Stage 2b.")
         lines.append("Evaluator exits non-zero if any gate misses.")
     lines.append("")
     lines.append("| gate | value | threshold | pass | load-bearing |")
     lines.append("|---|---|---|---|---|")
-    if args.stage == "e2c":
+    if args.stage == "e3":
+        lines.append(f"| **free-decode identifier_recovery_rate** | {free_decode_recovery_value:.4f} | {args.gate_e3_recovery:.4f} | {'✓' if e3_recovery_gate_pass else '✗'} | **YES (E3 PRIMARY)** |")
+        lines.append(f"| **swap cross_emission_count** (HARD safety) | {swap_cross_emission_total} | 0 (exact) | {'✓' if e3_safety_gate_pass else '✗'} | **YES (E3 HARD SAFETY)** |")
+        lines.append(f"| free-decode identifier_recovery_rate (strong-pass annotation) | {free_decode_recovery_value:.4f} | {args.gate_e3_strong:.4f} | {'✓' if e3_strong_pass else '✗'} | annotation only |")
+        lines.append(f"| TF per_token_accuracy | {tf_per_token_value:.4f} | — | — | informational at e3 |")
+        lines.append(f"| swap pair_pass_rate | {swap_value:.4f} | — | — | informational at e3 |")
+    elif args.stage == "e3-baseline":
+        lines.append(f"| free-decode identifier_recovery_rate | {free_decode_recovery_value:.4f} | {args.gate_e3_recovery:.4f} (decision threshold) | {'≥' if e3_recovery_gate_pass else '<'} | **DECISION POINT** (no fail-exit) |")
+        lines.append(f"| swap cross_emission_count | {swap_cross_emission_total} | 0 (target) | {'✓' if e3_safety_gate_pass else '✗'} | informational at baseline |")
+        lines.append(f"| TF per_token_accuracy | {tf_per_token_value:.4f} | — | — | informational |")
+        lines.append(f"| swap pair_pass_rate | {swap_value:.4f} | — | — | informational |")
+    elif args.stage == "e2c":
         lines.append(f"| **TF per_token_accuracy** | {tf_per_token_value:.4f} | {args.gate_per_token_accuracy:.4f} | {'✓' if tf_per_token_gate_pass else '✗'} | **YES (E2c PRIMARY)** |")
         lines.append(f"| TF identifier_recovery_rate | {tf_recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if tf_recovery_gate_pass else '✗'} | informational |")
         lines.append(f"| swap pair_pass_rate (free-decode) | {swap_value:.4f} | {args.gate_swap:.4f} | {'✓' if swap_gate_pass else '✗'} | informational at e2c |")
-    else:
+    else:  # e2a or e2b
         lines.append(f"| **TF identifier_recovery_rate** | {tf_recovery_value:.4f} | {args.gate_recovery:.4f} | {'✓' if tf_recovery_gate_pass else '✗'} | **YES (E2b PRIMARY)** |")
         lines.append(f"| TF per_token_accuracy | {tf_per_token_value:.4f} | {args.gate_per_token_accuracy:.4f} | {'✓' if tf_per_token_gate_pass else '✗'} | informational at e2b |")
         lines.append(f"| swap pair_pass_rate (free-decode) | {swap_value:.4f} | {args.gate_swap:.4f} | {'✓' if swap_gate_pass else '✗'} | **YES (E2b SECONDARY)** |")
@@ -859,14 +930,20 @@ def main() -> int:
     lines.append("wrong-pair leakage are the load-bearing E2b signals.")
 
     # Stage-specific overall pass determination:
-    #   e2a: informational only, no fail-exit
-    #   e2b: BOTH gates load-bearing (TF identifier_recovery + swap pair_pass)
-    #   e2c: ONLY tf_per_token_accuracy load-bearing per user audit
-    #     2026-05-12. Swap pair_pass and identifier_recovery are reported
-    #     as informational diagnostics. Rationale: E2c is the narrow
-    #     "did per-token pointing improve from 38% toward 70%" stage;
-    #     swap is free-decode whole-output behavior, premature here.
-    if args.stage == "e2c":
+    #   e2a:         informational only, no fail-exit
+    #   e2b:         BOTH gates load-bearing (TF identifier_recovery + swap pair_pass)
+    #   e2c:         ONLY tf_per_token_accuracy load-bearing per user audit 2026-05-12
+    #   e3-baseline: informational only, no fail-exit (decision point feeding Stage 3 branch)
+    #   e3:          BOTH free-decode identifier_recovery_rate >= 0.50 AND
+    #                swap cross_emission_count == 0 are load-bearing
+    if args.stage == "e3":
+        overall_pass = e3_recovery_gate_pass and e3_safety_gate_pass
+        primary_gate_name = "e3_free_decode_recovery+safety"
+    elif args.stage == "e3-baseline":
+        # Informational only; never fails.
+        overall_pass = True
+        primary_gate_name = "e3-baseline (informational)"
+    elif args.stage == "e2c":
         overall_pass = tf_per_token_gate_pass
         primary_gate_name = "tf_per_token_accuracy"
     else:  # e2a or e2b
@@ -896,9 +973,9 @@ def main() -> int:
         "gates": gates,
         "overall_pass": overall_pass,
     }, default=str), flush=True)
-    # Fail-exit on PRIMARY gate miss at --stage e2b or e2c.
-    # At --stage e2a, gates are informational only.
-    if args.stage in ("e2b", "e2c") and not overall_pass:
+    # Fail-exit on PRIMARY gate miss at e2b / e2c / e3.
+    # e2a and e3-baseline are informational only.
+    if args.stage in ("e2b", "e2c", "e3") and not overall_pass:
         return 2
     return 0
 

@@ -291,3 +291,187 @@ def test_e2b_gate_still_requires_both(evaluator_module):
     assert "overall_pass = tf_recovery_gate_pass and swap_gate_pass" in src, (
         "e2b gate must AND swap_gate_pass with tf_recovery_gate_pass"
     )
+
+
+# ---------------------------------------------------------------------------
+# Stage 3 evaluator modes — e3-baseline (informational) + e3 (enforced).
+# Per Codex audit 2026-05-13T02:36Z (commit ee8dfa4), Order B: implement
+# evaluator modes FIRST, add tests, surface for audit, then user "go" on
+# the pod baseline measurement. These tests pin the CLI surface and gate
+# semantics so a refactor cannot silently change Stage 3 decision logic.
+# ---------------------------------------------------------------------------
+
+def test_stage_e3_modes_in_argparse_choices(evaluator_module):
+    """--stage must accept both e3-baseline (informational, measures
+    free-decode behavior of E2c checkpoint BEFORE training) and e3
+    (post-training enforced gate)."""
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    # The argparse choices list must include both modes
+    assert '"e3-baseline"' in src, "e3-baseline missing from --stage choices"
+    assert '"e3"' in src, "e3 missing from --stage choices"
+    # The e2c choice must still be present (no regression)
+    assert '"e2c"' in src
+    assert '"e2b"' in src
+
+
+def test_stage_e3_cli_gate_args_present(evaluator_module):
+    """--gate-e3-recovery (default 0.50, PRIMARY) and --gate-e3-strong
+    (default 0.70, strong-pass annotation) must be declared as CLI args.
+    These are separate from --gate-recovery (E2b TF) so an operator
+    cannot accidentally collapse the two gates."""
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    assert "--gate-e3-recovery" in src, (
+        "PRIMARY Stage 3 free-decode gate flag missing"
+    )
+    assert "--gate-e3-strong" in src, (
+        "Strong-pass Stage 3 annotation flag missing"
+    )
+    # Defaults must match the Codex-ratified thresholds
+    assert "default=0.50" in src and "--gate-e3-recovery" in src
+    assert "default=0.70" in src and "--gate-e3-strong" in src
+
+
+def test_stage_e3_overall_pass_is_recovery_and_safety(evaluator_module):
+    """At --stage e3, overall_pass MUST be:
+        free-decode recovery_rate >= gate_e3_recovery
+      AND
+        swap cross_emission_count == 0  (hard safety)
+
+    Both are load-bearing. A model that meets recovery but emits ANY
+    cross-pair body fails. A model with zero cross-emission but
+    sub-threshold recovery fails. This pins the AND semantics."""
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    # Find ALL lines that assign overall_pass; the e3 branch must AND
+    # the recovery gate and the safety gate.
+    op_lines = [
+        line.strip() for line in src.splitlines()
+        if line.strip().startswith("overall_pass =")
+    ]
+    e3_lines = [
+        l for l in op_lines
+        if "e3_recovery_gate_pass" in l and "e3_safety_gate_pass" in l
+        and " and " in l
+    ]
+    assert e3_lines, (
+        f"e3 overall_pass must AND e3_recovery_gate_pass AND "
+        f"e3_safety_gate_pass; found assignments: {op_lines!r}"
+    )
+
+
+def test_stage_e3_baseline_is_informational_only(evaluator_module):
+    """At --stage e3-baseline, overall_pass MUST be True regardless of
+    measured metrics. This mode measures the E2c-continuation checkpoint
+    on free-decode BEFORE Stage 3 training; its purpose is to decide
+    whether Stage 3 training is even needed, not to fail-exit the run.
+
+    Per Codex 2026-05-13: <0.50 → run Stage 3; 0.50-0.70 → confirm and
+    decide; >=0.70 → strong pass, skip Stage 3 entirely. None of those
+    branches are fail-exits at this stage; they are operator decisions."""
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    # Look for the e3-baseline overall_pass = True line
+    assert 'args.stage == "e3-baseline"' in src, (
+        "e3-baseline argparse branch missing in main()"
+    )
+    # The branch body must assign overall_pass = True
+    # (informational-only — no fail-exit)
+    e3_baseline_block_present = False
+    lines = src.splitlines()
+    for i, line in enumerate(lines):
+        if 'args.stage == "e3-baseline"' in line:
+            # Check the next ~5 lines for the True assignment
+            for j in range(i, min(i + 8, len(lines))):
+                if "overall_pass = True" in lines[j]:
+                    e3_baseline_block_present = True
+                    break
+    assert e3_baseline_block_present, (
+        "e3-baseline branch must assign overall_pass = True "
+        "(informational-only mode, no fail-exit)"
+    )
+
+
+def test_stage_e3_fail_exit_excludes_e3_baseline(evaluator_module):
+    """Fail-exit (return 2) must fire for --stage in {e2b, e2c, e3} when
+    overall_pass is False, but NEVER for --stage e3-baseline (which is
+    informational, used as decision-point telemetry only).
+
+    This pin protects against a refactor that adds e3-baseline to the
+    fail-exit set and turns a measurement command into a CI failure."""
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    # The fail-exit predicate must include e3
+    assert 'args.stage in ("e2b", "e2c", "e3")' in src or \
+           "args.stage in ('e2b', 'e2c', 'e3')" in src, (
+        "Fail-exit predicate must include e3 (and exclude e3-baseline)"
+    )
+    # And NOT include e3-baseline inside the predicate tuple itself.
+    # Comments above/below the predicate may legitimately mention the
+    # name (explaining the exclusion); the failure mode this test guards
+    # against is the literal "e3-baseline" string appearing inside the
+    # tuple passed to `args.stage in (...)` next to a `return 2`.
+    forbidden_tuple_forms = [
+        'args.stage in ("e2b", "e2c", "e3", "e3-baseline")',
+        "args.stage in ('e2b', 'e2c', 'e3', 'e3-baseline')",
+        'args.stage in ("e3-baseline"',
+        "args.stage in ('e3-baseline'",
+    ]
+    for forbidden in forbidden_tuple_forms:
+        assert forbidden not in src, (
+            f"Fail-exit predicate must NOT include 'e3-baseline'; "
+            f"found pattern: {forbidden!r}"
+        )
+
+
+def test_stage_e3_safety_gate_reads_swap_cross_emission(evaluator_module):
+    """The hard-safety gate at --stage e3 must read swap-set
+    cross_emission_count (NOT TF set, NOT individual-record level).
+    Free-decode cross-pair body emission on the swap eval is the
+    canonical safety signal."""
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    # Confirm the swap-summary read path for cross-emission
+    assert "swap_cross_emission_total" in src, (
+        "e3 safety gate variable swap_cross_emission_total missing"
+    )
+    assert "e3_safety_gate_pass" in src
+    # Must compare against 0 (zero tolerance — any cross emission fails)
+    # The comparison must use the swap totals, not the TF totals.
+    safety_line_found = False
+    for line in src.splitlines():
+        if "e3_safety_gate_pass" in line and "==" in line and "0" in line:
+            safety_line_found = True
+            break
+    assert safety_line_found, (
+        "e3_safety_gate_pass assignment must compare cross_emission_total == 0"
+    )
+
+
+def test_stage_e3_recovery_gate_reads_free_decode_aggregate(evaluator_module):
+    """The PRIMARY gate at --stage e3 must read the FREE-DECODE
+    aggregate_recovery_rate (from dev_summary, not tf_dev_summary).
+    Stage 3's whole point is deployment-distribution behavior (no TF)."""
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    assert "free_decode_recovery_value" in src, (
+        "e3 primary gate variable free_decode_recovery_value missing"
+    )
+    # Must read from dev_summary (free-decode), NOT tf_dev_summary
+    free_decode_read_found = False
+    for line in src.splitlines():
+        if "free_decode_recovery_value" in line and "dev_summary.get" in line \
+                and "tf_dev_summary" not in line:
+            free_decode_read_found = True
+            break
+    assert free_decode_read_found, (
+        "free_decode_recovery_value must be read from dev_summary "
+        "(free-decode), not tf_dev_summary"
+    )
+
+
+def test_stage_e3_gates_dict_surfaces_both_e3_keys(evaluator_module):
+    """The gates dict written to findings.md / report.json must surface
+    BOTH e3 gate metrics (recovery PRIMARY + cross-emission HARD SAFETY)
+    so operators reading the JSON can see both load-bearing values."""
+    src = open(evaluator_module.__file__, encoding="utf-8").read()
+    assert '"e3_free_decode_recovery"' in src, (
+        "gates dict must surface e3_free_decode_recovery key"
+    )
+    assert '"e3_cross_emission_safety"' in src, (
+        "gates dict must surface e3_cross_emission_safety key"
+    )
