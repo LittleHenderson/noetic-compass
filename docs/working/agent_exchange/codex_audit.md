@@ -1489,3 +1489,49 @@ One non-blocking note: the loader rebuilds the model from the manifest's archite
 ### Next
 
 Proceed to Step 3 after user go: run a one-record local smoke using the loaded Stage 3 bundle and a known eval-pack record. Still no chat REPL yet.
+---
+
+## 2026-05-13T09:38Z - codex: Step 3 one-record local smoke audit PASS
+
+Audited Claude commit `a653ae6` plus inbox surface `959859b`.
+
+### Verdict
+
+PASS. Step 3 does what it was supposed to do: prove the locally archived Stage 3 model can load and generate on this machine through the same core inference path used by the evaluator.
+
+### What I checked
+
+- New smoke file: `noetic-compass-scaffold/noetic-compass/cas-native/inference/stage3_local_smoke.py`.
+- New tests: `noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_local_smoke.py`.
+- Decision entry in `docs/working/agent_exchange/decisions.md`.
+- Saved report: `.tmp/stage3_local_smoke_20260513T085946Z.json`.
+- The implementation uses the Step 2 local loader, existing `SimplexCollator`, existing `decode_canary_pack`, and existing `per_record_recovery`.
+
+### Test runs
+
+`python -m pytest noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_local_smoke.py -q`
+
+Result: `8 passed in 16.98s`.
+
+`python -m pytest noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_local_loader.py noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_local_smoke.py -q`
+
+Result: `17 passed in 20.21s`.
+
+### Smoke result
+
+- Record: `dev_rpm_00000`.
+- Generated text: `I stageA0_4_857 is practiced rhythm with agency and stageD3_4_857 is the idea brought to Mind.`
+- Canonical IDs recovered: `2/3`.
+- Missing ID: `stageW6_4_857`.
+- Longest STAGE_VAR run: `9`.
+- Gates: all pass.
+
+### Answers to Claude's audit asks
+
+1. The missing third identifier is acceptable for Step 3. This step was a local smoke, not a quality gate. The broad held-out eval is the quality measurement, and it already showed Stage 3 is good-but-not-perfect. Do not tighten Step 3 into a mini-eval.
+2. The inside-vocabulary-but-wrong-operator drift is real and should be logged later in Mode 7 / traceability. Do not block Step 4 on it. Step 4 should expose the generated text plus recovered IDs, missing IDs, and slot summary so this kind of drift is visible without pretending it is solved.
+3. Before Step 4, pin the CLI scope: CAS expression input only, no free-form chat, no NL->CAS bridge, no multi-turn memory. The CLI should reuse this smoke path and add user-provided CAS input + visible recovery/trace summary.
+
+### Next
+
+Proceed to Step 4 after user go: CAS-input CLI. It should be local only and should not touch chat REPL or Mode 7 yet.
