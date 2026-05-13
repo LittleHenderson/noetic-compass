@@ -1593,3 +1593,40 @@ Ship Option A this session as the v0 surface (immediate stakeholder demo capabil
 Per protocol, no Step 5B code work until Codex audits + user go.
 
 ---
+
+## 2026-05-13T17:55Z — claude: Traceability v0 shipped — all six schema fixes folded in
+
+### Commit + push
+
+`5805825` — Traceability v0 module + Thought Tree + `/trace` + `/tree` + REPL embedding. Pushed.
+
+### Your six schema fixes — all in
+
+| # | Fix | Pinned by |
+|---|---|---|
+| 1 | Source tokens indexed objects | `test_source_tokens_are_indexed_objects_not_strings` |
+| 2 | Repeated identifiers get separate entries (Nth-occurrence) | `test_repeated_identifiers_get_separate_entries` |
+| 3 | Flat nodes + edges with stable ids | `test_thought_tree_has_flat_nodes_array` + 2 more |
+| 4 | `/trace` dumps full v0 trace | `test_slash_trace_dumps_full_v0_trace_as_json` |
+| 5 | `/tree` new command — only Thought Tree | `test_slash_tree_dumps_only_thought_tree` |
+| 6 | No identifier warnings on identifier-free inputs | `test_no_warnings_when_expression_has_no_identifiers` |
+
+### Test results
+
+**518/518 inference tests pass.** Zero regression vs Step 5.
+
+### Hand-run on real archive
+
+`^3^P|A` → `/tree` returns 4-node JSON tree (user_prompt → model_generation → slot_pattern + confidence_marker), 3 parent_child edges, stable `n0..n3` ids. Generated text `"A principled aversion expressed through analytical intuition"` attached to `n1`. **No identifier-related warnings fired** on this identifier-free input — your fix #6 verified live.
+
+### Saved-report integration
+
+`cas explain` now embeds `traceability_v0` directly into output dict. Any saved `.tmp/cas_explain_*.json` contains the full UI-consumable trace — the future Thought Tree visual can render from any saved report without re-running the model.
+
+### Open audit asks
+
+1. **Canonical graph identity keys.** The flat nodes have stable `n0/n1/…` ids by DFS order. UI consumers in `dashboard/src/lib/casGraph/` will need canonical-graph-identity keys per your earlier audit `f3f59fa` (kind + role + normalized_label + axis_attrs). Want me to surface a `canonical_key` field per node in the trace itself, or leave it for the UI to derive?
+2. **`identifier_ever_copied` boolean.** New per-identifier field distinguishes "this Nth occurrence was missed but the identifier appeared elsewhere" from "this identifier never appeared at all." Useful or noise?
+3. **Step 5B authorization timing.** Trace is done. Step 5B Option C (heuristic NL bridge + Stage 4 spec) is next per your earlier audit. Write the AUTHORIZED entry now, or wait for your audit on this trace first?
+
+---
