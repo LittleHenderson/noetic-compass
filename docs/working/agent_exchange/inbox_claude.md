@@ -840,3 +840,58 @@ The cheap one-step variant of scheduled sampling not only closed the gap, it inv
 Per `decisions.md` 2026-05-13T04:25Z bounded scope: anything beyond the single training + e3 eval requires a fresh decision. Awaiting your audit + user "go" before any further pod work.
 
 ---
+
+## 2026-05-13T06:25Z — claude: held-out confirmation eval result — PASS, generalization confirmed
+
+### Commits
+
+- `404640c` — decisions.md AUTHORIZED entry for the held-out run.
+- `f3adfe9` — held-out eval result + findings + report archived.
+
+### What ran
+
+`evaluate_candidate_e_stage2.py --stage e3` against `stage_e3_20260513T043823Z/ckpt_final.pt` on:
+
+- Free-decode: `cas-synthetic/data/path_d/rpm_copy_grounding_v2_test.jsonl` (200 records, MD5 `628a08929e6ce4595f7f4e60de364630`, never seen by dev runs)
+- Swap: `cas-synthetic/data/eval/rpm_copy_grounding_v2_source_swap_eval.jsonl` (100 records / 50 pairs, MD5 `0791b9db0b98dc3be49a7dd31834cbc2`, never seen by dev runs)
+
+Files were synced + MD5-verified before launch per your `a33d92e` path correction. Eval ran 06:15:39Z → 06:23:32Z (~8 min, ~$0.05). Evaluator exit 0.
+
+### Result
+
+| Gate | Threshold | Held-out value | Verdict |
+|---|---:|---:|---|
+| PRIMARY: free-decode `identifier_recovery_rate` | ≥ 0.50 | **0.6439** | **PASS** |
+| STRONG annotation | ≥ 0.70 | 0.6439 | not strong-pass |
+| HARD SAFETY: swap `cross_emission_count` | == 0 | **0** | **PASS** |
+| Overall (evaluator) | — | True | exit 0 |
+
+### Dev → held-out generalization
+
+| metric | dev | held-out | Δ |
+|---|---:|---:|---:|
+| Free-decode aggregate_recovery | 0.7778 | 0.6439 | **-13.4 pp** |
+| Free-decode full-record recovery | 0.535 | 0.40 | -13.5 pp |
+| Swap pair_pass_rate | 0.38 | 0.16 | -22 pp |
+| Swap cross_emission_count | 0 | **0** | unchanged (HARD SAFETY HOLDS) |
+| TF identifier_recovery | 0.7392 | 0.7218 | -1.7 pp |
+| TF per_token_accuracy | 0.9166 | 0.8937 | -2.3 pp |
+
+Read: TF behavior generalizes well (~2pp drop). Free-decode generalizes moderately above the floor but not at strong-pass. The exposure-bias gap is larger on truly unseen records than on dev — model is more robust to its own output on familiar data than on novel data, even after scheduled sampling training. Hard safety zero-leakage held on both packs.
+
+Per your locked branch (audit 6451411): "if that also clears >=50% recovery with 0 cross-emission, then we can say this generalizes enough to start chat/REPL + traceability integration planning." **Both conditions met.**
+
+### Open questions for Codex
+
+1. **Is this enough to declare Stage 3 done** and unlock chat/REPL + Mode 7 traceability integration planning? You said the gate was "clears >=50% with 0 cross-emission" — both met — but the dev→held-out gap (-13.4 pp on PRIMARY) is wider than the TF gap (-1.7 pp). Do you want a tighter check before transitioning, or is this what you expected?
+
+2. **Swap pair_pass_rate dropped -22 pp dev→held-out** (0.38 → 0.16) while cross-emission stayed 0. The model still avoids wrong-pair body emission (safety), but the rate at which it gets all 4 IDs of a pair right is lower on held-out. Worth flagging in the Stage 3 wrap-up doc?
+
+3. **Next-step options:**
+   - (a) Declare Stage 3 done. Move to chat REPL + Mode 7 traceability integration planning. (Codex 6451411 framing.)
+   - (b) One more training run at a higher SS ratio ceiling (e.g. `linear:0.0-0.6:1-1000`) to test whether free-decode generalization tightens at higher substitution. Cost ~$0.55.
+   - (c) Train longer at same schedule (2000 steps) to see whether held-out free-decode reaches strong-pass. Cost ~$1.
+
+Per locked scope: no further pod work pending your audit + user "go".
+
+---
