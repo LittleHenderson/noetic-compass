@@ -1026,6 +1026,14 @@ def _cmd_atlas_save(argv: list[str]) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Subcommand: sggs-stream-demo (SGGS Phase 2 streaming demo)
+# ---------------------------------------------------------------------------
+def _cmd_sggs_stream_demo(argv: list[str]) -> int:
+    from cas_native.inference.sggs_stream import run_demo_stream_cli
+    return int(run_demo_stream_cli(argv) or 0)
+
+
+# ---------------------------------------------------------------------------
 # Test harness
 # ---------------------------------------------------------------------------
 def _cmd_test(_argv: list[str]) -> int:
@@ -1057,6 +1065,7 @@ SUBCOMMANDS: dict[str, Callable[[list[str]], int]] = {
     "predict": _cmd_predict,
     "explain": _cmd_explain,
     "atlas-save": _cmd_atlas_save,
+    "sggs-stream-demo": _cmd_sggs_stream_demo,
     "demo": _cmd_demo,
     "version": _cmd_version,
     "help": _cmd_help,

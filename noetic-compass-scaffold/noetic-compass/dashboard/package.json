@@ -12,6 +12,8 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@mediapipe/camera_utils": "^0.3.1675466124",
+    "@mediapipe/hands": "^0.4.1675469240",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-query": "^5.96.2",
     "docx": "^9.6.1",
@@ -24,6 +26,7 @@
     "react-router-dom": "^7.14.0",
     "recharts": "^3.8.1",
     "tailwindcss": "^4.2.2",
+    "three": "^0.171.0",
     "tone": "^15.1.22",
     "zustand": "^5.0.12"
   },
@@ -36,6 +39,7 @@
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.171.0",
     "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
