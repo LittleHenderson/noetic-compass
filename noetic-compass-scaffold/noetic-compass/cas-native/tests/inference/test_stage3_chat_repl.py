@@ -280,7 +280,7 @@ def test_slash_trace_dumps_full_v0_trace_as_json():
     response = handle_turn("/trace", state, _DummyExplainer())
     parsed = json.loads(response.text)
     # Full v0 trace has these top-level keys
-    assert parsed.get("schema_version") == "trace_v0"
+    assert parsed.get("schema_version") == "traceability_v0"
     assert "input" in parsed
     assert "output" in parsed
     assert "copy" in parsed

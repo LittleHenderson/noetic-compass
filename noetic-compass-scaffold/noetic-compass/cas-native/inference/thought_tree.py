@@ -148,27 +148,76 @@ def _expected_identifier_positions(
     return out
 
 
+def _canonical_node_key(node: dict[str, Any]) -> str:
+    """Build the canonical graph-identity key per Codex audit `f3f59fa`:
+    `node_key = kind + role + normalized_label + axis_attrs`.
+
+    Two nodes with the same canonical key represent the same idea
+    across renders — the future Thought Tree / Idea Atlas uses this
+    to recognize "this is the same identifier" / "this is the same
+    decision" across utterances, sessions, and replays.
+
+    Stable serialization: axis_attrs is sorted by key so the same
+    semantic content always produces the same string. Pipe-separated
+    to avoid collision with field content.
+    """
+    parts = [
+        str(node.get("kind") or ""),
+        str(node.get("role") or ""),
+        str(node.get("normalized_label") or ""),
+    ]
+    axis = node.get("axis_attrs") or {}
+    if isinstance(axis, dict) and axis:
+        axis_parts = [
+            f"{k}={axis[k]}" for k in sorted(axis.keys())
+        ]
+        parts.append(",".join(axis_parts))
+    else:
+        parts.append("")
+    return "|".join(parts)
+
+
+def _canonical_edge_key(
+    source_key: str, target_key: str, kind: str, label: str = "",
+) -> str:
+    """Build the canonical edge key per Codex audit `f3f59fa`:
+    `edge_key = source_key + target_key + kind + label`.
+
+    Same semantic edge produces the same key across renders, so the
+    UI can dedupe edges when merging traces from multiple turns into
+    the session-level Atlas.
+    """
+    return "|".join([source_key, target_key, kind, label])
+
+
 def _flatten(root: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Depth-first traversal producing flat `nodes` + `edges` arrays
     alongside the nested tree. Each node gets a stable `id` (n0, n1,
-    n2 in DFS order). Edges link parent→child by id.
+    n2 in DFS order) AND a canonical `node_key` per Codex audits
+    `f3f59fa` (graph identity scheme) + `7926698` (keys must live in
+    the trace, not be UI-derived).
 
-    Per Codex audit `95fcecf` 2026-05-13: the UI consumer needs real
-    nodes and edges with stable ids, not just nested children. Graph
-    algorithms (layout, filtering, path queries) operate on flat
-    structures.
+    Per-record id vs canonical key:
+    - `id` (n0, n1, …) is stable within ONE trace, used for edge
+      source/target pointers and per-render display.
+    - `node_key` (kind+role+normalized_label+axis_attrs) is stable
+      ACROSS renders, used by the future Atlas to recognize the same
+      idea seen in different traces/sessions.
     """
     nodes: list[dict[str, Any]] = []
     edges: list[dict[str, Any]] = []
     counter = {"n": 0, "e": 0}
 
-    def _walk(node: dict[str, Any], parent_id: Optional[str]) -> str:
+    def _walk(node: dict[str, Any], parent_id: Optional[str],
+              parent_key: Optional[str]) -> tuple[str, str]:
         node_id = f"n{counter['n']}"
         counter["n"] += 1
+        node_key = _canonical_node_key(node)
         # Copy the visible fields; omit `children` from the flat record
         # since edges encode parent→child.
         flat = {
             "id": node_id,
+            "node_key": node_key,
             "kind": node.get("kind"),
             "role": node.get("role"),
             "label": node.get("label"),
@@ -179,22 +228,30 @@ def _flatten(root: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str,
         if "axis_attrs" in node:
             flat["axis_attrs"] = node["axis_attrs"]
         nodes.append(flat)
-        # Stamp the id back onto the nested node so the two views agree
+        # Stamp id + node_key onto the nested node so the two views
+        # agree and the Atlas can use either view consistently.
         node["id"] = node_id
-        if parent_id is not None:
+        node["node_key"] = node_key
+        if parent_id is not None and parent_key is not None:
             edge_id = f"e{counter['e']}"
             counter["e"] += 1
+            edge_kind = "parent_child"
             edges.append({
                 "id": edge_id,
+                "edge_key": _canonical_edge_key(
+                    parent_key, node_key, edge_kind, label="",
+                ),
                 "source": parent_id,
                 "target": node_id,
-                "kind": "parent_child",
+                "source_key": parent_key,
+                "target_key": node_key,
+                "kind": edge_kind,
             })
         for child in node.get("children", []) or []:
-            _walk(child, node_id)
-        return node_id
+            _walk(child, node_id, node_key)
+        return node_id, node_key
 
-    _walk(root, None)
+    _walk(root, None, None)
     return nodes, edges
 
 

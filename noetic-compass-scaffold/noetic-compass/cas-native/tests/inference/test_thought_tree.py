@@ -270,3 +270,114 @@ def test_tree_round_trips_through_json():
     reloaded = json.loads(blob)
     assert reloaded["node_count"] == tree["node_count"]
     assert reloaded["root"]["kind"] == "user_prompt"
+
+
+# ---------------------------------------------------------------------------
+# Canonical graph identity keys (Codex audit 7926698 — keys must live
+# in the trace, not be UI-derived)
+# ---------------------------------------------------------------------------
+
+def test_each_flat_node_has_canonical_node_key():
+    """REGRESSION PIN: every flat node carries a canonical `node_key`
+    so the future Atlas can recognize the same idea across renders."""
+    tree = build_thought_tree(_make_report(
+        expected=["a"], emitted=["a"], copied=["a"], coverage=1.0,
+    ))
+    for node in tree["nodes"]:
+        assert "node_key" in node, (
+            "every flat node must carry a canonical node_key"
+        )
+        assert isinstance(node["node_key"], str)
+        assert node["node_key"], "node_key must be non-empty"
+
+
+def test_node_key_combines_kind_role_normalized_label_axis_attrs():
+    """Canonical key shape per Codex f3f59fa:
+    node_key = kind + role + normalized_label + axis_attrs.
+    Pipe-separated."""
+    tree = build_thought_tree(_make_report(
+        expected=["stageA0_4_857"], emitted=["stageA0_4_857"],
+        copied=["stageA0_4_857"], coverage=1.0,
+    ))
+    # The identifier_attempt node has axis_attrs and a role of 'copied'
+    ident_node = next(
+        n for n in tree["nodes"]
+        if n["kind"] == "identifier_attempt"
+    )
+    key = ident_node["node_key"]
+    parts = key.split("|")
+    # 4 parts: kind, role, normalized_label, axis_attrs
+    assert len(parts) == 4
+    assert parts[0] == "identifier_attempt"
+    assert parts[1] == "copied"
+    # normalized_label is lowercased (per _node()) — that's the
+    # canonical form so two nodes with the same identifier match
+    # regardless of casing in the source.
+    assert parts[2] == "stagea0_4_857"
+    # axis_attrs includes input_position + output_position + status
+    assert "input_position=" in parts[3]
+
+
+def test_same_semantic_node_produces_same_key():
+    """Two identifier_attempt nodes with the same identifier + status +
+    positions produce the same canonical key. This is the property
+    that lets the future Atlas dedupe the same idea seen in multiple
+    turns."""
+    rpt1 = _make_report(
+        expected=["x"], emitted=["x"], copied=["x"], coverage=1.0,
+    )
+    rpt2 = _make_report(
+        expected=["x"], emitted=["x"], copied=["x"], coverage=1.0,
+    )
+    t1 = build_thought_tree(rpt1)
+    t2 = build_thought_tree(rpt2)
+    ident1 = next(n for n in t1["nodes"] if n["kind"] == "identifier_attempt")
+    ident2 = next(n for n in t2["nodes"] if n["kind"] == "identifier_attempt")
+    assert ident1["node_key"] == ident2["node_key"]
+
+
+def test_different_status_produces_different_key():
+    """A copied identifier and a missed identifier with the same name
+    produce DIFFERENT canonical keys — they are semantically
+    different events."""
+    t_copied = build_thought_tree(_make_report(
+        expected=["x"], emitted=["x"], copied=["x"], coverage=1.0,
+    ))
+    t_missed = build_thought_tree(_make_report(
+        expected=["x"], emitted=[], copied=[], coverage=0.0,
+    ))
+    ident_copied = next(
+        n for n in t_copied["nodes"] if n["kind"] == "identifier_attempt"
+    )
+    ident_missed = next(
+        n for n in t_missed["nodes"] if n["kind"] == "identifier_attempt"
+    )
+    assert ident_copied["node_key"] != ident_missed["node_key"]
+
+
+def test_each_flat_edge_has_canonical_edge_key():
+    """Every edge carries a canonical edge_key built from
+    source_key + target_key + kind + label."""
+    tree = build_thought_tree(_make_report(
+        expected=["a"], emitted=["a"], copied=["a"], coverage=1.0,
+    ))
+    for edge in tree["edges"]:
+        assert "edge_key" in edge
+        assert "source_key" in edge
+        assert "target_key" in edge
+        assert isinstance(edge["edge_key"], str)
+        assert edge["edge_key"], "edge_key must be non-empty"
+        # The edge_key contains the source_key and target_key
+        assert edge["source_key"] in edge["edge_key"]
+        assert edge["target_key"] in edge["edge_key"]
+
+
+def test_node_key_stamped_on_nested_view_too():
+    """The id+node_key live in both flat AND nested views so the UI
+    can use either consistently."""
+    tree = build_thought_tree(_make_report())
+    assert "node_key" in tree["root"]
+    assert "id" in tree["root"]
+    # Flat array's n0 has the same node_key as nested root
+    flat_root = next(n for n in tree["nodes"] if n["id"] == tree["root"]["id"])
+    assert flat_root["node_key"] == tree["root"]["node_key"]

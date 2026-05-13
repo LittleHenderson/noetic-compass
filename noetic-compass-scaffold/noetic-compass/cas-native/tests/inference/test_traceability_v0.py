@@ -86,9 +86,15 @@ def test_trace_has_documented_top_level_keys():
 
 
 def test_schema_version_is_pinned():
+    """REGRESSION PIN (Codex audit `7926698` 2026-05-13): schema
+    version is `traceability_v0`, not `trace_v0`. The rename avoids
+    collision with the heavier future Mode 7 trace schema."""
     trace = build_v0_trace(_make_report())
-    assert trace["schema_version"] == "trace_v0"
+    assert trace["schema_version"] == "traceability_v0"
     assert trace["schema_version"] == SCHEMA_VERSION
+    # Ensure the old name is NOT used anywhere — defends against a
+    # refactor that drops the rename.
+    assert trace["schema_version"] != "trace_v0"
 
 
 def test_trace_id_is_unique_per_build():
@@ -377,7 +383,7 @@ def test_trace_round_trips_through_json():
     ))
     blob = trace_to_json(trace)
     reloaded = json.loads(blob)
-    assert reloaded["schema_version"] == "trace_v0"
+    assert reloaded["schema_version"] == "traceability_v0"
     assert reloaded["copy"]["copied_identifiers"] == ["stageA0_4_857"]
     assert reloaded["thought_tree"]["node_count"] == trace["thought_tree"]["node_count"]
 
@@ -386,7 +392,7 @@ def test_trace_to_json_returns_valid_json_string():
     trace = build_v0_trace(_make_report())
     s = trace_to_json(trace)
     parsed = json.loads(s)
-    assert parsed["schema_version"] == "trace_v0"
+    assert parsed["schema_version"] == "traceability_v0"
 
 
 # ---------------------------------------------------------------------------

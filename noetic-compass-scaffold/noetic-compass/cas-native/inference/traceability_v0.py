@@ -40,7 +40,7 @@ from cas_native.inference.plain_english import human_slot_label
 from cas_native.inference.thought_tree import build_thought_tree
 
 
-SCHEMA_VERSION = "trace_v0"
+SCHEMA_VERSION = "traceability_v0"
 
 
 def _iso_now() -> str:
