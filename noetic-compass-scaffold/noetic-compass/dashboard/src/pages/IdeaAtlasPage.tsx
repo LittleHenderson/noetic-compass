@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
 import { apiFetch, ApiError } from '../api/client';
 import { highlightSyntax } from './CompilerPage';
 import { GraphView } from '../components/idea-atlas/GraphView';
@@ -11,7 +11,16 @@ import {
   type ThoughtTreeNode as TreeViewNode,
   type ThoughtTree as TreeViewTree,
 } from '../components/idea-atlas/ThoughtTreeView';
-import type { AtlasTrace } from '../lib/trace';
+import type { AtlasTrace, AtlasTraceThoughtTree } from '../lib/trace';
+
+// SGGS — Three.js 3D scene. Lazy so the ~600 KB three + sprite bundle
+// only downloads when the user opens the SGGS tab (Codex guardrail
+// 3f495ba: "keep SGGS code-split").
+const SggsScene = lazy(() =>
+  import('../components/idea-atlas/SggsScene').then((m) => ({
+    default: m.SggsScene,
+  })),
+);
 
 // ── Types ──
 
@@ -33,7 +42,7 @@ interface AtlasEdge {
   breakdown?: Record<string, number>;
 }
 
-type ViewMode = 'list' | 'graph' | 'trace';
+type ViewMode = 'list' | 'graph' | 'trace' | 'sggs';
 
 // Backend returns flat shapes — Idea on POST, Idea[] on GET — not wrapped.
 type CaptureResponse = Idea;
@@ -521,6 +530,23 @@ export function IdeaAtlasPage() {
           >
             TRACE
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={viewMode === 'sggs'}
+            onClick={() => setViewMode('sggs')}
+            title="Spatial Gesture Graph — 3D Thought Tree (beta)"
+            className={`px-3 py-1 rounded transition-colors ${
+              viewMode === 'sggs'
+                ? 'bg-violet-500/20 text-violet-300'
+                : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            SGGS
+            <span className="ml-1 text-[8px] uppercase tracking-wider text-violet-400/70">
+              3D
+            </span>
+          </button>
         </div>
       </div>
 
@@ -990,6 +1016,56 @@ export function IdeaAtlasPage() {
           {!loadedTrace && !traceError && (
             <div className="rounded-lg border border-white/[0.06] bg-black/20 p-6 text-center font-mono text-xs text-slate-500">
               Load a traceability_v0 JSON to see the Thought Tree.
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* SGGS view — Spatial Gesture Graph (Phase 1 baseline 3D) */}
+      {viewMode === 'sggs' && (
+        <div className="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-4">
+          <TraceLoader
+            onTraceLoaded={handleTraceLoaded}
+            onError={handleTraceError}
+          />
+          {traceError && (
+            <div className="rounded border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-xs font-mono text-rose-300">
+              {traceError}
+            </div>
+          )}
+          {loadedTrace && (
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-violet-500/20 bg-violet-500/[0.05] px-4 py-3 font-mono text-xs text-violet-200">
+              <span>
+                SGGS 3D · {loadedTrace.thought_tree.node_count} nodes,{' '}
+                {loadedTrace.thought_tree.edge_count} edges · drag to orbit,
+                wheel to zoom, click a card to select.
+              </span>
+              <span className="text-[10px] uppercase tracking-wider text-violet-400/70">
+                beta — gestures arrive in a later phase
+              </span>
+            </div>
+          )}
+          {loadedTrace && (
+            <div className="min-h-[560px] rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden">
+              <Suspense
+                fallback={
+                  <div className="flex h-[560px] items-center justify-center font-mono text-xs text-slate-400">
+                    Loading 3D scene (~600 KB three.js + sprite atlas)…
+                  </div>
+                }
+              >
+                <SggsScene
+                  tree={loadedTrace.thought_tree as unknown as AtlasTraceThoughtTree}
+                  onNodeClick={(n) => setSelectedTraceNodeId(n.id)}
+                  selectedNodeId={selectedTraceNodeId}
+                  className="h-full w-full"
+                />
+              </Suspense>
+            </div>
+          )}
+          {!loadedTrace && !traceError && (
+            <div className="rounded-lg border border-white/[0.06] bg-black/20 p-6 text-center font-mono text-xs text-slate-500">
+              Load a traceability_v0 JSON to see the 3D Spatial Gesture Graph.
             </div>
           )}
         </div>
