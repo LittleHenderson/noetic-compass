@@ -127,6 +127,10 @@ def _short_answer(report: dict[str, Any]) -> str:
     n_expected = len(identifiers.get("expected", []) or [])
     n_copied = len(identifiers.get("copied", []) or [])
 
+    # Wording note (Codex audit 1c54b5f, 2026-05-13): "named ideas" double-
+    # counts repeated references to the same identifier in the source.
+    # "source references" stays honest about what's being counted —
+    # positions where an identifier appears, not distinct identifiers.
     if not generated:
         return "The model produced no output on this input."
     if n_expected == 0:
@@ -134,16 +138,16 @@ def _short_answer(report: dict[str, Any]) -> str:
     if not one_copied:
         return (
             f"The model produced an explanation but did not "
-            f"carry over any of the {n_expected} named ideas in the input."
+            f"carry over any of the {n_expected} source references in the input."
         )
     if n_copied >= n_expected:
         return (
-            f"The model carried over all {n_expected} named ideas "
+            f"The model carried over all {n_expected} source references "
             f"from the input."
         )
     return (
         f"The model carried over {n_copied} of {n_expected} "
-        f"named ideas from the input."
+        f"source references from the input."
     )
 
 
@@ -159,7 +163,7 @@ def _plain_meaning(report: dict[str, Any]) -> str:
 
     if copied:
         parts.append(
-            f"It correctly recognized {len(copied)} named idea(s) "
+            f"It correctly recognized {len(copied)} source reference(s) "
             f"from the input and carried them into the output."
         )
 
