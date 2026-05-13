@@ -895,3 +895,56 @@ Per your locked branch (audit 6451411): "if that also clears >=50% recovery with
 Per locked scope: no further pod work pending your audit + user "go".
 
 ---
+
+## 2026-05-13T07:00Z — claude: post-Stage-3 docs landed (3 parallel agents)
+
+Per your audit `707249b` ("Next move: write the Stage 3 wrap-up, then start chat/REPL + Mode 7 traceability planning") and user "team of smartest agents... parallel in background": three parallel agents produced three docs.
+
+### Commits
+
+| Agent | Commit | Doc | Words | Sections |
+|---|---|---|---:|---:|
+| A — Wrap-up | `3ef997e` | `docs/working/candidate_e/stage3_wrapup_2026_05_13.md` | 2065 | 9 |
+| B — Chat REPL plan | `53687ba` | `docs/working/chat_repl_stage3_integration_plan_2026_05_13.md` | ~3700 | 8 |
+| C — Mode 7 design | `ef474d3` | `docs/working/mode_7_traceability_design_2026_05_13.md` | ~4857 | 10 |
+
+### Headline findings the audit should focus on
+
+**Agent A (Stage 3 wrap-up):**
+
+1. **Free-decode beat TF on dev (+3.86 pp) but TF beat free-decode on held-out (−7.79 pp).** Dev reversal is a known scheduled-sampling artifact; held-out gap-restoration is the honest generalization signal.
+2. **Dev → held-out drop is asymmetric across metric type.** TF drops ~2 pp; free-decode drops 13.4 pp. The copy-pointer module generalizes; the keep-copying-while-generating behavior is somewhat dev-tuned. **This is the residual technical debt going into integration**, not the headline 0.6439.
+3. **Swap `pair_pass_rate` dropped 22 pp dev → held-out while `cross_emission_count` held at 0.** Model is still safe (no leakage) but less complete on harder pairs. Completeness, not source confusion, is the remaining weakness. **First chat REPL version should surface a recovery-confidence signal**, not pretend the gap doesn't exist.
+
+**Agent B (chat REPL integration plan):**
+
+The B-4-era K=9 + B-3 REPL is still wired in `inference/chat.py` (1399 lines). The canonical Stage 3 load + decode reference is `evaluation/evaluate_candidate_e_stage2.py`; chat REPL will mirror it. 5-phase plan: checkpoint load → CLI smoke → multi-turn REPL → trace dict + Mode 7 hook → UI/OOD/refusal. Stage3Trace contract defined for Mode 7 consumption.
+
+**Agent C (Mode 7 design):**
+
+Critical reuse finding: **the v0 trace scaffold already exists** (`trace/__init__.py`, `mechanistic.py`, `live_capture.py`, `generation_trace.py`, `attribution.py`, `network_summary.py` + `activation_hooks.py`) — built against the classifier. Stage 3 needs a sibling schema, not a fresh build. The Stage 3 decoder forward already returns every Mode 7 data source we need: `lm_logits`, `slot_type_logits`, `p_copy`, `copy_source_indices`, `decoder_hidden_state`. Plus `simplex_trajectory` from encoder. Six-layer trace dict (Input / CAS state / Activation / Attribution / Admissibility / Output) lands cleanly on top.
+
+### Open questions across the three docs (7 total)
+
+**From Agent B (chat REPL):**
+
+1. How does a free-form English chat prompt produce a `cas_prefix` (the encoder source the Stage 3 model needs)? Eval-pack-only, empty-prefix, or a yet-to-be-built NL-to-CAS step? Phase 1-3 defaults were assumed but unconfirmed.
+2. Is the Stage 3 checkpoint already pulled locally, or only at `/workspace/tksCAS/stage_e3_20260513T043823Z/ckpt_final.pt` on pod? Phase 1 smoke needs a local copy. (~664 MB.)
+
+**From Agent C (Mode 7):**
+
+3. Path A vs Path B for Drive/Register marginals: Path A = build dedicated aux heads; Path B = derive from per-position slot-type decisions. Agent C recommended Path B for v1 (cheaper, reuses existing slot_type_head). Audit OK or push Path A?
+4. Should the one-line trace marker surface the swap-pair `cross_emission` verdict inline? Agent C recommended yes (it's the Stage 3 hard safety gate). Audit OK?
+
+**From Agent A (wrap-up, talking points worth confirming):**
+
+5. Is the "dev → held-out asymmetry" framing (copy-pointer generalizes; keep-copying-while-generating is dev-tuned) accurate per your read of the eval data? Or is it overinterpreting two paired numbers?
+6. Should the wrap-up doc explicitly call out the "no further training" decision as a hard lock, or leave the door open contingent on integration findings (e.g., if Mode 7 surfaces a specific generalization failure mode, then targeted training)?
+7. The wrap-up's "Limitations and open questions" section enumerates the residual technical debt. Does it match your audit-time view of where the model is weakest, or are there other failure modes you want surfaced before integration starts?
+
+### What is NOT done
+
+- NO code changes. NO pod work. NO new `decisions.md` entries beyond the planning-phase authorization at 2026-05-13T06:30Z (commit `7d5cec9`).
+- NO start on chat REPL implementation (Phase 1 of plan B). Waiting for your audit of plans B + C + answer to the 7 open questions, then user "go" on which phase to execute first.
+
+---
