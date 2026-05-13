@@ -184,6 +184,10 @@ def run_stage3_local_smoke(
         "archive_hashes": bundle.hash_report,
         "manifest_ablation_mode": bundle.manifest.get("ablation_mode"),
         "manifest_n_steps": bundle.manifest.get("config", {}).get("n_steps"),
+        # Surface the cap explicitly so future trace consumers (chat REPL,
+        # Mode 7, Atlas) can prove the encoder saw the full CAS expression.
+        # Per Codex audit `92eb3a2` 2026-05-13.
+        "max_cas_prefix_len": cas_prefix_cap,
         "prompt_text": record.get("prompt_text"),
         "cas_expression": record.get("cas_expression"),
         "canonical_identifiers": (

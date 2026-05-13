@@ -166,6 +166,19 @@ def test_explain_passes_max_cas_prefix_len_192_to_collator():
     assert "192" in src
 
 
+def test_explain_output_surfaces_max_cas_prefix_len():
+    """Regression pin per Codex audit `92eb3a2` (2026-05-13): the
+    output report MUST surface the cap explicitly under model.* so
+    future trace consumers (chat REPL, Mode 7, Atlas) can prove the
+    encoder saw the full CAS expression. Source-level check so it
+    doesn't depend on the heavy archive load."""
+    src = open(cas_cli.__file__, encoding="utf-8").read()
+    assert '"max_cas_prefix_len": cas_prefix_cap' in src, (
+        "cas explain output dict must include `max_cas_prefix_len` "
+        "under model.* per Codex 92eb3a2 audit"
+    )
+
+
 # ---------------------------------------------------------------------------
 # Heavy: end-to-end against the real local archive + dev pack
 # Skipped when archive absent so this never blocks CI.

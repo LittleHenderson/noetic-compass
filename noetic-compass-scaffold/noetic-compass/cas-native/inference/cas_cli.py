@@ -546,6 +546,10 @@ def _cmd_explain(argv: list[str]) -> int:
             "checkpoint_sha256": bundle.hash_report.get("ckpt_final.pt"),
             "load_seconds": load_seconds,
             "decode_seconds": decode_seconds,
+            # Surface the cap explicitly so future trace consumers (chat
+            # REPL, Mode 7, Atlas) can prove the encoder saw the full
+            # CAS expression. Per Codex audit `92eb3a2` 2026-05-13.
+            "max_cas_prefix_len": cas_prefix_cap,
         },
         "generated_english": generated_text,
         "n_tokens_generated": entry.get("n_tokens_generated"),

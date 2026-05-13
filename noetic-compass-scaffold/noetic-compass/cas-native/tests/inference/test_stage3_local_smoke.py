@@ -94,6 +94,18 @@ def test_smoke_passes_max_cas_prefix_len_192_to_collator():
     assert "192" in src
 
 
+def test_smoke_report_surfaces_max_cas_prefix_len():
+    """Regression pin per Codex audit `92eb3a2` (2026-05-13): the
+    smoke report dict MUST surface the cap explicitly so future trace
+    consumers (chat REPL, Mode 7, Atlas) can prove the encoder saw
+    the full CAS expression. Source-level check."""
+    src = open(smoke.__file__, encoding="utf-8").read()
+    assert '"max_cas_prefix_len": cas_prefix_cap' in src, (
+        "stage3_local_smoke report dict must include `max_cas_prefix_len` "
+        "per Codex 92eb3a2 audit"
+    )
+
+
 # ---------------------------------------------------------------------------
 # Heavy: end-to-end against the real local archive + dev pack
 # Skipped when archive absent so this never blocks CI.
