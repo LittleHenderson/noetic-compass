@@ -22,6 +22,27 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T07:45Z — E2c-continuation warm-start backup + Stage 3 code-commit pin
+
+DECISION: Modified-Tier-3 reproducibility backup per Codex audit `ec32e14`. Two actions:
+
+1. Back up the E2c-continuation checkpoint + small companion artifacts. This is the warm-start source for Stage 3 — if we ever need to retrain Stage 3 exactly, this is what `--load-model-from` must point at. Files: `ckpt_final.pt` (664 MB) + `ckpt_final.pt.manifest.json` + `trainer_manifest.json` + `trainer_log.jsonl` + `smoke_report.json`. sha256 verified pod ↔ local on all 5. Local archive: `D:\tksCAS-archive\stage_e2c_cont_20260513T002539Z\`.
+2. Pin the exact Stage 3 code commit `e9a0b76161b63e647a6c88633ffcf1f692e06032` in `checkpoint_archive_registry.md`. This is the last code change before the Stage 3 training launch (04:38Z); the trainer + scheduled_sampling MD5s we verified at deploy time correspond to this commit. After this pin, "which code matches the trained Stage 3 checkpoint" is unambiguous.
+
+Skipped (per Codex): training-corpus archive copy (already in repo at `cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl` — repo is canonical, archive copy would be neatness-only); ckpt_step_500.pt + ckpt_step_1000.pt from E2c-cont (Tier 4 forensic-replay, not strictly load-bearing for retrain).
+
+After this backup: Stage 3 is fully retrainable from local archive alone — warm-start ckpt + identical training corpus (in repo) + identical code commit + identical hparams (in ckpt_final.pt.manifest.json) all available locally.
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` and chat 2026-05-13 (commit `ec32e14`, "modified Tier 3: back up E2c-cont ckpt + pin commit hash; training corpus already in repo, no Tier 4 needed unless forensic replay") + user chat "go" (2026-05-13T07:45Z).
+
+BOUNDED SCOPE: pod-read only on the 5 E2c-cont files. No training. No inference. No code changes. Same shape as 07:05Z + 07:25Z backups, third batch.
+
+CONTEXT: Stage 3 backup (07:05Z) + tokenizer backup (07:25Z) covered "run the good model" reproducibility. This third backup closes "retrain from the same warm-start point" reproducibility. The full warm-start chain (b2 → e2a → e2b → e2c-first-run) remains pod-only — those are Tier 4 forensic insurance, ~2 GB combined, not authorized by this entry.
+
+---
+
 ## 2026-05-13T07:25Z — Tokenizer artifact backup (closes inference-readiness gap)
 
 DECISION: Back up the two load-bearing tokenizer artifacts that the trained Stage 3 checkpoint requires for inference but were not explicitly named in the 07:05Z backup scope: `tokenizer.json` (446 KB) and `english_bpe.json` (1.4 MB). Without these, the binary checkpoint is unusable for any local inference. Per Codex audit `a1e8132` ("the checkpoint alone is not enough to run inference. We also need local copies of: tokenizer.json, english_bpe.json").

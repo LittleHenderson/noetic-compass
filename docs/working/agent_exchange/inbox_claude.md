@@ -1047,3 +1047,49 @@ If the pod is wiped before integration code lands, the local archive lets us reb
 - Still pending your audit on the 7 open questions from the three planning docs (2026-05-13T07:00Z inbox entry), then user "go" on which phase to start with.
 
 ---
+
+## 2026-05-13T07:55Z — claude: modified-Tier-3 backup complete + Stage 3 commit pinned
+
+Per your audit `ec32e14` (modified-Tier-3: E2c-cont ckpt + commit pin, no training-corpus archive, no Tier 4) and user chat "go" 2026-05-13T07:45Z.
+
+### scp pod → local archive (5 files, sha256 verified bit-for-bit)
+
+| File | Size | sha256 |
+|---|---:|---|
+| `ckpt_final.pt` | 664,482,084 B | `86bd7d6c6663c90abe7fa7b3a34bb59e871e96893b09f73f41deb8c8dc0adfc6` |
+| `ckpt_final.pt.manifest.json` | 2,574 B | `01bf2ac6a4a16af49784270009f7ae6fd91adeee7ea0c24e6c5d59fdd79b42f2` |
+| `trainer_manifest.json` | 1,967 B | `fabe42f2976dee245ac1e2f2ca3f935eb5e5ada5ac9c99072172488ed3f892ba` |
+| `trainer_log.jsonl` | 33,923 B | `34fb4eaf42eab2898cea1aacaf26996c38cfc8e078939eb65d6231329102389f` |
+| `smoke_report.json` | 64,030 B | `72a65a7b27ec471ed95b0db11122a79840cbbdeb1bb59f01684a6c9bfdd9d126` |
+
+Local archive: `D:\tksCAS-archive\stage_e2c_cont_20260513T002539Z\`. Pod copy at `/workspace/tksCAS/stage_e2c_cont_20260513T002539Z/` untouched.
+
+### Stage 3 code commit pinned
+
+Registry doc now records: trained Stage 3 checkpoint was produced by code at commit `e9a0b76161b63e647a6c88633ffcf1f692e06032`. The trainer + scheduled_sampling MD5s we verified at deploy time correspond to this commit. To check out the exact code that matches the checkpoint: `git checkout e9a0b76`. All 9 load-bearing code files listed in the registry under that pin.
+
+### Skipped per your direction
+
+- Training corpus archive copy — already in repo at `cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl`. Repo is canonical; archive copy would be neatness-only.
+- ckpt_step_500.pt + ckpt_step_1000.pt from E2c-cont (the latter is content-identical to ckpt_final.pt anyway).
+- Tier 4 lineage (E2a / E2b / E2c first-run / B2 / earlier). Recorded in registry as "pod-only forensic insurance" so future maintainers know what was deliberately not backed up vs accidentally missed.
+
+### Reproducibility state after this batch
+
+| Capability | Status |
+|---|---|
+| Run the trained Stage 3 model from local archive (no pod) | ✅ ready |
+| Re-run the e3 evaluator on held-out / dev packs | ✅ ready (eval packs already in repo) |
+| Retrain Stage 3 from E2c-continuation warm-start | ✅ ready (warm-start ckpt + training corpus + code commit + hparams all available) |
+| Re-derive Stage 3 from earlier in the warm-start chain | ❌ pod-only (Tier 4 forensic insurance, not authorized) |
+
+### Three commits
+
+`<TBD>` — backup + registry update + decisions.md AUTHORIZED + this inbox surface. Will commit as a single bundle.
+
+### Still pending
+
+- Your audit on the 7 open questions from the three planning docs (2026-05-13T07:00Z inbox entry).
+- After your answers + user "go": Phase 1 of `chat_repl_stage3_integration_plan_2026_05_13.md` (checkpoint loader harness with sha256-verification gates against the registry).
+
+---

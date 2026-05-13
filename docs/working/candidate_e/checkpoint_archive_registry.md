@@ -13,6 +13,22 @@ If you don't see your checkpoint here, it isn't backed up — assume the pod cop
 
 ## Active entry
 
+### Stage 3 code commit (PIN)
+
+The trained Stage 3 checkpoint was produced by the code at commit `e9a0b76161b63e647a6c88633ffcf1f692e06032` ("candidate-e: patch Codex re-audit blockers on scheduled sampling"). This is the last code change before the Stage 3 training launch at 2026-05-13T04:38:25Z. To check out the exact code that matches the checkpoint: `git checkout e9a0b76`. The trainer + scheduled_sampling MD5s verified at deploy time (`4543d11679eb17770af48bf78d8cfa78` and `aef4666f30d7c9b3c4d9bc2c86b247a4` respectively) correspond to this commit.
+
+Code files load-bearing for "load + run the Stage 3 model" — all present in repo at this commit:
+
+- `noetic-compass-scaffold/noetic-compass/cas-native/model/typed_fiber_decoder.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/model/simplex_encoder.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/train_simplex_mvp.py` (contains `build_simplex_mvp_model`)
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/scheduled_sampling.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/simplex_checkpoint.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/datasets/simplex_collator.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/training/tokenizer.py` (HybridCASTokenizer)
+- `noetic-compass-scaffold/noetic-compass/cas-native/evaluation/evaluate_candidate_e_stage2.py` (canonical load + decode reference)
+- `noetic-compass-scaffold/noetic-compass/cas-native/evaluation/sample_decoder.py`
+
 ### `stage_e3_20260513T043823Z/ckpt_final.pt` — Stage 3 trained checkpoint (PRIMARY)
 
 The current "good model" — passes both load-bearing gates on dev and held-out packs (free-decode identifier_recovery 0.7778 dev / 0.6439 held-out, swap cross_emission 0 across both). Per Codex audit `707249b`: Stage 3 is done for this loop; no further training authorized. This checkpoint is what chat REPL + Mode 7 integration loads.
@@ -109,6 +125,63 @@ Cannot (current state, may change with later phases):
 - Multi-utterance dialogue state tracking (this is a copy-grounded RPM-task model, not a chatbot).
 - Free-form English chat input — the encoder expects a CAS prefix. The chat REPL integration plan (`docs/working/chat_repl_stage3_integration_plan_2026_05_13.md`) is where the NL→CAS-prefix bridge gets designed.
 
-## Older / superseded archives
+## Warm-start lineage archive
 
-Not yet populated. Future entries (E2c continuation, intermediate checkpoints, ablation variants) go here.
+### `stage_e2c_cont_20260513T002539Z/ckpt_final.pt` — E2c continuation (Stage 3 warm-start source)
+
+The checkpoint Stage 3 trained from. `--load-model-from` for the Stage 3 run pointed at this file on pod. Required for "retrain Stage 3 from the same starting point" reproducibility. NOT load-bearing for "run the trained Stage 3 model" — for inference, only the Stage 3 entry above matters.
+
+| field | value |
+|---|---|
+| Local archive | `D:\tksCAS-archive\stage_e2c_cont_20260513T002539Z\ckpt_final.pt` |
+| Pod source | `/workspace/tksCAS/stage_e2c_cont_20260513T002539Z/ckpt_final.pt` |
+| Size | 664,482,084 bytes (~664 MB) |
+| sha256 | `86bd7d6c6663c90abe7fa7b3a34bb59e871e96893b09f73f41deb8c8dc0adfc6` |
+| Saved at | 2026-05-13T01:20Z |
+| Schema version | `simplex_mvp_ckpt.v1` |
+
+#### Training config (verbatim from manifest)
+
+| param | value |
+|---|---|
+| ablation | `e2c` |
+| n_steps | 1000 (continuation after first E2c run at 1000 steps) |
+| batch_size | 16 |
+| lr | 1e-4 |
+| max_cas_prefix_len | 192 |
+| seed | 1729 |
+| `load_model_from` | `/workspace/tksCAS/stage_e2c_anchor_20260512T192622Z/ckpt_step_1000.pt` (E2c first run, ckpt_step_1000.pt; that earlier checkpoint is NOT backed up locally — Tier 4 / pod-only) |
+
+#### Companion artifacts in the same archive directory
+
+| file | sha256 |
+|---|---|
+| `ckpt_final.pt.manifest.json` | `01bf2ac6a4a16af49784270009f7ae6fd91adeee7ea0c24e6c5d59fdd79b42f2` |
+| `trainer_manifest.json` | `fabe42f2976dee245ac1e2f2ca3f935eb5e5ada5ac9c99072172488ed3f892ba` |
+| `trainer_log.jsonl` | `34fb4eaf42eab2898cea1aacaf26996c38cfc8e078939eb65d6231329102389f` |
+| `smoke_report.json` | `72a65a7b27ec471ed95b0db11122a79840cbbdeb1bb59f01684a6c9bfdd9d126` |
+
+#### Verification post-archive (2026-05-13T07:50Z)
+
+scp completed; all 5 files transferred; sha256 verified pod-side and local-side independently — all 5 hashes match bit-for-bit. The local archive is a faithful copy of the pod source.
+
+#### What this checkpoint enables
+
+If Stage 3 needs to be retrained exactly (same weights to within RNG noise):
+
+1. Check out the Stage 3 code commit: `git checkout e9a0b76161b63e647a6c88633ffcf1f692e06032`.
+2. Load the warm-start ckpt from `D:\tksCAS-archive\stage_e2c_cont_20260513T002539Z\ckpt_final.pt` via `--load-model-from`.
+3. Run training with the recorded hparams (verbatim from the Stage 3 manifest: `--ablation e3 --scheduled-sampling-schedule "linear:0.0-0.5:1-1000" --n-steps 1000 --batch-size 16 --lr 1e-4 --weight-decay 1e-4 --grad-clip 1.0 --max-cas-prefix-len 192 --seed 1729`).
+4. Training data: `cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl` (already in repo, no separate archive copy).
+
+## Tier 4 / forensic-replay archives (pod-only)
+
+NOT backed up locally. These are only needed if we want to re-derive Stage 3 from earlier in the warm-start chain. Per Codex audit 2026-05-13: "No full Tier 4 unless forensic replay."
+
+- E2a checkpoint
+- E2b checkpoint
+- E2c first-run checkpoint at `/workspace/tksCAS/stage_e2c_anchor_20260512T192622Z/`
+- E2c continuation intermediate checkpoints (ckpt_step_500.pt, ckpt_step_1000.pt — note: ckpt_step_1000.pt is content-identical to ckpt_final.pt, just a different filename)
+- B2 checkpoint and earlier lineage
+
+If the pod dies before Phase 1 integration code lands, these are lost. We can still rebuild Stage 3 from the E2c-continuation backup (Tier 3) without them.
