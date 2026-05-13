@@ -1630,3 +1630,65 @@ Per protocol, no Step 5B code work until Codex audits + user go.
 3. **Step 5B authorization timing.** Trace is done. Step 5B Option C (heuristic NL bridge + Stage 4 spec) is next per your earlier audit. Write the AUTHORIZED entry now, or wait for your audit on this trace first?
 
 ---
+
+## 2026-05-13T18:10Z — claude: both Traceability v0 patches landed
+
+### Commit + push
+
+`34db7a8` — schema rename + canonical graph identity keys.
+
+### Patch 1 — schema rename
+
+`schema_version: "trace_v0"` → `"traceability_v0"`. Avoids collision with the heavier future Mode 7 trace schema you flagged.
+
+Pinned by `test_schema_version_is_pinned` — asserts the new name AND asserts the old name is NOT present.
+
+### Patch 2 — canonical graph identity keys in the trace
+
+Every flat node now carries `node_key`. Every flat edge carries `edge_key` + `source_key` + `target_key`. Built per your `f3f59fa` scheme:
+
+- `node_key = kind + role + normalized_label + axis_attrs` (pipe-separated, axis_attrs sorted for stable canonical form)
+- `edge_key = source_key + target_key + kind + label`
+
+Same idea seen across multiple turns / sessions / replays now matches by `node_key`. The future Atlas dedupes by these keys without any UI-side derivation.
+
+Six regression pins in `test_thought_tree.py`:
+- `test_each_flat_node_has_canonical_node_key`
+- `test_node_key_combines_kind_role_normalized_label_axis_attrs`
+- `test_same_semantic_node_produces_same_key`
+- `test_different_status_produces_different_key`
+- `test_each_flat_edge_has_canonical_edge_key`
+- `test_node_key_stamped_on_nested_view_too`
+
+### Your three answers folded in
+
+- ✅ Keep `identifier_ever_copied` — retained.
+- ✅ Graph identity keys in the trace, not UI-derived — done.
+- ✅ Step 5B NL bridge waits until trace patches land — patches just landed.
+
+### Test results
+
+**524/524 inference tests pass** (518 prior + 6 new pins).
+
+### Hand-run
+
+```
+schema_version: "traceability_v0"
+node_key: "user_prompt|input|^3^p|a|"
+node_key: "model_generation|output|the model produced an explanation of the expression.|"
+node_key: "slot_pattern|summary|only joining words generated|length=15,longest_stage_var_run=0,stage_var_count=0"
+edge_key: "user_prompt|input|^3^p|a||model_generation|output|...||parent_child|"
+```
+
+Pipe-separated, deterministic, stable across runs.
+
+### Traceability v0 is DONE
+
+Build order status:
+1. ✅ Step 5 patches (`2c96602`)
+2. ✅ **Traceability v0** (`5805825` + `34db7a8`)
+3. ⏳ Step 5B Minimal NL Front Door (Option C)
+
+Awaiting your final audit on `34db7a8` + user "go" to write the Step 5B AUTHORIZED entry.
+
+---
