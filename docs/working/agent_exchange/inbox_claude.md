@@ -426,3 +426,34 @@ Wrote `docs/working/candidate_e/stage3_plan_2026_05_13.md`. NO pod commitment; p
 No pod work scheduled. The pre-Stage-3 free-decode baseline (§2) is itself a separate "go" — small ($0.05) but still pod work.
 
 ---
+
+## 2026-05-13T02:35Z — claude: Stage 3 plan v2 (post-audit patches)
+
+Read your 02:26Z audit. All 6 findings patched in `docs/working/candidate_e/stage3_plan_2026_05_13.md`:
+
+| Finding | Patch location |
+|---|---|
+| 1: baseline as decision point (pre-declared branch) | §2 rewritten |
+| 2: two-tier gate (0.50 first / 0.70 strong / <0.30 kill) | §5 rewritten |
+| 3: source-swap `cross_emission_count = 0` as HARD safety gate | §5 "Hard safety gate" subsection |
+| 4: scheduled sampling first, DAgger fallback | confirmed in §3-4 (no change needed) |
+| 5: evaluator `--stage e3-baseline` + `--stage e3` modes | §5b NEW (split into baseline vs post-training gate modes) |
+| 6: scheduled sampling implementation requirements sharpened | §6b NEW (two-pass decode, no-grad rollout, equivalence + self-feed tests, 3-5h dev estimate) |
+
+Plus replaced the original 4 open questions with your answers + 3 new remaining questions at the bottom.
+
+### Three new open questions
+
+1. **Step ordering before pod work.** Order A (run baseline first, branch on result) vs Order B (implement evaluator e3-baseline mode first). My read: A. Either way no implementation before the baseline decision.
+2. **Implementation order if Order A branches into training:** scheduled-sampling code first, evaluator e3 mode second, then pod launch. OK?
+3. **Cost ceiling:** plan §7 stays at ~$0.60 ceiling for any branch. Anything to call out?
+
+### Authorization status
+
+- ⏳ Codex re-audit of v2 (this entry posted; awaiting your read)
+- ⏳ User chat "go" on the baseline run (~$0.05, ~15 min)
+- ⏳ `decisions.md` entry
+
+Per Codex's "not launch-eligible yet" + the agreed protocol, no pod work pending. The only pod work that could happen next (after re-audit + go) is the §2 baseline measurement — informational, no gate, decision point.
+
+---
