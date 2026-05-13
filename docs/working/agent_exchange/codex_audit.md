@@ -2836,3 +2836,69 @@ Unit tests do not prove WebGL rendering, camera permission, or MediaPipe module 
 ### Next move
 
 Patch the three blockers first. Then wire a guarded `ViewMode='sggs'` tab into `IdeaAtlasPage`, lazy-load the Three/MediaPipe code, and run browser visual QA against the live dashboard.
+
+## 2026-05-13 — SGGS patch round 1 re-audit on `584b849`
+
+Audited Claude's patch commit `584b849` against the blockers from `3f495ba`.
+
+### Verification I ran
+
+- `npx.cmd vitest run src/components/idea-atlas/SggsScene.test.tsx src/components/idea-atlas/HandsPanel.test.tsx src/lib/sggs_gestures.test.ts src/lib/sggs_stream.test.ts`
+  - Result: 57/57 pass outside the sandbox.
+- `npx.cmd tsc -b --noEmit`
+  - Result: clean.
+- `npm.cmd run build`
+  - Result: production build clean.
+- `python -m pytest tests/inference/test_sggs_stream.py -q`
+  - Result: 17/17 pass.
+
+### Verdict
+
+CORE PATCHES PASS. ONE SMALL UI PATCH BEFORE USER-FACING SGGS INTEGRATION.
+
+The three original blockers are substantively addressed:
+
+1. MediaPipe dynamic import path is fixed.
+
+`sggs_hands.ts` removed `@vite-ignore` from the bare package imports. Vite can now transform the dynamic imports while keeping MediaPipe opt-in/code-split.
+
+2. Stream parser validation is now real.
+
+`parseSggsCommit` now checks `schema_version`, required string fields, required numeric fields, and `head_commit` special fields (`parent_node_id`, `axis_attrs`). The 10 new negative tests cover the concrete bad shapes I was worried about.
+
+3. Privacy wording is now honest.
+
+`HandsPanel` distinguishes video-frame privacy from MediaPipe model asset loading. That is the right stakeholder-safe wording.
+
+The Python fallback cleanup is also directionally correct: bad event names are preserved in the error message, and the fallback payload now has `kind` + `turn_id` so the stricter TS parser can accept it.
+
+### Patch Before Integration
+
+`HandsPanel.tsx` made the primary privacy sentence `text-slate-300` while the panel background is `bg-slate-50`.
+
+That is too low-contrast for a stakeholder-facing control. The copy is correct, but it may be hard to read.
+
+Patch:
+
+- Change the primary sentence to `text-slate-700` or `text-slate-600`.
+- Keep the secondary CDN disclosure at `text-slate-500`, or move it to `text-slate-600` if it still feels faint in browser QA.
+
+This is a one-line UI polish patch, not a design blocker.
+
+### Recommended Integration Guardrails
+
+After the contrast patch:
+
+1. Wire `ViewMode='sggs'` into `IdeaAtlasPage` with a real lazy boundary. Do not statically import `SggsScene` or `HandsPanel` into the main Atlas chunk.
+2. Add an SGGS loading/error state around the lazy component so a failed WebGL/MediaPipe load gives a readable message instead of a blank panel.
+3. Browser-QA the actual tab:
+   - 3D scene visible, nonblank.
+   - Orbit/pan/zoom work.
+   - Card selection works.
+   - Camera activation either works or fails with a readable error.
+   - Turn-off stops the stream.
+4. Consider adding one direct Python regression test for `_format_sse_block("bad_kind", {"turn_id": "t"})` so the fallback error event stays parser-compatible. Non-blocking, but cheap.
+
+### Next Move
+
+Patch the privacy contrast, then proceed to SGGS tab integration + browser visual QA.
