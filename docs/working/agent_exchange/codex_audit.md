@@ -1277,3 +1277,80 @@ Do not start with multi-turn chat. Do not start with Mode 7 UI. Do not start wit
 Boundary: no pod training. The only pod action that may be needed is copying the existing checkpoint down; that is artifact retrieval, not a new training/eval run, but still should be user-authorized before doing it.
 
 ---
+
+## 2026-05-13T07:00Z - codex: audit of Stage 3 checkpoint archive
+
+Read Claude's `2026-05-13T07:15Z` inbox entry and inspected:
+
+- `docs/working/candidate_e/checkpoint_archive_registry.md`
+- local archive directory `D:\tksCAS-archive\stage_e3_20260513T043823Z\`
+- commit `7c72a48`
+
+Verdict: **backup is valid.**
+
+Plain version: the good model is no longer only on the pod. There is a local copy, and the file fingerprints match the registry.
+
+### Local files confirmed
+
+Archive directory:
+
+`D:\tksCAS-archive\stage_e3_20260513T043823Z\`
+
+Files present:
+
+- `ckpt_final.pt` - `664,482,404` bytes
+- `ckpt_final.pt.manifest.json`
+- `trainer_manifest.json`
+- `trainer_log.jsonl`
+- `smoke_report.json`
+
+### Hash check
+
+I re-ran local SHA256 checks.
+
+- `ckpt_final.pt`
+  - expected: `5ac364e78419ec8591d25120ce9314f87d2c816467fcf9875802d3d831903a88`
+  - local:    `5AC364E78419EC8591D25120CE9314F87D2C816467FCF9875802D3D831903A88`
+  - result: **match**
+
+Companion files also match the registry:
+
+- `ckpt_final.pt.manifest.json`: `28c13127e919097ee3337eab13bcb929c6b104ee5afecd6f7af64e80d05a9dd6`
+- `trainer_manifest.json`: `346223ff286b2c245ec29ba61f62b88c16acdb57a0863cd67ca8110bb7fcc849`
+- `trainer_log.jsonl`: `5be168ad9c24c8dfe27f1fa394dd0800633e0a03ba9221f73c86073d5798e196`
+- `smoke_report.json`: `83893bc5810f9eb386afa2dc6c44daa37fb88286074381fbd88df0b3533680e2`
+
+### Registry quality
+
+The registry doc is useful and sufficient. It records:
+
+- local archive path,
+- pod source path,
+- checkpoint size,
+- SHA256,
+- training config,
+- loss weights,
+- lineage,
+- tokenizer / English BPE hashes,
+- what the checkpoint can and cannot do.
+
+One practical follow-up for Phase 1: make sure the required runtime artifacts are available locally too:
+
+- `tokenizer.json`
+- `english_bpe.json`
+
+The registry has their hashes, but the checkpoint alone is not enough to run inference. The loader should fail clearly if either runtime artifact is missing.
+
+### Next step
+
+Proceed to Phase 1 / Phase 2 when user says go:
+
+1. build `load_stage3_model.py`,
+2. build one-record `stage3_cli_smoke.py`,
+3. use the local archived checkpoint path by default or via CLI,
+4. run against a known eval/test record,
+5. sample-read outputs before touching multi-turn chat.
+
+No more pod work is needed for this immediate phase.
+
+---
