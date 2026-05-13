@@ -881,3 +881,77 @@ No pod training yet.
 Patch the three blockers, rerun targeted tests and CPU smoke, then re-surface for audit.
 
 ---
+
+## 2026-05-13T04:17Z - codex: re-audit of scheduled-sampling blocker patches
+
+Read Claude's 2026-05-13 scheduled-sampling patch report and inspected commit `e9a0b76`.
+
+Verdict: **PASS / launch-eligible after user authorization.**
+
+The three blockers from my prior audit are resolved.
+
+### Blocker 1 - doc honesty about the variant
+
+Resolved.
+
+`scheduled_sampling.py`, `train_simplex_mvp.py`, and `stage3_plan_2026_05_13.md` now clearly say this is the Bengio-style **one-step / teacher-forced-prefix** scheduled sampling variant, not a full autoregressive rollout.
+
+Plain read: this is the cheaper first test. It mixes model-predicted previous tokens into the training prefix, but those predictions come from one gold-prefix forward pass. If this misses, the next heavier option is full rollout / DAgger. The file no longer pretends we already built that.
+
+### Blocker 2 - direct mixed-input inspection
+
+Resolved.
+
+`build_scheduled_sampling_input(...)` now exposes:
+
+- `mixed_input`
+- `use_sample`
+- `sampled_prev`
+
+The tests directly inspect the actual decoder input instead of inferring substitution from changed outputs. Coverage includes:
+
+- ratio `1.0`: every non-BOS position is substituted;
+- BOS position is never substituted across multiple ratios;
+- ratio `0.5`: both gold and sampled positions appear with a fixed seed;
+- ratio `0.0`: no substitution and mixed input equals gold.
+
+This is the direct evidence I asked for.
+
+### Blocker 3 - stale plan / smoke command mismatch
+
+Resolved.
+
+The Stage 3 plan now matches the actual implementation:
+
+- `--ablation e3`
+- `--scheduled-sampling-ratio`
+- `--scheduled-sampling-schedule`
+- CPU smoke uses the multi-step trainer path, not the old `--smoke-test` path.
+
+I searched for stale launch references. The only remaining `--smoke-test` references are the trainer's existing CLI/help text, not the Stage 3 launch checklist.
+
+### Tests run
+
+From `noetic-compass-scaffold/noetic-compass`:
+
+- `python -m pytest cas-native/tests/training/test_scheduled_sampling.py -q`
+  - result: `23 passed`
+- `python -m pytest cas-native/tests/training/test_e2b_losses.py cas-native/tests/training/test_candidate_e_stage1a_patches.py cas-native/tests/training/test_scheduled_sampling.py cas-native/tests/evaluation/test_evaluate_candidate_e_stage2.py -q`
+  - result: `81 passed`
+
+### Boundary
+
+This audit does **not** authorize pod training by itself.
+
+Stage 3 scheduled-sampling pod training is eligible only after:
+
+1. `decisions.md` has the required authorized entry,
+2. the user says `go` / `launch` in chat,
+3. sync + MD5 verification passes,
+4. the E2c continuation checkpoint path is verified,
+5. flags are checked,
+6. GPU/pod state is checked.
+
+No new losses, no corpus changes, no DAgger, no full rollout in this step.
+
+---
