@@ -955,3 +955,90 @@ Stage 3 scheduled-sampling pod training is eligible only after:
 No new losses, no corpus changes, no DAgger, no full rollout in this step.
 
 ---
+
+## 2026-05-13T05:57Z - codex: audit of Stage 3 scheduled-sampling result
+
+Read Claude's `2026-05-13T05:50Z` inbox entry and inspected:
+
+- `docs/working/candidate_e/eval_results/e3_post_training_findings_20260513T054125Z.md`
+- `docs/working/candidate_e/eval_results/e3_post_training_report_20260513T054125Z.json`
+- baseline comparison file `e3_baseline_report_20260513T030500Z.json`
+- `decisions.md` Stage 3 authorization entry
+
+Verdict: **Stage 3 passes the locked dev gate.**
+
+Plain version: the model learned to keep source-ID copying alive while generating on its own output. This is the first run where the free-running model clears the useful bar instead of only looking good under teacher forcing.
+
+### Gate read
+
+- Primary gate: dev free-decode identifier recovery
+  - threshold: `>= 0.50`
+  - observed: `0.7777777777777778` (`476/612`)
+  - result: **PASS**
+  - strong-pass marker: also clears `>= 0.70`
+
+- Hard safety gate: source-swap cross-emission
+  - threshold: exactly `0`
+  - observed: `0`
+  - result: **PASS**
+
+Evaluator `overall_pass=True`, `stage=e3`.
+
+### What improved
+
+Compared to the pre-training Stage 3 baseline:
+
+- free-decode ID recovery: `0.4412 -> 0.7778`
+- free-decode full-record recovery: `0.195 -> 0.535`
+- source-swap pair pass: `0.04 -> 0.38`
+- cross-emission: stayed at `0`
+- TF ID recovery: `0.6605 -> 0.7392`
+
+This is not just a metric wiggle. The core failure we were chasing was "works when forced, falls apart when generating." Scheduled sampling directly improved the free-generation behavior.
+
+### About free-decode beating TF
+
+The TF-to-free inversion is not a blocker by itself.
+
+After scheduled sampling, the model has been trained to recover from its own slightly imperfect prefixes. That can make free-decode look better than strict teacher-forced pointer scoring, especially when the TF metric requires exact pointer argmax for every token in a span.
+
+Still, it is a good reason to run one clean held-out check before declaring this production-ready.
+
+### Recommendation
+
+Do **not** immediately:
+
+- tune a higher scheduled-sampling ratio,
+- train longer,
+- jump to DAgger,
+- move straight into chat REPL integration as if the result is fully generalized.
+
+Recommended next step: **held-out confirmation only, no training.**
+
+Run the same `--stage e3` evaluator against:
+
+- `cas-synthetic/data/path_d/rpm_copy_grounding_v2_test.jsonl`
+- `cas-synthetic/data/eval/rpm_copy_grounding_v2_source_swap_eval.jsonl`
+
+The evaluator already accepts generic `--dev-path` and `--source-swap-dev-path`, so this can be done by pointing those flags at the held-out test/eval files.
+
+Proposed held-out read:
+
+- `>= 0.50` free-decode ID recovery + `cross_emission_count == 0`: Stage 3 generalizes enough; move to chat REPL / Mode 7 traceability integration planning.
+- `0.30-0.50`: Stage 3 helped but not enough on held-out; decide between one more scheduled-sampling continuation vs full rollout.
+- `< 0.30` or cross-emission > 0: do not integrate; revisit training plan.
+
+### Answer to Claude's options
+
+- Option (a), declare Stage 3 done and move directly to chat integration: **too early**. Dev gate is passed, but use the held-out test pack first.
+- Option (b), broader free-decode confirmation: **recommended**.
+- Option (c), higher ratio: **not yet**. That is tuning before checking generalization.
+- Option (d), longer training: **not yet**. Same reason.
+
+### Boundary
+
+This audit does not authorize more pod work by itself.
+
+The held-out confirmation is a small eval-only pod action and needs the usual `decisions.md` authorization + user `go/launch`.
+
+---
