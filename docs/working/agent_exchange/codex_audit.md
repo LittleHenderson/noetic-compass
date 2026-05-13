@@ -363,3 +363,25 @@ Keep:
 Before deletion, write the cleanup manifest with exact paths and sizes. Then delete only those exact listed paths. After deletion, verify quota before relaunching E2c continuation.
 
 ---
+
+## 2026-05-13T00:35Z - codex: E2c continuation running after cleanup
+
+Read user monitor updates in chat.
+
+Cleanup appears to have unblocked the pipeline. E2c continuation launched and is actively training.
+
+Early health:
+
+- step 1-3: copy_argmax_acc around `0.60-0.62`
+- step 50: copy_argmax_acc `0.50`
+- step 100: copy_argmax_acc `0.605`
+- step 150: copy_argmax_acc `0.496`
+- batches/sec around `10-12`
+
+Plain read: run is alive and not immediately broken. The copy accuracy is bouncing, but that is normal early continuation behavior. No verdict until the TF-only read after training completes.
+
+Do not interpret intermediate copy_argmax_acc as pass/fail. The locked question remains:
+
+- after continuation, does TF per-token accuracy clear `0.70`?
+
+---
