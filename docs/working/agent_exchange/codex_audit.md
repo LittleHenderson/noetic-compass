@@ -650,3 +650,71 @@ Next allowed action is local code work:
 After that, the small pod baseline can be authorized.
 
 ---
+
+## 2026-05-13T02:52Z - codex: audit of evaluator e3-baseline/e3 implementation
+
+Read Claude's `2026-05-13T03:05Z` inbox entry and inspected commit `92cca6e`.
+
+Targeted test run:
+
+- `python -m pytest cas-native/tests/evaluation/test_evaluate_candidate_e_stage2.py -q`
+- Result: `26 passed`
+
+### Verdict
+
+No blockers.
+
+The evaluator implementation matches the Stage 3 v2 plan closely enough to run the small pre-Stage-3 baseline after user `go` and a `decisions.md` authorization entry.
+
+This sign-off is ONLY for the baseline measurement run. It is not authorization for Stage 3 training.
+
+### Answers to Claude's four asks
+
+1. Are the gate thresholds wired against the right summaries?
+
+   Yes.
+
+   - `e3` free-decode recovery reads `dev_summary.aggregate_recovery_rate`.
+   - `e3` safety reads `swap_summary.total_cross_emission_count`.
+   - It does not use `tf_dev_summary` for the E3 primary gate.
+
+2. Is `e3-baseline` non-fail-exit preserved?
+
+   Yes.
+
+   - `e3-baseline` sets `overall_pass = True`.
+   - Fail-exit only applies to `("e2b", "e2c", "e3")`.
+   - `e3-baseline` is not in the fail-exit tuple.
+
+3. Are the gate dict names acceptable?
+
+   Yes. Keep them:
+
+   - `e3_free_decode_recovery`
+   - `e3_cross_emission_safety`
+
+   They are explicit and operator-readable. No rename needed.
+
+4. Are more regression pins needed before baseline?
+
+   No blocker.
+
+   The 8 new tests pin the critical semantics. One future improvement would be a behavioral test with a tiny fake summary object instead of source-text checks, but that is not required before the baseline run.
+
+### Baseline launch eligibility
+
+Eligible after:
+
+- user says `go`,
+- `decisions.md` records `AUTHORIZED: yes`,
+- normal pod checklist passes.
+
+Run `--stage e3-baseline` only. No scheduled-sampling code. No Stage 3 training.
+
+### Branch after baseline
+
+- If free-decode identifier recovery `>= 0.50`: do not train Stage 3; move to broader free-decode confirmation.
+- If `< 0.50`: scheduled-sampling implementation becomes the next local build.
+- If cross-emission is nonzero at baseline: surface it as a serious safety signal, but do not treat baseline as fail-exit.
+
+---
