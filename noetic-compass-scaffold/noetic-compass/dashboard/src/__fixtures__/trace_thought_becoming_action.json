@@ -1,0 +1,173 @@
+{
+  "schema_version": "traceability_v0",
+  "trace_id": "00000000-0000-4000-8000-000000000001",
+  "created_at": "2026-05-13T20:00:00Z",
+  "input": {
+    "input_kind": "nl_bridge",
+    "user_text": "explain a thought becoming action",
+    "cas_expression": "^9^O",
+    "source_tokens": [
+      {
+        "index": 0,
+        "token": "^9^O"
+      }
+    ],
+    "nl_bridge": {
+      "matched_pattern": "thought becoming action",
+      "confidence": 0.95,
+      "rationale": "Below/Effect in the Operational domain \u2014 a thought landing as behavior.",
+      "inferred_cas_expression": "^9^O"
+    }
+  },
+  "output": {
+    "english": "An embodied stance expressed through embodied intuition.",
+    "n_tokens": 14
+  },
+  "copy": {
+    "copied_identifiers": [],
+    "missed_identifiers": [],
+    "coverage": null,
+    "per_identifier": []
+  },
+  "slot_trace": {
+    "length": 15,
+    "slot_counts_by_label": {
+      "joining word": 15
+    },
+    "longest_stage_var_run": 0,
+    "raw_trace": null
+  },
+  "confidence": {
+    "qualitative_coverage": "unknown",
+    "slot_quality": "the model only generated joining words",
+    "caveats": [],
+    "warning_flags": []
+  },
+  "thought_tree": {
+    "root": {
+      "kind": "user_prompt",
+      "role": "input",
+      "label": "^9^O",
+      "normalized_label": "^9^o",
+      "text": "^9^O",
+      "children": [
+        {
+          "kind": "model_generation",
+          "role": "output",
+          "label": "The model produced an explanation of the expression.",
+          "normalized_label": "the model produced an explanation of the expression.",
+          "text": "An embodied stance expressed through embodied intuition.",
+          "children": [
+            {
+              "kind": "slot_pattern",
+              "role": "summary",
+              "label": "only joining words generated",
+              "normalized_label": "only joining words generated",
+              "axis_attrs": {
+                "length": 15,
+                "longest_stage_var_run": 0,
+                "stage_var_count": 0
+              },
+              "children": [],
+              "id": "n2",
+              "node_key": "slot_pattern|summary|only joining words generated|length=15,longest_stage_var_run=0,stage_var_count=0"
+            },
+            {
+              "kind": "confidence_marker",
+              "role": "unknown",
+              "label": "coverage: unknown",
+              "normalized_label": "coverage: unknown",
+              "axis_attrs": {
+                "caveat": null,
+                "band": "unknown"
+              },
+              "children": [],
+              "id": "n3",
+              "node_key": "confidence_marker|unknown|coverage: unknown|band=unknown,caveat=None"
+            }
+          ],
+          "id": "n1",
+          "node_key": "model_generation|output|the model produced an explanation of the expression.|"
+        }
+      ],
+      "id": "n0",
+      "node_key": "user_prompt|input|^9^o|"
+    },
+    "nodes": [
+      {
+        "id": "n0",
+        "node_key": "user_prompt|input|^9^o|",
+        "kind": "user_prompt",
+        "role": "input",
+        "label": "^9^O",
+        "normalized_label": "^9^o",
+        "text": "^9^O"
+      },
+      {
+        "id": "n1",
+        "node_key": "model_generation|output|the model produced an explanation of the expression.|",
+        "kind": "model_generation",
+        "role": "output",
+        "label": "The model produced an explanation of the expression.",
+        "normalized_label": "the model produced an explanation of the expression.",
+        "text": "An embodied stance expressed through embodied intuition."
+      },
+      {
+        "id": "n2",
+        "node_key": "slot_pattern|summary|only joining words generated|length=15,longest_stage_var_run=0,stage_var_count=0",
+        "kind": "slot_pattern",
+        "role": "summary",
+        "label": "only joining words generated",
+        "normalized_label": "only joining words generated",
+        "axis_attrs": {
+          "length": 15,
+          "longest_stage_var_run": 0,
+          "stage_var_count": 0
+        }
+      },
+      {
+        "id": "n3",
+        "node_key": "confidence_marker|unknown|coverage: unknown|band=unknown,caveat=None",
+        "kind": "confidence_marker",
+        "role": "unknown",
+        "label": "coverage: unknown",
+        "normalized_label": "coverage: unknown",
+        "axis_attrs": {
+          "caveat": null,
+          "band": "unknown"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e0",
+        "edge_key": "user_prompt|input|^9^o||model_generation|output|the model produced an explanation of the expression.||parent_child|",
+        "source": "n0",
+        "target": "n1",
+        "source_key": "user_prompt|input|^9^o|",
+        "target_key": "model_generation|output|the model produced an explanation of the expression.|",
+        "kind": "parent_child"
+      },
+      {
+        "id": "e1",
+        "edge_key": "model_generation|output|the model produced an explanation of the expression.||slot_pattern|summary|only joining words generated|length=15,longest_stage_var_run=0,stage_var_count=0|parent_child|",
+        "source": "n1",
+        "target": "n2",
+        "source_key": "model_generation|output|the model produced an explanation of the expression.|",
+        "target_key": "slot_pattern|summary|only joining words generated|length=15,longest_stage_var_run=0,stage_var_count=0",
+        "kind": "parent_child"
+      },
+      {
+        "id": "e2",
+        "edge_key": "model_generation|output|the model produced an explanation of the expression.||confidence_marker|unknown|coverage: unknown|band=unknown,caveat=None|parent_child|",
+        "source": "n1",
+        "target": "n3",
+        "source_key": "model_generation|output|the model produced an explanation of the expression.|",
+        "target_key": "confidence_marker|unknown|coverage: unknown|band=unknown,caveat=None",
+        "kind": "parent_child"
+      }
+    ],
+    "node_count": 4,
+    "edge_count": 3
+  }
+}

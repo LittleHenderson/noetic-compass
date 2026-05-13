@@ -193,3 +193,176 @@ describe('validateAtlasTrace', () => {
     }
   });
 });
+
+// ---------------------------------------------------------------------
+// REGRESSION PIN (Codex audit a658f6d blocker 1): per-node + per-edge
+// identity checks. The validator must reject:
+//   - any node missing string id / node_key / kind / role / label /
+//     normalized_label
+//   - any edge missing string id / edge_key / source / target /
+//     source_key / target_key / kind
+//   - any edge whose source or target does not exist in the node id set
+//   - thought_tree where node_count or edge_count disagrees with the
+//     flat array length
+// ---------------------------------------------------------------------
+
+function makeTreeWithTwoNodes(): AtlasTrace {
+  const t = makeValidTrace();
+  t.thought_tree = {
+    root: {
+      id: 'n0',
+      node_key: 'user_prompt|input|^9^o|',
+      kind: 'user_prompt',
+      role: 'input',
+      label: '^9^O',
+      normalized_label: '^9^o',
+      text: '^9^O',
+      children: [],
+    },
+    nodes: [
+      {
+        id: 'n0',
+        node_key: 'user_prompt|input|^9^o|',
+        kind: 'user_prompt',
+        role: 'input',
+        label: '^9^O',
+        normalized_label: '^9^o',
+      },
+      {
+        id: 'n1',
+        node_key: 'model_generation|output|thought becoming action|',
+        kind: 'model_generation',
+        role: 'output',
+        label: 'thought becoming action',
+        normalized_label: 'thought becoming action',
+      },
+    ],
+    edges: [
+      {
+        id: 'e0',
+        edge_key:
+          'user_prompt|input|^9^o||model_generation|output|thought becoming action||parent_child|',
+        source: 'n0',
+        target: 'n1',
+        source_key: 'user_prompt|input|^9^o|',
+        target_key: 'model_generation|output|thought becoming action|',
+        kind: 'parent_child',
+      },
+    ],
+    node_count: 2,
+    edge_count: 1,
+  };
+  return t;
+}
+
+describe('validateAtlasTrace — thought_tree identity', () => {
+  it('accepts a tree with full node + edge identity', () => {
+    const result = validateAtlasTrace(makeTreeWithTwoNodes());
+    expect(result.ok).toBe(true);
+  });
+
+  it('rejects a node missing node_key', () => {
+    const t = makeTreeWithTwoNodes();
+    delete (t.thought_tree.nodes[0] as unknown as Record<string, unknown>).node_key;
+    const result = validateAtlasTrace(t);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toContain('node_key');
+    }
+  });
+
+  it('rejects a node missing id', () => {
+    const t = makeTreeWithTwoNodes();
+    delete (t.thought_tree.nodes[1] as unknown as Record<string, unknown>).id;
+    const result = validateAtlasTrace(t);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toContain('id');
+    }
+  });
+
+  it('rejects each required string node field individually', () => {
+    const fields = ['kind', 'role', 'label', 'normalized_label'] as const;
+    for (const field of fields) {
+      const t = makeTreeWithTwoNodes();
+      delete (t.thought_tree.nodes[0] as unknown as Record<string, unknown>)[field as string];
+      const result = validateAtlasTrace(t);
+      expect(result.ok, `missing ${field}`).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toContain(field);
+      }
+    }
+  });
+
+  it('rejects an edge missing edge_key', () => {
+    const t = makeTreeWithTwoNodes();
+    delete (t.thought_tree.edges[0] as unknown as Record<string, unknown>).edge_key;
+    const result = validateAtlasTrace(t);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toContain('edge_key');
+    }
+  });
+
+  it('rejects each required string edge field individually', () => {
+    const fields = [
+      'id',
+      'source',
+      'target',
+      'source_key',
+      'target_key',
+      'kind',
+    ] as const;
+    for (const field of fields) {
+      const t = makeTreeWithTwoNodes();
+      delete (t.thought_tree.edges[0] as unknown as Record<string, unknown>)[field as string];
+      const result = validateAtlasTrace(t);
+      expect(result.ok, `missing ${field}`).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toContain(field);
+      }
+    }
+  });
+
+  it('rejects an edge whose source is not a node id (dangling)', () => {
+    const t = makeTreeWithTwoNodes();
+    t.thought_tree.edges[0].source = 'nonexistent';
+    const result = validateAtlasTrace(t);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.toLowerCase()).toContain('source');
+      expect(result.error).toContain('nonexistent');
+    }
+  });
+
+  it('rejects an edge whose target is not a node id (dangling)', () => {
+    const t = makeTreeWithTwoNodes();
+    t.thought_tree.edges[0].target = 'phantom';
+    const result = validateAtlasTrace(t);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.toLowerCase()).toContain('target');
+      expect(result.error).toContain('phantom');
+    }
+  });
+
+  it('rejects node_count that disagrees with nodes.length', () => {
+    const t = makeTreeWithTwoNodes();
+    t.thought_tree.node_count = 5;
+    const result = validateAtlasTrace(t);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toContain('node_count');
+    }
+  });
+
+  it('rejects edge_count that disagrees with edges.length', () => {
+    const t = makeTreeWithTwoNodes();
+    t.thought_tree.edge_count = 99;
+    const result = validateAtlasTrace(t);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toContain('edge_count');
+    }
+  });
+});

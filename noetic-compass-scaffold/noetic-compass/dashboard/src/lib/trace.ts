@@ -278,6 +278,50 @@ function isValidConfidence(value: unknown): value is AtlasTraceConfidence {
   return true;
 }
 
+// Required string fields on every flat ThoughtTreeNode (Codex audit
+// a658f6d blocker 1). The presence + types are load-bearing because
+// ThoughtTreeView indexes layout positions by `id` — a node without
+// an `id` silently drops out of the render.
+const REQUIRED_NODE_STRING_FIELDS = [
+  'id',
+  'node_key',
+  'kind',
+  'role',
+  'label',
+  'normalized_label',
+] as const;
+
+// Required string fields on every flat ThoughtTreeEdge.
+const REQUIRED_EDGE_STRING_FIELDS = [
+  'id',
+  'edge_key',
+  'source',
+  'target',
+  'source_key',
+  'target_key',
+  'kind',
+] as const;
+
+function isValidThoughtTreeNode(value: unknown): boolean {
+  if (!isPlainObject(value)) return false;
+  for (const field of REQUIRED_NODE_STRING_FIELDS) {
+    if (typeof (value as Record<string, unknown>)[field] !== 'string') {
+      return false;
+    }
+  }
+  return true;
+}
+
+function isValidThoughtTreeEdge(value: unknown): boolean {
+  if (!isPlainObject(value)) return false;
+  for (const field of REQUIRED_EDGE_STRING_FIELDS) {
+    if (typeof (value as Record<string, unknown>)[field] !== 'string') {
+      return false;
+    }
+  }
+  return true;
+}
+
 function isValidThoughtTree(value: unknown): value is AtlasTraceThoughtTree {
   if (!isPlainObject(value)) return false;
   if (!isPlainObject(value.root)) return false;
@@ -285,7 +329,77 @@ function isValidThoughtTree(value: unknown): value is AtlasTraceThoughtTree {
   if (!Array.isArray(value.edges)) return false;
   if (typeof value.node_count !== 'number') return false;
   if (typeof value.edge_count !== 'number') return false;
+  if (value.node_count !== value.nodes.length) return false;
+  if (value.edge_count !== value.edges.length) return false;
+  for (const node of value.nodes) {
+    if (!isValidThoughtTreeNode(node)) return false;
+  }
+  const nodeIds = new Set<string>(
+    value.nodes.map((n) => (n as { id: string }).id),
+  );
+  for (const edge of value.edges) {
+    if (!isValidThoughtTreeEdge(edge)) return false;
+    const e = edge as { source: string; target: string };
+    if (!nodeIds.has(e.source) || !nodeIds.has(e.target)) return false;
+  }
   return true;
+}
+
+/**
+ * Validate a thought tree and return a precise error message naming the
+ * first failure. Useful when surfacing UI errors instead of the
+ * top-level "thought_tree section is malformed." message.
+ *
+ * Per Codex audit a658f6d blocker 1: every node must have stable
+ * identity fields, every edge must carry its keys, and edges must not
+ * dangle.
+ */
+function thoughtTreeError(value: unknown): string | null {
+  if (!isPlainObject(value)) return 'thought_tree is not an object';
+  if (!isPlainObject(value.root)) return 'thought_tree.root is missing';
+  if (!Array.isArray(value.nodes)) return 'thought_tree.nodes is not an array';
+  if (!Array.isArray(value.edges)) return 'thought_tree.edges is not an array';
+  if (typeof value.node_count !== 'number') {
+    return 'thought_tree.node_count is not a number';
+  }
+  if (typeof value.edge_count !== 'number') {
+    return 'thought_tree.edge_count is not a number';
+  }
+  if (value.node_count !== value.nodes.length) {
+    return `thought_tree.node_count (${value.node_count}) does not match nodes.length (${value.nodes.length})`;
+  }
+  if (value.edge_count !== value.edges.length) {
+    return `thought_tree.edge_count (${value.edge_count}) does not match edges.length (${value.edges.length})`;
+  }
+  for (let i = 0; i < value.nodes.length; i++) {
+    const node = value.nodes[i];
+    if (!isPlainObject(node)) return `thought_tree.nodes[${i}] is not an object`;
+    for (const field of REQUIRED_NODE_STRING_FIELDS) {
+      if (typeof (node as Record<string, unknown>)[field] !== 'string') {
+        return `thought_tree.nodes[${i}] missing string field "${field}"`;
+      }
+    }
+  }
+  const nodeIds = new Set<string>(
+    value.nodes.map((n) => (n as { id: string }).id),
+  );
+  for (let i = 0; i < value.edges.length; i++) {
+    const edge = value.edges[i];
+    if (!isPlainObject(edge)) return `thought_tree.edges[${i}] is not an object`;
+    for (const field of REQUIRED_EDGE_STRING_FIELDS) {
+      if (typeof (edge as Record<string, unknown>)[field] !== 'string') {
+        return `thought_tree.edges[${i}] missing string field "${field}"`;
+      }
+    }
+    const e = edge as { source: string; target: string };
+    if (!nodeIds.has(e.source)) {
+      return `thought_tree.edges[${i}].source "${e.source}" is not a node id`;
+    }
+    if (!nodeIds.has(e.target)) {
+      return `thought_tree.edges[${i}].target "${e.target}" is not a node id`;
+    }
+  }
+  return null;
 }
 
 /**
@@ -358,8 +472,9 @@ export function validateAtlasTrace(
   if (!isValidConfidence(value.confidence)) {
     return { ok: false, error: 'confidence section is malformed.' };
   }
-  if (!isValidThoughtTree(value.thought_tree)) {
-    return { ok: false, error: 'thought_tree section is malformed.' };
+  const treeError = thoughtTreeError(value.thought_tree);
+  if (treeError !== null) {
+    return { ok: false, error: treeError };
   }
   return { ok: true, trace: value as unknown as AtlasTrace };
 }

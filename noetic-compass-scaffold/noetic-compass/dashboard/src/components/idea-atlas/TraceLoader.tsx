@@ -31,8 +31,8 @@ export const DEMO_TRACE: AtlasTrace = {
   },
   output: {
     english:
-      'A Below/Effect in the Operational domain — the Idea brought to Mind that lands as concrete action.',
-    n_tokens: 22,
+      'Below/Effect in the Operational domain — a thought landing as behavior.',
+    n_tokens: 18,
   },
   copy: {
     copied_identifiers: [],
@@ -54,6 +54,8 @@ export const DEMO_TRACE: AtlasTrace = {
   },
   thought_tree: {
     root: {
+      id: 'n0',
+      node_key: 'user_prompt|input|^9^o|',
       kind: 'user_prompt',
       role: 'input',
       label: '^9^O',
@@ -61,11 +63,13 @@ export const DEMO_TRACE: AtlasTrace = {
       text: '^9^O',
       children: [
         {
+          id: 'n1',
+          node_key: 'model_generation|output|thought becoming action|',
           kind: 'model_generation',
           role: 'output',
           label: 'thought becoming action',
           normalized_label: 'thought becoming action',
-          text: 'A Below/Effect in the Operational domain — the Idea brought to Mind that lands as concrete action.',
+          text: 'Below/Effect in the Operational domain — a thought landing as behavior.',
           children: [],
         },
       ],
@@ -87,7 +91,7 @@ export const DEMO_TRACE: AtlasTrace = {
         role: 'output',
         label: 'thought becoming action',
         normalized_label: 'thought becoming action',
-        text: 'A Below/Effect in the Operational domain — the Idea brought to Mind that lands as concrete action.',
+        text: 'Below/Effect in the Operational domain — a thought landing as behavior.',
       },
     ],
     edges: [

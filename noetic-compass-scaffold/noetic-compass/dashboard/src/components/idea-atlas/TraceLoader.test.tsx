@@ -13,7 +13,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { TraceLoader, DEMO_TRACE } from './TraceLoader';
-import type { AtlasTrace } from '../../lib/trace';
+import { ThoughtTreeView, type ThoughtTree } from './ThoughtTreeView';
+import { validateAtlasTrace, type AtlasTrace } from '../../lib/trace';
 
 // ── Helpers ─────────────────────────────────────────────────────
 
@@ -63,6 +64,73 @@ describe('TraceLoader — demo button', () => {
     const trace = onTraceLoaded.mock.calls[0][0] as AtlasTrace;
     expect(trace.schema_version).toBe('traceability_v0');
     expect(onError).not.toHaveBeenCalled();
+  });
+
+  it('DEMO_TRACE passes the tightened validator (per-node id + edge keys)', () => {
+    // REGRESSION PIN (Codex audit a658f6d blocker 2): the bundled
+    // demo must pass the strict validator that requires every node to
+    // carry id + node_key + kind + role + label + normalized_label,
+    // and every edge to carry id + edge_key + source/target/keys.
+    const result = validateAtlasTrace(DEMO_TRACE);
+    expect(result.ok).toBe(true);
+  });
+
+  it('DEMO_TRACE renders nodes and edges in ThoughtTreeView', () => {
+    // REGRESSION PIN (Codex audit a658f6d blocker 2): the demo button
+    // was previously rendering blank because the nested root and child
+    // lacked id/node_key, so ThoughtTreeView could not lay them out.
+    // This test pins both halves of the contract: load the demo via
+    // the button AND feed the resulting trace into ThoughtTreeView,
+    // then assert real visible nodes + edges.
+    let loaded: AtlasTrace | null = null;
+    const { rerender } = render(
+      <TraceLoader
+        onTraceLoaded={(t) => {
+          loaded = t;
+        }}
+        onError={() => {}}
+      />,
+    );
+    const btn = screen.getByRole('button', { name: /load demo trace/i });
+    act(() => {
+      btn.click();
+    });
+    expect(loaded).not.toBeNull();
+    if (!loaded) return;
+    rerender(
+      <ThoughtTreeView
+        tree={(loaded as AtlasTrace).thought_tree as unknown as ThoughtTree}
+      />,
+    );
+    // 2 flat nodes, 1 flat edge — exact counts pin against future
+    // demo trims.
+    const nodeGroups = document.querySelectorAll('[data-node-id]');
+    expect(nodeGroups.length).toBe(2);
+    const edges = document.querySelectorAll('[data-edge-id]');
+    expect(edges.length).toBe(1);
+    // Empty-state placeholder must NOT be rendered.
+    expect(
+      document.querySelector('[data-testid="thought-tree-empty"]'),
+    ).toBeNull();
+    // The user_prompt node should be present and labelled with the
+    // CAS expression (may match more than once — SVG <title> + visible
+    // text node both carry the label).
+    expect(screen.getAllByText('^9^O').length).toBeGreaterThan(0);
+  });
+
+  it('DEMO_TRACE rationale uses Below/Effect language, not "Idea brought to Mind"', () => {
+    // REGRESSION PIN (Codex audit a658f6d polish): the demo's
+    // generated English must match the corrected ^9 = Below/Effect
+    // rationale, not blend in ^0/^1 vocabulary.
+    expect(DEMO_TRACE.output.english.toLowerCase()).toContain(
+      'below/effect in the operational domain',
+    );
+    expect(DEMO_TRACE.output.english.toLowerCase()).toContain(
+      'thought landing as behavior',
+    );
+    expect(DEMO_TRACE.output.english.toLowerCase()).not.toContain(
+      'idea brought to mind',
+    );
   });
 });
 
