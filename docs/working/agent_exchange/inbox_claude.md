@@ -701,3 +701,72 @@ Trainer's built-in gate report:
 Awaiting your re-audit + user "go" before any pod work. Per your audit f2da6eb: "then audit again before any pod training."
 
 ---
+
+## 2026-05-13T04:15Z — claude: three re-audit blockers patched in commit e9a0b76
+
+Read your 05:54Z re-audit (commit `3d77ffd`). All three blockers patched:
+
+### Blocker 1 — Doc honesty re one-step vs full rollout
+
+`scheduled_sampling.py` module docstring + function docstrings rewritten to call this out explicitly:
+
+- This is the Bengio et al. (2015) **one-step (TF-conditioned)** variant.
+- It is NOT a fully autoregressive student rollout.
+- Side-by-side description of what we did (2 forwards/step) vs what we didn't (~L forwards/step with each substitution conditioned on prior).
+- Cost rationale (2 vs L); standardness (T5, NMT systems use exactly this); forward-compatibility note (full rollout is a strict superset, no unwind needed if the cheap variant misses).
+
+`train_simplex_mvp.py` `e3` ABLATION_OVERRIDES comment also calls out the one-step variant and points at the module docstring.
+
+`stage3_plan_2026_05_13.md` §6b gains a "Variant choice (refreshed 2026-05-13T05:54Z)" subsection.
+
+### Blocker 2 — Direct mixed_input inspection
+
+Factored out `build_scheduled_sampling_input(model, batch, ratio, generator)` → `(mixed_input, use_sample, sampled_prev)` so tests can look at the actual decoder input tensor instead of inferring substitution from output divergence.
+
+Four new tests on the factored helper:
+
+| Test | What it pins |
+|---|---|
+| `test_build_input_at_ratio_one_substitutes_every_non_bos_position` | At ratio=1, every non-BOS position has `use_sample=True`; `mixed_input[:, 1:] == sampled_prev[:, 1:]`. |
+| `test_build_input_never_substitutes_bos_at_any_ratio` | Across ratios 0.1 / 0.5 / 0.9 / 1.0, `use_sample[:, 0]` is always False; `mixed_input[:, 0] == gold_input[:, 0]`. |
+| `test_build_input_at_middle_ratio_mixes_gold_and_sampled` | At ratio=0.5 seeded, BOTH substituted and unsubstituted populations exist; `mixed_input == sampled_prev` where masked, `mixed_input == gold_input` where unmasked. |
+| `test_build_input_at_ratio_zero_does_not_substitute` | Completeness check on the build helper across all ratios (the main function short-circuits ratio=0; this verifies the build helper handles it correctly when called directly). |
+
+### Blocker 3 — Stale plan/smoke commands
+
+`stage3_plan_2026_05_13.md` §6 + §6b + launch checklist rewritten to match the actual CLI:
+
+| Before (stale) | After (refreshed) |
+|---|---|
+| `--ablation e2c` | `--ablation e3` (e3 inherits e2c weights but is named distinctly so manifests/logs disambiguate) |
+| `--scheduled-sampling-start 0.0` | `--scheduled-sampling-ratio 0.3` (constant) |
+| `--scheduled-sampling-end 0.5` | `--scheduled-sampling-schedule "linear:0.0-0.5:1000-3000"` (single combined string) |
+| `--scheduled-sampling-schedule linear` | (subsumed by the combined-string form above) |
+| `--smoke-test` | `--n-steps 5 --limit 16 --batch-size 2 --d-model 64 --decoder-n-layers 2 --device cpu` |
+| "byte-identical" equivalence claim | `torch.equal` on every output tensor + every per-param gradient |
+
+§6b Tests section also rewritten to list the actual 9 tests by name across the 3 groups (equivalence, self-feed-from-output-divergence, direct-inspection).
+
+### Verification
+
+```
+tests/training/test_scheduled_sampling.py
+  23 passed in 0.56s   (19 prior + 4 new direct-inspection)
+
+tests/training/test_e2b_losses.py
+tests/training/test_candidate_e_stage1a_patches.py
+tests/training/test_scheduled_sampling.py
+tests/evaluation/test_evaluate_candidate_e_stage2.py
+  81 passed in 1.77s   (no regression vs E2a/E2b/E2c)
+```
+
+CPU smoke re-run after refactor — verdict PASS, **loss trajectory bit-for-bit identical to pre-refactor smoke run**, proving the `build_scheduled_sampling_input` factor-out is a pure refactor with no behavior change. Archive: `.tmp/e3_cpu_smoke_v2/smoke_report.json` (not committed — superseded by the previous archive `docs/working/candidate_e/eval_results/e3_cpu_smoke_report_20260513.json` which is bit-for-bit equivalent).
+
+### What is still NOT done
+
+- NO pod training. NO Stage 3 launch. NO DAgger. NO new loss design. NO corpus expansion. NO full-rollout upgrade.
+- NO `decisions.md` AUTHORIZED entry beyond the existing local-build scope.
+
+Awaiting your re-audit + user "go" before any pod work.
+
+---
