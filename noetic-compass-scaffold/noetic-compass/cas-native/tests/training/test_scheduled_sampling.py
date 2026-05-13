@@ -24,6 +24,7 @@ import torch
 import torch.nn.functional as F
 
 from cas_native.training.scheduled_sampling import (
+    build_scheduled_sampling_input,
     forward_with_scheduled_sampling,
     resolve_ratio_at_step,
 )
@@ -252,6 +253,156 @@ def test_forward_at_ratio_one_changes_outputs_vs_tf():
     assert diff > 1e-4, (
         f"ratio=1 must produce visibly different lm_logits from TF; got "
         f"abs-max-diff {diff} (substitution may have silently not occurred)"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Test 2b: DIRECT mixed_input inspection (Codex re-audit blocker 2,
+#          2026-05-13T05:54Z). Rather than inferring substitution from output
+#          divergence, these tests look at the actual decoder input fed to
+#          pass 2.
+# ---------------------------------------------------------------------------
+
+def test_build_input_at_ratio_one_substitutes_every_non_bos_position():
+    """At ratio=1.0 the substitution mask MUST be True at every non-BOS
+    position; the resulting mixed_input MUST equal sampled_prev at every
+    non-BOS position (and gold at position 0).
+
+    This is the direct check Codex asked for — we are not inferring
+    substitution from output divergence; we are looking at the actual
+    decoder input tensor that pass 2 receives.
+    """
+    model, batch = _tiny_model_and_batch()
+    gen = torch.Generator(device=batch["lm_decoder_input_ids"].device)
+    gen.manual_seed(0)
+    mixed_input, use_sample, sampled_prev = build_scheduled_sampling_input(
+        model, batch, ratio=1.0, generator=gen,
+    )
+    gold_input = batch["lm_decoder_input_ids"]
+    B, L_out = gold_input.shape
+
+    # BOS preserved
+    assert torch.equal(use_sample[:, 0], torch.zeros(B, dtype=torch.bool)), (
+        "use_sample at position 0 (BOS) must be all False"
+    )
+    assert torch.equal(mixed_input[:, 0], gold_input[:, 0]), (
+        "mixed_input at position 0 must equal gold (BOS preserved)"
+    )
+
+    # Every non-BOS position substituted (use_sample True)
+    if L_out > 1:
+        non_bos_mask = use_sample[:, 1:]
+        assert non_bos_mask.all(), (
+            "at ratio=1, use_sample at every non-BOS position must be True; "
+            f"saw {int((~non_bos_mask).sum().item())} False entries"
+        )
+        # And mixed_input at non-BOS positions must equal sampled_prev
+        assert torch.equal(mixed_input[:, 1:], sampled_prev[:, 1:]), (
+            "at ratio=1, mixed_input[:, 1:] must equal sampled_prev[:, 1:]"
+        )
+
+
+def test_build_input_never_substitutes_bos_at_any_ratio():
+    """Position 0 (BOS) must be hard-fixed gold regardless of ratio.
+
+    Tests 4 ratios: 0.1, 0.5, 0.9, 1.0. None of them should ever flip
+    use_sample[:, 0] to True. mixed_input[:, 0] must equal gold[:, 0].
+    """
+    model, batch = _tiny_model_and_batch()
+    gold_input = batch["lm_decoder_input_ids"]
+    B = gold_input.shape[0]
+
+    for ratio in (0.1, 0.5, 0.9, 1.0):
+        gen = torch.Generator(device=gold_input.device)
+        gen.manual_seed(42)
+        mixed_input, use_sample, _ = build_scheduled_sampling_input(
+            model, batch, ratio=ratio, generator=gen,
+        )
+        assert not use_sample[:, 0].any().item(), (
+            f"BOS substitution leaked at ratio={ratio}: "
+            f"use_sample[:, 0] = {use_sample[:, 0].tolist()}"
+        )
+        assert torch.equal(mixed_input[:, 0], gold_input[:, 0]), (
+            f"mixed_input[:, 0] differs from gold at ratio={ratio}"
+        )
+
+
+def test_build_input_at_middle_ratio_mixes_gold_and_sampled():
+    """At ratio=0.5 with a seeded generator, BOTH substituted and
+    unsubstituted positions must appear in use_sample, AND mixed_input
+    must equal gold at unsubstituted positions and sampled_prev at
+    substituted positions.
+
+    This is the third part of Codex's direct-inspection requirement —
+    proving the mix actually mixes.
+    """
+    model, batch = _tiny_model_and_batch()
+    gold_input = batch["lm_decoder_input_ids"]
+    B, L_out = gold_input.shape
+
+    gen = torch.Generator(device=gold_input.device)
+    gen.manual_seed(7)
+    mixed_input, use_sample, sampled_prev = build_scheduled_sampling_input(
+        model, batch, ratio=0.5, generator=gen,
+    )
+
+    # Restrict to non-BOS positions for the mix check
+    if L_out <= 1:
+        pytest.skip("test requires L_out > 1")
+
+    non_bos_use = use_sample[:, 1:]
+    n_subst = int(non_bos_use.sum().item())
+    n_keep = int((~non_bos_use).sum().item())
+    n_total = n_subst + n_keep
+
+    # Both populations must be non-empty. At ratio=0.5 with a seeded
+    # generator across (B=1, L_out=~100) positions, the binomial is very
+    # peaked around 50% so both populations exist with overwhelming
+    # probability. If this test ever fails, the RNG or the mask logic
+    # is broken — not a flake.
+    assert n_subst > 0, (
+        f"at ratio=0.5 no non-BOS positions were substituted "
+        f"(use_sample sum at non-BOS = 0 of {n_total})"
+    )
+    assert n_keep > 0, (
+        f"at ratio=0.5 every non-BOS position was substituted "
+        f"({n_subst} of {n_total}) — generator may be broken"
+    )
+
+    # Where use_sample is True, mixed_input must equal sampled_prev.
+    # Where use_sample is False, mixed_input must equal gold_input.
+    where_subst = use_sample
+    where_keep = ~use_sample
+    assert torch.equal(
+        mixed_input[where_subst], sampled_prev[where_subst],
+    ), "mixed_input must equal sampled_prev at substituted positions"
+    assert torch.equal(
+        mixed_input[where_keep], gold_input[where_keep],
+    ), "mixed_input must equal gold_input at unsubstituted positions"
+
+
+def test_build_input_at_ratio_zero_does_not_substitute():
+    """At ratio=0, even though forward_with_scheduled_sampling
+    short-circuits, the build helper called directly must still produce
+    use_sample=all-False and mixed_input=gold_input.
+
+    Codex's blocker doesn't ask for this explicitly but it's a natural
+    completeness check on the build helper's behavior across all ratios.
+    """
+    model, batch = _tiny_model_and_batch()
+    gold_input = batch["lm_decoder_input_ids"]
+
+    gen = torch.Generator(device=gold_input.device)
+    gen.manual_seed(123)
+    mixed_input, use_sample, _ = build_scheduled_sampling_input(
+        model, batch, ratio=0.0, generator=gen,
+    )
+    assert not use_sample.any().item(), (
+        f"at ratio=0 no position should be substituted; "
+        f"got {int(use_sample.sum().item())} substitutions"
+    )
+    assert torch.equal(mixed_input, gold_input), (
+        "at ratio=0 mixed_input must equal gold_input exactly"
     )
 
 

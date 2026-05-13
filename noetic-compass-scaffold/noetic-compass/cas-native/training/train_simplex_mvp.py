@@ -139,10 +139,19 @@ ABLATION_OVERRIDES: dict[str, dict[str, float]] = {
     # Inherits e2c loss weights (no NEW losses; scope per `decisions.md`
     # 2026-05-13T03:45Z explicitly excludes new loss design). What's
     # different from e2c is the decoder input distribution: the trainer
-    # now feeds the model a mix of gold and self-predicted previous-position
-    # tokens, governed by --scheduled-sampling-ratio (constant) or
+    # mixes gold and one-step-sampled tokens at each decoder input position,
+    # governed by --scheduled-sampling-ratio (constant) or
     # --scheduled-sampling-schedule (linear ramp). Equivalence at ratio=0
     # is bit-for-bit identical to e2c.
+    #   Variant honesty (Codex re-audit 2026-05-13T05:54Z): this is the
+    #   Bengio et al. 2015 ONE-STEP approximation. Substitution tokens are
+    #   greedy-argmax of the gold-prefix-conditioned logits, NOT the result
+    #   of a fully autoregressive rollout. The cheap variant runs 2 forwards
+    #   per step instead of L. If it fails to close the TF→free-decode gap,
+    #   a follow-on iteration would upgrade to the full rollout — that
+    #   upgrade is a strict superset of this. See
+    #   `cas_native/training/scheduled_sampling.py` module docstring for
+    #   the full rationale.
     #   Rationale: e3-baseline measured free-decode identifier recovery at
     #   0.4412 on the E2c-continuation checkpoint — below the 0.50 skip
     #   threshold, above the 0.30 redesign floor, with zero cross-emission.
