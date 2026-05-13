@@ -1212,3 +1212,92 @@ Evaluator exit code: 0.
 Awaiting your audit + user "go" before Step 4.
 
 ---
+
+## 2026-05-13T14:25Z — claude: Step 4 done + 2 prep docs landed (3 parallel agents)
+
+Per AUTHORIZED entry `571d3a6` (2026-05-13T09:35Z): three agents ran in parallel. All complete.
+
+### Commits + push
+
+| commit | scope | files |
+|---|---|---|
+| `384032e` | Trace schema v0 doc + **inadvertently also**: `cas_cli.py` + `test_cas_cli_explain.py` (Agent A's staged files were caught in the commit — see note below) | 3 files, +1578 |
+| `bb873db` | Dashboard casing audit | 1 file, +468 |
+
+All pushed to `origin/master`. Heads-up on `384032e`: the commit message describes only the trace-schema doc, but the actual commit contains Agent A's `cas explain` code + tests as well. Agent A's git commit was blocked by the sandbox, so its files sat staged; when I committed Agent B's trace-schema doc, the staged files came along. Code is correct + tests pass + hand-run verified, but the commit message under-describes the contents. Flagging so you don't think the cas_cli.py changes appeared by accident.
+
+### Agent A — `cas explain` subcommand
+
+**Verification I just re-ran post-commit:**
+
+- 29/29 tests pass (`test_cas_cli_explain.py` + `test_stage3_local_loader.py` + `test_stage3_local_smoke.py`)
+- Hand-run on real archive with `let stageA0_4_857 = ^7^P_{F5}; let stageD3_4_857 = ^6^P_{F2}; stageA0_4_857 -> stageD3_4_857`:
+  - Load 1.6s, decode 5.5s
+  - **Generated:** *"I stageA0_4_857 is practiced rhythm with agency and stageD3_4_857 is the idea brought to Mind."*
+  - 4 expected / 2 emitted identifiers; coverage 1.000 (all expected appeared)
+  - Slot trace length 49, longest STAGE_VAR run 9
+  - All 3 gates PASS
+
+The output schema Agent A shipped becomes a soft contract for Step 5 chat REPL:
+
+```
+command, version, timestamp_utc, input_cas_expression,
+model: {manifest_ablation_mode, checkpoint_sha256, load_seconds, decode_seconds},
+generated_english, n_tokens_generated,
+identifiers: {expected, emitted, copied, missing, coverage},
+slot_summary: {length, counts, longest_stage_var_run},
+gates: {no_crash, generated_non_empty, ge_one_identifier_copied},
+report_path
+```
+
+Two small design deviations Agent A noted:
+- `reply_text="."` placeholder in synthetic record (the collator skips records with empty `reply_text`). Greedy decoder ignores it. Documented in code comment.
+- `COMMANDS` is an alias of existing `SUBCOMMANDS`, not a rename, to avoid breaking sibling consumers.
+
+### Agent B — trace schema v0 doc (`docs/working/cas_trace_schema_v0_2026_05_13.md`)
+
+~6645 words, 10 sections. Locks the canonical trace contract that flows inference → REPL → Mode 7 → Living Thought Atlas. Top-level layers: `input` / `encoder` / `decoder_per_position` / `attribution` / `admissibility` / `output` / `summary` / `timing_ms`. Plus object-traceability fields (`id`, `trace_id`, `created_at`, `parent_ids`, `source`, `schema_version`, `model_checkpoint_id`, `capture_level`).
+
+Critical reuses Agent B surfaced from existing plumbing (these shrink the Step 6 implementation):
+
+- `typed_fiber_decoder.py:325-331` already computes `simplex_pooled` + `pooled_noetic` — trace builder reuses.
+- `cas_native/trace/__init__.py` uses lazy `__getattr__` for the K=9-era `mechanistic_trace.v1`; v0 schema lives alongside it as sibling, not replacement.
+- `sample_decoder.py:316-323` already returns `emission_route_trace` — populatable with no model change when hard-typed-emission is on.
+- `activation_hooks.CAS_ALIGNED_CLASS_NAMES` (lines 70-93) just needs the four Stage 3 class names appended — smallest change that unlocks per-layer L2 fields.
+
+Three load-bearing open questions for your audit:
+
+1. Should `attribution.per_output_attribution` duplicate `p_copy_entropy` from `decoder_per_position`, or single-source?
+2. Trace persistence default: per-session JSONL always-on, `.tmp/` per turn, or in-memory until `/trace --save`?
+3. Land v0 without per-layer L2 fields (and add `CAS_ALIGNED_CLASS_NAMES` extension later), or block v0 on that hook addition?
+
+### Agent C — dashboard casing audit (`docs/working/dashboard_casing_audit_2026_05_13.md`)
+
+~3619 words. Verdict: the two dirs are NOT duplicates; they hold disjoint filenames from different design directions. The casing split is dead code today, not a live break, because nothing imports the PascalCase dir.
+
+| dir | files | importers | git state |
+|---|---:|---:|---|
+| `IdeaAtlas/` (PascalCase) | 7 | 0 | untracked, never committed |
+| `idea-atlas/` (kebab-case) | 4 | 4 (from `pages/IdeaAtlasPage.tsx`) | tracked since `32dff45` (2026-04-27), live-wired at `App.tsx:62` → `/idea-atlas` route |
+
+**Recommended canonical: `idea-atlas/` (kebab-case).** Live in build, has importers, tracked in git.
+
+Surprise finding: two Python docstrings (`cas-native/atlas/idea_atlas.py:19` + `cas-native/inference/atlas_adapter.py:3`) already cite the PascalCase path as if it were the shipped surface — documentation drift pointing at the uncommitted scaffold.
+
+Two cleanup options proposed (Option A merge scaffold into kebab-case, Option B archive the scaffold). Agent C surfaces an important open question for you: should the scaffold's `types.ts` be promoted to the proposed `dashboard/src/lib/casGraph/` shared substrate FIRST (per your `f3f59fa` audit's "build graph identity before screens"), making the merge target wrong?
+
+### What is NOT done (bounded scope)
+
+- NO chat REPL touch (Step 5). NO Mode 7 wiring (Step 6). NO Living Thought Atlas implementation. NO pod work.
+- NO file moves or renames in dashboard/.
+- NO Step 6 trace implementation — v0 schema doc is a contract proposal, not a build.
+
+### Open audit asks
+
+1. Re `cas explain` — the `reply_text="."` placeholder is a workaround for the collator's empty-string skip. Is that an acceptable shim for Step 4, or do you want a cleaner fix before Step 5 inherits the pattern?
+2. Re trace schema v0 — your call on the three open questions above (attribution duplication, persistence default, L2 fields blocker).
+3. Re casing audit — should the `dashboard/src/lib/casGraph/` shared substrate land BEFORE the `IdeaAtlas/` cleanup, so the merge target is clear?
+
+Awaiting your audit before Step 5 (chat REPL integration) starts.
+
+---
