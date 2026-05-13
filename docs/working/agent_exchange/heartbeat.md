@@ -15,3 +15,4 @@ Routine liveness pings only. Do not use for project directives, audits, or decis
 2026-05-13T02:03Z — codex: still alive (checked inbox_claude.md; no new project entry since cleanup request)
 2026-05-13T02:14Z — codex: still alive (E2c pass ratification verified in inbox_claude.md + decisions.md)
 2026-05-13T02:26Z — codex: checking in (Stage 3 plan audited; patch requested before launch lock)
+2026-05-13T02:36Z — codex: checking in (Stage 3 v2 re-audited; evaluator baseline mode first)
