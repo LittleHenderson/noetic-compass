@@ -2902,3 +2902,107 @@ After the contrast patch:
 ### Next Move
 
 Patch the privacy contrast, then proceed to SGGS tab integration + browser visual QA.
+
+## 2026-05-13 — SGGS tab integration audit on `21bf812`
+
+Audited Claude's SGGS integration commit `21bf812`:
+
+- `IdeaAtlasPage.tsx`
+- `HandsPanel.tsx`
+
+### Verification I ran
+
+- `npx.cmd vitest run`
+  - Result: 274/274 pass.
+- `npx.cmd tsc -b --noEmit`
+  - Result: clean.
+- `npm.cmd run build`
+  - Result: clean.
+  - Confirmed `SggsScene-ReHb35fx.js` is a separate lazy chunk: 518.21 kB / 129.67 kB gzip.
+  - Confirmed `IdeaAtlasPage` remains about 80 kB / 20 kB gzip.
+- `curl http://localhost:3001/idea-atlas`
+  - Result: HTTP 200.
+
+### Verdict
+
+INTEGRATION DIRECTION PASSES. TWO PATCHES BEFORE CALLING SGGS DEMO-READY.
+
+What is correct:
+
+- `ViewMode = 'sggs'` is wired as a fourth tab.
+- `SggsScene` is loaded through `React.lazy`, so Three.js stays out of the main Atlas bundle until SGGS opens.
+- `HandsPanel` / MediaPipe are not imported into `IdeaAtlasPage`, so camera code is still out of this phase.
+- `selectedTraceNodeId` is shared with the TRACE view, so selection can persist between SVG trace and 3D SGGS.
+- Privacy contrast patch landed: `text-slate-700` / `text-slate-600` on the light panel is readable.
+
+### Patch 1 — Make the SGGS canvas height explicit
+
+Current SGGS scene wrapper:
+
+```tsx
+<div className="min-h-[560px] ...">
+  <SggsScene className="h-full w-full" />
+</div>
+```
+
+`SggsScene` measures `wrapper.clientHeight` at mount. A child with `height: 100%` does not reliably fill a parent that only has `min-height` and no explicit height. In that case the scene can initialize near `SggsScene`'s internal `minHeight: 280`, leaving a smaller-than-promised 3D viewport inside a 560px shell.
+
+Patch:
+
+- Give the SGGS scene frame an explicit height, not only min-height:
+
+```tsx
+<div className="h-[min(72vh,760px)] min-h-[560px] ...">
+```
+
+or a simpler first patch:
+
+```tsx
+<div className="h-[560px] ...">
+```
+
+The stakeholder demo needs the 3D area to feel large immediately. Do not leave this to browser luck.
+
+### Patch 2 — Add an SGGS error boundary
+
+`Suspense` handles lazy loading, but it does not handle:
+
+- chunk load failure,
+- WebGLRenderer construction failure,
+- unsupported WebGL,
+- runtime errors inside `SggsScene`.
+
+Right now one of those can take down the panel or page instead of showing a controlled message. Add a small local error boundary around `SggsScene` with a user-readable fallback:
+
+> 3D scene could not start. Try refreshing, updating your browser, or using TRACE view.
+
+This matters because SGGS is the "wow" tab. A blank/crashed panel is worse than gracefully falling back.
+
+### Non-blocking test gap
+
+There is no `IdeaAtlasPage` integration test for the SGGS tab. The build proves the lazy chunk exists, but it does not pin the UI contract.
+
+Recommended cheap test:
+
+- Render `IdeaAtlasPage`.
+- Assert LIST / GRAPH / TRACE / SGGS tabs exist.
+- Click SGGS.
+- Assert the SGGS empty-state text appears.
+
+If mocking `TraceLoader` is practical, add a second test that loads a fixture and asserts the Suspense fallback / `SggsScene` shell mounts. Not mandatory for this pass, but useful.
+
+### Browser QA Still Required
+
+I did not complete pixel-level browser QA here. The dev server responds at `/idea-atlas`, but tests cannot prove real WebGL pixels.
+
+After the two patches:
+
+- Load complex demo in SGGS.
+- Confirm the 3D scene is large, nonblank, and centered.
+- Confirm orbit / wheel zoom.
+- Confirm clicking a card visibly selects it.
+- Switch TRACE ↔ SGGS and confirm selection persists.
+
+### Next Move
+
+Patch explicit height + error boundary, then run browser visual QA. If that looks good, SGGS Phase 1 integration is acceptable and the next build should be the actual showpiece layer: replay / slow-motion / ghost growth, not more backend training.
