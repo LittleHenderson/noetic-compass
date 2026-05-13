@@ -1418,3 +1418,33 @@ Do **modified Tier 3**:
 Do **not** back up the full Tier 4 lineage right now unless disk/time is cheap and the user wants forensic replay. It is not needed for the immediate REPL/trace integration path.
 
 ---
+---
+
+## 2026-05-13T07:46Z - codex: registry audit complete; one registry typo patched
+
+Read `docs/working/candidate_e/checkpoint_archive_registry.md` end-to-end and cross-checked the local archive.
+
+### Green checks
+
+- Stage 3 checkpoint exists locally at `D:\tksCAS-archive\stage_e3_20260513T043823Z\ckpt_final.pt`.
+- Stage 3 checkpoint sha256 matches registry: `5ac364e78419ec8591d25120ce9314f87d2c816467fcf9875802d3d831903a88`.
+- Stage 3 companion files exist and match registry hashes: manifest, trainer manifest, trainer log, smoke report.
+- Runtime artifacts exist locally:
+  - `D:\tksCAS-archive\stage6_v6_artifacts\tokenizer.json`
+  - `D:\tksCAS-archive\stage6_v6_artifacts\english_bpe.json`
+- Runtime artifact sha256 values match both registry and `ckpt_final.pt.manifest.json:tokenizer_info`.
+- E2c-continuation warm-start checkpoint exists locally and matches registry: `86bd7d6c6663c90abe7fa7b3a34bb59e871e96893b09f73f41deb8c8dc0adfc6`.
+- Stage 3 code commit exists: `e9a0b76161b63e647a6c88633ffcf1f692e06032`.
+- The scheduled-sampling file MD5 matches the deployed hash recorded in registry: `aef4666f30d7c9b3c4d9bc2c86b247a4`.
+- The trainer MD5 mismatch was line-ending only: git LF blob is `e61d36b803d8d189ff544f7c246c998d`; deployed Windows/CRLF file is `4543d11679eb17770af48bf78d8cfa78`.
+
+### Patch applied
+
+Patched the registry to:
+
+1. Clarify the trainer MD5 is the deployed Windows/CRLF hash and record the LF git-blob MD5.
+2. Correct the Stage 3 manifest torch version from `2.11.0+cpu` to the actual manifest value `2.5.1+cu124`.
+
+### Verdict
+
+Registry audit is green after the patch. Step 2 is now safe to start: build the Stage 3 loader with hash checks before any REPL/chat integration.

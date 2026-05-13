@@ -15,7 +15,7 @@ If you don't see your checkpoint here, it isn't backed up — assume the pod cop
 
 ### Stage 3 code commit (PIN)
 
-The trained Stage 3 checkpoint was produced by the code at commit `e9a0b76161b63e647a6c88633ffcf1f692e06032` ("candidate-e: patch Codex re-audit blockers on scheduled sampling"). This is the last code change before the Stage 3 training launch at 2026-05-13T04:38:25Z. To check out the exact code that matches the checkpoint: `git checkout e9a0b76`. The trainer + scheduled_sampling MD5s verified at deploy time (`4543d11679eb17770af48bf78d8cfa78` and `aef4666f30d7c9b3c4d9bc2c86b247a4` respectively) correspond to this commit.
+The trained Stage 3 checkpoint was produced by the code at commit `e9a0b76161b63e647a6c88633ffcf1f692e06032` ("candidate-e: patch Codex re-audit blockers on scheduled sampling"). This is the last code change before the Stage 3 training launch at 2026-05-13T04:38:25Z. To check out the exact code that matches the checkpoint: `git checkout e9a0b76`. The trainer + scheduled_sampling MD5s verified at deploy time (`4543d11679eb17770af48bf78d8cfa78` and `aef4666f30d7c9b3c4d9bc2c86b247a4` respectively) correspond to this commit. Note: the trainer MD5 is the deployed Windows/CRLF file hash; the same git blob with LF line endings hashes to `e61d36b803d8d189ff544f7c246c998d`.
 
 Code files load-bearing for "load + run the Stage 3 model" — all present in repo at this commit:
 
@@ -41,7 +41,7 @@ The current "good model" — passes both load-bearing gates on dev and held-out 
 | sha256 | `5ac364e78419ec8591d25120ce9314f87d2c816467fcf9875802d3d831903a88` |
 | Saved at | 2026-05-13T05:40:35Z |
 | Schema version | `simplex_mvp_ckpt.v1` |
-| torch version | 2.11.0+cpu (training was on cuda:0; cpu in the manifest is the torch build string) |
+| torch version | 2.5.1+cu124 |
 
 #### Training config (verbatim from manifest)
 
