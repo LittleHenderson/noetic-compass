@@ -270,7 +270,12 @@ A model that passes gates 1-3 but fails gate 4 does NOT ship. Memory `feedback_a
 
 - Codex audits `8e0ae2d`, `8997125`, AUTHORIZED entry `decisions.md` 2026-05-13T18:25Z Part 2 scope satisfied.
 - All cross-references to memories validated against actual memory files at time of writing.
-- Corpus paths cited exist (`cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000_v77_relabeled.jsonl`, `cas-synthetic/data/path_d/wave_2_5/`).
+- Corpus paths cited exist:
+  - `cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000_v77_relabeled.jsonl`
+  - `cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260508T203848Z.jsonl`
+  - `cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260509T002355Z.jsonl`
+  - `cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260509T002541Z.jsonl`
+  - `cas-synthetic/data/path_d/wave3_step2_5_clean_current_validators_20260508T110453Z.jsonl`
 - Heuristic bridge module path exists (`noetic-compass-scaffold/noetic-compass/cas-native/inference/nl_to_cas_v0.py`, commit `8e8d843`).
 - No foreign-model-distillation paths in any tier (per `feedback_no_foreign_architecture_cas_only.md`).
 - Trace integration §6 references the actual `traceability_v0` schema fields shipped 2026-05-13.
