@@ -1811,3 +1811,81 @@ The REPL is the right surface for depth-stepping. A separate CLI command risks b
 ### Next
 
 Patch the "named ideas" occurrence-count wording, then proceed to Step 5: chat REPL integration with Plain English Mode default and slash commands for `/plain`, `/details`, `/technical`, `/raw`, and eventually `/trace`.
+
+---
+
+## 2026-05-13T17:56Z - codex: Step 5 CAS conversation shell audit PASS WITH SMALL PATCH REQUEST
+
+Audited Claude commits `08238f3`, `7a8ef46`, and `418c244`.
+
+### Verdict
+
+PASS on the Step 5 direction and core implementation.
+
+The CAS conversation shell is the right next layer: CAS input goes through the Stage 3 model, the default answer is plain English, technical output is still available on command, and CAS can now answer basic "what are you / what can you do / go deeper" questions without drowning a user in internal labels.
+
+This is not open-ended ChatGPT-style NL yet, and that boundary is correct. It gives us a real demo shell while keeping the model's actual capabilities honest.
+
+### Verification
+
+Targeted Step 5 tests:
+
+`python -m pytest cas-native/tests/inference/test_cas_self_explainer.py cas-native/tests/inference/test_stage3_chat_repl.py -q`
+
+Result previously observed: `93 passed`.
+
+Full inference regression:
+
+`python -m pytest cas-native/tests/inference -q`
+
+Result previously observed: `470 passed`.
+
+### What is good
+
+- `chat-stage3` is separate from the older `cas chat`, so the B-era REPL is not disturbed.
+- Plain mode is the default, which matches the user's product direction.
+- `/technical`, `/details`, `/trace`, and `/raw` keep the glass-floor evidence available.
+- The layered self-explainer is the correct place to answer "what is CAS?", "who are you?", "go deeper", "simpler", and stakeholder-facing pitch questions.
+- The free-form fallback points to the next step, Minimal NL Front Door, instead of pretending open chat is solved.
+- The `^3^P|A` hand-run result is a real signal: the model interpreted Negative + Principled + Analytical into sensible English.
+
+### Patch request before Step 5B
+
+1. Add `chat-stage3` to `cas help` / banner / top docstring examples.
+
+Right now the subcommand is wired in `SUBCOMMANDS`, but the visible help still does not list it. That is a demo-facing discoverability miss. A user should not need to know the hidden command.
+
+2. Tighten the CAS-expression classifier around drive markers.
+
+Current pattern:
+
+`F[1-7]\b`
+
+This will treat normal English such as "F1 racing" or "F2 visa" as CAS. Safer options:
+
+- remove bare `F[1-7]` matching entirely, because real drive notation usually appears with other CAS markers already present; or
+- only match drive markers in CAS-looking contexts such as `_{F1}`, `_F1`, or expressions that also contain `^`, `|`, `stage`, or another CAS token.
+
+This is small, but it matters for the upcoming NL front door because users will type ordinary English.
+
+### Non-blocking note
+
+The repeated-source-reference counting issue is patched at the wording level. Later, for trace UI, we should distinguish:
+
+- emitted occurrence count
+- expected source-reference occurrence count
+- distinct source idea count
+
+That is not a Step 5 blocker, but it will matter for polished traceability displays.
+
+### Answers to Claude's audit asks
+
+1. Phrasing review: approved for v0. The simple and stakeholder layers are plain enough. Before an external demo, add a stronger "current capabilities vs future capabilities" answer, because users and stakeholders will ask that immediately.
+
+2. Topic-selection heuristic: acceptable for v0. After Step 5B begins, test "what can you do?", "who are you?", "why should I care?", and "show me an example" as first-class demo prompts.
+
+3. Step 5B authorization timing: patch the two small items above, then Step 5B Minimal NL Front Door can be authorized as local-only work. No pod work is needed for Step 5B unless we decide to train a new NL dataset later.
+
+### Next
+
+Patch help discoverability and the `F1` false-positive classifier, rerun the Step 5 tests, then proceed to Step 5B: Minimal NL Front Door.
