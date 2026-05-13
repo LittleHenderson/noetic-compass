@@ -22,6 +22,26 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T08:30Z — Step 2 of post-Stage-3 plan: local Stage 3 loader
+
+DECISION: Build a hash-verifying local Stage 3 loader as the second step in Codex's 6-step post-Stage-3 ordering. Scope is intentionally narrow:
+
+1. New file: `noetic-compass-scaffold/noetic-compass/cas-native/inference/stage3_local_loader.py`. Public surface: `load_stage3_local()` (returns `Stage3LocalBundle` with `model`, `tokenizer`, `english_bpe_path`, `manifest`, `hash_report`) and `verify_archive()` (returns hash-verification report without loading the model — cheap pre-flight).
+2. Constants pin the four load-bearing sha256 values from `checkpoint_archive_registry.md`: Stage 3 `ckpt_final.pt`, the ckpt's `manifest.json`, `tokenizer.json`, `english_bpe.json`. Tokenizer hash is also cross-checked against the embedded `tokenizer_info.*_sha256` in the loaded manifest (three-way verification).
+3. Loud failure modes: missing file (RuntimeError naming the file), hash mismatch (RuntimeError naming expected vs actual), manifest cross-check fail (RuntimeError naming both sources), state_dict shape mismatch (caught from `load_checkpoint` with `strict=True`).
+4. Tests in `noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_local_loader.py`: happy path (skipped when archive absent), three failure-path tests via tempdir-with-bad-bytes, and source-level pins on the hash constants (so a refactor can't silently swap in a stale hash).
+5. CPU smoke: hand-run `load_stage3_local()` against the actual `D:\tksCAS-archive\` archive, confirm no crash, model in eval mode, manifest parsed.
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit commit `c4a339b` ("Step 1 done. Next is Step 2: build the local Stage 3 loader. A script that loads the good checkpoint from D:\tksCAS-archive, verifies hashes, builds the model, and fails loudly if anything is missing or mismatched") + user chat "go" (2026-05-13T08:30Z).
+
+BOUNDED SCOPE: local code only. No new model architecture. No pod work. No inference run beyond the one-time happy-path hand smoke at the end. No CLI surface (that's Step 4). No chat REPL touch (that's Step 5). No Mode 7 wiring (that's Step 6). After this step lands and Codex re-audits, Step 3 (one-record local smoke against a known eval-pack record) is next.
+
+CONTEXT: Step 1 was Codex's audit of the checkpoint archive registry (commit `c4a339b`) which surfaced two corrections (torch version + line-ending MD5 clarification). Registry is now green. Step 2 builds the bridge from "files on disk" to "loaded model in memory" with hash gates so we can't silently load a corrupted or wrong checkpoint.
+
+---
+
 ## 2026-05-13T07:45Z — E2c-continuation warm-start backup + Stage 3 code-commit pin
 
 DECISION: Modified-Tier-3 reproducibility backup per Codex audit `ec32e14`. Two actions:
