@@ -1670,3 +1670,68 @@ This preserves the valuable scaffold work while eliminating the Windows/Linux ca
 ### Next
 
 Patch the 192-cap issue, then re-surface Step 4. Do not start Step 5 chat REPL integration until the corrected CLI/smoke path proves it is feeding the Stage 3 model the same full CAS prefix it was trained and evaluated with.
+
+---
+
+## 2026-05-13T15:18Z - codex: Step 4 truncation fix audit FUNCTIONAL PASS
+
+Audited Claude commit `0e95680` plus inbox surface `e89f047`.
+
+### Verdict
+
+FUNCTIONAL PASS on the blocker.
+
+The dangerous bug is fixed: both `cas explain` and `stage3_local_smoke` now read `max_cas_prefix_len` from the loaded checkpoint manifest and pass it into `SimplexCollator`. The Stage 3 archive manifest has `config.max_cas_prefix_len = 192`, so the CLI/smoke path now matches the training/eval path instead of falling back to the old collator default of 32.
+
+Manifest-read is the right design. Hardcoding 192 would work for Stage 3 only; manifest-read keeps future checkpoints honest if Stage 4+ changes the cap.
+
+### What I checked
+
+Relevant code:
+
+- `noetic-compass-scaffold/noetic-compass/cas-native/inference/cas_cli.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/inference/stage3_local_smoke.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_cas_cli_explain.py`
+- `noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_local_smoke.py`
+
+The real local Stage 3 manifest confirms:
+
+`D:\tksCAS-archive\stage_e3_20260513T043823Z\trainer_manifest.json`
+
+`config.max_cas_prefix_len: 192`
+
+### Test run
+
+`python -m pytest cas-native/tests/inference/test_stage3_local_loader.py cas-native/tests/inference/test_stage3_local_smoke.py cas-native/tests/inference/test_cas_cli_explain.py -q`
+
+Result:
+
+`31 passed in 49.65s`
+
+### Hand-run
+
+Ran `cas explain` on the real dev record with the local Stage 3 archive.
+
+Result:
+
+- exit code `0`
+- generated text non-empty
+- copied IDs include `stageA0_4_857` and `stageD3_4_857`
+- later IDs `stageP5_5_815` and `stageW6_4_857` are still not emitted, but after the fix that is a model/output limitation, not source truncation.
+
+### Small hardening before Step 5
+
+One report/schema gap remains: `cas explain --json` still does not include `max_cas_prefix_len` anywhere in the output payload. The smoke report snippet also does not show the cap.
+
+This is not the original truncation blocker, but it should be patched before Step 5 turns this payload into the chat REPL's soft contract. Add:
+
+- `model.max_cas_prefix_len` or top-level `max_cas_prefix_len` to `cas explain` JSON.
+- `max_cas_prefix_len` to the local smoke report.
+
+That lets the REPL/trace layer prove from the artifact itself: "this answer was generated with the full 192-token CAS prefix."
+
+The new tests are source-level string checks. They are acceptable for this immediate patch because the real hand-run confirms behavior, but a future cleanup should prefer monkeypatching `SimplexCollator` and asserting the actual constructor kwargs.
+
+### Next
+
+After the tiny cap-field reporting patch, Step 4 is clean enough to feed Step 5 chat REPL integration. Do not broaden Step 5 into free-form NL->CAS yet; keep it CAS-input first and reuse the same `cas explain` core.
