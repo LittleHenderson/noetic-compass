@@ -212,6 +212,10 @@ def test_slash_help():
     assert "/plain" in response.text
     assert "/technical" in response.text
     assert "/deeper" in response.text
+    # Per Codex audit 95fcecf: /trace dumps full trace; /tree dumps
+    # only the Thought Tree. Both must be in help.
+    assert "/trace" in response.text
+    assert "/tree" in response.text
 
 
 def test_slash_quit():
@@ -268,15 +272,48 @@ def test_slash_all_shows_both_layers():
     assert "slot trace" in text or "identifiers" in text
 
 
-def test_slash_trace_dumps_json():
+def test_slash_trace_dumps_full_v0_trace_as_json():
+    """REGRESSION PIN (Codex 95fcecf): /trace dumps the full
+    Traceability v0 trace object, not just the slot summary subset."""
     state = SessionState()
     handle_turn("^3^P|A", state, _DummyExplainer())
     response = handle_turn("/trace", state, _DummyExplainer())
-    # The trace dump should parse as JSON
     parsed = json.loads(response.text)
-    assert "model" in parsed
-    assert "identifiers" in parsed
-    assert "slot_summary" in parsed
+    # Full v0 trace has these top-level keys
+    assert parsed.get("schema_version") == "trace_v0"
+    assert "input" in parsed
+    assert "output" in parsed
+    assert "copy" in parsed
+    assert "slot_trace" in parsed
+    assert "confidence" in parsed
+    assert "thought_tree" in parsed
+    assert "trace_id" in parsed
+
+
+def test_slash_tree_dumps_only_thought_tree():
+    """REGRESSION PIN (Codex 95fcecf): /tree dumps ONLY the Thought
+    Tree sub-object, not the full trace. Useful when the user wants
+    the node-edge graph without metadata."""
+    state = SessionState()
+    handle_turn("^3^P|A", state, _DummyExplainer())
+    response = handle_turn("/tree", state, _DummyExplainer())
+    parsed = json.loads(response.text)
+    # Thought-tree-only payload has these keys, no schema_version
+    assert "root" in parsed
+    assert "nodes" in parsed
+    assert "edges" in parsed
+    assert "node_count" in parsed
+    # No full-trace top-level keys
+    assert "schema_version" not in parsed
+    assert "input" not in parsed
+    assert "confidence" not in parsed
+
+
+def test_slash_tree_no_history():
+    state = SessionState()
+    response = handle_turn("/tree", state, _DummyExplainer())
+    assert response.kind == "command"
+    assert "no thought tree" in response.text.lower()
 
 
 def test_slash_raw_dumps_full_report_as_json():

@@ -256,7 +256,8 @@ Available commands:
   /technical   Show the last reply's technical details
   /details     Alias for /technical
   /all         Show both plain and technical for the last reply
-  /trace       Dump the last reply's trace data as JSON
+  /trace       Dump the full Traceability v0 trace as JSON
+  /tree        Dump only the Thought Tree (node-edge graph) as JSON
   /raw         Dump the full last reply report as JSON
   /deeper      Go one level deeper on the last "what is CAS?" answer
   /simpler     Go one level simpler on the last "what is CAS?" answer
@@ -398,18 +399,32 @@ def handle_turn(
             return ReplResponse(text=_render_self_explain(last["entry"]),
                                 kind="command")
         if cmd == "trace":
+            # Per Codex audit `95fcecf` 2026-05-13: /trace dumps the
+            # full clean Traceability v0 trace object. /tree dumps
+            # only the Thought Tree sub-object.
             if last is None or last["kind"] != "explain":
                 return ReplResponse(text="(no trace from last reply)",
                                     kind="command")
-            slot = last["report"].get("slot_summary", {})
-            idents = last["report"].get("identifiers", {})
-            payload = {
-                "model": last["report"].get("model", {}),
-                "identifiers": idents,
-                "slot_summary": slot,
-                "gates": last["report"].get("gates", {}),
-            }
-            return ReplResponse(text=json.dumps(payload, indent=2,
+            from cas_native.inference.traceability_v0 import (
+                build_v0_trace, trace_to_json,
+            )
+            v0 = last["report"].get("traceability_v0")
+            if v0 is None:
+                v0 = build_v0_trace(last["report"])
+            return ReplResponse(text=trace_to_json(v0), kind="command")
+        if cmd == "tree":
+            # /tree shows ONLY the Thought Tree portion of the trace.
+            # Useful when the user wants the node-edge graph without
+            # the full trace metadata.
+            if last is None or last["kind"] != "explain":
+                return ReplResponse(text="(no thought tree from last reply)",
+                                    kind="command")
+            from cas_native.inference.traceability_v0 import build_v0_trace
+            v0 = last["report"].get("traceability_v0")
+            if v0 is None:
+                v0 = build_v0_trace(last["report"])
+            tree = v0.get("thought_tree", {})
+            return ReplResponse(text=json.dumps(tree, indent=2,
                                                 default=str),
                                 kind="command")
         if cmd == "raw":
@@ -602,6 +617,11 @@ def _build_production_explainer() -> Any:
             },
         }
         report["plain_english"] = translate_explain(report)
+        # Embed Traceability v0 so /trace and /tree have it ready and
+        # saved reports contain the UI-consumable trace. Per Codex
+        # `8e0ae2d` (build trace before NL bridge).
+        from cas_native.inference.traceability_v0 import build_v0_trace
+        report["traceability_v0"] = build_v0_trace(report)
         return report
 
     return _explain

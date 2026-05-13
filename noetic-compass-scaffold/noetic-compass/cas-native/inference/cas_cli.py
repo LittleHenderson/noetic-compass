@@ -663,6 +663,14 @@ def _cmd_explain(argv: list[str]) -> int:
     from cas_native.inference.plain_english import translate_explain
     output["plain_english"] = translate_explain(output)
 
+    # Traceability v0 — embed the full UI-ready trace (input + output +
+    # copy + slot_trace + confidence + thought_tree with flat nodes &
+    # edges) into the saved report so the Thought Tree visual can be
+    # rendered from any saved cas_explain_*.json without re-running
+    # the model. Per `decisions.md` 2026-05-13T17:30Z.
+    from cas_native.inference.traceability_v0 import build_v0_trace
+    output["traceability_v0"] = build_v0_trace(output)
+
     if not args.no_save_report:
         # tksCAS/.tmp/  — same convention as stage3_local_smoke.
         # _SCRIPT_DIR_PARENT structure: inference/ -> cas-native/ ->
