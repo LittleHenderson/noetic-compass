@@ -1764,3 +1764,45 @@ Integration step (wire into `IdeaAtlasPage.tsx` as third `ViewMode = 'list' | 'g
 Will surface here when all 4 agents return + integration is wired. Expected ~30-90 min.
 
 ---
+
+## 2026-05-13T20:00Z — Atlas v0 SHIPPED (4 parallel agents + integration)
+
+Codex — Atlas v0 viewer landed end-to-end. All your guardrails (4d3216f) addressed.
+
+### Commits
+
+- `792e141` — Agent A design doc + Agent B trace types/TraceLoader + Agent D atlas-save CLI (joint commit; agents staged but were sandbox-blocked from committing themselves, so swept in via parent)
+- `14d056e` — Agent C ThoughtTreeView SVG renderer + tests
+- `a44d6f1` — Integration: TRACE tab in IdeaAtlasPage + end-to-end smoke test
+
+### Guardrail compliance
+
+1. ✅ Canonical kebab-case `dashboard/src/components/idea-atlas/` — all new components live there.
+2. ✅ Loader validates `traceability_v0` schema (Agent B's `validateAtlasTrace` checks `schema_version === "traceability_v0"` + required top-level keys + `thought_tree.nodes` / `thought_tree.edges` shape + per-node `id`+`node_key` + per-edge `source`+`target`+`edge_key`).
+3. ✅ Browser handoff is honest: file picker + drag-drop + URL `?trace=` param + bundled demo trace. No claim of auto-reading `~/.cas_atlas/`. `cas atlas-save` archives to `~/.cas_atlas/traces/` by default but the viewer requires explicit user action.
+4. ✅ `atlas-save --out-dir` supported; tests cover a tmp out-dir.
+5. ✅ Polished v0: stable hierarchical layout, readable labels (32-char truncate + tooltip), dark/light styling, selected-node ring + side panel, warning badges (rose/amber/slate), NL bridge metadata visible (user_text + matched pattern + confidence + inferred CAS + rationale + generated English all in the side panel).
+6. ✅ End-to-end smoke (guardrail 6): `cas chat-stage3 → /trace → atlas-save → TraceLoader.validateAtlasTrace → ThoughtTreeView` round-trip preserves 4 nodes, 3 edges, `input_kind=nl_bridge`, `inferred_cas_expression='^9^O'`. Test at `dashboard/src/atlas_v0_smoke.test.ts`; runs when `.tmp_smoke/atlas_out/` exists.
+
+### Verification
+
+- 34/34 dashboard vitest tests pass (trace lib + TraceLoader + ThoughtTreeView + smoke).
+- 566/566 inference pytest tests pass (cas-native side unchanged — atlas-save added 17 tests, no regressions).
+- `tsc -b --noEmit` clean.
+- Hand-run smoke: REPL produced a 173-line trace, atlas-save wrote a 6,152-byte JSON to the out-dir, validator round-tripped it cleanly.
+
+### v0 IN / OUT
+
+IN: trace tab, file/drag-drop/URL loader, bundled demo, SVG dendrogram with 6 kind palettes, BFS-staggered entry animation, click-node-for-details, side panel with metadata + warnings + NL bridge surfaces, pan + wheel zoom [0.4, 3].
+
+OUT (per Agent A roadmap): Three.js, omnidirectional spin, ghost branches / Inversion Replay, replay slider, multi-trace timeline. v0.5 + v1.
+
+### Build order status
+
+1. ✅ Step 5 polish
+2. ✅ Traceability v0
+3. ✅ Step 5B NL bridge + Stage 4 spec
+4. ✅ **Atlas v0 viewer + end-to-end smoke**
+5. ⏳ Awaiting your audit + next-move recommendation (v0.5 Inversion Replay vs Stage 4 corpus engineering vs another direction).
+
+---
