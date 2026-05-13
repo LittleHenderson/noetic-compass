@@ -22,6 +22,61 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T15:30Z — Plain English Mode (Step 4.5): translator + `cas explain` defaults
+
+DECISION: Plain English Mode becomes a first-class output mode baked into `cas explain` BEFORE Step 5 (chat REPL) starts, so the REPL inherits plain-by-default. Per Codex's 6-step plan:
+
+Step 1 — `max_cas_prefix_len` reporting patch: DONE in commit `0762d20` (2026-05-13T15:15Z).
+
+Step 2 — new module `noetic-compass-scaffold/noetic-compass/cas-native/inference/plain_english.py`. Pure functions, no model dependencies. Maps internal signals to human language:
+- copied identifier → "the model carried this idea over"
+- missing identifier → "the model missed this source idea"
+- slot trace → "the model recognized this as a structured CAS name"
+- low confidence → "the model is unsure here"
+- cross emission → "the model may have mixed sources"
+- numeric coverage → qualitative band ("strong" / "partial" / "weak")
+- slot run length + counts → human pattern summary
+
+Step 3 — extend `cas explain` CLI with output-mode flags:
+- DEFAULT (no flag): `--plain` behavior. Three layers visible (Plain answer + What it means + collapsed "details available with --technical").
+- `--plain` (explicit): same as default.
+- `--technical`: full current technical output (slot trace, identifier breakdown with internal labels, etc.).
+- `--json`: raw dict, unchanged.
+- `--all`: all three layers, no collapse.
+
+Output dict additions (forward-compatible — adds, doesn't break):
+```json
+"plain_english": {
+  "short_answer": "...",       // one sentence
+  "plain_meaning": "...",      // 1-3 sentences interpreting result
+  "qualitative_coverage": "strong|partial|weak|none",
+  "qualitative_slot_quality": "...",
+  "confidence_caveat": null | "..."  // populated when confidence is uncertain
+}
+```
+
+Translator is RULE-BASED in v0 — explicit mappings, no model call. Deterministic, audit-able, cheap. Future iteration could use the model itself for phrasing, but v0 keeps it as a deterministic shim so stakeholder-facing text never degrades from a generation glitch.
+
+Test discipline (Codex's "plain mode does not lie" gate): every claim plain mode makes MUST be derivable from a verifiable field in the technical output. If an ID is missing, plain mode says so. If copy is clean, plain mode can say so. If confidence is unknown, plain mode does NOT claim certainty.
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` 2026-05-13 ("Plain English Mode should be the front door. Technical CAS should be the glass floor underneath it.") + user chat directive (2026-05-13T15:30Z) "we've to build a plain english mode into cas so users don't get lost in jargon" / approval of Codex's 6-step path.
+
+BOUNDED SCOPE THIS ENTRY:
+- `cas explain` CLI updates (Steps 2-3 of Codex's order)
+- new `plain_english.py` module + tests
+- regression pins on schema-level claims (plain mode does not lie)
+
+NOT in this entry's scope (Step 4-6 of Codex's order — separate decisions):
+- chat REPL adoption (Step 4 of Codex's order = our Step 5)
+- Mode 7 / Living Thought Atlas consumption of plain layer
+- model-generated plain phrasing (rule-based now)
+
+User memory: aligns with `feedback_plain_language_no_jargon.md` ("talk like a person, not a paper"). This formalizes that feedback rule as a product mode.
+
+---
+
 ## 2026-05-13T09:35Z — Step 4 of post-Stage-3 plan: `cas explain` subcommand + 2 parallel prep agents
 
 DECISION: Codex audit on Step 3 PASSED (`4e7961c`) and answered "Step 4 should stay narrow: CAS expression in → English out, with recovered IDs / missing IDs / slot summary shown. No free chat yet." User chat "go" 2026-05-13T09:35Z authorizes Step 4 PLUS two adjacent parallel prep agents that surface info needed for Steps 5-7 without preempting them.

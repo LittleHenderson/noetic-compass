@@ -326,14 +326,35 @@ def _explain_slot_trace_summary(trace: list[int]) -> dict[str, Any]:
     }
 
 
-def _print_explain_summary(output: dict[str, Any]) -> None:
-    """Human-readable single-page summary mirroring the smoke harness."""
-    print(f"=== cas explain — {output['timestamp_utc']} ===")
+def _print_plain_layer(output: dict[str, Any]) -> None:
+    """Plain English Mode layers 1 + 2. Reads the `plain_english`
+    sub-dict produced by the translator."""
+    plain = output.get("plain_english", {}) or {}
+    print(f"=== {output.get('input_cas_expression', '(no input)')[:80]} ===")
+    print()
+    print("--- Plain answer ---")
+    print(plain.get("short_answer") or "(no plain answer available)")
+    print()
+    print("--- What it means ---")
+    print(plain.get("plain_meaning") or "(no plain meaning available)")
+    print()
+    print("--- The model said ---")
+    print(output.get("generated_english") or "(no output)")
+    if caveat := plain.get("confidence_caveat"):
+        print()
+        print(f"Note: {caveat}")
+
+
+def _print_technical_layer(output: dict[str, Any]) -> None:
+    """Technical layer: full internal trace, slot counts, identifier
+    breakdown using internal labels. For engineers + auditors."""
+    print(f"=== cas explain (technical) — {output.get('timestamp_utc')} ===")
     model_info = output.get("model", {})
     print(
         f"model:           ablation_mode={model_info.get('manifest_ablation_mode')}  "
         f"load={model_info.get('load_seconds')}s  "
-        f"decode={model_info.get('decode_seconds')}s"
+        f"decode={model_info.get('decode_seconds')}s  "
+        f"max_cas_prefix_len={model_info.get('max_cas_prefix_len')}"
     )
     print()
     print("--- input CAS expression ---")
@@ -374,6 +395,35 @@ def _print_explain_summary(output: dict[str, Any]) -> None:
     if rp:
         print()
         print(f"full report: {rp}")
+
+
+def _print_explain_summary(
+    output: dict[str, Any], *, mode: str = "plain",
+) -> None:
+    """Dispatch on output mode. Default = plain (Codex 2026-05-13).
+
+    mode ∈ {"plain", "technical", "all"}. JSON is handled upstream
+    before this function is called.
+    """
+    if mode == "plain":
+        _print_plain_layer(output)
+        # Hint that technical details are available — per Codex's
+        # "Plain English Mode is the front door, technical CAS is the
+        # glass floor underneath" framing.
+        print()
+        print("(technical details: rerun with --technical or --all)")
+    elif mode == "technical":
+        _print_technical_layer(output)
+    elif mode == "all":
+        _print_plain_layer(output)
+        print()
+        print("=" * 60)
+        print()
+        _print_technical_layer(output)
+    else:
+        # Unknown mode: fall back to plain. NEVER silently swap to
+        # technical-by-default; that's how jargon leaked in the first place.
+        _print_plain_layer(output)
 
 
 def _cmd_explain(argv: list[str]) -> int:
@@ -417,6 +467,29 @@ def _cmd_explain(argv: list[str]) -> int:
         action="store_true",
         help="Skip writing .tmp/cas_explain_<ts>.json.",
     )
+    # Plain English Mode flags per Codex 2026-05-13 directive + decisions.md
+    # 2026-05-13T15:30Z. Default is plain (front door for stakeholders);
+    # technical details are one flag away. --json is unchanged: raw dict.
+    output_mode = parser.add_mutually_exclusive_group()
+    output_mode.add_argument(
+        "--plain",
+        action="store_const", dest="output_mode", const="plain",
+        help="Plain English Mode (default). Short answer + plain meaning, "
+             "technical details collapsed.",
+    )
+    output_mode.add_argument(
+        "--technical",
+        action="store_const", dest="output_mode", const="technical",
+        help="Show the technical layer only (slot trace, identifier "
+             "breakdown, internal labels).",
+    )
+    output_mode.add_argument(
+        "--all",
+        action="store_const", dest="output_mode", const="all",
+        help="Show all layers: plain answer + plain meaning + technical "
+             "details expanded.",
+    )
+    parser.set_defaults(output_mode="plain")
     args = parser.parse_args(argv)
 
     if not args.expression or not args.expression.strip():
@@ -568,6 +641,13 @@ def _cmd_explain(argv: list[str]) -> int:
         },
     }
 
+    # Plain English Mode (Codex 2026-05-13). Translator is rule-based,
+    # deterministic, no model call. Plain mode does not lie: every
+    # claim is derivable from a field already populated above. The
+    # translator's tests pin that discipline; this is just the wire-up.
+    from cas_native.inference.plain_english import translate_explain
+    output["plain_english"] = translate_explain(output)
+
     if not args.no_save_report:
         # tksCAS/.tmp/  — same convention as stage3_local_smoke.
         # _SCRIPT_DIR_PARENT structure: inference/ -> cas-native/ ->
@@ -592,7 +672,7 @@ def _cmd_explain(argv: list[str]) -> int:
     if args.json:
         print(_json.dumps(output, indent=2, default=str))
     else:
-        _print_explain_summary(output)
+        _print_explain_summary(output, mode=args.output_mode)
 
     # Gate: no-crash + non-empty generated text. Identifier copy is
     # informational at the CLI level (the user can see the breakdown);

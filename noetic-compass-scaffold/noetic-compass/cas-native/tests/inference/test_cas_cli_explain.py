@@ -180,6 +180,56 @@ def test_explain_output_surfaces_max_cas_prefix_len():
 
 
 # ---------------------------------------------------------------------------
+# Plain English Mode (Codex 2026-05-13 / decisions.md 2026-05-13T15:30Z)
+# ---------------------------------------------------------------------------
+
+def test_explain_default_mode_is_plain():
+    """Regression pin: the default output mode is `plain`, not
+    `technical`. Codex framing: Plain English Mode is the front door."""
+    src = open(cas_cli.__file__, encoding="utf-8").read()
+    assert 'set_defaults(output_mode="plain")' in src, (
+        "cas explain must default to plain mode per Codex 2026-05-13 "
+        "directive; technical access is one flag away"
+    )
+
+
+def test_explain_has_plain_technical_all_flags():
+    """All three output-mode flags must be registered, mutually
+    exclusive (only one can be on at a time)."""
+    src = open(cas_cli.__file__, encoding="utf-8").read()
+    assert '"--plain"' in src
+    assert '"--technical"' in src
+    assert '"--all"' in src
+    assert "add_mutually_exclusive_group" in src, (
+        "output-mode flags must be mutually exclusive"
+    )
+
+
+def test_explain_calls_translate_explain():
+    """Regression pin: cas explain must call translate_explain to
+    populate output['plain_english']. Without this wiring the new
+    flags would have nothing to read."""
+    src = open(cas_cli.__file__, encoding="utf-8").read()
+    assert "from cas_native.inference.plain_english import translate_explain" in src
+    assert 'output["plain_english"] = translate_explain(output)' in src
+
+
+def test_explain_print_summary_dispatches_on_mode():
+    """The print function must dispatch on the mode arg, not silently
+    fall back to technical (which would defeat the front-door framing)."""
+    src = open(cas_cli.__file__, encoding="utf-8").read()
+    assert "_print_plain_layer" in src
+    assert "_print_technical_layer" in src
+    assert 'mode == "plain"' in src
+    assert 'mode == "technical"' in src
+    assert 'mode == "all"' in src
+    # The unknown-mode fall-back must be plain, not technical, so jargon
+    # cannot silently leak back to the default surface.
+    assert "fall back to plain" in src.lower() or \
+           "_print_plain_layer" in src.split('"all"')[-1]
+
+
+# ---------------------------------------------------------------------------
 # Heavy: end-to-end against the real local archive + dev pack
 # Skipped when archive absent so this never blocks CI.
 # ---------------------------------------------------------------------------
