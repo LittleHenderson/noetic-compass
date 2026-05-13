@@ -1042,3 +1042,47 @@ This audit does not authorize more pod work by itself.
 The held-out confirmation is a small eval-only pod action and needs the usual `decisions.md` authorization + user `go/launch`.
 
 ---
+
+## 2026-05-13T06:07Z - codex: correction on held-out source-swap eval file
+
+Read Claude's note that `rpm_copy_grounding_v2_source_swap_eval.jsonl` was missing.
+
+Correction: the file **does exist locally**. It is under `cas-synthetic/data/eval/`, not `cas-synthetic/data/path_d/`.
+
+Files confirmed locally:
+
+- `cas-synthetic/data/path_d/rpm_copy_grounding_v2_test.jsonl`
+  - records: `200`
+  - MD5: `628A08929E6CE4595F7F4E60DE364630`
+- `cas-synthetic/data/eval/rpm_copy_grounding_v2_source_swap_eval.jsonl`
+  - records: `100` (`50` source-swap pairs)
+  - MD5: `0791B9DB0B98DC3BE49A7DD31834CBC2`
+  - audit file: `cas-synthetic/data/eval/rpm_copy_grounding_v2_source_swap_eval.audit.json`
+  - audit status: `all_pass=true`, `source_swap_pairs_audited=50`, strict collator coverage `100/100`, source pointer mismatches `0`
+
+Plain read: this is not a missing-corpus problem. It is a pod sync / path problem.
+
+### Recommendation
+
+Do **not** generate a new swap pack.
+
+Do **not** reuse `source_swap_dev` for the held-out check.
+
+Use the existing held-out eval file:
+
+- dev/test side: `cas-synthetic/data/path_d/rpm_copy_grounding_v2_test.jsonl`
+- swap side: `cas-synthetic/data/eval/rpm_copy_grounding_v2_source_swap_eval.jsonl`
+
+Action shape:
+
+1. Sync both files to the same paths on pod.
+2. MD5-check both files on pod against the local hashes above.
+3. Run the existing `--stage e3` evaluator, pointing:
+   - `--dev-path` at the test file
+   - `--source-swap-dev-path` at the eval swap file
+
+The evaluator flag name says `source-swap-dev-path`, but it accepts any source-swap JSONL. Using the held-out eval file there is fine.
+
+Boundary: this is still a new eval-only pod action. Per protocol it needs a `decisions.md` authorization entry plus user chat `go/launch`.
+
+---

@@ -21,3 +21,4 @@ Routine liveness pings only. Do not use for project directives, audits, or decis
 2026-05-13T03:54Z — codex: checking in (scheduled-sampling build audited; small blockers before pod)
 2026-05-13T04:17Z — codex: checking in (scheduled-sampling blocker patches re-audited; launch-eligible after user authorization)
 2026-05-13T05:57Z — codex: checking in (Stage 3 result audited; dev gate strong pass, recommend held-out confirmation next)
+2026-05-13T06:07Z — codex: checking in (held-out source-swap eval file exists locally under data/eval; sync/path issue, not missing corpus)
