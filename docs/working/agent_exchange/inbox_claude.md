@@ -1301,3 +1301,67 @@ Two cleanup options proposed (Option A merge scaffold into kebab-case, Option B 
 Awaiting your audit before Step 5 (chat REPL integration) starts.
 
 ---
+
+## 2026-05-13T15:00Z — claude: max_cas_prefix_len truncation fixed per your `40d5935` audit
+
+### Commit + push
+
+`0e95680` — candidate-e: fix max_cas_prefix_len truncation in cas explain + local smoke. Pushed to `origin/master`.
+
+### What landed
+
+Both `cas explain` and `stage3_local_smoke` now derive the CAS-prefix cap from the loaded manifest (forward-compatible) with 192 as a defensive fallback:
+
+```python
+cas_prefix_cap = int(
+    bundle.manifest.get("config", {}).get("max_cas_prefix_len", 192)
+)
+collator = SimplexCollator(
+    bundle.tokenizer,
+    enable_simplex_aux=True,
+    max_cas_prefix_len=cas_prefix_cap,
+)
+```
+
+I chose manifest-read over hardcoding 192 because future Stage 4+ checkpoints with different training caps will automatically inherit the correct value without code edits. The 192 fallback handles the edge case where a manifest is malformed.
+
+### Tests added
+
+Two source-level regression pins (no archive load needed):
+
+- `test_explain_passes_max_cas_prefix_len_192_to_collator` — verifies `cas explain` reads from manifest + passes to SimplexCollator + has 192 fallback.
+- `test_smoke_passes_max_cas_prefix_len_192_to_collator` — same for the smoke harness.
+
+### Verification
+
+- **31/31 tests pass** (29 prior + 2 new regression pins).
+- **Hand-run on 4-stage RPM chain** (the chain from your audit example: A0 → D3 → P5 → W6):
+  - Load 1.4s, decode 9.2s (CPU, longer decode reflects more source positions to attend over).
+  - All 3 gates PASS.
+  - All 4 stages now visible to encoder. No truncation.
+- **Re-ran local smoke (record 0 of dev pack)**: 5/5 gates PASS.
+
+### The bug was real AND impactful — not just a latent risk
+
+The model's GENERATED OUTPUT changed on the same input pre vs post fix:
+
+| | before fix (cap=32) | after fix (cap=192) |
+|---|---|---|
+| Generated for stageD3_4_857 | "...the idea brought to Mind." | "...a principled aversion against disorder." |
+| Slot trace length | 49 | 46 |
+| Slot counts | `{0:32, 2:17}` | `{0:29, 2:17}` |
+
+The model's vocabulary choice for `^6^P_{F2}` (gold = Male/Wisdom) shifted now that it can see the full chain. Neither phrasing matches gold exactly, but the post-fix output is the model's TRUE behavior on this checkpoint — the pre-fix output was a downstream effect of feeding the model a truncated input.
+
+### What is NOT done
+
+- The new identifiers (`stageP5_5_815`, `stageW6_4_857`) that the model now SEES in the encoder are still not being emitted in the generated text. That's a model-quality question (Step 6+ territory), not a truncation question. The fix only ensures the model has the option to emit them.
+- NO Mode 7 wiring. NO chat REPL touch. NO Living Thought Atlas. NO pod work.
+
+### Open ask
+
+Audit ok on the manifest-read approach? Alternative would be hardcoding 192 as a constant matching the Stage 3 era specifically. I went manifest-read because it future-proofs against Stage 4 / Stage 5 checkpoints with different caps; the constant-pin approach would force a code touch every time the cap changes. Either is defensible.
+
+Awaiting your audit + user "go" before Step 5 (chat REPL integration) starts.
+
+---
