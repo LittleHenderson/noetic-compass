@@ -1,0 +1,361 @@
+"""Tests for the Stage 3 conversation shell.
+
+Lightweight tests (no archive needed) drive handle_turn directly with
+the _DummyExplainer. Heavy test (skipped if real archive absent)
+spot-checks the production explainer wire-up.
+
+Discipline pinned:
+- Plain mode is the default reply layer for CAS-expression turns.
+- Slash commands dispatch correctly.
+- Input classifier separates CAS expressions from CAS questions from
+  free-form NL.
+- Free-form NL gets a polite refusal, not a model call.
+- /deeper and /simpler move the self-explain level correctly.
+"""
+from __future__ import annotations
+
+import json
+import pytest
+
+from cas_native.inference import stage3_chat_repl as repl
+from cas_native.inference.stage3_chat_repl import (
+    ReplResponse,
+    SessionState,
+    _DummyExplainer,
+    classify_input,
+    handle_turn,
+)
+from cas_native.inference.stage3_local_loader import DEFAULT_ARCHIVE_ROOT
+
+
+# ---------------------------------------------------------------------------
+# Input classifier
+# ---------------------------------------------------------------------------
+
+def test_classify_cas_expression_with_noetic_operator():
+    assert classify_input("^3^P|A") == "cas_expression"
+    assert classify_input("let stageA0_4_857 = ^7^P_{F5}") == "cas_expression"
+
+
+def test_classify_cas_expression_with_stage_identifier():
+    assert classify_input(
+        "stageA0_4_857 -> stageD3_4_857"
+    ) == "cas_expression"
+
+
+def test_classify_cas_question_what_is_cas():
+    assert classify_input("what is CAS?") == "cas_question"
+    assert classify_input("What is CAS?!") == "cas_question"
+    assert classify_input("WHAT IS CAS") == "cas_question"
+
+
+def test_classify_cas_question_examples():
+    assert classify_input("give me an example") == "cas_question"
+    assert classify_input("show me an example") == "cas_question"
+
+
+def test_classify_cas_question_explain():
+    assert classify_input("explain CAS") == "cas_question"
+    assert classify_input("explain yourself") == "cas_question"
+    assert classify_input("who are you?") == "cas_question"
+
+
+def test_classify_freeform():
+    assert classify_input("tell me a joke") == "freeform"
+    assert classify_input("what is the weather in Paris") == "freeform"
+    assert classify_input(
+        "I'd like to discuss philosophy with you"
+    ) == "freeform"
+
+
+def test_classify_empty():
+    assert classify_input("") == "empty"
+    assert classify_input("   ") == "empty"
+    assert classify_input("\n") == "empty"
+
+
+# ---------------------------------------------------------------------------
+# CAS expression turn → plain mode by default
+# ---------------------------------------------------------------------------
+
+def test_cas_expression_turn_returns_plain_mode():
+    """REGRESSION PIN: a CAS-expression turn returns the plain-mode
+    rendering, not the technical layer."""
+    state = SessionState()
+    expl = _DummyExplainer()
+    response = handle_turn("^3^P|A", state, expl)
+    assert response.kind == "explain"
+    # Plain mode includes the synthetic dummy plain answer
+    assert "plain answer" in response.text.lower() or \
+           "plain meaning" in response.text.lower()
+    # Technical-layer-only labels must NOT appear in the default reply
+    assert "slot trace" not in response.text.lower()
+    assert "STAGE_VAR" not in response.text
+
+
+def test_cas_expression_turn_pushes_to_history():
+    state = SessionState()
+    expl = _DummyExplainer()
+    handle_turn("^3^P|A", state, expl)
+    assert len(state.history) == 1
+    assert state.history[0]["kind"] == "explain"
+
+
+# ---------------------------------------------------------------------------
+# CAS question turn → self-explainer
+# ---------------------------------------------------------------------------
+
+def test_cas_question_turn_returns_self_explain():
+    state = SessionState()
+    response = handle_turn("what is CAS?", state, _DummyExplainer())
+    assert response.kind == "self_explain"
+    # Default level is simple, default topic is what
+    assert state.self_explain_level == "simple"
+    assert state.self_explain_topic == "what"
+    assert state.history[-1]["kind"] == "self_explain"
+
+
+def test_cas_question_with_example_keyword_sets_topic():
+    state = SessionState()
+    handle_turn("give me an example", state, _DummyExplainer())
+    assert state.self_explain_topic == "example"
+
+
+def test_cas_question_with_why_keyword_sets_topic():
+    state = SessionState()
+    handle_turn("why does CAS exist?", state, _DummyExplainer())
+    assert state.self_explain_topic == "why"
+
+
+# ---------------------------------------------------------------------------
+# Free-form NL → polite refusal
+# ---------------------------------------------------------------------------
+
+def test_freeform_turn_returns_polite_refusal():
+    """Codex 2026-05-13 reframe: freeform isn't a refusal, it's a bridge
+    to Step 5B. Asserts the response surfaces what works now AND points
+    at NL generation as the active next experiment."""
+    state = SessionState()
+    response = handle_turn(
+        "tell me about your weekend",
+        state, _DummyExplainer(),
+    )
+    assert response.kind == "freeform_refusal"
+    # Bridges to Step 5B (active next experiment, not future-distant)
+    assert "next experiment" in response.text.lower() or \
+           "coming after" in response.text.lower() or \
+           "coming next" in response.text.lower()
+    # Tells the user what IS supported
+    assert "CAS expression" in response.text
+    assert "what is CAS" in response.text.lower() or "what is cas" in response.text.lower()
+    # Concrete examples of supported input
+    assert "example" in response.text.lower()
+
+
+def test_freeform_turn_does_not_call_explainer():
+    """REGRESSION PIN: free-form NL must not invoke the model. Detect
+    via a counting explainer."""
+    state = SessionState()
+
+    class _CountingExplainer:
+        def __init__(self):
+            self.calls = 0
+
+        def __call__(self, _expr: str):
+            self.calls += 1
+            return _DummyExplainer()(_expr)
+
+    counter = _CountingExplainer()
+    handle_turn("hello, how are you", state, counter)
+    assert counter.calls == 0, (
+        "free-form NL must not invoke the explainer"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Slash commands
+# ---------------------------------------------------------------------------
+
+def test_slash_help():
+    state = SessionState()
+    response = handle_turn("/help", state, _DummyExplainer())
+    assert response.kind == "command"
+    assert "/plain" in response.text
+    assert "/technical" in response.text
+    assert "/deeper" in response.text
+
+
+def test_slash_quit():
+    state = SessionState()
+    response = handle_turn("/quit", state, _DummyExplainer())
+    assert response.should_quit is True
+
+
+def test_slash_exit():
+    state = SessionState()
+    response = handle_turn("/exit", state, _DummyExplainer())
+    assert response.should_quit is True
+
+
+def test_slash_clear_resets_history_and_level():
+    state = SessionState()
+    handle_turn("^3^P|A", state, _DummyExplainer())
+    handle_turn("/deeper", state, _DummyExplainer())
+    assert state.history  # something there
+    assert state.self_explain_level != "simple"
+    response = handle_turn("/clear", state, _DummyExplainer())
+    assert response.kind == "command"
+    assert state.history == []
+    assert state.self_explain_level == "simple"
+
+
+def test_slash_technical_after_cas_explain():
+    """/technical on a CAS-explain reply shows the technical layer."""
+    state = SessionState()
+    handle_turn("^3^P|A", state, _DummyExplainer())
+    response = handle_turn("/technical", state, _DummyExplainer())
+    assert response.kind == "command"
+    # Technical layer mentions slot trace, identifiers, gates
+    text = response.text
+    assert "slot trace" in text or "identifiers" in text or "gates" in text
+
+
+def test_slash_details_is_alias_for_technical():
+    state = SessionState()
+    handle_turn("^3^P|A", state, _DummyExplainer())
+    response = handle_turn("/details", state, _DummyExplainer())
+    text = response.text
+    assert "slot trace" in text or "identifiers" in text or "gates" in text
+
+
+def test_slash_all_shows_both_layers():
+    state = SessionState()
+    handle_turn("^3^P|A", state, _DummyExplainer())
+    response = handle_turn("/all", state, _DummyExplainer())
+    text = response.text
+    # Plain content
+    assert "plain answer" in text.lower() or "plain meaning" in text.lower()
+    # Technical content
+    assert "slot trace" in text or "identifiers" in text
+
+
+def test_slash_trace_dumps_json():
+    state = SessionState()
+    handle_turn("^3^P|A", state, _DummyExplainer())
+    response = handle_turn("/trace", state, _DummyExplainer())
+    # The trace dump should parse as JSON
+    parsed = json.loads(response.text)
+    assert "model" in parsed
+    assert "identifiers" in parsed
+    assert "slot_summary" in parsed
+
+
+def test_slash_raw_dumps_full_report_as_json():
+    state = SessionState()
+    handle_turn("^3^P|A", state, _DummyExplainer())
+    response = handle_turn("/raw", state, _DummyExplainer())
+    parsed = json.loads(response.text)
+    # The full report includes the raw fields
+    assert parsed.get("input_cas_expression") == "^3^P|A"
+    assert "plain_english" in parsed
+
+
+def test_slash_deeper_steps_up_a_level():
+    state = SessionState()
+    assert state.self_explain_level == "simple"
+    handle_turn("/deeper", state, _DummyExplainer())
+    assert state.self_explain_level == "stakeholder"
+    handle_turn("/deeper", state, _DummyExplainer())
+    assert state.self_explain_level == "user"
+
+
+def test_slash_simpler_steps_down_a_level():
+    state = SessionState()
+    state.self_explain_level = "technical"
+    handle_turn("/simpler", state, _DummyExplainer())
+    assert state.self_explain_level == "builder"
+
+
+def test_slash_deeper_at_technical_stays():
+    state = SessionState()
+    state.self_explain_level = "technical"
+    handle_turn("/deeper", state, _DummyExplainer())
+    assert state.self_explain_level == "technical"
+
+
+def test_slash_simpler_at_simple_stays():
+    state = SessionState()
+    state.self_explain_level = "simple"
+    handle_turn("/simpler", state, _DummyExplainer())
+    assert state.self_explain_level == "simple"
+
+
+def test_slash_unknown_command_is_helpful():
+    state = SessionState()
+    response = handle_turn("/nope", state, _DummyExplainer())
+    assert response.kind == "command"
+    assert "/help" in response.text
+
+
+def test_slash_plain_with_no_history():
+    """No previous reply — /plain returns the no-history hint, not a crash."""
+    state = SessionState()
+    response = handle_turn("/plain", state, _DummyExplainer())
+    assert response.kind == "command"
+    assert "no previous reply" in response.text.lower()
+
+
+def test_slash_trace_with_no_history():
+    state = SessionState()
+    response = handle_turn("/trace", state, _DummyExplainer())
+    assert response.kind == "command"
+    assert "no trace" in response.text.lower()
+
+
+# ---------------------------------------------------------------------------
+# Banner / help mentions the supported input paths (regression pin)
+# ---------------------------------------------------------------------------
+
+def test_help_text_mentions_both_supported_paths():
+    """REGRESSION PIN: the /help output must mention BOTH supported input
+    paths (CAS expression + CAS question) so the user knows what works."""
+    state = SessionState()
+    response = handle_turn("/help", state, _DummyExplainer())
+    text = response.text
+    assert "CAS expression" in text
+    assert "what is CAS" in text.lower() or "what is cas" in text.lower()
+
+
+# ---------------------------------------------------------------------------
+# Heavy: end-to-end against real archive (skipped if absent)
+# ---------------------------------------------------------------------------
+
+_REAL_CKPT = (
+    DEFAULT_ARCHIVE_ROOT / "stage_e3_20260513T043823Z" / "ckpt_final.pt"
+)
+
+
+@pytest.mark.skipif(
+    not _REAL_CKPT.exists(),
+    reason=f"real Stage 3 archive not present at {_REAL_CKPT}; "
+           "skip heavy end-to-end REPL test",
+)
+def test_production_explainer_returns_well_formed_report():
+    """Production explainer wires through the real Stage 3 model + Plain
+    English Mode. Spot-check that one CAS expression produces a
+    structurally valid report."""
+    explainer = repl._build_production_explainer()
+    report = explainer(
+        "let stageA0_4_857 = ^7^P_{F5}; "
+        "let stageD3_4_857 = ^6^P_{F2}; "
+        "stageA0_4_857 -> stageD3_4_857"
+    )
+    # Schema-level pin
+    assert "plain_english" in report
+    assert "short_answer" in report["plain_english"]
+    assert "plain_meaning" in report["plain_english"]
+    assert "generated_english" in report
+    assert report["model"]["max_cas_prefix_len"] == 192
+    # Gates structurally valid
+    gates = report.get("gates", {})
+    assert gates.get("no_crash") is True

@@ -269,6 +269,17 @@ def _cmd_chat(_argv: list[str]) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Subcommand: chat-stage3 (Step 5 — CAS conversation shell over the
+# trained Stage 3 model, plain English by default, layered self-
+# explanation, slash commands). Existing `cas chat` (B-4 era) is
+# UNTOUCHED. Per `decisions.md` 2026-05-13T16:30Z.
+# ---------------------------------------------------------------------------
+def _cmd_chat_stage3(argv: list[str]) -> int:
+    from cas_native.inference.stage3_chat_repl import main as repl_main
+    return int(repl_main(argv) or 0)
+
+
+# ---------------------------------------------------------------------------
 # Subcommand: notation
 # ---------------------------------------------------------------------------
 def _cmd_notation(argv: list[str]) -> int:
@@ -710,6 +721,7 @@ def _cmd_test(_argv: list[str]) -> int:
 # ---------------------------------------------------------------------------
 SUBCOMMANDS: dict[str, Callable[[list[str]], int]] = {
     "chat": _cmd_chat,
+    "chat-stage3": _cmd_chat_stage3,
     "notation": _cmd_notation,
     "predict": _cmd_predict,
     "explain": _cmd_explain,
