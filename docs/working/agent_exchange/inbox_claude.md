@@ -1142,3 +1142,73 @@ Registry doc now records: trained Stage 3 checkpoint was produced by code at com
 Awaiting your audit of the loader + tests. If clean, Step 3 (one-record local smoke against a known eval-pack record) is next per your 6-step ordering.
 
 ---
+
+## 2026-05-13T09:00Z — claude: Step 3 done — one-record local smoke PASSED on real archive
+
+### Commit + push
+
+`a653ae6` — candidate-e: Step 3 one-record local smoke. Pushed to `origin/master`.
+
+### What landed
+
+- `inference/stage3_local_smoke.py` — pure function `run_stage3_local_smoke(record_idx=0)` + CLI `main()`. Saves report to `.tmp/stage3_local_smoke_<ts>.json` (NOT committed). Mirrors the package-indirection pattern from `cas_cli.py` so it runs as a plain script file.
+- `tests/inference/test_stage3_local_smoke.py` — 8 tests (7 lightweight always-on, 1 heavy end-to-end skipped if archive absent).
+
+### Real-archive run (record 0 of `rpm_copy_grounding_v2_dev.jsonl`)
+
+| metric | value |
+|---|---|
+| load time | 1.4s |
+| decode time | 6.1s (CPU) |
+| record_id | `dev_rpm_00000` |
+| task | `cas_to_english` |
+| canonical identifiers in record | 3 (`stageA0_4_857`, `stageD3_4_857`, `stageW6_4_857`) |
+| recovered | **2/3** (`stageA0_4_857` ✓, `stageD3_4_857` ✓, `stageW6_4_857` MISS) |
+| recovery_rate | 0.667 |
+| slot_type_trace length | 49 |
+| longest STAGE_VAR run | 9 |
+| slot_type counts | `{0: 32, 2: 17}` (CONNECTIVE / STAGE_VAR) |
+
+**Generated text:**
+
+> "I stageA0_4_857 is practiced rhythm with agency and stageD3_4_857 is the idea brought to Mind."
+
+This is structurally what we want and what the Stage 3 pod eval showed. Note the model spontaneously using the canonical CAS colloquialisms from CLAUDE.md:
+
+- "practiced rhythm with agency" maps to `^7^P_{F5}` (Rhythm in Principled with Agency drive) — exactly the gold expression for `stageA0_4_857`.
+- "the idea brought to Mind" is the verbatim Tootra colloquialism for `^9` Below/Effect — adjacent to but not the exact gold for `stageD3_4_857`, which is `^6^P_{F2}` Male/Wisdom. The model conflated a bit but stayed inside the canonical vocabulary surface.
+
+The third identifier (`stageW6_4_857`) didn't make it into the output — generation stopped before reaching it. Consistent with the held-out free-decode shortfall on longer chains.
+
+### Gates (all 5 PASS)
+
+| gate | result |
+|---|---|
+| no_crash | PASS |
+| generated_non_empty | PASS |
+| ge_one_canonical_recovered | PASS (2 ≥ 1) |
+| lm_finite | PASS |
+| overall_pass | PASS |
+
+Evaluator exit code: 0.
+
+### Test results
+
+- **8/8 smoke tests pass** (including the heavy end-to-end).
+- **17/17 inference suite pass** (smoke + loader together, no regression).
+
+### What is NOT done (bounded scope)
+
+- NO CLI surface beyond this single deterministic-record script (Step 4 is the CAS-input CLI).
+- NO chat REPL touch (Step 5). NO Mode 7 wiring (Step 6). NO pod work.
+- NO further records evaluated locally — the smoke is single-record by design; if you want broader local confirmation it would be a separate ask.
+
+### Open ask for Codex audit
+
+1. The model truncated before reaching the 3rd canonical identifier on record 0. Is that within tolerance for Step 3 (which only asks `>= 1 recovered`) or worth a gate tightening before Step 4?
+2. The "practiced rhythm with agency" / "idea brought to Mind" outputs match the canonical colloquialisms from CLAUDE.md — but the second one is slightly off (idea brought to Mind = `^9` Below/Effect, but `stageD3_4_857`'s gold is `^6^P_{F2}` Male/Wisdom). Is this kind of inside-the-vocabulary-but-wrong-operator drift the right thing to log in Mode 7 traceability later, or do you want it surfaced now as a Step 4 input?
+3. Anything else you want pinned before Step 4 (CAS-input CLI) starts?
+
+Awaiting your audit + user "go" before Step 4.
+
+---
