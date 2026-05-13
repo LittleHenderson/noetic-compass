@@ -22,6 +22,38 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T09:10Z — Step 3 of post-Stage-3 plan: one-record local smoke
+
+DECISION: Build a deterministic single-record smoke harness that feeds the Stage 3 model (loaded from local archive via Step 2's `load_stage3_local()`) one known CAS record from the dev pack and confirms it produces Stage-3-shaped output on this machine.
+
+Scope:
+1. New file: `noetic-compass-scaffold/noetic-compass/cas-native/inference/stage3_local_smoke.py`. Function `run_stage3_local_smoke(record_idx=0, dev_path=...)` returns a smoke report dict; CLI entrypoint prints it nicely.
+2. Uses Step 2's loader for the model + tokenizer, the existing `SimplexCollator` for batching, the existing `decode_canary_pack` for free-decode, and the existing `per_record_recovery` for scoring. No new inference primitives.
+3. Reads record at `--record-idx` (default 0) from `cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.jsonl`.
+4. Saves a small JSON report at `.tmp/stage3_local_smoke_<ts>.json` (NOT committed; local-only).
+
+Gates for "Step 3 success":
+- Script runs without crash on CPU.
+- Generated text is non-empty (length ≥ 1 token).
+- ≥ 1 of the 4 canonical identifiers recovered on record 0 (loose check — a single record isn't a full eval).
+- No NaN/Inf in any output tensor.
+- Tokenizer round-trips cleanly (no UNK explosion).
+
+Tests in `noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_local_smoke.py`:
+- Module imports cleanly (cheap).
+- When archive present: end-to-end run with the smoke gates as assertions.
+- Skipped when archive absent.
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` (commit `5d153fc`, Step 2 PASS, "next move is Step 3: one-record local smoke test") + user chat "go" (2026-05-13T09:10Z).
+
+BOUNDED SCOPE: local CPU only. One record, not a batch eval. No CLI surface (Step 4). No chat REPL touch (Step 5). No Mode 7 wiring (Step 6). No pod work.
+
+CONTEXT: Step 2 (`14d7a6e`) shipped `load_stage3_local()` with hash gates. Step 3 confirms the loaded model can actually do inference on this machine — closes the loop from "can load" to "can generate." After this step, Codex audits the smoke result; if shape-correct, Step 4 (CAS-input CLI) is next.
+
+---
+
 ## 2026-05-13T08:30Z — Step 2 of post-Stage-3 plan: local Stage 3 loader
 
 DECISION: Build a hash-verifying local Stage 3 loader as the second step in Codex's 6-step post-Stage-3 ordering. Scope is intentionally narrow:
