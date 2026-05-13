@@ -993,3 +993,57 @@ The pod copy at `/workspace/tksCAS/stage_e3_20260513T043823Z/` is UNTOUCHED. We 
 - Still pending your audit of the three planning docs (commits `3ef997e`, `53687ba`, `ef474d3`) and the 7 open questions surfaced at 2026-05-13T07:00Z inbox entry. After your audit, user "go" on which integration phase to execute first.
 
 ---
+
+## 2026-05-13T07:30Z — claude: tokenizer artifact backup landed — inference-readiness gap closed
+
+Per your `a1e8132` audit ("the checkpoint alone is not enough to run inference; we also need local copies of tokenizer.json and english_bpe.json") and user chat "go" 2026-05-13T07:25Z: both runtime tokenizer files now archived locally.
+
+### Files transferred
+
+scp pod → local archive on 2 files:
+
+| File | Size | sha256 (pod ↔ local match) |
+|---|---:|---|
+| `tokenizer.json` | 446,446 B | `9c544425c9c08140070b2f3929adef864bbfafb0c00c1d687f2d6b98e0589b9b` |
+| `english_bpe.json` | 1,455,353 B | `ac4d12a6d26cc1194ea31fee8cdc07d52a0a759964810956b13cafea08a06889` |
+
+**Triple-verified.** The two hashes match across three independent sources:
+
+1. Local archive (just computed)
+2. Pod (re-computed after backup)
+3. Trainer manifest's `tokenizer_info.*_sha256` fields embedded in `ckpt_final.pt.manifest.json` at training time
+
+Three independent confirmations of the same hash means we can trust these files are exactly the tokenizer + BPE the Stage 3 model was trained against — not a different version that happens to have the same name.
+
+### Local archive
+
+- Path: `D:\tksCAS-archive\stage6_v6_artifacts\` (mirrors the pod relative path under the archive root).
+- NOT committed to git (artifacts, not code).
+- Total tokenizer artifacts on disk: 1.9 MB. Negligible storage cost; massive inference-readiness payoff.
+
+### Registry doc updated (committed)
+
+`docs/working/candidate_e/checkpoint_archive_registry.md` now lists local archive paths alongside the pod paths for both tokenizer files, with a note that the hashes have been triple-verified.
+
+### Pod side
+
+Pod copies at `/workspace/tksCAS/stage6_v6_artifacts/` UNTOUCHED.
+
+### What this enables
+
+Phase 1 of `docs/working/chat_repl_stage3_integration_plan_2026_05_13.md` can now proceed with no pod dependency for inference reproduction. The full load path:
+
+1. Read `D:\tksCAS-archive\stage_e3_20260513T043823Z\ckpt_final.pt` (the trained weights).
+2. Read `D:\tksCAS-archive\stage6_v6_artifacts\tokenizer.json` + `english_bpe.json` (the runtime artifacts).
+3. Cross-check tokenizer sha256 against `ckpt_final.pt.manifest.json:tokenizer_info` (fail loudly if mismatch).
+4. Build model via `build_simplex_mvp_model` + `load_state_dict`.
+5. Run inference.
+
+If the pod is wiped before integration code lands, the local archive lets us rebuild a working inference setup with zero retraining.
+
+### What is NOT done
+
+- NO Phase 1 code yet. NO chat REPL touched. NO Mode 7 wiring. NO inference test runs.
+- Still pending your audit on the 7 open questions from the three planning docs (2026-05-13T07:00Z inbox entry), then user "go" on which phase to start with.
+
+---

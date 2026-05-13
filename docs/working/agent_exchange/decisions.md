@@ -22,6 +22,22 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T07:25Z — Tokenizer artifact backup (closes inference-readiness gap)
+
+DECISION: Back up the two load-bearing tokenizer artifacts that the trained Stage 3 checkpoint requires for inference but were not explicitly named in the 07:05Z backup scope: `tokenizer.json` (446 KB) and `english_bpe.json` (1.4 MB). Without these, the binary checkpoint is unusable for any local inference. Per Codex audit `a1e8132` ("the checkpoint alone is not enough to run inference. We also need local copies of: tokenizer.json, english_bpe.json").
+
+Steps: scp both files pod → local archive at `D:\tksCAS-archive\stage6_v6_artifacts\` (preserves pod relative path under the archive root). sha256 verify both sides against the values already recorded in `checkpoint_archive_registry.md`. Update the registry doc with the local archive paths.
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` 2026-05-13T??:??Z (commit `a1e8132`, "checkpoint alone is not enough to run inference") + user chat "go" (2026-05-13T07:25Z).
+
+BOUNDED SCOPE: pod-read only for the two named tokenizer files. No checkpoint re-pull. No inference. No code changes. Same scope shape as the 07:05Z backup, narrower contents.
+
+CONTEXT: 07:05Z backup of `ckpt_final.pt` + 4 companion files passed Codex audit (`a1e8132`). Codex flagged the residual gap: the registry doc lists tokenizer/BPE hashes but doesn't archive the files themselves. Phase 1 loader (per `chat_repl_stage3_integration_plan_2026_05_13.md`) will verify these files exist at startup and fail clearly if not; this backup is what those checks will succeed against. After this, the trained model can be loaded end-to-end from local archive alone — no pod dependency for inference reproduction.
+
+---
+
 ## 2026-05-13T07:05Z — Stage 3 ckpt_final.pt backup from pod to local archive
 
 DECISION: Copy the Stage 3 trained checkpoint (the current "good model") from pod to local archive BEFORE any integration code work begins. Per Codex: "Without that checkpoint, all the integration work has nothing reliable to load." Six steps:

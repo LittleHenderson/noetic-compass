@@ -73,14 +73,14 @@ b2 (audited) → e2a (warmup) → e2b (span / contrastive / coverage)
 
 #### Required runtime artifacts to load this checkpoint
 
-These MUST be present at runtime; they are not bundled in the checkpoint binary:
+These MUST be present at runtime; they are not bundled in the checkpoint binary. Both are now backed up locally (per `decisions.md` 2026-05-13T07:25Z); Phase 1 loader should verify by sha256 and fail clearly if missing.
 
-| artifact | path on pod | sha256 |
-|---|---|---|
-| tokenizer | `/workspace/tksCAS/stage6_v6_artifacts/tokenizer.json` | `9c544425c9c08140070b2f3929adef864bbfafb0c00c1d687f2d6b98e0589b9b` |
-| english_bpe | `/workspace/tksCAS/stage6_v6_artifacts/english_bpe.json` | `ac4d12a6d26cc1194ea31fee8cdc07d52a0a759964810956b13cafea08a06889` |
+| artifact | local archive | pod path | sha256 |
+|---|---|---|---|
+| tokenizer | `D:\tksCAS-archive\stage6_v6_artifacts\tokenizer.json` | `/workspace/tksCAS/stage6_v6_artifacts/tokenizer.json` | `9c544425c9c08140070b2f3929adef864bbfafb0c00c1d687f2d6b98e0589b9b` |
+| english_bpe | `D:\tksCAS-archive\stage6_v6_artifacts\english_bpe.json` | `/workspace/tksCAS/stage6_v6_artifacts/english_bpe.json` | `ac4d12a6d26cc1194ea31fee8cdc07d52a0a759964810956b13cafea08a06889` |
 
-(Tokenizer hashes per the trainer manifest's `tokenizer_info.*_sha256` fields. These tokenizer files should be either bundled with any local-inference setup or kept in a parallel archive directory.)
+Hashes verified bit-for-bit pod ↔ local on backup (2026-05-13T07:30Z) AND match the values recorded by the trainer manifest at training time (the `tokenizer_info.*_sha256` fields in `ckpt_final.pt.manifest.json`). Three independent confirmations of the same hash means we can trust these files are the tokenizer + BPE the Stage 3 model was actually trained with.
 
 #### Companion artifacts in the same archive directory
 
