@@ -5,6 +5,13 @@ import { GraphView } from '../components/idea-atlas/GraphView';
 import { NodeDetailPanel } from '../components/idea-atlas/NodeDetailPanel';
 import { InversionModal } from '../components/idea-atlas/InversionModal';
 import { useRippleAnimation } from '../components/idea-atlas/useRippleAnimation';
+import { TraceLoader } from '../components/idea-atlas/TraceLoader';
+import {
+  ThoughtTreeView,
+  type ThoughtTreeNode as TreeViewNode,
+  type ThoughtTree as TreeViewTree,
+} from '../components/idea-atlas/ThoughtTreeView';
+import type { AtlasTrace } from '../lib/trace';
 
 // ── Types ──
 
@@ -26,7 +33,7 @@ interface AtlasEdge {
   breakdown?: Record<string, number>;
 }
 
-type ViewMode = 'list' | 'graph';
+type ViewMode = 'list' | 'graph' | 'trace';
 
 // Backend returns flat shapes — Idea on POST, Idea[] on GET — not wrapped.
 type CaptureResponse = Idea;
@@ -133,6 +140,29 @@ export function IdeaAtlasPage() {
 
   // ── Sprint 3 wiring: inversion modal ──
   const [invertingIdea, setInvertingIdea] = useState<Idea | null>(null);
+
+  // ── Atlas v0 wiring: traceability_v0 thought-tree viewer ──
+  // The TRACE tab is independent of the Idea backend — it works fully
+  // offline against a loaded JSON file. No backend dependency.
+  const [loadedTrace, setLoadedTrace] = useState<AtlasTrace | null>(null);
+  const [traceError, setTraceError] = useState<string | null>(null);
+  const [selectedTraceNodeId, setSelectedTraceNodeId] = useState<string | null>(null);
+  const handleTraceLoaded = useCallback((trace: AtlasTrace) => {
+    setLoadedTrace(trace);
+    setTraceError(null);
+    setSelectedTraceNodeId(null);
+  }, []);
+  const handleTraceError = useCallback((message: string) => {
+    setTraceError(message);
+  }, []);
+  const selectedTraceNode: TreeViewNode | null = useMemo(() => {
+    if (!loadedTrace || !selectedTraceNodeId) return null;
+    return (
+      loadedTrace.thought_tree.nodes.find(
+        (n) => n.id === selectedTraceNodeId,
+      ) ?? null
+    );
+  }, [loadedTrace, selectedTraceNodeId]);
 
   // Fetch edges lazily — first time the user switches into GRAPH view.
   // Backend exposes GET /idea_atlas/edges?similarity_threshold=0.2; if 404,
@@ -460,6 +490,19 @@ export function IdeaAtlasPage() {
           >
             GRAPH
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={viewMode === 'trace'}
+            onClick={() => setViewMode('trace')}
+            className={`px-3 py-1 rounded transition-colors ${
+              viewMode === 'trace'
+                ? 'bg-accent-teal/20 text-accent-teal'
+                : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            TRACE
+          </button>
         </div>
       </div>
 
@@ -700,6 +743,199 @@ export function IdeaAtlasPage() {
         onClose={() => setInvertingIdea(null)}
         onConfirm={handleInvertConfirm}
       />
+
+      {/* Trace view — Atlas v0 */}
+      {viewMode === 'trace' && (
+        <div className="flex-1 overflow-hidden px-6 py-4 flex flex-col gap-4">
+          <TraceLoader
+            onTraceLoaded={handleTraceLoaded}
+            onError={handleTraceError}
+          />
+          {traceError && (
+            <div className="rounded border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-xs font-mono text-rose-300">
+              {traceError}
+            </div>
+          )}
+          {loadedTrace && (
+            <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4 overflow-hidden">
+              {/* Tree on the left */}
+              <div className="rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden">
+                <ThoughtTreeView
+                  tree={loadedTrace.thought_tree as unknown as TreeViewTree}
+                  onNodeClick={(n) => setSelectedTraceNodeId(n.id)}
+                  selectedNodeId={selectedTraceNodeId}
+                  className="h-full w-full"
+                />
+              </div>
+              {/* Side panel — trace metadata + selected node detail */}
+              <aside className="rounded-lg border border-white/[0.06] bg-black/30 p-4 overflow-y-auto font-mono text-[11px] text-slate-300">
+                <header className="mb-3">
+                  <div className="text-accent-teal text-xs font-bold">
+                    TRACE METADATA
+                  </div>
+                  <div className="text-slate-500 text-[10px] mt-1">
+                    {loadedTrace.trace_id}
+                  </div>
+                  <div className="text-slate-500 text-[10px]">
+                    {loadedTrace.created_at}
+                  </div>
+                </header>
+                <dl className="space-y-2">
+                  <div>
+                    <dt className="text-slate-500 text-[10px] uppercase">
+                      Input kind
+                    </dt>
+                    <dd className="text-slate-200">
+                      {loadedTrace.input.input_kind}
+                    </dd>
+                  </div>
+                  {loadedTrace.input.input_kind === 'nl_bridge' && (
+                    <>
+                      <div>
+                        <dt className="text-slate-500 text-[10px] uppercase">
+                          User text
+                        </dt>
+                        <dd className="text-slate-100 italic">
+                          &ldquo;{loadedTrace.input.user_text}&rdquo;
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-500 text-[10px] uppercase">
+                          Matched pattern
+                        </dt>
+                        <dd className="text-slate-200">
+                          {loadedTrace.input.nl_bridge.matched_pattern}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-500 text-[10px] uppercase">
+                          Confidence
+                        </dt>
+                        <dd className="text-slate-200">
+                          {loadedTrace.input.nl_bridge.confidence.toFixed(2)}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-500 text-[10px] uppercase">
+                          Inferred CAS
+                        </dt>
+                        <dd className="text-accent-teal">
+                          {loadedTrace.input.nl_bridge.inferred_cas_expression}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-500 text-[10px] uppercase">
+                          Rationale
+                        </dt>
+                        <dd className="text-slate-200">
+                          {loadedTrace.input.nl_bridge.rationale}
+                        </dd>
+                      </div>
+                    </>
+                  )}
+                  {loadedTrace.input.input_kind === 'cas_expression' && (
+                    <div>
+                      <dt className="text-slate-500 text-[10px] uppercase">
+                        CAS expression
+                      </dt>
+                      <dd className="text-accent-teal">
+                        {loadedTrace.input.cas_expression}
+                      </dd>
+                    </div>
+                  )}
+                  <div>
+                    <dt className="text-slate-500 text-[10px] uppercase">
+                      Generated English
+                    </dt>
+                    <dd className="text-slate-100">
+                      {loadedTrace.output.english}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-slate-500 text-[10px] uppercase">
+                      Coverage
+                    </dt>
+                    <dd className="text-slate-200">
+                      {loadedTrace.confidence.qualitative_coverage}
+                    </dd>
+                  </div>
+                  {loadedTrace.confidence.warning_flags.length > 0 && (
+                    <div>
+                      <dt className="text-slate-500 text-[10px] uppercase">
+                        Warnings
+                      </dt>
+                      <dd className="space-y-1">
+                        {loadedTrace.confidence.warning_flags.map((flag, i) => (
+                          <div
+                            key={i}
+                            className={`text-[10px] px-2 py-1 rounded ${
+                              flag.severity === 'error'
+                                ? 'bg-rose-500/15 text-rose-300'
+                                : flag.severity === 'warning'
+                                  ? 'bg-amber-500/15 text-amber-300'
+                                  : 'bg-slate-500/15 text-slate-300'
+                            }`}
+                          >
+                            {flag.message}
+                          </div>
+                        ))}
+                      </dd>
+                    </div>
+                  )}
+                </dl>
+                {selectedTraceNode && (
+                  <section className="mt-4 pt-3 border-t border-white/[0.06]">
+                    <div className="text-accent-teal text-xs font-bold mb-2">
+                      SELECTED NODE
+                    </div>
+                    <dl className="space-y-2">
+                      <div>
+                        <dt className="text-slate-500 text-[10px] uppercase">
+                          Kind
+                        </dt>
+                        <dd className="text-slate-200">
+                          {selectedTraceNode.kind}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-500 text-[10px] uppercase">
+                          Role
+                        </dt>
+                        <dd className="text-slate-200">
+                          {selectedTraceNode.role}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-500 text-[10px] uppercase">
+                          Label
+                        </dt>
+                        <dd className="text-slate-100">
+                          {selectedTraceNode.label}
+                        </dd>
+                      </div>
+                      {selectedTraceNode.text && (
+                        <div>
+                          <dt className="text-slate-500 text-[10px] uppercase">
+                            Text
+                          </dt>
+                          <dd className="text-slate-100">
+                            {selectedTraceNode.text}
+                          </dd>
+                        </div>
+                      )}
+                    </dl>
+                  </section>
+                )}
+              </aside>
+            </div>
+          )}
+          {!loadedTrace && !traceError && (
+            <div className="rounded-lg border border-white/[0.06] bg-black/20 p-6 text-center font-mono text-xs text-slate-500">
+              Load a traceability_v0 JSON to see the Thought Tree.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
