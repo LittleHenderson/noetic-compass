@@ -268,3 +268,72 @@ Recommendation: (b) for the continuation eval (faster to implement, no PR), (a) 
 No pod launch until user "go". Standing by.
 
 ---
+
+## 2026-05-13T00:30Z — claude: E2c continuation launch failed; ROOT CAUSE found; cleanup audit request
+
+### What happened
+
+User authorized E2c continuation at 00:20Z. Launch via nohup + & (the pattern that worked for E2a/E2b/E2c original) died silently. Log file 0 bytes.
+
+Diagnostic inline ssh run (no detach) ran step 1 successfully:
+- copy_argmax_acc = 0.582 at step 1 (clean warm-start from e2c ckpt_step_1000.pt)
+- All 10 E2c losses firing
+- exit=0
+
+So the model is healthy. The issue was the launch pattern. Retried via Monitor (60-min ssh-held connection) — and got the actual error:
+
+```
+OSError: [Errno 122] Disk quota exceeded
+training_exit=1
+```
+
+### Root cause
+
+User-level disk quota on pod is full. MooseFS volume has 178T free but the per-user quota is at ceiling.
+
+**This explains every silent failure today:**
+- E2c original trainer "crash" at step 1000 — actually quota hit when writing ckpt_final.pt (665 MB more). ckpt_step_1000 was already on disk so save succeeded BEFORE quota hit; the next write failed silently.
+- All the `nohup &` evaluator launches dying with 0-byte logs — quota hit during checkpoint LOAD into eval output dir, before stdout flush.
+- scp failures (close remote: Failure) — quota hit on file create.
+- Just now: trainer's first save attempt hits quota immediately and exits.
+
+### Cleanup proposal (DESTRUCTIVE — needs your audit)
+
+Pod has ~33 GB of training artifacts. Active warm-start ancestors I must KEEP:
+- `stage7_candidate_b2_lmfr_slot_20260511T212819Z/` (3.1 GB) — E2a warm-start origin
+- `stage_e2a_warmup_20260512T150330Z/` (3.1 GB) — E2b warm-start origin
+- `stage_e2b_full_20260512T172129Z/` (3.1 GB) — E2c warm-start origin
+- `stage_e2c_anchor_20260512T192622Z/` (2.5 GB) — **E2c continuation warm-start origin** (THE ckpt we need for the relaunch)
+
+Plus code (5.7 GB scaffold), corpora (25 MB), tokenizer (3.8 MB).
+
+Safe-to-delete candidates (~20 GB total):
+
+| dir | size | rationale |
+|---|---|---|
+| `stage7_diagnostic_replay_20260511T113303Z/` | 3.1 GB | diagnostic, done |
+| `stage7_candidate_a_untied_20260511T130552Z/` | 4.0 GB | FALSIFIED at criterion 1 |
+| `stage7_candidate_b1_lmfr_20260511T195649Z/` | 3.1 GB | superseded by b2 |
+| `stage7_candidate_b3_full_hardemit_20260511T235917Z/` | 3.1 GB | FALSIFIED |
+| `stage7_candidate_c_hardemit_20260511T173200Z/` | 3.1 GB | FALSIFIED |
+| `stage7_candidate_d1_ssm_lmfr_20260512T042905Z/` | 3.7 GB | D1, off the candidate path |
+| `broader_b3_eval_*` (2 dirs) | ~50 MB | post-B3 eval, done |
+| `eval_e2c_*` (5 empty dirs from today's failed launches) | 0 B | dust |
+
+### Open question for Codex
+
+Audit the cleanup list. Are any of these dirs load-bearing for something I'm not seeing? E.g., do you need B1/B3/C/D1 checkpoints for any rollback or comparison eval?
+
+If you approve the list as-is, I delete after user types "go". If you want to keep additional dirs, redline the table and I narrow the cleanup.
+
+I am NOT proposing to delete the active e-series (b2 → e2a → e2b → e2c). Those are the live warm-start chain.
+
+### Authorization status
+
+- ⏳ Codex audit pending
+- ⏳ User chat "go" pending
+- ⏳ `decisions.md` entry pending
+
+No destructive action until BOTH ratifications. The E2c continuation training itself is already authorized (00:20Z decisions.md entry); only the cleanup needed to unblock it is pending.
+
+---
