@@ -91,18 +91,90 @@ const UNKNOWN_PALETTE: KindPalette = {
   kind: 'unknown',
 };
 
+// Human-readable chip labels for the kind badge on each card. The
+// underlying `kind` field stays snake_case for stable selectors and
+// machine consumers; the chip surfaces a polished label.
+const KIND_DISPLAY: Record<string, string> = {
+  user_prompt: 'USER PROMPT',
+  nl_bridge: 'NL BRIDGE',
+  cas_expression: 'CAS',
+  model_generation: 'MODEL OUTPUT',
+  identifier_attempt: 'IDENTIFIER',
+  slot_pattern: 'SLOT TRACE',
+  confidence_marker: 'CONFIDENCE',
+};
+
+function kindLabel(kind: string): string {
+  return KIND_DISPLAY[kind] ?? kind.replace(/_/g, ' ').toUpperCase();
+}
+
 function paletteFor(kind: string): KindPalette {
   return KIND_PALETTE[kind] ?? UNKNOWN_PALETTE;
 }
 
-// ── Truncation helper ──────────────────────────────────────────────────────
+// ── Truncation + wrap helpers ─────────────────────────────────────────────
 
-const LABEL_MAX_CHARS = 32;
+const LABEL_LINE_CHARS = 30;
+const LABEL_MAX_LINES = 2;
 
-function truncate(label: string, max: number = LABEL_MAX_CHARS): string {
-  if (!label) return '';
-  if (label.length <= max) return label;
-  return `${label.slice(0, max - 1)}…`;
+/**
+ * Wrap a single-line label into up to `maxLines` lines of at most
+ * `lineMax` characters each, breaking on whitespace where possible.
+ * Hard-cuts words that are themselves longer than `lineMax`. When the
+ * label overflows the line budget, the final line is ellipsized with
+ * `…` so the visible text always signals truncation.
+ *
+ * Used inside SVG <text> via <tspan> so the card looks like a real
+ * thought card instead of a single truncated label.
+ */
+function wrapLabel(
+  label: string,
+  lineMax: number = LABEL_LINE_CHARS,
+  maxLines: number = LABEL_MAX_LINES,
+): string[] {
+  const normalized = (label || '').replace(/\s+/g, ' ').trim();
+  if (!normalized) return [''];
+  const remaining: string[] = normalized.split(' ');
+  const lines: string[] = [];
+  let current = '';
+  while (remaining.length > 0 && lines.length < maxLines) {
+    const w = remaining[0];
+    // Hard-split words longer than the line budget.
+    if (w.length > lineMax) {
+      if (current) {
+        lines.push(current);
+        current = '';
+        if (lines.length >= maxLines) break;
+      }
+      lines.push(w.slice(0, lineMax));
+      remaining[0] = w.slice(lineMax);
+      continue;
+    }
+    const candidate = current ? `${current} ${w}` : w;
+    if (candidate.length <= lineMax) {
+      current = candidate;
+      remaining.shift();
+    } else {
+      // candidate too long — flush the current line and retry this
+      // word on the next line.
+      lines.push(current);
+      current = '';
+    }
+  }
+  if (current && lines.length < maxLines) lines.push(current);
+  // If content remains (words left OR an unflushed `current` that
+  // wouldn't fit), ellipsize the final visible line.
+  const overflowed = remaining.length > 0 || (current && lines.length >= maxLines);
+  if (overflowed && lines.length > 0) {
+    const last = lines[lines.length - 1];
+    if (!last.endsWith('…')) {
+      const cap = Math.max(1, lineMax - 1);
+      lines[lines.length - 1] = last.length >= cap
+        ? `${last.slice(0, cap)}…`
+        : `${last}…`;
+    }
+  }
+  return lines;
 }
 
 // ── Layout — hierarchical top-down, subtree width ∝ leaf count ────────────
@@ -119,10 +191,16 @@ interface LayoutResult {
   bfsOrder: string[];
 }
 
-const NODE_W = 160;
-const NODE_H = 44;
-const H_GAP = 24;
-const V_GAP = 80;
+// Card geometry — picked so the demo trace (6 nodes / 5 edges) fills a
+// stakeholder-grade ~720×580 viewport without feeling cramped or tiny.
+// These are visual choices, not load-bearing; future prop control
+// noted in Agent C's report. (Codex audit 2026-05-13: bigger, more
+// readable cards — "thought cards, not tiny labels.")
+const NODE_W = 240;
+const NODE_H = 96;
+const H_GAP = 48;
+const V_GAP = 168;
+const NODE_PADDING = 14;
 
 function leafCount(node: ThoughtTreeNode): number {
   const children = node.children ?? [];
@@ -291,12 +369,13 @@ export function ThoughtTreeView({
     return buildLayout(tree.root);
   }, [tree.root, tree.node_count]);
 
-  // BFS index → ms delay for staggered entry animation.
+  // BFS index → ms delay for staggered entry animation. Slowed slightly
+  // so the tree "unfolds" visibly rather than blinking in.
   const bfsDelayMs = useMemo(() => {
     const out: Record<string, number> = {};
     if (!layout) return out;
     layout.bfsOrder.forEach((id, idx) => {
-      out[id] = Math.min(idx * 40, 600);
+      out[id] = Math.min(idx * 75, 900);
     });
     return out;
   }, [layout]);
@@ -414,7 +493,19 @@ export function ThoughtTreeView({
             const palette = paletteFor(node.kind);
             const delay = bfsDelayMs[node.id] ?? 0;
             const animStyle: CSSProperties = { animationDelay: `${delay}ms` };
-            const labelText = truncate(node.label || node.kind);
+            // Two-line wrapped label so cards read as real thought cards,
+            // not single-line truncated chips.
+            const labelLines = wrapLabel(node.label || kindLabel(node.kind));
+            const chipLabel = kindLabel(node.kind);
+            // Card geometry — solid dark background + colored ribbon +
+            // a kind chip above the wrapped title. The previous card was
+            // a small translucent rectangle with one truncated label;
+            // this version reads as a stakeholder-grade thought card.
+            const cardFill = '#0b1220';
+            const cardFillOpacity = isSelected ? 0.98 : isHover ? 0.94 : 0.88;
+            const cardStrokeOpacity = isSelected ? 1 : isHover ? 0.95 : 0.75;
+            const cardStroke = isSelected ? '#fafafa' : palette.stroke;
+            const chipWidth = Math.min(NODE_W - NODE_PADDING * 2, 8 + chipLabel.length * 6.4);
 
             return (
               <g
@@ -428,7 +519,7 @@ export function ThoughtTreeView({
                 aria-label={node.label}
                 aria-selected={isSelected}
                 tabIndex={0}
-                className="thought-tree-node-anim cursor-pointer transition-transform duration-150 ease-out hover:scale-[1.04]"
+                className="thought-tree-node-anim cursor-pointer transition-transform duration-150 ease-out hover:scale-[1.03]"
                 style={animStyle}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -443,30 +534,94 @@ export function ThoughtTreeView({
                 onMouseEnter={() => setHoverId(node.id)}
                 onMouseLeave={() => setHoverId((id) => (id === node.id ? null : id))}
               >
-                {/* Cheap pseudo-shadow on hover/selected */}
-                {(isHover || isSelected) && (
-                  <rect x={2} y={4} width={NODE_W} height={NODE_H} rx={8} ry={8} fill="black" fillOpacity={0.35} />
-                )}
+                {/* Drop shadow — always-on subtle, brighter on hover/selected */}
                 <rect
-                  x={0} y={0} width={NODE_W} height={NODE_H} rx={8} ry={8}
-                  fill={palette.fill}
-                  fillOpacity={isSelected ? 0.85 : isHover ? 0.55 : 0.32}
-                  stroke={isSelected ? '#fafafa' : palette.stroke}
-                  strokeOpacity={isSelected ? 1 : isHover ? 0.95 : 0.7}
-                  strokeWidth={isSelected ? 2 : 1.25}
+                  x={3}
+                  y={6}
+                  width={NODE_W}
+                  height={NODE_H}
+                  rx={12}
+                  ry={12}
+                  fill="black"
+                  fillOpacity={isSelected ? 0.5 : isHover ? 0.42 : 0.25}
                 />
-                {/* Kind ribbon on the left edge */}
-                <rect x={0} y={0} width={4} height={NODE_H} rx={2} ry={2} fill={palette.stroke} fillOpacity={0.95} />
-                <text
-                  x={NODE_W / 2} y={NODE_H / 2 + 4} textAnchor="middle"
-                  fontFamily="ui-sans-serif, system-ui, sans-serif"
-                  fontSize={12} fontWeight={isSelected ? 600 : 500}
-                  fill={isSelected ? '#0f172a' : '#e2e8f0'}
+                {/* Card body — solid dark fill so text is always readable */}
+                <rect
+                  x={0}
+                  y={0}
+                  width={NODE_W}
+                  height={NODE_H}
+                  rx={12}
+                  ry={12}
+                  fill={cardFill}
+                  fillOpacity={cardFillOpacity}
+                  stroke={cardStroke}
+                  strokeOpacity={cardStrokeOpacity}
+                  strokeWidth={isSelected ? 2.5 : 1.5}
+                />
+                {/* Kind-colored ribbon on the left edge */}
+                <rect
+                  x={0}
+                  y={0}
+                  width={6}
+                  height={NODE_H}
+                  rx={3}
+                  ry={3}
+                  fill={palette.stroke}
+                  fillOpacity={0.98}
+                />
+                {/* Kind chip — palette-tinted pill */}
+                <g
+                  transform={`translate(${NODE_PADDING}, ${NODE_PADDING - 2})`}
                   className="select-none"
                 >
-                  {labelText}
+                  <rect
+                    x={0}
+                    y={0}
+                    width={chipWidth}
+                    height={18}
+                    rx={9}
+                    ry={9}
+                    fill={palette.fill}
+                    fillOpacity={0.32}
+                    stroke={palette.stroke}
+                    strokeOpacity={0.7}
+                    strokeWidth={1}
+                  />
+                  <text
+                    x={chipWidth / 2}
+                    y={12}
+                    textAnchor="middle"
+                    fontFamily="ui-monospace, SFMono-Regular, monospace"
+                    fontSize={10}
+                    fontWeight={700}
+                    letterSpacing={0.6}
+                    fill={palette.stroke}
+                  >
+                    {chipLabel}
+                  </text>
+                </g>
+                {/* Wrapped title — up to 2 lines, centered horizontally */}
+                <text
+                  x={NODE_PADDING}
+                  y={NODE_PADDING + 32}
+                  fontFamily="ui-sans-serif, system-ui, sans-serif"
+                  fontSize={14}
+                  fontWeight={isSelected ? 700 : 600}
+                  fill="#f1f5f9"
+                  className="select-none"
+                >
+                  {labelLines.map((line, i) => (
+                    <tspan
+                      key={i}
+                      x={NODE_PADDING}
+                      dy={i === 0 ? 0 : 18}
+                    >
+                      {line}
+                    </tspan>
+                  ))}
                 </text>
-                {/* Hover tooltip — full label is always available via SVG <title> */}
+                {/* Hover tooltip — full label always available via SVG <title> */}
                 <title>{node.label}</title>
               </g>
             );
@@ -486,7 +641,7 @@ export function ThoughtTreeView({
               className="inline-block h-2 w-2 rounded-sm"
               style={{ backgroundColor: p.stroke }}
             />
-            <span>{kind}</span>
+            <span>{kindLabel(kind).toLowerCase()}</span>
           </div>
         ))}
       </div>

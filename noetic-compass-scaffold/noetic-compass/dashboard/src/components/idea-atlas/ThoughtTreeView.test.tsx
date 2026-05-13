@@ -279,7 +279,7 @@ describe('ThoughtTreeView — accessibility', () => {
 });
 
 describe('ThoughtTreeView — labels', () => {
-  it('long labels are truncated in the visible <text> but full label stays in aria-label', () => {
+  it('long labels are wrapped+truncated in the visible <text> but full label stays in aria-label', () => {
     const longLabel = 'a'.repeat(80);
     const child = node('n1', 'model_generation', longLabel, 'output');
     const root = node('n0', 'user_prompt', 'short label', 'input', [child]);
@@ -293,9 +293,57 @@ describe('ThoughtTreeView — labels', () => {
     const { container } = render(<ThoughtTreeView tree={tree} />);
     const el = container.querySelector('[data-node-id="n1"]');
     expect(el?.getAttribute('aria-label')).toBe(longLabel);
-    // The rendered SVG <text> content is truncated with the ellipsis char.
-    const textEl = el?.querySelector('text');
-    expect(textEl?.textContent?.endsWith('…')).toBe(true);
-    expect(textEl?.textContent?.length).toBeLessThanOrEqual(32);
+    // Title is wrapped across up to 2 tspans on the title <text>; the
+    // last tspan ends with an ellipsis when the label exceeds the
+    // two-line budget. The kind chip's <text> is separate — we want
+    // the title text, which is the <text> with multiple tspans.
+    const titleTextEl = el && Array.from(el.querySelectorAll('text')).find(
+      (t) => t.querySelectorAll('tspan').length >= 1,
+    );
+    expect(titleTextEl).toBeTruthy();
+    expect(titleTextEl?.textContent?.endsWith('…')).toBe(true);
+    // Visible title content must be strictly less than the full label.
+    expect(
+      (titleTextEl?.textContent ?? '').length,
+    ).toBeLessThan(longLabel.length);
+  });
+
+  it('multi-word labels wrap to multiple lines as tspans', () => {
+    // REGRESSION PIN (Codex audit 2026-05-13 visual polish): cards are
+    // thought cards with wrapped titles, not single-line chips.
+    const wrappingLabel =
+      'A multi-word label that should clearly wrap onto two visible lines';
+    const child = node('n1', 'model_generation', wrappingLabel, 'output');
+    const root = node('n0', 'user_prompt', 'root', 'input', [child]);
+    const tree: ThoughtTree = {
+      root,
+      nodes: [root, child],
+      edges: [edge('e0', 'n0', 'n1')],
+      node_count: 2,
+      edge_count: 1,
+    };
+    const { container } = render(<ThoughtTreeView tree={tree} />);
+    const el = container.querySelector('[data-node-id="n1"]');
+    const titleTextEl = el && Array.from(el.querySelectorAll('text')).find(
+      (t) => t.querySelectorAll('tspan').length >= 2,
+    );
+    expect(titleTextEl).toBeTruthy();
+  });
+
+  it('renders a kind chip with the human-readable kind label', () => {
+    // REGRESSION PIN (Codex audit 2026-05-13 visual polish): cards
+    // carry a small uppercase kind chip so stakeholders see what the
+    // node IS, not just what it says.
+    const root = node('n0', 'user_prompt', 'short label', 'input');
+    const tree: ThoughtTree = {
+      root,
+      nodes: [root],
+      edges: [],
+      node_count: 1,
+      edge_count: 0,
+    };
+    const { container } = render(<ThoughtTreeView tree={tree} />);
+    const allText = container.textContent ?? '';
+    expect(allText).toContain('USER PROMPT');
   });
 });
