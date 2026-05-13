@@ -2528,3 +2528,80 @@ One trace file should flow through the whole pipeline:
 ### Next
 
 When the four agents return, audit the combined diff before pushing. Primary risks are broken imports, casing drift, and trace-loader/browser path assumptions.
+
+## 2026-05-13 — Atlas v0 audit on `792e141` / `14d056e` / `a44d6f1`
+
+Read the Atlas v0 bundle and ran focused verification:
+
+- `npx.cmd vitest run src/lib/trace.test.ts src/components/idea-atlas/TraceLoader.test.tsx src/components/idea-atlas/ThoughtTreeView.test.tsx src/atlas_v0_smoke.test.ts`
+  - Result: 33 passed, 1 skipped. The skipped test is the optional end-to-end smoke because `.tmp_smoke/atlas_out` was cleaned.
+- `npx.cmd tsc -b --noEmit`
+  - Result: clean.
+- `python -m pytest noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_cas_cli_atlas_save.py -q`
+  - Result: 17 passed.
+
+### Verdict
+
+PASS WITH PATCH BLOCKERS.
+
+The v0 shape is good: canonical kebab-case imports, a real TRACE tab, a real loader, a real SVG tree, a real side panel, and `atlas-save` exists. This is not throwaway scaffolding.
+
+But two details can make the first stakeholder-visible demo fail or silently accept a bad trace. Patch these before calling Atlas v0 final.
+
+### Blocker 1 — TS validator does not enforce canonical node/edge identity
+
+My guardrail said every node must have `id` + `node_key`, and every edge must have `source` + `target` + `edge_key`.
+
+Current `dashboard/src/lib/trace.ts:isValidThoughtTree` only checks:
+
+- `root` is an object
+- `nodes` is an array
+- `edges` is an array
+- `node_count` / `edge_count` are numbers
+
+It does not inspect the node or edge members. See `trace.ts:281-288`.
+
+Required patch:
+
+- validate every flat node has string `id`, `node_key`, `kind`, `role`, `label`, `normalized_label`
+- validate every flat edge has string `source`, `target`, `edge_key`, `source_key`, `target_key`, `kind`
+- validate every edge `source` and `target` exists in the node id set
+- validate `node_count === nodes.length` and `edge_count === edges.length`
+- add negative tests for missing `node_key`, missing `edge_key`, and edge pointing at a non-existent node
+
+### Blocker 2 — bundled demo trace can render blank
+
+`TraceLoader.DEMO_TRACE` says it is "fully-valid", but the nested `thought_tree.root` and child under `root.children` do not carry `id` or `node_key`.
+
+`ThoughtTreeView` builds layout positions from the nested tree via `positions[node.id]` (`ThoughtTreeView.tsx:143`), then renders the flat nodes by looking up `layout.positions[node.id]` (`ThoughtTreeView.tsx:409-410`). If the nested root/child ids are missing, the flat nodes `n0` / `n1` have no positions, so the demo tree can load but draw no nodes/edges.
+
+Required patch:
+
+- Add matching `id` and `node_key` to `DEMO_TRACE.thought_tree.root` and its child, OR change `ThoughtTreeView` to derive layout from the flat nodes/edges instead of the nested root.
+- Add a test that clicks "Load demo trace", passes the resulting trace into `ThoughtTreeView`, and asserts the expected nodes and edge render.
+
+### Non-blocker — smoke test is weaker than the claim
+
+The inbox says the smoke preserves 4 nodes / 3 edges / `input_kind=nl_bridge` / `^9^O`. The committed smoke test only asserts schema version and non-empty nodes/edges, and it skips entirely unless `.tmp_smoke/atlas_out` exists (`atlas_v0_smoke.test.ts:24-37`).
+
+Patch recommendation:
+
+- Either commit a tiny stable smoke fixture, or generate the trace fixture inside the test setup.
+- Assert `input.input_kind === "nl_bridge"`, `input.nl_bridge.inferred_cas_expression === "^9^O"`, and exact node/edge counts for the chosen fixture.
+- If the smoke remains optional, report it as "manual smoke performed" rather than a standing green test.
+
+### Polish — demo wording regressed
+
+The demo trace output says: "the Idea brought to Mind that lands as concrete action" for `^9^O` (`TraceLoader.tsx:34`, `68`, `90`).
+
+We already corrected this language in the NL bridge because `^9` is Below/Effect, not "Idea brought to Mind." Use the cleaner wording:
+
+> Below/Effect in the Operational domain — a thought landing as behavior.
+
+This matters because the bundled demo is the first thing stakeholders may see.
+
+### Next after patches
+
+After these patches: run the dashboard tests again, run one browser visual QA pass on the TRACE tab, then call Atlas v0 done.
+
+My next-move recommendation after Atlas v0 is clean: build v0.5 Inversion Replay / ghost branches. That is closer to the "wow" demo than Stage 4 corpus engineering, and it uses the trace substrate we just built.
