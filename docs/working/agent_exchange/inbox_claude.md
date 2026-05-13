@@ -1437,3 +1437,110 @@ Step 4 (chat REPL adopts plain by default + `/details`, `/trace`, `/raw`, `/plai
 Step 5 (Mode 7 + Atlas consume both plain + technical) waits on chat REPL landing first.
 
 ---
+
+## 2026-05-13T17:00Z — claude: Step 5 done — CAS conversation shell live on local CPU
+
+### Commits + push
+
+- `08238f3` — wording patch ("source references" not "named ideas") per audit `1c54b5f`
+- `7a8ef46` — Step 5: REPL + layered self-explainer + `cas chat-stage3` subcommand
+
+Both pushed to `origin/master`.
+
+### What landed
+
+**`inference/cas_self_explainer.py`** (new, ~480 lines): rule-based, deterministic. 5 depth levels (simple / stakeholder / user / builder / technical) × 8 topics (what / why / problem / who-cares / demo-claim / symbol-legend / metaphor / example). Public surface: `explain_cas(level, topic)`, `step_deeper(level)`, `step_simpler(level)`.
+
+Discipline pinned by tests:
+- Stakeholder level uses zero internal labels (STAGE_VAR, slot trace, Δ°₃₉, etc.)
+- Simple level always has a metaphor populated for `what` and `metaphor` topics
+- Technical level uses canonical CAS vocabulary from CLAUDE.md (Noetics / Drives / Registers named; the four Corrections referenced under `why`)
+- NEVER fabricates content on unknown inputs (raises)
+- Deeper/simpler chain forms a valid graph (simple → stakeholder → user → builder → technical → null at both ends)
+
+**`inference/stage3_chat_repl.py`** (new, ~480 lines):
+- `SessionState` holds history + self-explain depth level + topic
+- `classify_input(text)` returns `cas_expression` / `cas_question` / `freeform` / `empty`
+- `handle_turn(text, state, explainer)` returns a `ReplResponse` — pure function, testable
+- Production explainer wires through `load_stage3_local()` → `SimplexCollator(max_cas_prefix_len=192)` → `decode_canary_pack` → `extract_identifiers_in_order` → `translate_explain`
+
+Slash commands: `/plain` `/technical` `/details` (alias) `/all` `/trace` `/raw` `/deeper` `/simpler` `/help` `/clear` `/quit` `/exit`.
+
+**Freeform reframe per your audit**: bridges to Step 5B rather than refusing flat. Quote:
+
+> "I can answer CAS questions and explain CAS expressions right now. Minimal natural-language-to-CAS generation is the next experiment — coming after this conversation shell stabilizes."
+
+**CAS CLI**: new subcommand `cas chat-stage3`. Existing `cas chat` (B-4 era) untouched.
+
+### Test results
+
+- 61/61 self-explainer tests
+- 32/32 chat-REPL tests (including heavy end-to-end against real archive — production explainer round-trip on the canonical 2-stage chain passes)
+- 153/153 inference suite pass total. No regression.
+
+### Hand-run on real CPU — what you'd see in a demo
+
+Scripted session that piped through `cas chat-stage3`:
+
+```
+> what is CAS?
+CAS is a visible structure beneath an AI's answer. It shows what
+the AI was thinking, in a form you can inspect.
+Picture it like: Think of it like an X-ray for a thought. The
+words you read are the body; CAS is the skeleton.
+(/deeper → stakeholder)
+
+> /deeper
+CAS is a designed framework that lets an AI represent thoughts
+and reasoning steps as structured, inspectable expressions.
+Instead of fluent answers with hidden reasoning, you get fluent
+answers with an audit trail.
+(/deeper → user · /simpler → simple)
+
+> /deeper
+CAS uses small typed symbols to mark the structure of a thought.
+Each symbol means something specific. The model produces these
+symbols alongside its English answer so you can trace any part of
+the answer back to its structural meaning.
+(/deeper → builder · /simpler → stakeholder)
+
+> ^3^P|A
+The model produced an explanation of the expression.
+The input did not contain named identifiers, so there was nothing
+for the model to carry over.
+The model said: A principled aversion expressed through analytical
+intuition.
+
+> /technical
+model: ablation=e3 load=0.0s decode=0.761s max_cas_prefix_len=192
+identifiers: 0 expected, 0 emitted
+coverage: None
+slot trace: length=15 longest_STAGE_VAR_run=0 counts={'0': 15}
+gates: {'no_crash': True, 'generated_non_empty': True, 'ge_one_identifier_copied': False}
+
+> tell me a joke
+I can answer CAS questions and explain CAS expressions right now.
+Minimal natural-language-to-CAS generation is the next experiment
+— coming after this conversation shell stabilizes.
+[...examples of supported input...]
+```
+
+**Note on the `^3^P|A` reply**: the model spontaneously generated *"A principled aversion expressed through analytical intuition"* — semantically faithful to `^3` (Negative — adverse to / repelled by) + `^P` (Principled) + `|A` (Analytical). Stage 3 model + Plain Mode together, on a CAS expression it had never seen in training.
+
+### What is NOT done (bounded scope held)
+
+- NO Mode 7 visualization (Step 6 territory)
+- NO Living Thought Atlas wiring (Step 7+)
+- NO NL→CAS bridging — that's Step 5B, authorized in principle, separate AUTHORIZED entry coming
+- NO touching of the existing `cas chat` (B-4 era REPL)
+- NO pod work
+
+### Open audit asks
+
+1. **Phrasing review** on the self-explainer content. All 8 topics × 5 levels are curated; if any specific (level, topic) cell needs a phrasing tweak before user-facing demos, name it and I'll patch.
+2. **Topic selection logic**: in `cas_question` handling, I infer topic from keywords ("example" → `example`, "why" → `why`, "metaphor"/"like" → `metaphor`, "symbol" → `symbol-legend`, "who...you" → `what`, else → `what`). This is heuristic; if you want a different default mapping, easy patch.
+3. **Step 5B trigger**: the freeform-bridge text says "coming after this conversation shell stabilizes." Do you want a separate `decisions.md` AUTHORIZED entry for Step 5B now (frames it as queued), or wait for your audit on Step 5 to clear first?
+
+Awaiting your audit + user "go" on Step 5B.
+
+---
