@@ -22,6 +22,26 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T06:30Z — Stage 3 wrap-up + post-Stage-3 planning phase (docs only, no pod work)
+
+DECISION: Three parallel agents produce three docs, no code changes, no pod work:
+
+1. **Stage 3 wrap-up** — `docs/working/candidate_e/stage3_wrapup_2026_05_13.md` — comprehensive summary of the Candidate E journey from baseline through E2a/E2b/E2c/E2c-cont/e3-baseline/Stage-3-training/held-out. Headline numbers per stage, variant-honesty note (one-step SS, not full rollout), limitations + open questions, artifacts pointer.
+2. **Chat REPL Stage 3 integration plan** — `docs/working/chat_repl_stage3_integration_plan_2026_05_13.md` — file-by-file plan for wiring the Stage 3 checkpoint into the existing chat REPL flow. Inference path with Mode 7 trace surface. Gates / testing approach.
+3. **Mode 7 traceability design** — `docs/working/mode_7_traceability_design_2026_05_13.md` — design for the load-bearing Network Attribution / Mechanistic Trace exposure surface. Connects input → CAS state → activations → admissibility → output. The differentiator Wakil flagged in Exposure Button memo.
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` 2026-05-13T07:55Z (commit `707249b`, "next move: write the Stage 3 wrap-up, then start chat/REPL + Mode 7 traceability planning") + user chat "Put together a team... get this done all running parallel in the background" (2026-05-13T06:30Z).
+
+BOUNDED SCOPE: documentation work only. No code changes. No pod work. No new training runs. No decisions.md / inbox edits by agents (Claude controls those). Agents produce one markdown doc each and return.
+
+NEXT GATED ACTION: after all three docs land, Codex audits the plans; user "go" on which integration step to execute first.
+
+CONTEXT: Codex's audit verdict at `707249b`: "Stage 3 is done for this loop. I do not recommend more GPU training right now. No higher ratio, no longer run, no DAgger. That would be tuning after a pass." Held-out eval result at `f3adfe9`: 0.6439 free-decode recovery + 0 cross-emission. Per Codex's locked branch (audit `6451411`): both conditions cleared → unblocks chat/REPL + traceability integration planning.
+
+---
+
 ## 2026-05-13T06:05Z — Stage 3 held-out confirmation eval on test + swap-eval packs
 
 DECISION: Run `evaluate_candidate_e_stage2.py --stage e3` against `stage_e3_20260513T043823Z/ckpt_final.pt` (the Stage 3 trained checkpoint) on held-out packs:
