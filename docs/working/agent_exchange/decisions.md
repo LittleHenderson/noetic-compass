@@ -22,6 +22,35 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T09:35Z — Step 4 of post-Stage-3 plan: `cas explain` subcommand + 2 parallel prep agents
+
+DECISION: Codex audit on Step 3 PASSED (`4e7961c`) and answered "Step 4 should stay narrow: CAS expression in → English out, with recovered IDs / missing IDs / slot summary shown. No free chat yet." User chat "go" 2026-05-13T09:35Z authorizes Step 4 PLUS two adjacent parallel prep agents that surface info needed for Steps 5-7 without preempting them.
+
+Three parallel agents launched in background:
+
+1. **Agent A — Step 4 implementer (CODE WORK):** add `cas explain EXPR` subcommand to `noetic-compass-scaffold/noetic-compass/cas-native/inference/cas_cli.py`. Reuses Step 2's `load_stage3_local()` + Step 3's decode path. Outputs: generated English, copied identifiers, missing identifiers, slot summary; `--json` flag for raw dict. Tests + hand-run + commit + push.
+
+2. **Agent B — trace schema designer (DOCS ONLY):** write `docs/working/cas_trace_schema_v0_2026_05_13.md` proposing the canonical trace dict shape that flows inference → chat REPL → Mode 7 → Atlas. Locks the contract before Step 6 so all downstream consumers see the same shape. Reads Mode 7 design + chat REPL plan + existing trace plumbing.
+
+3. **Agent C — dashboard casing auditor (RECONNAISSANCE ONLY):** Codex `f3f59fa` flagged `dashboard/src/components/IdeaAtlas/` AND `dashboard/src/components/idea-atlas/` both exist. Agent audits what's in each dir, what references each, writes `docs/working/dashboard_casing_audit_2026_05_13.md` with the recommended cleanup plan. NO file moves, NO refactor — proposal only.
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` 2026-05-13T?Z (commit `4e7961c`, Step 3 PASS, "next is Step 4: CAS-input CLI" + answer that Step 4 should be narrow CAS→English) + user chat "authorize Step 4" / "put together your smartest ai agents working parallel in the background" (2026-05-13T09:35Z).
+
+BOUNDED SCOPE PER AGENT:
+- Agent A: code work strictly within `cas_cli.py` + `tests/inference/test_cas_cli_explain.py`. No changes to existing subcommands (notation, predict, chat, demo). No touching of `chat.py`. No CLI redesign. Subcommand registration only.
+- Agent B: docs only. NO code changes. NO edits to `agent_exchange/`. Proposes schema; does not implement it.
+- Agent C: read-only audit of dashboard/. NO file moves. NO renames. NO TS code changes. Recommendation doc only.
+
+NO chat REPL touched. NO Mode 7 wired. NO Living Thought Atlas implementation. NO pod work.
+
+CONTEXT: Step 3 smoke (`a653ae6`) confirmed the model loads + generates locally at 1.4s load + 6.1s decode for record 0 with 2/3 canonical recovery. Step 4 wraps that path in a CLI subcommand so users can hand a CAS expression to `cas explain` and get English back. After Step 4 lands and Codex audits, Step 5 (chat REPL wiring) is next.
+
+LIVING THOUGHT ATLAS FRAMING: per memory `project_living_thought_atlas_flagship_2026_05_13.md` and Codex `f3f59fa`, the Atlas is the flagship presentation layer, not decoration. Engineering ordering protects the vision. Agent A advances Step 4 (the "engine"); Agents B + C advance prep work for Steps 6-7 (the "legibility layer") without preempting them.
+
+---
+
 ## 2026-05-13T09:10Z — Step 3 of post-Stage-3 plan: one-record local smoke
 
 DECISION: Build a deterministic single-record smoke harness that feeds the Stage 3 model (loaded from local archive via Step 2's `load_stage3_local()`) one known CAS record from the dev pack and confirms it produces Stage-3-shaped output on this machine.
