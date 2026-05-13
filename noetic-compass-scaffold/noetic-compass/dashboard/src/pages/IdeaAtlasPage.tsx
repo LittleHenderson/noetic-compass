@@ -150,7 +150,7 @@ export function IdeaAtlasPage() {
   const handleTraceLoaded = useCallback((trace: AtlasTrace) => {
     setLoadedTrace(trace);
     setTraceError(null);
-    setSelectedTraceNodeId(null);
+    setSelectedTraceNodeId(trace.thought_tree.nodes[0]?.id ?? null);
   }, []);
   const handleTraceError = useCallback((message: string) => {
     setTraceError(message);
@@ -746,7 +746,7 @@ export function IdeaAtlasPage() {
 
       {/* Trace view — Atlas v0 */}
       {viewMode === 'trace' && (
-        <div className="flex-1 overflow-hidden px-6 py-4 flex flex-col gap-4">
+        <div className="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-4">
           <TraceLoader
             onTraceLoaded={handleTraceLoaded}
             onError={handleTraceError}
@@ -757,9 +757,15 @@ export function IdeaAtlasPage() {
             </div>
           )}
           {loadedTrace && (
-            <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4 overflow-hidden">
+            <>
+            <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] px-4 py-3 font-mono text-xs text-emerald-200">
+              Trace loaded: {loadedTrace.thought_tree.node_count} nodes,{' '}
+              {loadedTrace.thought_tree.edge_count} edges. Click a node in the
+              tree to inspect it.
+            </div>
+            <div className="min-h-[520px] grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4">
               {/* Tree on the left */}
-              <div className="rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden">
+              <div className="min-h-[420px] rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden">
                 <ThoughtTreeView
                   tree={loadedTrace.thought_tree as unknown as TreeViewTree}
                   onNodeClick={(n) => setSelectedTraceNodeId(n.id)}
@@ -768,7 +774,7 @@ export function IdeaAtlasPage() {
                 />
               </div>
               {/* Side panel — trace metadata + selected node detail */}
-              <aside className="rounded-lg border border-white/[0.06] bg-black/30 p-4 overflow-y-auto font-mono text-[11px] text-slate-300">
+              <aside className="min-h-[420px] rounded-lg border border-white/[0.06] bg-black/30 p-4 overflow-y-auto font-mono text-[11px] text-slate-300">
                 <header className="mb-3">
                   <div className="text-accent-teal text-xs font-bold">
                     TRACE METADATA
@@ -928,6 +934,7 @@ export function IdeaAtlasPage() {
                 )}
               </aside>
             </div>
+            </>
           )}
           {!loadedTrace && !traceError && (
             <div className="rounded-lg border border-white/[0.06] bg-black/20 p-6 text-center font-mono text-xs text-slate-500">
