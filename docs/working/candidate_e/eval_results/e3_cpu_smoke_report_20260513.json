@@ -1,0 +1,211 @@
+{
+  "event": "cpu_smoke_report",
+  "config_summary": {
+    "d_model": 64,
+    "encoder_n_layers": 2,
+    "decoder_n_layers": 2,
+    "encoder_n_heads": 4,
+    "decoder_n_heads": 4,
+    "batch_size": 2,
+    "lr": 0.0001,
+    "n_steps_planned": 5,
+    "n_steps_completed": 5,
+    "ablation": "e3",
+    "device": "cpu",
+    "n_records_loaded": 16
+  },
+  "wall_clock_sec": 2.488816976547241,
+  "verdict": "PASS",
+  "gates": {
+    "no_nan_inf": {
+      "pass": true,
+      "nan_steps": []
+    },
+    "simplex_min_above_floor": {
+      "pass": true,
+      "min_observed": 0.006474862806499004
+    },
+    "entropy_does_not_collapse": {
+      "pass": true,
+      "min_entropy_observed": 3.6467208862304688
+    },
+    "lm_does_not_explode": {
+      "pass": true,
+      "lm_initial": 10.636144638061523,
+      "lm_final": 10.587387084960938
+    },
+    "lm_decreasing": {
+      "pass": true,
+      "note": "fewer than 20 steps; window check skipped"
+    },
+    "fr_finite_and_directional": {
+      "pass": true,
+      "note": "fewer than 20 steps; trend check skipped"
+    },
+    "gradients_flow_both_paths": {
+      "pass": true,
+      "encoder_grad_norm_min": 5.320476459541161,
+      "decoder_grad_norm_min": 11.73296741145507
+    },
+    "q4_stage_var_copy": {
+      "pass": true,
+      "criteria": {},
+      "evidence": {
+        "rpm_batch_count": 5,
+        "non_rpm_batch_count": 0
+      },
+      "note": "Q4 NOT_MEASURED — fewer than 20 rpm-batch steps in this run. Window-based criteria need a minimum sample size."
+    }
+  },
+  "halt_reason": null,
+  "first_step": {
+    "step": 1,
+    "scheduled_sampling_ratio": 0.3,
+    "loss_total": 32.18267822265625,
+    "loss_lm": 10.636144638061523,
+    "loss_fr": 4.774543285369873,
+    "loss_slot_type": 2.1699447631835938,
+    "loss_copy": 4.619865417480469,
+    "loss_phrase_bias_aux": 0.0,
+    "loss_span": 1.0050402879714966,
+    "loss_contrastive_margin": 1.163837194442749,
+    "loss_coverage": 4.629817962646484,
+    "loss_start_anchor": 4.614105224609375,
+    "loss_anchor_contrastive": 1.01395845413208,
+    "copy_valid_count": 80.0,
+    "copy_argmax_acc": 0.012500000186264515,
+    "copy_loss_live": 4.619865417480469,
+    "copy_entropy_valid_mean": 4.629817962646484,
+    "grad_norm_encoder": 5.5490758954799295,
+    "grad_norm_decoder": 15.236041469525892,
+    "simplex_min_p": 0.0074973744340240955,
+    "simplex_entropy_mean": 3.6489059925079346,
+    "elapsed_sec": 0.25826573371887207
+  },
+  "last_step": {
+    "step": 5,
+    "scheduled_sampling_ratio": 0.3,
+    "loss_total": 31.283897399902344,
+    "loss_lm": 10.587387084960938,
+    "loss_fr": 4.565901279449463,
+    "loss_slot_type": 1.7393449544906616,
+    "loss_copy": 4.633128643035889,
+    "loss_phrase_bias_aux": 0.0,
+    "loss_span": 0.985522449016571,
+    "loss_contrastive_margin": 1.1677899360656738,
+    "loss_coverage": 4.637819290161133,
+    "loss_start_anchor": 4.499483585357666,
+    "loss_anchor_contrastive": 1.042534589767456,
+    "copy_valid_count": 53.0,
+    "copy_argmax_acc": 0.01886792480945587,
+    "copy_loss_live": 4.633128643035889,
+    "copy_entropy_valid_mean": 4.637819290161133,
+    "grad_norm_encoder": 5.709604683095974,
+    "grad_norm_decoder": 11.73296741145507,
+    "simplex_min_p": 0.006474862806499004,
+    "simplex_entropy_mean": 3.6467208862304688,
+    "elapsed_sec": 0.1339588165283203
+  },
+  "canary_history": [],
+  "checkpoint_manifests": [
+    {
+      "schema_version": "simplex_mvp_ckpt.v1",
+      "step": 5,
+      "saved_at_utc": "2026-05-13T03:48:45Z",
+      "torch_version": "2.11.0+cpu",
+      "cuda_version": null,
+      "tokenizer_info": {
+        "tokenizer_path": "stage6_v6_artifacts/tokenizer.json",
+        "tokenizer_sha256": "9c544425c9c08140070b2f3929adef864bbfafb0c00c1d687f2d6b98e0589b9b",
+        "english_bpe_path": "stage6_v6_artifacts/english_bpe.json",
+        "english_bpe_sha256": "ac4d12a6d26cc1194ea31fee8cdc07d52a0a759964810956b13cafea08a06889",
+        "vocab_size": 38683
+      },
+      "ablation_mode": "e3",
+      "loss_weights_active": {
+        "lm": 1.0,
+        "fr": 1.0,
+        "slot_type": 1.0,
+        "copy": 0.5,
+        "phrase_bias_aux": 0.1,
+        "span": 1.0,
+        "contrastive_margin": 0.5,
+        "coverage": 0.1,
+        "start_anchor": 2.0,
+        "anchor_contrastive": 1.0
+      },
+      "config": {
+        "data_path": "cas-synthetic/data/path_d/rpm_copy_grounding_v2_dev.jsonl",
+        "output_dir": ".tmp/e3_cpu_smoke",
+        "epochs": 1,
+        "batch_size": 2,
+        "lr": 0.0001,
+        "weight_decay": 0.0001,
+        "grad_clip": 1.0,
+        "device": "cpu",
+        "limit": 16,
+        "smoke_test": false,
+        "smoke_records": 4,
+        "d_model": 64,
+        "encoder_n_layers": 2,
+        "encoder_n_heads": 4,
+        "decoder_n_layers": 2,
+        "decoder_n_heads": 4,
+        "ablation": "e3",
+        "seed": 42,
+        "train_log_every_steps": 1,
+        "logging_steps": 100,
+        "sample_every_steps": 0,
+        "sample_record_index": 0,
+        "tokenizer_path": "stage6_v6_artifacts/tokenizer.json",
+        "english_bpe_path": "stage6_v6_artifacts/english_bpe.json",
+        "n_steps": 5,
+        "sample_canary_at": "",
+        "sample_canary_post_training": false,
+        "canary_max_new_tokens": 128,
+        "halt_on_canary_kill": false,
+        "save_checkpoints_at": "",
+        "save_final_checkpoint": true,
+        "no_tie_lm_head": false,
+        "hard_typed_emission": false,
+        "copy_confidence_threshold": 0.5,
+        "load_model_from": "",
+        "decoder_arch": "transformer",
+        "ssm_d_state": 16,
+        "ssm_d_conv": 4,
+        "ssm_expand": 2,
+        "max_cas_prefix_len": 192,
+        "scheduled_sampling_ratio": 0.3,
+        "scheduled_sampling_schedule": "",
+        "loss_weights": {
+          "lm": 1.0,
+          "fr": 1.0,
+          "slot_type": 1.0,
+          "copy": 0.5,
+          "phrase_bias_aux": 0.1,
+          "span": 1.0,
+          "contrastive_margin": 0.5,
+          "coverage": 0.1,
+          "start_anchor": 2.0,
+          "anchor_contrastive": 1.0
+        }
+      },
+      "loss_history_tail_count": 5,
+      "checkpoint_size_bytes": 68415494
+    }
+  ],
+  "loss_lm_trajectory": [
+    10.636144638061523,
+    10.620855331420898,
+    10.6448392868042,
+    10.596597671508789,
+    10.587387084960938
+  ],
+  "loss_fr_trajectory": [
+    4.774543285369873,
+    4.704335689544678,
+    4.698836326599121,
+    4.565750598907471,
+    4.565901279449463
+  ]
+}

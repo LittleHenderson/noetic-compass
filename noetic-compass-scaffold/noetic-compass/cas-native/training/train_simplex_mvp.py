@@ -48,6 +48,16 @@ if "cas_native" not in sys.modules:
     _pkg.__path__ = [str(_CAS_NATIVE)]
     sys.modules["cas_native"] = _pkg
 
+# Candidate E Stage 3 (2026-05-13): scheduled-sampling helpers.
+# Per `decisions.md` 2026-05-13T03:45Z bounded scope. The helpers are
+# pure-function utilities; importing them after the sys.path bootstrap
+# keeps the training-loop dispatch readable while staying compatible with
+# the existing absolute-import discipline.
+from cas_native.training.scheduled_sampling import (  # noqa: E402
+    forward_with_scheduled_sampling,
+    resolve_ratio_at_step,
+)
+
 
 # Loss-weight defaults per build-spec §5. Flat weights, no curriculum.
 # Candidate E Stage 2b (2026-05-12) adds span / contrastive_margin / coverage
@@ -122,6 +132,23 @@ ABLATION_OVERRIDES: dict[str, dict[str, float]] = {
     #   anchor_contrastive (1.0)  — margin loss at span starts, hard negatives
     #                               are OTHER source-side STAGE_VAR span starts
     "e2c":        {
+        "span": 1.0, "contrastive_margin": 0.5, "coverage": 0.1,
+        "start_anchor": 2.0, "anchor_contrastive": 1.0,
+    },
+    # Candidate E Stage 3 (2026-05-13): scheduled-sampling Stage 3 training.
+    # Inherits e2c loss weights (no NEW losses; scope per `decisions.md`
+    # 2026-05-13T03:45Z explicitly excludes new loss design). What's
+    # different from e2c is the decoder input distribution: the trainer
+    # now feeds the model a mix of gold and self-predicted previous-position
+    # tokens, governed by --scheduled-sampling-ratio (constant) or
+    # --scheduled-sampling-schedule (linear ramp). Equivalence at ratio=0
+    # is bit-for-bit identical to e2c.
+    #   Rationale: e3-baseline measured free-decode identifier recovery at
+    #   0.4412 on the E2c-continuation checkpoint — below the 0.50 skip
+    #   threshold, above the 0.30 redesign floor, with zero cross-emission.
+    #   Scheduled sampling targets the TF→free-decode gap of -21.93pp
+    #   (66.05% TF → 44.12% free-decode).
+    "e3":         {
         "span": 1.0, "contrastive_margin": 0.5, "coverage": 0.1,
         "start_anchor": 2.0, "anchor_contrastive": 1.0,
     },
@@ -209,6 +236,14 @@ class SimplexTrainConfig:
     # this to 128 or 192 so 4-stage rpm chains (~110 source tokens) fit
     # without truncating the W/P identifiers out of cas_prefix_ids.
     max_cas_prefix_len: int = 32
+    # Candidate E Stage 3 (2026-05-13): scheduled-sampling decoder input
+    # distribution. ratio=0.0 is bit-for-bit TF (e2c behavior). ratio>0
+    # mixes gold and self-predicted previous-position tokens at each
+    # decoder input position per Bernoulli(ratio). Use either a constant
+    # ratio (--scheduled-sampling-ratio) OR a schedule
+    # (--scheduled-sampling-schedule); schedule wins if both set.
+    scheduled_sampling_ratio: float = 0.0
+    scheduled_sampling_schedule: str = ""
     # Loss weights — populated by ablation mode after CLI parse
     loss_weights: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_LOSS_WEIGHTS))
 
@@ -332,6 +367,22 @@ def build_parser() -> argparse.ArgumentParser:
                         "Per audit 2026-05-12, cap=32 silently truncated half of "
                         "rpm identifier source positions, causing the 'only 2 spans per "
                         "record' supervision pattern.")
+    # Candidate E Stage 3 (2026-05-13): scheduled-sampling decoder input
+    # distribution. Default 0.0 = bit-for-bit TF (e2c behavior). Use either
+    # the constant ratio (--scheduled-sampling-ratio) OR a schedule
+    # (--scheduled-sampling-schedule); schedule wins if both are set.
+    p.add_argument("--scheduled-sampling-ratio", type=float, default=0.0,
+                   help="Constant per-position Bernoulli probability of "
+                        "substituting the gold decoder-input token with the "
+                        "model's previous-position greedy prediction. 0.0 = "
+                        "bit-for-bit TF. 1.0 = pure self-feed. Used with "
+                        "--ablation e3. Default 0.0 (TF).")
+    p.add_argument("--scheduled-sampling-schedule", type=str, default="",
+                   help="Optional schedule for the scheduled-sampling ratio. "
+                        "Form: 'linear:<start>-<end>:<warmup>-<full>'; e.g. "
+                        "'linear:0.0-0.5:1000-3000' ramps ratio 0.0→0.5 across "
+                        "steps 1000-3000. Wins over --scheduled-sampling-ratio "
+                        "when both are set. Empty default disables the schedule.")
     return p
 
 
@@ -378,6 +429,8 @@ def parse_args(argv: Optional[list[str]] = None) -> SimplexTrainConfig:
         ssm_d_conv=args.ssm_d_conv,
         ssm_expand=args.ssm_expand,
         max_cas_prefix_len=args.max_cas_prefix_len,
+        scheduled_sampling_ratio=args.scheduled_sampling_ratio,
+        scheduled_sampling_schedule=args.scheduled_sampling_schedule,
     )
     # Apply ablation overrides on top of defaults
     overrides = ABLATION_OVERRIDES.get(cfg.ablation, {})
@@ -1469,7 +1522,19 @@ def run_cpu_smoke(
 
         t_step_start = time.time()
         optimizer.zero_grad(set_to_none=True)
-        out = model(batch)
+        # Scheduled-sampling dispatch (Candidate E Stage 3, 2026-05-13).
+        # ratio=0 → bit-for-bit TF; ratio>0 → two-pass scheduled sampling.
+        # Schedule wins over constant ratio when both are set.
+        ss_ratio = resolve_ratio_at_step(
+            cfg.scheduled_sampling_schedule,
+            cfg.scheduled_sampling_ratio,
+            step,
+            n_steps,
+        )
+        if ss_ratio > 0.0:
+            out = forward_with_scheduled_sampling(model, batch, ratio=ss_ratio)
+        else:
+            out = model(batch)
         total, parts = compute_losses(
             out, batch, fisher_rao_loss=fisher_rao_loss, weights=cfg.loss_weights,
         )
@@ -1503,6 +1568,7 @@ def run_cpu_smoke(
         copy_metrics_step = parts.get("__copy_metrics__", {})
         step_record = {
             "step": step,
+            "scheduled_sampling_ratio": float(ss_ratio),
             "loss_total": float(parts["loss_total"].item()),
             "loss_lm": float(parts["loss_lm"].item()),
             "loss_fr": float(parts["loss_fr"].item()),
