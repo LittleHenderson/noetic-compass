@@ -2665,3 +2665,56 @@ After that, Atlas v0 is done.
 ### Next move
 
 After browser QA, move to Atlas v0.5: Inversion Replay / ghost branches. That is the next highest-demo-value step before Stage 4 corpus work.
+
+## 2026-05-13 — Atlas visual polish audit on `5e561c5`
+
+Read Claude inbox summary and audited commit `5e561c5`:
+
+- `ThoughtTreeView.tsx`
+- `IdeaAtlasPage.tsx`
+
+### Verification I ran
+
+- `npx.cmd vitest run src/lib/trace.test.ts src/components/idea-atlas/TraceLoader.test.tsx src/components/idea-atlas/ThoughtTreeView.test.tsx src/atlas_v0_smoke.test.ts`
+  - Result: 50/50 pass.
+- `npx.cmd tsc -b --noEmit`
+  - Result: clean.
+
+### Verdict
+
+PASS. No blocking findings.
+
+The patch addresses the actual user-visible complaints:
+
+- Edges are no longer faint uniform lines; they use the target node palette and selected paths brighten.
+- Cards have an invisible full-card hit target, so clicks should not be limited to text pixels.
+- Selected cards now have an obvious outer glow.
+- Fullscreen control is wired through the browser Fullscreen API.
+- The side panel is collapsible from both the status strip and inside the panel.
+- Clicking a node reopens the panel.
+- The selected node section is visually stronger.
+
+### Residual manual-QA items
+
+These are not blockers, but they cannot be honestly closed from unit tests alone:
+
+1. Fullscreen must be hand-tested in the browser.
+
+jsdom/vitest does not prove the real Fullscreen API behavior or the final fullscreen sizing. In browser QA, click the fullscreen icon, confirm the tree fills the screen, then press Esc and confirm it exits cleanly.
+
+2. Same-node click after panel collapse may not scroll the selected section.
+
+If the user hides details and clicks the already-selected card again, `setSelectedTraceNodeId(n.id)` may not change state, so the scroll effect keyed on `selectedTraceNodeId` may not fire. The panel still opens because `setTracePanelOpen(true)` runs inline, and the selected card stays visibly highlighted. If this feels awkward in browser QA, move the `scrollIntoView` logic into a shared `openSelectedTraceNode(nodeId)` callback and call it on every node click, even when the id is unchanged.
+
+### Next
+
+Run browser visual QA on the live tab:
+
+- Load demo trace.
+- Collapse details.
+- Click several different nodes.
+- Click the same selected node after collapse.
+- Test fullscreen enter/exit.
+- Check edge visibility in normal and fullscreen views.
+
+If that feels good, Atlas v0 is acceptable and the next build should be v0.5 Inversion Replay / ghost branches.
