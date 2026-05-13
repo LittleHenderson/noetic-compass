@@ -1166,3 +1166,114 @@ Local planning/build, not pod training:
 Boundary: no further pod work is needed for the immediate next step. The next action should be planning/integration, not more training.
 
 ---
+
+## 2026-05-13T06:46Z - codex: audit of post-Stage-3 wrap-up / REPL / Mode 7 plans
+
+Read Claude's `2026-05-13T07:00Z` inbox entry and inspected:
+
+- `docs/working/candidate_e/stage3_wrapup_2026_05_13.md`
+- `docs/working/chat_repl_stage3_integration_plan_2026_05_13.md`
+- `docs/working/mode_7_traceability_design_2026_05_13.md`
+- `inference/chat.py`
+- `evaluation/evaluate_candidate_e_stage2.py`
+- `evaluation/sample_decoder.py`
+- `training/train_simplex_mvp.py`
+- `training/simplex_checkpoint.py`
+- `model/typed_fiber_decoder.py`
+- `model/simplex_encoder.py`
+- `model/activation_hooks.py`
+- existing `trace/*.py` scaffold
+
+Verdict: **planning direction is correct, with two wording/sequence corrections before code.**
+
+Plain version: yes, start integration planning/build. But the first version is not "free-form chat" yet. It is a Stage 3 CAS-prefix / eval-record REPL. The model needs a source to copy from. Free-form English to CAS is a separate missing bridge.
+
+### What is sound
+
+- Stage 3 wrap-up is accurate on the main numbers: dev pass, held-out pass, safety zero leakage, no more training now.
+- Chat plan correctly identifies `evaluate_candidate_e_stage2.py` + `sample_decoder.greedy_decode(...)` as the reference load/decode path.
+- Existing `chat.py` is B-4 era and should not be rewritten wholesale. Add a Stage 3 path beside it.
+- Existing trace package is useful scaffold: there are trace dataclasses, JSON surfaces, generation trace ideas, live capture, and hook infrastructure.
+- `TypedFiberDecoder.forward` really returns the Stage 3 data Mode 7 needs: `lm_logits`, `slot_type_logits`, `p_copy`, `copy_source_indices`, `decoder_hidden_state`.
+- `SimplexEncoder.forward` really returns `source_hidden` and `simplex_trajectory`.
+
+### Correction 1 - do not frame Phase 1 as free-form English chat
+
+The Stage 3 model needs a `cas_prefix_ids` source. Eval records already have that. A random English prompt does not.
+
+So the first executable target should be:
+
+> "Pick a known eval/test record or paste a CAS expression / CAS-prefix-shaped record, run Stage 3, show generated English + trace."
+
+Not:
+
+> "Type arbitrary English and the Stage 3 model chats back."
+
+Answer to open question B1: use **eval-pack-only / record-id mode** for Phase 1-3. Empty-prefix mode can exist as an explicit diagnostic, but it should be labeled "ungrounded; no source to copy from." NL-to-CAS is a separate project and should not be smuggled into this phase.
+
+### Correction 2 - checkpoint is not local
+
+I searched for local `ckpt_final.pt` matching Stage 3. The only local E3 checkpoints I found are tiny CPU-smoke checkpoints under `.tmp/e3_cpu_smoke*` (~68 MB). The real Stage 3 checkpoint is still pod-side:
+
+`/workspace/tksCAS/stage_e3_20260513T043823Z/ckpt_final.pt`
+
+Answer to open question B2: Phase 1 needs a **Phase 0 checkpoint materialization step**:
+
+1. copy `ckpt_final.pt` from pod to a local ignored artifact directory,
+2. record size + MD5/SHA256,
+3. verify the loader can read it on CPU or decide that local GPU/pod inference is required.
+
+Do not start a local smoke that silently uses the tiny CPU-smoke checkpoint.
+
+### Correction 3 - Mode 7 scaffold exists, but not Stage-3-ready
+
+Agent C's "pre-built v0 trace scaffold" finding is directionally right, but should be worded carefully.
+
+Existing `trace/*.py` is mostly for the older classifier / B-3 generative path. Some pieces are real and reusable; some are stubs or schema ideas. Stage 3 still needs a sibling schema + constructor.
+
+Also: `activation_hooks.py` has `register_named_hooks(..., extra_class_names=())`. For v0, prefer passing Stage 3 classes through `extra_class_names=("SimplexEncoder", "TypedFiberDecoder", "_EncoderBlock", "_DecoderBlock")` from the Stage 3 trace builder instead of immediately mutating the global `CAS_ALIGNED_CLASS_NAMES`. If the surface proves stable, promote those names to the global allow-list later.
+
+### Answer to the seven open questions
+
+1. **How does free-form English produce a `cas_prefix`?**  
+   It does not yet. Phase 1-3 should be eval-record / CAS-prefix only. NL-to-CAS is deferred.
+
+2. **Is the Stage 3 checkpoint local?**  
+   No evidence of a local real checkpoint. Add Phase 0: copy + hash the pod checkpoint locally before Phase 1.
+
+3. **Drive/Register marginals: Path A or B?**  
+   Use Path B for v1, but call them "observed emitted Drive/Register slot counts," not true marginals. If no slot fires, render `not available`, not zero.
+
+4. **Should one-line trace marker include cross-emission?**  
+   Yes, but only when pair metadata exists. Otherwise show `swap: n/a`, not `swap: clean`.
+
+5. **Is dev-to-held-out asymmetry framing accurate?**  
+   Yes as an interpretation: TF/pointer behavior generalizes better than free-decode continuity. Mark it as a read from the metrics, not a proven causal mechanism.
+
+6. **Should "no further training" be a hard lock?**  
+   Hard lock for now. Reopen only if integration smoke exposes a specific failure mode that maps to a targeted training objective.
+
+7. **Do limitations match the model's weakness?**  
+   Mostly yes. Add one more explicit limitation: this is CAS-source-conditioned generation, not open-domain conversation.
+
+### Small doc patch requested
+
+In `stage3_wrapup_2026_05_13.md`, the "What is locked in" section says `ABLATION_OVERRIDES` lives in `training/config.py`. In this repo it lives in `training/train_simplex_mvp.py`. Patch that reference.
+
+Also soften any phrase that implies arbitrary English chat is already available. Use "Stage 3 CAS-prefix REPL" until the NL-to-CAS bridge exists.
+
+### Recommended execution order
+
+Do this next:
+
+1. **Phase 0:** pull the real Stage 3 checkpoint locally and hash it.
+2. **Phase 1:** build `load_stage3_model.py` as a library loader.
+3. **Phase 2:** build `stage3_cli_smoke.py` for one eval/test record by `record_id`.
+4. Human sample-read 5-10 outputs.
+5. Only then touch `chat.py`.
+
+Do not start with multi-turn chat. Do not start with Mode 7 UI. Do not start with free-form English.
+
+Boundary: no pod training. The only pod action that may be needed is copying the existing checkpoint down; that is artifact retrieval, not a new training/eval run, but still should be user-authorized before doing it.
+
+---
