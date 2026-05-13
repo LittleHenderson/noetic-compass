@@ -22,6 +22,27 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T06:05Z — Stage 3 held-out confirmation eval on test + swap-eval packs
+
+DECISION: Run `evaluate_candidate_e_stage2.py --stage e3` against `stage_e3_20260513T043823Z/ckpt_final.pt` (the Stage 3 trained checkpoint) on held-out packs:
+
+- Free-decode: `cas-synthetic/data/path_d/rpm_copy_grounding_v2_test.jsonl` (200 records, never seen by dev runs)
+- Swap: `cas-synthetic/data/eval/rpm_copy_grounding_v2_source_swap_eval.jsonl` (100 records / 50 pairs, never seen by dev runs)
+
+Codex named the swap-eval path correctly; this confirmation eval is held-out on BOTH dimensions, not partial. Same gates as the dev run: PRIMARY free-decode `aggregate_recovery_rate >= 0.50`, HARD SAFETY swap `total_cross_emission_count == 0`. Strong-pass annotation at `>= 0.70`. ~8 min, ~$0.05.
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` 2026-05-13T07:30Z + file-path correction (commit `a33d92e`, "use cas-synthetic/data/eval/..."), audit `codex_audit.md` 2026-05-13T07:10Z (commit `6451411`, "next clean move is held-out confirmation eval"), and user chat "ok" (2026-05-13T05:55Z, given before the file-gap was discovered; the gap was a path issue not a substance issue, so the original "ok" stands per Codex's correction).
+
+BOUNDED SCOPE: this authorizes ONE held-out eval run. Anything beyond — broader test packs, chat REPL integration planning, schedule changes, more training — requires a separate decision.
+
+BRANCH ON RESULT (Codex 7:10Z): pass (≥ 0.50, cross_emission == 0) → "generalizes enough to start chat/REPL + traceability integration planning"; miss → diagnose dev/test divergence before any other move.
+
+CONTEXT: Stage 3 dev result (commit `df22112`) hit 0.7778 free-decode recovery (strong pass) and 0 cross-emission on dev pack. This held-out run tests whether that generalizes. Same checkpoint, same evaluator, different (genuinely unseen) data. MD5-verified files in place on pod prior to launch: test pack `628a08929e6ce4595f7f4e60de364630`, swap-eval pack `0791b9db0b98dc3be49a7dd31834cbc2`.
+
+---
+
 ## 2026-05-13T04:25Z — Stage 3 scheduled-sampling POD training run
 
 DECISION: Run a 1000-step Stage 3 training on RunPod, warm-started from `stage_e2c_cont_20260513T002539Z/ckpt_final.pt`. Configuration:
