@@ -158,6 +158,26 @@ export function IdeaAtlasPage() {
   const [selectedTraceNodeId, setSelectedTraceNodeId] = useState<string | null>(null);
   const [tracePanelOpen, setTracePanelOpen] = useState(true);
   const selectedNodeSectionRef = useRef<HTMLElement | null>(null);
+
+  // ── SGGS (TRACE 3D) wiring: fullscreen state for the 3D scene ──
+  const sggsContainerRef = useRef<HTMLDivElement | null>(null);
+  const [sggsFullscreen, setSggsFullscreen] = useState(false);
+  useEffect(() => {
+    const onChange = () => {
+      setSggsFullscreen(document.fullscreenElement === sggsContainerRef.current);
+    };
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+  const toggleSggsFullscreen = useCallback(() => {
+    const el = sggsContainerRef.current;
+    if (!el) return;
+    if (document.fullscreenElement === el) {
+      void document.exitFullscreen?.();
+    } else {
+      void el.requestFullscreen?.();
+    }
+  }, []);
   const handleTraceLoaded = useCallback((trace: AtlasTrace) => {
     setLoadedTrace(trace);
     setTraceError(null);
@@ -535,15 +555,15 @@ export function IdeaAtlasPage() {
             role="tab"
             aria-selected={viewMode === 'sggs'}
             onClick={() => setViewMode('sggs')}
-            title="Spatial Gesture Graph — 3D Thought Tree (beta)"
+            title="3D Thought Tree (beta) — spatial gesture graph viewer"
             className={`px-3 py-1 rounded transition-colors ${
               viewMode === 'sggs'
                 ? 'bg-violet-500/20 text-violet-300'
                 : 'text-slate-500 hover:text-slate-300'
             }`}
           >
-            SGGS
-            <span className="ml-1 text-[8px] uppercase tracking-wider text-violet-400/70">
+            TRACE
+            <span className="ml-1 text-[9px] uppercase tracking-wider text-violet-400/80">
               3D
             </span>
           </button>
@@ -1046,7 +1066,11 @@ export function IdeaAtlasPage() {
             </div>
           )}
           {loadedTrace && (
-            <div className="min-h-[560px] rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden">
+            <div
+              ref={sggsContainerRef}
+              data-fullscreen={sggsFullscreen ? 'true' : 'false'}
+              className="relative min-h-[560px] rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden"
+            >
               <Suspense
                 fallback={
                   <div className="flex h-[560px] items-center justify-center font-mono text-xs text-slate-400">
@@ -1061,6 +1085,74 @@ export function IdeaAtlasPage() {
                   className="h-full w-full"
                 />
               </Suspense>
+
+              {/* Fullscreen toggle — top-right overlay */}
+              <button
+                type="button"
+                onClick={toggleSggsFullscreen}
+                aria-label={sggsFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                title={sggsFullscreen ? 'Exit fullscreen' : 'Fullscreen the 3D scene'}
+                className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-md bg-black/45 text-slate-200 backdrop-blur-sm transition-colors hover:bg-white/10 hover:text-white"
+              >
+                {sggsFullscreen ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M8 3v3a2 2 0 0 1-2 2H3" />
+                    <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+                    <path d="M3 16h3a2 2 0 0 1 2 2v3" />
+                    <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                    <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                    <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                    <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                  </svg>
+                )}
+              </button>
+
+              {/* Color key — bottom-left overlay. Same 7 kinds + colors as
+                  the SVG TRACE view legend, plus a one-line explanation of
+                  the glow pulse so the user knows what to look for. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-2 left-2 flex flex-col gap-1.5 rounded-md bg-black/55 px-3 py-2 font-mono text-[10px] text-slate-200 backdrop-blur-sm"
+              >
+                <div className="text-[9px] uppercase tracking-wider text-slate-400">
+                  Color key
+                </div>
+                {[
+                  ['#60a5fa', 'user prompt'],
+                  ['#a78bfa', 'NL bridge'],
+                  ['#2dd4bf', 'CAS expression'],
+                  ['#34d399', 'model output'],
+                  ['#22d3ee', 'identifier attempt'],
+                  ['#fbbf24', 'slot trace'],
+                  ['#fb7185', 'confidence'],
+                ].map(([color, label]) => (
+                  <div key={label} className="flex items-center gap-1.5">
+                    <span
+                      className="inline-block h-2.5 w-2.5 rounded-sm"
+                      style={{
+                        backgroundColor: color,
+                        boxShadow: `0 0 6px ${color}`,
+                      }}
+                    />
+                    <span>{label}</span>
+                  </div>
+                ))}
+                <div className="mt-1 border-t border-white/10 pt-1 text-[9px] text-slate-400">
+                  selected card pulses
+                </div>
+              </div>
+
+              {/* Hint strip — bottom-right overlay */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/45 px-2 py-1 font-mono text-[9px] text-slate-400 backdrop-blur-sm"
+              >
+                drag to orbit · wheel to zoom · click a card
+              </div>
             </div>
           )}
           {!loadedTrace && !traceError && (

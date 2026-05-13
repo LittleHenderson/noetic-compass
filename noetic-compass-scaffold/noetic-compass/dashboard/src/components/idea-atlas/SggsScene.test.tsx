@@ -251,7 +251,11 @@ describe('SggsScene — click → onNodeClick', () => {
 });
 
 describe('SggsScene — selectedNodeId visual state', () => {
-  it('updates the selected mesh body color toward the selection accent', () => {
+  it('selected node body color stays at its baseFill (no washout)', () => {
+    // REGRESSION PIN (user feedback 2026-05-13): "when the box is
+    // highlighted it turns grayish and the grayishness hides the
+    // white lettering." Fix is to leave body color at the palette
+    // baseFill and signal selection via halo + outline instead.
     const tree = makeSampleTree();
     const { container, rerender } = render(
       <SggsScene
@@ -270,27 +274,71 @@ describe('SggsScene — selectedNodeId visual state', () => {
         rendererFactory={makeRendererStub}
       />,
     );
-    // Force the selection lerp to completion deterministically.
     wrapper!.__sggs_step!();
     const scene = wrapper!.__sggs_scene!;
-    const expected = new Color(SELECTED_STROKE_HEX);
-    let matched = false;
+    const accent = new Color(SELECTED_STROKE_HEX);
+    let bodyColorMatchesAccent = false;
     scene.traverse((obj) => {
-      const role = (obj.userData as { role?: string; 'data-node-id'?: string })
-        ?.role;
+      const role = (obj.userData as { role?: string })?.role;
       const id = (obj.userData as { 'data-node-id'?: string })?.[
         'data-node-id'
       ];
       if (role === 'body' && id === 'n3') {
         const mat = (obj as unknown as { material: { color: Color } }).material;
-        // Color comparison: r/g/b within 1e-3.
-        const dr = Math.abs(mat.color.r - expected.r);
-        const dg = Math.abs(mat.color.g - expected.g);
-        const db = Math.abs(mat.color.b - expected.b);
-        matched = dr < 1e-3 && dg < 1e-3 && db < 1e-3;
+        const dr = Math.abs(mat.color.r - accent.r);
+        const dg = Math.abs(mat.color.g - accent.g);
+        const db = Math.abs(mat.color.b - accent.b);
+        bodyColorMatchesAccent = dr < 1e-3 && dg < 1e-3 && db < 1e-3;
       }
     });
-    expect(matched).toBe(true);
+    // Body should NOT have lerp'd to the accent — that was the
+    // grayish-washout bug. White card text must stay readable.
+    expect(bodyColorMatchesAccent).toBe(false);
+  });
+
+  it('selected node halo pulses to higher opacity and scale', () => {
+    // REGRESSION PIN (user feedback 2026-05-13): "the highlighted one
+    // should glow and pulsate." Halo opacity and scale should reach
+    // their max values when the selection lerp completes.
+    const tree = makeSampleTree();
+    const { container, rerender } = render(
+      <SggsScene
+        tree={tree}
+        selectedNodeId={null}
+        rendererFactory={makeRendererStub}
+      />,
+    );
+    const wrapper = container.querySelector('[data-testid="sggs-scene"]') as
+      | (HTMLElement & TestSurface)
+      | null;
+    rerender(
+      <SggsScene
+        tree={tree}
+        selectedNodeId="n3"
+        rendererFactory={makeRendererStub}
+      />,
+    );
+    wrapper!.__sggs_step!();
+    const scene = wrapper!.__sggs_scene!;
+    let haloOpacity = 0;
+    let haloScale = 0;
+    scene.traverse((obj) => {
+      const role = (obj.userData as { role?: string })?.role;
+      const id = (obj.userData as { 'data-node-id'?: string })?.[
+        'data-node-id'
+      ];
+      if (role === 'halo' && id === 'n3') {
+        const mat = (obj as unknown as {
+          material: { opacity: number };
+        }).material;
+        haloOpacity = mat.opacity;
+        haloScale = (obj as unknown as { scale: { x: number } }).scale.x;
+      }
+    });
+    // Selected halo should be at the max pulse opacity (~0.92) and
+    // scaled up beyond 1.0.
+    expect(haloOpacity).toBeGreaterThan(0.5);
+    expect(haloScale).toBeGreaterThan(1.0);
   });
 
   it('shows the outline only on the selected mesh', () => {
