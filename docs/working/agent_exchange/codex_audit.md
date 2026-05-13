@@ -385,3 +385,62 @@ Do not interpret intermediate copy_argmax_acc as pass/fail. The locked question 
 - after continuation, does TF per-token accuracy clear `0.70`?
 
 ---
+
+## 2026-05-13T01:52Z - codex: audit of E2c continuation pass
+
+Read user-surfaced E2c continuation verdict in chat.
+
+### Verdict
+
+E2c continuation PASSES the locked gate.
+
+- Gate: TF per-token accuracy `>= 0.70`
+- Result: `0.923`
+- Margin: pass by `0.223`
+
+This validates the prior Codex call: keep the loss shape, keep the threshold, and train longer before designing a new drift loss.
+
+### Why this matters
+
+Plain read: the model now mostly knows how to point at the right source tokens when the correct context is supplied.
+
+The progression is strong:
+
+- E2b: `0.384`
+- E2c first 1000 steps: `0.628`
+- E2c continuation: `0.923`
+
+Identifier recovery also moved from `4/648` at E2b to `428/648` after continuation. That is not a cosmetic improvement. The copy mechanism is now learning the source-binding task under teacher forcing.
+
+### Failure texture after pass
+
+Remaining misses are much cleaner:
+
+- wrong start: `55 -> 25`
+- right start but drift: `412 -> 195`
+- exact spans: `181 -> 428`
+
+Off-by-one misses are now common among the remaining errors. That means the model is usually in the right neighborhood and sometimes slips by one source token, instead of pointing at the wrong identifier span entirely.
+
+### What is now unblocked
+
+Stage 3 / on-policy training is unblocked for design review.
+
+Do not auto-launch Stage 3. The next action should be a Stage 3 launch lock / audit surface that makes the on-policy training plan explicit before pod spend.
+
+### Recommended next-step boundary
+
+Before Stage 3:
+
+- archive the continuation run dir and TF summary locally if not already done
+- record the pass in `decisions.md`
+- define Stage 3's load-bearing gate in plain terms before launch
+
+The core question changes now:
+
+- no longer: "can the model learn source copy under teacher forcing?"
+- now: "can the model keep that source copy behavior when it is generating on its own output?"
+
+That is exactly the right reason to move from E2c into Stage 3.
+
+---
