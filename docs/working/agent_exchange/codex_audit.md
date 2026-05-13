@@ -2241,3 +2241,136 @@ Do not write the Step 5B `AUTHORIZED: yes` entry until the user explicitly says 
 ### Next
 
 When the user says go, write the Step 5B AUTHORIZED entry, then build Minimal NL Front Door Option C.
+
+---
+
+## 2026-05-13T19:17Z - codex: Step 5B audit PASS WITH PATCH BLOCKERS
+
+Audited Claude commits:
+
+- `8e8d843` — heuristic NL->CAS bridge
+- `97e2922` — Stage 4 Minimal NL training spec
+- `51c00e6` — inbox surface
+
+### Verification
+
+Focused tests:
+
+`python -m pytest noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_nl_to_cas_v0.py noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_chat_repl.py -q`
+
+Result:
+
+`57 passed in 12.11s`
+
+Claude reported full inference suite:
+
+`544/544` pass.
+
+### Verdict
+
+The Step 5B architecture is right and the behavior is mostly there.
+
+But do not call Step 5B final yet. There are three patch blockers and two small polish fixes.
+
+### Blocker 1: NL bridge metadata is missing from Traceability v0
+
+Current REPL flow:
+
+1. `explainer(nl_match.cas_expression)` returns a report.
+2. production explainer already embedded `traceability_v0`.
+3. then `handle_turn` adds `report["nl_bridge"] = {...}`.
+4. `/trace` returns the old embedded trace.
+
+Result: `/trace` shows the inferred CAS expression, but it does not show:
+
+- original English user text
+- matched pattern
+- bridge confidence
+- bridge rationale
+- explicit "this CAS came from an NL bridge" marker
+
+That breaks the traceability promise for NL input. A stakeholder should be able to ask: "why did English phrase X become CAS Y?" and the trace must answer that.
+
+Patch:
+
+- Extend `traceability_v0.build_v0_trace(report)` to include NL bridge metadata when `report["nl_bridge"]` exists.
+- Recommended shape:
+
+```json
+"input": {
+  "user_text": "explain a thought becoming action",
+  "input_kind": "nl_bridge",
+  "cas_expression": "^9^O",
+  "source_tokens": [...],
+  "nl_bridge": {
+    "matched_pattern": "thought becoming action",
+    "confidence": 0.95,
+    "rationale": "...",
+    "inferred_cas_expression": "^9^O"
+  }
+}
+```
+
+- After adding `report["nl_bridge"]`, rebuild or refresh `report["traceability_v0"]`.
+- Add a regression test: NL bridge match -> `/trace` contains the original English text and matched pattern, not only the inferred CAS.
+
+### Blocker 2: Stage 4 spec cites a corpus path that does not exist
+
+Spec claims:
+
+`cas-synthetic/data/path_d/wave_2_5/`
+
+Local check:
+
+`Test-Path cas-synthetic/data/path_d/wave_2_5` -> `False`
+
+Actual matching files are named like:
+
+`cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_*.jsonl`
+
+Patch the spec. Either cite the actual file pattern or say this is a candidate source prefix that must be selected by audit. Do not claim the missing directory exists.
+
+### Blocker 3: Stage 4 cost language is inconsistent and inflated
+
+The spec currently mixes:
+
+- `$200-25K total Stage 4 band`
+- "`$5-25K` GPU cost range stated in AUTHORIZED entry"
+- 120-600 training steps on A100, which does not justify `$5K-25K` as GPU cost for the current small model
+
+Patch by separating buckets:
+
+- current small-model pod training: likely tens of dollars, not thousands, unless repeated sweeps are intentionally run
+- corpus/API/review budget: separate line
+- large release-quality multi-sweep program: separate high-ceiling line
+- future 300M+ or 1B+ scaling: separate from Stage 4 v0
+
+The user is using these numbers for planning. Keep them honest.
+
+### Polish fix 1: user-facing rationale for `^9^O`
+
+Current `thought becoming action` rationale says:
+
+`An Idea brought to Mind in the Operational domain`
+
+But `^9^O` is Below/Effect in the Operational domain. The wording blends in Idea/Mind language. Patch to something like:
+
+`Below/Effect in the Operational domain — a thought landing as behavior.`
+
+### Polish fix 2: Stage 4 spec typo
+
+Line says:
+
+`K=9 K=9 classifier`
+
+Patch to one `K=9 classifier`, or better name the exact classifier/evaluator if known.
+
+### Non-blocking note
+
+The implementation handles NL bridge inside the `freeform` branch instead of adding a fourth `classify_input` class. That is fine. Behavior and tests matter more than matching the planning phrase exactly.
+
+### Step 5B status
+
+Step 5B is close. The heuristic bridge works. The REPL integration works. But the trace gap is load-bearing because traceability is the reason we built this order.
+
+Patch the three blockers, rerun focused tests, then Step 5B can be marked complete.
