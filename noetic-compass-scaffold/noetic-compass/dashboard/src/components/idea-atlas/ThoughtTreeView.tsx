@@ -355,9 +355,29 @@ export function ThoughtTreeView({
   className,
 }: ThoughtTreeViewProps) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const onChange = () => {
+      setIsFullscreen(document.fullscreenElement === containerRef.current);
+    };
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    if (document.fullscreenElement === el) {
+      void document.exitFullscreen?.();
+    } else {
+      void el.requestFullscreen?.();
+    }
+  }, []);
   const dragState = useRef<{ startX: number; startY: number; panX: number; panY: number } | null>(null);
 
   useEffect(() => {
@@ -379,6 +399,14 @@ export function ThoughtTreeView({
     });
     return out;
   }, [layout]);
+
+  // Flat lookup: node id → kind. Used by the edge renderer to color
+  // each edge by its target node's palette.
+  const nodeKindById = useMemo(() => {
+    const out: Record<string, string> = {};
+    for (const n of tree.nodes ?? []) out[n.id] = n.kind;
+    return out;
+  }, [tree.nodes]);
 
   // ── Pan + zoom handlers ──────────────────────────────────────────────────
   const onWheel = useCallback((e: ReactWheelEvent<SVGSVGElement>) => {
@@ -426,7 +454,9 @@ export function ThoughtTreeView({
 
   return (
     <div
+      ref={containerRef}
       data-testid="thought-tree-view"
+      data-fullscreen={isFullscreen ? 'true' : 'false'}
       className={[
         'relative h-full min-h-[280px] w-full',
         'rounded-lg border border-white/[0.06] bg-black/30',
@@ -455,7 +485,11 @@ export function ThoughtTreeView({
         {/* Background — receives pan drag-starts */}
         <rect data-role="background" x={vbX} y={vbY} width={vbW} height={vbH} fill="transparent" />
 
-        {/* Edges first so nodes draw on top */}
+        {/* Edges first so nodes draw on top. Per-edge color is the
+            target node's kind palette so the eye reads "this thought
+            flowed INTO that node." Dim base was hard to see in the
+            stakeholder demo (user feedback 2026-05-13) — bumped to
+            0.85 opacity 2px stroke. */}
         <g>
           {tree.edges?.map((edge) => {
             const a = layout.positions[edge.source];
@@ -466,19 +500,37 @@ export function ThoughtTreeView({
             const involvesSelected =
               selectedNodeId != null &&
               (edge.source === selectedNodeId || edge.target === selectedNodeId);
+            const targetKind = nodeKindById[edge.target] ?? 'unknown';
+            const targetPalette = paletteFor(targetKind);
+            const stroke = involvesSelected ? '#fafafa' : targetPalette.stroke;
+            const strokeOpacity = involvesSelected ? 1 : 0.85;
+            const strokeWidth = involvesSelected ? 3 : 2;
             return (
-              <path
-                key={edge.id}
-                data-testid={`thought-tree-edge-${edge.id}`}
-                data-edge-id={edge.id}
-                d={edgePath(a, b)}
-                fill="none"
-                stroke={involvesSelected ? '#a78bfa' : '#475569'}
-                strokeOpacity={involvesSelected ? 0.95 : 0.55}
-                strokeWidth={involvesSelected ? 2 : 1.5}
-                className="thought-tree-edge-anim"
-                style={style}
-              />
+              <g key={edge.id}>
+                <path
+                  data-testid={`thought-tree-edge-${edge.id}`}
+                  data-edge-id={edge.id}
+                  d={edgePath(a, b)}
+                  fill="none"
+                  stroke={stroke}
+                  strokeOpacity={strokeOpacity}
+                  strokeWidth={strokeWidth}
+                  strokeLinecap="round"
+                  className="thought-tree-edge-anim"
+                  style={style}
+                />
+                {/* Arrowhead — filled dot at the target end so direction
+                    is obvious. Matches target node's stroke color. */}
+                <circle
+                  cx={b.x}
+                  cy={b.y - NODE_H / 2 - 2}
+                  r={involvesSelected ? 5 : 4}
+                  fill={stroke}
+                  fillOpacity={strokeOpacity}
+                  className="thought-tree-edge-anim"
+                  style={style}
+                />
+              </g>
             );
           })}
         </g>
@@ -521,6 +573,7 @@ export function ThoughtTreeView({
                 tabIndex={0}
                 className="thought-tree-node-anim cursor-pointer transition-transform duration-150 ease-out hover:scale-[1.03]"
                 style={animStyle}
+                pointerEvents="all"
                 onClick={(e) => {
                   e.stopPropagation();
                   onNodeClick?.(node);
@@ -534,6 +587,20 @@ export function ThoughtTreeView({
                 onMouseEnter={() => setHoverId(node.id)}
                 onMouseLeave={() => setHoverId((id) => (id === node.id ? null : id))}
               >
+                {/* Invisible click-target rect that covers the full card
+                    footprint. Guarantees the click hits the <g> handler
+                    even when the pointer lands on whitespace inside the
+                    card (between chip and title etc.). */}
+                <rect
+                  x={0}
+                  y={0}
+                  width={NODE_W}
+                  height={NODE_H}
+                  rx={12}
+                  ry={12}
+                  fill="transparent"
+                  pointerEvents="all"
+                />
                 {/* Drop shadow — always-on subtle, brighter on hover/selected */}
                 <rect
                   x={3}
@@ -557,8 +624,26 @@ export function ThoughtTreeView({
                   fillOpacity={cardFillOpacity}
                   stroke={cardStroke}
                   strokeOpacity={cardStrokeOpacity}
-                  strokeWidth={isSelected ? 2.5 : 1.5}
+                  strokeWidth={isSelected ? 3 : 1.5}
                 />
+                {/* Selected glow — a second outer stroke pulse so the
+                    user sees their click registered without needing
+                    to look at the side panel. */}
+                {isSelected && (
+                  <rect
+                    x={-3}
+                    y={-3}
+                    width={NODE_W + 6}
+                    height={NODE_H + 6}
+                    rx={14}
+                    ry={14}
+                    fill="none"
+                    stroke={palette.stroke}
+                    strokeOpacity={0.95}
+                    strokeWidth={2}
+                    pointerEvents="none"
+                  />
+                )}
                 {/* Kind-colored ribbon on the left edge */}
                 <rect
                   x={0}
@@ -674,6 +759,29 @@ export function ThoughtTreeView({
             <path d="M3 15v4a2 2 0 0 0 2 2h4" />
             <path d="M21 15v4a2 2 0 0 1-2 2h-4" />
           </svg>
+        </button>
+        <button
+          type="button"
+          aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+          title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen the tree'}
+          onClick={toggleFullscreen}
+          className="flex h-7 w-7 items-center justify-center rounded text-slate-200 hover:bg-white/10 hover:text-white"
+        >
+          {isFullscreen ? (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M8 3v3a2 2 0 0 1-2 2H3" />
+              <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+              <path d="M3 16h3a2 2 0 0 1 2 2v3" />
+              <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+            </svg>
+          ) : (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+              <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+              <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+              <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+            </svg>
+          )}
         </button>
         <div
           aria-hidden="true"

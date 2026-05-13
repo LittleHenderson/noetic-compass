@@ -148,6 +148,7 @@ export function IdeaAtlasPage() {
   const [traceError, setTraceError] = useState<string | null>(null);
   const [selectedTraceNodeId, setSelectedTraceNodeId] = useState<string | null>(null);
   const [tracePanelOpen, setTracePanelOpen] = useState(true);
+  const selectedNodeSectionRef = useRef<HTMLElement | null>(null);
   const handleTraceLoaded = useCallback((trace: AtlasTrace) => {
     setLoadedTrace(trace);
     setTraceError(null);
@@ -165,6 +166,21 @@ export function IdeaAtlasPage() {
       ) ?? null
     );
   }, [loadedTrace, selectedTraceNodeId]);
+  // Whenever the selected node changes (via card click), pop the side
+  // panel open if it's hidden and scroll the SELECTED NODE section
+  // into view. The user feedback (2026-05-13) was that clicks "didn't
+  // seem to do anything" — what was happening is the click did select
+  // but the detail was below the fold or the panel was collapsed.
+  useEffect(() => {
+    if (!selectedTraceNodeId) return;
+    setTracePanelOpen(true);
+    requestAnimationFrame(() => {
+      selectedNodeSectionRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    });
+  }, [selectedTraceNodeId]);
 
   // Fetch edges lazily — first time the user switches into GRAPH view.
   // Backend exposes GET /idea_atlas/edges?similarity_threshold=0.2; if 404,
@@ -921,8 +937,11 @@ export function IdeaAtlasPage() {
                   )}
                 </dl>
                 {selectedTraceNode && (
-                  <section className="mt-4 pt-3 border-t border-white/[0.06]">
-                    <div className="text-accent-teal text-xs font-bold mb-2">
+                  <section
+                    ref={selectedNodeSectionRef}
+                    className="mt-4 rounded bg-emerald-500/[0.06] border border-emerald-400/30 p-3"
+                  >
+                    <div className="text-emerald-300 text-xs font-bold mb-2">
                       SELECTED NODE
                     </div>
                     <dl className="space-y-2">
