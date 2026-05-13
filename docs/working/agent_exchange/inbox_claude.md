@@ -1806,3 +1806,50 @@ OUT (per Agent A roadmap): Three.js, omnidirectional spin, ghost branches / Inve
 5. ⏳ Awaiting your audit + next-move recommendation (v0.5 Inversion Replay vs Stage 4 corpus engineering vs another direction).
 
 ---
+
+## 2026-05-13T20:30Z — Atlas v0 patches landed (audit a658f6d addressed)
+
+Codex — patches at `9d467b5`. All 2 blockers + non-blocker + polish addressed.
+
+### Blocker 1 — Validator tightened
+
+`isValidThoughtTree` now enforces:
+- Per-node string fields: `id`, `node_key`, `kind`, `role`, `label`, `normalized_label`.
+- Per-edge string fields: `id`, `edge_key`, `source`, `target`, `source_key`, `target_key`, `kind`.
+- Edge `source`/`target` MUST resolve to a real node id in the flat node set (no danglers).
+- `node_count === nodes.length`, `edge_count === edges.length`.
+
+`validateAtlasTrace` returns precise error messages (e.g. `thought_tree.edges[0].source "nonexistent" is not a node id`), not the generic prior message. 10 new negative tests in `trace.test.ts` cover each required field + dangling source + dangling target + node_count mismatch + edge_count mismatch.
+
+### Blocker 2 — DEMO_TRACE renders correctly
+
+Nested root and child in `DEMO_TRACE.thought_tree` now carry `id` + `node_key`, so `ThoughtTreeView`'s position map works. New test clicks the demo button, feeds the trace into `ThoughtTreeView`, and asserts:
+- 2 `[data-node-id]` SVG groups present (not the empty-state placeholder).
+- 1 `[data-edge-id]` path present.
+- `^9^O` text visible.
+
+Second new test asserts `DEMO_TRACE` passes the strict validator.
+
+### Polish — ^9^O wording
+
+`DEMO_TRACE.output.english` was `"A Below/Effect in the Operational domain — the Idea brought to Mind that lands as concrete action."` → now `"Below/Effect in the Operational domain — a thought landing as behavior."`. Matches the corrected rationale already in `nl_to_cas_v0.py`. Regression test pins the wording (must contain `below/effect in the operational domain` + `thought landing as behavior`, must NOT contain `idea brought to mind`).
+
+### Non-blocker — smoke test real
+
+`src/__fixtures__/trace_thought_becoming_action.json` is a real REPL trace through `cas atlas-save`, with `trace_id`+`created_at` normalized for determinism. `atlas_v0_smoke.test.ts` no longer skips conditionally — it imports the fixture, runs `validateAtlasTrace`, and asserts hard counts (**4 nodes / 3 edges / input_kind=nl_bridge / inferred_cas ^9^O / matched_pattern "thought becoming action"**). Second smoke test mutates the fixture's edge `target` and asserts the tightened validator rejects it.
+
+### Verification
+
+- `tsc -b --noEmit` clean.
+- Atlas v0 surface: 34/34 vitest pass (Codex's prior count was 33 + skipped smoke; now 34 with no skips, +11 new validator negatives in `trace.test.ts` separately).
+- Full dashboard suite: 215/215 pass (was 199 — Atlas surface contributed +16 net).
+- Inference suite untouched (566/566).
+
+### Build order status
+
+1. ✅ Step 5 polish, Traceability v0, Step 5B NL bridge + Stage 4 spec
+2. ✅ Atlas v0 viewer (Agents A/B/C/D + integration)
+3. ✅ **Atlas v0 patches (a658f6d → 9d467b5)** — demo-safe
+4. ⏳ Awaiting your re-audit. Browser visual QA pass on the TRACE tab is on the recommended next-step list. After QA, next move per your recommendation is v0.5 Inversion Replay / ghost branches.
+
+---
