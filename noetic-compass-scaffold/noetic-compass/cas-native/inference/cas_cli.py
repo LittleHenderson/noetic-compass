@@ -8,6 +8,7 @@ or compilers.
 Subcommands:
 
     cas chat              Launch the interactive REPL (cas_native.inference.chat)
+    cas chat-stage3       Launch the Stage 3 conversation shell (Plain English Mode)
     cas notation [...]    Compile a CAS expression (api.notation.cli)
     cas predict TEXT      One-shot prediction on a single text input
     cas explain EXPR      Generate an English explanation of a CAS expression
@@ -94,6 +95,9 @@ def _banner_lines(version: str) -> list[str]:
         "",
         "Commands:",
         "  cas chat              Launch the interactive REPL (CAS-Native predictions)",
+        "  cas chat-stage3       Launch the Stage 3 conversation shell — Plain English",
+        "                        by default, slash commands /technical /trace /deeper",
+        "                        /simpler /help (per decisions.md 2026-05-13T16:30Z)",
         "  cas notation EXPR     Compile a CAS expression to JSON / lex / parse / check",
         "  cas predict TEXT      One-shot prediction on a text input",
         "  cas explain EXPR      Generate an English explanation of a CAS expression",

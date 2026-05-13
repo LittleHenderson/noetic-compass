@@ -34,6 +34,16 @@ def test_explain_subcommand_registered_in_COMMANDS():
     assert cas_cli.COMMANDS is cas_cli.SUBCOMMANDS
 
 
+def test_chat_stage3_in_dispatcher_help_banner():
+    """REGRESSION PIN (Codex audit fdd8a92): `cas chat-stage3` must
+    appear in the help banner so users can discover the Stage 3
+    conversation shell. Hidden subcommands are dead features."""
+    src = open(cas_cli.__file__, encoding="utf-8").read()
+    assert "cas chat-stage3" in src, (
+        "cas chat-stage3 must appear in the help banner (cas_cli._banner_lines)"
+    )
+
+
 def test_explain_in_dispatcher_help_banner():
     """Running `cas help` mentions the `explain` subcommand so users can
     discover it from the top-level banner."""

@@ -69,16 +69,30 @@ if str(_NOETIC_COMPASS_ROOT) not in sys.path:
 # Input classification
 # ---------------------------------------------------------------------------
 
-# Patterns to detect CAS expression input. Conservative — false negatives
-# (calling a real CAS expression "free-form") are recoverable; false
-# positives (treating English as CAS) crash the decoder.
+# Patterns to detect CAS expression input. Each pattern must require a
+# CAS-shaped context, not a bare letter-number match — otherwise "F1
+# racing" or "PEOPLE" or "EAT" get misread as CAS.
+#
+# Per Codex audit `fdd8a92` 2026-05-13: the classifier must not
+# false-positive on normal English phrases. Each pattern below is
+# scoped so it only fires on CAS-shaped syntax.
 _CAS_PATTERNS = [
-    re.compile(r"\^\d"),                       # ^0..^9 Noetic operator
-    re.compile(r"\bstage[A-Z]\d_\d+_\d+\b"),   # stageA0_4_857 style identifier
-    re.compile(r"^let\s+stage", re.IGNORECASE),  # let stage<X>_... = ...
-    re.compile(r"\^[PCEO]\b"),                 # Domain marker
-    re.compile(r"\|[TAfE]\b"),                 # Register marker
-    re.compile(r"F[1-7]\b"),                   # Drive marker
+    # ^0..^9 Noetic operator. Bare carets don't appear in normal English.
+    re.compile(r"\^\d"),
+    # stageA0_4_857 style identifier — the most CAS-specific signal.
+    re.compile(r"\bstage[A-Z]\d_\d+_\d+\b"),
+    # `let stage<X>_... = ...` — RPM-chain prefix.
+    re.compile(r"^let\s+stage", re.IGNORECASE),
+    # Domain marker ^P / ^C / ^E / ^O — caret-prefixed, not bare letter.
+    re.compile(r"\^[PCEO]\b"),
+    # Register marker |T / |A / |f / |E — pipe-prefixed, not bare letter.
+    re.compile(r"\|[TAfE]\b"),
+    # Drive marker — only fires inside CAS curly-brace context (e.g.
+    # `_{F5}`, `{F1,F2}`) so plain English like "F1 racing" doesn't
+    # trigger.
+    re.compile(r"\{F[1-7]\b"),
+    # The `^N^D_{F_k}|R` compound shape — full CAS state vector tail.
+    re.compile(r"\^\d\^[PCEO]_\{F[1-7]\}"),
 ]
 
 # Phrases that signal "the user is asking about CAS itself."

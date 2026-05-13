@@ -68,6 +68,35 @@ def test_classify_freeform():
     ) == "freeform"
 
 
+def test_classify_does_not_false_positive_on_F1_racing():
+    """REGRESSION PIN (Codex audit fdd8a92): the classifier must not
+    treat "F1 racing" as CAS just because F1 looks like a Drive
+    marker. Drive markers fire only inside CAS curly-brace context."""
+    assert classify_input("F1 racing is exciting") == "freeform"
+    assert classify_input("the F4 tornado") == "freeform"
+    assert classify_input("press F5 to reload") == "freeform"
+
+
+def test_classify_does_not_false_positive_on_other_English():
+    """A handful of English phrases that previously could trip patterns:
+    bare letters that match Domain/Register tokens but lack CAS context."""
+    # Word ending in "P" / "C" / "E" / "O" without caret prefix
+    assert classify_input("the cup is full") == "freeform"
+    # Bare T/A/f/E without pipe prefix
+    assert classify_input("type A personality") == "freeform"
+    # The bare letter "F" plus a number outside CAS braces
+    assert classify_input("Apollo 11 mission") == "freeform"
+    # A normal sentence that mentions "stage" but not the stageX_N_N pattern
+    assert classify_input("the stage was set") == "freeform"
+
+
+def test_classify_drive_marker_inside_braces_still_cas():
+    """The Drive-marker pattern must still match its CAS context — `_{F5}`
+    inside a compound expression."""
+    assert classify_input("^7^P_{F5}") == "cas_expression"
+    assert classify_input("let x = ^7^P_{F5}") == "cas_expression"
+
+
 def test_classify_empty():
     assert classify_input("") == "empty"
     assert classify_input("   ") == "empty"
