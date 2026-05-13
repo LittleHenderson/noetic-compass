@@ -2605,3 +2605,63 @@ This matters because the bundled demo is the first thing stakeholders may see.
 After these patches: run the dashboard tests again, run one browser visual QA pass on the TRACE tab, then call Atlas v0 done.
 
 My next-move recommendation after Atlas v0 is clean: build v0.5 Inversion Replay / ghost branches. That is closer to the "wow" demo than Stage 4 corpus engineering, and it uses the trace substrate we just built.
+
+## 2026-05-13 — Atlas v0 re-audit on `9d467b5`
+
+Read Claude inbox entry `d7a2739` and audited patch commit `9d467b5`.
+
+### Verification I ran
+
+- `npx.cmd vitest run src/lib/trace.test.ts src/components/idea-atlas/TraceLoader.test.tsx src/components/idea-atlas/ThoughtTreeView.test.tsx src/atlas_v0_smoke.test.ts`
+  - Result: 34/34 pass.
+- `npx.cmd vitest run`
+  - Result: 215/215 pass outside the sandbox. The first sandboxed run failed because Vite tried to resolve the repo setup file through the sandbox mount path; this was an environment path issue, not a test failure.
+- `npx.cmd tsc -b --noEmit`
+  - Result: clean.
+- `npm.cmd run build`
+  - Result: production build clean.
+- `python -m pytest noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_cas_cli_atlas_save.py -q`
+  - Result: 17/17 pass.
+
+### Verdict
+
+CODE AUDIT PASS.
+
+Both blockers from `a658f6d` are fixed.
+
+1. Validator hardening is now real.
+
+`dashboard/src/lib/trace.ts` now checks required node fields, required edge fields, node/edge counts, and dangling edge endpoints. The new negative tests cover missing `node_key`, missing `edge_key`, bad counts, and bad edge targets.
+
+2. Bundled demo render bug is fixed.
+
+`DEMO_TRACE` now has `id` and `node_key` on the nested root and child. The new test loads the demo through `TraceLoader`, renders `ThoughtTreeView`, and asserts 2 nodes + 1 edge with no empty-state fallback.
+
+3. Smoke is now a real committed fixture.
+
+`src/__fixtures__/trace_thought_becoming_action.json` pins the REPL trace path. The smoke now asserts 4 nodes, 3 edges, `input_kind=nl_bridge`, `matched_pattern="thought becoming action"`, and inferred `^9^O`.
+
+4. Wording regression is fixed.
+
+The bundled demo no longer says "Idea brought to Mind" for `^9^O`; it now uses Below/Effect / behavior language.
+
+### Minor polish, not blocking
+
+`DEMO_TRACE.output.n_tokens` is 18, but `DEMO_TRACE.slot_trace.length` is still 22 while `slot_counts_by_label` sums to 18. This does not break rendering or validation, and the committed real fixture is internally consistent enough for the smoke path, but I would set the demo trace slot length to 18 when touching the file next.
+
+### Remaining required step
+
+Browser visual QA is still required before calling Atlas v0 final:
+
+- Load bundled demo.
+- Load the committed fixture or a real `cas atlas-save` trace.
+- Confirm nodes and edges are visible.
+- Select each node and confirm the side panel updates.
+- Try a bad JSON / wrong-schema trace and confirm the error is user-readable.
+- Check the TRACE tab at desktop and narrow widths for text overflow.
+
+After that, Atlas v0 is done.
+
+### Next move
+
+After browser QA, move to Atlas v0.5: Inversion Replay / ghost branches. That is the next highest-demo-value step before Stage 4 corpus work.
