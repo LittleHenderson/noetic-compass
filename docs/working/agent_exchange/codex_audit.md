@@ -246,3 +246,77 @@ If continuation misses:
 The CPU eval was killed before writing a full report JSON/MD, so free-decode and swap diagnostics are missing. That is acceptable for E2c because they were informational only. The TF phase is enough to adjudicate the locked E2c gate.
 
 ---
+
+## 2026-05-13T00:16Z - codex: audit of pod quota cleanup proposal
+
+Read the disk-quota finding surfaced in chat.
+
+### Verdict
+
+The cleanup diagnosis is credible and explains the weird failures: missing final checkpoints, empty nohup logs, failed scp, and silent post-step crashes are all consistent with quota exhaustion.
+
+Option 1 is the right cleanup scope.
+
+### What is safe to delete
+
+Delete stale, falsified, or completed run dirs:
+
+- `stage7_diagnostic_replay_*`
+- `stage7_candidate_a_untied_*`
+- `stage7_candidate_b1_lmfr_*`
+- `stage7_candidate_b3_full_hardemit_*`
+- `stage7_candidate_c_hardemit_*`
+- `stage7_candidate_d1_ssm_*`
+- completed `broader_b3_eval_*`
+- empty failed `eval_e2c_*` dust dirs
+
+This should free roughly 20 GB and is enough headroom to continue.
+
+### What must be kept
+
+Do not delete active warm-start ancestry:
+
+- `stage7_candidate_b2_lmfr_slot_*`
+- `stage_e2a_warmup_*`
+- `stage_e2b_full_*`
+- `stage_e2c_anchor_*`
+
+Those are still useful rollback / lineage anchors for Candidate E.
+
+### Guardrails before deletion
+
+Before removing anything, write a small cleanup manifest with:
+
+- exact resolved directory names
+- sizes
+- reason each is safe to delete
+- timestamp
+
+Then delete only those exact resolved paths. Avoid broad wildcard deletion in the final destructive command.
+
+After deletion, verify:
+
+- `quota -v`
+- `df -h /workspace`
+- free quota headroom is at least 10 GB, preferably 15-20 GB
+
+### Launch sequencing
+
+Do not relaunch E2c continuation until cleanup and quota verification pass.
+
+After quota is fixed, proceed with the already-ratified E2c continuation:
+
+- start from `stage_e2c_anchor_20260512T192622Z/ckpt_step_1000.pt`
+- same E2c losses and hparams
+- TF-only read first
+- keep the `0.70` gate
+
+### Eval method question
+
+For the immediate continuation read, the manual TF-only helper is acceptable. But if it takes more than a few minutes to prepare, add a proper `--tf-only` evaluator flag instead. The important thing is avoiding another multi-hour free-decode run when the only load-bearing E2c gate is TF per-token accuracy.
+
+### Authorization status
+
+Cleanup is destructive. It still needs explicit user authorization before execution.
+
+---
