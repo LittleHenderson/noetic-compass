@@ -147,10 +147,12 @@ export function IdeaAtlasPage() {
   const [loadedTrace, setLoadedTrace] = useState<AtlasTrace | null>(null);
   const [traceError, setTraceError] = useState<string | null>(null);
   const [selectedTraceNodeId, setSelectedTraceNodeId] = useState<string | null>(null);
+  const [tracePanelOpen, setTracePanelOpen] = useState(true);
   const handleTraceLoaded = useCallback((trace: AtlasTrace) => {
     setLoadedTrace(trace);
     setTraceError(null);
     setSelectedTraceNodeId(trace.thought_tree.nodes[0]?.id ?? null);
+    setTracePanelOpen(true);
   }, []);
   const handleTraceError = useCallback((message: string) => {
     setTraceError(message);
@@ -758,23 +760,52 @@ export function IdeaAtlasPage() {
           )}
           {loadedTrace && (
             <>
-            <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] px-4 py-3 font-mono text-xs text-emerald-200">
-              Trace loaded: {loadedTrace.thought_tree.node_count} nodes,{' '}
-              {loadedTrace.thought_tree.edge_count} edges. Click a node in the
-              tree to inspect it.
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] px-4 py-3 font-mono text-xs text-emerald-200">
+              <span>
+                Trace loaded: {loadedTrace.thought_tree.node_count} nodes,{' '}
+                {loadedTrace.thought_tree.edge_count} edges. Click a node in the
+                tree to inspect it.
+              </span>
+              <button
+                type="button"
+                onClick={() => setTracePanelOpen((open) => !open)}
+                className="rounded border border-emerald-400/30 bg-black/20 px-3 py-1 text-[10px] uppercase tracking-wide text-emerald-100 transition-colors hover:bg-emerald-500/10"
+              >
+                {tracePanelOpen ? 'Hide Details' : 'Show Details'}
+              </button>
             </div>
-            <div className="min-h-[520px] grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4">
+            <div
+              className={`min-h-[560px] grid grid-cols-1 gap-4 ${
+                tracePanelOpen ? 'lg:grid-cols-[minmax(0,1fr)_360px]' : ''
+              }`}
+            >
               {/* Tree on the left */}
-              <div className="min-h-[420px] rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden">
+              <div className="min-h-[520px] rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden">
                 <ThoughtTreeView
                   tree={loadedTrace.thought_tree as unknown as TreeViewTree}
-                  onNodeClick={(n) => setSelectedTraceNodeId(n.id)}
+                  onNodeClick={(n) => {
+                    setSelectedTraceNodeId(n.id);
+                    setTracePanelOpen(true);
+                  }}
                   selectedNodeId={selectedTraceNodeId}
                   className="h-full w-full"
                 />
               </div>
               {/* Side panel — trace metadata + selected node detail */}
-              <aside className="min-h-[420px] rounded-lg border border-white/[0.06] bg-black/30 p-4 overflow-y-auto font-mono text-[11px] text-slate-300">
+              {tracePanelOpen && (
+              <aside className="min-h-[520px] rounded-lg border border-white/[0.06] bg-black/30 p-4 overflow-y-auto font-mono text-[11px] text-slate-300">
+                <div className="mb-3 flex items-start justify-between gap-3">
+                  <div className="text-accent-teal text-xs font-bold">
+                    TRACE DETAILS
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setTracePanelOpen(false)}
+                    className="rounded border border-white/[0.08] px-2 py-1 text-[10px] uppercase text-slate-400 transition-colors hover:border-emerald-400/30 hover:text-emerald-200"
+                  >
+                    Collapse
+                  </button>
+                </div>
                 <header className="mb-3">
                   <div className="text-accent-teal text-xs font-bold">
                     TRACE METADATA
@@ -933,6 +964,7 @@ export function IdeaAtlasPage() {
                   </section>
                 )}
               </aside>
+              )}
             </div>
             </>
           )}

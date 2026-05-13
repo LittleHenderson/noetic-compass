@@ -102,12 +102,13 @@ describe('TraceLoader — demo button', () => {
         tree={(loaded as AtlasTrace).thought_tree as unknown as ThoughtTree}
       />,
     );
-    // 2 flat nodes, 1 flat edge — exact counts pin against future
+    // 6 flat nodes, 5 flat edges — enough structure to read as an
+    // actual thought tree, not a single debug box.
     // demo trims.
     const nodeGroups = document.querySelectorAll('[data-node-id]');
-    expect(nodeGroups.length).toBe(2);
+    expect(nodeGroups.length).toBe(6);
     const edges = document.querySelectorAll('[data-edge-id]');
-    expect(edges.length).toBe(1);
+    expect(edges.length).toBe(5);
     // Empty-state placeholder must NOT be rendered.
     expect(
       document.querySelector('[data-testid="thought-tree-empty"]'),
@@ -116,6 +117,7 @@ describe('TraceLoader — demo button', () => {
     // CAS expression (may match more than once — SVG <title> + visible
     // text node both carry the label).
     expect(screen.getAllByText('^9^O').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('thought landing as behavior').length).toBeGreaterThan(0);
   });
 
   it('DEMO_TRACE rationale uses Below/Effect language, not "Idea brought to Mind"', () => {

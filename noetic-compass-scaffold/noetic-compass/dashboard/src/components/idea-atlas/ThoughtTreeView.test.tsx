@@ -193,6 +193,7 @@ describe('ThoughtTreeView — empty state', () => {
 describe('ThoughtTreeView — kind colors', () => {
   const SUPPORTED_KINDS = [
     'user_prompt',
+    'cas_expression',
     'model_generation',
     'identifier_attempt',
     'slot_pattern',
@@ -208,6 +209,7 @@ describe('ThoughtTreeView — kind colors', () => {
       node('n3', 'slot_pattern', 'pattern', 'summary'),
       node('n4', 'confidence_marker', 'coverage: weak', 'weak'),
       node('n5', 'nl_bridge', 'a bridge phrase', 'pattern'),
+      node('n6', 'cas_expression', '^9^O', 'inferred'),
     ];
     const gen = node('n1', 'model_generation', 'output text', 'output', children);
     const root = node('n0', 'user_prompt', 'cas expr', 'input', [gen]);
@@ -218,6 +220,7 @@ describe('ThoughtTreeView — kind colors', () => {
       edge('e2', 'n1', 'n3'),
       edge('e3', 'n1', 'n4'),
       edge('e4', 'n1', 'n5'),
+      edge('e5', 'n1', 'n6'),
     ];
     const tree: ThoughtTree = {
       root,

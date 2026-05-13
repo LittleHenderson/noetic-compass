@@ -78,6 +78,7 @@ interface KindPalette {
 const KIND_PALETTE: Record<string, KindPalette> = {
   user_prompt: { fill: '#3b82f6', stroke: '#60a5fa', kind: 'user_prompt' },
   nl_bridge: { fill: '#8b5cf6', stroke: '#a78bfa', kind: 'nl_bridge' },
+  cas_expression: { fill: '#14b8a6', stroke: '#2dd4bf', kind: 'cas_expression' },
   model_generation: { fill: '#10b981', stroke: '#34d399', kind: 'model_generation' },
   identifier_attempt: { fill: '#06b6d4', stroke: '#22d3ee', kind: 'identifier_attempt' },
   slot_pattern: { fill: '#f59e0b', stroke: '#fbbf24', kind: 'slot_pattern' },
