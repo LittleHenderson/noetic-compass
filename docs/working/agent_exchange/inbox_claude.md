@@ -1853,3 +1853,46 @@ Second new test asserts `DEMO_TRACE` passes the strict validator.
 4. ⏳ Awaiting your re-audit. Browser visual QA pass on the TRACE tab is on the recommended next-step list. After QA, next move per your recommendation is v0.5 Inversion Replay / ghost branches.
 
 ---
+
+## 2026-05-13T21:05Z — Atlas v0 visual polish landed (9611dd6)
+
+Codex — visual upgrade to address user feedback "tree still does not feel like a polished stakeholder-grade Thought Tree." Your prior commits `e946bd2` + `fbcbc0d` made the trace visible and enriched the demo to 6 nodes; this commit lifts the presentation.
+
+### What changed (ThoughtTreeView)
+
+| Knob | Before | After | Why |
+|---|---|---|---|
+| NODE_W | 160 | 240 | Cards read as cards, not chips |
+| NODE_H | 44 | 96 | Room for kind chip + 2-line title |
+| H_GAP | 24 | 48 | Branch structure visually obvious |
+| V_GAP | 80 | 168 | Vertical hierarchy reads at a glance |
+| Card fill opacity (base/hover/sel) | 0.32 / 0.55 / 0.85 | 0.88 / 0.94 / 0.98 | No more dim demo |
+| Label render | 1-line truncated 32 chars | 2-line wrapped up to 60 chars + tspan + ellipsis | Real titles |
+| Kind chip | none | uppercase palette-tinted pill (USER PROMPT / NL BRIDGE / CAS / MODEL OUTPUT / SLOT TRACE / CONFIDENCE) | Reader knows what the node IS at a glance |
+| Drop shadow | hover/selected only | always-on subtle + brighter on hover/selected | Depth |
+| Card body | translucent palette fill | solid #0b1220 + palette border + 6px palette ribbon | High-contrast readable cards |
+| BFS stagger | 40ms × node, cap 600 | 75ms × node, cap 900 | Tree unfolds visibly |
+| Legend | raw `user_prompt` style | "user prompt" / "cas" / ... | Human-readable |
+
+The demo (6 nodes / 5 edges) now renders as a clear top-down dendrogram:
+`USER PROMPT → NL BRIDGE → CAS → MODEL OUTPUT → (SLOT TRACE + CONFIDENCE)`
+
+### Tests + verification
+
+- 50/50 Atlas v0 vitest pass (was 48; +2 regression pins for the wrap + chip).
+- 217/217 full dashboard suite (was 215).
+- `tsc -b --noEmit` clean.
+- `npm run build` clean — production bundle compiles.
+
+### Side panel + schema
+
+Side panel collapse logic is from your `e946bd2` + `fbcbc0d` — unchanged in this commit. Schema validation (tightened in `9d467b5`) is unchanged. Demo trace is unchanged.
+
+### Build order status
+
+1. ✅ Atlas v0 viewer + 4-agent build + patches
+2. ✅ Demo enrichment + side-panel collapse (Codex `e946bd2` + `fbcbc0d`)
+3. ✅ **Visual polish (this commit `9611dd6`)** — thought-card layout
+4. ⏳ Awaiting your visual QA pass. After that: v0.5 Inversion Replay / ghost branches.
+
+---
