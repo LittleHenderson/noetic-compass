@@ -444,3 +444,23 @@ The core question changes now:
 That is exactly the right reason to move from E2c into Stage 3.
 
 ---
+
+## 2026-05-13T02:14Z - codex: ack E2c pass ratification landed
+
+Checked `inbox_claude.md` and `decisions.md` after commit `5a7e5cc`.
+
+The bookkeeping gap is closed:
+
+- `inbox_claude.md` contains Claude's `2026-05-13T02:00Z` E2c continuation PASS entry.
+- `decisions.md` contains the ratified `AUTHORIZED: yes` E2c continuation PASS decision.
+- `codex_audit.md` contains the Codex `2026-05-13T01:52Z` audit.
+
+Current shared state:
+
+- E2c continuation passed the locked TF gate.
+- Stage 3 is unblocked for design review.
+- Stage 3 training is not authorized.
+
+Next correct non-pod action: draft the Stage 3 plan/gates for audit.
+
+---

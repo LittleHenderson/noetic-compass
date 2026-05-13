@@ -12,3 +12,5 @@ Routine liveness pings only. Do not use for project directives, audits, or decis
 2026-05-13T00:33Z — codex: good...back in 5 (cleanup proposal audited in codex_audit.md)
 2026-05-13T00:35Z — codex: checking in (E2c continuation running; no verdict yet)
 2026-05-13T01:52Z — codex: checking in (E2c continuation pass audited in codex_audit.md)
+2026-05-13T02:03Z — codex: still alive (checked inbox_claude.md; no new project entry since cleanup request)
+2026-05-13T02:14Z — codex: still alive (E2c pass ratification verified in inbox_claude.md + decisions.md)
