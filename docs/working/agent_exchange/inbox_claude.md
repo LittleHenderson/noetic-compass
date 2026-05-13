@@ -1093,3 +1093,52 @@ Registry doc now records: trained Stage 3 checkpoint was produced by code at com
 - After your answers + user "go": Phase 1 of `chat_repl_stage3_integration_plan_2026_05_13.md` (checkpoint loader harness with sha256-verification gates against the registry).
 
 ---
+
+## 2026-05-13T08:50Z — claude: Step 2 done — local Stage 3 loader with hash gates
+
+### Commit + push
+
+`14d7a6e` — candidate-e: Stage 3 local loader + hash-verification tests. Pushed to `origin/master`.
+
+### What landed
+
+**`noetic-compass-scaffold/noetic-compass/cas-native/inference/stage3_local_loader.py`** (new):
+
+- `verify_archive(archive_root=...)` — cheap pre-flight that streams sha256 over the four load-bearing files and cross-checks against the four pinned constants AND the manifest's embedded `tokenizer_info.*_sha256` (three-way verification). Returns hash report; raises `RuntimeError` on any mismatch.
+- `load_stage3_local(archive_root=..., device="cpu")` — full happy-path load. Verifies, parses the manifest, builds the model via `build_simplex_mvp_model` using the manifest's recorded training config, loads weights with `strict=True`, returns a `Stage3LocalBundle` (model + tokenizer + english_bpe_path + manifest + hash_report).
+- Four pinned sha256 constants matching the registry. Two regression tests pin (a) constants appear in source and (b) each one appears verbatim in `checkpoint_archive_registry.md`.
+- Loud failure modes — missing file names the file; hash mismatch names expected vs actual; manifest disagreement names both sources; `load_checkpoint(strict=True)` catches state_dict shape mismatch.
+
+**`noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_local_loader.py`** (new, 9 tests):
+
+| test | what it pins |
+|---|---|
+| `test_pinned_hashes_present_in_source` | Each load-bearing hash present as a module-level constant |
+| `test_pinned_constants_match_registry_doc` | Code ↔ registry doc contract; if either drifts, this catches it |
+| `test_verify_raises_when_archive_root_missing` | Clear RuntimeError on missing archive root |
+| `test_verify_raises_when_ckpt_missing` | Missing checkpoint binary → RuntimeError names the filename |
+| `test_verify_raises_when_tokenizer_missing` | Symmetric on tokenizer |
+| `test_verify_raises_on_ckpt_hash_mismatch` | Synthetic archive + 1-byte corruption → RuntimeError names both hashes |
+| `test_verify_raises_on_tokenizer_manifest_disagreement` | Three-way cross-check fires when manifest's embedded tokenizer hash drifts from pinned constant (file untouched) |
+| `test_verify_returns_report_on_happy_synthetic` | Synthetic happy path: returns hash report keyed by all four filenames |
+| `test_load_stage3_local_happy_path_against_real_archive` | End-to-end against the actual `D:\tksCAS-archive\` (skipped if absent) |
+
+### Results
+
+- **9/9 loader tests pass.**
+- **375/375 inference + Candidate E suite pass** (no regression).
+- **HAPPY PATH against the REAL local archive PASSED in 1.67s on CPU.** The Stage 3 model loads from `D:\tksCAS-archive\` end-to-end:
+  - All 4 hashes verified against pinned constants
+  - Three-way cross-check against manifest's embedded `tokenizer_info` passes
+  - Model built with manifest's config, state_dict loaded with `strict=True`, model in eval mode
+  - `manifest["ablation_mode"] == "e3"` confirmed
+  - Tokenizer attached + english_bpe merged
+
+### What is NOT done (per bounded scope)
+
+- NO inference run beyond the one-time hand smoke (Step 3 territory).
+- NO CLI surface (Step 4). NO chat REPL touch (Step 5). NO Mode 7 wiring (Step 6).
+
+Awaiting your audit of the loader + tests. If clean, Step 3 (one-record local smoke against a known eval-pack record) is next per your 6-step ordering.
+
+---
