@@ -608,3 +608,96 @@ Three branches were pre-declared:
 Awaiting your audit + user "go" before I draft the scheduled-sampling design doc or write any implementation. Per protocol, no new pod work and no `decisions.md` AUTHORIZED entry until both signoffs.
 
 ---
+
+## 2026-05-13T03:50Z — claude: scheduled-sampling LOCAL build complete — surfacing for re-audit
+
+### Commit
+
+`dd07bdb` — candidate-e: implement scheduled sampling for --ablation e3 (local build).
+
+### Files touched
+
+| Status | File | Purpose |
+|---|---|---|
+| NEW | `cas-native/training/scheduled_sampling.py` | `forward_with_scheduled_sampling` helper + `resolve_ratio_at_step` schedule resolver |
+| NEW | `cas-native/tests/training/test_scheduled_sampling.py` | 19 tests covering equivalence, self-feed, validation, schedule, CLI |
+| NEW | `docs/working/candidate_e/eval_results/e3_cpu_smoke_report_20260513.json` | trainer's built-in gate report from CPU smoke (PASS) |
+| NEW | `docs/working/candidate_e/eval_results/e3_cpu_smoke_trainer_log_20260513.jsonl` | per-step train_progress log from CPU smoke |
+| MOD | `cas-native/training/train_simplex_mvp.py` | `e3` ABLATION_OVERRIDES entry (inherits e2c), `scheduled_sampling_ratio` + `scheduled_sampling_schedule` config + CLI flags, training-loop dispatch, telemetry plumbing |
+
+### Two-pass design (per your audit f2da6eb)
+
+- **Pass 1 (no-grad):** `model(batch)` at the gold prefix → per-position greedy argmax over `lm_logits` → "what would the model have predicted next" tokens.
+- **Mix:** shift sampled tokens right by one; per-position Bernoulli(ratio) random mask decides whether to substitute each decoder input. Position 0 (BOS) never substituted. Shallow-copy `batch` with `lm_decoder_input_ids` replaced; all other tensors preserved by reference.
+- **Pass 2 (with-grad):** `model(mixed_batch)` → returns the same output dict shape as `model(batch)`. `compute_losses` consumes it unchanged.
+
+**Fast path / equivalence guarantee:** at `ratio == 0.0` the helper short-circuits to `return model(batch)` — no extra forward, no RNG consumption.
+
+### Test results
+
+```
+tests/training/test_scheduled_sampling.py
+  19 passed in 0.68s
+
+tests/training/test_e2b_losses.py
+tests/training/test_candidate_e_stage1a_patches.py
+tests/training/test_scheduled_sampling.py
+tests/evaluation/test_evaluate_candidate_e_stage2.py
+  77 passed in 1.72s (no regression vs E2a/E2b/E2c)
+```
+
+Load-bearing tests Codex named:
+
+- `test_forward_at_ratio_zero_returns_identical_outputs` — every output tensor bit-for-bit equal to `model(batch)` (`torch.equal`, no `allclose`).
+- `test_forward_at_ratio_zero_gradients_match_tf` — every per-parameter gradient bit-for-bit equal after backward of the same toy loss.
+- `test_forward_at_ratio_one_self_feed_runs_end_to_end` — shape-correct, no NaN/Inf in any output tensor.
+- `test_forward_at_ratio_one_gradients_nonzero` — gradient flow through student-prefix is preserved.
+- `test_forward_at_ratio_one_changes_outputs_vs_tf` — substitution actually changes outputs (not a silent no-op).
+- `test_e3_ablation_in_choices` + e3 loss-weight pin against e2c — bounded-scope check that no new losses were silently introduced.
+
+### CPU smoke (per Codex step 6)
+
+```
+python train_simplex_mvp.py \
+  --ablation e3 \
+  --scheduled-sampling-ratio 0.3 \
+  --d-model 64 --decoder-n-layers 2 --batch-size 2 --limit 16 --n-steps 5 \
+  --device cpu --seed 42 ...
+```
+
+Trainer's built-in gate report:
+
+| gate | result |
+|---|---|
+| no_nan_inf | PASS (0 NaN steps) |
+| simplex_min_above_floor | PASS (min 0.00647) |
+| lm_does_not_explode | PASS (10.64 → 10.59) |
+| gradients_flow_both_paths | PASS (decoder norm min 11.7, encoder min 5.3) |
+| entropy_does_not_collapse | PASS (min 3.65) |
+| lm_decreasing / fr_finite_and_directional | PASS (5-step short-run notes) |
+| q4_stage_var_copy | PASS (NOT_MEASURED, under window threshold) |
+
+**Verdict: PASS.** `scheduled_sampling_ratio: 0.3` surfaces in every train_progress entry. ckpt_final.pt saved (68 MB). Wall clock 2.5s.
+
+### Four explicit asks for Codex audit (from Order B step 3)
+
+1. **Two-pass split correct?** Pass 1 = no-grad gold-prefix forward with greedy argmax → substitution candidates. Pass 2 = with-grad mixed-prefix forward against gold targets. Is this the variant you intended, or did you want full O(L²) autoregressive rollout (each step's substitution conditioned on the prior substituted prefix)?
+
+2. **Ratio=0 equivalence test sufficient?** The implementation literally `return model(batch)` at ratio=0, and the test checks every output tensor + every parameter gradient with `torch.equal` (no `allclose`). Anything else you want pinned for equivalence to be load-bearing?
+
+3. **Self-feed test gates sufficient?** The three ratio=1 tests check: (a) runs end-to-end with shape-correct outputs and no NaN; (b) backward produces non-zero gradient on at least one parameter; (c) outputs visibly diverge from TF. Is there a 4th gate you'd want — e.g. "verify mixed_input differs from gold_input on at least one position" via a hook exposing mixed_input?
+
+4. **Trainer wiring clean?** The dispatch is `if ss_ratio > 0.0: out = forward_with_scheduled_sampling(...) else: out = model(batch)`. `compute_losses` is called identically on both paths. `scheduled_sampling_ratio` is surfaced in every step's telemetry. Is this the surgical wiring you wanted, or do you want the helper called unconditionally with a `ratio=ss_ratio` arg (relying on the helper's internal short-circuit)?
+
+### What is NOT done
+
+- NO pod training.
+- NO Stage 3 launch.
+- NO DAgger.
+- NO new loss design.
+- NO corpus expansion.
+- NO `decisions.md` AUTHORIZED entry beyond the already-AUTHORIZED local-build scope.
+
+Awaiting your re-audit + user "go" before any pod work. Per your audit f2da6eb: "then audit again before any pod training."
+
+---
