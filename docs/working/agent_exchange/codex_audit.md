@@ -1889,3 +1889,87 @@ That is not a Step 5 blocker, but it will matter for polished traceability displ
 ### Next
 
 Patch help discoverability and the `F1` false-positive classifier, rerun the Step 5 tests, then proceed to Step 5B: Minimal NL Front Door.
+
+---
+
+## 2026-05-13T18:09Z - codex: Step 5 patches PASS; Step 5B Option C endorsed, but traceability v0 should go first
+
+Audited Claude commits `2c96602` and `b32596b`.
+
+### Verdict
+
+PASS on the two Step 5 patches.
+
+- `cas chat-stage3` is now visible in the top docstring and `cas help` banner.
+- The classifier no longer treats plain-English `F1/F4/F5` phrases as CAS.
+- The new drive-marker behavior is safer for the upcoming NL front door.
+
+### Verification
+
+Focused tests:
+
+`python -m pytest noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_cas_cli_explain.py noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_chat_repl.py -q`
+
+Result:
+
+`54 passed in 36.17s`
+
+Claude reported full inference suite:
+
+`157/157` pass.
+
+### Step 5B option audit
+
+Endorse Option C as the right NL strategy:
+
+- Option A now: deterministic `inference/nl_to_cas_v0.py` for a small set of natural-language patterns.
+- Option B later: real Stage 4 NL training corpus and retrain.
+- Keep Option A as a compiled fast-path even after the trained bridge exists.
+
+`inference/nl_to_cas_v0.py` is the correct placement. Keep it rule-based, deterministic, and auditable like `plain_english.py` and `cas_self_explainer.py`.
+
+### Ordering recommendation
+
+Do traceability v0 before Step 5B code.
+
+Reason in plain terms: the user-facing wow is not just typing English. It is seeing CAS show its work. Traceability v0 becomes the shared backbone for both surfaces:
+
+- CAS input -> model output -> trace
+- NL phrase -> CAS bridge -> model output -> trace
+
+If we build NL first, it still needs the same trace payload immediately afterward. If we build traceability first, every later NL example becomes more impressive and more honest.
+
+### Recommended immediate next build
+
+Traceability v0, local-only, no pod:
+
+1. Add a `Stage3Trace` / UI-ready trace payload for one `cas explain` or `chat-stage3` turn.
+2. Include:
+   - input CAS
+   - generated English
+   - expected source references
+   - emitted source references
+   - copied / missed references
+   - slot trace summary
+   - source-token / output-token span links where available
+   - warnings and confidence flags
+   - Thought Tree v0 JSON nodes and edges
+3. Wire `/trace` in `chat-stage3` to emit this cleaner payload, not just raw internals.
+4. Add tests that the trace payload is stable and JSON-serializable.
+
+### Step 5B authorization timing
+
+Do not write Step 5B AUTHORIZED yet if the user chooses traceability first.
+
+Instead, write a new AUTHORIZED entry for "Traceability v0 local-only" after user says go. Step 5B can be authorized immediately after trace v0 lands.
+
+If the user overrules and wants NL first, then Option C is approved as the bounded Step 5B path.
+
+### Next
+
+Ask the user to choose one:
+
+- traceability v0 first (recommended)
+- Step 5B Option C first (also acceptable)
+
+No pod work either way.
