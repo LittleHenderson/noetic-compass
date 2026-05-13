@@ -1973,3 +1973,129 @@ Ask the user to choose one:
 - Step 5B Option C first (also acceptable)
 
 No pod work either way.
+
+---
+
+## 2026-05-13T18:12Z - codex: Traceability v0 scope audit PASS WITH SCHEMA TIGHTENING
+
+Audited Claude's Traceability v0 proposed scope and the existing trace/Atlas docs:
+
+- `docs/working/cas_trace_schema_v0_2026_05_13.md`
+- `docs/working/cas_thought_tree_idea_atlas_codex_audit_2026_05_13.md`
+- `docs/working/agent_exchange/decisions.md`
+
+### Verdict
+
+PASS on the build direction.
+
+Traceability v0 should be built now, before Step 5B. It is the right bridge from the current plain-English REPL to the future Thought Tree / Idea Atlas surface.
+
+The proposed scope is correctly bounded:
+
+- pure functions
+- no new model call
+- no tensor dumps
+- no activation hooks
+- no full Mode 7
+- no visual UI yet
+
+### Required schema tightening before implementation
+
+1. Use a clear schema version name.
+
+Do not use vague `"trace_v0"`.
+
+Recommended:
+
+`"schema_version": "traceability_v0"`
+
+Reason: the existing design doc reserves `"cas_trace_v0"` for the heavier full trace schema. This new object is a lightweight summary trace built from `cas explain` output. The name should make that clear.
+
+2. Source tokens must be indexed objects, not plain strings.
+
+Change:
+
+`"source_tokens": list[str]`
+
+to:
+
+`"source_tokens": [{"index": int, "text": str}]`
+
+Reason: duplicate tokens and repeated identifiers will exist. A string-only list loses identity. The future UI needs stable positions.
+
+3. Per-identifier entries should be occurrence-aware.
+
+Keep the user-facing wording as "identifier" if desired, but internally include occurrence identity:
+
+```json
+{
+  "identifier": "stageA0_4_857",
+  "occurrence_index": 0,
+  "status": "copied",
+  "input_position": 12,
+  "output_position": 4
+}
+```
+
+Reason: the earlier plain-mode audit already found that distinct ideas and repeated source references can diverge. Trace v0 is where that gets fixed structurally.
+
+4. Thought Tree should expose both nested and flat graph forms.
+
+Nested `root.children` is good for a simple tree display, but the Atlas/Thought Tree UI will want node-edge data.
+
+Add:
+
+```json
+"thought_tree": {
+  "root": {...},
+  "nodes": [
+    {"node_id": "...", "node_key": "...", "kind": "...", "label": "..."}
+  ],
+  "edges": [
+    {"edge_id": "...", "edge_key": "...", "source": "...", "target": "...", "kind": "..."}
+  ],
+  "node_count": 0,
+  "edge_count": 0
+}
+```
+
+Use the existing canonical identity rule:
+
+`node_key = kind + role + normalized_label + axis_attrs`
+
+`edge_key = source_key + target_key + kind + label`
+
+Do not force the full Atlas system now. Just put the stable keys in the v0 trace.
+
+5. `/trace` should return the full `traceability_v0` object.
+
+`/tree` can return only the `thought_tree` sub-dict.
+
+Do not leave `/trace` as only the old slot-summary view. The whole point of this step is that the user can ask "show me the trace" and get the clean trace object.
+
+6. Warning flags need one guard:
+
+`no_identifiers_emitted` should fire only when expected identifiers exist and emitted identifiers are zero.
+
+For expressions like `^3^P|A`, there are no stage identifiers to carry over. That should not look like a warning.
+
+### Test additions I want
+
+Add tests for these exact cases:
+
+- repeated identifier/source-reference occurrence gets two distinct trace entries
+- `^3^P|A` produces no false `no_identifiers_emitted` warning
+- `source_tokens` entries include stable indexes
+- `thought_tree.nodes[*].node_key` and `thought_tree.edges[*].edge_key` exist
+- `/trace` returns full `traceability_v0`
+- `/tree` returns only `thought_tree`
+
+### Authorization read
+
+`decisions.md` already has an `AUTHORIZED: yes` entry for Traceability v0 before Step 5B. That is consistent with the user's chat direction and this audit.
+
+Build may proceed with the tightening above. Still local-only. No pod.
+
+### Next
+
+Implement Traceability v0 with these schema adjustments, run the new tests, then surface the trace output from one real Stage 3 local example.
