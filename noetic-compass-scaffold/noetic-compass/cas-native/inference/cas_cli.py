@@ -13,6 +13,7 @@ Subcommands:
     cas predict TEXT      One-shot prediction on a single text input
     cas explain EXPR      Generate an English explanation of a CAS expression
                           using the Stage 3 local checkpoint
+    cas atlas-save [...]  Save a traceability_v0 trace where the Atlas viewer reads
     cas demo              Show the curated 21 starter prompts (demo_prompts)
     cas version           Print version + checkpoint + metric info
     cas help              Print the dispatcher banner
@@ -102,6 +103,8 @@ def _banner_lines(version: str) -> list[str]:
         "  cas predict TEXT      One-shot prediction on a text input",
         "  cas explain EXPR      Generate an English explanation of a CAS expression",
         "                        using the Stage 3 local checkpoint",
+        "  cas atlas-save [...]  Save a traceability_v0 trace where the Atlas viewer",
+        "                        reads (Idea Atlas / Thought Tree consumers)",
         "  cas demo              Show 21 curated starter prompts",
         "  cas version           Show version and metric info",
         "  cas help              Show this banner",
@@ -707,6 +710,322 @@ def _cmd_explain(argv: list[str]) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Subcommand: atlas-save (Step — closes the REPL → Atlas pipeline by
+# parking a traceability_v0 JSON trace where the dashboard viewer reads.
+# Pure stdlib; no torch, no heavy imports. Per Agent D spec
+# 2026-05-13.)
+# ---------------------------------------------------------------------------
+
+# Required top-level keys for a traceability_v0 trace under
+# `--validate-strict`. Mirrors the schema produced by
+# `cas_native.inference.traceability_v0.build_v0_trace`.
+_ATLAS_REQUIRED_KEYS: tuple[str, ...] = (
+    "schema_version",
+    "trace_id",
+    "created_at",
+    "input",
+    "output",
+    "copy",
+    "slot_trace",
+    "confidence",
+    "thought_tree",
+)
+_ATLAS_EXPECTED_SCHEMA_VERSION = "traceability_v0"
+_ATLAS_DEFAULT_OUT_DIR = Path.home() / ".cas_atlas" / "traces"
+
+
+def _atlas_filename_safe_timestamp(created_at: str) -> str:
+    """Convert a `created_at` ISO8601 string into a filename-safe form.
+
+    The trace's `created_at` is `YYYY-MM-DDTHH:MM:SSZ` (colons are
+    illegal in Windows filenames). Strip them but keep the shape so the
+    timestamp remains human-readable.
+    """
+    if not isinstance(created_at, str) or not created_at:
+        # Fall back to UTC now if missing — better than a crash; the
+        # filename still tells the truth (when we WROTE the file).
+        from datetime import datetime as _dt
+        from datetime import timezone as _tz
+        created_at = _dt.now(_tz.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return (
+        created_at.replace(":", "")
+        .replace("-", "")
+        .replace(" ", "_")
+    )
+
+
+def _atlas_load_trace_from_path(path: Path) -> dict[str, Any]:
+    """Read JSON from `path`. Raise on read or parse error with a
+    message that names the path so the user can fix it."""
+    import json as _json
+
+    with path.open("r", encoding="utf-8") as f:
+        return _json.load(f)
+
+
+def _atlas_load_trace_from_stdin() -> dict[str, Any]:
+    """Read a JSON blob from stdin. Raises on parse error."""
+    import json as _json
+
+    data = sys.stdin.read()
+    if not data.strip():
+        raise ValueError("stdin was empty — pipe a trace JSON document")
+    return _json.loads(data)
+
+
+def _atlas_unwrap_trace(payload: dict[str, Any]) -> dict[str, Any]:
+    """Accept either a bare traceability_v0 dict OR a cas-explain
+    report that embeds the trace under `traceability_v0`.
+
+    `cas explain` writes the full report; the trace itself sits at
+    `report["traceability_v0"]`. To support `cas explain ... | cas
+    atlas-save --from -`, unwrap when the embedded form is detected.
+    Returns the bare trace dict.
+    """
+    if not isinstance(payload, dict):
+        return payload  # type: ignore[unreachable]
+    embedded = payload.get("traceability_v0")
+    if isinstance(embedded, dict) and embedded.get("schema_version"):
+        return embedded
+    return payload
+
+
+def _atlas_validate(
+    trace: dict[str, Any],
+) -> tuple[list[str], list[str]]:
+    """Return (errors, warnings). Errors mean strict-mode failure;
+    warnings are emitted to stderr but do not block save in lenient
+    mode.
+    """
+    errors: list[str] = []
+    warnings: list[str] = []
+
+    if not isinstance(trace, dict):
+        errors.append("trace is not a JSON object")
+        return errors, warnings
+
+    sv = trace.get("schema_version")
+    if sv != _ATLAS_EXPECTED_SCHEMA_VERSION:
+        errors.append(
+            f"schema_version is {sv!r}; expected "
+            f"{_ATLAS_EXPECTED_SCHEMA_VERSION!r}"
+        )
+
+    missing = [k for k in _ATLAS_REQUIRED_KEYS if k not in trace]
+    if missing:
+        errors.append(
+            f"missing required top-level keys: {', '.join(missing)}"
+        )
+
+    # Soft warnings — useful info but not strict-mode failures
+    if not trace.get("trace_id"):
+        warnings.append("trace_id is empty or missing")
+    if not isinstance(trace.get("thought_tree"), dict):
+        warnings.append("thought_tree is not an object — UI cannot render")
+
+    return errors, warnings
+
+
+def _atlas_summary(trace: dict[str, Any]) -> tuple[str, int, int]:
+    """Return (trace_id, node_count, edge_count) for the summary line.
+    Missing values render as `unknown` / 0 so the line never crashes."""
+    trace_id = trace.get("trace_id") or "unknown"
+    tt = trace.get("thought_tree") or {}
+    if isinstance(tt, dict):
+        nc = tt.get("node_count")
+        ec = tt.get("edge_count")
+        node_count = int(nc) if isinstance(nc, (int, float)) else 0
+        edge_count = int(ec) if isinstance(ec, (int, float)) else 0
+    else:
+        node_count = 0
+        edge_count = 0
+    return str(trace_id), node_count, edge_count
+
+
+def _cmd_atlas_save(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(
+        prog="cas atlas-save",
+        description=(
+            "Save a traceability_v0 trace JSON to the Atlas viewer's "
+            "watched directory. Closes the REPL→Atlas pipeline: a "
+            "trace produced by `cas explain` (or a future REPL "
+            "/trace cache) is parked where the dashboard reads it."
+        ),
+    )
+    parser.add_argument(
+        "--from",
+        dest="from_source",
+        default=None,
+        help=(
+            "Source of the trace JSON. Pass a file path, or `-` / "
+            "`STDIN` to read from stdin. Mutually exclusive with "
+            "--from-repl-history."
+        ),
+    )
+    parser.add_argument(
+        "--from-repl-history",
+        action="store_true",
+        help=(
+            "Read the most recent trace from the REPL session-state "
+            "cache. NOTE: not yet persistent between REPL sessions; "
+            "today this errors. Pipe a trace file instead."
+        ),
+    )
+    parser.add_argument(
+        "--out-dir",
+        default=None,
+        help=(
+            "Directory to save the trace into. Created if missing. "
+            f"Default: {_ATLAS_DEFAULT_OUT_DIR}"
+        ),
+    )
+    parser.add_argument(
+        "--filename",
+        default=None,
+        help=(
+            "Filename to write. If omitted, uses "
+            "`trace_{trace_id}_{created_at}.json` with a "
+            "filename-safe timestamp."
+        ),
+    )
+    parser.add_argument(
+        "--validate-strict",
+        action="store_true",
+        help=(
+            "Fail with exit code 2 if the trace has the wrong "
+            "schema_version or is missing any required top-level "
+            "key. Without this flag, partial traces are saved with "
+            "a stderr warning."
+        ),
+    )
+    args = parser.parse_args(argv)
+
+    # Source resolution ------------------------------------------------
+    if args.from_repl_history and args.from_source:
+        print(
+            "cas atlas-save: --from and --from-repl-history are "
+            "mutually exclusive.",
+            file=sys.stderr,
+        )
+        return 1
+
+    if args.from_repl_history:
+        print(
+            "cas atlas-save: REPL session cache not yet persistent — "
+            "pipe a trace file instead. Try:\n"
+            "  cas explain \"<expr>\" --json | cas atlas-save --from -",
+            file=sys.stderr,
+        )
+        return 1
+
+    if not args.from_source:
+        print(
+            "cas atlas-save: --from is required. Pass a file path, "
+            "or `-` / `STDIN` to read from stdin.",
+            file=sys.stderr,
+        )
+        return 1
+
+    # Read --------------------------------------------------------------
+    try:
+        if args.from_source in ("-", "STDIN", "stdin"):
+            payload = _atlas_load_trace_from_stdin()
+        else:
+            src_path = Path(args.from_source)
+            if not src_path.exists():
+                print(
+                    f"cas atlas-save: source file does not exist: "
+                    f"{src_path}",
+                    file=sys.stderr,
+                )
+                return 1
+            payload = _atlas_load_trace_from_path(src_path)
+    except (OSError, ValueError) as exc:
+        print(
+            f"cas atlas-save: failed to read trace ({exc!r}).",
+            file=sys.stderr,
+        )
+        return 1
+    except Exception as exc:  # JSONDecodeError, etc.
+        print(
+            f"cas atlas-save: failed to parse JSON ({exc!r}).",
+            file=sys.stderr,
+        )
+        return 1
+
+    trace = _atlas_unwrap_trace(payload)
+
+    # Validate ----------------------------------------------------------
+    errors, warnings = _atlas_validate(trace)
+    for w in warnings:
+        print(f"cas atlas-save: warning — {w}", file=sys.stderr)
+    if errors:
+        if args.validate_strict:
+            for e in errors:
+                print(
+                    f"cas atlas-save: validation error — {e}",
+                    file=sys.stderr,
+                )
+            return 2
+        for e in errors:
+            print(
+                f"cas atlas-save: warning — {e} (continuing without "
+                f"--validate-strict)",
+                file=sys.stderr,
+            )
+
+    # Resolve output --------------------------------------------------
+    out_dir = (
+        Path(args.out_dir) if args.out_dir
+        else (Path.home() / ".cas_atlas" / "traces")
+    )
+    try:
+        out_dir.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        print(
+            f"cas atlas-save: could not create out-dir {out_dir} "
+            f"({exc!r}).",
+            file=sys.stderr,
+        )
+        return 1
+
+    if args.filename:
+        filename = args.filename
+    else:
+        trace_id = trace.get("trace_id") or "unknown"
+        created_at = trace.get("created_at") or ""
+        safe_ts = _atlas_filename_safe_timestamp(created_at)
+        # Keep the prefix `trace_` so the test's `trace_*.json` glob
+        # matches regardless of trace_id shape.
+        filename = f"trace_{trace_id}_{safe_ts}.json"
+
+    out_path = out_dir / filename
+
+    # Write -------------------------------------------------------------
+    import json as _json
+
+    try:
+        with out_path.open("w", encoding="utf-8") as f:
+            _json.dump(trace, f, indent=2, default=str)
+    except OSError as exc:
+        print(
+            f"cas atlas-save: failed to write {out_path} ({exc!r}).",
+            file=sys.stderr,
+        )
+        return 1
+
+    # Report ------------------------------------------------------------
+    trace_id_str, node_count, edge_count = _atlas_summary(trace)
+    # Machine-parseable: the path, on its own line, first.
+    print(str(out_path))
+    print(
+        f"wrote trace {trace_id_str} ({node_count} nodes, "
+        f"{edge_count} edges) -> {out_path}"
+    )
+    return 0
+
+
+# ---------------------------------------------------------------------------
 # Test harness
 # ---------------------------------------------------------------------------
 def _cmd_test(_argv: list[str]) -> int:
@@ -737,6 +1056,7 @@ SUBCOMMANDS: dict[str, Callable[[list[str]], int]] = {
     "notation": _cmd_notation,
     "predict": _cmd_predict,
     "explain": _cmd_explain,
+    "atlas-save": _cmd_atlas_save,
     "demo": _cmd_demo,
     "version": _cmd_version,
     "help": _cmd_help,
