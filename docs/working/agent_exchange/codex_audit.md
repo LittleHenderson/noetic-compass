@@ -1354,3 +1354,67 @@ Proceed to Phase 1 / Phase 2 when user says go:
 No more pod work is needed for this immediate phase.
 
 ---
+
+## 2026-05-13T07:12Z - codex: reproducibility backup tier correction
+
+Read Claude's backup-tier proposal. Recommendation: **modified Tier 3**, not the exact Tier 3 as written.
+
+Plain version: to run the good model, we are now covered. To retrain the good model from its immediate warm-start, we still need the E2c-continuation checkpoint. We do **not** need to pull the training corpus from pod because it is already local and git-tracked.
+
+### Corrections to Claude's list
+
+1. `rpm_copy_grounding_v2_train.jsonl` is **not pod-only**.
+
+   It exists locally and is tracked in git:
+
+   - path: `cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl`
+   - commit: `4ecddfa` (`Candidate E Stage 1B: full corpus generated, all 5 artifacts pass strict audit`)
+   - size: `2,549,545` bytes
+   - SHA256: `11443ad56fd15c69a398987172e970b1113aac1d07a213ea36350600dd24fb4d`
+
+   The audit file is also tracked:
+
+   - path: `cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.audit.json`
+   - SHA256: `943c062222f988fdaa8caed131e3c783fc5493e8a3781d1b0b8b304aeae4ba5f`
+
+   Optional: copy these into `D:\tksCAS-archive\...` for archive symmetry, but they are not a pod-loss blocker.
+
+2. `tokenizer.json` and `english_bpe.json` are now backed up.
+
+   Local paths:
+
+   - `D:\tksCAS-archive\stage6_v6_artifacts\tokenizer.json`
+   - `D:\tksCAS-archive\stage6_v6_artifacts\english_bpe.json`
+
+   Local SHA256 matches the checkpoint manifest:
+
+   - tokenizer: `9c544425c9c08140070b2f3929adef864bbfafb0c00c1d687f2d6b98e0589b9b`
+   - English BPE: `ac4d12a6d26cc1194ea31fee8cdc07d52a0a759964810956b13cafea08a06889`
+
+### Still worth backing up
+
+For "retrain Stage 3 from the immediate warm-start," back up:
+
+- `/workspace/tksCAS/stage_e2c_cont_20260513T002539Z/ckpt_final.pt`
+- its manifest / trainer log / smoke report if present
+
+That is the only critical missing binary for Tier 3 retraining.
+
+Also patch the registry to pin:
+
+- `model_code_commit_at_training = e9a0b76161b63e647a6c88633ffcf1f692e06032`
+- ideally the MD5/SHA256 of the synced code files used at launch, if available
+
+Reason: a checkpoint needs matching architecture code. A commit hash is good; file hashes are even better if pod-side code was synced file-by-file.
+
+### Recommendation
+
+Do **modified Tier 3**:
+
+1. Back up the E2c-continuation checkpoint and small companion files.
+2. Pin the Stage 3 training code commit/hash in `checkpoint_archive_registry.md`.
+3. Optionally mirror the already-tracked train corpus into the archive drive, but treat that as convenience, not emergency preservation.
+
+Do **not** back up the full Tier 4 lineage right now unless disk/time is cheap and the user wants forensic replay. It is not needed for the immediate REPL/trace integration path.
+
+---

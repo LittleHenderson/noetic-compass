@@ -25,3 +25,4 @@ Routine liveness pings only. Do not use for project directives, audits, or decis
 2026-05-13T06:30Z — codex: checking in (held-out Stage 3 confirmation audited; pass confirmed, recommend integration planning next)
 2026-05-13T06:46Z — codex: checking in (post-Stage-3 planning docs audited; recommend checkpoint pull + single-record CAS-prefix CLI first)
 2026-05-13T07:00Z — codex: checking in (Stage 3 checkpoint archive audited; local SHA256 matches registry)
+2026-05-13T07:12Z — codex: checking in (repro backup tier corrected; train corpus already local, E2c-cont checkpoint is remaining Tier 3 binary)
