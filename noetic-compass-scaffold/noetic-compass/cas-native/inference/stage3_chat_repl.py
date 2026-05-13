@@ -488,20 +488,73 @@ def handle_turn(
         return ReplResponse(text=_render_self_explain(entry),
                             kind="self_explain")
 
-    # Freeform — bridge to Step 5B (Codex 2026-05-13 reframe). Not a
-    # flat refusal; positions natural-language-to-CAS as the active
-    # next experiment, not future-distant.
+    # Step 5B Minimal NL Front Door: try the heuristic NL → CAS bridge
+    # before falling through to the refusal. Per `decisions.md`
+    # 2026-05-13T18:25Z. Rule-based, deterministic, no model call.
+    # The matched pattern carries the inferred CAS expression which
+    # we then run through the existing cas-explain pipeline so
+    # Plain Mode + trace + Thought Tree all attach normally.
+    from cas_native.inference.nl_to_cas_v0 import (
+        match_nl_to_cas, list_supported_patterns,
+    )
+    nl_match = match_nl_to_cas(text)
+    if nl_match is not None:
+        try:
+            report = explainer(nl_match.cas_expression)
+        except Exception as exc:
+            return ReplResponse(
+                text=(
+                    f"I read that as: `{nl_match.cas_expression}` "
+                    f"({nl_match.matched_pattern}), but the model "
+                    f"failed to explain it: {exc!r}"
+                ),
+                kind="error",
+            )
+        # Tag the report so /trace / /raw show this came via the NL
+        # bridge — preserves traceability end-to-end.
+        report["nl_bridge"] = {
+            "user_text": text,
+            "matched_pattern": nl_match.matched_pattern,
+            "cas_expression": nl_match.cas_expression,
+            "rationale": nl_match.rationale,
+            "confidence": nl_match.confidence,
+        }
+        state.push_explain(report)
+        # User-facing text: show the inferred CAS + rationale + then
+        # the model's Plain Mode explanation. The user always sees
+        # both — the bridge never hides what it inferred.
+        head = (
+            f"I read that as: `{nl_match.cas_expression}` "
+            f"(matched pattern: {nl_match.matched_pattern}, "
+            f"confidence {nl_match.confidence:.2f})\n"
+            f"\n{nl_match.rationale}\n\n"
+            f"--- model explanation ---\n"
+        )
+        return ReplResponse(
+            text=head + _render_explain_plain(report),
+            kind="nl_bridge_match",
+        )
+
+    # No NL pattern matched — keep the existing bridge-to-Step-5B text
+    # but list supported patterns so the user learns what works.
+    supported_examples = list_supported_patterns()
+    examples_text = "\n".join(
+        f"  - {p}" for p in supported_examples[:6]
+    )
     return ReplResponse(
         text=(
-            "I can answer CAS questions and explain CAS expressions "
-            "right now. Minimal natural-language-to-CAS generation is "
-            "the next experiment — coming after this conversation "
-            "shell stabilizes.\n\n"
-            "Things you can try right now:\n"
-            "  - Ask a CAS question: 'what is CAS?' or 'show me an "
-            "example' or 'go deeper'.\n"
-            "  - Paste a CAS expression: 'let stageA0_4_857 = "
-            "^7^P_{F5}; stageA0_4_857 -> stageA0_4_857'.\n"
+            "I can answer CAS questions, explain CAS expressions, and "
+            "translate a handful of constrained English patterns into "
+            "CAS. Trained natural-language-to-CAS generation is the "
+            "next experiment.\n\n"
+            "Patterns I currently understand (heuristic v0). "
+            "Try one of these as an example phrasing:\n"
+            f"{examples_text}\n\n"
+            "Other things you can try:\n"
+            "  - Ask a CAS question: 'what is CAS?' or 'go deeper'\n"
+            "  - Paste a CAS expression (example: "
+            "'let stageA0_4_857 = ^7^P_{F5}; stageA0_4_857 -> "
+            "stageA0_4_857')\n"
             "  - Type /help for the full command list."
         ),
         kind="freeform_refusal",

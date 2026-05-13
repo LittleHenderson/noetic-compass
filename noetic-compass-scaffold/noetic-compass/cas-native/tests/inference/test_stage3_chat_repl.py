@@ -97,6 +97,71 @@ def test_classify_drive_marker_inside_braces_still_cas():
     assert classify_input("let x = ^7^P_{F5}") == "cas_expression"
 
 
+# ---------------------------------------------------------------------------
+# Step 5B Minimal NL Front Door (heuristic bridge)
+# ---------------------------------------------------------------------------
+
+def test_nl_bridge_match_routes_through_explainer():
+    """REGRESSION PIN: when the NL bridge matches a pattern, the REPL
+    runs the inferred CAS through the explainer and the response
+    surfaces BOTH the inferred CAS expression AND the Plain Mode
+    explanation. Counts as a bridge-match kind, not a refusal."""
+    state = SessionState()
+    explainer = _DummyExplainer()
+    response = handle_turn(
+        "explain a thought becoming action", state, explainer,
+    )
+    assert response.kind == "nl_bridge_match"
+    # The bridge surfaces the inferred CAS so the user sees what was matched
+    assert "^9^O" in response.text
+    # And it surfaces the matched pattern description
+    assert "thought becoming action" in response.text.lower()
+
+
+def test_nl_bridge_pushes_explain_to_history():
+    """The bridge runs through the explainer; the resulting report
+    goes into history so /trace and /tree work afterwards."""
+    state = SessionState()
+    handle_turn("turn anger into CAS", state, _DummyExplainer())
+    assert len(state.history) == 1
+    assert state.history[0]["kind"] == "explain"
+    # The report carries the nl_bridge tag with the user's text
+    report = state.history[0]["report"]
+    assert "nl_bridge" in report
+    assert report["nl_bridge"]["user_text"] == "turn anger into CAS"
+    assert report["nl_bridge"]["cas_expression"] == "^3^E|f"
+
+
+def test_nl_bridge_no_match_still_falls_through_to_refusal():
+    """Unmatched NL input still gets the bridge-to-Step-5B refusal,
+    BUT the refusal now lists supported patterns (heuristic v0)."""
+    state = SessionState()
+    response = handle_turn(
+        "tell me about your weekend", state, _DummyExplainer(),
+    )
+    assert response.kind == "freeform_refusal"
+    # New: lists supported patterns so the user learns what works
+    assert "heuristic" in response.text.lower() or \
+           "pattern" in response.text.lower()
+    # Still mentions both supported input paths
+    assert "CAS expression" in response.text
+    assert "what is CAS" in response.text.lower() or \
+           "what is cas" in response.text.lower()
+
+
+def test_nl_bridge_followed_by_slash_trace_works():
+    """After an NL bridge match, /trace should dump the full v0 trace
+    just like a direct CAS expression."""
+    state = SessionState()
+    handle_turn("explain a thought becoming action", state, _DummyExplainer())
+    response = handle_turn("/trace", state, _DummyExplainer())
+    import json
+    parsed = json.loads(response.text)
+    assert parsed["schema_version"] == "traceability_v0"
+    # Inferred CAS appears in the trace input
+    assert parsed["input"]["cas_expression"] == "^9^O"
+
+
 def test_classify_empty():
     assert classify_input("") == "empty"
     assert classify_input("   ") == "empty"
