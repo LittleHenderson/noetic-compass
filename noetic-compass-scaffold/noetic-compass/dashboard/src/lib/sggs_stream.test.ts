@@ -200,6 +200,168 @@ describe('parseSggsCommit', () => {
     }
   });
 
+  // ── Per-kind validator (Codex audit 3f495ba blocker 2) ──
+  // These pin that malformed commits are rejected BEFORE dispatch so
+  // a missing/typo'd required field can't corrupt the live graph.
+
+  it('rejects a head_commit missing node_id', () => {
+    const payload = JSON.stringify({
+      kind: 'head_commit',
+      schema_version: SGGS_STREAM_SCHEMA_VERSION,
+      turn_id: 't-001',
+      head_index: 0,
+      head_name: 'noetic',
+      // node_id MISSING
+      node_kind: 'identifier_attempt',
+      node_label: '^3^P|A',
+      parent_node_id: 'n0',
+      axis_attrs: {},
+    });
+    const result = parseSggsCommit('head_commit', payload);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toContain('node_id');
+  });
+
+  it('rejects a head_commit missing node_label', () => {
+    const payload = JSON.stringify({
+      kind: 'head_commit',
+      schema_version: SGGS_STREAM_SCHEMA_VERSION,
+      turn_id: 't-001',
+      head_index: 0,
+      head_name: 'noetic',
+      node_id: 'n1',
+      node_kind: 'identifier_attempt',
+      // node_label MISSING
+      parent_node_id: null,
+      axis_attrs: {},
+    });
+    const result = parseSggsCommit('head_commit', payload);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toContain('node_label');
+  });
+
+  it('rejects a head_commit with non-numeric head_index', () => {
+    const payload = JSON.stringify({
+      kind: 'head_commit',
+      schema_version: SGGS_STREAM_SCHEMA_VERSION,
+      turn_id: 't-001',
+      head_index: 'three',
+      head_name: 'noetic',
+      node_id: 'n1',
+      node_kind: 'identifier_attempt',
+      node_label: '^3^P|A',
+      parent_node_id: null,
+      axis_attrs: {},
+    });
+    const result = parseSggsCommit('head_commit', payload);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toContain('head_index');
+  });
+
+  it('rejects a head_commit with parent_node_id that is not string|null', () => {
+    const payload = JSON.stringify({
+      kind: 'head_commit',
+      schema_version: SGGS_STREAM_SCHEMA_VERSION,
+      turn_id: 't-001',
+      head_index: 0,
+      head_name: 'noetic',
+      node_id: 'n1',
+      node_kind: 'identifier_attempt',
+      node_label: '^3^P|A',
+      parent_node_id: 42,
+      axis_attrs: {},
+    });
+    const result = parseSggsCommit('head_commit', payload);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toContain('parent_node_id');
+  });
+
+  it('rejects a head_commit whose axis_attrs is not an object', () => {
+    const payload = JSON.stringify({
+      kind: 'head_commit',
+      schema_version: SGGS_STREAM_SCHEMA_VERSION,
+      turn_id: 't-001',
+      head_index: 0,
+      head_name: 'noetic',
+      node_id: 'n1',
+      node_kind: 'identifier_attempt',
+      node_label: '^3^P|A',
+      parent_node_id: null,
+      axis_attrs: 'not-an-object',
+    });
+    const result = parseSggsCommit('head_commit', payload);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toContain('axis_attrs');
+  });
+
+  it('rejects an edge_commit missing source_node_id', () => {
+    const payload = JSON.stringify({
+      kind: 'edge_commit',
+      schema_version: SGGS_STREAM_SCHEMA_VERSION,
+      turn_id: 't-001',
+      edge_id: 'e0',
+      target_node_id: 'n1',
+      edge_kind: 'parent_child',
+    });
+    const result = parseSggsCommit('edge_commit', payload);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toContain('source_node_id');
+  });
+
+  it('rejects a turn_end missing duration_ms', () => {
+    const payload = JSON.stringify({
+      kind: 'turn_end',
+      schema_version: SGGS_STREAM_SCHEMA_VERSION,
+      turn_id: 't-001',
+      final_trace_id: 'trace-uuid',
+      total_heads: 1,
+      // duration_ms MISSING
+      ended_at: '2026-05-13T20:00:00Z',
+    });
+    const result = parseSggsCommit('turn_end', payload);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toContain('duration_ms');
+  });
+
+  it('rejects a payload with the wrong schema_version', () => {
+    const payload = JSON.stringify({
+      kind: 'turn_start',
+      schema_version: 'sggs_stream_v1', // FUTURE / WRONG
+      turn_id: 't-001',
+      user_text: 'hi',
+      created_at: '2026-05-13T20:00:00Z',
+    });
+    const result = parseSggsCommit('turn_start', payload);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toContain('schema_version');
+  });
+
+  it('rejects a warning commit missing severity', () => {
+    const payload = JSON.stringify({
+      kind: 'warning',
+      schema_version: SGGS_STREAM_SCHEMA_VERSION,
+      turn_id: 't-001',
+      // severity MISSING
+      message: 'coefficients are unfit',
+    });
+    const result = parseSggsCommit('warning', payload);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toContain('severity');
+  });
+
+  it('rejects an error commit missing code', () => {
+    const payload = JSON.stringify({
+      kind: 'error',
+      schema_version: SGGS_STREAM_SCHEMA_VERSION,
+      turn_id: 't-001',
+      // code MISSING
+      message: 'something broke',
+    });
+    const result = parseSggsCommit('error', payload);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toContain('code');
+  });
+
   it('rejects a payload missing turn_id', () => {
     const payload = JSON.stringify({ kind: 'turn_start' });
     const result = parseSggsCommit('turn_start', payload);

@@ -114,16 +114,13 @@ export function useHands(opts: UseHandsOptions): UseHandsResult {
     (async () => {
       try {
         // Lazy-import so test environments / disabled state don't pull
-        // the runtime. Dynamic imports survive tsc --noEmit because
-        // @mediapipe/hands ships its own ambient types when installed,
-        // and is typed-as-unknown via the explicit cast below otherwise.
+        // the runtime. Vite must transform these (no @vite-ignore) —
+        // otherwise the browser cannot resolve bare package specifiers
+        // at runtime (Codex audit 3f495ba blocker 1, 2026-05-13).
+        // Tests mock useHands wholesale; this path only runs on opt-in.
         const [handsMod, cameraMod] = await Promise.all([
-          import(/* @vite-ignore */ '@mediapipe/hands') as Promise<
-            unknown
-          >,
-          import(/* @vite-ignore */ '@mediapipe/camera_utils') as Promise<
-            unknown
-          >,
+          import('@mediapipe/hands') as Promise<unknown>,
+          import('@mediapipe/camera_utils') as Promise<unknown>,
         ]);
         if (cancelled) return;
 

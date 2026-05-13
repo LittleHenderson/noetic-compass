@@ -191,6 +191,66 @@ function isSggsEventKind(value: unknown): value is SggsEventKind {
   );
 }
 
+// ── Per-kind field validators ────────────────────────────────────────────
+//
+// Codex audit 3f495ba blocker 2 (2026-05-13): the previous parser accepted
+// any object whose `kind` was in the known set and whose `turn_id` was a
+// string. That meant a malformed `head_commit` missing `node_id` /
+// `node_label` would still dispatch through `onCommit` and could corrupt
+// the live graph. These validators enforce every field declared by the
+// discriminated-union interfaces above + the schema_version.
+
+const REQ_STR_FIELDS: Record<SggsEventKind, readonly string[]> = {
+  turn_start: ['user_text', 'created_at'],
+  head_commit: ['head_name', 'node_id', 'node_kind', 'node_label'],
+  edge_commit: ['edge_id', 'source_node_id', 'target_node_id', 'edge_kind'],
+  turn_end: ['final_trace_id', 'ended_at'],
+  warning: ['severity', 'message'],
+  error: ['code', 'message'],
+};
+
+const REQ_NUM_FIELDS: Record<SggsEventKind, readonly string[]> = {
+  turn_start: [],
+  head_commit: ['head_index'],
+  edge_commit: [],
+  turn_end: ['total_heads', 'duration_ms'],
+  warning: [],
+  error: [],
+};
+
+function validateCommitFields(
+  kind: SggsEventKind,
+  payload: Record<string, unknown>,
+): string | null {
+  if (payload.schema_version !== SGGS_STREAM_SCHEMA_VERSION) {
+    return (
+      `schema_version expected "${SGGS_STREAM_SCHEMA_VERSION}" ` +
+      `got "${String(payload.schema_version)}"`
+    );
+  }
+  for (const field of REQ_STR_FIELDS[kind]) {
+    if (typeof payload[field] !== 'string') {
+      return `${kind} missing string field "${field}"`;
+    }
+  }
+  for (const field of REQ_NUM_FIELDS[kind]) {
+    if (typeof payload[field] !== 'number') {
+      return `${kind} missing numeric field "${field}"`;
+    }
+  }
+  if (kind === 'head_commit') {
+    // parent_node_id may be string OR null per the type union
+    const parent = payload.parent_node_id;
+    if (parent !== null && typeof parent !== 'string') {
+      return 'head_commit.parent_node_id must be string or null';
+    }
+    if (!isPlainObject(payload.axis_attrs)) {
+      return 'head_commit.axis_attrs must be an object';
+    }
+  }
+  return null;
+}
+
 /**
  * Parse a `data:` line payload into a typed `SggsCommit`.
  *
@@ -231,6 +291,11 @@ export function parseSggsCommit(
   }
   if (typeof parsed.turn_id !== 'string') {
     return { ok: false, error: 'commit is missing turn_id.' };
+  }
+  // Per-kind structural validation (Codex audit 3f495ba blocker 2).
+  const fieldError = validateCommitFields(kind, parsed);
+  if (fieldError !== null) {
+    return { ok: false, error: fieldError };
   }
   // The cast is checked structurally above; downstream consumers
   // discriminate on `kind`.

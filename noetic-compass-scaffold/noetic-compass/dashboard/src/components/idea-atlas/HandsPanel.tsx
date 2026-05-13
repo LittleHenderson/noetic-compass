@@ -133,9 +133,15 @@ export function HandsPanel(props: HandsPanelProps) {
           >
             Activate Camera
           </button>
-          <p className="text-xs text-slate-600" data-testid="sggs-hands-privacy">
-            Camera stays on this machine. No video is uploaded.
-          </p>
+          <div className="space-y-1" data-testid="sggs-hands-privacy">
+            <p className="text-xs text-slate-300">
+              Video stays on this machine. No camera frames are uploaded.
+            </p>
+            <p className="text-[10px] text-slate-500">
+              MediaPipe model files may load from a CDN on first use unless
+              self-hosted.
+            </p>
+          </div>
         </div>
       )}
 

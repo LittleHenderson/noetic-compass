@@ -76,12 +76,21 @@ describe('HandsPanel — initial render', () => {
     expect(screen.queryByTestId('sggs-hands-video')).not.toBeInTheDocument();
   });
 
-  it('shows the privacy notice on the inactive panel', () => {
+  it('shows the privacy notice on the inactive panel with CDN disclosure', () => {
+    // REGRESSION PIN (Codex audit 3f495ba blocker 3): privacy copy must
+    // distinguish "video frames stay local" from "model assets may be
+    // fetched from CDN unless self-hosted". The original wording was
+    // technically true for video but misleading about the MediaPipe
+    // model files loaded via `locateFile` from jsdelivr.
     render(<HandsPanel onGesture={() => {}} />);
     const notice = screen.getByTestId('sggs-hands-privacy');
+    // Video-stays-local promise (strict)
     expect(notice).toHaveTextContent(
-      /camera stays on this machine\. no video is uploaded\./i,
+      /video stays on this machine.*no camera frames are uploaded/i,
     );
+    // CDN disclosure (honest)
+    expect(notice).toHaveTextContent(/mediapipe model files/i);
+    expect(notice).toHaveTextContent(/cdn|self-hosted/i);
   });
 
   it('reports Camera off implicitly (no overlay rendered) before activation', () => {

@@ -92,10 +92,23 @@ def _format_sse_block(event: str, payload: dict[str, Any], event_id: Optional[st
         # event instead so the client at least sees something it can
         # parse. This matches the discipline of `traceability_v0`: never
         # raise from a producer helper that's called inside a model loop.
+        #
+        # Codex audit 3f495ba blocker 2 (2026-05-13): capture the bad
+        # event name BEFORE overwriting it, and emit a payload the
+        # tightened TS validator will actually accept (kind + turn_id
+        # + every required string field for `error` per
+        # parseSggsCommit).
+        bad_event = event
+        original_turn_id = payload.get("turn_id") if isinstance(payload, dict) else None
+        synthetic_turn_id = (
+            original_turn_id if isinstance(original_turn_id, str) else "unknown"
+        )
         event = EVENT_ERROR
         payload = {
+            "kind": EVENT_ERROR,
+            "turn_id": synthetic_turn_id,
             "code": "unknown_event_kind",
-            "message": f"unknown event kind {event!r}",
+            "message": f"unknown event kind {bad_event!r}",
             "schema_version": SCHEMA_VERSION,
         }
 
