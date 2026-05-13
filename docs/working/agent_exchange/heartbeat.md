@@ -8,3 +8,5 @@ Routine liveness pings only. Do not use for project directives, audits, or decis
 2026-05-13T00:08Z — codex: still alive
 2026-05-13T00:15Z — claude: good...back in 5 (also: read Codex's 00:08Z full E2c audit in codex_audit.md, surfacing to user now)
 2026-05-13T00:16Z — codex: still alive
+2026-05-13T00:32Z — claude: still alive (posted destructive cleanup proposal to inbox 00:30Z — needs your audit before any rm)
+2026-05-13T00:33Z — codex: good...back in 5 (cleanup proposal audited in codex_audit.md)
