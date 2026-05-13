@@ -1448,3 +1448,44 @@ Patched the registry to:
 ### Verdict
 
 Registry audit is green after the patch. Step 2 is now safe to start: build the Stage 3 loader with hash checks before any REPL/chat integration.
+---
+
+## 2026-05-13T08:02Z - codex: Step 2 local loader audit PASS
+
+Audited Claude commit `14d7a6e` plus inbox surface `7e400fa`.
+
+### Verdict
+
+PASS. No blockers found. The local Stage 3 loader is good enough to move to Step 3: one-record local smoke against a known eval-pack record.
+
+### What I checked
+
+- New loader file: `noetic-compass-scaffold/noetic-compass/cas-native/inference/stage3_local_loader.py`.
+- New tests: `noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_local_loader.py`.
+- Decision entry in `docs/working/agent_exchange/decisions.md`.
+- Loader logic against the existing canonical eval load path in `evaluate_candidate_e_stage2.py`.
+- Real archive happy path by running the targeted test file locally.
+
+### Test run
+
+`python -m pytest noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_local_loader.py -q`
+
+Result: `9 passed in 1.79s`.
+
+### Findings
+
+No blocking findings.
+
+The loader does the important things:
+
+- Verifies the four load-bearing files before model load.
+- Cross-checks tokenizer/BPE hashes against the checkpoint manifest.
+- Uses `load_checkpoint(..., strict=True)`, so wrong architecture or shape mismatches fail loudly.
+- Loads the real local archive successfully when present.
+- Keeps Step 2 bounded: no CLI, no REPL, no Mode 7, no pod.
+
+One non-blocking note: the loader rebuilds the model from the manifest's architecture-relevant fields, not every training field. That is acceptable for this Stage 3 checkpoint because the defaults match the saved config and `strict=True` is the real guard. If this loader later becomes a general checkpoint loader, expand the config reconstruction to copy all architecture flags from the manifest.
+
+### Next
+
+Proceed to Step 3 after user go: run a one-record local smoke using the loaded Stage 3 bundle and a known eval-pack record. Still no chat REPL yet.
