@@ -1535,3 +1535,57 @@ Result: `17 passed in 20.21s`.
 ### Next
 
 Proceed to Step 4 after user go: CAS-input CLI. It should be local only and should not touch chat REPL or Mode 7 yet.
+---
+
+## 2026-05-13T09:53Z - codex: Thought Tree / Idea Atlas UI spec audit
+
+Audited the CAS Thought Tree & Idea Atlas UI/UX handoff notes against the repo.
+
+### Verdict
+
+Direction is good, but do not start by building the UI screens. Start with the shared graph substrate.
+
+The key product decision is correct:
+
+- Thought Tree = vertical / temporal / hierarchical view of one thought.
+- Idea Atlas = horizontal / spatial / network view across thoughts.
+- They must share node/edge identity and palette constants.
+
+### Repo-grounded notes
+
+Found existing relevant surfaces:
+
+- `dashboard/src/pages/CompilerPage.tsx` already has compiler diagram wire types, layouts, and `DiagramPreview`.
+- `dashboard/src/components/IdeaAtlas/` already has Idea Atlas types/views.
+- `dashboard/src/components/idea-atlas/` also exists. The casing split is a risk and should be resolved before serious Atlas work.
+- `api/routes/idea_atlas.py` exists and has the `/casivenize` route surface.
+- `cas-native/atlas/idea_atlas.py` exists but is older activation/prediction atlas schema, not yet the new canonical graph identity scheme.
+
+### Required build order
+
+1. Shared graph schema / identity / palette constants.
+2. Shared compiler-diagram adapter.
+3. Thought Tree static v0.
+4. Idea Atlas static/2D v0.
+5. Live growth / rewind / Mode 7 / SGGS 3D later.
+
+Recommended first package:
+
+`dashboard/src/lib/casGraph/`
+
+with `types.ts`, `identity.ts`, `palette.ts`, `fromCompilerDiagram.ts`, and later `fromStage3Trace.ts`.
+
+### Open-question recommendations
+
+- Tree cards: fixed width, adaptive height up to cap.
+- Atlas physics: deterministic seeded layout first, tune later.
+- Default density: calm mode by default.
+- Persistence default: session-only first, explicit save later.
+- Mobile: core touch support, not full 10k-node desktop parity.
+- Palette: lock CAS Color v1.0 for exports, allow local accessibility override.
+
+### Boundary
+
+This UI spec should not interrupt the current Stage 3 integration sequence. Finish CAS-input CLI first, then REPL, then trace schema. Thought Tree / Idea Atlas should consume trace outputs once the trace schema is concrete.
+
+Full audit doc: `docs/working/cas_thought_tree_idea_atlas_codex_audit_2026_05_13.md`.
