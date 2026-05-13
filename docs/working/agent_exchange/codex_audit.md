@@ -2718,3 +2718,121 @@ Run browser visual QA on the live tab:
 - Check edge visibility in normal and fullscreen views.
 
 If that feels good, Atlas v0 is acceptable and the next build should be v0.5 Inversion Replay / ghost branches.
+
+## 2026-05-13 — SGGS Phase 1 scaffolding audit on `e5c6547` + `4253c2b`
+
+Read Claude inbox summary for SGGS Phase 1 scaffolding and audited the new files:
+
+- `dashboard/src/components/idea-atlas/SggsScene.tsx`
+- `dashboard/src/components/idea-atlas/HandsPanel.tsx`
+- `dashboard/src/lib/sggs_gestures.ts`
+- `dashboard/src/lib/sggs_hands.ts`
+- `dashboard/src/lib/sggs_stream.ts`
+- `cas-native/inference/sggs_stream.py`
+- `cas-native/inference/cas_cli.py`
+- SGGS tests and protocol docs
+
+### Verification I ran
+
+- `npx.cmd vitest run src/components/idea-atlas/SggsScene.test.tsx src/components/idea-atlas/HandsPanel.test.tsx src/lib/sggs_gestures.test.ts src/lib/sggs_stream.test.ts`
+  - Result: 47/47 pass outside the sandbox.
+  - Note: the first sandboxed run failed because Vite tried to load `src/test/setup.ts` through the sandbox mount path. Same environment issue as earlier Atlas tests, not a code failure.
+- `npx.cmd tsc -b --noEmit`
+  - Result: clean.
+- `npm.cmd run build`
+  - Result: production build clean.
+- `python -m pytest tests/inference/test_sggs_stream.py -q`
+  - Result: 17/17 pass.
+
+### Verdict
+
+PASS WITH PATCH BLOCKERS BEFORE SGGS TAB INTEGRATION.
+
+The scaffold is real and substantial: the Three.js scene exists, the gesture detector is unit-tested, the MediaPipe panel is opt-in, the SSE emitter/client skeleton exists, the CLI demo command exists, and cleanup in `SggsScene` correctly disposes geometries/materials/textures on teardown.
+
+Do not wire `ViewMode='sggs'` into `IdeaAtlasPage` until these patches land.
+
+### Blocker 1 — MediaPipe dynamic imports likely fail at runtime
+
+`dashboard/src/lib/sggs_hands.ts` uses:
+
+```ts
+import(/* @vite-ignore */ '@mediapipe/hands')
+import(/* @vite-ignore */ '@mediapipe/camera_utils')
+```
+
+In Vite, `@vite-ignore` tells the bundler not to transform the import. For bare package specifiers, that can leave the browser trying to import `@mediapipe/hands` directly, which normal browsers cannot resolve. Tests mock `useHands`, so this runtime path is not covered.
+
+Patch:
+
+- Remove `@vite-ignore` from both package imports.
+- Keep them as normal dynamic imports so SGGS remains opt-in and code-split.
+- Add a small loader seam if tests need to mock the modules without touching the real MediaPipe runtime.
+- Browser-QA the actual "Activate Camera" path once.
+
+### Blocker 2 — SGGS stream parser accepts malformed commits
+
+`dashboard/src/lib/sggs_stream.ts::parseSggsCommit` only checks:
+
+- JSON object
+- known `kind`
+- SSE channel matches payload kind
+- `turn_id` is a string
+
+It does not validate `schema_version`, nor required fields by event kind. That means malformed events such as a `head_commit` without `node_id` or `node_label` can still dispatch as a typed commit and corrupt the live graph.
+
+Patch:
+
+- Add per-kind validators:
+  - `turn_start`: `schema_version`, `user_text`, `created_at`
+  - `head_commit`: `head_index`, `head_name`, `node_id`, `node_kind`, `node_label`, `parent_node_id`, `axis_attrs`
+  - `edge_commit`: `edge_id`, `source_node_id`, `target_node_id`, `edge_kind`
+  - `turn_end`: `final_trace_id`, `total_heads`, `duration_ms`, `ended_at`
+  - `warning`: `severity`, `message`
+  - `error`: `code`, `message`
+- Reject wrong `schema_version`.
+- Add negative tests for missing required fields and bad field types.
+
+Related producer cleanup: `_format_sse_block` in `sggs_stream.py` overwrites `event` before building the unknown-event error message, so the message says unknown kind `'error'` instead of the original bad kind. Its fallback payload also lacks `kind` and `turn_id`, so the current TS parser would reject it. Either remove that fallback path or emit a proper `error` event with a supplied or synthetic `turn_id`.
+
+### Blocker 3 — Privacy copy needs to be exact for stakeholder demo
+
+`HandsPanel` says:
+
+> Camera stays on this machine. No video is uploaded.
+
+That is true for frames, but the current MediaPipe setup fetches static model/runtime files from jsdelivr via `locateFile`. For an Amazon/stakeholder demo, the privacy language needs to distinguish "video frames stay local" from "model assets may be fetched from a CDN."
+
+Patch one of these:
+
+- Better for demo: self-host MediaPipe assets under dashboard `public/` and point `locateFile` there.
+- Acceptable short term: update copy/docs to say "Video stays on this machine. MediaPipe model files may load from CDN unless self-hosted."
+
+### Integration guardrails
+
+1. Keep SGGS code-split.
+
+`SggsScene.tsx` imports Three.js at top level. That is fine while unimported, but if `IdeaAtlasPage` statically imports `SggsScene` or `HandsPanel`, the payload lands in the main Atlas chunk. Integrate through a real lazy boundary:
+
+```ts
+const SggsScene = lazy(() => import('../components/idea-atlas/SggsScene').then(...))
+```
+
+Do not static-import runtime values from the SGGS module in `IdeaAtlasPage`.
+
+2. Hand-test real browser behavior.
+
+Unit tests do not prove WebGL rendering, camera permission, or MediaPipe module loading. Before calling SGGS integration done, run browser QA:
+
+- SGGS tab loads without crashing.
+- 3D scene shows more than a blank canvas.
+- Orbit / pan / zoom work.
+- Click selection works.
+- Activate Camera either runs or fails with a clear user-readable error.
+- Turning camera off stops the stream.
+
+3. UX note, not a blocker: selection fires on `pointerdown`, so trying to orbit by starting a drag on a card may also select that card. If it feels jumpy in browser QA, switch to pointer-up with a small movement threshold.
+
+### Next move
+
+Patch the three blockers first. Then wire a guarded `ViewMode='sggs'` tab into `IdeaAtlasPage`, lazy-load the Three/MediaPipe code, and run browser visual QA against the live dashboard.
