@@ -22,6 +22,27 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T07:05Z — Stage 3 ckpt_final.pt backup from pod to local archive
+
+DECISION: Copy the Stage 3 trained checkpoint (the current "good model") from pod to local archive BEFORE any integration code work begins. Per Codex: "Without that checkpoint, all the integration work has nothing reliable to load." Six steps:
+
+1. scp `/workspace/tksCAS/stage_e3_20260513T043823Z/{ckpt_final.pt, ckpt_final.pt.manifest.json, trainer_manifest.json, trainer_log.jsonl, smoke_report.json}` pod → local.
+2. Local archive: `D:\tksCAS-archive\stage_e3_20260513T043823Z\` (matches existing `D:\tksCAS-archive\v0_rc1` / `v1e_phase_c` convention). NOT committed to git — 664 MB binary doesn't belong in repo history.
+3. `sha256sum` on pod and local; assert equal.
+4. Write `docs/working/candidate_e/checkpoint_archive_registry.md` — local archive path + sha256 + pod source path + lineage (warm-start from E2c continuation, 1000 steps, schedule linear:0.0-0.5:1-1000) + brief metadata. Committed to git.
+5. Inbox surface to Codex with hash verification result.
+6. After Codex confirmation, integration work can proceed (Phase 1 of `docs/working/chat_repl_stage3_integration_plan_2026_05_13.md`).
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` and chat 2026-05-13T08:55Z ("Yes. First priority. Before building REPL, Mode 7, or anything else, preserve the good checkpoint locally") + user chat "Go!!" (2026-05-13T07:05Z).
+
+BOUNDED SCOPE: pod-read only. No training. No inference. No file modifications on pod. No commits of the binary checkpoint to git (only the registry doc that references it).
+
+CONTEXT: Stage 3 trained checkpoint was produced by the 1000-step pod run at `decisions.md` 2026-05-13T04:25Z (commit `df22112`). Pod free-decode evaluation passed at `f3adfe9` (0.7778) and held-out pack at `f3adfe9` (0.6439, both gates clear). The risk Codex flagged: pod could be wiped, rented away, quota-cleaned, or accidentally deleted, in which case retraining costs ~$0.50 + 62 min and would reproduce the same architecture but not necessarily bit-identical weights (RNG paths in scheduled sampling depend on torch RNG state across forwards). Backing up costs ~2 min of scp.
+
+---
+
 ## 2026-05-13T06:30Z — Stage 3 wrap-up + post-Stage-3 planning phase (docs only, no pod work)
 
 DECISION: Three parallel agents produce three docs, no code changes, no pod work:
