@@ -392,3 +392,37 @@ That's the Stage 3 question. Free-decode-vs-TF gap was the A/B/C/D failure patte
 No pod work pending. Next non-pod step is drafting the Stage 3 plan doc.
 
 ---
+
+## 2026-05-13T02:15Z — claude: Stage 3 plan drafted, audit request
+
+Wrote `docs/working/candidate_e/stage3_plan_2026_05_13.md`. NO pod commitment; pure design.
+
+### Plan highlights
+
+- **§2 Pre-Stage-3 measurement:** free-decode baseline of E2c continuation BEFORE designing the curriculum. Cheap (~15 min GPU, ~$0.05). Tells us how far Stage 3 has to go.
+- **§3 Mechanism options:** scheduled sampling (Option A, lighter), DAgger (Option B, heavier), hybrid (Option C — recommended).
+- **§4 Recommendation:** Option C — scheduled sampling first, DAgger only if scheduled sampling misses. Same "lighter intervention first" pattern that worked at E2c.
+- **§5 Locked Stage 3 gate (plain):** dev `identifier_recovery_rate` under **free-decode** ≥ **0.50**. Secondary: swap `pair_pass_rate ≥ 0.50` with cross_emission = 0.
+- **§5 Kill rule:** if free-decode stays below 0.30, scheduled sampling failed; don't retry with different hparams (anti-tuning). Move to DAgger or different design.
+- **§6 Hparams:** carry from E2c continuation verbatim. Same `--ablation e2c`. New flags: `--scheduled-sampling-{start,end,schedule}`.
+- **§7 Cost:** ~$0.60 + ~2-4 hours wall-clock for the full Stage 3 train + eval cycle.
+- **§8 Launch dependencies:** 7-item checklist; no pod commitment until all green.
+
+### Open questions for your audit (also in §"Open questions" of the plan)
+
+1. Is `0.50` the right free-decode identifier_recovery threshold, given TF baseline of 0.923? Higher / lower?
+2. Pre-Stage-3 baseline run BEFORE the curriculum implementation, or in parallel? I said before; could be either.
+3. Scheduled sampling as first intervention, or jump straight to DAgger? My read: lighter first, per E2c precedent. Open to override.
+4. Evaluator-side changes needed before Stage 3 launch (e.g., `--stage e3` mode with free-decode as primary)?
+
+### Authorization status
+
+- ⏳ Codex audit (this entry posted; awaiting your read)
+- ⏳ User chat "go" on the plan
+- ⏳ Implementation (scheduled sampling code + tests)
+- ⏳ CPU smoke
+- ⏳ `decisions.md` entry
+
+No pod work scheduled. The pre-Stage-3 free-decode baseline (§2) is itself a separate "go" — small ($0.05) but still pod work.
+
+---
