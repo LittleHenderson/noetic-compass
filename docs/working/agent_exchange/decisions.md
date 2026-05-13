@@ -22,6 +22,48 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T17:30Z — Traceability v0 (before Step 5B per Codex re-ordering)
+
+DECISION: Build Traceability v0 BEFORE Step 5B (NL bridge). Per Codex audit `8e0ae2d` 2026-05-13: "traceability is the thing that makes CAS different... once trace v0 exists, every CAS answer and every future NL answer can show what CAS read / what the model generated / source references carried over / missed / slot pattern / confidence-warnings / Thought Tree JSON." Step 5B Option C remains the right NL path; it just comes after the trace backbone.
+
+Scope this entry — Traceability v0:
+
+1. New module `noetic-compass-scaffold/noetic-compass/cas-native/inference/traceability_v0.py`:
+   - `build_v0_trace(report) -> dict[str, Any]` — pure function. Takes the cas-explain report (already has plain_english + identifiers + slot_summary) and produces the UI-ready trace dict.
+   - 7 top-level sections per Codex's named field list: `schema_version` + `trace_id` + `created_at` (object-traceability per `feedback_object_traceability_required.md`), `input` (cas_expression + source_tokens), `output` (english + n_tokens), `copy` (copied / missed / coverage + per_identifier entries), `slot_trace` (length + counts_by_human_label + longest_stage_var_run + raw_trace), `confidence` (qualitative bands + caveats + structured warning_flags), `thought_tree` (root + node_count + edge_count, UI-consumable JSON).
+   - Pure functions only. No model call. No new tensors. Consumes existing cas-explain output.
+2. New module `inference/thought_tree.py`: tiny helper that builds the Thought Tree node-edge structure from copy + slot data. Public surface: `build_thought_tree(report) -> dict`. Separated so the eventual UI consumer can import it directly without the rest of traceability_v0.
+3. REPL extension: add `/tree` slash command that dumps the Thought Tree JSON for the last turn.
+4. cas-explain output dict gains `traceability_v0` sub-dict so saved `.tmp/cas_explain_*.json` files contain the full trace for UI consumption.
+5. Tests in `tests/inference/test_traceability_v0.py` + `tests/inference/test_thought_tree.py`:
+   - Each schema field populated from synthetic reports
+   - Warning flags fire on correct structural conditions (low_coverage / no_identifiers_emitted / slow_decode)
+   - Thought Tree node + edge counts are correct for known inputs
+   - JSON round-trip cleanly (json.dumps → json.loads → same shape)
+   - REPL `/tree` returns valid JSON
+
+NOT in scope this entry (full Mode 7 territory):
+- Per-position lm_logits / p_copy tensor dumps
+- Activation hooks
+- Simplex trajectory visualization
+- Per-layer L2 dumps
+- Inversion Replay alternates (ghost branches)
+- Visual rendering (Living Thought Atlas UI)
+
+NOT in scope this entry (Step 5B Option C — next):
+- NL → CAS heuristic bridge (`nl_to_cas_v0.py`)
+- Stage 4 corpus design
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` 2026-05-13 (commit `8e0ae2d`, "Traceability v0 first. Then Step 5B NL bridge.") + user chat (2026-05-13T17:30Z, ratifies Codex's order).
+
+BOUNDED SCOPE: pure-function additive code. The trace is built from already-computed fields in the cas-explain output. No new model plumbing. No Mode 7 wiring beyond what v0 enables.
+
+LIVING THOUGHT ATLAS FRAMING: per memory `project_living_thought_atlas_flagship_2026_05_13.md`, the Atlas is the flagship presentation layer. Traceability v0 is the schema contract that flows trace data INTO the Atlas. Atlas implementation remains downstream.
+
+---
+
 ## 2026-05-13T16:30Z — Step 5: CAS conversation shell (REPL) + Step 5B name reserved (Minimal NL Front Door)
 
 DECISION: Build the first real CAS conversation shell as Step 5 of Codex's post-Stage-3 ordering. Plain English Mode is the default reply layer; technical layers behind slash commands; CAS self-explanation is folded into the REPL (not a separate `cas explain-cas` subcommand) per Codex's earlier audit. Free-form NL chat politely declines for now — that's Step 5B (Minimal NL Front Door), authorized by Codex's 2026-05-13 chat directive but NOT in this entry's scope.
