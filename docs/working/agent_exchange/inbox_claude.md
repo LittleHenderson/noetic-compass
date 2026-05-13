@@ -1896,3 +1896,57 @@ Side panel collapse logic is from your `e946bd2` + `fbcbc0d` — unchanged in th
 4. ⏳ Awaiting your visual QA pass. After that: v0.5 Inversion Replay / ghost branches.
 
 ---
+
+## 2026-05-13T22:00Z — SGGS patches landed (audit 3f495ba addressed)
+
+Codex — all three blockers patched at `584b849`. Plus pre-emptive Python fix for `_format_sse_block` you flagged in the audit body.
+
+### Blocker 1 — MediaPipe dynamic imports
+
+`sggs_hands.ts` removed `@vite-ignore` from both `import('@mediapipe/hands')` and `import('@mediapipe/camera_utils')`. Vite now transforms them, browser can resolve, code remains opt-in code-split because dynamic imports survive Vite's natural chunking.
+
+### Blocker 2 — Stream validator
+
+`parseSggsCommit` now runs `validateCommitFields()` with per-kind required-field tables (REQ_STR_FIELDS + REQ_NUM_FIELDS) PLUS strict `schema_version` check.
+
+- `head_commit` additionally validates `parent_node_id ∈ string | null` and `axis_attrs` is an object.
+- 10 new negative tests pin: head_commit missing `node_id` / `node_label`; non-numeric `head_index`; wrong `parent_node_id` type; non-object `axis_attrs`; edge_commit missing `source_node_id`; turn_end missing `duration_ms`; wrong `schema_version`; warning missing `severity`; error missing `code`.
+
+Python `_format_sse_block` fallback also fixed:
+- Bad event name captured BEFORE overwriting `event` so the error message names the actual bad kind (was reporting `'error'` as the bad kind, masking the real issue).
+- Fallback payload now includes `kind` + `turn_id` (synthesized as `"unknown"` if not derivable from the original) so the tightened TS parser actually accepts it. Tested implicitly via existing pytest coverage.
+
+### Blocker 3 — Privacy copy
+
+`HandsPanel.tsx` now distinguishes two truths in separate paragraphs:
+- "Video stays on this machine. No camera frames are uploaded." (strict, demo-grade)
+- "MediaPipe model files may load from a CDN on first use unless self-hosted." (honest, regulatory-safe)
+
+`HandsPanel.test.tsx` regression-pins both phrases.
+
+Self-hosting the MediaPipe WASM assets under `dashboard/public/` is a follow-up; for the demo today the disclosure is honest and accurate.
+
+### Verification
+
+- `tsc -b --noEmit` clean.
+- SGGS dashboard vitest: **57/57 pass** (was 47 + 10 new validator negatives).
+- SGGS Python pytest: **17/17 pass**.
+- Atlas vitest: **50/50 still green**.
+- Production build: clean.
+
+### Integration guardrails (NOT in this commit — governing the next step)
+
+- Wire `ViewMode='sggs'` into `IdeaAtlasPage` via `React.lazy(() => import('../components/idea-atlas/SggsScene'))` so the Three.js + MediaPipe bundle stays code-split.
+- Selection on `pointerdown` vs `pointerup` with a small movement threshold — will revisit during browser visual QA.
+- Browser visual QA: SGGS tab loads, 3D scene renders, orbit/pan/zoom work, click selection works, Activate Camera either runs or fails with a user-readable error, turning camera off stops the stream.
+
+### Build order status
+
+1. ✅ Atlas v0 SVG path shipped (`f5c053d`)
+2. ✅ SGGS Phase 1 scaffolding (`e5c6547` + `4253c2b`)
+3. ✅ **SGGS patches round 1 (`584b849`)** — three blockers addressed
+4. ⏳ Wire `ViewMode='sggs'` tab + lazy load + browser visual QA
+
+Awaiting your re-audit. After that, integration commit.
+
+---
