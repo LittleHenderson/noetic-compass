@@ -3006,3 +3006,144 @@ After the two patches:
 ### Next Move
 
 Patch explicit height + error boundary, then run browser visual QA. If that looks good, SGGS Phase 1 integration is acceptable and the next build should be the actual showpiece layer: replay / slow-motion / ghost growth, not more backend training.
+
+## 2026-05-13 — TRACE 3D visual polish audit on `21ee636`
+
+Audited Claude's TRACE 3D polish commit `21ee636`:
+
+- `dashboard/src/components/idea-atlas/SggsScene.tsx`
+- `dashboard/src/pages/IdeaAtlasPage.tsx`
+
+### Verification I ran
+
+- `npx.cmd vitest run`
+  - Result: 274/274 pass.
+- `npx.cmd tsc -b --noEmit`
+  - Result: clean.
+- `npm.cmd run build`
+  - Result: clean.
+  - Confirmed `SggsScene-ReHb35fx.js` remains a separate lazy chunk: 518.21 kB / 129.67 kB gzip.
+- Read the SGGS animation/fullscreen code directly.
+
+### Verdict
+
+VISUAL DIRECTION IS RIGHT. NOT DEMO-READY UNTIL FOUR PATCHES LAND.
+
+What is good:
+
+- `SGGS` tab is relabeled to `TRACE 3D`, which is clearer for users.
+- Selection no longer washes the body color toward gray/white, so card text should stay readable.
+- Palette halos, selected pulse, legend, fullscreen button, ambient float, and bounce are the right kind of "alive" visual language for the stakeholder demo.
+- The lazy chunk split still works; SGGS remains isolated from the main Atlas path.
+
+### Blocker 1 — Prior explicit-height patch is still missing
+
+The SGGS wrapper is still:
+
+```tsx
+className="relative min-h-[560px] ..."
+```
+
+and `SggsScene` is still:
+
+```tsx
+className="h-full w-full"
+```
+
+This does not fully close the risk from audit `6b8add4`: a `height: 100%` child does not reliably fill a parent that only has `min-height`. The scene can still mount against the smaller internal component height instead of the intended 560px+ stakeholder canvas.
+
+Patch:
+
+```tsx
+className="relative h-[min(72vh,760px)] min-h-[560px] ..."
+```
+
+or, if Tailwind arbitrary `min()` is not accepted in this setup:
+
+```tsx
+className="relative h-[560px] ..."
+```
+
+### Blocker 2 — Prior error boundary patch is still missing
+
+`Suspense` handles the lazy chunk loading wait, but it does not catch:
+
+- WebGLRenderer creation failure,
+- unsupported WebGL,
+- chunk load error after request starts,
+- runtime errors inside `SggsScene`.
+
+Patch:
+
+- Add a small local error boundary around `SggsScene`.
+- Fallback text:
+
+> 3D scene could not start. Try refreshing, updating your browser, or using TRACE view.
+
+This is required for a stakeholder-facing "wow" tab. A clean fallback is much better than a blank or crashed panel.
+
+### Blocker 3 — Halo geometry/material leaks on unmount
+
+`SggsScene` now creates `bundle.halo`, but cleanup disposes body/ribbon/outline/sprite only:
+
+```ts
+bundle.body.geometry.dispose();
+...
+bundle.outline.geometry.dispose();
+...
+if (bundle.sprite) ...
+```
+
+No `bundle.halo.geometry.dispose()` and no halo material dispose.
+
+Patch:
+
+```ts
+bundle.halo.geometry.dispose();
+(bundle.halo.material as MeshBasicMaterial).dispose();
+```
+
+This matters because SGGS will be repeatedly opened/closed during demos and browser QA.
+
+### Blocker 4 — "Bounce on touch" only fires when selectedNodeId changes
+
+Bounce is triggered in a React effect keyed on `selectedNodeId`. In `IdeaAtlasPage`, clicking a card calls:
+
+```tsx
+onNodeClick={(n) => setSelectedTraceNodeId(n.id)}
+```
+
+If the card is already selected, React sees the same id and no prop change happens. That means repeated taps/clicks on the selected card do not bounce, even though the user asked for "bounce when hit or touched."
+
+Patch options:
+
+- Best: in `SggsScene.onPointerDown`, set `bundle.bounceStartedAt = performance.now()` immediately before calling `onNodeClickRef.current`.
+- Or add a `selectedTraceTouchNonce` prop from `IdeaAtlasPage`, but that is heavier.
+
+The first option is direct and local.
+
+### Non-blocking visual QA notes
+
+- Edges do not bob with the floating cards. The float amplitude is small, so this may look fine, but if browser QA shows cards detaching from lines, either make edges update each frame or reduce float amplitude.
+- Halo planes are not `DoubleSide`. Card bodies are double-sided, so cards remain visible from behind, but halos may disappear when orbiting behind a card. If the "omnidirectional spin" feel depends on glow from every angle, set the halo material `side: DoubleSide`.
+- Fullscreen toggle is useful, but real Fullscreen API behavior still needs browser QA.
+
+### Next Move
+
+Patch the four blockers, rerun:
+
+- SGGS vitest
+- full dashboard vitest
+- `tsc -b --noEmit`
+- `npm run build`
+
+Then run browser visual QA on `http://localhost:3001/idea-atlas`:
+
+- Load complex demo.
+- Open TRACE 3D.
+- Confirm large nonblank 3D canvas.
+- Orbit/zoom.
+- Click several cards.
+- Click the same selected card twice and confirm bounce both times.
+- Enter/exit fullscreen.
+- Switch TRACE ↔ TRACE 3D and confirm selected card persists.
