@@ -770,3 +770,73 @@ CPU smoke re-run after refactor — verdict PASS, **loss trajectory bit-for-bit 
 Awaiting your re-audit + user "go" before any pod work.
 
 ---
+
+## 2026-05-13T05:50Z — claude: Stage 3 trained + evaluated — STRONG PASS
+
+### Commits
+
+- `a881b12` — decisions.md AUTHORIZED entry for the Stage 3 pod training run.
+- `df22112` — Stage 3 e3-mode eval result + findings + report archived at `docs/working/candidate_e/eval_results/e3_post_training_*_20260513T054125Z.{md,json}`.
+
+### What ran
+
+**Training (04:38Z → 05:40Z, 62 min wall, RTX A6000, exit 0):**
+
+- `--ablation e3 --scheduled-sampling-schedule "linear:0.0-0.5:1-1000" --n-steps 1000`
+- Warm-start: `stage_e2c_cont_20260513T002539Z/ckpt_final.pt`
+- Identical hparams to E2c continuation (lr 1e-4, batch 16, max_cas_prefix 192, seed 1729)
+- Both checkpoints saved: `ckpt_step_500.pt` and `ckpt_final.pt`
+- Loss trajectory: classic SS dynamic — model struggles mid-ramp at step ~675 (loss_total 1.82, copy_acc 0.84), then recovers and surpasses baseline by step 1000 (loss_total 1.10, copy_acc **0.96**, loss_copy 0.22).
+
+**Eval (05:41Z → 05:49Z, 8 min wall, --stage e3, exit 0):**
+
+- `ckpt_final.pt` measured on `rpm_copy_grounding_v2_dev` (200 records) + `source_swap_dev` (50 pairs).
+- Same eval inputs as e3-baseline so the comparison is apples-to-apples.
+
+### Headline
+
+| metric | e3-baseline (before SS training) | e3 post-training | Δ |
+|---|---:|---:|---:|
+| **Free-decode identifier_recovery_rate** (PRIMARY GATE) | 0.4412 | **0.7778** | **+33.66 pp** |
+| **Swap cross_emission_count** (HARD SAFETY) | 0 | **0** | 0 |
+| Free-decode full-record recovery | 0.195 | 0.535 | +34 pp |
+| Swap pair_pass_rate | 0.04 | 0.38 | 9.5× |
+| TF identifier_recovery (control) | 0.6605 | 0.7392 | +7.87 pp |
+| TF per_token_accuracy (control) | 0.9235 | 0.9166 | -0.69 pp |
+
+**Per the gates you locked at decisions.md 2026-05-13T03:30Z:**
+
+- PRIMARY (≥0.50): 0.7778 ⇒ **PASS**
+- STRONG (≥0.70): 0.7778 ⇒ **STRONG PASS**
+- HARD SAFETY (==0): 0 ⇒ **PASS**
+
+Evaluator exit was 0 (overall_pass = True).
+
+### Notable finding — TF→free-decode gap reversed
+
+Before scheduled sampling: `66.05% TF → 44.12% free-decode` = **−21.93 pp gap** (the exposure-bias signature you flagged).
+
+After scheduled sampling: `73.92% TF → 77.78% free-decode` = **+3.86 pp** (free-decode now *exceeds* TF).
+
+The cheap one-step variant of scheduled sampling not only closed the gap, it inverted it. Consistent with the SS literature where training on partial-self-generation can make the model more robust to its own output distribution than to gold.
+
+### Subsidiary improvements
+
+- TF identifier recovery improved too (0.66 → 0.74) — no TF regression from scheduled sampling.
+- TF per_token_accuracy basically unchanged (0.92 → 0.92).
+- Swap pair_pass_rate went from 0.04 (essentially zero) to 0.38 — the model now correctly identifies pair membership 9.5× more often. Hard safety zero-leakage held.
+- Span "right_start_drift" rate dropped 0.30 → 0.23. Model starts spans at the correct position more often.
+
+### Open ask for Codex audit
+
+1. Is this enough to call Stage 3 done, or do you want broader free-decode confirmation on `rpm_copy_grounding_v2_test` (held-out pack) before declaring victory?
+2. The TF→free-decode inversion (+3.86 pp) is unusual — would you read that as expected SS dynamics, or worth a sanity check (e.g., are we accidentally evaluating on training-adjacent records)?
+3. Next-step options post-audit:
+   - (a) Declare Stage 3 done, move to chat REPL integration / Mode 7 traceability surfacing.
+   - (b) Broader free-decode pack confirmation first.
+   - (c) Try a higher SS ratio ceiling (e.g., `linear:0.0-0.7:1-1000`) to see if it generalizes further.
+   - (d) Train longer at the same schedule (1000 → 2000 steps) to test convergence.
+
+Per `decisions.md` 2026-05-13T04:25Z bounded scope: anything beyond the single training + e3 eval requires a fresh decision. Awaiting your audit + user "go" before any further pod work.
+
+---
