@@ -22,6 +22,60 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T18:25Z — Step 5B Minimal NL Front Door (Option C — heuristic + Stage 4 spec)
+
+DECISION: Build Step 5B Option C — heuristic-pattern NL→CAS bridge now, Stage 4 training spec captured for the next pod run. Per Codex audits `8e0ae2d` (Traceability v0 first, Step 5B next) + `8997125` (Traceability v0 PASS, Step 5B awaiting explicit user go) + user chat "go" (2026-05-13T18:25Z).
+
+Scope this entry:
+
+Part 1 — Heuristic NL→CAS bridge (CODE):
+1. New module `noetic-compass-scaffold/noetic-compass/cas-native/inference/nl_to_cas_v0.py`:
+   - Public surface: `match_nl_to_cas(text) -> NLMatchResult | None`. Pure functions, rule-based, no model call.
+   - Curated pattern table mapping constrained English to CAS expressions. Initial coverage per Codex's example set:
+     - "explain a thought becoming action" → `^9^O` (Below/Effect, Operational)
+     - "turn anger into CAS" → `^3^E|f` (Negative, Evaluative, Affective)
+     - "what does this symbol mean" → triggers self-explainer symbol-legend topic
+     - "give me a CAS chain for awareness leading to action" → `^1^C -> ^9^O`
+     - "show me a simple CAS example" → canonical 2-stage RPM chain
+     - "explain a decision in CAS" → `^8^P -> ^9^O` (cause/effect)
+     - "explain a feeling in CAS" → `^4^E|f` (vibration in evaluative, affective)
+     - Plus 8-10 more patterns from Codex's directive.
+   - `NLMatchResult` dataclass: `{matched_pattern, cas_expression, explanation, confidence}`.
+   - Discipline (mirrors plain_english "does not lie"): never invent a CAS expression. If no pattern matches, return None. The REPL then falls through to the existing bridge-text refusal.
+2. REPL integration in `stage3_chat_repl.py`:
+   - `classify_input` gains a fourth class: `nl_bridge_match` (when `nl_to_cas_v0.match_nl_to_cas` returns a non-None result).
+   - `handle_turn` for that class: print "I read that as: `<CAS expression>`" + a one-line rationale + route the inferred CAS through the existing cas-explain pipeline so trace + Plain Mode + Thought Tree all attach normally.
+   - When the user asks "explain anger" and the bridge maps to `^3^E|f`, they see BOTH the inferred CAS expression AND the model's Plain English explanation of that expression. Traceability is preserved end-to-end.
+3. Tests in `tests/inference/test_nl_to_cas_v0.py` (~12-15) + REPL integration tests (~4-5).
+
+Part 2 — Stage 4 training spec (DOC ONLY):
+4. New doc `docs/working/stage4_minimal_nl_training_spec_2026_05_13.md`:
+   - Target: 5K–25K curated examples on constrained prompt set per Codex's data-strategy memo (`feedback_cas_native_data_strategy_2026_05_13.md`).
+   - Corpus sources hierarchy: own CAS data → compiler-synthetic → HF/Kaggle for style only. NO foreign-model distillation.
+   - Curriculum tasks: english_to_cas (with the v0 heuristic as gold supervision), simple_chain_construction, symbol_query, depth_request_routing.
+   - Training compute estimate (~$5-25K, ~1-2 weeks).
+   - Gate criteria for Stage 4 promotion.
+   - This doc is the spec the next pod training run consumes. NOT a training launch.
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex audit `codex_audit.md` (commit `8997125`, Traceability v0 PASS) + Codex chat ("Step 5B Option C is still the right NL path") + user chat "go" (2026-05-13T18:25Z).
+
+BOUNDED SCOPE:
+- Code: heuristic module + REPL integration + tests (~3 hrs work)
+- Docs: Stage 4 training spec
+- NO model retraining
+- NO pod work
+- NO Mode 7 visualization implementation
+- NO Living Thought Atlas UI implementation
+- NO Step 6 (Mode 7 full) or Step 7 (Atlas) code work
+
+EXPLICITLY DEFERRED (Stage 4 training is its own AUTHORIZED entry, gated on Stage 4 spec doc audit + corpus engineering completion).
+
+LIVING THOUGHT ATLAS FRAMING: the heuristic bridge IS the v0 NL surface. The trained NL bridge (Stage 4) supersedes it but the heuristic stays as a deterministic fast-path even after training, per Codex's "ship A now, B planned" guidance. Both feed the same Traceability v0 trace pipeline — every NL input becomes a CAS expression which becomes a full trace with Thought Tree.
+
+---
+
 ## 2026-05-13T17:30Z — Traceability v0 (before Step 5B per Codex re-ordering)
 
 DECISION: Build Traceability v0 BEFORE Step 5B (NL bridge). Per Codex audit `8e0ae2d` 2026-05-13: "traceability is the thing that makes CAS different... once trace v0 exists, every CAS answer and every future NL answer can show what CAS read / what the model generated / source references carried over / missed / slot pattern / confidence-warnings / Thought Tree JSON." Step 5B Option C remains the right NL path; it just comes after the trace backbone.
