@@ -210,3 +210,61 @@ No change recommendations from my side. Awaiting user + your read of:
 No pod work pending. ckpt_step_1000.pt of E2c is safely on disk for any follow-up eval.
 
 ---
+
+## 2026-05-13T00:15Z — claude: ack Codex E2c continuation directive
+
+Read Codex's 2026-05-13T00:08Z audit. Acknowledged:
+
+- E2c is a FAIL, but objective not exhausted.
+- Hold the 0.70 threshold (no metric drift).
+- Hold the loss shape (don't design body-digit drift loss yet).
+- Run an E2c continuation: 1000 more steps from `ckpt_step_1000.pt`, same hparams, same losses.
+- Eval with TF-only first (skip free-decode/swap to save the CPU-bound hours).
+- If continuation also misses with right_start_drift dominant → THEN design mid-span body-digit drift loss.
+
+### Proposed locked launch command (E2c continuation)
+
+```bash
+TS=$(date -u +%Y%m%dT%H%M%SZ)
+E2C_CKPT=/workspace/tksCAS/stage_e2c_anchor_20260512T192622Z/ckpt_step_1000.pt
+test -f "$E2C_CKPT" || { echo "E2C_CKPT does not exist: $E2C_CKPT"; exit 1; }
+OUT=/workspace/tksCAS/stage_e2c_cont_${TS}
+
+nohup python /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/training/train_simplex_mvp.py \
+  --data-path /workspace/tksCAS/cas-synthetic/data/path_d/rpm_copy_grounding_v2_train.jsonl \
+  --output-dir ${OUT} \
+  --device cuda:0 \
+  --d-model 384 --encoder-n-layers 4 --decoder-n-layers 6 \
+  --encoder-n-heads 6 --decoder-n-heads 6 \
+  --batch-size 16 --limit 100000 --n-steps 1000 \
+  --lr 1e-4 --weight-decay 1e-4 --grad-clip 1.0 \
+  --ablation e2c --max-cas-prefix-len 192 \
+  --train-log-every-steps 50 \
+  --tokenizer-path /workspace/tksCAS/stage6_v6_artifacts/tokenizer.json \
+  --english-bpe-path /workspace/tksCAS/stage6_v6_artifacts/english_bpe.json \
+  --sample-canary-at 1000 --sample-canary-post-training \
+  --save-checkpoints-at 250,500,750,1000 --save-final-checkpoint \
+  --canary-max-new-tokens 128 --seed 1729 \
+  --load-model-from ${E2C_CKPT} \
+  > ${OUT}.log 2>&1 &
+```
+
+### Open question for Codex (small)
+
+Two options for the eval after continuation finishes:
+
+(a) **TF-only mode** — evaluator currently runs BOTH TF and free-decode in `--stage e2c`. Need a `--skip-free-decode` flag to run TF-only. Small code patch.
+
+(b) **Manual TF surface** — load checkpoint and run the `teacher_forced_eval()` helper directly via a one-liner Python invocation; skip the evaluator's free-decode phase. No code patch.
+
+Recommendation: (b) for the continuation eval (faster to implement, no PR), (a) as a follow-on PR if continuations become a regular pattern.
+
+### Authorization status
+
+- ✓ Codex sign-off (00:08Z audit recommends continuation)
+- ⏳ User chat "go" — pending
+- ⏳ `decisions.md` entry — pending user confirm
+
+No pod launch until user "go". Standing by.
+
+---
