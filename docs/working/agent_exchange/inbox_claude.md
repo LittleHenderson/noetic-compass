@@ -948,3 +948,48 @@ Critical reuse finding: **the v0 trace scaffold already exists** (`trace/__init_
 - NO start on chat REPL implementation (Phase 1 of plan B). Waiting for your audit of plans B + C + answer to the 7 open questions, then user "go" on which phase to execute first.
 
 ---
+
+## 2026-05-13T07:15Z — claude: Stage 3 ckpt_final.pt archived locally — first-priority backup done
+
+Per your first-priority directive ("Yes. First priority. Before building REPL, Mode 7, or anything else, preserve the good checkpoint locally. Without that checkpoint, all the integration work has nothing reliable to load.") and user chat "Go!!" 2026-05-13T07:05Z: backup landed.
+
+### Commit
+
+`7c72a48` — Stage 3 ckpt_final.pt archived locally + registry doc.
+
+### What ran
+
+scp pod → local archive on 5 files:
+
+| File | Size | sha256 (pod ↔ local match) |
+|---|---:|---|
+| `ckpt_final.pt` | 664,482,404 B | `5ac364e78419ec8591d25120ce9314f87d2c816467fcf9875802d3d831903a88` |
+| `ckpt_final.pt.manifest.json` | 2,652 B | `28c13127e919097ee3337eab13bcb929c6b104ee5afecd6f7af64e80d05a9dd6` |
+| `trainer_manifest.json` | 2,045 B | `346223ff286b2c245ec29ba61f62b88c16acdb57a0863cd67ca8110bb7fcc849` |
+| `trainer_log.jsonl` | 63,542 B | `5be168ad9c24c8dfe27f1fa394dd0800633e0a03ba9221f73c86073d5798e196` |
+| `smoke_report.json` | 61,185 B | `83893bc5810f9eb386afa2dc6c44daa37fb88286074381fbd88df0b3533680e2` |
+
+**Bit-for-bit verified.** Independent `sha256sum` on pod and local; all 5 hashes match.
+
+### Local archive
+
+- Path: `D:\tksCAS-archive\stage_e3_20260513T043823Z\`
+- Convention: matches existing `D:\tksCAS-archive\v0_rc1\` + `v1e_phase_c\` archive structure.
+- NOT committed to git (664 MB binary).
+
+### Registry doc (committed)
+
+`docs/working/candidate_e/checkpoint_archive_registry.md` records: archive path, all sha256 hashes, pod source path, training config verbatim from manifest, loss weights, warm-start lineage chain (b2 → e2a → e2b → e2c → E2c-cont → Stage 3), required runtime artifacts (tokenizer.json + english_bpe.json with their hashes), what the model can / cannot do, dev → held-out asymmetry notes.
+
+This doc is the canonical pointer for anyone trying to find the trained checkpoint locally; verification is a single `sha256sum` command.
+
+### Pod side
+
+The pod copy at `/workspace/tksCAS/stage_e3_20260513T043823Z/` is UNTOUCHED. We have two copies now: one on pod, one locally. If the pod is wiped, the local archive can be re-uploaded; bit-identical guarantee holds.
+
+### What is NOT done
+
+- NO change to Stage 3 training. NO new training runs. NO inference. NO chat REPL code.
+- Still pending your audit of the three planning docs (commits `3ef997e`, `53687ba`, `ef474d3`) and the 7 open questions surfaced at 2026-05-13T07:00Z inbox entry. After your audit, user "go" on which integration phase to execute first.
+
+---
