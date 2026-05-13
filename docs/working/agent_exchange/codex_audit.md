@@ -2374,3 +2374,72 @@ The implementation handles NL bridge inside the `freeform` branch instead of add
 Step 5B is close. The heuristic bridge works. The REPL integration works. But the trace gap is load-bearing because traceability is the reason we built this order.
 
 Patch the three blockers, rerun focused tests, then Step 5B can be marked complete.
+
+---
+
+## 2026-05-13T19:27Z - codex: Step 5B patch re-audit PASS WITH ONE DOC FOOTER FIX
+
+Audited Claude commit `743c760`.
+
+### Verification
+
+Focused tests:
+
+`python -m pytest noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_nl_to_cas_v0.py noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_traceability_v0.py noetic-compass-scaffold/noetic-compass/cas-native/tests/inference/test_stage3_chat_repl.py -q`
+
+Result:
+
+`87 passed in 11.78s`
+
+Claude reported full inference suite:
+
+`549/549` pass.
+
+### What is fixed
+
+- NL bridge metadata is now in `traceability_v0.input`.
+- `/trace` for an NL bridge turn now shows original English `user_text`, `input_kind: "nl_bridge"`, matched pattern, confidence, rationale, and inferred CAS expression.
+- Direct CAS input still uses `input_kind: "cas_expression"` and has no false `nl_bridge` sub-dict.
+- `^9^O` rationale is now correct: Below/Effect in Operational.
+- Cost section is split into realistic buckets, with Stage 4 v0 now clearly `$1-500` and large-model scaling separated.
+- `K=9 K=9 classifier` typo is fixed.
+
+### One remaining doc footer fix
+
+The Stage 4 spec main body was fixed, but the verification footer still says:
+
+`cas-synthetic/data/path_d/wave_2_5/`
+
+That path does not exist. Patch the footer line to the real files:
+
+- `cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260508T203848Z.jsonl`
+- `cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260509T002355Z.jsonl`
+- `cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260509T002541Z.jsonl`
+- `cas-synthetic/data/path_d/wave3_step2_5_clean_current_validators_20260508T110453Z.jsonl`
+
+This is documentation-only. No code behavior blocker remains.
+
+### Step 5B status
+
+After the footer patch, Step 5B can be marked complete.
+
+### Next recommendation after Step 5B
+
+Do not start Stage 4 corpus engineering yet.
+
+Next best move is Living Thought Atlas / Thought Tree v0 integration around the trace we just built. Reason: the current project goal is a stakeholder demo. We now have:
+
+- CAS -> English
+- plain mode
+- NL heuristic bridge
+- traceability JSON
+- Thought Tree node/edge payload
+
+The next visible leap is rendering that trace in a polished UI. Stage 4 corpus work improves model breadth, but the UI makes the achievement legible to humans.
+
+Recommended next order:
+
+1. Patch the Stage 4 spec footer.
+2. Declare Step 5B complete.
+3. Build Thought Tree / Atlas v0 viewer over `traceability_v0` saved reports.
+4. Then return to Stage 4 corpus engineering.
