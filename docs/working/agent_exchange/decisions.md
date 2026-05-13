@@ -22,6 +22,29 @@ CONTEXT: <link/pointer to the relevant inbox/audit entries>
 
 ---
 
+## 2026-05-13T04:25Z — Stage 3 scheduled-sampling POD training run
+
+DECISION: Run a 1000-step Stage 3 training on RunPod, warm-started from `stage_e2c_cont_20260513T002539Z/ckpt_final.pt`. Configuration:
+
+- `--ablation e3` (inherits e2c loss weights; no new losses per locked scope).
+- `--scheduled-sampling-schedule "linear:0.0-0.5:1-1000"` — linear ramp from `ratio=0.0` at step 1 to `ratio=0.5` at step 1000. Plan §6 spec (end at 0.5) applied proportionally to a 1000-step run.
+- Identical hparams to E2c continuation: `--lr 1e-4 --batch-size 16 --weight-decay 1e-4 --grad-clip 1.0 --max-cas-prefix-len 192 --seed 1729`.
+- Save final checkpoint + step-500 checkpoint.
+- Corpus: `rpm_copy_grounding_v2_train.jsonl`. No corpus change (locked scope).
+- Estimated cost / time: ~$0.50, ~90-100 min on RTX A6000 (2 forwards/step vs E2c's 1 forward/step → ~1.5-2× E2c continuation runtime).
+
+AUTHORIZED: yes
+
+RATIFIED-BY: codex re-audit `codex_audit.md` 2026-05-13T06:08Z (commit `a686b48`, "launch-eligible"; 23/23 + 81/81 tests pass, three re-audit blockers all patched in `e9a0b76`) + user chat "GO!" (2026-05-13T04:25Z).
+
+BOUNDED SCOPE: this authorizes ONE Stage 3 training run + the post-training `--stage e3` evaluator measurement. Whether to continue training, scale to more steps, or pivot to DAgger requires a separate decision after the e3-mode eval result is read.
+
+NEXT GATED ACTION: after the run completes, evaluate the resulting `ckpt_final.pt` with `--stage e3` (PRIMARY: free-decode `aggregate_recovery_rate >= 0.50`; HARD SAFETY: swap `total_cross_emission_count == 0`). Surface result for Codex audit + user "go" before any further pod work.
+
+CONTEXT: e3-baseline result (commit `ef468d2`) showed 0.4412 free-decode recovery — middle branch per plan §2. Implementation in `dd07bdb`. Re-audit blocker patches in `e9a0b76`. Codex launch-eligibility verdict in `a686b48`. Plan v2 at `docs/working/candidate_e/stage3_plan_2026_05_13.md`.
+
+---
+
 ## 2026-05-13T03:45Z — Stage 3 scheduled-sampling LOCAL build (no pod work)
 
 DECISION: Implement scheduled sampling locally in the simplex MVP trainer, gated on the 7-step build list in Codex's 03:42Z audit ratification. Strictly bounded scope: (1) two-pass `forward_with_scheduled_sampling` (no-grad rollout → with-grad supervised forward), (2) trainer flags (`--scheduled-sampling-ratio` + schedule), (3) `--ablation e3` alias in `ABLATION_OVERRIDES`, (4) equivalence test at ratio=0 (gradients match TF path bit-for-bit), (5) self-feed unit test at ratio=1, (6) CPU smoke with `--ablation e3`, (7) Codex re-audit before any pod work.
