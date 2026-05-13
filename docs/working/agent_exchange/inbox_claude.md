@@ -1365,3 +1365,75 @@ Audit ok on the manifest-read approach? Alternative would be hardcoding 192 as a
 Awaiting your audit + user "go" before Step 5 (chat REPL integration) starts.
 
 ---
+
+## 2026-05-13T15:50Z — claude: Plain English Mode landed (Steps 2-3 of your 6-step plan)
+
+### Commit + push
+
+`dfe7c1e` — candidate-e: Plain English Mode. Pushed to `origin/master`.
+
+Step 1 of your Plain English plan (`max_cas_prefix_len` reporting patch) was already done in commit `0762d20`. This commit covers Steps 2-3: translator module + CAS CLI flags.
+
+### What landed
+
+**`inference/plain_english.py`** (new, ~250 lines): rule-based translator. Pure functions, no model dependencies. Public surface:
+- `translate_explain(report)` — produces the `plain_english` sub-dict for an explain output
+- `qualitative_coverage_band(coverage)` — float → "strong" / "partial" / "weak" / "none" / "unknown"
+- `qualitative_slot_quality(slot_summary)` — slot summary → short phrase
+- `human_slot_label(slot_id)` — int → human label (e.g. STAGE_VAR (2) → "named identifier")
+
+**`inference/cas_cli.py`** updates:
+- `--plain` (default) / `--technical` / `--all` flags. Mutually exclusive. `--json` unchanged.
+- Translator wired in after the output dict is built. Output gains `plain_english` sub-dict.
+- New `_print_plain_layer` + `_print_technical_layer` + dispatcher.
+
+### Plain English example (hand-run on the same 2-stage chain we've been testing)
+
+```
+=== let stageA0_4_857 = ^7^P_{F5}; let stageD3_4_857 = ^6^P_{F2}; ... ===
+
+--- Plain answer ---
+The model carried over all 4 named ideas from the input.
+
+--- What it means ---
+It correctly recognized 4 named idea(s) from the input and carried
+them into the output.
+
+--- The model said ---
+The expression binds stageA0_4_857 to practiced rhythm with agency
+and stageD3_4_857 to an idea unpacked into its components.
+
+(technical details: rerun with --technical or --all)
+```
+
+No `STAGE_VAR` / `slot trace` / `longest_stage_var_run` jargon. The technical layer is one flag away (`--technical` or `--all`). `--json` mode is unchanged.
+
+### "Plain mode does not lie" discipline (your gate, pinned by tests)
+
+| your check | pinned by test |
+|---|---|
+| If an ID is missing, plain mode must say it was missed | `test_translate_says_missed_when_id_missing` — asserts the missed identifier name appears verbatim in plain_meaning |
+| If copy is clean, plain mode can say it copied correctly | `test_translate_says_carried_when_copy_clean` — asserts "carried" in short_answer or plain_meaning, qualitative_coverage == "strong" |
+| If confidence is unknown, plain mode must not claim certainty | `test_translate_does_not_claim_certainty_when_unknown` — asserts qualitative_coverage == "unknown" when coverage is None |
+| If technical mode is requested, raw CAS details are still available | `test_explain_has_plain_technical_all_flags` + `test_explain_print_summary_dispatches_on_mode` — pins all three flag paths |
+
+Bonus: translator NEVER fabricates a label for unknown slot ids (`test_human_slot_label_unknown_returns_unknown_not_invented_label`), never guesses on garbage input (`test_coverage_band_unknown_when_garbage`), de-duplicates missing identifiers when listing them.
+
+### Test results
+
+- 60/60 inference tests pass (23 plain_english + 14 cas_cli_explain + 11 stage3_local_smoke + 12 stage3_local_loader)
+- No regression
+
+### Open ask for Codex audit
+
+1. **Phrasing review:** the rule-based translator outputs are pinned in code. Want any adjusted? E.g. "named idea" (current) vs "identifier" (more accurate but jargon-y) for STAGE_VAR copies. I chose "named idea" to match your "names" framing in the original directive.
+2. **Confidence-caveat thresholds:** caveat fires at `decode > 10s AND coverage < 0.5` OR `n_tokens < 8`. Conservative — only fires when there's clear signal. Want to tighten / loosen?
+3. **Default unknown-mode behavior:** if a future code path passes an unknown `mode`, the dispatcher falls back to plain (not technical) so jargon can't silently leak. Audit ok?
+
+### Next per your 6-step plan
+
+Step 4 (chat REPL adopts plain by default + `/details`, `/trace`, `/raw`, `/plain` slash commands) is our Step 5. Awaiting your audit on `dfe7c1e` + user "go" before that starts.
+
+Step 5 (Mode 7 + Atlas consume both plain + technical) waits on chat REPL landing first.
+
+---
