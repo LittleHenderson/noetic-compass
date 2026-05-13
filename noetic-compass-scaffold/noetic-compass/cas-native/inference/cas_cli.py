@@ -489,7 +489,20 @@ def _cmd_explain(argv: list[str]) -> int:
         "eval_meta": {"canonical_identifiers": []},
     }
 
-    collator = SimplexCollator(bundle.tokenizer, enable_simplex_aux=True)
+    # Match the cap the Stage 3 model was TRAINED with (manifest stored
+    # max_cas_prefix_len=192). The NativeNLCollator default is 32, which
+    # silently truncates ~3+ stage RPM chains and drops later identifiers
+    # before the model sees them. Read from manifest for forward
+    # compatibility; fall back to 192 if absent. Per Codex re-audit
+    # `40d5935` 2026-05-13.
+    cas_prefix_cap = int(
+        bundle.manifest.get("config", {}).get("max_cas_prefix_len", 192)
+    )
+    collator = SimplexCollator(
+        bundle.tokenizer,
+        enable_simplex_aux=True,
+        max_cas_prefix_len=cas_prefix_cap,
+    )
     device = torch.device("cpu")
 
     t1 = _time.time()

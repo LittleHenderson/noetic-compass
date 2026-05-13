@@ -143,6 +143,29 @@ def test_slot_trace_summary_counts_and_run():
     assert s["longest_stage_var_run"] == 3
 
 
+def test_explain_passes_max_cas_prefix_len_192_to_collator():
+    """Regression pin per Codex re-audit `40d5935` (2026-05-13):
+    Stage 3 was trained with max_cas_prefix_len=192. The
+    NativeNLCollator default is 32, which silently truncates ~3+ stage
+    RPM chains and drops later identifiers before the model sees them.
+    `cas explain` MUST pass an explicit cap (read from manifest, fall
+    back to 192). Source-level check so the test doesn't depend on
+    loading the 664 MB archive."""
+    src = open(cas_cli.__file__, encoding="utf-8").read()
+    # The collator construction must pass max_cas_prefix_len explicitly
+    assert "max_cas_prefix_len=cas_prefix_cap" in src or \
+           "max_cas_prefix_len=192" in src, (
+        "cas explain must pass max_cas_prefix_len to SimplexCollator "
+        "(read from manifest with 192 fallback per Codex 40d5935)"
+    )
+    # The manifest read must be present (forward-compatibility)
+    assert 'bundle.manifest.get("config", {}).get("max_cas_prefix_len"' in src, (
+        "cas explain must derive the cap from the loaded manifest"
+    )
+    # The fallback value must be 192 (Stage 3 training value)
+    assert "192" in src
+
+
 # ---------------------------------------------------------------------------
 # Heavy: end-to-end against the real local archive + dev pack
 # Skipped when archive absent so this never blocks CI.
