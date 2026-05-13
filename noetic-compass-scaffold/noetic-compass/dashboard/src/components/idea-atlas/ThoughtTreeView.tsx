@@ -269,19 +269,39 @@ function buildLayout(root: ThoughtTreeNode): LayoutResult {
 }
 
 // ── Edge path — smooth cubic Bezier from parent-bottom to child-top ───────
+// The endpoint overlaps INTO the target card by EDGE_OVERLAP px so the
+// connection visually flows into the card rather than stopping in
+// empty space above it. Arrowhead is drawn separately.
+
+const EDGE_OVERLAP = 4;
+const ARROW_SIZE = 8;
 
 function edgePath(a: NodePos, b: NodePos): string {
   const x1 = a.x;
   const y1 = a.y + NODE_H / 2;
   const x2 = b.x;
-  const y2 = b.y - NODE_H / 2;
-  const dy = Math.max(20, (y2 - y1) / 2);
+  const y2 = b.y - NODE_H / 2 + EDGE_OVERLAP;
+  const dy = Math.max(28, (y2 - y1) / 2);
   return `M ${x1} ${y1} C ${x1} ${y1 + dy}, ${x2} ${y2 - dy}, ${x2} ${y2}`;
+}
+
+/** Filled triangle pointing DOWN into the target card. Anchored at
+ *  (b.x, b.y - NODE_H/2) — the top-center of the card. */
+function arrowPath(b: NodePos, size: number = ARROW_SIZE): string {
+  const cx = b.x;
+  const tip = b.y - NODE_H / 2 + 2;
+  const base = tip - size;
+  const half = size * 0.65;
+  return `M ${cx - half} ${base} L ${cx + half} ${base} L ${cx} ${tip} Z`;
 }
 
 // ── Inject keyframe animation once per page (BFS-staggered entry) ─────────
 
 const ENTRY_STYLE_ID = 'thought-tree-view-entry-keyframes';
+// Apple-style cubic-bezier — same as macOS/iOS standard easing curve.
+// Used for zoom transitions and node-state transitions so the tree
+// feels native instead of mechanical.
+const APPLE_EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
 const ENTRY_CSS = `
 @keyframes thought-tree-node-in {
   0%   { opacity: 0; transform: scale(0.85); }
@@ -289,11 +309,31 @@ const ENTRY_CSS = `
   100% { opacity: 1; transform: scale(1); }
 }
 @keyframes thought-tree-edge-in {
-  0%   { opacity: 0; stroke-dashoffset: 200; }
+  0%   { opacity: 0; stroke-dashoffset: 240; }
   100% { opacity: 1; stroke-dashoffset: 0; }
 }
-.thought-tree-node-anim { animation: thought-tree-node-in 320ms ease-out both; transform-origin: center; transform-box: fill-box; }
-.thought-tree-edge-anim { animation: thought-tree-edge-in 320ms ease-out both; stroke-dasharray: 200; }
+.thought-tree-node-anim { animation: thought-tree-node-in 360ms ${APPLE_EASE} both; transform-origin: center; transform-box: fill-box; }
+.thought-tree-edge-anim { animation: thought-tree-edge-in 420ms ${APPLE_EASE} both; stroke-dasharray: 240; }
+.thought-tree-smooth-stroke {
+  transition: stroke 220ms ${APPLE_EASE},
+              stroke-opacity 220ms ${APPLE_EASE},
+              stroke-width 220ms ${APPLE_EASE},
+              fill 220ms ${APPLE_EASE},
+              fill-opacity 220ms ${APPLE_EASE};
+}
+.thought-tree-card-shape {
+  transition: fill-opacity 240ms ${APPLE_EASE},
+              stroke 240ms ${APPLE_EASE},
+              stroke-opacity 240ms ${APPLE_EASE},
+              stroke-width 240ms ${APPLE_EASE};
+}
+.thought-tree-zoom-wrap {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+.thought-tree-zoom-wrap--animated {
+  transition: transform 260ms ${APPLE_EASE};
+}
 `;
 
 function injectEntryStyles(): void {
@@ -360,6 +400,21 @@ export function ThoughtTreeView({
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
+  // When true, the wrapper <g> uses CSS transitions to animate zoom/pan
+  // changes (button clicks). Disabled during continuous wheel/drag so
+  // those feel immediate. Re-enabled after a short debounce.
+  const [animateTransform, setAnimateTransform] = useState(true);
+  const animateTimeoutRef = useRef<number | null>(null);
+  const setNoAnimateForFrame = useCallback(() => {
+    setAnimateTransform(false);
+    if (animateTimeoutRef.current != null) {
+      window.clearTimeout(animateTimeoutRef.current);
+    }
+    animateTimeoutRef.current = window.setTimeout(() => {
+      setAnimateTransform(true);
+      animateTimeoutRef.current = null;
+    }, 140);
+  }, []);
 
   useEffect(() => {
     const onChange = () => {
@@ -409,27 +464,32 @@ export function ThoughtTreeView({
   }, [tree.nodes]);
 
   // ── Pan + zoom handlers ──────────────────────────────────────────────────
+  // Wheel + drag are continuous gestures — disable the CSS transition
+  // during them so they feel direct. Re-enabled by the timeout debounce.
   const onWheel = useCallback((e: ReactWheelEvent<SVGSVGElement>) => {
     e.preventDefault();
+    setNoAnimateForFrame();
     const delta = -e.deltaY * 0.0015;
     setZoom((z) => Math.max(0.4, Math.min(3, z + delta)));
-  }, []);
+  }, [setNoAnimateForFrame]);
 
   const onMouseDown = useCallback((e: ReactMouseEvent<SVGSVGElement>) => {
     // Only start panning on background drag — not on a node click.
     const target = e.target as SVGElement;
     if (target.dataset?.role !== 'background') return;
+    setNoAnimateForFrame();
     dragState.current = { startX: e.clientX, startY: e.clientY, panX: pan.x, panY: pan.y };
-  }, [pan.x, pan.y]);
+  }, [pan.x, pan.y, setNoAnimateForFrame]);
 
   const onMouseMove = useCallback((e: ReactMouseEvent<SVGSVGElement>) => {
     const ds = dragState.current;
     if (!ds) return;
+    setNoAnimateForFrame();
     setPan({
       x: ds.panX + (e.clientX - ds.startX),
       y: ds.panY + (e.clientY - ds.startY),
     });
-  }, []);
+  }, [setNoAnimateForFrame]);
 
   const onMouseUp = useCallback(() => {
     dragState.current = null;
@@ -440,17 +500,22 @@ export function ThoughtTreeView({
     return <EmptyState className={className} />;
   }
 
-  const PAD = 16;
+  const PAD = 24;
   const vbX = layout.bounds.minX - PAD;
   const vbY = layout.bounds.minY - PAD;
   const vbW = layout.bounds.maxX - layout.bounds.minX + PAD * 2;
   const vbH = layout.bounds.maxY - layout.bounds.minY + PAD * 2;
 
-  // Compose viewBox with pan + zoom so the SVG content scrolls in user space.
-  const zoomedW = vbW / zoom;
-  const zoomedH = vbH / zoom;
-  const zoomedX = vbX + (vbW - zoomedW) / 2 - pan.x / zoom;
-  const zoomedY = vbY + (vbH - zoomedH) / 2 - pan.y / zoom;
+  // Apple-style smooth zoom/pan: keep the viewBox fixed at natural
+  // bounds; apply pan+zoom as a CSS transform on a wrapper <g>. CSS
+  // transitions on the wrapper turn discrete button-zoom changes into
+  // fluid animations while continuous gestures (wheel/drag) remain
+  // direct.
+  const cx = vbX + vbW / 2;
+  const cy = vbY + vbH / 2;
+  const wrapperTransform =
+    `translate(${pan.x}px, ${pan.y}px) ` +
+    `translate(${cx}px, ${cy}px) scale(${zoom}) translate(${-cx}px, ${-cy}px)`;
 
   return (
     <div
@@ -473,7 +538,7 @@ export function ThoughtTreeView({
         aria-label="Thought Tree"
         width="100%"
         height="100%"
-        viewBox={`${zoomedX} ${zoomedY} ${zoomedW} ${zoomedH}`}
+        viewBox={`${vbX} ${vbY} ${vbW} ${vbH}`}
         preserveAspectRatio="xMidYMid meet"
         onWheel={onWheel}
         onMouseDown={onMouseDown}
@@ -481,9 +546,21 @@ export function ThoughtTreeView({
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseUp}
         className="cursor-grab active:cursor-grabbing"
+        style={{ shapeRendering: 'geometricPrecision' }}
       >
-        {/* Background — receives pan drag-starts */}
+        {/* Background — receives pan drag-starts. NOT inside the
+            transform wrapper so background hit-testing stays in
+            viewport space even when content is zoomed. */}
         <rect data-role="background" x={vbX} y={vbY} width={vbW} height={vbH} fill="transparent" />
+        {/* Content wrapper — pan + zoom applied here via CSS transform so
+            transitions animate smoothly. */}
+        <g
+          className={
+            'thought-tree-zoom-wrap' +
+            (animateTransform ? ' thought-tree-zoom-wrap--animated' : '')
+          }
+          style={{ transform: wrapperTransform }}
+        >
 
         {/* Edges first so nodes draw on top. Per-edge color is the
             target node's kind palette so the eye reads "this thought
@@ -516,18 +593,18 @@ export function ThoughtTreeView({
                   strokeOpacity={strokeOpacity}
                   strokeWidth={strokeWidth}
                   strokeLinecap="round"
-                  className="thought-tree-edge-anim"
+                  className="thought-tree-edge-anim thought-tree-smooth-stroke"
                   style={style}
                 />
-                {/* Arrowhead — filled dot at the target end so direction
-                    is obvious. Matches target node's stroke color. */}
-                <circle
-                  cx={b.x}
-                  cy={b.y - NODE_H / 2 - 2}
-                  r={involvesSelected ? 5 : 4}
+                {/* Arrowhead — filled triangle pointing DOWN into the
+                    target card's top edge. Sized + colored per target
+                    palette so the connection reads at a glance. */}
+                <path
+                  d={arrowPath(b, involvesSelected ? ARROW_SIZE + 2 : ARROW_SIZE)}
                   fill={stroke}
                   fillOpacity={strokeOpacity}
-                  className="thought-tree-edge-anim"
+                  stroke="none"
+                  className="thought-tree-edge-anim thought-tree-smooth-stroke"
                   style={style}
                 />
               </g>
@@ -614,6 +691,7 @@ export function ThoughtTreeView({
                 />
                 {/* Card body — solid dark fill so text is always readable */}
                 <rect
+                  className="thought-tree-card-shape"
                   x={0}
                   y={0}
                   width={NODE_W}
@@ -628,22 +706,22 @@ export function ThoughtTreeView({
                 />
                 {/* Selected glow — a second outer stroke pulse so the
                     user sees their click registered without needing
-                    to look at the side panel. */}
-                {isSelected && (
-                  <rect
-                    x={-3}
-                    y={-3}
-                    width={NODE_W + 6}
-                    height={NODE_H + 6}
-                    rx={14}
-                    ry={14}
-                    fill="none"
-                    stroke={palette.stroke}
-                    strokeOpacity={0.95}
-                    strokeWidth={2}
-                    pointerEvents="none"
-                  />
-                )}
+                    to look at the side panel. Animates in via
+                    thought-tree-card-shape transition class. */}
+                <rect
+                  className="thought-tree-card-shape"
+                  x={-4}
+                  y={-4}
+                  width={NODE_W + 8}
+                  height={NODE_H + 8}
+                  rx={16}
+                  ry={16}
+                  fill="none"
+                  stroke={palette.stroke}
+                  strokeOpacity={isSelected ? 0.95 : 0}
+                  strokeWidth={isSelected ? 2.5 : 0}
+                  pointerEvents="none"
+                />
                 {/* Kind-colored ribbon on the left edge */}
                 <rect
                   x={0}
@@ -711,6 +789,7 @@ export function ThoughtTreeView({
               </g>
             );
           })}
+        </g>
         </g>
       </svg>
 
