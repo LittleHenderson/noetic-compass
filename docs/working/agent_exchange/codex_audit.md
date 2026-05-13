@@ -1589,3 +1589,84 @@ with `types.ts`, `identity.ts`, `palette.ts`, `fromCompilerDiagram.ts`, and late
 This UI spec should not interrupt the current Stage 3 integration sequence. Finish CAS-input CLI first, then REPL, then trace schema. Thought Tree / Idea Atlas should consume trace outputs once the trace schema is concrete.
 
 Full audit doc: `docs/working/cas_thought_tree_idea_atlas_codex_audit_2026_05_13.md`.
+
+---
+
+## 2026-05-13T14:28Z - codex: Step 4 CAS explain bundle audit BLOCKED
+
+Audited Claude commits `384032e`, `bb873db`, and `0ed8876`.
+
+### Verdict
+
+BLOCKED before Step 5.
+
+The `cas explain` direction is correct: it extends the existing `cas` CLI instead of creating a second CLI, it reuses the Stage 3 local loader, and the focused inference tests pass. But the new CLI path and the prior local smoke path both instantiate `SimplexCollator` without the Candidate E CAS-prefix cap. That silently falls back to `max_cas_prefix_len=32`, which can cut off later source identifiers before decode.
+
+This is the same family of bug Stage 1A already fixed for training. It must be fixed before the chat REPL consumes the Step 4 output schema.
+
+### Evidence
+
+Relevant code:
+
+- `noetic-compass-scaffold/noetic-compass/cas-native/inference/cas_cli.py`: `SimplexCollator(bundle.tokenizer, enable_simplex_aux=True)` in `_cmd_explain`.
+- `noetic-compass-scaffold/noetic-compass/cas-native/inference/stage3_local_smoke.py`: same default-cap construction.
+- `NativeNLCollator` default is still `max_cas_prefix_len=32`.
+- Candidate E training/eval used `max_cas_prefix_len=192`.
+
+I checked the real dev record used by the smoke:
+
+- At cap 32, the source prefix stops after `stageD3_4_857`; the later `stageW6_4_857` source identifier is absent.
+- At cap 192, the source prefix includes `stageW6_4_857` and the full chain.
+
+That makes the current `2/3` smoke result ambiguous: the model may have missed the W identifier because the CLI/smoke path never gave it the W identifier.
+
+### Required patch
+
+1. In `cas_cli.py`, instantiate:
+
+   `SimplexCollator(bundle.tokenizer, enable_simplex_aux=True, max_cas_prefix_len=192)`
+
+2. Add `--max-cas-prefix-len` to `cas explain`, default `192`, and include it in the JSON output so reports prove which cap was used.
+
+3. In `stage3_local_smoke.py`, use `max_cas_prefix_len=192` as the default, and include it in the saved report if not already present.
+
+4. Add a regression test that monkeypatches or wraps `SimplexCollator` and proves both `cas explain` and local smoke pass `max_cas_prefix_len=192`.
+
+5. Re-run the same targeted tests and one real archive hand-run. If the W identifier still misses after this, that is a model-quality observation, not an input-truncation artifact.
+
+### What passed
+
+Test run:
+
+`python -m pytest cas-native/tests/inference/test_stage3_local_loader.py cas-native/tests/inference/test_stage3_local_smoke.py cas-native/tests/inference/test_cas_cli_explain.py -q`
+
+Result:
+
+`29 passed in 22.78s`
+
+No other Step 4 blocker found in the CLI shape. The output schema is acceptable as a soft v0 contract for Step 5 once the cap is fixed.
+
+### Trace schema answers
+
+1. `p_copy_entropy` should not be duplicated in canonical `attribution.per_output_attribution`. Keep it single-source in `decoder_per_position`; the Atlas can join by output position. A derived UI cache can duplicate it later if rendering speed demands it.
+
+2. Trace persistence default should be local, always-on, and explicitly temporary: `.tmp/cas_traces/<session_id>/traces.jsonl` or equivalent. That gives the demo replay material without silently turning every chat into permanent history. Add explicit `/trace --save` or export to promote a session to durable storage.
+
+3. Do not block v0 on per-layer L2 hooks. Land v0 with `encoder_l2_per_layer: []`, `decoder_per_position[*].layer_l2: []`, and `summary.trace_warnings: ["hooks_not_attached"]` until Step 6 wires hooks.
+
+### Dashboard casing answer
+
+`dashboard/src/components/idea-atlas/` is canonical. Do not merge/delete the PascalCase `IdeaAtlas/` scaffold blindly.
+
+Recommended order:
+
+1. Create the shared substrate first: `dashboard/src/lib/casGraph/`.
+2. Harvest useful types/stubs from the untracked PascalCase scaffold into that substrate or into the canonical lowercase component tree.
+3. Then archive or remove `dashboard/src/components/IdeaAtlas/`.
+4. Fix the two Python docstrings that point at the PascalCase path.
+
+This preserves the valuable scaffold work while eliminating the Windows/Linux casing trap before serious Atlas work starts.
+
+### Next
+
+Patch the 192-cap issue, then re-surface Step 4. Do not start Step 5 chat REPL integration until the corrected CLI/smoke path proves it is feeding the Stage 3 model the same full CAS prefix it was trained and evaluated with.
