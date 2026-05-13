@@ -244,6 +244,441 @@ export const DEMO_TRACE: AtlasTrace = {
   },
 };
 
+// ── Bundled COMPLEX demo trace ──
+//
+// A stakeholder-grade walk-through of a single Θ-recipe CAS expression
+// that exercises every Atlas v0 capability in one tree:
+//   - Recipe / production-target notation (Θ → outcome)
+//   - Cross-register integration with `×` and fused emergent state (Ω)
+//   - Multi-register principled state with all four CAS Registers
+//     (Transcendent / Analytical / Affective / Embodied via |T |A |f)
+//   - Compound state with Drive + Register sub-notation
+//     (^7^C_{F2|A})
+//   - Compositional + Effect chain (^6^P × ^9^O)
+//   - Branching tree structure (multiple children per node)
+//   - Every supported node kind: user_prompt, nl_bridge, cas_expression,
+//     model_generation, slot_pattern, confidence_marker,
+//     identifier_attempt
+//   - A confidence warning flag so the warning-badge surface renders
+//
+// The expression:
+//   Θ(refuse_harmful_request)
+//     = 2·(^3^P|A × ^3^P|f × ^3^P|T = ^3^P|Ω)
+//     + 1·(^6^P × ^9^O)
+//     + 0.5·^7^C_{F2|A}
+//     → refuse_harmful_request
+//
+// Reading: "A principled refusal of a harmful request needs two units
+// of a fused tri-register Principled Negative (analytical + affective +
+// transcendent aversion fused into emergent Ω), plus one unit of
+// compositional decomposition flowing into operational effect, plus a
+// half unit of analytical practiced rhythm anchored to the Wisdom
+// drive."
+export const DEMO_TRACE_COMPLEX: AtlasTrace = {
+  schema_version: TRACE_SCHEMA_VERSION,
+  trace_id: '00000000-0000-4000-8000-00000000c0c0',
+  created_at: '2026-05-13T21:00:00Z',
+  input: {
+    input_kind: 'nl_bridge',
+    user_text: 'show me how an AI refuses a harmful request, structurally',
+    cas_expression:
+      'Θ(refuse_harmful_request) = 2·(^3^P|A × ^3^P|f × ^3^P|T = ^3^P|Ω) + 1·(^6^P × ^9^O) + 0.5·^7^C_{F2|A} → refuse_harmful_request',
+    source_tokens: [
+      { index: 0, token: 'Θ(refuse_harmful_request)' },
+      { index: 1, token: '=' },
+      { index: 2, token: '2·(^3^P|A' },
+      { index: 3, token: '×' },
+      { index: 4, token: '^3^P|f' },
+      { index: 5, token: '×' },
+      { index: 6, token: '^3^P|T' },
+      { index: 7, token: '=' },
+      { index: 8, token: '^3^P|Ω)' },
+      { index: 9, token: '+' },
+      { index: 10, token: '1·(^6^P' },
+      { index: 11, token: '×' },
+      { index: 12, token: '^9^O)' },
+      { index: 13, token: '+' },
+      { index: 14, token: '0.5·^7^C_{F2|A}' },
+      { index: 15, token: '→' },
+      { index: 16, token: 'refuse_harmful_request' },
+    ],
+    nl_bridge: {
+      matched_pattern: 'safety refusal recipe',
+      confidence: 0.78,
+      rationale:
+        'A principled refusal is a production recipe: aversion fused across registers, plus compositional decomposition into operational effect, anchored by analytical wisdom-drive rhythm.',
+      inferred_cas_expression:
+        'Θ(refuse_harmful_request) = 2·(^3^P|A × ^3^P|f × ^3^P|T = ^3^P|Ω) + 1·(^6^P × ^9^O) + 0.5·^7^C_{F2|A} → refuse_harmful_request',
+    },
+  },
+  output: {
+    english:
+      'A grounded refusal is built from three ingredients. First, an aversion to the harmful idea fired three ways at once (analytical, felt, and value-laden) so it fuses into a single principled commitment. Second, a compositional unpacking of why the request is harmful that lands as a concrete refusal behavior. Third, a steady practiced rhythm anchored to wisdom that keeps the refusal stable across many similar prompts. All three ingredients have to be present together — leave one out and the refusal becomes brittle.',
+    n_tokens: 92,
+  },
+  copy: {
+    copied_identifiers: ['refuse_harmful_request'],
+    missed_identifiers: [],
+    coverage: 1.0,
+    per_identifier: [
+      {
+        identifier: 'refuse_harmful_request',
+        status: 'copied',
+        position_in_input: 0,
+        position_in_output: 0,
+        identifier_ever_copied: true,
+      },
+    ],
+  },
+  slot_trace: {
+    length: 92,
+    slot_counts_by_label: {
+      'joining word': 76,
+      'named identifier': 1,
+      'recipe coefficient': 3,
+      'cross-register operator': 4,
+      'co-presence operator': 2,
+      'production arrow': 1,
+    },
+    longest_stage_var_run: 0,
+    raw_trace: null,
+  },
+  confidence: {
+    qualitative_coverage: 'partial',
+    slot_quality:
+      'recipe structure mostly recovered; one prerequisite coefficient was approximated',
+    caveats: [
+      'Recipe coefficients are illustrative — the engine has not yet fit them to a corpus of real refusals.',
+    ],
+    warning_flags: [
+      {
+        kind: 'recipe_coefficient_unfit',
+        severity: 'warning',
+        message:
+          'Recipe coefficients (2, 1, 0.5) are pedagogical defaults, not corpus-fit values.',
+      },
+    ],
+  },
+  thought_tree: {
+    root: {
+      id: 'n0',
+      node_key: 'user_prompt|input|refusal_recipe|',
+      kind: 'user_prompt',
+      role: 'input',
+      label: 'show me how an AI refuses a harmful request',
+      normalized_label: 'show me how an ai refuses a harmful request',
+      text: 'show me how an AI refuses a harmful request, structurally',
+      children: [
+        {
+          id: 'n1',
+          node_key: 'nl_bridge|pattern|safety refusal recipe|conf=0.78',
+          kind: 'nl_bridge',
+          role: 'pattern',
+          label: 'safety refusal recipe',
+          normalized_label: 'safety refusal recipe',
+          axis_attrs: { confidence: 0.78 },
+          text: 'Matched the English request to a Θ production recipe with three prerequisites.',
+          children: [
+            {
+              id: 'n2',
+              node_key: 'cas_expression|inferred|theta_refusal|',
+              kind: 'cas_expression',
+              role: 'inferred',
+              label:
+                'Θ(refuse_harmful_request) = 2·(…|A × …|f × …|T) + 1·(^6^P × ^9^O) + 0.5·^7^C_{F2|A}',
+              normalized_label: 'theta refusal recipe',
+              text: 'The full canonical CAS recipe form, with the production target at the right of the arrow.',
+              children: [
+                {
+                  id: 'n3',
+                  node_key: 'slot_pattern|decomposition|recipe prereqs|count=3',
+                  kind: 'slot_pattern',
+                  role: 'decomposition',
+                  label: 'recipe prerequisites',
+                  normalized_label: 'recipe prerequisites',
+                  axis_attrs: { prereq_count: 3 },
+                  text: 'Three prerequisite ingredients each contribute to the production target.',
+                  children: [
+                    {
+                      id: 'n4',
+                      node_key: 'cas_expression|prereq1|principled aversion fused|coef=2',
+                      kind: 'cas_expression',
+                      role: 'prereq1',
+                      label: 'principled aversion (×3 registers)',
+                      normalized_label: 'principled aversion (×3 registers)',
+                      axis_attrs: { coefficient: 2, register_count: 3 },
+                      text: 'Cross-register integration of Principled Negative across Analytical, Affective, and Transcendent registers, fusing into the emergent state Ω.',
+                      children: [
+                        {
+                          id: 'n5',
+                          node_key: 'identifier_attempt|reg_a|^3^P|A',
+                          kind: 'identifier_attempt',
+                          role: 'reg_a',
+                          label: '^3^P|A — analytical aversion',
+                          normalized_label: '^3^p|a — analytical aversion',
+                          text: 'Principled Negative in the Analytical register — reasoned refusal: "this violates X principle, therefore no."',
+                          children: [],
+                        },
+                        {
+                          id: 'n6',
+                          node_key: 'identifier_attempt|reg_f|^3^P|f',
+                          kind: 'identifier_attempt',
+                          role: 'reg_f',
+                          label: '^3^P|f — felt aversion',
+                          normalized_label: '^3^p|f — felt aversion',
+                          text: 'Principled Negative in the Affective register — visceral refusal: "this feels wrong."',
+                          children: [],
+                        },
+                        {
+                          id: 'n7',
+                          node_key: 'identifier_attempt|reg_t|^3^P|T',
+                          kind: 'identifier_attempt',
+                          role: 'reg_t',
+                          label: '^3^P|T — transcendent aversion',
+                          normalized_label: '^3^p|t — transcendent aversion',
+                          text: 'Principled Negative in the Transcendent register — value-orienting refusal: "this is not who I am."',
+                          children: [],
+                        },
+                        {
+                          id: 'n8',
+                          node_key: 'model_generation|emergent|^3^P|Ω',
+                          kind: 'model_generation',
+                          role: 'emergent',
+                          label: '^3^P|Ω — fused refusal',
+                          normalized_label: '^3^p|ω — fused refusal',
+                          text: 'The cross-register integration result. A single refusal that holds even when any one register is defeated, because the other two still fire.',
+                          children: [],
+                        },
+                      ],
+                    },
+                    {
+                      id: 'n9',
+                      node_key: 'cas_expression|prereq2|^6^P × ^9^O|coef=1',
+                      kind: 'cas_expression',
+                      role: 'prereq2',
+                      label: '^6^P × ^9^O — composition → effect',
+                      normalized_label: '^6^p × ^9^o — composition → effect',
+                      axis_attrs: { coefficient: 1 },
+                      text: 'Male in the Principled domain (decomposing the request to find what is harmful) integrated with Below/Effect in the Operational domain (producing the refusal behavior).',
+                      children: [],
+                    },
+                    {
+                      id: 'n10',
+                      node_key: 'cas_expression|prereq3|^7^C_{F2|A}|coef=0.5',
+                      kind: 'cas_expression',
+                      role: 'prereq3',
+                      label: '^7^C_{F2|A} — analytical wisdom rhythm',
+                      normalized_label: '^7^c_{f2|a} — analytical wisdom rhythm',
+                      axis_attrs: { coefficient: 0.5 },
+                      text: 'Rhythm in the Cognitive domain, anchored to the Wisdom drive, expressed in the Analytical register. The trained pattern that keeps refusals consistent across similar prompts.',
+                      children: [],
+                    },
+                  ],
+                },
+                {
+                  id: 'n11',
+                  node_key: 'model_generation|output|refusal_explanation|',
+                  kind: 'model_generation',
+                  role: 'output',
+                  label: 'plain-English explanation',
+                  normalized_label: 'plain-english explanation',
+                  text: 'A grounded refusal is built from three ingredients. First, an aversion to the harmful idea fired three ways at once (analytical, felt, and value-laden) so it fuses into a single principled commitment. Second, a compositional unpacking of why the request is harmful that lands as a concrete refusal behavior. Third, a steady practiced rhythm anchored to wisdom that keeps the refusal stable across many similar prompts.',
+                  children: [
+                    {
+                      id: 'n12',
+                      node_key:
+                        'slot_pattern|summary|recipe structure recovered|length=92',
+                      kind: 'slot_pattern',
+                      role: 'summary',
+                      label: 'slot trace: recipe structure',
+                      normalized_label: 'slot trace: recipe structure',
+                      axis_attrs: {
+                        length: 92,
+                        recipe_coefficients: 3,
+                        cross_register_operators: 4,
+                      },
+                      text: 'The output carries every recipe operator and coefficient back, so the recipe is recoverable from the generated English alone.',
+                      children: [],
+                    },
+                    {
+                      id: 'n13',
+                      node_key: 'confidence_marker|warning|recipe_coefficient_unfit',
+                      kind: 'confidence_marker',
+                      role: 'warning',
+                      label: 'coefficients unfit',
+                      normalized_label: 'coefficients unfit',
+                      axis_attrs: { band: 'warning' },
+                      text: 'Recipe coefficients (2, 1, 0.5) are pedagogical defaults. The engine has not yet fit them to a corpus of real refusals.',
+                      children: [],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    nodes: [
+      {
+        id: 'n0',
+        node_key: 'user_prompt|input|refusal_recipe|',
+        kind: 'user_prompt',
+        role: 'input',
+        label: 'show me how an AI refuses a harmful request',
+        normalized_label: 'show me how an ai refuses a harmful request',
+        text: 'show me how an AI refuses a harmful request, structurally',
+      },
+      {
+        id: 'n1',
+        node_key: 'nl_bridge|pattern|safety refusal recipe|conf=0.78',
+        kind: 'nl_bridge',
+        role: 'pattern',
+        label: 'safety refusal recipe',
+        normalized_label: 'safety refusal recipe',
+        axis_attrs: { confidence: 0.78 },
+        text: 'Matched the English request to a Θ production recipe with three prerequisites.',
+      },
+      {
+        id: 'n2',
+        node_key: 'cas_expression|inferred|theta_refusal|',
+        kind: 'cas_expression',
+        role: 'inferred',
+        label:
+          'Θ(refuse_harmful_request) = 2·(…|A × …|f × …|T) + 1·(^6^P × ^9^O) + 0.5·^7^C_{F2|A}',
+        normalized_label: 'theta refusal recipe',
+        text: 'The full canonical CAS recipe form, with the production target at the right of the arrow.',
+      },
+      {
+        id: 'n3',
+        node_key: 'slot_pattern|decomposition|recipe prereqs|count=3',
+        kind: 'slot_pattern',
+        role: 'decomposition',
+        label: 'recipe prerequisites',
+        normalized_label: 'recipe prerequisites',
+        axis_attrs: { prereq_count: 3 },
+        text: 'Three prerequisite ingredients each contribute to the production target.',
+      },
+      {
+        id: 'n4',
+        node_key: 'cas_expression|prereq1|principled aversion fused|coef=2',
+        kind: 'cas_expression',
+        role: 'prereq1',
+        label: 'principled aversion (×3 registers)',
+        normalized_label: 'principled aversion (×3 registers)',
+        axis_attrs: { coefficient: 2, register_count: 3 },
+        text: 'Cross-register integration of Principled Negative across Analytical, Affective, and Transcendent registers, fusing into the emergent state Ω.',
+      },
+      {
+        id: 'n5',
+        node_key: 'identifier_attempt|reg_a|^3^P|A',
+        kind: 'identifier_attempt',
+        role: 'reg_a',
+        label: '^3^P|A — analytical aversion',
+        normalized_label: '^3^p|a — analytical aversion',
+        text: 'Principled Negative in the Analytical register — reasoned refusal: "this violates X principle, therefore no."',
+      },
+      {
+        id: 'n6',
+        node_key: 'identifier_attempt|reg_f|^3^P|f',
+        kind: 'identifier_attempt',
+        role: 'reg_f',
+        label: '^3^P|f — felt aversion',
+        normalized_label: '^3^p|f — felt aversion',
+        text: 'Principled Negative in the Affective register — visceral refusal: "this feels wrong."',
+      },
+      {
+        id: 'n7',
+        node_key: 'identifier_attempt|reg_t|^3^P|T',
+        kind: 'identifier_attempt',
+        role: 'reg_t',
+        label: '^3^P|T — transcendent aversion',
+        normalized_label: '^3^p|t — transcendent aversion',
+        text: 'Principled Negative in the Transcendent register — value-orienting refusal: "this is not who I am."',
+      },
+      {
+        id: 'n8',
+        node_key: 'model_generation|emergent|^3^P|Ω',
+        kind: 'model_generation',
+        role: 'emergent',
+        label: '^3^P|Ω — fused refusal',
+        normalized_label: '^3^p|ω — fused refusal',
+        text: 'The cross-register integration result. A single refusal that holds even when any one register is defeated, because the other two still fire.',
+      },
+      {
+        id: 'n9',
+        node_key: 'cas_expression|prereq2|^6^P × ^9^O|coef=1',
+        kind: 'cas_expression',
+        role: 'prereq2',
+        label: '^6^P × ^9^O — composition → effect',
+        normalized_label: '^6^p × ^9^o — composition → effect',
+        axis_attrs: { coefficient: 1 },
+        text: 'Male in the Principled domain (decomposing the request to find what is harmful) integrated with Below/Effect in the Operational domain (producing the refusal behavior).',
+      },
+      {
+        id: 'n10',
+        node_key: 'cas_expression|prereq3|^7^C_{F2|A}|coef=0.5',
+        kind: 'cas_expression',
+        role: 'prereq3',
+        label: '^7^C_{F2|A} — analytical wisdom rhythm',
+        normalized_label: '^7^c_{f2|a} — analytical wisdom rhythm',
+        axis_attrs: { coefficient: 0.5 },
+        text: 'Rhythm in the Cognitive domain, anchored to the Wisdom drive, expressed in the Analytical register. The trained pattern that keeps refusals consistent across similar prompts.',
+      },
+      {
+        id: 'n11',
+        node_key: 'model_generation|output|refusal_explanation|',
+        kind: 'model_generation',
+        role: 'output',
+        label: 'plain-English explanation',
+        normalized_label: 'plain-english explanation',
+        text: 'A grounded refusal is built from three ingredients. First, an aversion to the harmful idea fired three ways at once (analytical, felt, and value-laden) so it fuses into a single principled commitment. Second, a compositional unpacking of why the request is harmful that lands as a concrete refusal behavior. Third, a steady practiced rhythm anchored to wisdom that keeps the refusal stable across many similar prompts.',
+      },
+      {
+        id: 'n12',
+        node_key: 'slot_pattern|summary|recipe structure recovered|length=92',
+        kind: 'slot_pattern',
+        role: 'summary',
+        label: 'slot trace: recipe structure',
+        normalized_label: 'slot trace: recipe structure',
+        axis_attrs: {
+          length: 92,
+          recipe_coefficients: 3,
+          cross_register_operators: 4,
+        },
+        text: 'The output carries every recipe operator and coefficient back, so the recipe is recoverable from the generated English alone.',
+      },
+      {
+        id: 'n13',
+        node_key: 'confidence_marker|warning|recipe_coefficient_unfit',
+        kind: 'confidence_marker',
+        role: 'warning',
+        label: 'coefficients unfit',
+        normalized_label: 'coefficients unfit',
+        axis_attrs: { band: 'warning' },
+        text: 'Recipe coefficients (2, 1, 0.5) are pedagogical defaults. The engine has not yet fit them to a corpus of real refusals.',
+      },
+    ],
+    edges: [
+      { id: 'e0', edge_key: 'user_prompt→nl_bridge', source: 'n0', target: 'n1', source_key: 'user_prompt|input|refusal_recipe|', target_key: 'nl_bridge|pattern|safety refusal recipe|conf=0.78', kind: 'parent_child' },
+      { id: 'e1', edge_key: 'nl_bridge→cas_expression', source: 'n1', target: 'n2', source_key: 'nl_bridge|pattern|safety refusal recipe|conf=0.78', target_key: 'cas_expression|inferred|theta_refusal|', kind: 'parent_child' },
+      { id: 'e2', edge_key: 'cas_expression→decomposition', source: 'n2', target: 'n3', source_key: 'cas_expression|inferred|theta_refusal|', target_key: 'slot_pattern|decomposition|recipe prereqs|count=3', kind: 'parent_child' },
+      { id: 'e3', edge_key: 'decomposition→prereq1', source: 'n3', target: 'n4', source_key: 'slot_pattern|decomposition|recipe prereqs|count=3', target_key: 'cas_expression|prereq1|principled aversion fused|coef=2', kind: 'parent_child' },
+      { id: 'e4', edge_key: 'prereq1→reg_a', source: 'n4', target: 'n5', source_key: 'cas_expression|prereq1|principled aversion fused|coef=2', target_key: 'identifier_attempt|reg_a|^3^P|A', kind: 'parent_child' },
+      { id: 'e5', edge_key: 'prereq1→reg_f', source: 'n4', target: 'n6', source_key: 'cas_expression|prereq1|principled aversion fused|coef=2', target_key: 'identifier_attempt|reg_f|^3^P|f', kind: 'parent_child' },
+      { id: 'e6', edge_key: 'prereq1→reg_t', source: 'n4', target: 'n7', source_key: 'cas_expression|prereq1|principled aversion fused|coef=2', target_key: 'identifier_attempt|reg_t|^3^P|T', kind: 'parent_child' },
+      { id: 'e7', edge_key: 'prereq1→emergent', source: 'n4', target: 'n8', source_key: 'cas_expression|prereq1|principled aversion fused|coef=2', target_key: 'model_generation|emergent|^3^P|Ω', kind: 'parent_child' },
+      { id: 'e8', edge_key: 'decomposition→prereq2', source: 'n3', target: 'n9', source_key: 'slot_pattern|decomposition|recipe prereqs|count=3', target_key: 'cas_expression|prereq2|^6^P × ^9^O|coef=1', kind: 'parent_child' },
+      { id: 'e9', edge_key: 'decomposition→prereq3', source: 'n3', target: 'n10', source_key: 'slot_pattern|decomposition|recipe prereqs|count=3', target_key: 'cas_expression|prereq3|^7^C_{F2|A}|coef=0.5', kind: 'parent_child' },
+      { id: 'e10', edge_key: 'cas_expression→model_output', source: 'n2', target: 'n11', source_key: 'cas_expression|inferred|theta_refusal|', target_key: 'model_generation|output|refusal_explanation|', kind: 'parent_child' },
+      { id: 'e11', edge_key: 'model_output→slot_trace', source: 'n11', target: 'n12', source_key: 'model_generation|output|refusal_explanation|', target_key: 'slot_pattern|summary|recipe structure recovered|length=92', kind: 'parent_child' },
+      { id: 'e12', edge_key: 'model_output→confidence', source: 'n11', target: 'n13', source_key: 'model_generation|output|refusal_explanation|', target_key: 'confidence_marker|warning|recipe_coefficient_unfit', kind: 'parent_child' },
+    ],
+    node_count: 14,
+    edge_count: 13,
+  },
+};
+
 export interface TraceLoaderProps {
   onTraceLoaded: (trace: AtlasTrace) => void;
   onError: (message: string) => void;
@@ -327,6 +762,11 @@ export function TraceLoader({ onTraceLoaded, onError }: TraceLoaderProps) {
     handleLoadedTrace(DEMO_TRACE, 'Bundled demo');
   }, [handleLoadedTrace]);
 
+  // ── Complex demo button — full Θ recipe walkthrough ──
+  const handleComplexDemo = useCallback(() => {
+    handleLoadedTrace(DEMO_TRACE_COMPLEX, 'Bundled complex demo (Θ recipe)');
+  }, [handleLoadedTrace]);
+
   // ── File reader helper ──
   const readFile = useCallback(
     (file: File) => {
@@ -405,6 +845,15 @@ export function TraceLoader({ onTraceLoaded, onError }: TraceLoaderProps) {
           className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400"
         >
           Load demo trace
+        </button>
+
+        <button
+          type="button"
+          onClick={handleComplexDemo}
+          title="A 14-node Θ recipe trace exercising every Atlas capability"
+          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400"
+        >
+          Load complex demo (Θ recipe)
         </button>
 
         <label className="inline-flex cursor-pointer items-center rounded-lg border border-slate-600 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-100 hover:bg-slate-700 focus-within:ring-2 focus-within:ring-cyan-400">

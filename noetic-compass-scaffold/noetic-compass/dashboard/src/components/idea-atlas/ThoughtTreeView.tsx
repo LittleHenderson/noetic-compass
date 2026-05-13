@@ -629,6 +629,60 @@ export function ThoughtTreeView({
         </g>
       </svg>
 
+      {/* Zoom toolbar — top-right overlay. Visible controls because
+          trackpad-scroll-to-zoom is not discoverable. */}
+      <div
+        data-testid="thought-tree-toolbar"
+        className="absolute right-2 top-2 flex flex-col gap-1 rounded-md bg-black/45 p-1 backdrop-blur-sm"
+      >
+        <button
+          type="button"
+          aria-label="Zoom in"
+          title="Zoom in"
+          onClick={() => setZoom((z) => Math.min(3, z * 1.2))}
+          className="flex h-7 w-7 items-center justify-center rounded text-slate-200 hover:bg-white/10 hover:text-white"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          aria-label="Zoom out"
+          title="Zoom out"
+          onClick={() => setZoom((z) => Math.max(0.4, z / 1.2))}
+          className="flex h-7 w-7 items-center justify-center rounded text-slate-200 hover:bg-white/10 hover:text-white"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          aria-label="Reset view"
+          title="Reset view (fit to screen)"
+          onClick={() => {
+            setZoom(1);
+            setPan({ x: 0, y: 0 });
+          }}
+          className="flex h-7 w-7 items-center justify-center rounded text-slate-200 hover:bg-white/10 hover:text-white"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M3 9V5a2 2 0 0 1 2-2h4" />
+            <path d="M21 9V5a2 2 0 0 0-2-2h-4" />
+            <path d="M3 15v4a2 2 0 0 0 2 2h4" />
+            <path d="M21 15v4a2 2 0 0 1-2 2h-4" />
+          </svg>
+        </button>
+        <div
+          aria-hidden="true"
+          className="px-0.5 pt-0.5 text-center font-mono text-[9px] text-slate-400"
+        >
+          {Math.round(zoom * 100)}%
+        </div>
+      </div>
+
       {/* Legend — color encoding key, bottom-left overlay */}
       <div
         data-testid="thought-tree-legend"
@@ -644,6 +698,14 @@ export function ThoughtTreeView({
             <span>{kindLabel(kind).toLowerCase()}</span>
           </div>
         ))}
+      </div>
+
+      {/* Bottom-right hint — discoverability for trackpad zoom + drag pan */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/40 px-2 py-1 font-mono text-[9px] text-slate-400 backdrop-blur-sm"
+      >
+        scroll to zoom · drag to pan · click a card
       </div>
     </div>
   );
