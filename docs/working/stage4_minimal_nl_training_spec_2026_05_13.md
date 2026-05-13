@@ -50,7 +50,8 @@ Per `feedback_cas_native_data_strategy_2026_05_13.md`. Tier order matters: lower
 
 Source: existing `cas-synthetic/` corpora. Specifically:
 - `cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000_v77_relabeled.jsonl` (eval-only — DO NOT train on this).
-- `cas-synthetic/data/path_d/wave_2_5/*.jsonl` (the SFE-gated cas_to_english corpus — 5,268 records at last count).
+- `cas-synthetic/data/path_d/wave3_step2_5_english_descriptions_20260508T203848Z.jsonl` (+ `..._20260509T002355Z.jsonl` + `..._20260509T002541Z.jsonl`, 5,268 SFE-certified records total per memory `project_path_d_wave_2_5_promoted_2026_05_08.md`).
+- Sibling validator-clean file: `cas-synthetic/data/path_d/wave3_step2_5_clean_current_validators_20260508T110453Z.jsonl` (346 records). Use as a verification subset before pulling the full SFE corpus.
 - `cas-synthetic/data/native_nl/v1_dialogue_*` corpora — sample-read for fluent-Q&A pairs, filter heavily. Memory `feedback_audit_corpus_before_proposing_reuse.md` warns these reply with "the precise notation is...", not casual English; strict filter accepted 0 of 24,565 last audit.
 
 Hard rules:
@@ -173,15 +174,58 @@ The trace surface is non-optional. Memory `feedback_traceability_is_the_whole_pu
 
 ## 7. Training compute estimate
 
-Per memo `feedback_cas_native_data_strategy_2026_05_13.md` and memory `feedback_gpu_vs_cpu_for_real_training_runs.md`.
+Per memo `feedback_cas_native_data_strategy_2026_05_13.md` and memory `feedback_gpu_vs_cpu_for_real_training_runs.md`. Buckets are **separated** so planning doesn't conflate small-model pod cost with multi-sweep program cost.
 
-- Corpus prep (CPU + Claude API for paraphrase grammar verification): ~$200-500 in API spend, 2-5 days laptop wall-time. Memory `feedback_parallelize_sdg_with_training.md` — runs in parallel with checkpoint setup work.
-- Training pod: RunPod A100 80GB. Memory `feedback_canary_cost_dominates_short_runs.md` — set canary cadence to final-step only for short runs.
-- Steps: 5K records × 3 epochs × batch 128 = ~120 steps. 25K records × 3 epochs × batch 128 = ~600 steps.
-- Wall-time: 30 min (5K) to 4 hours (25K). Memory `feedback_cas_native_underfit_over_overfit_short_epochs.md` — 2-3 epochs default, sample-read every epoch.
-- GPU cost: ~$5-25K range stated in AUTHORIZED entry is the conservative HF-Stage-4-with-style-priors estimate. Pure Tier 1+2 (no Tier 3 ingestion overhead) lands ~$200-2K. Real number depends on Tier 3 inclusion + sweep count.
+### Bucket A — Current small-model Stage 4 v0 pod training
 
-Total Stage 4 cost band: $200-25K depending on tier 3 inclusion + sweep count. The low end is realistic for the v0 demo path; the high end is a fully ablated, multi-sweep release-quality run.
+This is the realistic v0 demo cost — one training run at the current ~150M simplex-MVP scale, single sweep, no extensive hyperparameter search.
+
+- Pod: RunPod A100 80GB.
+- Steps: 5K records × 3 epochs × batch 128 ≈ 120 steps. 25K records × 3 epochs × batch 128 ≈ 600 steps.
+- Wall-time: ~30 min (5K) to ~4 hours (25K). Memory `feedback_cas_native_underfit_over_overfit_short_epochs.md` — 2-3 epochs default, sample-read every epoch.
+- GPU rate: A100 80GB ≈ $2/hr on RunPod.
+- **Pod cost: ~$1-15 for a single Stage 4 v0 training run.**
+- Memory `feedback_canary_cost_dominates_short_runs.md` — set canary cadence to final-step only for short runs.
+
+### Bucket B — Corpus engineering (CPU + paraphrase grammar build + sample-read audits)
+
+This is the labor cost of building Tier 1+2 corpus before training. No model training here.
+
+- Paraphrase-grammar build: ~2-5 days laptop wall-time. CPU.
+- Compile-validation pass: ~hours of compiler-time. Free.
+- Human sample-read audits per memory `feedback_audit_corpus_before_proposing_reuse.md`: ~10-20 hours of user review across audit gates.
+- **Bucket B cost: $0 in cloud spend. Wall-time-bound, not money-bound.**
+
+### Bucket C — Optional Tier 3 ingestion (HF/Kaggle style priors)
+
+This is the cost of ingesting Tier 3 dialogue corpora for English-side style priors only. CAS supervision still comes from Tier 1+2.
+
+- License review: pre-flight, free.
+- Ingestion + sample-read filtering: ~1-2 days laptop wall-time + ~$100-500 in API spend if Claude/programmatic filtering is used for triage.
+- **Bucket C cost: $0-500. Skip entirely if Tier 1+2 alone clears the gates.**
+
+### Bucket D — Multi-sweep release-quality program (NOT v0)
+
+This is the cost of an ablated, peer-reviewable Stage 4 release with multiple hyperparameter sweeps and held-out audits across corpus sizes. This is NOT Stage 4 v0.
+
+- ~5-10 sweeps × ~$5-15 per sweep ≈ $25-150 in pod time.
+- Optional Mode 7 visualization tests, Atlas integration tests: extra ~$50-200.
+- Memory `feedback_back_up_successful_runs_imperative.md` — backup archive overhead is bytes, free.
+- **Bucket D cost: $75-500 if the program is run on the current small-model scale.**
+
+### Bucket E — Future large-model scaling (300M / 1B / larger)
+
+This is the cost band the original AUTHORIZED entry's "$5-25K" referred to: scaling Stage 4's recipe to a future larger CAS-Native backbone. NOT in scope for Stage 4 v0. Captured here so the v0 planning numbers don't contaminate the large-model planning numbers.
+
+- Scale 300M-1B params: ~$500-5K per training run on A100 cluster.
+- Multi-run ablation + Atlas-quality demo: ~$5-25K.
+- **Bucket E cost: $5-25K. Treat as a separate AUTHORIZED entry, gated on Stage 4 v0 success + large-model architecture decision.**
+
+### Honest summary
+
+**Stage 4 v0 (Buckets A + B + optional C) — total realistic cost band: $1-500.** Almost all of that is Tier 3 ingestion API spend, which is optional. Pure Tier 1+2 v0 training is single-digit dollars.
+
+Buckets D and E are deliberately separated so the v0 plan isn't inflated by large-model or multi-sweep numbers.
 
 ## 8. Gate criteria for Stage 4 promotion
 
@@ -193,7 +237,7 @@ Per memory `feedback_separate_evidence_levels_in_status.md` — don't conflate "
 
 ### Gate 2 — Round-trip preservation (CAS grounding)
 
-Generate CAS from English → explain CAS via Stage 3 → recover original concept via heuristic bridge or K=9 K=9 classifier. ≥0.80 round-trip on held-out anchor set. Memory `feedback_cas_native_5_layer_eval.md` — round-trip is the CAS grounding eval layer.
+Generate CAS from English → explain CAS via Stage 3 → recover original concept via the heuristic bridge or the K=9 classifier (`inference/predict_cas.py`). ≥0.80 round-trip on held-out anchor set. Memory `feedback_cas_native_5_layer_eval.md` — round-trip is the CAS grounding eval layer.
 
 ### Gate 3 — Trace coverage (Traceability v0)
 

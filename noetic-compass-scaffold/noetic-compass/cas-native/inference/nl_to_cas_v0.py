@@ -89,8 +89,8 @@ _NL_PATTERNS: list[tuple[re.Pattern, str, str, str, float]] = [
         ),
         "thought becoming action",
         "^9^O",
-        "An Idea brought to Mind in the Operational domain — a "
-        "thought that lands as behavior.",
+        "Below/Effect in the Operational domain — a thought landing "
+        "as behavior.",
         0.95,
     ),
     (

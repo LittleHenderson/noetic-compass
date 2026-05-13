@@ -519,6 +519,13 @@ def handle_turn(
             "rationale": nl_match.rationale,
             "confidence": nl_match.confidence,
         }
+        # The explainer already embedded a `traceability_v0` trace, but
+        # it was built BEFORE `nl_bridge` was added, so the trace's
+        # `input` section is missing the NL bridge metadata. Rebuild
+        # now so /trace answers "why did English phrase X become CAS Y?"
+        # — per Codex audit 2026-05-13T19:17Z blocker 1.
+        from cas_native.inference.traceability_v0 import build_v0_trace
+        report["traceability_v0"] = build_v0_trace(report)
         state.push_explain(report)
         # User-facing text: show the inferred CAS + rationale + then
         # the model's Plain Mode explanation. The user always sees

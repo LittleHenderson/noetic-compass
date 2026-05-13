@@ -162,6 +162,57 @@ def test_nl_bridge_followed_by_slash_trace_works():
     assert parsed["input"]["cas_expression"] == "^9^O"
 
 
+def test_nl_bridge_trace_surfaces_original_english_and_match_metadata():
+    """REGRESSION PIN (Codex audit 2026-05-13T19:17Z blocker 1):
+    /trace must answer 'why did English phrase X become CAS Y?'.
+
+    The trace's `input` section must carry the original English text,
+    the matched pattern description, the bridge confidence, the
+    rationale, AND an explicit `input_kind = "nl_bridge"` marker — not
+    only the inferred CAS expression.
+    """
+    state = SessionState()
+    handle_turn("explain a thought becoming action", state, _DummyExplainer())
+    response = handle_turn("/trace", state, _DummyExplainer())
+    import json
+    parsed = json.loads(response.text)
+    input_section = parsed["input"]
+    # Explicit kind marker so UI / Atlas can render NL-bridge inputs
+    # differently from raw CAS inputs.
+    assert input_section["input_kind"] == "nl_bridge"
+    # Original English the user typed — load-bearing for the
+    # "why did this phrase map to this CAS?" stakeholder question.
+    assert input_section["user_text"] == "explain a thought becoming action"
+    # NL bridge sub-dict carries the match metadata
+    assert "nl_bridge" in input_section
+    bridge_meta = input_section["nl_bridge"]
+    assert bridge_meta["matched_pattern"] == "thought becoming action"
+    assert bridge_meta["inferred_cas_expression"] == "^9^O"
+    assert 0.0 < bridge_meta["confidence"] <= 1.0
+    # Rationale is the plain-English explanation of the CAS shown to
+    # the user — should survive into the trace for full stakeholder
+    # audit.
+    assert isinstance(bridge_meta["rationale"], str)
+    assert len(bridge_meta["rationale"]) > 0
+
+
+def test_direct_cas_trace_uses_cas_expression_input_kind():
+    """REGRESSION PIN (negative pair to the NL bridge test): when the
+    input is a direct CAS expression (NOT through the heuristic
+    bridge), the trace's input_kind is `cas_expression` and there is
+    no `nl_bridge` sub-dict. Confirms the kind marker discriminates
+    correctly."""
+    state = SessionState()
+    handle_turn("^3^P|A", state, _DummyExplainer())
+    response = handle_turn("/trace", state, _DummyExplainer())
+    import json
+    parsed = json.loads(response.text)
+    input_section = parsed["input"]
+    assert input_section["input_kind"] == "cas_expression"
+    assert "nl_bridge" not in input_section
+    assert "user_text" not in input_section
+
+
 def test_classify_empty():
     assert classify_input("") == "empty"
     assert classify_input("   ") == "empty"

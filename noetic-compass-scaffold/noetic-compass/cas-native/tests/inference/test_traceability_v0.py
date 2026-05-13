@@ -405,3 +405,65 @@ def test_output_layer_carries_english_and_n_tokens():
     ))
     assert trace["output"]["english"] == "hello world"
     assert trace["output"]["n_tokens"] == 42
+
+
+# ---------------------------------------------------------------------------
+# NL bridge metadata (Codex audit 2026-05-13T19:17Z blocker 1)
+# ---------------------------------------------------------------------------
+
+def test_input_kind_is_cas_expression_by_default():
+    """REGRESSION PIN: when the report carries no `nl_bridge`, the
+    trace's input section uses `input_kind = "cas_expression"` and
+    has no nl_bridge sub-dict."""
+    trace = build_v0_trace(_make_report())
+    assert trace["input"]["input_kind"] == "cas_expression"
+    assert "nl_bridge" not in trace["input"]
+    assert "user_text" not in trace["input"]
+
+
+def test_nl_bridge_metadata_lands_in_input_section():
+    """REGRESSION PIN (Codex audit 2026-05-13T19:17Z blocker 1):
+    when `report["nl_bridge"]` is present, the trace's input section
+    must carry input_kind="nl_bridge", the original English user_text,
+    and an nl_bridge sub-dict with matched_pattern + confidence +
+    rationale + inferred_cas_expression. This is what answers the
+    stakeholder question "why did English phrase X become CAS Y?"."""
+    report = _make_report(cas_expression="^9^O")
+    report["nl_bridge"] = {
+        "user_text": "explain a thought becoming action",
+        "matched_pattern": "thought becoming action",
+        "cas_expression": "^9^O",
+        "rationale": "Below/Effect in the Operational domain.",
+        "confidence": 0.95,
+    }
+    trace = build_v0_trace(report)
+    input_section = trace["input"]
+    assert input_section["input_kind"] == "nl_bridge"
+    assert input_section["user_text"] == "explain a thought becoming action"
+    # CAS expression still surfaces at the top-level input layer
+    assert input_section["cas_expression"] == "^9^O"
+    # source_tokens still computed from the inferred CAS
+    assert input_section["source_tokens"] == [{"index": 0, "token": "^9^O"}]
+    # nl_bridge sub-dict carries the full match metadata
+    bridge = input_section["nl_bridge"]
+    assert bridge["matched_pattern"] == "thought becoming action"
+    assert bridge["confidence"] == 0.95
+    assert bridge["rationale"] == "Below/Effect in the Operational domain."
+    assert bridge["inferred_cas_expression"] == "^9^O"
+
+
+def test_nl_bridge_trace_still_round_trips_through_json():
+    """The extended input section must remain JSON-serializable."""
+    report = _make_report()
+    report["nl_bridge"] = {
+        "user_text": "turn anger into CAS",
+        "matched_pattern": "anger as CAS state",
+        "cas_expression": "^3^E|f",
+        "rationale": "Negative in the Evaluative domain, Affective register.",
+        "confidence": 1.0,
+    }
+    trace = build_v0_trace(report)
+    s = trace_to_json(trace)
+    parsed = json.loads(s)
+    assert parsed["input"]["input_kind"] == "nl_bridge"
+    assert parsed["input"]["nl_bridge"]["matched_pattern"] == "anger as CAS state"

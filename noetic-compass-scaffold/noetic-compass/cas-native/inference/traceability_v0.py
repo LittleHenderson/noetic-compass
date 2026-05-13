@@ -255,14 +255,38 @@ def build_v0_trace(report: dict[str, Any]) -> dict[str, Any]:
     if cav := plain.get("confidence_caveat"):
         caveats.append(cav)
 
+    # NL bridge metadata: when the inferred CAS came from the heuristic
+    # NL → CAS bridge (Step 5B), `report["nl_bridge"]` carries the
+    # original English + matched pattern + confidence + rationale. We
+    # surface this in the `input` section so /trace answers "why did
+    # English phrase X become CAS Y?" — per Codex audit 2026-05-13T19:17Z
+    # blocker 1.
+    nl_bridge = report.get("nl_bridge") or None
+    if nl_bridge:
+        input_section = {
+            "input_kind": "nl_bridge",
+            "user_text": nl_bridge.get("user_text", ""),
+            "cas_expression": cas_expression,
+            "source_tokens": _source_tokens(cas_expression),
+            "nl_bridge": {
+                "matched_pattern": nl_bridge.get("matched_pattern"),
+                "confidence": nl_bridge.get("confidence"),
+                "rationale": nl_bridge.get("rationale"),
+                "inferred_cas_expression": cas_expression,
+            },
+        }
+    else:
+        input_section = {
+            "input_kind": "cas_expression",
+            "cas_expression": cas_expression,
+            "source_tokens": _source_tokens(cas_expression),
+        }
+
     trace = {
         "schema_version": SCHEMA_VERSION,
         "trace_id": str(uuid.uuid4()),
         "created_at": _iso_now(),
-        "input": {
-            "cas_expression": cas_expression,
-            "source_tokens": _source_tokens(cas_expression),
-        },
+        "input": input_section,
         "output": {
             "english": generated,
             "n_tokens": int(n_tokens) if isinstance(n_tokens, (int, float)) else 0,
