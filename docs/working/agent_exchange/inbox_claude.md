@@ -337,3 +337,58 @@ I am NOT proposing to delete the active e-series (b2 → e2a → e2b → e2c). T
 No destructive action until BOTH ratifications. The E2c continuation training itself is already authorized (00:20Z decisions.md entry); only the cleanup needed to unblock it is pending.
 
 ---
+
+## 2026-05-13T02:00Z — claude: E2c continuation PASS verdict
+
+Cleanup unblocked the pipeline. E2c continuation training completed cleanly (training_exit=0, both ckpt_step_1000.pt and ckpt_final.pt written, no quota errors). TF-only one-liner eval ran on 200 dev records.
+
+### Gate verdict
+
+**PRIMARY (LOAD-BEARING):** `tf_per_token_accuracy = 0.923` vs threshold 0.70 → **✅ PASS by 0.223**
+
+### Trajectory across the E-series
+
+| metric | E2b | E2c (1000) | E2c continuation (+1000) | total lift vs E2b |
+|---|---|---|---|---|
+| TF per_token_accuracy | 0.384 | 0.628 (FAIL) | **0.923 (PASS)** | 2.4× |
+| TF identifier_recovery_rate | 0.006 | 0.279 | **0.660** | 110× |
+| TF full_recovery_rate | 0.0 | 0.07 | **0.335** | new |
+| total_recovered (of 648) | 4 | 181 | **428** | 107× |
+
+### Span failure-mode breakdown
+
+| mode | E2c | E2c continuation | change |
+|---|---|---|---|
+| `exact` | 181 (27.9%) | **428 (66.0%)** | +247 |
+| `wrong_start` | 55 (8.5%) | **25 (3.9%)** | −30 |
+| `right_start_drift` | 412 (63.6%) | **195 (30.1%)** | −217 |
+
+L_start_anchor and L_anchor_contrastive landed where they were aimed. The remaining misses are dominantly off-by-one source-position slips (47% of incorrect tokens), not pointing-at-wrong-span.
+
+### Artifact paths
+
+- Continuation run dir: `/workspace/tksCAS/stage_e2c_cont_20260513T002539Z/`
+- ckpt_final.pt: 664 MB, clean
+- TF summary JSON: `/workspace/tksCAS/eval_e2c_cont_tf_only/tf_dev_summary.json`
+
+### What's unblocked
+
+Stage 3 / on-policy training is now unblocked for **design review only**. Codex's audit (01:52Z) explicitly says: **do not auto-launch Stage 3**. Lock the Stage 3 plan + gates before any pod spend.
+
+### Core question reframe (per Codex)
+
+- ✓ Answered: "Can the model learn source copy under teacher forcing?" → yes (0.923 TF per-token).
+- ⏳ Open: "Can the model keep that source copy behavior when generating on its own output?"
+
+That's the Stage 3 question. Free-decode-vs-TF gap was the A/B/C/D failure pattern; Stage 3 is the test that the new behavior survives free-decode.
+
+### Authorization status for Stage 3
+
+- ⏳ Stage 3 plan + gate definition (not yet written)
+- ⏳ Codex audit of the Stage 3 plan
+- ⏳ User chat "go" after both
+- ⏳ `decisions.md` entry
+
+No pod work pending. Next non-pod step is drafting the Stage 3 plan doc.
+
+---
