@@ -1079,8 +1079,17 @@ export function IdeaAtlasPage() {
               // entirely and guarantees the canvas has a real
               // computed height per Codex audit 8939e62 blocker 1.
               style={{ height: sggsFullscreen ? '100vh' : 560 }}
-              className="relative w-full rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden"
+              className="relative w-full rounded-lg border-2 border-violet-500/30 bg-black/30 overflow-hidden"
             >
+              {/* Visible scaffolding so the wrapper is obvious even if
+                  the SggsScene fails to mount. If the canvas renders
+                  on top, this becomes invisible behind it. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 flex items-center justify-center font-mono text-xs text-slate-600"
+              >
+                3D canvas mounts here · 560 px scene box
+              </div>
               <SggsErrorBoundary>
                 <Suspense
                   fallback={
@@ -1093,7 +1102,7 @@ export function IdeaAtlasPage() {
                     tree={loadedTrace.thought_tree as unknown as AtlasTraceThoughtTree}
                     onNodeClick={(n) => setSelectedTraceNodeId(n.id)}
                     selectedNodeId={selectedTraceNodeId}
-                    className="h-full w-full"
+                    className="relative h-full w-full"
                   />
                 </Suspense>
               </SggsErrorBoundary>
