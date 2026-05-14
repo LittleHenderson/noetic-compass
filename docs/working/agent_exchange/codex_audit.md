@@ -3532,3 +3532,21 @@ Verification:
 - `SggsScene.test.tsx`: 13/13 pass.
 - SGGS dashboard slice: 73/73 pass.
 - Production build clean.
+
+## 2026-05-14 - SGGS cube-wide soft glow patch
+
+Follow-up from user visual QA:
+
+- The prior glow still read as one-sided, and the bright additive layer could wash out the face text.
+- Replaced the single cube glow with six face-aligned radiant gradient glow planes.
+- Glow planes sit behind the opaque face panels, so the whole cube can glow while the wording stays readable.
+- Hover and selection now brighten all six faces together, not just the front side.
+- Selected cubes still pulse, but at a lower opacity range so the highlight reads as a soft aura instead of a white blast.
+- Cleanup now disposes all six glow textures/materials/geometries per cube.
+
+Verification:
+
+- TypeScript clean.
+- `SggsScene.test.tsx`: 14/14 pass.
+- SGGS dashboard slice: 74/74 pass.
+- Production build clean.

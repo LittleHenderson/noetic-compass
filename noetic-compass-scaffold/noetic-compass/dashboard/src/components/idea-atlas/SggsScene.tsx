@@ -272,8 +272,10 @@ function makeFacePanel(
   const ctx = canvas.getContext('2d');
   if (ctx) {
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = `${fillHex}ee`;
+    ctx.fillStyle = fillHex;
     ctx.fillRect(12, 12, W - 24, H - 24);
+    ctx.fillStyle = 'rgba(2, 6, 23, 0.34)';
+    ctx.fillRect(20, 20, W - 40, H - 40);
     ctx.strokeStyle = strokeHex;
     ctx.lineWidth = 8;
     ctx.strokeRect(12, 12, W - 24, H - 24);
@@ -283,6 +285,9 @@ function makeFacePanel(
     ctx.font = 'bold 30px ui-monospace, SFMono-Regular, monospace';
     ctx.fillText(spec.title.toUpperCase(), W / 2, 92);
     ctx.fillStyle = '#f1f5f9';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.72)';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetY = 3;
     ctx.font = 'bold 34px ui-sans-serif, system-ui, sans-serif';
     for (let i = 0; i < spec.lines.slice(0, 3).length; i++) {
       ctx.fillText(spec.lines[i], W / 2, 198 + i * 58);
@@ -293,16 +298,75 @@ function makeFacePanel(
   const mat = new MeshBasicMaterial({
     map: tex,
     transparent: true,
-    opacity: 0.98,
+    opacity: 1,
     side: DoubleSide,
   });
-  return new Mesh(new PlaneGeometry(FACE_SIZE, FACE_SIZE), mat);
+  const mesh = new Mesh(new PlaneGeometry(FACE_SIZE, FACE_SIZE), mat);
+  mesh.renderOrder = 2;
+  return mesh;
+}
+
+function makeFaceGlow(strokeHex: string): Mesh | null {
+  if (typeof document === 'undefined') return null;
+  const canvas = document.createElement('canvas');
+  const W = 512;
+  const H = 512;
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.clearRect(0, 0, W, H);
+    const gradient = ctx.createRadialGradient(W / 2, H / 2, W * 0.12, W / 2, H / 2, W * 0.5);
+    gradient.addColorStop(0, `${strokeHex}ee`);
+    gradient.addColorStop(0.46, `${strokeHex}8c`);
+    gradient.addColorStop(0.74, `${strokeHex}34`);
+    gradient.addColorStop(1, `${strokeHex}00`);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, W, H);
+  }
+  const tex = new CanvasTexture(canvas);
+  tex.needsUpdate = true;
+  const mat = new MeshBasicMaterial({
+    map: tex,
+    transparent: true,
+    opacity: BASE_CUBE_GLOW_OPACITY,
+    blending: AdditiveBlending,
+    depthWrite: false,
+    side: DoubleSide,
+  });
+  const mesh = new Mesh(new PlaneGeometry(FACE_SIZE * 1.42, FACE_SIZE * 1.42), mat);
+  mesh.renderOrder = 1;
+  return mesh;
 }
 
 function placeFacePanel(panel: Mesh, side: CubeFaceSpec['side']): void {
   const z = NODE_D / 2 + 0.014;
   const x = NODE_W / 2 + 0.014;
   const y = NODE_H / 2 + 0.014;
+  if (side === 'front') {
+    panel.position.set(0, 0, z);
+  } else if (side === 'back') {
+    panel.position.set(0, 0, -z);
+    panel.rotation.y = Math.PI;
+  } else if (side === 'right') {
+    panel.position.set(x, 0, 0);
+    panel.rotation.y = Math.PI / 2;
+  } else if (side === 'left') {
+    panel.position.set(-x, 0, 0);
+    panel.rotation.y = -Math.PI / 2;
+  } else if (side === 'top') {
+    panel.position.set(0, y, 0);
+    panel.rotation.x = -Math.PI / 2;
+  } else {
+    panel.position.set(0, -y, 0);
+    panel.rotation.x = Math.PI / 2;
+  }
+}
+
+function placeFaceGlow(panel: Mesh, side: CubeFaceSpec['side']): void {
+  const z = NODE_D / 2 + 0.008;
+  const x = NODE_W / 2 + 0.008;
+  const y = NODE_H / 2 + 0.008;
   if (side === 'front') {
     panel.position.set(0, 0, z);
   } else if (side === 'back') {
@@ -331,14 +395,13 @@ interface NodeMeshBundle {
   ribbon: Mesh;
   /** Wireframe outline used to mark selection. Visible only when selected. */
   outline: LineSegments;
-  /** Additive-blended palette-colored halo plane behind the card. Always
-   *  rendered at low opacity so every card glows; the selected card
-   *  pulsates this halo's opacity + scale via the tick() loop. */
-  halo: Mesh;
+  /** Six face-aligned radiant glow planes. These sit behind the face
+   *  text panels so the whole cube glows without bleaching the words. */
+  faceGlows: Mesh[];
   facePanels: Mesh[];
   position: NodePos3D;
   node: ThoughtTreeNode;
-  /** Original fill color — kept for halo deselection state. */
+  /** Original fill color — kept so selection never washes out face text. */
   baseFill: Color;
   /** Stable per-card index. Used as a phase offset in the ambient float
    *  so neighbouring cards don't bob in lockstep. */
@@ -366,30 +429,7 @@ function buildNodeMesh(
   group.rotation.y = CUBE_READING_TILT_Y;
   group.userData = { 'data-node-id': node.id, kind: node.kind };
 
-  // Glow halo — additive-blended palette-colored plane behind the card.
-  // Always rendered at low opacity so every card has a soft glow; the
-  // tick() loop pulsates this on the selected card. Sized larger than
-  // the card so the halo bleeds out from the edges.
-  const haloMat = new MeshBasicMaterial({
-    color: palette.stroke.clone(),
-    transparent: true,
-    opacity: BASE_HALO_OPACITY,
-    blending: AdditiveBlending,
-    depthWrite: false,
-    // DoubleSide so the glow stays visible while the user orbits behind
-    // a card. Card body is already DoubleSide; halo matches it (Codex
-    // audit 8939e62 non-blocker note 2026-05-13).
-    side: DoubleSide,
-  });
-  const halo = new Mesh(
-    new PlaneGeometry(NODE_W * HALO_SCALE_W, NODE_H * HALO_SCALE_H),
-    haloMat,
-  );
-  halo.position.set(0, 0, -(NODE_D / 2 + 0.04)); // behind the cube body
-  halo.userData = { 'data-node-id': node.id, role: 'halo' };
-  group.add(halo);
-
-  // Card body — flat plane, palette fill.
+  // Cube body: solid palette fill behind the readable face panels.
   const bodyMat = new MeshBasicMaterial({
     color: palette.fill.clone(),
     transparent: true,
@@ -427,11 +467,23 @@ function buildNodeMesh(
   outline.userData = { 'data-node-id': node.id, role: 'outline' };
   group.add(outline);
 
-  // Label sprite — chip + 2-line title rendered to a CanvasTexture.
+  // Six cube faces + six radiant glow layers.
+  const faceGlows: Mesh[] = [];
   const facePanels: Mesh[] = [];
   const strokeHex = `#${palette.stroke.getHexString()}`;
   const fillHex = `#${palette.fill.getHexString()}`;
   for (const spec of faceSpecsForNode(node, pos, childCount)) {
+    const glow = makeFaceGlow(strokeHex);
+    if (glow) {
+      placeFaceGlow(glow, spec.side);
+      glow.userData = {
+        'data-node-id': node.id,
+        role: 'face-glow',
+        face: spec.side,
+      };
+      faceGlows.push(glow);
+      group.add(glow);
+    }
     const panel = makeFacePanel(spec, strokeHex, fillHex);
     if (!panel) continue;
     placeFacePanel(panel, spec.side);
@@ -450,7 +502,7 @@ function buildNodeMesh(
     body,
     ribbon,
     outline,
-    halo,
+    faceGlows,
     facePanels,
     position: pos,
     node,
@@ -471,19 +523,15 @@ const SELECT_LERP_MS = 200;
 // Camera fly-to duration when selection changes.
 const CAMERA_FLY_MS = 320;
 
-// Glow halo parameters. Every card gets a soft additive-blended halo
-// behind it at BASE_HALO_OPACITY. The selected card pulsates between
-// SELECTED_HALO_OPACITY_MIN..MAX and SELECTED_HALO_SCALE_MIN..MAX over
-// PULSE_PERIOD_MS, indexed by performance.now(). This replaces the
-// previous body-color-lerp-to-white selection style, which washed out
-// the white card text (user feedback 2026-05-13).
-const HALO_SCALE_W = 1.22;
-const HALO_SCALE_H = 1.36;
-const BASE_HALO_OPACITY = 0.28;
-const SELECTED_HALO_OPACITY_MIN = 0.55;
-const SELECTED_HALO_OPACITY_MAX = 0.92;
-const SELECTED_HALO_SCALE_MIN = 1.0;
-const SELECTED_HALO_SCALE_MAX = 1.18;
+// Cube glow parameters. The first glow pass used a single plane behind
+// the card, which lit only one side and washed out text. The current
+// version has six face-aligned radiant gradients behind the face text.
+const BASE_CUBE_GLOW_OPACITY = 0.08;
+const HOVER_CUBE_GLOW_OPACITY = 0.2;
+const SELECTED_CUBE_GLOW_OPACITY_MIN = 0.24;
+const SELECTED_CUBE_GLOW_OPACITY_MAX = 0.42;
+const SELECTED_CUBE_GLOW_SCALE_MIN = 1.0;
+const SELECTED_CUBE_GLOW_SCALE_MAX = 1.14;
 const PULSE_PERIOD_MS = 1500;
 
 // Ambient float — every card subtly bobs up/down so the structure
@@ -794,8 +842,8 @@ export function SggsScene({
       rafRef.current = requestAnimationFrame(tick);
       const now = performance.now();
       // Selection-state — body color stays at baseFill so white text on
-      // cards remains readable. Selection is signaled by halo intensity
-      // + scale + outline ring (no body washout). User feedback
+      // cube faces remains readable. Selection is signaled by face-glow
+      // intensity + outline ring (no body washout). User feedback
       // 2026-05-13: "highlighted box turns grayish and hides white
       // lettering — fix this."
       const sa = selectAnimRef.current;
@@ -819,26 +867,33 @@ export function SggsScene({
         if (t >= 1) selectAnimRef.current = null;
       }
 
-      // Glow halos — every card has a low-opacity additive halo (so the
-      // tree feels alive); the selected card pulsates between
-      // opacity_min..max and scale_min..max over PULSE_PERIOD_MS.
+      // Cube glow — every cube has six low-opacity radiant face glows;
+      // the hovered/selected cube brightens as a whole. Glows sit
+      // behind the readable face panels so they do not bleach text.
       const pulsePhase = (now % PULSE_PERIOD_MS) / PULSE_PERIOD_MS;
       // Sine wave 0..1 (smooth ease at the endpoints).
       const pulseT = (Math.sin(pulsePhase * Math.PI * 2 - Math.PI / 2) + 1) / 2;
       for (const bundle of meshesRef.current) {
-        const haloMat = bundle.halo.material as MeshBasicMaterial;
-        if (bundle.node.id === selectedIdRef.current) {
-          haloMat.opacity =
-            SELECTED_HALO_OPACITY_MIN +
-            (SELECTED_HALO_OPACITY_MAX - SELECTED_HALO_OPACITY_MIN) * pulseT;
-          const s =
-            SELECTED_HALO_SCALE_MIN +
-            (SELECTED_HALO_SCALE_MAX - SELECTED_HALO_SCALE_MIN) * pulseT;
-          bundle.halo.scale.set(s, s, 1);
-        } else {
-          // Snap back to base, in case this card was previously selected.
-          haloMat.opacity = BASE_HALO_OPACITY;
-          bundle.halo.scale.set(1, 1, 1);
+        const isSelected = bundle.node.id === selectedIdRef.current;
+        const isHovered = bundle.node.id === hoveredIdRef.current;
+        const glowOpacity = isSelected
+          ? SELECTED_CUBE_GLOW_OPACITY_MIN +
+            (SELECTED_CUBE_GLOW_OPACITY_MAX - SELECTED_CUBE_GLOW_OPACITY_MIN) *
+              pulseT
+          : isHovered
+            ? HOVER_CUBE_GLOW_OPACITY
+            : BASE_CUBE_GLOW_OPACITY;
+        const glowScale = isSelected
+          ? SELECTED_CUBE_GLOW_SCALE_MIN +
+            (SELECTED_CUBE_GLOW_SCALE_MAX - SELECTED_CUBE_GLOW_SCALE_MIN) *
+              pulseT
+          : isHovered
+            ? 1.08
+            : 1;
+        for (const glow of bundle.faceGlows) {
+          const mat = glow.material as MeshBasicMaterial;
+          mat.opacity = glowOpacity;
+          glow.scale.set(glowScale, glowScale, 1);
         }
       }
 
@@ -879,10 +934,7 @@ export function SggsScene({
         }
 
         // Damped bounce scale (whole group). Affects body/ribbon/faces/
-        // outline together so the cube pops then settles, without
-        // affecting the halo's separate pulse animation (halo lives in
-        // group-local space, so it inherits the bounce too — which is
-        // the intended visual).
+        // glows/outline together so the cube pops then settles.
         let bounceScale = 1.0;
         if (bundle.bounceStartedAt !== null) {
           const t = (now - bundle.bounceStartedAt) / BOUNCE_DURATION_MS;
@@ -938,24 +990,21 @@ export function SggsScene({
       testWrapper.__sggs_step = () => {
         // Force animation completion so tests can assert final state
         // deterministically. Body color stays at baseFill (no washout);
-        // selection is signaled by halo at SELECTED_HALO_OPACITY_MAX +
+        // selection is signaled by face glows +
         // outline ring fully visible. Mirrors the steady-state of the
         // rAF loop's selected branch.
         for (const bundle of meshesRef.current) {
           const isSelected = bundle.node.id === selectedIdRef.current;
           const mat = bundle.body.material as MeshBasicMaterial;
           mat.color.copy(bundle.baseFill);
-          const haloMat = bundle.halo.material as MeshBasicMaterial;
-          if (isSelected) {
-            haloMat.opacity = SELECTED_HALO_OPACITY_MAX;
-            bundle.halo.scale.set(
-              SELECTED_HALO_SCALE_MAX,
-              SELECTED_HALO_SCALE_MAX,
-              1,
-            );
-          } else {
-            haloMat.opacity = BASE_HALO_OPACITY;
-            bundle.halo.scale.set(1, 1, 1);
+          const glowOpacity = isSelected
+            ? SELECTED_CUBE_GLOW_OPACITY_MAX
+            : BASE_CUBE_GLOW_OPACITY;
+          const glowScale = isSelected ? SELECTED_CUBE_GLOW_SCALE_MAX : 1;
+          for (const glow of bundle.faceGlows) {
+            const glowMat = glow.material as MeshBasicMaterial;
+            glowMat.opacity = glowOpacity;
+            glow.scale.set(glowScale, glowScale, 1);
           }
           const outlineMat = bundle.outline.material as LineBasicMaterial;
           if (isSelected) {
@@ -992,10 +1041,8 @@ export function SggsScene({
       renderer.domElement.removeEventListener('pointerup', endCubeDrag, true);
       renderer.domElement.removeEventListener('pointercancel', endCubeDrag, true);
       renderer.domElement.removeEventListener('pointerleave', onPointerLeave, true);
-      // Dispose materials, geometries, textures. Per Codex audit
-      // 8939e62 blocker 3: halo geometry + material were missing here,
-      // which leaked GPU resources on every TRACE-3D tab close (the
-      // scene rebuilds when the tree prop changes).
+      // Dispose materials, geometries, textures. The scene rebuilds
+      // when the tree prop changes, so every cube-owned texture must go.
       for (const bundle of meshes) {
         bundle.body.geometry.dispose();
         (bundle.body.material as MeshBasicMaterial).dispose();
@@ -1003,8 +1050,12 @@ export function SggsScene({
         (bundle.ribbon.material as MeshBasicMaterial).dispose();
         bundle.outline.geometry.dispose();
         (bundle.outline.material as LineBasicMaterial).dispose();
-        bundle.halo.geometry.dispose();
-        (bundle.halo.material as MeshBasicMaterial).dispose();
+        for (const glow of bundle.faceGlows) {
+          glow.geometry.dispose();
+          const mat = glow.material as MeshBasicMaterial;
+          if (mat.map) mat.map.dispose();
+          mat.dispose();
+        }
         for (const panel of bundle.facePanels) {
           panel.geometry.dispose();
           const mat = panel.material as MeshBasicMaterial;

@@ -133,7 +133,13 @@ interface TestSurface {
       };
     };
     hasUserRotation: boolean;
+    faceGlows: Array<{
+      scale: { x: number };
+      material: { opacity: number };
+      userData: Record<string, unknown>;
+    }>;
     facePanels: Array<{
+      material: { opacity?: number };
       geometry: { parameters?: { width?: number; height?: number } };
       userData: Record<string, unknown>;
     }>;
@@ -260,6 +266,26 @@ describe('SggsScene — scene composition', () => {
       }
     }
   });
+
+  it('adds six radiant glow layers behind every cube face', () => {
+    const tree = makeSampleTree();
+    const { container } = render(
+      <SggsScene tree={tree} rendererFactory={makeRendererStub} />,
+    );
+    const wrapper = container.querySelector('[data-testid="sggs-scene"]') as
+      | (HTMLElement & TestSurface)
+      | null;
+    const expectedFaces = ['front', 'right', 'back', 'left', 'top', 'bottom'];
+    for (const bundle of wrapper!.__sggs_meshes!) {
+      expect(bundle.faceGlows).toHaveLength(6);
+      expect(bundle.faceGlows.map((glow) => glow.userData.face)).toEqual(
+        expectedFaces,
+      );
+      for (const panel of bundle.facePanels) {
+        expect(panel.material.opacity).toBe(1);
+      }
+    }
+  });
 });
 
 describe('SggsScene — click → onNodeClick', () => {
@@ -334,7 +360,7 @@ describe('SggsScene — selectedNodeId visual state', () => {
     // REGRESSION PIN (user feedback 2026-05-13): "when the box is
     // highlighted it turns grayish and the grayishness hides the
     // white lettering." Fix is to leave body color at the palette
-    // baseFill and signal selection via halo + outline instead.
+    // baseFill and signal selection via face glow + outline instead.
     const tree = makeSampleTree();
     const { container, rerender } = render(
       <SggsScene
@@ -375,10 +401,10 @@ describe('SggsScene — selectedNodeId visual state', () => {
     expect(bodyColorMatchesAccent).toBe(false);
   });
 
-  it('selected node halo pulses to higher opacity and scale', () => {
+  it('selected node glows on all six sides without washing out faces', () => {
     // REGRESSION PIN (user feedback 2026-05-13): "the highlighted one
-    // should glow and pulsate." Halo opacity and scale should reach
-    // their max values when the selection lerp completes.
+    // should glow and pulsate." The glow should wrap all six sides,
+    // while the face panels remain opaque enough to keep text readable.
     const tree = makeSampleTree();
     const { container, rerender } = render(
       <SggsScene
@@ -398,26 +424,17 @@ describe('SggsScene — selectedNodeId visual state', () => {
       />,
     );
     wrapper!.__sggs_step!();
-    const scene = wrapper!.__sggs_scene!;
-    let haloOpacity = 0;
-    let haloScale = 0;
-    scene.traverse((obj) => {
-      const role = (obj.userData as { role?: string })?.role;
-      const id = (obj.userData as { 'data-node-id'?: string })?.[
-        'data-node-id'
-      ];
-      if (role === 'halo' && id === 'n3') {
-        const mat = (obj as unknown as {
-          material: { opacity: number };
-        }).material;
-        haloOpacity = mat.opacity;
-        haloScale = (obj as unknown as { scale: { x: number } }).scale.x;
-      }
-    });
-    // Selected halo should be at the max pulse opacity (~0.92) and
-    // scaled up beyond 1.0.
-    expect(haloOpacity).toBeGreaterThan(0.5);
-    expect(haloScale).toBeGreaterThan(1.0);
+    const selected = wrapper!.__sggs_meshes!.find(
+      (m) => m.faceGlows[0].userData['data-node-id'] === 'n3',
+    )!;
+    expect(selected.faceGlows).toHaveLength(6);
+    for (const glow of selected.faceGlows) {
+      expect(glow.material.opacity).toBeGreaterThan(0.2);
+      expect(glow.scale.x).toBeGreaterThan(1.0);
+    }
+    for (const panel of selected.facePanels) {
+      expect(panel.material.opacity).toBe(1);
+    }
   });
 
   it('shows the outline only on the selected mesh', () => {
