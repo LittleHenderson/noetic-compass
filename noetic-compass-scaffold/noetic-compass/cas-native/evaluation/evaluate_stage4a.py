@@ -164,6 +164,15 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--encoder-n-heads", type=int, default=8)
     p.add_argument("--head-n-layers", type=int, default=6)
     p.add_argument("--head-n-heads", type=int, default=8)
+    p.add_argument(
+        "--allow-load-mismatch",
+        action="store_true",
+        help=(
+            "Permit a tolerant load_state_dict (missing/unexpected keys allowed). "
+            "Default is strict — Codex pre-launch lock per audit 27236de. "
+            "Use only for known-incompatible smoke runs."
+        ),
+    )
     return p
 
 
@@ -220,8 +229,24 @@ def main(argv: list[str] | None = None) -> int:
     raw = torch.load(str(ckpt_path), map_location="cpu", weights_only=False)
     state = raw.get("model") if isinstance(raw, dict) and "model" in raw else raw
     result = model.load_state_dict(state, strict=False)
-    n_missing = len(getattr(result, "missing_keys", []))
-    n_unexpected = len(getattr(result, "unexpected_keys", []))
+    missing_keys = list(getattr(result, "missing_keys", []))
+    unexpected_keys = list(getattr(result, "unexpected_keys", []))
+    n_missing = len(missing_keys)
+    n_unexpected = len(unexpected_keys)
+    # Codex pre-launch lock (audit 27236de): if checkpoint loading reports
+    # any missing or unexpected keys, the eval is invalid. Hard-fail unless
+    # the operator explicitly opts into a tolerant load.
+    if (n_missing > 0 or n_unexpected > 0) and not bool(getattr(args, "allow_load_mismatch", False)):
+        print(json.dumps({
+            "event": "fatal",
+            "reason": "load_state_dict_key_mismatch",
+            "n_missing_keys": n_missing,
+            "n_unexpected_keys": n_unexpected,
+            "missing_keys_sample": missing_keys[:10],
+            "unexpected_keys_sample": unexpected_keys[:10],
+            "hint": "model architecture flags must match the trained checkpoint exactly; pass --allow-load-mismatch only for known-incompatible smoke runs",
+        }))
+        return 4
     model.eval()
 
     # ---- Collator (for TF batch building) ----

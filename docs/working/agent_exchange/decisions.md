@@ -611,3 +611,143 @@ NOT in scope this entry:
 - SGGS Phase 2 live-witnessing wire-up (separate roadmap)
 
 ---
+
+## 2026-05-14T15:00Z — Stage 4A pod launch (English → CAS Front Door v0)
+
+DECISION: Stage 4A pod training of the Front Door v0 — train an English → CAS generation head on the 5,244-record Wave 2.5 + Wave 3 layer3 inverted corpus (`cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl`, sha256 `8ced4726bceae5176285a171d33ad6d9f3903c3047c240157fd51265ac3d2954`). Reuses the `train_native_nl_gen.py` real path (`NativeNLCollator` + `attach_nl_gen_head` + `forward_with_lm`). Post-training eval gated by `evaluate_stage4a.py` (commit `f273d36`) with the two Codex pre-launch locks below.
+
+AUTHORIZED: pending
+
+RATIFIED-BY: Codex audit `27236de` (evaluator + locks signed off) + awaiting user chat "go"
+
+CONTEXT: User's refined data rule ratified 2026-05-14 — "Foreign questions can broaden CAS. Foreign answers cannot define CAS." Stage 4A is the CAS-native local-first anchor. Inverter adapter `cf4828d`. Real-data corpus smoke matched between Claude + Codex (loss_lm 10.141 → 10.095 on Codex's micro command). Evaluator landed `f273d36`, hardened against silent (0,0) division + permissive compile-validity bugs.
+
+### Scope
+
+| Param | Value |
+|---|---|
+| Pod | RunPod A6000 48GB (default) or A100 80GB (if A6000 unavailable) |
+| Corpus | `cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl` (5,244 records, sha256 `8ced4726…`) |
+| Tokenizer | `cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json` |
+| English BPE | `cas-synthetic/data/native_nl/english_bpe_50k_20260507.json` |
+| Epochs | 3 |
+| Batch size | 32 |
+| Approx steps | 5,244 × 3 / 32 ≈ 491 |
+| Wall-time estimate | 30–60 min on A6000 |
+| LR / curriculum | trainer defaults (`--lr 2e-4`, β linear ramp `0.1 → 1.0` over 10K steps — short run stays near β=0.1) |
+| Arch flags | `--d-model 512 --encoder-n-layers 6 --encoder-n-heads 8 --head-n-layers 6 --head-n-heads 8` (trainer defaults; locked so eval `--d-model …` matches the trained checkpoint exactly) |
+| `--use-cas-prefix` | OFF — Stage 4A inverter sets `cas_expression=""` deliberately (target leakage guard) |
+| Budget cap | ≤ **$5** total GPU spend (kill-switch if exceeded) |
+
+### Codex pre-launch locks (must be satisfied for the eval to count)
+
+**Lock 1 — Full validation set.** Post-training eval must run with `--limit 0` (no cap). Expected ~262 records out of the deterministic 95/5 split. Default 50 is for iteration, not promotion.
+
+**Lock 2 — Strict load.** `evaluate_stage4a.py` defaults to strict `load_state_dict`: any missing or unexpected key aborts the eval. The `--allow-load-mismatch` escape hatch must NOT be used for the promotion eval. Codex audit 27236de.
+
+### Pod-side pre-flight smoke
+
+Before the real run, run the Codex real-data micro smoke command on the pod (NOT `--smoke-test`). Same shape as Codex's `dbbce48` verification, swapped to CUDA:
+
+```bash
+python noetic-compass-scaffold/noetic-compass/cas-native/training/train_native_nl_gen.py \
+  --data-path cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl \
+  --tokenizer-path cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json \
+  --english-bpe-path cas-synthetic/data/native_nl/english_bpe_50k_20260507.json \
+  --output-dir /workspace/tksCAS/stage4a_preflight_TS \
+  --device cuda:0 --limit 8 --epochs 1 --batch-size 4 \
+  --d-model 512 --encoder-n-layers 6 --encoder-n-heads 8 \
+  --head-n-layers 6 --head-n-heads 8 \
+  --train-log-every-steps 1 --beta-curriculum-steps 10 --seed 1729
+```
+
+Pre-flight passes if: corpus hash matches `8ced4726…`, `loss_lm` finite (not NaN), `mode=real`, 2 global steps, `training_complete` event emitted. Total time: ~2 min on A6000.
+
+### Real training launch command
+
+After pre-flight passes:
+
+```bash
+python noetic-compass-scaffold/noetic-compass/cas-native/training/train_native_nl_gen.py \
+  --data-path cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl \
+  --tokenizer-path cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json \
+  --english-bpe-path cas-synthetic/data/native_nl/english_bpe_50k_20260507.json \
+  --output-dir /workspace/tksCAS/stage4a_v0_TS \
+  --device cuda:0 --epochs 3 --batch-size 32 \
+  --d-model 512 --encoder-n-layers 6 --encoder-n-heads 8 \
+  --head-n-layers 6 --head-n-heads 8 \
+  --lr 2e-4 --beta-curriculum-steps 10000 \
+  --train-log-every-steps 20 --seed 42
+```
+
+### Eval gate after training (the four-rule check, calibrated for v0)
+
+Run with `--limit 0` (full val split):
+
+```bash
+python noetic-compass-scaffold/noetic-compass/cas-native/evaluation/evaluate_stage4a.py \
+  --checkpoint /workspace/tksCAS/stage4a_v0_TS \
+  --corpus cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl \
+  --tokenizer-path cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json \
+  --english-bpe-path cas-synthetic/data/native_nl/english_bpe_50k_20260507.json \
+  --output-dir /workspace/tksCAS/stage4a_eval_v0_TS \
+  --device cuda:0 --limit 0 --max-new-tokens 96 --sample-reads 12 \
+  --d-model 512 --encoder-n-layers 6 --encoder-n-heads 8 \
+  --head-n-layers 6 --head-n-heads 8
+```
+
+Promotion gates (v0, "did the model learn anything" floor — Codex to calibrate up/down after first numbers land):
+
+| Gate | Floor | Source |
+|---|---|---|
+| TF per-token accuracy | ≥ 0.20 | Stage 4 spec §8 gate 1 analogue |
+| Free-decode CAS validity rate | ≥ 0.50 | Stage 4 spec §8 gate 1 |
+| Normalized recovery rate | ≥ 0.10 | covers minor whitespace variation |
+| Per-grammar-category min validity | ≥ 0.25 in ≥ 7 of 10 buckets | catches bucket-skew failure |
+| No silent load mismatch | n_missing == 0 AND n_unexpected == 0 | Lock 2 |
+| Human sample read | user reads 12 samples; PASS = "this looks like a CAS-conditioned model trying to write CAS" | per `feedback_samples_are_the_only_true_eval_for_cas_native.md` |
+
+Six measurements emitted regardless of gate state (gate is for promotion, not for the eval itself running).
+
+### Kill-switch (during training)
+
+Stop run + report failure if ANY of:
+1. `loss_lm` NaN or +Inf at any logged step
+2. `loss_lm` plateau > 50 steps (no decrease ≥ 1e-4)
+3. Sample mode-collapse on mid-train sampling (if enabled) — i.e., greedy output repeats single token > 80% of sampled positions
+4. Wall-time > 90 min OR GPU spend > $5
+
+### Backup discipline (per `feedback_back_up_successful_runs_imperative.md`)
+
+On successful eval pass: immediately scp the full run dir (model_final.pt + tokenizer.json + english_bpe.json + checkpoint_manifest.json + training_events.jsonl + eval report JSON + samples.jsonl) to `D:\tksCAS-archive\stage4a_v0_TS\`. Three independent sha256 confirmations. Do not wait for the demo to be needed.
+
+### Push discipline
+
+Commit + push the eval report + samples + a short eval findings doc immediately after the run lands. Per `feedback_push_immediately_after_commit.md`.
+
+### Budget
+
+| Item | Cap |
+|---|---|
+| Pre-flight smoke | ≤ $0.10 (A6000 ~ $0.80/hr × ~5 min) |
+| Real run | ≤ $1.20 (A6000 × ~60 min) |
+| Eval | ≤ $0.50 (A6000 × ~15 min on 262 records) |
+| Buffer | ~$3.20 |
+| **Hard cap** | **$5.00** |
+
+### What is NOT in scope this entry
+
+- Stage 4B external-question SDG pilot (separate AUTHORIZED entry — user-ratified to run in parallel per `feedback_parallelize_sdg_with_training.md`, but the pilot scope/budget/dataset pick still needs its own ratification).
+- Stage 4C 70/30 mix retrain (post-Stage 4A; new AUTHORIZED entry once 4A baselines + 4B pilot land).
+- Mode 7 real-checkpoint upgrade (separate entry above, 2026-05-14T05:45Z).
+- Lane A conversational dialogue training (separate entry per `codex_onboarding_2026_05_14.md` §10).
+
+### Provenance trail
+
+- Corpus build: commit `cf4828d` (inverter adapter + corpus + manifest)
+- Audit Track 1+2: commit `4c48e11` (pre-flight findings)
+- Stage 4 spec: `docs/working/stage4_minimal_nl_training_spec_2026_05_13.md`
+- Data rule refinement: `feedback_cas_native_data_strategy_2026_05_13.md` (foreign-questions-OK refinement)
+- Codex Stage 4 directive: `codex_audit.md` 2026-05-14T00:??Z + 14:05Z + 27236de
+- Evaluator: commit `f273d36`, strict-load patch this commit (next commit)
+- Real-data micro-smoke (Claude verified): loss_lm 10.141 → 10.095, mode=real, 2 steps, matches Codex's numbers exactly.
