@@ -231,8 +231,8 @@ def test_sharded_manifest_loads_records_across_shards(tmp_path):
             {
                 "schema_version": "native_nl.v1",
                 "shard_paths": [
-                    "cas-synthetic/data/native_nl/shard_a.jsonl",
-                    "cas-synthetic/data/native_nl/shard_b.jsonl",
+                    "cas-synthetic\\data\\native_nl\\shard_a.jsonl",
+                    "cas-synthetic\\data\\native_nl\\shard_b.jsonl",
                 ],
             }
         ),

@@ -207,7 +207,8 @@ def _hash_single_file(path: str | Path) -> str:
 
 
 def _resolve_manifest_path(raw_path: str, *, manifest_path: Path) -> Path:
-    candidate = Path(raw_path)
+    normalized_path = raw_path.replace("\\", os.sep)
+    candidate = Path(normalized_path)
     if candidate.is_absolute():
         return candidate
 
