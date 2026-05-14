@@ -22,6 +22,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import StreamingResponse
 
+from api.config import settings
 from api.notation.compiler import compile_expression
 from api.routes.idea_atlas import _synthesize_from_signals
 
@@ -53,6 +54,15 @@ _NODE_RELEVANT_HEADS = {
     "slot_pattern": ("expression_family", "transition_kind", "drive"),
     "confidence_marker": ("turn_type", "authority", "omega", "meta_logic"),
 }
+_DEFAULT_PREDICTOR_RUN_NAME = (
+    "structured-token-recoverable-paraphrase-v77fix-20epoch-gpu-20260502-1045"
+)
+_PREDICTOR_ARTIFACTS = (
+    "best_structured_token_model.pt",
+    "structured_token_vocab.json",
+    "manifest.json",
+)
+_PREDICTOR_CACHE: dict[tuple[str, str], tuple[Any | None, list[str]]] = {}
 
 
 def _ensure_cas_native_alias() -> None:
@@ -69,6 +79,153 @@ def _ensure_cas_native_alias() -> None:
     package.__file__ = str(package_root / "__init__.py")
     package.__path__ = [str(package_root)]  # type: ignore[attr-defined]
     sys.modules["cas_native"] = package
+
+
+def _default_predictor_run_dir() -> Path:
+    return (
+        Path(__file__).resolve().parents[2]
+        / "cas-native"
+        / "training"
+        / "runs"
+        / _DEFAULT_PREDICTOR_RUN_NAME
+    )
+
+
+def _configured_predictor_run_dir() -> Path:
+    raw = (settings.cas_native_predictor_run_dir or "").strip()
+    if not raw:
+        return _default_predictor_run_dir()
+    return Path(raw).expanduser()
+
+
+def _predictor_artifact_diagnostics(run_dir: Path) -> list[str]:
+    if not run_dir.exists():
+        return [f"cas_native_predictor_run_dir_missing:{run_dir}"]
+    missing = [name for name in _PREDICTOR_ARTIFACTS if not (run_dir / name).exists()]
+    if missing:
+        return [
+            "cas_native_predictor_artifacts_missing:"
+            + ",".join(missing)
+            + f":{run_dir}"
+        ]
+    return []
+
+
+def _load_live_predictor() -> tuple[Any | None, list[str]]:
+    """Load the local CAS Native structured-token predictor when available."""
+    if not settings.cas_native_predictor_enabled:
+        return None, ["cas_native_predictor_disabled"]
+
+    run_dir = _configured_predictor_run_dir()
+    device = (settings.cas_native_predictor_device or "cpu").strip() or "cpu"
+    key = (str(run_dir), device)
+    cached = _PREDICTOR_CACHE.get(key)
+    if cached is not None:
+        return cached
+
+    diagnostics = _predictor_artifact_diagnostics(run_dir)
+    if diagnostics:
+        result = (None, diagnostics)
+        _PREDICTOR_CACHE[key] = result
+        return result
+
+    try:
+        _ensure_cas_native_alias()
+        from cas_native.inference.predict_cas import load_predictor
+
+        predictor = load_predictor(run_dir, device=device)
+    except Exception as exc:
+        diagnostics = [
+            f"cas_native_predictor_load_failed:{type(exc).__name__}:{exc}"
+        ]
+        result = (None, diagnostics)
+        _PREDICTOR_CACHE[key] = result
+        return result
+
+    result = (
+        predictor,
+        [
+            "cas_native_predictor_loaded:"
+            + f"{run_dir}:device={device}"
+        ],
+    )
+    _PREDICTOR_CACHE[key] = result
+    return result
+
+
+def _cas_expression_from_prediction(prediction: dict[str, Any]) -> str:
+    noetic = prediction.get("noetic")
+    try:
+        noetic_int = int(noetic)
+    except (TypeError, ValueError):
+        noetic_int = 0
+    noetic_int = max(0, min(9, noetic_int))
+
+    domain = str(prediction.get("domain") or "C")
+    if domain not in _DOMAIN_ORDER:
+        domain = "C"
+
+    drive = str(prediction.get("drive") or "F1")
+    if not re.fullmatch(r"F[1-7]", drive):
+        drive = "F1"
+
+    return f"CO-{noetic_int}^{domain}_{{{drive}}}"
+
+
+def _render_prediction_english(
+    prompt: str,
+    cas_expression: str,
+    prediction: dict[str, Any],
+) -> str:
+    try:
+        _ensure_cas_native_alias()
+        from cas_native.inference.cas_renderer import render_cas_prediction
+
+        return render_cas_prediction(prediction)
+    except Exception:
+        return (
+            "CAS Native structured prediction for: "
+            f"{prompt.strip() or cas_expression}. CAS expression: {cas_expression}"
+        )
+
+
+def _try_live_cas_native_prediction(prompt: str) -> tuple[dict[str, Any] | None, list[str]]:
+    """Run prompt through the local CAS Native predictor with live hooks."""
+    clean_prompt = (prompt or "").strip()
+    if not clean_prompt:
+        return None, []
+
+    predictor, diagnostics = _load_live_predictor()
+    if predictor is None:
+        return None, diagnostics
+
+    t_start = time.perf_counter()
+    try:
+        prediction, live_trace = predictor(
+            clean_prompt,
+            with_trace=True,
+            trace_top_k=5,
+        )
+    except Exception as exc:
+        return None, diagnostics + [
+            f"cas_native_predictor_inference_failed:{type(exc).__name__}:{exc}"
+        ]
+
+    trace_payload = (
+        live_trace.to_dict()
+        if hasattr(live_trace, "to_dict")
+        else dict(live_trace or {})
+    )
+    elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+    return {
+        "source": "cas_native.inference.predict_cas",
+        "run_dir": str(_configured_predictor_run_dir()),
+        "device": (settings.cas_native_predictor_device or "cpu").strip() or "cpu",
+        "prediction": dict(prediction or {}),
+        "live_trace": trace_payload,
+        "elapsed_ms": _clean_float(elapsed_ms, digits=3),
+        "diagnostics": diagnostics,
+    }, diagnostics
 
 
 def _extract_identifiers(text: str) -> list[str]:
@@ -428,10 +585,196 @@ def _fallback_mechanistic_summary(
     }
 
 
+def _live_trace_layer_summary(record: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "name": str(record.get("name") or "unknown_layer"),
+        "shape": list(record.get("shape") or []),
+        "l2_norm": _clean_float(record.get("l2_norm")),
+        "mean_abs": _clean_float(record.get("mean_abs")),
+        "max_abs": _clean_float(record.get("max_abs")),
+        "flat_preview": [
+            _clean_float(value)
+            for value in list(record.get("flat_preview") or [])[:8]
+        ],
+    }
+
+
+def _live_token_records(report: dict[str, Any], tokens: list[str]) -> list[dict[str, Any]]:
+    if not tokens:
+        trace_input = _trace_input_for_mechanistic(report)
+        tokens = [token for token in trace_input.split() if token]
+
+    expected = set((report.get("identifiers") or {}).get("expected") or [])
+    copied = set((report.get("identifiers") or {}).get("copied") or [])
+    expression_tokens = set(str(report.get("input_cas_expression") or "").split())
+    records: list[dict[str, Any]] = []
+    for index, token in enumerate(tokens):
+        normalized = token.strip(".,;:()[]{}")
+        roles = ["structured_prediction_input"]
+        score = _stable_score("live_token", token, index)
+        if normalized in expected:
+            score += 1.0
+            roles.append("expected_identifier")
+        if normalized in copied:
+            score += 1.0
+            roles.append("copied_identifier")
+        if token in expression_tokens:
+            score += 0.5
+            roles.append("cas_source_token")
+        if _CAS_TOKEN_RE.search(token):
+            score += 0.75
+            roles.append("cas_structural_token")
+        records.append(
+            {
+                "index": index,
+                "token": str(token),
+                "score": _clean_float(score),
+                "roles": roles,
+                "attribution_basis": (
+                    "live_input_token; token-gradient attribution pending"
+                ),
+            }
+        )
+    records.sort(key=lambda record: (-record["score"], record["index"]))
+    return records[:8]
+
+
+def _mechanistic_summary_from_live_trace(
+    report: dict[str, Any],
+    live_runtime: dict[str, Any],
+) -> dict[str, Any]:
+    trace_payload = dict(live_runtime.get("live_trace") or {})
+    prediction = dict(live_runtime.get("prediction") or {})
+    trace_input = _trace_input_for_mechanistic(report)
+    tokens = [token for token in trace_input.split() if token]
+    head_records = {
+        str(head.get("name")): dict(head)
+        for head in list(trace_payload.get("heads") or [])
+        if isinstance(head, dict) and head.get("name") is not None
+    }
+
+    strengths: dict[str, float] = {}
+    for head in _CANONICAL_HEADS:
+        top_attr = head_records.get(head, {}).get("top_k_attribution") or []
+        total = 0.0
+        for pair in top_attr:
+            if isinstance(pair, (list, tuple)) and len(pair) >= 2:
+                total += abs(_clean_float(pair[1]))
+        strengths[head] = total
+    strength_total = sum(strengths.values())
+
+    per_head_attribution: dict[str, Any] = {}
+    raw_logits: dict[str, list[float]] = {}
+    for head in _CANONICAL_HEADS:
+        record = head_records.get(head, {})
+        raw_logits[head] = [
+            _clean_float(value)
+            for value in list(record.get("raw_logits") or [])
+            if isinstance(value, (int, float))
+        ]
+        token_weights = [
+            _stable_score(trace_input, head, token, index)
+            * max(0.01, _clean_float(record.get("confidence")))
+            for index, token in enumerate(tokens)
+        ]
+        top_dims = []
+        for pair in list(record.get("top_k_attribution") or [])[:5]:
+            if isinstance(pair, (list, tuple)) and len(pair) >= 2:
+                top_dims.append(
+                    {
+                        "index": int(pair[0]),
+                        "score": _clean_float(pair[1]),
+                    }
+                )
+        per_head_attribution[head] = {
+            "confidence": _clean_float(record.get("confidence")),
+            "capacity_share": _clean_float(
+                (strengths[head] / strength_total)
+                if strength_total > 0.0
+                else (1.0 / len(_CANONICAL_HEADS))
+            ),
+            "argmax_index": record.get("argmax_index"),
+            "argmax_label": record.get("argmax_label"),
+            "top_tokens": _top_token_records(tokens, token_weights),
+            "top_bottleneck_dims": top_dims,
+            "attribution_basis": "live_bottleneck_gradient_x_activation",
+        }
+
+    logits_summary = _logits_summary_from_raw(raw_logits)
+    copy_summary = _copy_distribution_summary(report)
+    hook_status = dict(trace_payload.get("hook_status") or {})
+    trace_diagnostics = list(trace_payload.get("diagnostics") or [])
+    runtime_diagnostics = list(live_runtime.get("diagnostics") or [])
+    diagnostics = runtime_diagnostics + trace_diagnostics
+    if "token_gradient_attribution_pending" not in diagnostics:
+        diagnostics.append("token_gradient_attribution_pending")
+
+    activation_layers = [
+        _live_trace_layer_summary(layer)
+        for layer in list(trace_payload.get("layer_activations") or [])
+        if isinstance(layer, dict)
+    ]
+    activation_summary = {
+        "headline": "live CAS Native structured-token predictor trace",
+        "schema_version": trace_payload.get("schema_version"),
+        "run_dir": live_runtime.get("run_dir"),
+        "device": live_runtime.get("device"),
+        "elapsed_ms": live_runtime.get("elapsed_ms"),
+        "timing": dict(trace_payload.get("timing") or {}),
+        "attention_entropy_summary": dict(
+            trace_payload.get("attention_entropy_summary") or {}
+        ),
+        "bottleneck_top_k": [
+            {
+                "index": int(pair[0]),
+                "activation": _clean_float(pair[1]),
+            }
+            for pair in list(trace_payload.get("bottleneck_top_k") or [])[:8]
+            if isinstance(pair, (list, tuple)) and len(pair) >= 2
+        ],
+        "prediction": prediction,
+    }
+
+    return {
+        "schema_version": "mode7_mechanistic_axis_attrs.v1",
+        "source": "cas_native.inference.predict_cas.live_trace",
+        "trace_input_token_count": len(tokens),
+        "activation_hooks": {
+            "source": "cas_native.trace.live_capture.capture_live_trace",
+            "hook_status": hook_status,
+            "captured": [name for name, fired in hook_status.items() if fired],
+            "missing": [name for name, fired in hook_status.items() if not fired],
+            "diagnostics": diagnostics,
+        },
+        "activation_layers": activation_layers,
+        "activation_summary": activation_summary,
+        "per_head_attribution": per_head_attribution,
+        "load_bearing_tokens": _live_token_records(report, tokens),
+        "logits_summary": logits_summary,
+        "copy_distribution_summary": copy_summary,
+        "logits_copy_distribution_summary": {
+            "logits": logits_summary,
+            "copy": copy_summary,
+        },
+        "domain_descent_attention": _domain_descent_attention_summary(
+            report,
+            prediction,
+        ),
+        "structured_prediction": prediction,
+        "diagnostics": diagnostics,
+    }
+
+
 def _build_mechanistic_axis_summary(report: dict[str, Any]) -> dict[str, Any]:
     """Build compact Mode 7 mechanistic fields for SGGS axis_attrs."""
     _ensure_cas_native_alias()
+    mode7 = report.get("mode7") or {}
+    live_runtime = mode7.get("live_runtime")
+    if isinstance(live_runtime, dict) and live_runtime.get("live_trace"):
+        return _mechanistic_summary_from_live_trace(report, live_runtime)
+
     trace_input = _trace_input_for_mechanistic(report)
+    predictor_diagnostics = list(mode7.get("predictor_diagnostics") or [])
     try:
         from cas_native.trace.mechanistic import render_trace_json, trace_prediction
 
@@ -445,7 +788,8 @@ def _build_mechanistic_axis_summary(report: dict[str, Any]) -> dict[str, Any]:
     except Exception as exc:
         return _fallback_mechanistic_summary(
             report,
-            [f"mechanistic_trace_fallback:{type(exc).__name__}"],
+            predictor_diagnostics
+            + [f"mechanistic_trace_fallback:{type(exc).__name__}"],
         )
 
     metadata = payload.get("metadata") or {}
@@ -474,7 +818,7 @@ def _build_mechanistic_axis_summary(report: dict[str, Any]) -> dict[str, Any]:
         _vector_summary("pre_bottleneck", raw.get("pre_bottleneck")),
         _vector_summary("post_bottleneck", raw.get("post_bottleneck")),
     ]
-    diagnostics = list(metadata.get("diagnostics") or [])
+    diagnostics = predictor_diagnostics + list(metadata.get("diagnostics") or [])
 
     return {
         "schema_version": "mode7_mechanistic_axis_attrs.v1",
@@ -524,22 +868,58 @@ def _validated_expression(prompt: str, expression: str | None) -> tuple[str, lis
 
 
 def _build_trace_report(prompt: str, expression: str | None) -> tuple[dict[str, Any], list[str]]:
-    """Build a cas-explain-shaped report without calling a model runtime."""
+    """Build a cas-explain-shaped report for the Mode 7 stream."""
     _ensure_cas_native_alias()
     from cas_native.inference.plain_english import translate_explain
     from cas_native.inference.traceability_v0 import build_v0_trace
 
-    cas_expression, warnings = _validated_expression(prompt, expression)
+    live_runtime, predictor_diagnostics = _try_live_cas_native_prediction(prompt)
+    warnings: list[str] = []
+    if (expression or "").strip():
+        cas_expression, validation_warnings = _validated_expression(prompt, expression)
+        warnings.extend(validation_warnings)
+    elif live_runtime is not None:
+        prediction = dict(live_runtime.get("prediction") or {})
+        candidate = _cas_expression_from_prediction(prediction)
+        artifact = compile_expression(candidate)
+        if artifact.valid:
+            cas_expression = candidate
+            warnings.append("CAS Native structured-token predictor inferred the CAS expression from the prompt.")
+        else:
+            cas_expression, validation_warnings = _validated_expression(prompt, expression)
+            warnings.extend(validation_warnings)
+            warnings.append("CAS Native predictor expression did not compile; used deterministic fallback expression.")
+    else:
+        cas_expression, validation_warnings = _validated_expression(prompt, expression)
+        warnings.extend(validation_warnings)
+
     expected = _extract_identifiers(cas_expression)
-    generated = (
-        f"Mode 7 local trace for: {prompt.strip() or cas_expression}. "
-        f"CAS expression: {cas_expression}"
-    )
+    if live_runtime is not None:
+        generated = _render_prediction_english(
+            prompt,
+            cas_expression,
+            dict(live_runtime.get("prediction") or {}),
+        )
+    else:
+        generated = (
+            f"Mode 7 local trace for: {prompt.strip() or cas_expression}. "
+            f"CAS expression: {cas_expression}"
+        )
     emitted = _extract_identifiers(generated)
     emitted_set = set(emitted)
     copied = [identifier for identifier in expected if identifier in emitted_set]
     missing = [identifier for identifier in expected if identifier not in emitted_set]
     coverage = (len(copied) / len(expected)) if expected else 0.0
+    runtime_name = (
+        "cas_native_structured_token_predictor"
+        if live_runtime is not None
+        else "deterministic_fallback"
+    )
+    decode_seconds = (
+        _clean_float(float(live_runtime.get("elapsed_ms") or 0.0) / 1000.0)
+        if live_runtime is not None
+        else 0.0
+    )
 
     report: dict[str, Any] = {
         "command": "mode7 live",
@@ -548,8 +928,8 @@ def _build_trace_report(prompt: str, expression: str | None) -> tuple[dict[str, 
         "input_prompt": prompt,
         "input_cas_expression": cas_expression,
         "model": {
-            "runtime": "deterministic_fallback",
-            "decode_seconds": 0.0,
+            "runtime": runtime_name,
+            "decode_seconds": decode_seconds,
         },
         "generated_english": generated,
         "n_tokens_generated": len(generated.split()),
@@ -567,8 +947,14 @@ def _build_trace_report(prompt: str, expression: str | None) -> tuple[dict[str, 
             "ge_one_identifier_copied": bool(copied),
         },
         "mode7": {
-            "runtime": "deterministic_fallback",
-            "source": "cas_native.traceability_v0.thought_tree",
+            "runtime": runtime_name,
+            "source": (
+                "cas_native.inference.predict_cas.live_trace"
+                if live_runtime is not None
+                else "cas_native.traceability_v0.thought_tree"
+            ),
+            "live_runtime": live_runtime,
+            "predictor_diagnostics": predictor_diagnostics,
         },
     }
     report["plain_english"] = translate_explain(report)

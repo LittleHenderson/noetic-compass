@@ -42,6 +42,13 @@ class Settings(BaseSettings):
     # Default LLM provider
     default_llm_provider: str = "mock"
 
+    # CAS Native structured-token predictor. When artifacts and torch are
+    # available, Mode 7 can use this for real NL -> CAS head predictions and
+    # live hook capture; otherwise it falls back to the deterministic demo path.
+    cas_native_predictor_enabled: bool = True
+    cas_native_predictor_run_dir: str = ""
+    cas_native_predictor_device: str = "cpu"
+
     # Optional secondary scorer LLM. Empty = no separate scorer for mock/base demo flows.
     scoring_provider: str = ""
     scoring_model: str = ""

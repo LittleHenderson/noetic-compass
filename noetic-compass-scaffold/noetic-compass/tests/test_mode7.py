@@ -114,7 +114,11 @@ def test_mode7_live_streams_sggs_events_from_expression(client, auth_headers):
     assert end["total_heads"] == len(head_payloads)
 
 
-def test_mode7_live_prompt_only_uses_local_fallback(client, auth_headers):
+def test_mode7_live_prompt_only_uses_local_fallback(client, auth_headers, monkeypatch):
+    from api.routes import mode7
+
+    monkeypatch.setattr(mode7.settings, "cas_native_predictor_enabled", False)
+
     resp = client.get(
         "/mode7/live",
         params={"prompt": "I am drawn to disciplined structure.", "delay_ms": 0},
@@ -126,3 +130,79 @@ def test_mode7_live_prompt_only_uses_local_fallback(client, auth_headers):
     warning_payloads = [event["data"] for event in events if event["event"] == "warning"]
     assert any("deterministic local synthesis" in payload["message"] for payload in warning_payloads)
     assert events[0]["data"]["user_text"] == "I am drawn to disciplined structure."
+
+
+def test_mode7_live_can_stream_cas_native_live_trace(client, auth_headers, monkeypatch):
+    from api.routes import mode7
+
+    def fake_live_runtime(prompt: str):
+        return {
+            "source": "cas_native.inference.predict_cas",
+            "run_dir": "fake-run",
+            "device": "cpu",
+            "prediction": {
+                "turn_type": "ANSWER",
+                "expression_family": "state",
+                "transition_kind": "state",
+                "noetic": 3,
+                "domain": "P",
+                "drive": "F6",
+                "register_mode": "single",
+                "registers": ["A"],
+                "authority": "none",
+                "has_omega": False,
+                "has_meta_logic": False,
+                "meta_relations": [],
+            },
+            "live_trace": {
+                "schema_version": "live_trace.v1",
+                "input_text": prompt,
+                "layer_activations": [
+                    {
+                        "name": "bottleneck",
+                        "shape": [1, 64],
+                        "l2_norm": 2.5,
+                        "mean_abs": 0.2,
+                        "max_abs": 1.1,
+                        "flat_preview": [0.1, -0.2, 0.3],
+                    }
+                ],
+                "bottleneck_top_k": [[4, 1.1], [9, -0.8]],
+                "heads": [
+                    {
+                        "name": "domain",
+                        "argmax_index": 0,
+                        "argmax_label": "P",
+                        "confidence": 0.91,
+                        "top_k_attribution": [[4, 0.7], [9, -0.4]],
+                        "raw_logits": [3.0, 1.0, -1.0, -2.0],
+                    }
+                ],
+                "attention_entropy_summary": {"entropy": 0.5, "token_count": 6.0},
+                "hook_status": {"bottleneck": True, "head:domain": True},
+                "diagnostics": ["fake_live_trace"],
+                "timing": {"forward_ms": 1.0, "attribution_ms": 2.0},
+            },
+            "elapsed_ms": 3.0,
+            "diagnostics": ["cas_native_predictor_loaded:fake"],
+        }, ["cas_native_predictor_loaded:fake"]
+
+    monkeypatch.setattr(mode7, "_try_live_cas_native_prediction", fake_live_runtime)
+
+    resp = client.get(
+        "/mode7/live",
+        params={"prompt": "refuse harmful instructions with principled structure", "delay_ms": 0},
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200, resp.text
+    events = _parse_sse(resp.text)
+    head_payload = next(event["data"] for event in events if event["event"] == "head_commit")
+    attrs = head_payload["axis_attrs"]
+    assert attrs["mode7_semantics"]["source"] == "cas_native.inference.predict_cas.live_trace"
+    assert attrs["activation_hooks"]["captured"] == ["bottleneck", "head:domain"]
+    assert attrs["activation_layers"][0]["name"] == "bottleneck"
+    assert attrs["per_head_attribution"]["domain"]["top_bottleneck_dims"]
+    assert attrs["load_bearing_tokens"]
+    assert "structured_prediction_input" in attrs["load_bearing_tokens"][0]["roles"]
+    assert "token_gradient_attribution_pending" in attrs["mechanistic_diagnostics"]

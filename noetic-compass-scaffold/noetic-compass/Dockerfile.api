@@ -41,6 +41,7 @@ COPY --from=builder /usr/local/lib/python3.12/site-packages/cas_engine* /usr/loc
 
 # Copy application code
 COPY api/ api/
+COPY cas-native/ cas-native/
 COPY scenarios/ scenarios/
 COPY validation/ validation/
 
