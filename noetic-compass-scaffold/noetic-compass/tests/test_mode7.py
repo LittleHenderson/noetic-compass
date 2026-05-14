@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+from pathlib import Path
 from typing import Any
 
 
@@ -32,6 +33,43 @@ def _parse_sse(body: str) -> list[dict[str, Any]]:
 def test_mode7_live_requires_auth(client):
     resp = client.get("/mode7/live", params={"prompt": "trace this"})
     assert resp.status_code == 401
+
+
+def test_mode7_runtime_requires_auth(client):
+    resp = client.get("/mode7/runtime")
+    assert resp.status_code == 401
+
+
+def test_mode7_runtime_reports_disabled_fallback(client, auth_headers, monkeypatch):
+    from api.routes import mode7
+
+    monkeypatch.setattr(mode7.settings, "cas_native_predictor_enabled", False)
+
+    resp = client.get("/mode7/runtime", headers=auth_headers)
+
+    assert resp.status_code == 200, resp.text
+    payload = resp.json()
+    assert payload["schema_version"] == "mode7_runtime_status.v1"
+    assert payload["active_mode"] == "deterministic_fallback"
+    assert payload["predictor_enabled"] is False
+    assert payload["predictor_ready"] is False
+    assert "cas_native_predictor_disabled" in payload["diagnostics"]
+
+
+def test_mode7_runtime_reports_missing_artifacts(client, auth_headers, monkeypatch):
+    from api.routes import mode7
+
+    missing = Path(__file__).resolve().parent / "__missing_mode7_runtime__"
+    monkeypatch.setattr(mode7.settings, "cas_native_predictor_enabled", True)
+    monkeypatch.setattr(mode7.settings, "cas_native_predictor_run_dir", str(missing))
+
+    resp = client.get("/mode7/runtime", headers=auth_headers)
+
+    assert resp.status_code == 200, resp.text
+    payload = resp.json()
+    assert payload["active_mode"] == "deterministic_fallback"
+    assert payload["artifacts"]["ready"] is False
+    assert any("cas_native_predictor_run_dir_missing" in item for item in payload["diagnostics"])
 
 
 def test_mode7_live_streams_sggs_events_from_expression(client, auth_headers):

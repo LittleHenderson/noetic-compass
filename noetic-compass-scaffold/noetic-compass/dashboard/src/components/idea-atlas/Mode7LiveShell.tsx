@@ -10,7 +10,9 @@ import {
 } from 'react';
 import {
   authenticatedSggsEventSource,
+  getMode7RuntimeStatus,
   mode7LiveUrl,
+  type Mode7RuntimeStatus,
 } from '../../api/sggs';
 import {
   useSggsLiveTree,
@@ -618,6 +620,8 @@ export function Mode7LiveShell() {
   const [streamEnabled, setStreamEnabled] = useState(false);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>('n0');
   const [fullscreen, setFullscreen] = useState(false);
+  const [runtimeStatus, setRuntimeStatus] = useState<Mode7RuntimeStatus | null>(null);
+  const [runtimeError, setRuntimeError] = useState<string | null>(null);
   const sceneShellRef = useRef<HTMLDivElement | null>(null);
 
   const streamUrl = useMemo(() => {
@@ -646,6 +650,19 @@ export function Mode7LiveShell() {
   const label = statusLabel(stream.status, streamEnabled, stream.state.endedAt);
   const isRunning =
     streamEnabled && (stream.status === 'connecting' || stream.status === 'open');
+  const runtimeReady = runtimeStatus?.predictor_ready === true;
+  const runtimeLabel = runtimeReady
+    ? 'CAS Native live predictor'
+    : runtimeStatus
+      ? 'Fallback trace runtime'
+      : runtimeError
+        ? 'Runtime check failed'
+        : 'Checking runtime';
+  const runtimeDetail = runtimeReady
+    ? `torch ${runtimeStatus?.torch.version ?? 'available'} on ${runtimeStatus?.configured.device ?? 'cpu'}`
+    : runtimeStatus
+      ? runtimeStatus.diagnostics[0] ?? 'fallback active'
+      : runtimeError ?? 'contacting API';
 
   const events = useMemo(
     () => stream.state.commits.map(commitEvent).slice(-12).reverse(),
@@ -852,6 +869,24 @@ export function Mode7LiveShell() {
     return () => document.removeEventListener('fullscreenchange', onChange);
   }, []);
 
+  useEffect(() => {
+    let alive = true;
+    setRuntimeError(null);
+    getMode7RuntimeStatus()
+      .then((status) => {
+        if (!alive) return;
+        setRuntimeStatus(status);
+      })
+      .catch((error: unknown) => {
+        if (!alive) return;
+        const message = error instanceof Error ? error.message : 'Runtime status unavailable';
+        setRuntimeError(message);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   const toggleFullscreen = useCallback(() => {
     const el = sceneShellRef.current;
     if (!el) return;
@@ -915,6 +950,20 @@ export function Mode7LiveShell() {
               logits, and trace links behind each CAS Native AI turn. The
               Living Thought Atlas is the SGGS witness viewport for that trace.
             </p>
+            <div
+              className={`mt-3 rounded border px-3 py-2 text-xs ${
+                runtimeReady
+                  ? 'border-emerald-400/25 bg-emerald-500/10 text-emerald-200'
+                  : runtimeError
+                    ? 'border-rose-400/25 bg-rose-500/10 text-rose-200'
+                    : 'border-amber-400/20 bg-amber-500/10 text-amber-100'
+              }`}
+            >
+              <div className="font-mono text-[10px] uppercase tracking-wider">
+                {runtimeLabel}
+              </div>
+              <div className="mt-1 break-words text-slate-300">{runtimeDetail}</div>
+            </div>
           </section>
 
           <form
@@ -969,6 +1018,10 @@ export function Mode7LiveShell() {
               <div className="flex items-center justify-between gap-3">
                 <dt className="text-slate-500">trace source</dt>
                 <dd className="text-right text-cyan-200">{displaySource}</dd>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <dt className="text-slate-500">runtime</dt>
+                <dd className="text-right text-cyan-200">{runtimeLabel}</dd>
               </div>
               <div className="flex items-center justify-between gap-3">
                 <dt className="text-slate-500">nodes</dt>

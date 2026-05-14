@@ -111,6 +111,132 @@ def _predictor_artifact_diagnostics(run_dir: Path) -> list[str]:
     return []
 
 
+def _path_status(path: Path) -> dict[str, Any]:
+    exists = path.exists()
+    return {
+        "path": str(path),
+        "exists": exists,
+        "size_bytes": int(path.stat().st_size) if exists and path.is_file() else None,
+    }
+
+
+def _torch_package_status() -> dict[str, Any]:
+    try:
+        from importlib import metadata, util
+
+        spec_available = util.find_spec("torch") is not None
+        try:
+            version = metadata.version("torch")
+        except metadata.PackageNotFoundError:
+            version = None
+    except Exception as exc:
+        return {
+            "available": False,
+            "version": None,
+            "diagnostic": f"torch_status_failed:{type(exc).__name__}:{exc}",
+        }
+
+    return {
+        "available": bool(spec_available or version),
+        "version": version,
+        "diagnostic": None,
+    }
+
+
+def _runtime_file_status() -> dict[str, Any]:
+    root = Path(__file__).resolve().parents[2] / "cas-native"
+    required = {
+        "predict_cas": root / "inference" / "predict_cas.py",
+        "cas_renderer": root / "inference" / "cas_renderer.py",
+        "trace_mechanistic": root / "trace" / "mechanistic.py",
+        "trace_activations": root / "trace" / "activations.py",
+        "trace_attribution": root / "trace" / "attribution.py",
+        "trace_network_summary": root / "trace" / "network_summary.py",
+        "trace_live_capture": root / "trace" / "live_capture.py",
+    }
+    files = {name: _path_status(path) for name, path in required.items()}
+    missing = [name for name, status in files.items() if not status["exists"]]
+    return {
+        "root": str(root),
+        "ready": not missing,
+        "files": files,
+        "missing": missing,
+    }
+
+
+def _mode7_runtime_status(*, load_predictor: bool = False) -> dict[str, Any]:
+    run_dir = _configured_predictor_run_dir()
+    artifact_diagnostics = _predictor_artifact_diagnostics(run_dir)
+    artifacts = {
+        name: _path_status(run_dir / name)
+        for name in _PREDICTOR_ARTIFACTS
+    }
+    torch_status = _torch_package_status()
+    runtime_files = _runtime_file_status()
+    device = (settings.cas_native_predictor_device or "cpu").strip() or "cpu"
+    cache_key = (str(run_dir), device)
+    cached = _PREDICTOR_CACHE.get(cache_key)
+    cached_loaded = cached is not None and cached[0] is not None
+    load_diagnostics: list[str] = []
+    loaded_now = False
+
+    if load_predictor and settings.cas_native_predictor_enabled:
+        predictor, load_diagnostics = _load_live_predictor()
+        loaded_now = predictor is not None
+        cached_loaded = loaded_now
+
+    diagnostics: list[str] = []
+    if not settings.cas_native_predictor_enabled:
+        diagnostics.append("cas_native_predictor_disabled")
+    diagnostics.extend(artifact_diagnostics)
+    if not torch_status["available"]:
+        diagnostics.append("torch_package_missing")
+    if not runtime_files["ready"]:
+        diagnostics.extend(
+            f"cas_native_runtime_file_missing:{name}"
+            for name in runtime_files["missing"]
+        )
+    diagnostics.extend(load_diagnostics)
+
+    artifacts_ready = not artifact_diagnostics
+    predictor_ready = (
+        bool(settings.cas_native_predictor_enabled)
+        and artifacts_ready
+        and bool(torch_status["available"])
+        and bool(runtime_files["ready"])
+        and (
+            not load_predictor
+            or loaded_now
+            or cached_loaded
+        )
+    )
+    active_mode = (
+        "cas_native_live_predictor"
+        if predictor_ready
+        else "deterministic_fallback"
+    )
+
+    return {
+        "schema_version": "mode7_runtime_status.v1",
+        "active_mode": active_mode,
+        "predictor_ready": predictor_ready,
+        "predictor_enabled": bool(settings.cas_native_predictor_enabled),
+        "predictor_loaded": cached_loaded,
+        "load_checked": bool(load_predictor),
+        "configured": {
+            "run_dir": str(run_dir),
+            "device": device,
+        },
+        "artifacts": {
+            "ready": artifacts_ready,
+            "files": artifacts,
+        },
+        "torch": torch_status,
+        "runtime_files": runtime_files,
+        "diagnostics": diagnostics,
+    }
+
+
 def _load_live_predictor() -> tuple[Any | None, list[str]]:
     """Load the local CAS Native structured-token predictor when available."""
     if not settings.cas_native_predictor_enabled:
@@ -1259,3 +1385,14 @@ async def live(
         media_type="text/event-stream",
         headers=headers,
     )
+
+
+@router.get("/runtime")
+async def runtime(
+    load: bool = Query(
+        False,
+        description="When true, attempts to load the CAS Native predictor weights.",
+    ),
+) -> dict[str, Any]:
+    """Report whether Mode 7 will use CAS Native live predictor or fallback."""
+    return _mode7_runtime_status(load_predictor=load)
