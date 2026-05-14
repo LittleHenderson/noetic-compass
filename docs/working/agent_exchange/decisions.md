@@ -879,3 +879,15 @@ Commit + push the eval report + samples + a v0.1 findings doc immediately after 
 - Codex v0.1 directive: `codex_audit.md` commit `3b03207` 2026-05-14T16:??Z
 - Diversity evaluator patch: commit `b030bf2` 2026-05-14T17:00Z
 - Findings doc: `docs/working/stage4a_v0_2026_05_14/FINDINGS.md`
+
+### OUTCOME — 2026-05-14T17:20Z
+
+Sequence ran to completion per the locked v0.1 entry (note: SSH disconnect at ~T+10min due to user-side power outage; `nohup` detach kept pod-side process alive, training finished cleanly via background). **NOT promoted.** Two mechanical gates failed: `normalized_recovery_rate` 0.000 < 0.10, `unique_output_ratio` 0.229 < 0.40. Five gates passed including the new diversity floor `mode_collapse_ratio` 0.111 ≤ 0.15.
+
+Headline deltas vs v0: TF accuracy +4.7pp (0.773), validity rate +2.2pp (0.927), top-mode share dropped substantially (now 11.1% of records); unique-output count tripled to 60/262. Model now produces one favorite template per surface family rather than v0's single template across categories. Recovery still 0 — input-content mapping not learned.
+
+Full findings: `docs/working/stage4a_v01_2026_05_14/FINDINGS.md`. Run dir on pod: `/workspace/tksCAS/stage4a_v01_20260514T170228Z`. Eval dir on pod: `/workspace/tksCAS/stage4a_eval_v01_20260514T171317Z`. Total v0.1 cost ~$0.09.
+
+Diagnosis: β curriculum lifted the LM head signal as expected, but the Wave 2.5 input distribution is the new ceiling — too templated for content-conditional encoder learning. Codex's pre-stated next-lever trigger fires: Stage 4B external-question SDG is justified.
+
+Per "backup IF it promotes" condition: local-archive scp NOT executed. Codex review pending (`inbox_claude.md` 2026-05-14T17:20Z) on Stage 4B kickoff scope.

@@ -1,0 +1,103 @@
+aggregate:
+  exact_recovery_rate : 0.0
+  free_decode_validity_rate : 0.9274809160305344
+  mode_collapse_ratio : 0.11068702290076336
+  n_records : 262
+  normalized_recovery_rate : 0.0
+  tf_per_token_accuracy : 0.7726013162452373
+  tf_tokens_scored : 5774
+  top_mode_count : 29
+  unique_output_ratio : 0.22900763358778625
+  unique_outputs_count : 60
+
+load_state_dict_missing_keys: 0
+load_state_dict_unexpected_keys: 0
+
+diversity — top 5 modes:
+  count= 29 share=0.111  text='(^4^C|A×^4^C|f)=^4^C|Ω_self'
+  count= 18 share=0.069  text='Θ(Ω_translation_22)=1*^5^O+1*^3^O→Ω_translation_22+0.1*Λ·Ω_translation_side'
+  count= 14 share=0.053  text='^5^C_{F1}|A'
+  count= 14 share=0.053  text='Φ⟨6:6⟩'
+  count= 11 share=0.042  text='letstageA0_3_0266=^0^P;letstageD3_3_0266=^6^P_{F3};letstageW3_3_0266=^7^C_{F3};letstageP3_3_0266=^7^E_{F3};stageD3_3_0266->stageW3_3_02'
+
+per_category:
+  binary_composition        n= 38 tf=0.568 valid=1.000 exact=0.000 norm=0.000
+  cross_register_omega      n= 33 tf=0.784 valid=1.000 exact=0.000 norm=0.000
+  diagram_export            n= 14 tf=0.743 valid=1.000 exact=0.000 norm=0.000
+  fractal_sequence          n= 28 tf=0.500 valid=1.000 exact=0.000 norm=0.000
+  inversion                 n=  4 tf=0.759 valid=1.000 exact=0.000 norm=0.000
+  let_binding               n= 21 tf=0.863 valid=1.000 exact=0.000 norm=0.000
+  meta_logic_relation       n= 37 tf=0.718 valid=0.946 exact=0.000 norm=0.000
+  recipe                    n= 27 tf=0.719 valid=1.000 exact=0.000 norm=0.000
+  rpm_chain                 n= 17 tf=0.929 valid=0.000 exact=0.000 norm=0.000
+  state_literal             n= 43 tf=0.327 valid=1.000 exact=0.000 norm=0.000
+
+per_surface_family:
+  caret_export       n= 14 tf=0.743 valid=1.000 exact=0.000 norm=0.000
+  caret_only         n=194 tf=0.732 valid=0.990 exact=0.000 norm=0.000
+  caret_stage        n= 18 tf=0.926 valid=0.056 exact=0.000 norm=0.000
+  co_form            n=  6 tf=0.667 valid=1.000 exact=0.000 norm=0.000
+  other              n=  2 tf=0.600 valid=1.000 exact=0.000 norm=0.000
+  phi_fractal        n= 28 tf=0.500 valid=1.000 exact=0.000 norm=0.000
+
+---SAMPLES---
+--- Sample 1 | surface=caret_export | cat=diagram_export | valid=True | exact=False | norm=False ---
+  prompt: Export "nu_0117" as a cluster of three: something that struck a chord, practice makes perfect, and one thing leads to another.
+  gold:   export let nu_0117 = NoeticCluster{^4, ^7, ^8}
+  gen:    export let alpha_0368 = NoeticCluster{^1, ^2, ^4, ^8}
+
+--- Sample 2 | surface=caret_export | cat=diagram_export | valid=True | exact=False | norm=False ---
+  prompt: Export epsilon_0343 as a recipe: take 1 of a thought in cognitive thinking and add 1 of paying attention to cognitive thinking — together these produce the outcome called decision.
+  gold:   export let epsilon_0343 = Theta(Omega_decision) = 1*^0^C + 1*^1^C -> Omega_decision
+  gen:    export let nu_0266 = Theta(Omega_translation) = 1*^8^E + 1*^8^E -> Omega_translation
+
+--- Sample 3 | surface=caret_only | cat=let_binding | valid=True | exact=False | norm=False ---
+  prompt: Let "vsrc_0478" name who one is, shaped by a principled foundation. Let "vtgt_0478" name paying attention to an evaluative judgment. Who one is, shaped by a principled foundation, then flows toward pa
+  gold:   let vsrc_0478 = ^5^P; let vtgt_0478 = ^1^E; vsrc_0478 -> vtgt_0478
+  gen:    let vsrc_0436 = ^0^P; let vtgt_0436 = ^1^O; vsrc_0436 -> vtgt_0436
+
+--- Sample 4 | surface=caret_only | cat=state_literal | valid=True | exact=False | norm=False ---
+  prompt: An aversion in the foundational realm, driven by a need for wisdom, expressed in a transcendent way of thinking.
+  gold:   ^3^P_{F2}|T
+  gen:    ^5^C_{F1}|A
+
+--- Sample 5 | surface=caret_stage | cat=rpm_chain | valid=False | exact=False | norm=False ---
+  prompt: Let stageA0_3_0071 name a foundational thought, stageD3_3_0071 name something that rubs the wrong way in the evaluative arena with vitality as the driving need, stageW3_3_0071 name a cognitive judgmen
+  gold:   let stageA0_3_0071 = ^0^P; let stageD3_3_0071 = ^3^P_{F3}; let stageW3_3_0071 = ^3^C_{F3}; let stageP3_3_0071 = ^3^E_{F3}; stageW3_3_0071 -> stageP3_3_0071
+  gen:    let stageA0_3_0266 = ^0^P; let stageD3_3_0266 = ^6^P_{F3}; let stageW3_3_0266 = ^7^C_{F3}; let stageP3_3_0266 = ^7^E_{F3}; stageD3_3_0266 -> stageW3_3_02
+
+--- Sample 6 | surface=caret_stage | cat=rpm_chain | valid=False | exact=False | norm=False ---
+  prompt: Let stageA0_2_0117 name a foundational thought, stageD2_2_0117 name practiced rhythm in the wisdom/insight realm, stageW2_2_0117 name practiced rhythm in the cognitive arena, and stageP2_2_0117 name p
+  gold:   let stageA0_2_0117 = ^0^P; let stageD2_2_0117 = ^7^P_{F2}; let stageW2_2_0117 = ^7^C_{F2}; let stageP2_2_0117 = ^7^E_{F2}; stageD2_2_0117 -> stageW2_2_0117
+  gen:    let stageA0_3_0366 = ^0^P; let stageD3_3_0366 = ^9^P_{F3}; let stageW3_3_0366 = ^7^C_{F3}; let stageP3_3_0366 = ^7^E_{F3}; stageD3_3_0366 -> stageW3_3_03
+
+--- Sample 7 | surface=co_form | cat=binary_composition | valid=True | exact=False | norm=False ---
+  prompt: Something that triggered a memory in the operational arena, integrated with a felt aversion in the cognitive arena.
+  gold:   CO-8 ∘ CO-3
+  gen:    ^7^C × ^7^C
+
+--- Sample 8 | surface=co_form | cat=binary_composition | valid=True | exact=False | norm=False ---
+  prompt: Something that just clicked in the operational arena integrated with a thought in the principled arena.
+  gold:   CO-9 ∘ CO-0
+  gen:    ^7^C_{F3}
+
+--- Sample 9 | surface=other | cat=meta_logic_relation | valid=True | exact=False | norm=False ---
+  prompt: The need for unity and cohesion belongs to the set of driving needs.
+  gold:   F1 ∈ Drives
+  gen:    NoeticCluster{^1, ^3, ^6}
+
+--- Sample 10 | surface=other | cat=meta_logic_relation | valid=True | exact=False | norm=False ---
+  prompt: A cluster of thoughts, aversions, things that struck a chord, who one is, and breaking ideas down.
+  gold:   |Drives|
+  gen:    NoeticCluster{^1, ^3, ^5, ^8}
+
+--- Sample 11 | surface=phi_fractal | cat=fractal_sequence | valid=True | exact=False | norm=False ---
+  prompt: Something that popped into mind led to being shaped by experience, which then turned into muscle memory.
+  gold:   Φ<9:5:7>
+  gen:    ^7^C × ^7^C
+
+--- Sample 12 | surface=phi_fractal | cat=fractal_sequence | valid=True | exact=False | norm=False ---
+  prompt: An idea led to paying attention, which became drawn to it, then breaking it down, shaped by experience, practice makes perfect, shaped by experience again, and breaking it down once more.
+  gold:   Phi<5:2:6:7:1:0:5:6>
+  gen:    Φ⟨2:2:2:2:2:2⟩
+
