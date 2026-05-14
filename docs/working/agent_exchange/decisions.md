@@ -1002,3 +1002,155 @@ Repair pipeline: 56 records (11.2%) needed at least one compile-repair retry; 25
 Full report: `docs/working/stage4b_pilot_2026_05_14/FINDINGS.md`. 50 sample reads + 5 judge-rejected + 3 compile-rejected + all 9 quarantine + 5 repair examples: `docs/working/stage4b_pilot_2026_05_14/sample_reads_50.txt`.
 
 No v0.2 retrain in this scope. Pending user sample-read of the 50 to gate the next AUTHORIZED entry for v0.2 retrain.
+
+## 2026-05-14T19:45Z — Stage 4A v0.2 pod retrain (Wave 2.5 + Stage 4B clean-train mix)
+
+DECISION: Retrain Stage 4A on a merged corpus combining Wave 2.5 (5,244 records from `track1_merged_2026_05_14.jsonl`) + Stage 4B clean-train (364 records from `stage4b_pilot_20260514T185757Z_accepted.jsonl` minus 9 quarantined copyright-flagged). All trainer hyperparameters frozen at v0.1 values. **Tests the corpus-diversity hypothesis: does broader English-side variety recover the input-content mapping that v0.1's templated Wave 2.5 prompts could not learn?**
+
+AUTHORIZED: pending
+
+RATIFIED-BY: Codex audit `728be8c` (Stage 4B pilot PASS, 50 sample reads cleared 40/50 bar) + awaiting user chat "go"
+
+CONTEXT: Stage 4B pilot 374/500 accepted, 364 clean-train (entry above 19:30Z). Sample-read gate passed per Codex 728be8c. Stage 4A v0 mode-collapsed; v0.1 reduced collapse but still 0% recovery; diagnosis attributed to Wave 2.5's templated-renderer English prompts not teaching content-conditional mapping. Stage 4B adds real-user prompt diversity for the 4 natural cognitive-operation categories.
+
+### Design decisions worth flagging up-front
+
+**1. Mix ratio: natural, NOT 70/30.** The original Stage 4 spec recommended 70% local / 30% external. Current natural ratio is ~93/7 (5,244 Wave 2.5 vs 364 Stage 4B). To hit 70/30 would require either:
+   - Downsampling Wave 2.5 to ~850 records (throws away most own-data — bad)
+   - Upsampling Stage 4B via 6× replication (1 record seen 6× per epoch — risk of memorizing the specific 364 — bad per memory `feedback_cas_native_underfit_over_overfit_short_epochs.md`)
+
+Decision: **mix at natural ratio (Wave 2.5 5,244 + Stage 4B 364 = 5,608 unique records, ~6.5% Stage 4B share)**. Same 6-epoch curriculum so the broader English distribution is seen multiple times without record-level duplication. If v0.2 fails the recovery gate AGAIN, the next lever is generating more Stage 4B records (cheap at $1.44 per 500), not changing mix ratio. This is the underfit-over-overfit pattern from memory.
+
+**2. Category-spread exception (Codex 728be8c).** Stage 4B emerged 4 categories instead of the AUTHORIZED entry's 5-floor. Acceptable because Wave 2.5 already covers the missing 6 categories (cross_register_omega, fractal_sequence, diagram_export, rpm_chain, inversion, meta_logic_relation) — these are CAS-internal patterns not naturally requested in user English. v0.2 corpus has ALL 10 categories represented (Wave 2.5 supplies the missing 6 with renderer-shaped prompts; Stage 4B supplies real-user prompt diversity on the 4 natural categories).
+
+**3. Hparams frozen from v0.1.** All training-side knobs unchanged so v0.2 vs v0.1 is a clean A/B on corpus only.
+
+### Scope (deltas from v0.1 in **bold**)
+
+| Param | v0.1 | v0.2 |
+|---|---|---|
+| Pod | A6000 48GB | same |
+| **Corpus** | Wave 2.5 only (5,244 records) | **Wave 2.5 + Stage 4B clean = 5,608 unique records** |
+| Tokenizer + BPE | as v0.1 | same |
+| Epochs | 6 | same |
+| Batch size | 32 | same |
+| Approx steps | 936 | **~1,000** (5,608 × 6 / 32 = 1,051) |
+| LR | 2e-4 | same |
+| `--beta-curriculum-steps` | 200 | same |
+| Arch flags | d-model 512, 6/8 enc, 6/8 head | same |
+| `--use-cas-prefix` | OFF | same |
+| `--seed` | 42 | same (deterministic val split → same 262 records ≈ for direct gate comparability) |
+| Wall-time estimate | ~7 min observed | **~7-8 min** |
+| Budget cap | ≤ $5 | ≤ $5 |
+
+### Pre-flight requirements
+
+1. Build merged corpus: new script `cas-synthetic/scripts/build_stage4_v02_merged_corpus.py` inverts Stage 4B accepted records (363 clean-train, excluding the 9 copyright-quarantine), concats with Wave 2.5 inverted records, emits one JSONL with manifest + sha256.
+2. Verify merged corpus on laptop (record count, schema, dedupe).
+3. scp merged corpus to pod alongside `train_native_nl_gen.py` (already at parity per v0.1 sync) + evaluator (already at parity).
+
+### Codex pre-launch locks (carry forward from v0.1)
+
+**Lock 1 — Full validation set (`--limit 0`).** Eval runs on all val records, no cap. With merged corpus and same seed, val ≈ 280-285 records.
+
+**Lock 2 — Strict load.** Evaluator default strict; `--allow-load-mismatch` forbidden for promotion eval.
+
+### Pod-side pre-flight smoke
+
+Same Codex real-data micro shape on the merged corpus, swapped to CUDA:
+
+```bash
+python noetic-compass-scaffold/noetic-compass/cas-native/training/train_native_nl_gen.py \
+  --data-path cas-synthetic/data/stage4/track1_v02_merged_2026_05_14.jsonl \
+  --tokenizer-path cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json \
+  --english-bpe-path cas-synthetic/data/native_nl/english_bpe_50k_20260507.json \
+  --output-dir /workspace/tksCAS/stage4a_v02_preflight_TS \
+  --device cuda:0 --limit 8 --epochs 1 --batch-size 4 \
+  --d-model 512 --encoder-n-layers 6 --encoder-n-heads 8 \
+  --head-n-layers 6 --head-n-heads 8 \
+  --train-log-every-steps 1 --beta-curriculum-steps 10 --seed 1729
+```
+
+Pass criteria identical: corpus hash matches the merged-corpus sha256, loss_lm finite, mode=real, 2 global steps, training_complete event emitted.
+
+### Real training launch
+
+After pre-flight passes:
+
+```bash
+python noetic-compass-scaffold/noetic-compass/cas-native/training/train_native_nl_gen.py \
+  --data-path cas-synthetic/data/stage4/track1_v02_merged_2026_05_14.jsonl \
+  --tokenizer-path cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json \
+  --english-bpe-path cas-synthetic/data/native_nl/english_bpe_50k_20260507.json \
+  --output-dir /workspace/tksCAS/stage4a_v02_TS \
+  --device cuda:0 --epochs 6 --batch-size 32 \
+  --d-model 512 --encoder-n-layers 6 --encoder-n-heads 8 \
+  --head-n-layers 6 --head-n-heads 8 \
+  --lr 2e-4 --beta-curriculum-steps 200 \
+  --train-log-every-steps 20 --seed 42
+```
+
+### Eval gate (full val, strict load, with diversity)
+
+```bash
+python noetic-compass-scaffold/noetic-compass/cas-native/evaluation/evaluate_stage4a.py \
+  --checkpoint /workspace/tksCAS/stage4a_v02_TS \
+  --corpus cas-synthetic/data/stage4/track1_v02_merged_2026_05_14.jsonl \
+  --tokenizer-path cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json \
+  --english-bpe-path cas-synthetic/data/native_nl/english_bpe_50k_20260507.json \
+  --output-dir /workspace/tksCAS/stage4a_eval_v02_TS \
+  --device cuda:0 --limit 0 --max-new-tokens 96 --sample-reads 12 \
+  --d-model 512 --encoder-n-layers 6 --encoder-n-heads 8 \
+  --head-n-layers 6 --head-n-heads 8
+```
+
+### Promotion gates (same as v0.1)
+
+| Gate | Floor | v0.1 actual |
+|---|---|---|
+| TF per-token accuracy | ≥ 0.20 | 0.773 ✅ |
+| Free-decode CAS validity rate | ≥ 0.50 | 0.927 ✅ |
+| Normalized recovery rate | ≥ 0.10 | 0.000 ❌ |
+| Per-bucket validity ≥ 0.25 in ≥ 7/10 | 7/10 | 9/10 ✅ |
+| Unique output ratio | ≥ 0.40 | 0.229 ❌ |
+| Mode-collapse ratio | ≤ 0.15 | 0.111 ✅ |
+| Load mismatch | 0/0 | 0/0 ✅ |
+| Human sample read | "model trying to write CAS" | mode collapse ❌ |
+
+**Hypothesis we're testing:** the 2 failed gates (recovery + unique_output_ratio) lift materially with Stage 4B prompt diversity. If they don't, the diagnosis is wrong and we need a different lever (architecture, more Stage 4B records, different mix ratio).
+
+### Kill-switch (unchanged from v0.1)
+
+NaN, plateau > 50 steps, mode collapse during mid-train sampling, wall-time > 90 min, GPU spend > $5.
+
+### Backup discipline
+
+On successful eval pass (all 8 gates): scp run dir to `D:\tksCAS-archive\stage4a_v02_TS\`, three sha256 confirmations. Per `feedback_back_up_successful_runs_imperative.md`.
+
+### Budget
+
+| Item | Cap |
+|---|---|
+| Pre-flight | ≤ $0.05 |
+| Real run (~7-8 min A6000) | ≤ $0.20 |
+| Eval (~1-2 min) | ≤ $0.05 |
+| Buffer | ~$4.70 |
+| **Hard cap** | **$5.00** |
+
+Cumulative Stage 4A spend (v0 + v0.1 + v0.2): ~$0.23 projected, plus $1.44 already spent on Stage 4B pilot. Total Stage 4 to date: ~$1.67. Hard cap on this entry alone: $5.
+
+### What is NOT in scope
+
+- Stage 4C 70/30 mix retrain (the original spec's mix recommendation) — depends on v0.2 result + whether more Stage 4B records help.
+- Stage 4B expansion to 1K+ records — only justified if v0.2 partially works but plateaus.
+- New AUTHORIZED entry for any architecture changes.
+
+### Provenance trail
+
+- v0 outcome: 2026-05-14T16:45Z entry above
+- v0.1 outcome: 2026-05-14T17:20Z entry above
+- Stage 4B AUTHORIZED + outcome: 2026-05-14T17:35Z (entry above) + 19:30Z (outcome above)
+- Codex 4B PASS audit: commit `728be8c`
+- Refined data rule memory: `feedback_cas_native_data_strategy_2026_05_13.md` (2026-05-14 refinement)
+- Wave 2.5 inverted corpus: `cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl` (sha256 `8ced4726...`)
+- Stage 4B accepted records: `cas-synthetic/data/stage4b/stage4b_pilot_20260514T185757Z_accepted.jsonl`
