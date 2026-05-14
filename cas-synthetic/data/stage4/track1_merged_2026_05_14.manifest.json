@@ -1,0 +1,37 @@
+{
+  "created_at": "2026-05-14T13:33:18Z",
+  "empty_or_invalid_drops": 0,
+  "eval_dedupe_against": "cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000_v77_relabeled.jsonl",
+  "eval_dedupe_drops": 0,
+  "field_inversion": "english_description -> prompt_text (encoder); source_cas -> reply_text (decoder target); cas_expression intentionally empty to prevent target leakage",
+  "output_file": "cas-synthetic\\data\\stage4\\track1_merged_2026_05_14.jsonl",
+  "per_grammar_category_counts": {
+    "binary_composition": 707,
+    "cross_register_omega": 582,
+    "diagram_export": 417,
+    "fractal_sequence": 465,
+    "inversion": 66,
+    "let_binding": 444,
+    "meta_logic_relation": 696,
+    "recipe": 487,
+    "rpm_chain": 359,
+    "state_literal": 1021
+  },
+  "per_source_file_counts": {
+    "wave3_step2_5_english_descriptions_20260508T203848Z.jsonl": 5212,
+    "wave3_step2_5_english_descriptions_20260509T002355Z.jsonl": 4,
+    "wave3_step2_5_english_descriptions_20260509T002541Z.jsonl": 1,
+    "wave3_step2_5_layer3_clean_20260508T110453Z.jsonl": 27
+  },
+  "rule": "no foreign answer text in any target; all targets are own Path D Wave 2.5 + Wave 3 SFE CAS expressions",
+  "schema_version": "stage4.track1.v1",
+  "sha256": "8ced4726bceae5176285a171d33ad6d9f3903c3047c240157fd51265ac3d2954",
+  "source_files": [
+    "cas-synthetic\\data\\path_d\\wave3_step2_5_english_descriptions_20260508T203848Z.jsonl",
+    "cas-synthetic\\data\\path_d\\wave3_step2_5_english_descriptions_20260509T002355Z.jsonl",
+    "cas-synthetic\\data\\path_d\\wave3_step2_5_english_descriptions_20260509T002541Z.jsonl",
+    "cas-synthetic\\data\\path_d\\wave3_step2_5_layer3_clean_20260508T110453Z.jsonl"
+  ],
+  "task_type": "stage4_english_to_cas",
+  "total_records": 5244
+}
