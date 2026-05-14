@@ -193,13 +193,80 @@ TRAIN_EVENT_SCHEMA_VERSION = "train_event.v1"
 # ---------------------------------------------------------------------------
 
 
-def hash_corpus_file(path: str | Path) -> str:
-    """Return SHA-256 of the corpus file bytes."""
+def _hash_file_into(hasher: "hashlib._Hash", path: str | Path) -> None:
     path = Path(path)
-    h = hashlib.sha256()
     with path.open("rb") as fh:
         for chunk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(chunk)
+            hasher.update(chunk)
+
+
+def _hash_single_file(path: str | Path) -> str:
+    h = hashlib.sha256()
+    _hash_file_into(h, path)
+    return h.hexdigest()
+
+
+def _resolve_manifest_path(raw_path: str, *, manifest_path: Path) -> Path:
+    candidate = Path(raw_path)
+    if candidate.is_absolute():
+        return candidate
+
+    search_roots = [Path.cwd(), manifest_path.parent, *manifest_path.parent.parents]
+    for root in search_roots:
+        resolved = (root / candidate).resolve()
+        if resolved.exists():
+            return resolved
+
+    # Return the most natural candidate so the eventual FileNotFoundError
+    # points at the manifest-relative path that was attempted.
+    return (manifest_path.parent / candidate).resolve()
+
+
+def _manifest_shard_paths(path: str | Path) -> list[Path] | None:
+    path = Path(path).resolve()
+    if path.suffix.lower() != ".json":
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    shard_paths = payload.get("shard_paths")
+    if not isinstance(shard_paths, list):
+        return None
+    if not shard_paths:
+        raise ValueError(f"corpus manifest has no shard_paths: {path}")
+    resolved: list[Path] = []
+    for raw in shard_paths:
+        if not isinstance(raw, str) or not raw.strip():
+            raise ValueError(f"corpus manifest has invalid shard path: {raw!r}")
+        resolved.append(_resolve_manifest_path(raw, manifest_path=path))
+    return resolved
+
+
+def resolve_corpus_paths(path: str | Path) -> list[Path]:
+    """Resolve a JSONL corpus path or a manifest JSON with ``shard_paths``."""
+    path = Path(path).resolve()
+    shard_paths = _manifest_shard_paths(path)
+    if shard_paths is not None:
+        return shard_paths
+    return [path]
+
+
+def hash_corpus_file(path: str | Path) -> str:
+    """Return SHA-256 of a file or a sharded corpus manifest and its shards."""
+    path = Path(path).resolve()
+    shard_paths = _manifest_shard_paths(path)
+    if shard_paths is None:
+        return _hash_single_file(path)
+
+    h = hashlib.sha256()
+    h.update(b"cas-native-corpus-manifest-v1\0")
+    _hash_file_into(h, path)
+    for shard_path in shard_paths:
+        h.update(b"\0shard\0")
+        _hash_file_into(h, shard_path)
     return h.hexdigest()
 
 
@@ -512,17 +579,17 @@ class _FallbackNLGenerationHead(nn.Module):
 
 
 def load_corpus(path: str | Path, *, limit: int | None = None) -> list[dict[str, Any]]:
-    """Load a JSONL corpus of ``{cas, prompt, reply}`` records."""
-    path = Path(path)
+    """Load JSONL records from one corpus file or a sharded manifest."""
     records: list[dict[str, Any]] = []
-    with path.open("r", encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if not line:
-                continue
-            records.append(json.loads(line))
-            if limit is not None and len(records) >= int(limit):
-                break
+    for corpus_path in resolve_corpus_paths(path):
+        with corpus_path.open("r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                records.append(json.loads(line))
+                if limit is not None and len(records) >= int(limit):
+                    return records
     return records
 
 
@@ -1588,7 +1655,12 @@ def build_parser() -> argparse.ArgumentParser:
             "training_events.jsonl, and full provenance manifest."
         )
     )
-    p.add_argument("--data-path", type=str, default="")
+    p.add_argument(
+        "--data-path",
+        type=str,
+        default="",
+        help="Native NL corpus JSONL, or manifest JSON with shard_paths.",
+    )
     p.add_argument("--output-dir", type=str, default="./out_native_nl_gen")
     p.add_argument("--epochs", type=int, default=1)
     p.add_argument("--batch-size", type=int, default=8)
@@ -1781,6 +1853,7 @@ __all__ = [
     "hash_state_dict",
     "load_corpus",
     "main",
+    "resolve_corpus_paths",
     "run_smoke_test",
     "run_training",
 ]

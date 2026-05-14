@@ -210,6 +210,65 @@ def test_corpus_hash_is_deterministic(tmp_path):
     assert trainer.hash_corpus_file(corpus) != h1
 
 
+def test_sharded_manifest_loads_records_across_shards(tmp_path):
+    root = tmp_path / "workspace"
+    corpus_dir = root / "cas-synthetic" / "data" / "native_nl"
+    corpus_dir.mkdir(parents=True)
+    shard_a = corpus_dir / "shard_a.jsonl"
+    shard_b = corpus_dir / "shard_b.jsonl"
+    shard_a.write_text(
+        '{"id":"a1","prompt_text":"p1","reply_text":"r1","cas_expression":"^1^P|A"}\n'
+        '{"id":"a2","prompt_text":"p2","reply_text":"r2","cas_expression":"^2^C|f"}\n',
+        encoding="utf-8",
+    )
+    shard_b.write_text(
+        '{"id":"b1","prompt_text":"p3","reply_text":"r3","cas_expression":"^3^E|T"}\n',
+        encoding="utf-8",
+    )
+    manifest = corpus_dir / "manifest.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "schema_version": "native_nl.v1",
+                "shard_paths": [
+                    "cas-synthetic/data/native_nl/shard_a.jsonl",
+                    "cas-synthetic/data/native_nl/shard_b.jsonl",
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    records = trainer.load_corpus(manifest, limit=3)
+    assert [record["id"] for record in records] == ["a1", "a2", "b1"]
+    assert trainer.load_corpus(manifest, limit=2)[-1]["id"] == "a2"
+
+
+def test_sharded_manifest_hash_includes_shard_bytes(tmp_path):
+    root = tmp_path / "workspace"
+    corpus_dir = root / "cas-synthetic" / "data" / "native_nl"
+    corpus_dir.mkdir(parents=True)
+    shard = corpus_dir / "shard.jsonl"
+    shard.write_text(
+        '{"id":"a1","prompt_text":"p1","reply_text":"r1","cas_expression":"^1^P|A"}\n',
+        encoding="utf-8",
+    )
+    manifest = corpus_dir / "manifest.json"
+    manifest.write_text(
+        json.dumps({"schema_version": "native_nl.v1", "shard_paths": [str(shard)]}),
+        encoding="utf-8",
+    )
+
+    h1 = trainer.hash_corpus_file(manifest)
+    h2 = trainer.hash_corpus_file(manifest)
+    assert h1 == h2
+    shard.write_text(
+        '{"id":"a1","prompt_text":"p1","reply_text":"changed","cas_expression":"^1^P|A"}\n',
+        encoding="utf-8",
+    )
+    assert trainer.hash_corpus_file(manifest) != h1
+
+
 # ---------------------------------------------------------------------------
 # 8. Training-event JSON validates
 # ---------------------------------------------------------------------------
