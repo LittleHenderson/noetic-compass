@@ -616,9 +616,9 @@ NOT in scope this entry:
 
 DECISION: Stage 4A pod training of the Front Door v0 — train an English → CAS generation head on the 5,244-record Wave 2.5 + Wave 3 layer3 inverted corpus (`cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl`, sha256 `8ced4726bceae5176285a171d33ad6d9f3903c3047c240157fd51265ac3d2954`). Reuses the `train_native_nl_gen.py` real path (`NativeNLCollator` + `attach_nl_gen_head` + `forward_with_lm`). Post-training eval gated by `evaluate_stage4a.py` (commit `f273d36`) with the two Codex pre-launch locks below.
 
-AUTHORIZED: pending
+AUTHORIZED: yes
 
-RATIFIED-BY: Codex audit `27236de` (evaluator + locks signed off) + awaiting user chat "go"
+RATIFIED-BY: Codex audit `27236de` (evaluator + locks signed off) + user chat "go" 2026-05-14T15:15Z. Scope-of-go ratified: pre-flight smoke + full training + full-val eval `--limit 0` + sample read + immediate local backup on promote, exactly as written. No improvisation.
 
 CONTEXT: User's refined data rule ratified 2026-05-14 — "Foreign questions can broaden CAS. Foreign answers cannot define CAS." Stage 4A is the CAS-native local-first anchor. Inverter adapter `cf4828d`. Real-data corpus smoke matched between Claude + Codex (loss_lm 10.141 → 10.095 on Codex's micro command). Evaluator landed `f273d36`, hardened against silent (0,0) division + permissive compile-validity bugs.
 
