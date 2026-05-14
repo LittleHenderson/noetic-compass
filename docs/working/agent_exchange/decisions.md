@@ -768,9 +768,9 @@ Per the entry's "backup IF it promotes" condition, local-archive scp NOT execute
 
 DECISION: Retrain Stage 4A on the same corpus + arch with two changes from v0: `--beta-curriculum-steps 200` (was 10000) and `--epochs 6` (was 3). LR unchanged at `2e-4`. Same locks: full-val eval `--limit 0`, strict load (`--allow-load-mismatch` forbidden), sample-read gate. **New diagnostic added per Codex directive `3b03207`:** generation diversity (`unique_output_ratio`, `mode_collapse_ratio`, top-5 modes) computed across the full val set so mode collapse is measured directly. Evaluator with diversity metric committed at `b030bf2`.
 
-AUTHORIZED: pending
+AUTHORIZED: yes
 
-RATIFIED-BY: Codex audit `3b03207` (v0 rejection + v0.1 directive) + awaiting user chat "go"
+RATIFIED-BY: Codex audit `3b03207` (v0 rejection + v0.1 directive) + user chat "go" 2026-05-14T17:10Z. Scope-of-go ratified: pre-flight smoke + full training with `--epochs 6 --beta-curriculum-steps 200` + full-val eval `--limit 0` + sample read + immediate local backup on promote.
 
 CONTEXT: Stage 4A v0 (entry above) produced clean training (loss_lm 10.07 → 0.91) but mode-collapsed at inference. Codex diagnosis: β curriculum was too slow for short runs — β reached only 0.140 of its 1.0 target, starving the LM head of gradient signal. Lever A (faster β ramp) + Lever B (more epochs) is the cheapest training-signal test; Codex defers Stage 4B until v0.1 result lands.
 
