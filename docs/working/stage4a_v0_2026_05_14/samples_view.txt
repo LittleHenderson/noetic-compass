@@ -1,0 +1,62 @@
+--- Sample 1 | surface=caret_export | category=diagram_export | valid=True | exact=False | norm=False ---
+  prompt: Export "nu_0117" as a cluster of three: something that struck a chord, practice makes perfect, and one thing leads to another.
+  gold:   export let nu_0117 = NoeticCluster{^4, ^7, ^8}
+  gen:    export let gamma_037 = NoeticCluster{^0, ^2, ^6, ^9}
+
+--- Sample 2 | surface=caret_export | category=diagram_export | valid=True | exact=False | norm=False ---
+  prompt: Export epsilon_0343 as a recipe: take 1 of a thought in cognitive thinking and add 1 of paying attention to cognitive thinking — together these produce the outcome called decision.
+  gold:   export let epsilon_0343 = Theta(Omega_decision) = 1*^0^C + 1*^1^C -> Omega_decision
+  gen:    (^3^O|A × ^3^O|T) = ^3^O|Ω_wisdom
+
+--- Sample 3 | surface=caret_only | category=let_binding | valid=True | exact=False | norm=False ---
+  prompt: Let "vsrc_0478" name who one is, shaped by a principled foundation. Let "vtgt_0478" name paying attention to an evaluative judgment. Who one is, shaped by a principled foundation, then flows toward pa
+  gold:   let vsrc_0478 = ^5^P; let vtgt_0478 = ^1^E; vsrc_0478 -> vtgt_0478
+  gen:    Θ(Ω_synthesis_77) = 1.5*^3^O + 1*^3^O → Ω_judgment_7
+
+--- Sample 4 | surface=caret_only | category=state_literal | valid=True | exact=False | norm=False ---
+  prompt: An aversion in the foundational realm, driven by a need for wisdom, expressed in a transcendent way of thinking.
+  gold:   ^3^P_{F2}|T
+  gen:    let judgment_0277 = ^3^O|A
+
+--- Sample 5 | surface=caret_stage | category=rpm_chain | valid=False | exact=False | norm=False ---
+  prompt: Let stageA0_3_0071 name a foundational thought, stageD3_3_0071 name something that rubs the wrong way in the evaluative arena with vitality as the driving need, stageW3_3_0071 name a cognitive judgmen
+  gold:   let stageA0_3_0071 = ^0^P; let stageD3_3_0071 = ^3^P_{F3}; let stageW3_3_0071 = ^3^C_{F3}; let stageP3_3_0071 = ^3^E_{F3}; stageW3_3_0071 -> stageP3_3_0071
+  gen:    let stageA0_7_0277 = ^0^P; let stageD7_7_0277 = ^5^P_{F7}; let stageW7_7_0277 = ^5^C_{F7}; let stageP7_7_0277 = ^5^E_{F7}; stageA0_7_0277 -> stageP7_7_02
+  compile_err: typecheck: undefined variable stageP7_7_02
+
+--- Sample 6 | surface=caret_stage | category=rpm_chain | valid=False | exact=False | norm=False ---
+  prompt: Let stageA0_2_0117 name a foundational thought, stageD2_2_0117 name practiced rhythm in the wisdom/insight realm, stageW2_2_0117 name practiced rhythm in the cognitive arena, and stageP2_2_0117 name p
+  gold:   let stageA0_2_0117 = ^0^P; let stageD2_2_0117 = ^7^P_{F2}; let stageW2_2_0117 = ^7^C_{F2}; let stageP2_2_0117 = ^7^E_{F2}; stageD2_2_0117 -> stageW2_2_0117
+  gen:    let vsrc_0333 = ^3^O; let vtgt_0333 = ^4^E; vsrc_0333 -> vtgt_0333
+  compile_err: typecheck: domain descent violated: O cannot descend to E
+
+--- Sample 7 | surface=co_form | category=binary_composition | valid=True | exact=False | norm=False ---
+  prompt: Something that triggered a memory in the operational arena, integrated with a felt aversion in the cognitive arena.
+  gold:   CO-8 ∘ CO-3
+  gen:    let judgment_0277 = ^3^O
+
+--- Sample 8 | surface=co_form | category=binary_composition | valid=True | exact=False | norm=False ---
+  prompt: Something that just clicked in the operational arena integrated with a thought in the principled arena.
+  gold:   CO-9 ∘ CO-0
+  gen:    let judgment_027 = ^3^O
+
+--- Sample 9 | surface=other | category=meta_logic_relation | valid=True | exact=False | norm=False ---
+  prompt: The need for unity and cohesion belongs to the set of driving needs.
+  gold:   F1 ∈ Drives
+  gen:    let phase_0277 = ^3^O
+
+--- Sample 10 | surface=other | category=meta_logic_relation | valid=True | exact=False | norm=False ---
+  prompt: A cluster of thoughts, aversions, things that struck a chord, who one is, and breaking ideas down.
+  gold:   |Drives|
+  gen:    let judgment_0277 = ^3^O
+
+--- Sample 11 | surface=phi_fractal | category=fractal_sequence | valid=True | exact=False | norm=False ---
+  prompt: Something that popped into mind led to being shaped by experience, which then turned into muscle memory.
+  gold:   Φ<9:5:7>
+  gen:    let judgment_027 = ^3^O
+
+--- Sample 12 | surface=phi_fractal | category=fractal_sequence | valid=True | exact=False | norm=False ---
+  prompt: An idea led to paying attention, which became drawn to it, then breaking it down, shaped by experience, practice makes perfect, shaped by experience again, and breaking it down once more.
+  gold:   Phi<5:2:6:7:1:0:5:6>
+  gen:    (^3^O|A × ^3^O|T) = ^3^O|Ω_wisdom
+

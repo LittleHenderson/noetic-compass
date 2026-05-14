@@ -1,0 +1,145 @@
+{
+  "aggregate": {
+    "exact_recovery_rate": 0.0,
+    "free_decode_validity_rate": 0.9045801526717557,
+    "n_records": 262,
+    "normalized_recovery_rate": 0.0,
+    "tf_per_token_accuracy": 0.7263595427779702,
+    "tf_tokens_scored": 5774
+  },
+  "checkpoint": "/workspace/tksCAS/stage4a_v0_20260514T163737Z",
+  "config": {
+    "d_model": 512,
+    "encoder_n_layers": 6,
+    "head_n_layers": 6,
+    "limit": 0,
+    "max_new_tokens": 96,
+    "sampling": "greedy",
+    "val_fraction": 0.05,
+    "val_seed": 42
+  },
+  "corpus": "/workspace/tksCAS/cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl",
+  "corpus_sha256": "8ced4726bceae5176285a171d33ad6d9f3903c3047c240157fd51265ac3d2954",
+  "elapsed_seconds": 49.26754593849182,
+  "evaluated_at": "2026-05-14T16:42:59Z",
+  "load_state_dict_missing_keys": 0,
+  "load_state_dict_unexpected_keys": 0,
+  "n_val_records": 262,
+  "per_category": {
+    "binary_composition": {
+      "exact_recovery": 0.0,
+      "n": 38,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.5769230769230769,
+      "validity": 1.0
+    },
+    "cross_register_omega": {
+      "exact_recovery": 0.0,
+      "n": 33,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.6395348837209303,
+      "validity": 1.0
+    },
+    "diagram_export": {
+      "exact_recovery": 0.0,
+      "n": 14,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.7404129793510325,
+      "validity": 1.0
+    },
+    "fractal_sequence": {
+      "exact_recovery": 0.0,
+      "n": 28,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.4918918918918919,
+      "validity": 1.0
+    },
+    "inversion": {
+      "exact_recovery": 0.0,
+      "n": 4,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.7108433734939759,
+      "validity": 1.0
+    },
+    "let_binding": {
+      "exact_recovery": 0.0,
+      "n": 21,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.8371757925072046,
+      "validity": 1.0
+    },
+    "meta_logic_relation": {
+      "exact_recovery": 0.0,
+      "n": 37,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.6836581709145427,
+      "validity": 0.9459459459459459
+    },
+    "recipe": {
+      "exact_recovery": 0.0,
+      "n": 27,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.6833013435700576,
+      "validity": 0.7777777777777778
+    },
+    "rpm_chain": {
+      "exact_recovery": 0.0,
+      "n": 17,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.8706842435655995,
+      "validity": 0.0
+    },
+    "state_literal": {
+      "exact_recovery": 0.0,
+      "n": 43,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.30666666666666664,
+      "validity": 1.0
+    }
+  },
+  "per_surface_family": {
+    "caret_export": {
+      "exact_recovery": 0.0,
+      "n": 14,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.7404129793510325,
+      "validity": 1.0
+    },
+    "caret_only": {
+      "exact_recovery": 0.0,
+      "n": 194,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.6827749777646013,
+      "validity": 0.9587628865979382
+    },
+    "caret_stage": {
+      "exact_recovery": 0.0,
+      "n": 18,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.8675577156743621,
+      "validity": 0.05555555555555555
+    },
+    "co_form": {
+      "exact_recovery": 0.0,
+      "n": 6,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.6666666666666666,
+      "validity": 1.0
+    },
+    "other": {
+      "exact_recovery": 0.0,
+      "n": 2,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.6,
+      "validity": 1.0
+    },
+    "phi_fractal": {
+      "exact_recovery": 0.0,
+      "n": 28,
+      "normalized_recovery": 0.0,
+      "tf_acc": 0.4918918918918919,
+      "validity": 1.0
+    }
+  },
+  "schema_version": "stage4a_eval.v1"
+}

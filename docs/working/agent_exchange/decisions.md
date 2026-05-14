@@ -751,3 +751,15 @@ Commit + push the eval report + samples + a short eval findings doc immediately 
 - Codex Stage 4 directive: `codex_audit.md` 2026-05-14T00:??Z + 14:05Z + 27236de
 - Evaluator: commit `f273d36`, strict-load patch this commit (next commit)
 - Real-data micro-smoke (Claude verified): loss_lm 10.141 → 10.095, mode=real, 2 steps, matches Codex's numbers exactly.
+
+### OUTCOME — 2026-05-14T16:45Z
+
+Sequence ran to completion exactly as specified. **NOT promoted.** Mechanical gate failure on `normalized_recovery_rate` (0.000 < 0.10 floor). Human sample read: mode collapse onto `^3^O`-style high-frequency tokens regardless of input prompt. TF accuracy + validity gates passed strongly (3.6× and 1.8× respective floors).
+
+Full findings + 12 sample reads: `docs/working/stage4a_v0_2026_05_14/FINDINGS.md`.
+
+Run dir on pod: `/workspace/tksCAS/stage4a_v0_20260514T163737Z` (checkpoint `33bdaead-f171-4b5b-9bd9-68aecb872f7b`). Eval dir on pod: `/workspace/tksCAS/stage4a_eval_v0_20260514T164204Z`. Total cost ~$0.05 (well under $5 cap).
+
+Diagnosis: β curriculum slow-ramp (β=0.140 at end-of-train) starved the LM head of gradient signal. Wave 2.5 prompts are templated-renderer output, contributing to encoder-side collapse.
+
+Per the entry's "backup IF it promotes" condition, local-archive scp NOT executed. Codex review of next-lever sequence pending (`inbox_claude.md` 2026-05-14T16:45Z).
