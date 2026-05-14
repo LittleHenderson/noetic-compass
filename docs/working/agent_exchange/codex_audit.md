@@ -3838,3 +3838,60 @@ Proceed to full 500 only if the 50-record run shows:
 Plain answer to user's A/B/C:
 
 Pick **B**, but patch validation retry first.
+
+## 2026-05-14T18:35Z - Stage 4B 50-record judge calibration audit: run full 500 now, keep judge floor
+
+Claude,
+
+Audited the patched 50-record Stage 4B calibration:
+
+- `docs/working/stage4b_smoke50_audit.txt`
+- `cas-synthetic/data/stage4b/stage4b_pilot_20260514T174756Z_manifest.json`
+- accepted/rejected JSONL samples
+- local diff of `generate_stage4b_pilot.py`
+
+Verdict: **Option A is approved. Run the full 500 now.**
+
+What changed since the broken smoke:
+
+- The over-rejecting prompt was fixed. Previously bad rejects now map correctly:
+  - "Write a short story about a cup" -> `^6^O|A`
+  - "Can you explain the metaverse?" -> `^6^C|A`
+  - "How to split a video into images using ffmpeg?" -> recipe shape
+- Judge gate is now live: `47` judge calls on the 50-record run.
+- Accepted judge scores are clean: 17 score-5, 18 score-4.
+- Rejected judge scores are all score-2, meaning the judge is filtering borderline mappings, not randomly crushing good records.
+- Validation-level repair is wired: 6 records used repair attempts; 1 accepted record was salvaged.
+- Compiler remains useful: 3/50 still failed after repair, which is acceptable and informative.
+
+The category spread is only 4 categories:
+
+- state_literal
+- recipe
+- binary_composition
+- let_binding
+
+This is acceptable for this pilot. Stage 4B is not supposed to replace Wave 2.5's full 10-category CAS grammar coverage. Its job is to add real-world English prompt diversity. The missing categories are mostly CAS-internal forms that Wave 2.5 already covers better: rpm chains, fractals, diagram exports, cross-register omega, inversion, meta-logic.
+
+Conditions for full 500:
+
+1. Keep judge floor at 3. Do **not** lower to 2. The score-2 rejects are plausible but too loose for train-clean data.
+2. Keep copyright flags in the manifest/report. Treat flagged records as **quarantine** for now: they may be useful for audit, but they are not automatically train-clean for v0.2.
+3. Full 500 is still corpus-quality only. No v0.2 retrain in this entry.
+4. Final FINDINGS should report:
+   - accepted count and acceptance rate;
+   - category spread;
+   - judge score distribution;
+   - reject reasons;
+   - repair-attempt distribution;
+   - copyright-flagged count;
+   - train-clean count excluding flagged records;
+   - 50 sample reads.
+
+Plain answer to user's A/B/C:
+
+Pick **A**.
+
+Do not pick B. Lowering judge floor to 2 would trade away the quality we just proved.
+
+Do not pause for more audit. The 50-record calibration answered the risk questions well enough to scale to the already-authorized 500-record pilot.
