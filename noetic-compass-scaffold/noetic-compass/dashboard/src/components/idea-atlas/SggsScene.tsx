@@ -63,6 +63,7 @@ export interface SggsSceneProps {
   onNodeClick?: (node: ThoughtTreeNode) => void;
   selectedNodeId?: string | null;
   className?: string;
+  fillParent?: boolean;
   /**
    * Override factory for the WebGLRenderer. Tests pass a JSDOM-safe stub
    * because jsdom has no WebGL. Production callers ignore this prop.
@@ -434,6 +435,7 @@ export function SggsScene({
   onNodeClick,
   selectedNodeId,
   className,
+  fillParent = false,
   rendererFactory,
   raycasterFactory,
 }: SggsSceneProps) {
@@ -914,8 +916,12 @@ export function SggsScene({
   const containerStyle: CSSProperties = {
     width: '100%',
     height: '100%',
-    minHeight: 280,
-    position: 'relative',
+    minHeight: fillParent ? 0 : 280,
+    position: fillParent ? 'absolute' : 'relative',
+    top: fillParent ? 0 : undefined,
+    right: fillParent ? 0 : undefined,
+    bottom: fillParent ? 0 : undefined,
+    left: fillParent ? 0 : undefined,
     transition: `background-color 240ms ${APPLE_EASE}`,
   };
 

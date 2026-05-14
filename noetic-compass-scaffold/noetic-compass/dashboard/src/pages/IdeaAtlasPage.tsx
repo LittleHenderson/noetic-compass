@@ -6,6 +6,7 @@ import { NodeDetailPanel } from '../components/idea-atlas/NodeDetailPanel';
 import { InversionModal } from '../components/idea-atlas/InversionModal';
 import { useRippleAnimation } from '../components/idea-atlas/useRippleAnimation';
 import { TraceLoader } from '../components/idea-atlas/TraceLoader';
+import { Mode7LiveShell } from '../components/idea-atlas/Mode7LiveShell';
 import {
   ThoughtTreeView,
   type ThoughtTreeNode as TreeViewNode,
@@ -43,7 +44,7 @@ interface AtlasEdge {
   breakdown?: Record<string, number>;
 }
 
-type ViewMode = 'list' | 'graph' | 'trace' | 'sggs';
+type ViewMode = 'list' | 'graph' | 'trace' | 'sggs' | 'mode7live';
 
 // Backend returns flat shapes — Idea on POST, Idea[] on GET — not wrapped.
 type CaptureResponse = Idea;
@@ -51,6 +52,51 @@ type ListResponse = Idea[];
 
 // ── Backend availability state ──
 type BackendState = 'available' | 'unavailable' | 'unknown';
+
+const SGGS_COLOR_KEY = [
+  {
+    color: '#60a5fa',
+    label: 'user prompt',
+    explanation: 'The original idea or question the user gave the system.',
+  },
+  {
+    color: '#a78bfa',
+    label: 'NL bridge',
+    explanation: 'The translation step that turns plain English into a compact CAS reading.',
+  },
+  {
+    color: '#2dd4bf',
+    label: 'CAS expression',
+    explanation: 'The symbolic CAS structure the system is using as the reasoning spine.',
+  },
+  {
+    color: '#34d399',
+    label: 'model output',
+    explanation: 'The plain-English answer or explanation produced from the CAS structure.',
+  },
+  {
+    color: '#22d3ee',
+    label: 'identifier attempt',
+    explanation: 'A source name, symbol, or reference the model tried to carry into the answer.',
+  },
+  {
+    color: '#fbbf24',
+    label: 'slot trace',
+    explanation: 'A token-by-token recovery check that shows how the answer was categorized.',
+  },
+  {
+    color: '#fb7185',
+    label: 'confidence',
+    explanation: 'The coverage band and warnings that tell you how much trust to place in the trace.',
+  },
+] as const;
+
+function traceIdeaText(trace: AtlasTrace): string {
+  if (trace.input.input_kind === 'nl_bridge') {
+    return trace.input.user_text || trace.input.cas_expression;
+  }
+  return trace.input.cas_expression;
+}
 
 function isBackendMissingError(err: unknown): boolean {
   if (err instanceof ApiError) {
@@ -163,6 +209,8 @@ export function IdeaAtlasPage() {
   // ── SGGS (TRACE 3D) wiring: fullscreen state for the 3D scene ──
   const sggsContainerRef = useRef<HTMLDivElement | null>(null);
   const [sggsFullscreen, setSggsFullscreen] = useState(false);
+  const [activeSggsKeyIndex, setActiveSggsKeyIndex] = useState(0);
+  const activeSggsKey = SGGS_COLOR_KEY[activeSggsKeyIndex] ?? SGGS_COLOR_KEY[0];
   useEffect(() => {
     const onChange = () => {
       setSggsFullscreen(document.fullscreenElement === sggsContainerRef.current);
@@ -179,11 +227,20 @@ export function IdeaAtlasPage() {
       void el.requestFullscreen?.();
     }
   }, []);
+  const handleSggsKeyWheel = useCallback((event: React.WheelEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const step = event.deltaY >= 0 ? 1 : -1;
+    setActiveSggsKeyIndex((cur) => (
+      cur + step + SGGS_COLOR_KEY.length
+    ) % SGGS_COLOR_KEY.length);
+  }, []);
   const handleTraceLoaded = useCallback((trace: AtlasTrace) => {
     setLoadedTrace(trace);
     setTraceError(null);
     setSelectedTraceNodeId(trace.thought_tree.nodes[0]?.id ?? null);
     setTracePanelOpen(true);
+    setInput(traceIdeaText(trace));
+    requestAnimationFrame(() => textareaRef.current?.focus());
   }, []);
   const handleTraceError = useCallback((message: string) => {
     setTraceError(message);
@@ -568,10 +625,28 @@ export function IdeaAtlasPage() {
               3D
             </span>
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={viewMode === 'mode7live'}
+            onClick={() => setViewMode('mode7live')}
+            title="Live Mode 7 CAS Native AI thought tree shell"
+            className={`px-3 py-1 rounded transition-colors ${
+              viewMode === 'mode7live'
+                ? 'bg-cyan-500/20 text-cyan-200'
+                : 'text-slate-500 hover:text-slate-300'
+            }`}
+          >
+            MODE 7
+            <span className="ml-1 text-[9px] uppercase tracking-wider text-cyan-300/80">
+              LIVE
+            </span>
+          </button>
         </div>
       </div>
 
       {/* Capture area */}
+      {viewMode !== 'mode7live' && (
       <div className="border-b border-white/[0.06] px-6 py-4">
         <div className="flex items-start gap-2">
           <span className="font-mono text-sm font-bold shrink-0 pt-2 text-accent-teal">
@@ -658,6 +733,7 @@ export function IdeaAtlasPage() {
           </div>
         )}
       </div>
+      )}
 
       {/* List area (default) — preserved as Agent F shipped it */}
       {viewMode === 'list' && (
@@ -810,6 +886,9 @@ export function IdeaAtlasPage() {
       />
 
       {/* Trace view — Atlas v0 */}
+      {/* Mode 7 Live view - stakeholder-facing live CAS Native AI shell */}
+      {viewMode === 'mode7live' && <Mode7LiveShell />}
+
       {viewMode === 'trace' && (
         <div className="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-4">
           <TraceLoader
@@ -1079,7 +1158,7 @@ export function IdeaAtlasPage() {
               // entirely and guarantees the canvas has a real
               // computed height per Codex audit 8939e62 blocker 1.
               style={{ height: sggsFullscreen ? '100vh' : 560 }}
-              className="relative w-full rounded-lg border-2 border-violet-500/30 bg-black/30 overflow-hidden"
+              className="relative w-full shrink-0 rounded-lg border-2 border-violet-500/30 bg-black/30 overflow-hidden"
             >
               {/* Visible scaffolding so the wrapper is obvious even if
                   the SggsScene fails to mount. If the canvas renders
@@ -1093,7 +1172,7 @@ export function IdeaAtlasPage() {
               <SggsErrorBoundary>
                 <Suspense
                   fallback={
-                    <div className="flex h-full items-center justify-center font-mono text-xs text-slate-400">
+                    <div className="absolute inset-0 flex items-center justify-center font-mono text-xs text-slate-400">
                       Loading 3D scene (~600 KB three.js + sprite atlas)…
                     </div>
                   }
@@ -1102,7 +1181,8 @@ export function IdeaAtlasPage() {
                     tree={loadedTrace.thought_tree as unknown as AtlasTraceThoughtTree}
                     onNodeClick={(n) => setSelectedTraceNodeId(n.id)}
                     selectedNodeId={selectedTraceNodeId}
-                    className="relative h-full w-full"
+                    className="h-full w-full"
+                    fillParent
                   />
                 </Suspense>
               </SggsErrorBoundary>
@@ -1133,37 +1213,60 @@ export function IdeaAtlasPage() {
               </button>
 
               {/* Color key — bottom-left overlay. Same 7 kinds + colors as
-                  the SVG TRACE view legend, plus a one-line explanation of
-                  the glow pulse so the user knows what to look for. */}
+                  the SVG TRACE view legend, now interactive for explanations. */}
               <div
-                aria-hidden="true"
-                className="pointer-events-none absolute bottom-2 left-2 flex flex-col gap-1.5 rounded-md bg-black/55 px-3 py-2 font-mono text-[10px] text-slate-200 backdrop-blur-sm"
+                role="group"
+                aria-label="Spatial Gesture Graph color key"
+                onWheel={handleSggsKeyWheel}
+                className="absolute bottom-2 left-2 z-20 flex max-w-[min(330px,calc(100%-1rem))] flex-col gap-1.5 rounded-md bg-black/70 px-3 py-2 font-mono text-[10px] text-slate-200 backdrop-blur-sm"
               >
                 <div className="text-[9px] uppercase tracking-wider text-slate-400">
                   Color key
                 </div>
-                {[
-                  ['#60a5fa', 'user prompt'],
-                  ['#a78bfa', 'NL bridge'],
-                  ['#2dd4bf', 'CAS expression'],
-                  ['#34d399', 'model output'],
-                  ['#22d3ee', 'identifier attempt'],
-                  ['#fbbf24', 'slot trace'],
-                  ['#fb7185', 'confidence'],
-                ].map(([color, label]) => (
-                  <div key={label} className="flex items-center gap-1.5">
+                <div className="max-h-32 overflow-y-auto pr-1 scroll-glow">
+                  {SGGS_COLOR_KEY.map((entry, index) => {
+                    const active = index === activeSggsKeyIndex;
+                    return (
+                      <button
+                        key={entry.label}
+                        type="button"
+                        onClick={() => setActiveSggsKeyIndex(index)}
+                        onMouseEnter={() => setActiveSggsKeyIndex(index)}
+                        className={`mb-1 flex w-full items-center gap-1.5 rounded px-1.5 py-1 text-left transition-colors ${
+                          active
+                            ? 'bg-white/10 text-white'
+                            : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                        }`}
+                      >
+                        <span
+                          className="inline-block h-2.5 w-2.5 shrink-0 rounded-sm"
+                          style={{
+                            backgroundColor: entry.color,
+                            boxShadow: `0 0 8px ${entry.color}`,
+                          }}
+                        />
+                        <span>{entry.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="mt-1 rounded border border-white/10 bg-white/[0.04] p-2" aria-live="polite">
+                  <div className="mb-1 flex items-center gap-1.5 text-[9px] uppercase tracking-wider text-slate-300">
                     <span
-                      className="inline-block h-2.5 w-2.5 rounded-sm"
+                      className="inline-block h-2 w-2 rounded-sm"
                       style={{
-                        backgroundColor: color,
-                        boxShadow: `0 0 6px ${color}`,
+                        backgroundColor: activeSggsKey.color,
+                        boxShadow: `0 0 8px ${activeSggsKey.color}`,
                       }}
                     />
-                    <span>{label}</span>
+                    {activeSggsKey.label}
                   </div>
-                ))}
-                <div className="mt-1 border-t border-white/10 pt-1 text-[9px] text-slate-400">
-                  selected card pulses
+                  <p className="font-sans text-[11px] leading-snug text-slate-200">
+                    {activeSggsKey.explanation}
+                  </p>
+                </div>
+                <div className="border-t border-white/10 pt-1 text-[9px] text-slate-400">
+                  click a color or scroll this key
                 </div>
               </div>
 

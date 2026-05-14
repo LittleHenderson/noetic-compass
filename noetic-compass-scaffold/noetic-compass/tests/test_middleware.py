@@ -62,3 +62,12 @@ def test_auth_token_route_uses_per_username_api_key(client):
     payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
     assert payload["sub"] == "StakeholderA"
     assert payload["api_key"] == "dashboard:stakeholdera"
+
+
+def test_dashboard_tokens_skip_monthly_cap(client):
+    token = create_token(sub="StakeholderA", api_key="dashboard:stakeholdera")
+    headers = {"Authorization": f"Bearer {token}"}
+
+    for _ in range(51):
+        resp = client.get("/notation/grammar", headers=headers)
+        assert resp.status_code == 200

@@ -1,6 +1,21 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { lazy, Suspense, useState, useRef, useEffect, useCallback, useMemo, type CSSProperties } from 'react';
 import { axisColorForNode } from '../lib/casColorPalette';
 import { apiFetch } from '../api/client';
+import { authenticatedSggsEventSource, mode7LiveUrl } from '../api/sggs';
+import { SggsErrorBoundary } from '../components/idea-atlas/SggsErrorBoundary';
+import { useSggsStream, type SggsCommit, type SggsStreamStatus } from '../lib/sggs_stream';
+import type {
+  AtlasTraceThoughtTree,
+  ThoughtTreeEdge,
+  ThoughtTreeNode,
+  ThoughtTreeRootNode,
+} from '../lib/trace';
+
+const CompilerSggsScene = lazy(() =>
+  import('../components/idea-atlas/SggsScene').then((m) => ({
+    default: m.SggsScene,
+  })),
+);
 
 // ── Constants ──
 
@@ -1392,6 +1407,342 @@ function rectWidthFor(label: string): number {
   return Math.max(truncateLabel(label).length * CHAR_W + RECT_PAD_X * 2, 48);
 }
 
+type GestureNodeStyle = CSSProperties & { '--cas-node-color': string };
+
+function gestureNodeStyle(color: string, order = 0): GestureNodeStyle {
+  return {
+    '--cas-node-color': color,
+    animationDelay: `${(order % 10) * 0.08}s`,
+  } as GestureNodeStyle;
+}
+
+function compilerSpaceKind(item: DiagramNode): string {
+  const kind = item.kind.toLowerCase();
+  const role = String(item.role ?? '').toLowerCase();
+  if (item.id.startsWith('container:')) return 'cas_expression';
+  if (kind.includes('operator') || kind.includes('call')) return 'nl_bridge';
+  if (kind.includes('emergent') || kind.includes('target') || role.includes('output')) {
+    return 'model_generation';
+  }
+  if (kind.includes('fractal') || role.includes('step')) return 'slot_pattern';
+  if (kind.includes('assert') || kind.includes('confidence')) return 'confidence_marker';
+  return 'identifier_attempt';
+}
+
+function compilerTreeNode(item: DiagramNode): ThoughtTreeNode {
+  const label = truncateLabel(item.label, 32);
+  return {
+    id: item.id,
+    node_key: `compiler|${item.id}`,
+    kind: compilerSpaceKind(item),
+    role: String(item.role ?? item.kind),
+    label,
+    normalized_label: label.toLowerCase(),
+    text: `${item.kind}${item.role ? ` / ${item.role}` : ''}: ${item.label}`,
+  };
+}
+
+function buildCompilerSpaceTree(
+  diagram: CasDiagram,
+  displayItems: DiagramNode[],
+  visibleEdges: DiagramEdge[],
+): AtlasTraceThoughtTree {
+  const rootId = 'compiler:root';
+  const itemIds = new Set(displayItems.map((item) => item.id));
+  const thoughtNodes = displayItems.map(compilerTreeNode);
+  const nodeById = new Map(thoughtNodes.map((node) => [node.id, node]));
+  const outgoing = new Map<string, DiagramEdge[]>();
+  const incoming = new Set<string>();
+
+  visibleEdges.forEach((edge) => {
+    if (!itemIds.has(edge.source) || !itemIds.has(edge.target)) return;
+    const list = outgoing.get(edge.source) ?? [];
+    list.push(edge);
+    outgoing.set(edge.source, list);
+    incoming.add(edge.target);
+  });
+
+  const visited = new Set<string>();
+  const makeRootNode = (id: string): ThoughtTreeRootNode | null => {
+    const node = nodeById.get(id);
+    if (!node || visited.has(id)) return null;
+    visited.add(id);
+    const children = (outgoing.get(id) ?? [])
+      .map((edge) => makeRootNode(edge.target))
+      .filter((child): child is ThoughtTreeRootNode => !!child);
+    return {
+      id: node.id,
+      node_key: node.node_key,
+      kind: node.kind,
+      role: node.role,
+      label: node.label,
+      normalized_label: node.normalized_label,
+      text: node.text,
+      children,
+    };
+  };
+
+  const roots = displayItems
+    .filter((item) => !incoming.has(item.id))
+    .map((item) => makeRootNode(item.id))
+    .filter((node): node is ThoughtTreeRootNode => !!node);
+  displayItems.forEach((item) => {
+    const orphan = makeRootNode(item.id);
+    if (orphan) roots.push(orphan);
+  });
+
+  const rootNode: ThoughtTreeNode = {
+    id: rootId,
+    node_key: rootId,
+    kind: 'user_prompt',
+    role: 'compiler',
+    label: 'compiler graph',
+    normalized_label: 'compiler graph',
+    text: `Compiler diagram: ${diagram.kind}`,
+  };
+
+  const syntheticRootEdges: DiagramEdge[] = roots
+    .map((node, index) => ({
+      id: `compiler:root:${index}`,
+      source: rootId,
+      target: node.id ?? '',
+      kind: 'root',
+      label: '',
+      directed: false,
+    }))
+    .filter((edge) => edge.target);
+
+  return {
+    root: {
+      ...rootNode,
+      children: roots,
+    },
+    nodes: [rootNode, ...thoughtNodes],
+    edges: [
+      ...syntheticRootEdges.map((edge) => ({
+        id: edge.id,
+        edge_key: edge.id,
+        source: edge.source,
+        target: edge.target,
+        source_key: edge.source,
+        target_key: edge.target,
+        kind: edge.kind,
+      })),
+      ...visibleEdges
+        .filter((edge) => itemIds.has(edge.source) && itemIds.has(edge.target))
+        .map((edge) => ({
+          id: edge.id,
+          edge_key: `compiler|${edge.id}`,
+          source: edge.source,
+          target: edge.target,
+          source_key: edge.source,
+          target_key: edge.target,
+          kind: edge.kind,
+        })),
+    ],
+    node_count: thoughtNodes.length + 1,
+    edge_count: visibleEdges.length + syntheticRootEdges.length,
+  };
+}
+
+function mode7RootNode(sourceExpression?: string): ThoughtTreeNode {
+  const source = sourceExpression?.trim() || 'compiler source';
+  const label = truncateLabel(source, 36);
+  return {
+    id: 'n0',
+    node_key: 'compiler-mode7|source',
+    kind: 'user_prompt',
+    role: 'compiler_mode7_source',
+    label,
+    normalized_label: label.toLowerCase(),
+    text: `Compiler source: ${source}`,
+  };
+}
+
+function asRootNode(node: ThoughtTreeNode, children: ThoughtTreeRootNode[] = []): ThoughtTreeRootNode {
+  return {
+    id: node.id,
+    node_key: node.node_key,
+    kind: node.kind,
+    role: node.role,
+    label: node.label,
+    normalized_label: node.normalized_label,
+    axis_attrs: node.axis_attrs,
+    text: node.text,
+    children,
+  };
+}
+
+function nestMode7Tree(
+  rootNode: ThoughtTreeNode,
+  nodes: ThoughtTreeNode[],
+  edges: ThoughtTreeEdge[],
+): AtlasTraceThoughtTree {
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  const outgoing = new Map<string, ThoughtTreeEdge[]>();
+  edges.forEach((edge) => {
+    if (!nodeById.has(edge.source) || !nodeById.has(edge.target)) return;
+    const list = outgoing.get(edge.source) ?? [];
+    list.push(edge);
+    outgoing.set(edge.source, list);
+  });
+
+  const visited = new Set<string>();
+  const build = (id: string): ThoughtTreeRootNode | null => {
+    const node = nodeById.get(id);
+    if (!node || visited.has(id)) return null;
+    visited.add(id);
+    const children = (outgoing.get(id) ?? [])
+      .map((edge) => build(edge.target))
+      .filter((child): child is ThoughtTreeRootNode => !!child);
+    return asRootNode(node, children);
+  };
+
+  const root = build(rootNode.id) ?? asRootNode(rootNode);
+  const rootChildren = root.children ?? [];
+  nodes.forEach((node) => {
+    if (node.id === rootNode.id || visited.has(node.id)) return;
+    const orphan = build(node.id);
+    if (orphan) rootChildren.push(orphan);
+  });
+  root.children = rootChildren;
+
+  return {
+    root,
+    nodes,
+    edges,
+    node_count: nodes.length,
+    edge_count: edges.length,
+  };
+}
+
+function edgeKey(source: string, target: string, kind: string): string {
+  return `${source}|${target}|${kind}`;
+}
+
+function buildMode7TreeFromCommits(
+  commits: SggsCommit[],
+  sourceExpression: string | undefined,
+): AtlasTraceThoughtTree {
+  const rootNode = mode7RootNode(sourceExpression);
+  const nodes = new Map<string, ThoughtTreeNode>([[rootNode.id, rootNode]]);
+  const edges = new Map<string, ThoughtTreeEdge>();
+
+  commits.forEach((commit) => {
+    if (commit.kind === 'head_commit') {
+      const label = truncateLabel(commit.node_label, 34);
+      nodes.set(commit.node_id, {
+        id: commit.node_id,
+        node_key: `compiler-mode7|${commit.node_id}`,
+        kind: commit.node_kind,
+        role: commit.head_name,
+        label,
+        normalized_label: label.toLowerCase(),
+        axis_attrs: commit.axis_attrs,
+        text: `${commit.head_name}: ${commit.node_label}`,
+      });
+
+      const parentId = commit.parent_node_id || rootNode.id;
+      const id = `compiler-mode7:parent:${parentId}:${commit.node_id}`;
+      edges.set(id, {
+        id,
+        edge_key: edgeKey(parentId, commit.node_id, 'parent_child'),
+        source: parentId,
+        target: commit.node_id,
+        source_key: parentId,
+        target_key: commit.node_id,
+        kind: 'parent_child',
+      });
+      return;
+    }
+
+    if (commit.kind === 'edge_commit') {
+      edges.set(commit.edge_id, {
+        id: commit.edge_id,
+        edge_key: edgeKey(commit.source_node_id, commit.target_node_id, commit.edge_kind),
+        source: commit.source_node_id,
+        target: commit.target_node_id,
+        source_key: commit.source_node_id,
+        target_key: commit.target_node_id,
+        kind: commit.edge_kind,
+      });
+    }
+  });
+
+  return nestMode7Tree(rootNode, [...nodes.values()], [...edges.values()]);
+}
+
+function buildProgressiveCompilerMode7Tree(
+  fallbackTree: AtlasTraceThoughtTree,
+  visibleCount: number,
+  sourceExpression?: string,
+): AtlasTraceThoughtTree {
+  const rootNode = mode7RootNode(sourceExpression);
+  const originalRootId = fallbackTree.root.id ?? fallbackTree.nodes[0]?.id ?? 'compiler:root';
+  const nonRootNodes = fallbackTree.nodes.filter((node) => node.id !== originalRootId);
+  const visibleNodes = [
+    rootNode,
+    ...nonRootNodes.slice(0, Math.max(0, visibleCount - 1)),
+  ];
+  const visibleIds = new Set(visibleNodes.map((node) => node.id));
+  const edges: ThoughtTreeEdge[] = [
+    ...fallbackTree.edges
+      .filter((edge) => edge.source === originalRootId && visibleIds.has(edge.target))
+      .map((edge, index) => ({
+        ...edge,
+        id: `compiler-mode7:root:${index}`,
+        edge_key: `compiler-mode7:root:${index}`,
+        source: rootNode.id,
+        source_key: rootNode.node_key,
+      })),
+    ...fallbackTree.edges.filter(
+      (edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target),
+    ),
+  ];
+  return nestMode7Tree(rootNode, visibleNodes, edges);
+}
+
+function commitIdentity(commit: SggsCommit): string {
+  switch (commit.kind) {
+    case 'turn_start':
+      return `turn_start:${commit.turn_id}`;
+    case 'head_commit':
+      return `head_commit:${commit.turn_id}:${commit.node_id}`;
+    case 'edge_commit':
+      return `edge_commit:${commit.turn_id}:${commit.edge_id}`;
+    case 'turn_end':
+      return `turn_end:${commit.turn_id}:${commit.final_trace_id}`;
+    case 'warning':
+      return `warning:${commit.turn_id}:${commit.message}`;
+    case 'error':
+      return `error:${commit.turn_id}:${commit.code}:${commit.message}`;
+  }
+}
+
+function compilerMode7StreamUrl(sourceExpression: string): string {
+  const prompt = `Compiler Mode 7 trace for ${sourceExpression}`;
+  return `${mode7LiveUrl({
+    prompt,
+    expression: sourceExpression,
+    delayMs: 140,
+  })}&surface=compiler`;
+}
+
+function sggsStatusLabel(status: SggsStreamStatus): string {
+  switch (status) {
+    case 'idle':
+      return 'offline fallback';
+    case 'connecting':
+      return 'connecting';
+    case 'open':
+      return 'live stream';
+    case 'closed':
+      return 'stream closed';
+    case 'error':
+      return 'fallback active';
+  }
+}
+
 // Walk a ray from `from` toward `to` and return the point where it exits the
 // shape centred at `from`. Used to clip edge endpoints to the boundary of the
 // source/target node so arrow tips touch the outer edge instead of piercing
@@ -1462,7 +1813,144 @@ function computeLayout(
   }
 }
 
-export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | null; result?: Record<string, unknown> | null }) {
+function CompilerMode7LiveView({
+  fallbackTree,
+  sourceExpression,
+  fullscreen,
+  selectedNodeId,
+  onSelectNode,
+}: {
+  fallbackTree: AtlasTraceThoughtTree;
+  sourceExpression?: string;
+  fullscreen: boolean;
+  selectedNodeId: string | null;
+  onSelectNode: (node: ThoughtTreeNode) => void;
+}) {
+  const normalizedSource = sourceExpression?.trim() ?? '';
+  const [commits, setCommits] = useState<SggsCommit[]>([]);
+  const [streamMessage, setStreamMessage] = useState<string | null>(null);
+  const [fallbackVisibleCount, setFallbackVisibleCount] = useState(1);
+  const hasLiveHeads = commits.some((commit) => commit.kind === 'head_commit');
+
+  useEffect(() => {
+    setCommits([]);
+    setStreamMessage(null);
+    setFallbackVisibleCount(1);
+  }, [normalizedSource, fallbackTree]);
+
+  useEffect(() => {
+    if (hasLiveHeads) return;
+    const maxNodes = Math.max(fallbackTree.nodes.length, 1);
+    const id = window.setInterval(() => {
+      setFallbackVisibleCount((cur) => (cur >= maxNodes ? cur : cur + 1));
+    }, 180);
+    return () => window.clearInterval(id);
+  }, [hasLiveHeads, fallbackTree]);
+
+  const streamUrl = useMemo(
+    () => compilerMode7StreamUrl(normalizedSource),
+    [normalizedSource],
+  );
+  const streamEnabled = normalizedSource.length > 0;
+
+  const handleCommit = useCallback((commit: SggsCommit) => {
+    setStreamMessage(null);
+    setCommits((prev) => {
+      if (commit.kind === 'turn_start') return [commit];
+      const key = commitIdentity(commit);
+      if (prev.some((item) => commitIdentity(item) === key)) return prev;
+      return [...prev, commit].slice(-256);
+    });
+  }, []);
+
+  const handleStreamError = useCallback((message: string) => {
+    setStreamMessage(message);
+  }, []);
+
+  const stream = useSggsStream({
+    url: streamUrl,
+    enabled: streamEnabled,
+    onCommit: handleCommit,
+    onError: handleStreamError,
+    eventSourceFactory: authenticatedSggsEventSource,
+  });
+
+  const tree = useMemo(() => {
+    if (hasLiveHeads) {
+      return buildMode7TreeFromCommits(commits, normalizedSource);
+    }
+    return buildProgressiveCompilerMode7Tree(
+      fallbackTree,
+      fallbackVisibleCount,
+      normalizedSource,
+    );
+  }, [commits, fallbackTree, fallbackVisibleCount, hasLiveHeads, normalizedSource]);
+
+  const mode7NodeCount = Math.max(0, tree.node_count - 1);
+
+  return (
+    <div
+      className={`relative w-full overflow-hidden rounded bg-slate-950/70 ${
+        fullscreen ? 'h-[calc(100vh-9rem)] min-h-[560px]' : 'h-[360px]'
+      }`}
+    >
+      <SggsErrorBoundary>
+        <Suspense
+          fallback={
+            <div className="absolute inset-0 flex items-center justify-center font-mono text-xs text-slate-400">
+              Loading Mode 7 Live graph...
+            </div>
+          }
+        >
+          <CompilerSggsScene
+            tree={tree}
+            selectedNodeId={selectedNodeId}
+            onNodeClick={onSelectNode}
+            className="h-full w-full"
+            fillParent
+          />
+        </Suspense>
+      </SggsErrorBoundary>
+      <div className="pointer-events-none absolute left-2 top-2 max-w-[calc(100%-1rem)] rounded-md border border-violet-400/20 bg-black/55 px-2 py-1 font-mono text-[9px] text-violet-100 backdrop-blur-sm">
+        <span className="uppercase tracking-wider text-violet-300">Mode 7 Live</span>
+        <span className="mx-1 text-slate-500">|</span>
+        <span>{sggsStatusLabel(streamEnabled ? stream.status : 'idle')}</span>
+        <span className="mx-1 text-slate-500">|</span>
+        <span>{mode7NodeCount} visible nodes</span>
+        {stream.lastEventId && (
+          <>
+            <span className="mx-1 text-slate-500">|</span>
+            <span>event {stream.lastEventId.slice(0, 8)}</span>
+          </>
+        )}
+      </div>
+      <div className="pointer-events-none absolute bottom-2 left-2 max-w-[min(36rem,calc(100%-1rem))] rounded-md bg-black/45 px-2 py-1 font-mono text-[9px] text-slate-300 backdrop-blur-sm">
+        source: {normalizedSource || 'compiler result unavailable'}
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/45 px-2 py-1 font-mono text-[9px] text-slate-400 backdrop-blur-sm"
+      >
+        drag to orbit every direction · wheel to zoom · live commits grow the tree
+      </div>
+      {streamMessage && commits.length === 0 && (
+        <div className="pointer-events-none absolute right-2 top-2 max-w-[20rem] rounded-md border border-amber-400/20 bg-amber-500/10 px-2 py-1 font-mono text-[9px] text-amber-200 backdrop-blur-sm">
+          stream unavailable; showing compiler-derived fallback
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function DiagramPreview({
+  diagram,
+  result,
+  sourceExpression,
+}: {
+  diagram?: CasDiagram | null;
+  result?: Record<string, unknown> | null;
+  sourceExpression?: string;
+}) {
   // Truth-value of a set-theory assertion (only present for kind=meta_assertion).
   // Used to colour edges green for holds, red for not-holds.
   const assertionHolds: boolean | undefined =
@@ -1499,26 +1987,75 @@ export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | nul
   }, [diagram]);
 
   const [activeLayout, setActiveLayout] = useState<string>(availableLayouts[0] ?? 'radial');
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const [diagramFullscreen, setDiagramFullscreen] = useState(false);
+  const [bouncingNodeId, setBouncingNodeId] = useState<string | null>(null);
+  const [diagramView, setDiagramView] = useState<'space' | 'map' | 'mode7'>('space');
+  const [selectedSpaceNodeId, setSelectedSpaceNodeId] = useState<string | null>(null);
+  const [selectedMode7NodeId, setSelectedMode7NodeId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const onChange = () => {
+      setDiagramFullscreen(document.fullscreenElement === previewRef.current);
+    };
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+
+  const toggleDiagramFullscreen = useCallback(() => {
+    const el = previewRef.current;
+    if (!el) return;
+    if (document.fullscreenElement === el) {
+      void document.exitFullscreen?.();
+    } else {
+      void el.requestFullscreen?.();
+    }
+  }, []);
+
+  const triggerNodeBounce = useCallback((id: string) => {
+    setBouncingNodeId(id);
+    window.setTimeout(() => {
+      setBouncingNodeId((cur) => (cur === id ? null : cur));
+    }, 430);
+  }, []);
+
+  const displayItems = useMemo<DiagramNode[]>(() => {
+    if (!diagram) return [];
+    return [
+      ...diagram.containers.map(c => ({
+        id: c.id,
+        kind: c.kind,
+        label: `${c.label}${typeof c.cardinality === 'number' ? ` (${c.cardinality})` : ''}`,
+        role: c.element_type,
+      })),
+      ...diagram.nodes,
+    ].slice(0, 48);
+  }, [diagram]);
+
+  const visibleEdges = useMemo<DiagramEdge[]>(() => {
+    if (!diagram) return [];
+    const visibleIds = new Set(displayItems.map(item => item.id));
+    return diagram.edges
+      .filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target))
+      .slice(0, 32);
+  }, [diagram, displayItems]);
+
+  const spaceTree = useMemo<AtlasTraceThoughtTree | null>(() => {
+    if (!diagram) return null;
+    return buildCompilerSpaceTree(diagram, displayItems, visibleEdges);
+  }, [diagram, displayItems, visibleEdges]);
 
   // When a brand-new diagram comes in, reset to its first available layout
   useEffect(() => {
     if (availableLayouts.length && !availableLayouts.includes(activeLayout)) {
       setActiveLayout(availableLayouts[0]);
     }
+    setSelectedSpaceNodeId(null);
+    setSelectedMode7NodeId(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diagram]);
 
   if (!diagram || (diagram.nodes.length === 0 && diagram.containers.length === 0)) return null;
-
-  const displayItems: DiagramNode[] = [
-    ...diagram.containers.map(c => ({
-      id: c.id,
-      kind: c.kind,
-      label: `${c.label}${typeof c.cardinality === 'number' ? ` (${c.cardinality})` : ''}`,
-      role: c.element_type,
-    })),
-    ...diagram.nodes,
-  ].slice(0, 48);
 
   const VIEW_W = 620;
   const VIEW_H = 360;
@@ -1535,13 +2072,18 @@ export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | nul
   const edgeStroke = assertionHolds === true ? '#22c55e' : assertionHolds === false ? '#ef4444' : '#38bdf8';
   const edgeAccent = assertionHolds === true ? 'fill-emerald-300' : assertionHolds === false ? 'fill-red-300' : 'fill-cyan-300';
   const truthBadge = assertionHolds === true ? '✓' : assertionHolds === false ? '✗' : '';
-  const visibleIds = new Set(displayItems.map(item => item.id));
-  const visibleEdges = diagram.edges.filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target)).slice(0, 32);
-
   return (
-    <div className="mt-3 rounded border border-cyan-500/20 bg-cyan-500/[0.035] p-3">
+    <div
+      ref={previewRef}
+      className={`cas-spatial-graph mt-3 rounded border border-cyan-500/20 bg-cyan-500/[0.035] p-3 ${
+        diagramFullscreen ? 'min-h-screen overflow-auto bg-slate-950 p-4' : ''
+      }`}
+    >
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500">CAS Diagram</p>
+        <span className="rounded-full border border-violet-400/30 bg-violet-500/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-violet-200">
+          Spatial Gesture Graph
+        </span>
         {availableLayouts.slice(0, 6).map(layout => {
           const isActive = layout === activeLayout;
           return (
@@ -1559,14 +2101,88 @@ export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | nul
             </button>
           );
         })}
+        <div className="ml-auto flex items-center gap-1 rounded border border-white/[0.08] bg-white/[0.03] p-0.5">
+          {(['space', 'map', 'mode7'] as const).map((view) => (
+            <button
+              key={view}
+              type="button"
+              onClick={() => setDiagramView(view)}
+              className={`rounded px-2 py-0.5 text-[9px] uppercase tracking-wider transition-colors ${
+                diagramView === view
+                  ? 'bg-violet-500/20 text-violet-200'
+                : 'text-slate-500 hover:text-slate-200'
+              }`}
+            >
+              {view === 'space' ? '3D Space' : view === 'map' ? '2D Map' : 'Mode 7 Live'}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={toggleDiagramFullscreen}
+          className="rounded border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[9px] uppercase tracking-wider text-slate-300 transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+        >
+          {diagramFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+        </button>
       </div>
 
-      <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className="h-72 w-full rounded bg-slate-950/50">
+      {diagramView === 'space' ? (
+        <div
+          className={`relative w-full overflow-hidden rounded bg-slate-950/70 ${
+            diagramFullscreen ? 'h-[calc(100vh-9rem)] min-h-[560px]' : 'h-[360px]'
+          }`}
+        >
+          <SggsErrorBoundary>
+            <Suspense
+              fallback={
+                <div className="absolute inset-0 flex items-center justify-center font-mono text-xs text-slate-400">
+                  Loading 3D compiler graph...
+                </div>
+              }
+            >
+              <CompilerSggsScene
+                tree={spaceTree!}
+                selectedNodeId={selectedSpaceNodeId}
+                onNodeClick={(node) => {
+                  setSelectedSpaceNodeId(node.id);
+                  triggerNodeBounce(node.id);
+                }}
+                className="h-full w-full"
+                fillParent
+              />
+            </Suspense>
+          </SggsErrorBoundary>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/45 px-2 py-1 font-mono text-[9px] text-slate-400 backdrop-blur-sm"
+          >
+            drag to orbit every direction · wheel to zoom · click a box
+          </div>
+        </div>
+      ) : diagramView === 'mode7' ? (
+        <CompilerMode7LiveView
+          fallbackTree={spaceTree!}
+          sourceExpression={sourceExpression}
+          fullscreen={diagramFullscreen}
+          selectedNodeId={selectedMode7NodeId}
+          onSelectNode={(node) => {
+            setSelectedMode7NodeId(node.id);
+            triggerNodeBounce(node.id);
+          }}
+        />
+      ) : (
+      <svg
+        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+        className={`w-full rounded bg-slate-950/50 ${
+          diagramFullscreen ? 'h-[calc(100vh-9rem)] min-h-[520px]' : 'h-72'
+        }`}
+      >
         <defs>
           <marker id="cas-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
             <path d="M0,0 L9,4.5 L0,9 Z" fill={edgeStroke} />
           </marker>
         </defs>
+        <g className="cas-spatial-float-layer">
         {grid && (
           <g>
             <rect
@@ -1660,6 +2276,8 @@ export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | nul
           return (
             <ellipse
               key={`region-${id}`}
+              className="cas-spatial-region"
+              style={gestureNodeStyle(color)}
               cx={region.cx}
               cy={region.cy}
               rx={region.rx}
@@ -1709,7 +2327,7 @@ export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | nul
             </g>
           );
         })}
-        {displayItems.map(item => {
+        {displayItems.map((item, index) => {
           const pos = positions.get(item.id);
           if (!pos) return null;
           const color = diagramColor(item.kind, {
@@ -1725,6 +2343,14 @@ export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | nul
             if (pointMembers.has(item.id)) {
               return (
                 <g key={item.id} transform={`translate(${pos.x}, ${pos.y})`}>
+                  <g
+                    className={`cas-gesture-node ${bouncingNodeId === item.id ? 'cas-gesture-node-bounce' : ''}`}
+                    style={gestureNodeStyle(color, index)}
+                    onPointerDown={(event) => {
+                      event.stopPropagation();
+                      triggerNodeBounce(item.id);
+                    }}
+                  >
                   <circle r={ATOM_RADIUS - 4} fill={`${color}26`} stroke={color} strokeWidth="1.4" />
                   <text y="3" textAnchor="middle" className="fill-slate-100 text-[9px] font-semibold">
                     {label.replace('NoeticCluster', 'NC').replace('StateCluster', 'SC').replace(/\(\d+\)/, '').slice(0, 6)}
@@ -1732,6 +2358,7 @@ export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | nul
                   <text y={ATOM_RADIUS + 8} textAnchor="middle" className="fill-slate-300 text-[8px]">
                     {label}
                   </text>
+                  </g>
                 </g>
               );
             }
@@ -1740,6 +2367,14 @@ export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | nul
             const h = useVennPill ? RECT_HEIGHT_PILL : RECT_HEIGHT_FULL;
             return (
               <g key={item.id} transform={`translate(${pos.x}, ${pos.y})`}>
+                <g
+                  className={`cas-gesture-node ${bouncingNodeId === item.id ? 'cas-gesture-node-bounce' : ''}`}
+                  style={gestureNodeStyle(color, index)}
+                  onPointerDown={(event) => {
+                    event.stopPropagation();
+                    triggerNodeBounce(item.id);
+                  }}
+                >
                 <rect
                   x={-w / 2}
                   y={-h / 2}
@@ -1753,19 +2388,31 @@ export function DiagramPreview({ diagram, result }: { diagram?: CasDiagram | nul
                 <text y="3" textAnchor="middle" className="fill-slate-100 text-[10px] font-semibold">
                   {label}
                 </text>
+                </g>
               </g>
             );
           }
           return (
             <g key={item.id} transform={`translate(${pos.x}, ${pos.y})`}>
+              <g
+                className={`cas-gesture-node ${bouncingNodeId === item.id ? 'cas-gesture-node-bounce' : ''}`}
+                style={gestureNodeStyle(color, index)}
+                onPointerDown={(event) => {
+                  event.stopPropagation();
+                  triggerNodeBounce(item.id);
+                }}
+              >
               <circle r={ATOM_RADIUS} fill={`${color}26`} stroke={color} strokeWidth="1.4" />
               <text y="3" textAnchor="middle" className="fill-slate-100 text-[10px] font-semibold">
                 {label}
               </text>
+              </g>
             </g>
           );
         })}
+        </g>
       </svg>
+      )}
 
       <div className="mt-2 grid gap-1 text-[10px] text-slate-400 sm:grid-cols-3">
         <span>{diagram.nodes.length} nodes</span>
@@ -1845,7 +2492,12 @@ function ResultCard({ entry }: { entry: HistoryEntry }) {
           </div>
         )}
 
-        {nl.compilation?.diagram && <DiagramPreview diagram={nl.compilation.diagram} />}
+        {nl.compilation?.diagram && (
+          <DiagramPreview
+            diagram={nl.compilation.diagram}
+            sourceExpression={nl.synthesized_notation || entry.input}
+          />
+        )}
 
         {/* Interpretation */}
         <div className="rounded border border-purple-500/20 bg-purple-500/[0.03] p-3">
@@ -1930,7 +2582,7 @@ function ResultCard({ entry }: { entry: HistoryEntry }) {
         </div>
       )}
 
-      {r.diagram && <DiagramPreview diagram={r.diagram} result={r.result} />}
+      {r.diagram && <DiagramPreview diagram={r.diagram} result={r.result} sourceExpression={r.source} />}
 
       {r.warnings && r.warnings.length > 0 && (
         <div className="mt-2">

@@ -18,6 +18,7 @@ TIER_LIMITS: dict[str, tuple[int, int]] = {
     "professional": (30, 500),
     "enterprise": (120, 0),
 }
+DASHBOARD_API_KEY_PREFIX = "dashboard:"
 
 
 class TokenBucket:
@@ -93,14 +94,18 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                 content={"detail": "Rate limit exceeded (per-minute)"},
             )
 
-        # Monthly cap (0 = unlimited)
-        if self.monthly_limit > 0:
+        # Monthly cap (0 = unlimited). Dashboard login tokens represent the
+        # interactive app session, not a metered external API key; keep the
+        # per-minute throttle above but do not let local/stakeholder demos
+        # strand the compiler UI behind the community monthly cap.
+        monthly_limit = 0 if api_key.startswith(DASHBOARD_API_KEY_PREFIX) else self.monthly_limit
+        if monthly_limit > 0:
             count = self.monthly.increment(api_key)
-            if count > self.monthly_limit:
+            if count > monthly_limit:
                 return JSONResponse(
                     status_code=429,
                     content={
-                        "detail": f"Monthly limit exceeded ({self.monthly_limit} assessments). "
+                        "detail": f"Monthly limit exceeded ({monthly_limit} assessments). "
                         f"Upgrade tier or wait until next month.",
                     },
                 )

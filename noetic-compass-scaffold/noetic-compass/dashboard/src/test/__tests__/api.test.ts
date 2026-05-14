@@ -107,4 +107,32 @@ describe('apiFetch', () => {
       expect(err.detail).toContain('Unable to reach API');
     }
   });
+
+  it('refreshes the dashboard token once when the monthly cap is exhausted', async () => {
+    setToken('old-jwt');
+    const authHeaders: string[] = [];
+    server.use(
+      http.post('/api/auth/token', () => HttpResponse.json({ token: 'fresh-jwt' })),
+      http.post('/api/notation/compile', ({ request }) => {
+        const auth = request.headers.get('Authorization') ?? '';
+        authHeaders.push(auth);
+        if (auth === 'Bearer old-jwt') {
+          return HttpResponse.json(
+            { detail: 'Monthly limit exceeded (50 assessments). Upgrade tier or wait until next month.' },
+            { status: 429 },
+          );
+        }
+        return HttpResponse.json({ valid: true });
+      }),
+    );
+
+    const result = await apiFetch<{ valid: boolean }>('/notation/compile', {
+      method: 'POST',
+      body: JSON.stringify({ expression: 'Phi<3:8:5:2>' }),
+    });
+
+    expect(result.valid).toBe(true);
+    expect(authHeaders).toEqual(['Bearer old-jwt', 'Bearer fresh-jwt']);
+    expect(getToken()).toBe('fresh-jwt');
+  });
 });

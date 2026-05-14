@@ -16,7 +16,13 @@
  * `lastEventId` so a custom transport can read it on reconnect).
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type {
+  AtlasTraceThoughtTree,
+  ThoughtTreeEdge,
+  ThoughtTreeNode,
+  ThoughtTreeRootNode,
+} from './trace';
 
 // ── Schema literal ───────────────────────────────────────────────────────
 
@@ -151,6 +157,39 @@ export interface UseSggsStreamReturn {
   lastEventId: string | null;
 }
 
+// -- Live tree adapter ------------------------------------------------------
+
+export interface SggsLiveTreeState {
+  turnId: string | null;
+  userText: string | null;
+  startedAt: string | null;
+  endedAt: string | null;
+  finalTraceId: string | null;
+  durationMs: number | null;
+  rootNodeId: string | null;
+  nodes: ThoughtTreeNode[];
+  edges: ThoughtTreeEdge[];
+  tree: AtlasTraceThoughtTree | null;
+  commits: SggsCommit[];
+  warnings: SggsWarningCommit[];
+  errors: SggsErrorCommit[];
+  streamErrors: string[];
+  lastCommit: SggsCommit | null;
+  updatedAt: string | null;
+}
+
+export interface UseSggsLiveTreeOptions
+  extends Omit<UseSggsStreamOptions, 'onCommit' | 'onError'> {
+  onCommit?: (commit: SggsCommit, state: SggsLiveTreeState) => void;
+  onError?: (message: string, state: SggsLiveTreeState) => void;
+}
+
+export interface UseSggsLiveTreeReturn extends UseSggsStreamReturn {
+  state: SggsLiveTreeState;
+  tree: AtlasTraceThoughtTree | null;
+  reset: () => void;
+}
+
 // ── EventSource-like interface (for the test mock) ──────────────────────
 
 /** Minimal EventSource shape the hook depends on. Lets the test inject
@@ -170,6 +209,8 @@ export interface EventSourceLike {
   onopen?: ((this: EventSourceLike, ev: Event) => unknown) | null;
   /** Optional — only present on real EventSource. */
   onerror?: ((this: EventSourceLike, ev: Event) => unknown) | null;
+  /** Optional — used by fetch-backed streams that complete normally. */
+  onclose?: ((this: EventSourceLike) => unknown) | null;
 }
 
 // EventSource readyState constants. Hard-coded so the file does not
@@ -177,6 +218,172 @@ export interface EventSourceLike {
 export const EVENT_SOURCE_CONNECTING = 0 as const;
 export const EVENT_SOURCE_OPEN = 1 as const;
 export const EVENT_SOURCE_CLOSED = 2 as const;
+
+export interface FetchEventSourceOptions {
+  headers?: Record<string, string>;
+  fetchImpl?: typeof fetch;
+}
+
+interface ParsedSseBlock {
+  type: string;
+  data: string;
+  lastEventId?: string;
+}
+
+function takeSseBlock(buffer: string): [string | null, string] {
+  const lfIndex = buffer.indexOf('\n\n');
+  const crlfIndex = buffer.indexOf('\r\n\r\n');
+  if (lfIndex === -1 && crlfIndex === -1) return [null, buffer];
+  if (crlfIndex !== -1 && (lfIndex === -1 || crlfIndex < lfIndex)) {
+    return [buffer.slice(0, crlfIndex), buffer.slice(crlfIndex + 4)];
+  }
+  return [buffer.slice(0, lfIndex), buffer.slice(lfIndex + 2)];
+}
+
+function parseSseBlock(raw: string): ParsedSseBlock | null {
+  let type = 'message';
+  let lastEventId: string | undefined;
+  const dataLines: string[] = [];
+
+  for (const line of raw.split(/\r?\n/)) {
+    if (!line || line.startsWith(':')) continue;
+    const separator = line.indexOf(':');
+    const field = separator === -1 ? line : line.slice(0, separator);
+    const rawValue = separator === -1 ? '' : line.slice(separator + 1);
+    const value = rawValue.startsWith(' ') ? rawValue.slice(1) : rawValue;
+
+    if (field === 'event') type = value || 'message';
+    if (field === 'id') lastEventId = value;
+    if (field === 'data') dataLines.push(value);
+  }
+
+  if (dataLines.length === 0) return null;
+  return { type, data: dataLines.join('\n'), lastEventId };
+}
+
+class FetchEventSource implements EventSourceLike {
+  readonly url: string;
+  readyState: number = EVENT_SOURCE_CONNECTING;
+  onopen: ((this: EventSourceLike, ev: Event) => unknown) | null = null;
+  onerror: ((this: EventSourceLike, ev: Event) => unknown) | null = null;
+  onclose: ((this: EventSourceLike) => unknown) | null = null;
+
+  private readonly abortController = new AbortController();
+  private readonly fetchImpl: typeof fetch;
+  private readonly headers: Record<string, string>;
+  private readonly listeners = new Map<string, Array<(ev: { data: string; lastEventId?: string }) => void>>();
+  private closed = false;
+
+  constructor(url: string, options: FetchEventSourceOptions = {}) {
+    this.url = url;
+    this.fetchImpl = options.fetchImpl ?? fetch;
+    this.headers = options.headers ?? {};
+    void this.connect();
+  }
+
+  addEventListener(
+    type: string,
+    listener: (ev: { data: string; lastEventId?: string }) => void,
+  ): void {
+    const listeners = this.listeners.get(type) ?? [];
+    listeners.push(listener);
+    this.listeners.set(type, listeners);
+  }
+
+  removeEventListener(
+    type: string,
+    listener: (ev: { data: string; lastEventId?: string }) => void,
+  ): void {
+    const listeners = this.listeners.get(type) ?? [];
+    this.listeners.set(
+      type,
+      listeners.filter((candidate) => candidate !== listener),
+    );
+  }
+
+  close(): void {
+    if (this.closed) return;
+    this.closed = true;
+    this.readyState = EVENT_SOURCE_CLOSED;
+    this.abortController.abort();
+  }
+
+  private dispatch(type: string, ev: { data: string; lastEventId?: string }): void {
+    for (const listener of this.listeners.get(type) ?? []) {
+      listener(ev);
+    }
+  }
+
+  private async connect(): Promise<void> {
+    try {
+      const response = await this.fetchImpl(this.url, {
+        method: 'GET',
+        headers: {
+          Accept: 'text/event-stream',
+          ...this.headers,
+        },
+        credentials: 'same-origin',
+        signal: this.abortController.signal,
+      });
+
+      if (!response.ok || !response.body) {
+        throw new Error(`Mode 7 stream failed with HTTP ${response.status}.`);
+      }
+
+      this.readyState = EVENT_SOURCE_OPEN;
+      this.onopen?.call(this, new Event('open'));
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (!this.closed) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        while (true) {
+          const [block, rest] = takeSseBlock(buffer);
+          if (block === null) break;
+          buffer = rest;
+          const parsed = parseSseBlock(block);
+          if (parsed) {
+            this.dispatch(parsed.type, {
+              data: parsed.data,
+              lastEventId: parsed.lastEventId,
+            });
+          }
+        }
+      }
+
+      if (buffer.trim()) {
+        const parsed = parseSseBlock(buffer);
+        if (parsed) {
+          this.dispatch(parsed.type, {
+            data: parsed.data,
+            lastEventId: parsed.lastEventId,
+          });
+        }
+      }
+
+      if (!this.closed) {
+        this.readyState = EVENT_SOURCE_CLOSED;
+        this.onclose?.call(this);
+      }
+    } catch {
+      if (this.closed) return;
+      this.readyState = EVENT_SOURCE_CLOSED;
+      this.onerror?.call(this, new Event('error'));
+    }
+  }
+}
+
+export function createFetchEventSource(
+  url: string,
+  options: FetchEventSourceOptions = {},
+): EventSourceLike {
+  return new FetchEventSource(url, options);
+}
 
 // ── Parsing helpers ──────────────────────────────────────────────────────
 
@@ -302,6 +509,294 @@ export function parseSggsCommit(
   return { ok: true, commit: parsed as unknown as SggsCommit };
 }
 
+// -- Live tree state accumulation ------------------------------------------
+
+function nowIso(): string {
+  return new Date().toISOString();
+}
+
+function normalizeNodeLabel(label: string, axisAttrs: Record<string, unknown>): string {
+  const normalized = axisAttrs.normalized_label;
+  if (typeof normalized === 'string' && normalized.trim()) {
+    return normalized;
+  }
+  return label.trim().toLowerCase();
+}
+
+function shortLiveLabel(value: string, fallback: string): string {
+  const trimmed = value.trim() || fallback;
+  return trimmed.length > 64 ? `${trimmed.slice(0, 61)}...` : trimmed;
+}
+
+function rootNodeFromTurnStart(commit: SggsTurnStartCommit): ThoughtTreeNode {
+  const label = shortLiveLabel(commit.user_text, 'Mode 7 live prompt');
+  return {
+    id: 'n0',
+    node_key: `mode7|${commit.turn_id}|prompt`,
+    kind: 'user_prompt',
+    role: 'live_prompt',
+    label,
+    normalized_label: label.toLowerCase(),
+    text: commit.user_text,
+  };
+}
+
+function nodeFromHeadCommit(commit: SggsHeadCommit): ThoughtTreeNode {
+  const text = commit.axis_attrs.text;
+  return {
+    id: commit.node_id,
+    node_key: commit.node_id,
+    kind: commit.node_kind,
+    role: commit.head_name,
+    label: commit.node_label,
+    normalized_label: normalizeNodeLabel(commit.node_label, commit.axis_attrs),
+    axis_attrs: commit.axis_attrs,
+    ...(typeof text === 'string' ? { text } : {}),
+  };
+}
+
+function edgeFromEdgeCommit(commit: SggsEdgeCommit): ThoughtTreeEdge {
+  return {
+    id: commit.edge_id,
+    edge_key: commit.edge_id,
+    source: commit.source_node_id,
+    target: commit.target_node_id,
+    source_key: commit.source_node_id,
+    target_key: commit.target_node_id,
+    kind: commit.edge_kind,
+  };
+}
+
+function syntheticParentEdge(source: string, target: string): ThoughtTreeEdge {
+  const id = `parent:${source}->${target}`;
+  return {
+    id,
+    edge_key: id,
+    source,
+    target,
+    source_key: source,
+    target_key: target,
+    kind: 'parent_child',
+  };
+}
+
+function upsertNode(nodes: ThoughtTreeNode[], node: ThoughtTreeNode): ThoughtTreeNode[] {
+  const index = nodes.findIndex((candidate) => candidate.id === node.id);
+  if (index === -1) return [...nodes, node];
+  const next = nodes.slice();
+  next[index] = { ...next[index], ...node };
+  return next;
+}
+
+function upsertEdge(edges: ThoughtTreeEdge[], edge: ThoughtTreeEdge): ThoughtTreeEdge[] {
+  const explicitEdges = edge.id.startsWith('parent:')
+    ? edges
+    : edges.filter(
+        (candidate) =>
+          !(
+            candidate.id.startsWith('parent:') &&
+            candidate.source === edge.source &&
+            candidate.target === edge.target
+          ),
+      );
+  const index = explicitEdges.findIndex((candidate) => candidate.id === edge.id);
+  if (index === -1) return [...explicitEdges, edge];
+  const next = explicitEdges.slice();
+  next[index] = { ...next[index], ...edge };
+  return next;
+}
+
+function toRootNode(
+  node: ThoughtTreeNode,
+  children: ThoughtTreeRootNode[],
+): ThoughtTreeRootNode {
+  return {
+    id: node.id,
+    node_key: node.node_key,
+    kind: node.kind,
+    role: node.role,
+    label: node.label,
+    normalized_label: node.normalized_label,
+    ...(node.axis_attrs ? { axis_attrs: node.axis_attrs } : {}),
+    ...(node.text ? { text: node.text } : {}),
+    ...(children.length > 0 ? { children } : {}),
+  };
+}
+
+function chooseRootNodeId(
+  nodes: ThoughtTreeNode[],
+  edges: ThoughtTreeEdge[],
+  preferredRootId: string | null,
+): string | null {
+  if (preferredRootId && nodes.some((node) => node.id === preferredRootId)) {
+    return preferredRootId;
+  }
+  const targets = new Set(edges.map((edge) => edge.target));
+  return nodes.find((node) => !targets.has(node.id))?.id ?? nodes[0]?.id ?? null;
+}
+
+function buildLiveThoughtTree(
+  nodes: ThoughtTreeNode[],
+  edges: ThoughtTreeEdge[],
+  preferredRootId: string | null,
+): AtlasTraceThoughtTree | null {
+  const rootId = chooseRootNodeId(nodes, edges, preferredRootId);
+  if (!rootId) return null;
+
+  const nodesById = new Map(nodes.map((node) => [node.id, node]));
+  const childrenBySource = new Map<string, ThoughtTreeEdge[]>();
+  for (const edge of edges) {
+    if (!nodesById.has(edge.source) || !nodesById.has(edge.target)) continue;
+    const list = childrenBySource.get(edge.source) ?? [];
+    list.push(edge);
+    childrenBySource.set(edge.source, list);
+  }
+
+  const visit = (id: string, seen: Set<string>): ThoughtTreeRootNode | null => {
+    const node = nodesById.get(id);
+    if (!node || seen.has(id)) return null;
+    const nextSeen = new Set(seen);
+    nextSeen.add(id);
+    const childEdges = childrenBySource.get(id) ?? [];
+    const children = childEdges
+      .map((edge) => visit(edge.target, nextSeen))
+      .filter((child): child is ThoughtTreeRootNode => child !== null);
+    return toRootNode(node, children);
+  };
+
+  const root = visit(rootId, new Set());
+  if (!root) return null;
+
+  return {
+    root,
+    nodes,
+    edges,
+    node_count: nodes.length,
+    edge_count: edges.length,
+  };
+}
+
+export function createEmptySggsLiveTreeState(): SggsLiveTreeState {
+  return {
+    turnId: null,
+    userText: null,
+    startedAt: null,
+    endedAt: null,
+    finalTraceId: null,
+    durationMs: null,
+    rootNodeId: null,
+    nodes: [],
+    edges: [],
+    tree: null,
+    commits: [],
+    warnings: [],
+    errors: [],
+    streamErrors: [],
+    lastCommit: null,
+    updatedAt: null,
+  };
+}
+
+function withTree(
+  state: SggsLiveTreeState,
+  nodes: ThoughtTreeNode[],
+  edges: ThoughtTreeEdge[],
+  rootNodeId = state.rootNodeId,
+): Pick<SggsLiveTreeState, 'nodes' | 'edges' | 'rootNodeId' | 'tree'> {
+  return {
+    nodes,
+    edges,
+    rootNodeId,
+    tree: buildLiveThoughtTree(nodes, edges, rootNodeId),
+  };
+}
+
+export function applySggsCommitToLiveTree(
+  state: SggsLiveTreeState,
+  commit: SggsCommit,
+): SggsLiveTreeState {
+  const base = {
+    ...state,
+    commits: [...state.commits, commit],
+    lastCommit: commit,
+    updatedAt: nowIso(),
+  };
+
+  switch (commit.kind) {
+    case SGGS_EVENT_TURN_START:
+      {
+        const rootNode = rootNodeFromTurnStart(commit);
+        const empty = createEmptySggsLiveTreeState();
+        return {
+          ...empty,
+          turnId: commit.turn_id,
+          userText: commit.user_text,
+          startedAt: commit.created_at,
+          commits: [commit],
+          lastCommit: commit,
+          updatedAt: base.updatedAt,
+          ...withTree(empty, [rootNode], [], rootNode.id),
+        };
+      }
+
+    case SGGS_EVENT_HEAD_COMMIT: {
+      const node = nodeFromHeadCommit(commit);
+      const nodes = upsertNode(base.nodes, node);
+      const rootNodeId =
+        commit.parent_node_id === null && base.rootNodeId === null
+          ? commit.node_id
+          : base.rootNodeId;
+      const parentNodeId =
+        commit.parent_node_id ??
+        (base.rootNodeId && commit.node_id !== base.rootNodeId ? base.rootNodeId : null);
+      const edges =
+        parentNodeId === null
+          ? base.edges
+          : upsertEdge(
+              base.edges,
+              syntheticParentEdge(parentNodeId, commit.node_id),
+            );
+      return {
+        ...base,
+        turnId: base.turnId ?? commit.turn_id,
+        ...withTree(base, nodes, edges, rootNodeId),
+      };
+    }
+
+    case SGGS_EVENT_EDGE_COMMIT: {
+      const edges = upsertEdge(base.edges, edgeFromEdgeCommit(commit));
+      return {
+        ...base,
+        turnId: base.turnId ?? commit.turn_id,
+        ...withTree(base, base.nodes, edges),
+      };
+    }
+
+    case SGGS_EVENT_TURN_END:
+      return {
+        ...base,
+        turnId: base.turnId ?? commit.turn_id,
+        endedAt: commit.ended_at,
+        finalTraceId: commit.final_trace_id,
+        durationMs: commit.duration_ms,
+      };
+
+    case SGGS_EVENT_WARNING:
+      return {
+        ...base,
+        turnId: base.turnId ?? commit.turn_id,
+        warnings: [...base.warnings, commit],
+      };
+
+    case SGGS_EVENT_ERROR:
+      return {
+        ...base,
+        turnId: base.turnId ?? commit.turn_id,
+        errors: [...base.errors, commit],
+      };
+  }
+}
+
 // ── Hook ─────────────────────────────────────────────────────────────────
 
 /**
@@ -378,9 +873,8 @@ export function useSggsStream(opts: UseSggsStreamOptions): UseSggsStreamReturn {
       };
 
     // Wire one listener per known kind so the browser dispatches to
-    // the right handler based on the SSE `event:` line. (Default
-    // 'message' is unused — our producer always sets an explicit
-    // event name.)
+    // the right handler based on the SSE `event:` line. Also accept
+    // default 'message' events and trust the embedded `kind` field.
     const listeners: Array<{
       kind: string;
       fn: (ev: { data: string; lastEventId?: string }) => void;
@@ -390,6 +884,9 @@ export function useSggsStream(opts: UseSggsStreamOptions): UseSggsStreamReturn {
       source.addEventListener(kind, fn);
       listeners.push({ kind, fn });
     }
+    const defaultMessageHandler = handleCommit('');
+    source.addEventListener('message', defaultMessageHandler);
+    listeners.push({ kind: 'message', fn: defaultMessageHandler });
 
     // Status wiring — `onopen` / `onerror` may be undefined on a mock
     // source; guard each.
@@ -412,6 +909,9 @@ export function useSggsStream(opts: UseSggsStreamOptions): UseSggsStreamReturn {
         onErrorRef.current?.('SGGS stream transport error.');
       };
     }
+    if ('onclose' in realSource) {
+      realSource.onclose = () => setStatus('closed');
+    }
 
     return () => {
       // Detach listeners (in environments where removeEventListener is
@@ -432,4 +932,66 @@ export function useSggsStream(opts: UseSggsStreamOptions): UseSggsStreamReturn {
   }, [url, enabled]);
 
   return { status, lastEventId };
+}
+
+/**
+ * Subscribe to an SGGS stream and accumulate a UI-ready Thought Tree.
+ *
+ * This adapter is intentionally small: IdeaAtlasPage and CompilerPage can
+ * render `tree` directly with the existing ThoughtTreeView/SggsScene once
+ * they decide where to mount live Mode 7 output.
+ */
+export function useSggsLiveTree(
+  opts: UseSggsLiveTreeOptions,
+): UseSggsLiveTreeReturn {
+  const { onCommit, onError, ...streamOpts } = opts;
+  const [state, setState] = useState<SggsLiveTreeState>(() =>
+    createEmptySggsLiveTreeState(),
+  );
+
+  const onCommitRef = useRef(onCommit);
+  const onErrorRef = useRef(onError);
+  useEffect(() => {
+    onCommitRef.current = onCommit;
+  }, [onCommit]);
+  useEffect(() => {
+    onErrorRef.current = onError;
+  }, [onError]);
+
+  const handleCommit = useCallback((commit: SggsCommit) => {
+    setState((prev) => {
+      const next = applySggsCommitToLiveTree(prev, commit);
+      onCommitRef.current?.(commit, next);
+      return next;
+    });
+  }, []);
+
+  const handleError = useCallback((message: string) => {
+    setState((prev) => {
+      const next = {
+        ...prev,
+        streamErrors: [...prev.streamErrors, message],
+        updatedAt: nowIso(),
+      };
+      onErrorRef.current?.(message, next);
+      return next;
+    });
+  }, []);
+
+  const stream = useSggsStream({
+    ...streamOpts,
+    onCommit: handleCommit,
+    onError: handleError,
+  });
+
+  const reset = useCallback(() => {
+    setState(createEmptySggsLiveTreeState());
+  }, []);
+
+  return {
+    ...stream,
+    state,
+    tree: state.tree,
+    reset,
+  };
 }

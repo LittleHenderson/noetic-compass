@@ -29,8 +29,11 @@ import {
   SGGS_EVENT_WARNING,
   SGGS_STREAM_SCHEMA_VERSION,
   type EventSourceLike,
+  applySggsCommitToLiveTree,
+  createEmptySggsLiveTreeState,
   type SggsCommit,
   parseSggsCommit,
+  useSggsLiveTree,
   useSggsStream,
 } from './sggs_stream';
 
@@ -146,6 +149,12 @@ function turnEndPayload(): string {
     duration_ms: 150,
     ended_at: '2026-05-13T20:00:00Z',
   });
+}
+
+function parseCommit(kind: string, payload: string): SggsCommit {
+  const result = parseSggsCommit(kind, payload);
+  if (!result.ok) throw new Error(result.error);
+  return result.commit;
 }
 
 // ── parseSggsCommit ────────────────────────────────────────────────────
@@ -369,6 +378,136 @@ describe('parseSggsCommit', () => {
   });
 });
 
+// -- Live tree accumulator --------------------------------------------------
+
+describe('applySggsCommitToLiveTree', () => {
+  it('accumulates head commits into a growing thought tree', () => {
+    let state = createEmptySggsLiveTreeState();
+    state = applySggsCommitToLiveTree(
+      state,
+      parseCommit(SGGS_EVENT_TURN_START, turnStartPayload('t-live', 'grow')),
+    );
+    state = applySggsCommitToLiveTree(
+      state,
+      parseCommit(
+        SGGS_EVENT_HEAD_COMMIT,
+        headCommitPayload({
+          head_index: 0,
+          head_name: 'prompt',
+          node_id: 'root',
+          node_kind: 'user_prompt',
+          node_label: 'Grow a tree',
+          parent_node_id: null,
+        }),
+      ),
+    );
+    state = applySggsCommitToLiveTree(
+      state,
+      parseCommit(
+        SGGS_EVENT_HEAD_COMMIT,
+        headCommitPayload({
+          head_index: 1,
+          head_name: 'cas',
+          node_id: 'child',
+          node_kind: 'cas_expression',
+          node_label: '^2^P',
+          parent_node_id: 'root',
+          axis_attrs: { normalized_label: 'positive-principled' },
+        }),
+      ),
+    );
+
+    expect(state.turnId).toBe('t-live');
+    expect(state.tree?.node_count).toBe(3);
+    expect(state.tree?.edge_count).toBe(2);
+    expect(state.tree?.root.id).toBe('n0');
+    expect(state.tree?.root.children?.[0]?.id).toBe('root');
+    expect(state.tree?.root.children?.[0]?.children?.[0]?.id).toBe('child');
+    expect(state.nodes.find((node) => node.id === 'child')?.normalized_label).toBe(
+      'positive-principled',
+    );
+  });
+
+  it('replaces synthetic parent edges with explicit edge commits', () => {
+    let state = createEmptySggsLiveTreeState();
+    state = applySggsCommitToLiveTree(
+      state,
+      parseCommit(
+        SGGS_EVENT_HEAD_COMMIT,
+        headCommitPayload({ node_id: 'root', parent_node_id: null }),
+      ),
+    );
+    state = applySggsCommitToLiveTree(
+      state,
+      parseCommit(
+        SGGS_EVENT_HEAD_COMMIT,
+        headCommitPayload({ node_id: 'child', parent_node_id: 'root' }),
+      ),
+    );
+    expect(state.edges[0]?.id).toBe('parent:root->child');
+
+    state = applySggsCommitToLiveTree(
+      state,
+      parseCommit(
+        SGGS_EVENT_EDGE_COMMIT,
+        JSON.stringify({
+          kind: 'edge_commit',
+          schema_version: SGGS_STREAM_SCHEMA_VERSION,
+          turn_id: 't-001',
+          edge_id: 'edge-explicit',
+          source_node_id: 'root',
+          target_node_id: 'child',
+          edge_kind: 'parent_child',
+        }),
+      ),
+    );
+
+    expect(state.edges).toHaveLength(1);
+    expect(state.edges[0]?.id).toBe('edge-explicit');
+    expect(state.tree?.root.children?.[0]?.id).toBe('child');
+  });
+
+  it('records warning, error, and turn_end metadata without changing nodes', () => {
+    let state = createEmptySggsLiveTreeState();
+    state = applySggsCommitToLiveTree(
+      state,
+      parseCommit(
+        SGGS_EVENT_WARNING,
+        JSON.stringify({
+          kind: 'warning',
+          schema_version: SGGS_STREAM_SCHEMA_VERSION,
+          turn_id: 't-001',
+          severity: 'warning',
+          message: 'partial tree',
+        }),
+      ),
+    );
+    state = applySggsCommitToLiveTree(
+      state,
+      parseCommit(
+        SGGS_EVENT_ERROR,
+        JSON.stringify({
+          kind: 'error',
+          schema_version: SGGS_STREAM_SCHEMA_VERSION,
+          turn_id: 't-001',
+          code: 'E_PARTIAL',
+          message: 'missing leaf',
+        }),
+      ),
+    );
+    state = applySggsCommitToLiveTree(
+      state,
+      parseCommit(SGGS_EVENT_TURN_END, turnEndPayload()),
+    );
+
+    expect(state.nodes).toHaveLength(0);
+    expect(state.warnings[0]?.message).toBe('partial tree');
+    expect(state.errors[0]?.code).toBe('E_PARTIAL');
+    expect(state.finalTraceId).toBe('trace-uuid');
+    expect(state.durationMs).toBe(150);
+  });
+});
+
 // ── useSggsStream — end-to-end ────────────────────────────────────────
 
 describe('useSggsStream', () => {
@@ -569,6 +708,56 @@ describe('useSggsStream', () => {
     ]);
   });
 
+  it('accepts unnamed default SSE message events via embedded kind', () => {
+    const commits: SggsCommit[] = [];
+    renderHook(() =>
+      useSggsStream({
+        url: '/api/sggs/stream',
+        enabled: true,
+        onCommit: (c) => {
+          commits.push(c);
+        },
+        eventSourceFactory: (u) => new MockEventSource(u),
+      }),
+    );
+
+    const source = MockEventSource.instances[0];
+    act(() => {
+      source.simulateOpen();
+      source.simulateEvent('message', {
+        data: turnStartPayload(),
+        lastEventId: 'evt-default',
+      });
+    });
+
+    expect(commits.map((c) => c.kind)).toEqual(['turn_start']);
+  });
+
+  it('reports unknown default SSE message kinds without dispatching commits', () => {
+    const onCommit = vi.fn();
+    const onError = vi.fn();
+    renderHook(() =>
+      useSggsStream({
+        url: '/api/sggs/stream',
+        enabled: true,
+        onCommit,
+        onError,
+        eventSourceFactory: (u) => new MockEventSource(u),
+      }),
+    );
+
+    const source = MockEventSource.instances[0];
+    act(() => {
+      source.simulateOpen();
+      source.simulateEvent('message', {
+        data: JSON.stringify({ kind: 'future_event', turn_id: 't-001' }),
+      });
+    });
+
+    expect(onCommit).not.toHaveBeenCalled();
+    expect(onError).toHaveBeenCalledWith(expect.stringMatching(/Unknown SGGS/));
+  });
+
   it('surfaces transport errors via onError', () => {
     const onError = vi.fn();
     renderHook(() =>
@@ -586,5 +775,93 @@ describe('useSggsStream', () => {
       source.simulateError(/* closed = */ false);
     });
     expect(onError).toHaveBeenCalled();
+  });
+});
+
+describe('useSggsLiveTree', () => {
+  it('exposes a live accumulated tree and stream cursor', () => {
+    const onCommit = vi.fn();
+    const { result } = renderHook(() =>
+      useSggsLiveTree({
+        url: '/api/sggs/stream',
+        enabled: true,
+        onCommit,
+        eventSourceFactory: (u) => new MockEventSource(u),
+      }),
+    );
+
+    const source = MockEventSource.instances[0];
+    act(() => {
+      source.simulateOpen();
+      source.simulateEvent(SGGS_EVENT_HEAD_COMMIT, {
+        data: headCommitPayload({ node_id: 'root', parent_node_id: null }),
+        lastEventId: 'evt-root',
+      });
+      source.simulateEvent(SGGS_EVENT_HEAD_COMMIT, {
+        data: headCommitPayload({ node_id: 'leaf', parent_node_id: 'root' }),
+        lastEventId: 'evt-leaf',
+      });
+    });
+
+    expect(result.current.status).toBe('open');
+    expect(result.current.lastEventId).toBe('evt-leaf');
+    expect(result.current.tree?.node_count).toBe(2);
+    expect(result.current.tree?.root.children?.[0]?.id).toBe('leaf');
+    expect(onCommit).toHaveBeenCalledTimes(2);
+    expect(onCommit.mock.calls[1]?.[1].tree?.node_count).toBe(2);
+  });
+
+  it('stores malformed JSON errors and keeps accumulating later valid commits', () => {
+    const onError = vi.fn();
+    const { result } = renderHook(() =>
+      useSggsLiveTree({
+        url: '/api/sggs/stream',
+        enabled: true,
+        onError,
+        eventSourceFactory: (u) => new MockEventSource(u),
+      }),
+    );
+
+    const source = MockEventSource.instances[0];
+    act(() => {
+      source.simulateOpen();
+      source.simulateEvent(SGGS_EVENT_HEAD_COMMIT, { data: '{not-json' });
+      source.simulateEvent(SGGS_EVENT_HEAD_COMMIT, {
+        data: headCommitPayload({ node_id: 'root', parent_node_id: null }),
+        lastEventId: 'evt-recovered',
+      });
+    });
+
+    expect(result.current.state.streamErrors[0]).toMatch(/Could not parse/);
+    expect(onError).toHaveBeenCalled();
+    expect(result.current.tree?.root.id).toBe('root');
+    expect(result.current.lastEventId).toBe('evt-recovered');
+  });
+
+  it('reset clears accumulated live tree state without closing the stream', () => {
+    const { result } = renderHook(() =>
+      useSggsLiveTree({
+        url: '/api/sggs/stream',
+        enabled: true,
+        eventSourceFactory: (u) => new MockEventSource(u),
+      }),
+    );
+
+    const source = MockEventSource.instances[0];
+    act(() => {
+      source.simulateOpen();
+      source.simulateEvent(SGGS_EVENT_HEAD_COMMIT, {
+        data: headCommitPayload({ node_id: 'root', parent_node_id: null }),
+      });
+    });
+    expect(result.current.tree?.node_count).toBe(1);
+
+    act(() => {
+      result.current.reset();
+    });
+
+    expect(source.readyState).toBe(EVENT_SOURCE_OPEN);
+    expect(result.current.tree).toBeNull();
+    expect(result.current.state.commits).toHaveLength(0);
   });
 });

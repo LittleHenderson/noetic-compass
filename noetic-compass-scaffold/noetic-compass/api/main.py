@@ -32,6 +32,7 @@ from api.routes import (
     forecast,
     health,
     idea_atlas,
+    mode7,
     notation,
     reproducibility,
     scenarios,
@@ -124,3 +125,4 @@ app.include_router(validation.router)
 app.include_router(notation.router)
 app.include_router(reproducibility.router)
 app.include_router(idea_atlas.router)
+app.include_router(mode7.router)

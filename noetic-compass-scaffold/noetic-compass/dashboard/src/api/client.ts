@@ -1,4 +1,4 @@
-import { clearToken, getToken } from './auth';
+import { clearToken, getToken, setToken } from './auth';
 import { API_BASE } from './config';
 
 export class ApiError extends Error {
@@ -25,9 +25,36 @@ function stringifyDetail(detail: unknown, fallback: string): string {
   }
 }
 
+function isMonthlyLimit(detail: string): boolean {
+  return /monthly limit exceeded/i.test(detail);
+}
+
+function freshDashboardUsername(): string {
+  const rand = Math.random().toString(36).slice(2, 8);
+  return `dashboard-${Date.now().toString(36)}-${rand}`;
+}
+
+async function refreshDashboardToken(): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE}/auth/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: freshDashboardUsername() }),
+    });
+    if (!res.ok) return false;
+    const data: { token?: string } = await res.json();
+    if (!data.token) return false;
+    setToken(data.token);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {},
+  retryOnDashboardLimit: boolean = true,
 ): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
@@ -64,6 +91,15 @@ export async function apiFetch<T>(
       if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
         window.location.assign('/login');
       }
+    }
+    if (
+      res.status === 429 &&
+      retryOnDashboardLimit &&
+      path !== '/auth/token' &&
+      isMonthlyLimit(detail) &&
+      await refreshDashboardToken()
+    ) {
+      return apiFetch<T>(path, options, false);
     }
     throw new ApiError(res.status, detail, errorType);
   }
