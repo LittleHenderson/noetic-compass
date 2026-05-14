@@ -11,6 +11,7 @@ import {
   type ThoughtTreeNode as TreeViewNode,
   type ThoughtTree as TreeViewTree,
 } from '../components/idea-atlas/ThoughtTreeView';
+import { SggsErrorBoundary } from '../components/idea-atlas/SggsErrorBoundary';
 import type { AtlasTrace, AtlasTraceThoughtTree } from '../lib/trace';
 
 // SGGS — Three.js 3D scene. Lazy so the ~600 KB three + sprite bundle
@@ -1069,22 +1070,28 @@ export function IdeaAtlasPage() {
             <div
               ref={sggsContainerRef}
               data-fullscreen={sggsFullscreen ? 'true' : 'false'}
-              className="relative min-h-[560px] rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden"
+              // Explicit h-[560px] rather than min-h, per Codex audit
+              // 8939e62 blocker 1: the SGGS canvas needs a real
+              // computed height to render to. In fullscreen the wrapper
+              // grows naturally to fill the viewport.
+              className="relative h-[560px] rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden data-[fullscreen=true]:h-screen"
             >
-              <Suspense
-                fallback={
-                  <div className="flex h-[560px] items-center justify-center font-mono text-xs text-slate-400">
-                    Loading 3D scene (~600 KB three.js + sprite atlas)…
-                  </div>
-                }
-              >
-                <SggsScene
-                  tree={loadedTrace.thought_tree as unknown as AtlasTraceThoughtTree}
-                  onNodeClick={(n) => setSelectedTraceNodeId(n.id)}
-                  selectedNodeId={selectedTraceNodeId}
-                  className="h-full w-full"
-                />
-              </Suspense>
+              <SggsErrorBoundary>
+                <Suspense
+                  fallback={
+                    <div className="flex h-full items-center justify-center font-mono text-xs text-slate-400">
+                      Loading 3D scene (~600 KB three.js + sprite atlas)…
+                    </div>
+                  }
+                >
+                  <SggsScene
+                    tree={loadedTrace.thought_tree as unknown as AtlasTraceThoughtTree}
+                    onNodeClick={(n) => setSelectedTraceNodeId(n.id)}
+                    selectedNodeId={selectedTraceNodeId}
+                    className="h-full w-full"
+                  />
+                </Suspense>
+              </SggsErrorBoundary>
 
               {/* Fullscreen toggle — top-right overlay */}
               <button

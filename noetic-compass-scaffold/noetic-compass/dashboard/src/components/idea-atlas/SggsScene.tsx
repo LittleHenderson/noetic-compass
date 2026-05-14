@@ -314,6 +314,10 @@ function buildNodeMesh(node: ThoughtTreeNode, pos: NodePos3D): NodeMeshBundle {
     opacity: BASE_HALO_OPACITY,
     blending: AdditiveBlending,
     depthWrite: false,
+    // DoubleSide so the glow stays visible while the user orbits behind
+    // a card. Card body is already DoubleSide; halo matches it (Codex
+    // audit 8939e62 non-blocker note 2026-05-13).
+    side: DoubleSide,
   });
   const halo = new Mesh(
     new PlaneGeometry(NODE_W * HALO_SCALE_W, NODE_H * HALO_SCALE_H),
@@ -587,6 +591,13 @@ export function SggsScene({
       if (!id) return;
       const bundle = meshesRef.current.find((m) => m.node.id === id);
       if (!bundle) return;
+      // Bounce on EVERY click, not just selection changes. Per Codex
+      // audit 8939e62 blocker 4: if the user clicks the already-selected
+      // card, the React selection-change effect doesn't fire (same id),
+      // but the user still expects the card to bounce. Setting
+      // bounceStartedAt here makes "touch the card" the bounce trigger,
+      // not "select a different card".
+      bundle.bounceStartedAt = performance.now();
       // Stop propagation so an orbit drag doesn't simultaneously trigger
       // a click; the OrbitControls implementation is tolerant of this.
       onNodeClickRef.current?.(bundle.node);
@@ -778,7 +789,10 @@ export function SggsScene({
       rafRef.current = null;
       ro.disconnect();
       renderer.domElement.removeEventListener('pointerdown', onPointerDown);
-      // Dispose materials, geometries, textures.
+      // Dispose materials, geometries, textures. Per Codex audit
+      // 8939e62 blocker 3: halo geometry + material were missing here,
+      // which leaked GPU resources on every TRACE-3D tab close (the
+      // scene rebuilds when the tree prop changes).
       for (const bundle of meshes) {
         bundle.body.geometry.dispose();
         (bundle.body.material as MeshBasicMaterial).dispose();
@@ -786,6 +800,8 @@ export function SggsScene({
         (bundle.ribbon.material as MeshBasicMaterial).dispose();
         bundle.outline.geometry.dispose();
         (bundle.outline.material as LineBasicMaterial).dispose();
+        bundle.halo.geometry.dispose();
+        (bundle.halo.material as MeshBasicMaterial).dispose();
         if (bundle.sprite) {
           const m = bundle.sprite.material as SpriteMaterial;
           if (m.map) m.map.dispose();
