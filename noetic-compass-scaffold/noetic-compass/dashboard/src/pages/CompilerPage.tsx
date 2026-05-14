@@ -1623,6 +1623,8 @@ function edgeKey(source: string, target: string, kind: string): string {
 type Mode7HeadCommit = Extract<SggsCommit, { kind: 'head_commit' }>;
 
 const MODE7_STRUCTURAL_ATTR_KEYS = [
+  'mode7_semantics',
+  'structural_commit_linkage',
   'noetic',
   'domain',
   'drive',
@@ -1644,9 +1646,12 @@ const MODE7_STRUCTURAL_ATTR_KEYS = [
   'inferred_cas',
   'normalized_label',
   'role',
+  'mechanistic_diagnostics',
 ];
 
 const MODE7_TOKEN_ATTR_KEYS = [
+  'load_bearing_tokens',
+  'loadBearingTokens',
   'n_tokens',
   'token_count',
   'tokens',
@@ -1659,6 +1664,12 @@ const MODE7_TOKEN_ATTR_KEYS = [
 ];
 
 const MODE7_LAYER_ATTR_KEYS = [
+  'activation_layers',
+  'activation_hooks',
+  'activation_summary',
+  'per_head_attribution',
+  'node_relevant_head_attribution',
+  'domain_descent_attention',
   'layer',
   'layer_name',
   'layer_index',

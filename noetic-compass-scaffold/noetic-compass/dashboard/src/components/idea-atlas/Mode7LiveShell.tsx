@@ -78,6 +78,10 @@ const DEFAULT_SOURCE = 'CAS Native AI traceability stream';
 
 const TOKEN_DETAIL_FIELDS: readonly AttrField[] = [
   {
+    label: 'load-bearing tokens',
+    keys: ['load_bearing_tokens', 'loadBearingTokens'],
+  },
+  {
     label: 'decoded token',
     keys: ['decoded_token_str', 'token_str', 'token', 'decoded_token'],
   },
@@ -108,6 +112,14 @@ const TOKEN_DETAIL_FIELDS: readonly AttrField[] = [
 ] as const;
 
 const LAYER_DETAIL_FIELDS: readonly AttrField[] = [
+  {
+    label: 'activation layers',
+    keys: ['activation_layers', 'layer_activations'],
+  },
+  {
+    label: 'activation hooks',
+    keys: ['activation_hooks', 'hook_status'],
+  },
   {
     label: 'layer l2',
     keys: ['layer_l2', 'encoder_layer_l2', 'decoder_layer_l2'],
@@ -140,6 +152,18 @@ const LAYER_DETAIL_FIELDS: readonly AttrField[] = [
 
 const LOGIT_DETAIL_FIELDS: readonly AttrField[] = [
   {
+    label: 'head attribution',
+    keys: ['node_relevant_head_attribution', 'per_head_attribution'],
+  },
+  {
+    label: 'logits summary',
+    keys: ['logits_summary', 'logits_copy_distribution_summary'],
+  },
+  {
+    label: 'copy summary',
+    keys: ['copy_distribution_summary'],
+  },
+  {
     label: 'lm logits',
     keys: ['lm_logits_top5', 'lm_logits_top5_per_position', 'lm_logits'],
   },
@@ -169,6 +193,10 @@ const KNOWN_AXIS_ATTR_KEYS = new Set<string>([
   'role',
   'normalized_label',
   'text',
+  'mode7_semantics',
+  'structural_commit_linkage',
+  'mechanistic_diagnostics',
+  'domain_descent_attention',
 ]);
 
 function shortLabel(value: string, fallback: string, max = 54): string {
