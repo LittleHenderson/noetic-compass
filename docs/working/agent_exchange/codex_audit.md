@@ -3511,3 +3511,24 @@ Verification:
 - `SggsScene.test.tsx`: 12/12 pass.
 - SGGS dashboard slice: 72/72 pass.
 - Production build clean.
+
+## 2026-05-14 — SGGS individual cube rotation
+
+Follow-up from user visual QA:
+
+- The user needs each cube to rotate independently, not only by orbiting the whole SGGS structure.
+- Added a per-cube drag mode:
+  - drag empty space = orbit the whole SGGS scene;
+  - drag a cube = rotate only that cube;
+  - horizontal drag rotates the cube left/right around Y;
+  - vertical drag rotates the cube top/bottom around X;
+  - the cube remains anchored in the thought tree.
+- While a cube drag is active, OrbitControls is temporarily disabled so the scene does not move underneath the user.
+- Once a cube has been manually rotated, idle animation stops owning that cube's orientation.
+
+Verification:
+
+- TypeScript clean.
+- `SggsScene.test.tsx`: 13/13 pass.
+- SGGS dashboard slice: 73/73 pass.
+- Production build clean.

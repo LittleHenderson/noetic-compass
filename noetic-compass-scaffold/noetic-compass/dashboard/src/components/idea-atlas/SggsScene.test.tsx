@@ -20,6 +20,7 @@ import { Color } from 'three';
 import type { Scene } from 'three';
 import {
   SggsScene,
+  simulateCubeDrag,
   simulateNodeClick,
   type MinimalWebGLRenderer,
 } from './SggsScene';
@@ -124,12 +125,14 @@ interface TestSurface {
   __sggs_scene?: Scene;
   __sggs_step?: () => void;
   __sggs_meshes?: Array<{
+    group: { rotation: { x: number; y: number } };
     body: {
       geometry: {
         type?: string;
         parameters?: { width?: number; height?: number; depth?: number };
       };
     };
+    hasUserRotation: boolean;
     facePanels: Array<{
       geometry: { parameters?: { width?: number; height?: number } };
       userData: Record<string, unknown>;
@@ -296,6 +299,33 @@ describe('SggsScene — click → onNodeClick', () => {
     ) as HTMLElement;
     simulateNodeClick(wrapper, 'does-not-exist');
     expect(onNodeClick).not.toHaveBeenCalled();
+  });
+});
+
+describe('SggsScene — per-cube rotation', () => {
+  it('dragging a cube rotates that cube without rotating its siblings', () => {
+    const tree = makeSampleTree();
+    const { container } = render(
+      <SggsScene tree={tree} rendererFactory={makeRendererStub} />,
+    );
+    const wrapper = container.querySelector('[data-testid="sggs-scene"]') as
+      | (HTMLElement & TestSurface)
+      | null;
+    const meshes = wrapper!.__sggs_meshes!;
+    const target = meshes[0];
+    const sibling = meshes[1];
+    const beforeTargetX = target.group.rotation.x;
+    const beforeTargetY = target.group.rotation.y;
+    const beforeSiblingX = sibling.group.rotation.x;
+    const beforeSiblingY = sibling.group.rotation.y;
+
+    simulateCubeDrag(wrapper!, target.facePanels[0].userData['data-node-id'] as string, 120, -80);
+
+    expect(target.hasUserRotation).toBe(true);
+    expect(target.group.rotation.x).not.toBeCloseTo(beforeTargetX);
+    expect(target.group.rotation.y).not.toBeCloseTo(beforeTargetY);
+    expect(sibling.group.rotation.x).toBeCloseTo(beforeSiblingX);
+    expect(sibling.group.rotation.y).toBeCloseTo(beforeSiblingY);
   });
 });
 

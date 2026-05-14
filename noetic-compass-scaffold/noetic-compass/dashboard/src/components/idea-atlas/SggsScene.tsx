@@ -347,6 +347,11 @@ interface NodeMeshBundle {
    *  bouncing. User feedback 2026-05-13: "structure should float
    *  slightly in space and bounce when hit or touched." */
   bounceStartedAt: number | null;
+  /** User-controlled per-cube rotation. Once a user drags a cube,
+   *  the idle animation stops owning that cube's orientation. */
+  userRotationX: number;
+  userRotationY: number;
+  hasUserRotation: boolean;
 }
 
 function buildNodeMesh(
@@ -452,6 +457,9 @@ function buildNodeMesh(
     baseFill: palette.fill.clone(),
     floatPhaseOffset: 0, // overwritten by the caller with a per-index offset
     bounceStartedAt: null,
+    userRotationX: group.rotation.x,
+    userRotationY: group.rotation.y,
+    hasUserRotation: false,
   };
 }
 
@@ -503,6 +511,18 @@ const CUBE_IDLE_SPIN_AMPLITUDE = 0.34;
 const CUBE_SELECTED_SPIN_AMPLITUDE = 0.48;
 const CUBE_IDLE_TILT_AMPLITUDE = 0.28;
 const CUBE_SELECTED_TILT_AMPLITUDE = 0.38;
+const CUBE_DRAG_ROTATION_SENSITIVITY = 0.012;
+const CUBE_DRAG_THRESHOLD_PX = 3;
+
+interface CubeDragState {
+  nodeId: string;
+  pointerId: number;
+  startX: number;
+  startY: number;
+  startRotX: number;
+  startRotY: number;
+  moved: boolean;
+}
 
 export function SggsScene({
   tree,
@@ -526,6 +546,7 @@ export function SggsScene({
   const onNodeClickRef = useRef<SggsSceneProps['onNodeClick']>(onNodeClick);
   const selectedIdRef = useRef<string | null | undefined>(selectedNodeId);
   const hoveredIdRef = useRef<string | null>(null);
+  const cubeDragRef = useRef<CubeDragState | null>(null);
   const selectAnimRef = useRef<{
     startedAt: number;
     fromColors: Map<string, Color>;
@@ -675,12 +696,35 @@ export function SggsScene({
       return bundle ?? null;
     }
 
-    // Click handler. Find which mesh the ray hits and call onNodeClick.
+    function stopCubePointerEvent(ev: PointerEvent): void {
+      ev.preventDefault();
+      ev.stopPropagation();
+      ev.stopImmediatePropagation();
+    }
+
+    // Cube interaction handler. Dragging a cube rotates only that cube;
+    // dragging empty space still belongs to OrbitControls and moves the
+    // whole SGGS structure.
     function onPointerDown(ev: PointerEvent) {
       // Only handle primary-button clicks; orbit controls own right/middle.
       if (ev.button !== 0) return;
       const bundle = hitBundleFromPointer(ev);
       if (!bundle) return;
+      stopCubePointerEvent(ev);
+      renderer.domElement.setPointerCapture?.(ev.pointerId);
+      if (controlsRef.current) controlsRef.current.enabled = false;
+      hoveredIdRef.current = bundle.node.id;
+      const startRotX = bundle.group.rotation.x;
+      const startRotY = bundle.group.rotation.y;
+      cubeDragRef.current = {
+        nodeId: bundle.node.id,
+        pointerId: ev.pointerId,
+        startX: ev.clientX,
+        startY: ev.clientY,
+        startRotX,
+        startRotY,
+        moved: false,
+      };
       // Bounce on EVERY click, not just selection changes. Per Codex
       // audit 8939e62 blocker 4: if the user clicks the already-selected
       // card, the React selection-change effect doesn't fire (same id),
@@ -693,14 +737,45 @@ export function SggsScene({
       onNodeClickRef.current?.(bundle.node);
     }
     function onPointerMove(ev: PointerEvent) {
+      const drag = cubeDragRef.current;
+      if (drag) {
+        stopCubePointerEvent(ev);
+        const bundle = meshesRef.current.find((m) => m.node.id === drag.nodeId);
+        if (!bundle) return;
+        const dx = ev.clientX - drag.startX;
+        const dy = ev.clientY - drag.startY;
+        if (
+          Math.abs(dx) >= CUBE_DRAG_THRESHOLD_PX ||
+          Math.abs(dy) >= CUBE_DRAG_THRESHOLD_PX
+        ) {
+          drag.moved = true;
+          bundle.hasUserRotation = true;
+          bundle.userRotationY = drag.startRotY + dx * CUBE_DRAG_ROTATION_SENSITIVITY;
+          bundle.userRotationX = drag.startRotX + dy * CUBE_DRAG_ROTATION_SENSITIVITY;
+          bundle.group.rotation.x = bundle.userRotationX;
+          bundle.group.rotation.y = bundle.userRotationY;
+        }
+        return;
+      }
       hoveredIdRef.current = hitBundleFromPointer(ev)?.node.id ?? null;
     }
+    function endCubeDrag(ev: PointerEvent) {
+      const drag = cubeDragRef.current;
+      if (!drag) return;
+      stopCubePointerEvent(ev);
+      renderer.domElement.releasePointerCapture?.(drag.pointerId);
+      if (controlsRef.current) controlsRef.current.enabled = true;
+      cubeDragRef.current = null;
+    }
     function onPointerLeave() {
+      if (cubeDragRef.current) return;
       hoveredIdRef.current = null;
     }
-    renderer.domElement.addEventListener('pointerdown', onPointerDown);
-    renderer.domElement.addEventListener('pointermove', onPointerMove);
-    renderer.domElement.addEventListener('pointerleave', onPointerLeave);
+    renderer.domElement.addEventListener('pointerdown', onPointerDown, true);
+    renderer.domElement.addEventListener('pointermove', onPointerMove, true);
+    renderer.domElement.addEventListener('pointerup', endCubeDrag, true);
+    renderer.domElement.addEventListener('pointercancel', endCubeDrag, true);
+    renderer.domElement.addEventListener('pointerleave', onPointerLeave, true);
 
     // Resize observer — keeps renderer + camera matched to the wrapper.
     const ro = new ResizeObserver(() => {
@@ -786,7 +861,10 @@ export function SggsScene({
           bundle.node.id === selectedIdRef.current
             ? CUBE_SELECTED_TILT_AMPLITUDE
             : CUBE_IDLE_TILT_AMPLITUDE;
-        if (!isHovered) {
+        if (bundle.hasUserRotation) {
+          bundle.group.rotation.x = bundle.userRotationX;
+          bundle.group.rotation.y = bundle.userRotationY;
+        } else if (!isHovered) {
           const spinPhase =
             (now / CUBE_IDLE_SPIN_PERIOD_MS) * Math.PI * 2 +
             bundle.floatPhaseOffset;
@@ -909,9 +987,11 @@ export function SggsScene({
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
       ro.disconnect();
-      renderer.domElement.removeEventListener('pointerdown', onPointerDown);
-      renderer.domElement.removeEventListener('pointermove', onPointerMove);
-      renderer.domElement.removeEventListener('pointerleave', onPointerLeave);
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown, true);
+      renderer.domElement.removeEventListener('pointermove', onPointerMove, true);
+      renderer.domElement.removeEventListener('pointerup', endCubeDrag, true);
+      renderer.domElement.removeEventListener('pointercancel', endCubeDrag, true);
+      renderer.domElement.removeEventListener('pointerleave', onPointerLeave, true);
       // Dispose materials, geometries, textures. Per Codex audit
       // 8939e62 blocker 3: halo geometry + material were missing here,
       // which leaked GPU resources on every TRACE-3D tab close (the
@@ -1015,22 +1095,36 @@ export function SggsScene({
   // ── Test hook: deterministic click simulation. ────────────────────────────
   //
   // The unit tests can't drive WebGL hit-testing through real mouse
-  // events; instead they call `simulateNodeClick(wrapper, id)` which
-  // dispatches a custom `sggs-simulate-click` event that this effect
-  // listens for. Production callers don't touch it.
+  // events; instead they call custom simulation helpers below. Production
+  // callers don't touch these events.
   useEffect(() => {
     if (!mounted) return;
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
-    function handler(ev: Event) {
+    function clickHandler(ev: Event) {
       const id = (ev as CustomEvent<{ id: string }>).detail?.id;
       if (!id) return;
       const bundle = meshesRef.current.find((m) => m.node.id === id);
       if (!bundle) return;
       onNodeClickRef.current?.(bundle.node);
     }
-    wrapper.addEventListener('sggs-simulate-click', handler);
-    return () => wrapper.removeEventListener('sggs-simulate-click', handler);
+    function rotateHandler(ev: Event) {
+      const detail = (ev as CustomEvent<{ id: string; dx: number; dy: number }>).detail;
+      if (!detail?.id) return;
+      const bundle = meshesRef.current.find((m) => m.node.id === detail.id);
+      if (!bundle) return;
+      bundle.hasUserRotation = true;
+      bundle.userRotationY += detail.dx * CUBE_DRAG_ROTATION_SENSITIVITY;
+      bundle.userRotationX += detail.dy * CUBE_DRAG_ROTATION_SENSITIVITY;
+      bundle.group.rotation.x = bundle.userRotationX;
+      bundle.group.rotation.y = bundle.userRotationY;
+    }
+    wrapper.addEventListener('sggs-simulate-click', clickHandler);
+    wrapper.addEventListener('sggs-simulate-cube-drag', rotateHandler);
+    return () => {
+      wrapper.removeEventListener('sggs-simulate-click', clickHandler);
+      wrapper.removeEventListener('sggs-simulate-cube-drag', rotateHandler);
+    };
   }, [mounted]);
 
   // ── Render — wrapper div + canvas appended via three. ────────────────────
@@ -1079,6 +1173,22 @@ function easeInOutQuad(t: number): number {
  */
 export function simulateNodeClick(wrapper: HTMLElement, nodeId: string): void {
   const ev = new CustomEvent('sggs-simulate-click', { detail: { id: nodeId } });
+  wrapper.dispatchEvent(ev);
+}
+
+/**
+ * Test helper mirroring a user dragging one cube, not the entire scene.
+ * Positive dx rotates around Y; positive dy rotates around X.
+ */
+export function simulateCubeDrag(
+  wrapper: HTMLElement,
+  nodeId: string,
+  dx: number,
+  dy: number,
+): void {
+  const ev = new CustomEvent('sggs-simulate-cube-drag', {
+    detail: { id: nodeId, dx, dy },
+  });
   wrapper.dispatchEvent(ev);
 }
 
