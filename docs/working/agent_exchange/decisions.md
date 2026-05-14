@@ -763,3 +763,119 @@ Run dir on pod: `/workspace/tksCAS/stage4a_v0_20260514T163737Z` (checkpoint `33b
 Diagnosis: β curriculum slow-ramp (β=0.140 at end-of-train) starved the LM head of gradient signal. Wave 2.5 prompts are templated-renderer output, contributing to encoder-side collapse.
 
 Per the entry's "backup IF it promotes" condition, local-archive scp NOT executed. Codex review of next-lever sequence pending (`inbox_claude.md` 2026-05-14T16:45Z).
+
+## 2026-05-14T17:00Z — Stage 4A v0.1 pod retrain (Lever A + B combined)
+
+DECISION: Retrain Stage 4A on the same corpus + arch with two changes from v0: `--beta-curriculum-steps 200` (was 10000) and `--epochs 6` (was 3). LR unchanged at `2e-4`. Same locks: full-val eval `--limit 0`, strict load (`--allow-load-mismatch` forbidden), sample-read gate. **New diagnostic added per Codex directive `3b03207`:** generation diversity (`unique_output_ratio`, `mode_collapse_ratio`, top-5 modes) computed across the full val set so mode collapse is measured directly. Evaluator with diversity metric committed at `b030bf2`.
+
+AUTHORIZED: pending
+
+RATIFIED-BY: Codex audit `3b03207` (v0 rejection + v0.1 directive) + awaiting user chat "go"
+
+CONTEXT: Stage 4A v0 (entry above) produced clean training (loss_lm 10.07 → 0.91) but mode-collapsed at inference. Codex diagnosis: β curriculum was too slow for short runs — β reached only 0.140 of its 1.0 target, starving the LM head of gradient signal. Lever A (faster β ramp) + Lever B (more epochs) is the cheapest training-signal test; Codex defers Stage 4B until v0.1 result lands.
+
+### Scope (deltas from v0 in **bold**)
+
+| Param | v0 | v0.1 |
+|---|---|---|
+| Pod | A6000 48GB | **same** |
+| Corpus | 5,244 records sha256 `8ced4726…` | **same** |
+| Tokenizer + BPE | as v0 | **same** |
+| Epochs | 3 | **6** |
+| Batch size | 32 | **same** |
+| Approx steps | 491 | **~984** |
+| LR | 2e-4 | **same** |
+| `--beta-curriculum-steps` | 10000 | **200** |
+| Arch flags | d-model 512, 6/8 enc, 6/8 head | **same** |
+| Wall-time estimate | 3 min observed | **~7 min** |
+| Budget cap | ≤ $5 | **≤ $5** |
+
+### Pre-flight smoke (unchanged)
+
+Same Codex real-data micro command (`dbbce48` shape) on the pod with `--device cuda:0 --limit 8 --epochs 1 --batch-size 4`. Pass criteria identical: corpus hash matches `8ced4726…`, loss_lm finite, mode=real, 2 global steps, training_complete event emitted.
+
+### Real training launch command (v0.1)
+
+```bash
+python noetic-compass-scaffold/noetic-compass/cas-native/training/train_native_nl_gen.py \
+  --data-path cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl \
+  --tokenizer-path cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json \
+  --english-bpe-path cas-synthetic/data/native_nl/english_bpe_50k_20260507.json \
+  --output-dir /workspace/tksCAS/stage4a_v01_TS \
+  --device cuda:0 --epochs 6 --batch-size 32 \
+  --d-model 512 --encoder-n-layers 6 --encoder-n-heads 8 \
+  --head-n-layers 6 --head-n-heads 8 \
+  --lr 2e-4 --beta-curriculum-steps 200 \
+  --train-log-every-steps 20 --seed 42
+```
+
+The only flag deltas from v0 are `--epochs 6` and `--beta-curriculum-steps 200`. Seed stays at 42 so the train/val split is identical to v0 → eval gates are directly comparable.
+
+### Eval gate after training (full val, strict load, + diversity)
+
+```bash
+python noetic-compass-scaffold/noetic-compass/cas-native/evaluation/evaluate_stage4a.py \
+  --checkpoint /workspace/tksCAS/stage4a_v01_TS \
+  --corpus cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl \
+  --tokenizer-path cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json \
+  --english-bpe-path cas-synthetic/data/native_nl/english_bpe_50k_20260507.json \
+  --output-dir /workspace/tksCAS/stage4a_eval_v01_TS \
+  --device cuda:0 --limit 0 --max-new-tokens 96 --sample-reads 12 \
+  --d-model 512 --encoder-n-layers 6 --encoder-n-heads 8 \
+  --head-n-layers 6 --head-n-heads 8
+```
+
+### Promotion gates (v0.1 — diversity gate added)
+
+| Gate | Floor | v0 actual | Notes |
+|---|---|---|---|
+| TF per-token accuracy | ≥ 0.20 | 0.726 ✅ | unchanged |
+| Free-decode CAS validity rate | ≥ 0.50 | 0.905 ✅ | unchanged |
+| Normalized recovery rate | ≥ 0.10 | 0.000 ❌ | unchanged |
+| Per-bucket validity ≥ 0.25 | ≥ 7/10 | 9/10 ✅ | unchanged |
+| **Unique output ratio** | **≥ 0.40** | (not measured — added v0.1) | **NEW** — directly catches collapse |
+| **Mode-collapse ratio** | **≤ 0.15** | (not measured — added v0.1) | **NEW** — single output ≤ 15% of total |
+| No silent load mismatch | n_missing = 0 AND n_unexpected = 0 | 0/0 ✅ | unchanged |
+| Human sample read | "looks like CAS-conditioned model trying to write CAS" | mode collapse ❌ | unchanged |
+
+The diversity floors (0.40 unique / 0.15 collapse-cap) are first-cut values — Codex to calibrate after first v0.1 numbers if too strict / too loose. Both metrics are computed over normalized (whitespace-stripped) outputs so trivial spacing variations don't inflate diversity.
+
+### Kill-switch (unchanged)
+
+Stop run + report failure if ANY of:
+1. `loss_lm` NaN or +Inf
+2. `loss_lm` plateau > 50 steps (no decrease ≥ 1e-4)
+3. Sample mode-collapse on `--sample-every-steps` (off this run)
+4. Wall-time > 90 min OR GPU spend > $5
+
+### Backup discipline
+
+On successful eval pass (all 8 gates including diversity): immediately scp the full run dir to `D:\tksCAS-archive\stage4a_v01_TS\`. Three sha256 confirmations. Per `feedback_back_up_successful_runs_imperative.md`.
+
+### Push discipline
+
+Commit + push the eval report + samples + a v0.1 findings doc immediately after the run lands. Per `feedback_push_immediately_after_commit.md`.
+
+### Budget
+
+| Item | Cap |
+|---|---|
+| Pre-flight | ≤ $0.05 |
+| Real run (~7 min A6000) | ≤ $0.15 |
+| Eval (~1 min) | ≤ $0.05 |
+| Buffer | ~$4.75 |
+| **Hard cap** | **$5.00** |
+
+### What is NOT in scope this entry
+
+- Stage 4B (external HF questions via SDG) — Codex explicitly deferred until v0.1 outcome lands.
+- Stage 4C 70/30 mix retrain — gated on 4A v0.1 result + 4B pilot.
+- Architecture changes (Codex directive: keep arch + LR unchanged).
+
+### Provenance trail
+
+- v0 entry: 2026-05-14T15:00Z (above)
+- v0 outcome: 2026-05-14T16:45Z (above)
+- Codex v0.1 directive: `codex_audit.md` commit `3b03207` 2026-05-14T16:??Z
+- Diversity evaluator patch: commit `b030bf2` 2026-05-14T17:00Z
+- Findings doc: `docs/working/stage4a_v0_2026_05_14/FINDINGS.md`
