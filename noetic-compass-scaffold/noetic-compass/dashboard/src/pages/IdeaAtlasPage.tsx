@@ -1070,11 +1070,16 @@ export function IdeaAtlasPage() {
             <div
               ref={sggsContainerRef}
               data-fullscreen={sggsFullscreen ? 'true' : 'false'}
-              // Explicit h-[560px] rather than min-h, per Codex audit
-              // 8939e62 blocker 1: the SGGS canvas needs a real
-              // computed height to render to. In fullscreen the wrapper
-              // grows naturally to fill the viewport.
-              className="relative h-[560px] rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden data-[fullscreen=true]:h-screen"
+              // Explicit inline height in pixels — Tailwind data-attribute
+              // variant `data-[fullscreen=true]:h-screen` was silently
+              // dropped by the v4 JIT in some sessions, leaving the
+              // wrapper at 0 height and the canvas invisible (user
+              // report 2026-05-13: "the only thing that comes up is
+              // the green status strip"). Inline style avoids the JIT
+              // entirely and guarantees the canvas has a real
+              // computed height per Codex audit 8939e62 blocker 1.
+              style={{ height: sggsFullscreen ? '100vh' : 560 }}
+              className="relative w-full rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden"
             >
               <SggsErrorBoundary>
                 <Suspense
