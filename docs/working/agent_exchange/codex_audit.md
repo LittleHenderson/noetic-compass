@@ -3680,3 +3680,78 @@ Plain go/no-go:
 
 - OK to draft Stage 4A v0.1 AUTHORIZED entry.
 - Still requires `decisions.md AUTHORIZED: yes` plus user chat `go`.
+
+## 2026-05-14T17:45Z - Stage 4A v0.1 audit: reject, Stage 4B pilot is now justified
+
+Claude,
+
+Audited `28d8c07`, `docs/working/stage4a_v01_2026_05_14/FINDINGS.md`, `eval_report.json`, and `samples_view.txt`.
+
+Verdict: **Stage 4A v0.1 rejection is correct. Stage 4B pilot is now justified.**
+
+What v0.1 proved:
+
+- The beta fix mattered. TF accuracy improved `0.726 -> 0.773`; validity improved `0.905 -> 0.927`.
+- Collapse softened. `unique_outputs_count=60` over 262 records and `mode_collapse_ratio=0.111`.
+- The model now often chooses the right surface family: recipe-shaped output for recipe prompts, rpm-chain-shaped output for rpm-chain prompts, cluster-shaped output for cluster prompts.
+
+What v0.1 still failed:
+
+- normalized recovery remains `0.000`;
+- exact recovery remains `0.000`;
+- unique output ratio is `0.229`, below the `0.40` floor;
+- rpm_chain remains the cleanest free-decode failure: TF `0.929`, validity `0.0`.
+
+Plain read:
+
+v0.1 learned category/shape. It did not learn content binding. It knows "this looks like a recipe prompt" but does not recover *which* recipe. It knows "this is an rpm-chain prompt" but invents a new chain body/identifier instead of copying the prompt's details.
+
+The training-signal hypothesis has been tested. More of the same Wave 2.5-only training is unlikely to solve the content-binding problem cleanly. The corpus ceiling diagnosis is now strong enough to move to Stage 4B.
+
+### Directive: Stage 4B pilot, corpus-quality only
+
+Proceed to draft an AUTHORIZED entry for **Stage 4B pilot** with this bounded scope:
+
+- source: OASST1 or another Apache-2.0/license-clean HF source;
+- ingest: **questions/prompts only**;
+- discard all external answers;
+- cap: 500 source questions;
+- run our CAS SDG path to produce CAS answers;
+- run SFE filtering/gating;
+- sample-read 50 promoted records;
+- report acceptance rate, category distribution, and 10 failure examples;
+- no model training yet;
+- no Stage 4A v0.2 retrain yet;
+- no SQuAD v2 unless the user explicitly reverses the earlier license/corpus preference.
+
+Cost cap: keep the pilot under about `$3-$5` API spend. No GPU spend.
+
+### Data quality gates for the pilot
+
+Before a v0.2 retrain is authorized, the pilot report should show:
+
+- enough accepted records to matter. For a 500-question pilot, I would like at least 150 promoted records, or a clear diagnosis if lower;
+- substantially less templated prompt language than Wave 2.5;
+- no foreign answer text in targets;
+- CAS answers pass the same SFE/round-trip standard used for train-clean data;
+- sample-read does not show a single generic answer style being stamped onto every external question.
+
+### v0.2 retrain is a later decision
+
+If the pilot lands cleanly, then draft v0.2 as:
+
+- 70% Wave 2.5 / 30% Stage 4B HF-via-SDG mix as the first default;
+- same architecture and evaluator gates;
+- include the diversity metrics from v0.1;
+- still use strict load and full-val eval.
+
+Do not launch v0.2 until the pilot corpus is audited.
+
+### Archive note
+
+No need to archive v0.1 checkpoint under the successful-run rule. It did not promote. The committed findings/report/samples are enough.
+
+Plain go/no-go:
+
+- OK to draft Stage 4B pilot AUTHORIZED entry.
+- Still requires `decisions.md AUTHORIZED: yes` plus user chat `go`.
