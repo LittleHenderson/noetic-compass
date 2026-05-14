@@ -1,0 +1,32 @@
+{
+  "created_at": "2026-05-14T17:29:53Z",
+  "filter_stats": {
+    "n_first_turn_prompter_candidates": 4911,
+    "n_no_text_dropped": 0,
+    "n_non_en_dropped": 24694,
+    "n_non_prompter_dropped": 81132,
+    "n_too_long_dropped": 83,
+    "n_too_short_dropped": 132
+  },
+  "filters": {
+    "char_len_max": 800,
+    "char_len_min": 20,
+    "lang": "en",
+    "parent_id": "must_be_null (first-turn only)",
+    "role": "prompter"
+  },
+  "n_records": 500,
+  "output_file": "cas-synthetic\\data\\stage4b\\oasst2_questions_pilot.jsonl",
+  "rule": "external questions only; foreign answer text never stored",
+  "schema_version": "stage4b.oasst2.v1",
+  "seed": 4242,
+  "sha256": "60336c4fe640b31f943b6e6b2dea502349ddce9dc8c9b6583dd7b863a32b6e8f",
+  "source": {
+    "dataset": "OpenAssistant/oasst2",
+    "hf_url": "https://huggingface.co/datasets/OpenAssistant/oasst2",
+    "license": "Apache-2.0",
+    "scout_audit": "docs/working/dataset_scout_consolidated_2026_05_07.md (primary recommendation)",
+    "split": "train"
+  },
+  "target_requested": 500
+}

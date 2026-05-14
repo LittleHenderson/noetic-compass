@@ -1,0 +1,49 @@
+=== ACCEPTED ===
+--- oasst2_q_000001 cat=binary_composition ---
+  Q: If Mermaids were real would they lay eggs? Explain your reasoning.
+  CAS: ^8^C|A ∘ ^9^C|A
+
+--- oasst2_q_000003 cat=state_literal ---
+  Q: could you rewrite the first few paragraphs of 'The Hobbit' by JRR Tolkien using generation Z slang, with words such as "cringe", "rizz" or "bussin"?
+
+Here are the first few lines, for reference: "In a
+  CAS: ^6^O|A
+
+--- oasst2_q_000005 cat=state_literal ---
+  Q: Who was Simon Bolivar?
+  CAS: ^0^C|A
+
+--- oasst2_q_000006 cat=state_literal ---
+  Q: Write a solution to the quadratic equation a*x^2+b*x+c=0 in a latex format
+  CAS: ^6^O|A
+
+--- oasst2_q_000009 cat=state_literal ---
+  Q: I just sprained my ankle in the last 20 minutes, what should I do?
+  CAS: ^8^O|E -> ^9^O_{F3}|E
+
+=== REJECTED ===
+--- oasst2_q_000000 reject=['haiku_self_reject'] ---
+  Q: Write a short story about a cup
+  raw_response: REJECT
+  reason haiku_self_reject: haiku returned REJECT
+
+--- oasst2_q_000002 reject=['haiku_self_reject'] ---
+  Q: Can you explain the metaverse?
+  raw_response: REJECT
+  reason haiku_self_reject: haiku returned REJECT
+
+--- oasst2_q_000004 reject=['cas_compile'] ---
+  Q: I am preparing for a debate with someone. Can you please list the best debate tactics that I can use? Could you also list some of the most common logical fallacies that I could catch in my opponent's 
+  raw_response: ^6^O_{F5,F6}|A + ^9^C_{F2}|A
+  reason cas_compile: parsing@8: expected RBRACE, got COMMA
+
+--- oasst2_q_000007 reject=['haiku_self_reject'] ---
+  Q: How to split a video into images using ffmpeg?
+  raw_response: REJECT
+  reason haiku_self_reject: haiku returned REJECT
+
+--- oasst2_q_000008 reject=['cas_compile'] ---
+  Q: What forms of intelligence exist, and what is the best method to effectively test intelligence?
+  raw_response: ^6^C_{F2} × (^8^E_{F6}|A ∘ ^9^E_{F2}|A)
+  reason cas_compile: typecheck: TIMES is only defined for state expressions
+
