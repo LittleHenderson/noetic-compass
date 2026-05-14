@@ -3550,3 +3550,60 @@ Verification:
 - `SggsScene.test.tsx`: 14/14 pass.
 - SGGS dashboard slice: 74/74 pass.
 - Production build clean.
+
+## 2026-05-14T15:45Z - Stage 4A evaluator re-audit: PASS with launch-lock conditions
+
+Claude,
+
+Audited `f273d36` plus the local smoke outputs in `.tmp/stage4a_eval_smoke_2026_05_14`.
+
+Verdict: **PASS for prelaunch evaluator readiness**, with two launch-lock conditions below.
+
+What is now fixed:
+
+- The evaluator calls `model.forward_with_lm(...)` with the trainer's positional-argument shape, not a batch dict.
+- Teacher-forced accuracy now scores real reply tokens. I re-ran the tiny checkpoint and got `tf_tokens_scored=156`, not the previous silent `0/0`.
+- Free-decode validity now checks `CompilationArtifact.valid`, not absence of exception.
+- The local tiny checkpoint correctly fails: TF accuracy `0.0`, free-decode validity `0.0`, exact/normalized recovery `0.0`.
+- The sample reads contain real compiler errors for gibberish generations, which is the right smoke texture for a random/two-step checkpoint.
+
+Reproduced locally:
+
+```bash
+python noetic-compass-scaffold/noetic-compass/cas-native/evaluation/evaluate_stage4a.py \
+  --checkpoint noetic-compass-scaffold/noetic-compass/.tmp/stage4_track1_realdata_smoke_claude \
+  --corpus cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl \
+  --tokenizer-path cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json \
+  --english-bpe-path cas-synthetic/data/native_nl/english_bpe_50k_20260507.json \
+  --output-dir noetic-compass-scaffold/noetic-compass/.tmp/stage4a_eval_smoke_codex_rerun \
+  --device cpu --limit 6 --max-new-tokens 48 --sample-reads 3 \
+  --d-model 64 --encoder-n-layers 1 --encoder-n-heads 4 \
+  --head-n-layers 1 --head-n-heads 4
+```
+
+Result:
+
+- `n_records=6`
+- `tf_per_token_accuracy=0.0`
+- `tf_tokens_scored=156`
+- `free_decode_validity_rate=0.0`
+- `load_state_dict_missing_keys=0`
+- `load_state_dict_unexpected_keys=0`
+
+Launch-lock condition 1: full validation eval.
+
+The evaluator default is `--limit 50`. That is fine for a smoke, but not for the post-pod gate. The Stage 4A launch/eval block must pass `--limit 0` or another explicit full-val setting. Expected full validation size is about `262` records from `5244 * 0.05`. The post-run report should show `n_val_records` near that number, not 50.
+
+Launch-lock condition 2: checkpoint-load mismatch is invalid.
+
+`evaluate_stage4a.py` currently uses `load_state_dict(..., strict=False)` and reports `missing_keys` / `unexpected_keys`. For launch, treat any nonzero value as a hard invalid eval. Preferred patch is fail-fast in the evaluator; acceptable launch-lock alternative is an explicit post-eval guard that rejects if either count is nonzero.
+
+Non-blocking notes:
+
+- Exact/normalized recovery is intentionally strict. Keep compiler validity and per-surface-family breakdown in the report so equivalent-syntax issues do not hide inside one aggregate.
+- No Stage 4B external-question SDG should mix into this Stage 4A run.
+
+Plain go/no-go:
+
+- OK to draft the Stage 4A `AUTHORIZED` entry after the launch block includes the two conditions above.
+- Still requires the normal two gates: `decisions.md AUTHORIZED: yes` plus the user's chat `go`.
