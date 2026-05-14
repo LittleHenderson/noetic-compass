@@ -120,6 +120,8 @@ def _read_api_key() -> str:
 
 CAS_TEACHING_PROMPT = """You are a Cognitive Architecture System (CAS) classifier. Your job is to map a user's English question to the closest CAS expression that captures the cognitive structure of what the question is doing or asking for.
 
+**Almost every well-formed question has a CAS mapping.** Your default is to find one. REJECT is reserved for inputs with literally no cognitive content (random keysmash, a single emoji, an empty string, a fragment with no verb or noun). When in doubt, MAP, do not REJECT.
+
 # The 10 Noetics (authoritative — use these verbs verbatim in your reasoning)
 
 - ^0 Idea: All things in and outside the Mind.
@@ -128,7 +130,7 @@ CAS_TEACHING_PROMPT = """You are a Cognitive Architecture System (CAS) classifie
 - ^3 Negative: An Idea the Mind is adverse to and repelled by.
 - ^4 Vibration: The degree to which an Idea resonates with the Mind, its impression.
 - ^5 Female: A Mind impregnated with an Idea — accumulated experience, who one is.
-- ^6 Male: An Idea impregnated with another Idea — compositional structure inside an Idea.
+- ^6 Male: An Idea impregnated with another Idea — compositional structure inside an Idea. Colloquially: "unpacking an idea," "breaking it down," "looking at what's underneath."
 - ^7 Rhythm: The rate and pattern a Mind is exposed to an Idea, entraining/conditioning.
 - ^8 Above/Cause: An Idea that triggers a different Idea than itself to come to Mind.
 - ^9 Below/Effect: The Idea brought to Mind by an Above/Cause trigger.
@@ -159,13 +161,31 @@ F1 Unity, F2 Wisdom, F3 Vitality, F4 Connection, F5 Agency, F6 Structure, F7 Pur
 - Let binding / chain: `let X = ^N^P; let Y = ^M^C; X -> Y`
 - Export: `export let name = NoeticCluster{...}`
 
+# Compile-safety rules (avoid these common pitfalls — they will be rejected by our compiler)
+
+- Drive subscripts take a SINGLE drive: `_{F6}` is valid; `_{F5,F6}` is NOT — pick one or use `+` to compose two state expressions.
+- The `×` operator takes state expressions on both sides, not composed expressions. `^2^C × ^3^C` is valid; `^2^C × (^8^E ∘ ^9^E)` is NOT — refactor to `(^2^C × ^8^E) ∘ (^2^C × ^9^E)` or use `+`.
+- A CAS expression is a single statement. Don't emit multiple expressions joined by `;` unless using `let` bindings.
+
 # Your task
 
 Given a user's English question, output **only** a single CAS expression that captures its cognitive structure. No commentary, no explanation, no markdown, no quotes around the expression. Just the raw CAS.
 
-If the question is so general or so far from any CAS structure that no reasonable mapping exists, output literally the word REJECT and nothing else.
+# Question-shape cheat sheet (use these as a guide)
 
-Examples:
+- "What is X?" / "Who was X?" / "Tell me about X" → factual lookup, an Idea coming to Mind → `^0^C|A`
+- "Can you explain X?" / "Walk me through X" / "Break down how X works" → compositional decomposition → `^6^C|A`
+- "How do I do X?" / "Steps to do X" → operational recipe → `Θ(Ω_X) = 1*^6^O + 1*^1^C -> Ω_X` (or simpler `^6^O|A` for short procedures)
+- "Write me X" / "Create X" / "Compose X" → compositional creation in operational domain → `^6^O|A`
+- "Why does X happen?" / "What causes X?" → cause-effect reasoning → `^8^C|A ∘ ^9^C|A`
+- "Compare X and Y" / "Difference between X and Y" → compositional contrast → `^6^C|A` (or affinity/aversion contrast: `^2^C × ^3^C`)
+- "I feel X" / "Why am I drawn to X?" → affective state → `^N^_|f`
+- "What if X happened?" / "Could X be true?" → counterfactual reasoning → `^8^C|A ∘ ^9^C|A`
+- "Should I do X?" → evaluative judgment → `^N^E|A` or `^6^E|A`
+- "I keep thinking about X" / "X gets stuck in my head" → entrainment → `^7^C_{F2}`
+- "Imagine X" / "Picture X" → embodied/transcendent simulation → `^0^C|T` or `^0^C|E`
+
+# Examples
 
 User question: "Why do I feel drawn to old jazz records?"
 CAS answer: ^2^C_{F4}|f
@@ -176,13 +196,80 @@ CAS answer: Θ(Ω_decision) = 1*^1^P + 1*^6^E -> Ω_decision
 User question: "I keep thinking about the same problem over and over."
 CAS answer: ^7^C_{F2}
 
-User question: "What's the difference between the iPhone 13 and 14?"
+User question: "Can you explain the metaverse?"
+CAS answer: ^6^C|A
+
+User question: "Write me a short story about a cup."
+CAS answer: ^6^O|A
+
+User question: "How to split a video into images using ffmpeg?"
+CAS answer: Θ(Ω_extract_frames) = 1*^6^O + 1*^1^C -> Ω_extract_frames
+
+User question: "asdkjfh aslkdjfh"
 CAS answer: REJECT
 
 Now classify this user question:"""
 
 
-JUDGE_PROMPT_TEMPLATE = """You are auditing a Cognitive Architecture System (CAS) mapping.
+REPAIR_PROMPT_TEMPLATE = """You previously proposed a CAS expression for this user question, but it did not compile.
+
+User question:
+{question}
+
+Your previous CAS:
+{bad_cas}
+
+Compiler error:
+{error}
+
+Output a CORRECTED CAS expression that (a) captures the cognitive structure of the question and (b) compiles successfully. Common compiler rules to remember:
+- Drive subscripts take ONE drive only: `_{{F6}}` valid, `_{{F5,F6}}` NOT valid.
+- The `×` and `∘` operators require both sides to be plain state expressions (same domain for ∘).
+- Don't combine states from different domains with `∘` — use `+` instead or stay in one domain.
+
+Reply with ONLY the corrected CAS expression. No commentary. If you cannot repair the expression, reply REJECT."""
+
+
+JUDGE_PROMPT_TEMPLATE = """You are auditing a Cognitive Architecture System (CAS) mapping. CAS captures the COGNITIVE OPERATION shape of a question (what kind of mental work it's asking for), not the content.
+
+# CAS symbol legend (you MUST use this; do not score from surface symbol unfamiliarity)
+
+The 10 Noetics:
+- ^0 Idea: lookup / pointing at a concept ("what is X?")
+- ^1 Mind: awareness / paying attention
+- ^2 Positive: attraction, affinity ("drawn to X")
+- ^3 Negative: aversion, repulsion ("can't stand X")
+- ^4 Vibration: resonance, impression ("X struck a chord")
+- ^5 Female: who one is, accumulated experience, self-identity
+- ^6 Male: compositional decomposition / unpacking ("explain X", "break X down", "write me X", "compare X and Y")
+- ^7 Rhythm: repetition, entrainment ("can't stop thinking about X")
+- ^8 Above/Cause: trigger ("X reminded me")
+- ^9 Below/Effect: landing ("then Y came to mind")
+
+4 Domains: ^P principled, ^C cognitive, ^E evaluative, ^O operational
+7 Drives: F1 Unity, F2 Wisdom, F3 Vitality, F4 Connection, F5 Agency, F6 Structure, F7 Purpose
+4 Registers: |T transcendent, |A analytical, |f affective, |E embodied
+Operators: ∘ (compose), × (integrate), + (combine), → (lead-to), Θ(Ω_x) = recipe -> outcome.
+
+# Rubric — CRITICAL: judge on cognitive-operation match, NOT content recovery
+
+CAS is intentionally lossy on content. "Can you explain the metaverse?" → ^6^C|A is GOOD even though "metaverse" doesn't appear in the CAS, because ^6 Male IS the cognitive operation of "unpacking / explaining." Reward operation-type matches generously.
+
+- 5: precise — the CAS picks exactly the right Noetic + Domain + Register for the operation type the question requests.
+- 4: good — right Noetic and Domain; Register or Drive could be slightly off.
+- 3: acceptable — captures the cognitive operation type (correct Noetic) even if Domain/Register is approximate. **This is the floor: a "3" means 'the model would learn something useful from this pair'.**
+- 2: weak — Noetic is plausible but doesn't really match the operation the question performs.
+- 1: poor — wrong Noetic entirely; the CAS doesn't capture what the question is doing.
+
+Common-question reference (use as anchor):
+- "Explain X" / "Walk me through X" / "Break down X" → ^6^C|A (compositional decomposition). Score 4-5.
+- "Write me X" / "Create X" / "Compose X" → ^6^O|A (operational compositional creation). Score 4-5.
+- "Who/what is X?" → ^0^C|A (lookup, idea coming to mind). Score 4-5.
+- "How to do X?" → Θ(Ω_X) = ... -> Ω_X (recipe / procedure). Score 4-5.
+- "Why does X happen?" / "If X then Y" → ^8 ∘ ^9 (cause-effect). Score 4-5.
+- "Compare X and Y" → ^6^C|A or ^2 × ^3 (compositional contrast). Score 4-5.
+
+# Inputs
 
 The user question:
 {question}
@@ -190,14 +277,9 @@ The user question:
 The proposed CAS expression:
 {cas}
 
-Rate on a scale 1-5 how well the CAS expression captures the cognitive structure of the question:
-- 5: excellent — the CAS expression precisely captures what the user is asking about (cognitive pattern, structure, or intent).
-- 4: good — captures the main cognitive structure with minor weaknesses.
-- 3: acceptable — captures something real about the question's structure but missing nuance.
-- 2: weak — the CAS expression is technically valid but loosely related to the question.
-- 1: poor — the CAS expression doesn't capture what the question is doing.
+# Output
 
-Reply with only a single digit 1-5. No commentary."""
+Reply with ONLY a single digit 1-5. No commentary, no explanation."""
 
 
 # ---------------------------------------------------------------------------
@@ -269,6 +351,40 @@ def anti_jargon_ok(cas: str) -> tuple[bool, str | None]:
     if m:
         return False, f"english_word:{m.group(0)}"
     return True, None
+
+
+# ---------------------------------------------------------------------------
+# Copyright / long-quote detector (flag, do not reject — Codex patch 3)
+# ---------------------------------------------------------------------------
+
+# A quoted block of ≥200 chars is likely pasted from a copyrighted source.
+_RE_QUOTED_BLOCK = re.compile(r"[\"'“‘]([^\"'”’]{200,})[\"'”’]", re.DOTALL)
+# Known famous openings — heuristic; expand as needed.
+_RE_FAMOUS_OPENINGS = re.compile(
+    r"\b(?:In a hole in the ground there lived a hobbit|"
+    r"It was the best of times|Call me Ishmael|All happy families are alike|"
+    r"It is a truth universally acknowledged|Lorem ipsum)",
+    re.IGNORECASE,
+)
+
+
+def detect_long_quote(question_text: str) -> str | None:
+    """Return a non-empty flag string if the question likely contains
+    pasted-in copyrighted/long-quoted text. Returns None otherwise.
+
+    Codex audit `dc994e5`: flag, do not reject — preserves the corpus
+    while exposing review surface for the user.
+    """
+    if not question_text:
+        return None
+    m = _RE_QUOTED_BLOCK.search(question_text)
+    if m:
+        return f"quoted_block_chars:{len(m.group(1))}"
+    if _RE_FAMOUS_OPENINGS.search(question_text):
+        return "famous_opening_detected"
+    if question_text.count("\n\n") >= 2 and len(question_text) > 500:
+        return f"multi_paragraph_pasted_text_len:{len(question_text)}"
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -394,6 +510,8 @@ def main(argv: list[str] | None = None) -> int:
     total_cost = 0.0
     n_haiku_propose_calls = 0
     n_haiku_judge_calls = 0
+    n_copyright_flagged = 0
+    n_repaired = 0
     accepted_records: list[dict] = []
     rejected_records: list[dict] = []
     t_start = time.time()
@@ -455,22 +573,76 @@ def main(argv: list[str] | None = None) -> int:
                 else:
                     validators_passed.append("anti_jargon")
 
-            # Step 5: Compile (load-bearing)
+            # Step 5: Compile with repair retry (Codex patch 2 — commit dc994e5).
+            # On compile failure, ask Haiku to repair given the compile error.
+            # Up to 2 repair attempts. Each repair counts toward total cost.
             validators_run.append("cas_compile")
             compile_err: str | None = None
             grammar_category = "?"
+            repair_attempts: list[dict] = []
             if not validators_failed:
-                try:
-                    art = compile_expression(cas)
-                    if getattr(art, "valid", False):
-                        validators_passed.append("cas_compile")
-                        grammar_category = classify_grammar_category(cas)
-                    else:
+                MAX_REPAIRS = 2
+                for repair_i in range(MAX_REPAIRS + 1):  # +1 for the initial check
+                    try:
+                        art = compile_expression(cas)
+                        valid_ok = bool(getattr(art, "valid", False))
+                        if valid_ok:
+                            compile_err = None
+                            break
                         compile_err = (getattr(art, "error", "") or "compile_invalid")[:240]
-                        validators_failed["cas_compile"] = compile_err
-                except Exception as exc:
-                    compile_err = str(exc)[:240]
+                    except Exception as exc:
+                        compile_err = str(exc)[:240]
+                    if repair_i >= MAX_REPAIRS:
+                        break
+                    # Ask Haiku to repair with the compile error.
+                    repair_msg = REPAIR_PROMPT_TEMPLATE.format(
+                        question=question, bad_cas=cas, error=compile_err
+                    )
+                    try:
+                        rresp = client.messages.create(
+                            model=args.model,
+                            max_tokens=256,
+                            temperature=0.3,
+                            messages=[{"role": "user", "content": repair_msg}],
+                        )
+                        new_cas = "".join(
+                            b.text for b in rresp.content if hasattr(b, "text")
+                        ).strip()
+                        if new_cas.startswith("```") and new_cas.endswith("```"):
+                            new_cas = new_cas.strip("`").strip()
+                        new_cas = new_cas.lstrip("CAS answer:").strip()
+                        total_cost += _haiku_cost(
+                            rresp.usage.input_tokens, rresp.usage.output_tokens
+                        )
+                        n_haiku_propose_calls += 1
+                        repair_attempts.append({
+                            "attempt": repair_i + 1,
+                            "previous_cas": cas,
+                            "compile_error": compile_err,
+                            "new_cas": new_cas,
+                            "input_tokens": rresp.usage.input_tokens,
+                            "output_tokens": rresp.usage.output_tokens,
+                        })
+                        if new_cas.upper().strip() == "REJECT":
+                            break  # Haiku gave up on repair
+                        cas = new_cas
+                    except Exception as exc:
+                        compile_err = f"repair_api_err:{str(exc)[:200]}"
+                        break
+                if compile_err is None:
+                    validators_passed.append("cas_compile")
+                    if repair_attempts:
+                        validators_passed.append(f"cas_compile_repaired_after_{len(repair_attempts)}")
+                    grammar_category = classify_grammar_category(cas)
+                else:
                     validators_failed["cas_compile"] = compile_err
+            # Sanity re-check anti-jargon / length on potentially-repaired CAS
+            if validators_passed and "cas_compile" in validators_passed:
+                aj_ok2, aj_err2 = anti_jargon_ok(cas)
+                if not aj_ok2:
+                    validators_failed["anti_jargon_post_repair"] = aj_err2
+                    # remove cas_compile pass since the repaired result is bad
+                    validators_passed = [v for v in validators_passed if v != "cas_compile"]
 
             # Step 6: Judge (only if everything else passed and not --skip-judge)
             if not validators_failed and not args.skip_judge:
@@ -485,13 +657,18 @@ def main(argv: list[str] | None = None) -> int:
                 else:
                     validators_passed.append("haiku_judge")
 
+            # Codex patch 3: copyright / long-quote flag (does not reject).
+            copyright_flag = detect_long_quote(question)
+            if copyright_flag:
+                validators_run.append("copyright_flag")
+
             # Build output record
             out_rec = {
                 "seed_id": seed_id,
                 "source_cas": cas if not validators_failed else raw_response,
                 "grammar_category": grammar_category,
                 "english_description": question,
-                "prompt_template_version": "stage4b_pilot_v1_2026_05_14",
+                "prompt_template_version": "stage4b_pilot_v2_2026_05_14",
                 "validators_run": validators_run,
                 "validators_passed": validators_passed,
                 "validators_failed_reasons": validators_failed,
@@ -504,8 +681,15 @@ def main(argv: list[str] | None = None) -> int:
                 "wave2_5_run_id": "",
                 "stage4b_pilot_id": pilot_id,
                 "judge_result": judge_result,
+                "repair_attempts": repair_attempts,
+                "copyright_flag": copyright_flag,
                 "external_question_provenance": q_rec.get("source", {}),
             }
+
+            if copyright_flag:
+                n_copyright_flagged += 1
+            if repair_attempts:
+                n_repaired += 1
 
             if validators_failed:
                 first_reason = next(iter(validators_failed.keys()))
@@ -527,8 +711,26 @@ def main(argv: list[str] | None = None) -> int:
     elapsed_total = time.time() - t_start
     n_attempted = len(accepted_records) + len(rejected_records)
 
+    # Codex condition (commit 0e97599): copyright-flagged records are
+    # QUARANTINE, not train-clean. clean_train = accepted AND NOT
+    # copyright_flagged.
+    n_accepted = len(accepted_records)
+    n_accepted_copyright = sum(1 for r in accepted_records if r.get("copyright_flag"))
+    n_clean_train = n_accepted - n_accepted_copyright
+
+    # Judge-score distribution on accepted + rejected
+    judge_score_acc: collections.Counter[int] = collections.Counter()
+    judge_score_rej: collections.Counter[int] = collections.Counter()
+    for r in accepted_records:
+        j = r.get("judge_result") or {}
+        judge_score_acc[int(j.get("score", -1))] += 1
+    for r in rejected_records:
+        if "haiku_judge" in r.get("validators_failed_reasons", {}):
+            j = r.get("judge_result") or {}
+            judge_score_rej[int(j.get("score", -1))] += 1
+
     manifest = {
-        "schema_version": "stage4b_pilot.v1",
+        "schema_version": "stage4b_pilot.v2",
         "pilot_id": pilot_id,
         "created_at": _utc_now(),
         "input_file": str(in_path),
@@ -536,15 +738,22 @@ def main(argv: list[str] | None = None) -> int:
         "accepted_file": str(accepted_path),
         "rejected_file": str(rejected_path),
         "n_attempted": n_attempted,
-        "n_accepted": len(accepted_records),
+        "n_accepted": n_accepted,
         "n_rejected": len(rejected_records),
-        "acceptance_rate": (len(accepted_records) / n_attempted) if n_attempted > 0 else 0.0,
+        "n_clean_train": n_clean_train,
+        "n_quarantine_copyright_flagged_accepted": n_accepted_copyright,
+        "acceptance_rate": (n_accepted / n_attempted) if n_attempted > 0 else 0.0,
+        "clean_train_rate": (n_clean_train / n_attempted) if n_attempted > 0 else 0.0,
         "reject_reasons": dict(reject_reasons.most_common()),
         "category_spread": dict(cat_counts.most_common()),
+        "judge_score_distribution_accepted": dict(sorted(judge_score_acc.items())),
+        "judge_score_distribution_rejected": dict(sorted(judge_score_rej.items())),
         "model_used": args.model,
         "judge_floor": int(args.judge_floor),
         "n_haiku_propose_calls": n_haiku_propose_calls,
         "n_haiku_judge_calls": n_haiku_judge_calls,
+        "n_copyright_flagged": n_copyright_flagged,
+        "n_records_with_repair_attempts": n_repaired,
         "total_cost_usd": round(total_cost, 6),
         "budget_cap_usd": HARD_BUDGET_USD,
         "kill_switch_usd": KILL_SWITCH_USD,

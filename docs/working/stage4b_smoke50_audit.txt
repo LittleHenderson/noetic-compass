@@ -1,0 +1,71 @@
+=== ACCEPTED judge-score distribution (35 records) ===
+  score=4: 18
+  score=5: 17
+
+=== JUDGE-rejected score distribution (12 records) ===
+  score=2: 12
+
+=== STATS ===
+  accepted with repair attempts: 1/35
+  accepted with copyright flag:  1/35
+  total compile-failed (rejected after repair): 3
+
+=== ACCEPTED SAMPLES (1 per category if possible, up to 8) ===
+--- oasst2_q_000018 cat=binary_composition score=4 ---
+  Q: fix grammar and slightly rewrite:
+
+I am an improviser, I jam on my equipment until I get into the flow and then explore where it goes. I use a variety of tools 
+  CAS: ^7^O_{F5}|E ∘ ^6^O_{F3}|E
+--- oasst2_q_000014 cat=let_binding score=4 [REPAIRED x2] ---
+  Q: Hello my friend. Hope you are doing well. I need help with an issue that is happening to me: I'm an engineer. I've studied all my life.  I'm good at my work and
+  CAS: let X = ^5^E|f; let Y = ^8^C|A; let Z = ^9^C|A; X + Y + Z
+--- oasst2_q_000004 cat=recipe score=4 ---
+  Q: I am preparing for a debate with someone. Can you please list the best debate tactics that I can use? Could you also list some of the most common logical fallac
+  CAS: Θ(Ω_debate_prep) = 1*^6^O + 1*^6^C|A -> Ω_debate_prep
+--- oasst2_q_000000 cat=state_literal score=5 ---
+  Q: Write a short story about a cup
+  CAS: ^6^O|A
+
+=== JUDGE-REJECTED SAMPLES (5) ===
+--- oasst2_q_000001 score=2 ---
+  Q: If Mermaids were real would they lay eggs? Explain your reasoning.
+  CAS: ^8^C|A ∘ ^9^C|A
+--- oasst2_q_000010 score=2 ---
+  Q: Can you explain why the earth has seasons and respond like my sassy teenage daughter
+  CAS: ^8^C|A ∘ ^9^C|A
+--- oasst2_q_000016 score=2 ---
+  Q: Write me a fairy tale that makes little sense.
+  CAS: ^6^O|T
+--- oasst2_q_000023 score=2 ---
+  Q: What are a few industries that will be most negatively affected with the rise of coherent AI assistants like yourself and GPT-3 ?
+  CAS: ^8^C|A ∘ ^3^E|A
+--- oasst2_q_000031 score=2 ---
+  Q: I'm creating a NodeJS backend using Express, and I'm getting the following error:
+`Uncaught TypeError: Cannot read properties of undefined (reading 'id')`
+
+My c
+  CAS: ^6^C|A ∘ ^9^E|A
+
+=== COMPILE-FAILED SAMPLES (rejected after repair) ===
+--- oasst2_q_000008 ---
+  Q: What forms of intelligence exist, and what is the best method to effectively test intelligence?
+  final CAS: ^6^C|A ∘ ^6^E|A
+  final compile_err: parsing@15: unexpected token '_'
+  repair attempts: 2
+    -> attempt 1: previous='^6^C|A ∘ ^6^E|A' new='(^6^C|A + ^6^E|A) ∘ ^6^M|A'
+    -> attempt 2: previous='(^6^C|A + ^6^E|A) ∘ ^6^M|A' new='(^6^C + ^6^E) ×_{F6} ^6^M'
+
+--- oasst2_q_000011 ---
+  Q: In a git repository I'd like to change the commit message for commit abcdef1. Two branches depend on this commit, including 12-fix-a and 13-
+  final CAS: let X = ^8^C|A; let Y = ^6^O|A; X ∘ Y
+  final compile_err: typecheck: CIRC requires both states to share a domain
+  repair attempts: 1
+    -> attempt 1: previous='let X = ^8^C|A; let Y = ^6^O|A; X ∘ Y' new='REJECT'
+
+--- oasst2_q_000037 ---
+  Q: What's a woodchuck, can they chuck wood, and how much wood would a woodchuck chuck if a woodchuck could chuck wood? I would like a detailed 
+  final CAS: let X = ^0^C|A; let Y = ^6^C|A; let Z = ^8^C|A ∘ ^9^C|A; X + Y + Z
+  final compile_err: typecheck: PLUS is only defined for state, drive, or RPM expressions
+  repair attempts: 1
+    -> attempt 1: previous='let X = ^0^C|A; let Y = ^6^C|A; let Z = ^8^C|A ∘ ^9^C|A; X +' new='REJECT'
+
