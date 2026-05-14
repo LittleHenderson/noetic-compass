@@ -270,6 +270,11 @@ def main(argv: list[str] | None = None) -> int:
     n_valid_compile = 0
     n_exact = 0
     n_norm = 0
+    # Generation-diversity counter — Codex v0.1 directive 2026-05-14T16:??Z
+    # (commit 3b03207). Counts repeated greedy outputs across the full val
+    # split to measure mode collapse directly. Normalized form (whitespace-
+    # stripped) so trivial spacing differences don't inflate diversity.
+    gen_counts: collections.Counter[str] = collections.Counter()
     by_cat: dict[str, dict[str, int]] = collections.defaultdict(
         lambda: {"n": 0, "tf_correct": 0, "tf_total": 0, "valid": 0, "exact": 0, "norm": 0}
     )
@@ -314,6 +319,8 @@ def main(argv: list[str] | None = None) -> int:
         # Exact / normalized
         exact = gen_text == gold_cas
         norm = _normalize(gen_text) == _normalize(gold_cas)
+        # Track normalized generated text for diversity
+        gen_counts[_normalize(gen_text) or "<EMPTY>"] += 1
 
         per_record.append({
             "id": rec.get("id"),
@@ -352,6 +359,11 @@ def main(argv: list[str] | None = None) -> int:
     def rate(num: int, den: int) -> float:
         return (num / den) if den > 0 else 0.0
 
+    # Diversity / mode-collapse metrics (Codex v0.1 directive 3b03207).
+    # All ratios are over normalized (whitespace-stripped) generated text.
+    unique_outputs = len(gen_counts)
+    top_modes = gen_counts.most_common(5)
+    top_mode_count = top_modes[0][1] if top_modes else 0
     aggregate = {
         "tf_per_token_accuracy": rate(tf_correct, tf_total),
         "free_decode_validity_rate": rate(n_valid_compile, n),
@@ -359,6 +371,20 @@ def main(argv: list[str] | None = None) -> int:
         "normalized_recovery_rate": rate(n_norm, n),
         "tf_tokens_scored": tf_total,
         "n_records": n,
+        "unique_outputs_count": unique_outputs,
+        "unique_output_ratio": rate(unique_outputs, n),
+        "top_mode_count": top_mode_count,
+        "mode_collapse_ratio": rate(top_mode_count, n),
+    }
+    diversity = {
+        "unique_outputs_count": unique_outputs,
+        "unique_output_ratio": rate(unique_outputs, n),
+        "top_mode_count": top_mode_count,
+        "mode_collapse_ratio": rate(top_mode_count, n),
+        "top_5_modes": [
+            {"normalized_text": text[:200], "count": count, "share": rate(count, n)}
+            for text, count in top_modes
+        ],
     }
 
     def bucket_summary(b: dict[str, dict[str, int]]) -> dict[str, Any]:
@@ -398,6 +424,7 @@ def main(argv: list[str] | None = None) -> int:
         "load_state_dict_missing_keys": n_missing,
         "load_state_dict_unexpected_keys": n_unexpected,
         "aggregate": aggregate,
+        "diversity": diversity,
         "per_category": bucket_summary(by_cat),
         "per_surface_family": bucket_summary(by_surf),
         "config": {
@@ -428,6 +455,8 @@ def main(argv: list[str] | None = None) -> int:
         "free_decode_validity_rate": aggregate["free_decode_validity_rate"],
         "exact_recovery_rate": aggregate["exact_recovery_rate"],
         "normalized_recovery_rate": aggregate["normalized_recovery_rate"],
+        "unique_output_ratio": aggregate["unique_output_ratio"],
+        "mode_collapse_ratio": aggregate["mode_collapse_ratio"],
         "report_path": str(report_path),
         "samples_path": str(samples_path),
         "elapsed_seconds": elapsed_s,
