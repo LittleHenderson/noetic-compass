@@ -3196,3 +3196,113 @@ Still run the browser checklist before calling the UI done:
 ### Next recommendation
 
 If browser visual QA passes, SGGS Phase 1 baseline is acceptable. The next showpiece step should be replay/slow-motion/ghost growth, because that is where the "watch the thought form in real time" pitch becomes obvious to a non-technical stakeholder.
+
+---
+
+## 2026-05-14T01:35Z - SGGS browser visual QA: PATCHED + PASS
+
+Claude,
+
+I resumed the SGGS browser QA path and ran it in a real Chrome window via CDP because headless Chromium/Edge crashes the local GPU process before CDP can answer.
+
+### Blocker found during visual QA
+
+The SGGS tab did mount WebGL, but the scene box collapsed in the flex column:
+
+- Intended outer scene height: 560px.
+- Actual pre-patch canvas height: ~278px on first run, then 1px when trying an absolute-fill variant.
+- Root cause: the 560px wrapper was a flex item inside `flex flex-col gap-4` and default `flex-shrink: 1` let it shrink to leftover height after the loader/status strip.
+
+### Patch landed
+
+- `IdeaAtlasPage.tsx`: SGGS wrapper now includes `shrink-0`, preserving the explicit 560px scene height inside the scrollable flex column.
+- `SggsScene.tsx`: added `fillParent` mode so the scene host can absolute-fill a known-height parent in integrations that need exact sizing.
+- `IdeaAtlasPage.tsx`: uses `fillParent` for the TRACE 3D integration.
+
+### Browser QA evidence
+
+Real Chrome + Vite at `http://127.0.0.1:3001/idea-atlas`, with the complex demo loaded:
+
+- TRACE 3D route rendered.
+- Complex demo loaded: `14 nodes, 13 edges`.
+- Canvas mounted with `WebGL2RenderingContext`.
+- Final measured geometry:
+  - outer SGGS box: `940 x 560`
+  - inner `SggsScene`: `936 x 556`
+  - canvas: `934 x 554`
+  - backing buffer: `1868 x 1108`
+- Screenshot pixel check on the canvas region: 599/2400 sampled pixels non-background, 252 distinct colors.
+- Pointer smoke: canvas remained mounted after click/click/drag/wheel.
+- Fullscreen toggle: `data-fullscreen=true`, measured height `800`.
+- TRACE <-> TRACE 3D switch: selected trace persisted, SGGS remounted with `nodeCount=14`.
+- Forced WebGL failure: `SggsErrorBoundary` fallback rendered with the expected user-facing fallback text.
+
+Screenshots/evidence are in `.tmp/sggs_browser_qa/`:
+
+- `trace3d-loaded.png`
+- `trace3d-after-pointer.png`
+- `trace3d-after-fullscreen.png`
+- `trace3d-error-boundary.png`
+- `evidence.json`
+
+### Verification
+
+Dashboard directory:
+
+- `npx.cmd tsc -b --noEmit`: PASS
+- targeted SGGS vitest: 46/46 PASS
+- full dashboard vitest: 275/275 PASS
+- `npm.cmd run build`: PASS
+- production build keeps SGGS split as lazy chunk: `SggsScene-Bnj7-udF.js`, 519.39 kB / 130.14 kB gzip.
+
+### Verdict
+
+SGGS Phase 1 browser visual QA is PASS after the `shrink-0` canvas-height patch. Remaining console errors in the evidence are expected from the deliberate forced-WebGL-failure step used to verify the error boundary.
+
+## 2026-05-14T00:??Z - NL training + external Q&A SDG directive
+
+Claude,
+
+User's next target is:
+
+1. train CAS Native on the clean local NL we already have;
+2. build an external-question ingestion path where Hugging Face / Kaggle / Google-surfaced Q&A datasets provide question shapes only, then our CAS SDG generates the answers.
+
+My recommendation:
+
+### Track 1 - Local NL
+
+Choose option 1: **Wave 2.5 + Wave 3 layer3 clean**, after a quick sample-read/audit of the Wave 3 layer3 file.
+
+Do not train on the 50K Claude dialogue shards. They are tempting because they are large, but they violate the no-foreign-distillation rule and would weaken the "CAS-native" claim. Keep them out of training. If used at all, use them only as a quarantined style/debug reference, not as model supervision.
+
+Minimum pre-train checks:
+
+- exact record count per file;
+- schema compatibility with current trainer;
+- sample read 50-100 records;
+- dedupe against dev/test/eval;
+- confirm no direct assistant-answer text from external models enters the train split.
+
+### Track 2 - External Q&A -> CAS SDG
+
+Proceed with **questions only**:
+
+- keep external `question`;
+- drop external `answer`, `context`, rationale, and explanation from the training target;
+- store dataset name/license/source URL in a manifest;
+- run our CAS SDG to infer/construct CAS intent and generate CAS-grounded answer text;
+- SFE/audit-filter the generated answer before it becomes trainable.
+
+Recommended first pilot:
+
+- Start with a small Hugging Face SQuAD v2 question-only pilot because it is easy to load, has a clear `question` field, and the data card lists CC BY-SA 4.0.
+- Use 2k-5k questions first, not the full set.
+- Natural Questions is useful later because it contains real user questions, but it is much larger and heavier to handle.
+- Kaggle and Google Dataset Search should be discovery tools only until license and structure are explicitly pinned.
+
+Plain decision:
+
+- **Local train set:** Wave 2.5 + Wave 3 layer3 clean.
+- **External pilot:** SQuAD v2 questions only -> CAS SDG answers -> SFE gate -> train-approved subset.
+- **Forbidden for now:** training on external answers or 50K Claude answer text.
