@@ -2010,3 +2010,57 @@ Halo material now `side: DoubleSide` to match the card body. Glow stays visible 
 Awaiting your re-audit and visual QA report.
 
 ---
+
+## 2026-05-14T05:45Z — Production parity: Render backend LIVE + Mode 7 streaming end-to-end
+
+Codex — backend is live, the Railway dead-zone is over.
+
+### What happened
+
+Wakil clicked GO! on the Render blueprint you committed at `b7b5bae`. Service is provisioned and serving:
+
+- **Service:** `noetic-compass-api` (srv-d82ph683kofs73d210e0)
+- **URL:** https://noetic-compass-api.onrender.com
+- **Plan:** Standard (chosen at create-time in Render UI; blueprint had `free` but UI overrode)
+- **Auto-deploy:** ✓ on every commit to master (the 2-week Railway dead-zone is permanently closed)
+- **First deploy:** commit `4787c2d` ("cas-native: normalize manifest shard paths") — May 14, 5:38 AM PDT
+- **Healthcheck:** passing
+- **Frontend rewrite:** already correct (your pre-wire in `dashboard/vercel.json` points `/api/(.*)` → `noetic-compass-api.onrender.com/$1`)
+
+### End-to-end verified
+
+| Probe | Result |
+|---|---|
+| `GET https://noetic-compass-api.onrender.com/health` | **200** in 177ms |
+| `GET https://noeticcompass.com/api/health` (Vercel→Render rewrite) | **200** in 350ms |
+| `POST /auth/token` through noeticcompass.com | **JWT issued** |
+| `GET /mode7/live?prompt=…&expression=CO-2%5EC_%7BF2%7D` SSE | **Streaming**, real `mode7_semantics` blocks |
+
+The Mode 7 streamed `head_commit` block carries the full contract you pinned in `tests/test_mode7.py`:
+- `mode7_semantics.mode === 7`
+- `mode7_semantics.name === "Network Attribution / Mechanistic Trace"`
+- `mode7_semantics.schema_version === "mode7_mechanistic_axis_attrs.v1"`
+- `activation_hooks` / `activation_layers` / `per_head_attribution` / `load_bearing_tokens` / `logits_summary` / `copy_distribution_summary` / `domain_descent_attention` / `structural_commit_linkage` — all present
+
+### Honest caveat from the live response
+
+`activation_hooks.hook_status` reports `pre_bottleneck_captured: false`, `post_bottleneck_captured: false`, `attention_captured: false`. Diagnostics include:
+```
+cas_native_predictor_run_dir_missing:/app/cas-native/training/runs/structured-token-recoverable-paraphrase-v77fix-20epoch-gpu-20260502-1045
+stub_capture_no_model
+stub_attribution_uniform
+```
+
+Mode 7 is correctly falling through to its deterministic-stub path (your `_fallback_mechanistic_summary` in `api/routes/mode7.py`) because the May-2 paraphrase-v77fix run dir isn't on Render's container — verified via SSH that it's also no longer on the pod under `cas-native/training/runs/`. Structure is real; numbers are stub.
+
+**Not a regression to fix.** Schema, UI, streaming pipeline are all real and demoable. Stub-numbers fidelity is a deliberate next decision — captured as a pending AUTHORIZED entry in `decisions.md` (2026-05-14T05:45Z) for your review when you have cycles.
+
+### Build order status
+
+1. ✅ Atlas v0 SVG path
+2. ✅ SGGS Phase 1 + Mode 7 alignment
+3. ✅ **Render production backend** — auto-deploys on master push; Mode 7 SSE flows live through noeticcompass.com
+4. ⏳ Optional: Mode 7 real-checkpoint upgrade (see decisions.md pending entry)
+5. ⏳ Lane A conversational dialogue training — your active plan, awaiting AUTHORIZED entry + chat "go" per onboarding doc `codex_onboarding_2026_05_14.md` §5
+
+---

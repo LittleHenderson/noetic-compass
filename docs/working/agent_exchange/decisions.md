@@ -536,3 +536,78 @@ RATIFIED-BY: user (locked across E2a, E2b, E2c launches)
 CONTEXT: docs/working/candidate_e/stage2_launch_lock_2026_05_12.md pre-launch checklist. Applied at E2a (commit 8ad6a3b), E2b (commit f53baca), E2c (commit cfcbc39).
 
 ---
+
+## 2026-05-14T05:45Z — Mode 7 real-checkpoint upgrade (Render container)
+
+DECISION: Queued for review. Render backend is live at https://noetic-compass-api.onrender.com (deploy `4787c2d` 2026-05-14T05:38Z, auto-deploy on every master push). Mode 7 SSE flows end-to-end with structurally-correct mechanistic payloads — but `activation_hooks.hook_status` reports all-false and diagnostics include `cas_native_predictor_run_dir_missing`, `stub_capture_no_model`, `stub_attribution_uniform`. Mode 7 is correctly falling into `_fallback_mechanistic_summary`.
+
+This entry queues the option to upgrade Mode 7 from stub-numbers to real-model-numbers in production. NOT yet authorized — Codex to fill in scope/cost/source-checkpoint decision before user chat "go".
+
+### Why this is queued, not auto-greenlit
+
+- Production Mode 7 demo is **architecturally real** today (schema, UI, streaming, validators all correct). Stub numbers are a deliberate fallback the user accepted at SGGS-onboarding time.
+- Real-numbers upgrade is **stakeholder-fidelity polish**, not a regression fix. Easy to defer until a stakeholder explicitly notices.
+- Decision touches Render container shape (image size, persistent disk, or external blob fetch — all paid-tier tradeoffs).
+
+### Source-checkpoint problem Codex needs to resolve first
+
+Current Mode 7 predictor expects `/app/cas-native/training/runs/structured-token-recoverable-paraphrase-v77fix-20epoch-gpu-20260502-1045/`. That run is:
+- **Not in local archive `D:\tksCAS-archive\`** (verified by Claude 2026-05-14T05:45Z — paraphrase-v77fix folder absent)
+- **Not on RunPod at `/workspace/tksCAS/.../runs/`** (verified by Claude via SSH same time — `grep -i paraphrase` returns nothing)
+- **Older B3/K9 lineage** — pre-dates Stage 3 simplex MVP
+
+Codex needs to pick the source checkpoint before this entry can be ratified. Three candidates:
+
+| Option | Checkpoint | Pro | Con |
+|---|---|---|---|
+| **α** | Stage 3 simplex (`D:\tksCAS-archive\stage_e3_20260513T043823Z\ckpt_final.pt`) | Most advanced structural-prediction artifact; canonical for chat-stage3; 0.78/0.64 free-decode gates | Mode 7 mechanistic predictor was written for K=9/paraphrase architecture — likely requires `cas_native.trace.mechanistic` refactor to accept simplex-MVP shape. Not trivial. |
+| **β** | Retrain a paraphrase-v77fix-shape model | Drop-in for current Mode 7 predictor | New training run (~$5-50 GPU spend); duplicates lineage user has already moved past |
+| **γ** | Synthesize a tiny K=9-shape stub checkpoint | Cheapest; bypasses Lane 1 vs Lane 2 question | Worst signal — fake numbers dressed as real numbers; violates `feedback_separate_evidence_levels_in_status.md` (passes stub-numbers off as real) |
+
+**Recommendation (Claude):** option α — refactor `cas_native.trace.mechanistic` to accept Stage 3 simplex shape. Investment in real interpretability infra, on the canonical checkpoint. ~4–8 hours of Codex pod work + Claude audit. Not eligible for option γ — stub-as-real is exactly the failure mode the user's memory bank guards against.
+
+### Container delivery path
+
+After source-checkpoint is picked, three delivery patterns for Render:
+
+| Pattern | Implementation | Trade-off |
+|---|---|---|
+| **D1: Bake into image** | `COPY` checkpoint dir into `Dockerfile.api` before final stage | Image grows ~700 MB → 5-8 min builds (was 24 s on Railway). Auto-deploys slow proportionally. Git LFS or git-annex required since `.pt` files are too large for plain git. |
+| **D2: Render persistent disk** | Standard plan supports disks; manually upload weights to a mounted disk, point Mode 7 predictor at the mount path | Image stays small; one-time upload via Render UI or SFTP; **need to repeat upload on every checkpoint refresh** |
+| **D3: Container fetch on startup** | Lifecycle hook downloads checkpoint from an S3-compatible blob on container init | Cleanest separation of weights vs code; need a public-or-signed-URL bucket (R2 free tier works); cold-start gets +~30-60 s |
+
+**Recommendation (Claude):** **D2** for the first cut (manual upload to Render disk; under user's control; no external infra), with D3 as a follow-on once a blob store is in place.
+
+### Pre-flight checks before ratification
+
+1. Codex picks α/β/γ for source checkpoint. If α: estimate refactor scope (`cas_native.trace.mechanistic` API surface).
+2. Codex picks D1/D2/D3 for container delivery. If D2: confirm Render Standard persistent-disk pricing + Render UI upload mechanics. If D3: confirm a blob store target.
+3. Smoke plan: after upgrade, the same end-to-end curl Claude ran 2026-05-14T05:45Z must show `activation_hooks.hook_status.*` all `true` AND diagnostics empty.
+
+### Budget cap
+
+Per-month delta from current state:
+- D1: no monthly delta (paid in build minutes — Render Standard includes 500 build min/mo, current usage ~5 min)
+- D2: +$1-3/mo for persistent disk (Render disk pricing: $0.25/GB/mo, ~5-10 GB needed)
+- D3: ~$0/mo if Cloudflare R2 free tier (10 GB free egress)
+
+GPU spend (only if option β picked): ~$5-50 for a retrain run.
+
+### Gate criteria for promotion
+
+1. Live end-to-end smoke (same curl as the 2026-05-14T05:45Z probe) shows `hook_status` all `true`.
+2. Diagnostics list does NOT contain `cas_native_predictor_run_dir_missing`, `stub_capture_no_model`, or `stub_attribution_uniform`.
+3. At least one captured `attention_heads[*].entropy` numeric value differs from the deterministic-stub value (proves real attention extraction, not stub).
+4. `npx vitest run src/lib/sggs_stream.test.ts` still passes (selectors weren't broken by payload shape change).
+5. User sample-reads 3-5 head_commit payloads from a live production stream and confirms numbers look like real model output, not stub.
+
+### AUTHORIZED status
+
+**AUTHORIZED: pending** — Codex must answer α/β/γ + D1/D2/D3 in this entry's appendix, then user chat "go" to ratify.
+
+NOT in scope this entry:
+- Any backend deploy changes (already auto-deploy on master push via blueprint)
+- Lane A training (separate AUTHORIZED entry track per `codex_onboarding_2026_05_14.md` §10)
+- SGGS Phase 2 live-witnessing wire-up (separate roadmap)
+
+---
