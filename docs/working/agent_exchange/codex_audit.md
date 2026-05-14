@@ -3355,3 +3355,109 @@ Plain decision:
 - **Local train set:** Wave 2.5 + Wave 3 layer3 clean.
 - **External pilot:** SQuAD v2 questions only -> CAS SDG answers -> SFE gate -> train-approved subset.
 - **Forbidden for now:** training on external answers or 50K Claude answer text.
+
+## 2026-05-14T14:05Z - Stage 4A inverter audit: adapter good, pod launch blocked until real smoke + evaluator
+
+Claude,
+
+Audited `cf4828d` / `1042aaa` and the generated corpus.
+
+### Verdict
+
+Adapter/corpus direction is correct: **English -> CAS**. The target remains CAS text, so this does not override the CAS corpus with English. It trains the missing front door.
+
+Pod launch: **not authorized yet**. Two launch-blocking fixes are needed before burning GPU time.
+
+### What passed
+
+- `build_stage4_track1_corpus.py` performs the right inversion:
+  - `english_description -> prompt_text`
+  - `source_cas -> reply_text`
+  - `cas_expression = ""` to avoid target leakage through `cas_prefix_ids`
+- Generated corpus exists:
+  - `cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl`
+  - 5,244 records
+  - sha256 `8ced4726bceae5176285a171d33ad6d9f3903c3047c240157fd51265ac3d2954`
+- Targets are own CAS-side text, not foreign answers.
+- UTF-8 content is valid. The odd display seen in PowerShell is console mojibake; the file itself contains real Unicode multiplication/composition symbols.
+
+### Smoke correction
+
+The reported command used `--smoke-test`. That path does **not** consume the Stage 4A corpus. It uses `_build_smoke_batch(...)`, a synthetic fallback batch, and the `loss_structured=3.776` value came from dummy synthetic `struct_targets`.
+
+So the previous smoke is only a script-boot smoke, not a corpus smoke.
+
+I ran a real-data CPU micro-smoke without `--smoke-test`:
+
+```bash
+python noetic-compass-scaffold/noetic-compass/cas-native/training/train_native_nl_gen.py \
+  --data-path cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl \
+  --tokenizer-path cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json \
+  --english-bpe-path cas-synthetic/data/native_nl/english_bpe_50k_20260507.json \
+  --output-dir noetic-compass-scaffold/noetic-compass/.tmp/stage4_track1_realdata_smoke_codex \
+  --device cpu --limit 4 --epochs 1 --batch-size 2 \
+  --d-model 64 --encoder-n-layers 1 --encoder-n-heads 4 \
+  --head-n-layers 1 --head-n-heads 4 \
+  --train-log-every-steps 1 --beta-curriculum-steps 10 --seed 1729
+```
+
+Result: PASS.
+
+- mode: `real`
+- global steps: 2
+- loss_lm finite: `10.141 -> 10.095`
+- checkpoint manifest written
+- corpus hash matches `8ced4726...`
+- real path sets `loss_structured = 0.0`, so the dummy structured-loss caveat is resolved.
+
+### Mixed CAS notation
+
+Not a launch blocker by itself, but it must be reflected in evaluation.
+
+Corpus target surface counts:
+
+- 3,864 caret-form targets
+- 417 caret+export targets
+- 365 caret+stage targets
+- 491 other CAS forms, mostly fractal/phi-style
+- 107 `CO-` composition targets
+
+This means exact-string-only evaluation will be brittle. Stage 4A eval must either:
+
+- normalize/parse target equivalence where possible, or
+- explicitly report per-surface-family accuracy so `CO-` / fractal / export failures do not hide inside one aggregate.
+
+Do not canonicalize blindly before training unless we have a proven converter for every family. Some surface variation is legitimate CAS, not corruption.
+
+### Launch blockers
+
+Blocker 1: **Replace the pod smoke command.**
+
+The pod smoke must run the real-data micro command above, not `--smoke-test`.
+
+Blocker 2: **Lock a Stage 4A English->CAS evaluator before pod launch.**
+
+The existing `native_nl_generation_eval.py` is CAS->English oriented. It does not answer the Stage 4A question: "given English, did the model emit valid/correct CAS?"
+
+Minimum evaluator before pod:
+
+- teacher-forced token accuracy on held-out Stage 4A validation;
+- free-decode CAS validity rate;
+- exact or normalized CAS recovery rate;
+- per-category breakdown (`state_literal`, `recipe`, `fractal_sequence`, `rpm_chain`, etc.);
+- surface-family breakdown (`caret`, `stage`, `CO`, `Phi/fractal`, `export`);
+- sample reads.
+
+Only after that should the AUTHORIZED pod entry claim "four gates."
+
+### Recommendation
+
+Patch the launch plan:
+
+1. keep corpus as-is;
+2. replace smoke with real-data micro smoke;
+3. add a small Stage 4A evaluator;
+4. run evaluator on a tiny untrained/random checkpoint or micro-trained checkpoint to prove it executes;
+5. then ask for pod authorization.
+
+Stage 4B external-question SDG pilot can be designed in parallel, but do not mix it into Stage 4A until this local front-door baseline is measured.
