@@ -1,0 +1,48 @@
+# Render Blueprint - Noetic Compass API
+#
+# Render's Blueprint flow looks for this file at the Git repo root by default.
+# The actual FastAPI app lives in noetic-compass-scaffold/noetic-compass.
+
+services:
+  - type: web
+    name: noetic-compass-api
+    runtime: docker
+    rootDir: noetic-compass-scaffold/noetic-compass
+    dockerfilePath: ./Dockerfile.api
+    dockerContext: .
+    plan: free
+    autoDeployTrigger: commit
+    healthCheckPath: /health
+    envVars:
+      - key: NC_JWT_SECRET
+        generateValue: true
+      - key: NC_DEFAULT_LLM_PROVIDER
+        value: mock
+      - key: NC_MOCK_LLM
+        value: "true"
+      - key: NC_RATE_LIMIT_TIER
+        value: enterprise
+      - key: NC_RATE_LIMIT_RPM
+        value: "120"
+      - key: NC_CORS_ORIGINS
+        value: https://noeticcompass.com,https://www.noeticcompass.com,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
+      - key: NC_CORS_ORIGIN_REGEX
+        value: 'https://(.*\.)?noeticcompass\.com|https://([a-z0-9-]+\.)*vercel\.app|http://localhost(:\d+)?|http://127\.0\.0\.1(:\d+)?'
+      - key: NC_DATABASE_URL
+        sync: false
+      - key: NC_OPENAI_API_KEY
+        sync: false
+      - key: NC_ANTHROPIC_API_KEY
+        sync: false
+      - key: NC_GOOGLE_API_KEY
+        sync: false
+      - key: NC_META_API_BASE_URL
+        sync: false
+      - key: NC_META_API_KEY
+        sync: false
+      - key: NC_XAI_API_KEY
+        sync: false
+      - key: NC_DEEPSEEK_API_KEY
+        sync: false
+      - key: NC_QWEN_API_KEY
+        sync: false

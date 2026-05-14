@@ -2,7 +2,7 @@
  * API base URL.
  *
  * - Dev/default: use VITE_API_URL when provided, otherwise "/api"
- * - Production: always use same-origin "/api" and let Vercel rewrite to Railway
+ * - Production: always use same-origin "/api" and let Vercel rewrite to Render
  *
  * This avoids stale cross-origin frontend builds breaking after backend URL changes.
  */

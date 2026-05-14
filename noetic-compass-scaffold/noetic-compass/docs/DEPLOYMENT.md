@@ -99,7 +99,7 @@ docker compose down -v       # stop containers AND remove volumes
 docker compose up --build -d
 ```
 
-## Railway Deployment (API Backend)
+## Railway Deployment (API Backend - Legacy)
 
 Deploy the FastAPI backend to Railway with Docker (includes Rust cas-engine build).
 
@@ -184,20 +184,22 @@ railway domain add api.noetic-compass.com
 
 ---
 
-## Cloud Deployment (Render)
+## Cloud Deployment (Render API Backend)
 
 ### Quick Start
 1. Push repo to GitHub
-2. Go to [Render Dashboard](https://dashboard.render.com)
-3. New > Blueprint > connect your repo
-4. Render auto-detects `infra/render.yaml`
-5. Set environment variables (API keys) in Render dashboard
+2. Go to [Render Dashboard](https://dashboard.render.com/blueprints)
+3. New > Blueprint > connect `LittleHenderson/noetic-compass`
+4. Render auto-detects the repo-root `render.yaml`
+5. Review the free `noetic-compass-api` web service and click Deploy Blueprint
+6. Optional: set provider API keys in Render if you want live LLM calls
 
 ### Services Created
 | Service | Type | URL |
 |---------|------|-----|
-| noetic-compass-api | Web Service (Docker) | `*.onrender.com` |
-| noetic-compass-dashboard | Static Site | `*.onrender.com` |
+| noetic-compass-api | Web Service (Docker, free) | `https://noetic-compass-api.onrender.com` |
+
+The Vercel dashboard routes `https://noeticcompass.com/api/*` to this Render API with `dashboard/vercel.json`.
 
 ## Vercel Deployment (Dashboard)
 
@@ -227,21 +229,17 @@ On first run, Vercel CLI walks you through project linking. It auto-detects `ver
 
 ### Set the API URL
 
-By default the dashboard proxies `/api` to `localhost:8000` (dev mode). In production, set the environment variable so the built JS points to your real API:
+Production builds use same-origin `/api` and `dashboard/vercel.json` rewrites those requests to Render:
 
-```bash
-# Option A: Vercel CLI
-vercel env add VITE_API_URL production
-# Enter value: https://your-api-host.com
+```json
+{
+  "source": "/api/:path*",
+  "destination": "https://noetic-compass-api.onrender.com/:path*"
+}
 
-# Option B: Vercel dashboard
-# Project Settings → Environment Variables → Add:
-#   Name:  VITE_API_URL
-#   Value: https://your-api-host.com
-#   Environments: Production (and Preview if desired)
 ```
 
-Then redeploy for the variable to take effect:
+If Render assigns a different service hostname, update that rewrite and redeploy:
 
 ```bash
 vercel --prod
