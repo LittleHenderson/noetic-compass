@@ -630,7 +630,7 @@ export function IdeaAtlasPage() {
             role="tab"
             aria-selected={viewMode === 'mode7live'}
             onClick={() => setViewMode('mode7live')}
-            title="Live Mode 7 CAS Native AI thought tree shell"
+            title="Living Thought Atlas with Mode 7 network attribution"
             className={`px-3 py-1 rounded transition-colors ${
               viewMode === 'mode7live'
                 ? 'bg-cyan-500/20 text-cyan-200'
@@ -639,7 +639,7 @@ export function IdeaAtlasPage() {
           >
             MODE 7
             <span className="ml-1 text-[9px] uppercase tracking-wider text-cyan-300/80">
-              LIVE
+              TRACE
             </span>
           </button>
         </div>
@@ -886,7 +886,7 @@ export function IdeaAtlasPage() {
       />
 
       {/* Trace view — Atlas v0 */}
-      {/* Mode 7 Live view - stakeholder-facing live CAS Native AI shell */}
+      {/* Living Thought Atlas witness view with Mode 7 mechanistic attribution. */}
       {viewMode === 'mode7live' && <Mode7LiveShell />}
 
       {viewMode === 'trace' && (

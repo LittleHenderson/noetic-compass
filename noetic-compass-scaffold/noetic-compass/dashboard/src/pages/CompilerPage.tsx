@@ -1620,6 +1620,192 @@ function edgeKey(source: string, target: string, kind: string): string {
   return `${source}|${target}|${kind}`;
 }
 
+type Mode7HeadCommit = Extract<SggsCommit, { kind: 'head_commit' }>;
+
+const MODE7_STRUCTURAL_ATTR_KEYS = [
+  'noetic',
+  'domain',
+  'drive',
+  'register',
+  'coefficient',
+  'register_count',
+  'prereq_count',
+  'production_target',
+  'confidence',
+  'band',
+  'pattern',
+  'kind',
+  'emergent',
+  'evidence',
+  'commit_evidence',
+  'structural_commit_evidence',
+  'source_span',
+  'target_slot',
+  'inferred_cas',
+  'normalized_label',
+  'role',
+];
+
+const MODE7_TOKEN_ATTR_KEYS = [
+  'n_tokens',
+  'token_count',
+  'tokens',
+  'source_tokens',
+  'target_tokens',
+  'token_indices',
+  'input_position',
+  'output_position',
+  'position',
+];
+
+const MODE7_LAYER_ATTR_KEYS = [
+  'layer',
+  'layer_name',
+  'layer_index',
+  'layer_activations',
+  'layer_activation_l2',
+  'bottleneck_top_k',
+  'attention_entropy_summary',
+  'hook_status',
+];
+
+function isMode7HeadCommit(commit: SggsCommit): commit is Mode7HeadCommit {
+  return commit.kind === 'head_commit';
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function compactMode7Name(value: string): string {
+  return value.replace(/_/g, ' ');
+}
+
+function formatMode7AttrValue(value: unknown, max = 34): string | null {
+  let text: string | null = null;
+  if (typeof value === 'string') {
+    text = value.trim();
+  } else if (typeof value === 'number') {
+    text = Number.isInteger(value) ? String(value) : value.toFixed(3).replace(/0+$/, '').replace(/\.$/, '');
+  } else if (typeof value === 'boolean') {
+    text = value ? 'true' : 'false';
+  } else if (Array.isArray(value)) {
+    if (value.length === 0) return null;
+    const previews = value.slice(0, 3).map((item) => {
+      if (isRecord(item)) {
+        const token = item.token ?? item.value ?? item.label ?? item.name ?? item.id;
+        const index = item.index ?? item.position;
+        const tokenText = formatMode7AttrValue(token, 16);
+        const indexText = formatMode7AttrValue(index, 8);
+        if (tokenText && indexText) return `${indexText}:${tokenText}`;
+        return tokenText ?? formatMode7AttrValue(index, 16) ?? 'object';
+      }
+      return formatMode7AttrValue(item, 16) ?? 'item';
+    });
+    text = `${previews.join(', ')}${value.length > previews.length ? ` +${value.length - previews.length}` : ''}`;
+  } else if (isRecord(value)) {
+    const entries = Object.entries(value).filter(([, item]) => item !== null && item !== undefined);
+    if (entries.length === 0) return null;
+    text = entries
+      .slice(0, 3)
+      .map(([key, item]) => {
+        const itemText = formatMode7AttrValue(item, 12);
+        return itemText ? `${key}:${itemText}` : key;
+      })
+      .join(', ');
+    if (entries.length > 3) text = `${text} +${entries.length - 3}`;
+  }
+  if (!text) return null;
+  return text.length > max ? `${text.slice(0, max - 3)}...` : text;
+}
+
+function mode7AttrPill(
+  attrs: Record<string, unknown> | undefined,
+  key: string,
+  label = key.replace(/_/g, ' '),
+): string | null {
+  if (!attrs || !(key in attrs)) return null;
+  const value = formatMode7AttrValue(attrs[key]);
+  return value ? `${label}: ${value}` : null;
+}
+
+function collectMode7AttrPills(
+  attrs: Record<string, unknown> | undefined,
+  keys: string[],
+  labelForKey?: (key: string) => string,
+): string[] {
+  if (!attrs) return [];
+  return keys
+    .map((key) => mode7AttrPill(attrs, key, labelForKey?.(key) ?? key.replace(/_/g, ' ')))
+    .filter((pill): pill is string => !!pill);
+}
+
+function mode7TokenEvidence(attrs: Record<string, unknown> | undefined): string[] {
+  return collectMode7AttrPills(attrs, MODE7_TOKEN_ATTR_KEYS, (key) => {
+    if (key === 'n_tokens' || key === 'token_count') return 'tokens';
+    if (key === 'input_position') return 'input token';
+    if (key === 'output_position') return 'output token';
+    if (key === 'position') return 'token position';
+    return key.replace(/_/g, ' ');
+  });
+}
+
+function mode7LayerEvidence(attrs: Record<string, unknown> | undefined): string[] {
+  return collectMode7AttrPills(attrs, MODE7_LAYER_ATTR_KEYS, (key) => {
+    if (key === 'layer_activations') return 'layers';
+    if (key === 'layer_activation_l2') return 'layer L2';
+    if (key === 'bottleneck_top_k') return 'bottleneck top-k';
+    if (key === 'attention_entropy_summary') return 'attention entropy';
+    if (key === 'hook_status') return 'hooks';
+    return key.replace(/_/g, ' ');
+  });
+}
+
+function mode7StructuralEvidence(attrs: Record<string, unknown> | undefined): string[] {
+  if (!attrs) return [];
+  const structuredKeys = new Set(MODE7_STRUCTURAL_ATTR_KEYS);
+  const tokenKeys = new Set(MODE7_TOKEN_ATTR_KEYS);
+  const layerKeys = new Set(MODE7_LAYER_ATTR_KEYS);
+  const supplementalKeys = Object.keys(attrs)
+    .filter((key) => (
+      !structuredKeys.has(key) &&
+      !tokenKeys.has(key) &&
+      !layerKeys.has(key) &&
+      key !== 'node_key'
+    ))
+    .slice(0, 4);
+  return uniqueMode7Pills([
+    ...collectMode7AttrPills(attrs, MODE7_STRUCTURAL_ATTR_KEYS),
+    ...collectMode7AttrPills(attrs, supplementalKeys),
+  ]);
+}
+
+function uniqueMode7Pills(values: string[]): string[] {
+  return [...new Set(values)];
+}
+
+function mode7EvidencePills(attrs: Record<string, unknown> | undefined, max = 6): string[] {
+  return uniqueMode7Pills([
+    ...mode7TokenEvidence(attrs),
+    ...mode7LayerEvidence(attrs),
+    ...mode7StructuralEvidence(attrs),
+  ]).slice(0, max);
+}
+
+function mode7NodeText(commit: Mode7HeadCommit, label: string): string {
+  const evidence = mode7EvidencePills(commit.axis_attrs, 8);
+  return [
+    `Network attribution head ${commit.head_index + 1}: ${compactMode7Name(commit.head_name)}`,
+    `Node: ${label}`,
+    evidence.length ? `Evidence: ${evidence.join(' | ')}` : 'Evidence: structural commit received',
+  ].join('\n');
+}
+
+function mode7NodeLabel(commit: Mode7HeadCommit): string {
+  const head = compactMode7Name(commit.head_name);
+  return truncateLabel(`H${commit.head_index + 1} ${head}: ${commit.node_label}`, 48);
+}
+
 function buildMode7TreeFromCommits(
   commits: SggsCommit[],
   sourceExpression: string | undefined,
@@ -1630,7 +1816,7 @@ function buildMode7TreeFromCommits(
 
   commits.forEach((commit) => {
     if (commit.kind === 'head_commit') {
-      const label = truncateLabel(commit.node_label, 34);
+      const label = mode7NodeLabel(commit);
       nodes.set(commit.node_id, {
         id: commit.node_id,
         node_key: `compiler-mode7|${commit.node_id}`,
@@ -1639,7 +1825,7 @@ function buildMode7TreeFromCommits(
         label,
         normalized_label: label.toLowerCase(),
         axis_attrs: commit.axis_attrs,
-        text: `${commit.head_name}: ${commit.node_label}`,
+        text: mode7NodeText(commit, commit.node_label),
       });
 
       const parentId = commit.parent_node_id || rootNode.id;
@@ -1743,6 +1929,22 @@ function sggsStatusLabel(status: SggsStreamStatus): string {
   }
 }
 
+function mode7EvidenceCount(commits: Mode7HeadCommit[], collector: (attrs: Record<string, unknown>) => string[]): number {
+  return commits.reduce((count, commit) => count + (collector(commit.axis_attrs).length > 0 ? 1 : 0), 0);
+}
+
+function mode7SelectedNodeEvidence(node: ThoughtTreeNode | null): {
+  tokens: string[];
+  layers: string[];
+  structural: string[];
+} {
+  return {
+    tokens: mode7TokenEvidence(node?.axis_attrs),
+    layers: mode7LayerEvidence(node?.axis_attrs),
+    structural: mode7StructuralEvidence(node?.axis_attrs),
+  };
+}
+
 // Walk a ray from `from` toward `to` and return the point where it exits the
 // shape centred at `from`. Used to clip edge endpoints to the boundary of the
 // source/target node so arrow tips touch the outer edge instead of piercing
@@ -1830,7 +2032,8 @@ function CompilerMode7LiveView({
   const [commits, setCommits] = useState<SggsCommit[]>([]);
   const [streamMessage, setStreamMessage] = useState<string | null>(null);
   const [fallbackVisibleCount, setFallbackVisibleCount] = useState(1);
-  const hasLiveHeads = commits.some((commit) => commit.kind === 'head_commit');
+  const headCommits = useMemo(() => commits.filter(isMode7HeadCommit), [commits]);
+  const hasLiveHeads = headCommits.length > 0;
 
   useEffect(() => {
     setCommits([]);
@@ -1887,6 +2090,23 @@ function CompilerMode7LiveView({
   }, [commits, fallbackTree, fallbackVisibleCount, hasLiveHeads, normalizedSource]);
 
   const mode7NodeCount = Math.max(0, tree.node_count - 1);
+  const tokenEvidenceCount = useMemo(
+    () => mode7EvidenceCount(headCommits, mode7TokenEvidence),
+    [headCommits],
+  );
+  const layerEvidenceCount = useMemo(
+    () => mode7EvidenceCount(headCommits, mode7LayerEvidence),
+    [headCommits],
+  );
+  const structuralEvidenceCount = useMemo(
+    () => mode7EvidenceCount(headCommits, mode7StructuralEvidence),
+    [headCommits],
+  );
+  const selectedNode = useMemo(
+    () => (selectedNodeId ? tree.nodes.find((node) => node.id === selectedNodeId) ?? null : null),
+    [selectedNodeId, tree.nodes],
+  );
+  const selectedEvidence = useMemo(() => mode7SelectedNodeEvidence(selectedNode), [selectedNode]);
 
   return (
     <div
@@ -1898,7 +2118,7 @@ function CompilerMode7LiveView({
         <Suspense
           fallback={
             <div className="absolute inset-0 flex items-center justify-center font-mono text-xs text-slate-400">
-              Loading Mode 7 Live graph...
+              Loading Mode 7 mechanistic trace...
             </div>
           }
         >
@@ -1911,12 +2131,24 @@ function CompilerMode7LiveView({
           />
         </Suspense>
       </SggsErrorBoundary>
-      <div className="pointer-events-none absolute left-2 top-2 max-w-[calc(100%-1rem)] rounded-md border border-violet-400/20 bg-black/55 px-2 py-1 font-mono text-[9px] text-violet-100 backdrop-blur-sm">
-        <span className="uppercase tracking-wider text-violet-300">Mode 7 Live</span>
+      <div className="pointer-events-none absolute left-2 top-2 flex max-w-[calc(100%-1rem)] flex-wrap items-center gap-x-1 rounded-md border border-violet-400/20 bg-black/55 px-2 py-1 font-mono text-[9px] text-violet-100 backdrop-blur-sm">
+        <span className="uppercase tracking-wider text-violet-300">Mode 7 Trace</span>
+        <span className="mx-1 text-slate-500">|</span>
+        <span>Network Attribution / Mechanistic Trace</span>
         <span className="mx-1 text-slate-500">|</span>
         <span>{sggsStatusLabel(streamEnabled ? stream.status : 'idle')}</span>
         <span className="mx-1 text-slate-500">|</span>
-        <span>{mode7NodeCount} visible nodes</span>
+        <span>{hasLiveHeads ? `${headCommits.length} heads` : 'heads pending'}</span>
+        <span className="mx-1 text-slate-500">|</span>
+        <span>{tokenEvidenceCount > 0 ? `${tokenEvidenceCount} token refs` : 'tokens pending'}</span>
+        <span className="mx-1 text-slate-500">|</span>
+        <span>{layerEvidenceCount > 0 ? `${layerEvidenceCount} layer refs` : 'layers pending'}</span>
+        <span className="mx-1 text-slate-500">|</span>
+        <span>
+          {structuralEvidenceCount > 0
+            ? `${structuralEvidenceCount} structural commits`
+            : `${mode7NodeCount} structural nodes`}
+        </span>
         {stream.lastEventId && (
           <>
             <span className="mx-1 text-slate-500">|</span>
@@ -1925,17 +2157,45 @@ function CompilerMode7LiveView({
         )}
       </div>
       <div className="pointer-events-none absolute bottom-2 left-2 max-w-[min(36rem,calc(100%-1rem))] rounded-md bg-black/45 px-2 py-1 font-mono text-[9px] text-slate-300 backdrop-blur-sm">
-        source: {normalizedSource || 'compiler result unavailable'}
+        Living Thought Atlas source: {normalizedSource || 'compiler result unavailable'}
       </div>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute bottom-2 right-2 rounded-md bg-black/45 px-2 py-1 font-mono text-[9px] text-slate-400 backdrop-blur-sm"
       >
-        drag to orbit every direction · wheel to zoom · live commits grow the tree
+        drag to orbit every direction · wheel to zoom · head commits grow the trace
       </div>
       {streamMessage && commits.length === 0 && (
         <div className="pointer-events-none absolute right-2 top-2 max-w-[20rem] rounded-md border border-amber-400/20 bg-amber-500/10 px-2 py-1 font-mono text-[9px] text-amber-200 backdrop-blur-sm">
-          stream unavailable; showing compiler-derived fallback
+          network attribution stream unavailable; showing compiler-derived Living Thought Atlas trace
+        </div>
+      )}
+      {selectedNode && (
+        <div className="pointer-events-none absolute right-2 top-12 max-w-[min(24rem,calc(100%-1rem))] rounded-md border border-cyan-400/20 bg-black/60 p-2 font-mono text-[9px] text-slate-200 backdrop-blur-sm">
+          <div className="mb-1 flex flex-wrap items-center gap-x-1 text-cyan-200">
+            <span className="uppercase tracking-wider">Selected mechanistic node</span>
+            <span className="text-slate-500">|</span>
+            <span>head: {compactMode7Name(selectedNode.role || selectedNode.kind)}</span>
+          </div>
+          <div className="text-[10px] text-white">{selectedNode.label}</div>
+          <div className="mt-1 text-slate-400">kind: {compactMode7Name(selectedNode.kind)}</div>
+          <div className="mt-2 grid gap-1">
+            <div>
+              <span className="text-violet-300">tokens</span>
+              <span className="text-slate-500">: </span>
+              <span>{selectedEvidence.tokens.length ? selectedEvidence.tokens.join(' | ') : 'no token attrs on this commit'}</span>
+            </div>
+            <div>
+              <span className="text-violet-300">layers</span>
+              <span className="text-slate-500">: </span>
+              <span>{selectedEvidence.layers.length ? selectedEvidence.layers.join(' | ') : 'no layer attrs on this commit'}</span>
+            </div>
+            <div>
+              <span className="text-violet-300">structural evidence</span>
+              <span className="text-slate-500">: </span>
+              <span>{selectedEvidence.structural.length ? selectedEvidence.structural.join(' | ') : 'commit metadata pending'}</span>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -2113,7 +2373,7 @@ export function DiagramPreview({
                 : 'text-slate-500 hover:text-slate-200'
               }`}
             >
-              {view === 'space' ? '3D Space' : view === 'map' ? '2D Map' : 'Mode 7 Live'}
+              {view === 'space' ? '3D Space' : view === 'map' ? '2D Map' : 'Mode 7 Trace'}
             </button>
           ))}
         </div>

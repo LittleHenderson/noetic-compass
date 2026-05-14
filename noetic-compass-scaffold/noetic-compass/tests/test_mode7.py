@@ -65,6 +65,51 @@ def test_mode7_live_streams_sggs_events_from_expression(client, auth_headers):
     assert all("node_key" in payload["axis_attrs"] for payload in head_payloads)
 
     end = events[-1]["data"]
+    required_mode7_attrs = {
+        "mode7_semantics",
+        "activation_hooks",
+        "activation_layers",
+        "per_head_attribution",
+        "load_bearing_tokens",
+        "logits_summary",
+        "copy_distribution_summary",
+        "domain_descent_attention",
+        "structural_commit_linkage",
+    }
+    for payload in head_payloads:
+        attrs = payload["axis_attrs"]
+        assert required_mode7_attrs <= set(attrs)
+
+        assert attrs["mode7_semantics"]["mode"] == 7
+        assert attrs["mode7_semantics"]["name"] == "Network Attribution / Mechanistic Trace"
+
+        assert "hook_status" in attrs["activation_hooks"]
+        assert attrs["activation_layers"]
+
+        per_head = attrs["per_head_attribution"]
+        assert {"noetic", "domain", "drive", "register"} <= set(per_head)
+        assert all("top_tokens" in per_head[head] for head in ("noetic", "domain"))
+
+        assert attrs["load_bearing_tokens"]
+        assert attrs["logits_summary"]["per_head"]["domain"]["logit_count"] > 0
+        assert "coverage" in attrs["copy_distribution_summary"]
+
+        dda = attrs["domain_descent_attention"]
+        assert dda["applicable"] is True
+        assert dda["selected_domain"] == "C"
+        assert "C" in dda["observed_domains"]
+
+        linkage = attrs["structural_commit_linkage"]
+        assert linkage["commit_event"] == "head_commit"
+        assert linkage["turn_id"] == payload["turn_id"]
+        assert linkage["trace_id"] == end["final_trace_id"]
+        assert linkage["head_index"] == payload["head_index"]
+        assert linkage["head_name"] == payload["head_name"]
+        assert linkage["node_id"] == payload["node_id"]
+        assert linkage["node_key"] == attrs["node_key"]
+        assert linkage["parent_node_id"] == payload["parent_node_id"]
+        assert isinstance(linkage["incoming_edges"], list)
+
     assert end["final_trace_id"]
     assert end["total_heads"] == len(head_payloads)
 

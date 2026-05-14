@@ -398,6 +398,948 @@ function isSggsEventKind(value: unknown): value is SggsEventKind {
   );
 }
 
+// -- Mode 7 mechanistic axis_attr selectors --------------------------------
+
+export const MODE7_TRACE_SCHEMA_VERSION = 'mode_7_trace.v1' as const;
+export type Mode7TraceSchemaVersion = typeof MODE7_TRACE_SCHEMA_VERSION;
+
+export const MODE7_LOAD_BEARING_SLOT_TYPES = [
+  'OMEGA',
+  'STAGE_VAR',
+  'COEFFICIENT',
+  'REGISTER_LETTER',
+  'DOMAIN_LETTER',
+  'DRIVE_LETTER',
+  'FRACTAL_K_LITERAL',
+  'NOETIC_PHRASE',
+] as const;
+export type Mode7LoadBearingSlotType =
+  (typeof MODE7_LOAD_BEARING_SLOT_TYPES)[number];
+
+export interface Mode7ActivationLayer {
+  name: string;
+  l2Norm: number | null;
+  meanAbs: number | null;
+  maxAbs: number | null;
+  hookFired: boolean | null;
+  source: string;
+}
+
+export interface Mode7AttentionHead {
+  label: string;
+  layer: string | null;
+  headIndex: number | null;
+  entropy: number | null;
+  weight: number | null;
+  sourceToken: string | null;
+  targetToken: string | null;
+}
+
+export interface Mode7LoadBearingToken {
+  position: number;
+  tokenId: number | null;
+  token: string;
+  slotType: string | null;
+  slotConfidence: number | null;
+  copySourceIndex: number | null;
+  sourceToken: string | null;
+  copyEntropy: number | null;
+  phraseBiasActive: boolean | null;
+  importance: number | null;
+}
+
+export interface Mode7TokenProbability {
+  position: number | null;
+  tokenId: number | null;
+  token: string | null;
+  probability: number;
+  rank: number;
+}
+
+export interface Mode7CopyProbability {
+  position: number | null;
+  sourcePosition: number | null;
+  sourceToken: string | null;
+  probability: number;
+  rank: number;
+}
+
+export interface Mode7LogitsCopySummary {
+  positions: number;
+  copiedPositions: number;
+  maxLmProbability: number | null;
+  maxCopyProbability: number | null;
+  meanCopyEntropy: number | null;
+  topLm: Mode7TokenProbability[];
+  topCopy: Mode7CopyProbability[];
+  routeCounts: Record<string, number>;
+}
+
+export interface Mode7StructuralCommitLinkage {
+  turnId: string;
+  headIndex: number;
+  headName: string;
+  nodeId: string;
+  parentNodeId: string | null;
+  nodeKind: string;
+  nodeLabel: string;
+  traceId: string | null;
+  objectId: string | null;
+  parentIds: string[];
+  source: string | null;
+  modelCheckpointId: string | null;
+  modelCodeVersion: string | null;
+  schemaVersion: string | null;
+}
+
+export interface Mode7MechanisticTrace {
+  label: string;
+  explanation: string;
+  activationLayers: Mode7ActivationLayer[];
+  attentionHeads: Mode7AttentionHead[];
+  loadBearingTokens: Mode7LoadBearingToken[];
+  logitsCopySummary: Mode7LogitsCopySummary;
+  structuralCommit: Mode7StructuralCommitLinkage;
+  warnings: string[];
+  rawAxisAttrs: Record<string, unknown>;
+}
+
+function firstPlainObject(...values: unknown[]): Record<string, unknown> | null {
+  for (const value of values) {
+    if (isPlainObject(value)) return value;
+  }
+  return null;
+}
+
+function childObject(
+  obj: Record<string, unknown>,
+  key: string,
+): Record<string, unknown> | null {
+  const value = obj[key];
+  return isPlainObject(value) ? value : null;
+}
+
+function stringOrNull(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  return trimmed ? trimmed : null;
+}
+
+function firstString(...values: unknown[]): string | null {
+  for (const value of values) {
+    const parsed = stringOrNull(value);
+    if (parsed !== null) return parsed;
+  }
+  return null;
+}
+
+function numberOrNull(value: unknown): number | null {
+  return typeof value === 'number' && Number.isFinite(value) ? value : null;
+}
+
+function firstNumber(...values: unknown[]): number | null {
+  for (const value of values) {
+    const parsed = numberOrNull(value);
+    if (parsed !== null) return parsed;
+  }
+  return null;
+}
+
+function booleanOrNull(value: unknown): boolean | null {
+  return typeof value === 'boolean' ? value : null;
+}
+
+function firstBoolean(...values: unknown[]): boolean | null {
+  for (const value of values) {
+    const parsed = booleanOrNull(value);
+    if (parsed !== null) return parsed;
+  }
+  return null;
+}
+
+function recordArray(value: unknown): Record<string, unknown>[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is Record<string, unknown> =>
+    isPlainObject(item),
+  );
+}
+
+function numberArray(value: unknown): number[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter(
+    (item): item is number =>
+      typeof item === 'number' && Number.isFinite(item),
+  );
+}
+
+function stringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => stringOrNull(item))
+    .filter((item): item is string => item !== null);
+}
+
+function numericRecord(value: unknown): Record<string, number> {
+  if (!isPlainObject(value)) return {};
+  const out: Record<string, number> = {};
+  for (const [key, raw] of Object.entries(value)) {
+    const parsed = numberOrNull(raw);
+    if (parsed !== null) out[key] = parsed;
+  }
+  return out;
+}
+
+function dedupeStrings(values: string[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const value of values) {
+    if (seen.has(value)) continue;
+    seen.add(value);
+    out.push(value);
+  }
+  return out;
+}
+
+function mode7AxisPayload(
+  axisAttrs: Record<string, unknown>,
+): Record<string, unknown> {
+  return (
+    firstPlainObject(
+      axisAttrs.mode_7_trace,
+      axisAttrs.mode7_trace,
+      axisAttrs.mode7,
+      axisAttrs.mechanistic_trace,
+      axisAttrs.mechanistic,
+      axisAttrs.network_attribution,
+      axisAttrs.live_trace,
+    ) ?? axisAttrs
+  );
+}
+
+export function selectMode7AxisPayload(
+  axisAttrs: Record<string, unknown>,
+): Record<string, unknown> {
+  return mode7AxisPayload(axisAttrs);
+}
+
+export function hasMode7MechanisticAxisAttrs(
+  axisAttrs: Record<string, unknown>,
+): boolean {
+  if (
+    firstPlainObject(
+      axisAttrs.mode_7_trace,
+      axisAttrs.mode7_trace,
+      axisAttrs.mode7,
+      axisAttrs.mechanistic_trace,
+      axisAttrs.mechanistic,
+      axisAttrs.network_attribution,
+      axisAttrs.live_trace,
+    ) !== null
+  ) {
+    return true;
+  }
+
+  const schema = stringOrNull(axisAttrs.schema_version);
+  if (
+    schema === MODE7_TRACE_SCHEMA_VERSION ||
+    schema === 'mechanistic_trace.v1' ||
+    schema === 'live_trace.v1'
+  ) {
+    return true;
+  }
+
+  return [
+    'activation_layers',
+    'layer_activations',
+    'attention_heads',
+    'decoder_per_position',
+    'logits_copy_summary',
+    'hook_status',
+    'bottleneck_top_k',
+    'p_copy_top5_per_position',
+    'lm_logits_top5_per_position',
+  ].some((key) => key in axisAttrs);
+}
+
+function collectHookStatus(
+  payload: Record<string, unknown>,
+): Record<string, boolean> {
+  const out: Record<string, boolean> = {};
+  const metadata = childObject(payload, 'metadata');
+  const encoder = childObject(payload, 'encoder');
+  const decoder = childObject(payload, 'decoder');
+  const candidates = [
+    payload.hook_status,
+    payload.hooks,
+    payload.activation_hooks,
+    metadata?.hook_status,
+    encoder?.hook_status,
+    decoder?.hook_status,
+  ];
+
+  for (const candidate of candidates) {
+    if (isPlainObject(candidate)) {
+      for (const [key, raw] of Object.entries(candidate)) {
+        const value = booleanOrNull(raw);
+        if (value !== null) out[key] = value;
+      }
+    }
+    for (const item of recordArray(candidate)) {
+      const name = firstString(item.name, item.hook, item.layer);
+      const fired = firstBoolean(item.fired, item.hook_fired, item.captured);
+      if (name !== null && fired !== null) out[name] = fired;
+    }
+  }
+
+  return out;
+}
+
+function pushUniqueLayer(
+  layers: Mode7ActivationLayer[],
+  layer: Mode7ActivationLayer,
+): void {
+  const existing = layers.findIndex((candidate) => candidate.name === layer.name);
+  if (existing === -1) {
+    layers.push(layer);
+    return;
+  }
+  layers[existing] = {
+    ...layers[existing],
+    ...layer,
+    l2Norm: layer.l2Norm ?? layers[existing].l2Norm,
+    meanAbs: layer.meanAbs ?? layers[existing].meanAbs,
+    maxAbs: layer.maxAbs ?? layers[existing].maxAbs,
+    hookFired: layer.hookFired ?? layers[existing].hookFired,
+  };
+}
+
+function layerHookStatus(
+  hookStatus: Record<string, boolean>,
+  name: string,
+): boolean | null {
+  if (name in hookStatus) return hookStatus[name];
+  if (name.startsWith('encoder.') && '_EncoderBlock' in hookStatus) {
+    return hookStatus._EncoderBlock;
+  }
+  if (name.startsWith('decoder.') && '_DecoderBlock' in hookStatus) {
+    return hookStatus._DecoderBlock;
+  }
+  return null;
+}
+
+export function selectMode7ActivationLayers(
+  axisAttrs: Record<string, unknown>,
+): Mode7ActivationLayer[] {
+  const payload = mode7AxisPayload(axisAttrs);
+  const hookStatus = collectHookStatus(payload);
+  const layers: Mode7ActivationLayer[] = [];
+
+  const explicitLayers = [
+    ...recordArray(payload.activation_layers),
+    ...recordArray(payload.layer_activations),
+  ];
+  explicitLayers.forEach((item, index) => {
+    const name = firstString(item.name, item.layer, item.hook) ?? `layer.${index}`;
+    pushUniqueLayer(layers, {
+      name,
+      l2Norm: firstNumber(item.l2_norm, item.l2Norm, item.l2),
+      meanAbs: firstNumber(item.mean_abs, item.meanAbs),
+      maxAbs: firstNumber(item.max_abs, item.maxAbs),
+      hookFired:
+        firstBoolean(item.hook_fired, item.hookFired, item.fired, item.captured) ??
+        layerHookStatus(hookStatus, name),
+      source: 'activation_layers',
+    });
+  });
+
+  const encoder = childObject(payload, 'encoder') ?? payload;
+  const encoderLayerL2 = [
+    ...numberArray(encoder.encoder_layer_l2),
+    ...numberArray(encoder.encoder_l2_per_layer),
+  ];
+  encoderLayerL2.forEach((l2Norm, index) => {
+    const name = `encoder.${index}`;
+    pushUniqueLayer(layers, {
+      name,
+      l2Norm,
+      meanAbs: null,
+      maxAbs: null,
+      hookFired: layerHookStatus(hookStatus, name),
+      source: 'encoder_layer_l2',
+    });
+  });
+
+  const decoderLayerL2 = [
+    ...numberArray(payload.decoder_layer_l2),
+    ...numberArray(payload.decoder_l2_per_layer),
+  ];
+  decoderLayerL2.forEach((l2Norm, index) => {
+    const name = `decoder.${index}`;
+    pushUniqueLayer(layers, {
+      name,
+      l2Norm,
+      meanAbs: null,
+      maxAbs: null,
+      hookFired: layerHookStatus(hookStatus, name),
+      source: 'decoder_layer_l2',
+    });
+  });
+
+  const perLayerValues: number[][] = [];
+  for (const position of decoderPositionRecords(payload)) {
+    numberArray(position.layer_l2).forEach((value, index) => {
+      const values = perLayerValues[index] ?? [];
+      values.push(value);
+      perLayerValues[index] = values;
+    });
+  }
+  perLayerValues.forEach((values, index) => {
+    const name = `decoder.${index}`;
+    const l2Norm =
+      values.length > 0
+        ? values.reduce((sum, value) => sum + value, 0) / values.length
+        : null;
+    pushUniqueLayer(layers, {
+      name,
+      l2Norm,
+      meanAbs: null,
+      maxAbs: null,
+      hookFired: layerHookStatus(hookStatus, name),
+      source: 'decoder_per_position.layer_l2',
+    });
+  });
+
+  for (const [name, fired] of Object.entries(hookStatus)) {
+    pushUniqueLayer(layers, {
+      name,
+      l2Norm: null,
+      meanAbs: null,
+      maxAbs: null,
+      hookFired: fired,
+      source: 'hook_status',
+    });
+  }
+
+  return layers;
+}
+
+export function selectMode7AttentionHeads(
+  axisAttrs: Record<string, unknown>,
+): Mode7AttentionHead[] {
+  const payload = mode7AxisPayload(axisAttrs);
+  const attention = childObject(payload, 'attention') ?? payload;
+  const heads: Mode7AttentionHead[] = [];
+
+  const explicitHeads = [
+    ...recordArray(payload.attention_heads),
+    ...recordArray(attention.heads),
+  ];
+  explicitHeads.forEach((item, index) => {
+    const layer = firstString(item.layer, item.layer_name, item.module);
+    const headIndex = firstNumber(item.head_index, item.headIndex, item.head);
+    const label =
+      firstString(item.label, item.name) ??
+      `${layer ?? 'attention'}${headIndex !== null ? `.head${headIndex}` : `.${index}`}`;
+    heads.push({
+      label,
+      layer,
+      headIndex,
+      entropy: firstNumber(item.entropy, item.attention_entropy),
+      weight: firstNumber(item.weight, item.probability, item.score),
+      sourceToken: firstString(item.source_token, item.sourceToken),
+      targetToken: firstString(item.target_token, item.targetToken),
+    });
+  });
+
+  const entropyPerLayer = [
+    ...numberArray(payload.attention_entropy_per_layer),
+    ...numberArray(attention.attention_entropy_per_layer),
+  ];
+  entropyPerLayer.forEach((entropy, index) => {
+    heads.push({
+      label: `attention.layer${index}`,
+      layer: `layer.${index}`,
+      headIndex: null,
+      entropy,
+      weight: null,
+      sourceToken: null,
+      targetToken: null,
+    });
+  });
+
+  const entropySummary = firstPlainObject(
+    payload.attention_entropy_summary,
+    attention.attention_entropy_summary,
+  );
+  if (entropySummary) {
+    const entropy = firstNumber(entropySummary.entropy, entropySummary.mean);
+    if (entropy !== null) {
+      heads.push({
+        label: 'attention.summary',
+        layer: null,
+        headIndex: null,
+        entropy,
+        weight: null,
+        sourceToken: null,
+        targetToken: null,
+      });
+    }
+  }
+
+  return heads;
+}
+
+function sourceTokenMap(payload: Record<string, unknown>): Map<number, string> {
+  const input = childObject(payload, 'input');
+  const sourceTokens = [
+    ...recordArray(input?.bpe_tokens),
+    ...recordArray(input?.source_tokens),
+    ...recordArray(payload.bpe_tokens),
+    ...recordArray(payload.source_tokens),
+  ];
+  const map = new Map<number, string>();
+  sourceTokens.forEach((item, index) => {
+    const pos = firstNumber(item.position, item.index) ?? index;
+    const token = firstString(item.token_str, item.token, item.text);
+    if (token !== null) map.set(pos, token);
+  });
+  return map;
+}
+
+function decoderPositionRecords(
+  payload: Record<string, unknown>,
+): Record<string, unknown>[] {
+  const direct = recordArray(payload.decoder_per_position);
+  if (direct.length > 0) return direct;
+
+  const lmRows = Array.isArray(payload.lm_logits_top5_per_position)
+    ? payload.lm_logits_top5_per_position
+    : [];
+  const copyRows = Array.isArray(payload.p_copy_top5_per_position)
+    ? payload.p_copy_top5_per_position
+    : [];
+  const slotTypes = Array.isArray(payload.slot_type_decision_per_position)
+    ? payload.slot_type_decision_per_position
+    : [];
+  const slotConfidences = Array.isArray(
+    payload.slot_type_confidence_per_position,
+  )
+    ? payload.slot_type_confidence_per_position
+    : [];
+  const copySources = Array.isArray(payload.copy_source_indices)
+    ? payload.copy_source_indices
+    : [];
+  const copyEntropies = Array.isArray(payload.p_copy_entropy_per_position)
+    ? payload.p_copy_entropy_per_position
+    : [];
+  const decodedTokens = Array.isArray(payload.raw_decoded_tokens)
+    ? payload.raw_decoded_tokens
+    : [];
+
+  const count = Math.max(
+    lmRows.length,
+    copyRows.length,
+    slotTypes.length,
+    slotConfidences.length,
+    copySources.length,
+    copyEntropies.length,
+    decodedTokens.length,
+  );
+  return Array.from({ length: count }, (_, position) => ({
+    position,
+    lm_logits_top5: lmRows[position],
+    p_copy_top5: copyRows[position],
+    slot_type: slotTypes[position],
+    slot_type_confidence: slotConfidences[position],
+    copy_source_index: copySources[position],
+    p_copy_entropy: copyEntropies[position],
+    decoded_token_id: decodedTokens[position],
+  }));
+}
+
+function topLmFromEntry(
+  entry: unknown,
+  position: number | null,
+  rank: number,
+): Mode7TokenProbability | null {
+  if (Array.isArray(entry)) {
+    const tokenId = numberOrNull(entry[0]);
+    const token = typeof entry[0] === 'string' ? entry[0] : stringOrNull(entry[2]);
+    const probability = firstNumber(entry[1], entry[2]);
+    if (probability === null) return null;
+    return { position, tokenId, token, probability, rank };
+  }
+  if (!isPlainObject(entry)) return null;
+  const probability = firstNumber(entry.probability, entry.prob, entry.p, entry.score);
+  if (probability === null) return null;
+  return {
+    position,
+    tokenId: firstNumber(entry.token_id, entry.tokenId, entry.id),
+    token: firstString(entry.token_str, entry.token, entry.text),
+    probability,
+    rank,
+  };
+}
+
+function topCopyFromEntry(
+  entry: unknown,
+  position: number | null,
+  rank: number,
+  sources: Map<number, string>,
+): Mode7CopyProbability | null {
+  if (Array.isArray(entry)) {
+    const sourcePosition = numberOrNull(entry[0]);
+    const probability = firstNumber(entry[1], entry[2]);
+    if (probability === null) return null;
+    return {
+      position,
+      sourcePosition,
+      sourceToken:
+        sourcePosition !== null ? sources.get(sourcePosition) ?? null : null,
+      probability,
+      rank,
+    };
+  }
+  if (!isPlainObject(entry)) return null;
+  const probability = firstNumber(entry.probability, entry.prob, entry.p, entry.score);
+  if (probability === null) return null;
+  const sourcePosition = firstNumber(
+    entry.source_position,
+    entry.sourcePosition,
+    entry.src_position,
+    entry.srcPosition,
+    entry.position,
+  );
+  return {
+    position,
+    sourcePosition,
+    sourceToken:
+      firstString(entry.source_token, entry.sourceToken, entry.token) ??
+      (sourcePosition !== null ? sources.get(sourcePosition) ?? null : null),
+    probability,
+    rank,
+  };
+}
+
+function topLmForPosition(
+  position: Record<string, unknown>,
+  outputPosition: number | null,
+): Mode7TokenProbability[] {
+  return (Array.isArray(position.lm_logits_top5)
+    ? position.lm_logits_top5
+    : Array.isArray(position.lm_top5)
+      ? position.lm_top5
+      : []
+  )
+    .map((entry, index) => topLmFromEntry(entry, outputPosition, index + 1))
+    .filter((entry): entry is Mode7TokenProbability => entry !== null);
+}
+
+function topCopyForPosition(
+  position: Record<string, unknown>,
+  outputPosition: number | null,
+  sources: Map<number, string>,
+): Mode7CopyProbability[] {
+  return (Array.isArray(position.p_copy_top5)
+    ? position.p_copy_top5
+    : Array.isArray(position.copy_top5)
+      ? position.copy_top5
+      : []
+  )
+    .map((entry, index) =>
+      topCopyFromEntry(entry, outputPosition, index + 1, sources),
+    )
+    .filter((entry): entry is Mode7CopyProbability => entry !== null);
+}
+
+function isLoadBearingSlot(slotType: string | null): boolean {
+  return (
+    slotType !== null &&
+    (MODE7_LOAD_BEARING_SLOT_TYPES as readonly string[]).includes(slotType)
+  );
+}
+
+export function selectMode7LoadBearingTokens(
+  axisAttrs: Record<string, unknown>,
+): Mode7LoadBearingToken[] {
+  const payload = mode7AxisPayload(axisAttrs);
+  const sources = sourceTokenMap(payload);
+  const explicit = [
+    ...recordArray(payload.load_bearing_tokens),
+    ...recordArray(payload.loadBearingTokens),
+  ];
+  if (explicit.length > 0) {
+    return explicit.map((item, index) => {
+      const copySourceIndex = firstNumber(
+        item.copy_source_index,
+        item.copySourceIndex,
+        item.source_position,
+      );
+      return {
+        position: firstNumber(item.position, item.index) ?? index,
+        tokenId: firstNumber(item.token_id, item.tokenId, item.id),
+        token: firstString(item.token_str, item.token, item.text) ?? '',
+        slotType: firstString(item.slot_type, item.slotType),
+        slotConfidence: firstNumber(
+          item.slot_type_confidence,
+          item.slotConfidence,
+          item.confidence,
+        ),
+        copySourceIndex,
+        sourceToken:
+          firstString(item.source_token, item.sourceToken) ??
+          (copySourceIndex !== null ? sources.get(copySourceIndex) ?? null : null),
+        copyEntropy: firstNumber(item.p_copy_entropy, item.copyEntropy),
+        phraseBiasActive: booleanOrNull(item.phrase_bias_active),
+        importance: firstNumber(item.importance, item.weight, item.probability),
+      };
+    });
+  }
+
+  return decoderPositionRecords(payload)
+    .map((position, index): Mode7LoadBearingToken | null => {
+      const outputPosition = firstNumber(position.position, position.index) ?? index;
+      const slotType = firstString(position.slot_type, position.slotType);
+      const copySourceIndex = firstNumber(
+        position.copy_source_index,
+        position.copySourceIndex,
+      );
+      const copyIsActive = copySourceIndex !== null && copySourceIndex >= 0;
+      const phraseBiasActive = booleanOrNull(position.phrase_bias_active);
+      const topCopy = topCopyForPosition(position, outputPosition, sources);
+      const maxCopy = topCopy[0]?.probability ?? null;
+      if (
+        !isLoadBearingSlot(slotType) &&
+        !copyIsActive &&
+        phraseBiasActive !== true
+      ) {
+        return null;
+      }
+      return {
+        position: outputPosition,
+        tokenId: firstNumber(position.decoded_token_id, position.token_id),
+        token:
+          firstString(
+            position.decoded_token_str,
+            position.token_str,
+            position.token,
+          ) ?? '',
+        slotType,
+        slotConfidence: firstNumber(
+          position.slot_type_confidence,
+          position.slotConfidence,
+        ),
+        copySourceIndex,
+        sourceToken:
+          copyIsActive
+            ? sources.get(copySourceIndex) ?? null
+            : topCopy[0]?.sourceToken ?? null,
+        copyEntropy: firstNumber(position.p_copy_entropy, position.copyEntropy),
+        phraseBiasActive,
+        importance: Math.max(
+          firstNumber(
+            position.slot_type_confidence,
+            position.slotConfidence,
+            0,
+          ) ?? 0,
+          maxCopy ?? 0,
+        ),
+      };
+    })
+    .filter((item): item is Mode7LoadBearingToken => item !== null);
+}
+
+export function selectMode7LogitsCopySummary(
+  axisAttrs: Record<string, unknown>,
+): Mode7LogitsCopySummary {
+  const payload = mode7AxisPayload(axisAttrs);
+  const explicit = firstPlainObject(
+    payload.logits_copy_summary,
+    payload.logitsCopySummary,
+  );
+  const sources = sourceTokenMap(payload);
+  const positions = decoderPositionRecords(payload);
+  const topLm = positions.flatMap((position, index) =>
+    topLmForPosition(
+      position,
+      firstNumber(position.position, position.index) ?? index,
+    ),
+  );
+  const topCopy = positions.flatMap((position, index) =>
+    topCopyForPosition(
+      position,
+      firstNumber(position.position, position.index) ?? index,
+      sources,
+    ),
+  );
+  const copyEntropies = positions
+    .map((position) => firstNumber(position.p_copy_entropy, position.copyEntropy))
+    .filter((value): value is number => value !== null);
+  const copiedPositions = positions.filter((position) => {
+    const copySource = firstNumber(
+      position.copy_source_index,
+      position.copySourceIndex,
+    );
+    return copySource !== null && copySource >= 0;
+  }).length;
+
+  const sortedLm = topLm
+    .slice()
+    .sort((a, b) => b.probability - a.probability)
+    .slice(0, 5);
+  const sortedCopy = topCopy
+    .slice()
+    .sort((a, b) => b.probability - a.probability)
+    .slice(0, 5);
+
+  return {
+    positions:
+      firstNumber(explicit?.positions, explicit?.position_count) ??
+      positions.length,
+    copiedPositions:
+      firstNumber(explicit?.copied_positions, explicit?.copiedPositions) ??
+      copiedPositions,
+    maxLmProbability:
+      firstNumber(explicit?.max_lm_probability, explicit?.maxLmProbability) ??
+      sortedLm[0]?.probability ??
+      null,
+    maxCopyProbability:
+      firstNumber(
+        explicit?.max_copy_probability,
+        explicit?.maxCopyProbability,
+      ) ??
+      sortedCopy[0]?.probability ??
+      null,
+    meanCopyEntropy:
+      firstNumber(explicit?.mean_copy_entropy, explicit?.meanCopyEntropy) ??
+      (copyEntropies.length > 0
+        ? copyEntropies.reduce((sum, value) => sum + value, 0) /
+          copyEntropies.length
+        : null),
+    topLm: sortedLm,
+    topCopy: sortedCopy,
+    routeCounts: {
+      ...numericRecord(payload.emission_route_counts),
+      ...numericRecord(payload.route_counts),
+      ...numericRecord(explicit?.route_counts),
+      ...numericRecord(explicit?.routeCounts),
+    },
+  };
+}
+
+export function selectMode7StructuralCommitLinkage(
+  commit: SggsHeadCommit,
+): Mode7StructuralCommitLinkage {
+  const payload = mode7AxisPayload(commit.axis_attrs);
+  const structural =
+    firstPlainObject(
+      payload.structural_commit,
+      payload.structural,
+      payload.commit_linkage,
+    ) ?? payload;
+  const parentIds = dedupeStrings([
+    ...stringArray(payload.parent_ids),
+    ...stringArray(structural.parent_ids),
+    commit.turn_id,
+    ...(commit.parent_node_id ? [commit.parent_node_id] : []),
+  ]);
+  return {
+    turnId: commit.turn_id,
+    headIndex: commit.head_index,
+    headName: commit.head_name,
+    nodeId: commit.node_id,
+    parentNodeId: commit.parent_node_id,
+    nodeKind: commit.node_kind,
+    nodeLabel: commit.node_label,
+    traceId: firstString(
+      payload.trace_id,
+      structural.trace_id,
+      payload.final_trace_id,
+      structural.final_trace_id,
+    ),
+    objectId: firstString(
+      payload.id,
+      structural.id,
+      payload.object_id,
+      structural.object_id,
+    ),
+    parentIds,
+    source: firstString(payload.source, structural.source),
+    modelCheckpointId: firstString(
+      payload.model_checkpoint_id,
+      structural.model_checkpoint_id,
+    ),
+    modelCodeVersion: firstString(
+      payload.model_code_version,
+      structural.model_code_version,
+    ),
+    schemaVersion: firstString(payload.schema_version, structural.schema_version),
+  };
+}
+
+export function selectMode7MechanisticLabel(commit: SggsHeadCommit): string {
+  const payload = mode7AxisPayload(commit.axis_attrs);
+  const summary = childObject(payload, 'summary');
+  const dominant = [
+    firstString(summary?.dominant_noetic_name),
+    firstString(summary?.dominant_domain_name),
+  ]
+    .filter((part): part is string => part !== null)
+    .join(' / ');
+  return (
+    firstString(
+      payload.mechanistic_label,
+      payload.label,
+      summary?.label,
+      dominant,
+    ) ?? `Network Attribution: ${shortLiveLabel(commit.node_label, commit.head_name)}`
+  );
+}
+
+export function selectMode7MechanisticExplanation(
+  commit: SggsHeadCommit,
+): string {
+  const payload = mode7AxisPayload(commit.axis_attrs);
+  const summary = childObject(payload, 'summary');
+  const explicit = firstString(
+    payload.mechanistic_explanation,
+    payload.explanation,
+    summary?.explanation,
+  );
+  if (explicit !== null) return explicit;
+
+  const layerCount = selectMode7ActivationLayers(commit.axis_attrs).length;
+  const tokenCount = selectMode7LoadBearingTokens(commit.axis_attrs).length;
+  const copySummary = selectMode7LogitsCopySummary(commit.axis_attrs);
+  return (
+    `Activation hooks: ${layerCount}; load-bearing tokens: ${tokenCount}; ` +
+    `copy-linked positions: ${copySummary.copiedPositions}/${copySummary.positions}.`
+  );
+}
+
+export function selectMode7MechanisticTrace(
+  commit: SggsHeadCommit,
+): Mode7MechanisticTrace | null {
+  if (!hasMode7MechanisticAxisAttrs(commit.axis_attrs)) return null;
+  const payload = mode7AxisPayload(commit.axis_attrs);
+  const summary = childObject(payload, 'summary');
+  return {
+    label: selectMode7MechanisticLabel(commit),
+    explanation: selectMode7MechanisticExplanation(commit),
+    activationLayers: selectMode7ActivationLayers(commit.axis_attrs),
+    attentionHeads: selectMode7AttentionHeads(commit.axis_attrs),
+    loadBearingTokens: selectMode7LoadBearingTokens(commit.axis_attrs),
+    logitsCopySummary: selectMode7LogitsCopySummary(commit.axis_attrs),
+    structuralCommit: selectMode7StructuralCommitLinkage(commit),
+    warnings: dedupeStrings([
+      ...stringArray(payload.trace_warnings),
+      ...stringArray(summary?.trace_warnings),
+      ...stringArray(payload.diagnostics),
+    ]),
+    rawAxisAttrs: commit.axis_attrs,
+  };
+}
+
 // ── Per-kind field validators ────────────────────────────────────────────
 //
 // Codex audit 3f495ba blocker 2 (2026-05-13): the previous parser accepted
