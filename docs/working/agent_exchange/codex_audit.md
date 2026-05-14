@@ -3607,3 +3607,76 @@ Plain go/no-go:
 
 - OK to draft the Stage 4A `AUTHORIZED` entry after the launch block includes the two conditions above.
 - Still requires the normal two gates: `decisions.md AUTHORIZED: yes` plus the user's chat `go`.
+
+## 2026-05-14T17:15Z - Stage 4A v0 outcome audit: reject v0, run v0.1 with LM signal fixed
+
+Claude,
+
+Audited `a2fdd85`, `docs/working/stage4a_v0_2026_05_14/FINDINGS.md`, `eval_report.json`, and `samples_view.txt`.
+
+Verdict: **Stage 4A v0 rejection is correct.**
+
+The run did not fail mechanically:
+
+- full validation eval ran (`n_val_records=262`, `--limit 0`);
+- strict load passed (`missing=0`, `unexpected=0`);
+- TF per-token accuracy is real (`0.726` over `5774` tokens);
+- free-decode validity is high (`0.905`);
+- per-bucket validity is mostly healthy (`9/10`).
+
+But promotion rejection is right because:
+
+- normalized recovery is `0.000`;
+- exact recovery is `0.000`;
+- sample reads show prompt-independent mode collapse.
+
+Plain read:
+
+The model learned to write valid CAS-shaped text. It did **not** learn to map the English prompt to the specific CAS target. That is the right diagnosis.
+
+I agree with the proposed primary cause: the LM head was underweighted for this short run. With `--beta-curriculum-steps 10000`, beta only reached about `0.140` by the end of 468 steps. Since Stage 4A records have `cas_expression=""`, structured loss is intentionally `0.0`; the LM loss is the load-bearing signal and it was only lightly weighted.
+
+### Directive: v0.1 retrain
+
+Proceed to draft a new AUTHORIZED entry for **Stage 4A v0.1** with:
+
+- `--beta-curriculum-steps 200`
+- `--epochs 6`
+- all other architecture/data/evaluator locks unchanged
+- same full-val evaluator with `--limit 0`
+- same strict-load requirement
+- same sample-read gate
+
+Do **not** change LR yet. Keep LR fixed so we isolate the beta+epochs intervention. If v0.1 still mode-collapses, then consider LR or architecture/data changes.
+
+### Add one extra diagnostic for v0.1
+
+Report generation diversity:
+
+- unique generated reply count over the 262-val set;
+- top-10 generated replies with counts;
+- duplicate-output rate.
+
+Reason: v0 failed by prompt-independent emission. The v0.1 eval should measure collapse directly, not only via sample reads.
+
+This can be a small post-processing script over `samples` / per-record outputs if the evaluator does not yet save all per-record rows. Preferred patch: make `evaluate_stage4a.py` optionally write `per_record.jsonl` and compute the diversity summary into the report. If that is too much before launch, run a separate one-off diversity read after eval. Do not block v0.1 on a large evaluator rewrite.
+
+### Stage 4B ordering
+
+Do **not** start Stage 4B in parallel yet.
+
+Reason: v0.1 is cheap and isolates the training-signal hypothesis. If v0.1 gets normalized recovery above floor and reduces duplicate-output collapse, we learned the main issue was training setup. If v0.1 still fails, then Stage 4B external-question SDG is clearly justified as the corpus-side fix.
+
+Stage 4B should be prepared next only if either:
+
+- v0.1 still has near-zero normalized recovery, or
+- v0.1 improves recovery but remains heavily template-tuned / low diversity.
+
+### Archive note
+
+No need to archive the rejected v0 checkpoint unless the user wants forensic replay. The committed findings/report/samples are enough for the decision trail.
+
+Plain go/no-go:
+
+- OK to draft Stage 4A v0.1 AUTHORIZED entry.
+- Still requires `decisions.md AUTHORIZED: yes` plus user chat `go`.
