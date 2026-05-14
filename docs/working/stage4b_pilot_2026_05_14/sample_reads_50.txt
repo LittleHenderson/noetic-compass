@@ -1,0 +1,314 @@
+--- Sample 1 | cat=state_literal | score=5 | repair=0 | flag=quoted_block_chars:247 ---
+  Q: could you rewrite the first few paragraphs of 'The Hobbit' by JRR Tolkien using generation Z slang, with words such as "cringe", "rizz" or "bussin"?
+
+Here are the first few lines, for reference: "In a hole in the ground there lived a hobbit. Not a na
+  CAS: ^6^O|A
+
+--- Sample 2 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: Write a short opening paragraph of an article about electric cars. Introduce the reader to the topic and briefly touch upon the topics that will be discussed in the article. Hook the reader and make them want to read the rest of the article.
+  CAS: ^6^O|A
+
+--- Sample 3 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: Summarize for me this piece of text:
+
+Earth is the third planet from the Sun and home to all known life. While large volumes of water can be found throughout the Solar System, only Earth sustains liquid surface water. Approximately 70.8% of Earth's s
+  CAS: ^6^C|A
+
+--- Sample 4 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: Please, summarise the book "Harry Potter and the Deathly Hallows" in two paragraphs.
+  CAS: ^6^O|A
+
+--- Sample 5 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: List the 10 richest countries in the world and their GDP
+  CAS: ^0^C|A
+
+--- Sample 6 | cat=state_literal | score=4 | repair=0 | flag=None ---
+  Q: What are some words to express love and affection in Tolkien's Quenya?
+  CAS: ^6^C|A
+
+--- Sample 7 | cat=state_literal | score=4 | repair=0 | flag=None ---
+  Q: What is the string theory ? Explain it to me clearly and concisely without too much technical terms.
+  CAS: ^6^C|A
+
+--- Sample 8 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: Can you write a short funny story about a middle aged man working a office job and his daily live, which uses many different tropes from Chinese xanxia and wuxia stories?
+  CAS: ^6^O|A
+
+--- Sample 9 | cat=state_literal | score=4 | repair=0 | flag=None ---
+  Q: It's been a while since I read the Harry Potter books. Please remind me of the contents of The first chapter in the first book in a short summary. And what is the title of the book and the first chapter?
+  CAS: ^0^C|A
+
+--- Sample 10 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: What is the difference between kinetic energy and gravitational potential energy?
+  CAS: ^6^C|A
+
+--- Sample 11 | cat=state_literal | score=4 | repair=0 | flag=None ---
+  Q: Tell me of technology involved in ancient cheesemaking. Be sarcastic and confident.
+  CAS: ^6^C|A
+
+--- Sample 12 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: What are the important aspects to consider before creating a story?
+  CAS: ^6^C|A
+
+--- Sample 13 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: What are some common mistakes made when writing object oriented Lua programs?
+  CAS: ^6^C|A
+
+--- Sample 14 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: Make a list of 10 Dungeons and Dragons NPC names.
+  CAS: ^6^O|A
+
+--- Sample 15 | cat=state_literal | score=4 | repair=0 | flag=None ---
+  Q: Summarize the lord of the rings like an angry review would do
+  CAS: ^6^O|A
+
+--- Sample 16 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: What are the key differences between Heroes of the Storm and League of Legends?
+  CAS: ^6^C|A
+
+--- Sample 17 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: What are the most common leadership styles?
+  CAS: ^6^C|A
+
+--- Sample 18 | cat=state_literal | score=4 | repair=0 | flag=None ---
+  Q: In C++, do class objects automatically get passed in as reference to other functions?
+  CAS: ^6^C|A
+
+--- Sample 19 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: Explain in layman's terms what does options trading mean.
+  CAS: ^6^C|A
+
+--- Sample 20 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: write an essay about the Munich Agreements for a masters degree level in european history
+  CAS: ^6^O|A
+
+--- Sample 21 | cat=state_literal | score=4 | repair=0 | flag=None ---
+  Q: Please be my roleplay DM.
+Let's start with me entering a tavern with 3 gold coins in my pocket
+  CAS: ^6^O|E
+
+--- Sample 22 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: What is the largest city in North America?  What is the smallest city in North America?  What is the distance from California to London?  What is the width of the Earth?  What is the distance from the Earth to Mars?  What was the last planet we have 
+  CAS: ^0^C|A
+
+--- Sample 23 | cat=state_literal | score=4 | repair=0 | flag=None ---
+  Q: How do vending machines know what value banknote you put in?
+  CAS: ^6^C|A
+
+--- Sample 24 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: Can you write me 10 programming jokes?
+  CAS: ^6^O|A
+
+--- Sample 25 | cat=state_literal | score=5 | repair=0 | flag=None ---
+  Q: Create a title and plot summary for a new fantasy mixed with science fiction novel
+  CAS: ^6^O|A
+
+--- Sample 26 | cat=recipe | score=5 | repair=0 | flag=None ---
+  Q: Hello, I recently noticed my PC is getting slower and I would like to format it. What should I do?
+  CAS: Θ(Ω_format_pc) = 1*^6^O + 1*^1^C -> Ω_format_pc
+
+--- Sample 27 | cat=recipe | score=4 | repair=0 | flag=None ---
+  Q: I want to do reboot testing on one computer (lets call it A) by turning power off and on via a network controlled power outlet by a computer B. I want the computer A to report to a computer B on each boot so that it can keep track of when it succeede
+  CAS: Θ(Ω_reboot_test_system) = 1*^6^O + 1*^1^C -> Ω_reboot_test_system
+
+--- Sample 28 | cat=recipe | score=4 | repair=0 | flag=None ---
+  Q: Write the basic boilerplate code for a react native app with redux and react-router integrated.
+  CAS: Θ(Ω_react_native_boilerplate) = 1*^6^O + 1*^1^C -> Ω_react_native_boilerplate
+
+--- Sample 29 | cat=recipe | score=4 | repair=0 | flag=None ---
+  Q: I am trying to improve my writing skills. How could I do that?
+  CAS: Θ(Ω_writing_improvement) = 1*^6^O + 1*^1^C -> Ω_writing_improvement
+
+--- Sample 30 | cat=recipe | score=5 | repair=0 | flag=None ---
+  Q: How do you make french crèpes?
+  CAS: Θ(Ω_french_crepes) = 1*^6^O + 1*^1^C -> Ω_french_crepes
+
+--- Sample 31 | cat=recipe | score=4 | repair=0 | flag=None ---
+  Q: I would like to build some cool stuff using this software, how can I do it?
+  CAS: Θ(Ω_build_with_software) = 1*^6^O + 1*^1^C -> Ω_build_with_software
+
+--- Sample 32 | cat=recipe | score=5 | repair=0 | flag=None ---
+  Q: I'm in the mood for a cake. Can I please have a recipe for a tasty Victorian Sponge?
+  CAS: Θ(Ω_victorian_sponge) = 1*^6^O + 1*^1^C -> Ω_victorian_sponge
+
+--- Sample 33 | cat=recipe | score=4 | repair=0 | flag=None ---
+  Q: I want you to create two characters. One that you will play, and one that I will play. Come up with backstory, motivation, and something about the world in which the story takes place. My only initial stipulation is that both characters must be drago
+  CAS: Θ(Ω_roleplay_setup) = 1*^6^O + 1*^0^C|T -> Ω_roleplay_setup
+
+--- Sample 34 | cat=recipe | score=5 | repair=0 | flag=None ---
+  Q: How do I temper chocolate?
+  CAS: Θ(Ω_temper_chocolate) = 1*^6^O + 1*^1^C -> Ω_temper_chocolate
+
+--- Sample 35 | cat=recipe | score=4 | repair=0 | flag=None ---
+  Q: A ball was thrown on a planet with a density of 4.6 g/cm^3 and a radius of 4600 km at the speed of 400 m/s and an angle of 70 degrees. Calculate the maximum altitude of the ball from the surface and the distance between the initial point to the impac
+  CAS: Θ(Ω_projectile_motion) = 1*^6^C|A + 1*^6^O|A -> Ω_projectile_motion
+
+--- Sample 36 | cat=recipe | score=5 | repair=0 | flag=None ---
+  Q: I am a software developer and I would like to learn how to do create programs for quantum computers. What are the steps I should take?
+  CAS: Θ(Ω_quantum_programming) = 1*^6^O + 1*^1^C -> Ω_quantum_programming
+
+--- Sample 37 | cat=recipe | score=4 | repair=0 | flag=None ---
+  Q: Write a knock-knock joke encrypted with a Caeser cipher using a right shift of 3
+  CAS: Θ(Ω_encrypted_joke) = 1*^6^O + 1*^1^C -> Ω_encrypted_joke
+
+--- Sample 38 | cat=recipe | score=5 | repair=0 | flag=None ---
+  Q: How do I reverse a video with ffmpeg?
+  CAS: Θ(Ω_reverse_video) = 1*^6^O + 1*^1^C -> Ω_reverse_video
+
+--- Sample 39 | cat=recipe | score=5 | repair=0 | flag=None ---
+  Q: I need help creating a meal plan to build muscle while I start a new workout schedule. I am working out twice a week for about an hour Tuesday and Thursday. I am a 30yo man ~200lb and I am targeting strength exercises. I would like to prep most of my
+  CAS: Θ(Ω_meal_plan) = 1*^6^O + 1*^1^C + 1*^5^E_{F3} -> Ω_meal_plan
+
+--- Sample 40 | cat=recipe | score=4 | repair=0 | flag=None ---
+  Q: How can i sharpen my pencil when i don't have pencil sharpener?
+  CAS: Θ(Ω_sharpen_pencil) = 1*^6^O + 1*^1^C -> Ω_sharpen_pencil
+
+--- Sample 41 | cat=binary_composition | score=4 | repair=1 | flag=None ---
+  Q: What is the difference between multithreading and multiprocessing in Python? When should I use one over the other?
+  CAS: ^6^C|A + (^2^E|A × ^3^E|A)
+
+--- Sample 42 | cat=binary_composition | score=4 | repair=0 | flag=None ---
+  Q: if you are innocent until proven guilty beyond a reasonable doubt by a jury of your peers, isnt that the same thing as saying that the status of your innocence remains unchanged until the moment you are declared guilty and the term not guilty implies
+  CAS: ^6^C|A ∘ (^8^C|A × ^9^C|A)
+
+--- Sample 43 | cat=binary_composition | score=4 | repair=0 | flag=None ---
+  Q: What are the main differences between x86, arm and avr assembly? How difficult is one to learn if you know another one?
+  CAS: ^6^C|A ∘ (^8^C|A ∘ ^9^C|A)
+
+--- Sample 44 | cat=binary_composition | score=4 | repair=0 | flag=None ---
+  Q: Why do doctors still use fax machines?
+  CAS: ^8^C|A ∘ ^9^C|A
+
+--- Sample 45 | cat=binary_composition | score=4 | repair=0 | flag=None ---
+  Q: Can you explain to me the parameter gamma in XGBoost algorithm? What is its impact on the model's perfomance?
+  CAS: ^6^C|A ∘ ^8^C|A ∘ ^9^C|A
+
+--- Sample 46 | cat=binary_composition | score=4 | repair=0 | flag=None ---
+  Q: How could I reach emergency ? Someone is badly injured
+  CAS: ^8^O|E ∘ ^9^O|E
+
+--- Sample 47 | cat=binary_composition | score=4 | repair=0 | flag=None ---
+  Q: Argue from the perspective of a full-stack Laravel developer: What benefits does Laravel Orchid offer developers? Mention features and goals of Laravel Orchid, which are attractive for software developers.
+  CAS: ^6^C|A ∘ ^2^C_{F5}
+
+--- Sample 48 | cat=binary_composition | score=4 | repair=0 | flag=None ---
+  Q: fix grammar and slightly rewrite:
+
+I am an improviser, I jam on my equipment until I get into the flow and then explore where it goes. I use a variety of tools like Photoshop, Cameras, After Effects, AI, to achieve a different look every time.
+  CAS: ^7^O_{F5}|E ∘ ^6^O_{F3}|E
+
+--- Sample 49 | cat=let_binding | score=5 | repair=1 | flag=None ---
+  Q: What are the causes and consequences of desertification and what measures can be taken to prevent it?
+  CAS: let X = ^8^C|A ∘ ^9^C|A; let Y = ^6^O|A; X ∘ Y
+
+--- Sample 50 | cat=let_binding | score=4 | repair=0 | flag=None ---
+  Q: Hey, how are you.  Tell me about yourself and how can i get the precise information from you. What are your limitations.
+  CAS: let X = ^0^C|A; let Y = ^5^C|A; let Z = ^3^C|A; X + Y + Z
+
+
+=== Additional context: 5 judge-rejected (score 2) ===
+  Q: What is the fine if you make an illegal short wave radio station on an already used frequency near where I want to start broadcasting on it without a broadcast license?
+  CAS: ^8^C|A ∘ ^9^C|A  [judge score 2]
+
+  Q: Let's play a game of chess. I'll start:
+1. d4
+  CAS: ^6^O|E  [judge score 2]
+
+  Q: I'm creating a NodeJS backend using Express, and I'm getting the following error:
+`Uncaught TypeError: Cannot read properties of undefined (reading 'id')`
+
+My code of where this error is happening is 
+  CAS: ^6^C|A ∘ ^9^E|A  [judge score 2]
+
+  Q: What are a few industries that will be most negatively affected with the rise of coherent AI assistants like yourself and GPT-3 ?
+  CAS: ^8^C|A ∘ ^3^E|A  [judge score 2]
+
+  Q: Are you a FBI agent?
+  CAS: ^1^C|A  [judge score 2]
+
+=== 3 compile-rejected (after repair tries) ===
+  Q: What are the fundamentals of art and how can they be used to create art that resonates with viewers? What techniques can be used to strengthen the impact of eac
+  final CAS: let F = ^6^C|A; let T = ^6^O|A; let B = ^6^C|A ∘ ^4^C|f; F + T + B
+  compile_err: typecheck: PLUS is only defined for state, drive, or RPM expressions
+  repair attempts: 2
+
+  Q: I have an appointment in two weeks on the 29th. Is there anything else going on that day and if so, will I have time to go to the store in town between events?
+  final CAS: let A = ^0^C|A; let B = ^6^C|A; let C = ^5^E|A; A + B -> C
+  compile_err: parsing@36: expected IDENT, got DOMAIN
+  repair attempts: 2
+
+  Q: In which US state can you get a license to hunt a mythical creature with a horn? Why did they pass this law?
+  final CAS: let X = ^0^C|A; let Y = ^8^C|A ∘ ^9^C|A; X + Y
+  compile_err: typecheck: PLUS is only defined for state, drive, or RPM expressions
+  repair attempts: 1
+
+=== All 9 accepted-but-quarantined (copyright flag) ===
+  Q: could you rewrite the first few paragraphs of 'The Hobbit' by JRR Tolkien using generation Z slang, with words such as "cringe", "rizz" or "bussin"?
+
+Here are the first few lines, for reference: "In a
+  CAS: ^6^O|A
+  flag: quoted_block_chars:247
+
+  Q: I wish to build a simple website using python, HTML and javascript. it is a just a personal note taking and photo storage website.
+
+can you write me a simple webpage that has the following features:
+1
+  CAS: Θ(Ω_personal_webapp) = 1*^6^O + 1*^1^C -> Ω_personal_webapp
+  flag: multi_paragraph_pasted_text_len:669
+
+  Q: I'm interested in the nature of consciousness. Are you familiar with the works of Donald Hoffman, Giulio Tononi, and Daniel Dennett? What do you think of Integrated Information Theory? How does it com
+  CAS: ^6^C|A ∘ (^2^C_{F2}|A × ^3^C_{F2}|A)
+  flag: quoted_block_chars:213
+
+  Q: A statistical model is a mathematical model that embodies a set of statistical assumptions concerning the generation of sample data (and similar data from a larger population). A statistical model rep
+  CAS: ^6^C|A
+  flag: multi_paragraph_pasted_text_len:764
+
+  Q: Can you write a bash script that handles web requests using only binaries commonly found in BusyBox? My preference would be using netcat ("nc") to receive the requests. Map standard in (stdin) and sta
+  CAS: Θ(Ω_busybox_web_server) = 1*^6^O + 1*^1^C -> Ω_busybox_web_server
+  flag: quoted_block_chars:209
+
+  Q: Please correct the spelling and grammar of the following sentence, then explain the changes you've made:
+It was said: "Have you established the measure through the measure, and you are bound by the fa
+  CAS: ^6^C|A ∘ ^1^C|A
+  flag: quoted_block_chars:521
+
+  Q: Let's write a story together. I'm going to provide a short summary, you will expand that summary in the first part of the story, then suggest a few summaries of alternative ways to continue the story.
+  CAS: ^6^O|A + ^6^C|T
+  flag: quoted_block_chars:218
+
+  Q: Please write a script for a comedy sketch in which a human chef explains to a space alien how pasta is made. The main gag centers around the alien's inability to understand why some steps add water wh
+  CAS: ^6^O|A
+  flag: quoted_block_chars:392
+
+  Q: Can you convert this into a simple list. I don't want bullets or anything. Just line breaks.
+
+Yes cream, english muffin, one tomato, spinach maybe eggs good ones not eglands best. Three onions, soup b
+  CAS: ^6^O|A
+  flag: quoted_block_chars:315
+
+=== 5 repair-attempt examples (accepted) ===
+  Q: What are the causes and consequences of desertification and what measures can be taken to prevent it?
+  final CAS (accepted): let X = ^8^C|A ∘ ^9^C|A; let Y = ^6^O|A; X ∘ Y
+  repair history (1 attempts):
+    -> attempt 1: prev='let X = ^8^C|A ∘ ^9^C|A; let Y = ^6^O|A; X + Y' err='typecheck: PLUS is only defined for state, drive, or RPM expressions'
+
+  Q: How can i teach my cat to stop scratching furniture inside my house? Keep in mind that i live in the countryside, the cat can go outside whenever it wants and i
+  final CAS (accepted): Θ(Ω_cat_scratching) = 1*^6^O + 1*^8^C → Ω_cat_scratching
+  repair history (1 attempts):
+    -> attempt 1: prev='Θ(Ω_cat_scratching) = 1*^6^O + 1*^8^C ∘ 1*^9^O -> Ω_cat_scratching' err='parsing@38: CAS v7.6 recipe: expected `→` after prerequisites, got CIRC'
+
+  Q: How do you compare Perceptron and Bachpropgation technique? please explain me as i don't have any knowledge about it.
+  final CAS (accepted): Θ(Ω_perceptron_backprop_comparison) = 1*^6^C_{F6} + 1*^8^C_{F6} → Ω_perceptron_backprop_comparison
+  repair history (1 attempts):
+    -> attempt 1: prev='Θ(Ω_perceptron_backprop_comparison) = 1*^6^C|A + 1*^8^C|A ∘ ^9^C|A -> Ω_perceptr' err='parsing@58: CAS v7.6 recipe: expected `→` after prerequisites, got CIRC'
+
+  Q: Can you please recommend some restaurants in the inner city of Innsbruck, Tyrol? I would like to eat something Asian.
+  final CAS (accepted): ^0^C|A + ^2^E_{F4}
+  repair history (1 attempts):
+    -> attempt 1: prev='^0^C|A ∘ ^2^E_{F4}' err='typecheck: CIRC requires both states to share a domain'
+
+  Q: Let's write a story together. I'm going to provide a short summary, you will expand that summary in the first part of the story, then suggest a few summaries of
+  final CAS (accepted): ^6^O|A + ^6^C|T
+  repair history (1 attempts):
+    -> attempt 1: prev='^6^O|A ∘ ^6^C|T' err='typecheck: CIRC requires both states to share a domain'

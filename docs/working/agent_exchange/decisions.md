@@ -984,3 +984,21 @@ Stop + report failure if ANY:
 - Data rule refinement: `feedback_cas_native_data_strategy_2026_05_13.md` (2026-05-14 update)
 - Dataset scout findings: `docs/working/dataset_scout_consolidated_2026_05_07.md` (OASST2 = primary)
 - Wave 2.5 SFE precedent: `project_path_d_wave_2_5_promoted_2026_05_08.md` (Haiku drafter pattern, $0.0058/record cost reference)
+
+### OUTCOME — 2026-05-14T19:30Z
+
+Stage 4B pilot ran to completion per Codex audit `0e97599`. **374/500 accepted (74.6%), 364 clean-train (after 9 copyright-quarantine), $1.44 spent of $5 cap, 20.4 min wall-time.**
+
+Judge score distribution on accepted: 53% scored 5, 44% scored 4, 3% scored 3 (floor). Rejected by judge: 86 score-2 records + 2 score-1.
+
+Reject reasons: 88 haiku_judge, 31 cas_compile (after 2 repair attempts), 5 haiku_self_reject, 3 length_sanity.
+
+Category spread: state_literal=190 (51%), recipe=121 (32%), binary_composition=53 (14%), let_binding=9 (2%). 6 Wave 2.5 categories did NOT emerge — these are CAS-internal patterns (cross_register_omega, fractal_sequence, diagram_export, rpm_chain, inversion, meta_logic_relation) that don't have direct natural-language analogs in user questions. Wave 2.5 already covers these.
+
+Copyright flags: 12 total (9 in accepted set → quarantine, 3 in rejected). The 9 quarantined are NOT in the 364 clean-train count.
+
+Repair pipeline: 56 records (11.2%) needed at least one compile-repair retry; 25 salvaged, 31 lost after max-2 attempts.
+
+Full report: `docs/working/stage4b_pilot_2026_05_14/FINDINGS.md`. 50 sample reads + 5 judge-rejected + 3 compile-rejected + all 9 quarantine + 5 repair examples: `docs/working/stage4b_pilot_2026_05_14/sample_reads_50.txt`.
+
+No v0.2 retrain in this scope. Pending user sample-read of the 50 to gate the next AUTHORIZED entry for v0.2 retrain.

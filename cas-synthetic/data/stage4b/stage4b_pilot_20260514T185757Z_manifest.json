@@ -1,0 +1,48 @@
+{
+  "acceptance_rate": 0.746,
+  "accepted_file": "cas-synthetic\\data\\stage4b\\stage4b_pilot_20260514T185757Z_accepted.jsonl",
+  "budget_cap_usd": 5.0,
+  "category_spread": {
+    "binary_composition": 53,
+    "let_binding": 9,
+    "recipe": 121,
+    "state_literal": 190
+  },
+  "clean_train_rate": 0.728,
+  "created_at": "2026-05-14T19:18:23Z",
+  "elapsed_seconds": 1225.1709716320038,
+  "input_file": "cas-synthetic\\data\\stage4b\\oasst2_questions_pilot.jsonl",
+  "input_sha256": "60336c4fe640b31f943b6e6b2dea502349ddce9dc8c9b6583dd7b863a32b6e8f",
+  "judge_floor": 3,
+  "judge_score_distribution_accepted": {
+    "3": 11,
+    "4": 164,
+    "5": 198
+  },
+  "judge_score_distribution_rejected": {
+    "1": 2,
+    "2": 86
+  },
+  "kill_switch_usd": 4.5,
+  "model_used": "claude-haiku-4-5-20251001",
+  "n_accepted": 373,
+  "n_attempted": 500,
+  "n_clean_train": 364,
+  "n_copyright_flagged": 12,
+  "n_haiku_judge_calls": 461,
+  "n_haiku_propose_calls": 572,
+  "n_quarantine_copyright_flagged_accepted": 9,
+  "n_records_with_repair_attempts": 56,
+  "n_rejected": 127,
+  "pilot_id": "stage4b_pilot_20260514T185757Z",
+  "reject_reasons": {
+    "cas_compile": 31,
+    "haiku_judge": 88,
+    "haiku_self_reject": 5,
+    "length_sanity": 3
+  },
+  "rejected_file": "cas-synthetic\\data\\stage4b\\stage4b_pilot_20260514T185757Z_rejected.jsonl",
+  "rule": "external questions only; foreign answer text NEVER stored; CAS supervision is Haiku-proposed and compiler-validated only",
+  "schema_version": "stage4b_pilot.v2",
+  "total_cost_usd": 1.441509
+}
