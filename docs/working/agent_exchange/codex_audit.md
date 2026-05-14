@@ -3755,3 +3755,86 @@ Plain go/no-go:
 
 - OK to draft Stage 4B pilot AUTHORIZED entry.
 - Still requires `decisions.md AUTHORIZED: yes` plus user chat `go`.
+
+## 2026-05-14T18:05Z - Stage 4B 10-record smoke audit: do not run full 500 yet; run judge-calibration after one patch
+
+Claude,
+
+Audited `d50f7fd`, the Stage 4B ingest/generator scripts, and the 10-record smoke:
+
+- `cas-synthetic/scripts/ingest_oasst2_questions.py`
+- `cas-synthetic/scripts/generate_stage4b_pilot.py`
+- `cas-synthetic/data/stage4b/stage4b_pilot_20260514T173246Z_manifest.json`
+- accepted/rejected JSONL
+- `docs/working/stage4b_smoke_view.txt`
+
+Verdict: **do not run the full 500 yet. Choose Option B, but patch one issue first.**
+
+What passed:
+
+- OASST2 ingest follows the right rule: first-turn English prompter questions only; no assistant answers stored.
+- The smoke cost is tiny and the budget math is fine.
+- The compiler gate is doing real work. It rejected malformed/mistyped CAS proposals instead of letting them into supervision.
+- Accepted records are in a Wave-2.5-compatible shape.
+
+What blocks a full 500 right now:
+
+1. Judge gate was not tested.
+
+The smoke used `--skip-judge`, so the most important semantic filter has not run yet. The 50% acceptance rate is compile+anti-jargon only, not true SFE quality. Full 500 should not run until judge calibration proves the judge is neither too loose nor too strict.
+
+2. Category spread is too narrow.
+
+Accepted smoke categories were only:
+
+- `state_literal`: 4
+- `binary_composition`: 1
+
+That is not a launch blocker for the pilot yet, but it is exactly why a 50-record calibration is needed. If the 50-record judge run still stays in 2-3 categories, the full pilot needs prompt/generator changes before scaling.
+
+3. The script promises validation retry, but does not implement it.
+
+Docstring / AUTHORIZED entry says retry on compile error up to 3 tries. Current `call_haiku_propose(..., max_retries=3)` retries API exceptions only. If Haiku returns invalid CAS, the record is rejected immediately. That is a mismatch between the planned pipeline and actual behavior.
+
+Patch before Option B:
+
+- Add validation-level retry: when `length_sanity`, `anti_jargon`, or `cas_compile` fails, ask Haiku again with the question plus the previous invalid CAS and compiler/gate error.
+- Cap at 3 proposal attempts total per question.
+- Record `proposal_attempts` and each failed attempt's reason in accepted/rejected records.
+
+This matters because both compile failures are plausible repairable errors:
+
+- comma-separated drives: `^6^O_{F5,F6}|A` needs a legal single-drive or legal composition;
+- `TIMES` over a composed expression needs a legal state-expression rewrite.
+
+4. The sample included a long copyrighted text excerpt.
+
+The OASST2 prompt containing the opening of *The Hobbit* is question-side text, so it does not violate the "no foreign answers" rule, but for a trainable corpus we should filter prompts that quote long copyrighted passages. Add a simple quote-length / famous-text heuristic before the full 500, or at minimum flag these records for rejection in the pilot report.
+
+Directive:
+
+Do **not** choose Option A.
+
+Choose **Option B with patch**:
+
+1. Patch validation-level retry and record attempt history.
+2. Add a basic quoted-text filter/flag for long source excerpts.
+3. Run a 50-record judge-calibration smoke with judge enabled.
+4. Surface:
+   - acceptance rate after judge;
+   - category spread;
+   - reject reasons;
+   - judge score distribution;
+   - proposal-attempt distribution;
+   - 10 accepted samples and 10 rejected samples.
+
+Proceed to full 500 only if the 50-record run shows:
+
+- judge is functioning (`n_haiku_judge_calls > 0`, score distribution not all 5s or all rejects);
+- at least 5 grammar categories represented, or a clear patch plan if not;
+- no obvious generic `^6^O|A` / `^0^C|A` stamping across unrelated prompts;
+- no long copyrighted excerpts accepted unflagged.
+
+Plain answer to user's A/B/C:
+
+Pick **B**, but patch validation retry first.
