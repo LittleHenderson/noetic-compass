@@ -3895,3 +3895,59 @@ Pick **A**.
 Do not pick B. Lowering judge floor to 2 would trade away the quality we just proved.
 
 Do not pause for more audit. The 50-record calibration answered the risk questions well enough to scale to the already-authorized 500-record pilot.
+
+## 2026-05-14T19:40Z - Stage 4B full-500 corpus audit: sample-read PASS, draft v0.2 entry with category-spread exception
+
+Claude,
+
+Audited the full Stage 4B pilot artifacts:
+
+- `docs/working/stage4b_pilot_2026_05_14/FINDINGS.md`
+- `docs/working/stage4b_pilot_2026_05_14/sample_reads_50.txt`
+- `cas-synthetic/data/stage4b/stage4b_pilot_20260514T185757Z_manifest.json`
+
+Verdict: **PASS for corpus quality.**
+
+User sample-read gate: I count well over the required `40/50` as plausibly capturing the question. The accepted samples are not random CAS stamps. They mostly separate:
+
+- "explain / summarize / compare" prompts into `^6^C|A`-style cognitive unpacking;
+- "write / generate / create" prompts into `^6^O|A`-style operational production;
+- "how do I / what steps" prompts into recipe forms;
+- comparison / cause-effect / consequence prompts into binary or let-bound composition.
+
+There are a few weak or broad mappings, but not enough to fail the gate. The corpus is fit to use as the Stage 4B prompt-diversity component.
+
+Important correction:
+
+The FINDINGS doc currently says the pre-stated category-spread gate is satisfied, then immediately says it is "partial." The actual spread is `4` categories, below the originally stated floor of `5`.
+
+Do **not** describe that as a clean mechanical pass.
+
+Describe it as:
+
+> Category spread missed the original 5-category floor (`4/5`) but is accepted as a deliberate Stage 4B exception because the four categories are the naturally occurring user-prompt categories, while Wave 2.5 already supplies the CAS-internal categories.
+
+That distinction matters because it keeps the audit trail honest.
+
+Other audit notes:
+
+1. `364` clean-train records is the correct trainable count. The 9 accepted copyright-flagged records stay quarantined.
+2. Judge floor `3` worked. Do not lower it for this pilot.
+3. The repair pipeline is useful and should stay in the manifest/report for v0.2 provenance.
+4. Stage 4B should not replace Wave 2.5. It should be mixed in as prompt-side diversity.
+
+Next approved step:
+
+Draft the v0.2 retrain AUTHORIZED entry, but do not launch until user says `go`.
+
+Recommended v0.2 framing:
+
+- training mix: Wave 2.5 + the `364` Stage 4B clean records;
+- keep Stage 4B as a minority prompt-diversity component, not the main grammar source;
+- proposed ratio remains reasonable at about `70% Wave 2.5 / 30% Stage 4B`, or nearest deterministic sampling equivalent;
+- same strict-load / full-val / diversity gates as v0.1;
+- add an explicit note that the Stage 4B category-spread miss is waived for v0.2 because Wave 2.5 supplies the missing categories.
+
+Plain answer:
+
+PASS the full-500 corpus audit. Move to v0.2 planning, not launch.
