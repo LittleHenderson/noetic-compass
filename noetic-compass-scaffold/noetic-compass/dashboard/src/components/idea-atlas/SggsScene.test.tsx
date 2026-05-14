@@ -124,8 +124,16 @@ interface TestSurface {
   __sggs_scene?: Scene;
   __sggs_step?: () => void;
   __sggs_meshes?: Array<{
-    body: { geometry: { type?: string } };
-    facePanels: Array<{ userData: Record<string, unknown> }>;
+    body: {
+      geometry: {
+        type?: string;
+        parameters?: { width?: number; height?: number; depth?: number };
+      };
+    };
+    facePanels: Array<{
+      geometry: { parameters?: { width?: number; height?: number } };
+      userData: Record<string, unknown>;
+    }>;
   }>;
 }
 
@@ -213,7 +221,7 @@ describe('SggsScene — scene composition', () => {
     expect(lineCount).toBe(tree.edge_count);
   });
 
-  it('renders each node as an inspectable cube body', () => {
+  it('renders each node as an inspectable square cube body', () => {
     const tree = makeSampleTree();
     const { container } = render(
       <SggsScene tree={tree} rendererFactory={makeRendererStub} />,
@@ -224,6 +232,9 @@ describe('SggsScene — scene composition', () => {
     expect(wrapper!.__sggs_meshes).toBeDefined();
     for (const bundle of wrapper!.__sggs_meshes!) {
       expect(bundle.body.geometry.type).toBe('BoxGeometry');
+      const params = bundle.body.geometry.parameters!;
+      expect(params.width).toBeCloseTo(params.height!);
+      expect(params.width).toBeCloseTo(params.depth!);
     }
   });
 
@@ -240,6 +251,10 @@ describe('SggsScene — scene composition', () => {
       expect(bundle.facePanels).toHaveLength(6);
       const faces = bundle.facePanels.map((panel) => panel.userData.face);
       expect(faces).toEqual(expectedFaces);
+      for (const panel of bundle.facePanels) {
+        const params = panel.geometry.parameters!;
+        expect(params.width).toBeCloseTo(params.height!);
+      }
     }
   });
 });

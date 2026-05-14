@@ -99,14 +99,16 @@ export interface MinimalRaycaster {
 
 // ── Layout — mirrors ThoughtTreeView.buildLayout ──────────────────────────
 
-// Card geometry. Smaller than ThoughtTreeView's pixel-space cards because
-// THREE world units don't need to match pixel size, and a smaller card
-// keeps the dendrogram readable when orbiting.
-const NODE_W = 2.4;
-const NODE_H = 0.96;
-const NODE_D = 0.72;
-const H_GAP = 0.48;
-const V_GAP = 1.68;
+// Cube geometry. The first cube pass reused wide card proportions, which
+// made the side panels overhang and hid the top/bottom. Keep every face
+// square so the block reads as a real inspectable object in the tree.
+const CUBE_SIZE = 1.42;
+const NODE_W = CUBE_SIZE;
+const NODE_H = CUBE_SIZE;
+const NODE_D = CUBE_SIZE;
+const FACE_SIZE = CUBE_SIZE * 0.92;
+const H_GAP = 0.84;
+const V_GAP = 2.08;
 
 /** Depth-staggered Z so adjacent levels don't render co-planar. */
 const Z_STAGGER = 0.18;
@@ -264,7 +266,7 @@ function makeFacePanel(
   if (typeof document === 'undefined') return null;
   const canvas = document.createElement('canvas');
   const W = 512;
-  const H = 256;
+  const H = 512;
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext('2d');
@@ -278,12 +280,12 @@ function makeFacePanel(
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = strokeHex;
-    ctx.font = 'bold 24px ui-monospace, SFMono-Regular, monospace';
-    ctx.fillText(spec.title.toUpperCase(), W / 2, 48);
+    ctx.font = 'bold 30px ui-monospace, SFMono-Regular, monospace';
+    ctx.fillText(spec.title.toUpperCase(), W / 2, 92);
     ctx.fillStyle = '#f1f5f9';
-    ctx.font = 'bold 28px ui-sans-serif, system-ui, sans-serif';
+    ctx.font = 'bold 34px ui-sans-serif, system-ui, sans-serif';
     for (let i = 0; i < spec.lines.slice(0, 3).length; i++) {
-      ctx.fillText(spec.lines[i], W / 2, 104 + i * 42);
+      ctx.fillText(spec.lines[i], W / 2, 198 + i * 58);
     }
   }
   const tex = new CanvasTexture(canvas);
@@ -294,13 +296,13 @@ function makeFacePanel(
     opacity: 0.98,
     side: DoubleSide,
   });
-  return new Mesh(new PlaneGeometry(NODE_W * 0.96, NODE_H * 0.88), mat);
+  return new Mesh(new PlaneGeometry(FACE_SIZE, FACE_SIZE), mat);
 }
 
 function placeFacePanel(panel: Mesh, side: CubeFaceSpec['side']): void {
-  const z = NODE_D / 2 + 0.012;
-  const x = NODE_W / 2 + 0.012;
-  const y = NODE_H / 2 + 0.012;
+  const z = NODE_D / 2 + 0.014;
+  const x = NODE_W / 2 + 0.014;
+  const y = NODE_H / 2 + 0.014;
   if (side === 'front') {
     panel.position.set(0, 0, z);
   } else if (side === 'back') {
@@ -355,6 +357,8 @@ function buildNodeMesh(
   const palette = paletteThreeFor(node.kind);
   const group = new Group();
   group.position.set(pos.x, pos.y, pos.z);
+  group.rotation.x = CUBE_READING_TILT_X;
+  group.rotation.y = CUBE_READING_TILT_Y;
   group.userData = { 'data-node-id': node.id, kind: node.kind };
 
   // Glow halo — additive-blended palette-colored plane behind the card.
@@ -489,11 +493,16 @@ const BOUNCE_DURATION_MS = 520;
 const BOUNCE_DAMPING = 3.4;
 
 // Inspectable cube idle turn. It is intentionally subtle: enough to
-// reveal that each block has multiple faces, not enough to make labels
-// unreadable. Hover pauses the turn for inspection.
+// reveal that each block has multiple faces, not enough to detach it
+// from its place in the tree. A small X tilt exposes top/bottom faces
+// while the cube remains anchored to its node position.
 const CUBE_IDLE_SPIN_PERIOD_MS = 9000;
-const CUBE_IDLE_SPIN_AMPLITUDE = 0.24;
-const CUBE_SELECTED_SPIN_AMPLITUDE = 0.38;
+const CUBE_READING_TILT_X = -0.34;
+const CUBE_READING_TILT_Y = 0.26;
+const CUBE_IDLE_SPIN_AMPLITUDE = 0.34;
+const CUBE_SELECTED_SPIN_AMPLITUDE = 0.48;
+const CUBE_IDLE_TILT_AMPLITUDE = 0.28;
+const CUBE_SELECTED_TILT_AMPLITUDE = 0.38;
 
 export function SggsScene({
   tree,
@@ -773,11 +782,22 @@ export function SggsScene({
           bundle.node.id === selectedIdRef.current
             ? CUBE_SELECTED_SPIN_AMPLITUDE
             : CUBE_IDLE_SPIN_AMPLITUDE;
+        const tiltAmp =
+          bundle.node.id === selectedIdRef.current
+            ? CUBE_SELECTED_TILT_AMPLITUDE
+            : CUBE_IDLE_TILT_AMPLITUDE;
         if (!isHovered) {
           const spinPhase =
             (now / CUBE_IDLE_SPIN_PERIOD_MS) * Math.PI * 2 +
             bundle.floatPhaseOffset;
           bundle.group.rotation.y = Math.sin(spinPhase) * spinAmp;
+          bundle.group.rotation.x =
+            CUBE_READING_TILT_X + Math.sin(spinPhase * 0.73 + 0.8) * tiltAmp;
+        } else {
+          bundle.group.rotation.x +=
+            (CUBE_READING_TILT_X - bundle.group.rotation.x) * 0.18;
+          bundle.group.rotation.y +=
+            (CUBE_READING_TILT_Y - bundle.group.rotation.y) * 0.18;
         }
 
         // Damped bounce scale (whole group). Affects body/ribbon/faces/

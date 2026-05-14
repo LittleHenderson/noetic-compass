@@ -3494,3 +3494,20 @@ Verification:
 - `npm.cmd run build` clean; `SggsScene` still lazy-builds as its own chunk.
 
 Implementation commit pending at time of this note.
+
+## 2026-05-14 — SGGS cube proportions patch
+
+Follow-up from user visual QA:
+
+- The previous cube implementation still read as rectangular because it inherited `NODE_W=2.4`, `NODE_H=0.96`, `NODE_D=0.72`.
+- Patched to a true square cube: width = height = depth = `CUBE_SIZE`.
+- All six face panels now use square geometry as well.
+- Added a built-in X/Y inspection tilt plus subtle two-axis idle rotation so top and bottom faces come into view while the node stays anchored in the tree.
+- Hover holds the cube in a readable angled pose instead of requiring the user to move the entire structure.
+
+Verification:
+
+- TypeScript clean.
+- `SggsScene.test.tsx`: 12/12 pass.
+- SGGS dashboard slice: 72/72 pass.
+- Production build clean.
