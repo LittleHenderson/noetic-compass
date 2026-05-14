@@ -3461,3 +3461,36 @@ Patch the launch plan:
 5. then ask for pod authorization.
 
 Stage 4B external-question SDG pilot can be designed in parallel, but do not mix it into Stage 4A until this local front-door baseline is measured.
+
+## 2026-05-14 — SGGS trace nodes converted to inspectable cubes
+
+Implemented the user's cube-block interaction idea in `SggsScene.tsx`.
+
+What changed:
+
+- TRACE 3D nodes are now real `BoxGeometry` cubes instead of flat cards.
+- Each cube carries six information faces:
+  - front: human meaning
+  - right: CAS syntax
+  - back: trace provenance
+  - left: model/network evidence
+  - top: confidence/status
+  - bottom: timeline/replay metadata
+- Cubes slowly rotate while idle so users can tell they hold more information.
+- Hover pauses the idle spin for reading.
+- Selected cubes spin a little more, keep the existing glow/pulse, and still bounce on every click.
+- Raycast selection now hits the cube body, ribbon, and all six face panels.
+- GPU cleanup now disposes every face panel texture/material.
+
+Important wording boundary:
+
+- "Model/network evidence" currently surfaces trace-derived evidence plus `network: pending`.
+- This is intentionally not real Mode 7 attribution yet. It is a placeholder face that gives the UI a stable home for future layer/head evidence once Mode 7 lands.
+
+Verification:
+
+- `npx.cmd tsc -b --noEmit` clean.
+- SGGS dashboard slice: 72/72 tests pass.
+- `npm.cmd run build` clean; `SggsScene` still lazy-builds as its own chunk.
+
+Implementation commit pending at time of this note.

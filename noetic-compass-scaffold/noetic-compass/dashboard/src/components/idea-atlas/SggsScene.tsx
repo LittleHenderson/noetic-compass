@@ -37,8 +37,6 @@ import {
   PlaneGeometry,
   Raycaster,
   Scene,
-  Sprite,
-  SpriteMaterial,
   Vector2,
   Vector3,
   WebGLRenderer,
@@ -106,6 +104,7 @@ export interface MinimalRaycaster {
 // keeps the dendrogram readable when orbiting.
 const NODE_W = 2.4;
 const NODE_H = 0.96;
+const NODE_D = 0.72;
 const H_GAP = 0.48;
 const V_GAP = 1.68;
 
@@ -174,106 +173,155 @@ function recenterLayout(positions: Record<string, NodePos3D>): void {
   }
 }
 
-// ── Label sprite — canvas texture rendering 2 wrapped lines ───────────────
+// ── Cube faces — canvas texture rendering for inspectable sides ───────────
 
-const LABEL_LINE_CHARS = 24;
-const LABEL_MAX_LINES = 2;
-
-function wrapLabel(label: string): string[] {
-  const normalized = (label || '').replace(/\s+/g, ' ').trim();
-  if (!normalized) return [''];
-  const remaining = normalized.split(' ');
-  const lines: string[] = [];
-  let current = '';
-  while (remaining.length > 0 && lines.length < LABEL_MAX_LINES) {
-    const w = remaining[0];
-    if (w.length > LABEL_LINE_CHARS) {
-      if (current) {
-        lines.push(current);
-        current = '';
-        if (lines.length >= LABEL_MAX_LINES) break;
-      }
-      lines.push(w.slice(0, LABEL_LINE_CHARS));
-      remaining[0] = w.slice(LABEL_LINE_CHARS);
-      continue;
-    }
-    const cand = current ? `${current} ${w}` : w;
-    if (cand.length <= LABEL_LINE_CHARS) {
-      current = cand;
-      remaining.shift();
-    } else {
-      lines.push(current);
-      current = '';
-    }
-  }
-  if (current && lines.length < LABEL_MAX_LINES) lines.push(current);
-  const overflowed = remaining.length > 0 || (current && lines.length >= LABEL_MAX_LINES);
-  if (overflowed && lines.length > 0) {
-    const last = lines[lines.length - 1];
-    if (!last.endsWith('…')) {
-      const cap = Math.max(1, LABEL_LINE_CHARS - 1);
-      lines[lines.length - 1] =
-        last.length >= cap ? `${last.slice(0, cap)}…` : `${last}…`;
-    }
-  }
-  return lines;
+interface CubeFaceSpec {
+  side: 'front' | 'right' | 'back' | 'left' | 'top' | 'bottom';
+  title: string;
+  lines: string[];
 }
 
-/**
- * Sprite carrying a canvas-painted chip + 2-line title. Returns null in
- * non-DOM environments; jsdom is OK (it returns a canvas with a null
- * 2D context, which we still wrap into a textureless sprite so the
- * scene composition is identical between test + prod).
- */
-function makeLabelSprite(
-  chip: string,
-  labelLines: string[],
+function trimLine(value: string, max = 30): string {
+  const s = (value || '').replace(/\s+/g, ' ').trim();
+  if (s.length <= max) return s;
+  return `${s.slice(0, Math.max(1, max - 3))}...`;
+}
+
+function looksLikeCas(value: string): boolean {
+  return /(\^\d|CO-\d|stage[A-Z]\d|Phi|NoeticCluster|export|let\s+)/.test(value);
+}
+
+function primaryNodeText(node: ThoughtTreeNode): string {
+  return (node.text || node.label || kindLabel(node.kind) || '').trim();
+}
+
+function faceSpecsForNode(
+  node: ThoughtTreeNode,
+  pos: NodePos3D,
+  childCount: number,
+): CubeFaceSpec[] {
+  const main = primaryNodeText(node);
+  const casSurface = looksLikeCas(main) ? main : node.label || node.node_key || node.id;
+  const status =
+    node.role === 'copied' || node.role === 'missed' || node.role === 'partial'
+      ? node.role
+      : node.kind === 'confidence_marker'
+        ? node.label
+        : node.kind === 'identifier_attempt'
+          ? node.role || 'identifier'
+          : 'available';
+  const evidenceLines =
+    node.kind === 'slot_pattern'
+      ? ['slot trace node', trimLine(node.label), 'source: trace_v0']
+      : node.kind === 'identifier_attempt'
+        ? [`copy status: ${status}`, 'source span tracked', 'network: pending']
+        : node.kind === 'confidence_marker'
+          ? [`quality: ${trimLine(node.label)}`, 'warning-ready face', 'network: pending']
+          : ['trace node present', `kind: ${kindLabel(node.kind)}`, 'network: pending'];
+
+  return [
+    {
+      side: 'front',
+      title: 'Human Meaning',
+      lines: [trimLine(main || 'CAS thought'), trimLine(kindLabel(node.kind), 26)],
+    },
+    {
+      side: 'right',
+      title: 'CAS Syntax',
+      lines: [trimLine(casSurface), `role: ${trimLine(node.role || 'node', 20)}`],
+    },
+    {
+      side: 'back',
+      title: 'Trace Source',
+      lines: [`id: ${trimLine(node.id, 22)}`, `key: ${trimLine(node.node_key, 24)}`],
+    },
+    {
+      side: 'left',
+      title: 'Model Evidence',
+      lines: evidenceLines.map((line) => trimLine(line, 30)),
+    },
+    {
+      side: 'top',
+      title: 'Confidence',
+      lines: [
+        `status: ${trimLine(String(status), 22)}`,
+        `warnings: ${node.kind === 'confidence_marker' ? 'check' : 'none'}`,
+      ],
+    },
+    {
+      side: 'bottom',
+      title: 'Timeline',
+      lines: [`replay step: ${pos.depth}`, `children: ${childCount}`],
+    },
+  ];
+}
+
+function makeFacePanel(
+  spec: CubeFaceSpec,
   strokeHex: string,
-): Sprite | null {
+  fillHex: string,
+): Mesh | null {
   if (typeof document === 'undefined') return null;
   const canvas = document.createElement('canvas');
   const W = 512;
-  const H = 192;
+  const H = 256;
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext('2d');
   if (ctx) {
     ctx.clearRect(0, 0, W, H);
-    ctx.font = 'bold 22px ui-monospace, SFMono-Regular, monospace';
+    ctx.fillStyle = `${fillHex}ee`;
+    ctx.fillRect(12, 12, W - 24, H - 24);
+    ctx.strokeStyle = strokeHex;
+    ctx.lineWidth = 8;
+    ctx.strokeRect(12, 12, W - 24, H - 24);
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const chipW = Math.min(W - 32, 24 + chip.length * 12);
-    const chipX = (W - chipW) / 2;
-    const chipY = 18;
-    const chipH = 32;
-    const r = chipH / 2;
-    ctx.fillStyle = strokeHex + '52';
-    ctx.beginPath();
-    ctx.moveTo(chipX + r, chipY);
-    ctx.arcTo(chipX + chipW, chipY, chipX + chipW, chipY + chipH, r);
-    ctx.arcTo(chipX + chipW, chipY + chipH, chipX, chipY + chipH, r);
-    ctx.arcTo(chipX, chipY + chipH, chipX, chipY, r);
-    ctx.arcTo(chipX, chipY, chipX + chipW, chipY, r);
-    ctx.closePath();
-    ctx.fill();
     ctx.fillStyle = strokeHex;
-    ctx.fillText(chip, W / 2, chipY + chipH / 2 + 1);
+    ctx.font = 'bold 24px ui-monospace, SFMono-Regular, monospace';
+    ctx.fillText(spec.title.toUpperCase(), W / 2, 48);
     ctx.fillStyle = '#f1f5f9';
-    ctx.font = 'bold 30px ui-sans-serif, system-ui, sans-serif';
-    const titleY0 = chipY + chipH + 24;
-    for (let i = 0; i < labelLines.length; i++) {
-      ctx.fillText(labelLines[i], W / 2, titleY0 + i * 38);
+    ctx.font = 'bold 28px ui-sans-serif, system-ui, sans-serif';
+    for (let i = 0; i < spec.lines.slice(0, 3).length; i++) {
+      ctx.fillText(spec.lines[i], W / 2, 104 + i * 42);
     }
   }
   const tex = new CanvasTexture(canvas);
   tex.needsUpdate = true;
-  const mat = new SpriteMaterial({ map: tex, transparent: true });
-  const sprite = new Sprite(mat);
-  sprite.scale.set(NODE_W * 0.92, NODE_H * 0.92, 1);
-  return sprite;
+  const mat = new MeshBasicMaterial({
+    map: tex,
+    transparent: true,
+    opacity: 0.98,
+    side: DoubleSide,
+  });
+  return new Mesh(new PlaneGeometry(NODE_W * 0.96, NODE_H * 0.88), mat);
 }
 
-// ── Node mesh — flat plane + brighter "stroke" edge + label sprite ─────────
+function placeFacePanel(panel: Mesh, side: CubeFaceSpec['side']): void {
+  const z = NODE_D / 2 + 0.012;
+  const x = NODE_W / 2 + 0.012;
+  const y = NODE_H / 2 + 0.012;
+  if (side === 'front') {
+    panel.position.set(0, 0, z);
+  } else if (side === 'back') {
+    panel.position.set(0, 0, -z);
+    panel.rotation.y = Math.PI;
+  } else if (side === 'right') {
+    panel.position.set(x, 0, 0);
+    panel.rotation.y = Math.PI / 2;
+  } else if (side === 'left') {
+    panel.position.set(-x, 0, 0);
+    panel.rotation.y = -Math.PI / 2;
+  } else if (side === 'top') {
+    panel.position.set(0, y, 0);
+    panel.rotation.x = -Math.PI / 2;
+  } else {
+    panel.position.set(0, -y, 0);
+    panel.rotation.x = Math.PI / 2;
+  }
+}
+
+// ── Node mesh — glowing inspectable cube + side panels ────────────────────
 
 interface NodeMeshBundle {
   group: Group;
@@ -285,7 +333,7 @@ interface NodeMeshBundle {
    *  rendered at low opacity so every card glows; the selected card
    *  pulsates this halo's opacity + scale via the tick() loop. */
   halo: Mesh;
-  sprite: Sprite | null;
+  facePanels: Mesh[];
   position: NodePos3D;
   node: ThoughtTreeNode;
   /** Original fill color — kept for halo deselection state. */
@@ -299,7 +347,11 @@ interface NodeMeshBundle {
   bounceStartedAt: number | null;
 }
 
-function buildNodeMesh(node: ThoughtTreeNode, pos: NodePos3D): NodeMeshBundle {
+function buildNodeMesh(
+  node: ThoughtTreeNode,
+  pos: NodePos3D,
+  childCount: number,
+): NodeMeshBundle {
   const palette = paletteThreeFor(node.kind);
   const group = new Group();
   group.position.set(pos.x, pos.y, pos.z);
@@ -324,7 +376,7 @@ function buildNodeMesh(node: ThoughtTreeNode, pos: NodePos3D): NodeMeshBundle {
     new PlaneGeometry(NODE_W * HALO_SCALE_W, NODE_H * HALO_SCALE_H),
     haloMat,
   );
-  halo.position.set(0, 0, -0.02); // behind the card body
+  halo.position.set(0, 0, -(NODE_D / 2 + 0.04)); // behind the cube body
   halo.userData = { 'data-node-id': node.id, role: 'halo' };
   group.add(halo);
 
@@ -332,11 +384,9 @@ function buildNodeMesh(node: ThoughtTreeNode, pos: NodePos3D): NodeMeshBundle {
   const bodyMat = new MeshBasicMaterial({
     color: palette.fill.clone(),
     transparent: true,
-    opacity: 0.92,
-    // Render both faces so the card is visible from "behind" when orbiting.
-    side: DoubleSide,
+    opacity: 0.62,
   });
-  const body = new Mesh(new PlaneGeometry(NODE_W, NODE_H), bodyMat);
+  const body = new Mesh(new BoxGeometry(NODE_W, NODE_H, NODE_D), bodyMat);
   body.userData = { 'data-node-id': node.id, role: 'body' };
   group.add(body);
 
@@ -346,16 +396,17 @@ function buildNodeMesh(node: ThoughtTreeNode, pos: NodePos3D): NodeMeshBundle {
     color: palette.stroke.clone(),
     transparent: true,
     opacity: 0.98,
+    side: DoubleSide,
   });
   const ribbon = new Mesh(new PlaneGeometry(0.08, NODE_H), ribbonMat);
-  ribbon.position.set(-NODE_W / 2 + 0.05, 0, 0.001);
+  ribbon.position.set(-NODE_W / 2 + 0.05, 0, NODE_D / 2 + 0.018);
   ribbon.userData = { 'data-node-id': node.id, role: 'ribbon' };
   group.add(ribbon);
 
   // Selection outline — wireframe of a box slightly bigger than the card.
   // Hidden by default; flipped visible when `selectedNodeId` matches.
   const outlineGeom = new EdgesGeometry(
-    new BoxGeometry(NODE_W + 0.12, NODE_H + 0.12, 0.04),
+    new BoxGeometry(NODE_W + 0.12, NODE_H + 0.12, NODE_D + 0.12),
   );
   const outlineMat = new LineBasicMaterial({
     color: SELECTED_STROKE_THREE.clone(),
@@ -363,19 +414,26 @@ function buildNodeMesh(node: ThoughtTreeNode, pos: NodePos3D): NodeMeshBundle {
     opacity: 0,
   });
   const outline = new LineSegments(outlineGeom, outlineMat);
-  outline.position.set(0, 0, 0.002);
   outline.visible = false;
   outline.userData = { 'data-node-id': node.id, role: 'outline' };
   group.add(outline);
 
   // Label sprite — chip + 2-line title rendered to a CanvasTexture.
-  const labelLines = wrapLabel(node.label || kindLabel(node.kind));
-  const chip = kindLabel(node.kind);
-  const sprite = makeLabelSprite(chip, labelLines, `#${palette.stroke.getHexString()}`);
-  if (sprite) {
-    sprite.position.set(0, 0, 0.01); // slight forward offset
-    sprite.userData = { 'data-node-id': node.id, role: 'label' };
-    group.add(sprite);
+  const facePanels: Mesh[] = [];
+  const strokeHex = `#${palette.stroke.getHexString()}`;
+  const fillHex = `#${palette.fill.getHexString()}`;
+  for (const spec of faceSpecsForNode(node, pos, childCount)) {
+    const panel = makeFacePanel(spec, strokeHex, fillHex);
+    if (!panel) continue;
+    placeFacePanel(panel, spec.side);
+    panel.userData = {
+      'data-node-id': node.id,
+      role: 'cube-face',
+      face: spec.side,
+      title: spec.title,
+    };
+    facePanels.push(panel);
+    group.add(panel);
   }
 
   return {
@@ -384,7 +442,7 @@ function buildNodeMesh(node: ThoughtTreeNode, pos: NodePos3D): NodeMeshBundle {
     ribbon,
     outline,
     halo,
-    sprite,
+    facePanels,
     position: pos,
     node,
     baseFill: palette.fill.clone(),
@@ -430,6 +488,13 @@ const BOUNCE_AMPLITUDE = 0.18;
 const BOUNCE_DURATION_MS = 520;
 const BOUNCE_DAMPING = 3.4;
 
+// Inspectable cube idle turn. It is intentionally subtle: enough to
+// reveal that each block has multiple faces, not enough to make labels
+// unreadable. Hover pauses the turn for inspection.
+const CUBE_IDLE_SPIN_PERIOD_MS = 9000;
+const CUBE_IDLE_SPIN_AMPLITUDE = 0.24;
+const CUBE_SELECTED_SPIN_AMPLITUDE = 0.38;
+
 export function SggsScene({
   tree,
   onNodeClick,
@@ -451,6 +516,7 @@ export function SggsScene({
   const raycasterRef = useRef<MinimalRaycaster | null>(null);
   const onNodeClickRef = useRef<SggsSceneProps['onNodeClick']>(onNodeClick);
   const selectedIdRef = useRef<string | null | undefined>(selectedNodeId);
+  const hoveredIdRef = useRef<string | null>(null);
   const selectAnimRef = useRef<{
     startedAt: number;
     fromColors: Map<string, Color>;
@@ -534,11 +600,15 @@ export function SggsScene({
     // phase offset so the ambient float doesn't bob the whole tree in
     // lockstep.
     const meshes: NodeMeshBundle[] = [];
+    const childCountById = new Map<string, number>();
+    for (const edge of tree.edges ?? []) {
+      childCountById.set(edge.source, (childCountById.get(edge.source) ?? 0) + 1);
+    }
     let idx = 0;
     for (const node of tree.nodes ?? []) {
       const pos = layout[node.id];
       if (!pos) continue;
-      const bundle = buildNodeMesh(node, pos);
+      const bundle = buildNodeMesh(node, pos, childCountById.get(node.id) ?? 0);
       bundle.floatPhaseOffset = (idx * 0.62) % (Math.PI * 2);
       meshes.push(bundle);
       scene.add(bundle.group);
@@ -574,24 +644,33 @@ export function SggsScene({
       ? raycasterFactory()
       : new Raycaster();
 
-    // Click handler. Find which mesh the ray hits and call onNodeClick.
-    function onPointerDown(ev: PointerEvent) {
-      if (!cameraRef.current) return;
-      // Only handle primary-button clicks; orbit controls own right/middle.
-      if (ev.button !== 0) return;
+    function hitBundleFromPointer(ev: PointerEvent): NodeMeshBundle | null {
+      if (!cameraRef.current) return null;
       const rect = renderer.domElement.getBoundingClientRect();
       const nx = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
       const ny = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
       const ndc = new Vector2(nx, ny);
       raycaster.setFromCamera(ndc, cameraRef.current);
-      const targets = meshesRef.current.flatMap((m) => [m.body, m.ribbon]);
+      const targets = meshesRef.current.flatMap((m) => [
+        m.body,
+        m.ribbon,
+        ...m.facePanels,
+      ]);
       const hits = raycaster.intersectObjects(targets, false);
-      if (hits.length === 0) return;
-      // Walk back to the group; group has the data-node-id.
+      if (hits.length === 0) return null;
+      // Every clickable face/body/ribbon carries the node id.
       const hit = hits[0].object;
       const id = (hit.userData as { 'data-node-id'?: string })['data-node-id'];
-      if (!id) return;
+      if (!id) return null;
       const bundle = meshesRef.current.find((m) => m.node.id === id);
+      return bundle ?? null;
+    }
+
+    // Click handler. Find which mesh the ray hits and call onNodeClick.
+    function onPointerDown(ev: PointerEvent) {
+      // Only handle primary-button clicks; orbit controls own right/middle.
+      if (ev.button !== 0) return;
+      const bundle = hitBundleFromPointer(ev);
       if (!bundle) return;
       // Bounce on EVERY click, not just selection changes. Per Codex
       // audit 8939e62 blocker 4: if the user clicks the already-selected
@@ -604,7 +683,15 @@ export function SggsScene({
       // a click; the OrbitControls implementation is tolerant of this.
       onNodeClickRef.current?.(bundle.node);
     }
+    function onPointerMove(ev: PointerEvent) {
+      hoveredIdRef.current = hitBundleFromPointer(ev)?.node.id ?? null;
+    }
+    function onPointerLeave() {
+      hoveredIdRef.current = null;
+    }
     renderer.domElement.addEventListener('pointerdown', onPointerDown);
+    renderer.domElement.addEventListener('pointermove', onPointerMove);
+    renderer.domElement.addEventListener('pointerleave', onPointerLeave);
 
     // Resize observer — keeps renderer + camera matched to the wrapper.
     const ro = new ResizeObserver(() => {
@@ -681,8 +768,20 @@ export function SggsScene({
         const floatY = Math.sin(phase) * FLOAT_AMPLITUDE;
         bundle.group.position.y = bundle.position.y + floatY;
 
-        // Damped bounce scale (whole group). Affects body/ribbon/sprite/
-        // outline together so the card pops then settles, without
+        const isHovered = bundle.node.id === hoveredIdRef.current;
+        const spinAmp =
+          bundle.node.id === selectedIdRef.current
+            ? CUBE_SELECTED_SPIN_AMPLITUDE
+            : CUBE_IDLE_SPIN_AMPLITUDE;
+        if (!isHovered) {
+          const spinPhase =
+            (now / CUBE_IDLE_SPIN_PERIOD_MS) * Math.PI * 2 +
+            bundle.floatPhaseOffset;
+          bundle.group.rotation.y = Math.sin(spinPhase) * spinAmp;
+        }
+
+        // Damped bounce scale (whole group). Affects body/ribbon/faces/
+        // outline together so the cube pops then settles, without
         // affecting the halo's separate pulse animation (halo lives in
         // group-local space, so it inherits the bounce too — which is
         // the intended visual).
@@ -791,6 +890,8 @@ export function SggsScene({
       rafRef.current = null;
       ro.disconnect();
       renderer.domElement.removeEventListener('pointerdown', onPointerDown);
+      renderer.domElement.removeEventListener('pointermove', onPointerMove);
+      renderer.domElement.removeEventListener('pointerleave', onPointerLeave);
       // Dispose materials, geometries, textures. Per Codex audit
       // 8939e62 blocker 3: halo geometry + material were missing here,
       // which leaked GPU resources on every TRACE-3D tab close (the
@@ -804,10 +905,11 @@ export function SggsScene({
         (bundle.outline.material as LineBasicMaterial).dispose();
         bundle.halo.geometry.dispose();
         (bundle.halo.material as MeshBasicMaterial).dispose();
-        if (bundle.sprite) {
-          const m = bundle.sprite.material as SpriteMaterial;
-          if (m.map) m.map.dispose();
-          m.dispose();
+        for (const panel of bundle.facePanels) {
+          panel.geometry.dispose();
+          const mat = panel.material as MeshBasicMaterial;
+          if (mat.map) mat.map.dispose();
+          mat.dispose();
         }
         scene.remove(bundle.group);
       }

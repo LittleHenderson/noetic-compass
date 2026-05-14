@@ -123,6 +123,10 @@ function makeRendererStub(): MinimalWebGLRenderer {
 interface TestSurface {
   __sggs_scene?: Scene;
   __sggs_step?: () => void;
+  __sggs_meshes?: Array<{
+    body: { geometry: { type?: string } };
+    facePanels: Array<{ userData: Record<string, unknown> }>;
+  }>;
 }
 
 beforeEach(() => {
@@ -207,6 +211,36 @@ describe('SggsScene — scene composition', () => {
       if (eid) lineCount += 1;
     });
     expect(lineCount).toBe(tree.edge_count);
+  });
+
+  it('renders each node as an inspectable cube body', () => {
+    const tree = makeSampleTree();
+    const { container } = render(
+      <SggsScene tree={tree} rendererFactory={makeRendererStub} />,
+    );
+    const wrapper = container.querySelector('[data-testid="sggs-scene"]') as
+      | (HTMLElement & TestSurface)
+      | null;
+    expect(wrapper!.__sggs_meshes).toBeDefined();
+    for (const bundle of wrapper!.__sggs_meshes!) {
+      expect(bundle.body.geometry.type).toBe('BoxGeometry');
+    }
+  });
+
+  it('adds six information faces to every cube', () => {
+    const tree = makeSampleTree();
+    const { container } = render(
+      <SggsScene tree={tree} rendererFactory={makeRendererStub} />,
+    );
+    const wrapper = container.querySelector('[data-testid="sggs-scene"]') as
+      | (HTMLElement & TestSurface)
+      | null;
+    const expectedFaces = ['front', 'right', 'back', 'left', 'top', 'bottom'];
+    for (const bundle of wrapper!.__sggs_meshes!) {
+      expect(bundle.facePanels).toHaveLength(6);
+      const faces = bundle.facePanels.map((panel) => panel.userData.face);
+      expect(faces).toEqual(expectedFaces);
+    }
   });
 });
 
