@@ -1007,9 +1007,9 @@ No v0.2 retrain in this scope. Pending user sample-read of the 50 to gate the ne
 
 DECISION: Retrain Stage 4A on a merged corpus combining Wave 2.5 (5,244 records from `track1_merged_2026_05_14.jsonl`) + Stage 4B clean-train (364 records from `stage4b_pilot_20260514T185757Z_accepted.jsonl` minus 9 quarantined copyright-flagged). All trainer hyperparameters frozen at v0.1 values. **Tests the corpus-diversity hypothesis: does broader English-side variety recover the input-content mapping that v0.1's templated Wave 2.5 prompts could not learn?**
 
-AUTHORIZED: pending
+AUTHORIZED: yes
 
-RATIFIED-BY: Codex audit `728be8c` (Stage 4B pilot PASS, 50 sample reads cleared 40/50 bar) + awaiting user chat "go"
+RATIFIED-BY: Codex audit `728be8c` (Stage 4B pilot PASS, 50 sample reads cleared 40/50 bar) + user chat "go" 2026-05-14T19:55Z. Scope-of-go: build merged corpus (Wave 2.5 + 364 Stage 4B clean-train at natural ratio), pre-flight smoke, full training with v0.1 hparams frozen, full-val eval `--limit 0`, sample read 12, immediate local backup on promote.
 
 CONTEXT: Stage 4B pilot 374/500 accepted, 364 clean-train (entry above 19:30Z). Sample-read gate passed per Codex 728be8c. Stage 4A v0 mode-collapsed; v0.1 reduced collapse but still 0% recovery; diagnosis attributed to Wave 2.5's templated-renderer English prompts not teaching content-conditional mapping. Stage 4B adds real-user prompt diversity for the 4 natural cognitive-operation categories.
 

@@ -1,0 +1,41 @@
+{
+  "category_spread_stage4b_layer": {
+    "binary_composition": 50,
+    "let_binding": 9,
+    "recipe": 119,
+    "state_literal": 186
+  },
+  "category_spread_total": {
+    "binary_composition": 757,
+    "cross_register_omega": 582,
+    "diagram_export": 417,
+    "fractal_sequence": 465,
+    "inversion": 66,
+    "let_binding": 453,
+    "meta_logic_relation": 696,
+    "recipe": 606,
+    "rpm_chain": 359,
+    "state_literal": 1207
+  },
+  "created_at": "2026-05-14T20:02:45Z",
+  "mix_ratio_stage4b_pct": 6.49,
+  "mix_ratio_wave25_pct": 93.51,
+  "n_stage4b_in": 373,
+  "n_stage4b_invalid": 0,
+  "n_stage4b_kept": 364,
+  "n_stage4b_quarantined": 9,
+  "n_wave25": 5244,
+  "output_file": "cas-synthetic\\data\\stage4\\track1_v02_merged_2026_05_14.jsonl",
+  "policy_links": {
+    "data_strategy_memory": "feedback_cas_native_data_strategy_2026_05_13.md (2026-05-14 refinement)",
+    "stage4_spec": "docs/working/stage4_minimal_nl_training_spec_2026_05_13.md",
+    "stage4_v02_authorized_entry": "docs/working/agent_exchange/decisions.md 2026-05-14T19:45Z",
+    "stage4b_pilot_findings": "docs/working/stage4b_pilot_2026_05_14/FINDINGS.md"
+  },
+  "rule": "Wave 2.5 inverted records + Stage 4B clean-train (excludes copyright-quarantined). Natural mix ratio, no upsampling. Foreign answer text NEVER stored \u2014 only Haiku-proposed CAS that passed our compiler + judge.",
+  "schema_version": "stage4_v02_merged.v1",
+  "sha256": "513dd1060e675a2a9ed51bfcbeb813de593ed74f01c779baaaf0b72842db536a",
+  "source_stage4b": "cas-synthetic/data/stage4b/stage4b_pilot_20260514T185757Z_accepted.jsonl",
+  "source_wave25": "cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl",
+  "total_records": 5608
+}
