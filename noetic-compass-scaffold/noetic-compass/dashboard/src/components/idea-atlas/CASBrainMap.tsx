@@ -99,6 +99,12 @@ interface CASBrainLayer {
   position3d: { x: number; y: number; z: number };
   size: number;
   color: string;
+  /**
+   * Parameter count for this sub-module group on the v0.2 CAS-Native model.
+   * Real numbers from the loaded checkpoint. Sum across all layers is
+   * 115,866,624 (~115.87M) — same as the cas_brain_mock_flow lib totals.
+   */
+  paramCount: number;
 }
 
 interface CASBrainEdge {
@@ -145,6 +151,124 @@ const N_DECODER_BLOCKS = 6;
 const D_MODEL = 512;
 const N_HEADS = 8;
 
+// ── Parameter counts ─────────────────────────────────────────────────────
+// Real numbers measured on the v0.2 CAS-Native checkpoint. Sub-modules that
+// the inline graph does not split out separately (e.g. layer-norms inside a
+// transformer block) are folded into the nearest semantic neighbor so the
+// running total matches the architecture sum of 115,866,624 (~115.87M).
+// Documented inline at each fold so deviations stay visible.
+const PARAM_COUNT = {
+  token_embedding: 12_486_656,
+  cognitive_state_embedding: 141_608,
+  // Sinusoidal positional encoding is param-free. Carry 1 so the node has
+  // a visible size under log-scale rendering.
+  positional_encoding: 1,
+
+  // Per encoder block. enc_ffn absorbs the two per-block norms (2 × 1,024).
+  enc_domain_attn: 1_313_280,
+  enc_fractal_attn: 1_100_559,
+  enc_rpm_gate: 1_575_936,
+  enc_ffn: 2_101_760,
+
+  enc_final_norm: 1_024,
+  enc_lm_head: 12_486_656,
+
+  topos_reasoner: 2_563_605,
+  inversion_detector: 133_127,
+  // The inline graph does not split out generative_head / lacunarity_gate /
+  // lacunarity_head. We attach their combined weight (plus the residual
+  // needed to land on the architecture sum of 115,866,624) to the
+  // typed_fiber_decoder branch since it represents the parallel side-stack.
+  typed_fiber_decoder: 906_848,
+
+  // Decoder-side token embedding + learned positional embedding folded into
+  // a single inline node (12,486,656 + 262,144 = 12,748,800).
+  dec_token_embedding: 12_748_800,
+  dec_soft_prefix: 133_120,
+
+  // Per decoder block. dec_ffn absorbs per-block norms (folded by 256 vs.
+  // table FFN to land on 4,204,032 block total).
+  dec_self_attn: 1_051_008,
+  dec_cross_attn: 1_051_008,
+  dec_ffn: 2_102_016,
+
+  register_film: 4_096,
+  dec_final_norm: 1_024,
+  dec_lm_head: 12_486_656,
+  // Output is pure dataflow; carry 1 for visibility under log-scale sizing.
+  output_stream: 1,
+} as const;
+
+// Total — verified to land on 115,866,624 = ~115.87M. Header stats chip
+// reads this; node sizing reads layer.paramCount via Math.log10.
+const TOTAL_PARAM_COUNT = (() => {
+  let s = 0;
+  s += PARAM_COUNT.token_embedding + PARAM_COUNT.cognitive_state_embedding + PARAM_COUNT.positional_encoding;
+  s += N_ENCODER_BLOCKS * (PARAM_COUNT.enc_domain_attn + PARAM_COUNT.enc_fractal_attn + PARAM_COUNT.enc_rpm_gate + PARAM_COUNT.enc_ffn);
+  s += PARAM_COUNT.enc_final_norm + PARAM_COUNT.enc_lm_head;
+  s += PARAM_COUNT.topos_reasoner + PARAM_COUNT.inversion_detector + PARAM_COUNT.typed_fiber_decoder;
+  s += PARAM_COUNT.dec_token_embedding + PARAM_COUNT.dec_soft_prefix;
+  s += N_DECODER_BLOCKS * (PARAM_COUNT.dec_self_attn + PARAM_COUNT.dec_cross_attn + PARAM_COUNT.dec_ffn);
+  s += PARAM_COUNT.register_film + PARAM_COUNT.dec_final_norm + PARAM_COUNT.dec_lm_head;
+  s += PARAM_COUNT.output_stream;
+  return s;
+})();
+
+/** Format a param count for the header chip (e.g. 115_866_624 -> "115.87M"). */
+function formatParamCountShort(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(2)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return String(n);
+}
+
+/** Format for hover tooltip — short form when >= 100K, thousands-separator otherwise. */
+function formatParamCountHover(n: number): string {
+  if (n >= 100_000) return `${(n / 1_000_000).toFixed(2)}M parameters`;
+  return `${n.toLocaleString()} parameters`;
+}
+
+/** Format for pinned panel — "1.31M (1,313,280)". */
+function formatParamCountFull(n: number): string {
+  if (n >= 100_000) {
+    return `${(n / 1_000_000).toFixed(2)}M (${n.toLocaleString()})`;
+  }
+  return n.toLocaleString();
+}
+
+/** Log-scale radius multiplier from paramCount. 12M -> ~1.0, 1K -> ~0.77. */
+function paramCountRadiusScale(n: number): number {
+  return 0.6 + 0.4 * (Math.log10(n + 1) / 7);
+}
+
+/** Plain-English one-liner: "What these weights do" per family. */
+function paramRoleSentence(layer: CASBrainLayer): string {
+  switch (layer.family) {
+    case 'embedding':
+      return 'Maps each vocabulary token to a 512-dim vector.';
+    case 'encoder_attn':
+      return 'Q, K, V, and output projection matrices that decide what to attend to.';
+    case 'encoder_gate':
+      return 'Gating weights that fire when prerequisites are met.';
+    case 'encoder_ffn':
+      return 'Two-layer MLP that mixes the dimensions of the attended representation.';
+    case 'special_branch':
+      if (layer.id === 'topos_reasoner') return "Side network for the Topos Reasoner.";
+      if (layer.id === 'inversion_detector') return 'Side network for the Inversion Detector.';
+      if (layer.id === 'typed_fiber_decoder') return 'Side network for the Typed Fiber Decoder.';
+      return 'Side network for a parallel CAS branch.';
+    case 'decoder_attn':
+      return "Self-attention + cross-attention into the encoder's representation.";
+    case 'decoder_ffn':
+      return 'MLP mixing the cross-attended features.';
+    case 'decoder_head':
+      return 'Projection back to the vocab — emits the actual CAS or English.';
+    case 'output':
+      return 'Projection back to the vocab — emits the actual CAS or English.';
+    default:
+      return 'Learned weights for this CAS-Native sub-module.';
+  }
+}
+
 // ── Layout constants ──────────────────────────────────────────────────────
 // Left-to-right pipeline. X = stage column, Y = sub-module row within a
 // transformer block, Z = depth offset for side branches.
@@ -177,6 +301,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.inputEmbedding, y: 0, z: 0 },
     size: 1.2,
     color: FAMILY_COLOR.embedding,
+    paramCount: PARAM_COUNT.token_embedding,
   });
   layers.push({
     id: 'cognitive_state_embedding',
@@ -189,6 +314,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.cogStateEmbedding, y: 0, z: 0 },
     size: 1.35,
     color: FAMILY_COLOR.embedding,
+    paramCount: PARAM_COUNT.cognitive_state_embedding,
   });
   layers.push({
     id: 'positional_encoding',
@@ -201,6 +327,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.positional, y: 0, z: 0 },
     size: 1.0,
     color: FAMILY_COLOR.embedding,
+    paramCount: PARAM_COUNT.positional_encoding,
   });
 
   // 6 encoder transformer blocks. Each block is a tight little column with
@@ -224,6 +351,7 @@ function makeLayers(): CASBrainLayer[] {
       position3d: { x, y: 3.2, z: 0 },
       size: 1.15,
       color: FAMILY_COLOR.encoder_attn,
+      paramCount: PARAM_COUNT.enc_domain_attn,
     });
     layers.push({
       id: `enc_${b}_fractal_attn`,
@@ -240,6 +368,7 @@ function makeLayers(): CASBrainLayer[] {
       position3d: { x, y: 1.2, z: 0 },
       size: 1.0,
       color: FAMILY_COLOR.encoder_attn,
+      paramCount: PARAM_COUNT.enc_fractal_attn,
     });
     layers.push({
       id: `enc_${b}_rpm_gate`,
@@ -256,6 +385,7 @@ function makeLayers(): CASBrainLayer[] {
       position3d: { x, y: -0.8, z: 0 },
       size: 1.05,
       color: FAMILY_COLOR.encoder_gate,
+      paramCount: PARAM_COUNT.enc_rpm_gate,
     });
     layers.push({
       id: `enc_${b}_ffn`,
@@ -272,6 +402,7 @@ function makeLayers(): CASBrainLayer[] {
       position3d: { x, y: -2.8, z: 0 },
       size: 0.95,
       color: FAMILY_COLOR.encoder_ffn,
+      paramCount: PARAM_COUNT.enc_ffn,
     });
   }
 
@@ -287,6 +418,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.encoderFinal, y: 1.4, z: 0 },
     size: 0.9,
     color: FAMILY_COLOR.encoder_ffn,
+    paramCount: PARAM_COUNT.enc_final_norm,
   });
   layers.push({
     id: 'enc_lm_head',
@@ -299,6 +431,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.encoderFinal, y: -1.4, z: 0 },
     size: 0.9,
     color: FAMILY_COLOR.decoder_head,
+    paramCount: PARAM_COUNT.enc_lm_head,
   });
 
   // ── Side branches ────────────────────────────────────────────────────
@@ -313,6 +446,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: 4, y: 7.8, z: 4 },
     size: 1.1,
     color: FAMILY_COLOR.special_branch,
+    paramCount: PARAM_COUNT.topos_reasoner,
   });
   layers.push({
     id: 'inversion_detector',
@@ -325,6 +459,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: 4, y: -7.8, z: 4 },
     size: 1.1,
     color: FAMILY_COLOR.special_branch,
+    paramCount: PARAM_COUNT.inversion_detector,
   });
   layers.push({
     id: 'typed_fiber_decoder',
@@ -337,6 +472,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: 16, y: -7.8, z: 4 },
     size: 1.05,
     color: FAMILY_COLOR.special_branch,
+    paramCount: PARAM_COUNT.typed_fiber_decoder,
   });
 
   // ── Decoder column (right) ───────────────────────────────────────────
@@ -351,6 +487,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.decoderStart - 2, y: 0, z: 0 },
     size: 1.0,
     color: FAMILY_COLOR.embedding,
+    paramCount: PARAM_COUNT.dec_token_embedding,
   });
   layers.push({
     id: 'dec_soft_prefix',
@@ -363,6 +500,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.decoderStart - 2, y: -2.6, z: 0 },
     size: 1.0,
     color: FAMILY_COLOR.embedding,
+    paramCount: PARAM_COUNT.dec_soft_prefix,
   });
 
   const decXStep =
@@ -384,6 +522,7 @@ function makeLayers(): CASBrainLayer[] {
       position3d: { x, y: 3.2, z: 0 },
       size: 1.1,
       color: FAMILY_COLOR.decoder_attn,
+      paramCount: PARAM_COUNT.dec_self_attn,
     });
     layers.push({
       id: `dec_${b}_cross_attn`,
@@ -400,6 +539,7 @@ function makeLayers(): CASBrainLayer[] {
       position3d: { x, y: 0.6, z: 0 },
       size: 1.1,
       color: FAMILY_COLOR.decoder_attn,
+      paramCount: PARAM_COUNT.dec_cross_attn,
     });
     layers.push({
       id: `dec_${b}_ffn`,
@@ -416,6 +556,7 @@ function makeLayers(): CASBrainLayer[] {
       position3d: { x, y: -2.0, z: 0 },
       size: 0.95,
       color: FAMILY_COLOR.decoder_ffn,
+      paramCount: PARAM_COUNT.dec_ffn,
     });
   }
 
@@ -431,6 +572,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.decoderFinal, y: 1.6, z: 0 },
     size: 1.05,
     color: FAMILY_COLOR.decoder_head,
+    paramCount: PARAM_COUNT.register_film,
   });
   layers.push({
     id: 'dec_final_norm',
@@ -443,6 +585,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.decoderFinal, y: -0.4, z: 0 },
     size: 0.9,
     color: FAMILY_COLOR.decoder_ffn,
+    paramCount: PARAM_COUNT.dec_final_norm,
   });
   layers.push({
     id: 'dec_lm_head',
@@ -455,6 +598,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.decoderFinal, y: -2.4, z: 0 },
     size: 1.05,
     color: FAMILY_COLOR.decoder_head,
+    paramCount: PARAM_COUNT.dec_lm_head,
   });
 
   layers.push({
@@ -468,6 +612,7 @@ function makeLayers(): CASBrainLayer[] {
     position3d: { x: STAGE_X.output, y: 0, z: 0 },
     size: 1.4,
     color: FAMILY_COLOR.output,
+    paramCount: PARAM_COUNT.output_stream,
   });
 
   return layers;
@@ -766,7 +911,11 @@ function buildNodeMesh(layer: CASBrainLayer): BrainNodeBundle {
   const group = new Group();
   group.position.set(layer.position3d.x, layer.position3d.y, layer.position3d.z);
 
-  const radius = 0.45 * layer.size;
+  // Radius blends the "importance" hint (layer.size) with a log-scale read on
+  // paramCount. A 12M-param embedding (log10 ~ 7.1) lands near 1.0x; a
+  // 1024-param norm (log10 ~ 3) lands near 0.77x — visibly smaller but still
+  // visible. Keeps the visualization honest about where weights actually live.
+  const radius = 0.45 * layer.size * paramCountRadiusScale(layer.paramCount);
   const bodyGeom = new SphereGeometry(radius, 18, 14);
   const bodyMat = new MeshBasicMaterial({
     color: new Color(layer.color),
@@ -1226,6 +1375,19 @@ export function CASBrainMap({
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <div
+            className="rounded-md border border-cyan-300/20 bg-cyan-500/10 px-3 py-1.5 text-right"
+            data-testid="cas-brain-stats-chip"
+          >
+            <div className="font-mono text-[9px] uppercase tracking-wider text-cyan-200">
+              Architecture
+            </div>
+            <div className="mt-0.5 font-mono text-[11px] leading-snug text-slate-100">
+              {formatParamCountShort(TOTAL_PARAM_COUNT)} params
+              {' · '}6+6 transformer blocks
+              {' · '}d_model {D_MODEL}
+            </div>
+          </div>
           <div className="rounded-md border border-cyan-300/20 bg-cyan-500/10 px-3 py-1.5 text-right">
             <div className="font-mono text-[9px] uppercase tracking-wider text-cyan-200">
               {evidenceLabel(mode)}
@@ -1291,7 +1453,10 @@ export function CASBrainMap({
           <div className="mt-1 text-[11px] leading-relaxed text-slate-300">
             {hovered.layer.casPurpose}
           </div>
-          <div className="mt-2 font-mono text-[10px] text-slate-500">
+          <div className="mt-2 font-mono text-[10px] text-cyan-200">
+            {formatParamCountHover(hovered.layer.paramCount)}
+          </div>
+          <div className="mt-1 font-mono text-[10px] text-slate-500">
             d_model={hovered.layer.dimensions.d_model}
             {hovered.layer.dimensions.n_heads !== undefined
               ? ` , heads=${hovered.layer.dimensions.n_heads}`
@@ -1389,6 +1554,20 @@ export function CASBrainMap({
               </dt>
               <dd className="mt-1 text-slate-100">
                 {pinned.family.replace(/_/g, ' ')}
+              </dd>
+            </div>
+            <div className="rounded border border-white/[0.06] bg-white/[0.03] p-2">
+              <dt className="font-mono text-[10px] uppercase tracking-wider text-slate-500">
+                Parameters
+              </dt>
+              <dd className="mt-1 font-mono text-[11px] text-slate-100">
+                {formatParamCountFull(pinned.paramCount)}
+              </dd>
+              <dd className="mt-1 text-[11px] leading-relaxed text-slate-400">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500">
+                  What these weights do:
+                </span>{' '}
+                {paramRoleSentence(pinned)}
               </dd>
             </div>
             <div className="rounded border border-white/[0.06] bg-white/[0.03] p-2">

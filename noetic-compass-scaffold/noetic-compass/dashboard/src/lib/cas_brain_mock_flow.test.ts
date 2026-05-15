@@ -17,6 +17,7 @@ import {
   getMockFlows,
   getStaticEdges,
   getStaticLayers,
+  getTotalParamCount,
 } from './cas_brain_mock_flow';
 
 describe('cas_brain_mock_flow — static layers', () => {
@@ -61,6 +62,26 @@ describe('cas_brain_mock_flow — static layers', () => {
       expect(layer.casPurpose.length).toBeGreaterThan(20);
       expect(layer.whyItMatters.length).toBeGreaterThan(50);
     }
+  });
+
+  it('every layer carries a positive paramCount', () => {
+    const layers = getStaticLayers();
+    for (const layer of layers) {
+      expect(typeof layer.paramCount).toBe('number');
+      expect(Number.isFinite(layer.paramCount)).toBe(true);
+      expect(layer.paramCount).toBeGreaterThan(0);
+    }
+  });
+
+  it('total paramCount across all layers is within +/- 5% of 115.87M', () => {
+    const target = 115_866_624; // v0.2 architecture sum
+    const tolerance = 0.05;
+    const total = getTotalParamCount();
+    // Sanity: also matches the running sum across getStaticLayers().
+    const summed = getStaticLayers().reduce((acc, l) => acc + l.paramCount, 0);
+    expect(total).toBe(summed);
+    expect(total).toBeGreaterThanOrEqual(target * (1 - tolerance));
+    expect(total).toBeLessThanOrEqual(target * (1 + tolerance));
   });
 });
 
