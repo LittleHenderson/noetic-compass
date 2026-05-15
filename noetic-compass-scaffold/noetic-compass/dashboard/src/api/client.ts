@@ -54,7 +54,7 @@ async function refreshDashboardToken(): Promise<boolean> {
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {},
-  retryOnDashboardLimit: boolean = true,
+  allowRecovery: boolean = true,
 ): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
@@ -88,13 +88,16 @@ export async function apiFetch<T>(
     }
     if (res.status === 401) {
       clearToken();
+      if (allowRecovery && path !== '/auth/token' && await refreshDashboardToken()) {
+        return apiFetch<T>(path, options, false);
+      }
       if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
         window.location.assign('/login');
       }
     }
     if (
       res.status === 429 &&
-      retryOnDashboardLimit &&
+      allowRecovery &&
       path !== '/auth/token' &&
       isMonthlyLimit(detail) &&
       await refreshDashboardToken()
