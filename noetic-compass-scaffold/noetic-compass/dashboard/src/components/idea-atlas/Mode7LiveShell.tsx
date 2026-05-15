@@ -1068,6 +1068,7 @@ export function Mode7LiveShell() {
                 tree={tree}
                 commits={stream.state.commits}
                 selectedNodeId={selectedNodeId}
+                selectedTraceId={stream.state.finalTraceId ?? undefined}
                 runtimeReady={runtimeReady}
                 onSelectNode={setSelectedNodeId}
               />

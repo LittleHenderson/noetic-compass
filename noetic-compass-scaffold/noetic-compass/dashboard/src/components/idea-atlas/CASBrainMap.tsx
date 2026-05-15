@@ -95,6 +95,12 @@ export interface CASBrainMapProps {
   tree: AtlasTraceThoughtTree;
   commits: readonly SggsCommit[];
   selectedNodeId?: string | null;
+  /**
+   * Real Mode 7 trace_id from a completed stream. When absent the dev
+   * fixture `dev_example_001` is used and the button is labeled
+   * 'Open Example Evidence'.
+   */
+  selectedTraceId?: string | null;
   runtimeReady?: boolean;
   onSelectNode?: (nodeId: string) => void;
   className?: string;
@@ -1069,6 +1075,7 @@ export function CASBrainMap({
   tree,
   commits,
   selectedNodeId: _selectedNodeId,
+  selectedTraceId,
   runtimeReady = false,
   onSelectNode: _onSelectNode,
   className,
@@ -1136,7 +1143,16 @@ export function CASBrainMap({
   // off real trace_ids. Until then, the button surfaces the example
   // packet so stakeholders can audit the format end-to-end.
   const [evidenceOpen, setEvidenceOpen] = useState(false);
-  const [evidenceTraceId, setEvidenceTraceId] = useState<string>('dev_example_001');
+  const [evidenceTraceId, setEvidenceTraceId] = useState<string>(
+    selectedTraceId ?? 'dev_example_001',
+  );
+
+  // When the parent surfaces (or clears) a real Mode 7 finalTraceId, mirror
+  // it into the local evidence trace id so the next "Open Evidence" click
+  // opens the live packet. Falls back to the dev fixture when null/undef.
+  useEffect(() => {
+    setEvidenceTraceId(selectedTraceId ?? 'dev_example_001');
+  }, [selectedTraceId]);
 
   const mode = useMemo<EvidenceMode>(
     () => evidenceMode(commits, runtimeReady, tree),
@@ -1749,19 +1765,32 @@ export function CASBrainMap({
           >
             {tourMode ? 'Tour mode: on' : 'Tour mode: off'}
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              setEvidenceTraceId('dev_example_001');
-              setEvidenceOpen(true);
-            }}
-            aria-label="Open example evidence packet"
-            title="Open the EXAMPLE Evidence Packet (dev fixture). Real per-thought packets arrive once chat REPL / Atlas surfaces hand off live trace_ids."
-            data-testid="cas-brain-open-evidence"
-            className="flex h-9 items-center justify-center rounded-md border border-emerald-300/30 bg-emerald-500/15 px-3 text-xs text-emerald-100 transition-colors hover:bg-emerald-500/25 hover:text-emerald-50"
-          >
-            Open Example Evidence
-          </button>
+          {(() => {
+            const hasRealTrace = !!selectedTraceId;
+            return (
+              <button
+                type="button"
+                onClick={() => {
+                  setEvidenceTraceId(selectedTraceId ?? 'dev_example_001');
+                  setEvidenceOpen(true);
+                }}
+                aria-label={
+                  hasRealTrace
+                    ? 'Open evidence packet for this thought'
+                    : 'Open example evidence packet'
+                }
+                title={
+                  hasRealTrace
+                    ? 'Open the Evidence Packet for this thought (live trace_id from Mode 7 stream).'
+                    : 'Open the EXAMPLE Evidence Packet (dev fixture). Real per-thought packets arrive once chat REPL / Atlas surfaces hand off live trace_ids.'
+                }
+                data-testid="cas-brain-open-evidence"
+                className="flex h-9 items-center justify-center rounded-md border border-emerald-300/30 bg-emerald-500/15 px-3 text-xs text-emerald-100 transition-colors hover:bg-emerald-500/25 hover:text-emerald-50"
+              >
+                {hasRealTrace ? 'Open Evidence' : 'Open Example Evidence'}
+              </button>
+            );
+          })()}
           <button
             type="button"
             onClick={toggleFullscreen}
