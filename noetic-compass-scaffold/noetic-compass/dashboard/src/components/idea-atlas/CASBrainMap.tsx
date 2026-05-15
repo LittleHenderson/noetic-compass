@@ -1811,7 +1811,7 @@ export function CASBrainMap({
       </div>
 
       {/* Family legend (top-left, below header — clears the 2-line subtitle) */}
-      <div className="pointer-events-none absolute left-3 top-[124px] z-20 hidden gap-2 rounded-md border border-white/[0.08] bg-black/55 px-3 py-2 text-xs text-slate-300 backdrop-blur-sm md:flex md:flex-wrap md:max-w-md">
+      <div className="pointer-events-none absolute left-3 top-[180px] z-20 hidden gap-2 rounded-md border border-white/[0.08] bg-black/55 px-3 py-2 text-xs text-slate-300 backdrop-blur-sm md:flex md:flex-wrap md:max-w-md">
         {familyLegend.map((entry) => (
           <span key={entry.family} className="flex items-center gap-1.5">
             <span
@@ -1827,7 +1827,7 @@ export function CASBrainMap({
       {/* Click-to-pin side panel — top matches the family legend for visual balance */}
       {pinned && (
         <aside
-          className="absolute right-3 top-[124px] z-30 max-h-[calc(100%-156px)] w-80 overflow-y-auto rounded-md border border-cyan-300/25 bg-black/85 p-4 text-sm text-slate-200 shadow-xl backdrop-blur-sm"
+          className="absolute right-3 top-[180px] z-30 max-h-[calc(100%-212px)] w-80 overflow-y-auto rounded-md border border-cyan-300/25 bg-black/85 p-4 text-sm text-slate-200 shadow-xl backdrop-blur-sm"
           role="dialog"
           aria-label={`Layer details: ${pinned.label}`}
         >
@@ -1944,7 +1944,7 @@ function CloseViewInfoPanel({ layer, synthetic }: CloseViewInfoPanelProps) {
   return (
     <aside
       data-testid="cas-brain-close-info-panel"
-      className="absolute right-3 top-[124px] z-40 max-h-[calc(100%-156px)] w-96 overflow-y-auto rounded-md border border-cyan-300/30 bg-black/90 text-sm text-slate-200 shadow-xl backdrop-blur-sm"
+      className="absolute right-3 top-[180px] z-40 max-h-[calc(100%-212px)] w-96 overflow-y-auto rounded-md border border-cyan-300/30 bg-black/90 text-sm text-slate-200 shadow-xl backdrop-blur-sm"
       role="dialog"
       aria-label={`Close view: ${layer.label}`}
     >
