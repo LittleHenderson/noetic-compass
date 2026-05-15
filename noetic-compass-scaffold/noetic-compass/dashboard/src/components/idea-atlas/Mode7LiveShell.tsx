@@ -25,6 +25,7 @@ import type {
   ThoughtTreeNode,
   ThoughtTreeRootNode,
 } from '../../lib/trace';
+import { NeuralActivityMap } from './NeuralActivityMap';
 import { SggsErrorBoundary } from './SggsErrorBoundary';
 
 const SggsScene = lazy(() =>
@@ -1050,6 +1051,14 @@ export function Mode7LiveShell() {
         </aside>
 
         <main className="flex min-w-0 flex-col gap-4">
+          <NeuralActivityMap
+            tree={tree}
+            commits={stream.state.commits}
+            selectedNodeId={selectedNodeId}
+            runtimeReady={runtimeReady}
+            onSelectNode={setSelectedNodeId}
+          />
+
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-violet-500/20 bg-violet-500/[0.05] px-4 py-3">
             <div>
               <div className="font-mono text-[10px] uppercase tracking-wider text-violet-300">
