@@ -971,6 +971,7 @@ function buildHashRows(packet: EvidencePacketData): HashRow[] {
       id: 'english_bpe',
       label: 'English BPE',
       sha: packet.hashes.english_bpe_hash,
+      path: packet.hashes.on_disk_paths.english_bpe_path,
     });
   }
   if (packet.hashes.corpus_sha256) {
