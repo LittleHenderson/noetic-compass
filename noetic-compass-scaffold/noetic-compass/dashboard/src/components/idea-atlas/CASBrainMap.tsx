@@ -1183,6 +1183,14 @@ export function CASBrainMap({
     dir.position.set(2, 4, 6);
     scene.add(dir);
 
+    // Float group — everything that should drift gently in space lives here.
+    // Lights stay on the scene root so they don't move with the structure.
+    // The tick loop animates this group's position + rotation with a slow
+    // sine wave for a "floating in zero-G" feel; amplitudes are tiny so
+    // LOD distance thresholds + raycast hover/click remain stable.
+    const floatGroup = new Group();
+    scene.add(floatGroup);
+
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
@@ -1197,7 +1205,7 @@ export function CASBrainMap({
     const nodes: BrainNodeBundle[] = [];
     for (const layer of layers) {
       const bundle = buildLayerLOD(layer);
-      scene.add(bundle.lod);
+      floatGroup.add(bundle.lod);
       nodes.push(bundle);
     }
 
@@ -1219,7 +1227,7 @@ export function CASBrainMap({
       });
       const line = new Line(geom, mat);
       line.userData = { from: edge.from, to: edge.to };
-      scene.add(line);
+      floatGroup.add(line);
       edgeLines.push(line);
     }
 
@@ -1231,7 +1239,7 @@ export function CASBrainMap({
       opacity: 0.95,
     });
     const particle = new Mesh(particleGeom, particleMat);
-    scene.add(particle);
+    floatGroup.add(particle);
 
     // Raycaster for hover/click.
     const raycaster = new Raycaster();
@@ -1381,6 +1389,22 @@ export function CASBrainMap({
       const now = performance.now();
       const dt = lastFrameMs === 0 ? 0 : Math.min(0.1, (now - lastFrameMs) / 1000);
       lastFrameMs = now;
+
+      // Gentle floating-in-space drift on the whole structure. Tiny
+      // amplitudes so LOD distance triggers + raycast hover stay stable.
+      // We ease toward zero when a layer is in close-view so stakeholders
+      // can inspect matrices without the scene swaying under them.
+      const closeViewActive = closeLayerIdRef.current !== null;
+      const floatScale = closeViewActive ? 0.0 : 1.0;
+      const floatPrev = floatGroup.userData.floatScale ?? 1.0;
+      const floatLerped = floatPrev + (floatScale - floatPrev) * 0.08;
+      floatGroup.userData.floatScale = floatLerped;
+      const t = now / 1000;
+      floatGroup.position.y = Math.sin(t / 4.5) * 0.4 * floatLerped;
+      floatGroup.position.x = Math.cos(t / 6.2) * 0.18 * floatLerped;
+      floatGroup.rotation.x = Math.sin(t / 7.0) * 0.018 * floatLerped;
+      floatGroup.rotation.y = Math.cos(t / 9.0) * 0.024 * floatLerped;
+      floatGroup.rotation.z = Math.sin(t / 11.0) * 0.012 * floatLerped;
 
       // Reset-view tween: lerp camera + controls target into the default
       // far framing. Runs whenever resetTweenStartRef.current is non-null.
