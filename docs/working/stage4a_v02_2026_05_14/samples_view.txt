@@ -1,0 +1,61 @@
+=== 12 SAMPLES ===
+--- Sample 1 | surface=caret_export | cat=diagram_export | valid=True | exact=False | norm=False ---
+  prompt: Export "beta_0246" as something that struck a chord in the operational arena of wisdom and insight.
+  gold:   export let beta_0246 = ^4^O_{F2}
+  gen:    export let psi_0277 = NoeticCluster{^0, ^2, ^3, ^5, ^9}
+
+--- Sample 2 | surface=caret_export | cat=diagram_export | valid=True | exact=False | norm=False ---
+  prompt: Export "delta_0110" as a cluster of five operations: drawn to it, an aversion, something that struck a chord, breaking down an idea, and it just clicked.
+  gold:   export let delta_0110 = NoeticCluster{^2, ^3, ^4, ^6, ^9}
+  gen:    export let psi_0277 = NoeticCluster{^0, ^2, ^3, ^5, ^7, ^9}
+
+--- Sample 3 | surface=caret_only | cat=cross_register_omega | valid=True | exact=False | norm=False ---
+  prompt: When something draws you toward it in an analytical way and also pulls at you through felt emotion, those two modes fuse into the outcome called calm.
+  gold:   (^2^O|A × ^2^O|f) = ^2^O|Ω_calm
+  gen:    (^6^C|T × ^6^C|T) = ^6^C|Ω_coherence
+
+--- Sample 4 | surface=caret_only | cat=meta_logic_relation | valid=True | exact=False | norm=False ---
+  prompt: A cluster of one way of thinking—the one that triggers a memory or makes a connection between ideas—is contained within the full set of all ten ways of thinking.
+  gold:   NoeticCluster{^8} ⊆ Noetics
+  gen:    StateCluster{^4^O, ^2^E, ^9^O, ^2^E}
+
+--- Sample 5 | surface=caret_stage | cat=rpm_chain | valid=False | exact=False | norm=False ---
+  prompt: Let stageA0_6_0105 name a foundational thought, stageD6_6_0105 name practiced rhythm in the arena of structure or order, stageW6_6_0105 name practiced rhythm in the cognitive arena, and stageP6_6_0105
+  gold:   let stageA0_6_0105 = ^0^P; let stageD6_6_0105 = ^7^P_{F6}; let stageW6_6_0105 = ^7^C_{F6}; let stageP6_6_0105 = ^7^E_{F6}; stageA0_6_0105 -> stageD6_6_0105
+  gen:    let stageA0_2_0277 = ^0^P; let stageD2_2_0277 = ^0^P_{F2}; let stageW2_2_0277 = ^7^C_{F2}; let stageP2_2_0277 = ^7^E_{F2}; stageA0_2_0277 -> stageD2_2_02
+
+--- Sample 6 | surface=caret_stage | cat=rpm_chain | valid=False | exact=False | norm=False ---
+  prompt: Let stageA0_4_0315 name a foundational thought, stageD4_4_0315 name an aversion in the evaluative realm about connection and belonging, stageW4_4_0315 name cognitive thinking about connection and belo
+  gold:   let stageA0_4_0315 = ^0^P; let stageD4_4_0315 = ^3^P_{F4}; let stageW4_4_0315 = ^3^C_{F4}; let stageP4_4_0315 = ^3^E_{F4}; stageD4_4_0315 -> stageW4_4_0315
+  gen:    let stageA0_2_0277 = ^0^P; let stageD2_2_0277 = ^0^P_{F2}; let stageW2_2_0277 = ^7^C_{F2}; let stageP2_2_0277 = ^7^E_{F2}; stageA0_2_0277 -> stageD2_2_02
+
+--- Sample 7 | surface=co_form | cat=binary_composition | valid=True | exact=False | norm=False ---
+  prompt: Paying attention in the operational arena, followed by a resonance in the operational arena.
+  gold:   CO-4 ∘ CO-1
+  gen:    ^2^E + ^2^E
+
+--- Sample 8 | surface=co_form | cat=binary_composition | valid=True | exact=False | norm=False ---
+  prompt: Something that rubs the wrong way in your evaluative judgment, integrated with who you are shaped by in your principled foundation.
+  gold:   CO-3 ∘ CO-5
+  gen:    Phi<2:2:2:2>
+
+--- Sample 9 | surface=other | cat=meta_logic_relation | valid=True | exact=False | norm=False ---
+  prompt: A cluster consisting of the ten ways of thinking: a thought, paying attention, drawn to it, an aversion, something that struck a chord, who one is, breaking it down, practice makes perfect, one thing 
+  gold:   |Drives|
+  gen:    StateCluster{^4^O, ^2^E, ^9^O, ^4^O, ^4^O, ^2^E}
+
+--- Sample 10 | surface=other | cat=meta_logic_relation | valid=True | exact=False | norm=False ---
+  prompt: A cluster of states — the collection of all possible cognitive configurations within the system.
+  gold:   |States|
+  gen:    NoeticCluster{^0, ^2, ^3, ^5}
+
+--- Sample 11 | surface=phi_fractal | cat=fractal_sequence | valid=True | exact=False | norm=False ---
+  prompt: Something that popped into mind led to being shaped by experience, which then turned into muscle memory.
+  gold:   Φ<9:5:7>
+  gen:    Phi<2:2:2:2>
+
+--- Sample 12 | surface=phi_fractal | cat=fractal_sequence | valid=True | exact=False | norm=False ---
+  prompt: Paying attention led to something shaped by experience, which then turned into muscle memory, and finally struck a chord.
+  gold:   Φ<7:4:5:1>
+  gen:    Phi<2:2:2:2>
+

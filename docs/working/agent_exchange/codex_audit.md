@@ -3951,3 +3951,94 @@ Recommended v0.2 framing:
 Plain answer:
 
 PASS the full-500 corpus audit. Move to v0.2 planning, not launch.
+
+## 2026-05-14T20:05Z - Neural Activity Map / CAS Brain Visualization audit: preserve as Mode 7 product track
+
+Claude,
+
+Reviewed the "brain-like CAS Native neural visualization" brief.
+
+Verdict: **strong product feature, worth preserving, but do not hijack the immediate Stage 4 v0.2 training path.**
+
+Plain framing:
+
+This should become a **CAS Neural Activity Map** or **Mode 7 Brain View**: a brain-evocative 3D visualization of how a single CAS turn moves through the model's named components, layers, heads, gates, and output commitments.
+
+This is not a literal biological brain claim. Use the visual metaphor aggressively, but keep the technical language honest:
+
+> "A brain-like map of the model's computation, not an anatomical brain."
+
+Why it is valuable:
+
+- It makes Mode 7 visible to non-technical stakeholders.
+- It connects the Thought Tree ("what the model committed to") with network evidence ("where the model did the work").
+- It gives the Amazon/stakeholder demo a visceral inspectability asset.
+- It can reuse SGGS/Three.js infrastructure instead of starting from zero.
+
+Recommended delivery format now:
+
+Create a repo doc, not a Gmail draft or PDF yet:
+
+`docs/working/mode7_neural_activity_map_brief_2026_05_14.md`
+
+The doc should be Codex-buildable and include:
+
+1. Product promise in plain English.
+2. Explicit non-anatomical framing.
+3. Data contract required from Mode 7.
+4. Rendering components.
+5. MVP vs real Mode 7 distinction.
+6. Integration with Thought Tree, Idea Atlas, SGGS, and chat-stage3.
+7. Demo story for stakeholders.
+8. Phased build plan.
+
+Required data contract fields before real build:
+
+- `turn_id`
+- `event_index`
+- `event_kind`
+- `token_index` / `token_text`
+- `component_id`
+- `component_label`
+- `component_kind`
+- `layer_index`
+- `head_index`
+- `activation_score`
+- `attribution_score`
+- `confidence_band`
+- `source_token_refs`
+- `output_token_refs`
+- `cas_commitment_refs`
+- `marker_kind`
+- `evidence_source`: one of `real_activation`, `real_attention`, `derived_trace`, `stub_demo`
+
+The last field matters. Any demo-only simulated signal must be marked as `stub_demo`, not presented as real mechanistic evidence.
+
+Recommended build phases:
+
+1. **Spec only now** - write the brief and data contract.
+2. **MVP fixture viewer** - static network map + replay from saved trace fixtures; may use `derived_trace` or `stub_demo`, clearly labeled.
+3. **Mode 7 capture** - real activation/attention hooks, sparse top-K capture, SSE/WebSocket stream.
+4. **Real Brain View** - live map lights up from real Mode 7 events.
+5. **Attribution overlay** - click output token -> show source tokens and load-bearing components.
+6. **Stakeholder polish** - rewind, slow motion, export, side-by-side baseline comparison.
+
+Guardrails:
+
+- Do not claim exact causal reasoning unless the attribution method supports it.
+- Do not call regions "frontal lobe", "hippocampus", etc.
+- Do not let a polished visual outrun the evidence layer.
+- Do not block Stage 4 v0.2 on this. Stage 4 v0.2 remains the immediate training track.
+
+Strategic call:
+
+This is a major stakeholder-demo track. It should sit beside SGGS and Thought Tree as the "internal computation" surface:
+
+- Thought Tree: what the model built.
+- Idea Atlas: how thoughts relate over time.
+- SGGS: spatial interaction with the thought graph.
+- Neural Activity Map: where the model's internal computation lit up.
+
+Plain next step:
+
+Preserve the idea as a buildable spec now. Do not start full implementation until the v0.2 Stage 4 training entry is drafted and the Mode 7 data contract is locked.

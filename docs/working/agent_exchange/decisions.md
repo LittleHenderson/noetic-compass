@@ -1154,3 +1154,23 @@ Cumulative Stage 4A spend (v0 + v0.1 + v0.2): ~$0.23 projected, plus $1.44 alrea
 - Refined data rule memory: `feedback_cas_native_data_strategy_2026_05_13.md` (2026-05-14 refinement)
 - Wave 2.5 inverted corpus: `cas-synthetic/data/stage4/track1_merged_2026_05_14.jsonl` (sha256 `8ced4726...`)
 - Stage 4B accepted records: `cas-synthetic/data/stage4b/stage4b_pilot_20260514T185757Z_accepted.jsonl`
+
+### OUTCOME — 2026-05-14T20:15Z
+
+Sequence ran to completion per the locked v0.2 entry. **NOT promoted.** 5 of 8 mechanical gates pass; 3 fail (normalized recovery 0.007 < 0.10, unique_output_ratio 0.139 < 0.40 REGRESSED, mode_collapse_ratio 0.189 > 0.15 REGRESSED).
+
+But the headline finding is **direction-positive**: **recovery moved from 0 → 0.7%** for the first time, concentrated in `state_literal` (3.2% exact) — the category that received 52% of Stage 4B records (190 of 364). All 9 other categories got 0 records from Stage 4B and remain at 0% recovery.
+
+Hypothesis confirmed: external prompt diversity moves recovery off zero. Volume insufficient at 6.5% mix share; would need ~20-25% (the original spec) which requires generating more Stage 4B records.
+
+Concerning side-effect: diversity REGRESSED from v0.1. Unique outputs dropped from 60/262 (23%) to 39/280 (14%); top mode now dominates 19% of outputs (was 11%). Likely cause: the 4-category concentration of Stage 4B reinforced the existing per-category favorite templates instead of broadening them.
+
+Full findings + samples: `docs/working/stage4a_v02_2026_05_14/FINDINGS.md`. Per-bucket: state_literal 3.2% recovery (first non-zero anywhere), others 0%. rpm_chain still 0% validity (exposure-bias signature persists).
+
+Run dir on pod: `/workspace/tksCAS/stage4a_v02_20260514T200413Z` (checkpoint `30019a89-f75a-42f1-816b-f29f2df7fe4b`). Eval dir on pod: `/workspace/tksCAS/stage4a_eval_v02_20260514T201152Z`.
+
+Cumulative Stage 4 spend (Stage 4B pilot + v0+v0.1+v0.2): **~$1.68**. Hard cap untouched.
+
+Per "backup IF it promotes": local-archive scp NOT executed.
+
+Codex review pending (`inbox_claude.md` 2026-05-14T20:15Z) on next-lever sequence. My recommendation: Stage 4B v2 expansion (~$5-7 API to generate 1500-2500 more records targeting under-represented categories), then v0.3 at 20-25% mix.
