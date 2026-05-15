@@ -75,6 +75,7 @@ import {
   getSubMatricesForLayer,
 } from '../../lib/cas_brain_weights';
 import type { CASBrainLayer as LibCASBrainLayer } from '../../lib/cas_brain_mock_flow';
+import { EvidencePacket } from '../evidence/EvidencePacket';
 
 // ── LOD thresholds (camera-distance in scene-units) ───────────────────────
 // Pulled out as named constants per PHASE_2_LOD_DESIGN.md §1 so QA can tune
@@ -1130,6 +1131,12 @@ export function CASBrainMap({
   const [closeLayerId, setCloseLayerId] = useState<string | null>(null);
   /** Tour Mode toggle, React-side mirror of tourModeRef (drives button label). */
   const [tourMode, setTourMode] = useState(false);
+  // Evidence Packet drawer — v1 wires to the dev fixture trace. Real
+  // wiring is per-thought-node and arrives when chat REPL / Atlas hand
+  // off real trace_ids. Until then, the button surfaces the example
+  // packet so stakeholders can audit the format end-to-end.
+  const [evidenceOpen, setEvidenceOpen] = useState(false);
+  const [evidenceTraceId, setEvidenceTraceId] = useState<string>('dev_example_001');
 
   const mode = useMemo<EvidenceMode>(
     () => evidenceMode(commits, runtimeReady, tree),
@@ -1744,6 +1751,19 @@ export function CASBrainMap({
           </button>
           <button
             type="button"
+            onClick={() => {
+              setEvidenceTraceId('dev_example_001');
+              setEvidenceOpen(true);
+            }}
+            aria-label="Open evidence packet"
+            title="Open the Evidence Packet for this thought — input, CAS, hashes, claim levels"
+            data-testid="cas-brain-open-evidence"
+            className="flex h-9 items-center justify-center rounded-md border border-emerald-300/30 bg-emerald-500/15 px-3 text-xs text-emerald-100 transition-colors hover:bg-emerald-500/25 hover:text-emerald-50"
+          >
+            Open Evidence
+          </button>
+          <button
+            type="button"
             onClick={toggleFullscreen}
             aria-label={fullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
             title={fullscreen ? 'Exit fullscreen' : 'Fullscreen the CAS Brain Map'}
@@ -1946,6 +1966,14 @@ export function CASBrainMap({
           synthetic={CAS_BRAIN_WEIGHTS_IS_SYNTHETIC}
         />
       )}
+
+      {/* Evidence Packet drawer — v1 dev fixture mount. Real per-thought
+          trace_ids arrive when chat REPL / Atlas wire handoffs. */}
+      <EvidencePacket
+        traceId={evidenceTraceId}
+        open={evidenceOpen}
+        onClose={() => setEvidenceOpen(false)}
+      />
     </section>
   );
 }
