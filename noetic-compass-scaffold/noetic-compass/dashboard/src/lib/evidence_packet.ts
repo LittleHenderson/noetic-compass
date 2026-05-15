@@ -77,14 +77,19 @@ export interface EvidencePacketProvenance {
 export interface EvidencePacketHashesOnDisk {
   weights_path?: string;
   tokenizer_path?: string;
+  english_bpe_path?: string;
   corpus_path?: string;
 }
 
 export interface EvidencePacketHashes {
-  weights_sha: string;
-  tokenizer_hash: string;
-  english_bpe_hash?: string;
-  corpus_sha256?: string;
+  /** SHA-256 of the model weights file. Null when the artifact is missing on this host. */
+  weights_sha: string | null;
+  /** SHA-256 of the tokenizer.json. Null when missing. */
+  tokenizer_hash: string | null;
+  /** SHA-256 of the english BPE side-car. Null when not used for this packet. */
+  english_bpe_hash?: string | null;
+  /** SHA-256 of the training corpus snapshot. Null when not recorded. */
+  corpus_sha256?: string | null;
   on_disk_paths: EvidencePacketHashesOnDisk;
 }
 
@@ -109,9 +114,12 @@ export interface EvidencePacket {
 }
 
 export interface VerifyHashCheck {
+  /** Lowercase artifact id (weights | tokenizer | english_bpe | corpus | code_commit). */
   artifact: string;
-  expected: string;
-  actual: string;
+  /** Expected SHA from the packet. Null when the packet did not record one. */
+  expected: string | null;
+  /** Freshly-computed SHA. Null when the file is missing, oversized, or rejected by the allowlist. */
+  actual: string | null;
   match: boolean;
   notes?: string;
 }
