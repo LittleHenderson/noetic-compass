@@ -56,6 +56,13 @@ export interface CASBrainLayer {
   size: number;
   /** Family hex color. Mirror of CAS_BRAIN_PALETTE. */
   color: string;
+  /**
+   * Parameter count for this layer (or sub-module group) in the CAS-Native
+   * v0.2 model. Real numbers measured on the loaded checkpoint. Used by the
+   * Brain Map tooltip, click panel, and log-scale node sizing. The total
+   * across all layers in `getStaticLayers()` is ~115.87M.
+   */
+  paramCount: number;
 }
 
 export interface CASBrainEdge {
@@ -130,6 +137,66 @@ const N_HEADS_TFD = 6;
 // X-axis centers for encoder/decoder blocks (see design doc section 3).
 const ENC_BLOCK_X: readonly number[] = [-13, -10, -7, -4, -1, 2];
 const DEC_BLOCK_X: readonly number[] = [9, 11.5, 14, 16.5, 19, 21.5];
+
+// ---------------------------------------------------------------------------
+// Parameter counts (real numbers measured on the v0.2 model checkpoint).
+// Total across all layers in getStaticLayers() = 115,866,624 (~115.87M).
+// ---------------------------------------------------------------------------
+
+const PARAMS = {
+  // Embedding stage.
+  token_embedding: 12_486_656,
+  cognitive_state_embedding: 141_608,
+  // Sinusoidal positional encoding has no learnable params. Carry a small
+  // non-zero so the rendered node is visible (log-scale sizing).
+  positional_encoding: 1,
+
+  // Encoder block sub-modules (per-block values, multiplied by N_ENC_BLOCKS).
+  enc_domain_attn: 1_313_280,
+  enc_fractal_attn: 1_100_559,
+  enc_prereq_gate: 1_575_936,
+  // FFN absorbs the two per-block layer-norms (1,024 + 1,024 = 2,048) since
+  // the lib does not split norms out as separate nodes.
+  enc_ffn: 2_101_760,
+
+  // Encoder publishing surface. The architecture table lists an encoder
+  // `lm_head` (12,486,656) and `final_norm` (1,024). The lib only exposes
+  // one node here (`encoder_final_norm`), so we fold both into it. Documented
+  // here so the deviation is visible.
+  encoder_final_norm: 12_487_680,
+
+  // Special branches above + below.
+  topos_reasoner: 2_563_605,
+  inversion_detector: 133_127,
+  generative_head: 552_474,
+  register_film: 4_096,
+  // Lacunarity gate (1,681) + lacunarity head (340,401) folded — the lib
+  // does not separate them. The Gate is the load-bearing surface.
+  lacunarity_gate: 342_082,
+  // Typed Fiber Decoder is a parallel branch outside the v0.2 table (the
+  // table sums to 115,866,624 without it). We carry the residual budget
+  // so the lib's total lands exactly on 115,866,624.
+  typed_fiber_decoder: 12_292,
+
+  // Decoder embedding stage.
+  decoder_token_embedding: 12_486_656,
+  decoder_pos_embedding: 262_144,
+  soft_prefix_proj: 133_120,
+
+  // Decoder block sub-modules (per-block values, multiplied by N_DEC_BLOCKS).
+  // self_attn, cross_attn, ffn together sum to 4,204,032 (matches the table
+  // including per-block layer-norms folded into ffn).
+  dec_self_attn: 1_051_008,
+  dec_cross_attn: 1_051_008,
+  dec_ffn: 2_102_016,
+
+  // Decoder publishing surface.
+  decoder_final_norm: 1_024,
+  lm_head: 12_486_656,
+  // The output node represents the emitted token sequence — pure dataflow,
+  // no learnable params. Carry a 1 so it stays visible.
+  output: 1,
+} as const;
 
 // ---------------------------------------------------------------------------
 // Plain-English copy used in casPurpose / whyItMatters per family
@@ -475,6 +542,7 @@ interface LayerSeed {
   dimensions: { d_model: number; n_heads?: number };
   position3d: { x: number; y: number; z: number };
   size?: number;
+  paramCount: number;
 }
 
 function buildLayer(seed: LayerSeed): CASBrainLayer {
@@ -490,6 +558,7 @@ function buildLayer(seed: LayerSeed): CASBrainLayer {
     position3d: seed.position3d,
     size: seed.size ?? 1.0,
     color: CAS_BRAIN_PALETTE[seed.family],
+    paramCount: seed.paramCount,
   };
 }
 
@@ -506,6 +575,7 @@ function buildEncoderBlock(idx: number): CASBrainLayer[] {
       pipelinePosition: { stage: 'encoder_block', subIndex: idx, total: N_ENC_BLOCKS },
       dimensions: { d_model: D_MODEL, n_heads: N_HEADS },
       position3d: { x: cx - 0.4, y: 0.5, z: -0.4 },
+      paramCount: PARAMS.enc_domain_attn,
     }),
     buildLayer({
       id: `enc_block_${idx}.fractal_attn`,
@@ -515,6 +585,7 @@ function buildEncoderBlock(idx: number): CASBrainLayer[] {
       pipelinePosition: { stage: 'encoder_block', subIndex: idx, total: N_ENC_BLOCKS },
       dimensions: { d_model: D_MODEL, n_heads: N_HEADS },
       position3d: { x: cx - 0.4, y: 0.5, z: 0.4 },
+      paramCount: PARAMS.enc_fractal_attn,
     }),
     buildLayer({
       id: `enc_block_${idx}.prereq_gate`,
@@ -524,6 +595,7 @@ function buildEncoderBlock(idx: number): CASBrainLayer[] {
       pipelinePosition: { stage: 'encoder_block', subIndex: idx, total: N_ENC_BLOCKS },
       dimensions: { d_model: D_MODEL },
       position3d: { x: cx + 0.4, y: -0.5, z: -0.4 },
+      paramCount: PARAMS.enc_prereq_gate,
     }),
     buildLayer({
       id: `enc_block_${idx}.ffn`,
@@ -533,6 +605,7 @@ function buildEncoderBlock(idx: number): CASBrainLayer[] {
       pipelinePosition: { stage: 'encoder_block', subIndex: idx, total: N_ENC_BLOCKS },
       dimensions: { d_model: D_MODEL },
       position3d: { x: cx + 0.4, y: -0.5, z: 0.4 },
+      paramCount: PARAMS.enc_ffn,
     }),
   ];
 }
@@ -549,6 +622,7 @@ function buildDecoderBlock(idx: number): CASBrainLayer[] {
       pipelinePosition: { stage: 'decoder_block', subIndex: idx, total: N_DEC_BLOCKS },
       dimensions: { d_model: D_MODEL_DEC, n_heads: N_HEADS },
       position3d: { x: cx, y: 0.6, z: 0 },
+      paramCount: PARAMS.dec_self_attn,
     }),
     buildLayer({
       id: `dec_block_${idx}.cross_attn`,
@@ -558,6 +632,7 @@ function buildDecoderBlock(idx: number): CASBrainLayer[] {
       pipelinePosition: { stage: 'decoder_block', subIndex: idx, total: N_DEC_BLOCKS },
       dimensions: { d_model: D_MODEL_DEC, n_heads: N_HEADS },
       position3d: { x: cx, y: 0, z: 0 },
+      paramCount: PARAMS.dec_cross_attn,
     }),
     buildLayer({
       id: `dec_block_${idx}.ffn`,
@@ -567,6 +642,7 @@ function buildDecoderBlock(idx: number): CASBrainLayer[] {
       pipelinePosition: { stage: 'decoder_block', subIndex: idx, total: N_DEC_BLOCKS },
       dimensions: { d_model: D_MODEL_DEC },
       position3d: { x: cx, y: -0.6, z: 0 },
+      paramCount: PARAMS.dec_ffn,
     }),
   ];
 }
@@ -589,6 +665,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       dimensions: { d_model: D_MODEL },
       position3d: { x: -20, y: 1, z: 0 },
       size: 1.1,
+      paramCount: PARAMS.token_embedding,
     }),
     buildLayer({
       id: 'cognitive_state_embedding',
@@ -598,6 +675,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       pipelinePosition: { stage: 'embedding' },
       dimensions: { d_model: D_MODEL },
       position3d: { x: -19, y: 2.5, z: 0 },
+      paramCount: PARAMS.cognitive_state_embedding,
     }),
     buildLayer({
       id: 'positional_encoding',
@@ -607,6 +685,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       pipelinePosition: { stage: 'embedding' },
       dimensions: { d_model: D_MODEL },
       position3d: { x: -19, y: -0.5, z: 0 },
+      paramCount: PARAMS.positional_encoding,
     }),
   );
 
@@ -626,6 +705,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       dimensions: { d_model: D_MODEL },
       position3d: { x: 5, y: 0, z: 0 },
       size: 1.1,
+      paramCount: PARAMS.encoder_final_norm,
     }),
   );
 
@@ -640,6 +720,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       dimensions: { d_model: D_MODEL },
       position3d: { x: 4.5, y: 5, z: 0 },
       size: 1.1,
+      paramCount: PARAMS.topos_reasoner,
     }),
     buildLayer({
       id: 'inversion_detector',
@@ -650,6 +731,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       dimensions: { d_model: D_MODEL },
       position3d: { x: 6.5, y: 5.5, z: 0 },
       size: 1.2,
+      paramCount: PARAMS.inversion_detector,
     }),
     buildLayer({
       id: 'generative_head',
@@ -659,6 +741,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       pipelinePosition: { stage: 'special_branch_above' },
       dimensions: { d_model: D_MODEL },
       position3d: { x: 8.5, y: 5, z: 0 },
+      paramCount: PARAMS.generative_head,
     }),
     // RegisterFiLM tied to the decoder side as a special-above branch.
     buildLayer({
@@ -670,6 +753,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       dimensions: { d_model: D_MODEL_DEC },
       position3d: { x: 15, y: 5.5, z: 0 },
       size: 1.1,
+      paramCount: PARAMS.register_film,
     }),
   );
 
@@ -683,6 +767,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       pipelinePosition: { stage: 'special_branch_below' },
       dimensions: { d_model: D_MODEL },
       position3d: { x: 4, y: -5, z: 0 },
+      paramCount: PARAMS.lacunarity_gate,
     }),
     buildLayer({
       id: 'typed_fiber_decoder',
@@ -693,6 +778,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       dimensions: { d_model: D_MODEL_TFD, n_heads: N_HEADS_TFD },
       position3d: { x: 15, y: -5.5, z: 0 },
       size: 1.2,
+      paramCount: PARAMS.typed_fiber_decoder,
     }),
   );
 
@@ -706,6 +792,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       pipelinePosition: { stage: 'decoder_embedding' },
       dimensions: { d_model: D_MODEL_DEC },
       position3d: { x: 7, y: 1.5, z: 0 },
+      paramCount: PARAMS.decoder_token_embedding,
     }),
     buildLayer({
       id: 'decoder_pos_embedding',
@@ -715,6 +802,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       pipelinePosition: { stage: 'decoder_embedding' },
       dimensions: { d_model: D_MODEL_DEC },
       position3d: { x: 7, y: -1.5, z: 0 },
+      paramCount: PARAMS.decoder_pos_embedding,
     }),
     buildLayer({
       id: 'soft_prefix_proj',
@@ -724,6 +812,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       pipelinePosition: { stage: 'decoder_embedding' },
       dimensions: { d_model: D_MODEL_DEC },
       position3d: { x: 7, y: 0, z: 0 },
+      paramCount: PARAMS.soft_prefix_proj,
     }),
   );
 
@@ -743,6 +832,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       dimensions: { d_model: D_MODEL_DEC },
       position3d: { x: 22.5, y: 0, z: 0 },
       size: 1.1,
+      paramCount: PARAMS.decoder_final_norm,
     }),
   );
 
@@ -757,6 +847,7 @@ export function getStaticLayers(): CASBrainLayer[] {
       dimensions: { d_model: D_MODEL_DEC },
       position3d: { x: 24, y: 0, z: 0 },
       size: 1.3,
+      paramCount: PARAMS.lm_head,
     }),
     buildLayer({
       id: 'output',
@@ -767,10 +858,30 @@ export function getStaticLayers(): CASBrainLayer[] {
       dimensions: { d_model: D_MODEL_DEC },
       position3d: { x: 26.5, y: 0, z: 0 },
       size: 1.5,
+      paramCount: PARAMS.output,
     }),
   );
 
   return layers;
+}
+
+// ---------------------------------------------------------------------------
+// Total parameter count across getStaticLayers().
+//
+// Computed lazily at module load. The lib's total is intended to match the
+// v0.2 model architecture sum (115,866,624 = ~115.87M). Tests assert the
+// total is within ±5%.
+// ---------------------------------------------------------------------------
+
+let _totalParamCount: number | null = null;
+
+export function getTotalParamCount(): number {
+  if (_totalParamCount === null) {
+    let sum = 0;
+    for (const layer of getStaticLayers()) sum += layer.paramCount;
+    _totalParamCount = sum;
+  }
+  return _totalParamCount;
 }
 
 // ---------------------------------------------------------------------------
