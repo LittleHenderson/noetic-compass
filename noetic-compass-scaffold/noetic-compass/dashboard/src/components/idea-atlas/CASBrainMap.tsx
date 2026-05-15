@@ -1400,11 +1400,12 @@ export function CASBrainMap({
       const floatLerped = floatPrev + (floatScale - floatPrev) * 0.08;
       floatGroup.userData.floatScale = floatLerped;
       const t = now / 1000;
-      floatGroup.position.y = Math.sin(t / 4.5) * 0.4 * floatLerped;
-      floatGroup.position.x = Math.cos(t / 6.2) * 0.18 * floatLerped;
-      floatGroup.rotation.x = Math.sin(t / 7.0) * 0.018 * floatLerped;
-      floatGroup.rotation.y = Math.cos(t / 9.0) * 0.024 * floatLerped;
-      floatGroup.rotation.z = Math.sin(t / 11.0) * 0.012 * floatLerped;
+      floatGroup.position.y = Math.sin(t / 4.5) * 1.2 * floatLerped;
+      floatGroup.position.x = Math.cos(t / 6.2) * 0.55 * floatLerped;
+      floatGroup.position.z = Math.sin(t / 8.0) * 0.4 * floatLerped;
+      floatGroup.rotation.x = Math.sin(t / 7.0) * 0.05 * floatLerped;
+      floatGroup.rotation.y = Math.cos(t / 9.0) * 0.065 * floatLerped;
+      floatGroup.rotation.z = Math.sin(t / 11.0) * 0.035 * floatLerped;
 
       // Reset-view tween: lerp camera + controls target into the default
       // far framing. Runs whenever resetTweenStartRef.current is non-null.
