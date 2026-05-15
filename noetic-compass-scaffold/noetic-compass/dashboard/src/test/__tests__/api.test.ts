@@ -60,6 +60,9 @@ describe('apiFetch', () => {
   it('throws ApiError on 401', async () => {
     setToken('my-jwt');
     server.use(
+      http.post('/api/auth/token', () =>
+        HttpResponse.json({ detail: 'Token mint failed' }, { status: 500 }),
+      ),
       http.get('/api/config', () =>
         HttpResponse.json({ detail: 'Invalid token', error_type: 'auth_error' }, { status: 401 }),
       ),
@@ -75,6 +78,31 @@ describe('apiFetch', () => {
       expect(err.errorType).toBe('auth_error');
       expect(getToken()).toBeNull();
     }
+  });
+
+  it('refreshes the dashboard token once when Authorization is missing or invalid', async () => {
+    setToken('stale-jwt');
+    const authHeaders: string[] = [];
+    server.use(
+      http.post('/api/auth/token', () => HttpResponse.json({ token: 'fresh-jwt' })),
+      http.get('/api/config', ({ request }) => {
+        const auth = request.headers.get('Authorization') ?? '';
+        authHeaders.push(auth);
+        if (auth !== 'Bearer fresh-jwt') {
+          return HttpResponse.json(
+            { detail: 'Missing or invalid Authorization header', error_type: 'auth_error' },
+            { status: 401 },
+          );
+        }
+        return HttpResponse.json({ ok: true });
+      }),
+    );
+
+    const result = await apiFetch<{ ok: boolean }>('/config');
+
+    expect(result.ok).toBe(true);
+    expect(authHeaders).toEqual(['Bearer stale-jwt', 'Bearer fresh-jwt']);
+    expect(getToken()).toBe('fresh-jwt');
   });
 
   it('throws ApiError on 422', async () => {
