@@ -28,6 +28,7 @@ from api.routes import (
     benchmark,
     cohort,
     config,
+    evidence,
     export,
     forecast,
     health,
@@ -126,3 +127,4 @@ app.include_router(notation.router)
 app.include_router(reproducibility.router)
 app.include_router(idea_atlas.router)
 app.include_router(mode7.router)
+app.include_router(evidence.router)
