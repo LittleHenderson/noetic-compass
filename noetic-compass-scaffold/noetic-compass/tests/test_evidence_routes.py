@@ -250,22 +250,25 @@ def test_evidence_verify_artifact_names_match_spec(client, auth_headers):
 
 
 def test_evidence_verify_handles_missing_file(client, auth_headers, monkeypatch):
-    """When an on_disk_paths entry points to a path that doesn't exist, the
-    check is surfaced with ``match=False`` and ``notes='file not found locally'``.
+    """When an on_disk_paths entry points to a path inside the allowed roots
+    that doesn't exist on this host, the check is surfaced with
+    ``match=False`` and ``notes='file not found locally'``.
     """
     from api.routes import evidence as evidence_route
 
-    # Patch the dev-fixture builder to point at a path that definitely doesn't
-    # exist so we exercise the missing-file branch deterministically.
+    # Patch the dev-fixture builder to point at a path inside the scaffold
+    # root that doesn't exist, so we exercise the missing-file branch (not
+    # the outside-allowed-roots branch — that is tested separately).
     real_builder = evidence_route._dev_fixture_packet
+    scaffold_root = evidence_route._scaffold_root().resolve()
 
     def _patched_builder():
         packet = real_builder()
         packet.hashes["weights_sha"] = "deadbeef" * 8
         packet.hashes["tokenizer_hash"] = "cafebabe" * 8
         packet.hashes["on_disk_paths"] = {
-            "weights_path": "/definitely/not/a/real/path/model_final.pt",
-            "tokenizer_path": "/definitely/not/a/real/path/tokenizer.json",
+            "weights_path": str(scaffold_root / ".tmp" / "no_such_dir" / "model_final.pt"),
+            "tokenizer_path": str(scaffold_root / ".tmp" / "no_such_dir" / "tokenizer.json"),
         }
         # Drop optional keys so they don't generate extra "no_path" checks.
         packet.hashes.pop("english_bpe_hash", None)
@@ -286,6 +289,46 @@ def test_evidence_verify_handles_missing_file(client, auth_headers, monkeypatch)
     assert weights_check is not None
     assert weights_check["match"] is False
     assert weights_check["notes"] == "file not found locally"
+
+
+def test_evidence_verify_rejects_paths_outside_allowed_roots(
+    client, auth_headers, monkeypatch
+):
+    """Paths that resolve outside the project / scaffold roots are rejected
+    before any bytes are read. Defence-in-depth: the packet writer is
+    trusted, but the verify endpoint never reads arbitrary host files.
+    """
+    from api.routes import evidence as evidence_route
+
+    real_builder = evidence_route._dev_fixture_packet
+
+    def _patched_builder():
+        packet = real_builder()
+        packet.hashes["weights_sha"] = "deadbeef" * 8
+        packet.hashes["on_disk_paths"] = {
+            # Absolute path outside both project root and scaffold root.
+            "weights_path": "/etc/hosts",
+        }
+        packet.hashes.pop("tokenizer_hash", None)
+        packet.hashes.pop("english_bpe_hash", None)
+        packet.hashes.pop("corpus_sha256", None)
+        return packet
+
+    monkeypatch.setattr(evidence_route, "_dev_fixture_packet", _patched_builder)
+
+    resp = client.post(
+        f"/api/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    weights_check = next(
+        (c for c in body["checks"] if c["artifact"] == "weights"), None
+    )
+    assert weights_check is not None
+    assert weights_check["match"] is False
+    assert weights_check["actual"] is None
+    assert weights_check["notes"] == "path is outside allowed roots"
 
 
 def test_evidence_verify_unknown_trace_id_404(client, auth_headers):
