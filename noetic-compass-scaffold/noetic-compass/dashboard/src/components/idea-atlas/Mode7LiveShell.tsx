@@ -25,12 +25,17 @@ import type {
   ThoughtTreeNode,
   ThoughtTreeRootNode,
 } from '../../lib/trace';
-import { NeuralActivityMap } from './NeuralActivityMap';
 import { SggsErrorBoundary } from './SggsErrorBoundary';
 
 const SggsScene = lazy(() =>
   import('./SggsScene').then((m) => ({
     default: m.SggsScene,
+  })),
+);
+
+const CASBrainMap = lazy(() =>
+  import('./CASBrainMap').then((m) => ({
+    default: m.CASBrainMap,
   })),
 );
 
@@ -1051,13 +1056,23 @@ export function Mode7LiveShell() {
         </aside>
 
         <main className="flex min-w-0 flex-col gap-4">
-          <NeuralActivityMap
-            tree={tree}
-            commits={stream.state.commits}
-            selectedNodeId={selectedNodeId}
-            runtimeReady={runtimeReady}
-            onSelectNode={setSelectedNodeId}
-          />
+          <SggsErrorBoundary>
+            <Suspense
+              fallback={
+                <div className="flex h-[800px] w-full items-center justify-center rounded-lg border border-cyan-400/20 bg-slate-950/85 text-sm text-slate-400">
+                  Loading CAS Brain Map...
+                </div>
+              }
+            >
+              <CASBrainMap
+                tree={tree}
+                commits={stream.state.commits}
+                selectedNodeId={selectedNodeId}
+                runtimeReady={runtimeReady}
+                onSelectNode={setSelectedNodeId}
+              />
+            </Suspense>
+          </SggsErrorBoundary>
 
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-violet-500/20 bg-violet-500/[0.05] px-4 py-3">
             <div>
