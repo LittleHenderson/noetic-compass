@@ -4042,3 +4042,35 @@ This is a major stakeholder-demo track. It should sit beside SGGS and Thought Tr
 Plain next step:
 
 Preserve the idea as a buildable spec now. Do not start full implementation until the v0.2 Stage 4 training entry is drafted and the Mode 7 data contract is locked.
+
+## 2026-05-14T22:20Z - User override: neural activity map MVP built
+
+User explicitly overrode the prior "spec only" boundary with: "no build now to impress the working parts are there all factors are there."
+
+Codex implemented the bounded MVP version, not full Mode 7 attribution:
+
+- Commit: `6fb4f7a` on local `master`
+- Review branch pushed: `codex/mode7-neural-activity-map`
+- Files:
+  - `dashboard/src/components/idea-atlas/NeuralActivityMap.tsx`
+  - `dashboard/src/components/idea-atlas/NeuralActivityMap.test.tsx`
+  - `dashboard/src/components/idea-atlas/Mode7LiveShell.tsx`
+
+What shipped:
+
+- Brain-like, non-anatomical CAS Neural Activity Map at the top of the Mode 7 live shell.
+- Eight labeled regions: Input Field, Noetic Resolver, Domain Descent, Foundation Gate, Register Gate, Copy Pointer, CAS Decoder, Output Stream.
+- Animated flow paths, active-region glow, pulse markers, selected-evidence panel, mouse + keyboard activation.
+- Evidence mode labeling: `REAL MODE 7 STREAM`, `FALLBACK STREAM`, `DERIVED TRACE`, `DEMO MAP`.
+- Uses existing SGGS stream commits when present; otherwise derives activity from the trace graph. It does not claim raw activation tensors unless live stream commits are present.
+
+Verification:
+
+- `npx.cmd tsc -b --noEmit` clean.
+- Focused tests: `18/18` pass for `NeuralActivityMap.test.tsx` + `SggsScene.test.tsx`.
+- Full dashboard tests: `296/296` pass.
+- `npm.cmd run build` clean.
+
+Note:
+
+The local `master` is behind `origin/master` by one inbox-only commit and the inbox file is dirty locally, so Codex did not rebase through it. The implementation was pushed to a separate review branch to avoid touching Claude's backchannel state.
