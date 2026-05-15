@@ -45,6 +45,7 @@ import {
   Group,
   Line,
   LineBasicMaterial,
+  LOD,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
@@ -59,6 +60,33 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { SggsCommit } from '../../lib/sggs_stream';
 import type { AtlasTraceThoughtTree } from '../../lib/trace';
+import {
+  buildMediumViewSubstructure,
+  type MediumViewSubstructureHandle,
+} from './MediumViewSubstructure';
+import {
+  buildCloseViewMatrixGrid,
+  type CloseViewMatrixGridHandle,
+} from './CloseViewMatrixGrid';
+import {
+  CAS_BRAIN_WEIGHTS,
+  CAS_BRAIN_WEIGHTS_IS_SYNTHETIC,
+  getCheckpointSha256Prefix,
+  getSubMatricesForLayer,
+} from '../../lib/cas_brain_weights';
+import type { CASBrainLayer as LibCASBrainLayer } from '../../lib/cas_brain_mock_flow';
+
+// ── LOD thresholds (camera-distance in scene-units) ───────────────────────
+// Pulled out as named constants per PHASE_2_LOD_DESIGN.md §1 so QA can tune
+// without grepping. The numbers are tuned for the default 0,6,38 camera and
+// the existing 6..140 OrbitControls min/max distance.
+const FAR_THRESHOLD = 36;
+const MEDIUM_THRESHOLD = 18;
+
+// Default camera framing for the Reset View tween + ESC reset.
+const DEFAULT_CAMERA_POS: [number, number, number] = [0, 6, 38];
+const DEFAULT_CAMERA_TARGET: [number, number, number] = [4, 0, 0];
+const RESET_TWEEN_MS = 1000;
 
 // ── Public component contract (mirrors NeuralActivityMap) ─────────────────
 
@@ -239,6 +267,31 @@ function formatParamCountFull(n: number): string {
 function paramCountRadiusScale(n: number): number {
   return 0.6 + 0.4 * (Math.log10(n + 1) / 7);
 }
+
+/**
+ * Family-specific "What this layer does" explanations for the close-view
+ * info panel. Verbatim from PHASE_2_LOD_DESIGN.md §4.3 (locked copy).
+ */
+const LAYER_EXPLANATIONS: Record<LayerFamily, string> = {
+  embedding:
+    "This layer turns input tokens into numbers the model can work with. Each token gets a unique vector; position information and CAS state information get added in on parallel branches.",
+  encoder_attn:
+    "This layer decides which CAS Domain (P / C / E / O) your thought belongs to. The Q / K / V projections build a query-key-value space; the output projection blends the attended values back into the model's main stream.",
+  encoder_gate:
+    "This layer enforces RPM — the rule that a thought can't 'fire' unless its prerequisites have already been satisfied. The gate decides whether downstream layers see the signal.",
+  encoder_ffn:
+    "A two-layer MLP that mixes the dimensions of whatever the attention layer just attended to. This is where most of the model's 'pattern memory' lives — the FFN weights store what kinds of features go with what.",
+  special_branch:
+    "This is a parallel head that reads the encoder's final state and produces its own structured output — truth values, inversion scores, lacunarity scores, or typed CAS tokens. It runs alongside the main pipeline rather than in series.",
+  decoder_attn:
+    "This layer mixes the partially-generated output with the encoded input. The self-attention block looks at what's been generated so far; the cross-attention block looks back at the encoded source so the next token stays grounded.",
+  decoder_ffn:
+    "A two-layer MLP on the decoder side, mirroring the encoder FFN. It refines the cross-attended representation before the next decoder block sees it.",
+  decoder_head:
+    "This is the Phenomenological Register modulator. It multiplies the decoder hidden state by a register-specific gamma/beta pair, steering the same content into transcendent, analytical, affective, or embodied operational character.",
+  output:
+    "The final projection from the model's hidden dimension to the English vocabulary. Each output position becomes a probability distribution over all possible next tokens; the highest-scoring token gets generated.",
+};
 
 /** Plain-English one-liner: "What these weights do" per family. */
 function paramRoleSentence(layer: CASBrainLayer): string {
@@ -878,11 +931,108 @@ function evidenceHelp(mode: EvidenceMode): string {
 // ── 3D node + halo builders (mirroring SggsScene patterns) ───────────────
 
 interface BrainNodeBundle {
-  group: Group;
+  /** Top-level LOD container that owns the far/medium/close children. */
+  lod: LOD;
+  /** Far-view group containing the legacy single sphere + halo. */
+  farGroup: Group;
   body: Mesh;
   halo: Mesh;
+  /** Medium-view substructure (Agent D builder) + handle. */
+  mediumGroup: Group;
+  mediumBuilder: MediumViewSubstructureHandle;
+  /** Close-view matrix grids (Agent D builder) + handle. */
+  closeGroup: Group;
+  closeBuilder: CloseViewMatrixGridHandle;
   layer: CASBrainLayer;
   baseScale: number;
+}
+
+/**
+ * Build a layer node as a THREE.LOD with three levels: far (legacy sphere
+ * + halo), medium (Agent D substructure plates), close (Agent D matrix
+ * grids). The LOD swaps which child is rendered based on the camera's
+ * distance to the LOD's anchor position. Camera-distance thresholds are
+ * pulled from `FAR_THRESHOLD` / `MEDIUM_THRESHOLD`.
+ *
+ * The `layer` argument is the inline CAS Brain Map layer type (no
+ * `whyItMatters`); Agent D's builders expect the lib type, so we widen
+ * with a synthesized `whyItMatters` derived from the family explanation.
+ */
+function buildLayerLOD(layer: CASBrainLayer): BrainNodeBundle {
+  // Far view — the existing single sphere + halo.
+  const radius = 0.45 * layer.size * paramCountRadiusScale(layer.paramCount);
+  const farGroup = new Group();
+
+  const bodyGeom = new SphereGeometry(radius, 18, 14);
+  const bodyMat = new MeshBasicMaterial({
+    color: new Color(layer.color),
+    transparent: true,
+    opacity: 0.85,
+  });
+  const body = new Mesh(bodyGeom, bodyMat);
+  body.userData = { 'data-layer-id': layer.id, role: 'body' };
+  farGroup.add(body);
+
+  const haloTex = makeHaloTexture(layer.color);
+  const haloMat = new MeshBasicMaterial({
+    map: haloTex,
+    transparent: true,
+    opacity: 0.18,
+    blending: AdditiveBlending,
+    depthWrite: false,
+    side: DoubleSide,
+  });
+  const halo = new Mesh(new PlaneGeometry(radius * 4.6, radius * 4.6), haloMat);
+  halo.userData = { 'data-layer-id': layer.id, role: 'halo' };
+  farGroup.add(halo);
+
+  // Lib-type widening — Agent D's components only read the fields we
+  // already have, but the lib `CASBrainLayer` is structurally wider.
+  // Synthesize `whyItMatters` from the existing plain-English helper so
+  // a downstream consumer that ever does read it still gets sensible copy.
+  const libLayer: LibCASBrainLayer = {
+    ...layer,
+    whyItMatters: plainEnglishWhy(layer),
+  } as LibCASBrainLayer;
+
+  // Medium view — Agent D substructure plates.
+  const mediumBuilder = buildMediumViewSubstructure({
+    layer: libLayer,
+    baseSize: radius,
+    familyColor: layer.color,
+    active: false,
+  });
+  const mediumGroup = mediumBuilder.group;
+
+  // Close view — Agent D matrix grids, fed real (or fallback) weights.
+  const closeBuilder = buildCloseViewMatrixGrid({
+    layer: libLayer,
+    subMatrices: getSubMatricesForLayer(layer.id),
+    active: false,
+  });
+  const closeGroup = closeBuilder.group;
+
+  // Wrap into the LOD with three distance bands.
+  const lod = new LOD();
+  lod.position.set(layer.position3d.x, layer.position3d.y, layer.position3d.z);
+  lod.autoUpdate = true;
+  // Lower threshold = nearer. So order is: closest first.
+  lod.addLevel(closeGroup, 0);
+  lod.addLevel(mediumGroup, MEDIUM_THRESHOLD);
+  lod.addLevel(farGroup, FAR_THRESHOLD);
+
+  return {
+    lod,
+    farGroup,
+    body,
+    halo,
+    mediumGroup,
+    mediumBuilder,
+    closeGroup,
+    closeBuilder,
+    layer,
+    baseScale: 1,
+  };
 }
 
 function makeHaloTexture(strokeHex: string): CanvasTexture | null {
@@ -907,41 +1057,10 @@ function makeHaloTexture(strokeHex: string): CanvasTexture | null {
   return tex;
 }
 
-function buildNodeMesh(layer: CASBrainLayer): BrainNodeBundle {
-  const group = new Group();
-  group.position.set(layer.position3d.x, layer.position3d.y, layer.position3d.z);
-
-  // Radius blends the "importance" hint (layer.size) with a log-scale read on
-  // paramCount. A 12M-param embedding (log10 ~ 7.1) lands near 1.0x; a
-  // 1024-param norm (log10 ~ 3) lands near 0.77x — visibly smaller but still
-  // visible. Keeps the visualization honest about where weights actually live.
-  const radius = 0.45 * layer.size * paramCountRadiusScale(layer.paramCount);
-  const bodyGeom = new SphereGeometry(radius, 18, 14);
-  const bodyMat = new MeshBasicMaterial({
-    color: new Color(layer.color),
-    transparent: true,
-    opacity: 0.85,
-  });
-  const body = new Mesh(bodyGeom, bodyMat);
-  body.userData = { 'data-layer-id': layer.id, role: 'body' };
-  group.add(body);
-
-  const haloTex = makeHaloTexture(layer.color);
-  const haloMat = new MeshBasicMaterial({
-    map: haloTex,
-    transparent: true,
-    opacity: 0.18,
-    blending: AdditiveBlending,
-    depthWrite: false,
-    side: DoubleSide,
-  });
-  const halo = new Mesh(new PlaneGeometry(radius * 4.6, radius * 4.6), haloMat);
-  halo.userData = { 'data-layer-id': layer.id, role: 'halo' };
-  // Halo always faces the camera — we update its quaternion every frame.
-  group.add(halo);
-
-  return { group, body, halo, layer, baseScale: 1 };
-}
+// Note: buildLayerLOD (above) supersedes the prior buildNodeMesh helper.
+// It returns a THREE.LOD with three children — far (legacy sphere + halo),
+// medium (Agent D plates), close (Agent D matrix grids) — and is the
+// single entry point for layer-mesh construction.
 
 // ── Component ────────────────────────────────────────────────────────────
 
@@ -977,6 +1096,20 @@ export function CASBrainMap({
   const rafRef = useRef<number | null>(null);
   const raycasterRef = useRef<Raycaster | null>(null);
   const hoveredLayerIdRef = useRef<string | null>(null);
+  /** Currently-firing layer in the mock flow. Drives Agent D pulses + Tour. */
+  const activeLayerIdRef = useRef<string | null>(null);
+  /** Cached id of the layer currently in close view (LOD level 0). */
+  const closeLayerIdRef = useRef<string | null>(null);
+  /** Reset-view tween state: start ms, start camera pos, start target. */
+  const resetTweenStartRef = useRef<{
+    startMs: number;
+    fromPos: [number, number, number];
+    fromTarget: [number, number, number];
+  } | null>(null);
+  /** Tour-mode toggle (true => auto-orbit + auto-zoom active layer). */
+  const tourModeRef = useRef(false);
+  /** Captured by the mount effect — Reset View button calls this on click. */
+  const tickResetTweenFnRef = useRef<((now: number) => void) | null>(null);
 
   // React state for UI overlays.
   const [hovered, setHovered] = useState<{
@@ -993,6 +1126,10 @@ export function CASBrainMap({
     untilMs: number;
   } | null>(null);
   const [flowPreview, setFlowPreview] = useState<string>('');
+  /** Layer id currently at LOD close-view level (drives the side info panel). */
+  const [closeLayerId, setCloseLayerId] = useState<string | null>(null);
+  /** Tour Mode toggle, React-side mirror of tourModeRef (drives button label). */
+  const [tourMode, setTourMode] = useState(false);
 
   const mode = useMemo<EvidenceMode>(
     () => evidenceMode(commits, runtimeReady, tree),
@@ -1054,11 +1191,13 @@ export function CASBrainMap({
     controls.maxDistance = 140;
     controls.target.set(4, 0, 0);
 
-    // Build nodes.
+    // Build nodes — each layer is a THREE.LOD wrapping far / medium /
+    // close children. Camera-distance triggers swap automatically per
+    // `lod.update(camera)` inside the rAF loop.
     const nodes: BrainNodeBundle[] = [];
     for (const layer of layers) {
-      const bundle = buildNodeMesh(layer);
-      scene.add(bundle.group);
+      const bundle = buildLayerLOD(layer);
+      scene.add(bundle.lod);
       nodes.push(bundle);
     }
 
@@ -1156,24 +1295,141 @@ export function CASBrainMap({
     });
     ro.observe(wrapper);
 
+    // ── Reset-view tween ──────────────────────────────────────────────
+    // EaseInOutCubic per design spec.
+    function easeInOutCubic(t: number): number {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function tickResetTween(now: number): void {
+      const state = resetTweenStartRef.current;
+      if (!state) return;
+      const elapsed = now - state.startMs;
+      const t = Math.min(1, elapsed / RESET_TWEEN_MS);
+      const e = easeInOutCubic(t);
+      camera.position.set(
+        state.fromPos[0] + (DEFAULT_CAMERA_POS[0] - state.fromPos[0]) * e,
+        state.fromPos[1] + (DEFAULT_CAMERA_POS[1] - state.fromPos[1]) * e,
+        state.fromPos[2] + (DEFAULT_CAMERA_POS[2] - state.fromPos[2]) * e,
+      );
+      controls.target.set(
+        state.fromTarget[0] + (DEFAULT_CAMERA_TARGET[0] - state.fromTarget[0]) * e,
+        state.fromTarget[1] + (DEFAULT_CAMERA_TARGET[1] - state.fromTarget[1]) * e,
+        state.fromTarget[2] + (DEFAULT_CAMERA_TARGET[2] - state.fromTarget[2]) * e,
+      );
+      if (t >= 1) {
+        resetTweenStartRef.current = null;
+      }
+    }
+
+    // ── Tour mode: slowly orbit + zoom toward the active layer ────────
+    function tickTourMode(now: number): void {
+      if (!tourModeRef.current) return;
+      const activeId = activeLayerIdRef.current;
+      if (!activeId) return;
+      const node = nodesRef.current.find((n) => n.layer.id === activeId);
+      if (!node) return;
+      // Move OrbitControls target toward the active layer's anchor.
+      const lp = node.layer.position3d;
+      controls.target.set(
+        controls.target.x + (lp.x - controls.target.x) * 0.03,
+        controls.target.y + (lp.y - controls.target.y) * 0.03,
+        controls.target.z + (lp.z - controls.target.z) * 0.03,
+      );
+      // Pull camera in slowly toward a close-view distance, with a
+      // slow orbit around the active layer's anchor.
+      const desiredDist = 20;
+      const dx = camera.position.x - lp.x;
+      const dy = camera.position.y - lp.y;
+      const dz = camera.position.z - lp.z;
+      const curDist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      const newDist = curDist + (desiredDist - curDist) * 0.01;
+      // Orbit angle increments slowly.
+      const orbitOmega = 0.00015;
+      const angle = now * orbitOmega;
+      const cosA = Math.cos(angle);
+      const sinA = Math.sin(angle);
+      camera.position.set(
+        lp.x + newDist * cosA,
+        lp.y + 4,
+        lp.z + newDist * sinA,
+      );
+    }
+
+    // Stash for the React-side button click handler.
+    tickResetTweenFnRef.current = (now: number) => {
+      resetTweenStartRef.current = {
+        startMs: now,
+        fromPos: [camera.position.x, camera.position.y, camera.position.z],
+        fromTarget: [controls.target.x, controls.target.y, controls.target.z],
+      };
+    };
+
+    // Disable Tour Mode the moment the user grabs the orbit controls.
+    const onOrbitStart = () => {
+      if (tourModeRef.current) {
+        tourModeRef.current = false;
+        setTourMode(false);
+      }
+    };
+    controls.addEventListener('start', onOrbitStart);
+
     // ── Animation loop ────────────────────────────────────────────────
+    let lastFrameMs = 0;
     function tick() {
       rafRef.current = requestAnimationFrame(tick);
       const now = performance.now();
+      const dt = lastFrameMs === 0 ? 0 : Math.min(0.1, (now - lastFrameMs) / 1000);
+      lastFrameMs = now;
 
-      // Halos face the camera + subtle pulse.
+      // Reset-view tween: lerp camera + controls target into the default
+      // far framing. Runs whenever resetTweenStartRef.current is non-null.
+      tickResetTween(now);
+      tickTourMode(now);
+
+      // THREE.LOD swaps the rendered child based on camera distance. Has
+      // to be called explicitly when the camera moves.
+      for (const node of nodesRef.current) {
+        node.lod.update(camera);
+      }
+      // Detect close view + propagate to React state for the info panel.
+      const closeLayer = nodesRef.current.find(
+        (n) => n.lod.getCurrentLevel() === 0,
+      );
+      const closeId = closeLayer?.layer.id ?? null;
+      if (closeId !== closeLayerIdRef.current) {
+        closeLayerIdRef.current = closeId;
+        setCloseLayerId(closeId);
+      }
+
+      // Halos face the camera + subtle pulse + focus dim.
       const pulse = (Math.sin(now / 800) + 1) / 2;
+      const anyClose = closeId !== null;
       for (const node of nodesRef.current) {
         node.halo.quaternion.copy(camera.quaternion);
         const isHovered = node.layer.id === hoveredLayerIdRef.current;
-        const baseOpacity = isHovered ? 0.42 : 0.16 + pulse * 0.04;
-        (node.halo.material as MeshBasicMaterial).opacity = baseOpacity;
-        // Subtle body opacity pulse for the special branches so they read
-        // as "different track" without screaming for attention.
-        if (node.layer.family === 'special_branch') {
-          (node.body.material as MeshBasicMaterial).opacity =
-            0.65 + 0.18 * pulse;
+        const isFocused = anyClose && node.layer.id === closeId;
+        const targetBodyOpacity = anyClose && !isFocused ? 0.2 : 0.85;
+        const targetHaloOpacity = anyClose && !isFocused
+          ? 0.05
+          : (isHovered ? 0.42 : 0.16 + pulse * 0.04);
+        const bodyMat = node.body.material as MeshBasicMaterial;
+        const haloMat = node.halo.material as MeshBasicMaterial;
+        bodyMat.transparent = true;
+        haloMat.transparent = true;
+        // Lerp opacities smoothly so dim/restore feels natural.
+        bodyMat.opacity += (targetBodyOpacity - bodyMat.opacity) * 0.15;
+        haloMat.opacity += (targetHaloOpacity - haloMat.opacity) * 0.15;
+        // Subtle body opacity pulse for the special branches stays only
+        // when nothing is in close view.
+        if (!anyClose && node.layer.family === 'special_branch') {
+          bodyMat.opacity = 0.65 + 0.18 * pulse;
         }
+
+        // Tick Agent D builders for medium + close.
+        const active = node.layer.id === activeLayerIdRef.current;
+        node.mediumBuilder.update(active, dt);
+        node.closeBuilder.update(dt, active);
       }
 
       // ── Active flow ─────────────────────────────────────────────────
@@ -1218,7 +1474,9 @@ export function CASBrainMap({
             const scale = 0.85 + 0.4 * Math.sin(t * Math.PI);
             particle.scale.set(scale, scale, scale);
 
-            // Light up the currently-active node.
+            // Light up the currently-active node and propagate to the
+            // active-layer ref so Agent D builders + Tour mode know.
+            activeLayerIdRef.current = cur.activeLayerId;
             for (const node of nodesRef.current) {
               const isActive = node.layer.id === cur.activeLayerId;
               if (isActive) {
@@ -1277,13 +1535,17 @@ export function CASBrainMap({
       renderer.domElement.removeEventListener('pointerleave', onPointerLeave);
       renderer.domElement.removeEventListener('pointerdown', onPointerDown);
       for (const node of nodes) {
+        // Far view: dispose legacy body + halo materials/geometries.
         node.body.geometry.dispose();
         (node.body.material as MeshBasicMaterial).dispose();
         node.halo.geometry.dispose();
         const mat = node.halo.material as MeshBasicMaterial;
         if (mat.map) mat.map.dispose();
         mat.dispose();
-        scene.remove(node.group);
+        // Medium + close: delegate to Agent D's per-handle dispose().
+        node.mediumBuilder.dispose();
+        node.closeBuilder.dispose();
+        scene.remove(node.lod);
       }
       for (const line of edgeLines) {
         line.geometry.dispose();
@@ -1293,11 +1555,13 @@ export function CASBrainMap({
       particle.geometry.dispose();
       (particle.material as MeshBasicMaterial).dispose();
       scene.remove(particle);
+      controls.removeEventListener('start', onOrbitStart);
       controls.dispose();
       renderer.dispose();
       if (renderer.domElement.parentElement === wrapper) {
         wrapper.removeChild(renderer.domElement);
       }
+      tickResetTweenFnRef.current = null;
       sceneRef.current = null;
       cameraRef.current = null;
       rendererRef.current = null;
@@ -1328,6 +1592,37 @@ export function CASBrainMap({
       void el.requestFullscreen?.();
     }
   }, []);
+
+  const handleResetView = useCallback(() => {
+    const start = tickResetTweenFnRef.current;
+    if (!start) return;
+    // Also drop Tour mode when the user explicitly resets.
+    tourModeRef.current = false;
+    setTourMode(false);
+    start(performance.now());
+  }, []);
+
+  const handleToggleTour = useCallback(() => {
+    const next = !tourModeRef.current;
+    tourModeRef.current = next;
+    setTourMode(next);
+  }, []);
+
+  // ESC: reset camera when in close view; always disable Tour mode.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      // Skip when fullscreen is exiting — browser already handles that key.
+      if (closeLayerIdRef.current !== null) {
+        handleResetView();
+      } else if (tourModeRef.current) {
+        tourModeRef.current = false;
+        setTourMode(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [handleResetView]);
 
   const containerStyle: CSSProperties = {
     height: fullscreen ? '100vh' : 800,
@@ -1396,6 +1691,32 @@ export function CASBrainMap({
               {evidenceHelp(mode)}
             </div>
           </div>
+          <button
+            type="button"
+            onClick={handleResetView}
+            aria-label="Reset view"
+            title="Reset camera to default framing"
+            data-testid="cas-brain-reset-view"
+            className="flex h-9 items-center justify-center rounded-md border border-white/[0.08] bg-black/40 px-3 text-xs text-slate-200 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            Reset view
+          </button>
+          <button
+            type="button"
+            onClick={handleToggleTour}
+            aria-pressed={tourMode}
+            aria-label={tourMode ? 'Disable tour mode' : 'Enable tour mode'}
+            title="Auto-orbit + auto-zoom the currently-firing layer"
+            data-testid="cas-brain-tour-mode"
+            className={[
+              'flex h-9 items-center justify-center rounded-md border px-3 text-xs transition-colors',
+              tourMode
+                ? 'border-amber-300/40 bg-amber-500/20 text-amber-50 hover:bg-amber-500/30'
+                : 'border-white/[0.08] bg-black/40 text-slate-200 hover:bg-white/10 hover:text-white',
+            ].join(' ')}
+          >
+            {tourMode ? 'Tour mode: on' : 'Tour mode: off'}
+          </button>
           <button
             type="button"
             onClick={toggleFullscreen}
@@ -1590,7 +1911,98 @@ export function CASBrainMap({
           </div>
         </aside>
       )}
+
+      {/* Close-view info panel + synthetic-weights banner (per
+          PHASE_2_LOD_DESIGN.md §4.2 / §7.2). Renders only when the LOD
+          has swapped a layer into the close-view level. */}
+      {closeLayerId && (
+        <CloseViewInfoPanel
+          layer={layerById.get(closeLayerId) ?? null}
+          synthetic={CAS_BRAIN_WEIGHTS_IS_SYNTHETIC}
+        />
+      )}
     </section>
+  );
+}
+
+// ── Close-view info panel ────────────────────────────────────────────────
+
+interface CloseViewInfoPanelProps {
+  layer: CASBrainLayer | null;
+  synthetic: boolean;
+}
+
+function CloseViewInfoPanel({ layer, synthetic }: CloseViewInfoPanelProps) {
+  if (!layer) return null;
+  const checkpointId = CAS_BRAIN_WEIGHTS.checkpoint_id;
+  const shaPrefix = getCheckpointSha256Prefix(8);
+  const downsample = CAS_BRAIN_WEIGHTS.downsample_grid;
+  const fullParams = layer.paramCount;
+  const cells = downsample * downsample;
+  const avgPerCell = Math.max(1, Math.round(fullParams / cells));
+  const explanation = LAYER_EXPLANATIONS[layer.family];
+  return (
+    <aside
+      data-testid="cas-brain-close-info-panel"
+      className="absolute right-3 top-[124px] z-40 max-h-[calc(100%-156px)] w-96 overflow-y-auto rounded-md border border-cyan-300/30 bg-black/90 text-sm text-slate-200 shadow-xl backdrop-blur-sm"
+      role="dialog"
+      aria-label={`Close view: ${layer.label}`}
+    >
+      {synthetic && (
+        <div
+          data-testid="cas-brain-synthetic-banner"
+          className="border-b border-amber-200/40 bg-amber-300/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-amber-950"
+        >
+          SYNTHETIC WEIGHTS — illustrative only
+        </div>
+      )}
+      <div className="p-4">
+        <div
+          className="text-[17px] font-semibold"
+          style={{ color: FAMILY_COLOR[layer.family] }}
+        >
+          {layer.label}
+        </div>
+        <div className="mt-1 text-[12px] text-slate-400">
+          {layer.family.replace(/_/g, ' ')} · {formatParamCountHover(fullParams)}
+        </div>
+
+        {synthetic ? (
+          <div className="mt-4 text-[13px] leading-relaxed text-slate-300">
+            <span className="font-semibold text-slate-100">Weight grid:</span>{' '}
+            Showing {downsample}x{downsample} SYNTHETIC weights. Pod
+            checkpoint extraction failed; this grid is illustrative, not
+            derived from the trained v0.2 checkpoint. Re-run extraction to
+            see real weights.
+          </div>
+        ) : (
+          <div className="mt-4 text-[13px] leading-relaxed text-slate-300">
+            <span className="font-semibold text-slate-100">Weight grid:</span>{' '}
+            Showing {downsample}x{downsample} of{' '}
+            {fullParams.toLocaleString()} weights. Each cell averages{' '}
+            {avgPerCell.toLocaleString()} real weights from the trained v0.2
+            checkpoint (checkpoint id <span className="font-mono">{checkpointId}</span>, sha256 prefix{' '}
+            <span className="font-mono">{shaPrefix}</span>).
+          </div>
+        )}
+
+        <div className="mt-3 text-[13px] leading-relaxed text-slate-300">
+          <span className="font-semibold text-slate-100">
+            Activation pulses:
+          </span>{' '}
+          Illustrative — labeled MOCK until Mode 7 live capture is wired
+          through. The animation shows what a real forward pass would do
+          mechanically: input vector multiplied across rows, output emerges.
+        </div>
+
+        <div className="mt-3 text-[13px] leading-relaxed text-slate-300">
+          <span className="font-semibold text-slate-100">
+            What this layer does:
+          </span>{' '}
+          {explanation}
+        </div>
+      </div>
+    </aside>
   );
 }
 
