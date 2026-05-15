@@ -187,6 +187,69 @@ def _sha256_file(path: Path, chunk_size: int = 1 << 20) -> str | None:
 
 
 # ---------------------------------------------------------------------------
+# Path allowlist + size guard — packets carry on-disk paths that the verify
+# endpoint will re-hash. The packet writer is trusted, but the route is a
+# POST endpoint, so we defense-in-depth: only roots under the project root
+# or scaffold root are eligible, and files larger than the size cap are
+# refused before any bytes are read.
+# ---------------------------------------------------------------------------
+
+
+# 8 GiB — well above the largest plausible model checkpoint we ship today
+# (Stage 4 v0.2 model_final.pt is ~460 MB) but a hard upper bound on the
+# work this endpoint will do per request.
+_MAX_VERIFY_FILE_BYTES = 8 * 1024 * 1024 * 1024
+
+
+def _verify_allowed_roots() -> tuple[Path, ...]:
+    """Roots under which artifacts may live to be eligible for hashing."""
+    return (_project_root().resolve(), _scaffold_root().resolve())
+
+
+def _path_is_inside(path: Path, root: Path) -> bool:
+    """Return ``True`` if ``path`` is the same as, or nested under, ``root``.
+
+    Compatible with Python 3.8+ (avoids ``Path.is_relative_to``).
+    """
+    try:
+        path.resolve().relative_to(root)
+        return True
+    except ValueError:
+        return False
+
+
+def _resolve_allowed_path(path_str: str) -> tuple[Path | None, str | None]:
+    """Resolve ``path_str`` and verify it lives under an allowed root.
+
+    Returns ``(resolved_path, None)`` on success or ``(None, reason)`` if
+    the path is outside the allowlist, missing, oversized, or otherwise
+    not eligible to be hashed.
+    """
+    try:
+        candidate = Path(path_str).resolve()
+    except (OSError, RuntimeError):
+        return None, "path could not be resolved"
+
+    if not any(_path_is_inside(candidate, root) for root in _verify_allowed_roots()):
+        return None, "path is outside allowed roots"
+
+    if not candidate.is_file():
+        return None, "file not found locally"
+
+    try:
+        size = candidate.stat().st_size
+    except OSError:
+        return None, "failed to stat file"
+    if size > _MAX_VERIFY_FILE_BYTES:
+        return (
+            None,
+            f"file exceeds max verify size of {_MAX_VERIFY_FILE_BYTES} bytes",
+        )
+
+    return candidate, None
+
+
+# ---------------------------------------------------------------------------
 # Trace discovery — looks for a per-trace JSON file in the conventional spots.
 # ---------------------------------------------------------------------------
 
@@ -570,15 +633,15 @@ def _verify_packet_hashes(packet: EvidencePacket) -> VerifyHashesResponse:
                 )
             )
             continue
-        path = Path(path_str)
-        if not path.is_file():
+        path, reject_reason = _resolve_allowed_path(path_str)
+        if path is None:
             checks.append(
                 VerifyCheck(
                     artifact=artifact,
                     expected=expected,
                     actual=None,
                     match=False,
-                    notes="file not found locally",
+                    notes=reject_reason or "path rejected",
                 )
             )
             continue

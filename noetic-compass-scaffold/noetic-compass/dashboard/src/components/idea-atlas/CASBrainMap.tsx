@@ -1755,12 +1755,12 @@ export function CASBrainMap({
               setEvidenceTraceId('dev_example_001');
               setEvidenceOpen(true);
             }}
-            aria-label="Open evidence packet"
-            title="Open the Evidence Packet for this thought — input, CAS, hashes, claim levels"
+            aria-label="Open example evidence packet"
+            title="Open the EXAMPLE Evidence Packet (dev fixture). Real per-thought packets arrive once chat REPL / Atlas surfaces hand off live trace_ids."
             data-testid="cas-brain-open-evidence"
             className="flex h-9 items-center justify-center rounded-md border border-emerald-300/30 bg-emerald-500/15 px-3 text-xs text-emerald-100 transition-colors hover:bg-emerald-500/25 hover:text-emerald-50"
           >
-            Open Evidence
+            Open Example Evidence
           </button>
           <button
             type="button"

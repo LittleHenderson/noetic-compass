@@ -264,11 +264,22 @@ function MonoBlock({ children }: { children: ReactNode }) {
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 
-function firstEight(sha: string): string {
+/**
+ * Truncate-or-placeholder helpers for SHA-256 hashes. Some fixtures (and
+ * back-compat packets that pre-date the on-disk verifier) may have null /
+ * undefined hash fields when the artifact has not been hashed on this host
+ * yet. We render an explicit "unavailable on this host" placeholder instead
+ * of crashing.
+ */
+const UNAVAILABLE_ON_HOST = 'unavailable on this host';
+
+function firstEight(sha: string | null | undefined): string {
+  if (!sha) return UNAVAILABLE_ON_HOST;
   return sha.slice(0, 8);
 }
 
-function firstSixteen(sha: string): string {
+function firstSixteen(sha: string | null | undefined): string {
+  if (!sha) return UNAVAILABLE_ON_HOST;
   return sha.slice(0, 16);
 }
 
@@ -529,6 +540,19 @@ function DrawerHeader({
           <CrossIcon className="h-4 w-4" />
         </button>
       </div>
+
+      {traceId.startsWith('dev_') && (
+        <div
+          className="mt-3 rounded-md border border-amber-400/40 bg-amber-500/10 px-3 py-2 text-[11px] text-amber-100"
+          data-testid="evidence-packet-example-banner"
+          role="note"
+        >
+          <span className="font-semibold">Example packet — not this selected thought yet.</span>{' '}
+          This is a developer fixture so reviewers can audit the surface. Real
+          per-thought packets arrive once chat REPL / Atlas surfaces hand off
+          live trace IDs.
+        </div>
+      )}
 
       <blockquote className="mt-4 rounded-md border-l-2 border-cyan-400/60 bg-cyan-500/[0.04] px-3 py-2 text-[12px] italic text-slate-100">
         &ldquo;{HEADLINE_BLOCKQUOTE}&rdquo;
@@ -920,32 +944,39 @@ function ProvenanceView({
 // ── Hashes table ──────────────────────────────────────────────────────────
 
 interface HashRow {
-  artifact: string;
-  sha: string;
+  /** Lowercase identifier matching the backend `artifact` field on /verify responses. */
+  id: string;
+  /** Human-readable label rendered in the table. */
+  label: string;
+  sha: string | null;
   path?: string;
 }
 
 function buildHashRows(packet: EvidencePacketData): HashRow[] {
   const rows: HashRow[] = [];
   rows.push({
-    artifact: 'Weights',
-    sha: packet.hashes.weights_sha,
+    id: 'weights',
+    label: 'Weights',
+    sha: packet.hashes.weights_sha ?? null,
     path: packet.hashes.on_disk_paths.weights_path,
   });
   rows.push({
-    artifact: 'Tokenizer',
-    sha: packet.hashes.tokenizer_hash,
+    id: 'tokenizer',
+    label: 'Tokenizer',
+    sha: packet.hashes.tokenizer_hash ?? null,
     path: packet.hashes.on_disk_paths.tokenizer_path,
   });
   if (packet.hashes.english_bpe_hash) {
     rows.push({
-      artifact: 'English BPE',
+      id: 'english_bpe',
+      label: 'English BPE',
       sha: packet.hashes.english_bpe_hash,
     });
   }
   if (packet.hashes.corpus_sha256) {
     rows.push({
-      artifact: 'Corpus',
+      id: 'corpus',
+      label: 'Corpus',
       sha: packet.hashes.corpus_sha256,
       path: packet.hashes.on_disk_paths.corpus_path,
     });
@@ -986,15 +1017,15 @@ function HashesTable({
         </thead>
         <tbody>
           {rows.map((r) => {
-            const check = checkByArtifact.get(r.artifact);
+            const check = checkByArtifact.get(r.id);
             return (
               <tr
-                key={r.artifact}
+                key={r.id}
                 className="border-t border-white/[0.04] align-top text-slate-200"
               >
                 <td className="px-2 py-1.5">
                   <div className="flex items-center gap-1.5">
-                    <span>{r.artifact}</span>
+                    <span>{r.label}</span>
                     {check && !check.match && (
                       <span
                         className="inline-flex items-center gap-0.5 rounded-full bg-rose-500/15 border border-rose-400/30 px-1.5 py-0.5 text-[9px] text-rose-200"
@@ -1019,10 +1050,18 @@ function HashesTable({
                 </td>
                 <td
                   className="px-2 py-1.5 font-mono text-[10px] text-slate-300"
-                  title={r.sha}
+                  title={r.sha ?? UNAVAILABLE_ON_HOST}
                 >
-                  {firstSixteen(r.sha)}
-                  <span className="text-slate-500">…</span>
+                  {r.sha ? (
+                    <>
+                      {firstSixteen(r.sha)}
+                      <span className="text-slate-500">…</span>
+                    </>
+                  ) : (
+                    <span className="italic text-slate-500">
+                      {UNAVAILABLE_ON_HOST}
+                    </span>
+                  )}
                 </td>
                 <td className="px-2 py-1.5">
                   {r.path ? (
