@@ -27,16 +27,17 @@ export function CinematicIntro({ children }: { children: React.ReactNode }) {
     if (phase !== 'hidden') return;
     // Start flying on next frame
     const t1 = setTimeout(() => setPhase('flying'), 60);
-    // After the fly-in animation (~1.6s), switch to endless floating. No
-    // auto-advance past this — only the Skip button can dismiss the intro.
+    // After the fly-in animation (~1.6s), float briefly, then dismiss.
     const t2 = setTimeout(() => setPhase('floating'), 1700);
+    const t3 = setTimeout(() => dismissIntro(), 2900);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
+      clearTimeout(t3);
     };
   }, [phase]);
 
-  function handleSkip() {
+  function dismissIntro() {
     localStorage.setItem(INTRO_SEEN_KEY, '1');
     setPhase('leaving');
     // After slide-up animation, fully unmount
@@ -70,7 +71,7 @@ export function CinematicIntro({ children }: { children: React.ReactNode }) {
         </div>
 
         <button
-          onClick={handleSkip}
+          onClick={dismissIntro}
           className="absolute bottom-6 right-6 rounded-lg border border-accent-teal/40 bg-accent-teal/10 px-5 py-3 text-sm font-semibold text-accent-teal hover:bg-accent-teal/20 hover:border-accent-teal/60 transition-colors shadow-lg shadow-accent-teal/20"
         >
           Skip →
