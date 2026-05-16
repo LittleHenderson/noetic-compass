@@ -153,16 +153,50 @@ def main(argv: list[str] | None = None) -> int:
                     f"rate={rate:.2f}/s eta={(N - i - 1) / max(rate, 1e-6):.0f}s"
                 )
 
+    # Per Codex audit 37d0a62 medium fix: save sample_ids as a
+    # fixed-length unicode string array, not dtype=object. numpy
+    # auto-detects the right <UN width from the input list.
+    sample_ids_arr = np.array(sample_ids)
+    assert sample_ids_arr.dtype.kind == "U", (
+        f"sample_ids dtype must be unicode strings, got {sample_ids_arr.dtype}"
+    )
+
     np.savez_compressed(
         _OUT_ACTIVATIONS,
         X=X,
         y=y,
-        sample_ids=np.array(sample_ids, dtype=object),
+        sample_ids=sample_ids_arr,
     )
+
+    # Per Codex audit 37d0a62 medium fix: record model revision +
+    # package versions in the manifest so a future auditor can
+    # reproduce the exact environment.
+    try:
+        import transformers as _tf_pkg
+        transformers_version = _tf_pkg.__version__
+    except Exception:
+        transformers_version = "unknown"
+    try:
+        import torch as _torch_pkg
+        torch_version = _torch_pkg.__version__
+    except Exception:
+        torch_version = "unknown"
+    try:
+        numpy_version = np.__version__
+    except Exception:
+        numpy_version = "unknown"
+
+    # HF auto-loads the model from a specific revision. The config
+    # records the source name and any locally-resolved commit if HF
+    # returned one. Capture both.
+    model_revision = getattr(model.config, "_commit_hash", None) or "unknown"
+    model_source = getattr(model.config, "_name_or_path", _MODEL_NAME)
 
     manifest = {
         "schema_version": "pythia_probe_activations.v1",
         "model_name": _MODEL_NAME,
+        "model_source": model_source,
+        "model_revision": model_revision,
         "device": args.device,
         "snapshot_used": _LABELS_PATH.name,
         "n_records": N,
@@ -172,11 +206,18 @@ def main(argv: list[str] | None = None) -> int:
         "pool_method": "mean_over_seq_len",
         "tokenizer_pad_token": tokenizer.pad_token,
         "max_tokens": 256,
+        "sample_ids_dtype": str(sample_ids_arr.dtype),
+        "package_versions": {
+            "transformers": transformers_version,
+            "torch": torch_version,
+            "numpy": numpy_version,
+        },
         "elapsed_seconds": time.perf_counter() - started,
         "output_file": _OUT_ACTIVATIONS.name,
     }
-    with _OUT_RUN_MANIFEST.open("w", encoding="utf-8") as fh:
+    with _OUT_RUN_MANIFEST.open("w", encoding="utf-8", newline="\n") as fh:
         json.dump(manifest, fh, indent=2)
+        fh.write("\n")
 
     print(f"activations written: {_OUT_ACTIVATIONS}")
     print(f"run manifest: {_OUT_RUN_MANIFEST}")

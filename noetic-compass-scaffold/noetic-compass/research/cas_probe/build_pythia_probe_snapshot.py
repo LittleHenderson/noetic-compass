@@ -22,34 +22,70 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
+import re
 import sys
 from collections import Counter
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 
 # --------------------------------------------------------------------------- #
-# Paths — repo-rooted so the script is portable across hosts.
+# Paths — both sources are tracked inside the branch so a clean checkout
+# can rebuild the snapshot deterministically.
 # --------------------------------------------------------------------------- #
 
 _HERE = Path(__file__).resolve().parent
 # research/cas_probe → research → noetic-compass → noetic-compass-scaffold → tksCAS
 _REPO_ROOT = _HERE.parents[3]
 
-_WAVE3_PATH = (
-    _REPO_ROOT
-    / "cas-synthetic" / "data" / "path_d" / "wave3_full"
-    / "wave3_smoke_20260507T232622Z.jsonl"
-)
+_TODAY = "20260515"
+
+# Vendored slice of the wave3 corpus containing only the cas_to_english
+# records (~1129 rows). Vendored inside the branch so the builder works
+# on a clean worktree without depending on out-of-branch files.
+_WAVE3_PATH = _HERE / f"pythia_probe_source_wave3_cas_to_english_{_TODAY}.jsonl"
+
+# seeds.jsonl is already tracked at its canonical path; read it from there.
 _SEEDS_PATH = (
     _REPO_ROOT / "cas-synthetic" / "data" / "path_d" / "seeds.jsonl"
 )
 
-_TODAY = "20260515"
 _OUT_LABELS = _HERE / f"pythia_probe_labels_{_TODAY}.jsonl"
 _OUT_MANIFEST = _HERE / f"pythia_probe_manifest_{_TODAY}.json"
+
+
+# --------------------------------------------------------------------------- #
+# CAS-notation leakage filter — supplements wave3's leakage_in_reply
+# flag, which let row 416 through with literal "(^3)" in the English
+# (per Codex audit 37d0a62). Any English description matching one of
+# these patterns is rejected so the probe cannot cheat by reading the
+# CAS label off the prompt text itself.
+# --------------------------------------------------------------------------- #
+
+# Patterns deliberately conservative — false positives (over-rejection)
+# are preferred over false negatives (label leakage). The probe still has
+# 35+ records per class margin after filtering.
+_LEAKAGE_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
+    # ^ followed by a digit or one of the domain letters → noetic/domain.
+    ("caret_noetic_or_domain", re.compile(r"\^[0-9PCEOpceo]")),
+    # _F1..._F7 with optional curly braces → drive marker.
+    ("drive_marker", re.compile(r"_\{?F[1-7]\}?")),
+    # Greek omega / phi / theta — only used in CAS compound notation.
+    ("greek_omega", re.compile(r"[Ω]")),
+    ("greek_phi", re.compile(r"[ΦΘ]")),
+    # Explicit operator name (CO-0..CO-9).
+    ("co_n_operator", re.compile(r"\bCO-[0-9]+\b")),
+)
+
+
+def _has_cas_leakage(english: str) -> tuple[bool, list[str]]:
+    """Return (True, matched_pattern_names) if any CAS surface tokens are
+    present in the English. Otherwise (False, [])."""
+    hits: list[str] = []
+    for name, pattern in _LEAKAGE_PATTERNS:
+        if pattern.search(english):
+            hits.append(name)
+    return (bool(hits), hits)
 
 
 # --------------------------------------------------------------------------- #
@@ -57,8 +93,9 @@ _OUT_MANIFEST = _HERE / f"pythia_probe_manifest_{_TODAY}.json"
 # --------------------------------------------------------------------------- #
 
 EXTRACTION_RULES: list[str] = [
-    "Source: cas_to_english records from wave3_smoke_20260507T232622Z.jsonl "
-    "joined to seeds.jsonl by sample_id.source_id == seed.seed_id.",
+    "Source: the cas_to_english slice of wave3 vendored inside this branch "
+    "as pythia_probe_source_wave3_cas_to_english_20260515.jsonl, joined to "
+    "seeds.jsonl by sample_id.source_id == seed.seed_id.",
     "Pythia input: the natural-English description in the wave3 record's "
     "'raw_response' field (the model-generated paraphrase of the seed CAS).",
     "Label: seed.axes.noetics_used[0], which is one of 0..9.",
@@ -70,8 +107,14 @@ EXTRACTION_RULES: list[str] = [
     "Note: the wave3 cas_to_english record's own compiler_validated field is "
     "always None (it produces English, not CAS, so there is nothing to "
     "compile). The validity check rides on the seed expression.",
-    "Filter — no leakage: wave3 record's leakage_in_reply must be False "
-    "(CAS notation did not bleed into the English description).",
+    "Filter — no leakage (upstream flag): wave3 record's leakage_in_reply "
+    "must be False (the SDG pipeline's own leakage flag).",
+    "Filter — no leakage (regex re-check, added 2026-05-15 post-audit): "
+    "english must not match any of the CAS-notation patterns "
+    "_LEAKAGE_PATTERNS, which look for ^ followed by a digit/domain letter, "
+    "_F1..._F7 drive markers, Ω/Φ/Θ greek letters, or CO-N operator names. "
+    "This catches the row 416 'literal (^3)' case Codex flagged where the "
+    "upstream flag was False but the English still contained CAS notation.",
     "Filter — non-empty english: raw_response must be a non-empty string "
     "after stripping whitespace.",
     "Filter — minimum length: raw_response must be at least 20 characters "
@@ -142,6 +185,16 @@ def build() -> dict[str, Any]:
             rejected["english_too_short_or_empty"] += 1
             continue
 
+        # Post-audit CAS-notation leakage re-check. The upstream
+        # leakage_in_reply flag missed at least one row (row 416 of the
+        # pre-audit snapshot had literal "(^3)"). This regex catches the
+        # leakage so the probe cannot read its label off the prompt.
+        leaked, patterns = _has_cas_leakage(english)
+        if leaked:
+            for p in patterns:
+                rejected[f"cas_notation_leak_{p}"] += 1
+            continue
+
         source_id = r.get("source_id")
         if not isinstance(source_id, str):
             rejected["missing_source_id"] += 1
@@ -180,19 +233,24 @@ def build() -> dict[str, Any]:
             "grammar_category": seed.get("grammar_category"),
         })
 
-    # Write the snapshot.
+    # Write the snapshot. Explicit LF newlines + UTF-8 so the on-disk
+    # bytes are identical on Windows and POSIX checkouts (Codex audit
+    # 37d0a62 finding 2: manifest sha256 must match across hosts). The
+    # research/cas_probe .gitattributes also pins LF for these files
+    # so git checkout does not re-translate to CRLF on Windows.
     with _OUT_LABELS.open("w", encoding="utf-8", newline="\n") as fh:
         for row in rows:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
 
     class_dist = Counter(row["noetic_label"] for row in rows)
 
+    # Manifest is intentionally content-derived only. The build time is
+    # NOT recorded here so re-running with the same source files
+    # produces a byte-identical manifest. Use git history for the
+    # authoritative "when was this built" answer.
     manifest = {
         "schema_version": "pythia_probe_snapshot.v1",
         "snapshot_id": f"pythia_probe_labels_{_TODAY}",
-        "built_at_utc": datetime.now(tz=timezone.utc).strftime(
-            "%Y-%m-%dT%H:%M:%SZ"
-        ),
         "snapshot_file": _OUT_LABELS.name,
         "snapshot_sha256": _sha256_of_file(_OUT_LABELS),
         "record_count": len(rows),
@@ -208,11 +266,19 @@ def build() -> dict[str, Any]:
                 "path": str(_WAVE3_PATH.relative_to(_REPO_ROOT)),
                 "sha256": _sha256_of_file(_WAVE3_PATH),
                 "record_count": len(wave3),
+                "note": (
+                    "Vendored slice of the original wave3 corpus — only "
+                    "cas_to_english records were carried into the branch "
+                    "so the build can run on a clean checkout. Slice "
+                    "produced from cas-synthetic/data/path_d/wave3_full/"
+                    "wave3_smoke_20260507T232622Z.jsonl on 2026-05-15."
+                ),
             },
             {
                 "path": str(_SEEDS_PATH.relative_to(_REPO_ROOT)),
                 "sha256": _sha256_of_file(_SEEDS_PATH),
                 "record_count": len(seeds),
+                "note": "Already tracked at canonical path; read in place.",
             },
         ],
         "extraction_rules": EXTRACTION_RULES,
@@ -224,8 +290,12 @@ def build() -> dict[str, Any]:
         ],
     }
 
+    # Trailing newline to match git's expected-file-end convention so
+    # tools like `cat` and POSIX text checks treat the manifest as a
+    # well-formed text file.
     with _OUT_MANIFEST.open("w", encoding="utf-8", newline="\n") as fh:
         json.dump(manifest, fh, indent=2, ensure_ascii=False)
+        fh.write("\n")
 
     return manifest
 

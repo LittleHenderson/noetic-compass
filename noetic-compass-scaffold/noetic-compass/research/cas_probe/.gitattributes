@@ -1,0 +1,16 @@
+# Pin line endings + binary classification for the Pythia CAS-probe
+# research artifacts (Codex audit 37d0a62 finding 2). The manifest's
+# sha256 of the snapshot must be reproducible on any host, including
+# Windows checkouts that would otherwise translate LF → CRLF on `git
+# checkout`.
+
+# Treat all research JSON/JSONL as text but force LF line endings so the
+# on-disk bytes match the sha256 recorded in the manifest.
+*.jsonl text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+*.py    text eol=lf
+*.txt   text eol=lf
+
+# Numpy .npz files are binary archives — never apply EOL conversion.
+*.npz binary

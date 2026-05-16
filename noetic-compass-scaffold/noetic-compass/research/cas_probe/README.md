@@ -59,15 +59,29 @@ subject. CAS is the measuring instrument.**
 
 ## Files
 
-- `build_pythia_probe_snapshot.py` — joins `cas-synthetic/data/path_d/wave3_full/wave3_smoke_*.jsonl`
-  with `cas-synthetic/data/path_d/seeds.jsonl`, filters to records with
-  exactly one noetic, writes a frozen snapshot + manifest.
+- `.gitattributes` — pins LF line endings on the research JSON / JSONL /
+  Python / Markdown files so the manifest's sha256 of the snapshot
+  matches the on-disk bytes on any host (Windows, Linux, macOS).
+- `pythia_probe_source_wave3_cas_to_english_20260515.jsonl` — vendored
+  slice of the wave3 corpus, containing only the 1,129 `cas_to_english`
+  records. Vendored inside the branch so a clean checkout can rebuild
+  the labels snapshot without depending on out-of-branch files.
+- `build_pythia_probe_snapshot.py` — joins the vendored wave3 slice with
+  `cas-synthetic/data/path_d/seeds.jsonl` (tracked at its canonical
+  path) and writes a frozen snapshot + manifest. Deterministic: re-running
+  with the same source files produces byte-identical output. Includes a
+  regex-based CAS-notation leakage filter (added post-audit) so the
+  probe cannot read its label off the prompt.
 - `pythia_probe_labels_20260515.jsonl` — frozen labels for the
-  experiment. **Read-only.** Regenerate by re-running the builder with
-  the same source files.
+  experiment. **Read-only.** Regenerate by re-running the builder.
 - `pythia_probe_manifest_20260515.json` — sha256 of the snapshot,
-  source file paths + hashes, record count, class distribution, extraction
-  rules in plain text.
+  source-file paths + hashes, record count, class distribution,
+  extraction rules in plain text, and rejection counts (including the
+  new leakage-regex rejections).
+- `capture_pythia_activations.py` — Stage 1.1 capture script. Loads
+  Pythia-160M, mean-pools hidden states per layer, dumps a `.npz`. NOT
+  YET RUN — requires explicit user OK to install `transformers` and
+  download Pythia weights.
 
 ## Decision gates
 
