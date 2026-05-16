@@ -20,14 +20,31 @@ Setup:
 * Reported metrics: per-layer train/val/test accuracy + macro-F1.
 * 10-class chance baseline: 10%.
 
-Decision gate (set in the README):
+Decision gates (revised post-audit 2026-05-16, set in the README):
 
-* **≥30% test accuracy at best layer** → strong signal. CAS structure
-  is detectably in Pythia. Proceed to other CAS axes.
-* **20–30%** → weak. Run per-class ablation to see which noetics are
-  detectable.
-* **<20%** → fail. CAS structure is not naturally factored in Pythia's
-  prompt-encoding activations.
+Beating chance is necessary but NOT sufficient. To claim the model
+adds structure beyond plain text we require BOTH:
+
+* Pythia headline test accuracy minus best-text-baseline test accuracy
+  **>= 5 percentage points**, AND
+* McNemar's exact binomial test on the paired discordant pairs
+  (Pythia-only-correct vs text-baseline-only-correct) **p < 0.05**.
+
+Verdict tiers (computed at runtime in this script):
+
+* ``PROBE_RELIABLY_ABOVE_TEXT_BASELINE`` — both criteria pass.
+* ``LABELS_RECOVERABLE_MOSTLY_FROM_TEXT`` — headline beats chance
+  but does not show a reliable lift over a plain-text baseline.
+* ``PROBE_WEAKLY_ABOVE_CHANCE`` — between chance and the 30% strong
+  threshold; lift over text not even tested at this tier.
+* ``NULL_RESULT`` — at or below chance.
+
+The earlier ">=30% test accuracy = strong signal" framing in pre-
+audit versions of this script was insufficient: beating chance on
+this corpus only proves the labels are recoverable from the English
+text, not that Pythia adds anything beyond that. The Stage 2.2 audit
+(commit ``0421e7f``) replaced it with the paired-baseline criterion
+above.
 
 This script reads only files inside ``research/cas_probe/`` and does
 not import Pythia / transformers — it only uses the pre-captured

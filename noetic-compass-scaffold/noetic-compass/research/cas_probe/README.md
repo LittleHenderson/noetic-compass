@@ -18,12 +18,18 @@ If no, the CAS framing requires explicit training to surface, and the
 Two tests:
 
 1. **Detection (Stage 2).** Train a small linear classifier (a probe) to
-   read CAS axis labels from Pythia hidden states. If the probe does
-   better than chance, the structure is detectably in there.
+   read CAS axis labels from Pythia hidden states. Beating chance is
+   **not** enough on its own — the labels could be recoverable from the
+   English text alone. The probe must also reliably beat plain-text
+   baselines (TF-IDF, count-vector) by at least 5 percentage points
+   with a McNemar p < 0.05 on the paired discordant samples. See the
+   revised decision gates below.
 2. **Causal influence (Stage 3, gated on Stage 2).** Mess with the
    detected direction inside Pythia (turn it down, scramble it) and see
-   if the output changes. If yes, the structure is not just there —
-   it's load-bearing.
+   if the output changes. If yes, the structure is not just there — it's
+   load-bearing. This is a different kind of evidence (causal, not
+   discriminative) and remains worth running even when Stage 2 lands at
+   `LABELS_RECOVERABLE_MOSTLY_FROM_TEXT`.
 
 ## Isolation guardrails (user-ratified 2026-05-15)
 
@@ -346,18 +352,26 @@ Artifacts on disk:
   YET RUN — requires explicit user OK to install `transformers` and
   download Pythia weights.
 
-## Decision gates
+## Decision gates (superseded — see "Decision gates (revised)" above)
 
-- **Stage 2 pass:** best-layer noetic-probe test accuracy ≥ 30%
-  (vs 10% chance baseline across 10 noetic classes).
-- **Stage 2 weak:** 20%–30%. Run ablation analysis to understand which
-  noetics are detectable and which are not.
-- **Stage 2 fail:** <20%. CAS structure is not naturally factored in
-  Pythia's activations at the prompt-encoding level. Revisit:
-  (a) try later layers, (b) try generation-side encoding, (c) declare
-  the CAS framing requires explicit training to surface.
-- **Stage 3 pass:** ablating the detected direction changes the output
-  measurably (output similarity drops below a threshold).
+The original pre-experiment gates listed below proved insufficient.
+Beating chance only proves the labels are recoverable from the
+English text the SDG pipeline produced — it does not show the model
+adds structure beyond plain bag-of-words classification. The Stage
+2.2 audit (commit `0421e7f`) replaced these gates with the stricter
+paired-baseline + McNemar criterion in the **"Decision gates
+(revised post-audit 2026-05-16)"** section near the top of this
+README. The bullets below are retained for the audit trail only:
+
+- ~~**Stage 2 pass:** best-layer noetic-probe test accuracy ≥ 30%
+  (vs 10% chance baseline across 10 noetic classes).~~
+- ~~**Stage 2 weak:** 20%–30%. Run ablation analysis to understand
+  which noetics are detectable and which are not.~~
+- ~~**Stage 2 fail:** <20%. CAS structure is not naturally factored
+  in Pythia's activations at the prompt-encoding level.~~
+- **Stage 3 pass (still load-bearing):** ablating the detected
+  direction changes the output measurably (output similarity drops
+  below a threshold).
 
 ## What CAS Mode 7 means here
 
