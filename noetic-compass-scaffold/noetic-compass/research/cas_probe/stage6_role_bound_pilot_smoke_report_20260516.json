@@ -39,7 +39,7 @@
     "The pilot split has only two test rows per noetic; no scientific claim should be made from these numbers.",
     "The locked Stage 6 confirmatory fixture must be generated and hashed before claim-bearing evaluation."
   ],
-  "elapsed_seconds": 4.084755799995037,
+  "elapsed_seconds": 4.133518999995431,
   "experiment": "Stage 6.1 role-bound noetic mechanics smoke",
   "input_file": "stage6_role_bound_pilot_20260516.jsonl",
   "input_sha256": "2f3fdc6515a6dbcbba191ec1947ad50522cb4dc46e0e9c449fdf19ac9581e504",

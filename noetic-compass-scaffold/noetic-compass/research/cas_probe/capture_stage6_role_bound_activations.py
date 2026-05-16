@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 import time
 from pathlib import Path
@@ -58,15 +59,17 @@ def _load_jsonl(path: Path) -> list[dict[str, Any]]:
 
 
 def _find_focus_char_index(text: str, expected_focus: str) -> int:
-    marker = "Focus:"
-    marker_idx = text.rfind(marker)
-    if marker_idx < 0:
-        raise ValueError(f"missing {marker!r} marker: {text!r}")
-    tail = text[marker_idx + len(marker) :]
-    rel_idx = tail.find(expected_focus)
-    if rel_idx < 0:
-        raise ValueError(f"focus {expected_focus!r} not found after marker in {text!r}")
-    return marker_idx + len(marker) + rel_idx
+    if expected_focus not in {"A", "B"}:
+        raise ValueError(f"expected_focus must be 'A' or 'B', got {expected_focus!r}")
+    match = re.search(r"\bFocus:\s*([AB])\s*\.?\s*$", text)
+    if not match:
+        raise ValueError(f"missing terminal 'Focus: A/B' marker: {text!r}")
+    actual_focus = match.group(1)
+    if actual_focus != expected_focus:
+        raise ValueError(
+            f"focus marker mismatch: expected {expected_focus!r}, found {actual_focus!r} in {text!r}"
+        )
+    return match.start(1)
 
 
 def _find_token_for_char(offsets: list[tuple[int, int]], char_index: int) -> int:

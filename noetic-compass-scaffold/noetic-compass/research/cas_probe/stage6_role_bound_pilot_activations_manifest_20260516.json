@@ -1,6 +1,6 @@
 {
   "device": "cpu",
-  "elapsed_seconds": 8.038473399996292,
+  "elapsed_seconds": 8.050842200005718,
   "hidden_dim": 768,
   "input_file": "stage6_role_bound_pilot_20260516.jsonl",
   "input_sha256": "2f3fdc6515a6dbcbba191ec1947ad50522cb4dc46e0e9c449fdf19ac9581e504",

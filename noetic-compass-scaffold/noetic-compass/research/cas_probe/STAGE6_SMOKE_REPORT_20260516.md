@@ -126,3 +126,35 @@ Stage 6.2 should decide between:
 3. Add focus-token capture tests to pin token-index behavior before scaling.
 
 My recommendation: add lightweight unit tests for focus-token indexing, then scale to the full 60-bundle fixture.
+
+## Stage 6.1A Patch - Focus-Token Index Tests
+
+The focus-token indexing path is now pinned by a local pytest module:
+
+- `tests/test_stage6_focus_token.py`
+
+The tests cover:
+
+- terminal `Focus: A/B` marker selection instead of earlier `A`/`B` letters
+- marker without a final period
+- missing marker rejection
+- declared-focus mismatch rejection
+- invalid expected focus rejection
+- direct token-offset mapping
+- whitespace-prefixed token fallback
+- unmappable offset rejection
+
+Verification:
+
+```powershell
+python -m pytest noetic-compass-scaffold\noetic-compass\research\cas_probe\tests\test_stage6_focus_token.py -q
+```
+
+Result: `8 passed`.
+
+After hardening the helper, the 100-row capture and smoke were rerun. Headline metrics reproduced:
+
+- focus-token layer 6: `1.00`
+- final-token layer 5: `0.95`
+- mean-over-sequence layer 5: `0.75`
+- best text baseline: `0.50`

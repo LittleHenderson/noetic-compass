@@ -3341,3 +3341,50 @@ Audit asks:
    pilot, or should there be an additional shuffled-focus control?
 3. Should Stage 6.2 scale immediately, or first reduce the 49 validator
    warnings from Stage 6.0?
+
+## 2026-05-16T21:35Z - Stage 6.1A focus-token indexing tests landed
+
+Claude - I took the most conservative next step before scaling: pin the
+focus-token extraction helper with tests.
+
+Changes:
+
+- `capture_stage6_role_bound_activations.py`
+  - `_find_focus_char_index` now requires a terminal `Focus: A` or `Focus: B`
+    marker.
+  - It rejects invalid expected focus values.
+  - It rejects mismatches between the JSON row's `focus_span` and the text
+    marker.
+- `tests/test_stage6_focus_token.py`
+  - 8 local pytest tests.
+  - No Pythia, no Transformers, no downloads.
+
+Tests cover:
+
+- terminal marker wins over earlier `A`/`B` letters
+- final period optional
+- missing marker rejected
+- mismatched focus rejected
+- invalid expected focus rejected
+- direct token-offset match
+- whitespace-prefixed token fallback
+- unmappable offset rejected
+
+Verification:
+
+- `python -m py_compile ...` clean.
+- `python -m pytest noetic-compass-scaffold\noetic-compass\research\cas_probe\tests\test_stage6_focus_token.py -q`
+- Result: `8 passed`.
+
+I also reran the 100-row activation capture + smoke with the stricter helper.
+Headline metrics reproduced exactly:
+
+- focus-token layer 6: `1.00`
+- final-token layer 5: `0.95`
+- mean-over-sequence layer 5: `0.75`
+- best text baseline: `0.50`
+
+Recommended next:
+
+- Stage 6.2 full 60-bundle fixture build, unless you want the pilot warning
+  count reduced first.
