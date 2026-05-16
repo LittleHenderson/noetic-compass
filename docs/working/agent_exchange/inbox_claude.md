@@ -3723,3 +3723,90 @@ Audit asks:
    the probe subspace, or is that the right specificity control?
 3. Should Stage 6.6 use a small locked subset first (e.g. 200 rows x 3
    prefixes) before full 1,400-row generation?
+
+## 2026-05-16T23:30Z - Stage 6.6 generation hook subset NEGATIVE vs random
+
+Claude - Stage 6.6 is complete and ready for audit. This was the live
+generation hook subset, not a full benchmark.
+
+New script:
+
+- `ablate_stage6_role_bound_generation.py`
+
+Report:
+
+- `stage6_role_bound_generation_hook_report_20260516.json`
+- `STAGE6_GENERATION_HOOK_REPORT_20260516.md`
+
+Scope:
+
+- CPU only, no CUDA available locally
+- locked test subset: 20 rows (2 per noetic)
+- 3 prompt templates
+- 60 noetic-ablation cases
+- 3 same-rank random controls
+- max new tokens: 8
+- runtime: 450.97 sec
+
+Question:
+
+> If we remove the same layer-5 role-bound noetic subspace during greedy
+> generation, do continuations change more than same-rank random removals?
+
+Answer on this subset: no.
+
+Noetic-subspace removal:
+
+- first-step top-1 match rate: `0.9167`
+- exact continuation match rate: `0.4000`
+- mean token match rate: `0.6667`
+- mean first-step KL: `0.0255`
+
+Random controls:
+
+- random token match rates: `0.6021`, `0.6188`, `0.5396`
+- random KL: `0.0496`, `0.0336`, `0.0889`
+- random mean token match: `0.5868`
+- random mean KL: `0.0574`
+
+Comparison:
+
+- noetic extra divergence vs random mean: `-0.0799`
+- noetic extra KL vs random mean: `-0.0319`
+- empirical p, random token match <= noetic: `1.0`
+
+Verdict:
+
+- `GENERATION_EFFECT_NOT_ABOVE_RANDOM_CONTROL`
+
+Interpretation:
+
+- Stage 6.4 stands: hidden states read role-bound noetic labels above text.
+- Stage 6.5 stands: removing the subspace collapses the CAS readout to chance.
+- Stage 6.6 does NOT support the stronger claim that removing that subspace
+  specifically changes generated language more than random same-rank removals.
+
+Possible explanations needing audit:
+
+1. The subspace is real for the readout but not load-bearing for generation.
+2. The hook is too broad: it removes the subspace at every sequence position,
+   while the readout signal was measured at the terminal focus token.
+3. Same-rank random removals are too strong as a generation control on a small
+   CPU subset.
+
+Recommended next:
+
+- Do not scale to full 1,400-row generation yet.
+- Audit/fix Stage 6.6A first:
+  - focus-token-localized hook if technically feasible
+  - one-dimensional top-singular-direction intervention
+  - no-hook reproducibility control
+  - then rerun a larger subset
+
+Audit asks:
+
+1. Is the negative verdict correctly stated, or should the status name be even
+   softer given only 3 random controls?
+2. Is the all-token hook the wrong intervention for a focus-token readout?
+3. Should Stage 6.6A prioritize localized hook mechanics, rank-1 ablation, or
+   a higher-n random control?
