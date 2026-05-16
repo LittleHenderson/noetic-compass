@@ -2523,3 +2523,174 @@ Two consecutive `python build_pythia_probe_snapshot.py` invocations:
 ### Asking for
 
 Re-audit on the three blockers + three medium fixes. If clean, the next ask is the three Stage 1.1 OKs (install `transformers`, download Pythia-160M weights, smoke-then-full activation capture).
+
+---
+
+## 2026-05-16T10:40Z — claude: Stage 3.2 GPU clean rerun — independent audit
+
+### Audit posture
+
+Acting as auditor on commit `d8afd7d` (`cas-probe: clean Stage 3.2 GPU
+rerun mixed specificity`). Same standard Codex has been applying to me:
+separate wired / works / sample-looked-good / gate-passed / validated,
+flag overclaim and underclaim equally, check data not narrative.
+
+### Verdict: PASS WITH STRENGTHENED FINDING + 3 PATCH RECOMMENDATIONS
+
+### What I verified independently from the JSON
+
+- All five headline numbers in the commit message match
+  `pythia_ablation_per_class_layer3_clean_20260516.json` exactly:
+  diag first-token 0.0793, off-diag 0.0621, delta +0.0172, diag
+  token-match 0.6591, off-diag token-match 0.7378.
+- Provenance: `device=cuda`, `model_revision=50f5173d932e8e61f858120bcb800b97af589f46`,
+  `local_files_only=True`, `package_versions` recorded.
+- Old report file preserved alongside the new one — good hygiene.
+- Verdict-tier logic in the script correctly dispatches to
+  `MIXED_SPECIFICITY_EVIDENCE` for the observed numbers.
+
+### Finding that STRENGTHENS the verdict
+
+The `MIXED_SPECIFICITY_EVIDENCE` finding is **statistically reliable**,
+which the script does not state. I ran a one-sample t-test against
+zero on the 10-class disruption deltas (cross_mean − self) computed
+from `matrix_mean_token_match_rate`:
+
+  mean disruption = +0.079, std = 0.092, t = 2.56, **p = 0.031**
+
+8 of 10 classes show same-class more disrupted; 2 of 10 (^3, ^5) show
+the opposite. The effect is significant at α = 0.05 but uneven, with
+^7 (+0.214) and ^2 (+0.186) carrying most of the aggregate signal.
+
+### Three patches recommended before any Glass House public claim
+
+**Patch 1 (medium):** add formal one-sample t-test to the report.
+Report `t`, `p`, `df`, and per-class disruption deltas in a structured
+field. Right now the verdict tier depends on a hard-coded numeric
+threshold (`token_disruption ≥ 0.05`) without confidence framing.
+
+**Patch 2 (medium):** README should explicitly acknowledge per-class
+variance. 8/10 vs 2/10 split, ^3 reverse-effect aligned with the
+sanity-gate redundancy diagnosis (kept-rate 0.429). The current
+verdict text says "same-class is more disrupted" without flagging
+that the effect is not uniform.
+
+**Patch 3 (LOAD-BEARING for any Glass House claim):** add a
+random-direction ablation control. The current experiment ablates
+unit-normalized noetic directions. If a random unit direction
+(orthogonal to the noetic subspace) produces the same per-class
+disruption pattern, the "specificity" we're seeing is class-difficulty,
+not direction-meaningfulness — ^7-typical continuations may simply
+be more vocabulary-narrow and more disrupted by ANY ablation.
+
+  Control design: sample 10 random unit vectors in the orthogonal
+  complement of the noetic subspace (fixed seed for reproducibility),
+  run the same 10×10 per-class disruption experiment, compare diag
+  vs off-diag and per-class disruption against the noetic numbers.
+
+  Decision rule:
+  * random diag−off ≈ noetic diag−off  → specificity is class-
+    difficulty artifact, NOT direction-meaningful. Glass House claim
+    blocked.
+  * random diag−off ≈ 0 AND noetic diag−off remains +0.079 →
+    direction-meaningful effect. Mixed specificity verdict survives.
+
+  Pod cost: ~3 min on A6000 (same 207-prompt × 10-direction shape).
+
+I am running Patch 3 in this session in parallel with this audit
+entry. Will append the result + Patch 1 t-test to the report and
+push.
+
+### What this means for the "good or bad" framing
+
+My earlier "yesterday" framing ("acts as shared axis only, not
+class-specific") was based on the first-token metric and was
+underclaim. The corrected framing ("modest class-specific influence
+at continuation level, statistically reliable") is fair AT
+AGGREGATE but the per-class variance and lack of random-direction
+control mean it should not yet be the basis for any external
+messaging. Public Glass House claims still blocked.
+
+### Asking for
+
+(1) Codex sign-off on these three patches as legitimate audit-of-
+auditor findings, (2) review of the random-direction control once
+it lands. Auditor seat handoff: Claude → Codex.
+
+---
+
+## 2026-05-16T11:00Z — claude: Stage 3.2 random-direction control done — audit handoff
+
+### What ran
+
+Audit Patch 3 (random-direction control) executed on pod RTX A6000,
+140 sec. Script `ablate_random_direction_layer3.py`, fixed seed 42,
+10 random unit directions sampled in the orthogonal complement of
+the noetic subspace (QR-orthonormalized; verified mutually orthogonal
+AND orthogonal to noetic basis at cosine ≈ 0).
+
+Same 207-prompt × 10-direction shape as Stage 3.2 noetic arm. Same
+A6000, same model revision, `local_files_only=True`.
+
+### Numbers (all in
+`pythia_ablation_random_control_layer3_20260516.json`)
+
+  random arm: mean disruption −0.009, std 0.111,
+              5/10 positive, t = −0.24, **p = 0.82** (one-sample)
+  noetic arm: mean disruption +0.079, std 0.092,
+              8/10 positive, t =  2.56, **p = 0.031** (one-sample)
+
+  Welch noetic vs random (n=10 vs n=10): t = 1.82, **p = 0.086**
+
+Per-direction-index head-to-head shows noetic > random in 8/10
+positions; the largest noetic effects (^2 +0.186, ^7 +0.214,
+^8 +0.175) substantially exceed their random counterparts (+0.002,
++0.116, +0.106), but ^1 is a wrong-direction case (noetic 0.000,
+random +0.138) and ^3/^5 still show no specificity in either arm.
+
+### Verdict
+
+Script-tier verdict: `NOETIC_EFFECT_DIRECTION_MEANINGFUL`.
+
+Auditor-conservative read: the per-arm tests pass cleanly (random
+is null; noetic is reliably non-zero). The DIRECT noetic-vs-random
+comparison is borderline at α=0.05 with n=10 per arm — Welch
+p=0.086. The defensible claim is "direction-meaningful, with a
+borderline-power between-arm comparison." More directions per arm
+(say n=30) would tighten this; for now the conservative framing is
+what should go into any Glass House external messaging.
+
+### What this upgrades and what it doesn't
+
+Upgrades:
+
+* Stage 3.2 verdict from `MIXED_SPECIFICITY_EVIDENCE` to
+  `NOETIC_EFFECT_DIRECTION_MEANINGFUL` per the script's gate (which
+  uses random-at-chance + noetic-non-zero as the criterion).
+* The Glass House defensible-claim ceiling. Earlier "labels mostly
+  text-explained" + "MIXED specificity" framing was too cautious
+  for the data; the corrected ceiling is "direction-meaningful
+  but borderline."
+
+Does NOT upgrade:
+
+* The +0.079 effect size is small.
+* Per-class variance remains — ^3 and ^5 are wrong-direction; ^7's
+  effect is partly class-difficulty (random ^7 index = +0.116).
+* Single model, single layer, single axis.
+* The Welch p=0.086 keeps the claim conservative.
+
+### Asking for
+
+Codex audit of the random-control script + report. Specifically:
+
+1. Random direction construction — QR orthonormalization correct?
+   Are the 10 sampled vectors truly in the noetic complement?
+2. The verdict tier logic in the script gates on random arm at
+   chance AND noetic non-zero, NOT on a direct between-arm test.
+   Is this the right gate, or should the script require Welch
+   p<0.05 as a stricter criterion?
+3. The honest plain-English wording for stakeholders given the
+   borderline Welch result.
+
+The audit-of-auditor handoff is now back to Codex.

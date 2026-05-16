@@ -1,0 +1,37 @@
+activations sha256: f1b3610636ddb5fe056504e931c09cd07f2fed1247b84c649cf75503dd49ca9a
+probes sha256:      1991b5e650915129497ed24d4354ec9db37c5f9886d34c11efd158e6d5ebc47e
+random direction norms: min=1.0000 max=1.0000
+random x noetic cosine: max_abs=0.000000 (target 0)
+random x random off-diag: max_abs=0.000000 (target 0)
+
+loading EleutherAI/pythia-160m ...
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 5660.12it/s]
+device: cuda
+
+generating baselines + 10 random-direction ablations ...
+  baselines done in 13.8s
+  random direction 0 done at elapsed=27.1s
+  random direction 1 done at elapsed=39.5s
+  random direction 2 done at elapsed=52.9s
+  random direction 3 done at elapsed=65.4s
+  random direction 4 done at elapsed=77.8s
+  random direction 5 done at elapsed=90.3s
+  random direction 6 done at elapsed=102.7s
+  random direction 7 done at elapsed=115.1s
+  random direction 8 done at elapsed=127.6s
+  random direction 9 done at elapsed=140.0s
+
+RANDOM-CONTROL token-match diagonal vs off-diagonal:
+  diag:    0.741
+  off:     0.732
+  delta (off - diag):  -0.009
+  mean per-dir disruption: -0.009 (std 0.111)
+  one-sample t against 0: t=-0.238 p=0.8174
+
+NOETIC arm (from clean Stage 3.2 report) for compare:
+  mean per-class disruption: +0.079 (std 0.092)
+  one-sample t against 0: t=2.560 p=0.0307
+
+VERDICT: NOETIC_EFFECT_DIRECTION_MEANINGFUL
+Random unit directions in the noetic subspace's orthogonal complement produce per-direction disruption -0.009 (t=-0.238, p=0.8174) — indistinguishable from zero. The noetic-arm disruption (+0.079, p=0.031) survives the control: it is not class-difficulty artifact, it reflects direction-meaningful structure in the noetic subspace. Stage 3.2 MIXED_SPECIFICITY_EVIDENCE upgrades to NOETIC_EFFECT_DIRECTION_MEANINGFUL on this evidence. Per-class variance (8 of 10 positive, ^7/^2/^8 strong) remains a caveat; ^3/^5 wrong-direction also still applies.
+report written: /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_ablation_random_control_layer3_20260516.json
