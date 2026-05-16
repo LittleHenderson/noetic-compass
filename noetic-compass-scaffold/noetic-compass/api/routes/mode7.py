@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import json
 import math
 import re
 import sys
@@ -1350,6 +1351,138 @@ async def _stream_report(
     )
 
 
+# ---------------------------------------------------------------------------
+# Evidence Packet persistence — write a packet-loadable JSON to disk for each
+# Mode 7 stream so /api/evidence/{trace_id} can return a real packet instead
+# of 404'ing. Lands at <scaffold_root>/.tmp/traces/{trace_id}.json, one of
+# the candidate paths searched by api.routes.evidence._candidate_trace_paths.
+# ---------------------------------------------------------------------------
+
+
+def _scaffold_root_for_traces() -> Path:
+    """Return ``noetic-compass-scaffold/noetic-compass/`` — same anchor the
+    evidence route uses to resolve ``.tmp/traces/{trace_id}.json``."""
+    return Path(__file__).resolve().parents[2]
+
+
+def _evidence_copy_slot_trace(
+    per_identifier: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Map the v0 ``copy.per_identifier`` entries to the Evidence Packet
+    ``copy_slot_trace`` shape used by ``_packet_from_trace``.
+
+    Each v0 entry carries ``identifier``, ``status``, ``position_in_input``,
+    ``position_in_output``. We translate to ``role / name / copied /
+    source_token_index / target_token_index / claim_level``. Role is
+    ``identifier`` because Mode 7 v0 does not yet annotate slot roles
+    (noetic / domain / register / drive) at the per-identifier level.
+    """
+    rows: list[dict[str, Any]] = []
+    for entry in per_identifier:
+        copied = entry.get("status") == "copied"
+        rows.append(
+            {
+                "role": "identifier",
+                "name": entry.get("identifier"),
+                "copied": copied,
+                "source_token_index": entry.get("position_in_input"),
+                "target_token_index": entry.get("position_in_output"),
+                "claim_level": "source_copy_evidence" if copied else "derived_trace",
+            }
+        )
+    return rows
+
+
+def _persist_evidence_trace(report: dict[str, Any], prompt: str) -> str | None:
+    """Write a packet-loadable trace JSON to ``.tmp/traces/{trace_id}.json``.
+
+    Shaped to match what ``api.routes.evidence._packet_from_trace`` expects:
+    ``trace_id``, ``input``, ``cas_expression``, ``output``,
+    ``copy_slot_trace``, ``claim_levels``, ``caveats``. Hashes / on-disk
+    paths are intentionally absent — Mode 7 live does not currently emit a
+    checkpoint manifest, so the packet's hashes block will be sparse. The
+    evidence route handles missing fields gracefully.
+
+    Returns the ``trace_id`` on success, ``None`` if the underlying
+    ``traceability_v0`` block has no id (which should not happen, but the
+    write is best-effort and never raises into the SSE stream).
+    """
+    trace_v0 = report.get("traceability_v0") or {}
+    trace_id = trace_v0.get("trace_id")
+    if not isinstance(trace_id, str) or not trace_id:
+        return None
+
+    per_identifier = (
+        trace_v0.get("copy", {}).get("per_identifier") if isinstance(trace_v0.get("copy"), dict) else None
+    ) or []
+    caveats = (
+        trace_v0.get("confidence", {}).get("caveats")
+        if isinstance(trace_v0.get("confidence"), dict)
+        else None
+    ) or [
+        "Mode 7 live trace: hashes are not recorded inline because the live "
+        "stream does not currently emit a checkpoint manifest. The packet "
+        "renders provenance + claim levels but the verify table will be sparse.",
+    ]
+
+    packet_shape: dict[str, Any] = {
+        "trace_id": trace_id,
+        "schema_version": trace_v0.get("schema_version"),
+        "created_at": trace_v0.get("created_at"),
+        "input": {"text": prompt or ""},
+        "cas_expression": {
+            "text": report.get("input_cas_expression") or "",
+            "compiler_valid": True,
+            "grammar_category": None,
+        },
+        "output": {
+            "text": report.get("generated_english") or "",
+            "n_tokens": int(report.get("n_tokens_generated") or 0),
+        },
+        "copy_slot_trace": _evidence_copy_slot_trace(per_identifier),
+        "model_checkpoint_id": "mode7_live",
+        "checkpoint_label": "Mode 7 live stream",
+        "run_command": "GET /api/mode7/live",
+        "claim_levels": [
+            {
+                "claim": (
+                    "CAS expression "
+                    f"{report.get('input_cas_expression') or '<unknown>'} was "
+                    "compiled and shaped this trace."
+                ),
+                "level": "cas_hard_trace",
+                "rationale": (
+                    "Mode 7 live stream built the trace deterministically from a "
+                    "compiler-validated CAS expression."
+                ),
+            },
+            {
+                "claim": "Identifier copy trace reconstructed from input expression and emitted text.",
+                "level": "derived_trace",
+                "rationale": (
+                    "Per-identifier positions were reconstructed by the v0 "
+                    "traceability layer; not a direct decoder probe."
+                ),
+            },
+        ],
+        "caveats": list(caveats),
+        # Keep the full v0 payload alongside so downstream tools (Atlas
+        # TRACE tab, dashboards) can still read the original shape.
+        "traceability_v0": trace_v0,
+    }
+
+    target_dir = _scaffold_root_for_traces() / ".tmp" / "traces"
+    try:
+        target_dir.mkdir(parents=True, exist_ok=True)
+        target_path = target_dir / f"{trace_id}.json"
+        with target_path.open("w", encoding="utf-8") as fh:
+            json.dump(packet_shape, fh, indent=2, default=str)
+    except (OSError, PermissionError):
+        # Best-effort. A failure here should not break the SSE stream.
+        return None
+    return trace_id
+
+
 @router.get("/live")
 async def live(
     prompt: str = Query("", max_length=10000),
@@ -1368,6 +1501,7 @@ async def live(
         raise HTTPException(status_code=422, detail="prompt or expression is required")
 
     report, warnings = _build_trace_report(prompt, expression)
+    _persist_evidence_trace(report, prompt)
     turn_id = f"mode7-{uuid.uuid4().hex[:12]}"
     headers = {
         "Cache-Control": "no-cache",
