@@ -4149,6 +4149,37 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T07:10Z - Audit: Glass House AI strategy memo
+
+Branch: `experiment/cas-probe-pythia`
+Head reviewed: `08f917a`
+File reviewed: `noetic-compass-scaffold/noetic-compass/research/cas_probe/STRATEGY_GLASS_HOUSE.md`
+
+Verdict: **PASS / keep as conditional research strategy**.
+
+What is correct:
+
+- The memo is properly isolated under `research/cas_probe/`, so it stays tied to the Pythia/open-model probe experiment rather than leaking into production roadmap language.
+- The gating evidence is explicit: Glass House AI only survives if Stage 2 finds CAS structure in Pythia hidden states and the technique transfers to at least one other open model.
+- Closed API models are handled honestly: Claude/GPT/Gemini cannot be onboarded without activation access.
+- The customer onboarding shapes are credible: hosted, bring-your-endpoint, and self-hosted each name where weights live.
+- The one-time probe training flow is the right product skeleton: feed labeled CAS data, train per-axis probes per layer, validate, then inspect cheaply.
+- The memo avoids the dangerous claim that a probe can manufacture interpretability. It correctly says probe quality is bounded by the host model and validation is mandatory.
+- The memo keeps CAS Native primary and treats Glass House as a parallel SKU, not a replacement.
+- IP/legal risk is correctly flagged before any external sharing.
+
+Non-blocking notes:
+
+- The memo uses non-ASCII punctuation in a few places. That is fine for a markdown strategy doc, but if Windows/PowerShell display keeps showing mojibake, do an ASCII cleanup before external review.
+- The phrase "cross-model version of Anthropic's NLA" is acceptable internally, but public language should be more reserved until Stage 2/3 prove transfer. Suggested public-safe framing later: "CAS-style probe layer for open-weight models."
+- The ownership line "Glass House owns the probe weights; customer owns the inspections" is a legal placeholder, not an engineering fact. Keep it behind attorney review.
+
+Recommendation:
+
+The strategy memo does not block Stage 1.1. Proceed only after the user explicitly approves the three operational actions: install `transformers`, download Pythia-160M, and run smoke-then-full activation capture.
+
+collaborated and waiting
+
 ## 2026-05-16T06:56Z - Re-audit: Pythia CAS probe Stage 1.0 patches
 
 Branch: `experiment/cas-probe-pythia`
