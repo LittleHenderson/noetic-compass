@@ -1253,6 +1253,7 @@ async def _stream_report(
     report: dict[str, Any],
     warnings: list[str],
     delay_ms: int,
+    persisted_trace_id: str | None = None,
 ) -> AsyncIterator[str]:
     _ensure_cas_native_alias()
     from cas_native.inference.sggs_stream import (
@@ -1343,9 +1344,15 @@ async def _stream_report(
                 await asyncio.sleep(delay_ms / 1000)
 
     duration_ms = int((time.perf_counter() - started) * 1000)
+    # Only expose the trace_id to the UI when persistence succeeded. If the
+    # file is not on disk, the dashboard would offer "Open Evidence" for a
+    # trace_id that 404s — the example-fixture fallback is the honest UX in
+    # that case. The trace_id is still attached to head_commit axis_attrs
+    # above for downstream Atlas tagging; only the user-facing final id is
+    # gated on persistence.
     yield emit_turn_end(
         turn_id=turn_id,
-        final_trace_id=str(trace.get("trace_id") or ""),
+        final_trace_id=persisted_trace_id or "",
         total_heads=head_count,
         duration_ms=duration_ms,
     )
@@ -1393,7 +1400,17 @@ def _evidence_copy_slot_trace(
     return rows
 
 
-def _persist_evidence_trace(report: dict[str, Any], prompt: str) -> str | None:
+_UUID4_RE = re.compile(
+    r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+)
+
+
+def _persist_evidence_trace(
+    report: dict[str, Any],
+    prompt: str,
+    *,
+    warnings: list[str] | None = None,
+) -> str | None:
     """Write a packet-loadable trace JSON to ``.tmp/traces/{trace_id}.json``.
 
     Shaped to match what ``api.routes.evidence._packet_from_trace`` expects:
@@ -1403,27 +1420,44 @@ def _persist_evidence_trace(report: dict[str, Any], prompt: str) -> str | None:
     checkpoint manifest, so the packet's hashes block will be sparse. The
     evidence route handles missing fields gracefully.
 
-    Returns the ``trace_id`` on success, ``None`` if the underlying
-    ``traceability_v0`` block has no id (which should not happen, but the
-    write is best-effort and never raises into the SSE stream).
+    ``warnings`` (if any) are prepended to the persisted ``caveats`` list so
+    fallback / synthesis notices surfaced over SSE are preserved in the
+    packet itself — stakeholders inspecting the packet after the stream is
+    over should still see why the model fell back.
+
+    Returns the ``trace_id`` on success, ``None`` if:
+    - the underlying ``traceability_v0`` block has no id,
+    - the trace_id fails strict UUID4 validation (defense against path
+      traversal — e.g., ``trace_id="../escape_probe"``),
+    - the resolved write target escapes ``.tmp/traces/``,
+    - the file write itself fails (OSError / PermissionError).
+
+    Persistence is best-effort: failures never raise into the SSE stream.
     """
     trace_v0 = report.get("traceability_v0") or {}
     trace_id = trace_v0.get("trace_id")
-    if not isinstance(trace_id, str) or not trace_id:
+    if not isinstance(trace_id, str) or not _UUID4_RE.match(trace_id):
         return None
 
     per_identifier = (
         trace_v0.get("copy", {}).get("per_identifier") if isinstance(trace_v0.get("copy"), dict) else None
     ) or []
-    caveats = (
-        trace_v0.get("confidence", {}).get("caveats")
-        if isinstance(trace_v0.get("confidence"), dict)
-        else None
-    ) or [
-        "Mode 7 live trace: hashes are not recorded inline because the live "
-        "stream does not currently emit a checkpoint manifest. The packet "
-        "renders provenance + claim levels but the verify table will be sparse.",
-    ]
+    caveats: list[str] = list(
+        (trace_v0.get("confidence", {}).get("caveats")
+         if isinstance(trace_v0.get("confidence"), dict)
+         else None)
+        or [
+            "Mode 7 live trace: hashes are not recorded inline because the live "
+            "stream does not currently emit a checkpoint manifest. The packet "
+            "renders provenance + claim levels but the verify table will be sparse.",
+        ]
+    )
+    # Preserve SSE-stream warnings (fallback / synthesis notices) inside the
+    # packet itself so reviewers reading the packet after the stream is over
+    # still see why the model chose what it chose. Warnings come first so
+    # the most-recent-context caveat is at the top of the list.
+    if warnings:
+        caveats = [str(w) for w in warnings if w] + caveats
 
     packet_shape: dict[str, Any] = {
         "trace_id": trace_id,
@@ -1475,9 +1509,17 @@ def _persist_evidence_trace(report: dict[str, Any], prompt: str) -> str | None:
     try:
         target_dir.mkdir(parents=True, exist_ok=True)
         target_path = target_dir / f"{trace_id}.json"
+        # Defense in depth on top of the UUID4 regex: resolve the target
+        # path and verify it stays inside target_dir before opening for
+        # write. If trace_id is ever produced by a future builder with
+        # path-traversal characters and slips past the regex, this catches
+        # it.
+        resolved_target = target_path.resolve()
+        resolved_dir = target_dir.resolve()
+        resolved_target.relative_to(resolved_dir)  # raises ValueError if outside
         with target_path.open("w", encoding="utf-8") as fh:
             json.dump(packet_shape, fh, indent=2, default=str)
-    except (OSError, PermissionError):
+    except (OSError, PermissionError, ValueError):
         # Best-effort. A failure here should not break the SSE stream.
         return None
     return trace_id
@@ -1501,7 +1543,7 @@ async def live(
         raise HTTPException(status_code=422, detail="prompt or expression is required")
 
     report, warnings = _build_trace_report(prompt, expression)
-    _persist_evidence_trace(report, prompt)
+    persisted_trace_id = _persist_evidence_trace(report, prompt, warnings=warnings)
     turn_id = f"mode7-{uuid.uuid4().hex[:12]}"
     headers = {
         "Cache-Control": "no-cache",
@@ -1515,6 +1557,7 @@ async def live(
             report=report,
             warnings=warnings,
             delay_ms=delay_ms,
+            persisted_trace_id=persisted_trace_id,
         ),
         media_type="text/event-stream",
         headers=headers,

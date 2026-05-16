@@ -100,3 +100,135 @@ def test_mode7_persist_evidence_trace_returns_none_on_missing_trace_id(monkeypat
 
     no_v0 = {}
     assert mode7_route._persist_evidence_trace(no_v0, "ignored") is None
+
+
+def test_mode7_persist_evidence_trace_rejects_path_traversal_trace_id(monkeypatch, tmp_path):
+    """A trace_id that is not strict UUID4 — including path-traversal
+    payloads — must be rejected before any disk write happens.
+
+    Codex audit confirmed ``trace_id="../escape_probe"`` would have written
+    outside ``.tmp/traces/``. The UUID4 regex + resolved-path containment
+    check both protect against this; this test locks in the rejection.
+    """
+    from api.routes import mode7 as mode7_route
+
+    monkeypatch.setattr(mode7_route, "_scaffold_root_for_traces", lambda: tmp_path)
+    traces_dir = tmp_path / ".tmp" / "traces"
+
+    malicious_ids = [
+        "../escape_probe",
+        "..\\windows_escape",
+        "/etc/passwd",
+        "trace_id_with_spaces and slashes/",
+        "not-a-uuid",
+        "0123456789",
+        "",
+    ]
+    for bad_id in malicious_ids:
+        bad_report = {"traceability_v0": {"trace_id": bad_id}}
+        result = mode7_route._persist_evidence_trace(bad_report, "ignored")
+        assert result is None, f"expected None for trace_id={bad_id!r}"
+
+    # Confirm nothing escaped: tmp_path should contain at most the empty
+    # .tmp/traces/ directory; no files anywhere under tmp_path other than
+    # the directory itself.
+    files_written = [p for p in tmp_path.rglob("*") if p.is_file()]
+    assert files_written == [], (
+        f"no files should have been written; found {files_written}"
+    )
+    # The traces directory may or may not have been created depending on
+    # ordering — what matters is no file landed inside it (or outside it).
+    if traces_dir.exists():
+        assert list(traces_dir.iterdir()) == []
+
+
+def test_mode7_persist_evidence_trace_merges_warnings_into_caveats(monkeypatch, tmp_path):
+    """SSE-stream warnings (fallback / synthesis notices) must be preserved
+    inside the persisted packet's ``caveats`` list — stakeholders inspecting
+    the packet after the stream is over should still see why the model
+    chose what it chose.
+    """
+    import json
+    from api.routes import mode7 as mode7_route
+
+    monkeypatch.setattr(mode7_route, "_scaffold_root_for_traces", lambda: tmp_path)
+
+    report, _warnings = mode7_route._build_trace_report("warning test prompt", None)
+    trace_id = report["traceability_v0"]["trace_id"]
+    warnings = [
+        "CAS Native predictor expression did not compile; used deterministic fallback expression.",
+        "Synthesis fell back to CO-0^C_{F1}.",
+    ]
+
+    result = mode7_route._persist_evidence_trace(report, "warning test prompt", warnings=warnings)
+    assert result == trace_id
+
+    written = tmp_path / ".tmp" / "traces" / f"{trace_id}.json"
+    assert written.is_file()
+    body = json.loads(written.read_text(encoding="utf-8"))
+    caveats = body.get("caveats", [])
+    # Both warnings must appear, and they must precede any default caveat.
+    assert warnings[0] in caveats
+    assert warnings[1] in caveats
+    # Verify the ordering: warnings come first.
+    first_warning_index = caveats.index(warnings[0])
+    second_warning_index = caveats.index(warnings[1])
+    assert first_warning_index < second_warning_index
+    # There must still be at least one default caveat after warnings
+    # (sparse-hashes notice OR an upstream confidence caveat).
+    assert len(caveats) > len(warnings)
+
+
+def test_mode7_stream_emits_empty_final_trace_id_when_persistence_fails():
+    """When persistence fails (or is skipped), ``_stream_report`` must emit
+    an empty ``final_trace_id`` over SSE so the dashboard keeps its
+    'Open Example Evidence' fallback instead of claiming a trace_id that
+    would 404.
+    """
+    import asyncio
+    import json
+    from api.routes import mode7 as mode7_route
+
+    # Minimal report shaped enough to drive _stream_report.
+    report = {
+        "input_prompt": "smoke",
+        "input_cas_expression": "^0^C_{F1}",
+        "generated_english": "stub",
+        "traceability_v0": {
+            "trace_id": "00000000-0000-4000-8000-000000000000",
+            "thought_tree": {"nodes": [{"id": "n0", "label": "root"}], "edges": []},
+        },
+    }
+
+    async def consume() -> list[str]:
+        events: list[str] = []
+        async for event in mode7_route._stream_report(
+            turn_id="t0",
+            prompt="smoke",
+            report=report,
+            warnings=[],
+            delay_ms=0,
+            persisted_trace_id=None,
+        ):
+            events.append(event)
+        return events
+
+    events = asyncio.run(consume())
+    # Find the turn.end event. SSE events are formatted as
+    # "event: turn.end\ndata: { ... }\n\n".
+    turn_end_event = next(
+        (e for e in events if "turn.end" in e or "final_trace_id" in e),
+        None,
+    )
+    assert turn_end_event is not None, "no turn.end event was emitted"
+    # Parse data: <json> line.
+    data_line = next(
+        (line for line in turn_end_event.splitlines() if line.startswith("data:")),
+        None,
+    )
+    assert data_line is not None
+    payload = json.loads(data_line[len("data:") :].strip())
+    assert payload.get("final_trace_id", "<missing>") == "", (
+        f"final_trace_id must be empty when persistence failed; got "
+        f"{payload.get('final_trace_id')!r}"
+    )
