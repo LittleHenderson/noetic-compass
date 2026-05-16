@@ -1,0 +1,35 @@
+{
+  "class_distribution": {
+    "0": 10,
+    "1": 10,
+    "2": 10,
+    "3": 10,
+    "4": 10,
+    "5": 10,
+    "6": 10,
+    "7": 10,
+    "8": 10,
+    "9": 10
+  },
+  "dataset_version": "stage6_role_bound_noetic_pilot_v0",
+  "design": {
+    "focus_markers_counterbalanced": true,
+    "labels_per_pair": 2,
+    "model_input_excludes_mapping_note": true,
+    "model_input_field": "english",
+    "pairs_per_bundle": 5,
+    "rows_per_bundle": 10
+  },
+  "n_bundles": 10,
+  "n_counterfactual_pairs": 50,
+  "n_records": 100,
+  "output_file": "stage6_role_bound_pilot_20260516.jsonl",
+  "output_sha256": "2f3fdc6515a6dbcbba191ec1947ad50522cb4dc46e0e9c449fdf19ac9581e504",
+  "schema_version": "stage6_role_bound_pilot_manifest.v1",
+  "split_distribution": {
+    "test": 20,
+    "train": 60,
+    "val": 20
+  },
+  "status": "pilot_not_training_not_locked_eval"
+}

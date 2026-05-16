@@ -3189,3 +3189,82 @@ Audit asks:
    stakeholder-proof?
 3. Should the first build be the 10-bundle pilot validator/schema, or should we
    author the full 60-bundle dataset before any probe run?
+
+## 2026-05-16T20:45Z - Stage 6.0 role-bound pilot shipped
+
+Claude - user said "begin" and then "continue." I implemented the safest first
+piece of Stage 6: schema + deterministic pilot builder + validator.
+
+New artifacts:
+
+- `build_stage6_role_bound_pilot.py`
+- `validate_stage6_role_bound.py`
+- `stage6_role_bound_pilot_20260516.jsonl`
+- `stage6_role_bound_pilot_manifest_20260516.json`
+- `stage6_role_bound_pilot_validation_20260516.json`
+- `STAGE6_PILOT_REPORT_20260516.md`
+
+Pilot shape:
+
+- 100 rows total.
+- 10 bundles.
+- 50 counterfactual pairs.
+- 10 rows per noetic.
+- Split: train 60 / val 20 / test 20.
+- Pairs: `^0/^1`, `^2/^3`, `^4/^7`, `^5/^6`, `^8/^9`.
+
+Core data property:
+
+> Each pair uses the same `base_sentence`; only `Focus: A` vs `Focus: B`
+> changes the target noetic label.
+
+Example:
+
+```text
+B is the alert ping and A is the incident checklist. B calls up A for the system. Focus: B. -> ^8
+B is the alert ping and A is the incident checklist. B calls up A for the system. Focus: A. -> ^9
+```
+
+Validation:
+
+- `python -m py_compile ...` clean for both scripts.
+- Builder produced sha256 `2f3fdc6515a6dbcbba191ec1947ad50522cb4dc46e0e9c449fdf19ac9581e504`.
+- Validator status: pass.
+- Errors: 0.
+- Warnings: 49.
+
+Warning interpretation:
+
+- Label-ish token warnings are expected for the tiny pilot; the token
+  concentration audit confirms high-frequency role words are tied across both
+  labels in their contrast pair, so they do not predict one label outright.
+- Four cross-split `^0/^1` rows are in manual near-duplicate review range
+  (`0.75-0.85` char-5 Jaccard), but none cross the hard-fail threshold
+  (`>=0.85`).
+- The first validation correctly caught a real forbidden word (`label` inside
+  a product-design row). I patched it to `wording` before the passing run.
+
+What this does and does not claim:
+
+- Does claim: Stage 6 data shape is buildable, deterministic, and
+  machine-checkable.
+- Does not claim: Pythia has a CAS-semantic internal signal, the probe beats
+  TF-IDF, or the fixture is ready for public/statistical claims.
+
+Recommended next step:
+
+- Stage 6.1: run the 100-row pilot through activation capture + probe/text
+  baseline evaluator as a mechanics smoke only.
+- Stage 6.2: if mechanics are clean, expand to the full 60-bundle fixture and
+  freeze the locked-test manifest before any claim-bearing run.
+
+Audit asks:
+
+1. Is the validator's counterbalanced-token logic correct? It treats a token
+   that appears equally across both labels in a contrast pair as warning-only,
+   not an error.
+2. Should Stage 6.1 use the existing mean-pooled activation capture first, or
+   should we implement focus-token activation capture before any probe smoke?
+3. Are the four near-duplicate review warnings acceptable for the pilot, or
+   should the pilot itself be rewritten until warnings are lower before Stage
+   6.1?

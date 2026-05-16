@@ -1,0 +1,1083 @@
+{
+  "distribution": {
+    "class_distribution": {
+      "0": 10,
+      "1": 10,
+      "2": 10,
+      "3": 10,
+      "4": 10,
+      "5": 10,
+      "6": 10,
+      "7": 10,
+      "8": 10,
+      "9": 10
+    },
+    "focus_by_label": {
+      "0": {
+        "A": 5,
+        "B": 5
+      },
+      "1": {
+        "A": 5,
+        "B": 5
+      },
+      "2": {
+        "A": 5,
+        "B": 5
+      },
+      "3": {
+        "A": 5,
+        "B": 5
+      },
+      "4": {
+        "A": 5,
+        "B": 5
+      },
+      "5": {
+        "A": 5,
+        "B": 5
+      },
+      "6": {
+        "A": 5,
+        "B": 5
+      },
+      "7": {
+        "A": 5,
+        "B": 5
+      },
+      "8": {
+        "A": 5,
+        "B": 5
+      },
+      "9": {
+        "A": 5,
+        "B": 5
+      }
+    },
+    "n_bundles": 10,
+    "n_counterfactual_pairs": 50,
+    "n_records": 100,
+    "pair_distribution": {
+      "0_1": 20,
+      "2_3": 20,
+      "4_7": 20,
+      "5_6": 20,
+      "8_9": 20
+    },
+    "split_distribution": {
+      "test": 20,
+      "train": 60,
+      "val": 20
+    }
+  },
+  "errors": [],
+  "input_file": "stage6_role_bound_pilot_20260516.jsonl",
+  "input_sha256": "2f3fdc6515a6dbcbba191ec1947ad50522cb4dc46e0e9c449fdf19ac9581e504",
+  "n_errors": 0,
+  "n_warnings": 49,
+  "schema_version": "stage6_role_bound_validation.v1",
+  "status": "pass",
+  "warnings": [
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle001_debugging_patch_2_3_n2",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle001_debugging_patch_2_3_n3",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle001_debugging_patch_4_7_n4",
+      "tokens": [
+        "loop"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle001_debugging_patch_4_7_n7",
+      "tokens": [
+        "loop"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle001_debugging_patch_5_6_n5",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle001_debugging_patch_5_6_n6",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle002_classroom_method_2_3_n2",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle002_classroom_method_2_3_n3",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle002_classroom_method_5_6_n5",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle002_classroom_method_5_6_n6",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle003_policy_appeal_2_3_n2",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle003_policy_appeal_2_3_n3",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle003_policy_appeal_5_6_n5",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle003_policy_appeal_5_6_n6",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle004_music_practice_2_3_n2",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle004_music_practice_2_3_n3",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle004_music_practice_5_6_n5",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle004_music_practice_5_6_n6",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle005_route_planning_2_3_n2",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle005_route_planning_2_3_n3",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle005_route_planning_5_6_n5",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle005_route_planning_5_6_n6",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle006_recipe_sauce_2_3_n2",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle006_recipe_sauce_2_3_n3",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle006_recipe_sauce_5_6_n5",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle006_recipe_sauce_5_6_n6",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle007_legal_argument_2_3_n2",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle007_legal_argument_2_3_n3",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle007_legal_argument_5_6_n5",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle007_legal_argument_5_6_n6",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle008_model_card_2_3_n2",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle008_model_card_2_3_n3",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle008_model_card_4_7_n4",
+      "tokens": [
+        "loop"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle008_model_card_4_7_n7",
+      "tokens": [
+        "loop"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle008_model_card_5_6_n5",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle008_model_card_5_6_n6",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle009_dog_training_2_3_n2",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle009_dog_training_2_3_n3",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle009_dog_training_5_6_n5",
+      "tokens": [
+        "built",
+        "cue",
+        "repeat",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle009_dog_training_5_6_n6",
+      "tokens": [
+        "built",
+        "cue",
+        "repeat",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle010_product_design_2_3_n2",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle010_product_design_2_3_n3",
+      "tokens": [
+        "away",
+        "toward"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle010_product_design_5_6_n5",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "kind": "labelish_tokens_present",
+      "note": "warning only; token concentration audit decides whether these are counterbalanced",
+      "sample_id": "stage6_pilot_bundle010_product_design_5_6_n6",
+      "tokens": [
+        "built",
+        "shaped"
+      ]
+    },
+    {
+      "char5_jaccard": 0.7672,
+      "kind": "near_duplicate_cross_split_review",
+      "other_sample_id": "stage6_pilot_bundle008_model_card_0_1_n0",
+      "sample_id": "stage6_pilot_bundle004_music_practice_0_1_n0"
+    },
+    {
+      "char5_jaccard": 0.7521,
+      "kind": "near_duplicate_cross_split_review",
+      "other_sample_id": "stage6_pilot_bundle008_model_card_0_1_n1",
+      "sample_id": "stage6_pilot_bundle004_music_practice_0_1_n0"
+    },
+    {
+      "char5_jaccard": 0.7521,
+      "kind": "near_duplicate_cross_split_review",
+      "other_sample_id": "stage6_pilot_bundle008_model_card_0_1_n0",
+      "sample_id": "stage6_pilot_bundle004_music_practice_0_1_n1"
+    },
+    {
+      "char5_jaccard": 0.7672,
+      "kind": "near_duplicate_cross_split_review",
+      "other_sample_id": "stage6_pilot_bundle008_model_card_0_1_n1",
+      "sample_id": "stage6_pilot_bundle004_music_practice_0_1_n1"
+    },
+    {
+      "kind": "token_concentration_audit",
+      "tokens": [
+        {
+          "concentration": 0.1,
+          "count": 100,
+          "label_counts": {
+            "0": 10,
+            "1": 10,
+            "2": 10,
+            "3": 10,
+            "4": 10,
+            "5": 10,
+            "6": 10,
+            "7": 10,
+            "8": 10,
+            "9": 10
+          },
+          "second_label_count": 10,
+          "token": "a",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "0": 10,
+            "1": 10
+          },
+          "second_label_count": 10,
+          "token": "actively",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "2": 10,
+            "3": 10
+          },
+          "second_label_count": 10,
+          "token": "agent",
+          "top_label": 2,
+          "top_label_count": 10,
+          "top_label_name": "Positive",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "5": 10,
+            "6": 10
+          },
+          "second_label_count": 10,
+          "token": "already",
+          "top_label": 5,
+          "top_label_count": 10,
+          "top_label_name": "Female",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.1667,
+          "count": 60,
+          "label_counts": {
+            "0": 10,
+            "1": 10,
+            "5": 10,
+            "6": 10,
+            "8": 10,
+            "9": 10
+          },
+          "second_label_count": 10,
+          "token": "and",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "0": 10,
+            "1": 10
+          },
+          "second_label_count": 10,
+          "token": "as",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "2": 10,
+            "3": 10
+          },
+          "second_label_count": 10,
+          "token": "away",
+          "top_label": 2,
+          "top_label_count": 10,
+          "top_label_name": "Positive",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.1,
+          "count": 100,
+          "label_counts": {
+            "0": 10,
+            "1": 10,
+            "2": 10,
+            "3": 10,
+            "4": 10,
+            "5": 10,
+            "6": 10,
+            "7": 10,
+            "8": 10,
+            "9": 10
+          },
+          "second_label_count": 10,
+          "token": "b",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "5": 10,
+            "6": 10
+          },
+          "second_label_count": 10,
+          "token": "built",
+          "top_label": 5,
+          "top_label_count": 10,
+          "top_label_name": "Female",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "5": 10,
+            "6": 10
+          },
+          "second_label_count": 10,
+          "token": "by",
+          "top_label": 5,
+          "top_label_count": 10,
+          "top_label_name": "Female",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "8": 10,
+            "9": 10
+          },
+          "second_label_count": 10,
+          "token": "calls",
+          "top_label": 8,
+          "top_label_count": 10,
+          "top_label_name": "Above/Cause",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "0": 10,
+            "1": 10
+          },
+          "second_label_count": 10,
+          "token": "compares",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "0": 10,
+            "1": 10
+          },
+          "second_label_count": 10,
+          "token": "during",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.1,
+          "count": 100,
+          "label_counts": {
+            "0": 10,
+            "1": 10,
+            "2": 10,
+            "3": 10,
+            "4": 10,
+            "5": 10,
+            "6": 10,
+            "7": 10,
+            "8": 10,
+            "9": 10
+          },
+          "second_label_count": 10,
+          "token": "focus",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "8": 10,
+            "9": 10
+          },
+          "second_label_count": 10,
+          "token": "for",
+          "top_label": 8,
+          "top_label_count": 10,
+          "top_label_name": "Above/Cause",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "4": 10,
+            "7": 10
+          },
+          "second_label_count": 10,
+          "token": "force",
+          "top_label": 4,
+          "top_label_count": 10,
+          "top_label_name": "Vibration",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.25,
+          "count": 40,
+          "label_counts": {
+            "2": 10,
+            "3": 10,
+            "5": 10,
+            "6": 10
+          },
+          "second_label_count": 10,
+          "token": "from",
+          "top_label": 2,
+          "top_label_count": 10,
+          "top_label_name": "Positive",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "0": 10,
+            "1": 10
+          },
+          "second_label_count": 10,
+          "token": "holds",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.25,
+          "count": 40,
+          "label_counts": {
+            "5": 10,
+            "6": 10,
+            "8": 10,
+            "9": 10
+          },
+          "second_label_count": 10,
+          "token": "is",
+          "top_label": 5,
+          "top_label_count": 10,
+          "top_label_name": "Female",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "0": 10,
+            "1": 10
+          },
+          "second_label_count": 10,
+          "token": "item",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "4": 10,
+            "7": 10
+          },
+          "second_label_count": 10,
+          "token": "lands",
+          "top_label": 4,
+          "top_label_count": 10,
+          "top_label_name": "Vibration",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "0": 10,
+            "1": 10
+          },
+          "second_label_count": 10,
+          "token": "names",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "2": 10,
+            "3": 10
+          },
+          "second_label_count": 10,
+          "token": "pulls",
+          "top_label": 2,
+          "top_label_count": 10,
+          "top_label_name": "Positive",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "2": 10,
+            "3": 10
+          },
+          "second_label_count": 10,
+          "token": "pushes",
+          "top_label": 2,
+          "top_label_count": 10,
+          "top_label_name": "Positive",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "5": 10,
+            "6": 10
+          },
+          "second_label_count": 10,
+          "token": "received",
+          "top_label": 5,
+          "top_label_count": 10,
+          "top_label_name": "Female",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "4": 10,
+            "7": 10
+          },
+          "second_label_count": 10,
+          "token": "returns",
+          "top_label": 4,
+          "top_label_count": 10,
+          "top_label_name": "Vibration",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.3571,
+          "count": 28,
+          "label_counts": {
+            "0": 10,
+            "1": 10,
+            "4": 2,
+            "5": 1,
+            "6": 1,
+            "7": 2,
+            "8": 1,
+            "9": 1
+          },
+          "second_label_count": 10,
+          "token": "review",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "5": 10,
+            "6": 10
+          },
+          "second_label_count": 10,
+          "token": "shaped",
+          "top_label": 5,
+          "top_label_count": 10,
+          "top_label_name": "Female",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "4": 10,
+            "7": 10
+          },
+          "second_label_count": 10,
+          "token": "strong",
+          "top_label": 4,
+          "top_label_count": 10,
+          "top_label_name": "Vibration",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "8": 10,
+            "9": 10
+          },
+          "second_label_count": 10,
+          "token": "system",
+          "top_label": 8,
+          "top_label_count": 10,
+          "top_label_name": "Above/Cause",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "0": 10,
+            "1": 10
+          },
+          "second_label_count": 10,
+          "token": "task",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "0": 10,
+            "1": 10
+          },
+          "second_label_count": 10,
+          "token": "that",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.125,
+          "count": 80,
+          "label_counts": {
+            "0": 10,
+            "1": 10,
+            "2": 10,
+            "3": 10,
+            "4": 10,
+            "7": 10,
+            "8": 10,
+            "9": 10
+          },
+          "second_label_count": 10,
+          "token": "the",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "4": 10,
+            "7": 10
+          },
+          "second_label_count": 10,
+          "token": "through",
+          "top_label": 4,
+          "top_label_count": 10,
+          "top_label_name": "Vibration",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "2": 10,
+            "3": 10
+          },
+          "second_label_count": 10,
+          "token": "toward",
+          "top_label": 2,
+          "top_label_count": 10,
+          "top_label_name": "Positive",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "0": 10,
+            "1": 10
+          },
+          "second_label_count": 10,
+          "token": "under",
+          "top_label": 0,
+          "top_label_count": 10,
+          "top_label_name": "Idea",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "8": 10,
+            "9": 10
+          },
+          "second_label_count": 10,
+          "token": "up",
+          "top_label": 8,
+          "top_label_count": 10,
+          "top_label_name": "Above/Cause",
+          "top_tied": true
+        },
+        {
+          "concentration": 0.5,
+          "count": 20,
+          "label_counts": {
+            "4": 10,
+            "7": 10
+          },
+          "second_label_count": 10,
+          "token": "with",
+          "top_label": 4,
+          "top_label_count": 10,
+          "top_label_name": "Vibration",
+          "top_tied": true
+        }
+      ]
+    }
+  ]
+}
