@@ -4149,6 +4149,54 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-15T23:15Z - Audit: Pythia CAS probe Stage 1.0
+
+Branch: `experiment/cas-probe-pythia`
+Head reviewed: `e1c3098`
+
+Verdict: **FAIL / HOLD Stage 1.1**. The research-only isolation idea is correct, but the frozen snapshot is not yet reproducible/audit-clean enough to justify installing dependencies or downloading Pythia weights.
+
+What passed:
+
+- Work is isolated under `noetic-compass-scaffold/noetic-compass/research/cas_probe/`.
+- No Pythia / transformers imports found in `api/`, `dashboard/`, or `cas-native/` production paths.
+- Snapshot has 458 rows and the recorded class distribution is near-balanced across 10 noetic classes.
+- Scripts compile with `py_compile`.
+
+Blocker 1: clean checkout cannot rebuild the snapshot.
+
+- `build_pythia_probe_snapshot.py` requires `cas-synthetic/data/path_d/wave3_full/wave3_smoke_20260507T232622Z.jsonl`.
+- That file exists in the local dirty workspace, but it is not tracked on the experiment branch. A clean worktree at `e1c3098` fails immediately with:
+  - `missing wave3 source: ...wave3_smoke_20260507T232622Z.jsonl`
+- Impact: the manifest lists a source hash that reviewers cannot verify from the branch, and the claim “re-running produces the same snapshot” is false in a clean checkout.
+- Required fix: commit the source file, or commit a reduced source snapshot sufficient to rebuild the frozen labels, and update the manifest/source path accordingly.
+
+Blocker 2: recorded snapshot hash does not match checkout bytes.
+
+- Manifest `snapshot_sha256`: `5d8c9de3897f1f49230e001ab59441a683dd2fecfcb5b9e3be4ca2084c086128`.
+- Raw checked-out file hash: `d51c21eec0e66a4416473e5a47e8115d3bf912503eb829d64d653aa500ba3cbb`.
+- Normalized LF hash matches the manifest, so this is a CRLF checkout conversion issue.
+- Impact: hash verification fails on Windows checkout, exactly where the project is being run.
+- Required fix: add `.gitattributes` for the research snapshot artifacts (`*.jsonl`, `*.json`) with `text eol=lf` or `-text`, renormalize, and re-verify raw file hashes.
+
+Blocker 3: one leaked CAS label appears in the English input.
+
+- Row 416 / `wave3_cas_to_english_01032` contains: `A negative reaction (^3) ...`
+- Impact: the Pythia probe can cheat on at least one row by reading the literal noetic label from the English text. The manifest’s “no leakage” claim is therefore too weak.
+- Required fix: add explicit lexical leakage filtering for CAS notation in `raw_response` (at minimum `\^[0-9]`, noetic/domain/register markers, `NoeticCluster`, `Theta`, `Omega`, `stage...`) and regenerate the snapshot/manifest.
+
+Medium fixes before full capture:
+
+- `capture_pythia_activations.py` saves `sample_ids` as `dtype=object`; loading that `.npz` later can require pickle. Use a string dtype instead.
+- Activation manifest should record model revision / resolved commit hash and package versions (`transformers`, `torch`, `numpy`) so the activation artifact is reproducible.
+- README says the manifest is byte-identical on rerun, but `built_at_utc` makes that impossible. Either remove the timestamp from the deterministic manifest, put it in a separate run log, or change the claim to “snapshot bytes are deterministic; manifest records build time.”
+
+Recommendation:
+
+Do not approve Stage 1.1 yet. Patch the three blockers, re-run the snapshot integrity checks in a clean worktree, then approve the three Stage 1.1 actions (install transformers, download Pythia-160M, smoke then full capture).
+
+collaborated and waiting
+
 ## 2026-05-15T22:48Z - Re-audit: evidence-real-trace-ids blocker patches
 
 Branch: `codex/evidence-real-trace-ids`
