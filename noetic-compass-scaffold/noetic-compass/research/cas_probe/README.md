@@ -62,8 +62,8 @@ subject. CAS is the measuring instrument.**
 | 1.1 | done | Pythia-160M activation capture script + smoke test |
 | 2 | done | per-layer linear probe training |
 | 2.1 | done | TF-IDF baseline, shuffled-label control, val-selected headline, confusion matrix |
-| 2.2 | **done — labels recoverable, mostly text-baseline explained** | majority / stratified / count-vector baselines, paired contingency, McNemar test |
-| 3 | pending (exploratory only) | causal-influence ablation |
+| 2.2 | done — labels recoverable, mostly text-baseline explained | majority / stratified / count-vector baselines, paired contingency, McNemar test |
+| 3 | **done — no causal bite at layer 3** | ablation of noetic subspace; sanity gate passed (probe acc 0.899 → 0.101); next-token argmax unchanged on 69/69 prompts; mean KL(baseline‖ablated) = 0.12 nats |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -203,6 +203,102 @@ revised under Stage 2.2):
   TF-IDF), shuffled-label control, paired Pythia-vs-TF-IDF
   contingency + McNemar p-value, headline confusion matrix,
   reserved-language verdict.
+
+## Stage 3 result (2026-05-16) — causal ablation
+
+**Verdict: `ABLATION_NO_CAUSAL_BITE`.**
+
+The narrow Stage 3 question: even if the layer-3 probe's lift over
+TF-IDF is small, does ablating the direction the probe reads change
+Pythia's actual next-token behaviour?
+
+Method:
+
+- The 10 trained probe coefficients at layer 3 span a 9-dimensional
+  subspace in standardized activation space (the rank drops by one
+  because the multinomial logistic regression has a redundant
+  degree of freedom).
+- Translate that subspace into raw-activation coordinates by dividing
+  each probe coefficient by the StandardScaler scale.
+- Build an orthonormal basis (SVD) of the resulting matrix in raw
+  space; construct the projection matrix `P` onto that subspace.
+- Register a forward hook on transformer block index 2 (whose output
+  is the captured "layer 3" residual stream). The hook replaces the
+  residual stream `h` with `h - h @ P` — the orthogonal complement
+  of the probe-readout subspace.
+- For each of the 69 test-set prompts, do two forward passes
+  through Pythia-160M: baseline (no hook) and ablated (hook
+  installed). Compare the top-1 next-token argmax.
+
+Two checks gate the result:
+
+**Check 1 — probe-self-ablation sanity gate:** PASSED.
+
+| Probe accuracy on layer-3 activations | Test |
+|---|---:|
+| unablated (raw activations) | 0.899 |
+| ablated (subspace projection removed) | **0.101** |
+
+Ablation drops the probe to chance. The construction does what it
+says it does: it removes the signal the probe reads.
+
+**Check 2 — next-token causal effect:**
+
+| Metric | Value |
+|---|---:|
+| test records | 69 |
+| baseline_top1 == ablated_top1 | **69 / 69 (100.0%)** |
+| KL(baseline ‖ ablated), mean | 0.12 nats |
+| KL(baseline ‖ ablated), median | 0.12 nats |
+
+Removing the entire 9-dimensional noetic subspace from Pythia's
+layer-3 residual stream changes the top-1 next-token prediction on
+**zero** of the 69 test prompts. The KL divergence in the full
+logit distribution is small but non-zero (~0.12 nats), so the
+ablation does shift probability mass around in the tail — but not
+enough to flip any argmax.
+
+**Honest interpretation:**
+
+The noetic subspace at layer 3 of Pythia-160M carries readable
+information about the noetic axis but does **not** drive
+next-token behaviour on this corpus. The +1.4 pp probe lift over
+the TF-IDF baseline from Stage 2.2, which was already statistically
+indistinguishable from chance imbalance, is now also shown to be
+behaviourally inert: Pythia "knows" the noetic signal is in there
+in a read-only sense, but does not use it for what it says next.
+
+This is consistent with the Stage 2.2 finding that the layer-3
+signal is mostly lexical decoration. It is **not** consistent with
+any "Pythia mechanistically encodes CAS" claim. The Glass House AI
+strategy memo's core technical assumption — that probing
+open-model activations would surface mechanistically-active
+structure beyond plain-text classification — is not supported by
+Pythia-160M on the noetic axis.
+
+**What this does and doesn't conclude:**
+
+It rules out, on this single model + single axis + single layer +
+single ablation method, the strongest version of the cross-model
+interpretability pitch. It does NOT rule out:
+
+- The same test on **other axes** (domain, register, drive). Maybe
+  noetic is the lexically-easiest axis and others carry more
+  causal weight.
+- The same test on **larger Pythia** (1.4B or 2.8B). Mechanistic
+  structure may not appear in the smallest member of the family.
+- The same test on **other layers** (we ablated layer 3 only —
+  layers 4-12 were not ablated and could carry causal weight).
+- Tests on **other open models** (OLMo, Qwen).
+- The Harness use case where the value is forensic / documentation,
+  not mechanistic — that pitch is independent of this result.
+
+Artifacts:
+
+- `ablate_noetic_layer3.py` — Stage 3 script.
+- `pythia_ablation_layer3_20260515.json` — full per-record report
+  with baseline / ablated token IDs and decoded strings, KL stats,
+  sanity gate result, verdict, decision thresholds.
 
 ---
 

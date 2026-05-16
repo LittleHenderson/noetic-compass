@@ -1,0 +1,725 @@
+{
+  "schema_version": "pythia_ablation_layer3_report.v1",
+  "experiment": "Stage 3 — causal ablation of layer-3 noetic subspace on Pythia-160M",
+  "model_name": "EleutherAI/pythia-160m",
+  "target_layer_index": 3,
+  "hook_block_index": 2,
+  "activations_file": "pythia_probe_activations_20260515.npz",
+  "activations_sha256": "f1b3610636ddb5fe056504e931c09cd07f2fed1247b84c649cf75503dd49ca9a",
+  "probes_file": "pythia_noetic_probes_20260515.npz",
+  "probes_sha256": "1991b5e650915129497ed24d4354ec9db37c5f9886d34c11efd158e6d5ebc47e",
+  "subspace_rank": 9,
+  "probe_self_ablation_sanity_gate": {
+    "test_records": 69,
+    "probe_accuracy_unablated": 0.8985507246376812,
+    "probe_accuracy_ablated": 0.10144927536231885,
+    "pass_threshold": 0.2,
+    "pass": true,
+    "note": "If pass=False, the ablation construction did not remove what the probe reads; Check 2 results below are not interpretable."
+  },
+  "next_token_causal_effect": {
+    "test_records": 69,
+    "n_match": 69,
+    "match_rate": 1.0,
+    "kl_baseline_to_ablated_mean": 0.12045361610120554,
+    "kl_baseline_to_ablated_median": 0.12133330960479885
+  },
+  "decision_thresholds": {
+    "no_causal_bite_match_rate_min": 0.95,
+    "partial_causal_effect_match_rate_min": 0.7
+  },
+  "per_record": [
+    {
+      "sample_id": "wave3_cas_to_english_00865",
+      "true_y": 5,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.18100956269059185
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00899",
+      "true_y": 1,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.1445582868149619
+    },
+    {
+      "sample_id": "wave3_cas_to_english_01091",
+      "true_y": 3,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.10095715257290344
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00179",
+      "true_y": 4,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12635873151475446
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00944",
+      "true_y": 6,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.15288785951939274
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00749",
+      "true_y": 3,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.10032712343052598
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00802",
+      "true_y": 2,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12337562144358306
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00910",
+      "true_y": 0,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.03229694525716914
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00724",
+      "true_y": 2,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12720003530204438
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00098",
+      "true_y": 3,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.14260045486215578
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00149",
+      "true_y": 9,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.08613743761492781
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00878",
+      "true_y": 5,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12133330960479885
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00808",
+      "true_y": 8,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.11844946500520924
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00652",
+      "true_y": 7,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.08753865414004763
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00391",
+      "true_y": 0,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.15666115299229172
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00700",
+      "true_y": 2,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.14976642677171806
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00912",
+      "true_y": 9,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.09843034739755636
+    },
+    {
+      "sample_id": "wave3_cas_to_english_01066",
+      "true_y": 4,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.14659776915694245
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00071",
+      "true_y": 5,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.08548248987502353
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00692",
+      "true_y": 3,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.14080838571178625
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00634",
+      "true_y": 1,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.1138962079633569
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00466",
+      "true_y": 5,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12168193018733503
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00042",
+      "true_y": 4,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.10414437119125391
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00228",
+      "true_y": 0,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12713744152505932
+    },
+    {
+      "sample_id": "wave3_cas_to_english_01060",
+      "true_y": 2,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.0954468877773264
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00488",
+      "true_y": 1,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12816945732298166
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00539",
+      "true_y": 4,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.11528023151635625
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00850",
+      "true_y": 8,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12025541048936975
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00153",
+      "true_y": 1,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.09037509371359438
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00901",
+      "true_y": 6,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12680288232802503
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00373",
+      "true_y": 7,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.14673603329883975
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00463",
+      "true_y": 5,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.1406242415408237
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00096",
+      "true_y": 9,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12271124963113632
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00157",
+      "true_y": 1,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.17956186241742664
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00493",
+      "true_y": 7,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.03438543879439009
+    },
+    {
+      "sample_id": "wave3_cas_to_english_01085",
+      "true_y": 3,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.14014786236698595
+    },
+    {
+      "sample_id": "wave3_cas_to_english_01073",
+      "true_y": 9,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.10039152912676769
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00471",
+      "true_y": 8,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.07624266093314509
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00453",
+      "true_y": 5,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.07203182981758678
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00166",
+      "true_y": 2,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.13377261267884757
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00960",
+      "true_y": 7,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.13956383160260877
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00556",
+      "true_y": 0,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.19435834883973716
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00690",
+      "true_y": 0,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12450138467109689
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00790",
+      "true_y": 8,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.11418890245951166
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00480",
+      "true_y": 7,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.0946146937792986
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00669",
+      "true_y": 6,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.09704148352128354
+    },
+    {
+      "sample_id": "wave3_cas_to_english_01121",
+      "true_y": 0,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.09401368046986232
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00984",
+      "true_y": 2,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.1564137775247323
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00530",
+      "true_y": 7,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.17953295594612997
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00400",
+      "true_y": 2,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.16314386332867198
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00430",
+      "true_y": 3,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.10387128881892027
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00952",
+      "true_y": 9,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.10677212004500304
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00307",
+      "true_y": 1,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.11506312640484215
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00218",
+      "true_y": 2,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.11880478545367558
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00340",
+      "true_y": 9,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.11612594667549993
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00083",
+      "true_y": 1,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.1390645054949134
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00647",
+      "true_y": 7,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.09149076903873257
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00931",
+      "true_y": 4,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.10833643367432282
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00923",
+      "true_y": 6,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.17421108537641714
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00792",
+      "true_y": 0,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.08695107667722742
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00546",
+      "true_y": 0,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.10104129399415729
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00919",
+      "true_y": 4,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.13682708536205915
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00150",
+      "true_y": 3,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.147763784597698
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00872",
+      "true_y": 2,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.1126632767824223
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00811",
+      "true_y": 8,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.1297922566839017
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00954",
+      "true_y": 6,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.1072349368518218
+    },
+    {
+      "sample_id": "wave3_cas_to_english_01006",
+      "true_y": 9,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.07031280732500622
+    },
+    {
+      "sample_id": "wave3_cas_to_english_01126",
+      "true_y": 7,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.15173788842363384
+    },
+    {
+      "sample_id": "wave3_cas_to_english_00469",
+      "true_y": 6,
+      "baseline_top1_token_id": 187,
+      "ablated_top1_token_id": 187,
+      "match": true,
+      "baseline_top1_token_str": "\n",
+      "ablated_top1_token_str": "\n",
+      "kl_baseline_to_ablated": 0.12328967486100195
+    }
+  ],
+  "verdict": "ABLATION_NO_CAUSAL_BITE",
+  "verdict_text": "Probe-self-ablation confirms the probe's signal was removed from layer-3 activations, but Pythia's next-token argmax matches the baseline on >= 95% of test prompts. The noetic subspace at layer 3 carries readable information but does not drive next-token behaviour on this corpus. Consistent with the Stage 2.2 finding that the +1.4 pp probe lift over TF-IDF is lexical decoration, not mechanistic encoding."
+}
