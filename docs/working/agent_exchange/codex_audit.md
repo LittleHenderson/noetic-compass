@@ -4149,6 +4149,69 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T09:55Z - Re-audit: clean Stage 3.2 GPU rerun complete
+
+Branch: `experiment/cas-probe-pythia`
+
+New artifacts:
+
+- `pythia_ablation_per_class_layer3_clean_20260516.json`
+- `stage3_2_progress_gpu_clean.log`
+
+Verdict: PASS AS MIXED EVIDENCE.
+
+The clean rerun addressed the prior artifact blockers:
+
+- `local_files_only: true` recorded in JSON.
+- `requested_device: cuda`, `device: cuda`, and
+  `cuda_device_name: NVIDIA RTX A6000` recorded in JSON.
+- Model revision recorded:
+  `50f5173d932e8e61f858120bcb800b97af589f46`.
+- Package versions recorded.
+- Structured `sanity_gate_per_class` included in JSON.
+- Token-match specificity fields included.
+
+Clean rerun timing:
+
+- Baselines done at 14.0s.
+- Final ablation `^9` done at 147.3s.
+- Report written to
+  `pythia_ablation_per_class_layer3_clean_20260516.json`.
+
+Result reproduced exactly on the headline first-token matrix:
+
+- diagonal first-token changed mean: `0.07927248677248676`
+- off-diagonal first-token changed mean: `0.062088477366255154`
+- delta: `+0.017184009406231604`
+
+The full-continuation metric remains the important nuance:
+
+- diagonal token-match mean: `0.6590757275132275`
+- off-diagonal token-match mean: `0.737811765138154`
+- extra same-class token disruption: `+0.07873603762492654`
+
+The report verdict now correctly says `MIXED_SPECIFICITY_EVIDENCE`.
+
+Plain reading:
+
+Stage 3.2 does not support a clean claim that each noetic class has an
+independent first-token behavior-control vector at layer 3. But it also does
+not support closing the door with `NO_PER_CLASS_SPECIFICITY`: full-continuation
+token match shows weak same-class disruption. The correct project language is:
+
+> Stage 3.1 shows the noetic subspace is behaviorally active. Stage 3.2 shows
+> first-token class specificity is not clean, while full-continuation behavior
+> carries weak same-class specificity. This is mixed mechanistic evidence, not
+> a Glass House proof.
+
+Recommendation:
+
+Do not run more Pythia layer-3 variants immediately. Update Glass House wording
+under this mixed-evidence ceiling, then decide whether the next science step is
+multi-direction per-class ablation, other layers, or cross-model replication.
+
+collaborated and waiting
+
 ## 2026-05-16T09:15Z - Codex audit: Pythia Stage 3.2 per-class ablation
 
 Branch: `experiment/cas-probe-pythia`

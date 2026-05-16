@@ -56,6 +56,7 @@ Run:
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import sys
@@ -96,6 +97,24 @@ def _sha256_of_file(path: Path, chunk_size: int = 1 << 20) -> str:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--device",
+        choices=("cpu", "cuda", "auto"),
+        default="cpu",
+        help="Execution device. Use --device cuda for the clean RunPod rerun.",
+    )
+    parser.add_argument(
+        "--out-report",
+        type=Path,
+        default=_OUT_REPORT,
+        help="Output JSON path. Relative paths are resolved under this script directory.",
+    )
+    args = parser.parse_args()
+    out_report = args.out_report
+    if not out_report.is_absolute():
+        out_report = _HERE / out_report
+
     for p in (_ACTIVATIONS_PATH, _PROBES_PATH, _PROBES_REPORT_PATH, _LABELS_PATH):
         if not p.is_file():
             raise SystemExit(f"missing prerequisite: {p}")
@@ -233,13 +252,25 @@ def main() -> int:
         tokenizer.pad_token = tokenizer.eos_token
     model = AutoModelForCausalLM.from_pretrained(_MODEL_NAME, local_files_only=True)
     model.eval()
-    # CPU is intentional here: it preserves the committed Stage 3.2
-    # artifact's execution mode. If this moves to CUDA, record it as a
-    # distinct rerun instead of silently changing the experiment.
-    device = torch.device("cpu")
+    if args.device == "cuda":
+        if not torch.cuda.is_available():
+            raise SystemExit("--device cuda requested, but CUDA is not available")
+        device = torch.device("cuda")
+    elif args.device == "auto":
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    else:
+        device = torch.device("cpu")
     model.to(device)
     model_revision = getattr(model.config, "_commit_hash", None)
     model_config_name = getattr(model.config, "_name_or_path", None)
+    cuda_device_name = (
+        torch.cuda.get_device_name(device)
+        if device.type == "cuda"
+        else None
+    )
+    print(f"execution device: {device}")
+    if cuda_device_name:
+        print(f"cuda device name: {cuda_device_name}")
 
     block = model.gpt_neox.layers[_HOOK_BLOCK_INDEX]
 
@@ -400,6 +431,7 @@ def main() -> int:
 
     diag_match = float(_np.nanmean(_np.diag(matrix_token_match)))
     off_match = float(_np.nanmean(matrix_token_match[off_mask]))
+    token_disruption_delta = float(off_match - diag_match)
 
     # Per-class specificity ratio.
     spec_ratios: list[dict[str, Any]] = []
@@ -459,6 +491,17 @@ def main() -> int:
     print(
         f"delta (diag - off):              {(diag_first - off_first):+.3f}"
     )
+    print(
+        f"diagonal mean token_match:       {diag_match:.3f}  "
+        f"(same-class ablation)"
+    )
+    print(
+        f"off-diagonal mean token_match:    {off_match:.3f}  "
+        f"(other-class ablation)"
+    )
+    print(
+        f"extra same-class token disruption: {token_disruption_delta:+.3f}"
+    )
     print()
     print("Per-class specificity ratio (self / cross):")
     for sr in spec_ratios:
@@ -493,6 +536,21 @@ def main() -> int:
             f"effect is small. May be noise on the per-class cell sizes "
             f"(~6-9 cases per cell). Needs more data or a stricter test "
             f"before claiming specificity."
+        )
+    elif delta >= -0.03 and token_disruption_delta >= 0.05:
+        verdict = "MIXED_SPECIFICITY_EVIDENCE"
+        verdict_text = (
+            f"Diagonal and off-diagonal first_token_changed rates are "
+            f"indistinguishable ({diag_first:.3f} vs {off_first:.3f}), "
+            f"so the first-token metric does not support clean per-class "
+            f"specificity. However, same-class ablation is more disruptive "
+            f"over the full continuation: diagonal token_match is "
+            f"{diag_match:.3f} vs off-diagonal {off_match:.3f}, an extra "
+            f"same-class disruption of {token_disruption_delta:.3f}. "
+            f"The Stage 3.1 behavioural effect is real, and Stage 3.2 "
+            f"shows mixed evidence rather than clean class-specific "
+            f"control. This remains exploratory and needs a stronger "
+            f"semantic test before Glass House claims."
         )
     elif delta >= -0.03:
         verdict = "NO_PER_CLASS_SPECIFICITY"
@@ -529,7 +587,10 @@ def main() -> int:
         "model_revision": model_revision,
         "model_config_name_or_path": model_config_name,
         "local_files_only": True,
+        "requested_device": args.device,
         "device": str(device),
+        "cuda_device_name": cuda_device_name,
+        "out_report": out_report.name,
         "package_versions": {
             "transformers": transformers.__version__,
             "torch": torch.__version__,
@@ -567,22 +628,23 @@ def main() -> int:
         "diag_minus_off_first_changed": delta,
         "diagonal_token_match_mean": diag_match,
         "off_diagonal_token_match_mean": off_match,
-        "extra_same_class_token_disruption": float(off_match - diag_match),
+        "extra_same_class_token_disruption": token_disruption_delta,
         "per_class_specificity": spec_ratios,
         "per_class_token_match_specificity": token_match_specificity,
         "decision_thresholds": {
             "strong_specificity_delta_min": 0.10,
             "weak_specificity_delta_min": 0.03,
+            "mixed_specificity_token_disruption_min": 0.05,
         },
         "per_case": per_case,
         "verdict": verdict,
         "verdict_text": verdict_text,
     }
-    with _OUT_REPORT.open("w", encoding="utf-8", newline="\n") as fh:
+    with out_report.open("w", encoding="utf-8", newline="\n") as fh:
         json.dump(report, fh, indent=2, ensure_ascii=False)
         fh.write("\n")
     print()
-    print(f"report written: {_OUT_REPORT}")
+    print(f"report written: {out_report}")
     return 0
 
 

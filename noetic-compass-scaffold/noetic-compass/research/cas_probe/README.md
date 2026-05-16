@@ -65,7 +65,7 @@ subject. CAS is the measuring instrument.**
 | 2.2 | done — labels recoverable, mostly text-baseline explained | majority / stratified / count-vector baselines, paired contingency, McNemar test |
 | 3 | done — narrow newline-token test | ablation of noetic subspace; sanity gate passed (probe acc 0.899 → 0.101); immediate next-token argmax unchanged on 69/69 prompts, but all top tokens were newline |
 | 3.1 | done — continuation effect present | forced semantic continuations; first-step top-1 changes in 30/207 cases; full 8-token continuation changes in 157/207 cases |
-| 3.2 | **done — mixed specificity evidence, needs clean rerun** | per-class targeted ablation on the RunPod host (146 sec, script forced CPU); first-token specificity fails (diag 0.079 vs off-diag 0.062), but 8-token match suggests weak same-class disruption (diag match 0.659 vs off-diag 0.738). Do not treat `NO_PER_CLASS_SPECIFICITY` as closed until rerun with the patched self-contained report. |
+| 3.2 | **done — mixed specificity evidence** | clean RunPod GPU rerun on RTX A6000 (`cuda`, 147 sec); first-token specificity fails (diag 0.079 vs off-diag 0.062), but 8-token match shows weak same-class disruption (diag match 0.659 vs off-diag 0.738). Verdict: `MIXED_SPECIFICITY_EVIDENCE`. |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -292,6 +292,12 @@ interpretability pitch. It does NOT rule out:
 
 Artifacts:
 
+- `pythia_ablation_per_class_layer3_clean_20260516.json` - clean
+  RTX A6000 rerun with `local_files_only`, device, model revision,
+  package versions, structured sanity gate, token-match specificity,
+  and verdict `MIXED_SPECIFICITY_EVIDENCE`.
+- `stage3_2_progress_gpu_clean.log` - clean rerun stdout.
+
 - `ablate_noetic_layer3.py` — Stage 3 script.
 - `pythia_ablation_layer3_20260515.json` — full per-record report
   with baseline / ablated token IDs and decoded strings, KL stats,
@@ -365,12 +371,14 @@ Artifacts:
 
 ## Stage 3.2 result (2026-05-16) — per-class targeted ablation
 
-**Current verdict: `MIXED_SPECIFICITY_EVIDENCE_NEEDS_CLEAN_RERUN`.**
+**Current verdict: `MIXED_SPECIFICITY_EVIDENCE`.**
 
-The committed JSON report says `NO_PER_CLASS_SPECIFICITY`, but Codex audit
-found that verdict is too absolute because it is based on first-token change
-only. The full 8-token match metric points to weak same-class disruption:
-diagonal token-match `0.659` vs off-diagonal token-match `0.738`.
+The original JSON report said `NO_PER_CLASS_SPECIFICITY`, but Codex audit
+found that verdict too absolute because it was based on first-token change
+only. The clean rerun report records the mixed result directly: first-token
+specificity fails, while the full 8-token match metric points to weak
+same-class disruption (`0.659` diagonal token-match vs `0.738` off-diagonal
+token-match).
 
 Stage 3.1 showed the layer-3 noetic subspace is behaviourally active
 under forced continuation. The follow-up question (Codex audit
@@ -381,10 +389,10 @@ Method: ablate one class's unit-normalized raw-space direction at a
 time (1D projection per class, 10 separate runs), then compare each
 ablation's effect on its own-class prompts vs other-class prompts.
 
-Run location: **RunPod host with RTX A6000 available, 146 seconds total
-wall-clock**. The Stage 3.2 script forced `torch.device("cpu")`, so this
-should not be described as an A6000/GPU execution until a GPU-enabled
-rerun exists.
+Clean rerun: **RunPod RTX A6000, `device: cuda`, 147.3 seconds total
+wall-clock**. Report records `local_files_only: true`,
+`cuda_device_name: NVIDIA RTX A6000`, model revision
+`50f5173d932e8e61f858120bcb800b97af589f46`, and package versions.
 
 **Pre-flight: per-direction sanity gate.**
 
@@ -484,7 +492,10 @@ a claim. What's left: "the Probe finds linearly-decodable noetic
 information; ablating the full subspace changes behaviour under
 continuation; but the behaviour change is not class-specific."
 That's a much weaker statement than the original Glass House
-framing.
+framing. After the clean rerun, read that sentence narrowly: the
+behaviour change is not cleanly class-specific at the first token, but
+full-continuation token match gives weak same-class disruption. This
+is still not strong enough for a Glass House claim.
 
 **What this does NOT rule out** (kept narrow on purpose):
 
