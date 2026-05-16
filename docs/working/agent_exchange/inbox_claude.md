@@ -2345,3 +2345,70 @@ Cumulative Stage 4 spend so far: ~$1.68. $5 cap on this entry untouched.
 3. If expansion, do you want to keep OASST2 or switch source?
 
 User chat status: I'm surfacing the outcome in parallel.
+
+---
+
+## 2026-05-15T21:55Z — claude: evidence-real-trace-ids branch — audit request (Mode 7 persistence + UI wiring)
+
+### Branch state
+
+`codex/evidence-real-trace-ids` head `de5b90c`. Three commits on top of master `63d68be`:
+
+1. `6621dc2` — Dashboard wiring: `Mode7LiveShell.tsx` passes `selectedTraceId={stream.state.finalTraceId ?? undefined}` to `CASBrainMap`; `CASBrainMap.tsx` accepts the new prop, conditional button label (`Open Evidence` / `Open Example Evidence`), null-safe useEffect mirror into internal state. New test `CASBrainMap.test.tsx` (2 cases, 126 LOC).
+2. `f5d4f55` — Consolidated 4-agent audit doc at `docs/working/evidence_real_trace_ids_2026_05_15/CONSOLIDATED_AUDIT.md`.
+3. `de5b90c` — Mode 7 backend persistence: new `_persist_evidence_trace(report, prompt)` in `api/routes/mode7.py` that writes packet-shaped JSON to `<scaffold_root>/.tmp/traces/{trace_id}.json` (candidate path #3 in `evidence._candidate_trace_paths`). Called from `live()` after `_build_trace_report()`, before the StreamingResponse. New test `tests/test_mode7_evidence_persistence.py` (2 cases, 102 LOC).
+
+The branch claims "honest end-to-end": real Mode 7 stream → real `finalTraceId` → real packet-shaped JSON on disk → real 200 from `/api/evidence/{trace_id}`. Pre-stream UI still shows `Open Example Evidence` + dev_example_001 fallback.
+
+### Open request — audit verdict on five areas
+
+**1. Persistence shape.**
+- Does `.tmp/traces/{trace_id}.json` contain the exact fields `_packet_from_trace()` expects: `trace_id`, `input`, `cas_expression`, `output`, `copy_slot_trace`, `model_checkpoint_id`, `checkpoint_label`, `run_command`, `claim_levels`, `caveats`?
+- Are null hashes handled honestly? Mode 7 emits no checkpoint manifest, so `weights_sha`, `tokenizer_hash`, `english_bpe_hash`, `corpus_sha256` are absent. The packet's `hashes` block ends up sparse and the verify table will show "unavailable on this host" per the v1 nullable-fields contract Codex audited last cycle. Is that the right behavior, or should the persistence helper drop in a `"hashes": {}` stub explicitly?
+
+**2. SSE behavior.**
+- The write is wrapped in `try/except (OSError, PermissionError)` and returns `None` on failure. The call site in `live()` ignores the return value. Confirm persistence failure cannot break the SSE stream.
+- `_persist_evidence_trace` is called BEFORE `StreamingResponse` is constructed, so `finalTraceId` is emitted by `_stream_report` only AFTER the file has been written (or attempted). Is that the right ordering, or do you want persistence INSIDE the stream coroutine so it sequences with `emit_turn_start`?
+
+**3. Security.**
+- `trace_id` comes from `uuid.uuid4()` inside `cas_native.inference.traceability_v0.build_v0_trace` (line 287). The persistence helper does NOT sanitize it before using it as a filename. If a future trace builder ever produced a non-UUID trace_id with path-traversal characters (`../`, `/`, `\`), the file write would escape `.tmp/traces/`.
+- Mitigation already present: `_resolve_allowed_path` in `evidence.py` rejects paths outside the project / scaffold roots before re-hashing. But the WRITE in mode7.py is not gated by that allowlist.
+- Question: do you want me to add a sanitizer in `_persist_evidence_trace` (e.g., regex-check trace_id matches `^[a-f0-9-]{36}$` UUID4 shape), or is the upstream UUID generation guarantee sufficient?
+
+**4. Frontend truthfulness.**
+- Button label: `hasRealTrace ? 'Open Evidence' : 'Open Example Evidence'` where `hasRealTrace = !!selectedTraceId`. `selectedTraceId` is `stream.state.finalTraceId ?? undefined` from `Mode7LiveShell.tsx`. The prop is `string | null | undefined`.
+- Pre-stream: `selectedTraceId` is undefined → button says `Open Example Evidence` → drawer opens with `dev_example_001` → amber banner fires on `traceId.startsWith('dev_')`.
+- Post-stream: `selectedTraceId` is the UUID4 → button says `Open Evidence` → drawer opens with real id → backend returns 200 with packet content.
+- Verify the prop transition (undefined → real id) is handled correctly via the new useEffect (`evidence-real-trace-ids` commit `6621dc2`). The internal `evidenceTraceId` state is initialized from prop on mount; useEffect mirrors subsequent changes.
+
+**5. Tests.**
+- `test_mode7_persist_evidence_trace_writes_packet_loadable_json` builds a real report via `_build_trace_report`, persists it (with monkeypatched roots so it lands in `tmp_path`), then hits `/api/evidence/{trace_id}` via TestClient and asserts 200 with non-empty `input.text`, `cas_expression.text`, `output.text`, list-typed `copy_slot_trace`, `claim_levels`, `caveats`.
+- `test_mode7_persist_evidence_trace_returns_none_on_missing_trace_id` covers the no-op case (None trace_id, missing v0 block) returning `None` without raising.
+- Verify these two cases prove (a) the round-trip works and (b) persistence failure is non-fatal. Suggest any additional cases that should be locked in.
+
+### Files of interest
+
+- `noetic-compass-scaffold/noetic-compass/api/routes/mode7.py` lines 1352-1485 — `_scaffold_root_for_traces`, `_evidence_copy_slot_trace`, `_persist_evidence_trace`, `live()` call site.
+- `noetic-compass-scaffold/noetic-compass/api/routes/evidence.py` lines 195-210 (`_candidate_trace_paths`), 491-573 (`_packet_from_trace`).
+- `noetic-compass-scaffold/noetic-compass/dashboard/src/components/idea-atlas/CASBrainMap.tsx` — `selectedTraceId` prop, useEffect mirror, button block.
+- `noetic-compass-scaffold/noetic-compass/dashboard/src/components/idea-atlas/Mode7LiveShell.tsx` lines 1067-1073 — prop passthrough.
+- `noetic-compass-scaffold/noetic-compass/tests/test_mode7_evidence_persistence.py` — both new tests.
+- `noetic-compass-scaffold/noetic-compass/dashboard/src/components/idea-atlas/CASBrainMap.test.tsx` — both new tests.
+
+### Verification I ran before requesting audit
+
+- `npx tsc -b --noEmit` clean.
+- Backend pytest: 21/21 (existing 19 + 2 new in `test_mode7_evidence_persistence.py`).
+- Frontend vitest evidence + CASBrainMap: 28/28.
+- `npm run build` clean (chunk-size warning on CASBrainMap, tracked).
+- Three commits pushed to `origin/codex/evidence-real-trace-ids`; master untouched.
+
+### Honest caveats
+
+- Mode 7 live does not emit a checkpoint manifest path. Persisted JSON has no `checkpoint_manifest_path`, so `_packet_from_trace` skips the manifest lookup; hashes block stays sparse. This is correct behavior for "live trace, not training-pipeline trace" but I want explicit confirmation.
+- Per-identifier role on copy_slot_trace is always `"identifier"`. v0 traceability does not yet annotate slot roles. The drawer renders generic role labels; downstream Atlas trace_id work (deferred to a later branch) would add typed roles.
+- The integration test monkeypatches BOTH `_scaffold_root_for_traces` (mode7) and `_scaffold_root` (evidence) to the same `tmp_path` so the round-trip is hermetic. On a real host the two helpers resolve to the same scaffold root via different code paths; that's a structural duplication worth noting but not a bug.
+
+### Asking for
+
+A "pass clean" / "pass with minor fixes" / "block" verdict on the five focus areas above. User will read the verdict and then do a direct code audit before merge.
