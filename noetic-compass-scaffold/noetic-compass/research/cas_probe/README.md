@@ -65,7 +65,7 @@ subject. CAS is the measuring instrument.**
 | 2.2 | done — labels recoverable, mostly text-baseline explained | majority / stratified / count-vector baselines, paired contingency, McNemar test |
 | 3 | done — narrow newline-token test | ablation of noetic subspace; sanity gate passed (probe acc 0.899 → 0.101); immediate next-token argmax unchanged on 69/69 prompts, but all top tokens were newline |
 | 3.1 | done — continuation effect present | forced semantic continuations; first-step top-1 changes in 30/207 cases; full 8-token continuation changes in 157/207 cases |
-| 3.2 | **done — no per-class specificity** | per-class targeted ablation on RTX A6000 (146 sec); diag mean first-token-changed 0.079 vs off-diag 0.062 (Δ +1.7 pp); aggregate behaviour says shared noetic-shaped axis, NOT distinct per-class features |
+| 3.2 | **done — mixed specificity evidence, needs clean rerun** | per-class targeted ablation on the RunPod host (146 sec, script forced CPU); first-token specificity fails (diag 0.079 vs off-diag 0.062), but 8-token match suggests weak same-class disruption (diag match 0.659 vs off-diag 0.738). Do not treat `NO_PER_CLASS_SPECIFICITY` as closed until rerun with the patched self-contained report. |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -365,7 +365,12 @@ Artifacts:
 
 ## Stage 3.2 result (2026-05-16) — per-class targeted ablation
 
-**Verdict: `NO_PER_CLASS_SPECIFICITY`.**
+**Current verdict: `MIXED_SPECIFICITY_EVIDENCE_NEEDS_CLEAN_RERUN`.**
+
+The committed JSON report says `NO_PER_CLASS_SPECIFICITY`, but Codex audit
+found that verdict is too absolute because it is based on first-token change
+only. The full 8-token match metric points to weak same-class disruption:
+diagonal token-match `0.659` vs off-diagonal token-match `0.738`.
 
 Stage 3.1 showed the layer-3 noetic subspace is behaviourally active
 under forced continuation. The follow-up question (Codex audit
@@ -376,8 +381,10 @@ Method: ablate one class's unit-normalized raw-space direction at a
 time (1D projection per class, 10 separate runs), then compare each
 ablation's effect on its own-class prompts vs other-class prompts.
 
-Run hardware: **NVIDIA RTX A6000 (46 GB) on RunPod, 146 seconds
-total wall-clock** (vs ~3 hours projected on local CPU).
+Run location: **RunPod host with RTX A6000 available, 146 seconds total
+wall-clock**. The Stage 3.2 script forced `torch.device("cpu")`, so this
+should not be described as an A6000/GPU execution until a GPU-enabled
+rerun exists.
 
 **Pre-flight: per-direction sanity gate.**
 
@@ -457,10 +464,13 @@ specificity (^0 ~2.1, ^2 ~1.6, ^7 ~2.2, ^8 ~2.9), three clean
 directions show no self-effect (^4, ^6, sometimes ^5), and ^3/^1
 are confounded by direction redundancy.
 
-In aggregate, **ablating one class's direction is not measurably
-more disruptive to its own class than to other classes**. The
-Stage 3.1 behavioural effect IS real, but it does not decompose
-into clean per-class structure at this layer.
+On the first-token metric, **ablating one class's direction is not
+measurably more disruptive to its own class than to other classes**.
+On the full 8-token match metric, same-class ablation is more
+disruptive by about 7.9 percentage points (`0.659` diagonal match vs
+`0.738` off-diagonal match). The Stage 3.1 behavioural effect is real,
+but Stage 3.2 currently gives mixed evidence rather than a clean
+per-class mechanism.
 
 **What this means for the Glass House pitch:**
 

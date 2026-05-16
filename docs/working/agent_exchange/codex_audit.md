@@ -4149,6 +4149,79 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T09:15Z - Codex audit: Pythia Stage 3.2 per-class ablation
+
+Branch: `experiment/cas-probe-pythia`
+
+Head audited: `e210862`
+
+Verdict: HOLD. The broad direction is useful, but the committed
+`NO_PER_CLASS_SPECIFICITY` verdict is too absolute and the artifact is not yet
+self-contained enough to use as load-bearing evidence.
+
+What survives audit:
+
+- The first-token specificity metric really is weak: diagonal
+  first-token-changed mean `0.079` vs off-diagonal `0.062`, delta `+0.017`.
+- The one-unit per-class ablation does not support the strong claim
+  "each named noetic class has a clean independent behavior-control vector at
+  layer 3."
+- The pre-flight finding that `^1` and `^3` are redundant is credible and useful.
+
+Blocker 1: model loading was not offline / revision-pinned.
+
+- `ablate_noetic_per_class_layer3.py` used `AutoTokenizer.from_pretrained(_MODEL_NAME)`
+  and `AutoModelForCausalLM.from_pretrained(_MODEL_NAME)` without
+  `local_files_only=True`.
+- `stage3_2_progress.log` shows a Hugging Face hub warning, so the run was not
+  obviously isolated from network/cache state.
+- The report lacks `local_files_only`, model revision, package versions, and device.
+- I patched the script so the next run uses `local_files_only=True` and records
+  model revision / package versions / device.
+
+Blocker 2: hardware claim is wrong.
+
+- README says the run was on RTX A6000, but the script sets
+  `device = torch.device("cpu")`.
+- The pod had an A6000 available, but this script did not use it.
+- I patched README language to say RunPod host / script-forced CPU rather than
+  GPU execution.
+
+Blocker 3: report sanity gate is not self-contained.
+
+- JSON field `sanity_gate_per_class_self_kept_rates` says "see stdout".
+- Evidence reports should not require stdout logs for key diagnostic values.
+- I patched the script to write a structured `sanity_gate_per_class` list into
+  the next report.
+
+Blocker 4: verdict ignores the full-continuation metric.
+
+- The report's first-token metric supports "no clean first-token specificity."
+- But the full 8-token match metric points toward weak same-class disruption:
+  diagonal token-match `0.659` vs off-diagonal token-match `0.738`, meaning
+  same-class ablation changes more of the continuation by about `7.9 pp`.
+- Per-class token-match extra disruption is strongest for `^7` (`+0.214`),
+  `^2` (`+0.186`), `^8` (`+0.175`), `^0` (`+0.120`), and `^9` (`+0.111`).
+- That is not enough for a clean Glass House claim, but it is enough to make
+  `NO_PER_CLASS_SPECIFICITY` too absolute.
+- I patched the script to report `extra_same_class_token_disruption` and
+  `per_class_token_match_specificity` on the next run.
+
+Correct current reading:
+
+> Stage 3.2 does not show clean first-token per-class specificity. It does show
+> mixed evidence: one-unit per-class ablation is weak by the first-token metric,
+> while full-continuation token match suggests modest same-class disruption.
+> The result needs a patched offline rerun before being treated as closed.
+
+Recommendation:
+
+Rerun Stage 3.2 with the patched script on the pod, then re-audit the regenerated
+JSON. If the patched report reproduces the same numbers, revise the public branch
+claim to `MIXED_SPECIFICITY_EVIDENCE` rather than `NO_PER_CLASS_SPECIFICITY`.
+
+collaborated and waiting
+
 ## 2026-05-16T08:19Z - Re-run audit: Pythia Stage 3 ablation reproduces, but top-token test is weak
 
 Branch reviewed: `experiment/cas-probe-pythia`

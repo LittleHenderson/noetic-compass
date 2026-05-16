@@ -103,6 +103,7 @@ def main() -> int:
     try:
         import numpy as np
         import torch
+        import transformers
         from sklearn.metrics import accuracy_score
         from transformers import AutoModelForCausalLM, AutoTokenizer
     except ImportError as exc:
@@ -180,6 +181,7 @@ def main() -> int:
     h_raw_all = X[:, layer, :]
     y_test = y[idx_test]
     sanity_pass_per_class: list[bool] = []
+    sanity_gate_per_class: list[dict[str, Any]] = []
     for c in range(n_classes):
         Pc_np = np.outer(u[c], u[c])
         h_ablated = h_raw_all - h_raw_all @ Pc_np
@@ -209,20 +211,35 @@ def main() -> int:
             f"(baseline support {baseline_pred_c_rate:.3f}, "
             f"ablated pred=c rate={ablated_pred_c_rate:.3f})"
         )
-        sanity_pass_per_class.append(ablated_self_correct < 0.5)
+        sanity_pass = bool(ablated_self_correct < 0.5)
+        sanity_pass_per_class.append(sanity_pass)
+        sanity_gate_per_class.append(
+            {
+                "class": int(c),
+                "self_class_kept_rate": float(ablated_self_correct),
+                "baseline_support": float(baseline_pred_c_rate),
+                "ablated_pred_c_rate": float(ablated_pred_c_rate),
+                "pass": sanity_pass,
+            }
+        )
 
     # ------------------------------------------------------------------ #
     # Load Pythia + tokenizer.
     # ------------------------------------------------------------------ #
     print()
-    print(f"loading {_MODEL_NAME} ...")
-    tokenizer = AutoTokenizer.from_pretrained(_MODEL_NAME)
+    print(f"loading {_MODEL_NAME} from local cache only ...")
+    tokenizer = AutoTokenizer.from_pretrained(_MODEL_NAME, local_files_only=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-    model = AutoModelForCausalLM.from_pretrained(_MODEL_NAME)
+    model = AutoModelForCausalLM.from_pretrained(_MODEL_NAME, local_files_only=True)
     model.eval()
+    # CPU is intentional here: it preserves the committed Stage 3.2
+    # artifact's execution mode. If this moves to CUDA, record it as a
+    # distinct rerun instead of silently changing the experiment.
     device = torch.device("cpu")
     model.to(device)
+    model_revision = getattr(model.config, "_commit_hash", None)
+    model_config_name = getattr(model.config, "_name_or_path", None)
 
     block = model.gpt_neox.layers[_HOOK_BLOCK_INDEX]
 
@@ -386,6 +403,7 @@ def main() -> int:
 
     # Per-class specificity ratio.
     spec_ratios: list[dict[str, Any]] = []
+    token_match_specificity: list[dict[str, Any]] = []
     for c in range(n_classes):
         self_rate = matrix_first_changed[c, c]
         cross_rates = matrix_first_changed[c, [ty for ty in range(n_classes) if ty != c]]
@@ -401,6 +419,17 @@ def main() -> int:
                 "self_first_changed_rate": float(self_rate),
                 "cross_first_changed_rate_mean": cross_mean,
                 "specificity_ratio": ratio,
+            }
+        )
+        self_match = matrix_token_match[c, c]
+        cross_match_rates = matrix_token_match[c, [ty for ty in range(n_classes) if ty != c]]
+        cross_match_mean = float(_np.nanmean(cross_match_rates))
+        token_match_specificity.append(
+            {
+                "class": c,
+                "self_token_match_rate": float(self_match),
+                "cross_token_match_rate_mean": cross_match_mean,
+                "extra_same_class_disruption": float(cross_match_mean - self_match),
             }
         )
 
@@ -497,6 +526,15 @@ def main() -> int:
             "directions on Pythia-160M"
         ),
         "model_name": _MODEL_NAME,
+        "model_revision": model_revision,
+        "model_config_name_or_path": model_config_name,
+        "local_files_only": True,
+        "device": str(device),
+        "package_versions": {
+            "transformers": transformers.__version__,
+            "torch": torch.__version__,
+            "numpy": np.__version__,
+        },
         "target_layer_index": _TARGET_LAYER_INDEX,
         "hook_block_index": _HOOK_BLOCK_INDEX,
         "max_new_tokens": _MAX_NEW_TOKENS,
@@ -513,6 +551,7 @@ def main() -> int:
             "mean": float(off_diag_cos.mean()),
             "max_abs": float(_np.max(_np.abs(off_diag_cos))),
         },
+        "sanity_gate_per_class": sanity_gate_per_class,
         "sanity_gate_per_class_self_kept_rates": (
             "see stdout — class c's pred rate on true_y==c after ablating "
             "only direction c. Should drop below 0.5 for the ablation to "
@@ -528,7 +567,9 @@ def main() -> int:
         "diag_minus_off_first_changed": delta,
         "diagonal_token_match_mean": diag_match,
         "off_diagonal_token_match_mean": off_match,
+        "extra_same_class_token_disruption": float(off_match - diag_match),
         "per_class_specificity": spec_ratios,
+        "per_class_token_match_specificity": token_match_specificity,
         "decision_thresholds": {
             "strong_specificity_delta_min": 0.10,
             "weak_specificity_delta_min": 0.03,
