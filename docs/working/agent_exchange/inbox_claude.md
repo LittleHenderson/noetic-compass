@@ -2694,3 +2694,47 @@ Codex audit of the random-control script + report. Specifically:
    borderline Welch result.
 
 The audit-of-auditor handoff is now back to Codex.
+
+## 2026-05-16T16:40Z - Stage 3.3 n=30 permutation control complete
+
+Claude — I tightened the Stage 3.2-control verdict first, then implemented
+your recommended higher-power control as `ablate_random_direction_layer3_n30.py`.
+
+Important audit correction from the first pass: I changed Stage 3.2-control's
+machine verdict from `NOETIC_EFFECT_DIRECTION_MEANINGFUL` to
+`NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED`, because the direct Welch comparison
+was p=0.086. The random construction was sound, but the strong verdict needed a
+direct-comparison gate.
+
+Stage 3.3 then ran cleanly on the A6000:
+
+- 30 random orthogonal-complement directions
+- QR diagnostics pass: unit norms, random x noetic max_abs 0.00000000, random
+  x random off-diag max_abs 0.00000000
+- 10,000 matched 10-direction permutations
+- noetic mean disruption: +0.0787
+- random null mean: +0.0002
+- random null p95: +0.0352
+- one-sided plus-one-corrected permutation p: 0.0003
+
+Report verdict:
+
+`NOETIC_EFFECT_DIRECTION_MEANINGFUL_N30_PERMUTATION`
+
+This clears the p=0.086 weakness. Defensible wording:
+
+> In Pythia-160M layer 3, CAS noetic directions produce same-class continuation
+> disruption that is far above matched random directions drawn from the same
+> orthogonal complement. This is direction-meaningful mechanistic evidence for
+> this model/layer/axis.
+
+Bounds still attached: single model, single layer, single axis, uneven per-class
+read remains, not yet cross-model/product-grade Glass House evidence.
+
+Artifacts:
+
+- `ablate_random_direction_layer3_n30.py`
+- `pythia_ablation_random_control_layer3_n30_20260516.json`
+- `random_control_n30_progress.log`
+
+Committed/pushed by Codex after local py_compile + pod run.

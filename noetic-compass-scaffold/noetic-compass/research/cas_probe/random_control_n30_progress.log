@@ -1,0 +1,54 @@
+activations sha256:       f1b3610636ddb5fe056504e931c09cd07f2fed1247b84c649cf75503dd49ca9a
+probes sha256:            1991b5e650915129497ed24d4354ec9db37c5f9886d34c11efd158e6d5ebc47e
+stage3.2 noetic sha256:   9551ac6f8f664767f69924eb2a1474940afa1d9cb54b34e5db016c7a66895f9e
+random direction norms: min=1.0000 max=1.0000
+random x noetic cosine: max_abs=0.00000000 (target 0)
+random x random off-diag: max_abs=0.00000000 (target 0)
+
+loading EleutherAI/pythia-160m ...
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 8430.99it/s]
+device: cuda
+
+generating baselines + 30 random-direction ablations ...
+  baselines done in 14.2s
+  random direction 0 done at elapsed=27.3s
+  random direction 1 done at elapsed=39.8s
+  random direction 2 done at elapsed=52.1s
+  random direction 3 done at elapsed=65.1s
+  random direction 4 done at elapsed=77.3s
+  random direction 5 done at elapsed=89.6s
+  random direction 6 done at elapsed=102.0s
+  random direction 7 done at elapsed=114.4s
+  random direction 8 done at elapsed=126.9s
+  random direction 9 done at elapsed=139.2s
+  random direction 10 done at elapsed=151.5s
+  random direction 11 done at elapsed=163.9s
+  random direction 12 done at elapsed=176.2s
+  random direction 13 done at elapsed=188.6s
+  random direction 14 done at elapsed=200.9s
+  random direction 15 done at elapsed=213.3s
+  random direction 16 done at elapsed=225.6s
+  random direction 17 done at elapsed=238.9s
+  random direction 18 done at elapsed=251.9s
+  random direction 19 done at elapsed=264.3s
+  random direction 20 done at elapsed=276.7s
+  random direction 21 done at elapsed=289.1s
+  random direction 22 done at elapsed=301.5s
+  random direction 23 done at elapsed=313.9s
+  random direction 24 done at elapsed=326.4s
+  random direction 25 done at elapsed=338.8s
+  random direction 26 done at elapsed=351.3s
+  random direction 27 done at elapsed=363.6s
+  random direction 28 done at elapsed=377.2s
+  random direction 29 done at elapsed=389.4s
+
+STAGE 3.3 N=30 PERMUTATION CONTROL
+  noetic mean disruption: +0.0787
+  noetic one-sample t: t=2.560 p=0.0307
+  random null mean: +0.0002 std=0.0209
+  random null quantiles: {'p50': 5.346119929452165e-05, 'p90': 0.027401620370370368, 'p95': 0.03515597442680774, 'p99': 0.0489411283803645}
+  effect over null mean: +0.0786
+  permutation p(one-sided): 0.0003
+VERDICT: NOETIC_EFFECT_DIRECTION_MEANINGFUL_N30_PERMUTATION
+Noetic mean disruption is +0.079. The n=30 random-direction permutation null has mean +0.000, std 0.021, p95 +0.035. One-sided permutation p=0.0003 over 10000 matched 10-direction samples. Verdict: NOETIC_EFFECT_DIRECTION_MEANINGFUL_N30_PERMUTATION.
+report written: /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_ablation_random_control_layer3_n30_20260516.json

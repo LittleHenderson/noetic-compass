@@ -4149,6 +4149,66 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T16:35Z - Codex audit: Pythia Stage 3.3 n=30 permutation control
+
+Branch: `experiment/cas-probe-pythia`
+
+Verdict: PASS, WITH BOUNDS.
+
+Stage 3.3 fixes the underpowered Stage 3.2-control comparison. Instead of
+treating 30 random directions as 30 fake classes, the script samples 30 random
+unit directions in the noetic subspace's orthogonal complement, then builds
+10-direction matched null sets through 10,000 permutations. That matches the
+actual question: does the real 10-direction noetic set beat 10-direction random
+sets drawn from the same orthogonal complement?
+
+Run:
+
+- script: `ablate_random_direction_layer3_n30.py`
+- pod: RTX A6000
+- elapsed ablation pass: ~389 sec
+- random directions: 30
+- permutations: 10,000
+
+Direction-quality checks:
+
+- random direction norms: min=1.0000, max=1.0000
+- max cosine with noetic basis: 0.00000000
+- max random/random off-diagonal cosine: 0.00000000
+
+Results:
+
+- noetic mean disruption: +0.0787
+- random null mean: +0.0002
+- random null std: 0.0209
+- random null p95: +0.0352
+- random null p99: +0.0489
+- one-sided plus-one-corrected permutation p: 0.0003
+- report verdict: `NOETIC_EFFECT_DIRECTION_MEANINGFUL_N30_PERMUTATION`
+
+This clears the prior p=0.086 weakness. The effect is now well above matched
+random directions under the actual 10-direction-set null.
+
+Defensible claim:
+
+> In Pythia-160M layer 3, CAS noetic directions produce same-class continuation
+> disruption that is far above matched random directions drawn from the same
+> orthogonal complement. This is direction-meaningful mechanistic evidence for
+> this model/layer/axis.
+
+Bounds that must stay attached:
+
+- single model: Pythia-160M
+- single layer: layer 3
+- single axis: noetic only
+- per-class unevenness remains; ^3 and ^5 were weak/wrong-direction in Stage 3.2
+- not yet cross-model, cross-layer, cross-axis, or product-grade Glass House
+  evidence
+- do not claim "we can read every thought"; claim a bounded direction-level
+  behavioral effect beyond matched random directions
+
+collaborated and waiting
+
 ## 2026-05-16T11:35Z - Codex audit: Pythia Stage 3.2 random-control patch
 
 Branch: `experiment/cas-probe-pythia`

@@ -67,6 +67,7 @@ subject. CAS is the measuring instrument.**
 | 3.1 | done — continuation effect present | forced semantic continuations; first-step top-1 changes in 30/207 cases; full 8-token continuation changes in 157/207 cases |
 | 3.2 | done — mixed specificity evidence | clean RunPod GPU rerun on RTX A6000 (`cuda`, 147 sec); first-token specificity fails (diag 0.079 vs off-diag 0.062), but 8-token match shows weak same-class disruption (diag match 0.659 vs off-diag 0.738). Verdict: `MIXED_SPECIFICITY_EVIDENCE`. |
 | 3.2-control | **done — suggestive control passed** | random orthogonal control on RTX A6000 (140 sec); random arm mean disruption −0.009 (t=−0.24, p=0.82), noetic arm +0.079 (t=2.56, p=0.031); Welch noetic-vs-random t=1.82 (p=0.086, borderline). Verdict: `NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED`; no full direction-meaningful upgrade until the direct comparison passes. |
+| 3.3 | **done — n=30 permutation control passed** | 30 random orthogonal complement directions on RTX A6000 (389 sec), sampled into 10-direction matched null sets with 10,000 permutations. Noetic mean disruption +0.0787 vs random null mean +0.0002; null p95 +0.0352; one-sided permutation p=0.0003. Verdict: `NOETIC_EFFECT_DIRECTION_MEANINGFUL_N30_PERMUTATION`. |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -658,6 +659,84 @@ question."
   one-sample t-test for compare, and verdict.
 - `random_control_progress.log` — pod stdout with per-direction
   elapsed times and direction-quality diagnostics.
+
+---
+
+## Stage 3.3 n=30 permutation control (2026-05-16)
+
+**Verdict: `NOETIC_EFFECT_DIRECTION_MEANINGFUL_N30_PERMUTATION`.**
+
+This follow-up addresses the Stage 3.2-control limitation: n=10 vs n=10
+Welch was underpowered and only borderline (`p=0.086`). Instead of adding
+fake CAS classes, Stage 3.3 samples 30 random directions in the noetic
+subspace's orthogonal complement, then repeatedly builds matched
+10-direction null sets.
+
+Method:
+
+- Sample 30 random unit directions in the noetic complement
+  (`seed=4242`), QR-orthonormalized.
+- Run the same forced-continuation ablation for all 30 directions.
+- For each of 10,000 permutations, sample 10 random directions without
+  replacement, randomly assign them to the 10 noetic class slots, and
+  compute the same mean same-class disruption statistic as the real
+  noetic arm.
+- Use a one-sided plus-one-corrected permutation p-value:
+  `p = (1 + count(null >= observed)) / (1 + n_permutations)`.
+
+Direction quality verification:
+
+```text
+random direction norms: min=1.0000 max=1.0000
+random x noetic cosine: max_abs=0.00000000
+random x random off-diag: max_abs=0.00000000
+```
+
+Result:
+
+| Statistic | Value |
+|---|---:|
+| Noetic mean disruption | +0.0787 |
+| Random null mean | +0.0002 |
+| Random null std | 0.0209 |
+| Random null p95 | +0.0352 |
+| Random null p99 | +0.0489 |
+| Effect over null mean | +0.0786 |
+| One-sided permutation p | 0.0003 |
+
+Plain-English claim:
+
+> In Pythia-160M layer 3, CAS noetic directions produce same-class
+> continuation disruption that is far above matched random directions
+> drawn from the same orthogonal complement. This is direction-meaningful
+> mechanistic evidence for this model/layer/axis. It is not yet a
+> cross-model product claim.
+
+What this upgrades:
+
+- Stage 3.2-control's `NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED` becomes
+  `NOETIC_EFFECT_DIRECTION_MEANINGFUL_N30_PERMUTATION`.
+- The random-control story no longer rests on the borderline Welch
+  comparison. The permutation test matches the actual question: does the
+  real 10-direction noetic set beat 10-direction random sets sampled from
+  the orthogonal complement?
+
+What this still does **not** prove:
+
+- It is only Pythia-160M, only layer 3, only the noetic axis.
+- It does not prove every noetic class is individually clean; ^3 and ^5
+  remain weak/wrong-direction in the earlier per-class read.
+- It does not yet prove the same effect across domain/register/drive axes,
+  larger Pythia models, OLMo/Qwen, or CAS Native itself.
+- It does not support "we can read every thought" language. It supports a
+  bounded mechanistic claim: this CAS-labelled direction set has a
+  behavioral effect beyond matched random directions.
+
+Artifacts:
+
+- `ablate_random_direction_layer3_n30.py`
+- `pythia_ablation_random_control_layer3_n30_20260516.json`
+- `random_control_n30_progress.log`
 
 ---
 
