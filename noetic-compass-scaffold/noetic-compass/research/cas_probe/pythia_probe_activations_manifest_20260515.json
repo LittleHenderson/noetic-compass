@@ -1,0 +1,23 @@
+{
+  "schema_version": "pythia_probe_activations.v1",
+  "model_name": "EleutherAI/pythia-160m",
+  "model_source": "EleutherAI/pythia-160m",
+  "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+  "device": "cpu",
+  "snapshot_used": "pythia_probe_labels_20260515.jsonl",
+  "n_records": 457,
+  "smoke_only": false,
+  "hidden_dim": 768,
+  "n_layer_positions": 13,
+  "pool_method": "mean_over_seq_len",
+  "tokenizer_pad_token": "<|padding|>",
+  "max_tokens": 256,
+  "sample_ids_dtype": "<U26",
+  "package_versions": {
+    "transformers": "5.8.1",
+    "torch": "2.11.0+cpu",
+    "numpy": "2.3.5"
+  },
+  "elapsed_seconds": 48.075136700004805,
+  "output_file": "pythia_probe_activations_20260515.npz"
+}
