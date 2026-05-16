@@ -3268,3 +3268,76 @@ Audit asks:
 3. Are the four near-duplicate review warnings acceptable for the pilot, or
    should the pilot itself be rewritten until warnings are lower before Stage
    6.1?
+
+## 2026-05-16T21:15Z - Stage 6.1 activation mechanics smoke shipped
+
+Claude - user said "begin" again after Stage 6.0. I implemented the stronger
+Stage 6.1 path directly: focus-token activation capture, not legacy mean-only.
+
+New artifacts:
+
+- `capture_stage6_role_bound_activations.py`
+- `evaluate_stage6_role_bound_smoke.py`
+- `stage6_role_bound_pilot_activations_20260516.npz`
+- `stage6_role_bound_pilot_activations_manifest_20260516.json`
+- `stage6_role_bound_pilot_smoke_report_20260516.json`
+- `STAGE6_SMOKE_REPORT_20260516.md`
+
+Activation capture:
+
+- Input: `stage6_role_bound_pilot_20260516.jsonl`
+- Output arrays: `X_focus`, `X_final`, `X_mean`
+- Shape: `(100, 13, 768)` for each readout.
+- Runtime: 8.0s CPU.
+- Pythia revision: `50f5173d932e8e61f858120bcb800b97af589f46`.
+- The `embed_out.weight` warning is expected: hidden-state body only, no LM head.
+
+Smoke evaluator:
+
+- Uses fixed pilot split from JSONL: train 60 / val 20 / test 20.
+- Best text baseline by val: `tfidf_word_1_2`, test `10/20 = 0.50`.
+- Metadata focus-only baseline: `2/20 = 0.10`, chance.
+
+Headline readouts:
+
+| Readout | Layer | Val | Test | Lift over best text |
+|---|---:|---:|---:|---:|
+| focus_token | 6 | 1.00 | 1.00 | +0.50 |
+| final_token | 5 | 1.00 | 0.95 | +0.45 |
+| mean_over_seq_len | 5 | 0.75 | 0.75 | +0.25 |
+
+Important sanity checks:
+
+- Focus-token layer 0 is chance (`0.10`), so the focus-letter embedding alone
+  does not solve the task.
+- Metadata focus-only is chance (`0.10`), so `Focus: A/B` alone does not solve
+  the task.
+- Mid-layer focus-token is the strongest readout, which matches the Stage 6
+  hypothesis.
+
+Reserved interpretation:
+
+> Stage 6.1 confirms the role-bound pipeline works mechanically. Focus-token
+> activations can be captured and scored, and the pilot smoke produces
+> above-text results on a tiny non-claim-bearing fixture.
+
+Not allowed:
+
+- Pythia encodes CAS.
+- Stage 6 proves mechanistic CAS semantics.
+- Glass House is confirmed.
+
+Recommended next:
+
+- Add lightweight unit tests for focus-token index extraction.
+- Then scale to the 60-bundle locked fixture and freeze test SHA before
+  claim-bearing evaluation.
+
+Audit asks:
+
+1. Is the focus-token char-offset mapping robust enough for scale, or do you
+   want an explicit test fixture around token offsets before 60-bundle build?
+2. Does the layer-0 chance result satisfy the shortcut sanity check for the
+   pilot, or should there be an additional shuffled-focus control?
+3. Should Stage 6.2 scale immediately, or first reduce the 49 validator
+   warnings from Stage 6.0?

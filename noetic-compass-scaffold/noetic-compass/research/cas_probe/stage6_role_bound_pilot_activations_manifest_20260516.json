@@ -1,0 +1,27 @@
+{
+  "device": "cpu",
+  "elapsed_seconds": 8.038473399996292,
+  "hidden_dim": 768,
+  "input_file": "stage6_role_bound_pilot_20260516.jsonl",
+  "input_sha256": "2f3fdc6515a6dbcbba191ec1947ad50522cb4dc46e0e9c449fdf19ac9581e504",
+  "max_tokens": 256,
+  "model_name": "EleutherAI/pythia-160m",
+  "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+  "model_source": "EleutherAI/pythia-160m",
+  "n_layer_positions": 13,
+  "n_records": 100,
+  "output_file": "stage6_role_bound_pilot_activations_20260516.npz",
+  "output_sha256": "2d9fa4eb61f5e50f493fb5cfdb7bb41f092f413bc582a5884b5e6783ed1fc825",
+  "package_versions": {
+    "numpy": "2.3.5",
+    "torch": "2.11.0+cpu",
+    "transformers": "5.8.1"
+  },
+  "readouts": [
+    "focus_token",
+    "final_token",
+    "mean_over_seq_len"
+  ],
+  "sample_ids_dtype": "<U46",
+  "schema_version": "stage6_role_bound_activations.v1"
+}
