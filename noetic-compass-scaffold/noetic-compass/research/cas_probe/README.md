@@ -63,7 +63,8 @@ subject. CAS is the measuring instrument.**
 | 2 | done | per-layer linear probe training |
 | 2.1 | done | TF-IDF baseline, shuffled-label control, val-selected headline, confusion matrix |
 | 2.2 | done — labels recoverable, mostly text-baseline explained | majority / stratified / count-vector baselines, paired contingency, McNemar test |
-| 3 | **done — no causal bite at layer 3** | ablation of noetic subspace; sanity gate passed (probe acc 0.899 → 0.101); next-token argmax unchanged on 69/69 prompts; mean KL(baseline‖ablated) = 0.12 nats |
+| 3 | done — narrow newline-token test | ablation of noetic subspace; sanity gate passed (probe acc 0.899 → 0.101); immediate next-token argmax unchanged on 69/69 prompts, but all top tokens were newline |
+| 3.1 | **done — continuation effect present** | forced semantic continuations; first-step top-1 changes in 30/207 cases; full 8-token continuation changes in 157/207 cases |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -204,7 +205,7 @@ revised under Stage 2.2):
   contingency + McNemar p-value, headline confusion matrix,
   reserved-language verdict.
 
-## Stage 3 result (2026-05-16) — causal ablation
+## Stage 3 result (2026-05-16) — immediate next-token ablation
 
 **Verdict: `ABLATION_NO_CAUSAL_BITE`.**
 
@@ -258,23 +259,18 @@ logit distribution is small but non-zero (~0.12 nats), so the
 ablation does shift probability mass around in the tail — but not
 enough to flip any argmax.
 
-**Honest interpretation:**
+**Honest interpretation, revised after Stage 3.1:**
 
 The noetic subspace at layer 3 of Pythia-160M carries readable
-information about the noetic axis but does **not** drive
-next-token behaviour on this corpus. The +1.4 pp probe lift over
-the TF-IDF baseline from Stage 2.2, which was already statistically
-indistinguishable from chance imbalance, is now also shown to be
-behaviourally inert: Pythia "knows" the noetic signal is in there
-in a read-only sense, but does not use it for what it says next.
+information about the noetic axis. The immediate next-token test did
+not change because every baseline top-1 token was newline (`"\n"`).
+So Stage 3 proves only the narrow claim that removing the layer-3
+noetic probe subspace does not change Pythia's immediate newline
+prediction after these complete English descriptions.
 
-This is consistent with the Stage 2.2 finding that the layer-3
-signal is mostly lexical decoration. It is **not** consistent with
-any "Pythia mechanistically encodes CAS" claim. The Glass House AI
-strategy memo's core technical assumption — that probing
-open-model activations would surface mechanistically-active
-structure beyond plain-text classification — is not supported by
-Pythia-160M on the noetic axis.
+It does **not** prove the subspace is behaviorally inert under
+generation-style prompts. Stage 3.1 below supersedes that broader
+interpretation.
 
 **What this does and doesn't conclude:**
 
@@ -299,6 +295,70 @@ Artifacts:
 - `pythia_ablation_layer3_20260515.json` — full per-record report
   with baseline / ablated token IDs and decoded strings, KL stats,
   sanity gate result, verdict, decision thresholds.
+
+---
+
+## Stage 3.1 result (2026-05-16) — forced continuation ablation
+
+**Verdict: `CONTINUATION_CAUSAL_EFFECT_PRESENT`.**
+
+Codex re-audit of Stage 3 found that all 69 immediate next-token
+predictions were the same newline token. Stage 3.1 keeps the same
+ablation construction but forces Pythia into semantic continuation
+with three suffixes:
+
+- `In other words,`
+- `This concept means`
+- `A good explanation is`
+
+Each of the 69 held-out records is tested under all three suffixes,
+for 207 total continuation cases. Greedy generation is run for 8 new
+tokens, baseline vs ablated.
+
+**Sanity gate still passes:**
+
+| Probe accuracy on layer-3 activations | Test |
+|---|---:|
+| unablated | 0.899 |
+| ablated | **0.101** |
+
+The ablation still removes what the probe reads.
+
+**Continuation effect:**
+
+| Metric | Value |
+|---|---:|
+| records | 69 |
+| continuation cases | 207 |
+| first-step top-1 match | 177/207 = 0.855 |
+| full 8-token exact continuation match | 50/207 = 0.242 |
+| mean token match rate | 0.499 |
+| first-step KL mean | 0.0310 |
+| first-step KL median | 0.0307 |
+
+The forced-continuation test reverses the broad Stage 3 reading. The
+layer-3 noetic probe subspace is not merely read-only under this
+stronger setup: removing it changes continuation behavior often.
+
+**Careful interpretation:**
+
+This does **not** prove Pythia mechanistically encodes CAS in a clean
+semantic sense. The continuations are short, greedy, and often generic.
+A human semantic audit is still required to ask whether the changes
+track noetic meaning or are just distributional perturbations.
+
+The honest updated claim is:
+
+> In Pythia-160M, the layer-3 noetic probe subspace is readable, mostly
+> explainable from text, and behaviorally active under forced
+> continuation prompts. It is not proven to be a clean CAS-mechanistic
+> axis.
+
+Artifacts:
+
+- `ablate_noetic_layer3_continuation.py` — Stage 3.1 script.
+- `pythia_ablation_layer3_continuation_20260515.json` — full
+  per-case continuation report.
 
 ---
 

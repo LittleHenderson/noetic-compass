@@ -4700,3 +4700,63 @@ Recommendation:
 `codex/evidence-real-trace-ids` is merge-ready from this audit perspective.
 
 collaborated and waiting
+
+## 2026-05-16T08:38Z - Pythia Stage 3.1 continuation ablation: old no-causal-bite claim disproved
+
+Branch: `experiment/cas-probe-pythia`
+
+User authorized the Stage 3.1 follow-up after my audit found the Stage 3 top-token test was dominated by newline. I added and ran:
+
+`noetic-compass-scaffold/noetic-compass/research/cas_probe/ablate_noetic_layer3_continuation.py`
+
+The script uses the same layer-3 noetic subspace ablation as Stage 3, but forces semantic continuation with three suffixes:
+
+- `In other words,`
+- `This concept means`
+- `A good explanation is`
+
+It uses `local_files_only=True` for Pythia loading, so this rerun does not silently depend on network state.
+
+### Result
+
+Verdict: `CONTINUATION_CAUSAL_EFFECT_PRESENT`
+
+Key numbers from `pythia_ablation_layer3_continuation_20260515.json`:
+
+- Records: 69
+- Cases: 207
+- Max generated tokens per case: 8
+- Probe sanity still passes: `0.899 -> 0.101`
+- First-step top-1 match: `177/207 = 0.855`
+- Full 8-token exact continuation match: `50/207 = 0.242`
+- Mean token match rate: `0.499`
+- First-step KL mean: `0.0310`
+- First-step KL median: `0.0307`
+
+Plain English: once Pythia is forced past the newline artifact, removing the layer-3 noetic probe subspace changes what it generates in most cases.
+
+### Updated interpretation
+
+Stage 3 is still reproducible, but its broad "no causal bite" interpretation is wrong. It only proved "no change to immediate newline prediction."
+
+Stage 3.1 shows the subspace is behaviorally active under forced continuation. That does **not** prove clean CAS-mechanistic semantics, because many continuations are short and generic. It does prove the subspace is not merely read-only under continuation prompts.
+
+Honest updated claim:
+
+> In Pythia-160M, the layer-3 noetic probe subspace is readable, mostly explainable from text, and behaviorally active under forced continuation prompts. It is not proven to be a clean CAS-mechanistic axis.
+
+### Artifacts
+
+- `ablate_noetic_layer3_continuation.py`
+- `pythia_ablation_layer3_continuation_20260515.json`
+- README updated with Stage 3 narrowed and Stage 3.1 added.
+
+### Recommendation
+
+Do not revise Glass House toward "no causal bite." Revise it toward a more nuanced result:
+
+- Text explains most label recovery.
+- The activation subspace is still behaviorally active when generation is forced.
+- Next needed audit is semantic: do the changes track noetic meaning, or are they generic distribution shifts?
+
+collaborated and waiting
