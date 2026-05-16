@@ -1,0 +1,670 @@
+{
+  "schema_version": "tks_dog_training_noetic_eval.v1",
+  "experiment": "Original TKS dog-training noetic transfer eval",
+  "status": "research_only_tiny_n_semantic_smoke",
+  "fixture_file": "tks_dog_training_noetic_eval_20260516.jsonl",
+  "fixture_sha256": "b3a913bb76a682a73526f24f647f6ef6ca8602df3a75e69693d11fa30671a8ad",
+  "probe_file": "pythia_noetic_probes_20260515.npz",
+  "probe_sha256": "1991b5e650915129497ed24d4354ec9db37c5f9886d34c11efd158e6d5ebc47e",
+  "n_records": 10,
+  "headline_layer": 3,
+  "capture": {
+    "model_name": "EleutherAI/pythia-160m",
+    "model_source": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "device": "cpu",
+    "local_files_only": true,
+    "n_layer_positions": 13,
+    "hidden_dim": 768,
+    "pool_method": "mean_over_seq_len",
+    "max_tokens": 256,
+    "elapsed_seconds": 0.6610274000013305
+  },
+  "caveats": [
+    "This is a 10-row hand-authored semantic transfer smoke, not a statistical benchmark.",
+    "The ^6 row is user-clarified because the original dog-training excerpt did not contain a clean direct Male example.",
+    "Strong performance here would support transfer to an original TKS example, but does not by itself prove mechanistic encoding."
+  ],
+  "layer3_probe_accuracy": 0.4,
+  "best_layer": {
+    "layer": 9,
+    "accuracy": 0.6,
+    "correct": 6,
+    "total": 10
+  },
+  "text_baselines": {
+    "count_vector_logreg_accuracy": 0.4,
+    "tfidf_logreg_accuracy": 0.2
+  },
+  "verdict": "TKS_DOG_TRANSFER_MIXED",
+  "per_layer": [
+    {
+      "layer": 0,
+      "accuracy": 0.5,
+      "correct": 5,
+      "total": 10
+    },
+    {
+      "layer": 1,
+      "accuracy": 0.4,
+      "correct": 4,
+      "total": 10
+    },
+    {
+      "layer": 2,
+      "accuracy": 0.4,
+      "correct": 4,
+      "total": 10
+    },
+    {
+      "layer": 3,
+      "accuracy": 0.4,
+      "correct": 4,
+      "total": 10
+    },
+    {
+      "layer": 4,
+      "accuracy": 0.5,
+      "correct": 5,
+      "total": 10
+    },
+    {
+      "layer": 5,
+      "accuracy": 0.5,
+      "correct": 5,
+      "total": 10
+    },
+    {
+      "layer": 6,
+      "accuracy": 0.5,
+      "correct": 5,
+      "total": 10
+    },
+    {
+      "layer": 7,
+      "accuracy": 0.5,
+      "correct": 5,
+      "total": 10
+    },
+    {
+      "layer": 8,
+      "accuracy": 0.5,
+      "correct": 5,
+      "total": 10
+    },
+    {
+      "layer": 9,
+      "accuracy": 0.6,
+      "correct": 6,
+      "total": 10
+    },
+    {
+      "layer": 10,
+      "accuracy": 0.6,
+      "correct": 6,
+      "total": 10
+    },
+    {
+      "layer": 11,
+      "accuracy": 0.5,
+      "correct": 5,
+      "total": 10
+    },
+    {
+      "layer": 12,
+      "accuracy": 0.6,
+      "correct": 6,
+      "total": 10
+    }
+  ],
+  "layer3_predictions": [
+    {
+      "sample_id": "tks_dog_idea_0",
+      "english": "Get a dog to sit on command.",
+      "gold": 0,
+      "gold_name": "Idea",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": false,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.9869096875190735
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.008635494858026505
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.003711323719471693
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_dog_mind_1",
+      "english": "The dog is paying attention to the trainer's commands, processing and entertaining the idea.",
+      "gold": 1,
+      "gold_name": "Mind",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": true,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.9905450344085693
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.005054207984358072
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.0016362566966563463
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_dog_positive_2",
+      "english": "The trainer uses a dog treat to lure and reward the dog with something the dog likes.",
+      "gold": 2,
+      "gold_name": "Positive",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": false,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.8871297240257263
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.07063858956098557
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.030774999409914017
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_dog_negative_3",
+      "english": "A historical aversive correction gives the dog something it dislikes when it fails to follow the command.",
+      "gold": 3,
+      "gold_name": "Negative",
+      "predicted": 3,
+      "predicted_name": "Negative",
+      "correct": true,
+      "top3": [
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.9978836178779602
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.000602972402703017
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.00045203440822660923
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_dog_vibration_4",
+      "english": "The dog's gradual acceptance of the command is judged by how long it stays sitting and how quickly it responds.",
+      "gold": 4,
+      "gold_name": "Vibration",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": false,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.4944112300872803
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.25773072242736816
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.13059230148792267
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_dog_female_5",
+      "english": "The dog's mind is composed of temperament and training tendencies inherited through pedigree.",
+      "gold": 5,
+      "gold_name": "Female",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": false,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.9051247239112854
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.044923726469278336
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.03309737518429756
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_dog_male_6",
+      "english": "The idea of sitting on command contains nested sub-ideas such as the verbal cue, posture, reward expectation, trainer relationship, and repeated practice, while also belonging to the larger training system.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": false,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.8344453573226929
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.03452131524682045
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.03110795095562935
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_dog_rhythm_7",
+      "english": "The dog's training schedule and the length of training sessions set the repeated pattern of exposure to the command.",
+      "gold": 7,
+      "gold_name": "Rhythm",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": true,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.9825352430343628
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.007706074044108391
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.00445797573775053
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_dog_above_cause_8",
+      "english": "The trainer's verbal command sit acts as a trigger that brings a different idea to the dog's mind.",
+      "gold": 8,
+      "gold_name": "Above/Cause",
+      "predicted": 3,
+      "predicted_name": "Negative",
+      "correct": false,
+      "top3": [
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.7664353251457214
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.05950760841369629
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.059495747089385986
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_dog_below_effect_9",
+      "english": "An image of the dog treat pops into the dog's mind after the triggering command.",
+      "gold": 9,
+      "gold_name": "Below/Effect",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": true,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.7617561221122742
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.12596477568149567
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.04947610944509506
+        }
+      ]
+    }
+  ],
+  "text_baseline_predictions": {
+    "count_vector_logreg": {
+      "accuracy": 0.4,
+      "correct": 4,
+      "total": 10,
+      "predictions": [
+        {
+          "sample_id": "tks_dog_idea_0",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_dog_mind_1",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 1,
+          "predicted_name": "Mind",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_dog_positive_2",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_negative_3",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_vibration_4",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_female_5",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_dog_male_6",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_rhythm_7",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_above_cause_8",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_below_effect_9",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": true
+        }
+      ]
+    },
+    "tfidf_logreg": {
+      "accuracy": 0.2,
+      "correct": 2,
+      "total": 10,
+      "predictions": [
+        {
+          "sample_id": "tks_dog_idea_0",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_mind_1",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 1,
+          "predicted_name": "Mind",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_dog_positive_2",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_negative_3",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_vibration_4",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_female_5",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_male_6",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_rhythm_7",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_above_cause_8",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_dog_below_effect_9",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": true
+        }
+      ]
+    }
+  },
+  "fixture_rows": [
+    {
+      "sample_id": "tks_dog_idea_0",
+      "source": "original_tks_dog_training_demo",
+      "source_slot": "J",
+      "english": "Get a dog to sit on command.",
+      "canonical_noetic": 0,
+      "canonical_label": "Idea",
+      "cas_expression": "^0",
+      "mapping_note": "Original TKS lists this as noetic 10, Idea. CAS Native stores Idea as zero-indexed ^0.",
+      "confidence": "high"
+    },
+    {
+      "sample_id": "tks_dog_mind_1",
+      "source": "original_tks_dog_training_demo",
+      "source_slot": "A",
+      "english": "The dog is paying attention to the trainer's commands, processing and entertaining the idea.",
+      "canonical_noetic": 1,
+      "canonical_label": "Mind",
+      "cas_expression": "^1",
+      "mapping_note": "Mind is the awareness that processes, stores, outputs, and inputs ideas or information.",
+      "confidence": "high"
+    },
+    {
+      "sample_id": "tks_dog_positive_2",
+      "source": "original_tks_dog_training_demo",
+      "source_slot": "B",
+      "english": "The trainer uses a dog treat to lure and reward the dog with something the dog likes.",
+      "canonical_noetic": 2,
+      "canonical_label": "Positive",
+      "cas_expression": "^2",
+      "mapping_note": "Positive is an idea the mind has affinity for and is attracted toward.",
+      "confidence": "high"
+    },
+    {
+      "sample_id": "tks_dog_negative_3",
+      "source": "original_tks_dog_training_demo",
+      "source_slot": "C",
+      "english": "A historical aversive correction gives the dog something it dislikes when it fails to follow the command.",
+      "canonical_noetic": 3,
+      "canonical_label": "Negative",
+      "cas_expression": "^3",
+      "mapping_note": "Negative is an idea the mind is adverse to and repelled by. The original example names an outdated punishment method; this fixture keeps only the noetic role.",
+      "confidence": "high"
+    },
+    {
+      "sample_id": "tks_dog_vibration_4",
+      "source": "original_tks_dog_training_demo",
+      "source_slot": "D",
+      "english": "The dog's gradual acceptance of the command is judged by how long it stays sitting and how quickly it responds.",
+      "canonical_noetic": 4,
+      "canonical_label": "Vibration",
+      "cas_expression": "^4",
+      "mapping_note": "Vibration is the degree to which an idea resonates with the mind, its impression on the mind.",
+      "confidence": "high"
+    },
+    {
+      "sample_id": "tks_dog_female_5",
+      "source": "original_tks_dog_training_demo",
+      "source_slot": "E",
+      "english": "The dog's mind is composed of temperament and training tendencies inherited through pedigree.",
+      "canonical_noetic": 5,
+      "canonical_label": "Female",
+      "cas_expression": "^5",
+      "mapping_note": "Female is a mind impregnated with an idea, or the ideas composing a mind.",
+      "confidence": "high"
+    },
+    {
+      "sample_id": "tks_dog_male_6",
+      "source": "user_clarified_tks_dog_training_demo",
+      "source_slot": "^6 clarification",
+      "english": "The idea of sitting on command contains nested sub-ideas such as the verbal cue, posture, reward expectation, trainer relationship, and repeated practice, while also belonging to the larger training system.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Male is an idea composed of nested ideas while itself being part of a larger set of ideas. This row uses the user's corrected wording because the original dog-training excerpt did not give a clean direct ^6 example.",
+      "confidence": "high"
+    },
+    {
+      "sample_id": "tks_dog_rhythm_7",
+      "source": "original_tks_dog_training_demo",
+      "source_slot": "G",
+      "english": "The dog's training schedule and the length of training sessions set the repeated pattern of exposure to the command.",
+      "canonical_noetic": 7,
+      "canonical_label": "Rhythm",
+      "cas_expression": "^7",
+      "mapping_note": "Rhythm is the rate and pattern by which a mind is exposed to an idea.",
+      "confidence": "high"
+    },
+    {
+      "sample_id": "tks_dog_above_cause_8",
+      "source": "original_tks_dog_training_demo",
+      "source_slot": "H",
+      "english": "The trainer's verbal command sit acts as a trigger that brings a different idea to the dog's mind.",
+      "canonical_noetic": 8,
+      "canonical_label": "Above/Cause",
+      "cas_expression": "^8",
+      "mapping_note": "Above/Cause is an idea that triggers a different idea than itself to come to mind.",
+      "confidence": "high"
+    },
+    {
+      "sample_id": "tks_dog_below_effect_9",
+      "source": "original_tks_dog_training_demo",
+      "source_slot": "I",
+      "english": "An image of the dog treat pops into the dog's mind after the triggering command.",
+      "canonical_noetic": 9,
+      "canonical_label": "Below/Effect",
+      "cas_expression": "^9",
+      "mapping_note": "Below/Effect is the idea brought to mind by an Above/Cause trigger.",
+      "confidence": "high"
+    }
+  ]
+}

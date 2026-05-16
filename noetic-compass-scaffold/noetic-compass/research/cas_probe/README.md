@@ -71,6 +71,7 @@ subject. CAS is the measuring instrument.**
 
 | 4.0 | **done - cross-axis probe screen** | Domain/register/drive probes trained from the same activation file. Domain shows the strongest breadth signal (layer 5 test 0.810 vs text 0.730, lift +0.079, McNemar p=0.267). Register is weak (test 0.333, below stratified dummy 0.370). Drive is modest and mostly text-explained (test 0.324 vs text 0.294, lift +0.029). |
 | 4.1 | **done - domain ablation negative** | Domain layer-5 ablation with 30 random-complement directions and 10,000 matched permutations. Domain mean disruption +0.0142 vs random null p95 +0.0396; p=0.2931. Probe self-ablation also failed for O (kept-rate 1.000). Verdict: `DOMAIN_EFFECT_NOT_ABOVE_RANDOM_N30_PERMUTATION`. |
+| 5.0 | **done - original TKS dog-training noetic transfer smoke** | Ten hand-authored dog-training examples from the original TKS noetic demonstration, corrected to CAS zero-indexed numbering (`^0` Idea, `^1` Mind, ..., `^9` Below/Effect). Layer-3 noetic probe gets 4/10; best layer gets 6/10; count-vector text baseline gets 4/10; TF-IDF gets 2/10. Verdict: `TKS_DOG_TRANSFER_MIXED`. |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -1032,3 +1033,66 @@ because Pythia doesn't have CAS axes baked into its architecture.
 If this experiment succeeds, the pitch becomes: *"Mode 7 works on any
 open-weight model after training probes; with CAS Native, the probes are
 the architecture."*
+
+## Stage 5.0 result - original TKS dog-training noetic transfer smoke
+
+**Verdict: `TKS_DOG_TRANSFER_MIXED`.**
+
+This stage adds a tiny hand-authored transfer set from the original TKS
+dog-training demonstration. It is deliberately not training data. The
+purpose is to ask whether the saved Pythia noetic probe recognizes a
+clean original-TKS example outside the Claude/SDG snapshot style.
+
+Canonical numbering correction:
+
+| Original TKS | CAS Native | Meaning |
+|---:|---:|---|
+| 10 | `^0` | Idea |
+| 1 | `^1` | Mind |
+| 2 | `^2` | Positive |
+| 3 | `^3` | Negative |
+| 4 | `^4` | Vibration |
+| 5 | `^5` | Female |
+| 6 | `^6` | Male |
+| 7 | `^7` | Rhythm |
+| 8 | `^8` | Above/Cause |
+| 9 | `^9` | Below/Effect |
+
+The `^6` row is user-clarified rather than quoted directly from the
+page: Male is treated as an idea made of nested ideas while itself
+belonging to a larger set of ideas. In the dog-training frame, "sit on
+command" contains the cue, posture, reward expectation, trainer
+relationship, and repeated practice, while also belonging to the larger
+training system.
+
+Result:
+
+| Evaluator | Accuracy |
+|---|---:|
+| Pythia noetic probe, headline layer 3 | 4/10 |
+| Pythia noetic probe, best layer 9 | 6/10 |
+| Count-vector text baseline | 4/10 |
+| TF-IDF text baseline | 2/10 |
+
+Layer-3 gets Mind, Negative, Rhythm, and Below/Effect correct. The main
+failure mode is over-predicting `^7 Rhythm` for dog-training language:
+Idea, Positive, Female, and Male all collapse toward Rhythm at layer 3.
+That makes conceptual sense as a failure mode because the whole example
+is framed by training, command, repetition, schedule, and practice.
+
+Honest read:
+
+> The noetic probe partially transfers to an original TKS example, but
+> not cleanly. It recognizes some classes outside the snapshot style,
+> while also showing a strong dog-training lexical bias toward Rhythm.
+> This strengthens the case for adding more original-TKS hand-authored
+> transfer sets before making any broad cross-model claim.
+
+Artifacts:
+
+- `tks_dog_training_noetic_eval_20260516.jsonl` - 10-row canonical
+  fixture, one row per noetic.
+- `evaluate_tks_dog_noetics.py` - applies the saved Pythia noetic probe
+  and retrains text baselines on the original snapshot train split.
+- `tks_dog_training_noetic_eval_report_20260516.json` - full per-layer
+  and per-row report.

@@ -2801,3 +2801,54 @@ Updated claim:
 
 My recommendation: do not run register/drive ablations. Next highest-value
 science step is cross-model noetic replication, probably OLMo or Qwen.
+
+## 2026-05-16T17:55Z - Stage 5.0 original TKS dog-training noetic transfer smoke
+
+Claude - user asked whether to try drive/register next and supplied the
+original TKS dog-training noetic demonstration. I did not run drive/register
+ablations because Stage 4.0/4.1 says those axes are not ready. Instead I added
+a small original-TKS transfer smoke for the noetic axis.
+
+New artifacts:
+
+- `tks_dog_training_noetic_eval_20260516.jsonl`
+- `evaluate_tks_dog_noetics.py`
+- `tks_dog_training_noetic_eval_report_20260516.json`
+
+Canonical numbering correction locked in the fixture:
+
+- original TKS 10 -> CAS `^0` Idea
+- original TKS 1..9 -> CAS `^1`..`^9`
+
+The `^6` Male row is marked as user-clarified rather than direct original-page
+text: "sit on command" is treated as a nested idea composed of cue, posture,
+reward expectation, trainer relationship, and repeated practice, while also
+belonging to the larger training system.
+
+Results:
+
+- Pythia noetic probe, headline layer 3: 4/10
+- Pythia noetic probe, best layer 9: 6/10
+- Count-vector text baseline: 4/10
+- TF-IDF text baseline: 2/10
+- Verdict: `TKS_DOG_TRANSFER_MIXED`
+
+Layer-3 gets Mind, Negative, Rhythm, and Below/Effect correct. The main failure
+mode is over-predicting `^7 Rhythm` for dog-training language: Idea, Positive,
+Female, and Male all collapse toward Rhythm at layer 3. This is useful
+evidence, not a promotion claim. It says the saved noetic probe partially
+transfers to an original TKS example, but not cleanly, and we need more
+original-TKS hand-authored transfer sets before broad claims.
+
+Verification:
+
+- `python -m py_compile research/cas_probe/evaluate_tks_dog_noetics.py`
+- `python research/cas_probe/evaluate_tks_dog_noetics.py`
+
+Please audit the fixture mapping and the evaluator. Main audit asks:
+
+1. Is the `^6` user-clarified row acceptable as a canonical semantic row, or
+   should it be split into a separate "constructed" fixture?
+2. Is layer 9 as "best layer" useful to report here, or should the headline
+   stay layer 3 only to avoid cherry-picking?
+3. Does the README wording stay honest enough for a tiny-n transfer smoke?
