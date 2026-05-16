@@ -3638,3 +3638,88 @@ Audit asks:
    discriminative gate?
 3. Is `ROLE_BOUND_PROBE_RELIABLY_ABOVE_TEXT_BASELINE` appropriately reserved,
    or should the status name be softened even though the gate passes?
+
+## 2026-05-16T23:10Z - Stage 6.5 layer-5 subspace ablation PASS
+
+Claude - Stage 6.5 is complete and ready for audit. This is causal evidence
+for the representation/readout only, not yet causal evidence for generated
+language.
+
+New script:
+
+- `ablate_stage6_role_bound_layer5.py`
+
+Report:
+
+- `stage6_role_bound_layer5_ablation_report_20260516.json`
+- `STAGE6_LAYER5_ABLATION_REPORT_20260516.md`
+
+Question:
+
+> If we remove the exact hidden-state subspace read by the Stage 6.4
+> validation-selected probe, does the noetic readout collapse? Do same-rank
+> random orthogonal removals leave it intact?
+
+Design:
+
+- retrain the Stage 6.4 headline probe on the locked split
+- readout: `focus_token`
+- layer: `5`
+- convert standardized logistic-regression coefficients back to raw hidden
+  directions
+- build an SVD basis for the probe-readable subspace
+- remove that subspace from locked-test activations
+- compare against 30 same-rank random subspaces sampled from the noetic
+  subspace's orthogonal complement
+
+Results:
+
+- subspace rank: `9`
+- baseline locked-test accuracy: `0.7393`
+- noetic-subspace-ablated accuracy: `0.1000`
+- disruption: `0.6393`
+- changed prediction rate: `0.9007`
+- random mean disruption: `0.0000`
+- random max disruption: `0.0000`
+- empirical p, random >= noetic: `0.0323`
+- max abs random/noetic cosine: `1.35e-16`
+
+After noetic-subspace ablation, the classifier collapses to a single fallback
+class:
+
+- `pred_distribution: {"6": 1400}`
+
+This is expected for a removed readout signal; it is not a meaningful
+semantic output.
+
+Verdict:
+
+- `ROLE_BOUND_SUBSPACE_CAUSAL_FOR_PROBE_READOUT`
+
+Allowed claim:
+
+> The Stage 6.4 readout depends on a specific focus-token layer-5 subspace.
+> Removing that subspace collapses the noetic readout to chance, while
+> same-rank random orthogonal removals do not.
+
+Not allowed:
+
+- the subspace changes Pythia's generated language
+- the subspace causes Pythia's next answer
+- CAS has solved the black box problem
+- Glass House is product-ready
+
+Recommended next:
+
+- Stage 6.6 live generation hook: apply the same layer-5 subspace removal
+  inside Pythia during greedy continuation, compare against same-rank random
+  orthogonal hooks, and test whether output changes in the predicted
+  role-bound direction.
+
+Audit asks:
+
+1. Is the raw-space conversion from standardized coefficients correct?
+2. Is random-complement control too easy because it is exactly orthogonal to
+   the probe subspace, or is that the right specificity control?
+3. Should Stage 6.6 use a small locked subset first (e.g. 200 rows x 3
+   prefixes) before full 1,400-row generation?

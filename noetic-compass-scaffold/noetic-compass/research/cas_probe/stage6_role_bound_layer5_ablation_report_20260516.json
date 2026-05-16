@@ -1,0 +1,880 @@
+{
+  "activations_file": "stage6_role_bound_full_activations_20260516.npz",
+  "activations_sha256": "6641e28519eefeadc66d053c4996075d640401f6f650ef14b80435ccd57206f2",
+  "experiment": "Stage 6.5 role-bound focus-token layer-5 probe-subspace ablation",
+  "input_file": "stage6_role_bound_full_20260516.jsonl",
+  "input_sha256": "450086d137396cd9906f8458ab37ead041ead1842fbfa866d47326befd155710",
+  "layer": 5,
+  "n_random_controls": 30,
+  "noetic_subspace_ablation": {
+    "changed_prediction_rate": 0.9007142857142857,
+    "disruption": 0.6392857142857143,
+    "paired_vs_unablated": {
+      "a_name": "noetic_ablated",
+      "a_only_correct": 21,
+      "b_name": "unablated",
+      "b_only_correct": 916,
+      "both_correct": 119,
+      "both_wrong": 344,
+      "discordant": 937
+    },
+    "test": {
+      "acc": 0.1,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          140,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          140,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          140,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          140,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          140,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          140,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          140,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          140,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          140,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          140,
+          0,
+          0,
+          0
+        ]
+      ],
+      "macro_f1": 0.01818181818181818,
+      "pred_distribution": {
+        "6": 1400
+      }
+    }
+  },
+  "probe_retrained_for_ablation": {
+    "test": {
+      "acc": 0.7392857142857143,
+      "confusion_matrix": [
+        [
+          94,
+          3,
+          0,
+          1,
+          0,
+          4,
+          0,
+          3,
+          1,
+          34
+        ],
+        [
+          4,
+          95,
+          0,
+          4,
+          0,
+          0,
+          11,
+          3,
+          19,
+          4
+        ],
+        [
+          0,
+          0,
+          90,
+          46,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          22,
+          115,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          0,
+          0,
+          109,
+          0,
+          0,
+          24,
+          0,
+          4
+        ],
+        [
+          0,
+          7,
+          0,
+          0,
+          0,
+          119,
+          2,
+          0,
+          0,
+          12
+        ],
+        [
+          10,
+          1,
+          0,
+          0,
+          0,
+          10,
+          119,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          17,
+          0,
+          6,
+          112,
+          1,
+          0
+        ],
+        [
+          7,
+          0,
+          0,
+          0,
+          11,
+          0,
+          1,
+          8,
+          85,
+          28
+        ],
+        [
+          6,
+          6,
+          0,
+          0,
+          5,
+          0,
+          0,
+          23,
+          3,
+          97
+        ]
+      ],
+      "macro_f1": 0.7408751521170746,
+      "pred_distribution": {
+        "0": 126,
+        "1": 115,
+        "2": 112,
+        "3": 166,
+        "4": 142,
+        "5": 133,
+        "6": 139,
+        "7": 179,
+        "8": 109,
+        "9": 179
+      }
+    },
+    "train": {
+      "acc": 1.0,
+      "confusion_matrix": [
+        [
+          120,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          120,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          120,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          120,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          120,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          120,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          120,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          120,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          120,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          120
+        ]
+      ],
+      "macro_f1": 1.0,
+      "pred_distribution": {
+        "0": 120,
+        "1": 120,
+        "2": 120,
+        "3": 120,
+        "4": 120,
+        "5": 120,
+        "6": 120,
+        "7": 120,
+        "8": 120,
+        "9": 120
+      }
+    },
+    "val": {
+      "acc": 0.9925,
+      "confusion_matrix": [
+        [
+          40,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          40,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          37,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          40,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          40,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          40,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          40,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          40,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          40,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          40
+        ]
+      ],
+      "macro_f1": 0.9924894382725707,
+      "pred_distribution": {
+        "0": 40,
+        "1": 40,
+        "2": 37,
+        "3": 43,
+        "4": 40,
+        "5": 40,
+        "6": 40,
+        "7": 40,
+        "8": 40,
+        "9": 40
+      }
+    }
+  },
+  "random_complement_controls": {
+    "max_disruption": 0.0,
+    "mean_disruption": 0.0,
+    "min_disruption": 0.0,
+    "one_sided_empirical_p_random_ge_noetic": 0.03225806451612903,
+    "results": [
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 0,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 1,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 2,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 3,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 4,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 5,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 6,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 7,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 8,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 9,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 10,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 11,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 12,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 13,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 14,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 15,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 16,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 17,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 18,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 19,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 20,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 21,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 22,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 23,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 24,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 25,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 26,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 27,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 28,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      },
+      {
+        "changed_prediction_rate": 0.0,
+        "disruption": 0.0,
+        "index": 29,
+        "rank": 9,
+        "test_acc": 0.7392857142857143,
+        "test_macro_f1": 0.7408751521170746
+      }
+    ],
+    "std_disruption": 0.0
+  },
+  "readout": "focus_token",
+  "reserved_interpretation": "This shows the Stage 6.4 readout depends on the trained focus-token layer-5 probe subspace. It is a causal intervention on the representation/readout, not yet a causal language-generation test.",
+  "schema_version": "stage6_role_bound_layer5_ablation_report.v1",
+  "split": {
+    "test": 1400,
+    "test_distribution": {
+      "0": 140,
+      "1": 140,
+      "2": 140,
+      "3": 140,
+      "4": 140,
+      "5": 140,
+      "6": 140,
+      "7": 140,
+      "8": 140,
+      "9": 140
+    },
+    "train": 1200,
+    "train_distribution": {
+      "0": 120,
+      "1": 120,
+      "2": 120,
+      "3": 120,
+      "4": 120,
+      "5": 120,
+      "6": 120,
+      "7": 120,
+      "8": 120,
+      "9": 120
+    },
+    "val": 400,
+    "val_distribution": {
+      "0": 40,
+      "1": 40,
+      "2": 40,
+      "3": 40,
+      "4": 40,
+      "5": 40,
+      "6": 40,
+      "7": 40,
+      "8": 40,
+      "9": 40
+    }
+  },
+  "stage64_report_file": "stage6_role_bound_full_probe_report_20260516.json",
+  "stage64_report_sha256": "51c0342c0d82db49e0a685925ba39385d988cba5cfaf2cafea39162f840ab683",
+  "status": "ROLE_BOUND_SUBSPACE_CAUSAL_FOR_PROBE_READOUT",
+  "subspace": {
+    "max_abs_random_x_noetic_cosine": 1.3530843112619095e-16,
+    "rank": 9,
+    "singular_values": [
+      25.933300065370542,
+      22.348540112238403,
+      21.290573472548814,
+      18.022425335655925,
+      17.13772556861574,
+      15.724943862338069,
+      14.209217246459863,
+      12.718248363460557,
+      10.42149018316785,
+      6.753272899052867e-14
+    ],
+    "svd_threshold": 2.593330006537054e-05
+  }
+}
