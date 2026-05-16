@@ -4149,6 +4149,69 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T06:56Z - Re-audit: Pythia CAS probe Stage 1.0 patches
+
+Branch: `experiment/cas-probe-pythia`
+Head reviewed: `8131847`
+Implementation patch: `9fec0c6`
+
+Verdict: **PASS / Stage 1.1 eligible** from the code/data audit perspective. Do not install dependencies, download Pythia, or capture activations until the user explicitly approves the three Stage 1.1 actions.
+
+Prior Blocker 1: clean checkout could not rebuild the snapshot.
+
+- Resolution: PASS.
+- The branch now vendors the required Wave 3 CAS-to-English source slice as `research/cas_probe/pythia_probe_source_wave3_cas_to_english_20260515.jsonl`.
+- In a clean worktree at `8131847`, running `python research/cas_probe/build_pythia_probe_snapshot.py --root .` rebuilt the committed snapshot and manifest without relying on untracked local files.
+- Consecutive rebuilds produced byte-identical committed outputs: `labels_equal=True`, `manifest_equal=True`.
+
+Prior Blocker 2: manifest hash did not match checkout bytes on Windows.
+
+- Resolution: PASS.
+- `research/cas_probe/.gitattributes` now pins `.jsonl`, `.json`, `.md`, `.py`, and `.txt` to LF and marks `.npz` binary.
+- `git ls-files --eol` confirms the snapshot, manifest, and vendored source are checked out as LF.
+- Raw checked-out snapshot bytes now match the manifest: `snapshot_hash_match True`.
+
+Prior Blocker 3: CAS notation leaked into the English input.
+
+- Resolution: PASS.
+- The builder now includes explicit CAS-notation leakage filters covering caret noetic/domain notation, drive suffixes, `Ω`, `Φ`, `Θ`, and `CO-N`.
+- The regenerated snapshot has 457 records, down from 458, and the manifest records the single caret-notation rejection.
+- Independent scan of all 457 English prompts found zero leakage matches.
+
+Prior Medium 1: `sample_ids` saved as object dtype in `.npz`.
+
+- Resolution: PASS.
+- `capture_pythia_activations.py` now builds `sample_ids_arr = np.array(sample_ids)` and asserts `sample_ids_arr.dtype.kind == "U"`.
+- This prevents object arrays that would later require pickle on load.
+
+Prior Medium 2: activation manifest lacked model/package provenance.
+
+- Resolution: PASS.
+- Capture manifest now records `model.config._commit_hash` when available, `model.config._name_or_path`, and the `transformers`, `torch`, and `numpy` versions.
+- Non-blocking caveat: if Hugging Face does not populate `_commit_hash`, the script records `"unknown"`. If Stage 1.1 produces `"unknown"`, note that in the report and pin the model revision explicitly in a follow-up.
+
+Prior Medium 3: deterministic-manifest claim contradicted `built_at_utc`.
+
+- Resolution: PASS.
+- `built_at_utc` was removed from the deterministic manifest.
+- Clean-worktree rebuild produced the same manifest bytes on consecutive runs.
+
+Additional checks:
+
+- `python -m py_compile research/cas_probe/build_pythia_probe_snapshot.py research/cas_probe/capture_pythia_activations.py` passes.
+- Production isolation remains intact: no Pythia or `transformers` imports are wired into `api`, `dashboard`, or production CAS Native paths. Existing unrelated `sentence_transformers` references in old evaluation code are not part of this branch.
+- Snapshot distribution remains usable for the first noetic probe: `^0=51 ^1=48 ^2=60 ^3=46 ^4=38 ^5=42 ^6=40 ^7=51 ^8=35 ^9=46`.
+
+Recommendation:
+
+Stage 1.0 is now clean enough to proceed to Stage 1.1, subject to explicit user approval for:
+
+1. Installing `transformers>=4.40` locally.
+2. Downloading Pythia-160M weights to the local Hugging Face cache.
+3. Running `--smoke 10` first, then the full 457-record activation capture only if the smoke is clean.
+
+collaborated and waiting
+
 ## 2026-05-15T23:15Z - Audit: Pythia CAS probe Stage 1.0
 
 Branch: `experiment/cas-probe-pythia`
