@@ -72,6 +72,7 @@ subject. CAS is the measuring instrument.**
 | 4.0 | **done - cross-axis probe screen** | Domain/register/drive probes trained from the same activation file. Domain shows the strongest breadth signal (layer 5 test 0.810 vs text 0.730, lift +0.079, McNemar p=0.267). Register is weak (test 0.333, below stratified dummy 0.370). Drive is modest and mostly text-explained (test 0.324 vs text 0.294, lift +0.029). |
 | 4.1 | **done - domain ablation negative** | Domain layer-5 ablation with 30 random-complement directions and 10,000 matched permutations. Domain mean disruption +0.0142 vs random null p95 +0.0396; p=0.2931. Probe self-ablation also failed for O (kept-rate 1.000). Verdict: `DOMAIN_EFFECT_NOT_ABOVE_RANDOM_N30_PERMUTATION`. |
 | 5.0 | **done - original TKS dog-training noetic transfer smoke** | Ten hand-authored dog-training examples from the original TKS noetic demonstration, corrected to CAS zero-indexed numbering (`^0` Idea, `^1` Mind, ..., `^9` Below/Effect). Layer-3 noetic probe gets 4/10; best layer gets 6/10; count-vector text baseline gets 4/10; TF-IDF gets 2/10. Verdict: `TKS_DOG_TRANSFER_MIXED`. |
+| 5.1 | **done - multi-scenario TKS-style transfer smoke** | Dog training plus four definition-anchored hand-authored scenarios (debate prep, lost keys, software debugging, gallery viewing), 50 rows total. Layer-3 noetic probe gets 16/50; best layer gets 23/50; count-vector gets 11/50; TF-IDF gets 16/50. Verdict: `TKS_NOETIC_TRANSFER_MIXED`. |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -1096,3 +1097,73 @@ Artifacts:
   and retrains text baselines on the original snapshot train split.
 - `tks_dog_training_noetic_eval_report_20260516.json` - full per-layer
   and per-row report.
+
+## Stage 5.1 result - multi-scenario TKS-style noetic transfer smoke
+
+**Verdict: `TKS_NOETIC_TRANSFER_MIXED` - mixed transfer, not a pass.**
+
+After the dog-training-only smoke showed a Rhythm-heavy bias, Stage 5.1
+added four more hand-authored, definition-anchored scenarios: debate
+preparation, lost keys, software debugging, and gallery viewing. The
+fixture now has 50 rows: five scenarios times ten noetics.
+
+Result:
+
+| Evaluator | Accuracy |
+|---|---:|
+| Pythia noetic probe, headline layer 3 | 16/50 |
+| Pythia noetic probe, best layer 4 | 23/50 |
+| Count-vector text baseline | 11/50 |
+| TF-IDF text baseline | 16/50 |
+
+Layer-3 ties TF-IDF on the expanded transfer suite, so it does not show
+clean beyond-text transfer. The best layer does better, but that is an
+exploratory post-hoc layer pick and should not be treated as the main
+claim.
+
+Layer-3 by scenario:
+
+| Scenario | Accuracy |
+|---|---:|
+| Debate preparation | 3/10 |
+| Dog training | 3/10 |
+| Gallery viewing | 4/10 |
+| Lost keys | 4/10 |
+| Software debugging | 2/10 |
+
+Layer-3 by noetic:
+
+| Noetic | Accuracy |
+|---|---:|
+| Idea | 0/5 |
+| Mind | 1/5 |
+| Positive | 0/5 |
+| Negative | 4/5 |
+| Vibration | 0/5 |
+| Female | 4/5 |
+| Male | 0/5 |
+| Rhythm | 3/5 |
+| Above/Cause | 2/5 |
+| Below/Effect | 2/5 |
+
+Honest read:
+
+> The saved Pythia noetic probe carries some real signal into
+> original-TKS-style examples, especially Negative, Female, and Rhythm.
+> But it does not cleanly transfer across the noetic vocabulary. It
+> misses Idea, Positive, Vibration, and Male completely on this wording,
+> and headline layer 3 only ties TF-IDF. This supports the stricter
+> conclusion that current Pythia results are mechanistically interesting
+> for the frozen snapshot, but not yet robust semantic understanding of
+> the full TKS noetic system.
+
+Stage 5.1 reinforces the current roadmap decision: do not spend pod time
+on drive/register ablations yet. The next useful science step is either
+more carefully designed original-TKS semantic fixtures, or cross-model
+noetic replication with a cleaner, paraphrase-controlled dataset.
+
+Artifacts:
+
+- `tks_noetic_transfer_eval_20260516.jsonl` - 50-row multi-scenario
+  fixture.
+- `tks_noetic_transfer_eval_report_20260516.json` - full report.

@@ -2852,3 +2852,66 @@ Please audit the fixture mapping and the evaluator. Main audit asks:
 2. Is layer 9 as "best layer" useful to report here, or should the headline
    stay layer 3 only to avoid cherry-picking?
 3. Does the README wording stay honest enough for a tiny-n transfer smoke?
+
+## 2026-05-16T18:25Z - Stage 5.1 multi-scenario TKS-style transfer smoke
+
+Claude - user said "go" on adding 3-5 more original-TKS hand-authored noetic
+transfer sets before drive/register. I added four definition-anchored
+hand-authored scenarios on top of dog training:
+
+- debate preparation
+- lost keys
+- software debugging
+- gallery viewing
+
+New/default fixture/report:
+
+- `tks_noetic_transfer_eval_20260516.jsonl` - 50 rows, five scenarios x ten noetics
+- `tks_noetic_transfer_eval_report_20260516.json`
+
+I generalized `evaluate_tks_dog_noetics.py` to accept `--fixture` and
+`--out-report`; default is now the 50-row fixture, but the dog-only fixture can
+still be rerun explicitly.
+
+Result:
+
+- layer-3 noetic probe: 16/50 = 0.320
+- best Pythia layer: layer 4, 23/50 = 0.460
+- count-vector baseline: 11/50 = 0.220
+- TF-IDF baseline: 16/50 = 0.320
+- verdict: `TKS_NOETIC_TRANSFER_MIXED`
+
+Layer-3 by scenario:
+
+- debate_prep: 3/10
+- dog_training: 3/10
+- gallery_viewing: 4/10
+- lost_keys: 4/10
+- software_debugging: 2/10
+
+Layer-3 by noetic:
+
+- Idea: 0/5
+- Mind: 1/5
+- Positive: 0/5
+- Negative: 4/5
+- Vibration: 0/5
+- Female: 4/5
+- Male: 0/5
+- Rhythm: 3/5
+- Above/Cause: 2/5
+- Below/Effect: 2/5
+
+Honest read: the saved Pythia noetic probe carries partial transfer signal,
+especially Negative/Female/Rhythm, but does not show clean full-vocabulary TKS
+semantic transfer. Headline layer 3 ties TF-IDF. The best-layer result is useful
+diagnostically but post-hoc.
+
+Main audit asks:
+
+1. Should these four definition-anchored scenarios be considered acceptable
+   transfer fixtures, or should only directly sourced TKS page examples count?
+2. Is the default switch from dog-only to 50-row multi-scenario acceptable for
+   `evaluate_tks_dog_noetics.py`, or should this be a new script name?
+3. Does this result further argue for cross-model noetic replication, or should
+   we first build a paraphrase-controlled noetic transfer set?
