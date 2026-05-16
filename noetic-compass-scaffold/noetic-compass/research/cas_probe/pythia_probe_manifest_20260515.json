@@ -1,0 +1,58 @@
+{
+  "schema_version": "pythia_probe_snapshot.v1",
+  "snapshot_id": "pythia_probe_labels_20260515",
+  "built_at_utc": "2026-05-16T06:38:53Z",
+  "snapshot_file": "pythia_probe_labels_20260515.jsonl",
+  "snapshot_sha256": "5d8c9de3897f1f49230e001ab59441a683dd2fecfcb5b9e3be4ca2084c086128",
+  "record_count": 458,
+  "class_distribution": {
+    "0": 51,
+    "1": 48,
+    "2": 60,
+    "3": 47,
+    "4": 38,
+    "5": 42,
+    "6": 40,
+    "7": 51,
+    "8": 35,
+    "9": 46
+  },
+  "chance_baseline_per_class": 0.1,
+  "rejected_counts": {
+    "noetics_count_5": 29,
+    "wrong_slot": 3362,
+    "noetics_count_2": 383,
+    "noetics_count_0": 151,
+    "noetics_count_3": 56,
+    "noetics_count_6": 15,
+    "noetics_count_4": 27,
+    "noetics_count_10": 10
+  },
+  "source_files": [
+    {
+      "path": "cas-synthetic\\data\\path_d\\wave3_full\\wave3_smoke_20260507T232622Z.jsonl",
+      "sha256": "f612cedfe2a96f753eb7090245b108ac2d98a730e3540759f12935307ffdaf30",
+      "record_count": 4491
+    },
+    {
+      "path": "cas-synthetic\\data\\path_d\\seeds.jsonl",
+      "sha256": "df68d2447ccd7371f8b9a18e48fa90269914be2505f1a96d92e4164aabe91639",
+      "record_count": 5802
+    }
+  ],
+  "extraction_rules": [
+    "Source: cas_to_english records from wave3_smoke_20260507T232622Z.jsonl joined to seeds.jsonl by sample_id.source_id == seed.seed_id.",
+    "Pythia input: the natural-English description in the wave3 record's 'raw_response' field (the model-generated paraphrase of the seed CAS).",
+    "Label: seed.axes.noetics_used[0], which is one of 0..9.",
+    "Filter — single noetic only: seed.axes.noetics_used must have length exactly 1. Records with 0 noetics (e.g. domain-only expressions) or multiple noetics (compound expressions) are excluded for the v1 single-label probe.",
+    "Filter — compiler-validated SEED: seed.compiler_validated must be True. Note: the wave3 cas_to_english record's own compiler_validated field is always None (it produces English, not CAS, so there is nothing to compile). The validity check rides on the seed expression.",
+    "Filter — no leakage: wave3 record's leakage_in_reply must be False (CAS notation did not bleed into the English description).",
+    "Filter — non-empty english: raw_response must be a non-empty string after stripping whitespace.",
+    "Filter — minimum length: raw_response must be at least 20 characters after stripping (rejects empty / trivial / one-word responses).",
+    "Random selection: NONE. The script is deterministic; full set of eligible records is emitted in the order they appear in the wave3 source."
+  ],
+  "guardrails": [
+    "This snapshot is research-only, used ONLY by code under noetic-compass-scaffold/noetic-compass/research/cas_probe/.",
+    "Pythia weights and any probe artifacts derived from this snapshot must never enter the production CAS Native stack."
+  ]
+}
