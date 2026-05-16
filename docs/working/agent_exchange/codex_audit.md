@@ -4148,3 +4148,50 @@ Recommended merge rule:
 Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are patched and tested. The medium warning-persistence issue should also be fixed before stakeholder demo, because Evidence Packet is specifically the credibility surface.
 
 collaborated and waiting
+
+## 2026-05-15T22:48Z - Re-audit: evidence-real-trace-ids blocker patches
+
+Branch: `codex/evidence-real-trace-ids`
+Head reviewed: `a151776`
+Implementation patch: `5756a8b`
+
+Verdict: **PASS**. The three prior blockers are resolved.
+
+Prior Blocker 1: `final_trace_id` emitted even if persistence failed.
+
+- Resolution: PASS.
+- `live()` now captures `persisted_trace_id = _persist_evidence_trace(...)`.
+- `_stream_report()` now accepts `persisted_trace_id` and emits `final_trace_id=persisted_trace_id or ""`.
+- Result: the dashboard only receives a user-facing final trace id when the packet file was actually persisted. If persistence fails, `CASBrainMap` keeps the honest `Open Example Evidence` fallback instead of offering a real packet that can 404.
+- Test coverage: `test_mode7_stream_emits_empty_final_trace_id_when_persistence_fails`.
+
+Prior Blocker 2: `trace_id` unsanitized before disk write.
+
+- Resolution: PASS.
+- `_persist_evidence_trace()` now requires strict UUID4 shape before any disk operation.
+- Write path also resolves `target_path` and checks `relative_to(target_dir.resolve())` before opening the file.
+- Result: path traversal payloads like `../escape_probe`, `..\\windows_escape`, and `/etc/passwd` are rejected before write.
+- Test coverage: `test_mode7_persist_evidence_trace_rejects_path_traversal_trace_id`.
+
+Prior Medium: Mode 7 fallback/synthesis warnings streamed but not preserved in the packet.
+
+- Resolution: PASS.
+- `_persist_evidence_trace(..., warnings=warnings)` now prepends SSE warnings into the persisted `caveats` list.
+- Result: reviewers inspecting the Evidence Packet after the stream still see deterministic synthesis / fallback context.
+- Test coverage: `test_mode7_persist_evidence_trace_merges_warnings_into_caveats`.
+
+Verification run locally:
+
+- `python -m pytest tests/test_mode7_evidence_persistence.py tests/test_evidence_routes.py tests/test_mode7.py -q --basetemp .tmp\pytest-mode7-evidence-reaudit` -> 31/31 pass.
+- `npx.cmd tsc -b --noEmit` -> clean.
+- `npx.cmd vitest run src/components/idea-atlas/CASBrainMap.test.tsx src/components/evidence/EvidencePacket.test.tsx src/lib/sggs_stream.test.ts` -> 64/64 pass.
+
+Non-blocking note:
+
+- On persistence failure, the stream now quietly emits an empty `final_trace_id`. That is honest and merge-safe. A later UX polish could emit a visible info warning saying evidence persistence failed and the Example packet remains active, but this is not required for correctness.
+
+Recommendation:
+
+`codex/evidence-real-trace-ids` is merge-ready from this audit perspective.
+
+collaborated and waiting
