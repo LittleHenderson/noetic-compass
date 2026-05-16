@@ -4149,6 +4149,64 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T07:32Z - Audit: Pythia CAS probe Stage 1.1 activation capture
+
+Branch: `experiment/cas-probe-pythia`
+Head reviewed: `d7efc76`
+Artifact reviewed: `noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_probe_activations_20260515.npz`
+Manifest reviewed: `noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_probe_activations_manifest_20260515.json`
+
+Verdict: **PASS / Stage 2 eligible**. The activation artifact is structurally valid and clean enough for the first noetic-axis linear-probe experiment.
+
+Checks performed:
+
+- `.npz` keys: `X`, `y`, `sample_ids`.
+- `X.shape == (457, 13, 768)` and `X.dtype == float32`.
+- `y.shape == (457,)` and `y.dtype == int64`.
+- `sample_ids.shape == (457,)`, `sample_ids.dtype == <U26`, `sample_ids.dtype.kind == "U"`.
+- `np.load(..., allow_pickle=False)` succeeds, so the artifact does not require pickle.
+- All activation values are finite: `nan_count=0`, `inf_count=0`.
+- Class distribution matches the frozen labels: `^0=51 ^1=48 ^2=60 ^3=46 ^4=38 ^5=42 ^6=40 ^7=51 ^8=35 ^9=46`.
+- `sample_ids` match `pythia_probe_labels_20260515.jsonl` exactly and in order.
+- `y` matches the noetic labels in `pythia_probe_labels_20260515.jsonl` exactly and in order.
+- Manifest records real model revision: `50f5173d932e8e61f858120bcb800b97af589f46`.
+- Manifest records package versions: `transformers 5.8.1`, `torch 2.11.0+cpu`, `numpy 2.3.5`.
+- Artifact is tracked as binary via `.gitattributes`: `i/-text w/-text attr/-text`.
+- Production isolation remains intact: no Pythia / `transformers` imports found in production `api`, `dashboard`, or CAS Native paths. Existing unrelated `sentence_transformers` references in old evaluation code are not part of this experiment.
+
+Activation artifact hash recorded by audit:
+
+- `sha256: f1b3610636ddb5fe056504e931c09cd07f2fed1247b84c649cf75503dd49ca9a`
+
+On the `embed_out.weight` warning:
+
+- Acceptable for this stage.
+- `AutoModel.from_pretrained("EleutherAI/pythia-160m", output_hidden_states=True)` loads the hidden-state model, not the language-model head.
+- Stage 1.1 only needs hidden states for linear probing. The LM head is irrelevant unless a later stage evaluates generated text from this host model.
+
+Non-blocking fixes recommended before any future recapture:
+
+- Add `activations_sha256` to `pythia_probe_activations_manifest_20260515.json` in the capture script. This audit recorded the hash, but the artifact manifest itself should carry it.
+- Make `--smoke N` write to a smoke-specific output path so a later smoke run cannot accidentally overwrite the full activation artifact.
+- Update the capture script docstring from "full 458-record run" to "full snapshot run" or `457` to avoid stale count drift after the leakage filter removed one row.
+
+Stage 2 constraints:
+
+- Stage 2 should be local/research-only under `research/cas_probe/`.
+- Use a stratified split and report chance baseline (`10%`) and majority-class baseline, not only model accuracy.
+- Report per-layer train/val/test accuracy and confusion matrix for the best layer.
+- Do not promote Glass House / cross-model claims until the Stage 2 probe clears the README gate and at least one second open model is tested.
+
+Recommendation:
+
+It is reasonable to approve Stage 2 after user consent for the dependency install:
+
+- Install `scikit-learn`.
+- Train per-layer noetic logistic-regression probes on the committed activation artifact.
+- Treat `>=30%` best-layer held-out test accuracy as the first strong signal; `20-30%` as weak; `<20%` as fail/pivot.
+
+collaborated and waiting
+
 ## 2026-05-16T07:10Z - Audit: Glass House AI strategy memo
 
 Branch: `experiment/cas-probe-pythia`
