@@ -4149,6 +4149,75 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T07:58Z - Audit: Pythia CAS probe Stage 2 noetic linear probes
+
+Branch: `experiment/cas-probe-pythia`
+Head reviewed: `8b21538`
+Artifacts reviewed:
+
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/train_noetic_probes.py`
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_noetic_probes_20260515.npz`
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_noetic_probes_report_20260515.json`
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/README.md`
+
+Verdict: **PASS WITH INTERPRETATION PATCHES**.
+
+The core metric is real: best-layer noetic probe accuracy is reproducible at `0.927536` on the committed 69-record test split, far above the 10% chance baseline and above the pre-declared 30% strong-signal threshold. However, the current report language overstates the result. This is a strong decodability result on this corpus, not yet proof of deep CAS concepts inside Pythia.
+
+What passed:
+
+- Re-ran `python noetic-compass-scaffold/noetic-compass/research/cas_probe/train_noetic_probes.py`; per-layer accuracies reproduce the committed report.
+- Probe artifact hash matches the report: `1991b5e650915129497ed24d4354ec9db37c5f9886d34c11efd158e6d5ebc47e`.
+- Activation artifact hash matches the report: `f1b3610636ddb5fe056504e931c09cd07f2fed1247b84c649cf75503dd49ca9a`.
+- Probe arrays load with `allow_pickle=False`.
+- Probe arrays have expected shapes: `coefs (13,10,768)`, `intercepts (13,10)`, scaler arrays `(13,768)`, split arrays `319/69/69`.
+- Split logic is stratified and `StandardScaler` is fit on train only.
+- Shuffled-label hidden-state control behaves correctly: layer-4 test accuracy against shuffled labels is `0.101449`, and against true labels is `0.144928`. This argues against a split/indexing bug.
+
+Critical interpretation finding:
+
+- A plain text baseline is nearly as strong as the Pythia activation probe.
+- Same split, same labels:
+  - Majority dummy: `0.130435` test accuracy.
+  - Stratified dummy: `0.188406` test accuracy.
+  - TF-IDF word unigram+bigram logistic regression: `0.884058` test accuracy.
+  - Count word unigram+bigram logistic regression: `0.884058` test accuracy.
+  - Pythia embedding layer: `0.884058` test accuracy.
+  - Pythia best layer 4: `0.927536` test accuracy.
+
+Implication:
+
+The result is not fake. It does prove the noetic label is linearly decodable from Pythia hidden states on this CAS-generated English corpus. But because TF-IDF and the embedding layer are already at `88.4%`, much of the signal is likely lexical/style signal in the English descriptions. The stronger claim — "CAS noetic structure is present as a deep internal concept in Pythia" — remains unproven until ablation, paraphrase generalization, or lexical-control tests pass.
+
+Patch required before using Stage 2 as external evidence:
+
+1. Revise `pythia_noetic_probes_report_20260515.json` `verdict_text` to reserved language:
+   - Use: "CAS noetic labels are linearly decodable from Pythia hidden states on this corpus."
+   - Avoid: "CAS noetic structure is detectably present inside Pythia's internal activations" unless immediately qualified.
+2. Add the surface-text baselines to the official Stage 2 report:
+   - majority dummy
+   - stratified dummy
+   - TF-IDF logistic
+   - count-vector logistic
+3. Add the shuffled-label hidden-state control to the official report.
+4. Select the headline layer by validation accuracy, then report its held-out test accuracy. Do not choose the headline by max test accuracy. In this run, validation-best includes layer 4, so the headline probably survives, but the report should be methodologically cleaner.
+5. Add a confusion matrix / per-class metrics for the selected layer so Stage 3 knows which noetic classes are reliable enough to ablate.
+
+Recommendation:
+
+Proceed, but sequence should be:
+
+1. **Stage 2.1 patch**: update trainer/report with baselines, shuffled-label control, val-selected headline, confusion matrix, and reserved verdict language.
+2. **Then Stage 3 ablation**: use the selected layer(s) to test whether changing the detected noetic direction changes generated output in a noetic-consistent way.
+3. **Then other axes**: domain/register/drive on Pythia.
+4. **Then cross-model proof**: OLMo or Qwen.
+
+Do not pitch this externally yet as "Pythia thinks in CAS." The defensible internal statement is:
+
+> On a CAS-labeled English corpus, Pythia-160M hidden states contain enough information for a linear probe to recover noetic labels at 92.8% held-out accuracy. Surface-text baselines explain much of this signal, so causal and paraphrase-control tests are required before stronger mechanistic claims.
+
+collaborated and waiting
+
 ## 2026-05-16T07:32Z - Audit: Pythia CAS probe Stage 1.1 activation capture
 
 Branch: `experiment/cas-probe-pythia`
