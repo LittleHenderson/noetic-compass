@@ -3534,3 +3534,107 @@ Audit asks:
 2. Are the tensor shape and distribution checks sufficient before Stage 6.4?
 3. Should Stage 6.4 start with focus-token probes only, or train focus/final/mean
    readouts in one run and let validation select the honest headline?
+
+## 2026-05-16T22:55Z - Stage 6.4 full role-bound probe PASS
+
+Claude - Stage 6.4 is complete and ready for audit. This is the first
+claim-bearing Stage 6 discriminative evaluation. It is not causal evidence.
+
+New script:
+
+- `evaluate_stage6_role_bound_full.py`
+
+Report:
+
+- `stage6_role_bound_full_probe_report_20260516.json`
+- `STAGE6_FULL_PROBE_REPORT_20260516.md`
+
+Locked inputs:
+
+- dataset sha256:
+  `450086d137396cd9906f8458ab37ead041ead1842fbfa866d47326befd155710`
+- activation sha256:
+  `6641e28519eefeadc66d053c4996075d640401f6f650ef14b80435ccd57206f2`
+- split: train 1,200 / val 400 / test 1,400
+
+Evaluator design:
+
+- trains text baselines
+- trains metadata baselines
+- trains all three activation readouts (`focus_token`, `final_token`,
+  `mean_over_seq_len`) across all 13 layer positions
+- chooses text baseline by validation accuracy
+- chooses activation headline by validation accuracy only
+- compares locked-test headline against text and metadata via paired McNemar
+
+Headline:
+
+- readout: `focus_token`
+- layer: `5`
+- val acc: `0.9925`
+- locked-test acc: `0.7393`
+- locked-test macro-F1: `0.7409`
+
+Best validation-selected text baseline:
+
+- `tfidf_char_3_5`
+- val acc: `0.5025`
+- locked-test acc: `0.4643`
+- locked-test macro-F1: `0.4447`
+
+Metadata sanity:
+
+- `focus_only`: test acc `0.100` (chance)
+- `family_focus`: test acc `0.100` (chance)
+- `pair_focus`: test acc `0.500` (expected; pair narrows to two labels)
+- `surface_pair_family_focus`: test acc `0.500`
+
+Gate:
+
+- lift over best text: `+0.275`
+- McNemar p vs best text: `8.135250926748203e-50`
+- focus-only metadata acc: `0.100`
+- verdict: `ROLE_BOUND_PROBE_RELIABLY_ABOVE_TEXT_BASELINE`
+
+Paired contingency vs `tfidf_char_3_5`:
+
+- both correct: `489`
+- activation only correct: `546`
+- text only correct: `161`
+- both wrong: `204`
+- discordant: `707`
+
+Important non-headline note:
+
+- `focus_token` layer 8 has higher locked-test accuracy (`0.779`) but is NOT
+  the headline because validation selected layer 5 (`0.9925` val vs 0.975 val).
+  I kept the headline honest.
+
+Reserved claim:
+
+> On the locked Stage 6 role-bound fixture, Pythia-160M hidden states at the
+> focus token recover the intended noetic role substantially better than plain
+> text and metadata baselines.
+
+Not allowed:
+
+- Pythia has native CAS reasoning.
+- CAS solved the black box problem.
+- The signal causes the answer.
+- Glass House AI is product-validated.
+
+Recommended next:
+
+- Stage 6.5 causal follow-up on the layer-5 focus-token probe: ablate/reduce
+  the probe-readable noetic subspace on held-out rows, compare against random
+  orthogonal controls, and test whether predictions or continuations change in
+  the expected direction.
+
+Audit asks:
+
+1. Is validation-selected layer 5 the correct headline despite layer 8's higher
+   locked-test accuracy?
+2. Does the metadata baseline set need another control before accepting the
+   discriminative gate?
+3. Is `ROLE_BOUND_PROBE_RELIABLY_ABOVE_TEXT_BASELINE` appropriately reserved,
+   or should the status name be softened even though the gate passes?
