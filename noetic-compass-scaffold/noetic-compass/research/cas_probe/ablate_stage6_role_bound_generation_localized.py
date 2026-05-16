@@ -1,4 +1,4 @@
-"""Stage 6.6A: focus-token-localized generation hook.
+"""Stage 6.6A/C: focus-token-localized generation hook.
 
 Stage 6.6 used an all-token hook: it removed the role-bound noetic
 subspace from every sequence position during generation. That was a fair
@@ -8,6 +8,9 @@ terminal ``Focus: A/B`` token.
 This follow-up applies the same subspace removal only at that focus-token
 position. It also runs a no-hook reproducibility control so deterministic
 greedy generation is checked directly before interpreting hook effects.
+
+Use ``--rank-mode full`` for the original full noetic subspace removal.
+Use ``--rank-mode top1`` to remove only the strongest noetic direction.
 
 Run from repo root:
 
@@ -127,13 +130,35 @@ def _fit_probe_and_projection(X: Any, y: Any, idx_train: Any) -> dict[str, Any]:
     _u, s, vh = np.linalg.svd(w_raw, full_matrices=False)
     threshold = float(s.max() * 1e-6)
     basis_rows = vh[s > threshold]
+    if basis_rows.size == 0:
+        raise ValueError("No non-zero noetic probe directions found.")
+    top1_basis_rows = basis_rows[:1]
     return {
         "projection": basis_rows.T @ basis_rows,
         "basis_rows": basis_rows,
+        "top1_projection": top1_basis_rows.T @ top1_basis_rows,
+        "top1_basis_rows": top1_basis_rows,
         "rank": int(basis_rows.shape[0]),
+        "top1_rank": 1,
         "singular_values": [float(x) for x in s.tolist()],
         "threshold": threshold,
     }
+
+
+def _select_projection(projection_info: dict[str, Any], rank_mode: str) -> dict[str, Any]:
+    if rank_mode == "full":
+        return {
+            "projection": projection_info["projection"],
+            "basis_rows": projection_info["basis_rows"],
+            "rank": projection_info["rank"],
+        }
+    if rank_mode == "top1":
+        return {
+            "projection": projection_info["top1_projection"],
+            "basis_rows": projection_info["top1_basis_rows"],
+            "rank": projection_info["top1_rank"],
+        }
+    raise ValueError(f"unsupported rank_mode: {rank_mode}")
 
 
 def _select_subset(sample_ids: list[str], y: Any, idx_test: Any, per_label: int) -> list[int]:
@@ -146,12 +171,14 @@ def _select_subset(sample_ids: list[str], y: Any, idx_test: Any, per_label: int)
     return selected
 
 
-def _sample_random_projections(noetic_basis: Any, hidden_dim: int, rank: int, n_random: int) -> tuple[list[Any], float]:
+def _sample_random_projections(
+    selected_basis: Any, hidden_dim: int, rank: int, n_random: int
+) -> tuple[list[Any], float]:
     import numpy as np
 
     rng = np.random.default_rng(_SEED)
-    p_noetic = noetic_basis.T @ noetic_basis
-    p_complement = np.eye(hidden_dim) - p_noetic
+    p_selected = selected_basis.T @ selected_basis
+    p_complement = np.eye(hidden_dim) - p_selected
     projections: list[Any] = []
     max_abs_cosine = 0.0
     for _ in range(n_random):
@@ -159,7 +186,7 @@ def _sample_random_projections(noetic_basis: Any, hidden_dim: int, rank: int, n_
         projected = raw @ p_complement
         q, _ = np.linalg.qr(projected.T)
         basis = q[:, :rank].T
-        max_abs_cosine = max(max_abs_cosine, float(np.max(np.abs(basis @ noetic_basis.T))))
+        max_abs_cosine = max(max_abs_cosine, float(np.max(np.abs(basis @ selected_basis.T))))
         projections.append(basis.T @ basis)
     return projections, max_abs_cosine
 
@@ -212,6 +239,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--per-label", type=int, default=2)
     parser.add_argument("--n-random", type=int, default=3)
     parser.add_argument("--max-new-tokens", type=int, default=8)
+    parser.add_argument(
+        "--rank-mode",
+        choices=["full", "top1"],
+        default="full",
+        help="Remove the full noetic subspace or only its strongest direction.",
+    )
     args = parser.parse_args(argv)
 
     input_path = _resolve(args.input)
@@ -245,10 +278,11 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     projection_info = _fit_probe_and_projection(data[_READOUT_KEY][:, _LAYER, :], y, idx_train)
+    selected_projection = _select_projection(projection_info, str(args.rank_mode))
     random_projections, random_cosine = _sample_random_projections(
-        projection_info["basis_rows"],
+        selected_projection["basis_rows"],
         hidden_dim=int(data[_READOUT_KEY].shape[2]),
-        rank=int(projection_info["rank"]),
+        rank=int(selected_projection["rank"]),
         n_random=int(args.n_random),
     )
     selected_indices = _select_subset(sample_ids, y, idx_test, per_label=int(args.per_label))
@@ -265,7 +299,7 @@ def main(argv: list[str] | None = None) -> int:
     model.to(device)
     block = model.gpt_neox.layers[_HOOK_BLOCK_INDEX]
 
-    p_noetic_t = torch.tensor(projection_info["projection"], dtype=torch.float32, device=device)
+    p_noetic_t = torch.tensor(selected_projection["projection"], dtype=torch.float32, device=device)
     p_random_t = [torch.tensor(p, dtype=torch.float32, device=device) for p in random_projections]
 
     def make_local_hook(projection: Any, focus_token_index: int) -> Any:
@@ -444,7 +478,9 @@ def main(argv: list[str] | None = None) -> int:
         "layer": _LAYER,
         "hook_block_index": _HOOK_BLOCK_INDEX,
         "hook_scope": "focus_token_only",
-        "subspace_rank": int(projection_info["rank"]),
+        "rank_mode": str(args.rank_mode),
+        "subspace_rank": int(selected_projection["rank"]),
+        "full_subspace_rank": int(projection_info["rank"]),
         "per_label": int(args.per_label),
         "n_selected_rows": len(selected_indices),
         "selected_sample_ids": selected_ids,

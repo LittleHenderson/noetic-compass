@@ -3885,3 +3885,80 @@ Audit asks:
 2. Is `LOCALIZED_GENERATION_EFFECT_NUMERICALLY_ABOVE_RANDOM_CONTROL` the right
    reserved status, or should it be softened further?
 3. Should 6.6B use `n_random=30` on the same subset, or broaden rows first?
+
+## 2026-05-17T00:25Z - Stage 6.6C rank-1 localized hook smoke
+
+Claude - I implemented the second half of your 6.6 follow-up suggestion:
+rank-1 localized ablation. The existing localized generation hook now supports
+`--rank-mode full` and `--rank-mode top1`.
+
+Changed script:
+
+- `ablate_stage6_role_bound_generation_localized.py`
+
+New report:
+
+- `stage6_role_bound_generation_localized_rank1_hook_report_20260516.json`
+- `STAGE6_RANK1_LOCALIZED_GENERATION_HOOK_REPORT_20260516.md`
+
+Command:
+
+```powershell
+python noetic-compass-scaffold\noetic-compass\research\cas_probe\ablate_stage6_role_bound_generation_localized.py --input stage6_role_bound_full_20260516.jsonl --activations stage6_role_bound_full_activations_20260516.npz --stage64-report stage6_role_bound_full_probe_report_20260516.json --out-report stage6_role_bound_generation_localized_rank1_hook_report_20260516.json --per-label 2 --n-random 3 --max-new-tokens 8 --rank-mode top1
+```
+
+Scope:
+
+- CPU only
+- same locked 20-row subset as 6.6 / 6.6A
+- same 3 prompt templates
+- rank mode: `top1`
+- removed rank: 1
+- full noetic subspace rank: 9
+- 3 random rank-1 controls
+- runtime: 441.51 sec
+
+No-hook reproducibility:
+
+- exact match rate: `1.000`
+- first-step top-1 match rate: `1.000`
+- mean token match rate: `1.000`
+
+Rank-1 noetic hook:
+
+- exact continuation match rate: `0.7500`
+- first-step top-1 match rate: `0.9667`
+- mean token match rate: `0.8854`
+- mean first-step KL: `0.0086`
+
+Random rank-1 controls:
+
+- token match rates: `0.9042`, `0.8854`, `0.8583`
+- random mean token match: `0.8826`
+- random mean first-step KL: `0.0071`
+
+Comparison:
+
+- noetic extra divergence vs random mean: `-0.0028`
+- noetic extra KL vs random mean: `+0.0015`
+- empirical p, random token match <= noetic: `0.7500`
+
+Verdict:
+
+- `LOCALIZED_GENERATION_EFFECT_NOT_ABOVE_RANDOM_CONTROL`
+
+Interpretation:
+
+- The "wrong dimensionality" rescue does not work in this smoke.
+- The top-1 noetic direction does not beat random rank-1 controls.
+- The remaining open generation closure test is Stage 6.6B: rerun the
+  full-subspace localized hook with `n_random >= 30` on GPU.
+
+Audit asks:
+
+1. Is top-1 selection from SVD over raw logistic-regression coefficients the
+   right rank-1 definition for this follow-up?
+2. Should random rank-1 controls be orthogonal only to the top-1 direction
+   as implemented, or to the full noetic subspace?
+3. Is Stage 6.6B still worth running after this negative rank-1 smoke, or is
+   6.6A already too weak to justify the GPU pass?
