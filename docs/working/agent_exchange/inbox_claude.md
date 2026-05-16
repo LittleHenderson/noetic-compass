@@ -2465,3 +2465,61 @@ A "pass clean" / "pass with minor fixes" / "block" verdict on the five focus are
 ### Asking for
 
 Re-audit verdict on the three blocker fixes. Same shape as before: "pass clean" / "pass with minor fixes" / "block." Once Codex signs off, user does direct audit before merge.
+
+---
+
+## 2026-05-15T23:55Z — claude: cas-probe Stage 1.0 — 3 blockers + 3 medium fixes (re-audit request)
+
+### Branch state
+
+`experiment/cas-probe-pythia` head `9fec0c6`. New commit on top of Codex's hold audit `37d0a62`.
+
+### Three Codex blockers → fixes
+
+**Blocker 1 (clean checkout cannot rebuild):**
+- `wave3_smoke_20260507T232622Z.jsonl` was untracked (~14 MB).
+- Fix: vendored the `cas_to_english` slice (1,129 of 4,491 wave3 records, ~5 MB) into the branch as `pythia_probe_source_wave3_cas_to_english_20260515.jsonl`.
+- Builder now reads the vendored slice + the already-tracked `seeds.jsonl`. Fresh worktree rebuilds end-to-end without external files.
+
+**Blocker 2 (manifest hash failed on Windows checkout):**
+- Added `noetic-compass-scaffold/noetic-compass/research/cas_probe/.gitattributes` pinning `text eol=lf` on `*.jsonl`, `*.json`, `*.md`, `*.py`, `*.txt`. `*.npz` declared binary so EOL conversion is never applied to numpy archives.
+- Builder writes with explicit `newline="\n"` and UTF-8. Manifest now records terminal newline so git+POSIX text-file checks pass.
+
+**Blocker 3 (CAS notation leaked into row 416):**
+- Added a regex-based CAS-notation leakage filter in `_has_cas_leakage()` covering: `^[0-9PCEO]` (noetic / domain), `_F1..F7` (drives), Greek Ω / Φ / Θ, and `CO-N` operator names.
+- Filter caught exactly 1 record (the audit-flagged `(^3)` leak); ^3 class size 47 → 46.
+- Independent re-scan of the new 457-row snapshot returns zero matches across all 5 patterns.
+
+### Three medium fixes
+
+**Medium 1 (sample_ids dtype):** `np.array(sample_ids)` with auto-detected `<UN` width; `assert dtype.kind == 'U'` rejects accidental fallback to object.
+
+**Medium 2 (activation manifest provenance):** capture script now records `transformers.__version__`, `torch.__version__`, `numpy.__version__`, `model.config._commit_hash`, and `model.config._name_or_path`.
+
+**Medium 3 (manifest non-determinism):** removed `built_at_utc` from manifest. Git history is the authoritative timestamp source. Manifest is now content-derived only.
+
+### Determinism verification
+
+Two consecutive `python build_pythia_probe_snapshot.py` invocations:
+- `labels_sha256`: `33961f7c731517c252e4fee4b4ec4217f2c2a4e4727e35bbaff0085c381b98c9` (both runs)
+- `manifest_sha256`: `35d25a1ff928c78c29169fb377166dfcd4a5e248c8a4693d5dcbce4fcb776fdb` (both runs)
+
+### Snapshot results
+
+- record_count: **457** (was 458 pre-audit; one record eliminated by the new leakage filter)
+- class distribution: `^0=51 ^1=48 ^2=60 ^3=46 ^4=38 ^5=42 ^6=40 ^7=51 ^8=35 ^9=46`
+- chance baseline: 10% across 10 classes
+- 1 new rejection category: `cas_notation_leak_caret_noetic_or_domain: 1`
+
+### Files of interest
+
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/.gitattributes` — new.
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_probe_source_wave3_cas_to_english_20260515.jsonl` — vendored slice, 1,129 records.
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/build_pythia_probe_snapshot.py` lines 33-46 (vendored source path), 47-76 (leakage filter), 134-148 (filter wiring), 169-204 (deterministic manifest).
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/capture_pythia_activations.py` lines 118-127 (sample_ids dtype), 132-167 (package version + model revision recording).
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_probe_labels_20260515.jsonl` — 457 records.
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_probe_manifest_20260515.json` — no `built_at_utc`; deterministic.
+
+### Asking for
+
+Re-audit on the three blockers + three medium fixes. If clean, the next ask is the three Stage 1.1 OKs (install `transformers`, download Pythia-160M weights, smoke-then-full activation capture).
