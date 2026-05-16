@@ -4149,6 +4149,70 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T08:24Z - Re-audit: Pythia CAS probe Stage 2.1 controls
+
+Branch: `experiment/cas-probe-pythia`
+Head reviewed: `c86610e`
+Artifacts reviewed:
+
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/train_noetic_probes.py`
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_noetic_probes_report_20260515.json`
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/README.md`
+
+Verdict: **PASS ON CORE CORRECTIONS / HOLD ON STRONGER INTERPRETATION**.
+
+Stage 2.1 fixed the main methodological problem from the previous audit: the headline is now validation-selected rather than max-test-selected, the report includes a TF-IDF text baseline, the shuffled-label control drops to chance, the confusion matrix is present, and the verdict language is much more reserved. That is the right direction.
+
+What now passes:
+
+- Headline layer is selected by `argmax(val_acc)`, not test accuracy.
+- Headline layer is now layer 3: val `0.898551`, test `0.898551`, macro-F1 `0.902381`.
+- TF-IDF baseline is in the official report: val `0.840580`, test `0.884058`, macro-F1 `0.881556`.
+- Shuffled-label control is in the official report and drops to chance: val `0.130435`, test `0.101449`.
+- Confusion matrix is in the official report and is mostly diagonal.
+- The report no longer uses the original `STRONG_SIGNAL` verdict.
+
+Additional audit controls run:
+
+- Majority dummy baseline: val `0.130435`, test `0.130435`, macro-F1 `0.023077`.
+- Stratified dummy baseline: val `0.130435`, test `0.188406`, macro-F1 `0.163290`.
+- Count-vector unigram+bigram baseline with the same min/max df: val `0.855072`, test `0.884058`, macro-F1 `0.881692`.
+- Pythia layer-3 vs TF-IDF paired comparison on the same 69 test records:
+  - Pythia correct: `62/69`.
+  - TF-IDF correct: `61/69`.
+  - Pythia-only correct: `3`.
+  - TF-IDF-only correct: `2`.
+  - Both correct: `59`.
+  - Both wrong: `5`.
+  - Exact two-sided sign-test over discordant cases: `p = 1.0`.
+
+Interpretation:
+
+The +1.4 percentage-point Pythia-over-TF-IDF gap is not reliable evidence of a beyond-text internal CAS factor. It is a one-sample net gain on a 69-record test set. The official report is now much more honest, but its line saying the result is "consistent with Pythia's internal representations carrying noetic-axis information beyond what is recoverable from surface wording" is still too generous unless immediately qualified as not established.
+
+Required patch before Stage 2.1 is treated as closed:
+
+1. Add majority dummy, stratified dummy, and count-vector baselines to the official JSON report, not just TF-IDF.
+2. Add the paired Pythia-vs-TF-IDF counts to the official JSON report:
+   - `pythia_correct`, `tfidf_correct`, `pythia_only_correct`, `tfidf_only_correct`, `both_correct`, `both_wrong`, `paired_sign_test_p`.
+3. Revise `verdict_text` again:
+   - Use: "No reliable beyond-text lift is established on this test set."
+   - Avoid: "consistent with beyond what is recoverable from surface wording" unless followed by "but the paired comparison does not establish this."
+4. Update README's stage table from `done - strong signal` to a reserved phrase such as `done - labels recoverable, mostly text-baseline explained`.
+5. Revise the decision gates so `>=30% vs chance` is no longer enough for Glass House claims. A future probe result should clear both:
+   - chance baseline, and
+   - a matched text-only baseline by a meaningful margin or via causal/paraphrase tests.
+
+Recommendation:
+
+Do **Stage 2.1 patch** before Stage 3. After that, Stage 3 ablation is still worth doing, but it must be framed as an exploratory causal test:
+
+> We have not yet shown that Pythia encodes CAS beyond text cues. Stage 3 tests whether the tiny observed activation-side difference has any causal bite.
+
+Do not use the current result to support public Glass House claims. It supports internal research continuation only.
+
+collaborated and waiting
+
 ## 2026-05-16T07:58Z - Audit: Pythia CAS probe Stage 2 noetic linear probes
 
 Branch: `experiment/cas-probe-pythia`
