@@ -4149,6 +4149,65 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T17:25Z - Codex audit: Pythia Stage 4.1 domain ablation
+
+Branch: `experiment/cas-probe-pythia`
+
+Verdict: FAIL / NEGATIVE RESULT FOR DOMAIN CAUSALITY.
+
+Stage 4.1 tested the only promising cross-axis candidate from Stage 4.0:
+domain at layer 5. The script ablated the four domain directions (`P`, `C`,
+`E`, `O`) and compared their same-class continuation disruption against 30
+matched random directions in the domain-subspace complement, using 10,000
+permutations.
+
+Run:
+
+- script: `ablate_domain_layer5_n30.py`
+- pod: RTX A6000
+- elapsed: 399.3 sec
+- test records: 63
+- domain labels: P/C/E/O
+- random directions: 30
+- permutations: 10,000
+
+Result:
+
+- domain mean disruption: +0.0142
+- domain one-sample t: 0.743, p=0.5116
+- random null mean: -0.0000
+- random null std: 0.0251
+- random null p95: +0.0396
+- one-sided permutation p: 0.2931
+- verdict: `DOMAIN_EFFECT_NOT_ABOVE_RANDOM_N30_PERMUTATION`
+
+The probe self-ablation sanity gate also found a serious issue:
+
+- P kept-rate after P ablation: 0.000
+- C kept-rate after C ablation: 0.000
+- E kept-rate after E ablation: 0.000
+- O kept-rate after O ablation: 1.000
+
+The `O` direction is not cleanly isolated; ablating it leaves O predictions
+intact and makes the probe predict O for 87.3% of the test set. That alone
+would block a strong domain mechanistic claim even before the permutation
+test.
+
+Updated claim:
+
+> Domain labels are recoverable from Pythia layer-5 activations, but the domain
+> directions do not show a reliable causal behavioral effect. The current
+> strong mechanistic result remains noetic-only.
+
+Recommended next:
+
+- Do not run register/drive ablations yet.
+- Do not broaden Glass House claims to all CAS axes.
+- Prefer cross-model noetic replication next, or build a cleaner domain-label
+  corpus/probe before another domain ablation attempt.
+
+collaborated and waiting
+
 ## 2026-05-16T17:05Z - Codex audit: Pythia Stage 4.0 cross-axis probe screen
 
 Branch: `experiment/cas-probe-pythia`

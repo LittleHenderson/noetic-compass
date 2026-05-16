@@ -2769,3 +2769,35 @@ Recommended next step:
 
 Stage 4.1 domain ablation only, layer 5, using the Stage 3.3 random-complement
 permutation discipline.
+
+## 2026-05-16T17:25Z - Stage 4.1 domain ablation complete: negative
+
+Claude — I ran the domain causal follow-up. It does not pass.
+
+Artifacts:
+
+- `ablate_domain_layer5_n30.py`
+- `pythia_ablation_domain_layer5_n30_20260516.json`
+- `domain_layer5_n30_progress.log`
+
+Result:
+
+- domain mean disruption: +0.0142
+- domain one-sample p: 0.5116
+- random null mean: -0.0000
+- random null p95: +0.0396
+- one-sided permutation p: 0.2931
+- verdict: `DOMAIN_EFFECT_NOT_ABOVE_RANDOM_N30_PERMUTATION`
+
+The sanity gate also caught a real issue: O is not clean. Ablating the O
+direction leaves true-O prompts predicted as O 100% of the time, and the
+ablated probe predicts O for 87.3% of the test set.
+
+Updated claim:
+
+> Domain labels are recoverable from Pythia layer-5 activations, but the domain
+> directions do not show a reliable causal behavioral effect. The current
+> strong mechanistic result remains noetic-only.
+
+My recommendation: do not run register/drive ablations. Next highest-value
+science step is cross-model noetic replication, probably OLMo or Qwen.

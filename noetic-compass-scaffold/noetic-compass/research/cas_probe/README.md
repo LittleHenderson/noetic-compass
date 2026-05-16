@@ -70,6 +70,7 @@ subject. CAS is the measuring instrument.**
 | 3.3 | **done — n=30 permutation control passed** | 30 random orthogonal complement directions on RTX A6000 (389 sec), sampled into 10-direction matched null sets with 10,000 permutations. Noetic mean disruption +0.0787 vs random null mean +0.0002; null p95 +0.0352; one-sided permutation p=0.0003. Verdict: `NOETIC_EFFECT_DIRECTION_MEANINGFUL_N30_PERMUTATION`. |
 
 | 4.0 | **done - cross-axis probe screen** | Domain/register/drive probes trained from the same activation file. Domain shows the strongest breadth signal (layer 5 test 0.810 vs text 0.730, lift +0.079, McNemar p=0.267). Register is weak (test 0.333, below stratified dummy 0.370). Drive is modest and mostly text-explained (test 0.324 vs text 0.294, lift +0.029). |
+| 4.1 | **done - domain ablation negative** | Domain layer-5 ablation with 30 random-complement directions and 10,000 matched permutations. Domain mean disruption +0.0142 vs random null p95 +0.0396; p=0.2931. Probe self-ablation also failed for O (kept-rate 1.000). Verdict: `DOMAIN_EFFECT_NOT_ABOVE_RANDOM_N30_PERMUTATION`. |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -739,6 +740,65 @@ Artifacts:
 - `ablate_random_direction_layer3_n30.py`
 - `pythia_ablation_random_control_layer3_n30_20260516.json`
 - `random_control_n30_progress.log`
+
+---
+
+## Stage 4.1 domain ablation (2026-05-16)
+
+**Verdict: `DOMAIN_EFFECT_NOT_ABOVE_RANDOM_N30_PERMUTATION`.**
+
+This was the causal follow-up to the Stage 4.0 domain probe screen. The
+experiment used the domain probe's best layer (layer 5), ablated the four
+domain directions (`P`, `C`, `E`, `O`), and compared their mean
+same-class continuation disruption against 30 matched random directions
+from the domain-subspace complement.
+
+Result:
+
+| Statistic | Value |
+|---|---:|
+| Domain mean disruption | +0.0142 |
+| Domain one-sample p | 0.5116 |
+| Random null mean | -0.0000 |
+| Random null p95 | +0.0396 |
+| Effect over null mean | +0.0143 |
+| One-sided permutation p | 0.2931 |
+
+The result does **not** clear the causal bar. The observed domain effect
+is well inside the matched random null. The self-ablation sanity gate
+also flagged a serious weakness:
+
+| Domain | True-class kept rate after ablating its direction |
+|---|---:|
+| P | 0.000 |
+| C | 0.000 |
+| E | 0.000 |
+| O | 1.000 |
+
+The `O` direction did not suppress `O` predictions at all; after ablation,
+the probe still predicted `O` for 87.3% of the domain test set. That means
+the domain probe's class directions are not clean enough to support a
+domain mechanistic claim.
+
+Plain-English read:
+
+> Domain labels are recoverable from Pythia layer-5 activations, but the
+> domain directions do not yet show a reliable causal behavioral effect.
+> The current strong mechanistic result remains noetic-only.
+
+Next implication:
+
+- Do **not** run register/drive ablations yet.
+- Do **not** broaden Glass House claims to "all CAS axes."
+- The best next scientific path is either cross-model noetic replication
+  (OLMo/Qwen) or a cleaner domain-label corpus/probe before another domain
+  ablation.
+
+Artifacts:
+
+- `ablate_domain_layer5_n30.py`
+- `pythia_ablation_domain_layer5_n30_20260516.json`
+- `domain_layer5_n30_progress.log`
 
 ---
 
