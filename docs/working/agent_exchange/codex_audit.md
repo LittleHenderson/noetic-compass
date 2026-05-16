@@ -4149,6 +4149,61 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T08:42Z - Re-audit: Pythia CAS probe Stage 2.2 paired baselines
+
+Branch: `experiment/cas-probe-pythia`
+Head reviewed: `f4f18d0`
+Artifacts reviewed:
+
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/train_noetic_probes.py`
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_noetic_probes_report_20260515.json`
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/README.md`
+
+Verdict: **PASS ON RESULT / PATCH DOC DRIFT BEFORE NEXT SCIENCE STEP**.
+
+Stage 2.2 now gives the honest result Codex asked for. The official JSON report includes the full baseline set, the paired Pythia-vs-TF-IDF comparison, the stricter decision gates, and the reserved verdict. The noetic label is recoverable from this corpus, but no reliable beyond-text lift is established.
+
+What passes:
+
+- Majority baseline is in the official report: val `0.130435`, test `0.130435`.
+- Stratified-random baseline is in the official report: val `0.130435`, test `0.188406`.
+- Count-vector baseline is in the official report: val `0.855072`, test `0.884058`, macro-F1 `0.881692`.
+- TF-IDF baseline remains in the report: val `0.840580`, test `0.884058`, macro-F1 `0.881556`.
+- Pythia headline remains validation-selected: layer 3, val `0.898551`, test `0.898551`, macro-F1 `0.902381`.
+- Paired comparison is in the report:
+  - `both_correct=59`
+  - `pythia_only_correct=3`
+  - `tfidf_only_correct=2`
+  - `both_wrong=5`
+  - `discordant_total=5`
+  - `mcnemar_exact_binomial_p_two_sided=1.0`
+  - `reliable_lift=false`
+- Shuffled-label control remains at chance: test `0.101449`.
+- Revised gates are correct: beyond-text claim requires both `>= 5pp` lift and McNemar exact p `< 0.05`.
+- Re-running `train_noetic_probes.py` reproduces the metrics and verdict. Only `elapsed_seconds` changes on rerun, as expected.
+
+Interpretation locked:
+
+The current defensible statement is:
+
+> On the frozen CAS-labeled English corpus, a Pythia-160M hidden-state probe recovers noetic labels at 89.9% held-out accuracy, but plain text baselines recover 88.4%. The one-net-sample lift is not reliable. No beyond-text internal CAS factor is established yet.
+
+Remaining doc drift to patch before Stage 3:
+
+1. `train_noetic_probes.py` top docstring still says the old gate: `>=30% test accuracy at best layer -> strong signal` and "CAS structure is detectably in Pythia." This contradicts the Stage 2.2 gates. Update it to the new paired-baseline rule.
+2. `README.md` opening "Two tests" section still says if the probe does better than chance, "the structure is detectably in there." That is now too loose. Update to "labels are decodable; beyond-text/mechanistic claims require matched text baselines and Stage 3."
+3. `README.md` still contains an older trailing `## Decision gates` section with the old chance-only Stage 2 gate. Either delete it or explicitly mark it as superseded historical material.
+
+Recommendation:
+
+Patch the doc drift first. Then the next technical step can be Stage 3 ablation, but only as exploratory science:
+
+> Current Stage 2.2 did not prove beyond-text CAS structure. Stage 3 asks whether the small activation-side difference has any causal bite.
+
+Public Glass House claims remain paused. Internal research can continue.
+
+collaborated and waiting
+
 ## 2026-05-16T08:24Z - Re-audit: Pythia CAS probe Stage 2.1 controls
 
 Branch: `experiment/cas-probe-pythia`
