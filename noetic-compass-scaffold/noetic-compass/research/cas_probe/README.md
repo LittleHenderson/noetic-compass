@@ -74,6 +74,7 @@ subject. CAS is the measuring instrument.**
 | 5.0 | **done - original TKS dog-training noetic transfer smoke** | Ten hand-authored dog-training examples from the original TKS noetic demonstration, corrected to CAS zero-indexed numbering (`^0` Idea, `^1` Mind, ..., `^9` Below/Effect). Layer-3 noetic probe gets 4/10; best layer gets 6/10; count-vector text baseline gets 4/10; TF-IDF gets 2/10. Verdict: `TKS_DOG_TRANSFER_MIXED`. |
 | 5.1 | **done - multi-scenario TKS-style transfer smoke** | Dog training plus four definition-anchored hand-authored scenarios (debate prep, lost keys, software debugging, gallery viewing), 50 rows total. Layer-3 noetic probe gets 16/50; best layer gets 23/50; count-vector gets 11/50; TF-IDF gets 16/50. Verdict: `TKS_NOETIC_TRANSFER_MIXED`. |
 | 5.2 | **done - paraphrase-controlled TKS-style transfer smoke** | 60 rows: 10 noetics x 6 paraphrase styles. Layer-3 noetic probe gets 29/60; best layer gets 31/60; count-vector gets 16/60; TF-IDF gets 25/60. Probe beats count-vector reliably (paired p=0.007) but not TF-IDF (paired p=0.481). Verdict: `TKS_NOETIC_TRANSFER_MIXED`, suggestive but not clean pass. |
+| 5.3 | **done - targeted `^6` Male diagnostic** | 48 rows: 30 Male probes plus 18 contrast controls. Layer-3 gets only 7/30 Male rows. All 7 hits come from training-alias language (`breaking down` / `unpacking` / `looking underneath`): 7/10. Corrected nested-composition language is 0/10, and no-alias plain composition is 0/10. Diagnosis: current probe learned the alias, not the full corrected `^6` concept. |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -1240,3 +1241,57 @@ Artifacts:
   fixture.
 - `tks_noetic_paraphrase_eval_report_20260516.json` - full report,
   including paired baseline contingencies.
+
+## Stage 5.3 result - targeted `^6` Male diagnostic
+
+**Verdict: `^6` is alias-bound, not concept-robust.**
+
+The Stage 5.2 failure mode was specific: Male (`^6`) scored 0/6 even
+though other noetics partially transferred. Stage 5.3 isolates that
+failure with 30 Male rows and 18 contrast rows.
+
+Result:
+
+| Evaluator | Accuracy |
+|---|---:|
+| Pythia noetic probe, headline layer 3 | 18/48 |
+| Pythia noetic probe, best layer 4 | 19/48 |
+| Count-vector text baseline | 8/48 |
+| TF-IDF text baseline | 20/48 |
+
+Layer-3 target focus:
+
+| Focus | Accuracy |
+|---|---:|
+| Male rows | 7/30 |
+| Contrast rows | 11/18 |
+
+Male rows by wording family:
+
+| Wording family | Accuracy |
+|---|---:|
+| `male_alias_breakdown` | 7/10 |
+| `male_nested_composition` | 0/10 |
+| `male_no_alias_plain` | 0/10 |
+
+This resolves the question. The saved Pythia probe recognizes `^6` only
+when the text uses the training aliases: "breaking down," "unpacking,"
+"pulls apart," or "looking underneath." It does **not** recognize the
+cleaner corrected definition:
+
+> an idea made of nested ideas, while itself being part of a larger set
+> of ideas
+
+Honest read:
+
+> The current `^6` readout is a wording detector, not a robust Male
+> concept detector. The correct next repair is not more ablation. It is
+> a better noetic probe dataset whose `^6` examples include nested
+> composition language, no-alias plain language, and hard contrasts
+> against `^5` Female.
+
+Artifacts:
+
+- `tks_noetic_male_diagnostic_eval_20260516.jsonl` - targeted `^6`
+  diagnostic fixture.
+- `tks_noetic_male_diagnostic_eval_report_20260516.json` - full report.

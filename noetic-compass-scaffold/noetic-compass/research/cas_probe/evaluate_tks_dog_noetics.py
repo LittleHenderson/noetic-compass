@@ -453,6 +453,11 @@ def main(argv: list[str] | None = None) -> int:
             rows,
             "paraphrase_style",
         ),
+        "layer3_accuracy_by_target_focus": _accuracy_by_field(
+            layer3_rows,
+            rows,
+            "target_focus",
+        ),
         "text_baseline_predictions": text,
         "fixture_rows": rows,
     }

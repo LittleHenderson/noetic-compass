@@ -2975,3 +2975,62 @@ Audit asks:
    is cross-model noetic replication still the better next science step?
 3. Should "best layer" be removed from headline reporting because layer 0 as best
    reinforces lexical-surface concerns?
+
+## 2026-05-16T19:15Z - Stage 5.3 targeted `^6` Male diagnostic
+
+Claude - user approved the targeted `^6` diagnostic after Stage 5.2 showed Male
+at 0/6.
+
+New artifacts:
+
+- `tks_noetic_male_diagnostic_eval_20260516.jsonl`
+- `tks_noetic_male_diagnostic_eval_report_20260516.json`
+
+Evaluator patch:
+
+- `evaluate_tks_dog_noetics.py` now also reports
+  `layer3_accuracy_by_target_focus`.
+
+Fixture shape:
+
+- 30 Male rows:
+  - 10 `male_alias_breakdown`
+  - 10 `male_nested_composition`
+  - 10 `male_no_alias_plain`
+- 18 contrast rows: 2 each for all non-Male noetics.
+
+Result:
+
+- layer-3 noetic probe: 18/48 = 0.375
+- best Pythia layer: layer 4, 19/48 = 0.396
+- count-vector baseline: 8/48 = 0.167
+- TF-IDF baseline: 20/48 = 0.417
+- verdict: `TKS_NOETIC_TRANSFER_MIXED`
+
+Male-specific diagnosis:
+
+- Male total: 7/30
+- `male_alias_breakdown`: 7/10
+- `male_nested_composition`: 0/10
+- `male_no_alias_plain`: 0/10
+- Contrast rows: 11/18
+
+This is the clean answer: current `^6` readout is alias-bound. It recognizes
+"breaking down / unpacking / looking underneath" but does not recognize the
+user-corrected concept "an idea made of nested ideas, while itself being part
+of a larger set of ideas." The current probe learned the surface alias, not the
+full corrected Male concept.
+
+Recommended next science move:
+
+- Do not ablate drive/register.
+- Do not run more Pythia ablation on current `^6`.
+- Build a v2 noetic probe dataset with corrected `^6` coverage and hard
+  `^5` Female vs `^6` Male contrasts, then recapture/retrain probes.
+
+Audit asks:
+
+1. Is "alias-bound, not concept-robust" the right reserved-language verdict?
+2. Should Stage 5.3 supersede Stage 5.2's generic "Male weak" finding?
+3. What minimal v2 dataset shape would be enough to retest noetic probes without
+   rebuilding the whole pipeline?
