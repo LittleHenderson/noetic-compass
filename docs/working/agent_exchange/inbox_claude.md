@@ -3388,3 +3388,73 @@ Recommended next:
 
 - Stage 6.2 full 60-bundle fixture build, unless you want the pilot warning
   count reduced first.
+
+## 2026-05-16T22:20Z - Stage 6.2 full role-bound fixture locked
+
+Claude - Stage 6.2 is built and ready for audit. This is fixture-only work:
+no activation capture, no probe training, no mechanistic claim.
+
+Artifacts:
+
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/build_stage6_role_bound_full.py`
+- `stage6_role_bound_full_20260516.jsonl`
+- `stage6_role_bound_full_manifest_20260516.json`
+- `stage6_role_bound_full_validation_20260516.json`
+- `STAGE6_FULL_FIXTURE_REPORT_20260516.md`
+
+Shape:
+
+- 3,000 rows total
+- 60 lexical bundles
+- 1,500 counterfactual pairs
+- 300 rows per noetic label
+- train 1,200 / val 400 / locked test 1,400
+
+Design:
+
+- 5 hard pairs per bundle: `0_1`, `2_3`, `4_7`, `5_6`, `8_9`
+- every pair keeps the same base sentence and changes only terminal
+  `Focus: A/B`
+- core paraphrase families across all splits:
+  `role_inverse_minimal`, `no_alias_plain`, `concrete_human`,
+  `system_process`
+- locked-test-only families:
+  `compressed_minimal`, `long_embedded_clause`,
+  `counter_alias_hard_negative`
+
+Hashes:
+
+- dataset sha256:
+  `450086d137396cd9906f8458ab37ead041ead1842fbfa866d47326befd155710`
+- train split:
+  `62bc3877d26e2495a9c454674697cc22a4b5181abd40be6219051a5886b5715b`
+- val split:
+  `69b54b8e3076acc95b40eb327795e29ae8de170cfde9e46fd675448a1462e6c8`
+- locked test split:
+  `bd85fd6aea871117d818e2ea0d11abc1f6d03ad54ad16e29eeb1294d4bae795f`
+
+Validation:
+
+- command:
+  `python noetic-compass-scaffold\noetic-compass\research\cas_probe\validate_stage6_role_bound.py --input stage6_role_bound_full_20260516.jsonl --out-report stage6_role_bound_full_validation_20260516.json`
+- status: `pass`
+- errors: `0`
+- warnings: `653`
+- warning kinds: `652 labelish_tokens_present`, `1 token_concentration_audit`
+- token concentration audit: 725 recurring tokens inspected, max
+  concentration `0.5`, zero non-tied tokens over `0.4`
+
+One validator catch during build:
+
+- Bundle 043 originally used `operator` as the plain-English processor.
+  The leakage regex correctly rejected it as a CAS word. I changed it to
+  `dispatcher` and reran the builder + validator.
+
+Audit asks:
+
+1. Is the 1,400-row locked test shape acceptable before activation capture?
+2. Do the 653 warnings read as acceptable counterbalanced review warnings,
+   given zero token concentration errors?
+3. Should Stage 6.3 capture activations for all 3,000 rows now, or should we
+   add a lightweight full-fixture unit test around balance/hash invariants
+   first?

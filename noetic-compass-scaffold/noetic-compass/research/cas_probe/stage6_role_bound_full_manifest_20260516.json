@@ -1,0 +1,63 @@
+{
+  "class_distribution": {
+    "0": 300,
+    "1": 300,
+    "2": 300,
+    "3": 300,
+    "4": 300,
+    "5": 300,
+    "6": 300,
+    "7": 300,
+    "8": 300,
+    "9": 300
+  },
+  "dataset_version": "stage6_role_bound_noetic_full_v0",
+  "design": {
+    "claim_boundary": "No activations or probes are produced by this script.",
+    "core_paraphrase_families": [
+      "role_inverse_minimal",
+      "no_alias_plain",
+      "concrete_human",
+      "system_process"
+    ],
+    "focus_markers_counterbalanced": true,
+    "labels_per_pair": 2,
+    "model_input_excludes_mapping_note": true,
+    "model_input_field": "english",
+    "pairs_per_bundle": 5,
+    "test_bundles": 20,
+    "test_only_paraphrase_families": [
+      "compressed_minimal",
+      "long_embedded_clause",
+      "counter_alias_hard_negative"
+    ],
+    "train_bundles": 30,
+    "val_bundles": 10
+  },
+  "n_bundles": 60,
+  "n_counterfactual_pairs": 1500,
+  "n_records": 3000,
+  "output_file": "stage6_role_bound_full_20260516.jsonl",
+  "output_sha256": "450086d137396cd9906f8458ab37ead041ead1842fbfa866d47326befd155710",
+  "paraphrase_family_distribution": {
+    "compressed_minimal": 200,
+    "concrete_human": 600,
+    "counter_alias_hard_negative": 200,
+    "long_embedded_clause": 200,
+    "no_alias_plain": 600,
+    "role_inverse_minimal": 600,
+    "system_process": 600
+  },
+  "schema_version": "stage6_role_bound_full_manifest.v1",
+  "split_distribution": {
+    "test": 1400,
+    "train": 1200,
+    "val": 400
+  },
+  "split_sha256": {
+    "test": "bd85fd6aea871117d818e2ea0d11abc1f6d03ad54ad16e29eeb1294d4bae795f",
+    "train": "62bc3877d26e2495a9c454674697cc22a4b5181abd40be6219051a5886b5715b",
+    "val": "69b54b8e3076acc95b40eb327795e29ae8de170cfde9e46fd675448a1462e6c8"
+  },
+  "status": "locked_fixture_no_probe_run"
+}
