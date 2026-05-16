@@ -64,7 +64,8 @@ subject. CAS is the measuring instrument.**
 | 2.1 | done | TF-IDF baseline, shuffled-label control, val-selected headline, confusion matrix |
 | 2.2 | done — labels recoverable, mostly text-baseline explained | majority / stratified / count-vector baselines, paired contingency, McNemar test |
 | 3 | done — narrow newline-token test | ablation of noetic subspace; sanity gate passed (probe acc 0.899 → 0.101); immediate next-token argmax unchanged on 69/69 prompts, but all top tokens were newline |
-| 3.1 | **done — continuation effect present** | forced semantic continuations; first-step top-1 changes in 30/207 cases; full 8-token continuation changes in 157/207 cases |
+| 3.1 | done — continuation effect present | forced semantic continuations; first-step top-1 changes in 30/207 cases; full 8-token continuation changes in 157/207 cases |
+| 3.2 | **done — no per-class specificity** | per-class targeted ablation on RTX A6000 (146 sec); diag mean first-token-changed 0.079 vs off-diag 0.062 (Δ +1.7 pp); aggregate behaviour says shared noetic-shaped axis, NOT distinct per-class features |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -359,6 +360,143 @@ Artifacts:
 - `ablate_noetic_layer3_continuation.py` — Stage 3.1 script.
 - `pythia_ablation_layer3_continuation_20260515.json` — full
   per-case continuation report.
+
+---
+
+## Stage 3.2 result (2026-05-16) — per-class targeted ablation
+
+**Verdict: `NO_PER_CLASS_SPECIFICITY`.**
+
+Stage 3.1 showed the layer-3 noetic subspace is behaviourally active
+under forced continuation. The follow-up question (Codex audit
+`1dbcc99`): are those changes class-specific, or does the subspace
+behave like a shared "noetic-shaped" axis?
+
+Method: ablate one class's unit-normalized raw-space direction at a
+time (1D projection per class, 10 separate runs), then compare each
+ablation's effect on its own-class prompts vs other-class prompts.
+
+Run hardware: **NVIDIA RTX A6000 (46 GB) on RunPod, 146 seconds
+total wall-clock** (vs ~3 hours projected on local CPU).
+
+**Pre-flight: per-direction sanity gate.**
+
+For each class `^c`, ablate only direction `c` then re-run the
+trained probe. Sanity: if direction `c` is the only place the probe
+reads class-`c`, ablation should drive its "predict ^c on true-y=c"
+rate to zero.
+
+| Class | self-class kept-rate after ablation | direction quality |
+|---:|---:|---|
+| ^0 | 0.000 | clean |
+| **^1** | **0.714** | redundant — same info encoded along other axes |
+| ^2 | 0.000 | clean |
+| **^3** | **0.429** | partially redundant |
+| ^4 | 0.000 | clean |
+| ^5 | 0.000 | clean |
+| ^6 | 0.000 | clean |
+| ^7 | 0.000 | clean |
+| ^8 | 0.000 | clean |
+| ^9 | 0.000 | clean |
+
+8 of 10 directions are single-axis-clean. ^1 and ^3 are partially
+redundant — ablating just their named direction leaves the probe
+mostly intact. This is a real diagnostic finding: the noetic
+subspace has class-pair redundancy, not full per-class
+orthogonality.
+
+**Per-direction direction quality:** off-diagonal cosine
+similarities mean −0.109, max abs 0.234 — directions are roughly
+orthogonal with mild correlation.
+
+**Headline metric: 10×10 first-token-changed matrix.**
+
+Rows = ablated class. Columns = true_y of the prompt.
+
+```
+        ^0    ^1    ^2    ^3    ^4    ^5    ^6    ^7    ^8    ^9
+^0    0.12  0.05  0.04  0.00  0.00  0.06  0.06  0.25  0.00  0.10
+^1    0.08  0.14  0.11  0.00  0.06  0.00  0.11  0.04  0.27  0.05
+^2    0.00  0.10  0.07  0.00  0.00  0.06  0.00  0.12  0.13  0.00
+^3    0.04  0.10  0.04  0.00  0.00  0.00  0.11  0.12  0.07  0.10
+^4    0.08  0.05  0.04  0.00  0.00  0.06  0.06  0.12  0.00  0.05
+^5    0.04  0.05  0.04  0.10  0.00  0.06  0.00  0.04  0.13  0.14
+^6    0.04  0.05  0.04  0.00  0.00  0.11  0.00  0.08  0.13  0.10
+^7    0.17  0.10  0.04  0.00  0.00  0.11  0.00  0.17  0.13  0.14
+^8    0.00  0.14  0.04  0.00  0.00  0.06  0.00  0.08  0.13  0.10
+^9    0.12  0.10  0.04  0.10  0.00  0.06  0.00  0.17  0.13  0.10
+```
+
+| Aggregate | value |
+|---|---:|
+| diagonal mean first_token_changed (ablate ^c on class ^c prompts) | **0.079** |
+| off-diagonal mean first_token_changed (ablate ^c on other classes) | **0.062** |
+| delta (diag − off) | **+0.017 pp** |
+
+**Per-class specificity ratio (self / cross):**
+
+| Class | self | cross | ratio | note |
+|:---:|---:|---:|---:|---|
+| ^0 | 0.125 | 0.060 | **2.08** | clean direction, mild specificity |
+| ^1 | 0.143 | 0.080 | 1.79 | redundant direction; ratio may be inflated |
+| ^2 | 0.074 | 0.045 | 1.63 | clean direction, mild specificity |
+| ^3 | 0.000 | 0.064 | 0.00 | redundant direction; effect deflated |
+| ^4 | 0.000 | 0.050 | 0.00 | clean direction; no self-effect |
+| ^5 | 0.056 | 0.060 | 0.93 | clean direction; no specificity |
+| ^6 | 0.000 | 0.061 | 0.00 | clean direction; no self-effect |
+| ^7 | 0.167 | 0.076 | **2.19** | clean direction, mild specificity |
+| ^8 | 0.133 | 0.046 | **2.90** | clean direction, strongest specificity |
+| ^9 | 0.095 | 0.079 | 1.21 | clean direction; weak specificity |
+
+**Honest interpretation:**
+
+The aggregate diagonal-vs-off-diagonal delta is +1.7 percentage
+points — basically noise on per-cell sample sizes of ~6-9 prompts.
+Per-class results are scattered: four classes show modest
+specificity (^0 ~2.1, ^2 ~1.6, ^7 ~2.2, ^8 ~2.9), three clean
+directions show no self-effect (^4, ^6, sometimes ^5), and ^3/^1
+are confounded by direction redundancy.
+
+In aggregate, **ablating one class's direction is not measurably
+more disruptive to its own class than to other classes**. The
+Stage 3.1 behavioural effect IS real, but it does not decompose
+into clean per-class structure at this layer.
+
+**What this means for the Glass House pitch:**
+
+The cleanest mechanistic claim — that each named CAS direction in
+Pythia's layer-3 residual stream controls behaviour on its own
+class — is **not supported**. The subspace acts more like a shared
+"noetic-shaped" axis than as 10 distinct per-class controls.
+
+The pitch must drop "Pythia has class-specific noetic readouts" as
+a claim. What's left: "the Probe finds linearly-decodable noetic
+information; ablating the full subspace changes behaviour under
+continuation; but the behaviour change is not class-specific."
+That's a much weaker statement than the original Glass House
+framing.
+
+**What this does NOT rule out** (kept narrow on purpose):
+
+- The same test on **other layers** (4-12 unablated for per-class).
+- The same test with **multi-direction ablation per class** (full
+  rank, not unit-direction). With ^1 and ^3 redundancy noted, a
+  multi-direction targeted ablation might show specificity that
+  the unit-direction test missed.
+- The same test on **other axes** (domain, register, drive).
+- The same test on **larger Pythia** or **other open models**.
+- The **Harness-as-forensic-documentation** product, which is
+  independent of mechanistic interpretability claims.
+
+Artifacts:
+
+- `ablate_noetic_per_class_layer3.py` — Stage 3.2 script.
+- `pythia_ablation_per_class_layer3_20260515.json` — 10×10
+  matrices (first_token_changed + mean_token_match), per-case
+  rows, per-class specificity ratios, sanity-gate per-direction
+  results, full verdict.
+- `stage3_2_progress.log` — RunPod stdout, includes the per-class
+  elapsed times.
 
 ---
 

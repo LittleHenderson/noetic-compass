@@ -1,0 +1,67 @@
+activations sha256: f1b3610636ddb5fe056504e931c09cd07f2fed1247b84c649cf75503dd49ca9a
+probes sha256:      1991b5e650915129497ed24d4354ec9db37c5f9886d34c11efd158e6d5ebc47e
+per-class direction norms: ['11.578', '10.466', '9.689', '12.057', '7.895', '9.056', '8.725', '8.541', '9.255', '11.648']
+per-class direction off-diagonal cosine: mean=-0.109 max_abs=0.234
+
+Sanity gate per class (probe self-ablation, test set):
+  ^0: self-class kept-rate=0.000 (baseline support 0.116, ablated pred=c rate=0.000)
+  ^1: self-class kept-rate=0.714 (baseline support 0.101, ablated pred=c rate=0.159)
+  ^2: self-class kept-rate=0.000 (baseline support 0.130, ablated pred=c rate=0.000)
+  ^3: self-class kept-rate=0.429 (baseline support 0.101, ablated pred=c rate=0.087)
+  ^4: self-class kept-rate=0.000 (baseline support 0.087, ablated pred=c rate=0.000)
+  ^5: self-class kept-rate=0.000 (baseline support 0.087, ablated pred=c rate=0.000)
+  ^6: self-class kept-rate=0.000 (baseline support 0.087, ablated pred=c rate=0.000)
+  ^7: self-class kept-rate=0.000 (baseline support 0.116, ablated pred=c rate=0.000)
+  ^8: self-class kept-rate=0.000 (baseline support 0.072, ablated pred=c rate=0.000)
+  ^9: self-class kept-rate=0.000 (baseline support 0.101, ablated pred=c rate=0.000)
+
+loading EleutherAI/pythia-160m ...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 2018.10it/s]
+
+generating baselines + per-class ablations ...
+  baselines done in 15.6s
+  ablated direction ^0 done at elapsed=29.1s
+  ablated direction ^1 done at elapsed=42.8s
+  ablated direction ^2 done at elapsed=56.9s
+  ablated direction ^3 done at elapsed=69.7s
+  ablated direction ^4 done at elapsed=82.8s
+  ablated direction ^5 done at elapsed=95.3s
+  ablated direction ^6 done at elapsed=108.1s
+  ablated direction ^7 done at elapsed=120.7s
+  ablated direction ^8 done at elapsed=133.5s
+  ablated direction ^9 done at elapsed=146.0s
+
+first_token_changed rate, 10x10 (rows=ablated_class, cols=true_y):
+       ^0  ^1  ^2  ^3  ^4  ^5  ^6  ^7  ^8  ^9
+  ^0    0.12  0.05  0.04  0.00  0.00  0.06  0.06  0.25  0.00  0.10
+  ^1    0.08  0.14  0.11  0.00  0.06  0.00  0.11  0.04  0.27  0.05
+  ^2    0.00  0.10  0.07  0.00  0.00  0.06  0.00  0.12  0.13  0.00
+  ^3    0.04  0.10  0.04  0.00  0.00  0.00  0.11  0.12  0.07  0.10
+  ^4    0.08  0.05  0.04  0.00  0.00  0.06  0.06  0.12  0.00  0.05
+  ^5    0.04  0.05  0.04  0.10  0.00  0.06  0.00  0.04  0.13  0.14
+  ^6    0.04  0.05  0.04  0.00  0.00  0.11  0.00  0.08  0.13  0.10
+  ^7    0.17  0.10  0.04  0.00  0.00  0.11  0.00  0.17  0.13  0.14
+  ^8    0.00  0.14  0.04  0.00  0.00  0.06  0.00  0.08  0.13  0.10
+  ^9    0.12  0.10  0.04  0.10  0.00  0.06  0.00  0.17  0.13  0.10
+
+diagonal mean first_changed:    0.079  (ablate ^c on class ^c prompts)
+off-diagonal mean first_changed: 0.062  (ablate ^c on other-class prompts)
+delta (diag - off):              +0.017
+
+Per-class specificity ratio (self / cross):
+  ^0: self=0.125 cross=0.060 ratio=2.08
+  ^1: self=0.143 cross=0.080 ratio=1.79
+  ^2: self=0.074 cross=0.045 ratio=1.63
+  ^3: self=0.000 cross=0.064 ratio=0.00
+  ^4: self=0.000 cross=0.050 ratio=0.00
+  ^5: self=0.056 cross=0.060 ratio=0.93
+  ^6: self=0.000 cross=0.061 ratio=0.00
+  ^7: self=0.167 cross=0.076 ratio=2.19
+  ^8: self=0.133 cross=0.046 ratio=2.90
+  ^9: self=0.095 cross=0.079 ratio=1.21
+
+VERDICT: NO_PER_CLASS_SPECIFICITY
+Diagonal and off-diagonal first_token_changed rates are indistinguishable (0.079 vs 0.062). Ablating one class's direction is no more disruptive to its own class's prompts than to other classes' prompts. The Stage 3.1 behavioural effect is real but not class-specific at layer 3 — the directions point at a shared 'noetic-shaped' axis, not at distinct per-class features. This bounds the mechanistic claim sharply.
+
+report written: /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_ablation_per_class_layer3_20260515.json
