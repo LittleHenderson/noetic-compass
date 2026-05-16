@@ -41,11 +41,11 @@ _EVAL_DATE = "20260516"
 
 _MODEL_NAME = "EleutherAI/pythia-160m"
 _DEFAULT_FIXTURE = _HERE / f"tks_noetic_transfer_eval_{_EVAL_DATE}.jsonl"
-_SNAPSHOT_LABELS = _HERE / f"pythia_probe_labels_{_TRAIN_DATE}.jsonl"
-_PROBES_PATH = _HERE / f"pythia_noetic_probes_{_TRAIN_DATE}.npz"
+_DEFAULT_SNAPSHOT_LABELS = _HERE / f"pythia_probe_labels_{_TRAIN_DATE}.jsonl"
+_DEFAULT_PROBES_PATH = _HERE / f"pythia_noetic_probes_{_TRAIN_DATE}.npz"
 _DEFAULT_OUT_REPORT = _HERE / f"tks_noetic_transfer_eval_report_{_EVAL_DATE}.json"
 
-_HEADLINE_LAYER = 3
+_DEFAULT_HEADLINE_LAYER = 3
 _NOETIC_LABELS = {
     0: "Idea",
     1: "Mind",
@@ -175,12 +175,14 @@ def _capture_pythia(rows: list[dict[str, Any]], device: str, local_files_only: b
 def _apply_saved_probe(
     X: "np.ndarray",
     rows: list[dict[str, Any]],
+    probes_path: Path,
+    headline_layer: int,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     import numpy as np
 
-    if not _PROBES_PATH.is_file():
-        raise SystemExit(f"missing saved probe artifact: {_PROBES_PATH}")
-    probes = np.load(_PROBES_PATH, allow_pickle=False)
+    if not probes_path.is_file():
+        raise SystemExit(f"missing saved probe artifact: {probes_path}")
+    probes = np.load(probes_path, allow_pickle=False)
     coefs = probes["coefs"]
     intercepts = probes["intercepts"]
     scaler_mean = probes["scaler_mean"]
@@ -204,7 +206,7 @@ def _apply_saved_probe(
                 "total": int(len(y)),
             }
         )
-        if layer == _HEADLINE_LAYER:
+        if layer == headline_layer:
             for i in range(len(y)):
                 per_row_layer3.append(
                     {
@@ -222,7 +224,11 @@ def _apply_saved_probe(
     return per_layer, per_row_layer3
 
 
-def _text_baselines(rows: list[dict[str, Any]]) -> dict[str, Any]:
+def _text_baselines(
+    rows: list[dict[str, Any]],
+    snapshot_labels_path: Path,
+    probes_path: Path,
+) -> dict[str, Any]:
     try:
         import numpy as np
         from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
@@ -234,8 +240,8 @@ def _text_baselines(rows: list[dict[str, Any]]) -> dict[str, Any]:
         )
         raise SystemExit(2) from exc
 
-    snapshot = _load_jsonl(_SNAPSHOT_LABELS)
-    probes = np.load(_PROBES_PATH, allow_pickle=False)
+    snapshot = _load_jsonl(snapshot_labels_path)
+    probes = np.load(probes_path, allow_pickle=False)
     idx_train = probes["idx_train"]
     train_text = np.array([r["english"] for r in snapshot], dtype=object)[idx_train]
     train_y = np.array([int(r["noetic_label"]) for r in snapshot], dtype=np.int64)[idx_train]
@@ -376,6 +382,22 @@ def main(argv: list[str] | None = None) -> int:
         help="Output report JSON. Relative paths resolve inside research/cas_probe.",
     )
     parser.add_argument(
+        "--snapshot-labels",
+        default=str(_DEFAULT_SNAPSHOT_LABELS),
+        help="Training snapshot JSONL used for text baselines.",
+    )
+    parser.add_argument(
+        "--probe-file",
+        default=str(_DEFAULT_PROBES_PATH),
+        help="Saved noetic probe NPZ to apply.",
+    )
+    parser.add_argument(
+        "--headline-layer",
+        type=int,
+        default=_DEFAULT_HEADLINE_LAYER,
+        help="Layer to use for headline/per-row predictions.",
+    )
+    parser.add_argument(
         "--allow-download",
         action="store_true",
         help="Allow Hugging Face to download Pythia files if not already cached.",
@@ -384,6 +406,11 @@ def main(argv: list[str] | None = None) -> int:
 
     fixture_path = _resolve_local_path(args.fixture, _DEFAULT_FIXTURE)
     out_report = _resolve_local_path(args.out_report, _DEFAULT_OUT_REPORT)
+    snapshot_labels_path = _resolve_local_path(
+        args.snapshot_labels,
+        _DEFAULT_SNAPSHOT_LABELS,
+    )
+    probes_path = _resolve_local_path(args.probe_file, _DEFAULT_PROBES_PATH)
     rows = _load_jsonl(fixture_path)
     if not rows:
         raise SystemExit(f"no rows loaded from {fixture_path}")
@@ -397,10 +424,15 @@ def main(argv: list[str] | None = None) -> int:
         device=args.device,
         local_files_only=not args.allow_download,
     )
-    per_layer, layer3_rows = _apply_saved_probe(X, rows)
-    text = _text_baselines(rows)
+    per_layer, headline_rows = _apply_saved_probe(
+        X,
+        rows,
+        probes_path,
+        args.headline_layer,
+    )
+    text = _text_baselines(rows, snapshot_labels_path, probes_path)
 
-    layer3 = next(r for r in per_layer if r["layer"] == _HEADLINE_LAYER)
+    headline = next(r for r in per_layer if r["layer"] == args.headline_layer)
     count_acc = text["count_vector_logreg"]["accuracy"]
     tfidf_acc = text["tfidf_logreg"]["accuracy"]
     report = {
@@ -409,17 +441,20 @@ def main(argv: list[str] | None = None) -> int:
         "status": "research_only_tiny_n_semantic_smoke",
         "fixture_file": fixture_path.name,
         "fixture_sha256": _sha256_of_file(fixture_path),
-        "probe_file": _PROBES_PATH.name,
-        "probe_sha256": _sha256_of_file(_PROBES_PATH),
+        "snapshot_labels_file": snapshot_labels_path.name,
+        "snapshot_labels_sha256": _sha256_of_file(snapshot_labels_path),
+        "probe_file": probes_path.name,
+        "probe_sha256": _sha256_of_file(probes_path),
         "n_records": len(rows),
-        "headline_layer": _HEADLINE_LAYER,
+        "headline_layer": args.headline_layer,
         "capture": capture_manifest,
         "caveats": [
             "This is a small hand-authored semantic transfer smoke, not a statistical benchmark.",
             "Rows with source=definition_anchored_hand_authored are not quoted source text; they are canonical semantic fixtures built from the authoritative TKS/CAS noetic definitions.",
             "Strong performance here would support transfer to original-TKS-style examples, but does not by itself prove mechanistic encoding.",
         ],
-        "layer3_probe_accuracy": layer3["accuracy"],
+        "headline_probe_accuracy": headline["accuracy"],
+        "layer3_probe_accuracy": headline["accuracy"] if args.headline_layer == 3 else None,
         "best_layer": max(per_layer, key=lambda r: r["accuracy"]),
         "text_baselines": {
             "count_vector_logreg_accuracy": count_acc,
@@ -427,34 +462,36 @@ def main(argv: list[str] | None = None) -> int:
         },
         "paired_vs_text_baselines": {
             "count_vector_logreg": _paired_contingency(
-                layer3_rows,
+                headline_rows,
                 text["count_vector_logreg"]["predictions"],
             ),
             "tfidf_logreg": _paired_contingency(
-                layer3_rows,
+                headline_rows,
                 text["tfidf_logreg"]["predictions"],
             ),
         },
-        "verdict": _verdict(layer3["accuracy"], count_acc, tfidf_acc),
+        "verdict": _verdict(headline["accuracy"], count_acc, tfidf_acc),
         "per_layer": per_layer,
-        "layer3_predictions": layer3_rows,
+        "headline_predictions": headline_rows,
+        # Back-compat key for reports that used layer 3 as the headline.
+        "layer3_predictions": headline_rows if args.headline_layer == 3 else [],
         "layer3_accuracy_by_scenario": _accuracy_by_field(
-            layer3_rows,
+            headline_rows,
             rows,
             "scenario_id",
         ),
         "layer3_accuracy_by_noetic": _accuracy_by_field(
-            layer3_rows,
+            headline_rows,
             rows,
             "canonical_label",
         ),
         "layer3_accuracy_by_paraphrase_style": _accuracy_by_field(
-            layer3_rows,
+            headline_rows,
             rows,
             "paraphrase_style",
         ),
         "layer3_accuracy_by_target_focus": _accuracy_by_field(
-            layer3_rows,
+            headline_rows,
             rows,
             "target_focus",
         ),
@@ -466,7 +503,7 @@ def main(argv: list[str] | None = None) -> int:
         json.dump(report, fh, indent=2)
         fh.write("\n")
 
-    print(f"headline layer {_HEADLINE_LAYER}: {layer3['correct']}/{layer3['total']} = {layer3['accuracy']:.3f}")
+    print(f"headline layer {args.headline_layer}: {headline['correct']}/{headline['total']} = {headline['accuracy']:.3f}")
     print(f"best layer: {report['best_layer']}")
     print(f"count baseline: {count_acc:.3f}")
     print(f"tfidf baseline: {tfidf_acc:.3f}")

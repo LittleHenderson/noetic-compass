@@ -3034,3 +3034,90 @@ Audit asks:
 2. Should Stage 5.3 supersede Stage 5.2's generic "Male weak" finding?
 3. What minimal v2 dataset shape would be enough to retest noetic probes without
    rebuilding the whole pipeline?
+
+## 2026-05-16T19:45Z - Stage 5.4 v2 noetic probe repair complete
+
+Claude - user approved the v2 noetic probe repair after Stage 5.3 showed the
+saved `^6` Male readout was alias-bound.
+
+New/updated artifacts:
+
+- `build_pythia_probe_snapshot_v2.py`
+- `capture_pythia_activations_for_labels.py`
+- `train_noetic_probes_for_activations.py`
+- `evaluate_tks_dog_noetics.py`
+- `pythia_probe_labels_v2_20260516.jsonl`
+- `pythia_probe_manifest_v2_20260516.json`
+- `pythia_probe_activations_v2_20260516.npz`
+- `pythia_probe_activations_v2_manifest_20260516.json`
+- `pythia_noetic_probes_v2_20260516.npz`
+- `pythia_noetic_probes_v2_report_20260516.json`
+- `tks_noetic_paraphrase_eval_v2_layer4_report_20260516.json`
+- `tks_noetic_male_diagnostic_eval_v2_layer4_report_20260516.json`
+
+V2 snapshot shape:
+
+- 551 rows total = 457 frozen v1 rows + 94 hand-authored augment rows.
+- Augments: 36 corrected `^6` Male rows, 18 hard `^5` Female contrast rows,
+  40 support rows for weak noetics `^0`, `^2`, `^4`, `^8`.
+- Exact-text overlap with the held-out Stage 5.2 paraphrase fixture and Stage
+  5.3 Male diagnostic fixture is zero after two wording fixes.
+
+Internal v2 result:
+
+- Headline layer: 4.
+- Headline test accuracy: 0.916.
+- TF-IDF test accuracy: 0.867.
+- Count-vector test accuracy: 0.831.
+- Paired headline vs TF-IDF: probe-only 7, TF-IDF-only 3, p=0.344.
+- Read: strong internal accuracy, but still not a reliable beyond-TF-IDF proof.
+
+Held-out Stage 5.2 paraphrase fixture:
+
+- V1 headline: 29/60.
+- V2 headline: 38/60.
+- V2 best layer: 41/60.
+- Count-vector baseline: 29/60.
+- TF-IDF baseline: 35/60.
+- Paired v2 vs TF-IDF: probe-only 9, TF-IDF-only 6, p=0.607.
+- Repairs: Idea 2/6 -> 6/6, Male 0/6 -> 6/6, Vibration 2/6 -> 6/6,
+  Above/Cause 2/6 -> 5/6.
+- Regressions: Below/Effect 4/6 -> 1/6, Mind 4/6 -> 2/6,
+  Negative 4/6 -> 2/6, Rhythm 4/6 -> 2/6.
+
+Held-out Stage 5.3 Male diagnostic:
+
+- V1 Male total: 7/30.
+- V2 Male total: 29/30.
+- Alias-breakdown Male: 7/10 -> 10/10.
+- Nested-composition Male: 0/10 -> 10/10.
+- No-alias Male: 0/10 -> 9/10.
+- Full diagnostic: 18/48 -> 40/48.
+- TF-IDF baseline on same fixture: 40/48.
+
+Reserved-language verdict:
+
+> Targeted `^6` repair succeeded. The v2 probe is no longer alias-bound on the
+> held-out Male diagnostic. It recognizes nested composition and no-alias
+> composition wording. Global noetic transfer is still mixed, and the probe
+> still does not reliably beat TF-IDF on paired held-out checks.
+
+Recommended next science move:
+
+- Build v3 as a balanced hard-contrast noetic transfer dataset.
+- Prioritize confused pairs: `^5`/`^6`, `^8`/`^9`, `^2`/`^3`,
+  Rhythm-vs-Vibration.
+- V2 proves targeted repair is possible; v3 needs to stabilize the whole
+  vocabulary before more ablation or cross-model claims.
+
+Audit asks:
+
+1. Is the zero exact-text-overlap check enough for this held-out claim, or do
+   you want a semantic-near-duplicate audit before we trust the v2 transfer
+   numbers?
+2. Is the reserved-language verdict above tight enough, especially the
+   distinction between targeted repair success and no reliable beyond-TF-IDF
+   proof?
+3. Should v3 hard-contrast balancing happen before cross-model replication, or
+   should OLMo/Qwen replication run first to test whether the current mixed
+   result is Pythia-specific?

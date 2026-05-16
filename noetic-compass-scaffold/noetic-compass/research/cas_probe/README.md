@@ -75,6 +75,7 @@ subject. CAS is the measuring instrument.**
 | 5.1 | **done - multi-scenario TKS-style transfer smoke** | Dog training plus four definition-anchored hand-authored scenarios (debate prep, lost keys, software debugging, gallery viewing), 50 rows total. Layer-3 noetic probe gets 16/50; best layer gets 23/50; count-vector gets 11/50; TF-IDF gets 16/50. Verdict: `TKS_NOETIC_TRANSFER_MIXED`. |
 | 5.2 | **done - paraphrase-controlled TKS-style transfer smoke** | 60 rows: 10 noetics x 6 paraphrase styles. Layer-3 noetic probe gets 29/60; best layer gets 31/60; count-vector gets 16/60; TF-IDF gets 25/60. Probe beats count-vector reliably (paired p=0.007) but not TF-IDF (paired p=0.481). Verdict: `TKS_NOETIC_TRANSFER_MIXED`, suggestive but not clean pass. |
 | 5.3 | **done - targeted `^6` Male diagnostic** | 48 rows: 30 Male probes plus 18 contrast controls. Layer-3 gets only 7/30 Male rows. All 7 hits come from training-alias language (`breaking down` / `unpacking` / `looking underneath`): 7/10. Corrected nested-composition language is 0/10, and no-alias plain composition is 0/10. Diagnosis: current probe learned the alias, not the full corrected `^6` concept. |
+| 5.4 | **done - v2 noetic probe repair** | Built `pythia_probe_labels_v2_20260516.jsonl` (551 rows = 457 base + 94 augment rows) with corrected `^6` coverage and hard `^5`/`^6` contrasts. V2 fixes Male on held-out diagnostics: Stage 5.3 Male rows move 7/30 -> 29/30; Stage 5.2 Male moves 0/6 -> 6/6. Global transfer improves but remains mixed: Stage 5.2 headline 29/60 -> 38/60, still not reliably above TF-IDF. |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -1295,3 +1296,102 @@ Artifacts:
 - `tks_noetic_male_diagnostic_eval_20260516.jsonl` - targeted `^6`
   diagnostic fixture.
 - `tks_noetic_male_diagnostic_eval_report_20260516.json` - full report.
+
+## Stage 5.4 result - v2 noetic probe repair
+
+**Verdict: targeted `^6` repair succeeded; global transfer still mixed.**
+
+Stage 5.4 builds a v2 probe snapshot from the original 457-row frozen
+snapshot plus 94 hand-authored augment rows:
+
+- 36 corrected `^6` Male rows:
+  - nested-composition wording
+  - no-alias composition wording
+  - alias-plus-definition bridge wording
+- 18 hard `^5` Female contrast rows
+- 40 support rows for previously weak noetics (`^0`, `^2`, `^4`, `^8`)
+
+The v2 snapshot has 551 rows. Exact-text overlap with the held-out Stage
+5.2 paraphrase fixture and Stage 5.3 Male diagnostic fixture is zero.
+
+Internal v2 train/val/test result:
+
+| Metric | Value |
+|---|---:|
+| v2 headline layer | 4 |
+| v2 headline test accuracy | 0.916 |
+| TF-IDF test accuracy | 0.867 |
+| paired probe-only vs TF-IDF-only | 7 vs 3 |
+| paired p | 0.344 |
+
+So the internal v2 split is strong, but still not a statistically
+reliable beyond-TF-IDF proof.
+
+Held-out Stage 5.2 paraphrase fixture:
+
+| Metric | v1 | v2 |
+|---|---:|---:|
+| headline probe accuracy | 29/60 | 38/60 |
+| best layer accuracy | 31/60 | 41/60 |
+| count-vector baseline | 16/60 | 29/60 |
+| TF-IDF baseline | 25/60 | 35/60 |
+| paired vs TF-IDF | p=0.481 | p=0.607 |
+
+V2 repairs several weak noetics on Stage 5.2:
+
+| Noetic | v1 | v2 |
+|---|---:|---:|
+| Idea | 2/6 | 6/6 |
+| Male | 0/6 | 6/6 |
+| Vibration | 2/6 | 6/6 |
+| Above/Cause | 2/6 | 5/6 |
+
+But it also shifts errors elsewhere:
+
+| Noetic | v1 | v2 |
+|---|---:|---:|
+| Below/Effect | 4/6 | 1/6 |
+| Mind | 4/6 | 2/6 |
+| Negative | 4/6 | 2/6 |
+| Rhythm | 4/6 | 2/6 |
+
+Held-out Stage 5.3 Male diagnostic:
+
+| Metric | v1 | v2 |
+|---|---:|---:|
+| Male rows total | 7/30 | 29/30 |
+| alias-breakdown Male | 7/10 | 10/10 |
+| nested-composition Male | 0/10 | 10/10 |
+| no-alias Male | 0/10 | 9/10 |
+| full diagnostic accuracy | 18/48 | 40/48 |
+| TF-IDF baseline | 20/48 | 40/48 |
+
+Honest read:
+
+> The v2 probe repair worked for its target: `^6` Male is no longer
+> alias-bound on the held-out diagnostic. It now recognizes nested
+> composition and no-alias composition wording. However, global noetic
+> transfer is still mixed because improving `^6`, `^0`, `^4`, and `^8`
+> shifted errors into `^1`, `^3`, `^7`, and `^9`, and the probe still
+> does not reliably beat TF-IDF on paired held-out checks.
+
+Next scientific step:
+
+> Build a balanced v3 noetic transfer dataset with hard contrast pairs
+> for the confused involution pairs: `^5`/`^6`, `^8`/`^9`, `^2`/`^3`,
+> plus Rhythm-vs-Vibration contrasts. V2 proves targeted repair is
+> possible; v3 needs to stabilize the whole vocabulary.
+
+Artifacts:
+
+- `build_pythia_probe_snapshot_v2.py`
+- `capture_pythia_activations_for_labels.py`
+- `train_noetic_probes_for_activations.py`
+- `pythia_probe_labels_v2_20260516.jsonl`
+- `pythia_probe_manifest_v2_20260516.json`
+- `pythia_probe_activations_v2_20260516.npz`
+- `pythia_probe_activations_v2_manifest_20260516.json`
+- `pythia_noetic_probes_v2_20260516.npz`
+- `pythia_noetic_probes_v2_report_20260516.json`
+- `tks_noetic_paraphrase_eval_v2_layer4_report_20260516.json`
+- `tks_noetic_male_diagnostic_eval_v2_layer4_report_20260516.json`

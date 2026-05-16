@@ -1,0 +1,45 @@
+{
+  "schema_version": "pythia_probe_snapshot.v2",
+  "snapshot_id": "pythia_probe_labels_v2_20260516",
+  "snapshot_file": "pythia_probe_labels_v2_20260516.jsonl",
+  "snapshot_sha256": "1970c1ab3ee0d46fdd247da705ba038278ec86e51659f10c6b42d31a879e998c",
+  "base_snapshot_file": "pythia_probe_labels_20260515.jsonl",
+  "base_snapshot_sha256": "33961f7c731517c252e4fee4b4ec4217f2c2a4e4727e35bbaff0085c381b98c9",
+  "base_record_count": 457,
+  "augment_record_count": 94,
+  "record_count": 551,
+  "base_class_distribution": {
+    "0": 51,
+    "1": 48,
+    "2": 60,
+    "3": 46,
+    "4": 38,
+    "5": 42,
+    "6": 40,
+    "7": 51,
+    "8": 35,
+    "9": 46
+  },
+  "augment_class_distribution": {
+    "0": 10,
+    "2": 10,
+    "4": 10,
+    "5": 18,
+    "6": 36,
+    "8": 10
+  },
+  "final_class_distribution": {
+    "0": 61,
+    "1": 48,
+    "2": 70,
+    "3": 46,
+    "4": 48,
+    "5": 60,
+    "6": 76,
+    "7": 51,
+    "8": 45,
+    "9": 46
+  },
+  "purpose": "Repair Stage 5.3's alias-bound ^6 Male readout by adding corrected nested-composition examples, no-alias composition examples, and hard ^5 Female vs ^6 Male contrasts.",
+  "holdout_warning": "Do not evaluate v2 by claiming success on rows copied into this snapshot. Use Stage 5.2/5.3 fixtures and future held-out fixtures for transfer checks."
+}

@@ -1,0 +1,2887 @@
+{
+  "schema_version": "tks_noetic_transfer_eval.v1",
+  "experiment": "Original-TKS-style noetic transfer eval",
+  "status": "research_only_tiny_n_semantic_smoke",
+  "fixture_file": "tks_noetic_male_diagnostic_eval_20260516.jsonl",
+  "fixture_sha256": "538f91069756e42f3424b0dcfa7f7d2afd7bd0b3fcd1213ea9c83b6ee31676e0",
+  "snapshot_labels_file": "pythia_probe_labels_v2_20260516.jsonl",
+  "snapshot_labels_sha256": "1970c1ab3ee0d46fdd247da705ba038278ec86e51659f10c6b42d31a879e998c",
+  "probe_file": "pythia_noetic_probes_v2_20260516.npz",
+  "probe_sha256": "4605cbeac357fb33e9b9c66a84b78b2d450874c1b53bb623befa0d296f1486a2",
+  "n_records": 48,
+  "headline_layer": 4,
+  "capture": {
+    "model_name": "EleutherAI/pythia-160m",
+    "model_source": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "device": "cpu",
+    "local_files_only": true,
+    "n_layer_positions": 13,
+    "hidden_dim": 768,
+    "pool_method": "mean_over_seq_len",
+    "max_tokens": 256,
+    "elapsed_seconds": 9.25049730000319
+  },
+  "caveats": [
+    "This is a small hand-authored semantic transfer smoke, not a statistical benchmark.",
+    "Rows with source=definition_anchored_hand_authored are not quoted source text; they are canonical semantic fixtures built from the authoritative TKS/CAS noetic definitions.",
+    "Strong performance here would support transfer to original-TKS-style examples, but does not by itself prove mechanistic encoding."
+  ],
+  "headline_probe_accuracy": 0.8333333333333334,
+  "layer3_probe_accuracy": null,
+  "best_layer": {
+    "layer": 0,
+    "accuracy": 0.8958333333333334,
+    "correct": 43,
+    "total": 48
+  },
+  "text_baselines": {
+    "count_vector_logreg_accuracy": 0.7708333333333334,
+    "tfidf_logreg_accuracy": 0.8333333333333334
+  },
+  "paired_vs_text_baselines": {
+    "count_vector_logreg": {
+      "both_correct": 36,
+      "probe_only_correct": 4,
+      "text_only_correct": 1,
+      "both_wrong": 7,
+      "discordant": 5,
+      "exact_binomial_mcnemar_p": 0.375
+    },
+    "tfidf_logreg": {
+      "both_correct": 38,
+      "probe_only_correct": 2,
+      "text_only_correct": 2,
+      "both_wrong": 6,
+      "discordant": 4,
+      "exact_binomial_mcnemar_p": 1.0
+    }
+  },
+  "verdict": "TKS_NOETIC_TRANSFER_PASSED_TINY_N",
+  "per_layer": [
+    {
+      "layer": 0,
+      "accuracy": 0.8958333333333334,
+      "correct": 43,
+      "total": 48
+    },
+    {
+      "layer": 1,
+      "accuracy": 0.875,
+      "correct": 42,
+      "total": 48
+    },
+    {
+      "layer": 2,
+      "accuracy": 0.875,
+      "correct": 42,
+      "total": 48
+    },
+    {
+      "layer": 3,
+      "accuracy": 0.8541666666666666,
+      "correct": 41,
+      "total": 48
+    },
+    {
+      "layer": 4,
+      "accuracy": 0.8333333333333334,
+      "correct": 40,
+      "total": 48
+    },
+    {
+      "layer": 5,
+      "accuracy": 0.8541666666666666,
+      "correct": 41,
+      "total": 48
+    },
+    {
+      "layer": 6,
+      "accuracy": 0.8541666666666666,
+      "correct": 41,
+      "total": 48
+    },
+    {
+      "layer": 7,
+      "accuracy": 0.8541666666666666,
+      "correct": 41,
+      "total": 48
+    },
+    {
+      "layer": 8,
+      "accuracy": 0.8541666666666666,
+      "correct": 41,
+      "total": 48
+    },
+    {
+      "layer": 9,
+      "accuracy": 0.8541666666666666,
+      "correct": 41,
+      "total": 48
+    },
+    {
+      "layer": 10,
+      "accuracy": 0.875,
+      "correct": 42,
+      "total": 48
+    },
+    {
+      "layer": 11,
+      "accuracy": 0.8333333333333334,
+      "correct": 40,
+      "total": 48
+    },
+    {
+      "layer": 12,
+      "accuracy": 0.875,
+      "correct": 42,
+      "total": 48
+    }
+  ],
+  "headline_predictions": [
+    {
+      "sample_id": "male_alias_breaking_down_01",
+      "english": "The thinker is breaking down an idea to see how its parts fit together.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9420112371444702
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.020240487530827522
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.015089759603142738
+        }
+      ]
+    },
+    {
+      "sample_id": "male_alias_breaking_down_02",
+      "english": "The argument is being broken down into the pieces that make it work.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9995361566543579
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.0001896181929623708
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.00012670649448409677
+        }
+      ]
+    },
+    {
+      "sample_id": "male_alias_breaking_down_03",
+      "english": "The concept is unpacked so the smaller ideas inside it can be inspected.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9956430196762085
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.0014899156522005796
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.0012858682312071323
+        }
+      ]
+    },
+    {
+      "sample_id": "male_alias_breaking_down_04",
+      "english": "The explanation pulls apart the claim and looks at what is underneath it.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.996976375579834
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.0016307911137118936
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.0007811372634023428
+        }
+      ]
+    },
+    {
+      "sample_id": "male_alias_breaking_down_05",
+      "english": "The model is unpacking the reasoning rather than treating it as one simple thing.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9893863201141357
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.0053443037904798985
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.0031075316946953535
+        }
+      ]
+    },
+    {
+      "sample_id": "male_alias_breaking_down_06",
+      "english": "The idea is pulled apart so each inner piece can be named.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9155005812644958
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.08276775479316711
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.0012541310861706734
+        }
+      ]
+    },
+    {
+      "sample_id": "male_alias_breaking_down_07",
+      "english": "The process examines what is underneath a decision by breaking it down.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9999669790267944
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 1.1288951100141276e-05
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 9.259358193958178e-06
+        }
+      ]
+    },
+    {
+      "sample_id": "male_alias_breaking_down_08",
+      "english": "The response breaks down the problem into the ideas that compose it.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9993212223052979
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.00018895020184572786
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.0001319053553743288
+        }
+      ]
+    },
+    {
+      "sample_id": "male_alias_breaking_down_09",
+      "english": "The analysis looks underneath the surface claim and separates its parts.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9996533393859863
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.00010397177538834512
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 8.151138899847865e-05
+        }
+      ]
+    },
+    {
+      "sample_id": "male_alias_breaking_down_10",
+      "english": "The thought is unpacked into its smaller internal ideas.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9809640645980835
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.010185305029153824
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.004270170349627733
+        }
+      ]
+    },
+    {
+      "sample_id": "male_nested_composition_01",
+      "english": "The idea contains nested sub-ideas arranged inside a larger whole.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9999256134033203
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 2.4600745746283792e-05
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 2.068587673420552e-05
+        }
+      ]
+    },
+    {
+      "sample_id": "male_nested_composition_02",
+      "english": "A larger concept holds smaller concepts within it, each one part of the whole.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.8806020617485046
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.11772579699754715
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.000541270652320236
+        }
+      ]
+    },
+    {
+      "sample_id": "male_nested_composition_03",
+      "english": "The plan is a nested structure made from goals, steps, tools, and timing.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9901047348976135
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.008068839088082314
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.0009157508029602468
+        }
+      ]
+    },
+    {
+      "sample_id": "male_nested_composition_04",
+      "english": "The recipe idea is built from ingredients, sequence, heat, timing, and serving.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9994940757751465
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.00017324654618278146
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.0001587440783623606
+        }
+      ]
+    },
+    {
+      "sample_id": "male_nested_composition_05",
+      "english": "The policy idea includes rights, duties, enforcement, exceptions, and review.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9991963505744934
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.00035487557761371136
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.0002767327823676169
+        }
+      ]
+    },
+    {
+      "sample_id": "male_nested_composition_06",
+      "english": "The training command is made of cue, posture, memory, reward, and repetition.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.80364590883255
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.1712244749069214
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.006539803463965654
+        }
+      ]
+    },
+    {
+      "sample_id": "male_nested_composition_07",
+      "english": "The answer is a composite idea with claim, evidence, rule, caveat, and conclusion inside it.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9673589468002319
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.028299152851104736
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.0019927017856389284
+        }
+      ]
+    },
+    {
+      "sample_id": "male_nested_composition_08",
+      "english": "A machine-learning pipeline is one idea made from data, model, loss, training, and evaluation.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9581563472747803
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.03139526769518852
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.007378456648439169
+        }
+      ]
+    },
+    {
+      "sample_id": "male_nested_composition_09",
+      "english": "The story world contains characters, motives, setting, conflict, and outcome as inner ideas.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.948169469833374
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.015555694699287415
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.014079859480261803
+        }
+      ]
+    },
+    {
+      "sample_id": "male_nested_composition_10",
+      "english": "The diagram represents a whole idea whose nodes are smaller ideas inside it.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9572985172271729
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.024204647168517113
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.015816528350114822
+        }
+      ]
+    },
+    {
+      "sample_id": "male_no_alias_plain_01",
+      "english": "The central idea has internal structure.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.8294609189033508
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.13051199913024902
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.022241270169615746
+        }
+      ]
+    },
+    {
+      "sample_id": "male_no_alias_plain_02",
+      "english": "Several smaller meanings form one larger meaning.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9997089505195618
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.00021927841589786112
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 4.733404057333246e-05
+        }
+      ]
+    },
+    {
+      "sample_id": "male_no_alias_plain_03",
+      "english": "The whole is meaningful because of the pieces inside it.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9854458570480347
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.0053113834001123905
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.00486205006018281
+        }
+      ]
+    },
+    {
+      "sample_id": "male_no_alias_plain_04",
+      "english": "One thought is formed by other thoughts that sit within it.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": false,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.46911880373954773
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.45770707726478577
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.03614524379372597
+        }
+      ]
+    },
+    {
+      "sample_id": "male_no_alias_plain_05",
+      "english": "This meaning has layers of smaller meanings inside the same idea.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9983281493186951
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.0011519392719492316
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.00020716298604384065
+        }
+      ]
+    },
+    {
+      "sample_id": "male_no_alias_plain_06",
+      "english": "The larger thought depends on the inner thoughts that make it up.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.947985827922821
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.015692738816142082
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.01175097469240427
+        }
+      ]
+    },
+    {
+      "sample_id": "male_no_alias_plain_07",
+      "english": "The idea is not simple; it is structured by what it includes.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9400274753570557
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.052155785262584686
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.00642926013097167
+        }
+      ]
+    },
+    {
+      "sample_id": "male_no_alias_plain_08",
+      "english": "A combined meaning is present because several meanings are joined within one idea.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9693909287452698
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.013972041197121143
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.008692041970789433
+        }
+      ]
+    },
+    {
+      "sample_id": "male_no_alias_plain_09",
+      "english": "The concept is a container for related sub-concepts.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9463245868682861
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.045205410569906235
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.0026784755755215883
+        }
+      ]
+    },
+    {
+      "sample_id": "male_no_alias_plain_10",
+      "english": "The idea stands apart, but it is built from other ideas inside it.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": true,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.9875237345695496
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.006207454949617386
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.0034947770182043314
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_idea_01",
+      "english": "The object under discussion is a single topic.",
+      "gold": 0,
+      "gold_name": "Idea",
+      "predicted": 0,
+      "predicted_name": "Idea",
+      "correct": true,
+      "top3": [
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.9666723012924194
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.01945362612605095
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.004950308240950108
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_idea_02",
+      "english": "There is one thing on the mind, considered as itself.",
+      "gold": 0,
+      "gold_name": "Idea",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": false,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.3668168783187866
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.3426230847835541
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.15726825594902039
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_mind_01",
+      "english": "Attention is active and holding the information.",
+      "gold": 1,
+      "gold_name": "Mind",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": true,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.81858891248703
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.07103189826011658
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.06378871947526932
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_mind_02",
+      "english": "The system takes in the signal and keeps it available for response.",
+      "gold": 1,
+      "gold_name": "Mind",
+      "predicted": 2,
+      "predicted_name": "Positive",
+      "correct": false,
+      "top3": [
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.8480362296104431
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.09826796501874924
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.021617889404296875
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_positive_01",
+      "english": "The option attracts the mind and pulls attention toward it.",
+      "gold": 2,
+      "gold_name": "Positive",
+      "predicted": 2,
+      "predicted_name": "Positive",
+      "correct": true,
+      "top3": [
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.9975445866584778
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.0014365070965141058
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.0006845213356427848
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_positive_02",
+      "english": "The candidate is favored and feels appealing.",
+      "gold": 2,
+      "gold_name": "Positive",
+      "predicted": 2,
+      "predicted_name": "Positive",
+      "correct": true,
+      "top3": [
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.9837661981582642
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.007311286870390177
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.00543271703645587
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_negative_01",
+      "english": "The option repels the mind and gets pushed away.",
+      "gold": 3,
+      "gold_name": "Negative",
+      "predicted": 2,
+      "predicted_name": "Positive",
+      "correct": false,
+      "top3": [
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.9578660726547241
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.013695677742362022
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.01347631961107254
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_negative_02",
+      "english": "The proposal feels wrong and is rejected.",
+      "gold": 3,
+      "gold_name": "Negative",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": false,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.7038400769233704
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.20343293249607086
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.035199712961912155
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_vibration_01",
+      "english": "The idea leaves a strong impression on the mind.",
+      "gold": 4,
+      "gold_name": "Vibration",
+      "predicted": 4,
+      "predicted_name": "Vibration",
+      "correct": true,
+      "top3": [
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.5511122345924377
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.3411291837692261
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.04948331415653229
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_vibration_02",
+      "english": "The phrase resonates and keeps echoing after it is heard.",
+      "gold": 4,
+      "gold_name": "Vibration",
+      "predicted": 4,
+      "predicted_name": "Vibration",
+      "correct": true,
+      "top3": [
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.9998155236244202
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 6.507250509457663e-05
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 4.6081619075266644e-05
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_female_01",
+      "english": "The mind is shaped by the experiences it has taken in.",
+      "gold": 5,
+      "gold_name": "Female",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": true,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.9776171445846558
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.021722815930843353
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.0002655591524671763
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_female_02",
+      "english": "Past experience becomes part of what the person is.",
+      "gold": 5,
+      "gold_name": "Female",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": true,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.9998605251312256
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.00011965758312726393
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 6.284029495873256e-06
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_rhythm_01",
+      "english": "Repeated practice sets a pattern over time.",
+      "gold": 7,
+      "gold_name": "Rhythm",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": true,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.9805073142051697
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.011036330834031105
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.007847503758966923
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_rhythm_02",
+      "english": "The same signal returns at regular intervals.",
+      "gold": 7,
+      "gold_name": "Rhythm",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": false,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.597370982170105
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.20427387952804565
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.14348870515823364
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_above_01",
+      "english": "One cue triggers another thought to appear.",
+      "gold": 8,
+      "gold_name": "Above/Cause",
+      "predicted": 8,
+      "predicted_name": "Above/Cause",
+      "correct": true,
+      "top3": [
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.9997509121894836
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.0001888098195195198
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 2.3734908609185368e-05
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_above_02",
+      "english": "The sound reminds the listener of a different scene.",
+      "gold": 8,
+      "gold_name": "Above/Cause",
+      "predicted": 8,
+      "predicted_name": "Above/Cause",
+      "correct": true,
+      "top3": [
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.996059775352478
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.003473986405879259
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.00016714299272280186
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_below_01",
+      "english": "The remembered scene is what appears after the cue.",
+      "gold": 9,
+      "gold_name": "Below/Effect",
+      "predicted": 8,
+      "predicted_name": "Above/Cause",
+      "correct": false,
+      "top3": [
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.9291481971740723
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.050535641610622406
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.013528666459023952
+        }
+      ]
+    },
+    {
+      "sample_id": "contrast_below_02",
+      "english": "The resulting thought enters awareness after something sets it off.",
+      "gold": 9,
+      "gold_name": "Below/Effect",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": false,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.37428751587867737
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.26946038007736206
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.16710056364536285
+        }
+      ]
+    }
+  ],
+  "layer3_predictions": [],
+  "layer3_accuracy_by_scenario": {
+    "unknown": {
+      "correct": 40,
+      "total": 48,
+      "accuracy": 0.8333333333333334
+    }
+  },
+  "layer3_accuracy_by_noetic": {
+    "Above/Cause": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "Below/Effect": {
+      "correct": 0,
+      "total": 2,
+      "accuracy": 0.0
+    },
+    "Female": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "Idea": {
+      "correct": 1,
+      "total": 2,
+      "accuracy": 0.5
+    },
+    "Male": {
+      "correct": 29,
+      "total": 30,
+      "accuracy": 0.9666666666666667
+    },
+    "Mind": {
+      "correct": 1,
+      "total": 2,
+      "accuracy": 0.5
+    },
+    "Negative": {
+      "correct": 0,
+      "total": 2,
+      "accuracy": 0.0
+    },
+    "Positive": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "Rhythm": {
+      "correct": 1,
+      "total": 2,
+      "accuracy": 0.5
+    },
+    "Vibration": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    }
+  },
+  "layer3_accuracy_by_paraphrase_style": {
+    "contrast_above": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "contrast_below": {
+      "correct": 0,
+      "total": 2,
+      "accuracy": 0.0
+    },
+    "contrast_female": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "contrast_idea": {
+      "correct": 1,
+      "total": 2,
+      "accuracy": 0.5
+    },
+    "contrast_mind": {
+      "correct": 1,
+      "total": 2,
+      "accuracy": 0.5
+    },
+    "contrast_negative": {
+      "correct": 0,
+      "total": 2,
+      "accuracy": 0.0
+    },
+    "contrast_positive": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "contrast_rhythm": {
+      "correct": 1,
+      "total": 2,
+      "accuracy": 0.5
+    },
+    "contrast_vibration": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "male_alias_breakdown": {
+      "correct": 10,
+      "total": 10,
+      "accuracy": 1.0
+    },
+    "male_nested_composition": {
+      "correct": 10,
+      "total": 10,
+      "accuracy": 1.0
+    },
+    "male_no_alias_plain": {
+      "correct": 9,
+      "total": 10,
+      "accuracy": 0.9
+    }
+  },
+  "layer3_accuracy_by_target_focus": {
+    "contrast": {
+      "correct": 11,
+      "total": 18,
+      "accuracy": 0.6111111111111112
+    },
+    "male": {
+      "correct": 29,
+      "total": 30,
+      "accuracy": 0.9666666666666667
+    }
+  },
+  "text_baseline_predictions": {
+    "count_vector_logreg": {
+      "accuracy": 0.7708333333333334,
+      "correct": 37,
+      "total": 48,
+      "predictions": [
+        {
+          "sample_id": "male_alias_breaking_down_01",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_02",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_03",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_04",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_05",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_06",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_07",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_08",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_09",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_10",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_01",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_02",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_03",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_04",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_05",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_06",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_07",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_08",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_09",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_10",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_01",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_02",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_03",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_04",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_05",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_06",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_07",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_08",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_09",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_10",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_idea_01",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_idea_02",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_mind_01",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_mind_02",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_positive_01",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 2,
+          "predicted_name": "Positive",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_positive_02",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_negative_01",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 2,
+          "predicted_name": "Positive",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_negative_02",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_vibration_01",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 2,
+          "predicted_name": "Positive",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_vibration_02",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_female_01",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_female_02",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_rhythm_01",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_rhythm_02",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_above_01",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 8,
+          "predicted_name": "Above/Cause",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_above_02",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 8,
+          "predicted_name": "Above/Cause",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_below_01",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_below_02",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": false
+        }
+      ]
+    },
+    "tfidf_logreg": {
+      "accuracy": 0.8333333333333334,
+      "correct": 40,
+      "total": 48,
+      "predictions": [
+        {
+          "sample_id": "male_alias_breaking_down_01",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_02",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_03",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_04",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_05",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_06",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_07",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_08",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_09",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_alias_breaking_down_10",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_01",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_02",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_03",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_04",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_05",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_06",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_07",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_08",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_09",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_nested_composition_10",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_01",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_02",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_03",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_04",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_05",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_06",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_07",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_08",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_09",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "male_no_alias_plain_10",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_idea_01",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_idea_02",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 8,
+          "predicted_name": "Above/Cause",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_mind_01",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_mind_02",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_positive_01",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 2,
+          "predicted_name": "Positive",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_positive_02",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 2,
+          "predicted_name": "Positive",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_negative_01",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 3,
+          "predicted_name": "Negative",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_negative_02",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 2,
+          "predicted_name": "Positive",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_vibration_01",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_vibration_02",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_female_01",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_female_02",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_rhythm_01",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_rhythm_02",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_above_01",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 8,
+          "predicted_name": "Above/Cause",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_above_02",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 8,
+          "predicted_name": "Above/Cause",
+          "correct": true
+        },
+        {
+          "sample_id": "contrast_below_01",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": false
+        },
+        {
+          "sample_id": "contrast_below_02",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        }
+      ]
+    }
+  },
+  "fixture_rows": [
+    {
+      "sample_id": "male_alias_breaking_down_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_alias_breakdown",
+      "english": "The thinker is breaking down an idea to see how its parts fit together.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Training-alias diagnostic: breaking down an idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_alias_breaking_down_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_alias_breakdown",
+      "english": "The argument is being broken down into the pieces that make it work.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Training-alias diagnostic: broken down into pieces.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_alias_breaking_down_03",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_alias_breakdown",
+      "english": "The concept is unpacked so the smaller ideas inside it can be inspected.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Training-alias diagnostic: unpacked concept.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_alias_breaking_down_04",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_alias_breakdown",
+      "english": "The explanation pulls apart the claim and looks at what is underneath it.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Training-alias diagnostic: pulls apart and looks underneath.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_alias_breaking_down_05",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_alias_breakdown",
+      "english": "The model is unpacking the reasoning rather than treating it as one simple thing.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Training-alias diagnostic: unpacking reasoning.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_alias_breaking_down_06",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_alias_breakdown",
+      "english": "The idea is pulled apart so each inner piece can be named.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Training-alias diagnostic: pulled apart inner pieces.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_alias_breaking_down_07",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_alias_breakdown",
+      "english": "The process examines what is underneath a decision by breaking it down.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Training-alias diagnostic: underneath plus breaking down.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_alias_breaking_down_08",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_alias_breakdown",
+      "english": "The response breaks down the problem into the ideas that compose it.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Training-alias diagnostic: breaks down plus compose.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_alias_breaking_down_09",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_alias_breakdown",
+      "english": "The analysis looks underneath the surface claim and separates its parts.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Training-alias diagnostic: looks underneath and separates parts.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_alias_breaking_down_10",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_alias_breakdown",
+      "english": "The thought is unpacked into its smaller internal ideas.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Training-alias diagnostic: unpacked into internal ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_nested_composition_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_nested_composition",
+      "english": "The idea contains nested sub-ideas arranged inside a larger whole.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "User-clarified diagnostic: nested ideas inside a larger idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_nested_composition_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_nested_composition",
+      "english": "A larger concept holds smaller concepts within it, each one part of the whole.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "User-clarified diagnostic: concept holds smaller concepts.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_nested_composition_03",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_nested_composition",
+      "english": "The plan is a nested structure made from goals, steps, tools, and timing.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "User-clarified diagnostic: plan as nested structure.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_nested_composition_04",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_nested_composition",
+      "english": "The recipe idea is built from ingredients, sequence, heat, timing, and serving.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "User-clarified diagnostic: idea built from constituents.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_nested_composition_05",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_nested_composition",
+      "english": "The policy idea includes rights, duties, enforcement, exceptions, and review.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "User-clarified diagnostic: policy idea includes constituent ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_nested_composition_06",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_nested_composition",
+      "english": "The training command is made of cue, posture, memory, reward, and repetition.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Dog-training corrected ^6: command idea made of nested ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_nested_composition_07",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_nested_composition",
+      "english": "The answer is a composite idea with claim, evidence, rule, caveat, and conclusion inside it.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "User-clarified diagnostic: composite idea with inner ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_nested_composition_08",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_nested_composition",
+      "english": "A machine-learning pipeline is one idea made from data, model, loss, training, and evaluation.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "User-clarified diagnostic: one idea made from nested parts.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_nested_composition_09",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_nested_composition",
+      "english": "The story world contains characters, motives, setting, conflict, and outcome as inner ideas.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "User-clarified diagnostic: story-world idea contains inner ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_nested_composition_10",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_nested_composition",
+      "english": "The diagram represents a whole idea whose nodes are smaller ideas inside it.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "User-clarified diagnostic: whole idea with node ideas inside.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_no_alias_plain_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_no_alias_plain",
+      "english": "The central idea has internal structure.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "No-alias diagnostic: internal structure without training keywords.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_no_alias_plain_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_no_alias_plain",
+      "english": "Several smaller meanings form one larger meaning.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "No-alias diagnostic: smaller meanings form larger meaning.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_no_alias_plain_03",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_no_alias_plain",
+      "english": "The whole is meaningful because of the pieces inside it.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "No-alias diagnostic: whole and pieces.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_no_alias_plain_04",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_no_alias_plain",
+      "english": "One thought is formed by other thoughts that sit within it.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "No-alias diagnostic: thought formed by inner thoughts.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_no_alias_plain_05",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_no_alias_plain",
+      "english": "This meaning has layers of smaller meanings inside the same idea.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "No-alias diagnostic: layers of smaller meanings.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_no_alias_plain_06",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_no_alias_plain",
+      "english": "The larger thought depends on the inner thoughts that make it up.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "No-alias diagnostic: larger thought depends on inner thoughts.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_no_alias_plain_07",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_no_alias_plain",
+      "english": "The idea is not simple; it is structured by what it includes.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "No-alias diagnostic: structured by included content.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_no_alias_plain_08",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_no_alias_plain",
+      "english": "A combined meaning is present because several meanings are joined within one idea.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "No-alias diagnostic: combined meaning within one idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_no_alias_plain_09",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_no_alias_plain",
+      "english": "The concept is a container for related sub-concepts.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "No-alias diagnostic: concept as container for sub-concepts.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "male_no_alias_plain_10",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "male",
+      "paraphrase_style": "male_no_alias_plain",
+      "english": "The idea stands apart, but it is built from other ideas inside it.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "No-alias diagnostic: itself apart yet built from inner ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_idea_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_idea",
+      "english": "The object under discussion is a single topic.",
+      "canonical_noetic": 0,
+      "canonical_label": "Idea",
+      "cas_expression": "^0",
+      "mapping_note": "Contrast: bare Idea, not composed idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_idea_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_idea",
+      "english": "There is one thing on the mind, considered as itself.",
+      "canonical_noetic": 0,
+      "canonical_label": "Idea",
+      "cas_expression": "^0",
+      "mapping_note": "Contrast: bare Idea, not composed idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_mind_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_mind",
+      "english": "Attention is active and holding the information.",
+      "canonical_noetic": 1,
+      "canonical_label": "Mind",
+      "cas_expression": "^1",
+      "mapping_note": "Contrast: awareness processing, not composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_mind_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_mind",
+      "english": "The system takes in the signal and keeps it available for response.",
+      "canonical_noetic": 1,
+      "canonical_label": "Mind",
+      "cas_expression": "^1",
+      "mapping_note": "Contrast: awareness processing, not composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_positive_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_positive",
+      "english": "The option attracts the mind and pulls attention toward it.",
+      "canonical_noetic": 2,
+      "canonical_label": "Positive",
+      "cas_expression": "^2",
+      "mapping_note": "Contrast: attraction, not composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_positive_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_positive",
+      "english": "The candidate is favored and feels appealing.",
+      "canonical_noetic": 2,
+      "canonical_label": "Positive",
+      "cas_expression": "^2",
+      "mapping_note": "Contrast: affinity, not composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_negative_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_negative",
+      "english": "The option repels the mind and gets pushed away.",
+      "canonical_noetic": 3,
+      "canonical_label": "Negative",
+      "cas_expression": "^3",
+      "mapping_note": "Contrast: aversion, not composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_negative_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_negative",
+      "english": "The proposal feels wrong and is rejected.",
+      "canonical_noetic": 3,
+      "canonical_label": "Negative",
+      "cas_expression": "^3",
+      "mapping_note": "Contrast: rejection, not composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_vibration_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_vibration",
+      "english": "The idea leaves a strong impression on the mind.",
+      "canonical_noetic": 4,
+      "canonical_label": "Vibration",
+      "cas_expression": "^4",
+      "mapping_note": "Contrast: resonance, not composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_vibration_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_vibration",
+      "english": "The phrase resonates and keeps echoing after it is heard.",
+      "canonical_noetic": 4,
+      "canonical_label": "Vibration",
+      "cas_expression": "^4",
+      "mapping_note": "Contrast: resonance, not composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_female_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_female",
+      "english": "The mind is shaped by the experiences it has taken in.",
+      "canonical_noetic": 5,
+      "canonical_label": "Female",
+      "cas_expression": "^5",
+      "mapping_note": "Contrast: mind composed by ideas, not idea composed by ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_female_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_female",
+      "english": "Past experience becomes part of what the person is.",
+      "canonical_noetic": 5,
+      "canonical_label": "Female",
+      "cas_expression": "^5",
+      "mapping_note": "Contrast: accumulated mind makeup, not idea composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_rhythm_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_rhythm",
+      "english": "Repeated practice sets a pattern over time.",
+      "canonical_noetic": 7,
+      "canonical_label": "Rhythm",
+      "cas_expression": "^7",
+      "mapping_note": "Contrast: repetition pattern, not composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_rhythm_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_rhythm",
+      "english": "The same signal returns at regular intervals.",
+      "canonical_noetic": 7,
+      "canonical_label": "Rhythm",
+      "cas_expression": "^7",
+      "mapping_note": "Contrast: repeated exposure, not composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_above_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_above",
+      "english": "One cue triggers another thought to appear.",
+      "canonical_noetic": 8,
+      "canonical_label": "Above/Cause",
+      "cas_expression": "^8",
+      "mapping_note": "Contrast: trigger idea, not composed idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_above_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_above",
+      "english": "The sound reminds the listener of a different scene.",
+      "canonical_noetic": 8,
+      "canonical_label": "Above/Cause",
+      "cas_expression": "^8",
+      "mapping_note": "Contrast: trigger idea, not composed idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_below_01",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_below",
+      "english": "The remembered scene is what appears after the cue.",
+      "canonical_noetic": 9,
+      "canonical_label": "Below/Effect",
+      "cas_expression": "^9",
+      "mapping_note": "Contrast: effect idea, not composed idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "contrast_below_02",
+      "suite": "tks_noetic_male_diagnostic",
+      "target_focus": "contrast",
+      "paraphrase_style": "contrast_below",
+      "english": "The resulting thought enters awareness after something sets it off.",
+      "canonical_noetic": 9,
+      "canonical_label": "Below/Effect",
+      "cas_expression": "^9",
+      "mapping_note": "Contrast: effect idea, not composed idea.",
+      "confidence": "medium"
+    }
+  ]
+}
