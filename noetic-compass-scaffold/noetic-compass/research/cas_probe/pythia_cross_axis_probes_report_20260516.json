@@ -1,0 +1,831 @@
+{
+  "schema_version": "pythia_cross_axis_probes.v1",
+  "activations_file": "pythia_probe_activations_20260515.npz",
+  "activations_sha256": "f1b3610636ddb5fe056504e931c09cd07f2fed1247b84c649cf75503dd49ca9a",
+  "labels_file": "pythia_probe_labels_20260515.jsonl",
+  "labels_sha256": "33961f7c731517c252e4fee4b4ec4217f2c2a4e4727e35bbaff0085c381b98c9",
+  "n_activation_records": 457,
+  "n_layers": 13,
+  "hidden_dim": 768,
+  "seed": 42,
+  "split": {
+    "train_frac": 0.7,
+    "val_frac": 0.15,
+    "test_frac": 0.15000000000000005
+  },
+  "decision_gates": {
+    "minimum_test_accuracy_above_chance_pp": 0.1,
+    "reliable_lift_gap_pp_min": 0.05,
+    "reliable_lift_mcnemar_p_max": 0.05
+  },
+  "extraction_summary": {
+    "domain": {
+      "eligible_records": 415,
+      "label_order": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "class_distribution": {
+        "C": 96,
+        "E": 96,
+        "O": 103,
+        "P": 120
+      },
+      "rejected": {
+        "none_or_multi_label": 42
+      }
+    },
+    "register": {
+      "eligible_records": 176,
+      "label_order": [
+        "T",
+        "A",
+        "f",
+        "E"
+      ],
+      "class_distribution": {
+        "A": 41,
+        "E": 46,
+        "T": 47,
+        "f": 42
+      },
+      "rejected": {
+        "none_or_multi_label": 281
+      }
+    },
+    "drive": {
+      "eligible_records": 226,
+      "label_order": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "class_distribution": {
+        "1": 42,
+        "2": 34,
+        "3": 32,
+        "4": 30,
+        "5": 29,
+        "6": 31,
+        "7": 28
+      },
+      "rejected": {
+        "none_or_multi_label": 231
+      }
+    }
+  },
+  "axes": {
+    "domain": {
+      "axis": "domain",
+      "label_order": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "n_records": 415,
+      "class_distribution": {
+        "C": 96,
+        "E": 96,
+        "O": 103,
+        "P": 120
+      },
+      "chance_baseline": 0.25,
+      "split_counts": {
+        "train": 289,
+        "val": 63,
+        "test": 63
+      },
+      "headline_layer": {
+        "layer": 5,
+        "train_acc": 1.0,
+        "val_acc": 0.7619047619047619,
+        "test_acc": 0.8095238095238095,
+        "test_macro_f1": 0.7973076923076923
+      },
+      "per_layer": [
+        {
+          "layer": 0,
+          "train_acc": 1.0,
+          "val_acc": 0.6984126984126984,
+          "test_acc": 0.8412698412698413,
+          "test_macro_f1": 0.8326629797218033
+        },
+        {
+          "layer": 1,
+          "train_acc": 1.0,
+          "val_acc": 0.746031746031746,
+          "test_acc": 0.8253968253968254,
+          "test_macro_f1": 0.8122299527098289
+        },
+        {
+          "layer": 2,
+          "train_acc": 1.0,
+          "val_acc": 0.6984126984126984,
+          "test_acc": 0.7936507936507936,
+          "test_macro_f1": 0.7816687016687016
+        },
+        {
+          "layer": 3,
+          "train_acc": 1.0,
+          "val_acc": 0.7142857142857143,
+          "test_acc": 0.7936507936507936,
+          "test_macro_f1": 0.7816687016687016
+        },
+        {
+          "layer": 4,
+          "train_acc": 1.0,
+          "val_acc": 0.6984126984126984,
+          "test_acc": 0.8253968253968254,
+          "test_macro_f1": 0.8179810929810929
+        },
+        {
+          "layer": 5,
+          "train_acc": 1.0,
+          "val_acc": 0.7619047619047619,
+          "test_acc": 0.8095238095238095,
+          "test_macro_f1": 0.7973076923076923
+        },
+        {
+          "layer": 6,
+          "train_acc": 1.0,
+          "val_acc": 0.7142857142857143,
+          "test_acc": 0.7777777777777778,
+          "test_macro_f1": 0.7605171299288946
+        },
+        {
+          "layer": 7,
+          "train_acc": 1.0,
+          "val_acc": 0.7619047619047619,
+          "test_acc": 0.746031746031746,
+          "test_macro_f1": 0.731416957026713
+        },
+        {
+          "layer": 8,
+          "train_acc": 1.0,
+          "val_acc": 0.7142857142857143,
+          "test_acc": 0.7936507936507936,
+          "test_macro_f1": 0.782957782957783
+        },
+        {
+          "layer": 9,
+          "train_acc": 1.0,
+          "val_acc": 0.7301587301587301,
+          "test_acc": 0.8253968253968254,
+          "test_macro_f1": 0.8187811636087499
+        },
+        {
+          "layer": 10,
+          "train_acc": 1.0,
+          "val_acc": 0.7301587301587301,
+          "test_acc": 0.7777777777777778,
+          "test_macro_f1": 0.7765336765336766
+        },
+        {
+          "layer": 11,
+          "train_acc": 1.0,
+          "val_acc": 0.6984126984126984,
+          "test_acc": 0.7936507936507936,
+          "test_macro_f1": 0.7935903106181744
+        },
+        {
+          "layer": 12,
+          "train_acc": 1.0,
+          "val_acc": 0.746031746031746,
+          "test_acc": 0.8253968253968254,
+          "test_macro_f1": 0.8208349464447026
+        }
+      ],
+      "text_baselines": [
+        {
+          "name": "count_vector",
+          "val_acc": 0.746031746031746,
+          "test_acc": 0.8095238095238095,
+          "test_macro_f1": 0.7940095267681475
+        },
+        {
+          "name": "tfidf",
+          "val_acc": 0.7619047619047619,
+          "test_acc": 0.7301587301587301,
+          "test_macro_f1": 0.7156372549019608
+        }
+      ],
+      "dummy_baselines": [
+        {
+          "name": "most_frequent",
+          "test_acc": 0.2857142857142857,
+          "test_macro_f1": 0.1111111111111111
+        },
+        {
+          "name": "stratified",
+          "test_acc": 0.25396825396825395,
+          "test_macro_f1": 0.24675568425568425
+        }
+      ],
+      "best_text_baseline_by_val": {
+        "name": "tfidf",
+        "val_acc": 0.7619047619047619,
+        "test_acc": 0.7301587301587301,
+        "test_macro_f1": 0.7156372549019608
+      },
+      "pythia_minus_best_text_test_acc": 0.07936507936507942,
+      "mcnemar_vs_best_text": {
+        "pythia_only_correct": 9,
+        "text_only_correct": 4,
+        "discordant_total": 13,
+        "p_two_sided": 0.266845703125
+      },
+      "headline_confusion_matrix": [
+        [
+          18,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          9,
+          2,
+          3
+        ],
+        [
+          1,
+          1,
+          10,
+          2
+        ],
+        [
+          2,
+          0,
+          0,
+          14
+        ]
+      ],
+      "test_sample_ids": [
+        "wave3_cas_to_english_00750",
+        "wave3_cas_to_english_00900",
+        "wave3_cas_to_english_00633",
+        "wave3_cas_to_english_00575",
+        "wave3_cas_to_english_00175",
+        "wave3_cas_to_english_00212",
+        "wave3_cas_to_english_00182",
+        "wave3_cas_to_english_00241",
+        "wave3_cas_to_english_00369",
+        "wave3_cas_to_english_00201",
+        "wave3_cas_to_english_00735",
+        "wave3_cas_to_english_00513",
+        "wave3_cas_to_english_00776",
+        "wave3_cas_to_english_00066",
+        "wave3_cas_to_english_01068",
+        "wave3_cas_to_english_00840",
+        "wave3_cas_to_english_01051",
+        "wave3_cas_to_english_00586",
+        "wave3_cas_to_english_00126",
+        "wave3_cas_to_english_00989",
+        "wave3_cas_to_english_00081",
+        "wave3_cas_to_english_00549",
+        "wave3_cas_to_english_00300",
+        "wave3_cas_to_english_00507",
+        "wave3_cas_to_english_00844",
+        "wave3_cas_to_english_00652",
+        "wave3_cas_to_english_00398",
+        "wave3_cas_to_english_00741",
+        "wave3_cas_to_english_00355",
+        "wave3_cas_to_english_00099",
+        "wave3_cas_to_english_00334",
+        "wave3_cas_to_english_00452",
+        "wave3_cas_to_english_01041",
+        "wave3_cas_to_english_00777",
+        "wave3_cas_to_english_00964",
+        "wave3_cas_to_english_00856",
+        "wave3_cas_to_english_00936",
+        "wave3_cas_to_english_00872",
+        "wave3_cas_to_english_00668",
+        "wave3_cas_to_english_00007",
+        "wave3_cas_to_english_00220",
+        "wave3_cas_to_english_00413",
+        "wave3_cas_to_english_00391",
+        "wave3_cas_to_english_00725",
+        "wave3_cas_to_english_00309",
+        "wave3_cas_to_english_00286",
+        "wave3_cas_to_english_00871",
+        "wave3_cas_to_english_00439",
+        "wave3_cas_to_english_00388",
+        "wave3_cas_to_english_00285",
+        "wave3_cas_to_english_00405",
+        "wave3_cas_to_english_00581",
+        "wave3_cas_to_english_00704",
+        "wave3_cas_to_english_01052",
+        "wave3_cas_to_english_00960",
+        "wave3_cas_to_english_00029",
+        "wave3_cas_to_english_00718",
+        "wave3_cas_to_english_00463",
+        "wave3_cas_to_english_00792",
+        "wave3_cas_to_english_01037",
+        "wave3_cas_to_english_00729",
+        "wave3_cas_to_english_00219",
+        "wave3_cas_to_english_00819"
+      ],
+      "verdict": "LABELS_RECOVERABLE_MOSTLY_FROM_TEXT"
+    },
+    "register": {
+      "axis": "register",
+      "label_order": [
+        "T",
+        "A",
+        "f",
+        "E"
+      ],
+      "n_records": 176,
+      "class_distribution": {
+        "A": 41,
+        "E": 46,
+        "T": 47,
+        "f": 42
+      },
+      "chance_baseline": 0.25,
+      "split_counts": {
+        "train": 122,
+        "val": 27,
+        "test": 27
+      },
+      "headline_layer": {
+        "layer": 0,
+        "train_acc": 1.0,
+        "val_acc": 0.48148148148148145,
+        "test_acc": 0.3333333333333333,
+        "test_macro_f1": 0.32230122818358115
+      },
+      "per_layer": [
+        {
+          "layer": 0,
+          "train_acc": 1.0,
+          "val_acc": 0.48148148148148145,
+          "test_acc": 0.3333333333333333,
+          "test_macro_f1": 0.32230122818358115
+        },
+        {
+          "layer": 1,
+          "train_acc": 1.0,
+          "val_acc": 0.48148148148148145,
+          "test_acc": 0.2962962962962963,
+          "test_macro_f1": 0.2750484809308339
+        },
+        {
+          "layer": 2,
+          "train_acc": 1.0,
+          "val_acc": 0.48148148148148145,
+          "test_acc": 0.25925925925925924,
+          "test_macro_f1": 0.23593073593073594
+        },
+        {
+          "layer": 3,
+          "train_acc": 1.0,
+          "val_acc": 0.4444444444444444,
+          "test_acc": 0.25925925925925924,
+          "test_macro_f1": 0.20714285714285713
+        },
+        {
+          "layer": 4,
+          "train_acc": 1.0,
+          "val_acc": 0.3333333333333333,
+          "test_acc": 0.3333333333333333,
+          "test_macro_f1": 0.2944444444444444
+        },
+        {
+          "layer": 5,
+          "train_acc": 1.0,
+          "val_acc": 0.4074074074074074,
+          "test_acc": 0.2962962962962963,
+          "test_macro_f1": 0.26875
+        },
+        {
+          "layer": 6,
+          "train_acc": 1.0,
+          "val_acc": 0.37037037037037035,
+          "test_acc": 0.37037037037037035,
+          "test_macro_f1": 0.3557109557109557
+        },
+        {
+          "layer": 7,
+          "train_acc": 1.0,
+          "val_acc": 0.25925925925925924,
+          "test_acc": 0.3333333333333333,
+          "test_macro_f1": 0.32579920079920077
+        },
+        {
+          "layer": 8,
+          "train_acc": 1.0,
+          "val_acc": 0.48148148148148145,
+          "test_acc": 0.4074074074074074,
+          "test_macro_f1": 0.4080357142857143
+        },
+        {
+          "layer": 9,
+          "train_acc": 1.0,
+          "val_acc": 0.4074074074074074,
+          "test_acc": 0.37037037037037035,
+          "test_macro_f1": 0.3813976872800402
+        },
+        {
+          "layer": 10,
+          "train_acc": 1.0,
+          "val_acc": 0.4444444444444444,
+          "test_acc": 0.2962962962962963,
+          "test_macro_f1": 0.2956043956043956
+        },
+        {
+          "layer": 11,
+          "train_acc": 1.0,
+          "val_acc": 0.37037037037037035,
+          "test_acc": 0.2222222222222222,
+          "test_macro_f1": 0.21955128205128205
+        },
+        {
+          "layer": 12,
+          "train_acc": 1.0,
+          "val_acc": 0.37037037037037035,
+          "test_acc": 0.2962962962962963,
+          "test_macro_f1": 0.30943223443223444
+        }
+      ],
+      "text_baselines": [
+        {
+          "name": "count_vector",
+          "val_acc": 0.4074074074074074,
+          "test_acc": 0.2222222222222222,
+          "test_macro_f1": 0.20476190476190476
+        },
+        {
+          "name": "tfidf",
+          "val_acc": 0.4074074074074074,
+          "test_acc": 0.25925925925925924,
+          "test_macro_f1": 0.24656593406593408
+        }
+      ],
+      "dummy_baselines": [
+        {
+          "name": "most_frequent",
+          "test_acc": 0.25925925925925924,
+          "test_macro_f1": 0.10294117647058823
+        },
+        {
+          "name": "stratified",
+          "test_acc": 0.37037037037037035,
+          "test_macro_f1": 0.3341346153846154
+        }
+      ],
+      "best_text_baseline_by_val": {
+        "name": "tfidf",
+        "val_acc": 0.4074074074074074,
+        "test_acc": 0.25925925925925924,
+        "test_macro_f1": 0.24656593406593408
+      },
+      "pythia_minus_best_text_test_acc": 0.07407407407407407,
+      "mcnemar_vs_best_text": {
+        "pythia_only_correct": 4,
+        "text_only_correct": 2,
+        "discordant_total": 6,
+        "p_two_sided": 0.6875
+      },
+      "headline_confusion_matrix": [
+        [
+          3,
+          3,
+          1,
+          0
+        ],
+        [
+          3,
+          2,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          4
+        ],
+        [
+          3,
+          1,
+          0,
+          3
+        ]
+      ],
+      "test_sample_ids": [
+        "wave3_cas_to_english_00359",
+        "wave3_cas_to_english_01107",
+        "wave3_cas_to_english_00543",
+        "wave3_cas_to_english_00635",
+        "wave3_cas_to_english_01124",
+        "wave3_cas_to_english_00209",
+        "wave3_cas_to_english_00950",
+        "wave3_cas_to_english_00532",
+        "wave3_cas_to_english_00139",
+        "wave3_cas_to_english_00057",
+        "wave3_cas_to_english_00917",
+        "wave3_cas_to_english_00232",
+        "wave3_cas_to_english_00609",
+        "wave3_cas_to_english_01120",
+        "wave3_cas_to_english_00610",
+        "wave3_cas_to_english_00517",
+        "wave3_cas_to_english_00409",
+        "wave3_cas_to_english_00077",
+        "wave3_cas_to_english_00006",
+        "wave3_cas_to_english_00786",
+        "wave3_cas_to_english_00177",
+        "wave3_cas_to_english_00355",
+        "wave3_cas_to_english_00071",
+        "wave3_cas_to_english_00005",
+        "wave3_cas_to_english_00263",
+        "wave3_cas_to_english_01078",
+        "wave3_cas_to_english_00692"
+      ],
+      "verdict": "PROBE_WEAKLY_ABOVE_CHANCE"
+    },
+    "drive": {
+      "axis": "drive",
+      "label_order": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "n_records": 226,
+      "class_distribution": {
+        "1": 42,
+        "2": 34,
+        "3": 32,
+        "4": 30,
+        "5": 29,
+        "6": 31,
+        "7": 28
+      },
+      "chance_baseline": 0.14285714285714285,
+      "split_counts": {
+        "train": 158,
+        "val": 34,
+        "test": 34
+      },
+      "headline_layer": {
+        "layer": 3,
+        "train_acc": 1.0,
+        "val_acc": 0.4411764705882353,
+        "test_acc": 0.3235294117647059,
+        "test_macro_f1": 0.31031746031746027
+      },
+      "per_layer": [
+        {
+          "layer": 0,
+          "train_acc": 1.0,
+          "val_acc": 0.4117647058823529,
+          "test_acc": 0.29411764705882354,
+          "test_macro_f1": 0.28643578643578643
+        },
+        {
+          "layer": 1,
+          "train_acc": 1.0,
+          "val_acc": 0.35294117647058826,
+          "test_acc": 0.2647058823529412,
+          "test_macro_f1": 0.22987012987012984
+        },
+        {
+          "layer": 2,
+          "train_acc": 1.0,
+          "val_acc": 0.38235294117647056,
+          "test_acc": 0.2647058823529412,
+          "test_macro_f1": 0.22721722721722723
+        },
+        {
+          "layer": 3,
+          "train_acc": 1.0,
+          "val_acc": 0.4411764705882353,
+          "test_acc": 0.3235294117647059,
+          "test_macro_f1": 0.31031746031746027
+        },
+        {
+          "layer": 4,
+          "train_acc": 1.0,
+          "val_acc": 0.4117647058823529,
+          "test_acc": 0.23529411764705882,
+          "test_macro_f1": 0.2192807192807193
+        },
+        {
+          "layer": 5,
+          "train_acc": 1.0,
+          "val_acc": 0.4411764705882353,
+          "test_acc": 0.17647058823529413,
+          "test_macro_f1": 0.1717687074829932
+        },
+        {
+          "layer": 6,
+          "train_acc": 1.0,
+          "val_acc": 0.4117647058823529,
+          "test_acc": 0.2647058823529412,
+          "test_macro_f1": 0.26965811965811964
+        },
+        {
+          "layer": 7,
+          "train_acc": 1.0,
+          "val_acc": 0.35294117647058826,
+          "test_acc": 0.20588235294117646,
+          "test_macro_f1": 0.21461871461871462
+        },
+        {
+          "layer": 8,
+          "train_acc": 1.0,
+          "val_acc": 0.3235294117647059,
+          "test_acc": 0.2647058823529412,
+          "test_macro_f1": 0.26464646464646463
+        },
+        {
+          "layer": 9,
+          "train_acc": 1.0,
+          "val_acc": 0.38235294117647056,
+          "test_acc": 0.23529411764705882,
+          "test_macro_f1": 0.2323232323232323
+        },
+        {
+          "layer": 10,
+          "train_acc": 1.0,
+          "val_acc": 0.3235294117647059,
+          "test_acc": 0.23529411764705882,
+          "test_macro_f1": 0.23220271791700364
+        },
+        {
+          "layer": 11,
+          "train_acc": 1.0,
+          "val_acc": 0.38235294117647056,
+          "test_acc": 0.23529411764705882,
+          "test_macro_f1": 0.22453102453102453
+        },
+        {
+          "layer": 12,
+          "train_acc": 1.0,
+          "val_acc": 0.4117647058823529,
+          "test_acc": 0.3235294117647059,
+          "test_macro_f1": 0.28674103674103674
+        }
+      ],
+      "text_baselines": [
+        {
+          "name": "count_vector",
+          "val_acc": 0.3235294117647059,
+          "test_acc": 0.20588235294117646,
+          "test_macro_f1": 0.21700680272108844
+        },
+        {
+          "name": "tfidf",
+          "val_acc": 0.35294117647058826,
+          "test_acc": 0.29411764705882354,
+          "test_macro_f1": 0.294465058750773
+        }
+      ],
+      "dummy_baselines": [
+        {
+          "name": "most_frequent",
+          "test_acc": 0.17647058823529413,
+          "test_macro_f1": 0.04285714285714286
+        },
+        {
+          "name": "stratified",
+          "test_acc": 0.17647058823529413,
+          "test_macro_f1": 0.17176157176157178
+        }
+      ],
+      "best_text_baseline_by_val": {
+        "name": "tfidf",
+        "val_acc": 0.35294117647058826,
+        "test_acc": 0.29411764705882354,
+        "test_macro_f1": 0.294465058750773
+      },
+      "pythia_minus_best_text_test_acc": 0.02941176470588236,
+      "mcnemar_vs_best_text": {
+        "pythia_only_correct": 6,
+        "text_only_correct": 5,
+        "discordant_total": 11,
+        "p_two_sided": 1.0
+      },
+      "headline_confusion_matrix": [
+        [
+          3,
+          2,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "test_sample_ids": [
+        "wave3_cas_to_english_00453",
+        "wave3_cas_to_english_00356",
+        "wave3_cas_to_english_00412",
+        "wave3_cas_to_english_00238",
+        "wave3_cas_to_english_00763",
+        "wave3_cas_to_english_00267",
+        "wave3_cas_to_english_00984",
+        "wave3_cas_to_english_00631",
+        "wave3_cas_to_english_00917",
+        "wave3_cas_to_english_00166",
+        "wave3_cas_to_english_00811",
+        "wave3_cas_to_english_00803",
+        "wave3_cas_to_english_00186",
+        "wave3_cas_to_english_01104",
+        "wave3_cas_to_english_00375",
+        "wave3_cas_to_english_00674",
+        "wave3_cas_to_english_00476",
+        "wave3_cas_to_english_00016",
+        "wave3_cas_to_english_00532",
+        "wave3_cas_to_english_00467",
+        "wave3_cas_to_english_00647",
+        "wave3_cas_to_english_00096",
+        "wave3_cas_to_english_00635",
+        "wave3_cas_to_english_00757",
+        "wave3_cas_to_english_00065",
+        "wave3_cas_to_english_01107",
+        "wave3_cas_to_english_00098",
+        "wave3_cas_to_english_00872",
+        "wave3_cas_to_english_00260",
+        "wave3_cas_to_english_00517",
+        "wave3_cas_to_english_00935",
+        "wave3_cas_to_english_00062",
+        "wave3_cas_to_english_00124",
+        "wave3_cas_to_english_00481"
+      ],
+      "verdict": "LABELS_RECOVERABLE_MOSTLY_FROM_TEXT"
+    }
+  },
+  "package_versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.1"
+  },
+  "elapsed_sec": 2.1552669999982754,
+  "probes_file": "pythia_cross_axis_probes_20260516.npz",
+  "probes_sha256": "b7338f79fb6f7fdc03d31049200e4270f225114bbeb5d321c3053e0783663c0a"
+}

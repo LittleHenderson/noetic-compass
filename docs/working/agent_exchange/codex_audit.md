@@ -4149,6 +4149,48 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T17:05Z - Codex audit: Pythia Stage 4.0 cross-axis probe screen
+
+Branch: `experiment/cas-probe-pythia`
+
+Verdict: MIXED. DOMAIN IS THE ONLY PROMISING NEXT ABLATION TARGET.
+
+Stage 4.0 trains per-layer probes for domain, register, and drive using the
+same frozen Pythia-160M activation file from Stage 1.1. Labels are extracted
+deterministically from `source_cas_expression` in
+`pythia_probe_labels_20260515.jsonl`. Only single-label records are used for
+each axis.
+
+Results:
+
+| Axis | Eligible records | Headline layer | Pythia test | Best text test | Lift | McNemar p | Verdict |
+|---|---:|---:|---:|---:|---:|---:|---|
+| domain | 415 | 5 | 0.810 | 0.730 | +0.079 | 0.267 | `LABELS_RECOVERABLE_MOSTLY_FROM_TEXT` |
+| register | 176 | 0 | 0.333 | 0.259 | +0.074 | 0.688 | `PROBE_WEAKLY_ABOVE_CHANCE` |
+| drive | 226 | 3 | 0.324 | 0.294 | +0.029 | 1.000 | `LABELS_RECOVERABLE_MOSTLY_FROM_TEXT` |
+
+Interpretation:
+
+- Domain has the strongest breadth signal and is worth a causal follow-up.
+  It clears the +5 pp lift floor but not the paired McNemar reliability gate.
+- Register is weak. Its headline Pythia result is below the stratified dummy
+  baseline on this split, so no ablation spend yet.
+- Drive is modest and mostly text-explained.
+
+Recommended next experiment:
+
+Stage 4.1 domain ablation only. Use layer 5, domain-class directions, matched
+random directions in the domain-subspace complement, and the same permutation
+null discipline from Stage 3.3.
+
+Artifacts:
+
+- `train_cross_axis_probes.py`
+- `pythia_cross_axis_probes_20260516.npz`
+- `pythia_cross_axis_probes_report_20260516.json`
+
+collaborated and waiting
+
 ## 2026-05-16T16:35Z - Codex audit: Pythia Stage 3.3 n=30 permutation control
 
 Branch: `experiment/cas-probe-pythia`

@@ -69,6 +69,8 @@ subject. CAS is the measuring instrument.**
 | 3.2-control | **done — suggestive control passed** | random orthogonal control on RTX A6000 (140 sec); random arm mean disruption −0.009 (t=−0.24, p=0.82), noetic arm +0.079 (t=2.56, p=0.031); Welch noetic-vs-random t=1.82 (p=0.086, borderline). Verdict: `NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED`; no full direction-meaningful upgrade until the direct comparison passes. |
 | 3.3 | **done — n=30 permutation control passed** | 30 random orthogonal complement directions on RTX A6000 (389 sec), sampled into 10-direction matched null sets with 10,000 permutations. Noetic mean disruption +0.0787 vs random null mean +0.0002; null p95 +0.0352; one-sided permutation p=0.0003. Verdict: `NOETIC_EFFECT_DIRECTION_MEANINGFUL_N30_PERMUTATION`. |
 
+| 4.0 | **done - cross-axis probe screen** | Domain/register/drive probes trained from the same activation file. Domain shows the strongest breadth signal (layer 5 test 0.810 vs text 0.730, lift +0.079, McNemar p=0.267). Register is weak (test 0.333, below stratified dummy 0.370). Drive is modest and mostly text-explained (test 0.324 vs text 0.294, lift +0.029). |
+
 ## Decision gates (revised post-audit 2026-05-16)
 
 These are the stricter gates after Codex audit `6a7d657`. Beating
@@ -737,6 +739,55 @@ Artifacts:
 - `ablate_random_direction_layer3_n30.py`
 - `pythia_ablation_random_control_layer3_n30_20260516.json`
 - `random_control_n30_progress.log`
+
+---
+
+## Stage 4.0 cross-axis probe screen (2026-05-16)
+
+**Verdict: mixed. Domain is the only promising next ablation target.**
+
+This stage trains the same per-layer linear probes used for noetic, but
+for three additional CAS axes extracted from the frozen
+`source_cas_expression` field:
+
+- **domain**: P, C, E, O
+- **register**: T, A, f, E
+- **drive**: F1-F7
+
+Only records with exactly one unique label for the target axis are used.
+Multi-label and missing-label rows are excluded per-axis.
+
+| Axis | Eligible records | Headline layer | Pythia test | Best text test | Lift | McNemar p | Verdict |
+|---|---:|---:|---:|---:|---:|---:|---|
+| domain | 415 | 5 | 0.810 | 0.730 | +0.079 | 0.267 | `LABELS_RECOVERABLE_MOSTLY_FROM_TEXT` |
+| register | 176 | 0 | 0.333 | 0.259 | +0.074 | 0.688 | `PROBE_WEAKLY_ABOVE_CHANCE` |
+| drive | 226 | 3 | 0.324 | 0.294 | +0.029 | 1.000 | `LABELS_RECOVERABLE_MOSTLY_FROM_TEXT` |
+
+Domain is the only axis with enough signal to justify a causal follow-up:
+the Pythia probe beats the best text baseline by +7.9 pp, but the paired
+McNemar test is not significant. That means this is promising but not
+yet reliable beyond-text evidence.
+
+Register is weak. Its Pythia headline test accuracy (0.333) is below the
+stratified dummy baseline from this split (0.370), so it should not move
+to ablation yet.
+
+Drive is above chance and above text by a small amount (+2.9 pp), but the
+paired test gives no reliable lift.
+
+Recommended next experiment:
+
+> Stage 4.1 domain ablation only. Use the same discipline as Stage 3.3:
+> targeted domain directions at the best domain layer (layer 5), matched
+> random directions from the domain-subspace complement, and a permutation
+> null. Do not spend pod time on register or drive ablation until their
+> discriminative signal improves.
+
+Artifacts:
+
+- `train_cross_axis_probes.py`
+- `pythia_cross_axis_probes_20260516.npz`
+- `pythia_cross_axis_probes_report_20260516.json`
 
 ---
 
