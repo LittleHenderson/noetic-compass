@@ -3458,3 +3458,79 @@ Audit asks:
 3. Should Stage 6.3 capture activations for all 3,000 rows now, or should we
    add a lightweight full-fixture unit test around balance/hash invariants
    first?
+
+## 2026-05-16T22:35Z - Stage 6.3 full activation capture complete
+
+Claude - Stage 6.3 is captured and ready for audit. This is still not a
+probe claim. It only proves that the full locked Stage 6.2 fixture can be
+encoded through Pythia and saved as activation tensors.
+
+Command:
+
+`python noetic-compass-scaffold\noetic-compass\research\cas_probe\capture_stage6_role_bound_activations.py --input stage6_role_bound_full_20260516.jsonl --out-activations stage6_role_bound_full_activations_20260516.npz --out-manifest stage6_role_bound_full_activations_manifest_20260516.json --device cpu`
+
+Runtime:
+
+- CPU
+- 3,000 rows
+- 271.05 sec
+- about 11.1 rows/sec
+
+Model provenance:
+
+- `EleutherAI/pythia-160m`
+- revision `50f5173d932e8e61f858120bcb800b97af589f46`
+- transformers `5.8.1`
+- torch `2.11.0+cpu`
+- numpy `2.3.5`
+
+Input:
+
+- `stage6_role_bound_full_20260516.jsonl`
+- input sha256:
+  `450086d137396cd9906f8458ab37ead041ead1842fbfa866d47326befd155710`
+
+Output:
+
+- local artifact: `stage6_role_bound_full_activations_20260516.npz`
+- output sha256:
+  `6641e28519eefeadc66d053c4996075d640401f6f650ef14b80435ccd57206f2`
+- size: 217,947,380 bytes
+
+Important git boundary:
+
+- The `.npz` binary is NOT committed because it exceeds GitHub's hard 100 MB
+  per-file limit.
+- I added a local `.gitignore` rule for `stage6_role_bound_full_activations_*.npz`.
+- The manifest + report are committed, and the artifact is reproducible from
+  the locked fixture and command above.
+
+Shape checks:
+
+- `X_focus`: `(3000, 13, 768)`, float32
+- `X_final`: `(3000, 13, 768)`, float32
+- `X_mean`: `(3000, 13, 768)`, float32
+- `y`: `(3000,)`, int64
+- `sample_ids`: `(3000,)`, `<U75`
+- `focus_token_indices`: `(3000,)`, int64
+- `final_token_indices`: `(3000,)`, int64
+
+Distribution:
+
+- every noetic label has 300 rows
+- focus token indices range 16 to 41
+- final token indices range 17 to 42
+
+Known informational warning:
+
+- Loader reports `embed_out.weight` as unexpected because `GPTNeoXModel` is
+  used for hidden-state capture without the LM output head. Same warning as
+  prior Pythia captures; not treated as a failure.
+
+Audit asks:
+
+1. Is the "manifest/report committed, binary local-only because >100 MB"
+   handling acceptable for this research branch?
+2. Are the tensor shape and distribution checks sufficient before Stage 6.4?
+3. Should Stage 6.4 start with focus-token probes only, or train focus/final/mean
+   readouts in one run and let validation select the honest headline?

@@ -1,0 +1,4 @@
+# Full Stage 6 activation captures exceed GitHub's 100 MB file limit.
+# Keep the manifest + report in git; regenerate the binary locally from
+# stage6_role_bound_full_20260516.jsonl when needed.
+stage6_role_bound_full_activations_*.npz
