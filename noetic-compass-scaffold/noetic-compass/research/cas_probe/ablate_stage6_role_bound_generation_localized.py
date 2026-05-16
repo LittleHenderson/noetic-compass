@@ -161,13 +161,45 @@ def _select_projection(projection_info: dict[str, Any], rank_mode: str) -> dict[
     raise ValueError(f"unsupported rank_mode: {rank_mode}")
 
 
-def _select_subset(sample_ids: list[str], y: Any, idx_test: Any, per_label: int) -> list[int]:
+def _load_excluded_sample_ids(report_paths: list[str]) -> set[str]:
+    excluded: set[str] = set()
+    for report_path in report_paths:
+        report = json.loads(_resolve(report_path).read_text(encoding="utf-8"))
+        excluded.update(str(x) for x in report.get("selected_sample_ids", []))
+    return excluded
+
+
+def _select_subset(
+    sample_ids: list[str],
+    y: Any,
+    idx_test: Any,
+    per_label: int,
+    *,
+    selection_mode: str,
+    selection_seed: int,
+    exclude_sample_ids: set[str],
+) -> list[int]:
+    import numpy as np
+
     by_label: dict[int, list[int]] = defaultdict(list)
     for idx in idx_test.tolist():
+        if sample_ids[int(idx)] in exclude_sample_ids:
+            continue
         by_label[int(y[idx])].append(int(idx))
     selected: list[int] = []
+    rng = np.random.default_rng(selection_seed)
     for label in sorted(by_label):
-        selected.extend(by_label[label][:per_label])
+        candidates = list(by_label[label])
+        if selection_mode == "seeded":
+            rng.shuffle(candidates)
+        elif selection_mode != "first":
+            raise ValueError(f"unsupported selection_mode: {selection_mode}")
+        if len(candidates) < per_label:
+            raise ValueError(
+                f"not enough test rows for label {label}: need {per_label}, "
+                f"got {len(candidates)} after exclusions"
+            )
+        selected.extend(candidates[:per_label])
     return selected
 
 
@@ -240,6 +272,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--n-random", type=int, default=3)
     parser.add_argument("--max-new-tokens", type=int, default=8)
     parser.add_argument(
+        "--selection-mode",
+        choices=["first", "seeded"],
+        default="first",
+        help="Choose first rows per noetic, or deterministic shuffled rows per noetic.",
+    )
+    parser.add_argument("--selection-seed", type=int, default=20260517)
+    parser.add_argument(
+        "--exclude-report",
+        action="append",
+        default=[],
+        help="Exclude selected_sample_ids from a previous generation-hook report.",
+    )
+    parser.add_argument(
         "--rank-mode",
         choices=["full", "top1"],
         default="full",
@@ -285,7 +330,16 @@ def main(argv: list[str] | None = None) -> int:
         rank=int(selected_projection["rank"]),
         n_random=int(args.n_random),
     )
-    selected_indices = _select_subset(sample_ids, y, idx_test, per_label=int(args.per_label))
+    exclude_sample_ids = _load_excluded_sample_ids(list(args.exclude_report))
+    selected_indices = _select_subset(
+        sample_ids,
+        y,
+        idx_test,
+        per_label=int(args.per_label),
+        selection_mode=str(args.selection_mode),
+        selection_seed=int(args.selection_seed),
+        exclude_sample_ids=exclude_sample_ids,
+    )
     selected_ids = [sample_ids[i] for i in selected_indices]
 
     tokenizer = AutoTokenizer.from_pretrained(_MODEL_NAME, local_files_only=True, use_fast=True)
@@ -482,6 +536,9 @@ def main(argv: list[str] | None = None) -> int:
         "subspace_rank": int(selected_projection["rank"]),
         "full_subspace_rank": int(projection_info["rank"]),
         "per_label": int(args.per_label),
+        "selection_mode": str(args.selection_mode),
+        "selection_seed": int(args.selection_seed),
+        "excluded_sample_ids": sorted(exclude_sample_ids),
         "n_selected_rows": len(selected_indices),
         "selected_sample_ids": selected_ids,
         "prompt_templates": [{"name": name, "suffix": suffix} for name, suffix in _PROMPT_TEMPLATES],

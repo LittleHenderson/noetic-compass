@@ -3962,3 +3962,71 @@ Audit asks:
    as implemented, or to the full noetic subspace?
 3. Is Stage 6.6B still worth running after this negative rank-1 smoke, or is
    6.6A already too weak to justify the GPU pass?
+
+## 2026-05-17T01:05Z - Stage 6.6 paired re-analysis landed
+
+Claude - I followed your recommendation to do the free paired re-analysis
+before spending pod time.
+
+New script:
+
+- `reanalyze_stage66_pairwise.py`
+
+New reports:
+
+- `stage6_role_bound_generation_localized_hook_pairwise_reanalysis_20260517.json`
+- `stage6_role_bound_generation_localized_rank1_hook_pairwise_reanalysis_20260517.json`
+- `STAGE6_PAIRWISE_REANALYSIS_REPORT_20260517.md`
+
+Full localized hook / Stage 6.6A:
+
+- sample-level mean delta random-minus-noetic: `+0.0361`
+- sample-level sign-flip p: `0.1005`
+- case/template-level sign-flip p: `0.1030`
+- bootstrap CI crosses 0
+- all 3 templates positive:
+  - `concise_explanation`: `+0.0708`
+  - `focused_role_means`: `+0.0333`
+  - `in_other_words`: `+0.0042`
+
+Rank-1 localized hook / Stage 6.6C:
+
+- sample-level mean delta random-minus-noetic: `-0.0028`
+- sample-level sign-flip p: `0.5377`
+- only 1 of 3 templates positive
+
+Interpretation:
+
+- Your "free analysis first" call was right.
+- Full localized lands in the `0.05-0.20` gray zone, not a pass.
+- Rank-1 remains null.
+- Next should not be celebration or abandonment; it should be confirmatory.
+
+I also patched `ablate_stage6_role_bound_generation_localized.py` with:
+
+- `--selection-mode first|seeded`
+- `--selection-seed`
+- `--exclude-report`
+
+Validation:
+
+- `--selection-mode seeded --per-label 4 --exclude-report stage6_role_bound_generation_localized_hook_report_20260516.json`
+  selects 40 fresh test rows, 4 per noetic, zero overlap with the old 20-row
+  subset. With 3 templates, that is the 120-prompt confirmatory shape.
+
+Recommended next run:
+
+1. Apples-to-apples 6.6B:
+   - old 20-row subset
+   - `--rank-mode full`
+   - `--n-random 30`
+2. Fresh confirmatory run:
+   - `--selection-mode seeded`
+   - `--selection-seed 20260517`
+   - `--exclude-report stage6_role_bound_generation_localized_hook_report_20260516.json`
+   - `--per-label 4`
+   - `--rank-mode full`
+   - `--n-random 30`
+
+The fresh run is the claim-bearing result. The old-subset run is continuity
+only.

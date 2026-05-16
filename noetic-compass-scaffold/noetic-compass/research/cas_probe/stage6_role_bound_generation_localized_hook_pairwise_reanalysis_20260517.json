@@ -1,0 +1,634 @@
+{
+  "case_level": {
+    "bootstrap_95ci": {
+      "hi": 0.0923611111111111,
+      "lo": -0.014583333333333334
+    },
+    "mean_delta_random_minus_noetic": 0.03611111111111111,
+    "n": 60,
+    "sign_test": {
+      "negatives": 13,
+      "p_greater": 0.5,
+      "positives": 14,
+      "ties": 33
+    },
+    "signflip_p_greater": 0.10296897031029689
+  },
+  "label_summary": {
+    "0": {
+      "mean_delta_random_minus_noetic": -0.09027777777777779,
+      "n_cases": 6,
+      "negatives": 3,
+      "p_greater": 1.0,
+      "positives": 0,
+      "ties": 3
+    },
+    "1": {
+      "mean_delta_random_minus_noetic": -0.006944444444444438,
+      "n_cases": 6,
+      "negatives": 1,
+      "p_greater": 0.75,
+      "positives": 1,
+      "ties": 4
+    },
+    "2": {
+      "mean_delta_random_minus_noetic": 0.0,
+      "n_cases": 6,
+      "negatives": 1,
+      "p_greater": 0.75,
+      "positives": 1,
+      "ties": 4
+    },
+    "3": {
+      "mean_delta_random_minus_noetic": 0.11805555555555554,
+      "n_cases": 6,
+      "negatives": 1,
+      "p_greater": 0.75,
+      "positives": 1,
+      "ties": 4
+    },
+    "4": {
+      "mean_delta_random_minus_noetic": 0.041666666666666664,
+      "n_cases": 6,
+      "negatives": 2,
+      "p_greater": 0.6875,
+      "positives": 2,
+      "ties": 2
+    },
+    "5": {
+      "mean_delta_random_minus_noetic": 0.13194444444444445,
+      "n_cases": 6,
+      "negatives": 0,
+      "p_greater": 0.25,
+      "positives": 2,
+      "ties": 4
+    },
+    "6": {
+      "mean_delta_random_minus_noetic": -0.020833333333333332,
+      "n_cases": 6,
+      "negatives": 2,
+      "p_greater": 0.875,
+      "positives": 1,
+      "ties": 3
+    },
+    "7": {
+      "mean_delta_random_minus_noetic": 0.0069444444444444475,
+      "n_cases": 6,
+      "negatives": 2,
+      "p_greater": 0.6875,
+      "positives": 2,
+      "ties": 2
+    },
+    "8": {
+      "mean_delta_random_minus_noetic": 0.1388888888888889,
+      "n_cases": 6,
+      "negatives": 0,
+      "p_greater": 0.25,
+      "positives": 2,
+      "ties": 4
+    },
+    "9": {
+      "mean_delta_random_minus_noetic": 0.041666666666666664,
+      "n_cases": 6,
+      "negatives": 1,
+      "p_greater": 0.5,
+      "positives": 2,
+      "ties": 3
+    }
+  },
+  "paired_cases": [
+    {
+      "delta_random_minus_noetic": -0.08333333333333337,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.9166666666666666,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_0_1_n0",
+      "template": "in_other_words",
+      "true_y": 0
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_0_1_n0",
+      "template": "focused_role_means",
+      "true_y": 0
+    },
+    {
+      "delta_random_minus_noetic": -0.20833333333333337,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.7916666666666666,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_0_1_n0",
+      "template": "concise_explanation",
+      "true_y": 0
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_0_1_n0",
+      "template": "in_other_words",
+      "true_y": 0
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_0_1_n0",
+      "template": "focused_role_means",
+      "true_y": 0
+    },
+    {
+      "delta_random_minus_noetic": -0.25,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.75,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_0_1_n0",
+      "template": "concise_explanation",
+      "true_y": 0
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_0_1_n1",
+      "template": "in_other_words",
+      "true_y": 1
+    },
+    {
+      "delta_random_minus_noetic": -0.16666666666666663,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.8333333333333334,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_0_1_n1",
+      "template": "focused_role_means",
+      "true_y": 1
+    },
+    {
+      "delta_random_minus_noetic": 0.125,
+      "noetic_token_match": 0.875,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_0_1_n1",
+      "template": "concise_explanation",
+      "true_y": 1
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_0_1_n1",
+      "template": "in_other_words",
+      "true_y": 1
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_0_1_n1",
+      "template": "focused_role_means",
+      "true_y": 1
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 0.875,
+      "random_mean_token_match": 0.875,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_0_1_n1",
+      "template": "concise_explanation",
+      "true_y": 1
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_2_3_n2",
+      "template": "in_other_words",
+      "true_y": 2
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_2_3_n2",
+      "template": "focused_role_means",
+      "true_y": 2
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_2_3_n2",
+      "template": "concise_explanation",
+      "true_y": 2
+    },
+    {
+      "delta_random_minus_noetic": -0.25,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.75,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_2_3_n2",
+      "template": "in_other_words",
+      "true_y": 2
+    },
+    {
+      "delta_random_minus_noetic": 0.25,
+      "noetic_token_match": 0.75,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_2_3_n2",
+      "template": "focused_role_means",
+      "true_y": 2
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_2_3_n2",
+      "template": "concise_explanation",
+      "true_y": 2
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_2_3_n3",
+      "template": "in_other_words",
+      "true_y": 3
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_2_3_n3",
+      "template": "focused_role_means",
+      "true_y": 3
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_2_3_n3",
+      "template": "concise_explanation",
+      "true_y": 3
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 0.75,
+      "random_mean_token_match": 0.75,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_2_3_n3",
+      "template": "in_other_words",
+      "true_y": 3
+    },
+    {
+      "delta_random_minus_noetic": -0.08333333333333337,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.9166666666666666,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_2_3_n3",
+      "template": "focused_role_means",
+      "true_y": 3
+    },
+    {
+      "delta_random_minus_noetic": 0.7916666666666666,
+      "noetic_token_match": 0.125,
+      "random_mean_token_match": 0.9166666666666666,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_2_3_n3",
+      "template": "concise_explanation",
+      "true_y": 3
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_4_7_n4",
+      "template": "in_other_words",
+      "true_y": 4
+    },
+    {
+      "delta_random_minus_noetic": -0.16666666666666663,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.8333333333333334,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_4_7_n4",
+      "template": "focused_role_means",
+      "true_y": 4
+    },
+    {
+      "delta_random_minus_noetic": -0.08333333333333337,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.9166666666666666,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_4_7_n4",
+      "template": "concise_explanation",
+      "true_y": 4
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_4_7_n4",
+      "template": "in_other_words",
+      "true_y": 4
+    },
+    {
+      "delta_random_minus_noetic": 0.25,
+      "noetic_token_match": 0.5,
+      "random_mean_token_match": 0.75,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_4_7_n4",
+      "template": "focused_role_means",
+      "true_y": 4
+    },
+    {
+      "delta_random_minus_noetic": 0.25,
+      "noetic_token_match": 0.25,
+      "random_mean_token_match": 0.5,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_4_7_n4",
+      "template": "concise_explanation",
+      "true_y": 4
+    },
+    {
+      "delta_random_minus_noetic": 0.16666666666666663,
+      "noetic_token_match": 0.5,
+      "random_mean_token_match": 0.6666666666666666,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_5_6_n5",
+      "template": "in_other_words",
+      "true_y": 5
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_5_6_n5",
+      "template": "focused_role_means",
+      "true_y": 5
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_5_6_n5",
+      "template": "concise_explanation",
+      "true_y": 5
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_5_6_n5",
+      "template": "in_other_words",
+      "true_y": 5
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 0.375,
+      "random_mean_token_match": 0.375,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_5_6_n5",
+      "template": "focused_role_means",
+      "true_y": 5
+    },
+    {
+      "delta_random_minus_noetic": 0.625,
+      "noetic_token_match": 0.375,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_5_6_n5",
+      "template": "concise_explanation",
+      "true_y": 5
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_5_6_n6",
+      "template": "in_other_words",
+      "true_y": 6
+    },
+    {
+      "delta_random_minus_noetic": -0.16666666666666663,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.8333333333333334,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_5_6_n6",
+      "template": "focused_role_means",
+      "true_y": 6
+    },
+    {
+      "delta_random_minus_noetic": -0.33333333333333337,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.6666666666666666,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_5_6_n6",
+      "template": "concise_explanation",
+      "true_y": 6
+    },
+    {
+      "delta_random_minus_noetic": 0.375,
+      "noetic_token_match": 0.125,
+      "random_mean_token_match": 0.5,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_5_6_n6",
+      "template": "in_other_words",
+      "true_y": 6
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 0.75,
+      "random_mean_token_match": 0.75,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_5_6_n6",
+      "template": "focused_role_means",
+      "true_y": 6
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_5_6_n6",
+      "template": "concise_explanation",
+      "true_y": 6
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_4_7_n7",
+      "template": "in_other_words",
+      "true_y": 7
+    },
+    {
+      "delta_random_minus_noetic": 0.33333333333333337,
+      "noetic_token_match": 0.5,
+      "random_mean_token_match": 0.8333333333333334,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_4_7_n7",
+      "template": "focused_role_means",
+      "true_y": 7
+    },
+    {
+      "delta_random_minus_noetic": -0.16666666666666669,
+      "noetic_token_match": 0.625,
+      "random_mean_token_match": 0.4583333333333333,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_4_7_n7",
+      "template": "concise_explanation",
+      "true_y": 7
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_4_7_n7",
+      "template": "in_other_words",
+      "true_y": 7
+    },
+    {
+      "delta_random_minus_noetic": 0.20833333333333337,
+      "noetic_token_match": 0.375,
+      "random_mean_token_match": 0.5833333333333334,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_4_7_n7",
+      "template": "focused_role_means",
+      "true_y": 7
+    },
+    {
+      "delta_random_minus_noetic": -0.33333333333333337,
+      "noetic_token_match": 0.875,
+      "random_mean_token_match": 0.5416666666666666,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_4_7_n7",
+      "template": "concise_explanation",
+      "true_y": 7
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_8_9_n8",
+      "template": "in_other_words",
+      "true_y": 8
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_8_9_n8",
+      "template": "focused_role_means",
+      "true_y": 8
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 0.125,
+      "random_mean_token_match": 0.125,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_8_9_n8",
+      "template": "concise_explanation",
+      "true_y": 8
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_8_9_n8",
+      "template": "in_other_words",
+      "true_y": 8
+    },
+    {
+      "delta_random_minus_noetic": 0.08333333333333337,
+      "noetic_token_match": 0.875,
+      "random_mean_token_match": 0.9583333333333334,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_8_9_n8",
+      "template": "focused_role_means",
+      "true_y": 8
+    },
+    {
+      "delta_random_minus_noetic": 0.75,
+      "noetic_token_match": 0.25,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_8_9_n8",
+      "template": "concise_explanation",
+      "true_y": 8
+    },
+    {
+      "delta_random_minus_noetic": -0.125,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 0.875,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_8_9_n9",
+      "template": "in_other_words",
+      "true_y": 9
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_8_9_n9",
+      "template": "focused_role_means",
+      "true_y": 9
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_role_inverse_minimal_8_9_n9",
+      "template": "concise_explanation",
+      "true_y": 9
+    },
+    {
+      "delta_random_minus_noetic": 0.0,
+      "noetic_token_match": 1.0,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_8_9_n9",
+      "template": "in_other_words",
+      "true_y": 9
+    },
+    {
+      "delta_random_minus_noetic": 0.125,
+      "noetic_token_match": 0.875,
+      "random_mean_token_match": 1.0,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_8_9_n9",
+      "template": "focused_role_means",
+      "true_y": 9
+    },
+    {
+      "delta_random_minus_noetic": 0.25,
+      "noetic_token_match": 0.125,
+      "random_mean_token_match": 0.375,
+      "sample_id": "stage6_full_bundle041_patient_triage_no_alias_plain_8_9_n9",
+      "template": "concise_explanation",
+      "true_y": 9
+    }
+  ],
+  "rank_mode": "full_legacy",
+  "sample_level": {
+    "bootstrap_95ci": {
+      "hi": 0.08888888888888888,
+      "lo": -0.013194444444444444
+    },
+    "mean_delta_random_minus_noetic": 0.03611111111111111,
+    "n": 20,
+    "sign_test": {
+      "negatives": 7,
+      "p_greater": 0.5,
+      "positives": 8,
+      "ties": 5
+    },
+    "signflip_p_greater": 0.1004789952100479
+  },
+  "schema_version": "stage6_pairwise_reanalysis.v1",
+  "source_report": {
+    "aggregate_empirical_p": 0.25,
+    "aggregate_extra_divergence": 0.036111111111111094,
+    "aggregate_noetic_mean_token_match": 0.83125,
+    "aggregate_random_mean_token_match": 0.8673611111111111,
+    "n_noetic_cases": 60,
+    "n_random_controls": 3
+  },
+  "source_report_file": "stage6_role_bound_generation_localized_hook_report_20260516.json",
+  "source_status": "LOCALIZED_GENERATION_EFFECT_NUMERICALLY_ABOVE_RANDOM_CONTROL",
+  "template_summary": {
+    "concise_explanation": {
+      "mean_delta_random_minus_noetic": 0.07083333333333333,
+      "n_cases": 20,
+      "negatives": 6,
+      "p_greater": 0.61279296875,
+      "positives": 6,
+      "ties": 8
+    },
+    "focused_role_means": {
+      "mean_delta_random_minus_noetic": 0.03333333333333334,
+      "n_cases": 20,
+      "negatives": 4,
+      "p_greater": 0.376953125,
+      "positives": 6,
+      "ties": 10
+    },
+    "in_other_words": {
+      "mean_delta_random_minus_noetic": 0.004166666666666663,
+      "n_cases": 20,
+      "negatives": 3,
+      "p_greater": 0.8125,
+      "positives": 2,
+      "ties": 15
+    }
+  }
+}
