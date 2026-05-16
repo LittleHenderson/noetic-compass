@@ -187,8 +187,8 @@ def main() -> int:
     parser.add_argument(
         "--max-new-tokens",
         type=int,
-        default=24,
-        help="Greedy continuation length per prompt.",
+        default=8,
+        help="Greedy continuation length per prompt. Default matches the committed Stage 3.1 report.",
     )
     args = parser.parse_args()
 

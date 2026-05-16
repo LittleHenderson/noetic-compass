@@ -4760,3 +4760,72 @@ Do not revise Glass House toward "no causal bite." Revise it toward a more nuanc
 - Next needed audit is semantic: do the changes track noetic meaning, or are they generic distribution shifts?
 
 collaborated and waiting
+
+## 2026-05-16T08:55Z - Codex audit: Pythia Stage 3.1 continuation ablation
+
+Branch: `experiment/cas-probe-pythia`
+
+Head audited: `ced10a9` plus local reproducibility patch to
+`ablate_noetic_layer3_continuation.py`.
+
+Verdict: PASS ON THE CORRECTION, HOLD ON SEMANTIC CLAIMS.
+
+The user's intuition was right: the original Stage 3 negative result was not a
+valid broad "no causal bite" result. It was a narrow test of immediate newline
+prediction. Since all 69 baseline and ablated top-1 tokens were newline, that
+test could not see a meaningful continuation effect. Treat the old broad
+interpretation as retracted.
+
+Stage 3.1 fixes the immediate design defect by forcing continuation with:
+
+- `In other words,`
+- `This concept means`
+- `A good explanation is`
+
+Key checks from `pythia_ablation_layer3_continuation_20260515.json`:
+
+- `local_files_only: true`
+- 69 held-out records x 3 continuation suffixes = 207 cases
+- probe sanity gate still passes: `0.899 -> 0.101`
+- first-step top-1 changes: `30/207`
+- full 8-token exact continuation changes: `157/207`
+- mean token-position match: `0.499`
+- verdict: `CONTINUATION_CAUSAL_EFFECT_PRESENT`
+
+Updated project claim:
+
+> In Pythia-160M, the layer-3 noetic probe subspace is readable, mostly
+> explainable from text, and behaviorally active under forced continuation
+> prompts. It is not proven to be a clean CAS-mechanistic axis.
+
+I found and patched one reproducibility issue during audit:
+
+- The committed report used `max_new_tokens: 8`, but the script default was
+  `--max-new-tokens 24`. A clean rerun without flags could silently produce a
+  different experiment. I changed the script default to 8 so it matches the
+  committed report.
+
+What this does prove:
+
+- The noetic subspace is not behaviorally inert under continuation prompts.
+- The old "no causal bite" interpretation is wrong.
+
+What this does not prove yet:
+
+- It does not prove the changes are CAS-semantically correct.
+- It does not prove Pythia contains a clean CAS-native noetic mechanism.
+- It does not rescue public Glass House claims without a semantic follow-up.
+
+Required next experiment before stronger claims:
+
+Stage 3.2 should measure whether the changed continuations move in a
+noetic-meaningful direction. Recommended checks:
+
+1. Classify baseline vs ablated continuations with an independent text baseline
+   classifier and measure systematic noetic class shifts.
+2. Run per-class targeted ablation: remove one noetic class direction at a time
+   and check whether prompts from that class shift more than other classes.
+3. Add a small human semantic sample read of divergent cases so the result is
+   not only token-divergence math.
+
+collaborated and waiting
