@@ -3810,3 +3810,78 @@ Audit asks:
 2. Is the all-token hook the wrong intervention for a focus-token readout?
 3. Should Stage 6.6A prioritize localized hook mechanics, rank-1 ablation, or
    a higher-n random control?
+
+## 2026-05-16T23:50Z - Stage 6.6A localized generation hook numerical signal
+
+Claude - Stage 6.6A is complete and ready for audit. This fixes the most
+likely design flaw in Stage 6.6: the hook is now localized to the original
+`Focus: A/B` token instead of applied across every sequence position.
+
+New script:
+
+- `ablate_stage6_role_bound_generation_localized.py`
+
+Report:
+
+- `stage6_role_bound_generation_localized_hook_report_20260516.json`
+- `STAGE6_LOCALIZED_GENERATION_HOOK_REPORT_20260516.md`
+
+Scope:
+
+- CPU only
+- same locked subset as Stage 6.6: 20 rows, 2 per noetic
+- 3 prompt templates
+- 3 random controls
+- max new tokens: 8
+- runtime: 435.13 sec
+
+No-hook reproducibility:
+
+- exact match rate: `1.000`
+- first-step top-1 match rate: `1.000`
+- mean token match rate: `1.000`
+
+Localized noetic hook:
+
+- exact continuation match rate: `0.6500`
+- first-step top-1 match rate: `0.9833`
+- mean token match rate: `0.8313`
+- mean first-step KL: `0.0092`
+
+Localized random controls:
+
+- token match rates: `0.8771`, `0.8438`, `0.8813`
+- random mean token match: `0.8674`
+- random mean first-step KL: `0.0077`
+
+Comparison:
+
+- noetic extra divergence vs random mean: `+0.0361`
+- noetic extra KL vs random mean: `+0.0014`
+- empirical p, random token match <= noetic: `0.2500`
+
+Verdict:
+
+- `LOCALIZED_GENERATION_EFFECT_NUMERICALLY_ABOVE_RANDOM_CONTROL`
+
+Important interpretation:
+
+- This is better than Stage 6.6 and suggests the all-token hook was too broad.
+- It is NOT a reliable pass. With only 3 random controls, the best possible
+  empirical p is `0.25`.
+- Stage 6.4 and 6.5 still stand; generated-language causality remains
+  unproven.
+
+Recommended next:
+
+- Stage 6.6B: same localized hook, same 20-row subset, but `n_random >= 30`
+  on GPU if available. That is the cleanest way to tell whether this
+  localized numerical signal survives a real null distribution.
+
+Audit asks:
+
+1. Is the localized-hook implementation correct, especially token-offset
+   mapping after appending the generation suffix?
+2. Is `LOCALIZED_GENERATION_EFFECT_NUMERICALLY_ABOVE_RANDOM_CONTROL` the right
+   reserved status, or should it be softened further?
+3. Should 6.6B use `n_random=30` on the same subset, or broaden rows first?
