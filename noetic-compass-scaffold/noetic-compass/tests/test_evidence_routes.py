@@ -378,6 +378,25 @@ def test_build_packet_for_trace_dev_fixture_returns_packet():
     assert packet.schema_version == "evidence_packet.v1"
 
 
+def test_build_packet_for_trace_dev_fixture_falls_back_on_internal_error(monkeypatch):
+    """The example Evidence Packet must never 500 on deployment hosts that
+    lack local scratch artifacts. If fixture assembly crashes, the dev id
+    returns a static, caveated packet instead.
+    """
+    from api.routes import evidence as evidence_route
+
+    def _boom():
+        raise RuntimeError("simulated fixture host mismatch")
+
+    monkeypatch.setattr(evidence_route, "_dev_fixture_packet", _boom)
+
+    packet = evidence_route.build_packet_for_trace(_DEV_TRACE_ID)
+    assert packet.trace_id == _DEV_TRACE_ID
+    assert packet.provenance["model_checkpoint_id"] == "dev_fixture_fallback"
+    assert packet.hashes["on_disk_paths"] == {}
+    assert any("fallback" in c.lower() for c in packet.caveats or [])
+
+
 def test_build_packet_for_trace_unknown_raises_filenotfound():
     from api.routes.evidence import build_packet_for_trace
 

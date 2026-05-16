@@ -483,6 +483,105 @@ def _dev_fixture_packet() -> EvidencePacket:
     )
 
 
+def _dev_fixture_fallback_packet(reason: str | None = None) -> EvidencePacket:
+    """Return a static dev packet when host-specific fixture assembly fails.
+
+    The dev fixture is the drawer's first-run credibility surface. It must
+    never 500 just because Render lacks a scratch checkpoint, git metadata, or
+    another local-only artifact. Real trace packets should still fail loudly
+    when malformed; this fallback is scoped only to ``dev_example_001``.
+    """
+    caveat = (
+        "Dev fixture fallback: host-specific evidence artifacts were not "
+        "available on this deployment, so this packet uses static example "
+        "content and leaves hash verification unavailable."
+    )
+    if reason:
+        caveat += f" Internal reason: {reason[:160]}"
+
+    return EvidencePacket(
+        trace_id=_DEV_FIXTURE_TRACE_ID,
+        generated_at=_now_iso_utc(),
+        input={
+            "text": "What does ^3^P|A mean and why is it different from ^3^E|f?",
+            "user_id": "dev_user",
+            "session_id": "dev_session_001",
+        },
+        cas_expression={
+            "text": "^3^P|A",
+            "compiler_valid": True,
+            "grammar_category": "state_literal",
+        },
+        output={
+            "text": (
+                "^3^P|A is principled aversion expressed analytically. "
+                "^3^E|f is felt aversion in the evaluative domain. This "
+                "fallback packet exists so reviewers can inspect the Evidence "
+                "Packet surface even when deployment-local artifacts are absent."
+            ),
+            "n_tokens": 35,
+            "max_new_tokens": 128,
+        },
+        copy_slot_trace=[
+            {
+                "role": "noetic",
+                "name": "^3",
+                "copied": True,
+                "source_token_index": 2,
+                "target_token_index": 0,
+                "claim_level": "source_copy_evidence",
+            },
+            {
+                "role": "domain",
+                "name": "P",
+                "copied": True,
+                "source_token_index": 3,
+                "target_token_index": 2,
+                "claim_level": "source_copy_evidence",
+            },
+            {
+                "role": "register",
+                "name": "A",
+                "copied": True,
+                "source_token_index": 4,
+                "target_token_index": 4,
+                "claim_level": "source_copy_evidence",
+            },
+        ],
+        provenance={
+            "model_checkpoint_id": "dev_fixture_fallback",
+            "checkpoint_label": "Static Evidence Packet fixture",
+            "code_commit_sha": "unknown",
+            "code_commit_summary": None,
+            "run_command": "GET /api/evidence/dev_example_001",
+            "config_snapshot": {
+                "fixture_mode": "static_fallback",
+                "hash_verification": "unavailable_on_this_host",
+            },
+        },
+        hashes={
+            "weights_sha": None,
+            "tokenizer_hash": None,
+            "english_bpe_hash": None,
+            "corpus_sha256": None,
+            "on_disk_paths": {},
+        },
+        claim_levels=[
+            {
+                "claim": "The expression ^3^P|A is a valid CAS state literal.",
+                "level": "cas_hard_trace",
+                "rationale": "Static fallback fixture; compiler-validity claim mirrors the dev fixture example.",
+            },
+            {
+                "claim": "Copy/slot rows demonstrate the Evidence Packet inspection shape.",
+                "level": "derived_trace",
+                "rationale": "Rows are illustrative because deployment-local artifacts were unavailable.",
+            },
+        ],
+        caveats=[caveat],
+    )
+
+
 # ---------------------------------------------------------------------------
 # Real packet assembly (when a trace artifact is on disk).
 # ---------------------------------------------------------------------------
@@ -579,7 +678,10 @@ def build_packet_for_trace(trace_id: str) -> EvidencePacket:
     if neither path applies.
     """
     if trace_id == _DEV_FIXTURE_TRACE_ID:
-        return _dev_fixture_packet()
+        try:
+            return _dev_fixture_packet()
+        except Exception as exc:
+            return _dev_fixture_fallback_packet(f"{type(exc).__name__}: {exc}")
     trace = _load_trace_artifact(trace_id)
     if trace is None:
         raise FileNotFoundError(trace_id)
