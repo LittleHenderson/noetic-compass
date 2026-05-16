@@ -38,9 +38,20 @@ No paraphrase. Agent C copy-pastes this string.
 
 ---
 
-## 2. The three (and a half) claim-level tiers
+## 2. Evidence type vs claim support
 
-These are the only valid claim labels. Locked as a TypeScript-ready union:
+Do not overload the word "confidence." The packet separates two questions:
+
+1. **Evidence type** — how CAS found or traced the claim.
+2. **Claim support** — whether the answer itself backs the claim up.
+
+Plain example: CAS may clearly track that an answer said "this policy is
+fair" while also marking the fairness claim as unsupported because the answer
+gave no appeal process, bias check, worker protection, or audit path.
+
+### 2a. Evidence type tiers
+
+These are the only valid evidence-type labels. Locked as a TypeScript-ready union:
 
 ```typescript
 type EvidenceClaimLevel =
@@ -49,6 +60,28 @@ type EvidenceClaimLevel =
   | 'derived_trace'               // reconstructed from logs/UI state; not a primary signal
   | 'neural_attribution_estimate'; // Mode 7 mechanistic data — evidence, not proof
 ```
+
+### 2b. Claim support status
+
+This field answers a different question: did the answer actually support the
+claim it made?
+
+```typescript
+type EvidenceClaimSupport =
+  | 'supported'
+  | 'partially_supported'
+  | 'unsupported'
+  | 'contradicted'
+  | 'not_applicable'
+  | 'unknown';
+```
+
+- `supported`: the answer gives enough backing for this claim.
+- `partially_supported`: the answer gives some backing, but leaves gaps.
+- `unsupported`: CAS can see the claim, but the answer does not back it up.
+- `contradicted`: the answer conflicts with the claim or its own evidence.
+- `not_applicable`: the row is about trace mechanics, not an argumentative claim.
+- `unknown`: old packet or missing field; do not infer support.
 
 ### `cas_hard_trace` — green check, label "CAS hard trace"
 
@@ -100,7 +133,7 @@ Order is locked. Each section gets a headline and a subtitle. Agent C renders th
 | 4 | Copy / slot trace | **Copy / slot trace** | *"Which named identifiers survived the trip from input to output. Backed by pointer evidence."* |
 | 5 | Provenance | **Provenance** | *"Every step is logged with its checkpoint, code commit, and config."* |
 | 6 | Hashes | **Hashes** | *"Compare these to the on-disk files yourself. Mismatch means something changed."* |
-| 7 | Claim levels | **Claim levels** | *"Not every claim is the same kind. Read carefully."* |
+| 7 | Claim levels | **Evidence type & claim support** | *"Evidence type says how CAS traced it. Claim support says whether the answer backed it up."* |
 
 ---
 
@@ -186,11 +219,13 @@ interface EvidencePacket {
     };
   };
 
-  // ─── Section 7: Claim levels ─────────────────────────────────────────
-  // Per-packet rollup. Each claim references one of the four tiers.
+  // ─── Section 7: Evidence type & claim support ────────────────────────
+  // Per-packet rollup. Each claim separates evidence type from answer support.
   claim_levels: Array<{
     claim: string;                  // e.g. "the model produced a valid CAS expression"
-    level: EvidenceClaimLevel;
+    level: EvidenceClaimLevel;      // how CAS traced/found this claim
+    support_status?: EvidenceClaimSupport; // whether the answer backs the claim up
+    support_rationale?: string;     // plain-English reason for support_status
     rationale: string;              // 1-2 sentences, plain English
   }>;
 
@@ -268,11 +303,11 @@ Locked. Agent C copy-pastes. No paraphrase.
 - **Populated state:** rows for each of `weights_sha`, `tokenizer_hash`, `english_bpe_hash`, `corpus_sha256`. Each row shows the first 12 chars of the hash, the on-disk path (truncated to fit), and a copy-to-clipboard button. At the bottom: *"Compare these to the on-disk files yourself. Mismatch means something changed."* Plus a **Verify Hashes** button (see Section 6 contract below).
 - **Empty state:** *"No hashes recorded. Without hashes this packet cannot be independently verified against on-disk artifacts."*
 
-### Section 7 — Claim levels
+### Section 7 — Evidence type & claim support
 
 **Default badge:** mixed (per-row).
 
-- **Populated state:** a vertical list. Each row: claim text, badge (color + label per tier), rationale in italics. Above the list: *"Not every claim is the same kind. Read carefully."*
+- **Populated state:** a vertical list. Each row: claim text, evidence-type badge, claim-support badge, rationale in italics. Above the list: *"Evidence type says how CAS traced it. Claim support says whether the answer backed it up."*
 - **Empty state:** *"No claim-level rollup for this packet. Default to inspecting each section directly."*
 
 ---

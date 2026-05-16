@@ -1485,6 +1485,11 @@ def _persist_evidence_trace(
                     "compiled and shaped this trace."
                 ),
                 "level": "cas_hard_trace",
+                "support_status": "supported",
+                "support_rationale": (
+                    "The Mode 7 stream built this packet from a compiler-validated "
+                    "CAS expression."
+                ),
                 "rationale": (
                     "Mode 7 live stream built the trace deterministically from a "
                     "compiler-validated CAS expression."
@@ -1493,6 +1498,11 @@ def _persist_evidence_trace(
             {
                 "claim": "Identifier copy trace reconstructed from input expression and emitted text.",
                 "level": "derived_trace",
+                "support_status": "partially_supported",
+                "support_rationale": (
+                    "The trace reconstructs identifier positions; it is useful "
+                    "evidence but not a direct decoder-probe measurement."
+                ),
                 "rationale": (
                     "Per-identifier positions were reconstructed by the v0 "
                     "traceability layer; not a direct decoder probe."

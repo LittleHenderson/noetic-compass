@@ -443,21 +443,29 @@ def _dev_fixture_packet() -> EvidencePacket:
         {
             "claim": "The expression ^3^P|A is a valid CAS state literal.",
             "level": "cas_hard_trace",
+            "support_status": "supported",
+            "support_rationale": "The compiler accepts the expression deterministically.",
             "rationale": "compile_expression returned valid=true with grammar_category=state_literal - deterministic.",
         },
         {
             "claim": "The output reuses the input's CAS tokens via pointer copy, not paraphrase.",
             "level": "source_copy_evidence",
+            "support_status": "supported",
+            "support_rationale": "The copy trace names the copied slots and their source/target positions.",
             "rationale": "Four named slots (^3, P, A, f) have copy=true with named source token indices.",
         },
         {
             "claim": "Run reproducer reconstructed from the checkpoint manifest's extra block.",
             "level": "derived_trace",
+            "support_status": "partially_supported",
+            "support_rationale": "The manifest supports the reconstruction, but original argv was not stored verbatim.",
             "rationale": "run_command is reconstructed from manifest fields; original argv was not stored verbatim.",
         },
         {
             "claim": "Model conditioning on the |A vs |f Register distinction shaped the reply.",
             "level": "neural_attribution_estimate",
+            "support_status": "partially_supported",
+            "support_rationale": "Mode 7 provides evidence for this link, not deterministic proof.",
             "rationale": "Mode 7 attribution flags register_head among the top-3 contributors; this is evidence, not proof.",
         },
     ]
@@ -570,11 +578,15 @@ def _dev_fixture_fallback_packet(reason: str | None = None) -> EvidencePacket:
             {
                 "claim": "The expression ^3^P|A is a valid CAS state literal.",
                 "level": "cas_hard_trace",
+                "support_status": "supported",
+                "support_rationale": "The static fixture uses a compiler-valid CAS expression.",
                 "rationale": "Static fallback fixture; compiler-validity claim mirrors the dev fixture example.",
             },
             {
                 "claim": "Copy/slot rows demonstrate the Evidence Packet inspection shape.",
                 "level": "derived_trace",
+                "support_status": "not_applicable",
+                "support_rationale": "This fallback row demonstrates packet shape; it is not a live model claim.",
                 "rationale": "Rows are illustrative because deployment-local artifacts were unavailable.",
             },
         ],
@@ -654,6 +666,8 @@ def _packet_from_trace(trace_id: str, trace: dict[str, Any]) -> EvidencePacket:
         {
             "claim": "Trace artifact loaded from disk for this trace_id.",
             "level": "derived_trace",
+            "support_status": "supported",
+            "support_rationale": "The packet was assembled from an on-disk trace artifact for this trace_id.",
             "rationale": "Reconstructed from the trace JSON; original generation context preserved verbatim.",
         }
     ]

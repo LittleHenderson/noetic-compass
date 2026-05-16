@@ -27,6 +27,21 @@ export type EvidenceClaimLevel =
   | 'derived_trace'
   | 'neural_attribution_estimate';
 
+/**
+ * Whether the answer actually backs up the claim it made.
+ *
+ * This is separate from EvidenceClaimLevel. EvidenceClaimLevel says how CAS
+ * knows about a claim; support_status says whether the answer supported that
+ * claim.
+ */
+export type EvidenceClaimSupport =
+  | 'supported'
+  | 'partially_supported'
+  | 'unsupported'
+  | 'contradicted'
+  | 'not_applicable'
+  | 'unknown';
+
 /** Source slot the copy trace points at. */
 export type EvidenceSlotRole =
   | 'noetic'
@@ -95,7 +110,12 @@ export interface EvidencePacketHashes {
 
 export interface EvidencePacketClaim {
   claim: string;
+  /** How CAS obtained/traced this claim; not a truth-confidence score. */
   level: EvidenceClaimLevel;
+  /** Whether the answer backs the claim up. Defaults to unknown on old packets. */
+  support_status?: EvidenceClaimSupport;
+  /** Plain-English reason for support_status when available. */
+  support_rationale?: string;
   rationale: string;
 }
 

@@ -16,6 +16,7 @@ import { EvidencePacket } from './EvidencePacket';
 import {
   type EvidencePacket as EvidencePacketData,
   type EvidenceClaimLevel,
+  type EvidenceClaimSupport,
 } from '../../lib/evidence_packet';
 import { setToken, clearToken } from '../../api/auth';
 
@@ -82,6 +83,8 @@ function fixturePacket(overrides: Partial<EvidencePacketData> = {}): EvidencePac
       {
         claim: 'CAS expression compiles cleanly',
         level: 'cas_hard_trace',
+        support_status: 'supported',
+        support_rationale: 'The compiler accepted the expression.',
         rationale: 'Direct call to api/notation/compiler.py.',
       },
       {
@@ -158,7 +161,7 @@ describe('EvidencePacket — mount with initialPacket', () => {
       screen.getByRole('heading', { name: 'Hashes', level: 3 }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: 'Claim levels', level: 3 }),
+      screen.getByRole('heading', { name: 'Evidence type & claim support', level: 3 }),
     ).toBeInTheDocument();
   });
 
@@ -633,3 +636,52 @@ beforeAll(() => {
 
 // Keep act import alive for tooling that complains otherwise.
 void act;
+
+describe('EvidencePacket - claim support separation', () => {
+  it.each<[EvidenceClaimSupport, string]>([
+    ['supported', 'Support: yes'],
+    ['partially_supported', 'Support: partial'],
+    ['unsupported', 'Support: no'],
+    ['contradicted', 'Contradicted'],
+    ['not_applicable', 'Support: not applicable'],
+    ['unknown', 'Support: unknown'],
+  ])('renders %s as a separate support badge', (status, expectedLabel) => {
+    const packet = fixturePacket({
+      claim_levels: [
+        {
+          claim: `support status ${status}`,
+          level: 'derived_trace',
+          support_status: status,
+          support_rationale: 'Support status test row.',
+          rationale: 'Evidence type test row.',
+        },
+      ],
+    });
+    render(
+      <EvidencePacket
+        traceId={packet.trace_id}
+        open={true}
+        onClose={() => {}}
+        initialPacket={packet}
+      />,
+    );
+    expect(screen.getByTestId(`claim-support-${status}`)).toHaveTextContent(
+      expectedLabel,
+    );
+  });
+
+  it('explains that trace evidence and claim support are separate', () => {
+    render(
+      <EvidencePacket
+        traceId="t"
+        open={true}
+        onClose={() => {}}
+        initialPacket={fixturePacket()}
+      />,
+    );
+    expect(
+      screen.getByTestId('evidence-confidence-separation-note'),
+    ).toHaveTextContent(/CAS may clearly track that a claim was made/i);
+    expect(screen.getByText('Evidence type')).toBeInTheDocument();
+  });
+});

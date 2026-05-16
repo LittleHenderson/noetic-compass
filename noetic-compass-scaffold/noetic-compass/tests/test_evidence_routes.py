@@ -140,6 +140,26 @@ def test_evidence_get_dev_fixture_covers_all_four_claim_levels(client, auth_head
     assert not missing, f"claim_levels missing kinds: {missing}; got {seen}"
 
 
+def test_evidence_claim_rows_separate_evidence_type_from_support(client, auth_headers):
+    resp = client.get(f"/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    allowed_support = {
+        "supported",
+        "partially_supported",
+        "unsupported",
+        "contradicted",
+        "not_applicable",
+        "unknown",
+    }
+    for row in body["claim_levels"]:
+        assert "level" in row, "level is evidence type, not claim support"
+        assert "support_status" in row
+        assert row["support_status"] in allowed_support
+        assert "support_rationale" in row
+
+
 def test_evidence_get_dev_fixture_caveats_flag_dev_mode(client, auth_headers):
     resp = client.get(f"/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
     assert resp.status_code == 200

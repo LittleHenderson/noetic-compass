@@ -36,6 +36,7 @@ import {
   fetchEvidencePacket,
   verifyEvidenceHashes,
   type EvidenceClaimLevel,
+  type EvidenceClaimSupport,
   type EvidenceCopySlotEntry,
   type EvidencePacket as EvidencePacketData,
   type VerifyHashesResponse,
@@ -79,6 +80,39 @@ const CLAIM_LEVEL_STYLES: Record<EvidenceClaimLevel, ClaimLevelStyle> = {
     label: 'Neural attribution (estimate)',
     icon: 'warn',
     className: 'bg-amber-500/15 border border-amber-400/30 text-amber-200',
+  },
+};
+
+interface ClaimSupportStyle {
+  label: string;
+  className: string;
+}
+
+const CLAIM_SUPPORT_STYLES: Record<EvidenceClaimSupport, ClaimSupportStyle> = {
+  supported: {
+    label: 'Support: yes',
+    className:
+      'bg-emerald-500/15 border border-emerald-400/30 text-emerald-200',
+  },
+  partially_supported: {
+    label: 'Support: partial',
+    className: 'bg-sky-500/15 border border-sky-400/30 text-sky-200',
+  },
+  unsupported: {
+    label: 'Support: no',
+    className: 'bg-amber-500/15 border border-amber-400/30 text-amber-200',
+  },
+  contradicted: {
+    label: 'Contradicted',
+    className: 'bg-rose-500/15 border border-rose-400/30 text-rose-200',
+  },
+  not_applicable: {
+    label: 'Support: not applicable',
+    className: 'bg-slate-500/15 border border-slate-400/25 text-slate-300',
+  },
+  unknown: {
+    label: 'Support: unknown',
+    className: 'bg-slate-500/15 border border-slate-400/25 text-slate-300',
   },
 };
 
@@ -183,6 +217,26 @@ function ClaimLevelBadge({ level }: { level: EvidenceClaimLevel }) {
       data-testid={`claim-badge-${level}`}
     >
       {style.icon === 'check' ? <CheckIcon /> : <WarnIcon />}
+      <span>{style.label}</span>
+    </span>
+  );
+}
+
+function ClaimSupportBadge({
+  status = 'unknown',
+}: {
+  status?: EvidenceClaimSupport;
+}) {
+  const style = CLAIM_SUPPORT_STYLES[status] ?? CLAIM_SUPPORT_STYLES.unknown;
+  return (
+    <span
+      className={[
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium',
+        style.className,
+      ].join(' ')}
+      data-testid={`claim-support-${status}`}
+      title="Claim support says whether the answer backs this claim up. It is separate from evidence type."
+    >
       <span>{style.label}</span>
     </span>
   );
@@ -740,8 +794,8 @@ function PacketBody({
 
       {/* 7. Claim levels (with caveats above if present) */}
       <Section
-        title="Claim levels"
-        subtitle="Not every claim is the same kind. Read carefully."
+        title="Evidence type & claim support"
+        subtitle="Evidence type says how CAS traced it. Claim support says whether the answer backed it up."
       >
         {packet.caveats && packet.caveats.length > 0 && (
           <div
@@ -756,6 +810,14 @@ function PacketBody({
             </ul>
           </div>
         )}
+        <p
+          className="mb-3 rounded-md border border-sky-400/20 bg-sky-500/10 px-3 py-2 text-[12px] text-sky-100"
+          data-testid="evidence-confidence-separation-note"
+        >
+          Evidence type and claim support are different. CAS may clearly
+          track that a claim was made while still marking the claim itself as
+          unsupported.
+        </p>
         <ClaimLevelsList claims={packet.claim_levels} />
       </Section>
     </div>
@@ -826,7 +888,7 @@ function CopySlotTraceView({
             <th className="px-2 py-1.5 font-medium">Copied</th>
             <th className="px-2 py-1.5 font-medium">Src idx</th>
             <th className="px-2 py-1.5 font-medium">Tgt idx</th>
-            <th className="px-2 py-1.5 font-medium">Claim</th>
+            <th className="px-2 py-1.5 font-medium">Evidence type</th>
           </tr>
         </thead>
         <tbody>
@@ -1103,9 +1165,17 @@ function ClaimLevelsList({
         >
           <div className="flex items-start justify-between gap-3">
             <p className="flex-1 text-[12px] text-slate-100">{c.claim}</p>
-            <ClaimLevelBadge level={c.level} />
+            <div className="flex shrink-0 flex-col items-end gap-1">
+              <ClaimLevelBadge level={c.level} />
+              <ClaimSupportBadge status={c.support_status ?? 'unknown'} />
+            </div>
           </div>
           <p className="mt-1 text-[11px] text-slate-400">{c.rationale}</p>
+          {c.support_rationale && (
+            <p className="mt-1 text-[11px] text-slate-400">
+              Claim support: {c.support_rationale}
+            </p>
+          )}
         </li>
       ))}
     </ul>
