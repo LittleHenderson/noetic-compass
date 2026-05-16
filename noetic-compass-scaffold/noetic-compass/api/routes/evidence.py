@@ -51,7 +51,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-router = APIRouter(prefix="/api/evidence", tags=["evidence"])
+router = APIRouter(prefix="/evidence", tags=["evidence"])
 
 
 # ---------------------------------------------------------------------------

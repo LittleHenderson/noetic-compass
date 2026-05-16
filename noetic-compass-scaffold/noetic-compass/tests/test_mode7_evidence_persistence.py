@@ -67,7 +67,7 @@ def test_mode7_persist_evidence_trace_writes_packet_loadable_json(
 
     # Hit the evidence route. Must be 200, not 404, with the shape the
     # drawer expects.
-    resp = client.get(f"/api/evidence/{trace_id}", headers=auth_headers)
+    resp = client.get(f"/evidence/{trace_id}", headers=auth_headers)
     assert resp.status_code == 200, (
         f"expected 200 from /api/evidence/{trace_id}; got "
         f"{resp.status_code} {resp.text!r}"

@@ -38,12 +38,12 @@ _KNOWN_CHECKPOINT_DIR = (
 
 
 def test_evidence_get_requires_auth(client):
-    resp = client.get(f"/api/evidence/{_DEV_TRACE_ID}")
+    resp = client.get(f"/evidence/{_DEV_TRACE_ID}")
     assert resp.status_code == 401
 
 
 def test_evidence_verify_requires_auth(client):
-    resp = client.post(f"/api/evidence/{_DEV_TRACE_ID}/verify")
+    resp = client.post(f"/evidence/{_DEV_TRACE_ID}/verify")
     assert resp.status_code == 401
 
 
@@ -53,7 +53,7 @@ def test_evidence_verify_requires_auth(client):
 
 
 def test_evidence_get_dev_fixture_200(client, auth_headers):
-    resp = client.get(f"/api/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
+    resp = client.get(f"/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
     assert resp.status_code == 200, resp.text
     body = resp.json()
 
@@ -64,7 +64,7 @@ def test_evidence_get_dev_fixture_200(client, auth_headers):
 
 
 def test_evidence_get_dev_fixture_has_all_seven_sections(client, auth_headers):
-    resp = client.get(f"/api/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
+    resp = client.get(f"/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
     assert resp.status_code == 200, resp.text
     body = resp.json()
 
@@ -90,7 +90,7 @@ def test_evidence_get_dev_fixture_has_all_seven_sections(client, auth_headers):
 def test_copy_slot_trace_matches_spec_shape(client, auth_headers):
     """SPEC §4: each copy_slot_trace row has role / name / copied /
     source_token_index / target_token_index / claim_level."""
-    resp = client.get(f"/api/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
+    resp = client.get(f"/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
     assert resp.status_code == 200
     body = resp.json()
 
@@ -113,7 +113,7 @@ def test_copy_slot_trace_matches_spec_shape(client, auth_headers):
 def test_hashes_on_disk_paths_uses_spec_keys(client, auth_headers):
     """SPEC §4: on_disk_paths uses {weights_path, tokenizer_path, corpus_path,
     english_bpe_path?} — NOT keys named for the hashes themselves."""
-    resp = client.get(f"/api/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
+    resp = client.get(f"/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
     assert resp.status_code == 200
     body = resp.json()
 
@@ -125,7 +125,7 @@ def test_hashes_on_disk_paths_uses_spec_keys(client, auth_headers):
 
 
 def test_evidence_get_dev_fixture_covers_all_four_claim_levels(client, auth_headers):
-    resp = client.get(f"/api/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
+    resp = client.get(f"/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
     assert resp.status_code == 200, resp.text
     body = resp.json()
 
@@ -141,7 +141,7 @@ def test_evidence_get_dev_fixture_covers_all_four_claim_levels(client, auth_head
 
 
 def test_evidence_get_dev_fixture_caveats_flag_dev_mode(client, auth_headers):
-    resp = client.get(f"/api/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
+    resp = client.get(f"/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
     assert resp.status_code == 200
     body = resp.json()
     assert body["caveats"], "dev fixture must declare caveats"
@@ -155,7 +155,7 @@ def test_evidence_get_dev_fixture_caveats_flag_dev_mode(client, auth_headers):
 
 def test_evidence_get_unknown_trace_id_404(client, auth_headers):
     resp = client.get(
-        "/api/evidence/this_trace_id_does_not_exist_xyz_42", headers=auth_headers
+        "/evidence/this_trace_id_does_not_exist_xyz_42", headers=auth_headers
     )
     assert resp.status_code == 404
     assert resp.json()["detail"] == "trace_id not found"
@@ -198,7 +198,7 @@ def test_evidence_verify_streams_sha256_over_real_file(client, auth_headers):
     independent_sha = _hashlib_sha256_of(_KNOWN_CHECKPOINT_DIR / "model_final.pt")
 
     resp = client.post(
-        f"/api/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
+        f"/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
     )
     assert resp.status_code == 200, resp.text
     body = resp.json()
@@ -225,7 +225,7 @@ def test_evidence_verify_streams_sha256_over_real_file(client, auth_headers):
 )
 def test_evidence_verify_overall_field_is_present(client, auth_headers):
     resp = client.post(
-        f"/api/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
+        f"/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
     )
     assert resp.status_code == 200
     body = resp.json()
@@ -235,7 +235,7 @@ def test_evidence_verify_overall_field_is_present(client, auth_headers):
 def test_evidence_verify_artifact_names_match_spec(client, auth_headers):
     """SPEC §6: artifact ∈ {weights, tokenizer, english_bpe, corpus, code_commit}."""
     resp = client.post(
-        f"/api/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
+        f"/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
     )
     assert resp.status_code == 200
     body = resp.json()
@@ -278,7 +278,7 @@ def test_evidence_verify_handles_missing_file(client, auth_headers, monkeypatch)
     monkeypatch.setattr(evidence_route, "_dev_fixture_packet", _patched_builder)
 
     resp = client.post(
-        f"/api/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
+        f"/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
     )
     assert resp.status_code == 200, resp.text
     body = resp.json()
@@ -317,7 +317,7 @@ def test_evidence_verify_rejects_paths_outside_allowed_roots(
     monkeypatch.setattr(evidence_route, "_dev_fixture_packet", _patched_builder)
 
     resp = client.post(
-        f"/api/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
+        f"/evidence/{_DEV_TRACE_ID}/verify", headers=auth_headers
     )
     assert resp.status_code == 200, resp.text
     body = resp.json()
@@ -333,7 +333,7 @@ def test_evidence_verify_rejects_paths_outside_allowed_roots(
 
 def test_evidence_verify_unknown_trace_id_404(client, auth_headers):
     resp = client.post(
-        "/api/evidence/this_trace_id_does_not_exist_xyz_42/verify",
+        "/evidence/this_trace_id_does_not_exist_xyz_42/verify",
         headers=auth_headers,
     )
     assert resp.status_code == 404
