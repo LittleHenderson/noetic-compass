@@ -3121,3 +3121,71 @@ Audit asks:
 3. Should v3 hard-contrast balancing happen before cross-model replication, or
    should OLMo/Qwen replication run first to test whether the current mixed
    result is Pythia-specific?
+
+## 2026-05-16T20:15Z - Roundtable complete: Stage 6 role-bound v3 plan
+
+Claude - user approved a multi-agent research roundtable to find the strongest
+next experiment after Stage 5.4.
+
+Five read-only researchers ran independently:
+
+- CAS Ontology
+- Dataset Design
+- Mechanistic Interpretability
+- Statistics and Controls
+- Red Team
+
+Consolidated output:
+
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/STAGE6_ROUNDTABLE_V3_PLAN_20260516.md`
+
+Main conclusion:
+
+> The next step should not be another append-only alias repair. It should be a
+> role-bound counterfactual noetic fixture where the same sentence contains
+> both sides of a noetic contrast, and only a neutral focus marker selects the
+> target label.
+
+Reason:
+
+- V2 proved targeted repair is possible.
+- V2 did not prove reliable activation advantage over TF-IDF.
+- Same-words/different-focus rows are the cleanest way to make bag-of-words
+  shortcuts structurally unhelpful.
+
+Proposed experiment:
+
+- Dataset: `v3_hard_contrast_noetic`, 3,000 rows.
+- Train/val/locked-test: 1,200 / 400 / 1,400.
+- Split by `contrast_bundle_id`, `lexical_pack_id`, and `template_id`, never by
+  row.
+- Focus pairs: `^5/^6`, `^8/^9`, `^2/^3`, `^4/^7`, `^0/^1`.
+- Primary activation readout: focus-token residual stream.
+- Baselines: majority, stratified dummy, Count LR, TF-IDF LR, char TF-IDF LR,
+  alias-rule, metadata-only, shuffled-label, layer-0 shortcut check.
+- Pass gate for "above text": probe beats best text baseline by >=5 pp, McNemar
+  p<0.05, bootstrap lower bound >0, macro-F1 lift >=0.03, no class below 0.50,
+  8/10 classes >=0.60.
+- Causal claims only after dataset pass, using forced-choice semantic logit
+  tests plus true-direction ablation, signed steering, and counterfactual
+  activation patching.
+
+Reserved language:
+
+- Allowed after dataset pass: "The Pythia probe shows statistically reliable
+  lift over strong text-only baselines on this locked v3 noetic fixture."
+- Allowed after causal pass: "Pythia contains a role-bound, causally usable
+  internal signal aligned with CAS noetic distinctions under counterfactual
+  controls."
+- Not allowed yet: "Pythia encodes CAS", "we can inspect the model's
+  reasoning", "Glass House is confirmed", or "the probe proves hidden
+  thoughts."
+
+Audit asks:
+
+1. Is Stage 6 role-bound counterfactual design the right next experiment, or
+   should we run OLMo/Qwen cross-model replication first?
+2. Are the proposed pass gates too strict, too loose, or appropriately
+   stakeholder-proof?
+3. Should the first build be the 10-bundle pilot validator/schema, or should we
+   author the full 60-bundle dataset before any probe run?
