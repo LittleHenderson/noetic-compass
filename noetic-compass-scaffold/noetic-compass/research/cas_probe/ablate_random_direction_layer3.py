@@ -22,10 +22,16 @@ This script is the control that disambiguates:
 
 Decision rule:
 
+Audit note: full `NOETIC_EFFECT_DIRECTION_MEANINGFUL` now requires
+the direct noetic-vs-random Welch comparison to pass alpha=0.05.
+The weaker pattern "noetic non-zero, random null" is suggestive
+control evidence only.
+
 * random diag-off >= noetic diag-off  → "specificity" is class-
   difficulty artifact. Glass House claim blocked.
 * random diag-off ≈ 0 AND noetic diag-off remains positive →
-  direction-meaningful effect. `MIXED_SPECIFICITY_EVIDENCE` survives.
+  suggestive control evidence. Direction-meaningful upgrade requires
+  the direct Welch comparison to pass.
 
 Also folds in audit Patch 1: report formal one-sample t-test on
 per-class disruption deltas (both noetic and random arms).
@@ -85,9 +91,10 @@ def main() -> int:
 
     try:
         import numpy as np
+        import scipy
         import torch
         import transformers
-        from scipy.stats import ttest_1samp
+        from scipy.stats import ttest_1samp, ttest_ind
         from transformers import AutoModelForCausalLM, AutoTokenizer
     except ImportError as exc:
         print(
@@ -319,11 +326,18 @@ def main() -> int:
             noetic_disruptions.append(np.nanmean(cross) - self_v)
         noetic_disruption_arr = np.array(noetic_disruptions)
         t_noetic, p_noetic = ttest_1samp(noetic_disruption_arr, 0.0)
+        t_welch, p_welch = ttest_ind(
+            noetic_disruption_arr,
+            disruption_arr,
+            equal_var=False,
+        )
     except Exception as exc:
         print(f"WARN could not load noetic stage 3.2 report for compare: {exc}")
         noetic_disruption_arr = None
         t_noetic = None
         p_noetic = None
+        t_welch = None
+        p_welch = None
 
     # ------------------------------------------------------------------ #
     # Verdict.
@@ -341,13 +355,30 @@ def main() -> int:
         print("NOETIC arm (from clean Stage 3.2 report) for compare:")
         print(f"  mean per-class disruption: {noetic_disruption_arr.mean():+.3f} (std {noetic_disruption_arr.std():.3f})")
         print(f"  one-sample t against 0: t={t_noetic:.3f} p={p_noetic:.4f}")
+        print(f"  Welch noetic vs random: t={t_welch:.3f} p={p_welch:.4f}")
 
     # Decision rule. Random disruption near zero AND noetic disruption
     # remains the established +0.079 → noetic effect IS direction-
     # meaningful. Random disruption similar to noetic → class-difficulty
     # artifact.
+    # Superseding audit gate: the above pattern is only suggestive unless
+    # the direct noetic-vs-random Welch comparison also passes.
     NEAR_ZERO_THRESHOLD = 0.03
-    if abs(disruption_arr.mean()) < NEAR_ZERO_THRESHOLD and p_val > 0.05:
+    ALPHA = 0.05
+    random_is_null = abs(disruption_arr.mean()) < NEAR_ZERO_THRESHOLD and p_val > ALPHA
+    noetic_is_nonzero = (
+        noetic_disruption_arr is not None
+        and p_noetic is not None
+        and p_noetic < ALPHA
+        and float(noetic_disruption_arr.mean()) > 0
+    )
+    direct_compare_pass = (
+        noetic_disruption_arr is not None
+        and p_welch is not None
+        and p_welch < ALPHA
+        and float(noetic_disruption_arr.mean()) > float(disruption_arr.mean())
+    )
+    if random_is_null and noetic_is_nonzero and direct_compare_pass:
         verdict = "NOETIC_EFFECT_DIRECTION_MEANINGFUL"
         verdict_text = (
             f"Random unit directions in the noetic subspace's orthogonal "
@@ -384,6 +415,32 @@ def main() -> int:
             f"control as bounding evidence. No upgrade to direction-"
             f"meaningful claim."
         )
+
+    if random_is_null and noetic_is_nonzero and p_welch is not None and not direct_compare_pass:
+        verdict = "NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED"
+        verdict_text = (
+            f"Random unit directions in the noetic subspace's orthogonal "
+            f"complement produce per-direction disruption {disruption_arr.mean():+.3f} "
+            f"(t={t_stat:.3f}, p={p_val:.4f}), indistinguishable from zero. "
+            f"The noetic arm is non-zero (t={t_noetic:.3f}, p={p_noetic:.4f}) "
+            f"and points in the expected direction, but the direct noetic-vs-random "
+            f"Welch comparison does not pass alpha=0.05 "
+            f"(t={t_welch:.3f}, p={p_welch:.4f}). "
+            f"This is suggestive control evidence, not a full upgrade to "
+            f"NOETIC_EFFECT_DIRECTION_MEANINGFUL. Stage 3.2 remains a modest "
+            f"mechanistic signal with a borderline direct comparison."
+        )
+    elif random_is_null and noetic_is_nonzero and p_welch is not None and direct_compare_pass:
+        verdict_text = (
+            f"Random unit directions in the noetic subspace's orthogonal "
+            f"complement produce per-direction disruption {disruption_arr.mean():+.3f} "
+            f"(t={t_stat:.3f}, p={p_val:.4f}), indistinguishable from zero. "
+            f"The noetic arm is non-zero (t={t_noetic:.3f}, p={p_noetic:.4f}) "
+            f"and the direct noetic-vs-random Welch comparison passes "
+            f"(t={t_welch:.3f}, p={p_welch:.4f}). "
+            f"Stage 3.2 upgrades to NOETIC_EFFECT_DIRECTION_MEANINGFUL on this "
+            f"evidence. Per-class variance remains a caveat."
+        )
     print()
     print(f"VERDICT: {verdict}")
     print(verdict_text)
@@ -407,6 +464,7 @@ def main() -> int:
             "transformers": transformers.__version__,
             "torch": torch.__version__,
             "numpy": np.__version__,
+            "scipy": scipy.__version__,
         },
         "activations_file": _ACTIVATIONS_PATH.name,
         "activations_sha256": activations_sha,
@@ -445,9 +503,21 @@ def main() -> int:
             if noetic_disruption_arr is not None
             else None
         ),
+        "welch_noetic_vs_random_t_test": (
+            {
+                "t": float(t_welch),
+                "p_two_sided": float(p_welch),
+                "n_noetic": int(len(noetic_disruption_arr)),
+                "n_random": int(len(disruption_arr)),
+                "equal_var": False,
+            }
+            if noetic_disruption_arr is not None and t_welch is not None
+            else None
+        ),
         "decision_thresholds": {
             "near_zero_random_disruption_max": NEAR_ZERO_THRESHOLD,
-            "alpha_for_random_arm": 0.05,
+            "alpha": ALPHA,
+            "direction_meaningful_requires_welch_p_below_alpha": True,
         },
         "per_case": per_case,
         "verdict": verdict,

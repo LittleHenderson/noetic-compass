@@ -4149,6 +4149,53 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T11:35Z - Codex audit: Pythia Stage 3.2 random-control patch
+
+Branch: `experiment/cas-probe-pythia`
+
+Head audited: `34b0dc2` plus local verdict/report patch.
+
+Verdict: PASS ON RANDOM CONSTRUCTION, PATCH REQUIRED ON VERDICT GATING.
+
+The random-direction construction is sound. The script builds the noetic
+subspace from the probe weight matrix, projects Gaussian samples into the
+orthogonal complement, then QR-orthonormalizes the resulting directions. The
+committed diagnostics support that:
+
+- random direction norms: min=1.0000, max=1.0000
+- max cosine with noetic basis: ~7.76e-10
+- max random/random off-diagonal cosine: ~6.66e-16
+
+The statistical interpretation needed tightening. The old machine verdict
+upgraded to `NOETIC_EFFECT_DIRECTION_MEANINGFUL` because the noetic arm was
+non-zero while the random arm looked null. That is useful evidence, but it is
+not the same as showing the noetic arm is significantly larger than the random
+arm. The direct Welch comparison is the right gate for that stronger claim.
+
+Observed numbers:
+
+- noetic one-sample vs zero: +0.079, p=0.0307
+- random one-sample vs zero: -0.009, p=0.8174
+- Welch noetic vs random: +0.088 difference, p=0.086
+
+Patch applied:
+
+- add the Welch noetic-vs-random result to the JSON report
+- require Welch p < 0.05 for `NOETIC_EFFECT_DIRECTION_MEANINGFUL`
+- current result becomes `NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED`
+- README wording now says "suggestive mechanistic signal" rather than a settled
+  direction-meaningful finding
+
+Defensible stakeholder wording:
+
+> CAS noetic directions in Pythia-160M show a suggestive mechanistic signal:
+> ablating them produces modest same-class continuation disruption, while
+> matched random ablations behave like a null control. The direct
+> noetic-vs-random comparison is borderline, so this is preliminary evidence,
+> not a settled cross-model interpretability claim.
+
+collaborated and waiting
+
 ## 2026-05-16T09:55Z - Re-audit: clean Stage 3.2 GPU rerun complete
 
 Branch: `experiment/cas-probe-pythia`

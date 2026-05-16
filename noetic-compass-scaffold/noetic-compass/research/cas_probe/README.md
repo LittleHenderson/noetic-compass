@@ -66,7 +66,7 @@ subject. CAS is the measuring instrument.**
 | 3 | done — narrow newline-token test | ablation of noetic subspace; sanity gate passed (probe acc 0.899 → 0.101); immediate next-token argmax unchanged on 69/69 prompts, but all top tokens were newline |
 | 3.1 | done — continuation effect present | forced semantic continuations; first-step top-1 changes in 30/207 cases; full 8-token continuation changes in 157/207 cases |
 | 3.2 | done — mixed specificity evidence | clean RunPod GPU rerun on RTX A6000 (`cuda`, 147 sec); first-token specificity fails (diag 0.079 vs off-diag 0.062), but 8-token match shows weak same-class disruption (diag match 0.659 vs off-diag 0.738). Verdict: `MIXED_SPECIFICITY_EVIDENCE`. |
-| 3.2-control | **done — direction-meaningful** | random orthogonal control on RTX A6000 (140 sec); random arm mean disruption −0.009 (t=−0.24, p=0.82), noetic arm +0.079 (t=2.56, p=0.031); Welch noetic-vs-random t=1.82 (p=0.086, borderline). Verdict: `NOETIC_EFFECT_DIRECTION_MEANINGFUL` with borderline-between-arm caveat. |
+| 3.2-control | **done — suggestive control passed** | random orthogonal control on RTX A6000 (140 sec); random arm mean disruption −0.009 (t=−0.24, p=0.82), noetic arm +0.079 (t=2.56, p=0.031); Welch noetic-vs-random t=1.82 (p=0.086, borderline). Verdict: `NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED`; no full direction-meaningful upgrade until the direct comparison passes. |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -524,8 +524,9 @@ Artifacts:
 
 ## Stage 3.2 random-direction control (2026-05-16) — audit Patch 3
 
-**Verdict: `NOETIC_EFFECT_DIRECTION_MEANINGFUL`** with a borderline
-between-arm comparison caveat.
+**Verdict: `NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED`**. The control is
+useful and points in the expected direction, but the direct between-arm
+comparison is still borderline.
 
 Came out of the Claude-seat audit on commit `d8afd7d` (entry in
 `inbox_claude.md` 2026-05-16T10:40Z). The concern: Stage 3.2's
@@ -597,24 +598,25 @@ Three signals layered:
 > random orthogonal directions are ablated (p=0.82), and (c)
 > larger than the random control by +0.088 mean disruption
 > (Welch p=0.086, borderline at α=0.05 with n=10 per arm). On
-> this evidence the effect is direction-meaningful, not
-> class-difficulty artifact, with the caveat that the direct
-> between-arm test is borderline and would benefit from more
-> directions or a more sensitive metric.
+> this evidence is suggestive, not a full direction-meaningful
+> verdict, because the direct between-arm test is still borderline
+> and would benefit from more directions or a more sensitive metric.
 
 **What this upgrades:**
 
 - Stage 3.2 narrative from `MIXED_SPECIFICITY_EVIDENCE` to
-  `NOETIC_EFFECT_DIRECTION_MEANINGFUL` — within the script's own
-  decision logic, which uses "random arm at chance + noetic arm
-  reliably non-zero" as the gate. The script's gate passes.
-
+  `NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED`.
+- The random-control construction itself passes: random directions are
+  unit-length, mutually orthogonal, and orthogonal to the noetic
+  subspace. The random arm behaves like a null control.
 **What this does NOT upgrade:**
 
-- The Welch direct-comparison p=0.086 keeps the claim conservative.
-  Any external Glass House messaging should cite both the per-arm
-  one-sample results AND the borderline between-arm comparison,
-  with reserved language.
+- It does not upgrade to `NOETIC_EFFECT_DIRECTION_MEANINGFUL`.
+  That stronger verdict now requires Welch noetic-vs-random p < 0.05.
+  Current p=0.086 keeps the claim conservative.
+- Any external Glass House messaging should cite both the per-arm
+  one-sample results and the borderline between-arm comparison, with
+  reserved language.
 - ^3 and ^5 still show no specificity (and ^3 still aligns with the
   sanity-gate redundancy diagnosis).
 - ^7's noetic disruption (+0.214) is partly explained by random
@@ -629,21 +631,19 @@ Three signals layered:
 
 The cleanest defensible plain-English version, post-control:
 
-> CAS noetic directions in Pythia-160M's mid-network are
-> direction-meaningful — ablating them produces same-class
-> continuation disruption that random ablations of comparable
-> magnitude do not produce. The effect is modest (+0.079 mean,
-> uneven across classes) and the direct between-arm comparison
-> is borderline at conventional thresholds. This is real
-> mechanistic evidence at a small scale; it is not yet a
-> turnkey cross-model interpretability product.
+> CAS noetic directions in Pythia-160M's mid-network show a
+> suggestive mechanistic signal: ablating them produces modest
+> same-class continuation disruption, while matched random
+> ablations behave like a null control. The direct noetic-vs-random
+> comparison is borderline, so this is preliminary evidence, not a
+> settled cross-model interpretability claim.
 
-That's the strongest claim that survives the control. Earlier
+That's the current claim that survives the control. Earlier
 Glass House framing ("see how this model thinks in CAS") still
-overshoots. The corrected pitch: "structured probes find
-direction-meaningful CAS-correlated structure in open models;
-how robust this is across layers, axes, and architectures is
-the next empirical question."
+overshoots. The corrected pitch: "structured probes can find
+CAS-correlated structure in open models; whether that structure is
+robust across layers, axes, and architectures is the next empirical
+question."
 
 ### Artifacts
 

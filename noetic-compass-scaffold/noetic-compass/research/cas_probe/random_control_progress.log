@@ -5,21 +5,21 @@ random x noetic cosine: max_abs=0.000000 (target 0)
 random x random off-diag: max_abs=0.000000 (target 0)
 
 loading EleutherAI/pythia-160m ...
-Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 5660.12it/s]
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 9118.45it/s]
 device: cuda
 
 generating baselines + 10 random-direction ablations ...
   baselines done in 13.8s
-  random direction 0 done at elapsed=27.1s
-  random direction 1 done at elapsed=39.5s
-  random direction 2 done at elapsed=52.9s
-  random direction 3 done at elapsed=65.4s
-  random direction 4 done at elapsed=77.8s
-  random direction 5 done at elapsed=90.3s
-  random direction 6 done at elapsed=102.7s
-  random direction 7 done at elapsed=115.1s
-  random direction 8 done at elapsed=127.6s
-  random direction 9 done at elapsed=140.0s
+  random direction 0 done at elapsed=26.1s
+  random direction 1 done at elapsed=38.4s
+  random direction 2 done at elapsed=50.7s
+  random direction 3 done at elapsed=63.0s
+  random direction 4 done at elapsed=75.3s
+  random direction 5 done at elapsed=87.6s
+  random direction 6 done at elapsed=100.7s
+  random direction 7 done at elapsed=113.1s
+  random direction 8 done at elapsed=125.5s
+  random direction 9 done at elapsed=138.4s
 
 RANDOM-CONTROL token-match diagonal vs off-diagonal:
   diag:    0.741
@@ -31,7 +31,8 @@ RANDOM-CONTROL token-match diagonal vs off-diagonal:
 NOETIC arm (from clean Stage 3.2 report) for compare:
   mean per-class disruption: +0.079 (std 0.092)
   one-sample t against 0: t=2.560 p=0.0307
+  Welch noetic vs random: t=1.821 p=0.0859
 
-VERDICT: NOETIC_EFFECT_DIRECTION_MEANINGFUL
-Random unit directions in the noetic subspace's orthogonal complement produce per-direction disruption -0.009 (t=-0.238, p=0.8174) — indistinguishable from zero. The noetic-arm disruption (+0.079, p=0.031) survives the control: it is not class-difficulty artifact, it reflects direction-meaningful structure in the noetic subspace. Stage 3.2 MIXED_SPECIFICITY_EVIDENCE upgrades to NOETIC_EFFECT_DIRECTION_MEANINGFUL on this evidence. Per-class variance (8 of 10 positive, ^7/^2/^8 strong) remains a caveat; ^3/^5 wrong-direction also still applies.
+VERDICT: NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED
+Random unit directions in the noetic subspace's orthogonal complement produce per-direction disruption -0.009 (t=-0.238, p=0.8174), indistinguishable from zero. The noetic arm is non-zero (t=2.560, p=0.0307) and points in the expected direction, but the direct noetic-vs-random Welch comparison does not pass alpha=0.05 (t=1.821, p=0.0859). This is suggestive control evidence, not a full upgrade to NOETIC_EFFECT_DIRECTION_MEANINGFUL. Stage 3.2 remains a modest mechanistic signal with a borderline direct comparison.
 report written: /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/research/cas_probe/pythia_ablation_random_control_layer3_20260516.json

@@ -26,7 +26,8 @@
   "package_versions": {
     "transformers": "5.8.1",
     "torch": "2.5.1+cu124",
-    "numpy": "2.4.4"
+    "numpy": "2.4.4",
+    "scipy": "1.17.1"
   },
   "activations_file": "pythia_probe_activations_20260515.npz",
   "activations_sha256": "f1b3610636ddb5fe056504e931c09cd07f2fed1247b84c649cf75503dd49ca9a",
@@ -446,9 +447,17 @@
     ],
     "source_file": "pythia_ablation_per_class_layer3_clean_20260516.json"
   },
+  "welch_noetic_vs_random_t_test": {
+    "t": 1.820711650530203,
+    "p_two_sided": 0.0858664271212847,
+    "n_noetic": 10,
+    "n_random": 10,
+    "equal_var": false
+  },
   "decision_thresholds": {
     "near_zero_random_disruption_max": 0.03,
-    "alpha_for_random_arm": 0.05
+    "alpha": 0.05,
+    "direction_meaningful_requires_welch_p_below_alpha": true
   },
   "per_case": [
     {
@@ -17012,6 +17021,6 @@
       "token_match_rate": 1.0
     }
   ],
-  "verdict": "NOETIC_EFFECT_DIRECTION_MEANINGFUL",
-  "verdict_text": "Random unit directions in the noetic subspace's orthogonal complement produce per-direction disruption -0.009 (t=-0.238, p=0.8174) — indistinguishable from zero. The noetic-arm disruption (+0.079, p=0.031) survives the control: it is not class-difficulty artifact, it reflects direction-meaningful structure in the noetic subspace. Stage 3.2 MIXED_SPECIFICITY_EVIDENCE upgrades to NOETIC_EFFECT_DIRECTION_MEANINGFUL on this evidence. Per-class variance (8 of 10 positive, ^7/^2/^8 strong) remains a caveat; ^3/^5 wrong-direction also still applies."
+  "verdict": "NOETIC_EFFECT_SUGGESTIVE_CONTROL_PASSED",
+  "verdict_text": "Random unit directions in the noetic subspace's orthogonal complement produce per-direction disruption -0.009 (t=-0.238, p=0.8174), indistinguishable from zero. The noetic arm is non-zero (t=2.560, p=0.0307) and points in the expected direction, but the direct noetic-vs-random Welch comparison does not pass alpha=0.05 (t=1.821, p=0.0859). This is suggestive control evidence, not a full upgrade to NOETIC_EFFECT_DIRECTION_MEANINGFUL. Stage 3.2 remains a modest mechanistic signal with a borderline direct comparison."
 }
