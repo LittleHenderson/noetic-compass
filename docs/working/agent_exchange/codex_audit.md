@@ -4149,6 +4149,66 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T08:11Z - Pythia Stage 2 audit: pasted STRONG_SIGNAL framing is superseded
+
+Branch reviewed: `experiment/cas-probe-pythia`
+Stage 2 commit referenced by user: `8b21538`
+Current branch head observed: `040e898`
+
+Verdict: **PASS on isolation, FAIL on the original "STRONG_SIGNAL" interpretation.**
+
+The pasted Stage 2 summary is no longer the correct claim to use. The branch has already been tightened past that language. Current report verdict is:
+
+`LABELS_RECOVERABLE_MOSTLY_FROM_TEXT`
+
+Plain English: the noetic label is easy to recover from the English wording, but Pythia-160M does not yet show a reliable extra signal beyond a normal text classifier.
+
+Key numbers from `pythia_noetic_probes_report_20260515.json`:
+
+- Pythia headline layer is val-selected layer 3, not best-test layer 4.
+- Pythia layer 3 test accuracy: `0.899`.
+- TF-IDF baseline test accuracy on the same text: `0.884`.
+- Count-vector baseline: `0.884`.
+- Pythia lift over TF-IDF: `+1.4 pp`.
+- Paired table: 59 both correct, 3 Pythia-only, 2 TF-IDF-only, 5 both wrong.
+- McNemar exact p-value: `1.0000`.
+- Shuffled-label control: `0.101`, so the split is not leaking labels.
+
+Audit reading:
+
+- The signal is real as a label-recovery result.
+- It is not reliable evidence that Pythia internally encodes CAS beyond surface wording.
+- The original "92.8% strong signal" line is too strong for external use.
+- The honest public/internal wording is: "CAS labels are recoverable from this corpus; Pythia-160M does not yet add reliable beyond-text signal on the noetic axis."
+
+Isolation checks:
+
+- Files are scoped under `noetic-compass-scaffold/noetic-compass/research/cas_probe/`.
+- No production hits for `EleutherAI`, `pythia-160m`, `pythia_probe`, `cas_probe`, `capture_pythia`, or `ablate_noetic` in `dashboard`, `cas-native`, or `api`.
+- Artifacts are correctly prefixed `pythia_` or research scoped.
+- No production CAS Native path appears to import Pythia.
+
+Additional important finding:
+
+The current branch already includes Stage 3 ablation at `040e898`, with verdict:
+
+`ABLATION_NO_CAUSAL_BITE`
+
+That result says the probe-read subspace can be removed from layer 3 and the probe drops to chance, but Pythia's next-token top-1 output stays unchanged on 69/69 test prompts. Mean KL moves only about `0.12` nats. So the noetic signal is readable but behaviorally inert in this setup.
+
+Decision answers:
+
+1. Codex audit first: **done**.
+2. Stage 3 ablation: **already done; result is negative for causal bite**.
+3. Other axes: **OK as research-only**, but use the stricter paired text-baseline gate from the start.
+4. Cross-model proof: **not yet**. Only worth doing after either another axis beats the text baseline reliably, or a stronger ablation design shows causal movement.
+
+Recommendation:
+
+Continue the Pythia branch only as a research probe. Do not use this Stage 2/3 result in stakeholder copy as proof that foreign models "think in CAS." It is useful because it tightened the science: CAS labels are readable from the text, but this Pythia-160M noetic probe does not yet support the Glass House mechanistic claim.
+
+collaborated and waiting
+
 ## 2026-05-16T08:42Z - Re-audit: Pythia CAS probe Stage 2.2 paired baselines
 
 Branch: `experiment/cas-probe-pythia`
