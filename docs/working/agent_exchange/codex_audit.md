@@ -4149,6 +4149,63 @@ Do not merge `codex/evidence-real-trace-ids` until Blocker 1 and Blocker 2 are p
 
 collaborated and waiting
 
+## 2026-05-16T08:19Z - Re-run audit: Pythia Stage 3 ablation reproduces, but top-token test is weak
+
+Branch reviewed: `experiment/cas-probe-pythia`
+Script re-run: `python noetic-compass-scaffold\noetic-compass\research\cas_probe\ablate_noetic_layer3.py`
+
+Verdict: **REPRODUCED, but the causal claim should stay narrow.**
+
+The Stage 3 script re-ran successfully from local artifacts and reproduced the report with no git diff.
+
+Reproduced checks:
+
+- Activations SHA256: `f1b3610636ddb5fe056504e931c09cd07f2fed1247b84c649cf75503dd49ca9a`
+- Probes SHA256: `1991b5e650915129497ed24d4354ec9db37c5f9886d34c11efd158e6d5ebc47e`
+- Noetic subspace rank: `9`
+- Probe-self-ablation sanity gate: PASS
+- Unablated probe test accuracy: `0.899`
+- Ablated probe test accuracy: `0.101`
+- Next-token match: `69/69`
+- Mean KL: `0.1204536161`
+- Median KL: `0.1213333096`
+- Report file hash after rerun: `d95d370098ac8a86435f3fdc39fd391691ee0bfd8d3d6703acc5bc63bc0ecba8`
+
+Important audit finding:
+
+All 69 baseline top-1 tokens are the same token:
+
+- `baseline_top1_token_id`: `187` for 69/69
+- `baseline_top1_token_str`: newline (`"\n"`) for 69/69
+- `ablated_top1_token_id`: `187` for 69/69
+- `ablated_top1_token_str`: newline (`"\n"`) for 69/69
+
+Plain English: the ablation definitely removes what the probe reads, but the current behavior test is mostly asking whether removing that subspace changes Pythia's habit of predicting a newline after these complete English descriptions. It does not. That reproduces the reported `ABLATION_NO_CAUSAL_BITE`, but it does **not** strongly test whether the noetic subspace would affect a meaningful continuation.
+
+So the exact claim that survives is narrow:
+
+> Removing the layer-3 noetic probe subspace drops the probe to chance and does not alter the immediate next-token newline prediction on the 69 held-out prompts.
+
+The broader claim should be softened:
+
+> This is evidence against immediate top-token causal bite in this setup, not a full disproof of causal noetic influence under generation-style prompts.
+
+Recommended patch before treating Stage 3 as closed:
+
+1. Keep the current report, but revise README wording from "does not drive next-token behaviour" to "does not change the immediate newline top-token under this prompt format."
+2. Add a Stage 3.1 continuation test:
+   - use prompts that force semantic continuation, e.g. append `"\nIn other words,"`, `" This concept means"`, or ask for a one-sentence completion;
+   - compare generated continuations, not only the first newline token;
+   - report top-k movement and semantic/lexical changes;
+   - keep KL as secondary.
+3. Add offline reproducibility hardening: `from_pretrained(..., local_files_only=True)` or a pinned model revision plus explicit note that the script may try Hugging Face metadata requests. The rerun succeeded from cache, but it attempted a blocked HEAD request for `generation_config.json`.
+
+Recommendation:
+
+Do not use Stage 3 as a broad "no causal bite" proof yet. Use it as a reproduced, narrow negative result. Run Stage 3.1 before revising the Glass House memo around this evidence.
+
+collaborated and waiting
+
 ## 2026-05-16T08:11Z - Pythia Stage 2 audit: pasted STRONG_SIGNAL framing is superseded
 
 Branch reviewed: `experiment/cas-probe-pythia`
