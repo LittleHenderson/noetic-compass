@@ -26,7 +26,9 @@ Usage (after installing transformers + downloading Pythia):
     python noetic-compass-scaffold/noetic-compass/research/cas_probe/capture_pythia_activations.py
 
 A ``--smoke`` flag runs the capture over just the first N records for a
-fast sanity check before doing the full 458-record run.
+fast sanity check before doing the full 457-record run. Smoke runs write
+to ``pythia_probe_activations_smoke_*.npz`` so they never overwrite the
+production-grade full-run artifacts.
 
     python ...capture_pythia_activations.py --smoke 10
 """
@@ -34,6 +36,7 @@ fast sanity check before doing the full 458-record run.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -43,10 +46,35 @@ from typing import Any
 _HERE = Path(__file__).resolve().parent
 _TODAY = "20260515"
 _LABELS_PATH = _HERE / f"pythia_probe_labels_{_TODAY}.jsonl"
-_OUT_ACTIVATIONS = _HERE / f"pythia_probe_activations_{_TODAY}.npz"
-_OUT_RUN_MANIFEST = _HERE / f"pythia_probe_activations_manifest_{_TODAY}.json"
 
 _MODEL_NAME = "EleutherAI/pythia-160m"
+
+
+def _output_paths(smoke: bool) -> tuple[Path, Path]:
+    """Return (activations_path, manifest_path), separating smoke artifacts
+    from full-run artifacts. Codex audit a3a7932 non-blocking item #2:
+    smoke runs must not overwrite the production-grade full-run files.
+    """
+    if smoke:
+        return (
+            _HERE / f"pythia_probe_activations_smoke_{_TODAY}.npz",
+            _HERE / f"pythia_probe_activations_smoke_manifest_{_TODAY}.json",
+        )
+    return (
+        _HERE / f"pythia_probe_activations_{_TODAY}.npz",
+        _HERE / f"pythia_probe_activations_manifest_{_TODAY}.json",
+    )
+
+
+def _sha256_of_file(path: Path, chunk_size: int = 1 << 20) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        while True:
+            chunk = fh.read(chunk_size)
+            if not chunk:
+                break
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def _load_snapshot() -> list[dict[str, Any]]:
@@ -80,6 +108,7 @@ def main(argv: list[str] | None = None) -> int:
         help="Device to run Pythia on. CPU is fine for 160M.",
     )
     args = parser.parse_args(argv)
+    out_activations, out_manifest = _output_paths(smoke=args.smoke > 0)
 
     # Lazy imports so the script fails with a clear message if transformers
     # is not installed.
@@ -162,11 +191,17 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     np.savez_compressed(
-        _OUT_ACTIVATIONS,
+        out_activations,
         X=X,
         y=y,
         sample_ids=sample_ids_arr,
     )
+
+    # Codex audit a3a7932 non-blocking item #1: record sha256 of the
+    # activation file in the manifest so consumers (the Stage 2 probe
+    # trainer, future auditors) can verify the on-disk artifact
+    # without re-running the capture.
+    activations_sha256 = _sha256_of_file(out_activations)
 
     # Per Codex audit 37d0a62 medium fix: record model revision +
     # package versions in the manifest so a future auditor can
@@ -213,13 +248,14 @@ def main(argv: list[str] | None = None) -> int:
             "numpy": numpy_version,
         },
         "elapsed_seconds": time.perf_counter() - started,
-        "output_file": _OUT_ACTIVATIONS.name,
+        "output_file": out_activations.name,
+        "output_sha256": activations_sha256,
     }
-    with _OUT_RUN_MANIFEST.open("w", encoding="utf-8", newline="\n") as fh:
+    with out_manifest.open("w", encoding="utf-8", newline="\n") as fh:
         json.dump(manifest, fh, indent=2)
         fh.write("\n")
 
-    print(f"activations written: {_OUT_ACTIVATIONS}")
+    print(f"activations written: {out_activations}")
     print(f"run manifest: {_OUT_RUN_MANIFEST}")
     print(f"shape: X={X.shape} y={y.shape}")
     return 0

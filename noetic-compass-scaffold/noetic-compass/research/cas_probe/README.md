@@ -53,9 +53,74 @@ subject. CAS is the measuring instrument.**
 | Stage | Status | Deliverable |
 |---|---|---|
 | 1.0 | done | `README.md`, `build_pythia_probe_snapshot.py`, frozen labels jsonl, manifest |
-| 1.1 | pending | Pythia-160M activation capture script + smoke test |
-| 2 | pending | linear probe training over captured activations |
-| 3 | pending (gated) | causal-influence ablation if Stage 2 passes |
+| 1.1 | done | Pythia-160M activation capture script + smoke test |
+| 2 | **done — strong signal** | linear probe training over captured activations |
+| 3 | pending (eligible) | causal-influence ablation |
+
+## Stage 2 headline result (2026-05-16)
+
+**Verdict: STRONG_SIGNAL.** Best-layer noetic probe test accuracy
+**92.8%** against a 10% chance baseline. All 13 layer positions cross
+the 30% strong-signal threshold the README pre-committed to.
+
+| Layer | Train acc | Val acc | Test acc | macro-F1 |
+|---:|---:|---:|---:|---:|
+| 0 (embed) | 1.000 | 0.855 | 0.884 | 0.886 |
+| 1 | 1.000 | 0.884 | 0.913 | 0.912 |
+| 2 | 1.000 | 0.884 | 0.913 | 0.912 |
+| 3 | 1.000 | 0.899 | 0.899 | 0.902 |
+| **4** | 1.000 | 0.899 | **0.928** | **0.931** |
+| 5 | 1.000 | 0.884 | 0.928 | 0.926 |
+| 6 | 1.000 | 0.855 | 0.913 | 0.916 |
+| 7 | 1.000 | 0.812 | 0.884 | 0.884 |
+| 8 | 1.000 | 0.841 | 0.899 | 0.902 |
+| 9 | 1.000 | 0.812 | 0.884 | 0.887 |
+| 10 | 1.000 | 0.812 | 0.870 | 0.868 |
+| 11 | 1.000 | 0.812 | 0.884 | 0.886 |
+| 12 | 1.000 | 0.812 | 0.870 | 0.872 |
+
+Trained in 1.5 sec on CPU. Split: 319 train / 69 val / 69 test
+(stratified, seed=42). Logistic regression with L-BFGS, balanced class
+weight, StandardScaler fit on train only.
+
+**What this means.** Pythia-160M's internal representations of these
+English descriptions are detectably aligned with the CAS noetic axis at
+~90%+ accuracy from layer 1 onward, peaking around mid-network
+(layers 4-5).
+
+**Honest caveats reviewers should expect to push on.**
+
+1. **Lexical-vs-conceptual ambiguity.** The English descriptions were
+   written by Claude with knowledge of the source CAS expression.
+   Claude probably embedded stylistic patterns per noetic (^2 →
+   "drawn", "attraction"; ^3 → "resisting", "rejecting"; ^7 →
+   "groove", "practice"). The probe could be reading those surface
+   features rather than deep conceptual structure. This is the
+   classic interpretability problem.
+2. **Train accuracy 1.000 on every layer.** That is expected for L2-
+   regularized logistic regression with 768-dim features and only
+   ~32 samples per class in train. Generalization gap (train minus
+   test) is 7-13 pp, which is consistent with the probe not just
+   memorizing.
+3. **Small test set.** 69 samples means ~7 per class on average. The
+   92.8% point estimate has wide confidence intervals; real accuracy
+   on a held-out distribution might be 85-97%.
+4. **Single architecture.** We haven't shown this transfers. OLMo or
+   Qwen need to be probed before the Glass House pitch is
+   defensible.
+
+Stage 3 (causal ablation) is the right next move because it
+disambiguates point 1. If ablating the detected direction changes the
+output in a way that matches the noetic semantics, the structure is
+real. If it just scrambles output, the probe is reading surface
+features and the Glass House claim needs revision.
+
+Artifacts on disk:
+
+- `pythia_noetic_probes_20260515.npz` — trained probes (coefs,
+  intercepts, scaler params, per-layer).
+- `pythia_noetic_probes_report_20260515.json` — full per-layer
+  metrics, split indices, decision gates, verdict.
 
 ## Files
 
