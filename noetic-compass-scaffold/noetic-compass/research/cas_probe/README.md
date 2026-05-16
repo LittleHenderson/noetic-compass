@@ -54,10 +54,153 @@ subject. CAS is the measuring instrument.**
 |---|---|---|
 | 1.0 | done | `README.md`, `build_pythia_probe_snapshot.py`, frozen labels jsonl, manifest |
 | 1.1 | done | Pythia-160M activation capture script + smoke test |
-| 2 | **done — strong signal** | linear probe training over captured activations |
-| 3 | pending (eligible) | causal-influence ablation |
+| 2 | done | per-layer linear probe training |
+| 2.1 | done | TF-IDF baseline, shuffled-label control, val-selected headline, confusion matrix |
+| 2.2 | **done — labels recoverable, mostly text-baseline explained** | majority / stratified / count-vector baselines, paired contingency, McNemar test |
+| 3 | pending (exploratory only) | causal-influence ablation |
 
-## Stage 2.1 headline result (2026-05-16, post-Codex-audit)
+## Decision gates (revised post-audit 2026-05-16)
+
+These are the stricter gates after Codex audit `6a7d657`. Beating
+chance is necessary but **not sufficient**. To claim a model adds
+structure beyond plain text we require BOTH:
+
+- Pythia headline test accuracy minus best-text-baseline test
+  accuracy **>= 5 percentage points**, AND
+- McNemar's exact binomial test on the paired discordant pairs
+  (Pythia-only-correct vs text-baseline-only-correct) **p < 0.05**.
+
+Verdict tiers:
+
+- `PROBE_RELIABLY_ABOVE_TEXT_BASELINE` — both criteria pass.
+- `LABELS_RECOVERABLE_MOSTLY_FROM_TEXT` — headline beats chance but
+  not text reliably. This is where Stage 2.2 lands.
+- `PROBE_WEAKLY_ABOVE_CHANCE` — between chance and the 30% strong
+  threshold.
+- `NULL_RESULT` — at or below chance.
+
+## Stage 2.2 headline result (2026-05-16, post-second-Codex-audit)
+
+**Verdict: `LABELS_RECOVERABLE_MOSTLY_FROM_TEXT`.** No reliable
+beyond-text lift is established yet.
+
+The pre-Codex Stage 2 framing ("92.8% strong signal") and the Stage
+2.1 framing ("Pythia adds +1.4 pp over text") were both too strong.
+Codex's second audit `6a7d657` re-ran the paired contingency on the
+same 69-sample test set:
+
+- both correct: 59
+- Pythia layer-3 only correct: **3**
+- TF-IDF only correct: **2**
+- both wrong: 5
+- discordant total: 5
+- McNemar exact binomial p (two-sided): **1.0000**
+
+The +1.4 pp Pythia-over-TF-IDF gap reduces to **one net sample**
+on the discordant set, which is indistinguishable from chance
+imbalance. **The honest claim is that the noetic label is recoverable
+from this corpus, but Pythia's mid-network does not add reliable
+signal over plain text on this evidence.**
+
+**Full baseline + headline table:**
+
+| Source | Val acc | Test acc | macro-F1 |
+|---|---:|---:|---:|
+| Chance (1/10) | 0.100 | 0.100 | — |
+| Majority class | 0.130 | 0.130 | — |
+| Stratified random | 0.130 | 0.188 | — |
+| Count-vector + LogReg | 0.855 | **0.884** | 0.882 |
+| TF-IDF + LogReg | 0.841 | **0.884** | 0.882 |
+| **Pythia layer 3 (val-selected)** | **0.899** | **0.899** | 0.902 |
+| Shuffled-label control on layer 3 | 0.130 | 0.101 | — |
+
+Notable: count-vector and TF-IDF tie at 0.884. TF-IDF re-weighting
+adds nothing here. Lexical patterns in Claude's English do almost all
+the work.
+
+**Per-layer Pythia probe accuracies for the record:**
+
+| Layer | Train | Val | Test | macro-F1 |
+|---:|---:|---:|---:|---:|
+| 0 (embed) | 1.000 | 0.855 | 0.884 | 0.886 |
+| 1 | 1.000 | 0.884 | 0.913 | 0.912 |
+| 2 | 1.000 | 0.884 | 0.913 | 0.912 |
+| **3** ← headline (val) | 1.000 | **0.899** | 0.899 | 0.902 |
+| 4 | 1.000 | 0.899 | 0.928 | 0.931 |
+| 5 | 1.000 | 0.884 | 0.928 | 0.926 |
+| 6 | 1.000 | 0.855 | 0.913 | 0.916 |
+| 7 | 1.000 | 0.812 | 0.884 | 0.884 |
+| 8 | 1.000 | 0.841 | 0.899 | 0.902 |
+| 9 | 1.000 | 0.812 | 0.884 | 0.887 |
+| 10 | 1.000 | 0.812 | 0.870 | 0.868 |
+| 11 | 1.000 | 0.812 | 0.884 | 0.886 |
+| 12 | 1.000 | 0.812 | 0.870 | 0.872 |
+
+(Same per-layer numbers as Stage 2.1; only the interpretation changed.)
+
+**Reserved-language verdict:**
+
+> On this CAS-labeled English corpus (n=457, test n=69), a linear
+> probe on Pythia-160M layer-3 hidden states recovers the noetic label
+> at test accuracy 0.899 (macro-F1 0.902), vs a 10% chance baseline
+> and a 0.130 majority-class baseline. TF-IDF and count-vector
+> baselines on the same text both reach 0.884. The Pythia probe adds
+> +1.4 pp over TF-IDF. The paired contingency table shows 59 both
+> correct, 3 Pythia-only correct, 2 TF-IDF-only correct, 5 both wrong
+> (discordant n=5). McNemar's exact binomial test on the discordant
+> pairs gives p=1.0000. The shuffled-label control drops to 0.101,
+> ruling out a split leak.
+>
+> Honest claim on current evidence: the noetic label is recoverable
+> from this corpus, but the lift Pythia adds over a plain text baseline
+> is NOT statistically reliable on this test size. No reliable
+> beyond-text lift is established yet. Causal (ablation) and
+> paraphrase-control tests are required before any "Pythia
+> mechanistically encodes CAS" claim. Verdict treated as
+> tamper-evident, reproducible, independently inspectable; not as
+> proof of mechanistic alignment.
+
+**What this means for the Glass House AI pitch:**
+
+The strategy memo's core claim — that probing open-model activations
+gives interpretability signal beyond what plain text classifiers
+offer — is **not supported by current evidence**. The memo at
+`STRATEGY_GLASS_HOUSE.md` needs a re-read under the stricter standard,
+and any external-facing copy must be paused until Stage 3 ablation
+delivers a separate line of evidence.
+
+**Three next moves and the order I'd take them:**
+
+1. **Stage 3 ablation, exploratory only.** Ablate the layer-3 direction
+   in Pythia and check whether the output changes in a CAS-semantically-
+   correct way. This is a different kind of evidence (causal, not
+   discriminative). It is the test that could rescue or kill the
+   mechanistic claim — but no public Glass House claims off this single
+   experiment regardless.
+2. **Cross-axis (domain, register, drive).** Cheap rerun. Maybe noetic
+   is the lexically-easiest axis and others show a real Pythia-over-text
+   lift. Same paired-baseline gates apply.
+3. **Larger Pythia.** Pythia-160M is the smallest member of the family.
+   Pythia-1.4B or 2.8B may carry richer internal structure that doesn't
+   appear in the 160M slice. Still gated on the same paired-baseline
+   reliability check.
+
+Public Glass House messaging stays paused until at least one of these
+delivers a `PROBE_RELIABLY_ABOVE_TEXT_BASELINE` verdict.
+
+Artifacts on disk (unchanged shapes; only the report and README
+revised under Stage 2.2):
+
+- `pythia_noetic_probes_20260515.npz` — trained probes + split indices.
+- `pythia_noetic_probes_report_20260515.json` — per-layer metrics,
+  full baseline set (chance, majority, stratified, count-vector,
+  TF-IDF), shuffled-label control, paired Pythia-vs-TF-IDF
+  contingency + McNemar p-value, headline confusion matrix,
+  reserved-language verdict.
+
+---
+
+## Stage 2.1 result (kept for audit trail)
 
 **Verdict: `PROBE_RECOVERS_LABELS_NOT_ABOVE_TEXT_BASELINE`.**
 

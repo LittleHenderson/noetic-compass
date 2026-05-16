@@ -824,6 +824,30 @@
   },
   "headline_selection": "argmax(val_acc) \u2014 test set is held out and touched once to report the headline metric",
   "baselines": {
+    "majority_class": {
+      "strategy": "sklearn.DummyClassifier(strategy='most_frequent')",
+      "val_acc": 0.13043478260869565,
+      "test_acc": 0.13043478260869565
+    },
+    "stratified_random": {
+      "strategy": "sklearn.DummyClassifier(strategy='stratified')",
+      "val_acc": 0.13043478260869565,
+      "test_acc": 0.18840579710144928
+    },
+    "count_vector": {
+      "vectorizer": "sklearn.CountVectorizer",
+      "lowercase": true,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "min_df": 2,
+      "max_df": 0.95,
+      "vocab_size": 1116,
+      "val_acc": 0.855072463768116,
+      "test_acc": 0.8840579710144928,
+      "test_macro_f1": 0.881692294633471
+    },
     "tfidf": {
       "vectorizer": "sklearn.TfidfVectorizer",
       "lowercase": true,
@@ -990,14 +1014,28 @@
     "tfidf_test_acc": 0.8840579710144928,
     "delta_pp": 0.01449275362318836
   },
+  "paired_pythia_vs_tfidf": {
+    "comparison": "headline-layer Pythia probe vs TF-IDF, on same test set",
+    "test_n": 69,
+    "both_correct": 59,
+    "pythia_only_correct": 3,
+    "tfidf_only_correct": 2,
+    "both_wrong": 5,
+    "discordant_total": 5,
+    "mcnemar_exact_binomial_p_two_sided": 1.0,
+    "reliable_lift": false,
+    "reliable_lift_criteria": "gap_pp >= 5 AND McNemar exact binomial p < 0.05 on discordant pairs (Pythia-only-correct vs TF-IDF-only-correct)"
+  },
   "decision_gates": {
     "strong_signal_threshold": 0.3,
     "weak_signal_threshold": 0.2,
-    "chance_baseline": 0.1
+    "chance_baseline": 0.1,
+    "reliable_lift_gap_pp_min": 0.05,
+    "reliable_lift_mcnemar_p_max": 0.05
   },
-  "verdict": "PROBE_RECOVERS_LABELS_NOT_ABOVE_TEXT_BASELINE",
-  "verdict_text": "On this CAS-labeled English corpus (n=457), a linear probe on Pythia-160M layer-3 hidden states recovers the noetic label at test accuracy 0.899 (macro-F1 0.902), against a 10% chance baseline. A TF-IDF + logistic-regression baseline on the same text reaches 0.884; the Pythia probe adds +1.4 pp over text alone. A shuffled-label control on the same layer drops to 0.101, ruling out a split leak. This evidence is consistent with Pythia's internal representations carrying noetic-axis information beyond what is recoverable from surface wording, but the marginal lift over the TF-IDF baseline is modest. Causal-influence (ablation) and paraphrase-control tests are required before any claim that Pythia mechanistically encodes CAS structure beyond lexical association. Verdict treated as tamper-evident, reproducible, independently inspectable; not as proof of mechanistic alignment.",
+  "verdict": "LABELS_RECOVERABLE_MOSTLY_FROM_TEXT",
+  "verdict_text": "On this CAS-labeled English corpus (n=457, test n=69), a linear probe on Pythia-160M layer-3 hidden states recovers the noetic label at test accuracy 0.899 (macro-F1 0.902), vs a 10% chance baseline and a 0.130 majority-class baseline. A TF-IDF + logistic-regression baseline on the same text reaches 0.884; a plain count-vector baseline reaches 0.884. The Pythia probe adds +1.4 pp over TF-IDF. A paired contingency table on the same test set shows 59 both correct, 3 Pythia-only correct, 2 TF-IDF-only correct, 5 both wrong (discordant n=5). McNemar's exact binomial test on the discordant pairs gives p=1.0000. The shuffled-label control on layer-3 drops to 0.101, ruling out a split leak. Honest claim on current evidence: the noetic label is recoverable from this corpus, but the lift Pythia adds over a plain text baseline is NOT statistically reliable on this test size -- the +1.4 pp gap reduces to 3 Pythia-only-correct samples vs 2 TF-IDF-only-correct samples. No reliable beyond-text lift is established yet. Causal (ablation) and paraphrase-control tests are required before any 'Pythia mechanistically encodes CAS' claim. Verdict treated as tamper-evident, reproducible, independently inspectable; not as proof of mechanistic alignment.",
   "probes_file": "pythia_noetic_probes_20260515.npz",
   "probes_sha256": "1991b5e650915129497ed24d4354ec9db37c5f9886d34c11efd158e6d5ebc47e",
-  "elapsed_seconds": 1.5148990000016056
+  "elapsed_seconds": 1.4700007000064943
 }

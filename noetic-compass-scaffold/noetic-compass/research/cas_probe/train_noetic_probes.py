@@ -70,6 +70,12 @@ _DECISION_GATES = {
     "strong_signal_threshold": 0.30,
     "weak_signal_threshold": 0.20,
     "chance_baseline": 0.10,
+    # Codex audit 6a7d657 patch #5: beating chance is necessary but
+    # not sufficient. A claim that the model adds structure beyond
+    # plain text requires BOTH a meaningful accuracy gap AND
+    # statistical reliability on the paired discordant pairs.
+    "reliable_lift_gap_pp_min": 0.05,
+    "reliable_lift_mcnemar_p_max": 0.05,
 }
 
 
@@ -94,7 +100,12 @@ def main() -> int:
     # Lazy imports so missing sklearn produces a clear message.
     try:
         import numpy as np
-        from sklearn.feature_extraction.text import TfidfVectorizer
+        from scipy.stats import binomtest
+        from sklearn.dummy import DummyClassifier
+        from sklearn.feature_extraction.text import (
+            CountVectorizer,
+            TfidfVectorizer,
+        )
         from sklearn.linear_model import LogisticRegression
         from sklearn.metrics import (
             accuracy_score,
@@ -106,7 +117,7 @@ def main() -> int:
         from sklearn.preprocessing import StandardScaler
     except ImportError as exc:
         print(
-            f"missing dependency: {exc}\n  pip install scikit-learn numpy",
+            f"missing dependency: {exc}\n  pip install scikit-learn numpy scipy",
             file=sys.stderr,
         )
         return 2
@@ -306,6 +317,130 @@ def main() -> int:
     pythia_vs_tfidf_pp = headline["test_acc"] - tfidf_test_acc
     print(f"  Pythia layer-{headline['layer']} test acc above TF-IDF: "
           f"{pythia_vs_tfidf_pp * 100:+.1f} pp")
+    # Keep a copy of the TF-IDF test predictions for the paired comparison.
+    tfidf_test_pred = tfidf_clf.predict(Xt_test)
+
+    # ------------------------------------------------------------------ #
+    # Additional baselines (Codex audit 6a7d657 patch #1).
+    # ------------------------------------------------------------------ #
+    print()
+    print("Additional baselines:")
+
+    # Majority-class baseline: always predict the most common train class.
+    majority_clf = DummyClassifier(strategy="most_frequent")
+    majority_clf.fit(np.zeros((len(idx_train), 1)), y[idx_train])
+    majority_val_acc = float(accuracy_score(
+        y[idx_val], majority_clf.predict(np.zeros((len(idx_val), 1)))
+    ))
+    majority_test_acc = float(accuracy_score(
+        y[idx_test], majority_clf.predict(np.zeros((len(idx_test), 1)))
+    ))
+    print(
+        f"  majority:    val={majority_val_acc:.3f} test={majority_test_acc:.3f}"
+    )
+
+    # Stratified-random baseline: predictions drawn from train-class priors.
+    stratified_clf = DummyClassifier(strategy="stratified", random_state=_SEED)
+    stratified_clf.fit(np.zeros((len(idx_train), 1)), y[idx_train])
+    stratified_val_acc = float(accuracy_score(
+        y[idx_val], stratified_clf.predict(np.zeros((len(idx_val), 1)))
+    ))
+    stratified_test_acc = float(accuracy_score(
+        y[idx_test], stratified_clf.predict(np.zeros((len(idx_test), 1)))
+    ))
+    print(
+        f"  stratified:  val={stratified_val_acc:.3f} test={stratified_test_acc:.3f}"
+    )
+
+    # CountVectorizer baseline: plain bag-of-words (no TF-IDF re-weighting).
+    cv = CountVectorizer(
+        lowercase=True,
+        ngram_range=(1, 2),
+        min_df=2,
+        max_df=0.95,
+    )
+    Xc_train = cv.fit_transform(english_arr[idx_train])
+    Xc_val = cv.transform(english_arr[idx_val])
+    Xc_test = cv.transform(english_arr[idx_test])
+    cv_clf = LogisticRegression(
+        solver="lbfgs",
+        max_iter=2000,
+        class_weight="balanced",
+        random_state=_SEED,
+    )
+    cv_clf.fit(Xc_train, y[idx_train])
+    cv_val_acc = float(accuracy_score(y[idx_val], cv_clf.predict(Xc_val)))
+    cv_test_acc = float(accuracy_score(y[idx_test], cv_clf.predict(Xc_test)))
+    cv_test_f1 = float(f1_score(
+        y[idx_test], cv_clf.predict(Xc_test), average="macro", zero_division=0
+    ))
+    print(
+        f"  count-vector: val={cv_val_acc:.3f} test={cv_test_acc:.3f} "
+        f"macroF1={cv_test_f1:.3f}"
+    )
+
+    # ------------------------------------------------------------------ #
+    # Paired Pythia-vs-TF-IDF contingency table + McNemar test
+    # (Codex audit 6a7d657 patch #2). With n_test=69, a small absolute
+    # accuracy gap can be driven by a tiny number of discordant samples.
+    # The contingency table makes the noise visible; McNemar's exact
+    # binomial test on the discordant cells reports whether the gap is
+    # statistically distinguishable from chance imbalance.
+    # ------------------------------------------------------------------ #
+    print()
+    print("Paired Pythia (headline) vs TF-IDF on test set:")
+    # Re-fit headline-layer probe and capture predictions for pairing.
+    Xl_h = X[:, headline["layer"], :]
+    sc_paired = StandardScaler()
+    Xl_h_train_paired = sc_paired.fit_transform(Xl_h[idx_train])
+    Xl_h_test_paired = sc_paired.transform(Xl_h[idx_test])
+    paired_clf = LogisticRegression(
+        solver="lbfgs",
+        max_iter=2000,
+        class_weight="balanced",
+        random_state=_SEED,
+    )
+    paired_clf.fit(Xl_h_train_paired, y[idx_train])
+    pythia_test_pred = paired_clf.predict(Xl_h_test_paired)
+
+    y_test_arr = y[idx_test]
+    pythia_correct = pythia_test_pred == y_test_arr
+    tfidf_correct = tfidf_test_pred == y_test_arr
+
+    both_correct = int(np.sum(pythia_correct & tfidf_correct))
+    both_wrong = int(np.sum(~pythia_correct & ~tfidf_correct))
+    pythia_only_correct = int(np.sum(pythia_correct & ~tfidf_correct))
+    tfidf_only_correct = int(np.sum(~pythia_correct & tfidf_correct))
+
+    print(f"  both correct:        {both_correct}")
+    print(f"  pythia only correct: {pythia_only_correct}")
+    print(f"  TF-IDF only correct: {tfidf_only_correct}")
+    print(f"  both wrong:          {both_wrong}")
+    discordant_n = pythia_only_correct + tfidf_only_correct
+    print(f"  discordant total:    {discordant_n}")
+
+    # McNemar's exact (binomial) test on discordant pairs. p-value is
+    # two-sided, testing whether the split between pythia-only and
+    # tfidf-only correct samples is plausibly 50/50 by chance.
+    if discordant_n > 0:
+        # k = the LARGER discordant count by convention so the test is
+        # one-sided; we then double for two-sided. scipy's binomtest
+        # supports alternative="two-sided" directly.
+        k = max(pythia_only_correct, tfidf_only_correct)
+        mcnemar_result = binomtest(k, discordant_n, p=0.5, alternative="two-sided")
+        mcnemar_p = float(mcnemar_result.pvalue)
+        print(f"  McNemar exact binomial p-value (two-sided): {mcnemar_p:.4f}")
+    else:
+        mcnemar_p = 1.0
+        print("  no discordant pairs; McNemar not applicable.")
+
+    reliable_lift = (
+        pythia_vs_tfidf_pp >= 0.05 and mcnemar_p < 0.05
+    )
+    print(
+        f"  reliable beyond-text lift? {reliable_lift} "
+        f"(requires gap >= 5pp AND McNemar p < 0.05)"
+    )
 
     # ------------------------------------------------------------------ #
     # Shuffled-label control (Codex audit patch #2).
@@ -370,35 +505,48 @@ def main() -> int:
     # the TF-IDF baseline. Causal tests are required before deeper
     # claims.
     # ------------------------------------------------------------------ #
-    if pythia_vs_tfidf_pp >= 0.05 and headline["test_acc"] >= _DECISION_GATES["strong_signal_threshold"]:
-        verdict = "PROBE_RECOVERS_LABELS_ABOVE_TEXT_BASELINE"
+    # Per Codex audit 6a7d657 patch #3 + #5: the "above text baseline"
+    # claim requires BOTH a meaningful accuracy gap AND statistical
+    # reliability on the paired discordant pairs. Beating chance alone
+    # is no longer sufficient.
+    if reliable_lift:
+        verdict = "PROBE_RELIABLY_ABOVE_TEXT_BASELINE"
     elif headline["test_acc"] >= _DECISION_GATES["strong_signal_threshold"]:
-        verdict = "PROBE_RECOVERS_LABELS_NOT_ABOVE_TEXT_BASELINE"
+        verdict = "LABELS_RECOVERABLE_MOSTLY_FROM_TEXT"
     elif headline["test_acc"] >= _DECISION_GATES["weak_signal_threshold"]:
         verdict = "PROBE_WEAKLY_ABOVE_CHANCE"
     else:
         verdict = "NULL_RESULT"
 
     verdict_text = (
-        f"On this CAS-labeled English corpus (n={N}), a linear probe "
-        f"on Pythia-160M layer-{headline['layer']} hidden states recovers "
-        f"the noetic label at "
-        f"test accuracy {headline['test_acc']:.3f} (macro-F1 "
-        f"{headline['test_macro_f1']:.3f}), against a 10% chance baseline. "
-        f"A TF-IDF + logistic-regression baseline on the same text "
-        f"reaches {tfidf_test_acc:.3f}; the Pythia probe adds "
-        f"{pythia_vs_tfidf_pp * 100:+.1f} pp over text alone. A "
-        f"shuffled-label control on the same layer drops to "
-        f"{shuf_test_acc:.3f}, ruling out a split leak. "
-        f"This evidence is consistent with Pythia's internal "
-        f"representations carrying noetic-axis information beyond what "
-        f"is recoverable from surface wording, but the marginal lift "
-        f"over the TF-IDF baseline is modest. Causal-influence "
+        f"On this CAS-labeled English corpus (n={N}, test n={len(idx_test)}), "
+        f"a linear probe on Pythia-160M layer-{headline['layer']} hidden "
+        f"states recovers the noetic label at test accuracy "
+        f"{headline['test_acc']:.3f} (macro-F1 {headline['test_macro_f1']:.3f}), "
+        f"vs a 10% chance baseline and a {majority_test_acc:.3f} "
+        f"majority-class baseline. A TF-IDF + logistic-regression "
+        f"baseline on the same text reaches {tfidf_test_acc:.3f}; a "
+        f"plain count-vector baseline reaches {cv_test_acc:.3f}. The "
+        f"Pythia probe adds {pythia_vs_tfidf_pp * 100:+.1f} pp over "
+        f"TF-IDF. A paired contingency table on the same test set "
+        f"shows {both_correct} both correct, {pythia_only_correct} "
+        f"Pythia-only correct, {tfidf_only_correct} TF-IDF-only "
+        f"correct, {both_wrong} both wrong (discordant n="
+        f"{discordant_n}). McNemar's exact binomial test on the "
+        f"discordant pairs gives p={mcnemar_p:.4f}. The shuffled-label "
+        f"control on layer-{headline['layer']} drops to {shuf_test_acc:.3f}, "
+        f"ruling out a split leak. "
+        f"Honest claim on current evidence: the noetic label is "
+        f"recoverable from this corpus, but the lift Pythia adds over "
+        f"a plain text baseline is NOT statistically reliable on this "
+        f"test size -- the {pythia_vs_tfidf_pp * 100:+.1f} pp gap "
+        f"reduces to {pythia_only_correct} Pythia-only-correct samples "
+        f"vs {tfidf_only_correct} TF-IDF-only-correct samples. No "
+        f"reliable beyond-text lift is established yet. Causal "
         f"(ablation) and paraphrase-control tests are required before "
-        f"any claim that Pythia mechanistically encodes CAS structure "
-        f"beyond lexical association. Verdict treated as "
-        f"tamper-evident, reproducible, independently inspectable; "
-        f"not as proof of mechanistic alignment."
+        f"any 'Pythia mechanistically encodes CAS' claim. Verdict "
+        f"treated as tamper-evident, reproducible, independently "
+        f"inspectable; not as proof of mechanistic alignment."
     )
     print()
     print(f"VERDICT: {verdict}")
@@ -407,6 +555,27 @@ def main() -> int:
     # Pack baselines + controls + headline confusion matrix into the
     # report so future audits do not need to re-derive them.
     baselines = {
+        "majority_class": {
+            "strategy": "sklearn.DummyClassifier(strategy='most_frequent')",
+            "val_acc": majority_val_acc,
+            "test_acc": majority_test_acc,
+        },
+        "stratified_random": {
+            "strategy": "sklearn.DummyClassifier(strategy='stratified')",
+            "val_acc": stratified_val_acc,
+            "test_acc": stratified_test_acc,
+        },
+        "count_vector": {
+            "vectorizer": "sklearn.CountVectorizer",
+            "lowercase": True,
+            "ngram_range": [1, 2],
+            "min_df": 2,
+            "max_df": 0.95,
+            "vocab_size": int(len(cv.vocabulary_)),
+            "val_acc": cv_val_acc,
+            "test_acc": cv_test_acc,
+            "test_macro_f1": cv_test_f1,
+        },
         "tfidf": {
             "vectorizer": "sklearn.TfidfVectorizer",
             "lowercase": True,
@@ -424,6 +593,21 @@ def main() -> int:
             "test_acc": shuf_test_acc,
             "expected_near_chance": chance,
         },
+    }
+    paired_comparison = {
+        "comparison": "headline-layer Pythia probe vs TF-IDF, on same test set",
+        "test_n": int(len(idx_test)),
+        "both_correct": both_correct,
+        "pythia_only_correct": pythia_only_correct,
+        "tfidf_only_correct": tfidf_only_correct,
+        "both_wrong": both_wrong,
+        "discordant_total": discordant_n,
+        "mcnemar_exact_binomial_p_two_sided": mcnemar_p,
+        "reliable_lift": bool(reliable_lift),
+        "reliable_lift_criteria": (
+            "gap_pp >= 5 AND McNemar exact binomial p < 0.05 on "
+            "discordant pairs (Pythia-only-correct vs TF-IDF-only-correct)"
+        ),
     }
     headline_confusion_matrix = {
         "layer": int(headline["layer"]),
@@ -487,6 +671,7 @@ def main() -> int:
         "baselines": baselines,
         "headline_confusion_matrix": headline_confusion_matrix,
         "pythia_vs_tfidf": pythia_vs_tfidf,
+        "paired_pythia_vs_tfidf": paired_comparison,
         "decision_gates": _DECISION_GATES,
         "verdict": verdict,
         "verdict_text": verdict_text,
