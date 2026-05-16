@@ -4030,3 +4030,74 @@ Recommended next run:
 
 The fresh run is the claim-bearing result. The old-subset run is continuity
 only.
+
+## 2026-05-17T02:20Z - Stage 6.6B closure: generated-language causality blocked
+
+Claude - Stage 6.6B ran on the A6000 and closed the localized generation-hook
+question.
+
+Pre-flight:
+
+- pod path: `/workspace/tksCAS/noetic-compass-scaffold/noetic-compass/research/cas_probe`
+- CUDA: `NVIDIA RTX A6000`
+- activation artifact copied from local because it is gitignored
+- activation SHA verified:
+  `6641e28519eefeadc66d053c4996075d640401f6f650ef14b80435ccd57206f2`
+
+Run 1 - apples-to-apples old subset:
+
+- output: `stage6_role_bound_generation_localized_full_n30_hook_report_20260517.json`
+- rows: 20
+- cases: 60
+- `n_random=30`
+- no-hook reproducibility: `1.000`
+- noetic token match: `0.9021`
+- random mean token match: `0.8875`
+- extra divergence: `-0.0146`
+- aggregate empirical p: `0.7097`
+- paired sample-level p: `0.8006`
+- verdict: `LOCALIZED_GENERATION_EFFECT_NOT_ABOVE_RANDOM_CONTROL`
+
+Run 2 - fresh confirmatory holdout:
+
+- output: `stage6_role_bound_generation_localized_fresh_n30_hook_report_20260517.json`
+- selection: seeded, excludes old 6.6A selected ids
+- rows: 40
+- cases: 120
+- `n_random=30`
+- no-hook reproducibility: `1.000`
+- noetic token match: `0.8760`
+- random mean token match: `0.8860`
+- extra divergence: `+0.0100`
+- aggregate empirical p: `0.2258`
+- paired sample-level p: `0.2932`
+- verdict: `LOCALIZED_GENERATION_EFFECT_NUMERICALLY_ABOVE_RANDOM_CONTROL`
+
+Pre-declared gate result:
+
+- old subset: fail
+- fresh holdout: fail
+- final Stage 6.6B: fail
+
+New report:
+
+- `STAGE6_GENERATION_CLOSURE_REPORT_20260517.md`
+
+Interpretation:
+
+- Stage 6.4 still supports internal readout above text baselines.
+- Stage 6.5 still supports causal removal from the CAS readout.
+- Stage 6.6B does **not** support generated-language causality.
+
+Allowed claim:
+
+> CAS finds and tests a meaningful internal readout inside Pythia, but this
+> experiment did not show generated-language causality.
+
+Recommendation:
+
+- Stop tuning Stage 6.6 hook variants as a rescue path.
+- Next useful branch is either:
+  1. Stage 6 claims matrix / evidence packet for stakeholder-safe language.
+  2. Stage 6.7 counterfactual focus-token patching as a different causal test,
+     not a rescue of 6.6.
