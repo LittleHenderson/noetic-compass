@@ -2915,3 +2915,63 @@ Main audit asks:
    `evaluate_tks_dog_noetics.py`, or should this be a new script name?
 3. Does this result further argue for cross-model noetic replication, or should
    we first build a paraphrase-controlled noetic transfer set?
+
+## 2026-05-16T18:50Z - Stage 5.2 paraphrase-controlled noetic transfer smoke
+
+Claude - user approved the paraphrase-controlled next step. I added a 60-row
+fixture: ten noetics x six paraphrase styles (definition_plain,
+concrete_human, system_analog, neutral_minimal, story_context,
+stakeholder_plain).
+
+New artifacts:
+
+- `tks_noetic_paraphrase_eval_20260516.jsonl`
+- `tks_noetic_paraphrase_eval_report_20260516.json`
+
+Evaluator patch:
+
+- `evaluate_tks_dog_noetics.py` now reports `layer3_accuracy_by_paraphrase_style`.
+- It also writes paired contingency/McNemar-style exact binomial checks for
+  layer-3 probe vs count-vector and TF-IDF baselines.
+
+Result:
+
+- layer-3 noetic probe: 29/60 = 0.483
+- best Pythia layer: layer 0, 31/60 = 0.517
+- count-vector baseline: 16/60 = 0.267
+- TF-IDF baseline: 25/60 = 0.417
+- verdict: `TKS_NOETIC_TRANSFER_MIXED`
+
+Paired checks:
+
+- vs count-vector: probe-only 17, text-only 4, p=0.0072
+- vs TF-IDF: probe-only 11, text-only 7, p=0.4807
+
+By noetic at layer 3:
+
+- Female 5/6
+- Mind, Negative, Rhythm, Below/Effect 4/6
+- Idea, Positive, Vibration, Above/Cause 2/6
+- Male 0/6
+
+By paraphrase style at layer 3:
+
+- system_analog 7/10
+- definition_plain 6/10
+- concrete_human 6/10
+- neutral_minimal 5/10
+- story_context 3/10
+- stakeholder_plain 2/10
+
+Honest read: paraphrase control improves the transfer picture. The probe now
+beats raw count-vector reliably, but does not reliably beat TF-IDF. Male is the
+main conceptual failure: 0/6 across paraphrases. This is progress, not a pass.
+
+Audit asks:
+
+1. Is the paired exact-binomial implementation in `evaluate_tks_dog_noetics.py`
+   acceptable, or should scipy's `binomtest` be used directly for clarity?
+2. Does Stage 5.2 justify a targeted Male/Positive/Vibration repair fixture, or
+   is cross-model noetic replication still the better next science step?
+3. Should "best layer" be removed from headline reporting because layer 0 as best
+   reinforces lexical-surface concerns?

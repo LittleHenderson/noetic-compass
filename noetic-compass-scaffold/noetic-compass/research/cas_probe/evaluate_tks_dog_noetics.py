@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import sys
 import time
 from pathlib import Path
@@ -306,6 +307,50 @@ def _accuracy_by_field(
     }
 
 
+def _two_sided_exact_binomial_p(k: int, n: int) -> float:
+    if n <= 0:
+        return 1.0
+    lo = min(k, n - k)
+    p = 2.0 * sum(math.comb(n, i) for i in range(lo + 1)) / (2.0**n)
+    return float(min(1.0, p))
+
+
+def _paired_contingency(
+    probe_predictions: list[dict[str, Any]],
+    text_predictions: list[dict[str, Any]],
+) -> dict[str, Any]:
+    probe_by_id = {str(row["sample_id"]): bool(row["correct"]) for row in probe_predictions}
+    text_by_id = {str(row["sample_id"]): bool(row["correct"]) for row in text_predictions}
+    if set(probe_by_id) != set(text_by_id):
+        raise ValueError("probe and text predictions use different sample_id sets")
+    both_correct = 0
+    probe_only_correct = 0
+    text_only_correct = 0
+    both_wrong = 0
+    for sample_id, probe_correct in probe_by_id.items():
+        text_correct = text_by_id[sample_id]
+        if probe_correct and text_correct:
+            both_correct += 1
+        elif probe_correct and not text_correct:
+            probe_only_correct += 1
+        elif not probe_correct and text_correct:
+            text_only_correct += 1
+        else:
+            both_wrong += 1
+    discordant = probe_only_correct + text_only_correct
+    return {
+        "both_correct": both_correct,
+        "probe_only_correct": probe_only_correct,
+        "text_only_correct": text_only_correct,
+        "both_wrong": both_wrong,
+        "discordant": discordant,
+        "exact_binomial_mcnemar_p": _two_sided_exact_binomial_p(
+            probe_only_correct,
+            discordant,
+        ),
+    }
+
+
 def _verdict(layer3_accuracy: float, count_accuracy: float, tfidf_accuracy: float) -> str:
     best_text = max(count_accuracy, tfidf_accuracy)
     if layer3_accuracy >= 0.8 and layer3_accuracy > best_text:
@@ -380,6 +425,16 @@ def main(argv: list[str] | None = None) -> int:
             "count_vector_logreg_accuracy": count_acc,
             "tfidf_logreg_accuracy": tfidf_acc,
         },
+        "paired_vs_text_baselines": {
+            "count_vector_logreg": _paired_contingency(
+                layer3_rows,
+                text["count_vector_logreg"]["predictions"],
+            ),
+            "tfidf_logreg": _paired_contingency(
+                layer3_rows,
+                text["tfidf_logreg"]["predictions"],
+            ),
+        },
         "verdict": _verdict(layer3["accuracy"], count_acc, tfidf_acc),
         "per_layer": per_layer,
         "layer3_predictions": layer3_rows,
@@ -392,6 +447,11 @@ def main(argv: list[str] | None = None) -> int:
             layer3_rows,
             rows,
             "canonical_label",
+        ),
+        "layer3_accuracy_by_paraphrase_style": _accuracy_by_field(
+            layer3_rows,
+            rows,
+            "paraphrase_style",
         ),
         "text_baseline_predictions": text,
         "fixture_rows": rows,

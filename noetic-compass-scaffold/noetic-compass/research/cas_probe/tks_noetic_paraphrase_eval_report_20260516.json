@@ -1,0 +1,3489 @@
+{
+  "schema_version": "tks_noetic_transfer_eval.v1",
+  "experiment": "Original-TKS-style noetic transfer eval",
+  "status": "research_only_tiny_n_semantic_smoke",
+  "fixture_file": "tks_noetic_paraphrase_eval_20260516.jsonl",
+  "fixture_sha256": "764863c20fb9e1a645b4d656773d53374565c6b87a720a3a5e9dd11f697a8340",
+  "probe_file": "pythia_noetic_probes_20260515.npz",
+  "probe_sha256": "1991b5e650915129497ed24d4354ec9db37c5f9886d34c11efd158e6d5ebc47e",
+  "n_records": 60,
+  "headline_layer": 3,
+  "capture": {
+    "model_name": "EleutherAI/pythia-160m",
+    "model_source": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "device": "cpu",
+    "local_files_only": true,
+    "n_layer_positions": 13,
+    "hidden_dim": 768,
+    "pool_method": "mean_over_seq_len",
+    "max_tokens": 256,
+    "elapsed_seconds": 2.6917471999986446
+  },
+  "caveats": [
+    "This is a small hand-authored semantic transfer smoke, not a statistical benchmark.",
+    "Rows with source=definition_anchored_hand_authored are not quoted source text; they are canonical semantic fixtures built from the authoritative TKS/CAS noetic definitions.",
+    "Strong performance here would support transfer to original-TKS-style examples, but does not by itself prove mechanistic encoding."
+  ],
+  "layer3_probe_accuracy": 0.48333333333333334,
+  "best_layer": {
+    "layer": 0,
+    "accuracy": 0.5166666666666667,
+    "correct": 31,
+    "total": 60
+  },
+  "text_baselines": {
+    "count_vector_logreg_accuracy": 0.26666666666666666,
+    "tfidf_logreg_accuracy": 0.4166666666666667
+  },
+  "paired_vs_text_baselines": {
+    "count_vector_logreg": {
+      "both_correct": 12,
+      "probe_only_correct": 17,
+      "text_only_correct": 4,
+      "both_wrong": 27,
+      "discordant": 21,
+      "exact_binomial_mcnemar_p": 0.007197380065917969
+    },
+    "tfidf_logreg": {
+      "both_correct": 18,
+      "probe_only_correct": 11,
+      "text_only_correct": 7,
+      "both_wrong": 24,
+      "discordant": 18,
+      "exact_binomial_mcnemar_p": 0.480682373046875
+    }
+  },
+  "verdict": "TKS_NOETIC_TRANSFER_MIXED",
+  "per_layer": [
+    {
+      "layer": 0,
+      "accuracy": 0.5166666666666667,
+      "correct": 31,
+      "total": 60
+    },
+    {
+      "layer": 1,
+      "accuracy": 0.4166666666666667,
+      "correct": 25,
+      "total": 60
+    },
+    {
+      "layer": 2,
+      "accuracy": 0.43333333333333335,
+      "correct": 26,
+      "total": 60
+    },
+    {
+      "layer": 3,
+      "accuracy": 0.48333333333333334,
+      "correct": 29,
+      "total": 60
+    },
+    {
+      "layer": 4,
+      "accuracy": 0.48333333333333334,
+      "correct": 29,
+      "total": 60
+    },
+    {
+      "layer": 5,
+      "accuracy": 0.5166666666666667,
+      "correct": 31,
+      "total": 60
+    },
+    {
+      "layer": 6,
+      "accuracy": 0.5,
+      "correct": 30,
+      "total": 60
+    },
+    {
+      "layer": 7,
+      "accuracy": 0.5166666666666667,
+      "correct": 31,
+      "total": 60
+    },
+    {
+      "layer": 8,
+      "accuracy": 0.4666666666666667,
+      "correct": 28,
+      "total": 60
+    },
+    {
+      "layer": 9,
+      "accuracy": 0.48333333333333334,
+      "correct": 29,
+      "total": 60
+    },
+    {
+      "layer": 10,
+      "accuracy": 0.48333333333333334,
+      "correct": 29,
+      "total": 60
+    },
+    {
+      "layer": 11,
+      "accuracy": 0.4666666666666667,
+      "correct": 28,
+      "total": 60
+    },
+    {
+      "layer": 12,
+      "accuracy": 0.5,
+      "correct": 30,
+      "total": 60
+    }
+  ],
+  "layer3_predictions": [
+    {
+      "sample_id": "tks_para_idea_definition_plain",
+      "english": "A single object is being considered by the mind.",
+      "gold": 0,
+      "gold_name": "Idea",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": false,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.921812117099762
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.030530573800206184
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.020687947049736977
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_idea_concrete_human",
+      "english": "The route home is the thing the person is thinking about.",
+      "gold": 0,
+      "gold_name": "Idea",
+      "predicted": 0,
+      "predicted_name": "Idea",
+      "correct": true,
+      "top3": [
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.7039199471473694
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.12830495834350586
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.07058268785476685
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_idea_system_analog",
+      "english": "The input topic is the object the system is representing.",
+      "gold": 0,
+      "gold_name": "Idea",
+      "predicted": 0,
+      "predicted_name": "Idea",
+      "correct": true,
+      "top3": [
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.3713180720806122
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.20511451363563538
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.16041842103004456
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_idea_neutral_minimal",
+      "english": "There is something on the mind.",
+      "gold": 0,
+      "gold_name": "Idea",
+      "predicted": 4,
+      "predicted_name": "Vibration",
+      "correct": false,
+      "top3": [
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.27206844091415405
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.2443915158510208
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.1466449797153473
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_idea_story_context",
+      "english": "During planning, the bridge is the central thing everyone keeps referring to.",
+      "gold": 0,
+      "gold_name": "Idea",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": false,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.614012598991394
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.1739991307258606
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.15945681929588318
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_idea_stakeholder_plain",
+      "english": "This is the subject matter the analysis is about.",
+      "gold": 0,
+      "gold_name": "Idea",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": false,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.6518869996070862
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.18275955319404602
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.1138884425163269
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_mind_definition_plain",
+      "english": "Awareness takes in the information and holds it for processing.",
+      "gold": 1,
+      "gold_name": "Mind",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": true,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.6974915862083435
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.14229616522789001
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.08864253759384155
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_mind_concrete_human",
+      "english": "The listener pays attention to the instruction and keeps it in mind.",
+      "gold": 1,
+      "gold_name": "Mind",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": true,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.996672511100769
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.0008570138597860932
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.0008117574034258723
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_mind_system_analog",
+      "english": "The system attends to the signal, stores the relevant state, and prepares an output.",
+      "gold": 1,
+      "gold_name": "Mind",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": false,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.47152620553970337
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.23407422006130219
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.17269207537174225
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_mind_neutral_minimal",
+      "english": "Attention is active.",
+      "gold": 1,
+      "gold_name": "Mind",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": true,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.996235191822052
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.002598200226202607
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.0008105759043246508
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_mind_story_context",
+      "english": "Before answering, the student focuses on the question and holds the key terms together.",
+      "gold": 1,
+      "gold_name": "Mind",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": false,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.4497140049934387
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.2569810748100281
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.12413956969976425
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_mind_stakeholder_plain",
+      "english": "This marks the part where the system is actively taking the information in.",
+      "gold": 1,
+      "gold_name": "Mind",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": true,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.4529370069503784
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.2364148497581482
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.13190609216690063
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_positive_definition_plain",
+      "english": "The mind has affinity for the option and moves toward it.",
+      "gold": 2,
+      "gold_name": "Positive",
+      "predicted": 0,
+      "predicted_name": "Idea",
+      "correct": false,
+      "top3": [
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.3824448883533478
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.20277093350887299
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.1827508509159088
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_positive_concrete_human",
+      "english": "The offer appeals to the person, so their attention keeps returning to it.",
+      "gold": 2,
+      "gold_name": "Positive",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": false,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.6022237539291382
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.28550219535827637
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.09793440997600555
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_positive_system_analog",
+      "english": "The ranking process favors this candidate and pulls selection toward it.",
+      "gold": 2,
+      "gold_name": "Positive",
+      "predicted": 2,
+      "predicted_name": "Positive",
+      "correct": true,
+      "top3": [
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.5814729332923889
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.16170693933963776
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.07150749117136002
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_positive_neutral_minimal",
+      "english": "It is drawn toward that choice.",
+      "gold": 2,
+      "gold_name": "Positive",
+      "predicted": 2,
+      "predicted_name": "Positive",
+      "correct": true,
+      "top3": [
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.9983574748039246
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.0012029638746753335
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.0002424113336019218
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_positive_story_context",
+      "english": "Among several paths, the bright open road feels inviting and pulls the traveler forward.",
+      "gold": 2,
+      "gold_name": "Positive",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": false,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.2980756461620331
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.22359727323055267
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.17375518381595612
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_positive_stakeholder_plain",
+      "english": "This is where the answer shows attraction toward one possibility.",
+      "gold": 2,
+      "gold_name": "Positive",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": false,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.30822789669036865
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.2618931531906128
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.2076050043106079
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_negative_definition_plain",
+      "english": "The mind is adverse to the option and moves away from it.",
+      "gold": 3,
+      "gold_name": "Negative",
+      "predicted": 3,
+      "predicted_name": "Negative",
+      "correct": true,
+      "top3": [
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.9342524409294128
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.030260233208537102
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.01100996695458889
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_negative_concrete_human",
+      "english": "The proposal feels wrong to the person, and they want no part of it.",
+      "gold": 3,
+      "gold_name": "Negative",
+      "predicted": 3,
+      "predicted_name": "Negative",
+      "correct": true,
+      "top3": [
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.930546224117279
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.03712040185928345
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.010294427163898945
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_negative_system_analog",
+      "english": "The filter rejects that candidate and pushes it out of the allowed set.",
+      "gold": 3,
+      "gold_name": "Negative",
+      "predicted": 3,
+      "predicted_name": "Negative",
+      "correct": true,
+      "top3": [
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.996466875076294
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.0011121698189526796
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.0007425913936458528
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_negative_neutral_minimal",
+      "english": "It turns away from that option.",
+      "gold": 3,
+      "gold_name": "Negative",
+      "predicted": 6,
+      "predicted_name": "Male",
+      "correct": false,
+      "top3": [
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.4971240162849426
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.31505024433135986
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.09554687887430191
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_negative_story_context",
+      "english": "The smell from the cup makes the child push it away without wanting to taste it.",
+      "gold": 3,
+      "gold_name": "Negative",
+      "predicted": 3,
+      "predicted_name": "Negative",
+      "correct": true,
+      "top3": [
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.7785667777061462
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.17917126417160034
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.020107505843043327
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_negative_stakeholder_plain",
+      "english": "This is where the answer shows aversion toward one possibility.",
+      "gold": 3,
+      "gold_name": "Negative",
+      "predicted": 0,
+      "predicted_name": "Idea",
+      "correct": false,
+      "top3": [
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.40343767404556274
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.23405511677265167
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.14820045232772827
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_vibration_definition_plain",
+      "english": "The idea leaves a strong impression on the mind.",
+      "gold": 4,
+      "gold_name": "Vibration",
+      "predicted": 0,
+      "predicted_name": "Idea",
+      "correct": false,
+      "top3": [
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.5556602478027344
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.16219539940357208
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.1441604197025299
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_vibration_concrete_human",
+      "english": "The sentence strikes the reader deeply and lingers after the page is closed.",
+      "gold": 4,
+      "gold_name": "Vibration",
+      "predicted": 3,
+      "predicted_name": "Negative",
+      "correct": false,
+      "top3": [
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.6454643607139587
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.16920334100723267
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.14903734624385834
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_vibration_system_analog",
+      "english": "The signal has high salience and leaves a lasting trace in the processing state.",
+      "gold": 4,
+      "gold_name": "Vibration",
+      "predicted": 4,
+      "predicted_name": "Vibration",
+      "correct": true,
+      "top3": [
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.5484294295310974
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.09543963521718979
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.08950719982385635
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_vibration_neutral_minimal",
+      "english": "It resonates.",
+      "gold": 4,
+      "gold_name": "Vibration",
+      "predicted": 4,
+      "predicted_name": "Vibration",
+      "correct": true,
+      "top3": [
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.9999991655349731
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 8.322277835759451e-07
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 2.4735015813348582e-08
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_vibration_story_context",
+      "english": "The melody keeps echoing in the musician's mind long after rehearsal ends.",
+      "gold": 4,
+      "gold_name": "Vibration",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": false,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.9070274233818054
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.04477239400148392
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.034329742193222046
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_vibration_stakeholder_plain",
+      "english": "This marks how strongly the idea impresses itself on the system.",
+      "gold": 4,
+      "gold_name": "Vibration",
+      "predicted": 3,
+      "predicted_name": "Negative",
+      "correct": false,
+      "top3": [
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.9598162770271301
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.015666678547859192
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.010000765323638916
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_female_definition_plain",
+      "english": "The mind is composed by the ideas it has taken in.",
+      "gold": 5,
+      "gold_name": "Female",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": true,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.539804220199585
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.3783400356769562
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.02533966489136219
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_female_concrete_human",
+      "english": "Her past experiences shape who she is and what feels familiar.",
+      "gold": 5,
+      "gold_name": "Female",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": true,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.9986748695373535
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.0008834694745019078
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.00024022049910854548
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_female_system_analog",
+      "english": "The model's training history is part of what its processing system is made of.",
+      "gold": 5,
+      "gold_name": "Female",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": true,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.4850878119468689
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.21874754130840302
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.12215088307857513
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_female_neutral_minimal",
+      "english": "It is shaped by what it has already taken in.",
+      "gold": 5,
+      "gold_name": "Female",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": true,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.9907816052436829
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.004306762479245663
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.002738036448135972
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_female_story_context",
+      "english": "The gardener's memories of drought guide how she reads the clouds.",
+      "gold": 5,
+      "gold_name": "Female",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": true,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.7612701058387756
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.06270932406187057
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.05988902226090431
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_female_stakeholder_plain",
+      "english": "This is where prior experience becomes part of the system's makeup.",
+      "gold": 5,
+      "gold_name": "Female",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": false,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.6909028887748718
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.2361295372247696
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.0526462160050869
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_male_definition_plain",
+      "english": "The idea is composed of smaller ideas nested inside it.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": false,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.5216646194458008
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.32305964827537537
+        },
+        {
+          "label": 2,
+          "name": "Positive",
+          "probability": 0.06661926954984665
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_male_concrete_human",
+      "english": "The plan contains smaller pieces: budget, route, timing, tools, and backup.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": false,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.6491538286209106
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.1753472238779068
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.10962077230215073
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_male_system_analog",
+      "english": "The answer structure is built from subparts: claim, evidence, rule, exception, and conclusion.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": false,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.4773886203765869
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.2062484472990036
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.07881862670183182
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_male_neutral_minimal",
+      "english": "The concept has parts inside parts.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": false,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.59714674949646
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.1298457235097885
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.11495327204465866
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_male_story_context",
+      "english": "The recipe idea contains ingredients, steps, heat, timing, and serving order.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": false,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.8149282932281494
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.09125141054391861
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.032986849546432495
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_male_stakeholder_plain",
+      "english": "This is where a larger idea is broken into the ideas that make it up.",
+      "gold": 6,
+      "gold_name": "Male",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": false,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.49863237142562866
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.18680639564990997
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.18216648697853088
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_rhythm_definition_plain",
+      "english": "The mind meets the idea through a repeated pattern over time.",
+      "gold": 7,
+      "gold_name": "Rhythm",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": true,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.4775121510028839
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.3076059818267822
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.05656328797340393
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_rhythm_concrete_human",
+      "english": "Daily practice makes the movement familiar through repetition.",
+      "gold": 7,
+      "gold_name": "Rhythm",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": true,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.999981164932251
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 5.457157385535538e-06
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 5.133868853590684e-06
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_rhythm_system_analog",
+      "english": "The feedback loop presents the same signal at regular intervals.",
+      "gold": 7,
+      "gold_name": "Rhythm",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": true,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.4006434977054596
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.14898964762687683
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.11944983154535294
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_rhythm_neutral_minimal",
+      "english": "The exposure has a pattern.",
+      "gold": 7,
+      "gold_name": "Rhythm",
+      "predicted": 0,
+      "predicted_name": "Idea",
+      "correct": false,
+      "top3": [
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.32456374168395996
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.2810339331626892
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.18819698691368103
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_rhythm_story_context",
+      "english": "Every morning the pianist repeats the scale until the timing settles into the hands.",
+      "gold": 7,
+      "gold_name": "Rhythm",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": true,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.9484775066375732
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.02725260704755783
+        },
+        {
+          "label": 4,
+          "name": "Vibration",
+          "probability": 0.014775408431887627
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_rhythm_stakeholder_plain",
+      "english": "This shows the cadence by which the system is exposed to the same idea.",
+      "gold": 7,
+      "gold_name": "Rhythm",
+      "predicted": 1,
+      "predicted_name": "Mind",
+      "correct": false,
+      "top3": [
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.37449565529823303
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.27051204442977905
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.18722687661647797
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_above_definition_plain",
+      "english": "One idea acts as a trigger that brings another idea to mind.",
+      "gold": 8,
+      "gold_name": "Above/Cause",
+      "predicted": 8,
+      "predicted_name": "Above/Cause",
+      "correct": true,
+      "top3": [
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.9615885615348816
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.022650012746453285
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.006445464212447405
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_above_concrete_human",
+      "english": "The smell of bread reminds the person of their grandmother's kitchen.",
+      "gold": 8,
+      "gold_name": "Above/Cause",
+      "predicted": 5,
+      "predicted_name": "Female",
+      "correct": false,
+      "top3": [
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.752521812915802
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.10709135234355927
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.07257023453712463
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_above_system_analog",
+      "english": "A warning flag causes the system to retrieve the safety procedure.",
+      "gold": 8,
+      "gold_name": "Above/Cause",
+      "predicted": 8,
+      "predicted_name": "Above/Cause",
+      "correct": true,
+      "top3": [
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.983549952507019
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.012528563849627972
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.001439449144527316
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_above_neutral_minimal",
+      "english": "This cue brings another thought forward.",
+      "gold": 8,
+      "gold_name": "Above/Cause",
+      "predicted": 3,
+      "predicted_name": "Negative",
+      "correct": false,
+      "top3": [
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.7836188077926636
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.13704127073287964
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.034216322004795074
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_above_story_context",
+      "english": "The old song on the radio makes the driver think of the summer trip.",
+      "gold": 8,
+      "gold_name": "Above/Cause",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": false,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.7600916624069214
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.06941527873277664
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.05288734659552574
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_above_stakeholder_plain",
+      "english": "This is the source idea that starts the next idea appearing.",
+      "gold": 8,
+      "gold_name": "Above/Cause",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": false,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.8723263144493103
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.05931500717997551
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.03308958187699318
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_below_definition_plain",
+      "english": "The second idea is what comes to mind after the trigger.",
+      "gold": 9,
+      "gold_name": "Below/Effect",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": true,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.9197385907173157
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.047772057354450226
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.014766966924071312
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_below_concrete_human",
+      "english": "After smelling bread, the memory of the grandmother's kitchen appears.",
+      "gold": 9,
+      "gold_name": "Below/Effect",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": true,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.6546826958656311
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.2568240463733673
+        },
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.04057015851140022
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_below_system_analog",
+      "english": "After the warning flag, the safety procedure is the retrieved content.",
+      "gold": 9,
+      "gold_name": "Below/Effect",
+      "predicted": 8,
+      "predicted_name": "Above/Cause",
+      "correct": false,
+      "top3": [
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.6118025183677673
+        },
+        {
+          "label": 6,
+          "name": "Male",
+          "probability": 0.13673530519008636
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.11179634928703308
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_below_neutral_minimal",
+      "english": "A new thought appears because of the cue.",
+      "gold": 9,
+      "gold_name": "Below/Effect",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": true,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.6517033576965332
+        },
+        {
+          "label": 0,
+          "name": "Idea",
+          "probability": 0.3258361220359802
+        },
+        {
+          "label": 8,
+          "name": "Above/Cause",
+          "probability": 0.013951003551483154
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_below_story_context",
+      "english": "The summer-trip memory is what the old song brings into awareness.",
+      "gold": 9,
+      "gold_name": "Below/Effect",
+      "predicted": 7,
+      "predicted_name": "Rhythm",
+      "correct": false,
+      "top3": [
+        {
+          "label": 7,
+          "name": "Rhythm",
+          "probability": 0.6806684732437134
+        },
+        {
+          "label": 5,
+          "name": "Female",
+          "probability": 0.16185858845710754
+        },
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.07188500463962555
+        }
+      ]
+    },
+    {
+      "sample_id": "tks_para_below_stakeholder_plain",
+      "english": "This is the resulting idea that appears after something else sets it off.",
+      "gold": 9,
+      "gold_name": "Below/Effect",
+      "predicted": 9,
+      "predicted_name": "Below/Effect",
+      "correct": true,
+      "top3": [
+        {
+          "label": 9,
+          "name": "Below/Effect",
+          "probability": 0.9765937328338623
+        },
+        {
+          "label": 3,
+          "name": "Negative",
+          "probability": 0.011338131502270699
+        },
+        {
+          "label": 1,
+          "name": "Mind",
+          "probability": 0.005566925276070833
+        }
+      ]
+    }
+  ],
+  "layer3_accuracy_by_scenario": {
+    "paraphrase_control": {
+      "correct": 29,
+      "total": 60,
+      "accuracy": 0.48333333333333334
+    }
+  },
+  "layer3_accuracy_by_noetic": {
+    "Above/Cause": {
+      "correct": 2,
+      "total": 6,
+      "accuracy": 0.3333333333333333
+    },
+    "Below/Effect": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.6666666666666666
+    },
+    "Female": {
+      "correct": 5,
+      "total": 6,
+      "accuracy": 0.8333333333333334
+    },
+    "Idea": {
+      "correct": 2,
+      "total": 6,
+      "accuracy": 0.3333333333333333
+    },
+    "Male": {
+      "correct": 0,
+      "total": 6,
+      "accuracy": 0.0
+    },
+    "Mind": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.6666666666666666
+    },
+    "Negative": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.6666666666666666
+    },
+    "Positive": {
+      "correct": 2,
+      "total": 6,
+      "accuracy": 0.3333333333333333
+    },
+    "Rhythm": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.6666666666666666
+    },
+    "Vibration": {
+      "correct": 2,
+      "total": 6,
+      "accuracy": 0.3333333333333333
+    }
+  },
+  "layer3_accuracy_by_paraphrase_style": {
+    "concrete_human": {
+      "correct": 6,
+      "total": 10,
+      "accuracy": 0.6
+    },
+    "definition_plain": {
+      "correct": 6,
+      "total": 10,
+      "accuracy": 0.6
+    },
+    "neutral_minimal": {
+      "correct": 5,
+      "total": 10,
+      "accuracy": 0.5
+    },
+    "stakeholder_plain": {
+      "correct": 2,
+      "total": 10,
+      "accuracy": 0.2
+    },
+    "story_context": {
+      "correct": 3,
+      "total": 10,
+      "accuracy": 0.3
+    },
+    "system_analog": {
+      "correct": 7,
+      "total": 10,
+      "accuracy": 0.7
+    }
+  },
+  "text_baseline_predictions": {
+    "count_vector_logreg": {
+      "accuracy": 0.26666666666666666,
+      "correct": 16,
+      "total": 60,
+      "predictions": [
+        {
+          "sample_id": "tks_para_idea_definition_plain",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_idea_concrete_human",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_idea_system_analog",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_idea_neutral_minimal",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_idea_story_context",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_idea_stakeholder_plain",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_mind_definition_plain",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_mind_concrete_human",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_mind_system_analog",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_mind_neutral_minimal",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_mind_story_context",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_mind_stakeholder_plain",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_positive_definition_plain",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_positive_concrete_human",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_positive_system_analog",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_positive_neutral_minimal",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 2,
+          "predicted_name": "Positive",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_positive_story_context",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_positive_stakeholder_plain",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_negative_definition_plain",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 3,
+          "predicted_name": "Negative",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_negative_concrete_human",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_negative_system_analog",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_negative_neutral_minimal",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 3,
+          "predicted_name": "Negative",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_negative_story_context",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 3,
+          "predicted_name": "Negative",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_negative_stakeholder_plain",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_vibration_definition_plain",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_vibration_concrete_human",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_vibration_system_analog",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_vibration_neutral_minimal",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_vibration_story_context",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_vibration_stakeholder_plain",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_female_definition_plain",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_female_concrete_human",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_female_system_analog",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_female_neutral_minimal",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_female_story_context",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_female_stakeholder_plain",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_male_definition_plain",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_male_concrete_human",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_male_system_analog",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_male_neutral_minimal",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_male_story_context",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_male_stakeholder_plain",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_rhythm_definition_plain",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_rhythm_concrete_human",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_rhythm_system_analog",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_rhythm_neutral_minimal",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_rhythm_story_context",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_rhythm_stakeholder_plain",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_definition_plain",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_concrete_human",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_system_analog",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_neutral_minimal",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_story_context",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_stakeholder_plain",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_below_definition_plain",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_below_concrete_human",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 8,
+          "predicted_name": "Above/Cause",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_below_system_analog",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_below_neutral_minimal",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_below_story_context",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_below_stakeholder_plain",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": false
+        }
+      ]
+    },
+    "tfidf_logreg": {
+      "accuracy": 0.4166666666666667,
+      "correct": 25,
+      "total": 60,
+      "predictions": [
+        {
+          "sample_id": "tks_para_idea_definition_plain",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_idea_concrete_human",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_idea_system_analog",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_idea_neutral_minimal",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_idea_story_context",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 8,
+          "predicted_name": "Above/Cause",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_idea_stakeholder_plain",
+          "gold": 0,
+          "gold_name": "Idea",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_mind_definition_plain",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_mind_concrete_human",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 1,
+          "predicted_name": "Mind",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_mind_system_analog",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_mind_neutral_minimal",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 1,
+          "predicted_name": "Mind",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_mind_story_context",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_mind_stakeholder_plain",
+          "gold": 1,
+          "gold_name": "Mind",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_positive_definition_plain",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_positive_concrete_human",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 1,
+          "predicted_name": "Mind",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_positive_system_analog",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 2,
+          "predicted_name": "Positive",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_positive_neutral_minimal",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 2,
+          "predicted_name": "Positive",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_positive_story_context",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_positive_stakeholder_plain",
+          "gold": 2,
+          "gold_name": "Positive",
+          "predicted": 2,
+          "predicted_name": "Positive",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_negative_definition_plain",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 3,
+          "predicted_name": "Negative",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_negative_concrete_human",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_negative_system_analog",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 3,
+          "predicted_name": "Negative",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_negative_neutral_minimal",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 3,
+          "predicted_name": "Negative",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_negative_story_context",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 3,
+          "predicted_name": "Negative",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_negative_stakeholder_plain",
+          "gold": 3,
+          "gold_name": "Negative",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_vibration_definition_plain",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_vibration_concrete_human",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_vibration_system_analog",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_vibration_neutral_minimal",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 4,
+          "predicted_name": "Vibration",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_vibration_story_context",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_vibration_stakeholder_plain",
+          "gold": 4,
+          "gold_name": "Vibration",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_female_definition_plain",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_female_concrete_human",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_female_system_analog",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_female_neutral_minimal",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_female_story_context",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_female_stakeholder_plain",
+          "gold": 5,
+          "gold_name": "Female",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_male_definition_plain",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_male_concrete_human",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_male_system_analog",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 3,
+          "predicted_name": "Negative",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_male_neutral_minimal",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_male_story_context",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_male_stakeholder_plain",
+          "gold": 6,
+          "gold_name": "Male",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_rhythm_definition_plain",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_rhythm_concrete_human",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_rhythm_system_analog",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_rhythm_neutral_minimal",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_rhythm_story_context",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_rhythm_stakeholder_plain",
+          "gold": 7,
+          "gold_name": "Rhythm",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_definition_plain",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_concrete_human",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_system_analog",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_neutral_minimal",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_story_context",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 7,
+          "predicted_name": "Rhythm",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_above_stakeholder_plain",
+          "gold": 8,
+          "gold_name": "Above/Cause",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_below_definition_plain",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 9,
+          "predicted_name": "Below/Effect",
+          "correct": true
+        },
+        {
+          "sample_id": "tks_para_below_concrete_human",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 8,
+          "predicted_name": "Above/Cause",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_below_system_analog",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 5,
+          "predicted_name": "Female",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_below_neutral_minimal",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 0,
+          "predicted_name": "Idea",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_below_story_context",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 8,
+          "predicted_name": "Above/Cause",
+          "correct": false
+        },
+        {
+          "sample_id": "tks_para_below_stakeholder_plain",
+          "gold": 9,
+          "gold_name": "Below/Effect",
+          "predicted": 6,
+          "predicted_name": "Male",
+          "correct": false
+        }
+      ]
+    }
+  },
+  "fixture_rows": [
+    {
+      "sample_id": "tks_para_idea_definition_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "definition_plain",
+      "english": "A single object is being considered by the mind.",
+      "canonical_noetic": 0,
+      "canonical_label": "Idea",
+      "cas_expression": "^0",
+      "mapping_note": "Idea is the object or content under consideration.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_idea_concrete_human",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "concrete_human",
+      "english": "The route home is the thing the person is thinking about.",
+      "canonical_noetic": 0,
+      "canonical_label": "Idea",
+      "cas_expression": "^0",
+      "mapping_note": "Idea is the thing in mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_idea_system_analog",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "system_analog",
+      "english": "The input topic is the object the system is representing.",
+      "canonical_noetic": 0,
+      "canonical_label": "Idea",
+      "cas_expression": "^0",
+      "mapping_note": "Idea can be represented by any cognitive system.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_idea_neutral_minimal",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "neutral_minimal",
+      "english": "There is something on the mind.",
+      "canonical_noetic": 0,
+      "canonical_label": "Idea",
+      "cas_expression": "^0",
+      "mapping_note": "Idea is something in or outside mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_idea_story_context",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "story_context",
+      "english": "During planning, the bridge is the central thing everyone keeps referring to.",
+      "canonical_noetic": 0,
+      "canonical_label": "Idea",
+      "cas_expression": "^0",
+      "mapping_note": "The bridge is the object of thought.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_idea_stakeholder_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "stakeholder_plain",
+      "english": "This is the subject matter the analysis is about.",
+      "canonical_noetic": 0,
+      "canonical_label": "Idea",
+      "cas_expression": "^0",
+      "mapping_note": "Idea is the subject matter itself.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_mind_definition_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "definition_plain",
+      "english": "Awareness takes in the information and holds it for processing.",
+      "canonical_noetic": 1,
+      "canonical_label": "Mind",
+      "cas_expression": "^1",
+      "mapping_note": "Mind is awareness processing, storing, inputting, and outputting information.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_mind_concrete_human",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "concrete_human",
+      "english": "The listener pays attention to the instruction and keeps it in mind.",
+      "canonical_noetic": 1,
+      "canonical_label": "Mind",
+      "cas_expression": "^1",
+      "mapping_note": "Mind is active attention and processing.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_mind_system_analog",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "system_analog",
+      "english": "The system attends to the signal, stores the relevant state, and prepares an output.",
+      "canonical_noetic": 1,
+      "canonical_label": "Mind",
+      "cas_expression": "^1",
+      "mapping_note": "Mind applies to any awareness-like processing architecture.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_mind_neutral_minimal",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "neutral_minimal",
+      "english": "Attention is active.",
+      "canonical_noetic": 1,
+      "canonical_label": "Mind",
+      "cas_expression": "^1",
+      "mapping_note": "Mind as awareness in operation.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_mind_story_context",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "story_context",
+      "english": "Before answering, the student focuses on the question and holds the key terms together.",
+      "canonical_noetic": 1,
+      "canonical_label": "Mind",
+      "cas_expression": "^1",
+      "mapping_note": "The student is processing and entertaining the idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_mind_stakeholder_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "stakeholder_plain",
+      "english": "This marks the part where the system is actively taking the information in.",
+      "canonical_noetic": 1,
+      "canonical_label": "Mind",
+      "cas_expression": "^1",
+      "mapping_note": "Mind as active intake and processing.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_positive_definition_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "definition_plain",
+      "english": "The mind has affinity for the option and moves toward it.",
+      "canonical_noetic": 2,
+      "canonical_label": "Positive",
+      "cas_expression": "^2",
+      "mapping_note": "Positive is attraction toward an idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_positive_concrete_human",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "concrete_human",
+      "english": "The offer appeals to the person, so their attention keeps returning to it.",
+      "canonical_noetic": 2,
+      "canonical_label": "Positive",
+      "cas_expression": "^2",
+      "mapping_note": "The idea attracts the mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_positive_system_analog",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "system_analog",
+      "english": "The ranking process favors this candidate and pulls selection toward it.",
+      "canonical_noetic": 2,
+      "canonical_label": "Positive",
+      "cas_expression": "^2",
+      "mapping_note": "Positive as selection affinity.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_positive_neutral_minimal",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "neutral_minimal",
+      "english": "It is drawn toward that choice.",
+      "canonical_noetic": 2,
+      "canonical_label": "Positive",
+      "cas_expression": "^2",
+      "mapping_note": "Drawn toward marks Positive.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_positive_story_context",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "story_context",
+      "english": "Among several paths, the bright open road feels inviting and pulls the traveler forward.",
+      "canonical_noetic": 2,
+      "canonical_label": "Positive",
+      "cas_expression": "^2",
+      "mapping_note": "The road is attractive to the mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_positive_stakeholder_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "stakeholder_plain",
+      "english": "This is where the answer shows attraction toward one possibility.",
+      "canonical_noetic": 2,
+      "canonical_label": "Positive",
+      "cas_expression": "^2",
+      "mapping_note": "Positive as attraction toward a possibility.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_negative_definition_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "definition_plain",
+      "english": "The mind is adverse to the option and moves away from it.",
+      "canonical_noetic": 3,
+      "canonical_label": "Negative",
+      "cas_expression": "^3",
+      "mapping_note": "Negative is aversion or repulsion from an idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_negative_concrete_human",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "concrete_human",
+      "english": "The proposal feels wrong to the person, and they want no part of it.",
+      "canonical_noetic": 3,
+      "canonical_label": "Negative",
+      "cas_expression": "^3",
+      "mapping_note": "The idea repels the mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_negative_system_analog",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "system_analog",
+      "english": "The filter rejects that candidate and pushes it out of the allowed set.",
+      "canonical_noetic": 3,
+      "canonical_label": "Negative",
+      "cas_expression": "^3",
+      "mapping_note": "Negative as rejection or repulsion.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_negative_neutral_minimal",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "neutral_minimal",
+      "english": "It turns away from that option.",
+      "canonical_noetic": 3,
+      "canonical_label": "Negative",
+      "cas_expression": "^3",
+      "mapping_note": "Turning away marks Negative.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_negative_story_context",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "story_context",
+      "english": "The smell from the cup makes the child push it away without wanting to taste it.",
+      "canonical_noetic": 3,
+      "canonical_label": "Negative",
+      "cas_expression": "^3",
+      "mapping_note": "The cup idea is repelling the mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_negative_stakeholder_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "stakeholder_plain",
+      "english": "This is where the answer shows aversion toward one possibility.",
+      "canonical_noetic": 3,
+      "canonical_label": "Negative",
+      "cas_expression": "^3",
+      "mapping_note": "Negative as aversion toward a possibility.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_vibration_definition_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "definition_plain",
+      "english": "The idea leaves a strong impression on the mind.",
+      "canonical_noetic": 4,
+      "canonical_label": "Vibration",
+      "cas_expression": "^4",
+      "mapping_note": "Vibration is degree of resonance or impression.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_vibration_concrete_human",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "concrete_human",
+      "english": "The sentence strikes the reader deeply and lingers after the page is closed.",
+      "canonical_noetic": 4,
+      "canonical_label": "Vibration",
+      "cas_expression": "^4",
+      "mapping_note": "The idea resonates with the mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_vibration_system_analog",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "system_analog",
+      "english": "The signal has high salience and leaves a lasting trace in the processing state.",
+      "canonical_noetic": 4,
+      "canonical_label": "Vibration",
+      "cas_expression": "^4",
+      "mapping_note": "Vibration as strength of impression in a system.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_vibration_neutral_minimal",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "neutral_minimal",
+      "english": "It resonates.",
+      "canonical_noetic": 4,
+      "canonical_label": "Vibration",
+      "cas_expression": "^4",
+      "mapping_note": "Resonance marks Vibration.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_vibration_story_context",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "story_context",
+      "english": "The melody keeps echoing in the musician's mind long after rehearsal ends.",
+      "canonical_noetic": 4,
+      "canonical_label": "Vibration",
+      "cas_expression": "^4",
+      "mapping_note": "The melody has a lasting impression.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_vibration_stakeholder_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "stakeholder_plain",
+      "english": "This marks how strongly the idea impresses itself on the system.",
+      "canonical_noetic": 4,
+      "canonical_label": "Vibration",
+      "cas_expression": "^4",
+      "mapping_note": "Vibration as impression strength.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_female_definition_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "definition_plain",
+      "english": "The mind is composed by the ideas it has taken in.",
+      "canonical_noetic": 5,
+      "canonical_label": "Female",
+      "cas_expression": "^5",
+      "mapping_note": "Female is a mind impregnated with ideas, the ideas a mind is composed of.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_female_concrete_human",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "concrete_human",
+      "english": "Her past experiences shape who she is and what feels familiar.",
+      "canonical_noetic": 5,
+      "canonical_label": "Female",
+      "cas_expression": "^5",
+      "mapping_note": "The mind is formed by accumulated experience.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_female_system_analog",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "system_analog",
+      "english": "The model's training history is part of what its processing system is made of.",
+      "canonical_noetic": 5,
+      "canonical_label": "Female",
+      "cas_expression": "^5",
+      "mapping_note": "AI training data as the mind's accumulated composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_female_neutral_minimal",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "neutral_minimal",
+      "english": "It is shaped by what it has already taken in.",
+      "canonical_noetic": 5,
+      "canonical_label": "Female",
+      "cas_expression": "^5",
+      "mapping_note": "Accumulated content shapes the mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_female_story_context",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "story_context",
+      "english": "The gardener's memories of drought guide how she reads the clouds.",
+      "canonical_noetic": 5,
+      "canonical_label": "Female",
+      "cas_expression": "^5",
+      "mapping_note": "Past experience composes the mind's present reading.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_female_stakeholder_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "stakeholder_plain",
+      "english": "This is where prior experience becomes part of the system's makeup.",
+      "canonical_noetic": 5,
+      "canonical_label": "Female",
+      "cas_expression": "^5",
+      "mapping_note": "Female as accumulated makeup of mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_male_definition_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "definition_plain",
+      "english": "The idea is composed of smaller ideas nested inside it.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Male is an idea composed of ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_male_concrete_human",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "concrete_human",
+      "english": "The plan contains smaller pieces: budget, route, timing, tools, and backup.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "The plan-idea is composed of nested sub-ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_male_system_analog",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "system_analog",
+      "english": "The answer structure is built from subparts: claim, evidence, rule, exception, and conclusion.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "The answer-idea is composed of nested ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_male_neutral_minimal",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "neutral_minimal",
+      "english": "The concept has parts inside parts.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Nested composition marks Male.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_male_story_context",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "story_context",
+      "english": "The recipe idea contains ingredients, steps, heat, timing, and serving order.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "The recipe-idea is composed of sub-ideas.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_male_stakeholder_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "stakeholder_plain",
+      "english": "This is where a larger idea is broken into the ideas that make it up.",
+      "canonical_noetic": 6,
+      "canonical_label": "Male",
+      "cas_expression": "^6",
+      "mapping_note": "Male as idea-composition.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_rhythm_definition_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "definition_plain",
+      "english": "The mind meets the idea through a repeated pattern over time.",
+      "canonical_noetic": 7,
+      "canonical_label": "Rhythm",
+      "cas_expression": "^7",
+      "mapping_note": "Rhythm is rate and pattern of exposure to an idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_rhythm_concrete_human",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "concrete_human",
+      "english": "Daily practice makes the movement familiar through repetition.",
+      "canonical_noetic": 7,
+      "canonical_label": "Rhythm",
+      "cas_expression": "^7",
+      "mapping_note": "Repeated exposure marks Rhythm.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_rhythm_system_analog",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "system_analog",
+      "english": "The feedback loop presents the same signal at regular intervals.",
+      "canonical_noetic": 7,
+      "canonical_label": "Rhythm",
+      "cas_expression": "^7",
+      "mapping_note": "Rhythm as repeated patterned exposure in a system.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_rhythm_neutral_minimal",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "neutral_minimal",
+      "english": "The exposure has a pattern.",
+      "canonical_noetic": 7,
+      "canonical_label": "Rhythm",
+      "cas_expression": "^7",
+      "mapping_note": "Pattern of exposure marks Rhythm.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_rhythm_story_context",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "story_context",
+      "english": "Every morning the pianist repeats the scale until the timing settles into the hands.",
+      "canonical_noetic": 7,
+      "canonical_label": "Rhythm",
+      "cas_expression": "^7",
+      "mapping_note": "Practice pattern and repeated timing mark Rhythm.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_rhythm_stakeholder_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "stakeholder_plain",
+      "english": "This shows the cadence by which the system is exposed to the same idea.",
+      "canonical_noetic": 7,
+      "canonical_label": "Rhythm",
+      "cas_expression": "^7",
+      "mapping_note": "Rhythm as cadence of exposure.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_above_definition_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "definition_plain",
+      "english": "One idea acts as a trigger that brings another idea to mind.",
+      "canonical_noetic": 8,
+      "canonical_label": "Above/Cause",
+      "cas_expression": "^8",
+      "mapping_note": "Above/Cause is the trigger idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_above_concrete_human",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "concrete_human",
+      "english": "The smell of bread reminds the person of their grandmother's kitchen.",
+      "canonical_noetic": 8,
+      "canonical_label": "Above/Cause",
+      "cas_expression": "^8",
+      "mapping_note": "The smell is the trigger idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_above_system_analog",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "system_analog",
+      "english": "A warning flag causes the system to retrieve the safety procedure.",
+      "canonical_noetic": 8,
+      "canonical_label": "Above/Cause",
+      "cas_expression": "^8",
+      "mapping_note": "The warning flag is the trigger.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_above_neutral_minimal",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "neutral_minimal",
+      "english": "This cue brings another thought forward.",
+      "canonical_noetic": 8,
+      "canonical_label": "Above/Cause",
+      "cas_expression": "^8",
+      "mapping_note": "Cue as trigger marks Above/Cause.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_above_story_context",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "story_context",
+      "english": "The old song on the radio makes the driver think of the summer trip.",
+      "canonical_noetic": 8,
+      "canonical_label": "Above/Cause",
+      "cas_expression": "^8",
+      "mapping_note": "The song triggers the trip memory.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_above_stakeholder_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "stakeholder_plain",
+      "english": "This is the source idea that starts the next idea appearing.",
+      "canonical_noetic": 8,
+      "canonical_label": "Above/Cause",
+      "cas_expression": "^8",
+      "mapping_note": "Above/Cause as source trigger.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_below_definition_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "definition_plain",
+      "english": "The second idea is what comes to mind after the trigger.",
+      "canonical_noetic": 9,
+      "canonical_label": "Below/Effect",
+      "cas_expression": "^9",
+      "mapping_note": "Below/Effect is the idea brought to mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_below_concrete_human",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "concrete_human",
+      "english": "After smelling bread, the memory of the grandmother's kitchen appears.",
+      "canonical_noetic": 9,
+      "canonical_label": "Below/Effect",
+      "cas_expression": "^9",
+      "mapping_note": "The memory is the effect idea brought to mind.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_below_system_analog",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "system_analog",
+      "english": "After the warning flag, the safety procedure is the retrieved content.",
+      "canonical_noetic": 9,
+      "canonical_label": "Below/Effect",
+      "cas_expression": "^9",
+      "mapping_note": "The retrieved procedure is the effect idea.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_below_neutral_minimal",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "neutral_minimal",
+      "english": "A new thought appears because of the cue.",
+      "canonical_noetic": 9,
+      "canonical_label": "Below/Effect",
+      "cas_expression": "^9",
+      "mapping_note": "The appearing thought is Below/Effect.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_below_story_context",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "story_context",
+      "english": "The summer-trip memory is what the old song brings into awareness.",
+      "canonical_noetic": 9,
+      "canonical_label": "Below/Effect",
+      "cas_expression": "^9",
+      "mapping_note": "The memory is the idea brought by the trigger.",
+      "confidence": "medium"
+    },
+    {
+      "sample_id": "tks_para_below_stakeholder_plain",
+      "suite": "tks_noetic_paraphrase_transfer",
+      "scenario_id": "paraphrase_control",
+      "paraphrase_style": "stakeholder_plain",
+      "english": "This is the resulting idea that appears after something else sets it off.",
+      "canonical_noetic": 9,
+      "canonical_label": "Below/Effect",
+      "cas_expression": "^9",
+      "mapping_note": "Below/Effect as resulting idea.",
+      "confidence": "medium"
+    }
+  ]
+}

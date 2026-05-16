@@ -73,6 +73,7 @@ subject. CAS is the measuring instrument.**
 | 4.1 | **done - domain ablation negative** | Domain layer-5 ablation with 30 random-complement directions and 10,000 matched permutations. Domain mean disruption +0.0142 vs random null p95 +0.0396; p=0.2931. Probe self-ablation also failed for O (kept-rate 1.000). Verdict: `DOMAIN_EFFECT_NOT_ABOVE_RANDOM_N30_PERMUTATION`. |
 | 5.0 | **done - original TKS dog-training noetic transfer smoke** | Ten hand-authored dog-training examples from the original TKS noetic demonstration, corrected to CAS zero-indexed numbering (`^0` Idea, `^1` Mind, ..., `^9` Below/Effect). Layer-3 noetic probe gets 4/10; best layer gets 6/10; count-vector text baseline gets 4/10; TF-IDF gets 2/10. Verdict: `TKS_DOG_TRANSFER_MIXED`. |
 | 5.1 | **done - multi-scenario TKS-style transfer smoke** | Dog training plus four definition-anchored hand-authored scenarios (debate prep, lost keys, software debugging, gallery viewing), 50 rows total. Layer-3 noetic probe gets 16/50; best layer gets 23/50; count-vector gets 11/50; TF-IDF gets 16/50. Verdict: `TKS_NOETIC_TRANSFER_MIXED`. |
+| 5.2 | **done - paraphrase-controlled TKS-style transfer smoke** | 60 rows: 10 noetics x 6 paraphrase styles. Layer-3 noetic probe gets 29/60; best layer gets 31/60; count-vector gets 16/60; TF-IDF gets 25/60. Probe beats count-vector reliably (paired p=0.007) but not TF-IDF (paired p=0.481). Verdict: `TKS_NOETIC_TRANSFER_MIXED`, suggestive but not clean pass. |
 
 ## Decision gates (revised post-audit 2026-05-16)
 
@@ -1167,3 +1168,75 @@ Artifacts:
 - `tks_noetic_transfer_eval_20260516.jsonl` - 50-row multi-scenario
   fixture.
 - `tks_noetic_transfer_eval_report_20260516.json` - full report.
+
+## Stage 5.2 result - paraphrase-controlled noetic transfer smoke
+
+**Verdict: `TKS_NOETIC_TRANSFER_MIXED` - suggestive improvement, not a
+clean pass.**
+
+Stage 5.2 controls the wording more directly: ten noetics, six
+paraphrase styles each. The styles are definition-plain, concrete-human,
+system-analog, neutral-minimal, story-context, and stakeholder-plain.
+
+Result:
+
+| Evaluator | Accuracy |
+|---|---:|
+| Pythia noetic probe, headline layer 3 | 29/60 |
+| Pythia noetic probe, best layer 0 | 31/60 |
+| Count-vector text baseline | 16/60 |
+| TF-IDF text baseline | 25/60 |
+
+Paired baseline check:
+
+| Comparison | Probe-only correct | Text-only correct | p |
+|---|---:|---:|---:|
+| Layer-3 probe vs count-vector | 17 | 4 | 0.007 |
+| Layer-3 probe vs TF-IDF | 11 | 7 | 0.481 |
+
+So the paraphrase-controlled set is better than the prior transfer
+smokes, but it is still not a clean pass under the stricter standard.
+The probe clearly beats raw count-vector word presence, but it does not
+reliably beat TF-IDF on paired discordant examples.
+
+Layer-3 by noetic:
+
+| Noetic | Accuracy |
+|---|---:|
+| Idea | 2/6 |
+| Mind | 4/6 |
+| Positive | 2/6 |
+| Negative | 4/6 |
+| Vibration | 2/6 |
+| Female | 5/6 |
+| Male | 0/6 |
+| Rhythm | 4/6 |
+| Above/Cause | 2/6 |
+| Below/Effect | 4/6 |
+
+Layer-3 by paraphrase style:
+
+| Style | Accuracy |
+|---|---:|
+| system_analog | 7/10 |
+| definition_plain | 6/10 |
+| concrete_human | 6/10 |
+| neutral_minimal | 5/10 |
+| story_context | 3/10 |
+| stakeholder_plain | 2/10 |
+
+Honest read:
+
+> Paraphrase control improves the transfer result. The saved Pythia
+> noetic probe now shows partial wording robustness and beats a raw
+> word-count baseline. But the lift over TF-IDF is not statistically
+> reliable, and Male remains completely missed. This is real progress,
+> not a pass. The next dataset should target Male and the weak
+> noetics, while using held-out paraphrases designed before evaluation.
+
+Artifacts:
+
+- `tks_noetic_paraphrase_eval_20260516.jsonl` - 60-row paraphrase
+  fixture.
+- `tks_noetic_paraphrase_eval_report_20260516.json` - full report,
+  including paired baseline contingencies.
