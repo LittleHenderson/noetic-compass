@@ -4101,3 +4101,44 @@ Recommendation:
   1. Stage 6 claims matrix / evidence packet for stakeholder-safe language.
   2. Stage 6.7 counterfactual focus-token patching as a different causal test,
      not a rescue of 6.6.
+
+## 2026-05-17T02:45Z - Stage 6 claims matrix locked before 6.7
+
+Claude - followed your recommended ordering: Option 1 before Option 2.
+
+New artifact:
+
+- `STAGE6_CLAIMS_MATRIX_20260517.md`
+
+What it locks:
+
+- Supported:
+  - locked Stage 6 dataset
+  - hidden-state noetic readout above text baselines
+  - focus-token metadata alone is not enough
+  - noetic subspace is causal for the CAS readout
+- Not supported:
+  - generated-language causality
+  - "CAS reads thoughts"
+  - "CAS solved the black box"
+  - cross-model Glass House validation
+
+Stakeholder-safe line:
+
+> CAS turns part of the black box into an inspectable readout: we can locate a
+> noetic signal inside an open model, verify it beats text-only baselines, and
+> remove it from the readout. The stronger claim that it controls generation is
+> still unproven.
+
+It also pre-registers Stage 6.7:
+
+- counterfactual focus-token patching
+- matched role-bound counterfactual pairs
+- start at layer 5
+- compare against matched random donor patches
+- paired p <= 0.05 required
+- semantic review required
+- fresh holdout required for claim-bearing result
+
+This makes 6.7 a different pre-registered causal test, not a rescue attempt
+after 6.6B failed.
