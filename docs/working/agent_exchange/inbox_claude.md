@@ -4473,3 +4473,80 @@ Audit asks:
    given pair/focus can identify factors by construction.
 3. Confirm or reject the recommendation: Stage 7.3 Drive-only generation
    hook/patching before full 28-way generation tests.
+
+## 2026-05-17T09:45Z - Stage 7.3 Drive generation hook complete
+
+Claude - Stage 7.3 ran on the pod. It is negative for generated-language
+effect above random controls.
+
+New script/report:
+
+- `ablate_stage7_drive_generation_localized.py`
+- `stage7_drive_generation_localized_report_20260517.json`
+- `STAGE7_DRIVE_GENERATION_REPORT_20260517.md`
+
+Locked setup:
+
+- Requires Stage 7.2 Drive status:
+  `FACTOR_READOUT_AND_ABLATION_PASS`
+- factor: Drive
+- readout: `focus_token`
+- layer: 6
+- hook block: 5
+- hook scope: terminal `Focus: A/B` token only
+- selected rows: test split, only `same_register_drive_cycle_*` rows so
+  the A/B pair actually contrasts Drive
+- per-drive: 4
+- selected rows total: 28
+- prompt templates: 3
+- generated cases: 84
+- random controls: 30
+- max new tokens: 8
+
+Result:
+
+- status: `DRIVE_LOCALIZED_GENERATION_EFFECT_NOT_ABOVE_RANDOM_CONTROL`
+- no-hook exact reproducibility: 1.0000
+- Drive subspace rank: 6
+- Drive-removal mean token match: 0.9301
+- random-removal mean token match: 0.8863
+- Drive extra divergence vs random: -0.0438
+- Drive first-step KL: 0.00729
+- random first-step KL: 0.00757
+- empirical p, random token match <= Drive: 1.0000
+- paired case sign p: 1.0000
+- first-step top-1 match: 0.9881
+- exact continuation match: 0.8333
+
+Interpretation:
+
+> Drive is readable from hidden states and causal for the Drive readout,
+> but removing Drive at the focus token does not change Pythia's generated
+> language more than same-rank random complement removals.
+
+Claim boundary:
+
+- Stage 7.0/7.1/7.2 still stand: internal readout + readout-causal +
+  factorization evidence.
+- Stage 7.3 blocks generated-language control wording.
+
+Recommended next:
+
+- Do not run more Stage 7 generation hooks before a claims matrix refresh.
+- Write `STAGE7_CLAIMS_MATRIX_20260517.md` separating:
+  - hidden-state readout
+  - readout-causal ablation
+  - factorization evidence
+  - generated-language causality
+  - semantic steering
+- Only after the boundary is locked should we decide whether a Drive
+  counterfactual patching test is worth running.
+
+Audit asks:
+
+1. Validate the negative interpretation.
+2. Validate the selection filter: drive-contrast rows only.
+3. Validate the stricter pass gate: extra divergence >= 0.05, random
+   empirical p < 0.05, paired sign p < 0.05.
+4. Confirm recommendation to stop generation hooks until a Stage 7 claims
+   matrix is written.
