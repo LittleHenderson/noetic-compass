@@ -1,0 +1,74 @@
+{
+  "anti_leak_flag_counts": {},
+  "date": "20260517",
+  "family_counts": {
+    "applied_human": 1200,
+    "compressed_minimal": 400,
+    "counter_alias_hard_negative": 400,
+    "definition_compact": 1200,
+    "long_embedded_clause": 400,
+    "role_inverse_plain": 1200,
+    "system_process": 1200
+  },
+  "lessons_reused": [
+    "role-bound same-sentence counterfactuals",
+    "balanced labels",
+    "explicit Focus marker",
+    "literal symbol and framework leakage avoided in model-facing English",
+    "text and metadata baselines required before any harness claim"
+  ],
+  "mode": "full",
+  "n_classes": 5,
+  "n_rows": 6000,
+  "operator_counts": {
+    "add_copresence": 1200,
+    "compose_sequence": 1200,
+    "divide_ratio": 1200,
+    "multiply_integrate": 1200,
+    "subtract_remove": 1200
+  },
+  "operator_labels": [
+    "multiply_integrate",
+    "divide_ratio",
+    "compose_sequence",
+    "add_copresence",
+    "subtract_remove"
+  ],
+  "operator_metadata": {
+    "add_copresence": {
+      "gloss": "two distinct items remain side by side in the same scene without becoming one thing",
+      "plain": "distinct things stay present together",
+      "symbol": "+"
+    },
+    "compose_sequence": {
+      "gloss": "the outcome of one pass becomes the starting condition for the next pass",
+      "plain": "one result becomes the next starting point",
+      "symbol": "o"
+    },
+    "divide_ratio": {
+      "gloss": "one share is compared against another so the relation between them becomes the point",
+      "plain": "one thing is measured against another",
+      "symbol": "/"
+    },
+    "multiply_integrate": {
+      "gloss": "separate pieces are bound into one functioning whole while their roles remain inside it",
+      "plain": "parts become one working whole",
+      "symbol": "x"
+    },
+    "subtract_remove": {
+      "gloss": "one item is taken out so the remaining situation changes around its absence",
+      "plain": "one thing is taken out",
+      "symbol": "-"
+    }
+  },
+  "out_jsonl": "stage10_operators_full_20260517.jsonl",
+  "out_jsonl_sha256": "384b7fceff0fac4ecf9593301b772a64d223c773256ae3652d010b4bd54745ca",
+  "position_definition": "five CAS generative operations: integration, ratio, sequence, co-presence, removal",
+  "schema_version": "stage10_operator_fixture_manifest.v1",
+  "source": "user-requested Stage 10 CAS operator ladder after Stage 9 original-TKS 40 Elements pass",
+  "split_counts": {
+    "test": 2800,
+    "train": 2400,
+    "val": 800
+  }
+}

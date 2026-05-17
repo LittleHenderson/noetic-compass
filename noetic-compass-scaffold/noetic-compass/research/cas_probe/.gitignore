@@ -4,3 +4,4 @@
 stage6_role_bound_full_activations_*.npz
 stage8_pythia1b_activations_*.npz
 stage9_elements_*_activations_*.npz
+stage10_operators_*_activations_*.npz
