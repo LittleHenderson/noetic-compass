@@ -5125,3 +5125,70 @@ Hard cap: 2 GPU-hours on A6000. If the experiment is exceeding 90 minutes, surfa
 Pythia-160M findings remain valid as the within-model bound. This experiment tests whether they transfer, not whether they hold. A negative result on Pythia-1B does not invalidate any closed Pythia-160M tier; it narrows the cross-model scope.
 
 Codex executes; Claude/user audit on completion.
+
+## 2026-05-17T12:12Z - codex: Stage 8 Pythia-1B CPL2 replication complete
+
+Branch: `experiment/cas-probe-pythia`
+
+Status: `PASS_CLEAN_STAGE8_PYTHIA1B_CPL2_REPLICATES`
+
+Pre-registration discipline:
+
+- `STAGE8_CROSS_MODEL_GATES_20260517.md` was committed before the run in `ea5e191`.
+- Stage 8 scripts were committed and pushed before the pod run in `01795fb`.
+- The run stayed under the 2 GPU-hour cap. Full capture + CPL2 was under 10 minutes of pod wall time after setup.
+
+Artifacts:
+
+- `stage8_pythia1b_activations_manifest_20260517.json`
+- `STAGE8_PYTHIA1B_PROBE_REPORT_20260517.json`
+- `STAGE8_PYTHIA1B_PROBE_REPORT_20260517.md`
+- `STAGE8_PYTHIA1B_CPL2_REPORT_20260517.json`
+- `STAGE8_PYTHIA1B_CPL2_REPORT_20260517.md`
+- `STAGE8_PYTHIA1B_SUMMARY_20260517.md`
+- `STAGE8_CLAIMS_MATRIX_20260517.md`
+
+Activation manifest:
+
+- Model: `EleutherAI/pythia-1b`
+- Revision: `f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2`
+- Rows: `4368`
+- Stored layers: `6..13`
+- Hidden dim: `2048`
+- Activation binary SHA: `3d1a118a6290ddfe9780c9693c9938d26815d43fca009f3b756a5ab0ab0a80ab`
+- Binary remains uncommitted per gate; manifest is committed.
+
+Probe scan:
+
+- Selected readout: `focus_token`
+- Selected layer: `8`
+- Validation accuracy: `1.0000`
+- Validation lacunarity: `0.0000`
+- Test accuracy: `0.8240`
+- Test lacunarity: `0.0152`
+
+CPL2 gate:
+
+- Probe-readable delta vs none: `+0.5542` (floor `> +0.15`) PASS
+- Paired Wilcoxon p: `2.58e-14` (floor `< 0.05`) PASS
+- Probe-readable minus partner-readable margin: `+1.2460` (floor `> +0.30`) PASS
+- Positive cases: `90/112` (floor `> 60/112`) PASS
+
+Controls:
+
+- Gold-readable delta vs none: `+0.5800`
+- Partner-readable delta vs none: `-0.6918`
+- Gold-raw delta vs none: `-0.0233`
+- Probe-raw delta vs none: `-0.0227`
+
+Interpretation:
+
+> The eta-to-epsilon readable-prefix bridge transfers from Pythia-160M to Pythia-1B under the pre-registered CPL2 gate. This supports a cross-scale CAS Harness likelihood-conditioning claim, not hidden-state steering, raw CAS-symbol understanding, or pass-clean open-ended generated-language control.
+
+Audit asks:
+
+1. Verify layer choice was made by validation accuracy before test reporting.
+2. Check whether the lacunarity comparison is fair: Stage 8 selected layer test lacunarity `0.0152` vs Stage 7 reference `0.021`.
+3. Verify paired Wilcoxon and all four PASS_CLEAN thresholds.
+4. Audit the claims matrix wording for overclaim risk, especially "cross-scale" vs "cross-architecture."
+5. Confirm the next gate should be cross-architecture replication, not memo refresh before audit.
