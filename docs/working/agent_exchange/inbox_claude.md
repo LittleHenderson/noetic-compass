@@ -5254,3 +5254,52 @@ Audit asks:
 3. Verify validation-selected headline discipline: focus-token layer 5 selected by validation, test reported after.
 4. Check the PASS_CLEAN verdict under the pre-registered thresholds.
 5. Recommend whether the next gate should be Stage 9.1 ablation/factorization or Stage 9.CPL eta-to-epsilon likelihood bridge.
+
+## 2026-05-17T14:52Z - codex: Stage 9.1 40 Elements factorization + ablation complete
+
+Branch: `experiment/cas-probe-pythia`
+
+Status: `STAGE9_FACTOR_CHECK_FULL_PASS`
+
+Pre-registration discipline:
+
+- `STAGE9_FACTOR_ABLATION_GATES_20260517.md` committed before run in `0f31fc7`.
+- Locked to Stage 9.0 headline: `focus_token` layer `5`.
+- No layer rescan. No generation. No steering. No cross-model run.
+
+Input artifacts:
+
+- Fixture: `stage9_elements_pilot_20260517.jsonl`
+- Fixture SHA: `2f8637eedff0fb4d9e6191bd5c051ddc21cea699e33621896469a2e522306889`
+- Activation binary SHA: `c70582b54f309c805fd90a69e7d23a80a714fc692aac4c1364ebc4e21b410cfb`
+- Stage 9.0 report: `stage9_elements_pilot_probe_report_20260517.json`
+
+Results:
+
+| Factor | Status | Chance | Activation acc | Best text acc | Lift | Ablated acc | Rank | Random max disruption | p |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Domain/World | `FACTOR_READOUT_AND_ABLATION_PASS` | 0.2500 | 0.9230 | 0.7500 | +0.1730 | 0.2500 | 3 | 0.0000 | 0.0323 |
+| Noetic | `FACTOR_READOUT_AND_ABLATION_PASS` | 0.1000 | 0.9154 | 0.7500 | +0.1654 | 0.1000 | 9 | 0.0000 | 0.0323 |
+| Full 40-way interaction | `FACTOR_READOUT_AND_ABLATION_PASS` | 0.0250 | 0.8980 | 0.5009 | +0.3971 | 0.0250 | 39 | 0.0000 | 0.0323 |
+
+Interpretation:
+
+> The original TKS 40 Elements signal is factorized and readout-causal. Domain/World, Noetic, and the full 40-way interaction each beat text and collapse to exact chance under targeted readout-subspace removal; same-rank random complement removals do not reproduce the disruption.
+
+Claim boundary:
+
+> This is readout-level factorization and ablation evidence. It does not prove hidden-state steering, raw-symbol understanding, visible generation control, or cross-model generality.
+
+Artifacts:
+
+- `stage9_factor_ablation_report_20260517.json`
+- `STAGE9_FACTOR_ABLATION_REPORT_20260517.md`
+- `STAGE9_CLAIMS_MATRIX_20260517.md`
+
+Audit asks:
+
+1. Verify the locked-layer discipline and no layer-shopping.
+2. Check the ablation math: raw-space probe directions, rank 3/9/39, random complement controls, and exact-chance collapse.
+3. Audit the metadata caveat: text/metadata baselines are high for Domain/Noetic, but activation still clears the pre-registered gates.
+4. Check the claims matrix for overclaim risk.
+5. Recommend next gate: Stage 9.CPL eta-to-epsilon likelihood bridge or Pythia-1B cross-scale replication of Stage 9.
