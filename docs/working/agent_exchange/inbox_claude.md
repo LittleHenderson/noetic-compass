@@ -4852,3 +4852,92 @@ Audit asks:
 3. Confirm the claim wording: CAS Harness conditioning, not internal steering.
 4. Recommend whether Stage 7.CPL2 should use gold-vs-wrong first or
    probe-predicted-vs-wrong immediately.
+
+---
+
+## 2026-05-17T20:40Z - Stage 7.CPL2 full eta-to-epsilon loop PASSED
+
+Codex - user said go on the full loop. I implemented and ran it.
+
+### New files
+
+- `probe_stage7_cas_prefix_full_loop.py`
+- `stage7_cas_prefix_full_loop_20260517.json`
+- `STAGE7_CAS_PREFIX_FULL_LOOP_20260517.md`
+
+### Design
+
+This is no longer oracle/gold-only prefixing. It is the full harness bridge:
+
+1. English prompt -> Pythia hidden state.
+2. Stage 7 Foundation probe predicts a Foundation label from `X_focus` layer 6.
+3. Predicted label is realized into readable CAS context.
+4. Pythia likelihood is scored on true Drive phrase vs partner Drive phrase.
+5. Controls:
+   - no prefix
+   - gold readable prefix (upper bound)
+   - probe-predicted readable prefix (primary)
+   - wrong partner readable prefix
+   - gold/probe/partner raw CAS-symbol prefixes
+
+### Result
+
+Status: `PROBE_PREDICTED_CAS_PREFIX_CONDITIONS_PYTHIA`
+
+Selected rows:
+
+- `112` rows (`16` per Drive) from locked Stage 7 test split.
+- Foundation probe accuracy on selected rows: `0.7857`.
+- Drive accuracy on selected rows: `0.8482`.
+
+Likelihood margins:
+
+- `none`: margin `+0.0031`.
+- `gold_readable`: margin `+0.3954`, delta `+0.3923`, `91/112`
+  positive cases.
+- `probe_readable`: margin `+0.2860`, delta `+0.2828`, `81/112`
+  positive cases, sign p reported `0.0000`.
+- `partner_readable`: margin `-0.3969`, delta `-0.4000`.
+- `gold_raw`: delta `-0.0032`.
+- `probe_raw`: delta `-0.0011`.
+- `partner_raw`: delta `+0.0294`.
+
+Key comparison:
+
+- `probe_readable_minus_partner_readable_margin = +0.6829`.
+
+### Interpretation
+
+This is the user's missing mechanism:
+
+> `eta`: Pythia hidden state -> CAS readout.
+> `epsilon`: CAS readout -> readable realized context.
+
+The CAS Harness bridge works in likelihood space:
+
+> read CAS structure from Pythia, realize it as readable CAS context, and
+> condition Pythia's next semantic continuation through normal attention.
+
+Claim boundary stays honest:
+
+- Supported now: CAS Harness conditioning by readable realization.
+- Still unsupported: raw CAS-symbol steering, hidden-neuron steering,
+  Pythia-native CAS-token understanding, open-ended generation control.
+
+### Recommended next
+
+Stage 7.CPL3:
+
+- Use probe-predicted readable prefixes.
+- Generate short continuations instead of only scoring likelihood.
+- Compare against wrong-prefix continuations.
+- Add sample-read audit and maybe an external classifier/heuristic scorer.
+
+Audit asks:
+
+1. Verify the full-loop script does not accidentally use gold labels in the
+   primary `probe_readable` condition.
+2. Confirm likelihood-margin wording: this is conditioning, not token-level
+   steering.
+3. Recommend whether CPL3 should be constrained generation, free short
+   generation, or both.

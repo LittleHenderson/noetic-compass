@@ -437,3 +437,60 @@ Next clean experiment:
 2. Compare correct probe prediction vs intentionally wrong prefix on fresh
    held-out rows.
 3. If pass-clean, move from likelihood scoring to short constrained generation.
+
+## Full Eta-To-Epsilon Loop Result
+
+The next clean experiment was run.
+
+- Script: `probe_stage7_cas_prefix_full_loop.py`
+- Report: `stage7_cas_prefix_full_loop_20260517.json`
+- Summary: `STAGE7_CAS_PREFIX_FULL_LOOP_20260517.md`
+
+Design:
+
+1. Fit the Stage 7 Foundation probe on the locked activation split.
+2. Predict each selected test row's Foundation label from Pythia hidden states.
+3. Realize the predicted label as readable CAS context.
+4. Score Pythia's conditional likelihood of the true Drive phrase vs the
+   partner Drive phrase.
+5. Compare against gold-readable, wrong-partner-readable, and raw-symbol
+   controls.
+
+Result:
+
+- Status: `PROBE_PREDICTED_CAS_PREFIX_CONDITIONS_PYTHIA`.
+- Selected-row Foundation accuracy: `0.7857`.
+- Selected-row Drive accuracy: `0.8482`.
+- No prefix margin: `+0.0031`.
+- Gold readable prefix:
+  - margin `+0.3954`
+  - delta vs none `+0.3923`
+  - `91/112` positive cases.
+- Probe-predicted readable prefix:
+  - margin `+0.2860`
+  - delta vs none `+0.2828`
+  - `81/112` positive cases.
+  - sign p reported as `0.0000` in the summary table.
+- Wrong partner readable prefix:
+  - margin `-0.3969`
+  - delta vs none `-0.4000`.
+- Raw CAS symbols stay flat:
+  - `gold_raw` delta `-0.0032`.
+  - `probe_raw` delta `-0.0011`.
+
+Updated claim:
+
+> CAS Harness can close the loop on Pythia-160M by reading a Foundation label
+> from hidden states, realizing that label as readable CAS context, and moving
+> Pythia's semantic likelihood in the intended direction.
+
+Still not claimed:
+
+- Raw CAS notation steering.
+- Hidden-neuron steering.
+- Pythia-native CAS understanding.
+- Open-ended generation control.
+
+The next experiment should be short constrained generation using
+probe-predicted readable prefixes, with wrong-prefix controls and sample-read
+auditing.
