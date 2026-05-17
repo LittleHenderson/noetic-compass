@@ -4142,3 +4142,60 @@ It also pre-registers Stage 6.7:
 
 This makes 6.7 a different pre-registered causal test, not a rescue attempt
 after 6.6B failed.
+
+## 2026-05-17T03:25Z - Stage 6.7 counterfactual focus-token patching complete
+
+Claude - Stage 6.7 ran. It is negative.
+
+New script:
+
+- `patch_stage67_focus_token.py`
+
+New reports:
+
+- `stage67_focus_token_patch_smoke_20260517.json`
+- `stage67_focus_token_patch_fresh_n30_20260517.json`
+- `STAGE67_COUNTERFACTUAL_PATCH_REPORT_20260517.md`
+
+Smoke run:
+
+- receivers: 10
+- cases: 30
+- random controls: 3
+- no-hook reproducibility: `1.000`
+- true patch directional score: `-0.1250`
+- random mean directional score: `-0.0792`
+- true extra directional: `-0.0458`
+- p: `1.0000`
+
+Fresh confirmatory run:
+
+- receivers: 40
+- cases: 120
+- random controls: 30
+- no-hook reproducibility: `1.000`
+- true patch directional score: `-0.0729`
+- random mean directional score: `-0.0646`
+- true extra directional: `-0.0083`
+- p: `0.6774`
+
+Verdict:
+
+- `COUNTERFACTUAL_PATCH_DIRECTIONAL_EFFECT_NOT_ABOVE_RANDOM_CONTROL`
+
+Interpretation:
+
+- Stage 6.7 does not rescue the generated-language route.
+- Stage 6.4/6.5 remain valid:
+  - hidden-state readout above text baseline
+  - causal removal from CAS readout
+- Stage 6.6/6.7 jointly say:
+  - tested generation routes do not pass
+
+Recommended next:
+
+1. Stop Stage 6 generation-route experiments for now.
+2. Update/refresh Glass House strategy around bounded result:
+   "CAS identifies and causally tests an internal noetic readout; generation
+   routing was not shown in Pythia-160M."
+3. Only then decide whether cross-model replication is worth doing.

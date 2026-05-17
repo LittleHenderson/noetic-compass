@@ -68,6 +68,7 @@ Stakeholder-safe one-liner:
 | Baseline | Is it better than text-only classifiers? | Yes. |
 | Readout causality | Does removing the subspace break the CAS readout? | Yes. |
 | Generation causality | Does removing the subspace reliably change generated text more than random controls? | No. |
+| Counterfactual routing | Does patching a matched donor focus-token activation route generated text toward the donor? | No. |
 | Cross-model generality | Does this hold across open models? | Not tested. |
 
 ## Reviewer Playbook
@@ -146,10 +147,17 @@ If Stage 6.7 fails:
 > Pythia carries a CAS-readable noetic signal and the readout depends on it,
 > but this test did not show that the signal routes generation.
 
+Stage 6.7 result, 2026-05-17:
+
+> Failed. Fresh confirmatory run used 40 receivers, 120 cases, and 30 random
+> donor controls. True patch directional score was `-0.0729`; random donor
+> mean was `-0.0646`; extra directional score was `-0.0083`; empirical p was
+> `0.6774`.
+
 ## Current Bottom Line
 
 The honest Stage 6 result is still valuable:
 
 > CAS does not open the whole black box. It opens a verified window: a specific
 > internal noetic readout can be found, measured above baselines, and causally
-> removed from the readout. The generated-language route remains open research.
+> removed from the readout. The tested generation routes did not pass.
