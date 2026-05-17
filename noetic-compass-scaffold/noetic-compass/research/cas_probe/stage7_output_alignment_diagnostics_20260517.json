@@ -1,0 +1,319 @@
+{
+  "activations_file": "stage7_foundation_pilot_activations_20260517.npz",
+  "activations_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+  "elapsed_seconds": 139.13908491376787,
+  "experiment": "Stage 7 output-alignment diagnostics for Foundation/Drive probe subspaces",
+  "implication": "The tested Stage 7 readout subspaces are not specially aligned with the output head by these diagnostics. That explains why subtraction at layer 6 failed to steer generation and argues against more layer-6 free-generation hooks.",
+  "input_file": "stage7_foundation_pilot_20260517.jsonl",
+  "input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "layer": 6,
+  "model": {
+    "hidden_dim": 768,
+    "model_name": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "model_source": "EleutherAI/pythia-160m",
+    "torch": "2.5.1+cu124",
+    "transformers": "5.8.1",
+    "vocab_size": 50304
+  },
+  "n_random": 200,
+  "plain_english_read": "This diagnostic checks whether the CAS readout subspaces point toward Pythia's output head. It does not run generation and does not prove steering. It tells us whether the already-proven readout directions look like plausible output-writing directions or mostly like observer/readout directions.",
+  "principal_angle_full_unembedding_rowspace": {
+    "degenerate_full_rowspace": true,
+    "hidden_dim": 768,
+    "interpretation": "Because Pythia's unembedding is numerically full-rank over the hidden dimension, principal angles to the full unembedding row space are all zero for any hidden-state subspace. The raw principal-angle test proposed in the roundtable is therefore degenerate for this model; the useful version is rank-matched energy/top-mode/logit-lens alignment against random controls.",
+    "rank": 768
+  },
+  "readout": "X_focus",
+  "schema_version": "stage7_output_alignment_diagnostics.v1",
+  "seed": 71941,
+  "split": {
+    "test": 2352,
+    "train": 1344,
+    "val": 672
+  },
+  "status": "STAGE7_SUBSPACES_NOT_OUTPUT_ALIGNED_ABOVE_RANDOM",
+  "tasks": {
+    "drive": {
+      "alignment": {
+        "logit_lens_energy_fraction_on_locked_test": {
+          "actual": 0.0009650070672687816,
+          "actual_over_random_mean": 0.3671298146680368,
+          "actual_percentile_vs_random": 0.45,
+          "empirical_p_random_ge_actual": 0.5522388059701493,
+          "empirical_p_random_le_actual": null,
+          "n_random": 200,
+          "random_mean": 0.002628517294737701,
+          "random_p05": 0.0002677152683305951,
+          "random_p50": 0.0010646247072749662,
+          "random_p95": 0.009219706877480657,
+          "random_std": 0.0038358518145857204
+        },
+        "rank": 6,
+        "status": "OUTPUT_ALIGNMENT_NEAR_RANDOM",
+        "task": "drive",
+        "top_unembedding_mode_overlap": {
+          "top_128": {
+            "actual": 0.18610615699992064,
+            "actual_over_random_mean": 1.1220163861098018,
+            "actual_percentile_vs_random": 0.995,
+            "empirical_p_random_ge_actual": 0.009950248756218905,
+            "empirical_p_random_le_actual": null,
+            "n_random": 200,
+            "random_mean": 0.16586759275876392,
+            "random_p05": 0.15354632497068185,
+            "random_p50": 0.16568691938546248,
+            "random_p95": 0.17991187901452307,
+            "random_std": 0.00804628776396739
+          },
+          "top_16": {
+            "actual": 0.019705290311697637,
+            "actual_over_random_mean": 0.9526914654319234,
+            "actual_percentile_vs_random": 0.415,
+            "empirical_p_random_ge_actual": 0.5870646766169154,
+            "empirical_p_random_le_actual": null,
+            "n_random": 200,
+            "random_mean": 0.02068381110432622,
+            "random_p05": 0.01583034300203395,
+            "random_p50": 0.02048732731015023,
+            "random_p95": 0.026246141216433278,
+            "random_std": 0.003152422516543054
+          },
+          "top_256": {
+            "actual": 0.34270284252785216,
+            "actual_over_random_mean": 1.0294224170002082,
+            "actual_percentile_vs_random": 0.835,
+            "empirical_p_random_ge_actual": 0.1691542288557214,
+            "empirical_p_random_le_actual": null,
+            "n_random": 200,
+            "random_mean": 0.3329078878294748,
+            "random_p05": 0.31659813266915693,
+            "random_p50": 0.33279070074615247,
+            "random_p95": 0.347167750591061,
+            "random_std": 0.009594435855679238
+          },
+          "top_32": {
+            "actual": 0.04175082418262399,
+            "actual_over_random_mean": 1.0067333309004742,
+            "actual_percentile_vs_random": 0.56,
+            "empirical_p_random_ge_actual": 0.4427860696517413,
+            "empirical_p_random_le_actual": null,
+            "n_random": 200,
+            "random_mean": 0.04147158229605838,
+            "random_p05": 0.035330649889756975,
+            "random_p50": 0.04129955671814976,
+            "random_p95": 0.04895664824363968,
+            "random_std": 0.004219062349670608
+          },
+          "top_64": {
+            "actual": 0.09312774766255522,
+            "actual_over_random_mean": 1.1221685126419074,
+            "actual_percentile_vs_random": 0.935,
+            "empirical_p_random_ge_actual": 0.06965174129353234,
+            "empirical_p_random_le_actual": null,
+            "n_random": 200,
+            "random_mean": 0.08298909353935241,
+            "random_p05": 0.07349029597937322,
+            "random_p50": 0.08259821237374415,
+            "random_p95": 0.0934850110540739,
+            "random_std": 0.006124663297566995
+          }
+        },
+        "unembedding_energy_fraction": {
+          "actual": 0.01026849978745503,
+          "actual_over_random_mean": 1.327237884877041,
+          "actual_percentile_vs_random": 0.765,
+          "empirical_p_random_ge_actual": 0.23880597014925373,
+          "empirical_p_random_le_actual": null,
+          "n_random": 200,
+          "random_mean": 0.007736744033950126,
+          "random_p05": 0.0024689631514576565,
+          "random_p50": 0.006984225296131196,
+          "random_p95": 0.015039483131654378,
+          "random_std": 0.003929876856535679
+        }
+      },
+      "rank": 6,
+      "readout_accuracy": {
+        "test": 0.8907312925170068,
+        "train": 1.0,
+        "val": 1.0
+      },
+      "singular_values": [
+        25.31493704010505,
+        21.541261458083802,
+        21.222247522322313,
+        20.33727472281442,
+        18.60539751316088,
+        17.133280375231575,
+        9.655814307248187e-14
+      ]
+    },
+    "interaction": {
+      "alignment": {
+        "logit_lens_energy_fraction_on_locked_test": {
+          "actual": 0.01833088953729151,
+          "actual_over_random_mean": 1.2158722236044877,
+          "actual_percentile_vs_random": 0.75,
+          "empirical_p_random_ge_actual": 0.2537313432835821,
+          "empirical_p_random_le_actual": null,
+          "n_random": 200,
+          "random_mean": 0.015076328894946762,
+          "random_p05": 0.001489078905194766,
+          "random_p50": 0.007580314917945783,
+          "random_p95": 0.05467002221403959,
+          "random_std": 0.01969381060959356
+        },
+        "rank": 27,
+        "status": "OUTPUT_ALIGNMENT_NEAR_RANDOM",
+        "task": "interaction",
+        "top_unembedding_mode_overlap": {
+          "top_128": {
+            "actual": 0.1837289540159857,
+            "actual_over_random_mean": 1.1027845518432802,
+            "actual_percentile_vs_random": 1.0,
+            "empirical_p_random_ge_actual": 0.004975124378109453,
+            "empirical_p_random_le_actual": null,
+            "n_random": 200,
+            "random_mean": 0.16660457721219143,
+            "random_p05": 0.16033123105289637,
+            "random_p50": 0.16641999538112395,
+            "random_p95": 0.17237500929504207,
+            "random_std": 0.003701391383955511
+          },
+          "top_16": {
+            "actual": 0.0192350248402092,
+            "actual_over_random_mean": 0.9186644196425044,
+            "actual_percentile_vs_random": 0.115,
+            "empirical_p_random_ge_actual": 0.8855721393034826,
+            "empirical_p_random_le_actual": null,
+            "n_random": 200,
+            "random_mean": 0.02093803180893242,
+            "random_p05": 0.018692759396336286,
+            "random_p50": 0.020878006650854215,
+            "random_p95": 0.023583954617722756,
+            "random_std": 0.001517487016743008
+          },
+          "top_256": {
+            "actual": 0.34706225713907773,
+            "actual_over_random_mean": 1.0422158143859273,
+            "actual_percentile_vs_random": 1.0,
+            "empirical_p_random_ge_actual": 0.004975124378109453,
+            "empirical_p_random_le_actual": null,
+            "n_random": 200,
+            "random_mean": 0.3330042130895572,
+            "random_p05": 0.32568463562536176,
+            "random_p50": 0.33287720592789133,
+            "random_p95": 0.34042312083256127,
+            "random_std": 0.004550928584819756
+          },
+          "top_32": {
+            "actual": 0.044628257194717184,
+            "actual_over_random_mean": 1.0721843198647214,
+            "actual_percentile_vs_random": 0.93,
+            "empirical_p_random_ge_actual": 0.07462686567164178,
+            "empirical_p_random_le_actual": null,
+            "n_random": 200,
+            "random_mean": 0.04162368015263269,
+            "random_p05": 0.03796142106255484,
+            "random_p50": 0.04173145167505801,
+            "random_p95": 0.044808309096944936,
+            "random_std": 0.00198435422773352
+          },
+          "top_64": {
+            "actual": 0.09439873534255643,
+            "actual_over_random_mean": 1.132762962390122,
+            "actual_percentile_vs_random": 1.0,
+            "empirical_p_random_ge_actual": 0.004975124378109453,
+            "empirical_p_random_le_actual": null,
+            "n_random": 200,
+            "random_mean": 0.08333494162218699,
+            "random_p05": 0.0786905041774305,
+            "random_p50": 0.08348626605537815,
+            "random_p95": 0.08759965455419969,
+            "random_std": 0.0027608485536642392
+          }
+        },
+        "unembedding_energy_fraction": {
+          "actual": 0.0408164301787622,
+          "actual_over_random_mean": 1.1576478971409778,
+          "actual_percentile_vs_random": 0.755,
+          "empirical_p_random_ge_actual": 0.24875621890547264,
+          "empirical_p_random_le_actual": null,
+          "n_random": 200,
+          "random_mean": 0.03525806964238937,
+          "random_p05": 0.022904226160400963,
+          "random_p50": 0.03514268485346596,
+          "random_p95": 0.04966614887305714,
+          "random_std": 0.008315848091234361
+        }
+      },
+      "rank": 27,
+      "readout_accuracy": {
+        "test": 0.7857142857142857,
+        "train": 1.0,
+        "val": 0.9985119047619048
+      },
+      "singular_values": [
+        34.93343403192625,
+        32.95537031838813,
+        30.388847065655224,
+        28.902223858739724,
+        27.408851521876475,
+        26.8326906484827,
+        25.416775375409976,
+        24.629999283250978,
+        23.919892097283387,
+        12.794616069200043,
+        10.824228840796888,
+        10.126318543665201,
+        9.689566821242035,
+        8.011563579545033,
+        7.453708502688569,
+        7.365264529800236,
+        7.072899877019723,
+        6.846219373172008,
+        6.510777130787124,
+        6.294203201530604,
+        6.243906665538001,
+        5.860939115192838,
+        5.632438951648777,
+        5.455452270855294,
+        5.232786785063248,
+        5.162013437249556,
+        4.454321816739113,
+        6.111142617767057e-14
+      ]
+    }
+  },
+  "unembedding": {
+    "rank_tol": 0.004606572732915207,
+    "shape": [
+      50304,
+      768
+    ],
+    "top_eigenvalues": [
+      460657.27329152066,
+      3602.0165278892764,
+      1170.1544771914794,
+      687.3378170435619,
+      611.1182692483477,
+      409.57302501100816,
+      376.08448475434346,
+      366.0875232875455,
+      336.04314131814846,
+      278.0643173247156,
+      271.5727511336401,
+      255.7783124165908,
+      250.85991255948758,
+      240.9341348742085,
+      222.27004366372626,
+      215.12777337172884,
+      210.60455436258846,
+      205.71483266883075,
+      198.97360120358366,
+      185.2995122024846
+    ],
+    "total_frobenius_energy": 508471.33140945854
+  }
+}

@@ -4634,3 +4634,106 @@ Four independent reviews converged:
 4. Should shuffled-label probe subspace be mandatory in the locked test?
 5. Are the Stage 7.4 pass gates strict enough to prevent p-hacking while still
    allowing a real effect to surface?
+
+---
+
+## 2026-05-17T19:25Z - Stage 7 Claude-route diagnostics run
+
+Codex - user asked us to continue, but also supplied Claude's objection that we
+should run free output-alignment diagnostics first and, if the old route looked
+wrong, try late-layer additive steering with Embodied register explicitly
+tested. I ran both.
+
+### Commit scope pending
+
+New scripts:
+
+- `diagnose_stage7_output_alignment.py`
+- `probe_stage7_late_layer_additive.py`
+
+New reports:
+
+- `stage7_output_alignment_diagnostics_20260517.json`
+- `STAGE7_OUTPUT_ALIGNMENT_DIAGNOSTICS_20260517.md`
+- `stage7_late_layer_additive_probe_20260517.json`
+- `STAGE7_LATE_LAYER_ADDITIVE_PROBE_20260517.md`
+- `stage7_late_layer_additive_probe_embodied_20260517.json`
+- `STAGE7_LATE_LAYER_ADDITIVE_PROBE_EMBODIED_20260517.md`
+
+### Stage 7.OA - output alignment
+
+Result: `STAGE7_SUBSPACES_NOT_OUTPUT_ALIGNED_ABOVE_RANDOM`
+
+- Raw principal-angle test to the full unembedding row-space is degenerate:
+  Pythia's unembedding is full hidden-rank (`768/768`), so every hidden subspace
+  lies in that row-space.
+- Useful replacement diagnostics:
+  - Drive rank 6: unembedding energy `0.010268` vs random `0.007737`;
+    logit-lens energy `0.000965` vs random `0.002629`.
+  - Interaction rank 27: unembedding energy `0.040816` vs random `0.035258`;
+    logit-lens energy `0.018331` vs random `0.015076`.
+- Both tasks classified `OUTPUT_ALIGNMENT_NEAR_RANDOM`, not above-random output
+  alignment.
+
+Interpretation:
+
+> The Stage 7 layer-6 readout subspaces are real observer/readout directions,
+> not specially output-writing directions by these diagnostics. This explains
+> the Stage 7.3 layer-6 subtraction failure.
+
+### Stage 7.LA - late-layer additive probe
+
+Translated Claude's fallback into a bounded two-choice logit-margin test:
+
+- Layers 10 and 11.
+- Additive `+/- alpha * Drive direction`, alpha `-4, -2, +2, +4`.
+- Random rank-1 controls: 30.
+- Scored `logit(correct_option) - logit(incorrect_option)`.
+- Reused Stage 7 test rows, so this is explicitly exploratory, not a fresh
+  claim-bearing fixture.
+
+All-register run:
+
+- Status: `EXPLORATORY_LATE_LAYER_ADDITIVE_NOT_ABOVE_RANDOM_GATE`.
+- Best condition: layer 11 alpha `-2`.
+- Extra signed margin over random: `+0.0488`.
+- Empirical p: `0.2581`.
+- Positive share: `0.179`.
+
+Embodied-only `|E` run:
+
+- Status: `EXPLORATORY_LATE_LAYER_ADDITIVE_NOT_ABOVE_RANDOM_GATE`.
+- Best condition: layer 11 alpha `+4`.
+- Extra signed margin over random: `+0.0440`.
+- Empirical p: `0.1935`.
+- Positive share: `0.357`.
+
+Interpretation:
+
+> Claude's late-layer/additive/Embodied fallback was worth testing. It did not
+> clear the random-control gate in this Pythia-160M setup.
+
+### Updated evidence boundary
+
+Still supported:
+
+- 28-Foundation hidden-state readout above text and metadata.
+- Readout-causal ablation to chance.
+- Drive and full Drive x Register factorization.
+
+Still not supported:
+
+- Generated-language steering/control in Pythia-160M.
+- "CAS solved the black-box problem."
+
+### Audit asks
+
+1. Check whether the output-alignment script's replacement for the degenerate
+   row-space principal-angle test is mathematically sound.
+2. Check whether the late-layer additive script fairly implements Claude's
+   fallback: layers 10/11, additive operator, alpha sweep, Embodied slice.
+3. Confirm the negative interpretation: Pythia-160M now looks like strong
+   readout/readout-causal evidence, not steering evidence.
+4. Recommend whether the next step should be fresh Stage 7.4 forced-choice
+   confirmation, path/SAE diagnostics, or stopping Pythia steering work and
+   moving to CAS Native / a larger open model.

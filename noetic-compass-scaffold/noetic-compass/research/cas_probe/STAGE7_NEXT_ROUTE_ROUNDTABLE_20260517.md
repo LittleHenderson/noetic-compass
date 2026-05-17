@@ -287,3 +287,94 @@ outside reviewer to audit.
    only a diagnostic?
 5. Does this memo preserve the correct claim boundary from the Stage 7 claims
    matrix?
+
+## Post-Roundtable Execution Addendum
+
+The user then supplied a Claude research synthesis that challenged this memo's
+ordering. It argued that two free output-alignment diagnostics should run before
+any fresh Stage 7.4 fixture, and that if the old layer-6 subtraction route
+looked wrong, the fallback should be a late-layer additive probe at layers 10
+and 11, with the Embodied register tested explicitly.
+
+Those checks were run.
+
+### Stage 7.OA: Output-Alignment Diagnostics
+
+Report:
+
+- `stage7_output_alignment_diagnostics_20260517.json`
+- `STAGE7_OUTPUT_ALIGNMENT_DIAGNOSTICS_20260517.md`
+
+Result:
+
+- Raw principal-angle-to-unembedding-row-space test is degenerate for
+  Pythia-160M because the unembedding is full hidden-rank: `768/768`.
+- Drive subspace: `OUTPUT_ALIGNMENT_NEAR_RANDOM`.
+- 28-way interaction subspace: `OUTPUT_ALIGNMENT_NEAR_RANDOM`.
+- Verdict: `STAGE7_SUBSPACES_NOT_OUTPUT_ALIGNED_ABOVE_RANDOM`.
+
+Interpretation:
+
+> The Stage 7 layer-6 readout subspaces are real observer/readout directions,
+> but they are not specially aligned with Pythia's output head by these
+> diagnostics. This explains why layer-6 subtraction did not steer generation.
+
+### Stage 7.LA: Late-Layer Additive Probe
+
+Reports:
+
+- `stage7_late_layer_additive_probe_20260517.json`
+- `STAGE7_LATE_LAYER_ADDITIVE_PROBE_20260517.md`
+- `stage7_late_layer_additive_probe_embodied_20260517.json`
+- `STAGE7_LATE_LAYER_ADDITIVE_PROBE_EMBODIED_20260517.md`
+
+All-register exploratory run:
+
+- Layers: 10 and 11.
+- Alpha sweep: `-4, -2, +2, +4`.
+- Random rank-1 controls: 30.
+- Best condition: layer 11, alpha `-2`.
+- Extra signed margin over random: `+0.0488`.
+- Empirical p: `0.2581`.
+- Positive share: `0.179`.
+- Verdict: `EXPLORATORY_LATE_LAYER_ADDITIVE_NOT_ABOVE_RANDOM_GATE`.
+
+Embodied-only `|E` run:
+
+- Same layers, alpha sweep, and controls.
+- Best condition: layer 11, alpha `+4`.
+- Extra signed margin over random: `+0.0440`.
+- Empirical p: `0.1935`.
+- Positive share: `0.357`.
+- Verdict: `EXPLORATORY_LATE_LAYER_ADDITIVE_NOT_ABOVE_RANDOM_GATE`.
+
+Interpretation:
+
+> Claude's fallback was worth trying, but it did not clear the random-control
+> gate in this Pythia-160M setup. The best effects are small, not reliable, and
+> not broad across cases.
+
+### Updated Route
+
+The evidence now supports this stricter boundary:
+
+- Stage 7 readout is strong.
+- Stage 7 readout-causal ablation is strong.
+- Stage 7 factorization is strong for Drive and full Drive x Register
+  interaction.
+- Layer-6 output alignment is not above random.
+- Late-layer additive Drive steering is not above random in the exploratory
+  test, including the Embodied-only slice.
+
+The next move should not be another simple ablation/addition hook. If we keep
+working Pythia-160M, the next route is either:
+
+1. **Fresh Stage 7.4 forced-choice fixture** as a final bounded confirmation
+   that Pythia-160M remains readout-only under a clean held-out assay, or
+2. **Path/SAE diagnostics** to locate whether the Foundation signal routes
+   through polysemantic features that a linear Drive direction cannot isolate.
+
+The safe claim does not change:
+
+> CAS opens a verified internal readout window inside Pythia-160M. It has not
+> shown steering control over Pythia-160M generated language.
