@@ -1,0 +1,1244 @@
+{
+  "activations_file": "stage11_expression_shapes_full_activations_20260517.npz",
+  "activations_sha256": "ecc9c29c32ebc3e50993c9edc00ee4d894dd9b5096897f31fd497c3a1a3351ac",
+  "boundary": "Readout coherence audit only. Does not prove formula solving, compiler execution, raw-symbol parsing, or visible generation control.",
+  "coherence_notes": [
+    "No class collapse: all 10 labels appear with at least 0.857 accuracy; worst class is fractal_sequence.",
+    "The top errors are concentrated in structurally adjacent shapes rather than scattered uniformly.",
+    "Readout-causal ablation remains the stronger mechanical check: targeted subspace removal drops the trained readout to exact chance.",
+    "Largest confusion is fractal_sequence -> meta_logic_relation (40 examples); this is the first row to audit manually."
+  ],
+  "coherence_verdict": "COHERENT_WITH_ADJACENT_CONFUSIONS",
+  "examples_by_gold": {
+    "binary_composition": [
+      {
+        "confidence": 0.9999967809243752,
+        "correct": true,
+        "english": "A is the process signal showing how two marked conditions are linked together so the relation between them is the point inside route update; B is the process signal showing how one named outcome is carried across different modes of presentation without losing its identity inside route update. Focus: A.",
+        "focus_span": "A",
+        "gold": "binary_composition",
+        "hard_contrast_shapes": [
+          "binary_composition",
+          "cross_register_omega"
+        ],
+        "pair_kind": "shape_cross_half_binary_composition_vs_cross_register_omega",
+        "paraphrase_family": "system_process",
+        "predicted": "binary_composition",
+        "sample_id": "s11_full_bundle051_public_transit_shape_cross_half_binary_composition_vs_cross_register_omega_system_process_binary_composition"
+      },
+      {
+        "confidence": 0.9999955245748278,
+        "correct": true,
+        "english": "A is not the neighboring role, but the aspect where two marked conditions are linked together so the relation between them is the point; B is not the neighboring role, but the aspect where a temporary name is introduced first and then reused later inside the same record. Focus: A.",
+        "focus_span": "A",
+        "gold": "binary_composition",
+        "hard_contrast_shapes": [
+          "binary_composition",
+          "let_binding"
+        ],
+        "pair_kind": "shape_cycle_next_binary_composition_vs_let_binding",
+        "paraphrase_family": "counter_alias_hard_negative",
+        "predicted": "binary_composition",
+        "sample_id": "s11_full_bundle041_patient_triage_shape_cycle_next_binary_composition_vs_let_binding_counter_alias_hard_negative_binary_composition"
+      },
+      {
+        "confidence": 0.43637329756440313,
+        "correct": true,
+        "english": "A is the role that remains active while vehicle team changes, because one marked condition stands by itself without another relation attached before the record settles; while the record unfolds, B is the role that remains active while vehicle team changes, because two marked conditions are linked together so the relation between them is the point before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "binary_composition",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "binary_composition"
+        ],
+        "pair_kind": "shape_cycle_next_state_literal_vs_binary_composition",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "binary_composition",
+        "sample_id": "s11_full_bundle059_vehicle_recall_shape_cycle_next_state_literal_vs_binary_composition_long_embedded_clause_binary_composition"
+      },
+      {
+        "confidence": 0.4521458541801471,
+        "correct": true,
+        "english": "A is the role that remains active while study crew changes, because one marked condition stands by itself without another relation attached before the record settles; while the record unfolds, B is the role that remains active while study crew changes, because two marked conditions are linked together so the relation between them is the point before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "binary_composition",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "binary_composition"
+        ],
+        "pair_kind": "shape_cycle_next_state_literal_vs_binary_composition",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "binary_composition",
+        "sample_id": "s11_full_bundle052_wildlife_study_shape_cycle_next_state_literal_vs_binary_composition_long_embedded_clause_binary_composition"
+      },
+      {
+        "confidence": 0.4203370119044456,
+        "correct": false,
+        "english": "A is the role that remains active while dining crew changes, because one marked condition stands by itself without another relation attached before the record settles; while the record unfolds, B is the role that remains active while dining crew changes, because two marked conditions are linked together so the relation between them is the point before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "binary_composition",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "binary_composition"
+        ],
+        "pair_kind": "shape_cycle_next_state_literal_vs_binary_composition",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "inversion",
+        "sample_id": "s11_full_bundle049_restaurant_service_shape_cycle_next_state_literal_vs_binary_composition_long_embedded_clause_binary_composition"
+      }
+    ],
+    "cross_register_omega": [
+      {
+        "confidence": 0.9999470167973583,
+        "correct": true,
+        "english": "A is the process signal showing how a repeating pattern of moves is applied in order so each pass follows the previous one inside survey map; B is the process signal showing how one named outcome is carried across different modes of presentation without losing its identity inside survey map. Focus: B.",
+        "focus_span": "B",
+        "gold": "cross_register_omega",
+        "hard_contrast_shapes": [
+          "fractal_sequence",
+          "cross_register_omega"
+        ],
+        "pair_kind": "shape_cycle_next_fractal_sequence_vs_cross_register_omega",
+        "paraphrase_family": "system_process",
+        "predicted": "cross_register_omega",
+        "sample_id": "s11_full_bundle055_ocean_survey_shape_cycle_next_fractal_sequence_vs_cross_register_omega_system_process_cross_register_omega"
+      },
+      {
+        "confidence": 0.9999255406649885,
+        "correct": true,
+        "english": "A is the process signal showing how a repeating pattern of moves is applied in order so each pass follows the previous one inside care decision; B is the process signal showing how one named outcome is carried across different modes of presentation without losing its identity inside care decision. Focus: B.",
+        "focus_span": "B",
+        "gold": "cross_register_omega",
+        "hard_contrast_shapes": [
+          "fractal_sequence",
+          "cross_register_omega"
+        ],
+        "pair_kind": "shape_cycle_next_fractal_sequence_vs_cross_register_omega",
+        "paraphrase_family": "system_process",
+        "predicted": "cross_register_omega",
+        "sample_id": "s11_full_bundle041_patient_triage_shape_cycle_next_fractal_sequence_vs_cross_register_omega_system_process_cross_register_omega"
+      },
+      {
+        "confidence": 0.4210265987986643,
+        "correct": true,
+        "english": "A is the role that remains active while dining crew changes, because two marked conditions are linked together so the relation between them is the point before the record settles; while the record unfolds, B is the role that remains active while dining crew changes, because one named outcome is carried across different modes of presentation without losing its identity before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "cross_register_omega",
+        "hard_contrast_shapes": [
+          "binary_composition",
+          "cross_register_omega"
+        ],
+        "pair_kind": "shape_cross_half_binary_composition_vs_cross_register_omega",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "cross_register_omega",
+        "sample_id": "s11_full_bundle049_restaurant_service_shape_cross_half_binary_composition_vs_cross_register_omega_long_embedded_clause_cross_register_omega"
+      },
+      {
+        "confidence": 0.47207195940175173,
+        "correct": true,
+        "english": "A is the role that remains active while relief desk changes, because two marked conditions are linked together so the relation between them is the point before the record settles; while the record unfolds, B is the role that remains active while relief desk changes, because one named outcome is carried across different modes of presentation without losing its identity before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "cross_register_omega",
+        "hard_contrast_shapes": [
+          "binary_composition",
+          "cross_register_omega"
+        ],
+        "pair_kind": "shape_cross_half_binary_composition_vs_cross_register_omega",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "cross_register_omega",
+        "sample_id": "s11_full_bundle042_disaster_relief_shape_cross_half_binary_composition_vs_cross_register_omega_long_embedded_clause_cross_register_omega"
+      },
+      {
+        "confidence": 0.6337909942610623,
+        "correct": false,
+        "english": "A is the role that remains active while dining crew changes, because one named outcome is carried across different modes of presentation without losing its identity before the record settles; while the record unfolds, B is the role that remains active while dining crew changes, because one rule speaks about how another rule relates, follows, or holds together before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "cross_register_omega",
+        "hard_contrast_shapes": [
+          "cross_register_omega",
+          "meta_logic_relation"
+        ],
+        "pair_kind": "shape_cycle_next_cross_register_omega_vs_meta_logic_relation",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle049_restaurant_service_shape_cycle_next_cross_register_omega_vs_meta_logic_relation_long_embedded_clause_cross_register_omega"
+      }
+    ],
+    "diagram_export": [
+      {
+        "confidence": 0.9999598669765823,
+        "correct": true,
+        "english": "A is the usual direction is turned around so source and result exchange their roles; B is a named cluster is packaged as a reusable bundle for outside viewing. Focus: B.",
+        "focus_span": "B",
+        "gold": "diagram_export",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "compressed_minimal",
+        "predicted": "diagram_export",
+        "sample_id": "s11_full_bundle041_patient_triage_shape_cycle_next_inversion_vs_diagram_export_compressed_minimal_diagram_export"
+      },
+      {
+        "confidence": 0.9999598669765823,
+        "correct": true,
+        "english": "A is the usual direction is turned around so source and result exchange their roles; B is a named cluster is packaged as a reusable bundle for outside viewing. Focus: B.",
+        "focus_span": "B",
+        "gold": "diagram_export",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "compressed_minimal",
+        "predicted": "diagram_export",
+        "sample_id": "s11_full_bundle042_disaster_relief_shape_cycle_next_inversion_vs_diagram_export_compressed_minimal_diagram_export"
+      },
+      {
+        "confidence": 0.5199272415099887,
+        "correct": true,
+        "english": "A is the role that remains active while study crew changes, because a starting point advances through staged checkpoints before a final pass is reached before the record settles; while the record unfolds, B is the role that remains active while study crew changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "diagram_export",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cross_half_rpm_chain_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "diagram_export",
+        "sample_id": "s11_full_bundle052_wildlife_study_shape_cross_half_rpm_chain_vs_diagram_export_long_embedded_clause_diagram_export"
+      },
+      {
+        "confidence": 0.5744734717771456,
+        "correct": true,
+        "english": "A is the role that remains active while app team changes, because the usual direction is turned around so source and result exchange their roles before the record settles; while the record unfolds, B is the role that remains active while app team changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "diagram_export",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "diagram_export",
+        "sample_id": "s11_full_bundle050_mobile_app_shape_cycle_next_inversion_vs_diagram_export_long_embedded_clause_diagram_export"
+      },
+      {
+        "confidence": 0.845870675246735,
+        "correct": false,
+        "english": "A is the role that remains active while learning coach changes, because the usual direction is turned around so source and result exchange their roles before the record settles; while the record unfolds, B is the role that remains active while learning coach changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "diagram_export",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "inversion",
+        "sample_id": "s11_full_bundle047_child_tutoring_shape_cycle_next_inversion_vs_diagram_export_long_embedded_clause_diagram_export"
+      },
+      {
+        "confidence": 0.8433037529545926,
+        "correct": false,
+        "english": "A is the role that remains active while youth staff changes, because the usual direction is turned around so source and result exchange their roles before the record settles; while the record unfolds, B is the role that remains active while youth staff changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "diagram_export",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "inversion",
+        "sample_id": "s11_full_bundle060_youth_program_shape_cycle_next_inversion_vs_diagram_export_long_embedded_clause_diagram_export"
+      },
+      {
+        "confidence": 0.8378153961114674,
+        "correct": false,
+        "english": "A is the role that remains active while transit office changes, because the usual direction is turned around so source and result exchange their roles before the record settles; while the record unfolds, B is the role that remains active while transit office changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "diagram_export",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "inversion",
+        "sample_id": "s11_full_bundle051_public_transit_shape_cycle_next_inversion_vs_diagram_export_long_embedded_clause_diagram_export"
+      },
+      {
+        "confidence": 0.8119033093132194,
+        "correct": false,
+        "english": "A is the role that remains active while field vessel changes, because the usual direction is turned around so source and result exchange their roles before the record settles; while the record unfolds, B is the role that remains active while field vessel changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "diagram_export",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "inversion",
+        "sample_id": "s11_full_bundle055_ocean_survey_shape_cycle_next_inversion_vs_diagram_export_long_embedded_clause_diagram_export"
+      }
+    ],
+    "fractal_sequence": [
+      {
+        "confidence": 0.9999687225003508,
+        "correct": true,
+        "english": "A is the selected aspect of case notes where a starting point advances through staged checkpoints before a final pass is reached; B is the selected aspect of case notes where a repeating pattern of moves is applied in order so each pass follows the previous one. Focus: B.",
+        "focus_span": "B",
+        "gold": "fractal_sequence",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "fractal_sequence"
+        ],
+        "pair_kind": "shape_cycle_next_rpm_chain_vs_fractal_sequence",
+        "paraphrase_family": "role_inverse_plain",
+        "predicted": "fractal_sequence",
+        "sample_id": "s11_full_bundle048_forensics_lab_shape_cycle_next_rpm_chain_vs_fractal_sequence_role_inverse_plain_fractal_sequence"
+      },
+      {
+        "confidence": 0.9999348553765555,
+        "correct": true,
+        "english": "A is the selected aspect of case notes where one marked condition stands by itself without another relation attached; B is the selected aspect of case notes where a repeating pattern of moves is applied in order so each pass follows the previous one. Focus: B.",
+        "focus_span": "B",
+        "gold": "fractal_sequence",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "fractal_sequence"
+        ],
+        "pair_kind": "shape_cross_half_state_literal_vs_fractal_sequence",
+        "paraphrase_family": "role_inverse_plain",
+        "predicted": "fractal_sequence",
+        "sample_id": "s11_full_bundle048_forensics_lab_shape_cross_half_state_literal_vs_fractal_sequence_role_inverse_plain_fractal_sequence"
+      },
+      {
+        "confidence": 0.8509384839098584,
+        "correct": true,
+        "english": "A is the process signal showing how a repeating pattern of moves is applied in order so each pass follows the previous one inside route update; B is the process signal showing how one named outcome is carried across different modes of presentation without losing its identity inside route update. Focus: A.",
+        "focus_span": "A",
+        "gold": "fractal_sequence",
+        "hard_contrast_shapes": [
+          "fractal_sequence",
+          "cross_register_omega"
+        ],
+        "pair_kind": "shape_cycle_next_fractal_sequence_vs_cross_register_omega",
+        "paraphrase_family": "system_process",
+        "predicted": "fractal_sequence",
+        "sample_id": "s11_full_bundle051_public_transit_shape_cycle_next_fractal_sequence_vs_cross_register_omega_system_process_fractal_sequence"
+      },
+      {
+        "confidence": 0.9653520893987734,
+        "correct": true,
+        "english": "A is the process signal showing how a starting point advances through staged checkpoints before a final pass is reached inside route update; B is the process signal showing how a repeating pattern of moves is applied in order so each pass follows the previous one inside route update. Focus: B.",
+        "focus_span": "B",
+        "gold": "fractal_sequence",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "fractal_sequence"
+        ],
+        "pair_kind": "shape_cycle_next_rpm_chain_vs_fractal_sequence",
+        "paraphrase_family": "system_process",
+        "predicted": "fractal_sequence",
+        "sample_id": "s11_full_bundle051_public_transit_shape_cycle_next_rpm_chain_vs_fractal_sequence_system_process_fractal_sequence"
+      },
+      {
+        "confidence": 0.9159102087499997,
+        "correct": false,
+        "english": "A is the role that remains active while relief desk changes, because a starting point advances through staged checkpoints before a final pass is reached before the record settles; while the record unfolds, B is the role that remains active while relief desk changes, because a repeating pattern of moves is applied in order so each pass follows the previous one before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "fractal_sequence",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "fractal_sequence"
+        ],
+        "pair_kind": "shape_cycle_next_rpm_chain_vs_fractal_sequence",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle042_disaster_relief_shape_cycle_next_rpm_chain_vs_fractal_sequence_long_embedded_clause_fractal_sequence"
+      },
+      {
+        "confidence": 0.9139930444737665,
+        "correct": false,
+        "english": "A is the role that remains active while study crew changes, because one marked condition stands by itself without another relation attached before the record settles; while the record unfolds, B is the role that remains active while study crew changes, because a repeating pattern of moves is applied in order so each pass follows the previous one before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "fractal_sequence",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "fractal_sequence"
+        ],
+        "pair_kind": "shape_cross_half_state_literal_vs_fractal_sequence",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle052_wildlife_study_shape_cross_half_state_literal_vs_fractal_sequence_long_embedded_clause_fractal_sequence"
+      },
+      {
+        "confidence": 0.9024527334153807,
+        "correct": false,
+        "english": "A is the role that remains active while study crew changes, because a starting point advances through staged checkpoints before a final pass is reached before the record settles; while the record unfolds, B is the role that remains active while study crew changes, because a repeating pattern of moves is applied in order so each pass follows the previous one before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "fractal_sequence",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "fractal_sequence"
+        ],
+        "pair_kind": "shape_cycle_next_rpm_chain_vs_fractal_sequence",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle052_wildlife_study_shape_cycle_next_rpm_chain_vs_fractal_sequence_long_embedded_clause_fractal_sequence"
+      },
+      {
+        "confidence": 0.8956861744646875,
+        "correct": false,
+        "english": "A is the role that remains active while repair shop changes, because a starting point advances through staged checkpoints before a final pass is reached before the record settles; while the record unfolds, B is the role that remains active while repair shop changes, because a repeating pattern of moves is applied in order so each pass follows the previous one before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "fractal_sequence",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "fractal_sequence"
+        ],
+        "pair_kind": "shape_cycle_next_rpm_chain_vs_fractal_sequence",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle056_hardware_repair_shape_cycle_next_rpm_chain_vs_fractal_sequence_long_embedded_clause_fractal_sequence"
+      }
+    ],
+    "inversion": [
+      {
+        "confidence": 0.9999761449457347,
+        "correct": true,
+        "english": "A is the selected aspect of species records where a desired outcome is built from required contributors with different amounts of influence; B is the selected aspect of species records where the usual direction is turned around so source and result exchange their roles. Focus: B.",
+        "focus_span": "B",
+        "gold": "inversion",
+        "hard_contrast_shapes": [
+          "recipe",
+          "inversion"
+        ],
+        "pair_kind": "shape_cross_half_recipe_vs_inversion",
+        "paraphrase_family": "role_inverse_plain",
+        "predicted": "inversion",
+        "sample_id": "s11_full_bundle052_wildlife_study_shape_cross_half_recipe_vs_inversion_role_inverse_plain_inversion"
+      },
+      {
+        "confidence": 0.9999405332794414,
+        "correct": true,
+        "english": "A is the selected aspect of bug history where one rule speaks about how another rule relates, follows, or holds together; B is the selected aspect of bug history where the usual direction is turned around so source and result exchange their roles. Focus: B.",
+        "focus_span": "B",
+        "gold": "inversion",
+        "hard_contrast_shapes": [
+          "meta_logic_relation",
+          "inversion"
+        ],
+        "pair_kind": "shape_cycle_next_meta_logic_relation_vs_inversion",
+        "paraphrase_family": "role_inverse_plain",
+        "predicted": "inversion",
+        "sample_id": "s11_full_bundle050_mobile_app_shape_cycle_next_meta_logic_relation_vs_inversion_role_inverse_plain_inversion"
+      },
+      {
+        "confidence": 0.6019584268181608,
+        "correct": true,
+        "english": "A is the role that remains active while forensics unit changes, because one rule speaks about how another rule relates, follows, or holds together before the record settles; while the record unfolds, B is the role that remains active while forensics unit changes, because the usual direction is turned around so source and result exchange their roles before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "inversion",
+        "hard_contrast_shapes": [
+          "meta_logic_relation",
+          "inversion"
+        ],
+        "pair_kind": "shape_cycle_next_meta_logic_relation_vs_inversion",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "inversion",
+        "sample_id": "s11_full_bundle048_forensics_lab_shape_cycle_next_meta_logic_relation_vs_inversion_long_embedded_clause_inversion"
+      },
+      {
+        "confidence": 0.6279325355048169,
+        "correct": true,
+        "english": "A is the role that remains active while study crew changes, because one rule speaks about how another rule relates, follows, or holds together before the record settles; while the record unfolds, B is the role that remains active while study crew changes, because the usual direction is turned around so source and result exchange their roles before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "inversion",
+        "hard_contrast_shapes": [
+          "meta_logic_relation",
+          "inversion"
+        ],
+        "pair_kind": "shape_cycle_next_meta_logic_relation_vs_inversion",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "inversion",
+        "sample_id": "s11_full_bundle052_wildlife_study_shape_cycle_next_meta_logic_relation_vs_inversion_long_embedded_clause_inversion"
+      },
+      {
+        "confidence": 0.8357078117223542,
+        "correct": false,
+        "english": "A is the role that remains active while app team changes, because the usual direction is turned around so source and result exchange their roles before the record settles; while the record unfolds, B is the role that remains active while app team changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "inversion",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle050_mobile_app_shape_cycle_next_inversion_vs_diagram_export_long_embedded_clause_inversion"
+      },
+      {
+        "confidence": 0.8012413715164621,
+        "correct": false,
+        "english": "A is the role that remains active while learning coach changes, because the usual direction is turned around so source and result exchange their roles before the record settles; while the record unfolds, B is the role that remains active while learning coach changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "inversion",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle047_child_tutoring_shape_cycle_next_inversion_vs_diagram_export_long_embedded_clause_inversion"
+      },
+      {
+        "confidence": 0.7655908614382169,
+        "correct": false,
+        "english": "A is the role that remains active while repair shop changes, because the usual direction is turned around so source and result exchange their roles before the record settles; while the record unfolds, B is the role that remains active while repair shop changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "inversion",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle056_hardware_repair_shape_cycle_next_inversion_vs_diagram_export_long_embedded_clause_inversion"
+      },
+      {
+        "confidence": 0.7511567374230549,
+        "correct": false,
+        "english": "A is the role that remains active while youth staff changes, because the usual direction is turned around so source and result exchange their roles before the record settles; while the record unfolds, B is the role that remains active while youth staff changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "inversion",
+        "hard_contrast_shapes": [
+          "inversion",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cycle_next_inversion_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle060_youth_program_shape_cycle_next_inversion_vs_diagram_export_long_embedded_clause_inversion"
+      }
+    ],
+    "let_binding": [
+      {
+        "confidence": 0.9999853768478807,
+        "correct": true,
+        "english": "A is the selected aspect of reading log where a temporary name is introduced first and then reused later inside the same record; B is the selected aspect of reading log where a desired outcome is built from required contributors with different amounts of influence. Focus: A.",
+        "focus_span": "A",
+        "gold": "let_binding",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "recipe"
+        ],
+        "pair_kind": "shape_cycle_next_let_binding_vs_recipe",
+        "paraphrase_family": "role_inverse_plain",
+        "predicted": "let_binding",
+        "sample_id": "s11_full_bundle047_child_tutoring_shape_cycle_next_let_binding_vs_recipe_role_inverse_plain_let_binding"
+      },
+      {
+        "confidence": 0.9999775362638403,
+        "correct": true,
+        "english": "A is the selected aspect of warranty records where a temporary name is introduced first and then reused later inside the same record; B is the selected aspect of warranty records where a desired outcome is built from required contributors with different amounts of influence. Focus: A.",
+        "focus_span": "A",
+        "gold": "let_binding",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "recipe"
+        ],
+        "pair_kind": "shape_cycle_next_let_binding_vs_recipe",
+        "paraphrase_family": "role_inverse_plain",
+        "predicted": "let_binding",
+        "sample_id": "s11_full_bundle059_vehicle_recall_shape_cycle_next_let_binding_vs_recipe_role_inverse_plain_let_binding"
+      },
+      {
+        "confidence": 0.5723744413205412,
+        "correct": true,
+        "english": "A is the role that remains active while housing office changes, because a temporary name is introduced first and then reused later inside the same record before the record settles; while the record unfolds, B is the role that remains active while housing office changes, because a desired outcome is built from required contributors with different amounts of influence before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "let_binding",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "recipe"
+        ],
+        "pair_kind": "shape_cycle_next_let_binding_vs_recipe",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "let_binding",
+        "sample_id": "s11_full_bundle054_housing_case_shape_cycle_next_let_binding_vs_recipe_long_embedded_clause_let_binding"
+      },
+      {
+        "confidence": 0.8399165915729104,
+        "correct": true,
+        "english": "A is not the neighboring role, but the aspect where a temporary name is introduced first and then reused later inside the same record; B is not the neighboring role, but the aspect where one rule speaks about how another rule relates, follows, or holds together. Focus: A.",
+        "focus_span": "A",
+        "gold": "let_binding",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "meta_logic_relation"
+        ],
+        "pair_kind": "shape_cross_half_let_binding_vs_meta_logic_relation",
+        "paraphrase_family": "counter_alias_hard_negative",
+        "predicted": "let_binding",
+        "sample_id": "s11_full_bundle041_patient_triage_shape_cross_half_let_binding_vs_meta_logic_relation_counter_alias_hard_negative_let_binding"
+      },
+      {
+        "confidence": 0.9847367392070008,
+        "correct": false,
+        "english": "A is the role that remains active while dining crew changes, because a temporary name is introduced first and then reused later inside the same record before the record settles; while the record unfolds, B is the role that remains active while dining crew changes, because one rule speaks about how another rule relates, follows, or holds together before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "let_binding",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "meta_logic_relation"
+        ],
+        "pair_kind": "shape_cross_half_let_binding_vs_meta_logic_relation",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle049_restaurant_service_shape_cross_half_let_binding_vs_meta_logic_relation_long_embedded_clause_let_binding"
+      },
+      {
+        "confidence": 0.9616857141144736,
+        "correct": false,
+        "english": "A is the role that remains active while relief desk changes, because a temporary name is introduced first and then reused later inside the same record before the record settles; while the record unfolds, B is the role that remains active while relief desk changes, because one rule speaks about how another rule relates, follows, or holds together before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "let_binding",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "meta_logic_relation"
+        ],
+        "pair_kind": "shape_cross_half_let_binding_vs_meta_logic_relation",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle042_disaster_relief_shape_cross_half_let_binding_vs_meta_logic_relation_long_embedded_clause_let_binding"
+      },
+      {
+        "confidence": 0.9563253446606259,
+        "correct": false,
+        "english": "A is the role that remains active while repair shop changes, because a temporary name is introduced first and then reused later inside the same record before the record settles; while the record unfolds, B is the role that remains active while repair shop changes, because one rule speaks about how another rule relates, follows, or holds together before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "let_binding",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "meta_logic_relation"
+        ],
+        "pair_kind": "shape_cross_half_let_binding_vs_meta_logic_relation",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle056_hardware_repair_shape_cross_half_let_binding_vs_meta_logic_relation_long_embedded_clause_let_binding"
+      },
+      {
+        "confidence": 0.9465401919574262,
+        "correct": false,
+        "english": "A is the role that remains active while study crew changes, because a temporary name is introduced first and then reused later inside the same record before the record settles; while the record unfolds, B is the role that remains active while study crew changes, because one rule speaks about how another rule relates, follows, or holds together before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "let_binding",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "meta_logic_relation"
+        ],
+        "pair_kind": "shape_cross_half_let_binding_vs_meta_logic_relation",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle052_wildlife_study_shape_cross_half_let_binding_vs_meta_logic_relation_long_embedded_clause_let_binding"
+      }
+    ],
+    "meta_logic_relation": [
+      {
+        "confidence": 0.9999933822706198,
+        "correct": true,
+        "english": "A is one named outcome is carried across different modes of presentation without losing its identity; B is one rule speaks about how another rule relates, follows, or holds together. Focus: B.",
+        "focus_span": "B",
+        "gold": "meta_logic_relation",
+        "hard_contrast_shapes": [
+          "cross_register_omega",
+          "meta_logic_relation"
+        ],
+        "pair_kind": "shape_cycle_next_cross_register_omega_vs_meta_logic_relation",
+        "paraphrase_family": "compressed_minimal",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle041_patient_triage_shape_cycle_next_cross_register_omega_vs_meta_logic_relation_compressed_minimal_meta_logic_relation"
+      },
+      {
+        "confidence": 0.9999933822706198,
+        "correct": true,
+        "english": "A is one named outcome is carried across different modes of presentation without losing its identity; B is one rule speaks about how another rule relates, follows, or holds together. Focus: B.",
+        "focus_span": "B",
+        "gold": "meta_logic_relation",
+        "hard_contrast_shapes": [
+          "cross_register_omega",
+          "meta_logic_relation"
+        ],
+        "pair_kind": "shape_cycle_next_cross_register_omega_vs_meta_logic_relation",
+        "paraphrase_family": "compressed_minimal",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle042_disaster_relief_shape_cycle_next_cross_register_omega_vs_meta_logic_relation_compressed_minimal_meta_logic_relation"
+      },
+      {
+        "confidence": 0.7921623480983375,
+        "correct": true,
+        "english": "A is what the server notices when one rule speaks about how another rule relates, follows, or holds together in the case; B is what the server notices when the usual direction is turned around so source and result exchange their roles in the case. Focus: A.",
+        "focus_span": "A",
+        "gold": "meta_logic_relation",
+        "hard_contrast_shapes": [
+          "meta_logic_relation",
+          "inversion"
+        ],
+        "pair_kind": "shape_cycle_next_meta_logic_relation_vs_inversion",
+        "paraphrase_family": "applied_human",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle049_restaurant_service_shape_cycle_next_meta_logic_relation_vs_inversion_applied_human_meta_logic_relation"
+      },
+      {
+        "confidence": 0.883986112980052,
+        "correct": true,
+        "english": "A is the process signal showing how one rule speaks about how another rule relates, follows, or holds together inside route update; B is the process signal showing how the usual direction is turned around so source and result exchange their roles inside route update. Focus: A.",
+        "focus_span": "A",
+        "gold": "meta_logic_relation",
+        "hard_contrast_shapes": [
+          "meta_logic_relation",
+          "inversion"
+        ],
+        "pair_kind": "shape_cycle_next_meta_logic_relation_vs_inversion",
+        "paraphrase_family": "system_process",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle051_public_transit_shape_cycle_next_meta_logic_relation_vs_inversion_system_process_meta_logic_relation"
+      }
+    ],
+    "recipe": [
+      {
+        "confidence": 0.9999603105455016,
+        "correct": true,
+        "english": "A is a desired outcome is built from required contributors with different amounts of influence; B is the usual direction is turned around so source and result exchange their roles. Focus: A.",
+        "focus_span": "A",
+        "gold": "recipe",
+        "hard_contrast_shapes": [
+          "recipe",
+          "inversion"
+        ],
+        "pair_kind": "shape_cross_half_recipe_vs_inversion",
+        "paraphrase_family": "compressed_minimal",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle041_patient_triage_shape_cross_half_recipe_vs_inversion_compressed_minimal_recipe"
+      },
+      {
+        "confidence": 0.9999603105455016,
+        "correct": true,
+        "english": "A is a desired outcome is built from required contributors with different amounts of influence; B is the usual direction is turned around so source and result exchange their roles. Focus: A.",
+        "focus_span": "A",
+        "gold": "recipe",
+        "hard_contrast_shapes": [
+          "recipe",
+          "inversion"
+        ],
+        "pair_kind": "shape_cross_half_recipe_vs_inversion",
+        "paraphrase_family": "compressed_minimal",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle042_disaster_relief_shape_cross_half_recipe_vs_inversion_compressed_minimal_recipe"
+      },
+      {
+        "confidence": 0.5115803704708091,
+        "correct": true,
+        "english": "A is the role that remains active while forensics unit changes, because a temporary name is introduced first and then reused later inside the same record before the record settles; while the record unfolds, B is the role that remains active while forensics unit changes, because a desired outcome is built from required contributors with different amounts of influence before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "recipe",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "recipe"
+        ],
+        "pair_kind": "shape_cycle_next_let_binding_vs_recipe",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle048_forensics_lab_shape_cycle_next_let_binding_vs_recipe_long_embedded_clause_recipe"
+      },
+      {
+        "confidence": 0.5440306122521604,
+        "correct": true,
+        "english": "A is the role that remains active while field vessel changes, because a temporary name is introduced first and then reused later inside the same record before the record settles; while the record unfolds, B is the role that remains active while field vessel changes, because a desired outcome is built from required contributors with different amounts of influence before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "recipe",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "recipe"
+        ],
+        "pair_kind": "shape_cycle_next_let_binding_vs_recipe",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle055_ocean_survey_shape_cycle_next_let_binding_vs_recipe_long_embedded_clause_recipe"
+      },
+      {
+        "confidence": 0.6037544047210263,
+        "correct": false,
+        "english": "A is the role that remains active while study crew changes, because a temporary name is introduced first and then reused later inside the same record before the record settles; while the record unfolds, B is the role that remains active while study crew changes, because a desired outcome is built from required contributors with different amounts of influence before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "recipe",
+        "hard_contrast_shapes": [
+          "let_binding",
+          "recipe"
+        ],
+        "pair_kind": "shape_cycle_next_let_binding_vs_recipe",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "meta_logic_relation",
+        "sample_id": "s11_full_bundle052_wildlife_study_shape_cycle_next_let_binding_vs_recipe_long_embedded_clause_recipe"
+      }
+    ],
+    "rpm_chain": [
+      {
+        "confidence": 0.9999976248957637,
+        "correct": true,
+        "english": "A is a starting point advances through staged checkpoints before a final pass is reached; B is a repeating pattern of moves is applied in order so each pass follows the previous one. Focus: A.",
+        "focus_span": "A",
+        "gold": "rpm_chain",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "fractal_sequence"
+        ],
+        "pair_kind": "shape_cycle_next_rpm_chain_vs_fractal_sequence",
+        "paraphrase_family": "compressed_minimal",
+        "predicted": "rpm_chain",
+        "sample_id": "s11_full_bundle041_patient_triage_shape_cycle_next_rpm_chain_vs_fractal_sequence_compressed_minimal_rpm_chain"
+      },
+      {
+        "confidence": 0.9999976248957637,
+        "correct": true,
+        "english": "A is a starting point advances through staged checkpoints before a final pass is reached; B is a repeating pattern of moves is applied in order so each pass follows the previous one. Focus: A.",
+        "focus_span": "A",
+        "gold": "rpm_chain",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "fractal_sequence"
+        ],
+        "pair_kind": "shape_cycle_next_rpm_chain_vs_fractal_sequence",
+        "paraphrase_family": "compressed_minimal",
+        "predicted": "rpm_chain",
+        "sample_id": "s11_full_bundle042_disaster_relief_shape_cycle_next_rpm_chain_vs_fractal_sequence_compressed_minimal_rpm_chain"
+      },
+      {
+        "confidence": 0.3497267284958234,
+        "correct": true,
+        "english": "A is the role that remains active while procurement office changes, because a desired outcome is built from required contributors with different amounts of influence before the record settles; while the record unfolds, B is the role that remains active while procurement office changes, because a starting point advances through staged checkpoints before a final pass is reached before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "rpm_chain",
+        "hard_contrast_shapes": [
+          "recipe",
+          "rpm_chain"
+        ],
+        "pair_kind": "shape_cycle_next_recipe_vs_rpm_chain",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "rpm_chain",
+        "sample_id": "s11_full_bundle053_procurement_bid_shape_cycle_next_recipe_vs_rpm_chain_long_embedded_clause_rpm_chain"
+      },
+      {
+        "confidence": 0.37524359431823673,
+        "correct": true,
+        "english": "A is the role that remains active while housing office changes, because a desired outcome is built from required contributors with different amounts of influence before the record settles; while the record unfolds, B is the role that remains active while housing office changes, because a starting point advances through staged checkpoints before a final pass is reached before the record settles, and the focus chooses only one role. Focus: B.",
+        "focus_span": "B",
+        "gold": "rpm_chain",
+        "hard_contrast_shapes": [
+          "recipe",
+          "rpm_chain"
+        ],
+        "pair_kind": "shape_cycle_next_recipe_vs_rpm_chain",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "rpm_chain",
+        "sample_id": "s11_full_bundle054_housing_case_shape_cycle_next_recipe_vs_rpm_chain_long_embedded_clause_rpm_chain"
+      },
+      {
+        "confidence": 0.8293482019875174,
+        "correct": false,
+        "english": "A is the role that remains active while learning coach changes, because a starting point advances through staged checkpoints before a final pass is reached before the record settles; while the record unfolds, B is the role that remains active while learning coach changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "rpm_chain",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cross_half_rpm_chain_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle047_child_tutoring_shape_cross_half_rpm_chain_vs_diagram_export_long_embedded_clause_rpm_chain"
+      },
+      {
+        "confidence": 0.8121886252168233,
+        "correct": false,
+        "english": "A is the role that remains active while repair shop changes, because a starting point advances through staged checkpoints before a final pass is reached before the record settles; while the record unfolds, B is the role that remains active while repair shop changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "rpm_chain",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cross_half_rpm_chain_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle056_hardware_repair_shape_cross_half_rpm_chain_vs_diagram_export_long_embedded_clause_rpm_chain"
+      },
+      {
+        "confidence": 0.8033083673149333,
+        "correct": false,
+        "english": "A is the role that remains active while youth staff changes, because a starting point advances through staged checkpoints before a final pass is reached before the record settles; while the record unfolds, B is the role that remains active while youth staff changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "rpm_chain",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cross_half_rpm_chain_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle060_youth_program_shape_cross_half_rpm_chain_vs_diagram_export_long_embedded_clause_rpm_chain"
+      },
+      {
+        "confidence": 0.7962265758124492,
+        "correct": false,
+        "english": "A is the role that remains active while app team changes, because a starting point advances through staged checkpoints before a final pass is reached before the record settles; while the record unfolds, B is the role that remains active while app team changes, because a named cluster is packaged as a reusable bundle for outside viewing before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "rpm_chain",
+        "hard_contrast_shapes": [
+          "rpm_chain",
+          "diagram_export"
+        ],
+        "pair_kind": "shape_cross_half_rpm_chain_vs_diagram_export",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "recipe",
+        "sample_id": "s11_full_bundle050_mobile_app_shape_cross_half_rpm_chain_vs_diagram_export_long_embedded_clause_rpm_chain"
+      }
+    ],
+    "state_literal": [
+      {
+        "confidence": 0.9999970200074025,
+        "correct": true,
+        "english": "A is one marked condition stands by itself without another relation attached; B is two marked conditions are linked together so the relation between them is the point. Focus: A.",
+        "focus_span": "A",
+        "gold": "state_literal",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "binary_composition"
+        ],
+        "pair_kind": "shape_cycle_next_state_literal_vs_binary_composition",
+        "paraphrase_family": "compressed_minimal",
+        "predicted": "state_literal",
+        "sample_id": "s11_full_bundle041_patient_triage_shape_cycle_next_state_literal_vs_binary_composition_compressed_minimal_state_literal"
+      },
+      {
+        "confidence": 0.9999970200074025,
+        "correct": true,
+        "english": "A is one marked condition stands by itself without another relation attached; B is two marked conditions are linked together so the relation between them is the point. Focus: A.",
+        "focus_span": "A",
+        "gold": "state_literal",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "binary_composition"
+        ],
+        "pair_kind": "shape_cycle_next_state_literal_vs_binary_composition",
+        "paraphrase_family": "compressed_minimal",
+        "predicted": "state_literal",
+        "sample_id": "s11_full_bundle042_disaster_relief_shape_cycle_next_state_literal_vs_binary_composition_compressed_minimal_state_literal"
+      },
+      {
+        "confidence": 0.48111337697868145,
+        "correct": true,
+        "english": "A is the role that remains active while medical team changes, because one marked condition stands by itself without another relation attached before the record settles; while the record unfolds, B is the role that remains active while medical team changes, because a repeating pattern of moves is applied in order so each pass follows the previous one before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "state_literal",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "fractal_sequence"
+        ],
+        "pair_kind": "shape_cross_half_state_literal_vs_fractal_sequence",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "state_literal",
+        "sample_id": "s11_full_bundle041_patient_triage_shape_cross_half_state_literal_vs_fractal_sequence_long_embedded_clause_state_literal"
+      },
+      {
+        "confidence": 0.5617690507195369,
+        "correct": true,
+        "english": "A is the role that remains active while field vessel changes, because one marked condition stands by itself without another relation attached before the record settles; while the record unfolds, B is the role that remains active while field vessel changes, because two marked conditions are linked together so the relation between them is the point before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "state_literal",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "binary_composition"
+        ],
+        "pair_kind": "shape_cycle_next_state_literal_vs_binary_composition",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "state_literal",
+        "sample_id": "s11_full_bundle055_ocean_survey_shape_cycle_next_state_literal_vs_binary_composition_long_embedded_clause_state_literal"
+      },
+      {
+        "confidence": 0.9754446837842043,
+        "correct": false,
+        "english": "A is the role that remains active while vehicle team changes, because one marked condition stands by itself without another relation attached before the record settles; while the record unfolds, B is the role that remains active while vehicle team changes, because two marked conditions are linked together so the relation between them is the point before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "state_literal",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "binary_composition"
+        ],
+        "pair_kind": "shape_cycle_next_state_literal_vs_binary_composition",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "binary_composition",
+        "sample_id": "s11_full_bundle059_vehicle_recall_shape_cycle_next_state_literal_vs_binary_composition_long_embedded_clause_state_literal"
+      },
+      {
+        "confidence": 0.9659955007310064,
+        "correct": false,
+        "english": "A is the role that remains active while grid crew changes, because one marked condition stands by itself without another relation attached before the record settles; while the record unfolds, B is the role that remains active while grid crew changes, because two marked conditions are linked together so the relation between them is the point before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "state_literal",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "binary_composition"
+        ],
+        "pair_kind": "shape_cycle_next_state_literal_vs_binary_composition",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "binary_composition",
+        "sample_id": "s11_full_bundle043_energy_grid_shape_cycle_next_state_literal_vs_binary_composition_long_embedded_clause_state_literal"
+      },
+      {
+        "confidence": 0.9614112091562522,
+        "correct": false,
+        "english": "A is the role that remains active while dining crew changes, because one marked condition stands by itself without another relation attached before the record settles; while the record unfolds, B is the role that remains active while dining crew changes, because two marked conditions are linked together so the relation between them is the point before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "state_literal",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "binary_composition"
+        ],
+        "pair_kind": "shape_cycle_next_state_literal_vs_binary_composition",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "binary_composition",
+        "sample_id": "s11_full_bundle049_restaurant_service_shape_cycle_next_state_literal_vs_binary_composition_long_embedded_clause_state_literal"
+      },
+      {
+        "confidence": 0.9544936619731017,
+        "correct": false,
+        "english": "A is the role that remains active while medical team changes, because one marked condition stands by itself without another relation attached before the record settles; while the record unfolds, B is the role that remains active while medical team changes, because two marked conditions are linked together so the relation between them is the point before the record settles, and the focus chooses only one role. Focus: A.",
+        "focus_span": "A",
+        "gold": "state_literal",
+        "hard_contrast_shapes": [
+          "state_literal",
+          "binary_composition"
+        ],
+        "pair_kind": "shape_cycle_next_state_literal_vs_binary_composition",
+        "paraphrase_family": "long_embedded_clause",
+        "predicted": "binary_composition",
+        "sample_id": "s11_full_bundle041_patient_triage_shape_cycle_next_state_literal_vs_binary_composition_long_embedded_clause_state_literal"
+      }
+    ]
+  },
+  "input_file": "stage11_expression_shapes_full_20260517.jsonl",
+  "input_sha256": "d0059f55d94b75461b431b7c7b39df3d450ef1721527efe143caae2070f5aef7",
+  "layer": 2,
+  "per_class": {
+    "binary_composition": {
+      "accuracy": 0.9976190476190476,
+      "correct": 419,
+      "errors": {
+        "inversion": 1
+      },
+      "total": 420
+    },
+    "cross_register_omega": {
+      "accuracy": 0.9976190476190476,
+      "correct": 419,
+      "errors": {
+        "meta_logic_relation": 1
+      },
+      "total": 420
+    },
+    "diagram_export": {
+      "accuracy": 0.9071428571428571,
+      "correct": 381,
+      "errors": {
+        "binary_composition": 18,
+        "inversion": 19,
+        "recipe": 2
+      },
+      "total": 420
+    },
+    "fractal_sequence": {
+      "accuracy": 0.8571428571428571,
+      "correct": 360,
+      "errors": {
+        "binary_composition": 11,
+        "cross_register_omega": 3,
+        "meta_logic_relation": 40,
+        "recipe": 5,
+        "state_literal": 1
+      },
+      "total": 420
+    },
+    "inversion": {
+      "accuracy": 0.9047619047619048,
+      "correct": 380,
+      "errors": {
+        "meta_logic_relation": 20,
+        "recipe": 20
+      },
+      "total": 420
+    },
+    "let_binding": {
+      "accuracy": 0.8595238095238096,
+      "correct": 361,
+      "errors": {
+        "inversion": 3,
+        "meta_logic_relation": 37,
+        "recipe": 19
+      },
+      "total": 420
+    },
+    "meta_logic_relation": {
+      "accuracy": 1.0,
+      "correct": 420,
+      "errors": {},
+      "total": 420
+    },
+    "recipe": {
+      "accuracy": 0.9976190476190476,
+      "correct": 419,
+      "errors": {
+        "meta_logic_relation": 1
+      },
+      "total": 420
+    },
+    "rpm_chain": {
+      "accuracy": 0.888095238095238,
+      "correct": 373,
+      "errors": {
+        "binary_composition": 5,
+        "meta_logic_relation": 7,
+        "recipe": 35
+      },
+      "total": 420
+    },
+    "state_literal": {
+      "accuracy": 0.8904761904761904,
+      "correct": 374,
+      "errors": {
+        "binary_composition": 26,
+        "meta_logic_relation": 20
+      },
+      "total": 420
+    }
+  },
+  "readout": "final_token",
+  "recomputed_test_accuracy": 0.93,
+  "reported_macro_f1": 0.9311737321645674,
+  "reported_test_accuracy": 0.93,
+  "schema_version": "stage11_readout_coherence_audit.v1",
+  "stage11_report_file": "stage11_expression_shape_probe_report_20260517.json",
+  "stage11_report_sha256": "3c31284fb9a86227ca1357b76a5ecadd648340540029d00f923101c1a461fb8a",
+  "stage11_status": "STAGE11_EXPRESSION_SHAPES_FULL_PASS",
+  "top_confusions": [
+    {
+      "count": 40,
+      "gold": "fractal_sequence",
+      "predicted": "meta_logic_relation"
+    },
+    {
+      "count": 37,
+      "gold": "let_binding",
+      "predicted": "meta_logic_relation"
+    },
+    {
+      "count": 35,
+      "gold": "rpm_chain",
+      "predicted": "recipe"
+    },
+    {
+      "count": 26,
+      "gold": "state_literal",
+      "predicted": "binary_composition"
+    },
+    {
+      "count": 20,
+      "gold": "inversion",
+      "predicted": "meta_logic_relation"
+    },
+    {
+      "count": 20,
+      "gold": "inversion",
+      "predicted": "recipe"
+    },
+    {
+      "count": 20,
+      "gold": "state_literal",
+      "predicted": "meta_logic_relation"
+    },
+    {
+      "count": 19,
+      "gold": "let_binding",
+      "predicted": "recipe"
+    },
+    {
+      "count": 19,
+      "gold": "diagram_export",
+      "predicted": "inversion"
+    },
+    {
+      "count": 18,
+      "gold": "diagram_export",
+      "predicted": "binary_composition"
+    },
+    {
+      "count": 11,
+      "gold": "fractal_sequence",
+      "predicted": "binary_composition"
+    },
+    {
+      "count": 7,
+      "gold": "rpm_chain",
+      "predicted": "meta_logic_relation"
+    },
+    {
+      "count": 5,
+      "gold": "fractal_sequence",
+      "predicted": "recipe"
+    },
+    {
+      "count": 5,
+      "gold": "rpm_chain",
+      "predicted": "binary_composition"
+    },
+    {
+      "count": 3,
+      "gold": "let_binding",
+      "predicted": "inversion"
+    },
+    {
+      "count": 3,
+      "gold": "fractal_sequence",
+      "predicted": "cross_register_omega"
+    },
+    {
+      "count": 2,
+      "gold": "diagram_export",
+      "predicted": "recipe"
+    },
+    {
+      "count": 1,
+      "gold": "fractal_sequence",
+      "predicted": "state_literal"
+    },
+    {
+      "count": 1,
+      "gold": "binary_composition",
+      "predicted": "inversion"
+    },
+    {
+      "count": 1,
+      "gold": "cross_register_omega",
+      "predicted": "meta_logic_relation"
+    }
+  ]
+}

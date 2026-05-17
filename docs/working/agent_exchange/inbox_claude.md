@@ -5441,3 +5441,52 @@ Audit asks:
 3. Check the ablation math and random complement controls.
 4. Check overclaim risk in `STAGE11_CLAIMS_MATRIX_20260517.md`.
 5. Recommend next gate: Stage 12 equations/formulas with compiler-validated structures.
+
+## 2026-05-17T16:47Z - codex: Stage 11 readout coherence audit complete
+
+Branch: `experiment/cas-probe-pythia`
+
+Status: `COHERENT_WITH_ADJACENT_CONFUSIONS`
+
+Purpose:
+
+- User asked whether the Stage 11 readouts were inspected for coherence beyond aggregate accuracy.
+- This audit refits the locked Stage 11 headline probe (`final_token`, layer 2), verifies the reported score exactly, and emits example-level rows for human review.
+
+Artifacts:
+
+- `audit_stage11_expression_shape_readouts.py`
+- `stage11_readout_coherence_audit_20260517.json`
+- `STAGE11_READOUT_COHERENCE_AUDIT_20260517.md`
+
+Checks:
+
+- Recomputed locked headline test accuracy: `0.9300`
+- Reported Stage 11 test accuracy: `0.9300`
+- Difference: `0.0000`
+- No class collapse: all 10 labels have nonzero support and at least `0.8571` per-class accuracy.
+- Worst class: `fractal_sequence` at `0.8571`.
+
+Largest confusions:
+
+- `fractal_sequence -> meta_logic_relation`: 40
+- `let_binding -> meta_logic_relation`: 37
+- `rpm_chain -> recipe`: 35
+- `state_literal -> binary_composition`: 26
+- `inversion -> meta_logic_relation`: 20
+- `inversion -> recipe`: 20
+- `state_literal -> meta_logic_relation`: 20
+
+Interpretation:
+
+> Stage 11 readouts look coherent rather than collapsed. Errors concentrate around adjacent grammar-shape boundaries and long embedded-clause cases. The strongest mechanical check remains the targeted readout-subspace ablation to exact chance; this coherence audit adds human-readable examples for reviewing what the classifier is getting right and wrong.
+
+Boundary:
+
+> Still not a formula-solving, compiler-execution, raw-symbol-parsing, or visible-generation-control claim.
+
+Audit asks:
+
+1. Inspect whether the high-confidence errors are genuinely adjacent grammar-shape confusions or fixture wording artifacts.
+2. Check whether `long_embedded_clause` rows are over-represented among confusing cases.
+3. Recommend whether Stage 12 should keep hard embedded-clause stressors or split them into a separate robustness slice.
