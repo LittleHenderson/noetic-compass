@@ -1,0 +1,201 @@
+{
+  "axis_confirmation": {
+    "confirmed": true,
+    "fixture_rows": 4368,
+    "n_foundations": 28,
+    "plain_english": "The 28 are the original TKS seven foundations across four worlds/registers, mapped into CAS as F1T..F7E. They are not Drive x Domain.",
+    "position_definition": "7 original TKS foundations x 4 worlds/registers = 28 positions",
+    "source": "local PDF: C:/Users/wakil/Downloads/Everthing-Tootra-TKS/28 fOUNDATIONS 1.0.pdf; CAS map cross-checked against docs/reference/tks_28_foundations_translation_key.md",
+    "validation_errors": 0,
+    "validation_warnings": 0
+  },
+  "decision": {
+    "next_allowed_step": "Patch the Stage 7 evaluator overflow, then rerun the 28-foundation pilot as a discriminative readout test only.",
+    "stage7_pilot_claims_allowed": false
+  },
+  "fractal_classification": {
+    "method": "Existing api.pipeline.fractal_analysis.analyze_fractal on per-noetic disruption trajectories.",
+    "plain_english": "The Stage 3.2 same-class disruption trajectory and the fresh Stage 6.6B generation-divergence trajectory classify as oscillatory. The older 20-row subset classifies as stabilizing, so the oscillatory claim is supported for the stronger/fresh evidence but should not be stated as universal.",
+    "results": {
+      "stage3_2_per_class_same_class_disruption": {
+        "analysis": {
+          "cancellations_detected": 1,
+          "canonical_form": [
+            2,
+            7
+          ],
+          "classification": "oscillatory",
+          "dominant_sequence": [
+            0,
+            2,
+            7,
+            8,
+            9
+          ],
+          "has_fixed_point": false,
+          "orbit_length": 10
+        },
+        "scores": [
+          0.1202840241034685,
+          7.532333921222989e-05,
+          0.18631503527336846,
+          0.0,
+          0.025619121105232234,
+          0.0,
+          0.05724022633744863,
+          0.21415711346266908,
+          0.17471156672545562,
+          0.11084472369194598
+        ]
+      },
+      "stage6_6B_fresh_localized_generation_divergence": {
+        "analysis": {
+          "cancellations_detected": 1,
+          "canonical_form": [
+            4,
+            9
+          ],
+          "classification": "oscillatory",
+          "dominant_sequence": [
+            0,
+            4,
+            5,
+            6,
+            9
+          ],
+          "has_fixed_point": false,
+          "orbit_length": 10
+        },
+        "scores": [
+          0.21875,
+          0.11458333333333333,
+          0.041666666666666664,
+          0.010416666666666666,
+          0.15625,
+          0.13541666666666666,
+          0.1875,
+          0.052083333333333336,
+          0.13541666666666666,
+          0.1875
+        ]
+      },
+      "stage6_6B_old_subset_localized_generation_divergence": {
+        "analysis": {
+          "cancellations_detected": 1,
+          "canonical_form": [
+            3,
+            7
+          ],
+          "classification": "stabilizing",
+          "dominant_sequence": [
+            0,
+            3,
+            5,
+            6,
+            7
+          ],
+          "has_fixed_point": true,
+          "orbit_length": 1
+        },
+        "scores": [
+          0.22916666666666666,
+          0.0,
+          0.020833333333333332,
+          0.1875,
+          0.0625,
+          0.1875,
+          0.10416666666666667,
+          0.10416666666666667,
+          0.0,
+          0.08333333333333333
+        ]
+      }
+    }
+  },
+  "lacunarity_retrospective": {
+    "does_it_flag_3_and_5": {
+      "answer": "yes, but not uniquely",
+      "female_noetic_flagged": true,
+      "negative_noetic_flagged": true,
+      "note": "^3 and ^5 are the only wrong-direction raw slots. The broader gap map also flags ^1 and weakly flags ^4/^6, so the diagnostic supports the lacunarity explanation but does not say the problem is only ^3/^5."
+    },
+    "method": "Deterministic lacunarity-style gap map over Stage 3.2 noetic per-class same-class disruption, not the untrained neural LacunarityHead.",
+    "operator_scores": [
+      0.1202840241034685,
+      7.532333921222989e-05,
+      0.18631503527336846,
+      0.0,
+      0.025619121105232234,
+      0.0,
+      0.05724022633744863,
+      0.21415711346266908,
+      0.17471156672545562,
+      0.11084472369194598
+    ],
+    "raw_extra_same_class_disruption": [
+      0.1202840241034685,
+      7.532333921222989e-05,
+      0.18631503527336846,
+      -0.059349279835390845,
+      0.025619121105232234,
+      -0.04253747795414453,
+      0.05724022633744863,
+      0.21415711346266908,
+      0.17471156672545562,
+      0.11084472369194598
+    ],
+    "state_lacunarity_var_over_mean_sq": 0.7930623386443264,
+    "top_gap_slots": [
+      {
+        "gap_probability_like_score": 1.0,
+        "name": "Negative",
+        "noetic": 3,
+        "positive_evidence": 0.0,
+        "raw_extra_same_class_disruption": -0.059349279835390845,
+        "wrong_direction": true
+      },
+      {
+        "gap_probability_like_score": 1.0,
+        "name": "Female",
+        "noetic": 5,
+        "positive_evidence": 0.0,
+        "raw_extra_same_class_disruption": -0.04253747795414453,
+        "wrong_direction": true
+      },
+      {
+        "gap_probability_like_score": 0.9996482800034314,
+        "name": "Mind",
+        "noetic": 1,
+        "positive_evidence": 7.532333921222989e-05,
+        "raw_extra_same_class_disruption": 7.532333921222989e-05,
+        "wrong_direction": false
+      },
+      {
+        "gap_probability_like_score": 0.8803723084841726,
+        "name": "Vibration",
+        "noetic": 4,
+        "positive_evidence": 0.025619121105232234,
+        "raw_extra_same_class_disruption": 0.025619121105232234,
+        "wrong_direction": false
+      },
+      {
+        "gap_probability_like_score": 0.7327185382173799,
+        "name": "Male",
+        "noetic": 6,
+        "positive_evidence": 0.05724022633744863,
+        "raw_extra_same_class_disruption": 0.05724022633744863,
+        "wrong_direction": false
+      },
+      {
+        "gap_probability_like_score": 0.48241400017157055,
+        "name": "Below/Effect",
+        "noetic": 9,
+        "positive_evidence": 0.11084472369194598,
+        "raw_extra_same_class_disruption": 0.11084472369194598,
+        "wrong_direction": false
+      }
+    ]
+  },
+  "schema_version": "stage7_preflight_diagnostics.v1",
+  "status": "PREFLIGHT_COMPLETE"
+}

@@ -4199,3 +4199,122 @@ Recommended next:
    "CAS identifies and causally tests an internal noetic readout; generation
    routing was not shown in Pythia-160M."
 3. Only then decide whether cross-model replication is worth doing.
+
+## 2026-05-17T07:45Z - Stage 7 original-TKS 28-Foundation pilot complete
+
+Claude - Stage 7 landed. This is a pass for discriminative hidden-state
+readout, with the claim boundary kept narrow.
+
+New scripts/artifacts:
+
+- `build_stage7_foundation_fixture.py`
+- `validate_stage7_foundation.py`
+- `capture_stage7_foundation_activations.py`
+- `evaluate_stage7_foundation_pilot.py`
+- `analyze_stage7_preflight_diagnostics.py`
+- `stage7_foundation_pilot_20260517.jsonl`
+- `stage7_foundation_pilot_manifest_20260517.json`
+- `stage7_foundation_pilot_validation_20260517.json`
+- `stage7_preflight_diagnostics_20260517.json`
+- `STAGE7_PREFLIGHT_DIAGNOSTICS_20260517.md`
+- `stage7_foundation_pilot_activations_manifest_20260517.json`
+- `stage7_foundation_pilot_probe_report_20260517.json`
+- `STAGE7_FOUNDATION_PILOT_REPORT_20260517.md`
+
+Axis confirmation:
+
+- Confirmed `28 = original TKS seven foundations x four worlds/registers`.
+- CAS label space: `F1T..F7E`.
+- Not Drive x Domain.
+- Mapping source: `docs/reference/tks_28_foundations_translation_key.md`
+  plus the user-supplied source PDF at
+  `C:\Users\wakil\Downloads\Everthing-Tootra-TKS\28 fOUNDATIONS 1.0.pdf`.
+
+Preflight:
+
+- Lacunarity-style retrospective flags `^3` and `^5` as wrong-direction
+  noetic slots, but not uniquely (`^1`, `^4`, `^6` are also weak).
+- Fractal classifier marks Stage 3.2 and fresh Stage 6.6B trajectories as
+  `oscillatory`; the older 20-row Stage 6.6B subset is `stabilizing`.
+- Boundary: this is deterministic lacunarity/fractal analysis over saved
+  Pythia evidence, not the trained neural `LacunarityHead`.
+
+Fixture:
+
+- records: 4,368
+- labels: 28
+- per-label count: 156
+- split: train 1,344 / val 672 / locked test 2,352
+- validation: 0 errors, 0 warnings
+- input SHA-256:
+  `3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250`
+
+Activation capture:
+
+- model: Pythia-160M
+- readouts: focus token, final token, mean over sequence length
+- shape: 4,368 x 13 x 768
+- full `.npz` artifact is on RunPod only, about 304 MB, not committed.
+- activation SHA-256:
+  `d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f`
+
+Evaluation:
+
+- report: `stage7_foundation_pilot_probe_report_20260517.json`
+- status: `FOUNDATION_PROBE_RELIABLY_ABOVE_TEXT_BASELINE`
+- evaluator bug caught and patched: exact McNemar overflowed on 1,148
+  discordant pairs; patched to log-space exact binomial and reran.
+
+Headline:
+
+- activation headline: `focus_token` layer 6
+- val acc: 0.9985
+- locked-test acc: 0.7857
+- locked-test macro-F1: 0.7906
+
+Best text baseline:
+
+- `tfidf_char_3_5`
+- locked-test acc: 0.4966
+- activation lift: +28.9 pp
+- paired McNemar p: 2.66e-95
+
+Best metadata baseline:
+
+- `surface_pair_family_focus`
+- locked-test acc: 0.6667
+- activation lift: +11.9 pp
+- paired McNemar p: 4.38e-20
+
+Reserved interpretation:
+
+> Pythia-160M hidden states carry a strong original-TKS 28-Foundation
+> signal beyond plain text and beyond the strongest surface metadata
+> baseline in this locked pilot.
+
+What this does NOT claim:
+
+- no generation-control claim
+- no black-box-solved claim
+- no cross-model claim
+- no closed-model claim
+
+Recommended next gate:
+
+Stage 7.1 readout-causal ablation:
+
+- use validation-selected `focus_token` layer 6
+- remove the trained 28-class Foundation readout subspace
+- compare against same-rank random orthogonal removals
+- require Foundation removal to beat random controls
+- do not jump to generated-language steering yet
+
+Audit asks:
+
+1. Validate the 28-axis mapping and wording: Foundation x Register, not
+   Drive x Domain.
+2. Validate the preflight claim boundary, especially deterministic
+   lacunarity vs neural `LacunarityHead`.
+3. Review the log-space McNemar patch in `evaluate_stage7_foundation_pilot.py`.
+4. Review the result wording in `STAGE7_FOUNDATION_PILOT_REPORT_20260517.md`.
+5. Confirm Stage 7.1 is the right next gate before any generation tests.

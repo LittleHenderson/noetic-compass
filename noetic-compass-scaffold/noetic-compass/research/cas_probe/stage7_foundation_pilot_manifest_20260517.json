@@ -1,0 +1,62 @@
+{
+  "date": "20260517",
+  "foundation_counts": {
+    "F1A": 156,
+    "F1E": 156,
+    "F1T": 156,
+    "F1f": 156,
+    "F2A": 156,
+    "F2E": 156,
+    "F2T": 156,
+    "F2f": 156,
+    "F3A": 156,
+    "F3E": 156,
+    "F3T": 156,
+    "F3f": 156,
+    "F4A": 156,
+    "F4E": 156,
+    "F4T": 156,
+    "F4f": 156,
+    "F5A": 156,
+    "F5E": 156,
+    "F5T": 156,
+    "F5f": 156,
+    "F6A": 156,
+    "F6E": 156,
+    "F6T": 156,
+    "F6f": 156,
+    "F7A": 156,
+    "F7E": 156,
+    "F7T": 156,
+    "F7f": 156
+  },
+  "lessons_from_stage6": [
+    "same-sentence role-bound counterfactuals",
+    "balanced labels",
+    "explicit Focus marker",
+    "no scientific claim from fixture alone",
+    "text baselines required before ablation",
+    "generation tests deferred until readout and readout-causality pass"
+  ],
+  "mode": "pilot",
+  "n_foundations": 28,
+  "n_rows": 4368,
+  "out_jsonl": "stage7_foundation_pilot_20260517.jsonl",
+  "out_jsonl_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "pair_kind_counts": {
+    "same_drive_register_T_A": 728,
+    "same_drive_register_f_E": 728,
+    "same_register_drive_cycle_A": 728,
+    "same_register_drive_cycle_E": 728,
+    "same_register_drive_cycle_T": 728,
+    "same_register_drive_cycle_f": 728
+  },
+  "position_definition": "7 original TKS foundations x 4 worlds/registers = 28 positions",
+  "schema_version": "stage7_foundation_fixture_manifest.v1",
+  "source": "local PDF: C:/Users/wakil/Downloads/Everthing-Tootra-TKS/28 fOUNDATIONS 1.0.pdf; CAS map cross-checked against docs/reference/tks_28_foundations_translation_key.md",
+  "split_counts": {
+    "test": 2352,
+    "train": 1344,
+    "val": 672
+  }
+}
