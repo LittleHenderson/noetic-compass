@@ -494,3 +494,67 @@ Still not claimed:
 The next experiment should be short constrained generation using
 probe-predicted readable prefixes, with wrong-prefix controls and sample-read
 auditing.
+
+## Short Generation Follow-Up
+
+The short generated-text follow-up was run as Stage 7.CPL3.
+
+- Script: `probe_stage7_cas_prefix_generation.py`
+- Report: `stage7_cas_prefix_generation_20260517.json`
+- Summary: `STAGE7_CAS_PREFIX_GENERATION_20260517.md`
+- Sample read: `STAGE7_CAS_PREFIX_GENERATION_SAMPLES_20260517.md`
+
+Design:
+
+1. Fit the same Stage 7 Foundation probe.
+2. Select locked test rows with same-register Drive-cycle partners.
+3. Predict each selected row's Foundation label from Pythia hidden states.
+4. Generate short greedy continuations (`max_new_tokens=16`) under five
+   conditions:
+   - no prefix
+   - gold-readable CAS realization
+   - probe-predicted readable CAS realization
+   - wrong-partner readable CAS realization
+   - probe-predicted raw CAS symbol
+5. Score visible continuations with a simple target-vs-partner Drive keyword
+   heuristic and preserve samples for human review.
+
+Result:
+
+- Status: `PROBE_PREFIX_GENERATION_HEURISTIC_NOT_CLEAN`.
+- Selected rows: `56` (`8` per Drive).
+- Selected-row Foundation accuracy: `0.8750`.
+- Selected-row Drive accuracy: `0.9286`.
+- No-prefix baseline:
+  - target win `0.018`
+  - margin `+0.036`.
+- Probe-predicted readable prefix:
+  - target win `0.125`
+  - margin `+0.107`
+  - delta vs none `+0.071`.
+- Wrong partner readable prefix:
+  - target win `0.054`
+  - margin `-0.125`
+  - delta vs none `-0.161`.
+- Key comparison:
+  - `probe_readable_margin_minus_partner_readable = +0.2321`.
+  - The pre-set clean-pass floor was `+0.25`.
+- Probe-predicted raw CAS symbols:
+  - target win `0.018`
+  - margin `0.000`
+  - delta vs none `-0.036`.
+
+Interpretation:
+
+> The generated text shows the same directional shape as the likelihood test:
+> readable CAS realization helps more than no prefix, wrong-readable pushes
+> against the target, and raw symbols do not help. But the short-generation
+> heuristic is too weak/noisy to clear the pre-registered clean-pass floor.
+
+Claim boundary:
+
+- Still supported: CPL2 likelihood-space CAS Harness conditioning.
+- Weakly suggested: readable prefixing can alter visible short continuations in
+  the expected direction.
+- Not supported: pass-clean open-ended generation control.
+- Still unsupported: raw-symbol steering or internal hidden-neuron steering.
