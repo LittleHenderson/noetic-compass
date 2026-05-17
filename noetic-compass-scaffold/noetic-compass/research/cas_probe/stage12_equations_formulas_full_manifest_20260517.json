@@ -1,0 +1,127 @@
+{
+  "anti_leak_flag_counts": {},
+  "compiler_result_kind_counts": {
+    "meta_assertion": 1800,
+    "meta_set": 1800,
+    "program": 900,
+    "recipe": 900,
+    "relation": 900,
+    "state": 900,
+    "state_vector": 900,
+    "yield_expression": 900
+  },
+  "date": "20260517",
+  "family_counts": {
+    "applied_human": 1800,
+    "compressed_minimal": 600,
+    "counter_alias_hard_negative": 600,
+    "definition_compact": 1800,
+    "long_embedded_clause": 600,
+    "role_inverse_plain": 1800,
+    "system_process": 1800
+  },
+  "formula_counts": {
+    "cardinality_assertion": 900,
+    "cover_partition_formula": 900,
+    "emergent_register_assignment": 900,
+    "membership_assertion": 900,
+    "production_recipe": 900,
+    "relation_dependency": 900,
+    "set_operation_formula": 900,
+    "state_vector": 900,
+    "typed_program": 900,
+    "yield_query": 900
+  },
+  "formula_labels": [
+    "relation_dependency",
+    "typed_program",
+    "production_recipe",
+    "yield_query",
+    "state_vector",
+    "emergent_register_assignment",
+    "membership_assertion",
+    "cardinality_assertion",
+    "set_operation_formula",
+    "cover_partition_formula"
+  ],
+  "formula_metadata": {
+    "cardinality_assertion": {
+      "gloss": "a collection is checked against an exact count",
+      "plain": "a collection is checked against an exact count"
+    },
+    "cover_partition_formula": {
+      "gloss": "several collections are checked against a whole universe for complete reach or clean separation",
+      "plain": "collections are checked for complete reach or clean separation"
+    },
+    "emergent_register_assignment": {
+      "gloss": "several modes of the same pattern are fused under one result name",
+      "plain": "several modes of one pattern fuse into a named result"
+    },
+    "membership_assertion": {
+      "gloss": "one item is checked for belonging inside an allowed collection",
+      "plain": "one item is checked for belonging inside an allowed collection"
+    },
+    "production_recipe": {
+      "gloss": "a named outcome is built from weighted requirements and possible side results",
+      "plain": "a named outcome is built from weighted requirements"
+    },
+    "relation_dependency": {
+      "gloss": "one condition points forward to a later condition that depends on it",
+      "plain": "one condition points forward to a later dependent condition"
+    },
+    "set_operation_formula": {
+      "gloss": "two finite collections are combined or overlapped to form another collection",
+      "plain": "finite collections are combined or overlapped"
+    },
+    "state_vector": {
+      "gloss": "one profile records several weighted signals at the same time",
+      "plain": "one profile records several weighted activations"
+    },
+    "typed_program": {
+      "gloss": "a named starting value is saved, a reusable typed action is declared, and that action is then used",
+      "plain": "a named value and typed reusable action are declared and then used"
+    },
+    "yield_query": {
+      "gloss": "a request asks for the expected actual or efficient amount of a named outcome",
+      "plain": "a request asks for expected actual or efficient amount"
+    }
+  },
+  "lessons_reused": [
+    "role-bound same-sentence counterfactuals",
+    "balanced labels",
+    "explicit Focus marker",
+    "compiler validation stored in metadata",
+    "raw formula/CAS symbols withheld from model-facing English",
+    "text and metadata baselines required before any harness claim"
+  ],
+  "mode": "full",
+  "n_classes": 10,
+  "n_rows": 9000,
+  "out_jsonl": "stage12_equations_formulas_full_20260517.jsonl",
+  "out_jsonl_sha256": "a0bebdc2a073f26a2b1099bfd2f4bf41d4091505cdcd8397b88a450dad210974",
+  "pair_kind_counts": {
+    "formula_cross_half_production_recipe_vs_cardinality_assertion": 600,
+    "formula_cross_half_relation_dependency_vs_emergent_register_assignment": 600,
+    "formula_cross_half_state_vector_vs_cover_partition_formula": 600,
+    "formula_cross_half_typed_program_vs_membership_assertion": 600,
+    "formula_cross_half_yield_query_vs_set_operation_formula": 600,
+    "formula_cycle_next_cardinality_assertion_vs_set_operation_formula": 600,
+    "formula_cycle_next_cover_partition_formula_vs_relation_dependency": 600,
+    "formula_cycle_next_emergent_register_assignment_vs_membership_assertion": 600,
+    "formula_cycle_next_membership_assertion_vs_cardinality_assertion": 600,
+    "formula_cycle_next_production_recipe_vs_yield_query": 600,
+    "formula_cycle_next_relation_dependency_vs_typed_program": 600,
+    "formula_cycle_next_set_operation_formula_vs_cover_partition_formula": 600,
+    "formula_cycle_next_state_vector_vs_emergent_register_assignment": 600,
+    "formula_cycle_next_typed_program_vs_production_recipe": 600,
+    "formula_cycle_next_yield_query_vs_state_vector": 600
+  },
+  "position_definition": "ten compiler-validated CAS equation/formula families",
+  "schema_version": "stage12_equations_formulas_fixture_manifest.v1",
+  "source": "user-requested Stage 12 formulas/equations ladder after Stage 11 expression-shape pass",
+  "split_counts": {
+    "test": 4200,
+    "train": 3600,
+    "val": 1200
+  }
+}
