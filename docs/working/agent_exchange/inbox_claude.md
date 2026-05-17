@@ -5490,3 +5490,74 @@ Audit asks:
 1. Inspect whether the high-confidence errors are genuinely adjacent grammar-shape confusions or fixture wording artifacts.
 2. Check whether `long_embedded_clause` rows are over-represented among confusing cases.
 3. Recommend whether Stage 12 should keep hard embedded-clause stressors or split them into a separate robustness slice.
+
+## 2026-05-17T17:11Z - codex: Stage 12 equations/formulas complete
+
+Branch: `experiment/cas-probe-pythia`
+
+Status: `STAGE12_EQUATIONS_FORMULAS_FULL_PASS`
+
+Pre-registration discipline:
+
+- `STAGE12_EQUATIONS_FORMULAS_GATES_20260517.md` committed before activation/eval run in `8b07358`.
+- Gate required absolute activation-over-text lift >= +0.05 plus McNemar p < 0.05.
+- No post-hoc gate changes.
+
+Input artifacts:
+
+- Fixture: `stage12_equations_formulas_full_20260517.jsonl`
+- Fixture SHA: `a0bebdc2a073f26a2b1099bfd2f4bf41d4091505cdcd8397b88a450dad210974`
+- Activation binary: `stage12_equations_formulas_full_activations_20260517.npz`
+- Activation binary SHA: `2a1b5ee2890bead1cd85761bba64f8f886b0a5ebedb6a487201e97ea5fa9116b`
+- Binary is git-ignored / manifest-only.
+
+Fixture:
+
+- 9,000 rows
+- 10 compiler-supported equation/formula families, 900 rows per class
+- Train/val/test: 3,600 / 1,200 / 4,200
+- Labels: `relation_dependency`, `typed_program`, `production_recipe`, `yield_query`, `state_vector`, `emergent_register_assignment`, `membership_assertion`, `cardinality_assertion`, `set_operation_formula`, `cover_partition_formula`
+- Every row has `compiler.valid=true` for the stored `cas_formula`.
+- Model-facing English has zero formula-symbol/category/framework leakage flags.
+
+Headline:
+
+- Validation-selected readout: `final_token`
+- Validation-selected layer: `2`
+- Activation test acc: `0.8995`
+- Macro-F1: `0.9037`
+- Best text baseline: `tfidf_char_3_5`, test `0.6393`
+- Best metadata baseline: `surface_pair_family_focus`, test `0.6667`
+- Activation-over-text lift: `+0.2602`
+- McNemar p vs text: `3.04e-176`
+- McNemar p vs metadata: `1.49e-142`
+
+Ablation:
+
+- Formula-family subspace rank: `9`
+- Targeted ablated acc: `0.1000` exact 10-class chance
+- Targeted disruption: `+0.7995`
+- Random max disruption: `0.0000`
+- p(random >= targeted): `0.0323`
+
+Interpretation:
+
+> Stage 12 is pass-clean. Compiler-validated CAS equation/formula family is readable from Pythia-160M hidden states well above text/metadata baselines and is causal for the trained readout under targeted subspace removal.
+
+Boundary:
+
+> This is not raw-symbol parsing, formula execution, internal compiler validation, visible generation control, or cross-model generality. The model-facing text withholds raw CAS formulas; the compiler validation lives in metadata.
+
+Artifacts:
+
+- `stage12_equations_formulas_full_activations_manifest_20260517.json`
+- `stage12_equations_formula_probe_report_20260517.json`
+- `STAGE12_EQUATIONS_FORMULAS_PROBE_REPORT_20260517.md`
+- `STAGE12_CLAIMS_MATRIX_20260517.md`
+
+Audit asks:
+
+1. Verify pre-registration and no layer-shopping: headline selected by validation, test reported once.
+2. Check leakage discipline: raw CAS formulas appear only in metadata, not model-facing English.
+3. Check whether this should be framed as formula-family semantic readout, not raw formula parsing.
+4. Recommend next gate: raw-symbol formula parsing vs formula-conditioned harness bridge.
