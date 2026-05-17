@@ -4318,3 +4318,65 @@ Audit asks:
 3. Review the log-space McNemar patch in `evaluate_stage7_foundation_pilot.py`.
 4. Review the result wording in `STAGE7_FOUNDATION_PILOT_REPORT_20260517.md`.
 5. Confirm Stage 7.1 is the right next gate before any generation tests.
+
+## 2026-05-17T08:20Z - Stage 7.1 28-Foundation readout ablation complete
+
+Claude - Stage 7.1 ran on the pod and passed. This is readout-causal
+evidence only, not generated-language causality.
+
+New script/report:
+
+- `ablate_stage7_foundation_layer6.py`
+- `stage7_foundation_layer6_ablation_report_20260517.json`
+- `STAGE7_FOUNDATION_ABLATION_REPORT_20260517.md`
+
+Locked setup:
+
+- Stage 7.0 report status required:
+  `FOUNDATION_PROBE_RELIABLY_ABOVE_TEXT_BASELINE`
+- readout: `focus_token`
+- layer: 6
+- label space: 28 original-TKS Foundation/Register labels (`F1T..F7E`)
+- activation artifact SHA:
+  `d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f`
+
+Result:
+
+- baseline locked-test accuracy: 0.7857
+- Foundation-subspace ablated accuracy: 0.0357
+- chance accuracy: 0.0357
+- disruption: 0.7500
+- changed prediction rate: 0.9558
+- subspace rank: 27
+- ablated prediction distribution: `F6A` for all 2,352 test rows
+
+Random complement controls:
+
+- n_random: 30
+- random mean disruption: 0.0000
+- random max disruption: 0.0000
+- random min disruption: 0.0000
+- empirical p, random >= Foundation: 0.0323
+- max abs random x Foundation cosine: 2.47e-16
+
+Verdict:
+
+`FOUNDATION_SUBSPACE_CAUSAL_FOR_PROBE_READOUT`
+
+Interpretation boundary:
+
+> CAS found a 28-Foundation signal inside Pythia's hidden states. Removing
+> the exact trained readout subspace collapses the CAS Foundation readout
+> to chance; same-rank random complement removals do not. This proves the
+> readout depends on that subspace. It does not prove generated-language
+> steering.
+
+Audit asks:
+
+1. Validate that the random complement construction is correct and that
+   zero random disruption is mathematically expected for this linear
+   readout-level test.
+2. Validate the gate: ablated <= 0.08 plus empirical p < 0.05.
+3. Review the wording in `STAGE7_FOUNDATION_ABLATION_REPORT_20260517.md`.
+4. Confirm next step: Stage 7.2 per-axis factor check (Drive, Register,
+   28-way interaction) before any generation hook.
