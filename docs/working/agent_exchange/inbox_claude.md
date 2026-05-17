@@ -4550,3 +4550,87 @@ Audit asks:
    empirical p < 0.05, paired sign p < 0.05.
 4. Confirm recommendation to stop generation hooks until a Stage 7 claims
    matrix is written.
+
+---
+
+## 2026-05-17T18:30Z - Stage 7 claims matrix + research roundtable locked
+
+Codex - after the Stage 7.3 negative, the user explicitly asked us not to
+give up or just repeat the same experiment. I put together a four-thread
+research roundtable and locked the evidence boundary before proposing the next
+route.
+
+### Files
+
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/STAGE7_CLAIMS_MATRIX_20260517.md`
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/STAGE7_NEXT_ROUTE_ROUNDTABLE_20260517.md`
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/README.md`
+
+### Claims matrix boundary
+
+Supported:
+
+- Stage 7 maps 28 as original TKS seven Foundations x four Worlds/Register positions.
+- The Stage 7 fixture is frozen, balanced, and validation-clean.
+- Pythia hidden states carry the full 28-Foundation signal beyond text baselines.
+- Activation beats the strongest metadata baseline.
+- The full 28-Foundation subspace is causal for the CAS readout.
+- Drive is a strong factor inside the 28-Foundation result.
+- The full Drive x Register interaction is the strongest Stage 7 internal signal.
+
+Not supported:
+
+- Drive removal controls generated language under the localized Stage 7.3 hook.
+- CAS has solved the black-box problem.
+- Pythia proves cross-model Glass House generality.
+
+Safe one-liner:
+
+> CAS opens a verified readout window inside an open model: the
+> 28-Foundation signal is readable beyond text, and removing it breaks the CAS
+> readout. The stronger claim that it controls generated language is still
+> unproven.
+
+### Roundtable consensus
+
+Four independent reviews converged:
+
+- CAS/TKS internals: 28 Foundations helped because Drive x Register is cleaner
+  than the 10-noetic axis, but Pythia lacks CAS Native's typed decoder /
+  compiler machinery.
+- Math/mech theory: readout-causal is observability, not controllability; the
+  next test must target logits or routing, not the trained probe alone.
+- Experiment design: free generation token-match is too blunt; use a fresh
+  forced-choice Drive logit-margin assay.
+- Skeptical statistics: use fresh data, cluster-aware stats, stronger controls,
+  and locked pass gates.
+
+### Recommended Stage 7.4
+
+`Fresh Drive Forced-Choice Logit-Margin Test`
+
+- Fresh held-out fixture, not copied from existing Stage 7 rows.
+- Same-register Drive contrasts.
+- Two-choice semantic question with single-token verified answer options.
+- Frozen Stage 7.2 Drive projection: focus-token layer 6, rank 6.
+- Primary metric: `logit(correct_option) - logit(incorrect_option)`.
+- Intervention: Drive-subspace removal at locked focus token.
+- Controls: same-rank random removals, no-hook determinism, option-order
+  balance, label-shuffled sanity check, cluster-aware bootstrap.
+- Calibration gate: 280 rows; unablated 2AFC accuracy >= 0.60 and mean correct
+  margin >= 0.25.
+- Locked test: 840 rows if calibration passes.
+- Pass gates: extra margin drop >= 0.10 logits, one-sided paired permutation
+  p <= 0.01, bootstrap CI lower bound > 0.03, at least 5/7 Drives positive,
+  at least 3/4 registers positive, and secondary accuracy drop >= 5 pp over
+  random.
+
+### Audit asks
+
+1. Does the claims matrix preserve the correct Stage 7 evidence boundary?
+2. Is the forced-choice logit-margin endpoint the right next claim-bearing
+   test after the Stage 7.3 negative?
+3. Should locked-test random controls be 30 or 100?
+4. Should shuffled-label probe subspace be mandatory in the locked test?
+5. Are the Stage 7.4 pass gates strict enough to prevent p-hacking while still
+   allowing a real effect to surface?
