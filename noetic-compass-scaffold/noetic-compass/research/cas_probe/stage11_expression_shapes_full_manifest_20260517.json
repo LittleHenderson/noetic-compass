@@ -1,0 +1,116 @@
+{
+  "anti_leak_flag_counts": {},
+  "date": "20260517",
+  "family_counts": {
+    "applied_human": 1800,
+    "compressed_minimal": 600,
+    "counter_alias_hard_negative": 600,
+    "definition_compact": 1800,
+    "long_embedded_clause": 600,
+    "role_inverse_plain": 1800,
+    "system_process": 1800
+  },
+  "lessons_reused": [
+    "role-bound same-sentence counterfactuals",
+    "balanced labels",
+    "explicit Focus marker",
+    "literal expression/category leakage avoided in model-facing English",
+    "text and metadata baselines required before any harness claim"
+  ],
+  "mode": "full",
+  "n_classes": 10,
+  "n_rows": 9000,
+  "out_jsonl": "stage11_expression_shapes_full_20260517.jsonl",
+  "out_jsonl_sha256": "d0059f55d94b75461b431b7c7b39df3d450ef1721527efe143caae2070f5aef7",
+  "pair_kind_counts": {
+    "shape_cross_half_binary_composition_vs_cross_register_omega": 600,
+    "shape_cross_half_let_binding_vs_meta_logic_relation": 600,
+    "shape_cross_half_recipe_vs_inversion": 600,
+    "shape_cross_half_rpm_chain_vs_diagram_export": 600,
+    "shape_cross_half_state_literal_vs_fractal_sequence": 600,
+    "shape_cycle_next_binary_composition_vs_let_binding": 600,
+    "shape_cycle_next_cross_register_omega_vs_meta_logic_relation": 600,
+    "shape_cycle_next_diagram_export_vs_state_literal": 600,
+    "shape_cycle_next_fractal_sequence_vs_cross_register_omega": 600,
+    "shape_cycle_next_inversion_vs_diagram_export": 600,
+    "shape_cycle_next_let_binding_vs_recipe": 600,
+    "shape_cycle_next_meta_logic_relation_vs_inversion": 600,
+    "shape_cycle_next_recipe_vs_rpm_chain": 600,
+    "shape_cycle_next_rpm_chain_vs_fractal_sequence": 600,
+    "shape_cycle_next_state_literal_vs_binary_composition": 600
+  },
+  "position_definition": "ten existing Path D CAS expression grammar shapes",
+  "schema_version": "stage11_expression_shape_fixture_manifest.v1",
+  "shape_counts": {
+    "binary_composition": 900,
+    "cross_register_omega": 900,
+    "diagram_export": 900,
+    "fractal_sequence": 900,
+    "inversion": 900,
+    "let_binding": 900,
+    "meta_logic_relation": 900,
+    "recipe": 900,
+    "rpm_chain": 900,
+    "state_literal": 900
+  },
+  "shape_labels": [
+    "state_literal",
+    "binary_composition",
+    "let_binding",
+    "recipe",
+    "rpm_chain",
+    "fractal_sequence",
+    "cross_register_omega",
+    "meta_logic_relation",
+    "inversion",
+    "diagram_export"
+  ],
+  "shape_metadata": {
+    "binary_composition": {
+      "gloss": "two marked conditions are linked together so the relation between them is the point",
+      "plain": "two marked conditions are linked into one relation"
+    },
+    "cross_register_omega": {
+      "gloss": "one named outcome is carried across different modes of presentation without losing its identity",
+      "plain": "one named outcome is viewed across different modes"
+    },
+    "diagram_export": {
+      "gloss": "a named cluster is packaged as a reusable bundle for outside viewing",
+      "plain": "a named cluster is packaged for outside viewing"
+    },
+    "fractal_sequence": {
+      "gloss": "a repeating pattern of moves is applied in order so each pass follows the previous one",
+      "plain": "a repeated pattern of moves is applied in order"
+    },
+    "inversion": {
+      "gloss": "the usual direction is turned around so source and result exchange their roles",
+      "plain": "the usual direction is turned around"
+    },
+    "let_binding": {
+      "gloss": "a temporary name is introduced first and then reused later inside the same record",
+      "plain": "a temporary name is introduced and later used"
+    },
+    "meta_logic_relation": {
+      "gloss": "one rule speaks about how another rule relates, follows, or holds together",
+      "plain": "a rule describes how another rule relates or follows"
+    },
+    "recipe": {
+      "gloss": "a desired outcome is built from required contributors with different amounts of influence",
+      "plain": "a desired outcome is specified by weighted contributors"
+    },
+    "rpm_chain": {
+      "gloss": "a starting point advances through staged checkpoints before a final pass is reached",
+      "plain": "a starting point advances through staged checkpoints"
+    },
+    "state_literal": {
+      "gloss": "one marked condition stands by itself without another relation attached",
+      "plain": "one marked condition stands alone"
+    }
+  },
+  "source": "user-requested Stage 11 expression-shape ladder after Stage 10 five-operator result",
+  "split_counts": {
+    "test": 4200,
+    "train": 3600,
+    "val": 1200
+  }
+}
