@@ -5038,3 +5038,90 @@ Audit asks:
 1. Verify the CPL4 judge does not train on generated continuations.
 2. Check whether the classifier reliability floor and negative interpretation are fair.
 3. Audit the refreshed claims matrix wording: CPL2 positive, CPL3/CPL4 not clean, no hidden-state steering claim.
+
+## 2026-05-17T22:00Z — claude: Cross-model CPL2 replication on Pythia-1B AUTHORIZED
+
+Branch: `experiment/cas-probe-pythia`
+
+User directive (chat, 2026-05-17): "run cross-model CPL2 on Pythia-1B"
+
+Authorization: `AUTHORIZED: yes` for this specific launch (see `decisions.md` 2026-05-17T22:00Z).
+
+### Why this experiment
+
+CPL2 is the load-bearing Stage 7 result (+0.283 likelihood shift via probe-predicted readable prefix, p<0.0001, 81/112 positive on Pythia-160M). The Glass House pitch's central conditional is whether the η→ε bridge transfers across model scales. Pythia-1B is the cheapest sensible scale-up: same tokenizer family, same architecture family, ~6× parameters (1B vs 160M), 16 layers vs 12, hidden_dim 2048 vs 768.
+
+### Reuse as-is
+
+1. **v2 corpus** — `stage6_role_bound_full_*` (3,000 role-bound rows). No corpus rebuild.
+2. **Probe architecture** — sklearn LogisticRegression L-BFGS, balanced class weight, StandardScaler. Identical to Stage 6/7.
+3. **Evaluation harness** — same train/val/test split (1200/400/1400), same `evaluate_paraphrase_invariance.py`-style scaffolding, same McNemar discipline.
+4. **Realization templates** — `probe_stage7_cas_prefix_full_loop.py`'s readable prefix templates verbatim. Same `partner` class assignment via involution pairs.
+5. **Statistical methodology** — paired Wilcoxon on per-prompt deltas; 30 random rank-matched controls; pre-registered gate.
+
+### New work required
+
+1. **Activation capture on Pythia-1B** — port `capture_stage6_role_bound_activations.py` to Pythia-1B. Probe layers 6 through 13 (proportional to Pythia-160M layer 4-10), capture focus-token, final-token, mean-token at each. ~700 MB activation file (16 layers × 2048 dim × 3000 rows × 3 readouts × float32). git-ignore the binary; commit manifest + sha.
+
+   Cost estimate: ~15-20 min on A6000.
+
+2. **Probe scan + Stage 6.4-equivalent** — train per-layer 28-class probe. Locate the layer with highest test accuracy + cleanest factorization (lacunarity). This becomes the "Pythia-1B equivalent of layer 6."
+
+   Cost: ~10 min CPU (or quick GPU pass).
+
+3. **CPL2 replication run** — `probe_stage7_cas_prefix_full_loop.py` adapted to Pythia-1B. Same 112-row test pack, same conditions (none / gold_raw / gold_readable / probe_raw / probe_readable / partner_readable). Same metric (semantic likelihood logit margin on target vs partner class continuations).
+
+   Cost: ~15 min A6000.
+
+4. **Optional same-run sweetener** — while the model is loaded, also run CPL3/CPL4 visible-text continuations. The hypothesis is that surface-text manifestation closes at scale (16-token greedy decoding has lower sampling noise at 1B vs 160M).
+
+   Cost: ~30 min A6000 incremental.
+
+### Pre-registered PASS / NULL / GREY gates
+
+Lock these in `STAGE8_CROSS_MODEL_GATES_20260517.md` BEFORE running the experiment.
+
+**Layer choice:** locked to the layer with the highest 28-class probe test accuracy, ties broken by lowest lacunarity. Choose ONCE on val split, not test.
+
+**CPL2 gate (the load-bearing test):**
+- PASS_CLEAN: probe-readable delta vs none > +0.15 paired Wilcoxon p < 0.05, AND probe-readable minus partner-readable margin > +0.30, AND positive-share > 60/112.
+- NULL: probe-readable delta vs none < +0.05 OR margin minus partner < +0.10 OR positive-share < 50/112. ⇒ bridge does NOT transfer at scale; bounded Pythia-160M claim stands.
+- GREY: anything between. ⇒ rerun with n_prompts ≥ 240 for power.
+
+These thresholds are roughly half the Pythia-160M effect (Pythia-160M CPL2 was +0.283 delta, +0.683 margin, 81/112 positive). Half-strength is the minimum for a defensible cross-scale claim; weaker than that and we're inside noise.
+
+**Optional CPL3/CPL4 gate (sweetener):**
+- PASS_CLEAN: probe-readable beats wrong-partner by ≥ +0.25 on visible-text margin (same pre-registered floor as CPL3 had on Pythia-160M).
+- Treat as exploratory; do not refresh memo based on CPL3/CPL4 outcome alone.
+
+**Pre-registration discipline:** Commit `STAGE8_CROSS_MODEL_GATES_20260517.md` BEFORE running the experiment. After commit, no threshold edits. Statistical methodology: paired Wilcoxon on per-prompt deltas, NOT unpaired aggregate empirical-p. This is the same correction the statistician specialist flagged for Stage 6.6 and that closed CPL2 properly.
+
+### Artifacts to commit
+
+- `capture_stage8_pythia1b_activations.py` (or adapt existing capture script)
+- `STAGE8_CROSS_MODEL_GATES_20260517.md` (pre-registration) — BEFORE running
+- `STAGE8_PYTHIA1B_PROBE_REPORT_20260517.json` (probe scan results)
+- `STAGE8_PYTHIA1B_CPL2_REPORT_20260517.json` (CPL2 result)
+- `STAGE8_PYTHIA1B_CPL3_4_EXPLORATORY_REPORT_20260517.json` (if sweetener run)
+- `STAGE8_PYTHIA1B_SUMMARY_20260517.md` (verdict + bounds)
+- Update `README.md` with Stage 8 row
+- Update `STAGE7_CLAIMS_MATRIX_20260517.md` → `STAGE8_CLAIMS_MATRIX_20260517.md` with cross-model result
+- git-ignore the activation .npz binary; commit only manifest + sha256
+
+### Audit asks (after run completes, surface back)
+
+1. Layer choice — was it locked on val split before looking at test? Was lacunarity computed correctly at the new hidden dim (2048)?
+2. CPL2 verdict — does the paired Wilcoxon p actually pass the pre-registered gate, not just look favorable in aggregate? Was n_prompts ≥ 60 (matching Pythia-160M power)?
+3. Factorization sanity — lacunarity on Pythia-1B should be in the same ballpark as Pythia-160M's 0.021 if the cross-product factorization is genuinely architectural. If lacunarity is dramatically different, that's an interesting finding either way and should be flagged.
+4. Honest reserved-language framing for the outcome — PASS_CLEAN, NULL, or GREY, with exact thresholds met or missed.
+5. Glass House memo refresh trigger — if PASS_CLEAN, this is the inflection point. If NULL, the Pythia-160M-only bound stays. If GREY, hold the memo until n=240 rerun.
+
+### Cost cap
+
+Hard cap: 2 GPU-hours on A6000. If the experiment is exceeding 90 minutes, surface to Claude/user before continuing.
+
+### Standing state at handoff
+
+Pythia-160M findings remain valid as the within-model bound. This experiment tests whether they transfer, not whether they hold. A negative result on Pythia-1B does not invalidate any closed Pythia-160M tier; it narrows the cross-model scope.
+
+Codex executes; Claude/user audit on completion.

@@ -1174,3 +1174,26 @@ Cumulative Stage 4 spend (Stage 4B pilot + v0+v0.1+v0.2): **~$1.68**. Hard cap u
 Per "backup IF it promotes": local-archive scp NOT executed.
 
 Codex review pending (`inbox_claude.md` 2026-05-14T20:15Z) on next-lever sequence. My recommendation: Stage 4B v2 expansion (~$5-7 API to generate 1500-2500 more records targeting under-represented categories), then v0.3 at 20-25% mix.
+
+## 2026-05-17T22:00Z — AUTHORIZED: Cross-model CPL2 replication on Pythia-1B
+
+User directive (chat, 2026-05-17): "run cross-model CPL2 on Pythia-1B"
+
+`AUTHORIZED: yes` for the following scope ONLY:
+
+- Stage 8 experiment: cross-model CPL2 (η→ε bridge) replication on Pythia-1B
+- Reuse v2 corpus (3,000 role-bound rows), probe architecture, realization templates verbatim
+- New: Pythia-1B activation capture (per-layer scan layers 6-13), per-layer 28-class probe, CPL2 likelihood run
+- Optional same-run sweetener: CPL3/CPL4 visible-text continuations
+- Pre-registration document `STAGE8_CROSS_MODEL_GATES_20260517.md` must be committed BEFORE the experiment runs
+- Hard cap: 2 GPU-hours on A6000
+- All artifacts committed to `experiment/cas-probe-pythia`
+- Activation .npz binary git-ignored; manifest + sha256 committed
+- Audit handoff to Claude on completion via `inbox_claude.md`
+
+NOT authorized under this entry:
+- Larger Pythia scale-ups (1.4B, 2.8B, 6.9B, 12B) — separate decision required if Stage 8 PASS_CLEAN warrants scale-up
+- Cross-architecture (Llama, OLMo, Qwen) — separate decision required after Stage 8 closes
+- Memo refresh — gated on Stage 8 outcome, claims matrix update first
+
+Spec details: `inbox_claude.md` 2026-05-17T22:00Z entry.
