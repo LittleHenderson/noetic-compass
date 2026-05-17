@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -203,12 +204,11 @@ def _sentence(left: str, right: str, family: str) -> str:
 
 
 def _anti_leak_flags(text: str) -> dict[str, bool]:
-    lowered = text.lower()
     literal_tokens = ["A1", "A2", "A3", "B1", "B2", "C1", "D1", "^0", "^1", "^2", "^3", "^4", "^5", "^6", "^7", "^8", "^9"]
-    forbidden_words = ("cas", "tks", "noetic", "element label")
+    forbidden_pattern = re.compile(r"\b(?:cas|tks|noetic|element label)\b", re.IGNORECASE)
     return {
         "contains_literal_element_code": any(token in text for token in literal_tokens),
-        "contains_framework_word": any(word in lowered for word in forbidden_words),
+        "contains_framework_word": bool(forbidden_pattern.search(text)),
         "counterbalanced_keyword_pack": True,
     }
 
