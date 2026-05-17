@@ -4380,3 +4380,96 @@ Audit asks:
 3. Review the wording in `STAGE7_FOUNDATION_ABLATION_REPORT_20260517.md`.
 4. Confirm next step: Stage 7.2 per-axis factor check (Drive, Register,
    28-way interaction) before any generation hook.
+
+## 2026-05-17T09:05Z - Stage 7.2 factor check complete
+
+Claude - Stage 7.2 ran on the pod. Verdict is mixed but useful.
+
+New script/report:
+
+- `evaluate_stage7_factor_check.py`
+- `stage7_factor_check_report_20260517.json`
+- `STAGE7_FACTOR_CHECK_REPORT_20260517.md`
+
+Locked setup:
+
+- Requires Stage 7.0 pass:
+  `FOUNDATION_PROBE_RELIABLY_ABOVE_TEXT_BASELINE`
+- Requires Stage 7.1 pass:
+  `FOUNDATION_SUBSPACE_CAUSAL_FOR_PROBE_READOUT`
+- readout: `focus_token`
+- layer: 6
+- no layer sweep, to avoid layer shopping
+
+Overall:
+
+- status: `STAGE7_FACTOR_CHECK_MIXED`
+
+Drive:
+
+- status: `FACTOR_READOUT_AND_ABLATION_PASS`
+- chance: 0.1429
+- activation test acc: 0.8907
+- best text baseline: `tfidf_char_3_5`, test acc 0.6679
+- activation lift over text: +0.2228
+- paired p vs text: 1.13e-73
+- best metadata baseline: `pair_focus`, test acc 0.6667
+- activation lift over metadata: +0.2241
+- paired p vs metadata: 4.20e-72
+- subspace rank: 6
+- ablated acc: 0.1429
+- random max disruption: 0.0000
+
+Register:
+
+- status: `FACTOR_ABLATION_PASS_TEXT_GATE_FAIL`
+- chance: 0.2500
+- activation test acc: 0.8563
+- best text baseline: `tfidf_char_3_5`, test acc 0.8971
+- activation lift over text: -0.0408
+- paired p vs text: 2.75e-06, in favor of text
+- best metadata baseline: `surface_pair_family_focus`, test acc 1.0000
+- ablated acc: 0.2500
+- random max disruption: 0.0000
+
+Interaction/full 28-way:
+
+- status: `FACTOR_READOUT_AND_ABLATION_PASS`
+- chance: 0.0357
+- activation test acc: 0.7857
+- best text baseline: `tfidf_char_3_5`, test acc 0.4966
+- activation lift over text: +0.2891
+- paired p vs text: 2.66e-95
+- best metadata baseline: `surface_pair_family_focus`, test acc 0.6667
+- activation lift over metadata: +0.1190
+- paired p vs metadata: 4.38e-20
+- subspace rank: 27
+- ablated acc: 0.0357
+- random max disruption: 0.0000
+
+Interpretation:
+
+> Drive and the full 28-way Foundation/Register interaction are strong.
+> Register is real as a readout but text-explained in this fixture. That
+> means the Stage 7 success is not merely "the model noticed register
+> wording"; the stronger signal is Drive plus the Drive-Register
+> interaction.
+
+Recommended next:
+
+- Do not run Register generation hooks from this fixture.
+- If moving to generation, test Drive first:
+  - Drive beats text by +22.3 pp.
+  - Drive beats metadata by +22.4 pp.
+  - Drive ablation drops to exact chance.
+  - Drive subspace rank is compact at 6.
+- Full 28-way interaction is strong but rank 27 and may be too broad for
+  a generation hook.
+
+Audit asks:
+
+1. Validate that the mixed verdict is correctly worded.
+2. Check whether metadata should remain diagnostic-only for Drive/Register
+   given pair/focus can identify factors by construction.
+3. Confirm or reject the recommendation: Stage 7.3 Drive-only generation
+   hook/patching before full 28-way generation tests.
