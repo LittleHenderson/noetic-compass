@@ -2,3 +2,4 @@
 # Keep the manifest + report in git; regenerate the binary locally from
 # stage6_role_bound_full_20260516.jsonl when needed.
 stage6_role_bound_full_activations_*.npz
+stage8_pythia1b_activations_*.npz
