@@ -5370,3 +5370,74 @@ Audit asks:
 2. Check whether the ablation evidence is correctly bounded as readout-causal only.
 3. Check overclaim risk in `STAGE10_CLAIMS_MATRIX_20260517.md`.
 4. Recommend next gate: full expression grammar shapes vs a new ceiling-aware operator fixture.
+
+## 2026-05-17T16:08Z - codex: Stage 11 expression grammar shapes complete
+
+Branch: `experiment/cas-probe-pythia`
+
+Status: `STAGE11_EXPRESSION_SHAPES_FULL_PASS`
+
+Pre-registration discipline:
+
+- `STAGE11_EXPRESSION_SHAPES_GATES_20260517.md` committed before activation/eval run in `7d3bf3d`.
+- Gate required absolute activation-over-text lift >= +0.05 plus McNemar p < 0.05.
+- No post-hoc gate changes.
+
+Input artifacts:
+
+- Fixture: `stage11_expression_shapes_full_20260517.jsonl`
+- Fixture SHA: `d0059f55d94b75461b431b7c7b39df3d450ef1721527efe143caae2070f5aef7`
+- Activation binary: `stage11_expression_shapes_full_activations_20260517.npz`
+- Activation binary SHA: `ecc9c29c32ebc3e50993c9edc00ee4d894dd9b5096897f31fd497c3a1a3351ac`
+- Binary is git-ignored / manifest-only.
+
+Fixture:
+
+- 9,000 rows
+- 10 expression grammar-shape classes, 900 rows per class
+- Train/val/test: 3,600 / 1,200 / 4,200
+- Labels: `state_literal`, `binary_composition`, `let_binding`, `recipe`, `rpm_chain`, `fractal_sequence`, `cross_register_omega`, `meta_logic_relation`, `inversion`, `diagram_export`
+- Model-facing English has zero expression-symbol/category/framework leakage flags.
+
+Headline:
+
+- Validation-selected readout: `final_token`
+- Validation-selected layer: `2`
+- Activation test acc: `0.9300`
+- Macro-F1: `0.9312`
+- Best text baseline: `tfidf_char_3_5`, test `0.6443`
+- Best metadata baseline: `surface_pair_family_focus`, test `0.6667`
+- Activation-over-text lift: `+0.2857`
+- McNemar p vs text: `2.94e-227`
+- McNemar p vs metadata: `4.20e-216`
+
+Ablation:
+
+- Expression-shape subspace rank: `9`
+- Targeted ablated acc: `0.1000` exact 10-class chance
+- Targeted disruption: `+0.8300`
+- Random max disruption: `0.0000`
+- p(random >= targeted): `0.0323`
+
+Interpretation:
+
+> Stage 11 is pass-clean. Expression grammar shape is readable from Pythia-160M hidden states well above text/metadata baselines and is causal for the trained readout under targeted subspace removal.
+
+Boundary:
+
+> This is not formula solving, compiler execution, raw-symbol parsing, or visible generation control. It is expression grammar-shape readout and readout-causal subspace evidence.
+
+Artifacts:
+
+- `stage11_expression_shapes_full_activations_manifest_20260517.json`
+- `stage11_expression_shape_probe_report_20260517.json`
+- `STAGE11_EXPRESSION_SHAPES_PROBE_REPORT_20260517.md`
+- `STAGE11_CLAIMS_MATRIX_20260517.md`
+
+Audit asks:
+
+1. Verify pre-registration and no layer-shopping: headline selected by validation, test reported once.
+2. Check leakage discipline in fixture construction, including the sanitized inherited Stage 6 bundle text.
+3. Check the ablation math and random complement controls.
+4. Check overclaim risk in `STAGE11_CLAIMS_MATRIX_20260517.md`.
+5. Recommend next gate: Stage 12 equations/formulas with compiler-validated structures.

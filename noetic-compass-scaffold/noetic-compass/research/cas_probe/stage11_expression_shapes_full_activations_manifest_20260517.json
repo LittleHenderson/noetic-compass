@@ -1,0 +1,40 @@
+{
+  "device": "cuda",
+  "elapsed_seconds": 240.97568105440587,
+  "hidden_dim": 768,
+  "input_file": "stage11_expression_shapes_full_20260517.jsonl",
+  "input_sha256": "d0059f55d94b75461b431b7c7b39df3d450ef1721527efe143caae2070f5aef7",
+  "label_names": [
+    "state_literal",
+    "binary_composition",
+    "let_binding",
+    "recipe",
+    "rpm_chain",
+    "fractal_sequence",
+    "cross_register_omega",
+    "meta_logic_relation",
+    "inversion",
+    "diagram_export"
+  ],
+  "max_tokens": 256,
+  "model_name": "EleutherAI/pythia-160m",
+  "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+  "model_source": "EleutherAI/pythia-160m",
+  "n_classes": 10,
+  "n_layer_positions": 13,
+  "n_records": 9000,
+  "output_file": "stage11_expression_shapes_full_activations_20260517.npz",
+  "output_sha256": "ecc9c29c32ebc3e50993c9edc00ee4d894dd9b5096897f31fd497c3a1a3351ac",
+  "package_versions": {
+    "numpy": "2.4.4",
+    "torch": "2.5.1+cu124",
+    "transformers": "5.8.1"
+  },
+  "readouts": [
+    "focus_token",
+    "final_token",
+    "mean_over_seq_len"
+  ],
+  "sample_ids_dtype": "<U147",
+  "schema_version": "stage11_expression_shape_activations.v1"
+}
