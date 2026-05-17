@@ -4737,3 +4737,118 @@ Still not supported:
 4. Recommend whether the next step should be fresh Stage 7.4 forced-choice
    confirmation, path/SAE diagnostics, or stopping Pythia steering work and
    moving to CAS Native / a larger open model.
+
+---
+
+## 2026-05-17T20:10Z - Stage 7 eta-to-epsilon CAS prefix bridge found
+
+Codex - user pushed back on the "stop simple Pythia hooks" conclusion and
+named the missing math: the probe is `eta` (hidden state -> CAS structure), but
+generation needs `epsilon` (CAS structure -> realized token/language context).
+Prior hidden-state hooks tried to use `eta` as if it were `epsilon`.
+
+I tested that directly.
+
+### Important calibration note
+
+First I tried a numbered-choice CAS-prefix assay:
+
+- `probe_stage7_cas_prefix_conditioning.py`
+- `stage7_cas_prefix_conditioning_20260517.json`
+
+It is **not claim-bearing** because the no-prefix baseline only scored `0.446`
+on the numbered option task. Pythia-160M was bad at the assay itself, so this
+does not fairly test prefix conditioning.
+
+### Clean test: conditional likelihood
+
+New script:
+
+- `probe_stage7_cas_prefix_likelihood.py`
+
+New report:
+
+- `stage7_cas_prefix_likelihood_20260517.json`
+- `STAGE7_CAS_PREFIX_LIKELIHOOD_20260517.md`
+
+Design:
+
+- Select 112 locked Stage 7 test rows (`16` per Drive) from same-register
+  Drive-contrast pairs.
+- For each row, score conditional likelihood of:
+  - true Drive phrase continuation
+  - partner Drive phrase continuation
+- Compare margins under:
+  - no prefix
+  - raw CAS-symbol prefix (`F#|R`)
+  - human-readable CAS realization prefix
+  - plain English realization prefix
+- Prefix wording and candidate wording are deliberately paraphrased, not exact
+  string copies.
+
+### Result
+
+Status: `READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD`
+
+Key numbers:
+
+- No prefix margin: `+0.0405`.
+- Raw CAS symbols do not help:
+  - `raw_correct` margin `+0.0205`, delta `-0.0200`.
+  - `raw_partner` margin `+0.0386`.
+  - `raw_correct_minus_raw_partner_margin = -0.0182`.
+- Readable CAS realization works:
+  - `gloss_correct` margin `+0.3978`, delta `+0.3573`, `77/112`
+    positive cases.
+  - `gloss_partner` margin `-0.3337`, delta `-0.3742`.
+  - `gloss_correct_minus_gloss_partner_margin = +0.7314`.
+  - `plain_correct` margin `+0.5244`, delta `+0.4839`, `90/112`
+    positive cases.
+  - `plain_partner` margin `-0.4257`, delta `-0.4662`.
+  - `plain_correct_minus_plain_partner_margin = +0.9501`.
+
+### Interpretation
+
+This does **not** rescue internal-neuron steering. It does rescue the CAS
+Harness bridge:
+
+> Read CAS structure from Pythia (`eta`), realize that structure as readable CAS
+> context (`epsilon`), then condition Pythia generation through normal
+> self-attention.
+
+The raw-symbol result is important: Pythia does not understand `F3|E` by
+itself. The working bridge is the readable realization, not the bare CAS
+notation.
+
+### Updated claim boundary
+
+Supported:
+
+- Internal Foundation readout.
+- Readout-causal ablation.
+- Readable CAS-prefix conditioning of semantic likelihood.
+
+Not supported:
+
+- Hidden-state steering.
+- Raw CAS-symbol conditioning.
+- Pythia-native CAS-token understanding.
+
+### Next proposed test
+
+Stage 7.CPL2:
+
+1. Use the trained Stage 7 probe prediction, not gold labels.
+2. Convert predicted Foundation/Drive into readable CAS realization prefix.
+3. Score the same likelihood bridge against intentionally wrong prefixes on
+   fresh held-out rows.
+4. If pass-clean, move from likelihood to short constrained generation.
+
+Audit asks:
+
+1. Check whether the likelihood assay avoids the invalid numbered-choice issue.
+2. Check whether the paraphrased prefix/candidate wording is sufficiently
+   non-copying for an exploratory bridge claim.
+3. Confirm the claim wording: CAS Harness conditioning, not internal steering.
+4. Recommend whether Stage 7.CPL2 should use gold-vs-wrong first or
+   probe-predicted-vs-wrong immediately.

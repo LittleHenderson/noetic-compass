@@ -1,0 +1,2986 @@
+{
+  "cases": [
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "gloss_partner": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "none": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "raw_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "raw_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        }
+      },
+      "current_drive": 1,
+      "foundation_label": "F1f",
+      "partner_drive": 2,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F1f_F2f_compressed_minimal_F1f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "gloss_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "raw_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        }
+      },
+      "current_drive": 1,
+      "foundation_label": "F1f",
+      "partner_drive": 7,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F7f_F1f_concrete_human_F1f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "raw_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "raw_partner": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        }
+      },
+      "current_drive": 1,
+      "foundation_label": "F1E",
+      "partner_drive": 2,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_compressed_minimal_F1E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "raw_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "raw_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        }
+      },
+      "current_drive": 1,
+      "foundation_label": "F1T",
+      "partner_drive": 7,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F7T_F1T_concrete_human_F1T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        }
+      },
+      "current_drive": 1,
+      "foundation_label": "F1f",
+      "partner_drive": 7,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F7f_F1f_no_alias_plain_F1f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "raw_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "raw_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        }
+      },
+      "current_drive": 1,
+      "foundation_label": "F1A",
+      "partner_drive": 2,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_system_process_F1A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 835.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        }
+      },
+      "current_drive": 1,
+      "foundation_label": "F1A",
+      "partner_drive": 7,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_no_alias_plain_F1A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "gloss_partner": {
+          "correct_margin": 0.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "raw_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "raw_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        }
+      },
+      "current_drive": 1,
+      "foundation_label": "F1T",
+      "partner_drive": 7,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F7T_F1T_no_alias_plain_F1T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "gloss_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        }
+      },
+      "current_drive": 2,
+      "foundation_label": "F2f",
+      "partner_drive": 1,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F1f_F2f_concrete_human_F2f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "gloss_partner": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 830.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "none": {
+          "correct_margin": -3.0,
+          "correct_token_logit": 830.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_correct": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_partner": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        }
+      },
+      "current_drive": 2,
+      "foundation_label": "F2E",
+      "partner_drive": 3,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F2E_F3E_long_embedded_clause_F2E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "gloss_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        }
+      },
+      "current_drive": 2,
+      "foundation_label": "F2T",
+      "partner_drive": 1,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_role_inverse_minimal_F2T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        },
+        "gloss_partner": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 830.5,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "none": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        },
+        "raw_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        },
+        "raw_partner": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        }
+      },
+      "current_drive": 2,
+      "foundation_label": "F2T",
+      "partner_drive": 3,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F2T_F3T_long_embedded_clause_F2T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "gloss_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "none": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        }
+      },
+      "current_drive": 2,
+      "foundation_label": "F2T",
+      "partner_drive": 3,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F2T_F3T_system_process_F2T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "gloss_partner": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 829.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "none": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        }
+      },
+      "current_drive": 2,
+      "foundation_label": "F2E",
+      "partner_drive": 3,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_no_alias_plain_F2E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "gloss_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "none": {
+          "correct_margin": -2.5,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        }
+      },
+      "current_drive": 2,
+      "foundation_label": "F2E",
+      "partner_drive": 3,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_long_embedded_clause_F2E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "gloss_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "none": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "raw_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        }
+      },
+      "current_drive": 2,
+      "foundation_label": "F2E",
+      "partner_drive": 1,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F1E_F2E_compressed_minimal_F2E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "gloss_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "none": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 829.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "raw_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "raw_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        }
+      },
+      "current_drive": 3,
+      "foundation_label": "F3T",
+      "partner_drive": 4,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F3T_F4T_counter_alias_hard_negative_F3T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "gloss_partner": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 830.5,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "raw_correct": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "raw_partner": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        }
+      },
+      "current_drive": 3,
+      "foundation_label": "F3T",
+      "partner_drive": 2,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F2T_F3T_counter_alias_hard_negative_F3T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "gloss_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "none": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "raw_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "raw_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        }
+      },
+      "current_drive": 3,
+      "foundation_label": "F3A",
+      "partner_drive": 2,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F2A_F3A_no_alias_plain_F3A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 829.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "gloss_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "none": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 829.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "raw_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "raw_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        }
+      },
+      "current_drive": 3,
+      "foundation_label": "F3f",
+      "partner_drive": 4,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F3f_F4f_long_embedded_clause_F3f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 830.5,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "gloss_partner": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "raw_correct": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "raw_partner": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        }
+      },
+      "current_drive": 3,
+      "foundation_label": "F3E",
+      "partner_drive": 2,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F2E_F3E_role_inverse_minimal_F3E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 830.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "gloss_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "none": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 829.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "raw_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "raw_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        }
+      },
+      "current_drive": 3,
+      "foundation_label": "F3T",
+      "partner_drive": 4,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F3T_F4T_role_inverse_minimal_F3T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "gloss_partner": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "none": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "raw_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "raw_partner": {
+          "correct_margin": 2.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        }
+      },
+      "current_drive": 3,
+      "foundation_label": "F3A",
+      "partner_drive": 4,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_counter_alias_hard_negative_F3A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 829.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "gloss_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 829.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "raw_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "raw_partner": {
+          "correct_margin": -2.0,
+          "correct_token_logit": 830.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        }
+      },
+      "current_drive": 3,
+      "foundation_label": "F3f",
+      "partner_drive": 4,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F3f_F4f_role_inverse_minimal_F3f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 4,
+      "foundation_label": "F4E",
+      "partner_drive": 5,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F4E_F5E_role_inverse_minimal_F4E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "raw_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "raw_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 4,
+      "foundation_label": "F4T",
+      "partner_drive": 5,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_no_alias_plain_F4T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "raw_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "raw_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 4,
+      "foundation_label": "F4A",
+      "partner_drive": 5,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F4A_F5A_compressed_minimal_F4A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 830.5,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "none": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 830.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "raw_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "raw_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        }
+      },
+      "current_drive": 4,
+      "foundation_label": "F4T",
+      "partner_drive": 3,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F3T_F4T_concrete_human_F4T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "none": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 4,
+      "foundation_label": "F4A",
+      "partner_drive": 5,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F4A_F5A_concrete_human_F4A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "raw_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 4,
+      "foundation_label": "F4A",
+      "partner_drive": 5,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F4A_F5A_concrete_human_F4A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 830.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 829.5,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 830.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "raw_correct": {
+          "correct_margin": 2.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "raw_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        }
+      },
+      "current_drive": 4,
+      "foundation_label": "F4E",
+      "partner_drive": 3,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F3E_F4E_compressed_minimal_F4E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "raw_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 4,
+      "foundation_label": "F4f",
+      "partner_drive": 5,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F4f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "gloss_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "raw_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        }
+      },
+      "current_drive": 5,
+      "foundation_label": "F5E",
+      "partner_drive": 4,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_system_process_F5E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "gloss_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "raw_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 4
+        }
+      },
+      "current_drive": 5,
+      "foundation_label": "F5T",
+      "partner_drive": 4,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_compressed_minimal_F5T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        }
+      },
+      "current_drive": 5,
+      "foundation_label": "F5E",
+      "partner_drive": 4,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_role_inverse_minimal_F5E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "raw_correct": {
+          "correct_margin": 0.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        }
+      },
+      "current_drive": 5,
+      "foundation_label": "F5f",
+      "partner_drive": 6,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F5f_F6f_concrete_human_F5f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 831.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        }
+      },
+      "current_drive": 5,
+      "foundation_label": "F5T",
+      "partner_drive": 4,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F4T_F5T_system_process_F5T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "raw_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "raw_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 4
+        }
+      },
+      "current_drive": 5,
+      "foundation_label": "F5A",
+      "partner_drive": 4,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F4A_F5A_counter_alias_hard_negative_F5A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "gloss_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "raw_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        }
+      },
+      "current_drive": 5,
+      "foundation_label": "F5A",
+      "partner_drive": 6,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F5A_F6A_compressed_minimal_F5A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        }
+      },
+      "current_drive": 5,
+      "foundation_label": "F5T",
+      "partner_drive": 6,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F5T_F6T_system_process_F5T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 6,
+      "foundation_label": "F6f",
+      "partner_drive": 5,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F5f_F6f_no_alias_plain_F6f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "gloss_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "raw_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        }
+      },
+      "current_drive": 6,
+      "foundation_label": "F6T",
+      "partner_drive": 7,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F6T_F7T_no_alias_plain_F6T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 2
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "raw_correct": {
+          "correct_margin": -0.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 6,
+      "foundation_label": "F6A",
+      "partner_drive": 5,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "gloss_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "raw_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        }
+      },
+      "current_drive": 6,
+      "foundation_label": "F6A",
+      "partner_drive": 7,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F6A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 6,
+      "foundation_label": "F6A",
+      "partner_drive": 5,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F5A_F6A_compressed_minimal_F6A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "gloss_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "none": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "raw_correct": {
+          "correct_margin": 0.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 6,
+      "foundation_label": "F6f",
+      "partner_drive": 5,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F5f_F6f_counter_alias_hard_negative_F6f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "raw_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "raw_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        }
+      },
+      "current_drive": 6,
+      "foundation_label": "F6f",
+      "partner_drive": 7,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_role_inverse_minimal_F6f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "gloss_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        },
+        "none": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "raw_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        }
+      },
+      "current_drive": 6,
+      "foundation_label": "F6A",
+      "partner_drive": 5,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F5A_F6A_concrete_human_F6A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.5,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "raw_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 835.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        }
+      },
+      "current_drive": 7,
+      "foundation_label": "F7A",
+      "partner_drive": 1,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_system_process_F7A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 2
+        },
+        "none": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "raw_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        }
+      },
+      "current_drive": 7,
+      "foundation_label": "F7f",
+      "partner_drive": 1,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F7f_F1f_no_alias_plain_F7f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 831.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        }
+      },
+      "current_drive": 7,
+      "foundation_label": "F7E",
+      "partner_drive": 1,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F7E_F1E_system_process_F7E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -0.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -0.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": -0.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        }
+      },
+      "current_drive": 7,
+      "foundation_label": "F7A",
+      "partner_drive": 1,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_concrete_human_F7A"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 831.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "gloss_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 831.0,
+          "predicts_correct": true,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": 0.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "raw_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "raw_partner": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": true,
+          "prefix_drive": 6
+        }
+      },
+      "current_drive": 7,
+      "foundation_label": "F7f",
+      "partner_drive": 6,
+      "register": "f",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_counter_alias_hard_negative_F7f"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "gloss_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.0,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        },
+        "gloss_random_wrong": {
+          "correct_margin": 1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 5
+        },
+        "none": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 832.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "raw_correct": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 7
+        },
+        "raw_partner": {
+          "correct_margin": 1.5,
+          "correct_token_logit": 835.0,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": true,
+          "prefix_drive": 1
+        }
+      },
+      "current_drive": 7,
+      "foundation_label": "F7E",
+      "partner_drive": 1,
+      "register": "E",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F7E_F1E_role_inverse_minimal_F7E"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "gloss_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "raw_correct": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 6
+        }
+      },
+      "current_drive": 7,
+      "foundation_label": "F7T",
+      "partner_drive": 6,
+      "register": "T",
+      "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F6T_F7T_long_embedded_clause_F7T"
+    },
+    {
+      "condition_scores": {
+        "gloss_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.0,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "gloss_partner": {
+          "correct_margin": -1.5,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 834.0,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        },
+        "gloss_random_wrong": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.0,
+          "incorrect_token_logit": 833.0,
+          "predicts_correct": false,
+          "prefix_drive": 3
+        },
+        "none": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 832.5,
+          "incorrect_token_logit": 833.5,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "raw_correct": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 834.0,
+          "incorrect_token_logit": 835.0,
+          "predicts_correct": false,
+          "prefix_drive": 7
+        },
+        "raw_partner": {
+          "correct_margin": -1.0,
+          "correct_token_logit": 833.5,
+          "incorrect_token_logit": 834.5,
+          "predicts_correct": false,
+          "prefix_drive": 1
+        }
+      },
+      "current_drive": 7,
+      "foundation_label": "F7A",
+      "partner_drive": 1,
+      "register": "A",
+      "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_long_embedded_clause_F7A"
+    }
+  ],
+  "conditions": {
+    "gloss_correct": {
+      "accuracy": 0.44642857142857145,
+      "delta_positive_count": 9,
+      "delta_positive_sign_p": 0.9999999765590795,
+      "delta_vs_none": {
+        "mean": -0.017857142857142856,
+        "p05": -0.5,
+        "p50": 0.0,
+        "p95": 0.5,
+        "std": 0.3009724498760901
+      },
+      "margin": {
+        "mean": -0.22321428571428573,
+        "p05": -2.5,
+        "p50": -1.0,
+        "p95": 2.0,
+        "std": 1.5980659983445413
+      }
+    },
+    "gloss_partner": {
+      "accuracy": 0.44642857142857145,
+      "delta_positive_count": 9,
+      "delta_positive_sign_p": 0.9999999765590795,
+      "delta_vs_none": {
+        "mean": -0.026785714285714284,
+        "p05": -0.5,
+        "p50": 0.0,
+        "p95": 0.5,
+        "std": 0.3077726855554696
+      },
+      "margin": {
+        "mean": -0.23214285714285715,
+        "p05": -2.125,
+        "p50": -1.0,
+        "p95": 2.125,
+        "std": 1.5810361553978847
+      }
+    },
+    "gloss_random_wrong": {
+      "accuracy": 0.44642857142857145,
+      "delta_positive_count": 14,
+      "delta_positive_sign_p": 0.9999633339080153,
+      "delta_vs_none": {
+        "mean": 0.026785714285714284,
+        "p05": -0.5,
+        "p50": 0.0,
+        "p95": 0.5,
+        "std": 0.33601464872211173
+      },
+      "margin": {
+        "mean": -0.17857142857142858,
+        "p05": -2.0,
+        "p50": -1.0,
+        "p95": 2.125,
+        "std": 1.6304728021164776
+      }
+    },
+    "none": {
+      "accuracy": 0.44642857142857145,
+      "delta_positive_count": 0,
+      "delta_positive_sign_p": 1.0,
+      "delta_vs_none": {
+        "mean": 0.0,
+        "p05": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "std": 0.0
+      },
+      "margin": {
+        "mean": -0.20535714285714285,
+        "p05": -2.5,
+        "p50": -1.0,
+        "p95": 2.125,
+        "std": 1.6286547312939699
+      }
+    },
+    "raw_correct": {
+      "accuracy": 0.44642857142857145,
+      "delta_positive_count": 15,
+      "delta_positive_sign_p": 0.9998827770695404,
+      "delta_vs_none": {
+        "mean": 0.044642857142857144,
+        "p05": -0.5,
+        "p50": 0.0,
+        "p95": 0.5,
+        "std": 0.3474162517039926
+      },
+      "margin": {
+        "mean": -0.16071428571428573,
+        "p05": -2.0,
+        "p50": -1.0,
+        "p95": 2.0,
+        "std": 1.540682088784477
+      }
+    },
+    "raw_partner": {
+      "accuracy": 0.44642857142857145,
+      "delta_positive_count": 15,
+      "delta_positive_sign_p": 0.9998827770695404,
+      "delta_vs_none": {
+        "mean": 0.026785714285714284,
+        "p05": -0.5,
+        "p50": 0.0,
+        "p95": 0.5,
+        "std": 0.34928033618678456
+      },
+      "margin": {
+        "mean": -0.17857142857142858,
+        "p05": -2.0,
+        "p50": -1.0,
+        "p95": 2.125,
+        "std": 1.51486144409487
+      }
+    }
+  },
+  "elapsed_seconds": 11.25171115808189,
+  "experiment": "CAS-prefix conditioning bridge probe",
+  "implication": "This assay did not show reliable CAS-prefix conditioning. The next route would need training/fine-tuning, not just wrapping prompts. Raw CAS-symbol prefixes did not provide a strong route by themselves.",
+  "input_file": "stage7_foundation_pilot_20260517.jsonl",
+  "input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "model_name": "EleutherAI/pythia-160m",
+  "n_cases": 56,
+  "plain_english_read": "This tests the missing in-between mechanism: use CAS as a readable prefix/context around Pythia's generation point instead of editing hidden states directly. Raw CAS symbols and human-readable CAS glosses are scored separately.",
+  "schema_version": "stage7_cas_prefix_conditioning.v1",
+  "status": "CAS_PREFIX_CONDITIONING_NOT_EFFECTIVE_IN_THIS_ASSAY"
+}

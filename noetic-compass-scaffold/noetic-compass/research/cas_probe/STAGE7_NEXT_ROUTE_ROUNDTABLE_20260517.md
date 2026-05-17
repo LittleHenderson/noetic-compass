@@ -378,3 +378,62 @@ The safe claim does not change:
 
 > CAS opens a verified internal readout window inside Pythia-160M. It has not
 > shown steering control over Pythia-160M generated language.
+
+## Eta-To-Epsilon Addendum: CAS Prefix Likelihood
+
+The user then identified the missing mathematical bridge more precisely:
+
+- The Foundation probe is an embedding/readout map (`eta`): hidden states to
+  CAS structure.
+- Generation needs a realization map (`epsilon`): CAS structure to tokens /
+  language.
+- Prior tests tried to use `eta` as if it were `epsilon`.
+
+That led to a separate prefix-likelihood test:
+
+- Script: `probe_stage7_cas_prefix_likelihood.py`
+- Report: `stage7_cas_prefix_likelihood_20260517.json`
+- Summary: `STAGE7_CAS_PREFIX_LIKELIHOOD_20260517.md`
+
+This test avoids the failed numbered-choice behavior. It scores whether Pythia
+assigns higher conditional likelihood to the true Drive phrase than the partner
+Drive phrase under different prefixes.
+
+Result:
+
+- Status: `READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD`.
+- Raw CAS-symbol prefix does not help:
+  - `raw_correct` delta vs none: `-0.0200`.
+  - `raw_correct_minus_raw_partner_margin`: `-0.0182`.
+- Human-readable CAS realization does help:
+  - `gloss_correct` delta vs none: `+0.3573`, with `77/112`
+    positive cases.
+  - `gloss_partner` delta vs none: `-0.3742`.
+  - `gloss_correct_minus_gloss_partner_margin`: `+0.7314`.
+  - `plain_correct` delta vs none: `+0.4839`, with `90/112`
+    positive cases.
+  - `plain_partner` delta vs none: `-0.4662`.
+  - `plain_correct_minus_plain_partner_margin`: `+0.9501`.
+
+Interpretation:
+
+> The missing bridge is not "Pythia understands CAS symbols." It does not. The
+> bridge is "CAS can realize its readout into readable structure, and that
+> readable structure conditions Pythia through normal attention."
+
+This reopens the practical CAS Harness route while keeping the internal-claims
+boundary clean:
+
+- Still not proven: internal-neuron steering.
+- Now supported: external CAS Harness conditioning via readable realization.
+- Product implication: the Harness can read a CAS structure, render it as an
+  auditable prefix/context, and make Pythia's likelihood move toward the
+  intended semantic continuation.
+
+Next clean experiment:
+
+1. Replace gold prefixes with probe-predicted prefixes (`eta -> epsilon` full
+   loop).
+2. Compare correct probe prediction vs intentionally wrong prefix on fresh
+   held-out rows.
+3. If pass-clean, move from likelihood scoring to short constrained generation.
