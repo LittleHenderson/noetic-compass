@@ -5303,3 +5303,70 @@ Audit asks:
 3. Audit the metadata caveat: text/metadata baselines are high for Domain/Noetic, but activation still clears the pre-registered gates.
 4. Check the claims matrix for overclaim risk.
 5. Recommend next gate: Stage 9.CPL eta-to-epsilon likelihood bridge or Pythia-1B cross-scale replication of Stage 9.
+
+## 2026-05-17T15:45Z - codex: Stage 10 five CAS operators complete
+
+Branch: `experiment/cas-probe-pythia`
+
+Commit baseline before run: `a8f5594`
+
+Status: `STAGE10_OPERATORS_GREY`
+
+Pre-registration discipline:
+
+- `STAGE10_OPERATORS_GATES_20260517.md` committed before the activation/eval run.
+- Gate required absolute activation-over-text lift >= +0.05 plus McNemar p < 0.05.
+- No post-hoc gate relaxation.
+
+Input artifacts:
+
+- Fixture: `stage10_operators_full_20260517.jsonl`
+- Fixture SHA: `384b7fceff0fac4ecf9593301b772a64d223c773256ae3652d010b4bd54745ca`
+- Activation binary: `stage10_operators_full_activations_20260517.npz`
+- Activation binary SHA: `bf86393c0a922f714a68698d9133e108e0fac74f23ecc6cf0ac078f00d65abfc`
+- Binary is git-ignored / manifest-only.
+
+Fixture:
+
+- 6,000 rows
+- 5 classes, 1,200 rows per operator
+- Train/val/test: 2,400 / 800 / 2,800
+- Operators: `multiply_integrate`, `divide_ratio`, `compose_sequence`, `add_copresence`, `subtract_remove`
+- Model-facing English has zero symbol/framework leakage flags.
+
+Headline:
+
+- Validation-selected readout: `mean_over_seq_len`
+- Validation-selected layer: `0`
+- Activation test acc: `0.9918`
+- Macro-F1: `0.9918`
+- Best text baseline: `tfidf_char_3_5`, test `0.9557`
+- Best metadata baseline: `surface_pair_family_focus`, test `1.0000`
+- Activation-over-text lift: `+0.0361`
+- McNemar p vs text: `3.21e-22`
+
+Ablation:
+
+- Operator subspace rank: `4`
+- Targeted ablated acc: `0.2000` exact chance
+- Targeted disruption: `+0.7918`
+- Random max disruption: `0.0000`
+- p(random >= targeted): `0.0323`
+
+Interpretation:
+
+> Operator information is highly readable and readout-causal, but the isolated five-operator task is ceiling-limited against text. The pre-registered absolute +5 pp lift gate missed by 1.39 pp, so this is not a formal pass-clean result. It is not a null result either.
+
+Artifacts:
+
+- `stage10_operators_full_activations_manifest_20260517.json`
+- `stage10_operator_probe_report_20260517.json`
+- `STAGE10_OPERATORS_PROBE_REPORT_20260517.md`
+- `STAGE10_CLAIMS_MATRIX_20260517.md`
+
+Audit asks:
+
+1. Verify the Stage 10 status: GREY, not PASS_CLEAN, because the +5 pp absolute text-lift gate missed.
+2. Check whether the ablation evidence is correctly bounded as readout-causal only.
+3. Check overclaim risk in `STAGE10_CLAIMS_MATRIX_20260517.md`.
+4. Recommend next gate: full expression grammar shapes vs a new ceiling-aware operator fixture.
