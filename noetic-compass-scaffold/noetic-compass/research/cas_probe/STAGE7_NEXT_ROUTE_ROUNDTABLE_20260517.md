@@ -558,3 +558,52 @@ Claim boundary:
   the expected direction.
 - Not supported: pass-clean open-ended generation control.
 - Still unsupported: raw-symbol steering or internal hidden-neuron steering.
+
+## Generated-Text Classifier Judge
+
+A stricter generated-text quality check was then run as Stage 7.CPL4.
+
+- Script: `judge_stage7_cas_prefix_generation.py`
+- Report: `stage7_cas_prefix_generation_text_judge_20260517.json`
+- Summary: `STAGE7_CAS_PREFIX_GENERATION_TEXT_JUDGE_20260517.md`
+- Blind judge pack:
+  `STAGE7_CAS_PREFIX_GENERATION_TEXT_JUDGE_PACK_20260517.md`
+
+Design:
+
+1. Train independent text-only judges on the original Stage 7 fixture text.
+2. Select judge model by validation accuracy.
+3. Evaluate judge reliability on the locked Stage 7 fixture test split.
+4. Apply the judge to CPL3 generated continuations only after training.
+5. Compare probe-readable outputs against no-prefix, wrong-partner-readable,
+   and raw-prefix controls.
+
+Result:
+
+- Status: `PROBE_PREFIX_GENERATED_TEXT_CLASSIFIER_SHIFT_NOT_CLEAN`.
+- Drive judge: `tfidf_char_3_5`, test accuracy `0.6679`, macro-F1 `0.6546`.
+- Foundation judge: `tfidf_char_3_5`, test accuracy `0.4966`, macro-F1
+  `0.4801`.
+- Drive axis:
+  - probe-readable delta vs none `+0.0256`.
+  - probe-readable margin minus partner-readable `-0.0103`.
+  - probe target-pred rate minus partner target-pred rate `0.0000`.
+- Foundation axis:
+  - probe-readable delta vs none `+0.0202`.
+  - probe-readable margin minus partner-readable `-0.0047`.
+  - probe target-pred rate minus partner target-pred rate `0.0000`.
+
+Interpretation:
+
+> The generated text does not close under an independent text classifier. The
+> classifier sees a small positive delta versus no prefix, but not a clean
+> target-over-partner shift. The Drive judge is also below the pre-set `0.70`
+> reliability floor.
+
+Updated boundary:
+
+- Load-bearing positive: CPL2 likelihood-space eta-to-epsilon bridge.
+- Directional but not clean: CPL3 short generated-text keyword heuristic.
+- Not clean: CPL4 independent classifier judge.
+- Next product-relevant gate: cross-model CPL2 replication, not more
+  hidden-state surgery.
