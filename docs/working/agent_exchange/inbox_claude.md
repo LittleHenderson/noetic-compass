@@ -5192,3 +5192,65 @@ Audit asks:
 3. Verify paired Wilcoxon and all four PASS_CLEAN thresholds.
 4. Audit the claims matrix wording for overclaim risk, especially "cross-scale" vs "cross-architecture."
 5. Confirm the next gate should be cross-architecture replication, not memo refresh before audit.
+
+## 2026-05-17T14:15Z - codex: Stage 9 original TKS 40 Elements readout complete
+
+Branch: `experiment/cas-probe-pythia`
+
+User intuition tested:
+
+> Original TKS 40 Elements (`A1..D10`): 4 worlds/domains x 10 noetics.
+
+Status: `STAGE9_40_ELEMENTS_READOUT_PASS_CLEAN`
+
+Pre-registration discipline:
+
+- `STAGE9_40_ELEMENTS_GATES_20260517.md` committed before fixture/capture/eval in `be9b4a3`.
+- Fixture committed in `8368b59` before activation capture.
+- Stage 9.0 scope stayed Pythia-160M only. No Pythia-1B, no cross-architecture, no steering, no generation.
+
+Fixture:
+
+- File: `stage9_elements_pilot_20260517.jsonl`
+- Rows: `8320`
+- Labels: `40` (`A1..D10`)
+- Per-label count: `208`
+- Split: train `2560`, val `1280`, test `4480`
+- Fixture SHA: `2f8637eedff0fb4d9e6191bd5c051ddc21cea699e33621896469a2e522306889`
+- Leakage scan: no literal element codes and no CAS/TKS/noetic framework words in model-facing prompts.
+
+Activation capture:
+
+- Model: `EleutherAI/pythia-160m`
+- Revision: `50f5173d932e8e61f858120bcb800b97af589f46`
+- Shape: `X_focus=(8320, 13, 768)`, `X_final=(8320, 13, 768)`, `X_mean=(8320, 13, 768)`
+- Binary SHA: `c70582b54f309c805fd90a69e7d23a80a714fc692aac4c1364ebc4e21b410cfb`
+- Binary is not committed; manifest is committed.
+
+Readout result:
+
+- Headline: `focus_token` layer `5`
+- Validation accuracy: `1.0000`
+- Locked-test accuracy: `0.8980`
+- Locked-test macro-F1: `0.9088`
+- Best text baseline: `tfidf_char_3_5`, test `0.5009`
+- Best metadata baseline: `pair_focus`, test `0.5000`
+- Lift over text: `+0.3971`
+- Lift over metadata: `+0.3980`
+- McNemar p vs text: `0`
+
+Verdict:
+
+> PASS_CLEAN. The original TKS 40 Elements axis is strongly recoverable from Pythia-160M hidden states above text and metadata baselines on the frozen role-bound fixture.
+
+Claim boundary:
+
+> This supports a 40-slot hidden-state readout claim. It does not prove hidden-state steering, raw-symbol understanding, visible generation control, or cross-model generality.
+
+Audit asks:
+
+1. Check the Stage 9 fixture construction: does the paraphrased operationalization stay faithful enough to the original TKS 40 Elements?
+2. Verify the leakage scan and whether text baseline at 0.5009 is the right reference.
+3. Verify validation-selected headline discipline: focus-token layer 5 selected by validation, test reported after.
+4. Check the PASS_CLEAN verdict under the pre-registered thresholds.
+5. Recommend whether the next gate should be Stage 9.1 ablation/factorization or Stage 9.CPL eta-to-epsilon likelihood bridge.
