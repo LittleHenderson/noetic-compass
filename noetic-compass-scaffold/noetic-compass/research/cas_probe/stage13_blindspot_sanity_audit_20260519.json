@@ -1,0 +1,212 @@
+{
+  "boundary": "Blind spots are readout-path diagnostics over hidden activations. They are not model-incapacity proof.",
+  "fixture_file": "stage12_equations_formulas_full_20260517.jsonl",
+  "fixture_sha256": "a0bebdc2a073f26a2b1099bfd2f4bf41d4091505cdcd8397b88a450dad210974",
+  "per_readout_blindspots": {
+    "final_token": [
+      {
+        "best_layer": 9,
+        "best_layer_accuracy": 0.9476190476190476,
+        "blind_spot_score": 0.4785383792418898,
+        "label": "cardinality_assertion",
+        "mean_accuracy_across_layers": 0.7767399267399268
+      },
+      {
+        "best_layer": 3,
+        "best_layer_accuracy": 0.9809523809523809,
+        "blind_spot_score": 0.42569054273169676,
+        "label": "set_operation_formula",
+        "mean_accuracy_across_layers": 0.8177655677655677
+      },
+      {
+        "best_layer": 3,
+        "best_layer_accuracy": 0.9952380952380953,
+        "blind_spot_score": 0.4009467590693855,
+        "label": "production_recipe",
+        "mean_accuracy_across_layers": 0.8380952380952381
+      },
+      {
+        "best_layer": 6,
+        "best_layer_accuracy": 0.9785714285714285,
+        "blind_spot_score": 0.398152410268937,
+        "label": "membership_assertion",
+        "mean_accuracy_across_layers": 0.8349816849816848
+      },
+      {
+        "best_layer": 10,
+        "best_layer_accuracy": 0.9857142857142858,
+        "blind_spot_score": 0.39558267518302026,
+        "label": "cover_partition_formula",
+        "mean_accuracy_across_layers": 0.8456043956043957
+      }
+    ],
+    "focus_token": [
+      {
+        "best_layer": 9,
+        "best_layer_accuracy": 0.9047619047619048,
+        "blind_spot_score": 0.43073920457885956,
+        "label": "cardinality_assertion",
+        "mean_accuracy_across_layers": 0.802930402930403
+      },
+      {
+        "best_layer": 9,
+        "best_layer_accuracy": 0.9761904761904762,
+        "blind_spot_score": 0.40879905509134307,
+        "label": "set_operation_formula",
+        "mean_accuracy_across_layers": 0.828021978021978
+      },
+      {
+        "best_layer": 10,
+        "best_layer_accuracy": 0.9452380952380952,
+        "blind_spot_score": 0.3868783818654383,
+        "label": "membership_assertion",
+        "mean_accuracy_across_layers": 0.8183150183150183
+      },
+      {
+        "best_layer": 10,
+        "best_layer_accuracy": 0.9976190476190476,
+        "blind_spot_score": 0.3567298429372911,
+        "label": "cover_partition_formula",
+        "mean_accuracy_across_layers": 0.8492673992673994
+      },
+      {
+        "best_layer": 3,
+        "best_layer_accuracy": 1.0,
+        "blind_spot_score": 0.3559375981121997,
+        "label": "yield_query",
+        "mean_accuracy_across_layers": 0.8543956043956042
+      }
+    ],
+    "mean_over_seq_len": [
+      {
+        "best_layer": 10,
+        "best_layer_accuracy": 0.7261904761904762,
+        "blind_spot_score": 0.670202679310721,
+        "label": "relation_dependency",
+        "mean_accuracy_across_layers": 0.551098901098901
+      },
+      {
+        "best_layer": 5,
+        "best_layer_accuracy": 0.7619047619047619,
+        "blind_spot_score": 0.6258355506052724,
+        "label": "production_recipe",
+        "mean_accuracy_across_layers": 0.6023809523809524
+      },
+      {
+        "best_layer": 0,
+        "best_layer_accuracy": 0.8071428571428572,
+        "blind_spot_score": 0.6042961140689235,
+        "label": "membership_assertion",
+        "mean_accuracy_across_layers": 0.6170329670329671
+      },
+      {
+        "best_layer": 9,
+        "best_layer_accuracy": 0.8095238095238095,
+        "blind_spot_score": 0.6011809652484557,
+        "label": "cover_partition_formula",
+        "mean_accuracy_across_layers": 0.6223443223443225
+      },
+      {
+        "best_layer": 0,
+        "best_layer_accuracy": 0.8119047619047619,
+        "blind_spot_score": 0.5892701463232851,
+        "label": "yield_query",
+        "mean_accuracy_across_layers": 0.6452380952380954
+      }
+    ]
+  },
+  "population": {
+    "all": {
+      "cardinality_assertion": 900,
+      "cover_partition_formula": 900,
+      "emergent_register_assignment": 900,
+      "membership_assertion": 900,
+      "production_recipe": 900,
+      "relation_dependency": 900,
+      "set_operation_formula": 900,
+      "state_vector": 900,
+      "typed_program": 900,
+      "yield_query": 900
+    },
+    "is_perfectly_balanced": true,
+    "test": {
+      "cardinality_assertion": 420,
+      "cover_partition_formula": 420,
+      "emergent_register_assignment": 420,
+      "membership_assertion": 420,
+      "production_recipe": 420,
+      "relation_dependency": 420,
+      "set_operation_formula": 420,
+      "state_vector": 420,
+      "typed_program": 420,
+      "yield_query": 420
+    },
+    "train": {
+      "cardinality_assertion": 360,
+      "cover_partition_formula": 360,
+      "emergent_register_assignment": 360,
+      "membership_assertion": 360,
+      "production_recipe": 360,
+      "relation_dependency": 360,
+      "set_operation_formula": 360,
+      "state_vector": 360,
+      "typed_program": 360,
+      "yield_query": 360
+    },
+    "val": {
+      "cardinality_assertion": 120,
+      "cover_partition_formula": 120,
+      "emergent_register_assignment": 120,
+      "membership_assertion": 120,
+      "production_recipe": 120,
+      "relation_dependency": 120,
+      "set_operation_formula": 120,
+      "state_vector": 120,
+      "typed_program": 120,
+      "yield_query": 120
+    }
+  },
+  "relation_dependency": {
+    "final_token": {
+      "best_layer": 0,
+      "best_layer_accuracy": 1.0,
+      "blind_spot_rank": 10,
+      "blind_spot_score": 0.31710174688362824,
+      "mean_accuracy_across_layers": 0.911172161172161
+    },
+    "focus_token": {
+      "best_layer": 5,
+      "best_layer_accuracy": 1.0,
+      "blind_spot_rank": 8,
+      "blind_spot_score": 0.2703626337884354,
+      "mean_accuracy_across_layers": 0.9230769230769229
+    },
+    "headline_readout_layer": {
+      "accuracy": 0.9738095238095238,
+      "layer": 12,
+      "mean_confidence": 0.9774378581530565,
+      "mean_entropy": 0.06642279140489829,
+      "readout": "focus_token"
+    },
+    "mean_over_seq_len": {
+      "best_layer": 10,
+      "best_layer_accuracy": 0.7261904761904762,
+      "blind_spot_rank": 1,
+      "blind_spot_score": 0.670202679310721,
+      "mean_accuracy_across_layers": 0.551098901098901
+    }
+  },
+  "schema_version": "stage13_blindspot_sanity_audit.v1",
+  "stage13_report_file": "stage13_multilayer_formula_trace_audit_20260518.json",
+  "stage13_report_sha256": "476eb46bc31c954ef8ed6489519676d7bde72cdf2f577b798315739ed2c58829",
+  "trace_thresholds": [
+    "low confidence: at least half of layer positions have confidence < 0.45",
+    "high entropy: at least half of layer positions have entropy > 70% of maximum 10-class entropy",
+    "stable: majority label covers at least 70% of layers and longest stable run is at least 5 layers",
+    "early-correct-then-drift: first correct layer <= 4 and final layer is wrong",
+    "late-emerging-correct: first correct layer >= 7 and final layer is correct, or final layer correct after non-stable trace",
+    "conflicted: at least 5 switches or no majority over half the layers",
+    "bug fix 80377ab changed invalid strict zip iteration for switch count only; it did not change thresholds"
+  ],
+  "verdict": "BLINDSPOT_LANGUAGE_DEFENSIBLE_WITH_PER_READOUT_BOUNDARY"
+}

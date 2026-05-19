@@ -1542,3 +1542,111 @@ Artifacts:
 - `STAGE14_PYTHIA28B_CPL2_REPORT_20260518.md`
 - `STAGE14_PYTHIA28B_SUMMARY_20260518.md`
 - `STAGE14_CLAIMS_MATRIX_20260518.md`
+
+## Stage 13.1 result - blind-spot sanity audit
+
+**Verdict: `BLINDSPOT_LANGUAGE_DEFENSIBLE_WITH_PER_READOUT_BOUNDARY`.**
+
+The Stage 13 blind-spot claim was sanity-checked before publication.
+
+Findings:
+
+- The Stage 12 formula fixture is perfectly balanced: train `360`, val `120`, test `420` per class.
+- The `22.3%` problem-like trace count is not explained by fewer rows for the flagged classes.
+- The trace thresholds are documented:
+  - confidence `< 0.45` on at least half of layer positions
+  - entropy `> 70%` of max entropy on at least half of layer positions
+  - stable majority `>= 70%` and longest stable run `>= 5`
+  - conflicted if switches `>= 5` or no majority over half the layers
+- The `80377ab` bug fix changed invalid switch-count iteration only; it did not change thresholds.
+- `relation_dependency` is not weak at the best headline readout: `focus_token` layer 12 accuracy `0.9738`. It is mainly a mean-over-sequence readout-path weakness.
+
+Artifact:
+
+- `STAGE13_BLINDSPOT_SANITY_AUDIT_20260519.md`
+- `stage13_blindspot_sanity_audit_20260519.json`
+
+## Stage 14.1 result - Pythia-2.8B weight geometry
+
+**Verdict: `CAS_SUBSPACE_WEIGHT_ALIGNMENT_ABOVE_RANDOM_ON_SOME_CHECK`.**
+
+Weights do not fire. This inspection checks whether the learned CAS
+Foundation probe subspace is geometrically aligned with Pythia-2.8B's static
+token-weight matrices.
+
+Result:
+
+| Check | Actual | Random mean | Random p95 | p(random >= actual) |
+|---|---:|---:|---:|---:|
+| Output-weight energy fraction | `0.011178` | `0.010524` | `0.010826` | `0.0099` |
+| Input-weight energy fraction | `0.010583` | `0.010547` | `0.010667` | `0.3465` |
+| Output logit-lens energy on test activations | `0.027121` | `0.009582` | `0.013912` | `0.0099` |
+
+Honest read:
+
+> The Stage 14 CAS Foundation subspace is above random relative to output
+> token-weight geometry and logit-lens energy. This supports bounded
+> weight-alignment inspection. It does not prove exact causal neurons or
+> hidden-state generation steering.
+
+Artifacts:
+
+- `STAGE14_WEIGHT_GEOMETRY_ALIGNMENT_20260519.md`
+- `stage14_weight_geometry_alignment_20260519.json`
+
+## Stage 15 result - OLMo-1B cross-architecture replication
+
+**Verdict: `PASS_CLEAN_STAGE15_OLMO1B_CPL2_REPLICATES`.**
+
+Stage 15 repeats the eta-to-epsilon readable-prefix likelihood bridge on
+`allenai/OLMo-1B-hf`, a different model family from Pythia.
+
+Layer selection:
+
+| Metric | Value |
+|---|---:|
+| Candidate layers | `6-16` |
+| Selected layer | `16` |
+| Validation accuracy | `0.9911` |
+| Test accuracy | `0.9060` |
+| Test lacunarity | `0.0038` |
+
+CPL2 result:
+
+| Metric | Value |
+|---|---:|
+| Probe-readable delta vs none | `+0.6037` |
+| Probe-readable minus partner-readable margin | `+1.3047` |
+| Positive cases | `87/112` |
+| Wilcoxon p | `3.17e-12` |
+
+Cross-model comparison:
+
+| Model | Delta vs none | Margin over partner | Positive cases |
+|---|---:|---:|---:|
+| Pythia-160M | `+0.2828` | `+0.6829` | `81/112` |
+| Pythia-1B | `+0.5542` | `+1.2460` | `90/112` |
+| Pythia-2.8B | `+0.5832` | `+1.3363` | `92/112` |
+| OLMo-1B | `+0.6037` | `+1.3047` | `87/112` |
+
+Honest read:
+
+> The eta-to-epsilon bridge now has pass-clean cross-architecture evidence.
+> CAS Harness can read a bounded 28-Foundation signal from OLMo-1B hidden
+> activations and realize it as readable context that shifts semantic
+> likelihood. This remains likelihood conditioning, not hidden-neuron
+> steering, raw CAS-symbol understanding, or open-ended generation control.
+
+Artifacts:
+
+- `STAGE15_OLMO1B_GATES_20260519.md`
+- `capture_stage15_olmo1b_activations.py`
+- `probe_stage15_olmo1b_cpl2.py`
+- `stage15_olmo1b_activations_manifest_20260519.json`
+- `STAGE15_OLMO1B_PROBE_REPORT_20260519.json`
+- `STAGE15_OLMO1B_PROBE_REPORT_20260519.md`
+- `STAGE15_OLMO1B_CPL2_REPORT_20260519.json`
+- `STAGE15_OLMO1B_CPL2_REPORT_20260519.md`
+- `STAGE15_OLMO1B_SUMMARY_20260519.md`
+- `STAGE15_CLAIMS_MATRIX_20260519.md`
+- `CAS_HARNESS_EVIDENCE_PACKET_REVIEWER_PLAYBOOK_20260519.md`

@@ -5698,3 +5698,66 @@ Audit asks:
 2. Confirm layer selection was validation/lacunarity-based and not test-set selected.
 3. Confirm raw-symbol controls are framed as null.
 4. Recommend the next cross-architecture target: OLMo, Qwen, or Llama-family, with licensing and reproducibility constraints noted.
+
+## 2026-05-19T07:51Z - codex: blind-spot sanity, weight geometry, and OLMo cross-architecture complete
+
+Branch: `experiment/cas-probe-pythia`
+
+Commits:
+
+- `ad52f91` - pre-register blindspot and weight geometry audits
+- `502b293` - pre-register Stage 15 OLMo-1B cross-architecture test
+
+Stage 13.1 blind-spot sanity:
+
+- Status: `BLINDSPOT_LANGUAGE_DEFENSIBLE_WITH_PER_READOUT_BOUNDARY`
+- Fixture is perfectly balanced: train `360`, val `120`, test `420` per class.
+- The `22.3%` problem-like trace count is not explained by class underpopulation.
+- Trace thresholds are documented; the `80377ab` bug fix only changed invalid switch-count iteration and did not change thresholds.
+- `relation_dependency` is not weak at the best headline readout: focus-token layer 12 accuracy `0.9738`; it is mainly weak under the mean-over-sequence readout path.
+
+Stage 14.1 weight geometry:
+
+- Status: `CAS_SUBSPACE_WEIGHT_ALIGNMENT_ABOVE_RANDOM_ON_SOME_CHECK`
+- Output-weight energy fraction: actual `0.011178`, random mean `0.010524`, p(random >= actual) `0.0099`
+- Input-weight energy fraction: actual `0.010583`, random mean `0.010547`, p `0.3465`
+- Output logit-lens energy on locked test activations: actual `0.027121`, random mean `0.009582`, p `0.0099`
+- Boundary: weights do not fire. This is static weight-geometry alignment, not exact causal neurons or generation steering.
+
+Stage 15 OLMo-1B:
+
+- Model: `allenai/OLMo-1B-hf`
+- Model revision: `aee7752d9c08ee4775e9b0091426d8410e8f6a89`
+- Status: `PASS_CLEAN_STAGE15_OLMO1B_CPL2_REPLICATES`
+- Selected layer: `16`
+- Validation accuracy: `0.9911`
+- Test accuracy: `0.9060`
+- Test lacunarity: `0.0038`
+- Probe-readable delta vs none: `+0.6037`
+- Probe-readable minus partner-readable margin: `+1.3047`
+- Positive cases: `87/112`
+- Wilcoxon p: `3.17e-12`
+- Raw-symbol control remains near null: `probe_raw +0.0063`
+
+Cross-model line:
+
+- Pythia-160M: `+0.2828`, `+0.6829`, `81/112`
+- Pythia-1B: `+0.5542`, `+1.2460`, `90/112`
+- Pythia-2.8B: `+0.5832`, `+1.3363`, `92/112`
+- OLMo-1B: `+0.6037`, `+1.3047`, `87/112`
+
+Interpretation:
+
+> CAS Harness now has pass-clean cross-architecture evidence for the eta-to-epsilon readable-prefix likelihood bridge. This supports bounded cross-architecture likelihood conditioning, not hidden-neuron steering, raw CAS-symbol understanding, or open-ended generation control.
+
+New Evidence Packet playbook:
+
+- `CAS_HARNESS_EVIDENCE_PACKET_REVIEWER_PLAYBOOK_20260519.md`
+- It explains researcher/developer review steps: verify hashes, provenance, splits, leakage controls, probe, blind spots, ablation, CPL2, weight geometry, and claim boundaries.
+
+Audit asks:
+
+1. Check whether Stage 13.1's per-readout boundary resolves the blind-spot concern cleanly.
+2. Check whether Stage 14.1 weight geometry should be included in the public claims matrix or kept as technical appendix only.
+3. Verify Stage 15 pre-registration and layer selection.
+4. Recommend next architecture target: Qwen base vs Llama-family, with licensing and artifact constraints.
