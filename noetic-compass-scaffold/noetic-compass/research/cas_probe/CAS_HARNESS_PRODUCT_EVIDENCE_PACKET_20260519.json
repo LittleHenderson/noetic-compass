@@ -1,0 +1,161 @@
+{
+  "packet_id": "cas_harness_product_evidence_packet_20260519",
+  "date": "2026-05-19",
+  "branch": "experiment/cas-probe-pythia",
+  "status": "PRODUCT_PACKET_LOCKED",
+  "product_verdict": "BUILD_EVIDENCE_PACKET_NOW",
+  "decision": {
+    "chosen_path": "product_evidence_packet",
+    "deferred_path": "more_visible_free_form_text_tests",
+    "reason": "CPL2 likelihood is the cleaner load-bearing measurement. Stage 18 shows free-form generated text is a lossy surface channel, not that the eta-to-epsilon bridge failed."
+  },
+  "one_sentence_claim": "CAS Harness reads bounded CAS cognitive structure from open-model hidden activations, validates the readout with controls, flags blind spots, and packages the evidence so a reviewer can verify what was measured and what was not claimed.",
+  "supported_capabilities": [
+    {
+      "capability": "hidden_state_readout",
+      "evidence": ["stage7", "stage9", "stage11", "stage12"],
+      "meaning": "CAS can recover bounded CAS labels from open-model activations."
+    },
+    {
+      "capability": "beyond_text_signal",
+      "evidence": ["stage7", "stage9", "stage11", "stage12"],
+      "meaning": "The activation readout beats text and/or metadata baselines on claim-bearing fixtures."
+    },
+    {
+      "capability": "readout_causality",
+      "evidence": ["stage7", "stage9", "stage11", "stage12"],
+      "meaning": "Targeted subspace removal collapses the trained readout while random removals do not."
+    },
+    {
+      "capability": "blindspot_tracing",
+      "evidence": ["stage13", "stage13_1"],
+      "meaning": "CAS can flag weak, drifting, or conflicted readout paths."
+    },
+    {
+      "capability": "weight_geometry_inspection",
+      "evidence": ["stage14_1"],
+      "meaning": "CAS can inspect whether learned CAS subspaces align with static output geometry above random."
+    },
+    {
+      "capability": "cross_model_likelihood_bridge",
+      "evidence": ["stage7", "stage8", "stage14", "stage15", "stage16"],
+      "meaning": "Readable CAS realization shifts semantic likelihood across Pythia, OLMo, and Qwen."
+    }
+  ],
+  "rejected_claims": [
+    "exact_causal_neurons",
+    "weights_firing",
+    "host_model_internal_cas_compiler",
+    "raw_cas_symbol_understanding",
+    "hidden_state_generation_steering",
+    "open_ended_generation_control",
+    "full_black_box_solution"
+  ],
+  "cross_model_cpl2": [
+    {
+      "model": "EleutherAI/pythia-160m",
+      "family": "Pythia",
+      "selected_layer": 6,
+      "test_accuracy": 0.7857,
+      "delta_vs_none": 0.2828,
+      "margin_over_partner": 0.6829,
+      "positive_cases": "81/112",
+      "p_value": "sign_p_near_zero",
+      "raw_symbol_delta": -0.0011
+    },
+    {
+      "model": "EleutherAI/pythia-1b",
+      "family": "Pythia",
+      "selected_layer": 8,
+      "test_accuracy": 0.8240,
+      "delta_vs_none": 0.5542,
+      "margin_over_partner": 1.2460,
+      "positive_cases": "90/112",
+      "p_value": "2.58e-14",
+      "raw_symbol_delta": -0.0227
+    },
+    {
+      "model": "EleutherAI/pythia-2.8b",
+      "family": "Pythia",
+      "selected_layer": 14,
+      "test_accuracy": 0.8588,
+      "delta_vs_none": 0.5832,
+      "margin_over_partner": 1.3363,
+      "positive_cases": "92/112",
+      "p_value": "3.08e-15",
+      "raw_symbol_delta": 0.0027
+    },
+    {
+      "model": "allenai/OLMo-1B-hf",
+      "family": "OLMo",
+      "selected_layer": 16,
+      "test_accuracy": 0.9060,
+      "delta_vs_none": 0.6037,
+      "margin_over_partner": 1.3047,
+      "positive_cases": "87/112",
+      "p_value": "3.17e-12",
+      "raw_symbol_delta": 0.0063
+    },
+    {
+      "model": "Qwen/Qwen2.5-1.5B",
+      "family": "Qwen",
+      "selected_layer": 11,
+      "test_accuracy": 0.8202,
+      "delta_vs_none": 0.7960,
+      "margin_over_partner": 1.6253,
+      "positive_cases": "83/112",
+      "p_value": "2.92e-12",
+      "raw_symbol_delta": -0.0002
+    }
+  ],
+  "stage18_visible_text": {
+    "status": "NULL_STAGE18_QWEN_VISIBLE_TEXT_SHIFT_NOT_ESTABLISHED",
+    "drive_judge_test_accuracy": 0.6679,
+    "probe_minus_partner_margin": -0.1414,
+    "probe_delta_vs_none": 0.0178,
+    "probe_greater_than_partner_rows": "12/112",
+    "wilcoxon_p": 0.999759,
+    "interpretation": "Visible free-form generated text is not established. This is a surface-channel null, not evidence against CPL2 likelihood conditioning."
+  },
+  "claim_badges": [
+    "provenance",
+    "readout",
+    "beyond_text",
+    "readout_causal",
+    "trace_diagnostic",
+    "weight_geometry",
+    "harness_conditioning"
+  ],
+  "visible_generation_badge": {
+    "status": "not_closed",
+    "reason": "Stage 18 returned a clean visible-text null."
+  },
+  "reviewer_workflow": [
+    "Read the claim badge and boundary.",
+    "Verify model revision and fixture SHA.",
+    "Verify the pre-registration predates the result.",
+    "Confirm layer selection used validation data only.",
+    "Inspect text and metadata baselines.",
+    "Inspect readout accuracy and lacunarity.",
+    "Inspect ablation and random controls if the claim is causal.",
+    "Inspect blind-spot trace thresholds.",
+    "Inspect raw-symbol controls if prefix conditioning is claimed.",
+    "Check rejected claims before quoting the result externally."
+  ],
+  "implementation_target": {
+    "schema": "EvidencePacket",
+    "api": "/api/harness/evidence/{trace_id}",
+    "ui": "reviewer drawer with claim badge, provenance, readout, controls, blind spots, caveats, and export",
+    "exports": ["json", "markdown"]
+  },
+  "sources": [
+    {
+      "title": "Natural Language Autoencoders Produce Unsupervised Explanations of LLM Activations",
+      "url": "https://transformer-circuits.pub/2026/nla/index.html"
+    },
+    {
+      "title": "Anthropic Research: Natural Language Autoencoders",
+      "url": "https://www.anthropic.com/research/natural-language-autoencoders"
+    }
+  ]
+}

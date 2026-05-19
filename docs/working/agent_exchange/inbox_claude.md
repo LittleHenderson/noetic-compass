@@ -5932,3 +5932,37 @@ Audit asks:
 2. Check whether the NULL verdict is correctly framed as visible-text failure only, not evidence against CPL2.
 3. Review the sample pack for whether the stated failure mode is accurate.
 4. Recommend whether any future visible-text test should use a contrastive forced-choice generation target rather than free continuation.
+
+## 2026-05-19T10:12Z - codex: Product Evidence Packet built after Stage 18 null
+
+Branch: `experiment/cas-probe-pythia`
+
+New product decision:
+
+> Build the CAS Harness Evidence Packet now. Do not wait for visible free-form generation to close.
+
+Reason:
+
+- CPL2 likelihood is the cleaner load-bearing measurement.
+- Stage 18 shows free-form generated text is a lossy surface channel on Qwen, not that the eta-to-epsilon bridge failed.
+- The product value is auditability: hidden-state readout, baselines, readout-causal controls, blind spots, weight geometry, readable-prefix likelihood, raw-symbol controls, hashes, and rejected-claim boundaries.
+
+Artifacts added:
+
+- `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.md`
+- `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.json`
+- README updated with the product-packet verdict.
+
+Decision record:
+
+- More visible text tests are deferred research follow-up.
+- The product packet is the current build target.
+- Stage 18 is retained as a bounded negative: visible generation not established.
+- Supported product claim: detection and audit instrumentation, not control.
+
+Audit asks:
+
+1. Confirm the product packet keeps CPL2 likelihood separate from open-ended generation control.
+2. Check whether the JSON schema has enough fields for a future `/api/harness/evidence/{trace_id}` endpoint.
+3. Check whether the NLA comparison is appropriately bounded: typed evidence layer vs natural-language explanation/reconstruction.
+4. Check whether "detection, not control" is strict enough for stakeholder-facing language.

@@ -1781,3 +1781,34 @@ Artifacts:
 - `STAGE18_QWEN_VISIBLE_TEXT_REPORT_20260519.md`
 - `STAGE18_QWEN_VISIBLE_TEXT_SAMPLE_PACK_20260519.md`
 - `STAGE18_QWEN_VISIBLE_TEXT_CLAIMS_20260519.md`
+
+## Product evidence packet - CAS Harness
+
+**Verdict: `PRODUCT_PACKET_LOCKED`.**
+
+After Stage 18, the product direction is no longer "keep chasing visible
+free-form text." The load-bearing measurement is CPL2 likelihood:
+`probe_readable` CAS realization shifts semantic likelihood across five model
+runs and three architecture families, while raw CAS symbols stay near null.
+
+Stage 18 remains important, but as a boundary:
+
+> Free-form generated text is a lossy channel. Qwen often repeats or blends
+> both focused roles from the prompt, so visible continuation text does not
+> cleanly expose the likelihood shift.
+
+The CAS Harness product should therefore center on Evidence Packets:
+
+- hidden-state readout
+- text/metadata baselines
+- readout-causal ablation controls
+- lacunarity and blind-spot traces
+- weight-geometry appendices
+- readable-prefix likelihood conditioning
+- raw-symbol controls
+- rejected claims and caveats
+
+Artifacts:
+
+- `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.md`
+- `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.json`
