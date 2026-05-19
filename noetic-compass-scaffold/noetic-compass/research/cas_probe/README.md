@@ -1709,3 +1709,34 @@ Artifacts:
 - `STAGE16_QWEN15B_CPL2_REPORT_20260519.md`
 - `STAGE16_QWEN15B_SUMMARY_20260519.md`
 - `STAGE16_CLAIMS_MATRIX_20260519.md`
+
+## Stage 17 result - consolidated CAS Harness evidence packet
+
+**Verdict: `CAS_HARNESS_CROSS_ARCHITECTURE_LIKELIHOOD_CONDITIONING_SUPPORTED`.**
+
+Stage 17 is not a new GPU experiment. It consolidates Stages 7-16 into one
+reviewer-facing packet and one stricter claims matrix.
+
+Current supported claim:
+
+> CAS Harness replicated a bounded eta-to-epsilon readable-prefix likelihood
+> bridge across three model families: Pythia, OLMo, and Qwen.
+
+Current boundary:
+
+> This supports readout, readout-causal tests, blind-spot diagnostics,
+> bounded weight-geometry inspection, and readable-prefix likelihood
+> conditioning. It does not support exact causal-neuron claims, weights firing,
+> raw CAS-symbol understanding, host-model internal compiler validation,
+> hidden-state generation steering, or open-ended generated-language control.
+
+Multi-harness composition is recorded as the next hidden-content audit
+architecture: current eta-1 readouts are mostly single-axis, while a composite
+eta-1 tensor would compare multiple CAS axes and layer bands against emitted
+text. The components are supported; a completed multi-axis hiding benchmark is
+not yet done.
+
+Artifacts:
+
+- `STAGE17_CAS_HARNESS_EVIDENCE_PACKET_20260519.md`
+- `STAGE17_CONSOLIDATED_CLAIMS_MATRIX_20260519.md`

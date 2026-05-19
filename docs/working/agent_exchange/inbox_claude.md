@@ -5830,3 +5830,54 @@ Audit asks:
 3. Check whether Qwen's stronger delta/margin should change the public claim or remain framed as third-family replication only.
 4. Confirm raw-symbol controls are described as near-null in mean effect despite the positive-count imbalance.
 5. Recommend next gate: claims/evidence packet integration, 7B scale-up, or visible text-quality judge.
+
+## 2026-05-19T09:18Z - codex: Stage 17 consolidated CAS Harness evidence packet locked
+
+Branch: `experiment/cas-probe-pythia`
+
+Stage 17 is documentation-only. No new GPU experiment was run.
+
+New artifacts:
+
+- `STAGE17_CAS_HARNESS_EVIDENCE_PACKET_20260519.md`
+- `STAGE17_CONSOLIDATED_CLAIMS_MATRIX_20260519.md`
+
+Formal verdict:
+
+`CAS_HARNESS_CROSS_ARCHITECTURE_LIKELIHOOD_CONDITIONING_SUPPORTED`
+
+Supported external claim:
+
+> CAS Harness replicated a bounded eta-to-epsilon readable-prefix likelihood bridge across three model families: Pythia, OLMo, and Qwen.
+
+Evidence line:
+
+- Pythia-160M: `+0.2828` delta, `+0.6829` margin, `81/112`
+- Pythia-1B: `+0.5542` delta, `+1.2460` margin, `90/112`
+- Pythia-2.8B: `+0.5832` delta, `+1.3363` margin, `92/112`
+- OLMo-1B: `+0.6037` delta, `+1.3047` margin, `87/112`
+- Qwen2.5-1.5B: `+0.7960` delta, `+1.6253` margin, `83/112`
+
+Claims now explicitly separated:
+
+- Supported: hidden-state CAS readout, beyond-text readout, readout-causal subspace tests, blind-spot trace diagnostics, bounded weight-geometry inspection, eta-to-epsilon likelihood conditioning.
+- Bounded/grey: isolated five operators, register-only factor, weight geometry as appendix, blind spots as per-readout weakness.
+- Not supported: exact causal neurons, weights firing, raw CAS-symbol understanding, host-model internal CAS compiler, hidden-state generation steering, full black-box solution, open-ended generation control.
+
+Multi-harness composition note:
+
+- Added to Stage 17 as the next hidden-content audit architecture.
+- Current eta-1 is mostly a single-axis internal readout. Composite eta-1 becomes a structured tensor across CAS axes and layer bands.
+- This is relevant to "what the model is hiding" because the internal eta-1 tensor can be compared against eta-2 emitted-text readouts.
+- Claim boundary: the components are supported, but a completed multi-axis hiding benchmark is not yet done.
+
+Recommended next gate:
+
+Stage 18 visible text-quality judge. Pre-register a blind judge/classifier test over `none`, `probe_readable`, and `partner_readable` generations before any public visible-generation claim.
+
+Audit asks:
+
+1. Check whether Stage 17 wording keeps likelihood conditioning separate from open-ended generation control.
+2. Check whether the evidence ladder correctly orders readout, readout causality, blind-spot diagnostics, weight geometry, and eta-to-epsilon conditioning.
+3. Check whether the rejected-claims table is strong enough for skeptical stakeholders.
+4. Recommend whether Stage 17 should become the root Evidence Packet artifact for CAS Harness demos.
