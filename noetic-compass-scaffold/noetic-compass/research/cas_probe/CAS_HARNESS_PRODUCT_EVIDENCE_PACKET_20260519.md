@@ -231,7 +231,8 @@ Each packet should contain:
 | 6 | Weight geometry | CAS subspace aligns with static weight geometry above random. |
 | 7 | Harness conditioning | Readable CAS realization shifts likelihood under controls. |
 | 8 | Verification stack | Ensemble and trace stability accept high-confidence predictions while suppressing conflicted/unstable cases. |
-| 9 | Visible generation | Generated text visibly shifts. Not closed yet. |
+| 9 | Generation readiness | Verification decisions are translated into `allow`, `caveat`, `constrain`, or `suppress` packet policy. |
+| 10 | Visible generation | Generated text visibly shifts. Not closed yet. |
 
 ## Reviewer Walkthrough
 
@@ -265,6 +266,13 @@ Minimum fields:
     "mode_profile": {"accepted_accuracy": 0.0, "coverage": 0.0, "silent_error_rate": 0.0},
     "suppression_reasons": []
   },
+  "generation_readiness": {
+    "generation_readiness": "allow",
+    "risk_score": 0.0,
+    "reasons": [],
+    "recommended_mode": "BALANCED",
+    "policy_version": "stage20_generation_readiness_gate_v1"
+  },
   "controls": {"text_baseline": null, "metadata_baseline": null, "random_ablation": null, "raw_symbol": null},
   "conditioning": {"probe_readable_delta": null, "partner_margin": null, "p_value": null},
   "claim_badges": [],
@@ -278,6 +286,7 @@ UI behavior:
 - Show provenance next.
 - Show the readout and layer trace.
 - Show controls before any interpretation.
+- Show generation readiness before any generated-language preview.
 - Show caveats in the same view, not hidden in a footer.
 - Do not call the result "thought control."
 
@@ -335,12 +344,14 @@ Immediate implementation target:
 
 1. Add a reusable CAS Harness `EvidencePacket` schema.
 2. Add a backend endpoint that serves packet JSON by trace or artifact id.
-3. Attach committed manifests, model revisions, report paths, and SHA-256
+3. Attach `generation_readiness` from Stage 20B: `allow`, `caveat`,
+   `constrain`, or `suppress`.
+4. Attach committed manifests, model revisions, report paths, and SHA-256
    values.
-4. Render a reviewer drawer that opens with the claim badge, then provenance,
-   then readout, controls, blind spots, and caveats.
-5. Add export buttons for JSON and markdown.
-6. Keep visible-generation results in the packet as a bounded negative, not as
+5. Render a reviewer drawer that opens with the claim badge, then provenance,
+   then readout, controls, generation readiness, blind spots, and caveats.
+6. Add export buttons for JSON and markdown.
+7. Keep visible-generation results in the packet as a bounded negative, not as
    a blocker.
 
 Do not run more GPU experiments before this product surface exists unless a

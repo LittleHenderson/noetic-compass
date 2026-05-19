@@ -1,0 +1,378 @@
+{
+  "aggregate_policy_counts": [
+    {
+      "input_counts": {
+        "accepted_high": 3678,
+        "accepted_medium": 1,
+        "suppressed": 521,
+        "total_accounted": 4200
+      },
+      "model": "Pythia-160M formula fixture",
+      "modes": {
+        "BALANCED": {
+          "allow": 3678,
+          "caveat": 1,
+          "constrain": 0,
+          "suppress": 521
+        },
+        "HIGH_PRECISION": {
+          "allow": 3678,
+          "caveat": 1,
+          "constrain": 0,
+          "suppress": 521
+        },
+        "MAX_COVERAGE_TRIAGE": {
+          "allow": 3679,
+          "caveat": 0,
+          "constrain": 521,
+          "suppress": 0
+        }
+      },
+      "source": "stage19a_formula_stack"
+    },
+    {
+      "input_counts": {
+        "accepted_high": 1651,
+        "accepted_medium": 36,
+        "suppressed": 665,
+        "total_accounted": 2352
+      },
+      "model": "OLMo-1B",
+      "modes": {
+        "BALANCED": {
+          "allow": 1651,
+          "caveat": 36,
+          "constrain": 0,
+          "suppress": 665
+        },
+        "HIGH_PRECISION": {
+          "allow": 1651,
+          "caveat": 36,
+          "constrain": 0,
+          "suppress": 665
+        },
+        "MAX_COVERAGE_TRIAGE": {
+          "allow": 1687,
+          "caveat": 0,
+          "constrain": 665,
+          "suppress": 0
+        }
+      },
+      "source": "stage19b_cross_arch_stack"
+    },
+    {
+      "input_counts": {
+        "accepted_high": 1746,
+        "accepted_medium": 8,
+        "suppressed": 598,
+        "total_accounted": 2352
+      },
+      "model": "Qwen2.5-1.5B",
+      "modes": {
+        "BALANCED": {
+          "allow": 1746,
+          "caveat": 8,
+          "constrain": 0,
+          "suppress": 598
+        },
+        "HIGH_PRECISION": {
+          "allow": 1746,
+          "caveat": 8,
+          "constrain": 0,
+          "suppress": 598
+        },
+        "MAX_COVERAGE_TRIAGE": {
+          "allow": 1754,
+          "caveat": 0,
+          "constrain": 598,
+          "suppress": 0
+        }
+      },
+      "source": "stage19b_cross_arch_stack"
+    }
+  ],
+  "boundary": "No fresh hidden-state inference was run. Stage 20B attaches the Generation Readiness Gate to locked Stage 19 Verification Stack decisions and sample rows. Neural lacunarity-head values are not present in the Stage 19 reports, so this run validates the Verification Stack path of the readiness policy.",
+  "date": "2026-05-19",
+  "default_mode": "BALANCED",
+  "input_reports": [
+    "stage19a_formula_verification_stack_20260519.json",
+    "stage19b_cross_arch_foundation_verification_stack_20260519.json"
+  ],
+  "mode_policy": {
+    "BALANCED": "accepted high -> allow; accepted medium -> caveat; rejected -> suppress",
+    "HIGH_PRECISION": "accepted high -> allow; accepted medium -> caveat; rejected -> suppress",
+    "MAX_COVERAGE_TRIAGE": "accepted high/medium -> allow; rejected -> constrain"
+  },
+  "sample_customer_packets": [
+    {
+      "generation_readiness": {
+        "evidence": {
+          "inversion_flag_count": 0,
+          "max_gap_probability": 0.0,
+          "max_lacunarity": 0.0,
+          "mean_gap_probability": 0.0,
+          "min_domain_confidence": 1.0,
+          "mode": "BALANCED",
+          "rpm_satisfaction": 1.0,
+          "verification_accepted": true
+        },
+        "generation_readiness": "allow",
+        "mode": "BALANCED",
+        "policy_version": "stage20_generation_readiness_gate_v1",
+        "reasons": [
+          "all_readiness_signals_within_mode_thresholds"
+        ],
+        "recommended_mode": "BALANCED",
+        "risk_score": 0.0
+      },
+      "input_reference": {
+        "confidence_tier": "high",
+        "index": 0,
+        "prediction": "relation_dependency",
+        "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_definition_compact_relation_dependency",
+        "stable_agree": [
+          "focus_token",
+          "final_token",
+          "mean_over_seq_len"
+        ],
+        "verification_accepted": true,
+        "votes": {
+          "final_token": "relation_dependency",
+          "focus_token": "relation_dependency",
+          "mean_over_seq_len": "relation_dependency"
+        }
+      },
+      "label": "clean accepted example",
+      "mode": "BALANCED",
+      "model": "Pythia-160M formula fixture",
+      "source": "stage19a_formula_stack",
+      "verification": {
+        "accepted": true,
+        "decision_tier": "high"
+      }
+    },
+    {
+      "generation_readiness": {
+        "evidence": {
+          "inversion_flag_count": 0,
+          "max_gap_probability": 0.0,
+          "max_lacunarity": 0.0,
+          "mean_gap_probability": 0.0,
+          "min_domain_confidence": 1.0,
+          "mode": "BALANCED",
+          "rpm_satisfaction": 1.0,
+          "verification_accepted": true
+        },
+        "generation_readiness": "caveat",
+        "mode": "BALANCED",
+        "policy_version": "stage20_generation_readiness_gate_v1",
+        "reasons": [
+          "verification_tier_medium"
+        ],
+        "recommended_mode": "BALANCED",
+        "risk_score": 0.25
+      },
+      "input_reference": {
+        "confidence_tier": "medium",
+        "index": 3,
+        "prediction": "typed_program",
+        "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_applied_human_typed_program",
+        "stable_agree": [
+          "final_token",
+          "mean_over_seq_len"
+        ],
+        "verification_accepted": true,
+        "votes": {
+          "final_token": "typed_program",
+          "focus_token": "typed_program",
+          "mean_over_seq_len": "typed_program"
+        }
+      },
+      "label": "medium-confidence accepted example",
+      "mode": "BALANCED",
+      "model": "Pythia-160M formula fixture",
+      "source": "stage19a_formula_stack",
+      "verification": {
+        "accepted": true,
+        "decision_tier": "medium"
+      }
+    },
+    {
+      "generation_readiness": {
+        "evidence": {
+          "inversion_flag_count": 0,
+          "max_gap_probability": 0.0,
+          "max_lacunarity": 0.0,
+          "mean_gap_probability": 0.0,
+          "min_domain_confidence": 1.0,
+          "mode": "BALANCED",
+          "rpm_satisfaction": 1.0,
+          "verification_accepted": false
+        },
+        "generation_readiness": "suppress",
+        "mode": "BALANCED",
+        "policy_version": "stage20_generation_readiness_gate_v1",
+        "reasons": [
+          "verification_stack_rejected",
+          "verification:final_token_conflicted",
+          "verification:mean_over_seq_len_conflicted"
+        ],
+        "recommended_mode": "HIGH_PRECISION",
+        "risk_score": 0.9
+      },
+      "input_reference": {
+        "index": 9,
+        "reason": "final_token_conflicted+mean_over_seq_len_conflicted",
+        "verification_accepted": false
+      },
+      "label": "suppressed conflict in default mode",
+      "mode": "BALANCED",
+      "model": "Pythia-160M formula fixture",
+      "source": "stage19a_formula_stack",
+      "verification": {
+        "accepted": false,
+        "suppression_reasons": [
+          "final_token_conflicted",
+          "mean_over_seq_len_conflicted"
+        ]
+      }
+    },
+    {
+      "generation_readiness": {
+        "evidence": {
+          "inversion_flag_count": 0,
+          "max_gap_probability": 0.0,
+          "max_lacunarity": 0.0,
+          "mean_gap_probability": 0.0,
+          "min_domain_confidence": 1.0,
+          "mode": "MAX_COVERAGE_TRIAGE",
+          "rpm_satisfaction": 1.0,
+          "verification_accepted": false
+        },
+        "generation_readiness": "constrain",
+        "mode": "MAX_COVERAGE_TRIAGE",
+        "policy_version": "stage20_generation_readiness_gate_v1",
+        "reasons": [
+          "verification_stack_rejected",
+          "verification:final_token_conflicted",
+          "verification:mean_over_seq_len_conflicted"
+        ],
+        "recommended_mode": "HIGH_PRECISION",
+        "risk_score": 0.66
+      },
+      "input_reference": {
+        "index": 9,
+        "reason": "final_token_conflicted+mean_over_seq_len_conflicted",
+        "verification_accepted": false
+      },
+      "label": "same suppressed conflict in triage mode",
+      "mode": "MAX_COVERAGE_TRIAGE",
+      "model": "Pythia-160M formula fixture",
+      "source": "stage19a_formula_stack",
+      "verification": {
+        "accepted": false,
+        "suppression_reasons": [
+          "final_token_conflicted",
+          "mean_over_seq_len_conflicted"
+        ]
+      }
+    },
+    {
+      "generation_readiness": {
+        "evidence": {
+          "inversion_flag_count": 0,
+          "max_gap_probability": 0.0,
+          "max_lacunarity": 0.0,
+          "mean_gap_probability": 0.0,
+          "min_domain_confidence": 1.0,
+          "mode": "BALANCED",
+          "rpm_satisfaction": 1.0,
+          "verification_accepted": false
+        },
+        "generation_readiness": "suppress",
+        "mode": "BALANCED",
+        "policy_version": "stage20_generation_readiness_gate_v1",
+        "reasons": [
+          "verification_stack_rejected",
+          "verification:factor_conflicted"
+        ],
+        "recommended_mode": "HIGH_PRECISION",
+        "risk_score": 0.9
+      },
+      "input_reference": {
+        "index": 54,
+        "reason": "factor_conflicted",
+        "verification_accepted": false
+      },
+      "label": "cross-architecture factor conflict",
+      "mode": "BALANCED",
+      "model": "OLMo-1B",
+      "source": "stage19b_cross_arch_stack",
+      "verification": {
+        "accepted": false,
+        "suppression_reasons": [
+          "factor_conflicted"
+        ]
+      }
+    },
+    {
+      "generation_readiness": {
+        "evidence": {
+          "inversion_flag_count": 0,
+          "max_gap_probability": 0.0,
+          "max_lacunarity": 0.0,
+          "mean_gap_probability": 0.0,
+          "min_domain_confidence": 1.0,
+          "mode": "BALANCED",
+          "rpm_satisfaction": 1.0,
+          "verification_accepted": true
+        },
+        "generation_readiness": "allow",
+        "mode": "BALANCED",
+        "policy_version": "stage20_generation_readiness_gate_v1",
+        "reasons": [
+          "all_readiness_signals_within_mode_thresholds"
+        ],
+        "recommended_mode": "BALANCED",
+        "risk_score": 0.0
+      },
+      "input_reference": {
+        "confidence_tier": "high",
+        "drive_votes": {
+          "final_token": "F1",
+          "focus_token": "F1",
+          "mean_over_seq_len": "F7"
+        },
+        "foundation_votes": {
+          "final_token": "F1T",
+          "focus_token": "F1T",
+          "mean_over_seq_len": "F1T"
+        },
+        "index": 0,
+        "prediction": "F1T",
+        "register_votes": {
+          "final_token": "T",
+          "focus_token": "T",
+          "mean_over_seq_len": "T"
+        },
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1T",
+        "stable_agree": [
+          "focus_token",
+          "final_token",
+          "mean_over_seq_len"
+        ],
+        "verification_accepted": true
+      },
+      "label": "cross-architecture clean accepted example",
+      "mode": "BALANCED",
+      "model": "Qwen2.5-1.5B",
+      "source": "stage19b_cross_arch_stack",
+      "verification": {
+        "accepted": true,
+        "decision_tier": "high"
+      }
+    }
+  ],
+  "schema_version": "stage20b_generation_readiness_packets_v1",
+  "status": "PACKET_INTEGRATION_READY"
+}

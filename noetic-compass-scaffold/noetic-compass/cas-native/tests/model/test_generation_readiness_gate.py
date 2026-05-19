@@ -7,6 +7,7 @@ from cas_native.model.cas_native_model import CASNativeConfig, CASNativeModel
 from cas_native.model.generation_readiness_gate import (
     ALLOW,
     BALANCED,
+    CAVEAT,
     CONSTRAIN,
     HIGH_PRECISION,
     MAX_COVERAGE_TRIAGE,
@@ -85,6 +86,22 @@ def test_verification_rejection_is_suppressed_outside_triage():
     assert result.risk_score == 0.9
     assert "verification_stack_rejected" in result.reasons
     assert "verification:factor_conflicted" in result.reasons
+
+
+def test_medium_confidence_acceptance_gets_caveat_in_balanced_mode():
+    gate = GenerationReadinessGate()
+
+    result = gate(
+        lacunarity_scores=torch.zeros(1, 1),
+        lacunarity_meta=_clean_meta(),
+        inversion_flags=torch.zeros(1, 7),
+        rpm_satisfaction=torch.tensor(0.95),
+        verification={"accepted": True, "decision_tier": "medium"},
+    )
+
+    assert result.generation_readiness == CAVEAT
+    assert result.risk_score == 0.25
+    assert "verification_tier_medium" in result.reasons
 
 
 def test_verification_rejection_constrains_in_triage_mode():

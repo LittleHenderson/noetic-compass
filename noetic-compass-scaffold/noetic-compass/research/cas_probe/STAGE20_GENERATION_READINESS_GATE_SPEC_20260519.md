@@ -87,7 +87,7 @@ Evidence sources add risk:
 - low domain confidence
 - inversion flags
 - low RPM satisfaction
-- Verification Stack rejection or low-confidence tier
+- Verification Stack rejection or non-high-confidence tier
 
 Verification Stack rejection is treated strongly:
 
@@ -96,6 +96,10 @@ Verification Stack rejection is treated strongly:
 
 This preserves the Stage 19C product split: triage may still surface a
 candidate, but it is not a high-confidence license-grade claim.
+
+Medium/diagnostic accepted predictions are treated as a caveat-level signal in
+`HIGH_PRECISION` and `BALANCED`. They remain accepted, but the packet should
+tell the reviewer that the readout did not reach the high-confidence tier.
 
 ## Output
 
@@ -156,7 +160,7 @@ python -m pytest \
 
 Result:
 
-- `6 passed` for the new gate tests
+- `7 passed` for the new gate tests
 - `16 passed` for the CASNativeModel regression slice
 
 ## Product Read

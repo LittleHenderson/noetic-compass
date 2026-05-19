@@ -51,6 +51,11 @@
       "capability": "verification_stack",
       "evidence": ["stage19a", "stage19b", "stage19c"],
       "meaning": "Stage 19A runtime-safe ensemble and trace stability accepted 3679/4200 formula-family examples at 0.9978 accuracy with 0.0022 silent error rate. Deterministic rerun after commit 05ac687 reproduced the result exactly. Stage 19B transfers as a high-precision diagnostic on OLMo/Qwen Foundation fixtures. Stage 19C packages the precision/coverage ladder as selectable user modes."
+    },
+    {
+      "capability": "generation_readiness",
+      "evidence": ["stage20", "stage20b"],
+      "meaning": "The Generation Readiness Gate converts Verification Stack decisions into packet policy: allow clean high-confidence readouts, caveat medium-confidence readouts, suppress rejected readouts in license-grade modes, and constrain rejected readouts in triage mode."
     }
   ],
   "rejected_claims": [
@@ -221,6 +226,39 @@
       }
     }
   },
+  "stage20b_generation_readiness": {
+    "status": "PACKET_INTEGRATION_READY",
+    "default_mode": "BALANCED",
+    "report": "STAGE20B_GENERATION_READINESS_PACKETS_20260519.md",
+    "json": "stage20b_generation_readiness_packets_20260519.json",
+    "policy_version": "stage20_generation_readiness_gate_v1",
+    "boundary": "No fresh hidden-state inference was run. Stage 20B attaches the Generation Readiness Gate to locked Stage 19 Verification Stack decisions and sample rows. Neural lacunarity-head values are not present in the Stage 19 reports, so this run validates the Verification Stack path of the readiness policy.",
+    "mode_policy": {
+      "HIGH_PRECISION": "accepted high -> allow; accepted medium -> caveat; rejected -> suppress",
+      "BALANCED": "accepted high -> allow; accepted medium -> caveat; rejected -> suppress",
+      "MAX_COVERAGE_TRIAGE": "accepted high/medium -> allow; rejected -> constrain"
+    },
+    "default_mode_examples": {
+      "stage19a_formula_stack": {
+        "allow": 3678,
+        "caveat": 1,
+        "constrain": 0,
+        "suppress": 521
+      },
+      "olmo1b_cross_arch_stack": {
+        "allow": 1651,
+        "caveat": 36,
+        "constrain": 0,
+        "suppress": 665
+      },
+      "qwen15b_cross_arch_stack": {
+        "allow": 1746,
+        "caveat": 8,
+        "constrain": 0,
+        "suppress": 598
+      }
+    }
+  },
   "claim_badges": [
     "provenance",
     "readout",
@@ -229,7 +267,8 @@
     "trace_diagnostic",
     "weight_geometry",
     "harness_conditioning",
-    "verification_stack"
+    "verification_stack",
+    "generation_readiness"
   ],
   "visible_generation_badge": {
     "status": "not_closed",
@@ -254,6 +293,7 @@
     "verification_mode_field": "HIGH_PRECISION | BALANCED | MAX_COVERAGE_TRIAGE",
     "default_mode": "BALANCED",
     "mode_selection_ui": "Expose mode selector with precision, coverage, silent-error, and suppression tradeoffs before running or exporting a packet.",
+    "generation_readiness_field": "allow | caveat | constrain | suppress",
     "exports": ["json", "markdown"]
   },
   "sources": [

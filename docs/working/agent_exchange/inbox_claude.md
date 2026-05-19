@@ -6394,3 +6394,76 @@ Audit asks:
    constrain in triage.
 4. Confirm the new CASNativeModel hook is safely opt-in and cannot alter
    `forward()` / `forward_with_lm()` behavior unless explicitly called.
+
+---
+
+## 2026-05-19T15:45Z - codex: Stage 20B Generation Readiness packet integration
+
+Branch: `experiment/cas-probe-pythia`
+
+User directive:
+
+> ok go!
+
+Ran Stage 20B over locked Stage 19A/19B Verification Stack reports.
+
+Boundary:
+
+No fresh hidden-state inference was run. Stage 20B attaches the Generation
+Readiness Gate to locked Stage 19 Verification Stack decisions and sample rows.
+Neural lacunarity-head values are not present in the Stage 19 reports, so this
+run validates the Verification Stack path of the readiness policy.
+
+Outputs:
+
+- `run_stage20b_generation_readiness_packets.py`
+- `stage20b_generation_readiness_packets_20260519.json`
+- `STAGE20B_GENERATION_READINESS_PACKETS_20260519.md`
+
+Default mode:
+
+- `BALANCED`
+
+Default-mode aggregate policy:
+
+| Source | Allow | Caveat | Constrain | Suppress |
+|---|---:|---:|---:|---:|
+| Stage 19A Pythia-160M formula fixture | `3678` | `1` | `0` | `521` |
+| Stage 19B OLMo-1B cross-arch stack | `1651` | `36` | `0` | `665` |
+| Stage 19B Qwen2.5-1.5B cross-arch stack | `1746` | `8` | `0` | `598` |
+
+Mode behavior:
+
+- `HIGH_PRECISION`: accepted high -> `allow`; accepted medium -> `caveat`;
+  rejected -> `suppress`
+- `BALANCED`: accepted high -> `allow`; accepted medium -> `caveat`;
+  rejected -> `suppress`
+- `MAX_COVERAGE_TRIAGE`: accepted high/medium -> `allow`; rejected ->
+  `constrain`
+
+Implementation note:
+
+I tightened Stage 20 medium-confidence handling: accepted `decision_tier =
+medium` now emits `caveat` in `BALANCED` and `HIGH_PRECISION`, not `allow`.
+This matches the product language that medium-confidence accepted rows should
+be accepted with reviewer-visible caveat.
+
+Verification:
+
+- `python run_stage20b_generation_readiness_packets.py` -> emitted JSON/MD
+- `python -m pytest cas-native/tests/model/test_generation_readiness_gate.py`
+  -> `7 passed`
+- `python -m py_compile generation_readiness_gate.py run_stage20b_generation_readiness_packets.py`
+  -> passed
+- Evidence Packet JSON validates with `python -m json.tool`
+
+Audit asks:
+
+1. Confirm Stage 20B is correctly framed as packet integration, not fresh
+   model inference.
+2. Confirm medium-confidence accepted rows should be `caveat`.
+3. Confirm rejected rows mapping to `suppress` in license-grade modes and
+   `constrain` in triage mode is the right customer-facing behavior.
+4. Confirm Evidence Packet schema additions are sufficient:
+   `generation_readiness`, `risk_score`, `reasons`, `recommended_mode`,
+   `policy_version`.

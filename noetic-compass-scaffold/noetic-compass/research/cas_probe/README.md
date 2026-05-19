@@ -1988,3 +1988,34 @@ Artifacts:
 - `cas-native/model/generation_readiness_gate.py`
 - `cas-native/tests/model/test_generation_readiness_gate.py`
 - `STAGE20_GENERATION_READINESS_GATE_SPEC_20260519.md`
+
+## Stage 20B result - Generation Readiness packet integration
+
+**Verdict: `PACKET_INTEGRATION_READY`.**
+
+Stage 20B ran the Generation Readiness Gate over locked Stage 19A/19B
+Verification Stack reports. No fresh hidden-state inference was run. Neural
+lacunarity-head values are not present in the Stage 19 reports, so this run
+validates the Verification Stack path of the readiness policy.
+
+Default mode remains `BALANCED`.
+
+Default-mode aggregate policy:
+
+| Source | Allow | Caveat | Constrain | Suppress |
+|---|---:|---:|---:|---:|
+| Stage 19A Pythia-160M formula fixture | `3678` | `1` | `0` | `521` |
+| Stage 19B OLMo-1B cross-arch stack | `1651` | `36` | `0` | `665` |
+| Stage 19B Qwen2.5-1.5B cross-arch stack | `1746` | `8` | `0` | `598` |
+
+Triage behavior:
+
+> The same rejected rows that are `suppress` in `BALANCED` become `constrain`
+> in `MAX_COVERAGE_TRIAGE`, preserving triage as candidate surfacing rather
+> than license-grade acceptance.
+
+Artifacts:
+
+- `run_stage20b_generation_readiness_packets.py`
+- `stage20b_generation_readiness_packets_20260519.json`
+- `STAGE20B_GENERATION_READINESS_PACKETS_20260519.md`

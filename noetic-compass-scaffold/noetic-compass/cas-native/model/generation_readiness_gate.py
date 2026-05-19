@@ -225,7 +225,7 @@ class GenerationReadinessGate(nn.Module):
 
         decision_tier = str(verification.get("decision_tier", "")).lower()
         if decision_tier in {"medium", "diagnostic", "triage"}:
-            risk += 0.10
+            risk += 0.25
             _add_reason(reasons, f"verification_tier_{decision_tier}")
         elif decision_tier in {"low", "conflicted", "uncertain"}:
             risk += 0.25
