@@ -84,6 +84,45 @@ class WrapRequest(BaseModel):
     )
     scoring_provider: str | None = None
     scoring_model: str | None = None
+    # Stage 20 Generation Readiness Gate — opt-in Output Gate companion.
+    # When None, falls back to NC_WRAP_READINESS_GATE_ENABLED (default
+    # False). When False, the gate is bypassed and the pipeline behaves
+    # exactly as before. When True, the diagnostic policy gate runs after
+    # the Inversion Scan and may caveat / constrain / suppress emission.
+    readiness_gate_enabled: bool | None = Field(
+        default=None,
+        description=(
+            "Opt-in flag for the Stage 20 Generation Readiness Gate. "
+            "None defers to the server-side default "
+            "(NC_WRAP_READINESS_GATE_ENABLED). True enables the gate for "
+            "this request; False forces it off."
+        ),
+    )
+    # Optional mode override for the readiness gate. Must be one of
+    # HIGH_PRECISION, BALANCED, MAX_COVERAGE_TRIAGE. Default (None) uses
+    # NC_WRAP_READINESS_GATE_MODE which itself defaults to BALANCED.
+    verification_mode: Literal["HIGH_PRECISION", "BALANCED", "MAX_COVERAGE_TRIAGE"] | None = Field(
+        default=None,
+        description=(
+            "Per-request mode override for the Stage 20 Generation "
+            "Readiness Gate. None defers to the server-side default."
+        ),
+    )
+    # Optional Verification Stack evidence packet. The Stage 20 gate
+    # consumes this as one of its diagnostic inputs. Shape (all optional):
+    # {
+    #   "accepted": bool,                # default-pass when absent
+    #   "decision_tier": str,            # e.g. "high"|"medium"|"low"
+    #   "suppression_reasons": [str, ...]
+    # }
+    verification: dict | None = Field(
+        default=None,
+        description=(
+            "Optional Verification Stack evidence packet passed to the "
+            "Stage 20 Generation Readiness Gate. Treated as default-pass "
+            "(accepted=True) when omitted."
+        ),
+    )
 
     @field_validator("scoring_provider", "scoring_model")
     @classmethod
@@ -205,6 +244,32 @@ class WrapResponse(BaseModel):
     fractal_analysis: FractalAnalysisSchema | None = None
     compiled_notation: CompiledNotationSchema | None = None
     lacunarity: dict | None = None
+    # Stage 20 Generation Readiness Gate output (opt-in via
+    # `readiness_gate_enabled`). When the gate is disabled, this field is
+    # None and the response shape is byte-for-byte unchanged from the
+    # pre-gate baseline. When enabled, it carries the full
+    # GenerationReadinessResult.as_dict() output and `gate_action` carries
+    # the resolved policy verb (allow/caveat/constrain/suppress). On the
+    # `suppress` path the request is rejected with HTTP 422 instead of
+    # returning this field.
+    generation_readiness: dict | None = Field(
+        default=None,
+        description=(
+            "Stage 20 Generation Readiness Gate decision packet. Present "
+            "only when the gate was enabled for this request. Carries "
+            "generation_readiness (the action verb), risk_score, reasons, "
+            "recommended_mode, mode, evidence, and policy_version."
+        ),
+    )
+    gate_action: Literal["allow", "caveat", "constrain"] | None = Field(
+        default=None,
+        description=(
+            "Resolved policy verb for the Stage 20 readiness gate. Mirrors "
+            "`generation_readiness['generation_readiness']` for clients "
+            "that only need the verb. `suppress` is never serialized here "
+            "because suppression returns HTTP 422 instead."
+        ),
+    )
     # CAS v7.5/v7.7 Register data flow. One entry per operator score. Absent
     # from serialized JSON when None — preserving v7.4 response shape exactly.
     score_registers: list[str | list[str] | None] | None = Field(

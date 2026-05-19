@@ -53,6 +53,19 @@ class Settings(BaseSettings):
     scoring_provider: str = ""
     scoring_model: str = ""
 
+    # Stage 20 Generation Readiness Gate — opt-in Output Gate companion.
+    # When False (default), the 8-stage Wrap Pipeline behaves exactly as
+    # before. When True, the Wrap Pipeline runs the diagnostic readiness
+    # gate after the Inversion Scan and emits an allow/caveat/constrain/
+    # suppress policy decision into the response (and HTTP 422 on suppress).
+    # Per-request `readiness_gate_enabled` overrides this default; the
+    # request flag is the canonical opt-in surface and the env var is the
+    # ops-side default for environments that want the gate on globally.
+    wrap_readiness_gate_enabled: bool = False
+    # Default verification mode for the Wrap Pipeline integration of the
+    # Stage 20 gate. Valid: HIGH_PRECISION, BALANCED, MAX_COVERAGE_TRIAGE.
+    wrap_readiness_gate_mode: str = "BALANCED"
+
     # Docker Compose DB credentials (used only by docker-compose.yml)
     db_user: str = "noetic"
     db_password: str = "noetic_dev"

@@ -6,6 +6,7 @@ import hashlib
 import time
 
 from api.config import settings
+from api.errors import GenerationReadinessSuppression
 from api.llm_connectors.base import BaseLLMConnector, LLMResponse
 from api.llm_connectors.registry import get_connector
 from api.models import (
@@ -58,6 +59,20 @@ class WrapPipelineRunner:
     def __init__(self, connector: BaseLLMConnector, dial_config: DialConfigSchema):
         self.connector = connector
         self.dial_config = dial_config
+
+    @staticmethod
+    def _resolve_readiness_gate_enabled(request_flag: bool | None) -> bool:
+        """Resolve whether the Stage 20 readiness gate runs for this request.
+
+        Per-request opt-in overrides server-side default. Both must be
+        falsy for the gate to stay off — preserving existing behavior in
+        the gate-disabled path byte-for-byte.
+        """
+        if request_flag is True:
+            return True
+        if request_flag is False:
+            return False
+        return bool(getattr(settings, "wrap_readiness_gate_enabled", False))
 
     @staticmethod
     def _provider_is_available(provider: str) -> bool:
@@ -115,6 +130,9 @@ class WrapPipelineRunner:
         scoring_mode: str = "heuristic_fallback",
         scoring_provider: str | None = None,
         scoring_model: str | None = None,
+        readiness_gate_enabled: bool | None = None,
+        verification_mode: str | None = None,
+        verification: dict | None = None,
     ) -> WrapResponse:
         """Execute the full 8-stage pipeline."""
         stages: list[StageResult] = []
@@ -246,6 +264,74 @@ class WrapPipelineRunner:
             },
         ))
 
+        # ------------------------------------------------------------------
+        # Stage 20 Generation Readiness Gate (Output Gate companion).
+        #
+        # Opt-in policy layer that consumes Stage 5/6/7 diagnostic signals
+        # plus an optional Verification Stack evidence packet, and emits
+        # an allow / caveat / constrain / suppress action. The Stage 8
+        # Output Gate (NCCS) still runs unconditionally; the gate's
+        # decision is applied AS A COMPANION to the Output Gate, not as
+        # a replacement.
+        #
+        # Disabled path (default): behavior is unchanged from the pre-gate
+        # pipeline. `generation_readiness_packet` and `gate_action` stay
+        # None and the response shape is byte-for-byte identical.
+        # ------------------------------------------------------------------
+        gate_enabled = self._resolve_readiness_gate_enabled(readiness_gate_enabled)
+        generation_readiness_packet: dict | None = None
+        gate_action: str | None = None
+
+        if gate_enabled:
+            from api.pipeline import readiness_gate as _readiness
+
+            # Early lacunarity computation — same shape as the post-pipeline
+            # call (line ~360); we pass an empty fractal_sequence here because
+            # fractal_analysis runs after Stage 8 today. The gate only reads
+            # the composite + gap_map, so the early-vs-late computation is
+            # numerically identical for the signals the gate consumes (state,
+            # domain, drive, rpm_resolution; fractal lacunarity is 1.0 with
+            # an empty sequence regardless of the operator sequence).
+            #
+            # To avoid the empty-sequence fractal-lacunarity penalty inflating
+            # the composite, we compute lacunarity here with a placeholder
+            # fractal sequence derived from the operator-score ordering.
+            # This matches the eventual analyze_fractal seed input for
+            # readiness purposes without paying for the full IFS analysis.
+            placeholder_fractal_seq = [
+                i for i, _ in sorted(
+                    enumerate(op_result.scores), key=lambda kv: -kv[1]
+                )
+            ]
+            gate_lac_profile = compute_lacunarity_profile(
+                operator_scores=op_result.raw_scores_0_to_10,
+                domain_scores=dc_result.domain_averages,
+                drive_scores=flat_drives,
+                fractal_sequence=placeholder_fractal_seq,
+                resolution_details=rpm_result.resolution_details,
+            )
+
+            active_mode = _readiness.resolve_mode(
+                verification_mode,
+                getattr(settings, "wrap_readiness_gate_mode", _readiness.BALANCED),
+            )
+
+            readiness_result = _readiness.assess_for_wrap(
+                lacunarity_profile=gate_lac_profile,
+                inversion_axis_scores=inv_result.axis_scores,
+                rpm_completeness=rpm_result.rpm_completeness,
+                verification=verification,
+                mode=active_mode,
+            )
+
+            generation_readiness_packet = readiness_result.as_dict()
+            gate_action = readiness_result.generation_readiness
+
+            # `suppress` is a deliberate refusal — surface as HTTP 422
+            # via the GenerationReadinessSuppression handler.
+            if gate_action == _readiness.SUPPRESS:
+                raise GenerationReadinessSuppression(generation_readiness_packet)
+
         # Stage 8: Output Gate (NCCS) — pass real drive scores
         nccs = await output_gate(
             op_result, dc_result, inv_result, rpm_result,
@@ -302,6 +388,13 @@ class WrapPipelineRunner:
             "scorer_model": op_result.scorer_model or scorer_model_resolved,
             "elapsed_ms": elapsed_ms,
             "rpm_heuristic": rpm_result.heuristic,
+            # Stage 20 readiness gate provenance — only surfaced when the
+            # gate ran for this request. The full decision packet lives on
+            # the top-level `generation_readiness` field; provenance carries
+            # only the resolved verb + policy version so auditors can spot
+            # gate-touched requests at a glance.
+            "readiness_gate_enabled": gate_enabled,
+            "readiness_gate_action": gate_action,
         }
 
         # Post-pipeline: AI interpretation (not a 9th stage)
@@ -381,4 +474,9 @@ class WrapPipelineRunner:
             # register-neutral (no `|R` annotations on any score), so the
             # serialized JSON omits the field and remains v7.4-compatible.
             score_registers=op_result.score_registers,
+            # Stage 20 Generation Readiness Gate output — None when the
+            # gate is disabled (the default), preserving byte-for-byte
+            # response shape for the gate-disabled path.
+            generation_readiness=generation_readiness_packet,
+            gate_action=gate_action,  # type: ignore[arg-type]
         )

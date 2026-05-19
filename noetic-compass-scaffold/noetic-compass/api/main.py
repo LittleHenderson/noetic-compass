@@ -9,10 +9,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.config import settings
 from api.errors import (
     DialViolationError,
+    GenerationReadinessSuppression,
     LLMError,
     PipelineStageError,
     ScoringError,
     dial_violation_handler,
+    generation_readiness_suppression_handler,
     llm_error_handler,
     pipeline_stage_error_handler,
     scoring_error_handler,
@@ -109,6 +111,12 @@ app.add_exception_handler(DialViolationError, dial_violation_handler)  # type: i
 app.add_exception_handler(ScoringError, scoring_error_handler)  # type: ignore[arg-type]
 app.add_exception_handler(LLMError, llm_error_handler)  # type: ignore[arg-type]
 app.add_exception_handler(PipelineStageError, pipeline_stage_error_handler)  # type: ignore[arg-type]
+# Stage 20 Generation Readiness Gate "suppress" decisions surface as
+# HTTP 422 — a deliberate policy refusal, not a server error.
+app.add_exception_handler(
+    GenerationReadinessSuppression,
+    generation_readiness_suppression_handler,  # type: ignore[arg-type]
+)
 
 # Routes
 app.include_router(health.router)

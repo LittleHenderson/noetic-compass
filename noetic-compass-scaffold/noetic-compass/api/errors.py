@@ -34,6 +34,23 @@ class PipelineStageError(Exception):
         self.detail = detail
 
 
+class GenerationReadinessSuppression(Exception):
+    """Raised when the Stage 20 Generation Readiness Gate decides to suppress
+    customer-facing emission.
+
+    This is a *deliberate refusal*, not an error. The Wrap Pipeline runner
+    raises this when the gate returns the ``suppress`` action so the Output
+    Gate companion can surface the decision through an HTTP 422 (Unprocessable
+    Entity) rather than the 500 path used for genuine pipeline errors.
+
+    The serialized ``GenerationReadinessResult.as_dict()`` is attached as
+    ``result`` for the handler to surface in the response body.
+    """
+
+    def __init__(self, result: dict):
+        self.result = result
+
+
 async def dial_violation_handler(_request: Request, exc: DialViolationError) -> JSONResponse:
     return JSONResponse(
         status_code=422,
@@ -68,5 +85,27 @@ async def pipeline_stage_error_handler(
             "detail": exc.detail,
             "error_type": "pipeline_error",
             "stage": exc.stage,
+        },
+    )
+
+
+async def generation_readiness_suppression_handler(
+    _request: Request, exc: GenerationReadinessSuppression
+) -> JSONResponse:
+    """Surface a Stage 20 suppress decision as HTTP 422.
+
+    The body uses reserved policy language (caveat / constrain / suppress)
+    rather than "rejected" or "failed"; the decision is a structured policy
+    output, not an error. The full GenerationReadinessResult payload is
+    included as ``reason`` so the client (and audit trail) can inspect the
+    risk score, reasons, and recommended mode.
+    """
+    return JSONResponse(
+        status_code=422,
+        content={
+            "detail": "Generation suppressed by Stage 20 readiness gate.",
+            "error_type": "generation_readiness_suppression",
+            "gate_action": "suppress",
+            "reason": exc.result,
         },
     )

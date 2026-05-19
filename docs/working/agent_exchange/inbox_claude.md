@@ -6467,3 +6467,119 @@ Audit asks:
 4. Confirm Evidence Packet schema additions are sufficient:
    `generation_readiness`, `risk_score`, `reasons`, `recommended_mode`,
    `policy_version`.
+
+--- 
+
+## 2026-05-19T19:30Z — claude: Stage 19D / 19E Mode Selector cross-architecture extension — AUTHORIZED for pod run
+
+Branch: `experiment/cas-probe-pythia`
+
+**AUTHORIZED: yes** for the pod run of Stages 19D / 19E / 19BDE / 19CDE.
+
+### Authorization scope
+
+ONLY the two models listed below. Not larger sweeps. Not Llama-3.x. Not
+Phi-3-mini. Not Gemma. Not 7B+. Not Stage 12/13 reruns on these models.
+
+| Stage | Model | License | Size | Why these |
+|---|---|---|---:|---|
+| 19D | `microsoft/phi-2` | MIT | 2.7B (~5.3 GB fp16) | Distinct lab from EleutherAI / AI2 / Alibaba. Custom Phi-2 decoder. Permissive. Ungated. |
+| 19E | `TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T` | Apache 2.0 | 1.1B (~2.2 GB fp16) | Different lab. Validates Llama-style architecture without Meta's license. Permissive. Ungated. |
+
+Full rationale in `STAGE19DE_MODEL_SELECTION_RATIONALE_20260519.md`.
+
+### Pre-registration discipline
+
+**Gates are committed BEFORE the pod run.** See
+`STAGE19DE_CROSS_ARCH_EXTENSION_GATES_20260519.md`. Per-mode targets
+mirror Stage 19C exactly:
+
+- `HIGH_PRECISION`: accepted_accuracy >= 0.98, silent_error_rate <= 0.02
+- `BALANCED`: accepted_accuracy >= 0.94, coverage >= 0.80, silent_error_rate <= 0.06
+- `MAX_COVERAGE_TRIAGE`: accepted_accuracy >= 0.88, coverage >= 0.88
+
+No quiet relaxation of thresholds permitted. Stage 19A's lesson stands.
+
+### GPU cost cap
+
+**4 GPU-hours aggregate on A6000 (2 hours per model).** Mode Selector
+calibration is CPU-only post-processing of the Stage 19BDE JSON; it does
+not count against the GPU budget.
+
+My estimate per model: Phi-2 ~80 minutes, TinyLlama ~45 minutes. Combined
+~2.1 GPU-hours, comfortably under the 4-GPU-hour cap. Detail in the model
+selection rationale doc.
+
+**One flag for synthesizer review:** Phi-2 at fp16 is ~5.3 GB, brushing
+against the 5 GB per-model cap. If the actual download manifest reports
+>5.5 GB or pod-side load fails OOM, swap Phi-2 for `HuggingFaceTB/SmolLM2-1.7B`
+(Apache 2.0, ungated, ~3.4 GB) as the reserve candidate. The rationale doc
+documents this reserve. Re-emit gates with the SmolLM2 substitution before
+launching if that path is taken.
+
+### Sequence dependency
+
+Stages must run in order (capture -> probe -> CPL2 -> Stack -> Mode Selector):
+
+1. `capture_stage19D_phi2_activations.py` (Phi-2 .npz + manifest)
+2. `probe_stage19D_phi2_cpl2.py` (Phi-2 probe scan + CPL2 bridge)
+3. `capture_stage19E_tinyllama_activations.py` (TinyLlama .npz + manifest)
+4. `probe_stage19E_tinyllama_cpl2.py` (TinyLlama probe scan + CPL2 bridge)
+5. `run_stage19BDE_cross_arch_extension_verification_stack.py`
+   (combined Verification Stack over both models — depends on 1+2+3+4)
+6. `run_stage19CDE_cross_arch_extension_mode_selector.py`
+   (Mode Selector — depends on 5)
+
+Steps 1-2 and 3-4 can be parallelized across pod processes. Step 5 depends
+on both `.npz` files. Step 6 depends on step 5. Do NOT parallelize 5 and 6.
+
+### Files staged
+
+- `STAGE19DE_MODEL_SELECTION_RATIONALE_20260519.md`
+- `STAGE19DE_CROSS_ARCH_EXTENSION_GATES_20260519.md`
+- `capture_stage19D_phi2_activations.py`
+- `capture_stage19E_tinyllama_activations.py`
+- `probe_stage19D_phi2_cpl2.py`
+- `probe_stage19E_tinyllama_cpl2.py`
+- `run_stage19BD_phi2_verification_stack.py` (single-model OLMo-mirror, optional)
+- `run_stage19BE_tinyllama_verification_stack.py` (single-model Qwen-mirror, optional)
+- `run_stage19BDE_cross_arch_extension_verification_stack.py` (combined, REQUIRED for Mode Selector)
+- `run_stage19CDE_cross_arch_extension_mode_selector.py`
+
+The combined Stage 19BDE script is REQUIRED because the Mode Selector
+consumes the combined report (it needs `factor_consistent` and
+`ensemble_only` per model alongside `stack`). The single-model 19BD / 19BE
+scripts are convenience clones of the OLMo / Qwen Stage 19B singletons; the
+combined script is the canonical input to Stage 19CDE.
+
+All 8 Python scripts pass
+`python -c "import ast; ast.parse(open(<path>).read())"`.
+
+### Audit asks for Claude post-run
+
+1. **Reserved-language discipline.** Confirm runners emit PASS_CLEAN /
+   GREY / NULL / DIAGNOSTIC_ONLY / MODE_SELECTOR_READY /
+   MODE_SUPPORTED_CROSS_ARCH / MODE_PARTIAL / MODE_NOT_SUPPORTED only,
+   with no ad-hoc tier additions. Per-mode claim boundary preserved.
+2. **Layer selection invariant.** Confirm both models picked their layer
+   by validation accuracy with the test set untouched until after
+   selection. Selection rule must match Stages 15 / 16.
+3. **Per-mode threshold exactness.** Confirm the Stage 19CDE Mode
+   Selector applied the EXACT Stage 19C targets (0.98 / 0.94+0.80 /
+   0.88+0.88) without quiet relaxation. Cross-check against
+   `stage19c_verification_mode_selector_20260519.json`.
+4. **Raw-symbol controls.** Confirm `probe_raw_delta_vs_none` and
+   `gold_raw_delta_vs_none` are null or near-zero on both Phi-2 and
+   TinyLlama — the raw-symbol channel should not unexpectedly activate.
+   If either model shows large raw-symbol effects, treat as a finding,
+   not a pass.
+5. **Combined extension verdict.** Confirm the synthesizer's overall
+   `EXTENSION_FULLY_SUPPORTED` / `EXTENSION_PARTIAL` /
+   `EXTENSION_NOT_SUPPORTED` label follows correctly from the per-mode
+   `MODE_SUPPORTED_CROSS_ARCH` counts in the Stage 19CDE JSON.
+
+### Decision pointer
+
+Pod launch is gated on `AUTHORIZED: yes` in `decisions.md` AND user "go" in
+chat. This inbox entry authorizes the scaffolded pipeline; user "go" still
+required.

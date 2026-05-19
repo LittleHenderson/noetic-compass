@@ -21,6 +21,13 @@ async def wrap(req: WrapRequest, request: Request) -> WrapResponse:
         scoring_mode=req.scoring_mode,
         scoring_provider=req.scoring_provider,
         scoring_model=req.scoring_model,
+        # Stage 20 Generation Readiness Gate — opt-in Output Gate companion.
+        # When the gate is disabled (request flag and server default both
+        # falsy), these arguments are no-ops and the pipeline behaves
+        # exactly as before.
+        readiness_gate_enabled=req.readiness_gate_enabled,
+        verification_mode=req.verification_mode,
+        verification=req.verification,
     )
 
     # Persist assessment
