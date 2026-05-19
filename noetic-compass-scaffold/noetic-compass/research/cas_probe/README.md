@@ -1428,3 +1428,61 @@ Artifacts:
 - `pythia_noetic_probes_v2_report_20260516.json`
 - `tks_noetic_paraphrase_eval_v2_layer4_report_20260516.json`
 - `tks_noetic_male_diagnostic_eval_v2_layer4_report_20260516.json`
+
+## Stage 13 result - multi-layer formula trace audit
+
+**Verdict: CAS Harness can trace hidden activation evidence and flag blind spots across layers.**
+
+Stage 13 reuses the Stage 12 equation/formula activation artifact. It does not run
+Pythia again. It trains the same 10-way formula-family readout at every layer and
+readout position, then traces each test example across depth.
+
+Headline:
+
+| Metric | Value |
+|---|---:|
+| Prior Stage 12 reproduction | 0.8995 exactly |
+| Best Stage 13 readout | `focus_token` layer 12 |
+| Best Stage 13 test accuracy | 0.9540 |
+| Best Stage 13 macro-F1 | 0.9551 |
+| Test lacunarity | 0.0016 |
+| Mean confidence | 0.9637 |
+| Normalized entropy | 0.0452 |
+
+Layer scan:
+
+| Readout | Best val layer | Test accuracy | Test lacunarity |
+|---|---:|---:|---:|
+| `focus_token` | 12 | 0.9540 | 0.0016 |
+| `final_token` | 7 | 0.9186 | 0.0018 |
+| `mean_over_seq_len` | 5 | 0.6752 | 0.0134 |
+
+Trace stability over all three readouts:
+
+| Trace class | Count |
+|---|---:|
+| Stable-like | 9,794 / 12,600 |
+| Problem-like | 2,806 / 12,600 |
+| Stable-like share | 77.7% |
+| Problem-like share | 22.3% |
+
+Blind spot candidates are relative to a readout path, not absolute proof that
+Pythia cannot represent a concept. The overall top candidates were:
+`relation_dependency`, `production_recipe`, `membership_assertion`,
+`cover_partition_formula`, and `yield_query`.
+
+Honest read:
+
+> CAS Harness can inspect open-model hidden activations and report where a CAS
+> readout is strong, weak, stable, drifting, or internally conflicted. This is
+> a real blind-spot audit surface. It does not mean CAS sees exact causal
+> neurons, and it does not mean weights "fire." Weights are static parameters;
+> activations are the per-input values that change.
+
+Artifacts:
+
+- `STAGE13_MULTILAYER_TRACE_AUDIT_GATES_20260518.md`
+- `audit_stage13_multilayer_formula_trace.py`
+- `stage13_multilayer_formula_trace_audit_20260518.json`
+- `STAGE13_MULTILAYER_FORMULA_TRACE_AUDIT_20260518.md`
+- `STAGE13_CLAIMS_MATRIX_20260518.md`

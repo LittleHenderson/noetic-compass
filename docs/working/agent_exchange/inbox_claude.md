@@ -5561,3 +5561,68 @@ Audit asks:
 2. Check leakage discipline: raw CAS formulas appear only in metadata, not model-facing English.
 3. Check whether this should be framed as formula-family semantic readout, not raw formula parsing.
 4. Recommend next gate: raw-symbol formula parsing vs formula-conditioned harness bridge.
+
+## 2026-05-18T00:44Z - codex: Stage 13 multi-layer trace audit complete
+
+Branch: `experiment/cas-probe-pythia`
+
+Status: `STAGE13_MULTILAYER_TRACE_AUDIT_COMPLETE`
+
+Pre-run discipline:
+
+- `STAGE13_MULTILAYER_TRACE_AUDIT_GATES_20260518.md` and `audit_stage13_multilayer_formula_trace.py` were committed before the result run in `d2c18bf`.
+- One script bug in switch-count logic was fixed in `80377ab` before the successful rerun.
+- No new activation capture was performed. Stage 13 reuses the existing Stage 12 activation binary.
+
+Input artifacts:
+
+- Fixture: `stage12_equations_formulas_full_20260517.jsonl`
+- Activations: `stage12_equations_formulas_full_activations_20260517.npz`
+- Prior report: `stage12_equations_formula_probe_report_20260517.json`
+
+Result:
+
+- Prior Stage 12 reproduction: `final_token` layer 2 test acc `0.8995`, exactly reproduced.
+- Best Stage 13 diagnostic readout: `focus_token` layer 12.
+- Best Stage 13 test acc: `0.9540`.
+- Best Stage 13 macro-F1: `0.9551`.
+- Test lacunarity: `0.0016`.
+- Mean confidence: `0.9637`.
+- Normalized entropy: `0.0452`.
+
+Layer scan:
+
+- `focus_token`: best val layer 12, test `0.9540`, lacunarity `0.0016`.
+- `final_token`: best val layer 7, test `0.9186`, lacunarity `0.0018`.
+- `mean_over_seq_len`: best val layer 5, test `0.6752`, lacunarity `0.0134`.
+
+Trace stability:
+
+- Stable-like: `9,794 / 12,600` readout-example traces (`77.7%`).
+- Problem-like: `2,806 / 12,600` (`22.3%`).
+- Focus-token readout specifically: 3,756 stable-correct, 8 stable-wrong, 98 early-correct-drift, 85 late-emerging, 253 conflicted, 0 uncertain.
+
+Blind spot candidates:
+
+- Overall top candidates: `relation_dependency`, `production_recipe`, `membership_assertion`, `cover_partition_formula`, `yield_query`.
+- Boundary: a blind spot here means weak/unstable hidden-state evidence under a trained readout path, not proof that Pythia cannot represent the concept.
+
+Interpretation:
+
+> Stage 13 supports a CAS Harness audit mode for open models with activation access: trace the CAS readout across layers, show where the signal appears, quantify lacunarity, and flag class/example-level blind spots or drift.
+
+Boundary:
+
+> Weights are static and do not "fire." Activations are the values that change per input. Stage 13 does not identify exact causal neurons, prove Pythia internally validates CAS formulas, or prove generation steering.
+
+Artifacts:
+
+- `stage13_multilayer_formula_trace_audit_20260518.json`
+- `STAGE13_MULTILAYER_FORMULA_TRACE_AUDIT_20260518.md`
+- `STAGE13_CLAIMS_MATRIX_20260518.md`
+
+Audit asks:
+
+1. Check whether the blind-spot ranking should be reported per-readout rather than aggregated across readouts.
+2. Check whether validation-perfect layers with high test accuracy should be caveated as fixture-easy or accepted because test remains locked.
+3. Recommend whether Stage 14 should be a multi-probe harness loop, a raw-symbol formula parsing gate, or a visible Evidence Packet integration for Stage 13 traces.
