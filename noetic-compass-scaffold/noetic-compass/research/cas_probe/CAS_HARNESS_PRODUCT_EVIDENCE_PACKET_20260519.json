@@ -2,7 +2,7 @@
   "packet_id": "cas_harness_product_evidence_packet_20260519",
   "date": "2026-05-19",
   "branch": "experiment/cas-probe-pythia",
-  "status": "PRODUCT_PACKET_LOCKED",
+  "status": "PRODUCT_PACKET_LOCKED_STAGE19C_MODE_SELECTOR",
   "product_verdict": "BUILD_EVIDENCE_PACKET_NOW",
   "decision": {
     "chosen_path": "product_evidence_packet",
@@ -49,8 +49,8 @@
     },
     {
       "capability": "verification_stack",
-      "evidence": ["stage19a", "stage19b"],
-      "meaning": "Stage 19A runtime-safe ensemble and trace stability accepted 3679/4200 formula-family examples at 0.9978 accuracy with 0.0022 silent error rate. Deterministic rerun after commit 05ac687 reproduced the result exactly. Stage 19B transfers as a high-precision diagnostic on OLMo/Qwen Foundation fixtures, but misses the high-coverage product gate."
+      "evidence": ["stage19a", "stage19b", "stage19c"],
+      "meaning": "Stage 19A runtime-safe ensemble and trace stability accepted 3679/4200 formula-family examples at 0.9978 accuracy with 0.0022 silent error rate. Deterministic rerun after commit 05ac687 reproduced the result exactly. Stage 19B transfers as a high-precision diagnostic on OLMo/Qwen Foundation fixtures. Stage 19C packages the precision/coverage ladder as selectable user modes."
     }
   ],
   "rejected_claims": [
@@ -161,6 +161,63 @@
     },
     "interpretation": "The stack transfers as a high-precision diagnostic verifier across OLMo and Qwen, but coverage is below the pre-registered 0.800 PASS_BOUNDED floor."
   },
+  "stage19c_verification_modes": {
+    "status": "MODE_SELECTOR_READY",
+    "boundary": "Stage 19C is product-mode packaging over the locked Stage 19B result. It is not a fresh hidden-state test and does not upgrade Stage 19B's strict product-gate status.",
+    "modes": {
+      "HIGH_PRECISION": {
+        "recommended_use": "Regulator, legal, safety, and high-trust review where suppression is preferred over a wrong accepted answer.",
+        "claim_boundary": "Highest precision; lower coverage is expected.",
+        "license_grade": true,
+        "olmo1b": {
+          "accepted_accuracy": 0.981624184943687,
+          "coverage": 0.7172619047619048,
+          "silent_error_rate": 0.018375815056313027,
+          "suppressed_rate": 0.28273809523809523
+        },
+        "qwen15b": {
+          "accepted_accuracy": 0.9948688711516533,
+          "coverage": 0.7457482993197279,
+          "silent_error_rate": 0.0051311288483466555,
+          "suppressed_rate": 0.2542517006802721
+        }
+      },
+      "BALANCED": {
+        "recommended_use": "Normal customer audit flow where throughput matters but factor conflicts should still be suppressed.",
+        "claim_boundary": "Coverage restored above 80% with lower precision than HIGH_PRECISION.",
+        "license_grade": true,
+        "olmo1b": {
+          "accepted_accuracy": 0.9422084623323014,
+          "coverage": 0.8239795918367347,
+          "silent_error_rate": 0.05779153766769862,
+          "suppressed_rate": 0.17602040816326525
+        },
+        "qwen15b": {
+          "accepted_accuracy": 0.9660842754367934,
+          "coverage": 0.8273809523809523,
+          "silent_error_rate": 0.03391572456320657,
+          "suppressed_rate": 0.17261904761904767
+        }
+      },
+      "MAX_COVERAGE_TRIAGE": {
+        "recommended_use": "Exploratory triage and batch review queues where human review remains expected.",
+        "claim_boundary": "Triage mode only; not a licensed high-confidence claim mode.",
+        "license_grade": false,
+        "olmo1b": {
+          "accepted_accuracy": 0.8974600188146754,
+          "coverage": 0.9039115646258503,
+          "silent_error_rate": 0.10253998118532459,
+          "suppressed_rate": 0.09608843537414968
+        },
+        "qwen15b": {
+          "accepted_accuracy": 0.9280983916745507,
+          "coverage": 0.8988095238095238,
+          "silent_error_rate": 0.07190160832544934,
+          "suppressed_rate": 0.10119047619047616
+        }
+      }
+    }
+  },
   "claim_badges": [
     "provenance",
     "readout",
@@ -191,6 +248,9 @@
     "schema": "EvidencePacket",
     "api": "/api/harness/evidence/{trace_id}",
     "ui": "reviewer drawer with claim badge, provenance, readout, controls, blind spots, caveats, and export",
+    "verification_mode_field": "HIGH_PRECISION | BALANCED | MAX_COVERAGE_TRIAGE",
+    "default_mode": "HIGH_PRECISION",
+    "mode_selection_ui": "Expose mode selector with precision, coverage, silent-error, and suppression tradeoffs before running or exporting a packet.",
     "exports": ["json", "markdown"]
   },
   "sources": [

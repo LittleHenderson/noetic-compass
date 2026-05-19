@@ -2,7 +2,7 @@
 
 Date: 2026-05-19
 
-Status: `STAGE19A_PASS_STRONG_AUDIT_CLEAN`
+Status: `STAGE19C_MODE_SELECTOR_READY`
 
 ## Executive Summary
 
@@ -52,6 +52,50 @@ Audit-clean rerun:
 > committed before execution. After commit `05ac687`, Stage 19A was rerun with
 > the same script, same fixture, and same activation artifact. The rerun
 > reproduced every headline metric exactly, resolving the caveat.
+
+## Stage 19B Cross-Architecture Result
+
+Stage 19B reran the runtime-safe Verification Stack on OLMo-1B and
+Qwen2.5-1.5B Foundation fixtures. Gold labels were used only after acceptance
+for scoring.
+
+Report status:
+
+`NULL`
+
+Practical verdict:
+
+`DIAGNOSTIC_ONLY_CROSS_ARCH`
+
+| Model | Best single | Stack accepted acc | Coverage | Silent error | Suppressed |
+|---|---:|---:|---:|---:|---:|
+| OLMo-1B | `0.9060` | `0.9816` | `0.7173` | `0.0184` | `0.2827` |
+| Qwen2.5-1.5B | `0.8537` | `0.9949` | `0.7457` | `0.0051` | `0.2543` |
+
+Boundary:
+
+> Stage 19B did not pass the pre-registered `0.800` coverage floor for a
+> high-coverage cross-architecture product gate. It did pass the practical
+> diagnostic test: accepted examples remain very precise on both architectures.
+
+## Stage 19C User-Selectable Modes
+
+Stage 19C packages the Stage 19B precision/coverage ladder as explicit product
+modes. This is not a new hidden-state experiment and does not rewrite Stage
+19B's strict-gate `NULL`. It exposes the tradeoff to the user.
+
+| Mode | Intended use | OLMo acc / coverage / silent error | Qwen acc / coverage / silent error |
+|---|---|---:|---:|
+| `HIGH_PRECISION` | Regulator, legal, safety, and high-trust review where suppression is preferred over a wrong accepted answer. | `0.9816 / 0.7173 / 0.0184` | `0.9949 / 0.7457 / 0.0051` |
+| `BALANCED` | Normal customer audit flow where throughput matters but factor conflicts should still be suppressed. | `0.9422 / 0.8240 / 0.0578` | `0.9661 / 0.8274 / 0.0339` |
+| `MAX_COVERAGE_TRIAGE` | Exploratory triage and batch review queues where human review remains expected. | `0.8975 / 0.9039 / 0.1025` | `0.9281 / 0.8988 / 0.0719` |
+
+Runtime product rule:
+
+- Default to `HIGH_PRECISION`.
+- Allow users to choose `BALANCED` when throughput matters.
+- Reserve `MAX_COVERAGE_TRIAGE` for queue-building and human review, not final
+  high-confidence claims.
 
 ## Architecture
 
@@ -191,6 +235,12 @@ With the stack:
 > CAS Harness gives a verified prediction, confidence tier, and suppression
 > reason when the evidence is unstable.
 
+With Stage 19C modes:
+
+> CAS Harness lets the user choose the verifier operating point. The product
+> exposes precision, coverage, silent-error, and suppression tradeoffs instead
+> of pretending one threshold profile fits every audit.
+
 That is a major product upgrade because reviewers do not only see what CAS
 thinks the label is. They see why CAS accepts, caveats, or refuses the label.
 
@@ -213,13 +263,16 @@ Not supported without further evidence:
 
 ## Next Build Step
 
-Implement Stage 19A first.
+Implement the mode selector in the CAS Harness product surface.
 
-Reason:
+Required fields:
 
-- It can likely run offline from existing Stage 13 artifacts.
-- It tests the ensemble and trace-stability parts of the stack without new GPU.
-- It avoids mixing Foundation factor claims with formula-family trace claims.
+- `verification_mode`
+- `mode_profile`
+- `accepted`
+- `decision_tier`
+- `suppression_reasons`
+- `accepted_accuracy`, `coverage`, and `silent_error_rate` for the selected
+  mode/model profile
 
-Only after Stage 19A is clean should Stage 19B add Drive/Register
-recomposition on the Stage 7 Foundation fixture.
+The UI must show the tradeoff before the user runs or exports a packet.

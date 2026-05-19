@@ -1908,3 +1908,34 @@ Artifacts:
 - `stage19b_cross_arch_foundation_verification_stack_20260519.json`
 - `STAGE19B_CROSS_ARCH_FOUNDATION_VERIFICATION_STACK_20260519.md`
 - `STAGE19B_CLAIMS_MATRIX_20260519.md`
+
+## Stage 19C result - Verification Stack user-selectable modes
+
+**Verdict: `MODE_SELECTOR_READY`.**
+
+Stage 19C does not rerun hidden-state inference. It packages the locked Stage
+19B precision/coverage ladder as explicit user-selectable Verification Stack
+modes.
+
+| Mode | OLMo acc / coverage / silent error | Qwen acc / coverage / silent error | Product use |
+|---|---:|---:|---|
+| `HIGH_PRECISION` | `0.9816 / 0.7173 / 0.0184` | `0.9949 / 0.7457 / 0.0051` | Regulator, legal, safety, and high-trust review where suppression is preferred over a wrong accepted answer. |
+| `BALANCED` | `0.9422 / 0.8240 / 0.0578` | `0.9661 / 0.8274 / 0.0339` | Normal customer audit flow where throughput matters but factor conflicts should still be suppressed. |
+| `MAX_COVERAGE_TRIAGE` | `0.8975 / 0.9039 / 0.1025` | `0.9281 / 0.8988 / 0.0719` | Exploratory triage and batch review queues where human review remains expected. |
+
+Honest read:
+
+> Users can choose the operating mode. They cannot choose away the tradeoff:
+> precision, coverage, silent-error, and suppression move together.
+
+Product rule:
+
+> Default to `HIGH_PRECISION`; offer `BALANCED` for throughput-sensitive audit
+> work; reserve `MAX_COVERAGE_TRIAGE` for candidate surfacing with human review.
+
+Artifacts:
+
+- `STAGE19C_VERIFICATION_MODE_SELECTOR_SPEC_20260519.md`
+- `run_stage19c_verification_mode_selector.py`
+- `stage19c_verification_mode_selector_20260519.json`
+- `STAGE19C_VERIFICATION_MODE_SELECTOR_20260519.md`

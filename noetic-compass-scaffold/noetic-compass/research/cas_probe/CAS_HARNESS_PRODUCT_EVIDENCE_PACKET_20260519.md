@@ -4,7 +4,7 @@ Date: 2026-05-19
 
 Branch: `experiment/cas-probe-pythia`
 
-Status: `PRODUCT_PACKET_LOCKED`
+Status: `PRODUCT_PACKET_LOCKED_STAGE19C_MODE_SELECTOR`
 
 This is the reviewer/customer packet for CAS Harness. It compresses the
 Stage 7-18 research chain into a product-facing evidence surface.
@@ -56,7 +56,7 @@ evidence instead of waiting for free-form text to become clean.
 | Weight geometry inspection | Stage 14.1 | CAS can inspect whether a learned CAS subspace aligns with static output geometry above random. |
 | Cross-model likelihood bridge | Stage 7, 8, 14, 15, 16 | Readable CAS realization shifts semantic likelihood across Pythia, OLMo, and Qwen. |
 | Raw-symbol control | Stages 7, 8, 14, 15, 16 | Raw CAS notation does not drive the effect; readable realization does. |
-| Verification stack | Stage 19A, Stage 19B | Stage 19A runtime-safe ensemble + trace stability accepted `3679/4200` formula-family examples at `0.9978` accuracy, with `0.0022` silent error rate. Deterministic rerun after commit `05ac687` reproduced the result exactly. Stage 19B transfers as a high-precision diagnostic on OLMo/Qwen Foundation fixtures (`0.9816`-`0.9949` accepted accuracy), but misses the high-coverage product gate (`0.7173`-`0.7457` coverage). |
+| Verification stack | Stage 19A, Stage 19B, Stage 19C | Stage 19A runtime-safe ensemble + trace stability accepted `3679/4200` formula-family examples at `0.9978` accuracy, with `0.0022` silent error rate. Deterministic rerun after commit `05ac687` reproduced the result exactly. Stage 19B transfers as a high-precision diagnostic on OLMo/Qwen Foundation fixtures. Stage 19C turns that precision/coverage tradeoff into selectable user modes. |
 
 ## Control And Black-Box Boundary
 
@@ -114,6 +114,24 @@ Boundary:
 
 > This is likelihood conditioning. It is stronger and cleaner than the
 > free-form text surface for this product claim.
+
+## Verification Modes
+
+Stage 19C converts the Stage 19B cross-architecture precision/coverage ladder
+into explicit user-selectable operating modes. Users can choose the operating
+point; they cannot erase the tradeoff.
+
+| Mode | Intended use | OLMo acc / coverage / silent error | Qwen acc / coverage / silent error |
+|---|---|---:|---:|
+| `HIGH_PRECISION` | Regulator, legal, safety, and high-trust review where suppression is preferred over a wrong accepted answer. | `0.9816 / 0.7173 / 0.0184` | `0.9949 / 0.7457 / 0.0051` |
+| `BALANCED` | Normal customer audit flow where throughput matters but factor conflicts should still be suppressed. | `0.9422 / 0.8240 / 0.0578` | `0.9661 / 0.8274 / 0.0339` |
+| `MAX_COVERAGE_TRIAGE` | Exploratory triage and batch review queues where human review remains expected. | `0.8975 / 0.9039 / 0.1025` | `0.9281 / 0.8988 / 0.0719` |
+
+Product boundary:
+
+> `HIGH_PRECISION` is the license-grade trust mode. `BALANCED` is the
+> throughput mode. `MAX_COVERAGE_TRIAGE` is a surfacing mode, not a final
+> high-confidence claim mode.
 
 ## Stage 18 Null: Why It Does Not Break The Packet
 
@@ -189,6 +207,7 @@ Each packet should contain:
 - ablation result and random controls, when available
 - raw-symbol controls, when testing prefixes
 - readable-prefix likelihood result
+- verification mode and mode profile
 - claim-level badge
 - caveats
 
@@ -232,6 +251,12 @@ Minimum fields:
   "provenance": {"code_commit": "string", "fixture_sha256": "string", "activation_sha256": "string"},
   "readout": {"axis": "foundation", "layer": 11, "position": "focus_token", "label": "F3A", "confidence": 0.0},
   "diagnostics": {"lacunarity": 0.0, "blindspot_flags": []},
+  "verification": {
+    "mode": "HIGH_PRECISION",
+    "accepted": true,
+    "mode_profile": {"accepted_accuracy": 0.0, "coverage": 0.0, "silent_error_rate": 0.0},
+    "suppression_reasons": []
+  },
   "controls": {"text_baseline": null, "metadata_baseline": null, "random_ablation": null, "raw_symbol": null},
   "conditioning": {"probe_readable_delta": null, "partner_margin": null, "p_value": null},
   "claim_badges": [],

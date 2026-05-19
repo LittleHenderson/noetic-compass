@@ -1,0 +1,105 @@
+{
+  "boundary": "Stage 19C is product-mode packaging over the locked Stage 19B result. It is not a fresh hidden-state test and does not upgrade Stage 19B's strict product-gate status.",
+  "input_report": "stage19b_cross_arch_foundation_verification_stack_20260519.json",
+  "modes": {
+    "BALANCED": {
+      "claim_boundary": "Coverage restored above 80% with lower precision than HIGH_PRECISION.",
+      "cross_arch_status": "MODE_SUPPORTED_CROSS_ARCH",
+      "models": {
+        "olmo1b": {
+          "accepted": 1938,
+          "accepted_accuracy": 0.9422084623323014,
+          "coverage": 0.8239795918367347,
+          "display_name": "OLMo-1B",
+          "meets_target": true,
+          "silent_error_rate": 0.05779153766769862,
+          "source_component": "factor_consistent",
+          "suppressed_rate": 0.17602040816326525
+        },
+        "qwen15b": {
+          "accepted": 1946,
+          "accepted_accuracy": 0.9660842754367934,
+          "coverage": 0.8273809523809523,
+          "display_name": "Qwen2.5-1.5B",
+          "meets_target": true,
+          "silent_error_rate": 0.03391572456320657,
+          "source_component": "factor_consistent",
+          "suppressed_rate": 0.17261904761904767
+        }
+      },
+      "recommended_use": "Normal customer audit flow where throughput matters but factor conflicts should still be suppressed.",
+      "source_component": "factor_consistent",
+      "target": {
+        "accepted_accuracy_min": 0.94,
+        "coverage_min": 0.8,
+        "silent_error_rate_max": 0.06
+      }
+    },
+    "HIGH_PRECISION": {
+      "claim_boundary": "Highest precision; lower coverage is expected.",
+      "cross_arch_status": "MODE_SUPPORTED_CROSS_ARCH",
+      "models": {
+        "olmo1b": {
+          "accepted": 1687,
+          "accepted_accuracy": 0.981624184943687,
+          "coverage": 0.7172619047619048,
+          "display_name": "OLMo-1B",
+          "meets_target": true,
+          "silent_error_rate": 0.018375815056313027,
+          "source_component": "stack",
+          "suppressed_rate": 0.28273809523809523
+        },
+        "qwen15b": {
+          "accepted": 1754,
+          "accepted_accuracy": 0.9948688711516533,
+          "coverage": 0.7457482993197279,
+          "display_name": "Qwen2.5-1.5B",
+          "meets_target": true,
+          "silent_error_rate": 0.0051311288483466555,
+          "source_component": "stack",
+          "suppressed_rate": 0.2542517006802721
+        }
+      },
+      "recommended_use": "Regulator, legal, safety, and high-trust review where suppression is preferred over a wrong accepted answer.",
+      "source_component": "stack",
+      "target": {
+        "accepted_accuracy_min": 0.98,
+        "silent_error_rate_max": 0.02
+      }
+    },
+    "MAX_COVERAGE_TRIAGE": {
+      "claim_boundary": "Triage mode only; not a licensed high-confidence claim mode.",
+      "cross_arch_status": "MODE_SUPPORTED_CROSS_ARCH",
+      "models": {
+        "olmo1b": {
+          "accepted": 2126,
+          "accepted_accuracy": 0.8974600188146754,
+          "coverage": 0.9039115646258503,
+          "display_name": "OLMo-1B",
+          "meets_target": true,
+          "silent_error_rate": 0.10253998118532459,
+          "source_component": "ensemble_only",
+          "suppressed_rate": 0.09608843537414968
+        },
+        "qwen15b": {
+          "accepted": 2114,
+          "accepted_accuracy": 0.9280983916745507,
+          "coverage": 0.8988095238095238,
+          "display_name": "Qwen2.5-1.5B",
+          "meets_target": true,
+          "silent_error_rate": 0.07190160832544934,
+          "source_component": "ensemble_only",
+          "suppressed_rate": 0.10119047619047616
+        }
+      },
+      "recommended_use": "Exploratory triage and batch review queues where human review remains expected.",
+      "source_component": "ensemble_only",
+      "target": {
+        "accepted_accuracy_min": 0.88,
+        "coverage_min": 0.88
+      }
+    }
+  },
+  "schema_version": "stage19c_verification_mode_selector_v1",
+  "status": "MODE_SELECTOR_READY"
+}

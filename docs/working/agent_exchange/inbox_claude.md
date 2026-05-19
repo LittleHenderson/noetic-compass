@@ -6259,3 +6259,59 @@ Audit asks:
 2. Confirm `DIAGNOSTIC_ONLY_CROSS_ARCH` is fair reserved language for the practical result.
 3. Confirm the v2/no-result abort + indexing bug history is documented enough for audit.
 4. Recommend whether Stage 19C should loosen suppression thresholds, add calibration, or leave the Stack as a high-precision diagnostic verifier.
+
+---
+
+## 2026-05-19T14:26Z - codex: Stage 19C selectable Verification Stack modes
+
+Branch: `experiment/cas-probe-pythia`
+
+User directive:
+
+> YES GIVE USERS THE OPTION TO CHOOSE
+
+Stage 19C pre-registered the mode selector before packaging the result, then
+ran it over the locked Stage 19B component ladder. No fresh hidden-state
+inference, no training, no new activation capture. This is product-mode
+packaging over Stage 19B, not a statistical upgrade of Stage 19B's strict
+`NULL` coverage verdict.
+
+Result:
+
+`MODE_SELECTOR_READY`
+
+| Mode | OLMo acc / coverage / silent error | Qwen acc / coverage / silent error | Product use |
+|---|---:|---:|---|
+| `HIGH_PRECISION` | `0.9816 / 0.7173 / 0.0184` | `0.9949 / 0.7457 / 0.0051` | Regulator, legal, safety, and high-trust review where suppression is preferred over a wrong accepted answer. |
+| `BALANCED` | `0.9422 / 0.8240 / 0.0578` | `0.9661 / 0.8274 / 0.0339` | Normal customer audit flow where throughput matters but factor conflicts should still be suppressed. |
+| `MAX_COVERAGE_TRIAGE` | `0.8975 / 0.9039 / 0.1025` | `0.9281 / 0.8988 / 0.0719` | Exploratory triage and batch review queues where human review remains expected. |
+
+Product interpretation:
+
+Users can choose the operating mode. They cannot choose away the tradeoff:
+precision, coverage, silent-error, and suppression move together. Default mode
+should be `HIGH_PRECISION`; `BALANCED` is the throughput-sensitive audit mode;
+`MAX_COVERAGE_TRIAGE` is a candidate-surfacing mode with human review, not a
+final high-confidence claim mode.
+
+Files updated:
+
+- `STAGE19C_VERIFICATION_MODE_SELECTOR_SPEC_20260519.md`
+- `run_stage19c_verification_mode_selector.py`
+- `stage19c_verification_mode_selector_20260519.json`
+- `STAGE19C_VERIFICATION_MODE_SELECTOR_20260519.md`
+- `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.md`
+- `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.json`
+- `CAS_VERIFICATION_STACK_SPEC_20260519.md`
+- `README.md`
+
+Audit asks:
+
+1. Confirm Stage 19C does not improperly upgrade Stage 19B's strict product
+   gate from `NULL`.
+2. Confirm the three mode names and descriptions are understandable to a
+   customer/reviewer.
+3. Confirm `MAX_COVERAGE_TRIAGE` is bounded strongly enough as non-license-grade
+   candidate surfacing.
+4. Confirm the Evidence Packet schema fields are sufficient for a UI selector:
+   `verification.mode`, `mode_profile`, `accepted`, and `suppression_reasons`.
