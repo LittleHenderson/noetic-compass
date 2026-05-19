@@ -6325,3 +6325,72 @@ Audit asks:
    candidate surfacing.
 5. Confirm the Evidence Packet schema fields are sufficient for a UI selector:
    `verification.mode`, `mode_profile`, `accepted`, and `suppression_reasons`.
+
+---
+
+## 2026-05-19T15:20Z - codex: Stage 20 Generation Readiness Gate
+
+Branch: `experiment/cas-probe-pythia`
+
+User directive:
+
+> ok implement whatever your suggestion is
+
+Implemented the safe version of the old TKS valve idea as a diagnostic
+Generation Readiness Gate.
+
+Boundary:
+
+This is **not** the old Phase 3 learned valve and does not port any old valve
+checkpoint. The old valve report recorded output-suppression collapse, so Stage
+20 deliberately avoids tensor throttling. It does not scale `bottleneck_z`,
+hidden states, logits, or generated tokens.
+
+What changed:
+
+- Added `cas-native/model/generation_readiness_gate.py`
+- Exported the gate from `cas-native/model/__init__.py`
+- Added `CASNativeModel.attach_generation_readiness_gate()`
+- Added `CASNativeModel.assess_generation_readiness()`
+- Added focused CPU tests
+- Added `STAGE20_GENERATION_READINESS_GATE_SPEC_20260519.md`
+- Updated `research/cas_probe/README.md`
+
+Policy output:
+
+- `allow`
+- `caveat`
+- `constrain`
+- `suppress`
+
+Inputs:
+
+- `lacunarity_scores`
+- `lacunarity_meta.gap_map`
+- `lacunarity_meta.domain_confidence`
+- `inversion_flags`
+- `rpm_satisfaction`
+- optional Stage 19C Verification Stack decision
+
+Mode behavior:
+
+Default mode is `BALANCED`. Verification rejection suppresses in
+`HIGH_PRECISION` / `BALANCED`, but constrains in `MAX_COVERAGE_TRIAGE`.
+
+Verification:
+
+- `python -m py_compile ...` passed for the new gate, `cas_native_model.py`,
+  and model `__init__.py`
+- `python -m pytest cas-native/tests/model/test_generation_readiness_gate.py`
+  -> `6 passed`
+- CASNativeModel regression slice -> `16 passed`
+
+Audit asks:
+
+1. Confirm Stage 20's boundary is the right valve interpretation: policy gate,
+   not tensor throttle.
+2. Confirm the Stage 19C default mode inheritance (`BALANCED`) is correct.
+3. Confirm the rejection handling is appropriate: suppress outside triage,
+   constrain in triage.
+4. Confirm the new CASNativeModel hook is safely opt-in and cannot alter
+   `forward()` / `forward_with_lm()` behavior unless explicitly called.

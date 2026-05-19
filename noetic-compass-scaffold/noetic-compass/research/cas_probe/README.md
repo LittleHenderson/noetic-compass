@@ -1948,3 +1948,43 @@ Artifacts:
 - `run_stage19c_verification_mode_selector.py`
 - `stage19c_verification_mode_selector_20260519.json`
 - `STAGE19C_VERIFICATION_MODE_SELECTOR_20260519.md`
+
+## Stage 20 result - Generation Readiness Gate
+
+**Verdict: `IMPLEMENTED_CPU_TESTED`.**
+
+Stage 20 implements the safe version of the old TKS valve intuition as a
+diagnostic policy gate, not a learned tensor throttle.
+
+The prior Phase 3 valve lineage is treated as design history and a negative
+control: that version learned to suppress generation. Stage 20 therefore does
+not port old checkpoints and does not scale `bottleneck_z`, logits, hidden
+states, or generated text. It reads existing CAS signals and returns one of:
+
+- `allow`
+- `caveat`
+- `constrain`
+- `suppress`
+
+Inputs:
+
+- lacunarity scores
+- lacunarity gap map
+- domain confidence
+- inversion flags
+- RPM satisfaction
+- optional Stage 19C Verification Stack decision
+
+Default mode is `BALANCED`, matching Stage 19C.
+
+Product read:
+
+> CAS does not silently choke generation. CAS reports whether generation is
+> supported, caveated, constrained, or suppressed, and records the exact
+> structural reasons for that decision.
+
+Artifacts:
+
+- `cas-native/model/generation_readiness_gate.py`
+- `cas-native/tests/model/test_generation_readiness_gate.py`
+- `STAGE20_GENERATION_READINESS_GATE_SPEC_20260519.md`

@@ -34,7 +34,7 @@ CAS-Native v2 forward-path integration (Wave 7B Task 1, ADR-01):
 
 import math
 from dataclasses import dataclass
-from typing import Optional
+from typing import Any, Optional
 
 import torch
 import torch.nn as nn
@@ -276,6 +276,7 @@ class CASNativeModel(nn.Module):
         # trainer / harness via attach_nl_gen_head(). Default None preserves
         # backward-compat with all existing CASNativeModel callers.
         self.nl_gen_head = None  # type: ignore[assignment]
+        self.generation_readiness_gate = None  # type: ignore[assignment]
         self.aux_heads = None  # type: ignore[assignment]  # v1e Phase C — attach_aux_heads()
 
         # Initialize weights
@@ -669,6 +670,58 @@ class CASNativeModel(nn.Module):
         only fire when explicitly invoked.
         """
         self.aux_heads = aux_heads
+
+    # ---------------------------------------------------- generation readiness
+    def attach_generation_readiness_gate(self, gate: nn.Module) -> None:
+        """Attach a diagnostic generation-readiness gate.
+
+        The gate is deliberately not called from ``forward`` or
+        ``forward_with_lm``. It consumes already-produced CAS diagnostics and
+        returns an auditable policy such as allow/caveat/constrain/suppress.
+        This keeps Stage 20 valve behavior opt-in and prevents silent
+        bottleneck or logit mutation.
+        """
+        self.generation_readiness_gate = gate
+
+    def assess_generation_readiness(
+        self,
+        outputs: dict[str, Any],
+        *,
+        verification: dict[str, Any] | None = None,
+        mode: str | None = None,
+    ) -> dict[str, Any]:
+        """Assess generation readiness from an existing forward output dict.
+
+        Args:
+            outputs: Dict returned by ``forward`` or ``forward_with_lm``.
+            verification: Optional Verification Stack per-example decision.
+            mode: Optional mode override, e.g. ``BALANCED``.
+
+        Returns:
+            JSON-serializable readiness policy.
+
+        Raises:
+            RuntimeError: If no readiness gate was attached first.
+        """
+        gate = getattr(self, "generation_readiness_gate", None)
+        if gate is None:
+            raise RuntimeError(
+                "assess_generation_readiness called but no generation "
+                "readiness gate is attached. Use "
+                "attach_generation_readiness_gate() first."
+            )
+
+        result = gate(
+            lacunarity_scores=outputs.get("lacunarity_scores"),
+            lacunarity_meta=outputs.get("lacunarity_meta"),
+            inversion_flags=outputs.get("inversion_flags"),
+            rpm_satisfaction=outputs.get("rpm_satisfaction"),
+            verification=verification,
+            mode=mode,
+        )
+        if hasattr(result, "as_dict"):
+            return result.as_dict()
+        return result
 
     def forward_with_aux(
         self,
