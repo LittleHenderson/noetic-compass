@@ -113,6 +113,32 @@ export interface AtlasTraceConfidence {
 
 // ── Thought Tree section ──────────────────────────────────────────
 
+/**
+ * Per-node verification verdict from the CAS Verification Stack
+ * (Stage 19A). Surfaces accept/suppress decisions at the node level so
+ * the Atlas can render a regulator-grade refusal landscape.
+ *
+ * Field shape mirrors the Stack JSON schema documented at
+ * `research/cas_probe/stage19a_formula_verification_stack_20260519.json`:
+ *   - `decision` — top-level ACCEPT / SUPPRESS verdict (null when the
+ *     Stack has not yet rendered a verdict for this node).
+ *   - `decision_tier` — finer-grained band: high (clean accept), medium
+ *     (accept with caveat), suppress (refused), uncertain (no verdict).
+ *   - `ensemble_agreement` — true iff all Stack probes agreed.
+ *   - `suppression_reasons` — reason codes from the Stack on SUPPRESS
+ *     (e.g. `ensemble_all_disagree`, `final_token_conflicted`).
+ *   - `confidence` — accepted-band confidence in [0, 1].
+ *
+ * Optional so existing fixtures (no Stack data) still parse cleanly.
+ */
+export interface NodeVerification {
+  decision: 'ACCEPT' | 'SUPPRESS' | null;
+  decision_tier?: 'high' | 'medium' | 'suppress' | 'uncertain';
+  ensemble_agreement?: boolean;
+  suppression_reasons?: string[];
+  confidence?: number;
+}
+
 export interface ThoughtTreeNode {
   id: string;
   node_key: string;
@@ -122,6 +148,8 @@ export interface ThoughtTreeNode {
   normalized_label: string;
   axis_attrs?: Record<string, unknown>;
   text?: string;
+  /** Optional CAS Verification Stack verdict for this node. */
+  verification?: NodeVerification;
 }
 
 export interface ThoughtTreeEdge {
@@ -146,6 +174,8 @@ export interface ThoughtTreeRootNode {
   axis_attrs?: Record<string, unknown>;
   text?: string;
   children?: ThoughtTreeRootNode[];
+  /** Optional CAS Verification Stack verdict, mirrors the flat-node field. */
+  verification?: NodeVerification;
 }
 
 export interface AtlasTraceThoughtTree {

@@ -13,6 +13,7 @@ import {
   type ThoughtTree as TreeViewTree,
 } from '../components/idea-atlas/ThoughtTreeView';
 import { SggsErrorBoundary } from '../components/idea-atlas/SggsErrorBoundary';
+import { VerificationPanel } from '../components/idea-atlas/VerificationPanel';
 import type { AtlasTrace, AtlasTraceThoughtTree } from '../lib/trace';
 
 // SGGS — Three.js 3D scene. Lazy so the ~600 KB three + sprite bundle
@@ -206,6 +207,12 @@ export function IdeaAtlasPage() {
   const [tracePanelOpen, setTracePanelOpen] = useState(true);
   const selectedNodeSectionRef = useRef<HTMLElement | null>(null);
 
+  // ── CAS Verification Stack — Reviewer Mode ──
+  // When true, filter the rendered tree to nodes whose Stack verdict is
+  // SUPPRESS. Lets a regulator see the model's full refusal landscape
+  // without sifting through accepted output. Default off.
+  const [reviewerMode, setReviewerMode] = useState<boolean>(false);
+
   // ── SGGS (TRACE 3D) wiring: fullscreen state for the 3D scene ──
   const sggsContainerRef = useRef<HTMLDivElement | null>(null);
   const [sggsFullscreen, setSggsFullscreen] = useState(false);
@@ -253,6 +260,81 @@ export function IdeaAtlasPage() {
       ) ?? null
     );
   }, [loadedTrace, selectedTraceNodeId]);
+
+  // ── Reviewer-Mode filtered tree ──
+  // When reviewerMode is on, we render only nodes whose Stack verdict is
+  // SUPPRESS. The Atlas tree is rooted, so a pure filter would break edges
+  // pointing at filtered-out parents — we strip those edges too, leaving a
+  // partial graph that still validates against ThoughtTreeView's renderer
+  // (which is forgiving about dangling parents at the visual layer).
+  //
+  // We also build a synthetic, minimal `root` so the layout's recursive
+  // descent still terminates. The synthetic root is invisible — it carries
+  // no verification field and is never offered as a selection target.
+  const displayedTree: TreeViewTree = useMemo(() => {
+    if (!loadedTrace) {
+      // Fallback empty tree shape so callers see consistent typing.
+      return {
+        root: {
+          id: '__atlas_empty_root__',
+          node_key: '__atlas_empty_root__',
+          kind: 'user_prompt',
+          role: 'root',
+          label: '',
+          normalized_label: '',
+          children: [],
+        },
+        nodes: [],
+        edges: [],
+        node_count: 0,
+        edge_count: 0,
+      };
+    }
+    const fullTree = loadedTrace.thought_tree as unknown as TreeViewTree;
+    if (!reviewerMode) return fullTree;
+    const suppressedNodes = fullTree.nodes.filter(
+      (n) => (n as TreeViewNode).verification?.decision === 'SUPPRESS',
+    );
+    const suppressedIds = new Set(suppressedNodes.map((n) => n.id));
+    const filteredEdges = fullTree.edges.filter(
+      (e) => suppressedIds.has(e.source) && suppressedIds.has(e.target),
+    );
+    // Synthetic root parents every suppressed node that has no
+    // suppressed parent inside the filtered set, so the layout still
+    // forms a single tree without dangling references.
+    const childrenOfRoot = suppressedNodes
+      .filter((n) => {
+        const incoming = fullTree.edges.find((e) => e.target === n.id);
+        if (!incoming) return true;
+        return !suppressedIds.has(incoming.source);
+      })
+      .map((n) => ({ ...n, children: [] as TreeViewNode[] }));
+    const syntheticRoot: TreeViewNode = {
+      id: '__reviewer_mode_root__',
+      node_key: '__reviewer_mode_root__',
+      kind: 'user_prompt',
+      role: 'reviewer_mode',
+      label: 'Reviewer Mode — suppressed nodes only',
+      normalized_label: 'reviewer mode — suppressed nodes only',
+      children: childrenOfRoot,
+    };
+    return {
+      root: syntheticRoot,
+      nodes: suppressedNodes,
+      edges: filteredEdges,
+      node_count: suppressedNodes.length,
+      edge_count: filteredEdges.length,
+    };
+  }, [loadedTrace, reviewerMode]);
+
+  // Counts used for the reviewer-mode header indicator
+  const totalNodeCount = loadedTrace?.thought_tree.node_count ?? 0;
+  const suppressedNodeCount = useMemo(() => {
+    if (!loadedTrace) return 0;
+    return loadedTrace.thought_tree.nodes.filter(
+      (n) => (n as TreeViewNode).verification?.decision === 'SUPPRESS',
+    ).length;
+  }, [loadedTrace]);
   // Whenever the selected node changes (via card click), pop the side
   // panel open if it's hidden and scroll the SELECTED NODE section
   // into view. The user feedback (2026-05-13) was that clicks "didn't
@@ -903,18 +985,47 @@ export function IdeaAtlasPage() {
           {loadedTrace && (
             <>
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] px-4 py-3 font-mono text-xs text-emerald-200">
-              <span>
-                Trace loaded: {loadedTrace.thought_tree.node_count} nodes,{' '}
-                {loadedTrace.thought_tree.edge_count} edges. Click a node in the
-                tree to inspect it.
+              <span data-testid="trace-load-summary">
+                {reviewerMode ? (
+                  <>
+                    Reviewer Mode: showing {suppressedNodeCount} of{' '}
+                    {totalNodeCount} nodes — suppressed only.
+                  </>
+                ) : (
+                  <>
+                    Trace loaded: {totalNodeCount} nodes,{' '}
+                    {loadedTrace.thought_tree.edge_count} edges. Click a node
+                    in the tree to inspect it.
+                  </>
+                )}
               </span>
-              <button
-                type="button"
-                onClick={() => setTracePanelOpen((open) => !open)}
-                className="rounded border border-emerald-400/30 bg-black/20 px-3 py-1 text-[10px] uppercase tracking-wide text-emerald-100 transition-colors hover:bg-emerald-500/10"
-              >
-                {tracePanelOpen ? 'Hide Details' : 'Show Details'}
-              </button>
+              <div className="flex items-center gap-2">
+                <label
+                  data-testid="reviewer-mode-toggle-label"
+                  className={`inline-flex cursor-pointer items-center gap-2 rounded border px-2 py-1 text-[10px] uppercase tracking-wide transition-colors ${
+                    reviewerMode
+                      ? 'border-rose-400/40 bg-rose-500/15 text-rose-200'
+                      : 'border-emerald-400/30 bg-black/20 text-emerald-100 hover:bg-emerald-500/10'
+                  }`}
+                  title="Filter the tree to only nodes the Verification Stack suppressed."
+                >
+                  <input
+                    type="checkbox"
+                    data-testid="reviewer-mode-toggle"
+                    checked={reviewerMode}
+                    onChange={(e) => setReviewerMode(e.target.checked)}
+                    className="h-3 w-3 cursor-pointer accent-rose-400"
+                  />
+                  Reviewer Mode (suppressed only)
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setTracePanelOpen((open) => !open)}
+                  className="rounded border border-emerald-400/30 bg-black/20 px-3 py-1 text-[10px] uppercase tracking-wide text-emerald-100 transition-colors hover:bg-emerald-500/10"
+                >
+                  {tracePanelOpen ? 'Hide Details' : 'Show Details'}
+                </button>
+              </div>
             </div>
             <div
               className={`min-h-[560px] grid grid-cols-1 gap-4 ${
@@ -924,7 +1035,7 @@ export function IdeaAtlasPage() {
               {/* Tree on the left */}
               <div className="min-h-[520px] rounded-lg border border-white/[0.06] bg-black/30 overflow-hidden">
                 <ThoughtTreeView
-                  tree={loadedTrace.thought_tree as unknown as TreeViewTree}
+                  tree={displayedTree}
                   onNodeClick={(n) => {
                     setSelectedTraceNodeId(n.id);
                     setTracePanelOpen(true);
@@ -1106,6 +1217,10 @@ export function IdeaAtlasPage() {
                         </div>
                       )}
                     </dl>
+                    {/* CAS Verification Stack verdict for the selected node */}
+                    <VerificationPanel
+                      verification={selectedTraceNode.verification}
+                    />
                   </section>
                 )}
               </aside>

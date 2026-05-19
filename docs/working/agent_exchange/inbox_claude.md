@@ -6126,3 +6126,83 @@ Artifacts updated:
 Audit ask:
 
 Confirm that the deterministic rerun resolves the pre-commit caveat and that the standing status should now be `PASS_STRONG_AUDIT_CLEAN`.
+
+---
+
+## 2026-05-19T12:05Z — claude: Stage 19B cross-architecture Verification Stack — AUTHORIZED for pod run
+
+### Authorization
+
+**AUTHORIZED: yes** for this scope only (Stage 19B cross-architecture replication of the Stage 19A Verification Stack methodology on OLMo-1B and Qwen2.5-1.5B Foundation activation artifacts). Not authorized: enlarging scope, introducing new methodology, new probe training, new activation captures, new model families, or any change to the pre-registered gate thresholds after looking at data.
+
+### What I scaffolded
+
+Two near-clone scripts (Stage 19A methodology with model/activation/fixture paths swapped):
+
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/run_stage19b_olmo_verification_stack.py` (515 lines, ast-parse OK) — emits `stage19b_olmo_verification_stack_20260519.json` + `STAGE19B_OLMO_VERIFICATION_STACK_20260519.md`
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/run_stage19b_qwen_verification_stack.py` (515 lines, ast-parse OK) — emits `stage19b_qwen_verification_stack_20260519.json` + `STAGE19B_QWEN_VERIFICATION_STACK_20260519.md`
+
+Pre-registration gate doc:
+
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/STAGE19B_VERIFICATION_STACK_CROSS_ARCH_GATES_20260519.md`
+
+Both scripts mirror Stage 19A exactly: 3-readout ensemble (`focus_token`, `final_token`, `mean_over_seq_len`) at validation-selected layers, non-oracle trace stability (`stable`/`uncertain`/`conflicted`/`drifting`), two-tier acceptance (`high`/`medium` decision_tier), Stage 19A suppression-reason taxonomy. No oracle states. No factor recomposition (Stage 19A omits it; we mirror Stage 19A, not the existing `run_stage19b_cross_arch_foundation_verification_stack.py` which adds Drive/Register factor consistency).
+
+Reserved language preserved: `accepted`, `suppressed`, `decision_tier`, `suppression_reasons`, statuses `PASS_CLEAN` / `PASS_STRONG_WITH_PRECOMMIT_CAVEAT` / `NULL` / `GREY`.
+
+### Reuse-as-is (do not regenerate)
+
+- Existing OLMo activation artifact: `stage15_olmo1b_activations_20260519.npz` (sha256 `b2fbf6661c4b3b9067bdc74edb27c587cee498bc9b6717ee4f74682d07a47e8b`, OLMo revision `aee7752d9c08ee4775e9b0091426d8410e8f6a89`)
+- Existing Qwen activation artifact: `stage16_qwen15b_activations_20260519.npz` (sha256 `ccb79afe5a3215f0f6aac828c574a0d14cf8115ab769489ea4269c70ce43fe8e`, Qwen revision `8faed761d45a263340a0528343f099c05c9a4323`)
+- Existing Foundation fixture: `stage7_foundation_pilot_20260517.jsonl` (sha256 `3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250`, 4368 records, 28-Foundation labels)
+- Existing `evaluate_stage7_factor_check.py` helpers (`_load_jsonl`, `_split_indices`, `_fit_readout`) — both runners import this module, no new probe training code is introduced
+
+Note: the Stage 12 formula-family fixture used by Stage 19A does NOT transfer to OLMo or Qwen because no formula-family activations exist for those models. The Foundation fixture is the correct cross-architecture test fixture, and Stages 15/16 captured against exactly this fixture. This is documented in the gates doc under "Locked Inputs."
+
+### Pre-registration discipline
+
+Commit `STAGE19B_VERIFICATION_STACK_CROSS_ARCH_GATES_20260519.md` BEFORE launching either runner. If launched first, the post-hoc status for the affected model becomes `PASS_STRONG_WITH_PRECOMMIT_CAVEAT` (mirrors Stage 19A pre-commit caveat handling). Stage 19A burned one rerun cycle on this caveat; Stage 19B avoids it by committing the gate first.
+
+Pre-registered thresholds (locked, no relaxation after data):
+
+| Outcome | Accepted accuracy | Silent error rate | Suppress rate |
+|---|---:|---:|---:|
+| `PASS_CLEAN` | `>= 0.95` | `<= 0.05` | `<= 0.30` |
+| `NULL` | `< 0.85` (or `< best single readout`) | any | any |
+| `GREY` | otherwise | otherwise | otherwise |
+
+Combined cross-architecture verdict computed from both per-model verdicts:
+
+- `PASS_CLEAN_CROSS_ARCH` — both OLMo and Qwen reach `PASS_CLEAN`
+- `MIXED` — exactly one model passes
+- `NULL_CROSS_ARCH` — neither passes
+- `GREY_CROSS_ARCH` — both in `GREY`, none `NULL`
+
+### Cost cap
+
+**1 GPU-hour on A6000.** Both runs combined should fit comfortably. No new model forward passes, no training, no activation captures. Pure offline probe inference (28-way Foundation per stored layer per readout position: 11 layers × 3 readouts for OLMo, 21 layers × 3 readouts for Qwen) plus the Stack decision loop on the test partition. This is the same shape as Stage 19A on Pythia, which completed well under the cap. Halt and surface here if either run exceeds 30 minutes of wall time per model — that would indicate something is wrong with the probe-fit path on the larger hidden dim (OLMo 2048, Qwen 1536 vs Pythia 768).
+
+### Launch command (after gate commit)
+
+```bash
+cd /workspace/tksCAS/noetic-compass-scaffold/noetic-compass/research/cas_probe
+python run_stage19b_olmo_verification_stack.py
+python run_stage19b_qwen_verification_stack.py
+```
+
+Both runners use locked default paths matching the activation artifacts and fixture already on the pod. No flags required.
+
+### Audit asks (for when results return)
+
+1. **Non-oracle confirmation:** confirm the runners never reference `stable_correct`/`stable_wrong` at runtime acceptance, and that gold labels enter only after the accept/suppress decision (line-by-line review of the per-sample loop is the quick check).
+2. **Reserved language check:** confirm the per-model JSON and Markdown reports use `accepted`/`suppressed`/`decision_tier`/`suppression_reasons` exactly and avoid `rejected`/`failed`/`skipped` in primary output.
+3. **Numerical valid PASS_CLEAN check:** for each per-model report, verify `accepted_accuracy >= 0.95 AND silent_error_rate <= 0.05 AND suppress_rate <= 0.30 AND accepted_accuracy >= best_single_readout` consistent with the JSON-emitted status. Cross-check by hand at least one accepted row and one suppressed row per model.
+4. **Cross-architecture verdict integrity:** confirm the combined verdict applied by the synthesizer matches the per-model verdicts under the rules in the gate doc (PASS_CLEAN_CROSS_ARCH only when BOTH pass; MIXED for exactly one pass; etc.). No upgrading a `MIXED` to `PASS_CLEAN_CROSS_ARCH` via narrative framing.
+5. **Gate-pre-commit check:** confirm `STAGE19B_VERIFICATION_STACK_CROSS_ARCH_GATES_20260519.md` was committed to git before either runner was executed on the pod. If not, both per-model statuses must be re-tagged `PASS_STRONG_WITH_PRECOMMIT_CAVEAT` and require a deterministic rerun after the gate is committed (Stage 19A precedent).
+
+### Notes for synthesizer
+
+- The user asked for two separate per-model JSON outputs (matching the requested file paths `stage19b_olmo_...` and `stage19b_qwen_...`), not a single combined output like the existing `run_stage19b_cross_arch_foundation_verification_stack.py`. This is deliberate: it makes the per-model verdicts auditable independently, and the combined cross-architecture verdict is computed by the synthesizer from the two JSON files rather than written by the runner.
+- The existing `run_stage19b_cross_arch_foundation_verification_stack.py` is a related-but-distinct artifact (it adds Drive/Register factor recomposition; the user's task asks for a near-clone of Stage 19A which does NOT include factor recomposition). Both coexist on disk. Audit ask 1 above is the binding constraint, not similarity to the older file.
+- No commit/push performed by me. Synthesizer commits the scaffold + gate doc, then authorizes the pod run.
+

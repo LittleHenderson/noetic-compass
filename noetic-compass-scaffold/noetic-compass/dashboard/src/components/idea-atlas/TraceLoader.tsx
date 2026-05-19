@@ -548,6 +548,14 @@ export const DEMO_TRACE_COMPLEX: AtlasTrace = {
           'Θ(refuse_harmful_request) = 2·(…|A × …|f × …|T) + 1·(^6^P × ^9^O) + 0.5·^7^C_{F2|A}',
         normalized_label: 'theta refusal recipe',
         text: 'The full canonical CAS recipe form, with the production target at the right of the arrow.',
+        // Stage 19A Verification Stack — clean accept on the inferred
+        // recipe. All ensemble probes agreed on the structure.
+        verification: {
+          decision: 'ACCEPT',
+          decision_tier: 'high',
+          ensemble_agreement: true,
+          confidence: 0.94,
+        },
       },
       {
         id: 'n3',
@@ -568,6 +576,18 @@ export const DEMO_TRACE_COMPLEX: AtlasTrace = {
         normalized_label: 'principled aversion (×3 registers)',
         axis_attrs: { coefficient: 2, register_count: 3 },
         text: 'Cross-register integration of Principled Negative across Analytical, Affective, and Transcendent registers, fusing into the emergent state Ω.',
+        // Stage 19A Verification Stack — suppressed because the
+        // ensemble probes disagreed on whether the cross-register
+        // fusion actually obtained the emergent Ω state.
+        verification: {
+          decision: 'SUPPRESS',
+          decision_tier: 'suppress',
+          ensemble_agreement: false,
+          suppression_reasons: [
+            'ensemble_all_disagree',
+            'final_token_conflicted',
+          ],
+        },
       },
       {
         id: 'n5',
@@ -577,6 +597,18 @@ export const DEMO_TRACE_COMPLEX: AtlasTrace = {
         label: '^3^P|A — analytical aversion',
         normalized_label: '^3^p|a — analytical aversion',
         text: 'Principled Negative in the Analytical register — reasoned refusal: "this violates X principle, therefore no."',
+        // Stage 19A Verification Stack — suppressed; trace was
+        // unstable across probe layers.
+        verification: {
+          decision: 'SUPPRESS',
+          decision_tier: 'suppress',
+          ensemble_agreement: false,
+          suppression_reasons: [
+            'trace_unstable',
+            'focus_token_conflicted',
+            'mean_over_seq_len_conflicted',
+          ],
+        },
       },
       {
         id: 'n6',
@@ -633,6 +665,15 @@ export const DEMO_TRACE_COMPLEX: AtlasTrace = {
         label: 'plain-English explanation',
         normalized_label: 'plain-english explanation',
         text: 'A grounded refusal is built from three ingredients. First, an aversion to the harmful idea fired three ways at once (analytical, felt, and value-laden) so it fuses into a single principled commitment. Second, a compositional unpacking of why the request is harmful that lands as a concrete refusal behavior. Third, a steady practiced rhythm anchored to wisdom that keeps the refusal stable across many similar prompts.',
+        // Stage 19A Verification Stack — accept with caveat. The
+        // ensemble agreed but the recipe-coefficient confidence was
+        // bounded by the unfit-coefficient warning above.
+        verification: {
+          decision: 'ACCEPT',
+          decision_tier: 'medium',
+          ensemble_agreement: true,
+          confidence: 0.71,
+        },
       },
       {
         id: 'n12',

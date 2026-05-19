@@ -24,6 +24,20 @@ import {
 
 // ── Types — duck-typed against thought_tree.py::build_thought_tree ──────────
 
+/**
+ * Per-node CAS Verification Stack verdict. Optional so traces produced
+ * before the Stack landed continue to parse and render. Schema mirrors
+ * `lib/trace.ts::NodeVerification` and the Stack JSON documented at
+ * `research/cas_probe/stage19a_formula_verification_stack_20260519.json`.
+ */
+export interface NodeVerification {
+  decision: 'ACCEPT' | 'SUPPRESS' | null;
+  decision_tier?: 'high' | 'medium' | 'suppress' | 'uncertain';
+  ensemble_agreement?: boolean;
+  suppression_reasons?: string[];
+  confidence?: number;
+}
+
 /** A single node in the Thought Tree, matching the Python builder's shape. */
 export interface ThoughtTreeNode {
   id: string;
@@ -38,6 +52,8 @@ export interface ThoughtTreeNode {
   text?: string;
   /** Present on the nested `root` view, absent from the flat array. */
   children?: ThoughtTreeNode[];
+  /** Optional CAS Verification Stack verdict for this node. */
+  verification?: NodeVerification;
 }
 
 /** A single edge in the Thought Tree, matching the Python builder's shape. */
