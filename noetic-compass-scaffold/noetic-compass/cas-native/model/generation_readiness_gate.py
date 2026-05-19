@@ -1,10 +1,18 @@
 """Generation readiness policy gate for CAS-Native.
 
-This module is intentionally not a tensor throttle. Earlier TKS valve work
-showed that learned multiplicative gates can discover the shortcut of
-suppressing generation entirely. The Stage 20 gate is therefore a pure
-diagnostic policy layer: it reads existing CAS safety signals and returns an
-auditable generation policy.
+This module is intentionally NOT a tensor throttle. Learned multiplicative
+gates over hidden states or bottleneck activations are a documented failure
+mode in interpretability literature — they can discover the shortcut of
+suppressing generation entirely rather than learning calibrated selective
+gating. The Stage 20 gate is therefore a pure diagnostic policy layer with
+zero learnable parameters: it reads already-computed CAS safety signals
+(lacunarity, inversion flags, RPM satisfaction, Verification Stack decision)
+and returns an auditable generation policy of allow / caveat / constrain /
+suppress.
+
+This gate does not modify hidden states, bottleneck_z, logits, or generated
+tokens. It is opt-in (default unattached) and the existing
+CASNativeModel.forward and forward_with_lm paths are untouched.
 """
 
 from __future__ import annotations
