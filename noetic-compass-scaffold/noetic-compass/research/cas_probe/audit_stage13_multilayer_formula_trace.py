@@ -216,7 +216,7 @@ def _trace_kind(
     entropy_seq: list[float],
 ) -> str:
     n_layers = len(seq)
-    switches = sum(1 for a, b in zip(seq, seq[1:], strict=True) if a != b)
+    switches = sum(1 for a, b in zip(seq, seq[1:]) if a != b)
     counts = Counter(seq)
     majority_label, majority_count = counts.most_common(1)[0]
     run = _longest_run(seq)
@@ -262,7 +262,7 @@ def _trace_examples(
         confidence_seq = [float(np.max(p)) for p in proba_stack[i].tolist()]
         entropy_seq = [float(_entropy_rows(np.array([p]))[0]) for p in proba_stack[i].tolist()]
         first_correct = next((layer for layer, pred in enumerate(seq) if pred == gold), None)
-        switches = sum(1 for a, b in zip(seq, seq[1:], strict=True) if a != b)
+        switches = sum(1 for a, b in zip(seq, seq[1:]) if a != b)
         run = _longest_run(seq)
         counts = Counter(seq)
         majority_label, majority_count = counts.most_common(1)[0]
