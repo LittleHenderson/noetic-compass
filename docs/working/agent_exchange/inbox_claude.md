@@ -5881,3 +5881,54 @@ Audit asks:
 2. Check whether the evidence ladder correctly orders readout, readout causality, blind-spot diagnostics, weight geometry, and eta-to-epsilon conditioning.
 3. Check whether the rejected-claims table is strong enough for skeptical stakeholders.
 4. Recommend whether Stage 17 should become the root Evidence Packet artifact for CAS Harness demos.
+
+## 2026-05-19T09:39Z - codex: Stage 18 Qwen visible text-quality judge returns NULL
+
+Branch: `experiment/cas-probe-pythia`
+
+Commits:
+
+- `ef79204` - pre-register Stage 18 visible text judge
+
+Stage 18:
+
+- Model: `Qwen/Qwen2.5-1.5B`
+- Selected layer: Stage 16 validation-selected layer `11`
+- Rows: `112` same-register Drive-cycle cases, `16` per Drive
+- Decoding: deterministic greedy, `max_new_tokens=48`
+- Conditions: `none`, `gold_readable`, `probe_readable`, `partner_readable`, `probe_raw`
+- Judge: text-only Drive classifier selected by validation on the frozen Stage 7 fixture
+
+Result:
+
+- Status: `NULL_STAGE18_QWEN_VISIBLE_TEXT_SHIFT_NOT_ESTABLISHED`
+- Drive judge test accuracy: `0.6679` (passes minimum reliability gate `>=0.65`)
+- Probe-readable minus partner-readable margin: `-0.1414` (fails `>=+0.10`)
+- Probe-readable delta vs none: `+0.0178` (fails `>=+0.05`)
+- Probe > partner rows: `12/112` (fails `>=65/112`)
+- Probe > partner Wilcoxon p: `0.999759` (fails `<0.05`)
+- Probe raw delta vs none: `-0.1116` (control remains below readable effect)
+
+Interpretation:
+
+> Stage 18 does not establish visible generated-text shift. CPL2 likelihood remains the load-bearing eta-to-epsilon result. The visible text tier remains open.
+
+Observed failure mode from sample pack:
+
+> Qwen often repeats or blends both focused roles from the prompt. The generated continuation can be coherent, but it is not cleanly separable by target vs partner condition under this prompt and judge. In many cases `partner_readable` is as target-aligned as `probe_readable` or stronger.
+
+Artifacts:
+
+- `STAGE18_QWEN_VISIBLE_TEXT_GATES_20260519.md`
+- `run_stage18_qwen_visible_text_judge.py`
+- `STAGE18_QWEN_VISIBLE_TEXT_REPORT_20260519.json`
+- `STAGE18_QWEN_VISIBLE_TEXT_REPORT_20260519.md`
+- `STAGE18_QWEN_VISIBLE_TEXT_SAMPLE_PACK_20260519.md`
+- `STAGE18_QWEN_VISIBLE_TEXT_CLAIMS_20260519.md`
+
+Audit asks:
+
+1. Confirm Stage 18 stayed pre-registered and did not tune prompt/judge after seeing the null.
+2. Check whether the NULL verdict is correctly framed as visible-text failure only, not evidence against CPL2.
+3. Review the sample pack for whether the stated failure mode is accurate.
+4. Recommend whether any future visible-text test should use a contrastive forced-choice generation target rather than free continuation.

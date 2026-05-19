@@ -1740,3 +1740,44 @@ Artifacts:
 
 - `STAGE17_CAS_HARNESS_EVIDENCE_PACKET_20260519.md`
 - `STAGE17_CONSOLIDATED_CLAIMS_MATRIX_20260519.md`
+
+## Stage 18 result - Qwen visible text-quality judge
+
+**Verdict: `NULL_STAGE18_QWEN_VISIBLE_TEXT_SHIFT_NOT_ESTABLISHED`.**
+
+Stage 18 tested whether the Stage 16 Qwen eta-to-epsilon bridge is visible in
+generated text, not only in likelihood scores.
+
+Gate result:
+
+| Metric | Result | Gate |
+|---|---:|---:|
+| Drive judge test accuracy | `0.6679` | `>= 0.65` |
+| Probe-readable minus partner-readable margin | `-0.1414` | `>= +0.10` |
+| Probe-readable delta vs none | `+0.0178` | `>= +0.05` |
+| Probe > partner rows | `12/112` | `>= 65/112` |
+| Probe > partner Wilcoxon p | `0.999759` | `< 0.05` |
+| Probe raw delta vs none | `-0.1116` | `< +0.05` |
+
+Honest read:
+
+> Stage 18 does not establish visible generated-text shift. The independent
+> Drive judge cleared the minimum reliability threshold, but `probe_readable`
+> continuations were not judged more target-aligned than `partner_readable`
+> continuations. CPL2 likelihood remains the load-bearing eta-to-epsilon
+> result.
+
+Observed failure mode:
+
+> Qwen often repeats or blends both focused roles from the prompt. That makes
+> the generated continuation visible, but not cleanly separable by the target
+> vs partner condition under this prompt and judge.
+
+Artifacts:
+
+- `STAGE18_QWEN_VISIBLE_TEXT_GATES_20260519.md`
+- `run_stage18_qwen_visible_text_judge.py`
+- `STAGE18_QWEN_VISIBLE_TEXT_REPORT_20260519.json`
+- `STAGE18_QWEN_VISIBLE_TEXT_REPORT_20260519.md`
+- `STAGE18_QWEN_VISIBLE_TEXT_SAMPLE_PACK_20260519.md`
+- `STAGE18_QWEN_VISIBLE_TEXT_CLAIMS_20260519.md`
