@@ -56,6 +56,11 @@
       "capability": "generation_readiness",
       "evidence": ["stage20", "stage20b"],
       "meaning": "The Generation Readiness Gate converts Verification Stack decisions into packet policy: allow clean high-confidence readouts, caveat medium-confidence readouts, suppress rejected readouts in license-grade modes, and constrain rejected readouts in triage mode."
+    },
+    {
+      "capability": "evidence_packet_export",
+      "evidence": ["stage21a"],
+      "meaning": "EvidencePacket v1 exports per-trace JSON and Markdown packets with provenance, readout, verification mode, generation readiness, controls, conditioning metrics, caveats, rejected claims, and claim boundary."
     }
   ],
   "rejected_claims": [
@@ -259,6 +264,20 @@
       }
     }
   },
+  "stage21a_evidence_packet_export": {
+    "status": "EVIDENCE_PACKET_EXPORT_READY",
+    "packet_schema_version": "cas_harness_evidence_packet_v1",
+    "report": "STAGE21A_EVIDENCE_PACKET_EXPORT_20260519.md",
+    "json": "stage21a_evidence_packet_export_20260519.json",
+    "packet_count": 4,
+    "canonical_packets": [
+      "evidence_packets/stage21a_allow_qwen15b_000.json",
+      "evidence_packets/stage21a_caveat_olmo1b_009.json",
+      "evidence_packets/stage21a_suppress_olmo1b_054.json",
+      "evidence_packets/stage21a_constrain_olmo1b_054.json"
+    ],
+    "boundary": "Stage 21A exports canonical packet artifacts from locked Stage 19/20B reports. It is product packaging, not a new model run."
+  },
   "claim_badges": [
     "provenance",
     "readout",
@@ -268,7 +287,8 @@
     "weight_geometry",
     "harness_conditioning",
     "verification_stack",
-    "generation_readiness"
+    "generation_readiness",
+    "evidence_packet_export"
   ],
   "visible_generation_badge": {
     "status": "not_closed",
@@ -287,7 +307,7 @@
     "Check rejected claims before quoting the result externally."
   ],
   "implementation_target": {
-    "schema": "EvidencePacket",
+    "schema": "EvidencePacket v1",
     "api": "/api/harness/evidence/{trace_id}",
     "ui": "reviewer drawer with claim badge, provenance, readout, controls, blind spots, caveats, and export",
     "verification_mode_field": "HIGH_PRECISION | BALANCED | MAX_COVERAGE_TRIAGE",

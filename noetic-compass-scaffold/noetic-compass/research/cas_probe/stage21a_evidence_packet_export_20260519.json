@@ -1,0 +1,46 @@
+{
+  "boundary": "Stage 21A exports canonical packet artifacts from locked Stage 19/20B reports. It is product packaging, not a new model run.",
+  "date": "2026-05-19",
+  "packet_count": 4,
+  "packet_schema_version": "cas_harness_evidence_packet_v1",
+  "packets": [
+    {
+      "accepted": true,
+      "generation_readiness": "allow",
+      "json": "evidence_packets/stage21a_allow_qwen15b_000.json",
+      "markdown": "evidence_packets/stage21a_allow_qwen15b_000.md",
+      "mode": "BALANCED",
+      "model": "Qwen/Qwen2.5-1.5B",
+      "trace_id": "stage21a_allow_qwen15b_000"
+    },
+    {
+      "accepted": true,
+      "generation_readiness": "caveat",
+      "json": "evidence_packets/stage21a_caveat_olmo1b_009.json",
+      "markdown": "evidence_packets/stage21a_caveat_olmo1b_009.md",
+      "mode": "BALANCED",
+      "model": "allenai/OLMo-1B-hf",
+      "trace_id": "stage21a_caveat_olmo1b_009"
+    },
+    {
+      "accepted": false,
+      "generation_readiness": "suppress",
+      "json": "evidence_packets/stage21a_suppress_olmo1b_054.json",
+      "markdown": "evidence_packets/stage21a_suppress_olmo1b_054.md",
+      "mode": "BALANCED",
+      "model": "allenai/OLMo-1B-hf",
+      "trace_id": "stage21a_suppress_olmo1b_054"
+    },
+    {
+      "accepted": false,
+      "generation_readiness": "constrain",
+      "json": "evidence_packets/stage21a_constrain_olmo1b_054.json",
+      "markdown": "evidence_packets/stage21a_constrain_olmo1b_054.md",
+      "mode": "MAX_COVERAGE_TRIAGE",
+      "model": "allenai/OLMo-1B-hf",
+      "trace_id": "stage21a_constrain_olmo1b_054"
+    }
+  ],
+  "schema_version": "stage21a_evidence_packet_export_v1",
+  "status": "EVIDENCE_PACKET_EXPORT_READY"
+}

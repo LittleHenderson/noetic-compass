@@ -2019,3 +2019,40 @@ Artifacts:
 - `run_stage20b_generation_readiness_packets.py`
 - `stage20b_generation_readiness_packets_20260519.json`
 - `STAGE20B_GENERATION_READINESS_PACKETS_20260519.md`
+
+## Stage 21A result - EvidencePacket v1 export
+
+**Verdict: `EVIDENCE_PACKET_EXPORT_READY`.**
+
+Stage 21A turns the report stack into concrete customer/reviewer artifacts:
+one JSON packet and one Markdown packet per trace.
+
+Canonical packets:
+
+| Trace ID | Model | Mode | Accepted | Readiness |
+|---|---|---:|---:|---:|
+| `stage21a_allow_qwen15b_000` | Qwen2.5-1.5B | `BALANCED` | `true` | `allow` |
+| `stage21a_caveat_olmo1b_009` | OLMo-1B | `BALANCED` | `true` | `caveat` |
+| `stage21a_suppress_olmo1b_054` | OLMo-1B | `BALANCED` | `false` | `suppress` |
+| `stage21a_constrain_olmo1b_054` | OLMo-1B | `MAX_COVERAGE_TRIAGE` | `false` | `constrain` |
+
+Each packet includes:
+
+- model name and revision
+- fixture SHA-256
+- activation SHA-256
+- readout axis/layer/position/label
+- Verification Stack mode and mode profile
+- Generation Readiness policy
+- CPL2 conditioning metrics
+- caveats
+- rejected claims
+
+Artifacts:
+
+- `evidence_packet.py`
+- `run_stage21a_evidence_packet_exporter.py`
+- `stage21a_evidence_packet_export_20260519.json`
+- `STAGE21A_EVIDENCE_PACKET_EXPORT_20260519.md`
+- `evidence_packets/stage21a_*.json`
+- `evidence_packets/stage21a_*.md`

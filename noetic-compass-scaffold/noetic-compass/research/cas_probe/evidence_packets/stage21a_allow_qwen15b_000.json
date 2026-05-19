@@ -1,0 +1,114 @@
+{
+  "boundary": "This packet shows a bounded CAS Harness readout and readiness decision for one locked example. It does not claim raw CAS-symbol understanding, exact sentence forcing, or a complete neuron-by-neuron map.",
+  "caveats": [
+    "EvidencePacket v1 is an export artifact over locked Stage 19/20B reports; it does not rerun hidden-state inference.",
+    "Readiness policy is generated from Verification Stack status in this export; neural lacunarity-head values are not present in the Stage 19 reports.",
+    "Likelihood conditioning is supported by CPL2; exact sentence forcing in free-form decoding is not claimed."
+  ],
+  "claim_badges": [
+    "provenance",
+    "readout",
+    "verification_stack",
+    "generation_readiness",
+    "harness_conditioning"
+  ],
+  "conditioning": {
+    "p_value": "2.92e-12",
+    "partner_margin": 1.6253,
+    "positive_cases": "83/112",
+    "probe_readable_delta": 0.796
+  },
+  "controls": {
+    "metadata_baseline": null,
+    "random_ablation": "random null controls are reported in the source claims matrices",
+    "raw_symbol_delta": -0.0002,
+    "text_baseline": null
+  },
+  "created_at": "2026-05-19",
+  "diagnostics": {
+    "blindspot_flags": [],
+    "lacunarity": null,
+    "note": "Per-example LacunarityHead values are not present in Stage 19 reports."
+  },
+  "export_label": "allow: clean accepted Qwen readout",
+  "generation_readiness": {
+    "evidence": {
+      "inversion_flag_count": 0,
+      "max_gap_probability": 0.0,
+      "max_lacunarity": 0.0,
+      "mean_gap_probability": 0.0,
+      "min_domain_confidence": 1.0,
+      "mode": "BALANCED",
+      "rpm_satisfaction": 1.0,
+      "verification_accepted": true
+    },
+    "generation_readiness": "allow",
+    "mode": "BALANCED",
+    "policy_version": "stage20_generation_readiness_gate_v1",
+    "reasons": [
+      "all_readiness_signals_within_mode_thresholds"
+    ],
+    "recommended_mode": "BALANCED",
+    "risk_score": 0.0
+  },
+  "model": {
+    "family": "Qwen",
+    "model_key": "qwen15b",
+    "name": "Qwen/Qwen2.5-1.5B",
+    "revision": "8faed761d45a263340a0528343f099c05c9a4323"
+  },
+  "provenance": {
+    "activation_file": "stage16_qwen15b_activations_20260519.npz",
+    "activation_sha256": "ccb79afe5a3215f0f6aac828c574a0d14cf8115ab769489ea4269c70ce43fe8e",
+    "code_commit": "2c72e37a60efe0e9ad42e1093cabe05342472207",
+    "fixture_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+    "source_reports": [
+      "stage19b_cross_arch_foundation_verification_stack_20260519.json",
+      "stage19c_verification_mode_selector_20260519.json",
+      "stage20b_generation_readiness_packets_20260519.json"
+    ],
+    "source_stage": "Stage 16"
+  },
+  "readout": {
+    "axis": "foundation",
+    "confidence": null,
+    "confidence_source": "verification_stack_tier",
+    "label": "F1T",
+    "layer": 11,
+    "position": "focus_token",
+    "stable_agree": [
+      "focus_token",
+      "final_token",
+      "mean_over_seq_len"
+    ],
+    "votes": {
+      "final_token": "F1T",
+      "focus_token": "F1T",
+      "mean_over_seq_len": "F1T"
+    }
+  },
+  "rejected_claims": [
+    "exact_causal_neurons",
+    "weights_firing",
+    "host_model_internal_cas_compiler",
+    "raw_cas_symbol_understanding",
+    "hidden_state_steering_as_supported_mechanism",
+    "exact_sentence_forcing_in_free_form_decoding",
+    "complete_neuron_by_neuron_causal_map"
+  ],
+  "schema_version": "cas_harness_evidence_packet_v1",
+  "trace_id": "stage21a_allow_qwen15b_000",
+  "verification": {
+    "accepted": true,
+    "confidence_tier": "high",
+    "mode": "BALANCED",
+    "mode_profile": {
+      "accepted_accuracy": 0.9660842754367934,
+      "coverage": 0.8273809523809523,
+      "silent_error_rate": 0.03391572456320657,
+      "source_component": "factor_consistent",
+      "suppressed_rate": 0.17261904761904767
+    },
+    "suppression_reasons": []
+  }
+}

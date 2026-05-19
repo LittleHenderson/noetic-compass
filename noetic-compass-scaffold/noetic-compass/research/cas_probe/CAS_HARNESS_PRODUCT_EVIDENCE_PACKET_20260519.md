@@ -232,7 +232,8 @@ Each packet should contain:
 | 7 | Harness conditioning | Readable CAS realization shifts likelihood under controls. |
 | 8 | Verification stack | Ensemble and trace stability accept high-confidence predictions while suppressing conflicted/unstable cases. |
 | 9 | Generation readiness | Verification decisions are translated into `allow`, `caveat`, `constrain`, or `suppress` packet policy. |
-| 10 | Visible generation | Generated text visibly shifts. Not closed yet. |
+| 10 | Evidence packet export | Per-trace JSON and Markdown packets package provenance, readout, verification, readiness, controls, caveats, and rejected claims. |
+| 11 | Visible generation | Generated text visibly shifts. Not closed yet. |
 
 ## Reviewer Walkthrough
 
@@ -250,6 +251,9 @@ Each packet should contain:
 ## Developer Build Target
 
 Build the product surface around a `EvidencePacket` object.
+
+Stage 21A now provides a reusable `EvidencePacket v1` schema plus canonical
+JSON/Markdown examples in `research/cas_probe/evidence_packets/`.
 
 Minimum fields:
 
@@ -340,18 +344,22 @@ hidden-content benchmarks, but the product should now center on:
 
 ## Implementation Lock
 
-Immediate implementation target:
+Stage 21A completed:
 
 1. Add a reusable CAS Harness `EvidencePacket` schema.
-2. Add a backend endpoint that serves packet JSON by trace or artifact id.
-3. Attach `generation_readiness` from Stage 20B: `allow`, `caveat`,
+2. Export canonical packet JSON/Markdown examples.
+
+Immediate implementation target for Stage 21B:
+
+1. Add a backend endpoint that serves packet JSON by trace or artifact id.
+2. Attach `generation_readiness` from Stage 20B: `allow`, `caveat`,
    `constrain`, or `suppress`.
-4. Attach committed manifests, model revisions, report paths, and SHA-256
+3. Attach committed manifests, model revisions, report paths, and SHA-256
    values.
-5. Render a reviewer drawer that opens with the claim badge, then provenance,
+4. Render a reviewer drawer that opens with the claim badge, then provenance,
    then readout, controls, generation readiness, blind spots, and caveats.
-6. Add export buttons for JSON and markdown.
-7. Keep visible-generation results in the packet as a bounded negative, not as
+5. Add export buttons for JSON and markdown.
+6. Keep visible-generation results in the packet as a bounded negative, not as
    a blocker.
 
 Do not run more GPU experiments before this product surface exists unless a
