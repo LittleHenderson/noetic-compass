@@ -177,7 +177,14 @@ def _selected_layer(rows: list[dict[str, Any]]) -> dict[str, Any]:
     )[0]
 
 
-def _fit_task_readouts(data: Any, y: Any, split: dict[str, Any], labels: tuple[str, ...]) -> dict[str, Any]:
+def _fit_task_readouts(
+    data: Any,
+    y: Any,
+    split: dict[str, Any],
+    labels: tuple[str, ...],
+    task_name: str,
+    fixed_array_indices: dict[str, int] | None = None,
+) -> dict[str, Any]:
     import numpy as np
 
     layer_positions = [int(x) for x in data["layer_positions"].tolist()]
@@ -187,7 +194,19 @@ def _fit_task_readouts(data: Any, y: Any, split: dict[str, Any], labels: tuple[s
         layer_rows: list[dict[str, Any]] = []
         pred_by_layer: list[Any] = []
         proba_by_layer: list[Any] = []
-        for array_index, layer_position in enumerate(layer_positions):
+        if fixed_array_indices is None:
+            scan_items = list(enumerate(layer_positions))
+            selection_mode = "validation_selected_layer"
+        else:
+            fixed_index = int(fixed_array_indices[readout])
+            scan_items = [(fixed_index, layer_positions[fixed_index])]
+            selection_mode = "foundation_selected_layer"
+        for array_index, layer_position in scan_items:
+            print(
+                f"[Stage19B] fitting task={task_name} readout={readout} "
+                f"layer={layer_position} mode={selection_mode}",
+                flush=True,
+            )
             fitted = stage7._fit_readout(
                 X[:, array_index, :],
                 y,
@@ -211,6 +230,7 @@ def _fit_task_readouts(data: Any, y: Any, split: dict[str, Any], labels: tuple[s
                         "acc": float(fitted["test"]["acc"]),
                         "macro_f1": float(fitted["test"]["macro_f1"]),
                     },
+                    "selection_mode": selection_mode,
                 }
             )
         selected = _selected_layer(layer_rows)
@@ -263,10 +283,27 @@ def _run_model(model_key: str, config: dict[str, str]) -> dict[str, Any]:
     y_test_register = y_register[idx_test]
 
     fitted = {
-        "foundation": _fit_task_readouts(data, y_foundation, split, _FOUNDATION_LABELS),
-        "drive": _fit_task_readouts(data, y_drive, split, _DRIVE_LABELS),
-        "register": _fit_task_readouts(data, y_register, split, _REGISTER_LABELS),
+        "foundation": _fit_task_readouts(data, y_foundation, split, _FOUNDATION_LABELS, "foundation"),
     }
+    foundation_indices = {
+        readout: int(block["selected"]["array_index"]) for readout, block in fitted["foundation"].items()
+    }
+    fitted["drive"] = _fit_task_readouts(
+        data,
+        y_drive,
+        split,
+        _DRIVE_LABELS,
+        "drive",
+        fixed_array_indices=foundation_indices,
+    )
+    fitted["register"] = _fit_task_readouts(
+        data,
+        y_register,
+        split,
+        _REGISTER_LABELS,
+        "register",
+        fixed_array_indices=foundation_indices,
+    )
 
     selected_layers = {
         task: {
@@ -275,6 +312,7 @@ def _run_model(model_key: str, config: dict[str, str]) -> dict[str, Any]:
                 "array_index": int(block["selected"]["array_index"]),
                 "val_acc": float(block["selected"]["val"]["acc"]),
                 "test_acc": float(block["selected"]["test"]["acc"]),
+                "selection_mode": str(block["selected"]["selection_mode"]),
             }
             for readout, block in task_block.items()
         }
@@ -513,15 +551,15 @@ def _write_md(report: dict[str, Any], out_md: Path) -> None:
                 "",
                 "Selected layers:",
                 "",
-                "| Task | Readout | Layer | Val acc | Test acc |",
-                "|---|---|---:|---:|---:|",
+                "| Task | Readout | Layer | Selection | Val acc | Test acc |",
+                "|---|---|---:|---|---:|---:|",
             ]
         )
         for task, task_layers in model["selected_layers"].items():
             for readout, row in task_layers.items():
                 lines.append(
                     f"| `{task}` | `{readout}` | `{row['layer_position']}` | "
-                    f"`{row['val_acc']:.4f}` | `{row['test_acc']:.4f}` |"
+                    f"`{row['selection_mode']}` | `{row['val_acc']:.4f}` | `{row['test_acc']:.4f}` |"
                 )
         lines.extend(
             [
@@ -597,4 +635,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

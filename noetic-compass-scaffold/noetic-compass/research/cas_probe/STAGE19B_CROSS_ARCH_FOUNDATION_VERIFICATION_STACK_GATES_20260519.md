@@ -4,7 +4,14 @@ Date: 2026-05-19
 
 Branch: `experiment/cas-probe-pythia`
 
-Status: `PRE_REGISTERED_NOT_RUN`
+Status: `PRE_REGISTERED_NOT_RUN_V2`
+
+## Revision Note
+
+The first Stage 19B runner was pre-registered and launched, but produced no
+report artifact after more than 100 minutes of CPU time. That no-result run was
+terminated. This v2 gate is committed before any successful Stage 19B result and
+tightens the compute scope without changing the product question.
 
 ## Purpose
 
@@ -61,7 +68,11 @@ Independently train:
 - a 7-way Drive readout (`F1` through `F7`)
 - a 4-way Register readout (`T`, `A`, `f`, `E`)
 
-Layer selection uses the same validation-only rule as the Foundation readout.
+Drive/Register are consistency checks, not fresh layer-discovery claims in this
+run. To avoid a second and third full all-layer scan, train each Drive/Register
+readout at the Foundation-selected layer for the same readout position. This
+anchors factor consistency to the exact hidden-state depth used by the 28-way
+Foundation vote.
 
 At runtime:
 
@@ -103,6 +114,7 @@ Suppress all other cases as a trace-instability reason.
 Report per model and aggregate:
 
 - selected layers for Foundation, Drive, Register by readout position
+- factor-layer selection mode (`foundation_selected_layer`)
 - best single selected Foundation accuracy
 - ensemble-only accepted accuracy and coverage
 - factor-consistent accepted accuracy and coverage
@@ -145,4 +157,3 @@ Disallowed claims:
 - CAS identifies exact neurons or exact weights that caused the answer.
 - Register readout is beyond-text evidence in this run.
 - Generation steering or visible-text control is proven by Stage 19B.
-
