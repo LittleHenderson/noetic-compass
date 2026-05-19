@@ -6206,3 +6206,56 @@ Both runners use locked default paths matching the activation artifacts and fixt
 - The existing `run_stage19b_cross_arch_foundation_verification_stack.py` is a related-but-distinct artifact (it adds Drive/Register factor recomposition; the user's task asks for a near-clone of Stage 19A which does NOT include factor recomposition). Both coexist on disk. Audit ask 1 above is the binding constraint, not similarity to the older file.
 - No commit/push performed by me. Synthesizer commits the scaffold + gate doc, then authorizes the pod run.
 
+
+---
+
+## 2026-05-19T13:53Z - codex: Stage 19B cross-architecture Verification Stack result
+
+Branch: `experiment/cas-probe-pythia`
+
+Commits:
+
+- `ab6278c` - initial Stage 19B pre-registration and runner
+- `87e6842` - v2 bounded factor scan, committed before successful result
+- `ee19d62` - fixed fixed-layer indexing bug, committed before successful result
+
+Run note:
+
+The first full all-layer factor scan produced no report after >100 minutes and was terminated. v2 was committed before any successful Stage 19B result. A fixed-layer indexing bug then failed before report emission and was fixed before the successful run.
+
+Result:
+
+Report status: `NULL`
+
+Practical verdict: `DIAGNOSTIC_ONLY_CROSS_ARCH`
+
+| Model | Per-model status | Best single | Stack accepted acc | Coverage | Silent error | Suppressed |
+|---|---|---:|---:|---:|---:|---:|
+| OLMo-1B | `DIAGNOSTIC_ONLY` | `0.9060` | `0.9816` | `0.7173` | `0.0184` | `0.2827` |
+| Qwen2.5-1.5B | `DIAGNOSTIC_ONLY` | `0.8537` | `0.9949` | `0.7457` | `0.0051` | `0.2543` |
+
+Component ladder:
+
+| Model | Ensemble-only acc/cov | Factor-consistent acc/cov | Final stack acc/cov |
+|---|---:|---:|---:|
+| OLMo-1B | `0.8975 / 0.9039` | `0.9422 / 0.8240` | `0.9816 / 0.7173` |
+| Qwen2.5-1.5B | `0.9281 / 0.8988` | `0.9661 / 0.8274` | `0.9949 / 0.7457` |
+
+Interpretation:
+
+The stack does not pass the high-coverage product gate across architectures because both models fall below the pre-registered `0.800` coverage floor. It does transfer as a high-precision diagnostic verifier: accepted examples are substantially cleaner than the best single Foundation readout on both OLMo and Qwen.
+
+Artifacts:
+
+- `STAGE19B_CROSS_ARCH_FOUNDATION_VERIFICATION_STACK_GATES_20260519.md`
+- `run_stage19b_cross_arch_foundation_verification_stack.py`
+- `stage19b_cross_arch_foundation_verification_stack_20260519.json`
+- `STAGE19B_CROSS_ARCH_FOUNDATION_VERIFICATION_STACK_20260519.md`
+- `STAGE19B_CLAIMS_MATRIX_20260519.md`
+
+Audit asks:
+
+1. Confirm the `NULL` report status is correct under the pre-registered coverage gate.
+2. Confirm `DIAGNOSTIC_ONLY_CROSS_ARCH` is fair reserved language for the practical result.
+3. Confirm the v2/no-result abort + indexing bug history is documented enough for audit.
+4. Recommend whether Stage 19C should loosen suppression thresholds, add calibration, or leave the Stack as a high-precision diagnostic verifier.

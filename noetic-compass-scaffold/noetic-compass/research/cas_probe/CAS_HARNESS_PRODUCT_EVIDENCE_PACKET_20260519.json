@@ -49,8 +49,8 @@
     },
     {
       "capability": "verification_stack",
-      "evidence": ["stage19a"],
-      "meaning": "Runtime-safe ensemble and trace stability accepted 3679/4200 formula-family examples at 0.9978 accuracy with 0.0022 silent error rate. Deterministic rerun after commit 05ac687 reproduced the result exactly."
+      "evidence": ["stage19a", "stage19b"],
+      "meaning": "Stage 19A runtime-safe ensemble and trace stability accepted 3679/4200 formula-family examples at 0.9978 accuracy with 0.0022 silent error rate. Deterministic rerun after commit 05ac687 reproduced the result exactly. Stage 19B transfers as a high-precision diagnostic on OLMo/Qwen Foundation fixtures, but misses the high-coverage product gate."
     }
   ],
   "rejected_claims": [
@@ -139,6 +139,27 @@
     "coverage": 0.8759523809523809,
     "silent_error_rate": 0.002174503941288375,
     "audit_clean_rerun": "After commit 05ac687, Stage 19A was rerun with the same script, fixture, and activation artifact. Headline metrics matched exactly."
+  },
+  "stage19b_cross_arch_verification_stack": {
+    "report_status": "NULL",
+    "practical_verdict": "DIAGNOSTIC_ONLY_CROSS_ARCH",
+    "olmo1b": {
+      "status": "DIAGNOSTIC_ONLY",
+      "best_single_foundation_accuracy": 0.9060374149659864,
+      "accepted_accuracy": 0.981624184943687,
+      "coverage": 0.7172619047619048,
+      "silent_error_rate": 0.018375815056313027,
+      "suppressed_rate": 0.28273809523809523
+    },
+    "qwen15b": {
+      "status": "DIAGNOSTIC_ONLY",
+      "best_single_foundation_accuracy": 0.8537414965986394,
+      "accepted_accuracy": 0.9948688711516533,
+      "coverage": 0.7457482993197279,
+      "silent_error_rate": 0.0051311288483466555,
+      "suppressed_rate": 0.2542517006802721
+    },
+    "interpretation": "The stack transfers as a high-precision diagnostic verifier across OLMo and Qwen, but coverage is below the pre-registered 0.800 PASS_BOUNDED floor."
   },
   "claim_badges": [
     "provenance",

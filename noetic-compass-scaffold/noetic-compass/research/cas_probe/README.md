@@ -1867,3 +1867,44 @@ Artifacts:
 - `STAGE19A_FORMULA_VERIFICATION_STACK_20260519.md`
 - `stage19a_formula_verification_stack_rerun_20260519.json`
 - `STAGE19A_FORMULA_VERIFICATION_STACK_RERUN_20260519.md`
+
+## Stage 19B result - Cross-architecture Foundation Verification Stack
+
+**Report status: `NULL`. Practical verdict: `DIAGNOSTIC_ONLY_CROSS_ARCH`.**
+
+Stage 19B reran the runtime-safe Verification Stack on the Stage 15 OLMo and
+Stage 16 Qwen Foundation fixtures. It added the Stage 19B factor gate:
+independent Drive/Register predictions must recompose to the same 28-way
+Foundation label as the Foundation ensemble. Gold labels were used only after
+acceptance for scoring.
+
+Headline:
+
+| Model | Best single | Stack accepted acc | Coverage | Silent error | Suppressed |
+|---|---:|---:|---:|---:|---:|
+| OLMo-1B | `0.9060` | `0.9816` | `0.7173` | `0.0184` | `0.2827` |
+| Qwen2.5-1.5B | `0.8537` | `0.9949` | `0.7457` | `0.0051` | `0.2543` |
+
+The stack did **not** reach the pre-registered `PASS_BOUNDED` coverage gate
+(`>= 0.800`). So this is not yet a high-coverage external-license result.
+
+The useful finding is diagnostic: on accepted examples, the stack is very
+precise across both non-Pythia architectures. The ladder is coherent:
+
+| Model | Ensemble-only | + Factor consistency | + Trace stability |
+|---|---:|---:|---:|
+| OLMo-1B | `0.8975 / 0.9039` | `0.9422 / 0.8240` | `0.9816 / 0.7173` |
+| Qwen2.5-1.5B | `0.9281 / 0.8988` | `0.9661 / 0.8274` | `0.9949 / 0.7457` |
+
+Each gate trades coverage for precision. This supports CAS Harness as a
+high-precision diagnostic verifier across architectures, but it does not yet
+support the stronger product claim that the Stack is high-coverage across
+architectures.
+
+Artifacts:
+
+- `STAGE19B_CROSS_ARCH_FOUNDATION_VERIFICATION_STACK_GATES_20260519.md`
+- `run_stage19b_cross_arch_foundation_verification_stack.py`
+- `stage19b_cross_arch_foundation_verification_stack_20260519.json`
+- `STAGE19B_CROSS_ARCH_FOUNDATION_VERIFICATION_STACK_20260519.md`
+- `STAGE19B_CLAIMS_MATRIX_20260519.md`
