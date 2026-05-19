@@ -234,12 +234,14 @@ def _fit_task_readouts(
                 }
             )
         selected = _selected_layer(layer_rows)
-        selected_idx = int(selected["array_index"])
+        selected_list_idx = next(
+            i for i, row in enumerate(layer_rows) if int(row["array_index"]) == int(selected["array_index"])
+        )
         out[readout] = {
             "selected": selected,
             "per_layer": layer_rows,
-            "selected_pred": pred_by_layer[selected_idx],
-            "selected_proba": proba_by_layer[selected_idx],
+            "selected_pred": pred_by_layer[selected_list_idx],
+            "selected_proba": proba_by_layer[selected_list_idx],
             "pred_by_layer": pred_by_layer,
             "proba_by_layer": proba_by_layer,
         }
