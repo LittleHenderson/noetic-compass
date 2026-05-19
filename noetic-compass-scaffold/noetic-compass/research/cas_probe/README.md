@@ -1826,3 +1826,43 @@ Artifacts:
 
 - `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.md`
 - `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.json`
+
+## Stage 19A result - CAS Verification Stack
+
+**Verdict: `PASS_STRONG_WITH_PRECOMMIT_CAVEAT`.**
+
+Stage 19A tested the product-realistic verifier on the locked Stage 12
+formula-family fixture. Runtime acceptance used only non-oracle signals:
+selected-layer ensemble agreement plus trace stability/conflict states. Gold
+labels were used only after the fact for scoring.
+
+Headline:
+
+| Metric | Value |
+|---|---:|
+| Baseline `focus_token` layer-12 accuracy | `0.9540` |
+| Ensemble-only accuracy | `0.9550` |
+| Ensemble-only coverage | `0.9569` |
+| Stack accepted accuracy | `0.9978` |
+| Stack coverage | `0.8760` |
+| Stack silent error rate | `0.0022` |
+| Stack suppressed rate | `0.1240` |
+| Accepted examples | `3679/4200` |
+| Suppressed examples | `521/4200` |
+| Silent accepted errors | `8/3679` |
+
+Product read:
+
+> On this locked formula-family fixture, the CAS Verification Stack accepted
+> 87.6% of examples at 99.78% accuracy and suppressed 12.4% as conflicted or
+> unstable. This closes the proposed verification-stack shape for Stage 19A,
+> subject to audit/rerun because the gates were not committed before the pod
+> execution.
+
+Artifacts:
+
+- `STAGE19_CAS_VERIFICATION_STACK_GATES_20260519.md`
+- `CAS_VERIFICATION_STACK_SPEC_20260519.md`
+- `run_stage19a_formula_verification_stack.py`
+- `stage19a_formula_verification_stack_20260519.json`
+- `STAGE19A_FORMULA_VERIFICATION_STACK_20260519.md`

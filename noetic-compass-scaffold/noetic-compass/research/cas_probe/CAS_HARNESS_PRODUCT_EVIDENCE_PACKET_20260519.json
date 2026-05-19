@@ -46,6 +46,11 @@
       "capability": "cross_model_likelihood_bridge",
       "evidence": ["stage7", "stage8", "stage14", "stage15", "stage16"],
       "meaning": "Readable CAS realization shifts semantic likelihood across Pythia, OLMo, and Qwen."
+    },
+    {
+      "capability": "verification_stack",
+      "evidence": ["stage19a"],
+      "meaning": "Runtime-safe ensemble and trace stability accepted 3679/4200 formula-family examples at 0.9978 accuracy with 0.0022 silent error rate. Pre-commit caveat applies pending audit or deterministic rerun."
     }
   ],
   "rejected_claims": [
@@ -123,6 +128,18 @@
     "wilcoxon_p": 0.999759,
     "interpretation": "Visible free-form generated text is not established. This is a surface-channel null, not evidence against CPL2 likelihood conditioning."
   },
+  "stage19a_verification_stack": {
+    "status": "PASS_STRONG_WITH_PRECOMMIT_CAVEAT",
+    "baseline_focus_token_l12_accuracy": 0.954047619047619,
+    "ensemble_only_accuracy": 0.954963921373476,
+    "ensemble_only_coverage": 0.9569047619047619,
+    "accepted": "3679/4200",
+    "suppressed": "521/4200",
+    "accepted_accuracy": 0.9978254960587116,
+    "coverage": 0.8759523809523809,
+    "silent_error_rate": 0.002174503941288375,
+    "procedural_caveat": "Gates and runner were written before the pod run but not committed before execution; external use should wait for audit or deterministic rerun after commit."
+  },
   "claim_badges": [
     "provenance",
     "readout",
@@ -130,7 +147,8 @@
     "readout_causal",
     "trace_diagnostic",
     "weight_geometry",
-    "harness_conditioning"
+    "harness_conditioning",
+    "verification_stack"
   ],
   "visible_generation_badge": {
     "status": "not_closed",

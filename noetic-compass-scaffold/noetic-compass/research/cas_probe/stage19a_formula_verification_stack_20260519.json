@@ -1,0 +1,645 @@
+{
+  "accepted_examples_sample": [
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "relation_dependency",
+      "gold_index": 0,
+      "index": 0,
+      "prediction": "relation_dependency",
+      "prediction_index": 0,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_definition_compact_relation_dependency",
+      "stable_agree": [
+        "focus_token",
+        "final_token",
+        "mean_over_seq_len"
+      ],
+      "votes": {
+        "final_token": "relation_dependency",
+        "focus_token": "relation_dependency",
+        "mean_over_seq_len": "relation_dependency"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 1,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_definition_compact_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token",
+        "mean_over_seq_len"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "relation_dependency",
+      "gold_index": 0,
+      "index": 2,
+      "prediction": "relation_dependency",
+      "prediction_index": 0,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_applied_human_relation_dependency",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "relation_dependency",
+        "focus_token": "relation_dependency",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "medium",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 3,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_applied_human_typed_program",
+      "stable_agree": [
+        "final_token",
+        "mean_over_seq_len"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "relation_dependency",
+      "gold_index": 0,
+      "index": 4,
+      "prediction": "relation_dependency",
+      "prediction_index": 0,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_system_process_relation_dependency",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "relation_dependency",
+        "focus_token": "relation_dependency",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 5,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_system_process_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token",
+        "mean_over_seq_len"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "relation_dependency",
+      "gold_index": 0,
+      "index": 6,
+      "prediction": "relation_dependency",
+      "prediction_index": 0,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_role_inverse_plain_relation_dependency",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "relation_dependency",
+        "focus_token": "relation_dependency",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 7,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_role_inverse_plain_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "relation_dependency",
+      "gold_index": 0,
+      "index": 8,
+      "prediction": "relation_dependency",
+      "prediction_index": 0,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_compressed_minimal_relation_dependency",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "relation_dependency",
+        "focus_token": "relation_dependency",
+        "mean_over_seq_len": "relation_dependency"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "relation_dependency",
+      "gold_index": 0,
+      "index": 10,
+      "prediction": "relation_dependency",
+      "prediction_index": 0,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_long_embedded_clause_relation_dependency",
+      "stable_agree": [
+        "focus_token"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "relation_dependency",
+        "mean_over_seq_len": "relation_dependency"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 11,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_long_embedded_clause_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "relation_dependency"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "relation_dependency",
+      "gold_index": 0,
+      "index": 12,
+      "prediction": "relation_dependency",
+      "prediction_index": 0,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_counter_alias_hard_negative_relation_dependency",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "relation_dependency",
+        "focus_token": "relation_dependency",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 13,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_relation_dependency_vs_typed_program_counter_alias_hard_negative_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token",
+        "mean_over_seq_len"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 14,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_definition_compact_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token",
+        "mean_over_seq_len"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "production_recipe",
+      "gold_index": 2,
+      "index": 15,
+      "prediction": "production_recipe",
+      "prediction_index": 2,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_definition_compact_production_recipe",
+      "stable_agree": [
+        "focus_token",
+        "final_token",
+        "mean_over_seq_len"
+      ],
+      "votes": {
+        "final_token": "production_recipe",
+        "focus_token": "production_recipe",
+        "mean_over_seq_len": "production_recipe"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 16,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_applied_human_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "production_recipe",
+      "gold_index": 2,
+      "index": 17,
+      "prediction": "production_recipe",
+      "prediction_index": 2,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_applied_human_production_recipe",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "production_recipe",
+        "focus_token": "production_recipe",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 18,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_system_process_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token",
+        "mean_over_seq_len"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "production_recipe",
+      "gold_index": 2,
+      "index": 19,
+      "prediction": "production_recipe",
+      "prediction_index": 2,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_system_process_production_recipe",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "production_recipe",
+        "focus_token": "production_recipe",
+        "mean_over_seq_len": "production_recipe"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 20,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_role_inverse_plain_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "production_recipe",
+      "gold_index": 2,
+      "index": 21,
+      "prediction": "production_recipe",
+      "prediction_index": 2,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_role_inverse_plain_production_recipe",
+      "stable_agree": [
+        "focus_token",
+        "final_token",
+        "mean_over_seq_len"
+      ],
+      "votes": {
+        "final_token": "production_recipe",
+        "focus_token": "production_recipe",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 22,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_compressed_minimal_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "production_recipe"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "production_recipe",
+      "gold_index": 2,
+      "index": 23,
+      "prediction": "production_recipe",
+      "prediction_index": 2,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_compressed_minimal_production_recipe",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "production_recipe",
+        "focus_token": "production_recipe",
+        "mean_over_seq_len": "production_recipe"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 24,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_long_embedded_clause_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    },
+    {
+      "confidence_tier": "high",
+      "correct": true,
+      "gold": "typed_program",
+      "gold_index": 1,
+      "index": 26,
+      "prediction": "typed_program",
+      "prediction_index": 1,
+      "sample_id": "s12_full_bundle041_patient_triage_formula_cycle_next_typed_program_vs_production_recipe_counter_alias_hard_negative_typed_program",
+      "stable_agree": [
+        "focus_token",
+        "final_token",
+        "mean_over_seq_len"
+      ],
+      "votes": {
+        "final_token": "typed_program",
+        "focus_token": "typed_program",
+        "mean_over_seq_len": "typed_program"
+      }
+    }
+  ],
+  "baseline": {
+    "focus_token_l12_accuracy": 0.954047619047619,
+    "selected_readout_accuracies": {
+      "final_token": 0.9185714285714286,
+      "focus_token": 0.954047619047619,
+      "mean_over_seq_len": 0.6752380952380952
+    }
+  },
+  "boundary": "Gold labels are used only for scoring. Runtime acceptance uses selected-layer ensemble agreement plus non-oracle trace stability.",
+  "ensemble_only": {
+    "accepted": 4019,
+    "accuracy": 0.954963921373476,
+    "coverage": 0.9569047619047619
+  },
+  "inputs": {
+    "activations_file": "stage12_equations_formulas_full_activations_20260517.npz",
+    "input_file": "stage12_equations_formulas_full_20260517.jsonl",
+    "n_test": 4200,
+    "selected_layers": {
+      "final_token": 7,
+      "focus_token": 12,
+      "mean_over_seq_len": 5
+    }
+  },
+  "schema_version": "stage19a_formula_verification_stack_v1",
+  "stack": {
+    "accepted": 3679,
+    "accepted_accuracy": 0.9978254960587116,
+    "by_confidence_tier": {
+      "high": {
+        "accuracy": 0.9978249048395867,
+        "count": 3678
+      },
+      "medium": {
+        "accuracy": 1.0,
+        "count": 1
+      }
+    },
+    "coverage": 0.8759523809523809,
+    "silent_error_rate": 0.002174503941288375,
+    "suppressed": 521,
+    "suppressed_rate": 0.12404761904761905,
+    "suppression_reasons": {
+      "ensemble_all_disagree": 181,
+      "final_token_conflicted": 15,
+      "final_token_conflicted+focus_token_conflicted": 69,
+      "final_token_conflicted+focus_token_conflicted+mean_over_seq_len_conflicted": 134,
+      "final_token_conflicted+mean_over_seq_len_conflicted": 35,
+      "focus_token_conflicted": 14,
+      "focus_token_conflicted+mean_over_seq_len_conflicted": 46,
+      "mean_over_seq_len_conflicted": 18,
+      "trace_unstable": 9
+    }
+  },
+  "status": "PASS_STRONG_WITH_PRECOMMIT_CAVEAT",
+  "procedural_caveat": "The Stage 19 gates and runner were written before the pod run but were not committed before execution. Treat as a strong internal result pending audit or deterministic rerun after commit.",
+  "suppressed_examples_sample": [
+    {
+      "index": 9,
+      "reason": "final_token_conflicted+mean_over_seq_len_conflicted"
+    },
+    {
+      "index": 25,
+      "reason": "final_token_conflicted+focus_token_conflicted+mean_over_seq_len_conflicted"
+    },
+    {
+      "index": 39,
+      "reason": "ensemble_all_disagree"
+    },
+    {
+      "index": 52,
+      "reason": "focus_token_conflicted+mean_over_seq_len_conflicted"
+    },
+    {
+      "index": 53,
+      "reason": "ensemble_all_disagree"
+    },
+    {
+      "index": 65,
+      "reason": "ensemble_all_disagree"
+    },
+    {
+      "index": 66,
+      "reason": "final_token_conflicted+mean_over_seq_len_conflicted"
+    },
+    {
+      "index": 80,
+      "reason": "ensemble_all_disagree"
+    },
+    {
+      "index": 81,
+      "reason": "final_token_conflicted+focus_token_conflicted+mean_over_seq_len_conflicted"
+    },
+    {
+      "index": 94,
+      "reason": "final_token_conflicted+focus_token_conflicted+mean_over_seq_len_conflicted"
+    },
+    {
+      "index": 95,
+      "reason": "final_token_conflicted+focus_token_conflicted"
+    },
+    {
+      "index": 108,
+      "reason": "ensemble_all_disagree"
+    },
+    {
+      "index": 109,
+      "reason": "final_token_conflicted+focus_token_conflicted+mean_over_seq_len_conflicted"
+    },
+    {
+      "index": 122,
+      "reason": "final_token_conflicted+focus_token_conflicted"
+    },
+    {
+      "index": 123,
+      "reason": "focus_token_conflicted"
+    },
+    {
+      "index": 136,
+      "reason": "final_token_conflicted+focus_token_conflicted"
+    },
+    {
+      "index": 137,
+      "reason": "final_token_conflicted+focus_token_conflicted"
+    },
+    {
+      "index": 165,
+      "reason": "final_token_conflicted+focus_token_conflicted+mean_over_seq_len_conflicted"
+    },
+    {
+      "index": 179,
+      "reason": "final_token_conflicted+focus_token_conflicted"
+    },
+    {
+      "index": 181,
+      "reason": "ensemble_all_disagree"
+    },
+    {
+      "index": 192,
+      "reason": "focus_token_conflicted+mean_over_seq_len_conflicted"
+    },
+    {
+      "index": 193,
+      "reason": "ensemble_all_disagree"
+    },
+    {
+      "index": 207,
+      "reason": "focus_token_conflicted"
+    },
+    {
+      "index": 219,
+      "reason": "final_token_conflicted+mean_over_seq_len_conflicted"
+    },
+    {
+      "index": 220,
+      "reason": "final_token_conflicted"
+    }
+  ]
+}

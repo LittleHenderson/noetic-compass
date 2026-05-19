@@ -5994,3 +5994,94 @@ Audit asks:
 1. Check whether the revised language is stronger without overclaiming.
 2. Check whether "semantic likelihood influence" is the correct replacement for the too-broad "does not control output."
 3. Check whether "materially opens bounded parts of the black box" is defensible from Stages 7-18.
+
+## 2026-05-19T10:44Z - codex: Stage 19 CAS Verification Stack pre-registration/spec
+
+Branch: `experiment/cas-probe-pythia`
+
+User provided a four-layer CAS Verification Stack proposal:
+
+1. multi-probe ensemble,
+2. factor decomposition,
+3. structural admissibility,
+4. trace stability confidence.
+
+Codex read the existing Stage 7.2 and Stage 13 artifacts and locked a stricter version:
+
+- `STAGE19_CAS_VERIFICATION_STACK_GATES_20260519.md`
+- `CAS_VERIFICATION_STACK_SPEC_20260519.md`
+
+Important correction:
+
+> The `~97%` claim is a Stage 19 hypothesis, not a result. The proposal mixes Stage 13 formula traces, Stage 7 Foundation factors, and OLMo/Qwen cross-architecture readouts. Stage 19 must test one locked fixture at a time.
+
+Stage 19A target:
+
+- Use Stage 12/13 formula-family artifacts.
+- Test multi-readout ensemble + trace stability.
+- No Drive/Register recomposition in Stage 19A because formula-family labels are not Foundation labels.
+
+Stage 19B target:
+
+- Use Stage 7 Foundation fixture.
+- Test Drive/Register recomposition + 28-way interaction consistency.
+- Register may be a consistency signal, but not a beyond-text claim because Stage 7.2 found Register text-explained.
+
+Stage 19C target:
+
+- Structural admissibility only through deterministic validators with explicit rule IDs.
+- No "provably wrong" wording without a concrete validator result.
+
+Audit asks:
+
+1. Confirm the split into 19A/19B/19C avoids cross-fixture overclaiming.
+2. Confirm the pass gates (`PASS_STRONG >=0.970 accepted accuracy with >=0.850 coverage`) are reasonable.
+3. Confirm structural admissibility language is strong enough but not claiming unimplemented theorem-level validation.
+
+## 2026-05-19T10:58Z - codex: Stage 19A verification stack run complete
+
+Branch: `experiment/cas-probe-pythia`
+
+Result:
+
+`PASS_STRONG_WITH_PRECOMMIT_CAVEAT`
+
+Stage 19A ran on the existing Stage 12 formula-family activation artifact on the pod.
+
+Runtime-safe distinction:
+
+- The stack does NOT use oracle labels like `stable_correct` or `stable_wrong` for acceptance.
+- Acceptance uses selected-layer ensemble agreement plus non-oracle trace states: stable, conflicted, uncertain, drifting.
+- Gold labels are used only after acceptance to score the result.
+
+Headline:
+
+- Baseline `focus_token` layer-12 accuracy: `0.9540`
+- Ensemble-only accuracy: `0.9550`
+- Ensemble-only coverage: `0.9569`
+- Stack accepted accuracy: `0.9978`
+- Stack coverage: `0.8760`
+- Stack silent error rate: `0.0022`
+- Stack suppressed rate: `0.1240`
+- Accepted: `3679/4200`
+- Suppressed: `521/4200`
+- Silent accepted errors: `8/3679`
+
+Procedural caveat:
+
+> Gates and runner were written before the pod execution but were not committed before running. Treat this as a strong internal result pending audit or deterministic rerun after commit.
+
+Artifacts:
+
+- `STAGE19_CAS_VERIFICATION_STACK_GATES_20260519.md`
+- `CAS_VERIFICATION_STACK_SPEC_20260519.md`
+- `run_stage19a_formula_verification_stack.py`
+- `stage19a_formula_verification_stack_20260519.json`
+- `STAGE19A_FORMULA_VERIFICATION_STACK_20260519.md`
+
+Audit asks:
+
+1. Confirm the runtime verifier is non-oracle.
+2. Confirm the pre-commit caveat is correctly stated.
+3. Confirm `PASS_STRONG` is numerically valid under the pre-written gates.
+4. Recommend whether to rerun after commit to remove the procedural caveat or proceed to Stage 19B.
