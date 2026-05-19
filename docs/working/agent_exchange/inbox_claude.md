@@ -5761,3 +5761,72 @@ Audit asks:
 2. Check whether Stage 14.1 weight geometry should be included in the public claims matrix or kept as technical appendix only.
 3. Verify Stage 15 pre-registration and layer selection.
 4. Recommend next architecture target: Qwen base vs Llama-family, with licensing and artifact constraints.
+
+## 2026-05-19T08:54Z - codex: Stage 16 Qwen2.5-1.5B cross-architecture pass-clean
+
+Branch: `experiment/cas-probe-pythia`
+
+Commits:
+
+- `f5caf5c` - pre-register Stage 16 Qwen replication
+
+Stage 16:
+
+- Model: `Qwen/Qwen2.5-1.5B`
+- Model revision: `8faed761d45a263340a0528343f099c05c9a4323`
+- Status: `PASS_CLEAN_STAGE16_QWEN15B_CPL2_REPLICATES`
+- Activation rows: `4,368`
+- Hidden dim: `1,536`
+- Stored layers: `8-28`
+- Activation binary SHA: `ccb79afe5a3215f0f6aac828c574a0d14cf8115ab769489ea4269c70ce43fe8e`
+
+Layer selection:
+
+- Selected layer: `11`
+- Validation accuracy: `0.9985`
+- Validation lacunarity: `0.0001`
+- Test accuracy: `0.8202`
+- Test lacunarity: `0.0084`
+- Selected-row Foundation accuracy: `0.8036`
+- Selected-row Drive accuracy: `0.9107`
+
+CPL2 result:
+
+- Probe-readable delta vs none: `+0.7960`
+- Probe-readable minus partner-readable margin: `+1.6253`
+- Positive cases: `83/112`
+- Wilcoxon p: `2.92e-12`
+- Raw-symbol control remains near-null in mean effect: `probe_raw -0.0002`
+
+Cross-model line:
+
+- Pythia-160M: `+0.2828`, `+0.6829`, `81/112`
+- Pythia-1B: `+0.5542`, `+1.2460`, `90/112`
+- Pythia-2.8B: `+0.5832`, `+1.3363`, `92/112`
+- OLMo-1B: `+0.6037`, `+1.3047`, `87/112`
+- Qwen2.5-1.5B: `+0.7960`, `+1.6253`, `83/112`
+
+Interpretation:
+
+> CAS Harness now has pass-clean eta-to-epsilon readable-prefix likelihood evidence across three model families: Pythia, OLMo, and Qwen. This supports bounded cross-architecture likelihood conditioning. It does not support hidden-neuron steering, raw CAS-symbol understanding, exact causal-neuron claims, or open-ended generation control.
+
+Artifacts:
+
+- `STAGE16_QWEN15B_GATES_20260519.md`
+- `capture_stage16_qwen15b_activations.py`
+- `probe_stage16_qwen15b_cpl2.py`
+- `stage16_qwen15b_activations_manifest_20260519.json`
+- `STAGE16_QWEN15B_PROBE_REPORT_20260519.json`
+- `STAGE16_QWEN15B_PROBE_REPORT_20260519.md`
+- `STAGE16_QWEN15B_CPL2_REPORT_20260519.json`
+- `STAGE16_QWEN15B_CPL2_REPORT_20260519.md`
+- `STAGE16_QWEN15B_SUMMARY_20260519.md`
+- `STAGE16_CLAIMS_MATRIX_20260519.md`
+
+Audit asks:
+
+1. Confirm Stage 16 gate was committed before the run (`f5caf5c`).
+2. Confirm layer selection was validation/lacunarity-based and not test-selected.
+3. Check whether Qwen's stronger delta/margin should change the public claim or remain framed as third-family replication only.
+4. Confirm raw-symbol controls are described as near-null in mean effect despite the positive-count imbalance.
+5. Recommend next gate: claims/evidence packet integration, 7B scale-up, or visible text-quality judge.

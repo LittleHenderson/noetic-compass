@@ -1650,3 +1650,62 @@ Artifacts:
 - `STAGE15_OLMO1B_SUMMARY_20260519.md`
 - `STAGE15_CLAIMS_MATRIX_20260519.md`
 - `CAS_HARNESS_EVIDENCE_PACKET_REVIEWER_PLAYBOOK_20260519.md`
+
+## Stage 16 result - Qwen2.5-1.5B cross-architecture replication
+
+**Verdict: `PASS_CLEAN_STAGE16_QWEN15B_CPL2_REPLICATES`.**
+
+Stage 16 repeats the eta-to-epsilon readable-prefix likelihood bridge on
+`Qwen/Qwen2.5-1.5B`, giving a third model-family replication after Pythia and
+OLMo.
+
+Layer selection:
+
+| Metric | Value |
+|---|---:|
+| Candidate layers | `8-28` |
+| Selected layer | `11` |
+| Validation accuracy | `0.9985` |
+| Test accuracy | `0.8202` |
+| Test lacunarity | `0.0084` |
+
+CPL2 result:
+
+| Metric | Value |
+|---|---:|
+| Probe-readable delta vs none | `+0.7960` |
+| Probe-readable minus partner-readable margin | `+1.6253` |
+| Positive cases | `83/112` |
+| Wilcoxon p | `2.92e-12` |
+
+Cross-model comparison:
+
+| Model | Delta vs none | Margin over partner | Positive cases |
+|---|---:|---:|---:|
+| Pythia-160M | `+0.2828` | `+0.6829` | `81/112` |
+| Pythia-1B | `+0.5542` | `+1.2460` | `90/112` |
+| Pythia-2.8B | `+0.5832` | `+1.3363` | `92/112` |
+| OLMo-1B | `+0.6037` | `+1.3047` | `87/112` |
+| Qwen2.5-1.5B | `+0.7960` | `+1.6253` | `83/112` |
+
+Honest read:
+
+> The eta-to-epsilon bridge now has pass-clean evidence across three model
+> families: Pythia, OLMo, and Qwen. CAS Harness can read a bounded
+> 28-Foundation signal from Qwen hidden activations and realize it as readable
+> context that shifts semantic likelihood. This remains likelihood
+> conditioning, not hidden-neuron steering, raw CAS-symbol understanding, or
+> open-ended generation control.
+
+Artifacts:
+
+- `STAGE16_QWEN15B_GATES_20260519.md`
+- `capture_stage16_qwen15b_activations.py`
+- `probe_stage16_qwen15b_cpl2.py`
+- `stage16_qwen15b_activations_manifest_20260519.json`
+- `STAGE16_QWEN15B_PROBE_REPORT_20260519.json`
+- `STAGE16_QWEN15B_PROBE_REPORT_20260519.md`
+- `STAGE16_QWEN15B_CPL2_REPORT_20260519.json`
+- `STAGE16_QWEN15B_CPL2_REPORT_20260519.md`
+- `STAGE16_QWEN15B_SUMMARY_20260519.md`
+- `STAGE16_CLAIMS_MATRIX_20260519.md`
