@@ -1486,3 +1486,59 @@ Artifacts:
 - `stage13_multilayer_formula_trace_audit_20260518.json`
 - `STAGE13_MULTILAYER_FORMULA_TRACE_AUDIT_20260518.md`
 - `STAGE13_CLAIMS_MATRIX_20260518.md`
+
+## Stage 14 result - Pythia-2.8B scale replication
+
+**Verdict: `PASS_CLEAN_STAGE14_PYTHIA28B_CPL2_REPLICATES`.**
+
+Stage 14 repeats the Stage 8 eta-to-epsilon readable-prefix likelihood
+bridge on `EleutherAI/pythia-2.8b`, using the same frozen Stage 7
+28-Foundation fixture and the same CPL2 gate.
+
+Layer selection:
+
+| Metric | Value |
+|---|---:|
+| Candidate layers | `12-27` |
+| Selected layer | `14` |
+| Validation accuracy | `1.0000` |
+| Test accuracy | `0.8588` |
+| Test lacunarity | `0.0059` |
+
+CPL2 result:
+
+| Metric | Value |
+|---|---:|
+| Probe-readable delta vs none | `+0.5832` |
+| Probe-readable minus partner-readable margin | `+1.3363` |
+| Positive cases | `92/112` |
+| Wilcoxon p | `3.08e-15` |
+
+Scale comparison:
+
+| Model | Delta vs none | Margin over partner | Positive cases |
+|---|---:|---:|---:|
+| Pythia-160M | `+0.2828` | `+0.6829` | `81/112` |
+| Pythia-1B | `+0.5542` | `+1.2460` | `90/112` |
+| Pythia-2.8B | `+0.5832` | `+1.3363` | `92/112` |
+
+Honest read:
+
+> The eta-to-epsilon bridge now replicates across three Pythia scales.
+> CAS Harness can read a bounded 28-Foundation signal from open-model
+> hidden activations and realize it as readable context that shifts semantic
+> likelihood. This is still likelihood conditioning, not hidden-neuron
+> steering, raw CAS-symbol understanding, or open-ended generation control.
+
+Artifacts:
+
+- `STAGE14_PYTHIA28B_GATES_20260518.md`
+- `capture_stage14_pythia28b_activations.py`
+- `probe_stage14_pythia28b_cpl2.py`
+- `stage14_pythia28b_activations_manifest_20260518.json`
+- `STAGE14_PYTHIA28B_PROBE_REPORT_20260518.json`
+- `STAGE14_PYTHIA28B_PROBE_REPORT_20260518.md`
+- `STAGE14_PYTHIA28B_CPL2_REPORT_20260518.json`
+- `STAGE14_PYTHIA28B_CPL2_REPORT_20260518.md`
+- `STAGE14_PYTHIA28B_SUMMARY_20260518.md`
+- `STAGE14_CLAIMS_MATRIX_20260518.md`

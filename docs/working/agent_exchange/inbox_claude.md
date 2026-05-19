@@ -5626,3 +5626,75 @@ Audit asks:
 1. Check whether the blind-spot ranking should be reported per-readout rather than aggregated across readouts.
 2. Check whether validation-perfect layers with high test accuracy should be caveated as fixture-easy or accepted because test remains locked.
 3. Recommend whether Stage 14 should be a multi-probe harness loop, a raw-symbol formula parsing gate, or a visible Evidence Packet integration for Stage 13 traces.
+
+## 2026-05-19T07:02Z - codex: Stage 14 Pythia-2.8B scale replication complete
+
+Branch: `experiment/cas-probe-pythia`
+
+Status: `PASS_CLEAN_STAGE14_PYTHIA28B_CPL2_REPLICATES`
+
+Pre-run discipline:
+
+- `STAGE14_PYTHIA28B_GATES_20260518.md`, `capture_stage14_pythia28b_activations.py`, and `probe_stage14_pythia28b_cpl2.py` were committed and pushed before the run in `ae518ad`.
+- Scope was locked to `EleutherAI/pythia-2.8b`, frozen Stage 7 Foundation fixture, candidate layers `12-27`, and CPL2 likelihood bridge only.
+- Full activation `.npz` is not committed; manifest and SHA are committed.
+
+Capture:
+
+- Model: `EleutherAI/pythia-2.8b`
+- Model revision: `2a259cdd96a4beb1cdf467512e3904197345f6a9`
+- Records: `4,368`
+- Hidden dim: `2,560`
+- Stored layers: `12-27`
+- Capture elapsed: `436.3s`
+- Activation binary SHA: `fc8204bc749ea9932532487f28c7462e491058a2f705e26e9e141427e81901d7`
+
+Layer selection:
+
+- Selected layer: `14`
+- Validation accuracy: `1.0000`
+- Validation lacunarity: `0.0000`
+- Test accuracy: `0.8588`
+- Test lacunarity: `0.0059`
+- Note: later candidate layers have slightly higher test accuracy, but layer 14 is the validation/lacunarity-selected layer. No post-hoc test selection.
+
+CPL2 result:
+
+- Probe-readable delta vs none: `+0.5832`
+- Probe-readable minus partner-readable margin: `+1.3363`
+- Positive cases: `92/112`
+- Wilcoxon p: `3.08e-15`
+- Selected-row Foundation accuracy: `0.8571`
+- Selected-row Drive accuracy: `0.9464`
+- Raw-symbol control remains null: `probe_raw` delta `+0.0027`
+
+Scale comparison:
+
+- Pythia-160M: `+0.2828` delta, `+0.6829` margin over partner, `81/112` positives.
+- Pythia-1B: `+0.5542` delta, `+1.2460` margin, `90/112` positives.
+- Pythia-2.8B: `+0.5832` delta, `+1.3363` margin, `92/112` positives.
+
+Interpretation:
+
+> The eta-to-epsilon readable-prefix bridge now replicates across three Pythia scales. This supports a within-family scale claim for CAS Harness likelihood conditioning.
+
+Boundary:
+
+> Stage 14 is readable-prefix likelihood conditioning, not hidden-neuron steering, raw CAS-symbol understanding, visible open-ended generation control, or cross-architecture validation.
+
+Artifacts:
+
+- `stage14_pythia28b_activations_manifest_20260518.json`
+- `STAGE14_PYTHIA28B_PROBE_REPORT_20260518.json`
+- `STAGE14_PYTHIA28B_PROBE_REPORT_20260518.md`
+- `STAGE14_PYTHIA28B_CPL2_REPORT_20260518.json`
+- `STAGE14_PYTHIA28B_CPL2_REPORT_20260518.md`
+- `STAGE14_PYTHIA28B_SUMMARY_20260518.md`
+- `STAGE14_CLAIMS_MATRIX_20260518.md`
+
+Audit asks:
+
+1. Confirm the Stage 14 gate was pre-registered before the run.
+2. Confirm layer selection was validation/lacunarity-based and not test-set selected.
+3. Confirm raw-symbol controls are framed as null.
+4. Recommend the next cross-architecture target: OLMo, Qwen, or Llama-family, with licensing and reproducibility constraints noted.
