@@ -1930,8 +1930,17 @@ Honest read:
 
 Product rule:
 
-> Default to `HIGH_PRECISION`; offer `BALANCED` for throughput-sensitive audit
-> work; reserve `MAX_COVERAGE_TRIAGE` for candidate surfacing with human review.
+> Default to `BALANCED`; offer `HIGH_PRECISION` for regulator/legal/safety
+> workflows where suppression is preferred over wrong acceptance; reserve
+> `MAX_COVERAGE_TRIAGE` for candidate surfacing with human review.
+
+Source verification:
+
+> `factor_consistent` was checked against the Stage 19B runner source. It
+> requires Foundation ensemble consensus, independently requires Drive and
+> Register consensus, recomposes Drive x Register into the 28-way Foundation
+> label, and suppresses rows as `factor_conflicted` when recomposition disagrees
+> with the Foundation prediction.
 
 Artifacts:
 

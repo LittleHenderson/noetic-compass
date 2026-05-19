@@ -43,6 +43,14 @@ _MODES = {
     },
 }
 
+_DEFAULT_MODE = "BALANCED"
+_DEFAULT_RATIONALE = (
+    "BALANCED is the new-customer default because it restores the Stage 19B "
+    "coverage floor while retaining factor-decomposition agreement. "
+    "HIGH_PRECISION remains opt-in for regulator/legal workflows; "
+    "MAX_COVERAGE_TRIAGE remains opt-in for human-review queues."
+)
+
 
 def _resolve(path: str) -> Path:
     p = Path(path)
@@ -136,8 +144,16 @@ def _write_md(report: dict[str, Any], out_md: Path) -> None:
             "Users can choose the operating mode. They cannot choose away the tradeoff:",
             "",
             "- `HIGH_PRECISION` gives the strongest accepted predictions and suppresses more.",
-            "- `BALANCED` recovers coverage with lower accepted accuracy.",
+            "- `BALANCED` is the default new-customer mode: it recovers coverage with lower accepted accuracy.",
             "- `MAX_COVERAGE_TRIAGE` is for surfacing candidates, not final high-confidence claims.",
+            "",
+            f"Default mode: `{report['default_mode']}`.",
+            "",
+            report["default_rationale"],
+            "",
+            "## Source Component Verification",
+            "",
+            report["source_component_verification"],
             "",
             "Gold labels are used only to score these mode profiles after the fact. Runtime mode selection uses the same non-oracle signals from Stage 19B.",
             "",
@@ -186,6 +202,15 @@ def main(argv: list[str] | None = None) -> int:
         "schema_version": "stage19c_verification_mode_selector_v1",
         "input_report": input_path.name,
         "modes": modes,
+        "default_mode": _DEFAULT_MODE,
+        "default_rationale": _DEFAULT_RATIONALE,
+        "source_component_verification": (
+            "Source review confirms `factor_consistent` means Foundation factor-decomposition agreement: "
+            "the Stage 19B runner first requires 2-of-3 Foundation readout consensus, then separately "
+            "requires Drive and Register readout consensus, recomposes Drive x Register into a 28-way "
+            "Foundation label, and suppresses the row as `factor_conflicted` if the recomposed label does "
+            "not match the Foundation consensus."
+        ),
         "boundary": (
             "Stage 19C is product-mode packaging over the locked Stage 19B result. "
             "It is not a fresh hidden-state test and does not upgrade Stage 19B's strict product-gate status."
@@ -199,4 +224,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

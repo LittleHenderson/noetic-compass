@@ -163,6 +163,9 @@
   },
   "stage19c_verification_modes": {
     "status": "MODE_SELECTOR_READY",
+    "default_mode": "BALANCED",
+    "default_rationale": "BALANCED is the new-customer default because it restores the Stage 19B coverage floor while retaining factor-decomposition agreement. HIGH_PRECISION remains opt-in for regulator/legal workflows; MAX_COVERAGE_TRIAGE remains opt-in for human-review queues.",
+    "source_component_verification": "`factor_consistent` was checked against the Stage 19B runner source. It requires Foundation ensemble consensus, independently requires Drive and Register consensus, recomposes Drive x Register into the 28-way Foundation label, and suppresses rows as `factor_conflicted` when recomposition disagrees with the Foundation prediction.",
     "boundary": "Stage 19C is product-mode packaging over the locked Stage 19B result. It is not a fresh hidden-state test and does not upgrade Stage 19B's strict product-gate status.",
     "modes": {
       "HIGH_PRECISION": {
@@ -249,7 +252,7 @@
     "api": "/api/harness/evidence/{trace_id}",
     "ui": "reviewer drawer with claim badge, provenance, readout, controls, blind spots, caveats, and export",
     "verification_mode_field": "HIGH_PRECISION | BALANCED | MAX_COVERAGE_TRIAGE",
-    "default_mode": "HIGH_PRECISION",
+    "default_mode": "BALANCED",
     "mode_selection_ui": "Expose mode selector with precision, coverage, silent-error, and suppression tradeoffs before running or exporting a packet.",
     "exports": ["json", "markdown"]
   },

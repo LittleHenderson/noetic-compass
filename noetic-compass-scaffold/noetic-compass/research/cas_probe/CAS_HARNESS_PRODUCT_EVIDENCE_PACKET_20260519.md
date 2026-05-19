@@ -129,9 +129,17 @@ point; they cannot erase the tradeoff.
 
 Product boundary:
 
-> `HIGH_PRECISION` is the license-grade trust mode. `BALANCED` is the
-> throughput mode. `MAX_COVERAGE_TRIAGE` is a surfacing mode, not a final
-> high-confidence claim mode.
+> New customers default to `BALANCED`. `HIGH_PRECISION` is the opt-in
+> regulator/legal/safety mode. `MAX_COVERAGE_TRIAGE` is an opt-in surfacing
+> mode, not a final high-confidence claim mode.
+
+Source verification:
+
+> `factor_consistent` was checked against the Stage 19B runner source. It
+> requires Foundation ensemble consensus, independently requires Drive and
+> Register consensus, recomposes Drive x Register into the 28-way Foundation
+> label, and suppresses rows as `factor_conflicted` when recomposition disagrees
+> with the Foundation prediction.
 
 ## Stage 18 Null: Why It Does Not Break The Packet
 
@@ -252,7 +260,7 @@ Minimum fields:
   "readout": {"axis": "foundation", "layer": 11, "position": "focus_token", "label": "F3A", "confidence": 0.0},
   "diagnostics": {"lacunarity": 0.0, "blindspot_flags": []},
   "verification": {
-    "mode": "HIGH_PRECISION",
+    "mode": "BALANCED",
     "accepted": true,
     "mode_profile": {"accepted_accuracy": 0.0, "coverage": 0.0, "silent_error_rate": 0.0},
     "suppression_reasons": []

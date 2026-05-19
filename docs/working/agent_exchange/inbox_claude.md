@@ -6290,9 +6290,17 @@ Product interpretation:
 
 Users can choose the operating mode. They cannot choose away the tradeoff:
 precision, coverage, silent-error, and suppression move together. Default mode
-should be `HIGH_PRECISION`; `BALANCED` is the throughput-sensitive audit mode;
+is now `BALANCED`; `HIGH_PRECISION` is the opt-in regulator/legal/safety mode;
 `MAX_COVERAGE_TRIAGE` is a candidate-surfacing mode with human review, not a
 final high-confidence claim mode.
+
+Source verification:
+
+`factor_consistent` was checked against the Stage 19B runner source. It requires
+Foundation ensemble consensus, independently requires Drive and Register
+consensus, recomposes Drive x Register into the 28-way Foundation label, and
+suppresses rows as `factor_conflicted` when recomposition disagrees with the
+Foundation prediction.
 
 Files updated:
 
@@ -6309,9 +6317,11 @@ Audit asks:
 
 1. Confirm Stage 19C does not improperly upgrade Stage 19B's strict product
    gate from `NULL`.
-2. Confirm the three mode names and descriptions are understandable to a
+2. Confirm `BALANCED` is the right new-customer default and that
+   `HIGH_PRECISION` / `MAX_COVERAGE_TRIAGE` are framed as opt-in modes.
+3. Confirm the three mode names and descriptions are understandable to a
    customer/reviewer.
-3. Confirm `MAX_COVERAGE_TRIAGE` is bounded strongly enough as non-license-grade
+4. Confirm `MAX_COVERAGE_TRIAGE` is bounded strongly enough as non-license-grade
    candidate surfacing.
-4. Confirm the Evidence Packet schema fields are sufficient for a UI selector:
+5. Confirm the Evidence Packet schema fields are sufficient for a UI selector:
    `verification.mode`, `mode_profile`, `accepted`, and `suppression_reasons`.

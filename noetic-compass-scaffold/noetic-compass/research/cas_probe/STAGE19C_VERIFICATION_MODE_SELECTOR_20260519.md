@@ -44,7 +44,15 @@ Triage mode only; not a licensed high-confidence claim mode.
 Users can choose the operating mode. They cannot choose away the tradeoff:
 
 - `HIGH_PRECISION` gives the strongest accepted predictions and suppresses more.
-- `BALANCED` recovers coverage with lower accepted accuracy.
+- `BALANCED` is the default new-customer mode: it recovers coverage with lower accepted accuracy.
 - `MAX_COVERAGE_TRIAGE` is for surfacing candidates, not final high-confidence claims.
+
+Default mode: `BALANCED`.
+
+BALANCED is the new-customer default because it restores the Stage 19B coverage floor while retaining factor-decomposition agreement. HIGH_PRECISION remains opt-in for regulator/legal workflows; MAX_COVERAGE_TRIAGE remains opt-in for human-review queues.
+
+## Source Component Verification
+
+Source review confirms `factor_consistent` means Foundation factor-decomposition agreement: the Stage 19B runner first requires 2-of-3 Foundation readout consensus, then separately requires Drive and Register readout consensus, recomposes Drive x Register into a 28-way Foundation label, and suppresses the row as `factor_conflicted` if the recomposed label does not match the Foundation consensus.
 
 Gold labels are used only to score these mode profiles after the fact. Runtime mode selection uses the same non-oracle signals from Stage 19B.

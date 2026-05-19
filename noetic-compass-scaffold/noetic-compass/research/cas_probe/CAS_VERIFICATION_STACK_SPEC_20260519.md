@@ -92,10 +92,19 @@ modes. This is not a new hidden-state experiment and does not rewrite Stage
 
 Runtime product rule:
 
-- Default to `HIGH_PRECISION`.
-- Allow users to choose `BALANCED` when throughput matters.
+- Default new customers to `BALANCED`.
+- Allow users to choose `HIGH_PRECISION` when trust is more important than
+  throughput.
 - Reserve `MAX_COVERAGE_TRIAGE` for queue-building and human review, not final
   high-confidence claims.
+
+Source verification:
+
+> `factor_consistent` was checked against the Stage 19B runner source. It first
+> requires Foundation ensemble consensus, then independently requires Drive and
+> Register consensus, recomposes Drive x Register into the 28-way Foundation
+> label, and suppresses rows as `factor_conflicted` when recomposition disagrees
+> with the Foundation prediction.
 
 ## Architecture
 
@@ -240,6 +249,11 @@ With Stage 19C modes:
 > CAS Harness lets the user choose the verifier operating point. The product
 > exposes precision, coverage, silent-error, and suppression tradeoffs instead
 > of pretending one threshold profile fits every audit.
+
+Default:
+
+> `BALANCED`, because it restores `>= 0.800` coverage on both OLMo and Qwen
+> while preserving factor-decomposition agreement.
 
 That is a major product upgrade because reviewers do not only see what CAS
 thinks the label is. They see why CAS accepts, caveats, or refuses the label.

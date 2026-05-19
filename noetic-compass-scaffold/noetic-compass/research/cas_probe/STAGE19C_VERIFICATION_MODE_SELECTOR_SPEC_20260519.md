@@ -22,6 +22,17 @@ Stage 19C names those existing operating points as explicit product modes so a
 reviewer or customer can choose the risk profile instead of receiving one hidden
 threshold setting.
 
+Default customer mode:
+
+`BALANCED`
+
+Rationale:
+
+> `BALANCED` meets the Stage 19B coverage floor (`>= 0.800`) on both OLMo and
+> Qwen while preserving the Drive/Register factor-decomposition agreement gate.
+> `HIGH_PRECISION` is opt-in for regulator, legal, and safety workflows.
+> `MAX_COVERAGE_TRIAGE` is opt-in for human-review queues.
+
 ## Locked Input
 
 - `stage19b_cross_arch_foundation_verification_stack_20260519.json`
@@ -63,6 +74,14 @@ Source component:
 - Foundation ensemble agreement
 - Drive/Register factor consistency
 - no trace-stability suppression
+
+Source verification:
+
+> `factor_consistent` is the Stage 19B component that requires 2-of-3
+> Foundation readout consensus, independently requires Drive and Register
+> readout consensus, recomposes Drive x Register into the 28-way Foundation
+> index, and suppresses rows as `factor_conflicted` when the recomposed label
+> does not match the Foundation consensus.
 
 Product use:
 
@@ -129,6 +148,11 @@ Allowed:
 > examples at 98-99.5% accuracy, balanced mode restores >80% coverage at
 > 94-96.6% accuracy, and triage mode maximizes coverage with lower confidence.
 
+Allowed:
+
+> New customers default to `BALANCED`. `HIGH_PRECISION` is an opt-in trust mode
+> and `MAX_COVERAGE_TRIAGE` is an opt-in review-queue mode.
+
 Disallowed:
 
 > Stage 19C makes every mode product-certified.
@@ -136,4 +160,3 @@ Disallowed:
 Disallowed:
 
 > Users can choose accuracy without tradeoffs.
-
