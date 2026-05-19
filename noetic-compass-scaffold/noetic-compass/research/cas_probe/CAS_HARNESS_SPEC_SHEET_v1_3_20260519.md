@@ -29,10 +29,10 @@ note: Same-day refresh from v1.2 because Stage 19A landed a validated runtime-sa
 
 ### Changes from v1.2 → v1.3
 
-- **Stage 19A validated** (`PASS_STRONG_WITH_PRECOMMIT_CAVEAT`): the CAS Verification Stack — a runtime-safe acceptance/suppression decision layer that sits on top of the multi-layer trace methodology — accepts 87.6% of locked-fixture cases at 99.78% accepted accuracy with a 0.22% silent error rate, suppressing 12.4% as conflicted/unstable rather than guessing.
+- **Stage 19A validated** (`PASS_STRONG_AUDIT_CLEAN`): the CAS Verification Stack — a runtime-safe acceptance/suppression decision layer that sits on top of the multi-layer trace methodology — accepts 87.6% of locked-fixture cases at 99.78% accepted accuracy with a 0.22% silent error rate, suppressing 12.4% as conflicted/unstable rather than guessing.
 - **Critical runtime-safety distinction documented:** Verification Stack uses only non-oracle states at runtime (stable, conflicted, uncertain, drifting, plus ensemble agreement). It does **not** use oracle `stable_correct` or `stable_wrong` labels that would require gold-label access at inference time. This is what makes the layer deployable to customer audits where gold labels are by definition unavailable.
 - **New Section 5.14:** CAS Verification Stack — Runtime-Safe Acceptance/Suppression (validated)
-- **Pre-commit caveat noted:** Stage 19A gates and runner were written before the pod run but not committed before execution. Marked `PASS_STRONG_WITH_PRECOMMIT_CAVEAT` pending audit confirmation or deterministic rerun.
+- **Pre-commit caveat resolved:** deterministic rerun after commit `05ac687` reproduced every headline metric exactly.
 - Claim Map (Section 8) adds a LICENSED claim covering runtime-safe acceptance/suppression with the explicit gold-label-not-required boundary
 - Tier Closure Summary (Section 5.12) adds Verification Stack as validated capability
 - IP filing candidates (Section 12.2) adds Verification Stack as candidate #10 — potentially the load-bearing runtime IP claim for the product surface
@@ -421,7 +421,7 @@ This methodology itself is a product differentiator. Glass House inspections pro
 | Weight-geometry alignment (output-side) | ✅ validated |
 | Hidden-content / suppression detection | 🟡 prototype |
 | Multi-Harness Composition (axis-specialized + composed) | 🟡 planned-with-proven-components |
-| **CAS Verification Stack (runtime-safe accept/suppress)** | ✅ **validated-with-precommit-caveat (NEW v1.3)** — 87.6% accept @ 99.78% accuracy, 0.22% silent error, gold labels NOT required at runtime |
+| **CAS Verification Stack (runtime-safe accept/suppress)** | ✅ **audit-clean validated (NEW v1.3)** — 87.6% accept @ 99.78% accuracy, 0.22% silent error, gold labels NOT required at runtime |
 | Generation surface-text steering | ❌ closed-as-negative, mathematically explained |
 | Additional cross-architecture redundancy (Llama, Mistral, Phi, Gemma) | ⏭ open (no longer load-bearing) |
 | Scale beyond 2.8B (7B+, frontier-tier) | ⏭ open |
@@ -590,11 +590,11 @@ This is what makes the Stack deployable to customer audits where gold labels are
 
 These reasons are themselves auditable signals — a customer reviewing a suppression can see *which* readout positions conflicted on a given example.
 
-#### 5.14.5 Status, bounded claim, pre-commit caveat
+#### 5.14.5 Status, bounded claim, audit-clean rerun
 
-- **Status:** `PASS_STRONG_WITH_PRECOMMIT_CAVEAT`
+- **Status:** `PASS_STRONG_AUDIT_CLEAN`
 - **Defensible claim:** "On the locked formula-family fixture, CAS Verification Stack accepts 87.6% of cases at 99.78% accuracy and suppresses 12.4% instead of guessing. Acceptance decisions use only non-oracle runtime states; gold labels were used only for scoring, not for acceptance."
-- **Pre-commit caveat:** Stage 19 gates and runner were written before the pod run but were not committed before execution. Treated as a strong internal result pending one of (a) bi-agent audit confirmation, (b) deterministic rerun with gates committed first, (c) third-party reproduction. External-facing use should wait for caveat resolution.
+- **Audit-clean rerun:** Stage 19A was rerun after commit `05ac687` using the same script, same locked fixture, and same activation artifact. The rerun reproduced every headline metric exactly, resolving the initial pre-commit caveat.
 - **External claim license:** Internal — pending caveat resolution + IP attorney review (caveat resolution is the gate before the external license becomes available; IP review is independent and required regardless).
 - **IP filing candidate:** YES (see §12.2 filing candidate #10)
 
@@ -636,8 +636,8 @@ Chronological summary of the experimental chain (May 2026). Each stage was commi
 | 14.1 | 2026-05-19 | Weight-geometry alignment (probe vs W_U) | **PASS**: 2.83× random, p=0.0099 |
 | 15 | 2026-05-19 | OLMo-1B cross-architecture replication | **PASS CLEAN**: 90.6% probe, +0.604 likelihood Δ |
 | **16** | **2026-05-19** | **Qwen2.5-1.5B cross-architecture replication** | **PASS CLEAN**: 82.0% probe, +0.796 likelihood Δ, p=2.92×10⁻¹²** |
-| **19A** | **2026-05-19** | **CAS Verification Stack — runtime-safe accept/suppress on locked formula-family fixture (4,200 examples)** | **PASS_STRONG_WITH_PRECOMMIT_CAVEAT**: 87.6% accept @ 99.78% accuracy, 0.22% silent error, 12.4% suppression with auditable reasons; runtime uses only non-oracle states |
-| 20+ | (pending) | Additional cross-architecture (Mistral, Llama, Phi, Gemma) or scale-up (7B+); Verification Stack deterministic rerun for pre-commit caveat resolution | Pending |
+| **19A** | **2026-05-19** | **CAS Verification Stack — runtime-safe accept/suppress on locked formula-family fixture (4,200 examples)** | **PASS_STRONG_AUDIT_CLEAN**: 87.6% accept @ 99.78% accuracy, 0.22% silent error, 12.4% suppression with auditable reasons; runtime uses only non-oracle states |
+| 20+ | (pending) | Additional cross-architecture (Mistral, Llama, Phi, Gemma) or Verification Stack Stage 19B factor-composition replication | Pending |
 
 ### 6.1 Methodology Discipline (Updated)
 
@@ -703,7 +703,7 @@ External-facing claims must use this table. **Do not strengthen any claim beyond
 | "CAS Foundation subspace shows output-weight alignment above random" | LICENSED | Stage 14.1 (p = 0.0099) |
 | "We can flag blind spots and distinguish model-side from readout-position weakness" | LICENSED | Stages 13, 13.1 |
 | "We can detect hidden / withheld content at CAS-class granularity" | LICENSED with caveats | §5.10 — prototype with two-bridge methodology |
-| **"We can make runtime-safe accept/suppress decisions at high accuracy without gold labels at inference time"** | **LICENSED with pre-commit caveat (NEW)** | **Stage 19A: 87.6% accept @ 99.78% accuracy on locked formula-family fixture, 0.22% silent error; runtime uses only non-oracle states (stable / conflicted / uncertain / drifting / ensemble agreement). Pending caveat resolution before external use.** |
+| **"We can make runtime-safe accept/suppress decisions at high accuracy without gold labels at inference time"** | **LICENSED (NEW)** | **Stage 19A: 87.6% accept @ 99.78% accuracy on locked formula-family fixture, 0.22% silent error; runtime uses only non-oracle states (stable / conflicted / uncertain / drifting / ensemble agreement). Deterministic rerun after commit `05ac687` reproduced the result exactly.** |
 | "We can steer the model's generated language" | NOT LICENSED | CPL3/CPL4 closed-as-not-clean at small model scale; pending replication at 1B+ |
 | "We can read the model's mind in arbitrary natural-language detail" | NOT LICENSED | CAS reads at typed class granularity, not free-form English |
 | "Validated for production use at frontier scale" | NOT LICENSED | Highest validated scale is Pythia-2.8B; Qwen2.5-1.5B and OLMo-1B at mid-scale |
@@ -919,6 +919,7 @@ This document is **internal only**. Not authorized for external use until IP att
 | `f1fa2da` | Stage 14 Pythia-2.8B replication | PASS CLEAN |
 | **`74d6f88`** | **Stage 16 Qwen2.5-1.5B replication (pre-reg: `f5caf5c`)** | **PASS CLEAN** |
 | **`95cffee`** | **Stage 19A CAS Verification Stack — runtime-safe accept/suppress (4,200-example formula-family fixture)** | **PASS_STRONG_WITH_PRECOMMIT_CAVEAT** |
+| **`05ac687` + rerun** | **Stage 19A audit-clean deterministic rerun after v1.3 commit** | **PASS_STRONG_AUDIT_CLEAN** |
 
 ### 14.3 Standing Reproducibility Discipline (Unchanged from v1.0)
 

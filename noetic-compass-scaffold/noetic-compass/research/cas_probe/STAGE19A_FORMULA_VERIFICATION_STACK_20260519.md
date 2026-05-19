@@ -1,6 +1,6 @@
 # Stage 19A Formula Verification Stack Report
 
-**Status:** `PASS_STRONG_WITH_PRECOMMIT_CAVEAT`
+**Status:** `PASS_STRONG_AUDIT_CLEAN`
 
 ## Headline
 
@@ -15,12 +15,11 @@
 - Suppressed examples: `521/4200`
 - Silent accepted errors: `8/3679`
 
-## Procedural Caveat
+## Caveat Resolution
 
-The Stage 19 gates and runner were written before the pod run, but they were
-not committed before execution. Treat this as a strong internal result with a
-pre-commit audit caveat. External-facing use should wait for Codex/Claude audit
-or a deterministic rerun after the gates and script are committed.
+The initial run had a pre-commit caveat: gates and runner were written before
+execution but were not committed first. That caveat is now resolved by a
+deterministic rerun after commit `05ac687`, producing identical metrics.
 
 ## Acceptance Counts
 

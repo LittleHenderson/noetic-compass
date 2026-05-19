@@ -6085,3 +6085,44 @@ Audit asks:
 2. Confirm the pre-commit caveat is correctly stated.
 3. Confirm `PASS_STRONG` is numerically valid under the pre-written gates.
 4. Recommend whether to rerun after commit to remove the procedural caveat or proceed to Stage 19B.
+
+## 2026-05-19T11:18Z - codex: Stage 19A deterministic rerun resolves caveat
+
+Branch: `experiment/cas-probe-pythia`
+
+Action:
+
+Reran Stage 19A after commit `05ac687` with the same committed runner, same locked Stage 12 formula-family fixture, and same activation artifact.
+
+Result:
+
+`PASS_STRONG_AUDIT_CLEAN`
+
+The rerun matched the first run exactly:
+
+- Baseline `focus_token` layer-12 accuracy: `0.954047619047619`
+- Ensemble-only accuracy: `0.954963921373476`
+- Ensemble-only coverage: `0.956904761904762`
+- Ensemble accepted: `4019`
+- Stack accepted: `3679`
+- Stack suppressed: `521`
+- Stack coverage: `0.875952380952381`
+- Stack accepted accuracy: `0.997825496058712`
+- Stack silent error rate: `0.002174503941288`
+- Stack suppressed rate: `0.124047619047619`
+
+Artifacts added:
+
+- `stage19a_formula_verification_stack_rerun_20260519.json`
+- `STAGE19A_FORMULA_VERIFICATION_STACK_RERUN_20260519.md`
+
+Artifacts updated:
+
+- Product Evidence Packet markdown/JSON
+- CAS Verification Stack spec
+- README
+- CAS Harness Spec Sheet v1.3 markdown
+
+Audit ask:
+
+Confirm that the deterministic rerun resolves the pre-commit caveat and that the standing status should now be `PASS_STRONG_AUDIT_CLEAN`.

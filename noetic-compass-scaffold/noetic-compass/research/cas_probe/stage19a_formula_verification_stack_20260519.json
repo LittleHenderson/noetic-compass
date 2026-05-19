@@ -538,8 +538,8 @@
       "trace_unstable": 9
     }
   },
-  "status": "PASS_STRONG_WITH_PRECOMMIT_CAVEAT",
-  "procedural_caveat": "The Stage 19 gates and runner were written before the pod run but were not committed before execution. Treat as a strong internal result pending audit or deterministic rerun after commit.",
+  "status": "PASS_STRONG_AUDIT_CLEAN",
+  "caveat_resolution": "The initial pre-commit caveat was resolved by deterministic rerun after commit 05ac687. Rerun metrics matched the first run exactly.",
   "suppressed_examples_sample": [
     {
       "index": 9,

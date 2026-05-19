@@ -2,7 +2,7 @@
 
 Date: 2026-05-19
 
-Status: `STAGE19A_PASS_STRONG_WITH_PRECOMMIT_CAVEAT`
+Status: `STAGE19A_PASS_STRONG_AUDIT_CLEAN`
 
 ## Executive Summary
 
@@ -23,7 +23,7 @@ Stage 12 activation artifact on the pod.
 
 Status:
 
-`PASS_STRONG_WITH_PRECOMMIT_CAVEAT`
+`PASS_STRONG_AUDIT_CLEAN`
 
 Headline:
 
@@ -46,11 +46,12 @@ Product read:
 > 87.6% of examples at 99.78% accuracy and suppressed the remaining 12.4% as
 > conflicted or unstable.
 
-Procedural caveat:
+Audit-clean rerun:
 
-> The gates and runner were written before the pod run but not committed before
-> execution. Treat this as a strong internal result pending audit or a
-> deterministic rerun after commit.
+> The initial gates and runner were written before the first pod run but not
+> committed before execution. After commit `05ac687`, Stage 19A was rerun with
+> the same script, same fixture, and same activation artifact. The rerun
+> reproduced every headline metric exactly, resolving the caveat.
 
 ## Architecture
 

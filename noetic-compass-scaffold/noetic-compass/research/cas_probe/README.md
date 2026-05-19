@@ -1829,7 +1829,7 @@ Artifacts:
 
 ## Stage 19A result - CAS Verification Stack
 
-**Verdict: `PASS_STRONG_WITH_PRECOMMIT_CAVEAT`.**
+**Verdict: `PASS_STRONG_AUDIT_CLEAN`.**
 
 Stage 19A tested the product-realistic verifier on the locked Stage 12
 formula-family fixture. Runtime acceptance used only non-oracle signals:
@@ -1855,9 +1855,8 @@ Product read:
 
 > On this locked formula-family fixture, the CAS Verification Stack accepted
 > 87.6% of examples at 99.78% accuracy and suppressed 12.4% as conflicted or
-> unstable. This closes the proposed verification-stack shape for Stage 19A,
-> subject to audit/rerun because the gates were not committed before the pod
-> execution.
+> unstable. A deterministic rerun after commit `05ac687` reproduced every
+> headline metric exactly, resolving the initial pre-commit caveat.
 
 Artifacts:
 
@@ -1866,3 +1865,5 @@ Artifacts:
 - `run_stage19a_formula_verification_stack.py`
 - `stage19a_formula_verification_stack_20260519.json`
 - `STAGE19A_FORMULA_VERIFICATION_STACK_20260519.md`
+- `stage19a_formula_verification_stack_rerun_20260519.json`
+- `STAGE19A_FORMULA_VERIFICATION_STACK_RERUN_20260519.md`

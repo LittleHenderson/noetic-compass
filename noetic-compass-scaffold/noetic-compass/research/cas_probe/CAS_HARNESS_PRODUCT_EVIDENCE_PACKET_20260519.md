@@ -56,7 +56,7 @@ evidence instead of waiting for free-form text to become clean.
 | Weight geometry inspection | Stage 14.1 | CAS can inspect whether a learned CAS subspace aligns with static output geometry above random. |
 | Cross-model likelihood bridge | Stage 7, 8, 14, 15, 16 | Readable CAS realization shifts semantic likelihood across Pythia, OLMo, and Qwen. |
 | Raw-symbol control | Stages 7, 8, 14, 15, 16 | Raw CAS notation does not drive the effect; readable realization does. |
-| Verification stack | Stage 19A | Runtime-safe ensemble + trace stability accepted `3679/4200` formula-family examples at `0.9978` accuracy, with `0.0022` silent error rate. Pre-commit caveat applies pending audit/rerun. |
+| Verification stack | Stage 19A | Runtime-safe ensemble + trace stability accepted `3679/4200` formula-family examples at `0.9978` accuracy, with `0.0022` silent error rate. Deterministic rerun after commit `05ac687` reproduced the result exactly. |
 
 ## Control And Black-Box Boundary
 
