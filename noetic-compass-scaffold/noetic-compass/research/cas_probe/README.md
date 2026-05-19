@@ -1808,6 +1808,20 @@ The CAS Harness product should therefore center on Evidence Packets:
 - raw-symbol controls
 - rejected claims and caveats
 
+Language boundary:
+
+> CAS Harness influences semantic likelihood through readable realization. That
+> is output influence at the probability-distribution level. The unsupported
+> claim is exact sentence forcing in free-form decoding, not output influence
+> itself.
+
+And:
+
+> CAS Harness materially opens bounded parts of the black box: readout,
+> readout-causal controls, layer traces, blind spots, weight geometry, and
+> likelihood conditioning. The unsupported claim is a complete
+> neuron-by-neuron causal map of the entire model.
+
 Artifacts:
 
 - `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.md`

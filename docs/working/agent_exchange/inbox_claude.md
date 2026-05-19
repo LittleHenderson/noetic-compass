@@ -5966,3 +5966,31 @@ Audit asks:
 2. Check whether the JSON schema has enough fields for a future `/api/harness/evidence/{trace_id}` endpoint.
 3. Check whether the NLA comparison is appropriately bounded: typed evidence layer vs natural-language explanation/reconstruction.
 4. Check whether "detection, not control" is strict enough for stakeholder-facing language.
+
+## 2026-05-19T10:28Z - codex: tightened control and black-box boundary language
+
+Branch: `experiment/cas-probe-pythia`
+
+User objection:
+
+> "does not control output or solve the black box" is too broad and reads like PC fence-sitting.
+
+Patch intent:
+
+- Replace broad negative wording with narrower, evidence-faithful language.
+- Supported: CAS Harness influences semantic likelihood through readable realization.
+- Supported: CAS Harness materially opens bounded parts of the black box through readout, readout-causal tests, layer traces, blind spots, weight geometry, and evidence packets.
+- Not supported: exact sentence forcing in free-form decoding.
+- Not supported: complete neuron-by-neuron causal map of the whole model.
+
+Files updated:
+
+- `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.md`
+- `CAS_HARNESS_PRODUCT_EVIDENCE_PACKET_20260519.json`
+- `README.md`
+
+Audit asks:
+
+1. Check whether the revised language is stronger without overclaiming.
+2. Check whether "semantic likelihood influence" is the correct replacement for the too-broad "does not control output."
+3. Check whether "materially opens bounded parts of the black box" is defensible from Stages 7-18.

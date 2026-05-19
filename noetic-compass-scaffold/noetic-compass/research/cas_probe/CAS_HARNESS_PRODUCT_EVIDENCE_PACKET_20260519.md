@@ -31,7 +31,7 @@ Two paths were available after Stage 18:
 | Path | Value | Limitation | Decision |
 |---|---|---|---|
 | More visible text tests | Useful research follow-up for forced-choice or constrained decoding. | Free-form generated text is a lossy channel and Stage 18 already showed prompt blending. | Defer. |
-| Product Evidence Packet | Packages the strongest evidence now: readout, controls, blind spots, hashes, and CPL2 likelihood. | Does not claim open-ended generation control. | Build now. |
+| Product Evidence Packet | Packages the strongest evidence now: readout, controls, blind spots, hashes, and CPL2 likelihood. | Does not claim exact sentence forcing in free-form decoding. | Build now. |
 
 The product decision is based on measurement quality. CPL2 likelihood is closer
 to the host model's probability state than generated prose. Stage 18 does not
@@ -57,6 +57,29 @@ evidence instead of waiting for free-form text to become clean.
 | Cross-model likelihood bridge | Stage 7, 8, 14, 15, 16 | Readable CAS realization shifts semantic likelihood across Pythia, OLMo, and Qwen. |
 | Raw-symbol control | Stages 7, 8, 14, 15, 16 | Raw CAS notation does not drive the effect; readable realization does. |
 
+## Control And Black-Box Boundary
+
+The previous short boundary was too broad.
+
+More accurate:
+
+> CAS Harness influences the host model's semantic likelihood through readable
+> realization. That is output influence at the probability-distribution level.
+> The current evidence does not show exact sentence forcing in free-form
+> decoding.
+
+And:
+
+> CAS Harness materially opens bounded parts of the black box: it reads
+> cognitive structure from hidden activations, proves the readout is
+> load-bearing for that structured measurement, traces where the signal is
+> stable or weak, and packages the result with provenance and controls. It does
+> not provide a complete neuron-by-neuron causal explanation of the whole
+> model.
+
+This is not apologetic hedging. It is the claim boundary that preserves the
+strong result without inflating it into an impossible universal claim.
+
 ## What Is Not Proven
 
 | Claim | Status |
@@ -65,9 +88,9 @@ evidence instead of waiting for free-form text to become clean.
 | CAS sees weights firing. | Rejected phrasing. Weights are static; activations change per input. |
 | Host models run a CAS compiler internally. | Not proven. Compiler validation is external fixture provenance. |
 | Raw CAS symbols steer host models. | Not supported. Raw controls are near null. |
-| Hidden-state steering controls generated language. | Not supported. Stage 7 steering/additive routes failed controls. |
-| Free-form visible generation is solved. | Not supported. Stage 18 is a clean null. |
-| CAS fully solves the black-box problem. | Not supported. CAS reduces opacity for tested structures. |
+| Hidden-state steering is the mechanism of influence. | Not supported. Stage 7 steering/additive routes failed controls; the supported mechanism is readable realization. |
+| Exact sentence forcing in free-form decoding is solved. | Not supported. Stage 18 is a clean visible-text null. |
+| CAS gives a complete causal map of every neuron and circuit. | Not supported. CAS materially reduces opacity for tested structures. |
 
 ## Cross-Model Evidence Line
 
@@ -229,15 +252,21 @@ Use this:
 
 > "This packet shows exactly what CAS Harness measured. It names the model,
 > data, code, activation artifact, selected layer, readout accuracy, controls,
-> blind spots, and claim boundary. The result is not a claim that CAS controls
-> the model. It is a claim that CAS can expose a structured, auditable readout
-> of the model's internal activations and validate that readout with controls."
+> blind spots, and claim boundary. CAS Harness reads a structured internal
+> signal, validates that the signal is load-bearing for the readout, and shows
+> that readable realization moves the host model's semantic likelihood in the
+> intended direction."
 
 Use this:
 
 > "The strongest result is likelihood-level. That is intentional. Likelihood
 > is closer to the model's probability state than free-form text, which can
 > hedge, blend, or echo the prompt."
+
+Use this:
+
+> "CAS Harness materially opens bounded parts of the black box. It does not
+> claim a complete neuron-by-neuron causal map of the entire model."
 
 Do not use this:
 
@@ -246,6 +275,11 @@ Do not use this:
 Do not use this:
 
 > "CAS solved the black box."
+
+Use this instead:
+
+> "CAS opened a bounded, testable, auditable window into the model's internal
+> processing."
 
 Do not use this:
 
