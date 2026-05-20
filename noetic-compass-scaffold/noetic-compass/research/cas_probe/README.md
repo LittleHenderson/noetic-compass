@@ -2429,6 +2429,7 @@ Contract changes:
 - Empty present vote profiles -> `not_available` unless the row explicitly
   records an upstream suppression stage where the factor readout was not
   reached.
+- Non-numeric or internally inconsistent vote profile counts -> `not_available`.
 - Empty trace-state maps -> `not_available` unless the row explicitly records
   a pre-trace suppression stage.
 - Missing `rpm_satisfaction` -> `not_available`.

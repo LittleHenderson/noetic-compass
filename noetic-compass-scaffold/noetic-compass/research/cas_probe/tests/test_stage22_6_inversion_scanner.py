@@ -99,6 +99,42 @@ def test_scanner_marks_empty_present_profile_not_available():
     assert scan["reason"] == "malformed_drive_profile"
 
 
+def test_scanner_marks_nonnumeric_profile_fields_not_available():
+    scanner = _load(SCANNER, "scanner_nonnumeric_profile")
+    scan = scanner.scan_inversion_from_diagnostic_row(
+        {
+            "rpm_satisfaction": 1.0,
+            "gap_map_summary": {
+                "foundation": {"vote_count": "bad", "conflict_count": 0},
+                "drive": {"vote_count": 3, "conflict_count": 0},
+                "register": {"vote_count": 3, "conflict_count": 0},
+                "trace_states": {"focus": "stable"},
+            },
+        }
+    )
+    assert scan["attribution_status"] == "not_available"
+    assert scan["reason"] == "malformed_foundation_profile"
+
+
+def test_scanner_does_not_exempt_empty_foundation_profile():
+    scanner = _load(SCANNER, "scanner_empty_foundation_profile")
+    scan = scanner.scan_inversion_from_diagnostic_row(
+        {
+            "stage": "foundation_ensemble",
+            "reason": "foundation_ensemble_all_disagree",
+            "rpm_satisfaction": 0.5,
+            "gap_map_summary": {
+                "foundation": {"vote_count": 0, "conflict_count": 0},
+                "drive": {"vote_count": 0, "conflict_count": 0},
+                "register": {"vote_count": 0, "conflict_count": 0},
+                "trace_states": {},
+            },
+        }
+    )
+    assert scan["attribution_status"] == "not_available"
+    assert scan["reason"] == "empty_foundation_profile"
+
+
 def test_scanner_marks_empty_trace_states_not_available():
     scanner = _load(SCANNER, "scanner_empty_trace")
     scan = scanner.scan_inversion_from_diagnostic_row(

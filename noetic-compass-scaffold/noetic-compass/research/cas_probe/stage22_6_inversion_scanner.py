@@ -14,7 +14,6 @@ INVERSION_AXES = ("N", "W", "F", "E", "S", "A", "P")
 FLAG_THRESHOLD = 0.25
 _PROFILE_KEYS = ("foundation", "drive", "register")
 _PROFILE_SCHEMA_KEYS = ("vote_count", "conflict_count")
-_PRE_PROFILE_STAGES = {"foundation_ensemble"}
 _PRE_TRACE_STAGES = {
     "foundation_ensemble",
     "drive_ensemble",
@@ -87,9 +86,16 @@ def _is_unreached_row(row: dict[str, Any], stages: set[str]) -> bool:
     return str(row.get("stage") or "") in stages and bool(row.get("reason"))
 
 
+def _unreached_profiles(row: dict[str, Any]) -> set[str]:
+    if str(row.get("stage") or "") == "foundation_ensemble" and bool(row.get("reason")):
+        return {"drive", "register"}
+    return set()
+
+
 def _validate_gap(row: dict[str, Any], gap: Any) -> str | None:
     if not isinstance(gap, dict):
         return "missing_gap_map_summary"
+    unreached_profiles = _unreached_profiles(row)
     for key in _PROFILE_KEYS:
         profile = gap.get(key)
         if not isinstance(profile, dict):
@@ -97,8 +103,14 @@ def _validate_gap(row: dict[str, Any], gap: Any) -> str | None:
         missing_profile_keys = [schema_key for schema_key in _PROFILE_SCHEMA_KEYS if schema_key not in profile]
         if missing_profile_keys:
             return f"malformed_{key}_profile"
-        vote_count = int(profile.get("vote_count", 0) or 0)
-        if vote_count <= 0 and not _is_unreached_row(row, _PRE_PROFILE_STAGES):
+        try:
+            vote_count = int(profile.get("vote_count", 0) or 0)
+            conflict_count = int(profile.get("conflict_count", 0) or 0)
+        except (TypeError, ValueError):
+            return f"malformed_{key}_profile"
+        if vote_count < 0 or conflict_count < 0 or conflict_count > vote_count:
+            return f"malformed_{key}_profile"
+        if vote_count <= 0 and key not in unreached_profiles:
             return f"empty_{key}_profile"
     trace_states = gap.get("trace_states")
     if not isinstance(trace_states, dict):
