@@ -2092,3 +2092,36 @@ Artifacts:
 - `stage22_cas_harness_ablation_prereg_20260519.json`
 - `STAGE22_CAS_HARNESS_ABLATION_PREREG_20260519.md`
 - `tests/test_stage22_harness_ablation_spec.py`
+
+## Stage 22 result - CAS Harness no-GPU ablation bench
+
+**Verdict: `STAGE22_NO_GPU_ABLATION_BENCH_COMPLETE`.**
+
+Stage 22 executed the first artifact-only harness bench over locked local
+reports. No fresh hidden-state inference or GPU run was performed.
+
+Headline:
+
+| Layer | Result |
+|---|---:|
+| Raw no-prefix floor | mean margin `0.0498` |
+| Eta-to-epsilon bridge | mean CPL2 delta `0.5640`; range `0.2828` to `0.7960`; positives `433/560` |
+| BALANCED selector | mean coverage `82.6%`; mean accepted accuracy `95.4%` |
+| HIGH_PRECISION selector | mean coverage `73.2%`; mean accepted accuracy `98.8%` |
+| Evidence Packet surface | `4/4` canonical packets complete |
+| Frontier ceiling | reference-only; not run |
+
+Product read:
+
+> The harness layers add measurable structure. The readable eta-to-epsilon
+> bridge is the largest likelihood-conditioning lift; the mode selector exposes
+> the precision/coverage tradeoff; the Evidence Packet layer adds auditability
+> rather than model accuracy. Suppression remains paired with useful-output
+> rate, so over-refusal is not rewarded.
+
+Artifacts:
+
+- `run_stage22_harness_ablation_bench.py`
+- `stage22_cas_harness_ablation_bench_20260519.json`
+- `STAGE22_CAS_HARNESS_ABLATION_BENCH_20260519.md`
+- `tests/test_stage22_harness_ablation_bench.py`
