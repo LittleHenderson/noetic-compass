@@ -2339,3 +2339,34 @@ Artifacts:
 - `STAGE22_4_INSTRUMENTED_CROSS_ARCH_VERIFICATION_STACK_20260519.md`
 - `STAGE22_4_INSTRUMENTED_VERIFIER_COMPLETION_20260520.md`
 - `stage22_4_instrumented_verifier_20260520.log`
+
+## Stage 22.5 result - Full-row proxy attribution
+
+**Verdict: `STAGE22_5_FULL_ROW_PROXY_ATTRIBUTION_COMPLETE`.**
+
+Stage 22.5 uses the Stage 22.4 full diagnostic rows to attribute the runtime
+proxy diagnostics across accepted and suppressed rows.
+
+Headline:
+
+| Metric | Value |
+|---|---:|
+| Total rows | `4704` |
+| RPM proxy measurable rows | `4142` |
+| RPM proxy measurable rate | `0.8805` |
+| Lacunarity proxy measurable rows | `4704` |
+| Lacunarity proxy measurable rate | `1.0000` |
+| Inversion numeric measured rows | `0` |
+
+Interpretation:
+
+- RPM proxy is available when Drive/Register factor predictions exist.
+- Lacunarity proxy is available on every row through readout-vote and trace-state concentration.
+- Inversion remains unmeasured numerically and is explicitly outside the Stage 22.5 claim.
+
+Artifacts:
+
+- `run_stage22_5_full_row_proxy_attribution.py`
+- `stage22_5_full_row_proxy_attribution_20260520.json`
+- `STAGE22_5_FULL_ROW_PROXY_ATTRIBUTION_20260520.md`
+- `tests/test_stage22_5_full_row_proxy_attribution.py`
