@@ -14,14 +14,25 @@
       "accepted_rows": 1687,
       "display_name": "OLMo-1B",
       "inversion_scan": {
+        "attribution_status_counts": {
+          "not_measurable": 2352
+        },
         "decision_counts": {
           "not_evaluated": 2352
         },
         "interpretation": "No numeric inversion scanner is wired into Stage 22.4.",
         "measured_rate": 0.0,
-        "measured_rows": 0
+        "measured_rows": 0,
+        "numeric_measured_statuses": [
+          "measured",
+          "numeric_measured",
+          "scanner_measured"
+        ]
       },
       "lacunarity_proxy": {
+        "attribution_status_counts": {
+          "proxy_measurable": 2352
+        },
         "caveat_rows": 986,
         "constrain_rows": 324,
         "decision_counts": {
@@ -69,7 +80,7 @@
           "constrain": 271,
           "suppress": 143
         },
-        "interpretation": "RPM proxy is factor recomposition. It is measurable once Drive and Register predictions exist; rows suppressed before factor readout carry not_available.",
+        "interpretation": "RPM proxy is factor recomposition. It is measurable once Drive and Register predictions exist. Rows suppressed before both factor predictions exist are not_available and conservatively marked constrain; factor-conflict suppress rows remain proxy-measurable.",
         "measurable_rate": 0.8847789115646258,
         "measurable_rows": 2081,
         "stage_by_decision": {
@@ -109,14 +120,25 @@
       "accepted_rows": 1754,
       "display_name": "Qwen2.5-1.5B",
       "inversion_scan": {
+        "attribution_status_counts": {
+          "not_measurable": 2352
+        },
         "decision_counts": {
           "not_evaluated": 2352
         },
         "interpretation": "No numeric inversion scanner is wired into Stage 22.4.",
         "measured_rate": 0.0,
-        "measured_rows": 0
+        "measured_rows": 0,
+        "numeric_measured_statuses": [
+          "measured",
+          "numeric_measured",
+          "scanner_measured"
+        ]
       },
       "lacunarity_proxy": {
+        "attribution_status_counts": {
+          "proxy_measurable": 2352
+        },
         "caveat_rows": 933,
         "constrain_rows": 426,
         "decision_counts": {
@@ -163,7 +185,7 @@
           "constrain": 291,
           "suppress": 115
         },
-        "interpretation": "RPM proxy is factor recomposition. It is measurable once Drive and Register predictions exist; rows suppressed before factor readout carry not_available.",
+        "interpretation": "RPM proxy is factor recomposition. It is measurable once Drive and Register predictions exist. Rows suppressed before both factor predictions exist are not_available and conservatively marked constrain; factor-conflict suppress rows remain proxy-measurable.",
         "measurable_rate": 0.8762755102040817,
         "measurable_rows": 2061,
         "stage_by_decision": {
@@ -202,6 +224,7 @@
   },
   "schema_version": "stage22_5_full_row_proxy_attribution_v1",
   "source": "stage22_4_instrumented_cross_arch_verification_stack_20260519.json",
-  "source_status": "NULL",
+  "source_diagnostic_status": "STAGE22_4_DIAGNOSTIC_ROWS_EMITTED",
+  "source_product_status": "NULL",
   "status": "STAGE22_5_FULL_ROW_PROXY_ATTRIBUTION_COMPLETE"
 }

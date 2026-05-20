@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parent
 SOURCE = ROOT / "stage22_4_instrumented_cross_arch_verification_stack_20260519.json"
 OUT_JSON = ROOT / "stage22_5_full_row_proxy_attribution_20260520.json"
 OUT_MD = ROOT / "STAGE22_5_FULL_ROW_PROXY_ATTRIBUTION_20260520.md"
+NUMERIC_MEASURED_STATUSES = {"measured", "numeric_measured", "scanner_measured"}
 
 
 def _pct(numer: int, denom: int) -> float:
@@ -29,6 +30,14 @@ def _stage_gate_table(rows: list[dict[str, Any]], gate_name: str) -> dict[str, d
         decision = str(row["gate_decisions"][gate_name]["decision"])
         table[stage][decision] += 1
     return {stage: dict(sorted(counts.items())) for stage, counts in sorted(table.items())}
+
+
+def _status_rows(rows: list[dict[str, Any]], gate_name: str, status: str) -> list[dict[str, Any]]:
+    return [
+        row
+        for row in rows
+        if row["gate_decisions"][gate_name]["attribution_status"] == status
+    ]
 
 
 def _model_attribution(model_key: str, model_report: dict[str, Any]) -> dict[str, Any]:
@@ -60,11 +69,13 @@ def _model_attribution(model_key: str, model_report: dict[str, Any]) -> dict[str
     lac_caveat = [
         row for row in rows if row["gate_decisions"]["lacunarity_gate"]["decision"] == "caveat"
     ]
+    lac_rows = _status_rows(rows, "lacunarity_gate", "proxy_measurable")
 
     inversion_measured = [
         row
         for row in rows
-        if row["gate_decisions"]["inversion_scan_gate"]["attribution_status"] != "not_measurable"
+        if row["gate_decisions"]["inversion_scan_gate"]["attribution_status"]
+        in NUMERIC_MEASURED_STATUSES
     ]
 
     return {
@@ -85,14 +96,22 @@ def _model_attribution(model_key: str, model_report: dict[str, Any]) -> dict[str
             "stage_by_decision": _stage_gate_table(rows, "rpm_gate"),
             "interpretation": (
                 "RPM proxy is factor recomposition. It is measurable once Drive and Register "
-                "predictions exist; rows suppressed before factor readout carry not_available."
+                "predictions exist. Rows suppressed before both factor predictions exist are "
+                "not_available and conservatively marked constrain; factor-conflict suppress "
+                "rows remain proxy-measurable."
             ),
         },
         "lacunarity_proxy": {
-            "measurable_rows": total,
-            "measurable_rate": 1.0,
+            "measurable_rows": len(lac_rows),
+            "measurable_rate": _pct(len(lac_rows), total),
             "decision_counts": _counter(
                 [str(row["gate_decisions"]["lacunarity_gate"]["decision"]) for row in rows]
+            ),
+            "attribution_status_counts": _counter(
+                [
+                    str(row["gate_decisions"]["lacunarity_gate"]["attribution_status"])
+                    for row in rows
+                ]
             ),
             "suppress_rows": len(lac_suppress),
             "constrain_rows": len(lac_constrain),
@@ -109,6 +128,13 @@ def _model_attribution(model_key: str, model_report: dict[str, Any]) -> dict[str
             "decision_counts": _counter(
                 [str(row["gate_decisions"]["inversion_scan_gate"]["decision"]) for row in rows]
             ),
+            "attribution_status_counts": _counter(
+                [
+                    str(row["gate_decisions"]["inversion_scan_gate"]["attribution_status"])
+                    for row in rows
+                ]
+            ),
+            "numeric_measured_statuses": sorted(NUMERIC_MEASURED_STATUSES),
             "interpretation": "No numeric inversion scanner is wired into Stage 22.4.",
         },
     }
@@ -128,7 +154,8 @@ def build_report() -> dict[str, Any]:
         "status": "STAGE22_5_FULL_ROW_PROXY_ATTRIBUTION_COMPLETE",
         "schema_version": "stage22_5_full_row_proxy_attribution_v1",
         "source": SOURCE.name,
-        "source_status": source["status"],
+        "source_product_status": source["status"],
+        "source_diagnostic_status": source.get("diagnostic_contract", {}).get("status"),
         "models": models,
         "headline": {
             "total_rows": total_rows,
@@ -151,6 +178,9 @@ def _write_markdown(report: dict[str, Any]) -> None:
         "# Stage 22.5 Full-Row Proxy Attribution",
         "",
         f"**Status:** `{report['status']}`",
+        "",
+        f"Source product status: `{report['source_product_status']}`",
+        f"Source diagnostic status: `{report['source_diagnostic_status']}`",
         "",
         "## Headline",
         "",

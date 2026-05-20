@@ -2,6 +2,9 @@
 
 **Status:** `STAGE22_5_FULL_ROW_PROXY_ATTRIBUTION_COMPLETE`
 
+Source product status: `NULL`
+Source diagnostic status: `STAGE22_4_DIAGNOSTIC_ROWS_EMITTED`
+
 ## Headline
 
 | Metric | Value |
