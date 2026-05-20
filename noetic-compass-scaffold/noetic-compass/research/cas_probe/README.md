@@ -2481,6 +2481,15 @@ Artifacts:
 
 - `stage24a_sonar_component_spec.py`
 - `run_stage24a_sonar_component_prereg.py`
+- `run_stage24a_token_level_cas_sonar.py`
 - `stage24a_sonar_component_prereg_20260520.json`
 - `STAGE24A_SONAR_COMPONENT_PREREG_20260520.md`
 - `tests/test_stage24a_sonar_component_spec.py`
+- `tests/test_stage24a_token_level_cas_sonar.py`
+
+Implementation note:
+
+> The token-level sonar runner is implemented, but execution requires the
+> locked Stage 7 activation binary `stage7_foundation_pilot_activations_20260517.npz`.
+> If the binary is absent locally, the runner fails explicitly rather than
+> silently recapturing or changing the preregistered artifact set.
