@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 import evaluate_stage7_factor_check as stage7
+from stage22_6_inversion_scanner import scan_inversion_from_diagnostic_row
 
 
 _HERE = Path(__file__).resolve().parent
@@ -354,11 +355,7 @@ def _diagnostic_contract_row(
 
     rpm_gate_decision = _decision_from_score(rpm_satisfaction)
     lacunarity_gate_decision = _lacunarity_decision(max_lac)
-    inversion_axis_scores: list[None] = [None] * 7
-    inversion_flag_count = None
-    inversion_gate_decision = "not_evaluated"
-
-    return {
+    diagnostic_row = {
         "index": int(index),
         "sample_id": sample_id,
         "stage": stage,
@@ -387,9 +384,9 @@ def _diagnostic_contract_row(
             },
         },
         "lacunarity_gate_decision": lacunarity_gate_decision,
-        "inversion_axis_scores": inversion_axis_scores,
-        "inversion_flag_count": inversion_flag_count,
-        "inversion_gate_decision": inversion_gate_decision,
+        "inversion_axis_scores": [None] * 7,
+        "inversion_flag_count": None,
+        "inversion_gate_decision": "not_evaluated",
         "gate_decisions": {
             "rpm_gate": {
                 "decision": rpm_gate_decision,
@@ -404,12 +401,25 @@ def _diagnostic_contract_row(
                 "attribution_status": "proxy_measurable",
             },
             "inversion_scan_gate": {
-                "decision": inversion_gate_decision,
-                "source": "not_recorded_in_stage19b_runner",
-                "attribution_status": "not_measurable",
+                "decision": "not_evaluated",
+                "source": "stage22_6_pending_runtime_structural_proxy_scanner",
+                "attribution_status": "not_evaluated",
             },
         },
     }
+    inversion_scan = scan_inversion_from_diagnostic_row(diagnostic_row)
+    diagnostic_row["inversion_axis_scores"] = inversion_scan["axis_scores"]
+    diagnostic_row["inversion_flag_count"] = inversion_scan["flag_count"]
+    diagnostic_row["inversion_gate_decision"] = inversion_scan["decision"]
+    diagnostic_row["inversion_axis_order"] = inversion_scan["axis_order"]
+    diagnostic_row["inversion_flagged_axes"] = inversion_scan["flagged_axes"]
+    diagnostic_row["gate_decisions"]["inversion_scan_gate"] = {
+        "decision": inversion_scan["decision"],
+        "source": inversion_scan["source"],
+        "attribution_status": inversion_scan["attribution_status"],
+        "boundary": inversion_scan["boundary"],
+    }
+    return diagnostic_row
 
 
 def _status(accepted_accuracy: float, coverage: float, silent_error_rate: float, baseline: float) -> str:
@@ -763,11 +773,12 @@ def _run_model(
             "inversion_measured_rows": sum(
                 1
                 for row in diagnostic_rows
-                if row["gate_decisions"]["inversion_scan_gate"]["attribution_status"] != "not_measurable"
+                if row["gate_decisions"]["inversion_scan_gate"]["attribution_status"]
+                == "numeric_measured"
             ),
             "boundary": (
                 "RPM and lacunarity are deterministic runtime proxies. "
-                "Inversion scan is still not measured by Stage 19B."
+                "Inversion scan is a deterministic Stage 22.6 runtime structural proxy."
             ),
         }
     return report
@@ -901,7 +912,7 @@ def main(argv: list[str] | None = None) -> int:
             "status": "STAGE22_4_DIAGNOSTIC_ROWS_EMITTED",
             "boundary": (
                 "RPM and lacunarity are deterministic runtime proxies emitted per row. "
-                "Inversion axis scores remain not measured by this runner."
+                "Inversion axis scores are deterministic Stage 22.6 runtime structural proxies."
             ),
         }
     out_report.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")

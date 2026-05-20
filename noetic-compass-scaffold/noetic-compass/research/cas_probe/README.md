@@ -2370,3 +2370,44 @@ Artifacts:
 - `stage22_5_full_row_proxy_attribution_20260520.json`
 - `STAGE22_5_FULL_ROW_PROXY_ATTRIBUTION_20260520.md`
 - `tests/test_stage22_5_full_row_proxy_attribution.py`
+
+## Stage 22.6 result - Inversion proxy scanner
+
+**Verdict: `STAGE22_6_INVERSION_PROXY_ATTRIBUTION_COMPLETE`.**
+
+Stage 22.6 adds a deterministic seven-axis inversion-risk proxy scanner over
+the Stage 22.4 diagnostic rows. The scanner uses only runtime verifier signals:
+readout disagreement, trace instability, register/drive/foundation
+concentration, and RPM factor recomposition.
+
+Headline:
+
+| Metric | Value |
+|---|---:|
+| Total rows | `4704` |
+| Numeric inversion proxy rows | `4704` |
+| Numeric inversion proxy rate | `1.0000` |
+
+Per-model decision counts:
+
+| Model | Allow | Constrain | Suppress |
+|---|---:|---:|---:|
+| OLMo-1B | `1035` | `713` | `604` |
+| Qwen2.5-1.5B | `940` | `590` | `822` |
+
+Boundary:
+
+> Stage 22.6 closes numeric inversion proxy attribution for the Stage 22.4 row
+> contract. It does not claim a full semantic inversion theorem; scores are
+> runtime structural proxies derived without gold labels.
+
+The Stage 19B diagnostic runner is also patched so future `--emit-diagnostics`
+runs emit the Stage 22.6 numeric inversion proxy fields directly.
+
+Artifacts:
+
+- `stage22_6_inversion_scanner.py`
+- `run_stage22_6_inversion_proxy_attribution.py`
+- `stage22_6_inversion_proxy_attribution_20260520.json`
+- `STAGE22_6_INVERSION_PROXY_ATTRIBUTION_20260520.md`
+- `tests/test_stage22_6_inversion_scanner.py`

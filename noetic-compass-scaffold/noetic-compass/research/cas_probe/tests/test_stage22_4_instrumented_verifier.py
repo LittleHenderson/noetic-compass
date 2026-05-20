@@ -38,7 +38,7 @@ def test_stage22_4_preflight_reports_runner_and_artifact_status():
     report = module.build_report()
     assert report["runner_ready"] is True
     assert report["rpm_lacunarity_proxy_ready"] is True
-    assert report["inversion_numeric_ready"] is False
+    assert report["inversion_numeric_ready"] is True
     assert set(report["activation_artifacts"]) == {
         "stage15_olmo1b_activations_20260519.npz",
         "stage16_qwen15b_activations_20260519.npz",

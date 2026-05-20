@@ -10,6 +10,7 @@
 - Diagnostic rows emitted by runner: `True`
 - Local activation artifacts present: `False`
 - Can run locally: `False`
+- Inversion numeric proxy ready: `True`
 
 ## Required Fields
 
@@ -34,7 +35,7 @@
 
 ## Boundary
 
-The runner now emits Stage 22.2-compatible row fields. RPM and lacunarity are runtime proxy diagnostics. Inversion fields are reserved and emitted as not_evaluated until a real inversion scanner is wired into the verifier.
+The runner now emits Stage 22.2-compatible row fields. RPM and lacunarity are runtime proxy diagnostics. Inversion fields are numeric Stage 22.6 runtime structural proxies when the patched runner is used.
 
 ## Pod Command
 

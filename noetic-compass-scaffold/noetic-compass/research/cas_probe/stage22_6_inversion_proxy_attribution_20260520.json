@@ -1,0 +1,1924 @@
+{
+  "axis_order": [
+    "N",
+    "W",
+    "F",
+    "E",
+    "S",
+    "A",
+    "P"
+  ],
+  "claim_boundary": "Stage 22.6 closes numeric inversion proxy attribution for the Stage 22.4 row contract. It does not claim a full semantic inversion theorem; scores are runtime structural proxies derived without gold labels.",
+  "headline": {
+    "inversion_numeric_measured_rate": 1.0,
+    "inversion_numeric_measured_rows": 4704,
+    "total_rows": 4704
+  },
+  "models": {
+    "olmo1b": {
+      "accepted_rows": 1687,
+      "axis_mean_scores": {
+        "A": 0.11840986394557823,
+        "E": 0.17375283446712017,
+        "F": 0.09566326530612244,
+        "N": 0.18353174603174602,
+        "P": 0.11055602796674224,
+        "S": 0.02990362811791383,
+        "W": 0.06207482993197279
+      },
+      "decision_counts": {
+        "allow": 1035,
+        "constrain": 713,
+        "suppress": 604
+      },
+      "display_name": "OLMo-1B",
+      "flag_count_distribution": {
+        "0": 1035,
+        "1": 220,
+        "2": 153,
+        "3": 606,
+        "4": 173,
+        "5": 110,
+        "6": 55
+      },
+      "numeric_measured_rate": 1.0,
+      "numeric_measured_rows": 2352,
+      "sample_rows": [
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 0,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1T",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1T",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 1,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1A",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1A",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 2,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1T",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1T",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 3,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1A",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1A",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 4,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1T",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_concrete_human_F1T",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 5,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1A",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_concrete_human_F1A",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 6,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1T",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_system_process_F1T",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 7,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1A",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_system_process_F1A",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "drifting",
+              "focus_token": "conflicted",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "constrain",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "caveat",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 8,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.3333333333333333,
+            0.0,
+            0.3333333333333333,
+            0.0,
+            0.0,
+            0.1111111111111111
+          ],
+          "inversion_flag_count": 2,
+          "inversion_flagged_axes": [
+            "W",
+            "E"
+          ],
+          "inversion_gate_decision": "constrain",
+          "lacunarity_gate_decision": "caveat",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.3333333333333333,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.3333333333333333
+          },
+          "prediction": "F1T",
+          "reason": "focus_token_conflicted",
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_compressed_minimal_F1T",
+          "stage": "trace_stability"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "drifting",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 9,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1A",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_compressed_minimal_F1A",
+          "stage": "accepted"
+        }
+      ],
+      "suppressed_rows": 665,
+      "total_rows": 2352
+    },
+    "qwen15b": {
+      "accepted_rows": 1754,
+      "axis_mean_scores": {
+        "A": 0.11075680272108844,
+        "E": 0.21662414965986393,
+        "F": 0.09183673469387754,
+        "N": 0.1798469387755102,
+        "P": 0.13007842025699168,
+        "S": 0.047619047619047616,
+        "W": 0.13378684807256236
+      },
+      "decision_counts": {
+        "allow": 940,
+        "constrain": 590,
+        "suppress": 822
+      },
+      "display_name": "Qwen2.5-1.5B",
+      "flag_count_distribution": {
+        "0": 940,
+        "1": 146,
+        "2": 228,
+        "3": 508,
+        "4": 297,
+        "5": 132,
+        "6": 101
+      },
+      "numeric_measured_rate": 1.0,
+      "numeric_measured_rows": 2352,
+      "sample_rows": [
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 1,
+              "labels": [
+                "F1",
+                "F7"
+              ],
+              "max_vote_share": 0.6666666666666666,
+              "unique_labels": 2,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "constrain",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "caveat",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 0,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.3333333333333333,
+            0.16666666666666666,
+            0.0,
+            0.0,
+            0.08333333333333333
+          ],
+          "inversion_flag_count": 1,
+          "inversion_flagged_axes": [
+            "F"
+          ],
+          "inversion_gate_decision": "constrain",
+          "lacunarity_gate_decision": "caveat",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.3333333333333333,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.3333333333333333,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1T",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1T",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 2,
+              "labels": [
+                "F1",
+                "F2",
+                "F7"
+              ],
+              "max_vote_share": 0.3333333333333333,
+              "unique_labels": 3,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {}
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "suppress",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "constrain",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "not_available",
+              "decision": "constrain",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 1,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.6666666666666666,
+            0.3333333333333333,
+            0.0,
+            0.5,
+            0.25
+          ],
+          "inversion_flag_count": 3,
+          "inversion_flagged_axes": [
+            "F",
+            "E",
+            "A"
+          ],
+          "inversion_gate_decision": "suppress",
+          "lacunarity_gate_decision": "constrain",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.6666666666666666,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.6666666666666666,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1A",
+          "reason": "drive_ensemble_all_disagree",
+          "rpm_gate_decision": "constrain",
+          "rpm_satisfaction": 0.5,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1A",
+          "stage": "drive_ensemble"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 2,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1T",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1T",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 3,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1A",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1A",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 4,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1T",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_concrete_human_F1T",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "drifting"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 5,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1A",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_concrete_human_F1A",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 6,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1T",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_system_process_F1T",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 0,
+              "labels": [
+                "F1"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "allow",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 7,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inversion_flag_count": 0,
+          "inversion_flagged_axes": [],
+          "inversion_gate_decision": "allow",
+          "lacunarity_gate_decision": "allow",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.0,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.0,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1A",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_system_process_F1A",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 1,
+              "labels": [
+                "F1",
+                "F7"
+              ],
+              "max_vote_share": 0.6666666666666666,
+              "unique_labels": 2,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "T"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "constrain",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "caveat",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 8,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.3333333333333333,
+            0.16666666666666666,
+            0.0,
+            0.0,
+            0.08333333333333333
+          ],
+          "inversion_flag_count": 1,
+          "inversion_flagged_axes": [
+            "F"
+          ],
+          "inversion_gate_decision": "constrain",
+          "lacunarity_gate_decision": "caveat",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.3333333333333333,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.3333333333333333,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1T",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_compressed_minimal_F1T",
+          "stage": "accepted"
+        },
+        {
+          "gap_map_summary": {
+            "drive": {
+              "conflict_count": 1,
+              "labels": [
+                "F1",
+                "F7"
+              ],
+              "max_vote_share": 0.6666666666666666,
+              "unique_labels": 2,
+              "vote_count": 3
+            },
+            "foundation": {
+              "conflict_count": 0,
+              "labels": [
+                "F1A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "register": {
+              "conflict_count": 0,
+              "labels": [
+                "A"
+              ],
+              "max_vote_share": 1.0,
+              "unique_labels": 1,
+              "vote_count": 3
+            },
+            "trace_states": {
+              "final_token": "stable",
+              "focus_token": "stable",
+              "mean_over_seq_len": "stable"
+            }
+          },
+          "gate_decisions": {
+            "inversion_scan_gate": {
+              "attribution_status": "numeric_measured",
+              "boundary": "Scores are deterministic runtime inversion-risk proxies derived from readout disagreement, trace instability, register/drive/foundation concentration, and RPM factor recomposition. They are not gold-label correctness and not a full semantic inversion theorem.",
+              "decision": "constrain",
+              "source": "stage22_6_runtime_structural_proxy_scanner"
+            },
+            "lacunarity_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "caveat",
+              "source": "readout_vote_and_trace_lacunarity_proxy"
+            },
+            "rpm_gate": {
+              "attribution_status": "proxy_measurable",
+              "decision": "allow",
+              "source": "drive_register_recomposition_runtime_proxy"
+            }
+          },
+          "index": 9,
+          "inversion_axis_order": [
+            "N",
+            "W",
+            "F",
+            "E",
+            "S",
+            "A",
+            "P"
+          ],
+          "inversion_axis_scores": [
+            0.0,
+            0.0,
+            0.3333333333333333,
+            0.16666666666666666,
+            0.0,
+            0.0,
+            0.08333333333333333
+          ],
+          "inversion_flag_count": 1,
+          "inversion_flagged_axes": [
+            "F"
+          ],
+          "inversion_gate_decision": "constrain",
+          "lacunarity_gate_decision": "caveat",
+          "lacunarity_scores": {
+            "drive_vote_lacunarity": 0.3333333333333333,
+            "foundation_vote_lacunarity": 0.0,
+            "max_vote_or_trace_lacunarity": 0.3333333333333333,
+            "register_vote_lacunarity": 0.0,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+            "trace_instability_lacunarity": 0.0
+          },
+          "prediction": "F1A",
+          "reason": null,
+          "rpm_gate_decision": "allow",
+          "rpm_satisfaction": 1.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_compressed_minimal_F1A",
+          "stage": "accepted"
+        }
+      ],
+      "suppressed_rows": 598,
+      "total_rows": 2352
+    }
+  },
+  "schema_version": "stage22_6_inversion_proxy_attribution_v1",
+  "source": "stage22_4_instrumented_cross_arch_verification_stack_20260519.json",
+  "source_diagnostic_status": "STAGE22_4_DIAGNOSTIC_ROWS_EMITTED",
+  "source_product_status": "NULL",
+  "status": "STAGE22_6_INVERSION_PROXY_ATTRIBUTION_COMPLETE"
+}

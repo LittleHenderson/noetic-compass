@@ -47,6 +47,13 @@ def build_report() -> dict[str, Any]:
             all(required_field_presence.values()),
         ]
     )
+    inversion_numeric_ready = all(
+        [
+            "scan_inversion_from_diagnostic_row" in source,
+            "numeric_measured" in source,
+            "inversion_axis_order" in source,
+        ]
+    )
     local_artifacts_present = all(activation_presence.values())
     can_run_locally = runner_ready and local_artifacts_present
     status = (
@@ -69,12 +76,12 @@ def build_report() -> dict[str, Any]:
         "local_artifacts_present": local_artifacts_present,
         "can_run_locally": can_run_locally,
         "rpm_lacunarity_proxy_ready": runner_ready,
-        "inversion_numeric_ready": False,
+        "inversion_numeric_ready": inversion_numeric_ready,
         "boundary": (
             "The runner now emits Stage 22.2-compatible row fields. RPM and "
             "lacunarity are runtime proxy diagnostics. Inversion fields are "
-            "reserved and emitted as not_evaluated until a real inversion "
-            "scanner is wired into the verifier."
+            "numeric Stage 22.6 runtime structural proxies when the patched "
+            "runner is used."
         ),
         "pod_command": (
             "python research/cas_probe/run_stage19b_cross_arch_foundation_verification_stack.py "
@@ -99,6 +106,7 @@ def write_markdown(report: dict[str, Any]) -> None:
         f"- Diagnostic rows emitted by runner: `{report['diagnostic_rows_present']}`",
         f"- Local activation artifacts present: `{report['local_artifacts_present']}`",
         f"- Can run locally: `{report['can_run_locally']}`",
+        f"- Inversion numeric proxy ready: `{report['inversion_numeric_ready']}`",
         "",
         "## Required Fields",
         "",
