@@ -1,1016 +1,1259 @@
 {
   "boundary": "Static canonical 2D positions for CAS primitives across Stage 23.A (Noetics/Domains/Drives/Registers/Cognitive States), Stage 23.A.2 (Operations / Inversion Axes / Foundations / Production / RPM / Set primitives / Combinators / Authority Sets / Cardinality kinds), and Stage 23.A.3 (12 admitted Omega_* emergent registers from cas-native/config/omega_registry.yaml, each anchored at radius 1.8 along its derivation Noetic's angle). Does not include atlas-self-reading, encoder design, or training signal.",
+  "detection_rules": [
+    {
+      "description": "Omega_* name pattern",
+      "kind": "emergent_omega",
+      "priority": 1,
+      "regex": "\\bOmega_[A-Za-z]+\\b"
+    },
+    {
+      "description": "Greek capital omega glyph",
+      "kind": "emergent_omega",
+      "priority": 2,
+      "regex": "Ω"
+    },
+    {
+      "description": "Greek capital theta glyph",
+      "kind": "production",
+      "priority": 3,
+      "regex": "Θ"
+    },
+    {
+      "description": "Theta spelled out",
+      "kind": "production",
+      "priority": 4,
+      "regex": "\\bTheta\\b"
+    },
+    {
+      "description": "...Cluster suffix",
+      "kind": "set_constructor",
+      "priority": 5,
+      "regex": "[A-Za-z]+Cluster\\b"
+    },
+    {
+      "description": "Compound cognitive state ^N^D",
+      "kind": "cognitive_state",
+      "priority": 6,
+      "regex": "\\^\\d\\^[PCEO](?![A-Za-z0-9])"
+    },
+    {
+      "description": "Bare Noetic ^N",
+      "kind": "noetic",
+      "priority": 7,
+      "regex": "\\^\\d(?![\\^\\dPCEO])"
+    },
+    {
+      "description": "Bare Drive F1..F7",
+      "kind": "drive",
+      "priority": 8,
+      "regex": "\\bF[1-7]\\b"
+    },
+    {
+      "description": "Drive in subscript _{Fk}",
+      "kind": "drive",
+      "priority": 9,
+      "regex": "_\\{F[1-7]\\}"
+    },
+    {
+      "description": "Standalone Domain ^P/^C/^E/^O",
+      "kind": "domain",
+      "priority": 10,
+      "regex": "\\^[PCEO]\\b"
+    },
+    {
+      "description": "Standalone Register |T/|A/|f/|E",
+      "kind": "register",
+      "priority": 11,
+      "regex": "\\|[TAfE]\\b"
+    },
+    {
+      "description": "Register set marker |⟨…⟩",
+      "kind": "register",
+      "priority": 12,
+      "regex": "\\|⟨"
+    }
+  ],
   "layout_version": "stage23a3_notation_2d_layout_v3",
   "primitives": [
     {
+      "color": "#22d3ee",
       "kind": "noetic",
       "primitive": "^0",
       "x": 0.0,
       "y": 1.0
     },
     {
+      "color": "#22d3ee",
       "kind": "noetic",
       "primitive": "^1",
       "x": 0.0,
       "y": -1.0
     },
     {
+      "color": "#22d3ee",
       "kind": "noetic",
       "primitive": "^2",
       "x": 0.707106781,
       "y": 0.707106781
     },
     {
+      "color": "#22d3ee",
       "kind": "noetic",
       "primitive": "^3",
       "x": -0.707106781,
       "y": -0.707106781
     },
     {
+      "color": "#22d3ee",
       "kind": "noetic",
       "primitive": "^4",
       "x": 1.0,
       "y": 0.0
     },
     {
+      "color": "#22d3ee",
       "kind": "noetic",
       "primitive": "^5",
       "x": -0.382683432,
       "y": 0.923879533
     },
     {
+      "color": "#22d3ee",
       "kind": "noetic",
       "primitive": "^6",
       "x": 0.382683432,
       "y": -0.923879533
     },
     {
+      "color": "#22d3ee",
       "kind": "noetic",
       "primitive": "^7",
       "x": -1.0,
       "y": 0.0
     },
     {
+      "color": "#22d3ee",
       "kind": "noetic",
       "primitive": "^8",
       "x": -0.923879533,
       "y": 0.382683432
     },
     {
+      "color": "#22d3ee",
       "kind": "noetic",
       "primitive": "^9",
       "x": 0.923879533,
       "y": -0.382683432
     },
     {
+      "color": "#34d399",
       "kind": "domain",
       "primitive": "^P",
       "x": 0.0,
       "y": -2.0
     },
     {
+      "color": "#34d399",
       "kind": "domain",
       "primitive": "^C",
       "x": 0.0,
       "y": -3.0
     },
     {
+      "color": "#34d399",
       "kind": "domain",
       "primitive": "^E",
       "x": 0.0,
       "y": -4.0
     },
     {
+      "color": "#34d399",
       "kind": "domain",
       "primitive": "^O",
       "x": 0.0,
       "y": -5.0
     },
     {
+      "color": "#f59e0b",
       "kind": "drive",
       "primitive": "F1",
       "x": -1.5,
       "y": -1.5
     },
     {
+      "color": "#f59e0b",
       "kind": "drive",
       "primitive": "F2",
       "x": -1.0,
       "y": -1.5
     },
     {
+      "color": "#f59e0b",
       "kind": "drive",
       "primitive": "F3",
       "x": -0.5,
       "y": -1.5
     },
     {
+      "color": "#f59e0b",
       "kind": "drive",
       "primitive": "F4",
       "x": 0.0,
       "y": -1.5
     },
     {
+      "color": "#f59e0b",
       "kind": "drive",
       "primitive": "F5",
       "x": 0.5,
       "y": -1.5
     },
     {
+      "color": "#f59e0b",
       "kind": "drive",
       "primitive": "F6",
       "x": 1.0,
       "y": -1.5
     },
     {
+      "color": "#f59e0b",
       "kind": "drive",
       "primitive": "F7",
       "x": 1.5,
       "y": -1.5
     },
     {
+      "color": "#f472b6",
       "kind": "register",
       "primitive": "|T",
       "x": -1.5,
       "y": -6.0
     },
     {
+      "color": "#f472b6",
       "kind": "register",
       "primitive": "|A",
       "x": -0.5,
       "y": -6.0
     },
     {
+      "color": "#f472b6",
       "kind": "register",
       "primitive": "|f",
       "x": 0.5,
       "y": -6.0
     },
     {
+      "color": "#f472b6",
       "kind": "register",
       "primitive": "|E",
       "x": 1.5,
       "y": -6.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^0^P",
       "x": 3.0,
       "y": 2.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^0^C",
       "x": 3.5,
       "y": 2.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^0^E",
       "x": 4.0,
       "y": 2.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^0^O",
       "x": 4.5,
       "y": 2.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^1^P",
       "x": 3.0,
       "y": 1.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^1^C",
       "x": 3.5,
       "y": 1.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^1^E",
       "x": 4.0,
       "y": 1.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^1^O",
       "x": 4.5,
       "y": 1.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^2^P",
       "x": 3.0,
       "y": 1.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^2^C",
       "x": 3.5,
       "y": 1.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^2^E",
       "x": 4.0,
       "y": 1.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^2^O",
       "x": 4.5,
       "y": 1.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^3^P",
       "x": 3.0,
       "y": 0.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^3^C",
       "x": 3.5,
       "y": 0.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^3^E",
       "x": 4.0,
       "y": 0.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^3^O",
       "x": 4.5,
       "y": 0.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^4^P",
       "x": 3.0,
       "y": 0.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^4^C",
       "x": 3.5,
       "y": 0.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^4^E",
       "x": 4.0,
       "y": 0.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^4^O",
       "x": 4.5,
       "y": 0.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^5^P",
       "x": 3.0,
       "y": -0.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^5^C",
       "x": 3.5,
       "y": -0.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^5^E",
       "x": 4.0,
       "y": -0.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^5^O",
       "x": 4.5,
       "y": -0.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^6^P",
       "x": 3.0,
       "y": -1.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^6^C",
       "x": 3.5,
       "y": -1.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^6^E",
       "x": 4.0,
       "y": -1.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^6^O",
       "x": 4.5,
       "y": -1.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^7^P",
       "x": 3.0,
       "y": -1.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^7^C",
       "x": 3.5,
       "y": -1.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^7^E",
       "x": 4.0,
       "y": -1.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^7^O",
       "x": 4.5,
       "y": -1.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^8^P",
       "x": 3.0,
       "y": -2.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^8^C",
       "x": 3.5,
       "y": -2.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^8^E",
       "x": 4.0,
       "y": -2.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^8^O",
       "x": 4.5,
       "y": -2.0
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^9^P",
       "x": 3.0,
       "y": -2.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^9^C",
       "x": 3.5,
       "y": -2.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^9^E",
       "x": 4.0,
       "y": -2.5
     },
     {
+      "color": "#38bdf8",
       "kind": "cognitive_state",
       "primitive": "^9^O",
       "x": 4.5,
       "y": -2.5
     },
     {
+      "color": "#fb7185",
       "kind": "operation",
-      "primitive": "\u00d7",
+      "primitive": "×",
       "x": -1.0,
       "y": 2.5
     },
     {
+      "color": "#fb7185",
       "kind": "operation",
-      "primitive": "\u00f7",
+      "primitive": "÷",
       "x": 1.0,
       "y": 2.5
     },
     {
+      "color": "#fb7185",
       "kind": "operation",
-      "primitive": "\u2218",
+      "primitive": "∘",
       "x": 0.0,
       "y": 2.5
     },
     {
+      "color": "#fb7185",
       "kind": "operation",
       "primitive": "+",
       "x": -2.0,
       "y": 2.5
     },
     {
+      "color": "#fb7185",
       "kind": "operation",
-      "primitive": "\u2212",
+      "primitive": "−",
       "x": 2.0,
       "y": 2.5
     },
     {
+      "color": "#dc2626",
       "kind": "inversion_axis",
       "primitive": "Inv:N",
       "x": -4.0,
       "y": 1.5
     },
     {
+      "color": "#dc2626",
       "kind": "inversion_axis",
       "primitive": "Inv:W",
       "x": -4.0,
       "y": 1.0
     },
     {
+      "color": "#dc2626",
       "kind": "inversion_axis",
       "primitive": "Inv:F",
       "x": -4.0,
       "y": 0.5
     },
     {
+      "color": "#dc2626",
       "kind": "inversion_axis",
       "primitive": "Inv:P",
       "x": -4.0,
       "y": 0.0
     },
     {
+      "color": "#dc2626",
       "kind": "inversion_axis",
       "primitive": "Inv:E",
       "x": -4.0,
       "y": -0.5
     },
     {
+      "color": "#dc2626",
       "kind": "inversion_axis",
       "primitive": "Inv:S",
       "x": -4.0,
       "y": -1.0
     },
     {
+      "color": "#dc2626",
       "kind": "inversion_axis",
       "primitive": "Inv:A",
       "x": -4.0,
       "y": -1.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F1^T",
       "x": -1.5,
       "y": 4.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F1^A",
       "x": -1.5,
       "y": 4.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F1^f",
       "x": -1.5,
       "y": 3.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F1^E",
       "x": -1.5,
       "y": 3.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F2^T",
       "x": -1.0,
       "y": 4.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F2^A",
       "x": -1.0,
       "y": 4.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F2^f",
       "x": -1.0,
       "y": 3.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F2^E",
       "x": -1.0,
       "y": 3.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F3^T",
       "x": -0.5,
       "y": 4.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F3^A",
       "x": -0.5,
       "y": 4.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F3^f",
       "x": -0.5,
       "y": 3.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F3^E",
       "x": -0.5,
       "y": 3.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F4^T",
       "x": 0.0,
       "y": 4.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F4^A",
       "x": 0.0,
       "y": 4.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F4^f",
       "x": 0.0,
       "y": 3.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F4^E",
       "x": 0.0,
       "y": 3.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F5^T",
       "x": 0.5,
       "y": 4.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F5^A",
       "x": 0.5,
       "y": 4.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F5^f",
       "x": 0.5,
       "y": 3.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F5^E",
       "x": 0.5,
       "y": 3.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F6^T",
       "x": 1.0,
       "y": 4.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F6^A",
       "x": 1.0,
       "y": 4.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F6^f",
       "x": 1.0,
       "y": 3.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F6^E",
       "x": 1.0,
       "y": 3.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F7^T",
       "x": 1.5,
       "y": 4.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F7^A",
       "x": 1.5,
       "y": 4.0
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F7^f",
       "x": 1.5,
       "y": 3.5
     },
     {
+      "color": "#9333ea",
       "kind": "foundation",
       "primitive": "F7^E",
       "x": 1.5,
       "y": 3.0
     },
     {
+      "color": "#f472b6",
       "kind": "production",
-      "primitive": "\u0398",
+      "primitive": "Θ",
       "x": -2.0,
       "y": 5.5
     },
     {
+      "color": "#f472b6",
       "kind": "production",
-      "primitive": "\u039b",
+      "primitive": "Λ",
       "x": -1.0,
       "y": 5.5
     },
     {
+      "color": "#f472b6",
       "kind": "production",
-      "primitive": "\u03b7",
+      "primitive": "η",
       "x": 0.0,
       "y": 5.5
     },
     {
+      "color": "#f472b6",
       "kind": "production",
-      "primitive": "\u03ba",
+      "primitive": "κ",
       "x": 1.0,
       "y": 5.5
     },
     {
+      "color": "#f472b6",
       "kind": "production",
-      "primitive": "\u03b9",
+      "primitive": "ι",
       "x": 2.0,
       "y": 5.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "A0",
       "x": 0.0,
       "y": -8.0
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "D1",
       "x": -3.0,
       "y": -8.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "D2",
       "x": -2.0,
       "y": -8.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "D3",
       "x": -1.0,
       "y": -8.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "D4",
       "x": 0.0,
       "y": -8.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "D5",
       "x": 1.0,
       "y": -8.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "D6",
       "x": 2.0,
       "y": -8.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "D7",
       "x": 3.0,
       "y": -8.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "W1",
       "x": -3.0,
       "y": -9.0
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "W2",
       "x": -2.0,
       "y": -9.0
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "W3",
       "x": -1.0,
       "y": -9.0
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "W4",
       "x": 0.0,
       "y": -9.0
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "W5",
       "x": 1.0,
       "y": -9.0
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "W6",
       "x": 2.0,
       "y": -9.0
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "W7",
       "x": 3.0,
       "y": -9.0
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "P1",
       "x": -3.0,
       "y": -9.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "P2",
       "x": -2.0,
       "y": -9.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "P3",
       "x": -1.0,
       "y": -9.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "P4",
       "x": 0.0,
       "y": -9.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "P5",
       "x": 1.0,
       "y": -9.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "P6",
       "x": 2.0,
       "y": -9.5
     },
     {
+      "color": "#fbbf24",
       "kind": "rpm_pathway",
       "primitive": "P7",
       "x": 3.0,
       "y": -9.5
     },
     {
+      "color": "#14b8a6",
       "kind": "set_constructor",
       "primitive": "NoeticCluster",
       "x": 6.0,
       "y": 1.0
     },
     {
+      "color": "#14b8a6",
       "kind": "set_constructor",
       "primitive": "StateCluster",
       "x": 7.0,
       "y": 1.0
     },
     {
+      "color": "#14b8a6",
       "kind": "set_constructor",
       "primitive": "StateVariantCluster",
       "x": 6.0,
       "y": 0.0
     },
     {
+      "color": "#14b8a6",
       "kind": "set_constructor",
       "primitive": "RelationCluster",
       "x": 7.0,
       "y": 0.0
     },
     {
+      "color": "#10b981",
       "kind": "set_relation",
-      "primitive": "\u2208",
+      "primitive": "∈",
       "x": 6.0,
       "y": 2.0
     },
     {
+      "color": "#10b981",
       "kind": "set_relation",
-      "primitive": "\u2209",
+      "primitive": "∉",
       "x": 6.5,
       "y": 2.0
     },
     {
+      "color": "#10b981",
       "kind": "set_relation",
-      "primitive": "\u2282",
+      "primitive": "⊂",
       "x": 7.0,
       "y": 2.0
     },
     {
+      "color": "#10b981",
       "kind": "set_relation",
-      "primitive": "\u2286",
+      "primitive": "⊆",
       "x": 7.5,
       "y": 2.0
     },
     {
+      "color": "#10b981",
       "kind": "set_relation",
-      "primitive": "\u2283",
+      "primitive": "⊃",
       "x": 8.0,
       "y": 2.0
     },
     {
+      "color": "#10b981",
       "kind": "set_relation",
-      "primitive": "\u2287",
+      "primitive": "⊇",
       "x": 8.5,
       "y": 2.0
     },
     {
+      "color": "#16a34a",
       "kind": "set_operation",
-      "primitive": "\u222a",
+      "primitive": "∪",
       "x": 7.0,
       "y": -1.0
     },
     {
+      "color": "#16a34a",
       "kind": "set_operation",
-      "primitive": "\u2229",
+      "primitive": "∩",
       "x": 8.0,
       "y": -1.0
     },
     {
+      "color": "#16a34a",
       "kind": "set_operation",
-      "primitive": "\u2216",
+      "primitive": "∖",
       "x": 9.0,
       "y": -1.0
     },
     {
+      "color": "#16a34a",
       "kind": "set_operation",
-      "primitive": "\u2205",
+      "primitive": "∅",
       "x": 6.0,
       "y": -1.0
     },
     {
+      "color": "#0d9488",
       "kind": "combinator",
       "primitive": "Product",
       "x": 10.0,
       "y": 1.5
     },
     {
+      "color": "#0d9488",
       "kind": "combinator",
       "primitive": "CoverOf",
       "x": 10.0,
       "y": 0.5
     },
     {
+      "color": "#0d9488",
       "kind": "combinator",
       "primitive": "PartitionOf",
       "x": 10.0,
       "y": -0.5
     },
     {
+      "color": "#0d9488",
       "kind": "combinator",
       "primitive": "Pullback",
       "x": 10.0,
       "y": -1.5
     },
     {
+      "color": "#94a3b8",
       "kind": "authority_set",
       "primitive": "SystemInstructionSet",
       "x": 11.0,
       "y": 2.0
     },
     {
+      "color": "#94a3b8",
       "kind": "authority_set",
       "primitive": "UserUtteranceSet",
       "x": 11.0,
       "y": 1.0
     },
     {
+      "color": "#94a3b8",
       "kind": "authority_set",
       "primitive": "ToolObservationSet",
       "x": 11.0,
       "y": 0.0
     },
     {
+      "color": "#94a3b8",
       "kind": "authority_set",
       "primitive": "ValidatedClaimSet",
       "x": 11.0,
       "y": -1.0
     },
     {
+      "color": "#94a3b8",
       "kind": "authority_set",
       "primitive": "RenderedResponseSet",
       "x": 11.0,
       "y": -2.0
     },
     {
+      "color": "#cbd5e1",
       "kind": "cardinality_kind",
       "primitive": "Cardinality",
       "x": 12.0,
       "y": 0.5
     },
     {
+      "color": "#cbd5e1",
       "kind": "cardinality_kind",
       "primitive": "OrderedTuple",
       "x": 12.0,
       "y": -0.5
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_presence",
       "x": -0.250511582,
       "y": -1.782482524
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_refusal",
       "x": -1.272792206,
       "y": -1.272792206
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_grounding",
       "x": 1.272792206,
       "y": 1.272792206
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_alignment",
       "x": -0.688830178,
       "y": 1.662983159
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_clarity",
       "x": 0.0,
       "y": -1.8
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_resolve",
       "x": 0.688830178,
       "y": -1.662983159
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_witness",
       "x": 0.250511582,
       "y": -1.782482524
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_attunement",
       "x": 1.8,
       "y": 0.0
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_genesis",
       "x": 0.0,
       "y": 1.8
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_cadence",
       "x": -1.8,
       "y": 0.0
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_invocation",
       "x": -1.662983159,
       "y": 0.688830178
     },
     {
+      "color": "#a78bfa",
       "kind": "emergent_omega",
       "primitive": "Omega_landing",
       "x": 1.662983159,

@@ -8,6 +8,7 @@ preregistration boundary has been broken.
 from __future__ import annotations
 
 import math
+import re
 
 import pytest
 
@@ -501,3 +502,134 @@ def test_omega_anchor_map_matches_registry_anchor_noetics() -> None:
         "Omega_landing":    "^9",
     }
     assert nm.OMEGA_ANCHOR_NOETIC == expected
+
+
+# ── Stage 23.A.1.1 — per-primitive color field ────────────────────────
+
+
+_HEX_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
+
+
+def test_every_primitive_payload_entry_has_a_valid_color() -> None:
+    """Every emitted primitive carries a 7-char hex color string."""
+    payload = nm.canonical_layout_payload()
+    for entry in payload["primitives"]:
+        assert "color" in entry, (
+            f"Primitive {entry.get('primitive')!r} missing 'color' field"
+        )
+        color = entry["color"]
+        assert isinstance(color, str), (
+            f"Primitive {entry['primitive']!r} color is not a str: {color!r}"
+        )
+        assert _HEX_COLOR_RE.match(color), (
+            f"Primitive {entry['primitive']!r} color {color!r} not 7-char hex"
+        )
+
+
+def test_every_primitive_color_matches_kind_color_table() -> None:
+    """Each emitted color must equal KIND_COLOR[kind] for that entry."""
+    payload = nm.canonical_layout_payload()
+    for entry in payload["primitives"]:
+        kind = entry["kind"]
+        expected = nm.KIND_COLOR[kind]
+        assert entry["color"] == expected, (
+            f"Primitive {entry['primitive']!r} (kind={kind!r}) has color "
+            f"{entry['color']!r}; expected KIND_COLOR[{kind!r}] = {expected!r}"
+        )
+
+
+def test_kind_color_covers_every_primitive_kind() -> None:
+    """Every PrimitiveKind that appears on a position must have a color."""
+    observed_kinds = {p.kind for p in nm.all_positions()}
+    for kind in observed_kinds:
+        assert kind in nm.KIND_COLOR, (
+            f"Kind {kind!r} appears on a primitive but has no KIND_COLOR entry"
+        )
+
+
+# ── Stage 23.A.1.1 — detection_rules payload field ────────────────────
+
+
+def test_payload_has_detection_rules_list() -> None:
+    payload = nm.canonical_layout_payload()
+    assert "detection_rules" in payload
+    rules = payload["detection_rules"]
+    assert isinstance(rules, list)
+    assert len(rules) >= 12
+
+
+def test_every_detection_rule_has_required_keys() -> None:
+    payload = nm.canonical_layout_payload()
+    required = {"priority", "kind", "regex", "description"}
+    for rule in payload["detection_rules"]:
+        missing = required - set(rule.keys())
+        assert not missing, (
+            f"Detection rule {rule!r} missing keys: {missing}"
+        )
+        assert isinstance(rule["priority"], int)
+        assert isinstance(rule["kind"], str)
+        assert isinstance(rule["regex"], str)
+        assert isinstance(rule["description"], str)
+
+
+def test_detection_rule_priorities_are_strictly_increasing() -> None:
+    payload = nm.canonical_layout_payload()
+    priorities = [int(rule["priority"]) for rule in payload["detection_rules"]]
+    for earlier, later in zip(priorities, priorities[1:]):
+        assert later > earlier, (
+            f"Detection rule priorities not strictly increasing: {priorities}"
+        )
+
+
+def test_every_detection_rule_kind_is_a_valid_primitive_kind() -> None:
+    payload = nm.canonical_layout_payload()
+    valid_kinds = {
+        "noetic", "domain", "drive", "register", "cognitive_state",
+        "operation", "inversion_axis", "foundation", "production",
+        "rpm_pathway", "set_constructor", "set_relation",
+        "set_operation", "combinator", "authority_set", "cardinality_kind",
+        "emergent_omega",
+    }
+    for rule in payload["detection_rules"]:
+        assert rule["kind"] in valid_kinds, (
+            f"Detection rule kind {rule['kind']!r} is not a valid PrimitiveKind"
+        )
+
+
+def test_every_detection_rule_regex_is_compilable() -> None:
+    """Each rule's regex must compile cleanly (Python re.compile)."""
+    payload = nm.canonical_layout_payload()
+    for rule in payload["detection_rules"]:
+        try:
+            re.compile(rule["regex"])
+        except re.error as exc:  # pragma: no cover — defensive
+            raise AssertionError(
+                f"Detection rule regex {rule['regex']!r} failed to compile: {exc}"
+            )
+
+
+# ── Stage 23.A.1.1 — detect_cas_kind smoke cases ──────────────────────
+
+
+def test_detect_cas_kind_smoke_cases() -> None:
+    # Direct primitive lookups.
+    assert nm.detect_cas_kind("^3") == "noetic"
+    assert nm.detect_cas_kind("^3^P") == "cognitive_state"
+    assert nm.detect_cas_kind("F4") == "drive"
+    assert nm.detect_cas_kind("Omega_refusal") == "emergent_omega"
+    # No-signal inputs.
+    assert nm.detect_cas_kind("random text") is None
+    assert nm.detect_cas_kind("") is None
+    assert nm.detect_cas_kind(None) is None
+
+
+def test_detect_cas_kind_regex_fallback_for_inline_primitives() -> None:
+    """When direct lookup misses, the regex rules classify embedded primitives."""
+    # Compound state embedded in surrounding context.
+    assert nm.detect_cas_kind("the state is ^7^E here") == "cognitive_state"
+    # Bare drive subscript notation.
+    assert nm.detect_cas_kind("_{F2}") == "drive"
+    # Omega glyph fallback.
+    assert nm.detect_cas_kind("see Ω derivation") == "emergent_omega"
+    # Theta spelling.
+    assert nm.detect_cas_kind("apply Theta recipe") == "production"

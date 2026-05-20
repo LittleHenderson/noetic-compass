@@ -53,8 +53,9 @@ See `research/cas_probe/STAGE23_ATLAS_SELF_READING_PREREG_20260519.md`,
 from __future__ import annotations
 
 import math
+import re
 from dataclasses import dataclass
-from typing import Literal
+from typing import Literal, Optional
 
 
 LAYOUT_VERSION = "stage23a3_notation_2d_layout_v3"
@@ -114,6 +115,59 @@ PrimitiveKind = Literal[
 ]
 
 
+# ── Canonical color palette (Stage 23.A.1.1 — Python mirror) ──────────
+#
+# Mirrors the 17-entry palette in dashboard/src/lib/notation2DMap.ts.
+# Every PrimitiveKind has exactly one canonical color. Renderers and
+# downstream tooling (Python or TypeScript) consume this map instead of
+# maintaining ad-hoc CAS-expression colorizers. If a kind is added to
+# PrimitiveKind, this dict must grow with it.
+KIND_COLOR: dict[str, str] = {
+    "noetic":           "#22d3ee",
+    "domain":           "#34d399",
+    "drive":            "#f59e0b",
+    "register":         "#f472b6",
+    "cognitive_state":  "#38bdf8",
+    "operation":        "#fb7185",
+    "inversion_axis":   "#dc2626",
+    "foundation":       "#9333ea",
+    "production":       "#f472b6",
+    "rpm_pathway":      "#fbbf24",
+    "set_constructor":  "#14b8a6",
+    "set_relation":     "#10b981",
+    "set_operation":    "#16a34a",
+    "combinator":       "#0d9488",
+    "authority_set":    "#94a3b8",
+    "cardinality_kind": "#cbd5e1",
+    "emergent_omega":   "#a78bfa",
+}
+
+
+# ── Detection rules (Stage 23.A.1.1 — Python ↔ TypeScript shared) ─────
+#
+# Priority-ordered list of regex rules for classifying a free-form CAS
+# expression string into a PrimitiveKind. Both `detect_cas_kind` (Python)
+# and `detectCasKind` (TypeScript) consume these rules verbatim.
+#
+# Patterns are JavaScript-RegExp compatible (no Python-only features
+# like named groups). The TypeScript side must be able to feed each
+# `regex` field directly into `new RegExp(rule.regex)`.
+DETECTION_RULES: list[dict[str, object]] = [
+    {"priority": 1, "kind": "emergent_omega",  "regex": r"\bOmega_[A-Za-z]+\b",         "description": "Omega_* name pattern"},
+    {"priority": 2, "kind": "emergent_omega",  "regex": r"Ω",                            "description": "Greek capital omega glyph"},
+    {"priority": 3, "kind": "production",      "regex": r"Θ",                            "description": "Greek capital theta glyph"},
+    {"priority": 4, "kind": "production",      "regex": r"\bTheta\b",                    "description": "Theta spelled out"},
+    {"priority": 5, "kind": "set_constructor", "regex": r"[A-Za-z]+Cluster\b",           "description": "...Cluster suffix"},
+    {"priority": 6, "kind": "cognitive_state", "regex": r"\^\d\^[PCEO](?![A-Za-z0-9])",  "description": "Compound cognitive state ^N^D"},
+    {"priority": 7, "kind": "noetic",          "regex": r"\^\d(?![\^\dPCEO])",           "description": "Bare Noetic ^N"},
+    {"priority": 8, "kind": "drive",           "regex": r"\bF[1-7]\b",                   "description": "Bare Drive F1..F7"},
+    {"priority": 9, "kind": "drive",           "regex": r"_\{F[1-7]\}",                  "description": "Drive in subscript _{Fk}"},
+    {"priority": 10, "kind": "domain",         "regex": r"\^[PCEO]\b",                   "description": "Standalone Domain ^P/^C/^E/^O"},
+    {"priority": 11, "kind": "register",       "regex": r"\|[TAfE]\b",                   "description": "Standalone Register |T/|A/|f/|E"},
+    {"priority": 12, "kind": "register",       "regex": r"\|⟨",                          "description": "Register set marker |⟨…⟩"},
+]
+
+
 @dataclass(frozen=True)
 class Position2D:
     """Canonical 2D coordinate for a CAS primitive."""
@@ -129,6 +183,7 @@ class Position2D:
             "kind": self.kind,
             "x": round(self.x, 9),
             "y": round(self.y, 9),
+            "color": KIND_COLOR[self.kind],
         }
 
 
@@ -709,6 +764,55 @@ def all_positions() -> list[Position2D]:
     return out
 
 
+# ── Free-form CAS expression detection (Stage 23.A.1.1) ───────────────
+
+
+# Pre-compile the detection patterns once at module import; reused by
+# every `detect_cas_kind` call. The committed regex strings remain the
+# canonical source of truth (TypeScript consumes them verbatim), so we
+# do NOT mutate them here — just cache the compiled form for speed.
+_COMPILED_DETECTION_RULES: list[tuple[int, str, "re.Pattern[str]", str]] = [
+    (
+        int(rule["priority"]),  # type: ignore[arg-type]
+        str(rule["kind"]),
+        re.compile(str(rule["regex"])),
+        str(rule["description"]),
+    )
+    for rule in DETECTION_RULES
+]
+
+
+def detect_cas_kind(cas: Optional[str]) -> Optional[str]:
+    """Classify a free-form CAS expression into a PrimitiveKind.
+
+    Detection order:
+      1. Direct primitive lookup via `get_position` — covers exactly-named
+         primitives like 'Omega_refusal', 'Product', 'NoeticCluster', etc.
+         Bare 'E' raises ValueError inside `get_position`; we treat that
+         the same as "no direct hit" and fall through.
+      2. Iterate `DETECTION_RULES` in priority order, return the first
+         rule whose `regex` matches anywhere in `cas`.
+      3. Return None if no rule matches.
+
+    None/empty input → None.
+    """
+    if cas is None or cas == "":
+        return None
+    # 1. Direct primitive lookup.
+    try:
+        pos = get_position(cas.strip())
+    except (KeyError, ValueError):
+        pos = None
+    if pos is not None:
+        return pos.kind
+    # 2. Priority-ordered regex match.
+    for _priority, kind, pattern, _description in _COMPILED_DETECTION_RULES:
+        if pattern.search(cas):
+            return kind
+    # 3. No rule matched.
+    return None
+
+
 def canonical_layout_payload() -> dict[str, object]:
     """Machine-readable layout artifact (committed to research/cas_probe/)."""
     return {
@@ -726,4 +830,5 @@ def canonical_layout_payload() -> dict[str, object]:
             "reading, encoder design, or training signal."
         ),
         "primitives": [p.as_dict() for p in all_positions()],
+        "detection_rules": [dict(rule) for rule in DETECTION_RULES],
     }
