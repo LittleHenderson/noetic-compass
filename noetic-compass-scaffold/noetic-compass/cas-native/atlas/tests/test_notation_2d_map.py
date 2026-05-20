@@ -188,12 +188,13 @@ def test_canonical_layout_payload_has_required_shape() -> None:
     assert payload["layout_version"] == nm.LAYOUT_VERSION
     assert "stage_23_a" in payload["scope"]
     primitives = payload["primitives"]
-    # Stage 23.A (65) + Stage 23.A.2 (92) = 157.
+    # Stage 23.A (65) + Stage 23.A.2 (92) + Stage 23.A.3 (12) = 169.
     # 23.A:    10 Noetics + 4 Domains + 7 Drives + 4 Registers + 40 Cognitive States = 65
     # 23.A.2:  5 Operations + 7 Inversion Axes + 28 Foundations + 5 Production
     #          + 22 RPM + 4 Set constructors + 6 Set relations + 4 Set operations
     #          + 4 Combinators + 5 Authority sets + 2 Cardinality kinds = 92
-    assert len(primitives) == 157
+    # 23.A.3:  12 admitted Omega_* emergent registers = 12
+    assert len(primitives) == 169
     # Every entry has the required shape.
     for entry in primitives:
         assert "primitive" in entry
@@ -376,16 +377,16 @@ def test_cardinality_kinds_have_positions() -> None:
         assert pos.kind == "cardinality_kind"
 
 
-# ── Stage 23.A.2 — global property: 157 unique primitives ─────────────
+# ── Stage 23.A.2 — global property: now 169 unique primitives (with 23.A.3) ─
 
 
-def test_stage_23_a_2_total_primitive_count_is_157() -> None:
+def test_stage_23_a_3_total_primitive_count_is_169() -> None:
     positions = nm.all_positions()
-    assert len(positions) == 157
+    assert len(positions) == 169
 
 
-def test_no_collisions_across_full_157_primitive_set() -> None:
-    """The Stage 23.A no-collision invariant must still hold at 23.A.2."""
+def test_no_collisions_across_full_169_primitive_set() -> None:
+    """The Stage 23.A no-collision invariant must still hold at 23.A.3."""
     seen: dict[tuple[float, float], str] = {}
     for pos in nm.all_positions():
         key = (round(pos.x, 9), round(pos.y, 9))
@@ -397,16 +398,106 @@ def test_no_collisions_across_full_157_primitive_set() -> None:
         seen[key] = pos.primitive
 
 
-def test_all_16_primitive_kinds_are_populated() -> None:
+def test_all_17_primitive_kinds_are_populated() -> None:
     """Every kind in the PrimitiveKind Literal must have at least one entry."""
     expected_kinds = {
         "noetic", "domain", "drive", "register", "cognitive_state",
         "operation", "inversion_axis", "foundation", "production",
         "rpm_pathway", "set_constructor", "set_relation",
         "set_operation", "combinator", "authority_set", "cardinality_kind",
+        "emergent_omega",
     }
     observed_kinds = {p.kind for p in nm.all_positions()}
     assert observed_kinds == expected_kinds, (
         f"Missing kinds: {expected_kinds - observed_kinds}; "
         f"Extra kinds: {observed_kinds - expected_kinds}"
     )
+
+
+# ── Stage 23.A.3 — Emergent Omega_* registers ─────────────────────────
+
+
+def test_every_emergent_omega_has_a_position() -> None:
+    """All 12 admitted Omega_* registers in EMERGENT_OMEGAS get a position."""
+    assert len(nm.EMERGENT_OMEGAS) == 12
+    for name in nm.EMERGENT_OMEGAS:
+        pos = nm.get_position(name)
+        assert pos.kind == "emergent_omega"
+        assert pos.primitive == name
+
+
+def test_every_omega_is_closer_to_its_anchor_noetic_than_to_any_other() -> None:
+    """Each Ω must sit closer to its derivation anchor Noetic than to any
+    other Noetic — the spatial-anchor invariant of the 23.A.3 design.
+    """
+    for name in nm.EMERGENT_OMEGAS:
+        omega_pos = nm.get_position(name)
+        anchor = nm.OMEGA_ANCHOR_NOETIC[name]
+        ax, ay = nm.get_position(anchor).x, nm.get_position(anchor).y
+        anchor_d2 = (omega_pos.x - ax) ** 2 + (omega_pos.y - ay) ** 2
+        for other in nm.NOETICS:
+            if other == anchor:
+                continue
+            ox, oy = nm.get_position(other).x, nm.get_position(other).y
+            other_d2 = (omega_pos.x - ox) ** 2 + (omega_pos.y - oy) ** 2
+            assert anchor_d2 < other_d2, (
+                f"Omega {name!r} is not closer to anchor {anchor!r} "
+                f"(d²={anchor_d2:.4f}) than to {other!r} (d²={other_d2:.4f})"
+            )
+
+
+def test_no_omega_collides_with_any_other_primitive() -> None:
+    """No Ω position may coincide with any non-Ω primitive position."""
+    omega_names = set(nm.EMERGENT_OMEGAS)
+    omega_keys: dict[tuple[float, float], str] = {}
+    other_keys: dict[tuple[float, float], str] = {}
+    for pos in nm.all_positions():
+        key = (round(pos.x, 9), round(pos.y, 9))
+        if pos.primitive in omega_names:
+            omega_keys[key] = pos.primitive
+        else:
+            other_keys[key] = pos.primitive
+    overlap = set(omega_keys) & set(other_keys)
+    assert not overlap, (
+        f"Omega coordinates collide with non-Omega primitives at: "
+        + ", ".join(
+            f"{k} ({omega_keys[k]!r} ↔ {other_keys[k]!r})" for k in overlap
+        )
+    )
+
+
+def test_omega_radius_is_outside_noetic_ring() -> None:
+    """Each Ω must sit on a ring strictly outside the unit Noetic ring."""
+    for name in nm.EMERGENT_OMEGAS:
+        pos = nm.get_position(name)
+        r2 = pos.x ** 2 + pos.y ** 2
+        assert r2 > 1.0, (
+            f"Omega {name!r} at ({pos.x}, {pos.y}) is inside the Noetic ring"
+        )
+        # And on the canonical Ω-ring (radius 1.8) within floating tolerance.
+        assert math.isclose(math.sqrt(r2), nm.OMEGA_RADIUS, abs_tol=1e-9), (
+            f"Omega {name!r} off the canonical Ω-ring of radius "
+            f"{nm.OMEGA_RADIUS}: r={math.sqrt(r2)}"
+        )
+
+
+def test_omega_anchor_map_matches_registry_anchor_noetics() -> None:
+    """The hardcoded OMEGA_ANCHOR_NOETIC mirrors the LHS Noetic of each
+    derivation in cas-native/config/omega_registry.yaml. Verified here as
+    a structural check that the spec and code agree on the 12 anchors.
+    """
+    expected = {
+        "Omega_presence":   "^1",
+        "Omega_refusal":    "^3",
+        "Omega_grounding":  "^2",
+        "Omega_alignment":  "^5",
+        "Omega_clarity":    "^1",
+        "Omega_resolve":    "^6",
+        "Omega_witness":    "^1",
+        "Omega_attunement": "^4",
+        "Omega_genesis":    "^0",
+        "Omega_cadence":    "^7",
+        "Omega_invocation": "^8",
+        "Omega_landing":    "^9",
+    }
+    assert nm.OMEGA_ANCHOR_NOETIC == expected

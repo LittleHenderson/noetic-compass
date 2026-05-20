@@ -1,9 +1,9 @@
 """Canonical 2D coordinate system for CAS primitives.
 
-This module is Stage 23.A / 23.A.2 — the static foundation underneath
-any future "CAS Native reads its own Idea Atlas" capability.
+This module is Stage 23.A / 23.A.2 / 23.A.3 — the static foundation
+underneath any future "CAS Native reads its own Idea Atlas" capability.
 
-Coverage (Stage 23.A + 23.A.2 = 157 primitives total):
+Coverage (Stage 23.A + 23.A.2 + 23.A.3 = 169 primitives total):
   Stage 23.A (65):
     - 10 Noetics
     - 4 Domains
@@ -24,13 +24,20 @@ Coverage (Stage 23.A + 23.A.2 = 157 primitives total):
     - 5 Authority sets (SystemInstructionSet, UserUtteranceSet,
       ToolObservationSet, ValidatedClaimSet, RenderedResponseSet)
     - 2 Cardinality kind markers (Cardinality, OrderedTuple)
+  Stage 23.A.3 (12):
+    - 12 admitted Omega_* emergent registers (slots 0-11 from
+      `cas-native/config/omega_registry.yaml`), each anchored at
+      radius 1.8 along its derivation Noetic's angle. Slots sharing
+      an anchor Noetic (^1 carries slots 0/4/6) fan around the
+      anchor angle by ±8 degrees.
 
 Properties enforced by tests:
 - Noetic involution pairs reflect across the origin; Drive involution
   pairs reflect across x=0.
 - Self-dual primitives lie on a symmetry axis.
 - Domain precedence P ≻ C ≻ E ≻ O is spatially monotone.
-- Every position is unique across all 157 primitives.
+- Every position is unique across all 169 primitives.
+- Each Omega_* sits closer to its anchor Noetic than to any other Noetic.
 - Layout is deterministic across calls / processes / machines.
 
 This module does NOT:
@@ -38,12 +45,10 @@ This module does NOT:
 - Introduce a learned parameter or tensor.
 - Claim to be an optimal attention prior. That is a future empirical
   question (Stage 23.B/C/D), not declared here.
-- Enumerate "12 Ω_* emergent registers" — that group is intentionally
-  excluded pending canonical enumeration.
 
-See `research/cas_probe/STAGE23_ATLAS_SELF_READING_PREREG_20260519.md`
-and `STAGE23_A_2_NOTATION_MAP_EXTENSION_20260519.md` for the design
-boundary docs.
+See `research/cas_probe/STAGE23_ATLAS_SELF_READING_PREREG_20260519.md`,
+`STAGE23_A_2_NOTATION_MAP_EXTENSION_20260519.md`, and
+`STAGE23_A_3_OMEGA_ENUMERATION_20260520.md` for the design boundary docs.
 """
 from __future__ import annotations
 
@@ -52,7 +57,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 
-LAYOUT_VERSION = "stage23a2_notation_2d_layout_v2"
+LAYOUT_VERSION = "stage23a3_notation_2d_layout_v3"
 
 
 # ── Primitive identifiers ─────────────────────────────────────────────
@@ -104,6 +109,8 @@ PrimitiveKind = Literal[
     "combinator",
     "authority_set",
     "cardinality_kind",
+    # Stage 23.A.3
+    "emergent_omega",
 ]
 
 
@@ -325,6 +332,103 @@ CARDINALITY_POSITION: dict[str, tuple[float, float]] = {
 }
 
 
+# ── Stage 23.A.3 additions ────────────────────────────────────────────
+#
+# 12 admitted Omega_* emergent registers. Source of truth:
+# `cas-native/config/omega_registry.yaml`. Each entry's derivation is of
+# the form `(^N|R1 × ^N|R2 × ...) = ^N|Omega_<name>`; the "anchor Noetic"
+# is the Noetic on the LHS of that derivation. Names are hardcoded here
+# (not loaded from yaml at import time) so the canonical layout payload
+# stays deterministic across processes and machines; the yaml file
+# remains the spec, this tuple mirrors it.
+EMERGENT_OMEGAS: tuple[str, ...] = (
+    "Omega_presence",     # slot 0  — anchor ^1
+    "Omega_refusal",      # slot 1  — anchor ^3
+    "Omega_grounding",    # slot 2  — anchor ^2
+    "Omega_alignment",    # slot 3  — anchor ^5
+    "Omega_clarity",      # slot 4  — anchor ^1
+    "Omega_resolve",      # slot 5  — anchor ^6
+    "Omega_witness",      # slot 6  — anchor ^1
+    "Omega_attunement",   # slot 7  — anchor ^4
+    "Omega_genesis",      # slot 8  — anchor ^0
+    "Omega_cadence",      # slot 9  — anchor ^7
+    "Omega_invocation",   # slot 10 — anchor ^8
+    "Omega_landing",      # slot 11 — anchor ^9
+)
+
+# Anchor Noetic for each Omega (LHS of the derivation in omega_registry.yaml).
+OMEGA_ANCHOR_NOETIC: dict[str, str] = {
+    "Omega_presence":   "^1",
+    "Omega_refusal":    "^3",
+    "Omega_grounding":  "^2",
+    "Omega_alignment":  "^5",
+    "Omega_clarity":    "^1",
+    "Omega_resolve":    "^6",
+    "Omega_witness":    "^1",
+    "Omega_attunement": "^4",
+    "Omega_genesis":    "^0",
+    "Omega_cadence":    "^7",
+    "Omega_invocation": "^8",
+    "Omega_landing":    "^9",
+}
+
+# Spatial-anchor design (closes the 23.A.2 deferral):
+#   Each Ω sits on a ring at radius OMEGA_RADIUS = 1.8 around the origin,
+#   at the same angle as its anchor Noetic. The Noetic ring is radius 1.0;
+#   placing Ω at 1.8 puts it 0.8 outside the anchor, visually "adjacent" to
+#   the anchor and unambiguously identified by direction. Multiple Ω's that
+#   share an anchor Noetic (slots 0/4/6 all anchor on ^1) are disambiguated
+#   by fanning around the anchor angle by OMEGA_FAN_DEG = ±8 degrees.
+OMEGA_RADIUS: float = 1.8
+OMEGA_FAN_DEG: float = 8.0
+
+
+def _omega_fan_offsets(anchor: str) -> dict[str, float]:
+    """Return angular offsets (deg) for each Omega anchored on `anchor`.
+
+    Single-Omega anchors: offset = 0.
+    Multi-Omega anchors (currently only ^1 carries 3 Omegas): fan the
+    slots around the anchor by ±OMEGA_FAN_DEG. Slots are ordered by their
+    registry index, so the lowest-slot Ω sits at -OMEGA_FAN_DEG, the
+    middle slot at 0, the highest at +OMEGA_FAN_DEG.
+    """
+    siblings = [
+        name for name in EMERGENT_OMEGAS
+        if OMEGA_ANCHOR_NOETIC[name] == anchor
+    ]
+    n = len(siblings)
+    if n == 1:
+        return {siblings[0]: 0.0}
+    # Distribute n names evenly across [-OMEGA_FAN_DEG, +OMEGA_FAN_DEG].
+    # For n=3 this gives -OMEGA_FAN_DEG, 0, +OMEGA_FAN_DEG.
+    offsets: dict[str, float] = {}
+    if n == 1:
+        offsets[siblings[0]] = 0.0
+    else:
+        step = (2.0 * OMEGA_FAN_DEG) / (n - 1)
+        for i, name in enumerate(siblings):
+            offsets[name] = -OMEGA_FAN_DEG + i * step
+    return offsets
+
+
+def _omega_position(name: str) -> tuple[float, float]:
+    """Return (x, y) on the Ω-ring (radius 1.8) for an emergent register."""
+    if name not in OMEGA_ANCHOR_NOETIC:
+        raise KeyError(f"Unknown Omega: {name!r}")
+    anchor = OMEGA_ANCHOR_NOETIC[name]
+    anchor_angle_deg = NOETIC_ANGLE_DEG[anchor]
+    fan = _omega_fan_offsets(anchor)
+    angle_deg = anchor_angle_deg + fan[name]
+    angle_rad = math.radians(angle_deg)
+    return (OMEGA_RADIUS * math.cos(angle_rad), OMEGA_RADIUS * math.sin(angle_rad))
+
+
+# Pre-computed Ω positions, deterministic and frozen for the layout.
+OMEGA_POSITION: dict[str, tuple[float, float]] = {
+    name: _omega_position(name) for name in EMERGENT_OMEGAS
+}
+
+
 def _noetic_position(noetic: str) -> tuple[float, float]:
     """Return (x, y) on the unit circle for a Noetic."""
     if noetic not in NOETIC_ANGLE_DEG:
@@ -541,6 +645,16 @@ def get_position(primitive: str) -> Position2D:
             primitive=primitive, kind="cardinality_kind", x=x, y=y,
         )
 
+    # ── Stage 23.A.3 primitive dispatch ─────────────────────────────────
+
+    # Emergent Omega_* registers (canonical CamelCase names from
+    # omega_registry.yaml; no prefix because the names are unambiguous).
+    if primitive in OMEGA_POSITION:
+        x, y = OMEGA_POSITION[primitive]
+        return Position2D(
+            primitive=primitive, kind="emergent_omega", x=x, y=y,
+        )
+
     raise KeyError(f"Unknown primitive: {primitive!r}")
 
 
@@ -548,7 +662,7 @@ def all_positions() -> list[Position2D]:
     """Return Position2D for every primitive the layout covers.
 
     Enumerates in canonical form. No coordinate collisions across all
-    157 primitives (Stage 23.A: 65, Stage 23.A.2: 92).
+    169 primitives (Stage 23.A: 65, Stage 23.A.2: 92, Stage 23.A.3: 12).
     """
     out: list[Position2D] = []
     # Stage 23.A primitives.
@@ -589,6 +703,9 @@ def all_positions() -> list[Position2D]:
         out.append(get_position(auth))
     for card in CARDINALITY_KINDS:
         out.append(get_position(card))
+    # Stage 23.A.3 primitives.
+    for omega in EMERGENT_OMEGAS:
+        out.append(get_position(omega))
     return out
 
 
@@ -596,14 +713,17 @@ def canonical_layout_payload() -> dict[str, object]:
     """Machine-readable layout artifact (committed to research/cas_probe/)."""
     return {
         "layout_version": LAYOUT_VERSION,
-        "scope": "stage_23_a_and_23_a_2_static_foundation",
+        "scope": "stage_23_a_and_23_a_2_and_23_a_3_static_foundation",
         "boundary": (
-            "Static canonical 2D positions for CAS primitives across both "
-            "Stage 23.A (Noetics/Domains/Drives/Registers/Cognitive States) "
-            "and Stage 23.A.2 (Operations / Inversion Axes / Foundations / "
+            "Static canonical 2D positions for CAS primitives across "
+            "Stage 23.A (Noetics/Domains/Drives/Registers/Cognitive States), "
+            "Stage 23.A.2 (Operations / Inversion Axes / Foundations / "
             "Production / RPM / Set primitives / Combinators / Authority "
-            "Sets / Cardinality kinds). Does not include atlas-self-reading, "
-            "encoder design, or training signal."
+            "Sets / Cardinality kinds), and Stage 23.A.3 (12 admitted "
+            "Omega_* emergent registers from cas-native/config/"
+            "omega_registry.yaml, each anchored at radius 1.8 along its "
+            "derivation Noetic's angle). Does not include atlas-self-"
+            "reading, encoder design, or training signal."
         ),
         "primitives": [p.as_dict() for p in all_positions()],
     }

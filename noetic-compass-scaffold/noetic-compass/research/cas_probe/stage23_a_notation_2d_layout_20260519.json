@@ -1,6 +1,6 @@
 {
-  "boundary": "Static canonical 2D positions for CAS primitives across both Stage 23.A (Noetics/Domains/Drives/Registers/Cognitive States) and Stage 23.A.2 (Operations / Inversion Axes / Foundations / Production / RPM / Set primitives / Combinators / Authority Sets / Cardinality kinds). Does not include atlas-self-reading, encoder design, or training signal.",
-  "layout_version": "stage23a2_notation_2d_layout_v2",
+  "boundary": "Static canonical 2D positions for CAS primitives across Stage 23.A (Noetics/Domains/Drives/Registers/Cognitive States), Stage 23.A.2 (Operations / Inversion Axes / Foundations / Production / RPM / Set primitives / Combinators / Authority Sets / Cardinality kinds), and Stage 23.A.3 (12 admitted Omega_* emergent registers from cas-native/config/omega_registry.yaml, each anchored at radius 1.8 along its derivation Noetic's angle). Does not include atlas-self-reading, encoder design, or training signal.",
+  "layout_version": "stage23a3_notation_2d_layout_v3",
   "primitives": [
     {
       "kind": "noetic",
@@ -394,19 +394,19 @@
     },
     {
       "kind": "operation",
-      "primitive": "×",
+      "primitive": "\u00d7",
       "x": -1.0,
       "y": 2.5
     },
     {
       "kind": "operation",
-      "primitive": "÷",
+      "primitive": "\u00f7",
       "x": 1.0,
       "y": 2.5
     },
     {
       "kind": "operation",
-      "primitive": "∘",
+      "primitive": "\u2218",
       "x": 0.0,
       "y": 2.5
     },
@@ -418,7 +418,7 @@
     },
     {
       "kind": "operation",
-      "primitive": "−",
+      "primitive": "\u2212",
       "x": 2.0,
       "y": 2.5
     },
@@ -634,31 +634,31 @@
     },
     {
       "kind": "production",
-      "primitive": "Θ",
+      "primitive": "\u0398",
       "x": -2.0,
       "y": 5.5
     },
     {
       "kind": "production",
-      "primitive": "Λ",
+      "primitive": "\u039b",
       "x": -1.0,
       "y": 5.5
     },
     {
       "kind": "production",
-      "primitive": "η",
+      "primitive": "\u03b7",
       "x": 0.0,
       "y": 5.5
     },
     {
       "kind": "production",
-      "primitive": "κ",
+      "primitive": "\u03ba",
       "x": 1.0,
       "y": 5.5
     },
     {
       "kind": "production",
-      "primitive": "ι",
+      "primitive": "\u03b9",
       "x": 2.0,
       "y": 5.5
     },
@@ -820,61 +820,61 @@
     },
     {
       "kind": "set_relation",
-      "primitive": "∈",
+      "primitive": "\u2208",
       "x": 6.0,
       "y": 2.0
     },
     {
       "kind": "set_relation",
-      "primitive": "∉",
+      "primitive": "\u2209",
       "x": 6.5,
       "y": 2.0
     },
     {
       "kind": "set_relation",
-      "primitive": "⊂",
+      "primitive": "\u2282",
       "x": 7.0,
       "y": 2.0
     },
     {
       "kind": "set_relation",
-      "primitive": "⊆",
+      "primitive": "\u2286",
       "x": 7.5,
       "y": 2.0
     },
     {
       "kind": "set_relation",
-      "primitive": "⊃",
+      "primitive": "\u2283",
       "x": 8.0,
       "y": 2.0
     },
     {
       "kind": "set_relation",
-      "primitive": "⊇",
+      "primitive": "\u2287",
       "x": 8.5,
       "y": 2.0
     },
     {
       "kind": "set_operation",
-      "primitive": "∪",
+      "primitive": "\u222a",
       "x": 7.0,
       "y": -1.0
     },
     {
       "kind": "set_operation",
-      "primitive": "∩",
+      "primitive": "\u2229",
       "x": 8.0,
       "y": -1.0
     },
     {
       "kind": "set_operation",
-      "primitive": "∖",
+      "primitive": "\u2216",
       "x": 9.0,
       "y": -1.0
     },
     {
       "kind": "set_operation",
-      "primitive": "∅",
+      "primitive": "\u2205",
       "x": 6.0,
       "y": -1.0
     },
@@ -943,7 +943,79 @@
       "primitive": "OrderedTuple",
       "x": 12.0,
       "y": -0.5
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_presence",
+      "x": -0.250511582,
+      "y": -1.782482524
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_refusal",
+      "x": -1.272792206,
+      "y": -1.272792206
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_grounding",
+      "x": 1.272792206,
+      "y": 1.272792206
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_alignment",
+      "x": -0.688830178,
+      "y": 1.662983159
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_clarity",
+      "x": 0.0,
+      "y": -1.8
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_resolve",
+      "x": 0.688830178,
+      "y": -1.662983159
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_witness",
+      "x": 0.250511582,
+      "y": -1.782482524
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_attunement",
+      "x": 1.8,
+      "y": 0.0
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_genesis",
+      "x": 0.0,
+      "y": 1.8
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_cadence",
+      "x": -1.8,
+      "y": 0.0
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_invocation",
+      "x": -1.662983159,
+      "y": 0.688830178
+    },
+    {
+      "kind": "emergent_omega",
+      "primitive": "Omega_landing",
+      "x": 1.662983159,
+      "y": -0.688830178
     }
   ],
-  "scope": "stage_23_a_and_23_a_2_static_foundation"
+  "scope": "stage_23_a_and_23_a_2_and_23_a_3_static_foundation"
 }
