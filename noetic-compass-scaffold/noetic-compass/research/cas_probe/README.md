@@ -2132,3 +2132,40 @@ Artifacts:
 - `stage22_cas_harness_ablation_bench_20260519.json`
 - `STAGE22_CAS_HARNESS_ABLATION_BENCH_20260519.md`
 - `tests/test_stage22_harness_ablation_bench.py`
+
+## Stage 22.1 result - Fine-grained gate attribution
+
+**Verdict: `STAGE22_1_GATE_ATTRIBUTION_COMPLETE`.**
+
+Stage 22.1 split the measurable Stage 19B/19C/20B/21A harness gates without
+running fresh inference. It also identified which requested gates cannot be
+attributed from the current locked artifacts.
+
+Measured attribution:
+
+| Gate | Attribution |
+|---|---:|
+| Ensemble-only gate | coverage `90.1%`; accepted accuracy `91.3%` |
+| Factor consistency over ensemble | accepted accuracy `+4.1pp`; coverage `-7.6pp` |
+| Trace stability over factor consistency | accepted accuracy `+3.4pp`; coverage `-9.4pp` |
+| Evidence Packet gate | canonical packet completeness `100.0%` |
+
+Not measurable from locked artifacts:
+
+- RPM gate
+- Lacunarity gate
+- Inversion scan gate
+
+Reason: Stage 20B explicitly validates the Verification Stack path only; neural
+lacunarity-head values and per-row RPM/inversion signals are not present in
+the Stage 19/20 locked reports.
+
+Artifacts:
+
+- `stage22_1_gate_attribution_spec.py`
+- `run_stage22_1_gate_attribution_bench.py`
+- `stage22_1_gate_attribution_prereg_20260519.json`
+- `STAGE22_1_GATE_ATTRIBUTION_PREREG_20260519.md`
+- `stage22_1_gate_attribution_bench_20260519.json`
+- `STAGE22_1_GATE_ATTRIBUTION_BENCH_20260519.md`
+- `tests/test_stage22_1_gate_attribution.py`

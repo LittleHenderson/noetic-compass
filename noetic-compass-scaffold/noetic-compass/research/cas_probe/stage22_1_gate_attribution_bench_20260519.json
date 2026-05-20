@@ -1,0 +1,304 @@
+{
+  "attribution": {
+    "ensemble_gate": {
+      "accepted_accuracy": 0.9127792052446131,
+      "coverage": 0.9013605442176871,
+      "silent_error_rate": 0.08722079475538697,
+      "status": "MEASURABLE",
+      "suppressed_rate": 0.09863945578231292
+    },
+    "evidence_packet_gate": {
+      "complete_packets": 4,
+      "packet_completeness_rate": 1.0,
+      "packet_count": 4,
+      "readiness_actions_present": [
+        "allow",
+        "caveat",
+        "constrain",
+        "suppress"
+      ],
+      "source": "stage21a_evidence_packet_export_20260519.json",
+      "status": "MEASURABLE"
+    },
+    "factor_consistency_gate": {
+      "accepted_accuracy": 0.9541463688845474,
+      "coverage": 0.8256802721088435,
+      "delta_accepted_accuracy": 0.04136716363993431,
+      "delta_coverage": -0.07568027210884354,
+      "delta_silent_error_rate": -0.04136716363993437,
+      "delta_suppressed_rate": 0.07568027210884354,
+      "silent_error_rate": 0.0458536311154526,
+      "status": "MEASURABLE",
+      "suppressed_rate": 0.17431972789115646
+    },
+    "generation_readiness_gate": {
+      "boundary": "No fresh hidden-state inference was run. Stage 20B attaches the Generation Readiness Gate to locked Stage 19 Verification Stack decisions and sample rows. Neural lacunarity-head values are not present in the Stage 19 reports, so this run validates the Verification Stack path of the readiness policy.",
+      "rows": [
+        {
+          "model": "Pythia-160M formula fixture",
+          "modes": {
+            "BALANCED": {
+              "allow": 3678,
+              "caveat": 1,
+              "constrain": 0,
+              "suppress": 521,
+              "suppression_rate": 0.12404761904761905,
+              "useful_output_rate": 0.8759523809523809
+            },
+            "HIGH_PRECISION": {
+              "allow": 3678,
+              "caveat": 1,
+              "constrain": 0,
+              "suppress": 521,
+              "suppression_rate": 0.12404761904761905,
+              "useful_output_rate": 0.8759523809523809
+            },
+            "MAX_COVERAGE_TRIAGE": {
+              "allow": 3679,
+              "caveat": 0,
+              "constrain": 521,
+              "suppress": 0,
+              "suppression_rate": 0.0,
+              "useful_output_rate": 1.0
+            }
+          },
+          "source": "stage19a_formula_stack",
+          "total": 4200
+        },
+        {
+          "model": "OLMo-1B",
+          "modes": {
+            "BALANCED": {
+              "allow": 1651,
+              "caveat": 36,
+              "constrain": 0,
+              "suppress": 665,
+              "suppression_rate": 0.28273809523809523,
+              "useful_output_rate": 0.7172619047619048
+            },
+            "HIGH_PRECISION": {
+              "allow": 1651,
+              "caveat": 36,
+              "constrain": 0,
+              "suppress": 665,
+              "suppression_rate": 0.28273809523809523,
+              "useful_output_rate": 0.7172619047619048
+            },
+            "MAX_COVERAGE_TRIAGE": {
+              "allow": 1687,
+              "caveat": 0,
+              "constrain": 665,
+              "suppress": 0,
+              "suppression_rate": 0.0,
+              "useful_output_rate": 1.0
+            }
+          },
+          "source": "stage19b_cross_arch_stack",
+          "total": 2352
+        },
+        {
+          "model": "Qwen2.5-1.5B",
+          "modes": {
+            "BALANCED": {
+              "allow": 1746,
+              "caveat": 8,
+              "constrain": 0,
+              "suppress": 598,
+              "suppression_rate": 0.2542517006802721,
+              "useful_output_rate": 0.7457482993197279
+            },
+            "HIGH_PRECISION": {
+              "allow": 1746,
+              "caveat": 8,
+              "constrain": 0,
+              "suppress": 598,
+              "suppression_rate": 0.2542517006802721,
+              "useful_output_rate": 0.7457482993197279
+            },
+            "MAX_COVERAGE_TRIAGE": {
+              "allow": 1754,
+              "caveat": 0,
+              "constrain": 598,
+              "suppress": 0,
+              "suppression_rate": 0.0,
+              "useful_output_rate": 1.0
+            }
+          },
+          "source": "stage19b_cross_arch_stack",
+          "total": 2352
+        }
+      ],
+      "source": "stage20b_generation_readiness_packets_20260519.json",
+      "status": "PARTIALLY_MEASURABLE"
+    },
+    "inversion_scan_gate": {
+      "boundary": "Per-row inversion scan outputs are absent from Stage 19/20 locked reports.",
+      "status": "NOT_MEASURABLE_FROM_LOCKED_ARTIFACTS"
+    },
+    "lacunarity_gate": {
+      "boundary": "Neural lacunarity-head values are absent from Stage 19/20 locked reports.",
+      "status": "NOT_MEASURABLE_FROM_LOCKED_ARTIFACTS"
+    },
+    "mode_selector_gate": {
+      "modes": {
+        "BALANCED": {
+          "accepted_accuracy_mean": 0.9541463688845474,
+          "coverage_mean": 0.8256802721088435,
+          "cross_arch_status": "MODE_SUPPORTED_CROSS_ARCH",
+          "recommended_use": "Normal customer audit flow where throughput matters but factor conflicts should still be suppressed.",
+          "silent_error_rate_mean": 0.0458536311154526,
+          "suppressed_rate_mean": 0.17431972789115646
+        },
+        "HIGH_PRECISION": {
+          "accepted_accuracy_mean": 0.9882465280476702,
+          "coverage_mean": 0.7315051020408163,
+          "cross_arch_status": "MODE_SUPPORTED_CROSS_ARCH",
+          "recommended_use": "Regulator, legal, safety, and high-trust review where suppression is preferred over a wrong accepted answer.",
+          "silent_error_rate_mean": 0.011753471952329841,
+          "suppressed_rate_mean": 0.2684948979591837
+        },
+        "MAX_COVERAGE_TRIAGE": {
+          "accepted_accuracy_mean": 0.9127792052446131,
+          "coverage_mean": 0.9013605442176871,
+          "cross_arch_status": "MODE_SUPPORTED_CROSS_ARCH",
+          "recommended_use": "Exploratory triage and batch review queues where human review remains expected.",
+          "silent_error_rate_mean": 0.08722079475538697,
+          "suppressed_rate_mean": 0.09863945578231292
+        }
+      },
+      "status": "MEASURABLE"
+    },
+    "rpm_gate": {
+      "boundary": "Per-row RPM satisfaction is not recorded except placeholder policy evidence.",
+      "status": "NOT_MEASURABLE_FROM_LOCKED_ARTIFACTS"
+    },
+    "trace_stability_gate": {
+      "accepted_accuracy": 0.9882465280476702,
+      "coverage": 0.7315051020408163,
+      "delta_accepted_accuracy": 0.03410015916312281,
+      "delta_coverage": -0.09417517006802723,
+      "delta_silent_error_rate": -0.034100159163122756,
+      "delta_suppressed_rate": 0.09417517006802723,
+      "silent_error_rate": 0.011753471952329841,
+      "status": "MEASURABLE",
+      "suppressed_rate": 0.2684948979591837
+    },
+    "wrap_output_gate": {
+      "boundary": "No live Wrap Output Gate toggle exists in locked reports.",
+      "status": "REFERENCE_ONLY"
+    }
+  },
+  "claim_boundary": "Only gates with per-row or component-level measurements in locked artifacts may receive numeric attribution. RPM, lacunarity, and inversion require a fresh Stage 22.2 runner unless per-row signals are added to the artifact set.",
+  "headline": {
+    "ensemble_only_accuracy": 0.9127792052446131,
+    "ensemble_only_coverage": 0.9013605442176871,
+    "factor_consistency_delta_accuracy": 0.04136716363993431,
+    "factor_consistency_delta_coverage": -0.07568027210884354,
+    "trace_stability_delta_accuracy": 0.03410015916312281,
+    "trace_stability_delta_coverage": -0.09417517006802723
+  },
+  "per_model_stage19b": {
+    "olmo1b": {
+      "display_name": "OLMo-1B",
+      "ensemble_gate": {
+        "accepted": 2126,
+        "accepted_accuracy": 0.8974600188146754,
+        "coverage": 0.9039115646258503,
+        "silent_error_rate": 0.10253998118532459,
+        "suppressed_rate": 0.09608843537414968
+      },
+      "factor_consistency_gate": {
+        "accepted": 1938,
+        "accepted_accuracy": 0.9422084623323014,
+        "coverage": 0.8239795918367347,
+        "delta_accepted_accuracy": 0.04474844351762597,
+        "delta_coverage": -0.07993197278911557,
+        "delta_silent_error_rate": -0.04474844351762597,
+        "delta_suppressed_rate": 0.07993197278911557,
+        "silent_error_rate": 0.05779153766769862,
+        "suppressed_rate": 0.17602040816326525
+      },
+      "trace_stability_gate": {
+        "accepted": 1687,
+        "accepted_accuracy": 0.981624184943687,
+        "coverage": 0.7172619047619048,
+        "delta_accepted_accuracy": 0.039415722611385595,
+        "delta_coverage": -0.10671768707482998,
+        "delta_silent_error_rate": -0.039415722611385595,
+        "delta_suppressed_rate": 0.10671768707482998,
+        "silent_error_rate": 0.018375815056313027,
+        "suppressed_rate": 0.28273809523809523,
+        "suppression_reasons": {
+          "drive_ensemble_all_disagree": 28,
+          "factor_conflicted": 143,
+          "final_token_conflicted": 13,
+          "final_token_conflicted+focus_token_conflicted": 7,
+          "final_token_conflicted+focus_token_conflicted+mean_over_seq_len_conflicted": 5,
+          "final_token_conflicted+focus_token_uncertain+mean_over_seq_len_conflicted": 1,
+          "final_token_conflicted+mean_over_seq_len_conflicted": 11,
+          "final_token_uncertain": 1,
+          "focus_token_conflicted": 59,
+          "focus_token_conflicted+mean_over_seq_len_conflicted": 15,
+          "focus_token_uncertain": 4,
+          "focus_token_uncertain+mean_over_seq_len_conflicted": 8,
+          "foundation_ensemble_all_disagree": 226,
+          "mean_over_seq_len_conflicted": 51,
+          "register_ensemble_all_disagree": 17,
+          "trace_unstable": 76
+        }
+      }
+    },
+    "qwen15b": {
+      "display_name": "Qwen2.5-1.5B",
+      "ensemble_gate": {
+        "accepted": 2114,
+        "accepted_accuracy": 0.9280983916745507,
+        "coverage": 0.8988095238095238,
+        "silent_error_rate": 0.07190160832544934,
+        "suppressed_rate": 0.10119047619047616
+      },
+      "factor_consistency_gate": {
+        "accepted": 1946,
+        "accepted_accuracy": 0.9660842754367934,
+        "coverage": 0.8273809523809523,
+        "delta_accepted_accuracy": 0.03798588376224277,
+        "delta_coverage": -0.07142857142857151,
+        "delta_silent_error_rate": -0.03798588376224277,
+        "delta_suppressed_rate": 0.07142857142857151,
+        "silent_error_rate": 0.03391572456320657,
+        "suppressed_rate": 0.17261904761904767
+      },
+      "trace_stability_gate": {
+        "accepted": 1754,
+        "accepted_accuracy": 0.9948688711516533,
+        "coverage": 0.7457482993197279,
+        "delta_accepted_accuracy": 0.028784595714859917,
+        "delta_coverage": -0.08163265306122447,
+        "delta_silent_error_rate": -0.028784595714859917,
+        "delta_suppressed_rate": 0.08163265306122441,
+        "silent_error_rate": 0.0051311288483466555,
+        "suppressed_rate": 0.2542517006802721,
+        "suppression_reasons": {
+          "drive_ensemble_all_disagree": 22,
+          "factor_conflicted": 115,
+          "final_token_conflicted": 6,
+          "final_token_conflicted+focus_token_conflicted": 23,
+          "final_token_conflicted+focus_token_conflicted+mean_over_seq_len_conflicted": 50,
+          "final_token_conflicted+mean_over_seq_len_conflicted": 16,
+          "final_token_uncertain+focus_token_conflicted+mean_over_seq_len_conflicted": 2,
+          "focus_token_conflicted": 28,
+          "focus_token_conflicted+mean_over_seq_len_conflicted": 41,
+          "focus_token_uncertain+mean_over_seq_len_conflicted": 1,
+          "foundation_ensemble_all_disagree": 238,
+          "mean_over_seq_len_conflicted": 18,
+          "register_ensemble_all_disagree": 31,
+          "trace_unstable": 7
+        }
+      }
+    }
+  },
+  "pre_registration": "stage22_1_gate_attribution_prereg_20260519.json",
+  "schema_version": "stage22_1_gate_attribution_bench_v1",
+  "scope": "fine_grained_gate_attribution_from_locked_artifacts",
+  "status": "STAGE22_1_GATE_ATTRIBUTION_COMPLETE"
+}

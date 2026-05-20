@@ -1,0 +1,113 @@
+{
+  "gates": [
+    {
+      "gate": "wrap_output_gate",
+      "limitation": "The locked artifacts do not contain a live Wrap Output Gate toggle.",
+      "measurable_metrics": [
+        "none_margin_mean",
+        "cpl2_delta_vs_none"
+      ],
+      "question": "How much structure appears before any CAS Harness wrapper is applied?",
+      "source_component": "raw/no-prefix floor and CPL2 likelihood comparator",
+      "status": "reference_only"
+    },
+    {
+      "gate": "ensemble_gate",
+      "limitation": "Measured on OLMo/Qwen Stage 19B cross-architecture fixtures.",
+      "measurable_metrics": [
+        "coverage",
+        "accepted_accuracy",
+        "silent_error_rate"
+      ],
+      "question": "What happens when only readout-position consensus is required?",
+      "source_component": "Stage 19B ensemble_only",
+      "status": "measurable_from_locked_artifacts"
+    },
+    {
+      "gate": "factor_consistency_gate",
+      "limitation": "This measures factor consistency, not the whole CAS compiler.",
+      "measurable_metrics": [
+        "delta_coverage",
+        "delta_accuracy",
+        "delta_silent_error"
+      ],
+      "question": "What does Drive/Register recomposition consistency add over ensemble-only?",
+      "source_component": "Stage 19B factor_consistent",
+      "status": "measurable_from_locked_artifacts"
+    },
+    {
+      "gate": "trace_stability_gate",
+      "limitation": "Gold labels score the result after the fact; runtime gate remains non-oracle.",
+      "measurable_metrics": [
+        "delta_coverage",
+        "delta_accuracy",
+        "delta_silent_error"
+      ],
+      "question": "What does trace-stability suppression add over factor consistency?",
+      "source_component": "Stage 19B stack minus factor_consistent",
+      "status": "measurable_from_locked_artifacts"
+    },
+    {
+      "gate": "mode_selector_gate",
+      "limitation": "Packages existing Stage 19B components; no fresh hidden-state inference.",
+      "measurable_metrics": [
+        "coverage",
+        "accepted_accuracy",
+        "silent_error_rate"
+      ],
+      "question": "How does user-selected mode move precision and coverage?",
+      "source_component": "Stage 19C mode selector",
+      "status": "measurable_from_locked_artifacts"
+    },
+    {
+      "gate": "generation_readiness_gate",
+      "limitation": "Stage 20B validates the Verification Stack path only; neural lacunarity/RPM/inversion signals are absent.",
+      "measurable_metrics": [
+        "useful_output_rate",
+        "suppression_rate",
+        "policy_counts"
+      ],
+      "question": "How does readiness policy convert accept/suppress into allow/caveat/constrain/suppress?",
+      "source_component": "Stage 20B readiness packets",
+      "status": "partially_measurable_from_locked_artifacts"
+    },
+    {
+      "gate": "evidence_packet_gate",
+      "limitation": "Evidence Packet completeness is auditability, not model accuracy.",
+      "measurable_metrics": [
+        "packet_completeness_rate",
+        "readiness_action_coverage"
+      ],
+      "question": "Does the audit surface preserve complete per-trace evidence?",
+      "source_component": "Stage 21A packet export",
+      "status": "measurable_from_locked_artifacts"
+    },
+    {
+      "gate": "rpm_gate",
+      "limitation": "Stage 20B sample evidence sets rpm_satisfaction to 1.0 placeholders; no attribution possible.",
+      "measurable_metrics": [],
+      "question": "Does RPM satisfaction independently improve useful output or suppress unsupported traces?",
+      "source_component": "not recorded per row in Stage 19/20 locked reports",
+      "status": "not_measurable_from_locked_artifacts"
+    },
+    {
+      "gate": "lacunarity_gate",
+      "limitation": "Stage 20B explicitly says neural lacunarity-head values are not present.",
+      "measurable_metrics": [],
+      "question": "Does lacunarity independently flag blind spots beyond ensemble/factor/trace instability?",
+      "source_component": "not recorded per row in Stage 19/20 locked reports",
+      "status": "not_measurable_from_locked_artifacts"
+    },
+    {
+      "gate": "inversion_scan_gate",
+      "limitation": "Stage 20B sample evidence sets inversion_flag_count to zero placeholders; no attribution possible.",
+      "measurable_metrics": [],
+      "question": "Does inversion scanning independently catch unsupported or structurally inverted cases?",
+      "source_component": "not recorded per row in Stage 19/20 locked reports",
+      "status": "not_measurable_from_locked_artifacts"
+    }
+  ],
+  "required_boundary": "Only gates with per-row or component-level measurements in locked artifacts may receive numeric attribution. RPM, lacunarity, and inversion require a fresh Stage 22.2 runner unless per-row signals are added to the artifact set.",
+  "schema_version": "stage22_1_gate_attribution_spec_v1",
+  "scope": "fine_grained_gate_attribution_from_locked_artifacts"
+}
