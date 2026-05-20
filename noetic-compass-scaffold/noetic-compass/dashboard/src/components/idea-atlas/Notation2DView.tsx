@@ -27,6 +27,7 @@ import {
   colorForKind,
   layoutVersion,
   type Position2D,
+  type PrimitiveKind,
 } from '../../lib/notation2DMap';
 
 export interface Notation2DViewProps {
@@ -38,7 +39,27 @@ export interface Notation2DViewProps {
   onSelectPrimitive?: (p: Position2D) => void;
   /** Optional padding (in data-space units) around the data extent. Default: 1. */
   padding?: number;
+  /**
+   * When true, render a text label next to Noetics (10) and Domains (4)
+   * to make the map's axes self-orienting. The remaining 155 primitives
+   * stay unlabeled — labeling all 169 would overlap badly.
+   * Default: false.
+   */
+  showLabels?: boolean;
+  /**
+   * When set, render only primitives of this kind. Footer text becomes
+   * "N of M primitives" so the viewer always sees the filter applied.
+   * Useful for stakeholder questions like "show me just the Foundations."
+   * Default: undefined (render all).
+   */
+  filterKind?: PrimitiveKind;
 }
+
+/** Kinds that get auto-labeled when `showLabels` is true. */
+const AUTO_LABELED_KINDS: ReadonlySet<PrimitiveKind> = new Set([
+  'noetic',
+  'domain',
+]);
 
 interface Viewport {
   minX: number;
@@ -68,9 +89,18 @@ export function Notation2DView({
   height = 600,
   onSelectPrimitive,
   padding = 1,
+  showLabels = false,
+  filterKind,
 }: Notation2DViewProps) {
-  const positions = useMemo(() => allPositions(), []);
-  const viewport = useMemo(() => computeViewport(positions, padding), [positions, padding]);
+  const allPos = useMemo(() => allPositions(), []);
+  const positions = useMemo(
+    () => (filterKind ? allPos.filter((p) => p.kind === filterKind) : allPos),
+    [allPos, filterKind],
+  );
+  // Viewport fits to the FULL layout extent (not just the filtered subset),
+  // so toggling filter doesn't reflow positions — primitives stay where the
+  // viewer last saw them and just appear/disappear in place.
+  const viewport = useMemo(() => computeViewport(allPos, padding), [allPos, padding]);
   const [hovered, setHovered] = useState<Position2D | null>(null);
 
   const scaleX = (x: number) =>
@@ -121,6 +151,23 @@ export function Notation2DView({
             onClick={() => onSelectPrimitive?.(p)}
           />
         ))}
+        {showLabels &&
+          positions
+            .filter((p) => AUTO_LABELED_KINDS.has(p.kind))
+            .map((p) => (
+              <text
+                key={`label-${p.primitive}`}
+                data-testid={`notation-label-${p.primitive}`}
+                x={scaleX(p.x) + 10}
+                y={scaleY(p.y) + 4}
+                fill="#e2e8f0"
+                fontFamily="monospace"
+                fontSize={11}
+                pointerEvents="none"
+              >
+                {p.primitive}
+              </text>
+            ))}
       </svg>
       {hovered && (
         <div
@@ -157,7 +204,10 @@ export function Notation2DView({
           fontSize: 11,
         }}
       >
-        {positions.length} primitives · {layoutVersion()}
+        {filterKind
+          ? `${positions.length} of ${allPos.length} primitives`
+          : `${positions.length} primitives`}
+        {filterKind ? ` (${filterKind})` : ''} · {layoutVersion()}
       </div>
     </div>
   );

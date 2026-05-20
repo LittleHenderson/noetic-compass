@@ -112,3 +112,77 @@ describe('Notation2DView — canonical map renders end-to-end', () => {
     expect(svg.getAttribute('height')).toBe('300');
   });
 });
+
+// ── Stage 23.A.1.2 polish: showLabels + filterKind ────────────────────
+
+describe('Notation2DView — showLabels', () => {
+  it('renders no <text> labels by default', () => {
+    const { container } = render(<Notation2DView />);
+    // The footer is a div; the SVG should contain no <text> elements.
+    const svg = container.querySelector('svg');
+    expect(svg).not.toBeNull();
+    expect(svg!.querySelectorAll('text').length).toBe(0);
+  });
+
+  it('renders labels for Noetics and Domains only when showLabels=true', () => {
+    const { container } = render(<Notation2DView showLabels />);
+    const noeticCount = allPositions().filter((p) => p.kind === 'noetic').length;
+    const domainCount = allPositions().filter((p) => p.kind === 'domain').length;
+    const expectedLabelCount = noeticCount + domainCount;
+    const svg = container.querySelector('svg');
+    const labels = svg!.querySelectorAll('text');
+    expect(labels.length).toBe(expectedLabelCount);
+    // Every label text matches its primitive id.
+    for (const p of allPositions().filter((q) =>
+      ['noetic', 'domain'].includes(q.kind),
+    )) {
+      const label = container.querySelector(
+        `[data-testid="notation-label-${CSS.escape(p.primitive)}"]`,
+      );
+      expect(label).not.toBeNull();
+      expect(label?.textContent).toBe(p.primitive);
+    }
+  });
+
+  it('labels respect filterKind: filtering to "drive" hides Noetic+Domain labels', () => {
+    const { container } = render(<Notation2DView showLabels filterKind="drive" />);
+    const svg = container.querySelector('svg');
+    // Drive is neither Noetic nor Domain — auto-labels do not apply.
+    expect(svg!.querySelectorAll('text').length).toBe(0);
+  });
+});
+
+describe('Notation2DView — filterKind', () => {
+  it('renders only primitives of the filtered kind', () => {
+    const { container } = render(<Notation2DView filterKind="foundation" />);
+    const foundationCount = allPositions().filter(
+      (p) => p.kind === 'foundation',
+    ).length;
+    const circles = container.querySelectorAll('circle');
+    expect(circles.length).toBe(foundationCount);
+    for (const c of Array.from(circles)) {
+      expect(c.getAttribute('data-kind')).toBe('foundation');
+    }
+  });
+
+  it('footer shows "N of M primitives" when filtered', () => {
+    const { getByTestId } = render(<Notation2DView filterKind="emergent_omega" />);
+    const omegaCount = allPositions().filter((p) => p.kind === 'emergent_omega').length;
+    const footer = getByTestId('notation-2d-footer');
+    expect(footer.textContent).toContain(
+      `${omegaCount} of ${allPositions().length} primitives`,
+    );
+    expect(footer.textContent).toContain('emergent_omega');
+  });
+
+  it('rendering with filterKind=rpm_pathway isolates the 22 RPM nodes', () => {
+    const { container } = render(<Notation2DView filterKind="rpm_pathway" />);
+    const circles = container.querySelectorAll('circle');
+    const rpmCount = allPositions().filter((p) => p.kind === 'rpm_pathway').length;
+    expect(circles.length).toBe(rpmCount);
+    // And nothing else.
+    for (const c of Array.from(circles)) {
+      expect(c.getAttribute('data-kind')).toBe('rpm_pathway');
+    }
+  });
+});
