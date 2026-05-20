@@ -9,7 +9,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/react';
 
-import canonicalLayout from '../../../../research/cas_probe/stage23_a_notation_2d_layout_20260519.json';
+import canonicalLayout from '../../../../research/cas_probe/stage23_a_notation_2d_layout.json';
 import {
   allPositions,
   KIND_COLOR,

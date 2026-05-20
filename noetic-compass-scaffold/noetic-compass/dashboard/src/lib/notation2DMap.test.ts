@@ -13,7 +13,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import canonicalLayout from '../../../research/cas_probe/stage23_a_notation_2d_layout_20260519.json';
+import canonicalLayout from '../../../research/cas_probe/stage23_a_notation_2d_layout.json';
 import {
   allPositions,
   colorForKind,

@@ -3,7 +3,7 @@
  * coordinate map. Stage 23.A.1.
  *
  * Source of truth: `cas-native/atlas/notation_2d_map.py` (Python).
- * Canonical JSON artifact: `research/cas_probe/stage23_a_notation_2d_layout_20260519.json`.
+ * Canonical JSON artifact: `research/cas_probe/stage23_a_notation_2d_layout.json`.
  *
  * Boundary (Stage 23.A.1):
  *   IN scope:
@@ -40,7 +40,7 @@
 // without an assertion and that's the pattern used elsewhere in this
 // dashboard (`src/lib/cas_brain_weights.ts`).
 // eslint-disable-next-line import/no-relative-parent-imports
-import canonicalLayout from '../../../research/cas_probe/stage23_a_notation_2d_layout_20260519.json';
+import canonicalLayout from '../../../research/cas_probe/stage23_a_notation_2d_layout.json';
 
 // ── Types ─────────────────────────────────────────────────────────────
 
@@ -94,7 +94,7 @@ export interface DetectionRule {
 }
 
 /** Top-level JSON payload shape committed at
- * `research/cas_probe/stage23_a_notation_2d_layout_20260519.json`. */
+ * `research/cas_probe/stage23_a_notation_2d_layout.json`. */
 export interface CanonicalLayoutPayload {
   boundary?: string;
   layout_version: string;
