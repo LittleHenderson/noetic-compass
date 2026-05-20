@@ -67,7 +67,9 @@ export type PrimitiveKind =
   | 'set_operation'
   | 'combinator'
   | 'authority_set'
-  | 'cardinality_kind';
+  | 'cardinality_kind'
+  // Stage 23.A.3
+  | 'emergent_omega';
 
 /** Canonical 2D coordinate for a single CAS primitive. */
 export interface Position2D {
@@ -146,4 +148,133 @@ export function layoutVersion(): string {
  */
 export function _canonicalPayload(): CanonicalLayoutPayload {
   return payload;
+}
+
+// ── Canonical color palette (Stage 23.A.1.1) ──────────────────────────
+//
+// Every PrimitiveKind has exactly one canonical color. Renderers consume
+// this map instead of maintaining their own ad-hoc CAS-expression regex.
+// Colors group by family for visual readability:
+//   Structural CAS primitives  → cyan / sky / emerald / pink (the four
+//                                axes from the original ad-hoc palette
+//                                in GraphView are preserved)
+//   Operations / Inversion     → reds / oranges
+//   Foundations / Production   → purples / violets
+//   RPM / Authority            → ambers / greys
+//   Set primitives             → teals / greens
+//
+// Stable identifier discipline: the keys here are PrimitiveKind values,
+// not free-form strings, so the type system catches missing colors when
+// the kind union grows.
+
+export const KIND_COLOR: Record<PrimitiveKind, string> = {
+  // Stage 23.A — the four structural axes (palette preserved from the
+  // original GraphView heuristic for visual continuity).
+  noetic: '#22d3ee',            // cyan
+  domain: '#34d399',            // emerald
+  drive: '#f59e0b',             // amber
+  register: '#f472b6',          // pink
+  cognitive_state: '#38bdf8',   // sky blue (^N^D was sky in GraphView)
+  // Stage 23.A.2
+  operation: '#fb7185',         // rose — combination ops
+  inversion_axis: '#dc2626',    // red — alignment failure axes
+  foundation: '#9333ea',        // violet — Drive × Register product
+  production: '#f472b6',        // pink — CAS v7.6 stoichiometry (matches Θ in
+                                //   the original GraphView heuristic)
+  rpm_pathway: '#fbbf24',       // yellow — A0/D/W/P chain
+  set_constructor: '#14b8a6',   // teal (preserved from "Cluster" in the
+                                //   original GraphView heuristic)
+  set_relation: '#10b981',      // green
+  set_operation: '#16a34a',     // darker green
+  combinator: '#0d9488',        // dark teal
+  authority_set: '#94a3b8',     // slate grey — system / user / tool boundary
+  cardinality_kind: '#cbd5e1',  // lighter slate — form markers
+  // Stage 23.A.3
+  emergent_omega: '#a78bfa',    // purple (preserved from Ω in the original
+                                //   GraphView heuristic)
+};
+
+/**
+ * Canonical color for a primitive kind. The keys of KIND_COLOR are
+ * exhaustive over PrimitiveKind by construction, so this always returns
+ * a color for any valid kind. Used by GraphView (Stage 23.A.1.1) and any
+ * future renderer that needs a deterministic CAS-aware color scheme.
+ */
+export function colorForKind(kind: PrimitiveKind): string {
+  return KIND_COLOR[kind];
+}
+
+/**
+ * Detect the dominant CAS primitive kind in a free-form CAS expression
+ * string. Returns null when the expression contains no recognizable
+ * primitive (e.g. plain English, garbage, empty).
+ *
+ * Stage 23.A.1.1: replaces the hand-rolled `colorFromCas` regex in
+ * GraphView.tsx. Detection priority is most-specific to least-specific:
+ *
+ *   1. Direct primitive lookup (e.g. `'^3^P'`, `'F4'`, `'Omega_refusal'`).
+ *   2. Omega_* substring or bare `Ω` glyph → emergent_omega.
+ *   3. Greek production glyphs / spellings (Θ/Theta) → production.
+ *   4. Trailing `Cluster` (NoeticCluster, StateCluster, etc.) → set_constructor.
+ *   5. Compound state `^N^D` → cognitive_state.
+ *   6. Bare Noetic `^N` → noetic.
+ *   7. Drive `F1`..`F7` → drive.
+ *   8. Domain `^[PCEO]` → domain.
+ *   9. Register `|[TAfE]` → register.
+ *
+ * Caller's responsibility to translate kind → color via colorForKind().
+ */
+export function detectCasKind(cas: string | null | undefined): PrimitiveKind | null {
+  if (!cas) return null;
+
+  // 1. Direct lookup — covers exactly-named primitives like
+  //    'Omega_refusal', 'Product', 'NoeticCluster', etc.
+  try {
+    const direct = getPosition2D(cas.trim());
+    if (direct) return direct.kind;
+  } catch {
+    // Bare 'E' throws — that's fine, fall through to substring detection.
+  }
+
+  // 2. Omega_* or Ω glyph.
+  if (/\bOmega_[A-Za-z]+\b/.test(cas)) return 'emergent_omega';
+  if (cas.includes('Ω')) return 'emergent_omega';
+
+  // 3. Production primitives (Θ glyph or "Theta" spelling).
+  if (cas.includes('Θ') || /\bTheta\b/.test(cas)) return 'production';
+
+  // 4. Set constructors — '...Cluster' suffix.
+  if (/[A-Za-z]+Cluster\b/.test(cas)) return 'set_constructor';
+
+  // 5. Compound Cognitive State '^N^D'. Don't use \b because the next
+  //    character is often '_' (Drive marker) or '|' (Register marker),
+  //    both of which are \w characters that defeat \b. Instead, require
+  //    that no alphanumeric follows the Domain letter.
+  if (/\^\d\^[PCEO](?![A-Za-z0-9])/.test(cas)) return 'cognitive_state';
+
+  // 6. Bare Noetic '^N'.
+  if (/\^\d(?![\^\dPCEO])/.test(cas)) return 'noetic';
+
+  // 7. Drive 'F1'..'F7'.
+  if (/\bF[1-7]\b/.test(cas) || /_\{F[1-7]\}/.test(cas)) return 'drive';
+
+  // 8. Standalone Domain '^[PCEO]'.
+  if (/\^[PCEO]\b/.test(cas)) return 'domain';
+
+  // 9. Register '|[TAfE]' (or set-spec '|⟨…⟩').
+  if (/\|[TAfE]\b/.test(cas) || /\|⟨/.test(cas)) return 'register';
+
+  return null;
+}
+
+/**
+ * Convenience: free-form CAS expression → canonical color. Falls back
+ * to the noetic color (cyan) when no kind is detected, matching the
+ * legacy GraphView default. Renderers can compose `detectCasKind` +
+ * `colorForKind` directly if they need to distinguish "no signal" from
+ * "no expression."
+ */
+export function colorFromCasExpression(cas: string | null | undefined): string {
+  const kind = detectCasKind(cas);
+  return kind ? colorForKind(kind) : KIND_COLOR.noetic;
 }

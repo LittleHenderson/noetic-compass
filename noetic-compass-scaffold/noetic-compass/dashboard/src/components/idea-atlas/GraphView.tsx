@@ -1,5 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 
+import { colorFromCasExpression } from '../../lib/notation2DMap';
+
 // ── Types ──
 
 export interface Idea {
@@ -28,29 +30,18 @@ export interface GraphViewProps {
   height?: number;
 }
 
-// ── Color heuristic from CAS expression ──
-// Mirrors CompilerPage.tsx's diagramColor palette but derives "kind" from a
-// quick scan of the CAS expression string. Default cyan when no signal.
+// ── Color from CAS expression ──
+//
+// Stage 23.A.1.1: this used to be a hand-rolled regex inside this file
+// (`colorFromCas`). It has been replaced with `colorFromCasExpression`
+// from the canonical adapter, which classifies the dominant primitive
+// against the same 17-kind PrimitiveKind union as the Python source of
+// truth in `cas-native/atlas/notation_2d_map.py`. The palette is now
+// centralized in `notation2DMap.KIND_COLOR` so every CAS-aware renderer
+// gets a deterministic color scheme without copy-pasting regex.
 
 function colorFromCas(cas: string | null | undefined): string {
-  if (!cas) return '#22d3ee'; // default cyan
-  // Production target / emergent (Ω token)
-  if (cas.includes('Ω') || cas.includes('Omega')) return '#a78bfa';
-  // Recipe / production
-  if (cas.includes('Θ') || cas.startsWith('Theta')) return '#f472b6';
-  // Cluster
-  if (cas.includes('Cluster')) return '#14b8a6';
-  // Compound state (^N^D) — Noetic + Domain pair
-  if (/\^\d\^[PCEO]/.test(cas)) return '#38bdf8';
-  // Bare Noetic
-  if (/\^\d/.test(cas)) return '#22d3ee';
-  // Drive
-  if (/\bF[1-7]\b/.test(cas) || /_\{F\d+\}/.test(cas)) return '#f59e0b';
-  // Domain
-  if (/\^[PCEO]\b/.test(cas)) return '#34d399';
-  // Register
-  if (/\|[TAfE]\b/.test(cas) || /\|⟨/.test(cas)) return '#f472b6';
-  return '#22d3ee';
+  return colorFromCasExpression(cas);
 }
 
 // ── Hand-rolled force simulation ──

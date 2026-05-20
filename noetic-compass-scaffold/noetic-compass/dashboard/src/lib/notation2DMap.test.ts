@@ -16,7 +16,11 @@ import { describe, it, expect } from 'vitest';
 import canonicalLayout from '../../../research/cas_probe/stage23_a_notation_2d_layout_20260519.json';
 import {
   allPositions,
+  colorForKind,
+  colorFromCasExpression,
+  detectCasKind,
   getPosition2D,
+  KIND_COLOR,
   layoutVersion,
   type Position2D,
   type PrimitiveKind,
@@ -83,6 +87,7 @@ describe('notation2DMap — allPositions()', () => {
       'combinator',
       'authority_set',
       'cardinality_kind',
+      'emergent_omega',
     ];
     const validSet = new Set<string>(validKinds);
     for (const p of allPositions()) {
@@ -152,5 +157,98 @@ describe('notation2DMap — bare E ambiguity guard', () => {
     const regE = getPosition2D('|E');
     expect(regE).not.toBeNull();
     expect((regE as Position2D).kind).toBe('register');
+  });
+});
+
+// ── Stage 23.A.1.1 — canonical color palette + CAS-expression detection ──
+
+describe('notation2DMap — KIND_COLOR palette', () => {
+  it('has a color entry for every kind that appears in the canonical JSON', () => {
+    const observedKinds = new Set<PrimitiveKind>();
+    for (const p of allPositions()) {
+      observedKinds.add(p.kind);
+    }
+    for (const kind of observedKinds) {
+      expect(KIND_COLOR[kind]).toBeDefined();
+      expect(KIND_COLOR[kind]).toMatch(/^#[0-9a-fA-F]{3,8}$/);
+    }
+  });
+
+  it('colorForKind returns a valid hex color for every PrimitiveKind value', () => {
+    // Exhaustive over the type by enumerating KIND_COLOR keys.
+    const allKinds = Object.keys(KIND_COLOR) as PrimitiveKind[];
+    for (const kind of allKinds) {
+      const c = colorForKind(kind);
+      expect(c).toMatch(/^#[0-9a-fA-F]{3,8}$/);
+    }
+  });
+});
+
+describe('notation2DMap — detectCasKind', () => {
+  it('returns null for empty / null / undefined / unrecognized', () => {
+    expect(detectCasKind('')).toBeNull();
+    expect(detectCasKind(null)).toBeNull();
+    expect(detectCasKind(undefined)).toBeNull();
+    expect(detectCasKind('just plain English text')).toBeNull();
+  });
+
+  it('recognizes exact primitive names directly (covers Omega_*, Product, etc.)', () => {
+    expect(detectCasKind('Omega_refusal')).toBe('emergent_omega');
+    expect(detectCasKind('Omega_grounding')).toBe('emergent_omega');
+    expect(detectCasKind('Product')).toBe('combinator');
+    expect(detectCasKind('NoeticCluster')).toBe('set_constructor');
+    expect(detectCasKind('SystemInstructionSet')).toBe('authority_set');
+  });
+
+  it('classifies compound cognitive state (^N^D) before bare Noetic', () => {
+    expect(detectCasKind('^3^P_{F2}|A')).toBe('cognitive_state');
+    expect(detectCasKind('^9^O')).toBe('cognitive_state');
+  });
+
+  it('classifies bare Noetic (^N) when no compound form is present', () => {
+    expect(detectCasKind('^3 — visceral aversion')).toBe('noetic');
+    expect(detectCasKind('^0')).toBe('noetic');
+  });
+
+  it('classifies Drive, Domain, Register from CAS-expression fragments', () => {
+    expect(detectCasKind('expression with F4 alone')).toBe('drive');
+    expect(detectCasKind('^P standing alone')).toBe('domain');
+    expect(detectCasKind('register marker |T')).toBe('register');
+  });
+
+  it('recognizes Greek production glyphs', () => {
+    expect(detectCasKind('Θ(Ω) = Θ → Ω')).toBe('emergent_omega'); // Ω wins (higher specificity)
+    expect(detectCasKind('Θ-only recipe expression')).toBe('production');
+    expect(detectCasKind('Theta-spelled recipe')).toBe('production');
+  });
+});
+
+describe('notation2DMap — colorFromCasExpression', () => {
+  it('returns the cognitive-state color for ^N^D compound expressions', () => {
+    expect(colorFromCasExpression('^3^P')).toBe(KIND_COLOR.cognitive_state);
+  });
+
+  it('returns the emergent-omega color for Ω expressions', () => {
+    expect(colorFromCasExpression('(a × b × c) = Ω')).toBe(KIND_COLOR.emergent_omega);
+    expect(colorFromCasExpression('^1|Omega_witness')).toBe(KIND_COLOR.emergent_omega);
+  });
+
+  it('falls back to the noetic color when no signal is present', () => {
+    expect(colorFromCasExpression(null)).toBe(KIND_COLOR.noetic);
+    expect(colorFromCasExpression('')).toBe(KIND_COLOR.noetic);
+    expect(colorFromCasExpression('random English')).toBe(KIND_COLOR.noetic);
+  });
+
+  it('preserves the original GraphView palette for the four legacy axes', () => {
+    // These colors were chosen in the original GraphView heuristic; the
+    // 23.A.1.1 migration preserves them so existing graphs look identical.
+    expect(colorFromCasExpression('^3')).toBe('#22d3ee'); // cyan (noetic)
+    expect(colorFromCasExpression('^P')).toBe('#34d399'); // emerald (domain)
+    expect(colorFromCasExpression('F4 anywhere')).toBe('#f59e0b'); // amber (drive)
+    expect(colorFromCasExpression('|T anywhere')).toBe('#f472b6'); // pink (register)
+    expect(colorFromCasExpression('^3^P')).toBe('#38bdf8'); // sky (cognitive_state)
+    expect(colorFromCasExpression('NoeticCluster')).toBe('#14b8a6'); // teal (Cluster)
+    expect(colorFromCasExpression('Ω_anchor')).toBe('#a78bfa'); // purple (Ω)
+    expect(colorFromCasExpression('Θ-recipe')).toBe('#f472b6'); // pink (Θ)
   });
 });
