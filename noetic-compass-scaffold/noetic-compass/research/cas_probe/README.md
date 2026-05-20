@@ -2450,3 +2450,37 @@ Boundary:
 > Stage 22.7 is a scanner-contract hardening step, not a new experimental
 > claim. It makes malformed-row handling auditable while preserving the closed
 > Stage 22.6 result on valid diagnostic rows.
+
+## Stage 24A pre-registration - CAS Sonar + component attribution
+
+**Verdict: `PREREGISTERED_NO_GPU`.**
+
+Stage 24A is the next research escalation after CAS Harness product-candidate
+closure. It is not a product-launch blocker and it does not change the current
+Evidence Packet or Verification Stack claim boundary.
+
+Execution order:
+
+1. `sonar_token_signatures` - test whether the locked Stage 7 Foundation
+   probe directions produce class-specific vocabulary/token signatures through
+   Pythia-160M output embeddings.
+2. `component_attribution_pilot` - if token signatures are usable, hook
+   Pythia-160M attention-head outputs and MLP intermediate activations to rank
+   and ablate transformer components against matched random controls.
+3. `sae_feature_localization_followup_if_needed` - deferred. Stage 24A does
+   not authorize SAE training or exact-neuron claims.
+
+Boundary:
+
+> Stage 24A may support token-level CAS sonar and bounded component-level
+> causal localization if the pre-registered gates pass. It must not be used to
+> claim exact monosemantic neurons, SAE-level feature causality, raw CAS-symbol
+> understanding, or free-form generation control.
+
+Artifacts:
+
+- `stage24a_sonar_component_spec.py`
+- `run_stage24a_sonar_component_prereg.py`
+- `stage24a_sonar_component_prereg_20260520.json`
+- `STAGE24A_SONAR_COMPONENT_PREREG_20260520.md`
+- `tests/test_stage24a_sonar_component_spec.py`
