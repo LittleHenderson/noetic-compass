@@ -2493,3 +2493,41 @@ Implementation note:
 > locked Stage 7 activation binary `stage7_foundation_pilot_activations_20260517.npz`.
 > If the binary is absent locally, the runner fails explicitly rather than
 > silently recapturing or changing the preregistered artifact set.
+
+## Stage 24A diagnostic run - Token-level CAS Sonar
+
+**Verdict: `STAGE24A_SONAR_TOKEN_SIGNATURES_DIAGNOSTIC_ONLY_ARTIFACT_MISMATCH`.**
+
+The token-level sonar runner was executed after a local CPU recapture of the
+Stage 7 activation binary. The run is useful diagnostically, but it is not a
+formal Stage 24A gate result because the recaptured activation hash does not
+match the locked CUDA artifact hash in the committed Stage 7 manifest.
+
+Artifact contract:
+
+| Field | Value |
+|---|---|
+| Expected activation SHA-256 | `d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f` |
+| Local recapture SHA-256 | `f63a66de86366a63ea0fd786ad0dc0bef68d5634be3b5fae525d4fb667f14d53` |
+| Formal gate valid | `false` |
+
+Diagnostic read:
+
+- Same-Drive token-signature structure is above random controls:
+  `same_drive_minus_hard_partner = +0.1576`, p(random >= actual) `0.0099`.
+- Same-Register versus hard-partner does not pass:
+  `same_register_minus_hard_partner = -0.0386`, p(random >= actual) `1.0000`.
+- Top-token readability is mixed but above the artifact-dominance floor:
+  `453/672` readable top tokens, rate `0.6741`.
+
+Boundary:
+
+> This diagnostic run suggests Drive-level vocabulary geometry may be present,
+> but Register-level token structure is not established and the artifact hash
+> mismatch prevents formal Stage 24A closure. Restore the original locked `.npz`
+> or preregister a replacement recapture before making a Stage 24A claim.
+
+Artifacts:
+
+- `stage24a_token_level_cas_sonar_20260520.json`
+- `STAGE24A_TOKEN_LEVEL_CAS_SONAR_20260520.md`

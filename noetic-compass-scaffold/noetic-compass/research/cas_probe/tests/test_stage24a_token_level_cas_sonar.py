@@ -51,6 +51,64 @@ def test_top_tokens_reports_positive_and_negative_tokens() -> None:
     assert top["F1T"]["negative"][0]["token"] == "tok1"
 
 
+def test_top_token_readability_flags_artifacts() -> None:
+    sonar = _load_module("stage24a_sonar_readability", SONAR)
+    block = {
+        "F1T": {
+            "positive": [{"token": " useful", "token_id": 1}, {"token": "�", "token_id": 2}],
+            "negative": [{"token": "x", "token_id": 3}, {"token": " stable", "token_id": 4}],
+        }
+    }
+
+    summary = sonar._top_token_readability(block)
+
+    assert summary["total_top_tokens"] == 4
+    assert summary["readable_top_tokens"] == 2
+    assert summary["readable_rate"] == 0.5
+
+
+def test_status_marks_artifact_dominated_top_tokens_null() -> None:
+    sonar = _load_module("stage24a_sonar_status", SONAR)
+    controls = {
+        "same_drive_minus_hard_partner": {"empirical_p_random_ge_actual": 0.01},
+        "same_register_minus_hard_partner": {"empirical_p_random_ge_actual": 0.01},
+    }
+
+    status = sonar._status_from_controls(controls, {"readable_rate": 0.25})
+
+    assert status == "STAGE24A_SONAR_TOKEN_SIGNATURES_NULL_ARTIFACT_DOMINATED"
+
+
+def test_status_marks_hash_mismatch_diagnostic_only() -> None:
+    sonar = _load_module("stage24a_sonar_hash_status", SONAR)
+    controls = {
+        "same_drive_minus_hard_partner": {"empirical_p_random_ge_actual": 0.01},
+        "same_register_minus_hard_partner": {"empirical_p_random_ge_actual": 0.01},
+    }
+
+    status = sonar._status_from_controls(
+        controls,
+        {"readable_rate": 1.0},
+        {"formal_gate_valid": False},
+    )
+
+    assert status == "STAGE24A_SONAR_TOKEN_SIGNATURES_DIAGNOSTIC_ONLY_ARTIFACT_MISMATCH"
+
+
+def test_artifact_contract_detects_manifest_mismatch() -> None:
+    sonar = _load_module("stage24a_sonar_contract", SONAR)
+    manifest = ROOT / "__stage24a_contract_manifest_test.json"
+    try:
+        manifest.write_text('{"output_sha256": "expected"}', encoding="utf-8")
+        contract = sonar._artifact_contract("actual", manifest)
+    finally:
+        if manifest.exists():
+            manifest.unlink()
+
+    assert contract["status"] == "LOCAL_RECAPTURE_HASH_MISMATCH"
+    assert contract["formal_gate_valid"] is False
+
+
 def test_pair_sets_include_same_drive_same_register_and_hard_partner() -> None:
     sonar = _load_module("stage24a_sonar_pairs", SONAR)
     rows = [
@@ -90,6 +148,7 @@ def test_missing_activation_artifact_fails_explicitly() -> None:
         {
             "input": str(missing_dir / "missing.jsonl"),
             "activations": str(missing_dir / "missing.npz"),
+            "activation_manifest": str(missing_dir / "missing_manifest.json"),
             "stage7_report": str(missing_dir / "missing_report.json"),
             "allow_download": False,
             "n_random": 1,

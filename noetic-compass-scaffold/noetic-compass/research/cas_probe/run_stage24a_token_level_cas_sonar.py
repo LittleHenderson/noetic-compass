@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import math
+import string
 from itertools import combinations
 from pathlib import Path
 from typing import Any
@@ -81,32 +82,81 @@ def _score_token_space(directions: np.ndarray, output_w: np.ndarray) -> np.ndarr
     return np.asarray(output_w, dtype=np.float64) @ _unit_rows(directions).T
 
 
-def _top_tokens(scores_by_token: np.ndarray, tokenizer: Any, top_k: int) -> dict[str, Any]:
+def _is_readable_token(token: str) -> bool:
+    text = token.strip()
+    if len(text) < 2:
+        return False
+    if "�" in text or "\ufffd" in text:
+        return False
+    printable = set(string.printable)
+    if any(ch not in printable for ch in text):
+        return False
+    alpha_count = sum(ch.isalpha() for ch in text)
+    if alpha_count < 2:
+        return False
+    return True
+
+
+def _ranked_tokens(
+    scores: np.ndarray,
+    tokenizer: Any,
+    top_k: int,
+    *,
+    reverse: bool,
+    readable_only: bool,
+) -> list[dict[str, Any]]:
+    ordered = np.argsort(scores)
+    if reverse:
+        ordered = ordered[::-1]
+    out: list[dict[str, Any]] = []
+    for token_id in ordered:
+        token = tokenizer.decode([int(token_id)])
+        if readable_only and not _is_readable_token(token):
+            continue
+        out.append({"token_id": int(token_id), "token": token, "score": float(scores[int(token_id)])})
+        if len(out) >= top_k:
+            break
+    return out
+
+
+def _top_tokens(
+    scores_by_token: np.ndarray,
+    tokenizer: Any,
+    top_k: int,
+    *,
+    readable_only: bool = False,
+) -> dict[str, Any]:
     out: dict[str, Any] = {}
     scores_by_class = np.asarray(scores_by_token, dtype=np.float64).T
     for class_idx, label in enumerate(_FOUNDATION_LABELS):
         scores = scores_by_class[class_idx]
-        top_pos = np.argsort(scores)[-top_k:][::-1]
-        top_neg = np.argsort(scores)[:top_k]
         out[label] = {
-            "positive": [
-                {
-                    "token_id": int(token_id),
-                    "token": tokenizer.decode([int(token_id)]),
-                    "score": float(scores[int(token_id)]),
-                }
-                for token_id in top_pos
-            ],
-            "negative": [
-                {
-                    "token_id": int(token_id),
-                    "token": tokenizer.decode([int(token_id)]),
-                    "score": float(scores[int(token_id)]),
-                }
-                for token_id in top_neg
-            ],
+            "positive": _ranked_tokens(scores, tokenizer, top_k, reverse=True, readable_only=readable_only),
+            "negative": _ranked_tokens(scores, tokenizer, top_k, reverse=False, readable_only=readable_only),
         }
     return out
+
+
+def _top_token_readability(top_tokens: dict[str, Any]) -> dict[str, Any]:
+    total = 0
+    readable = 0
+    unreadable_examples: list[dict[str, Any]] = []
+    for label, block in top_tokens.items():
+        for polarity in ("positive", "negative"):
+            for item in block[polarity]:
+                total += 1
+                ok = _is_readable_token(str(item["token"]))
+                readable += int(ok)
+                if not ok and len(unreadable_examples) < 12:
+                    unreadable_examples.append(
+                        {"foundation": label, "polarity": polarity, "token": item["token"], "token_id": item["token_id"]}
+                    )
+    return {
+        "total_top_tokens": int(total),
+        "readable_top_tokens": int(readable),
+        "readable_rate": float(readable / total) if total else 0.0,
+        "unreadable_examples": unreadable_examples,
+    }
 
 
 def _partner_pairs(rows: list[dict[str, Any]]) -> list[tuple[int, int]]:
@@ -238,7 +288,35 @@ def _load_output_embeddings(allow_download: bool) -> tuple[np.ndarray, Any, dict
     return output_w, tokenizer, meta
 
 
-def _status_from_controls(controls: dict[str, Any]) -> str:
+def _artifact_contract(activations_sha256: str, manifest_path: Path) -> dict[str, Any]:
+    if not manifest_path.exists():
+        return {
+            "status": "MANIFEST_MISSING",
+            "expected_activation_sha256": None,
+            "actual_activation_sha256": activations_sha256,
+            "formal_gate_valid": False,
+        }
+    with manifest_path.open(encoding="utf-8") as fh:
+        manifest = json.load(fh)
+    expected = manifest.get("output_sha256")
+    matched = bool(expected == activations_sha256)
+    return {
+        "status": "LOCKED_ARTIFACT_MATCH" if matched else "LOCAL_RECAPTURE_HASH_MISMATCH",
+        "expected_activation_sha256": expected,
+        "actual_activation_sha256": activations_sha256,
+        "formal_gate_valid": matched,
+    }
+
+
+def _status_from_controls(
+    controls: dict[str, Any],
+    readability: dict[str, Any],
+    artifact_contract: dict[str, Any] | None = None,
+) -> str:
+    if artifact_contract is not None and not artifact_contract.get("formal_gate_valid", False):
+        return "STAGE24A_SONAR_TOKEN_SIGNATURES_DIAGNOSTIC_ONLY_ARTIFACT_MISMATCH"
+    if readability["readable_rate"] < 0.50:
+        return "STAGE24A_SONAR_TOKEN_SIGNATURES_NULL_ARTIFACT_DOMINATED"
     drive = controls["same_drive_minus_hard_partner"]["empirical_p_random_ge_actual"]
     register = controls["same_register_minus_hard_partner"]["empirical_p_random_ge_actual"]
     if drive < 0.05 and register < 0.05:
@@ -263,6 +341,7 @@ def _write_md(report: dict[str, Any], out_md: Path) -> None:
         f"- Model: `{report['model']['model_name']}`",
         f"- Locked readout: `{report['locked_readout']['readout_key']}` layer `{report['locked_readout']['layer']}`",
         f"- Probe test accuracy: `{report['probe']['test_acc']:.4f}`",
+        f"- Artifact contract: `{report['artifact_contract']['status']}`",
         "",
         "## Pair-Similarity Controls",
         "",
@@ -277,12 +356,20 @@ def _write_md(report: dict[str, Any], out_md: Path) -> None:
     lines.extend(
         [
             "",
+            "## Top-Token Readability",
+            "",
+            f"- Readable rate: `{report['top_token_readability']['readable_rate']:.4f}`",
+            f"- Readable tokens: `{report['top_token_readability']['readable_top_tokens']} / {report['top_token_readability']['total_top_tokens']}`",
+            "",
             "## Example Top Tokens",
             "",
         ]
     )
     for label in list(_FOUNDATION_LABELS)[:7]:
-        tokens = ", ".join(item["token"].replace("\n", "\\n") for item in report["top_tokens_by_foundation"][label]["positive"][:5])
+        tokens = ", ".join(
+            item["token"].replace("\n", "\\n")
+            for item in report["readable_top_tokens_by_foundation"][label]["positive"][:5]
+        )
         lines.append(f"- `{label}`: {tokens}")
     lines.extend(
         [
@@ -299,6 +386,7 @@ def _write_md(report: dict[str, Any], out_md: Path) -> None:
 def build_report(args: argparse.Namespace) -> dict[str, Any]:
     input_path = _resolve(args.input)
     activations_path = _resolve(args.activations)
+    activation_manifest_path = _resolve(args.activation_manifest)
     stage7_report_path = _resolve(args.stage7_report)
 
     if not activations_path.exists():
@@ -307,6 +395,8 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "Recapture or pull the artifact before running sonar."
         )
 
+    activations_sha256 = _sha256_of_file(activations_path)
+    artifact_contract = _artifact_contract(activations_sha256, activation_manifest_path)
     rows = _load_jsonl(input_path)
     rows_by_id = {str(row["sample_id"]): row for row in rows}
     data = np.load(activations_path, allow_pickle=False)
@@ -338,7 +428,9 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
             "same_register_minus_different",
         )
     }
-    status = _status_from_controls(random_control_summary)
+    raw_top_tokens = _top_tokens(scores_by_token, tokenizer, int(args.top_k))
+    readability = _top_token_readability(raw_top_tokens)
+    status = _status_from_controls(random_control_summary, readability, artifact_contract)
     with stage7_report_path.open(encoding="utf-8") as fh:
         stage7_report = json.load(fh)
 
@@ -349,7 +441,9 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "input_file": input_path.name,
         "input_sha256": _sha256_of_file(input_path),
         "activations_file": activations_path.name,
-        "activations_sha256": _sha256_of_file(activations_path),
+        "activations_sha256": activations_sha256,
+        "activation_manifest_file": activation_manifest_path.name,
+        "artifact_contract": artifact_contract,
         "stage7_report_file": stage7_report_path.name,
         "stage7_report_sha256": _sha256_of_file(stage7_report_path),
         "locked_readout": {"readout_key": _READOUT_KEY, "readout_name": "focus_token", "layer": _LAYER},
@@ -362,7 +456,14 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "pair_set_counts": {key: int(len(value)) for key, value in pair_sets.items()},
         "pair_similarity_metrics": actual_metrics,
         "random_control_summary": random_control_summary,
-        "top_tokens_by_foundation": _top_tokens(scores_by_token, tokenizer, int(args.top_k)),
+        "top_token_readability": readability,
+        "top_tokens_by_foundation": raw_top_tokens,
+        "readable_top_tokens_by_foundation": _top_tokens(
+            scores_by_token,
+            tokenizer,
+            int(args.top_k),
+            readable_only=True,
+        ),
         "plain_english_read": (
             "This report measures whether the Stage 7 Foundation probe directions have "
             "class-specific token signatures in Pythia-160M's output embedding space. "
@@ -381,6 +482,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", default="stage7_foundation_pilot_20260517.jsonl")
     parser.add_argument("--activations", default="stage7_foundation_pilot_activations_20260517.npz")
+    parser.add_argument("--activation-manifest", default="stage7_foundation_pilot_activations_manifest_20260517.json")
     parser.add_argument("--stage7-report", default="stage7_foundation_pilot_probe_report_20260517.json")
     parser.add_argument("--out-report", default="stage24a_token_level_cas_sonar_20260520.json")
     parser.add_argument("--out-md", default="STAGE24A_TOKEN_LEVEL_CAS_SONAR_20260520.md")

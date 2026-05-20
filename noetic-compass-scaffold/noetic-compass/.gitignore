@@ -15,3 +15,5 @@ cas-native/data/test_batch_*.jsonl
 .env*.local
 
 cas-native/training/runs/**/*.pt
+
+research/cas_probe/*.npz
