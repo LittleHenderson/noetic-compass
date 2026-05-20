@@ -1,0 +1,183 @@
+{
+  "artifacts": {
+    "stage19a_formula_verification_stack_20260519.json": {
+      "field_occurrences": {
+        "gap_map_summary": 0,
+        "gate_decisions": 0,
+        "inversion_axis_scores": 0,
+        "inversion_flag_count": 0,
+        "inversion_gate_decision": 0,
+        "lacunarity_gate_decision": 0,
+        "lacunarity_scores": 0,
+        "rpm_gate_decision": 0,
+        "rpm_satisfaction": 0
+      },
+      "instrumented": false,
+      "missing_fields": [
+        "rpm_satisfaction",
+        "rpm_gate_decision",
+        "lacunarity_scores",
+        "gap_map_summary",
+        "lacunarity_gate_decision",
+        "inversion_axis_scores",
+        "inversion_flag_count",
+        "inversion_gate_decision",
+        "gate_decisions"
+      ],
+      "present_fields": []
+    },
+    "stage19b_cross_arch_foundation_verification_stack_20260519.json": {
+      "field_occurrences": {
+        "gap_map_summary": 0,
+        "gate_decisions": 0,
+        "inversion_axis_scores": 0,
+        "inversion_flag_count": 0,
+        "inversion_gate_decision": 0,
+        "lacunarity_gate_decision": 0,
+        "lacunarity_scores": 0,
+        "rpm_gate_decision": 0,
+        "rpm_satisfaction": 0
+      },
+      "instrumented": false,
+      "missing_fields": [
+        "rpm_satisfaction",
+        "rpm_gate_decision",
+        "lacunarity_scores",
+        "gap_map_summary",
+        "lacunarity_gate_decision",
+        "inversion_axis_scores",
+        "inversion_flag_count",
+        "inversion_gate_decision",
+        "gate_decisions"
+      ],
+      "present_fields": []
+    },
+    "stage20b_generation_readiness_packets_20260519.json": {
+      "field_occurrences": {
+        "gap_map_summary": 0,
+        "gate_decisions": 0,
+        "inversion_axis_scores": 0,
+        "inversion_flag_count": 6,
+        "inversion_gate_decision": 0,
+        "lacunarity_gate_decision": 0,
+        "lacunarity_scores": 0,
+        "rpm_gate_decision": 0,
+        "rpm_satisfaction": 6
+      },
+      "instrumented": false,
+      "missing_fields": [
+        "rpm_gate_decision",
+        "lacunarity_scores",
+        "gap_map_summary",
+        "lacunarity_gate_decision",
+        "inversion_axis_scores",
+        "inversion_gate_decision",
+        "gate_decisions"
+      ],
+      "present_fields": [
+        "rpm_satisfaction",
+        "inversion_flag_count"
+      ]
+    }
+  },
+  "boundary": "Current locked reports can validate ensemble, factor, trace, mode, readiness-policy, and evidence-packet layers. They cannot attribute RPM, lacunarity, or inversion gates until these per-row diagnostic fields are emitted by a fresh runner.",
+  "contract": {
+    "boundary": "A diagnostic gate may receive numeric attribution only when its per-row fields are present in the locked artifact. Placeholder defaults such as rpm_satisfaction=1.0 or max_lacunarity=0.0 are not evidence of gate behavior.",
+    "required_fields": [
+      {
+        "expected_type": "float in [0, 1]",
+        "gate": "rpm_gate",
+        "name": "rpm_satisfaction",
+        "purpose": "Scalar runtime RPM-chain satisfaction used by the readiness gate.",
+        "status": "required"
+      },
+      {
+        "expected_type": "allow|caveat|constrain|suppress",
+        "gate": "rpm_gate",
+        "name": "rpm_gate_decision",
+        "purpose": "Per-row decision attributable specifically to RPM.",
+        "status": "required"
+      },
+      {
+        "expected_type": "object or numeric vector",
+        "gate": "lacunarity_gate",
+        "name": "lacunarity_scores",
+        "purpose": "Per-row state/fractal/domain/drive/RPM lacunarity values.",
+        "status": "required"
+      },
+      {
+        "expected_type": "object",
+        "gate": "lacunarity_gate",
+        "name": "gap_map_summary",
+        "purpose": "Compact count/max/mean summary of the per-slot gap map.",
+        "status": "required"
+      },
+      {
+        "expected_type": "allow|caveat|constrain|suppress",
+        "gate": "lacunarity_gate",
+        "name": "lacunarity_gate_decision",
+        "purpose": "Per-row decision attributable specifically to lacunarity/gap evidence.",
+        "status": "required"
+      },
+      {
+        "expected_type": "array[7] float in [0, 1]",
+        "gate": "inversion_scan_gate",
+        "name": "inversion_axis_scores",
+        "purpose": "Per-axis inversion-resistance or inversion-risk scores.",
+        "status": "required"
+      },
+      {
+        "expected_type": "integer >= 0",
+        "gate": "inversion_scan_gate",
+        "name": "inversion_flag_count",
+        "purpose": "Number of inversion axes crossing the configured flag threshold.",
+        "status": "required"
+      },
+      {
+        "expected_type": "allow|caveat|constrain|suppress",
+        "gate": "inversion_scan_gate",
+        "name": "inversion_gate_decision",
+        "purpose": "Per-row decision attributable specifically to inversion evidence.",
+        "status": "required"
+      },
+      {
+        "expected_type": "object",
+        "gate": "rpm_gate",
+        "name": "gate_decisions",
+        "purpose": "Merged per-gate decisions for all diagnostic gates, preserving individual attribution.",
+        "status": "required"
+      }
+    ],
+    "schema_version": "stage22_2_diagnostic_instrumentation_contract_v1"
+  },
+  "fresh_runner_required": true,
+  "missing_required_fields_across_locked_artifacts": [
+    "gap_map_summary",
+    "gate_decisions",
+    "inversion_axis_scores",
+    "inversion_flag_count",
+    "inversion_gate_decision",
+    "lacunarity_gate_decision",
+    "lacunarity_scores",
+    "rpm_gate_decision",
+    "rpm_satisfaction"
+  ],
+  "next_runner_requirements": {
+    "do_not_backfill_placeholder_defaults_as_evidence": true,
+    "emit_per_row_diagnostics": true,
+    "preserve_gate_decisions_separately": true,
+    "required_fields": [
+      "rpm_satisfaction",
+      "rpm_gate_decision",
+      "lacunarity_scores",
+      "gap_map_summary",
+      "lacunarity_gate_decision",
+      "inversion_axis_scores",
+      "inversion_flag_count",
+      "inversion_gate_decision",
+      "gate_decisions"
+    ]
+  },
+  "schema_version": "stage22_2_diagnostic_instrumentation_audit_v1",
+  "status": "INSTRUMENTATION_REQUIRED_BEFORE_ATTRIBUTION"
+}

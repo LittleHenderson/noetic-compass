@@ -2169,3 +2169,47 @@ Artifacts:
 - `stage22_1_gate_attribution_bench_20260519.json`
 - `STAGE22_1_GATE_ATTRIBUTION_BENCH_20260519.md`
 - `tests/test_stage22_1_gate_attribution.py`
+
+## Stage 22.2 preflight - Diagnostic gate instrumentation
+
+**Verdict: `INSTRUMENTATION_REQUIRED_BEFORE_ATTRIBUTION`.**
+
+Stage 22.2 defines the artifact contract needed to measure RPM, lacunarity,
+and inversion independently. The current locked Stage 19/20 reports do not
+contain per-row values for those gates, so treating their absence as a null
+effect would be wrong.
+
+Current artifact status:
+
+| Gate | Status | Reason |
+|---|---|---|
+| RPM | `not_measurable_from_locked_artifacts` | only placeholder `rpm_satisfaction=1.0` policy evidence is present |
+| Lacunarity | `not_measurable_from_locked_artifacts` | neural LacunarityHead values are absent |
+| Inversion scan | `not_measurable_from_locked_artifacts` | per-row inversion axis outputs are absent |
+
+Required fresh-run per-row fields:
+
+- `rpm_satisfaction`
+- `rpm_gate_decision`
+- `lacunarity_scores`
+- `gap_map_summary`
+- `lacunarity_gate_decision`
+- `inversion_axis_scores`
+- `inversion_flag_count`
+- `inversion_gate_decision`
+- `gate_decisions`
+
+Product read:
+
+> Stage 22.2 does not weaken the Stage 22/22.1 result. It prevents a false
+> attribution claim. The measurable gates already show a precision/coverage
+> ladder; RPM, lacunarity, and inversion need a fresh instrumented runner
+> before they can be credited or removed.
+
+Artifacts:
+
+- `stage22_2_diagnostic_instrumentation_spec.py`
+- `run_stage22_2_diagnostic_instrumentation_audit.py`
+- `stage22_2_diagnostic_instrumentation_audit_20260519.json`
+- `STAGE22_2_DIAGNOSTIC_INSTRUMENTATION_AUDIT_20260519.md`
+- `tests/test_stage22_2_diagnostic_instrumentation.py`
