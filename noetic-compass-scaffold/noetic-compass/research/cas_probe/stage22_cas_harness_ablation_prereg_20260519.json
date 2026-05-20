@@ -1,0 +1,226 @@
+{
+  "claim_boundary": "Stage 22 tests harness contribution and tradeoffs. Suppression rate is never interpreted without useful_output_rate and coverage.",
+  "conditions": [
+    {
+      "boundary": "No CAS claims attach to this condition; it is a comparator.",
+      "hypothesis": "Defines the no-harness floor for likelihood and output-quality metrics.",
+      "label": "Floor: raw frozen model",
+      "layers": {
+        "atlas_trace_linkage": false,
+        "epsilon_readable_prefix": false,
+        "eta_probe_readout": false,
+        "evidence_packet_export": false,
+        "external_frontier_model": false,
+        "frozen_model_logits": true,
+        "generation_readiness_gate": false,
+        "mode_selector": "OFF",
+        "verification_stack": false
+      },
+      "mode": "floor_raw_model",
+      "required_artifacts": [
+        "Stage 7/8/15/16 frozen model fixtures",
+        "locked prompt rows"
+      ],
+      "status": "executable_now",
+      "subject": "cas_harness"
+    },
+    {
+      "boundary": "Likelihood conditioning only; not visible-text control.",
+      "hypothesis": "Readable realization should shift semantic likelihood without safety layers.",
+      "label": "Eta-to-epsilon bridge only",
+      "layers": {
+        "atlas_trace_linkage": false,
+        "epsilon_readable_prefix": true,
+        "eta_probe_readout": true,
+        "evidence_packet_export": false,
+        "external_frontier_model": false,
+        "frozen_model_logits": true,
+        "generation_readiness_gate": false,
+        "mode_selector": "OFF",
+        "verification_stack": false
+      },
+      "mode": "cpl2_bridge_only",
+      "required_artifacts": [
+        "Stage 7 CPL2 report",
+        "Stage 8 Pythia-1B CPL2 report",
+        "Stage 15 OLMo CPL2 report",
+        "Stage 16 Qwen CPL2 report"
+      ],
+      "status": "executable_now",
+      "subject": "cas_harness"
+    },
+    {
+      "boundary": "Balances precision and coverage; not a high-precision legal mode.",
+      "hypothesis": "Default customer mode should recover coverage while preserving factor consistency.",
+      "label": "Mode Selector: BALANCED",
+      "layers": {
+        "atlas_trace_linkage": false,
+        "epsilon_readable_prefix": true,
+        "eta_probe_readout": true,
+        "evidence_packet_export": false,
+        "external_frontier_model": false,
+        "frozen_model_logits": true,
+        "generation_readiness_gate": false,
+        "mode_selector": "BALANCED",
+        "verification_stack": true
+      },
+      "mode": "mode_selector_balanced",
+      "required_artifacts": [
+        "stage19b_cross_arch_foundation_verification_stack_20260519.json",
+        "stage19c_verification_mode_selector_20260519.json"
+      ],
+      "status": "executable_now",
+      "subject": "cas_harness"
+    },
+    {
+      "boundary": "Opt-in regulator/legal/safety mode.",
+      "hypothesis": "High-precision mode should minimize silent error at the cost of coverage.",
+      "label": "Mode Selector: HIGH_PRECISION",
+      "layers": {
+        "atlas_trace_linkage": false,
+        "epsilon_readable_prefix": true,
+        "eta_probe_readout": true,
+        "evidence_packet_export": false,
+        "external_frontier_model": false,
+        "frozen_model_logits": true,
+        "generation_readiness_gate": false,
+        "mode_selector": "HIGH_PRECISION",
+        "verification_stack": true
+      },
+      "mode": "mode_selector_high_precision",
+      "required_artifacts": [
+        "stage19b_cross_arch_foundation_verification_stack_20260519.json",
+        "stage19c_verification_mode_selector_20260519.json"
+      ],
+      "status": "executable_now",
+      "subject": "cas_harness"
+    },
+    {
+      "boundary": "Policy packaging over existing signals; does not change host-model weights.",
+      "hypothesis": "Readiness policy should convert unsafe accept/suppress outcomes into useful allow/caveat/constrain/suppress decisions.",
+      "label": "Generation Readiness: BALANCED",
+      "layers": {
+        "atlas_trace_linkage": false,
+        "epsilon_readable_prefix": true,
+        "eta_probe_readout": true,
+        "evidence_packet_export": false,
+        "external_frontier_model": false,
+        "frozen_model_logits": true,
+        "generation_readiness_gate": true,
+        "mode_selector": "BALANCED",
+        "verification_stack": true
+      },
+      "mode": "readiness_balanced",
+      "required_artifacts": [
+        "stage20b_generation_readiness_packets_20260519.json"
+      ],
+      "status": "executable_now",
+      "subject": "cas_harness"
+    },
+    {
+      "boundary": "Audit completeness is a product metric separate from model accuracy.",
+      "hypothesis": "Full audit surface should maximize reviewer reproducibility, not necessarily raw output quality.",
+      "label": "Full audit surface",
+      "layers": {
+        "atlas_trace_linkage": true,
+        "epsilon_readable_prefix": true,
+        "eta_probe_readout": true,
+        "evidence_packet_export": true,
+        "external_frontier_model": false,
+        "frozen_model_logits": true,
+        "generation_readiness_gate": true,
+        "mode_selector": "BALANCED",
+        "verification_stack": true
+      },
+      "mode": "evidence_packet_full",
+      "required_artifacts": [
+        "stage21a_evidence_packet_export_20260519.json",
+        "Stage 21B backend/frontend route",
+        "Stage 21C trace-linkage commit"
+      ],
+      "status": "executable_now",
+      "subject": "cas_harness"
+    },
+    {
+      "boundary": "Not a CAS mechanism and not comparable as a weight-level intervention.",
+      "hypothesis": "Provides a non-CAS quality ceiling for the same prompts/tasks.",
+      "label": "Ceiling: frontier LLM without CAS",
+      "layers": {
+        "atlas_trace_linkage": false,
+        "epsilon_readable_prefix": false,
+        "eta_probe_readout": false,
+        "evidence_packet_export": false,
+        "external_frontier_model": true,
+        "frozen_model_logits": false,
+        "generation_readiness_gate": false,
+        "mode_selector": "OFF",
+        "verification_stack": false
+      },
+      "mode": "frontier_llm_ceiling",
+      "required_artifacts": [
+        "locked prompt rows",
+        "frontier-model outputs with model/date/version recorded"
+      ],
+      "status": "reference_only",
+      "subject": "cas_harness"
+    }
+  ],
+  "default_customer_mode": "BALANCED",
+  "metrics": [
+    {
+      "direction": "higher_is_better",
+      "name": "useful_output_rate",
+      "rationale": "Prevents rewarding a harness that suppresses everything safely."
+    },
+    {
+      "direction": "lower_is_better",
+      "name": "unsupported_output_rate",
+      "rationale": "Measures hallucinated or unsupported emission after the harness decision."
+    },
+    {
+      "direction": "higher_is_better",
+      "name": "accepted_accuracy",
+      "rationale": "Precision of accepted per-example decisions when gold labels exist."
+    },
+    {
+      "direction": "higher_is_better",
+      "name": "coverage",
+      "rationale": "Fraction of examples receiving an accepted or useful constrained decision."
+    },
+    {
+      "direction": "report_only",
+      "name": "suppression_rate",
+      "rationale": "Interpretable only alongside useful_output_rate."
+    },
+    {
+      "direction": "higher_is_better",
+      "name": "cpl2_delta",
+      "rationale": "Likelihood shift from eta-to-epsilon readable prefix conditioning."
+    },
+    {
+      "direction": "higher_is_better",
+      "name": "evidence_packet_completeness",
+      "rationale": "How completely the run can be audited by a reviewer."
+    },
+    {
+      "direction": "lower_is_better",
+      "name": "latency_ms",
+      "rationale": "Runtime cost of the harness condition."
+    }
+  ],
+  "naming_boundary": {
+    "cas_harness": "External inspection/conditioning product around open-weight models.",
+    "cas_native_cognitive_runtime": "Future from-scratch CAS Native inner loop; not Stage 22."
+  },
+  "schema_version": "stage22_cas_harness_ablation_spec_v1",
+  "scope": "external_cas_harness_not_cas_native_inner_loop",
+  "validation": {
+    "cpl2_bridge_only": [],
+    "evidence_packet_full": [],
+    "floor_raw_model": [],
+    "frontier_llm_ceiling": [],
+    "mode_selector_balanced": [],
+    "mode_selector_high_precision": [],
+    "readiness_balanced": []
+  }
+}

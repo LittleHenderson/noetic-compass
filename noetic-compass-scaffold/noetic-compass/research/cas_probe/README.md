@@ -2056,3 +2056,39 @@ Artifacts:
 - `STAGE21A_EVIDENCE_PACKET_EXPORT_20260519.md`
 - `evidence_packets/stage21a_*.json`
 - `evidence_packets/stage21a_*.md`
+
+## Stage 22 pre-registration - CAS Harness ablation bench
+
+**Verdict: `PREREGISTERED_NO_GPU`.**
+
+Stage 22 applies harness-engineering discipline to the external CAS Harness
+product, not to the future CAS Native inner loop. The naming boundary is
+locked:
+
+- **CAS Harness** = external inspection/conditioning product around frozen
+  open-weight models.
+- **CAS Native Cognitive Runtime** = future from-scratch CAS Native inner loop;
+  not Stage 22.
+
+The ablation matrix includes a floor, the eta-to-epsilon bridge, user-selectable
+Verification Stack modes, the Generation Readiness policy, the full Evidence
+Packet/Atlas surface, and a frontier-LLM ceiling reference.
+
+Required metric discipline:
+
+- report useful-output rate with suppression rate
+- report coverage with accepted accuracy
+- report CPL2 likelihood delta separately from visible free-form generation
+- report floor and ceiling comparators so harness lift is interpretable
+
+Default customer mode remains `BALANCED` unless Stage 22 data overturns it.
+`HIGH_PRECISION` is opt-in for regulator/legal/safety workflows.
+`MAX_COVERAGE_TRIAGE` is opt-in for human-review queues.
+
+Artifacts:
+
+- `stage22_harness_ablation_spec.py`
+- `run_stage22_harness_ablation_prereg.py`
+- `stage22_cas_harness_ablation_prereg_20260519.json`
+- `STAGE22_CAS_HARNESS_ABLATION_PREREG_20260519.md`
+- `tests/test_stage22_harness_ablation_spec.py`
