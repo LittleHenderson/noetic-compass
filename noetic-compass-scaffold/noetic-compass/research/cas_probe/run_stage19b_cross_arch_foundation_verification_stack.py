@@ -252,6 +252,166 @@ def _recompose(drive_idx: int, register_idx: int) -> int:
     return int(drive_idx) * len(_REGISTERS) + int(register_idx)
 
 
+def _vote_profile(votes: dict[str, int], labels: tuple[str, ...]) -> dict[str, Any]:
+    if not votes:
+        return {
+            "vote_count": 0,
+            "unique_labels": 0,
+            "max_vote_share": 0.0,
+            "conflict_count": 0,
+            "labels": [],
+        }
+    counts = Counter(votes.values())
+    max_count = counts.most_common(1)[0][1]
+    return {
+        "vote_count": len(votes),
+        "unique_labels": len(counts),
+        "max_vote_share": max_count / len(votes),
+        "conflict_count": len(votes) - max_count,
+        "labels": [labels[int(idx)] for idx in sorted(counts)],
+    }
+
+
+def _vote_lacunarity(profile: dict[str, Any]) -> float:
+    if int(profile["vote_count"]) == 0:
+        return 0.0
+    return float(profile["conflict_count"] / profile["vote_count"])
+
+
+def _decision_from_score(score: float) -> str:
+    if score >= 0.85:
+        return "allow"
+    if score >= 0.65:
+        return "caveat"
+    if score >= 0.45:
+        return "constrain"
+    return "suppress"
+
+
+def _lacunarity_decision(score: float) -> str:
+    if score <= 0.0:
+        return "allow"
+    if score <= 0.34:
+        return "caveat"
+    if score <= 0.67:
+        return "constrain"
+    return "suppress"
+
+
+def _diagnostic_contract_row(
+    *,
+    index: int,
+    sample_id: str,
+    stage: str,
+    foundation_votes: dict[str, int] | None = None,
+    drive_votes: dict[str, int] | None = None,
+    register_votes: dict[str, int] | None = None,
+    foundation_label_idx: int | None = None,
+    drive_idx: int | None = None,
+    register_idx: int | None = None,
+    trace_states: dict[str, Any] | None = None,
+    reason: str | None = None,
+) -> dict[str, Any]:
+    """Emit Stage 22.2-compatible per-row diagnostic fields.
+
+    The fields are runtime-only and do not require gold labels. RPM is the
+    Drive/Register recomposition check when factor predictions exist;
+    lacunarity is a deterministic readout-vote concentration proxy; inversion
+    is explicitly not evaluated by the Stage 19B artifacts.
+    """
+    foundation_votes = foundation_votes or {}
+    drive_votes = drive_votes or {}
+    register_votes = register_votes or {}
+    trace_states = trace_states or {}
+
+    recomposed_idx = (
+        _recompose(drive_idx, register_idx)
+        if drive_idx is not None and register_idx is not None
+        else None
+    )
+    factor_consistent = (
+        bool(recomposed_idx == foundation_label_idx)
+        if recomposed_idx is not None and foundation_label_idx is not None
+        else None
+    )
+    rpm_satisfaction = (
+        1.0 if factor_consistent is True else 0.0 if factor_consistent is False else 0.5
+    )
+
+    foundation_profile = _vote_profile(foundation_votes, _FOUNDATION_LABELS)
+    drive_profile = _vote_profile(drive_votes, _DRIVE_LABELS)
+    register_profile = _vote_profile(register_votes, _REGISTER_LABELS)
+    trace_instability = sum(
+        1
+        for trace in trace_states.values()
+        if str(trace.get("state")) in {"uncertain", "conflicted"}
+    )
+    trace_lacunarity = trace_instability / len(trace_states) if trace_states else 0.0
+    foundation_lac = _vote_lacunarity(foundation_profile)
+    drive_lac = _vote_lacunarity(drive_profile)
+    register_lac = _vote_lacunarity(register_profile)
+    max_lac = max(foundation_lac, drive_lac, register_lac, trace_lacunarity)
+
+    rpm_gate_decision = _decision_from_score(rpm_satisfaction)
+    lacunarity_gate_decision = _lacunarity_decision(max_lac)
+    inversion_axis_scores: list[None] = [None] * 7
+    inversion_flag_count = None
+    inversion_gate_decision = "not_evaluated"
+
+    return {
+        "index": int(index),
+        "sample_id": sample_id,
+        "stage": stage,
+        "reason": reason,
+        "prediction": (
+            _FOUNDATION_LABELS[int(foundation_label_idx)]
+            if foundation_label_idx is not None
+            else None
+        ),
+        "rpm_satisfaction": rpm_satisfaction,
+        "rpm_gate_decision": rpm_gate_decision,
+        "lacunarity_scores": {
+            "foundation_vote_lacunarity": foundation_lac,
+            "drive_vote_lacunarity": drive_lac,
+            "register_vote_lacunarity": register_lac,
+            "trace_instability_lacunarity": trace_lacunarity,
+            "max_vote_or_trace_lacunarity": max_lac,
+            "source": "deterministic_runtime_proxy_not_neural_lacunarity_head",
+        },
+        "gap_map_summary": {
+            "foundation": foundation_profile,
+            "drive": drive_profile,
+            "register": register_profile,
+            "trace_states": {
+                readout: trace.get("state") for readout, trace in trace_states.items()
+            },
+        },
+        "lacunarity_gate_decision": lacunarity_gate_decision,
+        "inversion_axis_scores": inversion_axis_scores,
+        "inversion_flag_count": inversion_flag_count,
+        "inversion_gate_decision": inversion_gate_decision,
+        "gate_decisions": {
+            "rpm_gate": {
+                "decision": rpm_gate_decision,
+                "source": "drive_register_recomposition_runtime_proxy",
+                "attribution_status": (
+                    "proxy_measurable" if factor_consistent is not None else "not_available"
+                ),
+            },
+            "lacunarity_gate": {
+                "decision": lacunarity_gate_decision,
+                "source": "readout_vote_and_trace_lacunarity_proxy",
+                "attribution_status": "proxy_measurable",
+            },
+            "inversion_scan_gate": {
+                "decision": inversion_gate_decision,
+                "source": "not_recorded_in_stage19b_runner",
+                "attribution_status": "not_measurable",
+            },
+        },
+    }
+
+
 def _status(accepted_accuracy: float, coverage: float, silent_error_rate: float, baseline: float) -> str:
     if accepted_accuracy < baseline:
         return "NULL"
@@ -264,7 +424,12 @@ def _status(accepted_accuracy: float, coverage: float, silent_error_rate: float,
     return "GREY"
 
 
-def _run_model(model_key: str, config: dict[str, str]) -> dict[str, Any]:
+def _run_model(
+    model_key: str,
+    config: dict[str, str],
+    *,
+    emit_diagnostics: bool = False,
+) -> dict[str, Any]:
     import numpy as np
 
     input_path = _resolve(config["input"])
@@ -330,14 +495,27 @@ def _run_model(model_key: str, config: dict[str, str]) -> dict[str, Any]:
     factor_rows: list[dict[str, Any]] = []
     accepted_rows: list[dict[str, Any]] = []
     suppressed_rows: list[dict[str, Any]] = []
+    diagnostic_rows: list[dict[str, Any]] = []
 
     for j in range(n_test):
+        row_id = sample_ids[int(idx_test[j])]
         foundation_votes = {
             readout: int(block["selected_pred"][j]) for readout, block in fitted["foundation"].items()
         }
         foundation_consensus = _consensus(foundation_votes, _FOUNDATION_LABELS, "foundation")
         if not foundation_consensus["accepted"]:
-            suppressed_rows.append({"index": j, "reason": foundation_consensus["reason"]})
+            reason = foundation_consensus["reason"]
+            suppressed_rows.append({"index": j, "sample_id": row_id, "reason": reason})
+            if emit_diagnostics:
+                diagnostic_rows.append(
+                    _diagnostic_contract_row(
+                        index=j,
+                        sample_id=row_id,
+                        stage="foundation_ensemble",
+                        foundation_votes=foundation_votes,
+                        reason=reason,
+                    )
+                )
             continue
         foundation_label_idx = int(foundation_consensus["label_index"])
         ensemble_only_rows.append(
@@ -355,24 +533,69 @@ def _run_model(model_key: str, config: dict[str, str]) -> dict[str, Any]:
         drive_consensus = _consensus(drive_votes, _DRIVE_LABELS, "drive")
         register_consensus = _consensus(register_votes, _REGISTER_LABELS, "register")
         if not drive_consensus["accepted"]:
-            suppressed_rows.append({"index": j, "reason": drive_consensus["reason"]})
+            reason = drive_consensus["reason"]
+            suppressed_rows.append({"index": j, "sample_id": row_id, "reason": reason})
+            if emit_diagnostics:
+                diagnostic_rows.append(
+                    _diagnostic_contract_row(
+                        index=j,
+                        sample_id=row_id,
+                        stage="drive_ensemble",
+                        foundation_votes=foundation_votes,
+                        drive_votes=drive_votes,
+                        register_votes=register_votes,
+                        foundation_label_idx=foundation_label_idx,
+                        reason=reason,
+                    )
+                )
             continue
         if not register_consensus["accepted"]:
-            suppressed_rows.append({"index": j, "reason": register_consensus["reason"]})
+            reason = register_consensus["reason"]
+            suppressed_rows.append({"index": j, "sample_id": row_id, "reason": reason})
+            if emit_diagnostics:
+                diagnostic_rows.append(
+                    _diagnostic_contract_row(
+                        index=j,
+                        sample_id=row_id,
+                        stage="register_ensemble",
+                        foundation_votes=foundation_votes,
+                        drive_votes=drive_votes,
+                        register_votes=register_votes,
+                        foundation_label_idx=foundation_label_idx,
+                        reason=reason,
+                    )
+                )
             continue
 
         drive_idx = int(drive_consensus["label_index"])
         register_idx = int(register_consensus["label_index"])
         recomposed_idx = _recompose(drive_idx, register_idx)
         if recomposed_idx != foundation_label_idx:
+            reason = "factor_conflicted"
             suppressed_rows.append(
                 {
                     "index": j,
-                    "reason": "factor_conflicted",
+                    "sample_id": row_id,
+                    "reason": reason,
                     "foundation": _FOUNDATION_LABELS[foundation_label_idx],
                     "recomposed": _FOUNDATION_LABELS[recomposed_idx],
                 }
             )
+            if emit_diagnostics:
+                diagnostic_rows.append(
+                    _diagnostic_contract_row(
+                        index=j,
+                        sample_id=row_id,
+                        stage="factor_consistency",
+                        foundation_votes=foundation_votes,
+                        drive_votes=drive_votes,
+                        register_votes=register_votes,
+                        foundation_label_idx=foundation_label_idx,
+                        drive_idx=drive_idx,
+                        register_idx=register_idx,
+                        reason=reason,
+                    )
+                )
             continue
         factor_rows.append(
             {
@@ -409,10 +632,40 @@ def _run_model(model_key: str, config: dict[str, str]) -> dict[str, Any]:
             reason = "trace_unstable"
             if unstable_reasons:
                 reason = "+".join(unstable_reasons)
-            suppressed_rows.append({"index": j, "reason": reason})
+            suppressed_rows.append({"index": j, "sample_id": row_id, "reason": reason})
+            if emit_diagnostics:
+                diagnostic_rows.append(
+                    _diagnostic_contract_row(
+                        index=j,
+                        sample_id=row_id,
+                        stage="trace_stability",
+                        foundation_votes=foundation_votes,
+                        drive_votes=drive_votes,
+                        register_votes=register_votes,
+                        foundation_label_idx=foundation_label_idx,
+                        drive_idx=drive_idx,
+                        register_idx=register_idx,
+                        trace_states=trace_states,
+                        reason=reason,
+                    )
+                )
             continue
 
-        row_id = sample_ids[int(idx_test[j])]
+        if emit_diagnostics:
+            diagnostic_rows.append(
+                _diagnostic_contract_row(
+                    index=j,
+                    sample_id=row_id,
+                    stage="accepted",
+                    foundation_votes=foundation_votes,
+                    drive_votes=drive_votes,
+                    register_votes=register_votes,
+                    foundation_label_idx=foundation_label_idx,
+                    drive_idx=drive_idx,
+                    register_idx=register_idx,
+                    trace_states=trace_states,
+                )
+            )
         accepted_rows.append(
             {
                 "index": j,
@@ -495,6 +748,28 @@ def _run_model(model_key: str, config: dict[str, str]) -> dict[str, Any]:
         "accepted_examples_sample": accepted_rows[:25],
         "suppressed_examples_sample": suppressed_rows[:25],
     }
+    if emit_diagnostics:
+        report["diagnostic_rows"] = diagnostic_rows
+        report["diagnostic_summary"] = {
+            "row_count": len(diagnostic_rows),
+            "accepted_rows": accepted,
+            "suppressed_rows": len(suppressed_rows),
+            "rpm_proxy_rows": sum(
+                1
+                for row in diagnostic_rows
+                if row["gate_decisions"]["rpm_gate"]["attribution_status"] == "proxy_measurable"
+            ),
+            "lacunarity_proxy_rows": len(diagnostic_rows),
+            "inversion_measured_rows": sum(
+                1
+                for row in diagnostic_rows
+                if row["gate_decisions"]["inversion_scan_gate"]["attribution_status"] != "not_measurable"
+            ),
+            "boundary": (
+                "RPM and lacunarity are deterministic runtime proxies. "
+                "Inversion scan is still not measured by Stage 19B."
+            ),
+        }
     return report
 
 
@@ -592,6 +867,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--models", default="olmo1b,qwen15b", help="Comma-separated model keys")
     parser.add_argument("--out-report", default="stage19b_cross_arch_foundation_verification_stack_20260519.json")
     parser.add_argument("--out-md", default="STAGE19B_CROSS_ARCH_FOUNDATION_VERIFICATION_STACK_20260519.md")
+    parser.add_argument(
+        "--emit-diagnostics",
+        action="store_true",
+        help="Emit Stage 22.4 per-row diagnostic contract fields for every test row.",
+    )
     args = parser.parse_args(argv)
 
     model_keys = [x.strip() for x in str(args.models).split(",") if x.strip()]
@@ -601,7 +881,10 @@ def main(argv: list[str] | None = None) -> int:
     out_report = _resolve(args.out_report)
     out_md = _resolve(args.out_md)
 
-    models = {key: _run_model(key, _MODEL_CONFIGS[key]) for key in model_keys}
+    models = {
+        key: _run_model(key, _MODEL_CONFIGS[key], emit_diagnostics=args.emit_diagnostics)
+        for key in model_keys
+    }
     report = {
         "status": _overall_status(models),
         "schema_version": "stage19b_cross_arch_foundation_verification_stack_v1",
@@ -612,6 +895,15 @@ def main(argv: list[str] | None = None) -> int:
             "factor-consistency, and trace-stability signals."
         ),
     }
+    if args.emit_diagnostics:
+        report["diagnostic_contract"] = {
+            "schema_version": "stage22_4_instrumented_verification_rows_v1",
+            "status": "STAGE22_4_DIAGNOSTIC_ROWS_EMITTED",
+            "boundary": (
+                "RPM and lacunarity are deterministic runtime proxies emitted per row. "
+                "Inversion axis scores remain not measured by this runner."
+            ),
+        }
     out_report.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     _write_md(report, out_md)
     print(

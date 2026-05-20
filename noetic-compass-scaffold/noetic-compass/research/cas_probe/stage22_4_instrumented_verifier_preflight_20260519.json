@@ -1,0 +1,30 @@
+{
+  "activation_artifacts": {
+    "stage15_olmo1b_activations_20260519.npz": false,
+    "stage16_qwen15b_activations_20260519.npz": false
+  },
+  "boundary": "The runner now emits Stage 22.2-compatible row fields. RPM and lacunarity are runtime proxy diagnostics. Inversion fields are reserved and emitted as not_evaluated until a real inversion scanner is wired into the verifier.",
+  "can_run_locally": false,
+  "diagnostic_helper_present": true,
+  "diagnostic_rows_present": true,
+  "emit_diagnostics_flag_present": true,
+  "inversion_numeric_ready": false,
+  "local_artifacts_present": false,
+  "pod_command": "python research/cas_probe/run_stage19b_cross_arch_foundation_verification_stack.py --models olmo1b,qwen15b --emit-diagnostics --out-report stage22_4_instrumented_cross_arch_verification_stack_20260519.json --out-md STAGE22_4_INSTRUMENTED_CROSS_ARCH_VERIFICATION_STACK_20260519.md",
+  "required_field_presence": {
+    "gap_map_summary": true,
+    "gate_decisions": true,
+    "inversion_axis_scores": true,
+    "inversion_flag_count": true,
+    "inversion_gate_decision": true,
+    "lacunarity_gate_decision": true,
+    "lacunarity_scores": true,
+    "rpm_gate_decision": true,
+    "rpm_satisfaction": true
+  },
+  "rpm_lacunarity_proxy_ready": true,
+  "runner": "run_stage19b_cross_arch_foundation_verification_stack.py",
+  "runner_ready": true,
+  "schema_version": "stage22_4_instrumented_verifier_preflight_v1",
+  "status": "RUNNER_PATCH_READY_LOCAL_ARTIFACTS_MISSING"
+}

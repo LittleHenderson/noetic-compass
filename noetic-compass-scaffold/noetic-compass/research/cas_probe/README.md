@@ -2251,3 +2251,55 @@ Artifacts:
 - `stage22_3_diagnostic_sample_instrumentation_20260519.json`
 - `STAGE22_3_DIAGNOSTIC_SAMPLE_INSTRUMENTATION_20260519.md`
 - `tests/test_stage22_3_diagnostic_sample_instrumentation.py`
+
+## Stage 22.4 preflight - Instrumented verifier rerun
+
+**Verdict: `RUNNER_PATCH_READY_LOCAL_ARTIFACTS_MISSING`.**
+
+Stage 22.4 patched the Stage 19B cross-architecture verifier so a fresh
+OLMo/Qwen run can emit Stage 22.2-compatible diagnostic rows for every test
+example, including suppressed rows. This closes the artifact-shape gap found in
+Stage 22.3.
+
+What changed:
+
+- `run_stage19b_cross_arch_foundation_verification_stack.py` now accepts
+  `--emit-diagnostics`.
+- The runner emits `diagnostic_rows[]` with `rpm_satisfaction`,
+  `lacunarity_scores`, `gap_map_summary`, `inversion_axis_scores`,
+  `inversion_gate_decision`, and `gate_decisions`.
+- Accepted and suppressed rows both get diagnostic rows when the flag is on.
+- Gold labels remain scoring-only; runtime diagnostics are derived from votes,
+  factor recomposition, and trace states.
+
+Local execution is blocked because the activation binaries are not in this
+workspace:
+
+- `stage15_olmo1b_activations_20260519.npz`
+- `stage16_qwen15b_activations_20260519.npz`
+
+Pod command:
+
+```bash
+python research/cas_probe/run_stage19b_cross_arch_foundation_verification_stack.py \
+  --models olmo1b,qwen15b \
+  --emit-diagnostics \
+  --out-report stage22_4_instrumented_cross_arch_verification_stack_20260519.json \
+  --out-md STAGE22_4_INSTRUMENTED_CROSS_ARCH_VERIFICATION_STACK_20260519.md
+```
+
+Boundary:
+
+> Stage 22.4 makes RPM and lacunarity proxy attribution runnable on full
+> accepted/suppressed rows. It does not yet make inversion attribution numeric:
+> inversion fields are emitted as `not_evaluated` / `not_measurable` until a
+> real inversion scanner is wired into the verifier.
+
+Artifacts:
+
+- `run_stage19b_cross_arch_foundation_verification_stack.py`
+- `run_stage22_4_instrumented_verifier_preflight.py`
+- `stage22_4_instrumented_verifier_preflight_20260519.json`
+- `STAGE22_4_INSTRUMENTED_VERIFIER_PREFLIGHT_20260519.md`
+- `STAGE22_4_INSTRUMENTED_VERIFIER_RUNBOOK_20260519.md`
+- `tests/test_stage22_4_instrumented_verifier.py`
