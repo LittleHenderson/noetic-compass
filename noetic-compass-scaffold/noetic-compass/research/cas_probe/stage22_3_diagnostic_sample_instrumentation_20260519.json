@@ -1,0 +1,4077 @@
+{
+  "boundary": "This sample instrumentation proves the row contract shape for accepted Stage 19B sample rows. RPM and lacunarity are vote/factor proxies, not fresh neural RPM/lacunarity diagnostics. Inversion remains unmeasured. Full attribution requires rerunning the verifier with per-row diagnostics for both accepted and suppressed rows.",
+  "instrumented_row_count": 50,
+  "instrumented_rows": [
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 0,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 1,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 2,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 3,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 4,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_concrete_human_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 5,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_concrete_human_F1A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 6,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_system_process_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 7,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_system_process_F1A"
+    },
+    {
+      "confidence_tier": "medium",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 9,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_compressed_minimal_F1A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 12,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_counter_alias_hard_negative_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 13,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_counter_alias_hard_negative_F1A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 14,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1f",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_role_inverse_minimal_F1f"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 15,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1E",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_role_inverse_minimal_F1E"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 16,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1f",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_no_alias_plain_F1f"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 17,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1E",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_no_alias_plain_F1E"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 18,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1f",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_concrete_human_F1f"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 19,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1E",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_concrete_human_F1E"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 20,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1f",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_system_process_F1f"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 21,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1E",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_system_process_F1E"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 22,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1f",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_compressed_minimal_F1f"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 23,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F1E",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_compressed_minimal_F1E"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 28,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F2T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_role_inverse_minimal_F2T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 29,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F2A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_role_inverse_minimal_F2A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 30,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F2T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_no_alias_plain_F2T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 31,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "olmo1b",
+      "prediction": "F2A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_no_alias_plain_F2A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 1,
+          "labels": [
+            "F1",
+            "F7"
+          ],
+          "max_vote_share": 0.6666666666666666,
+          "unique_labels": 2,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "caveat",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 0,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "caveat",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.3333333333333333,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.3333333333333333,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 2,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 3,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 4,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_concrete_human_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 5,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_concrete_human_F1A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 6,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_system_process_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 7,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_system_process_F1A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 1,
+          "labels": [
+            "F1",
+            "F7"
+          ],
+          "max_vote_share": 0.6666666666666666,
+          "unique_labels": 2,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "caveat",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 8,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "caveat",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.3333333333333333,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.3333333333333333,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_compressed_minimal_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 1,
+          "labels": [
+            "F1",
+            "F7"
+          ],
+          "max_vote_share": 0.6666666666666666,
+          "unique_labels": 2,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "caveat",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 9,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "caveat",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.3333333333333333,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.3333333333333333,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_compressed_minimal_F1A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 1,
+          "labels": [
+            "F1",
+            "F7"
+          ],
+          "max_vote_share": 0.6666666666666666,
+          "unique_labels": 2,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "caveat",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 10,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "caveat",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.3333333333333333,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.3333333333333333,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_long_embedded_clause_F1T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 1,
+          "labels": [
+            "F1",
+            "F7"
+          ],
+          "max_vote_share": 0.6666666666666666,
+          "unique_labels": 2,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "caveat",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 14,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "caveat",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.3333333333333333,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.3333333333333333,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1f",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_role_inverse_minimal_F1f"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 15,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1E",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_role_inverse_minimal_F1E"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 16,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1f",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_no_alias_plain_F1f"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 17,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1E",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_no_alias_plain_F1E"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 1,
+          "labels": [
+            "F1",
+            "F7"
+          ],
+          "max_vote_share": 0.6666666666666666,
+          "unique_labels": 2,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "caveat",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 20,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "caveat",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.3333333333333333,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.3333333333333333,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1f",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_system_process_F1f"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 21,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1E",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_system_process_F1E"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 1,
+          "labels": [
+            "F1f",
+            "F5f"
+          ],
+          "max_vote_share": 0.6666666666666666,
+          "unique_labels": 2,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "f"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "caveat",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 22,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "caveat",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.3333333333333333,
+        "max_vote_lacunarity": 0.3333333333333333,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1f",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_compressed_minimal_F1f"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F1"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F1E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "E"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 23,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F1E",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_compressed_minimal_F1E"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 28,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F2T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_role_inverse_minimal_F2T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 29,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F2A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_role_inverse_minimal_F2A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 30,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F2T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_no_alias_plain_F2T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 31,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F2A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_no_alias_plain_F2A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 32,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F2T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_concrete_human_F2T"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "A"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 33,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F2A",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_concrete_human_F2A"
+    },
+    {
+      "confidence_tier": "high",
+      "gap_map_summary": {
+        "drive": {
+          "conflict_count": 0,
+          "labels": [
+            "F2"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "foundation": {
+          "conflict_count": 0,
+          "labels": [
+            "F2T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "register": {
+          "conflict_count": 0,
+          "labels": [
+            "T"
+          ],
+          "max_vote_share": 1.0,
+          "unique_labels": 1,
+          "vote_count": 3
+        },
+        "source": "readout_vote_profiles"
+      },
+      "gate_decisions": {
+        "inversion_scan_gate": {
+          "attribution_status": "not_measurable",
+          "decision": "not_evaluated",
+          "source": "not_recorded_in_locked_stage19b_rows"
+        },
+        "lacunarity_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "readout_vote_lacunarity_proxy_not_neural_lacunarity_head"
+        },
+        "rpm_gate": {
+          "attribution_status": "proxy_measurable",
+          "decision": "allow",
+          "source": "drive_register_recomposition_runtime_proxy"
+        }
+      },
+      "index": 34,
+      "instrumentation_status": {
+        "full_attribution_ready": false,
+        "inversion_scan_gate": "not_measurable_from_locked_artifact",
+        "lacunarity_gate": "proxy_measurable_from_readout_votes",
+        "rpm_gate": "proxy_measurable_from_factor_recomposition"
+      },
+      "inversion_axis_scores": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "inversion_flag_count": null,
+      "inversion_gate_decision": "not_evaluated",
+      "lacunarity_gate_decision": "allow",
+      "lacunarity_scores": {
+        "drive_vote_lacunarity": 0.0,
+        "foundation_vote_lacunarity": 0.0,
+        "max_vote_lacunarity": 0.0,
+        "register_vote_lacunarity": 0.0,
+        "source": "vote_distribution_proxy"
+      },
+      "model_key": "qwen15b",
+      "prediction": "F2T",
+      "rpm_gate_decision": "allow",
+      "rpm_satisfaction": 1.0,
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_system_process_F2T"
+    }
+  ],
+  "inversion_ready_rows": 0,
+  "next_runner_requirements": {
+    "compute_neural_or_deterministic_lacunarity_scores": true,
+    "compute_rpm_satisfaction_without_gold_labels": true,
+    "compute_true_inversion_axis_scores": true,
+    "emit_all_test_rows": true,
+    "include_suppressed_row_votes": true
+  },
+  "rows_with_required_field_names_present": 50,
+  "schema_version": "stage22_3_diagnostic_sample_instrumentation_v1",
+  "source": "stage19b_cross_arch_foundation_verification_stack_20260519.json",
+  "status": "STAGE22_3_SAMPLE_INSTRUMENTATION_PARTIAL",
+  "suppressed_sample_rows_seen": 50,
+  "suppressed_sample_rows_with_votes": 0
+}

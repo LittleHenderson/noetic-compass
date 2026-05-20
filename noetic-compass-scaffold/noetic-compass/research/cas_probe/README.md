@@ -2213,3 +2213,41 @@ Artifacts:
 - `stage22_2_diagnostic_instrumentation_audit_20260519.json`
 - `STAGE22_2_DIAGNOSTIC_INSTRUMENTATION_AUDIT_20260519.md`
 - `tests/test_stage22_2_diagnostic_instrumentation.py`
+
+## Stage 22.3 result - Diagnostic sample instrumentation
+
+**Verdict: `STAGE22_3_SAMPLE_INSTRUMENTATION_PARTIAL`.**
+
+Stage 22.3 applied the Stage 22.2 row contract to the accepted sample rows
+that retain enough runtime data in the locked Stage 19B report.
+
+Result:
+
+| Item | Value |
+|---|---:|
+| Accepted sample rows instrumented | `50` |
+| Rows with required field names present | `50` |
+| Suppressed sample rows seen | `50` |
+| Suppressed sample rows with votes | `0` |
+| Inversion-ready rows | `0` |
+
+Boundary:
+
+> RPM and lacunarity are proxy-measurable on accepted samples through
+> Drive/Register recomposition and readout-vote concentration. They are not
+> fresh neural RPM/lacunarity diagnostics. Inversion remains unmeasured.
+> Suppressed rows cannot be fully instrumented because the locked report stores
+> mostly `index` + `reason`, not readout votes or per-gate signals.
+
+Next requirement:
+
+The Stage 19B-style verifier must be rerun with full per-row diagnostic
+emission for accepted and suppressed rows. Until then, Stage 22.3 proves the
+row shape but does not close RPM/lacunarity/inversion attribution.
+
+Artifacts:
+
+- `run_stage22_3_diagnostic_sample_instrumentation.py`
+- `stage22_3_diagnostic_sample_instrumentation_20260519.json`
+- `STAGE22_3_DIAGNOSTIC_SAMPLE_INSTRUMENTATION_20260519.md`
+- `tests/test_stage22_3_diagnostic_sample_instrumentation.py`
