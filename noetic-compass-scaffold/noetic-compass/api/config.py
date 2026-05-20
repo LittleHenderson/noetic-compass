@@ -1,7 +1,18 @@
 """Application configuration via environment variables."""
 
+from pathlib import Path
+
 from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings
+
+
+# Default directory for the Stage 21A CAS Harness EvidencePacket v1 store.
+# Anchored to this file's location so the default works regardless of the
+# process's current working directory. Production deployments override via
+# the ``NC_EVIDENCE_PACKETS_DIR`` environment variable.
+_DEFAULT_HARNESS_EVIDENCE_PACKETS_DIR = str(
+    (Path(__file__).resolve().parent.parent / "research" / "cas_probe" / "evidence_packets").resolve()
+)
 
 
 class Settings(BaseSettings):
@@ -65,6 +76,16 @@ class Settings(BaseSettings):
     # Default verification mode for the Wrap Pipeline integration of the
     # Stage 20 gate. Valid: HIGH_PRECISION, BALANCED, MAX_COVERAGE_TRIAGE.
     wrap_readiness_gate_mode: str = "BALANCED"
+
+    # Stage 21B CAS Harness EvidencePacket v1 — file-backed store directory.
+    # Default points at the research samples (Stage 21A canonical exports);
+    # production deployments override via ``NC_EVIDENCE_PACKETS_DIR``.
+    # Schema, validator, and renderer live in
+    # ``research/cas_probe/evidence_packet.py`` (Stage 21A).
+    harness_evidence_packets_dir: str = Field(
+        default=_DEFAULT_HARNESS_EVIDENCE_PACKETS_DIR,
+        validation_alias=AliasChoices("NC_EVIDENCE_PACKETS_DIR"),
+    )
 
     # Docker Compose DB credentials (used only by docker-compose.yml)
     db_user: str = "noetic"

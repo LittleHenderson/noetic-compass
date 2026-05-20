@@ -137,6 +137,12 @@ export interface NodeVerification {
   ensemble_agreement?: boolean;
   suppression_reasons?: string[];
   confidence?: number;
+  /**
+   * Optional Stage 21A Evidence Packet trace_id. When present, the
+   * Atlas VerificationPanel surfaces a "View full Evidence Packet"
+   * button that opens the EvidencePacketDrawer.
+   */
+  evidence_packet_trace_id?: string;
 }
 
 export interface ThoughtTreeNode {

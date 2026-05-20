@@ -33,6 +33,7 @@ from api.routes import (
     evidence,
     export,
     forecast,
+    harness_evidence,
     health,
     idea_atlas,
     mode7,
@@ -136,3 +137,4 @@ app.include_router(reproducibility.router)
 app.include_router(idea_atlas.router)
 app.include_router(mode7.router)
 app.include_router(evidence.router)
+app.include_router(harness_evidence.router)

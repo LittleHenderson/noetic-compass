@@ -24,6 +24,13 @@ export interface VerificationPanelProps {
   verification: NodeVerification | null | undefined;
   /** Optional className passthrough so the parent panel can position. */
   className?: string;
+  /**
+   * Callback fired when the user opens the full Evidence Packet
+   * drawer (Stage 21B). Receives the packet's trace_id. When not
+   * supplied, the "View full Evidence Packet" button does not render
+   * even if the verification carries `evidence_packet_trace_id`.
+   */
+  onOpenEvidencePacket?: (traceId: string) => void;
 }
 
 interface TierStyle {
@@ -88,6 +95,7 @@ function formatReasonChipLabel(reason: string): string {
 export function VerificationPanel({
   verification,
   className,
+  onOpenEvidencePacket,
 }: VerificationPanelProps) {
   // Missing field is a valid state — pre-Stack traces have no verdict.
   // Render nothing so the rest of the detail panel is undisturbed.
@@ -208,6 +216,28 @@ export function VerificationPanel({
           </div>
         )}
       </dl>
+
+      {/*
+        Stage 21B drawer hook: render the "View full Evidence Packet"
+        button only when (a) this node carries a Stage 21A trace_id and
+        (b) the parent supplied an onOpenEvidencePacket callback. Nodes
+        without a packet keep the existing surface intact — no button,
+        no visual delta.
+      */}
+      {verification.evidence_packet_trace_id && onOpenEvidencePacket && (
+        <div className="mt-3 border-t border-white/[0.06] pt-3">
+          <button
+            type="button"
+            data-testid="verification-open-evidence-packet"
+            onClick={() =>
+              onOpenEvidencePacket(verification.evidence_packet_trace_id as string)
+            }
+            className="rounded border border-accent-teal/30 bg-accent-teal/10 px-3 py-1.5 font-mono text-[11px] text-accent-teal transition-colors hover:bg-accent-teal/20"
+          >
+            View full Evidence Packet
+          </button>
+        </div>
+      )}
     </section>
   );
 }

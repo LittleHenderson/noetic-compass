@@ -14,6 +14,7 @@ import {
 } from '../components/idea-atlas/ThoughtTreeView';
 import { SggsErrorBoundary } from '../components/idea-atlas/SggsErrorBoundary';
 import { VerificationPanel } from '../components/idea-atlas/VerificationPanel';
+import { EvidencePacketDrawer } from '../components/idea-atlas/EvidencePacketDrawer';
 import type { AtlasTrace, AtlasTraceThoughtTree } from '../lib/trace';
 
 // SGGS — Three.js 3D scene. Lazy so the ~600 KB three + sprite bundle
@@ -212,6 +213,14 @@ export function IdeaAtlasPage() {
   // SUPPRESS. Lets a regulator see the model's full refusal landscape
   // without sifting through accepted output. Default off.
   const [reviewerMode, setReviewerMode] = useState<boolean>(false);
+
+  // ── Stage 21B: Evidence Packet drawer ──
+  // When set, the EvidencePacketDrawer mounts and fetches the packet
+  // from `/api/harness/evidence/{trace_id}`. Null = closed. The drawer
+  // is a sibling of the trace panel; the underlying tree view stays
+  // mounted and is dismissible without disrupting it.
+  const [selectedTraceIdForPacket, setSelectedTraceIdForPacket] =
+    useState<string | null>(null);
 
   // ── SGGS (TRACE 3D) wiring: fullscreen state for the 3D scene ──
   const sggsContainerRef = useRef<HTMLDivElement | null>(null);
@@ -1220,6 +1229,9 @@ export function IdeaAtlasPage() {
                     {/* CAS Verification Stack verdict for the selected node */}
                     <VerificationPanel
                       verification={selectedTraceNode.verification}
+                      onOpenEvidencePacket={(traceId) =>
+                        setSelectedTraceIdForPacket(traceId)
+                      }
                     />
                   </section>
                 )}
@@ -1401,6 +1413,16 @@ export function IdeaAtlasPage() {
           )}
         </div>
       )}
+
+      {/* Stage 21B — Evidence Packet drawer. Mounts on demand when a
+          trace node carries an Evidence Packet trace_id and the user
+          clicks "View full Evidence Packet" in the VerificationPanel.
+          Sibling component; the underlying Atlas tree view is never
+          unmounted while this drawer is open. */}
+      <EvidencePacketDrawer
+        traceId={selectedTraceIdForPacket}
+        onClose={() => setSelectedTraceIdForPacket(null)}
+      />
     </div>
   );
 }
