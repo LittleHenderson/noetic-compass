@@ -36,6 +36,7 @@ def _node(
     role: str = "",
     text: Optional[str] = None,
     children: Optional[list[dict[str, Any]]] = None,
+    verification: Optional[dict[str, Any]] = None,
     **axis_attrs: Any,
 ) -> dict[str, Any]:
     """Build a single Thought Tree node with the canonical graph-
@@ -54,8 +55,36 @@ def _node(
         node["text"] = text
     if axis_attrs:
         node["axis_attrs"] = axis_attrs
+    if verification:
+        node["verification"] = verification
     node["children"] = children or []
     return node
+
+
+def _node_verification(report: dict[str, Any]) -> Optional[dict[str, Any]]:
+    """Return the runtime Verification Stack block for the generation node.
+
+    Stage 21C producer linkage: the Atlas drawer opens only when a
+    thought-tree node carries ``verification.evidence_packet_trace_id``.
+    The source report may provide that id either inside the verification
+    block or as a top-level ``evidence_packet_trace_id``. This helper
+    merges the two without inventing verdicts.
+
+    No gold labels are used here. The function only forwards runtime
+    Stack fields already present on the report.
+    """
+    raw = report.get("verification")
+    if raw is None:
+        return None
+    if not isinstance(raw, dict):
+        return None
+    verification = dict(raw)
+    trace_id = verification.get("evidence_packet_trace_id") or report.get(
+        "evidence_packet_trace_id"
+    )
+    if isinstance(trace_id, str) and trace_id:
+        verification["evidence_packet_trace_id"] = trace_id
+    return verification
 
 
 def _identifier_node(
@@ -227,6 +256,8 @@ def _flatten(root: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str,
             flat["text"] = node["text"]
         if "axis_attrs" in node:
             flat["axis_attrs"] = node["axis_attrs"]
+        if "verification" in node:
+            flat["verification"] = node["verification"]
         nodes.append(flat)
         # Stamp id + node_key onto the nested node so the two views
         # agree and the Atlas can use either view consistently.
@@ -282,6 +313,7 @@ def build_thought_tree(report: dict[str, Any]) -> dict[str, Any]:
     copied_set = set(idents.get("copied", []) or [])
     slot_summary = report.get("slot_summary", {}) or {}
     plain = report.get("plain_english", {}) or {}
+    verification = _node_verification(report)
 
     # identifier_attempt children of model_generation — Nth-occurrence
     # semantics so repeats become separate entries with distinct output
@@ -318,6 +350,7 @@ def build_thought_tree(report: dict[str, Any]) -> dict[str, Any]:
         label=plain.get("short_answer") or "model output",
         text=generated,
         children=gen_children,
+        verification=verification,
     )
 
     root = _node(

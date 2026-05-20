@@ -35,8 +35,10 @@ def _make_report(
     slot_summary: dict | None = None,
     plain: dict | None = None,
     gates: dict | None = None,
+    verification: dict | None = None,
+    evidence_packet_trace_id: str | None = None,
 ) -> dict:
-    return {
+    report = {
         "input_cas_expression": cas_expression,
         "generated_english": generated,
         "n_tokens_generated": n_tokens,
@@ -69,6 +71,11 @@ def _make_report(
             "ge_one_identifier_copied": True,
         },
     }
+    if verification is not None:
+        report["verification"] = verification
+    if evidence_packet_trace_id is not None:
+        report["evidence_packet_trace_id"] = evidence_packet_trace_id
+    return report
 
 
 # ---------------------------------------------------------------------------
@@ -317,6 +324,30 @@ def test_edge_count_matches_nodes_minus_one():
     ))
     tree = trace["thought_tree"]
     assert len(tree["edges"]) == len(tree["nodes"]) - 1
+
+
+def test_traceability_tree_carries_evidence_packet_link():
+    """Stage 21C: the full trace artifact carries the packet link the Atlas uses."""
+    trace = build_v0_trace(_make_report(
+        verification={
+            "decision": "SUPPRESS",
+            "decision_tier": "suppress",
+            "suppression_reasons": ["factor_conflicted"],
+        },
+        evidence_packet_trace_id="stage21a_suppress_olmo1b_054",
+    ))
+    tree = trace["thought_tree"]
+    flat_gen = next(n for n in tree["nodes"] if n["kind"] == "model_generation")
+    nested_gen = tree["root"]["children"][0]
+
+    assert (
+        flat_gen["verification"]["evidence_packet_trace_id"]
+        == "stage21a_suppress_olmo1b_054"
+    )
+    assert (
+        nested_gen["verification"]["evidence_packet_trace_id"]
+        == "stage21a_suppress_olmo1b_054"
+    )
 
 
 # ---------------------------------------------------------------------------

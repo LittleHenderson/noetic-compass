@@ -27,8 +27,10 @@ def _make_report(
     coverage: float | None = None,
     slot_summary: dict | None = None,
     plain: dict | None = None,
+    verification: dict | None = None,
+    evidence_packet_trace_id: str | None = None,
 ) -> dict:
-    return {
+    report = {
         "input_cas_expression": cas_expression,
         "generated_english": generated,
         "identifiers": {
@@ -50,6 +52,11 @@ def _make_report(
             "confidence_caveat": None,
         },
     }
+    if verification is not None:
+        report["verification"] = verification
+    if evidence_packet_trace_id is not None:
+        report["evidence_packet_trace_id"] = evidence_packet_trace_id
+    return report
 
 
 # ---------------------------------------------------------------------------
@@ -381,3 +388,61 @@ def test_node_key_stamped_on_nested_view_too():
     # Flat array's n0 has the same node_key as nested root
     flat_root = next(n for n in tree["nodes"] if n["id"] == tree["root"]["id"])
     assert flat_root["node_key"] == tree["root"]["node_key"]
+
+
+# ---------------------------------------------------------------------------
+# Stage 21C EvidencePacket producer linkage
+# ---------------------------------------------------------------------------
+
+def test_model_generation_node_carries_evidence_packet_trace_id():
+    """Stage 21C: runtime verification metadata must reach the Atlas node.
+
+    The drawer button only appears when selectedNode.verification carries
+    evidence_packet_trace_id. The producer should attach that link without
+    changing old traces or using oracle correctness labels.
+    """
+    rpt = _make_report(
+        verification={
+            "decision": "ACCEPT",
+            "decision_tier": "high",
+            "accepted": True,
+            "ensemble_agreement": True,
+        },
+        evidence_packet_trace_id="stage21a_allow_qwen15b_000",
+    )
+    tree = build_thought_tree(rpt)
+    nested_gen = tree["root"]["children"][0]
+    flat_gen = next(n for n in tree["nodes"] if n["kind"] == "model_generation")
+
+    for node in (nested_gen, flat_gen):
+        assert node["verification"]["decision"] == "ACCEPT"
+        assert node["verification"]["decision_tier"] == "high"
+        assert (
+            node["verification"]["evidence_packet_trace_id"]
+            == "stage21a_allow_qwen15b_000"
+        )
+
+
+def test_verification_embedded_trace_id_is_preserved():
+    rpt = _make_report(
+        verification={
+            "decision": "SUPPRESS",
+            "decision_tier": "suppress",
+            "suppression_reasons": ["factor_conflicted"],
+            "evidence_packet_trace_id": "stage21a_suppress_olmo1b_054",
+        }
+    )
+    tree = build_thought_tree(rpt)
+    flat_gen = next(n for n in tree["nodes"] if n["kind"] == "model_generation")
+    assert (
+        flat_gen["verification"]["evidence_packet_trace_id"]
+        == "stage21a_suppress_olmo1b_054"
+    )
+    assert flat_gen["verification"]["suppression_reasons"] == ["factor_conflicted"]
+
+
+def test_no_verification_field_for_legacy_reports():
+    tree = build_thought_tree(_make_report())
+    flat_gen = next(n for n in tree["nodes"] if n["kind"] == "model_generation")
+    assert "verification" not in flat_gen
+    assert "verification" not in tree["root"]["children"][0]
