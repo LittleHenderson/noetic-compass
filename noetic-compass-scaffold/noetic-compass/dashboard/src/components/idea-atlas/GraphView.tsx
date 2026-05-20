@@ -39,9 +39,17 @@ export interface GraphViewProps {
 // truth in `cas-native/atlas/notation_2d_map.py`. The palette is now
 // centralized in `notation2DMap.KIND_COLOR` so every CAS-aware renderer
 // gets a deterministic color scheme without copy-pasting regex.
+//
+// Stage 23.A.1.2: the adapter now returns `null` for unclassified
+// expressions instead of silently defaulting to cyan. GraphView keeps
+// the cyan default for visual continuity — but the "I'm guessing because
+// I don't know" decision now lives here, where it belongs, instead of
+// being hidden inside the adapter.
+
+const GRAPHVIEW_UNCLASSIFIED_COLOR = '#22d3ee';
 
 function colorFromCas(cas: string | null | undefined): string {
-  return colorFromCasExpression(cas);
+  return colorFromCasExpression(cas) ?? GRAPHVIEW_UNCLASSIFIED_COLOR;
 }
 
 // ── Hand-rolled force simulation ──

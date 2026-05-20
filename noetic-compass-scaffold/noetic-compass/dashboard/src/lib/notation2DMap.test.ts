@@ -22,6 +22,7 @@ import {
   getPosition2D,
   KIND_COLOR,
   layoutVersion,
+  positionsByKind,
   type Position2D,
   type PrimitiveKind,
   type CanonicalLayoutPayload,
@@ -233,10 +234,14 @@ describe('notation2DMap — colorFromCasExpression', () => {
     expect(colorFromCasExpression('^1|Omega_witness')).toBe(KIND_COLOR.emergent_omega);
   });
 
-  it('falls back to the noetic color when no signal is present', () => {
-    expect(colorFromCasExpression(null)).toBe(KIND_COLOR.noetic);
-    expect(colorFromCasExpression('')).toBe(KIND_COLOR.noetic);
-    expect(colorFromCasExpression('random English')).toBe(KIND_COLOR.noetic);
+  it('returns null when no kind is detected (Stage 23.A.1.2 contract)', () => {
+    // Stage 23.A.1.2: the adapter no longer silently falls back to cyan.
+    // Consumers (e.g. GraphView) make the "unclassified → cyan" call
+    // explicitly, so callers can distinguish "Noetic" from "garbage."
+    expect(colorFromCasExpression(null)).toBeNull();
+    expect(colorFromCasExpression('')).toBeNull();
+    expect(colorFromCasExpression('random English')).toBeNull();
+    expect(colorFromCasExpression('not a CAS thing')).toBeNull();
   });
 
   it('preserves the original GraphView palette for the four legacy axes', () => {
@@ -250,5 +255,77 @@ describe('notation2DMap — colorFromCasExpression', () => {
     expect(colorFromCasExpression('NoeticCluster')).toBe('#14b8a6'); // teal (Cluster)
     expect(colorFromCasExpression('Ω_anchor')).toBe('#a78bfa'); // purple (Ω)
     expect(colorFromCasExpression('Θ-recipe')).toBe('#f472b6'); // pink (Θ)
+  });
+});
+
+// ── Stage 23.A.1.2 — positionsByKind + regression checks ──
+
+describe('notation2DMap — positionsByKind', () => {
+  it('returns exactly 10 Noetics, all with kind "noetic"', () => {
+    const noetics = positionsByKind('noetic');
+    expect(noetics.length).toBe(10);
+    for (const p of noetics) {
+      expect(p.kind).toBe('noetic');
+    }
+  });
+
+  it('returns exactly 28 Foundations, all with kind "foundation"', () => {
+    const foundations = positionsByKind('foundation');
+    expect(foundations.length).toBe(28);
+    for (const p of foundations) {
+      expect(p.kind).toBe('foundation');
+    }
+  });
+
+  it('returns exactly 12 Omega registers, all with kind "emergent_omega"', () => {
+    const omegas = positionsByKind('emergent_omega');
+    expect(omegas.length).toBe(12);
+    for (const p of omegas) {
+      expect(p.kind).toBe('emergent_omega');
+    }
+  });
+
+  it('returns a fresh array slice each call (no shared mutable state)', () => {
+    const first = positionsByKind('noetic');
+    const second = positionsByKind('noetic');
+    expect(first).not.toBe(second);
+    expect(first.length).toBe(second.length);
+  });
+
+  it('agrees with allPositions().filter for an arbitrary kind', () => {
+    const viaHelper = positionsByKind('drive');
+    const viaFilter = allPositions().filter((p) => p.kind === 'drive');
+    expect(viaHelper.length).toBe(viaFilter.length);
+    expect(viaHelper.length).toBeGreaterThan(0);
+  });
+});
+
+describe('notation2DMap — detectCasKind regression checks (Stage 23.A.1.2)', () => {
+  it("still classifies '^3^P_{F2}|A' as cognitive_state (priority guard)", () => {
+    // Regression check against the previous priority bug where bare
+    // Noetic could win over the compound cognitive state. The rule
+    // ordering (compound state before bare Noetic) is preserved
+    // identically by both the JSON-driven path and the fallback path.
+    expect(detectCasKind('^3^P_{F2}|A')).toBe('cognitive_state');
+  });
+
+  it('JSON-driven path agrees with the fallback path on smoke inputs', () => {
+    // When Agent A has shipped `detection_rules` in the canonical JSON,
+    // this test confirms the data-driven sweep returns the same kind
+    // for every smoke input as the previous TS-only behavior would.
+    // When Agent A has NOT shipped, the test is trivially satisfied
+    // because `detectCasKind` is itself running the fallback rules.
+    const smokeInputs: { cas: string; expected: PrimitiveKind | null }[] = [
+      { cas: 'Omega_refusal',         expected: 'emergent_omega' },
+      { cas: '(a × b × c) = Ω',       expected: 'emergent_omega' },
+      { cas: 'Θ-only recipe',         expected: 'production' },
+      { cas: 'NoeticCluster',         expected: 'set_constructor' },
+      { cas: '^3^P_{F2}|A',           expected: 'cognitive_state' },
+      { cas: '^3 — visceral aversion', expected: 'noetic' },
+      { cas: 'F4 anywhere',           expected: 'drive' },
+    ];
+    for (const { cas, expected } of smokeInputs) {
+      expect(detectCasKind(cas)).toBe(expected);
+    }
   });
 });
