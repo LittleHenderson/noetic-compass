@@ -1,0 +1,211 @@
+"""Property tests for the canonical 2D notation map (Stage 23.A).
+
+Every assertion here corresponds to a row in the Stage 23.A acceptance
+criteria table in STAGE23_ATLAS_SELF_READING_PREREG_20260519.md. If any
+of these tests regresses, the canonical layout has drifted and the
+preregistration boundary has been broken.
+"""
+from __future__ import annotations
+
+import math
+
+import pytest
+
+from cas_native.atlas import notation_2d_map as nm
+
+
+# ── Coverage: every primitive has a position ──────────────────────────
+
+
+def test_every_noetic_has_a_position() -> None:
+    for n in nm.NOETICS:
+        pos = nm.get_position(n)
+        assert pos.kind == "noetic"
+        assert isinstance(pos.x, float)
+        assert isinstance(pos.y, float)
+
+
+def test_every_domain_has_a_position() -> None:
+    for d in nm.DOMAINS:
+        pos = nm.get_position(d)
+        assert pos.kind == "domain"
+
+
+def test_every_drive_has_a_position() -> None:
+    for f in nm.DRIVES:
+        pos = nm.get_position(f)
+        assert pos.kind == "drive"
+
+
+def test_every_register_has_a_position() -> None:
+    for r in nm.REGISTERS:
+        pos = nm.get_position(r)
+        assert pos.kind == "register"
+
+
+def test_every_cognitive_state_has_a_position() -> None:
+    for n in nm.NOETICS:
+        for d in nm.DOMAINS:
+            pos = nm.get_position(nm.state_id(n, d))
+            assert pos.kind == "cognitive_state"
+
+
+# ── Symmetry: involution pairs are reflection-symmetric ───────────────
+
+
+def test_noetic_involution_pairs_reflect_across_origin() -> None:
+    """For each involution pair (^a, ^b): position(^a) == -position(^b)."""
+    for a, b in nm.NOETIC_INVOLUTIONS.items():
+        pa = nm.get_position(a)
+        pb = nm.get_position(b)
+        # x_a + x_b ≈ 0, y_a + y_b ≈ 0 (reflection through origin).
+        assert math.isclose(pa.x + pb.x, 0.0, abs_tol=1e-9), (
+            f"Noetic involution pair {a}↔{b} not x-symmetric: "
+            f"{pa.x} + {pb.x} = {pa.x + pb.x}"
+        )
+        assert math.isclose(pa.y + pb.y, 0.0, abs_tol=1e-9), (
+            f"Noetic involution pair {a}↔{b} not y-symmetric: "
+            f"{pa.y} + {pb.y} = {pa.y + pb.y}"
+        )
+
+
+def test_drive_involution_pairs_reflect_across_origin_x_axis() -> None:
+    """Drive involution pairs reflect across x=0 (they share a y row)."""
+    for a, b in nm.DRIVE_INVOLUTIONS.items():
+        pa = nm.get_position(a)
+        pb = nm.get_position(b)
+        assert math.isclose(pa.x + pb.x, 0.0, abs_tol=1e-9), (
+            f"Drive involution pair {a}↔{b} not x-symmetric: "
+            f"{pa.x} + {pb.x} = {pa.x + pb.x}"
+        )
+        assert math.isclose(pa.y, pb.y, abs_tol=1e-9)
+
+
+# ── Self-duals lie on a symmetry axis ─────────────────────────────────
+
+
+def test_self_dual_noetics_lie_on_an_axis() -> None:
+    """Self-dual Noetics (^0, ^1, ^4, ^7) sit on x=0 or y=0."""
+    for n in nm.NOETIC_SELF_DUALS:
+        pos = nm.get_position(n)
+        on_axis = (
+            math.isclose(pos.x, 0.0, abs_tol=1e-9)
+            or math.isclose(pos.y, 0.0, abs_tol=1e-9)
+        )
+        assert on_axis, f"Self-dual Noetic {n} off-axis: ({pos.x}, {pos.y})"
+
+
+def test_self_dual_drive_is_on_y_axis() -> None:
+    """F4 (self-dual) sits at x=0."""
+    pos = nm.get_position("F4")
+    assert math.isclose(pos.x, 0.0, abs_tol=1e-9)
+
+
+# ── Domain precedence is spatially monotone ───────────────────────────
+
+
+def test_domain_precedence_is_spatially_monotone() -> None:
+    """P ≻ C ≻ E ≻ O must map to monotone y positions (top-to-bottom)."""
+    ys = [nm.get_position(d).y for d in ("^P", "^C", "^E", "^O")]
+    for earlier, later in zip(ys, ys[1:]):
+        assert earlier > later, (
+            f"Domain precedence not monotone: {ys}"
+        )
+
+
+# ── Uniqueness: no two primitives share a coordinate ──────────────────
+
+
+def test_no_two_primitives_share_a_coordinate() -> None:
+    seen: dict[tuple[float, float], str] = {}
+    for pos in nm.all_positions():
+        key = (round(pos.x, 9), round(pos.y, 9))
+        if key in seen:
+            raise AssertionError(
+                f"Coordinate collision at {key}: "
+                f"{seen[key]!r} and {pos.primitive!r}"
+            )
+        seen[key] = pos.primitive
+
+
+# ── Determinism: same inputs return same outputs across calls ─────────
+
+
+def test_get_position_is_deterministic() -> None:
+    for prim in ("^3", "^P", "F4", "|T", "^7^O"):
+        first = nm.get_position(prim)
+        second = nm.get_position(prim)
+        assert first.x == second.x
+        assert first.y == second.y
+        assert first.kind == second.kind
+
+
+def test_bare_E_is_ambiguous_and_raises() -> None:
+    """Bare 'E' must be rejected — caller must use '^E' or '|E'."""
+    with pytest.raises(ValueError, match="ambiguous"):
+        nm.get_position("E")
+
+
+def test_qualified_E_resolves_both_meanings() -> None:
+    """'^E' is Evaluative Domain, '|E' is Embodied Register — different (x,y)."""
+    eval_domain = nm.get_position("^E")
+    embodied_register = nm.get_position("|E")
+    assert eval_domain.kind == "domain"
+    assert embodied_register.kind == "register"
+    assert (eval_domain.x, eval_domain.y) != (embodied_register.x, embodied_register.y)
+
+
+def test_compact_and_canonical_cognitive_state_ids_agree() -> None:
+    """'^3P' (3-char compact) and '^3^P' (4-char canonical) map to same position."""
+    compact = nm.get_position("^3P")
+    canonical = nm.get_position("^3^P")
+    assert compact.x == canonical.x
+    assert compact.y == canonical.y
+    # Emitted canonical id is always 4-char form.
+    assert compact.primitive == "^3^P"
+    assert canonical.primitive == "^3^P"
+
+
+# ── Error path: unknown primitive raises ──────────────────────────────
+
+
+def test_unknown_primitive_raises() -> None:
+    with pytest.raises(KeyError):
+        nm.get_position("^99")
+    with pytest.raises(KeyError):
+        nm.get_position("Q")  # not a Domain
+    with pytest.raises(KeyError):
+        nm.get_position("F99")
+    with pytest.raises(KeyError):
+        nm.get_position("Z")  # not a Register
+
+
+# ── Layout payload: canonical artifact is well-formed ─────────────────
+
+
+def test_canonical_layout_payload_has_required_shape() -> None:
+    payload = nm.canonical_layout_payload()
+    assert payload["layout_version"] == nm.LAYOUT_VERSION
+    assert "stage_23_a" in payload["scope"]
+    primitives = payload["primitives"]
+    # 10 Noetics + 4 Domains + 7 Drives + 4 Registers + 40 Cognitive States = 65
+    assert len(primitives) == 10 + 4 + 7 + 4 + 40
+    # Every entry has the required shape.
+    for entry in primitives:
+        assert "primitive" in entry
+        assert "kind" in entry
+        assert "x" in entry
+        assert "y" in entry
+
+
+def test_layout_does_not_claim_future_capabilities() -> None:
+    """Stage 23.A is foundation-only. The payload must not advertise
+    reading/conditioning capabilities that belong to 23.B/23.C/23.D."""
+    payload = nm.canonical_layout_payload()
+    boundary = payload["boundary"].lower()
+    assert "static" in boundary
+    forbidden = ("trains", "conditions during inference", "atlas-self-reading enabled")
+    for term in forbidden:
+        assert term not in boundary, (
+            f"Layout payload should not claim '{term}' at Stage 23.A"
+        )

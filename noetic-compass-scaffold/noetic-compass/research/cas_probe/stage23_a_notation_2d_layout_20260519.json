@@ -1,0 +1,397 @@
+{
+  "boundary": "Static canonical 2D positions for CAS primitives. Does not include atlas-self-reading, encoder design, or training signal.",
+  "layout_version": "stage23a_notation_2d_layout_v1",
+  "primitives": [
+    {
+      "kind": "noetic",
+      "primitive": "^0",
+      "x": 0.0,
+      "y": 1.0
+    },
+    {
+      "kind": "noetic",
+      "primitive": "^1",
+      "x": 0.0,
+      "y": -1.0
+    },
+    {
+      "kind": "noetic",
+      "primitive": "^2",
+      "x": 0.707106781,
+      "y": 0.707106781
+    },
+    {
+      "kind": "noetic",
+      "primitive": "^3",
+      "x": -0.707106781,
+      "y": -0.707106781
+    },
+    {
+      "kind": "noetic",
+      "primitive": "^4",
+      "x": 1.0,
+      "y": 0.0
+    },
+    {
+      "kind": "noetic",
+      "primitive": "^5",
+      "x": -0.382683432,
+      "y": 0.923879533
+    },
+    {
+      "kind": "noetic",
+      "primitive": "^6",
+      "x": 0.382683432,
+      "y": -0.923879533
+    },
+    {
+      "kind": "noetic",
+      "primitive": "^7",
+      "x": -1.0,
+      "y": 0.0
+    },
+    {
+      "kind": "noetic",
+      "primitive": "^8",
+      "x": -0.923879533,
+      "y": 0.382683432
+    },
+    {
+      "kind": "noetic",
+      "primitive": "^9",
+      "x": 0.923879533,
+      "y": -0.382683432
+    },
+    {
+      "kind": "domain",
+      "primitive": "^P",
+      "x": 0.0,
+      "y": -2.0
+    },
+    {
+      "kind": "domain",
+      "primitive": "^C",
+      "x": 0.0,
+      "y": -3.0
+    },
+    {
+      "kind": "domain",
+      "primitive": "^E",
+      "x": 0.0,
+      "y": -4.0
+    },
+    {
+      "kind": "domain",
+      "primitive": "^O",
+      "x": 0.0,
+      "y": -5.0
+    },
+    {
+      "kind": "drive",
+      "primitive": "F1",
+      "x": -1.5,
+      "y": -1.5
+    },
+    {
+      "kind": "drive",
+      "primitive": "F2",
+      "x": -1.0,
+      "y": -1.5
+    },
+    {
+      "kind": "drive",
+      "primitive": "F3",
+      "x": -0.5,
+      "y": -1.5
+    },
+    {
+      "kind": "drive",
+      "primitive": "F4",
+      "x": 0.0,
+      "y": -1.5
+    },
+    {
+      "kind": "drive",
+      "primitive": "F5",
+      "x": 0.5,
+      "y": -1.5
+    },
+    {
+      "kind": "drive",
+      "primitive": "F6",
+      "x": 1.0,
+      "y": -1.5
+    },
+    {
+      "kind": "drive",
+      "primitive": "F7",
+      "x": 1.5,
+      "y": -1.5
+    },
+    {
+      "kind": "register",
+      "primitive": "|T",
+      "x": -1.5,
+      "y": -6.0
+    },
+    {
+      "kind": "register",
+      "primitive": "|A",
+      "x": -0.5,
+      "y": -6.0
+    },
+    {
+      "kind": "register",
+      "primitive": "|f",
+      "x": 0.5,
+      "y": -6.0
+    },
+    {
+      "kind": "register",
+      "primitive": "|E",
+      "x": 1.5,
+      "y": -6.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^0^P",
+      "x": 3.0,
+      "y": 2.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^0^C",
+      "x": 3.5,
+      "y": 2.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^0^E",
+      "x": 4.0,
+      "y": 2.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^0^O",
+      "x": 4.5,
+      "y": 2.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^1^P",
+      "x": 3.0,
+      "y": 1.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^1^C",
+      "x": 3.5,
+      "y": 1.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^1^E",
+      "x": 4.0,
+      "y": 1.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^1^O",
+      "x": 4.5,
+      "y": 1.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^2^P",
+      "x": 3.0,
+      "y": 1.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^2^C",
+      "x": 3.5,
+      "y": 1.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^2^E",
+      "x": 4.0,
+      "y": 1.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^2^O",
+      "x": 4.5,
+      "y": 1.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^3^P",
+      "x": 3.0,
+      "y": 0.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^3^C",
+      "x": 3.5,
+      "y": 0.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^3^E",
+      "x": 4.0,
+      "y": 0.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^3^O",
+      "x": 4.5,
+      "y": 0.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^4^P",
+      "x": 3.0,
+      "y": 0.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^4^C",
+      "x": 3.5,
+      "y": 0.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^4^E",
+      "x": 4.0,
+      "y": 0.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^4^O",
+      "x": 4.5,
+      "y": 0.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^5^P",
+      "x": 3.0,
+      "y": -0.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^5^C",
+      "x": 3.5,
+      "y": -0.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^5^E",
+      "x": 4.0,
+      "y": -0.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^5^O",
+      "x": 4.5,
+      "y": -0.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^6^P",
+      "x": 3.0,
+      "y": -1.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^6^C",
+      "x": 3.5,
+      "y": -1.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^6^E",
+      "x": 4.0,
+      "y": -1.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^6^O",
+      "x": 4.5,
+      "y": -1.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^7^P",
+      "x": 3.0,
+      "y": -1.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^7^C",
+      "x": 3.5,
+      "y": -1.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^7^E",
+      "x": 4.0,
+      "y": -1.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^7^O",
+      "x": 4.5,
+      "y": -1.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^8^P",
+      "x": 3.0,
+      "y": -2.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^8^C",
+      "x": 3.5,
+      "y": -2.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^8^E",
+      "x": 4.0,
+      "y": -2.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^8^O",
+      "x": 4.5,
+      "y": -2.0
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^9^P",
+      "x": 3.0,
+      "y": -2.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^9^C",
+      "x": 3.5,
+      "y": -2.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^9^E",
+      "x": 4.0,
+      "y": -2.5
+    },
+    {
+      "kind": "cognitive_state",
+      "primitive": "^9^O",
+      "x": 4.5,
+      "y": -2.5
+    }
+  ],
+  "scope": "stage_23_a_static_foundation_only"
+}
