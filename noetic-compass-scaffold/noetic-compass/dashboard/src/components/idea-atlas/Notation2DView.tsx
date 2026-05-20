@@ -25,7 +25,6 @@ import { useMemo, useState } from 'react';
 import {
   allPositions,
   colorForKind,
-  getPosition2D,
   layoutVersion,
   type Position2D,
 } from '../../lib/notation2DMap';
@@ -164,9 +163,3 @@ export function Notation2DView({
   );
 }
 
-/**
- * Re-exported so tests / callers can sanity-check a specific primitive
- * round-trips through the adapter without importing notation2DMap
- * directly.
- */
-export { getPosition2D };
