@@ -1,0 +1,127 @@
+[Stage19B] fitting task=foundation readout=focus_token layer=6 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=7 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=8 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=9 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=10 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=11 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=12 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=13 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=14 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=15 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=16 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=6 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=7 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=8 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=9 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=10 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=11 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=12 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=13 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=14 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=15 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=16 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=6 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=7 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=8 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=9 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=10 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=11 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=12 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=13 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=14 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=15 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=16 mode=validation_selected_layer
+[Stage19B] fitting task=drive readout=focus_token layer=16 mode=foundation_selected_layer
+[Stage19B] fitting task=drive readout=final_token layer=16 mode=foundation_selected_layer
+[Stage19B] fitting task=drive readout=mean_over_seq_len layer=10 mode=foundation_selected_layer
+[Stage19B] fitting task=register readout=focus_token layer=16 mode=foundation_selected_layer
+[Stage19B] fitting task=register readout=final_token layer=16 mode=foundation_selected_layer
+[Stage19B] fitting task=register readout=mean_over_seq_len layer=10 mode=foundation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=8 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=9 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=10 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=11 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=12 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=13 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=14 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=15 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=16 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=17 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=18 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=19 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=20 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=21 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=22 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=23 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=24 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=25 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=26 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=27 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=focus_token layer=28 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=8 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=9 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=10 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=11 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=12 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=13 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=14 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=15 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=16 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=17 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=18 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=19 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=20 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=21 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=22 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=23 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=24 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=25 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=26 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=27 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=final_token layer=28 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=8 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=9 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=10 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=11 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=12 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=13 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=14 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=15 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=16 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=17 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=18 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=19 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=20 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=21 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=22 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=23 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=24 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=25 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=26 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=27 mode=validation_selected_layer
+[Stage19B] fitting task=foundation readout=mean_over_seq_len layer=28 mode=validation_selected_layer
+[Stage19B] fitting task=drive readout=focus_token layer=11 mode=foundation_selected_layer
+[Stage19B] fitting task=drive readout=final_token layer=21 mode=foundation_selected_layer
+[Stage19B] fitting task=drive readout=mean_over_seq_len layer=20 mode=foundation_selected_layer
+[Stage19B] fitting task=register readout=focus_token layer=11 mode=foundation_selected_layer
+[Stage19B] fitting task=register readout=final_token layer=21 mode=foundation_selected_layer
+[Stage19B] fitting task=register readout=mean_over_seq_len layer=20 mode=foundation_selected_layer
+{
+  "status": "NULL",
+  "models": {
+    "olmo1b": {
+      "status": "DIAGNOSTIC_ONLY",
+      "best_single": 0.9060374149659864,
+      "accepted_accuracy": 0.981624184943687,
+      "coverage": 0.7172619047619048,
+      "suppressed_rate": 0.28273809523809523
+    },
+    "qwen15b": {
+      "status": "DIAGNOSTIC_ONLY",
+      "best_single": 0.8537414965986394,
+      "accepted_accuracy": 0.9948688711516533,
+      "coverage": 0.7457482993197279,
+      "suppressed_rate": 0.2542517006802721
+    }
+  }
+}

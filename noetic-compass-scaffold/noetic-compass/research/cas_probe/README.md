@@ -2303,3 +2303,39 @@ Artifacts:
 - `STAGE22_4_INSTRUMENTED_VERIFIER_PREFLIGHT_20260519.md`
 - `STAGE22_4_INSTRUMENTED_VERIFIER_RUNBOOK_20260519.md`
 - `tests/test_stage22_4_instrumented_verifier.py`
+
+## Stage 22.4 result - Instrumented verifier rerun
+
+**Verdict: `STAGE22_4_DIAGNOSTIC_ROWS_EMITTED`.**
+
+The patched Stage 19B cross-architecture verifier was uploaded to the pod and
+rerun with `--emit-diagnostics` against the OLMo/Qwen activation binaries.
+
+The Stage 19B product verdict remains unchanged:
+
+| Model | Status | Accepted accuracy | Coverage | Silent error | Suppressed |
+|---|---|---:|---:|---:|---:|
+| OLMo-1B | `DIAGNOSTIC_ONLY` | `98.16%` | `71.73%` | `1.84%` | `665` |
+| Qwen2.5-1.5B | `DIAGNOSTIC_ONLY` | `99.49%` | `74.57%` | `0.51%` | `598` |
+
+What changed is the diagnostic surface:
+
+| Model | Test rows | Diagnostic rows | Accepted | Suppressed | Row parity |
+|---|---:|---:|---:|---:|---|
+| OLMo-1B | `2352` | `2352` | `1687` | `665` | `pass` |
+| Qwen2.5-1.5B | `2352` | `2352` | `1754` | `598` | `pass` |
+
+Stage 22.4 therefore closes the Stage 22.3 gap: accepted and suppressed rows
+now both carry per-row diagnostic fields.
+
+Boundary:
+
+> RPM and lacunarity are proxy-measurable on the full Stage 19B row set.
+> Inversion remains not numerically measured: `inversion_measured_rows == 0`.
+
+Artifacts:
+
+- `stage22_4_instrumented_cross_arch_verification_stack_20260519.json`
+- `STAGE22_4_INSTRUMENTED_CROSS_ARCH_VERIFICATION_STACK_20260519.md`
+- `STAGE22_4_INSTRUMENTED_VERIFIER_COMPLETION_20260520.md`
+- `stage22_4_instrumented_verifier_20260520.log`
