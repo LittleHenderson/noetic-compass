@@ -56,6 +56,24 @@ export async function apiFetch<T>(
   options: RequestInit = {},
   allowRecovery: boolean = true,
 ): Promise<T> {
+  const res = await apiRequest(path, options, allowRecovery);
+  return res.json() as Promise<T>;
+}
+
+export async function apiFetchText(
+  path: string,
+  options: RequestInit = {},
+  allowRecovery: boolean = true,
+): Promise<string> {
+  const res = await apiRequest(path, options, allowRecovery);
+  return res.text();
+}
+
+async function apiRequest(
+  path: string,
+  options: RequestInit = {},
+  allowRecovery: boolean = true,
+): Promise<Response> {
   const token = getToken();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -89,7 +107,7 @@ export async function apiFetch<T>(
     if (res.status === 401) {
       clearToken();
       if (allowRecovery && path !== '/auth/token' && await refreshDashboardToken()) {
-        return apiFetch<T>(path, options, false);
+        return apiRequest(path, options, false);
       }
       if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
         window.location.assign('/login');
@@ -102,10 +120,10 @@ export async function apiFetch<T>(
       isMonthlyLimit(detail) &&
       await refreshDashboardToken()
     ) {
-      return apiFetch<T>(path, options, false);
+      return apiRequest(path, options, false);
     }
     throw new ApiError(res.status, detail, errorType);
   }
 
-  return res.json() as Promise<T>;
+  return res;
 }

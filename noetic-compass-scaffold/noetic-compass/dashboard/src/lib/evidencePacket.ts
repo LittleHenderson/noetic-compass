@@ -169,6 +169,14 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((v) => typeof v === 'string');
 }
 
+function isNumberOrNull(value: unknown): value is number | null {
+  return value === null || typeof value === 'number';
+}
+
+function isStringOrNull(value: unknown): value is string | null {
+  return value === null || typeof value === 'string';
+}
+
 /**
  * Runtime type guard for an Evidence Packet. Validates the 15 load-bearing
  * top-level fields the drawer renders by name. Sub-shapes are checked at
@@ -196,12 +204,51 @@ export function isEvidencePacket(value: unknown): value is EvidencePacket {
   if (!isPlainObject(value.conditioning)) return false;
   if (!isPlainObject(value.provenance)) return false;
 
+  const readout = value.readout;
+  if (typeof readout.axis !== 'string') return false;
+  if (typeof readout.label !== 'string') return false;
+  if (!isNumberOrNull(readout.layer)) return false;
+  if (!isStringOrNull(readout.position)) return false;
+  if (!isNumberOrNull(readout.confidence)) return false;
+  if (!isStringOrNull(readout.confidence_source)) return false;
+  if (!isStringArray(readout.stable_agree)) return false;
+  if (!isPlainObject(readout.votes)) return false;
+
+  const controls = value.controls;
+  if (!isStringOrNull(controls.random_ablation)) return false;
+  if (!isStringOrNull(controls.text_baseline)) return false;
+  if (!isStringOrNull(controls.metadata_baseline)) return false;
+  if (!isNumberOrNull(controls.raw_symbol_delta)) return false;
+
+  const diagnostics = value.diagnostics;
+  if (!isNumberOrNull(diagnostics.lacunarity)) return false;
+  if (!isStringArray(diagnostics.blindspot_flags)) return false;
+  if (!isStringOrNull(diagnostics.note)) return false;
+
+  const provenance = value.provenance;
+  if (typeof provenance.source_stage !== 'string') return false;
+  if (typeof provenance.code_commit !== 'string') return false;
+  if (typeof provenance.fixture_sha256 !== 'string') return false;
+  if (typeof provenance.activation_file !== 'string') return false;
+  if (typeof provenance.activation_sha256 !== 'string') return false;
+  if (!isStringArray(provenance.source_reports)) return false;
+
   const gen = value.generation_readiness;
   if (!isPlainObject(gen)) return false;
   if (typeof gen.generation_readiness !== 'string') return false;
   if (typeof gen.mode !== 'string') return false;
   if (typeof gen.recommended_mode !== 'string') return false;
+  if (typeof gen.policy_version !== 'string') return false;
+  if (typeof gen.risk_score !== 'number') return false;
   if (!isStringArray(gen.reasons)) return false;
+  if (!isPlainObject(gen.evidence)) return false;
+  if (typeof gen.evidence.inversion_flag_count !== 'number') return false;
+  if (typeof gen.evidence.rpm_satisfaction !== 'number') return false;
+  if (typeof gen.evidence.max_gap_probability !== 'number') return false;
+  if (typeof gen.evidence.mean_gap_probability !== 'number') return false;
+  if (typeof gen.evidence.max_lacunarity !== 'number') return false;
+  if (typeof gen.evidence.min_domain_confidence !== 'number') return false;
+  if (typeof gen.evidence.verification_accepted !== 'boolean') return false;
 
   return true;
 }

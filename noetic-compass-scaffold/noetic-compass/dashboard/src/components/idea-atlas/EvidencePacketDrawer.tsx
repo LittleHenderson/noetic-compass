@@ -54,6 +54,7 @@ import {
   type EvidenceProvenance,
   type GenerationReadinessAction,
 } from '../../lib/evidencePacket';
+import { apiFetch, apiFetchText } from '../../api/client';
 import { VerificationPanel } from './VerificationPanel';
 import type { NodeVerification } from '../../lib/trace';
 
@@ -189,6 +190,7 @@ function ReadoutTab({ readout }: { readout: EvidenceReadout }) {
   return (
     <div
       data-testid="evidence-packet-tab-readout"
+      id="evidence-packet-tab-readout"
       role="tabpanel"
       aria-labelledby="evidence-packet-tab-button-readout"
       className="space-y-3 font-mono text-[11px] text-slate-300"
@@ -272,6 +274,7 @@ function DiagnosticsTab({
   return (
     <div
       data-testid="evidence-packet-tab-diagnostics"
+      id="evidence-packet-tab-diagnostics"
       role="tabpanel"
       aria-labelledby="evidence-packet-tab-button-diagnostics"
       className="space-y-3 font-mono text-[11px] text-slate-300"
@@ -371,6 +374,7 @@ function ControlsTab({ controls }: { controls: EvidenceControls }) {
   return (
     <div
       data-testid="evidence-packet-tab-controls"
+      id="evidence-packet-tab-controls"
       role="tabpanel"
       aria-labelledby="evidence-packet-tab-button-controls"
       className="space-y-3 font-mono text-[11px] text-slate-300"
@@ -419,6 +423,7 @@ function GenerationReadinessTab({
   return (
     <div
       data-testid="evidence-packet-tab-readiness"
+      id="evidence-packet-tab-readiness"
       role="tabpanel"
       aria-labelledby="evidence-packet-tab-button-readiness"
       className="space-y-3 font-mono text-[11px] text-slate-300"
@@ -490,6 +495,7 @@ function ProvenanceTab({
   return (
     <div
       data-testid="evidence-packet-tab-provenance"
+      id="evidence-packet-tab-provenance"
       role="tabpanel"
       aria-labelledby="evidence-packet-tab-button-provenance"
       className="space-y-3 font-mono text-[11px] text-slate-300"
@@ -535,6 +541,7 @@ function CaveatsTab({ caveats }: { caveats: string[] }) {
   return (
     <div
       data-testid="evidence-packet-tab-caveats"
+      id="evidence-packet-tab-caveats"
       role="tabpanel"
       aria-labelledby="evidence-packet-tab-button-caveats"
       className="space-y-3 font-mono text-[11px] text-slate-300"
@@ -562,6 +569,7 @@ function RejectedClaimsTab({ rejectedClaims }: { rejectedClaims: string[] }) {
   return (
     <div
       data-testid="evidence-packet-tab-rejected-claims"
+      id="evidence-packet-tab-rejected_claims"
       role="tabpanel"
       aria-labelledby="evidence-packet-tab-button-rejected_claims"
       className="space-y-3 font-mono text-[11px] text-slate-300"
@@ -672,23 +680,33 @@ export function EvidencePacketDrawer({
     if (!traceId) return;
     let cancelled = false;
     setState({ kind: 'loading' });
-    const fetcher = fetchImpl ?? globalThis.fetch.bind(globalThis);
     void (async () => {
       try {
-        const res = await fetcher(`/api/harness/evidence/${traceId}`);
+        const json: unknown = fetchImpl
+          ? await (async () => {
+              const res = await fetchImpl(
+                `/api/harness/evidence/${encodeURIComponent(traceId)}`,
+              );
+              if (res.status === 404) {
+                return { __evidence_packet_not_found__: true };
+              }
+              if (!res.ok) {
+                throw new Error(`Server responded with status ${res.status}.`);
+              }
+              return res.json();
+            })()
+          : await apiFetch<unknown>(
+              `/harness/evidence/${encodeURIComponent(traceId)}`,
+            );
         if (cancelled) return;
-        if (res.status === 404) {
+        if (
+          typeof json === 'object' &&
+          json !== null &&
+          '__evidence_packet_not_found__' in json
+        ) {
           setState({ kind: 'not_found' });
           return;
         }
-        if (!res.ok) {
-          setState({
-            kind: 'error',
-            message: `Server responded with status ${res.status}.`,
-          });
-          return;
-        }
-        const json: unknown = await res.json();
         if (!isEvidencePacket(json)) {
           setState({
             kind: 'error',
@@ -700,6 +718,10 @@ export function EvidencePacketDrawer({
       } catch (err) {
         if (cancelled) return;
         const message = err instanceof Error ? err.message : String(err);
+        if (message.includes('evidence packet not found')) {
+          setState({ kind: 'not_found' });
+          return;
+        }
         setState({ kind: 'error', message });
       }
     })();
@@ -736,10 +758,17 @@ export function EvidencePacketDrawer({
 
   const handleExportMarkdown = useCallback(async () => {
     if (state.kind !== 'ready' || !traceId) return;
-    const fetcher = fetchImpl ?? globalThis.fetch.bind(globalThis);
     try {
-      const res = await fetcher(
-        `/api/harness/evidence/${traceId}/markdown`,
+      if (!fetchImpl) {
+        const text = await apiFetchText(
+          `/harness/evidence/${encodeURIComponent(traceId)}/markdown`,
+        );
+        const blob = new Blob([text], { type: 'text/markdown' });
+        triggerDownload(blob, `evidence_packet_${traceId}.md`);
+        return;
+      }
+      const res = await fetchImpl(
+        `/api/harness/evidence/${encodeURIComponent(traceId)}/markdown`,
       );
       if (!res.ok) {
         // Surface no UI alert — caller's audit log / network panel

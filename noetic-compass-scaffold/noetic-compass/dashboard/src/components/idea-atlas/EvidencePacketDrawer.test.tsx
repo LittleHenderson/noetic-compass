@@ -25,6 +25,7 @@ import {
   type EvidencePacket,
   EVIDENCE_PACKET_SCHEMA_VERSION,
 } from '../../lib/evidencePacket';
+import { clearToken, setToken } from '../../api/auth';
 
 // ── Fixtures: condensed Stage 21A packets ──────────────────────────────────
 
@@ -200,6 +201,8 @@ beforeEach(() => {
 afterEach(() => {
   URL.createObjectURL = originalCreateObjectURL;
   URL.revokeObjectURL = originalRevokeObjectURL;
+  clearToken();
+  vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
 
@@ -254,6 +257,29 @@ describe('EvidencePacketDrawer — loading state', () => {
     await act(async () => {
       resolve(mockJsonResponse(allowPacket()));
     });
+  });
+
+  it('uses the authenticated API client by default', async () => {
+    setToken('drawer-jwt');
+    const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = typeof input === 'string' ? input : input.toString();
+      expect(url).toBe('/api/harness/evidence/stage21a_allow_qwen15b_000');
+      expect((init?.headers as Record<string, string>).Authorization).toBe(
+        'Bearer drawer-jwt',
+      );
+      return mockJsonResponse(allowPacket());
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(
+      <EvidencePacketDrawer
+        traceId="stage21a_allow_qwen15b_000"
+        onClose={() => {}}
+      />,
+    );
+
+    expect(await screen.findByTestId('evidence-packet-tab-readout')).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });
 
