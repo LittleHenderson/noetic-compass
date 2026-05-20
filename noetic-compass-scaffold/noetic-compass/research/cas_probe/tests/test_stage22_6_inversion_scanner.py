@@ -57,6 +57,64 @@ def test_scanner_flags_conflicted_factor_row():
     assert len(scan["axis_scores"]) == 7
 
 
+def test_scanner_marks_missing_gap_map_not_available():
+    scanner = _load(SCANNER, "scanner_missing_gap")
+    scan = scanner.scan_inversion_from_diagnostic_row({"rpm_satisfaction": 1.0})
+    assert scan["attribution_status"] == "not_available"
+    assert scan["decision"] == "not_available"
+    assert scan["reason"] == "missing_gap_map_summary"
+    assert scan["axis_scores"] == [None] * 7
+
+
+def test_scanner_marks_partial_vote_profile_not_available():
+    scanner = _load(SCANNER, "scanner_partial_votes")
+    scan = scanner.scan_inversion_from_diagnostic_row(
+        {
+            "rpm_satisfaction": 1.0,
+            "gap_map_summary": {
+                "foundation": {"vote_count": 3, "conflict_count": 0},
+                "register": {"vote_count": 3, "conflict_count": 0},
+                "trace_states": {"focus": "stable"},
+            },
+        }
+    )
+    assert scan["attribution_status"] == "not_available"
+    assert scan["reason"] == "missing_drive_profile"
+
+
+def test_scanner_marks_missing_rpm_not_available():
+    scanner = _load(SCANNER, "scanner_missing_rpm")
+    scan = scanner.scan_inversion_from_diagnostic_row(
+        {
+            "gap_map_summary": {
+                "foundation": {"vote_count": 3, "conflict_count": 0},
+                "drive": {"vote_count": 3, "conflict_count": 0},
+                "register": {"vote_count": 3, "conflict_count": 0},
+                "trace_states": {"focus": "stable"},
+            },
+        }
+    )
+    assert scan["attribution_status"] == "not_available"
+    assert scan["reason"] == "missing_rpm_satisfaction"
+
+
+def test_scanner_marks_unknown_trace_state_not_available():
+    scanner = _load(SCANNER, "scanner_unknown_trace")
+    scan = scanner.scan_inversion_from_diagnostic_row(
+        {
+            "rpm_satisfaction": 1.0,
+            "gap_map_summary": {
+                "foundation": {"vote_count": 3, "conflict_count": 0},
+                "drive": {"vote_count": 3, "conflict_count": 0},
+                "register": {"vote_count": 3, "conflict_count": 0},
+                "trace_states": {"focus": "mystery"},
+            },
+        }
+    )
+    assert scan["attribution_status"] == "not_available"
+    assert scan["reason"] == "unknown_trace_state"
+
+
 def test_stage22_6_report_closes_numeric_inversion_proxy_rows():
     runner = _load(RUNNER, "stage22_6")
     report = runner.build_report()

@@ -8,6 +8,7 @@ artifacts needed for a full rerun are present.
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -35,6 +36,32 @@ ACTIVATION_ARTIFACTS = [
 ]
 
 
+def _behavioral_inversion_ready() -> bool:
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    try:
+        from stage22_6_inversion_scanner import scan_inversion_from_diagnostic_row
+    except Exception:
+        return False
+    scan = scan_inversion_from_diagnostic_row(
+        {
+            "rpm_satisfaction": 1.0,
+            "gap_map_summary": {
+                "foundation": {"vote_count": 3, "conflict_count": 0},
+                "drive": {"vote_count": 3, "conflict_count": 0},
+                "register": {"vote_count": 3, "conflict_count": 0},
+                "trace_states": {"focus": "stable", "final": "stable", "mean": "stable"},
+            },
+        }
+    )
+    malformed = scan_inversion_from_diagnostic_row({"rpm_satisfaction": 1.0})
+    return (
+        scan.get("attribution_status") == "numeric_measured"
+        and len(scan.get("axis_scores", [])) == 7
+        and malformed.get("attribution_status") == "not_available"
+    )
+
+
 def build_report() -> dict[str, Any]:
     source = RUNNER.read_text(encoding="utf-8")
     required_field_presence = {field: field in source for field in REQUIRED_FIELDS}
@@ -47,13 +74,7 @@ def build_report() -> dict[str, Any]:
             all(required_field_presence.values()),
         ]
     )
-    inversion_numeric_ready = all(
-        [
-            "scan_inversion_from_diagnostic_row" in source,
-            "numeric_measured" in source,
-            "inversion_axis_order" in source,
-        ]
-    )
+    inversion_numeric_ready = _behavioral_inversion_ready()
     local_artifacts_present = all(activation_presence.values())
     can_run_locally = runner_ready and local_artifacts_present
     status = (
@@ -77,6 +98,7 @@ def build_report() -> dict[str, Any]:
         "can_run_locally": can_run_locally,
         "rpm_lacunarity_proxy_ready": runner_ready,
         "inversion_numeric_ready": inversion_numeric_ready,
+        "inversion_numeric_preflight": "behavioral_clean_and_malformed_rows",
         "boundary": (
             "The runner now emits Stage 22.2-compatible row fields. RPM and "
             "lacunarity are runtime proxy diagnostics. Inversion fields are "

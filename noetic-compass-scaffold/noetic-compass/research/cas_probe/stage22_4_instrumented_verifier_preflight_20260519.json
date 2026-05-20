@@ -8,6 +8,7 @@
   "diagnostic_helper_present": true,
   "diagnostic_rows_present": true,
   "emit_diagnostics_flag_present": true,
+  "inversion_numeric_preflight": "behavioral_clean_and_malformed_rows",
   "inversion_numeric_ready": true,
   "local_artifacts_present": false,
   "pod_command": "python research/cas_probe/run_stage19b_cross_arch_foundation_verification_stack.py --models olmo1b,qwen15b --emit-diagnostics --out-report stage22_4_instrumented_cross_arch_verification_stack_20260519.json --out-md STAGE22_4_INSTRUMENTED_CROSS_ARCH_VERIFICATION_STACK_20260519.md",

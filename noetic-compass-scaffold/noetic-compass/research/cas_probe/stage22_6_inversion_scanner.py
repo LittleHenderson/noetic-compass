@@ -12,6 +12,7 @@ from typing import Any
 
 INVERSION_AXES = ("N", "W", "F", "E", "S", "A", "P")
 FLAG_THRESHOLD = 0.25
+_PROFILE_KEYS = ("foundation", "drive", "register")
 
 
 def _clamp01(value: float) -> float:
@@ -40,34 +41,74 @@ def _trace_risk(trace_states: dict[str, Any]) -> float:
         return 0.0
     risky = 0
     for trace in trace_states.values():
-        if str(trace).lower() in {"uncertain", "conflicted"}:
+        state = str(trace.get("state") if isinstance(trace, dict) else trace).lower()
+        if state in {"uncertain", "conflicted"}:
             risky += 1
-        elif isinstance(trace, dict) and str(trace.get("state")) in {"uncertain", "conflicted"}:
-            risky += 1
+        elif state not in {"stable", "drifting", "uncertain", "conflicted"}:
+            raise ValueError("unknown_trace_state")
     return _clamp01(risky / len(trace_states))
 
 
 def _rpm_risk(row: dict[str, Any]) -> float:
     value = row.get("rpm_satisfaction")
     if value is None:
-        return 0.5
+        raise ValueError("missing_rpm_satisfaction")
     return _clamp01(1.0 - float(value))
+
+
+def _not_available(reason: str) -> dict[str, Any]:
+    return {
+        "axis_order": list(INVERSION_AXES),
+        "axis_scores": [None] * len(INVERSION_AXES),
+        "flagged_axes": [],
+        "flag_count": None,
+        "max_axis_score": None,
+        "decision": "not_available",
+        "attribution_status": "not_available",
+        "source": "stage22_6_runtime_structural_proxy_scanner",
+        "reason": reason,
+        "boundary": (
+            "Inversion proxy scanning requires gap_map_summary with foundation, "
+            "drive, register, trace_states, and rpm_satisfaction. Missing runtime "
+            "inputs are explicit not_available, not silent zero-risk rows."
+        ),
+    }
+
+
+def _validate_gap(gap: Any) -> str | None:
+    if not isinstance(gap, dict):
+        return "missing_gap_map_summary"
+    for key in _PROFILE_KEYS:
+        profile = gap.get(key)
+        if not isinstance(profile, dict):
+            return f"missing_{key}_profile"
+    if not isinstance(gap.get("trace_states"), dict):
+        return "missing_trace_states"
+    return None
 
 
 def scan_inversion_from_diagnostic_row(row: dict[str, Any]) -> dict[str, Any]:
     """Compute seven deterministic inversion-risk proxy scores for one row."""
-    gap = row.get("gap_map_summary") or {}
+    gap = row.get("gap_map_summary")
+    invalid_reason = _validate_gap(gap)
+    if invalid_reason is not None:
+        return _not_available(invalid_reason)
+    if row.get("rpm_satisfaction") is None:
+        return _not_available("missing_rpm_satisfaction")
     foundation_profile = gap.get("foundation") or {}
     drive_profile = gap.get("drive") or {}
     register_profile = gap.get("register") or {}
     trace_states = gap.get("trace_states") or {}
 
-    n_risk = _profile_lac(foundation_profile)
-    w_risk = _trace_risk(trace_states)
-    f_risk = _profile_lac(drive_profile)
-    e_risk = max(w_risk, _clamp01((n_risk + f_risk) / 2.0))
-    s_risk = _profile_lac(register_profile)
-    a_risk = _rpm_risk(row)
+    try:
+        n_risk = _profile_lac(foundation_profile)
+        w_risk = _trace_risk(trace_states)
+        f_risk = _profile_lac(drive_profile)
+        e_risk = max(w_risk, _clamp01((n_risk + f_risk) / 2.0))
+        s_risk = _profile_lac(register_profile)
+        a_risk = _rpm_risk(row)
+    except ValueError as exc:
+        return _not_available(str(exc))
     p_risk = _clamp01(mean([n_risk, w_risk, f_risk, e_risk, s_risk, a_risk]))
 
     scores = [_clamp01(x) for x in (n_risk, w_risk, f_risk, e_risk, s_risk, a_risk, p_risk)]

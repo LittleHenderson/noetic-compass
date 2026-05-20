@@ -49,16 +49,24 @@ def _model_summary(model_key: str, model_report: dict[str, Any]) -> dict[str, An
         for row in rows
         if row["gate_decisions"]["inversion_scan_gate"]["attribution_status"] == "numeric_measured"
     ]
+    numeric_rows = [
+        row
+        for row in rows
+        if all(isinstance(score, (int, float)) for score in row["inversion_axis_scores"])
+    ]
     axis_means = {
-        axis: mean(row["inversion_axis_scores"][idx] for row in rows)
+        axis: mean(row["inversion_axis_scores"][idx] for row in numeric_rows)
         for idx, axis in enumerate(INVERSION_AXES)
-    }
+    } if numeric_rows else {axis: None for axis in INVERSION_AXES}
     return {
         "display_name": model_report["display_name"],
         "total_rows": len(rows),
         "numeric_measured_rows": len(measured),
         "numeric_measured_rate": len(measured) / len(rows) if rows else 0.0,
         "decision_counts": _counter([row["inversion_gate_decision"] for row in rows]),
+        "attribution_status_counts": _counter(
+            [row["gate_decisions"]["inversion_scan_gate"]["attribution_status"] for row in rows]
+        ),
         "flag_count_distribution": _counter([str(row["inversion_flag_count"]) for row in rows]),
         "axis_mean_scores": axis_means,
         "suppressed_rows": int(model_report["stack"]["suppressed"]),

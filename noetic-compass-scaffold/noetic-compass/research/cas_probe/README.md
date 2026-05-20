@@ -2411,3 +2411,36 @@ Artifacts:
 - `stage22_6_inversion_proxy_attribution_20260520.json`
 - `STAGE22_6_INVERSION_PROXY_ATTRIBUTION_20260520.md`
 - `tests/test_stage22_6_inversion_scanner.py`
+
+## Stage 22.7 result - Inversion scanner contract hardening
+
+**Verdict: `STAGE22_7_SCANNER_CONTRACT_HARDENED`.**
+
+Stage 22.7 hardens the Stage 22.6 inversion proxy scanner without changing the
+valid Stage 22.4 artifact result. Malformed or incomplete diagnostic rows now
+return explicit `not_available` attribution instead of silently becoming zero
+risk. Present-but-empty downstream vote profiles remain valid, preserving the
+Stage 22.4 early-suppression rows.
+
+Contract changes:
+
+- Missing `gap_map_summary` -> `not_available`.
+- Missing Foundation/Drive/Register vote profile keys -> `not_available`.
+- Missing `rpm_satisfaction` -> `not_available`.
+- Unknown runtime trace state -> `not_available`.
+- Stage 22.4 preflight now checks scanner behavior directly on clean and
+  malformed rows instead of searching source text for readiness strings.
+
+Invariant preserved:
+
+| Metric | Value |
+|---|---:|
+| Total Stage 22.4 rows | `4704` |
+| Numeric inversion proxy rows after hardening | `4704` |
+| Numeric inversion proxy rate after hardening | `1.0000` |
+
+Boundary:
+
+> Stage 22.7 is a scanner-contract hardening step, not a new experimental
+> claim. It makes malformed-row handling auditable while preserving the closed
+> Stage 22.6 result on valid diagnostic rows.

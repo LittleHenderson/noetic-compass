@@ -17,6 +17,9 @@
   "models": {
     "olmo1b": {
       "accepted_rows": 1687,
+      "attribution_status_counts": {
+        "numeric_measured": 2352
+      },
       "axis_mean_scores": {
         "A": 0.11840986394557823,
         "E": 0.17375283446712017,
@@ -963,6 +966,9 @@
     },
     "qwen15b": {
       "accepted_rows": 1754,
+      "attribution_status_counts": {
+        "numeric_measured": 2352
+      },
       "axis_mean_scores": {
         "A": 0.11075680272108844,
         "E": 0.21662414965986393,
