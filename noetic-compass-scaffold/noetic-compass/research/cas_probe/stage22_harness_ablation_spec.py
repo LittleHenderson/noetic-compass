@@ -20,6 +20,7 @@ HarnessMode = Literal[
     "cpl2_bridge_only",
     "mode_selector_balanced",
     "mode_selector_high_precision",
+    "mode_selector_max_coverage_triage",
     "readiness_balanced",
     "evidence_packet_full",
     "frontier_llm_ceiling",
@@ -212,6 +213,25 @@ STAGE22_CONDITIONS: tuple[HarnessAblationCondition, ...] = (
         ),
     ),
     HarnessAblationCondition(
+        mode="mode_selector_max_coverage_triage",
+        label="Mode Selector: MAX_COVERAGE_TRIAGE",
+        subject="cas_harness",
+        status="executable_now",
+        layers=HarnessLayerSet(
+            frozen_model_logits=True,
+            eta_probe_readout=True,
+            epsilon_readable_prefix=True,
+            verification_stack=True,
+            mode_selector="MAX_COVERAGE_TRIAGE",
+        ),
+        hypothesis="Triage mode should maximize coverage for human-review queues while carrying a lower-confidence boundary.",
+        boundary="Opt-in review-queue mode only; not a licensed high-confidence claim mode.",
+        required_artifacts=(
+            "stage19b_cross_arch_foundation_verification_stack_20260519.json",
+            "stage19c_verification_mode_selector_20260519.json",
+        ),
+    ),
+    HarnessAblationCondition(
         mode="readiness_balanced",
         label="Generation Readiness: BALANCED",
         subject="cas_harness",
@@ -320,9 +340,26 @@ def stage22_preregistration_payload() -> dict[str, Any]:
         "conditions": stage22_condition_matrix(),
         "metrics": stage22_metric_matrix(),
         "validation": validate_stage22_conditions(),
+        "stage22_1_followup": {
+            "status": "recommended_not_yet_run",
+            "scope": "fine_grained_gate_attribution",
+            "candidate_switches": [
+                "wrap_output_gate",
+                "rpm_gate",
+                "lacunarity_gate",
+                "inversion_scan_gate",
+                "verification_stack",
+                "mode_selector",
+                "generation_readiness_gate",
+            ],
+            "rationale": (
+                "Stage 22 is the coarse harness bench. Stage 22.1 should split "
+                "the upstream gate bundle only after the coarse bench names "
+                "which bundle is worth deeper attribution."
+            ),
+        },
         "claim_boundary": (
             "Stage 22 tests harness contribution and tradeoffs. Suppression rate "
             "is never interpreted without useful_output_rate and coverage."
         ),
     }
-

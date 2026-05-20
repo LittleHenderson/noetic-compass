@@ -96,6 +96,29 @@
       "subject": "cas_harness"
     },
     {
+      "boundary": "Opt-in review-queue mode only; not a licensed high-confidence claim mode.",
+      "hypothesis": "Triage mode should maximize coverage for human-review queues while carrying a lower-confidence boundary.",
+      "label": "Mode Selector: MAX_COVERAGE_TRIAGE",
+      "layers": {
+        "atlas_trace_linkage": false,
+        "epsilon_readable_prefix": true,
+        "eta_probe_readout": true,
+        "evidence_packet_export": false,
+        "external_frontier_model": false,
+        "frozen_model_logits": true,
+        "generation_readiness_gate": false,
+        "mode_selector": "MAX_COVERAGE_TRIAGE",
+        "verification_stack": true
+      },
+      "mode": "mode_selector_max_coverage_triage",
+      "required_artifacts": [
+        "stage19b_cross_arch_foundation_verification_stack_20260519.json",
+        "stage19c_verification_mode_selector_20260519.json"
+      ],
+      "status": "executable_now",
+      "subject": "cas_harness"
+    },
+    {
       "boundary": "Policy packaging over existing signals; does not change host-model weights.",
       "hypothesis": "Readiness policy should convert unsafe accept/suppress outcomes into useful allow/caveat/constrain/suppress decisions.",
       "label": "Generation Readiness: BALANCED",
@@ -214,6 +237,20 @@
   },
   "schema_version": "stage22_cas_harness_ablation_spec_v1",
   "scope": "external_cas_harness_not_cas_native_inner_loop",
+  "stage22_1_followup": {
+    "candidate_switches": [
+      "wrap_output_gate",
+      "rpm_gate",
+      "lacunarity_gate",
+      "inversion_scan_gate",
+      "verification_stack",
+      "mode_selector",
+      "generation_readiness_gate"
+    ],
+    "rationale": "Stage 22 is the coarse harness bench. Stage 22.1 should split the upstream gate bundle only after the coarse bench names which bundle is worth deeper attribution.",
+    "scope": "fine_grained_gate_attribution",
+    "status": "recommended_not_yet_run"
+  },
   "validation": {
     "cpl2_bridge_only": [],
     "evidence_packet_full": [],
@@ -221,6 +258,7 @@
     "frontier_llm_ceiling": [],
     "mode_selector_balanced": [],
     "mode_selector_high_precision": [],
+    "mode_selector_max_coverage_triage": [],
     "readiness_balanced": []
   }
 }

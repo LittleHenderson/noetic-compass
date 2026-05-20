@@ -10,6 +10,7 @@
 | Eta-to-epsilon bridge | `SUPPORTED_ACROSS_LOCKED_MODELS` | mean CPL2 delta `0.5640`, range `0.2828` to `0.7960`, positives `433/560` |
 | BALANCED selector | `MODE_SUPPORTED_CROSS_ARCH` | mean coverage `82.6%`, mean accepted accuracy `95.4%` |
 | HIGH_PRECISION selector | `MODE_SUPPORTED_CROSS_ARCH` | mean accepted accuracy `98.8%`, mean coverage `73.2%` |
+| MAX_COVERAGE_TRIAGE selector | `MODE_SUPPORTED_CROSS_ARCH` | mean coverage `90.1%`, mean accepted accuracy `91.3%` |
 | Evidence Packet surface | `EVIDENCE_PACKET_SURFACE_COMPLETE_FOR_CANONICAL_PACKETS` | `4/4` canonical packets complete |
 | Frontier ceiling | `REFERENCE_ONLY_NOT_RUN` | not run in this no-GPU pass |
 
@@ -29,6 +30,7 @@
 |---|---:|---:|---:|---:|---|
 | `BALANCED` | `82.6%` | `95.4%` | `4.6%` | `17.4%` | Normal customer audit flow where throughput matters but factor conflicts should still be suppressed. |
 | `HIGH_PRECISION` | `73.2%` | `98.8%` | `1.2%` | `26.8%` | Regulator, legal, safety, and high-trust review where suppression is preferred over a wrong accepted answer. |
+| `MAX_COVERAGE_TRIAGE` | `90.1%` | `91.3%` | `8.7%` | `9.9%` | Exploratory triage and batch review queues where human review remains expected. |
 
 ## Readiness Policy
 
@@ -42,6 +44,10 @@ Readiness is measured from Stage 20B policy counts. It turns verification outcom
 | OLMo-1B | `MAX_COVERAGE_TRIAGE` | `100.0%` | `0.0%` |
 | Qwen2.5-1.5B | `BALANCED` | `74.6%` | `25.4%` |
 | Qwen2.5-1.5B | `MAX_COVERAGE_TRIAGE` | `100.0%` | `0.0%` |
+
+## Stage 22.1 Follow-Up
+
+Stage 22 intentionally measures the coarse harness layers first. The upstream gate bundle should be split in Stage 22.1 into wrap output, RPM, lacunarity, inversion scan, Verification Stack, Mode Selector, and Generation Readiness only after this coarse result identifies where fine-grained attribution is worth the extra matrix size.
 
 ## Boundary
 

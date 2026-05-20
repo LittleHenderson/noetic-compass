@@ -39,6 +39,7 @@ def test_stage22_has_floor_bridge_modes_and_frontier_ceiling() -> None:
     assert modes[0] == "floor_raw_model"
     assert "cpl2_bridge_only" in modes
     assert "mode_selector_balanced" in modes
+    assert "mode_selector_max_coverage_triage" in modes
     assert "frontier_llm_ceiling" in modes
 
 
@@ -55,6 +56,16 @@ def test_suppression_is_paired_with_useful_output_metric() -> None:
     assert "suppression_rate" in metrics
     assert "useful_output_rate" in metrics
     assert "coverage" in metrics
+
+
+def test_stage22_preregisters_22_1_gate_attribution_followup() -> None:
+    payload = stage22.stage22_preregistration_payload()
+    followup = payload["stage22_1_followup"]
+
+    assert followup["status"] == "recommended_not_yet_run"
+    assert followup["scope"] == "fine_grained_gate_attribution"
+    assert "lacunarity_gate" in followup["candidate_switches"]
+    assert "rpm_gate" in followup["candidate_switches"]
 
 
 def test_mode_selector_requires_verification_stack() -> None:

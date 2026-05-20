@@ -276,6 +276,10 @@ def build_report() -> dict[str, Any]:
                 "status": mode_selector["modes"]["HIGH_PRECISION"]["cross_arch_status"],
                 **mode_selector["modes"]["HIGH_PRECISION"],
             },
+            "mode_selector_max_coverage_triage": {
+                "status": mode_selector["modes"]["MAX_COVERAGE_TRIAGE"]["cross_arch_status"],
+                **mode_selector["modes"]["MAX_COVERAGE_TRIAGE"],
+            },
             "readiness_balanced": {
                 "status": "POLICY_LAYER_MEASURED_FROM_STAGE20B",
                 "rows": readiness["rows"],
@@ -297,7 +301,27 @@ def build_report() -> dict[str, Any]:
             "balanced_coverage_mean_olmo_qwen": mode_selector["modes"]["BALANCED"]["coverage_mean"],
             "balanced_accuracy_mean_olmo_qwen": mode_selector["modes"]["BALANCED"]["accepted_accuracy_mean"],
             "high_precision_accuracy_mean_olmo_qwen": mode_selector["modes"]["HIGH_PRECISION"]["accepted_accuracy_mean"],
+            "triage_coverage_mean_olmo_qwen": mode_selector["modes"]["MAX_COVERAGE_TRIAGE"]["coverage_mean"],
+            "triage_accuracy_mean_olmo_qwen": mode_selector["modes"]["MAX_COVERAGE_TRIAGE"]["accepted_accuracy_mean"],
             "evidence_packet_completeness_rate": evidence["completeness_rate"],
+        },
+        "stage22_1_followup": {
+            "status": "recommended_not_yet_run",
+            "scope": "fine_grained_gate_attribution",
+            "candidate_switches": [
+                "wrap_output_gate",
+                "rpm_gate",
+                "lacunarity_gate",
+                "inversion_scan_gate",
+                "verification_stack",
+                "mode_selector",
+                "generation_readiness_gate",
+            ],
+            "rationale": (
+                "Stage 22 reports the coarse harness contribution. Stage 22.1 "
+                "should split the upstream gate bundle only after this coarse "
+                "bench identifies where more attribution is useful."
+            ),
         },
         "claim_boundary": (
             "Stage 22 measures harness-layer contribution over locked artifacts. "
@@ -317,6 +341,7 @@ def _write_markdown(report: dict[str, Any], out_md: Path) -> None:
     balanced = report["conditions"]["mode_selector_balanced"]
     high_precision = report["conditions"]["mode_selector_high_precision"]
     evidence = report["conditions"]["evidence_packet_full"]
+    triage = report["conditions"]["mode_selector_max_coverage_triage"]
 
     lines = [
         "# Stage 22 CAS Harness Ablation Bench",
@@ -331,6 +356,7 @@ def _write_markdown(report: dict[str, Any], out_md: Path) -> None:
         f"| Eta-to-epsilon bridge | `{cpl2['status']}` | mean CPL2 delta `{cpl2['delta_mean']:.4f}`, range `{cpl2['delta_min']:.4f}` to `{cpl2['delta_max']:.4f}`, positives `{cpl2['total_positive']}/{cpl2['total_cases']}` |",
         f"| BALANCED selector | `{balanced['status']}` | mean coverage `{_pct(balanced['coverage_mean'])}`, mean accepted accuracy `{_pct(balanced['accepted_accuracy_mean'])}` |",
         f"| HIGH_PRECISION selector | `{high_precision['status']}` | mean accepted accuracy `{_pct(high_precision['accepted_accuracy_mean'])}`, mean coverage `{_pct(high_precision['coverage_mean'])}` |",
+        f"| MAX_COVERAGE_TRIAGE selector | `{triage['status']}` | mean coverage `{_pct(triage['coverage_mean'])}`, mean accepted accuracy `{_pct(triage['accepted_accuracy_mean'])}` |",
         f"| Evidence Packet surface | `{evidence['status']}` | `{evidence['complete_packets']}/{evidence['packet_count']}` canonical packets complete |",
         "| Frontier ceiling | `REFERENCE_ONLY_NOT_RUN` | not run in this no-GPU pass |",
         "",
@@ -356,7 +382,11 @@ def _write_markdown(report: dict[str, Any], out_md: Path) -> None:
             "|---|---:|---:|---:|---:|---|",
         ]
     )
-    for mode in ("mode_selector_balanced", "mode_selector_high_precision"):
+    for mode in (
+        "mode_selector_balanced",
+        "mode_selector_high_precision",
+        "mode_selector_max_coverage_triage",
+    ):
         row = report["conditions"][mode]
         lines.append(
             f"| `{mode.replace('mode_selector_', '').upper()}` | "
@@ -389,6 +419,10 @@ def _write_markdown(report: dict[str, Any], out_md: Path) -> None:
 
     lines.extend(
         [
+            "",
+            "## Stage 22.1 Follow-Up",
+            "",
+            "Stage 22 intentionally measures the coarse harness layers first. The upstream gate bundle should be split in Stage 22.1 into wrap output, RPM, lacunarity, inversion scan, Verification Stack, Mode Selector, and Generation Readiness only after this coarse result identifies where fine-grained attribution is worth the extra matrix size.",
             "",
             "## Boundary",
             "",
@@ -432,4 +466,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -205,6 +205,37 @@
       "status": "MODE_SUPPORTED_CROSS_ARCH",
       "suppressed_rate_mean": 0.2684948979591837
     },
+    "mode_selector_max_coverage_triage": {
+      "accepted_accuracy_mean": 0.9127792052446131,
+      "coverage_mean": 0.9013605442176871,
+      "cross_arch_status": "MODE_SUPPORTED_CROSS_ARCH",
+      "models": {
+        "olmo1b": {
+          "accepted": 2126,
+          "accepted_accuracy": 0.8974600188146754,
+          "coverage": 0.9039115646258503,
+          "display_name": "OLMo-1B",
+          "meets_target": true,
+          "silent_error_rate": 0.10253998118532459,
+          "source_component": "ensemble_only",
+          "suppressed_rate": 0.09608843537414968
+        },
+        "qwen15b": {
+          "accepted": 2114,
+          "accepted_accuracy": 0.9280983916745507,
+          "coverage": 0.8988095238095238,
+          "display_name": "Qwen2.5-1.5B",
+          "meets_target": true,
+          "silent_error_rate": 0.07190160832544934,
+          "source_component": "ensemble_only",
+          "suppressed_rate": 0.10119047619047616
+        }
+      },
+      "recommended_use": "Exploratory triage and batch review queues where human review remains expected.",
+      "silent_error_rate_mean": 0.08722079475538697,
+      "status": "MODE_SUPPORTED_CROSS_ARCH",
+      "suppressed_rate_mean": 0.09863945578231292
+    },
     "readiness_balanced": {
       "boundary": "Readiness converts verification outcomes into allow/caveat/constrain/suppress policy; no fresh inference.",
       "rows": [
@@ -316,10 +347,26 @@
     ],
     "cpl2_positive_share": 0.7732142857142857,
     "evidence_packet_completeness_rate": 1.0,
-    "high_precision_accuracy_mean_olmo_qwen": 0.9882465280476702
+    "high_precision_accuracy_mean_olmo_qwen": 0.9882465280476702,
+    "triage_accuracy_mean_olmo_qwen": 0.9127792052446131,
+    "triage_coverage_mean_olmo_qwen": 0.9013605442176871
   },
   "pre_registration": "stage22_cas_harness_ablation_prereg_20260519.json",
   "schema_version": "stage22_cas_harness_ablation_bench_v1",
   "scope": "external_cas_harness_not_cas_native_inner_loop",
+  "stage22_1_followup": {
+    "candidate_switches": [
+      "wrap_output_gate",
+      "rpm_gate",
+      "lacunarity_gate",
+      "inversion_scan_gate",
+      "verification_stack",
+      "mode_selector",
+      "generation_readiness_gate"
+    ],
+    "rationale": "Stage 22 reports the coarse harness contribution. Stage 22.1 should split the upstream gate bundle only after this coarse bench identifies where more attribution is useful.",
+    "scope": "fine_grained_gate_attribution",
+    "status": "recommended_not_yet_run"
+  },
   "status": "STAGE22_NO_GPU_ABLATION_BENCH_COMPLETE"
 }

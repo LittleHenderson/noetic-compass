@@ -2085,6 +2085,12 @@ Default customer mode remains `BALANCED` unless Stage 22 data overturns it.
 `HIGH_PRECISION` is opt-in for regulator/legal/safety workflows.
 `MAX_COVERAGE_TRIAGE` is opt-in for human-review queues.
 
+Stage 22 is the coarse bench. The upstream gate bundle (Wrap Output Gate,
+RPM, Lacunarity, Inversion Scan, Verification Stack, Mode Selector, and
+Generation Readiness) is intentionally split in a recommended Stage 22.1
+follow-up only after the coarse bench identifies where fine-grained attribution
+is worth the extra matrix size.
+
 Artifacts:
 
 - `stage22_harness_ablation_spec.py`
@@ -2108,6 +2114,7 @@ Headline:
 | Eta-to-epsilon bridge | mean CPL2 delta `0.5640`; range `0.2828` to `0.7960`; positives `433/560` |
 | BALANCED selector | mean coverage `82.6%`; mean accepted accuracy `95.4%` |
 | HIGH_PRECISION selector | mean coverage `73.2%`; mean accepted accuracy `98.8%` |
+| MAX_COVERAGE_TRIAGE selector | mean coverage `90.1%`; mean accepted accuracy `91.3%` |
 | Evidence Packet surface | `4/4` canonical packets complete |
 | Frontier ceiling | reference-only; not run |
 

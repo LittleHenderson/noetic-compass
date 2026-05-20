@@ -49,6 +49,16 @@ def test_stage22_bench_reports_balanced_default_tradeoff() -> None:
     assert high_precision["accepted_accuracy_mean"] > balanced["accepted_accuracy_mean"]
 
 
+def test_stage22_bench_includes_max_coverage_triage_selector() -> None:
+    report = bench.build_report()
+    triage = report["conditions"]["mode_selector_max_coverage_triage"]
+    balanced = report["conditions"]["mode_selector_balanced"]
+
+    assert triage["status"] == "MODE_SUPPORTED_CROSS_ARCH"
+    assert triage["coverage_mean"] > balanced["coverage_mean"]
+    assert triage["accepted_accuracy_mean"] < balanced["accepted_accuracy_mean"]
+
+
 def test_stage22_bench_pairs_suppression_with_useful_output() -> None:
     report = bench.build_report()
     readiness = report["conditions"]["readiness_balanced"]["rows"]
@@ -74,3 +84,11 @@ def test_stage22_bench_checks_evidence_packet_completeness() -> None:
         "suppress",
     ]
 
+
+def test_stage22_bench_records_22_1_followup_boundary() -> None:
+    report = bench.build_report()
+    followup = report["stage22_1_followup"]
+
+    assert followup["status"] == "recommended_not_yet_run"
+    assert followup["scope"] == "fine_grained_gate_attribution"
+    assert "inversion_scan_gate" in followup["candidate_switches"]
