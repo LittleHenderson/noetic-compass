@@ -82,6 +82,59 @@ def test_scanner_marks_partial_vote_profile_not_available():
     assert scan["reason"] == "missing_drive_profile"
 
 
+def test_scanner_marks_empty_present_profile_not_available():
+    scanner = _load(SCANNER, "scanner_empty_profile")
+    scan = scanner.scan_inversion_from_diagnostic_row(
+        {
+            "rpm_satisfaction": 1.0,
+            "gap_map_summary": {
+                "foundation": {"vote_count": 3, "conflict_count": 0},
+                "drive": {},
+                "register": {"vote_count": 3, "conflict_count": 0},
+                "trace_states": {"focus": "stable"},
+            },
+        }
+    )
+    assert scan["attribution_status"] == "not_available"
+    assert scan["reason"] == "malformed_drive_profile"
+
+
+def test_scanner_marks_empty_trace_states_not_available():
+    scanner = _load(SCANNER, "scanner_empty_trace")
+    scan = scanner.scan_inversion_from_diagnostic_row(
+        {
+            "rpm_satisfaction": 1.0,
+            "gap_map_summary": {
+                "foundation": {"vote_count": 3, "conflict_count": 0},
+                "drive": {"vote_count": 3, "conflict_count": 0},
+                "register": {"vote_count": 3, "conflict_count": 0},
+                "trace_states": {},
+            },
+        }
+    )
+    assert scan["attribution_status"] == "not_available"
+    assert scan["reason"] == "empty_trace_states"
+
+
+def test_scanner_keeps_explicit_unreached_stage_numeric():
+    scanner = _load(SCANNER, "scanner_unreached")
+    scan = scanner.scan_inversion_from_diagnostic_row(
+        {
+            "stage": "foundation_ensemble",
+            "reason": "foundation_ensemble_all_disagree",
+            "rpm_satisfaction": 0.5,
+            "gap_map_summary": {
+                "foundation": {"vote_count": 3, "conflict_count": 2},
+                "drive": {"vote_count": 0, "conflict_count": 0},
+                "register": {"vote_count": 0, "conflict_count": 0},
+                "trace_states": {},
+            },
+        }
+    )
+    assert scan["attribution_status"] == "numeric_measured"
+    assert len(scan["axis_scores"]) == 7
+
+
 def test_scanner_marks_missing_rpm_not_available():
     scanner = _load(SCANNER, "scanner_missing_rpm")
     scan = scanner.scan_inversion_from_diagnostic_row(

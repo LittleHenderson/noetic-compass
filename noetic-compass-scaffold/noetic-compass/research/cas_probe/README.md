@@ -2426,6 +2426,11 @@ Contract changes:
 
 - Missing `gap_map_summary` -> `not_available`.
 - Missing Foundation/Drive/Register vote profile keys -> `not_available`.
+- Empty present vote profiles -> `not_available` unless the row explicitly
+  records an upstream suppression stage where the factor readout was not
+  reached.
+- Empty trace-state maps -> `not_available` unless the row explicitly records
+  a pre-trace suppression stage.
 - Missing `rpm_satisfaction` -> `not_available`.
 - Unknown runtime trace state -> `not_available`.
 - Stage 22.4 preflight now checks scanner behavior directly on clean and

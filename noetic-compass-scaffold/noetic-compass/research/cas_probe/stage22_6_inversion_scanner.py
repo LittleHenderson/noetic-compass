@@ -13,6 +13,14 @@ from typing import Any
 INVERSION_AXES = ("N", "W", "F", "E", "S", "A", "P")
 FLAG_THRESHOLD = 0.25
 _PROFILE_KEYS = ("foundation", "drive", "register")
+_PROFILE_SCHEMA_KEYS = ("vote_count", "conflict_count")
+_PRE_PROFILE_STAGES = {"foundation_ensemble"}
+_PRE_TRACE_STAGES = {
+    "foundation_ensemble",
+    "drive_ensemble",
+    "register_ensemble",
+    "factor_consistency",
+}
 
 
 def _clamp01(value: float) -> float:
@@ -75,22 +83,35 @@ def _not_available(reason: str) -> dict[str, Any]:
     }
 
 
-def _validate_gap(gap: Any) -> str | None:
+def _is_unreached_row(row: dict[str, Any], stages: set[str]) -> bool:
+    return str(row.get("stage") or "") in stages and bool(row.get("reason"))
+
+
+def _validate_gap(row: dict[str, Any], gap: Any) -> str | None:
     if not isinstance(gap, dict):
         return "missing_gap_map_summary"
     for key in _PROFILE_KEYS:
         profile = gap.get(key)
         if not isinstance(profile, dict):
             return f"missing_{key}_profile"
-    if not isinstance(gap.get("trace_states"), dict):
+        missing_profile_keys = [schema_key for schema_key in _PROFILE_SCHEMA_KEYS if schema_key not in profile]
+        if missing_profile_keys:
+            return f"malformed_{key}_profile"
+        vote_count = int(profile.get("vote_count", 0) or 0)
+        if vote_count <= 0 and not _is_unreached_row(row, _PRE_PROFILE_STAGES):
+            return f"empty_{key}_profile"
+    trace_states = gap.get("trace_states")
+    if not isinstance(trace_states, dict):
         return "missing_trace_states"
+    if not trace_states and not _is_unreached_row(row, _PRE_TRACE_STAGES):
+        return "empty_trace_states"
     return None
 
 
 def scan_inversion_from_diagnostic_row(row: dict[str, Any]) -> dict[str, Any]:
     """Compute seven deterministic inversion-risk proxy scores for one row."""
     gap = row.get("gap_map_summary")
-    invalid_reason = _validate_gap(gap)
+    invalid_reason = _validate_gap(row, gap)
     if invalid_reason is not None:
         return _not_available(invalid_reason)
     if row.get("rpm_satisfaction") is None:
