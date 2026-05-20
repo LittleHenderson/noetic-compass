@@ -1,6 +1,6 @@
 {
-  "boundary": "Static canonical 2D positions for CAS primitives. Does not include atlas-self-reading, encoder design, or training signal.",
-  "layout_version": "stage23a_notation_2d_layout_v1",
+  "boundary": "Static canonical 2D positions for CAS primitives across both Stage 23.A (Noetics/Domains/Drives/Registers/Cognitive States) and Stage 23.A.2 (Operations / Inversion Axes / Foundations / Production / RPM / Set primitives / Combinators / Authority Sets / Cardinality kinds). Does not include atlas-self-reading, encoder design, or training signal.",
+  "layout_version": "stage23a2_notation_2d_layout_v2",
   "primitives": [
     {
       "kind": "noetic",
@@ -391,7 +391,559 @@
       "primitive": "^9^O",
       "x": 4.5,
       "y": -2.5
+    },
+    {
+      "kind": "operation",
+      "primitive": "×",
+      "x": -1.0,
+      "y": 2.5
+    },
+    {
+      "kind": "operation",
+      "primitive": "÷",
+      "x": 1.0,
+      "y": 2.5
+    },
+    {
+      "kind": "operation",
+      "primitive": "∘",
+      "x": 0.0,
+      "y": 2.5
+    },
+    {
+      "kind": "operation",
+      "primitive": "+",
+      "x": -2.0,
+      "y": 2.5
+    },
+    {
+      "kind": "operation",
+      "primitive": "−",
+      "x": 2.0,
+      "y": 2.5
+    },
+    {
+      "kind": "inversion_axis",
+      "primitive": "Inv:N",
+      "x": -4.0,
+      "y": 1.5
+    },
+    {
+      "kind": "inversion_axis",
+      "primitive": "Inv:W",
+      "x": -4.0,
+      "y": 1.0
+    },
+    {
+      "kind": "inversion_axis",
+      "primitive": "Inv:F",
+      "x": -4.0,
+      "y": 0.5
+    },
+    {
+      "kind": "inversion_axis",
+      "primitive": "Inv:P",
+      "x": -4.0,
+      "y": 0.0
+    },
+    {
+      "kind": "inversion_axis",
+      "primitive": "Inv:E",
+      "x": -4.0,
+      "y": -0.5
+    },
+    {
+      "kind": "inversion_axis",
+      "primitive": "Inv:S",
+      "x": -4.0,
+      "y": -1.0
+    },
+    {
+      "kind": "inversion_axis",
+      "primitive": "Inv:A",
+      "x": -4.0,
+      "y": -1.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F1^T",
+      "x": -1.5,
+      "y": 4.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F1^A",
+      "x": -1.5,
+      "y": 4.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F1^f",
+      "x": -1.5,
+      "y": 3.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F1^E",
+      "x": -1.5,
+      "y": 3.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F2^T",
+      "x": -1.0,
+      "y": 4.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F2^A",
+      "x": -1.0,
+      "y": 4.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F2^f",
+      "x": -1.0,
+      "y": 3.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F2^E",
+      "x": -1.0,
+      "y": 3.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F3^T",
+      "x": -0.5,
+      "y": 4.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F3^A",
+      "x": -0.5,
+      "y": 4.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F3^f",
+      "x": -0.5,
+      "y": 3.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F3^E",
+      "x": -0.5,
+      "y": 3.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F4^T",
+      "x": 0.0,
+      "y": 4.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F4^A",
+      "x": 0.0,
+      "y": 4.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F4^f",
+      "x": 0.0,
+      "y": 3.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F4^E",
+      "x": 0.0,
+      "y": 3.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F5^T",
+      "x": 0.5,
+      "y": 4.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F5^A",
+      "x": 0.5,
+      "y": 4.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F5^f",
+      "x": 0.5,
+      "y": 3.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F5^E",
+      "x": 0.5,
+      "y": 3.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F6^T",
+      "x": 1.0,
+      "y": 4.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F6^A",
+      "x": 1.0,
+      "y": 4.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F6^f",
+      "x": 1.0,
+      "y": 3.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F6^E",
+      "x": 1.0,
+      "y": 3.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F7^T",
+      "x": 1.5,
+      "y": 4.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F7^A",
+      "x": 1.5,
+      "y": 4.0
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F7^f",
+      "x": 1.5,
+      "y": 3.5
+    },
+    {
+      "kind": "foundation",
+      "primitive": "F7^E",
+      "x": 1.5,
+      "y": 3.0
+    },
+    {
+      "kind": "production",
+      "primitive": "Θ",
+      "x": -2.0,
+      "y": 5.5
+    },
+    {
+      "kind": "production",
+      "primitive": "Λ",
+      "x": -1.0,
+      "y": 5.5
+    },
+    {
+      "kind": "production",
+      "primitive": "η",
+      "x": 0.0,
+      "y": 5.5
+    },
+    {
+      "kind": "production",
+      "primitive": "κ",
+      "x": 1.0,
+      "y": 5.5
+    },
+    {
+      "kind": "production",
+      "primitive": "ι",
+      "x": 2.0,
+      "y": 5.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "A0",
+      "x": 0.0,
+      "y": -8.0
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "D1",
+      "x": -3.0,
+      "y": -8.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "D2",
+      "x": -2.0,
+      "y": -8.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "D3",
+      "x": -1.0,
+      "y": -8.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "D4",
+      "x": 0.0,
+      "y": -8.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "D5",
+      "x": 1.0,
+      "y": -8.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "D6",
+      "x": 2.0,
+      "y": -8.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "D7",
+      "x": 3.0,
+      "y": -8.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "W1",
+      "x": -3.0,
+      "y": -9.0
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "W2",
+      "x": -2.0,
+      "y": -9.0
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "W3",
+      "x": -1.0,
+      "y": -9.0
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "W4",
+      "x": 0.0,
+      "y": -9.0
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "W5",
+      "x": 1.0,
+      "y": -9.0
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "W6",
+      "x": 2.0,
+      "y": -9.0
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "W7",
+      "x": 3.0,
+      "y": -9.0
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "P1",
+      "x": -3.0,
+      "y": -9.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "P2",
+      "x": -2.0,
+      "y": -9.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "P3",
+      "x": -1.0,
+      "y": -9.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "P4",
+      "x": 0.0,
+      "y": -9.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "P5",
+      "x": 1.0,
+      "y": -9.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "P6",
+      "x": 2.0,
+      "y": -9.5
+    },
+    {
+      "kind": "rpm_pathway",
+      "primitive": "P7",
+      "x": 3.0,
+      "y": -9.5
+    },
+    {
+      "kind": "set_constructor",
+      "primitive": "NoeticCluster",
+      "x": 6.0,
+      "y": 1.0
+    },
+    {
+      "kind": "set_constructor",
+      "primitive": "StateCluster",
+      "x": 7.0,
+      "y": 1.0
+    },
+    {
+      "kind": "set_constructor",
+      "primitive": "StateVariantCluster",
+      "x": 6.0,
+      "y": 0.0
+    },
+    {
+      "kind": "set_constructor",
+      "primitive": "RelationCluster",
+      "x": 7.0,
+      "y": 0.0
+    },
+    {
+      "kind": "set_relation",
+      "primitive": "∈",
+      "x": 6.0,
+      "y": 2.0
+    },
+    {
+      "kind": "set_relation",
+      "primitive": "∉",
+      "x": 6.5,
+      "y": 2.0
+    },
+    {
+      "kind": "set_relation",
+      "primitive": "⊂",
+      "x": 7.0,
+      "y": 2.0
+    },
+    {
+      "kind": "set_relation",
+      "primitive": "⊆",
+      "x": 7.5,
+      "y": 2.0
+    },
+    {
+      "kind": "set_relation",
+      "primitive": "⊃",
+      "x": 8.0,
+      "y": 2.0
+    },
+    {
+      "kind": "set_relation",
+      "primitive": "⊇",
+      "x": 8.5,
+      "y": 2.0
+    },
+    {
+      "kind": "set_operation",
+      "primitive": "∪",
+      "x": 7.0,
+      "y": -1.0
+    },
+    {
+      "kind": "set_operation",
+      "primitive": "∩",
+      "x": 8.0,
+      "y": -1.0
+    },
+    {
+      "kind": "set_operation",
+      "primitive": "∖",
+      "x": 9.0,
+      "y": -1.0
+    },
+    {
+      "kind": "set_operation",
+      "primitive": "∅",
+      "x": 6.0,
+      "y": -1.0
+    },
+    {
+      "kind": "combinator",
+      "primitive": "Product",
+      "x": 10.0,
+      "y": 1.5
+    },
+    {
+      "kind": "combinator",
+      "primitive": "CoverOf",
+      "x": 10.0,
+      "y": 0.5
+    },
+    {
+      "kind": "combinator",
+      "primitive": "PartitionOf",
+      "x": 10.0,
+      "y": -0.5
+    },
+    {
+      "kind": "combinator",
+      "primitive": "Pullback",
+      "x": 10.0,
+      "y": -1.5
+    },
+    {
+      "kind": "authority_set",
+      "primitive": "SystemInstructionSet",
+      "x": 11.0,
+      "y": 2.0
+    },
+    {
+      "kind": "authority_set",
+      "primitive": "UserUtteranceSet",
+      "x": 11.0,
+      "y": 1.0
+    },
+    {
+      "kind": "authority_set",
+      "primitive": "ToolObservationSet",
+      "x": 11.0,
+      "y": 0.0
+    },
+    {
+      "kind": "authority_set",
+      "primitive": "ValidatedClaimSet",
+      "x": 11.0,
+      "y": -1.0
+    },
+    {
+      "kind": "authority_set",
+      "primitive": "RenderedResponseSet",
+      "x": 11.0,
+      "y": -2.0
+    },
+    {
+      "kind": "cardinality_kind",
+      "primitive": "Cardinality",
+      "x": 12.0,
+      "y": 0.5
+    },
+    {
+      "kind": "cardinality_kind",
+      "primitive": "OrderedTuple",
+      "x": 12.0,
+      "y": -0.5
     }
   ],
-  "scope": "stage_23_a_static_foundation_only"
+  "scope": "stage_23_a_and_23_a_2_static_foundation"
 }

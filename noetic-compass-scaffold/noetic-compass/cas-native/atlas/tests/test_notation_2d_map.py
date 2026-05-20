@@ -188,8 +188,12 @@ def test_canonical_layout_payload_has_required_shape() -> None:
     assert payload["layout_version"] == nm.LAYOUT_VERSION
     assert "stage_23_a" in payload["scope"]
     primitives = payload["primitives"]
-    # 10 Noetics + 4 Domains + 7 Drives + 4 Registers + 40 Cognitive States = 65
-    assert len(primitives) == 10 + 4 + 7 + 4 + 40
+    # Stage 23.A (65) + Stage 23.A.2 (92) = 157.
+    # 23.A:    10 Noetics + 4 Domains + 7 Drives + 4 Registers + 40 Cognitive States = 65
+    # 23.A.2:  5 Operations + 7 Inversion Axes + 28 Foundations + 5 Production
+    #          + 22 RPM + 4 Set constructors + 6 Set relations + 4 Set operations
+    #          + 4 Combinators + 5 Authority sets + 2 Cardinality kinds = 92
+    assert len(primitives) == 157
     # Every entry has the required shape.
     for entry in primitives:
         assert "primitive" in entry
@@ -209,3 +213,200 @@ def test_layout_does_not_claim_future_capabilities() -> None:
         assert term not in boundary, (
             f"Layout payload should not claim '{term}' at Stage 23.A"
         )
+
+
+# ── Stage 23.A.2 — Operations ─────────────────────────────────────────
+
+
+def test_every_operation_has_a_position() -> None:
+    for op in nm.OPERATIONS:
+        pos = nm.get_position(op)
+        assert pos.kind == "operation"
+
+
+def test_operation_inverse_pairs_reflect_across_y_axis() -> None:
+    """×↔÷ and +↔− are positioned symmetrically across x=0."""
+    plus = nm.get_position("+")
+    minus = nm.get_position("−")
+    times = nm.get_position("×")
+    div = nm.get_position("÷")
+    assert math.isclose(plus.x + minus.x, 0.0, abs_tol=1e-9)
+    assert math.isclose(plus.y, minus.y, abs_tol=1e-9)
+    assert math.isclose(times.x + div.x, 0.0, abs_tol=1e-9)
+    assert math.isclose(times.y, div.y, abs_tol=1e-9)
+
+
+def test_compose_operation_is_on_y_axis() -> None:
+    """∘ is the standalone composition op; sits at x=0 like a self-dual."""
+    pos = nm.get_position("∘")
+    assert math.isclose(pos.x, 0.0, abs_tol=1e-9)
+
+
+# ── Stage 23.A.2 — Inversion Axes ─────────────────────────────────────
+
+
+def test_every_inversion_axis_has_a_position() -> None:
+    for ax in nm.INVERSION_AXES:
+        pos = nm.get_position(ax)
+        assert pos.kind == "inversion_axis"
+
+
+def test_compound_inversion_axis_is_centered() -> None:
+    """Inv:P is the compound axis — sits at y=0 (center of the axis column)."""
+    pos = nm.get_position("Inv:P")
+    assert math.isclose(pos.y, 0.0, abs_tol=1e-9)
+
+
+# ── Stage 23.A.2 — Foundations (Drive × Register) ─────────────────────
+
+
+def test_every_foundation_has_a_position() -> None:
+    """All 28 Foundations Fk^R must be positioned."""
+    count = 0
+    for drive_id in nm.DRIVES:
+        for reg in ("T", "A", "f", "E"):
+            pos = nm.get_position(f"{drive_id}^{reg}")
+            assert pos.kind == "foundation"
+            count += 1
+    assert count == 28
+
+
+def test_foundation_inherits_drive_x_and_register_y() -> None:
+    """F1^T must share x with Drive F1 (vertical neighbor relationship)."""
+    f1 = nm.get_position("F1")
+    f1_T = nm.get_position("F1^T")
+    assert math.isclose(f1.x, f1_T.x, abs_tol=1e-9)
+
+
+def test_foundations_in_same_register_row_share_y() -> None:
+    """All Fk^T (k=1..7) share the same y."""
+    ys = [nm.get_position(f"F{k}^T").y for k in range(1, 8)]
+    for y in ys[1:]:
+        assert math.isclose(y, ys[0], abs_tol=1e-9)
+
+
+# ── Stage 23.A.2 — Production primitives ──────────────────────────────
+
+
+def test_every_production_primitive_has_a_position() -> None:
+    for prod in nm.PRODUCTION_PRIMITIVES:
+        pos = nm.get_position(prod)
+        assert pos.kind == "production"
+
+
+# ── Stage 23.A.2 — RPM chain (22 pathways) ────────────────────────────
+
+
+def test_a0_root_has_a_position() -> None:
+    pos = nm.get_position("A0")
+    assert pos.kind == "rpm_pathway"
+    assert math.isclose(pos.x, 0.0, abs_tol=1e-9)
+
+
+def test_rpm_chain_d_w_p_rows_are_vertically_ordered() -> None:
+    """A0 → Dn → Wn → Pn → outcome: each row sits below the previous."""
+    a0 = nm.get_position("A0")
+    d1 = nm.get_position("D1")
+    w1 = nm.get_position("W1")
+    p1 = nm.get_position("P1")
+    assert a0.y > d1.y > w1.y > p1.y, (
+        f"RPM chain rows not monotone descending: "
+        f"A0={a0.y}, D={d1.y}, W={w1.y}, P={p1.y}"
+    )
+
+
+def test_all_rpm_pathways_have_positions() -> None:
+    nm.get_position("A0")
+    for prefix in ("D", "W", "P"):
+        for i in range(1, 8):
+            pos = nm.get_position(f"{prefix}{i}")
+            assert pos.kind == "rpm_pathway"
+
+
+# ── Stage 23.A.2 — Set primitives + Authority Sets + Cardinality ──────
+
+
+def test_set_constructors_have_positions() -> None:
+    for ctor in nm.SET_CONSTRUCTORS:
+        pos = nm.get_position(ctor)
+        assert pos.kind == "set_constructor"
+
+
+def test_set_relations_have_positions() -> None:
+    for rel in nm.SET_RELATIONS:
+        pos = nm.get_position(rel)
+        assert pos.kind == "set_relation"
+
+
+def test_set_operations_have_positions() -> None:
+    for op in nm.SET_OPERATIONS:
+        pos = nm.get_position(op)
+        assert pos.kind == "set_operation"
+
+
+def test_combinators_have_positions() -> None:
+    for c in nm.COMBINATORS:
+        pos = nm.get_position(c)
+        assert pos.kind == "combinator"
+
+
+def test_authority_sets_have_positions() -> None:
+    for a in nm.AUTHORITY_SETS:
+        pos = nm.get_position(a)
+        assert pos.kind == "authority_set"
+
+
+def test_authority_sets_ordered_by_trust() -> None:
+    """System (highest trust) at top, Rendered (lowest) at bottom."""
+    order = [
+        "SystemInstructionSet",
+        "UserUtteranceSet",
+        "ToolObservationSet",
+        "ValidatedClaimSet",
+        "RenderedResponseSet",
+    ]
+    ys = [nm.get_position(a).y for a in order]
+    for earlier, later in zip(ys, ys[1:]):
+        assert earlier > later, f"Authority trust order not monotone: {ys}"
+
+
+def test_cardinality_kinds_have_positions() -> None:
+    for ck in nm.CARDINALITY_KINDS:
+        pos = nm.get_position(ck)
+        assert pos.kind == "cardinality_kind"
+
+
+# ── Stage 23.A.2 — global property: 157 unique primitives ─────────────
+
+
+def test_stage_23_a_2_total_primitive_count_is_157() -> None:
+    positions = nm.all_positions()
+    assert len(positions) == 157
+
+
+def test_no_collisions_across_full_157_primitive_set() -> None:
+    """The Stage 23.A no-collision invariant must still hold at 23.A.2."""
+    seen: dict[tuple[float, float], str] = {}
+    for pos in nm.all_positions():
+        key = (round(pos.x, 9), round(pos.y, 9))
+        if key in seen:
+            raise AssertionError(
+                f"Coordinate collision at {key}: "
+                f"{seen[key]!r} and {pos.primitive!r}"
+            )
+        seen[key] = pos.primitive
+
+
+def test_all_16_primitive_kinds_are_populated() -> None:
+    """Every kind in the PrimitiveKind Literal must have at least one entry."""
+    expected_kinds = {
+        "noetic", "domain", "drive", "register", "cognitive_state",
+        "operation", "inversion_axis", "foundation", "production",
+        "rpm_pathway", "set_constructor", "set_relation",
+        "set_operation", "combinator", "authority_set", "cardinality_kind",
+    }
+    observed_kinds = {p.kind for p in nm.all_positions()}
+    assert observed_kinds == expected_kinds, (
+        f"Missing kinds: {expected_kinds - observed_kinds}; "
+        f"Extra kinds: {observed_kinds - expected_kinds}"
+    )

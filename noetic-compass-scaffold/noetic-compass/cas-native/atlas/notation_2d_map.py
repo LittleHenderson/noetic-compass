@@ -1,24 +1,49 @@
 """Canonical 2D coordinate system for CAS primitives.
 
-This module is Stage 23.A — the static foundation underneath any future
-"CAS Native reads its own Idea Atlas" capability. Every CAS primitive
-(10 Noetics, 4 Domains, 7 Drives, 4 Registers, 40 Cognitive States) gets
-exactly one fixed (x, y) position. The geometry encodes CAS structure:
+This module is Stage 23.A / 23.A.2 — the static foundation underneath
+any future "CAS Native reads its own Idea Atlas" capability.
 
-- Involution pairs are reflection-symmetric across the origin.
-- Self-dual primitives sit on a symmetry axis.
+Coverage (Stage 23.A + 23.A.2 = 157 primitives total):
+  Stage 23.A (65):
+    - 10 Noetics
+    - 4 Domains
+    - 7 Drives
+    - 4 Registers
+    - 40 Cognitive States (Noetic × Domain)
+  Stage 23.A.2 (92):
+    - 5 Generative Operations (×, ÷, ∘, +, −)
+    - 7 Inversion Axes (Inv:N, Inv:W, Inv:F, Inv:P, Inv:E, Inv:S, Inv:A)
+    - 28 Foundations (Drive × Register: F1^T … F7^E)
+    - 5 Production primitives (Θ, Λ, η, κ, ι) — CAS v7.6 stoichiometry
+    - 22 RPM chain positions (A0 + D1-D7 + W1-W7 + P1-P7)
+    - 4 Set constructors (NoeticCluster, StateCluster, StateVariantCluster,
+      RelationCluster)
+    - 6 Set relations (∈, ∉, ⊂, ⊆, ⊃, ⊇)
+    - 4 Set operations (∪, ∩, ∖, ∅)
+    - 4 Combinators (Product, CoverOf, PartitionOf, Pullback)
+    - 5 Authority sets (SystemInstructionSet, UserUtteranceSet,
+      ToolObservationSet, ValidatedClaimSet, RenderedResponseSet)
+    - 2 Cardinality kind markers (Cardinality, OrderedTuple)
+
+Properties enforced by tests:
+- Noetic involution pairs reflect across the origin; Drive involution
+  pairs reflect across x=0.
+- Self-dual primitives lie on a symmetry axis.
 - Domain precedence P ≻ C ≻ E ≻ O is spatially monotone.
-- Every position is unique.
-- The layout is deterministic across calls / processes / machines.
+- Every position is unique across all 157 primitives.
+- Layout is deterministic across calls / processes / machines.
 
 This module does NOT:
 - Modify any existing atlas or trace code.
 - Introduce a learned parameter or tensor.
 - Claim to be an optimal attention prior. That is a future empirical
   question (Stage 23.B/C/D), not declared here.
+- Enumerate "12 Ω_* emergent registers" — that group is intentionally
+  excluded pending canonical enumeration.
 
 See `research/cas_probe/STAGE23_ATLAS_SELF_READING_PREREG_20260519.md`
-for the design boundary doc.
+and `STAGE23_A_2_NOTATION_MAP_EXTENSION_20260519.md` for the design
+boundary docs.
 """
 from __future__ import annotations
 
@@ -27,7 +52,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 
-LAYOUT_VERSION = "stage23a_notation_2d_layout_v1"
+LAYOUT_VERSION = "stage23a2_notation_2d_layout_v2"
 
 
 # ── Primitive identifiers ─────────────────────────────────────────────
@@ -60,7 +85,26 @@ DRIVE_SELF_DUALS: tuple[str, ...] = ("F4",)
 DOMAIN_ORDER: dict[str, int] = {"P": 0, "C": 1, "E": 2, "O": 3}
 
 
-PrimitiveKind = Literal["noetic", "domain", "drive", "register", "cognitive_state"]
+PrimitiveKind = Literal[
+    # Stage 23.A
+    "noetic",
+    "domain",
+    "drive",
+    "register",
+    "cognitive_state",
+    # Stage 23.A.2
+    "operation",
+    "inversion_axis",
+    "foundation",
+    "production",
+    "rpm_pathway",
+    "set_constructor",
+    "set_relation",
+    "set_operation",
+    "combinator",
+    "authority_set",
+    "cardinality_kind",
+]
 
 
 @dataclass(frozen=True)
@@ -143,6 +187,142 @@ REGISTER_X: dict[str, float] = {
 # Cognitive States (Noetic × Domain) sit at the same x as the Noetic and
 # the same y as the Domain — a 10 × 4 product grid offset from the Noetic
 # ring.  Each cell is unique by construction.
+
+# ── Stage 23.A.2 additions ────────────────────────────────────────────
+
+# 5 Generative Operations live on a row above the Noetic ring.
+# ∘ (composition) is the "neutral" self-dual op at x=0; × ↔ ÷ and + ↔ −
+# sit at conventional algebraic-inverse positions (not asserted as a
+# CAS-specific involution, just clean symmetry).
+OPERATIONS: tuple[str, ...] = ("×", "÷", "∘", "+", "−")
+OPERATION_Y: float = 2.5
+OPERATION_X: dict[str, float] = {
+    "∘": 0.0,
+    "×": -1.0,
+    "÷": 1.0,
+    "+": -2.0,
+    "−": 2.0,
+}
+
+# 7 Inversion Axes (CAS v7.4 / CLAUDE.md): N, W, F, E, S, A atomic,
+# P compound. Canonical ids use 'Inv:' prefix to avoid collision with
+# bare letters used by Domain / Register / Drive / RPM-chain primitives.
+INVERSION_AXES: tuple[str, ...] = (
+    "Inv:N", "Inv:W", "Inv:F", "Inv:P", "Inv:E", "Inv:S", "Inv:A",
+)
+INVERSION_X: float = -4.0
+INVERSION_Y: dict[str, float] = {
+    "Inv:N": 1.5,
+    "Inv:W": 1.0,
+    "Inv:F": 0.5,
+    "Inv:P": 0.0,   # Compound — centered
+    "Inv:E": -0.5,
+    "Inv:S": -1.0,
+    "Inv:A": -1.5,
+}
+
+# 28 Foundations: Drive × Register grid. Lives ABOVE the Noetic ring at
+# y ∈ [3.0, 4.5]. Foundation Fk^R has x = DRIVE_X[Fk] and y = a register-
+# specific row. Vertical neighbors share Drive, horizontal share Register.
+FOUNDATION_REGISTER_Y: dict[str, float] = {
+    "T": 4.5,
+    "A": 4.0,
+    "f": 3.5,
+    "E": 3.0,
+}
+
+# 5 Production primitives (CAS v7.6 stoichiometry). Above the Foundation
+# grid, y = 5.5, x ∈ [-2, 2].
+PRODUCTION_PRIMITIVES: tuple[str, ...] = ("Θ", "Λ", "η", "κ", "ι")
+PRODUCTION_Y: float = 5.5
+PRODUCTION_X: dict[str, float] = {
+    "Θ": -2.0,  # Recipe — leftmost
+    "Λ": -1.0,  # Leakage / Side-Reaction
+    "η": 0.0,   # Production Efficiency — center
+    "κ": 1.0,   # Catalyst
+    "ι": 2.0,   # Inhibitor — rightmost
+}
+
+# 22 RPM chain positions: A0 + D1-D7 + W1-W7 + P1-P7.
+# Bottom of canvas, stacked rows reflecting the section-retraction chain
+# A0 → Dn → Wn → Pn → outcome.
+RPM_A0_POSITION: tuple[float, float] = (0.0, -8.0)
+RPM_D_Y: float = -8.5
+RPM_W_Y: float = -9.0
+RPM_P_Y: float = -9.5
+# 7 x-positions for D/W/P rows: evenly spaced columns at -3, -2, ..., 3.
+RPM_COLUMN_X: dict[int, float] = {i: -3.0 + (i - 1) * 1.0 for i in range(1, 8)}
+
+# 4 Set constructors — 2×2 cluster to the right of Cognitive States.
+SET_CONSTRUCTORS: tuple[str, ...] = (
+    "NoeticCluster", "StateCluster", "StateVariantCluster", "RelationCluster",
+)
+SET_CONSTRUCTOR_POSITION: dict[str, tuple[float, float]] = {
+    "NoeticCluster":       (6.0,  1.0),
+    "StateCluster":        (7.0,  1.0),
+    "StateVariantCluster": (6.0,  0.0),
+    "RelationCluster":     (7.0,  0.0),
+}
+
+# 6 Set relations — row at y=2.0 right of constructors.
+SET_RELATIONS: tuple[str, ...] = ("∈", "∉", "⊂", "⊆", "⊃", "⊇")
+SET_RELATION_Y: float = 2.0
+SET_RELATION_X: dict[str, float] = {
+    "∈": 6.0,
+    "∉": 6.5,
+    "⊂": 7.0,
+    "⊆": 7.5,
+    "⊃": 8.0,
+    "⊇": 8.5,
+}
+
+# 4 Set operations — row at y=-1.0. ∅ "as origin" of the set-op subspace,
+# ∪ ↔ ∩ paired, ∖ offset.
+SET_OPERATIONS: tuple[str, ...] = ("∪", "∩", "∖", "∅")
+SET_OPERATION_Y: float = -1.0
+SET_OPERATION_X: dict[str, float] = {
+    "∅": 6.0,
+    "∪": 7.0,
+    "∩": 8.0,
+    "∖": 9.0,
+}
+
+# 4 Combinators — column at x=10, ordered by compositional depth.
+COMBINATORS: tuple[str, ...] = ("Product", "CoverOf", "PartitionOf", "Pullback")
+COMBINATOR_X: float = 10.0
+COMBINATOR_Y: dict[str, float] = {
+    "Product":      1.5,  # Simplest
+    "CoverOf":      0.5,
+    "PartitionOf": -0.5,
+    "Pullback":    -1.5,  # Most complex
+}
+
+# 5 Authority sets — column at x=11, ordered by trust level (highest top).
+AUTHORITY_SETS: tuple[str, ...] = (
+    "SystemInstructionSet",
+    "UserUtteranceSet",
+    "ToolObservationSet",
+    "ValidatedClaimSet",
+    "RenderedResponseSet",
+)
+AUTHORITY_X: float = 11.0
+AUTHORITY_Y: dict[str, float] = {
+    "SystemInstructionSet":  2.0,
+    "UserUtteranceSet":      1.0,
+    "ToolObservationSet":    0.0,
+    "ValidatedClaimSet":    -1.0,
+    "RenderedResponseSet":  -2.0,
+}
+
+# 2 Cardinality kind markers — these are form markers (any primitive can
+# be wrapped in `|X|` or `<a,b,c>`), but we expose canonical positions so
+# encoders can attend to "this is a cardinality form" vs "this is a tuple
+# form" regardless of inner content. Far right at x=12.
+CARDINALITY_KINDS: tuple[str, ...] = ("Cardinality", "OrderedTuple")
+CARDINALITY_POSITION: dict[str, tuple[float, float]] = {
+    "Cardinality":  (12.0,  0.5),
+    "OrderedTuple": (12.0, -0.5),
+}
 
 
 def _noetic_position(noetic: str) -> tuple[float, float]:
@@ -268,16 +448,110 @@ def get_position(primitive: str) -> Position2D:
             "'E' is ambiguous: use '^E' for the Evaluative Domain or "
             "'|E' for the Embodied Register."
         )
+
+    # ── Stage 23.A.2 primitive dispatch ─────────────────────────────────
+
+    # Generative Operations (×, ÷, ∘, +, −).
+    if primitive in OPERATION_X:
+        return Position2D(
+            primitive=primitive, kind="operation",
+            x=OPERATION_X[primitive], y=OPERATION_Y,
+        )
+    # Inversion Axes (canonical 'Inv:N' ... 'Inv:P').
+    if primitive in INVERSION_Y:
+        return Position2D(
+            primitive=primitive, kind="inversion_axis",
+            x=INVERSION_X, y=INVERSION_Y[primitive],
+        )
+    # Foundations: 'Fk^R' for k in 1..7, R in T/A/f/E. Matches Drive x and
+    # Register-row y.
+    if (
+        len(primitive) == 4
+        and primitive.startswith("F")
+        and primitive[1].isdigit()
+        and primitive[2] == "^"
+        and primitive[3] in FOUNDATION_REGISTER_Y
+    ):
+        drive_id = primitive[:2]
+        register = primitive[3]
+        if drive_id in DRIVE_X:
+            return Position2D(
+                primitive=primitive, kind="foundation",
+                x=DRIVE_X[drive_id], y=FOUNDATION_REGISTER_Y[register],
+            )
+    # Production primitives (Θ, Λ, η, κ, ι).
+    if primitive in PRODUCTION_X:
+        return Position2D(
+            primitive=primitive, kind="production",
+            x=PRODUCTION_X[primitive], y=PRODUCTION_Y,
+        )
+    # RPM chain — A0.
+    if primitive == "A0":
+        return Position2D(
+            primitive=primitive, kind="rpm_pathway",
+            x=RPM_A0_POSITION[0], y=RPM_A0_POSITION[1],
+        )
+    # RPM chain — Dk / Wk / Pk for k in 1..7.
+    if (
+        len(primitive) == 2
+        and primitive[0] in ("D", "W", "P")
+        and primitive[1].isdigit()
+        and 1 <= int(primitive[1]) <= 7
+    ):
+        row, idx = primitive[0], int(primitive[1])
+        y = {"D": RPM_D_Y, "W": RPM_W_Y, "P": RPM_P_Y}[row]
+        return Position2D(
+            primitive=primitive, kind="rpm_pathway",
+            x=RPM_COLUMN_X[idx], y=y,
+        )
+    # Set constructors.
+    if primitive in SET_CONSTRUCTOR_POSITION:
+        x, y = SET_CONSTRUCTOR_POSITION[primitive]
+        return Position2D(
+            primitive=primitive, kind="set_constructor", x=x, y=y,
+        )
+    # Set relations.
+    if primitive in SET_RELATION_X:
+        return Position2D(
+            primitive=primitive, kind="set_relation",
+            x=SET_RELATION_X[primitive], y=SET_RELATION_Y,
+        )
+    # Set operations.
+    if primitive in SET_OPERATION_X:
+        return Position2D(
+            primitive=primitive, kind="set_operation",
+            x=SET_OPERATION_X[primitive], y=SET_OPERATION_Y,
+        )
+    # Combinators.
+    if primitive in COMBINATOR_Y:
+        return Position2D(
+            primitive=primitive, kind="combinator",
+            x=COMBINATOR_X, y=COMBINATOR_Y[primitive],
+        )
+    # Authority sets.
+    if primitive in AUTHORITY_Y:
+        return Position2D(
+            primitive=primitive, kind="authority_set",
+            x=AUTHORITY_X, y=AUTHORITY_Y[primitive],
+        )
+    # Cardinality kind markers.
+    if primitive in CARDINALITY_POSITION:
+        x, y = CARDINALITY_POSITION[primitive]
+        return Position2D(
+            primitive=primitive, kind="cardinality_kind", x=x, y=y,
+        )
+
     raise KeyError(f"Unknown primitive: {primitive!r}")
 
 
 def all_positions() -> list[Position2D]:
     """Return Position2D for every primitive the layout covers.
 
-    Enumerates in canonical prefixed form (Noetic/Drive bare, Domain '^D',
-    Register '|R', Cognitive State '^n^D'). No coordinate collisions.
+    Enumerates in canonical form. No coordinate collisions across all
+    157 primitives (Stage 23.A: 65, Stage 23.A.2: 92).
     """
     out: list[Position2D] = []
+    # Stage 23.A primitives.
     for n in NOETICS:
         out.append(get_position(n))
     for d in DOMAINS:
@@ -289,6 +563,32 @@ def all_positions() -> list[Position2D]:
     for n in NOETICS:
         for d in DOMAINS:
             out.append(get_position(state_id(n, d)))
+    # Stage 23.A.2 primitives.
+    for op in OPERATIONS:
+        out.append(get_position(op))
+    for ax in INVERSION_AXES:
+        out.append(get_position(ax))
+    for drive_id in DRIVES:
+        for reg in ("T", "A", "f", "E"):
+            out.append(get_position(f"{drive_id}^{reg}"))
+    for prod in PRODUCTION_PRIMITIVES:
+        out.append(get_position(prod))
+    out.append(get_position("A0"))
+    for row in ("D", "W", "P"):
+        for i in range(1, 8):
+            out.append(get_position(f"{row}{i}"))
+    for ctor in SET_CONSTRUCTORS:
+        out.append(get_position(ctor))
+    for rel in SET_RELATIONS:
+        out.append(get_position(rel))
+    for op in SET_OPERATIONS:
+        out.append(get_position(op))
+    for comb in COMBINATORS:
+        out.append(get_position(comb))
+    for auth in AUTHORITY_SETS:
+        out.append(get_position(auth))
+    for card in CARDINALITY_KINDS:
+        out.append(get_position(card))
     return out
 
 
@@ -296,10 +596,14 @@ def canonical_layout_payload() -> dict[str, object]:
     """Machine-readable layout artifact (committed to research/cas_probe/)."""
     return {
         "layout_version": LAYOUT_VERSION,
-        "scope": "stage_23_a_static_foundation_only",
+        "scope": "stage_23_a_and_23_a_2_static_foundation",
         "boundary": (
-            "Static canonical 2D positions for CAS primitives. Does not "
-            "include atlas-self-reading, encoder design, or training signal."
+            "Static canonical 2D positions for CAS primitives across both "
+            "Stage 23.A (Noetics/Domains/Drives/Registers/Cognitive States) "
+            "and Stage 23.A.2 (Operations / Inversion Axes / Foundations / "
+            "Production / RPM / Set primitives / Combinators / Authority "
+            "Sets / Cardinality kinds). Does not include atlas-self-reading, "
+            "encoder design, or training signal."
         ),
         "primitives": [p.as_dict() for p in all_positions()],
     }
