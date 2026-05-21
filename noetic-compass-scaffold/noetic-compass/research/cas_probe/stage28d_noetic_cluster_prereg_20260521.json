@@ -1,0 +1,285 @@
+{
+  "claim_boundary": {
+    "claim_if_null": "Compound Noetic cluster colloquialisms do not jointly elevate their target Noetics over hard replacement controls under the preregistered phrase-level readouts.",
+    "claim_if_pass": "A preregistered phrase-level readout shows that compound Noetic cluster colloquialisms jointly elevate their two target Noetics over hard replacement controls on Pythia-160M.",
+    "forbidden_claims": "Do not claim exact neurons, complete circuits, retrained cluster classifiers, full TKS formulas, raw CAS-symbol understanding, free-form generation control, or cross-model generality from Stage 28D.",
+    "grey_status": "GREY_NOETIC_CLUSTER_REALIZATION_PARTIAL",
+    "null_status": "NULL_NOETIC_CLUSTER_REALIZATION_NOT_ESTABLISHED",
+    "pass_status": "PASS_BOUNDED_NOETIC_CLUSTER_REALIZATION",
+    "scope_boundary": "Stage 28D tests multi-label two-Noetic clusters on Pythia-160M using existing Stage 9 probes. It does not train a cluster classifier, test full formulas/equations, prove exact neurons, or establish generation control."
+  },
+  "cluster_fixture": [
+    {
+      "cluster": "attraction_cause",
+      "phrase": "that reminds me of something I'm drawn to",
+      "targets": [
+        "^2",
+        "^8"
+      ]
+    },
+    {
+      "cluster": "attraction_cause",
+      "phrase": "one thing leads me back to what speaks to me",
+      "targets": [
+        "^2",
+        "^8"
+      ]
+    },
+    {
+      "cluster": "attraction_cause",
+      "phrase": "a memory triggered a pull toward it",
+      "targets": [
+        "^2",
+        "^8"
+      ]
+    },
+    {
+      "cluster": "aversion_analysis",
+      "phrase": "I'm breaking down why I can't stomach it",
+      "targets": [
+        "^3",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "aversion_analysis",
+      "phrase": "pulling apart the argument that rubs me the wrong way",
+      "targets": [
+        "^3",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "aversion_analysis",
+      "phrase": "looking underneath what pushes me away",
+      "targets": [
+        "^3",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "resonance_rhythm",
+      "phrase": "it struck a chord and kept coming back",
+      "targets": [
+        "^4",
+        "^7"
+      ]
+    },
+    {
+      "cluster": "resonance_rhythm",
+      "phrase": "the feeling resonated until I got into a groove",
+      "targets": [
+        "^4",
+        "^7"
+      ]
+    },
+    {
+      "cluster": "resonance_rhythm",
+      "phrase": "it made an impression through repeated practice",
+      "targets": [
+        "^4",
+        "^7"
+      ]
+    },
+    {
+      "cluster": "mind_analysis",
+      "phrase": "paying attention while unpacking the idea",
+      "targets": [
+        "^1",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "mind_analysis",
+      "phrase": "using my head to break it down",
+      "targets": [
+        "^1",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "mind_analysis",
+      "phrase": "making up my mind by looking underneath",
+      "targets": [
+        "^1",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "identity_arising",
+      "phrase": "out of nowhere it felt like part of who I am",
+      "targets": [
+        "^5",
+        "^9"
+      ]
+    },
+    {
+      "cluster": "identity_arising",
+      "phrase": "the thought came to me as something that makes me me",
+      "targets": [
+        "^5",
+        "^9"
+      ]
+    },
+    {
+      "cluster": "identity_arising",
+      "phrase": "it clicked as shaped by what came before",
+      "targets": [
+        "^5",
+        "^9"
+      ]
+    },
+    {
+      "cluster": "attraction_resonance",
+      "phrase": "it resonated with me and pulled me toward it",
+      "targets": [
+        "^2",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "attraction_resonance",
+      "phrase": "it struck a chord because it speaks to me",
+      "targets": [
+        "^2",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "attraction_resonance",
+      "phrase": "the impression made it hard to resist",
+      "targets": [
+        "^2",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "aversion_vibration",
+      "phrase": "it hit me hard and rubbed me the wrong way",
+      "targets": [
+        "^3",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "aversion_vibration",
+      "phrase": "the impression made me unable to stomach it",
+      "targets": [
+        "^3",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "aversion_vibration",
+      "phrase": "it struck a sour chord I would not touch",
+      "targets": [
+        "^3",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "mind_rhythm",
+      "phrase": "I keep paying attention until practice makes perfect",
+      "targets": [
+        "^1",
+        "^7"
+      ]
+    },
+    {
+      "cluster": "mind_rhythm",
+      "phrase": "using my head while getting into a groove",
+      "targets": [
+        "^1",
+        "^7"
+      ]
+    },
+    {
+      "cluster": "mind_rhythm",
+      "phrase": "making up my mind through repeated practice",
+      "targets": [
+        "^1",
+        "^7"
+      ]
+    }
+  ],
+  "execution_order": [
+    "commit_preregistration_before_result_run",
+    "fit_collapsed_noetic_probes_for_mean_and_final_from_stage9_artifact",
+    "run_pythia_forward_on_locked_cluster_fixture",
+    "score_joint_target_pair_elevation_against_hard_controls",
+    "record_bounded_result"
+  ],
+  "formal_anchor": "Noetic clusters are treated as compound natural-language realizations. Because the target is multi-label, Stage 28D evaluates joint target-pair elevation over replacement controls instead of single-class exact accuracy.",
+  "gates": [
+    {
+      "criterion": "Stage 9 activation artifact matches the preregistered local replacement contract used by Stage 24B.",
+      "kind": "pass_floor",
+      "name": "artifact_contract"
+    },
+    {
+      "criterion": "A phrase-level candidate is eligible only if its matching Stage 9 Noetic probe has test accuracy at least 0.50.",
+      "kind": "pass_floor",
+      "name": "candidate_probe_floor"
+    },
+    {
+      "criterion": "At least one eligible phrase-level candidate has mean target-pair z margin over hard replacement controls > 0.",
+      "kind": "primary",
+      "name": "target_pair_margin"
+    },
+    {
+      "criterion": "The same candidate has at least 18/24 positive target-over-control rows and sign-test p<0.025.",
+      "kind": "primary",
+      "name": "corrected_sign_test"
+    },
+    {
+      "criterion": "The same candidate has mean target-labels-in-top4 at least 0.90 out of 2.",
+      "kind": "supporting",
+      "name": "top4_target_coverage"
+    },
+    {
+      "criterion": "Report positive-row share per cluster; this is diagnostic, not required for PASS.",
+      "kind": "diagnostic",
+      "name": "per_cluster_coverage"
+    }
+  ],
+  "method": [
+    "Commit this pre-registration before any Stage 28D result artifact is generated.",
+    "Use the locked 24-row compound-colloquialism cluster fixture.",
+    "Fit collapsed Stage 9 Noetic probes at layer 5 for X_mean and X_final.",
+    "Run Pythia-160M forward on each carrier sentence and capture all layer-5 token states overlapping the quoted phrase span.",
+    "Score phrase_mean with the X_mean probe and phrase_last with the X_final probe.",
+    "Use probe decision logits, standardized within each row, because clusters are multi-label and single-label softmax exact accuracy is the wrong target.",
+    "For each row, compute the target-pair z-score and compare it against the maximum hard replacement-control pair score.",
+    "Apply a two-candidate correction by requiring sign-test p<0.025 for a PASS on either phrase-level candidate.",
+    "Report top labels and per-cluster margins for audit."
+  ],
+  "motivation": "Stages 28B/C showed that single-Noetic colloquialisms do not cleanly re-enter the Stage 9 Noetic probe space. Stage 28D tests the user's cluster hypothesis directly: compound phrases may be represented as joint Noetic elevations rather than single-label readouts.",
+  "required_inputs": {
+    "activation_contract": "stage24b_40_element_cpu_recap_prereg_20260521.json",
+    "cluster_fixture": "24 compound colloquialisms: 8 two-Noetic clusters x 3 phrases",
+    "locked_layer": 5,
+    "model": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "n_cluster_rows": 24,
+    "primary_phrase_level_readouts": [
+      {
+        "definition": "mean of all tokenizer states overlapping the quoted cluster phrase span",
+        "runtime_name": "phrase_mean",
+        "stage9_key": "X_mean",
+        "stage9_name": "mean_over_seq_len"
+      },
+      {
+        "definition": "last tokenizer state overlapping the quoted cluster phrase span",
+        "runtime_name": "phrase_last",
+        "stage9_key": "X_final",
+        "stage9_name": "final_token"
+      }
+    ],
+    "stage9_activations": "stage9_elements_pilot_activations_20260517.npz",
+    "stage9_fixture": "stage9_elements_pilot_20260517.jsonl",
+    "task": "multi-label Noetic cluster realization from compound natural-language colloquialisms"
+  },
+  "stage": "28D",
+  "status": "PREREGISTERED_LOCAL_FORWARD_PASS",
+  "validation": {}
+}
