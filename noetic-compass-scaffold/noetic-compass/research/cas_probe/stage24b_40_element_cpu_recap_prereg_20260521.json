@@ -1,0 +1,42 @@
+{
+  "schema_version": "stage24b_40_element_cpu_recap_prereg.v1",
+  "status": "PREREGISTERED_REPLACEMENT_ARTIFACT_BEFORE_FORMAL_RERUN",
+  "stage": "Stage 24B",
+  "purpose": "Authorize a formal Stage 24B rerun against the local CPU recapture of the Stage 9 40-Element activation artifact because the locked CUDA npz is not present locally.",
+  "original_locked_artifact": {
+    "activation_file": "stage9_elements_pilot_activations_20260517.npz",
+    "manifest_file": "stage9_elements_pilot_activations_manifest_20260517.json",
+    "device": "cuda",
+    "output_sha256": "c70582b54f309c805fd90a69e7d23a80a714fc692aac4c1364ebc4e21b410cfb",
+    "formal_stage9_contract_preserved": true
+  },
+  "replacement_artifact_contract": {
+    "activation_file": "stage9_elements_pilot_activations_20260517.npz",
+    "device": "cpu",
+    "output_sha256": "63702c62e6230e25e891b0e68007780954f9e6c539e4996b69e91017b972c0c9",
+    "input_file": "stage9_elements_pilot_20260517.jsonl",
+    "input_sha256": "2f8637eedff0fb4d9e6191bd5c051ddc21cea699e33621896469a2e522306889",
+    "n_records": 8320,
+    "n_classes": 40,
+    "readout_key": "X_focus",
+    "readout_name": "focus_token",
+    "layer": 5
+  },
+  "formal_rerun_rules": {
+    "runner": "run_stage24b_40_elements_token_sonar.py",
+    "activation_manifest": "stage24b_40_element_cpu_recap_prereg_20260521.json",
+    "n_random": 100,
+    "top_k": 12,
+    "seed": 24040,
+    "primary_gates": [
+      "same_domain_minus_hard_partner",
+      "same_noetic_minus_hard_partner"
+    ],
+    "diagnostic_gates": [
+      "same_domain_minus_different",
+      "same_noetic_minus_different"
+    ],
+    "readability_floor": 0.5
+  },
+  "claim_boundary": "This replacement contract can support a formal Stage 24B CPU-recapture result only. It does not replace the Stage 9 CUDA artifact, and it does not authorize exact-neuron, SAE, raw-symbol, or free-form-generation-control claims."
+}

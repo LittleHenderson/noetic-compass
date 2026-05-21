@@ -2582,3 +2582,29 @@ Artifacts:
 - `stage24b_40_element_token_sonar_20260520.json`
 - `STAGE24B_40_ELEMENT_TOKEN_SONAR_20260520.md`
 - `tests/test_stage24b_40_elements_token_sonar.py`
+
+## Stage 24B CPU recapture pre-registration
+
+**Verdict: `PREREGISTERED_REPLACEMENT_ARTIFACT_BEFORE_FORMAL_RERUN`.**
+
+The original locked CUDA Stage 9 activation binary remains the primary Stage 9
+artifact contract, but it is absent locally. To close Stage 24B without
+mutating the Stage 9 manifest, a separate replacement-artifact contract has
+been preregistered for the local CPU recapture.
+
+Replacement contract:
+
+| Field | Value |
+|---|---|
+| Original locked CUDA SHA-256 | `c70582b54f309c805fd90a69e7d23a80a714fc692aac4c1364ebc4e21b410cfb` |
+| Replacement CPU recapture SHA-256 | `63702c62e6230e25e891b0e68007780954f9e6c539e4996b69e91017b972c0c9` |
+| Formal Stage 9 contract preserved | `true` |
+| Formal Stage 24B rerun manifest | `stage24b_40_element_cpu_recap_prereg_20260521.json` |
+
+The next Stage 24B formal rerun must use the replacement manifest above. The
+prior `20260520` Stage 24B report remains diagnostic-only.
+
+Artifacts:
+
+- `stage24b_40_element_cpu_recap_prereg_20260521.json`
+- `STAGE24B_40_ELEMENT_CPU_RECAP_PREREG_20260521.md`
