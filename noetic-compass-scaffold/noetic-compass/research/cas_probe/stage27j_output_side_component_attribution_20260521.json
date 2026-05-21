@@ -1,0 +1,2553 @@
+{
+  "boundary": "Stage 27J is bounded late-layer output-side component attribution for Pythia-160M semantic likelihood margins. It is not complete circuit discovery, not model-wide control, not weight editing, and not visible free-form generation control.",
+  "candidate_components": [
+    "L8H0",
+    "L8H1",
+    "L8H2",
+    "L8H3",
+    "L8H4",
+    "L8H5",
+    "L8H6",
+    "L8H7",
+    "L8H8",
+    "L8H9",
+    "L8H10",
+    "L8H11",
+    "L8MLP",
+    "L9H0",
+    "L9H1",
+    "L9H2",
+    "L9H3",
+    "L9H4",
+    "L9H5",
+    "L9H6",
+    "L9H7",
+    "L9H8",
+    "L9H9",
+    "L9H10",
+    "L9H11",
+    "L9MLP",
+    "L10H0",
+    "L10H1",
+    "L10H2",
+    "L10H3",
+    "L10H4",
+    "L10H5",
+    "L10H6",
+    "L10H7",
+    "L10H8",
+    "L10H9",
+    "L10H10",
+    "L10H11",
+    "L10MLP",
+    "L11H0",
+    "L11H1",
+    "L11H2",
+    "L11H3",
+    "L11H4",
+    "L11H5",
+    "L11H6",
+    "L11H7",
+    "L11H8",
+    "L11H9",
+    "L11H10",
+    "L11H11",
+    "L11MLP"
+  ],
+  "candidate_layers": [
+    8,
+    9,
+    10,
+    11
+  ],
+  "carrier_cover": [
+    "L10MLP",
+    "L8MLP",
+    "L9H7",
+    "L9MLP",
+    "L8H11",
+    "L8H10"
+  ],
+  "cover_size": 6,
+  "elapsed_seconds": 67.0783780394122,
+  "eraser_cover": [
+    "L11MLP",
+    "L9H3",
+    "L11H11",
+    "L10H6",
+    "L11H9",
+    "L10H3"
+  ],
+  "evaluation": {
+    "carrier_cover": {
+      "drop": {
+        "mean": 0.32094029017857156,
+        "median": 0.16875000000000018,
+        "n": 56,
+        "positive_share": 0.5535714285714286
+      },
+      "drop_vs_random": {
+        "mean_delta": 1.1011304242270334,
+        "median_delta": 0.613338470458984,
+        "n": 56,
+        "sign_test_p": 0.00228076637320411,
+        "win_share": 0.6964285714285714,
+        "wins": 39
+      },
+      "lift": {
+        "mean": -0.32094029017857156,
+        "median": -0.16875000000000018,
+        "n": 56,
+        "positive_share": 0.44642857142857145
+      },
+      "lift_vs_random": {
+        "mean_delta": -1.1011304242270334,
+        "median_delta": -0.613338470458984,
+        "n": 56,
+        "sign_test_p": 0.9990792226057538,
+        "win_share": 0.30357142857142855,
+        "wins": 17
+      },
+      "margins": {
+        "cover_ablated": {
+          "mean": 0.23805803571428566,
+          "median": 0.17187499999999956,
+          "n": 56,
+          "positive_share": 0.6607142857142857
+        },
+        "prefix": {
+          "mean": 0.5589983258928571,
+          "median": 0.4955078125000001,
+          "n": 56,
+          "positive_share": 0.6785714285714286
+        }
+      },
+      "random_mean_drop": {
+        "mean": -0.7801901340484617,
+        "median": -0.5506675720214844,
+        "n": 56,
+        "positive_share": 0.30357142857142855
+      },
+      "random_mean_lift": {
+        "mean": 0.7801901340484617,
+        "median": 0.5506675720214844,
+        "n": 56,
+        "positive_share": 0.6964285714285714
+      },
+      "row_reports": [
+        {
+          "cover_drop": 0.8291015625,
+          "cover_lift": -0.8291015625,
+          "cover_margin": 0.2521484374999998,
+          "foundation_label": "F1T",
+          "prefix_margin": 1.0812499999999998,
+          "random_mean_drop": -0.37088546752929696,
+          "random_mean_lift": 0.37088546752929696,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F1T"
+        },
+        {
+          "cover_drop": -0.6330078124999998,
+          "cover_lift": 0.6330078124999998,
+          "cover_margin": 0.38671875,
+          "foundation_label": "F1A",
+          "prefix_margin": -0.24628906249999982,
+          "random_mean_drop": 1.1196533203124999,
+          "random_mean_lift": -1.1196533203124999,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F1A"
+        },
+        {
+          "cover_drop": -0.5658203125000005,
+          "cover_lift": 0.5658203125000005,
+          "cover_margin": 0.23398437500000036,
+          "foundation_label": "F1f",
+          "prefix_margin": -0.3318359375000002,
+          "random_mean_drop": -0.8721191406250002,
+          "random_mean_lift": 0.8721191406250002,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_system_process_F1f"
+        },
+        {
+          "cover_drop": -0.07050781249999982,
+          "cover_lift": 0.07050781249999982,
+          "cover_margin": 0.44667968749999964,
+          "foundation_label": "F1E",
+          "prefix_margin": 0.3761718749999998,
+          "random_mean_drop": 1.1874999999999996,
+          "random_mean_lift": -1.1874999999999996,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F7E_F1E_concrete_human_F1E"
+        },
+        {
+          "cover_drop": 0.17070312500000018,
+          "cover_lift": -0.17070312500000018,
+          "cover_margin": 0.3369140625,
+          "foundation_label": "F1E",
+          "prefix_margin": 0.5076171875000002,
+          "random_mean_drop": 0.4011108398437504,
+          "random_mean_lift": -0.4011108398437504,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F1E"
+        },
+        {
+          "cover_drop": 0.3994140625,
+          "cover_lift": -0.3994140625,
+          "cover_margin": 0.083984375,
+          "foundation_label": "F1A",
+          "prefix_margin": 0.4833984375,
+          "random_mean_drop": 1.8736511230468753,
+          "random_mean_lift": -1.8736511230468753,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_concrete_human_F1A"
+        },
+        {
+          "cover_drop": 0.2839843750000002,
+          "cover_lift": -0.2839843750000002,
+          "cover_margin": 0.30312499999999964,
+          "foundation_label": "F1T",
+          "prefix_margin": 0.5871093749999998,
+          "random_mean_drop": 0.09029846191406232,
+          "random_mean_lift": -0.09029846191406232,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_concrete_human_F1T"
+        },
+        {
+          "cover_drop": 0.23027343750000018,
+          "cover_lift": -0.23027343750000018,
+          "cover_margin": 0.21464843750000018,
+          "foundation_label": "F1A",
+          "prefix_margin": 0.44492187500000036,
+          "random_mean_drop": 0.0800964355468754,
+          "random_mean_lift": -0.0800964355468754,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_counter_alias_hard_negative_F1A"
+        },
+        {
+          "cover_drop": -0.8425781250000002,
+          "cover_lift": 0.8425781250000002,
+          "cover_margin": 0.15273437500000053,
+          "foundation_label": "F2E",
+          "prefix_margin": -0.6898437499999996,
+          "random_mean_drop": -0.20083618164062478,
+          "random_mean_lift": 0.20083618164062478,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_counter_alias_hard_negative_F2E"
+        },
+        {
+          "cover_drop": -0.1503906249999991,
+          "cover_lift": 0.1503906249999991,
+          "cover_margin": -0.11308593750000018,
+          "foundation_label": "F2f",
+          "prefix_margin": -0.2634765624999993,
+          "random_mean_drop": -2.0282684326171863,
+          "random_mean_lift": 2.0282684326171863,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F1f_F2f_no_alias_plain_F2f"
+        },
+        {
+          "cover_drop": -0.5230468749999995,
+          "cover_lift": 0.5230468749999995,
+          "cover_margin": 0.04804687499999982,
+          "foundation_label": "F2A",
+          "prefix_margin": -0.47499999999999964,
+          "random_mean_drop": -1.1685485839843743,
+          "random_mean_lift": 1.1685485839843743,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_system_process_F2A"
+        },
+        {
+          "cover_drop": -0.5812499999999998,
+          "cover_lift": 0.5812499999999998,
+          "cover_margin": 0.018359375000000178,
+          "foundation_label": "F2E",
+          "prefix_margin": -0.5628906249999996,
+          "random_mean_drop": -0.4698654174804684,
+          "random_mean_lift": 0.4698654174804684,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F2E"
+        },
+        {
+          "cover_drop": -1.009765625,
+          "cover_lift": 1.009765625,
+          "cover_margin": -0.5064453125000004,
+          "foundation_label": "F2T",
+          "prefix_margin": -1.5162109375000004,
+          "random_mean_drop": 1.4443298339843746,
+          "random_mean_lift": -1.4443298339843746,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F1T_F2T_long_embedded_clause_F2T"
+        },
+        {
+          "cover_drop": -0.6222656249999989,
+          "cover_lift": 0.6222656249999989,
+          "cover_margin": -0.4933593750000007,
+          "foundation_label": "F2T",
+          "prefix_margin": -1.1156249999999996,
+          "random_mean_drop": 0.5219284057617188,
+          "random_mean_lift": -0.5219284057617188,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F2T"
+        },
+        {
+          "cover_drop": -0.6617187500000004,
+          "cover_lift": 0.6617187500000004,
+          "cover_margin": -0.046289062499999645,
+          "foundation_label": "F2E",
+          "prefix_margin": -0.7080078125,
+          "random_mean_drop": -0.4415000915527343,
+          "random_mean_lift": 0.4415000915527343,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_long_embedded_clause_F2E"
+        },
+        {
+          "cover_drop": -0.6101562499999993,
+          "cover_lift": 0.6101562499999993,
+          "cover_margin": -0.18398437500000053,
+          "foundation_label": "F2E",
+          "prefix_margin": -0.7941406249999998,
+          "random_mean_drop": -0.7395706176757806,
+          "random_mean_lift": 0.7395706176757806,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_long_embedded_clause_F2E"
+        },
+        {
+          "cover_drop": 0.8777343750000002,
+          "cover_lift": -0.8777343750000002,
+          "cover_margin": 0.49179687499999947,
+          "foundation_label": "F3T",
+          "prefix_margin": 1.3695312499999996,
+          "random_mean_drop": -0.6314697265625004,
+          "random_mean_lift": 0.6314697265625004,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F2T_F3T_system_process_F3T"
+        },
+        {
+          "cover_drop": -0.16328124999999982,
+          "cover_lift": 0.16328124999999982,
+          "cover_margin": -0.4365234375,
+          "foundation_label": "F3A",
+          "prefix_margin": -0.5998046874999998,
+          "random_mean_drop": 1.2753112792968753,
+          "random_mean_lift": -1.2753112792968753,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F3A"
+        },
+        {
+          "cover_drop": 1.2931640624999998,
+          "cover_lift": -1.2931640624999998,
+          "cover_margin": 0.27988281250000036,
+          "foundation_label": "F3T",
+          "prefix_margin": 1.5730468750000002,
+          "random_mean_drop": -0.934556579589843,
+          "random_mean_lift": 0.934556579589843,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F2T_F3T_role_inverse_minimal_F3T"
+        },
+        {
+          "cover_drop": 0.9068359375000004,
+          "cover_lift": -0.9068359375000004,
+          "cover_margin": 0.4142578124999998,
+          "foundation_label": "F3A",
+          "prefix_margin": 1.3210937500000002,
+          "random_mean_drop": -0.1599670410156251,
+          "random_mean_lift": 0.1599670410156251,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F2A_F3A_no_alias_plain_F3A"
+        },
+        {
+          "cover_drop": 1.0550781250000005,
+          "cover_lift": -1.0550781250000005,
+          "cover_margin": 0.1697265624999993,
+          "foundation_label": "F3E",
+          "prefix_margin": 1.2248046874999998,
+          "random_mean_drop": 0.7402618408203125,
+          "random_mean_lift": -0.7402618408203125,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F2E_F3E_role_inverse_minimal_F3E"
+        },
+        {
+          "cover_drop": 0.9039062499999995,
+          "cover_lift": -0.9039062499999995,
+          "cover_margin": 0.4220703124999998,
+          "foundation_label": "F3f",
+          "prefix_margin": 1.3259765624999993,
+          "random_mean_drop": 0.03935546874999929,
+          "random_mean_lift": -0.03935546874999929,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F2f_F3f_no_alias_plain_F3f"
+        },
+        {
+          "cover_drop": 0.25742187499999947,
+          "cover_lift": -0.25742187499999947,
+          "cover_margin": -0.32851562499999964,
+          "foundation_label": "F3T",
+          "prefix_margin": -0.07109375000000018,
+          "random_mean_drop": -0.8051452636718752,
+          "random_mean_lift": 0.8051452636718752,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F3T_F4T_no_alias_plain_F3T"
+        },
+        {
+          "cover_drop": -0.5193359374999993,
+          "cover_lift": 0.5193359374999993,
+          "cover_margin": -0.478515625,
+          "foundation_label": "F3E",
+          "prefix_margin": -0.9978515624999993,
+          "random_mean_drop": 0.6670623779296883,
+          "random_mean_lift": -0.6670623779296883,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F3E"
+        },
+        {
+          "cover_drop": -0.27089843749999876,
+          "cover_lift": 0.27089843749999876,
+          "cover_margin": 0.8787109374999993,
+          "foundation_label": "F4A",
+          "prefix_margin": 0.6078125000000005,
+          "random_mean_drop": -0.7567382812499992,
+          "random_mean_lift": 0.7567382812499992,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F4A"
+        },
+        {
+          "cover_drop": 0.6525390625000007,
+          "cover_lift": -0.6525390625000007,
+          "cover_margin": 0.17402343749999982,
+          "foundation_label": "F4E",
+          "prefix_margin": 0.8265625000000005,
+          "random_mean_drop": -1.3317291259765616,
+          "random_mean_lift": 1.3317291259765616,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_long_embedded_clause_F4E"
+        },
+        {
+          "cover_drop": 0.9187499999999993,
+          "cover_lift": -0.9187499999999993,
+          "cover_margin": 0.3425781250000002,
+          "foundation_label": "F4T",
+          "prefix_margin": 1.2613281249999995,
+          "random_mean_drop": -1.1782470703125003,
+          "random_mean_lift": 1.1782470703125003,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_system_process_F4T"
+        },
+        {
+          "cover_drop": -0.42714843749999964,
+          "cover_lift": 0.42714843749999964,
+          "cover_margin": 0.96875,
+          "foundation_label": "F4A",
+          "prefix_margin": 0.5416015625000004,
+          "random_mean_drop": -0.1764648437499996,
+          "random_mean_lift": 0.1764648437499996,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_system_process_F4A"
+        },
+        {
+          "cover_drop": -0.10507812500000036,
+          "cover_lift": 0.10507812500000036,
+          "cover_margin": 0.9253906250000004,
+          "foundation_label": "F4f",
+          "prefix_margin": 0.8203125,
+          "random_mean_drop": -0.7664001464843746,
+          "random_mean_lift": 0.7664001464843746,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F3f_F4f_no_alias_plain_F4f"
+        },
+        {
+          "cover_drop": 0.3759765625,
+          "cover_lift": -0.3759765625,
+          "cover_margin": 0.3947265624999998,
+          "foundation_label": "F4E",
+          "prefix_margin": 0.7707031249999998,
+          "random_mean_drop": -0.7849670410156251,
+          "random_mean_lift": 0.7849670410156251,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_counter_alias_hard_negative_F4E"
+        },
+        {
+          "cover_drop": 0.22812499999999947,
+          "cover_lift": -0.22812499999999947,
+          "cover_margin": 0.8011718750000005,
+          "foundation_label": "F4A",
+          "prefix_margin": 1.029296875,
+          "random_mean_drop": -0.6421997070312497,
+          "random_mean_lift": 0.6421997070312497,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F3A_F4A_no_alias_plain_F4A"
+        },
+        {
+          "cover_drop": -0.3943359375000002,
+          "cover_lift": 0.3943359375000002,
+          "cover_margin": 0.83984375,
+          "foundation_label": "F4T",
+          "prefix_margin": 0.4455078124999998,
+          "random_mean_drop": 0.80225830078125,
+          "random_mean_lift": -0.80225830078125,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F3T_F4T_system_process_F4T"
+        },
+        {
+          "cover_drop": 1.2693359375000002,
+          "cover_lift": -1.2693359375000002,
+          "cover_margin": 0.9753906249999993,
+          "foundation_label": "F5E",
+          "prefix_margin": 2.2447265624999995,
+          "random_mean_drop": -2.840695190429688,
+          "random_mean_lift": 2.840695190429688,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F5E_F6E_system_process_F5E"
+        },
+        {
+          "cover_drop": 0.3253906250000007,
+          "cover_lift": -0.3253906250000007,
+          "cover_margin": 0.052734375,
+          "foundation_label": "F5T",
+          "prefix_margin": 0.3781250000000007,
+          "random_mean_drop": -1.2486961364746085,
+          "random_mean_lift": 1.2486961364746085,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_system_process_F5T"
+        },
+        {
+          "cover_drop": -0.08378906250000018,
+          "cover_lift": 0.08378906250000018,
+          "cover_margin": 0.3996093749999998,
+          "foundation_label": "F5f",
+          "prefix_margin": 0.31582031249999964,
+          "random_mean_drop": -0.22994842529296933,
+          "random_mean_lift": 0.22994842529296933,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F4f_F5f_system_process_F5f"
+        },
+        {
+          "cover_drop": 1.4402343750000002,
+          "cover_lift": -1.4402343750000002,
+          "cover_margin": 0.8644531249999998,
+          "foundation_label": "F5A",
+          "prefix_margin": 2.3046875,
+          "random_mean_drop": -3.413691711425781,
+          "random_mean_lift": 3.413691711425781,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_compressed_minimal_F5A"
+        },
+        {
+          "cover_drop": -0.2236328125,
+          "cover_lift": 0.2236328125,
+          "cover_margin": 0.3857421875,
+          "foundation_label": "F5T",
+          "prefix_margin": 0.162109375,
+          "random_mean_drop": -0.42861175537109397,
+          "random_mean_lift": 0.42861175537109397,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_long_embedded_clause_F5T"
+        },
+        {
+          "cover_drop": -0.5453124999999996,
+          "cover_lift": 0.5453124999999996,
+          "cover_margin": 0.32421875,
+          "foundation_label": "F5f",
+          "prefix_margin": -0.22109374999999964,
+          "random_mean_drop": 0.2874786376953129,
+          "random_mean_lift": -0.2874786376953129,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F5f"
+        },
+        {
+          "cover_drop": -0.034570312499999645,
+          "cover_lift": 0.034570312499999645,
+          "cover_margin": 0.14570312499999982,
+          "foundation_label": "F5E",
+          "prefix_margin": 0.11113281250000018,
+          "random_mean_drop": -0.8327316284179687,
+          "random_mean_lift": 0.8327316284179687,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_no_alias_plain_F5E"
+        },
+        {
+          "cover_drop": 0.9642578124999996,
+          "cover_lift": -0.9642578124999996,
+          "cover_margin": 1.3005859375000002,
+          "foundation_label": "F5T",
+          "prefix_margin": 2.26484375,
+          "random_mean_drop": -3.3850021362304688,
+          "random_mean_lift": 3.3850021362304688,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F5T_F6T_system_process_F5T"
+        },
+        {
+          "cover_drop": -0.5669921874999995,
+          "cover_lift": 0.5669921874999995,
+          "cover_margin": 1.2960937499999998,
+          "foundation_label": "F6A",
+          "prefix_margin": 0.7291015625000004,
+          "random_mean_drop": 0.03085937500000102,
+          "random_mean_lift": -0.03085937500000102,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F6A"
+        },
+        {
+          "cover_drop": 0.06621093750000018,
+          "cover_lift": -0.06621093750000018,
+          "cover_margin": -0.27480468750000053,
+          "foundation_label": "F6f",
+          "prefix_margin": -0.20859375000000036,
+          "random_mean_drop": -0.6549240112304691,
+          "random_mean_lift": 0.6549240112304691,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F6f"
+        },
+        {
+          "cover_drop": -0.7244140625000002,
+          "cover_lift": 0.7244140625000002,
+          "cover_margin": 1.2781250000000002,
+          "foundation_label": "F6A",
+          "prefix_margin": 0.5537109375,
+          "random_mean_drop": 0.449462890625,
+          "random_mean_lift": -0.449462890625,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_system_process_F6A"
+        },
+        {
+          "cover_drop": -0.08398437500000089,
+          "cover_lift": 0.08398437500000089,
+          "cover_margin": -0.14179687499999982,
+          "foundation_label": "F6A",
+          "prefix_margin": -0.2257812500000007,
+          "random_mean_drop": -0.2625888824462903,
+          "random_mean_lift": 0.2625888824462903,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_concrete_human_F6A"
+        },
+        {
+          "cover_drop": 0.2863281249999998,
+          "cover_lift": -0.2863281249999998,
+          "cover_margin": -0.06015624999999947,
+          "foundation_label": "F6A",
+          "prefix_margin": 0.22617187500000036,
+          "random_mean_drop": -0.2948471069335934,
+          "random_mean_lift": 0.2948471069335934,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A"
+        },
+        {
+          "cover_drop": 0.09843749999999929,
+          "cover_lift": -0.09843749999999929,
+          "cover_margin": -0.13437499999999947,
+          "foundation_label": "F6E",
+          "prefix_margin": -0.03593750000000018,
+          "random_mean_drop": -0.34214019775390625,
+          "random_mean_lift": 0.34214019775390625,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F5E_F6E_compressed_minimal_F6E"
+        },
+        {
+          "cover_drop": -0.5546875,
+          "cover_lift": 0.5546875,
+          "cover_margin": 1.0167968749999998,
+          "foundation_label": "F6f",
+          "prefix_margin": 0.4621093749999998,
+          "random_mean_drop": 0.54375,
+          "random_mean_lift": -0.54375,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F6f"
+        },
+        {
+          "cover_drop": 0.16679687500000018,
+          "cover_lift": -0.16679687500000018,
+          "cover_margin": -0.494140625,
+          "foundation_label": "F6E",
+          "prefix_margin": -0.3273437499999998,
+          "random_mean_drop": -1.163188934326172,
+          "random_mean_lift": 1.163188934326172,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F5E_F6E_concrete_human_F6E"
+        },
+        {
+          "cover_drop": 1.9605468750000004,
+          "cover_lift": -1.9605468750000004,
+          "cover_margin": -0.025000000000000355,
+          "foundation_label": "F7A",
+          "prefix_margin": 1.935546875,
+          "random_mean_drop": -3.4144439697265625,
+          "random_mean_lift": 3.4144439697265625,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_long_embedded_clause_F7A"
+        },
+        {
+          "cover_drop": 1.7009765625000002,
+          "cover_lift": -1.7009765625000002,
+          "cover_margin": 0.039453124999999645,
+          "foundation_label": "F7f",
+          "prefix_margin": 1.7404296874999998,
+          "random_mean_drop": -3.1634033203125007,
+          "random_mean_lift": 3.1634033203125007,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_counter_alias_hard_negative_F7f"
+        },
+        {
+          "cover_drop": 1.9486328124999996,
+          "cover_lift": -1.9486328124999996,
+          "cover_margin": -0.29648437499999947,
+          "foundation_label": "F7A",
+          "prefix_margin": 1.6521484375000002,
+          "random_mean_drop": -3.1403747558593746,
+          "random_mean_lift": 3.1403747558593746,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F7A"
+        },
+        {
+          "cover_drop": 1.8796874999999993,
+          "cover_lift": -1.8796874999999993,
+          "cover_margin": -0.18124999999999947,
+          "foundation_label": "F7A",
+          "prefix_margin": 1.6984374999999998,
+          "random_mean_drop": -3.3663085937500004,
+          "random_mean_lift": 3.3663085937500004,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_counter_alias_hard_negative_F7A"
+        },
+        {
+          "cover_drop": 2.0238281250000005,
+          "cover_lift": -2.0238281250000005,
+          "cover_margin": 0.06210937499999947,
+          "foundation_label": "F7f",
+          "prefix_margin": 2.0859375,
+          "random_mean_drop": -3.5358428955078125,
+          "random_mean_lift": 3.5358428955078125,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f"
+        },
+        {
+          "cover_drop": 1.5099609374999998,
+          "cover_lift": -1.5099609374999998,
+          "cover_margin": -0.0693359375,
+          "foundation_label": "F7A",
+          "prefix_margin": 1.4406249999999998,
+          "random_mean_drop": -2.9721923828125,
+          "random_mean_lift": 2.9721923828125,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F7A"
+        },
+        {
+          "cover_drop": 2.1898437500000005,
+          "cover_lift": -2.1898437500000005,
+          "cover_margin": -0.0400390625,
+          "foundation_label": "F7f",
+          "prefix_margin": 2.1498046875000005,
+          "random_mean_drop": -3.2740303039550778,
+          "random_mean_lift": 3.2740303039550778,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f"
+        },
+        {
+          "cover_drop": 1.7271484374999995,
+          "cover_lift": -1.7271484374999995,
+          "cover_margin": -0.0859375,
+          "foundation_label": "F7A",
+          "prefix_margin": 1.6412109374999995,
+          "random_mean_drop": -2.8218750000000004,
+          "random_mean_lift": 2.8218750000000004,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F7A"
+        }
+      ]
+    },
+    "eraser_cover": {
+      "drop": {
+        "mean": -0.8223019736153739,
+        "median": -0.5318237304687501,
+        "n": 56,
+        "positive_share": 0.30357142857142855
+      },
+      "drop_vs_random": {
+        "mean_delta": -0.8944389888218472,
+        "median_delta": -0.5253906250000004,
+        "n": 56,
+        "sign_test_p": 0.9990792226057538,
+        "win_share": 0.30357142857142855,
+        "wins": 17
+      },
+      "lift": {
+        "mean": 0.8223019736153739,
+        "median": 0.5318237304687501,
+        "n": 56,
+        "positive_share": 0.6964285714285714
+      },
+      "lift_vs_random": {
+        "mean_delta": 0.8944389888218472,
+        "median_delta": 0.5253906250000004,
+        "n": 56,
+        "sign_test_p": 0.00228076637320411,
+        "win_share": 0.6964285714285714,
+        "wins": 39
+      },
+      "margins": {
+        "cover_ablated": {
+          "mean": 1.381300299508231,
+          "median": 0.8658203125000004,
+          "n": 56,
+          "positive_share": 0.7321428571428571
+        },
+        "prefix": {
+          "mean": 0.5589983258928571,
+          "median": 0.4955078125000001,
+          "n": 56,
+          "positive_share": 0.6785714285714286
+        }
+      },
+      "random_mean_drop": {
+        "mean": 0.07213701520647327,
+        "median": 0.0466064453124998,
+        "n": 56,
+        "positive_share": 0.5714285714285714
+      },
+      "random_mean_lift": {
+        "mean": -0.07213701520647327,
+        "median": -0.0466064453124998,
+        "n": 56,
+        "positive_share": 0.42857142857142855
+      },
+      "row_reports": [
+        {
+          "cover_drop": -1.0649414062500009,
+          "cover_lift": 1.0649414062500009,
+          "cover_margin": 2.1461914062500007,
+          "foundation_label": "F1T",
+          "prefix_margin": 1.0812499999999998,
+          "random_mean_drop": 0.19255371093749996,
+          "random_mean_lift": -0.19255371093749996,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F1T"
+        },
+        {
+          "cover_drop": 0.9138671875000002,
+          "cover_lift": -0.9138671875000002,
+          "cover_margin": -1.16015625,
+          "foundation_label": "F1A",
+          "prefix_margin": -0.24628906249999982,
+          "random_mean_drop": -0.2205322265624997,
+          "random_mean_lift": 0.2205322265624997,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F1A"
+        },
+        {
+          "cover_drop": -1.0138671875000016,
+          "cover_lift": 1.0138671875000016,
+          "cover_margin": 0.6820312500000014,
+          "foundation_label": "F1f",
+          "prefix_margin": -0.3318359375000002,
+          "random_mean_drop": -0.3031250000000001,
+          "random_mean_lift": 0.3031250000000001,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_system_process_F1f"
+        },
+        {
+          "cover_drop": 1.0960937499999988,
+          "cover_lift": -1.0960937499999988,
+          "cover_margin": -0.7199218749999989,
+          "foundation_label": "F1E",
+          "prefix_margin": 0.3761718749999998,
+          "random_mean_drop": 0.11037597656249976,
+          "random_mean_lift": -0.11037597656249976,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F7E_F1E_concrete_human_F1E"
+        },
+        {
+          "cover_drop": -0.3947021484375002,
+          "cover_lift": 0.3947021484375002,
+          "cover_margin": 0.9023193359375004,
+          "foundation_label": "F1E",
+          "prefix_margin": 0.5076171875000002,
+          "random_mean_drop": 0.032177734375000044,
+          "random_mean_lift": -0.032177734375000044,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F1E"
+        },
+        {
+          "cover_drop": 1.745166015625001,
+          "cover_lift": -1.745166015625001,
+          "cover_margin": -1.261767578125001,
+          "foundation_label": "F1A",
+          "prefix_margin": 0.4833984375,
+          "random_mean_drop": 0.12834472656250018,
+          "random_mean_lift": -0.12834472656250018,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_concrete_human_F1A"
+        },
+        {
+          "cover_drop": -0.5406982421875002,
+          "cover_lift": 0.5406982421875002,
+          "cover_margin": 1.1278076171875,
+          "foundation_label": "F1T",
+          "prefix_margin": 0.5871093749999998,
+          "random_mean_drop": -0.13913574218750002,
+          "random_mean_lift": 0.13913574218750002,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_concrete_human_F1T"
+        },
+        {
+          "cover_drop": -0.33193359374999964,
+          "cover_lift": 0.33193359374999964,
+          "cover_margin": 0.77685546875,
+          "foundation_label": "F1A",
+          "prefix_margin": 0.44492187500000036,
+          "random_mean_drop": 0.025634765625000222,
+          "random_mean_lift": -0.025634765625000222,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_counter_alias_hard_negative_F1A"
+        },
+        {
+          "cover_drop": 0.1586425781250007,
+          "cover_lift": -0.1586425781250007,
+          "cover_margin": -0.8484863281250004,
+          "foundation_label": "F2E",
+          "prefix_margin": -0.6898437499999996,
+          "random_mean_drop": -0.18759765624999947,
+          "random_mean_lift": 0.18759765624999947,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_counter_alias_hard_negative_F2E"
+        },
+        {
+          "cover_drop": -1.7872314453125,
+          "cover_lift": 1.7872314453125,
+          "cover_margin": 1.5237548828125007,
+          "foundation_label": "F2f",
+          "prefix_margin": -0.2634765624999993,
+          "random_mean_drop": 0.001855468750000866,
+          "random_mean_lift": -0.001855468750000866,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F1f_F2f_no_alias_plain_F2f"
+        },
+        {
+          "cover_drop": -0.7990234374999989,
+          "cover_lift": 0.7990234374999989,
+          "cover_margin": 0.3240234374999993,
+          "foundation_label": "F2A",
+          "prefix_margin": -0.47499999999999964,
+          "random_mean_drop": -0.2118408203124995,
+          "random_mean_lift": 0.2118408203124995,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_system_process_F2A"
+        },
+        {
+          "cover_drop": -0.30622558593749893,
+          "cover_lift": 0.30622558593749893,
+          "cover_margin": -0.2566650390625007,
+          "foundation_label": "F2E",
+          "prefix_margin": -0.5628906249999996,
+          "random_mean_drop": -0.08669433593749964,
+          "random_mean_lift": 0.08669433593749964,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F2E"
+        },
+        {
+          "cover_drop": 2.090576171875,
+          "cover_lift": -2.090576171875,
+          "cover_margin": -3.6067871093750004,
+          "foundation_label": "F2T",
+          "prefix_margin": -1.5162109375000004,
+          "random_mean_drop": -0.20847167968750047,
+          "random_mean_lift": 0.20847167968750047,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F1T_F2T_long_embedded_clause_F2T"
+        },
+        {
+          "cover_drop": 0.8265502929687507,
+          "cover_lift": -0.8265502929687507,
+          "cover_margin": -1.9421752929687504,
+          "foundation_label": "F2T",
+          "prefix_margin": -1.1156249999999996,
+          "random_mean_drop": -0.19653320312499956,
+          "random_mean_lift": 0.19653320312499956,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F2T"
+        },
+        {
+          "cover_drop": -0.683258056640625,
+          "cover_lift": 0.683258056640625,
+          "cover_margin": -0.024749755859375,
+          "foundation_label": "F2E",
+          "prefix_margin": -0.7080078125,
+          "random_mean_drop": -0.39582519531249993,
+          "random_mean_lift": 0.39582519531249993,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_long_embedded_clause_F2E"
+        },
+        {
+          "cover_drop": -0.3109863281249998,
+          "cover_lift": 0.3109863281249998,
+          "cover_margin": -0.483154296875,
+          "foundation_label": "F2E",
+          "prefix_margin": -0.7941406249999998,
+          "random_mean_drop": -0.27299804687499996,
+          "random_mean_lift": 0.27299804687499996,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_long_embedded_clause_F2E"
+        },
+        {
+          "cover_drop": -0.6480468750000004,
+          "cover_lift": 0.6480468750000004,
+          "cover_margin": 2.017578125,
+          "foundation_label": "F3T",
+          "prefix_margin": 1.3695312499999996,
+          "random_mean_drop": 0.17663574218749967,
+          "random_mean_lift": -0.17663574218749967,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F2T_F3T_system_process_F3T"
+        },
+        {
+          "cover_drop": 1.3633789062499995,
+          "cover_lift": -1.3633789062499995,
+          "cover_margin": -1.9631835937499993,
+          "foundation_label": "F3A",
+          "prefix_margin": -0.5998046874999998,
+          "random_mean_drop": -0.12502441406249976,
+          "random_mean_lift": 0.12502441406249976,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F3A"
+        },
+        {
+          "cover_drop": -0.6939331054687505,
+          "cover_lift": 0.6939331054687505,
+          "cover_margin": 2.2669799804687507,
+          "foundation_label": "F3T",
+          "prefix_margin": 1.5730468750000002,
+          "random_mean_drop": 0.4020996093750001,
+          "random_mean_lift": -0.4020996093750001,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F2T_F3T_role_inverse_minimal_F3T"
+        },
+        {
+          "cover_drop": -0.3213378906250002,
+          "cover_lift": 0.3213378906250002,
+          "cover_margin": 1.6424316406250004,
+          "foundation_label": "F3A",
+          "prefix_margin": 1.3210937500000002,
+          "random_mean_drop": 0.18588867187500013,
+          "random_mean_lift": -0.18588867187500013,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F2A_F3A_no_alias_plain_F3A"
+        },
+        {
+          "cover_drop": 1.1696533203125012,
+          "cover_lift": -1.1696533203125012,
+          "cover_margin": 0.05515136718749858,
+          "foundation_label": "F3E",
+          "prefix_margin": 1.2248046874999998,
+          "random_mean_drop": 0.34074707031249996,
+          "random_mean_lift": -0.34074707031249996,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F2E_F3E_role_inverse_minimal_F3E"
+        },
+        {
+          "cover_drop": 0.49665527343749893,
+          "cover_lift": -0.49665527343749893,
+          "cover_margin": 0.8293212890625004,
+          "foundation_label": "F3f",
+          "prefix_margin": 1.3259765624999993,
+          "random_mean_drop": 0.3460205078124994,
+          "random_mean_lift": -0.3460205078124994,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F2f_F3f_no_alias_plain_F3f"
+        },
+        {
+          "cover_drop": -1.0587890624999998,
+          "cover_lift": 1.0587890624999998,
+          "cover_margin": 0.9876953124999996,
+          "foundation_label": "F3T",
+          "prefix_margin": -0.07109375000000018,
+          "random_mean_drop": 0.047290039062499845,
+          "random_mean_lift": -0.047290039062499845,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F3T_F4T_no_alias_plain_F3T"
+        },
+        {
+          "cover_drop": 1.7171386718750004,
+          "cover_lift": -1.7171386718750004,
+          "cover_margin": -2.7149902343749996,
+          "foundation_label": "F3E",
+          "prefix_margin": -0.9978515624999993,
+          "random_mean_drop": -0.16540527343749922,
+          "random_mean_lift": 0.16540527343749922,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F3E"
+        },
+        {
+          "cover_drop": -1.2041015625000009,
+          "cover_lift": 1.2041015625000009,
+          "cover_margin": 1.8119140625000014,
+          "foundation_label": "F4A",
+          "prefix_margin": 0.6078125000000005,
+          "random_mean_drop": -0.38669433593749925,
+          "random_mean_lift": 0.38669433593749925,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F4A"
+        },
+        {
+          "cover_drop": -1.0886962890624998,
+          "cover_lift": 1.0886962890624998,
+          "cover_margin": 1.9152587890625004,
+          "foundation_label": "F4E",
+          "prefix_margin": 0.8265625000000005,
+          "random_mean_drop": -0.16818847656249947,
+          "random_mean_lift": 0.16818847656249947,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_long_embedded_clause_F4E"
+        },
+        {
+          "cover_drop": -0.6234375000000005,
+          "cover_lift": 0.6234375000000005,
+          "cover_margin": 1.884765625,
+          "foundation_label": "F4T",
+          "prefix_margin": 1.2613281249999995,
+          "random_mean_drop": 0.09511718749999964,
+          "random_mean_lift": -0.09511718749999964,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_system_process_F4T"
+        },
+        {
+          "cover_drop": -0.52294921875,
+          "cover_lift": 0.52294921875,
+          "cover_margin": 1.0645507812500004,
+          "foundation_label": "F4A",
+          "prefix_margin": 0.5416015625000004,
+          "random_mean_drop": -0.32451171874999973,
+          "random_mean_lift": 0.32451171874999973,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_system_process_F4A"
+        },
+        {
+          "cover_drop": -1.4423828125,
+          "cover_lift": 1.4423828125,
+          "cover_margin": 2.2626953125,
+          "foundation_label": "F4f",
+          "prefix_margin": 0.8203125,
+          "random_mean_drop": -0.29265136718749996,
+          "random_mean_lift": 0.29265136718749996,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F3f_F4f_no_alias_plain_F4f"
+        },
+        {
+          "cover_drop": -0.32521972656249876,
+          "cover_lift": 0.32521972656249876,
+          "cover_margin": 1.0959228515624986,
+          "foundation_label": "F4E",
+          "prefix_margin": 0.7707031249999998,
+          "random_mean_drop": -0.016699218750000244,
+          "random_mean_lift": 0.016699218750000244,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_counter_alias_hard_negative_F4E"
+        },
+        {
+          "cover_drop": -1.2476562500000004,
+          "cover_lift": 1.2476562500000004,
+          "cover_margin": 2.2769531250000004,
+          "foundation_label": "F4A",
+          "prefix_margin": 1.029296875,
+          "random_mean_drop": -0.03041992187500009,
+          "random_mean_lift": 0.03041992187500009,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F3A_F4A_no_alias_plain_F4A"
+        },
+        {
+          "cover_drop": 0.11503906250000018,
+          "cover_lift": -0.11503906250000018,
+          "cover_margin": 0.33046874999999964,
+          "foundation_label": "F4T",
+          "prefix_margin": 0.4455078124999998,
+          "random_mean_drop": -0.38488769531250044,
+          "random_mean_lift": 0.38488769531250044,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F3T_F4T_system_process_F4T"
+        },
+        {
+          "cover_drop": -3.1578613281250005,
+          "cover_lift": 3.1578613281250005,
+          "cover_margin": 5.402587890625,
+          "foundation_label": "F5E",
+          "prefix_margin": 2.2447265624999995,
+          "random_mean_drop": 0.4001708984374993,
+          "random_mean_lift": -0.4001708984374993,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F5E_F6E_system_process_F5E"
+        },
+        {
+          "cover_drop": -0.9095275878906239,
+          "cover_lift": 0.9095275878906239,
+          "cover_margin": 1.2876525878906246,
+          "foundation_label": "F5T",
+          "prefix_margin": 0.3781250000000007,
+          "random_mean_drop": 0.2098144531250009,
+          "random_mean_lift": -0.2098144531250009,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_system_process_F5T"
+        },
+        {
+          "cover_drop": -0.6762939453125014,
+          "cover_lift": 0.6762939453125014,
+          "cover_margin": 0.9921142578125011,
+          "foundation_label": "F5f",
+          "prefix_margin": 0.31582031249999964,
+          "random_mean_drop": 0.12336425781249982,
+          "random_mean_lift": -0.12336425781249982,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F4f_F5f_system_process_F5f"
+        },
+        {
+          "cover_drop": -3.9267822265624996,
+          "cover_lift": 3.9267822265624996,
+          "cover_margin": 6.2314697265625,
+          "foundation_label": "F5A",
+          "prefix_margin": 2.3046875,
+          "random_mean_drop": 0.6348876953125,
+          "random_mean_lift": -0.6348876953125,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_compressed_minimal_F5A"
+        },
+        {
+          "cover_drop": 0.1369140625000007,
+          "cover_lift": -0.1369140625000007,
+          "cover_margin": 0.02519531249999929,
+          "foundation_label": "F5T",
+          "prefix_margin": 0.162109375,
+          "random_mean_drop": 0.11730957031250011,
+          "random_mean_lift": -0.11730957031250011,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_long_embedded_clause_F5T"
+        },
+        {
+          "cover_drop": 0.6177276611328129,
+          "cover_lift": -0.6177276611328129,
+          "cover_margin": -0.8388214111328125,
+          "foundation_label": "F5f",
+          "prefix_margin": -0.22109374999999964,
+          "random_mean_drop": -0.09916992187499962,
+          "random_mean_lift": 0.09916992187499962,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F5f"
+        },
+        {
+          "cover_drop": -0.5470581054687509,
+          "cover_lift": 0.5470581054687509,
+          "cover_margin": 0.6581909179687511,
+          "foundation_label": "F5E",
+          "prefix_margin": 0.11113281250000018,
+          "random_mean_drop": 0.1627441406250002,
+          "random_mean_lift": -0.1627441406250002,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_no_alias_plain_F5E"
+        },
+        {
+          "cover_drop": -4.207153320312499,
+          "cover_lift": 4.207153320312499,
+          "cover_margin": 6.471997070312499,
+          "foundation_label": "F5T",
+          "prefix_margin": 2.26484375,
+          "random_mean_drop": 0.3417480468749997,
+          "random_mean_lift": -0.3417480468749997,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F5T_F6T_system_process_F5T"
+        },
+        {
+          "cover_drop": 0.5455078125000004,
+          "cover_lift": -0.5455078125000004,
+          "cover_margin": 0.18359375,
+          "foundation_label": "F6A",
+          "prefix_margin": 0.7291015625000004,
+          "random_mean_drop": 0.05129394531250042,
+          "random_mean_lift": -0.05129394531250042,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F6A"
+        },
+        {
+          "cover_drop": -0.4976318359375007,
+          "cover_lift": 0.4976318359375007,
+          "cover_margin": 0.28903808593750036,
+          "foundation_label": "F6f",
+          "prefix_margin": -0.20859375000000036,
+          "random_mean_drop": 0.045922851562499756,
+          "random_mean_lift": -0.045922851562499756,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F6f"
+        },
+        {
+          "cover_drop": 0.7982421875000014,
+          "cover_lift": -0.7982421875000014,
+          "cover_margin": -0.24453125000000142,
+          "foundation_label": "F6A",
+          "prefix_margin": 0.5537109375,
+          "random_mean_drop": -0.1353759765625,
+          "random_mean_lift": 0.1353759765625,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_system_process_F6A"
+        },
+        {
+          "cover_drop": -0.046984863281251066,
+          "cover_lift": 0.046984863281251066,
+          "cover_margin": -0.17879638671874964,
+          "foundation_label": "F6A",
+          "prefix_margin": -0.2257812500000007,
+          "random_mean_drop": -0.018041992187500577,
+          "random_mean_lift": 0.018041992187500577,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_concrete_human_F6A"
+        },
+        {
+          "cover_drop": -0.28562011718750036,
+          "cover_lift": 0.28562011718750036,
+          "cover_margin": 0.5117919921875007,
+          "foundation_label": "F6A",
+          "prefix_margin": 0.22617187500000036,
+          "random_mean_drop": 0.3072509765625002,
+          "random_mean_lift": -0.3072509765625002,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A"
+        },
+        {
+          "cover_drop": 0.30245361328125053,
+          "cover_lift": -0.30245361328125053,
+          "cover_margin": -0.3383911132812507,
+          "foundation_label": "F6E",
+          "prefix_margin": -0.03593750000000018,
+          "random_mean_drop": 0.1667236328124997,
+          "random_mean_lift": -0.1667236328124997,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F5E_F6E_compressed_minimal_F6E"
+        },
+        {
+          "cover_drop": 0.06445312499999911,
+          "cover_lift": -0.06445312499999911,
+          "cover_margin": 0.3976562500000007,
+          "foundation_label": "F6f",
+          "prefix_margin": 0.4621093749999998,
+          "random_mean_drop": -0.023364257812500067,
+          "random_mean_lift": 0.023364257812500067,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F6f"
+        },
+        {
+          "cover_drop": -0.41747436523437553,
+          "cover_lift": 0.41747436523437553,
+          "cover_margin": 0.09013061523437571,
+          "foundation_label": "F6E",
+          "prefix_margin": -0.3273437499999998,
+          "random_mean_drop": -0.07302246093750031,
+          "random_mean_lift": 0.07302246093750031,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F5E_F6E_concrete_human_F6E"
+        },
+        {
+          "cover_drop": -4.1114501953125,
+          "cover_lift": 4.1114501953125,
+          "cover_margin": 6.0469970703125,
+          "foundation_label": "F7A",
+          "prefix_margin": 1.935546875,
+          "random_mean_drop": 0.5915283203125001,
+          "random_mean_lift": -0.5915283203125001,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_long_embedded_clause_F7A"
+        },
+        {
+          "cover_drop": -3.78779296875,
+          "cover_lift": 3.78779296875,
+          "cover_margin": 5.52822265625,
+          "foundation_label": "F7f",
+          "prefix_margin": 1.7404296874999998,
+          "random_mean_drop": 0.4159667968749998,
+          "random_mean_lift": -0.4159667968749998,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_counter_alias_hard_negative_F7f"
+        },
+        {
+          "cover_drop": -3.158251953125,
+          "cover_lift": 3.158251953125,
+          "cover_margin": 4.810400390625,
+          "foundation_label": "F7A",
+          "prefix_margin": 1.6521484375000002,
+          "random_mean_drop": 0.4686279296875002,
+          "random_mean_lift": -0.4686279296875002,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F7A"
+        },
+        {
+          "cover_drop": -4.0555664062500005,
+          "cover_lift": 4.0555664062500005,
+          "cover_margin": 5.75400390625,
+          "foundation_label": "F7A",
+          "prefix_margin": 1.6984374999999998,
+          "random_mean_drop": 0.40056152343749984,
+          "random_mean_lift": -0.40056152343749984,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_counter_alias_hard_negative_F7A"
+        },
+        {
+          "cover_drop": -4.12197265625,
+          "cover_lift": 4.12197265625,
+          "cover_margin": 6.20791015625,
+          "foundation_label": "F7f",
+          "prefix_margin": 2.0859375,
+          "random_mean_drop": 0.4735351562500002,
+          "random_mean_lift": -0.4735351562500002,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f"
+        },
+        {
+          "cover_drop": -3.4190429687500012,
+          "cover_lift": 3.4190429687500012,
+          "cover_margin": 4.859667968750001,
+          "foundation_label": "F7A",
+          "prefix_margin": 1.4406249999999998,
+          "random_mean_drop": 0.4434570312499997,
+          "random_mean_lift": -0.4434570312499997,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F7A"
+        },
+        {
+          "cover_drop": -3.448040771484375,
+          "cover_lift": 3.448040771484375,
+          "cover_margin": 5.597845458984375,
+          "foundation_label": "F7f",
+          "prefix_margin": 2.1498046875000005,
+          "random_mean_drop": 0.5742675781250003,
+          "random_mean_lift": -0.5742675781250003,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f"
+        },
+        {
+          "cover_drop": -3.0230468750000012,
+          "cover_lift": 3.0230468750000012,
+          "cover_margin": 4.664257812500001,
+          "foundation_label": "F7A",
+          "prefix_margin": 1.6412109374999995,
+          "random_mean_drop": 0.4919677734374994,
+          "random_mean_lift": -0.4919677734374994,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F7A"
+        }
+      ]
+    }
+  },
+  "gates": {
+    "max_sign_test_p": 0.05,
+    "min_positive_effect_share": 0.55,
+    "min_random_win_share": 0.6
+  },
+  "input_file": "stage7_foundation_pilot_20260517.jsonl",
+  "input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "learned_component_scores": {
+    "carrier_rank": [
+      {
+        "component": "L10MLP",
+        "kind": "mlp",
+        "layer": 10,
+        "mean_drop": 0.19263044084821426,
+        "mean_lift": -0.19263044084821426,
+        "n": 56,
+        "positive_drop_share": 0.625
+      },
+      {
+        "component": "L8MLP",
+        "kind": "mlp",
+        "layer": 8,
+        "mean_drop": 0.0581089564732142,
+        "mean_lift": -0.0581089564732142,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L9H7",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.04365059988839285,
+        "mean_lift": -0.04365059988839285,
+        "n": 56,
+        "positive_drop_share": 0.6785714285714286
+      },
+      {
+        "component": "L9MLP",
+        "kind": "mlp",
+        "layer": 9,
+        "mean_drop": 0.042285156249999956,
+        "mean_lift": -0.042285156249999956,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L8H11",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.04183175223214286,
+        "mean_lift": -0.04183175223214286,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L8H10",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.03379429408482142,
+        "mean_lift": -0.03379429408482142,
+        "n": 56,
+        "positive_drop_share": 0.6607142857142857
+      },
+      {
+        "component": "L8H8",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.03185860770089285,
+        "mean_lift": -0.03185860770089285,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L10H1",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.02860281808035711,
+        "mean_lift": -0.02860281808035711,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L9H9",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.027446637834821406,
+        "mean_lift": -0.027446637834821406,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L8H7",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.027125767299107064,
+        "mean_lift": -0.027125767299107064,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L11H2",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.02516043526785713,
+        "mean_lift": -0.02516043526785713,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L8H2",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.024473353794642803,
+        "mean_lift": -0.024473353794642803,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L9H2",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.02360491071428572,
+        "mean_lift": -0.02360491071428572,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L8H0",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.023535156249999942,
+        "mean_lift": -0.023535156249999942,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L11H7",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.02338692801339291,
+        "mean_lift": -0.02338692801339291,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L8H4",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.02334507533482146,
+        "mean_lift": -0.02334507533482146,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L9H8",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.020591517857142843,
+        "mean_lift": -0.020591517857142843,
+        "n": 56,
+        "positive_drop_share": 0.625
+      },
+      {
+        "component": "L8H9",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.020078822544642754,
+        "mean_lift": -0.020078822544642754,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L11H8",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.01828438895089273,
+        "mean_lift": -0.01828438895089273,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L9H5",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.017607770647321472,
+        "mean_lift": -0.017607770647321472,
+        "n": 56,
+        "positive_drop_share": 0.625
+      },
+      {
+        "component": "L11H10",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.01756068638392851,
+        "mean_lift": -0.01756068638392851,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L9H1",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.01699916294642851,
+        "mean_lift": -0.01699916294642851,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L11H5",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.015318080357142836,
+        "mean_lift": -0.015318080357142836,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L10H9",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.014946637834821355,
+        "mean_lift": -0.014946637834821355,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L10H11",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.014678083147321441,
+        "mean_lift": -0.014678083147321441,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L8H6",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.014144461495535674,
+        "mean_lift": -0.014144461495535674,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L11H4",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.013947405133928623,
+        "mean_lift": -0.013947405133928623,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L10H10",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.01356201171874998,
+        "mean_lift": -0.01356201171874998,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L8H1",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.012962123325892734,
+        "mean_lift": -0.012962123325892734,
+        "n": 56,
+        "positive_drop_share": 0.625
+      },
+      {
+        "component": "L11H3",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.012928989955357168,
+        "mean_lift": -0.012928989955357168,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L10H0",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.012135532924107184,
+        "mean_lift": -0.012135532924107184,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L8H3",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.01171526227678567,
+        "mean_lift": -0.01171526227678567,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L8H5",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.01142578124999998,
+        "mean_lift": -0.01142578124999998,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L11H6",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.009793526785714277,
+        "mean_lift": -0.009793526785714277,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L10H7",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.008274623325892794,
+        "mean_lift": -0.008274623325892794,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L10H2",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.007474190848214308,
+        "mean_lift": -0.007474190848214308,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L9H4",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.0065290178571427715,
+        "mean_lift": -0.0065290178571427715,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L10H8",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.005644880022321426,
+        "mean_lift": -0.005644880022321426,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L10H5",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.004342215401785603,
+        "mean_lift": -0.004342215401785603,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L9H6",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.004317801339285721,
+        "mean_lift": -0.004317801339285721,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L9H0",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.0041294642857142416,
+        "mean_lift": -0.0041294642857142416,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L9H11",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.003937639508928527,
+        "mean_lift": -0.003937639508928527,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L9H10",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.0032505580357142954,
+        "mean_lift": -0.0032505580357142954,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L10H4",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.0031947544642856795,
+        "mean_lift": -0.0031947544642856795,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L11H1",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.0019304547991071397,
+        "mean_lift": -0.0019304547991071397,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L11H0",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": -0.0003627232142857016,
+        "mean_lift": 0.0003627232142857016,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L10H3",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": -0.003688267299107254,
+        "mean_lift": 0.003688267299107254,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L11H9",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": -0.006635393415178619,
+        "mean_lift": 0.006635393415178619,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L10H6",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": -0.0076695033482143205,
+        "mean_lift": 0.0076695033482143205,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L11H11",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": -0.008354840959821466,
+        "mean_lift": 0.008354840959821466,
+        "n": 56,
+        "positive_drop_share": 0.44642857142857145
+      },
+      {
+        "component": "L9H3",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": -0.02021309988839288,
+        "mean_lift": 0.02021309988839288,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L11MLP",
+        "kind": "mlp",
+        "layer": 11,
+        "mean_drop": -0.7368303026471822,
+        "mean_lift": 0.7368303026471822,
+        "n": 56,
+        "positive_drop_share": 0.3392857142857143
+      }
+    ],
+    "eraser_rank": [
+      {
+        "component": "L11MLP",
+        "kind": "mlp",
+        "layer": 11,
+        "mean_drop": -0.7368303026471822,
+        "mean_lift": 0.7368303026471822,
+        "n": 56,
+        "positive_drop_share": 0.3392857142857143
+      },
+      {
+        "component": "L9H3",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": -0.02021309988839288,
+        "mean_lift": 0.02021309988839288,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L11H11",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": -0.008354840959821466,
+        "mean_lift": 0.008354840959821466,
+        "n": 56,
+        "positive_drop_share": 0.44642857142857145
+      },
+      {
+        "component": "L10H6",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": -0.0076695033482143205,
+        "mean_lift": 0.0076695033482143205,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L11H9",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": -0.006635393415178619,
+        "mean_lift": 0.006635393415178619,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L10H3",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": -0.003688267299107254,
+        "mean_lift": 0.003688267299107254,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L11H0",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": -0.0003627232142857016,
+        "mean_lift": 0.0003627232142857016,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L11H1",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.0019304547991071397,
+        "mean_lift": -0.0019304547991071397,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L10H4",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.0031947544642856795,
+        "mean_lift": -0.0031947544642856795,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L9H10",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.0032505580357142954,
+        "mean_lift": -0.0032505580357142954,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L9H11",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.003937639508928527,
+        "mean_lift": -0.003937639508928527,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L9H0",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.0041294642857142416,
+        "mean_lift": -0.0041294642857142416,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L9H6",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.004317801339285721,
+        "mean_lift": -0.004317801339285721,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L10H5",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.004342215401785603,
+        "mean_lift": -0.004342215401785603,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L10H8",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.005644880022321426,
+        "mean_lift": -0.005644880022321426,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L9H4",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.0065290178571427715,
+        "mean_lift": -0.0065290178571427715,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L10H2",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.007474190848214308,
+        "mean_lift": -0.007474190848214308,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L10H7",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.008274623325892794,
+        "mean_lift": -0.008274623325892794,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L11H6",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.009793526785714277,
+        "mean_lift": -0.009793526785714277,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L8H5",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.01142578124999998,
+        "mean_lift": -0.01142578124999998,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L8H3",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.01171526227678567,
+        "mean_lift": -0.01171526227678567,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L10H0",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.012135532924107184,
+        "mean_lift": -0.012135532924107184,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L11H3",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.012928989955357168,
+        "mean_lift": -0.012928989955357168,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L8H1",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.012962123325892734,
+        "mean_lift": -0.012962123325892734,
+        "n": 56,
+        "positive_drop_share": 0.625
+      },
+      {
+        "component": "L10H10",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.01356201171874998,
+        "mean_lift": -0.01356201171874998,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L11H4",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.013947405133928623,
+        "mean_lift": -0.013947405133928623,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L8H6",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.014144461495535674,
+        "mean_lift": -0.014144461495535674,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L10H11",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.014678083147321441,
+        "mean_lift": -0.014678083147321441,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L10H9",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.014946637834821355,
+        "mean_lift": -0.014946637834821355,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L11H5",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.015318080357142836,
+        "mean_lift": -0.015318080357142836,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L9H1",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.01699916294642851,
+        "mean_lift": -0.01699916294642851,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L11H10",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.01756068638392851,
+        "mean_lift": -0.01756068638392851,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L9H5",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.017607770647321472,
+        "mean_lift": -0.017607770647321472,
+        "n": 56,
+        "positive_drop_share": 0.625
+      },
+      {
+        "component": "L11H8",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.01828438895089273,
+        "mean_lift": -0.01828438895089273,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L8H9",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.020078822544642754,
+        "mean_lift": -0.020078822544642754,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L9H8",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.020591517857142843,
+        "mean_lift": -0.020591517857142843,
+        "n": 56,
+        "positive_drop_share": 0.625
+      },
+      {
+        "component": "L8H4",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.02334507533482146,
+        "mean_lift": -0.02334507533482146,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L11H7",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.02338692801339291,
+        "mean_lift": -0.02338692801339291,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L8H0",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.023535156249999942,
+        "mean_lift": -0.023535156249999942,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L9H2",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.02360491071428572,
+        "mean_lift": -0.02360491071428572,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L8H2",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.024473353794642803,
+        "mean_lift": -0.024473353794642803,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L11H2",
+        "kind": "head",
+        "layer": 11,
+        "mean_drop": 0.02516043526785713,
+        "mean_lift": -0.02516043526785713,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L8H7",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.027125767299107064,
+        "mean_lift": -0.027125767299107064,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L9H9",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.027446637834821406,
+        "mean_lift": -0.027446637834821406,
+        "n": 56,
+        "positive_drop_share": 0.5535714285714286
+      },
+      {
+        "component": "L10H1",
+        "kind": "head",
+        "layer": 10,
+        "mean_drop": 0.02860281808035711,
+        "mean_lift": -0.02860281808035711,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L8H8",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.03185860770089285,
+        "mean_lift": -0.03185860770089285,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L8H10",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.03379429408482142,
+        "mean_lift": -0.03379429408482142,
+        "n": 56,
+        "positive_drop_share": 0.6607142857142857
+      },
+      {
+        "component": "L8H11",
+        "kind": "head",
+        "layer": 8,
+        "mean_drop": 0.04183175223214286,
+        "mean_lift": -0.04183175223214286,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L9MLP",
+        "kind": "mlp",
+        "layer": 9,
+        "mean_drop": 0.042285156249999956,
+        "mean_lift": -0.042285156249999956,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L9H7",
+        "kind": "head",
+        "layer": 9,
+        "mean_drop": 0.04365059988839285,
+        "mean_lift": -0.04365059988839285,
+        "n": 56,
+        "positive_drop_share": 0.6785714285714286
+      },
+      {
+        "component": "L8MLP",
+        "kind": "mlp",
+        "layer": 8,
+        "mean_drop": 0.0581089564732142,
+        "mean_lift": -0.0581089564732142,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L10MLP",
+        "kind": "mlp",
+        "layer": 10,
+        "mean_drop": 0.19263044084821426,
+        "mean_lift": -0.19263044084821426,
+        "n": 56,
+        "positive_drop_share": 0.625
+      }
+    ],
+    "prefix_margin": {
+      "mean": 0.48985072544642855,
+      "median": 0.6041992187499998,
+      "n": 56,
+      "positive_share": 0.6964285714285714
+    }
+  },
+  "model": {
+    "model_name": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "model_source": "EleutherAI/pythia-160m",
+    "torch": "2.5.1+cu124",
+    "transformers": "5.8.1"
+  },
+  "random_carrier_covers": [
+    [
+      "L11MLP",
+      "L9H5",
+      "L9H3",
+      "L11H3",
+      "L8H7",
+      "L8H2"
+    ],
+    [
+      "L11MLP",
+      "L9H8",
+      "L9H4",
+      "L10H3",
+      "L8H1",
+      "L8H5"
+    ],
+    [
+      "L11MLP",
+      "L9H2",
+      "L9H8",
+      "L11H8",
+      "L8H4",
+      "L8H5"
+    ],
+    [
+      "L11MLP",
+      "L10H10",
+      "L9H9",
+      "L11H11",
+      "L8H3",
+      "L8H7"
+    ],
+    [
+      "L11MLP",
+      "L11H6",
+      "L9H3",
+      "L10H5",
+      "L8H5",
+      "L8H7"
+    ],
+    [
+      "L11MLP",
+      "L9H0",
+      "L9H1",
+      "L11H0",
+      "L8H6",
+      "L8H5"
+    ],
+    [
+      "L11MLP",
+      "L11H2",
+      "L9H8",
+      "L8H4",
+      "L8H8",
+      "L8H7"
+    ],
+    [
+      "L11MLP",
+      "L10H4",
+      "L9H6",
+      "L9H9",
+      "L8H2",
+      "L8H1"
+    ]
+  ],
+  "random_control_match_profile": {
+    "carrier_cover": {
+      "all_exact_layer_kind": false,
+      "has_kind_only_singleton_fallback": true,
+      "has_unmatched_fallback": false,
+      "policy": "Random controls use same layer/kind replacements when available. For singleton MLP blocks, the fallback preserves kind across candidate layers; if that is impossible, the report marks an unmatched fallback.",
+      "rows": [
+        {
+          "component": "L10MLP",
+          "exact_pool_size": 0,
+          "kind": "mlp",
+          "kind_pool_size": 1,
+          "layer": 10,
+          "match_level": "kind_only_singleton_layer"
+        },
+        {
+          "component": "L8MLP",
+          "exact_pool_size": 0,
+          "kind": "mlp",
+          "kind_pool_size": 1,
+          "layer": 8,
+          "match_level": "kind_only_singleton_layer"
+        },
+        {
+          "component": "L9H7",
+          "exact_pool_size": 11,
+          "kind": "head",
+          "kind_pool_size": 45,
+          "layer": 9,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L9MLP",
+          "exact_pool_size": 0,
+          "kind": "mlp",
+          "kind_pool_size": 1,
+          "layer": 9,
+          "match_level": "kind_only_singleton_layer"
+        },
+        {
+          "component": "L8H11",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 45,
+          "layer": 8,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L8H10",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 45,
+          "layer": 8,
+          "match_level": "layer_kind_exact"
+        }
+      ]
+    },
+    "eraser_cover": {
+      "all_exact_layer_kind": false,
+      "has_kind_only_singleton_fallback": true,
+      "has_unmatched_fallback": false,
+      "policy": "Random controls use same layer/kind replacements when available. For singleton MLP blocks, the fallback preserves kind across candidate layers; if that is impossible, the report marks an unmatched fallback.",
+      "rows": [
+        {
+          "component": "L11MLP",
+          "exact_pool_size": 0,
+          "kind": "mlp",
+          "kind_pool_size": 3,
+          "layer": 11,
+          "match_level": "kind_only_singleton_layer"
+        },
+        {
+          "component": "L9H3",
+          "exact_pool_size": 11,
+          "kind": "head",
+          "kind_pool_size": 43,
+          "layer": 9,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L11H11",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 43,
+          "layer": 11,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L10H6",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 43,
+          "layer": 10,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L11H9",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 43,
+          "layer": 11,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L10H3",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 43,
+          "layer": 10,
+          "match_level": "layer_kind_exact"
+        }
+      ]
+    }
+  },
+  "random_eraser_covers": [
+    [
+      "L9MLP",
+      "L9H10",
+      "L11H8",
+      "L10H0",
+      "L11H1",
+      "L10H11"
+    ],
+    [
+      "L8MLP",
+      "L9H1",
+      "L11H1",
+      "L10H10",
+      "L11H2",
+      "L10H5"
+    ],
+    [
+      "L8MLP",
+      "L9H0",
+      "L11H1",
+      "L10H9",
+      "L11H8",
+      "L10H4"
+    ],
+    [
+      "L8MLP",
+      "L9H7",
+      "L11H4",
+      "L10H2",
+      "L11H7",
+      "L10H8"
+    ],
+    [
+      "L9MLP",
+      "L9H4",
+      "L11H0",
+      "L10H10",
+      "L11H3",
+      "L10H7"
+    ],
+    [
+      "L10MLP",
+      "L9H8",
+      "L11H6",
+      "L10H10",
+      "L11H2",
+      "L10H5"
+    ],
+    [
+      "L9MLP",
+      "L9H10",
+      "L11H4",
+      "L10H9",
+      "L11H8",
+      "L10H2"
+    ],
+    [
+      "L10MLP",
+      "L9H1",
+      "L11H2",
+      "L10H7",
+      "L11H10",
+      "L10H2"
+    ]
+  ],
+  "schema_version": "stage27j_output_side_component_attribution.v1",
+  "source_contracts": {
+    "stage27i": {
+      "expected_status": "NULL_PREDICTION_POSITION_NEURON_STEERING_NOT_ESTABLISHED",
+      "formal_gate_valid": true,
+      "source_file": "stage27i_prediction_position_steering_20260521.json",
+      "source_sha256": "fd9b8fa6734460b20ebcb9a41a50ca0cbc24a6949a5e2ae2240a4af44fb251c7",
+      "source_status": "NULL_PREDICTION_POSITION_NEURON_STEERING_NOT_ESTABLISHED"
+    },
+    "stage7_prefix": {
+      "expected_status": "READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD",
+      "formal_gate_valid": true,
+      "source_file": "stage7_cas_prefix_likelihood_20260517.json",
+      "source_sha256": "33971f02017af364aa60a0d865eb8af441c045cd0efdb5a6aefa9ffd781f91ea",
+      "source_status": "READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD"
+    }
+  },
+  "split_contract": {
+    "eval_rows": 56,
+    "eval_rows_per_drive": 8,
+    "learn_eval_disjoint": true,
+    "learn_rows": 56,
+    "learn_rows_per_drive": 8,
+    "per_drive": 16
+  },
+  "status": "PASS_BOUNDED_OUTPUT_SIDE_CARRIER_AND_ERASER_ATTRIBUTION"
+}
