@@ -1,0 +1,103 @@
+{
+  "claim_boundary": {
+    "claim_if_null": "Qwen2.5-1.5B did not establish cross-architecture drive-local calibrated eraser steering under the Stage 27P gates; Stage 27O remains a Pythia-family cross-scale result.",
+    "claim_if_pass": "Drive-local calibrated output-side eraser-cover steering transfers from Pythia-family models to Qwen2.5-1.5B under Qwen-specific component covers and matched random controls.",
+    "forbidden_claims": "Do not claim universal cross-architecture steering, complete circuits, exact model-wide causal explanation, durable weight edits, open-ended generation control, or raw CAS-symbol understanding from Stage 27P.",
+    "grey_status": "GREY_CROSS_ARCH_QWEN_DRIVE_LOCAL_CALIBRATED_ERASER_STEERING_PARTIAL",
+    "null_status": "NULL_CROSS_ARCH_QWEN_DRIVE_LOCAL_CALIBRATED_ERASER_STEERING_NOT_ESTABLISHED",
+    "pass_status": "PASS_BOUNDED_CROSS_ARCH_QWEN_DRIVE_LOCAL_CALIBRATED_ERASER_STEERING",
+    "scope_boundary": "Stage 27P is bounded cross-architecture evidence for Qwen drive-local calibrated output-side eraser-cover intervention over CPL2 likelihood margins. It is not universal architecture evidence, not weight editing, not complete circuit discovery, not model-wide control, and not visible free-form generation control."
+  },
+  "execution_order": [
+    "commit_preregistration_runner_and_tests_before_gpu_result",
+    "verify_source_contracts_and_loaded_revision",
+    "select_balanced_qwen_split",
+    "learn_drive_local_qwen_eraser_covers_on_learn_rows",
+    "calibrate_one_scale_per_drive_on_learn_rows",
+    "evaluate_56_held_out_rows_against_drive_matched_random_controls",
+    "record_bounded_cross_architecture_result"
+  ],
+  "formal_anchor": "Cross-architecture replication of the Stage 27O drive-local calibrated eraser protocol with Qwen-specific component covers, pinned model revision, held-out split, and matched random controls.",
+  "gates": [
+    {
+      "criterion": "Stage 16 Qwen CPL2 PASS, Stage 27O Pythia-1B PASS, and Stage 27P-A Qwen adapter PASS source contracts are verified.",
+      "kind": "pass_floor",
+      "name": "source_contracts"
+    },
+    {
+      "criterion": "Loaded Qwen model revision matches 8faed761d45a263340a0528343f099c05c9a4323.",
+      "kind": "pass_floor",
+      "name": "model_revision"
+    },
+    {
+      "criterion": "All seven Foundation drives produce exactly six learned Qwen eraser components from learn rows only.",
+      "kind": "pass_floor",
+      "name": "drive_local_cover_contract"
+    },
+    {
+      "criterion": "Evaluation uses exactly 56 held-out rows, 8 held-out rows per drive, and no learn/eval overlap.",
+      "kind": "pass_floor",
+      "name": "controlled_split"
+    },
+    {
+      "criterion": "Qwen drive-local calibrated eraser suppression beats matched random eraser suppression on at least 60% of 56 held-out rows with sign-test p<0.05.",
+      "kind": "primary",
+      "name": "qwen_drive_local_eval"
+    },
+    {
+      "criterion": "Passing Qwen drive-local mode must have positive mean increment and positive increment share at least 55%.",
+      "kind": "primary",
+      "name": "positive_effect_floor"
+    }
+  ],
+  "method": [
+    "Commit this pre-registration, runner, and tests before any Stage 27P GPU result is generated.",
+    "Verify Stage 16 Qwen CPL2 PASS, Stage 27O Pythia drive-local PASS, and Stage 27P-A Qwen hook-adapter PASS source contracts.",
+    "Load Qwen/Qwen2.5-1.5B at revision 8faed761d45a263340a0528343f099c05c9a4323.",
+    "Select 16 CPL2-eligible hard-partner rows per Foundation drive from the Stage 7 fixture using seed 27043.",
+    "Split the selected rows into 8 learn rows and 8 held-out eval rows per drive.",
+    "Enumerate Qwen output-side candidate components over layers 24-27: every attention head plus one MLP block per layer.",
+    "For each Foundation drive, learn a separate Qwen eraser cover on that drive's 8 learn rows only.",
+    "For each Foundation drive, choose one eraser scale from the fixed grid by maximum mean margin increment on that drive's learn rows.",
+    "Evaluate each drive-local cover only on held-out rows from its matching drive.",
+    "Compare held-out increments against matched random covers sampled separately for each drive-local cover."
+  ],
+  "motivation": "Stage 27O showed that drive-local output-side eraser covers solve Pythia-1B cross-scale steering. Stage 27P tests the same drive-local method on Qwen2.5-1.5B after Stage 27P-A validated the Qwen hook adapter.",
+  "required_inputs": {
+    "candidate_layers": [
+      24,
+      25,
+      26,
+      27
+    ],
+    "cover_size_per_drive": 6,
+    "eraser_scale_grid": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "eval_rows_per_drive": 8,
+    "fixture": "stage7_foundation_pilot_20260517.jsonl",
+    "held_out_eval_rows": 56,
+    "intervention_positions": "continuation_prediction_positions_only",
+    "learn_rows_per_drive": 8,
+    "model": "Qwen/Qwen2.5-1.5B",
+    "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "n_random_covers_per_drive": 8,
+    "per_drive": 16,
+    "random_control_policy": "each Qwen drive-local eraser cover compared against matched random covers for the same drive and same selected scale",
+    "selection_seed": 27043,
+    "stage16_cpl2_report": "STAGE16_QWEN15B_CPL2_REPORT_20260519.json",
+    "stage16_cpl2_status": "PASS_CLEAN_STAGE16_QWEN15B_CPL2_REPLICATES",
+    "stage16_manifest": "stage16_qwen15b_activations_manifest_20260519.json",
+    "stage27o_report": "stage27o_drive_local_cross_scale_eraser_steering_20260521.json",
+    "stage27o_status": "PASS_BOUNDED_CROSS_SCALE_DRIVE_LOCAL_CALIBRATED_ERASER_STEERING",
+    "stage27pa_report": "stage27p_qwen_hook_adapter_preflight_20260521.json",
+    "stage27pa_status": "PASS_QWEN_HOOK_ADAPTER_PREFLIGHT"
+  },
+  "stage": "27P",
+  "status": "PREREGISTERED_GPU_REQUIRED",
+  "validation": {}
+}
