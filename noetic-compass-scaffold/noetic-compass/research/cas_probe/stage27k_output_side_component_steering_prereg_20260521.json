@@ -1,0 +1,76 @@
+{
+  "claim_boundary": {
+    "claim_if_null": "Stage 27J remains attribution evidence only; direct carrier/eraser scaling did not establish held-out likelihood steering beyond matched random controls.",
+    "claim_if_pass": "Within Pythia-160M, Stage 27J late-layer carrier and eraser covers can be used as an output-side intervention surface that shifts readable-prefix semantic likelihood margins on held-out rows beyond matched random controls.",
+    "forbidden_claims": "Do not claim complete circuits, exact model-wide causal explanation, durable weight edits, open-ended generation control, cross-model steering, or raw CAS-symbol understanding from Stage 27K.",
+    "grey_status": "GREY_OUTPUT_SIDE_COMPONENT_STEERING_PARTIAL",
+    "null_status": "NULL_OUTPUT_SIDE_COMPONENT_STEERING_NOT_ESTABLISHED",
+    "pass_status": "PASS_BOUNDED_OUTPUT_SIDE_COMPONENT_STEERING",
+    "scope_boundary": "Stage 27K is bounded late-layer intervention steering over Pythia-160M CPL2 likelihood margins. It is not weight editing, not complete circuit discovery, not model-wide control, not cross-model control, and not visible free-form generation control.",
+    "strong_status": "PASS_BOUNDED_OUTPUT_SIDE_COMPONENT_STEERING_WITH_POLARITY_CONTROL"
+  },
+  "execution_order": [
+    "commit_preregistration_and_runner_before_gpu_result",
+    "verify_source_contracts",
+    "load_stage27j_covers_without_relearning",
+    "evaluate_held_out_output_side_scaling_against_matched_random_controls",
+    "record_bounded_result"
+  ],
+  "formal_anchor": "Output-side component intervention: scale the late component contributions that Stage 27J identified at the exact prediction positions used by the CPL2 continuation objective.",
+  "gates": [
+    {
+      "criterion": "Stage 7 readable-prefix source PASS and Stage 27J output-side attribution PASS are both verified.",
+      "kind": "pass_floor",
+      "name": "source_contracts"
+    },
+    {
+      "criterion": "Evaluation uses the recreated Stage 27J held-out rows only.",
+      "kind": "pass_floor",
+      "name": "held_out_split"
+    },
+    {
+      "criterion": "Combined carrier amplification plus eraser suppression increases held-out readable-prefix likelihood margin more than matched random combined interventions on at least 60% of rows with sign-test p<0.05.",
+      "kind": "primary",
+      "name": "combined_steering_eval"
+    },
+    {
+      "criterion": "Combined intervention has positive mean margin increment and positive increment share at least 55%.",
+      "kind": "primary",
+      "name": "positive_effect_floor"
+    },
+    {
+      "criterion": "Carrier polarity flip reduces held-out margin more than matched random carrier flip on at least 60% of rows with sign-test p<0.05.",
+      "kind": "secondary",
+      "name": "carrier_polarity_control"
+    }
+  ],
+  "method": [
+    "Commit this pre-registration and runner before any Stage 27K GPU result is generated.",
+    "Verify the Stage 7 readable-prefix source PASS and Stage 27J output-side attribution PASS source contract.",
+    "Recreate the Stage 27J learn/eval split deterministically and evaluate only the held-out eval rows.",
+    "Load the Stage 27J carrier and eraser covers; do not relearn covers in Stage 27K.",
+    "Score readable-prefix CPL2 margins with no intervention.",
+    "Score carrier amplification, eraser suppression, and combined carrier-amplification-plus-eraser-suppression at continuation prediction positions.",
+    "Score matched random combined interventions with the same cover sizes and component matching policy.",
+    "Use carrier polarity flip as a destructive-control diagnostic."
+  ],
+  "motivation": "Stage 27J found late output-side carrier and eraser components for readable-prefix likelihood margins. Stage 27K tests whether those attributed covers are usable as a direct intervention surface: amplify carriers, suppress erasers, and compare the held-out margin lift against matched random interventions.",
+  "required_inputs": {
+    "carrier_flip_scale": -1.0,
+    "carrier_scale": 2.0,
+    "eraser_scale": 0.0,
+    "fixture": "stage7_foundation_pilot_20260517.jsonl",
+    "intervention_positions": "continuation_prediction_positions_only",
+    "intervention_rows": "Stage 27J held-out eval split only",
+    "model": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "random_control_policy": "same layer/kind when available; singleton MLP blocks fall back to same-kind different-layer controls",
+    "stage27j_report": "stage27j_output_side_component_attribution_20260521.json",
+    "stage27j_status": "PASS_BOUNDED_OUTPUT_SIDE_CARRIER_AND_ERASER_ATTRIBUTION",
+    "stage7_prefix_report": "stage7_cas_prefix_likelihood_20260517.json",
+    "stage7_prefix_status": "READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD"
+  },
+  "stage": "27K",
+  "status": "PREREGISTERED_GPU_RECOMMENDED",
+  "validation": {}
+}
