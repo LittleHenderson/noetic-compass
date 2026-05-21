@@ -1,0 +1,83 @@
+{
+  "claim_boundary": {
+    "claim_if_null": "Stage 27F neuron-cover causality remains valid, but direct amplification of those covers did not establish readout-level steering under the preregistered controls.",
+    "claim_if_pass": "Within Pythia-160M and the trained Stage 7 Foundation readout, amplifying class-specific Stage 27F MLP-neuron covers increases target-vs-hard-partner margins, while polarity-flipping those same covers decreases those margins, both above matched random neuron-cover controls.",
+    "forbidden_claims": "Do not claim free-form generation control, model-wide control, complete circuits, weight editing, internal CAS compiler behavior, cross-model steering, or raw CAS-symbol understanding from Stage 27G.",
+    "grey_status": "GREY_MLP_NEURON_COVER_STEERING_PARTIAL",
+    "null_status": "NULL_MLP_NEURON_COVER_STEERING_NOT_ESTABLISHED",
+    "pass_status": "PASS_BOUNDED_MLP_NEURON_COVER_STEERING",
+    "scope_boundary": "Stage 27G is readout-level steering evidence over Stage 27F MLP-neuron covers. It is not free-form generation control, not weight editing, not a complete circuit, not model-wide control, and not a claim that raw CAS symbols are understood."
+  },
+  "execution_order": [
+    "commit_preregistration_and_runner_before_gpu_result",
+    "verify_stage27f_contract",
+    "amplify_target_and_partner_covers_on_test_split",
+    "compare_against_same_layer_random_intervention_controls",
+    "record_bounded_result"
+  ],
+  "formal_anchor": "Intervention surface refinement: Stage 27F identifies causal neuron covers; Stage 27G tests directional control by amplifying and polarity-flipping those covers, then measuring the signed readout-margin response.",
+  "gates": [
+    {
+      "criterion": "Stage 7 activation artifact hash matches the locked manifest.",
+      "kind": "pass_floor",
+      "name": "artifact_contract"
+    },
+    {
+      "criterion": "Stage 27F source report is PASS and exposes per-class MLP-neuron covers.",
+      "kind": "pass_floor",
+      "name": "stage27f_contract"
+    },
+    {
+      "criterion": "Target-cover amplification beats random target-layer amplification on at least 60% of eval rows with sign-test p<0.05.",
+      "kind": "primary",
+      "name": "target_amplification_control"
+    },
+    {
+      "criterion": "Target-cover polarity flip reduces target-vs-partner margin more than random target-layer polarity flips on at least 60% of eval rows with sign-test p<0.05.",
+      "kind": "primary",
+      "name": "target_polarity_flip_control"
+    },
+    {
+      "criterion": "Both target-amplification margin increases and target-flip margin reductions are positive on at least 55% of eval rows.",
+      "kind": "primary",
+      "name": "bidirectional_positive_share"
+    },
+    {
+      "criterion": "Report the share of rows where target polarity flip and partner amplification push target-vs-partner margin below zero; not required for PASS.",
+      "kind": "diagnostic",
+      "name": "flip_share"
+    }
+  ],
+  "method": [
+    "Commit this pre-registration and runner before any Stage 27G GPU result is generated.",
+    "Refit the locked Stage 7 28-way Foundation probe on the locked layer-6 focus-token artifact.",
+    "Verify Stage 27F is PASS, uses the locked artifact, and exposes per-class MLP-neuron covers.",
+    "On held-out Stage 7 test rows, read the target Foundation and hard-partner Foundation for each row.",
+    "Amplify the target class's Stage 27F neuron cover by the preregistered scale and measure target-vs-partner margin increase.",
+    "Polarity-flip the same target class neuron cover by the preregistered negative scale and measure target-vs-partner margin decrease or sign flip.",
+    "Compare both directional effects against same-size/same-layer random neuron-cover controls using the same intervention scale.",
+    "Amplify the hard-partner class's cover as a countersteering diagnostic, but do not use it as the primary PASS gate because the partner cover may be inactive on target-class prompts.",
+    "Report actual margin-flip share for polarity flip and partner amplification as diagnostics; signed readout-margin steering is the primary gate."
+  ],
+  "motivation": "Stage 27F established sparse MLP-neuron covers that causally support class-specific Foundation margins. Stage 27G tests whether those same covers can steer the readout when amplified.",
+  "required_inputs": {
+    "amplification_scale": 2.0,
+    "eval_rows_per_class": 4,
+    "fixture": "stage7_foundation_pilot_20260517.jsonl",
+    "locked_readout": {
+      "key": "X_focus",
+      "layer": 6,
+      "name": "focus_token"
+    },
+    "model": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "polarity_flip_scale": -1.0,
+    "stage27f_report": "stage27f_targeted_mlp_neuron_covers_20260521.json",
+    "stage27f_status": "PASS_BOUNDED_TARGETED_MLP_NEURON_COVERS",
+    "stage7_activation_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+    "stage7_activations": "stage7_foundation_pilot_activations_20260517.npz"
+  },
+  "stage": "27G",
+  "status": "PREREGISTERED_GPU_RECOMMENDED",
+  "validation": {}
+}
