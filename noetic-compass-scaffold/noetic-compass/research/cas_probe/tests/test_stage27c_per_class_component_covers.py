@@ -147,3 +147,69 @@ def test_status_boundaries() -> None:
     assert stage27c._status_from_gates(report) == "NULL_PER_CLASS_COMPONENT_COVERS_NOT_ESTABLISHED"
     report["artifact_contract"]["formal_gate_valid"] = False
     assert stage27c._status_from_gates(report) == "STAGE27C_PER_CLASS_COVERS_DIAGNOSTIC_ONLY_CONTRACT_MISMATCH"
+
+
+def test_evaluate_covers_reports_mean_gain_ratio_not_unstable_row_ratio() -> None:
+    stage27c = _load_module("stage27c_runner_gain_ratio")
+    original_labels = stage27c._FOUNDATION_LABELS
+    old_label_index = stage27c._LABEL_TO_INDEX
+    old_encode = stage27c._encode_row
+    old_cache = stage27c._forward_vec_and_cache_heads
+    old_patch = stage27c._forward_vec_with_head_patches
+    old_probe_margin = stage27c._probe_margin
+    try:
+        stage27c._FOUNDATION_LABELS = ("F1T", "F1A")
+        stage27c._LABEL_TO_INDEX = {"F1T": 0, "F1A": 1}
+
+        selected = [stage27c.Component("head", 0, 0), stage27c.Component("head", 0, 1)]
+        eval_rows = [
+            {"sample_id": "r1", "foundation_label": "F1T", "contrast_partner_foundation": "F1A", "full_margin": 1.0},
+            {"sample_id": "r2", "foundation_label": "F1T", "contrast_partner_foundation": "F1A", "full_margin": 2.0},
+            {"sample_id": "r3", "foundation_label": "F1T", "contrast_partner_foundation": "F1A", "full_margin": 4.0},
+        ]
+
+        def fake_encode(row, _tokenizer, _device):
+            return row, 0
+
+        def fake_cache(_encoded, _focus_idx, _model, _layers):
+            return np.asarray([0.0]), {}
+
+        def fake_patch(encoded, _focus_idx, _model, *, ablate_components, patch_components, clean_cache):
+            del ablate_components, clean_cache
+            names = [component.name for component in patch_components]
+            if not names:
+                return np.asarray([1.0])
+            if names == ["L0H1"]:
+                return np.asarray([4.0])
+            if names == ["L0H0", "L0H1"]:
+                return np.asarray([encoded["full_margin"]])
+            return np.asarray([2.0])
+
+        stage27c._encode_row = fake_encode
+        stage27c._forward_vec_and_cache_heads = fake_cache
+        stage27c._forward_vec_with_head_patches = fake_patch
+        stage27c._probe_margin = lambda _fitted, vector, _target_idx, _partner_idx: float(vector[0])
+
+        result = stage27c._evaluate_covers(
+            eval_rows,
+            np.asarray([0, 0, 0]),
+            {},
+            None,
+            None,
+            None,
+            selected,
+            {"F1T": ["L0H1"]},
+            [["L0H0"]],
+            global_prefix_size=1,
+        )
+    finally:
+        stage27c._FOUNDATION_LABELS = original_labels
+        stage27c._LABEL_TO_INDEX = old_label_index
+        stage27c._encode_row = old_encode
+        stage27c._forward_vec_and_cache_heads = old_cache
+        stage27c._forward_vec_with_head_patches = old_patch
+        stage27c._probe_margin = old_probe_margin
+
+    assert result["full_global_ceiling"]["mean_class_gain"] == 3.0
+    assert result["full_global_ceiling"]["mean_full_global_gain"] == 4.0 / 3.0
+    assert result["full_global_ceiling"]["mean_class_gain_fraction_of_mean_full_global_gain"] == 2.25

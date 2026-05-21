@@ -333,8 +333,9 @@ def _evaluate_covers(
 
     full_gain = np.asarray(full_global_margins, dtype=np.float64) - np.asarray(ablated_margins, dtype=np.float64)
     class_gain = np.asarray(class_margins, dtype=np.float64) - np.asarray(ablated_margins, dtype=np.float64)
-    valid = np.abs(full_gain) > 1e-8
-    ceiling_fraction = float(np.mean(class_gain[valid] / full_gain[valid])) if np.any(valid) else 0.0
+    mean_full_gain = float(np.mean(full_gain)) if full_gain.size else 0.0
+    mean_class_gain = float(np.mean(class_gain)) if class_gain.size else 0.0
+    ceiling_fraction = float(mean_class_gain / mean_full_gain) if abs(mean_full_gain) > 1e-8 else 0.0
     return {
         "row_reports": row_reports,
         "margins": {
@@ -349,7 +350,9 @@ def _evaluate_covers(
             "class_vs_random_subset_mean": _paired_summary(class_margins, random_mean_margins),
         },
         "full_global_ceiling": {
-            "mean_class_gain_fraction_of_full_global_gain": ceiling_fraction,
+            "mean_class_gain": mean_class_gain,
+            "mean_full_global_gain": mean_full_gain,
+            "mean_class_gain_fraction_of_mean_full_global_gain": ceiling_fraction,
             "mean_full_global_minus_class_margin": float(np.mean(np.asarray(full_global_margins) - np.asarray(class_margins))),
         },
         "pair_kind_breakdown": by_pair_kind,
@@ -531,7 +534,9 @@ def _write_md(report: dict[str, Any], out_md: Path) -> None:
         f"(share `{global_pair['win_share']:.4f}`, p `{global_pair['sign_test_p']:.6g}`, mean delta `{global_pair['mean_delta']:.6f}`)",
         f"- Class > random-subset mean: `{random_pair['wins']} / {random_pair['n']}` "
         f"(share `{random_pair['win_share']:.4f}`, p `{random_pair['sign_test_p']:.6g}`, mean delta `{random_pair['mean_delta']:.6f}`)",
-        f"- Mean class gain fraction of full-global gain: `{eval_block['full_global_ceiling']['mean_class_gain_fraction_of_full_global_gain']:.6f}`",
+        f"- Mean class gain: `{eval_block['full_global_ceiling']['mean_class_gain']:.6f}`",
+        f"- Mean full-global gain: `{eval_block['full_global_ceiling']['mean_full_global_gain']:.6f}`",
+        f"- Mean class gain / mean full-global gain: `{eval_block['full_global_ceiling']['mean_class_gain_fraction_of_mean_full_global_gain']:.6f}`",
         "",
         "## Pair-Kind Breakdown",
         "",

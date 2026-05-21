@@ -1,0 +1,3275 @@
+{
+  "activation_manifest_file": "stage7_foundation_pilot_activations_manifest_20260517.json",
+  "activations_file": "stage7_foundation_pilot_activations_20260517.npz",
+  "activations_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+  "artifact_contract": {
+    "actual_activation_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+    "expected_activation_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+    "formal_gate_valid": true,
+    "status": "LOCKED_ARTIFACT_MATCH"
+  },
+  "boundary": "Stage 27C is bounded to Pythia-160M Stage 7 Foundation probe-logit margins inside the Stage 26/27A validated six-head component family. It does not test Noetic/40-Element covers, token sonar, exact neurons, complete circuits, raw CAS-symbol understanding, or generation control.",
+  "component_path_contract": {
+    "expected_selected_components": [
+      "L5H3",
+      "L5H5",
+      "L5H0",
+      "L5H10",
+      "L1H6",
+      "L5H6"
+    ],
+    "formal_gate_valid": true,
+    "stage26_file": "stage26_component_attribution_20260521.json",
+    "stage26_selected_components": [
+      "L5H3",
+      "L5H5",
+      "L5H0",
+      "L5H10",
+      "L1H6",
+      "L5H6"
+    ],
+    "stage26_sha256": "24a902785769d1a89326738d0a39167f2155eb80f1bdd41a425d3a53542dc800",
+    "stage26_status": "PASS_BOUNDED_COMPONENT_ATTRIBUTION",
+    "stage27a_file": "stage27_component_path_patching_20260521.json",
+    "stage27a_selected_components": [
+      "L5H3",
+      "L5H5",
+      "L5H0",
+      "L5H10",
+      "L1H6",
+      "L5H6"
+    ],
+    "stage27a_sha256": "b945b417d2970466abfd8f9ab5d42680f260122aac21883918e0266cf948ea65",
+    "stage27a_status": "PASS_BOUNDED_COMPONENT_PATH_PATCHING"
+  },
+  "cover_size": 3,
+  "device": "cuda",
+  "elapsed_seconds": 42.679886813275516,
+  "evaluation": {
+    "full_global_ceiling": {
+      "mean_class_gain": 3.570533234619233,
+      "mean_class_gain_fraction_of_mean_full_global_gain": 3.564595128928418,
+      "mean_full_global_gain": 1.0016658569840442,
+      "mean_full_global_minus_class_margin": -2.5688673776351885
+    },
+    "margins": {
+      "ablated": {
+        "mean": 5.3696409649042405,
+        "median": 5.821983040937539,
+        "n": 112,
+        "positive_share": 0.875
+      },
+      "class_cover": {
+        "mean": 8.940174199523474,
+        "median": 8.960807691445059,
+        "n": 112,
+        "positive_share": 1.0
+      },
+      "full_global": {
+        "mean": 6.371306821888284,
+        "median": 6.311510904617727,
+        "n": 112,
+        "positive_share": 1.0
+      },
+      "global_prefix": {
+        "mean": 5.268135546179697,
+        "median": 5.500653480821103,
+        "n": 112,
+        "positive_share": 0.9642857142857143
+      },
+      "random_subset_mean": {
+        "mean": 5.557485565427373,
+        "median": 5.557997112609815,
+        "n": 112,
+        "positive_share": 0.9821428571428571
+      }
+    },
+    "pair_kind_breakdown": {
+      "same_drive_diff_register": {
+        "class_cover": {
+          "mean": 8.940174199523474,
+          "median": 8.960807691445059,
+          "n": 112,
+          "positive_share": 1.0
+        },
+        "class_vs_global_prefix": {
+          "mean_delta": 3.672038653343776,
+          "median_delta": 2.7319910151835423,
+          "n": 112,
+          "sign_test_p": 4.511471635427656e-29,
+          "win_share": 0.9732142857142857,
+          "wins": 109
+        },
+        "class_vs_random_mean": {
+          "mean_delta": 3.382688634096099,
+          "median_delta": 2.858100475022302,
+          "n": 112,
+          "sign_test_p": 2.1763008371575765e-32,
+          "win_share": 0.9910714285714286,
+          "wins": 111
+        },
+        "n": 112
+      }
+    },
+    "paired_controls": {
+      "class_vs_global_prefix": {
+        "mean_delta": 3.672038653343776,
+        "median_delta": 2.7319910151835423,
+        "n": 112,
+        "sign_test_p": 4.511471635427656e-29,
+        "win_share": 0.9732142857142857,
+        "wins": 109
+      },
+      "class_vs_random_subset_mean": {
+        "mean_delta": 3.382688634096099,
+        "median_delta": 2.858100475022302,
+        "n": 112,
+        "sign_test_p": 2.1763008371575765e-32,
+        "win_share": 0.9910714285714286,
+        "wins": 111
+      }
+    },
+    "row_reports": [
+      {
+        "ablated_margin": 3.0665567916238827,
+        "class_cover": [
+          "L5H5",
+          "L5H3",
+          "L1H6"
+        ],
+        "class_cover_margin": 9.24652013534105,
+        "class_minus_global_prefix": 3.503071600339166,
+        "class_minus_random_mean": 3.659161658473712,
+        "full_global_margin": 7.5994086833378685,
+        "global_prefix_margin": 5.7434485350018845,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1A",
+        "random_subset_mean_margin": 5.5873584768673386,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1T",
+        "target": "F1T"
+      },
+      {
+        "ablated_margin": 2.255897655372282,
+        "class_cover": [
+          "L5H5",
+          "L5H3",
+          "L1H6"
+        ],
+        "class_cover_margin": 9.001284066873007,
+        "class_minus_global_prefix": 3.7615425823970394,
+        "class_minus_random_mean": 3.4227327620049692,
+        "full_global_margin": 8.006303571634717,
+        "global_prefix_margin": 5.239741484475967,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1A",
+        "random_subset_mean_margin": 5.5785513048680375,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1T",
+        "target": "F1T"
+      },
+      {
+        "ablated_margin": 1.210713881226503,
+        "class_cover": [
+          "L5H5",
+          "L5H3",
+          "L1H6"
+        ],
+        "class_cover_margin": 6.83361073948629,
+        "class_minus_global_prefix": 3.151515505011589,
+        "class_minus_random_mean": 3.0586353075779704,
+        "full_global_margin": 5.7825263169712,
+        "global_prefix_margin": 3.6820952344747013,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1A",
+        "random_subset_mean_margin": 3.7749754319083197,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_concrete_human_F1T",
+        "target": "F1T"
+      },
+      {
+        "ablated_margin": 1.6581688447953455,
+        "class_cover": [
+          "L5H5",
+          "L5H3",
+          "L1H6"
+        ],
+        "class_cover_margin": 8.869506620497132,
+        "class_minus_global_prefix": 3.325083246520741,
+        "class_minus_random_mean": 4.111785718221833,
+        "full_global_margin": 7.444640712309427,
+        "global_prefix_margin": 5.544423373976391,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1A",
+        "random_subset_mean_margin": 4.757720902275299,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_system_process_F1T",
+        "target": "F1T"
+      },
+      {
+        "ablated_margin": 5.283998716862568,
+        "class_cover": [
+          "L5H10",
+          "L1H6",
+          "L5H0"
+        ],
+        "class_cover_margin": 11.924433996069052,
+        "class_minus_global_prefix": 10.683029146966774,
+        "class_minus_random_mean": 5.265881279370026,
+        "full_global_margin": 7.154206990450153,
+        "global_prefix_margin": 1.241404849102277,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1T",
+        "random_subset_mean_margin": 6.658552716699026,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1A",
+        "target": "F1A"
+      },
+      {
+        "ablated_margin": 4.8867576054781905,
+        "class_cover": [
+          "L5H10",
+          "L1H6",
+          "L5H0"
+        ],
+        "class_cover_margin": 9.647839104126842,
+        "class_minus_global_prefix": 9.850500737847803,
+        "class_minus_random_mean": 3.940654889150972,
+        "full_global_margin": 3.7987911544436557,
+        "global_prefix_margin": -0.2026616337209619,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1T",
+        "random_subset_mean_margin": 5.70718421497587,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1A",
+        "target": "F1A"
+      },
+      {
+        "ablated_margin": 4.773883058107895,
+        "class_cover": [
+          "L5H10",
+          "L1H6",
+          "L5H0"
+        ],
+        "class_cover_margin": 6.8575697636219735,
+        "class_minus_global_prefix": 4.498819809387147,
+        "class_minus_random_mean": 2.9740266050380653,
+        "full_global_margin": 3.760093239976772,
+        "global_prefix_margin": 2.3587499542348263,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1T",
+        "random_subset_mean_margin": 3.883543158583908,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_concrete_human_F1A",
+        "target": "F1A"
+      },
+      {
+        "ablated_margin": 5.02583290577151,
+        "class_cover": [
+          "L5H10",
+          "L1H6",
+          "L5H0"
+        ],
+        "class_cover_margin": 10.423433903267988,
+        "class_minus_global_prefix": 9.56794719752773,
+        "class_minus_random_mean": 4.542547462752134,
+        "full_global_margin": 5.486817206443192,
+        "global_prefix_margin": 0.8554867057402573,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1T",
+        "random_subset_mean_margin": 5.880886440515853,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F1T_F1A_system_process_F1A",
+        "target": "F1A"
+      },
+      {
+        "ablated_margin": 9.475509563862184,
+        "class_cover": [
+          "L1H6",
+          "L5H5",
+          "L5H10"
+        ],
+        "class_cover_margin": 10.233578699496055,
+        "class_minus_global_prefix": 5.758392186116053,
+        "class_minus_random_mean": 1.4822053319727342,
+        "full_global_margin": 5.488978010064219,
+        "global_prefix_margin": 4.475186513380002,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1E",
+        "random_subset_mean_margin": 8.751373367523321,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_role_inverse_minimal_F1f",
+        "target": "F1f"
+      },
+      {
+        "ablated_margin": 5.499216432213038,
+        "class_cover": [
+          "L1H6",
+          "L5H5",
+          "L5H10"
+        ],
+        "class_cover_margin": 8.292028735172844,
+        "class_minus_global_prefix": 7.851981004397927,
+        "class_minus_random_mean": 3.4403650975492353,
+        "full_global_margin": 3.442532018199789,
+        "global_prefix_margin": 0.4400477307749169,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1E",
+        "random_subset_mean_margin": 4.851663637623608,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_no_alias_plain_F1f",
+        "target": "F1f"
+      },
+      {
+        "ablated_margin": 8.901413647406097,
+        "class_cover": [
+          "L1H6",
+          "L5H5",
+          "L5H10"
+        ],
+        "class_cover_margin": 10.469468615008214,
+        "class_minus_global_prefix": 5.985750742720182,
+        "class_minus_random_mean": 2.006712811219103,
+        "full_global_margin": 5.598815412011131,
+        "global_prefix_margin": 4.483717872288032,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1E",
+        "random_subset_mean_margin": 8.462755803789111,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_concrete_human_F1f",
+        "target": "F1f"
+      },
+      {
+        "ablated_margin": 10.192337735791062,
+        "class_cover": [
+          "L1H6",
+          "L5H5",
+          "L5H10"
+        ],
+        "class_cover_margin": 9.520046120004633,
+        "class_minus_global_prefix": 5.239080233891796,
+        "class_minus_random_mean": 1.3391792366765074,
+        "full_global_margin": 4.162849830752371,
+        "global_prefix_margin": 4.280965886112837,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1E",
+        "random_subset_mean_margin": 8.180866883328125,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_system_process_F1f",
+        "target": "F1f"
+      },
+      {
+        "ablated_margin": 2.1089302192498725,
+        "class_cover": [
+          "L1H6",
+          "L5H3",
+          "L5H0"
+        ],
+        "class_cover_margin": 7.8405125531498285,
+        "class_minus_global_prefix": 1.4841966988968185,
+        "class_minus_random_mean": 1.401318596329756,
+        "full_global_margin": 8.177718251770717,
+        "global_prefix_margin": 6.35631585425301,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1f",
+        "random_subset_mean_margin": 6.4391939568200725,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_role_inverse_minimal_F1E",
+        "target": "F1E"
+      },
+      {
+        "ablated_margin": 4.227922901185967,
+        "class_cover": [
+          "L1H6",
+          "L5H3",
+          "L5H0"
+        ],
+        "class_cover_margin": 9.136890703322536,
+        "class_minus_global_prefix": 2.1862191976099226,
+        "class_minus_random_mean": 1.7805715825842814,
+        "full_global_margin": 8.011032075945007,
+        "global_prefix_margin": 6.950671505712613,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1f",
+        "random_subset_mean_margin": 7.356319120738254,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_no_alias_plain_F1E",
+        "target": "F1E"
+      },
+      {
+        "ablated_margin": 0.9946936093197705,
+        "class_cover": [
+          "L1H6",
+          "L5H3",
+          "L5H0"
+        ],
+        "class_cover_margin": 6.33973343547989,
+        "class_minus_global_prefix": 2.1533423163590806,
+        "class_minus_random_mean": 1.4342130654296037,
+        "full_global_margin": 7.06630403878286,
+        "global_prefix_margin": 4.18639111912081,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1f",
+        "random_subset_mean_margin": 4.9055203700502865,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_concrete_human_F1E",
+        "target": "F1E"
+      },
+      {
+        "ablated_margin": 0.029820133419992567,
+        "class_cover": [
+          "L1H6",
+          "L5H3",
+          "L5H0"
+        ],
+        "class_cover_margin": 6.669224054934227,
+        "class_minus_global_prefix": 1.7791599797226043,
+        "class_minus_random_mean": 1.1263218779175412,
+        "full_global_margin": 10.275329016885951,
+        "global_prefix_margin": 4.8900640752116225,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F1f",
+        "random_subset_mean_margin": 5.5429021770166855,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F1f_F1E_system_process_F1E",
+        "target": "F1E"
+      },
+      {
+        "ablated_margin": 7.287685004142199,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 9.66622109369661,
+        "class_minus_global_prefix": 2.4287004467799864,
+        "class_minus_random_mean": 2.0494021861452385,
+        "full_global_margin": 7.08795666769338,
+        "global_prefix_margin": 7.237520646916623,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2A",
+        "random_subset_mean_margin": 7.616818907551371,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_role_inverse_minimal_F2T",
+        "target": "F2T"
+      },
+      {
+        "ablated_margin": 9.068127511875158,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 12.641350743013403,
+        "class_minus_global_prefix": 2.5478435923601754,
+        "class_minus_random_mean": 2.485376828275621,
+        "full_global_margin": 10.192674572267519,
+        "global_prefix_margin": 10.093507150653227,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2A",
+        "random_subset_mean_margin": 10.155973914737782,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_no_alias_plain_F2T",
+        "target": "F2T"
+      },
+      {
+        "ablated_margin": 3.131900624979211,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 3.5799445280560693,
+        "class_minus_global_prefix": 2.4901674625118586,
+        "class_minus_random_mean": 0.4543714410419657,
+        "full_global_margin": 1.2150178106833067,
+        "global_prefix_margin": 1.0897770655442107,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2A",
+        "random_subset_mean_margin": 3.1255730870141036,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_concrete_human_F2T",
+        "target": "F2T"
+      },
+      {
+        "ablated_margin": 5.078936741543593,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 8.915086685245033,
+        "class_minus_global_prefix": 2.0942395490579147,
+        "class_minus_random_mean": 3.0522859095957795,
+        "full_global_margin": 5.986981705896864,
+        "global_prefix_margin": 6.820847136187118,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2A",
+        "random_subset_mean_margin": 5.862800775649253,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_system_process_F2T",
+        "target": "F2T"
+      },
+      {
+        "ablated_margin": 8.762110433581775,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 13.141192210650717,
+        "class_minus_global_prefix": 7.104855014338083,
+        "class_minus_random_mean": 6.6876430466086685,
+        "full_global_margin": 7.052733194456562,
+        "global_prefix_margin": 6.036337196312633,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2T",
+        "random_subset_mean_margin": 6.453549164042048,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_role_inverse_minimal_F2A",
+        "target": "F2A"
+      },
+      {
+        "ablated_margin": 9.374626056849479,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 13.829045600115027,
+        "class_minus_global_prefix": 7.280494099760523,
+        "class_minus_random_mean": 7.117121737382081,
+        "full_global_margin": 7.594434459851139,
+        "global_prefix_margin": 6.548551500354503,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2T",
+        "random_subset_mean_margin": 6.711923862732946,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_no_alias_plain_F2A",
+        "target": "F2A"
+      },
+      {
+        "ablated_margin": 9.586099130567614,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 10.459776717275194,
+        "class_minus_global_prefix": -0.5999789706378564,
+        "class_minus_random_mean": 3.170712575475209,
+        "full_global_margin": 8.334280516630805,
+        "global_prefix_margin": 11.05975568791305,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2T",
+        "random_subset_mean_margin": 7.289064141799985,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_concrete_human_F2A",
+        "target": "F2A"
+      },
+      {
+        "ablated_margin": 11.10088724833005,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 13.520567337047936,
+        "class_minus_global_prefix": 5.751077742252075,
+        "class_minus_random_mean": 5.839138969325551,
+        "full_global_margin": 6.680400810940175,
+        "global_prefix_margin": 7.769489594795861,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2T",
+        "random_subset_mean_margin": 7.681428367722385,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F2T_F2A_system_process_F2A",
+        "target": "F2A"
+      },
+      {
+        "ablated_margin": 12.548050855131597,
+        "class_cover": [
+          "L5H6",
+          "L1H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 10.70012022859883,
+        "class_minus_global_prefix": 2.535474228565704,
+        "class_minus_random_mean": 0.9219395729889328,
+        "full_global_margin": 6.320123384640415,
+        "global_prefix_margin": 8.164646000033127,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2E",
+        "random_subset_mean_margin": 9.778180655609898,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F2f_F2E_role_inverse_minimal_F2f",
+        "target": "F2f"
+      },
+      {
+        "ablated_margin": 11.242754197019535,
+        "class_cover": [
+          "L5H6",
+          "L1H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 10.010797796406711,
+        "class_minus_global_prefix": 3.81928983463051,
+        "class_minus_random_mean": 1.7927279436353096,
+        "full_global_margin": 4.960530579485288,
+        "global_prefix_margin": 6.191507961776201,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2E",
+        "random_subset_mean_margin": 8.218069852771402,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F2f_F2E_no_alias_plain_F2f",
+        "target": "F2f"
+      },
+      {
+        "ablated_margin": 12.521809161012916,
+        "class_cover": [
+          "L5H6",
+          "L1H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 11.370133248918474,
+        "class_minus_global_prefix": 3.7204791673826536,
+        "class_minus_random_mean": 1.342138789045201,
+        "full_global_margin": 6.495120669590196,
+        "global_prefix_margin": 7.649654081535821,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2E",
+        "random_subset_mean_margin": 10.027994459873273,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F2f_F2E_concrete_human_F2f",
+        "target": "F2f"
+      },
+      {
+        "ablated_margin": 12.32847167624991,
+        "class_cover": [
+          "L5H6",
+          "L1H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 10.263718987291426,
+        "class_minus_global_prefix": 2.133147867208981,
+        "class_minus_random_mean": 0.5153140653749126,
+        "full_global_margin": 6.070219456676227,
+        "global_prefix_margin": 8.130571120082445,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2E",
+        "random_subset_mean_margin": 9.748404921916514,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F2f_F2E_system_process_F2f",
+        "target": "F2f"
+      },
+      {
+        "ablated_margin": 1.5376632647628483,
+        "class_cover": [
+          "L5H10",
+          "L5H5",
+          "L5H3"
+        ],
+        "class_cover_margin": 13.578658873381505,
+        "class_minus_global_prefix": 4.457321408127504,
+        "class_minus_random_mean": 11.79933306207294,
+        "full_global_margin": 10.279883601943824,
+        "global_prefix_margin": 9.121337465254001,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2f",
+        "random_subset_mean_margin": 1.7793258113085653,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F2f_F2E_role_inverse_minimal_F2E",
+        "target": "F2E"
+      },
+      {
+        "ablated_margin": 5.30047706577006,
+        "class_cover": [
+          "L5H10",
+          "L5H5",
+          "L5H3"
+        ],
+        "class_cover_margin": 9.763113042569548,
+        "class_minus_global_prefix": 0.9176720905888374,
+        "class_minus_random_mean": 5.151257393443133,
+        "full_global_margin": 7.421845038075963,
+        "global_prefix_margin": 8.845440951980711,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2f",
+        "random_subset_mean_margin": 4.611855649126415,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F2f_F2E_no_alias_plain_F2E",
+        "target": "F2E"
+      },
+      {
+        "ablated_margin": 1.9006925550258416,
+        "class_cover": [
+          "L5H10",
+          "L5H5",
+          "L5H3"
+        ],
+        "class_cover_margin": 8.631257352078174,
+        "class_minus_global_prefix": 1.630090926657715,
+        "class_minus_random_mean": 7.413191889462925,
+        "full_global_margin": 5.733692483288688,
+        "global_prefix_margin": 7.001166425420459,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2f",
+        "random_subset_mean_margin": 1.2180654626152492,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F2f_F2E_concrete_human_F2E",
+        "target": "F2E"
+      },
+      {
+        "ablated_margin": -1.7672202523285394,
+        "class_cover": [
+          "L5H10",
+          "L5H5",
+          "L5H3"
+        ],
+        "class_cover_margin": 11.88890375813156,
+        "class_minus_global_prefix": 8.869214273757896,
+        "class_minus_random_mean": 12.61217313403349,
+        "full_global_margin": 8.967985778783982,
+        "global_prefix_margin": 3.0196894843736644,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F2f",
+        "random_subset_mean_margin": -0.7232693759019304,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F2f_F2E_system_process_F2E",
+        "target": "F2E"
+      },
+      {
+        "ablated_margin": 5.7563496247802535,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 10.126550787382278,
+        "class_minus_global_prefix": 2.863984918328697,
+        "class_minus_random_mean": 3.0873452167362734,
+        "full_global_margin": 7.2527765403480124,
+        "global_prefix_margin": 7.2625658690535815,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3A",
+        "random_subset_mean_margin": 7.039205570646005,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F3T_F3A_role_inverse_minimal_F3T",
+        "target": "F3T"
+      },
+      {
+        "ablated_margin": 6.293707291859604,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 11.31712808316228,
+        "class_minus_global_prefix": 2.8083078553444576,
+        "class_minus_random_mean": 3.326229009710884,
+        "full_global_margin": 8.653435144705668,
+        "global_prefix_margin": 8.508820227817822,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3A",
+        "random_subset_mean_margin": 7.990899073451395,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F3T_F3A_no_alias_plain_F3T",
+        "target": "F3T"
+      },
+      {
+        "ablated_margin": 3.0861524815805703,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 5.579400940079101,
+        "class_minus_global_prefix": 2.539626830666699,
+        "class_minus_random_mean": 1.8322868986224545,
+        "full_global_margin": 3.0267316794545627,
+        "global_prefix_margin": 3.0397741094124022,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3A",
+        "random_subset_mean_margin": 3.747114041456647,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F3T_F3A_concrete_human_F3T",
+        "target": "F3T"
+      },
+      {
+        "ablated_margin": 3.5799389976485854,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 8.799194854190558,
+        "class_minus_global_prefix": 2.5902884160578745,
+        "class_minus_random_mean": 3.7150415991001644,
+        "full_global_margin": 5.9504425890351875,
+        "global_prefix_margin": 6.208906438132684,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3A",
+        "random_subset_mean_margin": 5.084153255090394,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F3T_F3A_system_process_F3T",
+        "target": "F3T"
+      },
+      {
+        "ablated_margin": 3.7003119493851506,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 10.661229388560598,
+        "class_minus_global_prefix": 11.709629033868469,
+        "class_minus_random_mean": 6.229183929400641,
+        "full_global_margin": 5.645783092855459,
+        "global_prefix_margin": -1.048399645307871,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3T",
+        "random_subset_mean_margin": 4.432045459159957,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F3T_F3A_role_inverse_minimal_F3A",
+        "target": "F3A"
+      },
+      {
+        "ablated_margin": 3.3972390352788997,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 8.86916699313185,
+        "class_minus_global_prefix": 10.620072785383414,
+        "class_minus_random_mean": 5.142401024358899,
+        "full_global_margin": 3.959974125683239,
+        "global_prefix_margin": -1.7509057922515643,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3T",
+        "random_subset_mean_margin": 3.726765968772951,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F3T_F3A_no_alias_plain_F3A",
+        "target": "F3A"
+      },
+      {
+        "ablated_margin": 5.298247610644638,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 8.059239765867247,
+        "class_minus_global_prefix": 3.6754388219748506,
+        "class_minus_random_mean": 3.456953667524056,
+        "full_global_margin": 5.573916647738495,
+        "global_prefix_margin": 4.383800943892396,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3T",
+        "random_subset_mean_margin": 4.602286098343191,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F3T_F3A_concrete_human_F3A",
+        "target": "F3A"
+      },
+      {
+        "ablated_margin": 4.490448794928659,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 9.595710875244675,
+        "class_minus_global_prefix": 9.354248058000255,
+        "class_minus_random_mean": 4.80626590623438,
+        "full_global_margin": 5.210244458813928,
+        "global_prefix_margin": 0.24146281724442087,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3T",
+        "random_subset_mean_margin": 4.789444969010296,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F3T_F3A_system_process_F3A",
+        "target": "F3A"
+      },
+      {
+        "ablated_margin": 13.633175312853899,
+        "class_cover": [
+          "L5H6",
+          "L5H10",
+          "L5H0"
+        ],
+        "class_cover_margin": 12.561527342294838,
+        "class_minus_global_prefix": 1.8872088645095193,
+        "class_minus_random_mean": 1.3409027157198974,
+        "full_global_margin": 8.97233842662373,
+        "global_prefix_margin": 10.674318477785318,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3E",
+        "random_subset_mean_margin": 11.22062462657494,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F3f_F3E_role_inverse_minimal_F3f",
+        "target": "F3f"
+      },
+      {
+        "ablated_margin": 9.489205809501359,
+        "class_cover": [
+          "L5H6",
+          "L5H10",
+          "L5H0"
+        ],
+        "class_cover_margin": 9.595087131488205,
+        "class_minus_global_prefix": 3.7648228062755056,
+        "class_minus_random_mean": 2.476021528966225,
+        "full_global_margin": 5.335504901145764,
+        "global_prefix_margin": 5.830264325212699,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3E",
+        "random_subset_mean_margin": 7.11906560252198,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F3f_F3E_no_alias_plain_F3f",
+        "target": "F3f"
+      },
+      {
+        "ablated_margin": 11.059907525920657,
+        "class_cover": [
+          "L5H6",
+          "L5H10",
+          "L5H0"
+        ],
+        "class_cover_margin": 10.057521013613497,
+        "class_minus_global_prefix": 3.519976394320871,
+        "class_minus_random_mean": 1.6103809573171795,
+        "full_global_margin": 5.218780537626096,
+        "global_prefix_margin": 6.5375446192926265,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3E",
+        "random_subset_mean_margin": 8.447140056296318,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F3f_F3E_concrete_human_F3f",
+        "target": "F3f"
+      },
+      {
+        "ablated_margin": 13.281458487861073,
+        "class_cover": [
+          "L5H6",
+          "L5H10",
+          "L5H0"
+        ],
+        "class_cover_margin": 12.232613629368505,
+        "class_minus_global_prefix": 2.748801024553721,
+        "class_minus_random_mean": 1.6896610170595903,
+        "full_global_margin": 7.820617256046019,
+        "global_prefix_margin": 9.483812604814783,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3E",
+        "random_subset_mean_margin": 10.542952612308914,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F3f_F3E_system_process_F3f",
+        "target": "F3f"
+      },
+      {
+        "ablated_margin": -2.5522795496061104,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 7.4413463820083345,
+        "class_minus_global_prefix": 3.204167827363885,
+        "class_minus_random_mean": 4.3844479014135365,
+        "full_global_margin": 8.249619085812824,
+        "global_prefix_margin": 4.23717855464445,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3f",
+        "random_subset_mean_margin": 3.056898480594798,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F3f_F3E_role_inverse_minimal_F3E",
+        "target": "F3E"
+      },
+      {
+        "ablated_margin": 0.25823097249643956,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 6.626073379200242,
+        "class_minus_global_prefix": 2.1885316082930073,
+        "class_minus_random_mean": 2.5321918330078397,
+        "full_global_margin": 6.297540655920687,
+        "global_prefix_margin": 4.4375417709072345,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3f",
+        "random_subset_mean_margin": 4.093881546192402,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F3f_F3E_no_alias_plain_F3E",
+        "target": "F3E"
+      },
+      {
+        "ablated_margin": -0.9313318910300898,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 7.306594031624616,
+        "class_minus_global_prefix": 3.2007669896239914,
+        "class_minus_random_mean": 3.0503290630738302,
+        "full_global_margin": 8.09243194782325,
+        "global_prefix_margin": 4.105827042000625,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3f",
+        "random_subset_mean_margin": 4.256264968550786,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F3f_F3E_concrete_human_F3E",
+        "target": "F3E"
+      },
+      {
+        "ablated_margin": -5.54712822568149,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 4.914827240461833,
+        "class_minus_global_prefix": 2.9675651387714383,
+        "class_minus_random_mean": 3.115687430865984,
+        "full_global_margin": 11.553258437655073,
+        "global_prefix_margin": 1.947262101690395,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F3f",
+        "random_subset_mean_margin": 1.7991398095958493,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F3f_F3E_system_process_F3E",
+        "target": "F3E"
+      },
+      {
+        "ablated_margin": -2.3564962311393662,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 3.6614067532969417,
+        "class_minus_global_prefix": 2.4030667180769187,
+        "class_minus_random_mean": 2.3950259593692045,
+        "full_global_margin": 3.9705438509625184,
+        "global_prefix_margin": 1.258340035220023,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4A",
+        "random_subset_mean_margin": 1.2663807939277372,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F4T_F4A_role_inverse_minimal_F4T",
+        "target": "F4T"
+      },
+      {
+        "ablated_margin": -4.165505563152547,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 4.363119069510495,
+        "class_minus_global_prefix": 3.0307239119322196,
+        "class_minus_random_mean": 2.9180781579087203,
+        "full_global_margin": 6.362867173143399,
+        "global_prefix_margin": 1.3323951575782758,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4A",
+        "random_subset_mean_margin": 1.445040911601775,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F4T_F4A_no_alias_plain_F4T",
+        "target": "F4T"
+      },
+      {
+        "ablated_margin": -3.3650081602547557,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 0.7272411582870051,
+        "class_minus_global_prefix": 2.050380024004843,
+        "class_minus_random_mean": 1.3282009929375187,
+        "full_global_margin": 1.10891838448652,
+        "global_prefix_margin": -1.323138865717838,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4A",
+        "random_subset_mean_margin": -0.6009598346505136,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F4T_F4A_concrete_human_F4T",
+        "target": "F4T"
+      },
+      {
+        "ablated_margin": -2.8763560900763787,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 3.7209122095759506,
+        "class_minus_global_prefix": 2.4533741346755003,
+        "class_minus_random_mean": 2.460357476998586,
+        "full_global_margin": 3.9932312365778735,
+        "global_prefix_margin": 1.2675380749004503,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4A",
+        "random_subset_mean_margin": 1.2605547325773645,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F4T_F4A_system_process_F4T",
+        "target": "F4T"
+      },
+      {
+        "ablated_margin": 9.31192075685822,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 12.484062702843017,
+        "class_minus_global_prefix": 8.088035769041852,
+        "class_minus_random_mean": 5.8220870909342315,
+        "full_global_margin": 5.684196547572457,
+        "global_prefix_margin": 4.396026933801166,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4T",
+        "random_subset_mean_margin": 6.661975611908786,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F4T_F4A_role_inverse_minimal_F4A",
+        "target": "F4A"
+      },
+      {
+        "ablated_margin": 11.722859800915414,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 13.992643906197749,
+        "class_minus_global_prefix": 8.234397507773041,
+        "class_minus_random_mean": 5.3901794628847295,
+        "full_global_margin": 6.447539697427247,
+        "global_prefix_margin": 5.758246398424708,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4T",
+        "random_subset_mean_margin": 8.60246444331302,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F4T_F4A_no_alias_plain_F4A",
+        "target": "F4A"
+      },
+      {
+        "ablated_margin": 10.860664830400491,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 9.777100822258571,
+        "class_minus_global_prefix": 0.6872355645611616,
+        "class_minus_random_mean": 1.4468607740929205,
+        "full_global_margin": 6.302898424595038,
+        "global_prefix_margin": 9.08986525769741,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4T",
+        "random_subset_mean_margin": 8.330240048165651,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F4T_F4A_concrete_human_F4A",
+        "target": "F4A"
+      },
+      {
+        "ablated_margin": 9.971699921002974,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 10.930301019281522,
+        "class_minus_global_prefix": 4.588394071472089,
+        "class_minus_random_mean": 3.682288992396119,
+        "full_global_margin": 5.699779820255305,
+        "global_prefix_margin": 6.341906947809433,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4T",
+        "random_subset_mean_margin": 7.248012026885403,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F4T_F4A_system_process_F4A",
+        "target": "F4A"
+      },
+      {
+        "ablated_margin": 8.20585809857041,
+        "class_cover": [
+          "L5H10",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 8.920331316017108,
+        "class_minus_global_prefix": 2.635542781267196,
+        "class_minus_random_mean": 1.0459189273202174,
+        "full_global_margin": 7.21982962536016,
+        "global_prefix_margin": 6.284788534749913,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4E",
+        "random_subset_mean_margin": 7.874412388696891,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F4f_F4E_role_inverse_minimal_F4f",
+        "target": "F4f"
+      },
+      {
+        "ablated_margin": 5.717012519383442,
+        "class_cover": [
+          "L5H10",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 6.755501990168168,
+        "class_minus_global_prefix": 2.3096530333745653,
+        "class_minus_random_mean": 1.0862583549761906,
+        "full_global_margin": 6.031483893980622,
+        "global_prefix_margin": 4.445848956793602,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4E",
+        "random_subset_mean_margin": 5.669243635191977,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F4f_F4E_no_alias_plain_F4f",
+        "target": "F4f"
+      },
+      {
+        "ablated_margin": 7.37455939391138,
+        "class_cover": [
+          "L5H10",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 8.741475085679259,
+        "class_minus_global_prefix": 2.9496629048136054,
+        "class_minus_random_mean": 1.5043682946377688,
+        "full_global_margin": 7.074139816275574,
+        "global_prefix_margin": 5.791812180865653,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4E",
+        "random_subset_mean_margin": 7.23710679104149,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F4f_F4E_concrete_human_F4f",
+        "target": "F4f"
+      },
+      {
+        "ablated_margin": 6.882108477052714,
+        "class_cover": [
+          "L5H10",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 6.891456262318191,
+        "class_minus_global_prefix": 2.451212767149685,
+        "class_minus_random_mean": 0.2578874299889291,
+        "full_global_margin": 5.778519974450089,
+        "global_prefix_margin": 4.440243495168506,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4E",
+        "random_subset_mean_margin": 6.633568832329262,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F4f_F4E_system_process_F4f",
+        "target": "F4f"
+      },
+      {
+        "ablated_margin": 3.7035863116651337,
+        "class_cover": [
+          "L5H5",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 8.178215193661991,
+        "class_minus_global_prefix": 0.28115114256619744,
+        "class_minus_random_mean": 4.306452136492841,
+        "full_global_margin": 7.368823208227596,
+        "global_prefix_margin": 7.897064051095794,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4f",
+        "random_subset_mean_margin": 3.87176305716915,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F4f_F4E_role_inverse_minimal_F4E",
+        "target": "F4E"
+      },
+      {
+        "ablated_margin": 6.186749065997928,
+        "class_cover": [
+          "L5H5",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 7.565475200442123,
+        "class_minus_global_prefix": 0.875489926790511,
+        "class_minus_random_mean": 2.467504284951276,
+        "full_global_margin": 5.906622234566987,
+        "global_prefix_margin": 6.689985273651612,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4f",
+        "random_subset_mean_margin": 5.097970915490847,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F4f_F4E_no_alias_plain_F4E",
+        "target": "F4E"
+      },
+      {
+        "ablated_margin": 5.145214164111242,
+        "class_cover": [
+          "L5H5",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 6.033514950599832,
+        "class_minus_global_prefix": -0.34620893294395394,
+        "class_minus_random_mean": 1.467901960100856,
+        "full_global_margin": 5.312423689304319,
+        "global_prefix_margin": 6.379723883543786,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4f",
+        "random_subset_mean_margin": 4.565612990498976,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F4f_F4E_concrete_human_F4E",
+        "target": "F4E"
+      },
+      {
+        "ablated_margin": 3.8990011358337617,
+        "class_cover": [
+          "L5H5",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 11.116004711443399,
+        "class_minus_global_prefix": 3.6728889020725344,
+        "class_minus_random_mean": 7.111931917638241,
+        "full_global_margin": 9.337173142489345,
+        "global_prefix_margin": 7.443115809370864,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F4f",
+        "random_subset_mean_margin": 4.0040727938051575,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F4f_F4E_system_process_F4E",
+        "target": "F4E"
+      },
+      {
+        "ablated_margin": 4.786772641879459,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 6.920165298963768,
+        "class_minus_global_prefix": 1.143746138569826,
+        "class_minus_random_mean": 1.3470732507608236,
+        "full_global_margin": 6.137578032130585,
+        "global_prefix_margin": 5.776419160393942,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5A",
+        "random_subset_mean_margin": 5.573092048202945,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F5T_F5A_role_inverse_minimal_F5T",
+        "target": "F5T"
+      },
+      {
+        "ablated_margin": 4.322363205153142,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 8.342695874809863,
+        "class_minus_global_prefix": 2.398788514963612,
+        "class_minus_random_mean": 2.482494601530539,
+        "full_global_margin": 6.95689131266837,
+        "global_prefix_margin": 5.943907359846251,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5A",
+        "random_subset_mean_margin": 5.860201273279324,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F5T_F5A_no_alias_plain_F5T",
+        "target": "F5T"
+      },
+      {
+        "ablated_margin": 2.0133502089302198,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 5.616217378228576,
+        "class_minus_global_prefix": 3.166417987836372,
+        "class_minus_random_mean": 2.0514626038166197,
+        "full_global_margin": 3.6427332465270768,
+        "global_prefix_margin": 2.4497993903922044,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5A",
+        "random_subset_mean_margin": 3.5647547744119565,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F5T_F5A_concrete_human_F5T",
+        "target": "F5T"
+      },
+      {
+        "ablated_margin": 2.8047038350373867,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 6.383013485350848,
+        "class_minus_global_prefix": 1.8074453285825989,
+        "class_minus_random_mean": 2.391355806484183,
+        "full_global_margin": 4.782297298292146,
+        "global_prefix_margin": 4.575568156768249,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5A",
+        "random_subset_mean_margin": 3.9916576788666647,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F5T_F5A_system_process_F5T",
+        "target": "F5T"
+      },
+      {
+        "ablated_margin": 6.258163922125989,
+        "class_cover": [
+          "L1H6",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 11.311873524027988,
+        "class_minus_global_prefix": 7.4347595729131575,
+        "class_minus_random_mean": 3.937263858907958,
+        "full_global_margin": 8.457579077824565,
+        "global_prefix_margin": 3.87711395111483,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5T",
+        "random_subset_mean_margin": 7.37460966512003,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F5T_F5A_role_inverse_minimal_F5A",
+        "target": "F5A"
+      },
+      {
+        "ablated_margin": 7.54125403653549,
+        "class_cover": [
+          "L1H6",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 9.706544514230979,
+        "class_minus_global_prefix": 5.343446603363476,
+        "class_minus_random_mean": 1.948788051152242,
+        "full_global_margin": 6.067411702182334,
+        "global_prefix_margin": 4.363097910867503,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5T",
+        "random_subset_mean_margin": 7.757756463078737,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F5T_F5A_no_alias_plain_F5A",
+        "target": "F5A"
+      },
+      {
+        "ablated_margin": 6.122260050507598,
+        "class_cover": [
+          "L1H6",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 7.9397306642643795,
+        "class_minus_global_prefix": 2.316099970980803,
+        "class_minus_random_mean": 1.510918449182312,
+        "full_global_margin": 6.962528860347677,
+        "global_prefix_margin": 5.623630693283577,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5T",
+        "random_subset_mean_margin": 6.4288122150820675,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F5T_F5A_concrete_human_F5A",
+        "target": "F5A"
+      },
+      {
+        "ablated_margin": 8.684205153576789,
+        "class_cover": [
+          "L1H6",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 12.111321318613012,
+        "class_minus_global_prefix": 5.143547213366265,
+        "class_minus_random_mean": 2.8518552483621313,
+        "full_global_margin": 9.951442558718291,
+        "global_prefix_margin": 6.967774105246747,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5T",
+        "random_subset_mean_margin": 9.25946607025088,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F5T_F5A_system_process_F5A",
+        "target": "F5A"
+      },
+      {
+        "ablated_margin": 14.556921398932275,
+        "class_cover": [
+          "L1H6",
+          "L5H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 12.935333111191618,
+        "class_minus_global_prefix": 6.3540444030464345,
+        "class_minus_random_mean": 2.5941060567193652,
+        "full_global_margin": 4.966163440396311,
+        "global_prefix_margin": 6.581288708145183,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5E",
+        "random_subset_mean_margin": 10.341227054472252,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F5f_F5E_role_inverse_minimal_F5f",
+        "target": "F5f"
+      },
+      {
+        "ablated_margin": 10.930634129833244,
+        "class_cover": [
+          "L1H6",
+          "L5H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 10.257982186544561,
+        "class_minus_global_prefix": 7.281353126548638,
+        "class_minus_random_mean": 3.3134039155046286,
+        "full_global_margin": 2.305001893853812,
+        "global_prefix_margin": 2.976629059995923,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5E",
+        "random_subset_mean_margin": 6.944578271039933,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F5f_F5E_no_alias_plain_F5f",
+        "target": "F5f"
+      },
+      {
+        "ablated_margin": 15.2708972028151,
+        "class_cover": [
+          "L1H6",
+          "L5H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 13.874777350300116,
+        "class_minus_global_prefix": 5.565241949781962,
+        "class_minus_random_mean": 2.3771871901524033,
+        "full_global_margin": 6.910563125255263,
+        "global_prefix_margin": 8.309535400518154,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5E",
+        "random_subset_mean_margin": 11.497590160147713,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F5f_F5E_concrete_human_F5f",
+        "target": "F5f"
+      },
+      {
+        "ablated_margin": 13.539664131620109,
+        "class_cover": [
+          "L1H6",
+          "L5H6",
+          "L5H10"
+        ],
+        "class_cover_margin": 11.436878543444784,
+        "class_minus_global_prefix": 5.1470406514758915,
+        "class_minus_random_mean": 1.9465417484650853,
+        "full_global_margin": 4.180382958881636,
+        "global_prefix_margin": 6.289837891968893,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5E",
+        "random_subset_mean_margin": 9.490336794979699,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F5f_F5E_system_process_F5f",
+        "target": "F5f"
+      },
+      {
+        "ablated_margin": -5.95005875274427,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 5.861282350712181,
+        "class_minus_global_prefix": 2.9012884955935743,
+        "class_minus_random_mean": 3.911246529504724,
+        "full_global_margin": 8.730680580901234,
+        "global_prefix_margin": 2.959993855118607,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5f",
+        "random_subset_mean_margin": 1.9500358212074576,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F5f_F5E_role_inverse_minimal_F5E",
+        "target": "F5E"
+      },
+      {
+        "ablated_margin": -2.6058909568894437,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 6.582812935249352,
+        "class_minus_global_prefix": 2.0967671966148096,
+        "class_minus_random_mean": 2.3973009297823413,
+        "full_global_margin": 9.96844911330088,
+        "global_prefix_margin": 4.486045738634543,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5f",
+        "random_subset_mean_margin": 4.185512005467011,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F5f_F5E_no_alias_plain_F5E",
+        "target": "F5E"
+      },
+      {
+        "ablated_margin": -5.685317101434641,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 4.467592387492623,
+        "class_minus_global_prefix": 2.7151810058133634,
+        "class_minus_random_mean": 3.107775980755905,
+        "full_global_margin": 6.381867497700925,
+        "global_prefix_margin": 1.7524113816792593,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5f",
+        "random_subset_mean_margin": 1.3598164067367173,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F5f_F5E_concrete_human_F5E",
+        "target": "F5E"
+      },
+      {
+        "ablated_margin": -6.603605826486839,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 5.324949708651348,
+        "class_minus_global_prefix": 3.1337849966395694,
+        "class_minus_random_mean": 2.6444509182708464,
+        "full_global_margin": 13.25309025883567,
+        "global_prefix_margin": 2.191164712011779,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F5f",
+        "random_subset_mean_margin": 2.680498790380502,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F5f_F5E_system_process_F5E",
+        "target": "F5E"
+      },
+      {
+        "ablated_margin": 1.3892125458329838,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 5.764174437094365,
+        "class_minus_global_prefix": 0.1255655356473282,
+        "class_minus_random_mean": 2.82597186187279,
+        "full_global_margin": 5.536714535960638,
+        "global_prefix_margin": 5.638608901447037,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6A",
+        "random_subset_mean_margin": 2.938202575221575,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F6T_F6A_role_inverse_minimal_F6T",
+        "target": "F6T"
+      },
+      {
+        "ablated_margin": -0.364006660187286,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 5.228351199664326,
+        "class_minus_global_prefix": 0.5505964593645034,
+        "class_minus_random_mean": 2.974991332956553,
+        "full_global_margin": 5.514771182799411,
+        "global_prefix_margin": 4.6777547402998225,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6A",
+        "random_subset_mean_margin": 2.2533598667077728,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F6T_F6A_no_alias_plain_F6T",
+        "target": "F6T"
+      },
+      {
+        "ablated_margin": 0.9719141703684535,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 3.1749492521747253,
+        "class_minus_global_prefix": -0.2814714913830869,
+        "class_minus_random_mean": 1.453175438465117,
+        "full_global_margin": 3.078644423931797,
+        "global_prefix_margin": 3.4564207435578123,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6A",
+        "random_subset_mean_margin": 1.7217738137096084,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F6T_F6A_concrete_human_F6T",
+        "target": "F6T"
+      },
+      {
+        "ablated_margin": -1.0671523469152042,
+        "class_cover": [
+          "L5H3",
+          "L5H5",
+          "L1H6"
+        ],
+        "class_cover_margin": 3.8023987619687674,
+        "class_minus_global_prefix": 0.010639789142974365,
+        "class_minus_random_mean": 2.869409629251281,
+        "full_global_margin": 3.8079270531001965,
+        "global_prefix_margin": 3.791758972825793,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6A",
+        "random_subset_mean_margin": 0.9329891327174863,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F6T_F6A_system_process_F6T",
+        "target": "F6T"
+      },
+      {
+        "ablated_margin": 9.218860883310803,
+        "class_cover": [
+          "L5H10",
+          "L5H6",
+          "L5H0"
+        ],
+        "class_cover_margin": 12.688259438685476,
+        "class_minus_global_prefix": 8.030127448489957,
+        "class_minus_random_mean": 5.8787379520530125,
+        "full_global_margin": 6.488339208009753,
+        "global_prefix_margin": 4.658131990195519,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6T",
+        "random_subset_mean_margin": 6.809521486632463,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F6T_F6A_role_inverse_minimal_F6A",
+        "target": "F6A"
+      },
+      {
+        "ablated_margin": 12.257308110443699,
+        "class_cover": [
+          "L5H10",
+          "L5H6",
+          "L5H0"
+        ],
+        "class_cover_margin": 14.161251759401543,
+        "class_minus_global_prefix": 7.045979100645935,
+        "class_minus_random_mean": 4.923654306716843,
+        "full_global_margin": 7.445609458791607,
+        "global_prefix_margin": 7.115272658755607,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6T",
+        "random_subset_mean_margin": 9.2375974526847,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F6T_F6A_no_alias_plain_F6A",
+        "target": "F6A"
+      },
+      {
+        "ablated_margin": 8.774925367817563,
+        "class_cover": [
+          "L5H10",
+          "L5H6",
+          "L5H0"
+        ],
+        "class_cover_margin": 8.506584909333924,
+        "class_minus_global_prefix": 2.040523420282133,
+        "class_minus_random_mean": 2.0254878708720536,
+        "full_global_margin": 5.010971081739166,
+        "global_prefix_margin": 6.466061489051791,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6T",
+        "random_subset_mean_margin": 6.48109703846187,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F6T_F6A_concrete_human_F6A",
+        "target": "F6A"
+      },
+      {
+        "ablated_margin": 11.037579448285324,
+        "class_cover": [
+          "L5H10",
+          "L5H6",
+          "L5H0"
+        ],
+        "class_cover_margin": 12.878817358376194,
+        "class_minus_global_prefix": 6.831835964779016,
+        "class_minus_random_mean": 4.438487488847608,
+        "full_global_margin": 6.649705221265775,
+        "global_prefix_margin": 6.046981393597179,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6T",
+        "random_subset_mean_margin": 8.440329869528586,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F6T_F6A_system_process_F6A",
+        "target": "F6A"
+      },
+      {
+        "ablated_margin": 6.935384442692965,
+        "class_cover": [
+          "L5H6",
+          "L5H10",
+          "L5H5"
+        ],
+        "class_cover_margin": 4.850580761868135,
+        "class_minus_global_prefix": 1.3622314230597925,
+        "class_minus_random_mean": -0.19541117068591163,
+        "full_global_margin": 2.5358852740048174,
+        "global_prefix_margin": 3.488349338808342,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6E",
+        "random_subset_mean_margin": 5.045991932554046,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F6f_F6E_role_inverse_minimal_F6f",
+        "target": "F6f"
+      },
+      {
+        "ablated_margin": 6.878803722233641,
+        "class_cover": [
+          "L5H6",
+          "L5H10",
+          "L5H5"
+        ],
+        "class_cover_margin": 5.904894752944665,
+        "class_minus_global_prefix": 2.299147037730984,
+        "class_minus_random_mean": 0.790802092762152,
+        "full_global_margin": 3.4301200850835,
+        "global_prefix_margin": 3.605747715213681,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6E",
+        "random_subset_mean_margin": 5.114092660182513,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F6f_F6E_no_alias_plain_F6f",
+        "target": "F6f"
+      },
+      {
+        "ablated_margin": 7.134909643667001,
+        "class_cover": [
+          "L5H6",
+          "L5H10",
+          "L5H5"
+        ],
+        "class_cover_margin": 5.476481744846367,
+        "class_minus_global_prefix": 1.7501036409020156,
+        "class_minus_random_mean": 0.07440544183079911,
+        "full_global_margin": 3.2271568557029005,
+        "global_prefix_margin": 3.7263781039443518,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6E",
+        "random_subset_mean_margin": 5.402076303015568,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F6f_F6E_concrete_human_F6f",
+        "target": "F6f"
+      },
+      {
+        "ablated_margin": 6.938570937893949,
+        "class_cover": [
+          "L5H6",
+          "L5H10",
+          "L5H5"
+        ],
+        "class_cover_margin": 5.608742321744907,
+        "class_minus_global_prefix": 1.5332406291811758,
+        "class_minus_random_mean": 0.07960593636034652,
+        "full_global_margin": 3.644017371843912,
+        "global_prefix_margin": 4.075501692563731,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6E",
+        "random_subset_mean_margin": 5.52913638538456,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F6f_F6E_system_process_F6f",
+        "target": "F6f"
+      },
+      {
+        "ablated_margin": 6.8275593486143915,
+        "class_cover": [
+          "L5H10",
+          "L5H3",
+          "L5H5"
+        ],
+        "class_cover_margin": 13.375776244951933,
+        "class_minus_global_prefix": 2.6666119156336077,
+        "class_minus_random_mean": 10.243305842039168,
+        "full_global_margin": 7.658229264716127,
+        "global_prefix_margin": 10.709164329318325,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6f",
+        "random_subset_mean_margin": 3.132470402912764,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F6f_F6E_role_inverse_minimal_F6E",
+        "target": "F6E"
+      },
+      {
+        "ablated_margin": 7.5271140494848385,
+        "class_cover": [
+          "L5H10",
+          "L5H3",
+          "L5H5"
+        ],
+        "class_cover_margin": 10.705424815229051,
+        "class_minus_global_prefix": 1.3409414769188928,
+        "class_minus_random_mean": 5.898203747820066,
+        "full_global_margin": 6.868017329762005,
+        "global_prefix_margin": 9.364483338310158,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6f",
+        "random_subset_mean_margin": 4.807221067408985,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F6f_F6E_no_alias_plain_F6E",
+        "target": "F6E"
+      },
+      {
+        "ablated_margin": 6.975493076926764,
+        "class_cover": [
+          "L5H10",
+          "L5H3",
+          "L5H5"
+        ],
+        "class_cover_margin": 12.737267258252324,
+        "class_minus_global_prefix": 1.4880401789362114,
+        "class_minus_random_mean": 8.788709977689416,
+        "full_global_margin": 7.9318850706067066,
+        "global_prefix_margin": 11.249227079316112,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6f",
+        "random_subset_mean_margin": 3.9485572805629072,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F6f_F6E_concrete_human_F6E",
+        "target": "F6E"
+      },
+      {
+        "ablated_margin": 5.909383230855056,
+        "class_cover": [
+          "L5H10",
+          "L5H3",
+          "L5H5"
+        ],
+        "class_cover_margin": 14.369694248252628,
+        "class_minus_global_prefix": 5.243418059263888,
+        "class_minus_random_mean": 10.321279258026816,
+        "full_global_margin": 10.027481796346116,
+        "global_prefix_margin": 9.12627618898874,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F6f",
+        "random_subset_mean_margin": 4.048414990225811,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F6f_F6E_system_process_F6E",
+        "target": "F6E"
+      },
+      {
+        "ablated_margin": 5.887616457094824,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 8.880365091705226,
+        "class_minus_global_prefix": 1.3639035756908253,
+        "class_minus_random_mean": 1.8801425503387605,
+        "full_global_margin": 7.416313809284875,
+        "global_prefix_margin": 7.516461516014401,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7A",
+        "random_subset_mean_margin": 7.000222541366465,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F7T_F7A_role_inverse_minimal_F7T",
+        "target": "F7T"
+      },
+      {
+        "ablated_margin": 3.240942290362989,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 6.799024042847375,
+        "class_minus_global_prefix": 1.585606175556788,
+        "class_minus_random_mean": 1.8623952508205912,
+        "full_global_margin": 5.817224916935768,
+        "global_prefix_margin": 5.213417867290587,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7A",
+        "random_subset_mean_margin": 4.9366287920267835,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F7T_F7A_no_alias_plain_F7T",
+        "target": "F7T"
+      },
+      {
+        "ablated_margin": 3.2156782149475394,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 4.803826915656988,
+        "class_minus_global_prefix": 1.13697240835024,
+        "class_minus_random_mean": 0.8993823598283157,
+        "full_global_margin": 4.055119273917686,
+        "global_prefix_margin": 3.6668545073067484,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7A",
+        "random_subset_mean_margin": 3.9044445558286727,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F7T_F7A_concrete_human_F7T",
+        "target": "F7T"
+      },
+      {
+        "ablated_margin": 2.2523019054492144,
+        "class_cover": [
+          "L5H3",
+          "L1H6",
+          "L5H5"
+        ],
+        "class_cover_margin": 6.740721438541054,
+        "class_minus_global_prefix": 1.1242295085683098,
+        "class_minus_random_mean": 2.8643457016824723,
+        "full_global_margin": 5.689537597281999,
+        "global_prefix_margin": 5.616491929972744,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7A",
+        "random_subset_mean_margin": 3.8763757368585816,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F7T_F7A_system_process_F7T",
+        "target": "F7T"
+      },
+      {
+        "ablated_margin": 7.655386846036475,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 17.18538166767612,
+        "class_minus_global_prefix": 11.033882362840423,
+        "class_minus_random_mean": 10.890276917825528,
+        "full_global_margin": 12.22049783698096,
+        "global_prefix_margin": 6.151499304835696,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7T",
+        "random_subset_mean_margin": 6.295104749850591,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F7T_F7A_role_inverse_minimal_F7A",
+        "target": "F7A"
+      },
+      {
+        "ablated_margin": 8.655082177652083,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 14.294082226520167,
+        "class_minus_global_prefix": 8.31237265359584,
+        "class_minus_random_mean": 8.002764533700404,
+        "full_global_margin": 8.617282241527688,
+        "global_prefix_margin": 5.981709572924327,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7T",
+        "random_subset_mean_margin": 6.2913176928197645,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F7T_F7A_no_alias_plain_F7A",
+        "target": "F7A"
+      },
+      {
+        "ablated_margin": 6.257033722048121,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 7.540047562336528,
+        "class_minus_global_prefix": 2.1651615170547114,
+        "class_minus_random_mean": 3.4791657287953317,
+        "full_global_margin": 4.124359227747592,
+        "global_prefix_margin": 5.374886045281817,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7T",
+        "random_subset_mean_margin": 4.060881833541196,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F7T_F7A_concrete_human_F7A",
+        "target": "F7A"
+      },
+      {
+        "ablated_margin": 8.569709667187729,
+        "class_cover": [
+          "L5H10",
+          "L5H0",
+          "L5H6"
+        ],
+        "class_cover_margin": 12.821950959349827,
+        "class_minus_global_prefix": 7.365067371684013,
+        "class_minus_random_mean": 7.031520451150808,
+        "full_global_margin": 6.69332738770626,
+        "global_prefix_margin": 5.456883587665814,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7T",
+        "random_subset_mean_margin": 5.7904305081990195,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_T_A_F7T_F7A_system_process_F7A",
+        "target": "F7A"
+      },
+      {
+        "ablated_margin": 6.745116089199649,
+        "class_cover": [
+          "L5H6",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 6.131755133923103,
+        "class_minus_global_prefix": 1.463336015442323,
+        "class_minus_random_mean": 1.144732841631197,
+        "full_global_margin": 3.032823158588158,
+        "global_prefix_margin": 4.66841911848078,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7E",
+        "random_subset_mean_margin": 4.987022292291906,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F7f_F7E_role_inverse_minimal_F7f",
+        "target": "F7f"
+      },
+      {
+        "ablated_margin": 5.375453091568082,
+        "class_cover": [
+          "L5H6",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 5.800774678430729,
+        "class_minus_global_prefix": 1.9356292976157157,
+        "class_minus_random_mean": 1.7587880271798593,
+        "full_global_margin": 3.1346091729036996,
+        "global_prefix_margin": 3.8651453808150134,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7E",
+        "random_subset_mean_margin": 4.04198665125087,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F7f_F7E_no_alias_plain_F7f",
+        "target": "F7f"
+      },
+      {
+        "ablated_margin": 5.984092929703703,
+        "class_cover": [
+          "L5H6",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 5.950103008009161,
+        "class_minus_global_prefix": 1.8826586526756932,
+        "class_minus_random_mean": 1.507825441515826,
+        "full_global_margin": 3.052779620352929,
+        "global_prefix_margin": 4.067444355333468,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7E",
+        "random_subset_mean_margin": 4.442277566493335,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F7f_F7E_concrete_human_F7f",
+        "target": "F7f"
+      },
+      {
+        "ablated_margin": 5.917469319302053,
+        "class_cover": [
+          "L5H6",
+          "L5H0",
+          "L5H10"
+        ],
+        "class_cover_margin": 5.100778633868041,
+        "class_minus_global_prefix": 0.3567902037669839,
+        "class_minus_random_mean": 0.7589652774949585,
+        "full_global_margin": 2.9110027504052765,
+        "global_prefix_margin": 4.743988430101057,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7E",
+        "random_subset_mean_margin": 4.341813356373082,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F7f_F7E_system_process_F7f",
+        "target": "F7f"
+      },
+      {
+        "ablated_margin": 4.13217640600317,
+        "class_cover": [
+          "L5H10",
+          "L5H5",
+          "L5H3"
+        ],
+        "class_cover_margin": 11.606446782972387,
+        "class_minus_global_prefix": 2.7647561766532487,
+        "class_minus_random_mean": 5.9125014151658615,
+        "full_global_margin": 11.034523655295848,
+        "global_prefix_margin": 8.841690606319139,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7f",
+        "random_subset_mean_margin": 5.693945367806526,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F7f_F7E_role_inverse_minimal_F7E",
+        "target": "F7E"
+      },
+      {
+        "ablated_margin": 6.216536037068854,
+        "class_cover": [
+          "L5H10",
+          "L5H5",
+          "L5H3"
+        ],
+        "class_cover_margin": 9.491839768085455,
+        "class_minus_global_prefix": 2.132906916130569,
+        "class_minus_random_mean": 3.3793978315866813,
+        "full_global_margin": 8.397823777338012,
+        "global_prefix_margin": 7.3589328519548864,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7f",
+        "random_subset_mean_margin": 6.112441936498774,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F7f_F7E_no_alias_plain_F7E",
+        "target": "F7E"
+      },
+      {
+        "ablated_margin": 6.02940674244281,
+        "class_cover": [
+          "L5H10",
+          "L5H5",
+          "L5H3"
+        ],
+        "class_cover_margin": 9.057344357139721,
+        "class_minus_global_prefix": 1.6259866497145206,
+        "class_minus_random_mean": 3.4331892706392875,
+        "full_global_margin": 7.746891179047941,
+        "global_prefix_margin": 7.4313577074252,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7f",
+        "random_subset_mean_margin": 5.6241550865004335,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F7f_F7E_concrete_human_F7E",
+        "target": "F7E"
+      },
+      {
+        "ablated_margin": 2.827381286789452,
+        "class_cover": [
+          "L5H10",
+          "L5H5",
+          "L5H3"
+        ],
+        "class_cover_margin": 9.920704545114017,
+        "class_minus_global_prefix": 5.064427425457517,
+        "class_minus_random_mean": 5.974617534261453,
+        "full_global_margin": 9.06949876684553,
+        "global_prefix_margin": 4.8562771196565,
+        "pair_kind": "same_drive_diff_register",
+        "partner": "F7f",
+        "random_subset_mean_margin": 3.9460870108525636,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F7f_F7E_system_process_F7E",
+        "target": "F7E"
+      }
+    ]
+  },
+  "gates": {
+    "max_sign_test_p": 0.05,
+    "min_control_win_share": 0.6,
+    "min_positive_margin_share": 0.55
+  },
+  "input_file": "stage7_foundation_pilot_20260517.jsonl",
+  "input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "locked_readout": {
+    "layer": 6,
+    "readout_key": "X_focus",
+    "readout_name": "focus_token"
+  },
+  "per_class_component_scores": {
+    "F1A": [
+      {
+        "component": "L5H10",
+        "mean_lift": 3.390232389730053,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 0.9362753149490126,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.7823651345490577,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.010991022214890567,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -1.715273558825726,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -3.1668402140045213,
+        "n": 4
+      }
+    ],
+    "F1E": [
+      {
+        "component": "L1H6",
+        "mean_lift": 2.4958880769138365,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": 2.441806932670274,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.8486177306569862,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 0.7021059937310047,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.18583105268211614,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -0.3037547224228672,
+        "n": 4
+      }
+    ],
+    "F1T": [
+      {
+        "component": "L5H5",
+        "mean_lift": 2.7265389694718176,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": 2.4731084849359113,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 1.6207984224096623,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 0.40008640676426954,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.01343860355926374,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -1.8597320322887576,
+        "n": 4
+      }
+    ],
+    "F1f": [
+      {
+        "component": "L1H6",
+        "mean_lift": 0.853729179099675,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 0.04142999265141434,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 0.011944257010335413,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.1862289869170537,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -1.8005948283512792,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -2.9534851909987223,
+        "n": 4
+      }
+    ],
+    "F2A": [
+      {
+        "component": "L5H10",
+        "mean_lift": 1.8914420102460214,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.9082945132897131,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.032912068579851184,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -1.4815599636819012,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -2.1564349766061714,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -2.5423694549747795,
+        "n": 4
+      }
+    ],
+    "F2E": [
+      {
+        "component": "L5H10",
+        "mean_lift": 3.20469190660473,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 2.644261980780983,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": 2.010539604529141,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.024520685254118435,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.020534719009726032,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -2.7448937413927426,
+        "n": 4
+      }
+    ],
+    "F2T": [
+      {
+        "component": "L5H3",
+        "mean_lift": 1.6203671780018867,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 0.9389018939834106,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 0.464369419730839,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.029480248451432045,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": -0.7684485858241388,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -1.741106647073487,
+        "n": 4
+      }
+    ],
+    "F2f": [
+      {
+        "component": "L5H6",
+        "mean_lift": -0.021276747066639512,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -0.4580452944628397,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": -0.7224128786656716,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -0.8331078139927794,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -1.7835739084751352,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -1.8517291163512426,
+        "n": 4
+      }
+    ],
+    "F3A": [
+      {
+        "component": "L5H10",
+        "mean_lift": 4.579744599865777,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.7318305406535239,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.05692103839986773,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -0.20243730559944328,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -1.083623460631213,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -3.625940394808483,
+        "n": 4
+      }
+    ],
+    "F3E": [
+      {
+        "component": "L5H3",
+        "mean_lift": 2.8336663359590917,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 2.5320432343645862,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 2.5305807550870294,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 1.5564828835691848,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.04719320782389114,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -0.04534363620855997,
+        "n": 4
+      }
+    ],
+    "F3T": [
+      {
+        "component": "L5H3",
+        "mean_lift": 2.5560648838647246,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 2.4151937569486406,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 0.9593744866602613,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.04978428974034299,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": -0.9640424404820005,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -2.1211766963508056,
+        "n": 4
+      }
+    ],
+    "F3f": [
+      {
+        "component": "L5H6",
+        "mean_lift": -0.04725348642839999,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": -0.44454996080062137,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -0.5779230070246466,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -0.6863743989503321,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -1.5460469296035046,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -1.5742749846377264,
+        "n": 4
+      }
+    ],
+    "F4A": [
+      {
+        "component": "L5H10",
+        "mean_lift": 1.551138120952284,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.32201447770443004,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.06850584236284085,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -1.4045820720480164,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -2.1877179670066242,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -2.6307383725995175,
+        "n": 4
+      }
+    ],
+    "F4E": [
+      {
+        "component": "L5H5",
+        "mean_lift": 0.9373894205283226,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.5963622367657002,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 0.4145687219902996,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.10110484211355741,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": 0.05836104784313134,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -2.0334035822566134,
+        "n": 4
+      }
+    ],
+    "F4T": [
+      {
+        "component": "L5H3",
+        "mean_lift": 2.908269350573172,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 2.5495010485286382,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 1.2590384159694092,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 1.0812847219639217,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.06566917345964796,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -0.3606883841039388,
+        "n": 4
+      }
+    ],
+    "F4f": [
+      {
+        "component": "L5H10",
+        "mean_lift": 1.3226439854464338,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 0.32653803233456147,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 0.2757436275125489,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.10197692760097987,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -0.11004273308201562,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -1.2636368880738083,
+        "n": 4
+      }
+    ],
+    "F5A": [
+      {
+        "component": "L1H6",
+        "mean_lift": 1.3138886759006183,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.6083501929153465,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 0.5706244830076272,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.11889897010624129,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -0.05472554628733506,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -2.4886888244630017,
+        "n": 4
+      }
+    ],
+    "F5E": [
+      {
+        "component": "L5H3",
+        "mean_lift": 4.305922981293676,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 3.3423431101142964,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 3.1925703734861743,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 2.870073265274555,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 1.078418640248541,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.2325115949309009,
+        "n": 4
+      }
+    ],
+    "F5T": [
+      {
+        "component": "L5H3",
+        "mean_lift": 3.1215959339588575,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 0.6585982373897223,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 0.31669921603805706,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.11554261650563902,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -0.33497437425683074,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -1.4080582168035838,
+        "n": 4
+      }
+    ],
+    "F5f": [
+      {
+        "component": "L1H6",
+        "mean_lift": -0.07200679794932174,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.22717778823539758,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": -0.944953975445018,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -1.7825194632212265,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -2.487148958073633,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -3.6598119301035155,
+        "n": 4
+      }
+    ],
+    "F6A": [
+      {
+        "component": "L5H10",
+        "mean_lift": 0.6022764257551079,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.01848216813871728,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -0.07907635679092273,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -1.6571757915647956,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -2.3476187846196823,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -2.947974414708047,
+        "n": 4
+      }
+    ],
+    "F6E": [
+      {
+        "component": "L5H10",
+        "mean_lift": 1.624554648176336,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": 1.1798872369373337,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 0.7008142709506466,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.06011250792728795,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.14851601176846296,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -4.344581442714885,
+        "n": 4
+      }
+    ],
+    "F6T": [
+      {
+        "component": "L5H3",
+        "mean_lift": 2.740812636946864,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 2.5685071989537365,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 0.4157344412765096,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 0.2885517782817586,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.029932722250932464,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -0.05000179940783833,
+        "n": 4
+      }
+    ],
+    "F6f": [
+      {
+        "component": "L5H6",
+        "mean_lift": 0.14238400365876758,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": 0.14187072780674126,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 0.07942580889903916,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -0.26894729067734846,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -0.6321298143939402,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -1.1213268162447416,
+        "n": 4
+      }
+    ],
+    "F7A": [
+      {
+        "component": "L5H10",
+        "mean_lift": 4.410081039839566,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.4969848503689511,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.04507562789362396,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -1.258483387801793,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -1.599620632412587,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -2.6305726875329176,
+        "n": 4
+      }
+    ],
+    "F7E": [
+      {
+        "component": "L5H10",
+        "mean_lift": 2.3810245118073774,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 1.8322400828353267,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": 0.6225812964973817,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.010084757757860774,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": -0.13634238473330051,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -1.2871281251295037,
+        "n": 4
+      }
+    ],
+    "F7T": [
+      {
+        "component": "L5H3",
+        "mean_lift": 1.959740996378739,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": 0.9791004685636132,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": 0.9453873876398683,
+        "n": 4
+      },
+      {
+        "component": "L5H6",
+        "mean_lift": 0.040577336570606914,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": -0.18627476653040353,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": -0.6706239552594381,
+        "n": 4
+      }
+    ],
+    "F7f": [
+      {
+        "component": "L5H6",
+        "mean_lift": 0.14559654147910517,
+        "n": 4
+      },
+      {
+        "component": "L5H0",
+        "mean_lift": 0.031343569165834806,
+        "n": 4
+      },
+      {
+        "component": "L5H10",
+        "mean_lift": -0.4194900216914057,
+        "n": 4
+      },
+      {
+        "component": "L5H3",
+        "mean_lift": -0.4892824462262346,
+        "n": 4
+      },
+      {
+        "component": "L1H6",
+        "mean_lift": -0.6262351699836946,
+        "n": 4
+      },
+      {
+        "component": "L5H5",
+        "mean_lift": -1.5385753155816424,
+        "n": 4
+      }
+    ]
+  },
+  "per_class_covers": {
+    "F1A": [
+      "L5H10",
+      "L1H6",
+      "L5H0"
+    ],
+    "F1E": [
+      "L1H6",
+      "L5H3",
+      "L5H0"
+    ],
+    "F1T": [
+      "L5H5",
+      "L5H3",
+      "L1H6"
+    ],
+    "F1f": [
+      "L1H6",
+      "L5H5",
+      "L5H10"
+    ],
+    "F2A": [
+      "L5H10",
+      "L5H0",
+      "L5H6"
+    ],
+    "F2E": [
+      "L5H10",
+      "L5H5",
+      "L5H3"
+    ],
+    "F2T": [
+      "L5H3",
+      "L5H5",
+      "L1H6"
+    ],
+    "F2f": [
+      "L5H6",
+      "L1H6",
+      "L5H10"
+    ],
+    "F3A": [
+      "L5H10",
+      "L5H0",
+      "L5H6"
+    ],
+    "F3E": [
+      "L5H3",
+      "L5H5",
+      "L1H6"
+    ],
+    "F3T": [
+      "L5H3",
+      "L5H5",
+      "L1H6"
+    ],
+    "F3f": [
+      "L5H6",
+      "L5H10",
+      "L5H0"
+    ],
+    "F4A": [
+      "L5H10",
+      "L5H0",
+      "L5H6"
+    ],
+    "F4E": [
+      "L5H5",
+      "L5H0",
+      "L5H10"
+    ],
+    "F4T": [
+      "L5H3",
+      "L1H6",
+      "L5H5"
+    ],
+    "F4f": [
+      "L5H10",
+      "L1H6",
+      "L5H5"
+    ],
+    "F5A": [
+      "L1H6",
+      "L5H0",
+      "L5H10"
+    ],
+    "F5E": [
+      "L5H3",
+      "L1H6",
+      "L5H5"
+    ],
+    "F5T": [
+      "L5H3",
+      "L1H6",
+      "L5H10"
+    ],
+    "F5f": [
+      "L1H6",
+      "L5H6",
+      "L5H10"
+    ],
+    "F6A": [
+      "L5H10",
+      "L5H6",
+      "L5H0"
+    ],
+    "F6E": [
+      "L5H10",
+      "L5H3",
+      "L5H5"
+    ],
+    "F6T": [
+      "L5H3",
+      "L5H5",
+      "L1H6"
+    ],
+    "F6f": [
+      "L5H6",
+      "L5H10",
+      "L5H5"
+    ],
+    "F7A": [
+      "L5H10",
+      "L5H0",
+      "L5H6"
+    ],
+    "F7E": [
+      "L5H10",
+      "L5H5",
+      "L5H3"
+    ],
+    "F7T": [
+      "L5H3",
+      "L1H6",
+      "L5H5"
+    ],
+    "F7f": [
+      "L5H6",
+      "L5H0",
+      "L5H10"
+    ]
+  },
+  "probe": {
+    "raw_test_acc": 0.7857142857142857,
+    "raw_train_acc": 1.0,
+    "raw_val_acc": 0.9985119047619048
+  },
+  "random_subcovers": [
+    [
+      "L1H6",
+      "L5H3",
+      "L5H0"
+    ],
+    [
+      "L5H0",
+      "L5H6",
+      "L1H6"
+    ],
+    [
+      "L5H3",
+      "L1H6",
+      "L5H6"
+    ],
+    [
+      "L1H6",
+      "L5H10",
+      "L5H5"
+    ],
+    [
+      "L1H6",
+      "L5H3",
+      "L5H0"
+    ],
+    [
+      "L1H6",
+      "L5H6",
+      "L5H3"
+    ],
+    [
+      "L5H10",
+      "L5H6",
+      "L1H6"
+    ],
+    [
+      "L1H6",
+      "L5H6",
+      "L5H5"
+    ]
+  ],
+  "schema_version": "stage27c_per_class_component_covers.v1",
+  "selected_components": [
+    "L5H3",
+    "L5H5",
+    "L5H0",
+    "L5H10",
+    "L1H6",
+    "L5H6"
+  ],
+  "split_contract": {
+    "eval_rows": 112,
+    "eval_rows_per_class": 4,
+    "eval_split": "test",
+    "learn_eval_disjoint": true,
+    "learn_rows": 112,
+    "learn_rows_per_class": 4,
+    "learn_split": "train"
+  },
+  "stage27b_context": {
+    "formal_gate_valid": true,
+    "source_file": "stage27b_component_guided_contrast_sonar_20260521.json",
+    "source_sha256": "b04e171aadaf99e3221aecf28fb3f6bde3003a1e392fcda1acd66c500522b834",
+    "source_status": "GREY_COMPONENT_GUIDED_CONTRAST_SONAR_PARTIAL"
+  },
+  "status": "PASS_BOUNDED_PER_CLASS_COMPONENT_COVERS"
+}
