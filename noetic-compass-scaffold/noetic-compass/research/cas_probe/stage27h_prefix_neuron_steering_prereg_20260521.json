@@ -1,0 +1,74 @@
+{
+  "claim_boundary": {
+    "claim_if_null": "Stage 7 prefix conditioning and Stage 27G readout steering remain valid separately, but their combined effect on continuation likelihood was not established under the preregistered controls.",
+    "claim_if_pass": "Within Pythia-160M, a readable CAS realization prefix plus internal amplification of the matching Stage 27F MLP-neuron cover shifts semantic continuation likelihood beyond prefix-only and matched random-cover controls; polarity-flipping the same cover pushes the likelihood margin in the opposite direction.",
+    "forbidden_claims": "Do not claim open-ended generation control, exact circuit completion, model-wide control, weight editing, cross-model steering, or raw CAS-symbol understanding from Stage 27H.",
+    "grey_status": "GREY_PREFIX_PLUS_NEURON_STEERING_PARTIAL",
+    "null_status": "NULL_PREFIX_PLUS_NEURON_STEERING_NOT_ESTABLISHED",
+    "pass_status": "PASS_BOUNDED_PREFIX_PLUS_NEURON_STEERING",
+    "scope_boundary": "Stage 27H is output-distribution likelihood steering, not free-form visible-text control, not weight editing, not model-wide control, not a complete circuit, and not cross-model evidence."
+  },
+  "execution_order": [
+    "commit_preregistration_and_runner_before_gpu_result",
+    "verify_source_contracts",
+    "score_prefix_only_and_prefix_plus_neuron_interventions",
+    "compare_against_same_layer_random_neuron_cover_controls",
+    "record_bounded_result"
+  ],
+  "formal_anchor": "External realization plus internal cover intervention: epsilon-readable prefix supplies the realized CAS frame, while the Stage 27F/27G neuron cover amplifies the matching internal readout path.",
+  "gates": [
+    {
+      "criterion": "Stage 7 readable-prefix, Stage 27F, and Stage 27G source reports have the preregistered PASS statuses.",
+      "kind": "pass_floor",
+      "name": "source_contracts"
+    },
+    {
+      "criterion": "Readable prefix-only margin delta versus no-prefix is positive and at least +0.10 on average.",
+      "kind": "pass_floor",
+      "name": "prefix_floor"
+    },
+    {
+      "criterion": "Prefix-plus-target-cover amplification beats random-cover amplification increments on at least 60% of rows with sign-test p<0.05.",
+      "kind": "primary",
+      "name": "prefix_plus_target_amplification"
+    },
+    {
+      "criterion": "Prefix-plus-target-cover polarity flip reduces margin more than random-cover polarity flips on at least 60% of rows with sign-test p<0.05.",
+      "kind": "primary",
+      "name": "prefix_plus_target_flip"
+    },
+    {
+      "criterion": "Both amplification increments and polarity-flip reductions are positive on at least 55% of rows.",
+      "kind": "primary",
+      "name": "bidirectional_effect_share"
+    }
+  ],
+  "method": [
+    "Commit this pre-registration and runner before any Stage 27H GPU result is generated.",
+    "Reuse the Stage 7 CAS-prefix likelihood row selection and readable plain-prefix wording.",
+    "Verify Stage 27F and Stage 27G source reports are PASS and expose the class-specific MLP-neuron covers.",
+    "Score correct-drive versus hard-partner-drive continuation likelihood under no prefix and readable prefix.",
+    "During likelihood scoring, amplify the target class's Stage 27F neuron cover and compare prefix-plus-amplification against prefix-only.",
+    "Compare the prefix-plus-amplification increment against same-size/same-layer random neuron-cover amplification controls.",
+    "Polarity-flip the target cover under the same readable prefix and compare the margin reduction against random polarity-flip controls.",
+    "Report neuron-only amplification and partner-cover amplification as diagnostics, not primary PASS gates."
+  ],
+  "motivation": "Stage 7 proved readable-prefix likelihood conditioning. Stage 27G proved MLP-neuron cover readout steering. Stage 27H tests whether the two routes combine at the semantic likelihood level.",
+  "required_inputs": {
+    "amplification_scale": 2.0,
+    "fixture": "stage7_foundation_pilot_20260517.jsonl",
+    "model": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "per_drive": 16,
+    "polarity_flip_scale": -1.0,
+    "stage27f_report": "stage27f_targeted_mlp_neuron_covers_20260521.json",
+    "stage27f_status": "PASS_BOUNDED_TARGETED_MLP_NEURON_COVERS",
+    "stage27g_report": "stage27g_mlp_neuron_cover_steering_20260521.json",
+    "stage27g_status": "PASS_BOUNDED_MLP_NEURON_COVER_STEERING",
+    "stage7_prefix_report": "stage7_cas_prefix_likelihood_20260517.json",
+    "stage7_prefix_status": "READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD"
+  },
+  "stage": "27H",
+  "status": "PREREGISTERED_GPU_RECOMMENDED",
+  "validation": {}
+}
