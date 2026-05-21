@@ -288,11 +288,16 @@ def _artifact_contract(activations_sha256: str, manifest_path: Path) -> dict[str
     with manifest_path.open(encoding="utf-8") as fh:
         manifest = json.load(fh)
     expected = manifest.get("output_sha256")
+    contract_source = "output_sha256"
+    if expected is None and isinstance(manifest.get("replacement_artifact_contract"), dict):
+        expected = manifest["replacement_artifact_contract"].get("output_sha256")
+        contract_source = "replacement_artifact_contract.output_sha256"
     matched = bool(expected == activations_sha256)
     return {
         "status": "LOCKED_ARTIFACT_MATCH" if matched else "LOCAL_RECAPTURE_HASH_MISMATCH",
         "expected_activation_sha256": expected,
         "actual_activation_sha256": activations_sha256,
+        "contract_source": contract_source,
         "formal_gate_valid": matched,
     }
 

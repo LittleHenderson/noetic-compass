@@ -119,6 +119,24 @@ def test_artifact_contract_detects_manifest_mismatch() -> None:
     assert contract["formal_gate_valid"] is False
 
 
+def test_artifact_contract_accepts_nested_replacement_contract() -> None:
+    sonar = _load_module("stage24b_nested_contract")
+    manifest = ROOT / "__stage24b_nested_contract_manifest_test.json"
+    try:
+        manifest.write_text(
+            '{"replacement_artifact_contract": {"output_sha256": "actual"}}',
+            encoding="utf-8",
+        )
+        contract = sonar._artifact_contract("actual", manifest)
+    finally:
+        if manifest.exists():
+            manifest.unlink()
+
+    assert contract["status"] == "LOCKED_ARTIFACT_MATCH"
+    assert contract["formal_gate_valid"] is True
+    assert contract["contract_source"] == "replacement_artifact_contract.output_sha256"
+
+
 def test_missing_activation_artifact_fails_explicitly() -> None:
     sonar = _load_module("stage24b_missing")
     missing_dir = ROOT / "__stage24b_missing__"
