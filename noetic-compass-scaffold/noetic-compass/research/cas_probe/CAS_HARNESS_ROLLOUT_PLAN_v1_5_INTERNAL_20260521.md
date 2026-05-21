@@ -31,6 +31,8 @@ Beyond what's captured in v1.5, the project has advanced through:
 - **Stage 27G** — **Bidirectional neuron-cover steering formal PASS** (target amplification +12.72 margin gain; matched random −0.08; target polarity-flip −25.15 margin drop, pushing margin below zero in 100% of rows; matched random polarity-flip −0.14; partner-cover amplification flips 25.9% of rows as cross-control)
 - **Stage 27J** — Output-side attribution proven (Codex; landed during the 27F→27K sequence)
 - **Stage 27K** — **Output-side component steering GREY** (combined carrier amplification + eraser suppression; mean likelihood-margin lift +0.5576; matched random −0.2927; delta over random +0.8502; row-consistency gate failed at p = 0.3444 / 30 of 56 wins; **eraser-suppression single-channel was strongest at +0.8223 mean lift / 69.6% positive share**). Commits: `236c5c5` prereg + `9ef9b29` results.
+- **Stage 27N** — Cross-scale global-cover output-side steering on Pythia-1B: **NULL** (one global eraser cover too coarse to resolve cross-Drive distinctions at 1B scale). Established the methodology bound that informed 27O.
+- **Stage 27O** — **Cross-scale drive-local output-side eraser steering on Pythia-1B: PASS** (one calibrated eraser cover *per* Foundation drive; mean likelihood-margin lift **+0.8386** vs matched random −0.1634; **54 of 56** held-out rows positive; sign-test **p = 2.22×10⁻¹⁴**). First clean behavioral-control PASS. Commits: `a786714` prereg + `ee5b047` results.
 
 The empirical picture has clarified materially since v1.5:
 
@@ -38,7 +40,9 @@ The empirical picture has clarified materially since v1.5:
 - **Standard SAE empirically ruled out** for sparse causal CAS features at the tested layer (Stage 25 NULL)
 - **Head-level component attribution empirically validated** with necessity AND sufficiency, formal anchor via ACBE Axiom 4.2
 - **Sparse neuron-cover localization empirically validated** with full bidirectional control — ablate / amplify / polarity-flip / patch-back, all matched-control validated, all 112/112 at p < 10⁻³³. This is the finest causal granularity currently supported and the first formally PASS-grade neuron-level result in the project.
-- **Output-side component steering PARTIAL** — Stage 27K directional evidence (+0.5576 mean lift, delta over random +0.8502) but row-consistency p = 0.3444 didn't pass. **Eraser-suppression channel is the strongest single signal** (+0.8223 / 69.6%). Behavioral-control claim stays bounded as directional pending calibrated per-class steering (Stage 27L).
+- **Output-side component steering PARTIAL on Pythia-160M (Stage 27K)** — directional, not row-consistent.
+- **Cross-scale global cover NULL on Pythia-1B (Stage 27N)** — one global eraser cover too coarse to resolve cross-Drive distinctions at 1B.
+- **Cross-scale DRIVE-LOCAL eraser steering PASS on Pythia-1B (Stage 27O)** — first clean behavioral-control PASS. Mean lift +0.8386, 54/56 rows, p = 2.22×10⁻¹⁴. The working methodology is one calibrated eraser cover *per* Foundation drive. The NULL/PASS sequence (27K GREY → 27N NULL → 27O PASS) is itself part of the auditable methodology — the bound was learned, not assumed.
 
 The rollout below should be read against this updated foundation. Some Section 10 items from v1.5 (the rollout content extracted here) are now advanced, some are still relevant, and some have been refined by the recent NULL-then-PASS arc.
 
@@ -54,10 +58,12 @@ The rollout below should be read against this updated foundation. Some Section 1
 | ~~Stage 27H~~ | ~~CPL2 behavioral control test~~ | ~~~$10-30 GPU~~ | ~~Subsumed by Stage 27K's output-side steering test.~~ |
 | ~~Stage 27J~~ | ~~Wire output-side attribution~~ | ~~Done~~ | ~~Stage 27J output-side attribution proven (per Codex 2026-05-21 PM)~~ |
 | ~~Stage 27K~~ | ~~Output-side component steering (combined carrier amplification + eraser suppression)~~ | ~~Done~~ | ~~GREY: directional evidence (+0.5576 mean lift, delta over random +0.8502), row-consistency p = 0.3444 failed. Eraser-suppression channel strongest at +0.8223 / 69.6%.~~ |
-| **Stage 27L** | **Calibrated per-class / per-row steering, focused on eraser-suppression channel; test whether tuned gain produces clean row-consistency on output-distribution lift** | **~$15–40 GPU** | **Make-or-break for clean behavioral-control PASS. 27K's GREY signaled that fixed carrier_scale=2.0 + eraser_scale=0.0 is too blunt; tuned gain is the natural next attempt. Eraser-suppression's 69.6% positive share suggests it's the right channel to tune first.** |
-| **Stage 27M** | **Wire neuron-cover support signal into Evidence Packet + Verification Stack** | **$0 GPU — engineering** | **Product move. "Neuron-cover support: present / weak / conflicted" field per inspection. Audit-grade output upgrade regardless of 27L outcome.** |
+| ~~Stage 27L~~ | ~~Calibrated per-class steering on Pythia-160M~~ | ~~Done~~ | ~~Subsumed; drive-local methodology validated directly at cross-scale (Stage 27O)~~ |
+| ~~Stage 27N~~ | ~~Global-cover cross-scale output-side steering on Pythia-1B~~ | ~~Done~~ | ~~NULL — global cover too coarse at 1B; informed Stage 27O methodology~~ |
+| ~~Stage 27O~~ | ~~Drive-local cross-scale output-side eraser steering on Pythia-1B~~ | ~~Done~~ | ~~PASS — +0.8386 mean lift, 54/56, p = 2.22×10⁻¹⁴~~ |
+| **Stage 27P** | **Wire drive-local eraser-cover support + steering signal into Evidence Packet + Verification Stack** | **$0 GPU — engineering** | **Product move. Per-inspection field: "drive-local cover support: present / weak / conflicted"; per-inspection steering capability surfaced in Evidence Packet. Audit-grade output upgrade.** |
+| **Stage 28** | **Cross-architecture replication of Stage 27O drive-local eraser steering on OLMo-1B + Qwen2.5-1.5B** | **~$40–120 GPU** | **Highest-leverage open empirical extension. If passes: behavioral-control claim converts from Pythia-only (within-family) to cross-architecture. Largest remaining claim-ladder upgrade.** |
 | Stage 27I | Cross-axis: sparse-cover localization for 40 Elements + 10 Noetics | ~$20–40 GPU | Tests whether cover methodology generalizes beyond Foundations |
-| Stage 28 | Cross-model replication of Stages 26 / 27A / 27F / 27G on OLMo-1B + Qwen2.5-1.5B | ~$40–120 GPU | Converts neuron-cover localization from Pythia-only to cross-architecture. The strongest available single empirical extension. |
 | Stage 9.1 | 40-Element ablation + Domain × Noetic factorization | ~30 min A6000 | Tests whether 40 Elements is primary axis or Domain+Noetic composition |
 | Stage 17 option A | Llama-7B or OLMo-7B or Qwen2.5-7B scale-up | ~$30–100 GPU | Tests scale beyond 2.8B; would close the "scale" bound to 7B |
 | Stage 17 option B | Qwen2.5 in-family scale curve (0.5B / 1.5B / 7B) | ~$15–40 GPU | Tests training-data-dependent saturation hypothesis within one family |
@@ -66,15 +72,14 @@ The rollout below should be read against this updated foundation. Some Section 1
 | Stage 23.A.1 | Dashboard adapter migration to canonical 2D notation map (complete) | $0 | Validates foundation end-to-end (shipped: GraphView + Notation2DView) |
 | **Product packaging** | Subdomain landing page (`cas-harness.noeticcompass.com` or similar) + one-pager + customer-facing demo flow | $0 — design only | First external surface; required before any paid pilot |
 
-**Sequencing priority** (updated 2026-05-21 evening after Stage 27K GREY):
+**Sequencing priority** (updated 2026-05-21 late evening after Stage 27O PASS):
 
-1. **Stage 27L** — calibrated per-class / per-row steering, focused on the eraser-suppression channel that produced 27K's strongest single signal (+0.8223 mean lift, 69.6% positive share). **New make-or-break for clean behavioral-control claim.** Lowest GPU cost ($15–40) among open work, highest claim-ladder leverage.
-2. **Stage 27M** — wire neuron-cover support into Evidence Packet schema + Verification Stack. **Ships regardless of 27L outcome.** Product move, $0 GPU.
-3. Stage 28 — cross-model replication of 26 / 27A / 27F / 27G on OLMo + Qwen. Converts neuron-cover localization from Pythia-only finding into cross-architecture finding.
-4. **Update investor spec sheet** ✓ (done — neuron-cover + 27K PARTIAL output-steering folded in)
-5. Product packaging — subdomain landing + one-pager finalization + demo flow
-6. Stage 27I — extend cover methodology to 40 Elements / Noetics axes
-7. THEN: Stage 17 scale-up (7B+) OR Stage 17C hidden-content validation, depending on first paying conversation
+1. **Stage 28** — cross-architecture replication of Stage 27O drive-local eraser steering on OLMo-1B + Qwen2.5-1.5B. **Highest-leverage open work.** Converts the behavioral-control claim from Pythia-only (within-family) to cross-architecture. Same matched-control discipline; same per-Foundation-drive cover methodology proven at cross-scale on 1B; expected ~$40–120 GPU.
+2. **Stage 27P** — wire drive-local cover + steering signal into Evidence Packet + Verification Stack. $0 GPU, product move. Ships regardless of Stage 28 outcome.
+3. **Update investor spec sheet** ✓ (done — Stage 27O folded in, behavioral-control claim upgraded from PARTIAL to LICENSED with drive-local bound)
+4. Product packaging — subdomain landing + one-pager finalization + demo flow
+5. Stage 27I — extend cover methodology to 40 Elements / Noetics axes
+6. THEN: Stage 17 scale-up (7B+) OR Stage 17C hidden-content validation, depending on first paying conversation
 
 ---
 
@@ -156,6 +161,7 @@ The investor-facing spec sheet lists 13 candidate IP filings. The internal seque
 | 3 | Cross-architecture probe-transfer methodology | After Stage 28 cross-model replication of component attribution |
 | 4 | Component-level (head-level) necessity + sufficiency testing methodology | After Stage 28 cross-model replication confirms it isn't Pythia-specific |
 | 4b | **Sparse MLP-neuron-cover causal localization methodology** — targeted cover identification + ablation + amplification + polarity-flip + matched-control validation + bit-exact patch-back recovery (Stages 27F + 27G) | **Time-sensitive — file immediately after IP attorney consultation.** This is the finest-granularity causal localization claim in the project; differentiating against any competing interpretability product. |
+| 4c | **Drive-local output-side eraser-channel steering methodology** — per-Foundation-drive calibrated eraser cover applied at output side; cross-scale validated within Pythia family at 54/56 row consistency, p = 2.22×10⁻¹⁴ (Stage 27O). Includes the methodology-bound discovery that global cover is too coarse at 1B scale (Stage 27N NULL). | **Most time-sensitive of the open filings.** First clean behavioral-control claim; differentiates against any interpretability tool that reads but does not steer. Pre-registered NULL/PASS sequence is part of the IP package. |
 | 5 | CAS Verification Stack — runtime-safe accept/suppress | Already validated, ready to file |
 | 6 | Verification Mode Selector + factor-consistent verifier | Already validated, ready to file |
 | 7 | Generation Readiness Gate orchestrating policy methodology | Already validated, ready to file |

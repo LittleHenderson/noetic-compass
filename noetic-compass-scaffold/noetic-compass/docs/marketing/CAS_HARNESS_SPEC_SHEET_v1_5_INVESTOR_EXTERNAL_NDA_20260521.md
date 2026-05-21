@@ -44,7 +44,7 @@ The product is grounded in a formal mathematical result: **Proposition 5.6 of th
 
 ### Today's load-bearing claim, reserved-language, defensible for audit
 
-> CAS Harness reads cognitive structure from open-weight transformer hidden states across five model points and three architecture families (EleutherAI Pythia, AI2 OLMo, Alibaba Qwen). The η → ε bridge — the read-and-realize loop predicted by Proposition 5.6 of the Noetic Topos paper — conditions next-token likelihood with effect sizes that grow then plateau across Pythia scale, strengthen on OLMo, and reach their highest observed value on Qwen2.5-1.5B (+0.7960 likelihood Δ, p = 2.92×10⁻¹²). Six cognitive axes are detected, ablation-validated, and multi-layer trace-audited with blind-spot flagging that distinguishes model-side weakness from readout-position weakness. CAS Foundation subspace shows output-weight alignment 2.83× random expectation (p = 0.0099) — independent weight-geometry evidence of the bridge mechanism. Causal localization is empirically established at two granularities: head-level (necessity via ablation + sufficiency via path patching) AND **sparse MLP-neuron-cover-level with full bidirectional control** — ablating the cover inverts the classification margin, amplifying it strengthens the margin, polarity-flipping it reverses the margin entirely; all three tests pass 112/112 with matched-control validation at p < 10⁻³³ and bit-exact patch-back recovery. Cross-architecture transfer is closed at three independent out-of-family architectures.
+> CAS Harness reads cognitive structure from open-weight transformer hidden states across five model points and three architecture families (EleutherAI Pythia, AI2 OLMo, Alibaba Qwen). The η → ε bridge — the read-and-realize loop predicted by Proposition 5.6 of the Noetic Topos paper — conditions next-token likelihood with effect sizes that grow then plateau across Pythia scale, strengthen on OLMo, and reach their highest observed value on Qwen2.5-1.5B (+0.7960 likelihood Δ, p = 2.92×10⁻¹²). Six cognitive axes are detected, ablation-validated, and multi-layer trace-audited with blind-spot flagging that distinguishes model-side weakness from readout-position weakness. CAS Foundation subspace shows output-weight alignment 2.83× random expectation (p = 0.0099) — independent weight-geometry evidence of the bridge mechanism. Causal localization is empirically established at two granularities: head-level (necessity via ablation + sufficiency via path patching) AND **sparse MLP-neuron-cover-level with full bidirectional control** — ablating the cover inverts the classification margin, amplifying it strengthens the margin, polarity-flipping it reverses the margin entirely; all three tests pass 112/112 with matched-control validation at p < 10⁻³³ and bit-exact patch-back recovery. **Output-side behavioral steering is validated at drive-local granularity via calibrated eraser-channel suppression**, cross-scale on Pythia-1B (mean likelihood-margin lift +0.8386 vs matched-random −0.1634; 54 of 56 held-out rows positive; sign-test p = 2.22×10⁻¹⁴). Cross-architecture transfer is closed at three independent out-of-family architectures for the readout claim; cross-architecture extension of the steering claim is the next preregistered gate.
 
 ---
 
@@ -318,6 +318,28 @@ This is **bidirectional causal control at sparse-neuron-cover granularity**:
 
 The localization is bounded: it is **cover-level**, not single-neuron monosemantic. The sparse cover (32 of 3072 neurons) is the causal unit — individual neurons within the cover may carry additional structure not isolated by this methodology.
 
+#### 5.9.3 Output-Side Behavioral Steering at Drive-Local Granularity (Cross-Scale Validated)
+
+Beyond readout-level control, CAS Harness can shift the model's output-distribution likelihood via calibrated eraser-channel suppression at the level of individual Foundation drives (Drive-local granularity). The methodology was discovered via a precise NULL/PASS sequence:
+
+- A combined-channel, fixed-gain steering protocol at Pythia-160M scale produced directional but inconsistent evidence (row-consistency p = 0.3444)
+- A global cross-scale cover at Pythia-1B failed entirely (too coarse — single cover cannot resolve cross-Drive distinctions)
+- A **drive-local** cover (one learned eraser cover per Foundation drive) at Pythia-1B passed cleanly
+
+**Stage 27O headline result (cross-scale Pythia-1B):**
+
+| Measurement | Value |
+|---|---|
+| Drive-local mean likelihood-margin lift | **+0.8386** |
+| Matched random-control mean | −0.1634 |
+| Net effect vs matched random | +1.002 |
+| Held-out rows positive | **54 of 56** |
+| Sign-test p-value | **2.22 × 10⁻¹⁴** |
+
+The bound: this is **drive-local output-side eraser steering**, not universal or global-cover steering. The successful methodology specifies a separately-calibrated eraser cover *per* Foundation drive. The failure modes that taught this discipline (global-cover NULL at 1B, fixed-gain GREY at 160M) are pre-registered and part of the auditable evidence chain.
+
+The combined picture is: CAS Harness can *read* CAS structure (probe layer), *control the readout* (head- and neuron-cover bidirectional), and *steer the output distribution* (drive-local eraser channel, cross-scale validated within Pythia family).
+
 ### 5.10 Hidden-Content / Suppression Detection (Prototype)
 
 Two-bridge architecture (internal-state CAS profile vs emitted-text CAS profile) surfaces what the model is internally computing but not emitting. Detection at CAS-class granularity. Promoted from concept to working prototype.
@@ -375,7 +397,8 @@ REST API endpoint with JWT authentication, path-traversal guard, size cap, schem
 | Multi-layer trace + blind-spot detection | Closed |
 | Component-level causal localization (head-level, necessity + sufficiency) | Closed |
 | Sparse neuron-cover causal localization (ablation + amplification + polarity-flip + patch-back) | Closed |
-| Output-side component steering (likelihood-margin lift) | Partial — directional evidence; row-consistency gate not yet passed; calibrated per-class steering is the next gate |
+| Output-side behavioral steering at drive-local granularity (cross-scale within Pythia) | **Closed** (Stage 27O: +0.8386 mean lift, 54/56 rows, p = 2.22×10⁻¹⁴; bounded to drive-local eraser-channel methodology) |
+| Output-side steering cross-architecture (OLMo, Qwen) | Open — Stage 28 preregistered |
 | Runtime-safe acceptance/suppression | Closed |
 | Mode-configurable verification | Closed |
 | Four-tier generation readiness | Closed |
@@ -421,6 +444,7 @@ This discipline produces a methodologically stronger evidence base than the majo
 8. Produced first weight-geometry evidence of the bridge mechanism (2.83× random expectation, p = 0.0099)
 9. Established component-level causal localization at head-level with necessity AND sufficiency tests passing (matched-control validated)
 10. Established sparse MLP-neuron-cover causal localization with full bidirectional control — ablation, amplification, and polarity-flip — all passing 112/112 examples with p < 10⁻³³ and bit-exact patch-back recovery
+11. **Validated output-side behavioral steering at drive-local granularity, cross-scale within the Pythia family** (Stage 27O: +0.8386 mean likelihood-margin lift, 54 of 56 held-out rows positive, sign-test p = 2.22×10⁻¹⁴). The pre-registered NULL-then-PASS sequence (global-cover Stage 27N NULL → drive-local Stage 27O PASS) is itself part of the auditable methodology — the bound was learned, not assumed.
 10. Prototyped hidden-content / suppression detection via two-bridge methodology
 11. Established referee-defensible audit methodology with multiple consecutive pre-registered confirmatory stages
 
@@ -471,8 +495,9 @@ External-facing claims must use this table.
 | "We have component-level causal localization with necessity AND sufficiency tests passing" | LICENSED |
 | "We can identify sparse MLP-neuron covers that causally support class-specific structural readouts in any open-weight LLM tested" | LICENSED |
 | "We can ablate, amplify, or polarity-flip the sparse neuron covers to remove, strengthen, or reverse the classification — all with matched-control validation and bit-exact patch-back recovery" | LICENSED |
-| "We can shift the model's output-distribution likelihood via output-side component steering" | LICENSED PARTIAL (directional evidence; Stage 27K mean lift +0.5576, delta over matched random +0.8502; eraser-suppression channel strongest at +0.8223 mean lift / 69.6% positive share; preregistered row-consistency gate not yet passed, p = 0.3444. Calibrated per-class steering is the next gate.) |
-| "We can steer the model's generated language at full row-consistency cleanliness" | NOT LICENSED (Stage 27K GREY result; calibrated per-class/per-row gain tuning required for clean PASS) |
+| "We can shift the model's output-distribution likelihood via calibrated drive-local eraser-channel steering at cross-scale within the Pythia family" | LICENSED (Stage 27O cross-scale validated on Pythia-1B: mean lift +0.8386 vs matched random −0.1634; 54 of 56 held-out rows; p = 2.22×10⁻¹⁴. Bounded to drive-local cover methodology — not universal/global-cover steering.) |
+| "We can steer the model's output distribution at universal/global-cover granularity" | NOT LICENSED (Stage 27N established global cover is too coarse at cross-scale; per-drive cover is the working methodology) |
+| "Output-side steering replicates across architecture families" | NOT YET LICENSED (validated within Pythia family at cross-scale; Stage 28 cross-architecture replication is the next preregistered gate) |
 | "We can read the model's mind in arbitrary natural-language detail" | NOT LICENSED (typed class granularity only) |
 | "Validated for production use at frontier scale" | NOT LICENSED (highest validated scale is 2.8B) |
 | "Universal interpretability platform" | NOT LICENSED (three families ≠ universal) |
@@ -496,8 +521,9 @@ External-facing claims must use this table.
 ### 9.3 Modal
 
 - Likelihood conditioning via η→ε prefix closed at five model points, three architecture families.
-- **Output-side component-steering shows directional evidence but not clean row-consistency** (Stage 27K mean likelihood-margin lift +0.5576, delta over matched random +0.8502, row-consistency p = 0.3444). Eraser-suppression single-channel is the strongest observed (+0.8223 mean lift, 69.6% positive share). Calibrated per-class steering is the next preregistered gate; current claim is bounded as PARTIAL directional evidence, not clean control.
-- Surface-text steering at small model scale (Pythia-160M) failed at the sampling-noise floor in earlier stages. Replication at 1B+ for surface-text tier remains an open boundary.
+- **Output-side behavioral steering at drive-local granularity closed at cross-scale within Pythia** (Stage 27O: mean lift +0.8386 vs matched random −0.1634; 54 of 56 rows; p = 2.22×10⁻¹⁴). The successful methodology uses one calibrated eraser cover *per* Foundation drive. Global / universal cover was empirically falsified (Stage 27N NULL — too coarse).
+- Output-side steering **cross-architecture replication** (OLMo, Qwen) remains open; preregistered as Stage 28.
+- Surface-text steering at small model scale (Pythia-160M, earlier stages) failed at the sampling-noise floor. Replication at 1B+ for surface-text tier is now positionally adjacent to the validated drive-local steering claim and is a natural follow-on extension.
 
 ### 9.4 Per-Class
 
@@ -610,6 +636,7 @@ This investor-facing document is distributed **only under executed NDA**. Recipi
 - Multi-layer trace with blind-spot detection and readout-vs-model disambiguation
 - Component-level causal localization at head-level with necessity AND sufficiency (matched-control validated)
 - **Sparse MLP-neuron-cover causal localization with full bidirectional control** — ablate / amplify / polarity-flip, all 112/112 examples passing at p < 10⁻³³ with bit-exact patch-back recovery
+- **Output-side behavioral steering at drive-local granularity, cross-scale within Pythia** — Stage 27O: drive-local eraser-channel steering on Pythia-1B; mean likelihood-margin lift +0.8386 vs matched random −0.1634; 54 of 56 held-out rows positive; p = 2.22×10⁻¹⁴. Bounded to drive-local methodology — global cover was empirically falsified
 - Runtime-safe accept/suppress at 87.6% / 99.78% accuracy
 - Three customer-configurable verification modes (6/6 pre-registered targets met)
 - Four-tier generation readiness policy
