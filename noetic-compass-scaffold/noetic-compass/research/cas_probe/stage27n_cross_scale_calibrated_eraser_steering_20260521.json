@@ -1,0 +1,2863 @@
+{
+  "boundary": "Stage 27N is bounded cross-scale evidence for calibrated output-side eraser-cover intervention over Pythia-1B CPL2 likelihood margins. It is not cross-architecture evidence, not weight editing, not complete circuit discovery, not model-wide control, and not visible free-form generation control.",
+  "calibration": {
+    "drive_calibrated": {
+      "details": {
+        "1": {
+          "grid": [
+            {
+              "increment": {
+                "mean": -0.8894897460937501,
+                "median": -0.9233642578124996,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": -0.5590270996093749,
+                "median": -0.59130859375,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": -0.30153808593749976,
+                "median": -0.3131347656250001,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": -0.12186279296875002,
+                "median": -0.11845703125000018,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 0.0,
+            "median": 0.0,
+            "n": 8,
+            "positive_share": 0.0
+          },
+          "selected_scale": 1.0
+        },
+        "2": {
+          "grid": [
+            {
+              "increment": {
+                "mean": 0.17354125976562496,
+                "median": 0.13083496093750036,
+                "n": 8,
+                "positive_share": 0.75
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 0.1353088378906252,
+                "median": 0.09433593750000036,
+                "n": 8,
+                "positive_share": 0.75
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.08690185546875018,
+                "median": 0.0595703125,
+                "n": 8,
+                "positive_share": 0.75
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.043652343750000155,
+                "median": 0.033056640625000355,
+                "n": 8,
+                "positive_share": 0.75
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 0.17354125976562496,
+            "median": 0.13083496093750036,
+            "n": 8,
+            "positive_share": 0.75
+          },
+          "selected_scale": 0.0
+        },
+        "3": {
+          "grid": [
+            {
+              "increment": {
+                "mean": -1.3164306640625,
+                "median": -1.4315185546875,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": -0.8103088378906252,
+                "median": -0.8983642578124997,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": -0.4195800781250002,
+                "median": -0.4790527343750002,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": -0.15848388671875013,
+                "median": -0.18574218749999982,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 0.0,
+            "median": 0.0,
+            "n": 8,
+            "positive_share": 0.0
+          },
+          "selected_scale": 1.0
+        },
+        "4": {
+          "grid": [
+            {
+              "increment": {
+                "mean": 0.38358764648437493,
+                "median": 0.5989501953124994,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 0.23240356445312504,
+                "median": 0.34086914062499973,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.1304931640625001,
+                "median": 0.17436523437499973,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.058300781250000044,
+                "median": 0.07153320312499956,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 0.38358764648437493,
+            "median": 0.5989501953124994,
+            "n": 8,
+            "positive_share": 0.625
+          },
+          "selected_scale": 0.0
+        },
+        "5": {
+          "grid": [
+            {
+              "increment": {
+                "mean": 0.9999328613281251,
+                "median": 1.23505859375,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 0.8782653808593748,
+                "median": 1.0771484375,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.6327392578125002,
+                "median": 0.7741210937499998,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.3283569335937502,
+                "median": 0.4029785156250003,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 0.9999328613281251,
+            "median": 1.23505859375,
+            "n": 8,
+            "positive_share": 1.0
+          },
+          "selected_scale": 0.0
+        },
+        "6": {
+          "grid": [
+            {
+              "increment": {
+                "mean": 0.6539855957031248,
+                "median": 0.5973388671874997,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 0.4305847167968748,
+                "median": 0.3912597656250001,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.23699951171874956,
+                "median": 0.21440429687499973,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.09162597656249988,
+                "median": 0.08291015625000009,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 0.6539855957031248,
+            "median": 0.5973388671874997,
+            "n": 8,
+            "positive_share": 1.0
+          },
+          "selected_scale": 0.0
+        },
+        "7": {
+          "grid": [
+            {
+              "increment": {
+                "mean": 1.298883056640625,
+                "median": 1.2988281249999998,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 0.9424926757812501,
+                "median": 0.900927734375,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.5976074218749999,
+                "median": 0.6121582031249999,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.2823120117187499,
+                "median": 0.27915039062499925,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 1.298883056640625,
+            "median": 1.2988281249999998,
+            "n": 8,
+            "positive_share": 1.0
+          },
+          "selected_scale": 0.0
+        }
+      },
+      "selected_scales": {
+        "1": 1.0,
+        "2": 0.0,
+        "3": 1.0,
+        "4": 0.0,
+        "5": 0.0,
+        "6": 0.0,
+        "7": 0.0
+      }
+    },
+    "global": {
+      "grid": [
+        {
+          "increment": {
+            "mean": 0.18628714425223208,
+            "median": 0.3463867187499998,
+            "n": 56,
+            "positive_share": 0.625
+          },
+          "scale": 0.0
+        },
+        {
+          "increment": {
+            "mean": 0.17853131975446423,
+            "median": 0.22990722656250018,
+            "n": 56,
+            "positive_share": 0.625
+          },
+          "scale": 0.25
+        },
+        {
+          "increment": {
+            "mean": 0.13766043526785715,
+            "median": 0.12441406250000009,
+            "n": 56,
+            "positive_share": 0.625
+          },
+          "scale": 0.5
+        },
+        {
+          "increment": {
+            "mean": 0.07484305245535715,
+            "median": 0.050634765625000355,
+            "n": 56,
+            "positive_share": 0.5714285714285714
+          },
+          "scale": 0.75
+        },
+        {
+          "increment": {
+            "mean": 0.0,
+            "median": 0.0,
+            "n": 56,
+            "positive_share": 0.0
+          },
+          "scale": 1.0
+        }
+      ],
+      "selected_increment": {
+        "mean": 0.18628714425223208,
+        "median": 0.3463867187499998,
+        "n": 56,
+        "positive_share": 0.625
+      },
+      "selected_scale": 0.0
+    }
+  },
+  "candidate_component_count": 36,
+  "candidate_layers": [
+    12,
+    13,
+    14,
+    15
+  ],
+  "carrier_cover": [
+    "L14MLP",
+    "L15H7",
+    "L13H3",
+    "L14H2",
+    "L13MLP",
+    "L12H2"
+  ],
+  "cover_size": 6,
+  "elapsed_seconds": 98.78143754974008,
+  "eraser_cover": [
+    "L15MLP",
+    "L12MLP",
+    "L15H4",
+    "L12H4",
+    "L12H1",
+    "L12H0"
+  ],
+  "evaluation": {
+    "drive_calibrated": {
+      "increment": {
+        "mean": 0.47623029436383923,
+        "median": 0.3299804687500001,
+        "n": 56,
+        "positive_share": 0.6071428571428571
+      },
+      "prefix_margin": {
+        "mean": 0.9348214285714286,
+        "median": 0.7752929687500005,
+        "n": 56,
+        "positive_share": 0.8392857142857143
+      },
+      "random_mean_increment": {
+        "mean": -0.0628143310546875,
+        "median": 0.0,
+        "n": 56,
+        "positive_share": 0.35714285714285715
+      },
+      "row_reports": [
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1A",
+          "increment": 0.0,
+          "prefix_margin": 0.39804687499999947,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F1A_F2A_long_embedded_clause_F1A",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1f",
+          "increment": 0.0,
+          "prefix_margin": 0.505859375,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F7f_F1f_counter_alias_hard_negative_F1f",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1E",
+          "increment": 0.0,
+          "prefix_margin": 0.6711914062500002,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_compressed_minimal_F1E",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1T",
+          "increment": 0.0,
+          "prefix_margin": 1.0554687499999993,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F7T_F1T_concrete_human_F1T",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1T",
+          "increment": 0.0,
+          "prefix_margin": 1.2212890625000004,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F7T_F1T_counter_alias_hard_negative_F1T",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1A",
+          "increment": 0.0,
+          "prefix_margin": 0.9140625,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_role_inverse_minimal_F1A",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1T",
+          "increment": 0.0,
+          "prefix_margin": 1.6097656249999996,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F7T_F1T_no_alias_plain_F1T",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1f",
+          "increment": 0.0,
+          "prefix_margin": 0.6212890624999998,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_counter_alias_hard_negative_F1f",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": 0.2607421875,
+          "prefix_margin": 0.08476562500000018,
+          "random_mean_increment": 0.21948242187499978,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F2T_F3T_compressed_minimal_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2f",
+          "increment": 0.29550781250000036,
+          "prefix_margin": 0.19570312499999964,
+          "random_mean_increment": 0.049804687500000444,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F2f_F3f_long_embedded_clause_F2f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": 0.4145019531250007,
+          "prefix_margin": -0.5318359375000004,
+          "random_mean_increment": 0.8345458984375004,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F1T_F2T_compressed_minimal_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2f",
+          "increment": 0.469970703125,
+          "prefix_margin": -0.513671875,
+          "random_mean_increment": 0.6851562499999999,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F1f_F2f_counter_alias_hard_negative_F2f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2f",
+          "increment": 0.18247070312500036,
+          "prefix_margin": 0.30078125,
+          "random_mean_increment": 0.023632812500000044,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F2f_F3f_long_embedded_clause_F2f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": 0.4368164062500002,
+          "prefix_margin": -0.6951171875000002,
+          "random_mean_increment": 0.8567871093750004,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_concrete_human_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": 0.5060546874999998,
+          "prefix_margin": -0.6683593749999996,
+          "random_mean_increment": 0.8573242187499994,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2f",
+          "increment": 0.09062499999999929,
+          "prefix_margin": 0.10566406250000071,
+          "random_mean_increment": -0.01877441406250069,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F2f_F3f_system_process_F2f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": 0.0,
+          "prefix_margin": 0.10195312500000053,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F3E",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3f",
+          "increment": 0.0,
+          "prefix_margin": 0.0400390625,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F3f_F4f_system_process_F3f",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": 0.0,
+          "prefix_margin": -0.044335937499999645,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_counter_alias_hard_negative_F3E",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": 0.0,
+          "prefix_margin": 0.123046875,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_system_process_F3E",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": 0.0,
+          "prefix_margin": 1.7033203124999998,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F2E_F3E_system_process_F3E",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3A",
+          "increment": 0.0,
+          "prefix_margin": 1.2777343749999996,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F2A_F3A_long_embedded_clause_F3A",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3T",
+          "increment": 0.0,
+          "prefix_margin": 1.0062499999999996,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F2T_F3T_compressed_minimal_F3T",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3T",
+          "increment": 0.0,
+          "prefix_margin": -0.20644531249999964,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F3T_F4T_compressed_minimal_F3T",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4E",
+          "increment": -0.0005859374999994671,
+          "prefix_margin": 0.37343749999999964,
+          "random_mean_increment": 0.4123535156250001,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_role_inverse_minimal_F4E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": -0.007470703125000533,
+          "prefix_margin": 0.5138671874999998,
+          "random_mean_increment": 0.2852783203125002,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F4A_F5A_role_inverse_minimal_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4f",
+          "increment": -0.09458007812499947,
+          "prefix_margin": 0.12519531249999982,
+          "random_mean_increment": 0.3293457031250001,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F4f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": 0.62744140625,
+          "prefix_margin": 1.15625,
+          "random_mean_increment": -0.2513671875000001,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_system_process_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4E",
+          "increment": 0.7012695312499995,
+          "prefix_margin": 0.8150390625000004,
+          "random_mean_increment": -0.011083984375000355,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F3E_F4E_system_process_F4E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4T",
+          "increment": -0.379638671875,
+          "prefix_margin": 0.24775390624999982,
+          "random_mean_increment": 0.3580322265625001,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_system_process_F4T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": 0.03139648437500053,
+          "prefix_margin": 0.017382812500000178,
+          "random_mean_increment": 0.3802001953124998,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F4A_F5A_long_embedded_clause_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": -0.2842285156250002,
+          "prefix_margin": 0.3298828125000002,
+          "random_mean_increment": 0.3044189453124997,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F4A_F5A_role_inverse_minimal_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5A",
+          "increment": 0.6554687500000007,
+          "prefix_margin": 1.2900390624999996,
+          "random_mean_increment": -0.5621826171874994,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F4A_F5A_counter_alias_hard_negative_F5A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5E",
+          "increment": -0.03476562499999991,
+          "prefix_margin": 0.6326171875000002,
+          "random_mean_increment": -0.3387939453125003,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F4E_F5E_no_alias_plain_F5E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5T",
+          "increment": 1.4737792968749988,
+          "prefix_margin": 3.3167968750000005,
+          "random_mean_increment": -1.3369140625000004,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F5T_F6T_compressed_minimal_F5T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5A",
+          "increment": 0.4787109374999994,
+          "prefix_margin": 1.4466796875,
+          "random_mean_increment": -0.5861572265624999,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F4A_F5A_concrete_human_F5A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5A",
+          "increment": 1.2786132812499997,
+          "prefix_margin": 3.2841796874999996,
+          "random_mean_increment": -1.2480957031249995,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F5A_F6A_counter_alias_hard_negative_F5A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5f",
+          "increment": 0.95068359375,
+          "prefix_margin": 3.4837890624999996,
+          "random_mean_increment": -1.2870849609374995,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F5f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5f",
+          "increment": 1.0648437499999996,
+          "prefix_margin": 3.58984375,
+          "random_mean_increment": -1.440283203125,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F5f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5T",
+          "increment": 1.4790039062500004,
+          "prefix_margin": 3.2148437499999996,
+          "random_mean_increment": -1.3793701171874995,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F5T_F6T_compressed_minimal_F5T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.9310058593750004,
+          "prefix_margin": 1.4603515624999996,
+          "random_mean_increment": -0.10971679687499969,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_long_embedded_clause_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6f",
+          "increment": 0.33071289062499964,
+          "prefix_margin": -0.5160156249999996,
+          "random_mean_increment": 0.6780517578124997,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F5f_F6f_no_alias_plain_F6f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.32924804687500053,
+          "prefix_margin": -0.05019531250000053,
+          "random_mean_increment": 0.6224365234375008,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_counter_alias_hard_negative_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6E",
+          "increment": 1.1524902343750005,
+          "prefix_margin": 1.2667968749999998,
+          "random_mean_increment": -0.11010742187499967,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F6E_F7E_system_process_F6E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 1.0920898437500002,
+          "prefix_margin": 1.6412109374999995,
+          "random_mean_increment": -0.2815429687499994,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F6A_F7A_no_alias_plain_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 1.2096679687500007,
+          "prefix_margin": 1.4419921874999995,
+          "random_mean_increment": -0.20786132812499936,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6f",
+          "increment": 0.9348632812499993,
+          "prefix_margin": 0.9396484375000007,
+          "random_mean_increment": -0.0037353515625005995,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F6f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.3351562499999998,
+          "prefix_margin": -0.10273437499999982,
+          "random_mean_increment": 0.6758789062499998,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_system_process_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 1.3562499999999993,
+          "prefix_margin": 0.7355468750000007,
+          "random_mean_increment": 0.3366210937499996,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F7f_F1f_counter_alias_hard_negative_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 0.7532226562500002,
+          "prefix_margin": 2.2724609375,
+          "random_mean_increment": -0.663818359375,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F6f_F7f_compressed_minimal_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 0.9374023437499988,
+          "prefix_margin": 2.5855468750000004,
+          "random_mean_increment": -0.7481201171875004,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F6A_F7A_no_alias_plain_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 1.9617187500000002,
+          "prefix_margin": 1.2466796875000004,
+          "random_mean_increment": 0.12539062499999953,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_system_process_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 0.7506835937499998,
+          "prefix_margin": 2.2884765625000005,
+          "random_mean_increment": -0.6347656250000004,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_compressed_minimal_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7T",
+          "increment": 0.9259765624999998,
+          "prefix_margin": 2.2613281250000004,
+          "random_mean_increment": -0.7572753906250002,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F6T_F7T_compressed_minimal_F7T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 1.2729003906249998,
+          "prefix_margin": 0.9066406250000005,
+          "random_mean_increment": 0.2072265624999995,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_compressed_minimal_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 1.7988769531249993,
+          "prefix_margin": 0.8582031250000002,
+          "random_mean_increment": 0.21748046874999982,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F7A",
+          "scale": 0.0
+        }
+      ],
+      "vs_random": {
+        "mean_delta": 0.5390446254185267,
+        "median_delta": 0.0,
+        "n": 56,
+        "sign_test_p": 0.6555601196383303,
+        "win_share": 0.48214285714285715,
+        "wins": 27
+      }
+    },
+    "global": {
+      "increment": {
+        "mean": 0.18463570731026785,
+        "median": 0.3299804687500001,
+        "n": 56,
+        "positive_share": 0.6071428571428571
+      },
+      "prefix_margin": {
+        "mean": 0.9348214285714286,
+        "median": 0.7752929687500005,
+        "n": 56,
+        "positive_share": 0.8392857142857143
+      },
+      "random_mean_increment": {
+        "mean": -0.17123543875558037,
+        "median": -0.20466308593749966,
+        "n": 56,
+        "positive_share": 0.35714285714285715
+      },
+      "row_reports": [
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1A",
+          "increment": -0.9175781249999995,
+          "prefix_margin": 0.39804687499999947,
+          "random_mean_increment": -0.39013671874999956,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F1A_F2A_long_embedded_clause_F1A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1f",
+          "increment": -0.9073242187499995,
+          "prefix_margin": 0.505859375,
+          "random_mean_increment": -0.4829101562500001,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F7f_F1f_counter_alias_hard_negative_F1f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1E",
+          "increment": -0.92333984375,
+          "prefix_margin": 0.6711914062500002,
+          "random_mean_increment": -0.5712646484375002,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_compressed_minimal_F1E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1T",
+          "increment": -1.2578125,
+          "prefix_margin": 1.0554687499999993,
+          "random_mean_increment": -0.45246582031249916,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F7T_F1T_concrete_human_F1T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1T",
+          "increment": -1.1996093750000005,
+          "prefix_margin": 1.2212890625000004,
+          "random_mean_increment": -0.5484863281250006,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F7T_F1T_counter_alias_hard_negative_F1T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1A",
+          "increment": -1.0968749999999998,
+          "prefix_margin": 0.9140625,
+          "random_mean_increment": -0.49404296875,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_role_inverse_minimal_F1A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1T",
+          "increment": -0.7688964843749995,
+          "prefix_margin": 1.6097656249999996,
+          "random_mean_increment": -0.6791748046874999,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F7T_F1T_no_alias_plain_F1T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1f",
+          "increment": -0.7839843749999993,
+          "prefix_margin": 0.6212890624999998,
+          "random_mean_increment": -0.4396972656249998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_counter_alias_hard_negative_F1f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": 0.2607421875,
+          "prefix_margin": 0.08476562500000018,
+          "random_mean_increment": 0.21948242187499978,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F2T_F3T_compressed_minimal_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2f",
+          "increment": 0.29550781250000036,
+          "prefix_margin": 0.19570312499999964,
+          "random_mean_increment": 0.049804687500000444,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F2f_F3f_long_embedded_clause_F2f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": 0.4145019531250007,
+          "prefix_margin": -0.5318359375000004,
+          "random_mean_increment": 0.8345458984375004,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F1T_F2T_compressed_minimal_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2f",
+          "increment": 0.469970703125,
+          "prefix_margin": -0.513671875,
+          "random_mean_increment": 0.6851562499999999,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F1f_F2f_counter_alias_hard_negative_F2f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2f",
+          "increment": 0.18247070312500036,
+          "prefix_margin": 0.30078125,
+          "random_mean_increment": 0.023632812500000044,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F2f_F3f_long_embedded_clause_F2f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": 0.4368164062500002,
+          "prefix_margin": -0.6951171875000002,
+          "random_mean_increment": 0.8567871093750004,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_concrete_human_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": 0.5060546874999998,
+          "prefix_margin": -0.6683593749999996,
+          "random_mean_increment": 0.8573242187499994,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2f",
+          "increment": 0.09062499999999929,
+          "prefix_margin": 0.10566406250000071,
+          "random_mean_increment": -0.01877441406250069,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F2f_F3f_system_process_F2f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": -1.3798339843750007,
+          "prefix_margin": 0.10195312500000053,
+          "random_mean_increment": -0.21215820312500056,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F3E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3f",
+          "increment": -1.4836914062500002,
+          "prefix_margin": 0.0400390625,
+          "random_mean_increment": -0.021386718749999867,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F3f_F4f_system_process_F3f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": -1.3833496093750002,
+          "prefix_margin": -0.044335937499999645,
+          "random_mean_increment": -0.2542968750000002,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_counter_alias_hard_negative_F3E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": -1.3404296874999995,
+          "prefix_margin": 0.123046875,
+          "random_mean_increment": -0.20146484374999996,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_system_process_F3E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": -0.45449218750000053,
+          "prefix_margin": 1.7033203124999998,
+          "random_mean_increment": -0.500732421875,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F2E_F3E_system_process_F3E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3A",
+          "increment": -0.49531249999999893,
+          "prefix_margin": 1.2777343749999996,
+          "random_mean_increment": -0.29870605468749956,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F2A_F3A_long_embedded_clause_F3A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3T",
+          "increment": -0.5602050781249996,
+          "prefix_margin": 1.0062499999999996,
+          "random_mean_increment": -0.39555664062499973,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F2T_F3T_compressed_minimal_F3T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3T",
+          "increment": -1.3765625000000004,
+          "prefix_margin": -0.20644531249999964,
+          "random_mean_increment": -0.12910156250000027,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F3T_F4T_compressed_minimal_F3T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4E",
+          "increment": -0.0005859374999994671,
+          "prefix_margin": 0.37343749999999964,
+          "random_mean_increment": 0.4123535156250001,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_role_inverse_minimal_F4E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": -0.007470703125000533,
+          "prefix_margin": 0.5138671874999998,
+          "random_mean_increment": 0.2852783203125002,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F4A_F5A_role_inverse_minimal_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4f",
+          "increment": -0.09458007812499947,
+          "prefix_margin": 0.12519531249999982,
+          "random_mean_increment": 0.3293457031250001,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F4f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": 0.62744140625,
+          "prefix_margin": 1.15625,
+          "random_mean_increment": -0.2513671875000001,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_system_process_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4E",
+          "increment": 0.7012695312499995,
+          "prefix_margin": 0.8150390625000004,
+          "random_mean_increment": -0.011083984375000355,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F3E_F4E_system_process_F4E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4T",
+          "increment": -0.379638671875,
+          "prefix_margin": 0.24775390624999982,
+          "random_mean_increment": 0.3580322265625001,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_system_process_F4T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": 0.03139648437500053,
+          "prefix_margin": 0.017382812500000178,
+          "random_mean_increment": 0.3802001953124998,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F4A_F5A_long_embedded_clause_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": -0.2842285156250002,
+          "prefix_margin": 0.3298828125000002,
+          "random_mean_increment": 0.3044189453124997,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F4A_F5A_role_inverse_minimal_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5A",
+          "increment": 0.6554687500000007,
+          "prefix_margin": 1.2900390624999996,
+          "random_mean_increment": -0.5621826171874994,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F4A_F5A_counter_alias_hard_negative_F5A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5E",
+          "increment": -0.03476562499999991,
+          "prefix_margin": 0.6326171875000002,
+          "random_mean_increment": -0.3387939453125003,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F4E_F5E_no_alias_plain_F5E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5T",
+          "increment": 1.4737792968749988,
+          "prefix_margin": 3.3167968750000005,
+          "random_mean_increment": -1.3369140625000004,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F5T_F6T_compressed_minimal_F5T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5A",
+          "increment": 0.4787109374999994,
+          "prefix_margin": 1.4466796875,
+          "random_mean_increment": -0.5861572265624999,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F4A_F5A_concrete_human_F5A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5A",
+          "increment": 1.2786132812499997,
+          "prefix_margin": 3.2841796874999996,
+          "random_mean_increment": -1.2480957031249995,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F5A_F6A_counter_alias_hard_negative_F5A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5f",
+          "increment": 0.95068359375,
+          "prefix_margin": 3.4837890624999996,
+          "random_mean_increment": -1.2870849609374995,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F5f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5f",
+          "increment": 1.0648437499999996,
+          "prefix_margin": 3.58984375,
+          "random_mean_increment": -1.440283203125,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F5f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5T",
+          "increment": 1.4790039062500004,
+          "prefix_margin": 3.2148437499999996,
+          "random_mean_increment": -1.3793701171874995,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F5T_F6T_compressed_minimal_F5T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.9310058593750004,
+          "prefix_margin": 1.4603515624999996,
+          "random_mean_increment": -0.10971679687499969,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_long_embedded_clause_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6f",
+          "increment": 0.33071289062499964,
+          "prefix_margin": -0.5160156249999996,
+          "random_mean_increment": 0.6780517578124997,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F5f_F6f_no_alias_plain_F6f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.32924804687500053,
+          "prefix_margin": -0.05019531250000053,
+          "random_mean_increment": 0.6224365234375008,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_counter_alias_hard_negative_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6E",
+          "increment": 1.1524902343750005,
+          "prefix_margin": 1.2667968749999998,
+          "random_mean_increment": -0.11010742187499967,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F6E_F7E_system_process_F6E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 1.0920898437500002,
+          "prefix_margin": 1.6412109374999995,
+          "random_mean_increment": -0.2815429687499994,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F6A_F7A_no_alias_plain_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 1.2096679687500007,
+          "prefix_margin": 1.4419921874999995,
+          "random_mean_increment": -0.20786132812499936,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6f",
+          "increment": 0.9348632812499993,
+          "prefix_margin": 0.9396484375000007,
+          "random_mean_increment": -0.0037353515625005995,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F6f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.3351562499999998,
+          "prefix_margin": -0.10273437499999982,
+          "random_mean_increment": 0.6758789062499998,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_system_process_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 1.3562499999999993,
+          "prefix_margin": 0.7355468750000007,
+          "random_mean_increment": 0.3366210937499996,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F7f_F1f_counter_alias_hard_negative_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 0.7532226562500002,
+          "prefix_margin": 2.2724609375,
+          "random_mean_increment": -0.663818359375,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F6f_F7f_compressed_minimal_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 0.9374023437499988,
+          "prefix_margin": 2.5855468750000004,
+          "random_mean_increment": -0.7481201171875004,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F6A_F7A_no_alias_plain_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 1.9617187500000002,
+          "prefix_margin": 1.2466796875000004,
+          "random_mean_increment": 0.12539062499999953,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_system_process_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 0.7506835937499998,
+          "prefix_margin": 2.2884765625000005,
+          "random_mean_increment": -0.6347656250000004,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_compressed_minimal_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7T",
+          "increment": 0.9259765624999998,
+          "prefix_margin": 2.2613281250000004,
+          "random_mean_increment": -0.7572753906250002,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F6T_F7T_compressed_minimal_F7T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 1.2729003906249998,
+          "prefix_margin": 0.9066406250000005,
+          "random_mean_increment": 0.2072265624999995,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_compressed_minimal_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 1.7988769531249993,
+          "prefix_margin": 0.8582031250000002,
+          "random_mean_increment": 0.21748046874999982,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F7A",
+          "scale": 0.0
+        }
+      ],
+      "vs_random": {
+        "mean_delta": 0.3558711460658482,
+        "median_delta": -0.024230957031249667,
+        "n": 56,
+        "sign_test_p": 0.5530734525824892,
+        "win_share": 0.5,
+        "wins": 28
+      }
+    }
+  },
+  "gates": {
+    "max_sign_test_p": 0.05,
+    "min_positive_effect_share": 0.55,
+    "min_random_win_share": 0.6
+  },
+  "input_file": "stage7_foundation_pilot_20260517.jsonl",
+  "input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "learned_component_scores": {
+    "carrier_rank": [
+      {
+        "component": "L14MLP",
+        "kind": "mlp",
+        "layer": 14,
+        "mean_drop": 0.06594935825892852,
+        "mean_lift": -0.06594935825892852,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L15H7",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.05413643973214286,
+        "mean_lift": -0.05413643973214286,
+        "n": 56,
+        "positive_drop_share": 0.8214285714285714
+      },
+      {
+        "component": "L13H3",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": 0.038214983258928574,
+        "mean_lift": -0.038214983258928574,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L14H2",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 0.02411760602678573,
+        "mean_lift": -0.02411760602678573,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L13MLP",
+        "kind": "mlp",
+        "layer": 13,
+        "mean_drop": 0.022928292410714257,
+        "mean_lift": -0.022928292410714257,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L12H2",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.015504673549107093,
+        "mean_lift": -0.015504673549107093,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L13H2",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": 0.015133231026785725,
+        "mean_lift": -0.015133231026785725,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L12H3",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.013830566406249967,
+        "mean_lift": -0.013830566406249967,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L12H6",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.009950474330357133,
+        "mean_lift": -0.009950474330357133,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L14H5",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 0.008867536272321484,
+        "mean_lift": -0.008867536272321484,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L15H0",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.006706891741071419,
+        "mean_lift": -0.006706891741071419,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L15H3",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.004478236607142908,
+        "mean_lift": -0.004478236607142908,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L15H5",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.002429199218750019,
+        "mean_lift": -0.002429199218750019,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L15H6",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.002399553571428546,
+        "mean_lift": -0.002399553571428546,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L12H5",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.0013636997767857745,
+        "mean_lift": -0.0013636997767857745,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L14H4",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 0.0010341099330357254,
+        "mean_lift": -0.0010341099330357254,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L15H2",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.00028948102678572063,
+        "mean_lift": -0.00028948102678572063,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L14H1",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 1.7438616071492013e-05,
+        "mean_lift": -1.7438616071492013e-05,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L12H7",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.0010253906250000586,
+        "mean_lift": 0.0010253906250000586,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L13H6",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.001799665178571481,
+        "mean_lift": 0.001799665178571481,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L14H7",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.002129255022321443,
+        "mean_lift": 0.002129255022321443,
+        "n": 56,
+        "positive_drop_share": 0.42857142857142855
+      },
+      {
+        "component": "L13H7",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.0027186802455357157,
+        "mean_lift": 0.0027186802455357157,
+        "n": 56,
+        "positive_drop_share": 0.375
+      },
+      {
+        "component": "L14H6",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.004781668526785711,
+        "mean_lift": 0.004781668526785711,
+        "n": 56,
+        "positive_drop_share": 0.4107142857142857
+      },
+      {
+        "component": "L14H3",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.005140904017857185,
+        "mean_lift": 0.005140904017857185,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L14H0",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.005507114955357114,
+        "mean_lift": 0.005507114955357114,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L13H1",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.005969238281249971,
+        "mean_lift": 0.005969238281249971,
+        "n": 56,
+        "positive_drop_share": 0.44642857142857145
+      },
+      {
+        "component": "L13H5",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.006419154575892887,
+        "mean_lift": 0.006419154575892887,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L15H1",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": -0.008002580915178517,
+        "mean_lift": 0.008002580915178517,
+        "n": 56,
+        "positive_drop_share": 0.42857142857142855
+      },
+      {
+        "component": "L13H0",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.010860770089285774,
+        "mean_lift": 0.010860770089285774,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L13H4",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.012318638392857104,
+        "mean_lift": 0.012318638392857104,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L12H0",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.012595912388392869,
+        "mean_lift": 0.012595912388392869,
+        "n": 56,
+        "positive_drop_share": 0.30357142857142855
+      },
+      {
+        "component": "L12H1",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.017020089285714374,
+        "mean_lift": 0.017020089285714374,
+        "n": 56,
+        "positive_drop_share": 0.39285714285714285
+      },
+      {
+        "component": "L12H4",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.01733572823660718,
+        "mean_lift": 0.01733572823660718,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L15H4",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": -0.021582031250000005,
+        "mean_lift": 0.021582031250000005,
+        "n": 56,
+        "positive_drop_share": 0.14285714285714285
+      },
+      {
+        "component": "L12MLP",
+        "kind": "mlp",
+        "layer": 12,
+        "mean_drop": -0.0455461774553571,
+        "mean_lift": 0.0455461774553571,
+        "n": 56,
+        "positive_drop_share": 0.4107142857142857
+      },
+      {
+        "component": "L15MLP",
+        "kind": "mlp",
+        "layer": 15,
+        "mean_drop": -0.11113978794642855,
+        "mean_lift": 0.11113978794642855,
+        "n": 56,
+        "positive_drop_share": 0.4107142857142857
+      }
+    ],
+    "component_scores": [
+      {
+        "component": "L12H0",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.012595912388392869,
+        "mean_lift": 0.012595912388392869,
+        "n": 56,
+        "positive_drop_share": 0.30357142857142855
+      },
+      {
+        "component": "L12H1",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.017020089285714374,
+        "mean_lift": 0.017020089285714374,
+        "n": 56,
+        "positive_drop_share": 0.39285714285714285
+      },
+      {
+        "component": "L12H2",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.015504673549107093,
+        "mean_lift": -0.015504673549107093,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L12H3",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.013830566406249967,
+        "mean_lift": -0.013830566406249967,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L12H4",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.01733572823660718,
+        "mean_lift": 0.01733572823660718,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L12H5",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.0013636997767857745,
+        "mean_lift": -0.0013636997767857745,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L12H6",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.009950474330357133,
+        "mean_lift": -0.009950474330357133,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L12H7",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.0010253906250000586,
+        "mean_lift": 0.0010253906250000586,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L12MLP",
+        "kind": "mlp",
+        "layer": 12,
+        "mean_drop": -0.0455461774553571,
+        "mean_lift": 0.0455461774553571,
+        "n": 56,
+        "positive_drop_share": 0.4107142857142857
+      },
+      {
+        "component": "L13H0",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.010860770089285774,
+        "mean_lift": 0.010860770089285774,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L13H1",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.005969238281249971,
+        "mean_lift": 0.005969238281249971,
+        "n": 56,
+        "positive_drop_share": 0.44642857142857145
+      },
+      {
+        "component": "L13H2",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": 0.015133231026785725,
+        "mean_lift": -0.015133231026785725,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L13H3",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": 0.038214983258928574,
+        "mean_lift": -0.038214983258928574,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L13H4",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.012318638392857104,
+        "mean_lift": 0.012318638392857104,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L13H5",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.006419154575892887,
+        "mean_lift": 0.006419154575892887,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L13H6",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.001799665178571481,
+        "mean_lift": 0.001799665178571481,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L13H7",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.0027186802455357157,
+        "mean_lift": 0.0027186802455357157,
+        "n": 56,
+        "positive_drop_share": 0.375
+      },
+      {
+        "component": "L13MLP",
+        "kind": "mlp",
+        "layer": 13,
+        "mean_drop": 0.022928292410714257,
+        "mean_lift": -0.022928292410714257,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L14H0",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.005507114955357114,
+        "mean_lift": 0.005507114955357114,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L14H1",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 1.7438616071492013e-05,
+        "mean_lift": -1.7438616071492013e-05,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L14H2",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 0.02411760602678573,
+        "mean_lift": -0.02411760602678573,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L14H3",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.005140904017857185,
+        "mean_lift": 0.005140904017857185,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L14H4",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 0.0010341099330357254,
+        "mean_lift": -0.0010341099330357254,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L14H5",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 0.008867536272321484,
+        "mean_lift": -0.008867536272321484,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L14H6",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.004781668526785711,
+        "mean_lift": 0.004781668526785711,
+        "n": 56,
+        "positive_drop_share": 0.4107142857142857
+      },
+      {
+        "component": "L14H7",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.002129255022321443,
+        "mean_lift": 0.002129255022321443,
+        "n": 56,
+        "positive_drop_share": 0.42857142857142855
+      },
+      {
+        "component": "L14MLP",
+        "kind": "mlp",
+        "layer": 14,
+        "mean_drop": 0.06594935825892852,
+        "mean_lift": -0.06594935825892852,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L15H0",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.006706891741071419,
+        "mean_lift": -0.006706891741071419,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L15H1",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": -0.008002580915178517,
+        "mean_lift": 0.008002580915178517,
+        "n": 56,
+        "positive_drop_share": 0.42857142857142855
+      },
+      {
+        "component": "L15H2",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.00028948102678572063,
+        "mean_lift": -0.00028948102678572063,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L15H3",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.004478236607142908,
+        "mean_lift": -0.004478236607142908,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L15H4",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": -0.021582031250000005,
+        "mean_lift": 0.021582031250000005,
+        "n": 56,
+        "positive_drop_share": 0.14285714285714285
+      },
+      {
+        "component": "L15H5",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.002429199218750019,
+        "mean_lift": -0.002429199218750019,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L15H6",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.002399553571428546,
+        "mean_lift": -0.002399553571428546,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L15H7",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.05413643973214286,
+        "mean_lift": -0.05413643973214286,
+        "n": 56,
+        "positive_drop_share": 0.8214285714285714
+      },
+      {
+        "component": "L15MLP",
+        "kind": "mlp",
+        "layer": 15,
+        "mean_drop": -0.11113978794642855,
+        "mean_lift": 0.11113978794642855,
+        "n": 56,
+        "positive_drop_share": 0.4107142857142857
+      }
+    ],
+    "eraser_rank": [
+      {
+        "component": "L15MLP",
+        "kind": "mlp",
+        "layer": 15,
+        "mean_drop": -0.11113978794642855,
+        "mean_lift": 0.11113978794642855,
+        "n": 56,
+        "positive_drop_share": 0.4107142857142857
+      },
+      {
+        "component": "L12MLP",
+        "kind": "mlp",
+        "layer": 12,
+        "mean_drop": -0.0455461774553571,
+        "mean_lift": 0.0455461774553571,
+        "n": 56,
+        "positive_drop_share": 0.4107142857142857
+      },
+      {
+        "component": "L15H4",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": -0.021582031250000005,
+        "mean_lift": 0.021582031250000005,
+        "n": 56,
+        "positive_drop_share": 0.14285714285714285
+      },
+      {
+        "component": "L12H4",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.01733572823660718,
+        "mean_lift": 0.01733572823660718,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L12H1",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.017020089285714374,
+        "mean_lift": 0.017020089285714374,
+        "n": 56,
+        "positive_drop_share": 0.39285714285714285
+      },
+      {
+        "component": "L12H0",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.012595912388392869,
+        "mean_lift": 0.012595912388392869,
+        "n": 56,
+        "positive_drop_share": 0.30357142857142855
+      },
+      {
+        "component": "L13H4",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.012318638392857104,
+        "mean_lift": 0.012318638392857104,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L13H0",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.010860770089285774,
+        "mean_lift": 0.010860770089285774,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L15H1",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": -0.008002580915178517,
+        "mean_lift": 0.008002580915178517,
+        "n": 56,
+        "positive_drop_share": 0.42857142857142855
+      },
+      {
+        "component": "L13H5",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.006419154575892887,
+        "mean_lift": 0.006419154575892887,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L13H1",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.005969238281249971,
+        "mean_lift": 0.005969238281249971,
+        "n": 56,
+        "positive_drop_share": 0.44642857142857145
+      },
+      {
+        "component": "L14H0",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.005507114955357114,
+        "mean_lift": 0.005507114955357114,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L14H3",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.005140904017857185,
+        "mean_lift": 0.005140904017857185,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L14H6",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.004781668526785711,
+        "mean_lift": 0.004781668526785711,
+        "n": 56,
+        "positive_drop_share": 0.4107142857142857
+      },
+      {
+        "component": "L13H7",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.0027186802455357157,
+        "mean_lift": 0.0027186802455357157,
+        "n": 56,
+        "positive_drop_share": 0.375
+      },
+      {
+        "component": "L14H7",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": -0.002129255022321443,
+        "mean_lift": 0.002129255022321443,
+        "n": 56,
+        "positive_drop_share": 0.42857142857142855
+      },
+      {
+        "component": "L13H6",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": -0.001799665178571481,
+        "mean_lift": 0.001799665178571481,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L12H7",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": -0.0010253906250000586,
+        "mean_lift": 0.0010253906250000586,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L14H1",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 1.7438616071492013e-05,
+        "mean_lift": -1.7438616071492013e-05,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L15H2",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.00028948102678572063,
+        "mean_lift": -0.00028948102678572063,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L14H4",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 0.0010341099330357254,
+        "mean_lift": -0.0010341099330357254,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L12H5",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.0013636997767857745,
+        "mean_lift": -0.0013636997767857745,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L15H6",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.002399553571428546,
+        "mean_lift": -0.002399553571428546,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L15H5",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.002429199218750019,
+        "mean_lift": -0.002429199218750019,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L15H3",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.004478236607142908,
+        "mean_lift": -0.004478236607142908,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      },
+      {
+        "component": "L15H0",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.006706891741071419,
+        "mean_lift": -0.006706891741071419,
+        "n": 56,
+        "positive_drop_share": 0.5
+      },
+      {
+        "component": "L14H5",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 0.008867536272321484,
+        "mean_lift": -0.008867536272321484,
+        "n": 56,
+        "positive_drop_share": 0.5178571428571429
+      },
+      {
+        "component": "L12H6",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.009950474330357133,
+        "mean_lift": -0.009950474330357133,
+        "n": 56,
+        "positive_drop_share": 0.6428571428571429
+      },
+      {
+        "component": "L12H3",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.013830566406249967,
+        "mean_lift": -0.013830566406249967,
+        "n": 56,
+        "positive_drop_share": 0.48214285714285715
+      },
+      {
+        "component": "L13H2",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": 0.015133231026785725,
+        "mean_lift": -0.015133231026785725,
+        "n": 56,
+        "positive_drop_share": 0.4642857142857143
+      },
+      {
+        "component": "L12H2",
+        "kind": "head",
+        "layer": 12,
+        "mean_drop": 0.015504673549107093,
+        "mean_lift": -0.015504673549107093,
+        "n": 56,
+        "positive_drop_share": 0.5892857142857143
+      },
+      {
+        "component": "L13MLP",
+        "kind": "mlp",
+        "layer": 13,
+        "mean_drop": 0.022928292410714257,
+        "mean_lift": -0.022928292410714257,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L14H2",
+        "kind": "head",
+        "layer": 14,
+        "mean_drop": 0.02411760602678573,
+        "mean_lift": -0.02411760602678573,
+        "n": 56,
+        "positive_drop_share": 0.5714285714285714
+      },
+      {
+        "component": "L13H3",
+        "kind": "head",
+        "layer": 13,
+        "mean_drop": 0.038214983258928574,
+        "mean_lift": -0.038214983258928574,
+        "n": 56,
+        "positive_drop_share": 0.5357142857142857
+      },
+      {
+        "component": "L15H7",
+        "kind": "head",
+        "layer": 15,
+        "mean_drop": 0.05413643973214286,
+        "mean_lift": -0.05413643973214286,
+        "n": 56,
+        "positive_drop_share": 0.8214285714285714
+      },
+      {
+        "component": "L14MLP",
+        "kind": "mlp",
+        "layer": 14,
+        "mean_drop": 0.06594935825892852,
+        "mean_lift": -0.06594935825892852,
+        "n": 56,
+        "positive_drop_share": 0.6071428571428571
+      }
+    ],
+    "prefix_margin": {
+      "mean": 0.7749476841517857,
+      "median": 0.6394531250000002,
+      "n": 56,
+      "positive_share": 0.7857142857142857
+    }
+  },
+  "loaded_model_contract": {
+    "actual_model_name": "EleutherAI/pythia-1b",
+    "actual_model_revision": "f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
+    "expected_model_name": "EleutherAI/pythia-1b",
+    "expected_model_revision": "f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
+    "formal_gate_valid": true,
+    "hidden_size": 2048,
+    "num_attention_heads": 8,
+    "num_hidden_layers": 16
+  },
+  "model": {
+    "expected_model_revision": "f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
+    "hidden_size": 2048,
+    "model_name": "EleutherAI/pythia-1b",
+    "model_revision": "f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
+    "model_source": "EleutherAI/pythia-1b",
+    "num_attention_heads": 8,
+    "num_hidden_layers": 16,
+    "torch": "2.5.1+cu124",
+    "transformers": "5.8.1"
+  },
+  "random_control_match_profile": {
+    "all_exact_layer_kind": false,
+    "has_kind_only_singleton_fallback": true,
+    "has_unmatched_fallback": false,
+    "policy": "Random controls use same layer/kind replacements when available. For singleton MLP blocks, the fallback preserves kind across candidate layers; if that is impossible, the report marks an unmatched fallback.",
+    "rows": [
+      {
+        "component": "L15MLP",
+        "exact_pool_size": 0,
+        "kind": "mlp",
+        "kind_pool_size": 2,
+        "layer": 15,
+        "match_level": "kind_only_singleton_layer"
+      },
+      {
+        "component": "L12MLP",
+        "exact_pool_size": 0,
+        "kind": "mlp",
+        "kind_pool_size": 2,
+        "layer": 12,
+        "match_level": "kind_only_singleton_layer"
+      },
+      {
+        "component": "L15H4",
+        "exact_pool_size": 7,
+        "kind": "head",
+        "kind_pool_size": 28,
+        "layer": 15,
+        "match_level": "layer_kind_exact"
+      },
+      {
+        "component": "L12H4",
+        "exact_pool_size": 5,
+        "kind": "head",
+        "kind_pool_size": 28,
+        "layer": 12,
+        "match_level": "layer_kind_exact"
+      },
+      {
+        "component": "L12H1",
+        "exact_pool_size": 5,
+        "kind": "head",
+        "kind_pool_size": 28,
+        "layer": 12,
+        "match_level": "layer_kind_exact"
+      },
+      {
+        "component": "L12H0",
+        "exact_pool_size": 5,
+        "kind": "head",
+        "kind_pool_size": 28,
+        "layer": 12,
+        "match_level": "layer_kind_exact"
+      }
+    ]
+  },
+  "random_eraser_covers": [
+    [
+      "L14MLP",
+      "L13MLP",
+      "L15H1",
+      "L12H7",
+      "L12H5",
+      "L12H2"
+    ],
+    [
+      "L13MLP",
+      "L14MLP",
+      "L15H5",
+      "L12H5",
+      "L12H7",
+      "L12H6"
+    ],
+    [
+      "L13MLP",
+      "L14MLP",
+      "L15H5",
+      "L12H5",
+      "L12H2",
+      "L12H6"
+    ],
+    [
+      "L13MLP",
+      "L14MLP",
+      "L15H7",
+      "L12H6",
+      "L12H7",
+      "L12H5"
+    ],
+    [
+      "L14MLP",
+      "L13MLP",
+      "L15H5",
+      "L12H6",
+      "L12H3",
+      "L12H2"
+    ],
+    [
+      "L13MLP",
+      "L14MLP",
+      "L15H3",
+      "L12H7",
+      "L12H5",
+      "L12H6"
+    ],
+    [
+      "L14MLP",
+      "L13MLP",
+      "L15H1",
+      "L12H5",
+      "L12H6",
+      "L12H2"
+    ],
+    [
+      "L13MLP",
+      "L14MLP",
+      "L15H0",
+      "L12H2",
+      "L12H6",
+      "L12H7"
+    ]
+  ],
+  "scale_grid": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "schema_version": "stage27n_cross_scale_calibrated_eraser_steering.v1",
+  "source_contracts": {
+    "stage27m": {
+      "expected_status": "PASS_BOUNDED_ROBUST_GLOBAL_AND_DRIVE_CALIBRATED_ERASER_STEERING",
+      "formal_gate_valid": true,
+      "source_file": "stage27m_robust_calibrated_eraser_steering_20260521.json",
+      "source_sha256": "704aced9ecbf57deaf34b26dcc61c14fa9c5b66b2ec97a3e0480931ec0866cdd",
+      "source_status": "PASS_BOUNDED_ROBUST_GLOBAL_AND_DRIVE_CALIBRATED_ERASER_STEERING"
+    },
+    "stage8_cpl2": {
+      "expected_status": "PASS_CLEAN_STAGE8_PYTHIA1B_CPL2_REPLICATES",
+      "formal_gate_valid": true,
+      "model_name": "EleutherAI/pythia-1b",
+      "n_cases": 112,
+      "probe_readable_delta_vs_none": 0.5542184012276785,
+      "probe_readable_minus_partner_readable_margin": 1.246006556919643,
+      "selected_layer_position": 8,
+      "source_file": "STAGE8_PYTHIA1B_CPL2_REPORT_20260517.json",
+      "source_sha256": "a7a43bc8f68df1bf4c24a820c14dcb69db0c4c15dbc5d171647ab3ddf10ae06c",
+      "source_status": "PASS_CLEAN_STAGE8_PYTHIA1B_CPL2_REPLICATES"
+    },
+    "stage8_manifest": {
+      "expected_model_name": "EleutherAI/pythia-1b",
+      "expected_model_revision": "f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
+      "formal_gate_valid": true,
+      "model_name": "EleutherAI/pythia-1b",
+      "model_revision": "f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
+      "output_file": "stage8_pythia1b_activations_20260517.npz",
+      "output_sha256": "3d1a118a6290ddfe9780c9693c9938d26815d43fca009f3b756a5ab0ab0a80ab",
+      "source_file": "stage8_pythia1b_activations_manifest_20260517.json",
+      "source_sha256": "b1b4fe0fa04a5a2bcb2af47e1828ada5e5c99bd6a9963585553b2fb0cec0c896"
+    }
+  },
+  "split_contract": {
+    "eval_ids": [
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F1A_F2A_long_embedded_clause_F1A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F7f_F1f_counter_alias_hard_negative_F1f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_compressed_minimal_F1E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F7T_F1T_concrete_human_F1T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F7T_F1T_counter_alias_hard_negative_F1T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_role_inverse_minimal_F1A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F7T_F1T_no_alias_plain_F1T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_counter_alias_hard_negative_F1f",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F2T_F3T_compressed_minimal_F2T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F2f_F3f_long_embedded_clause_F2f",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F1T_F2T_compressed_minimal_F2T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F1f_F2f_counter_alias_hard_negative_F2f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F2f_F3f_long_embedded_clause_F2f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_concrete_human_F2T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F2T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F2f_F3f_system_process_F2f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F3E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F3f_F4f_system_process_F3f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_counter_alias_hard_negative_F3E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_system_process_F3E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F2E_F3E_system_process_F3E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F2A_F3A_long_embedded_clause_F3A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F2T_F3T_compressed_minimal_F3T",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F3T_F4T_compressed_minimal_F3T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_role_inverse_minimal_F4E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F4A_F5A_role_inverse_minimal_F4A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F4f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_system_process_F4A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F3E_F4E_system_process_F4E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_system_process_F4T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F4A_F5A_long_embedded_clause_F4A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F4A_F5A_role_inverse_minimal_F4A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F4A_F5A_counter_alias_hard_negative_F5A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F4E_F5E_no_alias_plain_F5E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F5T_F6T_compressed_minimal_F5T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F4A_F5A_concrete_human_F5A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F5A_F6A_counter_alias_hard_negative_F5A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F5f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F5f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F5T_F6T_compressed_minimal_F5T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_long_embedded_clause_F6A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F5f_F6f_no_alias_plain_F6f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_counter_alias_hard_negative_F6A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F6E_F7E_system_process_F6E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F6A_F7A_no_alias_plain_F6A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F6A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F6f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_system_process_F6A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F7f_F1f_counter_alias_hard_negative_F7f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F6f_F7f_compressed_minimal_F7f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F6A_F7A_no_alias_plain_F7A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_system_process_F7A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_compressed_minimal_F7f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F6T_F7T_compressed_minimal_F7T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_compressed_minimal_F7f",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F7A"
+    ],
+    "eval_rows": 56,
+    "eval_rows_per_drive": 8,
+    "learn_eval_disjoint": true,
+    "learn_ids": [
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F7E_F1E_long_embedded_clause_F1E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F7f_F1f_no_alias_plain_F1f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_system_process_F1A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F7T_F1T_role_inverse_minimal_F1T",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F7A_F1A_role_inverse_minimal_F1A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F1A_F2A_no_alias_plain_F1A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F1f_F2f_role_inverse_minimal_F1f",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F7f_F1f_no_alias_plain_F1f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F2f_F3f_compressed_minimal_F2f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F2A_F3A_compressed_minimal_F2A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F2A_F3A_concrete_human_F2A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_no_alias_plain_F2E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_counter_alias_hard_negative_F2E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F1A_F2A_long_embedded_clause_F2A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F1T_F2T_role_inverse_minimal_F2T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_no_alias_plain_F2T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F3A_F4A_system_process_F3A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F3T_F4T_system_process_F3T",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F3f_F4f_long_embedded_clause_F3f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F3T_F4T_counter_alias_hard_negative_F3T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F3f_F4f_counter_alias_hard_negative_F3f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_no_alias_plain_F3A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F3E_F4E_counter_alias_hard_negative_F3E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F2f_F3f_no_alias_plain_F3f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F3f_F4f_counter_alias_hard_negative_F4f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_no_alias_plain_F4A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_counter_alias_hard_negative_F4T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_long_embedded_clause_F4E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F4E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F4A_F5A_compressed_minimal_F4A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F3E_F4E_role_inverse_minimal_F4E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F3f_F4f_concrete_human_F4f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_concrete_human_F5A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F5f_F6f_counter_alias_hard_negative_F5f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_system_process_F5A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F4A_F5A_role_inverse_minimal_F5A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F5T_F6T_no_alias_plain_F5T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F5f_F6f_no_alias_plain_F5f",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F4T_F5T_compressed_minimal_F5T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F4A_F5A_system_process_F5A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F6E_F7E_system_process_F6E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F6T_F7T_long_embedded_clause_F6T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F6E_F7E_no_alias_plain_F6E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F5E_F6E_role_inverse_minimal_F6E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F6A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F5f_F6f_no_alias_plain_F6f",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F5T_F6T_system_process_F6T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F7T_F1T_long_embedded_clause_F7T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_no_alias_plain_F7f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_concrete_human_F7f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_compressed_minimal_F7A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F7A_F1A_concrete_human_F7A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_counter_alias_hard_negative_F7f",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F7E_F1E_system_process_F7E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F6E_F7E_role_inverse_minimal_F7E"
+    ],
+    "learn_rows": 56,
+    "learn_rows_per_drive": 8,
+    "per_drive": 16,
+    "selection_seed": 27041
+  },
+  "status": "GREY_CROSS_SCALE_CALIBRATED_ERASER_STEERING_PARTIAL"
+}
