@@ -2531,3 +2531,54 @@ Artifacts:
 
 - `stage24a_token_level_cas_sonar_20260520.json`
 - `STAGE24A_TOKEN_LEVEL_CAS_SONAR_20260520.md`
+
+## Stage 24B diagnostic run - 40-Element Token Sonar
+
+**Verdict: `STAGE24B_40_ELEMENT_SONAR_DIAGNOSTIC_ONLY_ARTIFACT_MISMATCH`.**
+
+Stage 24B applies the same token-sonar method to the original TKS 40 Elements
+(`A1..D10`) using the Stage 9 headline readout (`focus_token`, layer `5`).
+This branch was opened after the Stage 24A Foundation/Register result to test
+the user's hypothesis that the original 40-Element structure may be a cleaner
+token-level target than the Foundation Register axis.
+
+The local run used a CPU recapture because the locked CUDA Stage 9 activation
+binary is not present locally. The result is therefore diagnostic only, not a
+formal gate result.
+
+Artifact contract:
+
+| Field | Value |
+|---|---|
+| Expected activation SHA-256 | `c70582b54f309c805fd90a69e7d23a80a714fc692aac4c1364ebc4e21b410cfb` |
+| Local recapture SHA-256 | `63702c62e6230e25e891b0e68007780954f9e6c539e4996b69e91017b972c0c9` |
+| Formal gate valid | `false` |
+
+Diagnostic read:
+
+- 40-Element probe accuracy reproduced the Stage 9 headline:
+  `0.8980` test accuracy.
+- Same-domain token geometry beats broad different-domain/noetic controls:
+  `same_domain_minus_different = +0.0662`, p(random >= actual) `0.0099`.
+- Same-Noetic token geometry also beats broad different-domain/noetic controls:
+  `same_noetic_minus_different = +0.0691`, p(random >= actual) `0.0099`.
+- Neither same-domain nor same-Noetic beats hard-partner contrasts:
+  `same_domain_minus_hard_partner = -0.0494`, p `1.0000`;
+  `same_noetic_minus_hard_partner = -0.0465`, p `1.0000`.
+- Top-token readability is mixed but above the artifact-dominance floor:
+  `669/960` readable top tokens, rate `0.6969`.
+
+Boundary:
+
+> Stage 24B suggests coarse 40-Element vocabulary geometry is visible in the
+> output embedding space, but nearest-neighbor Element distinctions remain
+> unresolved at token level. This is diagnostic attribution only. It does not
+> prove exact neurons, SAE-disentangled features, raw CAS-symbol understanding,
+> or free-form generation control.
+
+Artifacts:
+
+- `run_stage24b_40_elements_token_sonar.py`
+- `stage24b_40_element_token_sonar_20260520.json`
+- `STAGE24B_40_ELEMENT_TOKEN_SONAR_20260520.md`
+- `tests/test_stage24b_40_elements_token_sonar.py`
