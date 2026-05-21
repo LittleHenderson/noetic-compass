@@ -1,0 +1,155 @@
+{
+  "adapter_contract": {
+    "formal_gate_valid": true
+  },
+  "adapter_summary": {
+    "candidate_layers": [
+      24,
+      25,
+      26,
+      27
+    ],
+    "head_dim": 128,
+    "hidden_size": 1536,
+    "num_attention_heads": 12,
+    "num_layers": 28,
+    "rows": [
+      {
+        "attention_output_projection": "self_attn.o_proj",
+        "layer": 24,
+        "mlp_module": "mlp"
+      },
+      {
+        "attention_output_projection": "self_attn.o_proj",
+        "layer": 25,
+        "mlp_module": "mlp"
+      },
+      {
+        "attention_output_projection": "self_attn.o_proj",
+        "layer": 26,
+        "mlp_module": "mlp"
+      },
+      {
+        "attention_output_projection": "self_attn.o_proj",
+        "layer": 27,
+        "mlp_module": "mlp"
+      }
+    ]
+  },
+  "boundary": "Stage 27P-A is only a hook-adapter preflight. It proves Qwen component hooks can be applied at the intended positions with finite effects; it does not prove Qwen steering, component attribution, or circuit control.",
+  "candidate_component_count": 52,
+  "candidate_layers": [
+    24,
+    25,
+    26,
+    27
+  ],
+  "elapsed_seconds": 25.110084078274667,
+  "hook_effects": {
+    "attention_head": {
+      "base_mean_logprob": -5.275,
+      "component": "L27H0",
+      "delta_summary": {
+        "max_abs_after_prediction_positions": 0.0,
+        "max_abs_all": 1.15625,
+        "max_abs_before_first_prediction": 0.0,
+        "max_abs_prediction_positions": 1.15625
+      },
+      "finite": true,
+      "hooked_mean_logprob": -5.403125,
+      "mean_logprob_delta": -0.12812499999999982,
+      "position_localized": true,
+      "prediction_effect": true,
+      "prediction_positions": [
+        86,
+        87,
+        88,
+        89,
+        90
+      ],
+      "scale": 0.0
+    },
+    "mlp": {
+      "base_mean_logprob": -5.275,
+      "component": "L27MLP",
+      "delta_summary": {
+        "max_abs_after_prediction_positions": 0.0,
+        "max_abs_all": 15.0625,
+        "max_abs_before_first_prediction": 0.0,
+        "max_abs_prediction_positions": 15.0625
+      },
+      "finite": true,
+      "hooked_mean_logprob": -6.503125,
+      "mean_logprob_delta": -1.2281249999999995,
+      "position_localized": true,
+      "prediction_effect": true,
+      "prediction_positions": [
+        86,
+        87,
+        88,
+        89,
+        90
+      ],
+      "scale": 0.0
+    }
+  },
+  "input_file": "stage7_foundation_pilot_20260517.jsonl",
+  "input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "loaded_model_contract": {
+    "actual_model_name": "Qwen/Qwen2.5-1.5B",
+    "actual_model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "expected_model_name": "Qwen/Qwen2.5-1.5B",
+    "expected_model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "formal_gate_valid": true,
+    "hidden_size": 1536,
+    "num_attention_heads": 12,
+    "num_hidden_layers": 28
+  },
+  "model": {
+    "expected_model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "hidden_size": 1536,
+    "model_name": "Qwen/Qwen2.5-1.5B",
+    "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "model_source": "Qwen/Qwen2.5-1.5B",
+    "num_attention_heads": 12,
+    "num_hidden_layers": 28,
+    "torch": "2.5.1+cu124",
+    "transformers": "5.8.1"
+  },
+  "preflight_row": {
+    "foundation_drive": 1,
+    "foundation_label": "F1f",
+    "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F7f_F1f_concrete_human_F1f"
+  },
+  "schema_version": "stage27p_qwen_hook_adapter_preflight.v1",
+  "source_contracts": {
+    "stage16_cpl2": {
+      "expected_status": "PASS_CLEAN_STAGE16_QWEN15B_CPL2_REPLICATES",
+      "formal_gate_valid": true,
+      "model_name": "Qwen/Qwen2.5-1.5B",
+      "n_cases": 112,
+      "probe_readable_delta_vs_none": 0.7960030691964286,
+      "selected_layer_position": 11,
+      "source_file": "STAGE16_QWEN15B_CPL2_REPORT_20260519.json",
+      "source_sha256": "0aad3bdaccecd2d9d12db08dc0dc1f35250ae1d224e9d8966e266f4261421507",
+      "source_status": "PASS_CLEAN_STAGE16_QWEN15B_CPL2_REPLICATES"
+    },
+    "stage16_manifest": {
+      "expected_model_name": "Qwen/Qwen2.5-1.5B",
+      "expected_model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+      "formal_gate_valid": true,
+      "model_name": "Qwen/Qwen2.5-1.5B",
+      "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+      "source_file": "stage16_qwen15b_activations_manifest_20260519.json",
+      "source_sha256": "4bddb609c48b7c02568bd19d21bfd3ca2aa07b49da321a1f796aa86460c7a0e4"
+    },
+    "stage27o": {
+      "expected_status": "PASS_BOUNDED_CROSS_SCALE_DRIVE_LOCAL_CALIBRATED_ERASER_STEERING",
+      "formal_gate_valid": true,
+      "source_file": "stage27o_drive_local_cross_scale_eraser_steering_20260521.json",
+      "source_sha256": "e596e3dbe55ee84bffcb68008ea5acf446d90a0689247a936353af08134685fc",
+      "source_status": "PASS_BOUNDED_CROSS_SCALE_DRIVE_LOCAL_CALIBRATED_ERASER_STEERING"
+    }
+  },
+  "status": "PASS_QWEN_HOOK_ADAPTER_PREFLIGHT"
+}
