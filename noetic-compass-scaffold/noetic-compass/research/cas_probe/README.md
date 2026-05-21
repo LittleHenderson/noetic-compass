@@ -2719,3 +2719,49 @@ Artifacts:
 - `STAGE25_SAE_FEATURE_PREREG_20260521.md`
 - `tests/test_stage25_sae_feature_spec.py`
 - `tests/test_stage25_sae_feature_pilot.py`
+
+## Stage 25 result - SAE feature localization pilot
+
+**Verdict: `NULL_SAE_FEATURE_READOUT_NOT_ESTABLISHED`.**
+
+Stage 25 ran on the existing A6000 pod against the original locked Stage 7
+activation artifact. The artifact contract matched the Stage 7 manifest, so
+this is a formal Stage 25 result, not a replacement-artifact diagnostic.
+
+Contract:
+
+| Field | Value |
+|---|---|
+| Activation SHA-256 | `d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f` |
+| Artifact contract | `LOCKED_ARTIFACT_MATCH` |
+| Formal gate valid | `true` |
+| Checkpoint SHA-256 | `594a224a9df92f89be0897f27d313af60febc8bb39b167412f88fa6f85b671f0` |
+
+Gate read:
+
+- Reconstruction passed strongly: heldout explained variance `0.9830`.
+- CAS alignment passed: top-k SAE decoder features align to Stage 7 Foundation
+  probe directions above random controls, p(random >= actual) `0.0099`.
+- Feature specificity passed: selected features show heldout class-selective
+  activation above random controls, p(random >= actual) `0.0099`.
+- Sparsity did **not** pass: mean active features per row `2303.16`, above the
+  preregistered `5..250` non-collapse window.
+- Causal feature drop did **not** pass: removing the selected top CAS-aligned
+  features did not degrade the Stage 7 readout (`targeted_drop = -0.0009`),
+  p(random >= actual) `0.7624`.
+
+Interpretation:
+
+> This SAE recovers a high-fidelity, class-aligned feature basis, but the
+> features are too dense and the selected aligned features are not
+> readout-causal under the preregistered removal test. Stage 25 therefore does
+> not license SAE-level feature causality or exact-neuron claims. The most
+> useful follow-up is a stronger sparsity sweep (`l1_coefficient` up, possibly
+> fewer features) or component hooks before another expensive SAE run.
+
+Artifacts:
+
+- `stage25_sae_feature_pilot_20260521.json`
+- `STAGE25_SAE_FEATURE_PILOT_20260521.md`
+- Binary checkpoint retained locally/pod-side only:
+  `stage25_sae_feature_pilot_20260521.pt` (git-ignored)
