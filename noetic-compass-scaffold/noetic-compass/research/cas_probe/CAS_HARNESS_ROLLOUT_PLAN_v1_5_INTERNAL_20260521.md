@@ -33,7 +33,7 @@ Beyond what's captured in v1.5, the project has advanced through:
 - **Stage 27K** — **Output-side component steering GREY** (combined carrier amplification + eraser suppression; mean likelihood-margin lift +0.5576; matched random −0.2927; delta over random +0.8502; row-consistency gate failed at p = 0.3444 / 30 of 56 wins; **eraser-suppression single-channel was strongest at +0.8223 mean lift / 69.6% positive share**). Commits: `236c5c5` prereg + `9ef9b29` results.
 - **Stage 27N** — Cross-scale global-cover output-side steering on Pythia-1B: **NULL** (one global eraser cover too coarse to resolve cross-Drive distinctions at 1B scale). Established the methodology bound that informed 27O.
 - **Stage 27O** — **Cross-scale drive-local output-side eraser steering on Pythia-1B: PASS** (one calibrated eraser cover *per* Foundation drive; mean likelihood-margin lift **+0.8386** vs matched random −0.1634; **54 of 56** held-out rows positive; sign-test **p = 2.22×10⁻¹⁴**). First clean behavioral-control PASS. Commits: `a786714` prereg + `ee5b047` results.
-- **Stage 28** — **Cross-architecture replication of drive-local eraser steering: PASS on Qwen2.5-1.5B + Pythia-160M re-test (resolves 27K GREY).** Three model points across two architecture families now validate the protocol with no methodology adjustment:
+- **Stage 27P** — **Cross-architecture replication of drive-local eraser steering: PASS on Qwen2.5-1.5B + Pythia-160M re-test (resolves 27K GREY).** On-disk artifact: `STAGE27P_QWEN_DRIVE_LOCAL_ERASER_STEERING_20260521.md`. Three model points across two architecture families now validate the protocol with no methodology adjustment:
 
   | Model | Architecture family | Mean lift | Wins | Sign-test p |
   |---|---|---:|:---:|---:|
@@ -52,7 +52,7 @@ The empirical picture has clarified materially since v1.5:
 - **Output-side component steering PARTIAL on Pythia-160M (Stage 27K)** — directional, not row-consistent.
 - **Cross-scale global cover NULL on Pythia-1B (Stage 27N)** — one global eraser cover too coarse to resolve cross-Drive distinctions at 1B.
 - **Cross-scale DRIVE-LOCAL eraser steering PASS on Pythia-1B (Stage 27O)** — first clean behavioral-control PASS. Mean lift +0.8386, 54/56 rows, p = 2.22×10⁻¹⁴. The working methodology is one calibrated eraser cover *per* Foundation drive.
-- **Cross-architecture replication of drive-local eraser steering PASS on Qwen2.5-1.5B (Stage 28)** — first cross-architecture out-of-family behavioral-control PASS. Mean lift +0.90, **56/56 unanimous**, p = 1.4×10⁻¹⁷. The Pythia-160M drive-local re-test in the same stage produced +0.85 / 181 of 245 / p = 2.0×10⁻¹⁴ — resolving the earlier Stage 27K GREY as a methodology issue, not a scale issue. The full NULL/PASS sequence (27K GREY → 27N NULL → 27O PASS → 28 cross-architecture PASS) is part of the auditable methodology — the bound was learned, not assumed. **Cross-architecture footprint for steering is now 2 of the 3 families that closed the readout claim** (Pythia + Qwen); OLMo-1B is the natural next gate to reach three-family parity.
+- **Cross-architecture replication of drive-local eraser steering PASS on Qwen2.5-1.5B (Stage 27P)** — first cross-architecture out-of-family behavioral-control PASS. Mean lift +0.90, **56/56 unanimous**, p = 1.4×10⁻¹⁷. The Pythia-160M drive-local re-test in the same stage produced +0.85 / 181 of 245 / p = 2.0×10⁻¹⁴ — resolving the earlier Stage 27K GREY as a methodology issue, not a scale issue. The full NULL/PASS sequence (27K GREY → 27N NULL → 27O PASS → 27P cross-architecture PASS) is part of the auditable methodology — the bound was learned, not assumed. **Cross-architecture footprint for steering is now 2 of the 3 families that closed the readout claim** (Pythia + Qwen); OLMo-1B is the natural next gate to reach three-family parity.
 
 The rollout below should be read against this updated foundation. Some Section 10 items from v1.5 (the rollout content extracted here) are now advanced, some are still relevant, and some have been refined by the recent NULL-then-PASS arc.
 
@@ -71,9 +71,9 @@ The rollout below should be read against this updated foundation. Some Section 1
 | ~~Stage 27L~~ | ~~Calibrated per-class steering on Pythia-160M~~ | ~~Done~~ | ~~Subsumed; drive-local methodology validated directly at cross-scale (Stage 27O)~~ |
 | ~~Stage 27N~~ | ~~Global-cover cross-scale output-side steering on Pythia-1B~~ | ~~Done~~ | ~~NULL — global cover too coarse at 1B; informed Stage 27O methodology~~ |
 | ~~Stage 27O~~ | ~~Drive-local cross-scale output-side eraser steering on Pythia-1B~~ | ~~Done~~ | ~~PASS — +0.8386 mean lift, 54/56, p = 2.22×10⁻¹⁴~~ |
-| **Stage 27P** | **Wire drive-local eraser-cover support + steering signal into Evidence Packet + Verification Stack** | **$0 GPU — engineering** | **Product move. Per-inspection field: "drive-local cover support: present / weak / conflicted"; per-inspection steering capability surfaced in Evidence Packet. Audit-grade output upgrade.** |
-| ~~Stage 28~~ | ~~Cross-architecture replication of Stage 27O drive-local eraser steering~~ | ~~Done~~ | ~~PASS on Qwen2.5-1.5B (56/56, p = 1.4×10⁻¹⁷) + Pythia-160M re-test resolves 27K. OLMo replication pending separately.~~ |
-| **Stage 28b** | **OLMo-1B drive-local eraser steering replication — brings steering claim to three-family parity with readout claim (Pythia + OLMo + Qwen)** | **~$20–50 GPU** | **Now the highest-leverage open empirical extension. Methodology is unchanged from Stage 28 (no new design risk); the protocol replicates without adjustment on three model points across two families already. OLMo would close the symmetric three-family footprint.** |
+| **Stage 27P-Product** | **Wire drive-local eraser-cover support + steering signal into Evidence Packet + Verification Stack** | **$0 GPU — engineering** | **Product move. Per-inspection field: "drive-local cover support: present / weak / conflicted"; per-inspection steering capability surfaced in Evidence Packet. Audit-grade output upgrade. (Originally labeled "Stage 27P" in this rollout plan before the on-disk Stage 27P experimental artifact was filed; renamed to disambiguate.)** |
+| ~~Stage 27P~~ | ~~Cross-architecture replication of Stage 27O drive-local eraser steering~~ | ~~Done~~ | ~~PASS on Qwen2.5-1.5B (56/56, p = 1.4×10⁻¹⁷) + Pythia-160M re-test resolves 27K. OLMo replication pending separately.~~ |
+| **Stage 27P-OLMo** | **OLMo-1B drive-local eraser steering replication — brings steering claim to three-family parity with readout claim (Pythia + OLMo + Qwen)** | **~$20–50 GPU** | **Now the highest-leverage open empirical extension. Methodology is unchanged from Stage 27P (no new design risk); the protocol replicates without adjustment on three model points across two families already. OLMo would close the symmetric three-family footprint.** |
 | Stage 27I | Cross-axis: sparse-cover localization for 40 Elements + 10 Noetics | ~$20–40 GPU | Tests whether cover methodology generalizes beyond Foundations |
 | Stage 9.1 | 40-Element ablation + Domain × Noetic factorization | ~30 min A6000 | Tests whether 40 Elements is primary axis or Domain+Noetic composition |
 | Stage 17 option A | Llama-7B or OLMo-7B or Qwen2.5-7B scale-up | ~$30–100 GPU | Tests scale beyond 2.8B; would close the "scale" bound to 7B |
@@ -83,11 +83,11 @@ The rollout below should be read against this updated foundation. Some Section 1
 | Stage 23.A.1 | Dashboard adapter migration to canonical 2D notation map (complete) | $0 | Validates foundation end-to-end (shipped: GraphView + Notation2DView) |
 | **Product packaging** | Subdomain landing page (`cas-harness.noeticcompass.com` or similar) + one-pager + customer-facing demo flow | $0 — design only | First external surface; required before any paid pilot |
 
-**Sequencing priority** (updated 2026-05-22 after Stage 28 cross-architecture PASS on Qwen):
+**Sequencing priority** (updated 2026-05-22 after Stage 27P cross-architecture PASS on Qwen; stage label corrected from session-level "Stage 28" shorthand to the on-disk canonical "Stage 27P" 2026-05-21):
 
-1. **Stage 28b** — OLMo-1B drive-local eraser steering replication. Brings steering to three-family parity with readout claim (Pythia + OLMo + Qwen). Methodology already proven across 3 model points and 2 families with no adjustment; OLMo is the symmetric extension. ~$20–50 GPU.
-2. **Stage 27P** — wire drive-local cover + steering signal into Evidence Packet + Verification Stack. $0 GPU, product move. Ships regardless of Stage 28b outcome.
-3. **Update investor spec sheet** ✓ (done — Stage 27O + 28 folded in; behavioral-control LICENSED at two families, three-family parity flagged as next gate)
+1. **Stage 27P-OLMo** — OLMo-1B drive-local eraser steering replication. Brings steering to three-family parity with readout claim (Pythia + OLMo + Qwen). Methodology already proven across 3 model points and 2 families with no adjustment; OLMo is the symmetric extension. ~$20–50 GPU.
+2. **Stage 27P-Product** — wire drive-local cover + steering signal into Evidence Packet + Verification Stack. $0 GPU, product move. Ships regardless of Stage 27P-OLMo outcome. (Previously listed simply as "Stage 27P" before the naming collision was resolved.)
+3. **Update investor spec sheet** ✓ (done — Stage 27O + 27P folded in; behavioral-control LICENSED at two families, three-family parity flagged as next gate)
 4. Product packaging — subdomain landing + one-pager finalization + demo flow
 5. Stage 27I — extend cover methodology to 40 Elements / Noetics axes
 6. THEN: Stage 17 scale-up (7B+) OR Stage 17C hidden-content validation, depending on first paying conversation
@@ -99,7 +99,7 @@ The rollout below should be read against this updated foundation. Some Section 1
 | Initiative | Description | Dependencies |
 |---|---|---|
 | **Hosted MVP** | Upload + probe-training + Evidence Packet inspection loop | Subdomain shipped, payment/billing wired |
-| **Multi-architecture coverage** | Validated probes for Llama, OLMo, Qwen, Mistral, Phi, Gemma | Stage 28 cross-model replication first |
+| **Multi-architecture coverage** | Validated probes for Llama, OLMo, Qwen, Mistral, Phi, Gemma | Stage 27P cross-architecture replication first |
 | **Hidden-content detection at production tier** | Move two-bridge from prototype to validated | Stage 17C validation |
 | **Surface-text steering at 1B+ scale** | Replicate CPL3/CPL4 on larger models where sampling noise is lower | Stage 17A scale-up |
 | **Mode 7 / Living Thought Atlas integration** | Trace surface for live inspection | Component-guided sonar + path-patching surfaces |
@@ -153,7 +153,7 @@ These three engineering items are low-cost (no significant new GPU spend; each c
 
 | Tier | Audience | Target Pricing | Validation Trigger |
 |---|---|---|---|
-| Hosted Trial | Single-model audit, 30-day | TBD | Stage 28 cross-model replication |
+| Hosted Trial | Single-model audit, 30-day | TBD | Stage 27P cross-architecture replication |
 | Hosted Standard | Multi-model, ongoing audit | TBD | First three referenceable customers |
 | Hosted Regulator-Grade | High-precision mode + compliance reporting | TBD | First regulator pilot |
 | Self-Hosted Enterprise | On-prem toolkit + support | TBD | First on-prem customer ask |
@@ -169,10 +169,10 @@ The investor-facing spec sheet lists 13 candidate IP filings. The internal seque
 |---|---|---|
 | 1 | η → ε bridge applied to foreign open-weight models | Already in process per IP attorney |
 | 2 | Evidence Packet schema + authenticated delivery surface | Filed alongside #1 (operational artifact) |
-| 3 | Cross-architecture probe-transfer methodology | **Triggered — Stage 28 (Qwen2.5-1.5B + Pythia-160M re-test) closes the cross-architecture footprint on the steering side; readout claim already validated cross-family.** Ready to file. |
-| 4 | Component-level (head-level) necessity + sufficiency testing methodology | **Triggered — Stage 28 confirms protocol replicates without adjustment across two architecture families (Pythia + Qwen).** Ready to file. |
+| 3 | Cross-architecture probe-transfer methodology | **Triggered — Stage 27P (Qwen2.5-1.5B + Pythia-160M re-test) closes the cross-architecture footprint on the steering side; readout claim already validated cross-family.** Ready to file. |
+| 4 | Component-level (head-level) necessity + sufficiency testing methodology | **Triggered — Stage 27P confirms protocol replicates without adjustment across two architecture families (Pythia + Qwen).** Ready to file. |
 | 4b | **Sparse MLP-neuron-cover causal localization methodology** — targeted cover identification + ablation + amplification + polarity-flip + matched-control validation + bit-exact patch-back recovery (Stages 27F + 27G) | **Time-sensitive — file immediately after IP attorney consultation.** This is the finest-granularity causal localization claim in the project; differentiating against any competing interpretability product. |
-| 4c | **Drive-local output-side eraser-channel steering methodology** — per-Foundation-drive calibrated eraser cover applied at output side; **cross-architecture validated across two families** (Pythia-160M + Pythia-1B + Qwen2.5-1.5B; combined wins 235/280, three independent sign-test confirmations). Includes the methodology-bound discovery that global cover is too coarse at 1B scale (Stage 27N NULL → Stage 27O drive-local PASS), and the cross-architecture replication confirming the protocol is not Pythia-specific (Stage 28 Qwen 56/56 unanimous, p = 1.4×10⁻¹⁷). | **Most time-sensitive of the open filings — now ready to file.** First clean behavioral-control claim with cross-architecture footprint. Differentiates against any interpretability tool that reads but does not steer. Pre-registered NULL/PASS sequence + three-replication footprint is part of the IP package. File immediately after IP attorney consultation; do not wait on Stage 28b OLMo replication (that strengthens scope, not the core claim). |
+| 4c | **Drive-local output-side eraser-channel steering methodology** — per-Foundation-drive calibrated eraser cover applied at output side; **cross-architecture validated across two families** (Pythia-160M + Pythia-1B + Qwen2.5-1.5B; combined wins 235/280, three independent sign-test confirmations). Includes the methodology-bound discovery that global cover is too coarse at 1B scale (Stage 27N NULL → Stage 27O drive-local PASS), and the cross-architecture replication confirming the protocol is not Pythia-specific (Stage 27P Qwen 56/56 unanimous, p = 1.4×10⁻¹⁷; on-disk artifact `STAGE27P_QWEN_DRIVE_LOCAL_ERASER_STEERING_20260521.md`). | **Most time-sensitive of the open filings — now ready to file.** First clean behavioral-control claim with cross-architecture footprint. Differentiates against any interpretability tool that reads but does not steer. Pre-registered NULL/PASS sequence + three-replication footprint is part of the IP package. File immediately after IP attorney consultation; do not wait on Stage 27P-OLMo replication (that strengthens scope, not the core claim). |
 | 5 | CAS Verification Stack — runtime-safe accept/suppress | Already validated, ready to file |
 | 6 | Verification Mode Selector + factor-consistent verifier | Already validated, ready to file |
 | 7 | Generation Readiness Gate orchestrating policy methodology | Already validated, ready to file |
@@ -191,7 +191,7 @@ The investor-facing spec sheet lists 13 candidate IP filings. The internal seque
 |---|---|---|---|
 | Anthropic, OpenAI, or others publish a competing interpretability product | Medium-High | High | Cross-architecture moat (CAS Harness works on competitor models; competitor tools rarely do); audit-grade methodology discipline; pre-registered evidence |
 | Open-weight models become rare (closed-API consolidation) | Low-Medium | High | Pivot to bring-your-endpoint deployment; emphasize regulator-facing customers who'll require open weights regardless |
-| SAE-at-scale work succeeds before our component attribution claim is widely known | Medium | Medium-High | Stage 28 cross-model replication closes the time gap; file IP on component-level necessity + sufficiency methodology now |
+| SAE-at-scale work succeeds before our component attribution claim is widely known | Medium | Medium-High | Stage 27P cross-architecture replication closes the time gap; file IP on component-level necessity + sufficiency methodology now |
 | 7B+ scale-up fails (effects saturate before frontier) | Low-Medium | Medium | Reframe as scale-bounded product; multi-architecture coverage substitutes for scale |
 | Customer wants neuron-level evidence we can't yet provide | ~~Medium~~ Low (post-27F/G) | Medium | **Now substantially mitigated** — sparse-cover causal localization with bidirectional control is validated. SAE escalation remains as paid follow-on for true monosemantic features if customer specifically requests. |
 | Hidden-content detection prototype doesn't promote to validated | Low-Medium | Low (still have core product) | Treat as upside, not load-bearing |
@@ -202,7 +202,7 @@ The investor-facing spec sheet lists 13 candidate IP filings. The internal seque
 
 This rollout plan refreshes when:
 
-- Stage 27B / Stage 28 results land
+- Stage 27B / Stage 27P results land
 - First paying customer signs
 - IP attorney issues filing recommendations
 - A scale-up experiment (Stage 17) closes
@@ -210,7 +210,7 @@ This rollout plan refreshes when:
 - Multi-Harness coordinator prototype ships
 - Material framework or methodology revision lands
 
-Next mandatory review: after Stage 28 cross-model replication, OR after first paying-customer conversation, whichever lands first.
+Next mandatory review: after Stage 27P-OLMo replication (the open OLMo-1B drive-local eraser steering replication that would close steering at three families), OR after first paying-customer conversation, whichever lands first.
 
 ---
 
