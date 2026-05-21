@@ -1,0 +1,1859 @@
+{
+  "boundary": "Stage 27L is bounded calibrated eraser-cover intervention over Pythia-160M CPL2 likelihood margins. It is not complete circuit discovery, not weight editing, not model-wide control, not cross-model control, and not visible free-form generation control.",
+  "calibration": {
+    "drive_calibrated": {
+      "details": {
+        "1": {
+          "grid": [
+            {
+              "increment": {
+                "mean": -0.06973495483398429,
+                "median": -0.08432617187499991,
+                "n": 8,
+                "positive_share": 0.5
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 0.24517517089843732,
+                "median": 0.22276611328125062,
+                "n": 8,
+                "positive_share": 0.875
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.1390380859375001,
+                "median": 0.1351074218749999,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.10638427734375,
+                "median": 0.11035156249999956,
+                "n": 8,
+                "positive_share": 0.75
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 0.24517517089843732,
+            "median": 0.22276611328125062,
+            "n": 8,
+            "positive_share": 0.875
+          },
+          "selected_scale": 0.25
+        },
+        "2": {
+          "grid": [
+            {
+              "increment": {
+                "mean": 1.1286029815673828,
+                "median": 1.040837097167969,
+                "n": 8,
+                "positive_share": 0.875
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 0.4798873901367182,
+                "median": 0.42882690429687376,
+                "n": 8,
+                "positive_share": 0.75
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.12974243164062482,
+                "median": 0.16428222656250036,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.053759765624999845,
+                "median": -0.008984374999999822,
+                "n": 8,
+                "positive_share": 0.5
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 1.1286029815673828,
+            "median": 1.040837097167969,
+            "n": 8,
+            "positive_share": 0.875
+          },
+          "selected_scale": 0.0
+        },
+        "3": {
+          "grid": [
+            {
+              "increment": {
+                "mean": -0.4478607177734376,
+                "median": -0.7013000488281258,
+                "n": 8,
+                "positive_share": 0.5
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": -0.5089904785156252,
+                "median": -0.6052490234375001,
+                "n": 8,
+                "positive_share": 0.375
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": -0.20372314453125018,
+                "median": -0.23649902343750107,
+                "n": 8,
+                "positive_share": 0.375
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": -0.10506591796874998,
+                "median": -0.06406250000000036,
+                "n": 8,
+                "positive_share": 0.5
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 0.0,
+            "median": 0.0,
+            "n": 8,
+            "positive_share": 0.0
+          },
+          "selected_scale": 1.0
+        },
+        "4": {
+          "grid": [
+            {
+              "increment": {
+                "mean": 0.26842651367187553,
+                "median": 0.2079223632812508,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 0.20815429687499998,
+                "median": 0.12785644531249973,
+                "n": 8,
+                "positive_share": 0.75
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.08531494140625007,
+                "median": 0.14941406250000044,
+                "n": 8,
+                "positive_share": 0.75
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.04947509765625013,
+                "median": 0.05302734375000018,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 0.26842651367187553,
+            "median": 0.2079223632812508,
+            "n": 8,
+            "positive_share": 0.625
+          },
+          "selected_scale": 0.0
+        },
+        "5": {
+          "grid": [
+            {
+              "increment": {
+                "mean": 2.7352756500244144,
+                "median": 3.3753570556640624,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 1.3564605712890623,
+                "median": 1.80667724609375,
+                "n": 8,
+                "positive_share": 0.875
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.5979003906249998,
+                "median": 0.8516601562499999,
+                "n": 8,
+                "positive_share": 0.75
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.22687988281249982,
+                "median": 0.20810546874999947,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 2.7352756500244144,
+            "median": 3.3753570556640624,
+            "n": 8,
+            "positive_share": 1.0
+          },
+          "selected_scale": 0.0
+        },
+        "6": {
+          "grid": [
+            {
+              "increment": {
+                "mean": 0.10572052001953147,
+                "median": 0.2591735839843752,
+                "n": 8,
+                "positive_share": 0.75
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 0.3326019287109375,
+                "median": 0.44813232421875027,
+                "n": 8,
+                "positive_share": 0.875
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.1620178222656251,
+                "median": 0.26684570312500044,
+                "n": 8,
+                "positive_share": 0.625
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.04229736328125022,
+                "median": 0.03759765625,
+                "n": 8,
+                "positive_share": 0.5
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 0.3326019287109375,
+            "median": 0.44813232421875027,
+            "n": 8,
+            "positive_share": 0.875
+          },
+          "selected_scale": 0.25
+        },
+        "7": {
+          "grid": [
+            {
+              "increment": {
+                "mean": 2.4344848632812495,
+                "median": 2.346337890624999,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.0
+            },
+            {
+              "increment": {
+                "mean": 1.3163818359375,
+                "median": 1.1370117187499997,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.25
+            },
+            {
+              "increment": {
+                "mean": 0.6874755859374999,
+                "median": 0.615966796875,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.5
+            },
+            {
+              "increment": {
+                "mean": 0.32388916015625,
+                "median": 0.2917968749999993,
+                "n": 8,
+                "positive_share": 1.0
+              },
+              "scale": 0.75
+            },
+            {
+              "increment": {
+                "mean": 0.0,
+                "median": 0.0,
+                "n": 8,
+                "positive_share": 0.0
+              },
+              "scale": 1.0
+            }
+          ],
+          "selected_increment": {
+            "mean": 2.4344848632812495,
+            "median": 2.346337890624999,
+            "n": 8,
+            "positive_share": 1.0
+          },
+          "selected_scale": 0.0
+        }
+      },
+      "selected_scales": {
+        "1": 0.25,
+        "2": 0.0,
+        "3": 1.0,
+        "4": 0.0,
+        "5": 0.0,
+        "6": 0.25,
+        "7": 0.0
+      }
+    },
+    "global": {
+      "grid": [
+        {
+          "increment": {
+            "mean": 0.8792735508510044,
+            "median": 0.5865478515625004,
+            "n": 56,
+            "positive_share": 0.75
+          },
+          "scale": 0.0
+        },
+        {
+          "increment": {
+            "mean": 0.4899529593331472,
+            "median": 0.4127685546874993,
+            "n": 56,
+            "positive_share": 0.7857142857142857
+          },
+          "scale": 0.25
+        },
+        {
+          "increment": {
+            "mean": 0.2282523018973214,
+            "median": 0.22221679687500018,
+            "n": 56,
+            "positive_share": 0.6785714285714286
+          },
+          "scale": 0.5
+        },
+        {
+          "increment": {
+            "mean": 0.09965994698660716,
+            "median": 0.08525390624999973,
+            "n": 56,
+            "positive_share": 0.6428571428571429
+          },
+          "scale": 0.75
+        },
+        {
+          "increment": {
+            "mean": 0.0,
+            "median": 0.0,
+            "n": 56,
+            "positive_share": 0.0
+          },
+          "scale": 1.0
+        }
+      ],
+      "selected_increment": {
+        "mean": 0.8792735508510044,
+        "median": 0.5865478515625004,
+        "n": 56,
+        "positive_share": 0.75
+      },
+      "selected_scale": 0.0
+    }
+  },
+  "candidate_layers": [
+    8,
+    9,
+    10,
+    11
+  ],
+  "elapsed_seconds": 44.42855340335518,
+  "eraser_cover": [
+    "L11MLP",
+    "L9H3",
+    "L11H11",
+    "L10H6",
+    "L11H9",
+    "L10H3"
+  ],
+  "evaluation": {
+    "drive_calibrated": {
+      "increment": {
+        "mean": 0.9550079890659877,
+        "median": 0.4992431640624999,
+        "n": 56,
+        "positive_share": 0.6785714285714286
+      },
+      "prefix_margin": {
+        "mean": 0.5589983258928571,
+        "median": 0.4955078125000001,
+        "n": 56,
+        "positive_share": 0.6785714285714286
+      },
+      "random_mean_increment": {
+        "mean": -0.12960510253906257,
+        "median": 0.0,
+        "n": 56,
+        "positive_share": 0.42857142857142855
+      },
+      "row_reports": [
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1T",
+          "increment": 0.9080566406250012,
+          "prefix_margin": 1.0812499999999998,
+          "random_mean_increment": -0.29594726562499973,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F1T",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1A",
+          "increment": -0.11132812500000089,
+          "prefix_margin": -0.24628906249999982,
+          "random_mean_increment": 0.1879638671874998,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F1A",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1f",
+          "increment": 0.5521484374999988,
+          "prefix_margin": -0.3318359375000002,
+          "random_mean_increment": 0.3337890625000002,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_system_process_F1f",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1E",
+          "increment": -0.09726562499999947,
+          "prefix_margin": 0.3761718749999998,
+          "random_mean_increment": -0.047607421875,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F7E_F1E_concrete_human_F1E",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1E",
+          "increment": 0.4755371093749998,
+          "prefix_margin": 0.5076171875000002,
+          "random_mean_increment": -0.13056640625000038,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F1E",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1A",
+          "increment": -0.19301757812499964,
+          "prefix_margin": 0.4833984375,
+          "random_mean_increment": -0.17414550781250016,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_concrete_human_F1A",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1T",
+          "increment": 0.4512207031250002,
+          "prefix_margin": 0.5871093749999998,
+          "random_mean_increment": 0.05151367187500011,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_concrete_human_F1T",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1A",
+          "increment": 0.5507324218749989,
+          "prefix_margin": 0.44492187500000036,
+          "random_mean_increment": -0.041992187500000444,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_counter_alias_hard_negative_F1A",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2E",
+          "increment": -0.1586425781250007,
+          "prefix_margin": -0.6898437499999996,
+          "random_mean_increment": 0.2830322265624997,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_counter_alias_hard_negative_F2E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2f",
+          "increment": 1.7872314453125,
+          "prefix_margin": -0.2634765624999993,
+          "random_mean_increment": 0.08593749999999922,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F1f_F2f_no_alias_plain_F2f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2A",
+          "increment": 0.7990234374999989,
+          "prefix_margin": -0.47499999999999964,
+          "random_mean_increment": 0.20761718749999958,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_system_process_F2A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2E",
+          "increment": 0.30622558593749893,
+          "prefix_margin": -0.5628906249999996,
+          "random_mean_increment": 0.1775878906249998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F2E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": -2.090576171875,
+          "prefix_margin": -1.5162109375000004,
+          "random_mean_increment": 0.4794921875000002,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F1T_F2T_long_embedded_clause_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": -0.8265502929687507,
+          "prefix_margin": -1.1156249999999996,
+          "random_mean_increment": 0.3394287109374995,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2E",
+          "increment": 0.683258056640625,
+          "prefix_margin": -0.7080078125,
+          "random_mean_increment": 0.2982910156249998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_long_embedded_clause_F2E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2E",
+          "increment": 0.3109863281249998,
+          "prefix_margin": -0.7941406249999998,
+          "random_mean_increment": 0.4573974609374999,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_long_embedded_clause_F2E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3T",
+          "increment": 0.0,
+          "prefix_margin": 1.3695312499999996,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F2T_F3T_system_process_F3T",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3A",
+          "increment": 0.0,
+          "prefix_margin": -0.5998046874999998,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F3A",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3T",
+          "increment": 0.0,
+          "prefix_margin": 1.5730468750000002,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F2T_F3T_role_inverse_minimal_F3T",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3A",
+          "increment": 0.0,
+          "prefix_margin": 1.3210937500000002,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F2A_F3A_no_alias_plain_F3A",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": 0.0,
+          "prefix_margin": 1.2248046874999998,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F2E_F3E_role_inverse_minimal_F3E",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3f",
+          "increment": 0.0,
+          "prefix_margin": 1.3259765624999993,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F2f_F3f_no_alias_plain_F3f",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3T",
+          "increment": 0.0,
+          "prefix_margin": -0.07109375000000018,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F3T_F4T_no_alias_plain_F3T",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": 0.0,
+          "prefix_margin": -0.9978515624999993,
+          "random_mean_increment": 0.0,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F3E",
+          "scale": 1.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": 1.2041015625000009,
+          "prefix_margin": 0.6078125000000005,
+          "random_mean_increment": 0.17087402343749958,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4E",
+          "increment": 1.0886962890624998,
+          "prefix_margin": 0.8265625000000005,
+          "random_mean_increment": -0.016796875000000377,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_long_embedded_clause_F4E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4T",
+          "increment": 0.6234375000000005,
+          "prefix_margin": 1.2613281249999995,
+          "random_mean_increment": -0.2274658203124994,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_system_process_F4T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": 0.52294921875,
+          "prefix_margin": 0.5416015625000004,
+          "random_mean_increment": 0.11340332031249967,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_system_process_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4f",
+          "increment": 1.4423828125,
+          "prefix_margin": 0.8203125,
+          "random_mean_increment": 0.08056640624999989,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F3f_F4f_no_alias_plain_F4f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4E",
+          "increment": 0.32521972656249876,
+          "prefix_margin": 0.7707031249999998,
+          "random_mean_increment": -0.09228515624999978,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_counter_alias_hard_negative_F4E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": 1.2476562500000004,
+          "prefix_margin": 1.029296875,
+          "random_mean_increment": -0.11411132812500024,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F3A_F4A_no_alias_plain_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4T",
+          "increment": -0.11503906250000018,
+          "prefix_margin": 0.4455078124999998,
+          "random_mean_increment": 0.18869628906250024,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F3T_F4T_system_process_F4T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5E",
+          "increment": 3.1578613281250005,
+          "prefix_margin": 2.2447265624999995,
+          "random_mean_increment": -0.7652832031249995,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F5E_F6E_system_process_F5E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5T",
+          "increment": 0.9095275878906239,
+          "prefix_margin": 0.3781250000000007,
+          "random_mean_increment": -0.12275390625000082,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_system_process_F5T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5f",
+          "increment": 0.6762939453125014,
+          "prefix_margin": 0.31582031249999964,
+          "random_mean_increment": -0.056689453124999734,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F4f_F5f_system_process_F5f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5A",
+          "increment": 3.9267822265624996,
+          "prefix_margin": 2.3046875,
+          "random_mean_increment": -0.7882568359374998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_compressed_minimal_F5A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5T",
+          "increment": -0.1369140625000007,
+          "prefix_margin": 0.162109375,
+          "random_mean_increment": 0.003564453124999978,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_long_embedded_clause_F5T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5f",
+          "increment": -0.6177276611328129,
+          "prefix_margin": -0.22109374999999964,
+          "random_mean_increment": 0.14150390624999987,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F5f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5E",
+          "increment": 0.5470581054687509,
+          "prefix_margin": 0.11113281250000018,
+          "random_mean_increment": 0.012719726562499756,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_no_alias_plain_F5E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5T",
+          "increment": 4.207153320312499,
+          "prefix_margin": 2.26484375,
+          "random_mean_increment": -0.5746337890624998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F5T_F6T_system_process_F5T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.03886718749999929,
+          "prefix_margin": 0.7291015625000004,
+          "random_mean_increment": 0.1378906249999995,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F6A",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6f",
+          "increment": 0.5977539062500004,
+          "prefix_margin": -0.20859375000000036,
+          "random_mean_increment": 0.04230957031250038,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F6f",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": -0.3525390625,
+          "prefix_margin": 0.5537109375,
+          "random_mean_increment": 0.24116210937500016,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_system_process_F6A",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.5283203125000018,
+          "prefix_margin": -0.2257812500000007,
+          "random_mean_increment": 0.0064208984375005995,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_concrete_human_F6A",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.30903320312499893,
+          "prefix_margin": 0.22617187500000036,
+          "random_mean_increment": -0.11550292968750053,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6E",
+          "increment": 0.3367187500000002,
+          "prefix_margin": -0.03593750000000018,
+          "random_mean_increment": -0.15642089843749984,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F5E_F6E_compressed_minimal_F6E",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6f",
+          "increment": 0.1933593750000009,
+          "prefix_margin": 0.4621093749999998,
+          "random_mean_increment": 0.10012207031249987,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F6f",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6E",
+          "increment": 0.3472900390625009,
+          "prefix_margin": -0.3273437499999998,
+          "random_mean_increment": 0.10175781249999982,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F5E_F6E_concrete_human_F6E",
+          "scale": 0.25
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 4.1114501953125,
+          "prefix_margin": 1.935546875,
+          "random_mean_increment": -1.1941406250000002,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_long_embedded_clause_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 3.78779296875,
+          "prefix_margin": 1.7404296874999998,
+          "random_mean_increment": -0.9100341796874998,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_counter_alias_hard_negative_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 3.158251953125,
+          "prefix_margin": 1.6521484375000002,
+          "random_mean_increment": -1.0014892578125,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 4.0555664062500005,
+          "prefix_margin": 1.6984374999999998,
+          "random_mean_increment": -0.9199707031249996,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_counter_alias_hard_negative_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 4.12197265625,
+          "prefix_margin": 2.0859375,
+          "random_mean_increment": -1.0248046874999999,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 3.4190429687500012,
+          "prefix_margin": 1.4406249999999998,
+          "random_mean_increment": -0.6263916015624998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 3.448040771484375,
+          "prefix_margin": 2.1498046875000005,
+          "random_mean_increment": -1.0842773437500006,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 3.0230468750000012,
+          "prefix_margin": 1.6412109374999995,
+          "random_mean_increment": -1.0193603515624994,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F7A",
+          "scale": 0.0
+        }
+      ],
+      "vs_random": {
+        "mean_delta": 1.0846130916050503,
+        "median_delta": 0.421020507812499,
+        "n": 56,
+        "sign_test_p": 0.02202327305107539,
+        "win_share": 0.6428571428571429,
+        "wins": 36
+      }
+    },
+    "global": {
+      "increment": {
+        "mean": 0.8223019736153739,
+        "median": 0.5318237304687501,
+        "n": 56,
+        "positive_share": 0.6964285714285714
+      },
+      "prefix_margin": {
+        "mean": 0.5589983258928571,
+        "median": 0.4955078125000001,
+        "n": 56,
+        "positive_share": 0.6785714285714286
+      },
+      "random_mean_increment": {
+        "mean": -0.15148751395089288,
+        "median": -0.07969970703124984,
+        "n": 56,
+        "positive_share": 0.44642857142857145
+      },
+      "row_reports": [
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1T",
+          "increment": 1.0649414062500009,
+          "prefix_margin": 1.0812499999999998,
+          "random_mean_increment": -0.3695800781249998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F1T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1A",
+          "increment": -0.9138671875000002,
+          "prefix_margin": -0.24628906249999982,
+          "random_mean_increment": 0.30092773437499987,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F1A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1f",
+          "increment": 1.0138671875000016,
+          "prefix_margin": -0.3318359375000002,
+          "random_mean_increment": 0.44931640625000024,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_system_process_F1f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1E",
+          "increment": -1.0960937499999988,
+          "prefix_margin": 0.3761718749999998,
+          "random_mean_increment": -0.0920166015624998,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F7E_F1E_concrete_human_F1E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1E",
+          "increment": 0.3947021484375002,
+          "prefix_margin": 0.5076171875000002,
+          "random_mean_increment": -0.20239257812500022,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F1E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1A",
+          "increment": -1.745166015625001,
+          "prefix_margin": 0.4833984375,
+          "random_mean_increment": -0.1585449218749999,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_concrete_human_F1A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1T",
+          "increment": 0.5406982421875002,
+          "prefix_margin": 0.5871093749999998,
+          "random_mean_increment": -0.08999023437499998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_concrete_human_F1T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 1,
+          "foundation_label": "F1A",
+          "increment": 0.33193359374999964,
+          "prefix_margin": 0.44492187500000036,
+          "random_mean_increment": -0.1367431640625002,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_counter_alias_hard_negative_F1A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2E",
+          "increment": -0.1586425781250007,
+          "prefix_margin": -0.6898437499999996,
+          "random_mean_increment": 0.2830322265624997,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_counter_alias_hard_negative_F2E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2f",
+          "increment": 1.7872314453125,
+          "prefix_margin": -0.2634765624999993,
+          "random_mean_increment": 0.08593749999999922,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F1f_F2f_no_alias_plain_F2f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2A",
+          "increment": 0.7990234374999989,
+          "prefix_margin": -0.47499999999999964,
+          "random_mean_increment": 0.20761718749999958,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_system_process_F2A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2E",
+          "increment": 0.30622558593749893,
+          "prefix_margin": -0.5628906249999996,
+          "random_mean_increment": 0.1775878906249998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F2E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": -2.090576171875,
+          "prefix_margin": -1.5162109375000004,
+          "random_mean_increment": 0.4794921875000002,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F1T_F2T_long_embedded_clause_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2T",
+          "increment": -0.8265502929687507,
+          "prefix_margin": -1.1156249999999996,
+          "random_mean_increment": 0.3394287109374995,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F2T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2E",
+          "increment": 0.683258056640625,
+          "prefix_margin": -0.7080078125,
+          "random_mean_increment": 0.2982910156249998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_long_embedded_clause_F2E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 2,
+          "foundation_label": "F2E",
+          "increment": 0.3109863281249998,
+          "prefix_margin": -0.7941406249999998,
+          "random_mean_increment": 0.4573974609374999,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_long_embedded_clause_F2E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3T",
+          "increment": 0.6480468750000004,
+          "prefix_margin": 1.3695312499999996,
+          "random_mean_increment": -0.36791992187499967,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F2T_F3T_system_process_F3T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3A",
+          "increment": -1.3633789062499995,
+          "prefix_margin": -0.5998046874999998,
+          "random_mean_increment": 0.1699951171874996,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F3A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3T",
+          "increment": 0.6939331054687505,
+          "prefix_margin": 1.5730468750000002,
+          "random_mean_increment": -0.5565673828125002,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F2T_F3T_role_inverse_minimal_F3T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3A",
+          "increment": 0.3213378906250002,
+          "prefix_margin": 1.3210937500000002,
+          "random_mean_increment": -0.2637939453125002,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F2A_F3A_no_alias_plain_F3A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": -1.1696533203125012,
+          "prefix_margin": 1.2248046874999998,
+          "random_mean_increment": -0.40444335937499976,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F2E_F3E_role_inverse_minimal_F3E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3f",
+          "increment": -0.49665527343749893,
+          "prefix_margin": 1.3259765624999993,
+          "random_mean_increment": -0.4510986328124993,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F2f_F3f_no_alias_plain_F3f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3T",
+          "increment": 1.0587890624999998,
+          "prefix_margin": -0.07109375000000018,
+          "random_mean_increment": -0.14025878906249978,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F3T_F4T_no_alias_plain_F3T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 3,
+          "foundation_label": "F3E",
+          "increment": -1.7171386718750004,
+          "prefix_margin": -0.9978515624999993,
+          "random_mean_increment": 0.2969970703124992,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F3E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": 1.2041015625000009,
+          "prefix_margin": 0.6078125000000005,
+          "random_mean_increment": 0.17087402343749958,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4E",
+          "increment": 1.0886962890624998,
+          "prefix_margin": 0.8265625000000005,
+          "random_mean_increment": -0.016796875000000377,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_long_embedded_clause_F4E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4T",
+          "increment": 0.6234375000000005,
+          "prefix_margin": 1.2613281249999995,
+          "random_mean_increment": -0.2274658203124994,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_system_process_F4T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": 0.52294921875,
+          "prefix_margin": 0.5416015625000004,
+          "random_mean_increment": 0.11340332031249967,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_system_process_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4f",
+          "increment": 1.4423828125,
+          "prefix_margin": 0.8203125,
+          "random_mean_increment": 0.08056640624999989,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F3f_F4f_no_alias_plain_F4f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4E",
+          "increment": 0.32521972656249876,
+          "prefix_margin": 0.7707031249999998,
+          "random_mean_increment": -0.09228515624999978,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_counter_alias_hard_negative_F4E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4A",
+          "increment": 1.2476562500000004,
+          "prefix_margin": 1.029296875,
+          "random_mean_increment": -0.11411132812500024,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F3A_F4A_no_alias_plain_F4A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 4,
+          "foundation_label": "F4T",
+          "increment": -0.11503906250000018,
+          "prefix_margin": 0.4455078124999998,
+          "random_mean_increment": 0.18869628906250024,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F3T_F4T_system_process_F4T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5E",
+          "increment": 3.1578613281250005,
+          "prefix_margin": 2.2447265624999995,
+          "random_mean_increment": -0.7652832031249995,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F5E_F6E_system_process_F5E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5T",
+          "increment": 0.9095275878906239,
+          "prefix_margin": 0.3781250000000007,
+          "random_mean_increment": -0.12275390625000082,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_system_process_F5T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5f",
+          "increment": 0.6762939453125014,
+          "prefix_margin": 0.31582031249999964,
+          "random_mean_increment": -0.056689453124999734,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F4f_F5f_system_process_F5f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5A",
+          "increment": 3.9267822265624996,
+          "prefix_margin": 2.3046875,
+          "random_mean_increment": -0.7882568359374998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_compressed_minimal_F5A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5T",
+          "increment": -0.1369140625000007,
+          "prefix_margin": 0.162109375,
+          "random_mean_increment": 0.003564453124999978,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_long_embedded_clause_F5T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5f",
+          "increment": -0.6177276611328129,
+          "prefix_margin": -0.22109374999999964,
+          "random_mean_increment": 0.14150390624999987,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F5f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5E",
+          "increment": 0.5470581054687509,
+          "prefix_margin": 0.11113281250000018,
+          "random_mean_increment": 0.012719726562499756,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_no_alias_plain_F5E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 5,
+          "foundation_label": "F5T",
+          "increment": 4.207153320312499,
+          "prefix_margin": 2.26484375,
+          "random_mean_increment": -0.5746337890624998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F5T_F6T_system_process_F5T",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": -0.5455078125000004,
+          "prefix_margin": 0.7291015625000004,
+          "random_mean_increment": 0.2583007812499998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6f",
+          "increment": 0.4976318359375007,
+          "prefix_margin": -0.20859375000000036,
+          "random_mean_increment": 0.08640136718750047,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F6f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": -0.7982421875000014,
+          "prefix_margin": 0.5537109375,
+          "random_mean_increment": 0.36503906250000007,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_system_process_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.046984863281251066,
+          "prefix_margin": -0.2257812500000007,
+          "random_mean_increment": 0.1041015625000008,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_concrete_human_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6A",
+          "increment": 0.28562011718750036,
+          "prefix_margin": 0.22617187500000036,
+          "random_mean_increment": -0.20451660156250018,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6E",
+          "increment": -0.30245361328125053,
+          "prefix_margin": -0.03593750000000018,
+          "random_mean_increment": -0.06940917968749971,
+          "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F5E_F6E_compressed_minimal_F6E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6f",
+          "increment": -0.06445312499999911,
+          "prefix_margin": 0.4621093749999998,
+          "random_mean_increment": 0.37377929687500044,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F6f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 6,
+          "foundation_label": "F6E",
+          "increment": 0.41747436523437553,
+          "prefix_margin": -0.3273437499999998,
+          "random_mean_increment": 0.11774902343749971,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F5E_F6E_concrete_human_F6E",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 4.1114501953125,
+          "prefix_margin": 1.935546875,
+          "random_mean_increment": -1.1941406250000002,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_long_embedded_clause_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 3.78779296875,
+          "prefix_margin": 1.7404296874999998,
+          "random_mean_increment": -0.9100341796874998,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_counter_alias_hard_negative_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 3.158251953125,
+          "prefix_margin": 1.6521484375000002,
+          "random_mean_increment": -1.0014892578125,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 4.0555664062500005,
+          "prefix_margin": 1.6984374999999998,
+          "random_mean_increment": -0.9199707031249996,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_counter_alias_hard_negative_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 4.12197265625,
+          "prefix_margin": 2.0859375,
+          "random_mean_increment": -1.0248046874999999,
+          "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 3.4190429687500012,
+          "prefix_margin": 1.4406249999999998,
+          "random_mean_increment": -0.6263916015624998,
+          "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F7A",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7f",
+          "increment": 3.448040771484375,
+          "prefix_margin": 2.1498046875000005,
+          "random_mean_increment": -1.0842773437500006,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f",
+          "scale": 0.0
+        },
+        {
+          "foundation_drive": 7,
+          "foundation_label": "F7A",
+          "increment": 3.0230468750000012,
+          "prefix_margin": 1.6412109374999995,
+          "random_mean_increment": -1.0193603515624994,
+          "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F7A",
+          "scale": 0.0
+        }
+      ],
+      "vs_random": {
+        "mean_delta": 0.9737894875662668,
+        "median_delta": 0.5494445800781262,
+        "n": 56,
+        "sign_test_p": 0.011120694736430056,
+        "win_share": 0.6607142857142857,
+        "wins": 37
+      }
+    }
+  },
+  "gates": {
+    "max_sign_test_p": 0.05,
+    "min_positive_effect_share": 0.55,
+    "min_random_win_share": 0.6
+  },
+  "input_file": "stage7_foundation_pilot_20260517.jsonl",
+  "input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "model": {
+    "model_name": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "model_source": "EleutherAI/pythia-160m",
+    "torch": "2.5.1+cu124",
+    "transformers": "5.8.1"
+  },
+  "random_control_match_profile": {
+    "all_exact_layer_kind": false,
+    "has_kind_only_singleton_fallback": true,
+    "has_unmatched_fallback": false,
+    "policy": "Random controls use same layer/kind replacements when available. For singleton MLP blocks, the fallback preserves kind across candidate layers; if that is impossible, the report marks an unmatched fallback.",
+    "rows": [
+      {
+        "component": "L11MLP",
+        "exact_pool_size": 0,
+        "kind": "mlp",
+        "kind_pool_size": 3,
+        "layer": 11,
+        "match_level": "kind_only_singleton_layer"
+      },
+      {
+        "component": "L9H3",
+        "exact_pool_size": 11,
+        "kind": "head",
+        "kind_pool_size": 43,
+        "layer": 9,
+        "match_level": "layer_kind_exact"
+      },
+      {
+        "component": "L11H11",
+        "exact_pool_size": 10,
+        "kind": "head",
+        "kind_pool_size": 43,
+        "layer": 11,
+        "match_level": "layer_kind_exact"
+      },
+      {
+        "component": "L10H6",
+        "exact_pool_size": 10,
+        "kind": "head",
+        "kind_pool_size": 43,
+        "layer": 10,
+        "match_level": "layer_kind_exact"
+      },
+      {
+        "component": "L11H9",
+        "exact_pool_size": 10,
+        "kind": "head",
+        "kind_pool_size": 43,
+        "layer": 11,
+        "match_level": "layer_kind_exact"
+      },
+      {
+        "component": "L10H3",
+        "exact_pool_size": 10,
+        "kind": "head",
+        "kind_pool_size": 43,
+        "layer": 10,
+        "match_level": "layer_kind_exact"
+      }
+    ]
+  },
+  "random_eraser_covers": [
+    [
+      "L10MLP",
+      "L9H9",
+      "L11H8",
+      "L10H5",
+      "L11H6",
+      "L10H8"
+    ],
+    [
+      "L10MLP",
+      "L9H5",
+      "L11H1",
+      "L10H11",
+      "L11H8",
+      "L10H5"
+    ],
+    [
+      "L9MLP",
+      "L9H11",
+      "L11H3",
+      "L10H10",
+      "L11H7",
+      "L10H2"
+    ],
+    [
+      "L8MLP",
+      "L9H8",
+      "L11H3",
+      "L10H8",
+      "L11H10",
+      "L10H1"
+    ],
+    [
+      "L10MLP",
+      "L9H10",
+      "L11H3",
+      "L10H1",
+      "L11H5",
+      "L10H10"
+    ],
+    [
+      "L10MLP",
+      "L9H7",
+      "L11H7",
+      "L10H2",
+      "L11H6",
+      "L10H7"
+    ],
+    [
+      "L10MLP",
+      "L9H11",
+      "L11H2",
+      "L10H11",
+      "L11H10",
+      "L10H4"
+    ],
+    [
+      "L8MLP",
+      "L9H4",
+      "L11H8",
+      "L10H0",
+      "L11H4",
+      "L10H8"
+    ]
+  ],
+  "scale_grid": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "schema_version": "stage27l_calibrated_eraser_steering.v1",
+  "source_contracts": {
+    "stage27j": {
+      "carrier_cover": [
+        "L10MLP",
+        "L8MLP",
+        "L9H7",
+        "L9MLP",
+        "L8H11",
+        "L8H10"
+      ],
+      "eraser_cover": [
+        "L11MLP",
+        "L9H3",
+        "L11H11",
+        "L10H6",
+        "L11H9",
+        "L10H3"
+      ],
+      "expected_status": "PASS_BOUNDED_OUTPUT_SIDE_CARRIER_AND_ERASER_ATTRIBUTION",
+      "formal_gate_valid": true,
+      "source_file": "stage27j_output_side_component_attribution_20260521.json",
+      "source_sha256": "f9b1e455638b8090c632d5d4f213003067b62a20c6170bf772964f67e174a64a",
+      "source_status": "PASS_BOUNDED_OUTPUT_SIDE_CARRIER_AND_ERASER_ATTRIBUTION"
+    },
+    "stage27k": {
+      "expected_status": "GREY_OUTPUT_SIDE_COMPONENT_STEERING_PARTIAL",
+      "formal_gate_valid": true,
+      "source_file": "stage27k_output_side_component_steering_20260521.json",
+      "source_sha256": "df97d500257d2a6d8f08701a44427a5a7919ebb3e1980d3e46882b9518837fab",
+      "source_status": "GREY_OUTPUT_SIDE_COMPONENT_STEERING_PARTIAL"
+    },
+    "stage7_prefix": {
+      "expected_status": "READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD",
+      "formal_gate_valid": true,
+      "source_file": "stage7_cas_prefix_likelihood_20260517.json",
+      "source_sha256": "33971f02017af364aa60a0d865eb8af441c045cd0efdb5a6aefa9ffd781f91ea",
+      "source_status": "READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD"
+    }
+  },
+  "split_contract": {
+    "eval_ids": [
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F1T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F1A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_system_process_F1f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F7E_F1E_concrete_human_F1E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F1E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_concrete_human_F1A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_concrete_human_F1T",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_counter_alias_hard_negative_F1A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_counter_alias_hard_negative_F2E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F1f_F2f_no_alias_plain_F2f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_system_process_F2A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F2E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F1T_F2T_long_embedded_clause_F2T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F2T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_long_embedded_clause_F2E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_long_embedded_clause_F2E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F2T_F3T_system_process_F3T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F3A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F2T_F3T_role_inverse_minimal_F3T",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F2A_F3A_no_alias_plain_F3A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F2E_F3E_role_inverse_minimal_F3E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F2f_F3f_no_alias_plain_F3f",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F3T_F4T_no_alias_plain_F3T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F3E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F4A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_long_embedded_clause_F4E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_system_process_F4T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_system_process_F4A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F3f_F4f_no_alias_plain_F4f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_counter_alias_hard_negative_F4E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F3A_F4A_no_alias_plain_F4A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F3T_F4T_system_process_F4T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F5E_F6E_system_process_F5E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_system_process_F5T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F4f_F5f_system_process_F5f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_compressed_minimal_F5A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_long_embedded_clause_F5T",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F5f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_no_alias_plain_F5E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F5T_F6T_system_process_F5T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F6A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F6f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_system_process_F6A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_concrete_human_F6A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F5E_F6E_compressed_minimal_F6E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F6f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F5E_F6E_concrete_human_F6E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_long_embedded_clause_F7A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_counter_alias_hard_negative_F7f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F7A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_counter_alias_hard_negative_F7A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F7A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F7A"
+    ],
+    "eval_rows": 56,
+    "eval_rows_per_drive": 8,
+    "learn_eval_disjoint": true,
+    "learn_ids": [
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F1T_F2T_system_process_F1T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_compressed_minimal_F1T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_system_process_F1E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_no_alias_plain_F1A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F1f_F2f_system_process_F1f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_role_inverse_minimal_F1A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_role_inverse_minimal_F1E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F1f_F2f_no_alias_plain_F1f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F1f_F2f_system_process_F2f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F2f_F3f_long_embedded_clause_F2f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F1f_F2f_no_alias_plain_F2f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_concrete_human_F2A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F1T_F2T_no_alias_plain_F2T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F2A_F3A_concrete_human_F2A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F2f_F3f_compressed_minimal_F2f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F2E_F3E_long_embedded_clause_F2E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F3A_F4A_concrete_human_F3A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_no_alias_plain_F3A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F2A_F3A_compressed_minimal_F3A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_compressed_minimal_F3E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_concrete_human_F3E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F2T_F3T_system_process_F3T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F2E_F3E_counter_alias_hard_negative_F3E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_system_process_F3E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F3f_F4f_system_process_F4f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F3E_F4E_counter_alias_hard_negative_F4E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_compressed_minimal_F4A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F3E_F4E_no_alias_plain_F4E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F4E_F5E_counter_alias_hard_negative_F4E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F3f_F4f_role_inverse_minimal_F4f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F3T_F4T_system_process_F4T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F3T_F4T_system_process_F4T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F5E_F6E_no_alias_plain_F5E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F5T_F6T_system_process_F5T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F4f_F5f_role_inverse_minimal_F5f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F5E_F6E_compressed_minimal_F5E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F4f_F5f_system_process_F5f",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_system_process_F5E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F4A_F5A_role_inverse_minimal_F5A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F5E_F6E_long_embedded_clause_F5E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_counter_alias_hard_negative_F6A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F6E_F7E_counter_alias_hard_negative_F6E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F5f_F6f_compressed_minimal_F6f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F6f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F5f_F6f_role_inverse_minimal_F6f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F6A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F5f_F6f_concrete_human_F6f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F6E_F7E_concrete_human_F7E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F7f_F1f_no_alias_plain_F7f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F6f_F7f_system_process_F7f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F7E_F1E_counter_alias_hard_negative_F7E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F7T_F1T_long_embedded_clause_F7T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F7E_F1E_compressed_minimal_F7E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_compressed_minimal_F7A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_concrete_human_F7A"
+    ],
+    "learn_rows": 56,
+    "learn_rows_per_drive": 8,
+    "per_drive": 16
+  },
+  "status": "PASS_BOUNDED_GLOBAL_AND_DRIVE_CALIBRATED_ERASER_STEERING"
+}
