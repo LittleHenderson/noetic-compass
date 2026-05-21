@@ -1,0 +1,79 @@
+{
+  "claim_boundary": {
+    "claim_if_pass": "CAS Harness has a validated Qwen2.5-1.5B component-hook adapter for continuation-position attention-head and MLP interventions, unblocking Stage 27P drive-local Qwen eraser-cover steering.",
+    "forbidden_claims": "Do not claim Qwen steering, cross-architecture control, complete circuits, durable weight edits, open-ended generation control, or raw CAS-symbol understanding from Stage 27P-A.",
+    "null_status": "NULL_QWEN_HOOK_ADAPTER_PREFLIGHT_NOT_READY",
+    "pass_status": "PASS_QWEN_HOOK_ADAPTER_PREFLIGHT",
+    "scope_boundary": "Stage 27P-A is only a hook-adapter preflight. It proves Qwen component hooks can be applied at the intended positions with finite effects; it does not prove Qwen steering, component attribution, or circuit control."
+  },
+  "execution_order": [
+    "commit_preregistration_adapter_runner_and_tests",
+    "verify_stage16_and_stage27o_contracts",
+    "load_pinned_qwen_model",
+    "inspect_adapter_paths",
+    "run_attention_and_mlp_position_localized_hook_smoke",
+    "record_preflight_result"
+  ],
+  "gates": [
+    {
+      "criterion": "Stage 16 Qwen CPL2 PASS, Stage 16 manifest revision match, and Stage 27O PASS source contracts are verified.",
+      "kind": "pass_floor",
+      "name": "source_contracts"
+    },
+    {
+      "criterion": "Loaded Qwen model revision matches 8faed761d45a263340a0528343f099c05c9a4323.",
+      "kind": "pass_floor",
+      "name": "model_revision"
+    },
+    {
+      "criterion": "Every candidate layer exposes attention output projection self_attn.o_proj and MLP module mlp.",
+      "kind": "primary",
+      "name": "adapter_paths"
+    },
+    {
+      "criterion": "A scaled attention-head hook changes logits at prediction positions while leaving earlier positions unchanged.",
+      "kind": "primary",
+      "name": "attention_hook_effect"
+    },
+    {
+      "criterion": "A scaled MLP hook changes logits at prediction positions while leaving earlier positions unchanged.",
+      "kind": "primary",
+      "name": "mlp_hook_effect"
+    }
+  ],
+  "method": [
+    "Commit this pre-registration, adapter, runner, and tests before any Qwen hook result is generated.",
+    "Verify Stage 16 Qwen CPL2 PASS and Stage 27O Pythia-1B drive-local steering PASS source contracts.",
+    "Load Qwen/Qwen2.5-1.5B at revision 8faed761d45a263340a0528343f099c05c9a4323.",
+    "Inspect candidate late layers 24-27 and verify attention output projection and MLP module paths.",
+    "Run one actual CPL2-style prompt/continuation row with no hook, one attention-head scale hook, and one MLP scale hook.",
+    "Confirm hooks are continuation-prediction-position localized: positions before the first prediction position remain unchanged.",
+    "Confirm each hook changes logits at prediction positions and yields finite continuation log-probabilities."
+  ],
+  "motivation": "Stage 27O closed Pythia cross-scale steering with drive-local output-side eraser covers. Stage 27P moves to Qwen, but Qwen uses different module paths than Pythia. Stage 27P-A validates the hook adapter before any cross-architecture steering claim is attempted.",
+  "required_inputs": {
+    "candidate_layers": [
+      24,
+      25,
+      26,
+      27
+    ],
+    "fixture": "stage7_foundation_pilot_20260517.jsonl",
+    "intervention_positions": "continuation_prediction_positions_only",
+    "model": "Qwen/Qwen2.5-1.5B",
+    "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "preflight_components": [
+      "L27H0",
+      "L27MLP"
+    ],
+    "probe_layer_reference": 11,
+    "stage16_cpl2_report": "STAGE16_QWEN15B_CPL2_REPORT_20260519.json",
+    "stage16_cpl2_status": "PASS_CLEAN_STAGE16_QWEN15B_CPL2_REPLICATES",
+    "stage16_manifest": "stage16_qwen15b_activations_manifest_20260519.json",
+    "stage27o_report": "stage27o_drive_local_cross_scale_eraser_steering_20260521.json",
+    "stage27o_status": "PASS_BOUNDED_CROSS_SCALE_DRIVE_LOCAL_CALIBRATED_ERASER_STEERING"
+  },
+  "stage": "27P-A",
+  "status": "PREREGISTERED_GPU_REQUIRED",
+  "validation": {}
+}
