@@ -6,3 +6,4 @@ stage8_pythia1b_activations_*.npz
 stage9_elements_*_activations_*.npz
 stage10_operators_*_activations_*.npz
 stage11_expression_shapes_*_activations_*.npz
+stage25_sae_*.pt

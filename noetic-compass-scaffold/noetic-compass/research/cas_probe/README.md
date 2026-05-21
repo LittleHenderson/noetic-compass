@@ -2714,6 +2714,8 @@ Artifacts:
 
 - `stage25_sae_feature_spec.py`
 - `run_stage25_sae_prereg.py`
+- `run_stage25_sae_feature_pilot.py`
 - `stage25_sae_feature_prereg_20260521.json`
 - `STAGE25_SAE_FEATURE_PREREG_20260521.md`
 - `tests/test_stage25_sae_feature_spec.py`
+- `tests/test_stage25_sae_feature_pilot.py`
