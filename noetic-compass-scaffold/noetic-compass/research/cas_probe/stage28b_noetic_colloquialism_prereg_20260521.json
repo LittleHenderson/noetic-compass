@@ -1,0 +1,301 @@
+{
+  "claim_boundary": {
+    "claim_if_null": "Noetic readouts may remain valid on the Stage 9 fixture, but this colloquialism realization fixture did not establish that canonical Noetic phrases produce the matching hidden-state readout under the locked probe.",
+    "claim_if_pass": "Pythia-160M's hidden states for canonical natural-language Noetic colloquialisms are readable by the Stage 9 Noetic probe above the preregistered gates, supporting the \u03b7\u2192\u03b5 realization route for Noetic language.",
+    "forbidden_claims": "Do not claim exact neurons, complete circuits, Noetic clusters, 40-Element hard-partner resolution, raw CAS-symbol understanding, free-form generation control, or cross-model generality from Stage 28B.",
+    "grey_status": "GREY_NOETIC_COLLOQUIALISM_REALIZATION_PARTIAL",
+    "null_status": "NULL_NOETIC_COLLOQUIALISM_REALIZATION_NOT_ESTABLISHED",
+    "pass_status": "PASS_BOUNDED_NOETIC_COLLOQUIALISM_REALIZATION",
+    "scope_boundary": "Stage 28B tests single Noetic colloquial phrases on Pythia-160M. It does not test Noetic clusters, full TKS formulas, component-localized covers, exact neurons, or open-ended generation control."
+  },
+  "colloquialism_fixture": [
+    {
+      "name": "Mind",
+      "noetic": "^1",
+      "phrase": "paying attention"
+    },
+    {
+      "name": "Mind",
+      "noetic": "^1",
+      "phrase": "making up my mind"
+    },
+    {
+      "name": "Mind",
+      "noetic": "^1",
+      "phrase": "using my head"
+    },
+    {
+      "name": "Mind",
+      "noetic": "^1",
+      "phrase": "becoming aware"
+    },
+    {
+      "name": "Positive",
+      "noetic": "^2",
+      "phrase": "drawn to it like a moth to a flame"
+    },
+    {
+      "name": "Positive",
+      "noetic": "^2",
+      "phrase": "speaks to me"
+    },
+    {
+      "name": "Positive",
+      "noetic": "^2",
+      "phrase": "can't resist it"
+    },
+    {
+      "name": "Positive",
+      "noetic": "^2",
+      "phrase": "pulled toward it"
+    },
+    {
+      "name": "Negative",
+      "noetic": "^3",
+      "phrase": "can't stomach it"
+    },
+    {
+      "name": "Negative",
+      "noetic": "^3",
+      "phrase": "rubs me the wrong way"
+    },
+    {
+      "name": "Negative",
+      "noetic": "^3",
+      "phrase": "wouldn't touch it with a ten-foot pole"
+    },
+    {
+      "name": "Negative",
+      "noetic": "^3",
+      "phrase": "pushed away from it"
+    },
+    {
+      "name": "Vibration",
+      "noetic": "^4",
+      "phrase": "hit me hard"
+    },
+    {
+      "name": "Vibration",
+      "noetic": "^4",
+      "phrase": "struck a chord"
+    },
+    {
+      "name": "Vibration",
+      "noetic": "^4",
+      "phrase": "resonated with me"
+    },
+    {
+      "name": "Vibration",
+      "noetic": "^4",
+      "phrase": "made an impression"
+    },
+    {
+      "name": "Female",
+      "noetic": "^5",
+      "phrase": "we are the sum of our experiences"
+    },
+    {
+      "name": "Female",
+      "noetic": "^5",
+      "phrase": "it's who I am"
+    },
+    {
+      "name": "Female",
+      "noetic": "^5",
+      "phrase": "part of what makes me me"
+    },
+    {
+      "name": "Female",
+      "noetic": "^5",
+      "phrase": "shaped by what came before"
+    },
+    {
+      "name": "Male",
+      "noetic": "^6",
+      "phrase": "unpacking an idea"
+    },
+    {
+      "name": "Male",
+      "noetic": "^6",
+      "phrase": "breaking it down"
+    },
+    {
+      "name": "Male",
+      "noetic": "^6",
+      "phrase": "looking at what's underneath"
+    },
+    {
+      "name": "Male",
+      "noetic": "^6",
+      "phrase": "pulling apart the argument"
+    },
+    {
+      "name": "Rhythm",
+      "noetic": "^7",
+      "phrase": "practice makes perfect"
+    },
+    {
+      "name": "Rhythm",
+      "noetic": "^7",
+      "phrase": "you are what you repeatedly do"
+    },
+    {
+      "name": "Rhythm",
+      "noetic": "^7",
+      "phrase": "getting into a groove"
+    },
+    {
+      "name": "Rhythm",
+      "noetic": "^7",
+      "phrase": "muscle memory"
+    },
+    {
+      "name": "Above/Cause",
+      "noetic": "^8",
+      "phrase": "that reminds me"
+    },
+    {
+      "name": "Above/Cause",
+      "noetic": "^8",
+      "phrase": "one thing leads to another"
+    },
+    {
+      "name": "Above/Cause",
+      "noetic": "^8",
+      "phrase": "triggered a memory"
+    },
+    {
+      "name": "Above/Cause",
+      "noetic": "^8",
+      "phrase": "made me think of something else"
+    },
+    {
+      "name": "Below/Effect",
+      "noetic": "^9",
+      "phrase": "it just popped into my head"
+    },
+    {
+      "name": "Below/Effect",
+      "noetic": "^9",
+      "phrase": "out of nowhere I thought of it"
+    },
+    {
+      "name": "Below/Effect",
+      "noetic": "^9",
+      "phrase": "the thought came to me"
+    },
+    {
+      "name": "Below/Effect",
+      "noetic": "^9",
+      "phrase": "it just clicked"
+    },
+    {
+      "name": "Idea",
+      "noetic": "^0",
+      "phrase": "it's all in your head"
+    },
+    {
+      "name": "Idea",
+      "noetic": "^0",
+      "phrase": "a thought on my mind"
+    },
+    {
+      "name": "Idea",
+      "noetic": "^0",
+      "phrase": "something on my mind"
+    },
+    {
+      "name": "Idea",
+      "noetic": "^0",
+      "phrase": "the idea itself"
+    }
+  ],
+  "execution_order": [
+    "commit_preregistration_before_result_run",
+    "fit_collapsed_noetic_probe_from_stage9_artifact",
+    "run_pythia_forward_on_locked_colloquialism_fixture",
+    "score_phrase_hidden_states_with_noetic_probe",
+    "record_bounded_result"
+  ],
+  "formal_anchor": "\u03b7\u2192\u03b5 bridge framing: colloquialisms are readable realization language (\u03b5-side) rather than raw CAS symbols or static W_U projections. The probe tests whether the realized phrase re-enters the hidden-state Noetic readout (\u03b7-side).",
+  "gates": [
+    {
+      "criterion": "Stage 9 activation artifact matches the preregistered local replacement contract used by Stage 24B.",
+      "kind": "pass_floor",
+      "name": "artifact_contract"
+    },
+    {
+      "criterion": "Noetic probe test accuracy is at least 0.50 on the 10-way collapsed Stage 9 task.",
+      "kind": "pass_floor",
+      "name": "probe_floor"
+    },
+    {
+      "criterion": "Colloquial phrase exact Noetic accuracy is at least 0.45 and exact-binomial p<0.05 against 10-way chance.",
+      "kind": "primary",
+      "name": "realization_exact_accuracy"
+    },
+    {
+      "criterion": "Mean target probability is at least 0.15, i.e. +0.05 over 10-way chance.",
+      "kind": "primary",
+      "name": "target_probability_lift"
+    },
+    {
+      "criterion": "Top-2 Noetic accuracy is at least 0.65.",
+      "kind": "supporting",
+      "name": "top2_accuracy"
+    },
+    {
+      "criterion": "For rows whose Noetic has a formal involution partner, target probability beats partner probability on at least 0.60 of rows.",
+      "kind": "supporting",
+      "name": "involution_partner_margin"
+    }
+  ],
+  "method": [
+    "Commit this pre-registration before any Stage 28B result artifact is generated.",
+    "Collapse the Stage 9 40-Element labels into the same 10 Noetic labels used in Stage 28A.",
+    "Fit the locked focus-token layer-5 Noetic probe on the existing Stage 9 activation artifact.",
+    "Construct a balanced 40-row colloquialism fixture: four natural-language phrases per Noetic class.",
+    "Run Pythia-160M forward on each carrier sentence and capture the layer-5 hidden state at the first token overlapping the phrase span.",
+    "Score each captured state with the locked Noetic probe.",
+    "Evaluate exact accuracy, top-2 accuracy, mean target probability lift over chance, and target-vs-involution-partner margins.",
+    "Report per-Noetic rows and failures for audit. Human readability of phrases is not a scoring gate because the fixture is locked natural language."
+  ],
+  "motivation": "Static output-embedding sonar failed to resolve most hard local Noetic contrasts. Stage 28B tests a different route: feed the model natural-language colloquialisms that realize Noetic operators and read the resulting hidden states with the existing Stage 9 Noetic probe.",
+  "required_inputs": {
+    "activation_contract": "stage24b_40_element_cpu_recap_prereg_20260521.json",
+    "fixture_source": "docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md Clarification 6 plus balanced source-compatible variants",
+    "involution_pairs": [
+      [
+        "^2",
+        "^3"
+      ],
+      [
+        "^5",
+        "^6"
+      ],
+      [
+        "^8",
+        "^9"
+      ]
+    ],
+    "locked_probe_readout": {
+      "key": "X_focus",
+      "layer": 5,
+      "name": "focus_token"
+    },
+    "model": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "n_colloquialism_rows": 40,
+    "runtime_readout": {
+      "definition": "first tokenizer token overlapping the quoted colloquial phrase span",
+      "layer": 5,
+      "name": "phrase_first_token"
+    },
+    "stage9_activations": "stage9_elements_pilot_activations_20260517.npz",
+    "stage9_fixture": "stage9_elements_pilot_20260517.jsonl",
+    "task": "10-way Noetic realization readout from natural-language colloquial phrases"
+  },
+  "stage": "28B",
+  "status": "PREREGISTERED_LOCAL_FORWARD_PASS",
+  "validation": {}
+}
