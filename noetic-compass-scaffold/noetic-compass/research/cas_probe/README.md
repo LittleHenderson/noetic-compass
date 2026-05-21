@@ -2765,3 +2765,59 @@ Artifacts:
 - `STAGE25_SAE_FEATURE_PILOT_20260521.md`
 - Binary checkpoint retained locally/pod-side only:
   `stage25_sae_feature_pilot_20260521.pt` (git-ignored)
+
+## Stage 26 pre-registration - Head/MLP component attribution
+
+**Verdict: `PREREGISTERED_NO_GPU`.**
+
+Stage 26 is the next route after the Stage 24B and Stage 25 constraints.
+Static unembedding sonar resolved broad token geometry but failed hard local
+contrasts. The Stage 25 SAE recovered a dense, CAS-aligned feature basis but
+failed sparsity and causal-removal gates. Stage 26 therefore changes the
+decomposition level: from within-layer feature discovery to across-component
+attribution over attention heads and MLP blocks.
+
+Formal anchor:
+
+> ACBE Axiom 4.2 / joint-surjectivity framing: multiple component morphisms may
+> jointly cover the residual-stream target even when no sparse within-layer
+> feature is individually causal.
+
+Scope:
+
+| Component family | Scope |
+|---|---|
+| Attention heads | Layers `0..5`, `12` heads/layer, `72` total heads |
+| MLP blocks | Layers `0..5`, `6` block-level outputs |
+| Readout target | Stage 7 `focus_token`, layer `6` |
+| Neuron-level claims | Deferred; not authorized by Stage 26 |
+
+Formal gates:
+
+- Capture contract: all `72` heads and `6` MLP blocks emit finite focus-token
+  contribution tensors.
+- Alignment enrichment: top-ranked components project onto the Stage 7
+  Foundation subspace above matched random controls, empirical p < `0.05`.
+- Targeted ablation drop: ablating top-ranked components drops Stage 7
+  Foundation probe accuracy more than same-count random component ablations,
+  empirical p < `0.05`.
+- Class specificity: disruption is concentrated in the relevant Foundation
+  classes rather than uniform global damage.
+- Sanity controls: no-op hooks and random same-layer ablations preserve probe
+  accuracy within preregistered slack.
+
+Claim boundary:
+
+> A passing Stage 26 licenses only bounded component attribution: CAS Harness
+> localizes the Stage 7 Foundation readout signal to specific attention-head or
+> MLP-block components with alignment and ablation evidence. It does not license
+> exact-neuron, complete-circuit, raw-symbol, internal-compiler,
+> free-form-generation-control, or cross-model component generality claims.
+
+Artifacts:
+
+- `stage26_component_attribution_spec.py`
+- `run_stage26_component_prereg.py`
+- `stage26_component_attribution_prereg_20260521.json`
+- `STAGE26_COMPONENT_ATTRIBUTION_PREREG_20260521.md`
+- `tests/test_stage26_component_attribution_spec.py`
