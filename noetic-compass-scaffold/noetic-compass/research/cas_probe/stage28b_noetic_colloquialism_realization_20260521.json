@@ -1,0 +1,1751 @@
+{
+  "activation_manifest_file": "stage24b_40_element_cpu_recap_prereg_20260521.json",
+  "activations_file": "stage9_elements_pilot_activations_20260517.npz",
+  "activations_sha256": "63702c62e6230e25e891b0e68007780954f9e6c539e4996b69e91017b972c0c9",
+  "artifact_contract": {
+    "actual_activation_sha256": "63702c62e6230e25e891b0e68007780954f9e6c539e4996b69e91017b972c0c9",
+    "contract_source": "replacement_artifact_contract.output_sha256",
+    "expected_activation_sha256": "63702c62e6230e25e891b0e68007780954f9e6c539e4996b69e91017b972c0c9",
+    "formal_gate_valid": true,
+    "status": "LOCKED_ARTIFACT_MATCH"
+  },
+  "boundary": "Stage 28B is a single-Noetic colloquial phrase realization probe on Pythia-160M. It does not prove Noetic clusters, exact neurons, complete circuits, raw CAS-symbol understanding, free-form generation control, or cross-model generality.",
+  "claim_boundary": {
+    "claim_if_null": "Noetic readouts may remain valid on the Stage 9 fixture, but this colloquialism realization fixture did not establish that canonical Noetic phrases produce the matching hidden-state readout under the locked probe.",
+    "claim_if_pass": "Pythia-160M's hidden states for canonical natural-language Noetic colloquialisms are readable by the Stage 9 Noetic probe above the preregistered gates, supporting the \u03b7\u2192\u03b5 realization route for Noetic language.",
+    "forbidden_claims": "Do not claim exact neurons, complete circuits, Noetic clusters, 40-Element hard-partner resolution, raw CAS-symbol understanding, free-form generation control, or cross-model generality from Stage 28B.",
+    "grey_status": "GREY_NOETIC_COLLOQUIALISM_REALIZATION_PARTIAL",
+    "null_status": "NULL_NOETIC_COLLOQUIALISM_REALIZATION_NOT_ESTABLISHED",
+    "pass_status": "PASS_BOUNDED_NOETIC_COLLOQUIALISM_REALIZATION",
+    "scope_boundary": "Stage 28B tests single Noetic colloquial phrases on Pythia-160M. It does not test Noetic clusters, full TKS formulas, component-localized covers, exact neurons, or open-ended generation control."
+  },
+  "colloquialism_metrics": {
+    "exact_accuracy": 0.125,
+    "exact_binomial_p_vs_chance": 0.37098230346579925,
+    "exact_correct": 5,
+    "involution_partner_n": 24,
+    "involution_partner_positive": 12,
+    "involution_partner_positive_share": 0.5,
+    "involution_partner_rows": [
+      {
+        "partner": "^3",
+        "row_id": "stage28b_004",
+        "target": "^2",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -2.2281276195366823e-23
+      },
+      {
+        "partner": "^3",
+        "row_id": "stage28b_005",
+        "target": "^2",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 8.887359254704988e-06
+      },
+      {
+        "partner": "^3",
+        "row_id": "stage28b_006",
+        "target": "^2",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 1.6638840342742053e-07
+      },
+      {
+        "partner": "^3",
+        "row_id": "stage28b_007",
+        "target": "^2",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -3.3143172320104754e-17
+      },
+      {
+        "partner": "^2",
+        "row_id": "stage28b_008",
+        "target": "^3",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -1.6638840342742053e-07
+      },
+      {
+        "partner": "^2",
+        "row_id": "stage28b_009",
+        "target": "^3",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -0.9473004253471174
+      },
+      {
+        "partner": "^2",
+        "row_id": "stage28b_010",
+        "target": "^3",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -3.442069556393922e-10
+      },
+      {
+        "partner": "^2",
+        "row_id": "stage28b_011",
+        "target": "^3",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 1.0067955454482407e-08
+      },
+      {
+        "partner": "^6",
+        "row_id": "stage28b_016",
+        "target": "^5",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -2.0476306268643034e-05
+      },
+      {
+        "partner": "^6",
+        "row_id": "stage28b_017",
+        "target": "^5",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -6.617981826512318e-12
+      },
+      {
+        "partner": "^6",
+        "row_id": "stage28b_018",
+        "target": "^5",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 5.829621772020198e-25
+      },
+      {
+        "partner": "^6",
+        "row_id": "stage28b_019",
+        "target": "^5",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 1.492941735743038e-14
+      },
+      {
+        "partner": "^5",
+        "row_id": "stage28b_020",
+        "target": "^6",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -3.085989479962786e-11
+      },
+      {
+        "partner": "^5",
+        "row_id": "stage28b_021",
+        "target": "^6",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -2.90858293347845e-14
+      },
+      {
+        "partner": "^5",
+        "row_id": "stage28b_022",
+        "target": "^6",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 1.3276709349423478e-15
+      },
+      {
+        "partner": "^5",
+        "row_id": "stage28b_023",
+        "target": "^6",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 5.16337085425928e-30
+      },
+      {
+        "partner": "^9",
+        "row_id": "stage28b_028",
+        "target": "^8",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -0.9997757466214036
+      },
+      {
+        "partner": "^9",
+        "row_id": "stage28b_029",
+        "target": "^8",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 0.9451450287963723
+      },
+      {
+        "partner": "^9",
+        "row_id": "stage28b_030",
+        "target": "^8",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 0.9999990965782902
+      },
+      {
+        "partner": "^9",
+        "row_id": "stage28b_031",
+        "target": "^8",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 0.9999999995311807
+      },
+      {
+        "partner": "^8",
+        "row_id": "stage28b_032",
+        "target": "^9",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 0.9999939036420189
+      },
+      {
+        "partner": "^8",
+        "row_id": "stage28b_033",
+        "target": "^9",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -6.071290227296536e-05
+      },
+      {
+        "partner": "^8",
+        "row_id": "stage28b_034",
+        "target": "^9",
+        "target_beats_partner": false,
+        "target_minus_partner_probability": -0.19612801872831803
+      },
+      {
+        "partner": "^8",
+        "row_id": "stage28b_035",
+        "target": "^9",
+        "target_beats_partner": true,
+        "target_minus_partner_probability": 0.9999939036420189
+      }
+    ],
+    "mean_involution_target_minus_partner_probability": 0.11674397705541718,
+    "mean_target_probability": 0.12398055385933723,
+    "median_target_probability": 7.447192750276192e-12,
+    "n_rows": 40,
+    "per_noetic": [
+      {
+        "exact_accuracy": 0.0,
+        "mean_target_probability": 0.0007210061700225999,
+        "n": 4,
+        "name": "Mind",
+        "noetic": "^1",
+        "predicted_counts": {
+          "^2": 1,
+          "^8": 2,
+          "^9": 1
+        },
+        "top2_accuracy": 0.0
+      },
+      {
+        "exact_accuracy": 0.0,
+        "mean_target_probability": 2.47075581834974e-06,
+        "n": 4,
+        "name": "Positive",
+        "noetic": "^2",
+        "predicted_counts": {
+          "^8": 4
+        },
+        "top2_accuracy": 0.25
+      },
+      {
+        "exact_accuracy": 0.0,
+        "mean_target_probability": 3.585942929101554e-09,
+        "n": 4,
+        "name": "Negative",
+        "noetic": "^3",
+        "predicted_counts": {
+          "^2": 1,
+          "^8": 3
+        },
+        "top2_accuracy": 0.0
+      },
+      {
+        "exact_accuracy": 0.0,
+        "mean_target_probability": 1.116019494576313e-10,
+        "n": 4,
+        "name": "Vibration",
+        "noetic": "^4",
+        "predicted_counts": {
+          "^2": 1,
+          "^8": 3
+        },
+        "top2_accuracy": 0.0
+      },
+      {
+        "exact_accuracy": 0.0,
+        "mean_target_probability": 3.732355485931943e-15,
+        "n": 4,
+        "name": "Female",
+        "noetic": "^5",
+        "predicted_counts": {
+          "^3": 1,
+          "^8": 2,
+          "^9": 1
+        },
+        "top2_accuracy": 0.0
+      },
+      {
+        "exact_accuracy": 0.0,
+        "mean_target_probability": 3.533210490792595e-12,
+        "n": 4,
+        "name": "Male",
+        "noetic": "^6",
+        "predicted_counts": {
+          "^8": 4
+        },
+        "top2_accuracy": 0.0
+      },
+      {
+        "exact_accuracy": 0.0,
+        "mean_target_probability": 1.2460952490647075e-21,
+        "n": 4,
+        "name": "Rhythm",
+        "noetic": "^7",
+        "predicted_counts": {
+          "^8": 4
+        },
+        "top2_accuracy": 0.0
+      },
+      {
+        "exact_accuracy": 0.75,
+        "mean_target_probability": 0.7362865431067321,
+        "n": 4,
+        "name": "Above/Cause",
+        "noetic": "^8",
+        "predicted_counts": {
+          "^8": 3,
+          "^9": 1
+        },
+        "top2_accuracy": 0.75
+      },
+      {
+        "exact_accuracy": 0.5,
+        "mean_target_probability": 0.5005833798307159,
+        "n": 4,
+        "name": "Below/Effect",
+        "noetic": "^9",
+        "predicted_counts": {
+          "^4": 1,
+          "^6": 1,
+          "^9": 2
+        },
+        "top2_accuracy": 0.5
+      },
+      {
+        "exact_accuracy": 0.0,
+        "mean_target_probability": 0.0022121350290016427,
+        "n": 4,
+        "name": "Idea",
+        "noetic": "^0",
+        "predicted_counts": {
+          "^1": 1,
+          "^4": 1,
+          "^8": 1,
+          "^9": 1
+        },
+        "top2_accuracy": 0.0
+      }
+    ],
+    "row_reports": [
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "paying attention",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999999999978,
+        "row_id": "stage28b_000",
+        "target": "^1",
+        "target_name": "Mind",
+        "target_probability": 1.5607880239369591e-24,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "making up my mind",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999990365474966,
+        "row_id": "stage28b_001",
+        "target": "^1",
+        "target_name": "Mind",
+        "target_probability": 3.460980058599502e-18,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "using my head",
+        "predicted": "^9",
+        "predicted_name": "Below/Effect",
+        "predicted_probability": 0.9710758049105512,
+        "row_id": "stage28b_002",
+        "target": "^1",
+        "target_name": "Mind",
+        "target_probability": 1.624346160979546e-16,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "becoming aware",
+        "predicted": "^2",
+        "predicted_name": "Positive",
+        "predicted_probability": 0.9627020402503843,
+        "row_id": "stage28b_003",
+        "target": "^1",
+        "target_name": "Mind",
+        "target_probability": 0.0028840246800902335,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -2.2281276195366823e-23,
+        "phrase": "drawn to it like a moth to a flame",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999423181469,
+        "row_id": "stage28b_004",
+        "target": "^2",
+        "target_name": "Positive",
+        "target_probability": 2.4507164119263062e-23,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": 8.887359254704988e-06,
+        "phrase": "speaks to me",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.999989459775339,
+        "row_id": "stage28b_005",
+        "target": "^2",
+        "target_name": "Positive",
+        "target_probability": 9.713791956317562e-06,
+        "top2": true
+      },
+      {
+        "exact": false,
+        "partner_margin": 1.6638840342742053e-07,
+        "phrase": "can't resist it",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.999998069960647,
+        "row_id": "stage28b_006",
+        "target": "^2",
+        "target_name": "Positive",
+        "target_probability": 1.6923131708139785e-07,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -3.3143172320104754e-17,
+        "phrase": "pulled toward it",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999999999964,
+        "row_id": "stage28b_007",
+        "target": "^2",
+        "target_name": "Positive",
+        "target_probability": 5.614196175976903e-22,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -1.6638840342742053e-07,
+        "phrase": "can't stomach it",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.999998069960647,
+        "row_id": "stage28b_008",
+        "target": "^3",
+        "target_name": "Negative",
+        "target_probability": 2.8429136539773234e-09,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -0.9473004253471174,
+        "phrase": "rubs me the wrong way",
+        "predicted": "^2",
+        "predicted_name": "Positive",
+        "predicted_probability": 0.9473004254024328,
+        "row_id": "stage28b_009",
+        "target": "^3",
+        "target_name": "Negative",
+        "target_probability": 5.5315302542669545e-11,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -3.442069556393922e-10,
+        "phrase": "wouldn't touch it with a ten-foot pole",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999994515161,
+        "row_id": "stage28b_010",
+        "target": "^3",
+        "target_name": "Negative",
+        "target_probability": 7.038454258585005e-25,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": 1.0067955454482407e-08,
+        "phrase": "pushed away from it",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999823076478399,
+        "row_id": "stage28b_011",
+        "target": "^3",
+        "target_name": "Negative",
+        "target_probability": 1.1445542759886222e-08,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "hit me hard",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 1.0,
+        "row_id": "stage28b_012",
+        "target": "^4",
+        "target_name": "Vibration",
+        "target_probability": 1.8177434970834887e-28,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "struck a chord",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999906757783,
+        "row_id": "stage28b_013",
+        "target": "^4",
+        "target_name": "Vibration",
+        "target_probability": 2.291793070206033e-17,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "resonated with me",
+        "predicted": "^2",
+        "predicted_name": "Positive",
+        "predicted_probability": 0.6638539111249575,
+        "row_id": "stage28b_014",
+        "target": "^4",
+        "target_name": "Vibration",
+        "target_probability": 4.4563644334455326e-10,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "made an impression",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999995317985,
+        "row_id": "stage28b_015",
+        "target": "^4",
+        "target_name": "Vibration",
+        "target_probability": 7.713315680412043e-13,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -2.0476306268643034e-05,
+        "phrase": "we are the sum of our experiences",
+        "predicted": "^3",
+        "predicted_name": "Negative",
+        "predicted_probability": 0.9997439899936834,
+        "row_id": "stage28b_016",
+        "target": "^5",
+        "target_name": "Female",
+        "target_probability": 5.338781040611503e-25,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -6.617981826512318e-12,
+        "phrase": "it's who I am",
+        "predicted": "^9",
+        "predicted_name": "Below/Effect",
+        "predicted_probability": 0.9999965205181655,
+        "row_id": "stage28b_017",
+        "target": "^5",
+        "target_name": "Female",
+        "target_probability": 4.585180545542388e-21,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": 5.829621772020198e-25,
+        "phrase": "part of what makes me me",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999999999989,
+        "row_id": "stage28b_018",
+        "target": "^5",
+        "target_name": "Female",
+        "target_probability": 5.829621828799159e-25,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": 1.492941735743038e-14,
+        "phrase": "shaped by what came before",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.5755498981695191,
+        "row_id": "stage28b_019",
+        "target": "^5",
+        "target_name": "Female",
+        "target_probability": 1.4929417357430387e-14,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -3.085989479962786e-11,
+        "phrase": "unpacking an idea",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.8388703788749562,
+        "row_id": "stage28b_020",
+        "target": "^6",
+        "target_name": "Male",
+        "target_probability": 1.412305393251118e-11,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -2.90858293347845e-14,
+        "phrase": "breaking it down",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9993781243004829,
+        "row_id": "stage28b_021",
+        "target": "^6",
+        "target_name": "Male",
+        "target_probability": 8.385579984804826e-15,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": 1.3276709349423478e-15,
+        "phrase": "looking at what's underneath",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999839483278,
+        "row_id": "stage28b_022",
+        "target": "^6",
+        "target_name": "Male",
+        "target_probability": 1.4024506743956267e-15,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": 5.16337085425928e-30,
+        "phrase": "pulling apart the argument",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999999999964,
+        "row_id": "stage28b_023",
+        "target": "^6",
+        "target_name": "Male",
+        "target_probability": 9.401886630757694e-30,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "practice makes perfect",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999999999998,
+        "row_id": "stage28b_024",
+        "target": "^7",
+        "target_name": "Rhythm",
+        "target_probability": 6.061172264881847e-28,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "you are what you repeatedly do",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.999933698671975,
+        "row_id": "stage28b_025",
+        "target": "^7",
+        "target_name": "Rhythm",
+        "target_probability": 4.984377891246127e-21,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "getting into a groove",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.999999975810392,
+        "row_id": "stage28b_026",
+        "target": "^7",
+        "target_name": "Rhythm",
+        "target_probability": 1.9661596188748548e-32,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "muscle memory",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9979352870358958,
+        "row_id": "stage28b_027",
+        "target": "^7",
+        "target_name": "Rhythm",
+        "target_probability": 2.4988758150056222e-27,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -0.9997757466214036,
+        "phrase": "that reminds me",
+        "predicted": "^9",
+        "predicted_name": "Below/Effect",
+        "predicted_probability": 0.9997757466416832,
+        "row_id": "stage28b_028",
+        "target": "^8",
+        "target_name": "Above/Cause",
+        "target_probability": 2.0279707542908733e-11,
+        "top2": false
+      },
+      {
+        "exact": true,
+        "partner_margin": 0.9451450287963723,
+        "phrase": "one thing leads to another",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.94514707629656,
+        "row_id": "stage28b_029",
+        "target": "^8",
+        "target_name": "Above/Cause",
+        "target_probability": 0.94514707629656,
+        "top2": true
+      },
+      {
+        "exact": true,
+        "partner_margin": 0.9999990965782902,
+        "phrase": "triggered a memory",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999990965782902,
+        "row_id": "stage28b_030",
+        "target": "^8",
+        "target_name": "Above/Cause",
+        "target_probability": 0.9999990965782902,
+        "top2": true
+      },
+      {
+        "exact": true,
+        "partner_margin": 0.9999999995311807,
+        "phrase": "made me think of something else",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9999999995317985,
+        "row_id": "stage28b_031",
+        "target": "^8",
+        "target_name": "Above/Cause",
+        "target_probability": 0.9999999995317985,
+        "top2": true
+      },
+      {
+        "exact": true,
+        "partner_margin": 0.9999939036420189,
+        "phrase": "it just popped into my head",
+        "predicted": "^9",
+        "predicted_name": "Below/Effect",
+        "predicted_probability": 0.9999965205181655,
+        "row_id": "stage28b_032",
+        "target": "^9",
+        "target_name": "Below/Effect",
+        "target_probability": 0.9999965205181655,
+        "top2": true
+      },
+      {
+        "exact": false,
+        "partner_margin": -6.071290227296536e-05,
+        "phrase": "out of nowhere I thought of it",
+        "predicted": "^6",
+        "predicted_name": "Male",
+        "predicted_probability": 0.9996203680040869,
+        "row_id": "stage28b_033",
+        "target": "^9",
+        "target_name": "Below/Effect",
+        "target_probability": 8.434145107574666e-06,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": -0.19612801872831803,
+        "phrase": "the thought came to me",
+        "predicted": "^4",
+        "predicted_name": "Vibration",
+        "predicted_probability": 0.7704695415562431,
+        "row_id": "stage28b_034",
+        "target": "^9",
+        "target_name": "Below/Effect",
+        "target_probability": 0.0023320441414248923,
+        "top2": false
+      },
+      {
+        "exact": true,
+        "partner_margin": 0.9999939036420189,
+        "phrase": "it just clicked",
+        "predicted": "^9",
+        "predicted_name": "Below/Effect",
+        "predicted_probability": 0.9999965205181655,
+        "row_id": "stage28b_035",
+        "target": "^9",
+        "target_name": "Below/Effect",
+        "target_probability": 0.9999965205181655,
+        "top2": true
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "it's all in your head",
+        "predicted": "^9",
+        "predicted_name": "Below/Effect",
+        "predicted_probability": 0.9999965205181655,
+        "row_id": "stage28b_036",
+        "target": "^0",
+        "target_name": "Idea",
+        "target_probability": 8.41778253433531e-07,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "a thought on my mind",
+        "predicted": "^1",
+        "predicted_name": "Mind",
+        "predicted_probability": 0.9832679467420053,
+        "row_id": "stage28b_037",
+        "target": "^0",
+        "target_name": "Idea",
+        "target_probability": 0.005989119415029219,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "something on my mind",
+        "predicted": "^8",
+        "predicted_name": "Above/Cause",
+        "predicted_probability": 0.9618685519471786,
+        "row_id": "stage28b_038",
+        "target": "^0",
+        "target_name": "Idea",
+        "target_probability": 0.0002434771177353569,
+        "top2": false
+      },
+      {
+        "exact": false,
+        "partner_margin": null,
+        "phrase": "the idea itself",
+        "predicted": "^4",
+        "predicted_name": "Vibration",
+        "predicted_probability": 0.7704695415562431,
+        "row_id": "stage28b_039",
+        "target": "^0",
+        "target_name": "Idea",
+        "target_probability": 0.0026151018049885622,
+        "top2": false
+      }
+    ],
+    "target_probability_lift_over_chance": 0.023980553859337228,
+    "top2_accuracy": 0.15,
+    "top2_correct": 6
+  },
+  "fixture_rows": [
+    {
+      "english": "The speaker says \"paying attention\". The quoted phrase is the focus.",
+      "focus_token_id": 12080,
+      "focus_token_index": 4,
+      "focus_token_text": "pay",
+      "noetic": "^1",
+      "noetic_name": "Mind",
+      "phrase": "paying attention",
+      "phrase_end": 34,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_000",
+      "sequence_length": 15,
+      "target_index": 0
+    },
+    {
+      "english": "The speaker says \"making up my mind\". The quoted phrase is the focus.",
+      "focus_token_id": 11849,
+      "focus_token_index": 4,
+      "focus_token_text": "making",
+      "noetic": "^1",
+      "noetic_name": "Mind",
+      "phrase": "making up my mind",
+      "phrase_end": 35,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "row_id": "stage28b_001",
+      "sequence_length": 16,
+      "target_index": 0
+    },
+    {
+      "english": "The speaker says \"using my head\". The quoted phrase is the focus.",
+      "focus_token_id": 5302,
+      "focus_token_index": 4,
+      "focus_token_text": "using",
+      "noetic": "^1",
+      "noetic_name": "Mind",
+      "phrase": "using my head",
+      "phrase_end": 31,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_002",
+      "sequence_length": 15,
+      "target_index": 0
+    },
+    {
+      "english": "The speaker says \"becoming aware\". The quoted phrase is the focus.",
+      "focus_token_id": 1257,
+      "focus_token_index": 4,
+      "focus_token_text": "be",
+      "noetic": "^1",
+      "noetic_name": "Mind",
+      "phrase": "becoming aware",
+      "phrase_end": 32,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_003",
+      "sequence_length": 15,
+      "target_index": 0
+    },
+    {
+      "english": "The speaker says \"drawn to it like a moth to a flame\". The quoted phrase is the focus.",
+      "focus_token_id": 21584,
+      "focus_token_index": 4,
+      "focus_token_text": "drawn",
+      "noetic": "^2",
+      "noetic_name": "Positive",
+      "phrase": "drawn to it like a moth to a flame",
+      "phrase_end": 52,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "row_id": "stage28b_004",
+      "sequence_length": 21,
+      "target_index": 1
+    },
+    {
+      "english": "The speaker says \"speaks to me\". The quoted phrase is the focus.",
+      "focus_token_id": 9293,
+      "focus_token_index": 4,
+      "focus_token_text": "spe",
+      "noetic": "^2",
+      "noetic_name": "Positive",
+      "phrase": "speaks to me",
+      "phrase_end": 30,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "row_id": "stage28b_005",
+      "sequence_length": 16,
+      "target_index": 1
+    },
+    {
+      "english": "The speaker says \"can't resist it\". The quoted phrase is the focus.",
+      "focus_token_id": 5092,
+      "focus_token_index": 4,
+      "focus_token_text": "can",
+      "noetic": "^2",
+      "noetic_name": "Positive",
+      "phrase": "can't resist it",
+      "phrase_end": 33,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "row_id": "stage28b_006",
+      "sequence_length": 16,
+      "target_index": 1
+    },
+    {
+      "english": "The speaker says \"pulled toward it\". The quoted phrase is the focus.",
+      "focus_token_id": 23290,
+      "focus_token_index": 4,
+      "focus_token_text": "pull",
+      "noetic": "^2",
+      "noetic_name": "Positive",
+      "phrase": "pulled toward it",
+      "phrase_end": 34,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "row_id": "stage28b_007",
+      "sequence_length": 16,
+      "target_index": 1
+    },
+    {
+      "english": "The speaker says \"can't stomach it\". The quoted phrase is the focus.",
+      "focus_token_id": 5092,
+      "focus_token_index": 4,
+      "focus_token_text": "can",
+      "noetic": "^3",
+      "noetic_name": "Negative",
+      "phrase": "can't stomach it",
+      "phrase_end": 34,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "row_id": "stage28b_008",
+      "sequence_length": 16,
+      "target_index": 2
+    },
+    {
+      "english": "The speaker says \"rubs me the wrong way\". The quoted phrase is the focus.",
+      "focus_token_id": 18241,
+      "focus_token_index": 4,
+      "focus_token_text": "rub",
+      "noetic": "^3",
+      "noetic_name": "Negative",
+      "phrase": "rubs me the wrong way",
+      "phrase_end": 39,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "row_id": "stage28b_009",
+      "sequence_length": 18,
+      "target_index": 2
+    },
+    {
+      "english": "The speaker says \"wouldn't touch it with a ten-foot pole\". The quoted phrase is the focus.",
+      "focus_token_id": 12756,
+      "focus_token_index": 4,
+      "focus_token_text": "would",
+      "noetic": "^3",
+      "noetic_name": "Negative",
+      "phrase": "wouldn't touch it with a ten-foot pole",
+      "phrase_end": 56,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "row_id": "stage28b_010",
+      "sequence_length": 23,
+      "target_index": 2
+    },
+    {
+      "english": "The speaker says \"pushed away from it\". The quoted phrase is the focus.",
+      "focus_token_id": 81,
+      "focus_token_index": 4,
+      "focus_token_text": "p",
+      "noetic": "^3",
+      "noetic_name": "Negative",
+      "phrase": "pushed away from it",
+      "phrase_end": 37,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "row_id": "stage28b_011",
+      "sequence_length": 17,
+      "target_index": 2
+    },
+    {
+      "english": "The speaker says \"hit me hard\". The quoted phrase is the focus.",
+      "focus_token_id": 26824,
+      "focus_token_index": 4,
+      "focus_token_text": "hit",
+      "noetic": "^4",
+      "noetic_name": "Vibration",
+      "phrase": "hit me hard",
+      "phrase_end": 29,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_012",
+      "sequence_length": 15,
+      "target_index": 3
+    },
+    {
+      "english": "The speaker says \"struck a chord\". The quoted phrase is the focus.",
+      "focus_token_id": 21407,
+      "focus_token_index": 4,
+      "focus_token_text": "stru",
+      "noetic": "^4",
+      "noetic_name": "Vibration",
+      "phrase": "struck a chord",
+      "phrase_end": 32,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "row_id": "stage28b_013",
+      "sequence_length": 16,
+      "target_index": 3
+    },
+    {
+      "english": "The speaker says \"resonated with me\". The quoted phrase is the focus.",
+      "focus_token_id": 373,
+      "focus_token_index": 4,
+      "focus_token_text": "res",
+      "noetic": "^4",
+      "noetic_name": "Vibration",
+      "phrase": "resonated with me",
+      "phrase_end": 35,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "row_id": "stage28b_014",
+      "sequence_length": 17,
+      "target_index": 3
+    },
+    {
+      "english": "The speaker says \"made an impression\". The quoted phrase is the focus.",
+      "focus_token_id": 12710,
+      "focus_token_index": 4,
+      "focus_token_text": "made",
+      "noetic": "^4",
+      "noetic_name": "Vibration",
+      "phrase": "made an impression",
+      "phrase_end": 36,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_015",
+      "sequence_length": 15,
+      "target_index": 3
+    },
+    {
+      "english": "The speaker says \"we are the sum of our experiences\". The quoted phrase is the focus.",
+      "focus_token_id": 664,
+      "focus_token_index": 4,
+      "focus_token_text": "we",
+      "noetic": "^5",
+      "noetic_name": "Female",
+      "phrase": "we are the sum of our experiences",
+      "phrase_end": 51,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "row_id": "stage28b_016",
+      "sequence_length": 19,
+      "target_index": 4
+    },
+    {
+      "english": "The speaker says \"it's who I am\". The quoted phrase is the focus.",
+      "focus_token_id": 262,
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "noetic": "^5",
+      "noetic_name": "Female",
+      "phrase": "it's who I am",
+      "phrase_end": 31,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "row_id": "stage28b_017",
+      "sequence_length": 17,
+      "target_index": 4
+    },
+    {
+      "english": "The speaker says \"part of what makes me me\". The quoted phrase is the focus.",
+      "focus_token_id": 2003,
+      "focus_token_index": 4,
+      "focus_token_text": "part",
+      "noetic": "^5",
+      "noetic_name": "Female",
+      "phrase": "part of what makes me me",
+      "phrase_end": 42,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "row_id": "stage28b_018",
+      "sequence_length": 18,
+      "target_index": 4
+    },
+    {
+      "english": "The speaker says \"shaped by what came before\". The quoted phrase is the focus.",
+      "focus_token_id": 13824,
+      "focus_token_index": 4,
+      "focus_token_text": "shaped",
+      "noetic": "^5",
+      "noetic_name": "Female",
+      "phrase": "shaped by what came before",
+      "phrase_end": 44,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "row_id": "stage28b_019",
+      "sequence_length": 17,
+      "target_index": 4
+    },
+    {
+      "english": "The speaker says \"unpacking an idea\". The quoted phrase is the focus.",
+      "focus_token_id": 328,
+      "focus_token_index": 4,
+      "focus_token_text": "un",
+      "noetic": "^6",
+      "noetic_name": "Male",
+      "phrase": "unpacking an idea",
+      "phrase_end": 35,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "row_id": "stage28b_020",
+      "sequence_length": 17,
+      "target_index": 5
+    },
+    {
+      "english": "The speaker says \"breaking it down\". The quoted phrase is the focus.",
+      "focus_token_id": 22071,
+      "focus_token_index": 4,
+      "focus_token_text": "breaking",
+      "noetic": "^6",
+      "noetic_name": "Male",
+      "phrase": "breaking it down",
+      "phrase_end": 34,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_021",
+      "sequence_length": 15,
+      "target_index": 5
+    },
+    {
+      "english": "The speaker says \"looking at what's underneath\". The quoted phrase is the focus.",
+      "focus_token_id": 13565,
+      "focus_token_index": 4,
+      "focus_token_text": "looking",
+      "noetic": "^6",
+      "noetic_name": "Male",
+      "phrase": "looking at what's underneath",
+      "phrase_end": 46,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "row_id": "stage28b_022",
+      "sequence_length": 17,
+      "target_index": 5
+    },
+    {
+      "english": "The speaker says \"pulling apart the argument\". The quoted phrase is the focus.",
+      "focus_token_id": 23290,
+      "focus_token_index": 4,
+      "focus_token_text": "pull",
+      "noetic": "^6",
+      "noetic_name": "Male",
+      "phrase": "pulling apart the argument",
+      "phrase_end": 44,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "row_id": "stage28b_023",
+      "sequence_length": 17,
+      "target_index": 5
+    },
+    {
+      "english": "The speaker says \"practice makes perfect\". The quoted phrase is the focus.",
+      "focus_token_id": 29105,
+      "focus_token_index": 4,
+      "focus_token_text": "practice",
+      "noetic": "^7",
+      "noetic_name": "Rhythm",
+      "phrase": "practice makes perfect",
+      "phrase_end": 40,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_024",
+      "sequence_length": 15,
+      "target_index": 6
+    },
+    {
+      "english": "The speaker says \"you are what you repeatedly do\". The quoted phrase is the focus.",
+      "focus_token_id": 5658,
+      "focus_token_index": 4,
+      "focus_token_text": "you",
+      "noetic": "^7",
+      "noetic_name": "Rhythm",
+      "phrase": "you are what you repeatedly do",
+      "phrase_end": 48,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "row_id": "stage28b_025",
+      "sequence_length": 18,
+      "target_index": 6
+    },
+    {
+      "english": "The speaker says \"getting into a groove\". The quoted phrase is the focus.",
+      "focus_token_id": 35777,
+      "focus_token_index": 4,
+      "focus_token_text": "getting",
+      "noetic": "^7",
+      "noetic_name": "Rhythm",
+      "phrase": "getting into a groove",
+      "phrase_end": 39,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "row_id": "stage28b_026",
+      "sequence_length": 16,
+      "target_index": 6
+    },
+    {
+      "english": "The speaker says \"muscle memory\". The quoted phrase is the focus.",
+      "focus_token_id": 14557,
+      "focus_token_index": 4,
+      "focus_token_text": "mus",
+      "noetic": "^7",
+      "noetic_name": "Rhythm",
+      "phrase": "muscle memory",
+      "phrase_end": 31,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_027",
+      "sequence_length": 15,
+      "target_index": 6
+    },
+    {
+      "english": "The speaker says \"that reminds me\". The quoted phrase is the focus.",
+      "focus_token_id": 3529,
+      "focus_token_index": 4,
+      "focus_token_text": "that",
+      "noetic": "^8",
+      "noetic_name": "Above/Cause",
+      "phrase": "that reminds me",
+      "phrase_end": 33,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_028",
+      "sequence_length": 15,
+      "target_index": 7
+    },
+    {
+      "english": "The speaker says \"one thing leads to another\". The quoted phrase is the focus.",
+      "focus_token_id": 531,
+      "focus_token_index": 4,
+      "focus_token_text": "one",
+      "noetic": "^8",
+      "noetic_name": "Above/Cause",
+      "phrase": "one thing leads to another",
+      "phrase_end": 44,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "row_id": "stage28b_029",
+      "sequence_length": 17,
+      "target_index": 7
+    },
+    {
+      "english": "The speaker says \"triggered a memory\". The quoted phrase is the focus.",
+      "focus_token_id": 39168,
+      "focus_token_index": 4,
+      "focus_token_text": "trig",
+      "noetic": "^8",
+      "noetic_name": "Above/Cause",
+      "phrase": "triggered a memory",
+      "phrase_end": 36,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "row_id": "stage28b_030",
+      "sequence_length": 16,
+      "target_index": 7
+    },
+    {
+      "english": "The speaker says \"made me think of something else\". The quoted phrase is the focus.",
+      "focus_token_id": 12710,
+      "focus_token_index": 4,
+      "focus_token_text": "made",
+      "noetic": "^8",
+      "noetic_name": "Above/Cause",
+      "phrase": "made me think of something else",
+      "phrase_end": 49,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "row_id": "stage28b_031",
+      "sequence_length": 18,
+      "target_index": 7
+    },
+    {
+      "english": "The speaker says \"it just popped into my head\". The quoted phrase is the focus.",
+      "focus_token_id": 262,
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "noetic": "^9",
+      "noetic_name": "Below/Effect",
+      "phrase": "it just popped into my head",
+      "phrase_end": 45,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "row_id": "stage28b_032",
+      "sequence_length": 18,
+      "target_index": 8
+    },
+    {
+      "english": "The speaker says \"out of nowhere I thought of it\". The quoted phrase is the focus.",
+      "focus_token_id": 483,
+      "focus_token_index": 4,
+      "focus_token_text": "out",
+      "noetic": "^9",
+      "noetic_name": "Below/Effect",
+      "phrase": "out of nowhere I thought of it",
+      "phrase_end": 48,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "row_id": "stage28b_033",
+      "sequence_length": 19,
+      "target_index": 8
+    },
+    {
+      "english": "The speaker says \"the thought came to me\". The quoted phrase is the focus.",
+      "focus_token_id": 783,
+      "focus_token_index": 4,
+      "focus_token_text": "the",
+      "noetic": "^9",
+      "noetic_name": "Below/Effect",
+      "phrase": "the thought came to me",
+      "phrase_end": 40,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "row_id": "stage28b_034",
+      "sequence_length": 17,
+      "target_index": 8
+    },
+    {
+      "english": "The speaker says \"it just clicked\". The quoted phrase is the focus.",
+      "focus_token_id": 262,
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "noetic": "^9",
+      "noetic_name": "Below/Effect",
+      "phrase": "it just clicked",
+      "phrase_end": 33,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_035",
+      "sequence_length": 15,
+      "target_index": 8
+    },
+    {
+      "english": "The speaker says \"it's all in your head\". The quoted phrase is the focus.",
+      "focus_token_id": 262,
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "noetic": "^0",
+      "noetic_name": "Idea",
+      "phrase": "it's all in your head",
+      "phrase_end": 39,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "row_id": "stage28b_036",
+      "sequence_length": 18,
+      "target_index": 9
+    },
+    {
+      "english": "The speaker says \"a thought on my mind\". The quoted phrase is the focus.",
+      "focus_token_id": 66,
+      "focus_token_index": 4,
+      "focus_token_text": "a",
+      "noetic": "^0",
+      "noetic_name": "Idea",
+      "phrase": "a thought on my mind",
+      "phrase_end": 38,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "row_id": "stage28b_037",
+      "sequence_length": 17,
+      "target_index": 9
+    },
+    {
+      "english": "The speaker says \"something on my mind\". The quoted phrase is the focus.",
+      "focus_token_id": 17873,
+      "focus_token_index": 4,
+      "focus_token_text": "something",
+      "noetic": "^0",
+      "noetic_name": "Idea",
+      "phrase": "something on my mind",
+      "phrase_end": 38,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "row_id": "stage28b_038",
+      "sequence_length": 16,
+      "target_index": 9
+    },
+    {
+      "english": "The speaker says \"the idea itself\". The quoted phrase is the focus.",
+      "focus_token_id": 783,
+      "focus_token_index": 4,
+      "focus_token_text": "the",
+      "noetic": "^0",
+      "noetic_name": "Idea",
+      "phrase": "the idea itself",
+      "phrase_end": 33,
+      "phrase_start": 18,
+      "phrase_token_indices": [
+        4,
+        5,
+        6
+      ],
+      "row_id": "stage28b_039",
+      "sequence_length": 15,
+      "target_index": 9
+    }
+  ],
+  "gates": {
+    "max_exact_binomial_p": 0.05,
+    "min_exact_accuracy": 0.45,
+    "min_involution_partner_positive_share": 0.6,
+    "min_mean_target_probability": 0.15,
+    "min_probe_test_acc": 0.5,
+    "min_top2_accuracy": 0.65
+  },
+  "input_file": "stage9_elements_pilot_20260517.jsonl",
+  "input_sha256": "2f8637eedff0fb4d9e6191bd5c051ddc21cea699e33621896469a2e522306889",
+  "locked_probe_readout": {
+    "layer": 5,
+    "readout_key": "X_focus",
+    "readout_name": "focus_token"
+  },
+  "model": {
+    "device": "cpu",
+    "hidden_dim": 768,
+    "model_name": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "model_source": "EleutherAI/pythia-160m",
+    "n_layer_positions": 13,
+    "torch": "2.11.0+cpu",
+    "transformers": "5.8.1"
+  },
+  "noetic_labels": [
+    "^1",
+    "^2",
+    "^3",
+    "^4",
+    "^5",
+    "^6",
+    "^7",
+    "^8",
+    "^9",
+    "^0"
+  ],
+  "noetic_names": [
+    "Mind",
+    "Positive",
+    "Negative",
+    "Vibration",
+    "Female",
+    "Male",
+    "Rhythm",
+    "Above/Cause",
+    "Below/Effect",
+    "Idea"
+  ],
+  "plain_english_read": "This report tests the colloquialism route: natural-language Noetic phrases are processed by Pythia, then the existing Stage 9 Noetic probe reads the resulting layer-5 phrase-token hidden state.",
+  "preregistration_file": "stage28b_noetic_colloquialism_prereg_20260521.json",
+  "preregistration_sha256": "de17b983ede2c227a9ab76de206477b337e99485278e05c9af9cb446225212ef",
+  "probe": {
+    "n_test": 4480,
+    "n_train": 2560,
+    "n_val": 1280,
+    "test_acc": 0.9145089285714286,
+    "train_acc": 1.0,
+    "val_acc": 1.0
+  },
+  "runtime_readout": {
+    "definition": "first tokenizer token overlapping the quoted colloquial phrase span",
+    "layer": 5,
+    "name": "phrase_first_token"
+  },
+  "schema_version": "stage28b_noetic_colloquialism_realization.v1",
+  "status": "NULL_NOETIC_COLLOQUIALISM_REALIZATION_NOT_ESTABLISHED"
+}
