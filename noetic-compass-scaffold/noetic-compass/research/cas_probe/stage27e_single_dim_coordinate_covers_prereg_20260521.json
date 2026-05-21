@@ -1,0 +1,108 @@
+{
+  "claim_boundary": {
+    "claim_if_null": "Stage 27C/27D class-local head and slice covers remain valid, but single-coordinate cover decomposition did not recover held-out hard-partner readout margins under the preregistered controls.",
+    "claim_if_pass": "Within the Stage 27C per-class Pythia-160M attention-head covers, sparse single-coordinate sets recover held-out hard-partner readout margins above matched random coordinate controls.",
+    "forbidden_claims": "Do not claim exact neurons, complete circuits, MLP-neuron localization, raw CAS-symbol understanding, an internal CAS compiler, Noetic/40-Element component causality, free-form generation control, or cross-model component generality from Stage 27E.",
+    "grey_status": "GREY_SINGLE_DIM_COORDINATE_COVERS_PARTIAL",
+    "null_status": "NULL_SINGLE_DIM_COORDINATE_COVERS_NOT_ESTABLISHED",
+    "pass_status": "PASS_BOUNDED_SINGLE_DIM_COORDINATE_COVERS",
+    "scope_boundary": "Stage 27E is bounded to single coordinates of pre-output-projection attention-head vectors inside the Pythia-160M Stage 27C Foundation covers. These coordinates are not literal neurons. Stage 27E is not an MLP-neuron claim, complete circuit, token sonar, Noetic/40-Element coverage, raw CAS-symbol understanding, or generation control."
+  },
+  "execution_order": [
+    "commit_preregistration_and_runner_before_gpu_result",
+    "verify_stage27c_and_stage27d_contracts",
+    "learn_per_class_coordinate_covers_on_train_split_only",
+    "evaluate_hard_partner_margins_on_test_split_only",
+    "record_bounded_result"
+  ],
+  "formal_anchor": "Refined local-cover framing: Stage 26/27A gives a global head cover, Stage 27C gives class-indexed head subcovers, Stage 27D gives within-head slice subcovers, and Stage 27E tests whether those covers admit single-coordinate subcovers.",
+  "gates": [
+    {
+      "criterion": "Stage 7 activation artifact hash matches the locked manifest.",
+      "kind": "pass_floor",
+      "name": "artifact_contract"
+    },
+    {
+      "criterion": "Stage 27C source report is PASS, uses the locked artifact, and exposes per-class covers over the selected six-head family.",
+      "kind": "pass_floor",
+      "name": "stage27c_contract"
+    },
+    {
+      "criterion": "Stage 27D source report is PASS and used single Stage 27C class-head covers as source context.",
+      "kind": "pass_floor",
+      "name": "stage27d_contract"
+    },
+    {
+      "criterion": "slices_per_head equals the 64-dimensional attention-head width; each candidate slice is one coordinate.",
+      "kind": "pass_floor",
+      "name": "single_coordinate_resolution"
+    },
+    {
+      "criterion": "Coordinate-cover learning rows come only from train split; scoring rows come only from test split.",
+      "kind": "pass_floor",
+      "name": "learn_eval_separation"
+    },
+    {
+      "criterion": "Per-class coordinate covers beat per-row random same-size coordinate-cover mean margin on at least 60% of eval rows with sign-test p<0.05.",
+      "kind": "primary",
+      "name": "matched_random_coordinate_control"
+    },
+    {
+      "criterion": "At least 55% of eval rows have positive target-vs-hard-partner margin under the per-class coordinate cover.",
+      "kind": "primary",
+      "name": "positive_margin_floor"
+    },
+    {
+      "criterion": "Mean coordinate-cover gain is at least 10% of the mean Stage 27C class-head-cover gain.",
+      "kind": "supporting",
+      "name": "head_cover_gain_fraction"
+    }
+  ],
+  "method": [
+    "Commit this pre-registration and runner before any Stage 27E GPU result is generated.",
+    "Refit the locked Stage 7 28-way Foundation probe on the locked layer-6 focus-token artifact.",
+    "Verify Stage 27C and Stage 27D are PASS with the locked artifact and selected six-head family.",
+    "Use Stage 27C per-class three-head covers as the candidate head set for each Foundation class.",
+    "Split each candidate head's 64-dimensional pre-output-projection vector into 64 single-coordinate slices.",
+    "Build a balanced coordinate-learning subset from Stage 7 train rows and a disjoint balanced evaluation subset from Stage 7 test rows.",
+    "For each learning row, globally ablate the six selected heads, then patch each candidate coordinate individually.",
+    "Score each candidate coordinate by target-vs-hard-partner Foundation probe-logit margin lift over the globally ablated state.",
+    "For each Foundation class, define an eight-coordinate class-local cover as the top coordinates by mean lift on learn rows for that class.",
+    "On held-out evaluation rows, compare class-local coordinate covers against same-size random coordinate covers sampled from the same class candidate heads.",
+    "Report the Stage 27C class-head cover and Stage 27D eight-dimensional slice-cover results as ceilings/context, not as primary controls."
+  ],
+  "motivation": "Stage 27D narrowed class-specific Foundation readout evidence from per-class attention-head covers to contiguous within-head slices. Stage 27E tests the resolution limit: single head-coordinate covers.",
+  "required_inputs": {
+    "coordinate_cover_size": 8,
+    "eval_rows_per_class": 4,
+    "fixture": "stage7_foundation_pilot_20260517.jsonl",
+    "global_selected_components": [
+      "L5H3",
+      "L5H5",
+      "L5H0",
+      "L5H10",
+      "L1H6",
+      "L5H6"
+    ],
+    "head_dim": 64,
+    "learn_rows_per_class": 4,
+    "locked_readout": {
+      "key": "X_focus",
+      "layer": 6,
+      "name": "focus_token"
+    },
+    "model": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "slices_per_head": 64,
+    "source_cover_size": 3,
+    "stage27c_report": "stage27c_per_class_component_covers_20260521.json",
+    "stage27c_status": "PASS_BOUNDED_PER_CLASS_COMPONENT_COVERS",
+    "stage27d_report": "stage27d_within_head_slice_covers_20260521.json",
+    "stage27d_status": "PASS_BOUNDED_WITHIN_HEAD_SLICE_COVERS",
+    "stage7_activation_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+    "stage7_activations": "stage7_foundation_pilot_activations_20260517.npz"
+  },
+  "stage": "27E",
+  "status": "PREREGISTERED_GPU_RECOMMENDED",
+  "validation": {}
+}
