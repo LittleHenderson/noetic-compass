@@ -1,0 +1,1073 @@
+{
+  "boundary": "Stage 27K is bounded late-layer intervention steering over Pythia-160M CPL2 likelihood margins. It is not complete circuit discovery, not weight editing, not model-wide control, not cross-model control, and not visible free-form generation control.",
+  "candidate_layers": [
+    8,
+    9,
+    10,
+    11
+  ],
+  "carrier_cover": [
+    "L10MLP",
+    "L8MLP",
+    "L9H7",
+    "L9MLP",
+    "L8H11",
+    "L8H10"
+  ],
+  "elapsed_seconds": 28.3433349262923,
+  "eraser_cover": [
+    "L11MLP",
+    "L9H3",
+    "L11H11",
+    "L10H6",
+    "L11H9",
+    "L10H3"
+  ],
+  "evaluation": {
+    "effects": {
+      "carrier_amplification_increment": {
+        "mean": 0.09225551060267853,
+        "median": 0.06982421875,
+        "n": 56,
+        "positive_share": 0.5714285714285714
+      },
+      "carrier_flip_reduction": {
+        "mean": 0.7360525948660716,
+        "median": 0.5859375,
+        "n": 56,
+        "positive_share": 0.6428571428571429
+      },
+      "combined_increment": {
+        "mean": 0.557552010672433,
+        "median": 0.35253906249999867,
+        "n": 56,
+        "positive_share": 0.5714285714285714
+      },
+      "eraser_suppression_increment": {
+        "mean": 0.8223019736153739,
+        "median": 0.5318237304687501,
+        "n": 56,
+        "positive_share": 0.6964285714285714
+      },
+      "prefix_margin": {
+        "mean": 0.5589983258928571,
+        "median": 0.4955078125000001,
+        "n": 56,
+        "positive_share": 0.6785714285714286
+      },
+      "random_carrier_flip_mean_reduction": {
+        "mean": 0.19831194196428495,
+        "median": 0.9181640625000003,
+        "n": 56,
+        "positive_share": 0.5178571428571429
+      },
+      "random_combined_mean_increment": {
+        "mean": -0.29266139439174105,
+        "median": -0.11329345703124966,
+        "n": 56,
+        "positive_share": 0.375
+      }
+    },
+    "paired_controls": {
+      "carrier_flip_vs_random_mean": {
+        "mean_delta": 0.5377406529017867,
+        "median_delta": -0.4560546875,
+        "n": 56,
+        "sign_test_p": 0.5530734525824892,
+        "win_share": 0.5,
+        "wins": 28
+      },
+      "combined_vs_random_mean": {
+        "mean_delta": 0.8502134050641741,
+        "median_delta": 0.3176269531249996,
+        "n": 56,
+        "sign_test_p": 0.3444398803616698,
+        "win_share": 0.5357142857142857,
+        "wins": 30
+      }
+    },
+    "row_reports": [
+      {
+        "carrier_amp_increment": -0.28183593749999947,
+        "carrier_flip_reduction": 0.2794921874999998,
+        "combined_increment": 0.20468749999999947,
+        "eraser_suppress_increment": 1.0649414062500009,
+        "foundation_label": "F1T",
+        "prefix_margin": 1.0812499999999998,
+        "random_carrier_flip_mean_reduction": 26.968749999999996,
+        "random_combined_mean_increment": -0.4665039062499998,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F1T"
+      },
+      {
+        "carrier_amp_increment": -0.44091796875,
+        "carrier_flip_reduction": -0.12343750000000053,
+        "combined_increment": -1.2353515624999991,
+        "eraser_suppress_increment": -0.9138671875000002,
+        "foundation_label": "F1A",
+        "prefix_margin": -0.24628906249999982,
+        "random_carrier_flip_mean_reduction": 28.150585937500004,
+        "random_combined_mean_increment": 0.3965820312499998,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F1A"
+      },
+      {
+        "carrier_amp_increment": -0.021484375,
+        "carrier_flip_reduction": -0.5986328124999991,
+        "combined_increment": 0.8443359374999995,
+        "eraser_suppress_increment": 1.0138671875000016,
+        "foundation_label": "F1f",
+        "prefix_margin": -0.3318359375000002,
+        "random_carrier_flip_mean_reduction": 23.946289062499996,
+        "random_combined_mean_increment": 0.45454101562500027,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_system_process_F1f"
+      },
+      {
+        "carrier_amp_increment": -0.33242187499999964,
+        "carrier_flip_reduction": -0.03652343749999876,
+        "combined_increment": -1.4738281249999998,
+        "eraser_suppress_increment": -1.0960937499999988,
+        "foundation_label": "F1E",
+        "prefix_margin": 0.3761718749999998,
+        "random_carrier_flip_mean_reduction": 25.432421874999996,
+        "random_combined_mean_increment": 0.02441406250000011,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F7E_F1E_concrete_human_F1E"
+      },
+      {
+        "carrier_amp_increment": 0.08203125,
+        "carrier_flip_reduction": -0.6156249999999988,
+        "combined_increment": 0.6324218749999995,
+        "eraser_suppress_increment": 0.3947021484375002,
+        "foundation_label": "F1E",
+        "prefix_margin": 0.5076171875000002,
+        "random_carrier_flip_mean_reduction": 26.810742187499997,
+        "random_combined_mean_increment": -0.1676025390625001,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F1E"
+      },
+      {
+        "carrier_amp_increment": 0.04404296874999947,
+        "carrier_flip_reduction": 0.3929687500000014,
+        "combined_increment": -0.2841796875,
+        "eraser_suppress_increment": -1.745166015625001,
+        "foundation_label": "F1A",
+        "prefix_margin": 0.4833984375,
+        "random_carrier_flip_mean_reduction": 34.5302734375,
+        "random_combined_mean_increment": -0.05009765625000007,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_concrete_human_F1A"
+      },
+      {
+        "carrier_amp_increment": -0.17568359374999964,
+        "carrier_flip_reduction": -0.9599609375000009,
+        "combined_increment": -0.27109374999999947,
+        "eraser_suppress_increment": 0.5406982421875002,
+        "foundation_label": "F1T",
+        "prefix_margin": 0.5871093749999998,
+        "random_carrier_flip_mean_reduction": 26.812109375000002,
+        "random_combined_mean_increment": -0.059716796874999645,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_concrete_human_F1T"
+      },
+      {
+        "carrier_amp_increment": 0.5966796875,
+        "carrier_flip_reduction": -0.016796874999998934,
+        "combined_increment": 0.4111328124999982,
+        "eraser_suppress_increment": 0.33193359374999964,
+        "foundation_label": "F1A",
+        "prefix_margin": 0.44492187500000036,
+        "random_carrier_flip_mean_reduction": 29.066796875,
+        "random_combined_mean_increment": -0.0670654296875004,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_counter_alias_hard_negative_F1A"
+      },
+      {
+        "carrier_amp_increment": -0.06484374999999964,
+        "carrier_flip_reduction": -0.2527343749999993,
+        "combined_increment": 1.3340820312499986,
+        "eraser_suppress_increment": -0.1586425781250007,
+        "foundation_label": "F2E",
+        "prefix_margin": -0.6898437499999996,
+        "random_carrier_flip_mean_reduction": -33.37109375,
+        "random_combined_mean_increment": 0.2499267578124994,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_counter_alias_hard_negative_F2E"
+      },
+      {
+        "carrier_amp_increment": 0.14765624999999893,
+        "carrier_flip_reduction": 0.33476562500000107,
+        "combined_increment": 2.6732421874999996,
+        "eraser_suppress_increment": 1.7872314453125,
+        "foundation_label": "F2f",
+        "prefix_margin": -0.2634765624999993,
+        "random_carrier_flip_mean_reduction": -30.247851562500006,
+        "random_combined_mean_increment": 0.041845703124999134,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F1f_F2f_no_alias_plain_F2f"
+      },
+      {
+        "carrier_amp_increment": 0.29550781249999947,
+        "carrier_flip_reduction": -0.07050781249999893,
+        "combined_increment": 1.2483398437499993,
+        "eraser_suppress_increment": 0.7990234374999989,
+        "foundation_label": "F2A",
+        "prefix_margin": -0.47499999999999964,
+        "random_carrier_flip_mean_reduction": -37.77187500000001,
+        "random_combined_mean_increment": 0.10502929687499962,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_system_process_F2A"
+      },
+      {
+        "carrier_amp_increment": -0.18398437500000053,
+        "carrier_flip_reduction": 0.05410156250000142,
+        "combined_increment": 0.4794921874999982,
+        "eraser_suppress_increment": 0.30622558593749893,
+        "foundation_label": "F2E",
+        "prefix_margin": -0.5628906249999996,
+        "random_carrier_flip_mean_reduction": -31.166015625,
+        "random_combined_mean_increment": 0.16821289062499956,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F2E"
+      },
+      {
+        "carrier_amp_increment": 0.4318359374999998,
+        "carrier_flip_reduction": -0.18144531250000107,
+        "combined_increment": -0.20371093750000036,
+        "eraser_suppress_increment": -2.090576171875,
+        "foundation_label": "F2T",
+        "prefix_margin": -1.5162109375000004,
+        "random_carrier_flip_mean_reduction": -19.266210937500006,
+        "random_combined_mean_increment": 0.6839843750000005,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F1T_F2T_long_embedded_clause_F2T"
+      },
+      {
+        "carrier_amp_increment": 0.07343749999999982,
+        "carrier_flip_reduction": -0.09511718749999964,
+        "combined_increment": 0.10927734374999964,
+        "eraser_suppress_increment": -0.8265502929687507,
+        "foundation_label": "F2T",
+        "prefix_margin": -1.1156249999999996,
+        "random_carrier_flip_mean_reduction": -28.02500000000001,
+        "random_combined_mean_increment": 0.47783203124999973,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F2T"
+      },
+      {
+        "carrier_amp_increment": 0.47841796875000053,
+        "carrier_flip_reduction": -0.9306640625,
+        "combined_increment": 2.8023925781249996,
+        "eraser_suppress_increment": 0.683258056640625,
+        "foundation_label": "F2E",
+        "prefix_margin": -0.7080078125,
+        "random_carrier_flip_mean_reduction": -7.995507812499998,
+        "random_combined_mean_increment": 0.3422851562499999,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_long_embedded_clause_F2E"
+      },
+      {
+        "carrier_amp_increment": 0.30869140625000036,
+        "carrier_flip_reduction": -0.1425781250000009,
+        "combined_increment": 2.040039062499999,
+        "eraser_suppress_increment": 0.3109863281249998,
+        "foundation_label": "F2E",
+        "prefix_margin": -0.7941406249999998,
+        "random_carrier_flip_mean_reduction": -30.197265624999993,
+        "random_combined_mean_increment": 0.38640136718749996,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_long_embedded_clause_F2E"
+      },
+      {
+        "carrier_amp_increment": -0.22226562499999947,
+        "carrier_flip_reduction": 1.5984374999999993,
+        "combined_increment": -2.0088867187500004,
+        "eraser_suppress_increment": 0.6480468750000004,
+        "foundation_label": "F3T",
+        "prefix_margin": 1.3695312499999996,
+        "random_carrier_flip_mean_reduction": 10.350781249999999,
+        "random_combined_mean_increment": -0.5159179687499997,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F2T_F3T_system_process_F3T"
+      },
+      {
+        "carrier_amp_increment": 0.0419921875,
+        "carrier_flip_reduction": 0.9583984375000005,
+        "combined_increment": -1.5517578125000009,
+        "eraser_suppress_increment": -1.3633789062499995,
+        "foundation_label": "F3A",
+        "prefix_margin": -0.5998046874999998,
+        "random_carrier_flip_mean_reduction": 15.990820312500002,
+        "random_combined_mean_increment": 0.09245605468749984,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F3A"
+      },
+      {
+        "carrier_amp_increment": -0.2707031250000007,
+        "carrier_flip_reduction": 2.2404296875,
+        "combined_increment": -1.8285156250000005,
+        "eraser_suppress_increment": 0.6939331054687505,
+        "foundation_label": "F3T",
+        "prefix_margin": 1.5730468750000002,
+        "random_carrier_flip_mean_reduction": 7.298046875000001,
+        "random_combined_mean_increment": -0.7531494140625,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F2T_F3T_role_inverse_minimal_F3T"
+      },
+      {
+        "carrier_amp_increment": 0.12812499999999982,
+        "carrier_flip_reduction": 1.8326171875000012,
+        "combined_increment": -1.7474609375000005,
+        "eraser_suppress_increment": 0.3213378906250002,
+        "foundation_label": "F3A",
+        "prefix_margin": 1.3210937500000002,
+        "random_carrier_flip_mean_reduction": 10.52734375,
+        "random_combined_mean_increment": -0.49689941406250004,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F2A_F3A_no_alias_plain_F3A"
+      },
+      {
+        "carrier_amp_increment": -0.46767578125000053,
+        "carrier_flip_reduction": 1.7705078124999991,
+        "combined_increment": -3.1291015625,
+        "eraser_suppress_increment": -1.1696533203125012,
+        "foundation_label": "F3E",
+        "prefix_margin": 1.2248046874999998,
+        "random_carrier_flip_mean_reduction": 10.134179687500001,
+        "random_combined_mean_increment": -0.46511230468749987,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F2E_F3E_role_inverse_minimal_F3E"
+      },
+      {
+        "carrier_amp_increment": -0.37421874999999893,
+        "carrier_flip_reduction": 1.5318359374999986,
+        "combined_increment": -2.259765625,
+        "eraser_suppress_increment": -0.49665527343749893,
+        "foundation_label": "F3f",
+        "prefix_margin": 1.3259765624999993,
+        "random_carrier_flip_mean_reduction": 8.741601562499994,
+        "random_combined_mean_increment": -0.5665527343749992,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F2f_F3f_no_alias_plain_F3f"
+      },
+      {
+        "carrier_amp_increment": -0.22929687500000018,
+        "carrier_flip_reduction": 1.1777343749999991,
+        "combined_increment": -0.5937499999999991,
+        "eraser_suppress_increment": 1.0587890624999998,
+        "foundation_label": "F3T",
+        "prefix_margin": -0.07109375000000018,
+        "random_carrier_flip_mean_reduction": 12.22578125,
+        "random_combined_mean_increment": -0.26552734374999987,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F3T_F4T_no_alias_plain_F3T"
+      },
+      {
+        "carrier_amp_increment": -0.4033203125000009,
+        "carrier_flip_reduction": -0.3601562499999993,
+        "combined_increment": -2.0656250000000007,
+        "eraser_suppress_increment": -1.7171386718750004,
+        "foundation_label": "F3E",
+        "prefix_margin": -0.9978515624999993,
+        "random_carrier_flip_mean_reduction": 18.274023437500002,
+        "random_combined_mean_increment": 0.45541992187499936,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F3E"
+      },
+      {
+        "carrier_amp_increment": -0.28671875000000124,
+        "carrier_flip_reduction": -1.5085937499999993,
+        "combined_increment": 0.5203125000000002,
+        "eraser_suppress_increment": 1.2041015625000009,
+        "foundation_label": "F4A",
+        "prefix_margin": 0.6078125000000005,
+        "random_carrier_flip_mean_reduction": -24.151562500000004,
+        "random_combined_mean_increment": 0.19633789062499962,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F4A"
+      },
+      {
+        "carrier_amp_increment": -0.18691406250000053,
+        "carrier_flip_reduction": -0.44277343749999964,
+        "combined_increment": -0.7255371093749998,
+        "eraser_suppress_increment": 1.0886962890624998,
+        "foundation_label": "F4E",
+        "prefix_margin": 0.8265625000000005,
+        "random_carrier_flip_mean_reduction": -22.4328125,
+        "random_combined_mean_increment": -0.33759765625000027,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_long_embedded_clause_F4E"
+      },
+      {
+        "carrier_amp_increment": -0.12167968749999947,
+        "carrier_flip_reduction": 0.059179687500000355,
+        "combined_increment": -0.9414062500000009,
+        "eraser_suppress_increment": 0.6234375000000005,
+        "foundation_label": "F4T",
+        "prefix_margin": 1.2613281249999995,
+        "random_carrier_flip_mean_reduction": -21.210546875000006,
+        "random_combined_mean_increment": -0.5762695312499994,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_system_process_F4T"
+      },
+      {
+        "carrier_amp_increment": -0.63671875,
+        "carrier_flip_reduction": -1.504101562499999,
+        "combined_increment": 0.2732421874999993,
+        "eraser_suppress_increment": 0.52294921875,
+        "foundation_label": "F4A",
+        "prefix_margin": 0.5416015625000004,
+        "random_carrier_flip_mean_reduction": -23.953710937500006,
+        "random_combined_mean_increment": 0.1525634765624998,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_system_process_F4A"
+      },
+      {
+        "carrier_amp_increment": 0.1064453125,
+        "carrier_flip_reduction": -0.9216796875000011,
+        "combined_increment": 1.4679687500000007,
+        "eraser_suppress_increment": 1.4423828125,
+        "foundation_label": "F4f",
+        "prefix_margin": 0.8203125,
+        "random_carrier_flip_mean_reduction": -24.404687499999998,
+        "random_combined_mean_increment": -0.03728027343750018,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F3f_F4f_no_alias_plain_F4f"
+      },
+      {
+        "carrier_amp_increment": -0.5935546875000002,
+        "carrier_flip_reduction": -0.6044921874999991,
+        "combined_increment": -1.4101562499999991,
+        "eraser_suppress_increment": 0.32521972656249876,
+        "foundation_label": "F4E",
+        "prefix_margin": 0.7707031249999998,
+        "random_carrier_flip_mean_reduction": -22.048046875000004,
+        "random_combined_mean_increment": -0.41350097656249984,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_counter_alias_hard_negative_F4E"
+      },
+      {
+        "carrier_amp_increment": -0.3251953125,
+        "carrier_flip_reduction": -0.1619140624999993,
+        "combined_increment": 1.1585937500000014,
+        "eraser_suppress_increment": 1.2476562500000004,
+        "foundation_label": "F4A",
+        "prefix_margin": 1.029296875,
+        "random_carrier_flip_mean_reduction": -24.870703125,
+        "random_combined_mean_increment": -0.19377441406249996,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F3A_F4A_no_alias_plain_F4A"
+      },
+      {
+        "carrier_amp_increment": -0.41015625,
+        "carrier_flip_reduction": -1.6931640625000002,
+        "combined_increment": 0.2939453124999991,
+        "eraser_suppress_increment": -0.11503906250000018,
+        "foundation_label": "F4T",
+        "prefix_margin": 0.4455078124999998,
+        "random_carrier_flip_mean_reduction": -15.438867187500001,
+        "random_combined_mean_increment": 0.30917968750000013,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F3T_F4T_system_process_F4T"
+      },
+      {
+        "carrier_amp_increment": 0.1793945312500007,
+        "carrier_flip_reduction": 2.9572265625,
+        "combined_increment": 3.1271484375,
+        "eraser_suppress_increment": 3.1578613281250005,
+        "foundation_label": "F5E",
+        "prefix_margin": 2.2447265624999995,
+        "random_carrier_flip_mean_reduction": -1.2333984375000027,
+        "random_combined_mean_increment": -1.0705322265624997,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F5E_F6E_system_process_F5E"
+      },
+      {
+        "carrier_amp_increment": 0.2175781249999993,
+        "carrier_flip_reduction": 2.3062500000000012,
+        "combined_increment": 2.3907226562500004,
+        "eraser_suppress_increment": 0.9095275878906239,
+        "foundation_label": "F5T",
+        "prefix_margin": 0.3781250000000007,
+        "random_carrier_flip_mean_reduction": 20.6625,
+        "random_combined_mean_increment": -0.22604980468750058,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_system_process_F5T"
+      },
+      {
+        "carrier_amp_increment": 0.1220703125,
+        "carrier_flip_reduction": 2.045117187499999,
+        "combined_increment": 1.8680664062500014,
+        "eraser_suppress_increment": 0.6762939453125014,
+        "foundation_label": "F5f",
+        "prefix_margin": 0.31582031249999964,
+        "random_carrier_flip_mean_reduction": 22.1611328125,
+        "random_combined_mean_increment": -0.08837890624999956,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F4f_F5f_system_process_F5f"
+      },
+      {
+        "carrier_amp_increment": 0.47226562500000036,
+        "carrier_flip_reduction": 2.99609375,
+        "combined_increment": 4.338281250000001,
+        "eraser_suppress_increment": 3.9267822265624996,
+        "foundation_label": "F5A",
+        "prefix_margin": 2.3046875,
+        "random_carrier_flip_mean_reduction": -2.023437499999993,
+        "random_combined_mean_increment": -1.118115234375,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_compressed_minimal_F5A"
+      },
+      {
+        "carrier_amp_increment": 0.42373046874999964,
+        "carrier_flip_reduction": 2.2566406249999993,
+        "combined_increment": 1.9658203125,
+        "eraser_suppress_increment": -0.1369140625000007,
+        "foundation_label": "F5T",
+        "prefix_margin": 0.162109375,
+        "random_carrier_flip_mean_reduction": 16.908984374999992,
+        "random_combined_mean_increment": 0.012695312500000222,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_long_embedded_clause_F5T"
+      },
+      {
+        "carrier_amp_increment": 0.03632812499999982,
+        "carrier_flip_reduction": 1.4476562499999996,
+        "combined_increment": 1.3280395507812486,
+        "eraser_suppress_increment": -0.6177276611328129,
+        "foundation_label": "F5f",
+        "prefix_margin": -0.22109374999999964,
+        "random_carrier_flip_mean_reduction": 26.378906249999996,
+        "random_combined_mean_increment": 0.29277343749999973,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F5f"
+      },
+      {
+        "carrier_amp_increment": 0.4919921875000002,
+        "carrier_flip_reduction": 1.6326171875000002,
+        "combined_increment": 2.342285156250001,
+        "eraser_suppress_increment": 0.5470581054687509,
+        "foundation_label": "F5E",
+        "prefix_margin": 0.11113281250000018,
+        "random_carrier_flip_mean_reduction": 21.7720703125,
+        "random_combined_mean_increment": -0.04338378906250018,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_no_alias_plain_F5E"
+      },
+      {
+        "carrier_amp_increment": 0.1904296875,
+        "carrier_flip_reduction": 2.948046875,
+        "combined_increment": 4.294140625,
+        "eraser_suppress_increment": 4.207153320312499,
+        "foundation_label": "F5T",
+        "prefix_margin": 2.26484375,
+        "random_carrier_flip_mean_reduction": 4.771093750000005,
+        "random_combined_mean_increment": -0.8762451171874998,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F5T_F6T_system_process_F5T"
+      },
+      {
+        "carrier_amp_increment": -0.5497070312500005,
+        "carrier_flip_reduction": 0.9154296874999996,
+        "combined_increment": -0.8849609375000007,
+        "eraser_suppress_increment": -0.5455078125000004,
+        "foundation_label": "F6A",
+        "prefix_margin": 0.7291015625000004,
+        "random_carrier_flip_mean_reduction": 21.34785156250001,
+        "random_combined_mean_increment": 0.2044189453124996,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F6A"
+      },
+      {
+        "carrier_amp_increment": 0.42294921875000036,
+        "carrier_flip_reduction": 0.046874999999998224,
+        "combined_increment": -0.7737304687499993,
+        "eraser_suppress_increment": 0.4976318359375007,
+        "foundation_label": "F6f",
+        "prefix_margin": -0.20859375000000036,
+        "random_carrier_flip_mean_reduction": -3.846093749999996,
+        "random_combined_mean_increment": -0.13820800781249976,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F6f"
+      },
+      {
+        "carrier_amp_increment": -0.4470703125000002,
+        "carrier_flip_reduction": 0.9267578125,
+        "combined_increment": -1.9644531250000004,
+        "eraser_suppress_increment": -0.7982421875000014,
+        "foundation_label": "F6A",
+        "prefix_margin": 0.5537109375,
+        "random_carrier_flip_mean_reduction": 28.8724609375,
+        "random_combined_mean_increment": 0.349853515625,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_system_process_F6A"
+      },
+      {
+        "carrier_amp_increment": 0.37001953125000053,
+        "carrier_flip_reduction": 0.9066406249999996,
+        "combined_increment": -1.0101806640624993,
+        "eraser_suppress_increment": 0.046984863281251066,
+        "foundation_label": "F6A",
+        "prefix_margin": -0.2257812500000007,
+        "random_carrier_flip_mean_reduction": 4.4804687500000036,
+        "random_combined_mean_increment": -0.14167480468749916,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_concrete_human_F6A"
+      },
+      {
+        "carrier_amp_increment": -0.04931640625000089,
+        "carrier_flip_reduction": 0.4296875,
+        "combined_increment": -1.409912109375,
+        "eraser_suppress_increment": 0.28562011718750036,
+        "foundation_label": "F6A",
+        "prefix_margin": 0.22617187500000036,
+        "random_carrier_flip_mean_reduction": 0.2855468750000032,
+        "random_combined_mean_increment": -0.44409179687500033,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A"
+      },
+      {
+        "carrier_amp_increment": 0.20644531250000053,
+        "carrier_flip_reduction": 1.1390624999999988,
+        "combined_increment": -0.8079589843749995,
+        "eraser_suppress_increment": -0.30245361328125053,
+        "foundation_label": "F6E",
+        "prefix_margin": -0.03593750000000018,
+        "random_carrier_flip_mean_reduction": 5.860937499999999,
+        "random_combined_mean_increment": -0.34475097656249987,
+        "sample_id": "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F5E_F6E_compressed_minimal_F6E"
+      },
+      {
+        "carrier_amp_increment": -0.42050781249999947,
+        "carrier_flip_reduction": 0.6773437499999995,
+        "combined_increment": -1.5581054687499991,
+        "eraser_suppress_increment": -0.06445312499999911,
+        "foundation_label": "F6f",
+        "prefix_margin": 0.4621093749999998,
+        "random_carrier_flip_mean_reduction": 17.851171874999995,
+        "random_combined_mean_increment": 0.28071289062500027,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F6f"
+      },
+      {
+        "carrier_amp_increment": 0.06621093750000018,
+        "carrier_flip_reduction": 0.49453125000000053,
+        "combined_increment": -0.9546874999999995,
+        "eraser_suppress_increment": 0.41747436523437553,
+        "foundation_label": "F6E",
+        "prefix_margin": -0.3273437499999998,
+        "random_carrier_flip_mean_reduction": 1.5507812499999973,
+        "random_combined_mean_increment": -0.03625488281250011,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F5E_F6E_concrete_human_F6E"
+      },
+      {
+        "carrier_amp_increment": 0.6876953124999998,
+        "carrier_flip_reduction": 2.37890625,
+        "combined_increment": 3.127960205078125,
+        "eraser_suppress_increment": 4.1114501953125,
+        "foundation_label": "F7A",
+        "prefix_margin": 1.935546875,
+        "random_carrier_flip_mean_reduction": -9.067578125,
+        "random_combined_mean_increment": -1.6080566406249999,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_long_embedded_clause_F7A"
+      },
+      {
+        "carrier_amp_increment": 0.8017578125,
+        "carrier_flip_reduction": 1.7972656250000005,
+        "combined_increment": 3.3859375,
+        "eraser_suppress_increment": 3.78779296875,
+        "foundation_label": "F7f",
+        "prefix_margin": 1.7404296874999998,
+        "random_carrier_flip_mean_reduction": -8.8220703125,
+        "random_combined_mean_increment": -1.4648193359375,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_counter_alias_hard_negative_F7f"
+      },
+      {
+        "carrier_amp_increment": 1.0079101562499995,
+        "carrier_flip_reduction": 1.7123046875000005,
+        "combined_increment": 2.5790283203125,
+        "eraser_suppress_increment": 3.158251953125,
+        "foundation_label": "F7A",
+        "prefix_margin": 1.6521484375000002,
+        "random_carrier_flip_mean_reduction": -3.929101562500008,
+        "random_combined_mean_increment": -1.506103515625,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F7A"
+      },
+      {
+        "carrier_amp_increment": 0.9765625,
+        "carrier_flip_reduction": 1.9417968750000005,
+        "combined_increment": 3.8218322753906255,
+        "eraser_suppress_increment": 4.0555664062500005,
+        "foundation_label": "F7A",
+        "prefix_margin": 1.6984374999999998,
+        "random_carrier_flip_mean_reduction": -10.8328125,
+        "random_combined_mean_increment": -1.4732421875,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_counter_alias_hard_negative_F7A"
+      },
+      {
+        "carrier_amp_increment": 0.8960937499999995,
+        "carrier_flip_reduction": 2.4007812499999996,
+        "combined_increment": 3.5416015625000004,
+        "eraser_suppress_increment": 4.12197265625,
+        "foundation_label": "F7f",
+        "prefix_margin": 2.0859375,
+        "random_carrier_flip_mean_reduction": -14.250000000000004,
+        "random_combined_mean_increment": -1.6196777343750002,
+        "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f"
+      },
+      {
+        "carrier_amp_increment": 0.5414062500000005,
+        "carrier_flip_reduction": 1.9474609374999998,
+        "combined_increment": 2.136669921875,
+        "eraser_suppress_increment": 3.4190429687500012,
+        "foundation_label": "F7A",
+        "prefix_margin": 1.4406249999999998,
+        "random_carrier_flip_mean_reduction": -29.996875000000003,
+        "random_combined_mean_increment": -1.1636230468749997,
+        "sample_id": "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F7A"
+      },
+      {
+        "carrier_amp_increment": 0.81396484375,
+        "carrier_flip_reduction": 2.1634765625000005,
+        "combined_increment": 2.728192138671875,
+        "eraser_suppress_increment": 3.448040771484375,
+        "foundation_label": "F7f",
+        "prefix_margin": 2.1498046875000005,
+        "random_carrier_flip_mean_reduction": -10.768945312499994,
+        "random_combined_mean_increment": -1.7516357421875006,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f"
+      },
+      {
+        "carrier_amp_increment": 1.0028320312500005,
+        "carrier_flip_reduction": 1.7414062499999998,
+        "combined_increment": 2.847796630859375,
+        "eraser_suppress_increment": 3.0230468750000012,
+        "foundation_label": "F7A",
+        "prefix_margin": 1.6412109374999995,
+        "random_carrier_flip_mean_reduction": -5.736914062500009,
+        "random_combined_mean_increment": -1.5190917968749993,
+        "sample_id": "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F7A"
+      }
+    ]
+  },
+  "gates": {
+    "max_sign_test_p": 0.05,
+    "min_positive_effect_share": 0.55,
+    "min_random_win_share": 0.6
+  },
+  "input_file": "stage7_foundation_pilot_20260517.jsonl",
+  "input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "intervention": {
+    "carrier_flip_scale": -1.0,
+    "carrier_scale": 2.0,
+    "eraser_scale": 0.0,
+    "positions": "continuation_prediction_positions_only"
+  },
+  "model": {
+    "model_name": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "model_source": "EleutherAI/pythia-160m",
+    "torch": "2.5.1+cu124",
+    "transformers": "5.8.1"
+  },
+  "random_carrier_covers": [
+    [
+      "L11MLP",
+      "L8H0",
+      "L9H5",
+      "L9H6",
+      "L8H1",
+      "L8H9"
+    ],
+    [
+      "L11MLP",
+      "L9H10",
+      "L9H1",
+      "L8H0",
+      "L8H1",
+      "L8H4"
+    ],
+    [
+      "L11MLP",
+      "L11H7",
+      "L9H0",
+      "L10H8",
+      "L8H7",
+      "L8H6"
+    ],
+    [
+      "L11MLP",
+      "L8H4",
+      "L9H4",
+      "L11H3",
+      "L8H0",
+      "L8H9"
+    ],
+    [
+      "L11MLP",
+      "L8H6",
+      "L9H2",
+      "L10H0",
+      "L8H4",
+      "L8H2"
+    ],
+    [
+      "L11MLP",
+      "L10H5",
+      "L9H4",
+      "L9H2",
+      "L8H7",
+      "L8H9"
+    ],
+    [
+      "L11MLP",
+      "L9H8",
+      "L9H1",
+      "L10H5",
+      "L8H9",
+      "L8H4"
+    ],
+    [
+      "L11MLP",
+      "L8H4",
+      "L9H6",
+      "L9H1",
+      "L8H0",
+      "L8H5"
+    ]
+  ],
+  "random_control_match_profile": {
+    "carrier_cover": {
+      "all_exact_layer_kind": false,
+      "has_kind_only_singleton_fallback": true,
+      "has_unmatched_fallback": false,
+      "policy": "Random controls use same layer/kind replacements when available. For singleton MLP blocks, the fallback preserves kind across candidate layers; if that is impossible, the report marks an unmatched fallback.",
+      "rows": [
+        {
+          "component": "L10MLP",
+          "exact_pool_size": 0,
+          "kind": "mlp",
+          "kind_pool_size": 1,
+          "layer": 10,
+          "match_level": "kind_only_singleton_layer"
+        },
+        {
+          "component": "L8MLP",
+          "exact_pool_size": 0,
+          "kind": "mlp",
+          "kind_pool_size": 1,
+          "layer": 8,
+          "match_level": "kind_only_singleton_layer"
+        },
+        {
+          "component": "L9H7",
+          "exact_pool_size": 11,
+          "kind": "head",
+          "kind_pool_size": 45,
+          "layer": 9,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L9MLP",
+          "exact_pool_size": 0,
+          "kind": "mlp",
+          "kind_pool_size": 1,
+          "layer": 9,
+          "match_level": "kind_only_singleton_layer"
+        },
+        {
+          "component": "L8H11",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 45,
+          "layer": 8,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L8H10",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 45,
+          "layer": 8,
+          "match_level": "layer_kind_exact"
+        }
+      ]
+    },
+    "eraser_cover": {
+      "all_exact_layer_kind": false,
+      "has_kind_only_singleton_fallback": true,
+      "has_unmatched_fallback": false,
+      "policy": "Random controls use same layer/kind replacements when available. For singleton MLP blocks, the fallback preserves kind across candidate layers; if that is impossible, the report marks an unmatched fallback.",
+      "rows": [
+        {
+          "component": "L11MLP",
+          "exact_pool_size": 0,
+          "kind": "mlp",
+          "kind_pool_size": 3,
+          "layer": 11,
+          "match_level": "kind_only_singleton_layer"
+        },
+        {
+          "component": "L9H3",
+          "exact_pool_size": 11,
+          "kind": "head",
+          "kind_pool_size": 43,
+          "layer": 9,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L11H11",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 43,
+          "layer": 11,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L10H6",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 43,
+          "layer": 10,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L11H9",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 43,
+          "layer": 11,
+          "match_level": "layer_kind_exact"
+        },
+        {
+          "component": "L10H3",
+          "exact_pool_size": 10,
+          "kind": "head",
+          "kind_pool_size": 43,
+          "layer": 10,
+          "match_level": "layer_kind_exact"
+        }
+      ]
+    }
+  },
+  "random_eraser_covers": [
+    [
+      "L8MLP",
+      "L9H2",
+      "L11H4",
+      "L10H0",
+      "L11H2",
+      "L10H9"
+    ],
+    [
+      "L8MLP",
+      "L9H5",
+      "L11H1",
+      "L10H10",
+      "L11H7",
+      "L10H9"
+    ],
+    [
+      "L8MLP",
+      "L9H0",
+      "L11H8",
+      "L10H9",
+      "L11H6",
+      "L10H4"
+    ],
+    [
+      "L10MLP",
+      "L9H2",
+      "L11H7",
+      "L10H2",
+      "L11H0",
+      "L10H9"
+    ],
+    [
+      "L10MLP",
+      "L9H2",
+      "L11H0",
+      "L10H10",
+      "L11H10",
+      "L10H2"
+    ],
+    [
+      "L8MLP",
+      "L9H8",
+      "L11H10",
+      "L10H4",
+      "L11H7",
+      "L10H1"
+    ],
+    [
+      "L9MLP",
+      "L9H6",
+      "L11H5",
+      "L10H5",
+      "L11H4",
+      "L10H2"
+    ],
+    [
+      "L10MLP",
+      "L9H4",
+      "L11H10",
+      "L10H2",
+      "L11H2",
+      "L10H0"
+    ]
+  ],
+  "schema_version": "stage27k_output_side_component_steering.v1",
+  "source_contracts": {
+    "stage27j": {
+      "carrier_cover": [
+        "L10MLP",
+        "L8MLP",
+        "L9H7",
+        "L9MLP",
+        "L8H11",
+        "L8H10"
+      ],
+      "eraser_cover": [
+        "L11MLP",
+        "L9H3",
+        "L11H11",
+        "L10H6",
+        "L11H9",
+        "L10H3"
+      ],
+      "expected_status": "PASS_BOUNDED_OUTPUT_SIDE_CARRIER_AND_ERASER_ATTRIBUTION",
+      "formal_gate_valid": true,
+      "source_file": "stage27j_output_side_component_attribution_20260521.json",
+      "source_sha256": "f9b1e455638b8090c632d5d4f213003067b62a20c6170bf772964f67e174a64a",
+      "source_status": "PASS_BOUNDED_OUTPUT_SIDE_CARRIER_AND_ERASER_ATTRIBUTION"
+    },
+    "stage7_prefix": {
+      "expected_status": "READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD",
+      "formal_gate_valid": true,
+      "source_file": "stage7_cas_prefix_likelihood_20260517.json",
+      "source_sha256": "33971f02017af364aa60a0d865eb8af441c045cd0efdb5a6aefa9ffd781f91ea",
+      "source_status": "READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD"
+    }
+  },
+  "split_contract": {
+    "eval_ids": [
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F1T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F1A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F7f_F1f_system_process_F1f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F7E_F1E_concrete_human_F1E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F1E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F1A_F2A_concrete_human_F1A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_concrete_human_F1T",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_counter_alias_hard_negative_F1A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_counter_alias_hard_negative_F2E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F1f_F2f_no_alias_plain_F2f",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F1A_F2A_system_process_F2A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F1E_F2E_no_alias_plain_F2E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F1T_F2T_long_embedded_clause_F2T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F1T_F2T_counter_alias_hard_negative_F2T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F2E_F3E_long_embedded_clause_F2E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F1E_F2E_long_embedded_clause_F2E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F2T_F3T_system_process_F3T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F3A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F2T_F3T_role_inverse_minimal_F3T",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F2A_F3A_no_alias_plain_F3A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F2E_F3E_role_inverse_minimal_F3E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F2f_F3f_no_alias_plain_F3f",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F3T_F4T_no_alias_plain_F3T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F3E_F4E_long_embedded_clause_F3E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F3A_F4A_long_embedded_clause_F4A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F4E_F5E_long_embedded_clause_F4E",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_T_F4T_F5T_system_process_F4T",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F3A_F4A_system_process_F4A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F3f_F4f_no_alias_plain_F4f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_counter_alias_hard_negative_F4E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F3A_F4A_no_alias_plain_F4A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F3T_F4T_system_process_F4T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_E_F5E_F6E_system_process_F5E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_system_process_F5T",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F4f_F5f_system_process_F5f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_compressed_minimal_F5A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_T_F4T_F5T_long_embedded_clause_F5T",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_f_F4f_F5f_compressed_minimal_F5f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_E_F4E_F5E_no_alias_plain_F5E",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_T_F5T_F6T_system_process_F5T",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F6A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_f_F5f_F6f_long_embedded_clause_F6f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_system_process_F6A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_A_F5A_F6A_concrete_human_F6A",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A",
+      "stage7_pilot_bundle044_privacy_review_same_register_drive_cycle_E_F5E_F6E_compressed_minimal_F6E",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F6f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_E_F5E_F6E_concrete_human_F6E",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_long_embedded_clause_F7A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_counter_alias_hard_negative_F7f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_role_inverse_minimal_F7A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F6A_F7A_counter_alias_hard_negative_F7A",
+      "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f",
+      "stage7_pilot_bundle043_energy_grid_same_register_drive_cycle_A_F7A_F1A_counter_alias_hard_negative_F7A",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_f_F6f_F7f_long_embedded_clause_F7f",
+      "stage7_pilot_bundle042_disaster_relief_same_register_drive_cycle_A_F6A_F7A_compressed_minimal_F7A"
+    ],
+    "eval_rows": 56,
+    "eval_rows_per_drive": 8,
+    "held_out_eval_only": true,
+    "learn_rows_per_drive": 8,
+    "per_drive": 16
+  },
+  "status": "GREY_OUTPUT_SIDE_COMPONENT_STEERING_PARTIAL"
+}
