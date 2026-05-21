@@ -2608,3 +2608,48 @@ Artifacts:
 
 - `stage24b_40_element_cpu_recap_prereg_20260521.json`
 - `STAGE24B_40_ELEMENT_CPU_RECAP_PREREG_20260521.md`
+
+## Stage 24B formal CPU-recapture result - 40-Element Token Sonar
+
+**Verdict: `STAGE24B_40_ELEMENT_SONAR_NULL`.**
+
+After committing the replacement-artifact preregistration, Stage 24B was rerun
+against `stage24b_40_element_cpu_recap_prereg_20260521.json`. The replacement
+contract matched the local CPU recapture, so this is a formal CPU-recapture
+Stage 24B result.
+
+Formal contract:
+
+| Field | Value |
+|---|---|
+| Contract source | `replacement_artifact_contract.output_sha256` |
+| Expected activation SHA-256 | `63702c62e6230e25e891b0e68007780954f9e6c539e4996b69e91017b972c0c9` |
+| Formal gate valid | `true` |
+| Probe test accuracy | `0.8980` |
+
+Formal gate read:
+
+- Same-domain did not beat hard-partner controls:
+  `same_domain_minus_hard_partner = -0.0494`, p(random >= actual) `1.0000`.
+- Same-Noetic did not beat hard-partner controls:
+  `same_noetic_minus_hard_partner = -0.0465`, p(random >= actual) `1.0000`.
+
+Diagnostic side-read:
+
+- Same-domain still beats broad different-domain/noetic controls:
+  `same_domain_minus_different = +0.0662`, p(random >= actual) `0.0099`.
+- Same-Noetic still beats broad different-domain/noetic controls:
+  `same_noetic_minus_different = +0.0691`, p(random >= actual) `0.0099`.
+- Top-token readability: `669/960`, rate `0.6969`.
+
+Interpretation:
+
+> Stage 24B closes as a bounded null for token-level resolution of nearest
+> 40-Element hard contrasts. The coarse Domain and Noetic geometry is visible
+> against broad controls, but the sonar does not resolve the hard local
+> element-pair distinctions through static output embeddings.
+
+Artifacts:
+
+- `stage24b_40_element_token_sonar_formal_cpu_20260521.json`
+- `STAGE24B_40_ELEMENT_TOKEN_SONAR_FORMAL_CPU_20260521.md`
