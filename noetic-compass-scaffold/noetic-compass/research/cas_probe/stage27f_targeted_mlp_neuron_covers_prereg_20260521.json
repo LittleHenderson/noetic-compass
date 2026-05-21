@@ -1,0 +1,106 @@
+{
+  "claim_boundary": {
+    "claim_if_null": "Stage 27C/27D/27E attention-coordinate localization remains valid, but this targeted MLP-neuron cover method did not establish held-out causal margin drops above matched random neuron controls.",
+    "claim_if_pass": "Within MLP layers targeted by Stage 27E attention-coordinate covers, sparse MLP intermediate-neuron covers causally support class-specific Foundation hard-partner readout margins above matched same-layer random neuron controls.",
+    "forbidden_claims": "Do not claim complete circuits, model-wide exact causal explanation, raw CAS-symbol understanding, an internal CAS compiler, Noetic/40-Element component causality, free-form generation control, or cross-model component generality from Stage 27F.",
+    "grey_status": "GREY_TARGETED_MLP_NEURON_COVERS_PARTIAL",
+    "null_status": "NULL_TARGETED_MLP_NEURON_COVERS_NOT_ESTABLISHED",
+    "pass_status": "PASS_BOUNDED_TARGETED_MLP_NEURON_COVERS",
+    "scope_boundary": "Stage 27F is bounded to Pythia-160M MLP intermediate neurons in layers selected from Stage 27E coordinate covers, scored against the trained Stage 7 Foundation readout. It is not a complete circuit, not all neurons in the model, not token sonar, not Noetic/40-Element coverage, not raw CAS-symbol understanding, and not generation control."
+  },
+  "execution_order": [
+    "commit_preregistration_and_runner_before_gpu_result",
+    "verify_stage27c_and_stage27e_contracts",
+    "learn_per_class_neuron_covers_on_train_split_only",
+    "evaluate_targeted_ablation_drops_on_test_split_only",
+    "record_bounded_result"
+  ],
+  "formal_anchor": "Targeted local-cover refinement: Stage 27E supplies per-class coordinate covers that select candidate layers; Stage 27F asks whether sparse MLP-neuron covers inside those layers form causal supports for the same readout margins.",
+  "gates": [
+    {
+      "criterion": "Stage 7 activation artifact hash matches the locked manifest.",
+      "kind": "pass_floor",
+      "name": "artifact_contract"
+    },
+    {
+      "criterion": "Stage 27C source report is PASS and exposes per-class attention-head covers.",
+      "kind": "pass_floor",
+      "name": "stage27c_contract"
+    },
+    {
+      "criterion": "Stage 27E source report is PASS and exposes single-coordinate covers for per-class candidate-layer targeting.",
+      "kind": "pass_floor",
+      "name": "stage27e_contract"
+    },
+    {
+      "criterion": "Neuron-cover learning rows come only from train split; scoring rows come only from test split.",
+      "kind": "pass_floor",
+      "name": "learn_eval_separation"
+    },
+    {
+      "criterion": "Per-class neuron-cover ablation drop beats per-row random same-size/same-layer neuron-cover mean drop on at least 60% of eval rows with sign-test p<0.05.",
+      "kind": "primary",
+      "name": "matched_random_neuron_control"
+    },
+    {
+      "criterion": "At least 55% of eval rows have positive target-vs-hard-partner margin drop under targeted neuron-cover ablation.",
+      "kind": "primary",
+      "name": "positive_drop_floor"
+    },
+    {
+      "criterion": "Mean targeted neuron-cover drop is positive and greater than mean matched-random neuron-cover drop.",
+      "kind": "primary",
+      "name": "mean_drop_floor"
+    },
+    {
+      "criterion": "Patch-back after targeted ablation restores the clean margin within numerical tolerance on average.",
+      "kind": "sanity",
+      "name": "patchback_sanity"
+    }
+  ],
+  "method": [
+    "Commit this pre-registration and runner before any Stage 27F GPU result is generated.",
+    "Refit the locked Stage 7 28-way Foundation probe on the locked layer-6 focus-token artifact.",
+    "Verify Stage 27C and Stage 27E are PASS with the locked artifact and selected six-head family.",
+    "Use Stage 27E per-class single-coordinate covers only to choose candidate MLP layers for each Foundation class.",
+    "Capture activated MLP intermediate neurons at the focus token for those candidate layers on train rows.",
+    "Rank every candidate MLP neuron by first-order target-vs-hard-partner margin contribution: activation_j times the output-projection alignment with the probe margin direction.",
+    "For each Foundation class, define a 32-neuron cover as the top ranked candidate neurons learned only on train rows.",
+    "On held-out test rows, ablate the per-class neuron cover from the clean forward pass and measure target-vs-hard-partner margin drop.",
+    "Compare targeted drops against same-size random neuron covers with the same per-layer count as the targeted cover.",
+    "Patch-back of the targeted cover is a sanity/recovery check; the primary discovery gate is targeted ablation drop above matched random ablations."
+  ],
+  "motivation": "Stage 27E localized class-specific Foundation readout evidence to single attention-head coordinates. Stage 27F tests whether nearby MLP intermediate neurons in the same targeted layers causally support the same hard-partner margins.",
+  "required_inputs": {
+    "candidate_layers": "per-class layers from Stage 27E coordinate covers",
+    "eval_rows_per_class": 4,
+    "fixture": "stage7_foundation_pilot_20260517.jsonl",
+    "global_selected_components": [
+      "L5H3",
+      "L5H5",
+      "L5H0",
+      "L5H10",
+      "L1H6",
+      "L5H6"
+    ],
+    "learn_rows_per_class": 4,
+    "locked_readout": {
+      "key": "X_focus",
+      "layer": 6,
+      "name": "focus_token"
+    },
+    "mlp_intermediate_dim": 3072,
+    "model": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "neuron_cover_size": 32,
+    "stage27c_report": "stage27c_per_class_component_covers_20260521.json",
+    "stage27c_status": "PASS_BOUNDED_PER_CLASS_COMPONENT_COVERS",
+    "stage27e_report": "stage27e_single_dim_coordinate_covers_20260521.json",
+    "stage27e_status": "PASS_BOUNDED_SINGLE_DIM_COORDINATE_COVERS",
+    "stage7_activation_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+    "stage7_activations": "stage7_foundation_pilot_activations_20260517.npz"
+  },
+  "stage": "27F",
+  "status": "PREREGISTERED_GPU_RECOMMENDED",
+  "validation": {}
+}
