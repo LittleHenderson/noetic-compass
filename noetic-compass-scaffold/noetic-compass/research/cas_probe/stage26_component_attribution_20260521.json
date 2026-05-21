@@ -1,0 +1,491 @@
+{
+  "activation_manifest_file": "stage7_foundation_pilot_activations_manifest_20260517.json",
+  "activations_file": "stage7_foundation_pilot_activations_20260517.npz",
+  "activations_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+  "alignment_enrichment": {
+    "all_component_control": {
+      "actual": 0.31326196059557326,
+      "empirical_p_random_ge_actual": 0.03225806451612903,
+      "n_random": 30,
+      "random_mean": 0.22471507750035558,
+      "random_p95": 0.24988984060384187
+    },
+    "matched_same_kind_layer_control": {
+      "actual": 0.31326196059557326,
+      "empirical_p_random_ge_actual": 0.03225806451612903,
+      "n_random": 30,
+      "random_mean": 0.2438454151951557,
+      "random_p95": 0.26315546417776586
+    },
+    "random_control": {
+      "actual": 0.31326196059557326,
+      "empirical_p_random_ge_actual": 0.03225806451612903,
+      "n_random": 30,
+      "random_mean": 0.2438454151951557,
+      "random_p95": 0.26315546417776586
+    },
+    "selected_components": [
+      "L5H3",
+      "L5H5",
+      "L5H0",
+      "L5H10",
+      "L1H6",
+      "L5H6"
+    ],
+    "selected_mean_projection_score": 0.31326196059557326
+  },
+  "artifact_contract": {
+    "actual_activation_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+    "expected_activation_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+    "formal_gate_valid": true,
+    "status": "LOCKED_ARTIFACT_MATCH"
+  },
+  "boundary": "Stage 26 is bounded component attribution over attention heads and MLP blocks. It does not identify exact neurons, complete circuits, raw CAS-symbol understanding, an internal CAS compiler, free-form generation control, or cross-model component generality.",
+  "capture_contract": {
+    "component_counts_max": 4368,
+    "component_counts_min": 4368,
+    "finite_components": true,
+    "n_components": 78,
+    "n_rows": 4368
+  },
+  "class_specificity": {
+    "max_class_drop": 0.9523809523809523,
+    "mean_positive_class_drop": 0.6450216450216449,
+    "n_positive_drop_classes": 26,
+    "top_class_drops": [
+      {
+        "ablated_acc": 0.047619047619047616,
+        "baseline_acc": 1.0,
+        "drop": 0.9523809523809523,
+        "foundation": "F3T",
+        "n": 21
+      },
+      {
+        "ablated_acc": 0.0,
+        "baseline_acc": 0.9047619047619048,
+        "drop": 0.9047619047619048,
+        "foundation": "F4T",
+        "n": 21
+      },
+      {
+        "ablated_acc": 0.0,
+        "baseline_acc": 0.8181818181818182,
+        "drop": 0.8181818181818182,
+        "foundation": "F3E",
+        "n": 11
+      },
+      {
+        "ablated_acc": 0.0,
+        "baseline_acc": 0.8095238095238095,
+        "drop": 0.8095238095238095,
+        "foundation": "F4f",
+        "n": 21
+      },
+      {
+        "ablated_acc": 0.047619047619047616,
+        "baseline_acc": 0.8571428571428571,
+        "drop": 0.8095238095238095,
+        "foundation": "F5T",
+        "n": 21
+      },
+      {
+        "ablated_acc": 0.14285714285714285,
+        "baseline_acc": 0.9523809523809523,
+        "drop": 0.8095238095238095,
+        "foundation": "F7T",
+        "n": 21
+      },
+      {
+        "ablated_acc": 0.0,
+        "baseline_acc": 0.8095238095238095,
+        "drop": 0.8095238095238095,
+        "foundation": "F7A",
+        "n": 21
+      },
+      {
+        "ablated_acc": 0.09523809523809523,
+        "baseline_acc": 0.8571428571428571,
+        "drop": 0.7619047619047619,
+        "foundation": "F3A",
+        "n": 21
+      },
+      {
+        "ablated_acc": 0.14285714285714285,
+        "baseline_acc": 0.9047619047619048,
+        "drop": 0.7619047619047619,
+        "foundation": "F6T",
+        "n": 21
+      },
+      {
+        "ablated_acc": 0.0,
+        "baseline_acc": 0.7142857142857143,
+        "drop": 0.7142857142857143,
+        "foundation": "F1E",
+        "n": 14
+      }
+    ]
+  },
+  "component_ranking": [
+    {
+      "component": "L5H3",
+      "projection_score": 0.3412365409385263
+    },
+    {
+      "component": "L5H5",
+      "projection_score": 0.3342392278098307
+    },
+    {
+      "component": "L5H0",
+      "projection_score": 0.30443886140763976
+    },
+    {
+      "component": "L5H10",
+      "projection_score": 0.30210752810791625
+    },
+    {
+      "component": "L1H6",
+      "projection_score": 0.2995772223523903
+    },
+    {
+      "component": "L5H6",
+      "projection_score": 0.29797238295713624
+    },
+    {
+      "component": "L5H2",
+      "projection_score": 0.297595438045951
+    },
+    {
+      "component": "L5H4",
+      "projection_score": 0.2847611243416975
+    },
+    {
+      "component": "L1H10",
+      "projection_score": 0.2836827336309048
+    },
+    {
+      "component": "L4H6",
+      "projection_score": 0.27749803388020494
+    },
+    {
+      "component": "L5H1",
+      "projection_score": 0.2754278506660636
+    },
+    {
+      "component": "L4H11",
+      "projection_score": 0.26967229227102174
+    },
+    {
+      "component": "L4H8",
+      "projection_score": 0.26242673695906177
+    },
+    {
+      "component": "L0H7",
+      "projection_score": 0.2570122954991711
+    },
+    {
+      "component": "L4H1",
+      "projection_score": 0.2564538189383981
+    },
+    {
+      "component": "L5MLP",
+      "projection_score": 0.25535334583249064
+    },
+    {
+      "component": "L3H7",
+      "projection_score": 0.2527793637637199
+    },
+    {
+      "component": "L4MLP",
+      "projection_score": 0.25007820423460486
+    },
+    {
+      "component": "L4H4",
+      "projection_score": 0.24480793228024963
+    },
+    {
+      "component": "L3H1",
+      "projection_score": 0.24252381428885153
+    },
+    {
+      "component": "L5H11",
+      "projection_score": 0.23983338541068108
+    },
+    {
+      "component": "L2H10",
+      "projection_score": 0.23928754293656612
+    },
+    {
+      "component": "L4H9",
+      "projection_score": 0.23839610598421904
+    },
+    {
+      "component": "L5H9",
+      "projection_score": 0.23329821181903174
+    },
+    {
+      "component": "L0H2",
+      "projection_score": 0.23316444297263147
+    },
+    {
+      "component": "L4H2",
+      "projection_score": 0.22955296599330047
+    },
+    {
+      "component": "L1H3",
+      "projection_score": 0.22784565920999525
+    },
+    {
+      "component": "L3H3",
+      "projection_score": 0.2276338618419273
+    },
+    {
+      "component": "L3H11",
+      "projection_score": 0.22530529463847915
+    },
+    {
+      "component": "L4H10",
+      "projection_score": 0.22235311878906502
+    },
+    {
+      "component": "L1H9",
+      "projection_score": 0.22199217395536303
+    },
+    {
+      "component": "L0H3",
+      "projection_score": 0.2212732974576317
+    },
+    {
+      "component": "L5H7",
+      "projection_score": 0.2198119353769081
+    },
+    {
+      "component": "L3H4",
+      "projection_score": 0.2196244205801915
+    },
+    {
+      "component": "L2H4",
+      "projection_score": 0.2175858714464274
+    },
+    {
+      "component": "L0H9",
+      "projection_score": 0.21671841637787473
+    },
+    {
+      "component": "L3H5",
+      "projection_score": 0.21532589210122277
+    },
+    {
+      "component": "L4H5",
+      "projection_score": 0.2147361401830128
+    },
+    {
+      "component": "L2H2",
+      "projection_score": 0.21442770284187773
+    },
+    {
+      "component": "L1H2",
+      "projection_score": 0.21352937242063957
+    },
+    {
+      "component": "L3H10",
+      "projection_score": 0.21349493678550036
+    },
+    {
+      "component": "L3H6",
+      "projection_score": 0.21326648944054113
+    },
+    {
+      "component": "L0H4",
+      "projection_score": 0.21276600176857396
+    },
+    {
+      "component": "L2H7",
+      "projection_score": 0.20959862148655312
+    },
+    {
+      "component": "L0H10",
+      "projection_score": 0.20904622501574266
+    },
+    {
+      "component": "L1H7",
+      "projection_score": 0.2088096868007993
+    },
+    {
+      "component": "L2MLP",
+      "projection_score": 0.20706621584083354
+    },
+    {
+      "component": "L2H5",
+      "projection_score": 0.20584078399880684
+    },
+    {
+      "component": "L5H8",
+      "projection_score": 0.20284118776929466
+    },
+    {
+      "component": "L0H0",
+      "projection_score": 0.20219487610235537
+    },
+    {
+      "component": "L2H11",
+      "projection_score": 0.2008785219153478
+    },
+    {
+      "component": "L2H0",
+      "projection_score": 0.20030129426278365
+    },
+    {
+      "component": "L3MLP",
+      "projection_score": 0.19867412989188135
+    },
+    {
+      "component": "L2H9",
+      "projection_score": 0.1973280419865043
+    },
+    {
+      "component": "L4H7",
+      "projection_score": 0.19677281624640955
+    },
+    {
+      "component": "L0H6",
+      "projection_score": 0.19473954030711735
+    },
+    {
+      "component": "L2H3",
+      "projection_score": 0.1943206148402895
+    },
+    {
+      "component": "L4H0",
+      "projection_score": 0.19353940726459135
+    },
+    {
+      "component": "L4H3",
+      "projection_score": 0.1930197502380653
+    },
+    {
+      "component": "L1H0",
+      "projection_score": 0.19259138749195978
+    },
+    {
+      "component": "L2H6",
+      "projection_score": 0.1925860805259574
+    },
+    {
+      "component": "L1H5",
+      "projection_score": 0.1922268151431839
+    },
+    {
+      "component": "L2H8",
+      "projection_score": 0.19174176613517077
+    },
+    {
+      "component": "L0H8",
+      "projection_score": 0.184969537949442
+    },
+    {
+      "component": "L0H5",
+      "projection_score": 0.1848902881943754
+    },
+    {
+      "component": "L2H1",
+      "projection_score": 0.1839877279482154
+    },
+    {
+      "component": "L1H11",
+      "projection_score": 0.18169802672233118
+    },
+    {
+      "component": "L1H1",
+      "projection_score": 0.17988178983071457
+    },
+    {
+      "component": "L0H1",
+      "projection_score": 0.17511151431489996
+    },
+    {
+      "component": "L3H2",
+      "projection_score": 0.17477578390048537
+    },
+    {
+      "component": "L0H11",
+      "projection_score": 0.17410537294511283
+    },
+    {
+      "component": "L3H9",
+      "projection_score": 0.16762706174791514
+    },
+    {
+      "component": "L1MLP",
+      "projection_score": 0.1645308056105979
+    },
+    {
+      "component": "L1H8",
+      "projection_score": 0.1530775100934309
+    },
+    {
+      "component": "L0MLP",
+      "projection_score": 0.14798621515037266
+    },
+    {
+      "component": "L3H0",
+      "projection_score": 0.14277797886733334
+    },
+    {
+      "component": "L1H4",
+      "projection_score": 0.13734719015473684
+    },
+    {
+      "component": "L3H8",
+      "projection_score": 0.13473275962589315
+    }
+  ],
+  "device": "cuda",
+  "elapsed_seconds": 339.7191999144852,
+  "input_file": "stage7_foundation_pilot_20260517.jsonl",
+  "input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "locked_readout": {
+    "layer": 6,
+    "readout_key": "X_focus",
+    "readout_name": "focus_token"
+  },
+  "probe": {
+    "basis_rank": 27,
+    "raw_test_acc": 0.7857142857142857,
+    "raw_train_acc": 1.0,
+    "raw_val_acc": 0.9985119047619048
+  },
+  "sanity_controls": {
+    "noop_acc": 0.783203125,
+    "noop_acc_delta": 0.0,
+    "noop_acc_delta_slack": 0.01
+  },
+  "schema_version": "stage26_component_attribution.v1",
+  "status": "PASS_BOUNDED_COMPONENT_ATTRIBUTION",
+  "targeted_ablation_drop": {
+    "all_component_control": {
+      "actual": 0.59765625,
+      "empirical_p_random_ge_actual": 0.4838709677419355,
+      "n_random": 30,
+      "random_mean": 0.5094401041666666,
+      "random_p95": 0.74736328125
+    },
+    "baseline_acc": 0.783203125,
+    "eval_rows": 512,
+    "matched_same_kind_layer_control": {
+      "actual": 0.59765625,
+      "empirical_p_random_ge_actual": 0.03225806451612903,
+      "n_random": 30,
+      "random_mean": 0.1841796875,
+      "random_p95": 0.28789062499999996
+    },
+    "random_control": {
+      "actual": 0.59765625,
+      "empirical_p_random_ge_actual": 0.03225806451612903,
+      "n_random": 30,
+      "random_mean": 0.1841796875,
+      "random_p95": 0.28789062499999996
+    },
+    "targeted_ablated_acc": 0.185546875,
+    "targeted_drop": 0.59765625
+  }
+}
