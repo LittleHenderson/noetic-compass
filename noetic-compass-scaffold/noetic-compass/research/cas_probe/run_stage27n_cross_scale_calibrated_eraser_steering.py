@@ -148,11 +148,20 @@ def _load_model_and_tokenizer(
     import transformers as transformers_pkg
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=not allow_download, use_fast=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_name,
+        revision=expected_revision,
+        local_files_only=not allow_download,
+        use_fast=True,
+    )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     actual_device = torch.device(device if device == "cuda" and torch.cuda.is_available() else "cpu")
-    model = AutoModelForCausalLM.from_pretrained(model_name, local_files_only=not allow_download)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        revision=expected_revision,
+        local_files_only=not allow_download,
+    )
     model.eval()
     model.to(actual_device)
     meta = {
