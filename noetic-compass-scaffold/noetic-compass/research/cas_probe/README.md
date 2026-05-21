@@ -2653,3 +2653,67 @@ Artifacts:
 
 - `stage24b_40_element_token_sonar_formal_cpu_20260521.json`
 - `STAGE24B_40_ELEMENT_TOKEN_SONAR_FORMAL_CPU_20260521.md`
+
+## Stage 25 pre-registration - SAE feature localization
+
+**Verdict: `AUTHORIZED_GPU_SAE_PREREGISTERED`.**
+
+Stage 25 is the paid GPU follow-up to the Stage 24 sonar ceiling. Static
+projection through the unembedding showed broad token geometry but failed hard
+local contrasts, which is the expected signature of polysemantic readout
+directions. Stage 25 tests whether a sparse autoencoder can decompose the
+Stage 7 Foundation residual-stream readout into sparse, CAS-aligned feature
+candidates.
+
+Required input:
+
+| Field | Value |
+|---|---|
+| Model | `EleutherAI/pythia-160m` |
+| Fixture | `stage7_foundation_pilot_20260517.jsonl` |
+| Activations | `stage7_foundation_pilot_activations_20260517.npz` |
+| Readout | `focus_token`, layer `6` |
+| Classes | `28` Foundation labels |
+
+SAE config:
+
+| Field | Value |
+|---|---|
+| Input dim | `768` |
+| Features | `6144` |
+| Feature multiplier | `8` |
+| Max steps | `5000` |
+| Batch size | `1024` |
+| L1 coefficient | `0.001` |
+| Expected GPU budget | `$200-500` |
+
+Formal gates:
+
+- Reconstruction quality: heldout explained variance >= `0.80`.
+- Sparsity non-collapse: mean active features per row between `5` and `250`,
+  dead feature rate < `0.80`.
+- CAS alignment: top SAE decoder features align to Stage 7 Foundation probe
+  directions above matched random decoder-vector controls, empirical p < `0.05`.
+- Feature specificity: CAS-aligned features show heldout class-selective
+  activation above random feature controls, empirical p < `0.05`.
+- Causal feature drop: removing top CAS-aligned SAE feature contributions
+  degrades Stage 7 Foundation probe accuracy more than matched random feature
+  removals.
+
+Claim boundary:
+
+> A passing Stage 25 licenses only `PASS_BOUNDED_SAE_FEATURE_READOUT`: SAE
+> features provide a bounded, inspectable feature basis from which CAS
+> Foundation signals are recoverable on the tested model/layer/fixture. If the
+> ablation gate also passes, the selected SAE feature set has readout-level
+> causal relevance under controls. It does not license exact-neuron, complete
+> circuit, raw-symbol, internal-compiler, free-form steering, or solved-black-box
+> claims.
+
+Artifacts:
+
+- `stage25_sae_feature_spec.py`
+- `run_stage25_sae_prereg.py`
+- `stage25_sae_feature_prereg_20260521.json`
+- `STAGE25_SAE_FEATURE_PREREG_20260521.md`
+- `tests/test_stage25_sae_feature_spec.py`
